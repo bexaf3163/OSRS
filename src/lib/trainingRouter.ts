@@ -64,6 +64,8 @@ export interface TrainingMethod {
   /** Coins an hour the model's method banks from its drop when that pays for its time, and the drop. */
   lootPerHour?: number;
   lootName?: string;
+  /** Better tools the player could buy, priced, with the rate each would give (the gathering engine). */
+  upgrades?: { tool: string; price: number; xph: [number, number] }[];
   /** XP per single action — the game's exact value. */
   xpa: number | null;
   /** The word forms "log|logs" for "how many more". */
@@ -311,6 +313,8 @@ export interface TrainingAdvice {
   /** One phrase "why this method". */
   reason: string;
   style: PlayStyle;
+  /** The better tool worth buying for the XP left (toolUpgrade), when there is one. */
+  upgrade?: ToolUpgrade | null;
 }
 
 export interface AdviceInput {
@@ -358,6 +362,7 @@ export function personalize(methods: readonly TrainingMethod[], skill: string, s
       ...(r.lootPerHour ? { lootPerHour: r.lootPerHour, lootName: r.loot } : {}),
       ...(r.costName ? { costName: r.costName } : {}),
       ...(r.warning ? { rateWarning: r.warning } : {}),
+      ...(r.upgrades?.length ? { upgrades: r.upgrades } : {}),
       ...(r.spot ? { spot: r.spot, where: r.spot.how === 'bank' && r.spot.bank ? `${r.spot.label} (bank at ${r.spot.bank})` : r.spot.label } : {}),
     } : m;
     if (rateCache.size > 500) rateCache.clear();
@@ -380,7 +385,34 @@ const rateText = (m: TrainingMethod) => {
   return `${fmtK(r[0]) === fmtK(r[1]) ? `≈ ${fmtK(r[0])}` : `≈ ${fmtK(r[0])}–${fmtK(r[1])}`} XP per hour${m.rateSource === 'model' ? ' for you' : ''}`;
 };
 
-function reasonFor(v: MethodView, priority: MethodPriority, level: number): string {
+export interface ToolUpgrade { tool: string; price: number; hours: number }
+/** Hours a better tool must save to the goal to be worth a line. */
+const UPGRADE_MIN_HOURS = 1 / 6;
+/**
+ * The better tool worth buying for the XP left, or null. Fastest: the one that saves the most time (its price is shown; coins do not trade against
+ * time). Balanced: the one whose hours saved, valued at the coin baseline (lootValue.coinsPerMinute), beat its price by the most; without prices
+ * nothing is weighed. Relaxed: none. The hours are this method's to the goal: a later method of the skill gains too, so the saving is a floor.
+ */
+export function toolUpgrade(m: TrainingMethod, xpLeft: number, priority: MethodPriority, coinRate: number | null): ToolUpgrade | null {
+  if (!m.upgrades?.length || !m.xph || xpLeft <= 0 || priority === 'relaxed') return null;
+  const mid = (x: readonly [number, number]) => (x[0] + x[1]) / 2;
+  const now = xpLeft / mid(m.xph);
+  let best: ToolUpgrade | null = null;
+  let bestScore = -Infinity;
+  for (const u of m.upgrades) {
+    const hours = now - xpLeft / mid(u.xph);
+    if (hours < UPGRADE_MIN_HOURS) continue;
+    const score = priority === 'fastest' ? hours : coinRate ? hours * 60 * coinRate - u.price : -Infinity;
+    if (score <= 0 || score <= bestScore) continue;
+    bestScore = score;
+    best = { tool: u.tool, price: u.price, hours };
+  }
+  return best;
+}
+
+const hoursText = (h: number) => (h < 1 ? `${Math.max(1, Math.round(h * 60))} min` : `${h < 10 ? Math.round(h * 10) / 10 : Math.round(h)} h`);
+
+function reasonFor(v: MethodView, priority: MethodPriority, level: number, upgrade: ToolUpgrade | null = null): string {
   const m = v.method;
   const parts: string[] = [];
   if (priority === 'balanced') {
@@ -404,6 +436,7 @@ function reasonFor(v: MethodView, priority: MethodPriority, level: number): stri
   if (v.status === 'PREP') parts.push(`first: ${v.missing.map((x) => x.label).join(', ')}`);
   if (v.status === 'LOCKED') parts.push(`locked: ${v.missing.map((x) => x.label).join(', ')}`);
   if (level < m.from) parts.push(`from level ${m.from}`);
+  if (upgrade) parts.push(`a ${upgrade.tool} (≈ ${fmtK(upgrade.price)} gp) saves ≈ ${hoursText(upgrade.hours)}`);
   return parts.join('; ');
 }
 
@@ -454,7 +487,8 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
 
   const priority = objective;
   const xpNow0 = input.xp ?? xpForLevel(level);
-  const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level, coinsPerMinute(input.prices));
+  const coinRate = coinsPerMinute(input.prices);
+  const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level, coinRate);
   const views = methodsFor(skill, methods).filter((m) => availableAt(m, level, mode)).map((m) => viewMethod(m, state)).sort(cmp);
   const best = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
   const others = views.filter((v) => v !== best).slice(0, 3);
@@ -476,9 +510,10 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   } else if (best?.method.xph) {
     time = { source: best.method.rateSource ?? 'wiki', minHours: xpLeft / best.method.xph[1], maxHours: xpLeft / best.method.xph[0] };
   }
+  const upgrade = best ? toolUpgrade(best.method, xpLeft, priority, coinRate) : null;
   return {
-    ...empty, best, others, quests, path, xpLeft, actionsLeft, actionTarget, time,
-    reason: best ? reasonFor(best, priority, level) : 'There is no method in the list for this level and mode: see the skill training plan.',
+    ...empty, best, others, quests, path, xpLeft, actionsLeft, actionTarget, time, upgrade,
+    reason: best ? reasonFor(best, priority, level, upgrade) : 'There is no method in the list for this level and mode: see the skill training plan.',
   };
 }
 

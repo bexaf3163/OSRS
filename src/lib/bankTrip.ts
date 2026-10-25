@@ -26,7 +26,7 @@ function legTiles(a: Point, b: Point): number | null {
  * The spot's nearest bank and the minutes of one trip there and back, banking included: the straight line at running pace at the fast end, a winding path
  * at walking pace at the slow end, and the ladders on the way. A leg the map data cannot measure (a ladder into a separate area) counts only its climb.
  */
-export function bankTrip(spot: BankedSpot): { bank: Point & { label: string }; tiles: number; minutes: [number, number] } | null {
+export function bankTrip(spot: BankedSpot, bankSeconds: readonly [number, number] = BANK_SECONDS): { bank: Point & { label: string }; tiles: number; minutes: [number, number] } | null {
   const way: Point[] = spot.waypoints?.length ? spot.waypoints : [spot.place];
   const entrance = way[0];
   const named = spot.bank ? LOCATIONS[spot.bank] : undefined;
@@ -39,7 +39,16 @@ export function bankTrip(spot: BankedSpot): { bank: Point & { label: string }; t
     if (leg === null || leg !== dist(way[i - 1], way[i])) climbs++;
     tiles += leg ?? 0;
   }
-  const seconds = (pace: number, factor: number, i: 0 | 1) => (2 * tiles * factor) / pace + BANK_SECONDS[i] + 2 * climbs * CLIMB_SECONDS[i];
-  return { bank, tiles, minutes: [seconds(TILES_PER_SECOND, 1, 0) / 60, seconds(TILES_PER_SECOND / 2, WINDING, 1) / 60] };
+  return { bank, tiles, minutes: tripMinutes(tiles, climbs, bankSeconds) };
+}
+
+/**
+ * Minutes of one trip to a bank and back, banking included, for a walk of this many tiles each way (and ladders): the straight line at running pace
+ * at the fast end, a winding path at walking pace at the slow end. 0 tiles: banking where one stands. bank: the seconds at the bank, fast and slow
+ * (a fighter's visit by default; a processing visit is a preset deposit and withdrawal, processingRates.ts).
+ */
+export function tripMinutes(tiles: number, climbs = 0, bank: readonly [number, number] = BANK_SECONDS): [number, number] {
+  const seconds = (pace: number, factor: number, i: 0 | 1) => (2 * tiles * factor) / pace + bank[i] + 2 * climbs * CLIMB_SECONDS[i];
+  return [seconds(TILES_PER_SECOND, 1, 0) / 60, seconds(TILES_PER_SECOND / 2, WINDING, 1) / 60];
 }
 

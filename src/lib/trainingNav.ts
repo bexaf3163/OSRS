@@ -7,6 +7,9 @@ import type { TrainingMethod } from './trainingRouter';
 
 export function trainingNav(m: Pick<TrainingMethod, 'place' | 'objectNames' | 'spot'>): NavTargetPayload | null {
   // The spot the gathering engine picked for this player wins over the method's general place (both are wiki-checked points).
+  // A spot under the ground: the arrow goes to its way in (the plugin's one target cannot follow a ladder).
+  const door = m.spot?.waypoints?.[0];
+  if (m.spot && door) return { label: `${m.spot.label} (way in)`, x: door.x, y: door.y, plane: door.plane };
   if (m.spot) return { label: m.spot.label, x: m.spot.place.x, y: m.spot.place.y, plane: m.spot.place.plane, ...(m.objectNames ? { objectNames: m.objectNames } : {}) };
   if (!m.place) return null;
   const p = matchStrict(m.place);

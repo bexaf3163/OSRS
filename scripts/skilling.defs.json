@@ -1,5 +1,5 @@
 {
-  "about": "The gathering spots of the non-combat skills, read by scripts/build-skilling.ts against the OSRS Wiki. A resource names its wiki object (spawns), the page with its skilling success chart, its products (XP and level from the products' info templates) and its tool; a spot names one spawn group of the object's ObjectLocLines (exact location text) and the bank players use from it (a majorLocations.json bank), or no bank (drop only). A method of trainingMethods.json lists the resources it trains. Members content is added the same way: members spawn groups are skipped on a free account by the engine, not here.",
+  "about": "The gathering spots of the non-combat skills, read by scripts/build-skilling.ts against the OSRS Wiki. A resource names its wiki object (spawns), the page with its skilling success chart, its products (XP and level from the products' info templates) and its tool; a spot names one spawn group of the object's ObjectLocLines (exact location text) and the bank players use from it (a majorLocations.json bank), or no bank (drop only). A spot under the ground names its way in (entrance: a dungeon of majorLocations.json, 6400 tiles south of the spawns). A method of trainingMethods.json lists the resources it trains. Members content is added the same way: members spawn groups are skipped on a free account by the engine, not here.",
   "reach": 60,
   "hostiles": {
     "about": "Aggressive NPCs checked at every spot: each page's {{Infobox Monster}} must say aggressive, and every one of its free {{LocLine}} groups within range tiles of a spot is attached to that spot with its levels. Add a page here and rebuild; the engine applies the wiki's aggression rule (combat level at most twice the NPC's) to every spot.",
@@ -138,6 +138,16 @@
       "chart": "Iron rocks",
       "products": [
         "Iron ore"
+      ],
+      "tool": "pickaxe"
+    },
+    {
+      "id": "coal",
+      "skill": "mining",
+      "object": "Coal rocks",
+      "chart": "Coal rocks",
+      "products": [
+        "Coal"
       ],
       "tool": "pickaxe"
     },
@@ -318,6 +328,25 @@
       "resource": "iron",
       "location": "[[Rimmington mine]]",
       "bank": "Falador East Bank"
+    },
+    {
+      "resource": "iron",
+      "location": "[[Dwarven Mine]]",
+      "entrance": "Dwarven Mine",
+      "bank": "Falador East Bank",
+      "why": "Reached by the Ice Mountain ladder (the place data's way in); the Falador staircase is not in the place data yet, so the walk to the bank is a long estimate."
+    },
+    {
+      "resource": "coal",
+      "location": "[[Barbarian Village mine]]",
+      "bank": "Edgeville Bank"
+    },
+    {
+      "resource": "coal",
+      "location": "[[Dwarven Mine]]",
+      "entrance": "Dwarven Mine",
+      "bank": "Falador East Bank",
+      "why": "Reached by the Ice Mountain ladder (the place data's way in); the Falador staircase is not in the place data yet, so the walk to the bank is a long estimate."
     },
     {
       "resource": "net",

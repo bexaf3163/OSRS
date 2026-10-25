@@ -29,8 +29,13 @@ describe('a money method at a registry spot is timed by the gathering engine', (
   it('a tool whose ownership is unknown leaves the pace unknown: the published pace applies', () => {
     expect(gatherPersonaliser(stateOf({ woodcutting: 60 }, null))(yew, null)).toBeNull();
   });
-  it('a place the registry has no spot for (inside the Dwarven Mine) keeps the published pace', () => {
-    expect(gatherPersonaliser(stateOf({ mining: 60 }, { 'Rune pickaxe': 1 }))(methodById('mine-iron-dwarven')!, 'Rune pickaxe')).toBeNull();
+  it('a spot under the ground is found from its way in: the Dwarven Mine methods name the entrance, the rocks are below it', () => {
+    const st = stateOf({ mining: 60 }, { 'Rune pickaxe': 1 });
+    expect(gatherPersonaliser(st)(methodById('mine-iron-dwarven')!, 'Rune pickaxe')?.basis).toMatch(/Rune pickaxe/);
+    expect(gatherPersonaliser(st)(methodById('mine-coal-dwarven')!, 'Rune pickaxe')).not.toBeNull();
+  });
+  it('a place the registry has no spot for keeps the published pace', () => {
+    expect(gatherPace('Iron ore', { x: 2600, y: 3100, plane: 0 }, stateOf({ mining: 60 }, { 'Rune pickaxe': 1 }), 'Rune pickaxe')).toBeNull();
   });
   it('a spot whose number of trees is unknown is not timed as endless (the one oak east of Draynor Bank)', () => {
     expect(gatherPersonaliser(stateOf({ woodcutting: 60 }, { 'Rune axe': 1 }))(methodById('chop-oak-draynor')!, 'Rune axe')).toBeNull();

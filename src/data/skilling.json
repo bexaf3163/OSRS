@@ -386,6 +386,27 @@
       "source": "https://oldschool.runescape.wiki/w/Iron_rocks"
     },
     {
+      "id": "coal",
+      "skill": "mining",
+      "object": "Coal rocks",
+      "tool": "pickaxe",
+      "cascade": false,
+      "products": [
+        {
+          "name": "Coal",
+          "level": 30,
+          "xp": 50,
+          "low": 16,
+          "high": 100,
+          "respawn": [
+            30,
+            30
+          ]
+        }
+      ],
+      "source": "https://oldschool.runescape.wiki/w/Coal_rocks"
+    },
+    {
       "id": "net",
       "skill": "fishing",
       "object": "Fishing spot (small net, bait)",
@@ -839,6 +860,93 @@
       "count": 6,
       "members": false,
       "bank": "Falador East Bank"
+    },
+    {
+      "resource": "iron",
+      "label": "Dwarven Mine",
+      "place": {
+        "x": 3039,
+        "y": 9777,
+        "plane": 0,
+        "label": "Dwarven Mine"
+      },
+      "count": 9,
+      "members": false,
+      "waypoints": [
+        {
+          "x": 3018,
+          "y": 3450,
+          "plane": 0,
+          "label": "Dwarven Mine"
+        },
+        {
+          "x": 3039,
+          "y": 9777,
+          "plane": 0,
+          "label": "Dwarven Mine"
+        }
+      ],
+      "bank": "Falador East Bank",
+      "why": "Reached by the Ice Mountain ladder (the place data's way in); the Falador staircase is not in the place data yet, so the walk to the bank is a long estimate.",
+      "hostiles": [
+        {
+          "npc": "Scorpion",
+          "levels": [
+            14
+          ],
+          "count": 13
+        }
+      ]
+    },
+    {
+      "resource": "coal",
+      "label": "Barbarian Village mine",
+      "place": {
+        "x": 3082,
+        "y": 3421,
+        "plane": 0,
+        "label": "Barbarian Village mine"
+      },
+      "count": 4,
+      "members": false,
+      "bank": "Edgeville Bank"
+    },
+    {
+      "resource": "coal",
+      "label": "Dwarven Mine",
+      "place": {
+        "x": 3048,
+        "y": 9775,
+        "plane": 0,
+        "label": "Dwarven Mine"
+      },
+      "count": 7,
+      "members": false,
+      "waypoints": [
+        {
+          "x": 3018,
+          "y": 3450,
+          "plane": 0,
+          "label": "Dwarven Mine"
+        },
+        {
+          "x": 3048,
+          "y": 9775,
+          "plane": 0,
+          "label": "Dwarven Mine"
+        }
+      ],
+      "bank": "Falador East Bank",
+      "why": "Reached by the Ice Mountain ladder (the place data's way in); the Falador staircase is not in the place data yet, so the walk to the bank is a long estimate.",
+      "hostiles": [
+        {
+          "npc": "Scorpion",
+          "levels": [
+            14
+          ],
+          "count": 13
+        }
+      ]
     },
     {
       "resource": "net",

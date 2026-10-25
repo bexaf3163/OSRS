@@ -28,7 +28,7 @@ export function pickMethods(steps: readonly Step[], state: PlayerState, mode: Ga
     const spot = best?.method.spot;
     if (best) picks[step.id] = best.method.kit || spot ? {
       methodId: best.method.id, needs: methodNeeds(best.method, state), name: best.method.name,
-      ...(spot ? { spot: { label: spot.label, x: spot.place.x, y: spot.place.y, plane: spot.place.plane }, where: best.method.where } : {}),
+      ...(spot ? { spot: { label: spot.label, x: spot.place.x, y: spot.place.y, plane: spot.place.plane, ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }, where: best.method.where } : {}),
       ...(best.method.rateWarning ? { warning: best.method.rateWarning } : {}),
     } : best.method.id;
   }

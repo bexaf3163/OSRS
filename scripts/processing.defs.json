@@ -1,0 +1,48 @@
+{
+  "about": "The processing recipes of the non-combat skills (Smithing, Cooking, Crafting), read by scripts/build-processing.ts against the OSRS Wiki. A recipe names the product's page; its level, XP, ticks, tools, materials and output come from the page's free {{Recipe}} for that skill, its success chance from the page's {{Skilling success chart}} (cooking) or the recipe's own note (an iron bar's 50%). A station is a wiki-listed furnace or anvil (the page's location table: the map point and the wiki's distance from the bank) or a permanent fire (its ObjectLocLine near a named place, banked at a named bank). A recipe without a facility is made by a bank. A method of trainingMethods.json lists the recipes it trains. Members recipes and stations are added the same way; the engine skips them on a free account.",
+  "stations": [
+    { "kind": "furnace", "page": "Furnace", "row": "[[Edgeville]]" },
+    { "kind": "furnace", "page": "Furnace", "row": "[[Al Kharid]]" },
+    { "kind": "furnace", "page": "Furnace", "row": "[[Falador]]" },
+    { "kind": "anvil", "page": "Anvil", "row": "[[Varrock anvil building]]" },
+    { "kind": "fire", "page": "Fire", "location": "[[Barbarian Village]]", "near": "Barbarian Village fishing spots", "bank": "Edgeville Bank" }
+  ],
+  "recipes": [
+    { "id": "bronze-axe", "page": "Bronze axe", "skill": "smithing", "facility": "anvil" },
+    { "id": "bronze-scimitar", "page": "Bronze scimitar", "skill": "smithing", "facility": "anvil" },
+    { "id": "bronze-warhammer", "page": "Bronze warhammer", "skill": "smithing", "facility": "anvil" },
+    { "id": "bronze-platebody", "page": "Bronze platebody", "skill": "smithing", "facility": "anvil" },
+    { "id": "iron-platebody", "page": "Iron platebody", "skill": "smithing", "facility": "anvil" },
+    { "id": "steel-platebody", "page": "Steel platebody", "skill": "smithing", "facility": "anvil" },
+    { "id": "mithril-platebody", "page": "Mithril platebody", "skill": "smithing", "facility": "anvil" },
+    { "id": "adamant-platebody", "page": "Adamant platebody", "skill": "smithing", "facility": "anvil" },
+    { "id": "cooked-chicken", "page": "Cooked chicken", "skill": "cooking", "facility": "fire" },
+    { "id": "cooked-meat", "page": "Cooked meat", "skill": "cooking", "facility": "fire" },
+    { "id": "trout", "page": "Trout", "skill": "cooking", "facility": "fire" },
+    { "id": "tuna", "page": "Tuna", "skill": "cooking", "facility": "fire" },
+    { "id": "leather-gloves", "page": "Leather gloves", "skill": "crafting", "facility": null },
+    { "id": "leather-boots", "page": "Leather boots", "skill": "crafting", "facility": null },
+    { "id": "gold-ring", "page": "Gold ring", "skill": "crafting", "facility": "furnace" },
+    { "id": "gold-necklace", "page": "Gold necklace", "skill": "crafting", "facility": "furnace" },
+    { "id": "gold-amulet", "page": "Gold amulet (u)", "skill": "crafting", "facility": "furnace" },
+    { "id": "sapphire", "page": "Sapphire", "skill": "crafting", "facility": null },
+    { "id": "emerald", "page": "Emerald", "skill": "crafting", "facility": null },
+    { "id": "ruby", "page": "Ruby", "skill": "crafting", "facility": null },
+    { "id": "diamond", "page": "Diamond", "skill": "crafting", "facility": null }
+  ],
+  "methods": {
+    "sm-bronze-items": ["bronze-axe", "bronze-scimitar", "bronze-warhammer"],
+    "sm-bronze": ["bronze-platebody"],
+    "sm-iron": ["iron-platebody"],
+    "sm-steel": ["steel-platebody"],
+    "sm-mithril": ["mithril-platebody"],
+    "sm-adamant": ["adamant-platebody"],
+    "ck-meat": ["cooked-chicken", "cooked-meat"],
+    "ck-trout": ["trout"],
+    "ck-tuna": ["tuna"],
+    "cr-leather": ["leather-gloves", "leather-boots"],
+    "cr-gold": ["gold-ring", "gold-necklace", "gold-amulet"],
+    "cr-gems": ["sapphire", "emerald", "ruby"],
+    "cr-diamond": ["diamond"]
+  }
+}

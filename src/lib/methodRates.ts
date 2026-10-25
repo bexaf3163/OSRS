@@ -15,6 +15,8 @@ import { gatherRate } from './skillingRates';
 export interface RateSpot {
   label: string;
   place: Point & { label: string };
+  /** The way to a spot under the ground: its entrance first, then the spot (the plugin's path and the bank trip follow it). */
+  waypoints?: (Point & { label?: string })[];
   /** bank - the bank trip pays (bank named); drop - dropping is faster than the walk, or there is no bank on foot. */
   how: 'bank' | 'drop';
   bank?: string;
@@ -37,6 +39,8 @@ export interface ModelRate {
   warning?: string;
   /** The spot the engine picked (gathering); absent for the combat engines, whose spot is the method's own. */
   spot?: RateSpot;
+  /** Better tools the player could buy, with the price and the rate each would give here (gathering): weighed by the caller over the hours left. */
+  upgrades?: { tool: string; price: number; xph: [number, number] }[];
 }
 
 /** What the trade allows (the exchange and the account) and what the player wants: on the fastest objective nothing is kept that costs time. */

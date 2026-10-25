@@ -70,14 +70,41 @@ Read this first. Claude keeps this file current after every release. It says wha
     - `tests/skillingRates.test.ts`: wiki worked examples; tools; objective; restriction; synthetic spots incl. bank journey, members and hostiles; forecast; catalogue sync.
     - `tests/combatRoute/plans.test.ts`: members spots explicit.
 
+- **2.78.2, tool upgrades weighed (block a):**
+  - **Engine:** `skillingRates.upgradesAt` lists, for the picked spot, every better tier of the method's tool family. Each tier must be usable at this level, allowed on this account (members tools never on F2P), not owned, and priced (`supplyPrice`). Each comes with the rate it would give at the same spot. It returns `ModelRate.upgrades`, which `personalize` copies to the method.
+  - **Rule:** `trainingRouter.toolUpgrade(m, xpLeft, priority, coinRate)`:
+    - Fastest: the tier saving the most hours (≥ 10 min), price shown.
+    - Balanced: the tier whose hours saved × `coinsPerMinute` beat its price by the most; nothing without prices.
+    - Relaxed: none.
+  - The hours are the current method's to the goal, a floor, since later methods gain too.
+  - **UI:** one clause at the end of the existing reason ("a Rune axe (≈ 7k gp) saves ≈ 23 h"); `TrainingAdvice.upgrade` carries it.
+  - **Tests:** `tests/skillingRates.test.ts` "a better tool is weighed…".
+  - **Example, recorded market:** Mining 41 with an Iron pickaxe → "a Rune pickaxe (≈ 19k gp) saves ≈ 7 h"; Mining 15 with Bronze → Steel (≈ 230 gp) saves ≈ 24 min.
+  - **Not yet:** weapons/bows/staves (combat gear upgrade); the cash the player has is not checked (the price is shown, the Money page funds it).
+- **2.78.2, spots under the ground (gathering registry):**
+  - A defs spot may name `entrance` (a `kind: dungeon` place of majorLocations.json). `build-skilling` checks that the spawns lie 6400 tiles north of it (±200, the same rule as `bankTrip.legTiles`) and refuses an underground spawn group without one. It writes `waypoints: [entrance, spot]`.
+  - The engine follows those waypoints everywhere:
+    - the bank trip goes through them (`bankTrip({ waypoints })`);
+    - `RateSpot.waypoints` → `TrainingPick.spot.waypoints` → `withTrainingMethod` sets `inGame.pathWaypoints`;
+    - `trainingNav` points the arrow at the way in ("… (way in)");
+    - `gatherPace` matches a money method by the way in (the Dwarven Mine methods name the entrance).
+  - **Data added (wiki rebuild):** resource `coal`. Spots:
+    - iron, Dwarven Mine (9 rocks, scorpions attached);
+    - coal, Dwarven Mine (7);
+    - coal, Barbarian Village mine (4, Edgeville Bank).
+  - **Effect:** `mine-iron-dwarven` and `mine-coal-dwarven` on the Money page are now engine-timed too. No gathering money method is left on the scaled published pace except the uncounted oak.
+  - **Approximation:** the only Dwarven Mine way in in the place data is the Ice Mountain ladder (3018,3450), so the Falador East Bank trip is long. Adding the Falador staircase to majorLocations.json (wiki-verified) and using it as the entrance would shorten it.
+  - **Tests:** `tests/skillingRates.test.ts` "a spot under the ground (synthetic)"; `tests/funding/gatherAdapter.test.ts`.
+
+
 ## 5. In progress (Claude)
 
 **Hardening pass (owner brief of 2026-10-25, after 2.78.0)**, in small verified blocks. The order:
 Done in 2.78.1: food/consumable costs and the objective in both rankings, the bounded baseline, explicit members eligibility, the price-snapshot cache key, forecast re-rating, safety by facts, the content-contract tests, and the assumptions table (5b).
 Still open in the brief:
-- (a) Tool/gear acquisition cost in the ranking: the gear-upgrade variant, i.e. an axe/pickaxe/weapon upgrade's time saved vs its price, and cash-to-start vs later purchases on the Skills card.
+- (a) Gathering tools done in 2.78.2. Left: combat gear upgrades (weapon/bow/staff) on the same rule, and checking the player's cash before suggesting a purchase.
 - (b) Done in 2.78.1 (see the reserves entry above).
-- (c) Gathering done in 2.78.1 (see above); combat already shared. Left: add the Dwarven Mine iron/coal spots to the registry (wiki rebuild) so those two money methods leave the scaled published pace.
+- (c) Done (2.78.1 gathering adapter, 2.78.2 Dwarven Mine spots). Combat already shared `estimateStep`.
 - (d) Calibration against a real session (NOT REACHABLE while the owner is away).
 - (e) Processing skills on the engine.
 

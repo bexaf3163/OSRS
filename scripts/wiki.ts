@@ -103,3 +103,66 @@ export function middleOf(pts: readonly Pt[]): Pt {
 }
 
 export const chebyshev = (a: { x: number; y: number }, b: { x: number; y: number }): number => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
+
+/**
+ * The rows of every {| wikitable |} of the text: each row's cells as written (a cell's attributes before a single | are dropped), with the header
+ * cells of the table. Nested tables are not split apart; cells may hold templates and links whole.
+ */
+export function wikitables(text: string): { headers: string[]; rows: string[][] }[] {
+  const out: { headers: string[]; rows: string[][] }[] = [];
+  for (const m of text.matchAll(/\{\|[^\n]*\n([\s\S]*?)\n\|\}/g)) {
+    const headers: string[] = [];
+    const rows: string[][] = [];
+    let row: string[] | null = null;
+    for (const raw of m[1].split('\n')) {
+      const line = raw.trim();
+      if (line.startsWith('|-')) { if (row?.length) rows.push(row); row = []; continue; }
+      if (line.startsWith('!')) { for (const h of line.slice(1).split('!!')) headers.push(cellText(h)); continue; }
+      if (line.startsWith('|') && !line.startsWith('|+')) {
+        row ??= [];
+        for (const c of splitCells(line.slice(1))) row.push(cellText(c));
+      } else if (row?.length) row[row.length - 1] += `\n${raw}`;
+    }
+    if (row?.length) rows.push(row);
+    out.push({ headers, rows });
+  }
+  return out;
+}
+
+/** A row line's cells: split at || outside templates and links. */
+function splitCells(line: string): string[] {
+  const out: string[] = [];
+  let cur = '';
+  let d = 0;
+  for (let i = 0; i < line.length; i++) {
+    const two = line.slice(i, i + 2);
+    if (two === '{{' || two === '[[') { d++; cur += two; i++; continue; }
+    if (two === '}}' || two === ']]') { d--; cur += two; i++; continue; }
+    if (two === '||' && d === 0) { out.push(cur); cur = ''; i++; continue; }
+    cur += line[i];
+  }
+  out.push(cur);
+  return out;
+}
+
+/** A cell without its attributes ("class=x | text" → "text"); a | inside a template or link is not an attribute separator. */
+function cellText(cell: string): string {
+  let d = 0;
+  for (let i = 0; i < cell.length; i++) {
+    const two = cell.slice(i, i + 2);
+    if (two === '{{' || two === '[[') { d++; i++; continue; }
+    if (two === '}}' || two === ']]') { d--; i++; continue; }
+    if (cell[i] === '|' && d === 0 && /=/.test(cell.slice(0, i))) return cell.slice(i + 1).trim();
+  }
+  return cell.trim();
+}
+
+/** The point of a {{Map}} in a text ("x=3110|y=3499" or "x:2344,y:3811"), with its plane; null when there is none. */
+export function mapPoint(text: string): Pt | null {
+  const t = templates(text, 'Map')[0];
+  if (!t) return null;
+  const pos = Object.values(t).map((v) => /^x[:=]?(\d+),y[:=]?(\d+)/.exec(v.replace(/\s/g, ''))).find(Boolean);
+  const x = num(t.x) || Number(pos?.[1]);
+  const y = num(t.y) || Number(pos?.[2]);
+  return Number.isFinite(x) && Number.isFinite(y) && x > 0 && y > 0 ? { x, y, plane: Number(t.plane ?? 0) || 0 } : null;
+}

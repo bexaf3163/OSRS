@@ -31,6 +31,8 @@ interface Resource {
 }
 interface SkillSpot {
   resource: string; label: string; place: Point & { label: string }; count?: number; members: boolean; bank?: string; why?: string;
+  /** A spot under the ground: its way in (a dungeon entrance of the place data), then the spot. */
+  waypoints?: (Point & { label?: string })[];
   /** Aggressive NPCs standing at the spot (their own wiki spawn lines), with their levels. */
   hostiles?: { npc: string; levels: number[]; count: number }[];
 }
@@ -125,8 +127,8 @@ function paceAt(r: Resource, spot: SkillSpot, level: number, tool: ToolUse): { c
   return { chances, any, atSpot };
 }
 
-function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerState, market: Market, coinRate: number | null, reg: SkillingRegistry): SpotRate | null {
-  const tool = toolFor(r, level, state, reg);
+function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerState, market: Market, coinRate: number | null, reg: SkillingRegistry, forced?: ToolUse): SpotRate | null {
+  const tool = forced ?? toolFor(r, level, state, reg);
   if (!tool) return null;
   const pace = paceAt(r, spot, level, tool);
   if (!pace) return null;
@@ -135,7 +137,7 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
   const values = r.products.map((p) => dropValue(p.name, market.prices, market.restriction) ?? 0);
   const valueEach = r.products.reduce((a, _p, i) => a + chances[i] * values[i], 0) / any;
   const slots = BAG - (tool.wielded ? 0 : 1) - (r.bait ? 1 : 0);
-  const trip = spot.bank ? bankTrip({ place: spot.place, bank: spot.bank }) : null;
+  const trip = spot.bank ? bankTrip({ place: spot.place, bank: spot.bank, ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }) : null;
   const bankPer = (i: 0 | 1) => (trip ? (trip.minutes[i] * 60) / slots : Infinity);
   const mid = (f: (i: 0 | 1) => number) => (f(0) + f(1)) / 2;
   const banks = trip !== null && bankingPays(valueEach, mid(bankPer) - mid((i) => DROP[i]), coinRate, market.objective);
@@ -146,7 +148,9 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
   const baitPrice = r.bait ? supplyPrice(r.bait, market.prices, state.mode) : null;
   const lootPerHour = banks ? valueEach * items : 0;
   const main = r.products.find((_p, i) => chances[i] > 0)!;
-  const where: RateSpot = { label: spot.label, place: spot.place, how: banks ? 'bank' : 'drop', ...(banks && trip ? { bank: trip.bank.label } : {}) };
+  const where: RateSpot = {
+    label: spot.label, place: spot.place, how: banks ? 'bank' : 'drop', ...(banks && trip ? { bank: trip.bank.label } : {}), ...(spot.waypoints ? { waypoints: spot.waypoints } : {}),
+  };
   const rate: ModelRate = {
     xph, costPerHour: r.bait ? (baitPrice === null ? null : items * baitPrice) : 0, basis: tool.name,
     ...(r.bait ? { costName: r.bait === 'Feather' ? 'feathers' : r.bait.toLowerCase() } : {}),
@@ -168,17 +172,40 @@ export function gatherRate(m: TrainingMethod, skill: string, state: PlayerState,
   if (level === undefined) return null;
   const coinRate = coinsPerMinute(market.prices);
   const home = m.place ? matchStrict(m.place) : null;
-  let best: SpotRate | null = null;
+  let best: { s: SpotRate; r: Resource; spot: SkillSpot } | null = null;
   for (const id of ids) {
     const r = reg.resources.find((x) => x.id === id);
     if (!r || r.skill !== skill) continue;
     for (const spot of reg.spots) {
       if (spot.resource !== id || (spot.members && state.mode !== 'members')) continue;
       const s = spotRate(r, spot, level, state, market, coinRate, reg);
-      if (s && (!best || better(s, best, home))) best = s;
+      if (s && (!best || better(s, best.s, home))) best = { s, r, spot };
     }
   }
-  return best ? { ...best.rate, ...(best.danger ? { warning: best.danger } : {}) } : null;
+  if (!best) return null;
+  const upgrades = upgradesAt(best.r, best.spot, level, state, market, coinRate, reg);
+  return { ...best.s.rate, ...(best.s.danger ? { warning: best.s.danger } : {}), ...(upgrades.length ? { upgrades } : {}) };
+}
+
+/**
+ * The better tiers of the tool the player could buy, each with its price (supplyPrice: the exchange, else a shop this account may use) and the rate it
+ * would give at the same spot: the caller weighs the hours saved against the price. A tier above the one the rate uses, usable at this level and on
+ * this account, not owned; an unpriced tier is left out (never offered as free).
+ */
+function upgradesAt(r: Resource, spot: SkillSpot, level: number, state: PlayerState, market: Market, coinRate: number | null, reg: SkillingRegistry): NonNullable<ModelRate['upgrades']> {
+  const family = reg.tools[r.tool];
+  const now = toolFor(r, level, state, reg);
+  if (!family || !now?.tier) return [];
+  const attack = levelOf(state, 'attack');
+  const from = family.tiers.findIndex((t) => t.item === now.tier!.item);
+  return family.tiers.slice(from + 1).flatMap((tier) => {
+    if (level < tier.level || (toolUse(tier.item)?.members && state.mode !== 'members') || (r.byTool && !r.byTool[tier.item])) return [];
+    if (heldOf(state, tier.item).presence === 'PRESENT') return [];
+    const price = supplyPrice(tier.item, market.prices, state.mode);
+    if (price === null) return [];
+    const s = spotRate(r, spot, level, state, market, coinRate, reg, { tier, name: tier.item, wielded: attack !== undefined && attack >= tier.wield });
+    return s ? [{ tool: tier.item, price, xph: s.rate.xph }] : [];
+  });
 }
 
 /** A spot further than this from the place another engine names is not that place's spot, tiles. */
@@ -197,8 +224,10 @@ export function gatherPace(product: string, near: Point & { plane?: number }, st
   for (const r of reg.resources) {
     if (!r.products.some((p) => p.name.toLowerCase() === key)) continue;
     for (const spot of reg.spots) {
-      if (spot.resource !== r.id || (spot.members && state.mode !== 'members') || (spot.place.plane ?? 0) !== (near.plane ?? 0)) continue;
-      const far = Math.max(Math.abs(spot.place.x - near.x), Math.abs(spot.place.y - near.y));
+      // A spot under the ground is found from its way in: where a method on the surface says to go.
+      const door = spot.waypoints?.[0] ?? spot.place;
+      if (spot.resource !== r.id || (spot.members && state.mode !== 'members') || (door.plane ?? 0) !== (near.plane ?? 0)) continue;
+      const far = Math.max(Math.abs(door.x - near.x), Math.abs(door.y - near.y));
       if (far <= SAME_PLACE && (!found || far < found.far)) found = { r, spot, far };
     }
   }

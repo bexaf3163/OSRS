@@ -1,0 +1,617 @@
+{
+  "about": "Built by scripts/build-processing.ts from scripts/processing.defs.json and the OSRS Wiki; edit the definitions and rebuild.",
+  "stations": [
+    {
+      "kind": "furnace",
+      "label": "Edgeville furnace",
+      "place": {
+        "x": 3110,
+        "y": 3499,
+        "plane": 0,
+        "label": "Edgeville furnace"
+      },
+      "bankTiles": 14,
+      "members": false
+    },
+    {
+      "kind": "furnace",
+      "label": "Al Kharid furnace",
+      "place": {
+        "x": 3273,
+        "y": 3187,
+        "plane": 0,
+        "label": "Al Kharid furnace"
+      },
+      "bankTiles": 30,
+      "members": false
+    },
+    {
+      "kind": "furnace",
+      "label": "Falador furnace",
+      "place": {
+        "x": 2976,
+        "y": 3369,
+        "plane": 0,
+        "label": "Falador furnace"
+      },
+      "bankTiles": 40,
+      "members": false
+    },
+    {
+      "kind": "anvil",
+      "label": "Varrock anvil building",
+      "place": {
+        "x": 3246,
+        "y": 3404,
+        "plane": 0,
+        "label": "Varrock anvil building"
+      },
+      "bankTiles": 10,
+      "members": false
+    },
+    {
+      "kind": "fire",
+      "label": "Barbarian Village fire",
+      "place": {
+        "x": 3106,
+        "y": 3432,
+        "plane": 0,
+        "label": "Barbarian Village fire"
+      },
+      "bank": "Edgeville Bank",
+      "members": false
+    }
+  ],
+  "recipes": [
+    {
+      "id": "bronze-axe",
+      "skill": "smithing",
+      "level": 1,
+      "xp": 12.5,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Bronze bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Bronze axe",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Bronze_axe"
+    },
+    {
+      "id": "bronze-scimitar",
+      "skill": "smithing",
+      "level": 5,
+      "xp": 25,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Bronze bar",
+          "qty": 2,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Bronze scimitar",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Bronze_scimitar"
+    },
+    {
+      "id": "bronze-warhammer",
+      "skill": "smithing",
+      "level": 9,
+      "xp": 37.5,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Bronze bar",
+          "qty": 3,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Bronze warhammer",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Bronze_warhammer"
+    },
+    {
+      "id": "bronze-platebody",
+      "skill": "smithing",
+      "level": 18,
+      "xp": 62.5,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Bronze bar",
+          "qty": 5,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Bronze platebody",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Bronze_platebody"
+    },
+    {
+      "id": "iron-platebody",
+      "skill": "smithing",
+      "level": 33,
+      "xp": 125,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Iron bar",
+          "qty": 5,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Iron platebody",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Iron_platebody"
+    },
+    {
+      "id": "steel-platebody",
+      "skill": "smithing",
+      "level": 48,
+      "xp": 187.5,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Steel bar",
+          "qty": 5,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Steel platebody",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Steel_platebody"
+    },
+    {
+      "id": "mithril-platebody",
+      "skill": "smithing",
+      "level": 68,
+      "xp": 250,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Mithril bar",
+          "qty": 5,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Mithril platebody",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Mithril_platebody"
+    },
+    {
+      "id": "adamant-platebody",
+      "skill": "smithing",
+      "level": 88,
+      "xp": 312.5,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Adamantite bar",
+          "qty": 5,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Adamant platebody",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Adamant_platebody"
+    },
+    {
+      "id": "cooked-chicken",
+      "skill": "cooking",
+      "level": 1,
+      "xp": 30,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Raw chicken",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Cooked chicken",
+        "qty": 1
+      },
+      "success": {
+        "low": 128,
+        "high": 512
+      },
+      "source": "https://oldschool.runescape.wiki/w/Cooked_chicken"
+    },
+    {
+      "id": "cooked-meat",
+      "skill": "cooking",
+      "level": 1,
+      "xp": 30,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Raw beef",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Cooked meat",
+        "qty": 1
+      },
+      "success": {
+        "low": 128,
+        "high": 512
+      },
+      "source": "https://oldschool.runescape.wiki/w/Cooked_meat"
+    },
+    {
+      "id": "trout",
+      "skill": "cooking",
+      "level": 15,
+      "xp": 70,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Raw trout",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Trout",
+        "qty": 1
+      },
+      "success": {
+        "low": 88,
+        "high": 432
+      },
+      "source": "https://oldschool.runescape.wiki/w/Trout"
+    },
+    {
+      "id": "tuna",
+      "skill": "cooking",
+      "level": 30,
+      "xp": 100,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Raw tuna",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Tuna",
+        "qty": 1
+      },
+      "success": {
+        "low": 58,
+        "high": 372
+      },
+      "source": "https://oldschool.runescape.wiki/w/Tuna"
+    },
+    {
+      "id": "leather-gloves",
+      "skill": "crafting",
+      "level": 1,
+      "xp": 13.8,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Needle"
+      ],
+      "inputs": [
+        {
+          "name": "Leather",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Thread",
+          "qty": 1,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Leather gloves",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Leather_gloves"
+    },
+    {
+      "id": "leather-boots",
+      "skill": "crafting",
+      "level": 7,
+      "xp": 16.3,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Needle"
+      ],
+      "inputs": [
+        {
+          "name": "Leather",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Thread",
+          "qty": 1,
+          "stacks": true
+        }
+      ],
+      "output": {
+        "name": "Leather boots",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Leather_boots"
+    },
+    {
+      "id": "gold-ring",
+      "skill": "crafting",
+      "level": 5,
+      "xp": 15,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Ring mould"
+      ],
+      "inputs": [
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Gold ring",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Gold_ring"
+    },
+    {
+      "id": "gold-necklace",
+      "skill": "crafting",
+      "level": 6,
+      "xp": 20,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Necklace mould"
+      ],
+      "inputs": [
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Gold necklace",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Gold_necklace"
+    },
+    {
+      "id": "gold-amulet",
+      "skill": "crafting",
+      "level": 8,
+      "xp": 30,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Amulet mould"
+      ],
+      "inputs": [
+        {
+          "name": "Gold bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Gold amulet (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Gold_amulet_(u)"
+    },
+    {
+      "id": "sapphire",
+      "skill": "crafting",
+      "level": 20,
+      "xp": 50,
+      "ticks": 2,
+      "facility": null,
+      "tools": [
+        "Chisel"
+      ],
+      "inputs": [
+        {
+          "name": "Uncut sapphire",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Sapphire",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Sapphire"
+    },
+    {
+      "id": "emerald",
+      "skill": "crafting",
+      "level": 27,
+      "xp": 67.5,
+      "ticks": 2,
+      "facility": null,
+      "tools": [
+        "Chisel"
+      ],
+      "inputs": [
+        {
+          "name": "Uncut emerald",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Emerald",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Emerald"
+    },
+    {
+      "id": "ruby",
+      "skill": "crafting",
+      "level": 34,
+      "xp": 85,
+      "ticks": 2,
+      "facility": null,
+      "tools": [
+        "Chisel"
+      ],
+      "inputs": [
+        {
+          "name": "Uncut ruby",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Ruby",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Ruby"
+    },
+    {
+      "id": "diamond",
+      "skill": "crafting",
+      "level": 43,
+      "xp": 107.5,
+      "ticks": 2,
+      "facility": null,
+      "tools": [
+        "Chisel"
+      ],
+      "inputs": [
+        {
+          "name": "Uncut diamond",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Diamond",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Diamond"
+    }
+  ],
+  "methods": {
+    "sm-bronze-items": [
+      "bronze-axe",
+      "bronze-scimitar",
+      "bronze-warhammer"
+    ],
+    "sm-bronze": [
+      "bronze-platebody"
+    ],
+    "sm-iron": [
+      "iron-platebody"
+    ],
+    "sm-steel": [
+      "steel-platebody"
+    ],
+    "sm-mithril": [
+      "mithril-platebody"
+    ],
+    "sm-adamant": [
+      "adamant-platebody"
+    ],
+    "ck-meat": [
+      "cooked-chicken",
+      "cooked-meat"
+    ],
+    "ck-trout": [
+      "trout"
+    ],
+    "ck-tuna": [
+      "tuna"
+    ],
+    "cr-leather": [
+      "leather-gloves",
+      "leather-boots"
+    ],
+    "cr-gold": [
+      "gold-ring",
+      "gold-necklace",
+      "gold-amulet"
+    ],
+    "cr-gems": [
+      "sapphire",
+      "emerald",
+      "ruby"
+    ],
+    "cr-diamond": [
+      "diamond"
+    ]
+  }
+}

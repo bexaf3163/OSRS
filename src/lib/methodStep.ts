@@ -21,7 +21,11 @@ export const GOAL_REACHED = 'goal-reached';
 export const UNKNOWN_GOAL_PREFIX = 'goal-unknown:';
 /** Resolved supplies travel with the method pick, as combat/food projections already do; the store never rebuilds a loadout from stale state. */
 /** A picked method: its id, or with what the player needs for it, a name for this player, and the spot the gathering engine chose (methodRates.ts). */
-export type TrainingPick = string | { methodId: string; needs: MethodNeed[]; name?: string; spot?: { label: string; x: number; y: number; plane: number }; where?: string; warning?: string };
+export type TrainingPick = string | {
+  methodId: string; needs: MethodNeed[]; name?: string; where?: string; warning?: string;
+  /** The spot the engine picked; waypoints - the way in of a spot under the ground, entrance first. */
+  spot?: { label: string; x: number; y: number; plane: number; waypoints?: { x: number; y: number; plane: number; label?: string }[] };
+};
 
 /** The method a pick names, whatever its form. */
 export const pickedMethodId = (pick: TrainingPick): string => (typeof pick === 'string' ? pick : pick.methodId);
@@ -145,7 +149,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
     mapLocation: at ?? undefined, resourceSpots: at ? [at] : [],
     ...(step.inGame ? { inGame: {
       ...step.inGame,
-      worldPoint: at ?? undefined, groundTiles: at ? [at] : [], pathWaypoints: undefined,
+      worldPoint: at ?? undefined, groundTiles: at ? [at] : [], pathWaypoints: chosen?.waypoints?.length ? chosen.waypoints.map((p) => ({ x: p.x, y: p.y, plane: p.plane })) : undefined,
       goal: at?.label ?? `${m.name}: ${m.where}`,
       objectNames: m.objectNames ?? [], objectIds: [],
       ...(m.npcNames || goal.skill !== step.followsMethod || goal.skill === 'ranged' || goal.skill === 'magic' ? { npcNames: m.npcNames ?? [], npcIds: [] } : {}),

@@ -6,8 +6,11 @@ import { buildPlayerState, type PlayerState } from '../src/lib/playerState';
 import { emptyProgress } from '../src/lib/progress';
 import { nameKey } from '../src/lib/checklist';
 import { cascade, skillChance } from '../src/lib/skillChance';
-import { gatherRate, SKILLING, type SkillingRegistry } from '../src/lib/skillingRates';
-import { adviseTraining, trainingMethods, type TrainingMethod } from '../src/lib/trainingRouter';
+import { gatherPace, gatherRate, SKILLING, type SkillingRegistry } from '../src/lib/skillingRates';
+import { trainingNav } from '../src/lib/trainingNav';
+import { withTrainingMethod } from '../src/lib/methodStep';
+import { stepById } from '../src/data';
+import { adviseTraining, toolUpgrade, trainingMethods, type TrainingMethod } from '../src/lib/trainingRouter';
 import type { PriceView } from '../src/lib/funding/quotes';
 import { market } from './funding/market';
 
@@ -127,6 +130,33 @@ describe('a new gathering spot inherits the rules (synthetic registry)', () => {
   });
 });
 
+describe('a spot under the ground (synthetic): the way in is walked, followed in the game and pointed at', () => {
+  // The same grove twice: once on the surface by the bank, once in the dungeon space under a point further from it, entered there.
+  const door = { x: 3093, y: 3150, plane: 0, label: 'Test hatch' };
+  const below = { x: 3093, y: 3150 + 6400, plane: 0, label: 'Test cave' };
+  const reg: SkillingRegistry = { ...SYNTHETIC, spots: [
+    { resource: 'test-tree', label: 'Test cave', place: below, waypoints: [door, below], count: 6, members: false, bank: 'Draynor Bank' },
+  ] };
+  const st = stateOf({ woodcutting: 40, attack: 40 }, { 'Bronze axe': [1, 0] });
+  const valuable = { prices: prices({ 'Test logs': 400 }), objective: 'balanced' as const };
+  it('the bank trip goes through the way in: the rate carries it, and it is slower than the same grove by the bank', () => {
+    const cave = gatherRate(TEST_METHOD, 'woodcutting', st, valuable, reg)!;
+    expect(cave.spot?.waypoints?.[0]).toMatchObject({ x: door.x, y: door.y });
+    const surface = gatherRate(TEST_METHOD, 'woodcutting', st, valuable, { ...SYNTHETIC, spots: [SYNTHETIC.spots[1]] })!;
+    expect(mid(cave)).toBeLessThan(mid(surface));
+  });
+  it('the step follows the way in and the arrow points at it', () => {
+    const r = gatherRate(TEST_METHOD, 'woodcutting', st, valuable, reg)!;
+    expect(trainingNav({ spot: r.spot })).toMatchObject({ x: door.x, y: door.y, label: 'Test cave (way in)' });
+    const fishing = stepById.get('S6-02')!;
+    const step = withTrainingMethod(fishing, { methodId: 'fi-fly', needs: [], spot: { label: 'Test cave', x: below.x, y: below.y, plane: 0, waypoints: [door, below] } });
+    expect(step.inGame?.pathWaypoints).toEqual([{ x: door.x, y: door.y, plane: 0 }, { x: below.x, y: below.y, plane: 0 }]);
+  });
+  it('a money method that names the way in finds the spot below it', () => {
+    expect(gatherPace('Test logs', door, st, null, reg)).not.toBeNull();
+  });
+});
+
 describe('aggressive NPCs at a spot (the wiki aggression rule, one rule for every spot)', () => {
   const pick = { 'Rune pickaxe': [1, 0] as [number, number] };
   it('a better spot with monsters that attack the player loses to a safe one; a player they ignore may use it (synthetic)', () => {
@@ -189,5 +219,31 @@ describe('the path forecasts with the rates of the levels it reaches', () => {
     const a = adviseTraining({ skill: 'woodcutting', target: 75, state: s, mode: 'f2p', style: 'chill', priority: 'fastest' });
     expect(a.path.length).toBeGreaterThan(0);
     for (const leg of a.path) expect(leg.method.rateSource, `${leg.method.id} from ${leg.fromLevel}`).toBe('model');
+  });
+});
+
+describe('a better tool is weighed against its price over the hours left', () => {
+  const buying = (buy: Record<string, number>): PriceView => ({
+    ...prices({}), buy: (name) => (buy[name] === undefined ? null : { price: buy[name], basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] }),
+  });
+  it('offers only better tiers this account can use, does not own, and has a price for', () => {
+    const r = gatherRate(method('mi-iron'), 'mining', stateOf({ mining: 41, attack: 1 }, { 'Iron pickaxe': [1, 0], 'Mithril pickaxe': [0, 1] }), { prices: buying({ 'Adamant pickaxe': 1200, 'Rune pickaxe': 12000 }) })!;
+    const tools = (r.upgrades ?? []).map((u) => u.tool);
+    // The Mithril one is owned (the rate already uses it), Rune needs Mining 41 and is priced, Dragon is members.
+    expect(r.basis).toBe('Mithril pickaxe');
+    expect(tools).toEqual(['Adamant pickaxe', 'Rune pickaxe']);
+    expect(mid({ xph: r.upgrades![1].xph })).toBeGreaterThan(mid({ xph: r.upgrades![0].xph }));
+    expect(mid({ xph: r.upgrades![0].xph })).toBeGreaterThan(mid(r));
+  });
+  it('balanced buys it when the hours saved are worth more than it costs; fastest when it saves time; relaxed never', () => {
+    const m = { ...method('mi-iron'), xph: [20_000, 20_000], upgrades: [{ tool: 'Rune pickaxe', price: 12_000, xph: [30_000, 30_000] }] } as TrainingMethod;
+    // 300k XP: 15 h now, 10 h with it: 5 h saved. At 100 coins a minute that is 30,000 coins of time, more than the 12,000 it costs.
+    expect(toolUpgrade(m, 300_000, 'balanced', 100)).toMatchObject({ tool: 'Rune pickaxe', hours: 5 });
+    // 30k XP saves half an hour: 3,000 coins of time, not worth 12,000.
+    expect(toolUpgrade(m, 30_000, 'balanced', 100)).toBeNull();
+    expect(toolUpgrade(m, 30_000, 'fastest', 100)).toMatchObject({ tool: 'Rune pickaxe' });
+    expect(toolUpgrade(m, 300_000, 'relaxed', 100)).toBeNull();
+    // Without prices the coins cannot be weighed: nothing is bought on balanced.
+    expect(toolUpgrade(m, 300_000, 'balanced', null)).toBeNull();
   });
 });
