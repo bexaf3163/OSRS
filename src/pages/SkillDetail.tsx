@@ -6,7 +6,7 @@ import { useBridge } from '../bridge';
 import { currentStage, isClosed } from '../lib/next-step';
 import { formatXp, goalFor } from '../lib/goals';
 import { levelOf } from '../lib/progress';
-import { rangeForLevel, skillLevel } from '../lib/ranges';
+import { focusRange, rangeForLevel } from '../lib/ranges';
 import { clampLevel, levelForXp, MAX_LEVEL, xpForLevel } from '../lib/xp';
 import { SkillGlyph } from '../components/SectionShell';
 import { Blocks } from '../components/Blocks';
@@ -48,8 +48,6 @@ function SkillView({ skill }: { skill: Skill }) {
     setTab('reference');
     window.setTimeout(() => document.getElementById('plan')?.scrollIntoView({ behavior: 'smooth' }), 60);
   };
-  const level = skillLevel(skill, progress);
-  const hit = rangeForLevel(skill.plan.ranges, level);
   const related = steps.filter((s) => s.targets?.some((t) => levelById.get(t.skill)?.skill === skill.id));
   // "What to train with": the route decides first (a stage goal that is behind), the generic training row only when the route asks for nothing.
   const stage = currentStage(steps, progress);
@@ -57,12 +55,15 @@ function SkillView({ skill }: { skill: Skill }) {
     levelSkills: skill.levelSkills, stage, goals, levelOf: (id) => levelOf(progress, id), lastStage: stages[stages.length - 1]?.id,
     rowEnd: (_id, lv) => rangeForLevel(skill.plan.ranges, lv)?.range.to ?? null,
   });
+  // The level and plan row of the skill being trained (Melee: the one with a goal ahead, not a Defence kept at 1).
+  const { level, hit } = focusRange(skill, progress, goals, stage, stages[stages.length - 1]?.id);
+  const focusName = skill.levelSkills.length > 1 ? levelById.get(focus.skill)?.name : undefined;
 
   return (
     <div className="page skill-detail">
       <header className="page-head">
         <SkillGlyph skill={skill.levelSkills[0]} size={48} />
-        <h1>{skill.name}<span className="skill-level-goal">Level {level} → Goal {focus.target}</span>{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
+        <h1>{skill.name}<span className="skill-level-goal">{focusName ?? 'Level'} {level} → Goal {focus.target}</span>{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
         <p className="muted">
           {(skill.nameEn ?? skill.subtitle) !== skill.name && <>{skill.nameEn ?? skill.subtitle} · </>}
           {skill.wiki && <a href={skill.wiki} target="_blank" rel="noopener noreferrer">Wiki <IconExternal /></a>}
@@ -99,7 +100,7 @@ function SkillView({ skill }: { skill: Skill }) {
             <button type="button" className="link-btn" onClick={showPlan}>
               <code className="code">{hit.range.code}</code>
             </button> · {hit.range.levels}
-            {skill.levelSkills.length > 1 && <span className="muted"> (by the lagging one, level {level})</span>}
+            {focusName && <span className="muted"> ({focusName} {level})</span>}
           </p>
         )}
       </section>

@@ -22,9 +22,10 @@ const ANCHOR_Y = 0.42;
 
 /** A map point; `now` marks the game's current target for this step. */
 type Spot = MapLocation & { now?: boolean };
-const spotKey = (p: MapLocation) => `${p.x},${p.y},${p.plane}`;
+const spotKey = (p: Pick<MapLocation, 'x' | 'y' | 'plane'>) => `${p.x},${p.y},${p.plane}`;
 
-export function StepMap({ step }: { step: Step }) {
+/** shownTarget: where the view's own "Show in game" button leads; "Lead here" is left out when it would only repeat it (one place, the same tile). */
+export function StepMap({ step, shownTarget }: { step: Step; shownTarget?: { x: number; y: number; plane: number } | null }) {
   // The step map points, where items and quest NPCs are — the same places as in the "What you need" list in the game.
   const places = mapPlaces(step);
   // The point the player picked, by place: the list can gain the game's current target while the card is open.
@@ -44,6 +45,7 @@ export function StepMap({ step }: { step: Step }) {
   const picked = chosen ? points.findIndex((p) => spotKey(p) === chosen) : -1;
   const active = picked >= 0 ? picked : live ? 0 : initialPoint(step);
   const point = points[Math.min(active, points.length - 1)];
+  const repeatsShow = !!shownTarget && points.length === 1 && !point.now && spotKey(point) === spotKey(shownTarget);
 
   return (
     <section className="step-map" aria-label="Map">
@@ -72,8 +74,8 @@ export function StepMap({ step }: { step: Step }) {
         <button type="button" className="btn btn-ghost btn-sm" onClick={() => setOpen(true)}>🗺️ World map</button>
         {/* The chosen point goes to the game: the arrow and Shortest Path lead there, the point's NPC is highlighted, on arrival
             the arrow returns to the step. "Go here" in the "OSRS Path" panel in RuneLite does the same. */}
-        <NavigateButton label="🧭 Lead here in the game"
-          target={{ label: point.label, x: point.x, y: point.y, plane: point.plane, ...(point.npc ? { npcNames: [point.npc] } : {}), stepId: step.id }} />
+        {!repeatsShow && <NavigateButton label="🧭 Lead here in the game"
+          target={{ label: point.label, x: point.x, y: point.y, plane: point.plane, ...(point.npc ? { npcNames: [point.npc] } : {}), stepId: step.id }} />}
       </div>
 
       {zoomed && step.mapPreviewImage && (

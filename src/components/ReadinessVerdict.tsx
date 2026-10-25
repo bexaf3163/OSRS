@@ -36,6 +36,8 @@ export function useReadinessVerdict(step: Step): { verdict: ReadinessVerdict; co
   }, [step, plan, view, gear, owned, connected, stats]);
 }
 
+const upperFirst = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+
 const ORDER: ReasonGroup[] = ['access', 'equipment', 'safety', 'unknown', 'optional'];
 const MARK = { ok: '✓', bank: '↗', missing: '!', unknown: '○', caution: '⚠' } as const;
 
@@ -48,7 +50,10 @@ export function ReadinessVerdictCard({ step, noPill = false }: { step: Step; noP
       <p className="verdict-head" role="status">
         {/* "Preparation needed: bring food…" already starts with the level: the pill would say it twice (seen in the compact view). */}
         {!noPill && !v.headline.startsWith(v.label) && <span className="verdict-pill">{v.label}</span>}
-        <span className="verdict-line">{v.headline}</span>
+        {/* Under the status line ("Preparation required (1 item)") the level prefix is a third telling of the same thing: it stays for screen readers. */}
+        {noPill && v.headline.startsWith(`${v.label}: `)
+          ? <span className="verdict-line"><span className="visually-hidden">{v.label}: </span>{upperFirst(v.headline.slice(v.label.length + 2))}</span>
+          : <span className="verdict-line">{v.headline}</span>}
       </p>
       {combat?.variant && <p className="small verdict-variant">{combat.variant}</p>}
       {!v.bankInHeadline && <p className="small muted verdict-bank">{v.bank.text}</p>}

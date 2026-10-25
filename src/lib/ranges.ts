@@ -1,7 +1,8 @@
 // The "Training plan" row by skill level.
 
-import type { Progress, Skill, SkillRange } from '../types';
+import type { GoalsData, Progress, Skill, SkillRange } from '../types';
 import { levelOf } from './progress';
+import { trainingFocus } from './skillFocus';
 
 export interface RangeHit {
   range: SkillRange;
@@ -27,4 +28,17 @@ export function skillLevel(skill: Skill, p: Progress): number {
 
 export function skillRange(skill: Skill, p: Progress): RangeHit | null {
   return rangeForLevel(skill.plan.ranges, skillLevel(skill, p));
+}
+
+/**
+ * The plan row for the skill the route is training: in Melee the one with a goal ahead (Attack 30 toward 40 → giant frogs), not the lowest of the three
+ * (a Defence kept at 1 on purpose would show cows). A single skill is its own focus.
+ */
+export function focusRange(skill: Skill, p: Progress, goals: GoalsData, stage: number, lastStage?: number): { skill: string; level: number; target: number; hit: RangeHit | null } {
+  const focus = trainingFocus({
+    levelSkills: skill.levelSkills, stage, goals, levelOf: (id) => levelOf(p, id), lastStage,
+    rowEnd: (_id, lv) => rangeForLevel(skill.plan.ranges, lv)?.range.to ?? null,
+  });
+  const level = levelOf(p, focus.skill);
+  return { skill: focus.skill, level, target: focus.target, hit: rangeForLevel(skill.plan.ranges, level) };
 }

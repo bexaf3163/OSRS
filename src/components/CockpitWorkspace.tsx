@@ -32,7 +32,7 @@ const VIEWS: { id: View; title: string; key: string }[] = [
 export function CockpitWorkspace({ step, suggested, onDone, nextId }: { step: Step; suggested: boolean; onDone: (id: string) => void; nextId?: string }) {
   const { progress } = useStore();
   const qp = useQuestPoints();
-  const { questInstruction, state, inGame, activeStepId } = useBridge();
+  const { questInstruction, state, inGame, activeStepId, enabled } = useBridge();
   const engine = useReadinessEngine();
   const recovery = engine.plan(step, { ahead: 0 }).recovery;
   const [view, setView] = useState<View | null>(null);
@@ -66,7 +66,7 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId }: { step: St
       <section className="quest-panel cockpit-where-card" aria-label="Where">
         <header className="quest-panel-heading"><h3>Where</h3></header>
         <TravelTip step={step} />
-        <StepMap step={step} />
+        <StepMap step={step} shownTarget={enabled && !closed ? toInGameTarget(step)?.worldPoint : null} />
       </section>
     )}
     <QuestReward step={step} />

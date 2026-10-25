@@ -4,7 +4,7 @@ import { useStore } from '../store';
 import { currentStage } from '../lib/next-step';
 import { goalFor, formatXp, isReached } from '../lib/goals';
 import { levelOf } from '../lib/progress';
-import { skillRange } from '../lib/ranges';
+import { focusRange } from '../lib/ranges';
 import type { Skill } from '../types';
 import { Blocks } from '../components/Blocks';
 import { IconCheck, IconChevron } from '../components/Icons';
@@ -73,9 +73,10 @@ export function roadmapSkills(skill: Skill): SkillName[] {
 
 /** A skill card leads with what to train now and opens the skill's guide; the level is a number while the game reports it, a field to type into while it does not. */
 function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
-  const { progress } = useStore();
+  const { progress, stages } = useStore();
   const { state, stats } = useBridge();
-  const hit = skillRange(skill, progress);
+  const focus = focusRange(skill, progress, goals, stage, stages[stages.length - 1]?.id);
+  const hit = focus.hit;
   const many = skill.levelSkills.length > 1;
   const tracked = useTracked();
   const guides = roadmapSkills(skill);
@@ -111,7 +112,7 @@ function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
           );
         })}
       </div>
-      {hit && <p className="skill-range"><span className="muted">Now:</span> <Inline text={hit.range.what} /></p>}
+      {hit && <p className="skill-range"><span className="muted">Now{many ? ` (${levelById.get(focus.skill)?.name ?? focus.skill})` : ''}:</span> <Inline text={hit.range.what} /></p>}
       <p className="skill-card-actions">
         <a className="btn btn-sm skill-guide-link" href={`#/skills/${skill.id}`}>Training guide</a>
         {isTracked && <span className="badge badge-now">followed in the game</span>}

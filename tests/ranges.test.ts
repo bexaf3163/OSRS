@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { skillById } from '../src/data';
+import { goals, skillById } from '../src/data';
 import { emptyProgress } from '../src/lib/progress';
-import { rangeForLevel, skillLevel, skillRange } from '../src/lib/ranges';
+import { focusRange, rangeForLevel, skillLevel, skillRange } from '../src/lib/ranges';
 
 const ranges = (id: string) => skillById.get(id)!.plan.ranges;
 
@@ -35,6 +35,15 @@ describe('the training plan row by level', () => {
     const p = { ...emptyProgress(), levels: { attack: 32, strength: 25, defence: 41 } };
     expect(skillLevel(me, p)).toBe(25);
     expect(skillRange(me, p)?.range.code).toBe('ME-3');
+  });
+
+  it('melee "Now" follows the skill the route trains, not a Defence kept at 1 (Attack 30 toward 40 → giant frogs)', () => {
+    const me = skillById.get('ME')!;
+    const p = { ...emptyProgress(), levels: { attack: 30, strength: 21, defence: 1 } };
+    const f = focusRange(me, p, goals, 4);
+    expect(f).toMatchObject({ skill: 'attack', level: 30, target: 40 });
+    expect(f.hit?.range.what).toContain('Giant frogs');
+    expect(skillRange(me, p)?.range.what).toContain('Cows');
   });
 
   it('without entered levels — the first row', () => {
