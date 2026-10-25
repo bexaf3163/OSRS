@@ -197,3 +197,5 @@ Release receipts (Checks and Release both green; the portable EXE's sha256 as pu
 | 2.78.2 | b130ddf | OSRS-Put-2.78.2-portable.exe, 102,065,776 B | bd0193ee97e1f40b18fc0ca7cfb1e5b5a0f77255926620ebfa45278f150f0eb3 |
 | 2.79.0 | 23da9f5 | OSRS-Put-2.79.0-portable.exe, 102,066,310 B | 63645fdcfae083b09988523cdd2686490fd8e55692d56d94aad64f0aa33723e6 |
 | 2.79.1 | 8dc30e8 | no release of its own: pushed together with 2.79.2, which carries it | — |
+| 2.79.2 | 570d479 | OSRS-Put-2.79.2-portable.exe, 102,068,589 B | 2b9c42121747e9661f837c02715efe21c89d6b2bdc9b29d1e4c3968d5228d486 |
+| 2.80.0 | 6ea83b4 | OSRS-Put-2.80.0-portable.exe, 102,068,579 B | e8b828fe97cea449be300ead036f88cba049c54bd3b9c592057f21cee7336d6e |
