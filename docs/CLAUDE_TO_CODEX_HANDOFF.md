@@ -159,7 +159,7 @@ Still open in the brief:
 - (d) Calibration against a real session (NOT REACHABLE while the owner is away).
 - (e) Processing: Smithing/Cooking/Crafting done in 2.79.0, Money smelting on the engine in 2.79.1. Left: Firemaking, Runecraft, Prayer, Magic utility, wine. Cook-on-the-spot done in 2.80.0.
 
-**Next actions, in order (state at 2.80.0; Claude's weekly limit is nearly used up, so Codex may continue from here):**
+**Next actions, in order (state at 2.80.3, main = claude/clear-quest-lines; Codex may continue from here):**
 1. ~~Firemaking~~: done in 2.80.3 (see the entry above).
 2. **Combat gear upgrade variant (block a).** Apply `trainingRouter.toolUpgrade`'s rule to weapons: the hours saved by a better weapon vs its price, using `supplyPrice`. Check `services/gearAdvisor` first, so as not to duplicate the Gear page's upgrade advice.
 3. ~~Cash before suggesting a purchase~~: done in 2.80.1 (`adviseTraining` sets `ToolUpgrade.short` from `coinsOf(state).total` when it is known and below the price; the reason says "; you have X"; unknown coins say nothing). Test in `tests/skillingRates.test.ts`. Apply the same to weapon upgrades when item 2 is done.
