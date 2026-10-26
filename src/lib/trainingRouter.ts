@@ -228,10 +228,11 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number, coin
     }
     // Unchecked supplies must not beat a confirmed preparation step merely by being labelled READY.
     // Keep them available and disclose their uncertainty; do not invent missing quantities.
-    // The same ranged kit should not drop back to an earlier trainer after equipping its arrows merely because owned food needs withdrawal.
+    // A method should not drop back to an earlier one merely because owned supplies need withdrawal (first seen with the ranged kit and its food).
     // Missing/unread supplies still lose to a supplied safer method; this only covers confirmed bank/wear preparation.
-    const bankedRanged = (v: MethodView) => v.method.kit === 'f2p-bow' && v.status === 'PREP' && v.missing.every(n => n.state === 'BANK');
-    const rank = (v: MethodView) => (bankedRanged(v) ? 0 : STATUS_RANK[v.status]) + (v.status === 'READY' && v.unchecked.length ? 1 : 0)
+    // Everything missing is confirmed in the bank (a bank stop, BANK_SETUP_HOURS): ranked with the ready ones, for every method, not one kit.
+    const banked = (v: MethodView) => v.status === 'PREP' && v.missing.length > 0 && v.missing.every(n => n.state === 'BANK');
+    const rank = (v: MethodView) => (banked(v) ? 0 : STATUS_RANK[v.status]) + (v.status === 'READY' && v.unchecked.length ? 1 : 0)
       + (v.unchecked.some(n => n.kind === 'skill' || n.kind === 'quest') ? 2 : 0);
     const s = rank(a) - rank(b);
     const ra = rateLow(a.method);

@@ -115,6 +115,15 @@ describe('balanced counts the setup and does not switch for a sliver', () => {
     expect(BANK_SETUP_HOURS).toBeLessThan(SETUP_HOURS);
   });
 
+  it('supplies confirmed in the bank rank with the ready methods for any method, not only the ranged kit', () => {
+    const bank: OwnedState = { bankSeen: true, items: new Map([['raw trout', { name: 'Raw trout', carried: 0, noted: 0, bank: 500 }]]) };
+    const banked = method({ id: 'banked-afk', effort: 'afk', needs: [{ type: 'item', name: 'Raw trout', count: 26 }] });
+    const ready = method({ id: 'ready-busy', effort: 'medium' });
+    // Relaxed ranks by status first, then effort: the banked supplies do not push the quieter method behind.
+    const r = adviseTraining({ skill: 'fishing', target: 40, state: stateAt('fishing', 20, bank), mode: 'f2p', style: 'chill', priority: 'relaxed', methods: [ready, banked] });
+    expect(r.best?.method.id).toBe('banked-afk');
+  });
+
   it('the path keeps the method in hand when a new unlock is barely better, and switches when it is clearly better', () => {
     const base = method({ id: 'base', xph: [10_000, 10_000] });
     const sliver = method({ id: 'sliver', from: 20, xph: [10_500, 10_500] });

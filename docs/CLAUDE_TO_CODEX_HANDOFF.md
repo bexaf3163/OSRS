@@ -139,6 +139,8 @@ Read this first. Claude keeps this file current after every release. It says wha
 
 - **2.80.1:** tool upgrade suggestions check the known coins (`ToolUpgrade.short`).
 
+- **2.80.2:** the bank-only ranking rule is general (was `kit === 'f2p-bow'` only).
+
 ## 5. In progress (Claude)
 
 **Hardening pass (owner brief of 2026-10-25, after 2.78.0)**, in small verified blocks. The order:
@@ -155,7 +157,7 @@ Still open in the brief:
 2. **Combat gear upgrade variant (block a).** Apply `trainingRouter.toolUpgrade`'s rule to weapons: the hours saved by a better weapon vs its price, using `supplyPrice`. Check `services/gearAdvisor` first, so as not to duplicate the Gear page's upgrade advice.
 3. ~~Cash before suggesting a purchase~~: done in 2.80.1 (`adviseTraining` sets `ToolUpgrade.short` from `coinsOf(state).total` when it is known and below the price; the reason says "; you have X"; unknown coins say nothing). Test in `tests/skillingRates.test.ts`. Apply the same to weapon upgrades when item 2 is done.
 4. **Runecraft, Prayer, Magic utility, wine:** add them to the processing registry the same way (wiki `{{Recipe}}` + defs), never per-method code.
-5. **Ranged/melee "bankedRanged" special case** in `trainingRouter.compare` (`rank()`) predates `BANK_SETUP_HOURS`. Check whether the general bank-only setup rule now covers it, and remove the special case only if every ranged test stays green.
+5. ~~`bankedRanged` special case~~: done in 2.80.2. `compare`'s `rank()` now treats any PREP method whose missing items are all confirmed in the bank as ready (`banked`), for every kit. All ranged tests stayed green; new test in `tests/trainingPriority.test.ts` fails on the old kit-only rule.
 6. **Calibration (d)** needs a real play session with the owner (NOT REACHABLE).
 
 Watch-outs:
