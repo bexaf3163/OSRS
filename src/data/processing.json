@@ -60,6 +60,98 @@
       },
       "bank": "Edgeville Bank",
       "members": false
+    },
+    {
+      "kind": "altar",
+      "label": "Air Altar",
+      "place": {
+        "x": 2843,
+        "y": 4833,
+        "plane": 0,
+        "label": "Air Altar"
+      },
+      "entry": {
+        "x": 2984,
+        "y": 3291,
+        "plane": 0,
+        "label": "Air Altar: mysterious ruins"
+      },
+      "portal": {
+        "x": 2841,
+        "y": 4828,
+        "plane": 0
+      },
+      "bank": "Falador East Bank",
+      "members": false
+    },
+    {
+      "kind": "altar",
+      "label": "Earth Altar",
+      "place": {
+        "x": 2657,
+        "y": 4840,
+        "plane": 0,
+        "label": "Earth Altar"
+      },
+      "entry": {
+        "x": 3305,
+        "y": 3473,
+        "plane": 0,
+        "label": "Earth Altar: mysterious ruins"
+      },
+      "portal": {
+        "x": 2655,
+        "y": 4829,
+        "plane": 0
+      },
+      "bank": "Varrock East Bank",
+      "members": false
+    },
+    {
+      "kind": "altar",
+      "label": "Fire Altar",
+      "place": {
+        "x": 2584,
+        "y": 4837,
+        "plane": 0,
+        "label": "Fire Altar"
+      },
+      "entry": {
+        "x": 3312,
+        "y": 3254,
+        "plane": 0,
+        "label": "Fire Altar: mysterious ruins"
+      },
+      "portal": {
+        "x": 2574,
+        "y": 4850,
+        "plane": 0
+      },
+      "bank": "Al Kharid Bank",
+      "members": false
+    },
+    {
+      "kind": "altar",
+      "label": "Body Altar",
+      "place": {
+        "x": 2522,
+        "y": 4839,
+        "plane": 0,
+        "label": "Body Altar"
+      },
+      "entry": {
+        "x": 3052,
+        "y": 3444,
+        "plane": 0,
+        "label": "Body Altar: mysterious ruins"
+      },
+      "portal": {
+        "x": 2521,
+        "y": 4833,
+        "plane": 0
+      },
+      "bank": "Edgeville Bank",
+      "members": false
     }
   ],
   "recipes": [
@@ -829,6 +921,849 @@
       },
       "retry": true,
       "source": "https://oldschool.runescape.wiki/w/Yew_logs"
+    },
+    {
+      "id": "wine",
+      "skill": "cooking",
+      "level": 35,
+      "xp": 200,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Grapes",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Jug of water",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Jug of wine",
+        "qty": 1
+      },
+      "batchSize": 13,
+      "batchWaitTicks": 20,
+      "success": {
+        "low": 48,
+        "high": 352
+      },
+      "source": "https://oldschool.runescape.wiki/w/Jug_of_wine"
+    },
+    {
+      "id": "bury-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 4.5,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Bones"
+    },
+    {
+      "id": "bury-big-bones",
+      "skill": "prayer",
+      "level": 1,
+      "xp": 15,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Big bones",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Big_bones"
+    },
+    {
+      "id": "superheat-iron",
+      "skill": "magic",
+      "level": 43,
+      "xp": 53,
+      "ticks": 3,
+      "facility": null,
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Iron ore",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Nature rune",
+          "qty": 1,
+          "stacks": true
+        },
+        {
+          "name": "Fire rune",
+          "qty": 4,
+          "stacks": true,
+          "staff": "Staff of fire"
+        }
+      ],
+      "output": {
+        "name": "Iron bar",
+        "qty": 1
+      },
+      "batchSize": 25,
+      "requires": [
+        {
+          "skill": "smithing",
+          "level": 15
+        }
+      ],
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Superheat_Item"
+    },
+    {
+      "id": "rc-air",
+      "skill": "runecraft",
+      "level": 1,
+      "xp": 5,
+      "ticks": 1,
+      "facility": "altar",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Rune essence",
+          "qty": 1,
+          "stacks": false,
+          "anyOf": [
+            "Pure essence"
+          ]
+        }
+      ],
+      "output": {
+        "name": "Air rune",
+        "qty": 1
+      },
+      "wholeBatch": true,
+      "multiplierEvery": 11,
+      "access": {
+        "carried": "Air talisman",
+        "equipped": "Air tiara"
+      },
+      "station": "Air Altar",
+      "source": "https://oldschool.runescape.wiki/w/air_rune"
+    },
+    {
+      "id": "rc-earth",
+      "skill": "runecraft",
+      "level": 9,
+      "xp": 6.5,
+      "ticks": 1,
+      "facility": "altar",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Rune essence",
+          "qty": 1,
+          "stacks": false,
+          "anyOf": [
+            "Pure essence"
+          ]
+        }
+      ],
+      "output": {
+        "name": "Earth rune",
+        "qty": 1
+      },
+      "wholeBatch": true,
+      "multiplierEvery": 26,
+      "access": {
+        "carried": "Earth talisman",
+        "equipped": "Earth tiara"
+      },
+      "station": "Earth Altar",
+      "source": "https://oldschool.runescape.wiki/w/earth_rune"
+    },
+    {
+      "id": "rc-fire",
+      "skill": "runecraft",
+      "level": 14,
+      "xp": 7,
+      "ticks": 1,
+      "facility": "altar",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Rune essence",
+          "qty": 1,
+          "stacks": false,
+          "anyOf": [
+            "Pure essence"
+          ]
+        }
+      ],
+      "output": {
+        "name": "Fire rune",
+        "qty": 1
+      },
+      "wholeBatch": true,
+      "multiplierEvery": 35,
+      "access": {
+        "carried": "Fire talisman",
+        "equipped": "Fire tiara"
+      },
+      "station": "Fire Altar",
+      "source": "https://oldschool.runescape.wiki/w/fire_rune"
+    },
+    {
+      "id": "rc-body",
+      "skill": "runecraft",
+      "level": 20,
+      "xp": 7.5,
+      "ticks": 1,
+      "facility": "altar",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Rune essence",
+          "qty": 1,
+          "stacks": false,
+          "anyOf": [
+            "Pure essence"
+          ]
+        }
+      ],
+      "output": {
+        "name": "Body rune",
+        "qty": 1
+      },
+      "wholeBatch": true,
+      "multiplierEvery": 46,
+      "access": {
+        "carried": "Body talisman",
+        "equipped": "Body tiara"
+      },
+      "station": "Body Altar",
+      "source": "https://oldschool.runescape.wiki/w/body_rune"
+    },
+    {
+      "id": "fl-shafts-logs",
+      "skill": "fletching",
+      "level": 1,
+      "xp": 5,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Arrow shaft",
+        "qty": 15
+      },
+      "source": "https://oldschool.runescape.wiki/w/Arrow_shaft"
+    },
+    {
+      "id": "fl-shortbow-unstrung",
+      "skill": "fletching",
+      "level": 5,
+      "xp": 5,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Shortbow (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Shortbow_(u)"
+    },
+    {
+      "id": "fl-longbow-unstrung",
+      "skill": "fletching",
+      "level": 10,
+      "xp": 10,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Longbow (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Longbow_(u)"
+    },
+    {
+      "id": "fl-oak-shortbow-unstrung",
+      "skill": "fletching",
+      "level": 20,
+      "xp": 16.5,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Oak logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Oak shortbow (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Oak_shortbow_(u)"
+    },
+    {
+      "id": "fl-oak-longbow-unstrung",
+      "skill": "fletching",
+      "level": 25,
+      "xp": 25,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Oak logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Oak longbow (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Oak_longbow_(u)"
+    },
+    {
+      "id": "fl-willow-shortbow-unstrung",
+      "skill": "fletching",
+      "level": 35,
+      "xp": 33.3,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Willow logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Willow shortbow (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Willow_shortbow_(u)"
+    },
+    {
+      "id": "fl-willow-longbow-unstrung",
+      "skill": "fletching",
+      "level": 40,
+      "xp": 41.5,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Willow logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Willow longbow (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Willow_longbow_(u)"
+    },
+    {
+      "id": "fl-maple-shortbow-unstrung",
+      "skill": "fletching",
+      "level": 50,
+      "xp": 50,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Maple logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Maple shortbow (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Maple_shortbow_(u)"
+    },
+    {
+      "id": "fl-maple-longbow-unstrung",
+      "skill": "fletching",
+      "level": 55,
+      "xp": 58.3,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Maple logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Maple longbow (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Maple_longbow_(u)"
+    },
+    {
+      "id": "fl-yew-shortbow-unstrung",
+      "skill": "fletching",
+      "level": 65,
+      "xp": 67.5,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Yew logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Yew shortbow (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Yew_shortbow_(u)"
+    },
+    {
+      "id": "fl-yew-longbow-unstrung",
+      "skill": "fletching",
+      "level": 70,
+      "xp": 75,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Yew logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Yew longbow (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Yew_longbow_(u)"
+    },
+    {
+      "id": "fl-magic-shortbow-unstrung",
+      "skill": "fletching",
+      "level": 80,
+      "xp": 83.3,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Magic logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Magic shortbow (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Magic_shortbow_(u)"
+    },
+    {
+      "id": "fl-magic-longbow-unstrung",
+      "skill": "fletching",
+      "level": 85,
+      "xp": 91.5,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Knife"
+      ],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Magic logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Magic longbow (u)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Magic_longbow_(u)"
+    },
+    {
+      "id": "he-attack-potion",
+      "skill": "herblore",
+      "level": 3,
+      "xp": 25,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Guam potion (unf)",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Eye of newt",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Attack potion(3)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Attack_potion"
+    },
+    {
+      "id": "he-antipoison",
+      "skill": "herblore",
+      "level": 5,
+      "xp": 37.5,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Marrentill potion (unf)",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Unicorn horn dust",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Antipoison(3)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Antipoison"
+    },
+    {
+      "id": "he-strength-potion",
+      "skill": "herblore",
+      "level": 12,
+      "xp": 50,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Tarromin potion (unf)",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Limpwurt root",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Strength potion(3)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Strength_potion"
+    },
+    {
+      "id": "he-defence-potion",
+      "skill": "herblore",
+      "level": 30,
+      "xp": 75,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Ranarr potion (unf)",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "White berries",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Defence potion(3)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Defence_potion"
+    },
+    {
+      "id": "he-prayer-potion",
+      "skill": "herblore",
+      "level": 38,
+      "xp": 87.5,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Ranarr potion (unf)",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Snape grass",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Prayer potion(3)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Prayer_potion"
+    },
+    {
+      "id": "he-super-attack",
+      "skill": "herblore",
+      "level": 45,
+      "xp": 100,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Irit potion (unf)",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Eye of newt",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Super attack(3)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Super_attack"
+    },
+    {
+      "id": "he-super-strength",
+      "skill": "herblore",
+      "level": 55,
+      "xp": 125,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Kwuarm potion (unf)",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Limpwurt root",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Super strength(3)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Super_strength"
+    },
+    {
+      "id": "he-super-restore",
+      "skill": "herblore",
+      "level": 63,
+      "xp": 142.5,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Snapdragon potion (unf)",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Red spiders' eggs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Super restore(3)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Super_restore"
+    },
+    {
+      "id": "he-super-defence",
+      "skill": "herblore",
+      "level": 66,
+      "xp": 150,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Cadantine potion (unf)",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "White berries",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Super defence(3)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Super_defence"
+    },
+    {
+      "id": "he-zamorak-brew",
+      "skill": "herblore",
+      "level": 78,
+      "xp": 175,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Torstol potion (unf)",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Jangerberries",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Zamorak brew(3)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Zamorak_brew"
+    },
+    {
+      "id": "he-saradomin-brew",
+      "skill": "herblore",
+      "level": 81,
+      "xp": 180,
+      "ticks": 2,
+      "facility": null,
+      "tools": [],
+      "members": true,
+      "inputs": [
+        {
+          "name": "Toadflax potion (unf)",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Crushed nest",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Saradomin brew(3)",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Saradomin_brew"
     }
   ],
   "methods": {
@@ -893,6 +1828,72 @@
     ],
     "fm-yew": [
       "fm-yew-logs"
+    ],
+    "ck-wine": [
+      "wine"
+    ],
+    "pr-banked-bones": [
+      "bury-bones"
+    ],
+    "pr-banked-big-bones": [
+      "bury-big-bones"
+    ],
+    "ma-superheat": [
+      "superheat-iron"
+    ],
+    "rc-air": [
+      "rc-air"
+    ],
+    "rc-earth": [
+      "rc-earth"
+    ],
+    "rc-fire": [
+      "rc-fire"
+    ],
+    "rc-body": [
+      "rc-body"
+    ],
+    "fl-shaft": [
+      "fl-shafts-logs"
+    ],
+    "fl-shortbow": [
+      "fl-shortbow-unstrung",
+      "fl-longbow-unstrung"
+    ],
+    "fl-oak-willow": [
+      "fl-oak-shortbow-unstrung",
+      "fl-oak-longbow-unstrung",
+      "fl-willow-shortbow-unstrung",
+      "fl-willow-longbow-unstrung"
+    ],
+    "fl-maple": [
+      "fl-maple-shortbow-unstrung",
+      "fl-maple-longbow-unstrung"
+    ],
+    "fl-yew": [
+      "fl-yew-shortbow-unstrung",
+      "fl-yew-longbow-unstrung"
+    ],
+    "fl-magic": [
+      "fl-magic-shortbow-unstrung",
+      "fl-magic-longbow-unstrung"
+    ],
+    "he-potions": [
+      "he-attack-potion",
+      "he-antipoison",
+      "he-strength-potion",
+      "he-defence-potion",
+      "he-prayer-potion",
+      "he-super-attack",
+      "he-super-strength"
+    ],
+    "he-high": [
+      "he-super-attack",
+      "he-super-strength",
+      "he-super-restore",
+      "he-super-defence",
+      "he-zamorak-brew",
+      "he-saradomin-brew"
     ]
   }
 }

@@ -1346,15 +1346,11 @@
       "to": 99,
       "name": "Burying bones from combat",
       "members": false,
-      "xph": [
-        43500,
-        43500
-      ],
       "effort": "low",
       "cost": "profit",
       "risk": "none",
       "where": "Wherever you fight (bones from giant frogs, giants)",
-      "note": "Trained along with combat; the wiki says about 43k per hour with big bones.",
+      "note": "Bury drops while training combat. The rate depends on the monsters and time spent fighting; the dedicated bank-burying rate does not apply to collecting your own bones.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
     },
     {
@@ -1391,7 +1387,10 @@
       "needs": [
         {
           "type": "item",
-          "name": "Air talisman"
+          "name": "Air talisman",
+          "anyOf": [
+            "Air tiara"
+          ]
         },
         {
           "type": "item",
@@ -1406,7 +1405,9 @@
       "cost": "profit",
       "risk": "none",
       "where": "The Air Altar south of Falador",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training"
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training",
+      "act": "essence|essence",
+      "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches."
     },
     {
       "id": "rc-earth",
@@ -1418,7 +1419,10 @@
       "needs": [
         {
           "type": "item",
-          "name": "Earth talisman"
+          "name": "Earth talisman",
+          "anyOf": [
+            "Earth tiara"
+          ]
         },
         {
           "type": "item",
@@ -1433,7 +1437,9 @@
       "cost": "profit",
       "risk": "none",
       "where": "The Earth Altar north-east of Varrock",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training"
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training",
+      "act": "essence|essence",
+      "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches."
     },
     {
       "id": "rc-fire",
@@ -1445,7 +1451,10 @@
       "needs": [
         {
           "type": "item",
-          "name": "Fire talisman"
+          "name": "Fire talisman",
+          "anyOf": [
+            "Fire tiara"
+          ]
         },
         {
           "type": "item",
@@ -1460,7 +1469,9 @@
       "cost": "profit",
       "risk": "none",
       "where": "The Fire Altar west of Emir's Arena",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training"
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training",
+      "act": "essence|essence",
+      "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches."
     },
     {
       "id": "rc-body",
@@ -1472,7 +1483,10 @@
       "needs": [
         {
           "type": "item",
-          "name": "Body talisman"
+          "name": "Body talisman",
+          "anyOf": [
+            "Body tiara"
+          ]
         },
         {
           "type": "item",
@@ -1487,7 +1501,9 @@
       "cost": "profit",
       "risk": "none",
       "where": "The Body Altar",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training"
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training",
+      "act": "essence|essence",
+      "note": "Take unnoted rune essence or pure essence. Use the talisman on the mysterious ruins, or wear the corresponding tiara to enter. Craft at the altar, leave through the portal, then bank and refill. The walking estimate excludes teleports and essence pouches."
     },
     {
       "id": "ra-lumb",
@@ -2384,6 +2400,54 @@
       "where": "Tithe Farm (Hosidius)",
       "note": "The wiki's figures are for level 74+; at 34 it is noticeably slower.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Farming_training"
+    },
+    {
+      "id": "pr-banked-bones",
+      "skill": "prayer",
+      "from": 1,
+      "to": 99,
+      "name": "Bury banked bones",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Bones",
+          "count": 28
+        }
+      ],
+      "xpa": 4.5,
+      "act": "bone|bones",
+      "effort": "high",
+      "cost": "cost",
+      "risk": "none",
+      "where": "By a bank",
+      "place": "Edgeville Bank",
+      "note": "Withdraw owned unnoted bones first. Buying bones is a separate paid method; it does not include collecting them through combat. Check the price and your budget before buying.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
+    },
+    {
+      "id": "pr-banked-big-bones",
+      "skill": "prayer",
+      "from": 1,
+      "to": 99,
+      "name": "Bury banked big bones",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Big bones",
+          "count": 28
+        }
+      ],
+      "xpa": 15,
+      "act": "bone|bones",
+      "effort": "high",
+      "cost": "cost",
+      "risk": "none",
+      "where": "By a bank",
+      "place": "Edgeville Bank",
+      "note": "Withdraw owned unnoted bones first. Buying bones is a separate paid method; it does not include collecting them through combat. Check the price and your budget before buying.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
     }
   ]
 }

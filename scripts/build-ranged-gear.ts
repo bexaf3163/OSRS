@@ -5,11 +5,10 @@
 
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { wikitext } from './wiki.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const OUT = `${root}src/data/rangedGear.json`;
-const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
-const API = 'https://oldschool.runescape.wiki/api.php';
 
 /** The bows and arrows of styleGear.json's ranged list and their longbows (rangedLoadout.ts), and the free ranged armour and amulets. */
 const PAGES = [
@@ -19,18 +18,6 @@ const PAGES = [
   "Green d'hide chaps", 'Leather vambraces', "Green d'hide vambraces", 'Leather gloves', 'Leather boots', 'Amulet of accuracy', 'Amulet of power',
 ];
 
-let last = 0;
-async function wikitext(page: string): Promise<string> {
-  for (let attempt = 1; ; attempt++) {
-    const wait = last + 400 - Date.now();
-    if (wait > 0) await new Promise((r) => setTimeout(r, wait));
-    last = Date.now();
-    const res = await fetch(`${API}?${new URLSearchParams({ action: 'parse', page, prop: 'wikitext', format: 'json', formatversion: '2', redirects: '1' })}`, { headers: { 'User-Agent': UA } });
-    if (res.ok) return ((await res.json()) as { parse: { wikitext: string } }).parse.wikitext;
-    if (attempt >= 6 || (res.status !== 429 && res.status < 500)) throw new Error(`${page}: ${res.status}`);
-    await new Promise((r) => setTimeout(r, 4000 * attempt));
-  }
-}
 
 /** The bonuses as written: "|arange = +8"; a versioned article ("|arange1 = …") gives its first version. */
 function fields(text: string): Map<string, string> {

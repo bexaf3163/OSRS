@@ -1003,7 +1003,8 @@ async function run(browser: Browser) {
     // "Back to the quest route" stops it. A group's label covers its steps (no "Levels 30–40" over "Lvl 30 → 60").
     {
       const { page, errors } = await open(browser, width, { progress: progressBefore('S9-01') }, '#/skills');
-      await page.getByRole('link', { name: 'Training guide' }).first().click();
+      await page.locator('.skill-tile a').first().click();
+      await page.locator('.skill-guide-roadmap > summary').click();
       await waitFor(page, '.skill-guide-roadmap .skill-timeline', 5000);
       expect(await page.getByRole('tab', { name: 'Training guide' }).getAttribute('aria-selected') === 'true', 'roadmap: the skill opens on its Training guide');
       const before = await text(page, '.skill-timeline');
@@ -1047,6 +1048,7 @@ async function run(browser: Browser) {
         localStorage: { 'osrs-put:profiles': profiles },
         status: { protocol: 5, pluginVersion: '2.12.0', player: 'Alpha One', xp: { woodcutting: 10 } },
       }, '#/skills/WC');
+      await ok.page.locator('.skill-level-editor > summary').click();
       await waitFor(ok.page, '.live-xp', 5000);
       const x = await text(ok.page, '.live-xp');
       expect(x.includes('to ') && x.includes('XP left'), 'skill: XP from the game — "N XP left to the level"');
@@ -1533,7 +1535,7 @@ async function run(browser: Browser) {
   // The local strip of a section shows every link: the first one used to take the whole width and push the rest out of view.
   console.log('Section strip');
   // Shopping (2.67) and Gear (2.68) have no strip: one short page each.
-  for (const [hash, least] of [['#/skills/ME', 5], ['#/journal', 3], ['#/reference', 3]] as [string, number][]) {
+  for (const [hash, least] of [['#/journal', 3], ['#/reference', 3]] as [string, number][]) {
     for (const width of [1000, 1440]) {
       const { page } = await open(browser, width, { progress: progressBefore('S3-03') }, hash);
       const seen = await page.evaluate(() => {
@@ -1548,6 +1550,21 @@ async function run(browser: Browser) {
       expect(seen >= least, `section strip ${hash} at ${width} px: ${seen} links in view (at least ${least})`);
       await page.context().close();
     }
+  }
+
+  // Direct skill tiles replace the duplicate skill rail; the recommendation stays compact.
+  for (const width of [480, 1000, 1440]) {
+    const { page } = await open(browser, width, { progress: progressBefore('S3-03', { gameMode: 'f2p', levels: { attack: 30, strength: 21, defence: 10 } }) }, '#/skills');
+    const defence = page.locator('.skill-tile a[href="#/skills/ME/defence"]');
+    expect(await defence.count() === 1, `Skills ${width}: Defence has one direct tile`);
+    expect(await page.locator('.section-rail').count() === 0, `Skills ${width}: no duplicate skill menu`);
+    await defence.click();
+    await page.locator('.training').waitFor();
+    expect((await text(page, 'h1')).includes('Defence'), `Skills ${width}: Defence opens directly`);
+    expect(await page.locator('[aria-label="Training priority"] button').count() === 3, `Skills ${width}: three priorities`);
+    expect(await page.locator('[aria-label="Training priority"] button[aria-pressed="true"]').innerText() === 'Balanced', `Skills ${width}: Balanced is default`);
+    expect(await page.locator('.training details[open]').count() === 0, `Skills ${width}: details start closed`);
+    await page.context().close();
   }
 
   // The desktop action follows the quest cursor while the player stays logged in: the plugin announces a moved cursor with a STATUS event.
@@ -1732,7 +1749,7 @@ async function fundingScenarios(browser: Browser) {
     };
     const sentPlan = await lastFunding();
     expect(sentPlan?.player === 'Funding Test' && sentPlan.status === 'ACTIVE' && typeof sentPlan.action === 'string' && sentPlan.stepCount >= 2, `funding (${width} px): the game gets the same plan in the snapshot`);
-    expect((await text(page, '.status-funding')).includes(String(sentPlan?.action ?? ' ')), `funding (${width} px): the app and the game say the same sentence`);
+    expect((await text(page, '.status-funding')).includes(String(sentPlan?.action ?? '\u0000')), `funding (${width} px): the app and the game say the same sentence`);
     expect(await page.locator('.funding-card.is-running').count() === 1, `funding (${width} px): the card shows the step in hand`);
     const saved = await page.evaluate(() => Object.entries(localStorage).filter(([k]) => k.startsWith('osrs-put:funding-plan')).map(([, v]) => JSON.parse(v)));
     expect(saved.length === 1 && saved[0].sourceStepId === 'S4-03' && saved[0].character === 'Funding Test', `funding (${width} px): the plan is saved for this character`);
@@ -2511,11 +2528,15 @@ async function skillHandoverScenarios(browser: Browser) {
       events: [{ type: 'STATS', stats }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/step/S6-02');
     const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
-    const setLevels = async (levels: Record<string, number>) => {
+    const setLevels = async (levels: Record<string, number>, destination: string) => {
       await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, levels);
-      await page.waitForTimeout(1300);
+      // The cold-start profile/bridge effects can finish after the old fixed delay. Wait for the actual projection; keep every assertion below.
+      await page.waitForFunction(label => {
+        const posts = (window as unknown as { __posts: { path: string; body: any }[] }).__posts;
+        return posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.step?.worldPoint?.label?.includes(label);
+      }, destination, { timeout: 10000 });
     };
-    await setLevels({ fishing: 50, cooking: 30 });
+    await setLevels({ fishing: 50, cooking: 30 }, 'Cooking: Tuna');
     const cooking = await snapshot();
     expect(cooking?.step?.worldPoint?.label?.includes('Cooking: Tuna') && cooking.step.worldPoint.label.includes('Barbarian Village') && cooking.step.checklist?.some((r: any) => r.name === 'Raw tuna' && r.count === 26), `skill handover (${width}): completing Fishing projects Cooking supplies and destination into the game`);
     expect(!cooking?.step?.npcNames?.includes('Fishing spot') && !cooking?.step?.checklist?.some((r: any) => /fishing net|fishing rod|harpoon/i.test(r.name)), `skill handover (${width}): no obsolete Fishing targets or tools`);
@@ -2523,7 +2544,7 @@ async function skillHandoverScenarios(browser: Browser) {
     expect(saved.steps?.['S6-02'] !== 'done', `skill handover (${width}): Fishing alone cannot complete the combined goal`);
     await reveal(page, '.training:visible');
     expect((await text(page, '.training:visible')).includes('Cooking'), `skill handover (${width}): the visible method follows the same remaining skill`);
-    await setLevels({ fishing: 50, cooking: 35 });
+    await setLevels({ fishing: 50, cooking: 35 }, 'Edgeville Bank');
     const wine = await snapshot();
     expect(wine?.step?.worldPoint?.label?.includes('Edgeville Bank') && wine.step.checklist?.some((r: any) => r.name === 'Grapes' && r.count === 13) && wine.step.checklist?.some((r: any) => r.name === 'Jug of water' && r.count === 13), `skill handover (${width}): wine uses actual ingredient pairs at a bank`);
     expect(await noOverflow(page) && !errors.length, `skill handover (${width}): no overflow or console errors`);

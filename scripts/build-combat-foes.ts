@@ -5,11 +5,10 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { wikitext } from './wiki.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const OUT = `${root}src/data/combatFoes.json`;
-const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
-const API = 'https://oldschool.runescape.wiki/api.php';
 
 /** The opponents whose fights are estimated: the route's, then the training spots' (scripts/trainers.defs.json, the one list to extend). */
 const TRAINER_FOES = (JSON.parse(readFileSync(`${root}scripts/trainers.defs.json`, 'utf8')) as { spots: { foe: string }[] }).spots.map((s) => s.foe);
@@ -21,18 +20,6 @@ const PAGES = [...new Set(['Minotaur', 'Hill Giant', 'Giant frog', 'Cow', 'Flesh
   // The Ranged trainers of stage 6 (2.74.18, the whole-goal arrow count): level 3 Seagulls at Port Sarim, the Edgeville monks.
   'Seagull', 'Monk', ...TRAINER_FOES])];
 
-let last = 0;
-async function wikitext(page: string): Promise<string> {
-  for (let attempt = 1; ; attempt++) {
-    const wait = last + 400 - Date.now();
-    if (wait > 0) await new Promise((r) => setTimeout(r, wait));
-    last = Date.now();
-    const res = await fetch(`${API}?${new URLSearchParams({ action: 'parse', page, prop: 'wikitext', format: 'json', formatversion: '2' })}`, { headers: { 'User-Agent': UA } });
-    if (res.ok) return ((await res.json()) as { parse: { wikitext: string } }).parse.wikitext;
-    if (attempt >= 6 || (res.status !== 429 && res.status < 500)) throw new Error(`${page}: ${res.status}`);
-    await new Promise((r) => setTimeout(r, 4000 * attempt));
-  }
-}
 
 /** The infobox fields as written: "|hitpoints1 = 10". */
 function fields(text: string): Map<string, string> {

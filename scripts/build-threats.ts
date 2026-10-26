@@ -2,8 +2,9 @@
 // how much health the free-version food restores (the first phrase "restores N Hitpoints" in the article). It needs a network.
 // Run: npm run build-threats (about a minute). No numbers of our own: only what is written in the wiki.
 
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { templates } from './wiki.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const OUT = `${root}src/data/threats.json`;
@@ -39,12 +40,14 @@ const THREATS: { key: string; page: string; version?: string; note?: string }[] 
   { key: 'Ogress shaman', page: 'Ogress shaman' },
 ];
 
-/** The free-version food that is eaten in one bite. */
+/** Ordinary food eaten in one bite; membership is read from its item infobox. */
 const FOODS = ['Shrimps', 'Anchovies', 'Sardine', 'Herring', 'Mackerel', 'Trout', 'Cod', 'Pike', 'Salmon', 'Tuna', 'Lobster', 'Bass', 'Swordfish', 'Cooked chicken', 'Cooked meat', 'Bread'];
 
 const quote = (s: string) => `'${s.replace(/'/g, "\\'")}'`;
-const threats: Record<string, { page: string; version?: string; hits: { n: number; label: string }[]; speedTicks: number; hitpoints: number; combat: number }> = {};
-for (const t of THREATS) {
+const foodsOnly = process.argv.includes('--foods-only');
+const threats: Record<string, { page: string; version?: string; hits: { n: number; label: string }[]; speedTicks: number; hitpoints: number; combat: number }> = foodsOnly
+  ? JSON.parse(readFileSync(OUT, 'utf8')).threats : {};
+for (const t of foodsOnly ? [] : THREATS) {
   const res = await get({ action: 'bucket', query: `bucket('infobox_monster').select('page_name','version_anchor','max_hit','attack_speed','hitpoints','combat_level','is_members_only').where('page_name',${quote(t.page)}).limit(40).run()` });
   const rows = (res.bucket as Record<string, unknown>[]) ?? [];
   const row = rows.find((r) => !t.version || r.version_anchor === t.version) ?? rows[0];
@@ -55,13 +58,14 @@ for (const t of THREATS) {
   threats[t.key] = { page: t.page, ...(t.version ? { version: t.version } : {}), hits, speedTicks: Number(row.attack_speed) || 4, hitpoints: Number(row.hitpoints) || 0, combat: Number(row.combat_level) || 0 };
 }
 
-const foods: { name: string; heals: number }[] = [];
+const foods: { name: string; heals: number; members: boolean }[] = [];
 for (const name of FOODS) {
   const res = await get({ action: 'parse', page: name, prop: 'wikitext', redirects: '1' });
   const text = (res.parse as { wikitext?: string } | undefined)?.wikitext ?? '';
   const m = /restores?\s+(\d+)\s*\[\[Hitpoints/i.exec(text);
-  if (m) foods.push({ name, heals: parseInt(m[1], 10) });
-  else console.log(`  ✗ food ${name}: the phrase "restores N Hitpoints" was not found`);
+  const member = templates(text, 'Infobox Item')[0]?.members?.toLowerCase();
+  if (!m || !/^(yes|no)$/.test(member ?? '')) throw new Error(`${name}: food healing/membership evidence incomplete; not written`);
+  foods.push({ name, heals: parseInt(m[1], 10), members: member === 'yes' });
 }
 
 writeFileSync(OUT, `${JSON.stringify({

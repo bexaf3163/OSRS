@@ -2,11 +2,13 @@
 
 Read this first. Claude keeps this file current after every release. It says what Claude received from Codex, what Claude changed, which engine owns each concern, what is in progress and what is still open. The owner wants **one coherent product built on engines**: before changing anything, find the engine below that owns the concern and fix or extend that engine. Never add a parallel mechanism, a per-step patch or an old feature back.
 
+**Codex continuation, 2026-10-26:** work is based on main `ae22ab7`, released app **2.80.3**. The local forecast, combat upgrade, Ranged/Magic recovery, Fletching/Herblore processing, funding-aware training and compact Skills/XP-Balanced-Money changes are described in [CODEX_ENGINE_HARDENING_HANDOFF.md](CODEX_ENGINE_HARDENING_HANDOFF.md). They are not yet a published release. Historical release entries below remain historical; use the current open list and the new receipt before repeating work.
+
 ## 1. Baseline received from Codex
 
 - Codex delivered **2.74.3** (main `7ba9aeea`, tree `f5aa4d76`), described in [CLAUDE_NEXT_SESSION.md](CLAUDE_NEXT_SESSION.md). Codex's backlog is [CODEX_AUDIT_BACKLOG.md](CODEX_AUDIT_BACKLOG.md) (T01–T17). Its handoffs (`docs/CODEX_*_HANDOFF.md`) still describe the subsystems Codex built.
 - Owner decision 2026-10-24: Claude owns the in-game tests ([CLAUDE_IN_GAME_ACCEPTANCE.md](CLAUDE_IN_GAME_ACCEPTANCE.md)).
-- Claude released **2.74.4 → 2.78.0** on main (see section 8 for the release receipts). Every release has `release-notes/vX.md` and an entry in CLAUDE_NEXT_SESSION.md.
+- Claude released **2.74.4 → 2.80.3** on main (see section 8 for the release receipts). Every release has `release-notes/vX.md` and an entry in CLAUDE_NEXT_SESSION.md.
 
 ## 2. Owner rules (binding)
 
@@ -42,7 +44,7 @@ Read this first. Claude keeps this file current after every release. It says wha
 | Wiki reading for builders | `scripts/wiki.ts`: one `wikitext()` fetch, `templates()`, `successCharts()`, `locLines()`, `pointsOf()`, `middleOf()` | build-skilling uses it; the older builders still have their own fetch (open) |
 | In-game guidance | plugin: Quest Helper machines (`QhMachine`), `StepGuide`, one HUD | `questMachines.json`, `questStages.json` |
 
-## 4. What Claude changed (2.74.4 → 2.78.0)
+## 4. What Claude changed (2.74.4 → 2.80.3)
 
 - **Quests, live fixes (2.74.4–2.74.16):** Melzar's Maze follows Quest Helper's rooms and keys. The lesser demon and Lost City are magic fights with required runes. Dragon Slayer S5-01 waits for all five questions, and S5-04…S5-07 follow game state. There is a death recovery path to Elvarg (volcano shortcut or hull repair). Stage 7 boss food is required where the game checks it. Only the nearest copy of a shared object ID is outlined. Every in-game card line is ≤225 characters. The free Anti-dragon shield comes from Duke Horacio.
 - **App/UI minimalism (2.74.10–2.74.25):** one preparation panel; prerequisites named once; Skills is guide-first; the compact Bag/Now tabs say each thing once; Money details don't repeat.
@@ -148,24 +150,23 @@ Read this first. Claude keeps this file current after every release. It says wha
   - **Approximation:** the wiki calls the lighting chance a crowdsourced belief ("citation needed"); the same line is used for every log. Lines are burnt "by a bank": a 3–15 s bank visit, no walk back along the line.
   - The `trainingRouter` "no speed" test now uses wine (still unrated).
 
-## 5. In progress (Claude)
+## 5. Current continuation (Codex, local candidate)
 
-**Hardening pass (owner brief of 2026-10-25, after 2.78.0)**, in small verified blocks. The order:
-Done in 2.78.1: food/consumable costs and the objective in both rankings, the bounded baseline, explicit members eligibility, the price-snapshot cache key, forecast re-rating, safety by facts, the content-contract tests, and the assumptions table (5b).
-Still open in the brief:
-- (a) Gathering tools done in 2.78.2. Left: combat gear upgrades (weapon/bow/staff) on the same rule, and checking the player's cash before suggesting a purchase.
-- (b) Done in 2.78.1 (see the reserves entry above).
-- (c) Done (2.78.1 gathering adapter, 2.78.2 Dwarven Mine spots). Combat already shared `estimateStep`.
-- (d) Calibration against a real session (NOT REACHABLE while the owner is away).
-- (e) Processing: Smithing/Cooking/Crafting done in 2.79.0, Money smelting on the engine in 2.79.1. Left: Firemaking, Runecraft, Prayer, Magic utility, wine. Cook-on-the-spot done in 2.80.0.
+Baseline remains released **2.80.3**, main `ae22ab7`; candidate branch `codex/engine-hardening-2-80-3`. See [CODEX_ENGINE_HARDENING_HANDOFF.md](CODEX_ENGINE_HARDENING_HANDOFF.md) for exact changes, verification and limitations. No candidate release/EXE exists yet. Historical release bullets above describe those releases only.
 
-**Next actions, in order (state at 2.80.3, main = claude/clear-quest-lines; Codex may continue from here):**
-1. ~~Firemaking~~: done in 2.80.3 (see the entry above).
-2. **Combat gear upgrade variant (block a).** Apply `trainingRouter.toolUpgrade`'s rule to weapons: the hours saved by a better weapon vs its price, using `supplyPrice`. Check `services/gearAdvisor` first, so as not to duplicate the Gear page's upgrade advice.
-3. ~~Cash before suggesting a purchase~~: done in 2.80.1 (`adviseTraining` sets `ToolUpgrade.short` from `coinsOf(state).total` when it is known and below the price; the reason says "; you have X"; unknown coins say nothing). Test in `tests/skillingRates.test.ts`. Apply the same to weapon upgrades when item 2 is done.
-4. **Runecraft, Prayer, Magic utility, wine:** add them to the processing registry the same way (wiki `{{Recipe}}` + defs), never per-method code.
-5. ~~`bankedRanged` special case~~: done in 2.80.2. `compare`'s `rank()` now treats any PREP method whose missing items are all confirmed in the bank as ready (`banked`), for every kit. All ranged tests stayed green; new test in `tests/trainingPriority.test.ts` fails on the old kit-only rule.
-6. **Calibration (d)** needs a real play session with the owner (NOT REACHABLE).
+The owner brief's status:
+- (a) Gathering upgrades and cash-shortfall disclosure were released. Local additions: shared melee/bow/ordinary staff eligibility and combat simulation, cost-only staff savings, and savings limited to the current method's forecast leg. Local advice now counts the shared acquisition allowance and reserves known missing next-trip kit costs via Funding. Actual detour routes, route fees, replenishment across the full goal and future purchases remain open.
+- (b) Reserves: released in 2.78.1; no new autonomous purchasing or selling.
+- (c) Shared gathering/combat/funding adapters: released. Processing costs, supplies and output now also share batch mechanics locally.
+- (d) Real-session calibration: pending Claude's game acceptance.
+- (e) Local processing additions: wine, explicit paid banked Prayer methods, Superheat iron, and four F2P rune altars. All use the shared registry/model; no step-specific formulas. General enchant/alchemy automation remains excluded by its manual target/budget safeguards.
+
+**Next actions:**
+1. Review the local candidate and obtain browser smoke, source Electron and isolated portable evidence in a working execution environment. Current Windows execution restrictions prevent these gates; do not weaken them.
+2. Extend current next-trip kit reservation to actual acquisition routes, route fees and goal-wide replenishment if needed. Cost-per-effective-HP food ranking is now used by the existing fallback food suggestions, with explicit membership; automatic substitution across combat plans/preparation/shopping is still open.
+3. Calibrate wine fermentation, altar travel, Prayer pace, Superheat and combat estimates against reachable real sessions. Do not grind or spend merely to force a test. Use docs/CLAUDE_IN_GAME_ACCEPTANCE.md.
+4. Keep further utility Magic methods manual until exact expendable targets, prices, required skills/equipment and spell mechanics are verified.
+5. Recheck latest main before publication, reconcile concurrent Claude work, run every gate and only then make a new version. Never overwrite 2.80.3.
 
 Watch-outs:
 - `fishingClimb` "the pick settles…" is an exhaustive test with an explicit 20 s timeout. Do not lower it.
@@ -178,9 +179,9 @@ Watch-outs:
 | --- | --- | --- | --- | --- |
 | Combat estimate (`combatEstimate.ts`) | Monster stats, max hits, attack speeds, XP bonus (wiki infobox via build-combat-foes); food heals (wiki) | levels, worn gear, measured pace (combat log) | time between kills `[2,6]` s, eat threshold `max(2×maxHit, special+1)`, 15% slow-end margin, competition not modelled | prayer flicking, safespot pathing beyond the listed ones, manual special-attack avoidance, multi-combat beyond `groupAggro` |
 | Combat spots / fight plans (`combatRoute/*`) | spawns (LocLine), always-drops, named banks, quest gates (wiki + route) | bank contents, quests done, adopted plan | bank trip = straight line (fast) / ×1.4 walking (slow) + 20–45 s banking + ladders; `SWITCH_MINUTES` 6; coins valued at the cowhide baseline, credited at most half the time; food priced at its buy price even when owned | travel by teleports for bank trips, loot beyond the sell drop, boss respawn variance beyond the listed range |
-| Gathering (`skillingRates.ts`) | success low/high per tool (Skilling success chart), roll ticks (Action lengths), XP/level/respawn (info templates), tree despawn timers, spot spawns and counts, aggressive NPCs' levels and spawns (wiki, build-skilling) | levels, tools owned (bag/worn/bank), combat level for aggression | moving between trees 2.4–6 s, rocks 0.6–1.8 s, fishing spot moves every 250–530 ticks costing 3–8 s, drop 0.3–0.6 s an item, 10% slow-end margin, tool worn when Attack allows | competition and Forestry events, the Al Kharid toll and Port Sarim deposit boxes, banking by boat (Musa Point is drop-only), oak/normal trees without wiki spawns (drop-only), aggression tolerance after 10 min, cook-on-the-spot (next) |
-| Processing (`processingRates.ts`) | recipe level/XP/ticks/tools/materials/output ({{Recipe}}), burn chart (cooking), smelt chance note, material stackability, furnace/anvil map point and the wiki's distance from the bank, fire spawns (wiki, build-processing) | levels, account mode, prices, restriction, objective | bank visit 3–15 s (calibrated: the wiki guide figures lie within the range, fast end within 10%), walking pace/winding at the slow end (shared), 10% slow-end margin, thread counted one per item (the wiki recipe; really 1 per 5) | ranges in kitchens (no wiki coordinates: cooking uses the Barbarian Village fire), wine and pies (not in the registry yet), Firemaking, Runecraft, Prayer, Magic utility, cook-on-the-spot after fishing, tools' ownership (prep lists them; speed does not depend on them) |
-| Ranking (`trainingRouter.ts`) | catalogue brackets from the wiki guides | measured XP/h overrides | the 5% band as a tie on hours; `SWITCH_GAIN`; future path legs re-rated every 5 levels (`FORECAST_STEP`), with today's gear and tools | gear bought on the way (an upgrade's time saved is not ranked yet) |
+| Gathering (`skillingRates.ts`) | success low/high per tool (Skilling success chart), roll ticks (Action lengths), XP/level/respawn (info templates), tree despawn timers, spot spawns and counts, aggressive NPCs' levels and spawns (wiki, build-skilling) | levels, tools owned (bag/worn/bank), combat level for aggression | moving between trees 2.4–6 s, rocks 0.6–1.8 s, fishing spot moves every 250–530 ticks costing 3–8 s, drop 0.3–0.6 s an item, 10% slow-end margin, tool worn when Attack allows | competition and Forestry events, the Al Kharid toll and Port Sarim deposit boxes, banking by boat (Musa Point is drop-only), oak/normal trees without wiki spawns (drop-only), aggression tolerance after 10 min |
+| Processing (`processingRates.ts`) | Wiki recipe/action lengths, burn/success charts, staff bonuses and requirements; consumed bone XP/timing; Superheat spell/rune/Smithing facts; rune output multipliers and exact altar exterior/interior/exit coordinates (shared builders) | levels, mode, held/equipped alternatives, prices, restrictions, objective | bank visit 3–15 s, 10% slow margin; wine waits once per documented 13-jug batch (continuous bank fermentation not simulated); altar arrival near exit portal, cross-area transition uses shared bank-trip allowance, walking only; thread one per item | uncalibrated altar arrival/route winding, teleports/pouches, continuous wine optimization, ranges in kitchens, general enchant/alchemy, Firemaking return walks; tools still require prep |
+| Ranking (`trainingRouter.ts`) | catalogue brackets from the wiki guides | measured XP/h overrides | the 5% band as a tie on hours; `SWITCH_GAIN`; future path legs re-rated every 5 levels (`FORECAST_STEP`), with today's gear and tools | gear bought on the way (local upgrade advice does not yet simulate future purchases); see the Codex receipt for forecast repairs |
 | Preparation / safety (`prepPlan.ts`, `readinessVerdict.ts`) | hazards from threats.json hit labels; items/quantities from the route | bag/bank/worn/noted from the plugin; untracked rows stay UNKNOWN | — | hazards other than dragonfire need a new `SAFETY_RULES` entry (a new mechanic, not data) |
 | Value of coins (`lootValue.ts`) | GE prices and tax (live board, `netEach`), trade restriction list | restriction state | cowhide baseline: `fundingMethods.json` typical 260 hides/h × net hide price; it is NOT this character's best earning method, so it is capped (`COIN_SHARE_CAP` 0.5) and never used on the fastest objective | the cost of buying tools or gear is not yet in the ranking (open, block 1 continuation) |
 
@@ -188,11 +189,14 @@ Calibration against real sessions is pending: the measured pace (combat log, `me
 
 ## 6. Open (not done)
 
-- T10: gear-upgrade variant (an upgrade's time saved vs its cost), food choice by cost per heal, and the static skill roadmap's "now" step that can differ from the personal pick (roadmap = wiki brackets in `skillGuide.ts`; the card = model).
-- Processing skills on the same engine (Cooking with burn charts and cook-on-the-spot for fishing, Firemaking, Smithing, Crafting, Runecraft, Prayer, Magic utility). The wiki burn charts (Fire or Range vs Lumbridge range) and action lengths are already known (section 5 of 2.78 notes).
+- Latest local continuation: read the recovery/recipes/compact Skills section of CODEX_ENGINE_HARDENING_HANDOFF.md. Balanced is default; do not restore a duplicate skill menu, auto-expanded alternatives, or impossible bow+shield predictions. No release/portable/UI/game acceptance is claimed.
+- Complete source-backed models for remaining guide-only Members skills. SKILLS_COVERAGE.md now explicitly distinguishes catalogue/guide coverage from model support. Route Money comparisons currently deduct food but not potion/armour acquisition; retain that limitation until the shared plan economics is extended.
+
+- T10: actual acquisition routes/fees, goal-wide replenishment/future purchases, automatic food substitution across all consumers, and the static roadmap's "now" bracket versus the personal model pick. Local advice now reserves known next-trip kit costs, counts the shared acquisition allowance, and ranks fallback food suggestions by effective healing/cost with membership guards. These are not published yet.
+- Processing: wine, paid banked Prayer, Superheat and four F2P rune altars are now implemented locally. General enchant/alchemy retains manual safeguards. Continuous wine fermentation, teleports/pouches and live altar travel calibration remain unsupported/unverified; see the receipt.
 - Gathering approximations: tree/rock move seconds, spot-move cost, drop speed and the 10% slow-end margin are model assumptions; competition (other players) and Forestry are not modelled; oak and normal trees have no wiki spawns, so they are drop-only with no bank trip; the Al Kharid toll (10 gp unless Prince Ali Rescue) and the Port Sarim deposit boxes (no wiki coordinates) are not modelled; aggression tolerance after 10 minutes is not counted.
 - Musa Point banking by boat and deposit box is not modelled; such spots are drop-only until it is added as data (`skilling.defs.json` `why`).
-- Older builders (`build-combat-foes`, `build-ranged-gear`, `build-style-gear`, `build-trainers`) each still have their own `wikitext()`. Move them to `scripts/wiki.ts` and confirm byte-identical output.
+- Builder consolidation is implemented locally: combat foes, ranged gear, style gear and trainers now use scripts/wiki.ts. Before/after replay of the same recorded Wiki responses produced byte-identical output for all four; no related app data was regenerated in place.
 - In-game acceptance still pending: live S5-08; T04 world hop/logout; T08 live restart; looking at 2.74.20–2.77 in the app (CLAUDE_IN_GAME_ACCEPTANCE.md).
 
 ## 7. Do not

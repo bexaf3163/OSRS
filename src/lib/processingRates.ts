@@ -7,23 +7,29 @@
 import processingJson from '../data/processing.json';
 import { bankTrip, tripMinutes } from './bankTrip';
 import { skillChance } from './skillChance';
-import { coinsPerMinute, coinTimeShare, dropValue } from './lootValue';
-import { levelOf, type PlayerState } from './playerState';
+import { coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from './lootValue';
+import { heldOf, levelOf, type PlayerState } from './playerState';
 import { isRestrictedItem } from './tradeRestriction';
 import { supplyPrice } from './sourceRouter';
 import { matchStrict } from '../services/locationResolver';
+import { canWear, gearPieceByName } from '../services/gearAdvisor';
 import type { Market, ModelRate, RateSpot } from './methodRates';
-import type { TrainingMethod } from './trainingRouter';
+import type { TrainingMethod, MethodNeed } from './trainingRouter';
 import type { Point } from './travel';
 
-type Facility = 'furnace' | 'anvil' | 'fire';
-interface Station { kind: Facility; label: string; place: Point & { label: string }; bankTiles?: number; bank?: string; members: boolean }
+type Facility = 'furnace' | 'anvil' | 'fire' | 'altar';
+interface Station { kind: Facility; label: string; place: Point & { label: string }; bankTiles?: number; bank?: string; members: boolean; entry?: Point; portal?: Point }
 interface Recipe {
   id: string; skill: string; level: number; xp: number; ticks: number; facility: Facility | null; tools: string[];
   /** output: null - nothing kept (logs burnt). retry: a failed attempt keeps the material and costs only its time (lighting a log). */
-  inputs: { name: string; qty: number; stacks: boolean }[]; output: { name: string; qty: number } | null; retry?: boolean;
+  inputs: { name: string; qty: number; stacks: boolean; staff?: string; anyOf?: string[] }[]; output: { name: string; qty: number } | null; retry?: boolean;
   /** The skilling success formula's low and high (cooking: the food is not burnt), or a flat chance (an iron bar); neither - always. */
   success?: { low: number; high: number }; chance?: number; members?: boolean;
+  /** Plan-specific batch size and one shared wait after the batch, not a delay on every input. */
+  batchSize?: number; batchWaitTicks?: number;
+  requires?: { skill: string; level: number }[];
+  source?: string;
+  wholeBatch?: boolean; multiplierEvery?: number; access?: { carried: string; equipped: string }; station?: string;
 }
 /** The processing registry: data/processing.json in the app; a test may pass its own (synthetic content never enters the app's data). */
 export interface ProcessingRegistry { stations: Station[]; recipes: Recipe[]; methods: Record<string, string[]> }
@@ -44,31 +50,64 @@ const BANK_VISIT: [number, number] = [3, 15];
 /** Where the recipe is made and the minutes of one bank trip from there: a station of its kind, or (no facility) by the bank itself. */
 function placesFor(r: Recipe, state: PlayerState, reg: ProcessingRegistry): { spot: RateSpot | null; trip: [number, number] }[] {
   if (!r.facility) return [{ spot: null, trip: tripMinutes(0, 0, BANK_VISIT) }];
-  return reg.stations.filter((s) => s.kind === r.facility && !(s.members && state.mode !== 'members')).flatMap((s) => {
-    const walk = s.bankTiles !== undefined ? { minutes: tripMinutes(s.bankTiles, 0, BANK_VISIT), bank: undefined } : s.bank ? bankTrip({ place: s.place, bank: s.bank }, BANK_VISIT) : null;
+  return reg.stations.filter((s) => s.kind === r.facility && (!r.station || r.station === s.label) && !(s.members && state.mode !== 'members')).flatMap((s) => {
+    const walk = s.bankTiles !== undefined ? { minutes: tripMinutes(s.bankTiles, 0, BANK_VISIT), bank: undefined } : s.bank ? bankTrip({ place: s.place, bank: s.bank,
+      ...(s.entry && s.portal ? { waypoints: [s.entry, s.portal, s.place] } : {}) }, BANK_VISIT) : null;
     if (!walk) return [];
-    return [{ spot: { label: s.label, place: s.place, how: 'bank' as const, ...(walk.bank ? { bank: walk.bank.label } : {}) }, trip: walk.minutes }];
+    return [{ spot: { label: s.label, place: s.place, how: 'bank' as const, ...(walk.bank ? { bank: walk.bank.label } : {}),
+      ...(s.entry ? { waypoints: [s.entry, s.place] } : {}) }, trip: walk.minutes }];
   });
 }
 
 interface Option { rate: ModelRate; score: number }
 
-function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number] }, level: number, state: PlayerState, market: Market, coinRate: number | null): Option | null {
+function recipeBag(r: Recipe, state: PlayerState, market: Market, method?: TrainingMethod) {
+  const substituted = r.inputs.filter((i) => {
+    if (!i.staff) return false;
+    const staff = gearPieceByName(i.staff);
+    if (!staff || staff.reqUnverified || (staff.members && state.mode !== 'members') || !canWear(staff, {
+      attack: levelOf(state, 'attack') ?? 1, strength: levelOf(state, 'strength') ?? 1, defence: levelOf(state, 'defence') ?? 1,
+      magic: levelOf(state, 'magic'), ranged: levelOf(state, 'ranged'),
+    }, state.quests.known ? new Set(state.quests.value) : undefined)) return false;
+    const held = heldOf(state, i.staff);
+    return held.presence === 'PRESENT' || held.equipped > 0;
+  });
+  const inputs = r.inputs.filter((i) => !substituted.includes(i)).map((i) => {
+    if (!i.anyOf?.length) return i;
+    const names = [i.name, ...i.anyOf];
+    const name = names.find((n) => (heldOf(state, n).total ?? 0) > 0)
+      ?? names.map((n) => ({ name: n, price: supplyPrice(n, market.prices, state.mode) })).filter((n) => n.price !== null).sort((a, b) => a.price! - b.price!)[0]?.name ?? i.name;
+    return { ...i, name, anyOf: names.filter((n) => n !== name) };
+  });
+  const tiara = r.access ? heldOf(state, r.access.equipped) : null;
+  const wearsAccess = tiara !== null && (tiara.presence === 'PRESENT' || tiara.equipped > 0);
+  const accessNeed: MethodNeed | null = r.access ? wearsAccess
+    ? { type: 'item', name: r.access.equipped, count: 1, equip: true }
+    : { type: 'item', name: r.access.carried, count: 1, anyOf: [r.access.equipped] } : null;
   // The bag: a slot for each tool and each stackable material, the rest for the materials one action uses.
-  const perAction = r.inputs.filter((i) => !i.stacks).reduce((a, i) => a + i.qty, 0);
-  const free = BAG - r.tools.length - r.inputs.filter((i) => i.stacks).length;
-  const actions = perAction > 0 ? Math.floor(free / perAction) : free;
+  const perAction = inputs.filter((i) => !i.stacks).reduce((a, i) => a + i.qty, 0);
+  const free = BAG - r.tools.length - inputs.filter((i) => i.stacks).length - (r.access && !wearsAccess ? 1 : 0);
+  const planned = inputs.flatMap((i) => {
+    const n = method?.needs?.find((n) => n.type === 'item' && (n.name === i.name || n.anyOf?.includes(i.name) || i.anyOf?.includes(n.name)));
+    return n?.type === 'item' && n.count !== undefined && n.count > 0 ? [Math.floor(n.count / i.qty)] : [];
+  });
+  const actions = Math.min(r.batchSize ?? Infinity, ...planned, perAction > 0 ? Math.floor(free / perAction) : free);
+  return { actions, inputs, substituted, accessNeed };
+}
+
+function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number] }, level: number, state: PlayerState, market: Market, coinRate: number | null, method: TrainingMethod): Option | null {
+  const { actions, inputs, substituted, accessNeed } = recipeBag(r, state, market, method);
   if (actions <= 0) return null;
   const chance = r.success ? skillChance(r.success.low, r.success.high, level) : r.chance ?? 1;
   // A retried action (a log that did not light) is tried again: the failures cost time, and every action ends in a success.
   const tries = r.retry ? 1 / chance : 1;
   const success = r.retry ? 1 : chance;
-  const seconds = (i: 0 | 1) => r.ticks * TICK * tries + (at.trip[i] * 60) / actions;
+  const seconds = (i: 0 | 1) => r.ticks * TICK * tries / (r.wholeBatch ? actions : 1) + (at.trip[i] * 60 + (r.batchWaitTicks ?? 0) * TICK) / actions;
   const perHour = (i: 0 | 1) => 3600 / seconds(i);
   const xph: [number, number] = [(r.xp * success * perHour(1)) / (1 + MARGIN), r.xp * success * perHour(0)];
   const done = (perHour(0) + perHour(1)) / 2;
   // Materials at the price to replace them (a material owned is used up too); the product at its sale value after tax, a failed one (burnt) at none.
-  const each = r.inputs.reduce<number | null>((a, i) => {
+  const each = inputs.reduce<number | null>((a, i) => {
     const p = supplyPrice(i.name, market.prices, state.mode);
     return a === null || p === null ? null : a + p * i.qty;
   }, 0);
@@ -77,12 +116,20 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number] }
   const value = sale ?? (market.restriction === 'RESTRICTED' && isRestrictedItem(r.output!.name) ? 0 : null);
   const costPerHour = each === null || value === null ? null : each * done;
   // The product's value is shown only with its materials' cost: a gain without the cost would read as profit.
-  const lootPerHour = costPerHour === null || !r.output ? 0 : value! * r.output.qty * success * done;
+  const outputQty = (r.output?.qty ?? 0) * (r.multiplierEvery ? 1 + Math.floor(level / r.multiplierEvery) : 1);
+  const lootPerHour = costPerHour === null || !r.output ? 0 : value! * outputQty * success * done;
   const rate: ModelRate = {
-    xph, costPerHour, basis: r.output?.name ?? r.inputs[0].name,
-    ...(costPerHour !== null ? { costName: r.inputs.filter((i) => !i.stacks).map((i) => i.name.toLowerCase()).join(', ') } : {}),
+    xph, costPerHour, basis: r.output?.name ?? r.inputs[0].name, xpPerAction: r.xp * success,
+    needs: [
+      ...r.tools.map((name) => ({ type: 'item' as const, name, count: 1 })),
+      ...(accessNeed ? [accessNeed] : []),
+      ...substituted.map((i) => ({ type: 'item' as const, name: i.staff!, count: 1, equip: true })),
+      ...inputs.map((i) => ({ type: 'item' as const, name: i.name, count: Math.ceil(i.qty * actions), ...(i.anyOf?.length ? { anyOf: i.anyOf } : {}) })),
+    ],
+    ...(costPerHour !== null ? { costName: inputs.map((i) => i.name.toLowerCase()).join(', ') } : {}),
     ...(lootPerHour > 0 && r.output ? { lootPerHour, loot: r.output.name } : {}),
     ...(at.spot ? { spot: at.spot } : {}),
+    ...(r.wholeBatch ? { warning: 'Walking and banking estimate; no teleports or essence pouches.' } : {}),
   };
   // Time per XP less what the coins are worth in time (lootValue): a loss counts in full, a gain at most half; unknown coins are left out.
   const saved = costPerHour === null || market.objective === 'fastest' ? 0 : coinTimeShare(lootPerHour - costPerHour, coinRate);
@@ -95,7 +142,7 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number] }
  */
 export function processRate(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}, reg: ProcessingRegistry = PROCESSING): ModelRate | null {
   const ids = reg.methods[m.id];
-  if (!ids || m.kind !== 'method' || !m.skills.includes(skill)) return null;
+  if (!ids || m.kind !== 'method' || !m.skills.includes(skill) || (m.members && state.mode !== 'members')) return null;
   const level = levelOf(state, skill);
   if (level === undefined) return null;
   const coinRate = coinsPerMinute(market.prices);
@@ -104,12 +151,15 @@ export function processRate(m: TrainingMethod, skill: string, state: PlayerState
   for (const id of ids) {
     const r = reg.recipes.find((x) => x.id === id);
     if (!r || r.skill !== skill || level < r.level || (r.members && state.mode !== 'members')) continue;
+    if (r.requires?.some((q) => (levelOf(state, q.skill) ?? 0) < q.level)) continue;
     for (const at of placesFor(r, state, reg)) {
-      const o = option(r, at, level, state, market, coinRate);
+      const o = option(r, at, level, state, market, coinRate, m);
       if (!o) continue;
+      if (ids.length > 1 && r.output) o.rate.methodName = `Make ${r.output.name}`;
       // A tie (within 2%) goes to the station nearer the method's own place, so the advice does not hop between equal stations.
       const far = (x: Option) => (home && x.rate.spot ? Math.max(Math.abs(x.rate.spot.place.x - home.x), Math.abs(x.rate.spot.place.y - home.y)) : 0);
-      if (!best || o.score < best.score * 0.98 || (o.score <= best.score * 1.02 && far(o) < far(best))) best = o;
+      const earnings = best && market.objective === 'profit' ? earningsOrder(netEarnings(o.rate), netEarnings(best.rate)) : 0;
+      if (!best || earnings < 0 || (!earnings && (o.score < best.score * 0.98 || (o.score <= best.score * 1.02 && far(o) < far(best))))) best = o;
     }
   }
   return best?.rate ?? null;
@@ -130,14 +180,18 @@ export function processPace(product: string, near: Point, state: PlayerState, re
   if (!r) return null;
   const level = levelOf(state, r.skill);
   if (level === undefined || level < r.level) return null;
+  if (r.requires?.some((q) => (levelOf(state, q.skill) ?? 0) < q.level)) return null;
   const station = r.facility
-    ? reg.stations.filter((s) => s.kind === r.facility && !(s.members && state.mode !== 'members') && s.place.plane === near.plane)
+    ? reg.stations.filter((s) => s.kind === r.facility && (!r.station || r.station === s.label) && !(s.members && state.mode !== 'members') && s.place.plane === near.plane)
       .map((s) => ({ s, far: Math.max(Math.abs(s.place.x - near.x), Math.abs(s.place.y - near.y)) })).filter((x) => x.far <= SAME_PLACE)
       .sort((a, b) => a.far - b.far)[0]?.s ?? null
     : null;
   if (r.facility && !station) return null;
   const chance = r.success ? skillChance(r.success.low, r.success.high, level) : r.chance ?? 1;
-  const fast = (r.ticks * TICK) / (chance * r.output!.qty);
+  const { actions } = recipeBag(r, state, {});
+  if (actions <= 0) return null;
+  const outputQty = r.output!.qty * (r.multiplierEvery ? 1 + Math.floor(level / r.multiplierEvery) : 1);
+  const fast = ((r.ticks / (r.wholeBatch ? actions : 1) + (r.batchWaitTicks ?? 0) / actions) * TICK) / (chance * outputQty);
   const slow = fast * (1 + MARGIN);
   return { seconds: { fast, typical: (fast + slow) / 2, slow }, recipe: r.output!.name, station: station?.label ?? null };
 }

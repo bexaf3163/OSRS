@@ -9,6 +9,15 @@ Owner decision,2026-10-24: Codex finishes implementation and automated verificat
 3. Exercise the companion while the player controls movement/combat/skilling. Do not add gameplay automation. Do not spend coins, sell/drop protected items or change permanent progress just to force a test. Use isolated fixture profiles for impossible states; label those as simulated.
 4. A completed quest or unreachable skill scenario cannot be claimed as live-tested. Record the limitation and retain its automated evidence; do not grind hours or replay completed quests to manufacture acceptance.
 
+## New local Skills and recovery acceptance (not live-verified)
+
+- Skills overview: individual icons without a second skill menu. Clicking Defence opens its recommendation directly, even when the route prefers Attack. Three priorities XP/Balanced/Money; Balanced on an untouched save, explicit saved preference preserved. Changing priority affects the shared calculation, not just the label; no unsolicited change to an explicit followed plan.
+- Check480/1000/1440px and large text: labels, icon loading, keyboard focus, no horizontal overflow; roadmap/levels/alternatives start collapsed and open correctly. Confirm manual level editing and live XP still work. Screenshots must be real application captures, not server-render/unit fixtures.
+- With banked bow+arrows and worn melee gear, preparation asks for the bow and predicts without the shield. Actual equipped kit must agree with prediction. No free shield defence or old-weapon accuracy remains.
+- Compare reachable Ranged/Magic sessions against their selected trainer: food use, bank breaks, rune/arrow consumption, monk free-heal downtime. Missing HP/Defence/quotes stays unchecked; no invented safespot. Do not deliberately enter unsafe combat to force a scenario.
+- Money mode: known sale proceeds minus modeled supplies and loot time, restricted/unpriced drops excluded. Unaffordable next-trip supplies prefer a feasible alternative; unread bank/coins is not a shortage. Route Money text says after food; potion/armour acquisition is still a documented economic gap.
+- Members Fletching/Herblore: concrete usable product, correct unlock/quest/tool, actual batch inputs, price failures, bank preparation and navigation. Never accept3-dose ingredients for an unimplemented4-dose-only recipe. Do not spend/grind to force inaccessible tests.
+
 ## Current Ranged preparation
 
 - At reachable levels, confirm desktop, checklist, guide card, navigation and NPC highlights show one current trainer. Earlier bug: equipped arrows plus already banked frog food reverted to monks. Confirm the bank withdrawal remains visible and the selected plan is stable.
@@ -54,3 +63,26 @@ For each scenario record exact source/EXE/plugin versions, initial real state, a
 - **Observed, not a PASS claim:** Elvarg fight warnings and food. Dragonfire was absorbed by the worn shield; lobsters were eaten. The player died once, respawned in Lumbridge, and was back in the Crandor dungeon at 17:34 (plugin shot `shot-20261024-173457-stage_cursor_3.jpg`, collapsed one-card HUD).
 - **Open (needs the player in game):** Ranged/Magic preparation, travel and teleports, HUD expanded states and long text (telemetry flags lines of 107–201 characters), and the login/logout/world-hop lifecycle. None of these has been observed yet.
 - **Earlier sessions today (telemetry 2.74.3 / 2.74.4):** every STUCK, SLOW_LINE and manual close is in Dragon Slayer: S5-01 Guildmaster line 1 (6 min 50 s, closed by hand), S5-03 maze front door, red door (39 min) and magenta door / lesser demon (12 min + 8 min), S5-04 Oracle (16 min). Fixed in 2.74.4 (maze machine), 2.74.5 (demon runes), 2.74.6 (Oracle) and 2.74.7 (questions machine). No stall outside Dragon Slayer in today's logs. Re-test pending.
+
+## Pending acceptance — local engine hardening candidate (2026-10-26)
+
+Source: branch codex/engine-hardening-2-80-3, based on released2.80.3 / ae22ab7; uncommitted local candidate, no candidate EXE. These cases are **PENDING**, not additional live results. Use CODEX_ENGINE_HARDENING_HANDOFF.md and the final checkpoint for the verified source tree. Preserve the real account; use isolated fixtures for unreachable levels instead of grinding/spending to force tests.
+
+- Forecast: select a multi-method goal and confirm the single time line includes later methods. Changing/following another method must not apply the old measured pace to its forecast. Unknown future pace must not produce a known total; expanded path remains at most six rows.
+- Upgrades: reachable melee/bow eligibility, two-handed shield removal, no suggestion to repurchase a known owned item, no purchase advice with unread ownership. Equip a better owned weapon first. Unknown Members weapons must not produce an invented downgrade. Observe without buying for the test.
+- Ordinary staves: a real rune-cost saving with identical combat pace must say gp saved after price, not fictitious time. A banked staff still needs withdrawing/equipping. Known cash shortage must be disclosed; full supply reserves remain outside this candidate.
+- Wine (if Cooking35+): thirteen grapes/water jugs, one fermentation wait after the batch, bad-wine/no-XP accounting, preparation counts and measured progress. Note actual banking/fermentation overlap; the model conservatively waits per documented batch.
+- Prayer: passive combat bone collection has no paid power-burying speed. Explicit banked methods require unnoted bones and show supply costs. Do not bury reserved quest/route bones merely to test.
+- Superheat (if Magic43/Smithing15): exact spell inputs, owned/worn fire staff, 25-ore preparation, no extra coal, guaranteed iron output, costs and XP. Compare existing banked handover, supply depletion and NPC-highlight clearing; no extra cast just for a screenshot.
+- Runecraft: each method goes to its own exterior ruins, then its interior altar, and can leave by the correct portal/bank. Talisman takes a slot; tiara must be worn and permits 28 essence. Reuse owned Rune/Pure essence. Rune yield increases at the source level thresholds without multiplying XP per essence. Check directions at exterior, inside and after exit; portal-near arrival and trip duration remain model assumptions until observed.
+- Cross-feature: Path/Skills, preparation/shopping, Money, navigation and the single guide agree on selected supplies, expected action count and destination. Mixed raw meats and the existing 26-tuna preparation must not request duplicate or extra materials. Narrow/large font/DPI layouts must keep the existing reason readable without extra panels or clipped text.
+
+For every case record PASS/FAIL/NOT REACHABLE, exact app/plugin/source versions and actual evidence. No fixture render or automated result counts as in-game acceptance.
+
+### Pending acceptance — food and optional purchases continuation
+
+- F2P fallback food advice never suggests Mackerel, Cod or Bass as usable food; Members recognizes them. Existing suggestions rank by cost per effective healing. Check the same shared price snapshot, unknown-price fallback and low maximum HP. No extra panels or clipped/overlong labels at narrow widths/large text.
+- Low-HP combat estimates must not credit a piece with more healing than a living player can be missing. This is a bound, not exact bite-by-bite calibration. Existing nominal food equivalence outside these consumers still needs review before enabling automatic substitutions.
+- A small equipment speed gain must not send the player on a longer acquisition detour. A kit trip already required must not be charged twice. The allowance is a model assumption, not an actual route ETA.
+- Cash that covers an optional upgrade but would leave too little for known missing next-trip supplies must say “only X gp after the kit”. Banked/owned supplies cost no extra purchase; replacement tools are not reserved twice. Unread stock/unpriced kit says to check before buying. No actual purchase is needed to test this; fixtures are acceptable for unreachable financial states, labelled simulated.
+- Current reserve covers the selected next-trip kit only. Route fees, goal-wide replenishment and future purchases are not promised; never describe the displayed remainder as globally safe to spend.

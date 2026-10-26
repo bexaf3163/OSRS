@@ -34,5 +34,6 @@ export const styleOf = (f: Pick<Features, 'efficient'>): StyleProfile => (f.effi
  * material cost. "fastest" (the old "Efficient", an explicit choice) puts speed first; "relaxed" puts no risk and fewer clicks first. Before 2.69 the
  * default ("Calm") put AFK methods first; a save that never chose gets "balanced", a save that chose "Efficient" keeps it as "fastest".
  */
-export type MethodPriority = 'balanced' | 'fastest' | 'relaxed';
-export const priorityOf = (f: Pick<Features, 'efficient' | 'relaxedTraining'>): MethodPriority => (f.efficient ? 'fastest' : f.relaxedTraining ? 'relaxed' : 'balanced');
+export type MethodPriority = 'balanced' | 'fastest' | 'relaxed' | 'profit';
+export const priorityOf = (f: Pick<Features, 'efficient' | 'relaxedTraining'> & Partial<Pick<Features, 'profitTraining'>>): MethodPriority =>
+  f.efficient ? 'fastest' : f.profitTraining ? 'profit' : f.relaxedTraining ? 'relaxed' : 'balanced';

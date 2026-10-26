@@ -27,6 +27,26 @@
       "location": "[[Barbarian Village]]",
       "near": "Barbarian Village fishing spots",
       "bank": "Edgeville Bank"
+    },
+    {
+      "kind": "altar",
+      "page": "Air Altar",
+      "bank": "Falador East Bank"
+    },
+    {
+      "kind": "altar",
+      "page": "Earth Altar",
+      "bank": "Varrock East Bank"
+    },
+    {
+      "kind": "altar",
+      "page": "Fire Altar",
+      "bank": "Al Kharid Bank"
+    },
+    {
+      "kind": "altar",
+      "page": "Body Altar",
+      "bank": "Edgeville Bank"
     }
   ],
   "recipes": [
@@ -226,6 +246,260 @@
       "skill": "firemaking",
       "facility": null,
       "light": true
+    },
+    {
+      "id": "wine",
+      "page": "Jug of wine",
+      "skill": "cooking",
+      "facility": null,
+      "successLabel": "Jug of wine",
+      "batch": {
+        "size": 13,
+        "workTicks": 2,
+        "waitTicks": 20,
+        "workEvidence": "2 ticks to add grapes",
+        "waitEvidence": "20 ticks to ferment"
+      }
+    },
+    {
+      "id": "bury-bones",
+      "page": "Bones",
+      "skill": "prayer",
+      "facility": null,
+      "consume": {
+        "level": 1,
+        "xp": 4.5,
+        "xpEvidence": "Bones give 4.5 [[Prayer]] experience when buried.",
+        "action": {
+          "page": "Game tick/Action lengths",
+          "evidence": "Burying [[remains|bones]]:",
+          "ticks": 2
+        }
+      }
+    },
+    {
+      "id": "bury-big-bones",
+      "page": "Big bones",
+      "skill": "prayer",
+      "facility": null,
+      "consume": {
+        "level": 1,
+        "xp": 15,
+        "xpEvidence": "Big bones give 15 [[Prayer]] experience when buried.",
+        "action": {
+          "page": "Game tick/Action lengths",
+          "evidence": "Burying [[remains|bones]]:",
+          "ticks": 2
+        }
+      }
+    },
+    {
+      "id": "superheat-iron",
+      "page": "Superheat Item",
+      "skill": "magic",
+      "facility": null,
+      "spell": {
+        "page": "Superheat Item",
+        "materialPage": "Iron bar",
+        "successEvidence": "100% chance of success",
+        "batchSize": 25
+      }
+    },
+    {
+      "id": "rc-air",
+      "page": "air rune",
+      "skill": "runecraft",
+      "facility": "altar",
+      "wholeBatch": true
+    },
+    {
+      "id": "rc-earth",
+      "page": "earth rune",
+      "skill": "runecraft",
+      "facility": "altar",
+      "wholeBatch": true
+    },
+    {
+      "id": "rc-fire",
+      "page": "fire rune",
+      "skill": "runecraft",
+      "facility": "altar",
+      "wholeBatch": true
+    },
+    {
+      "id": "rc-body",
+      "page": "body rune",
+      "skill": "runecraft",
+      "facility": "altar",
+      "wholeBatch": true
+    },
+    {
+      "id": "fl-shafts-logs",
+      "page": "Arrow shaft",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fl-shortbow-unstrung",
+      "page": "Shortbow (u)",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fl-longbow-unstrung",
+      "page": "Longbow (u)",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fl-oak-shortbow-unstrung",
+      "page": "Oak shortbow (u)",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fl-oak-longbow-unstrung",
+      "page": "Oak longbow (u)",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fl-willow-shortbow-unstrung",
+      "page": "Willow shortbow (u)",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fl-willow-longbow-unstrung",
+      "page": "Willow longbow (u)",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fl-maple-shortbow-unstrung",
+      "page": "Maple shortbow (u)",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fl-maple-longbow-unstrung",
+      "page": "Maple longbow (u)",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fl-yew-shortbow-unstrung",
+      "page": "Yew shortbow (u)",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fl-yew-longbow-unstrung",
+      "page": "Yew longbow (u)",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fl-magic-shortbow-unstrung",
+      "page": "Magic shortbow (u)",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "fl-magic-longbow-unstrung",
+      "page": "Magic longbow (u)",
+      "skill": "fletching",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "he-attack-potion",
+      "page": "Attack potion",
+      "skill": "herblore",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "he-antipoison",
+      "page": "Antipoison",
+      "skill": "herblore",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "he-strength-potion",
+      "page": "Strength potion",
+      "skill": "herblore",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "he-defence-potion",
+      "page": "Defence potion",
+      "skill": "herblore",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "he-prayer-potion",
+      "page": "Prayer potion",
+      "skill": "herblore",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "he-super-attack",
+      "page": "Super attack",
+      "skill": "herblore",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "he-super-strength",
+      "page": "Super strength",
+      "skill": "herblore",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "he-super-restore",
+      "page": "Super restore",
+      "skill": "herblore",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "he-super-defence",
+      "page": "Super defence",
+      "skill": "herblore",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "he-zamorak-brew",
+      "page": "Zamorak brew",
+      "skill": "herblore",
+      "facility": null,
+      "members": true
+    },
+    {
+      "id": "he-saradomin-brew",
+      "page": "Saradomin brew",
+      "skill": "herblore",
+      "facility": null,
+      "members": true
     }
   ],
   "methods": {
@@ -290,6 +564,72 @@
     ],
     "fm-yew": [
       "fm-yew-logs"
+    ],
+    "ck-wine": [
+      "wine"
+    ],
+    "pr-banked-bones": [
+      "bury-bones"
+    ],
+    "pr-banked-big-bones": [
+      "bury-big-bones"
+    ],
+    "ma-superheat": [
+      "superheat-iron"
+    ],
+    "rc-air": [
+      "rc-air"
+    ],
+    "rc-earth": [
+      "rc-earth"
+    ],
+    "rc-fire": [
+      "rc-fire"
+    ],
+    "rc-body": [
+      "rc-body"
+    ],
+    "fl-shaft": [
+      "fl-shafts-logs"
+    ],
+    "fl-shortbow": [
+      "fl-shortbow-unstrung",
+      "fl-longbow-unstrung"
+    ],
+    "fl-oak-willow": [
+      "fl-oak-shortbow-unstrung",
+      "fl-oak-longbow-unstrung",
+      "fl-willow-shortbow-unstrung",
+      "fl-willow-longbow-unstrung"
+    ],
+    "fl-maple": [
+      "fl-maple-shortbow-unstrung",
+      "fl-maple-longbow-unstrung"
+    ],
+    "fl-yew": [
+      "fl-yew-shortbow-unstrung",
+      "fl-yew-longbow-unstrung"
+    ],
+    "fl-magic": [
+      "fl-magic-shortbow-unstrung",
+      "fl-magic-longbow-unstrung"
+    ],
+    "he-potions": [
+      "he-attack-potion",
+      "he-antipoison",
+      "he-strength-potion",
+      "he-defence-potion",
+      "he-prayer-potion",
+      "he-super-attack",
+      "he-super-strength"
+    ],
+    "he-high": [
+      "he-super-attack",
+      "he-super-strength",
+      "he-super-restore",
+      "he-super-defence",
+      "he-zamorak-brew",
+      "he-saradomin-brew"
     ]
   },
   "light": {

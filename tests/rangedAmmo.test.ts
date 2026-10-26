@@ -25,7 +25,7 @@ describe('arrows for a Ranged goal', () => {
   it('the hand-worked case: Ranged 1, Shortbow and Bronze arrows on Rapid against a level 3 Seagull', () => {
     // Effective level 1 + 0 + 8 = 9; max hit floor(0.5 + 9 × 71 / 640) = 1; attack roll 9 × 72 = 648; Seagull (Defence 1, ranged -42):
     // 10 × 22 = 220, hit chance 1 - 222 / 1298 ≈ 0.829. A 10-hit-point Seagull at max hit 1 takes 10 / 0.829 ≈ 12.1 shots.
-    const one = arrowsForGoal({ xp: 0, goalLevel: 2, bow: 'Shortbow', arrow: 'Bronze arrow', worn: [], foe: foe('Seagull', 'Level 3') })!;
+    const one = arrowsForGoal({ xp: 0, goalLevel: 2, bow: 'Shortbow', arrow: 'Bronze arrow', worn: [], foe: foe('Seagull', 'Level 3'), style: 'rapid' })!;
     const damage = xpForLevel(2) / 4;
     expect(one.shots.mid).toBe(Math.round((damage / 10) * (10 / (1 - 222 / 1298))));
     expect(one.lostPickingUp.mid).toBe(Math.round(one.shots.mid * ARROW_BREAK));

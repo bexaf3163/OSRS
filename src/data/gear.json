@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: item and bonus infoboxes (Bucket infobox_item, infobox_bonuses), shops (storeline, infobox_shop), requirements from the articles",
-  "updated": "2026-09-27",
+  "updated": "2026-10-26",
   "items": [
     {
       "id": 1205,
@@ -4732,6 +4732,210 @@
       },
       "strength": 0,
       "iconUrl": "https://oldschool.runescape.wiki/images/Hardleather_body.png"
+    },
+    {
+      "id": 1379,
+      "name": "Staff",
+      "slot": "weapon",
+      "kind": "staff",
+      "reqFrom": "Free-to-play Magic training",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": -1,
+        "crush": 7,
+        "magic": 4,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 2,
+        "slash": 3,
+        "crush": 1,
+        "magic": 4,
+        "ranged": 0
+      },
+      "strength": 3,
+      "speed": 5,
+      "shops": [
+        {
+          "shop": "Zaff's Superior Staffs!",
+          "location": "Varrock",
+          "price": 15,
+          "owner": "Zaff"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Staff.png"
+    },
+    {
+      "id": 1389,
+      "name": "Magic staff",
+      "slot": "weapon",
+      "kind": "staff",
+      "reqFrom": "Free-to-play Magic training",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 2,
+        "slash": -1,
+        "crush": 10,
+        "magic": 10,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 2,
+        "slash": 3,
+        "crush": 1,
+        "magic": 10,
+        "ranged": 0
+      },
+      "strength": 7,
+      "speed": 5,
+      "shops": [
+        {
+          "shop": "Zaff's Superior Staffs!",
+          "location": "Varrock",
+          "price": 200,
+          "owner": "Zaff"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Magic_staff.png"
+    },
+    {
+      "id": 1381,
+      "name": "Staff of air",
+      "slot": "weapon",
+      "kind": "staff",
+      "reqFrom": "Free-to-play Magic training",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": -1,
+        "crush": 7,
+        "magic": 10,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 2,
+        "slash": 3,
+        "crush": 1,
+        "magic": 10,
+        "ranged": 0
+      },
+      "strength": 3,
+      "speed": 5,
+      "shops": [
+        {
+          "shop": "Zaff's Superior Staffs!",
+          "location": "Varrock",
+          "price": 1500,
+          "owner": "Zaff"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_air.png"
+    },
+    {
+      "id": 1383,
+      "name": "Staff of water",
+      "slot": "weapon",
+      "kind": "staff",
+      "reqFrom": "Free-to-play Magic training",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": -1,
+        "crush": 7,
+        "magic": 10,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 2,
+        "slash": 3,
+        "crush": 1,
+        "magic": 10,
+        "ranged": 0
+      },
+      "strength": 3,
+      "speed": 5,
+      "shops": [
+        {
+          "shop": "Zaff's Superior Staffs!",
+          "location": "Varrock",
+          "price": 1500,
+          "owner": "Zaff"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_water.png"
+    },
+    {
+      "id": 1385,
+      "name": "Staff of earth",
+      "slot": "weapon",
+      "kind": "staff",
+      "reqFrom": "Free-to-play Magic training",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 1,
+        "slash": -1,
+        "crush": 9,
+        "magic": 10,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 2,
+        "slash": 3,
+        "crush": 1,
+        "magic": 10,
+        "ranged": 0
+      },
+      "strength": 5,
+      "speed": 5,
+      "shops": [
+        {
+          "shop": "Zaff's Superior Staffs!",
+          "location": "Varrock",
+          "price": 1500,
+          "owner": "Zaff"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_earth.png"
+    },
+    {
+      "id": 1387,
+      "name": "Staff of fire",
+      "slot": "weapon",
+      "kind": "staff",
+      "reqFrom": "Free-to-play Magic training",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 3,
+        "slash": -1,
+        "crush": 9,
+        "magic": 10,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 2,
+        "slash": 3,
+        "crush": 1,
+        "magic": 10,
+        "ranged": 0
+      },
+      "strength": 6,
+      "speed": 5,
+      "shops": [
+        {
+          "shop": "Zaff's Superior Staffs!",
+          "location": "Varrock",
+          "price": 1500,
+          "owner": "Zaff"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
     }
   ]
 }

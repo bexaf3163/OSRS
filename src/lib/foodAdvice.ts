@@ -2,11 +2,13 @@
 // speed, food healing. The only thing of our own is the threshold rule: eat while HP has not dropped below two max hits.
 
 import threatsJson from '../data/threats.json';
-import type { Step } from '../types';
+import type { GameMode, Step } from '../types';
+import type { PriceView } from './funding/quotes';
+import { supplyPrice } from './sourceRouter';
 
 export interface Hit { n: number; label: string }
 export interface Threat { page: string; version?: string; hits: Hit[]; speedTicks: number; hitpoints: number; combat: number }
-export interface Food { name: string; heals: number }
+export interface Food { name: string; heals: number; members: boolean }
 
 export const THREATS = threatsJson.threats as unknown as Record<string, Threat>;
 export const FOODS = threatsJson.foods as Food[];
@@ -59,15 +61,31 @@ export function viewThreat(key: string, hp: number | undefined): FoodView {
 }
 
 /** Food from the bag by name (counting the quantity), the best healing on top. */
-export function foodInBag(items: readonly { name: string; count?: number }[] | null): { food: Food; count: number }[] {
+export function foodInBag(items: readonly { name: string; count?: number }[] | null, mode?: GameMode): { food: Food; count: number }[] {
   if (!items) return [];
   return FOODS.flatMap((f) => {
+    if (mode && !foodAllowed(f, mode)) return [];
     const count = items.filter((i) => i.name === f.name).reduce((s, i) => s + (i.count ?? 1), 0);
     return count > 0 ? [{ food: f, count }] : [];
   }).sort((a, b) => b.food.heals - a.food.heals);
 }
 
-/** Which food covers the max hit in one bite, the weakest on top (more economical). */
-export function foodsCovering(hit: number): Food[] {
-  return FOODS.filter((f) => f.heals >= hit).sort((a, b) => a.heals - b.heals);
+/** Unknown membership is never evidence that a food is usable. */
+export function foodAllowed(food: Food, mode: GameMode): boolean {
+  return food.members === false || (food.members === true && mode === 'members');
+}
+
+/** Ordinary single-bite food cannot heal beyond the missing HP of a living player. */
+export function effectiveHeal(food: Pick<Food, 'heals'>, hitpoints?: number): number {
+  return hitpoints === undefined ? food.heals : Math.min(food.heals, Math.max(1, hitpoints - 1));
+}
+
+/** Eligible food that covers one max hit; priced choices rank by cost per effective HP, never by an invented free price. */
+export function foodsCovering(hit: number, mode: GameMode = 'f2p', hitpoints?: number, prices?: PriceView | null): Food[] {
+  return FOODS.filter((f) => foodAllowed(f, mode) && effectiveHeal(f, hitpoints) >= hit)
+    .map((food) => ({ food, price: supplyPrice(food.name, prices, mode) }))
+    .sort((a, b) => {
+      if (a.price === null || b.price === null) return (a.price === null ? 1 : 0) - (b.price === null ? 1 : 0) || a.food.heals - b.food.heals;
+      return a.price / effectiveHeal(a.food, hitpoints) - b.price / effectiveHeal(b.food, hitpoints) || a.food.heals - b.food.heals;
+    }).map(({ food }) => food);
 }

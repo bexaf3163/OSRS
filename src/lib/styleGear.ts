@@ -56,6 +56,11 @@ export function unmet(o: StyleOption, levels: StyleInput['levels'], quests: Read
   return missing;
 }
 
+/** A wearable option needs positive evidence for every requirement, unlike an informational unlock row. */
+export function usableStyleOption(o: StyleOption, level: (skill: string) => number | undefined, questDone: (quest: string) => boolean): boolean {
+  return o.reqs.every((r) => { const have = level(r.skill); return have !== undefined && have >= r.level; }) && o.quests.every(questDone);
+}
+
 /** The wiki note "(Maple shortbow only)" / "(Willow shortbow or higher)": arrows do not suit every bow. */
 export function ammoFits(o: StyleOption, weapon: string | null, weapons: readonly StyleOption[]): string | null {
   const m = /^\((.+?) (only|or higher)\)$/.exec(o.note ?? '');

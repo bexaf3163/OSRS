@@ -2,7 +2,6 @@ import { useEffect, useId, useState } from 'react';
 import type { Skill } from '../types';
 import { findSkill, goals, levelById } from '../data';
 import { useStore } from '../store';
-import { useBridge } from '../bridge';
 import { currentStage, isClosed } from '../lib/next-step';
 import { formatXp, goalFor } from '../lib/goals';
 import { levelOf } from '../lib/progress';
@@ -20,7 +19,7 @@ import { methodOfGuideStep } from '../lib/trainingRouter';
 import { roadmapSkills } from './Skills';
 import { trainingFocus, type TrainingFocus } from '../lib/skillFocus';
 
-export function SkillDetailPage({ id }: { id: string }) {
+export function SkillDetailPage({ id, selectedSkill }: { id: string; selectedSkill?: string }) {
   const skill = findSkill(id);
   if (!skill) {
     return (
@@ -31,14 +30,13 @@ export function SkillDetailPage({ id }: { id: string }) {
       </div>
     );
   }
-  return <SkillView skill={skill} />;
+  return <SkillView skill={skill} selectedSkill={selectedSkill && skill.levelSkills.includes(selectedSkill) ? selectedSkill : undefined} />;
 }
 
 type SkillTab = 'guide' | 'calculator' | 'reference';
 
-function SkillView({ skill }: { skill: Skill }) {
+function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: string }) {
   const { progress, steps, stages, mode } = useStore();
-  const { xp } = useBridge();
   const [tab, setTab] = useState<SkillTab>('guide');
   const guides = roadmapSkills(skill);
   const tabs: [SkillTab, string][] = [
@@ -52,16 +50,17 @@ function SkillView({ skill }: { skill: Skill }) {
   const related = steps.filter((s) => s.targets?.some((t) => levelById.get(t.skill)?.skill === skill.id));
   // "What to train with": the route decides first (a stage goal that is behind), the generic training row only when the route asks for nothing.
   const stage = currentStage(steps, progress);
+  const focused = selectedSkill ? { ...skill, levelSkills: [selectedSkill] } : skill;
   const focus = trainingFocus({
-    levelSkills: skill.levelSkills, stage, goals, levelOf: (id) => levelOf(progress, id), lastStage: stages[stages.length - 1]?.id,
+    levelSkills: focused.levelSkills, stage, goals, levelOf: (id) => levelOf(progress, id), lastStage: stages[stages.length - 1]?.id,
     rowEnd: (_id, lv) => rangeForLevel(skill.plan.ranges, lv)?.range.to ?? null,
   });
   // The level and plan row of the skill being trained (Melee: the one with a goal ahead, not a Defence kept at 1).
-  const { level, hit } = focusRange(skill, progress, goals, stage, stages[stages.length - 1]?.id);
+  const { level, hit } = focusRange(focused, progress, goals, stage, stages[stages.length - 1]?.id);
   const focusName = skill.levelSkills.length > 1 ? levelById.get(focus.skill)?.name : undefined;
   // A tracked plan of this page's skills leads the game: the card shows that skill and the plan's method, so the card and the game agree.
   const trackedStep = useTrackedStep();
-  const follow = trackedStep && skill.levelSkills.includes(trackedStep.skill) ? trackedStep : null;
+  const follow = trackedStep && focused.levelSkills.includes(trackedStep.skill) ? trackedStep : null;
   const card = follow
     ? { skill: follow.skill, target: focus.skill === follow.skill ? focus.target : follow.step.targetLevel, followed: methodOfGuideStep(follow.step)?.id ?? null }
     : { skill: focus.skill, target: focus.target, followed: null };
@@ -69,8 +68,8 @@ function SkillView({ skill }: { skill: Skill }) {
   return (
     <div className="page skill-detail">
       <header className="page-head">
-        <SkillGlyph skill={skill.levelSkills[0]} size={48} />
-        <h1>{skill.name}<span className="skill-level-goal">{focusName ?? 'Level'} {level} → Goal {focus.target}</span>{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
+        <SkillGlyph skill={focus.skill} size={48} />
+        <h1>{selectedSkill ? levelById.get(selectedSkill)?.name ?? skill.name : skill.name}<span className="skill-level-goal">{focusName ?? 'Level'} {level} → Goal {focus.target}</span>{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
         <p className="muted">
           {(skill.nameEn ?? skill.subtitle) !== skill.name && <>{skill.nameEn ?? skill.subtitle} · </>}
           {skill.wiki && <a href={skill.wiki} target="_blank" rel="noopener noreferrer">Wiki <IconExternal /></a>}
@@ -80,6 +79,10 @@ function SkillView({ skill }: { skill: Skill }) {
         <p className="notice">This skill can be trained only with membership. Switch the mode to Members in the header to see stages 7–9.</p>
       )}
 
+      {skill.levelSkills.length > 1 && <nav className="skill-seg" aria-label="Combat skill">
+        {skill.levelSkills.map(id => <a key={id} className={`skill-seg-btn ${focus.skill === id ? 'is-on' : ''}`}
+          aria-current={focus.skill === id ? 'page' : undefined} href={`#/skills/${skill.id}/${id}`}>{levelById.get(id)?.name ?? id}</a>)}
+      </nav>}
       <nav className="subtabs" aria-label="Skill sections" role="tablist">
         {tabs.map(([id, label]) => (
           <button key={id} type="button" role="tab" aria-selected={tab === id} className={`subtab ${tab === id ? 'is-active' : ''}`} onClick={() => setTab(id)}>
@@ -90,12 +93,12 @@ function SkillView({ skill }: { skill: Skill }) {
 
       {tab === 'guide' && (
       <>
-      <ReachedNote skill={skill} stage={stage} focus={focus} />
+      <ReachedNote skill={focused} stage={stage} focus={focus} />
       <FocusNote focus={focus} />
       <TrainingCard skill={card.skill} target={card.target} followed={card.followed} />
-      {guides.length > 0 && <section className="card skill-guide-roadmap" aria-label="Leveling roadmap"><RoadmapPane skills={guides} label={skill.name} /></section>}
+      {guides.length > 0 && <details className="card skill-guide-roadmap"><summary>Leveling roadmap</summary><RoadmapPane skills={guides} label={skill.name} /></details>}
 
-      <details className="card skill-level-editor" open={skill.levelSkills.some(id => xp?.[id] != null)}><summary>Levels and live experience</summary>
+      <details className="card skill-level-editor"><summary>Levels and live experience</summary>
       <section className="levels-card" aria-label="Levels">
         <div className="levels-row">
           {skill.levelSkills.map((lid) => <LevelInput key={lid} id={lid} label={levelById.get(lid)!.name} />)}

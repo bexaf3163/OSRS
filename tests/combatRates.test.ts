@@ -15,12 +15,12 @@ const prices = market();
 /** A fixed exchange for the costs: every rune 5 gp, every arrow 3 gp (the recorded market has neither). */
 const fixed: PriceView = {
   status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, sell: () => null,
-  buy: (name) => (/ rune$/.test(name) ? 5 : / arrow$/.test(name) ? 3 : null) === null ? null
-    : { price: / rune$/.test(name) ? 5 : 3, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] },
+  buy: (name) => (/ rune$/.test(name) ? 5 : / arrow$/.test(name) ? 3 : ['Salmon', 'Trout'].includes(name) ? 20 : null) === null ? null
+    : { price: / rune$/.test(name) ? 5 : / arrow$/.test(name) ? 3 : 20, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] },
 };
 const method = (id: string) => trainingMethods.find((m) => m.id === id) as TrainingMethod;
 const state = (stats: Record<string, number>, equipment: [number, string, string, number?][], known = true): PlayerState => buildPlayerState({
-  mode: 'f2p', stats: stats as never, progress: { levels: {} }, owned: null, questsDone: [], connected: true,
+  mode: 'f2p', stats: { defence: 1, ...stats } as never, progress: { levels: {} }, owned: null, questsDone: [], connected: true,
   gear: known ? { equipment: equipment.map(([id, name, slot, count]) => ({ id, name, slot, ...(count ? { count } : {}) })), inventory: [], coins: 0, bankCoins: 0 } as never : null,
 });
 const MELEE: [number, string, string][] = [[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']];
@@ -39,7 +39,7 @@ describe('one engine for every combat method', () => {
     expect(methodRate(method('me-hill'), 'attack', state({ attack: 20, strength: 20, defence: 1, hitpoints: 7 }, MELEE))).toBeNull();
   });
 
-  it('Ranged: the trainers the wiki names come out of the numbers, seagulls first, frogs after 20, moss giants late', () => {
+  it('Ranged: incoming damage changes which trainer is worthwhile; a bracket cannot override the real kit', () => {
     const at = (level: number) => {
       const s = state({ ranged: level, defence: 1, hitpoints: Math.max(10, level) }, BOW);
       return Object.fromEntries(['ra-lumb', 'ra-monk', 'ra-frog', 'ra-moss'].map((id) => [id, methodRate(method(id), 'ranged', s)]));
@@ -47,18 +47,21 @@ describe('one engine for every combat method', () => {
     const one = at(1);
     expect(mid(one['ra-lumb']!)).toBeGreaterThan(mid(one['ra-frog']!));
     const thirty = at(30);
-    expect(mid(thirty['ra-frog']!)).toBeGreaterThan(mid(thirty['ra-lumb']!));
+    // Bare Defence1 now pays for eating/banking instead of assuming the frogs never hit.
+    expect(mid(thirty['ra-frog']!)).toBeLessThan(mid(thirty['ra-lumb']!));
     const seventy = at(70);
-    expect(mid(seventy['ra-moss']!)).toBeGreaterThan(mid(seventy['ra-lumb']!));
+    const defended = methodRate(method('ra-moss'), 'ranged', state({ ranged: 70, defence: 99, hitpoints: 70 }, BOW))!;
+    expect(mid(defended)).toBeGreaterThan(mid(seventy['ra-moss']!));
   });
 
   it('Ranged: the arrows broken are the cost an hour, at the exchange price', () => {
-    const r = methodRate(method('ra-frog'), 'ranged', state({ ranged: 30, hitpoints: 30 }, BOW), { prices: fixed })!;
+    // Non-damaging seagulls isolate ammunition cost; damaging trainers also consume food now.
+    const r = methodRate(method('ra-lumb'), 'ranged', state({ ranged: 30, hitpoints: 30 }, BOW), { prices: fixed })!;
     // One arrow in five breaks: 3 gp each, a few hundred to a few thousand shots an hour.
     expect(r.costPerHour!).toBeGreaterThan(100);
     expect(r.costPerHour!).toBeLessThan(3 * 0.2 * 2400);
     // No exchange price: the free shop's price of the item data (Lowe's, 1 gp a bronze arrow) - known, cheaper, never free.
-    const shop = methodRate(method('ra-frog'), 'ranged', state({ ranged: 30, hitpoints: 30 }, BOW))!.costPerHour!;
+    const shop = methodRate(method('ra-lumb'), 'ranged', state({ ranged: 30, hitpoints: 30 }, BOW))!.costPerHour!;
     expect(shop).toBeCloseTo(r.costPerHour! / 3, 5);
   });
 

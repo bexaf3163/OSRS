@@ -13,7 +13,10 @@ import type { OwnedState } from '../checklist';
 import type { PrepLine, PrepPlan } from '../prepPlan';
 import { healsOf } from '../combatEstimate';
 import { aggregateShopping, holdingFor } from '../shopping';
-import { dosePackage } from '../doses';
+import { doseKind, dosePackage } from '../doses';
+import { evaluate, type Requirement } from '../requirements';
+import type { PlayerState } from '../playerState';
+import { nameKey } from '../checklist';
 import type { Confidence, PriceStatus, PriceView } from './quotes';
 
 export type NeedKind = 'buy' | 'tool' | 'upgrade';
@@ -89,6 +92,33 @@ const tierOf = (lines: NeedLine[]): Tier => ({
   unpriced: lines.filter((l) => l.cost === null).length,
   lines,
 });
+
+/** Price a known missing kit with the same quote/dose rules as Funding. Unread stock or unpriced required inputs leave its cost unknown. */
+export function requirementCost(requirements: readonly Requirement[], state: PlayerState, prices?: PriceView | null): number | null {
+  let total = 0;
+  const allocated = new Set<string>();
+  for (const req of requirements) {
+    if (req.type === 'skill' || req.type === 'quest' || req.type === 'gameMode') continue;
+    // This helper reserves missing kit, not fees or arbitrary composite allocations.
+    if (req.type === 'composite' || req.type === 'money') return null;
+    const names = req.type === 'alternative' ? req.alternatives.map((a) => a.name)
+      : req.type === 'equipment' ? [req.name, ...(req.anyOf ?? [])] : [req.name];
+    const keys = [...new Set(names.map(nameKey))];
+    // Do not spend the same observed stock through overlapping requirements. Leave complex allocations to the prep ledger.
+    if (keys.some((key) => allocated.has(key))) return null;
+    keys.forEach((key) => allocated.add(key));
+    const result = evaluate(req, state);
+    if (result.state === 'OK' || result.state === 'BANK') continue;
+    if (result.state === 'UNKNOWN' || !prices) return null;
+    const qty = result.missing;
+    if (qty === undefined || !Number.isFinite(qty) || qty < 0) return null;
+    const costs = names.map((name) => tierOf(needLines({ key: name, name, qty, why: 'Training kit', kind: 'buy' }, req.type === 'item' && Boolean(doseKind(name)), prices)))
+      .filter((tier) => tier.unpriced === 0 && Number.isFinite(tier.cost) && tier.cost >= 0).map((tier) => tier.cost);
+    if (!costs.length) return null;
+    total += Math.min(...costs);
+  }
+  return total;
+}
 
 /**
  * Whether a missing line is something coins buy. The preparation plan names the cheapest *source*, and for an item the item database has no exchange price for

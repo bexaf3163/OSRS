@@ -477,6 +477,11 @@ function allowed(p: GearPiece, lv: Levels, mode: GameMode, quests?: ReadonlySet<
   return (!p.members || mode === 'members') && !p.reqUnverified && canWear(p, lv, quests);
 }
 
+/** Verified melee weapons this account can use; shared by Gear and training upgrade comparisons. */
+export function trainingWeapons(lv: Levels, mode: GameMode, quests?: ReadonlySet<string>, data: GearData = gearData): GearPiece[] {
+  return data.items.filter((p) => p.slot === 'weapon' && WEAPON_KINDS.has(p.kind) && allowed(p, lv, mode, quests));
+}
+
 /** Attack and strength prayers by prayer level (OSRS Wiki: the level and multiplier of each). */
 const PRAYERS: { name: string; level: number; kind: 'attack' | 'strength'; mult: number; effect: string }[] = [
   { name: 'Burst of Strength', level: 4, kind: 'strength', mult: 1.05, effect: '+5% Strength' },
@@ -512,6 +517,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   const weaponNow = meleeWith(lv, weaponPiece, neckPiece, {}, foes[0]);
   const valueNow = meleeValue(lv, weaponPiece, neckPiece, foes);
   const candidates: GearAction[] = [];
+  const weapons = new Set(trainingWeapons(lv, input.mode, input.questsDone, data));
   const incoming = foeAttack(foes[0]);
   const defStyle = incoming && incoming.style !== 'magic' && incoming.style !== 'ranged' ? incoming.style : null;
   /** The worn defence bonus of the opponent's style, with some slots changed (null takes the slot off). */
@@ -569,7 +575,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   for (const slot of SLOTS) {
     const cur = equipped[slot];
     for (const p of data.items) {
-      if (p.slot !== slot || (slot === 'weapon' && !WEAPON_KINDS.has(p.kind)) || !allowed(p, lv, input.mode, input.questsDone)) continue;
+      if (p.slot !== slot || (slot === 'weapon' ? !weapons.has(p) : !allowed(p, lv, input.mode, input.questsDone))) continue;
       if (cur && p.id === cur.id) continue;
       const gain = gainOf(slot, p, cur);
       if (gain) candidates.push(action(slot, p, cur, gain, input, route(p)));

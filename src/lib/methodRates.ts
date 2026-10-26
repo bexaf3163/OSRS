@@ -5,7 +5,7 @@
 import type { PlayerState } from './playerState';
 import type { PriceView } from './funding/quotes';
 import type { TradeRestriction } from './tradeRestriction';
-import type { TrainingMethod } from './trainingRouter';
+import type { TrainingMethod, MethodNeed } from './trainingRouter';
 import type { Point } from './travel';
 import type { MethodPriority } from './playStyle';
 import { combatRate } from './combatRates';
@@ -24,10 +24,16 @@ export interface RateSpot {
 }
 
 export interface ModelRate {
+  /** A concrete recipe when a catalogue method spans several products. */
+  methodName?: string;
   /** XP per hour in the trained skill now: the slow and the fast end. */
   xph: [number, number];
   /** Coins an hour the training uses up (arrows broken, runes, bait, food), at exchange prices; 0 - nothing is used up; null - used up, price unknown. */
   costPerHour: number | null;
+  /** Expected XP per input action, including failed/burnt attempts when relevant. */
+  xpPerAction?: number;
+  /** Physical supplies for the recipe actually selected by the model. */
+  needs?: MethodNeed[];
   /** What the cost is spent on, when it is not arrows (Ranged) or runes (Magic): "feathers". */
   costName?: string;
   /** What it was worked out for, in a few words: "Shortbow, Bronze arrows", "Rune axe". */
@@ -41,7 +47,7 @@ export interface ModelRate {
   /** The spot the engine picked (gathering); absent for the combat engines, whose spot is the method's own. */
   spot?: RateSpot;
   /** Better tools the player could buy, with the price and the rate each would give here (gathering): weighed by the caller over the hours left. */
-  upgrades?: { tool: string; price: number; xph: [number, number] }[];
+  upgrades?: { tool: string; price: number; xph: [number, number]; costPerHour?: number | null }[];
 }
 
 /** What the trade allows (the exchange and the account) and what the player wants: on the fastest objective nothing is kept that costs time. */

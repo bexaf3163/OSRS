@@ -7,7 +7,9 @@ import { describe, expect, it } from 'vitest';
 import { skillGuides } from '../src/data/skillGuideRegistry';
 import { goals } from '../src/data';
 import { bracketsOf, buildPath, SKILL_NAMES, type SkillGuideFile, type SkillName } from '../src/lib/skillGuide';
-import { methodsFor, trainingMethods } from '../src/lib/trainingRouter';
+import { methodsFor, trainingMethods, type TrainingMethod } from '../src/lib/trainingRouter';
+import { PROCESSING } from '../src/lib/processingRates';
+import { SKILLING } from '../src/lib/skillingRates';
 
 const F2P_STAGES = 6;
 const routeMax = (skill: string, last: number) => {
@@ -76,8 +78,17 @@ const rows: Row[] = SKILL_NAMES.map((skill) => {
   };
 });
 
+/** Registry support is distinct from a guide's bracket coverage, and still requires real readable player state. */
+const modelOwner = (m: TrainingMethod): string | null => PROCESSING.methods[m.id] ? 'processing'
+  : SKILLING.methods[m.id] ? 'gathering'
+  : m.npcNames?.length && m.skills.some(s => ['attack', 'strength', 'defence', 'ranged', 'magic'].includes(s)) ? 'combat' : null;
+const modelRows = SKILL_NAMES.map(skill => {
+  const methods = methodsFor(skill).filter(m => m.kind === 'method');
+  const modelled = methods.filter(m => modelOwner(m));
+  return `| ${skill} | ${modelled.length ? `${modelled.length}: ${[...new Set(modelled.map(modelOwner))].join(', ')}` : 'none'} | ${methods.length - modelled.length} |`;
+});
 const md = [
-  '# Skills coverage ledger (2.70)',
+  '# Skills coverage ledger',
   '',
   'Every skill the app supports. **Guide**: the leveling roadmap (`src/data/skills/<skill>.json`, built by `tools/skill-guides` from the OSRS Wiki). **Methods**:',
   'the training method catalogue (`src/data/trainingMethods.json`) behind "What to train with" and the route steps that follow a method. **Route**: the',
@@ -87,13 +98,23 @@ const md = [
   'Fixed in 2.70: roadmap groups were labelled by fixed brackets ("Levels 30-40" over a step "Lvl 30 → 60"): labels now cover their steps. The three mixed',
   'filters ("Fastest / Quest-Driven", "AFK / Budget", "F2P Only") are two separate controls: priority (Fastest / Low effort) and, for a free account, a',
   'members preview. "Use the best axe you can wield" now says the axe works from the bag at the Woodcutting level (wielding needs Attack).',
-  'Not done: cost per hour is not modelled per method (the catalogue says free / cost / profit only); members methods beyond the guide are not researched.',
+  'Rates and consumable costs are personalised where the shared combat, gathering or processing registry supports the method. Other catalogue rates',
+  'remain Wiki guides, not measured predictions. Missing prices stay unknown. Passive bone collection has no fixed bank-burying rate. Members methods',
+  'beyond the verified registries and real-session calibration remain open; this catalogue coverage is not proof of in-game performance.',
   '',
   '| Skill | Account | Guide | Methods | Route asks | Gaps and problems | Verification |',
   '|---|---|---|---|---|---|---|',
   ...rows.map((r) => `| ${r.skill} | ${r.modes} | ${r.guide} | ${r.methods} | ${r.route} | ${r.gaps} | ${r.status} |`),
   '',
   `Catalogue: ${trainingMethods.length} entries. Skills with no catalogue method fall back to the training plan row of the skill page; they are said so, not shown as a full plan.`,
+  '',
+  '## Personalized engine support',
+  '',
+  'Counts below mean a method has a shared model dispatch, not that every item, spell, opponent, unlock or level is modelled. A model can return no prediction when data is unread or unsupported. Guide-only rates remain labelled Wiki estimates; no synthetic player stats fill the gaps. Agility, Thieving and Farming still have guide-only catalogue rates. Construction, Hunter, Slayer and Hitpoints use their guide row. Adding complete models for those is remaining work.',
+  '',
+  '| Skill | Model-backed catalogue methods | Guide-only catalogue methods |',
+  '|---|---|---|',
+  ...modelRows,
 ].join('\n') + '\n';
 
 describe('skills coverage', () => {

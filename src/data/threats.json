@@ -1,6 +1,6 @@
 {
  "source": "OSRS Wiki: monster infoboxes (Bucket infobox_monster) and the food articles",
- "generatedAt": "2026-10-03",
+ "generatedAt": "2026-10-26",
  "threats": {
   "Count Draynor": {
    "page": "Count Draynor",
@@ -167,67 +167,83 @@
  "foods": [
   {
    "name": "Shrimps",
-   "heals": 3
+   "heals": 3,
+   "members": false
   },
   {
    "name": "Anchovies",
-   "heals": 1
+   "heals": 1,
+   "members": false
   },
   {
    "name": "Sardine",
-   "heals": 4
+   "heals": 4,
+   "members": false
   },
   {
    "name": "Herring",
-   "heals": 5
+   "heals": 5,
+   "members": false
   },
   {
    "name": "Mackerel",
-   "heals": 6
+   "heals": 6,
+   "members": true
   },
   {
    "name": "Trout",
-   "heals": 7
+   "heals": 7,
+   "members": false
   },
   {
    "name": "Cod",
-   "heals": 7
+   "heals": 7,
+   "members": true
   },
   {
    "name": "Pike",
-   "heals": 8
+   "heals": 8,
+   "members": false
   },
   {
    "name": "Salmon",
-   "heals": 9
+   "heals": 9,
+   "members": false
   },
   {
    "name": "Tuna",
-   "heals": 10
+   "heals": 10,
+   "members": false
   },
   {
    "name": "Lobster",
-   "heals": 12
+   "heals": 12,
+   "members": false
   },
   {
    "name": "Bass",
-   "heals": 13
+   "heals": 13,
+   "members": true
   },
   {
    "name": "Swordfish",
-   "heals": 14
+   "heals": 14,
+   "members": false
   },
   {
    "name": "Cooked chicken",
-   "heals": 3
+   "heals": 3,
+   "members": false
   },
   {
    "name": "Cooked meat",
-   "heals": 3
+   "heals": 3,
+   "members": false
   },
   {
    "name": "Bread",
-   "heals": 5
+   "heals": 5,
+   "members": false
   }
  ]
 }

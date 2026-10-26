@@ -13,21 +13,22 @@
 
 import spellsJson from '../data/spells.json';
 import { allSteps } from '../data';
-import { attacksToKill, estimateCombat, foeVariants, hitChance, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
+import { attacksToKill, combatMargin, combatRecovery, counterDamage, estimateCombat, foeVariants, hitChance, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
 import { spotsOf, termsFor, TRAINER_LEVELS } from './combatRoute/spots';
 import { coinsPerMinute, dropValue, lootSecondsPerKill } from './lootValue';
-import { methodFoe, rangedHit } from './rangedAmmo';
-import { rangedNeeds } from './rangedLoadout';
+import { methodFoe, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
+import { bowEquipment, rangedNeeds } from './rangedLoadout';
 import { STAFFS, strikeRecipe } from './magicPlan';
 import { FOODS } from './foodAdvice';
-import { levelOf, type PlayerState } from './playerState';
-import { gearPieceByName } from '../services/gearAdvisor';
+import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from './playerState';
+import { STYLE_GEAR, usableStyleOption } from './styleGear';
+import { gearPieceByName, trainingWeapons, type Levels } from '../services/gearAdvisor';
 import { nameKey } from './checklist';
 import { supplyPrice } from './sourceRouter';
 import { xpForLevel } from './xp';
 import type { PriceView } from './funding/quotes';
 import type { Market, ModelRate } from './methodRates';
-import type { TrainingMethod } from './trainingRouter';
+import type { MethodNeed, TrainingMethod } from './trainingRouter';
 import type { GearPiece } from '../types';
 
 const TICK = 0.6;
@@ -39,8 +40,6 @@ const ARROW_PICKUP = 1.2;
 const ARROW_BREAK = 0.2;
 /** A standard spell is cast every 5 ticks. */
 const SPELL_TICKS = 5;
-/** The model's margin on the pace at the slow end: who swings first, misclicks, other players at the spot. */
-const MARGIN = 0.15;
 /** Levels ahead the melee estimate is made for: long enough to average the rolls, short enough to stay "now". */
 const MELEE_LEVELS = 3;
 
@@ -48,12 +47,60 @@ const MAX_HIT = (spellsJson as unknown as { maxHit: Record<'strike' | 'bolt', [n
 
 const MELEE = new Set(['attack', 'strength', 'defence']);
 
+/** Rate only the selected trainer's eligible weapon purchases; reuse Gear eligibility and the complete fight model. */
+export function combatUpgrades(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): NonNullable<ModelRate['upgrades']> {
+  if (state.equipmentKnown !== true || !m.npcNames?.length || (!MELEE.has(skill) && !(skill === 'ranged' && m.kit === 'f2p-bow') && !(skill === 'magic' && m.kit === 'strike-spell'))) return [];
+  const weapon = state.equipment.weapon;
+  if (weapon && skill === 'magic' && !gearPieceByName(weapon)) return [];
+  if (weapon && skill === 'ranged' && state.mode === 'members' && !RANGED_GEAR.some((g) => nameKey(g.name) === nameKey(weapon) && g.speed)) return [];
+  const levels = Object.fromEntries(Object.entries(state.levels).flatMap(([k, v]) => v.known ? [[k, v.value]] : []));
+  if ((MELEE.has(skill) ? ['attack', 'strength', 'defence', 'hitpoints'] : [skill, 'hitpoints']).some((k) => levels[k] === undefined)) return [];
+  const before = combatRate(m, skill, state, market);
+  if (!before) return [];
+  const quests = state.quests.known ? new Set(state.quests.value) : undefined;
+  // The style registry and bow model are the F2P starter kit's verified weapon list, shared with rangedNeeds.
+  const weapons: Pick<GearPiece, 'name' | 'twoHanded'>[] = skill === 'ranged' || skill === 'magic'
+    ? STYLE_GEAR[skill].weapon.filter((o) => usableStyleOption(o, (s) => levelOf(state, s), (q) => questOf(state, q) === 'DONE'))
+      .flatMap((o) => o.names.flatMap((name): Pick<GearPiece, 'name' | 'twoHanded'>[] => {
+        const p = gearPieceByName(name);
+        // Unmodelled special staves cannot acquire a made-up zero Magic bonus.
+        return skill === 'ranged' ? [{ name, twoHanded: true }] : p && !p.reqUnverified && !(p.members && state.mode === 'f2p') ? [p] : [];
+      }))
+    : trainingWeapons(levels as unknown as Levels, state.mode, quests);
+  const rateWith = (p: Pick<GearPiece, 'name' | 'twoHanded'>) => {
+    const equipment: Record<string, string> = { ...state.equipment, weapon: p.name };
+    if (p.twoHanded) delete equipment.shield;
+    const removed = new Set([state.equipment.weapon, ...(p.twoHanded ? [state.equipment.shield] : [])].filter(Boolean).map(nameKey));
+    const equipmentItems = [...(wornItemsOf(state) ?? []).filter((it) => !removed.has(nameKey(it.name))), { name: p.name, count: 1 }];
+    return combatRate(m, skill, { ...state, equipment, equipmentItems }, market);
+  };
+  const improves = (rate: ModelRate | null) => rate !== null && rate.xph[0] + rate.xph[1] >= before.xph[0] + before.xph[1]
+    && (rate.xph[0] + rate.xph[1] > before.xph[0] + before.xph[1]
+      || (rate.costPerHour !== null && before.costPerHour !== null && rate.costPerHour < before.costPerHour));
+  // Gear already offers free equipment changes. Do not send the player shopping before using a better owned weapon.
+  if (weapons.some((p) => {
+    if (nameKey(p.name) === nameKey(state.equipment.weapon ?? '') || (heldOf(state, p.name).total ?? 0) <= 0) return false;
+    const rate = rateWith(p);
+    return improves(rate);
+  })) return [];
+  return weapons.flatMap((p) => {
+    // Unread stock must not become an instruction to buy an item that may already be in the bank.
+    const held = heldOf(state, p.name);
+    if (held.total === null || held.total > 0) return [];
+    const price = supplyPrice(p.name, market.prices, state.mode);
+    if (price === null || !Number.isFinite(price) || price <= 0) return [];
+    const after = rateWith(p);
+    if (!after || !improves(after)) return [];
+    return [{ tool: p.name, price, xph: after.xph, costPerHour: after.costPerHour }];
+  });
+}
+
 /** The rate of one combat method for this player in this skill, or null when the model has nothing honest to say (methodRates.ts dispatches here). */
 export function combatRate(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): ModelRate | null {
-  if (m.kind !== 'method' || !m.npcNames?.length || state.equipmentKnown !== true) return null;
+  if (m.kind !== 'method' || !m.skills.includes(skill) || (m.members && state.mode !== 'members') || !m.npcNames?.length || state.equipmentKnown !== true) return null;
   if (MELEE.has(skill) && m.skills.includes(skill)) return withLoot(meleeRate(m.npcNames[0], skill as 'attack' | 'strength' | 'defence', state, market.prices), m.npcNames[0], market);
   if (skill === 'ranged' && m.kit === 'f2p-bow') return withLoot(rangedRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market);
-  if (skill === 'magic' && m.kit === 'strike-spell') return magicRate(m, state, market.prices);
+  if (skill === 'magic' && m.kit === 'strike-spell') return withLoot(magicRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market);
   return null;
 }
 
@@ -68,7 +115,8 @@ function withLoot(r: (ModelRate & { secondsPerKill: number }) | null, foe: strin
   const extra = each !== null && spot?.sell ? lootSecondsPerKill(each, trip ? (trip[0] + trip[1]) / 2 : 4.5, coinsPerMinute(market.prices), market.objective) : null;
   if (extra === null || each === null) return rate;
   const slower = secondsPerKill / (secondsPerKill + extra);
-  return { ...rate, xph: [rate.xph[0] * slower, rate.xph[1] * slower], lootPerHour: (3600 / (secondsPerKill + extra)) * each, loot: spot!.sell };
+  return { ...rate, xph: [rate.xph[0] * slower, rate.xph[1] * slower], costPerHour: rate.costPerHour === null ? null : rate.costPerHour * slower,
+    lootPerHour: (3600 / (secondsPerKill + extra)) * each, loot: spot!.sell };
 }
 
 /** The worn items as gear pieces by slot; null when a worn weapon is unknown to the gear data (the model does not guess its hit). */
@@ -120,64 +168,101 @@ function meleeRate(npc: string, skill: 'attack' | 'strength' | 'defence', state:
   };
 }
 
+/** All styles use the same incoming-hit, eating, free-heal and bank-trip model. A safespot is never inferred from a method's prose. */
+function styleRecovery(m: TrainingMethod, level: number, state: PlayerState, foe: CombatFoe,
+  hit: { maxHit: number; chance: number; speedTicks: number }, perKillXp: number, prices?: PriceView | null,
+  needs: MethodNeed[] = m.needs, pickupSeconds = 0, zeroIsOne = true) {
+  const hp = levelOf(state, 'hitpoints');
+  const defence = levelOf(state, 'defence');
+  const terms = termsOf(foe.name);
+  if (hp === undefined || unsafe(foe, terms, hp) || (foe.maxHit > 0 && defence === undefined)) return null;
+  // The shared incoming melee roll is not a substitute for an unmodelled magic/ranged defence formula.
+  if (foe.maxHit > 0 && !['stab', 'slash', 'crush'].includes(foe.attackStyle)) return null;
+  const a = attacksToKill(foe.hitpoints, hit.maxHit, hit.chance, zeroIsOne);
+  if (!Number.isFinite(a.mean) || !(perKillXp > 0)) return null;
+  const foodNeed = needs.find((n) => n.type === 'item' && FOODS.some((f) => f.name === n.name));
+  const food = FOODS.find((f) => f.name === (foodNeed?.type === 'item' ? foodNeed.name : 'Salmon'))!;
+  const pieces = Object.entries(state.equipment).filter(([slot]) => ['weapon', 'head', 'body', 'legs', 'shield', 'feet', 'hands', 'neck', 'cape'].includes(slot));
+  const unknown = pieces.some(([slot, name]) => !gearPieceByName(name) && !(slot === 'weapon' && RANGED_GEAR.some((g) => nameKey(g.name) === nameKey(name) && g.speed)));
+  const bonus = pieces.reduce((sum, [, name]) => sum + (gearPieceByName(name)?.defence[foe.attackStyle as 'stab' | 'slash' | 'crush'] ?? 0), 0);
+  const incoming = counterDamage(foe, hit.maxHit, hit.chance, hit.speedTicks, defence ?? 1, bonus, zeroIsOne);
+  if (!Number.isFinite(incoming.mean) || !Number.isFinite(incoming.variance)) return null;
+  const kills = Math.max(1, Math.ceil((xpForLevel(Math.min(99, level + MELEE_LEVELS)) - xpForLevel(level)) / perKillXp));
+  const between = terms.betweenKills ?? BETWEEN;
+  const recovery = combatRecovery({ ...terms, foe, hitpoints: hp, food,
+    foodSlots: foodNeed?.type === 'item' ? Math.max(1, Math.min(26, foodNeed.count ?? 26)) : 26,
+    kills, fightMean: kills * a.mean * hit.speedTicks * TICK, fightVar: kills * a.variance * (hit.speedTicks * TICK) ** 2,
+    damageMean: kills * incoming.mean, damageVar: kills * incoming.variance,
+    margin: combatMargin(unknown ? 'basic' : 'formula', Boolean(foe.aggressive || terms.groupAggro)),
+    betweenKills: [between[0] + pickupSeconds, between[1] + pickupSeconds],
+  });
+  const price = supplyPrice(food.name, prices, state.mode);
+  const foodCost = recovery.food.mid === 0 ? 0 : price === null ? null : recovery.food.mid * price;
+  const hours = recovery.totalMinutes.mid / 60;
+  return { recovery, kills, hours, foodCost, food: food.name,
+    warning: unknown ? 'Some worn defence bonuses are unknown; food and time are approximate.' : undefined };
+}
+
 function rangedRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): (ModelRate & { secondsPerKill: number }) | null {
   const level = levelOf(state, 'ranged');
-  const hp = levelOf(state, 'hitpoints');
   const foe = methodFoe(m);
   if (level === undefined || !foe || level >= 99) return null;
-  const terms = termsOf(foe.name);
-  if (hp !== undefined && unsafe(foe, terms, hp)) return null;
   const kit = rangedNeeds(state).filter((n) => n.type === 'item');
   const [bow, arrow] = [kit[0]?.name, kit[1]?.name];
   if (!bow || !arrow) return null;
-  const skip = new Set([nameKey(bow), nameKey(arrow)]);
-  const hit = rangedHit(level, bow, arrow, Object.values(state.equipment).filter((n) => !skip.has(nameKey(n))), foe);
+  const equipment = bowEquipment(state.equipment, bow, arrow);
+  const armour = Object.entries(equipment).filter(([slot]) => slot !== 'weapon' && slot !== 'ammo').map(([, name]) => name);
+  const hit = rangedHit(level, bow, arrow, armour, foe, trainingRangedStyle(level));
   if (!hit) return null;
   const shots = attacksToKill(foe.hitpoints, hit.maxHit, hit.chance).mean;
   if (!Number.isFinite(shots)) return null;
-  const between = terms.betweenKills ?? BETWEEN;
-  const fight = shots * hit.speedTicks * TICK;
-  const fast = fight + between[0] + ARROW_PICKUP;
-  const slow = fight * (1 + MARGIN) + between[1] + ARROW_PICKUP;
   const perKill = xpPerKill(foe);
+  const sustained = styleRecovery(m, level, { ...state, equipment }, foe, hit, perKill, prices, m.needs, ARROW_PICKUP);
+  if (!sustained) return null;
+  const { recovery, kills, hours, foodCost } = sustained;
   const price = supplyPrice(arrow, prices, state.mode);
-  const shotsPerHour = (3600 / ((fast + slow) / 2)) * shots;
+  const ammoCost = price === null ? null : kills * shots * ARROW_BREAK * price;
   return {
-    xph: [(3600 * perKill) / slow, (3600 * perKill) / fast],
-    costPerHour: price === null ? null : shotsPerHour * ARROW_BREAK * price,
+    xph: [(kills * perKill * 60) / recovery.totalMinutes.high, (kills * perKill * 60) / recovery.totalMinutes.low],
+    costPerHour: ammoCost === null || foodCost === null ? null : (ammoCost + foodCost) / hours,
+    costName: recovery.food.mid > 0 ? `arrows and ${sustained.food.toLowerCase()}` : 'arrows',
     basis: `${bow}, ${arrow}`,
-    secondsPerKill: (fast + slow) / 2,
+    secondsPerKill: (recovery.totalMinutes.mid * 60) / kills,
+    ...(sustained.warning ? { warning: sustained.warning } : {}),
   };
 }
 
-function magicRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): ModelRate | null {
+function magicRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): (ModelRate & { secondsPerKill: number }) | null {
   const level = levelOf(state, 'magic');
   const foe = methodFoe(m);
   if (level === undefined || !foe || level >= 99) return null;
-  const { spell } = strikeRecipe(state);
+  const { spell, needs } = strikeRecipe(state);
+  const staff = Object.entries(STAFFS).find(([, s]) => needs.some((n) => n.type === 'item' && n.equip && nameKey(n.name) === nameKey(s.name)));
+  const equipment = { ...state.equipment, ...(staff ? { weapon: staff[1].name } : {}) };
+  if (equipment.weapon && !gearPieceByName(equipment.weapon)) return null;
   const maxHit = [...MAX_HIT.strike].reverse().find(([from]) => from <= level)?.[1];
   if (!maxHit) return null;
   // The magic attack bonus of what is worn; an item the gear data does not know counts as 0.
-  const bonus = Object.values(state.equipment).reduce((a, n) => a + (gearPieceByName(n)?.attack.magic ?? 0), 0);
-  const chance = hitChance((level + 8) * (bonus + 64), (foe.magicLevel + 9) * (foe.defence.magic + 64));
+  const bonus = Object.values(equipment).reduce((a, n) => a + (gearPieceByName(n)?.attack.magic ?? 0), 0);
+  const chance = hitChance(Math.max(0, (level + 8) * (bonus + 64)), (foe.magicLevel + 9) * (foe.defence.magic + 64));
   const casts = attacksToKill(foe.hitpoints, maxHit, chance, false).mean;
   if (!Number.isFinite(casts)) return null;
-  const between = termsOf(foe.name).betweenKills ?? BETWEEN;
-  const fight = casts * SPELL_TICKS * TICK;
-  const fast = fight + between[0];
-  const slow = fight * (1 + MARGIN) + between[1];
   // Base XP for every cast, a splash too, and 2 per point of damage: a kill is its hit points of damage.
   const perKill = casts * spell.xp + 2 * foe.hitpoints;
-  const staff = Object.entries(STAFFS).find(([, s]) => Object.values(state.equipment).some((n) => nameKey(n) === nameKey(s.name)))?.[0];
-  const runes = Object.entries(spell.runes).filter(([element]) => element !== staff);
+  const sustained = styleRecovery(m, level, { ...state, equipment }, foe, { maxHit, chance, speedTicks: SPELL_TICKS }, perKill, prices, needs, 0, false);
+  if (!sustained) return null;
+  const { recovery, kills, hours, foodCost } = sustained;
+  const runes = Object.entries(spell.runes).filter(([element]) => element !== staff?.[0]);
   const perCast = runes.reduce<number | null>((a, [element, qty]) => {
     const p = supplyPrice(`${element[0].toUpperCase()}${element.slice(1)} rune`, prices, state.mode);
     return a === null || p === null ? null : a + p * qty;
   }, 0);
-  const castsPerHour = (3600 / ((fast + slow) / 2)) * casts;
   return {
-    xph: [(3600 * perKill) / slow, (3600 * perKill) / fast],
-    costPerHour: perCast === null ? null : castsPerHour * perCast,
+    xph: [(kills * perKill * 60) / recovery.totalMinutes.high, (kills * perKill * 60) / recovery.totalMinutes.low],
+    costPerHour: perCast === null || foodCost === null ? null : (kills * casts * perCast + foodCost) / hours,
+    costName: recovery.food.mid > 0 ? `runes and ${sustained.food.toLowerCase()}` : 'runes',
     basis: spell.name,
+    secondsPerKill: (recovery.totalMinutes.mid * 60) / kills,
+    ...(sustained.warning ? { warning: sustained.warning } : {}),
   };
 }

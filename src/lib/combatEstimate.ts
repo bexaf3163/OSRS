@@ -18,7 +18,7 @@ import combatFoesJson from '../data/combatFoes.json';
 import { equippedBySlot, gearData, meleeAs, SLOTS, type TrainStyle } from '../services/gearAdvisor';
 import type { GearState } from '../services/runeliteBridge';
 import type { GearData, GearPiece, PacingSkill, Step } from '../types';
-import { FOODS } from './foodAdvice';
+import { effectiveHeal, FOODS } from './foodAdvice';
 import { levelForXp, xpForLevel } from './xp';
 
 export interface CombatFoe {
@@ -142,9 +142,10 @@ export function attacksToKill(hp: number, maxHit: number, landChance: number, ze
  * The chance that a kill takes exactly n attacks, n = 0, 1, 2… (cut where less than 1 in 100 000 is left). The same recursion as
  * attacksToKill, kept whole: the opponent's swings depend on the fight's length in a way the mean alone does not give.
  */
-export function attackCounts(hp: number, maxHit: number, chance: number): number[] {
+export function attackCounts(hp: number, maxHit: number, landChance: number, zeroIsOne = true): number[] {
+  const chance = progressChance(landChance, maxHit, zeroIsOne);
   if (!(chance > 0)) return [];
-  const q = playerHitDistribution(maxHit);
+  const q = playerHitDistribution(maxHit, zeroIsOne);
   // left[r] — the chance the opponent has r hit points after the attacks so far.
   let left = new Array<number>(hp + 1).fill(0);
   left[hp] = 1;
@@ -186,6 +187,14 @@ export function swingsPerFight(counts: number[], weaponTicks: number, foeTicks: 
 /** One swing of the opponent: mean and second moment of its damage. Its hit rolls 0..max. */
 export function swingDamage(chance: number, maxHit: number): { mean: number; square: number } {
   return { mean: (chance * maxHit) / 2, square: (chance * maxHit * (2 * maxHit + 1)) / 6 };
+}
+
+/** Incoming damage over the same attack-count distribution used to time the fight. */
+export function counterDamage(foe: CombatFoe, maxHit: number, chance: number, attackTicks: number, defenceLevel: number, defenceBonus: number, zeroIsOne = true): { mean: number; variance: number } {
+  if (foe.maxHit === 0) return { mean: 0, variance: 0 };
+  const swing = swingDamage(hitChance((foe.attackLevel + 9) * (foe.attackBonus + 64), (defenceLevel + 8) * (defenceBonus + 64)), foe.maxHit);
+  const sw = swingsPerFight(attackCounts(foe.hitpoints, maxHit, chance, zeroIsOne), attackTicks, foe.speedTicks);
+  return { mean: sw.mean * swing.mean, variance: sw.mean * (swing.square - swing.mean ** 2) + sw.variance * swing.mean ** 2 };
 }
 
 // ---------------------------------------------------------------------------
@@ -285,6 +294,7 @@ export interface CombatEstimate {
 
 /** Model margin on top of the luck of the rolls, by how much is known. */
 const MARGIN: Record<Basis, number> = { formula: 0.15, calibrated: 0.08, basic: 0.35 };
+export const combatMargin = (basis: Basis, aggressive: boolean) => MARGIN[basis] + (aggressive ? 0.1 : 0);
 /** About 90% of outcomes lie within this many standard deviations. */
 const Z = 1.65;
 /** Finding and reaching the next target, seconds a kill. */
@@ -316,7 +326,6 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
   // The opponent against the worn armour: its attack type is the defence bonus that counts.
   const type = (['stab', 'slash', 'crush', 'magic', 'ranged'] as const).find((t) => t === foe.attackStyle) ?? 'crush';
   const defenceBonus = [inp.weapon, inp.neck, ...inp.armour].reduce((sum, p) => sum + (p?.defence[type] ?? 0), 0);
-  const foeRoll = (foe.attackLevel + 9) * (foe.attackBonus + 64);
   if (inp.unknownPieces) assumed.push(`${inp.unknownPieces} worn item${inp.unknownPieces > 1 ? 's' : ''} without data counted as no armour`);
 
   const perKill = xpPerKill(foe);
@@ -363,18 +372,12 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
         const a = attacksToKill(foe.hitpoints, hit.maxHit, hit.hitChance);
         if (!Number.isFinite(a.mean)) return null;
         const weaponTicks = hit.speed / TICK;
-        const effDef = lv.defence + (style === 'defensive' ? 3 : 0) + 8;
-        const swing = swingDamage(hitChance(foeRoll, effDef * (defenceBonus + 64)), foe.maxHit);
-        const sw = swingsPerFight(attackCounts(foe.hitpoints, hit.maxHit, hit.hitChance), weaponTicks, foe.speedTicks);
-        const swingsMean = sw.mean;
-        const swingsVar = sw.variance;
-        const perKillDamage = swingsMean * swing.mean;
-        const perKillDamageVar = swingsMean * (swing.square - swing.mean ** 2) + swingsVar * swing.mean ** 2;
+        const incoming = counterDamage(foe, hit.maxHit, hit.hitChance, weaponTicks, lv.defence + (style === 'defensive' ? 3 : 0), defenceBonus);
         phase.kills += run.kills;
         phase.seconds += run.kills * a.mean * hit.speed;
-        phase.damage += run.kills * perKillDamage;
+        phase.damage += run.kills * incoming.mean;
         phaseFightVar += run.kills * a.variance * hit.speed ** 2;
-        phaseDamageVar += run.kills * perKillDamageVar;
+        phaseDamageVar += run.kills * incoming.variance;
       }
       xp[goal.skill] += segment;
       phase.toLevel = levelForXp(xp[goal.skill]);
@@ -415,12 +418,27 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
     basis = 'calibrated';
   }
   // An opponent that picks the fight, or brings its friends, makes the damage and the pace less sure.
-  const margin = MARGIN[basis] + (foe.aggressive || inp.groupAggro ? 0.1 : 0);
+  const margin = combatMargin(basis, Boolean(foe.aggressive || inp.groupAggro));
 
+  const recovery = combatRecovery({ ...inp, hitpoints: inp.levels.hitpoints, kills, fightMean, fightVar, damageMean, damageVar, margin });
+  if (inp.currentHp == null) assumed.push('you start at full health');
+
+  return {
+    basis, foe, phases, kills, ...recovery, assumed,
+    strengthDosesLeft: Math.max(0, Math.floor(potionSeconds / (boost * 60))),
+  };
+}
+
+/** Shared eating, healing and banking for a sequence of fights, independent of attack style. */
+export function combatRecovery(inp: SpotTerms & {
+  foe: CombatFoe; hitpoints: number; currentHp?: number | null; food: { name: string; heals: number }; foodSlots?: number;
+  kills: number; fightMean: number; fightVar: number; damageMean: number; damageVar: number; margin: number;
+}) {
+  const { foe, kills, fightMean, fightVar, damageMean, damageVar, margin } = inp;
+  const between = inp.betweenKills ?? BETWEEN_KILLS;
   const fight = spread(fightMean, fightVar, margin);
   const regen = (fightMean + kills * avg(between)) * REGEN_PER_SECOND;
-  const maxHp = inp.levels.hitpoints;
-  if (inp.currentHp == null) assumed.push('you start at full health');
+  const maxHp = inp.hitpoints;
   const startHp = Math.min(maxHp, inp.currentHp ?? maxHp);
   // Health below two of its max hits is where you eat (above a special attack's max hit when it has one); what is above that at the start is free.
   const eatAt = Math.max(2 * foe.maxHit, (inp.specialMaxHit ?? 0) + 1);
@@ -428,7 +446,8 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
   const netMid = Math.max(0, damageMean - regen - buffer);
   const damage = spread(netMid, damageVar, margin);
   // A monk's healing replaces the food: 2 + 20% of the Hitpoints level each time it is asked for.
-  const heals = inp.freeHeal ? 2 + Math.floor(maxHp / 5) : inp.food.heals;
+  // Ordinary food cannot restore more than the missing health of a living player. Keep the existing early-eating margin as well.
+  const heals = effectiveHeal({ heals: inp.freeHeal ? 2 + Math.floor(maxHp / 5) : inp.food.heals }, maxHp);
   const asked: Range | null = inp.freeHeal ? {
     low: Math.max(0, Math.floor(damage.low / heals)), mid: Math.max(0, Math.round(damage.mid / (heals * avg(USABLE)))), high: Math.max(0, Math.ceil(damage.high / (heals * USABLE[0]))),
   } : null;
@@ -454,12 +473,9 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
     mid: minutes(fight.mid + kills * avg(between) + eatSeconds(food.mid) + healSeconds.mid) + (trips.mid - 1) * avg(trip),
     high: minutes(fight.high + kills * between[1] + eatSeconds(food.high) + healSeconds.high) + (trips.high - 1) * trip[1],
   };
-
-  return {
-    basis, foe, phases, kills, combatMinutes, totalMinutes, damage, food, foodSlots, killsPerTrip, trips,
+  return { combatMinutes, totalMinutes, damage, food, foodSlots, killsPerTrip, trips,
     hpPerKill: Math.max(0, perKillNet), secondsPerKill: fightMean / kills + avg(between),
-    nextTrip: Math.min(foodSlots, food.high), reserve: food.high - food.mid, assumed,
-    strengthDosesLeft: Math.max(0, Math.floor(potionSeconds / (boost * 60))),
+    nextTrip: Math.min(foodSlots, food.high), reserve: food.high - food.mid,
     bankTripMinutes: { low: trip[0], mid: avg(trip), high: trip[1] },
     ...(asked ? { heals: asked.mid } : {}),
   };

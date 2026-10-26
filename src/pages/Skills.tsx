@@ -1,15 +1,11 @@
 // The list of skills: what to train now in each, and the way into each skill's training guide (its method, place and leveling roadmap).
-import { goals, levelById, membersGuide, membersSkills, reference, skills, xpData } from '../data';
+import { levelById, membersGuide, membersSkills, reference, skills, xpData } from '../data';
 import { useStore } from '../store';
 import { currentStage } from '../lib/next-step';
-import { goalFor, formatXp, isReached } from '../lib/goals';
+import { formatXp } from '../lib/goals';
 import { levelOf } from '../lib/progress';
-import { focusRange } from '../lib/ranges';
 import type { Skill } from '../types';
 import { Blocks } from '../components/Blocks';
-import { IconCheck, IconChevron } from '../components/Icons';
-import { Inline } from '../components/Inline';
-import { LevelInput } from '../components/LevelInput';
 import { Table } from '../components/Table';
 import { SkillGlyph } from '../components/SectionShell';
 import { useBridge } from '../bridge';
@@ -23,7 +19,7 @@ export function SkillsPage() {
     <div className="page">
       <header className="page-head">
         <h1>Skills</h1>
-        <p className="muted">What to train in each skill now; a card opens its training guide. Goals are for stage {stage}.</p>
+        <p className="muted">Choose a skill for a recommended method. Goals follow stage {stage}.</p>
       </header>
 
       <details className="disclosure card">
@@ -36,8 +32,8 @@ export function SkillsPage() {
         </div>
       </details>
 
-      <div className="skill-grid">
-        {skills.map((s) => <SkillCard key={s.id} skill={s} stage={stage} />)}
+      <div className="skill-grid skill-grid-compact">
+        {skills.flatMap((s) => s.levelSkills.map((id) => <SkillCard key={id} skill={s} id={id} />))}
       </div>
 
       {mode === 'members' && (
@@ -47,8 +43,8 @@ export function SkillsPage() {
             <summary>How the members skill plans work</summary>
             <div className="prose"><Blocks blocks={membersGuide.intro} /></div>
           </details>
-          <div className="skill-grid">
-            {membersSkills.map((m) => <SkillCard key={m.id} skill={m} stage={stage} />)}
+          <div className="skill-grid skill-grid-compact">
+            {membersSkills.flatMap((m) => m.levelSkills.map((id) => <SkillCard key={id} skill={m} id={id} />))}
           </div>
         </section>
       )}
@@ -71,52 +67,21 @@ export function roadmapSkills(skill: Skill): SkillName[] {
   return ids.filter((id): id is SkillName => (SKILL_NAMES as readonly string[]).includes(id));
 }
 
-/** A skill card leads with what to train now and opens the skill's guide; the level is a number while the game reports it, a field to type into while it does not. */
-function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
-  const { progress, stages } = useStore();
+/** One skill per tile; recommendations and manual level editing live on its detail page. */
+function SkillCard({ skill, id }: { skill: Skill; id: string }) {
+  const { progress } = useStore();
   const { state, stats } = useBridge();
-  const focus = focusRange(skill, progress, goals, stage, stages[stages.length - 1]?.id);
-  const hit = focus.hit;
-  const many = skill.levelSkills.length > 1;
   const tracked = useTracked();
-  const guides = roadmapSkills(skill);
-  const isTracked = tracked !== null && guides.includes(tracked.skill);
-  const live = state === 'online' && skill.levelSkills.every((id) => stats?.[id as keyof typeof stats] != null);
+  const live = state === 'online' && stats?.[id as keyof typeof stats] != null;
+  const name = levelById.get(id)?.name ?? skill.name;
+  const isTracked = tracked?.skill === id;
   return (
-    <article className={`skill-card card ${skill.membersOnly ? 'is-members' : ''} ${isTracked ? 'is-tracked' : ''}`}>
-      <a className="skill-card-link" href={`#/skills/${skill.id}`}>
-        <SkillGlyph skill={skill.levelSkills[0]} size={28} />
-        <span>
-          <span className="skill-name">{skill.name}</span>
-          {many && <span className="skill-en">{skill.levelSkills.map((id) => levelById.get(id)!.name).join(', ')}</span>}
-        </span>
-        <IconChevron className="chevron" />
+    <article className={`skill-card card skill-tile ${skill.membersOnly ? 'is-members' : ''} ${isTracked ? 'is-tracked' : ''}`}>
+      <a className="skill-card-link" href={`#/skills/${skill.id}/${id}`} aria-label={`${name}, level ${levelOf(progress, id)}${live ? ', live' : ', saved'}`}>
+        <SkillGlyph skill={id} size={28} />
+        <span className="skill-name">{name}</span>
+        <span className="muted">{levelOf(progress, id)}{isTracked && <span className="visually-hidden">, followed in the game</span>}</span>
       </a>
-      <div className={`skill-levels ${many ? 'is-many' : ''}`}>
-        {skill.levelSkills.map((id) => {
-          const goal = goalFor(goals, id, stage);
-          const reached = goal && isReached(levelOf(progress, id), goal);
-          const name = levelById.get(id)!.name;
-          return (
-            <div key={id} className="skill-level">
-              {live
-                ? <span className="skill-level-now">{many && <span className="skill-level-name">{name}</span>}<strong>{levelOf(progress, id)}</strong></span>
-                : <LevelInput id={id} label={many ? name : `Level: ${name}`} hideLabel={!many} compact />}
-              {goal && (
-                <span className={`goal-chip ${reached ? 'is-reached' : ''}`}>
-                  {goal.kind === 'optional' ? 'optional ' : ''}goal {goal.raw}{reached && <IconCheck />}
-                  <span className="visually-hidden"> at stage {stage}{reached ? ', reached' : ''}</span>
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
-      {hit && <p className="skill-range"><span className="muted">Now{many ? ` (${levelById.get(focus.skill)?.name ?? focus.skill})` : ''}:</span> <Inline text={hit.range.what} /></p>}
-      <p className="skill-card-actions">
-        <a className="btn btn-sm skill-guide-link" href={`#/skills/${skill.id}`}>Training guide</a>
-        {isTracked && <span className="badge badge-now">followed in the game</span>}
-      </p>
     </article>
   );
 }

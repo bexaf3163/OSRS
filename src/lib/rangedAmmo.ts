@@ -11,7 +11,7 @@
 
 import rangedGearJson from '../data/rangedGear.json';
 import { attacksToKill, foeVariants, spread, type CombatFoe, type Range } from './combatEstimate';
-import { rangedNeeds } from './rangedLoadout';
+import { bowEquipment, rangedNeeds } from './rangedLoadout';
 import type { PlayerState } from './playerState';
 import type { TrainingMethod } from './trainingRouter';
 import { gearData } from '../services/gearAdvisor';
@@ -22,6 +22,8 @@ export interface RangedGearItem { name: string; slot: string; rangedAttack: numb
 export const RANGED_GEAR = (rangedGearJson as { items: RangedGearItem[] }).items;
 
 export type RangedStyle = 'accurate' | 'rapid' | 'longrange';
+/** The starter guide uses Accurate below 5, then Rapid; explicit player choices still override it. */
+export const trainingRangedStyle = (level: number): RangedStyle => level < 5 ? 'accurate' : 'rapid';
 const STYLE_BONUS: Record<RangedStyle, number> = { accurate: 3, rapid: 0, longrange: 0 };
 /** The share of shots that destroy their arrow (OSRS Wiki, Arrows: 20% without an Ava's device). */
 export const ARROW_BREAK = 0.2;
@@ -104,7 +106,7 @@ export function arrowsForGoal(inp: AmmoInput): AmmoEstimate | null {
   for (let xp = inp.xp; xp < goalXp;) {
     const level = levelForXp(xp);
     const until = Math.min(goalXp, xpForLevel(level + 1));
-    const hit = rangedHit(level, inp.bow, inp.arrow, inp.worn, inp.foe, inp.style)!;
+    const hit = rangedHit(level, inp.bow, inp.arrow, inp.worn, inp.foe, inp.style ?? trainingRangedStyle(level))!;
     notCounted = hit.notCounted;
     const per = attacksToKill(hp, hit.maxHit, hit.chance);
     if (!Number.isFinite(per.mean)) return null;
@@ -147,8 +149,7 @@ export function goalArrows(legs: readonly { method: TrainingMethod; fromLevel: n
   const kit = rangedNeeds(state).filter((n) => n.type === 'item');
   const [bow, arrow] = [kit[0]?.name, kit[1]?.name];
   if (!bow || !arrow) return null;
-  const skip = new Set([nameKey(bow), nameKey(arrow)]);
-  const worn = Object.values(state.equipment).filter((n) => !skip.has(nameKey(n)));
+  const worn = Object.entries(bowEquipment(state.equipment, bow, arrow)).filter(([slot]) => slot !== 'weapon' && slot !== 'ammo').map(([, name]) => name);
   const sum: AmmoEstimate = { shots: { low: 0, mid: 0, high: 0 }, lostPickingUp: { low: 0, mid: 0, high: 0 }, kills: 0, notCounted: [] };
   for (const leg of legs) {
     const foe = methodFoe(leg.method);

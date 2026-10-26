@@ -8,7 +8,7 @@ import { rangeForLevel } from '../lib/ranges';
 import { useStore } from '../store';
 import { useBridge } from '../bridge';
 import { usePlayerState } from '../playerStateContext';
-import { useFeatures } from '../lib/features';
+import { setFeatures, useFeatures } from '../lib/features';
 import { priorityOf, styleOf } from '../lib/playStyle';
 import { adviseTraining, formatHours, type MethodView, type TrainingAdvice } from '../lib/trainingRouter';
 import { actionForm } from '../lib/pacing';
@@ -86,7 +86,9 @@ export function TrainingCard({ skill, target, followed = null }: { skill: string
     // Without the live XP the count starts at the beginning of the level: a little more than needed, never less.
     return goalArrows(legs, state, xp?.ranged ?? xpForLevel(advice.level));
   }, [skill, advice, state, xp, target]);
-  if (!advice || advice.level === null || advice.level >= target) return null;
+  if (!advice) return null;
+  if (advice.level === null) return <section className="training" aria-label="What to train with"><p className="small muted">Level not checked. Connect RuneLite or enter your level under “Levels and live experience”.</p></section>;
+  if (advice.level >= target) return null;
   const { best } = advice;
   // The method the game follows (a tracked plan) leads the card with this player's figures; the pick, when it differs, is one line under it.
   const shown = advice.followed ?? best;
@@ -99,6 +101,15 @@ export function TrainingCard({ skill, target, followed = null }: { skill: string
       <p className="readiness-head">
         🎯 <strong>What to train with: {skillTitle(skill)}</strong> <span className="muted">— now {advice.level}, goal {target}</span>
       </p>
+      <div className="skill-seg" role="group" aria-label="Training priority">
+        {([['fastest', 'XP'], ['balanced', 'Balanced'], ['profit', 'Money']] as const).map(([priority, label]) => (
+          <button key={priority} type="button" className={`skill-seg-btn ${priorityOf(features) === priority ? 'is-on' : ''}`}
+            aria-pressed={priorityOf(features) === priority}
+            onClick={() => setFeatures({ efficient: priority === 'fastest', profitTraining: priority === 'profit', relaxedTraining: false })}>
+            {label}
+          </button>
+        ))}
+      </div>
       {best ? (
         <>
           <div className="training-recommendation">
@@ -121,7 +132,7 @@ export function TrainingCard({ skill, target, followed = null }: { skill: string
             </p>
           )}
           {profile.showTime && advice.time && (
-            <p className="small">⏱ {formatHours(advice.time)} to {target}{advice.time.source === 'wiki' ? ' (by the wiki speed — a guide)' : advice.time.source === 'model' ? ' (for your levels and gear)' : ' (at your pace)'}.</p>
+            <p className="small">⏱ {formatHours(advice.time)} to {target}{advice.time.source === 'wiki' ? ' (by the wiki speed — a guide)' : advice.time.source === 'model' ? ' (for your levels and gear)' : advice.time.source === 'forecast' ? ' (across your plan)' : ' (at your pace)'}.</p>
           )}
           {best.status === 'PREP' && (
             <p className="small">First: <strong>{best.missing.map((x) => x.label).join(', ')}</strong> <a href="#/shopping">To the shopping list</a></p>
@@ -136,14 +147,16 @@ export function TrainingCard({ skill, target, followed = null }: { skill: string
       ) : (
         <GuideRow skill={skill} level={advice.level} fallback={advice.reason} />
       )}
+      {(advice.path.length > 1 || advice.quests.length > 0) && <details className="small"><summary className="muted">Plan details</summary>
       {advice.path.length > 1 && (
         <p className="small muted">Path: {advice.path.map((l) => `${l.fromLevel}–${l.toLevel} ${l.method.name}`).join(' → ')}</p>
       )}
       {advice.quests.length > 0 && (
         <p className="small muted">📜 Some levels are covered by quests: {advice.quests.map((q) => q.name).join('; ')}.</p>
       )}
+      </details>}
       {showOthers && (
-        <details className="small" open={profile.alternatives > 0}>
+        <details className="small">
           <summary className="muted">Other methods: {advice.others.length}</summary>
           <ul>{advice.others.slice(0, profile.alternatives || 3).map((v) => <Alternative key={v.method.id} v={v} />)}</ul>
         </details>

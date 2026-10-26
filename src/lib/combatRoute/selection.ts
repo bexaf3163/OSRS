@@ -9,7 +9,8 @@
 //  - A plan that is gone (its conditions changed: the bones are already in hand) or not safe gives way at once: safety does not wait for a bank trip.
 
 import type { Adopted } from './adopt';
-import { gainOver, MIN_GAIN, planKeyOf, type EvaluatedPlan, type PlanReport } from './plans';
+import { earningsOrder } from '../lootValue';
+import { gainOver, MIN_GAIN, planKeyOf, planNetPerHour, type EvaluatedPlan, type PlanReport } from './plans';
 
 /** Whether the player is in the middle of a trip on this step: then a better plan waits for the next bank trip instead of moving the arrow. */
 export interface TripState { inProgress: boolean }
@@ -42,7 +43,7 @@ export function selectPlan(report: PlanReport, stored: Adopted | undefined, trip
   if (stored && chosen) {
     // The guide's own pick is offered when it is clearly better than the player's (MIN_GAIN of the chosen plan's score); otherwise the choice stands quietly.
     const top = usable(report, report.fresh);
-    const better = top && top.key !== chosen.key && gainOver(chosen, top) >= MIN_GAIN;
+    const better = top && top.key !== chosen.key && (report.priority === 'profit' ? earningsOrder(planNetPerHour(top), planNetPerHour(chosen)) < 0 : gainOver(chosen, top) >= MIN_GAIN);
     return { key: chosen.key, source: 'player', recommended: report.fresh, ...(better ? { offer: top.key } : {}) };
   }
   // What applied before this evaluation: the guide's earlier choice, or for a step never chosen the route's own plan (the default before 2.69).

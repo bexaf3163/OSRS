@@ -91,7 +91,7 @@ export function App() {
   let content;
   switch (route.page) {
     case 'path': content = compact ? <PathCompact focusStep={route.step} /> : <PathPage focusStep={route.step} focusKey={route.key} />; break;
-    case 'skills': content = route.param ? <SkillDetailPage key={route.param} id={route.param} /> : <SkillsPage />; break;
+    case 'skills': content = route.param ? <SkillDetailPage key={`${route.param}:${route.skill ?? ''}`} id={route.param} selectedSkill={route.skill} /> : <SkillsPage />; break;
     case 'goals':
     case 'quests':
     case 'journal': content = <JournalPage tab={journalTabOf(route.page, route.param)} />; break;

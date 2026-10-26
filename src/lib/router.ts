@@ -9,6 +9,8 @@ export interface Route {
   /** The code of a skill, a reference section or a step (#/step/S3-05 opens Path with the step expanded). */
   param?: string;
   step?: string;
+  /** Direct skill selection within a grouped guide, for example ME/defence. */
+  skill?: string;
   /** Grows with every navigation, so that a repeated click on the same link scrolls to the step again. */
   key: number;
 }
@@ -20,10 +22,10 @@ export function parseHash(hash: string): Route {
 }
 
 function parsePath(hash: string): Omit<Route, 'key'> {
-  const [first, second] = hash.replace(/^#\/?/, '').split('/').map(decodeURIComponent);
+  const [first, second, third] = hash.replace(/^#\/?/, '').split('/').map(decodeURIComponent);
   switch (first) {
     case 'step': return { page: 'path', step: second };
-    case 'skills': return { page: 'skills', param: second };
+    case 'skills': return { page: 'skills', param: second, ...(third ? { skill: third } : {}) };
     case 'goals': return { page: 'goals' };
     case 'quests': return { page: 'quests' };
     // The Journal groups Quests, Stage goals and Session. #/quests and #/goals keep working and open the matching tab.

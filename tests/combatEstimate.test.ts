@@ -182,6 +182,15 @@ describe('trip and total', () => {
     expect(lobster.food.mid).toBeCloseTo((e.food.mid * 9) / 12, -1);
   });
 
+  it('food cannot restore more than a living player can be missing', () => {
+    const at = (heals: number) => estimateCombat(input(L12, { levels: { attack: 22, strength: 16, defence: 1, hitpoints: 10 }, food: { name: 'Test food', heals } }))!;
+    const capped = at(9);
+    expect(capped.food.mid).toBeGreaterThan(0);
+    expect(at(14).food).toEqual(capped.food);
+    expect(at(14).totalMinutes).toEqual(capped.totalMinutes);
+    expect(at(7).food.mid).toBeGreaterThan(capped.food.mid);
+  });
+
   it('two phases in order: Strength to 20 first, then Attack to 30', () => {
     expect(e.phases.map((p) => [p.skill, p.fromLevel, p.toLevel])).toEqual([['strength', 16, 20], ['attack', 22, 30]]);
   });

@@ -28,6 +28,17 @@ export function coinsPerMinute(prices: PriceView | null | undefined): number | n
  * pace), not this character's best way to earn; so coins only ever trade against part of the time, and past the cap the XP decides.
  */
 export const COIN_SHARE_CAP = 0.5;
+
+/** Known net proceeds per hour. Unknown costs are never a free input. */
+export function netEarnings(rate: { costPerHour: number | null; lootPerHour?: number }): number | null {
+  return rate.costPerHour === null ? null : (rate.lootPerHour ?? 0) - rate.costPerHour;
+}
+
+/** A money-first choice needs positive evidence; non-positive/unknown figures do not invent a profitable preference. */
+export function earningsOrder(a: number | null, b: number | null): number {
+  const positive = (n: number | null) => n !== null && Number.isFinite(n) && n > 0;
+  return positive(a) || positive(b) ? (positive(b) ? b! : 0) - (positive(a) ? a! : 0) : 0;
+}
 /** netPerHour: coins banked less coins used up (arrows, runes, bait, food), an hour. A gain is capped; a cost counts in full (it is real money). */
 export function coinTimeShare(netPerHour: number | undefined, rate: number | null): number {
   if (!rate || !netPerHour) return 0;
@@ -58,5 +69,6 @@ export function lootSecondsPerKill(each: number, tripMinutes: number, rate: numb
  */
 export function bankingPays(each: number, extraSeconds: number, rate: number | null, objective?: MethodPriority): boolean {
   if (objective === 'fastest' && extraSeconds > 0) return false;
+  if (objective === 'profit') return each > 0 && Number.isFinite(extraSeconds) && extraSeconds >= 0;
   return rate !== null && rate > 0 && each > 0 && (extraSeconds <= 0 || each / extraSeconds >= rate / 60);
 }

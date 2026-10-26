@@ -14,9 +14,16 @@ import { chebyshev, locLines, mapPoint, middleOf, num, successCharts, templates,
 const root = fileURLToPath(new URL('..', import.meta.url));
 const OUT = `${root}src/data/processing.json`;
 
-type Kind = 'furnace' | 'anvil' | 'fire';
+type Kind = 'furnace' | 'anvil' | 'fire' | 'altar';
 interface StationDef { kind: Kind; page: string; row?: string; location?: string; near?: string; bank?: string }
-interface RecipeDef { id: string; page: string; skill: string; facility: Kind | null; /** Lit with a tinderbox (Firemaking): read from the log's {{Firemaking info}}. */ light?: boolean }
+interface TickEvidence { page: string; evidence: string; ticks: number }
+interface RecipeDef { id: string; page: string; skill: string; facility: Kind | null; members?: boolean; /** Lit with a tinderbox (Firemaking): read from the log's {{Firemaking info}}. */ light?: boolean;
+  consume?: { level: number; xp: number; xpEvidence: string; action: TickEvidence };
+  spell?: { page: string; materialPage: string; successEvidence: string; batchSize: number };
+  wholeBatch?: boolean;
+  /** Batch size is an app preparation choice. Work/wait ticks must match the Wiki recipe's timing note and total. */
+  batch?: { size: number; workTicks: number; waitTicks: number; workEvidence: string; waitEvidence: string }; successLabel?: string;
+}
 /** Lighting logs: the action length (checked against its evidence line) and the lighting success chart, one for every log. */
 interface LightDef { ticks: { page: string; evidence: string; ticks: number }; chart: { page: string; label: string; line: string } }
 interface Defs { stations: StationDef[]; recipes: RecipeDef[]; methods: Record<string, string[]>; light?: LightDef }
@@ -36,6 +43,21 @@ const page = async (p: string) => { if (!pages.has(p)) pages.set(p, await wikite
 for (const s of defs.stations) {
   const what = `${s.kind} @ ${s.row ?? s.location}`;
   const text = await page(s.page);
+  if (s.kind === 'altar') {
+    const box = templates(text, 'Infobox Scenery')[0] ?? {};
+    const at = mapPoint(box.map ?? '');
+    const outside = templates(text, 'Map').find((m) => /mysterious ruins/i.test(m.caption ?? ''));
+    const entry = outside ? mapPoint(`{{Map|x=${outside.x}|y=${outside.y}}}`) : null;
+    const portals = templates(await page('Portal (Runecrafting)'), 'Infobox Scenery')[0] ?? {};
+    const version = Object.entries(portals).find(([k, v]) => /^version\d+$/.test(k) && `${v} Altar` === s.page)?.[0].slice(7);
+    const portal = version ? mapPoint(portals[`map${version}`] ?? '') : null;
+    if (!at || !entry || !portal || chebyshev(at, portal) > 100 || !s.bank || places[s.bank]?.kind !== 'bank' || chebyshev(entry, places[s.bank]) > 500) {
+      fail(s.page, 'altar/ruins/exit-portal maps or bank are missing/inconsistent'); continue;
+    }
+    stations.push({ kind: s.kind, label: s.page, place: { ...at, label: s.page }, entry: { ...entry, label: `${s.page}: mysterious ruins` }, portal,
+      bank: s.bank, members: /^yes$/i.test(box.members ?? '') });
+    continue;
+  }
   if (s.row) {
     // The article's location table: the row whose first cell is exactly the location, with a {{Map}} point and a distance from the bank in tiles.
     const row = wikitables(text).flatMap((t) => t.rows).find((r) => r[0] === s.row);
@@ -74,10 +96,10 @@ async function stacks(item: string): Promise<boolean> {
 /** The ticks of one action at the Make-X pace: the note's "increases to N" or "N ticks for the rest" when the first action is quicker. */
 function steadyTicks(r: Record<string, string>): number {
   const note = r.ticksnote ?? '';
-  const later = /increases to (\d+)/i.exec(note) ?? /(\d+) ticks for the rest/i.exec(note);
+  const later = /increases to (\d+)/i.exec(note) ?? /(\d+) ticks for the rest/i.exec(note) ?? /then (\d+) ticks/i.exec(note);
   return later ? Number(later[1]) : num(r.ticks);
 }
-const FACILITY: Record<Kind, RegExp> = { furnace: /furnace/i, anvil: /anvil/i, fire: /range|fire/i };
+const FACILITY: Record<Kind, RegExp> = { furnace: /furnace/i, anvil: /anvil/i, fire: /range|fire/i, altar: /altar/i };
 
 // Lighting logs: one action length and one success chart for every log (Firemaking), checked on the wiki once.
 let light: { ticks: number; low: number; high: number } | null = null;
@@ -93,6 +115,46 @@ if (defs.light) {
 const recipes = [];
 for (const d of defs.recipes) {
   const text = await wikitext(d.page);
+  if (d.spell) {
+    const s = d.spell;
+    const box = templates(text, 'Infobox Spell')[0] ?? {};
+    const mat = templates(await wikitext(s.materialPage), 'Recipe').find((r) => !/^yes$/i.test(r.members ?? ''));
+    const runes = templates(box.cost ?? '', 'RuneReq')[0] ?? {};
+    const ticks = /^(\d+) ticks$/.exec(box.speed ?? '');
+    if (!mat || !text.includes(s.successEvidence) || !ticks || !(num(box.level) > 0) || !(num(box.exp) > 0)
+      || !Object.keys(runes).length || !(s.batchSize > 0) || !Number.isInteger(s.batchSize) || !mat.output1
+      || !mat.skill1 || !(num(mat.skill1lvl) > 0)) { fail(d.id, 'spell/material evidence incomplete'); continue; }
+    const staffData = (JSON.parse(readFileSync(`${root}src/data/spells.json`, 'utf8')) as { staffs: Record<string, { name: string }> }).staffs;
+    const inputs = [];
+    for (let i = 1; mat[`mat${i}`]; i++) {
+      const name = plain(mat[`mat${i}`]);
+      inputs.push({ name, qty: num(mat[`mat${i}quantity`]) || 1, stacks: await stacks(name) });
+    }
+    for (const [element, qty] of Object.entries(runes)) {
+      if (!(num(qty) > 0)) { fail(d.id, `invalid ${element} rune quantity`); continue; }
+      const name = `${element} rune`;
+      inputs.push({ name, qty: num(qty), stacks: await stacks(name), ...(staffData[element.toLowerCase()] ? { staff: staffData[element.toLowerCase()].name } : {}) });
+    }
+    recipes.push({ id: d.id, skill: d.skill, level: num(box.level), xp: num(box.exp), ticks: Number(ticks[1]), facility: null, tools: [], inputs,
+      output: { name: plain(mat.output1), qty: num(mat.output1quantity) || 1 }, batchSize: s.batchSize,
+      requires: [{ skill: (mat.skill1 ?? '').toLowerCase(), level: num(mat.skill1lvl) }], members: /^yes$/i.test(box.members ?? ''),
+      source: `https://oldschool.runescape.wiki/w/${encodeURIComponent(s.page.replace(/ /g, '_'))}` });
+    continue;
+  }
+  if (d.consume) {
+    const c = d.consume;
+    const action = (await wikitext(c.action.page)).split('\n').find((l) => l.includes(c.action.evidence));
+    const item = templates(text, 'Infobox Item')[0];
+    const xpMatch = /give (\d+(?:\.\d+)?) \[\[Prayer\]\] experience when buried/.exec(c.xpEvidence);
+    if (!item || !text.includes(c.xpEvidence) || !xpMatch || Number(xpMatch[1]) !== c.xp || d.skill !== 'prayer'
+      || !action || !action.includes(`${c.action.ticks} ticks per bone`) || !(c.level > 0) || !(c.xp > 0) || !(c.action.ticks > 0)) {
+      fail(d.id, 'consumption XP/action evidence does not match the source'); continue;
+    }
+    recipes.push({ id: d.id, skill: d.skill, level: c.level, xp: c.xp, ticks: c.action.ticks, facility: null, tools: [],
+      inputs: [{ name: plain(d.page), qty: 1, stacks: await stacks(d.page) }], output: null, members: /^yes$/i.test(item.members ?? ''),
+      source: `https://oldschool.runescape.wiki/w/${encodeURIComponent(d.page.replace(/ /g, '_'))}` });
+    continue;
+  }
   if (d.light) {
     // The log's {{Firemaking info}}: the tinderbox version's level and XP. A failed light keeps the log (retry): it costs time, not the log.
     const fi = templates(text, 'Firemaking info')[0] ?? {};
@@ -108,8 +170,8 @@ for (const d of defs.recipes) {
     });
     continue;
   }
-  const r = templates(text, 'Recipe').find((x) => (x.skill1 ?? '').toLowerCase() === d.skill && !/^yes$/i.test(x.members ?? ''));
-  if (!r) { fail(d.id, `no free {{Recipe}} for ${d.skill} on ${d.page}`); continue; }
+  const r = templates(text, 'Recipe').find((x) => (x.skill1 ?? '').toLowerCase() === d.skill && /^yes$/i.test(x.members ?? '') === Boolean(d.members));
+  if (!r) { fail(d.id, `no ${d.members ? 'members' : 'free'} {{Recipe}} for ${d.skill} on ${d.page}`); continue; }
   if (d.facility ? !FACILITY[d.facility].test(r.facilities ?? '') : (r.facilities ?? '').trim()) {
     fail(d.id, `the recipe's facilities are "${r.facilities ?? ''}", not ${d.facility ?? 'none'}`); continue;
   }
@@ -119,17 +181,32 @@ for (const d of defs.recipes) {
     inputs.push({ name, qty: num(r[`mat${i}quantity`]) || 1, stacks: await stacks(name) });
   }
   const tools = (r.tools ?? '').split(/,|<br\s*\/?>/).map(plain).filter(Boolean);
-  const ticks = steadyTicks(r);
+  const carried = d.wholeBatch ? tools.find((n) => / talisman$/i.test(n)) : undefined;
+  const equipped = d.wholeBatch ? tools.find((n) => / tiara$/i.test(n)) : undefined;
+  const every = d.wholeBatch ? /every (\d+)(?:st|nd|rd|th) level/i.exec(r.notes ?? '') : null;
+  if (d.wholeBatch) {
+    const guide = plain(await page('Free-to-play Runecraft training')).toLowerCase();
+    if (d.skill !== 'runecraft' || !carried || !equipped || !every || inputs.length !== 1 || inputs[0].name !== 'Rune essence'
+      || !guide.includes('pure essence or rune essence')) { fail(d.id, 'whole-inventory crafting/access/essence evidence incomplete'); continue; }
+  }
+  const ticks = d.batch?.workTicks ?? steadyTicks(r);
+  if (d.batch && (!(d.batch.size > 0) || !Number.isInteger(d.batch.size) || !(d.batch.workTicks > 0) || !(d.batch.waitTicks >= 0)
+    || num(r.ticks) !== d.batch.workTicks + d.batch.waitTicks || !(r.ticksnote ?? '').includes(d.batch.workEvidence)
+    || !(r.ticksnote ?? '').includes(d.batch.waitEvidence))) { fail(d.id, 'batch work/wait evidence does not match the recipe'); continue; }
   const level = num(r.skill1lvl);
   const xp = num(r.skill1exp);
   if (!(ticks > 0) || !(level > 0) || !(xp > 0) || !inputs.length || !r.output1) { fail(d.id, `incomplete recipe ${JSON.stringify(r)}`); continue; }
   // Success: a cooking chart's fire-or-range line (low/high of the skilling success formula, burning stops where it reaches 1), or a flat "N% chance".
-  const chart = successCharts(text).flatMap((c) => c.lines).find((l) => /fire or range/i.test(l.label));
+  const chart = successCharts(text).flatMap((c) => c.lines).find((l) => d.successLabel ? l.label === d.successLabel : /fire or range/i.test(l.label));
   const pct = /(\d+)% chance/.exec(r.output1quantitynote ?? '');
   if (d.skill === 'cooking' && !chart) { fail(d.id, 'no fire-or-range line in its skilling success chart'); continue; }
   recipes.push({
-    id: d.id, skill: d.skill, level, xp, ticks, facility: d.facility, tools, inputs,
+    id: d.id, skill: d.skill, level, xp, ticks, facility: d.facility, tools: d.wholeBatch ? [] : tools,
+    ...(d.members ? { members: true } : {}),
+    inputs: d.wholeBatch ? inputs.map((i) => ({ ...i, anyOf: ['Pure essence'] })) : inputs,
     output: { name: plain(r.output1), qty: num(r.output1quantity) || 1 },
+    ...(d.wholeBatch ? { wholeBatch: true, multiplierEvery: Number(every![1]), access: { carried, equipped }, station: plain(r.facilities) } : {}),
+    ...(d.batch ? { batchSize: d.batch.size, batchWaitTicks: d.batch.waitTicks } : {}),
     ...(chart ? { success: { low: chart.low, high: chart.high } } : pct ? { chance: Number(pct[1]) / 100 } : {}),
     source: `https://oldschool.runescape.wiki/w/${encodeURIComponent(d.page.replace(/ /g, '_'))}`,
   });
@@ -144,6 +221,7 @@ for (const [id, list] of Object.entries(defs.methods)) {
     if (!r) { fail(id, `${rid} is not a built recipe`); continue; }
     if (r.skill !== m.skill) fail(id, `${rid} trains ${r.skill}, the method ${m.skill}`);
     if (r.facility && !stations.some((s) => s.kind === r.facility)) fail(id, `${rid} needs a ${r.facility} and there is none`);
+    if ('station' in r && !stations.some((s) => s.label === r.station)) fail(id, `${rid} has no matching station`);
   }
 }
 

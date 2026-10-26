@@ -12,7 +12,7 @@
 import skillingJson from '../data/skilling.json';
 import { bankTrip } from './bankTrip';
 import { cascade, skillChance } from './skillChance';
-import { bankingPays, coinsPerMinute, coinTimeShare, dropValue } from './lootValue';
+import { bankingPays, coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from './lootValue';
 import { heldOf, levelOf, type PlayerState } from './playerState';
 import { toolUse } from './toolTiers';
 import type { Market, ModelRate, RateSpot } from './methodRates';
@@ -82,8 +82,10 @@ const TIE = 0.02;
  * Whether spot a beats spot b: a spot whose NPCs would attack this player loses to any spot where none do (when every spot has them, the best is kept
  * and says so); then the better score; in a tie the spot nearer the method's own place (the guide's), so the advice does not hop between equal spots.
  */
-function better(a: SpotRate, b: SpotRate, home: Point | null): boolean {
+function better(a: SpotRate, b: SpotRate, home: Point | null, objective?: Market['objective']): boolean {
   if (Boolean(a.danger) !== Boolean(b.danger)) return !a.danger;
+  const earnings = objective === 'profit' ? earningsOrder(netEarnings(a.rate), netEarnings(b.rate)) : 0;
+  if (earnings) return earnings < 0;
   if (Math.abs(a.score - b.score) > TIE * Math.min(a.score, b.score)) return a.score < b.score;
   const far = (x: SpotRate) => (home && x.rate.spot ? Math.max(Math.abs(x.rate.spot.place.x - home.x), Math.abs(x.rate.spot.place.y - home.y)) : 0);
   return far(a) < far(b);
@@ -180,7 +182,7 @@ export function gatherRate(m: TrainingMethod, skill: string, state: PlayerState,
     for (const spot of reg.spots) {
       if (spot.resource !== id || (spot.members && state.mode !== 'members')) continue;
       const s = spotRate(r, spot, level, state, market, coinRate, reg);
-      if (s && (!best || better(s, best.s, home))) best = { s, r, spot };
+      if (s && (!best || better(s, best.s, home, market.objective))) best = { s, r, spot };
     }
   }
   if (!best) return null;
@@ -205,7 +207,7 @@ function upgradesAt(r: Resource, spot: SkillSpot, level: number, state: PlayerSt
     const price = supplyPrice(tier.item, market.prices, state.mode);
     if (price === null) return [];
     const s = spotRate(r, spot, level, state, market, coinRate, reg, { tier, name: tier.item, wielded: attack !== undefined && attack >= tier.wield });
-    return s ? [{ tool: tier.item, price, xph: s.rate.xph }] : [];
+    return s ? [{ tool: tier.item, price, xph: s.rate.xph, costPerHour: s.rate.costPerHour }] : [];
   });
 }
 

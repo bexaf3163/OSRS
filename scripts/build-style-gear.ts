@@ -5,18 +5,12 @@
 
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { wikitext } from './wiki.ts';
 import { parseEquipment } from './style-gear-parse.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const OUT = `${root}src/data/styleGear.json`;
-const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 
-async function wikitext(page: string): Promise<string> {
-  const url = `https://oldschool.runescape.wiki/api.php?${new URLSearchParams({ action: 'parse', page, prop: 'wikitext', redirects: '1', format: 'json', formatversion: '2' })}`;
-  const res = await fetch(url, { headers: { 'User-Agent': UA } });
-  if (!res.ok) throw new Error(`${page}: ${res.status}`);
-  return ((await res.json()) as { parse: { wikitext: string } }).parse.wikitext;
-}
 
 const pages = { magic: 'Free-to-play Magic training', ranged: 'Free-to-play Ranged training' } as const;
 const out: Record<string, unknown> = {

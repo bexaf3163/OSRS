@@ -21,6 +21,7 @@
 // Then the plan's time includes that work and its score counts the coins as the minutes they save. A restricted account does not count what it cannot sell.
 
 import type { MethodPriority } from '../playStyle';
+import { bankingPays, earningsOrder } from '../lootValue';
 import type { Step } from '../../types';
 import type { OwnedState } from '../checklist';
 import { nameKey } from '../checklist';
@@ -109,6 +110,7 @@ export interface PlanReport {
   stepId: string;
   /** What the step asks, for the card: "Attack to 40, 50 Big bones". */
   objective: string;
+  priority?: MethodPriority;
   plans: EvaluatedPlan[];
   /** The plan to offer; the route's own when nothing is clearly better. A plan in effect (`adopted`) stays unless another is clearly better. */
   recommended: string;
@@ -184,6 +186,7 @@ export const gainOver = (a: Pick<EvaluatedPlan, 'score' | 'effort'>, b: Pick<Eva
 const ZERO: Range = { low: 0, mid: 0, high: 0 };
 const worst = (a: Basis, b: Basis): Basis => (BASIS_RANK[b] > BASIS_RANK[a] ? b : a);
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+export const planNetPerHour = (p: EvaluatedPlan): number | null => p.net === null || p.minutes.mid <= 0 ? null : p.net * 60 / p.minutes.mid;
 const gpText = (n: number) => Math.round(n).toLocaleString('en-US');
 
 /** What a later phase starts from: the XP the earlier steps reach, and the XP the earlier phases of the plan reach, whichever is higher in each skill. */
@@ -258,9 +261,9 @@ function risksOf(phases: PlanPhase[], hp: number): { risks: string[]; blockers: 
  * restricted account cannot sell.
  */
 export function lootOf(p: PlanPhase, e: Pick<CombatEstimate, 'foodSlots' | 'bankTripMinutes'>, reserved: number, prices: PriceView | null | undefined,
-  restriction: TradeRestriction['state'] | undefined, rate: number | null): PlanPhase['loot'] | null {
+  restriction: TradeRestriction['state'] | undefined, rate: number | null, objective?: MethodPriority): PlanPhase['loot'] | null {
   const name = p.spot.sell;
-  if (!name || !rate || p.kind === 'armour') return null;
+  if (!name || (!rate && objective !== 'profit') || p.kind === 'armour') return null;
   const each = dropValue(name, prices, restriction);
   const qty = Math.max(0, p.kills - reserved);
   if (qty <= 0 || each === null) return null;
@@ -274,7 +277,7 @@ export function lootOf(p: PlanPhase, e: Pick<CombatEstimate, 'foodSlots' | 'bank
   }
   const net = qty * each;
   // Worth it only when the coins come faster than the simplest way to earn them.
-  return net / Math.max(1e-6, minutes.mid) >= rate ? { name, qty, net, minutes } : null;
+  return bankingPays(net, minutes.mid * 60, rate, objective) ? { name, qty, net, minutes } : null;
 }
 const avg2 = (r: readonly [number, number]) => (r[0] + r[1]) / 2;
 
@@ -380,7 +383,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const reserve = item && item.missing > 0 ? { name: item.name, qty: item.missing } : null;
   // Each training phase banks its loot when that pays for its time (lootOf); the estimate behind a phase gives its bank trips and bag.
   const looted = (ph: PlanPhase, e: CombatEstimate, reserved = 0): PlanPhase => {
-    const loot = lootOf(ph, e, reserved, inp.prices, inp.restriction, rate);
+    const loot = lootOf(ph, e, reserved, inp.prices, inp.restriction, rate, inp.objective);
     return loot ? { ...ph, loot, minutes: sum(ph.minutes, loot.minutes), text: `${ph.text}, banking the ${lootName(loot.name)}` } : ph;
   };
   const make = (id: PlanId, key: string, title: string, phases: PlanPhase[], extra: string[] = [], notes: string[] = []) => {
@@ -493,7 +496,10 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const route = plans[0];
   const eligible = plans.filter((p) => p.eligible);
   // The conservative time decides; plans within a few percent of each other are told apart by what they cost net of what the drops bring.
+  const moneyOrder = (a: EvaluatedPlan, b: EvaluatedPlan) => inp.objective === 'profit' ? earningsOrder(planNetPerHour(a), planNetPerHour(b)) : 0;
   const byTime = (a: EvaluatedPlan, b: EvaluatedPlan) => {
+    const money = moneyOrder(a, b);
+    if (money) return money;
     if (Math.abs(a.score - b.score) <= Math.min(a.effort, b.effort) * TIE_BAND) return (b.net ?? -b.food.mid) - (a.net ?? -a.food.mid) || a.score - b.score || a.key.localeCompare(b.key);
     return a.score - b.score;
   };
@@ -503,20 +509,22 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     || (p.minutes.mid <= route.minutes.mid * 1.05 && p.food.mid <= route.food.mid * 0.5);
   const best = [...eligible.filter(worthEarly)].sort(byTime)[0] ?? route;
   // Another plan must clearly beat a route that works.
-  const fresh = route.eligible && best.id !== 'route' && gainOver(route, best) < ROUTE_MARGIN ? route : best;
+  const fresh = route.eligible && best.id !== 'route' && moneyOrder(best, route) >= 0 && gainOver(route, best) < ROUTE_MARGIN ? route : best;
   let recommended = fresh;
   // The plan the player adopted stays while it is not clearly beaten.
   const adoptedKey = inp.adopted ? planKeyOf(plans, inp.adopted) : undefined;
   const adopted = adoptedKey ? plans.find((p) => p.key === adoptedKey && p.eligible) : undefined;
-  if (adopted && adopted.score - best.score <= best.effort * (KEEP_MARGIN - 1)) recommended = adopted;
+  if (adopted && moneyOrder(best, adopted) >= 0 && adopted.score - best.score <= best.effort * (KEEP_MARGIN - 1)) recommended = adopted;
   // A Defence plan that looks better at the slow end only: the route's plan stays and the sentence says why.
-  const held = recommended.id === 'route' ? [...eligible].sort(byTime).find((p) => !worthEarly(p) && route.eligible && gainOver(route, p) >= MIN_GAIN) : undefined;
+  const held = inp.objective !== 'profit' && recommended.id === 'route' ? [...eligible].sort(byTime).find((p) => !worthEarly(p) && route.eligible && gainOver(route, p) >= MIN_GAIN) : undefined;
 
   const confidence: PlanReport['confidence'] = recommended.basis === 'calibrated' ? 'HIGH' : recommended.basis === 'formula' ? 'MEDIUM' : 'LOW';
   return {
-    stepId: step.id, objective, plans, recommended: recommended.key, fresh: fresh.key, confidence, compared: [...compared],
+    stepId: step.id, objective, priority: inp.objective, plans, recommended: recommended.key, fresh: fresh.key, confidence, compared: [...compared],
     order: [recommended, ...[...eligible].sort(byTime).filter((p) => p !== recommended), ...plans.filter((p) => !p.eligible)].map((p) => p.key), locked,
-    reason: held ? heldReason(held, route, later) : reasonOf(recommended, route, price, plans),
+    reason: inp.objective === 'profit' && (planNetPerHour(recommended) ?? 0) > 0
+      ? `${recommended.title}: estimated ${gpText(planNetPerHour(recommended)!)} gp/hour after food; XP, pickups and bank time included.`
+      : held ? heldReason(held, route, later) : reasonOf(recommended, route, price, plans),
     food: { name: foodItem.nameEn, heals: foodItem.heals!, price },
   };
 }

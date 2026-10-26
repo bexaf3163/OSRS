@@ -8,22 +8,22 @@ import { methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
 import { contextOf } from '../src/lib/readiness';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
 import { toInGameTarget, type GearItem } from '../src/services/runeliteBridge';
-import { trainingMethods, viewMethod } from '../src/lib/trainingRouter';
+import { methodNeeds, trainingMethods, viewMethod } from '../src/lib/trainingRouter';
 import { market } from './funding/market';
 import type { Market } from '../src/lib/methodRates';
 import type { PriceView } from '../src/lib/funding/quotes';
 
 const base = stepById.get('S6-01')!;
-function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}) {
+function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}, chosenMethod?: string) {
   const progress = emptyProgress();
   for (const s of allSteps) { if (s.id === base.id) break; progress.steps[s.id] = 'done'; }
   const names = [...new Set([...methodToolNames(base), ...Object.keys(stock)])].filter(n => complete || n === 'Shortbow' || n === 'Bronze arrow');
   const owned = { bankSeen: true, items: new Map(names.map(name => [nameKey(name), { name, carried: stock[name]?.carried ?? equipment.filter(e => e.name === name).reduce((n, e) => n + (e.count ?? 1), 0), noted: 0, bank: stock[name]?.bank ?? 0 }])) };
-  const stats = { ranged: level, ...(defence === null ? {} : { defence }) };
+  const stats = { ranged: level, hitpoints: Math.max(30, level), ...(defence === null ? {} : { defence }) };
   const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
   const state = buildPlayerState({ mode: 'f2p', stats, progress, owned, gear, questsDone: ['The Corsair Curse'], connected: true });
   const picks = pickMethods([base], state, 'f2p', 'chill', 'balanced', trade);
-  const pick = picks[base.id];
+  const pick = chosenMethod ? { methodId: chosenMethod, needs: methodNeeds(trainingMethods.find(m => m.id === chosenMethod)!, state) } : picks[base.id];
   const step = withTrainingMethod(base, pick);
   const engine = createReadinessEngine({ ...contextOf({ step, steps: allSteps.map(s => s.id === step.id ? step : s), progress, mode: 'f2p', qp: 44, gear, owned, stats }), state });
   return { state, picks, pick, step, engine, payload: toInGameTarget(step)! };
@@ -41,16 +41,15 @@ describe('S6-01 actual ranged preparation', () => {
     expect(low.step.itemsRequired?.find(r => r.nameEn === 'Bronze arrow')?.amount).toBe(100);
     expect(low.engine.readiness(low.step).status).not.toBe('READY');
   });
-  it('keeps the level-26 trainer when equipped arrows settle and its food is already banked', () => {
-    const s = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)], { Salmon: { bank: 10 } });
-    expect(s.pick).toMatchObject({ methodId: 'ra-frog' });
+  it('banked food remains withdrawal preparation when a player selects the frog plan', () => {
+    const m = trainingMethods.find(m => m.id === 'ra-frog')!;
+    const s = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)], { Salmon: { bank: 10 } }, 1, true, {}, m.id);
     expect(s.engine.plan(s.step).lines.find(r => r.name === 'Salmon')?.where).toBe('BANK');
-    // 2.76: the frogs give this character clearly more XP an hour than the monks (the combat model), so ten food to buy does not send them back.
-    const absentFood = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)]);
-    expect(absentFood.pick).toMatchObject({ methodId: 'ra-frog' });
+    expect(viewMethod(m, s.state).status).not.toBe('LOCKED');
+    const absentFood = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)], {}, 1, true, {}, m.id);
     expect(absentFood.engine.plan(absentFood.step).lines.find(r => r.name === 'Salmon')?.where).not.toBe('BANK');
   });
-  it.each([[1, 'ra-lumb', 'Seagull'], [20, 'ra-monk', 'Monk'], [26, 'ra-frog', 'Giant frog'], [49, 'ra-frog', 'Giant frog']] as const)(
+  it.each([[1, 'ra-lumb', 'Seagull'], [20, 'ra-lumb', 'Seagull'], [26, 'ra-lumb', 'Seagull'], [49, 'ra-monk', 'Monk']] as const)(
     'Ranged%s gets its current trainer, kit and unchanged goal', (level, id, npc) => {
       const s = scenario(level);
       expect(s.pick).toMatchObject({ methodId: id });
@@ -102,10 +101,13 @@ describe('S6-01 actual ranged preparation', () => {
   });
   it('Flesh Crawlers retain their actual Defence guard and cannot keep the old ogress arrow', () => {
     const s = scenario(40, [], {}, 40);
-    expect(s.pick).toMatchObject({ methodId: 'ra-crawler' });
-    expect(s.step.requirements).toContainEqual({ type: 'skill', skill: 'defence', min: 40 });
-    expect(s.payload.worldPoint).toBeUndefined();
-    expect(s.payload.npcNames).toEqual(['Flesh Crawler']);
+    const m = trainingMethods.find(m => m.id === 'ra-crawler')!;
+    expect(viewMethod(m, s.state).status).not.toBe('LOCKED');
+    expect(viewMethod(m, scenario(40, [], {}, 39).state).status).toBe('LOCKED');
+    const chosen = withTrainingMethod(base, { methodId: m.id, needs: methodNeeds(m, s.state) });
+    expect(chosen.requirements).toContainEqual({ type: 'skill', skill: 'defence', min: 40 });
+    expect(toInGameTarget(chosen)?.worldPoint).toBeUndefined();
+    expect(toInGameTarget(chosen)?.npcNames).toEqual(['Flesh Crawler']);
     const unknown = scenario(40, [], {}, null);
     expect(unknown.pick).not.toMatchObject({ methodId: 'ra-crawler' });
     expect(viewMethod(trainingMethods.find(m => m.id === 'ra-crawler')!, unknown.state).unchecked.some(n => n.kind === 'skill')).toBe(true);

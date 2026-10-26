@@ -10,11 +10,10 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { wikitext } from './wiki.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const OUT = `${root}src/data/trainers.json`;
-const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
-const API = 'https://oldschool.runescape.wiki/api.php';
 
 interface Pt { x: number; y: number; plane: number; label?: string }
 interface Def {
@@ -48,18 +47,6 @@ const defs = JSON.parse(readFileSync(`${root}scripts/trainers.defs.json`, 'utf8'
 const steps = JSON.parse(readFileSync(`${root}src/data/steps.json`, 'utf8')) as { id: string; foes?: string[]; mapLocation?: Pt; inGame?: { pathWaypoints?: Pt[] } }[];
 const banks = (JSON.parse(readFileSync(`${root}src/data/majorLocations.json`, 'utf8')) as { locations: Record<string, { kind: string }> }).locations;
 
-let last = 0;
-async function wikitext(page: string): Promise<string> {
-  for (let attempt = 1; ; attempt++) {
-    const wait = last + 400 - Date.now();
-    if (wait > 0) await new Promise((r) => setTimeout(r, wait));
-    last = Date.now();
-    const res = await fetch(`${API}?${new URLSearchParams({ action: 'parse', page, prop: 'wikitext', format: 'json', formatversion: '2' })}`, { headers: { 'User-Agent': UA } });
-    if (res.ok) return ((await res.json()) as { parse: { wikitext: string } }).parse.wikitext;
-    if (attempt >= 6 || (res.status !== 429 && res.status < 500)) throw new Error(`${page}: ${res.status}`);
-    await new Promise((r) => setTimeout(r, 4000 * attempt));
-  }
-}
 
 const chebyshev = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 

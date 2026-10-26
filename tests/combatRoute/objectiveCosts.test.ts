@@ -2,7 +2,7 @@
 // time (the cowhide baseline is rough), and the player's objective decides whether coins trade against time at all.
 
 import { describe, expect, it } from 'vitest';
-import { evaluatePlans, type PlanReport } from '../../src/lib/combatRoute/plans';
+import { evaluatePlans, planNetPerHour, type PlanReport } from '../../src/lib/combatRoute/plans';
 import { selectPlan } from '../../src/lib/combatRoute/selection';
 import { COIN_SHARE_CAP } from '../../src/lib/lootValue';
 import type { MethodPriority } from '../../src/lib/playStyle';
@@ -15,6 +15,24 @@ const report = (o: Over, objective?: MethodPriority): PlanReport =>
 const banked = { items: { 'Big bones': [0, 50] as [number, number] } };
 
 describe('what a plan costs is ranked, not only shown', () => {
+  it('money ranks accessible plans by positive income after food and explains the actual objective', () => {
+    const r = report(banked, 'profit');
+    const selected = r.plans.find(p => p.key === r.recommended)!;
+    const positive = r.plans.filter(p => p.eligible && (planNetPerHour(p) ?? 0) > 0);
+    expect(positive.length).toBeGreaterThan(0);
+    expect(planNetPerHour(selected)).toBe(Math.max(...positive.map(p => planNetPerHour(p)!)));
+    expect(r.reason).toMatch(/gp\/hour after food/);
+    expect(selected.phases.some(p => p.kind !== 'armour' && p.loot)).toBe(true);
+  });
+
+  it('money does not need a cowhide baseline to value known bones, and no-price costs stay unknown', () => {
+    const board = { ...prices, sell: (name: string) => name === 'Cowhide' ? null : prices.sell(name) };
+    const r = evaluatePlans({ ...planInput(banked), prices: board, foodPrice: prices.buy('Salmon')!.price, objective: 'profit' })!;
+    expect(r.plans.some(p => p.phases.some(ph => ph.loot?.name === 'Big bones'))).toBe(true);
+    const unread = evaluatePlans({ ...planInput(banked), prices: board, foodPrice: null, objective: 'profit' })!;
+    expect(unread.plans.every(p => planNetPerHour(p) === null)).toBe(true);
+  });
+
   it('the food eaten counts against a plan: with the bones already banked, the giants\' 400+ salmon lose to the cows\' hides on balance', () => {
     const r = report(banked, 'balanced');
     const pick = selectPlan(r, undefined, { inProgress: false });

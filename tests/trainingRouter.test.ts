@@ -150,8 +150,9 @@ describe('path, actions and time', () => {
     expect(wiki.time!.minHours).toBeLessThan(wiki.time!.maxHours);
     expect(formatHours(wiki.time!)).toMatch(/^about/);
     expect(formatHours(measured.time!)).toMatch(/^≈/);
-    // Wine is not in the processing registry yet (Firemaking now is): it has XP an action but no speed.
-    const none = advise({ skill: 'cooking', target: 45, state: levels({ cooking: 40 }), mode: 'f2p', methods: trainingMethods.filter((m) => m.id === 'ck-wine') });
+    // A new method with an action value but no verified rate must not inherit another recipe's speed.
+    const unknown = { ...trainingMethods.find((m) => m.id === 'ck-wine')!, id: 'synthetic-unrated-recipe', xph: null };
+    const none = advise({ skill: 'cooking', target: 45, state: levels({ cooking: 40 }), mode: 'f2p', methods: [unknown] });
     expect(none.time).toBeNull();
     expect(none.actionsLeft).not.toBeNull();
   });

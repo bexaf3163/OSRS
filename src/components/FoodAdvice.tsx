@@ -3,15 +3,17 @@
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
-import { foodInBag, foodsCovering, threatKeys, viewThreat } from '../lib/foodAdvice';
+import { effectiveHeal, foodInBag, foodsCovering, threatKeys, viewThreat } from '../lib/foodAdvice';
 import { estimateStepFights, fightLine, OTHER_METHOD } from '../lib/fightEstimate';
 import { foeLabel } from '../lib/combatEstimate';
 import { CombatPlan, useCombatPlan } from './CombatPlan';
 import { CombatRoute } from './CombatRoute';
+import { usePriceView } from '../lib/funding/usePriceView';
 
 export function FoodAdvice({ step }: { step: Step }) {
-  const { progress } = useStore();
+  const { progress, mode } = useStore();
   const { stats, gear } = useBridge();
+  const prices = usePriceView(true);
   // A combat training step with the game linked: the food is planned for this player (trip, whole goal, what to buy) instead.
   const plan = useCombatPlan(step);
   if (plan) return <><CombatRoute step={step} /><CombatPlan v={plan} /></>;
@@ -20,8 +22,8 @@ export function FoodAdvice({ step }: { step: Step }) {
   const hp = stats?.hitpoints ?? progress.levels.hitpoints;
   const views = keys.map((k) => viewThreat(k, hp));
   const worst = Math.max(...views.map((v) => v.typical));
-  const bag = foodInBag(gear?.inventory ?? null);
-  const covering = foodsCovering(worst);
+  const bag = foodInBag(gear?.inventory ?? null, mode);
+  const covering = foodsCovering(worst, mode, hp, prices);
   const best = bag[0];
   // One fight with your kit (2.63.0): how long, how much damage, how much food; the fights the route does another way say so.
   const fights = estimateStepFights(step, stats as Partial<Record<string, number>> | null, gear);
@@ -64,8 +66,8 @@ export function FoodAdvice({ step }: { step: Step }) {
       </ul>
       {gear?.inventory ? (
         best
-          ? <p className="small">In the bag: {bag.map((b) => `${b.food.name} ×${b.count} (+${b.food.heals})`).join(', ')}.{best.food.heals >= worst ? ' One bite is enough to cover the max hit.' : ` One portion heals less than the max hit (${worst}) — eat ahead of time.`}</p>
-          : <p className="small">No food in the bag. These cover the max hit ({worst}) with one bite: {covering.slice(0, 4).map((f) => `${f.name} (+${f.heals})`).join(', ') || 'you need stronger food'}.</p>
+          ? <p className="small">In the bag: {bag.map((b) => `${b.food.name} ×${b.count} (+${b.food.heals})`).join(', ')}.{effectiveHeal(best.food, hp) >= worst ? ' One bite is enough to cover the max hit.' : ` One portion heals less than the max hit (${worst}) — eat ahead of time.`}</p>
+          : <p className="small">No food in the bag. These cover the max hit ({worst}) with one bite: {covering.slice(0, 4).map((f) => `${f.name} (+${f.heals})`).join(', ') || (hp !== undefined && hp <= worst ? 'your maximum health is too low to cover this hit with ordinary food' : 'you need stronger food')}.</p>
       ) : (
         <p className="muted small">Food that covers the max hit ({worst}): {covering.slice(0, 4).map((f) => `${f.name} (+${f.heals})`).join(', ') || '—'}.</p>
       )}

@@ -362,11 +362,11 @@ function PlayStyleSection() {
       </div>
       <div className="setting">
         <div className="mode-toggle style-toggle" role="group" aria-label="Training choices">
-          {([['balanced', 'Balanced'], ['fastest', 'Fastest'], ['relaxed', 'Relaxed']] as const).map(([k, label]) => {
+          {([['balanced', 'Balanced'], ['fastest', 'Fastest'], ['profit', 'Money'], ['relaxed', 'Relaxed']] as const).map(([k, label]) => {
             const on = priorityOf(features) === k;
             return (
               <button key={k} type="button" className={`mode-btn ${on ? 'is-active' : ''}`} aria-pressed={on}
-                onClick={() => setFeatures({ efficient: k === 'fastest', relaxedTraining: k === 'relaxed' })}>
+                onClick={() => setFeatures({ efficient: k === 'fastest', relaxedTraining: k === 'relaxed', profitTraining: k === 'profit' })}>
                 <span className="style-label">{label}</span>
               </button>
             );
@@ -374,7 +374,7 @@ function PlayStyleSection() {
         </div>
         <p className="muted small">
           How the guide picks training methods. <strong>Balanced</strong> (the default): the quickest practical way to the goal, counting getting the items, how much attention it
-          takes and what the materials cost. <strong>Fastest</strong>: speed first, with more hints and a look further ahead. <strong>Relaxed</strong>: no risk and fewer clicks first.
+          takes and what the materials cost. <strong>Fastest</strong>: speed first, with more hints and a look further ahead. <strong>Money</strong>: known positive net earnings first, within accessible methods. <strong>Relaxed</strong>: no risk and fewer clicks first.
           Combat plans, the step requirements and safety do not depend on this.
         </p>
       </div>

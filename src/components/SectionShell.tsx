@@ -1,6 +1,6 @@
 // Shared section navigation. It only presents existing routes and controls; data stays in each workspace.
 import { useState, type ReactNode } from 'react';
-import { allLevelSkills as levels, reference, findSkill } from '../data';
+import { reference } from '../data';
 import { useStore } from '../store';
 import type { Page } from '../lib/router';
 import { IconBook, IconCart, IconGear, IconJournal } from './Icons';
@@ -18,7 +18,7 @@ export function SectionShell({ page, param, children }: { page: Page; param?: st
   if (!title) return <>{children}</>;
   const icon = page === 'gear' ? <IconGear /> : page === 'shopping' ? <IconCart /> : page === 'reference' ? <IconBook /> : <IconJournal />;
   const links: ({ label: string; href: string; id: string; glyph?: string } | { label: string; selector: string })[] = skill
-    ? [{ label: 'Overall', href: '#/skills', id: '', glyph: 'overall' }, ...levels.filter((l, i) => levels.findIndex(other => other.skill === l.skill) === i && (mode === 'members' || !findSkill(l.skill)?.membersOnly)).map(l => ({ label: l.skill === 'ME' ? 'Melee' : l.name, href: `#/skills/${l.skill}`, id: l.skill, glyph: l.id }))]
+    ? (param ? [{ label: 'All skills', href: '#/skills', id: '', glyph: 'overall' }] : [])
     : page === 'journal' || page === 'quests' || page === 'goals'
       ? [{ label: 'Quests', href: '#/journal', id: '' }, { label: 'Stage goals', href: '#/journal/goals', id: 'goals' }, { label: 'Session log', href: '#/journal/session', id: 'session' }]
       : page === 'reference'

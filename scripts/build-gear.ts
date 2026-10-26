@@ -17,6 +17,7 @@ import { listedWithoutRequirements, requirementsFromText, setRule } from './gear
 const root = fileURLToPath(new URL('..', import.meta.url));
 const OUT = `${root}src/data/gear.json`;
 const OUT_FOES = `${root}src/data/monsters.json`;
+const styles = JSON.parse(readFileSync(`${root}src/data/styleGear.json`, 'utf8')) as Record<'magic' | 'ranged', { weapon: { names: string[]; reqs: { skill: string; level: number }[]; quests: string[] }[] }>;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 
 const METALS = ['bronze', 'iron', 'steel', 'black', 'mithril', 'adamant', 'rune'] as const;
@@ -57,6 +58,12 @@ const EXTRA: { name: string; kind: string; set?: string }[] = [
   { name: 'Leather chaps', kind: 'leather', set: 'Leather armour' },
   { name: 'Coif', kind: 'leather' },
   { name: 'Hardleather body', kind: 'leather' },
+  { name: 'Staff', kind: 'staff' },
+  { name: 'Magic staff', kind: 'staff' },
+  { name: 'Staff of air', kind: 'staff' },
+  { name: 'Staff of water', kind: 'staff' },
+  { name: 'Staff of earth', kind: 'staff' },
+  { name: 'Staff of fire', kind: 'staff' },
 ];
 
 const SLOT: Record<string, GearSlot> = { weapon: 'weapon', '2h': 'weapon', head: 'head', body: 'body', legs: 'legs', shield: 'shield', neck: 'neck' };
@@ -130,6 +137,17 @@ for (const w of wanted) {
     if (r) { req = r === 'none' ? {} : r; reqFrom = w.set; }
   }
   if (!req) {
+    // Reuse the Wiki training guide's verified equipment row rather than infer no requirements from silent item prose.
+    for (const style of ['magic', 'ranged'] as const) {
+      const option = styles[style].weapon.find((o) => o.names.includes(box.name));
+      if (!option) continue;
+      req = Object.fromEntries(option.reqs.map((r) => [r.skill, r.level])) as GearRequirements;
+      if (option.quests.length) req.quests = option.quests;
+      reqFrom = `Free-to-play ${style === 'magic' ? 'Magic' : 'Ranged'} training`;
+      break;
+    }
+  }
+  if (!req) {
     const overview = await pageText(OVERVIEW);
     if (overview && listedWithoutRequirements(overview, box.name)) { req = {}; reqFrom = OVERVIEW; }
   }
@@ -165,8 +183,10 @@ for (const w of wanted) {
 // The step opponents: an article may have several versions — we take the free-world version and the
 // lowest-level one (Ghast from Nature Spirit — 30, Flesh Crawler — 28): the player meets it first.
 const steps = JSON.parse(readFileSync(`${root}src/data/steps.json`, 'utf8')) as Step[];
-const foeNames = [...new Set(steps.flatMap((s) => s.foes ?? []))];
-const monsters = await fetchMonsters(fetchFn, foeNames);
+// An item-only refresh must not rewrite independent monster facts as a side effect.
+const itemsOnly = process.argv.includes('--items-only');
+const foeNames = itemsOnly ? [] : [...new Set(steps.flatMap((s) => s.foes ?? []))];
+const monsters = itemsOnly ? new Map() : await fetchMonsters(fetchFn, foeNames);
 const foes: Foe[] = [];
 for (const name of foeNames) {
   const versions = monsters.get(name);
@@ -197,5 +217,7 @@ const foeData: FoeData = {
   updated: data.updated,
   foes,
 };
-writeFileSync(OUT_FOES, JSON.stringify(foeData, null, 2) + '\n');
-console.log(`Written ${foes.length} opponents to ${OUT_FOES}: ${foes.map((f) => `${f.name} (${f.combat})`).join(', ')}`);
+if (!itemsOnly) {
+  writeFileSync(OUT_FOES, JSON.stringify(foeData, null, 2) + '\n');
+  console.log(`Written ${foes.length} opponents to ${OUT_FOES}: ${foes.map((f) => `${f.name} (${f.combat})`).join(', ')}`);
+}
