@@ -284,7 +284,7 @@ export function alongRate(m: TrainingMethod, gatherSkill: string, processSkill: 
   for (const id of ids) {
     const r = reg.resources.find((x) => x.id === id);
     if (!r || r.skill !== gatherSkill) continue;
-    const recipes = r.products.map((p) => preg.recipes.find((x) => x.skill === processSkill && x.facility && usable(x) && plevel >= x.level
+    const recipes = r.products.map((p) => preg.recipes.find((x) => x.skill === processSkill && x.facility && x.output && usable(x) && plevel >= x.level
       && x.inputs.length === 1 && x.inputs[0].qty === 1 && x.inputs[0].name === p.name) ?? null);
     if (!recipes.some(Boolean)) continue;
     const kinds = new Set(recipes.flatMap((x) => (x ? [x.facility] : [])));
@@ -302,7 +302,7 @@ export function alongRate(m: TrainingMethod, gatherSkill: string, processSkill: 
       const gatherXp = sum((k) => r.products[k].xp);
       const processXp = sum((k) => (recipes[k] ? success[k] * recipes[k]!.xp : 0));
       const work = sum((k) => (recipes[k] ? recipes[k]!.ticks * TICK : 0));
-      const valueEach = sum((k) => (recipes[k] ? success[k] * (dropValue(recipes[k]!.output.name, market.prices, market.restriction) ?? 0)
+      const valueEach = sum((k) => (recipes[k] ? success[k] * (dropValue(recipes[k]!.output!.name, market.prices, market.restriction) ?? 0)
         : dropValue(r.products[k].name, market.prices, market.restriction) ?? 0));
       const slots = BAG - (tool.wielded ? 0 : 1) - (r.bait ? 1 : 0);
       const walk = (2 * near.far) / TILES_PER_SECOND / slots;
@@ -314,7 +314,7 @@ export function alongRate(m: TrainingMethod, gatherSkill: string, processSkill: 
       const option: AlongRate = {
         gather: rate(gatherXp), process: rate(processXp),
         spot: { label: spot.label, place: spot.place, how: banks ? 'bank' : 'drop', ...(banks && trip ? { bank: trip.bank.label } : {}), ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) },
-        station: near.s.place, products: recipes.flatMap((x) => (x ? [x.output.name] : [])),
+        station: near.s.place, products: recipes.flatMap((x) => (x?.output ? [x.output.name] : [])),
       };
       if (!best || option.gather[0] + option.gather[1] > best.gather[0] + best.gather[1]) best = option;
     }

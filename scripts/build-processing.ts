@@ -16,8 +16,10 @@ const OUT = `${root}src/data/processing.json`;
 
 type Kind = 'furnace' | 'anvil' | 'fire';
 interface StationDef { kind: Kind; page: string; row?: string; location?: string; near?: string; bank?: string }
-interface RecipeDef { id: string; page: string; skill: string; facility: Kind | null }
-interface Defs { stations: StationDef[]; recipes: RecipeDef[]; methods: Record<string, string[]> }
+interface RecipeDef { id: string; page: string; skill: string; facility: Kind | null; /** Lit with a tinderbox (Firemaking): read from the log's {{Firemaking info}}. */ light?: boolean }
+/** Lighting logs: the action length (checked against its evidence line) and the lighting success chart, one for every log. */
+interface LightDef { ticks: { page: string; evidence: string; ticks: number }; chart: { page: string; label: string; line: string } }
+interface Defs { stations: StationDef[]; recipes: RecipeDef[]; methods: Record<string, string[]>; light?: LightDef }
 
 const defs = JSON.parse(readFileSync(`${root}scripts/processing.defs.json`, 'utf8')) as Defs;
 const places = (JSON.parse(readFileSync(`${root}src/data/majorLocations.json`, 'utf8')) as { locations: Record<string, Pt & { label: string; kind: string }> }).locations;
@@ -77,9 +79,35 @@ function steadyTicks(r: Record<string, string>): number {
 }
 const FACILITY: Record<Kind, RegExp> = { furnace: /furnace/i, anvil: /anvil/i, fire: /range|fire/i };
 
+// Lighting logs: one action length and one success chart for every log (Firemaking), checked on the wiki once.
+let light: { ticks: number; low: number; high: number } | null = null;
+if (defs.light) {
+  const L = defs.light;
+  const line = (await wikitext(L.ticks.page)).split('\n').find((l) => l.includes(L.ticks.evidence));
+  const chart = successCharts(await wikitext(L.chart.page)).find((c) => c.label === L.chart.label)?.lines.find((l) => l.label === L.chart.line);
+  if (!line || !new RegExp(`\\b${L.ticks.ticks} ticks`).test(line)) fail('light', `no "${L.ticks.evidence}" line saying ${L.ticks.ticks} ticks on ${L.ticks.page}`);
+  else if (!chart) fail('light', `no "${L.chart.line}" line in the "${L.chart.label}" chart on ${L.chart.page}`);
+  else light = { ticks: L.ticks.ticks, low: chart.low, high: chart.high };
+}
+
 const recipes = [];
 for (const d of defs.recipes) {
   const text = await wikitext(d.page);
+  if (d.light) {
+    // The log's {{Firemaking info}}: the tinderbox version's level and XP. A failed light keeps the log (retry): it costs time, not the log.
+    const fi = templates(text, 'Firemaking info')[0] ?? {};
+    const k = Object.entries(fi).find(([key, v]) => /^version\d+$/.test(key) && /^tinderbox$/i.test(v.trim()))?.[0].slice(7);
+    const level = num(fi[`skill1lvl${k}`]);
+    const xp = num(fi[`skill1exp${k}`]);
+    if (!light || !k || !(level > 0) || !(xp > 0)) { fail(d.id, `no tinderbox level and XP in the {{Firemaking info}} of ${d.page}`); continue; }
+    const log = plain(d.page);
+    recipes.push({
+      id: d.id, skill: d.skill, level, xp, ticks: light.ticks, facility: null, tools: ['Tinderbox'], inputs: [{ name: log, qty: 1, stacks: await stacks(log) }],
+      output: null, success: { low: light.low, high: light.high }, retry: true,
+      source: `https://oldschool.runescape.wiki/w/${encodeURIComponent(d.page.replace(/ /g, '_'))}`,
+    });
+    continue;
+  }
   const r = templates(text, 'Recipe').find((x) => (x.skill1 ?? '').toLowerCase() === d.skill && !/^yes$/i.test(x.members ?? ''));
   if (!r) { fail(d.id, `no free {{Recipe}} for ${d.skill} on ${d.page}`); continue; }
   if (d.facility ? !FACILITY[d.facility].test(r.facilities ?? '') : (r.facilities ?? '').trim()) {

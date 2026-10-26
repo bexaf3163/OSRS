@@ -141,6 +141,13 @@ Read this first. Claude keeps this file current after every release. It says wha
 
 - **2.80.2:** the bank-only ranking rule is general (was `kit === 'f2p-bow'` only).
 
+- **2.80.3, Firemaking on the processing engine:**
+  - **Data:** defs `light` = the action length ("Lighting any logs: 4 ticks per log", checked on Game tick/Action lengths) plus the Firemaking page's "Firemaking success chance" Normal line (low 64, high 512). Recipes with `light: true` read the log page's `{{Firemaking info}}` tinderbox version (level, XP), tools Tinderbox, `output: null`, `retry: true`. Methods fm-normal … fm-yew.
+  - **Engine (`processingRates`):** a `retry` recipe charges failures as time (`ticks / chance`): every action ends in a success, the material is used once a success, and `output: null` has no value. Logs are a cost.
+  - **Calibration test:** the wiki guide's 1,485 logs/h lies in range at willow/maple/yew levels.
+  - **Approximation:** the wiki calls the lighting chance a crowdsourced belief ("citation needed"); the same line is used for every log. Lines are burnt "by a bank": a 3–15 s bank visit, no walk back along the line.
+  - The `trainingRouter` "no speed" test now uses wine (still unrated).
+
 ## 5. In progress (Claude)
 
 **Hardening pass (owner brief of 2026-10-25, after 2.78.0)**, in small verified blocks. The order:
@@ -153,7 +160,7 @@ Still open in the brief:
 - (e) Processing: Smithing/Cooking/Crafting done in 2.79.0, Money smelting on the engine in 2.79.1. Left: Firemaking, Runecraft, Prayer, Magic utility, wine. Cook-on-the-spot done in 2.80.0.
 
 **Next actions, in order (state at 2.80.0; Claude's weekly limit is nearly used up, so Codex may continue from here):**
-1. **Firemaking on the processing engine.** The wiki has a `{{Skilling success chart}}` "Firemaking success chance" (Normal: low 64, high 512) on the Firemaking page, but no `{{Recipe}}` for lighting logs. Verify the lighting action length on the wiki ("Game tick/Action lengths" or "Free-to-play Firemaking training") before modelling it; never assume it. Burning in lines by a bank is facility-free, like gem cutting. Then map fm-* methods in `scripts/processing.defs.json`.
+1. ~~Firemaking~~: done in 2.80.3 (see the entry above).
 2. **Combat gear upgrade variant (block a).** Apply `trainingRouter.toolUpgrade`'s rule to weapons: the hours saved by a better weapon vs its price, using `supplyPrice`. Check `services/gearAdvisor` first, so as not to duplicate the Gear page's upgrade advice.
 3. ~~Cash before suggesting a purchase~~: done in 2.80.1 (`adviseTraining` sets `ToolUpgrade.short` from `coinsOf(state).total` when it is known and below the price; the reason says "; you have X"; unknown coins say nothing). Test in `tests/skillingRates.test.ts`. Apply the same to weapon upgrades when item 2 is done.
 4. **Runecraft, Prayer, Magic utility, wine:** add them to the processing registry the same way (wiki `{{Recipe}}` + defs), never per-method code.

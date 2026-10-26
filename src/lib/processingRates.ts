@@ -20,7 +20,8 @@ type Facility = 'furnace' | 'anvil' | 'fire';
 interface Station { kind: Facility; label: string; place: Point & { label: string }; bankTiles?: number; bank?: string; members: boolean }
 interface Recipe {
   id: string; skill: string; level: number; xp: number; ticks: number; facility: Facility | null; tools: string[];
-  inputs: { name: string; qty: number; stacks: boolean }[]; output: { name: string; qty: number };
+  /** output: null - nothing kept (logs burnt). retry: a failed attempt keeps the material and costs only its time (lighting a log). */
+  inputs: { name: string; qty: number; stacks: boolean }[]; output: { name: string; qty: number } | null; retry?: boolean;
   /** The skilling success formula's low and high (cooking: the food is not burnt), or a flat chance (an iron bar); neither - always. */
   success?: { low: number; high: number }; chance?: number; members?: boolean;
 }
@@ -59,25 +60,28 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number] }
   const actions = perAction > 0 ? Math.floor(free / perAction) : free;
   if (actions <= 0) return null;
   const chance = r.success ? skillChance(r.success.low, r.success.high, level) : r.chance ?? 1;
-  const seconds = (i: 0 | 1) => r.ticks * TICK + (at.trip[i] * 60) / actions;
+  // A retried action (a log that did not light) is tried again: the failures cost time, and every action ends in a success.
+  const tries = r.retry ? 1 / chance : 1;
+  const success = r.retry ? 1 : chance;
+  const seconds = (i: 0 | 1) => r.ticks * TICK * tries + (at.trip[i] * 60) / actions;
   const perHour = (i: 0 | 1) => 3600 / seconds(i);
-  const xph: [number, number] = [(r.xp * chance * perHour(1)) / (1 + MARGIN), r.xp * chance * perHour(0)];
+  const xph: [number, number] = [(r.xp * success * perHour(1)) / (1 + MARGIN), r.xp * success * perHour(0)];
   const done = (perHour(0) + perHour(1)) / 2;
   // Materials at the price to replace them (a material owned is used up too); the product at its sale value after tax, a failed one (burnt) at none.
   const each = r.inputs.reduce<number | null>((a, i) => {
     const p = supplyPrice(i.name, market.prices, state.mode);
     return a === null || p === null ? null : a + p * i.qty;
   }, 0);
-  const sale = dropValue(r.output.name, market.prices, market.restriction);
+  const sale = r.output ? dropValue(r.output.name, market.prices, market.restriction) : 0;
   // A product the trade rules keep from being sold is worth nothing to sell; one with no price is unknown, and then so are the coins.
-  const value = sale ?? (market.restriction === 'RESTRICTED' && isRestrictedItem(r.output.name) ? 0 : null);
+  const value = sale ?? (market.restriction === 'RESTRICTED' && isRestrictedItem(r.output!.name) ? 0 : null);
   const costPerHour = each === null || value === null ? null : each * done;
   // The product's value is shown only with its materials' cost: a gain without the cost would read as profit.
-  const lootPerHour = costPerHour === null ? 0 : value! * r.output.qty * chance * done;
+  const lootPerHour = costPerHour === null || !r.output ? 0 : value! * r.output.qty * success * done;
   const rate: ModelRate = {
-    xph, costPerHour, basis: r.output.name,
+    xph, costPerHour, basis: r.output?.name ?? r.inputs[0].name,
     ...(costPerHour !== null ? { costName: r.inputs.filter((i) => !i.stacks).map((i) => i.name.toLowerCase()).join(', ') } : {}),
-    ...(lootPerHour > 0 ? { lootPerHour, loot: r.output.name } : {}),
+    ...(lootPerHour > 0 && r.output ? { lootPerHour, loot: r.output.name } : {}),
     ...(at.spot ? { spot: at.spot } : {}),
   };
   // Time per XP less what the coins are worth in time (lootValue): a loss counts in full, a gain at most half; unknown coins are left out.
@@ -122,7 +126,7 @@ const SAME_PLACE = 30;
  */
 export function processPace(product: string, near: Point, state: PlayerState, reg: ProcessingRegistry = PROCESSING):
   { seconds: { fast: number; typical: number; slow: number }; recipe: string; station: string | null } | null {
-  const r = reg.recipes.find((x) => x.output.name.toLowerCase() === product.toLowerCase() && !(x.members && state.mode !== 'members'));
+  const r = reg.recipes.find((x) => x.output?.name.toLowerCase() === product.toLowerCase() && !(x.members && state.mode !== 'members'));
   if (!r) return null;
   const level = levelOf(state, r.skill);
   if (level === undefined || level < r.level) return null;
@@ -133,7 +137,7 @@ export function processPace(product: string, near: Point, state: PlayerState, re
     : null;
   if (r.facility && !station) return null;
   const chance = r.success ? skillChance(r.success.low, r.success.high, level) : r.chance ?? 1;
-  const fast = (r.ticks * TICK) / (chance * r.output.qty);
+  const fast = (r.ticks * TICK) / (chance * r.output!.qty);
   const slow = fast * (1 + MARGIN);
-  return { seconds: { fast, typical: (fast + slow) / 2, slow }, recipe: r.output.name, station: station?.label ?? null };
+  return { seconds: { fast, typical: (fast + slow) / 2, slow }, recipe: r.output!.name, station: station?.label ?? null };
 }

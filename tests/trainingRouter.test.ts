@@ -150,7 +150,8 @@ describe('path, actions and time', () => {
     expect(wiki.time!.minHours).toBeLessThan(wiki.time!.maxHours);
     expect(formatHours(wiki.time!)).toMatch(/^about/);
     expect(formatHours(measured.time!)).toMatch(/^≈/);
-    const none = advise({ skill: 'firemaking', target: 20, state: levels({ firemaking: 15 }), mode: 'f2p' });
+    // Wine is not in the processing registry yet (Firemaking now is): it has XP an action but no speed.
+    const none = advise({ skill: 'cooking', target: 45, state: levels({ cooking: 40 }), mode: 'f2p', methods: trainingMethods.filter((m) => m.id === 'ck-wine') });
     expect(none.time).toBeNull();
     expect(none.actionsLeft).not.toBeNull();
   });

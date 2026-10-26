@@ -1,5 +1,5 @@
 {
-  "about": "The processing recipes of the non-combat skills (Smithing, Cooking, Crafting), read by scripts/build-processing.ts against the OSRS Wiki. A recipe names the product's page; its level, XP, ticks, tools, materials and output come from the page's free {{Recipe}} for that skill, its success chance from the page's {{Skilling success chart}} (cooking) or the recipe's own note (an iron bar's 50%). A station is a wiki-listed furnace or anvil (the page's location table: the map point and the wiki's distance from the bank) or a permanent fire (its ObjectLocLine near a named place, banked at a named bank). A recipe without a facility is made by a bank. A method of trainingMethods.json lists the recipes it trains. Members recipes and stations are added the same way; the engine skips them on a free account.",
+  "about": "The processing recipes of the non-combat skills (Smithing, Cooking, Crafting, Firemaking), read by scripts/build-processing.ts against the OSRS Wiki. A recipe names the product's page; its level, XP, ticks, tools, materials and output come from the page's free {{Recipe}} for that skill, its success chance from the page's {{Skilling success chart}} (cooking) or the recipe's own note (an iron bar's 50%). A station is a wiki-listed furnace or anvil (the page's location table: the map point and the wiki's distance from the bank) or a permanent fire (its ObjectLocLine near a named place, banked at a named bank). A recipe without a facility is made by a bank. A method of trainingMethods.json lists the recipes it trains. Members recipes and stations are added the same way; the engine skips them on a free account.",
   "stations": [
     {
       "kind": "furnace",
@@ -191,6 +191,41 @@
       "page": "Diamond",
       "skill": "crafting",
       "facility": null
+    },
+    {
+      "id": "fm-logs",
+      "page": "Logs",
+      "skill": "firemaking",
+      "facility": null,
+      "light": true
+    },
+    {
+      "id": "fm-oak-logs",
+      "page": "Oak logs",
+      "skill": "firemaking",
+      "facility": null,
+      "light": true
+    },
+    {
+      "id": "fm-willow-logs",
+      "page": "Willow logs",
+      "skill": "firemaking",
+      "facility": null,
+      "light": true
+    },
+    {
+      "id": "fm-maple-logs",
+      "page": "Maple logs",
+      "skill": "firemaking",
+      "facility": null,
+      "light": true
+    },
+    {
+      "id": "fm-yew-logs",
+      "page": "Yew logs",
+      "skill": "firemaking",
+      "facility": null,
+      "light": true
     }
   ],
   "methods": {
@@ -240,6 +275,33 @@
     ],
     "cr-diamond": [
       "diamond"
+    ],
+    "fm-normal": [
+      "fm-logs"
+    ],
+    "fm-oak": [
+      "fm-oak-logs"
+    ],
+    "fm-willow": [
+      "fm-willow-logs"
+    ],
+    "fm-maple": [
+      "fm-maple-logs"
+    ],
+    "fm-yew": [
+      "fm-yew-logs"
     ]
+  },
+  "light": {
+    "ticks": {
+      "page": "Game tick/Action lengths",
+      "evidence": "Lighting any logs",
+      "ticks": 4
+    },
+    "chart": {
+      "page": "Firemaking",
+      "label": "Firemaking success chance",
+      "line": "Normal"
+    }
   }
 }

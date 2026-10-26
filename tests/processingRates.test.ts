@@ -99,3 +99,23 @@ describe('a new recipe or station inherits the rules (synthetic registry)', () =
     expect(processRate(TEST, 'smithing', stateOf({ smithing: 10 }), {}, { ...SYNTHETIC, recipes: [{ ...SYNTHETIC.recipes[0], level: 20 }] })).toBeNull();
   });
 });
+
+describe('Firemaking: logs lit by a bank (2.80.3)', () => {
+  // Free-to-play Firemaking training assumes 1,485 logs an hour burnt in lines; the wiki's lighting chance is certain from level 43.
+  it.each([['fm-willow', 45, 90], ['fm-maple', 50, 135], ['fm-yew', 70, 202.5]] as const)('%s at %i: the wiki guide rate lies inside the range', (id, level, xp) => {
+    const r = processRate(method(id), 'firemaking', stateOf({ firemaking: level }))!;
+    expect(r.xph[0]).toBeLessThanOrEqual(xp * 1485);
+    expect(r.xph[1] * 1.1).toBeGreaterThanOrEqual(xp * 1485);
+    expect(r.basis).toMatch(/logs$/i);
+  });
+  it('a failed light costs time, not the log: low levels are slower, and the logs used stay one a success', () => {
+    const at = (lv: number) => processRate(method('fm-normal'), 'firemaking', stateOf({ firemaking: lv }), { prices: prices({ Logs: 50 }, {}) })!;
+    expect(at(1).xph[1]).toBeLessThan(at(43).xph[1] / 2);
+    // Logs used an hour = XP an hour / 40 at every level: no log is lost to a failure.
+    for (const lv of [1, 43]) {
+      const r = at(lv);
+      const logs = r.costPerHour! / 50;
+      expect(logs * 40).toBeCloseTo(((r.xph[0] * 1.1 + r.xph[1]) / 2), -2);
+    }
+  });
+});

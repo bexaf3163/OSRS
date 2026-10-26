@@ -704,6 +704,131 @@
         "qty": 1
       },
       "source": "https://oldschool.runescape.wiki/w/Diamond"
+    },
+    {
+      "id": "fm-logs",
+      "skill": "firemaking",
+      "level": 1,
+      "xp": 40,
+      "ticks": 4,
+      "facility": null,
+      "tools": [
+        "Tinderbox"
+      ],
+      "inputs": [
+        {
+          "name": "Logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "success": {
+        "low": 64,
+        "high": 512
+      },
+      "retry": true,
+      "source": "https://oldschool.runescape.wiki/w/Logs"
+    },
+    {
+      "id": "fm-oak-logs",
+      "skill": "firemaking",
+      "level": 15,
+      "xp": 60,
+      "ticks": 4,
+      "facility": null,
+      "tools": [
+        "Tinderbox"
+      ],
+      "inputs": [
+        {
+          "name": "Oak logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "success": {
+        "low": 64,
+        "high": 512
+      },
+      "retry": true,
+      "source": "https://oldschool.runescape.wiki/w/Oak_logs"
+    },
+    {
+      "id": "fm-willow-logs",
+      "skill": "firemaking",
+      "level": 30,
+      "xp": 90,
+      "ticks": 4,
+      "facility": null,
+      "tools": [
+        "Tinderbox"
+      ],
+      "inputs": [
+        {
+          "name": "Willow logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "success": {
+        "low": 64,
+        "high": 512
+      },
+      "retry": true,
+      "source": "https://oldschool.runescape.wiki/w/Willow_logs"
+    },
+    {
+      "id": "fm-maple-logs",
+      "skill": "firemaking",
+      "level": 45,
+      "xp": 135,
+      "ticks": 4,
+      "facility": null,
+      "tools": [
+        "Tinderbox"
+      ],
+      "inputs": [
+        {
+          "name": "Maple logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "success": {
+        "low": 64,
+        "high": 512
+      },
+      "retry": true,
+      "source": "https://oldschool.runescape.wiki/w/Maple_logs"
+    },
+    {
+      "id": "fm-yew-logs",
+      "skill": "firemaking",
+      "level": 60,
+      "xp": 202.5,
+      "ticks": 4,
+      "facility": null,
+      "tools": [
+        "Tinderbox"
+      ],
+      "inputs": [
+        {
+          "name": "Yew logs",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": null,
+      "success": {
+        "low": 64,
+        "high": 512
+      },
+      "retry": true,
+      "source": "https://oldschool.runescape.wiki/w/Yew_logs"
     }
   ],
   "methods": {
@@ -753,6 +878,21 @@
     ],
     "cr-diamond": [
       "diamond"
+    ],
+    "fm-normal": [
+      "fm-logs"
+    ],
+    "fm-oak": [
+      "fm-oak-logs"
+    ],
+    "fm-willow": [
+      "fm-willow-logs"
+    ],
+    "fm-maple": [
+      "fm-maple-logs"
+    ],
+    "fm-yew": [
+      "fm-yew-logs"
     ]
   }
 }
