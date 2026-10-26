@@ -137,6 +137,8 @@ Read this first. Claude keeps this file current after every release. It says wha
   - **Data:** salmon recipe (Cooking 25, 90 XP, own burn chart) from the wiki.
   - **Tests:** `tests/cookOnTheSpot.test.ts` (F30/C20 → along; F45/C40 → plain fishing because wine is faster later; salmon only from 25).
 
+- **2.80.1:** tool upgrade suggestions check the known coins (`ToolUpgrade.short`).
+
 ## 5. In progress (Claude)
 
 **Hardening pass (owner brief of 2026-10-25, after 2.78.0)**, in small verified blocks. The order:
@@ -151,7 +153,7 @@ Still open in the brief:
 **Next actions, in order (state at 2.80.0; Claude's weekly limit is nearly used up, so Codex may continue from here):**
 1. **Firemaking on the processing engine.** The wiki has a `{{Skilling success chart}}` "Firemaking success chance" (Normal: low 64, high 512) on the Firemaking page, but no `{{Recipe}}` for lighting logs. Verify the lighting action length on the wiki ("Game tick/Action lengths" or "Free-to-play Firemaking training") before modelling it; never assume it. Burning in lines by a bank is facility-free, like gem cutting. Then map fm-* methods in `scripts/processing.defs.json`.
 2. **Combat gear upgrade variant (block a).** Apply `trainingRouter.toolUpgrade`'s rule to weapons: the hours saved by a better weapon vs its price, using `supplyPrice`. Check `services/gearAdvisor` first, so as not to duplicate the Gear page's upgrade advice.
-3. **Cash before suggesting a purchase:** the tool/weapon upgrade line should say when the player's known coins (`state.coins`) cannot cover the price, and say nothing when the coins are unknown.
+3. ~~Cash before suggesting a purchase~~: done in 2.80.1 (`adviseTraining` sets `ToolUpgrade.short` from `coinsOf(state).total` when it is known and below the price; the reason says "; you have X"; unknown coins say nothing). Test in `tests/skillingRates.test.ts`. Apply the same to weapon upgrades when item 2 is done.
 4. **Runecraft, Prayer, Magic utility, wine:** add them to the processing registry the same way (wiki `{{Recipe}}` + defs), never per-method code.
 5. **Ranged/melee "bankedRanged" special case** in `trainingRouter.compare` (`rank()`) predates `BANK_SETUP_HOURS`. Check whether the general bank-only setup rule now covers it, and remove the special case only if every ranged test stays green.
 6. **Calibration (d)** needs a real play session with the owner (NOT REACHABLE).

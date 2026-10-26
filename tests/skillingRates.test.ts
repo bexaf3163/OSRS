@@ -223,6 +223,15 @@ describe('the path forecasts with the rates of the levels it reaches', () => {
 });
 
 describe('a better tool is weighed against its price over the hours left', () => {
+  it('the suggestion says when the known coins fall short of the price, and nothing when the coins are unknown', () => {
+    const p: PriceView = { ...prices({}), buy: (n) => (n === 'Rune pickaxe' ? { price: 12000, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] } : null) };
+    const poor = stateOf({ mining: 41, attack: 1 }, { 'Iron pickaxe': [1, 0] });
+    const a = adviseTraining({ skill: 'mining', target: 70, state: poor, mode: 'f2p', style: 'chill', priority: 'fastest', prices: p });
+    expect(a.upgrade).toMatchObject({ tool: 'Rune pickaxe', short: 0 });
+    expect(a.reason).toMatch(/Rune pickaxe \(≈ 12k gp; you have 0\)/);
+    const unknown = buildPlayerState({ mode: 'f2p', stats: { mining: 41 } as never, progress: { ...emptyProgress(), levels: { mining: 41 } }, owned: { bankSeen: true, items: new Map([['iron pickaxe', { name: 'Iron pickaxe', carried: 1, noted: 0, bank: 0 }]]) } as never, gear: null, questsDone: [], connected: true });
+    expect(adviseTraining({ skill: 'mining', target: 70, state: unknown, mode: 'f2p', style: 'chill', priority: 'fastest', prices: p }).upgrade?.short).toBeUndefined();
+  });
   const buying = (buy: Record<string, number>): PriceView => ({
     ...prices({}), buy: (name) => (buy[name] === undefined ? null : { price: buy[name], basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] }),
   });

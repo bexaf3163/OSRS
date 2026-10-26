@@ -12,7 +12,7 @@ import type { GameMode } from '../types';
 import methodsJson from '../data/trainingMethods.json';
 import toolProgressionJson from '../data/toolProgression.json';
 import { evaluate, type ReqState, type Requirement } from './requirements';
-import { levelOf, type PlayerState } from './playerState';
+import { coinsOf, levelOf, type PlayerState } from './playerState';
 import { xpForLevel } from './xp';
 import type { MethodPriority, PlayStyle } from './playStyle';
 import { rangedNeeds, RANGED_WATCH } from './rangedLoadout';
@@ -417,7 +417,7 @@ export function methodOfGuideStep(step: { skill: string; levelRange: readonly [n
   return hits.length === 1 ? hits[0] : null;
 }
 
-export interface ToolUpgrade { tool: string; price: number; hours: number }
+export interface ToolUpgrade { tool: string; price: number; hours: number; /** The player's coins when they are known and fall short of the price. */ short?: number }
 /** Hours a better tool must save to the goal to be worth a line. */
 const UPGRADE_MIN_HOURS = 1 / 6;
 /**
@@ -468,7 +468,7 @@ function reasonFor(v: MethodView, priority: MethodPriority, level: number, upgra
   if (v.status === 'PREP') parts.push(`first: ${v.missing.map((x) => x.label).join(', ')}`);
   if (v.status === 'LOCKED') parts.push(`locked: ${v.missing.map((x) => x.label).join(', ')}`);
   if (level < m.from) parts.push(`from level ${m.from}`);
-  if (upgrade) parts.push(`a ${upgrade.tool} (≈ ${fmtK(upgrade.price)} gp) saves ≈ ${hoursText(upgrade.hours)}`);
+  if (upgrade) parts.push(`a ${upgrade.tool} (≈ ${fmtK(upgrade.price)} gp${upgrade.short !== undefined ? `; you have ${fmtK(upgrade.short)}` : ''}) saves ≈ ${hoursText(upgrade.hours)}`);
   return parts.join('; ');
 }
 
@@ -545,7 +545,10 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   } else if (best?.method.xph) {
     time = { source: best.method.rateSource ?? 'wiki', minHours: xpLeft / best.method.xph[1], maxHours: xpLeft / best.method.xph[0] };
   }
-  const upgrade = best ? toolUpgrade(best.method, xpLeft, priority, coinRate) : null;
+  const found = best ? toolUpgrade(best.method, xpLeft, priority, coinRate) : null;
+  // Coins known (bag and bank) and short of the price: said, so the suggestion is not read as affordable. Unknown coins: nothing is said.
+  const cash = coinsOf(state).total;
+  const upgrade = found && cash !== null && cash < found.price ? { ...found, short: Math.round(cash) } : found;
   const reason = best ? reasonFor(best, priority, level, upgrade) : 'There is no method in the list for this level and mode: see the skill training plan.';
   return {
     ...empty, best: best ? { ...best, reason } : null, others, quests, path, xpLeft, actionsLeft, actionTarget, time, upgrade, reason,
