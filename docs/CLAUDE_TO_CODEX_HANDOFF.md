@@ -162,6 +162,7 @@ Still open in the brief:
 
 Watch-outs:
 - `fishingClimb` "the pick settles…" is an exhaustive test with an explicit 20 s timeout. Do not lower it.
+- 2.80.2's first Release run failed only the first three `skill handover (390)` UI checks, 4 s after the preview server started. The 1280 px versions and the full local run of the same commit passed, and a rerun of the failed job passed. This is a cold-start timing flake in `scripts/ui-smoke.ts`'s first scenario. If it recurs, make that scenario wait for the app to settle; do not loosen its assertions.
 - Releases: a `package.json` version push to main triggers Release. Wait for one Release run to finish before pushing the next version.
 
 ## 5b. What each engine knows, assumes and does not support
@@ -216,3 +217,4 @@ Release receipts (Checks and Release both green; the portable EXE's sha256 as pu
 | 2.79.2 | 570d479 | OSRS-Put-2.79.2-portable.exe, 102,068,589 B | 2b9c42121747e9661f837c02715efe21c89d6b2bdc9b29d1e4c3968d5228d486 |
 | 2.80.0 | 6ea83b4 | OSRS-Put-2.80.0-portable.exe, 102,068,579 B | e8b828fe97cea449be300ead036f88cba049c54bd3b9c592057f21cee7336d6e |
 | 2.80.1 | bda9cd5 | OSRS-Put-2.80.1-portable.exe, 102,068,427 B | 1d7ebab137f0b509e98763425d5e0d202b8bbac35d68e587ea825011ea067e14 |
+| 2.80.2 | edd7dfd | OSRS-Put-2.80.2-portable.exe, 102071119 B | c4b28352aa81d1ef5a8f4b7bf1d30088227d53ed826eac963bd39ab1727662d5 |
