@@ -65,6 +65,9 @@ describe('S6-01 actual ranged preparation', () => {
     const s = scenario(20, [], {}, 1, true, { prices: priced, restriction: 'LIFTED' });
     expect(s.pick).toMatchObject({ methodId: 'ra-frog' });
     expect(s.payload.npcNames).toEqual(['Giant frog']);
+    const equipped = scenario(20, [piece('Shortbow'), piece('Bronze arrow', 100)], { Salmon: { bank: 10 } }, 1, true, { prices: base, restriction: 'UNKNOWN' });
+    expect(equipped.pick).toMatchObject({ methodId: 'ra-frog' });
+    expect(equipped.payload.npcNames).toEqual(['Giant frog']);
     // Without an exchange arrow price the free shop's price counts (Lowe's, 1 gp): the cost stays known and the same choice is made.
     expect(scenario(20, [], {}, 1, true, { prices: base, restriction: 'LIFTED' }).pick).toMatchObject({ methodId: 'ra-frog' });
   });

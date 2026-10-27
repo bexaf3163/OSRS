@@ -80,6 +80,8 @@ jobs:
           $hash = (Get-FileHash -LiteralPath $files[0].FullName -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  $($files[0].Name)" | Set-Content -LiteralPath release/SHA256SUMS.txt -Encoding utf8
           Copy-Item -LiteralPath docs/CLAUDE_NEXT_SESSION.md -Destination release/CLAUDE_NEXT_SESSION.md
+          Copy-Item -LiteralPath docs/CODEX_ENGINE_HARDENING_HANDOFF.md -Destination release/CODEX_ENGINE_HARDENING_HANDOFF.md
+          Copy-Item -LiteralPath docs/CLAUDE_IN_GAME_ACCEPTANCE.md -Destination release/CLAUDE_IN_GAME_ACCEPTANCE.md
       - if: steps.v.outputs.exists == 'false'
         uses: softprops/action-gh-release@v2
         with:
@@ -91,4 +93,6 @@ jobs:
             release/*.exe
             release/SHA256SUMS.txt
             release/CLAUDE_NEXT_SESSION.md
+            release/CODEX_ENGINE_HARDENING_HANDOFF.md
+            release/CLAUDE_IN_GAME_ACCEPTANCE.md
           fail_on_unmatched_files: true

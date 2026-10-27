@@ -2585,7 +2585,7 @@ async function miningHandoverScenarios(browser: Browser) {
 
 async function rangedPreparationScenarios(browser: Browser) {
   for (const width of [390, 1280]) {
-    const stats = { ranged: 1, defence: 1 };
+    const stats = { ranged: 1, defence: 1, hitpoints: 30 };
     const weapon = { id: 841, name: 'Shortbow', slot: 'weapon', count: 1 };
     const arrow = { id: 882, name: 'Bronze arrow', slot: 'ammo', count: 1 };
     const gear = { equipment: [weapon, arrow], inventory: [], coins: 1000, bankCoins: 0 };
@@ -2606,9 +2606,9 @@ async function rangedPreparationScenarios(browser: Browser) {
     await page.waitForTimeout(1500);
     const ready = await snapshot();
     expect(ready?.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where === 'EQUIPPED', `ranged (${width}): a GEAR-only quantity update reaches the canonical preparation snapshot`);
-    // 2.76: the market prices the Big bones, so the frogs (not the monks) already pay at Ranged 20 (tests/rangedPreparation.test.ts).
+    // Known HP/Defence are needed for personalized recovery; prices and owned food make the frog kit practical.
     for (const [level, npc] of [[20, 'Giant frog'], [26, 'Giant frog']] as const) {
-      await page.evaluate(s => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { ranged: level, defence: 1 });
+      await page.evaluate(s => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { ranged: level, defence: 1, hitpoints: 30 });
       await page.waitForTimeout(1500);
       const current = await snapshot();
       expect(JSON.stringify(current?.step?.npcNames) === JSON.stringify([npc]) && !current?.step?.worldPoint?.label?.includes('Corsair'), `ranged (${width}, level${level}): method, scenery and destination advance together`);

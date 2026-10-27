@@ -4,7 +4,20 @@
 
 Updated2026-10-24. This replaces the rolling historical status entries. Start from the latest remote main, not an old local branch/chat prompt. Check for subsequent owner/Claude commits before editing. Do not reset them or replay included stacked commits.
 
-## Published delivery — verified 2.74.3
+## Current portable handoff — 2.80.4, 2026-10-26
+
+The owner requested a portable build of the source repairs on main after commit f6a0e82. App and bridge versions are coordinated at2.80.4; protocol6 is unchanged. Use the latest main and release asset, not the historical2.74.3 receipt below.
+
+- Implementation and remaining work: [CODEX_ENGINE_HARDENING_HANDOFF.md](CODEX_ENGINE_HARDENING_HANDOFF.md). Source verification before the version bump:2198 Vitest tests/185files,637 Java tests, production build and check-data0errors/0warnings.
+- The Release workflow publishes this EXE only after its full tests, browser smoke, source Electron E2E and isolated portable E2E pass. Check the2.80.4 workflow/release for actual completion and SHA256SUMS.txt for the artifact digest; do not infer success from this build-time file.
+- New work: compact direct skill icons, XP/Balanced/Money priorities, shared ranged/Magic recovery and virtual bow equipment, missing-kit budget guards, Fletching/Herblore processing, forecast/upgrade economics and shared Wiki fetch fixes. Saved preferences, manual plans and unknown states remain intact.
+- No live RuneLite acceptance is claimed. Claude owns [CLAUDE_IN_GAME_ACCEPTANCE.md](CLAUDE_IN_GAME_ACCEPTANCE.md), including the new Skills, preparation and recovery cases. Preserve character progress; never grind/spend or automate gameplay to force tests.
+- Still open: guide-only Members models, route potion/armour acquisition costs, goal-wide supplies and coordinated automatic food substitution. Model dispatch coverage is distinct from catalogue coverage in SKILLS_COVERAGE.md.
+- Agent state, local credentials, runtime logs and generated bin files are excluded from source publication.
+
+---
+
+## Historical published delivery — verified 2.74.3
 
 - Stable source/main merge: **7ba9aeeade91b4b8de359be478bb4a431d2741d0**, exact tree **f5aa4d7696e94ad1151d13031125b288e804bb84**, identical to tested PR head **cc3a0659dfeae41cb083341e174d086e4bf2af77**. Subsequent handoff-only commits do not change the application.
 - [Portable EXE](https://github.com/bexaf3163/OSRS/releases/download/v2.74.3/OSRS-Put-2.74.3-portable.exe), **101,849,619 bytes**. SHA256: **6d3dc9b504080e389b6d69b8a477d1aa923674639795ec69c6d9ed52ac2c124f**, matched the actual isolated portable test log against GitHub's published asset digest.
