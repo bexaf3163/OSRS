@@ -88,7 +88,7 @@ export function itemPreflight(line: Pick<QuestStageLine, 'pre'>, inp: PreflightI
     const have = countOf(inp.carried, p, inp.levels);
     if (have >= need) continue;
     const base = { item: p.item, need, have, chip: missingChip(p.item) };
-    if (inp.bankCurrent !== false && inp.bank && countOf(inp.bank, p, inp.levels) >= need - have) {
+    if (inp.bankCurrent !== false && inp.bank && countOf([...inp.carried, ...inp.bank], p, inp.levels) >= need) {
       const bank = nearest(inp.from, BANK_SPOTS);
       if (bank) return { ...base, via: 'bank', target: bank, instruction: `Take ${p.item} from the bank` };
     }

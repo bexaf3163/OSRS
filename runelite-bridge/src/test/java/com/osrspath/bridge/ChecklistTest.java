@@ -213,4 +213,15 @@ public class ChecklistTest
 		ItemCounts all = ItemCounts.sum(counts(954, "Rope", 1), null, counts(954, "Rope", 2));
 		assertEquals(3, all.count(954, "Rope"));
 	}
+	@Test
+	public void partialFoodHealingAcrossBagAndBankIsOwned()
+	{
+		ActiveTarget.ChecklistItem salmon = item("Salmon", 329, 1, 9);
+		salmon.setAlt(Arrays.asList("Shrimps", "Cooked meat"));
+		Checklist.Row row = Checklist.evaluate(Collections.singletonList(salmon), counts(315, "Shrimps", 2), counts(2142, "Cooked meat", 1)).getRows().get(0);
+		assertEquals(0, row.getHave());
+		assertEquals(1, row.getInBank());
+		assertEquals(Checklist.State.MISSING_FROM_BAG, row.getState());
+	}
+
 }

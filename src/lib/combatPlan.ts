@@ -150,7 +150,7 @@ export function ownedFood(step: Pick<Step, 'itemsRequired'>, owned: OwnedState |
   const unit = effectiveHeal({ heals: item.heals! }, hitpoints);
   return {
     carried, bank, equivalent: Math.floor(healing / unit), carriedEq: Math.floor(carriedHealing / unit),
-    bankEq: Math.floor(bankHealing / unit), bankComplete, notedEq: Math.floor(notedHealing / unit), reserved: kept, text: parts.join(', '),
+    bankEq: Math.floor(healing / unit) - Math.floor((carriedHealing + notedHealing) / unit), bankComplete, notedEq: Math.floor((carriedHealing + notedHealing) / unit) - Math.floor(carriedHealing / unit), reserved: kept, text: parts.join(', '),
   };
 }
 

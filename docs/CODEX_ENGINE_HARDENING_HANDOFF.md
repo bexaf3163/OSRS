@@ -1,6 +1,19 @@
 # Engine hardening — Codex continuation, 2026-10-26
 
-## Current continuation - 2.80.7 preparation (2026-10-27)
+## Current continuation - 2.80.8 preparation (2026-10-27)
+
+Published NORMAL baseline2.80.7, source2002eed0657ff99a33420805c474027ef4be13e3: Release40556403825 and Checks40556404554 green. EXE102,081,664bytes; SHA256 `dc8b4f9c6a6e834fa74d6e207d2ce408346cd2c7a45391d50abf1a3a667a8ac1`, verified against GitHub digest and SHA256SUMS. Local evidence:2233TS,644Java,1035browser,75sourceElectron checks passed. The real update happy path2.80.5->2.80.6 also passed (40549572912).
+
+New batch extends the existing nutrition/preparation engines:
+- Physical food pieces determine additional slots, withdrawal names/quantities and bank targets.26Salmon-equivalents covered by34Trout occupy34slots; no silent26-slot assumption.
+- Current/upcoming deadlines select a shared pool once; carried pieces are used before notes/bank. Unknown ownership and named quest ingredients keep their existing protection.
+- Bag/notes/bank healing credits are apportioned after combining partial healing. TS readiness/Shopping/combat preparation and Java checklist/quest guards agree; mixed partial bites no longer cause needless purchases.
+- No protocol change, extra panels, save migration or forced route edits. Notes require a bank; slot estimates remain conservative and do not promise optimal packing.
+
+Local verification:2239TS tests/190files, Java646/0failures, build/TypeScript, data0errors/warnings, rebuilt plugin jar and75sourceElectron checks passed. Full browser1035checks passed. Normal2.80.8 publication is next; record the CI/artifact receipt before calling it published. Live-game acceptance belongs to Claude. Remaining broad work: confirmed acquisition travel/fees, goal-wide potion purchases, source-backed Members models and deferred acceptance. Review historical candidates against current source before reopening them.
+
+
+## Previous batch - 2.80.7 (published)
 
 Published baseline is NORMAL portable2.80.6 (sourcea7d3d54): Release40540103010 and Checks40540103432 succeeded. EXE102,075,688bytes, SHA256 `8c2a9ab105bb5d6c1f31f945ff0a7673287f505cd2e016859b595e132878c143`, matching GitHub digest/SHA256SUMS. Publish verified batches to main as normal releases autonomously; no previews or repeated approval.
 
@@ -11,7 +24,7 @@ Implemented in this batch:
 - Java Checklist/Foods mirror the allocation and share healing with quest guards. Login, mid-session enabling and HP changes refresh the cap. Unrecognised alternatives receive no assumed healing credit. Estimates and cleanup reserves also use effective healing; heterogeneous partial alternatives stay protected.
 - No new panels, settings, route IDs or save migration. Existing manual marks retain their original keys. Old unsafe20-any-fish regression expectations now cover both sufficient healing and insufficient weak food.
 
-Verification: final source passed2233unit tests/189files, fullJava644tests, build/TypeScript, data0errors/warnings, rebuilt plugin jar, sourceElectron E2E75checks (including actual profile-conflict merge and first-write copy failures). Full browser1035checks PASSED on source3edc5af; portable2.80.7 is not yet published and new behavior is not live-game verified.
+Verification: final source passed2233unit tests/189files, fullJava644tests, build/TypeScript, data0errors/warnings, rebuilt plugin jar, sourceElectron E2E75checks (including actual profile-conflict merge and first-write copy failures). Full browser1035checks PASSED on source3edc5af; portable2.80.7 is published (receipt above); new behavior is not live-game verified.
 
 REAL UPDATE ACCEPTANCE PASSED: [run40549572912](https://github.com/bexaf3163/OSRS/actions/runs/40549572912) exercised published2.80.5 ->2.80.6, real download/digest/install/automatic restart, old-EXE/cleanup-note removal and healthy recheck. S1-01 save bytes were identical. T02's normal update path is verified; interrupted-update/power-loss recovery is not claimed.
 
@@ -19,7 +32,7 @@ Native profile-conflict merge is verified through its real UI action: every char
 
 Native first-write-copy failure is exercised in isolated source E2E: primary save succeeds, Settings names the failed profile/copy, history is persisted, renderer reload retains it, and successful independent copies do not erase it. This is not cold-process warning restart acceptance or a guarantee of retaining an unwritable copy.
 
-NEXT: finish browser/packaged release acceptance and record the portable receipt; then address confirmed inventory packing/acquisition/whole-goal potion gaps. Verify remaining Members models and reproduce historical audit candidates before changing them. Do not redo completed work or claim the full audit complete. Default guidance stays compact and Balanced.
+The2.80.7 release gates and receipt are complete. Continue only the current batch and confirmed acquisition/whole-goal potion gaps. Verify remaining Members models and reproduce historical audit candidates before changing them. Do not redo completed work or claim the full audit complete. Default guidance stays compact and Balanced.
 
 ## Local continuation — remaining combat supplies, 2026-10-27
 

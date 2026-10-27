@@ -40,6 +40,18 @@ describe('shared declared combat food stock', () => {
     expect(heldFood(s, { ...food, anyOf: ['Shrimps', 'shrimps', 'Cooked meat', 'Salmon'] })).toMatchObject({ bag: 1, total: 1 });
   });
 
+  it('credits partial healing across bag and bank without inventing an extra purchase', () => {
+    const s = snapshot({ Shrimps: [2, 0], 'Cooked meat': [0, 1] });
+    const r = step(1);
+    const line = aggregateShopping([r]).required[0];
+    expect(heldFood(s, food)).toMatchObject({ bag: 0, bank: 1, total: 1, bankLower: 1 });
+    expect(ownedFood(r, s.owned)).toMatchObject({ carriedEq: 0, bankEq: 1, equivalent: 1 });
+    expect(evaluatePreflight(preflightItems(r), s.owned!).rows[0]).toMatchObject({ have: 0, inBank: 1, state: 'MISSING_FROM_BAG' });
+    expect(planOneTrip([r], emptyProgress(), r.id, s).lines[0]).toMatchObject({ status: 'BANK', toGet: 0 });
+    expect(ownershipOf(s, line)).toMatchObject({ total: 1 });
+    expect(shopRows(aggregateShopping([r]), { state: s, onGe: () => true, detail: () => undefined, gePrice: () => 10 })[0]).toMatchObject({ channel: 'bank', action: 'Take 1 Cooked meat at the bank' });
+  });
+
   it('caps both foods at the real Hitpoints level', () => {
     const s = snapshot({ Tuna: [23, 0] }, 10);
     expect(heldFood(s, food, undefined, 10).total).toBe(23);

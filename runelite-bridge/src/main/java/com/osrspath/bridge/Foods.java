@@ -50,13 +50,20 @@ final class Foods
 		{
 			return 0;
 		}
+		return (int) Math.min(Integer.MAX_VALUE, healing(items, id, name, alternatives, healing, used, reserved) / unit);
+	}
+
+	/** Unrounded healing lets partial bites in the bag and bank jointly cover a requirement. */
+	static long healing(ItemCounts items, Integer id, String name, java.util.List<String> alternatives, int healing,
+		Map<String, Integer> used, Map<String, Integer> reserved)
+	{
 		long health = 0;
 		String primary = ActiveTarget.nameKey(name);
 		for (Map.Entry<String, Integer> part : parts(name, alternatives, healing).entrySet())
 		{
 			health += (long) available(items, part.getKey().equals(primary) ? id : null, part.getKey(), used, reserved) * part.getValue();
 		}
-		return (int) Math.min(Integer.MAX_VALUE, health / unit);
+		return health;
 	}
 
 	/** Allocate whole physical pieces, never the same bite to two requirements. Returns health still needed. */

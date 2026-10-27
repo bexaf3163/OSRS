@@ -134,7 +134,7 @@ export function bankWithdrawalsOf(plan: Pick<PrepPlan, 'lines'>): NonNullable<Pr
   // A potion is taken as the exact potions that hold the doses (2 × Strength potion(4), 1 × Strength potion(3)), never "×8" of one size.
   return plan.lines
     .filter((l) => l.where === 'BANK' && (l.timing === 'NOW' || l.timing === 'SOON'))
-    .flatMap((l) => (l.unit === 'dose' && l.potions?.length
+    .flatMap((l) => (l.foodTake?.length ? l.foodTake.map(item => ({ name: item.name, quantity: item.count })) : l.unit === 'dose' && l.potions?.length
       ? l.potions.map((p) => ({ name: p.name, quantity: p.count }))
       : [{ name: l.name, quantity: l.toGet ?? l.count }]))
     .slice(0, MAX_WITHDRAWALS)

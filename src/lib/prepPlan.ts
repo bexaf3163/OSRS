@@ -12,7 +12,7 @@
 
 import type { Progress, Step, WikiItemDetail } from '../types';
 import { itemById } from '../data';
-import { THREATS } from './foodAdvice';
+import { foodCarry, THREATS, type FoodCarry, type FoodHolding } from './foodAdvice';
 import { stepFightNames } from './fightEstimate';
 import recipesJson from '../data/recipes.json';
 import { npcSpot } from './stepPlaces';
@@ -57,6 +57,10 @@ export interface PrepAction {
 }
 
 export interface PrepLine {
+  /** Internal allocated stock: equivalent healing must not be mistaken for physical carrying slots. */
+  food?: FoodHolding;
+  /** Physical food to withdraw/unnote, rather than pieces of its healing-equivalent label. */
+  foodTake?: FoodCarry['take'];
   /** The item must be worn, not merely carried. */
   equip?: boolean;
   /** Market cost for physical items; doses are priced by their actual package in Shopping. */
@@ -212,13 +216,17 @@ function whyOf(line: ShoppingLine, group: string[], all: string[], currentId: st
   return parts.join(' · ');
 }
 
-function bankAction(step: Step, name: string, n: number, doses = false, unnote = 0): PrepAction {
+function bankAction(step: Step, name: string, n: number, doses = false, unnote = 0, food?: FoodCarry['take']): PrepAction {
   const b = nearestBank(step);
+  const actual = food?.length && food.some(item => nameKey(item.name) !== nameKey(name)) ? food : null;
+  const label = actual?.map(item => `${item.count} ${item.name}`).join(', ');
+  const itemName = actual?.[0].name ?? name;
   return {
     kind: 'TAKE',
-    label: unnote > 0 ? `Unnote ${name}${unnote > 1 ? ` (${unnote}${doses ? ' doses' : ''})` : ''} at a bank${n > unnote ? '; withdraw the rest' : ''}`
+    label: actual ? `${actual.some(item => item.noted) ? 'Withdraw or unnote' : 'Take'} ${label} at the bank`
+      : unnote > 0 ? `Unnote ${name}${unnote > 1 ? ` (${unnote}${doses ? ' doses' : ''})` : ''} at a bank${n > unnote ? '; withdraw the rest' : ''}`
       : doses ? `Take ${n} ${n === 1 ? 'dose' : 'doses'} from the bank` : `Take from the bank${n > 1 ? ` ×${n}` : ''}`,
-    ...(b ? { nav: { label: `${b.label}: take ${name}`, x: b.x, y: b.y, plane: b.plane, itemName: name, stepId: step.id } } : {}),
+    ...(b ? { nav: { label: `${b.label}: take ${itemName}`, x: b.x, y: b.y, plane: b.plane, itemName, stepId: step.id } } : {}),
   };
 }
 
@@ -375,7 +383,15 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       g.ids.push(a.stepId);
       groups.set(timing, g);
     }
+    let cumulativeFood = 0;
+    const selectedFood = new Map<string, number>();
     for (const [timing, g] of groups) {
+      const foodTake = t.food && !inStep ? foodCarry(t.food, cumulativeFood += g.need).take.flatMap(item => {
+        const key = `${nameKey(item.name)}:${item.noted}`;
+        const count = item.count - (selectedFood.get(key) ?? 0);
+        selectedFood.set(key, item.count);
+        return count > 0 ? [{ ...item, count }] : [];
+      }) : [];
       const where: PrepWhere = g.unknown > 0 ? 'UNKNOWN' : g.missing > 0 ? 'MISSING' : g.bank > 0 ? 'BANK' : equipped > 0 && equipped >= g.bag ? 'EQUIPPED' : 'INVENTORY';
       const satisfied = where === 'INVENTORY' || where === 'EQUIPPED';
       const priority: PrepPriority = inStep ? 'OPTIONAL' : timing === 'NOW' ? 'CRITICAL' : 'IMPORTANT';
@@ -385,7 +401,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       if (inStep && !satisfied) {
         action = { kind: 'GATHER', label: 'You get it during the step' };
       } else if (where === 'BANK') {
-        action = bankAction(step, t.line.nameEn, g.bank, dose, g.noted);
+        action = bankAction(step, t.line.nameEn, g.bank, dose, g.noted, foodTake);
       } else if (where === 'MISSING' && acquired) {
         const spot = acquired.from ? npcSpot(acquired.from, step.id) : undefined;
         action = { kind: 'GATHER', label: acquired.howToGet, ...(spot ? { nav: { label: `${acquired.from}: ${acquired.nameEn}`, x: spot.x, y: spot.y, plane: spot.plane, itemName: acquired.nameEn, stepId: step.id } } : {}) };
@@ -426,6 +442,8 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
         ...(potions.length ? { potions } : {}),
         ...(g.noted > 0 ? { unnote: g.noted } : {}),
         bagShortfall: g.need - g.bag,
+        ...(t.food ? { food: t.food } : {}),
+        ...(foodTake.length ? { foodTake } : {}),
       });
     }
   }
@@ -541,8 +559,13 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   // How many slots what must be taken now and along the way will occupy: "≈", because we know an item's packing only by its name.
   let adding = 0;
   const doseNeeds = new Map<string, { name: string; need: number }>();
+  const foodNeeds = new Map<FoodHolding, number>();
   for (const l of [...now, ...soon]) {
     if (l.where === 'UNKNOWN') continue;
+    if (l.food) {
+      foodNeeds.set(l.food, (foodNeeds.get(l.food) ?? 0) + l.count);
+      continue;
+    }
     const n = l.bagShortfall ?? Math.max(0, l.count - (l.have.bag ?? 0));
     if (l.unit === 'dose') {
       const base = doseKind(l.name)!.base;
@@ -552,6 +575,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       adding += stacks(l.name) ? (n > 0 && !(l.have.bag && l.have.bag > 0) ? 1 : 0) : n;
     }
   }
+  for (const [stock, need] of foodNeeds) adding += foodCarry(stock, need).adding;
   for (const { name, need } of doseNeeds.values()) {
     const h = heldUnits(state, name);
     const kind = doseKind(name)!;

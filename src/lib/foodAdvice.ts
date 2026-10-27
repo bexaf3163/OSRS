@@ -88,6 +88,31 @@ export interface FoodRequirement { nameEn: string; heals: number; anyOf?: readon
 interface FoodPart { name: string; heals: number; held: Held; alternative: boolean }
 export interface FoodHolding extends Held { withYou: number | null; viaAlternatives: number; bankLower: number; parts: FoodPart[] }
 
+export interface FoodCarry {
+  /** Physical food to receive at a bank, including notes that must be unnoted. */
+  take: { name: string; count: number; noted: boolean }[];
+  /** Additional physical slots; any uncovered health is allowed for in the named food. */
+  adding: number;
+  missing: number;
+}
+
+/** A healing equivalent is not an inventory slot: select whole physical bites in the same order as allocation. */
+export function foodCarry(stock: FoodHolding, units: number): FoodCarry {
+  const unit = stock.parts.find(part => !part.alternative)?.heals ?? 1;
+  let health = Math.max(0, units) * unit;
+  const take: FoodCarry['take'] = [];
+  for (const where of ['bag', 'noted', 'bank'] as const) {
+    for (const part of stock.parts) {
+      if (health <= 0) break;
+      const count = Math.min(part.held[where] ?? 0, Math.ceil(health / part.heals));
+      health = Math.max(0, health - count * part.heals);
+      if (where !== 'bag' && count > 0) take.push({ name: part.name, count, noted: where === 'noted' });
+    }
+  }
+  const missing = Math.ceil(health / unit);
+  return { take, missing, adding: take.reduce((sum, item) => sum + item.count, 0) + missing };
+}
+
 /** Named-food equivalents, rounded after adding healing, with the same bank certainty as physical stock. */
 export function heldFood(
   state: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>,
@@ -110,23 +135,26 @@ export function heldFood(
     const total = original.total === null ? null : Math.max(0, original.total - reserve);
     return [{ name, held: { ...original, bank, noted, bag, total }, alternative: nameKey(name) !== primary, heals: effectiveHeal({ heals }, hitpoints) }];
   });
-  const sum = (where: 'bag' | 'bank' | 'total') => Math.floor(parts.reduce((n, p) => n + (p.held[where] ?? 0) * p.heals, 0) / unit);
+  const health = (where: 'bag' | 'noted' | 'bank' | 'total') => parts.reduce((n, p) => n + (p.held[where] ?? 0) * p.heals, 0);
+  const bag = Math.floor(health('bag') / unit);
+  const withYou = Math.floor((health('bag') + health('noted')) / unit);
+  const bank = Math.floor((health('bag') + health('noted') + health('bank')) / unit) - withYou;
   const bankKnown = parts.every(p => p.held.bank !== null);
   const anyBag = parts.some(p => p.held.bag !== null);
   const anyStock = parts.some(p => p.held.presence === 'PRESENT');
   const allMissing = parts.every(p => p.held.presence === 'MISSING');
-  const total = sum('total');
+  const total = Math.floor(health('total') / unit);
   return {
-    bag: anyBag ? sum('bag') : null,
-    noted: Math.floor(parts.reduce((n, p) => n + p.held.noted * p.heals, 0) / unit),
-    bank: bankKnown ? sum('bank') : null,
+    bag: anyBag ? bag : null,
+    noted: withYou - bag,
+    bank: bankKnown ? bank : null,
     total: anyStock || allMissing ? total : null,
     presence: anyStock ? 'PRESENT' : allMissing ? 'MISSING' : 'UNKNOWN',
     equipped: 0,
     source: parts.some(p => p.held.source === 'manual') ? 'manual' : parts.some(p => p.held.source === 'game') ? 'game' : 'none',
-    withYou: anyBag ? Math.floor(parts.reduce((n, p) => n + ((p.held.bag ?? 0) + p.held.noted) * p.heals, 0) / unit) : null,
+    withYou: anyBag ? withYou : null,
     viaAlternatives: Math.floor(parts.filter(p => p.alternative).reduce((n, p) => n + (p.held.total ?? 0) * p.heals, 0) / unit),
-    bankLower: sum('bank'),
+    bankLower: bank,
     parts,
   };
 }

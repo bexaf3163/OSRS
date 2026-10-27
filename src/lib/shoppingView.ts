@@ -6,7 +6,7 @@
 import type { Progress, Step, WikiItemDetail } from '../types';
 import { aggregateShopping, formatGp, type ShoppingLine, type ShoppingList, type ShoppingSource } from './shopping';
 import { heldEquipment, heldOf, levelOf, type PlayerState } from './playerState';
-import { allocateFoodStock, heldFood, type FoodHolding } from './foodAdvice';
+import { allocateFoodStock, foodCarry, heldFood, type FoodHolding } from './foodAdvice';
 import { carryOf, doseKind, dosePackage, heldUnits, takeFromBank, type Carry, type DosePackage, type DoseSize } from './doses';
 import { legacyKeys } from './oneTrip';
 import { planSources } from './sourceRouter';
@@ -166,7 +166,9 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
   if (enough) {
     if (withYou < tripNeed && (own.bank ?? own.bankLower ?? 0) > 0) {
       const qty = Math.min(tripNeed - withYou, own.bank ?? own.bankLower ?? 0);
-      return { ...base, qty, channel: 'bank', action: `Take ${qty} from the bank`, unitPrice: null, cost: null };
+      const take = foodStock ? foodCarry(foodStock, tripNeed).take : [];
+      const actual = take.some(item => nameKey(item.name) !== nameKey(line.nameEn)) ? take.map(item => `${item.count} ${item.name}`).join(', ') : null;
+      return { ...base, qty, channel: 'bank', action: actual ? `${take.some(item => item.noted) ? 'Withdraw or unnote' : 'Take'} ${actual} at the bank` : `Take ${qty} from the bank`, unitPrice: null, cost: null };
     }
     if (wearable.has(nameKey(line.nameEn)) && own.worn === 0 && withYou > 0 && /\b(wear|wield|equip)/i.test(line.howToGet)) {
       return { ...base, qty: 1, channel: 'equip', action: 'In your bag: put it on before the step', unitPrice: null, cost: null };

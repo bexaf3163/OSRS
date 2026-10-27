@@ -160,7 +160,7 @@ final class Preflight
 			Integer sx = line.hasPoint() ? line.getX() : null;
 			Integer sy = line.hasPoint() ? line.getY() : null;
 			Integer sp = line.hasPoint() ? line.getPlane() : null;
-			if ((bank == null ? 0 : count(bank, p)) + count(notes, p) >= p.need() - have)
+			if (count(ItemCounts.sum(carried, notes, bank), p) >= p.need())
 			{
 				ActiveTarget.Spot b = nearest(banks, px, py, plane);
 				if (b != null)

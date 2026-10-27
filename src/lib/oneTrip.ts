@@ -7,7 +7,7 @@ import type { Step } from '../types';
 import { aggregateShopping, type ShoppingLine } from './shopping';
 import { nameKey, parseAmount } from './checklist';
 import { heldEquipment, levelOf, type PlayerState } from './playerState';
-import { allocateFoodStock } from './foodAdvice';
+import { allocateFoodStock, type FoodHolding } from './foodAdvice';
 import { heldUnits, type HeldUnits } from './doses';
 import { isClosed } from './next-step';
 import type { Progress } from '../types';
@@ -27,6 +27,8 @@ export interface TripAllocation {
 
 export interface TripLine {
   line: ShoppingLine;
+  /** Allocated physical food, retained for carrying-space and withdrawal calculations. */
+  food?: FoodHolding;
   /** In the line's units: doses for a potion (doses.ts). */
   held: HeldUnits;
   allocation: TripAllocation[];
@@ -132,7 +134,7 @@ export function planOneTrip(steps: Step[], progress: Progress, currentId: string
     const firstGap = allocation.findIndex((a) => a.need > a.covered);
     const idx = firstGap >= 0 ? ids.indexOf(allocation[firstGap].stepId) : 0;
     const urgency: Urgency = idx <= 0 ? 'NOW' : idx <= 2 ? 'SOON' : 'LATER';
-    lines.push({ line, held, allocation, toGet, status, urgency });
+    lines.push({ line, held, allocation, toGet, status, urgency, ...(foodStock.has(line.key) ? { food: foodStock.get(line.key) } : {}) });
   }
   const pending = lines.filter((l) => l.status === 'GET' || l.status === 'BANK');
   // The bank not opened leaves the total unknown, but coins in the bag that already cover the need settle the question.

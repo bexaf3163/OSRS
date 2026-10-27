@@ -160,6 +160,12 @@ final class Checklist
 			int have = equip ? worn == null ? 0 : ActiveTarget.countWithAlt(worn, item.getId(), item.getName(), item.getAlt()) : onHand;
 			int inBank = bank == null ? -1 : dose ? bank.doses(item.getName()) : food ? Foods.count(bank, item.getId(), item.getName(), item.getAlt(), item.getHeals(), usedBank, bankReserved)
 				: ActiveTarget.countWithAlt(bank, item.getId(), item.getName(), item.getAlt());
+			if (food && bank != null)
+			{
+				long health = Foods.healing(carried, item.getId(), item.getName(), item.getAlt(), item.getHeals(), usedBag, bagReserved)
+					+ Foods.healing(bank, item.getId(), item.getName(), item.getAlt(), item.getHeals(), usedBank, bankReserved);
+				inBank = (int) Math.min(Integer.MAX_VALUE, health / ItemCounts.effectiveHeal(item.getHeals())) - onHand;
+			}
 			if (food)
 			{
 				long health = Foods.reserve(carried, item.getId(), item.getName(), item.getAlt(), item.getHeals(),

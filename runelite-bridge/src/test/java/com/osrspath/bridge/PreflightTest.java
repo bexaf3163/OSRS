@@ -221,4 +221,13 @@ public class PreflightTest
 		// An older call without the chip still builds.
 		assertNull(new Hud.State("t", null, null, false, null, false, null, false, null, false, null, null, false, null, -1).getMissing());
 	}
+	@Test
+	public void partialBitesAcrossContainersLeadToTheBank()
+	{
+		ActiveTarget.StageLine l = line("{\"pre\":[{\"item\":\"Salmon\",\"n\":1,\"alt\":[\"Shrimps\",\"Cooked meat\"]}]}");
+		Preflight.Block block = check(l, bag(315, "Shrimps", 2), bag(2142, "Cooked meat", 1), 3222, 3218);
+		assertNotNull(block);
+		assertEquals(Preflight.Via.BANK, block.getVia());
+	}
+
 }
