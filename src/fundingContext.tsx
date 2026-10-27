@@ -11,6 +11,7 @@ import { useBridge } from './bridge';
 import { checkStatus } from './services/runeliteBridge';
 import { useStore } from './store';
 import { usePlayerState } from './playerStateContext';
+import { levelOf } from './lib/playerState';
 import { useReadinessEngine } from './readinessContext';
 import { useProfiles } from './lib/profiles';
 import { useFeatures } from './lib/features';
@@ -457,7 +458,7 @@ export function useFundingScreen(step: Step, wanted: boolean): FundingScreen {
     if (!wanted || !snap || plan || !base) return null;
     const prep = engine.plan(step, { ahead });
     const manual = Object.fromEntries(Object.entries(progress.ownedManual ?? {}).map(([k, v]) => [k, v.count]));
-    const need = buildNeed({ step, prep, prices, owned: state.owned, manual });
+    const need = buildNeed({ step, prep, prices, owned: state.owned, manual, hitpoints: levelOf(state, 'hitpoints') });
     const keep = shown.current?.stepId === step.id ? shown.current.id : null;
     const out = assess({
       step, need, snap, prices, recs: cleanup.live ? cleanup.result.recs : [], bankValue: bridge.gear?.bankValue ?? null, base, activeId: keep,

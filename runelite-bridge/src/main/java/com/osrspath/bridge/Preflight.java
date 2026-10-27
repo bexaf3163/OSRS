@@ -48,6 +48,10 @@ final class Preflight
 		String reason()
 		{
 			Integer h = Foods.heals(item);
+			if (h != null)
+			{
+				h = ItemCounts.effectiveHeal(h);
+			}
 			if (h != null && need > 1)
 			{
 				// Food is counted by healing: say it in health, so 10 Cooked meat next to "10 Trout" is not a riddle.
@@ -108,8 +112,11 @@ final class Preflight
 	static int count(ItemCounts items, ActiveTarget.Pre p)
 	{
 		Integer unit = Foods.heals(p.getItem());
+		if (unit != null)
+		{
+			return Foods.count(items, p.getId(), p.getItem(), p.getAlt(), unit);
+		}
 		int n = items.exact(p.getId(), p.getItem());
-		long healing = unit == null ? 0 : (long) n * unit;
 		if (p.getAlt() != null)
 		{
 			for (String other : p.getAlt())
@@ -120,16 +127,10 @@ final class Preflight
 					continue;
 				}
 				int k = items.exact(null, other);
-				if (unit == null)
-				{
-					n += k;
-					continue;
-				}
-				Integer h = Foods.heals(other);
-				healing += (long) k * (h == null ? unit : h);
+				n += k;
 			}
 		}
-		return unit == null ? n : (int) Math.min(Integer.MAX_VALUE, healing / unit);
+		return n;
 	}
 
 	/**

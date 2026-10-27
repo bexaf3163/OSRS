@@ -66,6 +66,7 @@ final class ItemCounts
 	/** The player's real Mining and Woodcutting levels; 0 while unknown, and then every tier counts (unknown is not missing). */
 	private static volatile int miningLevel;
 	private static volatile int woodcuttingLevel;
+	private static volatile int hitpointsLevel;
 	/** Tiers that are members items (the same set as toolTiers.ts): on a free-to-play world they do not do the job at any level. */
 	private static final java.util.Set<String> MEMBERS_TIERS = java.util.Set.of("dragon");
 	/** False on a free-to-play world, null while no world is known (then every tier counts: unknown is not missing). */
@@ -74,8 +75,19 @@ final class ItemCounts
 	/** A better tier the player cannot use yet (a Rune pickaxe at Mining 10) does not stand in for the named one. Set from the game's levels. */
 	static void setToolLevels(int mining, int woodcutting)
 	{
+		setLevels(mining, woodcutting, 0);
+	}
+
+	static void setLevels(int mining, int woodcutting, int hitpoints)
+	{
 		miningLevel = mining;
 		woodcuttingLevel = woodcutting;
+		hitpointsLevel = hitpoints;
+	}
+
+	static int effectiveHeal(int healing)
+	{
+		return hitpointsLevel > 0 ? Math.min(healing, Math.max(1, hitpointsLevel - 1)) : healing;
 	}
 
 	/** The world the player is on: true for a members world, false for a free one, null while not logged in. */

@@ -13,6 +13,7 @@ import type { GearState, NavTargetPayload } from '../services/runeliteBridge';
 import { plural } from './shopping';
 import { buildPlayerState, coinsOf, heldOf, levelOf, ownedCountOf, questOf, unusableTools, type Held, type PlayerState } from './playerState';
 import { evaluate } from './requirements';
+import { allocateFoodStock } from './foodAdvice';
 import { toolFamilyOf } from './toolTiers';
 import { doseKind, heldUnits, needUnits } from './doses';
 import { currentLoadoutStep, loadoutPhase } from './loadoutPhase';
@@ -212,7 +213,10 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
 
   // Items taken along (not obtained during the step) and coins.
   const bank = nearestBank(step);
-  for (const it of preflightItems(currentLoadoutStep(step, state.connected ? ctx.questInstruction : null))) {
+  const departureItems = preflightItems(currentLoadoutStep(step, state.connected ? ctx.questInstruction : null));
+  const foodStock = allocateFoodStock(state, departureItems.map((it, index) => ({ ...it, key: `departure:${index}`,
+    manualKey: it.id !== undefined ? `id:${it.id}` : `name:${nameKey(it.nameEn)}`, anyOf: it.alt })), levelOf(state, 'hitpoints'));
+  for (const [index, it] of departureItems.entries()) {
     const isCoins = it.id === COINS_ID || nameKey(it.nameEn) === 'coins';
     if (isCoins) {
       const res = evaluate({ type: 'money', amount: it.count }, state);
@@ -241,13 +245,16 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     // Any of several items does the job (S3-08's food: Salmon, or Trout, Tuna...): they count together, as the plugin's guide counts them. A tool
     // family (every pickaxe tier) is counted by heldOf already.
     const alt = it.alt?.length && !toolFamilyOf(it.nameEn) ? it.alt : null;
-    const res = it.equip ? evaluate({ type: 'equipment', name: it.nameEn, anyOf: it.alt, count: it.count }, state) : alt
+    const food = typeof it.heals === 'number' && it.heals > 0 ? { heals: it.heals, anyOf: it.alt } : undefined;
+    const res = it.equip ? evaluate({ type: 'equipment', name: it.nameEn, anyOf: it.alt, count: it.count }, state) : food
+      ? evaluate({ type: 'item', name: it.nameEn, count: it.count, manualKey: key, food }, state, { ...foodStock.get(`departure:${index}`)!, unit: 'piece' }) : alt
       ? evaluate({
         type: 'alternative', requiredCount: it.count,
         alternatives: [{ name: it.nameEn, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, ...alt.map((n) => ({ name: n, manualKey: `name:${nameKey(n)}` }))],
       }, state)
       : evaluate({ type: 'item', name: it.nameEn, count: it.count, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, state);
-    const h = alt ? heldAll(state, [it.nameEn, ...alt], key) : heldUnits(state, it.nameEn, key);
+    const h = food ? foodStock.get(`departure:${index}`)!
+      : alt ? heldAll(state, [it.nameEn, ...alt], key) : heldUnits(state, it.nameEn, key);
     // A potion is counted in doses (doses.ts): the label keeps the route's "×5" and says what that is in doses.
     const doses = !alt && doseKind(it.nameEn) ? needUnits(it.nameEn, it.count) : null;
     const u = doses !== null ? ' doses' : '';

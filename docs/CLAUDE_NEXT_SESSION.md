@@ -1,34 +1,25 @@
 # Claude continuation â€” authoritative takeover
 
-## Published delivery receipt — 2026-10-27
+## Current continuation - 2.80.7 preparation (2026-10-27)
 
-**2.80.5 is a normal published latest portable release**, source58d74b0. Release40539342356 and Checks40539342213 both succeeded. EXE102,077,781bytes; SHA256 `82c72ab2bc68f814477156b6518caf66b7b591be419dab37d1c32323b9bbda63`, verified equal to GitHub asset digest and SHA256SUMS. Download: https://github.com/bexaf3163/OSRS/releases/tag/v2.80.5 . New game behavior remains unverified live.
+Published baseline is NORMAL portable2.80.6 (sourcea7d3d54): Release40540103010 and Checks40540103432 succeeded. EXE102,075,688bytes, SHA256 `8c2a9ab105bb5d6c1f31f945ff0a7673287f505cd2e016859b595e132878c143`, matching GitHub digest/SHA256SUMS. Publish verified batches to main as normal releases autonomously; no previews or repeated approval.
 
-2.80.6 code is on main at a7d3d54; all Checks40540103432 succeeded. Normal Release40540103010 is running its own gates and will publish automatically on success. Do not call it released before checking GitHub. The older preparation/publication text below is historical; implementation and remaining-engine lists still apply. No repeated publication approval is required.
+Implemented in this batch:
+- Shared food holding/allocation in the existing food/readiness pipeline: healing rather than piece count, one rounding after mixed healing, real-HP limits, deduplicated aliases and physical/manual stock allocated once.
+- Readiness, departure, one-trip preparation, Shopping and goal funding use it. Quest ingredients/other demands remain reserved; optional food cannot consume required stock. Player snapshots are immutable; only watched food records are copied, and lists without food skip allocation.
+- Unread alternatives remain unknown, but sufficient observed bag/bank stock still proves ownership. Merged alternatives must satisfy every source. Mixed food/exact demands stay conservative; no such collision was found in current four-step raw route windows.
+- Java Checklist/Foods mirror the allocation and share healing with quest guards. Login, mid-session enabling and HP changes refresh the cap. Unrecognised alternatives receive no assumed healing credit. Estimates and cleanup reserves also use effective healing; heterogeneous partial alternatives stay protected.
+- No new panels, settings, route IDs or save migration. Existing manual marks retain their original keys. Old unsafe20-any-fish regression expectations now cover both sufficient healing and insufficient weak food.
 
-## Food replacement certainty — 2.80.6 preparation
+Verification: final source passed2233unit tests/189files, fullJava644tests, build/TypeScript, data0errors/warnings, rebuilt plugin jar, sourceElectron E2E75checks (including actual profile-conflict merge and first-write copy failures). Full browser acceptance is running; portable2.80.7 is not yet published and new behavior is not live-game verified.
 
-Cheaper food comparisons now use the shared effective-healing rule at the known Hitpoints level; for example10HP needs25Tuna to replace25Salmon, not23Tuna. Confidence is the weaker of the original and substitute purchase quotes, so stale prices cannot create a HIGH-confidence saving. This extends the existing cheaper-supply engine; no new UI or silent food substitution.
+REAL UPDATE ACCEPTANCE PASSED: [run40549572912](https://github.com/bexaf3163/OSRS/actions/runs/40549572912) exercised published2.80.5 ->2.80.6, real download/digest/install/automatic restart, old-EXE/cleanup-note removal and healthy recheck. S1-01 save bytes were identical. T02's normal update path is verified; interrupted-update/power-loss recovery is not claimed.
 
-Passed2224unit tests/188files and build/data; focused final-version checks and GitHub release gates are pending.2.80.5 publication is running separately; do not claim either new EXE live-tested. Automatic normal portable releases on main are authorized; no owner reminder is needed. The broader coordinated food substitution/packing/acquisition/potion/Members backlog remains open.
+Native profile-conflict merge is verified through its real UI action: every character remains, browser/native lists agree after reload, and both original lists remain as exact recovery copies. The merge logic already existed; do not rebuild it.
 
-## Normal portable release policy — 2026-10-27
+Native first-write-copy failure is exercised in isolated source E2E: primary save succeeds, Settings names the failed profile/copy, history is persisted, renderer reload retains it, and successful independent copies do not erase it. This is not cold-process warning restart acceptance or a guarantee of retaining an unwritable copy.
 
-Owner correction: publish completed verified batches directly to main as new normal portable releases, autonomously. Previews are not the requested delivery. The main-push audit publication added in c576600 is disabled; historical PR preview behavior remains. Existing Release workflow and full gates build each bumped version. No hourly schedule or repeated permission request.
-
-**2.80.5 is being prepared** from the already verified repairs described below. Release publication and its own packaged checks are pending; do not confuse the older audit digest with the new versioned portable. Previous local source checks passed2221unit/1037browser/639Java/sourceE2E66/portableE2E68. No new live-game validation is claimed. Remaining engine work below is unchanged.
-
-## Verified preview continuation â€” 2026-10-27
-
-Production source **2748da5** includes repairs9e26279/1613c6e/82604a8/59d1052: net combat costs, funding certainty, unread-bank quest guards and remaining-phase supplies. Carrying readiness stays phase-specific; whole-goal Shopping/Funding/cleanup retain future food and armour. No new menus or parallel engines.
-
-Passed: **2,221 unit tests /188files;1,037 browser checks;639 Java tests /82suites;66 source Electron E2E checks;68 isolated portable E2E checks**, TypeScript/build and data0errors/warnings. Electron44.9.3 matches the lock. Browser fixtures now await an identified Entrana snapshot and retain unknown armour pricing instead of asserting positive gross profit. Production was not changed for these test repairs.
-
-Audit portable: `OSRS-Path-audit-test-2748da5.exe`,102,075,217bytes, SHA256 `BBBE82B41F7D24186B50DF26EB5376CE72CA8BD8459BF0C9F971F24E59D0BD6F`. Bundled/rebuilt plugin SHA256 `0CEFB2B5C5A90A07BA0F6DB6E7D8DA0B34B250E0FBE9996A97BFBA8A03CFE4ED`. Internal app/plugin version remains2.80.4; identify audits by source and filename. Stable2.80.4 stays unchanged.
-
-Owner authorized publishing ready batches. Main pushes now build and publish separate audit prereleases only after all Checks jobs pass, including source/packaged E2E. No hourly timer. Check Actions for actual publication; pushing is not proof of a published EXE.
-
-New fixes are **not live-verified**. Existing live evidence covers released2.80.4 login/sync and collapsed/expanded HUD only. Remaining: coordinated food substitution; acquisition travel/fees; goal-wide potion/future-purchase simulation; source-backed remaining Members models; live combat/food/quest/lifecycle acceptance. Preserve UNKNOWN and saved progression. Older pending verification/publication text below is historical and superseded here.
+NEXT: finish browser/packaged release acceptance and record the portable receipt; then address confirmed inventory packing/acquisition/whole-goal potion gaps. Verify remaining Members models and reproduce historical audit candidates before changing them. Do not redo completed work or claim the full audit complete. Default guidance stays compact and Balanced.
 
 ## Local continuation â€” remaining combat supplies, 2026-10-27
 
@@ -177,8 +168,8 @@ The earlier six local sandbox failures are historical: permitted loopback and wo
 
 | Open area | Required work |
 | --- | --- |
-| T01 | Conflict-resolution UX; first-write.bak failures; restart error history; invalid/unsupported skipped-copy diagnostics; runtime external file changes/broader recovery. Preserve quarantine. |
-| T02 | Real isolated two-version update/post-update save recovery. Existing digest tests are not an old-to-new restart. No new fixture transport/test seam implemented. |
+| T01 | Profile merge UX implemented and native-tested; cold-process warning acceptance (native first-write failure/history is now covered); invalid/unsupported skipped-copy diagnostics; runtime external file changes/broader recovery. Preserve quarantine. |
+| T02 | Normal2.80.5 ->2.80.6 update/restart/save preservation PASSED in run40549572912. Interrupted-update/power-loss recovery remains unverified; the old normal-path acceptance is no longer unfinished. |
 | T03 | Remaining exact-ID/legacy consumers, special-tool eligibility/mixed-version parity. Never substitute physical tools twice or unreported facts as absent. |
 | T04/T08 | Broader account/restart/session and partial-rejection acceptance. Preserve working freshness/order/limits guards. |
 | T05 | Equivalent acquisition proof, consumer subsets, branch/cursor recovery, Shield of Arrav/partial-quest acceptance. No repeat completed quest to reacquire items. |

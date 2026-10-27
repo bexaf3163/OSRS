@@ -297,8 +297,25 @@ try {
 
   // Native damage/future formats and valid conflicting lists survive mirroring and a normal live-status poll.
   // These are disposable native files; no installed profile or real plugin is contacted.
-  status.stats.magic = 99;
   const conflictingProfiles = { ...profiles, list: [...profiles.list, { id: 'onlydisk', name: 'Disk-only character', player: 'Disk tester' }] };
+  writeFileSync(profilesFile, JSON.stringify(conflictingProfiles), 'utf8');
+  await page.evaluate(savedProfiles => localStorage.setItem('osrs-put:profiles', JSON.stringify(savedProfiles)), profiles);
+  await page.reload();
+  const mergeButton = page.getByRole('button', { name: 'Merge both lists', exact: true });
+  await mergeButton.waitFor({ state: 'visible' });
+  expect(await mergeButton.isVisible(), 'profile conflict: the real shell offers the explicit merge action');
+  await Promise.all([page.waitForNavigation({ waitUntil: 'domcontentloaded' }), mergeButton.click()]);
+  await page.waitForTimeout(1000);
+  const mergedNative = JSON.parse(readFileSync(profilesFile, 'utf8'));
+  const mergedBrowser = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:profiles') ?? 'null'));
+  expect(mergedNative.list.some((p: { id: string }) => p.id === 'onlydisk') && profiles.list.every(p => mergedNative.list.some((n: { id: string }) => n.id === p.id)),
+    'profile conflict merge: every original character remains in the native file');
+  expect(JSON.stringify(mergedBrowser) === JSON.stringify(mergedNative), 'profile conflict merge: browser and native lists agree after reload');
+  const originals = await page.evaluate(() => ({ local: localStorage.getItem('osrs-put:profiles:recovery:local'), file: localStorage.getItem('osrs-put:profiles:recovery:file') }));
+  expect(originals.local === JSON.stringify(profiles) && originals.file === JSON.stringify(conflictingProfiles),
+    'profile conflict merge: both original lists remain as exact recovery copies');
+
+  status.stats.magic = 99;
   for (const raw of ['{"version":99,"list":[]}', '{broken native profiles', JSON.stringify(conflictingProfiles)]) {
     await page.evaluate(() => (window as unknown as { osrsDesktop: { loadProfilesFile(): string | null } }).osrsDesktop.loadProfilesFile());
     writeFileSync(profilesFile, raw, 'utf8');
@@ -388,6 +405,36 @@ try {
   }
   const copiesRecovered = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
   expect(copiesRecovered.error === null, 'partial backup recovery: restoring readable sources clears the failure');
+
+  // A new profile has not had its session-first copy yet. Block only that copy in the disposable data directory.
+  const firstProfile = join(dirname(file), 'progress-firstbak.json');
+  const firstCopy = join(dirname(file), 'progress-firstbak.bak.json');
+  if (existsSync(firstProfile) || existsSync(firstCopy)) throw new Error('First-copy fixture already exists');
+  const initialProfile = readFileSync(file, 'utf8');
+  writeFileSync(firstProfile, initialProfile, { flag: 'wx' });
+  mkdirSync(firstCopy);
+  try {
+    const receipt = await page.evaluate(json => (window as unknown as { osrsDesktop: {
+      saveProgressFileChecked(json: string, profile: string): Promise<{ ok: boolean }>;
+    } }).osrsDesktop.saveProgressFileChecked(json, 'firstbak'), initialProfile);
+    expect(receipt.ok && readFileSync(firstProfile, 'utf8') === initialProfile,
+      'first-write backup failure: a failed .bak copy does not falsely reject the successful primary save');
+    const copyState = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    expect(Boolean(copyState.error?.includes('progress-firstbak.json') && copyState.error.includes('before the first save')),
+      'first-write backup failure: Settings identifies the affected profile and copy');
+    const uiState = JSON.parse(readFileSync(join(dirname(file), 'ui.json'), 'utf8'));
+    expect(Boolean(uiState.copyErrors?.['first-write copy']?.['progress-firstbak.json']),
+      'first-write backup failure: warning history is persisted to disk');
+    await page.reload();
+    await page.waitForFunction(() => Boolean((window as unknown as { osrsDesktop?: unknown }).osrsDesktop));
+    const afterReload = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    expect(afterReload.error === copyState.error, 'first-write backup failure: reloading the renderer cannot hide the warning');
+    const otherCopies = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
+    expect(otherCopies.error === copyState.error, 'first-write backup failure: successful scheduled copies do not erase another failed copy');
+  } finally {
+    rmdirSync(firstCopy);
+    rmSync(firstProfile);
+  }
 
   expect(!errors.length, `console: no errors ${errors.join('; ')}`);
   if (exe) {

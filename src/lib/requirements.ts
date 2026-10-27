@@ -8,13 +8,14 @@ import type { GameMode } from '../types';
 import { nameKey } from './checklist';
 import { coinsOf, heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from './playerState';
 import { countWorn } from './equipmentCount';
-import { heldUnits, needUnits } from './doses';
+import { heldUnits, needUnits, type HeldUnits } from './doses';
+import { heldFood } from './foodAdvice';
 
 export type ItemRef = { name: string; id?: number; /** The manual "already have" mark key. */ manualKey?: string };
 
 export type Requirement =
   | { type: 'skill'; skill: string; min: number }
-  | ({ type: 'item'; count: number } & ItemRef)
+  | ({ type: 'item'; count: number; food?: { heals: number; anyOf?: readonly string[] } } & ItemRef)
   | { type: 'equipment'; name: string; slot?: string; anyOf?: string[]; count?: number }
   | { type: 'quest'; quest: string }
   | { type: 'money'; amount: number }
@@ -36,7 +37,7 @@ export interface ReqResult {
 
 const gp = (n: number) => Math.round(n).toLocaleString('en-US');
 
-export function evaluate(req: Requirement, s: PlayerState): ReqResult {
+export function evaluate(req: Requirement, s: PlayerState, allocated?: HeldUnits): ReqResult {
   const bankUnknown = s.bankSeen ? 'bank quantity not checked' : 'the bank was not opened';
   switch (req.type) {
     case 'skill': {
@@ -48,7 +49,8 @@ export function evaluate(req: Requirement, s: PlayerState): ReqResult {
     }
     case 'item': {
       // A potion is counted in doses across its sizes (doses.ts): 4 × Strength potion(4) is 16 doses, a (3) and a (1) are 4 of them.
-      const h = heldUnits(s, req.name, req.manualKey);
+      const h = allocated ?? (req.food ? { ...heldFood(s, { nameEn: req.name, ...req.food }, req.manualKey, levelOf(s, 'hitpoints')), unit: 'piece' as const }
+        : heldUnits(s, req.name, req.manualKey));
       const count = needUnits(req.name, req.count);
       const u = h.unit === 'dose' ? ' doses' : '';
       if (h.presence === 'UNKNOWN') {

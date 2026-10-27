@@ -6,6 +6,7 @@ import { nameKey, parseAmount, type OwnedState } from './checklist';
 import { toolFamilyOf } from './toolTiers';
 import { doseKind, heldUnits } from './doses';
 import gearJson from '../data/gear.json';
+import { heldFood, type FoodHolding } from './foodAdvice';
 
 /**
  * Tools and gear: they are not used up, so one is enough for all the steps: the largest
@@ -133,8 +134,17 @@ function collect(
       }
       acc.line.iconUrl ??= item.iconUrl;
       if (item.equip) acc.line.equip = true;
-      if (item.heals !== undefined) acc.line.heals ??= item.heals;
-      if (item.anyOf?.length) acc.line.anyOf = [...new Set([...(acc.line.anyOf ?? []), ...item.anyOf])].filter((n) => nameKey(n) !== name);
+      if (!carryOver) {
+        const alternatives = [...new Map((item.anyOf ?? []).filter(n => nameKey(n) !== name).map(n => [nameKey(n), n])).values()];
+        if (acc.perStep.size === 0) {
+          acc.line.heals = item.heals;
+          acc.line.anyOf = alternatives;
+        } else {
+          if (acc.line.heals !== item.heals) acc.line.heals = undefined;
+          const accepted = new Set(alternatives.map(nameKey));
+          acc.line.anyOf = (acc.line.anyOf ?? []).filter(n => accepted.has(nameKey(n)));
+        }
+      }
       byName.set(name, acc);
       acc.line.sources.push({ stepId: step.id, amount: item.amount, carryOver, ...(item.phase ? { phase: item.phase } : {}), ...(dose ? { per: dose.per } : {}) });
       if (carryOver) continue;
@@ -228,14 +238,18 @@ export interface Holding {
 }
 
 export function holdingFor(
-  line: Pick<ShoppingLine, 'nameEn' | 'count' | 'exact'>,
+  line: Pick<ShoppingLine, 'nameEn' | 'count' | 'exact'> & Partial<Pick<ShoppingLine, 'heals' | 'anyOf'>>,
   owned: { bankSeen: boolean; items: Map<string, { carried: number; noted: number; bank?: number }> } | null,
   manual?: number,
   onGe = true,
+  hitpoints?: number,
+  allocatedFood?: FoodHolding,
 ): Holding {
   const required = line.count;
   // The same "how much there is" calculation as readiness and the single requirements (playerState.heldOf; a potion in doses, doses.ts).
-  const h = heldUnits({ owned: owned as OwnedState | null, equipment: {}, manual: manual !== undefined ? { m: manual } : {}, bankSeen: owned?.bankSeen === true }, line.nameEn, manual !== undefined ? 'm' : undefined);
+  const state = { owned: owned as OwnedState | null, equipment: {}, manual: (manual !== undefined ? { m: manual } : {}) as Record<string, number>, bankSeen: owned?.bankSeen === true };
+  const h = line.heals ? allocatedFood ?? heldFood(state, { ...line, heals: line.heals }, manual !== undefined ? 'm' : undefined, hitpoints)
+    : heldUnits(state, line.nameEn, manual !== undefined ? 'm' : undefined);
   const inGame = h.bag !== null;
   const carried = inGame ? (h.bag ?? 0) + h.noted : undefined;
   const bank = inGame ? h.bank : undefined;
@@ -262,6 +276,10 @@ export function holdingFor(
   if (h.source === 'manual') {
     const have = h.total ?? 0;
     return { ...base, owned: have, buy: Math.max(0, required - have), status: status(have), source: 'manual' };
+  }
+  // A confirmed lower bound can prove sufficiency even if another accepted food is still unread.
+  if (h.source === 'game' && h.total !== null && h.total >= required) {
+    return { ...base, owned: h.total, buy: 0, status: status(h.total), source: 'live' };
   }
   // The bank is unknown: what is in the bag suffices, it is known; what is lacking is unknown, not "none".
   if (carried !== undefined) {

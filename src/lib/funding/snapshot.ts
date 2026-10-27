@@ -10,7 +10,7 @@ import { carryoverOf } from '../carryover';
 import { heldExact, heldOf, levelOf, questOf, type Held, type PlayerState, type QuestPresence, type WorldPoint } from '../playerState';
 import { aggregateShopping } from '../shopping';
 import { doseKind, doseNames } from '../doseKind';
-import { FOODS } from '../foodAdvice';
+import { effectiveHeal, FOODS } from '../foodAdvice';
 import { toolFamilyOf, usableAt } from '../toolTiers';
 import { questItemKeys } from '../questItems';
 import { totalLevelOf, tradeRestriction, type SellOverride, type TradeRestriction } from '../tradeRestriction';
@@ -76,10 +76,11 @@ export function protectionsFor(window: readonly Step[], state?: PlayerState): Ma
   // The exchange list's quantities (food for the whole planned goal, not one trip): what Shopping has the player buy is never surplus to sell.
   const list = aggregateShopping(window.map(s => ({ ...s, itemsRequired: s.itemsRequired?.filter(i => !i.inStep), goalItemsRequired: s.goalItemsRequired?.filter(i => !i.inStep) })), { wholeGoal: true });
   const used = new Map<string, number>();
-  const heals = new Map(FOODS.map(f => [nameKey(f.name), f.heals]));
+  const hp = state ? levelOf(state, 'hitpoints') : undefined;
+  const heals = new Map(FOODS.map(f => [nameKey(f.name), effectiveHeal(f, hp)]));
   const stock = (name: string, key?: string) => state ? heldExact(state, name, key).total ?? 0 : 0;
   for (const line of list.required) {
-    const foodHeal = line.heals ?? heals.get(nameKey(line.nameEn));
+    const foodHeal = line.heals ? effectiveHeal({ heals: line.heals }, hp) : heals.get(nameKey(line.nameEn));
     let remaining = line.count * (foodHeal ?? 1);
     const family = toolFamilyOf(line.nameEn);
     const sourceItems = window.flatMap(s => line.sources.some(src => src.stepId === s.id) ? (s.goalItemsRequired ?? s.itemsRequired ?? []).filter(i => !i.inStep && (nameKey(i.nameEn) === nameKey(line.nameEn) || (line.id !== undefined && i.wikiItemId === line.id))) : []);
@@ -94,11 +95,12 @@ export function protectionsFor(window: readonly Step[], state?: PlayerState): Ma
     // A row with heterogeneous alternatives cannot yet be split into source allocations by
     // Shopping. Protect its held partial alternatives as well as the conservative primary
     // deficit: losing that protection would make useful stock look safe to sell.
-    for (const name of (line.anyOf ?? []).filter(n => !common.some(c => nameKey(c) === nameKey(n)))) {
+    const alternatives = [...new Set(sourceItems.flatMap(item => item.anyOf ?? []))];
+    for (const name of alternatives.filter(n => !common.some(c => nameKey(c) === nameKey(n)))) {
       const key = nameKey(name);
       const possibleNeed = sourceItems.filter(it => it.anyOf?.some(n => nameKey(n) === key)).reduce((sum, it) => {
         const n = parseAmount(it.amount);
-        return n === null ? Infinity : sum + n * (it.heals ?? foodHeal ?? 1);
+        return n === null ? Infinity : sum + n * (it.heals ? effectiveHeal({ heals: it.heals }, hp) : foodHeal ?? 1);
       }, 0);
       const per = foodHeal ? heals.get(key) ?? foodHeal : 1;
       const qty = Math.min(Math.max(0, stock(name) - (used.get(key) ?? 0)), Math.ceil(possibleNeed / per));

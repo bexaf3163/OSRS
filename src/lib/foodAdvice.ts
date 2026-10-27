@@ -5,6 +5,8 @@ import threatsJson from '../data/threats.json';
 import type { GameMode, Step } from '../types';
 import type { PriceView } from './funding/quotes';
 import { supplyPrice } from './sourceRouter';
+import { heldExact, type Held, type PlayerState } from './playerState';
+import { nameKey, type OwnedItem } from './checklist';
 
 export interface Hit { n: number; label: string }
 export interface Threat { page: string; version?: string; hits: Hit[]; speedTicks: number; hitpoints: number; combat: number }
@@ -78,6 +80,104 @@ export function foodAllowed(food: Food, mode: GameMode): boolean {
 /** Ordinary single-bite food cannot heal beyond the missing HP of a living player. */
 export function effectiveHeal(food: Pick<Food, 'heals'>, hitpoints?: number): number {
   return hitpoints === undefined ? food.heals : Math.min(food.heals, Math.max(1, hitpoints - 1));
+}
+
+/** Only explicit combat food may use edible alternatives; a quest ingredient stays an exact item. */
+export interface FoodRequirement { nameEn: string; heals: number; anyOf?: readonly string[] }
+
+interface FoodPart { name: string; heals: number; held: Held; alternative: boolean }
+export interface FoodHolding extends Held { withYou: number | null; viaAlternatives: number; bankLower: number; parts: FoodPart[] }
+
+/** Named-food equivalents, rounded after adding healing, with the same bank certainty as physical stock. */
+export function heldFood(
+  state: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>,
+  food: FoodRequirement, manualKey?: string, hitpoints?: number, reserved?: ReadonlyMap<string, number>, reservePrimary = false,
+): FoodHolding {
+  const primary = nameKey(food.nameEn);
+  const names = [...new Map([food.nameEn, ...(food.anyOf ?? [])].map(name => [nameKey(name), name])).values()];
+  const unit = effectiveHeal(food, hitpoints);
+  const parts = names.flatMap(name => {
+    const heals = nameKey(name) === primary ? food.heals : FOODS.find(f => nameKey(f.name) === nameKey(name))?.heals;
+    if (heals === undefined) return [];
+    const original = heldExact(state, name, nameKey(name) === primary ? manualKey : undefined);
+    const reserve = nameKey(name) === primary && !reservePrimary ? 0 : reserved?.get(nameKey(name)) ?? 0;
+    let keep = reserve;
+    const bank = original.bank === null ? null : Math.max(0, original.bank - keep);
+    keep = Math.max(0, keep - (original.bank ?? 0));
+    const noted = Math.max(0, original.noted - keep);
+    keep = Math.max(0, keep - original.noted);
+    const bag = original.bag === null ? null : Math.max(0, original.bag - keep);
+    const total = original.total === null ? null : Math.max(0, original.total - reserve);
+    return [{ name, held: { ...original, bank, noted, bag, total }, alternative: nameKey(name) !== primary, heals: effectiveHeal({ heals }, hitpoints) }];
+  });
+  const sum = (where: 'bag' | 'bank' | 'total') => Math.floor(parts.reduce((n, p) => n + (p.held[where] ?? 0) * p.heals, 0) / unit);
+  const bankKnown = parts.every(p => p.held.bank !== null);
+  const anyBag = parts.some(p => p.held.bag !== null);
+  const anyStock = parts.some(p => p.held.presence === 'PRESENT');
+  const allMissing = parts.every(p => p.held.presence === 'MISSING');
+  const total = sum('total');
+  return {
+    bag: anyBag ? sum('bag') : null,
+    noted: Math.floor(parts.reduce((n, p) => n + p.held.noted * p.heals, 0) / unit),
+    bank: bankKnown ? sum('bank') : null,
+    total: anyStock || allMissing ? total : null,
+    presence: anyStock ? 'PRESENT' : allMissing ? 'MISSING' : 'UNKNOWN',
+    equipped: 0,
+    source: parts.some(p => p.held.source === 'manual') ? 'manual' : parts.some(p => p.held.source === 'game') ? 'game' : 'none',
+    withYou: anyBag ? Math.floor(parts.reduce((n, p) => n + ((p.held.bag ?? 0) + p.held.noted) * p.heals, 0) / unit) : null,
+    viaAlternatives: Math.floor(parts.filter(p => p.alternative).reduce((n, p) => n + (p.held.total ?? 0) * p.heals, 0) / unit),
+    bankLower: sum('bank'),
+    parts,
+  };
+}
+
+/** Allocate physical edible stock once, in demand order; another line's named ingredients stay reserved. */
+export function allocateFoodStock(
+  state: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>,
+  lines: readonly { key: string; manualKey?: string; reservedCount?: number; nameEn: string; count: number; heals?: number; anyOf?: readonly string[] }[],
+  hitpoints?: number, reservations?: ReadonlyMap<string, number>,
+): Map<string, FoodHolding> {
+  const foodLines = lines.filter(line => line.heals);
+  if (!foodLines.length) return new Map();
+  const names = new Set(foodLines.flatMap(line => [line.nameEn, ...(line.anyOf ?? [])]).map(nameKey));
+  const items = new Map([...names].flatMap(key => {
+    const item = state.owned?.items.get(key);
+    return item ? [[key, { ...item }] as [string, OwnedItem]] : [];
+  }));
+  const pool = { ...state, manual: { ...state.manual }, owned: state.owned ? { ...state.owned, items } : null };
+  const reserved = new Map(reservations);
+  if (!reservations) for (const line of lines) reserved.set(nameKey(line.nameEn), (reserved.get(nameKey(line.nameEn)) ?? 0) + line.count);
+  const out = new Map<string, FoodHolding>();
+  for (const line of lines) {
+    if (!line.heals) continue;
+    const primary = nameKey(line.nameEn);
+    reserved.set(primary, Math.max(0, (reserved.get(primary) ?? 0) - (line.reservedCount ?? line.count)));
+    const held = heldFood(pool, { ...line, heals: line.heals }, line.manualKey ?? line.key, hitpoints, reserved, true);
+    out.set(line.key, held);
+    let health = Math.max(0, line.count) * effectiveHeal({ heals: line.heals }, hitpoints);
+    let primaryUsed = 0;
+    // Carried food is allocated before banknotes/bank stock so two lines cannot both claim the same ready bag.
+    for (const where of ['bag', 'noted', 'bank'] as const) {
+      for (const part of held.parts) {
+        if (health <= 0) break;
+        const record = pool.owned?.items.get(nameKey(part.name));
+        if (!record) continue;
+        const take = Math.min(part.held[where] ?? 0, Math.ceil(health / part.heals));
+        const field = where === 'bag' ? 'carried' : where;
+        record[field] = Math.max(0, (record[field] ?? 0) - take);
+        if (!part.alternative) primaryUsed += take;
+        health = Math.max(0, health - take * part.heals);
+      }
+    }
+    const manualKey = line.manualKey ?? line.key;
+    if (pool.manual[manualKey] !== undefined) {
+      const primaryHeld = held.parts.find(part => !part.alternative);
+      const extra = primaryHeld?.held.source === 'manual'
+        ? Math.min(Math.max(0, (primaryHeld.held.total ?? 0) - primaryUsed), Math.ceil(health / effectiveHeal({ heals: line.heals }, hitpoints))) : 0;
+      pool.manual[manualKey] = Math.max(0, pool.manual[manualKey] - primaryUsed - extra);
+    }
+  }
+  return out;
 }
 
 /** Eligible food that covers one max hit; priced choices rank by cost per effective HP, never by an invented free price. */

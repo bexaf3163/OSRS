@@ -16,6 +16,8 @@ const step = (id: string, items: StepItemRequirement[], rec: StepItemRequirement
 
 function owned(items: Record<string, [number, number | null]>, bankSeen = true): OwnedState {
   const map = new Map<string, OwnedItem>();
+  // A complete departure report includes every accepted food, including confirmed zeroes.
+  if (bankSeen) for (const name of ['Salmon', 'Trout', 'Tuna', 'Lobster']) map.set(nameKey(name), { name, carried: 0, noted: 0, bank: 0 });
   for (const [n, [carried, bank]] of Object.entries(items)) map.set(nameKey(n), { name: n, carried, noted: 0, ...(bank === null ? {} : { bank }) });
   return { bankSeen, items: map };
 }

@@ -5,6 +5,7 @@ import type { Step, StepItemRequirement } from '../types';
 import { alternativesOf, toolUse, toolFamilyOf, usableAt } from './toolTiers';
 import { doseKind, doseName } from './doseKind';
 import { countWorn, type WornItem } from './equipmentCount';
+import { allocateFoodStock } from './foodAdvice';
 
 /** How many of an item the player has, by the plugin's data. bank is undefined until the bank was opened in this session. */
 export interface OwnedItem {
@@ -95,7 +96,9 @@ export interface PreflightResult {
 }
 
 export function evaluatePreflight(items: PreflightItem[], owned: OwnedState, levels?: Partial<Record<string, number>> | null, equipment?: readonly WornItem[] | null): PreflightResult {
-  const rows = items.map((item): PreflightRow => {
+  const foods = allocateFoodStock({ owned, bankSeen: owned.bankSeen, equipment: {}, manual: {} },
+    items.map((item, index) => ({ ...item, key: `departure:${index}`, anyOf: item.alt })), levels?.hitpoints);
+  const rows = items.map((item, index): PreflightRow => {
     // A potion counts in doses across its four sizes, each potion by its own doses: a (3) and a (1) are 4.
     const dose = item.doses !== undefined ? doseKind(item.nameEn) : null;
     const all = dose
@@ -106,11 +109,12 @@ export function evaluatePreflight(items: PreflightItem[], owned: OwnedState, lev
     const need = item.doses ?? item.count;
     const legacy = Boolean(toolFamilyOf(item.nameEn)) && all.some(({ o }) => o?.legacyToolCount);
     const count = (where: 'carried' | 'bank') => legacy ? Math.max(0, ...all.map(({ o }) => o?.[where] ?? 0)) : all.reduce((s, { o, w }) => s + (o?.[where] ?? 0) * w, 0);
-    const carried = count('carried');
+    const food = foods.get(`departure:${index}`);
+    const carried = food ? food.bag ?? 0 : count('carried');
     const accepted = new Set([item.nameEn, ...(item.alt ?? [])].map(nameKey));
     const worn = countWorn(equipment, n => accepted.has(nameKey(n)));
     const have = item.equip ? worn.count : carried;
-    const inBank = owned.bankSeen && all.every(({ o }) => o?.bank !== undefined) ? count('bank') : null;
+    const inBank = food ? food.bank : owned.bankSeen && all.every(({ o }) => o?.bank !== undefined) ? count('bank') : null;
     let state: PreflightState;
     if (have >= need) state = 'IN_BAG_READY';
     else if (item.equip && !worn.known) state = 'UNKNOWN';

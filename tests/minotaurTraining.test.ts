@@ -35,9 +35,11 @@ describe('S3-08 readiness: not "ready" with an empty bag', () => {
     expect(foodRow(owned({ 'Mithril scimitar': [1] }, true))).toMatchObject({ state: 'MISSING', label: 'Salmon ×20 (or Trout, Tuna…)' });
   });
 
-  it('20 pieces of any listed fish are the food: Trout counts, and Salmon and Trout add up', () => {
-    expect(readiness(owned({ 'Mithril scimitar': [1], Trout: [20] }, true)).status).toBe('READY');
-    expect(readiness(owned({ 'Mithril scimitar': [1], Salmon: [12], Trout: [8] }, true)).status).toBe('READY');
+  it('alternative fish must cover the same healing: weak pieces alone are not enough', () => {
+    expect(readiness(owned({ 'Mithril scimitar': [1], Trout: [20] }, true)).status).toBe('MISSING_ITEM');
+    expect(readiness(owned({ 'Mithril scimitar': [1], Trout: [26] }, true)).status).toBe('READY');
+    expect(readiness(owned({ 'Mithril scimitar': [1], Salmon: [12], Trout: [8] }, true)).status).toBe('MISSING_ITEM');
+    expect(readiness(owned({ 'Mithril scimitar': [1], Salmon: [12], Trout: [11] }, true)).status).toBe('READY');
   });
 
   it('the live bag of 2026-10-15 (5 Salmon): short with the bank read, "not checked" while the bank is unread', () => {

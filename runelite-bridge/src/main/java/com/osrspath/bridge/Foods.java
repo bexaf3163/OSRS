@@ -36,6 +36,68 @@ final class Foods
 		return m.get(ActiveTarget.nameKey(name));
 	}
 
+	/** Named-food equivalents; sum healing before rounding, never count an alias twice. */
+	static int count(ItemCounts items, Integer id, String name, java.util.List<String> alternatives, int healing)
+	{
+		return count(items, id, name, alternatives, healing, Collections.emptyMap(), Collections.emptyMap());
+	}
+
+	static int count(ItemCounts items, Integer id, String name, java.util.List<String> alternatives, int healing,
+		Map<String, Integer> used, Map<String, Integer> reserved)
+	{
+		int unit = ItemCounts.effectiveHeal(healing);
+		if (unit <= 0)
+		{
+			return 0;
+		}
+		long health = 0;
+		String primary = ActiveTarget.nameKey(name);
+		for (Map.Entry<String, Integer> part : parts(name, alternatives, healing).entrySet())
+		{
+			health += (long) available(items, part.getKey().equals(primary) ? id : null, part.getKey(), used, reserved) * part.getValue();
+		}
+		return (int) Math.min(Integer.MAX_VALUE, health / unit);
+	}
+
+	/** Allocate whole physical pieces, never the same bite to two requirements. Returns health still needed. */
+	static long reserve(ItemCounts items, Integer id, String name, java.util.List<String> alternatives, int healing,
+		long health, Map<String, Integer> used, Map<String, Integer> reserved)
+	{
+		String primary = ActiveTarget.nameKey(name);
+		for (Map.Entry<String, Integer> part : parts(name, alternatives, healing).entrySet())
+		{
+			if (health <= 0) break;
+			int free = available(items, part.getKey().equals(primary) ? id : null, part.getKey(), used, reserved);
+			int take = (int) Math.min(free, (health + part.getValue() - 1) / part.getValue());
+			used.merge(part.getKey(), take, Integer::sum);
+			health = Math.max(0, health - (long) take * part.getValue());
+		}
+		return health;
+	}
+
+	private static int available(ItemCounts items, Integer id, String name, Map<String, Integer> used, Map<String, Integer> reserved)
+	{
+		return (int) Math.max(0, (long) items.exact(id, name) - used.getOrDefault(name, 0) - reserved.getOrDefault(name, 0));
+	}
+
+	private static Map<String, Integer> parts(String name, java.util.List<String> alternatives, int healing)
+	{
+		Map<String, Integer> out = new java.util.LinkedHashMap<>();
+		out.put(ActiveTarget.nameKey(name), ItemCounts.effectiveHeal(healing));
+		if (alternatives != null)
+		{
+			for (String other : alternatives)
+			{
+				Integer heals = heals(other);
+				if (heals != null && heals > 0)
+				{
+					out.putIfAbsent(ActiveTarget.nameKey(other), ItemCounts.effectiveHeal(heals));
+				}
+			}
+		}
+		return out;
+	}
+
 	static Map<String, Integer> parse(InputStream in)
 	{
 		if (in == null)

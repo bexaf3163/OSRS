@@ -5,11 +5,11 @@
 
 import type { Progress, Step, WikiItemDetail } from '../types';
 import { aggregateShopping, formatGp, type ShoppingLine, type ShoppingList, type ShoppingSource } from './shopping';
-import { heldEquipment, heldOf, type PlayerState } from './playerState';
+import { heldEquipment, heldOf, levelOf, type PlayerState } from './playerState';
+import { allocateFoodStock, heldFood, type FoodHolding } from './foodAdvice';
 import { carryOf, doseKind, dosePackage, heldUnits, takeFromBank, type Carry, type DosePackage, type DoseSize } from './doses';
 import { legacyKeys } from './oneTrip';
 import { planSources } from './sourceRouter';
-import { healsOf } from './combatEstimate';
 import { nameKey, parseAmount } from './checklist';
 import { isClosed } from './next-step';
 import { tripWindow } from './oneTrip';
@@ -29,6 +29,9 @@ export interface Ownership {
   source: 'game' | 'manual' | 'bag' | 'none';
   /** Pieces of another item that does the same job, counted in (food by healing). */
   viaAlternatives: number;
+  /** Confirmed lower bounds when unreported alternatives keep the complete total unknown. */
+  lowerBound?: number;
+  bankLower?: number;
   /** A potion: the counts above are doses; these are the potions of each size, largest first. */
   sizes?: DoseSize[];
 }
@@ -76,8 +79,15 @@ const wearable = new Set(gearData.items.filter((p) => p.slot).map((p) => nameKey
  * list need of an alternative (the Lobsters a step asks for are not also the Salmon of another): only the rest of that stack counts here.
  */
 export function ownershipOf(
-  state: PlayerState, line: Pick<ShoppingLine, 'nameEn' | 'key' | 'anyOf' | 'heals'> & Partial<Pick<ShoppingLine, 'dose' | 'id' | 'equip'>>, reserved?: ReadonlyMap<string, number>,
+  state: PlayerState, line: Pick<ShoppingLine, 'nameEn' | 'key' | 'anyOf' | 'heals'> & Partial<Pick<ShoppingLine, 'dose' | 'id' | 'equip'>>, reserved?: ReadonlyMap<string, number>, allocatedFood?: FoodHolding,
 ): Ownership {
+  if (line.heals && !line.equip) {
+    const h = allocatedFood ?? heldFood(state, { ...line, heals: line.heals }, line.key, levelOf(state, 'hitpoints'), reserved);
+    const complete = h.source === 'manual' || h.bank !== null;
+    return { total: complete ? h.total : null, withYou: h.withYou, bank: h.bank, worn: 0,
+      source: h.source === 'manual' ? 'manual' : complete ? 'game' : h.withYou !== null ? 'bag' : 'none', viaAlternatives: h.viaAlternatives,
+      lowerBound: h.total ?? 0, bankLower: h.bankLower };
+  }
   if (line.equip) {
     const h = heldEquipment(state, [line.nameEn, ...(line.anyOf ?? [])]);
     return { total: h.total, withYou: h.bag === null ? null : h.bag + h.noted, bank: h.bank, worn: h.equipped,
@@ -92,8 +102,7 @@ export function ownershipOf(
   let alt = 0;
   for (const name of line.anyOf ?? []) {
     const h = heldOf(state, name);
-    const altHeals = line.heals ? healsOf(name) : null;
-    const conv = (n: number) => (line.heals && altHeals ? Math.floor((n * altHeals) / line.heals) : n);
+    const conv = (n: number) => n;
     // The pieces another line needs come out of the bank first, then the bag.
     let keep = reserved?.get(nameKey(name)) ?? 0;
     const bankFree = h.bank === null ? null : Math.max(0, h.bank - keep);
@@ -137,9 +146,9 @@ const why = (sources: readonly ShoppingSource[]) => sources.map((s) => {
 
 const firstSentence = (t: string) => (t.split(/(?<=[.!?])\s/)[0] ?? t).replace(/\.$/, '');
 
-function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: ReadonlyMap<string, number>): ShopRow {
+function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: ReadonlyMap<string, number>, foodStock?: FoodHolding): ShopRow {
   if (line.dose) return doseRow(line, optional, ctx);
-  const own = ownershipOf(ctx.state, line, reserved);
+  const own = ownershipOf(ctx.state, line, reserved, foodStock);
   const required = line.count;
   const tradeable = ctx.onGe(line);
   const tripNeed = Math.min(required, ctx.trip?.get(line.key) ?? required);
@@ -149,14 +158,14 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
   };
   const done = (action: string): ShopRow => ({ ...base, qty: 0, channel: 'have', action, unitPrice: null, cost: null });
   const withYou = own.withYou ?? 0;
-  const enough = (own.total !== null && own.total >= required) || withYou >= required;
+  const enough = (own.total ?? own.lowerBound ?? 0) >= required || withYou >= required;
   if (line.inStepOnly && !enough) {
     const first = line.sources.find((s) => !s.carryOver)?.stepId ?? line.sources[0]?.stepId;
     return { ...base, qty: Math.max(0, required - (own.total ?? withYou)), channel: 'along', action: `You get it during ${first}`, unitPrice: null, cost: null };
   }
   if (enough) {
-    if (withYou < tripNeed && (own.bank ?? 0) > 0) {
-      const qty = Math.min(tripNeed - withYou, own.bank ?? 0);
+    if (withYou < tripNeed && (own.bank ?? own.bankLower ?? 0) > 0) {
+      const qty = Math.min(tripNeed - withYou, own.bank ?? own.bankLower ?? 0);
       return { ...base, qty, channel: 'bank', action: `Take ${qty} from the bank`, unitPrice: null, cost: null };
     }
     if (wearable.has(nameKey(line.nameEn)) && own.worn === 0 && withYou > 0 && /\b(wear|wield|equip)/i.test(line.howToGet)) {
@@ -166,7 +175,7 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
   }
   if (own.total === null) {
     // Priced at the exchange only to say what it could cost at most; it is not counted as a purchase.
-    const qty = Math.max(0, required - withYou);
+    const qty = Math.max(0, required - Math.max(withYou, own.lowerBound ?? 0));
     const unit = tradeable ? ctx.gePrice(line) : null;
     // The group says it is not confirmed; the row says what to do if it is missing.
     const fallback = tradeable ? 'the Grand Exchange' : line.howToGet ? firstSentence(line.howToGet) : 'on the way';
@@ -273,7 +282,11 @@ function doseRow(line: ShoppingLine, optional: boolean, ctx: RowContext): ShopRo
 export function shopRows(list: ShoppingList, ctx: RowContext): ShopRow[] {
   // What every required line needs of its own item: an alternative stack serves another line only beyond that.
   const reserved = new Map(list.required.map((l) => [nameKey(l.nameEn), l.count]));
-  return [...list.required.map((l) => row(l, false, ctx, reserved)), ...list.recommended.map((l) => row(l, true, ctx, reserved))].map(r => {
+  const demands = [...list.required, ...list.recommended].map((line, index) => ({ ...line, key: `shop:${index}`, manualKey: line.key,
+    reservedCount: index < list.required.length ? line.count : 0 }));
+  const foodStock = allocateFoodStock(ctx.state, demands, levelOf(ctx.state, 'hitpoints'), reserved);
+  return [...list.required.map((l, index) => row(l, false, ctx, reserved, foodStock.get(`shop:${index}`))),
+    ...list.recommended.map((l, index) => row(l, true, ctx, reserved, foodStock.get(`shop:${list.required.length + index}`)))].map(r => {
     if (!ctx.priceLabel || !r.tradeable || (r.channel !== 'ge' && r.channel !== 'unknown')) return r;
     const labels = r.package ? r.package.lines.map(p => ctx.priceLabel!(p.name)) : [ctx.priceLabel(r.name, r.id)];
     const priceLabel = r.cost === null ? 'Price unavailable' : labels.find(l => l.startsWith('Cached')) ?? labels.find(l => l.startsWith('Indicative')) ?? 'GE estimate';

@@ -88,7 +88,7 @@ public class ToolLevelTest
 		Preflight.Block meat = Preflight.check("S3-04", l, true, bag(2142, "Cooked meat", 10), null, 3000, 3494, 0, Collections.emptyList());
 		assertEquals(4, meat.getHave());
 		assertTrue(meat.reason(), meat.reason().startsWith("Guidance paused: bring food before entering — 70 health (10 Trout or food that heals as much); you carry 28."));
-		assertNull("a food the table does not know counts as one piece of the named one", Preflight.check("S3-04", l, true, bag(385, "Shark", 10), null, 3000, 3494, 0, Collections.emptyList()));
+		assertNotNull("unverified healing must not satisfy a food safety guard", Preflight.check("S3-04", l, true, bag(385, "Shark", 10), null, 3000, 3494, 0, Collections.emptyList()));
 		assertEquals(Integer.valueOf(7), Foods.heals("Trout"));
 	}
 

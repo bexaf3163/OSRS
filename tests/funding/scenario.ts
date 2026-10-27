@@ -69,7 +69,7 @@ export function scenario(prices: PriceView, o: ScenarioOpts = {}): Scenario {
   const steps = stepsFor('f2p').map(s => s.id === 'S4-03' ? legacyCollect as Step : s);
   const step = steps.find(s => s.id === (o.stepId ?? 'S4-03'))!;
   // The plugin reports every item the route asks about, zero included: a tracked item with nothing is a fact, an untracked one is unknown.
-  const tracked = new Set(tripWindow(steps, emptyProgress(), step.id).flatMap((w) => (w.itemsRequired ?? []).map((i) => i.nameEn)));
+  const tracked = new Set(tripWindow(steps, emptyProgress(), step.id).flatMap((w) => (w.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])));
   const bankSeen = o.bankSeen ?? true;
   const worn = o.worn ?? HISTORICAL.worn;
   // What is worn is reported as carried by the plugin.
@@ -93,7 +93,7 @@ export function scenario(prices: PriceView, o: ScenarioOpts = {}): Scenario {
   const progress = emptyProgress();
   const trip = planOneTrip(steps, progress, step.id, state);
   const prep = buildPrepPlan({ step, steps, progress, state, trip, readiness: readinessOf(step, { steps, progress, qp: 0, mode: 'f2p', state }), detail: o.detail ?? (() => undefined) });
-  const need = buildNeed({ step, prep, prices, owned: state.owned, manual: {} });
+  const need = buildNeed({ step, prep, prices, owned: state.owned, manual: {}, hitpoints: (o.stats ?? HISTORICAL.stats).hitpoints });
   const snap = buildSnapshot({
     state, window: trip.stepIds.map((id) => steps.find(s => s.id === id)!), questPoints: o.questPoints === undefined ? 30 : o.questPoints,
     totalLevel: o.totalLevel === undefined ? 150 : o.totalLevel, ironman: o.ironman === undefined ? false : o.ironman, sellOverride: o.sellOverride,

@@ -429,6 +429,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			if (loggedIn)
 			{
 				// The plugin was enabled in the middle of a game: take levels and the bag at once, without waiting for events.
+				ItemCounts.setLevels(client.getRealSkillLevel(Skill.MINING), client.getRealSkillLevel(Skill.WOODCUTTING), client.getRealSkillLevel(Skill.HITPOINTS));
 				for (Skill skill : Skill.values())
 				{
 					if (!isOverall(skill))
@@ -3318,12 +3319,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			loginTick = tickCount;
 			// A Dragon pickaxe or axe is a members item: on a free world it does not stand in for the tool the step names.
 			ItemCounts.setMembersWorld(client.getWorldType().contains(net.runelite.api.WorldType.MEMBERS));
+			ItemCounts.setLevels(client.getRealSkillLevel(Skill.MINING), client.getRealSkillLevel(Skill.WOODCUTTING), client.getRealSkillLevel(Skill.HITPOINTS));
 			ownedDirty = true;
 			updateHud();
 		}
 		else if (state == GameState.LOGIN_SCREEN || state == GameState.HOPPING)
 		{
 			ItemCounts.setMembersWorld(null);
+			ItemCounts.setLevels(0, 0, 0);
 			npcs.clear();
 			navNpcs.clear();
 			dangerNpcs.clear();
@@ -3644,10 +3647,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			return;
 		}
-		if (e.getSkill() == Skill.MINING || e.getSkill() == Skill.WOODCUTTING)
+		if (e.getSkill() == Skill.MINING || e.getSkill() == Skill.WOODCUTTING || e.getSkill() == Skill.HITPOINTS)
 		{
 			// A pickaxe or axe tier above the player's level does not count as "the tool" (a Rune pickaxe at Mining 10).
-			ItemCounts.setToolLevels(client.getRealSkillLevel(Skill.MINING), client.getRealSkillLevel(Skill.WOODCUTTING));
+			ItemCounts.setLevels(client.getRealSkillLevel(Skill.MINING), client.getRealSkillLevel(Skill.WOODCUTTING), client.getRealSkillLevel(Skill.HITPOINTS));
 			ownedDirty = true;
 		}
 		// The tracked skill reached the target level of its step: the next step leads (chime, arrow to its place, its object or NPC highlighted).

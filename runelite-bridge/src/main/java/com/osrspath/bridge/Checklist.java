@@ -125,16 +125,47 @@ final class Checklist
 			return NONE;
 		}
 		List<Row> rows = new ArrayList<>(items.size());
+		java.util.Map<String, Integer> remaining = new java.util.HashMap<>();
+		java.util.Map<String, Integer> usedBag = new java.util.HashMap<>();
+		java.util.Map<String, Integer> usedBank = new java.util.HashMap<>();
+		for (ActiveTarget.ChecklistItem item : items)
+		{
+			remaining.merge(ActiveTarget.nameKey(item.getName()), Math.max(1, item.getCount()),
+				(a, b) -> (int) Math.min(Integer.MAX_VALUE, (long) a + b));
+		}
 		boolean ready = true;
 		for (ActiveTarget.ChecklistItem item : items)
 		{
 			// A potion is counted in doses of every size (the app sends them): a (3) and a (1) cover a "Strength potion(4)".
 			boolean dose = item.getDoses() != null && item.getDoses() > 0 && ItemCounts.doseBase(item.getName()) != null;
 			int need = dose ? item.getDoses() : Math.max(1, item.getCount());
-			int onHand = dose ? carried.doses(item.getName()) : ActiveTarget.countWithAlt(carried, item.getId(), item.getName(), item.getAlt());
+			boolean food = item.getHeals() != null && item.getHeals() > 0;
+			java.util.Map<String, Integer> bagReserved = new java.util.HashMap<>();
+			java.util.Map<String, Integer> bankReserved = new java.util.HashMap<>();
+			if (food)
+			{
+				String primary = ActiveTarget.nameKey(item.getName());
+				remaining.compute(primary, (key, count) -> Math.max(0, (count == null ? 0 : count) - need));
+				for (java.util.Map.Entry<String, Integer> requirement : remaining.entrySet())
+				{
+					int bankFree = bank == null ? 0 : Math.max(0, bank.exact(null, requirement.getKey()) - usedBank.getOrDefault(requirement.getKey(), 0));
+					int inBank = Math.min(requirement.getValue(), bankFree);
+					bankReserved.put(requirement.getKey(), inBank);
+					bagReserved.put(requirement.getKey(), requirement.getValue() - inBank);
+				}
+			}
+			int onHand = dose ? carried.doses(item.getName()) : food ? Foods.count(carried, item.getId(), item.getName(), item.getAlt(), item.getHeals(), usedBag, bagReserved)
+				: ActiveTarget.countWithAlt(carried, item.getId(), item.getName(), item.getAlt());
 			boolean equip = Boolean.TRUE.equals(item.getEquip());
 			int have = equip ? worn == null ? 0 : ActiveTarget.countWithAlt(worn, item.getId(), item.getName(), item.getAlt()) : onHand;
-			int inBank = bank == null ? -1 : dose ? bank.doses(item.getName()) : ActiveTarget.countWithAlt(bank, item.getId(), item.getName(), item.getAlt());
+			int inBank = bank == null ? -1 : dose ? bank.doses(item.getName()) : food ? Foods.count(bank, item.getId(), item.getName(), item.getAlt(), item.getHeals(), usedBank, bankReserved)
+				: ActiveTarget.countWithAlt(bank, item.getId(), item.getName(), item.getAlt());
+			if (food)
+			{
+				long health = Foods.reserve(carried, item.getId(), item.getName(), item.getAlt(), item.getHeals(),
+					(long) need * ItemCounts.effectiveHeal(item.getHeals()), usedBag, bagReserved);
+				if (bank != null) Foods.reserve(bank, item.getId(), item.getName(), item.getAlt(), item.getHeals(), health, usedBank, bankReserved);
+			}
 			State state;
 			if (have >= need)
 			{
@@ -153,7 +184,7 @@ final class Checklist
 				state = State.NOT_FOUND_IN_BANK;
 			}
 			ready &= state == State.IN_BAG_READY;
-			rows.add(new Row(item.getName(), have, need, inBank, item.getHeals(), state, dose));
+			rows.add(new Row(item.getName(), have, need, inBank, food ? Integer.valueOf(ItemCounts.effectiveHeal(item.getHeals())) : item.getHeals(), state, dose));
 		}
 		return new Result(Collections.unmodifiableList(rows), ready);
 	}

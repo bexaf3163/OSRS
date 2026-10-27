@@ -1708,10 +1708,10 @@ async function fundingScenarios(browser: Browser) {
     .map(([id, name, slot]) => ({ id, name, slot }));
   const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
   // The plugin reports every item the route asks about, zero included; what is worn counts as carried.
-  const all = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string }[] }[];
+  const all = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
   const from = all.findIndex((x) => x.id === 'S4-03');
   const worn = new Set(equipment.map((e) => e.name));
-  const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).map((i) => i.nameEn)))];
+  const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))];
   const owned = asked.map((name) => ({ name, carried: worn.has(name) ? 1 : 0, noted: 0, bank: 0 }));
   for (const width of [1440, 390]) {
     const { page, errors } = await open(browser, width, {
@@ -1756,7 +1756,7 @@ async function fundingScenarios(browser: Browser) {
     const saved = await page.evaluate(() => Object.entries(localStorage).filter(([k]) => k.startsWith('osrs-put:funding-plan')).map(([, v]) => JSON.parse(v)));
     expect(saved.length === 1 && saved[0].sourceStepId === 'S4-03' && saved[0].character === 'Funding Test', `funding (${width} px): the plan is saved for this character`);
     if (process.env.UI_SHOTS) await page.locator('.funding-card').screenshot({ path: `${process.env.UI_SHOTS}/funding-running-${width}.png` }).catch(() => {});
-    await page.getByRole('button', { name: 'Cancel' }).first().click();
+    await page.locator('.funding-card.is-running').getByRole('button', { name: 'Cancel', exact: true }).click();
     await page.waitForTimeout(500);
     expect(await page.locator('.funding-card.is-running').count() === 0 && await page.locator('.status-funding').count() === 0, `funding (${width} px): Cancel closes the plan`);
     await page.waitForTimeout(900);
@@ -1776,10 +1776,10 @@ async function moneyScenarios(browser: Browser) {
   console.log('money');
   const equipment = ([[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']] as [number, string, string][])
     .map(([id, name, slot]) => ({ id, name, slot }));
-  const all = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string }[] }[];
+  const all = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
   const from = all.findIndex((x) => x.id === 'S4-03');
   const worn = new Set(equipment.map((e) => e.name));
-  const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).map((i) => i.nameEn)))];
+  const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))];
   const stats = { attack: 30, strength: 21, defence: 1, hitpoints: 24 };
   const hero = (o: { bankSeen?: boolean; offline?: boolean; coins?: number } = {}): Mock => {
     const gear = { equipment, inventory: [], coins: o.coins ?? 400, bankCoins: o.bankSeen === false ? null : 0 };
@@ -1976,6 +1976,9 @@ async function moneyScenarios(browser: Browser) {
 async function shoppingScenarios(browser: Browser) {
   console.log('shopping');
   const scim = { id: 1329, name: 'Mithril scimitar', slot: 'weapon' };
+  const requirements = (JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { anyOf?: string[] }[] }[])
+    .find(step => step.id === 'S3-08')!.itemsRequired ?? [];
+  const absentAlternatives = [...new Set(requirements.flatMap(item => item.anyOf ?? []))].map(name => ({ name, carried: 0, noted: 0, bank: 0 }));
   const base = (o: { worn?: boolean; coins?: number; bankSeen?: boolean; items?: { name: string; carried: number; noted: number; bank?: number }[]; offline?: boolean }) => {
     const gear = { equipment: o.worn ? [scim] : [], inventory: [], coins: o.coins ?? 100, bankCoins: o.bankSeen === false ? null : 0 };
     return {
@@ -1994,7 +1997,7 @@ async function shoppingScenarios(browser: Browser) {
   for (const width of [1440, 390]) {
     // Real shortages: the purchases, the money short, the way to the coin plan, the exchange list.
     {
-      const { page, errors } = await open(browser, width, base({ items: [{ name: 'Mithril scimitar', carried: 0, noted: 0, bank: 0 }, { name: 'Salmon', carried: 0, noted: 0, bank: 5 }] }), '#/shopping');
+      const { page, errors } = await open(browser, width, base({ items: [...absentAlternatives, { name: 'Mithril scimitar', carried: 0, noted: 0, bank: 0 }, { name: 'Salmon', carried: 0, noted: 0, bank: 5 }] }), '#/shopping');
       await page.waitForTimeout(1200);
       const body = await text(page, '.shop-page');
       expect(/Buy (at the Grand Exchange|in shops) · [12]/.test(body) && /Salmon[^]*×15/.test(body) && /5 more in the bank/.test(body), `shopping (${width} px): the buy list with the bank stock named`);
@@ -2054,10 +2057,10 @@ async function combatRouteScenarios(browser: Browser) {
   const equipment = ([[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']] as [number, string, string][])
     .map(([id, name, slot]) => ({ id, name, slot }));
   const gear = { equipment, inventory: [], coins: 5000, bankCoins: 0 };
-  const all = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string }[] }[];
+  const all = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
   const from = all.findIndex((x) => x.id === 'S4-03');
   const worn = new Set(equipment.map((e) => e.name));
-  const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).map((i) => i.nameEn)))];
+  const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))];
   const owned = asked.map((name) => ({ name, carried: worn.has(name) ? 1 : 0, noted: 0, bank: 0 }));
   const COWS = 'The cow field east of Lumbridge';
   for (const width of [1440, 390]) {

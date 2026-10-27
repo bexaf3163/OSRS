@@ -6,7 +6,8 @@
 import type { Step } from '../types';
 import { aggregateShopping, type ShoppingLine } from './shopping';
 import { nameKey, parseAmount } from './checklist';
-import { heldEquipment, type PlayerState } from './playerState';
+import { heldEquipment, levelOf, type PlayerState } from './playerState';
+import { allocateFoodStock } from './foodAdvice';
 import { heldUnits, type HeldUnits } from './doses';
 import { isClosed } from './next-step';
 import type { Progress } from '../types';
@@ -97,9 +98,12 @@ export function planOneTrip(steps: Step[], progress: Progress, currentId: string
   const window = tripWindow(steps, progress, currentId, ahead);
   const ids = window.map((s) => s.id);
   const list = aggregateShopping(window);
+  const foodStock = allocateFoodStock(state, list.required, levelOf(state, 'hitpoints'));
   const lines: TripLine[] = [];
   for (const line of list.required) {
-    const held: HeldUnits = line.equip ? { ...heldEquipment(state, [line.nameEn, ...(line.anyOf ?? [])]), unit: 'piece' } : heldUnits(state, line.nameEn, line.key, legacyKeys(line));
+    const held: HeldUnits = line.equip ? { ...heldEquipment(state, [line.nameEn, ...(line.anyOf ?? [])]), unit: 'piece' }
+      : line.heals ? { ...foodStock.get(line.key)!, unit: 'piece' }
+      : heldUnits(state, line.nameEn, line.key, legacyKeys(line));
     const needs = perStepNeed(line, ids);
     // Assign what is already owned to the nearest steps: 13 of 20 is on hand, the first steps are covered, the last is not.
     let pool = held.total ?? 0;

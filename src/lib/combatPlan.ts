@@ -10,6 +10,7 @@ import {
 import { durationText } from './splits';
 import { heldUnits } from './doses';
 import { heldExact } from './playerState';
+import { effectiveHeal } from './foodAdvice';
 import { currentXp, itemGoal, objectiveEstimates } from './combatObjectives';
 
 export const BASIS_LABEL: Record<Basis, string> = {
@@ -102,7 +103,7 @@ export const minutesText = (r: Range) => {
 };
 
 /** The food of the step and its alternatives you own, counted in pieces of the step's food by healing. Unknown — null. */
-export function ownedFood(step: Pick<Step, 'itemsRequired'>, owned: OwnedState | null, reserved: FoodReservations = new Map()): OwnedFood | null {
+export function ownedFood(step: Pick<Step, 'itemsRequired'>, owned: OwnedState | null, reserved: FoodReservations = new Map(), hitpoints?: number): OwnedFood | null {
   const item = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
   if (!item || !owned) return null;
   let carried = 0;
@@ -116,8 +117,9 @@ export function ownedFood(step: Pick<Step, 'itemsRequired'>, owned: OwnedState |
   const kept: string[] = [];
   for (const name of [...new Map([item.nameEn, ...(item.anyOf ?? [])].map((n) => [nameKey(n), n])).values()]) {
     const o = owned.items.get(nameKey(name));
-    const heals = name === item.nameEn ? item.heals! : healsOf(name);
-    if (heals === null) continue;
+    const raw = name === item.nameEn ? item.heals! : healsOf(name);
+    if (raw === null) continue;
+    const heals = effectiveHeal({ heals: raw }, hitpoints);
     const held = heldExact({ owned, bankSeen: owned.bankSeen, equipment: {}, manual: {} }, name);
     if (held.bank === null) bankComplete = false;
     if (!o) continue;
@@ -145,9 +147,10 @@ export function ownedFood(step: Pick<Step, 'itemsRequired'>, owned: OwnedState |
     notedHealing += inNotes * heals;
     parts.push(`${n} ${name}`);
   }
+  const unit = effectiveHeal({ heals: item.heals! }, hitpoints);
   return {
-    carried, bank, equivalent: Math.floor(healing / item.heals!), carriedEq: Math.floor(carriedHealing / item.heals!),
-    bankEq: Math.floor(bankHealing / item.heals!), bankComplete, notedEq: Math.floor(notedHealing / item.heals!), reserved: kept, text: parts.join(', '),
+    carried, bank, equivalent: Math.floor(healing / unit), carriedEq: Math.floor(carriedHealing / unit),
+    bankEq: Math.floor(bankHealing / unit), bankComplete, notedEq: Math.floor(notedHealing / unit), reserved: kept, text: parts.join(', '),
   };
 }
 
@@ -203,7 +206,7 @@ export function combatPlanView(
   if (!primary || !item) return null;
   const food = item.nameEn;
   const total = roundPieces(primary.food);
-  const owned = ownedFood(step, ctx.owned, ctx.reserved);
+  const owned = ownedFood(step, ctx.owned, ctx.reserved, ctx.stats?.hitpoints);
   const buy = owned && (owned.equivalent >= total.high || owned.bankComplete) ? Math.max(0, total.high - owned.equivalent) : null;
 
   const phases = primary.phases.map((p) =>

@@ -3,7 +3,7 @@ import type { GearItem } from '../services/runeliteBridge';
 import { BANKS, EXCHANGE, bankTiles, type Point } from './travel';
 import { nameKey } from './checklist';
 import { usableAt } from './toolTiers';
-import { FOODS } from './foodAdvice';
+import { effectiveHeal, FOODS } from './foodAdvice';
 
 /**
  * The item pre-flight guard for a quest stage step: while an item the step uses is not in the bag (or worn), the arrow does not lead to the step.
@@ -47,7 +47,9 @@ export function countOf(items: GearItem[], p: Pick<StagePre, 'item' | 'id' | 'al
   const key = nameKey(p.item);
   const level = (skill: string) => (typeof levels?.[skill] === 'number' ? (levels[skill] as number) : null);
   const alts = new Set((p.alt ?? []).filter((n) => usableAt(n, level)).map(nameKey));
-  const unit = healOf(p.item);
+  const hp = levels?.hitpoints;
+  const rawUnit = healOf(p.item);
+  const unit = rawUnit === null ? null : effectiveHeal({ heals: rawUnit }, hp);
   let n = 0;
   let healing = 0;
   for (const i of items) {
@@ -58,7 +60,10 @@ export function countOf(items: GearItem[], p: Pick<StagePre, 'item' | 'id' | 'al
       healing += c * (unit ?? 0);
     } else if (alts.has(nameKey(i.name))) {
       if (unit === null) n += c;
-      else healing += c * (healOf(i.name) ?? unit);
+      else {
+        const raw = healOf(i.name);
+        if (raw !== null) healing += c * effectiveHeal({ heals: raw }, hp);
+      }
     }
   }
   return unit === null ? n : Math.floor(healing / unit);
