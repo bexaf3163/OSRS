@@ -1,12 +1,24 @@
 # Claude continuation — authoritative takeover
 
+## Verified preview continuation — 2026-10-27
+
+Production source **2748da5** includes repairs9e26279/1613c6e/82604a8/59d1052: net combat costs, funding certainty, unread-bank quest guards and remaining-phase supplies. Carrying readiness stays phase-specific; whole-goal Shopping/Funding/cleanup retain future food and armour. No new menus or parallel engines.
+
+Passed: **2,221 unit tests /188files;1,037 browser checks;639 Java tests /82suites;66 source Electron E2E checks;68 isolated portable E2E checks**, TypeScript/build and data0errors/warnings. Electron44.9.3 matches the lock. Browser fixtures now await an identified Entrana snapshot and retain unknown armour pricing instead of asserting positive gross profit. Production was not changed for these test repairs.
+
+Audit portable: `OSRS-Path-audit-test-2748da5.exe`,102,075,217bytes, SHA256 `BBBE82B41F7D24186B50DF26EB5376CE72CA8BD8459BF0C9F971F24E59D0BD6F`. Bundled/rebuilt plugin SHA256 `0CEFB2B5C5A90A07BA0F6DB6E7D8DA0B34B250E0FBE9996A97BFBA8A03CFE4ED`. Internal app/plugin version remains2.80.4; identify audits by source and filename. Stable2.80.4 stays unchanged.
+
+Owner authorized publishing ready batches. Main pushes now build and publish separate audit prereleases only after all Checks jobs pass, including source/packaged E2E. No hourly timer. Check Actions for actual publication; pushing is not proof of a published EXE.
+
+New fixes are **not live-verified**. Existing live evidence covers released2.80.4 login/sync and collapsed/expanded HUD only. Remaining: coordinated food substitution; acquisition travel/fees; goal-wide potion/future-purchase simulation; source-backed remaining Members models; live combat/food/quest/lifecycle acceptance. Preserve UNKNOWN and saved progression. Older pending verification/publication text below is historical and superseded here.
+
 ## Local continuation — remaining combat supplies, 2026-10-27
 
 - Resolved combat picks now retain food for all unfinished phases and the remaining equipment phase's usable armour alternatives. Defence eligibility is projected in a copy through the existing armour policy; no actual player level or account inventory is changed.
 - Runtime goalItemsRequired projects purchases from that plan. Current itemsRequired remains the current carrying/equipping checklist. Whole-goal Shopping, funding and cleanup protection use the same projected requirements; the bridge watches future supplies without adding them to the immediate checklist.
 - The current phase's more conservative food estimate can raise the goal allowance; completing a phase removes its demand. Zero-food plans do not retain a mandatory food purchase. New training-method, unknown-level and goal-reached projections clear superseded combat purchases. Goal quantity updates do not resend the HUD on every kill.
 - Regression coverage: armour phase retains later food, whole-goal Shopping versus immediate readiness, cleanup reservation, watched-but-not-required future food, completed-phase demand, quantity updates/resend stability and method handover. The historical split-plan test now counts both training and later collection food rather than asserting the current phase alone costs one quarter as much.
-- Full unit run: 2,220 tests / 188 files passed; subsequent method-handover regression (26-test file) passed. TypeScript/build and data 0 errors/warnings passed. No Java source changed since full639-test verification. Source Electron E2E passed in an isolated profile/mock bridge, including native save/read/backup recovery. Electron44.4.5 runtime installed successfully with the working task TEMP; plugin jar rebuilt from current source. Full browser suite is running against Chromium1247; collect its final result before publication. Browser/runtime blocks described in older sections are superseded by these current results.
+- Full unit run: 2,220 tests / 188 files passed; subsequent method-handover regression (26-test file) passed. TypeScript/build and data 0 errors/warnings passed. No Java source changed since full639-test verification. Source Electron E2E passed in an isolated profile/mock bridge, including native save/read/backup recovery. Electron44.9.3 runtime installed successfully with the working task TEMP; plugin jar rebuilt from current source. Full browser suite is running against Chromium1247; collect its final result before publication. Browser/runtime blocks described in older sections are superseded by these current results.
 - These fixes are local only; running2.80.4 remains unchanged. Still open: automatic food substitution across all consumers, acquisition travel/fees, goal-wide potion replenishment/future purchase simulation and remaining source-backed Members models. Do not treat this projection as a complete acquisition-time or future-economy simulator.
 
 ## Local continuation — quest purchase guard, 2026-10-27

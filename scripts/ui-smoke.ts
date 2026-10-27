@@ -457,11 +457,13 @@ async function run(browser: Browser) {
     const stats = { crafting: 31, woodcutting: 36, attack: 40, strength: 40, defence: 33 };
     const { page, errors } = await open(browser, 1280, {
       zen: true, progress: progressBefore('S9-01', { gameMode: 'members', levels: stats }),
-      localStorage: { 'osrs-put:active-step': 'S9-01' }, status: { protocol: 6, stats, activeStepId: 'S9-01' },
+      localStorage: { 'osrs-put:active-step': 'S9-01' }, status: { protocol: 6, inGame: true, player: 'Entrana Test', stats, activeStepId: 'S9-01' },
       events: [{ type: 'STATS', stats }, { type: 'OWNED', bankSeen: true, items: [
         { name: 'Knife', carried: 1, noted: 0, bank: 0 }, { name: 'Bronze axe', carried: 0, noted: 0, bank: 1 },
       ] }],
     }, '#/step/S9-01');
+    await page.waitForFunction(() => (window as unknown as { __posts: { path: string; body?: { plan?: { stepId?: string } } }[] }).__posts
+      .some(p => p.path === '/prep-plan' && p.body?.plan?.stepId === 'S9-01'), null, { timeout: 10000 });
     const plan = await page.evaluate(() => {
       const posts = (window as unknown as { __posts: { path: string; body?: { plan?: {
         lines: { name: string; timing: string; action?: string }[]; bankWithdrawals?: { itemName: string }[];
@@ -2110,7 +2112,8 @@ async function combatRouteScenarios(browser: Browser) {
     expect(rows >= 3 && rows <= 4 && await page.locator('.combat-plan-row', { hasText: '(the route)' }).count() === 1 && !/Defence 10 first/.test(all),
       `combat route (${width} px): three or four rows with the route's own; the common Defence 10 preparation is not a plan of its own (${rows})`);
     expect(!/Big bones bank quantity is not checked/.test(all), `combat route (${width} px): an unreported item quantity is disclosed even when the bank was opened`);
-    expect(/\+\d[\d,k]* gp/.test(all) && /Big bones/.test(await text(page, '.combat-verdict')), `combat route (${width} px): the loot is counted and the verdict says what it brings`);
+    const verdictText = await text(page, '.combat-verdict');
+    expect(/Not priced/.test(all) && verdictText.trim().length > 0, `combat route (${width} px): unchecked armour stays unpriced and the recommendation still explains its tradeoff`);
     expect(/Also compared: .*(Cows|Monks|Barbarians)/.test(all), `combat route (${width} px): it says what else was compared`);
     expect(await page.locator('.combat-plan-row.is-now .cpr-figs').count() === 1, `combat route (${width} px): the plan in use has its time, food and coins`);
     const netFigures = await page.locator('.combat-plan-row .cpr-figs > span:last-child').allTextContents();

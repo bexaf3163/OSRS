@@ -1,4 +1,4 @@
-# OSRS Path audit preview — historical test download
+# OSRS Path verified audit preview
 
 For the current main/release, completed repairs, source-specific verification and remaining work, start with [CLAUDE_NEXT_SESSION.md](CLAUDE_NEXT_SESSION.md). Identify historical previews by filename/source/SHA256; their internal app version alone does not identify a revision. Stable auto-updates ignore prereleases.
 
@@ -6,7 +6,7 @@ The2.74.3 repair batch includes progress proof, native read/copy diagnostics, to
 
 S4-03 is Attack40 without a mandatory bone quota/Hill Giant detour. Genuine collection/reserve tests elsewhere retain their own item objectives. Preserve the single guide and existing IDs/saves/unknown-state semantics.
 
-## Included
+## Historical scope (superseded by the current handoff)
 
 - Progress recovery and reporting of physical save failures; SHA-256 update verification.
 - Exact carried/noted/bank item quantities, explicit unnoting, recipe deficits and physical potion slots.
@@ -40,7 +40,7 @@ S4-03 is Attack40 without a mandatory bone quota/Hill Giant detour. Genuine coll
 
 The preview's Windows CI runs TypeScript/build, data validation, all Vitest tests, all Java tests, full Chromium UI smoke and native E2E against the actual portable EXE in an isolated folder. Native E2E uses a bridge fixture and test profiles, not a live account. The downloadable EXE is the same verified artifact; its SHA-256 is included separately.
 
-## Still open
+## Historical open list (consult the current handoff)
 
 Full combat trainer coverage, complete joint food/potion/loot packing, acquisition/travel and gear budgets; verified skill unlock/rate/budget coverage, compound Fishing/Cooking handover and actual combat-style Gear comparison; all route steps as a continuous progression; supported profile-conflict recovery UX, broader recovery/secondary-backup failures and remaining phase/unknown-state edge cases; Path simplification; residual dependency advisories; real-game screenshots and lifecycle/update acceptance. Automated estimates are not measured live combat timings. Profile receipts are not a transaction across native/browser storage or a power-loss guarantee. See `docs/CODEX_AUDIT_BACKLOG.md` and the individual handoffs in the source tree.
 

@@ -1,5 +1,27 @@
 # Claude → Codex handoff (living document)
 
+## Verified preview continuation — 2026-10-27
+
+Production source **2748da5** includes repairs9e26279/1613c6e/82604a8/59d1052: net combat costs, funding certainty, unread-bank quest guards and remaining-phase supplies. Carrying readiness stays phase-specific; whole-goal Shopping/Funding/cleanup retain future food and armour. No new menus or parallel engines.
+
+Passed: **2,221 unit tests /188files;1,037 browser checks;639 Java tests /82suites;66 source Electron E2E checks;68 isolated portable E2E checks**, TypeScript/build and data0errors/warnings. Electron44.9.3 matches the lock. Browser fixtures now await an identified Entrana snapshot and retain unknown armour pricing instead of asserting positive gross profit. Production was not changed for these test repairs.
+
+Audit portable: `OSRS-Path-audit-test-2748da5.exe`,102,075,217bytes, SHA256 `BBBE82B41F7D24186B50DF26EB5376CE72CA8BD8459BF0C9F971F24E59D0BD6F`. Bundled/rebuilt plugin SHA256 `0CEFB2B5C5A90A07BA0F6DB6E7D8DA0B34B250E0FBE9996A97BFBA8A03CFE4ED`. Internal app/plugin version remains2.80.4; identify audits by source and filename. Stable2.80.4 stays unchanged.
+
+Owner authorized publishing ready batches. Main pushes now build and publish separate audit prereleases only after all Checks jobs pass, including source/packaged E2E. No hourly timer. Check Actions for actual publication; pushing is not proof of a published EXE.
+
+New fixes are **not live-verified**. Existing live evidence covers released2.80.4 login/sync and collapsed/expanded HUD only. Remaining: coordinated food substitution; acquisition travel/fees; goal-wide potion/future-purchase simulation; source-backed remaining Members models; live combat/food/quest/lifecycle acceptance. Preserve UNKNOWN and saved progression. Older pending verification/publication text below is historical and superseded here.
+
+## Codex local continuation — 2026-10-27
+
+Current production source is local commit **2748da5**, after **9e26279 / 1613c6e / 82604a8 / 59d1052**. These commits are not pushed; stable main/release remains2.80.4. Start with the new top sections of [CLAUDE_NEXT_SESSION.md](CLAUDE_NEXT_SESSION.md) and [CODEX_ENGINE_HARDENING_HANDOFF.md](CODEX_ENGINE_HARDENING_HANDOFF.md), which supersede older open-item wording below.
+
+Implemented locally: net combat costs include consumed potions and needed usable armour; mixed unchecked supply costs remain unknown; quest purchase guards check unread/earlier-session banks before buying; remaining combat-phase food/armour persist in whole-goal Shopping/Funding/cleanup, while carrying readiness stays phase-specific. No duplicate engines, new menus or HUDs.
+
+Verified:2,221 unit tests/188files, build/data, prior fullJava639, sourceElectron66checks and isolated portable68checks. Full browser retest is pending final collection after correcting an Entrana fixture identity/wait and old gross-profit assertions; do not call it passed before its final result. Portable audit source2748da5 is102,075,217bytes, SHA256BBBE82B41F7D24186B50DF26EB5376CE72CA8BD8459BF0C9F971F24E59D0BD6F; not a new stable release.
+
+Owner now permits Codex limited live checks on World316. Released2.80.4 login/sync and collapsed/expanded HUD were checked without combat/travel/spending; **new local code is not live-verified**. Remaining work: coordinated automatic food substitution, acquisition travel/fees and goal-wide potion/future-purchase simulation, source-backed remaining Members models, broader live acceptance. Do not restore quotas or treat completed local repairs as missing features.
+
 Read this first. Claude keeps this file current after every release. It says what Claude received from Codex, what Claude changed, which engine owns each concern, what is in progress and what is still open. The owner wants **one coherent product built on engines**: before changing anything, find the engine below that owns the concern and fix or extend that engine. Never add a parallel mechanism, a per-step patch or an old feature back.
 
 **Codex continuation, 2026-10-26:** work is based on main `ae22ab7`, released app **2.80.3**. The local forecast, combat upgrade, Ranged/Magic recovery, Fletching/Herblore processing, funding-aware training and compact Skills/XP-Balanced-Money changes are described in [CODEX_ENGINE_HARDENING_HANDOFF.md](CODEX_ENGINE_HARDENING_HANDOFF.md). They are published in **2.80.4**; the verified portable receipt is at the top of CODEX_ENGINE_HARDENING_HANDOFF.md. Historical release entries below remain historical; use the current open list and the new receipt before repeating work.
