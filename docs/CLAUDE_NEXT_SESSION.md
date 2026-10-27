@@ -1,5 +1,14 @@
 # Claude continuation — authoritative takeover
 
+## Local continuation — remaining combat supplies, 2026-10-27
+
+- Resolved combat picks now retain food for all unfinished phases and the remaining equipment phase's usable armour alternatives. Defence eligibility is projected in a copy through the existing armour policy; no actual player level or account inventory is changed.
+- Runtime goalItemsRequired projects purchases from that plan. Current itemsRequired remains the current carrying/equipping checklist. Whole-goal Shopping, funding and cleanup protection use the same projected requirements; the bridge watches future supplies without adding them to the immediate checklist.
+- The current phase's more conservative food estimate can raise the goal allowance; completing a phase removes its demand. Zero-food plans do not retain a mandatory food purchase. New training-method, unknown-level and goal-reached projections clear superseded combat purchases. Goal quantity updates do not resend the HUD on every kill.
+- Regression coverage: armour phase retains later food, whole-goal Shopping versus immediate readiness, cleanup reservation, watched-but-not-required future food, completed-phase demand, quantity updates/resend stability and method handover. The historical split-plan test now counts both training and later collection food rather than asserting the current phase alone costs one quarter as much.
+- Full unit run: 2,220 tests / 188 files passed; subsequent method-handover regression (26-test file) passed. TypeScript/build and data 0 errors/warnings passed. No Java source changed since full639-test verification. Source Electron E2E passed in an isolated profile/mock bridge, including native save/read/backup recovery. Electron44.4.5 runtime installed successfully with the working task TEMP; plugin jar rebuilt from current source. Full browser suite is running against Chromium1247; collect its final result before publication. Browser/runtime blocks described in older sections are superseded by these current results.
+- These fixes are local only; running2.80.4 remains unchanged. Still open: automatic food substitution across all consumers, acquisition travel/fees, goal-wide potion replenishment/future purchase simulation and remaining source-backed Members models. Do not treat this projection as a complete acquisition-time or future-economy simulator.
+
 ## Local continuation — quest purchase guard, 2026-10-27
 
 - Reproduced in real released RuneLite: the current Dragon Slayer recovery line showed Plank as Not checked in the app, while the game said Buy Plank. The plugin had an earlier-session bank snapshot.

@@ -162,7 +162,7 @@ function collect(
 export function aggregateShopping(steps: Step[], opts: { wholeGoal?: boolean } = {}): ShoppingList {
   const selected = new Set(steps.map((s) => s.id));
   const coins = { n: 0, lines: [] as { stepId: string; amount: number; why: string }[] };
-  const required = collect(steps, (s) => (opts.wholeGoal ? s.itemsRequired?.map(wholeGoal) : s.itemsRequired), selected, coins);
+  const required = collect(steps, (s) => (opts.wholeGoal ? (s.goalItemsRequired ?? s.itemsRequired)?.map(wholeGoal) : s.itemsRequired), selected, coins);
   const requiredKeys = new Set(required.flatMap((l) => [l.key, `name:${nameKey(l.nameEn)}`]));
   // A recommended item that is already in the required list (by ID or by name) is not shown a second time.
   const recommended = collect(steps, (s) => s.itemsRecommended, selected)

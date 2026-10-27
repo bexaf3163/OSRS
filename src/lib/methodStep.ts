@@ -114,7 +114,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
     const skill = id.slice(UNKNOWN_GOAL_PREFIX.length);
     if (!followedGoals(step).some(g => g.skill === skill)) return step;
     const message = `Check your ${skill} level in RuneLite or Skills before choosing its training method.`;
-    return { ...step, followsMethod: skill, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
+    return { ...step, goalItemsRequired: undefined, followsMethod: skill, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
       requirements: [...step.requirements ?? [], { type: 'skill', skill, min: 1 }],
       warning: message, how: message, where: 'Training level not checked', quickSteps: [message], pacing: undefined, foes: undefined, threats: undefined,
       ...(step.inGame ? { inGame: { ...step.inGame, worldPoint: undefined, groundTiles: [], pathWaypoints: undefined,
@@ -122,7 +122,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
     };
   }
   if (id === GOAL_REACHED) {
-    return { ...step, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
+    return { ...step, goalItemsRequired: undefined, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
       ...(step.inGame ? { inGame: { ...step.inGame, worldPoint: undefined, groundTiles: [], pathWaypoints: undefined,
         npcNames: [], npcIds: [], objectNames: [], objectIds: [], highlightItems: [], goal: 'Training goals reached' } } : {}),
     };
@@ -143,6 +143,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
   const at = chosen ? { x: chosen.x, y: chosen.y, plane: chosen.plane, label: pointLabel(m, chosen.label) } : methodPoint(id);
   return {
     ...step,
+    goalItemsRequired: undefined,
     followsMethod: goal.skill,
     itemsRequired,
     requirements,

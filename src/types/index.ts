@@ -333,6 +333,8 @@ export interface Step {
   /** The floor of the place if the step has no NPC (for example a bank at the top of a castle). */
   floor?: string;
   itemsRequired?: StepItemRequirement[];
+  /** Runtime projection of all remaining combat phases, for purchases/protection only; carrying readiness uses itemsRequired. */
+  goalItemsRequired?: StepItemRequirement[];
   itemsRecommended?: StepItemRequirement[];
   /** Canonical baseline armour IDs for the route's combat preparation; usable owned equivalents are accepted. */
   combatArmour?: number[];

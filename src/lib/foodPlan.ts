@@ -125,5 +125,7 @@ export function withFoodPlan(step: Step, pick: FoodPick | undefined): Step {
   else items[at] = { ...items[at], amount: pick.trip, totalAmount: pick.total };
   // The game's training plate: the food in the bag as kills (plugin 2.57+; an older plugin ignores the field).
   const pacing = step.pacing && pick.hpPerKill > 0 && pick.hpPerKill <= 500 ? { ...step.pacing, foodHpPerKill: pick.hpPerKill } : step.pacing;
-  return { ...step, itemsRequired: items, ...(pacing ? { pacing } : {}) };
+  const goalItemsRequired = step.goalItemsRequired?.map(item => nameKey(item.nameEn) === nameKey(step.itemsRequired![at].nameEn)
+    ? { ...item, amount: Math.max(Number(item.totalAmount ?? item.amount) || 0, pick.total), totalAmount: Math.max(Number(item.totalAmount ?? item.amount) || 0, pick.total) } : item);
+  return { ...step, itemsRequired: items, ...(goalItemsRequired ? { goalItemsRequired } : {}), ...(pacing ? { pacing } : {}) };
 }

@@ -32,6 +32,14 @@ const chosenSpotOf = (methodId: string, label: string | undefined) =>
   SKILLING.spots.some((sp) => SKILLING.methods[methodId]?.includes(sp.resource) && label?.endsWith(`— ${sp.label}`));
 
 describe('one coherent Fishing/Cooking handover', () => {
+  it('a new training method cannot retain purchases from a superseded combat plan', () => {
+    const stale = { ...base, goalItemsRequired: [{ nameEn: 'Salmon', amount: 200, howToGet: 'Old combat plan' }] };
+    for (const pick of ['fi-shrimp', GOAL_REACHED, `${UNKNOWN_GOAL_PREFIX}fishing`]) {
+      const changed = withTrainingMethod(stale, pick);
+      expect(changed).not.toBe(stale);
+      expect(changed.goalItemsRequired).toBeUndefined();
+    }
+  });
   it.each([1, 20, 30, 35, 49])('Fishing50/Cooking%s uses the remaining skill, its supplies and one destination', cooking => {
     const s = scenario({ fishing: 50, cooking });
     expect(s.pick).not.toBe(GOAL_REACHED);

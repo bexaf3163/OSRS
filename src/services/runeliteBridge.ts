@@ -399,7 +399,9 @@ export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: stri
   const alternatives = (step.itemsRequired ?? []).flatMap((i) => (i.inStep ? [] : i.anyOf ?? []));
   // A potion is counted in doses of every size: the game must report all four, or a (3) in the bag would read as "no potion" (doses.ts).
   const potions = [...(step.itemsRequired ?? []), ...(step.itemsRecommended ?? [])].filter((i) => doseKind(i.nameEn)).map((i) => i.nameEn);
-  const named = [...watchedItems(step), ...methodToolNames(step), ...alternatives, ...extraWatch, ...potions];
+  const goalWatch = (step.goalItemsRequired ?? []).filter(i => !i.inStep);
+  const named = [...watchedItems(step), ...methodToolNames(step), ...alternatives, ...extraWatch, ...potions,
+    ...goalWatch.map(i => i.nameEn), ...goalWatch.flatMap(i => i.anyOf ?? [])];
   const own = [...new Set([...named, ...named.flatMap((n) => toolFamilyOf(n) ?? doseNames(n))])].slice(0, 40);
   // And what the ways there need (runes, a teleport item, an axe): the game reports how many the bank holds, so "withdraw it" is said only for what is there.
   // They go after the step's own items and never push one out.

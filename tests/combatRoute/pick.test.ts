@@ -162,7 +162,32 @@ describe('the whole app reads the same step: food, shopping, arrow, game', () =>
     const baseNeed = list(withFoodPlan(route, foodPicks([route], emptyProgress(), live)['S4-03']));
     const planNeed = list(withFoodPlan(adopted, cows));
     expect(baseNeed).toBeGreaterThan(300);
-    expect(planNeed).toBeLessThan(baseNeed / 4);
+    const remaining = rep.plans.find(p => p.key === 'split')!.phases.reduce((n, ph) => n + ph.food.high, 0);
+    expect(planNeed).toBe(Math.max(Math.ceil(remaining), cows.total));
+    expect(planNeed).toBeLessThan(baseNeed);
+    expect(planNeed).toBeGreaterThan(cows.total); // Later collection still needs food after training ends.
+  });
+
+  it('stops buying supplies for completed phases', () => {
+    const old = rep.plans.find(p => p.key === 'split')!;
+    // This first phase used food; the current cow fixture can regenerate all incoming damage.
+    const plan = { ...old, phases: old.phases.map((ph, n) => n === 0 ? { ...ph, food: { low: 50, mid: 75, high: 100 } } : ph) };
+    const updated = { ...rep, plans: rep.plans.map(p => p.key === plan.key ? plan : p) };
+    const pick = resolvePick(updated, 'split', progress(37224, 0))!;
+    expect(pick.phase).toBe(2);
+    const selected = withCombatPlan(route, pick);
+    const count = aggregateShopping([selected], { wholeGoal: true }).required.find(item => item.nameEn === 'Salmon')!.count;
+    expect(count).toBe(Math.ceil(plan.phases[1].food.high));
+    expect(count).toBeLessThan(Math.ceil(plan.phases.reduce((n, ph) => n + ph.food.high, 0)));
+  });
+
+  it('refreshes goal supplies without resending the HUD for every food estimate change', () => {
+    const pick = resolvePick(rep, 'split', progress(13363, 0))!;
+    const changed = { ...pick, remainingFood: pick.remainingFood! + 10 };
+    expect(samePicks({ step: pick }, { step: changed })).toBe(false);
+    expect(stepResendKey(withCombatPlan(route, pick))).toBe(stepResendKey(withCombatPlan(route, changed)));
+    const noFood = withFoodPlan(withCombatPlan(route, { ...pick, remainingFood: 0 }), { trip: 0, total: 0, hpPerKill: 0 });
+    expect(aggregateShopping([noFood], { wholeGoal: true }).required.some(item => item.nameEn === 'Salmon')).toBe(false);
   });
 
   it('the arrow and the game get the trainer: the place, the NPC, the pace line and the unchanged completion trigger', () => {

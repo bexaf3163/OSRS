@@ -22,6 +22,10 @@ import type { PlayerState } from '../playerState';
 import type { PriceView } from '../funding/quotes';
 
 export interface CombatPick {
+  /** Conservative food for every unfinished phase, not the current bag. */
+  remainingFood?: number;
+  /** Armour still required by a future/current equipment phase, resolved by the shared eligibility policy. */
+  remainingKit?: StepItemRequirement[];
   kit?: StepItemRequirement[];
   kitDefence?: number;
   /** The plan's key: "split", "defence-first:20". */
@@ -99,11 +103,18 @@ export function resolvePick(report: PlanReport | null, key: string | null | unde
   if (!plan || !plan.eligible || (plan.id === 'route' && !plan.phases.some(p => p.kind === 'armour' || p.loot))) return null;
   const i = currentPhase(plan, st);
   const ph = plan.phases[i];
+  const remaining = plan.phases.slice(i);
+  const armour = remaining.find(p => p.kind === 'armour');
+  const defence = armourDefence(armour?.armour ?? []);
+  const futureState = st.state ? { ...st.state, levels: { ...st.state.levels,
+    defence: { known: true as const, value: Math.max(st.state.levels.defence.known ? st.state.levels.defence.value : 1, defence), source: 'profile' as const } } } : null;
   const steps = plan.phases.slice(i).map((p, n) => {
     const line = phaseInstruction(p);
     return n === 0 ? line : `Then: ${line.charAt(0).toLowerCase()}${line.slice(1)}`;
   });
   return {
+    remainingFood: Math.ceil(remaining.reduce((n, p) => n + p.food.high, 0)),
+    ...(armour?.armour && futureState ? { remainingKit: armourItems(armour.armour, armour.foe.attackStyle, futureState, st.prices) } : {}),
     key: plan.key, title: plan.title, source, why, phase: i + 1, phases: plan.phases.length, kind: ph.kind, foe: ph.foe.name, xpPerKill: xpPerKill(ph.foe), spot: ph.spot, goals: ph.goals,
     ...(ph.item ? { item: ph.item } : {}), text: ph.text, steps,
     ...(ph.kind === 'armour' && ph.armour && st.state ? { kit: armourItems(ph.armour, ph.foe.attackStyle, st.state, st.prices), kitDefence: armourDefence(ph.armour) } : {}),
@@ -114,7 +125,8 @@ export function samePicks(a: Record<string, CombatPick>, b: Record<string, Comba
   const ka = Object.keys(a);
   return ka.length === Object.keys(b).length
     && ka.every((k) => b[k] && a[k].key === b[k].key && a[k].phase === b[k].phase && a[k].foe === b[k].foe && a[k].text === b[k].text
-      && a[k].source === b[k].source && a[k].why === b[k].why && a[k].steps.join('|') === b[k].steps.join('|') && JSON.stringify(a[k].kit) === JSON.stringify(b[k].kit));
+      && a[k].source === b[k].source && a[k].why === b[k].why && a[k].steps.join('|') === b[k].steps.join('|') && JSON.stringify(a[k].kit) === JSON.stringify(b[k].kit)
+      && a[k].remainingFood === b[k].remainingFood && JSON.stringify(a[k].remainingKit) === JSON.stringify(b[k].remainingKit));
 }
 
 /** The combat model follows the phase's XP/style; an item phase with explicit training has a projection too. The guide's current action remains its item goal. */
@@ -163,6 +175,7 @@ export function withCombatPlan(step: Step, pick: CombatPick | undefined): Step {
     text: `${pick.title}${pick.phases > 1 ? ` (part ${pick.phase} of ${pick.phases})` : ''}: ${pick.text}.${pick.why ? ` ${pick.why}` : ''}`,
   };
   const rest: Step = { ...step };
+  const food = step.itemsRequired?.find(item => typeof item.heals === 'number');
   delete rest.pacing;
   delete rest.how;
   const asWritten: NonNullable<Step['routeAsWritten']> = {
@@ -170,7 +183,13 @@ export function withCombatPlan(step: Step, pick: CombatPick | undefined): Step {
     ...(step.quickSteps?.length ? { quickSteps: step.quickSteps } : {}), ...(step.fields?.length ? { fields: step.fields } : {}),
   };
   return {
-    ...rest, combatPlan: {
+    ...rest,
+    ...(pick.remainingFood !== undefined ? { goalItemsRequired: [...(step.itemsRequired ?? [])
+      .filter(item => item !== food || pick.remainingFood! > 0)
+      .map(item => item === food
+        ? { ...item, amount: pick.remainingFood!, totalAmount: pick.remainingFood } : item),
+      ...(pick.remainingKit ?? []).filter(item => !(step.itemsRequired ?? []).some(old => old.wikiItemId === item.wikiItemId && item.wikiItemId !== undefined))] } : {}),
+    combatPlan: {
       key: pick.key, phase: pick.phase, source: pick.source,
       ...(trainingSkill ? { trainingSkill } : {}),
       ...(pick.kind === 'armour' ? { now: pick.text } : pick.kind === 'item' && pick.item ? { now: `Collect ${pick.item.count} ${pick.item.name} from ${themOf(pick.spot)}${pick.goals[0] ? ` on ${STYLE_WORD[pick.goals[0].skill]}` : ''}` } : {}),

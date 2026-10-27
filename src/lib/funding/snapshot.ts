@@ -74,7 +74,7 @@ export function protectionsFor(window: readonly Step[], state?: PlayerState): Ma
   // Use the same demand ledger as Shopping: independent consumables add, tools reuse,
   // and a carried stock from a selected producer is not bought again for its consumer.
   // The exchange list's quantities (food for the whole planned goal, not one trip): what Shopping has the player buy is never surplus to sell.
-  const list = aggregateShopping(window.map(s => ({ ...s, itemsRequired: s.itemsRequired?.filter(i => !i.inStep) })), { wholeGoal: true });
+  const list = aggregateShopping(window.map(s => ({ ...s, itemsRequired: s.itemsRequired?.filter(i => !i.inStep), goalItemsRequired: s.goalItemsRequired?.filter(i => !i.inStep) })), { wholeGoal: true });
   const used = new Map<string, number>();
   const heals = new Map(FOODS.map(f => [nameKey(f.name), f.heals]));
   const stock = (name: string, key?: string) => state ? heldExact(state, name, key).total ?? 0 : 0;
@@ -82,7 +82,7 @@ export function protectionsFor(window: readonly Step[], state?: PlayerState): Ma
     const foodHeal = line.heals ?? heals.get(nameKey(line.nameEn));
     let remaining = line.count * (foodHeal ?? 1);
     const family = toolFamilyOf(line.nameEn);
-    const sourceItems = window.flatMap(s => line.sources.some(src => src.stepId === s.id) ? (s.itemsRequired ?? []).filter(i => !i.inStep && (nameKey(i.nameEn) === nameKey(line.nameEn) || (line.id !== undefined && i.wikiItemId === line.id))) : []);
+    const sourceItems = window.flatMap(s => line.sources.some(src => src.stepId === s.id) ? (s.goalItemsRequired ?? s.itemsRequired ?? []).filter(i => !i.inStep && (nameKey(i.nameEn) === nameKey(line.nameEn) || (line.id !== undefined && i.wikiItemId === line.id))) : []);
     // A merged shopping row may have different alternatives on different steps. Only a common
     // alternative can cover the whole merged demand; keep the primary deficit otherwise.
     const common = (line.anyOf ?? []).filter(n => sourceItems.every(i => i.anyOf?.some(a => nameKey(a) === nameKey(n))));

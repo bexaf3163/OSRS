@@ -14,6 +14,8 @@ import { buildPriceView } from '../../src/lib/funding/quotes';
 import { ownedOf, planInput } from './fixture';
 import { market } from '../funding/market';
 import { requirementCost } from '../../src/lib/funding/need';
+import { aggregateShopping } from '../../src/lib/shopping';
+import { protectionsFor } from '../../src/lib/funding/snapshot';
 
 const step = stepById.get('S4-03')!;
 const kit = [1165, 1125, 1077, 1195];
@@ -38,6 +40,25 @@ function engine(i: ReturnType<typeof input>, s: typeof step, prices?: ReturnType
 }
 
 describe('structured Black armour preparation on the real route', () => {
+  it('keeps remaining fight supplies in purchases and cleanup protection while carrying only the current armour kit', () => {
+    const i = input(10);
+    const original = JSON.stringify(step);
+    const { report, pick, step: projectedStep } = projected(i);
+    expect(pick.kind).toBe('armour');
+    expect(projectedStep.itemsRequired!.every(item => item.equip)).toBe(true);
+    const immediate = aggregateShopping([projectedStep]);
+    const goal = aggregateShopping([projectedStep], { wholeGoal: true });
+    expect(immediate.required.some(item => item.nameEn === 'Salmon')).toBe(false);
+    const plan = report.plans.find(p => p.key === pick.key)!;
+    expect(goal.required.find(item => item.nameEn === 'Salmon')?.count).toBe(Math.ceil(plan.phases.reduce((n, ph) => n + ph.food.high, 0)));
+    for (const id of kit) expect(goal.required.some(item => item.id === id)).toBe(true);
+    const protection = protectionsFor([projectedStep], i.state);
+    expect(protection.get('salmon')?.qty).toBeGreaterThan(0);
+    const payload = toInGameTarget(projectedStep)!;
+    expect(payload.checklist!.some(item => item.name === 'Salmon')).toBe(false);
+    expect(payload.watchItems).toContain('Salmon');
+    expect(JSON.stringify(step)).toBe(original);
+  });
   it('prices only needed usable armour through the same preparation requirements, without changing live levels', () => {
     const now = 1_800_000_000_000;
     const prices = buildPriceView({ now, baked: new Map(), mapping: new Map(kit.map(id => [id, { name: piece(id).name }])),
