@@ -1,5 +1,15 @@
 # Engine hardening — Codex continuation, 2026-10-26
 
+## Local continuation — combat economics, 2026-10-27 (not in released 2.80.4)
+
+- Combat route net/ranking includes consumed food, opened Strength doses at replacement value, and only needed usable armour purchases. Owned consumables still cost money to replace; owned equivalent/better armour is not purchased again. Unknown bank/quotes prevent a fictitious zero cost.
+- Reuses doses, supplyPrice, armourItems and requirementCost; no duplicate item policy or preparation engine. Future Defence eligibility is projected in a copy; live state and saved choices remain unchanged. Armour stops consume no doses; phase dose consumption is bounded by starting stock.
+- Existing folded comparison shows net profit/loss or Not priced, replacing gross proceeds in the same field. Money explanation matches its net-cost ranking. No additional panels, controls or HUDs.
+- Verified: 2,209 Vitest tests / 186 files, TypeScript/build, check-data 0 errors/warnings and Java testClasses. No Java production edits; existing compiler/bundle warnings remain. Focused cost/display suite: 143 tests.
+- Native released-EXE check: owner-approved 2.80.4 launch, Skills icon grid, direct Defence page, Gear, Shopping and Money viewed at 1266x853. Layout/text readable; saved levels/equipment and unknown live ownership clearly distinguished. RuneLite opened automatically; no login, gameplay, spending, completion or profile edits performed. This validates the released UI only, not these local economics changes.
+- Still required: browser/packaged checks for this new source batch and live acceptance by Claude. Armour acquisition travel time, fees, full-goal replenishment/future purchases and coordinated automatic food substitution remain open. Potion consumption remains the existing fight-time model, not a tick-accurate walk/bank decay simulation.
+- Native follow-up: Gear says No fight ahead although current Elvarg quest has threats but no supported foes entry; its neutral Cow fallback should be labelled as unsupported context, not proof no fight remains. Do not fabricate NPC data or treat generic quest hazards as modeled melee fights.
+
 ## Verified portable delivery — 2.80.4, 2026-10-27
 
 - Release source: main3f4291199a2c2b37a956a78b302d2f3943624799. [Release40431062397](https://github.com/bexaf3163/OSRS/actions/runs/40431062397) and [Checks40431062437](https://github.com/bexaf3163/OSRS/actions/runs/40431062437) succeeded. Full data/unit/build/Java/browser, source Electron and isolated portable checks passed; no gate was bypassed.

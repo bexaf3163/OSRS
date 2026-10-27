@@ -2,12 +2,14 @@
 // time (the cowhide baseline is rough), and the player's objective decides whether coins trade against time at all.
 
 import { describe, expect, it } from 'vitest';
-import { evaluatePlans, planNetPerHour, type PlanReport } from '../../src/lib/combatRoute/plans';
+import { evaluatePlans, planNetPerHour, planWhy, type PlanReport } from '../../src/lib/combatRoute/plans';
 import { selectPlan } from '../../src/lib/combatRoute/selection';
 import { COIN_SHARE_CAP } from '../../src/lib/lootValue';
 import type { MethodPriority } from '../../src/lib/playStyle';
 import { market } from '../funding/market';
 import { planInput, type Over } from './fixture';
+import { doseValue } from '../../src/lib/doses';
+import { supplyPrice } from '../../src/lib/sourceRouter';
 
 const prices = market();
 const report = (o: Over, objective?: MethodPriority): PlanReport =>
@@ -15,6 +17,19 @@ const report = (o: Over, objective?: MethodPriority): PlanReport =>
 const banked = { items: { 'Big bones': [0, 50] as [number, number] } };
 
 describe('what a plan costs is ranked, not only shown', () => {
+  it('charges consumed owned potions once across phases, preserving spare stock', () => {
+    const items = { ...banked.items, ...Object.fromEntries([1, 2, 3, 4].map(size => [`Strength potion(${size})`, [0, size === 4 ? 100 : 0] as [number, number]])) };
+    const r = report({ items }, 'profit');
+    for (const p of r.plans) {
+      const used = p.phases.reduce((n, ph) => n + (ph.strengthDosesUsed ?? 0), 0);
+      expect(used).toBeGreaterThan(0);
+      expect(used).toBeLessThan(400);
+      expect(p.potionCost).toBe(doseValue('Strength potion(4)', used, name => supplyPrice(name, prices, 'f2p')));
+      expect(p.potionCost!).toBeGreaterThan(0);
+      expect(p.totalCost).toBe(p.foodCost! + p.potionCost!);
+      expect(p.net).toBe(p.income.net - p.totalCost!);
+    }
+  });
   it('money ranks accessible plans by positive income after food and explains the actual objective', () => {
     const r = report(banked, 'profit');
     const selected = r.plans.find(p => p.key === r.recommended)!;
@@ -22,6 +37,8 @@ describe('what a plan costs is ranked, not only shown', () => {
     expect(positive.length).toBeGreaterThan(0);
     expect(planNetPerHour(selected)).toBe(Math.max(...positive.map(p => planNetPerHour(p)!)));
     expect(r.reason).toMatch(/gp\/hour after food/);
+    expect(planWhy(r, r.recommended, 'auto')).toBe(r.reason);
+    expect(r.reason).toContain('potions and needed armour');
     expect(selected.phases.some(p => p.kind !== 'armour' && p.loot)).toBe(true);
   });
 
@@ -30,7 +47,10 @@ describe('what a plan costs is ranked, not only shown', () => {
     const r = evaluatePlans({ ...planInput(banked), prices: board, foodPrice: prices.buy('Salmon')!.price, objective: 'profit' })!;
     expect(r.plans.some(p => p.phases.some(ph => ph.loot?.name === 'Big bones'))).toBe(true);
     const unread = evaluatePlans({ ...planInput(banked), prices: board, foodPrice: null, objective: 'profit' })!;
-    expect(unread.plans.every(p => planNetPerHour(p) === null)).toBe(true);
+    const consuming = unread.plans.filter(p => p.food.mid > 0);
+    expect(consuming.length).toBeGreaterThan(0);
+    expect(consuming.every(p => planNetPerHour(p) === null)).toBe(true);
+    for (const p of unread.plans.filter(p => p.food.mid === 0)) expect(p.foodCost).toBe(0);
   });
 
   it('the food eaten counts against a plan: with the bones already banked, the giants\' 400+ salmon lose to the cows\' hides on balance', () => {

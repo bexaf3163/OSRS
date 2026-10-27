@@ -286,6 +286,8 @@ export interface CombatEstimate {
   assumed: string[];
   /** Whole unused Strength doses after this estimate; a partly elapsed dose is conservatively not carried into a later bank visit. */
   strengthDosesLeft?: number;
+  /** Opened doses used by this estimate; a partially elapsed dose is consumed, not an intact spare. */
+  strengthDosesUsed?: number;
   /** The bank-trip assumptions used in totalMinutes, for a planner that adds required loot trips. */
   bankTripMinutes?: Range;
   /** Heals asked for instead of food (a monk), mean; absent when food is eaten. */
@@ -333,7 +335,8 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
   // A Strength potion dose lasts `boost` minutes: it wears off a level a minute, so each boost from the full one down to +1 holds
   // for a minute (the max hit grows in steps, an average boost would hide them).
   const boost = strengthBoost(lv.strength);
-  let potionSeconds = (inp.strengthDoses ?? 0) * boost * 60;
+  const startingDoses = Number.isFinite(inp.strengthDoses) ? Math.max(0, Math.floor(inp.strengthDoses!)) : 0;
+  let potionSeconds = startingDoses * boost * 60;
   const phases: Phase[] = [];
   let kills = 0;
   let fightMean = 0;
@@ -426,6 +429,7 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
   return {
     basis, foe, phases, kills, ...recovery, assumed,
     strengthDosesLeft: Math.max(0, Math.floor(potionSeconds / (boost * 60))),
+    strengthDosesUsed: Math.max(0, startingDoses - Math.max(0, Math.floor(potionSeconds / (boost * 60)))),
   };
 }
 

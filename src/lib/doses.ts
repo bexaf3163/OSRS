@@ -33,6 +33,19 @@ export function displayName(name: string): string {
   return doseKind(name)?.base ?? name;
 }
 
+/** Replacement value of consumed doses, not a shopping package. Spare doses are not consumed costs. */
+export function doseValue(name: string, units: number, price: (name: string) => number | null): number | null {
+  if (!Number.isFinite(units) || units < 0) return null;
+  if (units === 0) return 0;
+  const kind = doseKind(name);
+  if (!kind) return null;
+  const unitPrices = DOSE_SIZES.flatMap(size => {
+    const p = price(doseName(kind.base, size));
+    return p !== null && Number.isFinite(p) && p >= 0 ? [p / size] : [];
+  });
+  return unitPrices.length ? units * Math.min(...unitPrices) : null;
+}
+
 /** Potions of one size the player has: in the bag, as banknotes, in the bank (null when the bank is not known). */
 export interface DoseSize { size: number; bag: number; noted: number; bank: number | null }
 

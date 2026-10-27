@@ -12,6 +12,8 @@ import { bankWithdrawalsOf, planPayload } from '../../src/lib/prepEnvelope';
 import { toInGameTarget } from '../../src/services/runeliteBridge';
 import { buildPriceView } from '../../src/lib/funding/quotes';
 import { ownedOf, planInput } from './fixture';
+import { market } from '../funding/market';
+import { requirementCost } from '../../src/lib/funding/need';
 
 const step = stepById.get('S4-03')!;
 const kit = [1165, 1125, 1077, 1195];
@@ -36,6 +38,38 @@ function engine(i: ReturnType<typeof input>, s: typeof step, prices?: ReturnType
 }
 
 describe('structured Black armour preparation on the real route', () => {
+  it('prices only needed usable armour through the same preparation requirements, without changing live levels', () => {
+    const now = 1_800_000_000_000;
+    const prices = buildPriceView({ now, baked: new Map(), mapping: new Map(kit.map(id => [id, { name: piece(id).name }])),
+      board: { at: now, hourAt: null, status: 'live', quotes: new Map(kit.map(id => [id, { id, high: { price: 1000, at: now }, low: { price: 900, at: now }, hour: null }])) } });
+    for (const defence of [1, 10]) {
+      const i = input(defence, [1331], { 'Black full helm': [0, 1] });
+      const future = { ...i.state, levels: { ...i.state.levels, defence: { known: true as const, value: 10, source: 'profile' as const } } };
+      const requirements = armourItems(kit, 'crush', future, prices).map(item => ({ type: 'equipment' as const, name: item.nameEn, count: 1, anyOf: item.anyOf }));
+      const expected = requirementCost(requirements, future, prices);
+      expect(expected).not.toBeNull();
+      expect(expected).toBe(3000);
+      const r = evaluatePlans({ ...i, prices })!;
+      for (const p of r.plans) {
+        expect(p.armourCost).toBe(expected);
+        expect(p.totalCost).toBe(p.foodCost! + p.potionCost! + expected!);
+        expect(p.net).toBe(p.income.net - p.totalCost!);
+        expect(p.phases.find(ph => ph.kind === 'armour')?.strengthDosesUsed).toBe(0);
+      }
+      expect(i.state.levels.defence).toMatchObject({ value: defence });
+    }
+  });
+  it('does not charge owned equivalent armour and keeps unread ownership or missing quotes unknown', () => {
+    const prices = market();
+    const worn = input(20, [1331, 1159, 1121, 1085, 1197]);
+    expect(evaluatePlans({ ...worn, prices })!.plans.every(p => p.armourCost === 0)).toBe(true);
+    const banked = input(10, [1331], Object.fromEntries(kit.map(id => [piece(id).name, [0, 1] as [number, number]])));
+    expect(evaluatePlans({ ...banked, prices })!.plans.every(p => p.armourCost === 0)).toBe(true);
+    const unread = input(20);
+    unread.state.owned!.items.delete('mithril platebody');
+    expect(evaluatePlans({ ...unread, prices })!.plans.every(p => p.armourCost === null && p.net === null)).toBe(true);
+    expect(evaluatePlans(input())!.plans.every(p => p.armourCost === null && p.net === null)).toBe(true);
+  });
   it('trains Defence before equipment in every normal plan, preserving the original completion trigger', () => {
     const i = input(1);
     const report = evaluatePlans(i)!;

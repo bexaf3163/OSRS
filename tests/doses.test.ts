@@ -2,7 +2,7 @@
 // every size counts toward a need, doses are not bag slots, and a shortfall is bought as a package of potions, never as "another full potion" per dose.
 
 import { describe, expect, it } from 'vitest';
-import { carryOf, doseKind, dosePackage, heldUnits, needUnits, shortText, takeFromBank } from '../src/lib/doses';
+import { carryOf, doseKind, dosePackage, doseValue, heldUnits, needUnits, shortText, takeFromBank } from '../src/lib/doses';
 import { shopRows, scopeList, geListText, type ShopRow } from '../src/lib/shoppingView';
 import { aggregateShopping, holdingFor, type ShoppingLine } from '../src/lib/shopping';
 import { buildPlayerState } from '../src/lib/playerState';
@@ -39,6 +39,21 @@ const rowsOf = (steps: Step[], o: OwnedState | null): ShopRow[] => {
 };
 const potionRow = (rows: ShopRow[]) => rows.find((r) => r.unit === 'dose')!;
 const ONE_FOUR = [step('A', [item('Strength potion(4)', 1, POTION)])];
+
+describe('consumed dose replacement value', () => {
+  it('charges only consumed doses at the cheapest quoted unit value, not spare packaging', () => {
+    expect(doseValue('Strength potion(4)', 1, price)).toBe(40);
+    expect(doseValue('Strength potion(1)', 3, price)).toBe(120);
+    expect(doseValue('Strength potion(4)', 2, n => n.endsWith('(1)') ? 5 : price(n))).toBe(10);
+  });
+  it('keeps unpriced consumption unknown and zero consumption free', () => {
+    expect(doseValue('Strength potion(4)', 0, () => null)).toBe(0);
+    expect(doseValue('Strength potion(4)', 1, () => null)).toBeNull();
+    for (const invalid of [-1, Infinity, NaN]) expect(doseValue('Strength potion(4)', invalid, price)).toBeNull();
+    for (const invalid of [-1, Infinity, NaN]) expect(doseValue('Strength potion(4)', 1, () => invalid)).toBeNull();
+    expect(doseValue('Games necklace(8)', 1, price)).toBeNull();
+  });
+});
 
 describe('what is a potion', () => {
   it('a name with a dose count is a potion; charges are not doses', () => {

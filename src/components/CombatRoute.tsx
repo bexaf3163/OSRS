@@ -50,7 +50,6 @@ function rowWhere(p: EvaluatedPlan): string {
 
 function PlanRow({ p, now, best, food, onUse }: { p: EvaluatedPlan; now: boolean; best: boolean; food: string; onUse: () => void }) {
   const pieces = Math.round(p.food.mid / 5) * 5;
-  const loot = p.income.lines.filter((l) => l.counted && l.net > 0).map((l) => l.name);
   // What is worth knowing stays with the plan it is about, and only for the plan in use or the one recommended: the rest is a row of figures.
   const notes = now || best ? [...p.risks.map((r) => `⚠ ${r}`), ...p.notes] : [];
   return (
@@ -64,8 +63,8 @@ function PlanRow({ p, now, best, food, onUse }: { p: EvaluatedPlan; now: boolean
       <div className="cpr-figs small" aria-label="Time, food and coins">
         <span title={`${minutesText(p.minutes.low)} to ${minutesText(p.minutes.high)}`}>{minutesText(p.minutes.mid)}</span>
         <span>{pieces > 0 ? `${pieces} ${food}` : 'no food'}</span>
-        <span className={p.income.net > 0 ? 'cpr-gp' : 'muted'} title={loot.length ? `Banking ${loot.join(' and ')}, at exchange prices after tax` : undefined}>
-          {p.income.net > 0 ? `+${coinsText(p.income.net)} gp` : '—'}
+        <span className={(p.net ?? 0) > 0 ? 'cpr-gp' : 'muted'} title="Estimated net after food, consumed potions and needed armour; drops valued after exchange tax">
+          {p.net === null ? 'Not priced' : `${p.net > 0 ? '+' : ''}${coinsText(p.net)} gp net`}
         </span>
       </div>
       <div className="cpr-act">

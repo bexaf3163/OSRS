@@ -92,6 +92,25 @@ function runs(n: number, foe: CombatFoe, neck: GearPiece | null, doses = 0) {
 }
 const mean = (xs: number[]) => xs.reduce((a, b) => a + b, 0) / xs.length;
 
+describe('Strength dose consumption', () => {
+  it('charges an opened dose but preserves unopened stock after a short fight', () => {
+    const e = estimateCombat(input(L12, { strengthDoses: 100, goals: [{ skill: 'attack', exp: 5625 }] }))!;
+    expect(e.strengthDosesUsed).toBe(1);
+    expect(e.strengthDosesLeft).toBe(99);
+  });
+  it('never spends beyond starting stock, including malformed input', () => {
+    for (const doses of [0, 1, 4, 100]) {
+      const e = estimateCombat(input(L12, { strengthDoses: doses }))!;
+      expect(e.strengthDosesUsed! + e.strengthDosesLeft!).toBe(doses);
+      expect(e.strengthDosesUsed!).toBeGreaterThanOrEqual(0);
+      expect(e.strengthDosesUsed!).toBeLessThanOrEqual(doses);
+    }
+    for (const doses of [-1, NaN, Infinity]) {
+      expect(estimateCombat(input(L12, { strengthDoses: doses }))).toMatchObject({ strengthDosesUsed: 0, strengthDosesLeft: 0 });
+    }
+  });
+});
+
 describe('the wiki constants', () => {
   it('max hit: 99 Strength, no bonus, Aggressive is 11 (wiki: Maximum melee hit)', () => {
     expect(meleeHit({ attack: 1, strength: 99, defence: 1 }, 0, 0, 4, 'aggressive').maxHit).toBe(11);

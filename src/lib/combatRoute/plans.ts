@@ -22,6 +22,9 @@
 
 import type { MethodPriority } from '../playStyle';
 import { bankingPays, earningsOrder } from '../lootValue';
+import { doseValue } from '../doses';
+import { requirementCost } from '../funding/need';
+import { supplyPrice } from '../sourceRouter';
 import type { Step } from '../../types';
 import type { OwnedState } from '../checklist';
 import { nameKey } from '../checklist';
@@ -38,7 +41,7 @@ import { SELL_DROP, spotsOf, spotTerms, TRAINER_LEVELS, TRAINERS, type Spot } fr
 import { coinsPerMinute, dropValue, LOOT_SLOTS, PICKUP_SECONDS, COIN_SHARE_CAP } from '../lootValue';
 import { questOf } from '../playerState';
 import { questStepOf } from '../readiness';
-import { armourDefence, armourReady } from './armour';
+import { armourDefence, armourItems, armourReady } from './armour';
 import type { PlayerState } from '../playerState';
 import { nearestBank } from '../readiness';
 
@@ -67,6 +70,8 @@ export interface PlanPhase {
   killsPerTrip: number;
   /** Minimum required banking for retained drops; actual combined food/loot capacity can require more. */
   requiredLootTrips?: number;
+  /** Opened Strength doses, bounded by the plan’s actual starting stock. */
+  strengthDosesUsed?: number;
   /** The drop picked up and banked to sell, when it pays for its time: how many, coins after the tax, the minutes it adds (in `minutes` already). */
   loot?: { name: string; qty: number; net: number; minutes: Range };
 }
@@ -89,7 +94,11 @@ export interface EvaluatedPlan {
   /** Pieces at the food's exchange price; null - no price. */
   foodCost: number | null;
   income: PlanIncome;
-  /** Income less the food; null when the food has no price. An estimate. */
+  potionCost?: number | null;
+  armourCost?: number | null;
+  /** Food and consumed potions plus needed armour purchases, or null if any cost is unread. */
+  totalCost?: number | null;
+  /** Income less all modeled costs; null when any consumed supply or needed purchase is unpriced. */
   net: number | null;
   basis: Basis;
   risks: string[];
@@ -213,6 +222,7 @@ function phaseOf(kind: PlanPhase['kind'], e: CombatEstimate, spot: Spot, goals: 
     minutes[bound] = Math.max(0, minutes[bound] - (e.trips[bound] - 1) * bank[bound] * f + (visits - 1) * bank[bound]);
   }
   return {
+    strengthDosesUsed: Math.min(e.strengthDosesUsed ?? 0, Math.ceil((e.strengthDosesUsed ?? 0) * f)),
     kind, foe: e.foe, spot, goals, ...(item ? { item, requiredLootTrips: lootTrips } : {}), kills: Math.round(k), minutes, food, text, basis: e.basis,
     killsPerTrip: e.killsPerTrip,
   };
@@ -305,7 +315,7 @@ export function incomeOf(phases: readonly PlanPhase[], reserve: { name: string; 
   return { net: lines.filter((l) => l.counted).reduce((a, l) => a + l.net, 0), lines };
 }
 
-function assemble(id: PlanId, key: string, title: string, phases: PlanPhase[], hp: number, price: number | null, income: PlanIncome, extraBlockers: string[] = [], notes: string[] = [], rate: number | null = null): EvaluatedPlan {
+function assemble(id: PlanId, key: string, title: string, phases: PlanPhase[], hp: number, price: number | null, income: PlanIncome, extraBlockers: string[] = [], notes: string[] = [], rate: number | null = null, costs: { potionCost: number | null; armourCost: number | null } = { potionCost: 0, armourCost: 0 }): EvaluatedPlan {
   // Changing spots costs time too: the walk between them is part of the plan, not free.
   const switches = phases.slice(1).filter((p, i) => p.spot.foe !== phases[i].spot.foe).length;
   const walk = SWITCH_MINUTES * switches;
@@ -314,15 +324,15 @@ function assemble(id: PlanId, key: string, title: string, phases: PlanPhase[], h
   const basis = phases.reduce<Basis>((a, p) => worst(a, p.basis), 'calibrated');
   const { risks, blockers } = risksOf(phases, hp);
   const all = [...blockers, ...extraBlockers];
-  const foodCost = price === null ? null : Math.round(food.mid * price);
+  const foodCost = food.mid <= 0 ? 0 : price === null ? null : Math.round(food.mid * price);
+  const totalCost = foodCost === null || costs.potionCost === null || costs.armourCost === null ? null : foodCost + costs.potionCost + costs.armourCost;
   const effort = Math.max(1e-6, minutes.high * BASIS_PENALTY[basis]);
-  // Coins count as the minutes the baseline way would take to earn them (lootValue.coinsPerMinute): the loot banked less the food eaten. Owned food is
-  // still used up, so its price is a cost too. A gain credits at most COIN_SHARE_CAP of the time (the baseline is rough); a cost counts in full.
-  // Without a food price the coins are not counted at all, so an unknown cost is never taken as free.
-  const coins = rate && foodCost !== null ? income.net - foodCost : null;
+  // Convert net proceeds after consumed food/potions and needed armour to baseline earning time. Owned consumables still have replacement cost.
+  // A gain credits at most COIN_SHARE_CAP of the time; a cost counts in full. Any unknown cost prevents a coin credit.
+  const coins = rate && totalCost !== null ? income.net - totalCost : null;
   const credit = coins === null ? 0 : coins > 0 ? Math.min(coins / rate!, COIN_SHARE_CAP * effort) : coins / rate!;
   return {
-    id, key, title, phases, minutes, food, foodCost, income, net: foodCost === null ? null : income.net - foodCost,
+    id, key, title, phases, minutes, food, foodCost, income, ...costs, totalCost, net: totalCost === null ? null : income.net - totalCost,
     basis, risks, notes, blockers: all, eligible: all.length === 0, effort,
     // Ranking also values fewer repeated target selections. This is an effort weight,
     // not extra elapsed time (the time estimate already includes target acquisition).
@@ -393,14 +403,23 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
       const bank = nearestBank(step);
       const ready = armourReady(kit, first.foe.attackStyle, inp.state);
       const armour: PlanPhase = { ...first, kind: 'armour', armour: kit, goals: [], item: undefined, kills: 0,
-        requiredLootTrips: undefined, minutes: { ...ZERO }, food: { ...ZERO }, killsPerTrip: Infinity,
+        requiredLootTrips: undefined, strengthDosesUsed: 0, minutes: { ...ZERO }, food: { ...ZERO }, killsPerTrip: Infinity,
         basis: ready ? first.basis : 'basic', text: `Equip Black armour or equivalent/better (${kitDefence} Defence required)`,
         spot: { ...first.spot, ...(bank ? { place: bank, goal: bank.label, where: `Prepare at ${bank.label}; equipment must be worn before training.` } : {}), npcNames: [], waypoints: undefined },
       };
       all = [...preparation, armour, ...phases];
       if (!ready) notes = [...notes, 'The times are for the armour you wear now; buying the new set is not timed. Keep coins for food.'];
     }
-    return assemble(id, key, title, all, hp, price, incomeOf(all, reserve, inp.prices, inp.restriction), extra, notes, rate);
+    const usedDoses = Math.min(doses, all.reduce((n, ph) => n + (ph.strengthDosesUsed ?? 0), 0));
+    const potionCost = doseValue('Strength potion(4)', usedDoses, name => supplyPrice(name, inp.prices, inp.state?.mode ?? 'f2p'));
+    const preparedState = inp.state ? { ...inp.state, levels: { ...inp.state.levels,
+      defence: { known: true as const, value: Math.max(ctx.stats?.defence ?? 1, kitDefence), source: 'profile' as const } } } : null;
+    const neededArmour = kit?.length && preparedState ? armourItems(kit, phases[0].foe.attackStyle, preparedState, inp.prices ?? undefined) : [];
+    const armourCost = !kit?.length ? 0 : !preparedState || neededArmour.length !== kit.length ? null : requirementCost(
+      neededArmour.map(item => ({
+        type: 'equipment' as const, name: item.nameEn, count: 1, anyOf: item.anyOf,
+      })), preparedState, inp.prices);
+    return assemble(id, key, title, all, hp, price, incomeOf(all, reserve, inp.prices, inp.restriction), extra, notes, rate, { potionCost, armourCost });
   };
   const plans: EvaluatedPlan[] = [make('route', 'route', 'The route\'s plan', [looted(routePhase, routeEst, itemKills ? Math.min(itemKills, routePhase.kills) : 0)])];
   const compared = new Set<string>([foeLabel(routeEst.foe)]);
@@ -523,7 +542,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     stepId: step.id, objective, priority: inp.objective, plans, recommended: recommended.key, fresh: fresh.key, confidence, compared: [...compared],
     order: [recommended, ...[...eligible].sort(byTime).filter((p) => p !== recommended), ...plans.filter((p) => !p.eligible)].map((p) => p.key), locked,
     reason: inp.objective === 'profit' && (planNetPerHour(recommended) ?? 0) > 0
-      ? `${recommended.title}: estimated ${gpText(planNetPerHour(recommended)!)} gp/hour after food; XP, pickups and bank time included.`
+      ? `${recommended.title}: estimated ${gpText(planNetPerHour(recommended)!)} gp/hour after food, potions and needed armour; XP, pickups and bank time included.`
       : held ? heldReason(held, route, later) : reasonOf(recommended, route, price, plans),
     food: { name: foodItem.nameEn, heals: foodItem.heals!, price },
   };
@@ -592,6 +611,7 @@ export function planWhy(report: PlanReport, key: string, source: 'auto' | 'playe
   const route = report.plans[0];
   if (!plan) return '';
   if (source === 'player') return plan.id === 'route' ? 'You chose the route as written.' : `You chose this plan: ${comparison(plan, route, report.food.price)}.`;
+  if (report.priority === 'profit' && key === report.recommended && (planNetPerHour(plan) ?? 0) > 0) return report.reason;
   if (plan.id === 'route') return report.plans.length > 1 ? `Best for your levels and kit${coinsText(plan) ? `, banking ${coinsText(plan)}` : ''}.` : '';
   return `Recommended for your levels and kit: ${comparison(plan, route, report.food.price)}.`;
 }
