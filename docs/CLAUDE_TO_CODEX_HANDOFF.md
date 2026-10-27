@@ -2,7 +2,7 @@
 
 Read this first. Claude keeps this file current after every release. It says what Claude received from Codex, what Claude changed, which engine owns each concern, what is in progress and what is still open. The owner wants **one coherent product built on engines**: before changing anything, find the engine below that owns the concern and fix or extend that engine. Never add a parallel mechanism, a per-step patch or an old feature back.
 
-**Codex continuation, 2026-10-26:** work is based on main `ae22ab7`, released app **2.80.3**. The local forecast, combat upgrade, Ranged/Magic recovery, Fletching/Herblore processing, funding-aware training and compact Skills/XP-Balanced-Money changes are described in [CODEX_ENGINE_HARDENING_HANDOFF.md](CODEX_ENGINE_HARDENING_HANDOFF.md). They are not yet a published release. Historical release entries below remain historical; use the current open list and the new receipt before repeating work.
+**Codex continuation, 2026-10-26:** work is based on main `ae22ab7`, released app **2.80.3**. The local forecast, combat upgrade, Ranged/Magic recovery, Fletching/Herblore processing, funding-aware training and compact Skills/XP-Balanced-Money changes are described in [CODEX_ENGINE_HARDENING_HANDOFF.md](CODEX_ENGINE_HARDENING_HANDOFF.md). They are published in **2.80.4**; the verified portable receipt is at the top of CODEX_ENGINE_HARDENING_HANDOFF.md. Historical release entries below remain historical; use the current open list and the new receipt before repeating work.
 
 ## 1. Baseline received from Codex
 

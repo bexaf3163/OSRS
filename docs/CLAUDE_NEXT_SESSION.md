@@ -1,5 +1,14 @@
 # Claude continuation — authoritative takeover
 
+## Verified portable delivery — 2.80.4, 2026-10-27
+
+- Release source: main3f4291199a2c2b37a956a78b302d2f3943624799. [Release40431062397](https://github.com/bexaf3163/OSRS/actions/runs/40431062397) and [Checks40431062437](https://github.com/bexaf3163/OSRS/actions/runs/40431062437) succeeded. Full data/unit/build/Java/browser, source Electron and isolated portable checks passed; no gate was bypassed.
+- [Portable EXE](https://github.com/bexaf3163/OSRS/releases/download/v2.80.4/OSRS-Put-2.80.4-portable.exe):102,074,955bytes. SHA256:486d80cd0a9c5d9efdaa0f7b43e8e17975999391b5e6068f88e8bccf914ee746. Codex downloaded the published EXE and independently matched this hash to SHA256SUMS and the GitHub asset digest.
+- Release attachments include CLAUDE_NEXT_SESSION.md, CODEX_ENGINE_HARDENING_HANDOFF.md and CLAUDE_IN_GAME_ACCEPTANCE.md. Build-time attachments precede this final receipt; the main-branch receipt supersedes historical pending/runtime-blocked wording.
+- The failed predecessor's two ranged-navigation assertions had no Hitpoints fixture. The corrected fixture supplies HP30, retains all navigation/readiness assertions and adds the equipped-bow/banked-food regression. No production model or release gate was weakened.
+- Live RuneLite testing remains Claude's responsibility. Remaining Members models, route potion/armour economics and coordinated full-goal supplies remain open. Release success does not mean that backlog is complete.
+
+
 **Start with [CLAUDE_TO_CODEX_HANDOFF.md](CLAUDE_TO_CODEX_HANDOFF.md): the owner rules, the engine map, what Claude changed since 2.74.3, what is in progress and open, and what must not come back.**
 
 Updated2026-10-24. This replaces the rolling historical status entries. Start from the latest remote main, not an old local branch/chat prompt. Check for subsequent owner/Claude commits before editing. Do not reset them or replay included stacked commits.
