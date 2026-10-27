@@ -1,5 +1,14 @@
 # Engine hardening — Codex continuation, 2026-10-26
 
+## Local continuation — funding certainty and live acceptance, 2026-10-27
+
+- Funding tiers now retain their own unknown-ownership counts. A covered known subtotal cannot produce a next-trip COVERED verdict while other NOW supplies are unchecked. Unknown SOON supplies do not invalidate a fully checked free next trip. Whole-goal details mark incomplete ownership/quotes as not fully checked and label only the known part.
+- This extends the existing need/assessment pipeline; no new panel, catalogue or funding engine. Final verification: 2,216 Vitest tests / 188 files, TypeScript/build, data 0 errors/warnings. Java testClasses passed earlier in this continuation; no Java changes. Full multi-phase goal purchases and automatic food substitution remain unfinished.
+- Owner explicitly authorized live entry on World316 through the already-running OSRSPath-launched RuneLite session. Selected316, entered via Play Now / Click here to play, no credentials entered. Bridge status confirmed plugin2.80.4, protocol6, inGame true and current stepS5-08. App changed Waiting to Connected, received live43QP and29,192gp, and showed personalized Money suggestions. No method was started, no purchases/combat/travel performed.
+- Show in game sent current S5-08; one compact HUD appeared, with banked Anti-dragon shield warning and plank acquisition guard. Header click expanded the same card; readable text, no duplicate HUD. Desktop subsequently matched the live recovery instruction, Stage2of2, with its overview marker. This is a real released2.80.4 check, not acceptance of local fixes or a replay of Elvarg.
+- Live follow-up to investigate: quest-stage Plank row is Not checked, but Java Preflight directs Buy Plank when inventory lacks it and bank snapshot is unavailable/incomplete. Existing Preflight tests intentionally expect EXCHANGE for a null bank. Review app/plugin known-state parity before changing that shared guard; do not fabricate bank absence or remove encounter protection. Files: Preflight.java/check/reason, HudModel.java, app preflight.ts.
+- Native world entry and collapsed/expanded warning layout have now been exercised. Saved-position/Alt-drag, bank refresh, combat/food calibration, completed/unreachable encounters and new source browser/portable checks remain unverified.
+
 ## Local continuation — combat economics, 2026-10-27 (not in released 2.80.4)
 
 - Combat route net/ranking includes consumed food, opened Strength doses at replacement value, and only needed usable armour purchases. Owned consumables still cost money to replace; owned equivalent/better armour is not purchased again. Unknown bank/quotes prevent a fictitious zero cost.

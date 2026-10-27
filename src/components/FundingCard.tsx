@@ -15,6 +15,7 @@ import type { FundingAssessment, FundingOption } from '../lib/funding/assess';
 import type { MethodEvaluation } from '../lib/funding/evaluate';
 import type { PriceView } from '../lib/funding/quotes';
 import type { Realized } from '../lib/funding/session';
+import type { Tier } from '../lib/funding/need';
 
 const gp = (n: number) => `${formatGp(Math.round(n))} gp`;
 
@@ -58,7 +59,13 @@ export function Economics({ e, earn }: { e: MethodEvaluation | undefined; earn: 
 function Details({ a, prices, onUse }: { a: FundingAssessment; prices: PriceView; onUse?: (o: FundingOption) => void }) {
   const { need, budget } = a;
   const coins = budget.liquid;
-  const upTo = (label: string, cost: number) => (cost > need.minimum.cost ? <li>{label}: {gp(cost)}</li> : null);
+  const upTo = (label: string, tier: Tier, fees: number) => {
+    const cost = tier.cost + fees;
+    const unchecked = (tier.unknown ?? 0) + tier.unpriced;
+    return cost > need.minimum.cost || unchecked > 0
+      ? <li>{label}: {unchecked > 0 ? <>not fully checked{cost > 0 && <>; known part {gp(cost)}</>}</> : gp(cost)}</li>
+      : null;
+  };
   return (
     <details className="zen-more funding-details">
       <summary className="small">Details</summary>
@@ -67,8 +74,8 @@ function Details({ a, prices, onUse }: { a: FundingAssessment; prices: PriceView
           Your coins: {coins.amount === null ? 'not known yet' : `${gp(coins.amount)}${coins.complete ? '' : ' (the bank has not been read, so this is the bag only)'}`}.
         </li>
         <li>The next trip needs {gp(a.required)}{need.minimum.lines.length > 0 && <>: {need.minimum.lines.map((l) => `${l.qty} ${l.name}`).join(', ')}</>}.</li>
-        {upTo('With the steps after it', need.recommended.cost + need.fees.now)}
-        {upTo('For the whole goal', need.objective.cost + need.fees.now)}
+        {upTo('With the steps after it', need.recommended, need.fees.now)}
+        {upTo('For the whole goal', need.objective, need.fees.now)}
         {need.optional.cost > 0 && <li className="muted">Optional upgrades: {gp(need.optional.cost)}</li>}
         {budget.surplus.excluded.slice(0, 3).map((x) => <li key={x.name} className="muted">Not for sale: {x.name} ({x.why})</li>)}
       </ul>

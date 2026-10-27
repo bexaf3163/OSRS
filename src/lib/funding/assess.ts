@@ -104,7 +104,7 @@ export function assess(i: AssessInput): FundingAssessment {
 
   if (need.minimum.cost === 0 && need.fees.now === 0 && need.minimum.lines.length === 0) {
     // Nothing is known to be missing. If the reason is that nothing could be checked, say that: unknown is not covered.
-    return need.unknown > 0
+    return (need.minimum.unknown ?? need.unknown) > 0
       ? { ...base, state: 'UNKNOWN', headline: snap.connected ? 'Open your bank to check your supplies.' : 'Connect RuneLite to check your supplies.' }
       : { ...base, headline: 'Nothing to pay for.' };
   }
@@ -120,6 +120,9 @@ export function assess(i: AssessInput): FundingAssessment {
       headline: !connected ? 'Connect RuneLite to check your coins.' : budget.liquid.amount === null ? 'Your coins are not known yet.' : 'Open your bank to see all your coins.',
     };
   }
+  if (gap === 0 && (need.minimum.unknown ?? need.unknown) > 0) return {
+    ...base, state: 'UNKNOWN', headline: 'Known purchases are covered; check the remaining supplies before starting.',
+  };
   if (gap === 0) return { ...base, headline: `You can pay for the next trip (${gp(required)} gp).` };
 
   const options: FundingOption[] = [];

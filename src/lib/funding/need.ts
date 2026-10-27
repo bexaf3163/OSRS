@@ -36,7 +36,7 @@ export interface NeedLine {
   kind: NeedKind;
 }
 
-export interface Tier { cost: number; unpriced: number; lines: NeedLine[] }
+export interface Tier { cost: number; unpriced: number; lines: NeedLine[]; /** Ownership not checked; excluded from cost, never assumed free. */ unknown?: number }
 
 export interface FundingNeed {
   stepId: string;
@@ -87,10 +87,11 @@ function needLines(
   return pack.lines.map((p) => priceLine({ key: `${l.key}#${p.size}`, name: p.name, qty: p.count, why: l.why, kind: l.kind }, prices));
 }
 
-const tierOf = (lines: NeedLine[]): Tier => ({
+const tierOf = (lines: NeedLine[], unknown = 0): Tier => ({
   cost: lines.reduce((s, l) => s + (l.cost ?? 0), 0),
   unpriced: lines.filter((l) => l.cost === null).length,
   lines,
+  unknown,
 });
 
 /** Price a known missing kit with the same quote/dose rules as Funding. Unread stock or unpriced required inputs leave its cost unknown. */
@@ -150,11 +151,13 @@ export function buildNeed(i: NeedInput): FundingNeed {
   // The whole goal of this step: the exchange list with the food for every kill left, minus what is owned.
   const list = aggregateShopping([step], { wholeGoal: true });
   const objective: NeedLine[] = [];
+  let objectiveUnknown = 0;
   for (const line of list.required) {
     if (line.inStepOnly) continue;
     const h = holdingFor(line, i.owned, i.manual[line.key]);
     // Ownership not observed is not a shortage: it is counted in `unknown` of the next trip, and never priced here.
-    if (h.status === 'UNKNOWN' || h.status === 'UNAVAILABLE' || h.buy <= 0) continue;
+    if (h.status === 'UNKNOWN' || h.status === 'UNAVAILABLE') { objectiveUnknown++; continue; }
+    if (h.buy <= 0) continue;
     objective.push(...needLines({ key: line.key, name: line.nameEn, id: line.id, qty: h.buy, why: line.howToGet, kind: line.reusable ? 'tool' : 'buy' }, Boolean(line.dose), prices));
   }
 
@@ -165,9 +168,9 @@ export function buildNeed(i: NeedInput): FundingNeed {
   return {
     stepId: step.id,
     fees: { now: aggregateShopping([step]).coins, window: prep.coins.need },
-    minimum: tierOf(now),
-    recommended: tierOf(recommended),
-    objective: tierOf(objective),
+    minimum: tierOf(now, prep.lines.filter(l => l.timing === 'NOW' && l.where === 'UNKNOWN').length),
+    recommended: tierOf(recommended, prep.lines.filter(l => (l.timing === 'NOW' || l.timing === 'SOON') && l.where === 'UNKNOWN').length),
+    objective: tierOf(objective, objectiveUnknown),
     optional: tierOf(optional),
     unknown: prep.lines.filter((l) => (l.timing === 'NOW' || l.timing === 'SOON') && l.where === 'UNKNOWN').length,
     priceStatus: prices.status,
