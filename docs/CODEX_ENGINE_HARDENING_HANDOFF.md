@@ -11,7 +11,7 @@ Implemented in this batch:
 - Java Checklist/Foods mirror the allocation and share healing with quest guards. Login, mid-session enabling and HP changes refresh the cap. Unrecognised alternatives receive no assumed healing credit. Estimates and cleanup reserves also use effective healing; heterogeneous partial alternatives stay protected.
 - No new panels, settings, route IDs or save migration. Existing manual marks retain their original keys. Old unsafe20-any-fish regression expectations now cover both sufficient healing and insufficient weak food.
 
-Verification: final source passed2233unit tests/189files, fullJava644tests, build/TypeScript, data0errors/warnings, rebuilt plugin jar, sourceElectron E2E75checks (including actual profile-conflict merge and first-write copy failures). Full browser acceptance is running; portable2.80.7 is not yet published and new behavior is not live-game verified.
+Verification: final source passed2233unit tests/189files, fullJava644tests, build/TypeScript, data0errors/warnings, rebuilt plugin jar, sourceElectron E2E75checks (including actual profile-conflict merge and first-write copy failures). Full browser1035checks PASSED on source3edc5af; portable2.80.7 is not yet published and new behavior is not live-game verified.
 
 REAL UPDATE ACCEPTANCE PASSED: [run40549572912](https://github.com/bexaf3163/OSRS/actions/runs/40549572912) exercised published2.80.5 ->2.80.6, real download/digest/install/automatic restart, old-EXE/cleanup-note removal and healthy recheck. S1-01 save bytes were identical. T02's normal update path is verified; interrupted-update/power-loss recovery is not claimed.
 
