@@ -1,5 +1,11 @@
 # Claude continuation â€” authoritative takeover
 
+## Published delivery receipt — 2026-10-27
+
+**2.80.5 is a normal published latest portable release**, source58d74b0. Release40539342356 and Checks40539342213 both succeeded. EXE102,077,781bytes; SHA256 `82c72ab2bc68f814477156b6518caf66b7b591be419dab37d1c32323b9bbda63`, verified equal to GitHub asset digest and SHA256SUMS. Download: https://github.com/bexaf3163/OSRS/releases/tag/v2.80.5 . New game behavior remains unverified live.
+
+2.80.6 code is on main at a7d3d54; all Checks40540103432 succeeded. Normal Release40540103010 is running its own gates and will publish automatically on success. Do not call it released before checking GitHub. The older preparation/publication text below is historical; implementation and remaining-engine lists still apply. No repeated publication approval is required.
+
 ## Food replacement certainty — 2.80.6 preparation
 
 Cheaper food comparisons now use the shared effective-healing rule at the known Hitpoints level; for example10HP needs25Tuna to replace25Salmon, not23Tuna. Confidence is the weaker of the original and substitute purchase quotes, so stale prices cannot create a HIGH-confidence saving. This extends the existing cheaper-supply engine; no new UI or silent food substitution.
