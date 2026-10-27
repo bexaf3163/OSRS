@@ -90,9 +90,10 @@ function throwCopyErrors(errors) {
 /**
  * A scheduled copy: once a day every progress file (progress.json and progress-<profile>.json) is copied into
  * the chosen folder as osrs-put-<name>-YYYYMMDD.json. Today's copy is not overwritten; the last
- * fourteen per file are kept. A broken file is not copied. It returns the number of new copies or throws a folder error.
+ * fourteen per file are kept. A broken file is not copied. onSkipped reports protected sources/destinations without changing them.
+ * It returns the number of new copies or throws a folder error.
  */
-function dailyBackup(dir, target, now = new Date()) {
+function dailyBackup(dir, target, now = new Date(), onSkipped = () => {}) {
   fs.mkdirSync(target, { recursive: true });
   const today = stampOf(now);
   let made = 0;
@@ -104,8 +105,9 @@ function dailyBackup(dir, target, now = new Date()) {
       let text;
       try { text = fs.readFileSync(path.join(dir, name), 'utf8'); }
       catch (error) { if (error.code === 'ENOENT') continue; throw error; }
-      if (!validSavedText(name, text)) continue;
+      if (!validSavedText(name, text)) { onSkipped(name, 'source'); continue; }
       if (!fs.existsSync(out)) { fs.writeFileSync(out, text); made++; }
+      else if (!validSavedText(name, fs.readFileSync(out, 'utf8'))) onSkipped(path.basename(out), 'copy');
       const mine = fs.readdirSync(target).filter((n) => n.startsWith(`osrs-put-${base}-`) && n.length === `osrs-put-${base}-`.length + 13 && /^\d{8}\.json$/.test(n.slice(-13))).sort();
       const supported = mine.filter(n => {
         try { return validSavedText(name, fs.readFileSync(path.join(target, n), 'utf8')); } catch { return false; }
@@ -130,8 +132,9 @@ const updatedAtOf = (text) => {
  * The freshest state next to the dated copies: osrs-put-<name>-latest.json is overwritten whenever the source changes,
  * so a deletion in the middle of the day loses minutes, not a day. A broken file is not copied, and a source that is
  * OLDER than the copy (a fresh or stale data folder somewhere else) never replaces it.
+ * onSkipped reports damaged/unsupported sources or destinations; an intentionally newer supported copy is not an error.
  */
-function latestCopy(dir, target) {
+function latestCopy(dir, target, onSkipped = () => {}) {
   fs.mkdirSync(target, { recursive: true });
   const errors = [];
   for (const name of fs.readdirSync(dir).filter((n) => COPIED.test(n))) {
@@ -139,13 +142,13 @@ function latestCopy(dir, target) {
       let text;
       try { text = fs.readFileSync(path.join(dir, name), 'utf8'); }
       catch (error) { if (error.code === 'ENOENT') continue; throw error; }
-      if (!validSavedText(name, text)) continue;
+      if (!validSavedText(name, text)) { onSkipped(name, 'source'); continue; }
       const out = path.join(target, `osrs-put-${name.replace(/\.json$/, '')}-latest.json`);
       let old = null;
       try { old = fs.readFileSync(out, 'utf8'); }
       catch (error) { if (error.code !== 'ENOENT') throw error; }
       if (old === text) continue;
-      if (old !== null && !validSavedText(name, old)) continue;
+      if (old !== null && !validSavedText(name, old)) { onSkipped(path.basename(out), 'copy'); continue; }
       const mine = updatedAtOf(text);
       const theirs = old === null ? null : updatedAtOf(old);
       if (mine !== null && theirs !== null && mine < theirs) continue;

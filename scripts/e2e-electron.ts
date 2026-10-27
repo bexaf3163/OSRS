@@ -406,6 +406,26 @@ try {
   const copiesRecovered = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
   expect(copiesRecovered.error === null, 'partial backup recovery: restoring readable sources clears the failure');
 
+  // Protected unknown records must be reported, while healthy character copies still complete.
+  const futureProfile = join(dirname(file), 'progress-future.json');
+  const futureRaw = '{"version":99,"steps":{}}';
+  if (existsSync(futureProfile)) throw new Error('Skipped-copy fixture already exists');
+  writeFileSync(futureProfile, futureRaw, { flag: 'wx' });
+  try {
+    const receipt = await page.evaluate(json => (window as unknown as { osrsDesktop: { saveProgressFileChecked(json: string): Promise<{ ok: boolean }> } }).osrsDesktop.saveProgressFileChecked(json), readFileSync(file, 'utf8'));
+    const state = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    expect(receipt.ok && Boolean(state.error?.includes('progress-future.json') && state.error.includes('damaged or unsupported')),
+      'skipped backup: primary save succeeds while Settings names the protected source');
+    const manual = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
+    expect(Boolean(manual.error?.includes('progress-future.json')), 'skipped backup: manual copying does not falsely report success');
+    expect(readFileSync(futureProfile, 'utf8') === futureRaw && readFileSync(join(copyDir, `osrs-put-${basename(file, '.json')}-latest.json`), 'utf8') === readFileSync(file, 'utf8'),
+      'skipped backup: unsupported source is untouched and the healthy active character is copied');
+  } finally {
+    rmSync(futureProfile);
+  }
+  const skippedRecovered = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
+  expect(skippedRecovered.error === null, 'skipped backup: a complete retry clears the affected warning');
+
   // A new profile has not had its session-first copy yet. Block only that copy in the disposable data directory.
   const firstProfile = join(dirname(file), 'progress-firstbak.json');
   const firstCopy = join(dirname(file), 'progress-firstbak.bak.json');
@@ -434,6 +454,25 @@ try {
   } finally {
     rmdirSync(firstCopy);
     rmSync(firstProfile);
+  }
+
+  const keptProfile = join(dirname(file), 'progress-keptcopy.json');
+  const keptCopy = join(dirname(file), 'progress-keptcopy.bak.json');
+  if (existsSync(keptProfile) || existsSync(keptCopy)) throw new Error('Protected first-copy fixture already exists');
+  const goodProfile = readFileSync(file, 'utf8');
+  writeFileSync(keptProfile, goodProfile, { flag: 'wx' });
+  writeFileSync(keptCopy, futureRaw, { flag: 'wx' });
+  try {
+    const receipt = await page.evaluate(json => (window as unknown as { osrsDesktop: {
+      saveProgressFileChecked(json: string, profile: string): Promise<{ ok: boolean }>;
+    } }).osrsDesktop.saveProgressFileChecked(json, 'keptcopy'), goodProfile);
+    const state = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    expect(receipt.ok && Boolean(state.error?.includes('progress-keptcopy.json') && state.error.includes('preserved without replacing')),
+      'protected first copy: primary save succeeds and Settings identifies the retained unsupported copy');
+    expect(readFileSync(keptCopy, 'utf8') === futureRaw, 'protected first copy: the original unsupported bytes remain untouched');
+  } finally {
+    rmSync(keptProfile);
+    rmSync(keptCopy);
   }
 
   expect(!errors.length, `console: no errors ${errors.join('; ')}`);

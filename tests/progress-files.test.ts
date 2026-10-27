@@ -79,7 +79,7 @@ describe('profiles and the scheduled copy', () => {
   const api = createRequire(import.meta.url)('../electron/progress-files.cjs') as {
     readProgress: (dir: string, now?: Date, name?: string) => string | null;
     backupProgress: (dir: string, name?: string) => void;
-    dailyBackup: (dir: string, target: string, now?: Date) => number;
+    dailyBackup: (dir: string, target: string, now?: Date, onSkipped?: (file: string, kind: string) => void) => number;
   };
 
   it('each profile has its own file, a broken one is set aside under its own name', () => {
@@ -121,7 +121,7 @@ describe('profiles and the scheduled copy', () => {
 
 describe('copies outside the app and the restore of a fresh data folder', () => {
   const api = createRequire(import.meta.url)('../electron/progress-files.cjs') as {
-    dailyBackup: (dir: string, target: string, now?: Date) => number;
+    dailyBackup: (dir: string, target: string, now?: Date, onSkipped?: (file: string, kind: string) => void) => number;
     latestCopy: (dir: string, target: string) => void;
     restoreFromCopies: (dir: string, source: string, replaceOlder?: boolean) => string[];
   };
@@ -316,5 +316,40 @@ describe('copies outside the app and the restore of a fresh data folder', () => 
     const newerHere = tmp();
     writeFileSync(join(newerHere, 'progress.json'), at('2026-10-05T12:00:00Z'));
     expect(api.restoreFromCopies(newerHere, src, true)).toEqual([]);
+  });
+});
+
+
+describe('skipped copy diagnostics preserve every protected record', () => {
+  const api = createRequire(import.meta.url)('../electron/progress-files.cjs') as {
+    dailyBackup(dir: string, target: string, now?: Date, onSkipped?: (file: string, kind: string) => void): number;
+    latestCopy(dir: string, target: string, onSkipped?: (file: string, kind: string) => void): void;
+  };
+  it.each(['{broken', '{"version":99,"steps":{}}'])('reports skipped source while copying healthy profiles: %s', raw => {
+    const d = tmp(), out = tmp();
+    const good = '{"version":3,"steps":{"S1-01":"done"}}';
+    writeFileSync(join(d, 'progress.json'), raw);
+    writeFileSync(join(d, 'progress-alt.json'), good);
+    const skipped: [string, string][] = [];
+    const report = (file: string, kind: string) => skipped.push([file, kind]);
+    expect(api.dailyBackup(d, out, new Date(2026, 9, 27), report)).toBe(1);
+    api.latestCopy(d, out, report);
+    expect(skipped).toEqual([['progress.json', 'source'], ['progress.json', 'source']]);
+    expect(readFileSync(join(d, 'progress.json'), 'utf8')).toBe(raw);
+    expect(readFileSync(join(out, 'osrs-put-progress-alt-latest.json'), 'utf8')).toBe(good);
+    expect(readFileSync(join(out, 'osrs-put-progress-alt-20261027.json'), 'utf8')).toBe(good);
+  });
+  it('names protected latest and current daily destinations without overwriting either', () => {
+    const d = tmp(), out = tmp();
+    writeFileSync(join(d, 'progress.json'), '{"version":3,"steps":{}}');
+    const raw = '{"version":99,"steps":{}}';
+    const names = ['osrs-put-progress-latest.json', 'osrs-put-progress-20261027.json'];
+    for (const name of names) writeFileSync(join(out, name), raw);
+    const skipped: [string, string][] = [];
+    const report = (file: string, kind: string) => skipped.push([file, kind]);
+    expect(api.dailyBackup(d, out, new Date(2026, 9, 27), report)).toBe(0);
+    api.latestCopy(d, out, report);
+    expect(skipped).toEqual([[names[1], 'copy'], [names[0], 'copy']]);
+    for (const name of names) expect(readFileSync(join(out, name), 'utf8')).toBe(raw);
   });
 });

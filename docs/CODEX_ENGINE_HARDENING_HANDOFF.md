@@ -1,6 +1,20 @@
 # Engine hardening — Codex continuation, 2026-10-26
 
-## Current continuation - 2.80.8 preparation (2026-10-27)
+## Current continuation - 2.80.9 preparation (2026-10-27)
+
+2.80.8 food-packing batch is committed and on main:6795a624cdc0634501214381995a899ea0b89c73. Release40589844389 and Checks40589844345 are running; collect their result and verify the portable digest. Its local2239TS/646Java/1035browser/75sourceElectron checks passed. Do not mix live acceptance with these automated results.
+
+Next batch (T01, existing backup engine only):
+- Optional skip-report callbacks preserve existing copy return values and byte-preservation rules. Damaged/unsupported sources and protected latest/current-daily destinations are named in the existing Settings warning; healthy profiles still copy.
+- First-write skipped/retained copy outcomes no longer clear diagnostics as though a copy succeeded. The primary save can succeed independently; protected copies remain untouched.
+- A complete retry clears its scheduled-copy warning. Independent success does not erase a first-write warning. No new panels, save format, source overwrite, external file watcher or recovery guarantee.
+- Current npm audit (2026-10-27) reports0 advisories across the installed dependency tree; no dependency edits or force-fix were needed. The earlier eight-moderate result is historical; future clean-install/release evidence still applies.
+- New filesystem/native cases preserve unsupported bytes and healthy-profile continuity. Local2242TS/190files, build/TypeScript, data0errors/warnings, rebuiltJar and focused profile UI53checks and final sourceElectron81checks passed. CI/portable acceptance remains pending.
+
+Still open: cold-process warning acceptance, broader runtime external changes/recovery, remaining audit candidates. Continue confirmed acquisition/travel/potion/Members work and Claude's deferred in-game acceptance; do not declare the entire audit complete.
+
+
+## Previous batch - 2.80.8
 
 Published NORMAL baseline2.80.7, source2002eed0657ff99a33420805c474027ef4be13e3: Release40556403825 and Checks40556404554 green. EXE102,081,664bytes; SHA256 `dc8b4f9c6a6e834fa74d6e207d2ce408346cd2c7a45391d50abf1a3a667a8ac1`, verified against GitHub digest and SHA256SUMS. Local evidence:2233TS,644Java,1035browser,75sourceElectron checks passed. The real update happy path2.80.5->2.80.6 also passed (40549572912).
 

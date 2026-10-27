@@ -143,13 +143,21 @@ if (!app.requestSingleInstanceLock()) {
   const progressWriter = createProgressWriter({
     write: writeAtomic,
     backup: name => {
-      try { backupProgress(app.getPath('userData'), name); recordCopyError(BAK, name, null); }
+      try {
+        const result = backupProgress(app.getPath('userData'), name);
+        recordCopyError(BAK, name, result === 'skipped' || result === 'kept'
+          ? { code: result === 'skipped' ? 'Source is damaged or unsupported; copy skipped' : 'Previous copy is damaged or unsupported; preserved without replacing it' } : null);
+      }
       catch (err) { recordCopyError(BAK, name, err); }
     },
     afterFlush: () => {
       // The freshest copy follows every change, so a deleted folder loses seconds, not an hour.
       if (ui.backupOff !== true) {
-        try { latestCopy(app.getPath('userData'), autoCopyDir); recordCopyError(autoCopyDir, 'latest', null); }
+        try {
+          const skipped = new Set();
+          latestCopy(app.getPath('userData'), autoCopyDir, (file, kind) => skipped.add(`${file}: ${kind} is damaged or unsupported`));
+          recordCopyError(autoCopyDir, 'latest', skipped.size ? { code: `Copy skipped (${[...skipped].join('; ')})` } : null);
+        }
         catch (err) { recordCopyError(autoCopyDir, 'latest', err); }
       }
     },
@@ -202,8 +210,11 @@ if (!app.requestSingleInstanceLock()) {
     flushProgress();
     for (const target of targets) {
       try {
-        dailyBackup(app.getPath('userData'), target);
-        latestCopy(app.getPath('userData'), target);
+        const skipped = new Set();
+        const onSkipped = (file, kind) => skipped.add(`${file}: ${kind} is damaged or unsupported`);
+        dailyBackup(app.getPath('userData'), target, undefined, onSkipped);
+        latestCopy(app.getPath('userData'), target, onSkipped);
+        if (skipped.size) throw Object.assign(new Error('Copy incomplete'), { code: `Copy skipped (${[...skipped].join('; ')})` });
         copyErrors.delete(target);
         keepCopyErrors();
         ui.backupLast = new Date().toISOString();
