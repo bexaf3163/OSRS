@@ -126,11 +126,16 @@ if (!app.requestSingleInstanceLock()) {
   // Secondary copy failures must remain observable without rejecting a successful primary save. They outlive a restart (ui.json) until the
   // same copy succeeds, so closing the app cannot hide an unreported failure.
   const copyErrors = new Map(Object.entries(ui.copyErrors && typeof ui.copyErrors === 'object' ? ui.copyErrors : {}));
+  let savedCopyErrors = JSON.stringify(ui.copyErrors ?? {});
+  let copyHistoryError = null;
   const keepCopyErrors = () => {
     const kept = Object.fromEntries(copyErrors);
-    if (JSON.stringify(kept) === JSON.stringify(ui.copyErrors ?? {})) return;
+    const json = JSON.stringify(kept);
+    if (json === savedCopyErrors) { copyHistoryError = null; return; }
     ui.copyErrors = kept;
-    saveUi();
+    const receipt = saveUi();
+    copyHistoryError = receipt.ok ? null : receipt.error;
+    if (receipt.ok) savedCopyErrors = json;
   };
   const recordCopyError = (target, phase, err) => {
     const errors = { ...copyErrors.get(target), [phase]: err ? String(err.code || 'write error') : null };
@@ -203,7 +208,8 @@ if (!app.requestSingleInstanceLock()) {
   const backupTargets = () => [...new Set([ui.backupOff === true ? null : autoCopyDir, ui.backupDir || null].filter(Boolean))];
   const backupState = () => ({ dir: ui.backupDir || null, autoDir: ui.backupOff === true ? null : autoCopyDir, last: ui.backupLast || null,
     error: [...new Set([BAK, ...backupTargets()].flatMap(target => Object.entries(copyErrors.get(target) || {})
-      .filter(([, code]) => code).map(([phase, code]) => (target === BAK ? `${code} (copy of ${phase} before the first save)` : code))))].join('; ') || null });
+      .filter(([, code]) => code).map(([phase, code]) => (target === BAK ? `${code} (copy of ${phase} before the first save)` : code)))),
+      ...(copyHistoryError ? [`Backup warning history could not be saved (${copyHistoryError}); current warnings may be lost after restart`] : [])].join('; ') || null });
   function runBackup() {
     const targets = backupTargets();
     if (!targets.length) return backupState();

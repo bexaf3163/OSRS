@@ -426,6 +426,32 @@ try {
   const skippedRecovered = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
   expect(skippedRecovered.error === null, 'skipped backup: a complete retry clears the affected warning');
 
+  // A failed ui.json write must not be remembered as successful persistence of copy diagnostics.
+  const historySource = join(dirname(file), 'progress-history.json');
+  const historyTemp = join(dirname(file), 'ui.json.tmp');
+  if (existsSync(historySource) || existsSync(historyTemp)) throw new Error('Copy-history fixture already exists');
+  writeFileSync(historySource, futureRaw, { flag: 'wx' });
+  mkdirSync(historyTemp);
+  try {
+    const json = readFileSync(file, 'utf8');
+    const receipt = await page.evaluate(raw => (window as unknown as { osrsDesktop: { saveProgressFileChecked(json: string): Promise<{ ok: boolean }> } }).osrsDesktop.saveProgressFileChecked(raw), json);
+    const state = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    expect(receipt.ok && readFileSync(file, 'utf8') === json, 'copy-history failure: primary save acknowledgement remains truthful');
+    expect(Boolean(state.error?.includes('progress-history.json') && state.error.includes('history could not be saved')),
+      'copy-history failure: unpersisted warning history is disclosed');
+    rmdirSync(historyTemp);
+    await page.evaluate(raw => (window as unknown as { osrsDesktop: { saveProgressFileChecked(json: string): Promise<{ ok: boolean }> } }).osrsDesktop.saveProgressFileChecked(raw), json);
+    const persisted = JSON.parse(readFileSync(join(dirname(file), 'ui.json'), 'utf8'));
+    const retry = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    expect(JSON.stringify(persisted.copyErrors).includes('progress-history.json') && !retry.error?.includes('history could not be saved'),
+      'copy-history retry: unchanged diagnostics retry persistence after the path becomes writable');
+  } finally {
+    if (existsSync(historyTemp)) rmdirSync(historyTemp);
+    rmSync(historySource);
+  }
+  const historyRecovered = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
+  expect(historyRecovered.error === null, 'copy-history recovery: a complete copy clears the repaired diagnostic');
+
   // A new profile has not had its session-first copy yet. Block only that copy in the disposable data directory.
   const firstProfile = join(dirname(file), 'progress-firstbak.json');
   const firstCopy = join(dirname(file), 'progress-firstbak.bak.json');
@@ -481,6 +507,36 @@ try {
     await page.close();
     for (let i = 0; i < 120 && app.exitCode === null; i++) await new Promise((r) => setTimeout(r, 500));
     expect(app.exitCode !== null, 'release candidate: closing the window ends the app and its launcher');
+  }
+  if (!exe) {
+    const beforeRestart = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    await page.close();
+    for (let i = 0; i < 60 && app.exitCode === null; i++) await new Promise(r => setTimeout(r, 250));
+    expect(app.exitCode !== null, 'copy-history restart: the original native process exits before relaunch');
+    if (app.exitCode === null) throw new Error('Native process did not exit for copy-history restart');
+    const restarted = spawn(electronPath, ['.', `--remote-debugging-port=${cdpPort}`], {
+      cwd: root, stdio: 'ignore',
+      env: { ...process.env, USERPROFILE: home, HOME: home, APPDATA: join(home, 'appdata'), LOCALAPPDATA: home, OSRS_PUT_E2E_ROOT: home, PORTABLE_EXECUTABLE_DIR: home, OSRS_PUT_BRIDGE_PORT: String(bridgePort) },
+    });
+    let restartedBrowser: Awaited<ReturnType<typeof chromium.connectOverCDP>> | undefined;
+    try {
+      let ready = false;
+      for (let i = 0; i < 60 && !ready; i++) {
+        try { ready = (await fetch(`http://127.0.0.1:${cdpPort}/json/version`)).ok; } catch { await new Promise(r => setTimeout(r, 500)); }
+      }
+      if (!ready) throw new Error('Copy-history restart did not become available');
+      restartedBrowser = await chromium.connectOverCDP(`http://127.0.0.1:${cdpPort}`);
+      const restartedPage = restartedBrowser.contexts()[0].pages()[0];
+      await restartedPage.waitForFunction(() => Boolean((window as unknown as { osrsDesktop?: unknown }).osrsDesktop));
+      const afterRestart = await restartedPage.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+      expect(Boolean(beforeRestart.error) && afterRestart.error === beforeRestart.error,
+        'copy-history restart: retained first-write warnings survive a completely new native process');
+      await restartedPage.close();
+    } finally {
+      await restartedBrowser?.close();
+      for (let i = 0; i < 40 && restarted.exitCode === null; i++) await new Promise(r => setTimeout(r, 250));
+      if (restarted.exitCode === null && restarted.pid) spawnSync('taskkill', ['/T', '/F', '/PID', String(restarted.pid)]);
+    }
   }
   await browser.close();
 } catch (e) {

@@ -1,6 +1,19 @@
 # Claude continuation — authoritative takeover
 
-## Current continuation - 2.80.9 preparation (2026-10-27)
+## Current continuation - 2.80.10 preparation (2026-10-28)
+
+Published NORMAL2.80.8: source6795a624cdc0634501214381995a899ea0b89c73; Release40589844389 and Checks40589844345 succeeded. The downloaded EXE is102,082,401bytes and SHA256 `71b0ad15bed53d8eb7f6338da6115136ce0aa8cc47462535ba83f531e3178d27`, matching GitHub digest and downloaded SHA256SUMS. Its local2239TS/646Java/1035browser/75sourceElectron checks passed.
+
+2.80.9 sourcea15567a4bd3894a594a47b430980e554778e5a37 has green Checks40590735962; Release40590735860 is now running. Collect its normal portable receipt next.
+
+New narrow T01 fix: backup-history state is remembered as persisted only after saveUi returns a successful physical-write receipt. An unwritable ui.json no longer suppresses the next attempt to save unchanged diagnostics. Settings discloses unpersisted history without falsely rejecting a successful primary progress save. No new panels, formats or engines.
+
+Regression evidence includes an isolated ui.json.tmp write obstruction, primary-save success, warning disclosure, unchanged-state retry and a complete recovery. Final source acceptance PASSED87checks, including exit of the original process and survival of retained first-write warnings in a fresh native process.2242unit tests/190files, build/TypeScript, data0errors/warnings and rebuiltJar passed. Java logic is unchanged from646-test verification; release CI repeats the full gates. FullUI1035 passed on2.80.8; focused profile UI53 passed on2.80.9 with unchanged frontend code. This is source cold-process acceptance, not a claimed portable restart or power-loss test.
+
+After publication: continue only confirmed remaining issues. Runtime external-file changes and broad interrupted-write recovery remain open; this fix does not promise power-loss durability. In-game acceptance remains Claude's responsibility.
+
+
+## Previous batch - 2.80.9
 
 2.80.8 food-packing batch is committed and on main:6795a624cdc0634501214381995a899ea0b89c73. Release40589844389 and Checks40589844345 are running; collect their result and verify the portable digest. Its local2239TS/646Java/1035browser/75sourceElectron checks passed. Do not mix live acceptance with these automated results.
 
@@ -11,7 +24,7 @@ Next batch (T01, existing backup engine only):
 - Current npm audit (2026-10-27) reports0 advisories across the installed dependency tree; no dependency edits or force-fix were needed. The earlier eight-moderate result is historical; future clean-install/release evidence still applies.
 - New filesystem/native cases preserve unsupported bytes and healthy-profile continuity. Local2242TS/190files, build/TypeScript, data0errors/warnings, rebuiltJar and focused profile UI53checks and final sourceElectron81checks passed. CI/portable acceptance remains pending.
 
-Still open: cold-process warning acceptance, broader runtime external changes/recovery, remaining audit candidates. Continue confirmed acquisition/travel/potion/Members work and Claude's deferred in-game acceptance; do not declare the entire audit complete.
+Still open: broader runtime external changes/recovery, remaining audit candidates. Continue confirmed acquisition/travel/potion/Members work and Claude's deferred in-game acceptance; do not declare the entire audit complete.
 
 
 ## Previous batch - 2.80.8
@@ -24,7 +37,7 @@ New batch extends the existing nutrition/preparation engines:
 - Bag/notes/bank healing credits are apportioned after combining partial healing. TS readiness/Shopping/combat preparation and Java checklist/quest guards agree; mixed partial bites no longer cause needless purchases.
 - No protocol change, extra panels, save migration or forced route edits. Notes require a bank; slot estimates remain conservative and do not promise optimal packing.
 
-Local verification:2239TS tests/190files, Java646/0failures, build/TypeScript, data0errors/warnings, rebuilt plugin jar and75sourceElectron checks passed. Full browser1035checks passed. Normal2.80.8 publication is next; record the CI/artifact receipt before calling it published. Live-game acceptance belongs to Claude. Remaining broad work: confirmed acquisition travel/fees, goal-wide potion purchases, source-backed Members models and deferred acceptance. Review historical candidates against current source before reopening them.
+Local verification:2239TS tests/190files, Java646/0failures, build/TypeScript, data0errors/warnings, rebuilt plugin jar and75sourceElectron checks passed. Full browser1035checks passed. Normal2.80.8 is published and its downloaded EXE is verified; receipt above. Live-game acceptance belongs to Claude. Remaining broad work: confirmed acquisition travel/fees, goal-wide potion purchases, source-backed Members models and deferred acceptance. Review historical candidates against current source before reopening them.
 
 
 ## Previous batch - 2.80.7 (published)
