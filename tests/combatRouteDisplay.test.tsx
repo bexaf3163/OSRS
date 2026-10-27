@@ -10,7 +10,7 @@ const view = vi.hoisted(() => ({ entry: null as CombatPlanEntry | null }));
 vi.mock('../src/playerStateContext', () => ({ usePlayerState: () => ({ combatPlans: { 'S4-03': view.entry }, choosePlan: vi.fn() }) }));
 
 describe('compact combat comparison economics', () => {
-  it.each([-500, 0, 500, null])('shows net %s rather than gross drops, inside the existing folded comparison', net => {
+  it.each([-500, -20, 0, 20, 500, null])('shows net %s rather than gross drops, inside the existing folded comparison', net => {
     const input = planInput();
     const report = evaluatePlans(input)!;
     report.plans = report.plans.map(p => ({ ...p, net, income: { ...p.income, net: 999999 } }));

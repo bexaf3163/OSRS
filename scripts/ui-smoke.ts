@@ -2113,6 +2113,8 @@ async function combatRouteScenarios(browser: Browser) {
     expect(/\+\d[\d,k]* gp/.test(all) && /Big bones/.test(await text(page, '.combat-verdict')), `combat route (${width} px): the loot is counted and the verdict says what it brings`);
     expect(/Also compared: .*(Cows|Monks|Barbarians)/.test(all), `combat route (${width} px): it says what else was compared`);
     expect(await page.locator('.combat-plan-row.is-now .cpr-figs').count() === 1, `combat route (${width} px): the plan in use has its time, food and coins`);
+    const netFigures = await page.locator('.combat-plan-row .cpr-figs > span:last-child').allTextContents();
+    expect(netFigures.length === rows && netFigures.every(t => /gp net$|^Not priced$/.test(t.trim())), `combat route (${width} px): every comparison shows net proceeds or an unknown cost, never gross loot`);
     if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-open-${width}.png` }).catch(() => {});
     // A trainer choice cannot bypass common preparation: Defence 10 still comes before the armour and Attack phase.
     const other = page.locator('.combat-plan-row:not(.is-now)', { has: page.getByRole('button', { name: 'Use' }) }).first();

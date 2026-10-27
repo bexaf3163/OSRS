@@ -209,7 +209,7 @@ export function GearPage() {
   const incoming = advice.incoming;
   const context = fightStep && foe
     ? <>For <a href={`#/step/${fightStep.id}`}>{fightStep.id}</a>: {foe.name}{incoming ? <>, attacks with {incoming.style}{incoming.maxHit ? `, hits up to ${incoming.maxHit}` : ''}</> : null}.</>
-    : <>No fight ahead on the route: compared against a cow.</>;
+    : <>No supported opponent selected: comparison uses a cow.</>;
   const coins = advice.coins;
   // Levels from the game or entered on the Skills page; without either the advisor works from level 1, which is not shown as the player's.
   const levelsKnown = Boolean(stats?.attack || progress.levels.attack);

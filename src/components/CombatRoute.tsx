@@ -32,7 +32,7 @@ const minutesText = (m: number) => {
   return r >= 60 ? `${Math.floor(r / 60)} h${r % 60 ? ` ${r % 60} min` : ''}` : `${r} min`;
 };
 /** "83k", "4,900": coins in a column. */
-const coinsText = (n: number) => (n >= 10000 ? `${Math.round(n / 1000)}k` : formatGp(Math.round(n / 100) * 100));
+const coinsText = (n: number) => (Math.abs(n) >= 10000 ? `${Math.round(n / 1000)}k` : formatGp(Math.abs(n) < 100 ? Math.round(n) : Math.round(n / 100) * 100));
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const titleOf = (p: EvaluatedPlan) => (p.id === 'route' ? 'The route as written' : p.title);
 /** The phases that make this plan what it is: after the armour stop, the preparation every plan of the step shares is not repeated in each row. */
