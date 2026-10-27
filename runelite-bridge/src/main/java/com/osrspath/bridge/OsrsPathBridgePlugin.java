@@ -1686,7 +1686,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			return null;
 		}
-		return Preflight.check(target.getStepId(), line, true, carried, noted, bank, pos.getX(), pos.getY(), pos.getPlane(), st.getBanks());
+		return Preflight.check(target.getStepId(), line, true, carried, noted, bankFromSave ? null : bank, pos.getX(), pos.getY(), pos.getPlane(), st.getBanks());
 	}
 
 	/** Recompute the current stage step from the player's position and items. Client thread. */
@@ -1927,10 +1927,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				n = vn;
 			}
 		}
-		if (block != null && block.getTarget() != null)
+		if (block != null)
 		{
 			// The pre-flight guard: the step's tile is not the destination until the item is in the bag.
 			n = block.getTarget();
+			if (n == null)
+			{
+				applyNav(null);
+				return;
+			}
 		}
 		if (n != null)
 		{

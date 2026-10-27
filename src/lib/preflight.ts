@@ -7,7 +7,8 @@ import { FOODS } from './foodAdvice';
 
 /**
  * The item pre-flight guard for a quest stage step: while an item the step uses is not in the bag (or worn), the arrow does not lead to the step.
- * It leads where the item is: the nearest bank when the bank snapshot holds it, else the place named in the data, else the Grand Exchange.
+ * It leads to a known bank holding, a source named in the data, or a bank check before buying when bank ownership is unread.
+ * The exchange is a purchase fallback only after the current-session bank was checked.
  * The plugin runs the same rules in Java (Preflight.java); this module is the app's copy and what the tests pin.
  *
  * Unknown is not missing: with no bag read yet nothing is blocked, and the bank is used only when it has really been seen.
@@ -16,6 +17,8 @@ export interface PreflightInput {
   carried: GearItem[] | null;
   /** The bank snapshot, or null when the bank has never been opened. */
   bank?: GearItem[] | null;
+  /** False for a saved earlier-session snapshot; it cannot prove a purchase shortage. */
+  bankCurrent?: boolean;
   from: Point;
   /** The player's real levels: a pickaxe or axe tier above them does not count (Preflight.java the same). Absent — unknown, every tier counts. */
   levels?: Partial<Record<string, number>> | null;
@@ -25,7 +28,7 @@ export interface PreflightBlock {
   item: string;
   need: number;
   have: number;
-  via: 'bank' | 'source' | 'exchange';
+  via: 'bank' | 'check-bank' | 'source' | 'exchange';
   target: Point & { label: string };
   /** What to do now, for the HUD heading and the arrow label. */
   instruction: string;
@@ -80,7 +83,7 @@ export function itemPreflight(line: Pick<QuestStageLine, 'pre'>, inp: PreflightI
     const have = countOf(inp.carried, p, inp.levels);
     if (have >= need) continue;
     const base = { item: p.item, need, have, chip: missingChip(p.item) };
-    if (inp.bank && countOf(inp.bank, p, inp.levels) >= need - have) {
+    if (inp.bankCurrent !== false && inp.bank && countOf(inp.bank, p, inp.levels) >= need - have) {
       const bank = nearest(inp.from, BANK_SPOTS);
       if (bank) return { ...base, via: 'bank', target: bank, instruction: `Take ${p.item} from the bank` };
     }
@@ -89,6 +92,10 @@ export function itemPreflight(line: Pick<QuestStageLine, 'pre'>, inp: PreflightI
         ...base, via: 'source', target: { x: p.at[0], y: p.at[1], plane: p.at[2], label: p.t ?? `Get ${p.item}` }, instruction: p.t ?? `Get ${p.item}`,
         ...(p.on?.length ? { on: p.on } : {}), ...(p.npc ? { npc: p.npc } : {}),
       };
+    }
+    if (!inp.bank || inp.bankCurrent === false) {
+      const bank = nearest(inp.from, BANK_SPOTS);
+      if (bank) return { ...base, via: 'check-bank', target: bank, instruction: `Check your bank for ${p.item} before buying` };
     }
     return { ...base, via: 'exchange', target: EXCHANGE, instruction: `Buy ${p.item} on the Grand Exchange` };
   }

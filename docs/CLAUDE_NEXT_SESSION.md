@@ -1,5 +1,12 @@
 # Claude continuation — authoritative takeover
 
+## Local continuation — quest purchase guard, 2026-10-27
+
+- Reproduced in real released RuneLite: the current Dragon Slayer recovery line showed Plank as Not checked in the app, while the game said Buy Plank. The plugin had an earlier-session bank snapshot.
+- Shared TS/Java Preflight now distinguishes an unread bank from a current checked-empty bank. Without a named free source, it leads to Check your bank before recommending a purchase. Known sources remain available; sufficient bag/worn items still satisfy the guard. Owned notes still lead to a bank. No encounter protection was removed.
+- Plugin ignores the earlier-session bank snapshot for this pre-entry acquisition decision. The HUD uses Check bank for / bank not checked. A blocked line with no resolvable corrective target clears automatic navigation instead of falling through to the encounter tile. No protocol or saved-profile migration.
+- Verified final source: 2,217 Vitest tests / 188 files; full Java 639 tests / 82 suites, 0 failures/errors; TypeScript/build and data 0 errors/warnings. The new code has not replaced the running2.80.4 client and is not yet live-verified. Browser/portable checks remain pending for this local continuation.
+
 ## Local continuation — funding certainty and live acceptance, 2026-10-27
 
 - Funding tiers now retain their own unknown-ownership counts. A covered known subtotal cannot produce a next-trip COVERED verdict while other NOW supplies are unchecked. Unknown SOON supplies do not invalidate a fully checked free next trip. Whole-goal details mark incomplete ownership/quotes as not fully checked and label only the known part.

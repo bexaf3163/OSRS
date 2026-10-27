@@ -431,6 +431,15 @@ public class HudModelTest
 		assertTrue("what the stage adds stays: " + all, all.contains("Another note."));
 	}
 
+	@Test
+	public void anUnreadBankGuardNeverSaysBuyOrWithdraw()
+	{
+		Preflight.Block pb = new Preflight.Block("Plank", 3, 0, Preflight.Via.CHECK_BANK, null, 3000, 3200, 0);
+		HudModel.Card c = HudModel.build(with(input(view(S403, null), quiet(), attack(30)), "preflight", pb));
+		assertEquals("Check bank for Plank", c.getHeadline());
+		assertTrue(expanded(c).contains("bank not checked"));
+	}
+
 	// ---------- One warning, safety first ----------
 
 	@Test

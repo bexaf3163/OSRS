@@ -92,6 +92,15 @@ describe('S3-02 Black Knights Fortress: the cabbage comes first', () => {
 });
 
 describe('unknown is not missing', () => {
+  it('checks an unread or earlier-session bank before recommending a purchase', () => {
+    const l = lineOf('S2-07', 'talkToThurgo');
+    for (const bank of [undefined, null]) {
+      expect(itemPreflight(l, { carried: [], bank, from: at(3000, 3145) })).toMatchObject({ via: 'check-bank', instruction: 'Check your bank for Redberry pie before buying' });
+    }
+    expect(itemPreflight(l, { carried: [], bank: [], bankCurrent: false, from: at(3000, 3145) })!.via).toBe('check-bank');
+    expect(itemPreflight(l, { carried: [], bank: bag(['Redberry pie', 2325]), bankCurrent: false, from: at(3000, 3145) })!.via).toBe('check-bank');
+    expect(itemPreflight(l, { carried: bag(['Redberry pie', 2325]), bank: null, from: at(3000, 3145) })).toBeNull();
+  });
   it('a bag that was never read blocks nothing, and an unseen bank is not used', () => {
     const door = lineOf('S3-02', 'enterFortress');
     expect(itemPreflight(door, { carried: null, from: at(3016, 3514) })).toBeNull();
@@ -103,7 +112,7 @@ describe('unknown is not missing', () => {
 describe('the Grand Exchange is the fallback for what can be bought', () => {
   it('Redberry pie has no place of its own: the arrow turns to the exchange and the bank wins when it holds one', () => {
     const l = lineOf('S2-07', 'talkToThurgo');
-    const b = itemPreflight(l, { carried: [], from: at(3000, 3145) })!;
+    const b = itemPreflight(l, { carried: [], bank: [], from: at(3000, 3145) })!;
     expect(b).toMatchObject({ item: 'Redberry pie', via: 'exchange' });
     expect(b.target).toMatchObject({ x: EXCHANGE.x, y: EXCHANGE.y });
     expect(b.instruction).toBe('Buy Redberry pie on the Grand Exchange');

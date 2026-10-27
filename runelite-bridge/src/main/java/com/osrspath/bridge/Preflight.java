@@ -7,7 +7,8 @@ import lombok.Value;
 /**
  * The item pre-flight guard for a quest stage step (the app's copy is src/lib/preflight.ts). While an item the step uses is not in the bag or worn, the
  * arrow does not lead to the step: it leads where the item is, the nearest bank if the bank snapshot holds it, else the place named in the data, else the
- * Grand Exchange. Unknown is not missing: no bag read yet blocks nothing, and the bank counts only when it has been seen.
+ * Grand Exchange after the current-session bank was checked. An unread bank first leads to a bank check before buying.
+ * Unknown is not missing: no bag read yet blocks nothing.
  */
 final class Preflight
 {
@@ -18,7 +19,7 @@ final class Preflight
 
 	enum Via
 	{
-		BANK, SOURCE, EXCHANGE
+		BANK, CHECK_BANK, SOURCE, EXCHANGE
 	}
 
 	@Value
@@ -56,6 +57,8 @@ final class Preflight
 				{
 					case BANK:
 						return food + " Take it from the bank first.";
+					case CHECK_BANK:
+						return food + " Check your bank before buying more.";
 					case SOURCE:
 						return food + " Get it first, the arrow leads there.";
 					default:
@@ -67,6 +70,8 @@ final class Preflight
 			{
 				case BANK:
 					return "Guidance paused: " + what + " is missing from your bag. Take it from the bank first.";
+				case CHECK_BANK:
+					return "Guidance paused: " + what + " is missing from your bag. Your bank is not checked; check it before buying.";
 				case SOURCE:
 					return "Guidance paused: " + what + " is missing from your bag. Get it first, the arrow leads there.";
 				default:
@@ -168,6 +173,12 @@ final class Preflight
 				String label = p.getT() == null || p.getT().isEmpty() ? "Get " + p.getItem() : p.getT();
 				return new Block(p.getItem(), p.need(), have, Via.SOURCE,
 					target(stepId, label, p.getAt().get(0), p.getAt().get(1), p.getAt().get(2), p.getOn(), p.getNpc()), sx, sy, sp);
+			}
+			if (bank == null)
+			{
+				ActiveTarget.Spot b = nearest(banks, px, py, plane);
+				return new Block(p.getItem(), p.need(), have, Via.CHECK_BANK,
+					b == null ? null : target(stepId, "Check your bank for " + p.getItem(), b.getX(), b.getY(), b.getPlane(), null, null), sx, sy, sp);
 			}
 			return new Block(p.getItem(), p.need(), have, Via.EXCHANGE,
 				target(stepId, "Buy " + p.getItem() + " on the Grand Exchange", EXCHANGE_X, EXCHANGE_Y, 0, null, null), sx, sy, sp);

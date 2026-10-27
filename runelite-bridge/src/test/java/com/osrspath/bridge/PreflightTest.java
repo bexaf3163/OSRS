@@ -81,7 +81,7 @@ public class PreflightTest
 	{
 		Preflight.Block field = check(line(DOOR), new ItemCounts(), null, 3016, 3514);
 		assertEquals("Guidance paused: Cabbage is missing from your bag. Get it first, the arrow leads there.", field.reason());
-		Preflight.Block exchange = check(line(PIE), new ItemCounts(), null, 3000, 3145);
+		Preflight.Block exchange = check(line(PIE), new ItemCounts(), bag(), 3000, 3145);
 		assertEquals("Guidance paused: Redberry pie is missing from your bag. Buy it at the Grand Exchange first.", exchange.reason());
 		Preflight.Block bank = check(line(PIE), new ItemCounts(), bag(2325, "Redberry pie", 1), 3185, 3436);
 		assertEquals("Guidance paused: Redberry pie is missing from your bag. Take it from the bank first.", bank.reason());
@@ -110,10 +110,25 @@ public class PreflightTest
 	@Test
 	public void anItemWithNoPlaceIsBoughtOnTheGrandExchange()
 	{
-		Preflight.Block b = check(line(PIE), new ItemCounts(), null, 3000, 3145);
+		Preflight.Block b = check(line(PIE), new ItemCounts(), bag(), 3000, 3145);
 		assertEquals(Preflight.Via.EXCHANGE, b.getVia());
 		assertEquals(Preflight.EXCHANGE_X, b.getTarget().getX());
 		assertEquals("Buy Redberry pie on the Grand Exchange", b.getTarget().getLabel());
+	}
+
+	@Test
+	public void anUnreadBankDoesNotProveAPurchaseShortage()
+	{
+		Preflight.Block b = check(line(PIE), bag(), null, 3000, 3145);
+		assertEquals(Preflight.Via.CHECK_BANK, b.getVia());
+		assertTrue(b.getTarget().getLabel().startsWith("Check your bank"));
+		assertTrue(b.reason().contains("check it before buying"));
+		assertEquals(Preflight.Via.EXCHANGE, check(line(PIE), bag(), bag(), 3000, 3145).getVia());
+		assertNull(check(line(PIE), bag(2325, "Redberry pie", 1), null, 3000, 3145));
+		Preflight.Block noBank = Preflight.check("test", line(PIE), true, bag(), null, 3000, 3145, 0, Collections.emptyList());
+		assertNotNull(noBank);
+		assertEquals(Preflight.Via.CHECK_BANK, noBank.getVia());
+		assertNull(noBank.getTarget());
 	}
 
 	@Test

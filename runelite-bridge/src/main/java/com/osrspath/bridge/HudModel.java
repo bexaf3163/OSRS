@@ -666,10 +666,10 @@ final class HudModel
 			PrepPlan currentPrep = in.getView() == null ? null : in.getView().getPrep();
 			PrepPlan.Line currentLine = currentPrep == null ? null : currentPrep.line(pb.getItem());
 			boolean unnote = currentLine != null && currentLine.getUnnote() != null && currentLine.getUnnote() > 0;
-			String verb = unnote ? "Unnote" : pb.getVia() == Preflight.Via.BANK ? "Withdraw" : pb.getVia() == Preflight.Via.SOURCE ? "Get" : "Buy";
+			String verb = unnote ? "Unnote" : pb.getVia() == Preflight.Via.CHECK_BANK ? "Check bank for" : pb.getVia() == Preflight.Via.BANK ? "Withdraw" : pb.getVia() == Preflight.Via.SOURCE ? "Get" : "Buy";
 			b.headline = verb + " " + (food ? "food" : pb.getItem());
 			b.status = pb.getItem() + (food ? " or similar" : "") + ": " + pb.getHave() + " / " + pb.getNeed() + " · "
-				+ (unnote ? "banknotes in your bag" : pb.getVia() == Preflight.Via.BANK ? "in the bank" : pb.getVia() == Preflight.Via.SOURCE ? "the arrow leads where to get it" : "at the Grand Exchange");
+				+ (unnote ? "banknotes in your bag" : pb.getVia() == Preflight.Via.CHECK_BANK ? "bank not checked" : pb.getVia() == Preflight.Via.BANK ? "in the bank" : pb.getVia() == Preflight.Via.SOURCE ? "the arrow leads where to get it" : "at the Grand Exchange");
 			b.danger = s != null && s.getMissing() != null;
 			b.key = ActiveTarget.nameKey(pb.getItem());
 			b.now.add(Line.small(Icon.DOT, unnote ? currentLine.getAction() == null ? "Deposit the notes and withdraw usable items at a bank." : currentLine.getAction() : pb.reason().replaceFirst("^Guidance paused: ", "The arrow waits: "), Tone.TEXT));
