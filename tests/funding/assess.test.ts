@@ -117,6 +117,23 @@ describe('what may be sold, and what is protected', () => {
 });
 
 describe('a cheaper valid supply comes before any earning', () => {
+  it('compares usable healing at low Hitpoints rather than promising impossible healing per bite', () => {
+    const { assessment: a } = scenario(market({ Salmon: { high: 60, avgHigh: 60 } }), {
+      bagCoins: 1400, bankCoins: 0, stats: { attack: 30, strength: 21, defence: 1, hitpoints: 10 },
+    });
+    expect(a.recommendation).toMatchObject({ kind: 'CHEAPER_SUPPLY', cheaper: { to: 'Tuna', pieces: 25, health: 225 } });
+  });
+
+  it.each(['Salmon', 'Tuna'])('keeps a stale %s quote uncertain when comparing replacement food', name => {
+    const prices = market({ Salmon: { high: 60, avgHigh: 60 }, [name]: {
+      ...(name === 'Salmon' ? { high: 60, avgHigh: 60 } : {}), highAgeMin: 600, lowAgeMin: 600,
+    } });
+    const { assessment: a } = scenario(prices, { bagCoins: 1400, bankCoins: 0 });
+    const option = [a.recommendation, ...a.alternatives].find(o => o?.kind === 'CHEAPER_SUPPLY');
+    expect(option?.cheaper?.to).toBe('Tuna');
+    expect(option?.confidence).toBe('LOW');
+  });
+
   it('Tuna for the same health costs less than Salmon at these prices and fits the bag', () => {
     // Salmon at 60 makes 25 cost 1,500 against 1,400 coins. 225 health in Tuna (heals 10) is 23 pieces at 43 = 989.
     const { assessment: a } = scenario(market({ Salmon: { high: 60, avgHigh: 60 } }), { bagCoins: 1400, bankCoins: 0 });

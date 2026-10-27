@@ -129,12 +129,12 @@ export function assess(i: AssessInput): FundingAssessment {
   const notOffered: FundingAssessment['notOffered'] = [];
 
   // 2. A cheaper valid supply.
-  const cheaper = cheaperSupply(i.step, need.minimum.lines, prices);
+  const cheaper = cheaperSupply(i.step, need.minimum.lines, prices, snap.level('hitpoints'));
   if (cheaper) {
     options.push({
       kind: 'CHEAPER_SUPPLY', id: `cheaper:${cheaper.to}`, title: `Take ${cheaper.to} instead of ${cheaper.from}`,
       detail: `${cheaper.pieces} ${cheaper.to} give the same health for ${gp(cheaper.cost)} gp instead of ${gp(cheaper.was)}`,
-      closes: Math.min(gap, cheaper.saves), confidence: 'HIGH', minutes: null, cheaper,
+      closes: Math.min(gap, cheaper.saves), confidence: cheaper.confidence, minutes: null, cheaper,
     });
   }
 

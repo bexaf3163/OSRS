@@ -1,5 +1,11 @@
 # Engine hardening â€” Codex continuation, 2026-10-26
 
+## Food replacement certainty — 2.80.6 preparation
+
+Cheaper food comparisons now use the shared effective-healing rule at the known Hitpoints level; for example10HP needs25Tuna to replace25Salmon, not23Tuna. Confidence is the weaker of the original and substitute purchase quotes, so stale prices cannot create a HIGH-confidence saving. This extends the existing cheaper-supply engine; no new UI or silent food substitution.
+
+Passed2224unit tests/188files and build/data; focused final-version checks and GitHub release gates are pending.2.80.5 publication is running separately; do not claim either new EXE live-tested. Automatic normal portable releases on main are authorized; no owner reminder is needed. The broader coordinated food substitution/packing/acquisition/potion/Members backlog remains open.
+
 ## Normal portable release policy — 2026-10-27
 
 Owner correction: publish completed verified batches directly to main as new normal portable releases, autonomously. Previews are not the requested delivery. The main-push audit publication added in c576600 is disabled; historical PR preview behavior remains. Existing Release workflow and full gates build each bumped version. No hourly schedule or repeated permission request.

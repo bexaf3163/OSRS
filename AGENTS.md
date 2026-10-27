@@ -19,4 +19,4 @@ Apply to Codex in this project and future related sessions:
 
 ## Publication preference — 2026-10-27
 
-- Publish every completed, verified implementation batch autonomously to main with a new normal portable release through the existing Release workflow. No repeated owner confirmation is needed. Do not substitute previews/prereleases or hourly rebuilds. Bump the package/lock version, add release notes and update the Claude handoff. Wait for release gates and verify the downloadable EXE digest before calling publication complete. Keep unfinished work out of the release; never overwrite existing release assets.
+- Publish every completed, verified implementation batch autonomously to main with a new normal portable release through the existing Release workflow. No repeated owner confirmation is needed. Do not substitute previews/prereleases or hourly rebuilds. Synchronize package.json, package-lock.json and BridgeServer.PLUGIN_VERSION, add release notes and update the Claude handoff. Wait for release gates and verify the downloadable EXE digest before calling publication complete. Keep unfinished work out of the release; never overwrite existing release assets.

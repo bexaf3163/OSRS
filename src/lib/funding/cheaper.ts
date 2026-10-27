@@ -6,8 +6,9 @@
 
 import type { Step } from '../../types';
 import { healsOf } from '../combatEstimate';
+import { effectiveHeal } from '../foodAdvice';
 import type { NeedLine } from './need';
-import type { PriceView } from './quotes';
+import { minConfidence, type Confidence, type PriceView } from './quotes';
 
 /** Food slots in the bag (28 less the weapon and two for potions or loot, as the combat model assumes). */
 export const FOOD_SLOTS = 26;
@@ -25,25 +26,28 @@ export interface CheaperOption {
   saves: number;
   /** Health the plan needs, so the reader can check the arithmetic. */
   health: number;
+  /** The saving depends on both the original and replacement purchase quotes. */
+  confidence: Confidence;
 }
 
-export function cheaperSupply(step: Pick<Step, 'itemsRequired'>, lines: readonly NeedLine[], prices: PriceView): CheaperOption | null {
+export function cheaperSupply(step: Pick<Step, 'itemsRequired'>, lines: readonly NeedLine[], prices: PriceView, hitpoints?: number): CheaperOption | null {
   const food = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
   if (!food) return null;
   const line = lines.find((l) => l.name === food.nameEn && l.cost !== null);
   if (!line || line.qty <= 0 || line.cost === null) return null;
-  const health = line.qty * (food.heals as number);
+  const health = line.qty * effectiveHeal({ heals: food.heals as number }, hitpoints);
   let best: CheaperOption | null = null;
   for (const name of food.anyOf ?? []) {
     const heals = healsOf(name);
-    const price = prices.buy(name)?.price;
-    if (heals === null || price === undefined) continue;
-    const pieces = Math.ceil(health / heals);
+    const quote = prices.buy(name);
+    if (heals === null || quote === null) continue;
+    const pieces = Math.ceil(health / effectiveHeal({ heals }, hitpoints));
     if (pieces > FOOD_SLOTS) continue;
-    const cost = pieces * price;
+    const cost = pieces * quote.price;
     const saves = line.cost - cost;
     if (saves < MIN_SAVING_GP || saves < line.cost * MIN_SAVING_SHARE) continue;
-    if (!best || cost < best.cost) best = { from: food.nameEn, to: name, pieces, cost, was: line.cost, saves, health };
+    if (!best || cost < best.cost) best = { from: food.nameEn, to: name, pieces, cost, was: line.cost, saves, health,
+      confidence: minConfidence(line.confidence ?? 'LOW', quote.confidence) };
   }
   return best;
 }
