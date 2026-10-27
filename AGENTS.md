@@ -16,3 +16,7 @@ Apply to Codex in this project and future related sessions:
 - Owner decision2026-10-24: in-game tests belong to Claude. Continue code, desktop/browser and packaged automated verification; preserve explicit unverified game scenarios in docs/CLAUDE_IN_GAME_ACCEPTANCE.md. Do not require the owner to launch/play RuneLite for Codex, or count deferred game tests as passed.
 - Silent execution mode: omit progress updates unless the owner must decide, grant permission or resolve a blocker. Do not narrate thoughts, speculation, deliberation, next steps, tool calls, file reads, commands or successful intermediate checks. Report intermediate success only when it materially affects the final result. Preserve sufficient internal reasoning, implementation quality and full verification.
 - Final response: at most three short lines, reporting only the relevant result. Add explanation only when an error, risk or blocker requires it. For blockers, state "Blocked by: ..." and "Needed: ...".
+
+## Publication preference — 2026-10-27
+
+- Publish every completed, verified implementation batch autonomously to main with a new normal portable release through the existing Release workflow. No repeated owner confirmation is needed. Do not substitute previews/prereleases or hourly rebuilds. Bump the package/lock version, add release notes and update the Claude handoff. Wait for release gates and verify the downloadable EXE digest before calling publication complete. Keep unfinished work out of the release; never overwrite existing release assets.

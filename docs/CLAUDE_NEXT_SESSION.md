@@ -1,5 +1,11 @@
 # Claude continuation — authoritative takeover
 
+## Normal portable release policy � 2026-10-27
+
+Owner correction: publish completed verified batches directly to main as new normal portable releases, autonomously. Previews are not the requested delivery. The main-push audit publication added in c576600 is disabled; historical PR preview behavior remains. Existing Release workflow and full gates build each bumped version. No hourly schedule or repeated permission request.
+
+**2.80.5 is being prepared** from the already verified repairs described below. Release publication and its own packaged checks are pending; do not confuse the older audit digest with the new versioned portable. Previous local source checks passed2221unit/1037browser/639Java/sourceE2E66/portableE2E68. No new live-game validation is claimed. Remaining engine work below is unchanged.
+
 ## Verified preview continuation — 2026-10-27
 
 Production source **2748da5** includes repairs9e26279/1613c6e/82604a8/59d1052: net combat costs, funding certainty, unread-bank quest guards and remaining-phase supplies. Carrying readiness stays phase-specific; whole-goal Shopping/Funding/cleanup retain future food and armour. No new menus or parallel engines.
