@@ -200,6 +200,26 @@ try {
   await page.waitForFunction(() => !document.querySelector('.progress-storage-warning'));
   expect(readFileSync(file, 'utf8') !== priorText, 'progress write retry: a later successful write clears the warning and persists the latest state');
 
+  // A live external replacement must be reviewed, not overwritten by the next ordinary UI edit.
+  const externallyChanged = JSON.parse(readFileSync(file, 'utf8'));
+  externallyChanged.notes = { ...externallyChanged.notes, 'S1-01': 'External source retained' };
+  externallyChanged.updatedAt = new Date().toISOString();
+  const externalBytes = JSON.stringify(externallyChanged);
+  writeFileSync(file, externalBytes);
+  await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
+  await page.waitForSelector('.progress-storage-warning');
+  expect((await page.locator('.progress-storage-warning').innerText()).includes('not overwritten'),
+    'external save: the normal UI explains the protected external replacement');
+  expect(readFileSync(file, 'utf8') === externalBytes, 'external save: an ordinary edit preserves the unseen native bytes');
+  const browserEdits = await page.evaluate(() => localStorage.getItem('osrs-put:progress'));
+  expect(Boolean(browserEdits && Object.values(JSON.parse(browserEdits).steps ?? {}).includes('done')),
+    'external save: working edits remain in browser storage for export');
+  await page.reload();
+  await page.waitForTimeout(2500);
+  expect(!await page.locator('.progress-storage-warning').count(), 'external save: an explicit reload reviews the new source and resumes normal saving');
+  expect(readdirSync(dirname(file)).filter(n => n.startsWith('progress.external-')).some(n => readFileSync(join(dirname(file), n), 'utf8') === externalBytes),
+    'external save: reload retains the external bytes separately before normal saving resumes');
+
   // Exercise the recovery through the native preload/file reader, not only the browser transport stub.
   await page.evaluate(() => localStorage.setItem('osrs-put:progress', '{broken'));
   await page.reload();
@@ -460,6 +480,7 @@ try {
   writeFileSync(firstProfile, initialProfile, { flag: 'wx' });
   mkdirSync(firstCopy);
   try {
+    await page.evaluate(() => (window as unknown as { osrsDesktop: { loadProgressFile(profile: string): string | null } }).osrsDesktop.loadProgressFile('firstbak'));
     const receipt = await page.evaluate(json => (window as unknown as { osrsDesktop: {
       saveProgressFileChecked(json: string, profile: string): Promise<{ ok: boolean }>;
     } }).osrsDesktop.saveProgressFileChecked(json, 'firstbak'), initialProfile);
@@ -489,6 +510,7 @@ try {
   writeFileSync(keptProfile, goodProfile, { flag: 'wx' });
   writeFileSync(keptCopy, futureRaw, { flag: 'wx' });
   try {
+    await page.evaluate(() => (window as unknown as { osrsDesktop: { loadProgressFile(profile: string): string | null } }).osrsDesktop.loadProgressFile('keptcopy'));
     const receipt = await page.evaluate(json => (window as unknown as { osrsDesktop: {
       saveProgressFileChecked(json: string, profile: string): Promise<{ ok: boolean }>;
     } }).osrsDesktop.saveProgressFileChecked(json, 'keptcopy'), goodProfile);

@@ -2,7 +2,7 @@ import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmdirSync, rmSync, w
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createRequire } from 'node:module';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const { backupProgress, readProgress } = createRequire(import.meta.url)('../electron/progress-files.cjs') as {
   backupProgress: (dir: string) => void;
@@ -352,4 +352,58 @@ describe('skipped copy diagnostics preserve every protected record', () => {
     expect(skipped).toEqual([[names[1], 'copy'], [names[0], 'copy']]);
     for (const name of names) expect(readFileSync(join(out, name), 'utf8')).toBe(raw);
   });
+});
+
+
+describe('native progress revision guard', () => {
+  const { createProgressGuard } = createRequire(import.meta.url)('../electron/progress-files.cjs') as {
+    createProgressGuard(dir: string): { read(name: string): { ok: boolean; text?: string | null; error?: string }; check(name: string): { ok: false; error: string } | null; saved(name: string, text: string): void };
+  };
+  it('protects external replacement, deletion and creation until explicitly re-read', () => {
+    const d = tmp(), name = 'progress.json';
+    writeFileSync(join(d, name), '{"version":3,"steps":{}}');
+    const guard = createProgressGuard(d);
+    expect(guard.check(name)?.error).toBe('NATIVE_NOT_LOADED');
+    expect(guard.read(name).ok).toBe(true);
+    expect(guard.check(name)).toBeNull();
+    writeFileSync(join(d, name), '{external replacement');
+    expect(guard.check(name)?.error).toBe('EXTERNAL_CHANGE');
+    expect(readFileSync(join(d, name), 'utf8')).toBe('{external replacement');
+    guard.read(name);
+    expect(guard.check(name)).toBeNull();
+    const retained = readdirSync(d).filter(n => n.startsWith('progress.external-'));
+    expect(retained).toHaveLength(1);
+    expect(readFileSync(join(d, retained[0]), 'utf8')).toBe('{external replacement');
+    rmSync(join(d, name));
+    expect(guard.check(name)?.error).toBe('EXTERNAL_CHANGE');
+    guard.read(name);
+    writeFileSync(join(d, name), 'external creation');
+    expect(guard.check(name)?.error).toBe('EXTERNAL_CHANGE');
+  });
+  it('tracks successful writes per file without assuming an unreadable source is missing', () => {
+    const d = tmp(), guard = createProgressGuard(d);
+    expect(guard.check('progress.json')).toBeNull();
+    writeFileSync(join(d, 'progress.json'), 'saved');
+    guard.saved('progress.json', 'saved');
+    expect(guard.check('progress.json')).toBeNull();
+    mkdirSync(join(d, 'profiles.json'));
+    expect(guard.read('profiles.json').ok).toBe(false);
+    expect(guard.check('profiles.json')?.error).toBe('READ_FAILED');
+    expect(guard.check('progress.json')).toBeNull();
+  });
+  it('keeps a changed source protected when its recovery copy cannot be written', () => {
+    const d = tmp(), name = 'progress.json', guard = createProgressGuard(d);
+    writeFileSync(join(d, name), '{"version":3,"steps":{}}');
+    guard.read(name);
+    const replacement = '{"version":3,"steps":{"S1-01":"done"}}';
+    writeFileSync(join(d, name), replacement);
+    const io = createRequire(import.meta.url)('node:fs') as typeof import('node:fs');
+    const blocked = vi.spyOn(io, 'writeFileSync').mockImplementationOnce(() => { throw new Error('copy blocked'); });
+    try {
+      expect(guard.read(name)).toMatchObject({ ok: false, error: 'RECOVERY_COPY_FAILED' });
+      expect(guard.check(name)?.error).toBe('NATIVE_NOT_LOADED');
+      expect(readFileSync(join(d, name), 'utf8')).toBe(replacement);
+    } finally { blocked.mockRestore(); }
+  });
+
 });

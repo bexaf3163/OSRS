@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 type Result = { ok: boolean; error: string | null };
 const { createProgressWriter } = createRequire(import.meta.url)('../electron/progress-writer.cjs') as {
-  createProgressWriter(o: { write: (name: string, json: string) => Result; backup: (name: string) => void; afterFlush: () => void }): { queue: (name: string, json: string) => void; save: (name: string, json: string) => Promise<Result>; saveNow: (name: string, json: string) => Result; flush: () => void };
+  createProgressWriter(o: { write: (name: string, json: string) => Result; backup: (name: string) => void; afterFlush: () => void; beforeWrite?: (name: string, json: string) => Result | null }): { queue: (name: string, json: string) => void; save: (name: string, json: string) => Promise<Result>; saveNow: (name: string, json: string) => Result; flush: () => void };
 };
 afterEach(() => vi.useRealTimers());
 
@@ -54,4 +54,20 @@ describe('debounced physical save receipts', () => {
     expect(await second).toEqual({ ok: true, error: null });
     await vi.runAllTimersAsync();
   });
+  it('rejects an external replacement before copying or writing, and allows a later reviewed retry', async () => {
+    vi.useFakeTimers();
+    const write = vi.fn(() => ({ ok: true, error: null }));
+    const backup = vi.fn();
+    const guard = vi.fn<() => Result | null>(() => ({ ok: false, error: 'EXTERNAL_CHANGE' }));
+    const writer = createProgressWriter({ write, backup, beforeWrite: guard, afterFlush: vi.fn() });
+    const blocked = writer.save('progress.json', 'new');
+    writer.flush();
+    expect(await blocked).toEqual({ ok: false, error: 'EXTERNAL_CHANGE' });
+    expect(write).not.toHaveBeenCalled();
+    expect(backup).not.toHaveBeenCalled();
+    guard.mockReturnValue(null);
+    expect(writer.saveNow('progress.json', 'reviewed')).toEqual({ ok: true, error: null });
+    expect(backup).toHaveBeenCalledOnce();
+  });
+
 });

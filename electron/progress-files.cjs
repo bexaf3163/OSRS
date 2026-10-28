@@ -4,6 +4,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const { randomUUID } = require('node:crypto');
 const { validSavedText } = require('./saved-data.mjs');
 
 const BROKEN_KEEP = 3;
@@ -49,6 +50,42 @@ function readProgress(dir, now = new Date(), name = 'progress.json', includeInva
 function readProgressResult(dir, now = new Date(), name = 'progress.json') {
   try { return { ok: true, text: readProgress(dir, now, name, true) }; }
   catch { return { ok: false, error: 'READ_FAILED' }; }
+}
+
+/** Reject an unseen external replacement before the shared writer touches the primary or its session copy. */
+function createProgressGuard(dir) {
+  const seen = new Map();
+  return {
+    read(name) {
+      const result = readProgressResult(dir, new Date(), name);
+      if (result.ok && result.text !== null && seen.has(name) && seen.get(name) !== result.text) {
+        try {
+          const recovery = `${name.replace(/\.json$/, '')}.external-${Date.now()}-${randomUUID()}.json`;
+          fs.writeFileSync(path.join(dir, recovery), result.text, { flag: 'wx' });
+        } catch {
+          seen.delete(name);
+          return { ok: false, error: 'RECOVERY_COPY_FAILED' };
+        }
+      }
+      if (result.ok) seen.set(name, result.text);
+      else seen.delete(name);
+      return result;
+    },
+    check(name) {
+      let current;
+      try { current = fs.readFileSync(path.join(dir, name), 'utf8'); }
+      catch (err) {
+        if (err.code !== 'ENOENT') return { ok: false, error: 'READ_FAILED' };
+        current = null;
+      }
+      if (!seen.has(name)) {
+        if (current !== null) return { ok: false, error: 'NATIVE_NOT_LOADED' };
+        seen.set(name, null);
+      }
+      return current === seen.get(name) ? null : { ok: false, error: 'EXTERNAL_CHANGE' };
+    },
+    saved(name, text) { seen.set(name, text); },
+  };
 }
 
 /**
@@ -207,4 +244,4 @@ function restoreFromCopies(dir, source, replaceOlder = false) {
   return done;
 }
 
-module.exports = { readProgress, readProgressResult, backupProgress, dailyBackup, latestCopy, restoreFromCopies };
+module.exports = { readProgress, readProgressResult, createProgressGuard, backupProgress, dailyBackup, latestCopy, restoreFromCopies };

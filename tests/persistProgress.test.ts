@@ -37,4 +37,12 @@ describe('confirmed progress writes', () => {
   it('a successful retry clears the write warning', async () => {
     expect(await persistProgress(p, good(), 'key', { saveProgressFile: vi.fn(), saveProgressFileChecked: async () => ({ ok: true, error: null }) }, 'main')).toBeNull();
   });
+  it('explains external changes while retaining the browser edits', async () => {
+    const local = good();
+    const warning = await persistProgress(p, local, 'key', { saveProgressFile: vi.fn(), saveProgressFileChecked: async () => ({ ok: false, error: 'EXTERNAL_CHANGE' }) }, 'main');
+    expect(local.setItem).toHaveBeenCalled();
+    expect(warning).toContain('not overwritten');
+    expect(warning).toContain('reload');
+  });
+
 });

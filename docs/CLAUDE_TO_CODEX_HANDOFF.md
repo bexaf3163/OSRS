@@ -1,65 +1,32 @@
 # Claude → Codex handoff (living document)
 
-## Current continuation - 2.80.10 preparation (2026-10-28)
+## Current continuation - 2.80.11 preparation (2026-10-28)
 
-Published NORMAL2.80.8: source6795a624cdc0634501214381995a899ea0b89c73; Release40589844389 and Checks40589844345 succeeded. The downloaded EXE is102,082,401bytes and SHA256 `71b0ad15bed53d8eb7f6338da6115136ce0aa8cc47462535ba83f531e3178d27`, matching GitHub digest and downloaded SHA256SUMS. Its local2239TS/646Java/1035browser/75sourceElectron checks passed.
+Normal releases2.80.8-2.80.10 are published; all their Checks/Release workflows succeeded. Each EXE below was downloaded and hashed; its hash matches GitHub's asset digest and the downloaded SHA256SUMS. No preview releases were substituted.
 
-2.80.9 sourcea15567a4bd3894a594a47b430980e554778e5a37 has green Checks40590735962; Release40590735860 is now running. Collect its normal portable receipt next.
+| Version | Source | Release / Checks | EXE bytes | SHA256 |
+| --- | --- | --- | --- | --- |
+|2.80.8|6795a624cdc0634501214381995a899ea0b89c73|40589844389 /40589844345|102082401|71b0ad15bed53d8eb7f6338da6115136ce0aa8cc47462535ba83f531e3178d27|
+|2.80.9|a15567a4bd3894a594a47b430980e554778e5a37|40590735860 /40590735962|102081268|ba9ea5a1b3d1bbb94375de2e91c744f9f1d4d40dc3ae726e979ede33ea22393d|
+|2.80.10|0786ab4a6dc6e66f15c1fca42919d41581179ad4|40592783566 /40592783510|102081647|f50b94c8ac6653b6b8531ecab530b018415152c2deaf73fb906f58bd4fa724c3|
 
-New narrow T01 fix: backup-history state is remembered as persisted only after saveUi returns a successful physical-write receipt. An unwritable ui.json no longer suppresses the next attempt to save unchanged diagnostics. Settings discloses unpersisted history without falsely rejecting a successful primary progress save. No new panels, formats or engines.
+Delivered engine repairs (do not rebuild):
+-2.80.7/8: shared food holding/allocation across readiness, departure, Shopping, funding and Java Checklist/quest guards. Sum healing before rounding; cap by real HP; preserve unread-bank uncertainty, exact quest ingredients and manual ownership keys; allocate one physical stack once without mutating snapshots. Merged alternatives must satisfy every source.
+-Physical foodCarry selects carried pieces before notes/bank; preparation slots, bank targets and withdrawals name actual food.34Trout covering26Salmon-equivalents occupy34slots. Bag/notes/bank partial healing receives cumulative credit; current/upcoming deadlines do not duplicate withdrawals. Notes require a bank; packing remains a conservative estimate.
+-2.80.9: skipped damaged/unsupported sources and protected current-day/latest destinations are reported through existing Settings warnings while healthy files continue copying. Protected bytes remain untouched; first-write kept/skipped outcomes do not falsely clear warnings. No changed save format or added panels.
+-2.80.10: backup-history persistence follows the actual write receipt and retries unchanged diagnostics after a failed ui.json write. Primary-save success remains independent. Native source acceptance passed87checks including a fully new process retaining first-write warnings. This is not a claimed portable restart or power-loss test.
 
-Regression evidence includes an isolated ui.json.tmp write obstruction, primary-save success, warning disclosure, unchanged-state retry and a complete recovery. Final source acceptance PASSED87checks, including exit of the original process and survival of retained first-write warnings in a fresh native process.2242unit tests/190files, build/TypeScript, data0errors/warnings and rebuiltJar passed. Java logic is unchanged from646-test verification; release CI repeats the full gates. FullUI1035 passed on2.80.8; focused profile UI53 passed on2.80.9 with unchanged frontend code. This is source cold-process acceptance, not a claimed portable restart or power-loss test.
+Verification already delivered:2.80.8 local2239TS/646Java/1035browser/75sourceElectron checks;2.80.9 local2242TS/53focused-profile-UI/81sourceElectron;2.80.10 local2242TS/87sourceElectron. Each normal release CI repeats full units/Java/browser/packaged gates. Current npm audit reports0advisories across376dependencies; the earlier eight-moderate result is historical, with no force fix or dependency edit.
 
-After publication: continue only confirmed remaining issues. Runtime external-file changes and broad interrupted-write recovery remain open; this fix does not promise power-loss durability. In-game acceptance remains Claude's responsibility.
+Additional native acceptance: profile-list Merge preserves every character and both raw original lists; native/browser lists agree after reload. First-write-copy errors/history are tested. Real update2.80.5->2.80.6 passed40549572912: download/digest/install/automatic restart, oldEXE/cleanup removal, healthy recheck and byte-identical S1-01 save. Do not repeat this completed normal update test as unfinished.
 
+Current local2.80.11 extends the same native file/writer pipeline:
+-Compare the actual file with its last-read revision before any primary or session-copy write. Unread existing files, external replacements/deletions/creations and read errors do not authorize overwrite. Successful physical writes alone advance the revision.
+-The existing progress warning retains browser edits and explains export/reload. Before admitting a changed source on reload, retain its exact bytes as <name>.external-<time>-<uuid>.json. If retention fails, keep the source protected. The shared guard covers progress and character-list files.
+-Final local acceptance:2247TS tests/190files,92sourceElectron checks,53focused profile-UI checks, build/TypeScript,data0errors/warnings and rebuiltJar passed. Native acceptance covers the actual warning/export/reload path and exact external-byte retention, alongside all earlier backup/conflict/history/restart cases. Normal2.80.11 CI/portable acceptance is next; record its final receipt before calling publication complete.
 
-## Previous batch - 2.80.9
+Limits/open work: this is pre-write detection, not filesystem watching, automatic conflict merging or cross-process locking. Interrupted-write/power-loss recovery, broader historical audit cases, acquisition travel/fees and verified Members coverage remain open. Finite owned Strength doses/costs are already shared/tested; do not invent mandatory goal-wide potion purchases. In-game acceptance belongs to Claude. Preserve one compact Balanced default and existing route IDs/saves.
 
-2.80.8 food-packing batch is committed and on main:6795a624cdc0634501214381995a899ea0b89c73. Release40589844389 and Checks40589844345 are running; collect their result and verify the portable digest. Its local2239TS/646Java/1035browser/75sourceElectron checks passed. Do not mix live acceptance with these automated results.
-
-Next batch (T01, existing backup engine only):
-- Optional skip-report callbacks preserve existing copy return values and byte-preservation rules. Damaged/unsupported sources and protected latest/current-daily destinations are named in the existing Settings warning; healthy profiles still copy.
-- First-write skipped/retained copy outcomes no longer clear diagnostics as though a copy succeeded. The primary save can succeed independently; protected copies remain untouched.
-- A complete retry clears its scheduled-copy warning. Independent success does not erase a first-write warning. No new panels, save format, source overwrite, external file watcher or recovery guarantee.
-- Current npm audit (2026-10-27) reports0 advisories across the installed dependency tree; no dependency edits or force-fix were needed. The earlier eight-moderate result is historical; future clean-install/release evidence still applies.
-- New filesystem/native cases preserve unsupported bytes and healthy-profile continuity. Local2242TS/190files, build/TypeScript, data0errors/warnings, rebuiltJar and focused profile UI53checks and final sourceElectron81checks passed. CI/portable acceptance remains pending.
-
-Still open: broader runtime external changes/recovery, remaining audit candidates. Continue confirmed acquisition/travel/potion/Members work and Claude's deferred in-game acceptance; do not declare the entire audit complete.
-
-
-## Previous batch - 2.80.8
-
-Published NORMAL baseline2.80.7, source2002eed0657ff99a33420805c474027ef4be13e3: Release40556403825 and Checks40556404554 green. EXE102,081,664bytes; SHA256 `dc8b4f9c6a6e834fa74d6e207d2ce408346cd2c7a45391d50abf1a3a667a8ac1`, verified against GitHub digest and SHA256SUMS. Local evidence:2233TS,644Java,1035browser,75sourceElectron checks passed. The real update happy path2.80.5->2.80.6 also passed (40549572912).
-
-New batch extends the existing nutrition/preparation engines:
-- Physical food pieces determine additional slots, withdrawal names/quantities and bank targets.26Salmon-equivalents covered by34Trout occupy34slots; no silent26-slot assumption.
-- Current/upcoming deadlines select a shared pool once; carried pieces are used before notes/bank. Unknown ownership and named quest ingredients keep their existing protection.
-- Bag/notes/bank healing credits are apportioned after combining partial healing. TS readiness/Shopping/combat preparation and Java checklist/quest guards agree; mixed partial bites no longer cause needless purchases.
-- No protocol change, extra panels, save migration or forced route edits. Notes require a bank; slot estimates remain conservative and do not promise optimal packing.
-
-Local verification:2239TS tests/190files, Java646/0failures, build/TypeScript, data0errors/warnings, rebuilt plugin jar and75sourceElectron checks passed. Full browser1035checks passed. Normal2.80.8 is published and its downloaded EXE is verified; receipt above. Live-game acceptance belongs to Claude. Remaining broad work: confirmed acquisition travel/fees, goal-wide potion purchases, source-backed Members models and deferred acceptance. Review historical candidates against current source before reopening them.
-
-
-## Previous batch - 2.80.7 (published)
-
-Published baseline is NORMAL portable2.80.6 (sourcea7d3d54): Release40540103010 and Checks40540103432 succeeded. EXE102,075,688bytes, SHA256 `8c2a9ab105bb5d6c1f31f945ff0a7673287f505cd2e016859b595e132878c143`, matching GitHub digest/SHA256SUMS. Publish verified batches to main as normal releases autonomously; no previews or repeated approval.
-
-Implemented in this batch:
-- Shared food holding/allocation in the existing food/readiness pipeline: healing rather than piece count, one rounding after mixed healing, real-HP limits, deduplicated aliases and physical/manual stock allocated once.
-- Readiness, departure, one-trip preparation, Shopping and goal funding use it. Quest ingredients/other demands remain reserved; optional food cannot consume required stock. Player snapshots are immutable; only watched food records are copied, and lists without food skip allocation.
-- Unread alternatives remain unknown, but sufficient observed bag/bank stock still proves ownership. Merged alternatives must satisfy every source. Mixed food/exact demands stay conservative; no such collision was found in current four-step raw route windows.
-- Java Checklist/Foods mirror the allocation and share healing with quest guards. Login, mid-session enabling and HP changes refresh the cap. Unrecognised alternatives receive no assumed healing credit. Estimates and cleanup reserves also use effective healing; heterogeneous partial alternatives stay protected.
-- No new panels, settings, route IDs or save migration. Existing manual marks retain their original keys. Old unsafe20-any-fish regression expectations now cover both sufficient healing and insufficient weak food.
-
-Verification: final source passed2233unit tests/189files, fullJava644tests, build/TypeScript, data0errors/warnings, rebuilt plugin jar, sourceElectron E2E75checks (including actual profile-conflict merge and first-write copy failures). Full browser1035checks PASSED on source3edc5af; portable2.80.7 is published (receipt above); new behavior is not live-game verified.
-
-REAL UPDATE ACCEPTANCE PASSED: [run40549572912](https://github.com/bexaf3163/OSRS/actions/runs/40549572912) exercised published2.80.5 ->2.80.6, real download/digest/install/automatic restart, old-EXE/cleanup-note removal and healthy recheck. S1-01 save bytes were identical. T02's normal update path is verified; interrupted-update/power-loss recovery is not claimed.
-
-Native profile-conflict merge is verified through its real UI action: every character remains, browser/native lists agree after reload, and both original lists remain as exact recovery copies. The merge logic already existed; do not rebuild it.
-
-Native first-write-copy failure is exercised in isolated source E2E: primary save succeeds, Settings names the failed profile/copy, history is persisted, renderer reload retains it, and successful independent copies do not erase it. This is not cold-process warning restart acceptance or a guarantee of retaining an unwritable copy.
-
-The2.80.7 release gates and receipt are complete. Continue only the current batch and confirmed acquisition/whole-goal potion gaps. Verify remaining Members models and reproduce historical audit candidates before changing them. Do not redo completed work or claim the full audit complete. Default guidance stays compact and Balanced.
 
 Read this first. Claude keeps this file current after every release. It says what Claude received from Codex, what Claude changed, which engine owns each concern, what is in progress and what is still open. The owner wants **one coherent product built on engines**: before changing anything, find the engine below that owns the concern and fix or extend that engine. Never add a parallel mechanism, a per-step patch or an old feature back.
 

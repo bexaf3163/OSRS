@@ -1,6 +1,6 @@
 // Coalesce edits per profile, but acknowledge only the physical write of the newest edit.
 // Older callers in the same batch are superseded by that edit, never written over it.
-function createProgressWriter({ write, backup, afterFlush, delay = 400 }) {
+function createProgressWriter({ write, backup, afterFlush, beforeWrite = () => null, delay = 400 }) {
   const pending = new Map();
   const acknowledgements = new Map();
   const backedUp = new Set();
@@ -10,13 +10,17 @@ function createProgressWriter({ write, backup, afterFlush, delay = 400 }) {
     timer = null;
     const results = new Map();
     for (const [name, json] of pending) {
-      if (!backedUp.has(name)) {
-        backedUp.add(name);
-        backup(name);
-      }
       let result;
-      try { result = write(name, json); }
-      catch { result = { ok: false, error: 'WRITE_FAILED' }; }
+      try {
+        result = beforeWrite(name, json);
+        if (!result) {
+          if (!backedUp.has(name)) {
+            backedUp.add(name);
+            backup(name);
+          }
+          result = write(name, json);
+        }
+      } catch { result = { ok: false, error: 'WRITE_FAILED' }; }
       results.set(name, result);
       for (const resolve of acknowledgements.get(name) ?? []) resolve(result);
       acknowledgements.delete(name);
