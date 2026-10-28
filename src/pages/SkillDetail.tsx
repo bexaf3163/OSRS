@@ -18,6 +18,7 @@ import { RoadmapPane, useTrackedStep } from '../components/SkillRoadmap';
 import { methodOfGuideStep } from '../lib/trainingRouter';
 import { roadmapSkills } from './Skills';
 import { trainingFocus, type TrainingFocus } from '../lib/skillFocus';
+import { F2pSkillNote } from '../components/F2pSkillNote';
 
 export function SkillDetailPage({ id, selectedSkill }: { id: string; selectedSkill?: string }) {
   const skill = findSkill(id);
@@ -93,6 +94,7 @@ function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: str
 
       {tab === 'guide' && (
       <>
+      {mode === 'f2p' && <F2pSkillNote skill={card.skill} level={progress.levels?.[card.skill]} />}
       <ReachedNote skill={focused} stage={stage} focus={focus} />
       <FocusNote focus={focus} />
       <TrainingCard skill={card.skill} target={card.target} followed={card.followed} />

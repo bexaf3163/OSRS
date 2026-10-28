@@ -24,3 +24,7 @@ Apply to Codex in this project and future related sessions:
 ## RuneLite heap invariant — 2026-10-28
 
 - Preserve `-Xmx1024m` (minimum) in `electron/runelite-launcher.cjs` JVM_ARGS, including any refactor/move. Preserve `-ea` and the other JVM arguments. OSRS Path directly launches Java, so RuneLite launcher config.json does not control this launch. Retain Claude release 2.80.12 (`e3f8642`, receipt `4e86414`); do not overwrite it with the pending audit batch.
+
+## Desktop-only scope — owner decision, 2026-10-28
+
+No mobile/phone development or phone-only QA. Keep Windows desktop resizing, DPI/text scaling, themes and accessibility. See the authoritative desktop-only scope in PROJECT_GUIDELINES.md.

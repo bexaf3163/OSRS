@@ -1,5 +1,13 @@
 # Claude → Codex handoff (living document)
 
+## Desktop-only scope — owner decision, 2026-10-28
+
+No mobile/phone development or phone-only QA. Keep Windows desktop resizing, DPI/text scaling, themes and accessibility. See the authoritative desktop-only scope in [PROJECT_GUIDELINES.md](../PROJECT_GUIDELINES.md).
+
+## Current continuation — 2.80.14
+
+Use [CLAUDE_NEXT_SESSION.md](CLAUDE_NEXT_SESSION.md) for the authoritative current scope, verification and portable receipt.14 contains F2P Skills checkpoints and desktop-only QA; future-only food-alias work is parked and excluded. Older receipts below are historical; do not repeat completed work or restore mobile QA.
+
 ## Current continuation — 2.80.13 quest-entry preparation
 
 Preserves Claude2.80.12 heap fix (`e3f8642`, receipt`4e86414`): keep `-Xmx1024m`, `-ea` and other launcher arguments. Earlier2.80.11 receipts below remain historical.

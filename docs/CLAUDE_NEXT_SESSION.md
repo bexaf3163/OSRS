@@ -1,5 +1,20 @@
 # Claude continuation — authoritative takeover
 
+## Desktop-only scope — owner decision, 2026-10-28
+
+No mobile/phone development or phone-only QA. Keep Windows desktop resizing, DPI/text scaling, themes and accessibility. See the authoritative desktop-only scope in [PROJECT_GUIDELINES.md](../PROJECT_GUIDELINES.md).
+
+## Current continuation — 2.80.14 F2P Skills and desktop-only scope
+
+- Skills has a compact F2P value/checkpoint marker for each free skill, including passive Hitpoints. Known reached milestones are marked; unread levels never count as reached. Reasons, method comparisons and Wiki links stay folded on the existing detail page. Members mode has no extra markers. Existing XP/Balanced/Money preferences, route goals, followed plans and saves are unchanged.
+- The shared advisory table is `src/lib/f2pSkillAdvice.ts`, reviewed2026-10-28. Authored checkpoints are not caps or promises of equal XP/h: Cooking68, Firemaking50, Mining45, Fishing35, Woodcutting36, Magic55, Smithing29 via The Knight's Sword, Crafting31, Attack/Strength/Ranged40 and optional Defence10. Prayer/Runecraft prefer members without forced F2P levels; Hitpoints stays passive. Distinguish ordinary-method parity from members quest skips/gear/faster methods. Current Wiki wine threshold is68, not65.
+- Desktop-only policy is recorded in PROJECT_GUIDELINES.md, AGENTS.md and CLAUDE.md. Phone-only repetitions are removed from UI smoke; functional cases remain at desktop widths, with explicit light/dark and DPI coverage. Harmless responsive CSS and desktop resizing are retained. Do not resurrect mobile acceptance as a release blocker.
+- Future-only food-alias hardening was preserved outside the repository and excluded from14: the actual route does not declare those members-food alternatives. Do not claim it shipped or make it an automatic next task. Avoid speculative scope expansion; batch related changes, targeted checks and release gates.
+
+Local verification:2259-test full app suite passed, followed by6 focused tests for the final admitted-profile checkpoint guard. Full desktop UI passed587checks; final rebuilt Skills UI passed30focused desktop/theme/DPI checks. Build/TypeScript, data0errors/warnings, rebuilt14pluginJAR and diff check passed. No Electron or plugin logic changes are included; native packaged and full Java gates run in CI. Publication/portable receipt pending. No new in-game verification. Keep12heapfix intact.
+
+Remaining active audit items are the reproduced route/acquisition/economy gaps below and Claude's reachable in-game acceptance, not hypothetical future extensions. Read this current section before older historical handoffs.
+
 ## Current continuation — 2.80.13 quest-entry preparation
 
 Preserves Claude2.80.12 heap fix (`e3f8642`, receipt`4e86414`): keep `-Xmx1024m`, `-ea` and other launcher arguments. Earlier2.80.11 receipts below remain historical.

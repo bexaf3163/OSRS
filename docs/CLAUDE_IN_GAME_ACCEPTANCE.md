@@ -1,6 +1,8 @@
 # In-game acceptance — assigned to Claude
 
-Owner decision,2026-10-24: Codex finishes implementation and automated verification; Claude performs in-game tests. These are deferred acceptance tasks, not passed checks and not a blocker requiring the owner to test now. Read CLAUDE_NEXT_SESSION.md for the exact current source, EXE and remaining work before starting. Older preview evidence does not apply to newer code.
+## Desktop-only scope — owner decision, 2026-10-28
+
+No mobile/phone development or phone-only QA. Keep Windows desktop resizing, DPI/text scaling, themes and accessibility. See the authoritative desktop-only scope in [PROJECT_GUIDELINES.md](../PROJECT_GUIDELINES.md).
 
 ## 2.80.13 quest-entry acceptance — not live-verified
 
@@ -8,6 +10,12 @@ Owner decision,2026-10-24: Codex finishes implementation and automated verificat
 - After confirmed entry, the app stops demanding the optional entry buffer. A manual future-line preview must not move current preparation. Existing global quest food budgets remain unchanged.
 - Magic12 blocks the selected Fire Strike strategy;13 passes; unread Magic stays unchecked. The UI must not present13 as an official quest unlock requirement. Safespot/food/runes are guide assumptions, not a guaranteed fight budget.
 - The Entrana axe is acquired from zombies, not withdrawn for departure. Preserve original route/saves and do not replay a completed quest to manufacture live evidence.
+
+## 2.80.14 F2P acceptance — not live-verified
+
+- F2P Skills: markers and detail explanations agree with actual or saved levels; reached checkpoints update without changing route goals or chosen combat/training priority. Verify compact layout at the actual desktop scale. Prayer/Runecraft do not invent mandatory grind levels; Hitpoints is passive.
+- Members mode removes these F2P preparation markers. Current personalized methods still use the shared training engines, real kit and funding state; a static checkpoint is not an XP/h forecast or affordability claim.
+
 
 ## Setup and preservation
 

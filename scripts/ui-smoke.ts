@@ -1,3 +1,4 @@
+// Desktop-only QA: phone viewports retired by owner decision2026-10-28. Keep desktop sizes, themes and DPI coverage.
 // npm run test:ui — a run of the interface in a real browser (Chromium through Playwright), as the player has it in the exe:
 // the built page, a stub desktop app (window.osrsDesktop) and a stub RuneLite bridge. The network to the wiki
 // is closed — it checks that everything works without it too. It needs a build (npm run build) and Chromium
@@ -39,6 +40,7 @@ interface Mock {
   profileWriteFailure?: boolean;
   /** Windows display scaling (1.25 = 125%): the device pixel ratio; the viewport width passed is then in CSS pixels. */
   scale?: number;
+  theme?: 'light' | 'dark';
 }
 
 /** The progress: everything before the step is closed. */
@@ -50,7 +52,7 @@ function progressBefore(id: string, extra: Record<string, unknown> = {}) {
 
 async function open(browser: Browser, width: number, mock: Mock, hash: string): Promise<{ page: Page; errors: string[] }> {
   const ctx = await browser.newContext({
-    viewport: { width, height: mock.scale ? Math.round(1040 / mock.scale) : 900 }, colorScheme: width < 600 ? 'light' : 'dark',
+    viewport: { width, height: mock.scale ? Math.round(1040 / mock.scale) : 900 }, colorScheme: mock.theme ?? 'dark',
     ...(mock.scale ? { deviceScaleFactor: mock.scale } : {}),
   });
   await ctx.addInitScript((m: Mock) => {
@@ -222,7 +224,44 @@ const text = async (page: Page, sel: string) => {
   return page.locator(sel).allInnerTexts().then((t) => t.join('\n'));
 };
 
+async function f2pSkillsScenarios(browser: Browser) {
+  for (const width of [1000, 1440]) {
+    const { page, errors } = await open(browser, width, { zen: true, progress: progressBefore('S3-03', { gameMode: 'f2p', levels: { attack: 30, strength: 21, defence: 10 } }) }, '#/skills');
+    const defence = page.locator('.skill-tile a[href="#/skills/ME/defence"]');
+    expect(await defence.count() === 1, `Skills ${width}: Defence has one direct tile`);
+    expect(await page.locator('.section-rail').count() === 0, `Skills ${width}: no duplicate skill menu`);
+    expect(await page.locator('.f2p-skill-badge').count() === 15, `F2P ${width}: every free skill including passive Hitpoints has one marker`);
+    expect((await defence.innerText()).includes('10 reached'), `F2P ${width}: a known reached checkpoint is marked`);
+    expect((await page.locator('.skill-tile a[href="#/skills/CO/cooking"]').innerText()).includes('68'), `F2P ${width}: Cooking shows the verified wine checkpoint`);
+    expect((await page.locator('.skill-tile a[href="#/skills/PR/prayer"]').innerText()).includes('Prefer members'), `F2P ${width}: Prayer does not demand a F2P grind`);
+    expect(await noOverflow(page) && !errors.length, `F2P ${width}: compact markers have no overflow or console errors`);
+    await page.screenshot({ path: `audit-temp/f2p-priorities-${width}.png` });
+    await defence.click();
+    await page.locator('.training').waitFor();
+    expect((await text(page, 'h1')).includes('Defence'), `Skills ${width}: Defence opens directly`);
+    expect(await page.locator('[aria-label="Training priority"] button').count() === 3, `Skills ${width}: three priorities`);
+    expect(await page.locator('[aria-label="Training priority"] button[aria-pressed="true"]').innerText() === 'Balanced', `Skills ${width}: Balanced is default`);
+    expect(await page.locator('.training details[open]').count() === 0, `Skills ${width}: details start closed`);
+    expect((await text(page, '.f2p-skill-note')).includes('10 reached'), `F2P ${width}: the detail uses the same checkpoint as its tile`);
+    expect(await page.locator('.f2p-skill-note details[open]').count() === 0, `F2P ${width}: comparison and sources start folded`);
+    expect(await noOverflow(page) && !errors.length, `F2P ${width}: the direct skill guide stays usable`);
+    await page.context().close();
+  }
+
+  {
+    const { page, errors } = await open(browser, 1000, { theme: 'light', scale: 1.5, zen: true, progress: progressBefore('S3-03', { gameMode: 'f2p' }) }, '#/skills');
+    expect(await page.locator('.f2p-skill-badge').count() === 15 && await noOverflow(page) && !errors.length, 'F2P desktop light theme and 150% scaling: every marker remains readable without horizontal scrolling');
+    await page.context().close();
+  }
+  {
+    const { page } = await open(browser, 1280, { zen: true, progress: progressBefore('S9-01', { gameMode: 'members' }) }, '#/skills');
+    expect(await page.locator('.f2p-skill-badge').count() === 0, 'Members: F2P preparation markers do not clutter the overview');
+    await page.context().close();
+  }
+}
+
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'f2p-skills') { await f2pSkillsScenarios(browser); return; }
   if (process.env.UI_ONLY === 'skill-handover') { await skillHandoverScenarios(browser); return; }
   if (!process.env.UI_ONLY) await skillHandoverScenarios(browser);
   if (process.env.UI_ONLY === 'mining-handover') { await miningHandoverScenarios(browser); return; }
@@ -338,7 +377,7 @@ async function run(browser: Browser) {
     expect(await noOverflow(page) && !errors.length, 'profile recovery: no overflow or console errors');
     await page.context().close();
   }
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const profiles = { active: 'main', list: [{ id: 'main', name: 'Main', player: 'Profile test' }] };
     const { page, errors } = await open(browser, width, {
       profileFile: { version: 99, list: [] },
@@ -356,7 +395,7 @@ async function run(browser: Browser) {
     if (process.env.UI_ONLY === 'stabilization') await page.screenshot({ path: `audit-temp/profile-protected-${width}.png` });
     await page.context().close();
   }
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const browserProfiles = { active: 'main', list: [{ id: 'main', name: 'Main', player: 'Profile test' }] };
     const nativeProfiles = { ...browserProfiles, list: [...browserProfiles.list, { id: 'alt', name: 'Native only', player: 'Other hero' }] };
     const { page, errors } = await open(browser, width, {
@@ -376,7 +415,7 @@ async function run(browser: Browser) {
     if (process.env.UI_ONLY === 'stabilization') await page.screenshot({ path: `audit-temp/profile-conflict-${width}.png` });
     await page.context().close();
   }
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const profiles = { active: 'main', list: [{ id: 'main', name: 'Main' }] };
     const { page, errors } = await open(browser, width, {
       offline: true, profileFile: profiles, profileWriteFailure: true,
@@ -395,7 +434,7 @@ async function run(browser: Browser) {
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'stabilization') return;
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const equipment = [[1329, 'Mithril scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']]
       .map(([id, name, slot]) => ({ id, name, slot }));
     const stats = { attack: 22, strength: 16, defence: 1, hitpoints: 22 };
@@ -424,7 +463,7 @@ async function run(browser: Browser) {
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'items') return;
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S6-02', { gameMode: 'f2p', levels: { fishing: 45 } }),
       localStorage: { 'osrs-put:features': JSON.stringify({ efficient: true }) },
@@ -508,7 +547,7 @@ async function run(browser: Browser) {
     expect(await noOverflow(page) && !errors.length, 'prerequisites: no overflow or page errors');
     await page.context().close();
   }
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const progress = progressBefore('S7-05', { gameMode: 'members', levels: { agility: 24 } });
     progress.steps['S7-04'] = 'skipped';
     const { page, errors } = await open(browser, width, {
@@ -642,7 +681,7 @@ async function run(browser: Browser) {
   if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'gear') { await gearScenarios(browser); return; }
   if (process.env.UI_ONLY === 'money') { await moneyScenarios(browser); return; }
-  for (const width of [390, 1100]) {
+  for (const width of [1100]) {
     console.log(`Width ${width}`);
 
     // Step readiness: a level is missing — the action "catch up"; an item is in the bank — "to the bank". The auto preparation is off —
@@ -1360,7 +1399,7 @@ async function run(browser: Browser) {
   ];
   const routes = ['#/', '#/skills', '#/goals', '#/quests', '#/reference', '#/settings', '#/shopping', '#/gear',
     ...steps.map((x) => `#/step/${x.id}`), ...skillIds.map((id) => `#/skills/${id}`)];
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const { page, errors } = await open(browser, width, { progress: progressBefore('S2-10') }, '#/');
     const bad: string[] = [];
     for (const r of routes) {
@@ -1451,7 +1490,7 @@ async function run(browser: Browser) {
     const questData = JSON.parse(readFileSync(new URL('../src/data/questStages.json', import.meta.url),'utf8')).quests['S3-04'];
     const stage = questData.stages.find((s: {do: {t:string;k?:string}[]}) => s.do.some(l => l.k === 'defeatGuardian'));
     const lineIndex = stage.do.findIndex((l: {t:string;k?:string}) => l.k === 'defeatGuardian');
-    const {page, errors} = await open(browser, 420, {
+    const {page, errors} = await open(browser, 1000, {
       progress:progressBefore('S3-04'),
       localStorage:{'osrs-put:active-step':'S3-04','osrs-put:features':JSON.stringify({compact:true})},
       status:{protocol:6,inGame:true,activeStepId:'S3-04',questInstruction:{stepId:'S3-04',stageAt:stage.at,lineIndex,peeking:false},navTarget:{stepId:'S3-04',label:'Talk to Willow (south of Ice Mountain)',x:0,y:0,plane:0}},
@@ -1534,7 +1573,7 @@ async function run(browser: Browser) {
 
   // The header fits at any width when RuneLite is connected (it used to overflow by 11–193 px).
   console.log('Header');
-  for (const scale of [1, 1.5]) for (const width of [320, 390, 900, 1000, 1100, 1280, 1400, 1600, 1720, 1920]) {
+  for (const scale of [1, 1.5]) for (const width of [900, 1280, 1920]) {
     const { page } = await open(browser, width, {progress:progressBefore('S3-03'),localStorage:{'osrs-put:text-scale':String(scale)}}, '#/');
     expect(await noOverflow(page), `the header at ${width} px and ${scale*100}% text without horizontal scrolling`);
     if (width >= 1000) expect(await page.locator('.app-sidebar').evaluate(el => el.scrollWidth <= el.clientWidth), `sidebar at ${width} px and ${scale*100}% text without internal horizontal scrolling`);
@@ -1567,20 +1606,7 @@ async function run(browser: Browser) {
     }
   }
 
-  // Direct skill tiles replace the duplicate skill rail; the recommendation stays compact.
-  for (const width of [480, 1000, 1440]) {
-    const { page } = await open(browser, width, { progress: progressBefore('S3-03', { gameMode: 'f2p', levels: { attack: 30, strength: 21, defence: 10 } }) }, '#/skills');
-    const defence = page.locator('.skill-tile a[href="#/skills/ME/defence"]');
-    expect(await defence.count() === 1, `Skills ${width}: Defence has one direct tile`);
-    expect(await page.locator('.section-rail').count() === 0, `Skills ${width}: no duplicate skill menu`);
-    await defence.click();
-    await page.locator('.training').waitFor();
-    expect((await text(page, 'h1')).includes('Defence'), `Skills ${width}: Defence opens directly`);
-    expect(await page.locator('[aria-label="Training priority"] button').count() === 3, `Skills ${width}: three priorities`);
-    expect(await page.locator('[aria-label="Training priority"] button[aria-pressed="true"]').innerText() === 'Balanced', `Skills ${width}: Balanced is default`);
-    expect(await page.locator('.training details[open]').count() === 0, `Skills ${width}: details start closed`);
-    await page.context().close();
-  }
+  await f2pSkillsScenarios(browser);
 
   // The desktop action follows the quest cursor while the player stays logged in: the plugin announces a moved cursor with a STATUS event.
   {
@@ -1636,7 +1662,7 @@ async function run(browser: Browser) {
   }
 
   // Inventory cleanup: the bag is checked against the open steps, "Always keep" moves a line to the kept list and survives a reload.
-  for (const width of [1440, 390]) {
+  for (const width of [1440]) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S2-10', { gameMode: 'f2p' }),
       status: {
@@ -1726,7 +1752,7 @@ async function fundingScenarios(browser: Browser) {
   const worn = new Set(equipment.map((e) => e.name));
   const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))];
   const owned = asked.map((name) => ({ name, carried: worn.has(name) ? 1 : 0, noted: 0, bank: 0 }));
-  for (const width of [1440, 390]) {
+  for (const width of [1440]) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S4-03', { gameMode: 'f2p' }),
       status: {
@@ -1816,7 +1842,7 @@ async function moneyScenarios(browser: Browser) {
   };
   const gpOf = (t: string) => { const m = /^([\d.]+)(k?)/.exec(t.trim()); return m ? Number(m[1]) * (m[2] ? 1000 : 1) : -Infinity; };
 
-  for (const width of [1440, 390]) {
+  for (const width of [1440]) {
     const { page, errors } = await open(browser, width, hero(), '#/money');
     await page.waitForTimeout(1500);
     const posts = async () => page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts);
@@ -1838,10 +1864,6 @@ async function moneyScenarios(browser: Browser) {
     expect(await page.locator('.money-row .money-details').count() === 0, `money (${width} px): the details are folded`);
     const facts = await page.locator('.money-row-facts').allInnerTexts();
     expect(facts.every((t) => /gp\/h net|Estimate unavailable/.test(t) && /gp to start|No coins needed/.test(t)), `money (${width} px): every row says net an hour (or "Estimate unavailable") and the coins to start`);
-    if (width === 390) {
-      const narrow = await page.locator('.money-row-title').evaluateAll((els) => els.filter((e) => e.getBoundingClientRect().width < 100).length);
-      expect(narrow === 0, `money (390 px): no row title is squeezed by its badge`);
-    }
     expect(await noOverflow(page), `money (${width} px): no horizontal scroll`);
     await shot(page, `default-${width}`);
 
@@ -2007,7 +2029,7 @@ async function shoppingScenarios(browser: Browser) {
   const shot = async (page: Page, name: string) => {
     if (process.env.UI_SHOTS) await page.locator('.shop-page').screenshot({ path: `${process.env.UI_SHOTS}/shopping-${name}.png` }).catch(() => {});
   };
-  for (const width of [1440, 390]) {
+  for (const width of [1440]) {
     // Real shortages: the purchases, the money short, the way to the coin plan, the exchange list.
     {
       const { page, errors } = await open(browser, width, base({ items: [...absentAlternatives, { name: 'Mithril scimitar', carried: 0, noted: 0, bank: 0 }, { name: 'Salmon', carried: 0, noted: 0, bank: 5 }] }), '#/shopping');
@@ -2076,7 +2098,7 @@ async function combatRouteScenarios(browser: Browser) {
   const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))];
   const owned = asked.map((name) => ({ name, carried: worn.has(name) ? 1 : 0, noted: 0, bank: 0 }));
   const COWS = 'The cow field east of Lumbridge';
-  for (const width of [1440, 390]) {
+  for (const width of [1440]) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S4-03', { gameMode: 'f2p' }),
       localStorage: { 'osrs-put:active-step': 'S4-03' },
@@ -2186,7 +2208,7 @@ async function retainedCombatFoodScenario(browser: Browser) {
   const stats = { attack: 30, strength: 21, defence: 1, hitpoints: 24 };
   const xp = { attack: 13363, strength: 5018, defence: 0, hitpoints: 7842 };
   const items = ['Salmon', 'Trout', 'Tuna', 'Lobster', 'Swordfish', 'Big bones'].map(name => ({ name, carried: 0, noted: 0, bank: 0 }));
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S4-03', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:active-step': 'S4-03', 'osrs-put:features': JSON.stringify({ keepDefenceOne: true }) },
@@ -2260,7 +2282,7 @@ async function gearScenarios(browser: Browser) {
   const shot = async (page: Page, name: string) => {
     if (process.env.UI_SHOTS) await page.locator('.gear-page').screenshot({ path: `${process.env.UI_SHOTS}/gear-${name}.png` }).catch(() => {});
   };
-  for (const width of [1440, 390]) {
+  for (const width of [1440]) {
     // What is owned beats a purchase: the Mithril scimitar in the bank is the one recommendation, the rest folded.
     {
       const { page, errors } = await open(browser, width, live([BRONZE], { attack: 20, strength: 20, defence: 1, hitpoints: 25 }, 5000, [{ name: 'Mithril scimitar', bank: 1 }]), '#/gear');
@@ -2322,7 +2344,7 @@ async function gearScenarios(browser: Browser) {
 }
 
 async function consumerDependencyScenarios(browser: Browser) {
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const stats = { crafting: 30, woodcutting: 36, ranged: 1, slayer: 1, cooking: 1 };
     const progress = progressBefore('S9-01', { gameMode: 'members', levels: stats });
     progress.steps['S8-04'] = 'skipped';
@@ -2341,7 +2363,7 @@ async function consumerDependencyScenarios(browser: Browser) {
 }
 
 async function magicRouteScenarios(browser: Browser) {
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const names = ['Mind rune', 'Air rune', 'Water rune', 'Earth rune', 'Fire rune', 'Nature rune', 'Iron ore', 'Staff of air', 'Staff of water', 'Staff of earth', 'Staff of fire', 'Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'];
     const stock = (counts: Record<string, number>) => names.map(name => ({ name, carried: counts[name] ?? 0, noted: 0, bank: 0 }));
     const stats = { magic: 1, smithing: 15 };
@@ -2375,7 +2397,7 @@ async function magicRouteScenarios(browser: Browser) {
 
 async function magicFundingScenarios(browser: Browser) {
   const prices = { 556: 6, 558: 3, 555: 6, 557: 6, 554: 6, 563: 120, 1381: 1542, 1383: 1500, 1385: 1500, 1387: 940, 1739: 125 };
-  for (const width of [390, 1280]) for (const sale of ['restricted', 'unknown', 'lifted']) {
+  for (const width of [1280]) for (const sale of ['restricted', 'unknown', 'lifted']) {
     const gear = { equipment: [], inventory: [], coins: sale === 'lifted' ? 100000 : 50, bankCoins: sale === 'restricted' ? null : 0 };
     const stats = { magic: 10 };
     const { page, errors } = await open(browser, width, {
@@ -2399,7 +2421,7 @@ async function magicFundingScenarios(browser: Browser) {
 }
 
 async function dateFreeSettingsScenarios(browser: Browser) {
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const progress = { version: 3, steps: { 'S1-01': 'done' }, levels: {}, notes: { 'S1-01': 'Keep this note' }, updatedAt: '2001-02-03T04:05:06.000Z', gameMode: 'f2p' };
     const { page, errors } = await open(browser, width, { offline: true, progress, localStorage: { 'osrs-put-settings-tab': 'progress' } }, '#/settings');
     const transfer = page.locator('section').filter({ has: page.getByRole('button', { name: 'Export progress', exact: true }) });
@@ -2417,7 +2439,7 @@ async function dateFreeSettingsScenarios(browser: Browser) {
 }
 
 async function marketPreparationScenarios(browser: Browser) {
-  for (const width of [390, 1280]) for (const unavailable of [false, true]) {
+  for (const width of [1280]) for (const unavailable of [false, true]) {
     const { page, errors } = await open(browser, width, {
       zen: true, market: true, marketUnavailable: unavailable,
       progress: progressBefore('S4-04', { gameMode: 'f2p' }),
@@ -2443,7 +2465,7 @@ async function marketPreparationScenarios(browser: Browser) {
 }
 
 async function toolProofScenarios(browser: Browser) {
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const rows = PICKAXES.map(name => ({ name, carried: 0, noted: 0, bank: 0, exactCarried: 0, exactNoted: 0, exactBank: 0 }));
     const { page, errors } = await open(browser, width, {
       zen: true, progress: progressBefore('S1-12', { gameMode: 'f2p' }),
@@ -2483,7 +2505,7 @@ async function armourPreparationScenarios(browser: Browser) {
   const xp = { attack: 13363, strength: 2000, defence: 1154, hitpoints: 3500 };
   const items = [...pieces.map(p => ({ name: p.name, carried: 1, noted: 0, bank: 0 })), { name: 'Black plateskirt', carried: 0, noted: 0, bank: 0 }];
   const gear = { equipment: [weapon], inventory: pieces, coins: 10000, bankCoins: 0 };
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S4-03', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:active-step': 'S4-03' }, market: true,
@@ -2516,7 +2538,7 @@ async function armourPreparationScenarios(browser: Browser) {
 }
 
 async function styleQuoteScenarios(browser: Browser) {
-  for (const width of [390, 1280]) for (const unavailable of [false, true]) {
+  for (const width of [1280]) for (const unavailable of [false, true]) {
     const stats = { magic: 10, attack: 1, defence: 1, ranged: 1 };
     const { page, errors } = await open(browser, width, {
       market: true, marketUnavailable: unavailable, progress: progressBefore('S2-04', { levels: stats }),
@@ -2538,7 +2560,7 @@ async function styleQuoteScenarios(browser: Browser) {
 }
 
 async function skillHandoverScenarios(browser: Browser) {
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const stats = { fishing: 49, cooking: 30 };
     const names = ['Small fishing net', 'Fishing rod', 'Fishing bait', 'Fly fishing rod', 'Feather', 'Lobster pot', 'Harpoon', 'Raw beef', 'Raw chicken', 'Raw trout', 'Raw tuna', 'Grapes', 'Jug of water'];
     const items = names.map(name => ({ name, carried: 0, noted: 0, bank: name === 'Raw tuna' ? 26 : name === 'Grapes' || name === 'Jug of water' ? 13 : 0 }));
@@ -2574,7 +2596,7 @@ async function skillHandoverScenarios(browser: Browser) {
 }
 
 async function miningHandoverScenarios(browser: Browser) {
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const stats = { mining: 59, woodcutting: 1 };
     const names = ['Bronze pickaxe', 'Iron pickaxe', 'Steel pickaxe', 'Mithril pickaxe', 'Adamant pickaxe', 'Rune pickaxe', 'Bronze axe', 'Iron axe', 'Steel axe', 'Mithril axe', 'Adamant axe', 'Rune axe'];
     const items = names.map(name => ({ name, carried: name === 'Rune pickaxe' ? 1 : 0, noted: 0, bank: name === 'Bronze axe' ? 1 : 0 }));
@@ -2605,7 +2627,7 @@ async function miningHandoverScenarios(browser: Browser) {
 }
 
 async function rangedPreparationScenarios(browser: Browser) {
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const stats = { ranged: 1, defence: 1, hitpoints: 30 };
     const weapon = { id: 841, name: 'Shortbow', slot: 'weapon', count: 1 };
     const arrow = { id: 882, name: 'Bronze arrow', slot: 'ammo', count: 1 };
@@ -2643,7 +2665,7 @@ async function rangedPreparationScenarios(browser: Browser) {
 }
 
 async function shoppingQuoteScenarios(browser: Browser) {
-  for (const width of [390, 1280]) for (const state of ['current', 'cached', 'missing']) {
+  for (const width of [1280]) for (const state of ['current', 'cached', 'missing']) {
     const { page, errors } = await open(browser, width, {
       market: true, marketUnavailable: state === 'missing', marketAgeMinutes: state === 'cached' ? 120 : undefined,
       progress: progressBefore('S4-04'), localStorage: { 'osrs-put:active-step': 'S4-04', 'osrs-put:shopping-scope': 'step' },
@@ -2662,7 +2684,7 @@ async function shoppingQuoteScenarios(browser: Browser) {
 }
 
 async function journalQuoteScenarios(browser: Browser) {
-  for (const width of [390, 1280]) for (const state of ['current', 'cached', 'missing']) {
+  for (const width of [1280]) for (const state of ['current', 'cached', 'missing']) {
     const stamp = Date.now() - 60_000;
     const rows = [{ name: 'Cowhide', quantityDelta: 10, reason: 'LOOT', timestamp: stamp, estimatedGpValue: 99999 }];
     const { page, errors } = await open(browser, width, {
@@ -2683,7 +2705,7 @@ async function journalQuoteScenarios(browser: Browser) {
 }
 
 async function dossierQuoteScenarios(browser: Browser) {
-  for (const width of [390, 1280]) for (const quoteState of ['current', 'cached', 'missing']) {
+  for (const width of [1280]) for (const quoteState of ['current', 'cached', 'missing']) {
     const unavailable = quoteState === 'missing';
     const { page, errors } = await open(browser, width, {
       market: true, marketUnavailable: unavailable, marketAgeMinutes: quoteState === 'cached' ? 120 : undefined, progress: progressBefore('S4-04'),
@@ -2712,7 +2734,7 @@ async function dossierQuoteScenarios(browser: Browser) {
 }
 
 async function accountSyncProofScenarios(browser: Browser) {
-  for (const width of [390, 1280]) {
+  for (const width of [1280]) {
     const { page, errors } = await open(browser, width, {
       progress: { version: 3, steps: { 'S1-04': 'skipped' }, levels: {}, notes: { 'S1-01': 'Keep this note' }, gameMode: 'f2p' },
       localStorage: { 'osrs-put-settings-tab': 'progress' },

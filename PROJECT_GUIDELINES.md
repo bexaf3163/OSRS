@@ -742,3 +742,10 @@ For every task:
 The objective is not maximum code volume.
 
 The objective is a reliable, intelligent, low-friction OSRS companion that proactively prepares the player, gives accurate guidance, and uses limited UI automation without controlling the player's character.
+
+## Desktop-only scope — owner decision, 2026-10-28
+
+- A mobile/phone version is no longer wanted. Do not develop mobile layouts, phone navigation, touch-specific flows, mobile packaging or phone-only features. Do not spend implementation or QA time supporting phone viewports.
+- Focus on the Windows desktop portable app and RuneLite integration. Preserve normal desktop window resizing, desktop minimum usable dimensions, Windows DPI/text scaling and accessibility. These remain desktop requirements, not mobile support.
+- Existing responsive code may remain where harmless; do not perform a risky blanket CSS/UI deletion simply to remove mobile support. Retire phone-specific development and test scenarios in the next relevant test-maintenance change, retaining equivalent functional checks at desktop sizes. Mobile gaps are no longer release blockers.
+- This decision applies to both Codex and Claude and supersedes older mobile/narrow-phone acceptance requests.

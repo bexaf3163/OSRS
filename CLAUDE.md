@@ -12,3 +12,7 @@ Key points to keep in mind every time:
 - Automation is a companion, never a bot: in the game itself at most ~2 clicks every several minutes, no movement/combat/skilling; never spend GP automatically.
 - Before declaring completion run: `npm run build`, `npm test -- --reporter=dot`, `npm run check-data`, `cd runelite-bridge && ./gradlew -q testClasses` (plus the full Gradle `test` when plugin logic changed). Never report PASS if a check failed or was skipped.
 - Final response: changed files and verification results in 1–2 sentences.
+
+## Desktop-only scope — owner decision, 2026-10-28
+
+No mobile/phone development or phone-only QA. Keep Windows desktop resizing, DPI/text scaling, themes and accessibility. See the authoritative desktop-only scope in PROJECT_GUIDELINES.md.

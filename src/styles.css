@@ -558,6 +558,11 @@ main {
 .skill-grid.skill-grid-compact { grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); }
 .skill-tile .skill-card-link { flex-direction: column; justify-content: center; text-align: center; margin: 0; min-height: 90px; }
 .skill-tile .skill-name { overflow-wrap: anywhere; }
+.f2p-skill-badge { font-size: 0.75rem; line-height: 1.4; color: var(--muted); overflow-wrap: anywhere; }
+.f2p-skill-badge.is-good { color: var(--accent); }
+.f2p-skill-note { margin-block: 12px; padding-left: 12px; border-left: 2px solid var(--border-strong); }
+.f2p-skill-note > p { margin: 0 0 6px; }
+.f2p-skill-note summary { cursor: pointer; color: var(--muted); }
 .skill-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
 @media (min-width: 560px) { .skill-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 900px) { .skill-grid { grid-template-columns: repeat(3, 1fr); } }
