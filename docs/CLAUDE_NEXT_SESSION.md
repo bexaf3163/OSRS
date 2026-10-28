@@ -1,5 +1,9 @@
 # Claude continuation — authoritative takeover
 
+## 2.80.12 - RuneLite heap fix (2026-10-28)
+
+`electron/runelite-launcher.cjs` JVM_ARGS now uses `-Xmx1024m` instead of `-Xmx768m`. OSRS Path starts RuneLite itself and ignores RuneLite's config.json, so this constant is the client's only heap setting. 768 MB leaves little heap headroom with 117 HD + Quest Helper + Shortest Path (client working set about 2.2 GB), and GC pressure can show as stutter. Do not lower it back; keep `-ea` and the other arguments as they are.
+
 ## Current continuation - 2.80.11 published (2026-10-28)
 
 Normal releases2.80.8-2.80.11 are published; all their Checks/Release workflows succeeded. Each EXE below was downloaded and hashed; its hash matches GitHub's asset digest and the downloaded SHA256SUMS. No preview releases were substituted.

@@ -13,7 +13,9 @@ const http = require('node:http');
 const MAIN_CLASS = 'com.osrspath.bridge.OsrsPathLauncher';
 const PLUGIN_JAR = 'osrs-path-bridge.jar';
 // As in the RuneLite launcher (its config.json); -ea is needed by loadBuiltin.
-const JVM_ARGS = ['-ea', '-Xmx768m', '-Xss2m', '-XX:CompileThreshold=1500', '-XX:+DisableAttachMechanism'];
+// Heap is 1024 MB, not RuneLite's 768 MB: 768 MB leaves little headroom with 117 HD,
+// Quest Helper and Shortest Path, and GC pressure can show as stutter. Do not lower it.
+const JVM_ARGS = ['-ea', '-Xmx1024m', '-Xss2m', '-XX:CompileThreshold=1500', '-XX:+DisableAttachMechanism'];
 
 const exists = (p) => { try { return fs.statSync(p).isFile(); } catch { return false; } };
 
