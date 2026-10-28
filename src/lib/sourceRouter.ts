@@ -13,6 +13,7 @@ import { items } from '../data';
 import type { PriceView } from './funding/quotes';
 import locationsJson from '../data/majorLocations.json';
 import stepsJson from '../data/steps.json';
+import { purchaseCost, type PurchaseFee } from './purchaseCost';
 
 export type SourceKind = 'bag' | 'bank' | 'free' | 'shop' | 'ge' | 'drop';
 
@@ -21,6 +22,7 @@ export interface SourceOption {
   label: string;
   /** The price per piece; for a free one and an "already have" one it is 0; unknown means undefined. */
   price?: number;
+  fee?: PurchaseFee;
   /** Tiles from the player; undefined means the position is unknown. */
   distance?: number;
   point?: WorldPoint & { label: string };
@@ -181,7 +183,9 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
     const name = b.shopName.replace(/\.$/, '');
     const notes = [toll ? `gate toll ${toll} gp` : '', access.fare ? access.note ?? '' : '', access.state !== 'open' ? access.note ?? '' : ''].filter(Boolean);
     shops.push({
-      kind: 'shop', label: `${town ? `${name} — ${town}` : name}${accessSuffix(access)}`, price: b.price + toll, access: access.state,
+      kind: 'shop', label: `${town ? `${name} — ${town}` : name}${accessSuffix(access)}`, price: b.price, access: access.state,
+      ...(toll ? { fee: { key: 'al-kharid-toll', coins: toll, label: 'gate toll allowance' } }
+        : access.fare ? { fee: { key: 'karamja-boat', coins: access.fare, label: 'standard Karamja boat fare allowance' } } : {}),
       ...(p ? { point: { x: p.x, y: p.y, plane: p.plane, label: p.label }, distance: here ? dist(p, here) : undefined } : {}),
       ...(notes.length ? { note: notes.join('; ') } : {}),
     });
@@ -189,7 +193,8 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   // The nearest open shop; among equal ones — the cheaper. A shop the player may not be able to enter comes after the exchange, never first.
   shops.sort((a, b) => Number(a.access !== 'open') - Number(b.access !== 'open') || (a.distance ?? Infinity) - (b.distance ?? Infinity) || (a.price ?? 0) - (b.price ?? 0));
   const shop = shops[0];
-  const cheapShopFirst = shop && shop.access === 'open' && (ge === undefined || (shop.price ?? Infinity) - ge < SAVE_GP);
+  const quantity = Math.max(1, input.need);
+  const cheapShopFirst = shop && shop.access === 'open' && (ge === undefined || (purchaseCost(shop, quantity) ?? Infinity) / quantity - ge < SAVE_GP);
   if (shop && cheapShopFirst) out.push(shop);
   if (geOption) out.push(geOption);
   if (shop && !cheapShopFirst) out.push(shop);

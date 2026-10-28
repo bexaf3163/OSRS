@@ -81,9 +81,10 @@ describe('the router never sends the player where they cannot go', () => {
 
   it('Silk is bought in Al Kharid, toll included', () => {
     const plan = planSources({ name: 'Silk', need: 1, detail: detail(950), kinds: ['shop'] }, state());
-    expect(plan.primary).toMatchObject({ kind: 'shop', label: 'Silk trader — Al Kharid', price: 12, access: 'open' });
+    expect(plan.primary).toMatchObject({ kind: 'shop', label: 'Silk trader — Al Kharid', price: 2, fee: { coins: 10 }, access: 'open' });
     const free = planSources({ name: 'Silk', need: 1, detail: detail(950), kinds: ['shop'] }, state({ quests: ['Prince Ali Rescue'] }));
     expect(free.primary?.price).toBe(2);
+    expect(free.primary?.fee).toBeUndefined();
   });
 });
 

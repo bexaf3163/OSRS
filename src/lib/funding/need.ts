@@ -18,6 +18,7 @@ import { doseKind, dosePackage } from '../doses';
 import { evaluate, type Requirement } from '../requirements';
 import type { PlayerState } from '../playerState';
 import { nameKey } from '../checklist';
+import { purchaseFees } from '../purchaseCost';
 import type { Confidence, PriceStatus, PriceView } from './quotes';
 
 export type NeedKind = 'buy' | 'tool' | 'upgrade';
@@ -141,7 +142,9 @@ function buyable(l: PrepLine, prices: PriceView): boolean {
 function shortLines(lines: readonly PrepLine[], prices: PriceView): NeedLine[] {
   return lines
     .filter((l) => l.where === 'MISSING' && (l.toGet ?? 0) > 0 && buyable(l, prices))
-    .flatMap((l) => needLines({ key: l.key, name: l.name, qty: l.toGet as number, fallback: l.action?.price, why: l.why, kind: 'buy' }, l.unit === 'dose', prices));
+    .flatMap((l) => l.action?.purchase?.source === 'shop' && l.action.price !== undefined
+      ? [{ key: l.key, name: l.name, qty: l.toGet as number, unit: l.action.price, cost: l.action.price * (l.toGet as number), confidence: 'LOW' as const, priced: 'plan' as const, why: l.why, kind: 'buy' as const }]
+      : needLines({ key: l.key, name: l.name, qty: l.toGet as number, fallback: l.action?.price, why: l.why, kind: 'buy' }, l.unit === 'dose', prices));
 }
 
 export function buildNeed(i: NeedInput): FundingNeed {
@@ -170,7 +173,8 @@ export function buildNeed(i: NeedInput): FundingNeed {
 
   return {
     stepId: step.id,
-    fees: { now: aggregateShopping([step]).coins, window: prep.coins.need },
+    fees: { now: aggregateShopping([step]).coins + purchaseFees(prep.lines.filter(line => line.timing === 'NOW' && line.where === 'MISSING')
+      .map(line => ({ fee: line.action?.purchase?.fee }))), window: prep.coins.need },
     minimum: tierOf(now, prep.lines.filter(l => l.timing === 'NOW' && l.where === 'UNKNOWN').length),
     recommended: tierOf(recommended, prep.lines.filter(l => (l.timing === 'NOW' || l.timing === 'SOON') && l.where === 'UNKNOWN').length),
     objective: tierOf(objective, objectiveUnknown),

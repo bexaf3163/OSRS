@@ -4,6 +4,15 @@
 
 No mobile/phone development or phone-only QA. Keep Windows desktop resizing, DPI/text scaling, themes and accessibility. See the authoritative desktop-only scope in [PROJECT_GUIDELINES.md](../PROJECT_GUIDELINES.md).
 
+## Current continuation - 2.80.15 shared acquisition charges (verification pending)
+
+- Shop unit prices exclude access charges. Shopping, preparation/funding and transport include one declared charge per acquisition trip/zone; optional items sharing a required fee do not add it again. Transport stop labels reconcile with the total. Known Prince Ali Rescue completion still waives the gate allowance.
+- Funding preserves the selected fixed shop price instead of replacing it with an unrelated GE quote. Unread bank cash stays UNKNOWN when the bag does not cover the enlarged fee allowance. No new panels, save format, game actions or launcher changes.
+- Scope: existing Al Kharid 10gp gate allowance and standard Karamja 60gp return-boat allowance. These are conservative catalog allowances, not an actual route-crossing solver; no claim of optimal gate routing, diary discounts or exact cash spent. Existing stock/access/free-spawn rules remain.
+- Regression fixture uses actual S8-06 supplies with a smaller shop-stock-sized batch and excludes free spawns to isolate acquisition costs. It does not claim nine pots/buckets are purchased in one stock cycle.
+- Separately reproduced, not fixed in this batch: some callers pass an already-calculated shortage to planSources, which can compare it against owned stock again. Fixing that flag alone breaks the existing mixed Raw beef/Raw chicken regression because oneTrip does not allocate those alternatives consistently. Address the shared alternative-allocation contract together in a separate verified batch; do not ship a caller-only workaround.
+- Local verification: 2264 app tests/193 files, build/TypeScript, data checks (0 errors/warnings), bridge JAR and Gradle testClasses passed; full desktop UI passed, and final shopping-quotes/market-preparation UI checks passed. Publication results will be recorded after CI. Previous verified release remains 2.80.14 below. In-game acceptance remains Claude's responsibility; preserve the 2.80.12 heap invariant.
+
 ## Current continuation — 2.80.14 F2P Skills and desktop-only scope
 
 - Skills has a compact F2P value/checkpoint marker for each free skill, including passive Hitpoints. Known reached milestones are marked; unread levels never count as reached. Reasons, method comparisons and Wiki links stay folded on the existing detail page. Members mode has no extra markers. Existing XP/Balanced/Money preferences, route goals, followed plans and saves are unchanged.

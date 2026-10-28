@@ -7,6 +7,7 @@ import type { Progress, Step, WikiItemDetail } from '../types';
 import { aggregateShopping, formatGp, type ShoppingLine, type ShoppingList, type ShoppingSource } from './shopping';
 import { heldEquipment, heldOf, levelOf, type PlayerState } from './playerState';
 import { allocateFoodStock, foodCarry, heldFood, type FoodHolding } from './foodAdvice';
+import { purchaseFees, type PurchaseFee } from './purchaseCost';
 import { carryOf, doseKind, dosePackage, heldUnits, takeFromBank, type Carry, type DosePackage, type DoseSize } from './doses';
 import { legacyKeys } from './oneTrip';
 import { planSources } from './sourceRouter';
@@ -37,6 +38,7 @@ export interface Ownership {
 }
 
 export interface ShopRow {
+  fee?: PurchaseFee;
   key: string;
   name: string;
   id?: number;
@@ -204,7 +206,8 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
   if (src?.kind === 'shop' && src.access === 'open' && fits) {
     const unit = src.price ?? null;
     // The gate toll or the boat fare is said with the shop: it is part of going there.
-    return { ...base, qty: missing, channel: 'shop', action: `Buy at ${src.label}${src.note ? ` (${src.note})` : ''}${also}`, unitPrice: unit, cost: unit === null ? null : unit * missing };
+    return { ...base, qty: missing, channel: 'shop', action: `Buy at ${src.label}${src.note ? ` (${src.note})` : ''}${also}`, unitPrice: unit, cost: unit === null ? null : unit * missing,
+      ...(src.fee ? { fee: src.fee } : {}) };
   }
   const maybe = [plan.primary, ...plan.alternatives].find((o) => o?.kind === 'shop' && o.access !== 'open');
   const orMaybe = maybe ? ` · or ${maybe.label}` : '';
@@ -368,10 +371,12 @@ export function budgetSum(b: Budget, coinLines: readonly { stepId: string; amoun
 export function budgetOf(rows: readonly ShopRow[], coinsForSteps: number, coins: { bag: number | null; bank: number | null }): Budget {
   const buy = (r: ShopRow) => r.channel === 'ge' || r.channel === 'shop';
   const req = rows.filter((r) => !r.optional && buy(r));
-  const required = req.reduce((a, r) => a + (r.cost ?? 0), 0);
+  const fees = purchaseFees(req);
+  const required = req.reduce((a, r) => a + (r.cost ?? 0), 0) + fees;
   const unpriced = req.filter((r) => r.cost === null).length;
   const unknown = rows.filter((r) => !r.optional && r.channel === 'unknown' && r.qty > 0);
-  const optional = rows.filter((r) => r.optional && buy(r)).reduce((a, r) => a + (r.cost ?? 0), 0);
+  const opt = rows.filter((r) => r.optional && buy(r));
+  const optional = opt.reduce((a, r) => a + (r.cost ?? 0), 0) + purchaseFees([...req, ...opt]) - fees;
   const need = required + coinsForSteps;
   const funds = coins.bag !== null && coins.bank !== null ? coins.bag + coins.bank : coins.bag !== null && coins.bag >= need ? coins.bag : null;
   return {

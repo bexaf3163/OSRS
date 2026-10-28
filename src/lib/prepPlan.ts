@@ -34,6 +34,7 @@ import { loadoutNeed, loadoutPhase } from './loadoutPhase';
 import type { QuestInstruction } from '../services/runeliteBridge';
 import type { PriceView } from './funding/quotes';
 import { itemPrice, marketItemPrice, type ItemPrice } from './itemPrice';
+import { purchaseCost, purchaseFees, type PurchaseFee } from './purchaseCost';
 
 /** Critical: the step cannot be done without it; important: better to prepare before leaving; an improvement saves time or money; optional is a convenience. */
 export type PrepPriority = 'CRITICAL' | 'IMPORTANT' | 'OPTIMIZATION' | 'OPTIONAL';
@@ -47,6 +48,7 @@ export type Supply = 'ENOUGH' | 'LOW' | 'CRITICAL';
 export type PrepActionKind = 'TAKE' | 'BUY' | 'EARN' | 'GATHER' | 'CONNECT' | 'UPGRADE';
 
 export interface PrepAction {
+  purchase?: { source: 'shop' | 'ge'; fee?: PurchaseFee };
   kind: PrepActionKind;
   label: string;
   /** The price per piece, if known. */
@@ -236,14 +238,16 @@ function sourceAction(src: SourceOption | null, name: string, toGet: number, coi
   if (src.kind === 'free') return { kind: 'GATHER', label: src.label, ...(nav ? { nav } : {}) };
   if (src.kind === 'drop') return { kind: 'GATHER', label: src.label };
   if (src.kind === 'bag' || src.kind === 'bank') return undefined;
-  const total = src.price !== undefined ? src.price * toGet : null;
+  const total = purchaseCost(src, toGet);
+  const purchase = src.kind === 'shop' || src.kind === 'ge' ? { source: src.kind, ...(src.fee ? { fee: src.fee } : {}) } : undefined;
   // Not enough money: "buy" would be an empty piece of advice, so earn first.
   if (total !== null && coinsTotal !== null && coinsTotal < total) {
-    return { kind: 'EARN', label: `Short of ${gp(total - coinsTotal)} gp for ${name}: earn it first`, ...(src.price !== undefined ? { price: src.price } : {}), href: '#/shopping' };
+    return { kind: 'EARN', label: `Short of ${gp(total - coinsTotal)} gp for ${name}: earn it first`, ...(src.price !== undefined ? { price: src.price } : {}), purchase, href: '#/shopping' };
   }
   return {
     kind: 'BUY',
-    label: `Buy: ${src.label}${src.price ? `, ${gp(src.price)} gp` : ''}${toGet > 1 && src.price ? ` each` : ''}`,
+    label: `Buy: ${src.label}${src.price ? `, ${gp(src.price)} gp` : ''}${toGet > 1 && src.price ? ` each` : ''}${src.fee ? ` + ${gp(src.fee.coins)} gp ${src.fee.label}` : ''}`,
+    purchase,
     ...(src.price !== undefined ? { price: src.price } : {}),
     ...(nav ? { nav } : {}),
     ...(nav ? {} : { href: '#/shopping' }),
@@ -336,7 +340,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   const detail = i.detail ?? ((id: number) => itemById.get(id));
   const ids = trip.stepIds;
   const heals = new Map(preflightItems(step).filter((p) => p.heals).map((p) => [p.nameEn.toLowerCase(), p.heals as number]));
-  const coinsTotal = trip.coins.have;
+  const coinsTotal = state.coins.bag.known && state.coins.bank.known ? state.coins.bag.value + state.coins.bank.value : null;
   const danger = Boolean(step.foes?.length);
   const lines: PrepLine[] = [];
   const phase = loadoutPhase(step, i.questInstruction);
@@ -527,9 +531,14 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   }
 
   // Coins are a separate readiness line.
-  const coinsMissing = trip.coins.missing;
+  const accessFees = purchaseFees(lines.filter(line => (line.timing === 'NOW' || line.timing === 'SOON') && line.where === 'MISSING')
+    .map(line => ({ fee: line.action?.purchase?.fee })));
+  const coinsNeed = trip.coins.need + accessFees;
+  const { bag: bagCoins, bank: bankCoins } = state.coins;
+  const coinsHave = !bagCoins.known ? null : bankCoins.known ? bagCoins.value + bankCoins.value : bagCoins.value >= coinsNeed ? bagCoins.value : null;
+  const coinsMissing = coinsHave === null ? null : Math.max(0, coinsNeed - coinsHave);
   const coins: PrepPlan['coins'] = {
-    need: trip.coins.need, have: trip.coins.have, missing: coinsMissing,
+    need: coinsNeed, have: coinsHave, missing: coinsMissing,
     ...(coinsMissing !== null && coinsMissing > 0 ? { action: { kind: 'EARN' as const, label: `Short of ${gp(coinsMissing)} gp: earn it`, href: '#/shopping' } } : {}),
   };
 

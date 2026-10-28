@@ -156,7 +156,7 @@ describe('where to get an item', () => {
       ],
     });
     const p = planSources({ name: 'Thing', need: 1, detail: d }, at({ owned: owned({ Thing: { carried: 0 } }, false) }));
-    expect(p.primary).toMatchObject({ kind: 'shop', label: 'Silk trader — Al Kharid', price: 12 });
+    expect(p.primary).toMatchObject({ kind: 'shop', label: 'Silk trader — Al Kharid', price: 2, fee: { coins: 10 } });
     // A townless shop the table does not know: named alone, not "Barmaid — ", and only as an unchecked alternative.
     expect(p.alternatives.find((o) => o.label.startsWith('Barmaid'))?.label).toBe('Barmaid (entry not checked)');
     expect([p.primary, ...p.alternatives].some((o) => o?.label.includes('Silk merchant'))).toBe(false);
@@ -172,10 +172,10 @@ describe('where to get an item', () => {
     expect([p.primary, ...p.alternatives].some((o) => o?.kind === 'free')).toBe(false);
   });
 
-  it('Al Kharid: the toll is included in the price, after Prince Ali Rescue — it is not', () => {
+  it('Al Kharid: the toll is separate from the unit price and waived after Prince Ali Rescue', () => {
     const d = detail({ buyLocations: [{ shopName: "Zeke's Superior Scimitars.", location: 'Al Kharid', price: 20, stock: 10 }] });
     const s = at({ owned: owned({ Thing: { carried: 0 } }, false) });
-    expect(planSources({ name: 'Thing', need: 1, detail: d }, s).primary?.price).toBe(30);
+    expect(planSources({ name: 'Thing', need: 1, detail: d }, s).primary).toMatchObject({ price: 20, fee: { coins: 10 } });
     expect(planSources({ name: 'Thing', need: 1, detail: d, freeToll: true }, s).primary?.price).toBe(20);
   });
 });

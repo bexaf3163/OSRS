@@ -52,7 +52,7 @@ export function transportSources(state: PlayerState, priceOf?: (name: string) =>
     const plan = planSources({ name, need, detail: detailByName.get(key), gePrice: priceOf?.(name) ?? null, kinds: ['shop', 'ge'] }, state);
     for (const o of [plan.primary, ...plan.alternatives]) {
       if (!o?.point) continue;
-      if (o.kind === 'shop') return { kind: 'shop', where: o.label.replace(/\.(?= — )/, ''), point: { x: o.point.x, y: o.point.y, plane: o.point.plane }, price: o.price ?? null };
+      if (o.kind === 'shop') return { kind: 'shop', where: o.label.replace(/\.(?= — )/, ''), point: { x: o.point.x, y: o.point.y, plane: o.point.plane }, price: o.price ?? null, ...(o.fee ? { fee: o.fee } : {}) };
       if (o.kind === 'ge') return { kind: 'exchange', where: EXCHANGE.label, point: EXCHANGE, price: o.price ?? null };
     }
     return TRADED.has(key) ? { kind: 'exchange', where: EXCHANGE.label, point: EXCHANGE, price: priceOf?.(name) ?? null } : null;

@@ -8,6 +8,7 @@ import locationsJson from '../data/majorLocations.json';
 import { nameKey } from './checklist';
 import type { GearItem } from '../services/runeliteBridge';
 import { isInstancedPoint, isOverworld } from './instances';
+import { purchaseCost, purchaseFees, type PurchaseFee } from './purchaseCost';
 
 export interface Point { x: number; y: number; plane: number }
 export interface Teleport {
@@ -177,14 +178,14 @@ export interface Need {
 }
 
 /** Where a missing thing can be got, as the app's source router says (sourceRouter.ts): a shop, the exchange or a free spawn, with a place to lead to. */
-export interface ItemSource { kind: 'shop' | 'exchange' | 'free'; where: string; point: Point; /** gp per piece; null: not known. */ price: number | null }
+export interface ItemSource { kind: 'shop' | 'exchange' | 'free'; where: string; point: Point; /** gp per piece; null: not known. */ price: number | null; fee?: PurchaseFee }
 
 /** One stop of a preparation: the bank to withdraw from or the place to buy at, and what to get there. */
 export interface PrepStop {
   action: 'withdraw' | 'buy' | 'take';
   where: string;
   point: Point;
-  items: { name: string; qty: number; price: number | null }[];
+  items: { name: string; qty: number; price: number | null; fee?: PurchaseFee }[];
   /** Tiles from the stop before (the first one: from the player, by the best way usable now). */
   tiles: number;
   via?: string;
@@ -628,7 +629,7 @@ function acquireFor(item: string, inp: TravelInput): Acquire | null {
     const src = inp.sourceOf(item, 1);
     if (!src) return null;
     const r = reachTiles(inp, src.point);
-    return { what: item, where: src.where, point: src.point, tiles: r.tiles, cost: src.price, source: src.kind === 'exchange' ? 'exchange' : 'shop', ...(r.via ? { via: r.via } : {}) };
+    return { what: item, where: src.where, point: src.point, tiles: r.tiles, cost: purchaseCost(src, 1), source: src.kind === 'exchange' ? 'exchange' : 'shop', ...(r.via ? { via: r.via } : {}) };
   }
   const r = reachTiles(inp, EXCHANGE);
   return { what: item, where: EXCHANGE.label, point: EXCHANGE, tiles: r.tiles, cost: inp.priceOf?.(item) ?? null, source: 'exchange', ...(r.via ? { via: r.via } : {}) };
@@ -641,7 +642,7 @@ const placeText = (where: string) => (where === EXCHANGE.label ? `the ${where}` 
 const stopWhat = (s: Pick<PrepStop, 'action' | 'items'>) => `${STOP_VERB[s.action]} ${s.items.map(qtyText).join(', ')}`;
 /** " (~12 gp)" for a purchase; an unknown price is said, never shown as free. */
 const stopPrice = (s: Pick<PrepStop, 'action' | 'items'>) =>
-  (s.action !== 'buy' ? '' : s.items.some((i) => i.price === null) ? ' (price unknown)' : ` (~${s.items.reduce((sum, i) => sum + (i.price ?? 0) * i.qty, 0)} gp)`);
+  (s.action !== 'buy' ? '' : s.items.some((i) => i.price === null) ? ' (price unknown)' : ` (~${s.items.reduce((sum, i) => sum + (i.price ?? 0) * i.qty, 0) + purchaseFees(s.items)} gp)`);
 
 /** "withdraw Law rune, Air rune ×3 at Varrock West Bank": one stop of a preparation in words. */
 export function stopText(s: Pick<PrepStop, 'action' | 'items' | 'where'>): string {
@@ -664,9 +665,10 @@ export function prepareFor(missing: readonly NeedItem[], inp: TravelInput): { pr
     if (bank) { add('withdraw', bank.label, bank, { name: m.name, qty, price: 0 }); continue; }
     const src = inp.sourceOf?.(m.name, qty) ?? null;
     if (!src) return { reject: 'no_source', what: m.name };
-    add(src.kind === 'free' ? 'take' : 'buy', src.where, src.point, { name: m.name, qty, price: src.kind === 'free' ? 0 : src.price });
+    add(src.kind === 'free' ? 'take' : 'buy', src.where, src.point, { name: m.name, qty, price: src.kind === 'free' ? 0 : src.price, ...(src.kind !== 'free' && src.fee ? { fee: src.fee } : {}) });
   }
   const stops: PrepStop[] = [];
+  const chargedFees = new Set<string>();
   let at: Point = inp.from;
   let total = 0;
   while (groups.length) {
@@ -678,12 +680,17 @@ export function prepareFor(missing: readonly NeedItem[], inp: TravelInput): { pr
       if (r.tiles + stairs < reach.tiles) { reach = { ...r, tiles: r.tiles + stairs }; best = i; }
     });
     const g = groups.splice(best, 1)[0];
+    for (const item of g.items) {
+      if (!item.fee) continue;
+      if (chargedFees.has(item.fee.key)) delete item.fee;
+      else chargedFees.add(item.fee.key);
+    }
     stops.push({ ...g, tiles: reach.tiles, ...(reach.via ? { via: reach.via } : {}) });
     total += reach.tiles;
     at = g.point;
   }
   const bought = stops.filter((s) => s.action === 'buy').flatMap((s) => s.items);
-  const cost = bought.some((i) => i.price === null) ? null : bought.reduce((sum, i) => sum + (i.price ?? 0) * i.qty, 0);
+  const cost = bought.some((i) => i.price === null) ? null : bought.reduce((sum, i) => sum + (i.price ?? 0) * i.qty, 0) + purchaseFees(bought);
   return { prep: { stops, missing: [...missing], cost }, tiles: total, end: at };
 }
 
