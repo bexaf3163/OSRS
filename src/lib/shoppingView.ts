@@ -8,6 +8,7 @@ import { aggregateShopping, formatGp, type ShoppingLine, type ShoppingList, type
 import { heldEquipment, heldOf, levelOf, type PlayerState } from './playerState';
 import { allocateFoodStock, foodCarry, heldFood, type FoodHolding } from './foodAdvice';
 import { purchaseFees, type PurchaseFee } from './purchaseCost';
+import { allocateMaterialStock, materialTake, type MaterialHolding } from './materialStock';
 import { carryOf, doseKind, dosePackage, heldUnits, takeFromBank, type Carry, type DosePackage, type DoseSize } from './doses';
 import { legacyKeys } from './oneTrip';
 import { planSources } from './sourceRouter';
@@ -81,7 +82,7 @@ const wearable = new Set(gearData.items.filter((p) => p.slot).map((p) => nameKey
  * list need of an alternative (the Lobsters a step asks for are not also the Salmon of another): only the rest of that stack counts here.
  */
 export function ownershipOf(
-  state: PlayerState, line: Pick<ShoppingLine, 'nameEn' | 'key' | 'anyOf' | 'heals'> & Partial<Pick<ShoppingLine, 'dose' | 'id' | 'equip'>>, reserved?: ReadonlyMap<string, number>, allocatedFood?: FoodHolding,
+  state: PlayerState, line: Pick<ShoppingLine, 'nameEn' | 'key' | 'anyOf' | 'heals'> & Partial<Pick<ShoppingLine, 'dose' | 'id' | 'equip'>>, reserved?: ReadonlyMap<string, number>, allocatedFood?: FoodHolding, allocatedMaterial?: MaterialHolding,
 ): Ownership {
   if (line.heals && !line.equip) {
     const h = allocatedFood ?? heldFood(state, { ...line, heals: line.heals }, line.key, levelOf(state, 'hitpoints'), reserved);
@@ -94,6 +95,14 @@ export function ownershipOf(
     const h = heldEquipment(state, [line.nameEn, ...(line.anyOf ?? [])]);
     return { total: h.total, withYou: h.bag === null ? null : h.bag + h.noted, bank: h.bank, worn: h.equipped,
       source: h.source === 'game' ? h.bank === null ? 'bag' : 'game' : 'none', viaAlternatives: 0 };
+  }
+  if (allocatedMaterial) {
+    const h = allocatedMaterial;
+    const complete = h.source === 'manual' || h.bank !== null;
+    return { total: complete ? h.total : null, withYou: h.bag === null ? null : h.bag + h.noted, bank: h.bank, worn: 0,
+      source: h.source === 'manual' ? 'manual' : complete ? 'game' : h.bag !== null ? 'bag' : 'none',
+      viaAlternatives: h.parts.filter(p => nameKey(p.name) !== nameKey(line.nameEn)).reduce((n, p) => n + (p.held.total ?? 0), 0),
+      lowerBound: h.total ?? 0, bankLower: h.bankLower };
   }
   // A potion is counted in doses across its sizes (doses.ts), as the step's readiness and preparation count it.
   const base = heldUnits(state, line.nameEn, line.key, legacyKeys({ dose: line.dose, id: line.id, nameEn: line.nameEn }));
@@ -148,9 +157,9 @@ const why = (sources: readonly ShoppingSource[]) => sources.map((s) => {
 
 const firstSentence = (t: string) => (t.split(/(?<=[.!?])\s/)[0] ?? t).replace(/\.$/, '');
 
-function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: ReadonlyMap<string, number>, foodStock?: FoodHolding): ShopRow {
+function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: ReadonlyMap<string, number>, foodStock?: FoodHolding, materialStock?: MaterialHolding): ShopRow {
   if (line.dose) return doseRow(line, optional, ctx);
-  const own = ownershipOf(ctx.state, line, reserved, foodStock);
+  const own = ownershipOf(ctx.state, line, reserved, foodStock, materialStock);
   const required = line.count;
   const tradeable = ctx.onGe(line);
   const tripNeed = Math.min(required, ctx.trip?.get(line.key) ?? required);
@@ -168,7 +177,7 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
   if (enough) {
     if (withYou < tripNeed && (own.bank ?? own.bankLower ?? 0) > 0) {
       const qty = Math.min(tripNeed - withYou, own.bank ?? own.bankLower ?? 0);
-      const take = foodStock ? foodCarry(foodStock, tripNeed).take : [];
+      const take = foodStock ? foodCarry(foodStock, tripNeed).take : materialStock ? materialTake(materialStock, tripNeed) : [];
       const actual = take.some(item => nameKey(item.name) !== nameKey(line.nameEn)) ? take.map(item => `${item.count} ${item.name}`).join(', ') : null;
       return { ...base, qty, channel: 'bank', action: actual ? `${take.some(item => item.noted) ? 'Withdraw or unnote' : 'Take'} ${actual} at the bank` : `Take ${qty} from the bank`, unitPrice: null, cost: null };
     }
@@ -190,7 +199,7 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
   const also = banked > 0 ? ` · ${banked} more in the bank` : '';
   const detail = line.id !== undefined ? ctx.detail(line.id) : undefined;
   const plan = planSources({
-    name: line.nameEn, need: missing, manualKey: line.key, ...(detail ? { detail } : {}),
+    name: line.nameEn, need: missing, shortage: true, manualKey: line.key, ...(detail ? { detail } : {}),
     gePrice: tradeable ? ctx.gePrice(line) : null, kinds: ['shop', 'ge', 'free', 'drop'], qp: ctx.qp ?? null,
   }, ctx.state);
   const src = plan.primary;
@@ -290,8 +299,9 @@ export function shopRows(list: ShoppingList, ctx: RowContext): ShopRow[] {
   const demands = [...list.required, ...list.recommended].map((line, index) => ({ ...line, key: `shop:${index}`, manualKey: line.key,
     reservedCount: index < list.required.length ? line.count : 0 }));
   const foodStock = allocateFoodStock(ctx.state, demands, levelOf(ctx.state, 'hitpoints'), reserved);
-  return [...list.required.map((l, index) => row(l, false, ctx, reserved, foodStock.get(`shop:${index}`))),
-    ...list.recommended.map((l, index) => row(l, true, ctx, reserved, foodStock.get(`shop:${list.required.length + index}`)))].map(r => {
+  const materials = allocateMaterialStock(ctx.state, demands, reserved);
+  return [...list.required.map((l, index) => row(l, false, ctx, reserved, foodStock.get(`shop:${index}`), materials.get(`shop:${index}`))),
+    ...list.recommended.map((l, index) => row(l, true, ctx, reserved, foodStock.get(`shop:${list.required.length + index}`), materials.get(`shop:${list.required.length + index}`)))].map(r => {
     if (!ctx.priceLabel || !r.tradeable || (r.channel !== 'ge' && r.channel !== 'unknown')) return r;
     const labels = r.package ? r.package.lines.map(p => ctx.priceLabel!(p.name)) : [ctx.priceLabel(r.name, r.id)];
     const priceLabel = r.cost === null ? 'Price unavailable' : labels.find(l => l.startsWith('Cached')) ?? labels.find(l => l.startsWith('Indicative')) ?? 'GE estimate';

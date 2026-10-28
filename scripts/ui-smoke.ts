@@ -2592,6 +2592,25 @@ async function skillHandoverScenarios(browser: Browser) {
     expect(wine?.step?.worldPoint?.label?.includes('Edgeville Bank') && wine.step.checklist?.some((r: any) => r.name === 'Grapes' && r.count === 13) && wine.step.checklist?.some((r: any) => r.name === 'Jug of water' && r.count === 13), `skill handover (${width}): wine uses actual ingredient pairs at a bank`);
     expect(await noOverflow(page) && !errors.length, `skill handover (${width}): no overflow or console errors`);
     await page.context().close();
+    // A fresh low-level profile: do not simulate Cooking dropping from35 to1 on the admitted character.
+    const low = { fishing: 50, cooking: 1 };
+    const mixedItems = names.map(name => ({ name, carried: name === 'Raw beef' || name === 'Raw chicken' ? 13 : 0, noted: 0, bank: 0 }));
+    const { page: materialPage, errors: materialErrors } = await open(browser, width, {
+      market: true, progress: progressBefore('S6-02', { gameMode: 'f2p', levels: low }),
+      localStorage: { 'osrs-put:active-step': 'S6-02' },
+      status: { protocol: 6, inGame: true, player: 'Material Handover', activeStepId: 'S6-02', stats: low, coins: 1000, bankCoins: 0, equipment: [], inventory: [] },
+      events: [{ type: 'STATS', stats: low }, { type: 'OWNED', bankSeen: true, items: mixedItems }],
+    }, '#/step/S6-02');
+    await materialPage.waitForFunction(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.lines?.some((r: any) => r.name === 'Raw beef' && r.where === 'INVENTORY' && r.need === 26));
+    const mixed = await materialPage.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    expect(mixed.plan.lines.some((r: any) => r.name === 'Raw beef' && r.where === 'INVENTORY' && r.need === 26), `skill handover (${width}): mixed beef/chicken covers one bag without buying duplicate beef`);
+    await materialPage.evaluate(items => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items }),
+      names.map(name => ({ name, carried: 0, noted: 0, bank: name === 'Raw chicken' ? 26 : 0 })));
+    await materialPage.waitForFunction(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.bankWithdrawals?.some((w: any) => w.itemName === 'Raw chicken' && w.quantity === 26));
+    const banked = await materialPage.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    expect(banked.plan.lines.find((r: any) => r.name === 'Raw beef')?.where === 'BANK', `skill handover (${width}): banked chicken projects the actual alternative withdrawal`);
+    expect(await noOverflow(materialPage) && !materialErrors.length, `skill handover (${width}): mixed-material preparation has no overflow or console errors`);
+    await materialPage.context().close();
   }
 }
 

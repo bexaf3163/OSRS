@@ -60,6 +60,8 @@ function nearestBank(from: WorldPoint | undefined): Place | null {
 export interface SourceInput {
   name: string;
   need: number;
+  /** need is already the shortage after ownership was allocated. */
+  shortage?: boolean;
   /** An item card from the database (shops, spawns, drops, the exchange price). */
   detail?: WikiItemDetail;
   /** The exchange price, if fresher than the one in the card. */
@@ -130,10 +132,10 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   const held = heldOf(s, input.name, input.manualKey);
   const have = (held.bag ?? 0) + held.noted;
   const out: SourceOption[] = [];
-  if (have >= input.need) {
+  if (!input.shortage && have >= input.need) {
     return { satisfied: true, primary: { kind: 'bag', label: `In the bag: ${have}`, price: 0 }, alternatives: [], total: 1 };
   }
-  if ((held.bank ?? 0) > 0 && have + (held.bank ?? 0) >= input.need) {
+  if (!input.shortage && (held.bank ?? 0) > 0 && have + (held.bank ?? 0) >= input.need) {
     const b = nearestBank(here);
     out.push({
       kind: 'bank', label: `In the bank: ${held.bank}`, price: 0,

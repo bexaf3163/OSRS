@@ -49,7 +49,7 @@ export function transportSources(state: PlayerState, priceOf?: (name: string) =>
   return (name, need) => {
     const key = nameKey(name);
     if (key === 'coins') return null;
-    const plan = planSources({ name, need, detail: detailByName.get(key), gePrice: priceOf?.(name) ?? null, kinds: ['shop', 'ge'] }, state);
+    const plan = planSources({ name, need, shortage: true, detail: detailByName.get(key), gePrice: priceOf?.(name) ?? null, kinds: ['shop', 'ge'] }, state);
     for (const o of [plan.primary, ...plan.alternatives]) {
       if (!o?.point) continue;
       if (o.kind === 'shop') return { kind: 'shop', where: o.label.replace(/\.(?= — )/, ''), point: { x: o.point.x, y: o.point.y, plane: o.point.plane }, price: o.price ?? null, ...(o.fee ? { fee: o.fee } : {}) };

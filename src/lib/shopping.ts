@@ -7,6 +7,7 @@ import { toolFamilyOf } from './toolTiers';
 import { doseKind, heldUnits } from './doses';
 import gearJson from '../data/gear.json';
 import { heldFood, type FoodHolding } from './foodAdvice';
+import type { MaterialHolding } from './materialStock';
 
 /**
  * Tools and gear: they are not used up, so one is enough for all the steps: the largest
@@ -244,12 +245,13 @@ export function holdingFor(
   onGe = true,
   hitpoints?: number,
   allocatedFood?: FoodHolding,
+  allocatedMaterial?: MaterialHolding,
 ): Holding {
   const required = line.count;
   // The same "how much there is" calculation as readiness and the single requirements (playerState.heldOf; a potion in doses, doses.ts).
   const state = { owned: owned as OwnedState | null, equipment: {}, manual: (manual !== undefined ? { m: manual } : {}) as Record<string, number>, bankSeen: owned?.bankSeen === true };
-  const h = line.heals ? allocatedFood ?? heldFood(state, { ...line, heals: line.heals }, manual !== undefined ? 'm' : undefined, hitpoints)
-    : heldUnits(state, line.nameEn, manual !== undefined ? 'm' : undefined);
+  const h = allocatedMaterial ?? (line.heals ? allocatedFood ?? heldFood(state, { ...line, heals: line.heals }, manual !== undefined ? 'm' : undefined, hitpoints)
+    : heldUnits(state, line.nameEn, manual !== undefined ? 'm' : undefined));
   const inGame = h.bag !== null;
   const carried = inGame ? (h.bag ?? 0) + h.noted : undefined;
   const bank = inGame ? h.bank : undefined;

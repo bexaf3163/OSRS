@@ -19,6 +19,7 @@ import { evaluate, type Requirement } from '../requirements';
 import type { PlayerState } from '../playerState';
 import { nameKey } from '../checklist';
 import { purchaseFees } from '../purchaseCost';
+import { allocateMaterialStock } from '../materialStock';
 import type { Confidence, PriceStatus, PriceView } from './quotes';
 
 export type NeedKind = 'buy' | 'tool' | 'upgrade';
@@ -156,11 +157,12 @@ export function buildNeed(i: NeedInput): FundingNeed {
   // The whole goal of this step: the exchange list with the food for every kill left, minus what is owned.
   const list = aggregateShopping([step], { wholeGoal: true });
   const foodStock = allocateFoodStock({ owned: i.owned, manual: i.manual, equipment: {}, bankSeen: i.owned?.bankSeen === true }, list.required, i.hitpoints);
+  const materials = allocateMaterialStock({ owned: i.owned, manual: i.manual, equipment: {}, bankSeen: i.owned?.bankSeen === true }, list.required);
   const objective: NeedLine[] = [];
   let objectiveUnknown = 0;
   for (const line of list.required) {
     if (line.inStepOnly) continue;
-    const h = holdingFor(line, i.owned, i.manual[line.key], true, i.hitpoints, foodStock.get(line.key));
+    const h = holdingFor(line, i.owned, i.manual[line.key], true, i.hitpoints, foodStock.get(line.key), materials.get(line.key));
     // Ownership not observed is not a shortage: it is counted in `unknown` of the next trip, and never priced here.
     if (h.status === 'UNKNOWN' || h.status === 'UNAVAILABLE') { objectiveUnknown++; continue; }
     if (h.buy <= 0) continue;

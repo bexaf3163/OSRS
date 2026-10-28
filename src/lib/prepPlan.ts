@@ -35,6 +35,7 @@ import type { QuestInstruction } from '../services/runeliteBridge';
 import type { PriceView } from './funding/quotes';
 import { itemPrice, marketItemPrice, type ItemPrice } from './itemPrice';
 import { purchaseCost, purchaseFees, type PurchaseFee } from './purchaseCost';
+import { materialTake, type MaterialTake } from './materialStock';
 
 /** Critical: the step cannot be done without it; important: better to prepare before leaving; an improvement saves time or money; optional is a convenience. */
 export type PrepPriority = 'CRITICAL' | 'IMPORTANT' | 'OPTIMIZATION' | 'OPTIONAL';
@@ -63,6 +64,8 @@ export interface PrepLine {
   food?: FoodHolding;
   /** Physical food to withdraw/unnote, rather than pieces of its healing-equivalent label. */
   foodTake?: FoodCarry['take'];
+  /** Exact interchangeable material pieces to withdraw or unnote. */
+  itemTake?: MaterialTake[];
   /** The item must be worn, not merely carried. */
   equip?: boolean;
   /** Market cost for physical items; doses are priced by their actual package in Shopping. */
@@ -218,7 +221,7 @@ function whyOf(line: ShoppingLine, group: string[], all: string[], currentId: st
   return parts.join(' · ');
 }
 
-function bankAction(step: Step, name: string, n: number, doses = false, unnote = 0, food?: FoodCarry['take']): PrepAction {
+function bankAction(step: Step, name: string, n: number, doses = false, unnote = 0, food?: readonly MaterialTake[]): PrepAction {
   const b = nearestBank(step);
   const actual = food?.length && food.some(item => nameKey(item.name) !== nameKey(name)) ? food : null;
   const label = actual?.map(item => `${item.count} ${item.name}`).join(', ');
@@ -387,13 +390,19 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       g.ids.push(a.stepId);
       groups.set(timing, g);
     }
-    let cumulativeFood = 0;
-    const selectedFood = new Map<string, number>();
+    let cumulativeSupply = 0;
+    const selectedSupply = new Map<string, number>();
     for (const [timing, g] of groups) {
-      const foodTake = t.food && !inStep ? foodCarry(t.food, cumulativeFood += g.need).take.flatMap(item => {
+      const foodTake = t.food && !inStep ? foodCarry(t.food, cumulativeSupply += g.need).take.flatMap(item => {
         const key = `${nameKey(item.name)}:${item.noted}`;
-        const count = item.count - (selectedFood.get(key) ?? 0);
-        selectedFood.set(key, item.count);
+        const count = item.count - (selectedSupply.get(key) ?? 0);
+        selectedSupply.set(key, item.count);
+        return count > 0 ? [{ ...item, count }] : [];
+      }) : [];
+      const itemTake = t.material && !inStep ? materialTake(t.material, cumulativeSupply += g.need).flatMap(item => {
+        const key = `${nameKey(item.name)}:${item.noted}`;
+        const count = item.count - (selectedSupply.get(key) ?? 0);
+        selectedSupply.set(key, item.count);
         return count > 0 ? [{ ...item, count }] : [];
       }) : [];
       const where: PrepWhere = g.unknown > 0 ? 'UNKNOWN' : g.missing > 0 ? 'MISSING' : g.bank > 0 ? 'BANK' : equipped > 0 && equipped >= g.bag ? 'EQUIPPED' : 'INVENTORY';
@@ -405,7 +414,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       if (inStep && !satisfied) {
         action = { kind: 'GATHER', label: 'You get it during the step' };
       } else if (where === 'BANK') {
-        action = bankAction(step, t.line.nameEn, g.bank, dose, g.noted, foodTake);
+        action = bankAction(step, t.line.nameEn, g.bank, dose, g.noted, itemTake.length ? itemTake : foodTake);
       } else if (where === 'MISSING' && acquired) {
         const spot = acquired.from ? npcSpot(acquired.from, step.id) : undefined;
         action = { kind: 'GATHER', label: acquired.howToGet, ...(spot ? { nav: { label: `${acquired.from}: ${acquired.nameEn}`, x: spot.x, y: spot.y, plane: spot.plane, itemName: acquired.nameEn, stepId: step.id } } : {}) };
@@ -413,7 +422,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
         // Doses, not potions: the shortfall and the sizes that cover it; Shopping prices every size and names the package.
         action = { kind: 'BUY', label: shortText(t.line.nameEn, g.missing), href: '#/shopping' };
       } else if (where === 'MISSING') {
-        const plan = planSources({ name: t.line.nameEn, need: g.missing, detail: t.line.id !== undefined ? detail(t.line.id) : undefined, manualKey: t.line.key,
+        const plan = planSources({ name: t.line.nameEn, need: g.missing, shortage: true, detail: t.line.id !== undefined ? detail(t.line.id) : undefined, manualKey: t.line.key,
           ...(i.prices !== undefined ? { gePrice: itemPrice(i.prices, t.line.nameEn, t.line.id, g.missing).unit } : {}),
         }, state);
         // No source the player can surely use (only a guild shop behind an unconfirmed door, say): the route's own way to get it, the shop as an "or".
@@ -448,6 +457,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
         bagShortfall: g.need - g.bag,
         ...(t.food ? { food: t.food } : {}),
         ...(foodTake.length ? { foodTake } : {}),
+        ...(itemTake.length ? { itemTake } : {}),
       });
     }
   }
@@ -567,6 +577,12 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
 
   // How many slots what must be taken now and along the way will occupy: "≈", because we know an item's packing only by its name.
   let adding = 0;
+  const addedStacks = new Set<string>();
+  const addPieces = (name: string, count: number, withYou = state.owned?.items.get(nameKey(name))?.carried ?? 0) => {
+    if (!stacks(name)) { adding += count; return; }
+    const key = nameKey(name);
+    if (count > 0 && withYou === 0 && !addedStacks.has(key)) { adding++; addedStacks.add(key); }
+  };
   const doseNeeds = new Map<string, { name: string; need: number }>();
   const foodNeeds = new Map<FoodHolding, number>();
   for (const l of [...now, ...soon]) {
@@ -580,8 +596,12 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       const base = doseKind(l.name)!.base;
       const previous = doseNeeds.get(base);
       doseNeeds.set(base, { name: l.name, need: (previous?.need ?? 0) + n });
+    } else if (l.itemTake?.length) {
+      for (const take of l.itemTake) addPieces(take.name, take.count);
+      const covered = l.itemTake.reduce((sum, take) => sum + take.count, 0);
+      addPieces(l.name, Math.max(0, n - covered));
     } else {
-      adding += stacks(l.name) ? (n > 0 && !(l.have.bag && l.have.bag > 0) ? 1 : 0) : n;
+      addPieces(l.name, n, l.have.bag ?? 0);
     }
   }
   for (const [stock, need] of foodNeeds) adding += foodCarry(stock, need).adding;
@@ -625,7 +645,10 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   // Weight: on a non-combat step heavy gear and extras in the bag hinder running. What the preparation window needs is left alone.
   const needed = new Set<string>();
   for (const l of lines) needed.add(l.name);
-  for (const w of window) for (const it of [...(w.itemsRequired ?? []), ...(w.itemsRecommended ?? [])]) needed.add(it.nameEn);
+  for (const w of window) for (const it of [...(w.itemsRequired ?? []), ...(w.itemsRecommended ?? [])]) {
+    needed.add(it.nameEn);
+    for (const name of it.anyOf ?? []) needed.add(name);
+  }
   // What a step keeps for a later one is not "extra" whatever the bag says, nor what the window's quests check for themselves.
   for (const w of window) for (const c of carryoverOf(w)) needed.add(c.item);
   for (const k of questItemKeys(window)) needed.add(k);

@@ -132,11 +132,19 @@ function itemIdOf(name: string): number {
 /** The items the plan says to take out of the bank (needed now or soon): so a stop at a bank is for something. */
 export function bankWithdrawalsOf(plan: Pick<PrepPlan, 'lines'>): NonNullable<PrepPlanPayload['bankWithdrawals']> {
   // A potion is taken as the exact potions that hold the doses (2 × Strength potion(4), 1 × Strength potion(3)), never "×8" of one size.
-  return plan.lines
+  const pieces = plan.lines
     .filter((l) => l.where === 'BANK' && (l.timing === 'NOW' || l.timing === 'SOON'))
-    .flatMap((l) => (l.foodTake?.length ? l.foodTake.map(item => ({ name: item.name, quantity: item.count })) : l.unit === 'dose' && l.potions?.length
+    .flatMap((l) => (l.itemTake?.length ? l.itemTake.map(item => ({ name: item.name, quantity: item.count })) : l.foodTake?.length ? l.foodTake.map(item => ({ name: item.name, quantity: item.count })) : l.unit === 'dose' && l.potions?.length
       ? l.potions.map((p) => ({ name: p.name, quantity: p.count }))
-      : [{ name: l.name, quantity: l.toGet ?? l.count }]))
+      : [{ name: l.name, quantity: l.toGet ?? l.count }]));
+  const grouped = new Map<string, { name: string; quantity: number }>();
+  for (const piece of pieces) {
+    const key = nameKey(piece.name);
+    const row = grouped.get(key) ?? { name: piece.name, quantity: 0 };
+    row.quantity += piece.quantity;
+    grouped.set(key, row);
+  }
+  return [...grouped.values()]
     .slice(0, MAX_WITHDRAWALS)
     .map((w) => ({ itemId: itemIdOf(w.name), itemName: clipText(w.name, 60), quantity: Math.max(1, Math.min(w.quantity, 10_000_000)) }));
 }

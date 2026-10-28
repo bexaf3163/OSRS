@@ -14,6 +14,7 @@ import { plural } from './shopping';
 import { buildPlayerState, coinsOf, heldOf, levelOf, ownedCountOf, questOf, unusableTools, type Held, type PlayerState } from './playerState';
 import { evaluate } from './requirements';
 import { allocateFoodStock } from './foodAdvice';
+import { allocateMaterialStock, materialTake } from './materialStock';
 import { toolFamilyOf } from './toolTiers';
 import { doseKind, heldUnits, needUnits } from './doses';
 import { currentLoadoutStep, loadoutPhase } from './loadoutPhase';
@@ -216,6 +217,8 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
   const departureItems = preflightItems(currentLoadoutStep(step, state.connected ? ctx.questInstruction : null));
   const foodStock = allocateFoodStock(state, departureItems.map((it, index) => ({ ...it, key: `departure:${index}`,
     manualKey: it.id !== undefined ? `id:${it.id}` : `name:${nameKey(it.nameEn)}`, anyOf: it.alt })), levelOf(state, 'hitpoints'));
+  const materials = allocateMaterialStock(state, departureItems.map((it, index) => ({ ...it, key: `departure:${index}`,
+    manualKey: it.id !== undefined ? `id:${it.id}` : `name:${nameKey(it.nameEn)}`, anyOf: it.alt })));
   for (const [index, it] of departureItems.entries()) {
     const isCoins = it.id === COINS_ID || nameKey(it.nameEn) === 'coins';
     if (isCoins) {
@@ -246,15 +249,19 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     // family (every pickaxe tier) is counted by heldOf already.
     const alt = it.alt?.length && !toolFamilyOf(it.nameEn) ? it.alt : null;
     const food = typeof it.heals === 'number' && it.heals > 0 ? { heals: it.heals, anyOf: it.alt } : undefined;
-    const res = it.equip ? evaluate({ type: 'equipment', name: it.nameEn, anyOf: it.alt, count: it.count }, state) : food
+    const material = materials.get(`departure:${index}`);
+    const res = material ? evaluate({ type: 'item', name: it.nameEn, count: it.count, manualKey: key }, state, material)
+      : it.equip ? evaluate({ type: 'equipment', name: it.nameEn, anyOf: it.alt, count: it.count }, state) : food
       ? evaluate({ type: 'item', name: it.nameEn, count: it.count, manualKey: key, food }, state, { ...foodStock.get(`departure:${index}`)!, unit: 'piece' }) : alt
       ? evaluate({
         type: 'alternative', requiredCount: it.count,
         alternatives: [{ name: it.nameEn, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, ...alt.map((n) => ({ name: n, manualKey: `name:${nameKey(n)}` }))],
       }, state)
       : evaluate({ type: 'item', name: it.nameEn, count: it.count, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, state);
-    const h = food ? foodStock.get(`departure:${index}`)!
-      : alt ? heldAll(state, [it.nameEn, ...alt], key) : heldUnits(state, it.nameEn, key);
+    const h = material ?? (food ? foodStock.get(`departure:${index}`)!
+      : alt ? heldAll(state, [it.nameEn, ...alt], key) : heldUnits(state, it.nameEn, key));
+    const physical = material ? materialTake(material, it.count) : [];
+    const actual = physical.map(item => `${item.count} ${item.name}`).join(', ');
     // A potion is counted in doses (doses.ts): the label keeps the route's "×5" and says what that is in doses.
     const doses = !alt && doseKind(it.nameEn) ? needUnits(it.nameEn, it.count) : null;
     const u = doses !== null ? ' doses' : '';
@@ -278,10 +285,11 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'BANK', hard: true, source: 'game',
         ...(it.equip && (h.bag ?? 0) > 0 ? { equip: true } : {}),
-        detail: it.equip && (h.bag ?? 0) > 0 ? 'in your bag: equip it before training'
+        detail: actual ? `${physical.some(item => item.noted) ? 'Withdraw or unnote' : 'Take'} ${actual} at the bank`
+          : it.equip && (h.bag ?? 0) > 0 ? 'in your bag: equip it before training'
           : h.noted > 0 ? `${h.bag ?? 0}${u} usable, ${h.noted}${u} as banknotes: unnote at a bank before use`
           : `${h.bag ?? 0}${u} in the bag, ${h.bank ?? 0} in the bank: take it from the bank${whole((h.bag ?? 0) + (h.bank ?? 0))}`,
-        ...(!(it.equip && (h.bag ?? 0) > 0) && bank ? { action: bankNav(bank, step, it.nameEn) } : {}),
+        ...(!(it.equip && (h.bag ?? 0) > 0) && bank ? { action: bankNav(bank, step, physical[0]?.name ?? it.nameEn) } : {}),
       });
     } else if (res.state === 'UNKNOWN') {
       reqs.push({
