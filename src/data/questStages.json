@@ -12934,7 +12934,7 @@
          1167
         ]
        },
-       "pre": [{"item": "Fire rune", "id": 554, "n": 195, "t": "Fire Strike for the zombies and the Tree spirit: no weapons are allowed on Entrana"}, {"item": "Air rune", "id": 556, "n": 130}, {"item": "Mind rune", "id": 558, "n": 65}, {"item": "Lumbridge teleport", "id": 8008, "n": 1, "t": "The only way out of the Entrana dungeon"}],
+       "pre": [{"item": "Fire rune", "id": 554, "n": 195, "t": "Fire Strike for the zombies and the Tree spirit: no weapons are allowed on Entrana"}, {"item": "Air rune", "id": 556, "n": 130}, {"item": "Mind rune", "id": 558, "n": 65}, {"item": "Lumbridge teleport", "id": 8008, "n": 1, "t": "The only way out of the Entrana dungeon"}, {"item": "Tuna", "id": 361, "n": 4, "alt": ["Trout", "Salmon", "Lobster"], "t": "Guide food buffer for reaching the safespot; this is not a full melee-fight allowance."}],
        "k": "goToEntrana"
       },
       {
@@ -12950,7 +12950,7 @@
          2408
         ]
        },
-       "pre": [{"item": "Lumbridge teleport", "id": 8008, "n": 1, "t": "The only way out of the Entrana dungeon"}, {"item": "Fire rune", "id": 554, "n": 30, "t": "Fire Strike for the zombies"}, {"item": "Air rune", "id": 556, "n": 20}, {"item": "Mind rune", "id": 558, "n": 10}],
+       "pre": [{"item": "Lumbridge teleport", "id": 8008, "n": 1, "t": "The only way out of the Entrana dungeon"}, {"item": "Fire rune", "id": 554, "n": 30, "t": "Fire Strike for the zombies"}, {"item": "Air rune", "id": 556, "n": 20}, {"item": "Mind rune", "id": 558, "n": 10}, {"item": "Tuna", "id": 361, "n": 4, "alt": ["Trout", "Salmon", "Lobster"], "t": "Guide food buffer for reaching the safespot; this is not a full melee-fight allowance."}],
        "k": "goDownHole"
       },
       {
@@ -12979,8 +12979,8 @@
        "k": "attemptToCutDramen"
       },
       {
-       "t": "Magic only: stand between the mushrooms to the south-west, out of the Tree Spirit's reach, and cast Fire Strike (85 hit points, hits up to 10). It vanishes after about 10 minutes: keep casting.",
-       "s": "Tree Spirit: Fire Strike from the mushrooms to the south-west",
+       "t": "For this guide, stand between the mushrooms to the south-west, out of the Tree Spirit's reach, and manually cast Fire Strike (85 hit points, hits up to 10). It vanishes after about 10 minutes: keep casting.",
+       "s": "Tree Spirit: manually cast Fire Strike from the south-west mushrooms",
        "at": [
         2859,
         9734,

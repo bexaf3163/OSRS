@@ -7,7 +7,7 @@ import type { PrepEnvelope } from '../lib/prepEnvelope';
 import type { InGameTarget, PacingSkill, StageHighlight, StagePre, PlayerStats, Progress, Step, StepBranch, StepPacing } from '../types';
 import { desktop } from '../lib/desktop';
 import { isClosed, openAfter, type DependencyFact } from '../lib/next-step';
-import { parseAmount, preflightItems } from '../lib/checklist';
+import { nameKey, parseAmount, preflightItems } from '../lib/checklist';
 import { watchedItems } from '../lib/branching';
 import { methodToolNames } from '../lib/methodStep';
 import { routeTrigger } from '../lib/carryover';
@@ -399,9 +399,14 @@ export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: stri
   const alternatives = (step.itemsRequired ?? []).flatMap((i) => (i.inStep ? [] : i.anyOf ?? []));
   // A potion is counted in doses of every size: the game must report all four, or a (3) in the bag would read as "no potion" (doses.ts).
   const potions = [...(step.itemsRequired ?? []), ...(step.itemsRecommended ?? [])].filter((i) => doseKind(i.nameEn)).map((i) => i.nameEn);
+  const optionalFood = (step.itemsRecommended ?? []).filter(item => item.heals);
+  const foodGuards = step.questStages?.stages.flatMap(stage => stage.do.flatMap(line => (line.pre ?? [])
+    .filter(pre => optionalFood.some(food => nameKey(food.nameEn) === nameKey(pre.item)))
+    .flatMap(pre => [pre.item, ...(pre.alt ?? [])]))) ?? [];
   const goalWatch = (step.goalItemsRequired ?? []).filter(i => !i.inStep);
   const named = [...watchedItems(step), ...methodToolNames(step), ...alternatives, ...extraWatch, ...potions,
-    ...goalWatch.map(i => i.nameEn), ...goalWatch.flatMap(i => i.anyOf ?? [])];
+    ...goalWatch.map(i => i.nameEn), ...goalWatch.flatMap(i => i.anyOf ?? []),
+    ...optionalFood.flatMap(food => [food.nameEn, ...(food.anyOf ?? [])]), ...foodGuards];
   const own = [...new Set([...named, ...named.flatMap((n) => toolFamilyOf(n) ?? doseNames(n))])].slice(0, 40);
   // And what the ways there need (runes, a teleport item, an axe): the game reports how many the bank holds, so "withdraw it" is said only for what is there.
   // They go after the step's own items and never push one out.

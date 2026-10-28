@@ -5,6 +5,7 @@
 // The memory lives exactly until the snapshot changes: the engine is created anew when the player's state, the marks or the mode change.
 
 import type { Step } from '../types';
+import { entryFoodStep } from './loadoutPhase';
 import { fixChainOf, readinessOf, type ChainLink, type ReadinessContext, type StepReadiness } from './readiness';
 import { buildPrepRoute, openTaskIds, type PrepRoute } from './prepRoute';
 import { planOneTrip, type OneTripPlan } from './oneTrip';
@@ -40,6 +41,9 @@ export interface ReadinessEngine {
 }
 
 export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
+  const entry = (step: Step) => entryFoodStep(step, ctx.state.connected ? ctx.questInstruction ?? null : null);
+  const steps = ctx.steps.map(entry);
+  if (steps.some((step, index) => step !== ctx.steps[index])) ctx = { ...ctx, steps };
   const readinessMemo = new Map<string, StepReadiness>();
   const prepMemo = new Map<string, PrepRoute>();
   const chainMemo = new Map<string, ChainLink[]>();
@@ -53,7 +57,7 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
     const hit = readinessMemo.get(step.id);
     if (hit) return hit;
     computed.readiness++;
-    const r = readinessOf(step, ctx);
+    const r = readinessOf(entry(step), ctx);
     readinessMemo.set(step.id, r);
     return r;
   };
@@ -61,7 +65,7 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
   const prep = (step: Step): PrepRoute => {
     const hit = prepMemo.get(step.id);
     if (hit) return hit;
-    const r = buildPrepRoute(readiness(step), step);
+    const r = buildPrepRoute(readiness(step), entry(step));
     prepMemo.set(step.id, r);
     return r;
   };
@@ -109,7 +113,7 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
       if (hit) return hit;
       computed.plan++;
       const p = buildPrepPlan({
-        step, steps: ctx.steps, progress: ctx.progress, state: ctx.state,
+        step: entry(step), steps: ctx.steps, progress: ctx.progress, state: ctx.state,
         trip: tripOf(step.id, opts.ahead), readiness: readiness(step), prices: ctx.prices, upgrade: up ?? null, recovery: rec, questInstruction: ctx.state.connected ? ctx.questInstruction : null,
       });
       planMemo.set(key, p);

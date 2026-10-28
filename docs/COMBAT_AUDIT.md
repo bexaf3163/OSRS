@@ -1,6 +1,6 @@
 # Combat audit
 
-Written by `tests/combatAudit.test.ts` from `src/data/combatAudit.json` (revision 2026-10-18) and the route data. Do not edit by hand: change the ledger or the route and run `UPDATE_FIXTURES=1 npx vitest run tests/combatAudit.test.ts`.
+Written by `tests/combatAudit.test.ts` from `src/data/combatAudit.json` (revision 2026-10-28) and the route data. Do not edit by hand: change the ledger or the route and run `UPDATE_FIXTURES=1 npx vitest run tests/combatAudit.test.ts`.
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
@@ -586,10 +586,11 @@ Quest stage lines: 2.2, 2.4.
 Assumptions:
 
 - The safespot between the south-west mushrooms holds.
+- Magic 13 is required by the selected Fire Strike strategy, not by the quest unlock. Four Tuna (40 nominal HP) are a guide setup buffer, not a verified full-fight damage budget; 65 Fire Strike casts are a guide allowance, not the Wiki Crumble Undead estimate.
 
 Problems:
 
-- No weapons or armour are allowed on Entrana, so the fight is magic only, but no runes were in the kit; the instant teleport the wiki asks for to leave the dungeon was missing; no food in the item list and no numbers for the Tree Spirit in the app.
+- The chosen magic strategy had no runes in the kit; the instant teleport the wiki asks for to leave the dungeon was missing; no food in the item list and no numbers for the Tree Spirit in the app.
 
 Alternatives:
 
@@ -597,11 +598,12 @@ Alternatives:
 
 Changed:
 
-- 2.74.6: Fire Strike runes for about 65 casts (195 Fire, 130 Air, 65 Mind) and a Lumbridge teleport are required items and are checked on the Entrana line; the lines name the south-west mushroom safespot, the greater demons to run past and the Wilderness door.
+- 2.80.13: chosen-strategy Magic 13 checked; an explicitly labelled four-Tuna entry buffer shares readiness, Shopping and funding protection and returns to optional after the confirmed entry. Physical alternative bank withdrawals are named consistently in the app and plugin.
+- 2.74.6: Fire Strike runes for a guide allowance of 65 casts (195 Fire, 130 Air, 65 Mind) and a Lumbridge teleport are required items and are checked on the Entrana line; the lines name the south-west mushroom safespot, the greater demons to run past and the Wilderness door.
 
 Evidence:
 
-- OSRS Wiki Lost City, Lost City/Quick guide and Tree spirit (Lost City), read 2026-10-24; quest stage lines 2.2 and 2.4.
+- https://oldschool.runescape.wiki/w/Lost_City and https://oldschool.runescape.wiki/w/Entrana_Dungeon checked 2026-10-28 for strategy, food recommendation, axe acquisition and exit; no food quantity is prescribed. Existing boss statistics were not reverified in this batch; quest stage lines 2.2 and 2.4.
 
 ## S9-02 Fairytale I - Growing Pains
 

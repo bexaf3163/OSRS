@@ -52,4 +52,14 @@ describe('a consumer uses its actual skill subset without completing the produce
     const unknown = { ...city, requirements: [] };
     expect(blockersOf(unknown, progress(), 200, facts({ crafting: 31, woodcutting: 36 }))?.steps).toContain(producer.id);
   });
+  it('does not send a missing independent Magic level back to a producer that cannot train Magic', () => {
+    const levels = { crafting: 31, woodcutting: 36, magic: 12, ranged: 1, slayer: 1, cooking: 1 };
+    const fact = facts(levels);
+    expect(fact(producer.id, city)).toBe(true);
+    expect(fact(producer.id)).toBeUndefined();
+    const engine = createReadinessEngine(contextOf({ step: city, steps: allSteps, progress: progress(), qp: 200, mode: 'members', stats: levels, owned: null, gear: null }));
+    expect(engine.readiness(city).problems.some(req => req.stat?.skill === 'magic' && req.state === 'MISSING')).toBe(true);
+    expect(engine.readiness(city).problems.some(req => req.kind === 'step' && req.label.includes(producer.id))).toBe(false);
+  });
+
 });

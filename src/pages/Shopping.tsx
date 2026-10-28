@@ -112,7 +112,9 @@ function whereText(r: ShopRow): string {
 }
 
 export function ShoppingPage() {
-  const { steps, stages, progress, notify, setOwnedManual } = useStore();
+  const { stages, progress, notify, setOwnedManual } = useStore();
+  const engine = useReadinessEngine();
+  const steps = engine.ctx.steps;
   const { state: link, owned, activeStepId, syncPlan, questPoints } = useBridge();
   const { state: player } = usePlayerState();
   const prices = usePriceView(true);
@@ -140,7 +142,7 @@ export function ShoppingPage() {
   };
 
   // The step in progress: the one started in the game, else the next open one the route allows.
-  const { dependencies, ctx: { qp: effectiveQp } } = useReadinessEngine();
+  const { dependencies, ctx: { qp: effectiveQp } } = engine;
   const current = useMemo(() => {
     const started = activeStepId && steps.some((s) => s.id === activeStepId) ? activeStepId : null;
     return started ?? nextStep(steps, progress, effectiveQp, dependencies)?.id ?? null;

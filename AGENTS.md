@@ -20,3 +20,7 @@ Apply to Codex in this project and future related sessions:
 ## Publication preference — 2026-10-27
 
 - Publish every completed, verified implementation batch autonomously to main with a new normal portable release through the existing Release workflow. No repeated owner confirmation is needed. Do not substitute previews/prereleases or hourly rebuilds. Synchronize package.json, package-lock.json and BridgeServer.PLUGIN_VERSION, add release notes and update the Claude handoff. Wait for release gates and verify the downloadable EXE digest before calling publication complete. Keep unfinished work out of the release; never overwrite existing release assets.
+
+## RuneLite heap invariant — 2026-10-28
+
+- Preserve `-Xmx1024m` (minimum) in `electron/runelite-launcher.cjs` JVM_ARGS, including any refactor/move. Preserve `-ea` and the other JVM arguments. OSRS Path directly launches Java, so RuneLite launcher config.json does not control this launch. Retain Claude release 2.80.12 (`e3f8642`, receipt `4e86414`); do not overwrite it with the pending audit batch.

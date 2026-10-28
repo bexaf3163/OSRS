@@ -230,4 +230,20 @@ public class PreflightTest
 		assertEquals(Preflight.Via.BANK, block.getVia());
 	}
 
+	@Test
+	public void foodGuardNamesActualBankPiecesAndRefreshesItsKey()
+	{
+		ActiveTarget.StageLine l = line("{\"pre\":[{\"item\":\"Tuna\",\"id\":361,\"n\":4,\"alt\":[\"Salmon\",\"Trout\"]}]}");
+		Preflight.Block salmon = check(l, bag(), bag(329, "Salmon", 5), 3047, 3236);
+		assertEquals("Take 5 Salmon from the bank", salmon.getTarget().getLabel());
+		assertTrue(salmon.reason().contains("Take 5 Salmon"));
+		Preflight.Block trout = check(l, bag(), bag(333, "Trout", 6), 3047, 3236);
+		assertEquals("Take 6 Trout from the bank", trout.getTarget().getLabel());
+		assertTrue(!salmon.key().equals(trout.key()));
+		Preflight.Block notes = Preflight.check("S9-01", l, true, bag(), bag(361, "Tuna", 4), null, 3047, 3236, 0, BANKS);
+		assertEquals(Preflight.Via.BANK, notes.getVia());
+		assertEquals("Withdraw or unnote 4 Tuna from the bank", notes.getTarget().getLabel());
+		assertEquals(0, notes.getHave());
+	}
+
 }

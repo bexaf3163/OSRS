@@ -32,9 +32,9 @@ describe('Lost City departure versus dungeon acquisition', () => {
     }
   });
 
-  it('carries Fire Strike runes and an instant teleport: the fight is magic only and the dungeon has no way out on foot', () => {
+  it('carries Fire Strike runes and an instant teleport: the guide uses a magic strategy and the dungeon has no way out on foot', () => {
     const need = new Map((step.itemsRequired ?? []).map(i => [i.nameEn, i.amount]));
-    // Fire Strike: 3 Fire, 2 Air, 1 Mind a cast; the wiki suggests about 65 casts.
+    // Fire Strike uses 3 Fire, 2 Air and 1 Mind per cast.65casts is this guide's preparation allowance, not a measured forecast or Wiki Fire Strike budget.
     expect([need.get('Fire rune'), need.get('Air rune'), need.get('Mind rune')]).toEqual([195, 130, 65]);
     expect(need.get('Lumbridge teleport')).toBe(1);
     expect(step.safespot).toMatch(/south-west.*Fire Strike/);

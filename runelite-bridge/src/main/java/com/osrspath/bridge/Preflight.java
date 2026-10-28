@@ -1,6 +1,9 @@
 package com.osrspath.bridge;
 
 import java.util.Collections;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.List;
 import lombok.Value;
 
@@ -56,11 +59,11 @@ final class Preflight
 			{
 				// Food is counted by healing: say it in health, so 10 Cooked meat next to "10 Trout" is not a riddle.
 				String food = "Guidance paused: bring food before entering — " + need * h + " health (" + need + " " + item
-					+ " or food that heals as much); you carry " + have * h + ".";
+					+ " or food that heals as much); you carry at least " + have * h + ".";
 				switch (via)
 				{
 					case BANK:
-						return food + " Take it from the bank first.";
+						return food + " " + (target == null ? "Take it from the bank first." : target.getLabel() + ".");
 					case CHECK_BANK:
 						return food + " Check your bank before buying more.";
 					case SOURCE:
@@ -73,7 +76,7 @@ final class Preflight
 			switch (via)
 			{
 				case BANK:
-					return "Guidance paused: " + what + " is missing from your bag. Take it from the bank first.";
+					return "Guidance paused: " + what + " is missing from your bag. " + (h != null && target != null ? target.getLabel() + "." : "Take it from the bank first.");
 				case CHECK_BANK:
 					return "Guidance paused: " + what + " is missing from your bag. Your bank is not checked; check it before buying.";
 				case SOURCE:
@@ -86,7 +89,7 @@ final class Preflight
 		/** A short key of what is missing: the stage line key must change with it, so the arrow is recomputed when the bag changes. */
 		String key()
 		{
-			return item + ":" + via;
+			return item + ":" + via + (via == Via.BANK && target != null ? ":" + target.getLabel() : "");
 		}
 
 		/** The player is near the blocked step (or the step has no tile): the chip is for this moment. */
@@ -137,6 +140,30 @@ final class Preflight
 	 * The first missing item of the line and where to get it; null means the line may go on. bagKnown is false before the inventory was read,
 	 * bank is null while the bank was never seen.
 	 */
+	private static String foodBankInstruction(ActiveTarget.Pre p, ItemCounts carried, ItemCounts notes, ItemCounts bank)
+	{
+		Integer healing = Foods.heals(p.getItem());
+		if (healing == null) return null;
+		long health = (long) p.need() * ItemCounts.effectiveHeal(healing);
+		health = Foods.reserve(carried, p.getId(), p.getItem(), p.getAlt(), healing, health, new LinkedHashMap<>(), Collections.emptyMap());
+		Map<String, Integer> noted = new LinkedHashMap<>();
+		if (notes != null) health = Foods.reserve(notes, p.getId(), p.getItem(), p.getAlt(), healing, health, noted, Collections.emptyMap());
+		Map<String, Integer> banked = new LinkedHashMap<>();
+		if (bank != null) health = Foods.reserve(bank, p.getId(), p.getItem(), p.getAlt(), healing, health, banked, Collections.emptyMap());
+		if (health > 0) return null;
+		boolean unnote = noted.values().stream().anyMatch(count -> count > 0);
+		banked.forEach((name, count) -> noted.merge(name, count, Integer::sum));
+		noted.entrySet().removeIf(entry -> entry.getValue() <= 0);
+		String primary = ActiveTarget.nameKey(p.getItem());
+		if (noted.isEmpty() || (!unnote && noted.keySet().stream().allMatch(primary::equals))) return null;
+		Map<String, String> names = new LinkedHashMap<>();
+		names.put(primary, p.getItem());
+		if (p.getAlt() != null) for (String name : p.getAlt()) names.putIfAbsent(ActiveTarget.nameKey(name), name);
+		List<String> pieces = new ArrayList<>();
+		noted.forEach((name, count) -> pieces.add(count + " " + names.getOrDefault(name, name)));
+		return (unnote ? "Withdraw or unnote " : "Take ") + String.join(", ", pieces) + " from the bank";
+	}
+
 	static Block check(String stepId, ActiveTarget.StageLine line, boolean bagKnown, ItemCounts carried, ItemCounts bank, int px, int py, int plane,
 		List<ActiveTarget.Spot> banks)
 	{
@@ -160,13 +187,14 @@ final class Preflight
 			Integer sx = line.hasPoint() ? line.getX() : null;
 			Integer sy = line.hasPoint() ? line.getY() : null;
 			Integer sp = line.hasPoint() ? line.getPlane() : null;
+			String foodTake = foodBankInstruction(p, carried, notes, bank);
 			if (count(ItemCounts.sum(carried, notes, bank), p) >= p.need())
 			{
 				ActiveTarget.Spot b = nearest(banks, px, py, plane);
 				if (b != null)
 				{
 					return new Block(p.getItem(), p.need(), have, Via.BANK,
-						target(stepId, "Take " + p.getItem() + " from the bank", b.getX(), b.getY(), b.getPlane(), null, null), sx, sy, sp);
+						target(stepId, foodTake == null ? "Take " + p.getItem() + " from the bank" : foodTake, b.getX(), b.getY(), b.getPlane(), null, null), sx, sy, sp);
 				}
 			}
 			if (p.hasPlace())

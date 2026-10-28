@@ -3,6 +3,7 @@
 
 import { useMemo } from 'react';
 import { useBridge } from '../bridge';
+import { useReadinessEngine } from '../readinessContext';
 import { useStore } from '../store';
 import { usePlayerState } from '../playerStateContext';
 import { protectionsFor } from './funding/snapshot';
@@ -30,7 +31,8 @@ export interface CleanupState {
 export function useCleanupAdvice(): CleanupState {
   const { state: playerState } = usePlayerState();
   const { gear, player, accountType, state, questsDone } = useBridge();
-  const { progress, mode, steps } = useStore();
+  const { progress, mode } = useStore();
+  const steps = useReadinessEngine().ctx.steps;
   const trade = useTradeRestriction();
   const { prefs, update } = useCleanupPrefs(player ?? null);
   const board = usePriceView(state === 'online' && gear?.inventory !== null);

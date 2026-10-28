@@ -26,13 +26,13 @@ describe('step readiness', () => {
     expect(low.status).toBe('MISSING_STATS');
     expect(low.problems[0]).toMatchObject({ kind: 'skill', label: 'Crafting 31', state: 'MISSING', action: { kind: 'link', href: '#/skills/CR' } });
     expect(low.problems[0].detail).toContain('3 short');
-    const ok = stepReadiness(input(s, { stats: { crafting: 31, woodcutting: 36 } }));
+    const ok = stepReadiness(input(s, { stats: { crafting: 31, woodcutting: 36, magic: 13 } }));
     expect(ok.problems).toEqual([]);
-    expect(ok.requirements.filter((r) => r.kind === 'skill').map((r) => r.state)).toEqual(['OK', 'OK']);
+    expect(ok.requirements.filter((r) => r.kind === 'skill').map((r) => r.state)).toEqual(['OK', 'OK', 'OK']);
     const unknown = stepReadiness(input(s));
     expect(unknown.status).toBe('UNKNOWN');
     expect(unknown.problems).toEqual([]);
-    expect(unknown.unknown.filter((r) => r.kind === 'skill').map((r) => r.label)).toEqual(['Crafting 31', 'Woodcutting 36']);
+    expect(unknown.unknown.filter((r) => r.kind === 'skill').map((r) => r.label).sort()).toEqual(['Crafting 31', 'Magic 13', 'Woodcutting 36']);
   });
 
   it('the game level wins over the one entered in the profile', () => {

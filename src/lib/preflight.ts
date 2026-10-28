@@ -3,7 +3,8 @@ import type { GearItem } from '../services/runeliteBridge';
 import { BANKS, EXCHANGE, bankTiles, type Point } from './travel';
 import { nameKey } from './checklist';
 import { usableAt } from './toolTiers';
-import { effectiveHeal, FOODS } from './foodAdvice';
+import { effectiveHeal, foodCarry, heldFood, FOODS } from './foodAdvice';
+import type { OwnedItem } from './checklist';
 
 /**
  * The item pre-flight guard for a quest stage step: while an item the step uses is not in the bag (or worn), the arrow does not lead to the step.
@@ -80,6 +81,36 @@ export const BANK_SPOTS: (Point & { label: string })[] = BANKS;
 /** The nearest bank, the stairs to an upstairs one counted (the plugin's Preflight.nearest weighs them the same way). */
 const nearest = <T extends Point>(from: Point, list: T[]): T | null => list.reduce<T | null>((m, c) => (!m || bankTiles(from, c) < bankTiles(from, m) ? c : m), null);
 
+/** Name whole physical bank food/notes using the same healing allocation as preparation. */
+function foodBankInstruction(p: StagePre, inp: PreflightInput): string | null {
+  const food = FOODS.find(item => nameKey(item.name) === nameKey(p.item));
+  if (!food) return null;
+  const primary = nameKey(p.item);
+  const names = [...new Map([p.item, ...(p.alt ?? [])].map(name => [nameKey(name), name])).values()];
+  const bankKnown = Boolean(inp.bank && inp.bankCurrent !== false);
+  const items = new Map<string, OwnedItem>();
+  const primaryItem = (item: GearItem) => p.id !== undefined && !item.noted ? item.id === p.id : nameKey(item.name) === primary;
+  for (const name of names) {
+    const matches = (item: GearItem) => nameKey(name) === primary ? primaryItem(item) : !primaryItem(item) && nameKey(item.name) === nameKey(name);
+    const count = (list: GearItem[], noted: boolean) => list.filter(item => Boolean(item.noted) === noted && matches(item)).reduce((n, item) => n + (item.count ?? 1), 0);
+    items.set(nameKey(name), { name, carried: count(inp.carried ?? [], false), noted: count(inp.carried ?? [], true),
+      ...(bankKnown ? { bank: count(inp.bank!, false) } : {}),
+    });
+  }
+  const stock = heldFood({ owned: { bankSeen: bankKnown, items }, bankSeen: bankKnown, equipment: {}, manual: {} },
+    { nameEn: p.item, heals: food.heals, anyOf: p.alt }, undefined, inp.levels?.hitpoints);
+  const selected = foodCarry(stock, p.n ?? 1);
+  if (selected.missing || !selected.take.length) return null;
+  const unnote = selected.take.some(item => item.noted);
+  if (!unnote && selected.take.every(item => nameKey(item.name) === primary)) return null;
+  const combined = new Map<string, { name: string; count: number }>();
+  for (const item of selected.take) {
+    const key = nameKey(item.name);
+    combined.set(key, { name: item.name, count: (combined.get(key)?.count ?? 0) + item.count });
+  }
+  return `${unnote ? 'Withdraw or unnote' : 'Take'} ${[...combined.values()].map(item => `${item.count} ${item.name}`).join(', ')} from the bank`;
+}
+
 /** The first missing item of the step and where to get it; null when the step may go on. */
 export function itemPreflight(line: Pick<QuestStageLine, 'pre'>, inp: PreflightInput): PreflightBlock | null {
   if (!line.pre?.length || inp.carried === null) return null;
@@ -88,9 +119,10 @@ export function itemPreflight(line: Pick<QuestStageLine, 'pre'>, inp: PreflightI
     const have = countOf(inp.carried, p, inp.levels);
     if (have >= need) continue;
     const base = { item: p.item, need, have, chip: missingChip(p.item) };
-    if (inp.bankCurrent !== false && inp.bank && countOf([...inp.carried, ...inp.bank], p, inp.levels) >= need) {
+    const foodTake = foodBankInstruction(p, inp);
+    if (foodTake || (inp.bankCurrent !== false && inp.bank && countOf([...inp.carried, ...inp.bank], p, inp.levels) >= need)) {
       const bank = nearest(inp.from, BANK_SPOTS);
-      if (bank) return { ...base, via: 'bank', target: bank, instruction: `Take ${p.item} from the bank` };
+      if (bank) return { ...base, via: 'bank', target: bank, instruction: foodTake ?? `Take ${p.item} from the bank` };
     }
     if (p.at) {
       return {

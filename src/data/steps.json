@@ -6605,6 +6605,12 @@
         "skill": "woodcutting",
         "min": 36,
         "boostable": true
+      },
+      {
+        "type": "skill",
+        "skill": "magic",
+        "min": 13,
+        "boostable": true
       }
     ],
     "membersOnly": true,
@@ -6642,7 +6648,7 @@
       {
         "nameEn": "Fire rune",
         "amount": 195,
-        "howToGet": "No weapons or armour are allowed on Entrana, so the zombies and the Tree spirit (level 101) are fought with magic. Fire Strike (Magic 13) uses 3 Fire, 2 Air and 1 Mind rune a cast; the spirit is weak to fire. The wiki suggests about 65 casts. Grand Exchange; check the current rune estimate.",
+        "howToGet": "For this guide's Fire Strike strategy: Magic 13, with 3 Fire, 2 Air and 1 Mind rune per cast. The 65-cast preparation allowance is not a measured kill forecast. Cast manually without a staff. Grand Exchange; check the current rune estimate.",
         "wikiItemId": 554,
         "iconUrl": "https://oldschool.runescape.wiki/images/Fire_rune.png"
       },
@@ -6671,7 +6677,7 @@
     "fields": [
       {
         "label": "Requirements",
-        "text": "Crafting 31, Woodcutting 36."
+        "text": "Crafting 31 and Woodcutting 36. This guide uses Fire Strike (Magic 13); other combat methods can complete the quest."
       },
       {
         "label": "Entrana",
@@ -6708,7 +6714,22 @@
         "type": "QUEST_COMPLETED",
         "questName": "Lost City"
       }
-    }
+    },
+    "itemsRecommended": [
+      {
+        "nameEn": "Tuna",
+        "amount": 4,
+        "heals": 10,
+        "anyOf": [
+          "Trout",
+          "Salmon",
+          "Lobster"
+        ],
+        "wikiItemId": 361,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tuna.png",
+        "howToGet": "Guide planning buffer for reaching the mushroom safespot: 4 Tuna (40 nominal HP). This is a setup allowance, not a full melee-fight budget. Withdraw what you own or buy the missing quantity."
+      }
+    ]
   },
   {
     "id": "S9-02",

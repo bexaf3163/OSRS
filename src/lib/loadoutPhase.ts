@@ -4,14 +4,45 @@ import { nameKey } from './checklist';
 
 export interface LoadoutPhase { id: string; index: number; confirmed: boolean }
 
+function confirmedLine(step: Step, instruction: QuestInstruction | null) {
+  if (!instruction || instruction.peeking || instruction.stepId !== step.id || !Number.isInteger(instruction.lineIndex)) return null;
+  return step.questStages?.stages.find(stage => stage.at === instruction.stageAt)?.do[instruction.lineIndex] ?? null;
+}
+
+/** An explicitly recommended food becomes required at a confirmed entry guard, then returns to optional after that entry. */
+export function entryFoodStep(step: Step, instruction: QuestInstruction | null = null): Step {
+  if (step.type !== 'quest' || step.itemsRequired?.some(item => item.heals)) return step;
+  const line = confirmedLine(step, instruction);
+  const added = new Map<string, NonNullable<Step['itemsRequired']>[number]>();
+  for (const pre of line?.pre ?? []) {
+    const key = nameKey(pre.item);
+    if (step.itemsRequired?.some(item => nameKey(item.nameEn) === key)) continue;
+    const food = step.itemsRecommended?.find(item => item.heals && nameKey(item.nameEn) === key);
+    if (!food) continue;
+    const previous = added.get(key);
+    const anyOf = previous ? (previous.anyOf ?? []).filter(name => pre.alt?.some(alt => nameKey(alt) === nameKey(name))) : pre.alt;
+    added.set(key, { nameEn: pre.item, amount: Math.max(Number(previous?.amount ?? 0), pre.n ?? 1), heals: food.heals,
+      howToGet: food.howToGet || pre.t || 'Withdraw food you own or buy the missing quantity before entering.',
+      ...(pre.id !== undefined ? { wikiItemId: pre.id } : food.wikiItemId !== undefined ? { wikiItemId: food.wikiItemId } : {}),
+      ...(food.iconUrl ? { iconUrl: food.iconUrl } : {}), ...(food.from ? { from: food.from } : {}), ...(anyOf?.length ? { anyOf: [...anyOf] } : {}),
+    });
+  }
+  if (!added.size) return step;
+  const food = [...added.values()];
+  return { ...step, itemsRequired: [...(step.itemsRequired ?? []), ...food],
+    itemsRecommended: step.itemsRecommended?.filter(item => !added.has(nameKey(item.nameEn))),
+    ...(step.goalItemsRequired && !step.goalItemsRequired.some(item => item.heals)
+      ? { goalItemsRequired: [...step.goalItemsRequired, ...food] } : {}),
+  };
+}
+
 /** Use confirmed canonical line keys: a coarse quest var can cover several bank-to-bank phases. */
 export function loadoutPhase(step: Step, instruction: QuestInstruction | null = null): LoadoutPhase | null {
   const loadouts = step.loadouts;
   if (!loadouts?.length) return null;
   const opening = { id: loadouts[0].id, index: 0, confirmed: false };
   const stages = step.questStages?.stages;
-  const current = stages?.find(s => s.at === instruction?.stageAt);
-  if (!instruction || instruction.peeking || instruction.stepId !== step.id || !current || !Number.isInteger(instruction.lineIndex) || !current.do[instruction.lineIndex]) return opening;
+  if (!instruction || !confirmedLine(step, instruction)) return opening;
   const boundaries = loadouts.map((l, index) => {
     if (index === 0) return [-Infinity, 0];
     if (l.fromLine) {

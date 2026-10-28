@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
+import { entryFoodStep } from '../src/lib/loadoutPhase';
 import stagesFile from '../src/data/questStages.json';
 
 type Pre = { item: string; at?: number[]; alt?: string[] };
@@ -17,7 +18,7 @@ describe('the in-game bag checks match the step kit', () => {
   // 3 planks, 90 steel nails and a hammer). Every player would otherwise be told to bring them; the line itself checks them when it applies.
   const ONLY_AFTER_A_DEATH = new Set(['S5-08 Plank', 'S5-08 Steel nails', 'S5-08 Hammer']);
 
-  it('every brought item a line checks is a required item of the step', () => {
+  it('every brought item a line checks is required in the canonical preparation for that line', () => {
     const missing: string[] = [];
     for (const step of allSteps) {
       const g = quests[step.id];
@@ -26,9 +27,11 @@ describe('the in-game bag checks match the step kit', () => {
       for (const l of step.loadouts ?? []) for (const t of l.take) listed.add(key(t.nameEn));
       for (const st of g.stages) {
         const got = new Set<string>();
-        for (const line of st.do) {
+        for (const [lineIndex, line] of st.do.entries()) {
+          const current = entryFoodStep(step, { stepId: step.id, stageAt: st.at, lineIndex, peeking: false });
+          const entry = new Set([...listed, ...(current.itemsRequired ?? []).flatMap(item => [item.nameEn, ...(item.anyOf ?? [])]).map(key)]);
           for (const p of line.pre ?? []) {
-            if (p.at || got.has(key(p.item)) || listed.has(key(p.item)) || (p.alt ?? []).some((a) => listed.has(key(a)))) continue;
+            if (p.at || got.has(key(p.item)) || entry.has(key(p.item)) || (p.alt ?? []).some((a) => entry.has(key(a)))) continue;
             if (RECOMMENDED_ON_PURPOSE.has(`${step.id} ${p.item}`) || ONLY_AFTER_A_DEATH.has(`${step.id} ${p.item}`)) continue;
             missing.push(`${step.id} ${st.at}:${line.k} ${p.item}`);
           }

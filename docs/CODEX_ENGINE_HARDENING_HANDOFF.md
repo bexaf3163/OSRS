@@ -1,5 +1,20 @@
 # Engine hardening — Codex continuation, 2026-10-26
 
+## Current continuation — 2.80.13 quest-entry preparation
+
+Preserves Claude2.80.12 heap fix (`e3f8642`, receipt`4e86414`): keep `-Xmx1024m`, `-ea` and other launcher arguments. Earlier2.80.11 receipts below remain historical.
+
+Implemented through existing engines:
+- `entryFoodStep` promotes only explicitly recommended food matching the confirmed current quest entry guard, only when no global food budget exists. Readiness, preparation, Shopping, cleanup protection and funding consume the same projected steps. Future previews, mismatched/disconnected cursors and existing declared budgets are unchanged; entry food returns to optional after entry.
+- Lost City: selected Fire Strike strategy checks Magic13, distinguished from official quest unlock requirements. Four Tuna (40 nominalHP) are an explicitly labelled guide setup buffer, not a Wiki quantity or full-fight survival estimate. Entry alternatives are Trout/Salmon/Lobster. Existing65-cast allowance is labelled as the guide's allowance, not the Wiki Crumble Undead cast estimate. Do not bring the dungeon axe onto Entrana.
+- Quest entry guards name actual physical alternative withdrawals/notes through existing food allocation (e.g.5Salmon for4Tuna). Bank freshness/UNKNOWN and realHP caps remain; Java and TS match. Food warning healing is a lower bound after equivalent rounding.
+- Consumer dependency equivalence checks only skills that its training producer can supply. Other missing or unknown skills remain independent blockers. No producer completion/save mutation or quest/item bypass is inferred.
+
+Final local checks passed:2257 TypeScript tests/191 files,647 Java tests, 1037 full browser checks,92 source Electron checks, build/TypeScript, data0errors/warnings and rebuilt pluginJAR. The browser test covers confirmed entry→inside and physical Salmon withdrawal; units cover shared Shopping/funding protection and UNKNOWN cases. Publication/portable digest receipt pending; actual game acceptance remains assigned to Claude.
+
+Remaining: known-mode food usability (Mackerel/Cod/Bass must not count as edible F2P alternatives); acquisition travel/fees, goal-wide supplies/future-purchase economics and source-backed remaining Members models. These are separate follow-ups, not claimed solved. Do not duplicate engines or infer unavailable inventory/membership facts.
+
+
 ## Current continuation - 2.80.11 published (2026-10-28)
 
 Normal releases2.80.8-2.80.11 are published; all their Checks/Release workflows succeeded. Each EXE below was downloaded and hashed; its hash matches GitHub's asset digest and the downloaded SHA256SUMS. No preview releases were substituted.
@@ -139,10 +154,10 @@ The registry now has **40 recipes, 9 stations and 26 methods**; the training cat
 
 ## Important limits and remaining work
 
-1. Obtain browser smoke, source Electron and isolated portable acceptance in a working execution environment. Check narrow/large Skills layouts, existing upgrade sentence, navigation/preparation, single HUD and login lifecycle. Do not change Windows security or weaken gates to force a PASS.
+1. Earlier runtime blockers are resolved: browser, source Electron and isolated portable checks passed on the published releases listed above. Repeat relevant gates for new changes; do not present the old environment blocker as current. Live HUD/game acceptance still belongs to Claude.
 2. Claude performs reachable live tests in CLAUDE_IN_GAME_ACCEPTANCE.md. Unit tests do not validate real XP/h, food consumption, profits, route winding or altar arrival. Do not grind/spend merely to force inaccessible scenarios.
 3. Altar timing assumes arrival near the known exit portal and uses the existing transition allowance. Walking/banking only: no pouches, teleports or run-restoring effects. Validate actual transitions/directions in game. Rune yield changes proceeds, not XP/essence.
 4. Fallback food ranking, next-trip kit reserves and a shared acquisition allowance are implemented. Actual acquisition routes/fees, goal-wide replenishment, future purchases and automatic food substitution across all consumers remain open. Combat still has bounded eating assumptions and is not a survival guarantee; minimum effective-healing bounds are not a calibrated per-bite simulation.
 5. Complete remaining guide-only Members models from verified sources, plus route potion/armour economics. Do not claim all peaceful skills are fully personalized. General enchant/alchemy retains manual expendable-target/budget safeguards. Do not fabricate uniform recipes or defaults. Continuous wine banking optimization and further Members coverage remain outside this candidate.
 6. Existing gathering approximations remain (competition/Forestry, tolls/deposit boxes, Musa Point boat banking); see the main handoff. Static roadmap brackets may differ from the personalized pick. The four previously listed duplicate Wiki readers are consolidated and replay-verified locally.
-7. Before publishing: inspect latest main and reconcile Claude's concurrent work; preserve saves/IDs/unknown ownership; run every gate; then make a new version and release receipt. The owner requested the verified source changes on main. No version bump or portable release is included; runtime gates remain outstanding.
+7. Before publishing: inspect latest main and reconcile Claude's concurrent work; preserve saves/IDs/unknown ownership; run every gate; then make a new version and release receipt. The owner requests verified batches on main as normal portable releases; record each actual release receipt. Earlier unreleased-candidate wording is superseded by the published receipts above.

@@ -1,5 +1,20 @@
 # Claude → Codex handoff (living document)
 
+## Current continuation — 2.80.13 quest-entry preparation
+
+Preserves Claude2.80.12 heap fix (`e3f8642`, receipt`4e86414`): keep `-Xmx1024m`, `-ea` and other launcher arguments. Earlier2.80.11 receipts below remain historical.
+
+Implemented through existing engines:
+- `entryFoodStep` promotes only explicitly recommended food matching the confirmed current quest entry guard, only when no global food budget exists. Readiness, preparation, Shopping, cleanup protection and funding consume the same projected steps. Future previews, mismatched/disconnected cursors and existing declared budgets are unchanged; entry food returns to optional after entry.
+- Lost City: selected Fire Strike strategy checks Magic13, distinguished from official quest unlock requirements. Four Tuna (40 nominalHP) are an explicitly labelled guide setup buffer, not a Wiki quantity or full-fight survival estimate. Entry alternatives are Trout/Salmon/Lobster. Existing65-cast allowance is labelled as the guide's allowance, not the Wiki Crumble Undead cast estimate. Do not bring the dungeon axe onto Entrana.
+- Quest entry guards name actual physical alternative withdrawals/notes through existing food allocation (e.g.5Salmon for4Tuna). Bank freshness/UNKNOWN and realHP caps remain; Java and TS match. Food warning healing is a lower bound after equivalent rounding.
+- Consumer dependency equivalence checks only skills that its training producer can supply. Other missing or unknown skills remain independent blockers. No producer completion/save mutation or quest/item bypass is inferred.
+
+Final local checks passed:2257 TypeScript tests/191 files,647 Java tests, 1037 full browser checks,92 source Electron checks, build/TypeScript, data0errors/warnings and rebuilt pluginJAR. The browser test covers confirmed entry→inside and physical Salmon withdrawal; units cover shared Shopping/funding protection and UNKNOWN cases. Publication/portable digest receipt pending; actual game acceptance remains assigned to Claude.
+
+Remaining: known-mode food usability (Mackerel/Cod/Bass must not count as edible F2P alternatives); acquisition travel/fees, goal-wide supplies/future-purchase economics and source-backed remaining Members models. These are separate follow-ups, not claimed solved. Do not duplicate engines or infer unavailable inventory/membership facts.
+
+
 ## Current continuation - 2.80.11 published (2026-10-28)
 
 Normal releases2.80.8-2.80.11 are published; all their Checks/Release workflows succeeded. Each EXE below was downloaded and hashed; its hash matches GitHub's asset digest and the downloaded SHA256SUMS. No preview releases were substituted.

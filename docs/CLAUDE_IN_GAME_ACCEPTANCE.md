@@ -2,6 +2,13 @@
 
 Owner decision,2026-10-24: Codex finishes implementation and automated verification; Claude performs in-game tests. These are deferred acceptance tasks, not passed checks and not a blocker requiring the owner to test now. Read CLAUDE_NEXT_SESSION.md for the exact current source, EXE and remaining work before starting. Older preview evidence does not apply to newer code.
 
+## 2.80.13 quest-entry acceptance — not live-verified
+
+- Lost City on a reachable quest state: confirmed Entrana departure/dungeon entry requires the labelled food buffer; five Salmon satisfy four Tuna by healing, and bank withdrawal/HUD name Salmon. Notes route to the bank and cannot count as edible carried food. An unread/stale bank never becomes a purchase deficit.
+- After confirmed entry, the app stops demanding the optional entry buffer. A manual future-line preview must not move current preparation. Existing global quest food budgets remain unchanged.
+- Magic12 blocks the selected Fire Strike strategy;13 passes; unread Magic stays unchecked. The UI must not present13 as an official quest unlock requirement. Safespot/food/runes are guide assumptions, not a guaranteed fight budget.
+- The Entrana axe is acquired from zombies, not withdrawn for departure. Preserve original route/saves and do not replay a completed quest to manufacture live evidence.
+
 ## Setup and preservation
 
 1. Record the installed app/plugin/protocol versions and current character, mode, active step and relevant real levels. Preserve the player's saves, notes, skips, selected plan and equipment. Use the latest named verified portable and confirm its SHA256 against the handoff/release.

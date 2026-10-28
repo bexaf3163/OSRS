@@ -1,5 +1,26 @@
 # Claude continuation — authoritative takeover
 
+## Current continuation — 2.80.13 quest-entry preparation
+
+Preserves Claude2.80.12 heap fix (`e3f8642`, receipt`4e86414`): keep `-Xmx1024m`, `-ea` and other launcher arguments. Earlier2.80.11 receipts below remain historical.
+
+Implemented through existing engines:
+- `entryFoodStep` promotes only explicitly recommended food matching the confirmed current quest entry guard, only when no global food budget exists. Readiness, preparation, Shopping, cleanup protection and funding consume the same projected steps. Future previews, mismatched/disconnected cursors and existing declared budgets are unchanged; entry food returns to optional after entry.
+- Lost City: selected Fire Strike strategy checks Magic13, distinguished from official quest unlock requirements. Four Tuna (40 nominalHP) are an explicitly labelled guide setup buffer, not a Wiki quantity or full-fight survival estimate. Entry alternatives are Trout/Salmon/Lobster. Existing65-cast allowance is labelled as the guide's allowance, not the Wiki Crumble Undead cast estimate. Do not bring the dungeon axe onto Entrana.
+- Quest entry guards name actual physical alternative withdrawals/notes through existing food allocation (e.g.5Salmon for4Tuna). Bank freshness/UNKNOWN and realHP caps remain; Java and TS match. Food warning healing is a lower bound after equivalent rounding.
+- Consumer dependency equivalence checks only skills that its training producer can supply. Other missing or unknown skills remain independent blockers. No producer completion/save mutation or quest/item bypass is inferred.
+
+Final local checks passed:2257 TypeScript tests/191 files,647 Java tests, 1037 full browser checks,92 source Electron checks, build/TypeScript, data0errors/warnings and rebuilt pluginJAR. The browser test covers confirmed entry→inside and physical Salmon withdrawal; units cover shared Shopping/funding protection and UNKNOWN cases. Publication/portable digest receipt pending; actual game acceptance remains assigned to Claude.
+
+Remaining: known-mode food usability (Mackerel/Cod/Bass must not count as edible F2P alternatives); acquisition travel/fees, goal-wide supplies/future-purchase economics and source-backed remaining Members models. These are separate follow-ups, not claimed solved. Do not duplicate engines or infer unavailable inventory/membership facts.
+
+
+## Startup check — 2026-10-28
+
+Owner reported a black screen after RuneLite/plugin updates and PC-Tune changes. Earlier logs contain `Unable to unmarshal hd.tiledLighting` / `DefaultBoolean.true`. At inspection the profile already held `hd.tiledLighting=DEFAULT`; Codex did not edit graphics settings, clear caches, or disable plugins. Relaunch through the running 2.80.12 app reached Play Now. Log confirms RuneLite1.13.4, `-Xmx1024m`, 117HD ZoneRenderer and `117 HD started successfully!` (17:44:40 local). No world login/gameplay performed. This proves one successful startup, not the root cause or performance stability. Do not attribute the failure to heap alone. PC-Tune changes were not modified.
+
+Upstream `e3f8642` and `4e86414` fast-forwarded into the working branch; unfinished quest-entry-food audit edits preserved. Their next release must be2.80.13 or later;2.80.12 is already published. Codex instructions retain the heap invariant.
+
 ## 2.80.12 - RuneLite heap fix (2026-10-28)
 
 `electron/runelite-launcher.cjs` JVM_ARGS now uses `-Xmx1024m` instead of `-Xmx768m`. OSRS Path starts RuneLite itself and ignores RuneLite's config.json, so this constant is the client's only heap setting. 768 MB leaves little heap headroom with 117 HD + Quest Helper + Shortest Path (client working set about 2.2 GB), and GC pressure can show as stutter. Do not lower it back; keep `-ea` and the other arguments as they are.

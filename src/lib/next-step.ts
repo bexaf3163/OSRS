@@ -81,8 +81,9 @@ export function dependencyFacts(
     // not a hard requirement of a consumer with explicit, already-reached entry skills.
     // This proof belongs to this edge only: callers without a consumer get no completion fact.
     if (!consumer?.requires.includes(id)) return undefined;
-    const needs = consumer.requirements?.filter(r => r.type === 'skill') ?? [];
-    if (!needs.some(r => goals.some(g => g.skill === r.skill))) return undefined;
+    // Only the goals this producer can supply belong to this edge. Other consumer skills are checked separately.
+    const needs = consumer.requirements?.filter(r => r.type === 'skill').filter(r => goals.some(g => g.skill === r.skill)) ?? [];
+    if (!needs.length) return undefined;
     return needs.length > 0 && needs.every(r => {
       const have = level(r.skill);
       return have !== undefined && Number.isFinite(have) && have >= r.min;
