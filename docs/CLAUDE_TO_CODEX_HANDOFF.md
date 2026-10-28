@@ -1,14 +1,16 @@
 # Claude → Codex handoff (living document)
 
-## Current continuation - 2.80.11 preparation (2026-10-28)
+## Current continuation - 2.80.11 published (2026-10-28)
 
-Normal releases2.80.8-2.80.10 are published; all their Checks/Release workflows succeeded. Each EXE below was downloaded and hashed; its hash matches GitHub's asset digest and the downloaded SHA256SUMS. No preview releases were substituted.
+Normal releases2.80.8-2.80.11 are published; all their Checks/Release workflows succeeded. Each EXE below was downloaded and hashed; its hash matches GitHub's asset digest and the downloaded SHA256SUMS. No preview releases were substituted.
 
 | Version | Source | Release / Checks | EXE bytes | SHA256 |
 | --- | --- | --- | --- | --- |
 |2.80.8|6795a624cdc0634501214381995a899ea0b89c73|40589844389 /40589844345|102082401|71b0ad15bed53d8eb7f6338da6115136ce0aa8cc47462535ba83f531e3178d27|
 |2.80.9|a15567a4bd3894a594a47b430980e554778e5a37|40590735860 /40590735962|102081268|ba9ea5a1b3d1bbb94375de2e91c744f9f1d4d40dc3ae726e979ede33ea22393d|
 |2.80.10|0786ab4a6dc6e66f15c1fca42919d41581179ad4|40592783566 /40592783510|102081647|f50b94c8ac6653b6b8531ecab530b018415152c2deaf73fb906f58bd4fa724c3|
+
+|2.80.11|398fdc9eed7c56d174d0c9fc30d7a17afe38798a|40674526384 /40674526398|102083285|88f439f834f8a54ae581a12577ee4a1109022b726750d15c508909b7f3cf6978|
 
 Delivered engine repairs (do not rebuild):
 -2.80.7/8: shared food holding/allocation across readiness, departure, Shopping, funding and Java Checklist/quest guards. Sum healing before rounding; cap by real HP; preserve unread-bank uncertainty, exact quest ingredients and manual ownership keys; allocate one physical stack once without mutating snapshots. Merged alternatives must satisfy every source.
@@ -20,10 +22,10 @@ Verification already delivered:2.80.8 local2239TS/646Java/1035browser/75sourceEl
 
 Additional native acceptance: profile-list Merge preserves every character and both raw original lists; native/browser lists agree after reload. First-write-copy errors/history are tested. Real update2.80.5->2.80.6 passed40549572912: download/digest/install/automatic restart, oldEXE/cleanup removal, healthy recheck and byte-identical S1-01 save. Do not repeat this completed normal update test as unfinished.
 
-Current local2.80.11 extends the same native file/writer pipeline:
+Published2.80.11 extends the same native file/writer pipeline:
 -Compare the actual file with its last-read revision before any primary or session-copy write. Unread existing files, external replacements/deletions/creations and read errors do not authorize overwrite. Successful physical writes alone advance the revision.
 -The existing progress warning retains browser edits and explains export/reload. Before admitting a changed source on reload, retain its exact bytes as <name>.external-<time>-<uuid>.json. If retention fails, keep the source protected. The shared guard covers progress and character-list files.
--Final local acceptance:2247TS tests/190files,92sourceElectron checks,53focused profile-UI checks, build/TypeScript,data0errors/warnings and rebuiltJar passed. Native acceptance covers the actual warning/export/reload path and exact external-byte retention, alongside all earlier backup/conflict/history/restart cases. Normal2.80.11 CI/portable acceptance is next; record its final receipt before calling publication complete.
+-Final local acceptance:2247TS tests/190files,92sourceElectron checks,53focused profile-UI checks, build/TypeScript,data0errors/warnings and rebuiltJar passed. Native acceptance covers the actual warning/export/reload path and exact external-byte retention, alongside all earlier backup/conflict/history/restart cases. Normal2.80.11 Release/Checks and packaged acceptance passed; actual downloaded EXE receipt is in the table above.
 
 Limits/open work: this is pre-write detection, not filesystem watching, automatic conflict merging or cross-process locking. Interrupted-write/power-loss recovery, broader historical audit cases, acquisition travel/fees and verified Members coverage remain open. Finite owned Strength doses/costs are already shared/tested; do not invent mandatory goal-wide potion purchases. In-game acceptance belongs to Claude. Preserve one compact Balanced default and existing route IDs/saves.
 
