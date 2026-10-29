@@ -23,6 +23,8 @@ import type { PriceView } from './funding/quotes';
 import { coinsPerMinute, coinTimeShare, earningsOrder } from './lootValue';
 import type { TradeRestriction } from './tradeRestriction';
 import { requirementCost } from './funding/need';
+import { allocateMaterialStock } from './materialStock';
+import type { HeldUnits } from './doses';
 
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
@@ -134,8 +136,10 @@ function methodRequirement(n: MethodNeed, state: PlayerState): Requirement {
     : { type: 'item', name: n.name, count };
 }
 
-function needStatus(n: MethodNeed, state: PlayerState): NeedStatus {
-  const r = evaluate(methodRequirement(n, state), state);
+function needStatus(n: MethodNeed, state: PlayerState, allocated?: HeldUnits): NeedStatus {
+  const requirement: Requirement = allocated && n.type === 'item'
+    ? { type: 'item', name: n.name, count: n.count ?? 1 } : methodRequirement(n, state);
+  const r = evaluate(requirement, state, allocated);
   const label = n.type === 'skill' ? `${n.skill.charAt(0).toUpperCase()}${n.skill.slice(1)} ${n.min}`
     : n.type === 'quest' ? n.quest
     : n.type === 'tool' ? n.skill === 'woodcutting' ? 'Axe' : 'Pickaxe'
@@ -160,14 +164,17 @@ export interface MethodView {
 
 export function viewMethod(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodView {
   if (m.kit === 'strike-spell') m = { ...m, name: `${strikeRecipe(state).spell.name} on cows and chickens` };
-  const needs = methodNeeds(m, state).map((n) => needStatus(n, state));
+  const declared = methodNeeds(m, state);
+  const materials = allocateMaterialStock(state, declared.flatMap((n, index) => n.type === 'item'
+    ? [{ key: `method:${index}`, nameEn: n.name, count: n.count ?? 1, anyOf: n.anyOf, equip: n.equip }] : []));
+  const needs = declared.map((n, index) => needStatus(n, state, materials.get(`method:${index}`)));
   if (m.manualSetup) needs.push({ kind: 'item', label: m.manualSetup, state: 'UNKNOWN', detail: 'Manual setup has not been verified.' });
   if (m.kit === 'f2p-bow' && state.mode !== 'f2p') needs.push({ kind: 'item', label: 'Members ranged loadout', state: 'UNKNOWN', detail: 'This starter kit models ordinary F2P bows only; check your Members weapon and ammunition separately.' });
   const locked = needs.filter((n) => (n.kind === 'quest' || n.kind === 'skill') && n.state === 'MISSING');
   const prep = needs.filter((n) => (n.kind === 'item' || n.kind === 'tool') && (n.state === 'MISSING' || n.state === 'PARTIAL' || n.state === 'BANK'));
   const unchecked = needs.filter((n) => n.state === 'UNKNOWN');
   const cash = coinsOf(state).total;
-  const kit = cash !== null && prices ? requirementCost(methodNeeds(m, state).map(n => methodRequirement(n, state)), state, prices) : null;
+  const kit = cash !== null && prices ? requirementCost(declared.map(n => methodRequirement(n, state)), state, prices) : null;
   const fundingShortfall = cash !== null && kit !== null && kit > cash ? Math.ceil(kit - cash) : 0;
   return { method: m, status: locked.length ? 'LOCKED' : prep.length || m.manualSetup ? 'PREP' : 'READY', missing: [...locked, ...prep], unchecked, ...(fundingShortfall ? { fundingShortfall } : {}) };
 }

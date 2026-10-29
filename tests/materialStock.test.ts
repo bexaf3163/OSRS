@@ -12,6 +12,7 @@ import { buildNeed } from '../src/lib/funding/need';
 import { transportSources } from '../src/lib/liveTransport';
 import { itemById } from '../src/data';
 import { market } from './funding/market';
+import { trainingMethods, viewMethod } from '../src/lib/trainingRouter';
 import type { Step } from '../src/types';
 
 const demand = (nameEn: string, count: number, anyOf: string[] = [], key = nameEn) => ({ key, nameEn, count, anyOf });
@@ -129,4 +130,18 @@ it('does not subtract owned stock twice from a confirmed remaining acquisition',
   expect(m.rows[0]).toMatchObject({ channel: 'shop', qty: 3, unitPrice: 2, cost: 6 });
   expect(m.funding.minimum.cost).toBe(6);
   expect(transportSources(s, () => 100)('Silk', 3)).toMatchObject({ kind: 'shop', price: 2 });
+});
+
+it('a newly declared recipe inherits allocation rules in method selection as well as preparation', () => {
+  const recipe = { ...trainingMethods.find(m => m.id === 'ck-meat')!, id: 'new-recipe-contract',
+    needs: [{ type: 'item' as const, name: 'Raw beef', count: 26, anyOf: ['Raw chicken'] },
+      { type: 'item' as const, name: 'Raw chicken', count: 8 }] };
+  const step: Step = { ...meat, id: recipe.id, itemsRequired: recipe.needs.map(n => ({ nameEn: n.name, amount: n.count, anyOf: n.anyOf, howToGet: '' })) };
+  const short = state({ 'Raw beef': { bank: 0 }, 'Raw chicken': { carried: 26, bank: 0 } });
+  expect(models(short, step).prep.lines.find(l => l.name === 'Raw beef')).toMatchObject({ where: 'MISSING', toGet: 8 });
+  expect(viewMethod(recipe, short)).toMatchObject({ status: 'PREP', missing: [expect.objectContaining({ label: 'Raw beef ×26', state: 'PARTIAL' })] });
+  const ready = state({ 'Raw beef': { carried: 8, bank: 0 }, 'Raw chicken': { carried: 26, bank: 0 } });
+  expect(viewMethod(recipe, ready).status).toBe('READY');
+  const unread = state({ 'Raw beef': { bank: 0 }, 'Raw chicken': {} });
+  expect(viewMethod(recipe, unread).unchecked).toEqual(expect.arrayContaining([expect.objectContaining({ label: 'Raw beef ×26' })]));
 });

@@ -42,6 +42,10 @@ Do not rewrite working systems, replace state engines, create duplicate APIs, cr
 
 Prefer focused surgical diffs. Do not rewrite whole files when only a small section needs modification. Do not touch unrelated formatting, whitespace, architecture, naming, comments, or components.
 
+### Reusable fixes and new content
+
+For a recurring defect, fix the shared engine and its affected consumers rather than adding a quest ID, method ID or item-name exception. New content must declare its requirements and mechanics through the existing schemas. Add a regression using different or newly declared content to prove that the rule is inherited. Content declarations and genuinely new mechanics still need validation; shared fixes do not automatically support mechanics the engines do not model.
+
 ## 3. LANGUAGE RULES
 
 All player-facing UI, RuneLite HUD, overlays, dialogs, warnings, and recommendations must be in native English:
