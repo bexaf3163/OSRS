@@ -4,13 +4,12 @@ Updated 2026-10-29. Read this first; open historical records only for the area b
 
 ## Current delivery
 
-**2.80.18 candidate: compact Skills.** Publication receipt follows CI/portable verification. Local build/types, 2,280 tests/195 files, data checks, 725 full desktop assertions plus 88 final focused assertions, 92 isolated native assertions, bridge JAR and Java testClasses passed. Dark desktop and light/150% fixture screenshots were inspected. Train has one recommendation with visible preparation/unknown/funding/risk states; Plan holds analysis/alternatives/roadmap; Calculator and Reference retain tools/levels/F2P evidence. No save, formula, route, protocol or launcher changes. Existing route-step TrainingCard presentation is preserved. No live-game acceptance claimed.
+**2.80.18 is published and verified.** [Normal portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.80.18).
 
-**2.80.17 is published and verified.** [Normal portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.80.17).
-
-- Product source: `bf8d7a7c155a687816c2fa64906a0dd32c6492c1`; verified receipt `87eb7db` on main. Later documentation-only commits do not change this binary.
-- Checks `40861418634` and Release `40861418582` passed full app/Java/desktop/native/isolated-portable gates. Local: 2,274 tests/194 files, build/types, data checks, targeted desktop, bridge JAR and testClasses passed.
-- Downloaded EXE: 102089580 bytes. SHA256 `d873dd634072d753bad0b23b01bbd036729ca590b22604ba441b9d3cab55cd56` matched GitHub and SHA256SUMS. No 2.80.17 release action remains.
+- Product source: `0a5f1cbea75961ef6c4865eaa17d6bde5be05cb6` on main. Later documentation-only commits do not change this binary.
+- Checks `40871190338` and Release `40871190286` passed full app/Java/desktop/native/isolated-portable gates. Local build/types, 2,280 tests/195 files, data checks, 725 full desktop assertions plus 88 final focused assertions, 92 isolated native assertions, bridge JAR and Java testClasses passed.
+- Downloaded EXE: 102089080 bytes. SHA256 `1c13640e6cbeb1a973204bab1affc8de5dc30bce1c05bdc1619798ed57ad0b70` matched GitHub asset metadata and SHA256SUMS. No 2.80.18 release action remains.
+- Train has one recommendation with visible preparation/unknown/funding/risk states; Plan holds analysis/alternatives/roadmap; Calculator and Reference retain tools/levels/F2P evidence. Dark desktop and light/150% fixture screenshots were inspected. Existing route-step TrainingCard presentation is preserved. No save, formula, route, protocol or launcher changes; no live-game acceptance claimed.
 - Automated bridge fixtures and renders are not live-game evidence.
 
 ## Owner decisions
