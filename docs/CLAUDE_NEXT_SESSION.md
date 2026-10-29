@@ -4,14 +4,14 @@ Updated 2026-10-29. Read this first; open historical records only for the area b
 
 ## Current delivery
 
-**2.80.19 candidate: shared Members gathering.** Members oak/teak now dispatch through existing skillingRates; all six current Woodcutting catalogue methods have models, not all possible tree/tool mechanics. Registry rebuilt against primary Wiki data. Teak uses ordinary chopping, not the removed mixed 34k–93k guide range. Seers oak is approximate/drop-only; supported Isle of Souls teaks have verified spawns/drop-only. No invented banking income. Shared physical-tool lookup now uses heldExact: an owned unsupported Infernal axe no longer becomes a pretend Bronze axe rate. Unsupported explicit planned tools and F2P use of Members methods return no model estimate. Synthetic new-content regressions and shared gathering/funding tests cover this. Full publication receipt follows gates; portable18 remains verified below.
+**2.80.19 is published and verified.** [Normal portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.80.19).
 
-**2.80.18 is published and verified.** [Normal portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.80.18).
-
-- Product source: `0a5f1cbea75961ef6c4865eaa17d6bde5be05cb6` on main. Later documentation-only commits do not change this binary.
-- Checks `40871190338` and Release `40871190286` passed full app/Java/desktop/native/isolated-portable gates. Local build/types, 2,280 tests/195 files, data checks, 725 full desktop assertions plus 88 final focused assertions, 92 isolated native assertions, bridge JAR and Java testClasses passed.
-- Downloaded EXE: 102089080 bytes. SHA256 `1c13640e6cbeb1a973204bab1affc8de5dc30bce1c05bdc1619798ed57ad0b70` matched GitHub asset metadata and SHA256SUMS. No 2.80.18 release action remains.
-- Train has one recommendation with visible preparation/unknown/funding/risk states; Plan holds analysis/alternatives/roadmap; Calculator and Reference retain tools/levels/F2P evidence. Dark desktop and light/150% fixture screenshots were inspected. Existing route-step TrainingCard presentation is preserved. No save, formula, route, protocol or launcher changes; no live-game acceptance claimed.
+- Product source: `a999964705fa57c24063b4814b3d217667bcd7c3` on main. Later documentation-only commits do not change this binary.
+- Checks `40914442923` and Release `40914443130` passed full app/Java/desktop/native/isolated-portable gates. Local build/types, 2,286 tests/195 files, data checks (zero errors/warnings), 10 Members-gathering desktop and five tool-proof desktop assertions, bridge JAR and Java testClasses passed.
+- Downloaded EXE: 102090641 bytes. SHA256 `c908a7cab24f5ab96f8578cf5d7eb41349aa60337792834b382ddb61e23aedff` matched GitHub asset metadata, size, source commit and SHA256SUMS. No 2.80.19 release action remains.
+- Members oak/teak now dispatch through existing skillingRates; all six current Woodcutting catalogue methods have models, not all possible tree/tool mechanics. Registry rebuilt against primary Wiki data. Teak uses ordinary chopping, not the removed mixed 34k–93k range. Seers oak is approximate/drop-only; supported Isle of Souls teaks have verified spawns/drop-only. No invented banking income.
+- Shared physical-tool lookup uses heldExact: an owned unsupported Infernal axe no longer becomes a Bronze axe rate. Unsupported explicit planned tools and F2P use of Members methods return no model estimate. Synthetic new-content regressions and shared gathering/funding tests cover this; usable unsupported tools still satisfy preparation.
+- Compact 2.80.18 presentation is retained: Train has one recommendation; Plan holds analysis/roadmap; Calculator and Reference retain tools/levels/F2P evidence. No save, route, protocol or launcher changes; no live-game acceptance claimed.
 - Automated bridge fixtures and renders are not live-game evidence.
 
 ## Owner decisions
