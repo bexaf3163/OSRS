@@ -13,6 +13,7 @@ import { CompanionStrip } from '../components/CompanionStrip';
 import { AccountSync } from '../components/AccountSync';
 import { Welcome } from '../components/Welcome';
 import { TrackedSkillCard } from '../components/TrackedSkillCard';
+import { Page } from '../ledger';
 
 export function PathCompact({ focusStep }: { focusStep?: string }) {
   const { progress, steps, setStep } = useStore();
@@ -43,7 +44,8 @@ export function PathCompact({ focusStep }: { focusStep?: string }) {
   };
 
   return (
-    <div className="page compact-page">
+    <Page side="r" className="compact" label="Current step">
+    <div className="page compact-page la-scroll">
       <h1 className="visually-hidden">Path</h1>
       <Welcome compact />
       <AccountSync compact />
@@ -63,5 +65,6 @@ export function PathCompact({ focusStep }: { focusStep?: string }) {
         </footer>
       </article>
     </div>
+    </Page>
   );
 }

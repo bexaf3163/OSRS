@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { plugins, reference } from '../data';
 import type { Plugin } from '../types';
 import { Blocks } from '../components/Blocks';
-import { IconBack, IconChevron } from '../components/Icons';
+import { IconChevron } from '../components/Icons';
 import { Inline } from '../components/Inline';
+import { Eyebrow, Page } from '../ledger';
 
 /** The index is grouped by what the player is trying to do; every section stays in exactly one group. */
 const TOPICS: { title: string; ids: string[] }[] = [
@@ -13,13 +14,16 @@ const TOPICS: { title: string; ids: string[] }[] = [
 ];
 
 export function ReferencePage({ section }: { section?: string }) {
-  if (section) return <ReferenceSection id={section} />;
   const known = new Set(TOPICS.flatMap((t) => t.ids));
   // A section that is not in a group (a new one) still shows up, after the groups.
   const rest = reference.sections.filter((s) => !known.has(s.id));
   const groups = [...TOPICS, ...(rest.length ? [{ title: 'More', ids: rest.map((s) => s.id) }] : [])];
+  const shown = section ?? groups.flatMap((g) => g.ids)[0];
   return (
-    <div className="page">
+    <>
+    <Page side="l" basis={440} className="reference-index" label="Reference">
+    <div className="page la-scroll">
+      <Eyebrow>LORE</Eyebrow>
       <header className="page-head">
         <h1>Reference</h1>
         <p className="muted">{reference.description}</p>
@@ -33,7 +37,7 @@ export function ReferencePage({ section }: { section?: string }) {
             <ul className="nav-list card">
               {items.map((s) => (
                 <li key={s.id}>
-                  <a href={`#/reference/${s.id}`}><span>{s.title}</span><IconChevron className="chevron" /></a>
+                  <a href={`#/reference/${s.id}`} aria-current={s.id === shown ? 'page' : undefined}><span>{s.title}</span><IconChevron className="chevron" /></a>
                 </li>
               ))}
             </ul>
@@ -41,6 +45,11 @@ export function ReferencePage({ section }: { section?: string }) {
         );
       })}
     </div>
+    </Page>
+    <Page side="r" className="reference-article" label="Article">
+      <div className="la-scroll">{shown && <ReferenceSection id={shown} />}</div>
+    </Page>
+    </>
   );
 }
 
@@ -48,7 +57,6 @@ function ReferenceSection({ id }: { id: string }) {
   const sec = reference.sections.find((s) => s.id === id);
   return (
     <div className="page">
-      <a className="back" href="#/reference"><IconBack />Reference</a>
       {!sec ? <h1>Section not found</h1> : (
         <>
           <header className="page-head"><h1>{sec.title}</h1></header>

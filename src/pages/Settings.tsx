@@ -20,6 +20,7 @@ import { AccountSync } from '../components/AccountSync';
 import { BackupSection, DiagnosticsSection, UpdatesSection, ProfilesSection, SessionSection } from './SettingsExtra';
 import { CurrentAction } from '../components/StepWorkspace';
 import { nextStep } from '../lib/next-step';
+import { Eyebrow, Page } from '../ledger';
 
 type SettingsTab = 'look' | 'game' | 'progress' | 'app';
 const SETTINGS_TABS: [SettingsTab, string][] = [['look', 'Appearance'], ['game', 'RuneLite'], ['progress', 'Progress and copies'], ['app', 'App']];
@@ -76,19 +77,27 @@ export function SettingsPage() {
   };
 
   return (
-    <div className="page">
+    <>
+    <Page side="l" basis={340} className="settings-index" label="Settings sections">
+    <div className="page la-scroll">
+      <Eyebrow>THE SATCHEL</Eyebrow>
       <header className="page-head">
         <h1>Settings</h1>
       </header>
-
-      <div className="settings-layout">
-      <div className="mode-toggle settings-tabs" role="tablist" aria-label="Settings sections">
+      <div className="mode-toggle settings-tabs" role="tablist" aria-label="Settings sections" aria-orientation="vertical">
         {SETTINGS_TABS.map(([k, label]) => (
           <button key={k} type="button" role="tab" aria-selected={tab === k} className={`mode-btn ${tab === k ? 'is-active' : ''}`} onClick={() => chooseTab(k)}>{label}</button>
         ))}
       </div>
-
-      <div className="settings-content">
+      <p className="muted small">
+        OSRS Path {__APP_VERSION__}
+        {bridge?.isPortable() ? ' · portable version' : ''}
+        {' · '}<a href="https://github.com/bexaf3163/OSRS/releases/latest" target="_blank" rel="noopener noreferrer">New versions</a>
+      </p>
+    </div>
+    </Page>
+    <Page side="r" className="settings" label={SETTINGS_TABS.find(([k]) => k === tab)?.[1]}>
+      <div className="settings-content la-scroll">
       {tab === 'look' && (
         <>
         <div className="appearance-workspace">
@@ -178,15 +187,9 @@ export function SettingsPage() {
           <DiagnosticsSection />
         </>
       )}
-
       </div>
-      </div>
-      <p className="muted small">
-        OSRS Path {__APP_VERSION__}
-        {bridge?.isPortable() ? ' · portable version' : ''}
-        {' · '}<a href="https://github.com/bexaf3163/OSRS/releases/latest" target="_blank" rel="noopener noreferrer">New versions</a>
-      </p>
-    </div>
+    </Page>
+    </>
   );
 }
 

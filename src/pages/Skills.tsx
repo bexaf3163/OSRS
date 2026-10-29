@@ -10,13 +10,22 @@ import { SkillGlyph } from '../components/SectionShell';
 import { useBridge } from '../bridge';
 import { SKILL_NAMES, type SkillName } from '../lib/skillGuide';
 import { useTracked } from '../lib/skillTrack';
+import { SkillDetailPage } from './SkillDetail';
+import { Eyebrow, Page } from '../ledger';
 import { f2pAdviceFor, f2pAdviceLabel, F2P_PRIORITY_LABEL } from '../lib/f2pSkillAdvice';
 
-export function SkillsPage() {
+/** The Skills spread: the character sheet on the left, the chosen skill (or the followed one) on the right. */
+export function SkillsPage({ param, selectedSkill }: { param?: string; selectedSkill?: string }) {
   const { progress, steps, mode } = useStore();
   const stage = currentStage(steps, progress);
+  const tracked = useTracked();
+  const trackedHome = tracked ? [...skills, ...membersSkills].find((s) => s.levelSkills.includes(tracked.skill)) : undefined;
+  const shown = param ?? trackedHome?.id;
   return (
-    <div className="page">
+    <>
+    <Page side="l" basis={560} className="skills-index" label="Skills">
+    <div className="page la-scroll">
+      <Eyebrow>CHARACTER SHEET</Eyebrow>
       <header className="page-head">
         <h1>Skills</h1>
         <p className="muted">Choose a skill for a recommended method. Goals follow stage {stage}.</p>
@@ -36,6 +45,23 @@ export function SkillsPage() {
         </section>
       )}
     </div>
+    </Page>
+    <Page side="r" className="skills-detail" label="Skill">
+      <div className="la-scroll">
+        {shown ? (
+          <SkillDetailPage key={`${shown}:${selectedSkill ?? ''}`} id={shown} selectedSkill={param ? selectedSkill : tracked?.skill} />
+        ) : (
+          <div className="page">
+            <Eyebrow>TRAINING</Eyebrow>
+            <h2 className="la-t">Choose a skill</h2>
+            <p className="muted">Pick a skill on the left: its recommended method, the calculator, the leveling plan and the reference open here.</p>
+            <h3 className="subhead">{xpData.title}</h3>
+            <XpTable />
+          </div>
+        )}
+      </div>
+    </Page>
+    </>
   );
 }
 

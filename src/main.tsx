@@ -13,6 +13,10 @@ import './styles.css';
 import './clear-path.css';
 import './modern-path.css';
 import './cockpit.css';
+import './ledger/fonts.css';
+import './ledger/ledger.css';
+import './ledger/extras.css';
+import './ledger/app.css';
 
 applyTextScale(loadTextScale());
 

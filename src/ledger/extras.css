@@ -1,0 +1,10 @@
+/* Additions the static reference did not need: states for real data and keyboard focus. */
+.la-root button:focus-visible,.la-root input:focus-visible{outline:2px solid var(--la-gold2);outline-offset:2px}
+.la-root button:disabled{opacity:.45;cursor:default}
+.la-slot:disabled:hover{border-color:#4a3822;color:var(--la-parch2)}
+.la-gem.la-off{color:var(--la-mute)}
+.la-gem.la-off i{background:#5a4a38;box-shadow:none;animation:none}
+.la-oracle .la-q input{flex:1;min-width:0;background:none;border:0;outline:0;font:inherit;font-style:italic;color:var(--la-ink2)}
+.la-oracle button.la-hit{width:100%;text-align:left}
+.la-root button.la-irow{background:none;border:0;font:inherit;color:inherit}
+.la-root button.la-med{padding:0}

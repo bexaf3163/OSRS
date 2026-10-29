@@ -26,6 +26,7 @@ import { ItemIcon } from '../components/WikiDrawer';
 import { NavigateButton } from '../components/NavigateButton';
 import { PlaceMapView, usePlaceMap } from '../components/PlaceMap';
 import { ActionNotes, ActionSource, ActionTitle, OwnershipNote } from '../components/GearPrompt';
+import { Eyebrow, Page } from '../ledger';
 
 const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 function SlotGlyph({ slot }: { slot: GearSlot }) {
@@ -215,7 +216,10 @@ export function GearPage() {
   const levelsKnown = Boolean(stats?.attack || progress.levels.attack);
 
   return (
-    <div className="page gear-page">
+    <div className="page gear-page la-spread">
+    <Page side="l" basis={560} className="gear" label="Worn gear">
+    <div className="page la-scroll">
+      <Eyebrow>EQUIPMENT · {advice.live ? 'WORN NOW' : 'LAST KNOWN'}</Eyebrow>
       <header className="page-head">
         <h1>Gear</h1>
         <p className="muted small gear-context">
@@ -245,6 +249,11 @@ export function GearPage() {
         </div>
       )}
 
+    </div>
+    </Page>
+    <Page side="r" className="gear-advisor" label="Gear advisor">
+    <div className="page la-scroll">
+      <Eyebrow>GEAR ADVISOR</Eyebrow>
       {advice.live && <Recommendation advice={advice} stepId={fightStep?.id} onShow={places.show} priceUnknown={priceUnknown} pricesFailed={pricesFailed} />}
 
       {advice.live && (advice.actions.length > 1 || advice.armour.length > 0 || advice.goals.length > 0) && (
@@ -290,6 +299,8 @@ export function GearPage() {
         </p>
       </details>}
       <PlaceMapView view={places.view} onClose={places.close} />
+    </div>
+    </Page>
     </div>
   );
 }

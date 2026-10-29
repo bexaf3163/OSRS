@@ -1,0 +1,278 @@
+/* The app inside the Ledger: the existing components keep their markup and get the book's ink, parchment and type.
+   Imported after styles.css, clear-path.css, modern-path.css and cockpit.css. Rules start with ":root" so they win
+   over the old ":root:not([data-look="classic"])" layer at the same depth. */
+
+/* ---- the stage fills the window 1:1 (the reference is 1440x900) ---- */
+.la-stage{width:100%;height:100%;transform:none}
+body{background:#050302}
+.la-root{--font:var(--la-serif)}
+.la-root .skip-link{position:absolute;left:8px;top:-60px;z-index:50;padding:6px 12px;background:var(--la-gold);color:#2a1a08;font-family:var(--la-disp);font-size:11px;letter-spacing:.14em}
+.la-root .skip-link:focus{top:6px}
+#la-hotbar-slot:empty{display:none}
+/* The bookmarks stick out of the right page; its text still scrolls inside. */
+.la-pg.la-r{overflow:visible}
+.la-root a.la-rb,.la-root a.la-tool,.la-root a.la-stat{text-decoration:none}
+.la-root a.la-tool{color:var(--la-parch2)}
+.la-root a.la-tool.la-on,.la-root a.la-tool:hover{color:var(--la-gold2)}
+.la-root a.la-stat{color:inherit}
+.la-root a.la-rb{color:var(--la-mute)}
+.la-root a.la-rb.la-on{color:#2a1a08}
+.la-rb:focus-visible,.la-root a.la-tool:focus-visible,.la-root a.la-stat:focus-visible{outline:2px solid var(--la-gold2);outline-offset:2px}
+
+/* ---- the RuneLite link in the HUD: the app's indicator drawn as the gem ---- */
+.la-gem{gap:12px}
+.la-gem .bridge-indicator{display:flex;align-items:center;gap:9px;color:var(--la-mute);font-style:italic;font-size:15px;text-decoration:none;background:none;border:0;padding:0;min-height:0}
+.la-gem .bridge-indicator.is-online{color:#a8d6bf}
+.la-gem .bridge-indicator.is-stale{color:var(--la-gold2)}
+.la-gem .bridge-dot{width:12px;height:12px;flex:none;font-size:0;transform:rotate(45deg);background:#5a4a38;box-shadow:none;border-radius:0}
+.la-gem .is-online .bridge-dot{background:radial-gradient(circle at 30% 30%,#b8ffe0,#2f9a72);box-shadow:0 0 12px #3fcf95aa;animation:la-pl 2.4s infinite}
+.la-gem .is-stale .bridge-dot{background:radial-gradient(circle at 30% 30%,#ffe7a8,#b98a2f)}
+.la-gem .bridge-label-short{display:none}
+:root .la-root .la-gem .bridge-label{max-width:none;overflow:visible;white-space:nowrap}
+:root .la-root .la-gem .launch-runelite{height:32px;padding:0 10px;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--la-gold);background:#150e09;color:var(--la-gold2);font-family:var(--la-disp);font-size:10px;letter-spacing:.14em;border-radius:0;box-shadow:none}
+:root .la-root .la-gem .launch-runelite:hover{background:#2a1d0e}
+@media (prefers-reduced-motion: reduce){.la-gem .is-online .bridge-dot,.la-gem i{animation:none}}
+
+/* ---- notices above the book ---- */
+.la-main>:is(.update-banner,.profile-banner,.plaque,[role="alert"]):not(.la-book){margin:0 0 18px;background:linear-gradient(90deg,#2a1d12,#3a281a);color:var(--la-parch);border:1px solid #8a6d3a;border-radius:0;box-shadow:inset 0 0 0 3px #2a1d12,inset 0 0 0 4px #7b6030;padding:9px 14px;font-size:15.5px}
+.la-main>:is(.update-banner,.profile-banner,.plaque) a{color:var(--la-gold2)}
+
+/* ---- parchment: the tokens of the existing components on a page, in the dialogs and toasts ---- */
+.la-pg,dialog{
+  --bg:#e9dec2;--surface:#f3ead2b3;--surface-2:#e4d6b4;--surface-3:#d8c7a0;--text:#2b1d11;--muted:#5a4630;
+  --border:#8a6d3a59;--border-strong:#8a6d3a;--accent:#b04722;--accent-ink:#9c3d1c;--accent-soft:#c4512a1c;--on-accent:#fff;
+  --gold:#8a6d3a;--gold-ink:#6a4f22;--gold-soft:#c9b78d66;--done:#3d7a60;--done-soft:#4f8f7424;--warn:#8a5a12;--warn-soft:#d9a64a33;
+  --focus:#b04722;--danger:#9a2a1a;--danger-soft:#c4512a24;--members:#6a4a8a;--members-soft:#7a4a8a1a;
+  --radius:2px;--radius-sm:2px;--font:var(--la-serif);--bg-art:none;--glass-glow:transparent;
+  color-scheme:light;color:var(--text);font-family:var(--la-serif)}
+.la-pg{font-size:17px;line-height:1.35}
+.la-pg .la-scroll{display:flex;flex-direction:column;gap:12px;padding-bottom:12px}
+.la-pg .la-scroll>*{flex:none}
+.la-pg .page{max-width:none;width:auto;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.la-pg>.page{min-height:0;flex:1}
+:root .la-pg :is(.page-head,.page-head-v2){margin:0;padding:0;border:0;background:none;display:flex;flex-direction:column;gap:6px}
+:root .la-pg .page-head h1,:root .la-pg h1:not(.la-t){font-family:var(--la-disp);font-weight:600;font-size:30px;line-height:1.1;color:var(--la-ink);letter-spacing:.02em;margin:2px 0 0}
+:root .la-pg h2:not(.la-t){font-family:var(--la-disp);font-weight:600;font-size:19px;line-height:1.2;color:var(--la-ink);letter-spacing:.04em}
+:root .la-pg h3{font-family:var(--la-serif);font-weight:600;font-size:19px;line-height:1.2;color:var(--la-ink)}
+:root .la-pg :is(.eyebrow,.kicker){font-family:var(--la-disp);font-size:11px;letter-spacing:.24em;color:var(--la-ember);font-weight:600;text-transform:none}
+/* Block, not flex: a flex heading would split its text into lines for innerText and screen readers. The rule is a bottom border. */
+:root .la-pg :is(.subhead,.card-title,.topic-title,.section-title){font-family:var(--la-disp);font-size:12px;letter-spacing:.2em;color:var(--la-ember);font-weight:700;display:block;margin:6px 0 4px}
+:root .la-pg :is(.subhead,.topic-title){padding-bottom:4px;border-bottom:1px solid #8a6d3a66}
+:root .la-pg :is(.subhead,.card-title) .muted{font-family:var(--la-serif);letter-spacing:0;font-size:14px;font-weight:400}
+:root .la-pg :is(.muted,.text-muted){color:var(--la-ink2)}
+:root .la-pg .small{font-size:15px}
+:root .la-pg p{line-height:1.4}
+:root .la-pg a{color:#9c3d1c;text-decoration-color:#9c3d1c66}
+:root .la-pg a:hover{color:var(--la-ember)}
+:root .la-pg :is(code,.code){font-family:var(--la-disp);font-size:.78em;letter-spacing:.06em;background:#c9b78d55;border:1px solid #8a6d3a66;color:var(--la-ink2);border-radius:0;padding:0 5px}
+:root .la-pg kbd{font-family:var(--la-serif);border:1px solid #8a6d3a;background:#f2e9d1;color:var(--la-ink2);border-radius:0;box-shadow:none}
+
+/* cards, panels and folds: parchment boxes with a thin ink rule */
+:root .la-pg :is(.card,.quest-panel,.training,.quest,.step-status,.one-trip,.notice,.funding-card,.combat-plan,.money-reco,.shop-budget,.review-banner,.dock-panel,.dock-empty,.goals-now,.gear-reco){background:#f3ead28c;border:1px solid #8a6d3a66;border-radius:2px;box-shadow:none;color:var(--text)}
+:root .la-pg :is(.card,.quest-panel){padding:12px 16px}
+:root .la-pg details>summary{cursor:pointer}
+:root .la-pg :is(.notice.is-error,.is-blocked,.is-danger){border-color:var(--la-ember)}
+:root .la-pg hr{border:0;height:12px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='12'><path d='M0 6h170M230 6h170' stroke='%238a6d3a' stroke-width='1'/><path d='M200 1l5 5-5 5-5-5z' fill='%238a6d3a'/></svg>") center/100% 12px no-repeat}
+
+/* buttons: the Ledger's engraved plates (Cinzel draws lowercase as small capitals, so labels keep their case for screen readers and tests) */
+:root .la-pg .btn,:root dialog .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:30px;padding:5px 14px;font-family:var(--la-disp);font-size:12px;font-weight:600;letter-spacing:.08em;line-height:1.2;border:1px solid #8a6d3a;color:var(--la-ink);background:#d9c89f;border-radius:0;box-shadow:none;text-decoration:none}
+:root .la-pg .btn:hover:not(:disabled),:root dialog .btn:hover:not(:disabled){background:#cdb988}
+:root .la-pg .btn-primary,:root dialog .btn-primary{background:linear-gradient(#d8b560,#a98433);color:#2a1a08;border-color:#7b6030;font-weight:700}
+:root .la-pg .btn-primary:hover:not(:disabled),:root dialog .btn-primary:hover:not(:disabled){background:linear-gradient(#e2c274,#b08a3a)}
+:root .la-pg .btn-ghost,:root dialog .btn-ghost{background:transparent;border-color:#8a6d3a88}
+:root .la-pg .btn-ghost:hover:not(:disabled){background:#c9b78d55}
+:root .la-pg .btn-danger{background:var(--la-ember);border-color:#8a2f14;color:#fff}
+:root .la-pg .btn-sm{min-height:26px;padding:3px 10px;font-size:11px}
+:root .la-pg .btn-link{background:none;border:0;padding:0;min-height:0;color:#9c3d1c;font-family:var(--la-serif);font-size:inherit;letter-spacing:0;text-decoration:underline}
+:root .la-pg .btn:disabled{opacity:.45}
+:root .la-pg .icon-btn{border-radius:0;border:1px solid #8a6d3a88;background:transparent;color:var(--la-ink2)}
+:root .la-pg .icon-btn:hover{background:#c9b78d55;color:var(--la-ink)}
+
+/* segmented controls and local tabs: the Ledger's seg */
+:root .la-pg :is(.segmented,.mode-toggle,.subtabs,.status-tabs){display:inline-flex;flex-wrap:wrap;gap:0;padding:0;border:1px solid #8a6d3a;border-radius:0;background:transparent;box-shadow:none;width:max-content;max-width:100%}
+:root .la-pg :is(.segmented .seg,.mode-toggle .mode-btn,.subtabs [role="tab"],.status-tabs .status-tab){padding:5px 14px;min-height:0;font-family:var(--la-disp);font-size:11.5px;letter-spacing:.08em;color:var(--la-ink2);background:transparent;border:0;border-radius:0;box-shadow:none}
+:root .la-pg :is(.segmented .seg.is-active,.segmented .seg[aria-pressed="true"],.mode-toggle .mode-btn.is-active,.subtabs [aria-selected="true"],.status-tabs .is-active){background:var(--la-ink);color:var(--la-gold2)}
+.la-seg a{padding:5px 14px;font-family:var(--la-disp);font-size:10px;letter-spacing:.16em;color:var(--la-ink2);text-decoration:none}
+.la-seg a.la-on{background:var(--la-ink);color:var(--la-gold2)}
+.la-pg>.la-seg{width:max-content;margin-bottom:10px}
+
+/* chips, badges, tags */
+:root .la-pg :is(.badge,.chip,.tag,.pill){font-family:var(--la-disp);font-size:10.5px;letter-spacing:.1em;padding:2px 8px;border:1px solid #8a6d3a;border-radius:0;background:#c9b78d55;color:var(--la-ink2);box-shadow:none}
+:root .la-pg :is(.badge-members,.is-members .badge){border-color:var(--members);color:var(--members)}
+:root .la-pg :is(.badge-ingame,.is-ready){border-color:var(--la-ok);color:var(--la-ok)}
+
+/* fields */
+:root .la-pg :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),select,textarea),:root dialog :is(input[type="search"],input[type="text"],select){font-family:var(--la-serif);font-size:16px;padding:5px 10px;border:1px solid #8a6d3a;background:var(--surface);color:var(--la-ink);border-radius:0;box-shadow:none}
+:root .la-pg :is(input,select,textarea):focus-visible{outline:2px solid var(--la-ember);outline-offset:1px}
+:root .la-pg :is(input[type="checkbox"],input[type="radio"],input[type="range"]){accent-color:var(--la-ember)}
+
+/* tables: the Ledger's ruled table */
+:root .la-pg table{width:100%;border-collapse:collapse;font-size:16px;background:transparent}
+:root .la-pg :is(th,thead td){font-family:var(--la-disp);font-size:10.5px;letter-spacing:.16em;text-align:left;color:var(--la-ember);padding:6px 8px;border-bottom:1.5px solid #8a6d3a;background:transparent;font-weight:600}
+:root .la-pg td{padding:7px 8px;border-bottom:1px dotted #8a6d3a88;vertical-align:top;background:transparent}
+:root .la-pg :is(tr.is-current,tr.is-highlight,tr.highlight) td{background:#c4512a14}
+:root .la-pg .table-wrap{border:0;border-radius:0;background:transparent;box-shadow:none}
+
+/* lists of links (Reference, Journal) */
+:root .la-pg .nav-list{list-style:none;padding:0;margin:0;border:0;background:none;box-shadow:none}
+:root .la-pg .nav-list li a{display:flex;align-items:center;gap:10px;padding:7px 4px;border-bottom:1px dotted #8a6d3a88;color:var(--la-ink);font-size:17.5px;text-decoration:none;border-radius:0;background:none}
+:root .la-pg .nav-list li a[aria-current="page"]{background:#c4512a14;color:var(--la-ember)}
+:root .la-pg .nav-list li a:hover{background:#c9b78d55}
+:root .la-pg .reference-index .section{margin:0;padding:0;border:0;background:none}
+
+/* ---- the Journey's right page: plaque, NOW and the step ---- */
+.cockpit .la-scroll{gap:10px}
+:root .la-root .cockpit h1.la-t.step-view-title{font-family:var(--la-disp);font-weight:600;font-size:38px;line-height:1.08;color:var(--la-ink);letter-spacing:.01em;margin:4px 0 8px}
+.cockpit .la-chips .step-id{margin-left:0;white-space:nowrap;line-height:14px;font-family:var(--la-disp);font-size:10px;letter-spacing:.14em;padding:3px 10px;border:1px solid #8a6d3a;color:var(--la-ink2);background:#c9b78d55}
+.cockpit.is-switching .la-scroll{opacity:.6;transition:opacity .15s}
+.cockpit .step-blocked{font-style:italic;color:var(--la-ink2);display:flex;gap:6px;align-items:center;margin:0}
+.la-plaque:not(:has(.step-status)){display:none}
+.la-plaque>div:last-child{flex:1;min-width:0}
+:root .la-plaque .step-status{background:none;border:0;padding:0;margin:0;box-shadow:none;color:var(--la-parch);--text:var(--la-parch);--muted:#cdbb92;--border:#7b603088}
+:root .la-plaque .step-status :is(.status-line,.status-text){display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:16px;color:var(--la-parch);background:none;border:0;padding:0}
+:root .la-plaque .step-status .status-text strong{font-weight:500}
+:root .la-plaque .step-status .status-actions{margin-left:auto;display:flex;gap:6px}
+:root .la-plaque .step-status :is(.small,.muted,p){color:#cdbb92;font-size:14.5px}
+:root .la-plaque .step-status a{color:var(--la-gold2)}
+:root .la-plaque .btn{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;min-height:0;font-family:var(--la-disp);font-size:10.5px;letter-spacing:.14em;border:1px solid var(--la-gold);color:var(--la-gold2);background:#150e09;border-radius:0;box-shadow:none}
+:root .la-plaque .btn:hover{background:#2a1d0e}
+:root .la-plaque .ready-ring{--ring:var(--la-gold2)}
+.la-now{margin-top:6px}
+.la-now::before{content:none}
+:root .la-root .la-now .current-action{background:none;border:0;padding:0;margin:0;box-shadow:none;display:flex;flex-direction:column;gap:0;align-items:stretch;flex:1;min-width:0}
+:root .la-root .la-now .current-action-icon{display:none}
+:root .la-root .la-now .current-action-body{width:auto;min-width:0}
+:root .la-root .la-now .current-action .eyebrow{position:absolute;top:-9px;left:14px;background:#e4d6b4;padding:0 8px;font-size:10px;letter-spacing:.3em;font-weight:700;color:var(--la-ember);margin:0}
+:root .la-root .la-now .current-action-title{font-family:var(--la-serif);font-size:22px;font-weight:600;line-height:1.15;color:var(--la-ink);margin:0}
+:root .la-root .la-now .current-action-place{color:var(--la-ink2);font-size:16px;margin-top:2px}
+:root .la-root .la-now .current-action-side{margin-top:8px;gap:6px;width:auto;max-width:100%}
+:root .la-root .la-now .la-acts{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;margin:6px 0 0;gap:8px}
+:root .la-root .la-now .manual-complete{display:flex;gap:6px;flex-wrap:wrap}
+.la-view{display:flex;flex-direction:column;gap:12px}
+.cockpit .quest-cursor-progress{font-family:var(--la-disp);font-size:10.5px;letter-spacing:.14em;color:var(--la-ink2)}
+.cockpit .quest-cursor-segments span{background:#b9a578}
+.cockpit .quest-cursor-segments .is-past{background:var(--la-ok)}
+.cockpit .quest-cursor-segments .is-now{background:var(--la-ember)}
+.la-dock{display:block}
+.la-ribbons{max-height:calc(100% - 40px)}
+.la-root .la-rbn{border:0;text-transform:uppercase}
+
+/* the road */
+.la-roadlist,.la-rows{list-style:none}
+.la-road .la-rrow svg{position:static}
+.la-root .la-rrow{width:100%;text-align:left;cursor:pointer;padding-right:6px}
+.la-root .la-rrow:hover .la-nm{color:var(--la-ember)}
+.la-rrow .la-nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.la-rrow .la-ypl,.la-rrow .la-qp,.la-rrow .la-m{flex:none;white-space:nowrap}
+.la-rrow.la-sel{background:linear-gradient(90deg,transparent 52px,#c4512a14 52px)}
+.la-rrow.la-sel::after{content:"";position:absolute;left:52px;top:8px;bottom:8px;width:3px;background:var(--la-ember)}
+.la-stagehead.la-members b{border-color:#6a4a8a}
+.la-rrow.flash,.la-rrow.is-flash{animation:la-flash 1.2s}
+@keyframes la-flash{from{background:#4f8f7440}}
+
+/* ---- Skills: the character sheet's tiles ---- */
+:root .skills-index .skill-grid-compact{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+:root .skills-index .skill-card{display:flex;align-items:center;gap:7px;padding:6px 8px;min-width:0;border:1px solid #8a6d3a88;background:#c9b78d44;border-radius:0;box-shadow:none;position:relative}
+:root .skills-index .skill-card:hover,:root .skills-index .skill-card.is-tracked{background:#c4512a1c;border-color:var(--la-ember)}
+:root .skills-index .skill-card a{color:var(--la-ink);text-decoration:none}
+:root .skills-index .skill-name{font-size:15px;line-height:1.05;color:var(--la-ink2)}
+.skills-detail .back{display:none}
+
+/* ---- dialogs: parchment sheets in a gold frame ---- */
+dialog{background:linear-gradient(#e9dec2,#d6c59f);color:var(--la-ink);border:1px solid var(--la-gold);border-radius:0;box-shadow:0 0 0 5px #2a1d12,0 0 0 6px var(--la-goldd),0 40px 80px #000}
+/* Dialogs are opaque sheets: the page behind them never shows through. */
+dialog{--surface:#efe5cc;--surface-2:#e4d6b4;font-size:16.5px;line-height:1.35;
+  --la-serif:'EB Garamond',Georgia,serif;--la-disp:'Cinzel',Georgia,serif;--la-ink:#2b1d11;--la-ink2:#5a4630;--la-ember:#c4512a;--la-ok:#4f8f74;--la-gold:#c9a24b;--la-gold2:#ecd18a;--la-goldd:#7b6030;--la-parch:#e9dec2}
+dialog::backdrop{background:#050302cc;backdrop-filter:blur(3px)}
+:root dialog :is(h2,h3){font-family:var(--la-disp);font-weight:600;color:var(--la-ink);letter-spacing:.04em}
+:root dialog.drawer .drawer-panel{background:transparent;color:var(--la-ink)}
+:root dialog.search-dialog{width:min(720px,calc(100vw - 48px));margin-top:120px;padding:22px 26px}
+:root .search-dialog .search-box{border:0;border-bottom:1.5px solid #8a6d3a;border-radius:0;background:transparent;box-shadow:none;padding-bottom:10px}
+:root .search-dialog .search-input{font-family:var(--la-serif);font-size:26px;font-style:italic;background:transparent;border:0;color:var(--la-ink2);box-shadow:none}
+:root .search-dialog .search-group{font-family:var(--la-disp);font-size:10px;letter-spacing:.24em;color:var(--la-ember);margin:14px 0 4px;background:none}
+:root .search-dialog .search-hit{font-size:18px;border-radius:0;color:var(--la-ink)}
+:root .search-dialog .search-hit.is-active{background:#c4512a1c;outline:1px solid var(--la-ember)}
+:root .search-dialog .search-hit-sub{font-size:14px;font-style:italic;color:var(--la-ink2)}
+
+/* ---- toasts: a leather tag ---- */
+:root .la-root :is(.toast,.toast-view){background:linear-gradient(90deg,#2a1d12,#3a281a);color:var(--la-parch);border:1px solid #8a6d3a;border-radius:0;font-family:var(--la-serif)}
+
+/* ---- smaller windows: the same book, tighter ---- */
+@media (max-width:1360px){
+  .la-main{padding-right:48px}
+  .la-pg.la-l{flex-basis:400px!important}
+  .la-slot{width:104px}
+  .la-slot.la-go{width:124px}
+}
+@media (max-width:1180px){
+  .la-hud{gap:14px;padding:0 16px}
+  .la-who i,.la-tool kbd{display:none}
+  .la-tool{font-size:0;gap:0}
+  .la-gem .bridge-label{display:none}
+  .la-gem .bridge-label-short{display:inline}
+  .la-spine{width:84px}
+  .la-rb{font-size:9px;letter-spacing:.1em}
+  .la-rb.la-on{width:80px}
+  .la-pg{padding:20px 22px 18px}
+  .la-pg.la-l{flex-basis:340px!important}
+  .la-hotbar{gap:6px}
+  .la-slot{width:84px;font-size:9px;letter-spacing:.08em}
+  .la-slot.la-go{width:100px}
+  .la-done-seal{width:78px;height:78px;margin:0 4px}
+}
+@media (max-width:980px){
+  .la-world button{padding:5px 10px}
+  .la-book,:root .la-root .la-book>.la-spread{flex-direction:column;overflow:auto}
+  .la-book .la-pg{flex:none!important;overflow:visible}
+  .la-book .la-pg .la-scroll{overflow:visible}
+  .la-pg.la-l,.la-pg.la-r{border-radius:4px;box-shadow:none}
+  .la-ribbons{position:static;flex-direction:row;flex-wrap:wrap;margin:-6px 0 10px}
+  .la-rbn{writing-mode:horizontal-tb;width:auto;padding:6px 12px;border-radius:0 0 3px 3px}
+  .la-rbn:hover{width:auto;padding-left:12px}
+  .la-rbn.la-on{width:auto}
+  .la-main{padding:10px 12px 10px 4px}
+  .la-hotbar{height:auto;flex-wrap:wrap}
+}
+@media (max-width:700px){
+  .la-hud{flex-wrap:wrap;height:auto;padding:6px 10px;gap:8px}
+  .la-hud .la-sp{display:none}
+  .la-tb,.la-crest .la-who,.la-stat>div:last-child{display:none}
+  .la-spine{width:64px}
+  .la-rb span{display:none}
+  .la-rb.la-on{width:60px}
+}
+/* The compact view beside the game: one page, nothing around it but the HUD. */
+.la-root.is-compact .la-spine,.la-root.is-compact .la-tb{display:none}
+.la-root.is-compact .la-main{padding:10px}
+
+/* ---- the old shell's padding and positions, restated for the book ---- */
+:root .la-root main#main.la-main{max-width:none;width:auto;padding:16px 56px 16px 12px;margin:0}
+:root .la-root .toast-region{bottom:132px!important}
+:root .la-root .la-pg :is(.shop-head-v2,.page-head){align-items:flex-start;text-align:left}
+:root .la-root .la-pg summary.subhead{list-style:none}
+:root .la-root .la-pg summary.subhead::-webkit-details-marker{display:none}
+:root .la-root .la-pg summary.subhead::before{content:"";display:inline-block;margin-right:8px;vertical-align:middle;border-left:6px solid var(--la-ember);border-top:4px solid transparent;border-bottom:4px solid transparent;transition:transform .15s}
+:root .la-root .la-pg details[open]>summary.subhead::before{transform:rotate(90deg)}
+
+/* Skills: one row per tile, as on the character sheet */
+:root .la-root .skills-index .skill-tile .skill-card-link{flex-direction:row;justify-content:flex-start;align-items:center;text-align:left;min-height:0;gap:7px;padding:0}
+:root .la-root .skills-index .skill-card{padding:6px 8px;gap:0}
+:root .la-root .skills-index .skill-glyph{width:20px;height:20px;margin:0 2px}
+:root .la-root .skills-index .skill-card-link>.muted{flex:none;margin-left:auto;font-family:var(--la-disp);font-size:19px;line-height:1;font-weight:600;color:var(--la-ink)}
+:root .la-root .skills-index .f2p-skill-badge{position:absolute;top:-1px;right:5px;font-size:11px}
+
+/* Settings: the sections as the satchel's index */
+:root .la-root .settings-index .settings-tabs{display:flex;flex-direction:column;width:100%;border:0;margin:6px 0 10px}
+:root .la-root .settings-index .settings-tabs .mode-btn{justify-content:flex-start;text-align:left;width:100%;padding:9px 6px;font-family:var(--la-serif);font-size:18px;letter-spacing:0;color:var(--la-ink);border-bottom:1px dotted #8a6d3a88}
+:root .la-root .settings-index .settings-tabs .mode-btn.is-active{background:#c4512a14;color:var(--la-ember)}
+
+/* Search: the Oracle's line */
+:root .search-dialog .search-input{border:0;outline:none;padding-left:0}
+:root .search-dialog .search-box:focus-within{border-bottom-color:var(--la-ember)}
+:root .la-root .skills-index .skill-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+:root .la-root .la-book>.la-spread{display:flex;flex-direction:row;align-items:stretch;flex:1;min-width:0;min-height:0;position:relative;max-width:none;width:auto;margin:0;padding:0;gap:0;grid-template-columns:none}
+/* Short windows: the spine's bookmarks give up height before anything is cut. */
+.la-spine{overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+.la-rb{flex:0 1 84px;min-height:54px}
+@media (max-width:980px){:root .la-root .la-book>.la-spread{flex-direction:column}}
+.cockpit .la-chips .step-id{display:inline-block;height:20px;padding:2px 10px;overflow:hidden}

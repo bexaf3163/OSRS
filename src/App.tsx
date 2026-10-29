@@ -1,13 +1,11 @@
-// The frame: the header, the page switch (hash routing), the global observers of preparation and of the RuneLite link.
-import { useEffect, useState, type ComponentType } from 'react';
+// The frame: the Ledger (title strip, HUD, spine and the open book), the page switch (hash routing),
+// the global observers of preparation and the RuneLite link.
+import { useEffect, useState } from 'react';
 import { findSkill, reference } from './data';
 import { useStore } from './store';
 import { useRoute, type Page } from './lib/router';
-import { IconCart, IconCompact, IconGear, IconJournal, IconMoney, IconPath, IconSearch, IconSettings, IconSkills } from './components/Icons';
+import { desktop } from './lib/desktop';
 import { SearchBox } from './components/SearchBox';
-import { HeaderMode } from './components/ModeToggle';
-import { CompassMark } from './components/CompassMark';
-import { HeaderProgress } from './components/HeaderProgress';
 import { BridgeIndicator } from './components/BridgeIndicator';
 import { LaunchRuneLiteButton } from './components/LaunchRuneLiteButton';
 import { ToastView } from './components/ToastView';
@@ -22,7 +20,6 @@ import { PathPage } from './pages/Path';
 import { PathCompact } from './pages/PathCompact';
 import { setFeatures, useFeatures } from './lib/features';
 import { SkillsPage } from './pages/Skills';
-import { SkillDetailPage } from './pages/SkillDetail';
 import { JournalPage, journalTabOf } from './pages/Journal';
 import { ReferencePage } from './pages/Reference';
 import { SettingsPage } from './pages/Settings';
@@ -31,19 +28,11 @@ import { GearPage } from './pages/Gear';
 import { MoneyPage } from './pages/Money';
 import { ProfileBanner } from './components/ProfileBanner';
 import { UpdateBanner } from './components/UpdateBanner';
-import { SectionShell } from './components/SectionShell';
-
-const TABS: { page: Page; href: string; label: string; Icon: ComponentType<{ className?: string }> }[] = [
-  { page: 'path', href: '#/', label: 'Path', Icon: IconPath },
-  { page: 'skills', href: '#/skills', label: 'Skills', Icon: IconSkills },
-  { page: 'gear', href: '#/gear', label: 'Gear', Icon: IconGear },
-  { page: 'shopping', href: '#/shopping', label: 'Shopping', Icon: IconCart },
-  { page: 'money', href: '#/money', label: 'Money', Icon: IconMoney },
-  { page: 'journal', href: '#/journal', label: 'Journal', Icon: IconJournal },
-];
+import { Book, Hud, LedgerStage, Spine, TitleBar, LEDGER_NAV, type ToolId } from './ledger';
+import { usePlayerSummary } from './ledger/adapters';
 
 /** The section a route belongs to: the old #/quests and #/goals hashes live inside the Journal. */
-function sectionOf(page: Page): Page {
+function sectionOf(page: Page): string {
   return page === 'quests' || page === 'goals' ? 'journal' : page;
 }
 
@@ -55,13 +44,22 @@ function pageTitle(page: Page, param?: string): string {
   if (page === 'shopping') return 'Shopping';
   if (page === 'gear') return 'Gear';
   if (page === 'money') return 'Money';
-  return TABS.find((t) => t.page === sectionOf(page))!.label;
+  if (page === 'path') return 'Path';
+  return LEDGER_NAV.find((t) => t.section === sectionOf(page))?.label ?? 'OSRS Path';
 }
 
 export function App() {
   const route = useRoute();
-  const { mode, persistenceWarning } = useStore();
+  const { mode, setMode, persistenceWarning } = useStore();
+  const features = useFeatures();
+  const player = usePlayerSummary();
   const [searchOpen, setSearchOpen] = useState(false);
+  const desk = desktop();
+  const [pinned, setPinned] = useState(false);
+
+  useEffect(() => {
+    void desk?.getZoom().then((z) => setPinned(z.alwaysOnTop));
+  }, [desk]);
 
   // "/" opens the search if the focus is not in an input field.
   useEffect(() => {
@@ -82,16 +80,29 @@ export function App() {
 
   useEffect(() => {
     document.title = `${pageTitle(route.page, route.param)} — OSRS Path`;
-    if (!route.step) window.scrollTo(0, 0);
   }, [route]);
 
   const section = sectionOf(route.page);
   // The compact view is a presentation of Path only; every other page opens as usual.
-  const compact = useFeatures().compact && route.page === 'path';
+  const compact = features.compact && route.page === 'path';
+  const onTool = (tool: ToolId) => {
+    if (tool === 'zen') setFeatures({ inspector: false });
+    else if (tool === 'insp') setFeatures({ inspector: !features.inspector });
+    else {
+      setFeatures({ compact: !features.compact });
+      if (!features.compact && route.page !== 'path') location.hash = '#/';
+    }
+  };
+  const togglePin = () => {
+    if (!desk) return;
+    desk.setAlwaysOnTop(!pinned);
+    setPinned(!pinned);
+  };
+
   let content;
   switch (route.page) {
     case 'path': content = compact ? <PathCompact focusStep={route.step} /> : <PathPage focusStep={route.step} focusKey={route.key} />; break;
-    case 'skills': content = route.param ? <SkillDetailPage key={`${route.param}:${route.skill ?? ''}`} id={route.param} selectedSkill={route.skill} /> : <SkillsPage />; break;
+    case 'skills': content = <SkillsPage param={route.param} selectedSkill={route.skill} />; break;
     case 'goals':
     case 'quests':
     case 'journal': content = <JournalPage tab={journalTabOf(route.page, route.param)} />; break;
@@ -103,83 +114,35 @@ export function App() {
   }
 
   return (
-    <>
+    <LedgerStage className={compact ? 'is-compact' : ''}>
       <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>
         Skip to content
       </a>
-      <div className={`app-shell ${compact ? 'is-compact' : ''}`}>
-        <aside className="app-sidebar" aria-label="Workspace navigation">
-          <div className="sidebar-identity">
-          <a className="brand" href="#/">
-            <CompassMark />
-            <span>OSRS Path</span>
-          </a>
-          <HeaderMode />
-          </div>
-          <nav className="tabs tabs-top" aria-label="Sections">
-            {TABS.map(({ page, href, label, Icon }) => (
-              <a key={page} href={href} className={`tab ${section === page ? 'is-active' : ''}`} title={label}
-                aria-current={section === page ? 'page' : undefined}>
-                <Icon /><span className="tab-label">{label}</span>
-              </a>
-            ))}
-          </nav>
-          <div id="app-route-slot" />
-          <div className="sidebar-utilities">
-            <HeaderProgress />
-            <a href="#/settings" className={`sidebar-settings ${route.page === 'settings' ? 'is-active' : ''}`} aria-current={route.page === 'settings' ? 'page' : undefined}><IconSettings />Settings</a>
-          </div>
-        </aside>
-        <div className="app-content">
-      <header className={`topbar ${compact ? 'is-compact' : ''}`}>
-        <div className="topbar-inner">
-          <a className="mobile-brand brand" href="#/" aria-label="OSRS Path"><CompassMark /><span>OSRS Path</span></a>
-          <div className="mobile-mode"><HeaderMode /></div>
-          <span className="workspace-breadcrumb">{pageTitle(route.page, route.param)}</span>
-          <div className="topbar-actions">
-            {compact && (
-              <button type="button" className="btn btn-sm" onClick={() => setFeatures({ compact: false })}>Full workspace</button>
-            )}
-            <LaunchRuneLiteButton />
-            <BridgeIndicator />
-            {!compact && (
-              <button type="button" className="icon-btn compact-btn" aria-label="Compact view: keep the current action next to the game"
-                title="Compact view: keep the current action next to the game"
-                onClick={() => { setFeatures({ compact: true }); if (route.page !== 'path') location.hash = '#/'; }}>
-                <IconCompact />
-              </button>
-            )}
-            <button type="button" className="search-trigger" onClick={() => setSearchOpen(true)} aria-label="Search" aria-keyshortcuts="/">
-              <IconSearch />
-              <span className="search-trigger-text">Search</span>
-              <kbd>/</kbd>
-            </button>
-            <a href="#/settings" className={`icon-btn topbar-settings ${route.page === 'settings' ? 'is-active' : ''}`} aria-label="Settings"
-              aria-current={route.page === 'settings' ? 'page' : undefined}>
-              <IconSettings /><span className="settings-link-label">Settings</span>
-            </a>
-          </div>
-        </div>
-      </header>
-
-      <main id="main" tabIndex={-1} className={compact ? 'is-compact' : undefined}>
-        <UpdateBanner />
-        <ProfileBanner />
-        {persistenceWarning && <div className="plaque plaque-warning progress-storage-warning" role="alert">{persistenceWarning} <a href="#/settings">Settings</a></div>}
-        <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}><SectionShell key={route.page} page={route.page} param={route.param}>{content}</SectionShell></PageBoundary>
-      </main>
-        </div>
+      <TitleBar pinned={pinned} onTogglePin={desk ? togglePin : undefined} />
+      <Hud
+        player={player}
+        members={mode === 'members'}
+        onMembers={(m) => setMode(m ? 'members' : 'f2p')}
+        status={<><BridgeIndicator /><LaunchRuneLiteButton /></>}
+        zen={!features.inspector}
+        insp={features.inspector}
+        compact={features.compact}
+        onToggleTool={onTool}
+        onOpenSearch={() => setSearchOpen(true)}
+        settingsActive={route.page === 'settings'}
+      />
+      <div className="la-body">
+        <Spine section={section} />
+        <main id="main" tabIndex={-1} className="la-main">
+          <UpdateBanner />
+          <ProfileBanner />
+          {persistenceWarning && <div className="plaque plaque-warning progress-storage-warning" role="alert">{persistenceWarning} <a href="#/settings">Settings</a></div>}
+          <Book compact={compact}>
+            <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}>{content}</PageBoundary>
+          </Book>
+          <div id="la-hotbar-slot" />
+        </main>
       </div>
-
-      <nav className={`tabs tabs-bottom ${compact ? 'is-compact' : ''}`} aria-label="Sections">
-        {TABS.map(({ page, href, label, Icon }) => (
-          <a key={page} href={href} className={`tab ${section === page ? 'is-active' : ''}`}
-            aria-current={section === page ? 'page' : undefined}>
-            <Icon />
-            <span>{label}</span>
-          </a>
-        ))}
-      </nav>
 
       <PrepWatcher />
       <PrepAuto />
@@ -190,6 +153,6 @@ export function App() {
       <PrepSync />
       <SkillSync />
       <SearchBox open={searchOpen} onClose={() => setSearchOpen(false)} />
-    </>
+    </LedgerStage>
   );
 }

@@ -1,39 +1,33 @@
-// "Path" on a wide screen (redesign D): on the left a ribbon of stages with steps, in the centre the chosen step,
-// on the right the pinned wiki dossier. The whole route, the step and the dossier are visible at once, without page scrolling.
+// "Path": the Journey spread of the Ledger. The left page is the road of the route (stages and steps), the right page
+// the chosen step with its ribbons, and the hotbar under the book holds the step's actions. The whole route and the step are in view at once.
 
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
-import { createPortal } from 'react-dom';
 import type { Step } from '../types';
 import { stepById } from '../data';
 import { useStore } from '../store';
 import { useQuestPoints } from '../lib/useQuestPoints';
-import { blockersOf, currentStage, firstOpen, isClosed, nextStep, openAfter } from '../lib/next-step';
+import { firstOpen, isClosed, nextStep, openAfter } from '../lib/next-step';
 import { useBridge } from '../bridge';
 import { useReadinessEngine } from '../readinessContext';
 import { flashDone } from '../lib/flash';
-import { needsReview, pendingReview } from '../lib/review';
-import { IconCheck, IconChevron, IconLock } from '../components/Icons';
+import { pendingReview } from '../lib/review';
 import { CockpitWorkspace } from '../components/CockpitWorkspace';
-import { WikiDock, useWiki } from '../components/WikiDrawer';
+import { useWiki } from '../components/WikiDrawer';
 import { findSubStep, instructionSubStep, subStepNpcInfo } from '../lib/subStep';
 import { GearBanner } from '../components/GearPrompt';
 import { TrackedSkillCard } from '../components/TrackedSkillCard';
 import { AccountSync } from '../components/AccountSync';
 import { Welcome } from '../components/Welcome';
-import { useMediaQuery, WIDE } from '../lib/media';
-import { RouteDrawer } from '../components/RouteDrawer';
+import { Eyebrow, Icon, Page, Road } from '../ledger';
+import { roadStages } from '../ledger/adapters';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey: number }) {
   const { progress, maxQp, steps, stages, setStep, review, reactivate } = useStore();
   const qp = useQuestPoints();
-  const wide = useMediaQuery(WIDE);
-  const [routeOpen, setRouteOpen] = useState(false);
-  const [routeSlot, setRouteSlot] = useState<HTMLElement | null>(null);
-  useEffect(() => { setRouteSlot(document.getElementById('app-route-slot')); }, []);
   const { advance, navTarget, questInstruction, state, inGame, activeStepId } = useBridge();
-  const { setSuggested, pinned } = useWiki();
+  const { setSuggested } = useWiki();
   const dependencies = useReadinessEngine().dependencies;
   const suggested = nextStep(steps, progress, qp, dependencies) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
   const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested.id);
@@ -41,9 +35,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   const [railId, setRailId] = useState(selectedId);
   const [switching, startSwitch] = useTransition();
   const selected = steps.find((s) => s.id === selectedId) ?? suggested;
-  const current = currentStage(steps, progress);
   const [openStages, setOpenStages] = useState<Set<number>>(() => new Set([selected.stage]));
-  const center = useRef<HTMLElement>(null);
+  const center = useRef<HTMLDivElement>(null);
   const pending = pendingReview(steps, progress);
 
   const select = useCallback((id: string, focus = true) => {
@@ -111,133 +104,70 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
 
   const upcoming = nextAfter(selected.id);
 
-  const rail = (
-    <nav className={`rail ${wide ? '' : 'is-drawer'}`} aria-label="Stages and steps">
-      {selected.id !== suggested.id ? (
-        <button type="button" className="rail-now" onClick={() => { select(suggested.id); setRouteOpen(false); }}>
-          To the current step · <code className="code">{suggested.id}</code>
-        </button>
-      ) : (
-        // The same height as the button: the list below does not jump when you leave the current step.
-        <div className="rail-now is-here">You are on the current step · <code className="code">{suggested.id}</code></div>
-      )}
-      <ol className="rail-stages">
-        {stages.map((st) => {
-          const list = steps.filter((s) => s.stage === st.id);
-          const done = list.filter((s) => isClosed(progress, s.id)).length;
-          const complete = done === list.length;
-          const open = openStages.has(st.id);
-          return (
-            <li key={st.id} className={`rail-stage ${st.id === current ? 'is-current' : ''} ${complete ? 'is-complete' : ''} ${st.membersOnly ? 'is-members' : ''}`}>
-              <button type="button" className="rail-stage-btn" aria-expanded={open} onClick={() => toggleStage(st.id)}>
-                <span className="rail-num">{complete ? <IconCheck /> : st.id}</span>
-                <span className="rail-stage-title">{st.title}</span>
-                <span className="rail-count">{done}/{list.length}</span>
-              </button>
-              {open && (
-                <ol className="rail-steps">
-                  {list.map((s) => {
-                    const closed = isClosed(progress, s.id);
-                    const locked = !closed && blockersOf(s, progress, qp, dependencies);
-                    return (
-                      <li key={s.id}>
-                        <button type="button" id={`rail-${s.id}`}
-                          className={`rail-step ${s.id === railId ? 'is-selected' : ''} ${closed ? 'is-closed' : ''} ${s.id === suggested.id ? 'is-next' : ''}`}
-                          aria-current={s.id === railId ? 'step' : undefined} onClick={() => { select(s.id, false); setRouteOpen(false); }}>
-                          <span className="rail-step-mark" aria-hidden="true">
-                            {progress.steps[s.id] === 'done' ? <IconCheck /> : locked ? <IconLock /> : null}
-                          </span>
-                          <code className="rail-step-code">{s.id}</code>
-                          <span className="rail-step-title">{s.title}</span>
-                          {needsReview(s, progress) && <span className="rail-dot" title="Updated in V2 — check" />}
-                          <span className="visually-hidden">
-                            {progress.steps[s.id] === 'done' ? ', done' : progress.steps[s.id] === 'skipped' ? ', skipped' : locked ? ', locked' : ''}
-                          </span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ol>
-              )}
-            </li>
-          );
-        })}
-      </ol>
-    </nav>
-  );
+  // The road opens at the chosen step, in the middle of its page.
+  useEffect(() => {
+    const row = document.getElementById(`rail-${selectedId}`);
+    const road = row?.closest<HTMLElement>('.la-scroll');
+    if (row && road) road.scrollTop += row.getBoundingClientRect().top - road.getBoundingClientRect().top - road.clientHeight / 2;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  /** Below the wide layout the route rail is a drawer: the current action stays on top, the route is one tap away. */
-  function RouteBar() {
-    const closed = steps.filter((st) => isClosed(progress, st.id)).length;
-    return (
-      <div className="route-bar">
-        <button type="button" className="btn route-bar-btn" aria-haspopup="dialog" onClick={() => setRouteOpen(true)}>
-          <span aria-hidden="true">☰</span> Route
-          <span className="muted route-bar-now">Stage {selected.stage} · {selected.id}</span>
-        </button>
-        <p className="route-bar-stats muted small">
-          {steps.length ? Math.round((closed / steps.length) * 100) : 0}% done · {qp} / {maxQp} QP
-        </p>
-      </div>
-    );
-  }
+  const at = steps.findIndex((s) => s.id === selected.id);
+  const road = useMemo(() => roadStages(stages, steps, progress, qp, dependencies, suggested.id, railId), [stages, steps, progress, qp, dependencies, suggested.id, railId]);
+  const chapters = road.length;
+  const unrolled = useMemo(() => new Set([...openStages].map(String)), [openStages]);
 
   return (
-    <div className={`path-wide ${pinned && wide ? '' : 'no-dock'} ${wide ? '' : 'is-narrow'}`}>
+    <div className="path-wide la-spread">
       <h1 className="visually-hidden">Path</h1>
-
-      {wide && routeSlot ? createPortal(
-        <section className="sidebar-route" aria-label="Current route">
-          <p className="eyebrow">Your route</p>
-          <p className="sidebar-route-stage">Stage {selected.stage}<span>{steps.filter(s => s.stage === selected.stage && isClosed(progress, s.id)).length} / {steps.filter(s => s.stage === selected.stage).length}</span></p>
-          <p className="muted small">{stages.find(s => s.id === selected.stage)?.title}</p>
-          <p className="sidebar-route-current">{selected.title}</p>
-          {upcoming && <a className="sidebar-route-next" href={`#/step/${upcoming.id}`}>{upcoming.title}</a>}
-          <button type="button" className="btn btn-ghost" aria-haspopup="dialog" onClick={() => setRouteOpen(true)}>All stages <IconChevron /></button>
-        </section>, routeSlot) : <RouteBar />}
-
-      <section className={`center ${switching ? 'is-switching' : ''}`} ref={center} aria-labelledby="step-view-title" aria-busy={switching}>
-        {pending.length > 0 && (
-          <div className="review-banner card">
-            <h2 className="review-title">🔔 The guide updated to V2!</h2>
-            <p>
-              In the {pending.length === 1 ? 'step' : 'steps'} {pending.map((s) => s.id).join(', ')}, which you already marked, important requirements appeared.
-              Quest points are not taken away on a reset.
-            </p>
-            <div className="actions">
-              <button type="button" className="btn btn-primary" onClick={showChanges}>Show what changed</button>
-              <button type="button" className="btn" onClick={() => reactivate(pending.map((s) => s.id))}>Reset the updated steps to active</button>
-              <button type="button" className="btn btn-ghost" onClick={() => review(pending.map((s) => s.id))}>I checked everything, hide</button>
+      <Page side="l" className="path-road" label="Route">
+        <Eyebrow>THE ROAD AHEAD</Eyebrow>
+        <h2 className="la-t" style={{ marginTop: 4 }}>Route · {steps.length} steps</h2>
+        <div className="la-chips" style={{ marginTop: 8 }}>
+          <span className="la-chip">{chapters} CHAPTERS</span>
+          <span className="la-chip">{qp} → {maxQp} QP</span>
+          <button type="button" className="la-btn la-d rail-now" style={{ padding: '3px 10px', marginLeft: 'auto' }} disabled={selected.id === suggested.id} onClick={() => select(suggested.id)}>
+            <Icon name="target" size={12} /> TO THE CURRENT STEP
+          </button>
+        </div>
+        <div className="la-scroll">
+          <Road stages={road} unrolled={unrolled} onUnroll={(id) => toggleStage(Number(id))} onSelectStep={(s) => select(s.id, false)} />
+        </div>
+      </Page>
+      <CockpitWorkspace
+        key={selected.id}
+        step={selected}
+        suggested={selected.id === suggested.id}
+        onDone={complete}
+        nextId={upcoming?.id}
+        prev={steps[at - 1]}
+        next={steps[at + 1]}
+        onSelect={select}
+        position={{ at, total: steps.length }}
+        busy={switching}
+        scrollRef={center}
+        notices={<>
+          {pending.length > 0 && (
+            <div className="review-banner card">
+              <h2 className="review-title">🔔 The guide updated to V2!</h2>
+              <p>
+                In the {pending.length === 1 ? 'step' : 'steps'} {pending.map((s) => s.id).join(', ')}, which you already marked, important requirements appeared.
+                Quest points are not taken away on a reset.
+              </p>
+              <div className="actions">
+                <button type="button" className="btn btn-primary" onClick={showChanges}>Show what changed</button>
+                <button type="button" className="btn" onClick={() => reactivate(pending.map((s) => s.id))}>Reset the updated steps to active</button>
+                <button type="button" className="btn btn-ghost" onClick={() => review(pending.map((s) => s.id))}>I checked everything, hide</button>
+              </div>
             </div>
-          </div>
-        )}
-
-        <Welcome />
-        <AccountSync compact />
-        <TrackedSkillCard />
-
-        {/* A combat step has its own advice in the card — the banner does not repeat it. */}
-        {!selected.foes?.length && <GearBanner step={selected} />}
-        <article className={`step-view ${selected.membersOnly ? 'is-members' : ''}`} key={selected.id}>
-          <CockpitWorkspace step={selected} suggested={selected.id === suggested.id} onDone={complete} nextId={upcoming?.id} />
-          <footer className="step-view-nav">
-            {(() => {
-              const at = steps.findIndex((s) => s.id === selected.id);
-              const prev = steps[at - 1];
-              const next = steps[at + 1];
-              return (
-                <>
-                  {prev ? <button type="button" className="btn btn-ghost" title={prev.title} onClick={() => select(prev.id)}><IconChevron className="flip" /> Previous step</button> : <span />}
-                  {next && <button type="button" className="btn btn-ghost" title={next.title} onClick={() => select(next.id)}>Next step <IconChevron /></button>}
-                </>
-              );
-            })()}
-          </footer>
-        </article>
-      </section>
-
-      {wide && <WikiDock className="dock" />}
-      <RouteDrawer open={routeOpen} onClose={() => setRouteOpen(false)}>{rail}</RouteDrawer>
+          )}
+          <Welcome />
+          <AccountSync compact />
+          <TrackedSkillCard />
+          {/* A combat step has its own advice in the card — the banner does not repeat it. */}
+          {!selected.foes?.length && <GearBanner step={selected} />}
+        </>}
+      />
     </div>
   );
 }

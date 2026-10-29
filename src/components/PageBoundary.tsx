@@ -1,4 +1,5 @@
 import { Component, type ReactNode } from 'react';
+import { Page } from '../ledger';
 
 interface Props {
   /** A page change clears the error: a broken section must not lock the others. */
@@ -29,6 +30,7 @@ export class PageBoundary extends Component<Props, State> {
     const { error } = this.state;
     if (!error) return this.props.children;
     return (
+      <Page side="w">
       <div className="card page-error" role="alert">
         <h2 className="card-title">This page did not open</h2>
         <p>The progress is saved separately and is not harmed. Try opening the page again or go to another section.</p>
@@ -38,6 +40,7 @@ export class PageBoundary extends Component<Props, State> {
           <a className="btn" href="#/">To the path</a>
         </div>
       </div>
+      </Page>
     );
   }
 }

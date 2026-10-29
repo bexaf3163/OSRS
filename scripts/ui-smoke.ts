@@ -184,8 +184,8 @@ async function noOverflow(page: Page) {
  */
 async function reveal(page: Page, sel: string) {
   if (await page.locator(sel).count()) return;
-  // The cockpit: Preparation, Travel and Details are drawers. The companion strip: Now, Bag, Route and More are tabs.
-  const openers = [page.getByRole('navigation', { name: 'Step views' }).getByRole('button'), page.getByRole('tablist', { name: 'Companion views' }).getByRole('tab')];
+  // The Ledger's step page: Steps, Preparation, Route & game, Details and Wiki are ribbons. The companion strip: Now, Bag, Route and More are tabs.
+  const openers = [page.getByRole('tablist', { name: 'Step views' }).getByRole('tab'), page.getByRole('tablist', { name: 'Companion views' }).getByRole('tab')];
   for (const group of openers) {
     const n = await group.count();
     for (let i = 0; i < n; i++) {
@@ -204,10 +204,10 @@ async function waitFor(page: Page, sel: string, timeout: number) {
 
 /** A button of the step workspace, found in whichever tab holds it. */
 async function stepButton(page: Page, name: string | RegExp, role: 'button' | 'radio' = 'button') {
-  // The map and its button are on the cockpit and in the Travel drawer when that is open: the last one is the drawer's, which is the one in front.
+  // A button of the open ribbon; the last one is the one in front.
   const find = () => page.getByRole(role, { name }).last();
   if (await find().count()) return find();
-  const openers = [page.getByRole('navigation', { name: 'Step views' }).getByRole('button'), page.getByRole('tablist', { name: 'Companion views' }).getByRole('tab')];
+  const openers = [page.getByRole('tablist', { name: 'Step views' }).getByRole('tab'), page.getByRole('tablist', { name: 'Companion views' }).getByRole('tab')];
   for (const group of openers) {
     const total = await group.count();
     for (let i = 0; i < total; i++) {
@@ -495,6 +495,7 @@ async function run(browser: Browser) {
       status: { protocol: 6, ...gear, stats, activeStepId: 'S3-08' },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 40, bank: 0, exactCarried: 0, exactNoted: 40, exactBank: 0 }] }],
     }, '#/step/S3-08');
+    await reveal(page, 'text=/Bank: unnote/i');
     await page.getByText(/Bank: unnote/i).first().waitFor({ timeout: 8000 });
     expect((await page.locator('main').innerText()).includes('Unnote at bank'), `notes (${width}): notes are an action, not ready-to-eat food`);
     expect(await page.evaluate(() => (window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; unnote?: number }[] } } }[] }).__posts.some((p) => p.path === '/prep-plan' && p.body?.plan?.lines.some((l) => l.name === 'Salmon' && (l.unnote ?? 0) > 0))), `notes (${width}): the actual game snapshot carries the unnote action`);
@@ -603,6 +604,7 @@ async function run(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       progress, status: { protocol: 6, stats: { agility: 24 } }, events: [{ type: 'STATS', stats: { agility: 24 } }],
     }, '#/step/S7-05');
+    await page.getByRole('tab', { name: 'Preparation', exact: true }).click(); // the readiness verdict is on the Preparation ribbon
     expect((await page.locator('main').innerText()).includes('First S7-04'), `skill dependency (${width}): skipping below the goal does not unlock the quest`);
     await reveal(page, '.requires .step-ref[href="#/step/S7-04"]');
     expect(await page.locator('.requires .step-ref.is-met[href="#/step/S7-04"]').count() === 0, `skill dependency (${width}): a skipped training step is not labelled met`);
@@ -694,7 +696,7 @@ async function run(browser: Browser) {
       status: { protocol: 6, inGame: true, activeStepId: id, player: 'Phase Test', ...gear, questInstruction: { stepId: id, stageAt: 3, lineIndex: 4, peeking: false } },
       events: [{ type: 'GEAR', ...gear }, { type: 'OWNED', bankSeen: true, items: ['Rope', 'Air rune', 'Earth rune', 'Water rune', "Glarial's pebble"].map(name => ({ name, carried: name.includes('pebble') ? 1 : 0, noted: 0, bank: 0 })) }],
     }, '#/step/S7-01');
-    await page.getByRole('button', { name: 'Preparation', exact: true }).click();
+    await page.getByRole('tab', { name: 'Preparation', exact: true }).click();
     expect((await text(page, '.loadout.is-current')).includes("Glarial's Tomb"), 'phase: confirmed tomb cursor selects the tomb inventory');
     const timing = () => page.evaluate(() => {
       const posts = (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan');
@@ -851,8 +853,8 @@ async function run(browser: Browser) {
       expect((await text(page, '.readiness')).length > 0, 'Zen: Preparation exposes the readiness panel');
       await page.keyboard.press('Escape');
       expect((await text(page, '.manual-complete')).includes('Done'),'Zen: Done is one clear action under the current instruction');
-      expect(await page.getByRole('navigation', { name: 'Step views' }).getByRole('button').count() === 3, 'Zen: the reference views are three buttons: Preparation, Travel, Details');
-      await page.getByRole('navigation', { name: 'Step views' }).getByRole('button', { name: /Preparation/ }).click();
+      expect(await page.getByRole('tablist', { name: 'Step views' }).getByRole('tab').count() === 5, 'Zen: the step views are five ribbons: Steps, Preparation, Route & game, Details, Wiki');
+      await page.getByRole('tablist', { name: 'Step views' }).getByRole('tab', { name: /Preparation/i }).click();
       await page.waitForTimeout(300);
       const open1 = await text(page, '.readiness');
       expect(open1.includes('Catch up Crafting') && open1.includes('To the bank'), 'Zen: the Preparation view holds the whole preparation panel');
@@ -912,7 +914,7 @@ async function run(browser: Browser) {
     // 2.63.3: "Launch RuneLite" in the header while the plugin does not answer; gone once it is connected.
     {
       const off = await open(browser, width, { offline: true }, '#/');
-      const btn = off.page.locator('.topbar .launch-runelite');
+      const btn = off.page.locator('.la-hud .launch-runelite');
       expect(await btn.count() === 1, `header (${width} px): the launch button is there while the plugin does not answer`);
       if (await btn.count()) {
         // The app's own start-up launch (auto-launch) is counted already: the click is one more.
@@ -926,7 +928,7 @@ async function run(browser: Browser) {
       expect(await noOverflow(off.page), `header (${width} px): launch button, no horizontal scrolling`);
       await off.page.context().close();
       const on = await open(browser, width, {}, '#/');
-      expect(await on.page.locator('.topbar .launch-runelite').count() === 0, `header (${width} px): no launch button once the plugin is connected`);
+      expect(await on.page.locator('.la-hud .launch-runelite').count() === 0, `header (${width} px): no launch button once the plugin is connected`);
       await on.page.context().close();
     }
 
@@ -1000,7 +1002,7 @@ async function run(browser: Browser) {
       await waitFor(zen.page, '.step-status', 8000);
       await zen.page.keyboard.press('Escape');
       if (process.env.UI_SHOTS) await zen.page.screenshot({ path: `${process.env.UI_SHOTS}/zen-s308-${width}.png`, fullPage: true }).catch(() => {});
-      await zen.page.getByRole('navigation', { name: 'Step views' }).getByRole('button', { name: /Preparation/ }).click();
+      await zen.page.getByRole('tablist', { name: 'Step views' }).getByRole('tab', { name: /Preparation/i }).click();
       await zen.page.waitForTimeout(300);
       if (process.env.UI_SHOTS) await zen.page.screenshot({ path: `${process.env.UI_SHOTS}/zen-s308-prep-${width}.png`, fullPage: true }).catch(() => {});
       const prep = await zen.page.locator('body').innerText();
@@ -1010,9 +1012,9 @@ async function run(browser: Browser) {
       expect(verdict.includes('Preparation needed') && verdict.includes('Bank: withdraw 13 Salmon') && verdict.includes('Then buy about 13 Salmon'),
         `readiness (Zen): the next action names the bank and the purchase (${verdict.replace(/\s+/g, ' ').slice(0, 200)})`);
       expect(verdict.includes('Minotaur (level 12) suits your current kit best') && verdict.includes('Minotaur (level 27):'), 'readiness (Zen): both Minotaur versions are compared');
-      // Preparation opens as a drawer over the step page: its own card is the one in the dialog.
-      await zen.page.locator('dialog[aria-label="Preparation"] .readiness-verdict summary').first().click();
-      const why = await text(zen.page, 'dialog[aria-label="Preparation"] .readiness-verdict');
+      // Preparation opens on its ribbon: its own card is the one in the step view's panel.
+      await zen.page.locator('#step-view-panel .readiness-verdict summary').first().click();
+      const why = await text(zen.page, '#step-view-panel .readiness-verdict');
       expect(why.includes('Mithril scimitar: suitable for training') && why.includes('Armour: Iron full helm'), 'readiness (Zen): the weapon and the armour are judged');
       expect(why.includes('not a chance of surviving'), 'readiness (Zen): the percent is never a survival chance');
       if (process.env.UI_SHOTS) await zen.page.locator('dialog[aria-label="Preparation"] .readiness-verdict').first().screenshot({ path: `${process.env.UI_SHOTS}/readiness-s308-${width}.png` }).catch(() => {});
@@ -1295,7 +1297,8 @@ async function run(browser: Browser) {
         const cs = getComputedStyle(el);
         const probe = document.createElement('div');
         probe.style.backgroundColor = 'var(--surface)';
-        document.body.appendChild(probe);
+        // The surface token where the select stands: the Ledger's pages define their own (parchment).
+        el.parentElement!.appendChild(probe);
         const surface = getComputedStyle(probe).backgroundColor;
         probe.remove();
         return { appearance: cs.appearance, bg: cs.backgroundColor, surface };
@@ -1479,23 +1482,24 @@ async function run(browser: Browser) {
         navTarget: { label: 'Lady Keli: use soft clay on the key for a print', x: 3127, y: 3244, plane: 0, stepId: 'S2-10' } },
     }, '#/step/S2-10');
     await waitFor(page, '.path-wide', 5000);
-    expect(await page.locator('.path-wide.no-dock').count() === 1 && !(await page.locator('.dock').isVisible()), 'dossier: no permanent column by default');
-    await page.getByRole('navigation', { name: 'Step views' }).getByRole('button', { name: /Details/ }).click();
+    expect(await page.locator('.la-dock .dock-panel').count() === 0, 'dossier: nothing pinned by default');
+    await page.getByRole('tablist', { name: 'Step views' }).getByRole('tab', { name: /Details/i }).click();
     await page.locator('.npc-name').first().click();
     await page.waitForSelector('dialog.drawer[open]', { timeout: 5000 });
     expect(await page.getByRole('button', { name: 'Pin to the side' }).count() === 1, 'dossier: the drawer offers to pin it');
     await page.getByRole('button', { name: 'Pin to the side' }).click();
-    await page.waitForSelector('.path-wide:not(.no-dock) .dock .dock-panel', { timeout: 5000 });
-    expect(await page.locator('dialog.drawer[open][aria-label="OSRS Wiki inspector"]').count() === 0, 'dossier: pinning closes the drawer and shows the column');
+    await page.waitForSelector('.la-dock .dock-panel', { timeout: 5000 });
+    expect(await page.locator('dialog.drawer[open][aria-label="OSRS Wiki inspector"]').count() === 0, 'dossier: pinning closes the drawer and keeps the dossier on its ribbon');
     await page.reload();
     await page.waitForTimeout(1500);
-    const dock = await text(page, '.dock');
-    expect(await page.locator('.path-wide:not(.no-dock)').count() === 1, 'dossier: the pin is remembered after a reload');
+    await page.getByRole('tablist', { name: 'Step views' }).getByRole('tab', { name: /Wiki/i }).click();
+    const dock = await text(page, '.la-dock');
+    expect(await page.locator('.la-dock .dock-panel').count() === 1, 'dossier: the pin is remembered after a reload');
     expect(/your current target/i.test(dock) && dock.includes('Keli') && !dock.includes('Click an item or NPC'), 'dossier: pinned with nothing chosen it shows the target NPC instead of an empty hint');
     if (process.env.UI_SHOTS) await page.screenshot({ path: `${process.env.UI_SHOTS}/cockpit-1280.png` }).catch(() => {});
     await page.getByRole('button', { name: 'Unpin from the side' }).click();
     await page.waitForTimeout(300);
-    expect(await page.locator('.path-wide.no-dock').count() === 1, 'dossier: unpinning returns the on-demand drawer');
+    expect(await page.locator('.la-dock .dock-panel').count() === 0, 'dossier: unpinning returns the on-demand drawer');
     expect(errors.length === 0, `dossier: no console errors ${errors.join('; ')}`);
     await page.context().close();
   }
@@ -1511,26 +1515,22 @@ async function run(browser: Browser) {
     },'#/step/S3-04');
     expect((await text(page,'.current-action-title')).includes('Ancient Guardian') && !(await text(page,'.current-action-title')).includes('Willow'),'current instruction: the quest cursor wins over the earlier arrow destination');
     const actionBox = await page.locator('.current-action-title').boundingBox();
-    // Three columns at this width: the action keeps a readable measure (not squeezed into a sliver) and stays within four lines.
+    // On the step page the action keeps a readable measure (not squeezed into a sliver) and stays within four lines.
     expect(!!actionBox && actionBox.width >= 420 && actionBox.height < 180,'modern Path: the main action has readable desktop width');
-    expect(await page.locator('.cockpit-walk .overview').isVisible(),'cockpit: the walkthrough is open without a click');
-    const bag = await page.locator('.cockpit-bag .quest-preparation').boundingBox();
-    expect(!!bag && !!actionBox && bag.x > actionBox.x + actionBox.width - 1 && bag.y < actionBox.y + 400 && await page.locator('.quest-preparation').count() === 1,'cockpit: on a wide window the stage list stands beside the action, once');
-    const need = await text(page,'.cockpit-bag .quest-preparation');
+    expect(await page.locator('#step-view-panel .overview').isVisible(),'cockpit: the walkthrough is open without a click');
+    expect((await text(page,'.overview')).includes('In the game now'),'current instruction: the canonical walkthrough identifies the confirmed line');
+    expect(/checked|Ready to set off/.test(await text(page,'.la-plaque .status-line')) && !(await text(page,'.la-plaque .status-line')).includes('Missing'),'cockpit: the verdict follows the stage too');
+    await page.keyboard.press('p');
+    await page.waitForTimeout(300);
+    expect(await page.locator('#step-view-prep[aria-selected="true"]').count() === 1 && await page.locator('#step-view-panel .quest-preparation').count() === 1 && await page.locator('#step-view-panel .one-trip').count() === 1,'cockpit: P opens the Preparation ribbon with the stage list and the whole plan');
+    const need = await text(page,'#step-view-panel .quest-preparation');
     // The last fight asks for a pickaxe and food; the meat, bread, knife and beer of stage 15 are used up and folded away.
     expect(need.includes('Needed for this stage') && need.includes('Used earlier in this quest') && need.includes('Bronze pickaxe') && !need.includes('Missing')
       && !need.includes('Cooked meat') && !need.includes('Bread') && !need.includes('Knife') && !need.includes('Beer'),'cockpit: the quest items the stage no longer asks for are folded away, not listed as missing');
-    expect(/checked|Ready to set off/.test(await text(page,'.cockpit-bag .status-line')) && !(await text(page,'.cockpit-bag .status-line')).includes('Missing'),'cockpit: the verdict follows the stage too');
-    expect((await text(page,'.overview')).includes('In the game now'),'current instruction: the canonical walkthrough identifies the confirmed line');
     expect(await page.locator('.manual-complete').isVisible(),'cockpit: manual completion stays accessible');
-    await page.keyboard.press('p');
-    await page.waitForSelector('dialog.step-drawer[open]',{timeout:3000});
-    expect((await text(page,'dialog.step-drawer[open]')).includes('Preparation') && await page.locator('dialog.step-drawer[open] .one-trip').count() === 1,'cockpit: P opens the Preparation drawer with the whole plan');
-    await page.keyboard.press('Escape');
-    await page.waitForTimeout(300);
-    expect(await page.locator('dialog.step-drawer[open]').count() === 0,'cockpit: Esc closes the drawer');
     await page.keyboard.press('t');
-    await page.waitForSelector('dialog.step-drawer[open]',{timeout:3000});
+    await page.waitForTimeout(300);
+    expect(await page.locator('#step-view-travel[aria-selected="true"]').count() === 1,'cockpit: T opens the Route & game ribbon');
     await page.keyboard.press('Escape');
     expect(errors.length === 0 && await noOverflow(page),'modern Path: no runtime errors or horizontal overflow');
     await page.context().close();
@@ -1627,31 +1627,27 @@ async function run(browser: Browser) {
   for (const scale of [1, 1.5]) for (const width of [900, 1280, 1920]) {
     const { page } = await open(browser, width, {progress:progressBefore('S3-03'),localStorage:{'osrs-put:text-scale':String(scale)}}, '#/');
     expect(await noOverflow(page), `the header at ${width} px and ${scale*100}% text without horizontal scrolling`);
-    if (width >= 1000) expect(await page.locator('.app-sidebar').evaluate(el => el.scrollWidth <= el.clientWidth), `sidebar at ${width} px and ${scale*100}% text without internal horizontal scrolling`);
-    // The old header moved its tabs to a third row below 1200 px and at large text; in the sidebar that rule put the sections under Settings.
-    if (width >= 1000) expect(await page.evaluate(() => {
-      const nav = document.querySelector('.app-sidebar .tabs-top')!.getBoundingClientRect();
-      const foot = document.querySelector('.app-sidebar .sidebar-utilities')!.getBoundingClientRect();
-      return nav.bottom <= foot.top + 1;
-    }), `sidebar at ${width} px and ${scale*100}% text: the sections stand above quest points and Settings`);
+    if (width >= 1000) expect(await page.locator('.la-spine').evaluate(el => el.scrollWidth <= el.clientWidth), `spine at ${width} px and ${scale*100}% text without internal horizontal scrolling`);
+    if (width >= 1000) expect(await page.evaluate(() => [...document.querySelectorAll('.la-spine a')].length === 7
+      && [...document.querySelectorAll('.la-spine a')].every((a) => a.getBoundingClientRect().bottom <= innerHeight + 1)), `spine at ${width} px and ${scale*100}% text: all seven sections are on screen`);
     await page.context().close();
   }
 
   // The local strip of a section shows every link: the first one used to take the whole width and push the rest out of view.
   console.log('Section strip');
   // Shopping (2.67) and Gear (2.68) have no strip: one short page each.
-  for (const [hash, least] of [['#/journal', 3], ['#/reference', 3]] as [string, number][]) {
+  for (const [hash, least, links] of [['#/journal', 2, '.journal-views a'], ['#/reference', 3, '.reference-index .nav-list a']] as [string, number, string][]) {
     for (const width of [1000, 1440]) {
       const { page } = await open(browser, width, { progress: progressBefore('S3-03') }, hash);
-      const seen = await page.evaluate(() => {
-        const nav = document.querySelector('.section-rail nav');
+      const seen = await page.evaluate((links) => {
+        const nav = document.querySelector(links)?.closest('.la-pg');
         if (!nav) return -1;
         const box = nav.getBoundingClientRect();
-        return [...nav.querySelectorAll('.section-nav-item')].filter((el) => {
+        return [...nav.querySelectorAll(links)].filter((el) => {
           const r = el.getBoundingClientRect();
           return r.left >= box.left - 1 && r.right <= box.right + 1;
         }).length;
-      });
+      }, links);
       expect(seen >= least, `section strip ${hash} at ${width} px: ${seen} links in view (at least ${least})`);
       await page.context().close();
     }
@@ -2403,6 +2399,7 @@ async function consumerDependencyScenarios(browser: Browser) {
       progress, localStorage: { 'osrs-put:active-step': 'S9-01' },
       status: { protocol: 6, inGame: true, stats }, events: [{ type: 'STATS', stats }],
     }, '#/step/S9-01');
+    await page.getByRole('tab', { name: 'Preparation', exact: true }).click(); // the readiness verdict is on the Preparation ribbon
     expect((await page.locator('main').innerText()).includes('First S8-04'), `consumer skills (${width}): a missing actual entry skill retains the blocker`);
     await page.evaluate(next => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'STATS', stats: next }), { ...stats, crafting: 31 });
     await page.waitForTimeout(900);
@@ -2498,6 +2495,8 @@ async function marketPreparationScenarios(browser: Browser) {
       status: { protocol: 6, activeStepId: 'S4-04', coins: 10000, bankCoins: 0 },
       events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Lobster', carried: 0, noted: 0, bank: 0 }] }],
     }, '#/step/S4-04');
+    // The quest's items are on the Preparation ribbon.
+    await reveal(page, '.quest-supply-list');
     const supplies = page.locator('.quest-supply-list');
     await supplies.getByText(unavailable ? 'Price unavailable' : 'GE estimate: ≈ 2,060 gp (103 each)', { exact: true }).waitFor({ timeout: 6000 });
     expect(await supplies.getByText(unavailable ? 'Price unavailable' : 'GE estimate: ≈ 2,060 gp (103 each)', { exact: true }).count() === 1,
@@ -2572,6 +2571,7 @@ async function armourPreparationScenarios(browser: Browser) {
     expect(currentArmour.length === 4 && currentArmour.every((i: any) => i.where === 'INVENTORY' && /^Equip /.test(i.action))
       && !prep.plan.bankWithdrawals?.some((i: any) => pieces.some(p => p.id === i.itemId)),
       `armour (${width}): carried armour requires equipping, with no duplicate purchase or withdrawal`);
+    await reveal(page, '.quest-supply-state');
     expect(await page.locator('.quest-supply-state').filter({ hasText: /^↗ Equip$/ }).count() === 4, `armour (${width}): each current supply says Equip`);
     const worn = { ...gear, equipment: [weapon, ...pieces], inventory: [] };
     await page.evaluate(g => {

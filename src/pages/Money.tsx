@@ -22,6 +22,7 @@ import type { MethodEvaluation, RequirementCheck } from '../lib/funding/evaluate
 import type { Ranking } from '../lib/funding/rank';
 import type { Step } from '../types';
 import { Economics, FundingCard, PriceNote } from '../components/FundingCard';
+import { Eyebrow, Page } from '../ledger';
 
 const gp = (n: number) => `${formatGp(Math.round(n))} gp`;
 
@@ -213,7 +214,10 @@ function MoneyBody({ step }: { step: Step }) {
   const toggle = (id: string) => { setOpen((o) => (o === id ? null : id)); setStarting(null); };
 
   return (
-    <div className="page money-page">
+    <div className="page money-page la-spread">
+    <Page side="l" basis={600} className="money" label="Coffers">
+    <div className="page la-scroll">
+      <Eyebrow>COFFERS</Eyebrow>
       <header className="page-head">
         <h1>Money</h1>
         <p className="muted small money-context">
@@ -263,6 +267,11 @@ function MoneyBody({ step }: { step: Step }) {
         </div>
       )}
 
+    </div>
+    </Page>
+    <Page side="r" className="money-browse" label="Earning methods">
+    <div className="page la-scroll">
+      <Eyebrow>EARNING METHODS</Eyebrow>
       <div className="money-controls">
         <input type="search" className="money-search" placeholder="Search methods" aria-label="Search methods" value={filters.query}
           onChange={(ev) => { setFilters({ query: ev.target.value }); setLimit(PAGE); }} />
@@ -307,6 +316,8 @@ function MoneyBody({ step }: { step: Step }) {
           <button type="button" className="btn btn-link" onClick={() => { setFiltersState(() => { const all = { ...DEFAULT_FILTERS, availableOnly: false }; saveFilters(all); return all; }); }}>Show all</button>
         </p>
       )}
+    </div>
+    </Page>
     </div>
   );
 }

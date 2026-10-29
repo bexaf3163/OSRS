@@ -22,6 +22,7 @@ import { itemPrice } from '../lib/itemPrice';
 import { findLocalItem } from '../services/wikiService';
 import { ItemIcon } from '../components/WikiDrawer';
 import { copyText as copy } from '../lib/clipboard';
+import { Eyebrow, Page } from '../ledger';
 import { RoadSupplies } from '../components/RoadSupplies';
 import { InventoryCleanup } from '../components/InventoryCleanup';
 import { useQuestDone, useSkillLevel } from '../components/SkillRoadmap';
@@ -303,7 +304,10 @@ export function ShoppingPage() {
   const sum = budgetSum(total, coinLines);
 
   return (
-    <div className="page shop-page">
+    <div className="page shop-page la-spread">
+    <Page side="l" basis={700} className="shop" label="Shopping list">
+    <div className="page la-scroll">
+      <Eyebrow>PROVISIONS</Eyebrow>
       <header className="page-head shop-head-v2">
         <h1>Shopping</h1>
         <div className="segmented shop-scope" role="group" aria-label="What to prepare for">
@@ -333,49 +337,6 @@ export function ShoppingPage() {
       <p className="muted small shop-scope-line">{scopeLine ? `For ${scopeLine} ` : ''}{empty === 'offline' || empty === 'not-loaded' ? '' : sync}</p>
 
       {empty !== null && emptyView(empty)}
-
-      {listShown && purchase && (
-        <div className="shop-budget" aria-label="Budget">
-          {split ? (
-            <>
-              <p className="small">
-                <strong>{current}</strong>:{' '}
-                {nowNothing ? <>nothing to buy before you go on</> : <>
-                  {budget.required > 0 ? <>buy <strong>≈ {formatGp(budget.required)} gp</strong></> : <>no confirmed purchases</>}
-                  {budget.coinsForSteps > 0 && <> · {formatGp(budget.coinsForSteps)} gp the step pays out</>}
-                  {budget.shortfall !== null && budget.shortfall > 0 && <> · <strong className="warn-text">short {formatGp(budget.shortfall)} gp</strong></>}
-                </>}
-              </p>
-              {aheadBudget && (aheadBudget.required > 0 || aheadBudget.coinsForSteps > 0 || aheadBudget.unknownRows > 0) && (
-                <p className="small">
-                  Next steps ({aheadIds.join(', ')}), optional now:{' '}
-                  {aheadBudget.required > 0 ? <>buy ≈ {formatGp(aheadBudget.required)} gp</> : <>no confirmed purchases</>}
-                  {aheadBudget.coinsForSteps > 0 && <> · {formatGp(aheadBudget.coinsForSteps)} gp kept for {aheadCoins.map((c) => c.stepId).join(', ')}</>}
-                </p>
-              )}
-            </>
-          ) : (
-            <p className="small">
-              {budget.required > 0 ? <>Purchases <strong>≈ {formatGp(budget.required)} gp</strong></> : <>No confirmed purchases</>}
-              {budget.coinsForSteps > 0 && <> · {formatGp(budget.coinsForSteps)} gp the steps pay out</>}
-              {budget.shortfall !== null && budget.shortfall > 0 && <> · <strong className="warn-text">short {formatGp(budget.shortfall)} gp</strong></>}
-            </p>
-          )}
-          {!sum && <p className="small muted">Your coins are not known yet: open your bank in RuneLite.</p>}
-          {total.unpriced > 0 && <p className="small muted">{total.unpriced} without a price, not counted.</p>}
-          {total.shortfall !== null && total.shortfall > 0 && current && (
-            <p className="small"><a href={backHref}>Raise the coins</a> <span className="muted">— the step's coin plan picks a way that suits your account.</span> <a href="#/money">Browse earning methods</a></p>
-          )}
-          {/* The figures added up, so the shortfall can be checked against them: one click away, not a wall of numbers above the list. */}
-          <details className="zen-more shop-budget-how">
-            <summary className="small">How this is counted</summary>
-            {sum && <p className="small muted">{split ? 'All of it: ' : ''}{sum}</p>}
-            {total.unknownRows > 0 && <p className="small muted">{total.unknownRows} not confirmed{total.unknownMax > 0 ? `: up to ${formatGp(total.unknownMax)} gp more if none of them is owned` : ''}.</p>}
-            {total.optional > 0 && <p className="small muted">Optional extras ≈ {formatGp(total.optional)} gp, not counted above.</p>}
-            <p className="small muted">Purchase quantities cover the selected steps, not one inventory; see Path for what to carry now. GE estimates are not offers. Cached prices are labelled; unpriced costs are excluded. NPC prices are separate.</p>
-          </details>
-        </div>
-      )}
 
       {listShown && GROUPS.map((g) => {
         const items = required.filter((r) => g.channels.includes(r.channel));
@@ -426,11 +387,61 @@ export function ShoppingPage() {
         </p>
       )}
 
+    </div>
+    </Page>
+    <Page side="r" className="shop-purse" label="Coin purse">
+    <div className="page la-scroll">
+      <Eyebrow>COUNTING HOUSE</Eyebrow>
+      <h2 className="la-t">Coin purse</h2>
+      {listShown && purchase && (
+        <div className="shop-budget" aria-label="Budget">
+          {split ? (
+            <>
+              <p className="small">
+                <strong>{current}</strong>:{' '}
+                {nowNothing ? <>nothing to buy before you go on</> : <>
+                  {budget.required > 0 ? <>buy <strong>≈ {formatGp(budget.required)} gp</strong></> : <>no confirmed purchases</>}
+                  {budget.coinsForSteps > 0 && <> · {formatGp(budget.coinsForSteps)} gp the step pays out</>}
+                  {budget.shortfall !== null && budget.shortfall > 0 && <> · <strong className="warn-text">short {formatGp(budget.shortfall)} gp</strong></>}
+                </>}
+              </p>
+              {aheadBudget && (aheadBudget.required > 0 || aheadBudget.coinsForSteps > 0 || aheadBudget.unknownRows > 0) && (
+                <p className="small">
+                  Next steps ({aheadIds.join(', ')}), optional now:{' '}
+                  {aheadBudget.required > 0 ? <>buy ≈ {formatGp(aheadBudget.required)} gp</> : <>no confirmed purchases</>}
+                  {aheadBudget.coinsForSteps > 0 && <> · {formatGp(aheadBudget.coinsForSteps)} gp kept for {aheadCoins.map((c) => c.stepId).join(', ')}</>}
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="small">
+              {budget.required > 0 ? <>Purchases <strong>≈ {formatGp(budget.required)} gp</strong></> : <>No confirmed purchases</>}
+              {budget.coinsForSteps > 0 && <> · {formatGp(budget.coinsForSteps)} gp the steps pay out</>}
+              {budget.shortfall !== null && budget.shortfall > 0 && <> · <strong className="warn-text">short {formatGp(budget.shortfall)} gp</strong></>}
+            </p>
+          )}
+          {!sum && <p className="small muted">Your coins are not known yet: open your bank in RuneLite.</p>}
+          {total.unpriced > 0 && <p className="small muted">{total.unpriced} without a price, not counted.</p>}
+          {total.shortfall !== null && total.shortfall > 0 && current && (
+            <p className="small"><a href={backHref}>Raise the coins</a> <span className="muted">— the step's coin plan picks a way that suits your account.</span> <a href="#/money">Browse earning methods</a></p>
+          )}
+          {/* The figures added up, so the shortfall can be checked against them: one click away, not a wall of numbers above the list. */}
+          <details className="zen-more shop-budget-how">
+            <summary className="small">How this is counted</summary>
+            {sum && <p className="small muted">{split ? 'All of it: ' : ''}{sum}</p>}
+            {total.unknownRows > 0 && <p className="small muted">{total.unknownRows} not confirmed{total.unknownMax > 0 ? `: up to ${formatGp(total.unknownMax)} gp more if none of them is owned` : ''}.</p>}
+            {total.optional > 0 && <p className="small muted">Optional extras ≈ {formatGp(total.optional)} gp, not counted above.</p>}
+            <p className="small muted">Purchase quantities cover the selected steps, not one inventory; see Path for what to carry now. GE estimates are not offers. Cached prices are labelled; unpriced costs are excluded. NPC prices are separate.</p>
+          </details>
+        </div>
+      )}
       {empty !== 'error' && empty !== 'no-plan' && selected.length > 0 && (
         <RoadSupplies steps={selected} locate={scope !== 'range' || (range.openOnly && range.from <= currentStage(steps, progress))} heading="For the road" quietWhenEmpty />
       )}
       <CleanupFold />
       <p className="muted small">The app buys nothing by itself: you place the orders.</p>
+    </div>
+    </Page>
     </div>
   );
 }
