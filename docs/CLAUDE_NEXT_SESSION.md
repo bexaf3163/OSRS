@@ -4,12 +4,12 @@
 
 No mobile/phone development or phone-only QA. Keep Windows desktop resizing, DPI/text scaling, themes and accessibility. See the authoritative desktop-only scope in [PROJECT_GUIDELINES.md](../PROJECT_GUIDELINES.md).
 
-## Current continuation - 2.80.17 shared method-allocation contract (verification pending)
+## Current continuation - 2.80.17 shared method-allocation contract - published and verified
 
 - Owner clarified that recurring fixes must be inherited by future content. PROJECT_GUIDELINES.md now explicitly requires shared-engine repairs and data-agnostic/new-content regressions. New mechanics and content declarations still need validation; this is not a promise that every future mechanic is already supported.
 - Found one remaining bypass: trainingRouter.viewMethod evaluated each material need independently. A new recipe declaring26 interchangeable beef/chicken plus8 chicken could claim READY with only26 chicken, while preparation correctly found8 missing. Method selection now consumes the existing materialStock allocator too; no recipe ID/name exception or second allocation engine.
 - Regression constructs a new method ID using ordinary declared requirements and checks selector/preparation agreement for short, sufficient and unread stock. Existing single-material recipes, specialised tools/equipment/doses and UNKNOWN handling remain. Complex overlapping kit pricing remains unknown through the existing conservative requirementCost guard; no optimistic invented budget.
-- No new UI panels, save format, gameplay or launcher changes. Local verification passed:2274 app tests/194files, build/TypeScript, data0errors/warnings,9 desktop handover checks, bridgeJAR and Gradle testClasses. Full CI/normal portable receipt pending. Live-game acceptance remains Claude's; preserve `-Xmx1024m`, `-ea` and other launcher arguments.
+- No new UI panels, save format, gameplay or launcher changes. Local verification passed:2274 app tests/194files, build/TypeScript, data0errors/warnings,9 desktop handover checks, bridgeJAR and Gradle testClasses. Published source `bf8d7a7c155a687816c2fa64906a0dd32c6492c1`; Checks `40861418634` and Release `40861418582` both succeeded, including full app/Java/desktop/native/isolated-portable gates. Actual downloaded `OSRS-Put-2.80.17-portable.exe`:102089580 bytes; SHA256 `d873dd634072d753bad0b23b01bbd036729ca590b22604ba441b9d3cab55cd56` matches the GitHub asset digest and downloaded SHA256SUMS. Live-game acceptance remains Claude's; preserve `-Xmx1024m`, `-ea` and other launcher arguments.
 
 ## Current continuation - 2.80.16 material stock consistency - published and verified
 
