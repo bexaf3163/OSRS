@@ -307,7 +307,7 @@ export function ShoppingPage() {
     <div className="page shop-page la-spread">
     <Page side="l" basis={700} className="shop" label="Shopping list">
     <div className="page la-scroll">
-      <Eyebrow>PROVISIONS</Eyebrow>
+      <Eyebrow>SHOPPING LIST</Eyebrow>
       <header className="page-head shop-head-v2">
         <h1>Shopping</h1>
         <div className="segmented shop-scope" role="group" aria-label="What to prepare for">

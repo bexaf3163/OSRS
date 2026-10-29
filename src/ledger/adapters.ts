@@ -48,7 +48,7 @@ export function roadStages(
   return stages
     .map((st) => ({
       id: roman(st.id),
-      key: st.id,
+      key: String(st.id),
       name: st.title,
       members: st.membersOnly,
       steps: steps

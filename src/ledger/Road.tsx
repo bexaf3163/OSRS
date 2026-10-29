@@ -9,14 +9,15 @@ const STATE_TEXT: Record<RouteStep['state'], string> = { done: ', closed', curre
 
 interface RoadProps {
   stages: RouteStage[];
-  /** Completed chapters fold into a seal unless they are in this set. */
+  /** Completed chapters (by stage key) fold into a seal unless they are in this set. */
   unrolled: ReadonlySet<string>;
-  onUnroll: (stage: string) => void;
+  /** Unrolls a folded chapter, or folds an unrolled complete one again. */
+  onToggle: (stage: string) => void;
   onSelectStep: (step: RouteStep) => void;
 }
 
 /** The winding road of the route: chapters, a wavy path and one row per step. */
-export function Road({ stages, unrolled, onUnroll, onSelectStep }: RoadProps) {
+export function Road({ stages, unrolled, onToggle, onSelectStep }: RoadProps) {
   const globalIndex = new Map(stages.flatMap((s) => s.steps).map((x, i) => [x.id, i]));
 
   return (
@@ -24,8 +25,9 @@ export function Road({ stages, unrolled, onUnroll, onSelectStep }: RoadProps) {
       {stages.map((stage) => {
         const doneCount = stage.steps.filter((x) => x.state === 'done').length;
         const allDone = doneCount === stage.steps.length;
-        const head = (
-          <div className={`la-stagehead ${stage.members ? 'la-members' : ''}`}>
+        const open = unrolled.has(stage.key);
+        const inner = (
+          <>
             <b>
               <i>{stage.id}</i>
             </b>
@@ -33,13 +35,21 @@ export function Road({ stages, unrolled, onUnroll, onSelectStep }: RoadProps) {
             <em>
               {doneCount} of {stage.steps.length}
             </em>
-          </div>
+          </>
         );
-        if (allDone && !unrolled.has(stage.id)) {
+        // A complete chapter's heading folds it back; an open chapter's heading is a plain title.
+        const head = allDone && open ? (
+          <button type="button" className={`la-stagehead la-fold ${stage.members ? 'la-members' : ''}`} aria-expanded title="Fold this chapter" onClick={() => onToggle(stage.key)}>
+            {inner}
+          </button>
+        ) : (
+          <div className={`la-stagehead ${stage.members ? 'la-members' : ''}`}>{inner}</div>
+        );
+        if (allDone && !open) {
           return (
             <li key={stage.id}>
               {head}
-              <button type="button" className="la-seal6" aria-expanded={false} onClick={() => onUnroll(stage.id)}>
+              <button type="button" className="la-seal6" aria-expanded={false} onClick={() => onToggle(stage.key)}>
                 <Icon name="check" size={16} /> Chapter complete — {stage.steps.length} steps, {stage.steps.reduce((a, b) => a + b.qp, 0)} QP. <i>Unroll</i>
               </button>
             </li>

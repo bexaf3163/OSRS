@@ -2,7 +2,7 @@
 // ("NOW"), then the step's views on ribbons (Steps, Preparation, Route & game, Details, Wiki; P, T and D switch to them).
 // The hotbar under the book carries the step's actions.
 // Presentation only: the step bodies, the preparation engine and the navigation actions are the existing ones.
-import { useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import type { Step } from '../types';
 import { useStore } from '../store';
@@ -54,7 +54,7 @@ interface Props {
 }
 
 export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, onSelect, position, notices, busy, scrollRef }: Props) {
-  const { progress, setStep } = useStore();
+  const { progress, setStep, notify } = useStore();
   const qp = useQuestPoints();
   const { questInstruction, state, inGame, activeStepId, enabled, pointInGame, navigate } = useBridge();
   const engine = useReadinessEngine();
@@ -62,9 +62,10 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, 
   const sub = useSubStep(step);
   const recovery = engine.plan(step, { ahead: 0 }).recovery;
   const [view, setView] = useState<View>('steps');
-  const [mapRequest, setMapRequest] = useState(0);
+  const [mapRequest, setMapRequest] = useState(false);
   const [slot, setSlot] = useState<HTMLElement | null>(null);
   const openPrep = () => setView('prep');
+  const mapOpened = useCallback(() => setMapRequest(false), []);
   const { available: canFix, fix } = usePrepFix(step, openPrep);
   const closed = isClosed(progress, step.id);
   const status = progress.steps[step.id];
@@ -96,7 +97,7 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, 
   const firstView = useRef(true);
   useEffect(() => {
     if (firstView.current) { firstView.current = false; return; }
-    const panel = document.getElementById(view === 'wiki' ? 'step-view-wiki' : 'step-view-panel');
+    const panel = document.getElementById(view === 'wiki' ? 'step-view-wiki-panel' : 'step-view-panel');
     panel?.parentElement?.scrollTo({ top: panel.offsetTop - 8, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
   }, [view]);
   // A dossier pinned to the book opens on its ribbon when something is picked in a step.
@@ -105,11 +106,19 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, 
   }, [pinned, chosen]);
 
   const live = enabled && !closed;
+  // The same messages as the step's own buttons when the game cannot take the target.
+  const point = async () => {
+    const r = await pointInGame(step);
+    if (r !== 'ok') notify(r === 'offline' ? 'RuneLite is offline. Target saved.' : 'No game target is available for this step.');
+  };
   const game = live
     ? confirmed && sub?.target
-      ? () => void navigate({ ...sub.target!, stepId: step.id })
+      ? async () => {
+          const r = await navigate({ ...sub.target!, stepId: step.id });
+          if (!r.ok) notify(r.reason === 'refused' ? r.message : 'RuneLite offline');
+        }
       : target
-        ? () => void pointInGame(step)
+        ? () => void point()
         : undefined
     : undefined;
   const hotbar = (
@@ -118,19 +127,21 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, 
         prev: prev && (() => onSelect(prev.id)),
         next: next && (() => onSelect(next.id)),
         fix: closed ? undefined : canFix ? () => void fix() : openPrep,
-        start: live && target ? () => void pointInGame(step) : undefined,
-        game,
+        start: live && target ? () => void point() : undefined,
+        game: game && (() => void game()),
         done: closed ? undefined : () => onDone(step.id),
-        map: target ? () => { setView('travel'); setMapRequest((n) => n + 1); } : undefined,
+        map: target ? () => { setView('travel'); setMapRequest(true); } : undefined,
         skip: step.optional && !closed ? () => setStep(step.id, 'skipped') : undefined,
         remove: status === 'done' || status === 'skipped' ? () => setStep(step.id, null) : undefined,
       }}
+      labels={{ fix: canFix ? 'FIX' : 'PREPARATION' }}
+      icons={{ fix: canFix ? 'wrench' : 'bag' }}
       titles={{
         prev: prev && `Previous step: ${prev.title}`,
         next: next && `Next step: ${next.title}`,
-        fix: canFix ? 'Fix: go and get what is missing' : 'Open the preparation',
-        start: 'Start the step: the arrow and the route lead to it in RuneLite',
-        game: 'Show the current line of the step in the game',
+        fix: canFix ? 'Fix: the arrow leads to what is missing (the bank or a shop)' : 'Open the Preparation ribbon: what to bring for this step',
+        start: 'Start the step: the arrow and the route lead to where the step starts',
+        game: 'Show in game: the arrow leads to the line the game is on (or to the start)',
         done: nextId ? 'Mark as done and open the next step' : 'Mark as done',
         map: 'Open the world map of the step',
         skip: 'Skip this optional step',
@@ -218,7 +229,7 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, 
                 <section className="quest-panel cockpit-where-card" aria-label="Where">
                   <header className="quest-panel-heading"><h3>Where</h3></header>
                   <TravelTip step={step} />
-                  <StepMap step={step} shownTarget={live ? target.worldPoint : null} mapRequest={mapRequest} />
+                  <StepMap step={step} shownTarget={live ? target.worldPoint : null} mapRequest={mapRequest} onMapOpened={mapOpened} />
                 </section>
               )}
               <StepBody step={step} onDone={onDone} nextId={nextId} tab="travel" onPrep={openPrep} safetyShown />
@@ -232,7 +243,7 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, 
           )}
         </div>
         {/* The dossier's place stays mounted, so a step's item or NPC can be pinned from the drawer at any time. */}
-        <div id="step-view-wiki" hidden={view !== 'wiki'}>
+        <div id="step-view-wiki-panel" hidden={view !== 'wiki'}>
           {!pinned && (
             <div className="dock-empty">
               <p className="dock-empty-title">OSRS Wiki dossier</p>

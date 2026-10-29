@@ -28,7 +28,7 @@ import { GearPage } from './pages/Gear';
 import { MoneyPage } from './pages/Money';
 import { ProfileBanner } from './components/ProfileBanner';
 import { UpdateBanner } from './components/UpdateBanner';
-import { Book, Hud, LedgerStage, Spine, TitleBar, LEDGER_NAV, type ToolId } from './ledger';
+import { Book, Hud, LedgerStage, Spine, TitleBar, LEDGER_NAV } from './ledger';
 import { usePlayerSummary } from './ledger/adapters';
 
 /** The section a route belongs to: the old #/quests and #/goals hashes live inside the Journal. */
@@ -85,13 +85,9 @@ export function App() {
   const section = sectionOf(route.page);
   // The compact view is a presentation of Path only; every other page opens as usual.
   const compact = features.compact && route.page === 'path';
-  const onTool = (tool: ToolId) => {
-    if (tool === 'zen') setFeatures({ inspector: false });
-    else if (tool === 'insp') setFeatures({ inspector: !features.inspector });
-    else {
-      setFeatures({ compact: !features.compact });
-      if (!features.compact && route.page !== 'path') location.hash = '#/';
-    }
+  const toggleCompact = () => {
+    setFeatures({ compact: !features.compact });
+    if (!features.compact && route.page !== 'path') location.hash = '#/';
   };
   const togglePin = () => {
     if (!desk) return;
@@ -124,10 +120,8 @@ export function App() {
         members={mode === 'members'}
         onMembers={(m) => setMode(m ? 'members' : 'f2p')}
         status={<><BridgeIndicator /><LaunchRuneLiteButton /></>}
-        zen={!features.inspector}
-        insp={features.inspector}
         compact={features.compact}
-        onToggleTool={onTool}
+        onToggleCompact={toggleCompact}
         onOpenSearch={() => setSearchOpen(true)}
         settingsActive={route.page === 'settings'}
       />

@@ -17,7 +17,10 @@ export interface RouteStep {
 }
 
 export interface RouteStage {
+  /** The label in the diamond (a Roman numeral). */
   id: string;
+  /** The stage number: what unrolling and folding are keyed by. */
+  key: string;
   name: string;
   members?: boolean;
   steps: RouteStep[];
@@ -41,8 +44,7 @@ export const LEDGER_NAV: { section: string; href: string; label: string; icon: I
   { section: 'path', href: '#/', label: 'Journey', icon: 'compass' },
   { section: 'skills', href: '#/skills', label: 'Skills', icon: 'star' },
   { section: 'journal', href: '#/journal', label: 'Journal', icon: 'book' },
-  { section: 'gear', href: '#/gear', label: 'Loadout', icon: 'shield' },
-  { section: 'shopping', href: '#/shopping', label: 'Provisions', icon: 'cart' },
-  { section: 'money', href: '#/money', label: 'Coffers', icon: 'coin' },
-  { section: 'reference', href: '#/reference', label: 'Lore', icon: 'scroll' },
+  { section: 'gear', href: '#/gear', label: 'Gear', icon: 'shield' },
+  { section: 'shopping', href: '#/shopping', label: 'Shopping', icon: 'cart' },
+  { section: 'money', href: '#/money', label: 'Money', icon: 'coin' },
 ];

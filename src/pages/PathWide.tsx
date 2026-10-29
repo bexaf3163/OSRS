@@ -131,7 +131,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
           </button>
         </div>
         <div className="la-scroll">
-          <Road stages={road} unrolled={unrolled} onUnroll={(id) => toggleStage(Number(id))} onSelectStep={(s) => select(s.id, false)} />
+          <Road stages={road} unrolled={unrolled} onToggle={(key) => toggleStage(Number(key))} onSelectStep={(s) => select(s.id, false)} />
         </div>
       </Page>
       <CockpitWorkspace

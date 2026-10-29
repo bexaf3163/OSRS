@@ -217,7 +217,7 @@ function MoneyBody({ step }: { step: Step }) {
     <div className="page money-page la-spread">
     <Page side="l" basis={600} className="money" label="Coffers">
     <div className="page la-scroll">
-      <Eyebrow>COFFERS</Eyebrow>
+      <Eyebrow>COINS</Eyebrow>
       <header className="page-head">
         <h1>Money</h1>
         <p className="muted small money-context">

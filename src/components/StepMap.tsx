@@ -25,8 +25,8 @@ type Spot = MapLocation & { now?: boolean };
 const spotKey = (p: Pick<MapLocation, 'x' | 'y' | 'plane'>) => `${p.x},${p.y},${p.plane}`;
 
 /** shownTarget: where the view's own "Show in game" button leads; "Lead here" is left out when it would only repeat it (one place, the same tile). */
-/** mapRequest: a counter; each new value opens the world map (the hotbar's World map). */
-export function StepMap({ step, shownTarget, mapRequest = 0 }: { step: Step; shownTarget?: { x: number; y: number; plane: number } | null; mapRequest?: number }) {
+/** mapRequest: the hotbar asked for the world map; onMapOpened clears the request so it does not open again on the next visit. */
+export function StepMap({ step, shownTarget, mapRequest = false, onMapOpened }: { step: Step; shownTarget?: { x: number; y: number; plane: number } | null; mapRequest?: boolean; onMapOpened?: () => void }) {
   // The step map points, where items and quest NPCs are — the same places as in the "What you need" list in the game.
   const places = mapPlaces(step);
   // The point the player picked, by place: the list can gain the game's current target while the card is open.
@@ -34,8 +34,10 @@ export function StepMap({ step, shownTarget, mapRequest = 0 }: { step: Step; sho
   const [open, setOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);
   useEffect(() => {
-    if (mapRequest) setOpen(true);
-  }, [mapRequest]);
+    if (!mapRequest) return;
+    setOpen(true);
+    onMapOpened?.();
+  }, [mapRequest, onMapOpened]);
   const { navTarget, activeStepId, branchChoice } = useBridge();
   const branch = step.branches?.find((b) => b.id === branchChoice[step.id]);
   const { prep } = usePrep();

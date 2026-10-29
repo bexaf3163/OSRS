@@ -79,6 +79,10 @@ Compared against `concept-a-ledger.html` rendered by Chromium at 1440x900, then 
 
 `docs/design-preview/ledger-*.png`: the built app at 1440x900 with the UI test's stub desktop and bridge and fictional progress (Journey, Skills, Journal, Provisions, Lore, Settings), and `ledger-reference-concept-a.png`, the supplied reference at the same size.
 
+## 2.81.1 follow-up
+
+The owner's first look in the real window found overlapping F2P labels on the skill tiles, Inter in the header's RuneLite link and button, spine names that did not match the pages, a Fix slot that only opened Preparation, a world map that reopened by itself and complete chapters that could not be folded back. All are fixed. `ledgerScenarios` in `scripts/ui-smoke.ts` now clicks every spine link, HUD control, road control, ribbon, hotbar slot (and its key) and the Journal, Reference, Settings, Skills and Shopping menus, and checks what each one changed. Full UI run: 802 checks pass; Electron: 92 pass; unit tests 2297/2297. A scan of every page found no text in other faces than EB Garamond and Cinzel and no clipped visible text at 1280x800 and 1632x1090.
+
 ## Not verified
 
 - RuneLite live: no game client was run. Bridge states were checked with the UI test's stub bridge only.

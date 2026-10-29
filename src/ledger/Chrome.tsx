@@ -23,23 +23,19 @@ export function TitleBar({ pinned, onTogglePin }: TitleBarProps) {
   );
 }
 
-export type ToolId = 'zen' | 'insp' | 'compact';
-
 interface HudProps {
   player: Player;
   members: boolean;
   onMembers: (members: boolean) => void;
   /** The RuneLite link: the app's own indicator and launch button. */
   status: ReactNode;
-  zen: boolean;
-  insp: boolean;
   compact: boolean;
-  onToggleTool: (tool: ToolId) => void;
+  onToggleCompact: () => void;
   onOpenSearch: () => void;
   settingsActive: boolean;
 }
 
-export function Hud({ player, members, onMembers, status, zen, insp, compact, onToggleTool, onOpenSearch, settingsActive }: HudProps) {
+export function Hud({ player, members, onMembers, status, compact, onToggleCompact, onOpenSearch, settingsActive }: HudProps) {
   const R = 2 * Math.PI * 21;
   const offset = R * (1 - player.progress / 100);
   return (
@@ -85,15 +81,7 @@ export function Hud({ player, members, onMembers, status, zen, insp, compact, on
           <Icon name="search" size={15} />
           <kbd>/</kbd>
         </button>
-        <button type="button" className={`la-tool ${zen ? 'la-on' : ''}`} title="Zen: one status line and the Done button on the step" aria-pressed={zen} onClick={() => onToggleTool('zen')}>
-          <Icon name="zen" size={15} />
-          ZEN
-        </button>
-        <button type="button" className={`la-tool ${insp ? 'la-on' : ''}`} title="Inspector: every block of the step expanded" aria-pressed={insp} onClick={() => onToggleTool('insp')}>
-          <Icon name="code" size={15} />
-          INSPECT
-        </button>
-        <button type="button" className={`la-tool ${compact ? 'la-on' : ''}`} title={compact ? 'Back to the full workspace' : 'Compact view: keep the current action next to the game'} onClick={() => onToggleTool('compact')}>
+        <button type="button" className={`la-tool ${compact ? 'la-on' : ''}`} title={compact ? 'Back to the full workspace' : 'Compact view: keep the current action next to the game'} onClick={onToggleCompact}>
           <Icon name="compact" size={15} />
           {compact ? 'FULL WORKSPACE' : 'COMPACT'}
         </button>
@@ -120,8 +108,10 @@ export function Spine({ section }: { section: string }) {
 
 const KEYS: Record<string, HotbarAction> = { q: 'prev', f: 'fix', s: 'start', g: 'game', m: 'map', u: 'remove', e: 'next' };
 
-/** `titles` explain what each slot does for this step (the button names stay those of the design). */
-export function Hotbar({ handlers, titles = {} }: { handlers: HotbarHandlers; titles?: Partial<Record<HotbarAction, string>> }) {
+type IconOf = Parameters<typeof Icon>[0]['name'];
+
+/** `titles` explain what each slot does for this step; `labels` and `icons` rename a slot whose action changes (Fix becomes Preparation). */
+export function Hotbar({ handlers, titles = {}, labels = {}, icons = {} }: { handlers: HotbarHandlers; titles?: Partial<Record<HotbarAction, string>>; labels?: Partial<Record<HotbarAction, string>>; icons?: Partial<Record<HotbarAction, IconOf>> }) {
   // The keys printed on the slots; never while typing, with a modifier or while a dialog is open.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -137,11 +127,11 @@ export function Hotbar({ handlers, titles = {} }: { handlers: HotbarHandlers; ti
     return () => window.removeEventListener('keydown', onKey);
   }, [handlers]);
 
-  const slot = (action: HotbarAction, key: string | null, icon: Parameters<typeof Icon>[0]['name'], label: string, extra = '') => (
+  const slot = (action: HotbarAction, key: string | null, icon: IconOf, label: string, extra = '') => (
     <button type="button" className={`la-slot ${extra}`} disabled={!handlers[action]} title={titles[action]} aria-keyshortcuts={key ?? undefined} onClick={handlers[action]}>
       {key && <kbd>{key}</kbd>}
-      <Icon name={icon} size={18} />
-      {label}
+      <Icon name={icons[action] ?? icon} size={18} />
+      <span className="la-slot-label">{labels[action] ?? label}</span>
     </button>
   );
   return (
