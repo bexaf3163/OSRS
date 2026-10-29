@@ -2,16 +2,18 @@
 
 Updated 2026-10-29. Read this first; open historical records only for the area being changed.
 
-## Current implementation — 2.80.20 candidate
+## Current delivery — 2.80.20
+
+**2.80.20 is published and verified.** [Normal portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.80.20). Source `c7306a1c53ad6fbba0ab5d92df6112f9de925240`; Checks `40937298434` and Release `40937298295` succeeded, including full Java, desktop, native and isolated-portable gates. Downloaded102090430-byte EXE SHA256 `c08a065eb47149709ac0ec705cf261a868374b76f323f78a468234cc4bb4600b` matches GitHub asset metadata and SHA256SUMS. No20 release action remains.
 
 - Optional S6-01 now stops at Ranged40; no Bond or Ranged50 grind is a membership prerequisite. Stage6 is titled Optional F2P preparation before membership. IDs and manual progress are preserved.
 - Existing rangedLoadout/StyleGear now select a full usable kit: owned/affordable shortbow, compatible physical arrow stack, armour and suitable amulet. Defence and quest unlocks are separate; reserve starter ammunition, food and basic armour before optional upgrades. Unknown stock/cash does not justify paid upgrades. No mandatory cosmetic ring/cape.
 - The same selected kit drives method preparation, combat estimates and goal-arrow forecasts. Forecasts replace old melee armour and remove the shield for two-handed bows. Modelled style is Accurate below5, Rapid thereafter. Refills are starter buffers, not a full-goal guarantee.
 - Model-rate cache keys now include budget, quest proofs, manual ownership, legacy-tool certainty and worn quantities; location-only movement still reuses forecasts. This prevents a paid-kit or unlock change retaining the old rate.
-- Full desktop suite passed; ten focused ranged assertions cover banked outfit, equipped counts, trainer changes and food. Build/types and Java testClasses passed. Final unit suite: 2,297 tests/196 files; data checks: zero errors/warnings. CI/release gates remain pending. No live-game test claimed.
-- Next: publish20 after gates; finish Optional peaceful checkpoints/order through existing Skills/F2P advice. Other processing WIP is parked outside the repository, not shipped. Latest owner requirement: both Skills and Optional must show practical peaceful-skill tools/equipment, real useful bonuses, and lighter/no armour when appropriate. Do not invent amulet benefits or force cosmetic purchases; keep Train compact.
+- Full desktop suite passed; ten focused ranged assertions cover banked outfit, equipped counts, trainer changes and food. Build/types and Java testClasses passed. Final unit suite: 2,297 tests/196 files; data checks: zero errors/warnings. CI/release gates passed. No live-game test claimed.
+- Next: finish Optional peaceful checkpoints/order through existing Skills/F2P advice. Other processing WIP is parked outside the repository, not shipped. Latest owner requirement: both Skills and Optional must show practical peaceful-skill tools/equipment, real useful bonuses, and lighter/no armour when appropriate. Do not invent amulet benefits or force cosmetic purchases; keep Train compact.
 
-## Current delivery
+## Previous verified delivery — 2.80.19
 
 **2.80.19 is published and verified.** [Normal portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.80.19).
 
