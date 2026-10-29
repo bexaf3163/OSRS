@@ -12,7 +12,7 @@ import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { chromium } from 'playwright';
+import { chromium, type Page } from 'playwright';
 import { jarEntry } from './jarEntry.ts';
 
 const require = createRequire(import.meta.url);
@@ -68,13 +68,21 @@ const status = {
   pos: { x: 3222, y: 3218, plane: 0 }, coins: 500, equipment: [], inventory: [],
 };
 const posts: string[] = [];
+const fixtureRequests: { path: string; authorized: boolean }[] = [];
+const heartbeats = new Set<ReturnType<typeof setInterval>>();
 const bridge = http.createServer((req, res) => {
+  fixtureRequests.push({ path: req.url ?? '', authorized: req.headers['x-osrs-path'] === '1' });
+  if (fixtureRequests.length > 30) fixtureRequests.shift();
   if (req.headers['x-osrs-path'] !== '1') { res.writeHead(403).end(); return; }
   if (req.url === '/status') { res.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(status)); return; }
   if (req.url === '/events') {
     res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache' });
     res.write(`data: ${JSON.stringify({ type: 'STATUS', inGame: true, player: status.player })}\n\n`);
     res.write(`data: ${JSON.stringify({ type: 'STATS', stats: status.stats })}\n\n`);
+    // Match the real plugin's 15-second keepalive; silence makes the native bridge expire after 45 seconds.
+    const heartbeat = setInterval(() => { if (!res.destroyed) res.write(': ping\n\n'); }, 15_000);
+    heartbeats.add(heartbeat);
+    res.on('close', () => { clearInterval(heartbeat); heartbeats.delete(heartbeat); });
     return;
   }
   posts.push(`${req.method} ${req.url}`);
@@ -100,6 +108,7 @@ app.stderr?.on('data', data => { startupLog += String(data); });
 
 // The candidate's unpacked copy (TEMP\<build id>): the launcher removes it when the app ends; what is still locked then goes in stop().
 let unpacked: string | undefined;
+let failurePage: Page | undefined;
 
 function stop() {
   try {
@@ -113,6 +122,8 @@ function stop() {
       spawnSync('taskkill', ['/T', '/F', '/PID', String(app.pid)]);
     } else app.kill('SIGKILL');
   } catch { /* already closed */ }
+  for (const heartbeat of heartbeats) clearInterval(heartbeat);
+  heartbeats.clear();
   bridge.close();
   if (dirname(resolve(home)) !== resolve(tmpdir()) || !home.startsWith(join(tmpdir(), 'osrs-put-e2e-'))) throw new Error('Unsafe temporary cleanup path');
   removeDir(home);
@@ -131,6 +142,7 @@ try {
   if (exe && app.pid) unpacked = childProcs(app.pid).map((p) => dirname(p.path)).find((dir) => dirname(resolve(dir)) === resolve(tmpdir()));
   const browser = await chromium.connectOverCDP(`http://127.0.0.1:${cdpPort}`);
   const page = browser.contexts()[0].pages()[0];
+  failurePage = page;
   // The source tree serves its own dist/; a release candidate the dist/ inside its app.asar.
   await page.waitForURL(url => exe
     ? url.protocol === 'file:' && /\/resources\/app\.asar\/dist\/index\.html$/.test(url.pathname)
@@ -564,6 +576,18 @@ try {
 } catch (e) {
   failures.push(`run failure: ${(e as Error).message}`);
   console.log(`  ✗ run failure: ${(e as Error).message}`);
+  console.log(`  Fixture requests: ${JSON.stringify(fixtureRequests)}`);
+  if (failurePage && !failurePage.isClosed()) {
+    try {
+      const diagnostic = await failurePage.evaluate(async () => {
+        const api = (window as unknown as { osrsDesktop?: { bridge?: { request(method: string, path: string): Promise<{ ok: boolean; status: number; data?: { status?: string; inGame?: boolean; protocol?: number } }> } } }).osrsDesktop;
+        const res = await api?.bridge?.request('GET', '/status');
+        return { indicator: document.querySelector('.bridge-indicator')?.textContent, settings: document.querySelector('main')?.textContent?.slice(0, 1600),
+          request: res ? { ok: res.ok, status: res.status, bridgeStatus: res.data?.status, inGame: res.data?.inGame, protocol: res.data?.protocol } : null };
+      });
+      console.log(`  Isolated bridge diagnostic: ${JSON.stringify(diagnostic)}`);
+    } catch (error) { console.log(`  Diagnostic unavailable: ${(error as Error).message}`); }
+  }
 } finally {
   stop();
 }
