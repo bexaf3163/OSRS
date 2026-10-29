@@ -36,7 +36,7 @@ Read [CLAUDE.md](../CLAUDE.md) and [project guidelines](../PROJECT_GUIDELINES.md
 | 2.80.16 | Shared material alternatives, primary reservations, stock spent once, UNKNOWN/manual/notes handling, physical withdrawals/stack slots; acquisition shortages do not deduct ownership twice. |
 | 2.80.17 | Method selection consumes that same allocator. A newly declared recipe regression proves selector/preparation agreement. Complex overlapping kit pricing remains unknown through its conservative guard. |
 
-Relevant modules: playerState/readinessEngine, materialStock, foodAdvice, oneTrip/prepPlan/prepEnvelope, sourceRouter/purchaseCost, trainingRouter and funding/need under `src/lib`. Food healing, equipment, usable tool tiers and doses retain specialised engines. Existing combatRoute, skillingRates, processingRates and methodRates provide the combat/gathering/processing models; do not duplicate them.
+Relevant modules: playerState/readinessEngine, materialStock, foodAdvice, oneTrip/prepPlan/prepEnvelope, sourceRouter/purchaseCost, trainingRouter and funding/need under `src/lib`. Food healing, equipment, usable tool tiers and doses retain specialised engines. Existing combatRoute, skillingRates, processingRates and methodRates provide the combat/gathering/processing models; do not duplicate them. Utility processing already includes five Firemaking log recipes, Bones/Big bones burial, Superheat iron and four F2P Runecraft altars (source f6a0e82). On 2026-10-29, 36 processing/funding-adapter tests passed. These are implemented basic models, not a claim that every Members/utility method is modelled; do not rebuild them from historical open labels.
 
 ## Remaining work and limits
 
