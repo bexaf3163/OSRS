@@ -1535,7 +1535,8 @@
       "npcNames": [
         "Seagull"
       ],
-      "note": "Level 3 Seagulls cannot damage you; check the target level. Equip a compatible bow and arrow stack. Use Accurate while starting, then Rapid after Ranged 5. Pick up reusable arrows when safe; bank before ammunition runs out. The 100 arrows are a starter stack; the card above counts the whole goal."
+      "note": "Level 3 Seagulls cannot damage you; check the target level. Equip a compatible bow and arrow stack. Use Accurate while starting, then Rapid after Ranged 5. Pick up reusable arrows when safe; bank before ammunition runs out. The 100 arrows are a starter stack; the card above counts the whole goal.",
+      "introductory": true
     },
     {
       "id": "ra-monk",
@@ -1568,6 +1569,93 @@
       ],
       "npcNames": [
         "Monk"
+      ]
+    },
+    {
+      "id": "ra-barbarian",
+      "skill": "ranged",
+      "from": 1,
+      "suggestedFrom": 21,
+      "to": 26,
+      "name": "Level 10 barbarians",
+      "members": false,
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "low",
+      "where": "Barbarian Village: level 10 barbarians; check the level before attacking.",
+      "place": "Barbarian Village",
+      "note": "An XP-focused bridge from Ranged 21 to 26. Choose level 10 barbarians, not the tougher level 15/17 variants. Bring the listed food and collect arrows safely. Monks remain the cheaper free-healing alternative. The guide point is the village centre; no zero-damage safespot is assumed.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
+      "kit": "f2p-bow",
+      "needs": [
+        {
+          "type": "item",
+          "name": "Shortbow",
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Bronze arrow",
+          "count": 100,
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Salmon",
+          "count": 10,
+          "anyOf": [
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
+        }
+      ],
+      "npcNames": [
+        "Barbarian"
+      ]
+    },
+    {
+      "id": "ra-wizard",
+      "skill": "ranged",
+      "from": 1,
+      "suggestedFrom": 9,
+      "to": 70,
+      "name": "Wizards at the Wizards' Tower (manual alternative)",
+      "members": false,
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "high",
+      "where": "Wizards' Tower: level 9 wizards.",
+      "place": "Wizards' Tower",
+      "note": "The Wiki lists wizards as an XP/loot alternative. Review your magic defence and food before choosing them. Starter supplies are not a safety guarantee.",
+      "manualSetup": "Incoming magic damage and rune-drop income are not estimated for this method; review the linked guide and your food before choosing it.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
+      "kit": "f2p-bow",
+      "needs": [
+        {
+          "type": "item",
+          "name": "Shortbow",
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Bronze arrow",
+          "count": 100,
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Salmon",
+          "count": 10,
+          "anyOf": [
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
+        }
+      ],
+      "npcNames": [
+        "Wizard"
       ]
     },
     {

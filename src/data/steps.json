@@ -5072,7 +5072,7 @@
     "id": "S6-02",
     "stage": 6,
     "type": "skill",
-    "title": "Fishing to 50 and Cooking to 50",
+    "title": "Fishing to 35 and Cooking to 35",
     "requires": [],
     "floor": "Ground floor",
     "mapLocation": {
@@ -5081,31 +5081,27 @@
       "plane": 0,
       "label": "Net fishing — Draynor Village (Fishing 1-20)"
     },
-    "where": "1-20: net fishing at Draynor Village. 20-40: fly fishing at Barbarian Village. 40-50: lobsters at Musa Point (Karamja). From 50: swordfish (Swordfish) with a harpoon in the same place. Cook on the range in Al Kharid.",
+    "where": "Follow the current Fishing method to 35, then finish Cooking 35 with the current affordable method. No Karamja trip or harpoon is required for these checkpoints.",
     "itemsRequired": [
       {
         "nameEn": "Small fishing net",
         "amount": 1,
-        "howToGet": "The first tool of the climb, from Gerrant's Fishy Business in Port Sarim. With your level known, this list follows the method for it: net, rod and bait, fly fishing rod and feathers, then the lobster pot.",
+        "howToGet": "The starter net is from Gerrant in Port Sarim. The live method selects the tool for your actual Fishing level; fly fishing uses a fly fishing rod and feathers from 20.",
         "wikiItemId": 303,
         "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
       }
     ],
     "fields": [
       {
-        "label": "Fishing 1-40 first",
-        "text": "The route reaches this step at Fishing 1, so lobsters (level 40) are the end of the climb, not the start. 1-20: net shrimps at the Draynor Village spots (anchovies from 15). 20-40: fly fish at the Barbarian Village spots with a fly fishing rod and feathers (trout from 20, salmon from 30). Tuna with a harpoon at Musa Point is open from 35. Cook what you catch for the Cooking half, or drop it; raw fish sells for little."
+        "label": "Plan",
+        "text": "Follow the current trainer and its supplies. Net fish from 1; fly fishing opens at 20. The shared planner compares cooking your catch beside the spot with finishing Cooking separately."
       },
       {
-        "label": "Important",
-        "text": "Swordfish can only be caught from Fishing 50 and cooked from Cooking 45. Before that, lobsters (from 40) or tuna with a harpoon (from 35)."
-      },
-      {
-        "label": "Optional",
-        "text": "One of the ways to earn towards a Bond. Skip it if another way pays you better."
+        "label": "Stop here",
+        "text": "Fishing 35 is the Skills F2P checkpoint. Cooking 35 opens wine; continuing towards 68 can be useful with an affordable supply budget, but is optional. Members methods and quests can be faster."
       }
     ],
-    "doneWhen": "Fishing 50, Cooking 50.",
+    "doneWhen": "Fishing 35 and Cooking 35. Skip any optional training you do not want before membership.",
     "inGame": {
       "npcNames": [
         "Fishing spot"
@@ -5121,11 +5117,11 @@
         "levels": [
           {
             "skill": "fishing",
-            "level": 50
+            "level": 35
           },
           {
             "skill": "cooking",
-            "level": 50
+            "level": 35
           }
         ]
       }
@@ -5144,15 +5140,8 @@
         "x": 3107,
         "y": 3429,
         "plane": 0,
-        "label": "Fly fishing — Barbarian Village (Fishing 20-40)",
+        "label": "Fly fishing — Barbarian Village (Fishing 20-35)",
         "note": "Fly fishing rod and feathers: trout from 20, salmon from 30."
-      },
-      {
-        "x": 2925,
-        "y": 3180,
-        "plane": 0,
-        "label": "Lobsters and swordfish — Musa Point, Karamja (Fishing 40-50)",
-        "note": "By boat from Port Sarim (30 gp). Lobster pot from 40, harpoon for tuna from 35 and swordfish from 50."
       }
     ],
     "followsMethod": "fishing"
@@ -5161,7 +5150,7 @@
     "id": "S6-03",
     "stage": 6,
     "type": "skill",
-    "title": "Mining to 60 (Mining Guild) and Woodcutting to 60 (yews)",
+    "title": "Mining to 45, Woodcutting to 36 and Firemaking to 50",
     "requires": [],
     "mapLocation": {
       "x": 3229,
@@ -5171,23 +5160,23 @@
     },
     "fields": [
       {
-        "label": "Mining",
-        "text": "Train Mining with the selected method and a usable pickaxe: copper or tin from 1, then iron from 15. Mining 60 unlocks the Mining Guild; coal and mithril are not required for this climb."
+        "label": "Plan",
+        "text": "Follow Mining to 45, Woodcutting to 36, then Firemaking to 50. Each phase uses the current Skills method, usable owned tools and its actual supplies; bank the previous phase tools before starting the next."
       },
       {
-        "label": "Woodcutting",
-        "text": "After Mining 60, follow the Woodcutting method with a usable axe: regular trees from 1, oaks from 15 and willows from 30. Keep clear of dark wizards near Draynor. Yews unlock at 60; compare current Money estimates before using them for income."
+        "label": "Why these levels",
+        "text": "45 is a sensible iron-mining checkpoint. Woodcutting 36 prepares Lost City. Firemaking 50 unlocks members Wintertodt. Mining Guild 60 and yews 60 are not required before membership."
       },
       {
-        "label": "Optional",
-        "text": "One of the ways to earn towards a Bond. Skip it if another way pays you better."
+        "label": "Supplies",
+        "text": "Keep logs you want to burn when the bank trip is practical. Firemaking selects logs your level allows; do not burn all logs before checking upcoming needs. No long grind or purchase is required to subscribe."
       },
       {
         "label": "Requirements",
-        "text": "Mining 1. The selected method names its current tool and location; train Mining and Woodcutting in turn."
+        "text": "Mining 1. Each later phase checks its own level, tool and materials."
       }
     ],
-    "doneWhen": "Mining 60, Woodcutting 60.",
+    "doneWhen": "Mining 45, Woodcutting 36 and Firemaking 50. These are optional checkpoints, not membership requirements.",
     "inGame": {
       "objectNames": [
         "Copper rocks",
@@ -5198,11 +5187,15 @@
         "levels": [
           {
             "skill": "mining",
-            "level": 60
+            "level": 45
           },
           {
             "skill": "woodcutting",
-            "level": 60
+            "level": 36
+          },
+          {
+            "skill": "firemaking",
+            "level": 50
           }
         ]
       }
@@ -5288,8 +5281,8 @@
     "optional": true,
     "fields": [
       {
-        "label": "Optional",
-        "text": "One of the ways to earn towards a Bond. Skip it if another way pays you better."
+        "label": "Optional checkpoint",
+        "text": "Magic 55 unlocks High Level Alchemy; it is not required before membership. Train only while the current spell and supplies fit your budget. High Alchemy is not guaranteed profit; use Money for a funding plan when needed."
       },
       {
         "label": "Requirements",
@@ -5310,33 +5303,23 @@
     "id": "S6-05",
     "stage": 6,
     "type": "prep",
-    "title": "Buy an Old School Bond on the Grand Exchange",
+    "title": "Choose membership, or keep playing F2P",
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Old_school_bond",
-    "mapLocation": {
-      "x": 3164,
-      "y": 3487,
-      "plane": 0,
-      "label": "The Grand Exchange"
-    },
-    "how": "An Old School Bond gives 14 days of membership; check its current GE estimate before saving or buying. For F2P that is a lot: save up on the ogresses, yews and swordfish of this stage, or pay for membership with money: progress does not depend on the method. When membership is active, switch the app to Members mode: that opens the Members route.",
-    "itemsRequired": [
-      {
-        "nameEn": "Old school bond",
-        "amount": 1,
-        "howToGet": "Buy on the Grand Exchange; check the current GE estimate before placing an offer. It gives 14 days of membership: use it on yourself.",
-        "wikiItemId": 13190,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Old_school_bond.png",
-        "inStep": true
-      }
-    ],
-    "doneWhen": "Membership is activated.",
+    "how": "Ready for membership? Activate it through your chosen payment method, then switch the app to Members mode. You do not need to finish Optional or earn a Bond first. Staying F2P? Continue a Skills plan or open Money for current earning methods.",
+    "doneWhen": "Membership is active and Members mode is selected, or mark this optional decision complete yourself.",
     "inGame": {
       "highlightItems": [
         "Old school bond"
       ]
     },
-    "bondBranch": true
+    "bondBranch": true,
+    "optional": true,
+    "quickSteps": [
+      "Ready for membership: activate it, then select Members mode in the app.",
+      "Staying F2P: choose a Skills plan or open Money; no fixed grind is required.",
+      "A Bond is optional. Check its current price and your budget before any manual purchase."
+    ]
   },
   {
     "id": "S7-01",

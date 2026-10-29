@@ -16,6 +16,7 @@ const quests = (stagesFile as unknown as { quests: Record<string, { var: [string
 const NO_PLACE: Record<string, string> = {
   'S1-01': 'setting up the RuneLite client happens outside the game',
   'S6-04': 'Magic is trained anywhere: combat spells on any monster, Superheat Item and High Level Alchemy need no place',
+  'S6-05': 'choosing membership happens in account settings, not at a mandatory GE destination',
 };
 
 /** Stage rows whose first line has no place: an action in the bag or an interface, or waiting. Known, and the list must not grow. */

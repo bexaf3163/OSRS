@@ -128,16 +128,18 @@ describe('path, actions and time', () => {
     expect(a.path[0].fromLevel).toBe(1);
     expect(a.path[a.path.length - 1].toLevel).toBe(60);
     for (let i = 1; i < a.path.length; i++) expect(a.path[i].fromLevel).toBe(a.path[i - 1].toLevel);
-    expect(a.path.map((l) => l.method.id)).toEqual(['wc-tree', 'wc-oak', 'wc-willow']);
+    expect(a.path.filter((l, i) => i === 0 || l.method.id !== a.path[i - 1].method.id).map(l => l.method.id)).toEqual(['wc-tree', 'wc-oak', 'wc-willow']);
+    expect(a.path.some(l => l.fromLevel === 21)).toBe(true); // Mithril axe review, even when the tree stays the same.
   });
 
   it('"how many more actions" — by the exact experience per action', () => {
     const a = advise({ skill: 'woodcutting', target: 30, state: levels({ woodcutting: 15 }), mode: 'f2p' });
     expect(a.best?.method.id).toBe('wc-oak');
-    expect(a.actionsLeft).toBe(Math.ceil((xpForLevel(30) - xpForLevel(15)) / 37.5));
+    expect(a.actionTarget).toBe(21);
+    expect(a.actionsLeft).toBe(Math.ceil((xpForLevel(21) - xpForLevel(15)) / 37.5));
     // If the experience is known exactly, we count from it.
     const b = advise({ skill: 'woodcutting', target: 30, state: levels({ woodcutting: 15 }), mode: 'f2p', xp: xpForLevel(15) + 1000 });
-    expect(b.actionsLeft).toBe(Math.ceil((xpForLevel(30) - xpForLevel(15) - 1000) / 37.5));
+    expect(b.actionsLeft).toBe(Math.ceil((xpForLevel(21) - xpForLevel(15) - 1000) / 37.5));
   });
 
   it('time: by the player\'s measurements exactly; without measurements — a range "by the wiki"; no speed — no time', () => {

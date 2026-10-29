@@ -26,11 +26,13 @@ export function pickMethods(steps: readonly Step[], state: PlayerState, mode: Ga
       if (goal.skill !== step.followsMethod) picks[step.id] = `${UNKNOWN_GOAL_PREFIX}${goal.skill}`;
       continue;
     }
-    const best = adviseTraining({ skill: goal.skill, target: goal.target, state, mode, style, priority, ...market }).best;
+    const advice = adviseTraining({ skill: goal.skill, target: goal.target, state, mode, style, priority, ...market });
+    const best = advice.best;
     const along = best ? alongPlan(step, goal, best.method, state, mode, style, priority, market) : null;
     const spot = along?.spot ?? best?.method.spot;
-    if (best) picks[step.id] = best.method.kit || spot ? {
-      methodId: best.method.id, needs: methodNeeds(best.method, state, market.prices), name: best.method.name,
+    // A model can resolve recipe supplies without a named kit or station (for example bank-side processing).
+    if (best) picks[step.id] = best.method.kit || spot || best.method.needs.length || advice.actionTarget !== null ? {
+      methodId: best.method.id, untilLevel: advice.actionTarget ?? goal.target, needs: methodNeeds(best.method, state, market.prices), name: best.method.name,
       ...(spot ? { spot: { label: spot.label, x: spot.place.x, y: spot.place.y, plane: spot.place.plane, ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }, where: best.method.where } : {}),
       ...(best.method.rateWarning ? { warning: best.method.rateWarning } : {}),
       ...(along ? { along: { skill: along.skill, station: along.station, products: along.products, how: along.spot.how } } : {}),

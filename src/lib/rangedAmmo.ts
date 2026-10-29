@@ -1,3 +1,4 @@
+import { ARROW_BREAK_RATE, rangedMaximumHit, trainingRangedStyleBonus } from './combatEstimate';
 // How many arrows a Ranged goal uses, for this player's bow, arrows and armour against the chosen opponent (T11).
 //
 // OSRS Wiki, "Damage per second/Ranged": effective level = Ranged + style (Accurate 3, Rapid and Longrange 0) + 8; max hit =
@@ -14,7 +15,7 @@ import { attacksToKill, foeVariants, spread, type CombatFoe, type Range } from '
 import { rangedEquipment, rangedNeeds } from './rangedLoadout';
 import type { PriceView } from './funding/quotes';
 import type { PlayerState } from './playerState';
-import type { TrainingMethod } from './trainingRouter';
+import type { MethodNeed, TrainingMethod } from './trainingRouter';
 import { gearData } from '../services/gearAdvisor';
 import { nameKey } from './checklist';
 import { levelForXp, xpForLevel } from './xp';
@@ -24,10 +25,10 @@ export const RANGED_GEAR = (rangedGearJson as { items: RangedGearItem[] }).items
 
 export type RangedStyle = 'accurate' | 'rapid' | 'longrange';
 /** The starter guide uses Accurate below 5, then Rapid; explicit player choices still override it. */
-export const trainingRangedStyle = (level: number): RangedStyle => level < 5 ? 'accurate' : 'rapid';
+export const trainingRangedStyle = (level: number): RangedStyle => trainingRangedStyleBonus(level) ? 'accurate' : 'rapid';
 const STYLE_BONUS: Record<RangedStyle, number> = { accurate: 3, rapid: 0, longrange: 0 };
 /** The share of shots that destroy their arrow (OSRS Wiki, Arrows: 20% without an Ava's device). */
-export const ARROW_BREAK = 0.2;
+export const ARROW_BREAK = ARROW_BREAK_RATE;
 const XP_PER_DAMAGE = 4;
 /** The model's margin on top of the luck of the rolls: who is attacked, overkill on a shared target, misclicks. */
 const MARGIN = 0.15;
@@ -88,7 +89,7 @@ export function rangedHit(level: number, bowName: string, arrowName: string, wor
     else armour += b;
   }
   const effective = level + STYLE_BONUS[styleName] + 8;
-  const maxHit = Math.floor(0.5 + (effective * (bow.rangedStrength + arrow.rangedStrength + 64)) / 640);
+  const maxHit = rangedMaximumHit(level, bow.rangedStrength + arrow.rangedStrength, STYLE_BONUS[styleName]);
   const chance = hitChanceOf(effective * (bow.rangedAttack + arrow.rangedAttack + armour + 64), (foe.defenceLevel + 9) * (rdef + 64));
   // OSRS Wiki, Ranged: the rapid style shoots one tick faster.
   const speedTicks = Math.max(1, (bow.speed ?? 4) - (styleName === 'rapid' ? 1 : 0));
@@ -139,22 +140,28 @@ export function methodFoe(m: Pick<TrainingMethod, 'npcNames' | 'where'>): Combat
   return variants.find((f) => level !== undefined && f.combat === Number(level)) ?? variants[0] ?? null;
 }
 
-export interface GoalArrows extends AmmoEstimate { bow: string; arrow: string; goalLevel: number }
+export interface GoalArrows extends AmmoEstimate { bow: string; arrow: string; goalLevel: number; changesKit?: boolean }
 
 /**
  * The arrows for the whole goal along the advice's path (each leg against its own opponent), with the bow and arrows the starter kit picks
  * now (rangedLoadout.rangedNeeds). null when a leg is not a bow method or lacks data, or the Ranged XP is unknown.
  */
-export function goalArrows(legs: readonly { method: TrainingMethod; fromLevel: number; toLevel: number }[], state: PlayerState, xp: number | null, prices?: PriceView | null): GoalArrows | null {
+export function goalArrows(legs: readonly { method: TrainingMethod; fromLevel: number; toLevel: number; needs?: readonly MethodNeed[] }[], state: PlayerState, xp: number | null, prices?: PriceView | null): GoalArrows | null {
   if (xp === null || !legs.length || legs.some((l) => l.method.kit !== 'f2p-bow')) return null;
   const kit = rangedNeeds(state, prices).filter((n) => n.type === 'item');
   const [bow, arrow] = [kit[0]?.name, kit[1]?.name];
   if (!bow || !arrow) return null;
-  const worn = Object.entries(rangedEquipment(state.equipment, kit)).filter(([slot]) => slot !== 'weapon' && slot !== 'ammo').map(([, name]) => name);
+  const kits = new Set<string>();
   const sum: AmmoEstimate = { shots: { low: 0, mid: 0, high: 0 }, lostPickingUp: { low: 0, mid: 0, high: 0 }, kills: 0, notCounted: [] };
   for (const leg of legs) {
+    const planned = (leg.needs ?? kit).filter(n => n.type === 'item');
+    const legBow = planned.find(n => n.equip && RANGED_GEAR.some(g => g.name === n.name && g.speed))?.name;
+    const legArrow = planned.find(n => n.equip && RANGED_GEAR.some(g => g.name === n.name && g.slot === 'ammo'))?.name;
+    if (!legBow || !legArrow) return null;
+    const worn = Object.entries(rangedEquipment(state.equipment, planned)).filter(([slot]) => slot !== 'weapon' && slot !== 'ammo').map(([, name]) => name);
+    kits.add(JSON.stringify([legBow, legArrow, worn]));
     const foe = methodFoe(leg.method);
-    const e = foe && arrowsForGoal({ xp: Math.max(xp, xpForLevel(leg.fromLevel)), goalLevel: leg.toLevel, bow, arrow, worn, foe });
+    const e = foe && arrowsForGoal({ xp: Math.max(xp, xpForLevel(leg.fromLevel)), goalLevel: leg.toLevel, bow: legBow, arrow: legArrow, worn, foe });
     if (!e) return null;
     for (const k of ['low', 'mid', 'high'] as const) {
       sum.shots[k] += e.shots[k];
@@ -163,5 +170,5 @@ export function goalArrows(legs: readonly { method: TrainingMethod; fromLevel: n
     sum.kills += e.kills;
     for (const n of e.notCounted) if (!sum.notCounted.includes(n)) sum.notCounted.push(n);
   }
-  return { ...sum, bow, arrow, goalLevel: legs[legs.length - 1].toLevel };
+  return { ...sum, bow, arrow, goalLevel: legs[legs.length - 1].toLevel, ...(kits.size > 1 ? { changesKit: true } : {}) };
 }

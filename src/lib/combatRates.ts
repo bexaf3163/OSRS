@@ -1,3 +1,5 @@
+import { bankTrip } from './bankTrip';
+import { matchStrict } from '../services/locationResolver';
 // What a combat training method gives this player per hour, from the same combat model the fight plans use (2.76, T10): one engine for melee, Ranged
 // and Magic, so the Skills page and the route's steps never disagree about where to train.
 //   melee  - combatEstimate.estimateCombat for the next few levels: the worn weapon, amulet and armour, eating, the spot's bank trips and respawns;
@@ -16,7 +18,7 @@ import { allSteps } from '../data';
 import { attacksToKill, combatMargin, combatRecovery, counterDamage, estimateCombat, foeVariants, hitChance, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
 import { spotsOf, termsFor, TRAINER_LEVELS } from './combatRoute/spots';
 import { coinsPerMinute, dropValue, lootSecondsPerKill } from './lootValue';
-import { methodFoe, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
+import { ARROW_BREAK, methodFoe, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
 import { rangedEquipment, rangedNeeds } from './rangedLoadout';
 import { STAFFS, strikeRecipe } from './magicPlan';
 import { FOODS } from './foodAdvice';
@@ -36,8 +38,6 @@ const TICK = 0.6;
 const BETWEEN: [number, number] = [2, 6];
 /** Picking up the arrows under a kill, seconds. */
 const ARROW_PICKUP = 1.2;
-/** The share of shots that destroy their arrow (rangedAmmo.ARROW_BREAK). */
-const ARROW_BREAK = 0.2;
 /** A standard spell is cast every 5 ticks. */
 const SPELL_TICKS = 5;
 /** Levels ahead the melee estimate is made for: long enough to average the rolls, short enough to stay "now". */
@@ -174,7 +174,10 @@ function styleRecovery(m: TrainingMethod, level: number, state: PlayerState, foe
   needs: MethodNeed[] = m.needs, pickupSeconds = 0, zeroIsOne = true) {
   const hp = levelOf(state, 'hitpoints');
   const defence = levelOf(state, 'defence');
-  const terms = termsOf(foe.name);
+  const declared = termsOf(foe.name);
+  const place = m.place ? matchStrict(m.place) : null;
+  const fallbackTrip = !declared.tripMinutes && place ? bankTrip({ place }) : null;
+  const terms = { ...declared, ...(fallbackTrip ? { tripMinutes: fallbackTrip.minutes } : {}) };
   if (hp === undefined || unsafe(foe, terms, hp) || (foe.maxHit > 0 && defence === undefined)) return null;
   // The shared incoming melee roll is not a substitute for an unmodelled magic/ranged defence formula.
   if (foe.maxHit > 0 && !['stab', 'slash', 'crush'].includes(foe.attackStyle)) return null;

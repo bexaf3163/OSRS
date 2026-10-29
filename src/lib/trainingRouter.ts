@@ -1,3 +1,4 @@
+import { nameKey } from './checklist';
 // "What to train with": by level, goal, game mode, items and play style (calm / efficient) it picks a training method
 // for the skill and shows the path to the goal. The methods are in src/data/trainingMethods.json (OSRS Wiki and the skills' training plans).
 //
@@ -15,8 +16,11 @@ import { evaluate, type ReqState, type Requirement } from './requirements';
 import { coinsOf, levelOf, type PlayerState } from './playerState';
 import { xpForLevel } from './xp';
 import type { MethodPriority, PlayStyle } from './playStyle';
-import { rangedNeeds, RANGED_WATCH } from './rangedLoadout';
-import { strikeRecipe, superheatNeeds } from './magicPlan';
+import { rangedEquipment, rangedNeeds, RANGED_WATCH } from './rangedLoadout';
+import { SPELLS, strikeRecipe, superheatNeeds } from './magicPlan';
+import { STYLE_GEAR } from './styleGear';
+import { PROCESSING } from './processingRates';
+import { canWear, gearData, type Levels } from '../services/gearAdvisor';
 import { methodRate, rateKeyOf, type RateSpot } from './methodRates';
 import { combatUpgrades } from './combatRates';
 import type { PriceView } from './funding/quotes';
@@ -45,6 +49,8 @@ export interface TrainingMethod {
   from: number;
   /** Suggested training bracket; unlike from, this does not invent a game unlock requirement. */
   suggestedFrom?: number;
+  /** Starter-only recommendation ends at to; older efficient methods otherwise remain valid. */
+  introductory?: boolean;
   /** Up to which level (exclusive) the method is the best; null — to the end. */
   to: number | null;
   name: string;
@@ -57,6 +63,8 @@ export interface TrainingMethod {
   xph: [number, number] | null;
   /** model - xph is the model's for this player's levels and gear (methodRates.ts: the combat or the gathering engine), not the wiki's guide. */
   rateSource?: 'model';
+  /** Physical tool/recipe/loadout used by the rate, for useful progression milestones. */
+  rateBasis?: string;
   /** The spot the gathering engine picked among the method's candidates, and whether a full bag is banked or dropped there. */
   spot?: RateSpot;
   /** One safety line from the model: aggressive NPCs at the picked spot. */
@@ -91,7 +99,7 @@ export interface TrainingMethod {
 }
 
 interface Raw {
-  id: string; skill: string | string[]; from: number; suggestedFrom?: number; to: number | null; name: string; members: boolean;
+  id: string; skill: string | string[]; from: number; suggestedFrom?: number; introductory?: boolean; to: number | null; name: string; members: boolean;
   needs?: MethodNeed[]; kit?: TrainingMethod['kit']; manualSetup?: string; xph?: [number, number]; xpa?: number; act?: string; effort: Effort; cost: MethodCost; risk: Risk;
   where: string; place?: string; objectNames?: string[]; npcNames?: string[]; note?: string; url: string; kind?: 'method' | 'quest'; xpTotal?: number;
 }
@@ -105,6 +113,7 @@ export const trainingMethods: TrainingMethod[] = (methodsJson as unknown as { me
   kind: m.kind ?? 'method', xpTotal: m.xpTotal ?? null,
   ...(m.objectNames ? { objectNames: m.objectNames } : {}),
   ...(m.npcNames ? { npcNames: m.npcNames } : {}),
+  ...(m.introductory ? { introductory: true } : {}),
   ...(m.suggestedFrom !== undefined ? { suggestedFrom: m.suggestedFrom } : {}),
   ...(m.kit ? { kit: m.kit } : {}),
   ...(m.manualSetup ? { manualSetup: m.manualSetup } : {}),
@@ -309,10 +318,15 @@ export const methodsFor = (skill: string, methods: readonly TrainingMethod[] = t
 const availableAt = (m: TrainingMethod, level: number, mode: GameMode): boolean =>
   m.kind === 'method' && m.from <= level && (mode === 'members' || !m.members);
 
+const recommendedAt = (m: TrainingMethod, level: number, mode: GameMode): boolean =>
+  availableAt(m, level, mode) && (m.suggestedFrom ?? m.from) <= level && (!m.introductory || m.to === null || level < m.to);
+
 export interface PathLeg {
   method: TrainingMethod;
   fromLevel: number;
   toLevel: number;
+  /** Resolved future preparation, not a claim that these supplies are owned or already funded. */
+  needs?: MethodNeed[];
 }
 
 export interface TimeEstimate {
@@ -395,7 +409,7 @@ export function personalize(methods: readonly TrainingMethod[], skill: string, s
     if (hit) return hit;
     const r = methodRate(m, skill, state, { prices, restriction, objective });
     const out: TrainingMethod = r ? {
-      ...m, xph: [Math.round(r.xph[0]), Math.round(r.xph[1])], rateSource: 'model', costPerHour: r.costPerHour,
+      ...m, xph: [Math.round(r.xph[0]), Math.round(r.xph[1])], rateSource: 'model', rateBasis: r.basis, costPerHour: r.costPerHour,
       ...(r.methodName ? { name: r.methodName } : {}),
       ...(r.xpPerAction !== undefined ? { xpa: r.xpPerAction } : {}),
       ...(r.needs ? { needs: [...m.needs.filter((n) => n.type === 'skill' || n.type === 'quest'), ...r.needs.map((n) => {
@@ -521,11 +535,29 @@ function reasonFor(v: MethodView, priority: MethodPriority, level: number, upgra
 }
 
 /**
- * The best method on each leg of the path to the goal: identical consecutive ones merge. Except for "fastest", a new unlock replaces the method in hand
+ * The best method on each leg of the path to the goal; useful gear/recipe milestones remain separate review stages. Except for "fastest", a new unlock replaces the method in hand
  * only when it is clearly better in practice (SWITCH_GAIN): changing method for a sliver costs a trip and a new setup.
  */
+/** Conditional future preparation in a copy: never grant this kit/coins to the live player. */
+function forecastRangedEquipment(state: PlayerState, needs: readonly MethodNeed[], prices?: PriceView | null): PlayerState {
+  const equipmentNeeds = needs.filter(n => n.type === 'item' && n.equip);
+  const cost = requirementCost(equipmentNeeds.map(n => methodRequirement(n, state)), state, prices);
+  const cash = coinsOf(state).total;
+  const equipmentItems = equipmentNeeds.flatMap(n => n.type === 'item' ? [{ name: n.name,
+    count: Math.max(n.count ?? 1, state.equipmentItems?.find(i => nameKey(i.name) === nameKey(n.name))?.count ?? 0) }] : []);
+  return { ...state, equipment: rangedEquipment(state.equipment, equipmentNeeds), equipmentItems,
+    coins: cash !== null && cost !== null ? {
+      bag: { known: true, value: Math.max(0, cash - cost), source: 'profile' }, bank: { known: true, value: 0, source: 'profile' },
+    } : { bag: { known: false }, bank: { known: false } },
+  };
+}
+
 function buildPath(skill: string, level: number, target: number, input: AdviceInput, priority: MethodPriority, first: TrainingMethod | null, raw: readonly TrainingMethod[]): { legs: PathLeg[]; time: TimeEstimate | null } {
   const legs: PathLeg[] = [];
+  const milestones = trainingMilestones(skill, raw, input.mode, input.state);
+  let ratedAt = level;
+  let previousSetup = '';
+  let projectedState = input.state;
   let minHours = 0;
   let maxHours = 0;
   let timed = true;
@@ -533,10 +565,12 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
   for (let lv = level; lv < target; lv++) {
     // The model's rates are for the level the leg starts at (every FORECAST_STEP levels), not today's carried forward: a method unlocked later is
     // then compared on its own model rate, not on the wiki's guide against today's model rates.
-    const at = Math.max(level, lv - (lv % FORECAST_STEP));
-    const methods = at === level ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(input.state, skill, at), input.prices, input.restriction, priority);
-    // For future levels the item requirements are not counted: "what will be needed", not "what there is now".
-    const cands = methodsFor(skill, methods).filter((m) => !m.manualSetup && availableAt(m, lv, input.mode)).map((m) => viewMethod(m, input.state, input.prices)).filter((v) => v.status !== 'LOCKED' || v.missing.every((x) => x.kind === 'skill'));
+    if (lv === level || lv % FORECAST_STEP === 0 || milestones.has(lv)) ratedAt = lv;
+    const at = ratedAt;
+    const projected = atLevel(projectedState, skill, lv);
+    const methods = at === level ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(projected, skill, at), input.prices, input.restriction, priority);
+    // Advance only this skill in a copy; other skill/quest entry proofs must still be satisfied.
+    const cands = methodsFor(skill, methods).filter((m) => !m.manualSetup && recommendedAt(m, lv, input.mode)).map((m) => viewMethod(m, projected, input.prices)).filter((v) => v.status !== 'LOCKED');
     // Each level is weighed as the first one is (adviseTraining): the hours from here to the goal, less what the banked drops are worth.
     cands.sort(compare(priority, Math.max(0, xpForLevel(target) - xpForLevel(lv)), lv, coinsPerMinute(input.prices)));
     let pick = (lv === level ? cands.find(c => c.method.id === first?.id)?.method : undefined) ?? cands[0]?.method;
@@ -557,11 +591,39 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
       maxHours += xp / rate[0];
       sources.add(measured ? 'measured' : pick.rateSource ?? 'wiki');
     }
-    if (last && last.method.id === pick.id) last.toLevel = lv + 1;
-    else legs.push({ method: pick, fromLevel: lv, toLevel: lv + 1 });
+    const plannedNeeds = methodNeeds(pick, projected, input.prices);
+    const setup = JSON.stringify([pick.rateBasis ?? '', plannedNeeds.map(n => n.type === 'item' && n.equip ? { ...n, count: 1 } : n)]);
+    const review = milestones.has(lv);
+    if (last && last.method.id === pick.id && setup === previousSetup && !review) last.toLevel = lv + 1;
+    else legs.push({ method: pick, fromLevel: lv, toLevel: lv + 1, needs: plannedNeeds });
+    previousSetup = setup;
+    if (pick.kit === 'f2p-bow') projectedState = forecastRangedEquipment(projected, plannedNeeds, input.prices);
   }
   const source = sources.size === 1 ? [...sources][0] : 'forecast';
   return { legs, time: timed && legs.length > 0 ? { source, minHours, maxHours } : null };
+}
+
+/** Re-rate at real declared unlocks as well as the normal five-level sampling interval. */
+function trainingMilestones(skill: string, methods: readonly TrainingMethod[], mode: GameMode, state: PlayerState): Set<number> {
+  const relevant = methods.filter(m => !m.manualSetup && m.skills.includes(skill) && (mode === 'members' || !m.members));
+  const levels = relevant.flatMap(m => [m.from, m.suggestedFrom ?? m.from, m.to ?? 99]);
+  if (skill === 'woodcutting' || skill === 'mining') levels.push(...tools[skill].map(t => t.levelReq));
+  for (const style of Object.values(STYLE_GEAR).filter((v): v is typeof STYLE_GEAR.ranged => typeof v === 'object')) {
+    for (const options of Object.values(style)) for (const o of options) for (const req of o.reqs) if (req.skill === skill) levels.push(req.level);
+  }
+  const futureGearLevels: Levels = { attack: levelOf(state, 'attack') ?? 1, strength: levelOf(state, 'strength') ?? 1, defence: levelOf(state, 'defence') ?? 1,
+    ranged: levelOf(state, 'ranged'), magic: levelOf(state, 'magic'), prayer: levelOf(state, 'prayer'), [skill]: 99 };
+  const quests = state.quests.known ? new Set(state.quests.value) : undefined;
+  for (const piece of gearData.items) {
+    const unlock = piece.req?.[skill as keyof Levels];
+    if (unlock !== undefined && !piece.reqUnverified && !(piece.members && mode === 'f2p') && canWear(piece, futureGearLevels, quests)) levels.push(unlock);
+  }
+  const recipes = new Set(relevant.flatMap(m => PROCESSING.methods[m.id] ?? []));
+  for (const r of PROCESSING.recipes) if (recipes.has(r.id) && !(r.members && mode === 'f2p')) {
+    levels.push(r.level, ...r.requires?.filter(q => q.skill === skill).map(q => q.level) ?? []);
+  }
+  if (skill === 'magic') levels.push(...SPELLS.map(s => s.level));
+  return new Set(levels.filter(n => Number.isInteger(n) && n >= 1 && n <= 99));
 }
 
 /** Future legs of the path are re-rated every this many levels. */
@@ -584,7 +646,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const xpNow0 = input.xp ?? xpForLevel(level);
   const coinRate = coinsPerMinute(input.prices);
   const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level, coinRate);
-  const views = methodsFor(skill, methods).filter((m) => availableAt(m, level, mode)).map((m) => viewMethod(m, state, input.prices)).sort(cmp);
+  const views = methodsFor(skill, methods).filter((m) => recommendedAt(m, level, mode) || (m.id === input0.followed && availableAt(m, level, mode))).map((m) => viewMethod(m, state, input.prices)).sort(cmp);
   const pickV = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
   const said = (v: MethodView): MethodView => ({ ...v, reason: reasonFor(v, priority, level) });
   const followedV = input0.followed ? views.find((v) => v.method.id === input0.followed && v !== pickV) ?? null : null;
@@ -592,7 +654,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const best = pickV;
   const quests = methodsFor(skill, methods).filter((m) => m.kind === 'quest' && m.from <= level && (m.to === null || level < m.to) && (mode === 'members' || !m.members));
   const forecast = buildPath(skill, level, target, input, priority, best?.method ?? null, input0.methods ?? trainingMethods);
-  const path = forecast.legs.slice(0, 6);
+  const path = forecast.legs;
 
   const xpNow = input.xp ?? xpForLevel(level);
   const xpLeft = Math.max(0, xpForLevel(target) - xpNow);
@@ -604,7 +666,8 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   }
   const time = forecast.time;
   // Upgrade rates are for the current method only, not for later methods that may use another tool.
-  const methodXp = Math.max(0, xpForLevel(actionTarget ?? level) - xpNow);
+  const methodEnd = path.find(l => l.method.id !== best?.method.id)?.fromLevel ?? target;
+  const methodXp = Math.max(0, xpForLevel(methodEnd) - xpNow);
   const upgradeMethod = best && priority !== 'relaxed' && priority !== 'profit' ? {
     ...best.method, upgrades: best.method.upgrades ?? combatUpgrades(best.method, skill, state, { prices: input.prices, restriction: input.restriction, objective }),
   } : best?.method;

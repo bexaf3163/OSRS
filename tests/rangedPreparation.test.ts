@@ -56,27 +56,27 @@ describe('S6-01 actual ranged preparation', () => {
     const absentFood = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)], {}, 1, true, {}, m.id);
     expect(absentFood.engine.plan(absentFood.step).lines.find(r => r.name === 'Salmon')?.where).not.toBe('BANK');
   });
-  it.each([[1, 'ra-lumb', 'Seagull'], [20, 'ra-lumb', 'Seagull'], [26, 'ra-lumb', 'Seagull'], [39, 'ra-monk', 'Monk']] as const)(
+  it.each([[1, 'ra-lumb', 'Seagull'], [20, 'ra-monk', 'Monk'], [26, 'ra-monk', 'Monk'], [39, 'ra-monk', 'Monk']] as const)(
     'Ranged%s gets its current trainer, kit and unchanged goal', (level, id, npc) => {
       const s = scenario(level);
       expect(s.pick).toMatchObject({ methodId: id });
       expect(s.payload.npcNames).toEqual([npc]);
       expect(s.payload.npcNames?.some(n => /Ogress/.test(n))).toBe(false);
-      expect(s.payload.checklist).toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Shortbow', equip: true }), expect.objectContaining({ name: 'Bronze arrow', count: 100, equip: true })]));
+      expect(s.payload.checklist).toEqual(expect.arrayContaining([expect.objectContaining({ name: level >= 30 ? 'Maple shortbow' : level >= 20 ? 'Willow shortbow' : 'Shortbow', equip: true }), expect.objectContaining({ name: 'Bronze arrow', count: 100, equip: true })]));
       expect(s.payload.completionTrigger).toEqual(base.inGame!.completionTrigger);
     });
-  it('with exchange prices the Big bones count: at Ranged 20 the frogs pay for their bank trips and beat the monks', () => {
+  it('with exchange prices the Big bones count: at Ranged 26 the frogs pay for their bank trips and beat the monks', () => {
     // The recorded market has no arrow prices: an exchange that also prices the arrows the training breaks.
     const base = market();
     const priced: PriceView = { ...base, buy: (n) => (/ arrow$/i.test(n) ? { price: 3, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] } : base.buy(n)) };
-    const s = scenario(20, [], {}, 1, true, { prices: priced, restriction: 'LIFTED' });
+    const s = scenario(26, [], {}, 1, true, { prices: priced, restriction: 'LIFTED' });
     expect(s.pick).toMatchObject({ methodId: 'ra-frog' });
     expect(s.payload.npcNames).toEqual(['Giant frog']);
-    const equipped = scenario(20, [piece('Shortbow'), piece('Bronze arrow', 100)], { Salmon: { bank: 10 } }, 1, true, { prices: base, restriction: 'UNKNOWN' });
+    const equipped = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)], { Salmon: { bank: 10 } }, 1, true, { prices: base, restriction: 'UNKNOWN' });
     expect(equipped.pick).toMatchObject({ methodId: 'ra-frog' });
     expect(equipped.payload.npcNames).toEqual(['Giant frog']);
     // Without an exchange arrow price the free shop's price counts (Lowe's, 1 gp): the cost stays known and the same choice is made.
-    expect(scenario(20, [], {}, 1, true, { prices: base, restriction: 'LIFTED' }).pick).toMatchObject({ methodId: 'ra-frog' });
+    expect(scenario(26, [], {}, 1, true, { prices: base, restriction: 'LIFTED' }).pick).toMatchObject({ methodId: 'ra-frog' });
   });
   it('recognizes a usable owned bow and compatible banked ammunition before buying replacements', () => {
     const s = scenario(30, [piece('Maple shortbow')], { 'Adamant arrow': { bank: 100 }, Salmon: { bank: 10 } });

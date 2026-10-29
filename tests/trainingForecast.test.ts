@@ -33,10 +33,10 @@ describe('time follows the complete training path', () => {
     expect(a.time?.source).toBe('wiki');
     expect(a.time?.minHours).toBeCloseTo((xpForLevel(20) - xpForLevel(15)) / 20000);
   });
-  it('includes methods beyond the six displayed rows', () => {
+  it('retains the complete internal path beyond a compact display preview', () => {
     const ms = Array.from({ length: 8 }, (_, i) => method(`phase-${i}`, 10 + i, [1000 * (i + 1), 1000 * (i + 1)]));
     const a = advice(ms, 10, 18);
-    expect(a.path).toHaveLength(6);
+    expect(a.path).toHaveLength(8);
     const hours = ms.reduce((total, _m, i) => total + (xpForLevel(11 + i) - xpForLevel(10 + i)) / (1000 * (i + 1)), 0);
     expect(a.time?.maxHours).toBeCloseTo(hours);
   });

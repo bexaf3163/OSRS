@@ -6,28 +6,35 @@ export interface F2pSkillAdvice {
   reason: string;
   comparison: string;
   sources: string[];
+  /** Short practical equipment advice; actual usable tools/supplies still come from preparation. */
+  equipment?: string;
 }
 
 const wiki = (page: string) => `https://oldschool.runescape.wiki/w/${page}`;
 /** Reviewed 2026-10-28. Authored pre-members checkpoints, not training requirements or XP forecasts. */
 export const F2P_SKILL_ADVICE: Partial<Record<SkillName, F2pSkillAdvice>> = {
   cooking: { priority: 'good', target: 68,
+    equipment: "Bring the listed ingredients. Armour and combat amulets do not improve cooking; keep room for the batch.",
     reason: 'A good F2P project if you can afford supplies. Wine starts at 35; bad wine stops at 68.',
     comparison: 'Wine uses the same basic banking and creation method in both modes. Fish cooking and your actual budget can change the best choice; this is not a promise of maximum XP/h.',
     sources: [wiki('Free-to-play_Cooking_training'), wiki('Pay-to-play_Cooking_training')] },
   firemaking: { priority: 'good', target: 50,
+    equipment: "Bring a tinderbox and the listed logs. No special F2P outfit or amulet is needed.",
     reason: 'Burning logs is useful F2P preparation for Wintertodt, which opens at 50 on members.',
     comparison: 'Basic log burning is shared. Wintertodt adds a lower-effort members alternative from 50; 50 is a practical stopping point, not an XP-speed cap.',
     sources: [wiki('Pay-to-play_Firemaking_training')] },
   mining: { priority: 'good', target: 45,
+    equipment: "Carry your best usable owned pickaxe; wielding needs Attack, carrying works. Bank heavy armour for travel.",
     reason: 'Iron mining is a useful early project. Pause at 45 and compare members methods before a longer grind.',
     comparison: 'Members also use iron at these levels. Their quest skips, Varrock armour, later guild access and tick-manipulation methods can be faster; identical XP/h is not guaranteed.',
     sources: [wiki('Pay-to-play_Mining_training')] },
   fishing: { priority: 'good', target: 35,
+    equipment: "Use the listed rod/net and bait. Armour and combat amulets do not improve fishing; leave room for catches.",
     reason: 'Fly fish from 20; 35 is a sensible checkpoint before comparing members methods.',
     comparison: 'The same trout/salmon method is available in both modes. Without tick manipulation, members Tempoross becomes faster from 35. Banking your catch lowers XP/h compared with dropping it.',
     sources: [wiki('Free-to-play_Fishing_training'), wiki('Pay-to-play_Fishing_training')] },
   woodcutting: { priority: 'optional', target: 36,
+    equipment: "Carry your best usable owned axe; wielding needs Attack, carrying works. No special F2P amulet is needed.",
     reason: '36 prepares the Woodcutting requirement for Lost City. There is little reason to force a long F2P grind before membership.',
     comparison: 'Basic trees and oaks are comparable early methods. Members teaks open at 35; the extra level to 36 is a quest checkpoint, not a claim of equal training speed.',
     sources: [wiki('Pay-to-play_Woodcutting_training'), wiki('Lost_City')] },

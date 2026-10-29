@@ -48,7 +48,8 @@ describe('one engine for every combat method', () => {
     expect(mid(one['ra-lumb']!)).toBeGreaterThan(mid(one['ra-frog']!));
     const thirty = at(30);
     // Bare Defence1 now pays for eating/banking instead of assuming the frogs never hit.
-    expect(mid(thirty['ra-frog']!)).toBeLessThan(mid(thirty['ra-lumb']!));
+    const safeFrogs = methodRate(method('ra-frog'), 'ranged', state({ ranged: 30, defence: 99, hitpoints: 30 }, BOW))!;
+    expect(mid(safeFrogs)).toBeGreaterThan(mid(thirty['ra-frog']!));
     const seventy = at(70);
     const defended = methodRate(method('ra-moss'), 'ranged', state({ ranged: 70, defence: 99, hitpoints: 70 }, BOW))!;
     expect(mid(defended)).toBeGreaterThan(mid(seventy['ra-moss']!));

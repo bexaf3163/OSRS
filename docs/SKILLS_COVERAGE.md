@@ -17,7 +17,7 @@ beyond the verified registries and real-session calibration remain open; this ca
 | attack | free to 99, members to 99 | 22 steps (16 free), levels 1-99 | 11 (10 free) | free route 40, whole route 49 | none | automated data checks; not verified in the game |
 | strength | free to 99, members to 99 | 21 steps (17 free), levels 1-99 | 11 (10 free) | free route 35, whole route 39 | none | automated data checks; not verified in the game |
 | defence | free to 99, members to 99 | 20 steps (17 free), levels 1-99 | 11 (10 free) | free route 33, whole route 34 | none | automated data checks; not verified in the game |
-| ranged | free to 99, members to 99 | 14 steps (11 free), levels 1-99 | 5 (5 free) | free route 40, whole route 40 | none | automated data checks; not verified in the game |
+| ranged | free to 99, members to 99 | 14 steps (11 free), levels 1-99 | 7 (7 free) | free route 40, whole route 40 | none | automated data checks; not verified in the game |
 | prayer | free to 99, members to 99 | 9 steps (8 free), levels 1-99 | 4 (4 free) | free route 15, whole route 43 | none | automated data checks; not verified in the game |
 | magic | free to 99, members to 99 | 13 steps (13 free), levels 1-99 | 6 (6 free) | free route 55, whole route 55 | none | automated data checks; not verified in the game |
 | runecraft | free to 99, members to 99 | 8 steps (5 free), levels 1-99 | 4 (4 free) | not asked | none | automated data checks; not verified in the game |
@@ -30,15 +30,15 @@ beyond the verified registries and real-session calibration remain open; this ca
 | fletching | members only | 8 steps (0 free), levels 1-99 | 6 (0 free) | not asked | none | automated data checks; not verified in the game |
 | slayer | members only | 3 steps (0 free), levels 1-99 | none: the card shows the training plan row | free route -, whole route 20 | none | automated data checks; not verified in the game |
 | hunter | members only | 10 steps (0 free), levels 1-99 | none: the card shows the training plan row | not asked | none | automated data checks; not verified in the game |
-| mining | free to 99, members to 99 | 11 steps (8 free), levels 1-99 | 3 (2 free) | free route 60, whole route 60 | none | automated data checks; not verified in the game |
+| mining | free to 99, members to 99 | 11 steps (8 free), levels 1-99 | 3 (2 free) | free route 45, whole route 45 | none | automated data checks; not verified in the game |
 | smithing | free to 99, members to 99 | 8 steps (6 free), levels 1-99 | 6 (6 free) | free route 29, whole route 29 | none | automated data checks; not verified in the game |
-| fishing | free to 99, members to 99 | 12 steps (8 free), levels 1-99 | 7 (5 free) | free route 50, whole route 50 | none | automated data checks; not verified in the game |
-| cooking | free to 99, members to 99 | 8 steps (7 free), levels 1-99 | 4 (4 free) | free route 50, whole route 50 | none | automated data checks; not verified in the game |
-| firemaking | free to 99, members to 99 | 7 steps (6 free), levels 1-99 | 5 (5 free) | free route 15, whole route 15 | none | automated data checks; not verified in the game |
-| woodcutting | free to 99, members to 99 | 11 steps (7 free), levels 1-99 | 6 (4 free) | free route 60, whole route 60 | none | automated data checks; not verified in the game |
+| fishing | free to 99, members to 99 | 12 steps (8 free), levels 1-99 | 7 (5 free) | free route 35, whole route 35 | none | automated data checks; not verified in the game |
+| cooking | free to 99, members to 99 | 8 steps (7 free), levels 1-99 | 4 (4 free) | free route 35, whole route 35 | none | automated data checks; not verified in the game |
+| firemaking | free to 99, members to 99 | 7 steps (6 free), levels 1-99 | 5 (5 free) | free route 50, whole route 50 | none | automated data checks; not verified in the game |
+| woodcutting | free to 99, members to 99 | 11 steps (7 free), levels 1-99 | 6 (4 free) | free route 36, whole route 36 | none | automated data checks; not verified in the game |
 | farming | members only | 3 steps (0 free), levels 1-99 | 3 (0 free) | not asked | none | automated data checks; not verified in the game |
 
-Catalogue: 93 entries. Skills with no catalogue method fall back to the training plan row of the skill page; they are said so, not shown as a full plan.
+Catalogue: 95 entries. Skills with no catalogue method fall back to the training plan row of the skill page; they are said so, not shown as a full plan.
 
 ## Personalized engine support
 
@@ -49,7 +49,7 @@ Counts below mean a method has a shared model dispatch, not that every item, spe
 | attack | 10: combat | 1 |
 | strength | 10: combat | 1 |
 | defence | 10: combat | 1 |
-| ranged | 5: combat | 0 |
+| ranged | 7: combat | 0 |
 | prayer | 2: processing | 2 |
 | magic | 2: combat, processing | 4 |
 | runecraft | 4: processing | 0 |

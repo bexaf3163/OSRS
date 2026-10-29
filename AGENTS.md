@@ -28,3 +28,11 @@ Apply to Codex in this project and future related sessions:
 ## Desktop-only scope — owner decision, 2026-10-28
 
 No mobile/phone development or phone-only QA. Keep Windows desktop resizing, DPI/text scaling, themes and accessibility. See the authoritative desktop-only scope in PROJECT_GUIDELINES.md.
+
+## Staged training — owner requirement, 2026-10-29
+
+Every skill must offer practical progression, not one starter activity presented as the full climb. Reuse the shared training planner: current leg, next milestone, useful tool/weapon/armour/ammunition/material upgrades, preparation and destination must agree. Re-evaluate at real unlocks and state changes. Choose stages for efficiency, affordability, safety and useful development; do not force worse activities merely for variety. If the next sensible stage needs gear, supplies, bank confirmation or funding, show that preparation clearly instead of silently extending the starter activity to the final goal. Preserve unknown states and meaningful budget constraints. This applies to Skills and Optional and future content, not only Ranged. Ranged seagulls must not be presented as a single instruction to40.
+
+## Accepted Ledger design — owner decision, 2026-10-30
+
+Preserve Claude's current Adventurer's Ledger design (2.81.1 baseline), layout and EB Garamond/Cinzel fonts. Do not restore earlier designs or change typography during functional work. Read the current CLAUDE_REDESIGN_HANDOFF.md and retain Ledger UI tests. Report a concrete design conflict if one blocks functional changes.

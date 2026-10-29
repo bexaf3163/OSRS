@@ -79,7 +79,7 @@ const BOOST: Record<UpgradeCategory, string> = {
 /** Which upgrade categories a step has: by the step's training skills. Quests, shopping and combat — without this hint. */
 export function stepUpgradeCategories(step: Step): UpgradeCategory[] {
   if (step.type !== 'skill') return [];
-  const skills = new Set([...(step.targets ?? []).map((t) => t.skill), ...(step.pacing ? [step.pacing.skill] : [])]);
+  const skills = new Set(step.followsMethod ? [step.followsMethod] : [...(step.targets ?? []).map((t) => t.skill), ...(step.pacing ? [step.pacing.skill] : [])]);
   const out: UpgradeCategory[] = [];
   if (skills.has('woodcutting')) out.push('woodcutting');
   if (skills.has('mining')) out.push('mining');

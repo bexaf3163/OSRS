@@ -1,6 +1,27 @@
 # Claude continuation - current authoritative handoff
 
-Updated 2026-10-29. Read this first; open historical records only for the area being changed.
+Updated 2026-10-30. Read this first; open historical records only for the area being changed.
+
+## Current design baseline
+
+Owner accepted Claude's Adventurer's Ledger2.81.1 (`57ec3ca`) on2026-10-30. Preserve its layout, controls and EB Garamond/Cinzel fonts. Current design contract: CLAUDE_REDESIGN_HANDOFF.md and REDESIGN_VERIFICATION.md. Functional WIP was backed up/stashed before fast-forwarding and reapplied without changing src/ledger, pages, App/main or the Ledger frame. No design issue identified during integration. Current Ledger desktop regressions are running without changing its presentation.
+
+## Functional batch 2.81.2 — verification in progress
+
+- Fixed the owner-reported starter grind in the shared planner. Declared method bands, tool/equipment unlocks and registered recipe/spell levels create useful review stages. Introductory methods retire at their declared end; efficient older methods otherwise remain eligible. methodPick carries the stage end into methodStep; final completion goals/IDs/saved marks stay intact. The visible plan previews six stages; the internal full path and goal-arrow estimate are not truncated.
+- Ranged: seagulls are introductory through20; level10 barbarians21–25 use existing verified combatFoes data. Monks remain a cheap healing alternative; frogs become recommended from26 when the actual kit/food/budget support them. No assumed zero-damage safespot. Wizard is a clearly manual alternative: incoming magic/rune-drop income are not modelled, so it cannot become the automatic default. Verify NPC variants/highlights live.
+- Standard bows upgrade at5/20/30, suitable owned same-tier longbows count. Missing basic bows are actual preparation/funding needs rather than silently retaining Shortbow. Arrow value uses shared max-hit/style/break math and current quotes; compatible equipped stacks have hysteresis, avoiding tiny price-driven changes. Armour/amulets remain usable, budget-aware shared StyleGear choices. Unknown cash/bank stays unknown; no cosmetic requirement.
+- Future Ranged equipment is simulated only in copies, charging known equipment costs once. Each forecast leg carries its conditional kit; total arrows use those kits. This is not proof future purchases are affordable or a complete consumable-depletion simulation. Never apply projected levels/gear/cash to live state. Existing ranged incoming-damage calculations already used projected armour; no separate fix was necessary there.
+- Optional checkpoints: Fish35/Cook35, Mine45/WC36/FM50, optional Magic55 and a membership choice without mandatory Bond shopping or GE travel. Cooking68 remains a separate funded Skills project. Preserve manual completion/skips/notes; no membership prerequisite is added.
+- Shared model supplies survive without a named station/kit. Registry tools/materials/access items are watched before handover. F2P equipment hints for Fishing/Cooking/Mining/Woodcutting/Firemaking are reused by Skills/Optional; no invented amulet bonuses. Current-phase upgrade categories prevent irrelevant axes/melee purchases during Firemaking. Extended50/60 engine fixtures remain alongside actual checkpoint tests.
+- Preserve accepted Ledger2.81.1 controls/layout/fonts. Functional TrainingCard text only; no Ledger/frame/page/CSS/font changes. Local build/types, zero-error/zero-warning data validation, 2317-test full unit suite, all826 Ledger desktop assertions plus focused posted-game-guide/bow-milestone checks, full647-test Java suite and 92-assertion native Electron smoke passed. Live-game verification belongs to Claude, per docs/CLAUDE_IN_GAME_ACCEPTANCE.md. Release is not yet claimed.
+
+### Remaining after this batch
+
+1. Claude: real-game acceptance for new Ranged equipment milestones, trainer transitions, food/ammo/unknown stock, shared peaceful handovers, saved progress and current Ledger UI. No mock screenshot is live acceptance.
+2. Wizard magic-defence/food/rune-drop model and exact NPC-variant highlight proof remain unsupported; do not enable automatic selection prematurely.
+3. Broader Members outfit advice/other peaceful-skill hints and full acquisition/consumable forecasts are not claimed complete. Existing shared models remain authoritative; add verified registry data, not per-step patches.
+4. Parked processing-budget WIP remains outside the repo at ../osrs-audit-temp/parked-processing-2026-10-29/README.txt. Rebase selectively; never overwrite current method/forecast/UI fixes. No mobile work.
 
 ## Current delivery — 2.80.20
 

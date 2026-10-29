@@ -8,12 +8,15 @@
 
 import type { MapLocation, Step, StepItemRequirement } from '../types';
 import methodsJson from '../data/trainingMethods.json';
+import processingJson from '../data/processing.json';
+import type { ProcessingRegistry } from './processingRates';
 import { items as itemData } from '../data';
 import { matchStrict } from '../services/locationResolver';
 import { AXES, PICKAXES } from './toolTiers';
 import type { MethodNeed } from './trainingRouter';
 import { RANGED_WATCH } from './rangedLoadout';
 import { STRIKE_WATCH, SUPERHEAT_WATCH } from './magicPlan';
+import { f2pAdviceFor } from './f2pSkillAdvice';
 import { healsOf } from './combatEstimate';
 
 /** The stored pick when the skill's goal is already reached: no tool of that skill is asked for. */
@@ -22,7 +25,7 @@ export const UNKNOWN_GOAL_PREFIX = 'goal-unknown:';
 /** Resolved supplies travel with the method pick, as combat/food projections already do; the store never rebuilds a loadout from stale state. */
 /** A picked method: its id, or with what the player needs for it, a name for this player, and the spot the gathering engine chose (methodRates.ts). */
 export type TrainingPick = string | {
-  methodId: string; needs: MethodNeed[]; name?: string; where?: string; warning?: string;
+  methodId: string; untilLevel?: number; needs: MethodNeed[]; name?: string; where?: string; warning?: string;
   /** The spot the engine picked; waypoints - the way in of a spot under the ground, entrance first. */
   spot?: { label: string; x: number; y: number; plane: number; waypoints?: { x: number; y: number; plane: number; label?: string }[] };
   /** The step's next skill trained on the same catches at a station beside the spot (fish cooked on the fire there), and what is done with them. */
@@ -37,6 +40,8 @@ interface RawMethod { id: string; skills: string[]; name: string; from: number; 
 const RAW: RawMethod[] = (methodsJson as unknown as { methods: (Omit<RawMethod, 'skills'> & { skill: string | string[] })[] }).methods
   .map((m) => ({ ...m, skills: Array.isArray(m.skill) ? m.skill : [m.skill] }));
 const METHODS = new Map(RAW.map((m) => [m.id, m]));
+const PROCESSING = processingJson as unknown as ProcessingRegistry;
+const RECIPES = new Map(PROCESSING.recipes.map(r => [r.id, r]));
 const ITEMS = new Map(itemData.map((i) => [i.nameEn.toLowerCase(), i]));
 
 function needNames(need: MethodNeed): readonly string[] {
@@ -46,7 +51,7 @@ function needNames(need: MethodNeed): readonly string[] {
 }
 
 /** The skill and the level the step's own completion check asks for, or null when the step has no such goal. */
-export function followedGoal(step: Pick<Step, 'followsMethod' | 'inGame'>): { skill: string; target: number } | null {
+export function followedGoal(step: Pick<Step, 'followsMethod' | 'inGame' | 'bondBranch'>): { skill: string; target: number } | null {
   const skill = step.followsMethod;
   const trig = step.inGame?.completionTrigger;
   if (!skill || trig?.type !== 'SKILL_LEVEL') return null;
@@ -55,7 +60,7 @@ export function followedGoal(step: Pick<Step, 'followsMethod' | 'inGame'>): { sk
 }
 
 /** One ordered set of goals from the unchanged completion trigger; the declared primary skill goes first. */
-export function followedGoals(step: Pick<Step, 'followsMethod' | 'inGame'>): { skill: string; target: number }[] {
+export function followedGoals(step: Pick<Step, 'followsMethod' | 'inGame' | 'bondBranch'>): { skill: string; target: number }[] {
   const primary = followedGoal(step);
   const trigger = step.inGame?.completionTrigger;
   if (!primary || trigger?.type !== 'SKILL_LEVEL') return [];
@@ -64,7 +69,7 @@ export function followedGoals(step: Pick<Step, 'followsMethod' | 'inGame'>): { s
 
 /** Every tool any method of the followed skill asks for. The game must report all of them, not only the picked method's: an item that is not
  * tracked reads as unknown, which ranks a method as ready, so the pick would flip between two methods forever. */
-export function methodToolNames(step: Pick<Step, 'followsMethod' | 'inGame'>): string[] {
+export function methodToolNames(step: Pick<Step, 'followsMethod' | 'inGame' | 'bondBranch'>): string[] {
   const goals = followedGoals(step);
   const skills = goals.length ? goals.map(g => g.skill) : step.followsMethod ? [step.followsMethod] : [];
   if (!skills.length) return [];
@@ -72,7 +77,15 @@ export function methodToolNames(step: Pick<Step, 'followsMethod' | 'inGame'>): s
   if (skills.includes('ranged')) for (const name of RANGED_WATCH) names.add(name);
   if (skills.includes('magic')) for (const name of SUPERHEAT_WATCH) names.add(name);
   if (skills.includes('magic')) for (const name of STRIKE_WATCH) names.add(name);
-  for (const m of RAW) if (m.skills.some(skill => skills.includes(skill))) for (const need of m.needs ?? []) for (const name of needNames(need)) names.add(name);
+  for (const m of RAW) if (m.skills.some(skill => skills.includes(skill))) {
+    for (const need of m.needs ?? []) for (const name of needNames(need)) names.add(name);
+    // Model-selected recipes can declare supplies absent from the broad catalogue row.
+    for (const id of PROCESSING.methods[m.id] ?? []) {
+      const r = RECIPES.get(id);
+      if (!r || (step.bondBranch && r.members)) continue;
+      for (const name of [...r.tools, ...r.inputs.flatMap(i => [i.name, ...(i.anyOf ?? []), ...(i.staff ? [i.staff] : [])]), ...(r.access ? [r.access.carried, r.access.equipped] : [])]) names.add(name);
+    }
+  }
   return [...names];
 }
 
@@ -132,6 +145,8 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
   const goals = followedGoals(step);
   const goal = goals.find(g => m?.skills.includes(g.skill));
   if (!m || !goal) return step;
+  const phaseTarget = typeof pick === 'object' && pick.untilLevel !== undefined ? Math.min(goal.target, pick.untilLevel) : goal.target;
+  const equipmentHint = step.bondBranch ? f2pAdviceFor(goal.skill)?.equipment : undefined;
   const needs = typeof pick === 'string' ? m.needs ?? [] : pick.needs;
   const gates = needs.filter((n): n is Extract<MethodNeed, { type: 'skill' | 'quest' }> => n.type === 'skill' || n.type === 'quest');
   const requirements = [...(step.requirements ?? []).filter(r => r.type !== 'skill' || !gates.some(n => n.type === 'skill' && n.skill === r.skill && n.min >= r.min)), ...gates];
@@ -145,12 +160,13 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
     ...step,
     goalItemsRequired: undefined,
     followsMethod: goal.skill,
+    ...(equipmentHint ? { fields: [...(step.fields ?? []).filter(f => f.label !== 'Equipment'), { label: 'Equipment', text: equipmentHint }] } : {}),
     itemsRequired,
     requirements,
     ...(goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' || goal.skill === 'ranged' || goal.skill === 'magic' ? {
       itemsRecommended: [], foes: undefined, threats: undefined, pacing: undefined,
-      where: m.where, how: `Train ${goal.skill} to ${goal.target}: ${m.name}. ${m.note ?? ''}`.trim(),
-      quickSteps: ['Bank finished-skill tools and surplus supplies before withdrawing the current batch.', `Prepare the listed supplies for ${m.name}.`, `Train ${goal.skill} to ${goal.target} at ${m.where}. ${m.note ?? ''}`.trim()],
+      where: m.where, how: `Train ${goal.skill} to ${phaseTarget}: ${m.name}. ${m.note ?? ''}`.trim(),
+      quickSteps: ['Bank finished-skill tools and surplus supplies before withdrawing the current batch.', `Prepare the listed supplies for ${m.name}.`, `Train ${goal.skill} to ${phaseTarget} at ${m.where}. ${m.note ?? ''}`.trim()],
     } : {}),
     ...(alongLine ? { quickSteps: [...(goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' ? [] : step.quickSteps ?? []), alongLine] } : {}),
     // The engine's one safety line for its spot (aggressive NPCs that attack this player) joins the step's own warning.

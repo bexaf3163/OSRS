@@ -129,7 +129,8 @@ describe('balanced counts the setup and does not switch for a sliver', () => {
     const sliver = method({ id: 'sliver', from: 20, xph: [10_500, 10_500] });
     const leap = method({ id: 'leap', from: 30, xph: [25_000, 25_000] });
     const path = adviseTraining({ skill: 'fishing', target: 40, state: stateAt('fishing', 10), mode: 'f2p', style: 'chill', priority: 'balanced', methods: [base, sliver, leap] }).path;
-    expect(path.map((l) => l.method.id)).toEqual(['base', 'leap']);
+    expect(path.filter((l, i) => i === 0 || l.method.id !== path[i - 1].method.id).map(l => l.method.id)).toEqual(['base', 'leap']);
+    expect(path.find(l => l.method.id === 'leap')?.fromLevel).toBe(30);
     const fastest = adviseTraining({ skill: 'fishing', target: 40, state: stateAt('fishing', 10), mode: 'f2p', style: 'efficient', priority: 'fastest', methods: [base, sliver, leap] }).path;
     expect(fastest.map((l) => l.method.id)).toEqual(['base', 'sliver', 'leap']);
   });

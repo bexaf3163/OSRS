@@ -21,6 +21,12 @@ import type { GearData, GearPiece, PacingSkill, Step } from '../types';
 import { effectiveHeal, FOODS } from './foodAdvice';
 import { levelForXp, xpForLevel } from './xp';
 
+/** Shared ranged defaults and damage math (OSRS Wiki DPS/Ranged and Arrows). */
+export const ARROW_BREAK_RATE = 0.2;
+export const trainingRangedStyleBonus = (level: number): number => level < 5 ? 3 : 0;
+export const rangedMaximumHit = (level: number, strength: number, styleBonus = 0): number =>
+  Math.floor(0.5 + ((level + styleBonus + 8) * (strength + 64)) / 640);
+
 export interface CombatFoe {
   name: string;
   version?: string;

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { combatUpgrades, combatRate } from '../src/lib/combatRates';
 import { buildPlayerState } from '../src/lib/playerState';
 import { gearData, trainingWeapons } from '../src/services/gearAdvisor';
-import { trainingMethods, toolUpgrade, adviseTraining } from '../src/lib/trainingRouter';
+import { trainingMethods, toolUpgrade, adviseTraining, methodNeeds } from '../src/lib/trainingRouter';
 import { emptyProgress } from '../src/lib/progress';
 import type { PriceView } from '../src/lib/funding/quotes';
 import { STYLE_GEAR } from '../src/lib/styleGear';
@@ -88,12 +88,14 @@ describe('bow and elemental staff comparisons share the existing style models', 
     for (const o of STYLE_GEAR[skill].weapon) for (const name of o.names) s.owned!.items.set(name.toLowerCase(), { name, carried: 0, noted: 0, bank: 0 });
     return s;
   };
-  it('rates a usable bow with the same ammunition, without offering the next tier too early', () => {
+  it('plans the unlocked standard bow without a duplicate discretionary upgrade or premature next tier', () => {
     const m = trainingMethods.find((x) => x.id === 'ra-frog')!;
     const s = styled('ranged', 'Shortbow');
     const before = combatRate(m, 'ranged', s, { prices: market })!;
     const maple = combatUpgrades(m, 'ranged', s, { prices: market }).find((u) => u.tool === 'Maple shortbow');
-    expect(maple?.xph[0]).toBeGreaterThan(before.xph[0]);
+    expect(before.xph[0]).toBeGreaterThan(0);
+    expect(methodNeeds(m, s, market)).toContainEqual({ type: 'item', name: 'Maple shortbow', equip: true });
+    expect(maple).toBeUndefined();
     s.levels.ranged = { known: true, value: 29, source: 'game' };
     expect(combatUpgrades(m, 'ranged', s, { prices: market }).some((u) => u.tool === 'Maple shortbow')).toBe(false);
     s.mode = 'members';

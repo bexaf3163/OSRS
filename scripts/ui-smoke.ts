@@ -261,6 +261,15 @@ async function f2pSkillsScenarios(browser: Browser) {
     await page.context().close();
   }
 
+  for (const [group, skill, tool] of [['WC', 'woodcutting', 'axe'], ['MI', 'mining', 'pickaxe'], ['FI', 'fishing', 'rod/net'], ['CO', 'cooking', 'ingredients'], ['FM', 'firemaking', 'tinderbox']] as const) {
+    const { page, errors } = await open(browser, 1000, { zen: true, market: true,
+      progress: progressBefore('S6-03', { gameMode: 'f2p', levels: { [skill]: 1 } }),
+    }, `#/skills/${group}/${skill}`);
+    expect((await text(page, '.training-equipment:visible')).toLowerCase().includes(tool), `Skills equipment (${skill}): one practical hint accompanies the current method`);
+    expect(await page.locator('.skill-detail details').count() === 0 && await noOverflow(page) && !errors.length, `Skills equipment (${skill}): compact without a disclosure stack or errors`);
+    await page.context().close();
+  }
+
   {
     const { page, errors } = await open(browser, 1000, { theme: 'light', scale: 1.5, zen: true, progress: progressBefore('S3-03', { gameMode: 'f2p' }) }, '#/skills');
     expect(await page.locator('.f2p-skill-badge').count() === 15 && await noOverflow(page) && !errors.length, 'F2P desktop light theme and 150% scaling: every marker remains readable without horizontal scrolling');
@@ -742,10 +751,8 @@ async function run(browser: Browser) {
       const posts = (window as unknown as { __posts: { path: string; body?: { step?: { worldPoint?: { x: number; y: number }; groundTiles?: { x: number; y: number }[] } } }[] }).__posts;
       return posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.step;
     });
-    // The gathering engine's spot (skilling.json): the wiki spawn tile of the Barbarian Village fly fishing spots, not the area's label point.
-    const fly = (JSON.parse(readFileSync(new URL('../src/data/skilling.json', import.meta.url), 'utf8')) as { spots: { resource: string; label: string; place: { x: number; y: number } }[] }).spots
-      .find((sp) => sp.resource === 'fly' && sp.label === 'Barbarian Village')!.place;
-    expect(target?.worldPoint?.x === fly.x && target.worldPoint.y === fly.y && target.groundTiles?.length === 1 && target.groundTiles[0].y === fly.y, `method map (${width}): the actual game target and single ground tile agree on Barbarian Village`);
+    // Skills can keep training beyond35, but Optional must release Fishing and check the unread remaining Cooking level.
+    expect(!target?.worldPoint && (target?.groundTiles ?? []).length === 0, `method map (${width}): the completed Fishing checkpoint cannot retain its obsolete fishing arrow`);
     expect(await noOverflow(page) && !errors.length, `method map (${width}): no overflow or console errors`);
     await page.context().close();
   }
@@ -2819,7 +2826,7 @@ async function styleQuoteScenarios(browser: Browser) {
 
 async function skillHandoverScenarios(browser: Browser) {
   for (const width of [1280]) {
-    const stats = { fishing: 49, cooking: 30 };
+    const stats = { fishing: 34, cooking: 30 };
     const names = ['Small fishing net', 'Fishing rod', 'Fishing bait', 'Fly fishing rod', 'Feather', 'Lobster pot', 'Harpoon', 'Raw beef', 'Raw chicken', 'Raw trout', 'Raw tuna', 'Grapes', 'Jug of water'];
     const items = names.map(name => ({ name, carried: 0, noted: 0, bank: name === 'Raw tuna' ? 26 : name === 'Grapes' || name === 'Jug of water' ? 13 : 0 }));
     const { page, errors } = await open(browser, width, {
@@ -2837,7 +2844,7 @@ async function skillHandoverScenarios(browser: Browser) {
         return posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.step?.worldPoint?.label?.includes(label);
       }, destination, { timeout: 10000 });
     };
-    await setLevels({ fishing: 50, cooking: 30 }, 'Cooking: Tuna');
+    await setLevels({ fishing: 35, cooking: 30 }, 'Cooking: Tuna');
     const cooking = await snapshot();
     expect(cooking?.step?.worldPoint?.label?.includes('Cooking: Tuna') && cooking.step.worldPoint.label.includes('Barbarian Village') && cooking.step.checklist?.some((r: any) => r.name === 'Raw tuna' && r.count === 26), `skill handover (${width}): completing Fishing projects Cooking supplies and destination into the game`);
     expect(!cooking?.step?.npcNames?.includes('Fishing spot') && !cooking?.step?.checklist?.some((r: any) => /fishing net|fishing rod|harpoon/i.test(r.name)), `skill handover (${width}): no obsolete Fishing targets or tools`);
@@ -2845,13 +2852,18 @@ async function skillHandoverScenarios(browser: Browser) {
     expect(saved.steps?.['S6-02'] !== 'done', `skill handover (${width}): Fishing alone cannot complete the combined goal`);
     await reveal(page, '.training:visible');
     expect((await text(page, '.training:visible')).includes('Cooking'), `skill handover (${width}): the visible method follows the same remaining skill`);
-    await setLevels({ fishing: 50, cooking: 35 }, 'Edgeville Bank');
-    const wine = await snapshot();
-    expect(wine?.step?.worldPoint?.label?.includes('Edgeville Bank') && wine.step.checklist?.some((r: any) => r.name === 'Grapes' && r.count === 13) && wine.step.checklist?.some((r: any) => r.name === 'Jug of water' && r.count === 13), `skill handover (${width}): wine uses actual ingredient pairs at a bank`);
+    // Optional stops at35; extended wine batches are covered by the shared handover engine regressions.
+    await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { fishing: 35, cooking: 35 });
+    await page.waitForFunction(() => {
+      const step = (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.step;
+      return step && (step.checklist ?? []).length === 0;
+    });
+    const finished = await snapshot();
+    expect(!finished?.step?.checklist?.some((r: any) => r.name === 'Grapes' || r.name === 'Jug of water'), `skill handover (${width}): Cooking35 releases its kit rather than imposing a wine grind`);
     expect(await noOverflow(page) && !errors.length, `skill handover (${width}): no overflow or console errors`);
     await page.context().close();
     // A fresh low-level profile: do not simulate Cooking dropping from35 to1 on the admitted character.
-    const low = { fishing: 50, cooking: 1 };
+    const low = { fishing: 35, cooking: 1 };
     const mixedItems = names.map(name => ({ name, carried: name === 'Raw beef' || name === 'Raw chicken' ? 13 : 0, noted: 0, bank: 0 }));
     const { page: materialPage, errors: materialErrors } = await open(browser, width, {
       market: true, progress: progressBefore('S6-02', { gameMode: 'f2p', levels: low }),
@@ -2874,9 +2886,9 @@ async function skillHandoverScenarios(browser: Browser) {
 
 async function miningHandoverScenarios(browser: Browser) {
   for (const width of [1280]) {
-    const stats = { mining: 59, woodcutting: 1 };
-    const names = ['Bronze pickaxe', 'Iron pickaxe', 'Steel pickaxe', 'Mithril pickaxe', 'Adamant pickaxe', 'Rune pickaxe', 'Bronze axe', 'Iron axe', 'Steel axe', 'Mithril axe', 'Adamant axe', 'Rune axe'];
-    const items = names.map(name => ({ name, carried: name === 'Rune pickaxe' ? 1 : 0, noted: 0, bank: name === 'Bronze axe' ? 1 : 0 }));
+    const stats = { mining: 44, woodcutting: 1, firemaking: 1 };
+    const names = ['Bronze pickaxe', 'Iron pickaxe', 'Steel pickaxe', 'Mithril pickaxe', 'Adamant pickaxe', 'Rune pickaxe', 'Bronze axe', 'Iron axe', 'Steel axe', 'Mithril axe', 'Adamant axe', 'Rune axe', 'Tinderbox', 'Logs', 'Oak logs', 'Willow logs', 'Maple logs', 'Yew logs'];
+    const items = names.map(name => ({ name, carried: name === 'Rune pickaxe' ? 1 : 0, noted: 0, bank: name === 'Bronze axe' || name === 'Tinderbox' ? 1 : name === 'Logs' ? 27 : 0 }));
     const { page, errors } = await open(browser, width, {
       market: true, progress: progressBefore('S6-03', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:active-step': 'S6-03' },
@@ -2887,17 +2899,24 @@ async function miningHandoverScenarios(browser: Browser) {
     const mining = await snapshot();
     expect(mining?.step?.worldPoint?.label?.includes('South-east Varrock mine') && JSON.stringify(mining.step.objectNames) === JSON.stringify(['Iron rocks']), `Mining handover (${width}): current Mining task has only iron scenery`);
     for (const [level, object, place] of [[1, 'Tree', 'Lumbridge'], [15, 'Oak tree', 'Draynor Bank'], [30, 'Willow tree', 'Port Sarim']] as const) {
-      await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { mining: 60, woodcutting: level });
+      await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { mining: 45, woodcutting: level, firemaking: 1 });
       await page.waitForTimeout(1300);
       const current = await snapshot();
       expect(current?.step?.worldPoint?.label?.includes(place) && JSON.stringify(current.step.objectNames) === JSON.stringify([object]), `Mining handover (${width}, WC${level}): one current Woodcutting scene and destination`);
       expect(current?.step?.checklist?.length === 1 && current.step.checklist[0].name === 'Bronze axe', `Mining handover (${width}, WC${level}): axe replaces pickaxe preparation`);
-      expect(current?.step?.completionTrigger?.levels?.some((r: any) => r.skill === 'mining' && r.level === 60) && current.step.completionTrigger.levels.some((r: any) => r.skill === 'woodcutting' && r.level === 60), `Mining handover (${width}, WC${level}): both original goals remain`);
+      expect(current?.step?.completionTrigger?.levels?.some((r: any) => r.skill === 'mining' && r.level === 45) && current.step.completionTrigger.levels.some((r: any) => r.skill === 'woodcutting' && r.level === 36) && current.step.completionTrigger.levels.some((r: any) => r.skill === 'firemaking' && r.level === 50), `Mining handover (${width}, WC${level}): all declared checkpoints remain`);
     }
     const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'));
     expect(saved.steps?.['S6-03'] !== 'done', `Mining handover (${width}): Mining alone cannot complete this step`);
     await reveal(page, '.training:visible');
     expect((await text(page, '.training:visible')).includes('Woodcutting'), `Mining handover (${width}): desktop method and game payload agree`);
+    await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { mining: 45, woodcutting: 36, firemaking: 1 });
+    await page.waitForFunction(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.step?.checklist?.some((r: any) => r.name === 'Tinderbox'));
+    const burning = await snapshot();
+    expect(burning.step.checklist.some((r: any) => r.name === 'Logs') && !burning.step.checklist.some((r: any) => /pickaxe| axe$/i.test(r.name)), `Mining handover (${width}): Firemaking receives its actual logs/tinderbox without old tools`);
+    expect(await page.locator('.gear-banner').count() === 0, `Mining handover (${width}): no unrelated melee shopping banner`);
+    expect((await text(page, '.training-equipment:visible')).includes('tinderbox'), `Mining handover (${width}): practical equipment advice follows the current phase`);
+    await page.screenshot({ path: `audit-temp/optional-firemaking-${width}.png` });
     expect(await noOverflow(page) && !errors.length, `Mining handover (${width}): no overflow or console errors`);
     await page.context().close();
   }
@@ -2920,6 +2939,7 @@ async function rangedPreparationScenarios(browser: Browser) {
     }, '#/step/S6-01');
     const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
     const initial = await snapshot();
+    expect(/Train ranged to 5 at /.test(JSON.stringify(initial?.step?.guide?.steps)), `ranged (${width}): the actual game guide stops at the first bow milestone, not40`);
     expect(initial?.step?.npcNames?.includes('Seagull') && initial.step.worldPoint?.label?.includes('Port Sarim'), `ranged (${width}): a beginner gets the current surface trainer, not ogresses`);
     expect(initial?.step?.checklist?.some((r: any) => r.name === 'Bronze arrow' && r.count === 100 && r.equip) && initial.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where !== 'EQUIPPED', `ranged (${width}): one worn arrow cannot satisfy the starter stack`);
     expect(clothes.every(c => initial?.step?.checklist?.some((r: any) => r.name === c.name && r.equip) && initial.plan?.lines?.find((r: any) => r.name === c.name)?.where === 'BANK'), `ranged (${width}): the whole owned ranged outfit is prepared from the bank`);
@@ -2930,11 +2950,12 @@ async function rangedPreparationScenarios(browser: Browser) {
     expect(ready?.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where === 'EQUIPPED', `ranged (${width}): a GEAR-only quantity update reaches the canonical preparation snapshot`);
     expect(clothes.every(c => ready?.plan?.lines?.find((r: any) => r.name === c.name)?.where === 'EQUIPPED'), `ranged (${width}): actual equipped outfit clears its preparation lines`);
     // Known HP/Defence are needed for personalized recovery; prices and owned food make the frog kit practical.
-    for (const [level, npc] of [[20, 'Giant frog'], [26, 'Giant frog']] as const) {
+    for (const [level, npc] of [[20, 'Monk'], [26, 'Giant frog'], [30, 'Giant frog']] as const) {
       await page.evaluate(s => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { ranged: level, defence: 1, hitpoints: 30 });
       await page.waitForTimeout(1500);
       const current = await snapshot();
       expect(JSON.stringify(current?.step?.npcNames) === JSON.stringify([npc]) && !current?.step?.worldPoint?.label?.includes('Corsair'), `ranged (${width}, level${level}): method, scenery and destination advance together`);
+      expect(current?.step?.checklist?.some((r: any) => r.name === (level >= 30 ? 'Maple shortbow' : 'Willow shortbow') && r.equip), `ranged (${width}, level${level}): the current bow unlock is actual preparation`);
       if (level === 26) expect(current?.step?.checklist?.some((r: any) => r.name === 'Salmon' && r.count === 10) && current.plan?.lines?.find((r: any) => r.name === 'Salmon')?.where === 'BANK', `ranged (${width}): the later combat method asks for owned banked food`);
     }
     await reveal(page, '.training:visible');

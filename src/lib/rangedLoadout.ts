@@ -1,3 +1,5 @@
+import { ARROW_BREAK_RATE, rangedMaximumHit, trainingRangedStyleBonus } from './combatEstimate';
+import { coinsPerMinute } from './lootValue';
 // One level-appropriate ranged kit for preparation and forecasts; unlocks and arrow compatibility reuse StyleGear.
 import { STYLE_GEAR, ammoFits, usableStyleOption, type StyleOption } from './styleGear';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from './playerState';
@@ -70,14 +72,12 @@ export function rangedNeeds(state: PlayerState, prices?: PriceView | null): Meth
     const p = price(name);
     return heldOf(state, name).presence === 'MISSING' && p !== null && budget !== null && p <= budget;
   };
-  for (const o of usable) {
-    const name = o.names[0]; // Buy shortbows, not their slower longbow alternatives.
-    if (o.names.includes(bow.name)) break;
-    if (owned(name) || canBuy(name)) {
-      if (!owned(name)) budget! -= price(name)!;
-      bow = { name, canonical: name };
-      break;
-    }
+  // The normal unlocked bow is a progression need; preparation/funding disclose a shortfall instead of hiding the upgrade.
+  const unlocked = usable[0];
+  if (unlocked && !unlocked.names.includes(bow.name)) {
+    const name = unlocked.names.find(owned) ?? unlocked.names[0];
+    if (!owned(name) && budget !== null) budget = Math.max(0, budget - (price(name) ?? budget));
+    bow = { name, canonical: unlocked.names[0] };
   }
   const compatible = ammo.filter(o => !ammoFits(o, bow.canonical, STYLE_GEAR.ranged.weapon));
   const candidates = compatible.flatMap(o => o.names.map(name => {
@@ -90,8 +90,28 @@ export function rangedNeeds(state: PlayerState, prices?: PriceView | null): Meth
     ?? candidates.find(o => o.held.bank === null)
     ?? [...candidates].sort((a, b) => (b.held.total ?? 0) - (a.held.total ?? 0)).find(o => (o.held.total ?? 0) > 0)
     ?? candidates.find(o => o.name === 'Bronze arrow')!;
-  if (candidates.every(o => o.held.bank !== null && (o.held.total ?? 0) === 0 && o.equipped === 0)) {
-    // Buy economical compatible ammunition; an adequate better stack already owned wins above.
+  const bankKnown = candidates.every(o => o.held.bank !== null);
+  const adequate = candidates.filter(o => o.equipped >= LOW_ARROWS || (o.held.total ?? 0) >= STARTER_ARROWS);
+  const ammoBudget = cash !== null && budget !== null && arrowReserve !== null ? Math.min(cash, budget + STARTER_ARROWS * arrowReserve) : 0;
+  // Review paid ammunition with a bow purchase or a needed refill, not an extra trip for every unlock.
+  const buy = bankKnown && (!adequate.length || !owned(bow.name)) ? candidates.filter(o =>
+    o.held.presence === 'MISSING' && price(o.name) !== null && STARTER_ARROWS * price(o.name)! <= ammoBudget) : [];
+  const minute = coinsPerMinute(prices);
+  const speed = Math.max(1, (stats.find(g => g.name === bow.name)?.speed ?? 4) - 1);
+  const timeValue = minute === null ? 0 : minute * speed * 0.6 / 60;
+  const efficiency = (name: string) => {
+    const p = price(name), strength = stats.find(g => g.name === name)?.rangedStrength;
+    return p === null || strength === undefined ? null : rangedMaximumHit(levelOf(state, 'ranged') ?? 1, strength, trainingRangedStyleBonus(levelOf(state, 'ranged') ?? 1)) / Math.max(0.001, timeValue + p * ARROW_BREAK_RATE);
+  };
+  const optionsByValue = [...adequate, ...buy].filter(o => efficiency(o.name) !== null)
+    .sort((a, b) => efficiency(b.name)! - efficiency(a.name)! || price(a.name)! - price(b.name)!);
+  const currentStack = candidates.find(o => o.equipped >= LOW_ARROWS);
+  const bestValue = optionsByValue[0];
+  const keepCurrent = currentStack && worn.has(nameKey(bow.name)) && (!bestValue || efficiency(currentStack.name) === null || efficiency(bestValue.name)! <= efficiency(currentStack.name)! * 1.1);
+  if (keepCurrent) arrow = currentStack;
+  else if (optionsByValue.length) arrow = optionsByValue[0];
+  if (buy.includes(arrow) && budget !== null && arrowReserve !== null) budget = Math.max(0, budget - STARTER_ARROWS * Math.max(0, price(arrow.name)! - arrowReserve));
+  if (!adequate.length && !buy.length && bankKnown && candidates.every(o => (o.held.total ?? 0) === 0 && o.equipped === 0)) {
     const priced = candidates.filter(o => price(o.name) !== null).sort((a, b) => price(a.name)! - price(b.name)!);
     arrow = priced[0] ?? arrow;
   }

@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import type { Step } from '../src/types';
 import { stepById } from '../src/data';
 import locationsJson from '../src/data/majorLocations.json';
 import { stepPoints, initialPoint } from '../src/lib/map';
@@ -18,7 +19,10 @@ import type { PlayStyle } from '../src/lib/playStyle';
 // ready. The step now follows the training method the app recommends for the real level (Step.followsMethod), with the tools of that method only.
 
 const LOCATIONS = (locationsJson as { locations: Record<string, { x: number; y: number; plane: number }> }).locations;
-const step = stepById.get('S6-02')!;
+const routeStep = stepById.get('S6-02')!;
+// Longer user-selected goals remain supported; the real Optional35 checkpoint is covered separately.
+const step: Step = { ...routeStep, title: 'Fishing to 50 and Cooking to 50', targets: routeStep.targets?.map(t => ({ ...t, level: 50 })),
+  inGame: { ...routeStep.inGame!, completionTrigger: { ...routeStep.inGame!.completionTrigger!, levels: [{ skill: 'fishing', level: 50 }, { skill: 'cooking', level: 50 }] } } };
 
 // The plugin reports the items the app watches: a watched item that is not there is 0 (missing), not unknown.
 const WATCHED = ['Small fishing net', 'Fishing rod', 'Fishing bait', 'Fly fishing rod', 'Feather', 'Lobster pot', 'Harpoon'];
@@ -51,12 +55,11 @@ function readyOf(fishing: number, bag: Record<string, number>, style: PlayStyle 
 }
 
 describe('S6-02 Fishing: the places of the climb are on the map in level order', () => {
-  it('the static arrow starts at the net spots; fly fishing and the lobsters follow', () => {
+  it('the static optional arrow starts at net spots, then fly fishing without an unnecessary Karamja leg', () => {
     const points = stepPoints(step);
     expect(points.map((p) => p.label)).toEqual([
       expect.stringContaining('Draynor Village (Fishing 1-20)'),
-      expect.stringContaining('Barbarian Village (Fishing 20-40)'),
-      expect.stringContaining('Musa Point'),
+      expect.stringContaining('Barbarian Village (Fishing 20-35)'),
     ]);
     expect(initialPoint(step)).toBe(0);
     expect(step.mapLocation).toMatchObject({ x: points[0].x, y: points[0].y });

@@ -1,5 +1,16 @@
 # In-game acceptance — assigned to Claude
 
+## 2.81.2 Optional and staged training acceptance — not live-verified
+
+- Check Optional after Dragon Slayer: Ranged40, Fishing35/Cooking35, Mining45/Woodcutting36/Firemaking50, optional Magic55. Skip unwanted optional training; switching to Members must remain possible without completing it or buying a Bond. Saved marks/notes/skips must survive.
+- At each real reachable level boundary, confirm the active skill, tools/materials, map/arrow, NPC/object highlights and equipment hint change together. Fishing35 hands off to Cooking; Mining45 to Woodcutting; Woodcutting36 to Firemaking. Bank previous tools; Firemaking needs a tinderbox and usable logs, not a new axe or melee weapon.
+- Verify unknown levels/bank, owned alternatives, small batches and funding shortfalls. Declared processing recipe supplies must be tracked and retained even when the method has no named station. Equipment hints are F2P advice, not numeric bonuses or a full Members-outfit model.
+- Cooking35 releases this Optional kit rather than requesting wine ingredients beyond the checkpoint. All gathering goals are needed for its automatic completion; a completed checkpoint should not cause another grind. The final membership decision has no mandatory Bond shopping item/GE arrow.
+
+- Ranged1→5→20→21→26→30→40: current instruction stops at the next useful milestone; final completion stays40. Compare Balanced/XP/Money without silently replacing an explicitly adopted plan. No automatic Seagulls beyond20. Check level10 barbarians rather than15/17; village point is approximate. Wizard is manual/unmodelled, not an automatic safe/profitable recommendation.
+- Bow upgrades and value-based ammunition must survive withdrawal/equipping order and reconnect. Check ready old ammo, owned compatible longbows, insufficient cash, unread bank and quest/Defence armour locks. Conditional future kits must not appear as observed ownership or suppress actual preparation. Total-arrow forecast covers all stages and is an estimate.
+- Retain Claude's Ledger layout/fonts. Verify current game/desktop guide text agrees, not just static renders. No Codex live tests are claimed.
+
 ## 2.80.20 Ranged acceptance — not live-verified
 
 - On S6-01, open the real bank and check bow/arrows/armour/amulet recommendations against current levels, Defence, Dragon Slayer state, owned quantities and spendable coins. Reuse owned suitable equipment; unknown bank is not missing.

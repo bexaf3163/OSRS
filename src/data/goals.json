@@ -371,8 +371,8 @@
           "min": 15
         },
         {
-          "raw": "60",
-          "min": 60,
+          "raw": "36",
+          "min": 36,
           "kind": "optional",
           "from": [
             "S6-03"
@@ -423,8 +423,12 @@
           "min": 15
         },
         {
-          "raw": "15",
-          "min": 15
+          "raw": "50",
+          "min": 50,
+          "kind": "optional",
+          "from": [
+            "S6-03"
+          ]
         },
         {
           "raw": "15",
@@ -465,8 +469,8 @@
           "min": 1
         },
         {
-          "raw": "50",
-          "min": 50,
+          "raw": "35",
+          "min": 35,
           "kind": "optional",
           "from": [
             "S6-02"
@@ -514,8 +518,8 @@
           "min": 4
         },
         {
-          "raw": "50",
-          "min": 50,
+          "raw": "35",
+          "min": 35,
           "kind": "optional",
           "from": [
             "S6-02"
@@ -572,8 +576,8 @@
           "max": 17
         },
         {
-          "raw": "60",
-          "min": 60,
+          "raw": "45",
+          "min": 45,
           "kind": "optional",
           "from": [
             "S6-03"

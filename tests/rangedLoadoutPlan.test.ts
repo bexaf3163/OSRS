@@ -64,6 +64,24 @@ describe('one complete, level-appropriate F2P ranged kit', () => {
     expect(rateKeyOf(state(40, 40))).not.toBe(rateKeyOf(state(40, 40, 10000, {}, ['Dragon Slayer I'])));
     expect(rateKeyOf({ ...funded, position: { known: true, source: 'game', value: { x: 1, y: 2, plane: 0 } } })).toBe(rateKeyOf(funded));
   });
+  it('reviews arrow damage and current prices at a bow upgrade instead of always buying bronze or the most expensive tier', () => {
+    const priced: PriceView = { ...prices, sell: () => ({ price: 200, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] }),
+      buy: name => ({ ...prices.buy(name)!, price: ({ 'Bronze arrow': 1, 'Iron arrow': 3, 'Steel arrow': 3, 'Mithril arrow': 2, 'Adamant arrow': 100 } as Record<string, number>)[name] ?? 10 }) };
+    const ammo = (level: number) => rangedNeeds(state(level), priced).filter(n => n.type === 'item')[1].name;
+    expect(ammo(30)).toBe('Mithril arrow');
+    expect(ammo(24)).toBe('Bronze arrow'); // Same max hit: do not pay more for the higher tier.
+    const poor = rangedNeeds(state(30, 1, 0), priced).filter(n => n.type === 'item');
+    expect(poor[0].name).toBe('Maple shortbow'); // A real preparation/funding need, not hidden forever by keeping the beginner bow.
+    expect(poor[1].name).toBe('Bronze arrow');
+  });
+  it('keeps a compatible worn stack when a tiny price saving would not justify changing it', () => {
+    const st = state(24, 1, 10000, { 'Bronze arrow': 1000 });
+    st.equipment = { weapon: 'Willow shortbow', ammo: 'Mithril arrow' };
+    st.equipmentItems = [{ name: 'Willow shortbow', count: 1 }, { name: 'Mithril arrow', count: 100 }];
+    const priced: PriceView = { ...prices, sell: () => ({ price: 200, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] }),
+      buy: name => ({ ...prices.buy(name)!, price: name === 'Bronze arrow' ? 1 : name.endsWith(' arrow') ? 2 : 10 }) };
+    expect(rangedNeeds(st, priced).filter(n => n.type === 'item')[1].name).toBe('Mithril arrow');
+  });
   it('uses the same kit for a newly declared ranged method, not a step-ID exception', () => {
     const method = { ...trainingMethods.find(m => m.id === 'ra-lumb')!, id: 'future-ranged-method' };
     const st = state(30, 20);

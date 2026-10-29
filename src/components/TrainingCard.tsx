@@ -19,6 +19,7 @@ import { xpForLevel } from '../lib/xp';
 import type { NavTargetPayload } from '../services/runeliteBridge';
 import { NavigateButton } from './NavigateButton';
 import { usePriceView } from '../lib/funding/usePriceView';
+import { f2pAdviceFor } from '../lib/f2pSkillAdvice';
 import { useTradeRestriction } from '../lib/useTradeRestriction';
 
 /** Skill advice from the shared player state; recomputed when levels, items, mode or style change. */
@@ -80,6 +81,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
   const { state } = usePlayerState();
   const { xp } = useBridge();
   const prices = usePriceView(true);
+  const equipmentHint = state.mode === 'f2p' ? f2pAdviceFor(skill)?.equipment : undefined;
   // T11: the arrows for the whole goal, leg by leg against each leg's opponent, with the bow and arrows the kit picks now.
   const arrows = useMemo(() => {
     if (skill !== 'ranged' || !advice?.best || advice.level === null) return null;
@@ -121,7 +123,8 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
           <div className="training-recommendation">
             <div className="training-method">
               <h3>{advice.followed ? 'Your plan (the game follows it)' : 'Recommended method'}</h3>
-              <p className="training-now"><strong>{shown!.method.name}</strong></p>
+              <p className="training-now"><strong>{shown!.method.name}</strong>{advice.actionTarget != null && (!advice.followed || shown!.method.id === best.method.id) && <span className="muted"> · to {advice.actionTarget}</span>}</p>
+              {equipmentHint && <p className="small muted training-equipment"><strong>Equipment:</strong> {equipmentHint}</p>}
               {view === 'full' ? <p className="small muted">{shown!.reason}</p> : <>
                 <p className="small muted">{shown!.method.xph ? `${shown!.method.xph.map(n => Math.round(n).toLocaleString('en-US')).join('–')} XP/h · ${shown!.method.rateSource === 'model' ? 'Estimated for your setup' : 'Guide estimate'}` : 'XP rate not estimated'}</p>
                 <p className="small training-economics">
@@ -142,13 +145,13 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
           )}
           {view === 'full' && arrows && arrows.shots.mid > 0 && (
             <p className="small ranged-arrows">
-              🏹 To level {arrows.goalLevel} with {arrows.bow} and {arrows.arrow}: about {arrows.shots.mid.toLocaleString('en-US')} shots
+              🏹 To level {arrows.goalLevel}{arrows.changesKit ? ' through the planned equipment stages' : ` with ${arrows.bow} and ${arrows.arrow}`}: about {arrows.shots.mid.toLocaleString('en-US')} shots
               ({arrows.shots.low.toLocaleString('en-US')}–{arrows.shots.high.toLocaleString('en-US')}). Picking arrows up, about {arrows.lostPickingUp.mid.toLocaleString('en-US')} break;
               left on the ground, every shot costs one.{arrows.notCounted.length > 0 && ` Accuracy leaves out ${arrows.notCounted.join(', ')} (no ranged data).`}
             </p>
           )}
           {profile.showTime && advice.time && (
-            <p className="small">⏱ {formatHours(advice.time)} to {target}{advice.time.source === 'wiki' ? ' (by the wiki speed — a guide)' : advice.time.source === 'model' ? ' (for your levels and gear)' : advice.time.source === 'forecast' ? ' (across your plan)' : ' (at your pace)'}.</p>
+            <p className="small">⏱ {formatHours(advice.time)} to {target}{arrows?.changesKit ? ' (assumes planned gear; preparation time excluded)' : advice.time.source === 'wiki' ? ' (by the wiki speed — a guide)' : advice.time.source === 'model' ? ' (for your levels and gear)' : advice.time.source === 'forecast' ? ' (across your plan)' : ' (at your pace)'}.</p>
           )}
           {best.status === 'PREP' && (
             <p className="small">First: <strong>{best.missing.map((x) => x.label).join(', ')}</strong> <a href="#/shopping">To the shopping list</a></p>
@@ -177,7 +180,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
       </>}
       {(advice.path.length > 1 || advice.quests.length > 0) && <DetailSection className="small"><DetailHeading>Plan details</DetailHeading>
       {advice.path.length > 1 && (
-        <p className="small muted">Path: {advice.path.map((l) => `${l.fromLevel}–${l.toLevel} ${l.method.name}`).join(' → ')}</p>
+        <p className="small muted">Path: {advice.path.slice(0, 6).map((l) => `${l.fromLevel}–${l.toLevel} ${l.method.name}`).join(' → ')}{advice.path.length > 6 ? ' · Later stages update as you progress.' : ''}</p>
       )}
       {advice.quests.length > 0 && (
         <p className="small muted">📜 Some levels are covered by quests: {advice.quests.map((q) => q.name).join('; ')}.</p>
