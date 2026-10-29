@@ -186,7 +186,7 @@ const SHOTS: Shot[] = [
   {
     name: 'skill-roadmap', area: 'T5', caption: 'Mining roadmap: priority and members preview as separate controls, groups labelled by the levels they cover', width: 1440,
     hash: '#/skills/MI', mock: skiller(SKILLER),
-    act: async (p) => { await p.locator('.skill-guide-roadmap').scrollIntoViewIfNeeded(); await p.waitForTimeout(300); },
+    act: async (p) => { await p.getByRole('tab', { name: 'Plan', exact: true }).click(); await p.locator('.skill-guide-roadmap').scrollIntoViewIfNeeded(); await p.waitForTimeout(300); },
   },
   {
     name: 'skill-melee', area: 'T5', caption: 'Melee reference: giant frogs from 20, the other options under the plan', width: 1440, hash: '#/skills/ME', mock: skiller(SKILLER),
@@ -194,7 +194,7 @@ const SHOTS: Shot[] = [
   },
   {
     name: 'skill-melee-roadmap', area: 'T5', caption: 'Attack roadmap: the giant frogs step with its other options opened', width: 1440, hash: '#/skills/ME', mock: skiller(SKILLER),
-    act: async (p) => { const d = p.locator('.skill-step-alts').first(); await d.locator('summary').click(); await d.scrollIntoViewIfNeeded(); await p.waitForTimeout(300); }, sel: '.skill-guide-roadmap',
+    act: async (p) => { await p.getByRole('tab', { name: 'Plan', exact: true }).click(); const d = p.locator('.skill-step-alts').first(); await d.locator('summary').click(); await d.scrollIntoViewIfNeeded(); await p.waitForTimeout(300); }, sel: '.skill-guide-roadmap',
   },
   { name: 'skill-melee-guide', area: 'T10', caption: 'Melee training guide for the reported character: the method ranked by the combat model (XP an hour for this gear)', width: 1440, hash: '#/skills/ME', mock: hillGiants() },
   { name: 'skill-ranged', area: 'T11', caption: 'Ranged: the training card with the arrows for the whole goal', width: 1440, hash: '#/skills/RA', mock: skiller(SKILLER) },

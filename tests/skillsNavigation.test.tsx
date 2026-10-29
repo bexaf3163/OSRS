@@ -14,8 +14,8 @@ const bridge = vi.hoisted(() => ({ state: 'offline', stats: null as Record<strin
 vi.mock('../src/bridge', () => ({ useBridge: () => bridge }));
 vi.mock('../src/lib/skillTrack', () => ({ useTracked: () => null }));
 vi.mock('../src/components/SkillRoadmap', () => ({ RoadmapPane: () => null, useTrackedStep: () => null }));
-vi.mock('../src/components/TrainingCard', () => ({ TrainingCard: ({ skill, target }: { skill: string; target: number }) =>
-  createElement('div', { 'data-training-skill': skill, 'data-target': target }) }));
+vi.mock('../src/components/TrainingCard', () => ({ TrainingCard: ({ skill, target, view }: { skill: string; target: number; view?: string }) =>
+  createElement('div', { 'data-training-skill': skill, 'data-target': target, 'data-view': view }) }));
 vi.mock('../src/components/LevelInput', () => ({ LevelInput: () => null }));
 vi.mock('../src/components/LiveXp', () => ({ LiveXp: () => null }));
 
@@ -39,13 +39,16 @@ describe('direct skill access without nested menus', () => {
     }
     expect(html).not.toContain('href="#/skills/ME"');
     expect(html).not.toContain('Training guide</a>');
+    expect(html).not.toContain('<details');
   });
   it('Defence stays selected even when the route would normally focus Attack or Strength', () => {
     const html = renderToStaticMarkup(<SkillDetailPage id="ME" selectedSkill="defence" />);
     expect(html).toContain('data-training-skill="defence"');
     expect(html).toContain('<h1>Defence');
-    expect(html).not.toContain('<details open');
-    expect(html).not.toContain(' open=""');
+    expect(html).toContain('data-view="summary"');
+    expect(html).not.toContain('<details');
+    expect(html).not.toContain('Levels and live experience');
+    expect(html).not.toContain('Path steps with this skill');
   });
   it('invalid skill selections cannot switch to another guide or create an invented skill', () => {
     const html = renderToStaticMarkup(<SkillDetailPage id="WC" selectedSkill="defence" />);

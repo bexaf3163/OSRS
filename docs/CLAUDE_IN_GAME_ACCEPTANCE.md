@@ -1,5 +1,12 @@
 # In-game acceptance — assigned to Claude
 
+## 2.80.18 Skills acceptance — not live-verified
+
+- With an admitted character and current bank/equipment, select melee, Ranged, Magic and gathering/processing skills. Train must show one method and honest model/guide/unknown estimates; required preparation and danger remain visible.
+- XP/Balanced/Money selection must agree with shared advice and preserve existing explicit preferences. An adopted plan remains the plan followed by the game; changing a recommendation does not silently replace it.
+- Plan retains the chosen melee skill, full analysis, ammunition estimates, roadmap and Follow/Stop behaviour. Show in game sends the selected method's location; verify actual arrow/highlights on reachable cases.
+- Reference retains manual levels/live XP and F2P sources; Calculator remains usable. Confirm desktop fonts/scaling and no lost progress after restart. Automated fixture screenshots are not live evidence.
+
 ## Desktop-only scope — owner decision, 2026-10-28
 
 No mobile/phone development or phone-only QA. Keep Windows desktop resizing, DPI/text scaling, themes and accessibility. See the authoritative desktop-only scope in [PROJECT_GUIDELINES.md](../PROJECT_GUIDELINES.md).

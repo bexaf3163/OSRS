@@ -73,7 +73,7 @@ function GuideRow({ skill, level, fallback }: { skill: string; level: number; fa
   );
 }
 
-export function TrainingCard({ skill, target, followed = null }: { skill: string; target: number; followed?: string | null }) {
+export function TrainingCard({ skill, target, followed = null, view = 'full' }: { skill: string; target: number; followed?: string | null; view?: 'full' | 'summary' | 'analysis' }) {
   const advice = useTrainingAdvice(skill, target, followed);
   const features = useFeatures();
   const profile = styleOf(features);
@@ -87,7 +87,7 @@ export function TrainingCard({ skill, target, followed = null }: { skill: string
     return goalArrows(legs, state, xp?.ranged ?? xpForLevel(advice.level));
   }, [skill, advice, state, xp, target]);
   if (!advice) return null;
-  if (advice.level === null) return <section className="training" aria-label="What to train with"><p className="small muted">Level not checked. Connect RuneLite or enter your level under “Levels and live experience”.</p></section>;
+  if (advice.level === null) return <section className="training" aria-label="What to train with"><p className="small muted">Level not checked. Connect RuneLite or enter your level in Reference → Levels and live experience.</p></section>;
   if (advice.level >= target) return null;
   const { best } = advice;
   // The method the game follows (a tracked plan) leads the card with this player's figures; the pick, when it differs, is one line under it.
@@ -96,8 +96,13 @@ export function TrainingCard({ skill, target, followed = null }: { skill: string
   const legEnd = advice.actionTarget ?? target;
   const count = advice.actionsLeft;
   const showOthers = advice.others.length > 0;
+  const summary = view !== 'analysis';
+  const analysis = view !== 'summary';
+  const DetailSection = view === 'full' ? 'details' : 'section';
+  const DetailHeading = view === 'full' ? 'summary' : 'h3';
   return (
-    <section className="training" aria-label="What to train with">
+    <section className={`training training-${view}`} aria-label={view === 'analysis' ? 'Method analysis' : 'What to train with'}>
+      {summary && <>
       <p className="readiness-head">
         🎯 <strong>What to train with: {skillTitle(skill)}</strong> <span className="muted">— now {advice.level}, goal {target}</span>
       </p>
@@ -115,16 +120,26 @@ export function TrainingCard({ skill, target, followed = null }: { skill: string
           <div className="training-recommendation">
             <div className="training-method">
               <h3>{advice.followed ? 'Your plan (the game follows it)' : 'Recommended method'}</h3>
-              <p className="training-now"><strong>{shown!.method.name}</strong></p><p className="small muted">{shown!.reason}</p>
+              <p className="training-now"><strong>{shown!.method.name}</strong></p>
+              {view === 'full' ? <p className="small muted">{shown!.reason}</p> : <>
+                <p className="small muted">{shown!.method.xph ? `${shown!.method.xph.map(n => Math.round(n).toLocaleString('en-US')).join('–')} XP/h · ${shown!.method.rateSource === 'model' ? 'Estimated for your setup' : 'Guide estimate'}` : 'XP rate not estimated'}</p>
+                <p className="small training-economics">
+                  {shown!.method.lootPerHour != null ? `Loot ≈ ${Math.round(shown!.method.lootPerHour).toLocaleString('en-US')} gp/h` : 'Earnings not estimated'}
+                  {shown!.method.costPerHour != null ? ` · Supplies ≈ ${Math.round(shown!.method.costPerHour).toLocaleString('en-US')} gp/h` : shown!.method.cost === 'cost' ? ' · Supply cost unknown' : ''}
+                </p>
+                {shown!.method.rateWarning && <p className="notice">{shown!.method.rateWarning}</p>}
+                {shown!.method.risk === 'high' && !shown!.method.rateWarning && <p className="notice">High-risk method. Check the plan before starting.</p>}
+                {shown!.method.manualSetup && <p className="notice">Manual setup: {shown!.method.manualSetup}</p>}
+              </>}
             </div>
-            <div className="training-location"><h3>Location</h3><p>{shown!.method.where}</p>{nav && <NavigateButton target={nav} label={`To the place: ${nav.label}`} />}</div>
+            <div className="training-location"><h3>Location</h3><p>{shown!.method.where}</p>{nav && <NavigateButton target={nav} label={view === 'summary' ? 'Show in game' : `To the place: ${nav.label}`} />}</div>
           </div>
-          {advice.followed && <p className="small">Recommended for you: <strong>{best.method.name}</strong> — {advice.reason}</p>}
+          {advice.followed && <p className="small">Recommended for you: <strong>{best.method.name}</strong>{view === 'full' && <> — {advice.reason}</>}</p>}
           {!advice.followed && (<>
           {count !== null && best.method.act && (
             <p className="small">≈ {count.toLocaleString('en-US')} more {actionForm(best.method.act, count)}{legEnd < target ? ` to level ${legEnd}` : ` to level ${target}`}.</p>
           )}
-          {arrows && arrows.shots.mid > 0 && (
+          {view === 'full' && arrows && arrows.shots.mid > 0 && (
             <p className="small ranged-arrows">
               🏹 To level {arrows.goalLevel} with {arrows.bow} and {arrows.arrow}: about {arrows.shots.mid.toLocaleString('en-US')} shots
               ({arrows.shots.low.toLocaleString('en-US')}–{arrows.shots.high.toLocaleString('en-US')}). Picking arrows up, about {arrows.lostPickingUp.mid.toLocaleString('en-US')} break;
@@ -138,29 +153,42 @@ export function TrainingCard({ skill, target, followed = null }: { skill: string
             <p className="small">First: <strong>{best.missing.map((x) => x.label).join(', ')}</strong> <a href="#/shopping">To the shopping list</a></p>
           )}
           {best.unchecked.length > 0 && <p className="small muted">Not checked: {best.unchecked.map((x) => x.label).join(', ')} — open the bank in the game.</p>}
-          {best.method.note && <p className="small muted">{best.method.note}</p>}
+          {view === 'full' && best.method.note && <p className="small muted">{best.method.note}</p>}
           </>)}
-          <div className="actions">
+          {view === 'summary' && shown!.fundingShortfall != null && shown!.fundingShortfall > 0 && <p className="notice">Earn at least {shown!.fundingShortfall.toLocaleString('en-US')} gp for the missing next-trip kit first.</p>}
+          {view === 'summary' && advice.followed && <>
+            {shown!.missing.length > 0 && <p className="small">First: <strong>{shown!.missing.map(x => x.label).join(', ')}</strong> <a href="#/shopping">Shopping</a></p>}
+            {shown!.unchecked.length > 0 && <p className="small muted">Not checked: {shown!.unchecked.map(x => x.label).join(', ')} — open the bank in the game.</p>}
+          </>}
+          {view === 'full' && <div className="actions">
             <a className="btn btn-ghost btn-sm" href={best.method.url} target="_blank" rel="noopener noreferrer">Wiki ↗</a>
-          </div>
+          </div>}
         </>
       ) : (
         <GuideRow skill={skill} level={advice.level} fallback={advice.reason} />
       )}
-      {(advice.path.length > 1 || advice.quests.length > 0) && <details className="small"><summary className="muted">Plan details</summary>
+      </>}
+      {analysis && <>
+      {view === 'analysis' && shown && <>
+        <h2>{shown.method.name}</h2><p className="small">{shown.reason}</p>
+        {shown.method.note && <p className="small muted">{shown.method.note}</p>}
+        {arrows && arrows.shots.mid > 0 && <p className="small">To level {arrows.goalLevel}: approximately {arrows.shots.low.toLocaleString('en-US')}–{arrows.shots.high.toLocaleString('en-US')} shots with {arrows.bow} and {arrows.arrow}. Picking up arrows: about {arrows.lostPickingUp.mid.toLocaleString('en-US')} break; otherwise every shot costs one.{arrows.notCounted.length > 0 && ` Accuracy leaves out ${arrows.notCounted.join(', ')} (no ranged data).`}</p>}
+      </>}
+      {(advice.path.length > 1 || advice.quests.length > 0) && <DetailSection className="small"><DetailHeading>Plan details</DetailHeading>
       {advice.path.length > 1 && (
         <p className="small muted">Path: {advice.path.map((l) => `${l.fromLevel}–${l.toLevel} ${l.method.name}`).join(' → ')}</p>
       )}
       {advice.quests.length > 0 && (
         <p className="small muted">📜 Some levels are covered by quests: {advice.quests.map((q) => q.name).join('; ')}.</p>
       )}
-      </details>}
+      </DetailSection>}
       {showOthers && (
-        <details className="small">
-          <summary className="muted">Other methods: {advice.others.length}</summary>
+        <DetailSection className="small">
+          <DetailHeading>Other methods{view === 'full' ? `: ${advice.others.length}` : ''}</DetailHeading>
           <ul>{advice.others.slice(0, profile.alternatives || 3).map((v) => <Alternative key={v.method.id} v={v} />)}</ul>
-        </details>
+        </DetailSection>
       )}
+      </>}
     </section>
   );
 }

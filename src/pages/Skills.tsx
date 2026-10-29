@@ -1,11 +1,10 @@
 // The list of skills: what to train now in each, and the way into each skill's training guide (its method, place and leveling roadmap).
-import { levelById, membersGuide, membersSkills, reference, skills, xpData } from '../data';
+import { levelById, membersSkills, skills, xpData } from '../data';
 import { useStore } from '../store';
 import { currentStage } from '../lib/next-step';
 import { formatXp } from '../lib/goals';
 import { levelOf } from '../lib/progress';
 import type { Skill } from '../types';
-import { Blocks } from '../components/Blocks';
 import { Table } from '../components/Table';
 import { SkillGlyph } from '../components/SectionShell';
 import { useBridge } from '../bridge';
@@ -24,16 +23,6 @@ export function SkillsPage() {
       </header>
       {mode === 'f2p' && <p className="small muted f2p-priority-key">★ Good F2P value · ◇ Optional · ↓ Prefer members. Suggested checkpoints, not caps.</p>}
 
-      <details className="disclosure card">
-        <summary>{reference.training.title}</summary>
-        <div className="prose">
-          <Blocks blocks={reference.training.blocks} />
-          <h3>{xpData.title}</h3>
-          <XpTable />
-          <Blocks blocks={xpData.note} />
-        </div>
-      </details>
-
       <div className="skill-grid skill-grid-compact">
         {skills.flatMap((s) => [...s.levelSkills, ...(mode === 'f2p' && s.id === 'ME' ? ['hitpoints'] : [])].map((id) => <SkillCard key={id} skill={s} id={id} />))}
       </div>
@@ -41,10 +30,6 @@ export function SkillsPage() {
       {mode === 'members' && (
         <section className="section" aria-labelledby="members-skills">
           <h2 id="members-skills">Members skills <span className="badge badge-members">Members</span></h2>
-          <details className="disclosure card">
-            <summary>How the members skill plans work</summary>
-            <div className="prose"><Blocks blocks={membersGuide.intro} /></div>
-          </details>
           <div className="skill-grid skill-grid-compact">
             {membersSkills.flatMap((m) => m.levelSkills.map((id) => <SkillCard key={id} skill={m} id={id} />))}
           </div>

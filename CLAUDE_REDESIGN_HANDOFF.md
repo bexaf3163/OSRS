@@ -1,4 +1,6 @@
-# Current delivery — 2.80.4
+# Current delivery — see authoritative takeover
+
+Skills compact presentation (2.80.18): selecting a tile opens **Train**, one recommendation with estimates and visible preparation/risk/unknown states. **Plan** owns method analysis and the roadmap, **Calculator** retains XP tools, **Reference** owns manual levels, F2P comparisons, training reference and related route steps. Do not restore the stack of disclosures to Train. Existing route-step cards retain their original presentation. Engine/model coverage is explicitly partial; see docs/SKILLS_COVERAGE.md and the takeover. No save or formula migration.
 
 Start with [Claude takeover](docs/CLAUDE_NEXT_SESSION.md) for implemented repairs, exact release/evidence and remaining T01–T17. It supersedes historical pending/branch references below. The accepted design history remains for implementation context.
 

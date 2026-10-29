@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from 'react';
 import type { Skill } from '../types';
-import { findSkill, goals, levelById } from '../data';
+import { findSkill, goals, levelById, reference, membersGuide, xpData } from '../data';
 import { useStore } from '../store';
 import { currentStage, isClosed } from '../lib/next-step';
 import { formatXp, goalFor } from '../lib/goals';
@@ -16,9 +16,10 @@ import { LiveXp } from '../components/LiveXp';
 import { TrainingCard } from '../components/TrainingCard';
 import { RoadmapPane, useTrackedStep } from '../components/SkillRoadmap';
 import { methodOfGuideStep } from '../lib/trainingRouter';
-import { roadmapSkills } from './Skills';
+import { roadmapSkills, XpTable } from './Skills';
 import { trainingFocus, type TrainingFocus } from '../lib/skillFocus';
 import { F2pSkillNote } from '../components/F2pSkillNote';
+import { f2pAdviceFor, f2pAdviceLabel } from '../lib/f2pSkillAdvice';
 
 export function SkillDetailPage({ id, selectedSkill }: { id: string; selectedSkill?: string }) {
   const skill = findSkill(id);
@@ -34,14 +35,14 @@ export function SkillDetailPage({ id, selectedSkill }: { id: string; selectedSki
   return <SkillView skill={skill} selectedSkill={selectedSkill && skill.levelSkills.includes(selectedSkill) ? selectedSkill : undefined} />;
 }
 
-type SkillTab = 'guide' | 'calculator' | 'reference';
+type SkillTab = 'guide' | 'plan' | 'calculator' | 'reference';
 
 function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: string }) {
   const { progress, steps, stages, mode } = useStore();
   const [tab, setTab] = useState<SkillTab>('guide');
   const guides = roadmapSkills(skill);
   const tabs: [SkillTab, string][] = [
-    ['guide', 'Training guide'], ['calculator', 'Calculator'], ['reference', 'Reference'],
+    ['guide', 'Train'], ['plan', 'Plan'], ['calculator', 'Calculator'], ['reference', 'Reference'],
   ];
   /** "Now by the plan" leads to the training plan row, which lives in the Reference tab. */
   const showPlan = () => {
@@ -65,6 +66,7 @@ function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: str
   const card = follow
     ? { skill: follow.skill, target: focus.skill === follow.skill ? focus.target : follow.step.targetLevel, followed: methodOfGuideStep(follow.step)?.id ?? null }
     : { skill: focus.skill, target: focus.target, followed: null };
+  const f2p = mode === 'f2p' ? f2pAdviceFor(card.skill) : null;
 
   return (
     <div className="page skill-detail">
@@ -94,13 +96,23 @@ function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: str
 
       {tab === 'guide' && (
       <>
-      {mode === 'f2p' && <F2pSkillNote skill={card.skill} level={progress.levels?.[card.skill]} />}
-      <ReachedNote skill={focused} stage={stage} focus={focus} />
-      <FocusNote focus={focus} />
-      <TrainingCard skill={card.skill} target={card.target} followed={card.followed} />
-      {guides.length > 0 && <details className="card skill-guide-roadmap"><summary>Leveling roadmap</summary><RoadmapPane skills={guides} label={skill.name} /></details>}
+      {f2p && <p className="small muted f2p-skill-checkpoint">{f2pAdviceLabel(f2p, progress.levels?.[card.skill])} <button type="button" className="link-btn" onClick={() => setTab('reference')}>Why?</button></p>}
+      <TrainingCard skill={card.skill} target={card.target} followed={card.followed} view="summary" />
+      <button type="button" className="link-btn skill-plan-link" onClick={() => setTab('plan')}>Method details &amp; leveling plan →</button>
+      </>
+      )}
 
-      <details className="card skill-level-editor"><summary>Levels and live experience</summary>
+      {tab === 'plan' && <>
+        <ReachedNote skill={focused} stage={stage} focus={focus} />
+        <FocusNote focus={focus} />
+        <TrainingCard skill={card.skill} target={card.target} followed={card.followed} view="analysis" />
+        {guides.length > 0 && <section className="card skill-guide-roadmap"><RoadmapPane skills={selectedSkill ? guides.filter(id => id === selectedSkill) : guides} label={selectedSkill ? levelById.get(selectedSkill)?.name ?? skill.name : skill.name} /></section>}
+      </>}
+
+      {tab === 'reference' && (<>
+      {mode === 'f2p' && <F2pSkillNote skill={card.skill} level={progress.levels?.[card.skill]} />}
+
+      <section className="card skill-level-editor"><h2>Levels and live experience</h2>
       <section className="levels-card" aria-label="Levels">
         <div className="levels-row">
           {skill.levelSkills.map((lid) => <LevelInput key={lid} id={lid} label={levelById.get(lid)!.name} />)}
@@ -116,11 +128,11 @@ function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: str
           </p>
         )}
       </section>
-      </details>
+      </section>
 
       {related.length > 0 && (
-        <details className="section skill-related">
-          <summary>Path steps with this skill</summary>
+        <section className="section skill-related">
+          <h2>Path steps with this skill</h2>
           <ul className="link-list">
             {related.map((s) => (
               <li key={s.id} className={isClosed(progress, s.id) ? 'is-done' : ''}>
@@ -133,7 +145,7 @@ function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: str
               </li>
             ))}
           </ul>
-        </details>
+        </section>
       )}
 
       </>
@@ -151,6 +163,10 @@ function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: str
               {i === skill.plan.sectionIndex ? <PlanBlocks skill={skill} highlight={hit?.index} blocks={sec.blocks} /> : <Blocks blocks={sec.blocks} />}
             </section>
           ))}
+          <section className="section prose"><h2>{reference.training.title}</h2><Blocks blocks={reference.training.blocks} />
+            {mode === 'members' && <Blocks blocks={membersGuide.intro} />}
+            <h3>{xpData.title}</h3><XpTable /><Blocks blocks={xpData.note} />
+          </section>
         </>
       )}
     </div>

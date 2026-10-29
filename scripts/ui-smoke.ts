@@ -5,7 +5,7 @@
 // (npx playwright install chromium). These scenarios used to live outside the repository.
 
 import { spawn } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright';
 import { PICKAXES } from '../src/lib/toolTiers.ts';
 
@@ -241,9 +241,22 @@ async function f2pSkillsScenarios(browser: Browser) {
     expect((await text(page, 'h1')).includes('Defence'), `Skills ${width}: Defence opens directly`);
     expect(await page.locator('[aria-label="Training priority"] button').count() === 3, `Skills ${width}: three priorities`);
     expect(await page.locator('[aria-label="Training priority"] button[aria-pressed="true"]').innerText() === 'Balanced', `Skills ${width}: Balanced is default`);
-    expect(await page.locator('.training details[open]').count() === 0, `Skills ${width}: details start closed`);
-    expect((await text(page, '.f2p-skill-note')).includes('10 reached'), `F2P ${width}: the detail uses the same checkpoint as its tile`);
-    expect(await page.locator('.f2p-skill-note details[open]').count() === 0, `F2P ${width}: comparison and sources start folded`);
+    expect(await page.locator('.skill-detail details').count() === 0, `Skills ${width}: default view contains no disclosure stack`);
+    expect((await text(page, '.f2p-skill-checkpoint')).includes('10 reached'), `F2P ${width}: the detail uses the same checkpoint as its tile`);
+    expect(await page.locator('.training-analysis, .skill-level-editor, .skill-guide-roadmap').count() === 0, `Skills ${width}: supporting tools are absent from the default view`);
+    for (const label of ['Money', 'XP', 'Balanced']) {
+      await page.getByRole('group', { name: 'Training priority' }).getByRole('button', { name: label, exact: true }).click();
+      expect(await page.locator('[aria-label="Training priority"] button[aria-pressed="true"]').innerText() === label, `Skills ${width}: ${label} priority remains directly available`);
+    }
+    await page.screenshot({ path: `audit-temp/skills-compact-${width}.png` });
+    await page.getByRole('tab', { name: 'Plan', exact: true }).click();
+    expect(await page.locator('.skill-guide-roadmap').count() === 1 && await noOverflow(page), `Skills ${width}: plan remains accessible without a disclosure`);
+    expect((await page.locator('.skill-roadmap-head h2').innerText()).includes('Defence'), `Skills ${width}: plan keeps the chosen combat skill`);
+    await page.getByRole('tab', { name: 'Calculator', exact: true }).click();
+    expect(await page.locator('.calc').count() === 1, `Skills ${width}: calculator remains accessible`);
+    await page.getByRole('tab', { name: 'Reference', exact: true }).click();
+    expect((await text(page, '.f2p-skill-note')).includes('10 reached') && await page.locator('.skill-level-editor').count() === 1, `Skills ${width}: F2P evidence and level editing remain accessible`);
+    await page.getByRole('tab', { name: 'Train', exact: true }).click();
     expect(await noOverflow(page) && !errors.length, `F2P ${width}: the direct skill guide stays usable`);
     await page.context().close();
   }
@@ -254,14 +267,27 @@ async function f2pSkillsScenarios(browser: Browser) {
     await page.context().close();
   }
   {
-    const { page } = await open(browser, 1280, { zen: true, progress: progressBefore('S9-01', { gameMode: 'members' }) }, '#/skills');
+    const { page, errors } = await open(browser, 1280, { zen: true, theme: 'light', scale: 1.5,
+      progress: progressBefore('S9-01', { gameMode: 'members', levels: Object.fromEntries(readdirSync(new URL('../src/data/skills/', import.meta.url)).filter(f => f.endsWith('.json')).map(f => [f.slice(0, -5), 30])) }) }, '#/skills');
     expect(await page.locator('.f2p-skill-badge').count() === 0, 'Members: F2P preparation markers do not clutter the overview');
+    const links = await page.locator('.skill-tile a').evaluateAll(els => els.map(el => ({ href: el.getAttribute('href')!, name: el.querySelector('.skill-name')!.textContent! })));
+    for (const { href, name } of links) {
+      await page.evaluate(hash => { location.hash = hash; }, href);
+      await page.locator('.skill-detail h1').filter({ hasText: name }).waitFor();
+      expect(await page.getByRole('tab', { name: 'Train', exact: true }).getAttribute('aria-selected') === 'true'
+        && await page.locator('.skill-detail details').count() === 0, `${href}: direct recommendation without disclosure clutter`);
+      expect(await noOverflow(page) && !errors.length, `${href}: light desktop at 150% has no overflow or console errors`);
+    }
+    await page.evaluate(() => { location.hash = '#/skills/WC/woodcutting'; });
+    await waitFor(page, '.training', 5000);
+    await page.screenshot({ path: 'audit-temp/skills-compact-light-150.png' });
     await page.context().close();
   }
 }
 
 async function run(browser: Browser) {
   if (process.env.UI_ONLY === 'f2p-skills') { await f2pSkillsScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await f2pSkillsScenarios(browser);
   if (process.env.UI_ONLY === 'skill-handover') { await skillHandoverScenarios(browser); return; }
   if (!process.env.UI_ONLY) await skillHandoverScenarios(browser);
   if (process.env.UI_ONLY === 'mining-handover') { await miningHandoverScenarios(browser); return; }
@@ -1058,9 +1084,10 @@ async function run(browser: Browser) {
     {
       const { page, errors } = await open(browser, width, { progress: progressBefore('S9-01') }, '#/skills');
       await page.locator('.skill-tile a').first().click();
-      await page.locator('.skill-guide-roadmap > summary').click();
+      expect(await page.getByRole('tab', { name: 'Train', exact: true }).getAttribute('aria-selected') === 'true', 'roadmap: the skill opens on its compact recommendation');
+      await page.getByRole('tab', { name: 'Plan', exact: true }).click();
       await waitFor(page, '.skill-guide-roadmap .skill-timeline', 5000);
-      expect(await page.getByRole('tab', { name: 'Training guide' }).getAttribute('aria-selected') === 'true', 'roadmap: the skill opens on its Training guide');
+      expect(await page.getByRole('tab', { name: 'Plan', exact: true }).getAttribute('aria-selected') === 'true', 'roadmap: the full plan has its own view');
       const before = await text(page, '.skill-timeline');
       expect(/Levels \d+/.test(before), 'roadmap: the level brackets are shown');
       expect(await noOverflow(page), 'roadmap: no horizontal scrolling');
@@ -1102,7 +1129,7 @@ async function run(browser: Browser) {
         localStorage: { 'osrs-put:profiles': profiles },
         status: { protocol: 5, pluginVersion: '2.12.0', player: 'Alpha One', xp: { woodcutting: 10 } },
       }, '#/skills/WC');
-      await ok.page.locator('.skill-level-editor > summary').click();
+      await ok.page.getByRole('tab', { name: 'Reference', exact: true }).click();
       await waitFor(ok.page, '.live-xp', 5000);
       const x = await text(ok.page, '.live-xp');
       expect(x.includes('to ') && x.includes('XP left'), 'skill: XP from the game — "N XP left to the level"');

@@ -132,6 +132,18 @@
  :root .path-wide .dock { display:none; }
  .cockpit .current-action-title, .strip .current-action-title { font-size:1.9rem; }
 }
+.skill-detail .training-summary { max-width:900px; }
+.skill-detail .training-summary .training-recommendation { grid-template-columns:minmax(0,1fr); gap:8px; margin:16px 0 8px; padding:16px; border:1px solid var(--border); border-radius:var(--radius); }
+.skill-detail .training-summary .training-method,.skill-detail .training-summary .training-location { padding:0; background:transparent; border:0; }
+.skill-detail .training-summary .training-method h3 { color:var(--muted); font-size:.8rem; margin-bottom:6px; }
+.skill-detail .training-summary .training-now { font-size:1.4rem; margin:0 0 8px; }
+.skill-detail .training-summary .training-location { display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; }
+.skill-detail .training-summary .training-location h3 { display:none; }
+.skill-detail .training-summary .training-location p { margin:0; color:var(--muted); }
+.skill-detail .training-summary .small { margin-block:8px; }
+.skill-detail .training-summary .actions { margin-block:8px; }
+.skill-detail .skill-plan-link { margin-top:8px; }
+.skill-detail .training-analysis { max-width:900px; }
 @media(max-width:520px) {
  :root main#main,:root main#main:has(.path-wide) { padding:20px 14px 90px; }
  :root .topbar-actions { gap:5px; }

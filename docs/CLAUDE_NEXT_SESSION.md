@@ -4,6 +4,8 @@ Updated 2026-10-29. Read this first; open historical records only for the area b
 
 ## Current delivery
 
+**2.80.18 candidate: compact Skills.** Publication receipt follows CI/portable verification. Local build/types, 2,280 tests/195 files, data checks, 725 full desktop assertions plus 88 final focused assertions, 92 isolated native assertions, bridge JAR and Java testClasses passed. Dark desktop and light/150% fixture screenshots were inspected. Train has one recommendation with visible preparation/unknown/funding/risk states; Plan holds analysis/alternatives/roadmap; Calculator and Reference retain tools/levels/F2P evidence. No save, formula, route, protocol or launcher changes. Existing route-step TrainingCard presentation is preserved. No live-game acceptance claimed.
+
 **2.80.17 is published and verified.** [Normal portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.80.17).
 
 - Product source: `bf8d7a7c155a687816c2fa64906a0dd32c6492c1`; verified receipt `87eb7db` on main. Later documentation-only commits do not change this binary.
@@ -39,6 +41,8 @@ Read [CLAUDE.md](../CLAUDE.md) and [project guidelines](../PROJECT_GUIDELINES.md
 Relevant modules: playerState/readinessEngine, materialStock, foodAdvice, oneTrip/prepPlan/prepEnvelope, sourceRouter/purchaseCost, trainingRouter and funding/need under `src/lib`. Food healing, equipment, usable tool tiers and doses retain specialised engines. Existing combatRoute, skillingRates, processingRates and methodRates provide the combat/gathering/processing models; do not duplicate them. Utility processing already includes five Firemaking log recipes, Bones/Big bones burial, Superheat iron and four F2P Runecraft altars (source f6a0e82). On 2026-10-29, 36 processing/funding-adapter tests passed. These are implemented basic models, not a claim that every Members/utility method is modelled; do not rebuild them from historical open labels.
 
 ## Remaining work and limits
+
+**Skills coverage is not complete.** [The tested coverage ledger](SKILLS_COVERAGE.md) distinguishes all 23 guides from personalized models. Melee/Ranged/Magic combat, Woodcutting/Fishing/Mining gathering, Smithing/Cooking/Crafting/Fletching/Herblore processing, and basic Firemaking/Prayer/Runecraft/Superheat models exist. Not every method/level is modelled. Agility/Thieving/Farming have guide-only catalogue rates; Construction/Hunter/Slayer/Hitpoints use guide rows. Do not claim the owner's full personalized-skill requirements met, or build duplicate engines. Extend existing dispatch only with supported mechanics and sources. Whole-goal supply/acquisition economics and live acceptance remain partial.
 
 1. Perform reachable [live acceptance cases](CLAUDE_IN_GAME_ACCEPTANCE.md), recording exact build/character/state and PASS / FAIL / NOT REACHABLE. Codex does code/automated checks; Claude does live acceptance.
 2. Select a **reproduced current issue** from [the audit ledger](CODEX_AUDIT_BACKLOG.md). It retains all T01-T17 and all 30 Gemini dispositions. Historical open/unreleased labels are not proof of a current bug; check source and later receipts first.
