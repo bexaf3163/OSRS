@@ -2701,9 +2701,10 @@ async function rangedPreparationScenarios(browser: Browser) {
     const stats = { ranged: 1, defence: 1, hitpoints: 30 };
     const weapon = { id: 841, name: 'Shortbow', slot: 'weapon', count: 1 };
     const arrow = { id: 882, name: 'Bronze arrow', slot: 'ammo', count: 1 };
+    const clothes = ['Leather cowl', 'Leather body', 'Leather chaps', 'Leather vambraces', 'Leather boots'].map((name, i) => ({ id: 50000 + i, name, slot: ['head', 'body', 'legs', 'hands', 'feet'][i], count: 1 }));
     const gear = { equipment: [weapon, arrow], inventory: [], coins: 1000, bankCoins: 0 };
-    const names = ['Maple shortbow', 'Maple longbow', 'Willow shortbow', 'Willow longbow', 'Oak shortbow', 'Oak longbow', 'Shortbow', 'Longbow', 'Adamant arrow', 'Mithril arrow', 'Steel arrow', 'Iron arrow', 'Bronze arrow', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'];
-    const items = names.map(name => ({ name, carried: name === 'Shortbow' ? 1 : name === 'Bronze arrow' ? 100 : 0, noted: 0, bank: name === 'Salmon' ? 10 : 0 }));
+    const names = ['Maple shortbow', 'Maple longbow', 'Willow shortbow', 'Willow longbow', 'Oak shortbow', 'Oak longbow', 'Shortbow', 'Longbow', 'Adamant arrow', 'Mithril arrow', 'Steel arrow', 'Iron arrow', 'Bronze arrow', 'Salmon', 'Tuna', 'Lobster', 'Swordfish', ...clothes.map(c => c.name), 'Coif', 'Studded body', 'Studded chaps', "Green d'hide body", "Green d'hide chaps", "Green d'hide vambraces", 'Amulet of power', 'Amulet of accuracy'];
+    const items = names.map(name => ({ name, carried: name === 'Shortbow' ? 1 : name === 'Bronze arrow' ? 100 : 0, noted: 0, bank: name === 'Salmon' ? 10 : clothes.some(c => c.name === name) ? 1 : 0 }));
     const { page, errors } = await open(browser, width, {
       market: true, progress: progressBefore('S6-01', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:active-step': 'S6-01' },
@@ -2714,11 +2715,13 @@ async function rangedPreparationScenarios(browser: Browser) {
     const initial = await snapshot();
     expect(initial?.step?.npcNames?.includes('Seagull') && initial.step.worldPoint?.label?.includes('Port Sarim'), `ranged (${width}): a beginner gets the current surface trainer, not ogresses`);
     expect(initial?.step?.checklist?.some((r: any) => r.name === 'Bronze arrow' && r.count === 100 && r.equip) && initial.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where !== 'EQUIPPED', `ranged (${width}): one worn arrow cannot satisfy the starter stack`);
-    const equipped = { ...gear, equipment: [weapon, { ...arrow, count: 100 }] };
+    expect(clothes.every(c => initial?.step?.checklist?.some((r: any) => r.name === c.name && r.equip) && initial.plan?.lines?.find((r: any) => r.name === c.name)?.where === 'BANK'), `ranged (${width}): the whole owned ranged outfit is prepared from the bank`);
+    const equipped = { ...gear, equipment: [weapon, { ...arrow, count: 100 }, ...clothes] };
     await page.evaluate(g => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, ...g }; w.__emit({ type: 'GEAR', gear: g }); }, equipped);
     await page.waitForTimeout(1500);
     const ready = await snapshot();
     expect(ready?.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where === 'EQUIPPED', `ranged (${width}): a GEAR-only quantity update reaches the canonical preparation snapshot`);
+    expect(clothes.every(c => ready?.plan?.lines?.find((r: any) => r.name === c.name)?.where === 'EQUIPPED'), `ranged (${width}): actual equipped outfit clears its preparation lines`);
     // Known HP/Defence are needed for personalized recovery; prices and owned food make the frog kit practical.
     for (const [level, npc] of [[20, 'Giant frog'], [26, 'Giant frog']] as const) {
       await page.evaluate(s => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { ranged: level, defence: 1, hitpoints: 30 });
@@ -2729,6 +2732,7 @@ async function rangedPreparationScenarios(browser: Browser) {
     }
     await reveal(page, '.training:visible');
     expect((await text(page, '.training:visible')).includes('Giant frogs'), `ranged (${width}): the visible desktop advice matches the game target`);
+    await page.screenshot({ path: `audit-temp/ranged-kit-${width}.png` });
     expect(await noOverflow(page) && !errors.length, `ranged (${width}): no overflow or runtime errors`);
     await page.context().close();
   }

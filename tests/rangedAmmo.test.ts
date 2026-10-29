@@ -78,8 +78,8 @@ describe('the arrows on the training card, along the path', () => {
     const legs = [{ method: method('ra-monk'), fromLevel: 20, toLevel: 26 }, { method: method('ra-frog'), fromLevel: 26, toLevel: 40 }];
     const all = goalArrows(legs, s, xpForLevel(20))!;
     expect(all).toMatchObject({ bow: 'Willow shortbow', arrow: 'Mithril arrow', goalLevel: 40, notCounted: [] });
-    const monks = arrowsForGoal({ xp: xpForLevel(20), goalLevel: 26, bow: 'Willow shortbow', arrow: 'Mithril arrow', worn: ['Leather body'], foe: methodFoe(method('ra-monk'))! })!;
-    const frogs = arrowsForGoal({ xp: xpForLevel(26), goalLevel: 40, bow: 'Willow shortbow', arrow: 'Mithril arrow', worn: ['Leather body'], foe: methodFoe(method('ra-frog'))! })!;
+    const monks = arrowsForGoal({ xp: xpForLevel(20), goalLevel: 26, bow: 'Willow shortbow', arrow: 'Mithril arrow', worn: ['Leather body', 'Leather cowl', 'Leather chaps', 'Leather vambraces', 'Leather boots'], foe: methodFoe(method('ra-monk'))! })!;
+    const frogs = arrowsForGoal({ xp: xpForLevel(26), goalLevel: 40, bow: 'Willow shortbow', arrow: 'Mithril arrow', worn: ['Leather body', 'Leather cowl', 'Leather chaps', 'Leather vambraces', 'Leather boots'], foe: methodFoe(method('ra-frog'))! })!;
     expect(all.shots.mid).toBe(monks.shots.mid + frogs.shots.mid);
     expect(goalArrows(legs, s, null)).toBeNull();
   });

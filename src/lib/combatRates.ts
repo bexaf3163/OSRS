@@ -17,7 +17,7 @@ import { attacksToKill, combatMargin, combatRecovery, counterDamage, estimateCom
 import { spotsOf, termsFor, TRAINER_LEVELS } from './combatRoute/spots';
 import { coinsPerMinute, dropValue, lootSecondsPerKill } from './lootValue';
 import { methodFoe, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
-import { bowEquipment, rangedNeeds } from './rangedLoadout';
+import { rangedEquipment, rangedNeeds } from './rangedLoadout';
 import { STAFFS, strikeRecipe } from './magicPlan';
 import { FOODS } from './foodAdvice';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from './playerState';
@@ -207,10 +207,10 @@ function rangedRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | 
   const level = levelOf(state, 'ranged');
   const foe = methodFoe(m);
   if (level === undefined || !foe || level >= 99) return null;
-  const kit = rangedNeeds(state).filter((n) => n.type === 'item');
+  const kit = rangedNeeds(state, prices).filter((n) => n.type === 'item');
   const [bow, arrow] = [kit[0]?.name, kit[1]?.name];
   if (!bow || !arrow) return null;
-  const equipment = bowEquipment(state.equipment, bow, arrow);
+  const equipment = rangedEquipment(state.equipment, kit);
   const armour = Object.entries(equipment).filter(([slot]) => slot !== 'weapon' && slot !== 'ammo').map(([, name]) => name);
   const hit = rangedHit(level, bow, arrow, armour, foe, trainingRangedStyle(level));
   if (!hit) return null;

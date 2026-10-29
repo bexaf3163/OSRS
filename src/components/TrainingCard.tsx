@@ -79,13 +79,14 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
   const profile = styleOf(features);
   const { state } = usePlayerState();
   const { xp } = useBridge();
+  const prices = usePriceView(true);
   // T11: the arrows for the whole goal, leg by leg against each leg's opponent, with the bow and arrows the kit picks now.
   const arrows = useMemo(() => {
     if (skill !== 'ranged' || !advice?.best || advice.level === null) return null;
     const legs = advice.path.length ? advice.path : [{ method: advice.best.method, fromLevel: advice.level, toLevel: target }];
     // Without the live XP the count starts at the beginning of the level: a little more than needed, never less.
-    return goalArrows(legs, state, xp?.ranged ?? xpForLevel(advice.level));
-  }, [skill, advice, state, xp, target]);
+    return goalArrows(legs, state, xp?.ranged ?? xpForLevel(advice.level), prices);
+  }, [skill, advice, state, xp, target, prices]);
   if (!advice) return null;
   if (advice.level === null) return <section className="training" aria-label="What to train with"><p className="small muted">Level not checked. Connect RuneLite or enter your level in Reference → Levels and live experience.</p></section>;
   if (advice.level >= target) return null;

@@ -25,7 +25,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S4-03 Attack to 40 | training | yes | Giant frog (13) | melee | Giant frog | Salmon 25 | Branch |
 | S5-03 Map piece 1: Melzar's Maze | quest-fight | yes | Melzar the Mad (43), Lesser demon (82) | melee | Melzar the Mad | Salmon 10 | Retain |
 | S5-08 The battle with the dragon Elvarg | quest-fight | yes | Elvarg (83) | melee | Elvarg | Lobster 20+ | Retain |
-| S6-01 Ranged to 50 with a prepared ranged loadout | training | no | Seagull (3), Monk, Giant frog | other | - | - | Revised |
+| S6-01 Ranged to 40: prepare your kit and follow the current trainer | training | no | Seagull (3), Monk, Giant frog | other | - | - | Revised |
 | S6-04 Magic to 55 (High Level Alchemy) | training | no | Cow, Chicken | other | - | Trout 5 | Revised |
 | S7-02 Fight Arena | quest-fight | yes | Khazard Ogre (63), Khazard scorpion (44), Bouncer (137) | safespot | - | Lobster 10 | Revised |
 | S7-03 Tree Gnome Village | quest-fight | yes | Khazard warlord (112) | safespot | - | Lobster 10 | Revised |
@@ -394,7 +394,7 @@ Evidence:
 
 In-game danger zones: crandor-boarding, elvarg-lair.
 
-## S6-01 Ranged to 50 with a prepared ranged loadout
+## S6-01 Ranged to 40: prepare your kit and follow the current trainer
 
 **Revised.** Optional Ranged to 50 using a level-appropriate F2P bow, one equipped arrow stack and the current trainer.
 

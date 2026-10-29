@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById, stepsFor } from '../src/data';
+import goalsData from '../src/data/goals.json';
 import { emptyProgress } from '../src/lib/progress';
 import { buildPlayerState } from '../src/lib/playerState';
 import { nameKey } from '../src/lib/checklist';
 import { pickMethods, samePicks } from '../src/lib/methodPick';
-import { methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
+import { GOAL_REACHED, methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
 import { contextOf } from '../src/lib/readiness';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
 import { toInGameTarget, type GearItem } from '../src/services/runeliteBridge';
@@ -14,7 +15,13 @@ import type { Market } from '../src/lib/methodRates';
 import type { PriceView } from '../src/lib/funding/quotes';
 
 const base = stepById.get('S6-01')!;
-function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}, chosenMethod?: string) {
+function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}, chosenMethod?: string, dressed = true) {
+  if (dressed) equipment = [
+    ...[['Leather cowl', 'head'], ['Leather body', 'body'], ['Leather chaps', 'legs'], ['Leather vambraces', 'hands'], ['Leather boots', 'feet']]
+      .filter(([, slot]) => !equipment.some(e => e.slot === slot))
+      .map(([name, slot], i) => ({ id: 50000 + i, name, slot, count: 1 })),
+    ...equipment,
+  ];
   const progress = emptyProgress();
   for (const s of allSteps) { if (s.id === base.id) break; progress.steps[s.id] = 'done'; }
   const names = [...new Set([...methodToolNames(base), ...Object.keys(stock)])].filter(n => complete || n === 'Shortbow' || n === 'Bronze arrow');
@@ -49,7 +56,7 @@ describe('S6-01 actual ranged preparation', () => {
     const absentFood = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)], {}, 1, true, {}, m.id);
     expect(absentFood.engine.plan(absentFood.step).lines.find(r => r.name === 'Salmon')?.where).not.toBe('BANK');
   });
-  it.each([[1, 'ra-lumb', 'Seagull'], [20, 'ra-lumb', 'Seagull'], [26, 'ra-lumb', 'Seagull'], [49, 'ra-monk', 'Monk']] as const)(
+  it.each([[1, 'ra-lumb', 'Seagull'], [20, 'ra-lumb', 'Seagull'], [26, 'ra-lumb', 'Seagull'], [39, 'ra-monk', 'Monk']] as const)(
     'Ranged%s gets its current trainer, kit and unchanged goal', (level, id, npc) => {
       const s = scenario(level);
       expect(s.pick).toMatchObject({ methodId: id });
@@ -114,6 +121,13 @@ describe('S6-01 actual ranged preparation', () => {
     const unknown = scenario(40, [], {}, null);
     expect(unknown.pick).not.toMatchObject({ methodId: 'ra-crawler' });
     expect(viewMethod(trainingMethods.find(m => m.id === 'ra-crawler')!, unknown.state).unchecked.some(n => n.kind === 'skill')).toBe(true);
+  });
+  it('finishes the optional checkpoint at Ranged 40 without keeping a farming kit active', () => {
+    expect(base.inGame?.completionTrigger?.levels).toEqual([{ skill: 'ranged', level: 40 }]);
+    expect(goalsData.rows.find(r => r.id === 'ranged')?.values[5]).toMatchObject({ min: 40, raw: '40', kind: 'optional' });
+    const s = scenario(40);
+    expect(s.pick).toBe(GOAL_REACHED);
+    expect(s.step.itemsRequired ?? []).toHaveLength(0);
   });
   it('kit picks are stable by content and watch every supported supply within the existing bound', () => {
     const s = scenario(1);

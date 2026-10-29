@@ -11,7 +11,8 @@
 
 import rangedGearJson from '../data/rangedGear.json';
 import { attacksToKill, foeVariants, spread, type CombatFoe, type Range } from './combatEstimate';
-import { bowEquipment, rangedNeeds } from './rangedLoadout';
+import { rangedEquipment, rangedNeeds } from './rangedLoadout';
+import type { PriceView } from './funding/quotes';
 import type { PlayerState } from './playerState';
 import type { TrainingMethod } from './trainingRouter';
 import { gearData } from '../services/gearAdvisor';
@@ -144,12 +145,12 @@ export interface GoalArrows extends AmmoEstimate { bow: string; arrow: string; g
  * The arrows for the whole goal along the advice's path (each leg against its own opponent), with the bow and arrows the starter kit picks
  * now (rangedLoadout.rangedNeeds). null when a leg is not a bow method or lacks data, or the Ranged XP is unknown.
  */
-export function goalArrows(legs: readonly { method: TrainingMethod; fromLevel: number; toLevel: number }[], state: PlayerState, xp: number | null): GoalArrows | null {
+export function goalArrows(legs: readonly { method: TrainingMethod; fromLevel: number; toLevel: number }[], state: PlayerState, xp: number | null, prices?: PriceView | null): GoalArrows | null {
   if (xp === null || !legs.length || legs.some((l) => l.method.kit !== 'f2p-bow')) return null;
-  const kit = rangedNeeds(state).filter((n) => n.type === 'item');
+  const kit = rangedNeeds(state, prices).filter((n) => n.type === 'item');
   const [bow, arrow] = [kit[0]?.name, kit[1]?.name];
   if (!bow || !arrow) return null;
-  const worn = Object.entries(bowEquipment(state.equipment, bow, arrow)).filter(([slot]) => slot !== 'weapon' && slot !== 'ammo').map(([, name]) => name);
+  const worn = Object.entries(rangedEquipment(state.equipment, kit)).filter(([slot]) => slot !== 'weapon' && slot !== 'ammo').map(([, name]) => name);
   const sum: AmmoEstimate = { shots: { low: 0, mid: 0, high: 0 }, lostPickingUp: { low: 0, mid: 0, high: 0 }, kills: 0, notCounted: [] };
   for (const leg of legs) {
     const foe = methodFoe(leg.method);

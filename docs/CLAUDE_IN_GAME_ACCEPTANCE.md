@@ -1,5 +1,12 @@
 # In-game acceptance — assigned to Claude
 
+## 2.80.20 Ranged acceptance — not live-verified
+
+- On S6-01, open the real bank and check bow/arrows/armour/amulet recommendations against current levels, Defence, Dragon Slayer state, owned quantities and spendable coins. Reuse owned suitable equipment; unknown bank is not missing.
+- Withdraw/equip the requested outfit and a compatible arrow stack. Check one worn arrow does not count as100, genuine equipped quantities clear prep, and the arrow leads through bank/shop/preparation before the selected trainer. No action or spending is automatic.
+- Verify beginner and later reachable trainers, Accurate below5/Rapid thereafter, matching desktop/game NPC/arrow, food withdrawal/refill, low arrows, login/reconnect and level changes. Forecasts are estimates for the planned kit, not guarantees of drops, safety or exact XP/h.
+- Ranged40 finishes this optional checkpoint and releases the training kit. No forced Ranged50, ogresses or Bond purchase. Preserve saved marks/notes/skips. Existing screenshots are browser fixtures only.
+
 ## 2.80.19 gathering acceptance — not live-verified
 
 - On a reachable Members account with Woodcutting35+ and a supported axe, compare normal teak chopping at the verified Isle of Souls trees with the displayed model. The guide must not promise tick-manipulation rates or banking income. Verify the destination and Teak tree highlights.

@@ -164,7 +164,7 @@ export interface MethodView {
 
 export function viewMethod(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodView {
   if (m.kit === 'strike-spell') m = { ...m, name: `${strikeRecipe(state).spell.name} on cows and chickens` };
-  const declared = methodNeeds(m, state);
+  const declared = methodNeeds(m, state, prices);
   const materials = allocateMaterialStock(state, declared.flatMap((n, index) => n.type === 'item'
     ? [{ key: `method:${index}`, nameEn: n.name, count: n.count ?? 1, anyOf: n.anyOf, equip: n.equip }] : []));
   const needs = declared.map((n, index) => needStatus(n, state, materials.get(`method:${index}`)));
@@ -179,13 +179,13 @@ export function viewMethod(m: TrainingMethod, state: PlayerState, prices?: Price
   return { method: m, status: locked.length ? 'LOCKED' : prep.length || m.manualSetup ? 'PREP' : 'READY', missing: [...locked, ...prep], unchecked, ...(fundingShortfall ? { fundingShortfall } : {}) };
 }
 
-export function methodNeeds(m: TrainingMethod, state: PlayerState): MethodNeed[] {
+export function methodNeeds(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodNeed[] {
   if (m.kit === 'strike-spell') return strikeRecipe(state).needs;
   if (m.kit === 'superheat-iron') return superheatNeeds(state);
   // Stage 6 is F2P-only. Do not demand a weaker F2P bow from Members using an unmodelled weapon.
   if (m.kit === 'f2p-bow' && state.mode !== 'f2p') return m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name));
   return m.kit === 'f2p-bow' && m.kind === 'method'
-    ? [...m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name)), ...rangedNeeds(state)] : m.needs;
+    ? [...m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name)), ...rangedNeeds(state, prices)] : m.needs;
 }
 
 // ---------------------------------------------------------------------------
@@ -613,7 +613,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const found = upgradeMethod ? toolUpgrade(upgradeMethod, methodXp, priority, coinRate, purchaseTrip) : null;
   // Coins known (bag and bank) and short of the price: said, so the suggestion is not read as affordable. Unknown coins: nothing is said.
   const cash = coinsOf(state).total;
-  const kitCost = found && best ? requirementCost(methodNeeds(best.method, state)
+  const kitCost = found && best ? requirementCost(methodNeeds(best.method, state, input.prices)
     // The offered tool replaces this requirement; do not reserve money for buying a second tool as well.
     .filter((n) => !(n.type === 'tool' && tools[n.skill].some((t) => t.tier === found.tool)))
     .map((n) => methodRequirement(n, state)), state, input.prices) : 0;

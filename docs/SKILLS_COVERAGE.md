@@ -17,7 +17,7 @@ beyond the verified registries and real-session calibration remain open; this ca
 | attack | free to 99, members to 99 | 22 steps (16 free), levels 1-99 | 11 (10 free) | free route 40, whole route 49 | none | automated data checks; not verified in the game |
 | strength | free to 99, members to 99 | 21 steps (17 free), levels 1-99 | 11 (10 free) | free route 35, whole route 39 | none | automated data checks; not verified in the game |
 | defence | free to 99, members to 99 | 20 steps (17 free), levels 1-99 | 11 (10 free) | free route 33, whole route 34 | none | automated data checks; not verified in the game |
-| ranged | free to 99, members to 99 | 14 steps (11 free), levels 1-99 | 5 (5 free) | free route 50, whole route 50 | none | automated data checks; not verified in the game |
+| ranged | free to 99, members to 99 | 14 steps (11 free), levels 1-99 | 5 (5 free) | free route 40, whole route 40 | none | automated data checks; not verified in the game |
 | prayer | free to 99, members to 99 | 9 steps (8 free), levels 1-99 | 4 (4 free) | free route 15, whole route 43 | none | automated data checks; not verified in the game |
 | magic | free to 99, members to 99 | 13 steps (13 free), levels 1-99 | 6 (6 free) | free route 55, whole route 55 | none | automated data checks; not verified in the game |
 | runecraft | free to 99, members to 99 | 8 steps (5 free), levels 1-99 | 4 (4 free) | not asked | none | automated data checks; not verified in the game |

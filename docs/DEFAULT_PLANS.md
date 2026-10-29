@@ -20,10 +20,9 @@ older save stays as "Fastest"; "Relaxed" keeps the old calm order.
 | S4-03 Attack 40 and 50 Big bones (Hill Giants) | As the first, an older save with no choice (the old automatic default) | The route as written | The route as written | Best for your levels and kit, banking about 39,000 gp of Big bones. |
 | S4-03 Attack 40 and 50 Big bones (Hill Giants) | As the first, in the middle of a trip at the giants (food in the bag, fighting) | The route as written | The route as written | Best for your levels and kit, banking about 39,000 gp of Big bones. |
 | S3-08 Strength 20 and Attack 30 (Minotaurs) | Attack 22, Strength 16, Defence 1, 22 HP, Mithril scimitar, iron armour | The route as written | Train on cows | Recommended for your levels and kit: about 34,000 gp more from drops and 75 fewer pieces of food (about 2,442 gp) than the route as written, for about 25 min more. |
-| S6-01 Ranged to 50 with a prepared ranged loadout | ranged 1 (F2P) | Seagulls at Port Sarim | Seagulls at Port Sarim | steady clicking; material costs |
-| S6-01 Ranged to 50 with a prepared ranged loadout | ranged 20 (F2P) | The monks of Edgeville Monastery | The monks of Edgeville Monastery | steady clicking; small risk; material costs |
-| S6-01 Ranged to 50 with a prepared ranged loadout | ranged 30 (F2P) | Giant frogs | Giant frogs | steady clicking; small risk; material costs |
-| S6-01 Ranged to 50 with a prepared ranged loadout | ranged 40 (F2P) | Giant frogs | Giant frogs | steady clicking; small risk; material costs |
+| S6-01 Ranged to 40: prepare your kit and follow the current trainer | ranged 1 (F2P) | Seagulls at Port Sarim | Seagulls at Port Sarim | steady clicking; material costs |
+| S6-01 Ranged to 40: prepare your kit and follow the current trainer | ranged 20 (F2P) | The monks of Edgeville Monastery | The monks of Edgeville Monastery | steady clicking; small risk; material costs |
+| S6-01 Ranged to 40: prepare your kit and follow the current trainer | ranged 30 (F2P) | Giant frogs | Giant frogs | steady clicking; small risk; material costs |
 | S6-02 Fishing to 50 and Cooking to 50 | fishing 1 (F2P) | Shrimp and anchovies with a net | Shrimp and anchovies with a net | ≈ 2k XP per hour for you; few clicks; drop when full |
 | S6-02 Fishing to 50 and Cooking to 50 | fishing 20 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 12k–15k XP per hour for you; almost no clicks; drop when full; feathers ≈ 600 gp per hour |
 | S6-02 Fishing to 50 and Cooking to 50 | fishing 30 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 23k–28k XP per hour for you; almost no clicks; drop when full; feathers ≈ 900 gp per hour |

@@ -4985,11 +4985,11 @@
     "id": "S6-01",
     "stage": 6,
     "type": "skill",
-    "title": "Ranged to 50 with a prepared ranged loadout",
+    "title": "Ranged to 40: prepare your kit and follow the current trainer",
     "requires": [
       "S4-01"
     ],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Corsair_Cove_Dungeon",
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
     "mapLocation": {
       "x": 3029,
       "y": 3221,
@@ -5001,15 +5001,15 @@
     "fields": [
       {
         "label": "Optional branch",
-        "text": "This whole stage is only the way to a Bond for an account without membership. Nothing in it is required for the Members route. If you already have membership, switch the app to Members mode: stage 6 disappears and Waterfall Quest comes next. Do the parts that pay best for you, in any order."
+        "text": "Prepare for membership at your own pace. Ranged 40 is the default checkpoint; no Bond or full optional grind is required. No purchase or combat is automated."
       },
       {
         "label": "Requirements",
-        "text": "Ranged 1. The selected method checks current equipment and supplies; later methods carry their own requirements."
+        "text": "Ranged 1. Higher Ranged, Defence and quest requirements are checked separately. Reuse suitable owned equipment; open the bank when quantities are unread. Expensive cosmetic variants are not required."
       },
       {
         "label": "Training",
-        "text": "Follow the selected current trainer, compatible bow and ammunition. Start with level 3 Seagulls; Monks offer free healing, and later methods ask for food. Required starter batches are not a promise of enough supplies for the whole goal."
+        "text": "Follow the current Skills recommendation: it checks your level, worn gear, bank, coins and prices. Prepare the selected kit, then follow the arrow. Use Accurate to Ranged 5, then Rapid, matching the model. The trainer and kit refresh as your levels and supplies change."
       },
       {
         "label": "Arrows",
@@ -5018,9 +5018,13 @@
       {
         "label": "Ogresses later",
         "text": "Ogresses are a later income choice, not a Ranged 1-50 default. At 50 they are still slow; compare Money with your actual gear, supplies and current market before choosing them. The Corsair Curse opens their dungeon."
+      },
+      {
+        "label": "Equipment",
+        "text": "Shortbows unlock at Ranged 1, 5, 20 and 30. The live plan selects compatible owned or affordable equipment. Leather, studded and green dragonhide depend on levels and quests. Amulet of power or a budget Amulet of accuracy; no Amulet of strength upgrade. Cape and boots are secondary; no ring purchase is required."
       }
     ],
-    "doneWhen": "Ranged 50.",
+    "doneWhen": "Ranged 40. A useful F2P checkpoint, not a requirement for membership. Continue to 50 only if you choose to stay F2P.",
     "inGame": {
       "npcNames": [
         "Seagull"
@@ -5030,7 +5034,7 @@
         "levels": [
           {
             "skill": "ranged",
-            "level": 50
+            "level": 40
           }
         ]
       }

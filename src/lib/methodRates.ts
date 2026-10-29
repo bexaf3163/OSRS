@@ -2,7 +2,7 @@
 // that models the method - combat (combatRates.ts: melee, Ranged, Magic) or gathering (skillingRates.ts: Woodcutting, Fishing, Mining). Each engine
 // answers null when it has nothing honest to say; then the wiki's guide stays.
 
-import type { PlayerState } from './playerState';
+import { coinsOf, type PlayerState } from './playerState';
 import type { PriceView } from './funding/quotes';
 import type { TradeRestriction } from './tradeRestriction';
 import type { TrainingMethod, MethodNeed } from './trainingRouter';
@@ -58,10 +58,14 @@ export function methodRate(m: TrainingMethod, skill: string, state: PlayerState,
   return combatRate(m, skill, state, market) ?? gatherRate(m, skill, state, market) ?? processRate(m, skill, state, market);
 }
 
-/** What the rates depend on, without the position (a step on the map must not recompute every method): levels, mode, items, worn gear. */
+/** What the rates depend on, without the position (a step on the map must not recompute every method): levels, mode, items, worn quantities, coins and unlock proofs. */
 export function rateKeyOf(s: PlayerState): string {
   const lv = Object.entries(s.levels).map(([k, v]) => `${k}${v.known ? v.value : '?'}`).sort().join(',');
-  const items = s.owned ? [...s.owned.items.entries()].map(([k, o]) => `${k}:${o.carried}/${o.noted}/${o.bank ?? '?'}`).sort().join(';') : '-';
+  const items = s.owned ? [...s.owned.items.entries()].map(([k, o]) => `${k}:${o.carried}/${o.noted}/${o.bank ?? '?'}/${o.legacyToolCount ? 'legacy' : 'exact'}`).sort().join(';') : '-';
   const eq = Object.entries(s.equipment).map(([k, v]) => `${k}=${v}`).sort().join(',');
-  return [s.mode, s.equipmentKnown ? 1 : 0, s.bankSeen ? 1 : 0, lv, eq, items].join('|');
+  const cash = coinsOf(s);
+  const quests = s.quests?.known ? JSON.stringify([...s.quests.value].sort()) : '?';
+  const counts = s.equipmentItems?.map(i => `${i.name}:${i.count ?? '?'}`).sort().join(',') ?? '?';
+  const manual = Object.entries(s.manual ?? {}).sort(([a], [b]) => a.localeCompare(b));
+  return [s.mode, s.equipmentKnown ? 1 : 0, s.bankSeen ? 1 : 0, lv, eq, items, cash.bag ?? '?', cash.bank ?? '?', quests, counts, JSON.stringify(manual)].join('|');
 }

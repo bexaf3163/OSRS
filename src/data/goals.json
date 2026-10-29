@@ -1,5 +1,5 @@
 {
-  "intro": "The levels the route itself gives you by the end of each stage. A single number is guaranteed by the quests and training steps of the route; a range is the guaranteed level up to what the likely extras reach (Strength 25 instead of 20, iron ore, the Daero option). Cells with a dashed border belong to the optional Bond branch (stage 6): they are targets of steps you may skip.",
+  "intro": "The levels the route itself gives you by the end of each stage. A single number is guaranteed by the quests and training steps of the route; a range is the guaranteed level up to what the likely extras reach (Strength 25 instead of 20, iron ore, the Daero option). Cells with a dashed border belong to the optional F2P preparation branch (stage 6): they are targets of steps you may skip.",
   "stages": [
     "Stage 1",
     "Stage 2",
@@ -211,8 +211,8 @@
           "min": 1
         },
         {
-          "raw": "50",
-          "min": 50,
+          "raw": "40",
+          "min": 40,
           "kind": "optional",
           "from": [
             "S6-01"
