@@ -4,6 +4,8 @@ Updated 2026-10-29. Read this first; open historical records only for the area b
 
 ## Current delivery
 
+**2.80.19 candidate: shared Members gathering.** Members oak/teak now dispatch through existing skillingRates; all six current Woodcutting catalogue methods have models, not all possible tree/tool mechanics. Registry rebuilt against primary Wiki data. Teak uses ordinary chopping, not the removed mixed 34k–93k guide range. Seers oak is approximate/drop-only; supported Isle of Souls teaks have verified spawns/drop-only. No invented banking income. Shared physical-tool lookup now uses heldExact: an owned unsupported Infernal axe no longer becomes a pretend Bronze axe rate. Unsupported explicit planned tools and F2P use of Members methods return no model estimate. Synthetic new-content regressions and shared gathering/funding tests cover this. Full publication receipt follows gates; portable18 remains verified below.
+
 **2.80.18 is published and verified.** [Normal portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.80.18).
 
 - Product source: `0a5f1cbea75961ef6c4865eaa17d6bde5be05cb6` on main. Later documentation-only commits do not change this binary.

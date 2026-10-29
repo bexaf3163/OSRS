@@ -30,6 +30,73 @@ const prices = (sell: Record<string, number>): PriceView => ({
 });
 const mid = (r: { xph: [number, number] }) => (r.xph[0] + r.xph[1]) / 2;
 
+describe('Members gathering through the shared resource model', () => {
+  it('models ordinary teak chopping using the usable axe, without a tick-manipulation fallback', () => {
+    const m = method('wc-teak');
+    expect(m.xph).toBeNull();
+    const bronze = gatherRate(m, 'woodcutting', stateOf({ woodcutting: 55, attack: 40 }, { 'Bronze axe': [1, 0] }, 'members'))!;
+    const rune = gatherRate(m, 'woodcutting', stateOf({ woodcutting: 55, attack: 40 }, { 'Rune axe': [1, 0] }, 'members'))!;
+    expect(bronze.basis).toBe('Bronze axe');
+    expect(rune.basis).toBe('Rune axe');
+    expect(mid(rune)).toBeGreaterThan(mid(bronze));
+    expect(rune.spot).toMatchObject({ label: 'Isle of Souls', how: 'drop' });
+    expect(rune.spot?.bank).toBeUndefined();
+    expect(rune.lootPerHour).toBeUndefined();
+    expect(rune.xph[0]).toBeGreaterThan(0);
+    expect(rune.xph[1]).toBeLessThan(93000);
+  });
+
+  it('preserves source-verified tree rolls, timers and membership for new resources and approximate locations', () => {
+    expect(SKILLING.resources.find(r => r.id === 'teak')).toMatchObject({
+      ticks: 4, lifetime: 50, products: [{ name: 'Teak logs', level: 35, xp: 85, respawn: [9, 9] }],
+    });
+    expect(SKILLING.spots.find(s => s.resource === 'teak')).toMatchObject({ members: true, count: 3 });
+    expect(SKILLING.spots.find(s => s.resource === 'oak' && s.label === "Seers' Village")).toMatchObject({ members: true });
+    expect(gatherRate(method('wc-oak-p2p'), 'woodcutting', stateOf({ woodcutting: 20 }, { 'Iron axe': [1, 0] }, 'members'))).not.toBeNull();
+  });
+
+  it('does not estimate a Members method on a free account, even when its resource also has free locations', () => {
+    const free = stateOf({ woodcutting: 55 }, { 'Rune axe': [1, 0] });
+    expect(gatherRate(method('wc-oak-p2p'), 'woodcutting', free)).toBeNull();
+    expect(gatherRate(method('wc-teak'), 'woodcutting', free)).toBeNull();
+    // A newly declared Members method reusing a free resource must inherit the same protection.
+    const reg = { ...SKILLING, methods: { ...SKILLING.methods, 'future-members-oak': ['oak'] } };
+    expect(gatherRate({ ...method('wc-oak'), id: 'future-members-oak', members: true }, 'woodcutting', free, {}, reg)).toBeNull();
+    expect(gatherRate(method('wc-oak'), 'woodcutting', free)).not.toBeNull();
+  });
+
+  it('keeps an unread axe unknown instead of using authored maximum rates', () => {
+    const unread = stateOf({ woodcutting: 55 }, {}, 'members', false);
+    expect(gatherRate(method('wc-teak'), 'woodcutting', unread)).toBeNull();
+    const a = adviseTraining({ skill: 'woodcutting', target: 60, state: unread, mode: 'members', style: 'chill', priority: 'fastest', methods: [method('wc-teak')] });
+    expect(a.best?.method.xph).toBeNull();
+    expect(a.best?.unchecked.length).toBeGreaterThan(0);
+  });
+
+  it('does not invent a Bronze axe when the only owned usable tool has unmodelled mechanics', () => {
+    const s = stateOf({ woodcutting: 75, attack: 60 }, { 'Infernal axe': [1, 0] }, 'members');
+    expect(gatherRate(method('wc-teak'), 'woodcutting', s)).toBeNull();
+    const spot = SKILLING.spots.find(s => s.resource === 'teak')!;
+    expect(gatherPace('Teak logs', spot.place, s)).toBeNull();
+    const advice = adviseTraining({ skill: 'woodcutting', target: 80, state: s, mode: 'members', style: 'chill', methods: [method('wc-teak')] });
+    expect(advice.best?.status).toBe('READY'); // The tool works; only the personalized rate is unsupported.
+    expect(advice.best?.method.xph).toBeNull();
+    // Different, newly declared content must inherit the same unknown-tool protection.
+    const reg = { ...SKILLING, methods: { ...SKILLING.methods, 'future-tree': ['oak'] } };
+    expect(gatherRate({ ...method('wc-oak'), id: 'future-tree' }, 'woodcutting', s, {}, reg)).toBeNull();
+  });
+
+  it('does not time an unavailable explicitly planned tool, or silently substitute a different tier', () => {
+    const yew = SKILLING.spots.find(s => s.resource === 'yew')!;
+    const free = stateOf({ woodcutting: 75 }, { 'Rune axe': [1, 0] });
+    expect(gatherPace('Yew logs', yew.place, free, 'Dragon axe')).toBeNull();
+    expect(gatherPace('Yew logs', yew.place, free, 'Unmodelled axe')).toBeNull();
+    expect(gatherPace('Yew logs', yew.place, free, 'Rune axe')?.tool).toBe('Rune axe');
+    const teak = SKILLING.spots.find(s => s.resource === 'teak')!;
+    expect(gatherPace('Teak logs', teak.place, stateOf({ woodcutting: 35 }, { 'Bronze axe': [1, 0] }, 'members'), 'Rune axe')).toBeNull();
+  });
+});
+
 describe('the skilling success function', () => {
   it('reproduces the wiki worked examples', () => {
     // "Skilling success rate": raw monkfish (48/90) at level 74 is 80/256; a leaping sturgeon (8/64) at 85 is 57/256.

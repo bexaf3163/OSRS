@@ -17,7 +17,7 @@ const OUT = `${root}src/data/skilling.json`;
 
 interface ToolDef { skill: string; page: string; tiers: string[] }
 interface ResourceDef { id: string; skill: string; object: string; chart: string; products: string[]; tool: string; bait?: string; ticks?: string }
-interface SpotDef { resource: string; location?: string; near?: string; bank?: string; why?: string; /** The way in of a spot under the ground: a dungeon of majorLocations.json. */ entrance?: string }
+interface SpotDef { resource: string; location?: string; near?: string; members?: boolean; bank?: string; why?: string; /** The way in of a spot under the ground: a dungeon of majorLocations.json. */ entrance?: string }
 interface Defs {
   reach: number;
   hostiles: { range: number; pages: string[] };
@@ -119,7 +119,7 @@ for (const r of defs.resources) {
   });
 }
 
-// Spots: a spawn group of the object, by its exact location text, free and on the surface or in a free dungeon.
+// Spots: verified spawn groups, or explicitly approximate drop-only locations; membership is retained in both forms.
 /** The map's dungeon space lies this many tiles north of the surface above it (the same rule as bankTrip.ts). */
 const UNDERGROUND = 6400;
 const spawnCache = new Map<string, ReturnType<typeof locLines>>();
@@ -133,7 +133,7 @@ for (const s of defs.spots) {
     const p = places[s.near];
     if (!p) { fail(what, `${s.near} is not in majorLocations.json`); continue; }
     if (s.bank) { fail(what, 'a spot without wiki spawns cannot measure a bank trip: drop only'); continue; }
-    spots.push({ resource: s.resource, label: p.label, place: { x: p.x, y: p.y, plane: p.plane, label: p.label }, members: false, ...(s.why ? { why: s.why } : {}) });
+    spots.push({ resource: s.resource, label: p.label, place: { x: p.x, y: p.y, plane: p.plane, label: p.label }, members: s.members ?? false, ...(s.why ? { why: s.why } : {}) });
     continue;
   }
   if (!spawnCache.has(r.object)) spawnCache.set(r.object, locLines(await wikitext(r.object), 'ObjectLocLine'));

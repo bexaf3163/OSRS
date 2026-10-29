@@ -1,5 +1,11 @@
 # In-game acceptance — assigned to Claude
 
+## 2.80.19 gathering acceptance — not live-verified
+
+- On a reachable Members account with Woodcutting35+ and a supported axe, compare normal teak chopping at the verified Isle of Souls trees with the displayed model. The guide must not promise tick-manipulation rates or banking income. Verify the destination and Teak tree highlights.
+- Check owned Rune/Dragon axes, an unread bank and a kit containing only an unsupported Infernal/Crystal axe. Usable unsupported tools still satisfy preparation, but must not receive invented Bronze-tool model rates. Do not automatically buy a replacement.
+- Verify free accounts cannot receive Members method predictions or a Dragon-tool timing through the funding adapter. Seers' Village oak guidance is approximate and drop-only; do not count its unmodelled bank trip as validated.
+
 ## 2.80.18 Skills acceptance — not live-verified
 
 - With an admitted character and current bank/equipment, select melee, Ranged, Magic and gathering/processing skills. Train must show one method and honest model/guide/unknown estimates; required preparation and danger remain visible.

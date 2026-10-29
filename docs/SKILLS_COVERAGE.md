@@ -67,5 +67,5 @@ Counts below mean a method has a shared model dispatch, not that every item, spe
 | fishing | 5: gathering | 2 |
 | cooking | 4: processing | 0 |
 | firemaking | 5: processing | 0 |
-| woodcutting | 4: gathering | 2 |
+| woodcutting | 6: gathering | 0 |
 | farming | none | 3 |

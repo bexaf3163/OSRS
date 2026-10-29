@@ -1,6 +1,6 @@
 {
   "source": "scripts/skilling.defs.json checked against the OSRS Wiki (skilling success charts, info templates, tool tables, action lengths, ObjectLocLine spawns) by scripts/build-skilling.ts",
-  "generatedAt": "2026-10-25",
+  "generatedAt": "2026-10-29",
   "tools": {
     "axe": {
       "skill": "woodcutting",
@@ -323,6 +323,61 @@
       "source": "https://oldschool.runescape.wiki/w/Yew_tree"
     },
     {
+      "id": "teak",
+      "skill": "woodcutting",
+      "object": "Teak tree",
+      "tool": "axe",
+      "ticks": 4,
+      "cascade": false,
+      "products": [
+        {
+          "name": "Teak logs",
+          "level": 35,
+          "xp": 85,
+          "respawn": [
+            9,
+            9
+          ]
+        }
+      ],
+      "byTool": {
+        "Bronze axe": {
+          "low": 15,
+          "high": 46
+        },
+        "Iron axe": {
+          "low": 23,
+          "high": 70
+        },
+        "Steel axe": {
+          "low": 31,
+          "high": 93
+        },
+        "Black axe": {
+          "low": 35,
+          "high": 102
+        },
+        "Mithril axe": {
+          "low": 39,
+          "high": 117
+        },
+        "Adamant axe": {
+          "low": 47,
+          "high": 140
+        },
+        "Rune axe": {
+          "low": 55,
+          "high": 164
+        },
+        "Dragon axe": {
+          "low": 60,
+          "high": 190
+        }
+      },
+      "lifetime": 50,
+      "source": "https://oldschool.runescape.wiki/w/Teak_tree"
+    },
+    {
       "id": "copper",
       "skill": "mining",
       "object": "Copper rocks",
@@ -560,6 +615,18 @@
           "count": 2
         }
       ]
+    },
+    {
+      "resource": "oak",
+      "label": "Seers' Village",
+      "place": {
+        "x": 2710,
+        "y": 3485,
+        "plane": 0,
+        "label": "Seers' Village"
+      },
+      "members": true,
+      "why": "Approximate town location: the wiki does not list individual oak spawns. Bank travel is not modelled here; cut and drop."
     },
     {
       "resource": "willow",
@@ -1095,6 +1162,19 @@
       "count": 3,
       "members": false,
       "why": "No bank on foot from Karamja: the boat and the Port Sarim deposit box are not modelled yet, so the catch is dropped."
+    },
+    {
+      "resource": "teak",
+      "label": "Isle of Souls",
+      "place": {
+        "x": 2185,
+        "y": 2990,
+        "plane": 0,
+        "label": "Isle of Souls"
+      },
+      "count": 3,
+      "members": true,
+      "why": "Normal chopping at the wiki-listed trees. Bank travel from this spot is not modelled; drop logs rather than assuming sale income."
     }
   ],
   "methods": {
@@ -1131,6 +1211,12 @@
     ],
     "mi-iron": [
       "iron"
+    ],
+    "wc-oak-p2p": [
+      "oak"
+    ],
+    "wc-teak": [
+      "teak"
     ]
   }
 }

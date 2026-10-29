@@ -285,7 +285,31 @@ async function f2pSkillsScenarios(browser: Browser) {
   }
 }
 
+async function membersGatheringScenarios(browser: Browser) {
+  for (const width of [1000, 1440]) {
+    const levels = { woodcutting: 55, attack: 40 };
+    const { page, errors } = await open(browser, width, {
+      zen: true, progress: progressBefore('S9-01', { gameMode: 'members', levels }),
+      localStorage: { 'osrs-put:features': JSON.stringify({ efficient: true }) },
+      status: { protocol: 6, inGame: true, stats: levels, equipment: [], inventory: [{ id: 1359, name: 'Rune axe', count: 1 }], coins: 5000, bankCoins: 0 },
+      events: [{ type: 'STATS', stats: levels }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Rune axe', carried: 1, noted: 0, bank: 0 }] }],
+    }, '#/skills/WC/woodcutting');
+    const card = await text(page, '.training-summary');
+    expect(card.includes('Teak trees') && card.includes('Estimated for your setup') && !card.includes('93,000'), `Members gathering ${width}: ordinary chopping replaces the mixed tick-manipulation range`);
+    expect(card.includes('Isle of Souls') && card.includes('Earnings not estimated') && await page.locator('.training-summary details').count() === 0, `Members gathering ${width}: one compact modelled location without invented bank income`);
+    await page.getByRole('button', { name: 'Show in game', exact: true }).click();
+    const targets = await page.evaluate(() => (window as unknown as { __posts: { path: string; body?: { label?: string; objectNames?: string[] } }[] }).__posts.filter(p => p.path === '/nav-target').map(p => p.body));
+    expect(targets.some(t => t?.label === 'Isle of Souls' && t.objectNames?.includes('Teak tree')), `Members gathering ${width}: the arrow and scenery use the model's spot`);
+    await page.getByRole('tab', { name: 'Plan', exact: true }).click();
+    expect((await text(page, '.training-analysis')).includes('drops logs because its banking route is not modelled'), `Members gathering ${width}: the banking limitation is explicit`);
+    expect(await noOverflow(page) && !errors.length, `Members gathering ${width}: no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'members-gathering') { await membersGatheringScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await membersGatheringScenarios(browser);
   if (process.env.UI_ONLY === 'f2p-skills') { await f2pSkillsScenarios(browser); return; }
   if (!process.env.UI_ONLY) await f2pSkillsScenarios(browser);
   if (process.env.UI_ONLY === 'skill-handover') { await skillHandoverScenarios(browser); return; }

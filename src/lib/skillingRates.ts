@@ -13,8 +13,8 @@ import skillingJson from '../data/skilling.json';
 import { bankTrip } from './bankTrip';
 import { cascade, skillChance } from './skillChance';
 import { bankingPays, coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from './lootValue';
-import { heldOf, levelOf, type PlayerState } from './playerState';
-import { toolUse } from './toolTiers';
+import { heldExact, levelOf, type PlayerState } from './playerState';
+import { toolFamilyOf, toolUse } from './toolTiers';
 import type { Market, ModelRate, RateSpot } from './methodRates';
 import type { TrainingMethod } from './trainingRouter';
 import { attacksPlayer, hostileText } from './aggression';
@@ -63,12 +63,18 @@ const MARGIN = 0.1;
  */
 function toolFor(r: Resource, level: number, state: PlayerState, reg: SkillingRegistry): { tier: Tier | null; name: string; owned: boolean; wielded: boolean } | null {
   const family = reg.tools[r.tool];
-  if (!family) return { tier: null, name: r.tool, owned: heldOf(state, r.tool).presence === 'PRESENT', wielded: false };
+  if (!family) return { tier: null, name: r.tool, owned: heldExact(state, r.tool).presence === 'PRESENT', wielded: false };
   const usable = family.tiers.filter((t) => level >= t.level && !(toolUse(t.item)?.members && state.mode !== 'members') && (!r.byTool || r.byTool[t.item]));
   if (!usable.length) return null;
-  const seen = usable.map((t) => heldOf(state, t.item).presence);
+  const seen = usable.map((t) => heldExact(state, t.item).presence);
   const best = seen.lastIndexOf('PRESENT');
   if (best < 0 && seen.includes('UNKNOWN')) return null;
+  // A known but unmodelled tool is not an empty kit. Do not silently price/rate a Bronze replacement.
+  if (best < 0 && toolFamilyOf(r.tool)?.some(name => {
+    const use = toolUse(name);
+    return use && level >= use.level && (!use.members || state.mode === 'members')
+      && !family.tiers.some(t => t.item.toLowerCase() === name.toLowerCase()) && heldExact(state, name).presence === 'PRESENT';
+  })) return null;
   const tier = usable[Math.max(0, best)];
   const attack = levelOf(state, 'attack');
   return { tier, name: tier.item, owned: best >= 0, wielded: attack !== undefined && attack >= tier.wield };
@@ -170,7 +176,7 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
 /** The rate of a gathering method for this player, at the best of its spots, or null: not a gathering method, or the level is not known. */
 export function gatherRate(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}, reg: SkillingRegistry = SKILLING): ModelRate | null {
   const ids = reg.methods[m.id];
-  if (!ids || m.kind !== 'method' || !m.skills.includes(skill)) return null;
+  if (!ids || m.kind !== 'method' || !m.skills.includes(skill) || (m.members && state.mode !== 'members')) return null;
   const level = levelOf(state, skill);
   if (level === undefined) return null;
   const coinRate = coinsPerMinute(market.prices);
@@ -203,7 +209,7 @@ function upgradesAt(r: Resource, spot: SkillSpot, level: number, state: PlayerSt
   const from = family.tiers.findIndex((t) => t.item === now.tier!.item);
   return family.tiers.slice(from + 1).flatMap((tier) => {
     if (level < tier.level || (toolUse(tier.item)?.members && state.mode !== 'members') || (r.byTool && !r.byTool[tier.item])) return [];
-    if (heldOf(state, tier.item).presence === 'PRESENT') return [];
+    if (heldExact(state, tier.item).presence === 'PRESENT') return [];
     const price = supplyPrice(tier.item, market.prices, state.mode);
     if (price === null) return [];
     const s = spotRate(r, spot, level, state, market, coinRate, reg, { tier, name: tier.item, wielded: attack !== undefined && attack >= tier.wield });
@@ -241,7 +247,9 @@ export function gatherPace(product: string, near: Point & { plane?: number }, st
   const level = levelOf(state, r.skill);
   if (level === undefined) return null;
   const family = reg.tools[r.tool];
-  const named = family && toolName ? family.tiers.find((t) => t.item.toLowerCase() === toolName.toLowerCase() && level >= t.level) : undefined;
+  const named = family && toolName ? family.tiers.find((t) => t.item.toLowerCase() === toolName.toLowerCase() && level >= t.level && !(toolUse(t.item)?.members && state.mode !== 'members')) : undefined;
+  // An evaluator explicitly planned this tool: do not substitute another tool or use an unavailable tier.
+  if (family && toolName && !named) return null;
   const attack = levelOf(state, 'attack');
   const tool = named ? { tier: named, name: named.item, wielded: attack !== undefined && attack >= named.wield } : toolFor(r, level, state, reg);
   if (!tool) return null;

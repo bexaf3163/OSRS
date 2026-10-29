@@ -147,18 +147,17 @@
           "skill": "woodcutting"
         }
       ],
-      "xph": [
-        34000,
-        93000
-      ],
       "xpa": 85,
       "act": "log|logs",
       "effort": "low",
       "cost": "profit",
       "risk": "none",
       "where": "Ape Atoll, Fossil Island, Isle of Souls, Prifddinas",
-      "note": "The lower bound is plain chopping, the upper is fast tick-manipulation methods with teaks: they demand attention.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Woodcutting_training"
+      "note": "Normal chopping; the personalized model uses your level and usable axe. It does not assume tick manipulation. The supported Isle of Souls spot drops logs because its banking route is not modelled.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Woodcutting_training",
+      "objectNames": [
+        "Teak tree"
+      ]
     },
     {
       "id": "fi-shrimp",

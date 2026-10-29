@@ -112,6 +112,17 @@
       "ticks": "woodcutting"
     },
     {
+      "id": "teak",
+      "skill": "woodcutting",
+      "object": "Teak tree",
+      "chart": "Teak tree",
+      "products": [
+        "Teak logs"
+      ],
+      "tool": "axe",
+      "ticks": "woodcutting"
+    },
+    {
       "id": "copper",
       "skill": "mining",
       "object": "Copper rocks",
@@ -223,6 +234,12 @@
       "resource": "oak",
       "near": "Draynor Bank",
       "why": "Oak trees grow in most towns (the wiki lists no spawns): cut and drop."
+    },
+    {
+      "resource": "oak",
+      "near": "Seers' Village",
+      "members": true,
+      "why": "Approximate town location: the wiki does not list individual oak spawns. Bank travel is not modelled here; cut and drop."
     },
     {
       "resource": "willow",
@@ -397,6 +414,11 @@
       "resource": "harpoon",
       "location": "[[Musa Point]]",
       "why": "No bank on foot from Karamja: the boat and the Port Sarim deposit box are not modelled yet, so the catch is dropped."
+    },
+    {
+      "resource": "teak",
+      "location": "[[Isle of Souls]]",
+      "why": "Normal chopping at the wiki-listed trees. Bank travel from this spot is not modelled; drop logs rather than assuming sale income."
     }
   ],
   "methods": {
@@ -433,6 +455,12 @@
     ],
     "mi-iron": [
       "iron"
+    ],
+    "wc-oak-p2p": [
+      "oak"
+    ],
+    "wc-teak": [
+      "teak"
     ]
   }
 }
