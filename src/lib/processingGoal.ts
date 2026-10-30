@@ -45,7 +45,7 @@ export function processingGoalNeeds(path: readonly PathLeg[], level: number, tar
     const { method } = leg;
     if (!Number.isInteger(leg.toLevel) || leg.fromLevel !== end || leg.toLevel <= end || leg.toLevel > target || !method.consumables?.length || !method.xpa || !Number.isFinite(method.xpa) || method.xpa <= 0) return null;
     const actions = leg.processingActions ?? (xpForLevel(leg.toLevel) - Math.max(xpForLevel(leg.fromLevel), xp)) / method.xpa;
-    if (!Number.isFinite(actions) || actions < 0) return null;
+    if (!Number.isFinite(actions) || actions <= 0) return null;
     const consumed = new Set(method.consumables.flatMap(namesOf));
     for (const input of method.consumables) {
       if (!Number.isFinite(input.qty) || input.qty <= 0) return null;

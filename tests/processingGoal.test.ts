@@ -52,6 +52,8 @@ describe('conditional full-goal processing supplies through the shared path', ()
     expect(processingGoalNeeds([unknown], 1, 2)).toBeNull();
     expect(processingGoalNeeds([leg(1, 2, NaN)], 1, 2)).toBeNull();
     expect(processingGoalNeeds([leg(1, 2)], 1, 2, NaN)).toBeNull();
+    const emptyAttempts = leg(1, 2); emptyAttempts.processingActions = 0;
+    expect(processingGoalNeeds([emptyAttempts], 1, 2)).toBeNull();
   });
   it('rejects overlapping incompatible alternatives and reusable/consumed name collisions', () => {
     const path = [leg(1, 2), leg(2, 3)]; path[1].method.consumables = [{ name: 'Future ingredient', qty: 1, anyOf: ['Other input'] }];
