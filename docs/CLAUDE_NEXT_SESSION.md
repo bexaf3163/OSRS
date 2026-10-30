@@ -6,16 +6,22 @@ Updated 2026-10-30. Read this first; open historical records only for the area b
 
 Owner accepted Claude's Adventurer's Ledger2.81.1 (`57ec3ca`) on2026-10-30. Preserve its layout, controls and EB Garamond/Cinzel fonts. Current design contract: CLAUDE_REDESIGN_HANDOFF.md and REDESIGN_VERIFICATION.md. Functional WIP was backed up/stashed before fast-forwarding and reapplied without changing src/ledger, pages, App/main or the Ledger frame. No design issue identified during integration. Ledger desktop regressions preserve the accepted presentation.
 
-## Active batch — 2.81.3 processing affordability (not yet published)
+## Current delivery — 2.81.3 published and verified
+
+[Normal Portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.81.3). Product source `5e13bd3330e913fc85d8c19074b5fd00d8087b24` on main. [Checks](https://github.com/bexaf3163/OSRS/actions/runs/40977812554) and [Release](https://github.com/bexaf3163/OSRS/actions/runs/40977812561) succeeded, including the exact final-tree full browser, Java, native and isolated-EXE gates. Downloaded `102440650`-byte EXE SHA256 `05b3f9a1e114f10007ad224e3a0c0bccf8d85f2b28a13f157bd2aa13c225ae60` matches GitHub asset metadata and SHA256SUMS; tag/source and both CI head SHAs match. No publication action remains.
+
+Local evidence: 2,332 unit tests/198 files, build/types/data0/0, Java647 and native92 passed. The former full-browser failure was an obsolete expected primary ingredient name, not an incorrect withdrawal; corrected handover and eight processing scenarios passed locally, then the complete corrected suite passed in both CI workflows. Current Ledger layout, fonts and controls are unchanged; TrainingCard has one more precise ETA qualifier only. All live-game acceptance remains assigned to Claude.
+
+## Implemented processing affordability — 2.81.3
 
 - Resumed the parked processing fix selectively on current Ledger/staged-training code. Preserved the existing cash/quest/manual/worn-quantity cache key; never restored the old methodRates implementation.
 - Shared processingRates compares confirmed feasible next batches before uncertain/unfundable alternatives, across XP/Balanced/Money. Tools, access items and staff substitutions use shared requirementCost and itemRequirement. Known bag coins can prove affordability while bank cash is unread; unread balances cannot prove a shortfall. Future product sales are not starting capital.
 - Batch size can shrink to observed stock/funds; bank-cycle timing is recalculated. A single warning discloses a capped first batch and unassumed replenishment. Processing ETA is explicitly conditional on future supplies and excludes purchasing time; a funded initial bag is not a whole-goal bankroll. Unpriced or unread requirements stay visible, not zero or inaccessible methods.
 - ModelRate.exactNeeds preserves the selected recipe's ingredients through personalize; it cannot regain unrelated authored alternatives. Authored mixtures are allowed only when every listed recipe has the same XP, timing, level/access mechanics. Mixed sale income and input cost remain unestimated; Profit mode evaluates exact recipes.
-- New-content regressions cover funding/uncertainty/tools, actual smaller-batch timing, no observed-state mutation, compatible mixtures and different-XP rejection. Existing material allocation, Members processing, Money adapter, Optional and Ranged cases passed. Local full2332unit/198files, build/types, data0/0, Java647 and native92 passed. Browser run passed835 checks with one obsolete beef-primary assertion; actual26-chicken withdrawal was already correct. The assertion now verifies the physical chicken ingredient and the focused handover passes; eight processing/cash/time desktop checks also pass. Exact final-tree full browser/release gates run in CI before publication; no release claim yet. No UI layout, CSS or font changes.
+- New-content regressions cover funding/uncertainty/tools, actual smaller-batch timing, no observed-state mutation, compatible mixtures and different-XP rejection. Existing material allocation, Members processing, Money adapter, Optional and Ranged cases passed. Local full2332unit/198files, build/types, data0/0, Java647 and native92 passed. Browser run passed835 checks with one obsolete beef-primary assertion; actual26-chicken withdrawal was already correct. The assertion now verifies the physical chicken ingredient and the focused handover passes; eight processing/cash/time desktop checks also pass. Exact final-tree full browser/release gates subsequently passed in CI; release and downloaded EXE verified above. No UI layout, CSS or font changes.
 - Still open: whole-goal depletion/reinvestment/acquisition timing, broader outfit advice and Wizard magic-defence/drop modelling. These are not fixed by initial-batch feasibility. Live acceptance remains Claude-only.
 
-## Current delivery — 2.81.2 published and verified
+## Previous delivery — 2.81.2 published and verified
 
 [Normal Portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.81.2). Product source `6c2e4f41e33180fa4f7bb21d3ae849e952a49990` on main. [Checks](https://github.com/bexaf3163/OSRS/actions/runs/40973832545) and [Release](https://github.com/bexaf3163/OSRS/actions/runs/40973832590) succeeded, including Java, desktop, native and isolated-EXE validation. The downloaded `102439126`-byte EXE has SHA256 `f6c5eed9c79dcad468d6dcd9a07149e123323c050e0c9e3d1e48aea0f2a8ad1b`, matching the GitHub asset digest and SHA256SUMS. Tag/source and both CI head SHAs were verified. No 2.81.2 publication action remains.
 
@@ -36,7 +42,7 @@ Current design/fonts are preserved; no Ledger, frame, page, CSS or font files ch
 1. Claude: real-game acceptance for new Ranged equipment milestones, trainer transitions, food/ammo/unknown stock, shared peaceful handovers, saved progress and current Ledger UI. No mock screenshot is live acceptance.
 2. Wizard magic-defence/food/rune-drop model and exact NPC-variant highlight proof remain unsupported; do not enable automatic selection prematurely.
 3. Broader Members outfit advice/other peaceful-skill hints and full acquisition/consumable forecasts are not claimed complete. Existing shared models remain authoritative; add verified registry data, not per-step patches.
-4. The processing-budget patch is being integrated selectively in2.81.3 (above). Its original backup remains outside the repo; do not reapply it wholesale. No mobile work.
+4. Processing-budget initial-batch feasibility and exact recipe supplies are shipped in2.81.3. The original parked patch is archival; do not reapply it or restore old files/cache code. Whole-goal acquisition/depletion/reinvestment remains separate work. No mobile work.
 
 ## Historical delivery — 2.80.20
 
