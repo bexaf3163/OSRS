@@ -1,17 +1,19 @@
 # Claude continuation - current authoritative handoff
 
-Updated 2026-10-30. Read this first; open historical records only for the area being changed.
+Updated 2026-10-31. Read this first; open historical records only for the area being changed.
 
 ## Current design baseline
 
 Owner accepted Claude's Adventurer's Ledger2.81.1 (`57ec3ca`) on2026-10-30. Preserve its layout, controls and EB Garamond/Cinzel fonts. Current design contract: CLAUDE_REDESIGN_HANDOFF.md and REDESIGN_VERIFICATION.md. Functional WIP was backed up/stashed before fast-forwarding and reapplied without changing src/ledger, pages, App/main or the Ledger frame. No design issue identified during integration. Ledger desktop regressions preserve the accepted presentation.
 
-## Pending implementation — 2.81.9 training scope/tool names
+## Verified delivery — 2.81.9 training scope/tool names
+
+Normal [Portable2.81.9](https://github.com/bexaf3163/OSRS/releases/tag/v2.81.9), source `b16003fcde7114c167335b984c14d8a316c69280` on main. [Checks](https://github.com/bexaf3163/OSRS/actions/runs/41118757635) and [Release](https://github.com/bexaf3163/OSRS/actions/runs/41118757726) passed on that exact source. Downloaded EXE:102443834 bytes; SHA256 `7265b7105c5ca3618d17ba77fe8aaca706f07f3ba923d70216f9826ff3424825`, matching asset digest, SHA256SUMS.txt and tag/source. Release aggregate metadata briefly lagged the completed successful Windows job; verification completed after successful CI confirmation. No real-game tests claimed.
 
 - Four red regressions reproduced two shared defects: valid black/Dragon tools were absent from the smaller purchase progression table used by preparation; a saved F2P-only plan on a Members profile filtered methods but still modelled Members tools/locations, while the Skills card ignored that saved scope.
 - Preparation now validates the selected tool with canonical `toolUse`, reusing the existing full tool-use registry. No new database or paid-tool pricing logic. Supported black and Members tools are named correctly; unsupported model mechanics remain unsupported.
 - Pure `trackedTrainingContext` supplies the same conservative account scope to `trackedTraining` and the memoized Skills advice. A free available context cannot be promoted to Members; legacy free-only saves still work; other skills are unaffected. Only a planning copy's mode changes: observed levels, stock, wallet, quests, identity and source markers remain intact.
-- Added tests cover black axes/pickaxes, Rune versus Dragon scope, Attack1 carrying, legacy/other-skill context, state immutability and actual card input. Browser checks pass for black F2P tools and both free-only/unrestricted Members plans through the normal guide/bank action. Local2418 unit tests/203 files,902 full-browser checks, native Electron, types/build, data0/0, testClasses and fresh jar passed. Java runtime logic is unchanged apart from the coordinated version; the previous full suite passed647 tests, and exact-source CI runs it again. Exact-source CI and Portable receipt pending. No fonts/layout, save schema or protocol changes.
+- Added tests cover black axes/pickaxes, Rune versus Dragon scope, Attack1 carrying, legacy/other-skill context, state immutability and actual card input. Browser checks pass for black F2P tools and both free-only/unrestricted Members plans through the normal guide/bank action. Local2418 unit tests/203 files,902 full-browser checks, native Electron, types/build, data0/0, testClasses and fresh jar passed. Java runtime logic is unchanged apart from the coordinated version; exact-source CI passed all gates including the full Java suite and isolated Portable verification. No fonts/layout, save schema or protocol changes.
 
 ## Verified delivery — 2.81.8 non-combat preparation
 
