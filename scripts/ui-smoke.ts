@@ -576,6 +576,8 @@ async function run(browser: Browser) {
   if (!process.env.UI_ONLY) await magicPreparationScenarios(browser);
   if (process.env.UI_ONLY === 'peaceful-preparation') { await nonCombatPreparationScenarios(browser); return; }
   if (!process.env.UI_ONLY) await nonCombatPreparationScenarios(browser);
+  if (process.env.UI_ONLY === 'training-scope') { await trainingScopeScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await trainingScopeScenarios(browser);
   if (process.env.UI_ONLY === 'shopping-quotes') { await shoppingQuoteScenarios(browser); return; }
   if (!process.env.UI_ONLY) await shoppingQuoteScenarios(browser);
   if (process.env.UI_ONLY === 'journal-quotes') { await journalQuoteScenarios(browser); return; }
@@ -3094,6 +3096,30 @@ async function rangedPreparationScenarios(browser: Browser) {
     expect(!(await poorSnapshot())?.funding && (await poorSnapshot())?.plan?.stepId === 'S0-04', `ranged (${width}): available funds return to the same preparation flow`);
     expect(await noOverflow(poor.page) && !poor.errors.length, `ranged (${width}): funding handover has no overflow or runtime errors`);
     await poor.page.context().close();
+  }
+}
+
+async function trainingScopeScenarios(browser: Browser) {
+  for (const [mode, level, freeOnly, expectedTool] of [
+    ['f2p', 11, true, 'Black axe'], ['members', 61, true, 'Rune axe'], ['members', 61, false, 'Dragon axe'],
+  ] as const) {
+    const stats = { woodcutting: level, attack: 1, strength: 1, defence: 1, hitpoints: 10 };
+    const gear = { equipment: [], inventory: [], coins: 0, bankCoins: 0 };
+    const items = ['Bronze axe', 'Iron axe', 'Steel axe', 'Black axe', 'Mithril axe', 'Adamant axe', 'Rune axe', 'Dragon axe']
+      .map(name => ({ name, carried: 0, noted: 0, bank: mode === 'f2p' ? Number(name === 'Black axe') : Number(['Rune axe', 'Dragon axe'].includes(name)) }));
+    const { page, errors } = await open(browser, 1280, {
+      market: true, progress: progressBefore('S6-03', { gameMode: mode, levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-03', 'osrs-put:skill-track': JSON.stringify({ skill: 'woodcutting', mode: 'fast', freeOnly, target: level + 4 }) },
+      status: { protocol: 6, inGame: true, player: 'Scoped Tool', activeStepId: 'S6-03', questsDone: [], stats, ...gear },
+      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/skills/WC/woodcutting');
+    await page.locator('.training-follow').waitFor();
+    await page.locator('.training-follow').click();
+    await page.locator('.tracked-skill').waitFor();
+    await page.waitForFunction(tool => (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.guide?.items?.some((item: any) => item.name === tool), expectedTool);
+    expect((await text(page, '.tracked-skill')).includes(expectedTool), `Training scope (${mode}, freeOnly=${freeOnly}): the canonical guide names ${expectedTool} for carrying at Attack1`);
+    expect(await noOverflow(page) && !errors.length, `Training scope (${mode}, freeOnly=${freeOnly}): no Ledger overflow or runtime errors`);
+    await page.context().close();
   }
 }
 

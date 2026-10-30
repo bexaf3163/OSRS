@@ -19,6 +19,7 @@ const stateFor = (skill: string, level: number, tool?: string) => buildPlayerSta
 describe('non-combat skills inherit the common staged lifecycle', () => {
   it.each([
     ['woodcutting', 'wc-oak', 'Mithril axe'], ['mining', 'mi-iron', 'Mithril pickaxe'],
+    ['woodcutting', 'wc-oak', 'Black axe'], ['mining', 'mi-iron', 'Black pickaxe'],
   ])('%s preparation names the owned modelled tool, carried without its Attack requirement', (skill, id, tool) => {
     const state = stateFor(skill, 21, tool), before = structuredClone(state);
     const advice = adviseTraining({ skill, target: 30, mode: 'f2p', state, style: 'chill', priority: 'balanced', methods: trainingMethods.filter(m => m.id === id) });

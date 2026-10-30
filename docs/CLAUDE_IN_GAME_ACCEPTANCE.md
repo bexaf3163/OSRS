@@ -1,5 +1,10 @@
 # In-game acceptance — assigned to Claude
 
+## 2.81.9 training scope/tools — not live-verified
+
+- At a reachable black axe/pickaxe use level with it confirmed in bank, verify Skills, Path and the single HUD name and withdraw that tool, without its Attack wielding requirement. Unknown/unmodelled tools must not acquire a fabricated rate.
+- On a Members profile with both Rune and Dragon tools, compare a saved F2P-only plan with an unrestricted plan at a usable level. The former must choose only free training content/tools; the latter may use a model-supported owned Dragon tool. Actual profile mode, stock, levels and identity must stay unchanged. Check legacy free-only saves, stopping/reloading, switching skills and a newly chosen unrestricted goal.
+
 ## 2.81.8 non-combat preparation — not live-verified
 
 - From an actual quest prerequisite (for example Mining10 for The Knight's Sword), use the preparation action. Skills must open that exact skill/goal, start the normal prepared session and return to the retained quest on Stop, without XP/completion credits. Change the goal of an already followed skill and verify it really changes.

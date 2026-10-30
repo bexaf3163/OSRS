@@ -4,6 +4,8 @@
 import { useSyncExternalStore } from 'react';
 import { SKILL_NAMES, type GuideMode, type SkillName } from './skillGuide';
 import type { MethodPriority } from './playStyle';
+import type { GameMode } from '../types';
+import type { PlayerState } from './playerState';
 
 /** The followed skill plan: the skill, its priority and (2.70) whether members steps are left out. An older save's 'f2p' mode is the fast lane, free only. */
 export interface TrackedSkill { skill: SkillName; mode: GuideMode; freeOnly?: boolean; target?: number }
@@ -12,6 +14,13 @@ export interface TrackedSkill { skill: SkillName; mode: GuideMode; freeOnly?: bo
 export const freeOnlyOf = (t: TrackedSkill): boolean => t.freeOnly ?? t.mode === 'f2p';
 export const trackedPriority = (t: TrackedSkill | null, skill: string, fallback: MethodPriority): MethodPriority =>
   t?.skill === skill && t.mode === 'afk' ? 'relaxed' : fallback;
+
+/** Apply a followed plan's account restriction consistently without changing observed facts. */
+export function trackedTrainingContext(t: TrackedSkill | null, skill: string, state: PlayerState, mode: GameMode): { state: PlayerState; mode: GameMode } {
+  const restricted = mode === 'f2p' || state.mode === 'f2p' || (t?.skill === skill && freeOnlyOf(t));
+  const available: GameMode = restricted ? 'f2p' : 'members';
+  return { mode: available, state: state.mode === available ? state : { ...state, mode: available } };
+}
 
 const KEY = 'osrs-put:skill-track';
 const MODES: readonly GuideMode[] = ['fast', 'afk', 'f2p'];

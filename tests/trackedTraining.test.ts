@@ -6,7 +6,7 @@ import { RANGED_WATCH } from '../src/lib/rangedLoadout';
 import { buildEnvelope, EMPTY_PARTS, envelopeKey } from '../src/lib/prepEnvelope';
 import { toInGameTarget } from '../src/services/runeliteBridge';
 import { stepById } from '../src/data';
-import { parseTracked } from '../src/lib/skillTrack';
+import { parseTracked, trackedTrainingContext } from '../src/lib/skillTrack';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
 import { emptyPrep, rearmReadyDetours, startDetour } from '../src/lib/prepRoute';
 import type { PriceView } from '../src/lib/funding/quotes';
@@ -16,6 +16,31 @@ const state = (ranged?: number) => buildPlayerState({ mode: 'f2p', connected: tr
   gear: { equipment: [], inventory: [], coins: 10000, bankCoins: 0 },
   owned: { bankSeen: true, items: new Map([...RANGED_WATCH, 'Salmon', 'Tuna', 'Lobster', 'Swordfish'].map(name => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: 0 }])) } });
 const plan = (ranged?: number) => trackedTraining({ skill: 'ranged', mode: 'fast', freeOnly: true }, state(ranged), 'f2p', 'chill', 'balanced');
+
+describe('followed account scope and usable tools', () => {
+  const member = () => buildPlayerState({ mode: 'members', connected: true, stats: { woodcutting: 61, attack: 1 },
+    progress: emptyProgress(), questsDone: [], gear: { equipment: [], inventory: [], coins: 0, bankCoins: 0 },
+    owned: { bankSeen: true, items: new Map(['Rune axe', 'Dragon axe'].map(name => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: 1 }])) } });
+  it('a free-only followed plan excludes Members tools even on a Members profile', () => {
+    const observed = member(), before = structuredClone(observed);
+    const followed = trackedTraining({ skill: 'woodcutting', mode: 'fast', freeOnly: true, target: 65 }, observed, 'members', 'efficient', 'fastest')!;
+    expect(followed.step.itemsRequired).toContainEqual(expect.objectContaining({ nameEn: 'Rune axe' }));
+    expect(followed.step.itemsRequired).not.toContainEqual(expect.objectContaining({ nameEn: 'Dragon axe' }));
+    expect(observed).toEqual(before);
+  });
+  it('a Members plan names the modelled Dragon tool and carries it without Attack60', () => {
+    const followed = trackedTraining({ skill: 'woodcutting', mode: 'fast', target: 65 }, member(), 'members', 'efficient', 'fastest')!;
+    expect(followed.step.itemsRequired).toContainEqual(expect.objectContaining({ nameEn: 'Dragon axe' }));
+    expect(followed.step.itemsRequired?.find(item => item.nameEn === 'Dragon axe')?.equip).not.toBe(true);
+  });
+  it('scope is local to the followed skill and cannot promote an actually free context to Members', () => {
+    const observed = member();
+    expect(trackedTrainingContext({ skill: 'fishing', mode: 'f2p' }, 'woodcutting', observed, 'members').state).toBe(observed);
+    expect(trackedTrainingContext({ skill: 'woodcutting', mode: 'f2p' }, 'woodcutting', observed, 'members').mode).toBe('f2p');
+    const free = { ...observed, mode: 'f2p' as const };
+    expect(trackedTrainingContext(null, 'woodcutting', free, 'members')).toEqual({ mode: 'f2p', state: free });
+  });
+});
 
 describe('followed skills use the shared staged route', () => {
   it('migrates an older followed Ranged setting to the F2P checkpoint, with a current leg instead of starter mobs to40', () => {

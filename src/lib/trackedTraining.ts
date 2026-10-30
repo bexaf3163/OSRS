@@ -4,7 +4,7 @@ import type { PlayerState } from './playerState';
 import { levelOf } from './playerState';
 import { SKILL_NAMES } from './skillGuide';
 import type { TrackedSkill } from './skillTrack';
-import { freeOnlyOf } from './skillTrack';
+import { trackedTrainingContext } from './skillTrack';
 import { f2pAdviceFor } from './f2pSkillAdvice';
 import { methodsFor } from './trainingRouter';
 import { pickMethods } from './methodPick';
@@ -14,10 +14,11 @@ import type { Market } from './methodRates';
 
 export interface TrackedTraining { step: Step; target: number; complete: boolean }
 
-export function trackedTraining(tracked: TrackedSkill | null, state: PlayerState, mode: GameMode,
+export function trackedTraining(tracked: TrackedSkill | null, observed: PlayerState, mode: GameMode,
   style: PlayStyle, priority: MethodPriority, market: Market = {}): TrackedTraining | null {
   if (!tracked || !methodsFor(tracked.skill).length) return null;
-  const free = mode === 'f2p' || freeOnlyOf(tracked);
+  const context = trackedTrainingContext(tracked, tracked.skill, observed, mode);
+  const state = context.state, free = context.mode === 'f2p';
   const target = tracked.target ?? (free ? f2pAdviceFor(tracked.skill)?.target : 99);
   // A passive/prefer-members marker is not an instruction to grind to 99.
   if (target == null || !Number.isInteger(target) || target < 2 || target > 99) return null;
@@ -32,7 +33,7 @@ export function trackedTraining(tracked: TrackedSkill | null, state: PlayerState
     how: `Check your ${skill} level before choosing a training stage.`,
     inGame: { completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill, level: target }] } },
   };
-  const pick = pickMethods([base], state, free ? 'f2p' : mode, style, priority, market)[id];
+  const pick = pickMethods([base], state, context.mode, style, priority, market)[id];
   const step = withTrainingMethod(base, pick);
   if (typeof pick === 'object' && step.inGame) step.inGame = { ...step.inGame, goal: `${pick.name ?? name}: train ${skill} to ${pick.untilLevel ?? target}` };
   const method = typeof pick === 'object' ? methodsFor(skill).find(method => method.id === pick.methodId) : null;

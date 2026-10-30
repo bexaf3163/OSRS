@@ -1,19 +1,27 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
-import type { TrainingAdvice } from '../src/lib/trainingRouter';
+import type { AdviceInput, TrainingAdvice } from '../src/lib/trainingRouter';
+import type { TrackedSkill } from '../src/lib/skillTrack';
+import type { PlayerState } from '../src/lib/playerState';
+import { buildPlayerState } from '../src/lib/playerState';
+import { emptyProgress } from '../src/lib/progress';
 import { TrainingCard } from '../src/components/TrainingCard';
 
-const fixture = vi.hoisted(() => ({ advice: null as TrainingAdvice | null }));
-vi.mock('../src/store', () => ({ useStore: () => ({ mode: 'f2p' }) }));
+const fixture = vi.hoisted(() => ({ advice: null as TrainingAdvice | null, mode: 'f2p' as 'f2p' | 'members',
+  state: null as PlayerState | null, tracked: null as TrackedSkill | null, input: null as AdviceInput | null }));
+vi.mock('../src/store', () => ({ useStore: () => ({ mode: fixture.mode }) }));
 vi.mock('../src/bridge', () => ({ useBridge: () => ({ xp: null, xpRate: () => null }) }));
-vi.mock('../src/playerStateContext', () => ({ usePlayerState: () => ({ state: {} }) }));
+vi.mock('../src/playerStateContext', () => ({ usePlayerState: () => ({ state: fixture.state ?? {} }) }));
+vi.mock('../src/lib/skillTrack', async importOriginal => ({
+  ...await importOriginal<typeof import('../src/lib/skillTrack')>(), useTracked: () => fixture.tracked,
+}));
 vi.mock('../src/lib/features', () => ({ useFeatures: () => ({}), setFeatures: vi.fn() }));
 vi.mock('../src/lib/funding/usePriceView', () => ({ usePriceView: () => null }));
 vi.mock('../src/lib/useTradeRestriction', () => ({ useTradeRestriction: () => ({ state: 'unknown' }) }));
 vi.mock('../src/lib/trainingNav', () => ({ trainingNav: () => null }));
 vi.mock('../src/lib/trainingRouter', async importOriginal => ({
   ...await importOriginal<typeof import('../src/lib/trainingRouter')>(),
-  adviseTraining: () => fixture.advice,
+  adviseTraining: (input: AdviceInput) => { fixture.input = input; return fixture.advice; },
 }));
 
 function advice(): TrainingAdvice {
@@ -32,6 +40,17 @@ function advice(): TrainingAdvice {
 }
 
 describe('compact skill recommendations without hiding required preparation', () => {
+  it('the card uses the same restricted planning context as a followed F2P-only step', () => {
+    const observed = buildPlayerState({ mode: 'members', connected: true, progress: emptyProgress(), stats: { woodcutting: 61 }, owned: null, gear: null, questsDone: null });
+    fixture.advice = advice(); fixture.mode = 'members'; fixture.state = observed;
+    fixture.tracked = { skill: 'woodcutting', mode: 'fast', freeOnly: true, target: 65 };
+    try {
+      renderToStaticMarkup(<TrainingCard skill="woodcutting" target={65} view="summary" />);
+      expect(fixture.input?.mode).toBe('f2p');
+      expect(fixture.input?.state).toEqual({ ...observed, mode: 'f2p' });
+      expect(observed.mode).toBe('members');
+    } finally { fixture.mode = 'f2p'; fixture.state = null; fixture.tracked = null; }
+  });
   it('shows one method, estimates, risk, missing stock, unread stock and funding need without disclosures', () => {
     fixture.advice = advice();
     const html = renderToStaticMarkup(<TrainingCard skill="attack" target={20} view="summary" />);

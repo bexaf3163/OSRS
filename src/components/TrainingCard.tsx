@@ -21,7 +21,7 @@ import { NavigateButton } from './NavigateButton';
 import { usePriceView } from '../lib/funding/usePriceView';
 import { f2pAdviceFor } from '../lib/f2pSkillAdvice';
 import { useTradeRestriction } from '../lib/useTradeRestriction';
-import { setTracked, trackedPriority, useTracked } from '../lib/skillTrack';
+import { setTracked, trackedPriority, trackedTrainingContext, useTracked } from '../lib/skillTrack';
 import { SKILL_NAMES, type SkillName } from '../lib/skillGuide';
 
 /** Skill advice from the shared player state; recomputed when levels, items, mode or style change. */
@@ -33,14 +33,15 @@ export function useTrainingAdvice(skill: string | null, target: number, followed
   const style = styleOf(features).style;
   const tracked = useTracked();
   const priority = trackedPriority(tracked, skill ?? '', priorityOf(features));
+  const context = useMemo(() => trackedTrainingContext(tracked, skill ?? '', state, mode), [tracked, skill, state, mode]);
   const have = skill ? xp?.[skill] ?? null : null;
   const measured = skill ? xpRate(skill) : null;
   // The exchange and the trade restriction: what a combat method's arrows, runes and drops are worth, as on the route's steps.
   const prices = usePriceView(true);
   const trade = useTradeRestriction();
   return useMemo(
-    () => (skill ? adviseTraining({ skill, target, state, mode, style, priority, xp: have, measuredXph: measured, prices, restriction: trade.state, followed }) : null),
-    [skill, target, state, mode, style, priority, have, measured, prices, trade.state, followed],
+    () => (skill ? adviseTraining({ skill, target, ...context, style, priority, xp: have, measuredXph: measured, prices, restriction: trade.state, followed }) : null),
+    [skill, target, context, style, priority, have, measured, prices, trade.state, followed],
   );
 }
 

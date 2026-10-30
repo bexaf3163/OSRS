@@ -12,6 +12,7 @@ import { nameKey } from './checklist';
 import type { GameMode, Progress, Step } from '../types';
 import methodsJson from '../data/trainingMethods.json';
 import toolProgressionJson from '../data/toolProgression.json';
+import { toolUse } from './toolTiers';
 import { evaluate, itemRequirement, type ReqState, type Requirement } from './requirements';
 import { coinsOf, heldExact, levelOf, questOf, type PlayerState } from './playerState';
 import { isClosed } from './next-step';
@@ -273,7 +274,7 @@ export function preparationNeeds(advice: Pick<TrainingAdvice, 'best' | 'upgrade'
     { type: 'item', name: piece.name, count: 1, equip: true }];
   return needs.map(n => {
     const selected = tool ?? method.selectedTool;
-    return n.type === 'tool' && selected && tools[n.skill].some(t => t.tier === selected)
+    return n.type === 'tool' && selected && toolUse(selected)?.skill === n.skill
       ? { type: 'item', name: selected, count: 1 } : n;
   });
 }
