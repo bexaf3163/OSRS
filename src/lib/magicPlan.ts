@@ -3,9 +3,12 @@
 
 import spellsJson from '../data/spells.json';
 import { levelForXp, xpForLevel } from './xp';
-import { heldExact, levelOf, wornItemsOf, type PlayerState } from './playerState';
+import { heldExact, levelOf, questOf, wornItemsOf, type PlayerState } from './playerState';
 import { countWorn } from './equipmentCount';
 import type { MethodNeed } from './trainingRouter';
+import { STYLE_GEAR, usableStyleOption } from './styleGear';
+import { gearPieceByName } from '../services/gearAdvisor';
+import type { GearPiece } from '../types';
 
 export interface Spell { id: string; name: string; level: number; xp: number; runes: Record<string, number>; element: string }
 export interface Staff { name: string; id: number }
@@ -16,16 +19,37 @@ export const STAFFS = spellsJson.staffs as Record<string, Staff>;
 export const COWHIDE_ID = spellsJson.cowhideId;
 
 export const SUPERHEAT_WATCH = ['Nature rune', 'Fire rune', 'Iron ore', STAFFS.fire.name];
-export const STRIKE_WATCH = ['Mind rune', 'Air rune', 'Water rune', 'Earth rune', 'Fire rune', ...Object.values(STAFFS).map(s => s.name), 'Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'];
+export const STRIKE_WATCH = [...new Set(['Mind rune', 'Air rune', 'Water rune', 'Earth rune', 'Fire rune', ...Object.values(STAFFS).map(s => s.name), 'Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish',
+  ...Object.values(STYLE_GEAR.magic).flatMap(options => options.flatMap(option => option.names.filter(name => gearPieceByName(name) !== null))),
+])];
+
+/** Free, verified F2P clothing candidates; the combat model checks their actual food/XP trade-off. */
+function ownedMagicClothing(state: PlayerState): MethodNeed[] {
+  if (state.mode !== 'f2p' || !state.equipmentKnown) return [];
+  return Object.entries(STYLE_GEAR.magic).flatMap(([slot, options]) => {
+    if (slot === 'weapon') return [];
+    const currentName = state.equipment[slot], current = currentName ? gearPieceByName(currentName) : null;
+    // Unknown worn bonuses are not evidence that an ordinary replacement is better.
+    if (currentName && !current) return [];
+    const owned = options.filter(option => usableStyleOption(option, skill => levelOf(state, skill), quest => questOf(state, quest) === 'DONE'))
+      .flatMap(option => option.names).map(gearPieceByName)
+      .filter((piece): piece is GearPiece => piece !== null && !piece.members && !piece.reqUnverified && piece.slot === slot && (heldExact(state, piece.name).total ?? 0) > 0)
+      .sort((a, b) => b.attack.magic - a.attack.magic)[0];
+    return owned && owned.attack.magic > (current?.attack.magic ?? 0)
+      ? [{ type: 'item', name: owned.name, count: 1, equip: true }] : [];
+  });
+}
 
 /** Prefer a higher unlocked Strike only when its actual ingredients are already confirmed.
  * Otherwise Wind Strike is the inexpensive fallback; no unavailable price is treated as an affordable upgrade.
  */
-export function strikeRecipe(state: PlayerState): { spell: Spell; needs: MethodNeed[] } {
+export function strikeRecipe(state: PlayerState, preparedWeapon?: string): { spell: Spell; needs: MethodNeed[] } {
   const worn = wornItemsOf(state);
   const staves = Object.entries(STAFFS);
-  const staff = staves.find(([, s]) => countWorn(worn, n => n.toLowerCase() === s.name.toLowerCase()).count > 0)
-    ?? staves.find(([, s]) => (heldExact(state, s.name).total ?? 0) > 0);
+  // An evaluated purchase must use that weapon's rune substitution without pretending it is already owned/worn.
+  const staff = preparedWeapon !== undefined ? staves.find(([, s]) => s.name.toLowerCase() === preparedWeapon.toLowerCase())
+    : staves.find(([, s]) => countWorn(worn, n => n.toLowerCase() === s.name.toLowerCase()).count > 0)
+      ?? staves.find(([, s]) => (heldExact(state, s.name).total ?? 0) > 0);
   const pool = SPELLS.filter(s => s.id.endsWith('-strike') && s.level <= (levelOf(state, 'magic') ?? 1));
   const spent = (s: Spell) => Object.entries(s.runes).filter(([element]) => element !== staff?.[0]);
   const spell = [...pool].reverse().find(s => spent(s).every(([element, qty]) => (heldExact(state, `${element[0].toUpperCase()}${element.slice(1)} rune`).total ?? 0) >= qty * 20)) ?? pool[0];
@@ -36,6 +60,7 @@ export function strikeRecipe(state: PlayerState): { spell: Spell; needs: MethodN
     { type: 'skill', skill: 'magic', min: spell.level },
     ...spent(spell).map(([element, qty]): MethodNeed => ({ type: 'item', name: `${element[0].toUpperCase()}${element.slice(1)} rune`, count: qty * batch })),
     ...(staff ? [{ type: 'item' as const, name: staff[1].name, equip: true }] : []),
+    ...ownedMagicClothing(state),
     { type: 'item', name: foods[0], count: foodCount, refill: 5, anyOf: foods.slice(1) },
   ] };
 }

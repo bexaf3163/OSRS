@@ -404,7 +404,7 @@ export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: stri
     .filter(pre => optionalFood.some(food => nameKey(food.nameEn) === nameKey(pre.item)))
     .flatMap(pre => [pre.item, ...(pre.alt ?? [])]))) ?? [];
   const goalWatch = (step.goalItemsRequired ?? []).filter(i => !i.inStep);
-  const named = [...watchedItems(step), ...methodToolNames(step), ...alternatives, ...extraWatch, ...potions,
+  const named = [...watchedItems(step), ...alternatives, ...methodToolNames(step), ...extraWatch, ...potions,
     ...goalWatch.map(i => i.nameEn), ...goalWatch.flatMap(i => i.anyOf ?? []),
     ...optionalFood.flatMap(food => [food.nameEn, ...(food.anyOf ?? [])]), ...foodGuards];
   const own = [...new Set([...named, ...named.flatMap((n) => toolFamilyOf(n) ?? doseNames(n))])].slice(0, 40);

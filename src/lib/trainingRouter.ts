@@ -17,7 +17,7 @@ import { coinsOf, heldExact, levelOf, type PlayerState } from './playerState';
 import { xpForLevel } from './xp';
 import type { MethodPriority, PlayStyle } from './playStyle';
 import { rangedEquipment, rangedNeeds, RANGED_WATCH } from './rangedLoadout';
-import { SPELLS, strikeRecipe, superheatNeeds } from './magicPlan';
+import { SPELLS, STAFFS, strikeRecipe, superheatNeeds } from './magicPlan';
 import { STYLE_GEAR } from './styleGear';
 import { PROCESSING } from './processingRates';
 import { adviseGear, canWear, gearData, gearPieceByName, stepFoes, type Levels } from '../services/gearAdvisor';
@@ -82,7 +82,7 @@ export interface TrainingMethod {
   lootPerHour?: number;
   lootName?: string;
   /** Better tools the player could buy, priced, with the rate each would give (the gathering engine). */
-  upgrades?: { tool: string; price: number; xph: [number, number]; costPerHour?: number | null }[];
+  upgrades?: ModelRate['upgrades'];
   /** XP per single action — the game's exact value. */
   xpa: number | null;
   /** The word forms "log|logs" for "how many more". */
@@ -174,7 +174,7 @@ export interface MethodView {
 }
 
 export function viewMethod(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodView {
-  if (m.kit === 'strike-spell') m = { ...m, name: `${strikeRecipe(state).spell.name} on cows and chickens` };
+  if (m.kit === 'strike-spell' && m.npcNames?.length) m = { ...m, name: `${strikeRecipe(state).spell.name} on ${m.npcNames.join(' / ')}` };
   const declared = methodNeeds(m, state, prices);
   const materials = allocateMaterialStock(state, declared.flatMap((n, index) => n.type === 'item'
     ? [{ key: `method:${index}`, nameEn: n.name, count: n.count ?? 1, anyOf: n.anyOf, equip: n.equip }] : []));
@@ -205,7 +205,17 @@ export function methodNeeds(m: TrainingMethod, state: PlayerState, prices?: Pric
 export function preparationNeeds(advice: Pick<TrainingAdvice, 'best' | 'upgrade'>, state: PlayerState, prices?: PriceView | null): MethodNeed[] {
   if (!advice.best) return [];
   const method = advice.best.method;
-  let needs = methodNeeds(method, state, prices);
+  let needs = advice.upgrade?.needs ?? methodNeeds(method, state, prices);
+  const upgradePiece = advice.upgrade?.tool ? gearPieceByName(advice.upgrade.tool) : null;
+  if (method.kit === 'strike-spell' && upgradePiece?.slot === 'weapon' && !advice.upgrade?.needs) {
+    const supplies = new Set([
+      ...SPELLS.filter(spell => spell.id.endsWith('-strike')).flatMap(spell => Object.keys(spell.runes).map(element => `${element} rune`)),
+      ...Object.values(STAFFS).map(staff => nameKey(staff.name)),
+    ]);
+    const isSupply = (need: MethodNeed) => need.type === 'item' && supplies.has(nameKey(need.name));
+    // Keep access items, food and gates; only the evaluated staff's physical casting supplies change.
+    needs = [...needs.filter(need => !isSupply(need)), ...strikeRecipe(state, upgradePiece.name).needs.filter(isSupply)];
+  }
   // Finish a usable partial processing batch; do not send the player to the bank after every action.
   if (method.consumables?.length) {
     const lines = needs.flatMap((n, index) => n.type === 'item' && !n.equip ? [{ key: String(index), nameEn: n.name, count: n.count ?? 1, anyOf: n.anyOf }] : []);
@@ -253,9 +263,9 @@ export function preparationNeeds(advice: Pick<TrainingAdvice, 'best' | 'upgrade'
     }
   }
   const tool = advice.upgrade?.tool;
-  const weapon = tool && melee ? gearPieceByName(tool) : null;
-  if (weapon?.slot === 'weapon') return [...needs.filter(n => n.type !== 'item' || !n.equip || !['weapon', ...(weapon.twoHanded ? ['shield'] : [])].includes(gearPieceByName(n.name)?.slot ?? '')),
-    { type: 'item', name: weapon.name, count: 1, equip: true }];
+  const piece = melee || method.kit === 'strike-spell' || method.kit === 'f2p-bow' ? upgradePiece : null;
+  if (piece) return [...needs.filter(n => n.type !== 'item' || !n.equip || ![piece.slot, ...(piece.slot === 'weapon' && piece.twoHanded ? ['shield'] : [])].includes(gearPieceByName(n.name)?.slot ?? '')),
+    { type: 'item', name: piece.name, count: 1, equip: true }];
   return tool ? needs.map(n => n.type === 'tool' && tools[n.skill].some(t => t.tier === tool)
     ? { type: 'item', name: tool, count: 1 } : n) : needs;
 }
@@ -533,6 +543,7 @@ export function methodOfGuideStep(step: { skill: string; levelRange: readonly [n
 export interface ToolUpgrade { tool: string; price: number; hours: number; /** Net consumable savings after the purchase when the benefit is coins instead of meaningful time. */ coinsSaved?: number; /** The player's coins when they are known and fall short of the price. */ short?: number;
   /** Missing next-trip supplies, not the price of an entire future goal. null means stock/prices are unchecked. */ kitCost?: number | null;
   /** Known coins after reserving the kit, when that leaves too little for this optional purchase. */ afterKit?: number;
+  /** Physical supplies resolved by the same model that evaluated the proposed equipment. */ needs?: MethodNeed[];
 }
 /** Hours a better tool must save to the goal to be worth a line. */
 const UPGRADE_MIN_HOURS = 1 / 6;
@@ -561,7 +572,7 @@ export function toolUpgrade(m: TrainingMethod, xpLeft: number, priority: MethodP
     const score = priority === 'fastest' ? hours : costsKnown ? (coinRate ? hours * 60 * coinRate : 0) + costSaved - u.price : -Infinity;
     if (score <= 0 || score <= bestScore) continue;
     bestScore = score;
-    best = { tool: u.tool, price: u.price, hours, ...(!timeBenefit && netSaved !== null ? { coinsSaved: netSaved } : {}) };
+    best = { tool: u.tool, price: u.price, hours, ...(u.needs ? { needs: u.needs } : {}), ...(!timeBenefit && netSaved !== null ? { coinsSaved: netSaved } : {}) };
   }
   return best;
 }
@@ -746,9 +757,10 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const found = upgradeMethod ? toolUpgrade(upgradeMethod, methodXp, priority, coinRate, purchaseTrip) : null;
   // Coins known (bag and bank) and short of the price: said, so the suggestion is not read as affordable. Unknown coins: nothing is said.
   const cash = coinsOf(state).total;
-  const kitCost = found && best ? requirementCost(methodNeeds(best.method, state, input.prices)
+  const kitCost = found && best ? requirementCost(preparationNeeds({ best, upgrade: found }, state, input.prices)
     // The offered tool replaces this requirement; do not reserve money for buying a second tool as well.
-    .filter((n) => !(n.type === 'tool' && tools[n.skill].some((t) => t.tier === found.tool)))
+    .filter((n) => !(n.type === 'tool' && tools[n.skill].some((t) => t.tier === found.tool))
+      && !(n.type === 'item' && nameKey(n.name) === nameKey(found.tool)))
     .map((n) => methodRequirement(n, state)), state, input.prices) : 0;
   const afterKit = cash !== null && kitCost !== null ? Math.max(0, cash - kitCost) : null;
   const upgrade = found ? { ...found, kitCost,

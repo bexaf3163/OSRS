@@ -30,10 +30,10 @@ older save stays as "Fastest"; "Relaxed" keeps the old calm order.
 | S6-03 Mining to 45, Woodcutting to 36 and Firemaking to 50 | mining 20 (F2P) | Iron, dropping the ore | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
 | S6-03 Mining to 45, Woodcutting to 36 and Firemaking to 50 | mining 30 (F2P) | Iron, dropping the ore | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
 | S6-03 Mining to 45, Woodcutting to 36 and Firemaking to 50 | mining 40 (F2P) | Iron, dropping the ore | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
-| S6-04 Magic to 55 (High Level Alchemy) | magic 1 (F2P) | Wind Strike on cows and chickens | Wind Strike on cows and chickens | needs full attention; small risk; material costs |
-| S6-04 Magic to 55 (High Level Alchemy) | magic 20 (F2P) | Wind Strike on cows and chickens | Wind Strike on cows and chickens | needs full attention; small risk; material costs |
-| S6-04 Magic to 55 (High Level Alchemy) | magic 30 (F2P) | Wind Strike on cows and chickens | Wind Strike on cows and chickens | needs full attention; small risk; material costs |
-| S6-04 Magic to 55 (High Level Alchemy) | magic 40 (F2P) | Wind Strike on cows and chickens | Wind Strike on cows and chickens | needs full attention; small risk; material costs |
+| S6-04 Magic to 55 (High Level Alchemy) | magic 1 (F2P) | Wind Strike on Cow / Chicken | Wind Strike on Cow / Chicken | needs full attention; small risk; material costs |
+| S6-04 Magic to 55 (High Level Alchemy) | magic 20 (F2P) | Wind Strike on Cow / Chicken | Wind Strike on Cow / Chicken | needs full attention; small risk; material costs |
+| S6-04 Magic to 55 (High Level Alchemy) | magic 30 (F2P) | Wind Strike on Cow / Chicken | Wind Strike on Cow / Chicken | needs full attention; small risk; material costs |
+| S6-04 Magic to 55 (High Level Alchemy) | magic 40 (F2P) | Wind Strike on Cow / Chicken | Wind Strike on Cow / Chicken | needs full attention; small risk; material costs |
 | Skills page: attack | level 10 → 20 (F2P) | Chickens and cows | Al Kharid warriors | steady clicking; small risk |
 | Skills page: defence | level 10 → 20 (F2P) | Chickens and cows | Al Kharid warriors | steady clicking; small risk |
 | Skills page: strength | level 10 → 20 (F2P) | Chickens and cows | Al Kharid warriors | steady clicking; small risk |

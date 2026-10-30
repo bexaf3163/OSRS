@@ -48,7 +48,7 @@ const MAX_HIT = (spellsJson as unknown as { maxHit: Record<'strike' | 'bolt', [n
 
 const MELEE = new Set(['attack', 'strength', 'defence']);
 
-/** Rate only the selected trainer's eligible weapon purchases; reuse Gear eligibility and the complete fight model. */
+/** Rate the selected trainer's eligible equipment purchases with the existing complete fight model. */
 export function combatUpgrades(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): NonNullable<ModelRate['upgrades']> {
   if (state.equipmentKnown !== true || !m.npcNames?.length || (!MELEE.has(skill) && !(skill === 'ranged' && m.kit === 'f2p-bow') && !(skill === 'magic' && m.kit === 'strike-spell'))) return [];
   const weapon = state.equipment.weapon;
@@ -68,23 +68,28 @@ export function combatUpgrades(m: TrainingMethod, skill: string, state: PlayerSt
         return skill === 'ranged' ? [{ name, twoHanded: true }] : p && !p.reqUnverified && !(p.members && state.mode === 'f2p') ? [p] : [];
       }))
     : trainingWeapons(levels as unknown as Levels, state.mode, quests);
-  const rateWith = (p: Pick<GearPiece, 'name' | 'twoHanded'>) => {
-    const equipment: Record<string, string> = { ...state.equipment, weapon: p.name };
-    if (p.twoHanded) delete equipment.shield;
-    const removed = new Set([state.equipment.weapon, ...(p.twoHanded ? [state.equipment.shield] : [])].filter(Boolean).map(nameKey));
+  const clothing = skill === 'magic' && state.mode === 'f2p' ? Object.entries(STYLE_GEAR.magic).filter(([slot]) => slot !== 'weapon')
+    .flatMap(([, options]) => options.filter(option => usableStyleOption(option, s => levelOf(state, s), q => questOf(state, q) === 'DONE'))
+      .flatMap(option => option.names).map(gearPieceByName)
+      .filter((piece): piece is GearPiece => piece !== null && !piece.reqUnverified && !piece.members)) : [];
+  const candidates = [...weapons.map(p => ({ ...p, slot: 'weapon' as const })), ...clothing];
+  const rateWith = (p: Pick<GearPiece, 'name' | 'slot' | 'twoHanded'>) => {
+    const equipment: Record<string, string> = { ...state.equipment, [p.slot]: p.name };
+    const twoHanded = p.slot === 'weapon' && p.twoHanded;
+    if (twoHanded) delete equipment.shield;
+    const removed = new Set([state.equipment[p.slot], ...(twoHanded ? [state.equipment.shield] : [])].filter(Boolean).map(nameKey));
     const equipmentItems = [...(wornItemsOf(state) ?? []).filter((it) => !removed.has(nameKey(it.name))), { name: p.name, count: 1 }];
     return combatRate(m, skill, { ...state, equipment, equipmentItems }, market);
   };
-  const improves = (rate: ModelRate | null) => rate !== null && rate.xph[0] + rate.xph[1] >= before.xph[0] + before.xph[1]
-    && (rate.xph[0] + rate.xph[1] > before.xph[0] + before.xph[1]
-      || (rate.costPerHour !== null && before.costPerHour !== null && rate.costPerHour < before.costPerHour));
+  const improves = (rate: ModelRate | null) => improvesCombatRate(rate, before);
   // Gear already offers free equipment changes. Do not send the player shopping before using a better owned weapon.
-  if (weapons.some((p) => {
-    if (nameKey(p.name) === nameKey(state.equipment.weapon ?? '') || (heldOf(state, p.name).total ?? 0) <= 0) return false;
+  if (candidates.some((p) => {
+    if (p.slot !== 'weapon') return false; // Magic clothing is already accepted/rejected by magicRate's recovery comparison.
+    if (nameKey(p.name) === nameKey(state.equipment[p.slot] ?? '') || (heldOf(state, p.name).total ?? 0) <= 0) return false;
     const rate = rateWith(p);
     return improves(rate);
   })) return [];
-  return weapons.flatMap((p) => {
+  return candidates.flatMap((p) => {
     // Unread stock must not become an instruction to buy an item that may already be in the bank.
     const held = heldOf(state, p.name);
     if (held.total === null || held.total > 0) return [];
@@ -92,7 +97,9 @@ export function combatUpgrades(m: TrainingMethod, skill: string, state: PlayerSt
     if (price === null || !Number.isFinite(price) || price <= 0) return [];
     const after = rateWith(p);
     if (!after || !improves(after)) return [];
-    return [{ tool: p.name, price, xph: after.xph, costPerHour: after.costPerHour }];
+    const replaced = new Set(before.needs?.flatMap(need => need.type === 'item' ? [nameKey(need.name)] : []) ?? []);
+    const needs = skill === 'magic' && after.needs ? [...m.needs.filter(need => need.type !== 'item' || !replaced.has(nameKey(need.name))), ...after.needs] : undefined;
+    return [{ tool: p.name, price, xph: after.xph, costPerHour: after.costPerHour, ...(needs ? { needs } : {}) }];
   });
 }
 
@@ -275,13 +282,46 @@ function rangedRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | 
   };
 }
 
+function improvesCombatRate(rate: ModelRate | null, before: ModelRate): boolean {
+  return rate !== null && rate.xph[0] + rate.xph[1] >= before.xph[0] + before.xph[1]
+    && (rate.xph[0] + rate.xph[1] > before.xph[0] + before.xph[1]
+      || rate.costPerHour !== null && before.costPerHour !== null && rate.costPerHour < before.costPerHour);
+}
+
 function magicRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): (ModelRate & { secondsPerKill: number }) | null {
+  const recipe = strikeRecipe(state);
+  const clothing = recipe.needs.filter(need => {
+    const piece = need.type === 'item' && need.equip ? gearPieceByName(need.name) : null;
+    return piece !== null && piece.slot !== 'weapon';
+  });
+  let needs = recipe.needs.filter(need => !clothing.includes(need));
+  let best = magicKitRate(m, state, prices, { ...recipe, needs });
+  if (!best) return null;
+  // More Magic attack is not automatically more practical XP: lost armour, food and loot banking count too.
+  const remaining = new Set(clothing);
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const item of remaining) {
+      const candidate = magicKitRate(m, state, prices, { ...recipe, needs: [...needs, item] });
+      if (!candidate || !improvesCombatRate(candidate, best)
+        || candidate.costPerHour === null || best.costPerHour === null || candidate.costPerHour > best.costPerHour) continue;
+      needs = [...needs, item]; best = candidate; remaining.delete(item); changed = true;
+    }
+  }
+  return best;
+}
+
+function magicKitRate(m: TrainingMethod, state: PlayerState, prices: PriceView | null | undefined, { spell, needs }: ReturnType<typeof strikeRecipe>): (ModelRate & { secondsPerKill: number }) | null {
   const level = levelOf(state, 'magic');
   const foe = methodFoe(m);
   if (level === undefined || !foe || level >= 99) return null;
-  const { spell, needs } = strikeRecipe(state);
   const staff = Object.entries(STAFFS).find(([, s]) => needs.some((n) => n.type === 'item' && n.equip && nameKey(n.name) === nameKey(s.name)));
-  const equipment = { ...state.equipment, ...(staff ? { weapon: staff[1].name } : {}) };
+  const equipment = { ...state.equipment };
+  for (const need of needs) {
+    const piece = need.type === 'item' && need.equip ? gearPieceByName(need.name) : null;
+    if (piece) equipment[piece.slot] = piece.name;
+  }
   if (equipment.weapon && !gearPieceByName(equipment.weapon)) return null;
   const maxHit = [...MAX_HIT.strike].reverse().find(([from]) => from <= level)?.[1];
   if (!maxHit) return null;

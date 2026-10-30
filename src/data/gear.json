@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: item and bonus infoboxes (Bucket infobox_item, infobox_bonuses), shops (storeline, infobox_shop), requirements from the articles",
-  "updated": "2026-10-26",
+  "updated": "2026-10-30",
   "items": [
     {
       "id": 1205,
@@ -4577,6 +4577,114 @@
       "strength": 6,
       "prayer": 1,
       "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_power.png"
+    },
+    {
+      "id": 1727,
+      "name": "Amulet of magic",
+      "slot": "neck",
+      "kind": "amulet",
+      "reqFrom": "Free-to-play PvP equipment",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 10,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 0,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_magic.png"
+    },
+    {
+      "id": 579,
+      "name": "Blue wizard hat",
+      "slot": "head",
+      "kind": "robe",
+      "reqFrom": "Free-to-play PvP equipment",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 2,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 2,
+        "ranged": 0
+      },
+      "strength": 0,
+      "shops": [
+        {
+          "shop": "Betty's Magic Emporium",
+          "location": "Port Sarim",
+          "price": 2,
+          "owner": "Betty"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Blue_wizard_hat.png"
+    },
+    {
+      "id": 577,
+      "name": "Blue wizard robe",
+      "slot": "body",
+      "kind": "robe",
+      "reqFrom": "Free-to-play PvP equipment",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 3,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 3,
+        "ranged": 0
+      },
+      "strength": 0,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Blue_wizard_robe.png"
+    },
+    {
+      "id": 581,
+      "name": "Black robe",
+      "slot": "body",
+      "kind": "robe",
+      "reqFrom": "Free-to-play PvP equipment",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 3,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 3,
+        "ranged": 0
+      },
+      "strength": 0,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Black_robe.png"
     },
     {
       "id": 1171,

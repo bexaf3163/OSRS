@@ -53,7 +53,7 @@ export interface ModelRate {
   /** The spot the engine picked (gathering); absent for the combat engines, whose spot is the method's own. */
   spot?: RateSpot;
   /** Better tools the player could buy, with the price and the rate each would give here (gathering): weighed by the caller over the hours left. */
-  upgrades?: { tool: string; price: number; xph: [number, number]; costPerHour?: number | null }[];
+  upgrades?: { tool: string; price: number; xph: [number, number]; costPerHour?: number | null; needs?: MethodNeed[] }[];
 }
 
 /** What the trade allows (the exchange and the account) and what the player wants: on the fastest objective nothing is kept that costs time. */

@@ -28,7 +28,7 @@ function scenario(magic: number | null, smithing: number | null = 15, stock: Rec
 describe('S6-04 spell-dependent supplies', () => {
   it.each([1, 25, 35])('Magic%s without confirmed higher-spell inputs gets real Wind Strike runes instead of nature-only preparation', level => {
     const s = scenario(level);
-    expect(s.pick).toMatchObject({ methodId: 'ma-strike', name: 'Wind Strike on cows and chickens' });
+    expect(s.pick).toMatchObject({ methodId: 'ma-strike', name: 'Wind Strike on Cow / Chicken' });
     expect(s.payload.checklist).toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Mind rune', count: 100 }), expect.objectContaining({ name: 'Air rune', count: 100 }), expect.objectContaining({ name: 'Trout', heals: 7 })]));
     expect(s.payload.checklist?.some(r => r.name === 'Nature rune')).toBe(false);
     expect(s.step.how).toContain('Wind Strike');
@@ -36,14 +36,14 @@ describe('S6-04 spell-dependent supplies', () => {
   });
   it('uses an unlocked higher Strike only with its confirmed ingredients and projects the same spell name', () => {
     const s = scenario(25, 15, { 'Mind rune': { bank: 50 }, 'Fire rune': { bank: 60 }, 'Air rune': { bank: 40 }, Trout: { bank: 5 } });
-    expect(s.pick).toMatchObject({ name: 'Fire Strike on cows and chickens' });
+    expect(s.pick).toMatchObject({ name: 'Fire Strike on Cow / Chicken' });
     expect(s.step.how).toContain('Fire Strike');
     expect(s.payload.checklist).toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Fire rune', count: 60 }), expect.objectContaining({ name: 'Air rune', count: 40 })]));
     expect(s.engine.plan(s.step).lines.find(r => r.name === 'Fire rune')?.where).toBe('BANK');
   });
   it('never selects Fire Strike below its actual level even if the runes are owned', () => {
     const s = scenario(1, 15, { 'Mind rune': { carried: 100 }, 'Fire rune': { carried: 300 }, 'Air rune': { carried: 200 } });
-    expect(s.pick).toMatchObject({ name: 'Wind Strike on cows and chickens' });
+    expect(s.pick).toMatchObject({ name: 'Wind Strike on Cow / Chicken' });
   });
   it.each([43, 54])('Magic%s with a prepared ore batch uses Superheat and carries its actual inputs', level => {
     const s = scenario(level, 15, { 'Nature rune': { carried: 25 }, 'Iron ore': { carried: 25 }, 'Fire rune': { carried: 100 } });

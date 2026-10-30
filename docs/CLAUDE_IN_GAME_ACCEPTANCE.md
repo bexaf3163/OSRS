@@ -1,5 +1,12 @@
 # In-game acceptance — assigned to Claude
 
+## 2.81.7 Magic equipment/preparation — not live-verified
+
+- Follow a reachable Magic goal and verify its current spell, next real level boundary, runes, staff, food and destination agree in Skills, Path, Shopping and the single HUD. Stop restores the retained quest; a short custom goal must not complete the route's Magic55 objective.
+- At a genuinely worthwhile staff or clothing purchase, verify the proposed kit uses that staff's rune substitution and the new outfit's recovery needs. Known insufficient GP invokes the existing earning guide; unread stock/prices remain unknown. All purchases/equipping/casting stay manual.
+- Read the real bank for owned wizard clothing and Amulet of magic. Equivalent declarations/unknown worn bonuses must not cause invented ownership or a forced downgrade. A larger Magic bonus is insufficient if practical XP/recovery worsens; keeping a useful current outfit can be correct. Check weak/strong defensive profiles and reachable trainers without treating the high-defence unit fixture as a novice recommendation.
+- Check the four generated item bonuses against the actual equipment screen and that current required alternatives are counted under the unchanged watch bound. Test normal login/reconnect, inventory depletion and stage transitions. No claim is made for unsupported spell tiers, special mechanics or fully calibrated whole-goal Magic budgets.
+
 ## 2.81.6 guided Skills lifecycle — not live-verified
 
 - Start Ranged from Skills and from an older saved followed setting. Before buying/equipping, open the real bank so missing/unknown/owned are distinct. Verify the current bow, usable arrows, armour/amulet and food match the current checklist, Shopping, map and the single HUD. Seagulls must not remain the instruction to40; real level20 changes trainer/Willow kit, level30 offers the usable Maple kit. Do not manufacture levels on the real character.

@@ -572,6 +572,8 @@ async function run(browser: Browser) {
   if (!process.env.UI_ONLY) await miningHandoverScenarios(browser);
   if (process.env.UI_ONLY === 'ranged-preparation') { await rangedPreparationScenarios(browser); return; }
   if (!process.env.UI_ONLY) await rangedPreparationScenarios(browser);
+  if (process.env.UI_ONLY === 'magic-preparation') { await magicPreparationScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await magicPreparationScenarios(browser);
   if (process.env.UI_ONLY === 'shopping-quotes') { await shoppingQuoteScenarios(browser); return; }
   if (!process.env.UI_ONLY) await shoppingQuoteScenarios(browser);
   if (process.env.UI_ONLY === 'journal-quotes') { await journalQuoteScenarios(browser); return; }
@@ -3091,6 +3093,47 @@ async function rangedPreparationScenarios(browser: Browser) {
     expect(await noOverflow(poor.page) && !poor.errors.length, `ranged (${width}): funding handover has no overflow or runtime errors`);
     await poor.page.context().close();
   }
+}
+
+async function magicPreparationScenarios(browser: Browser) {
+  const width = 1280, stats = { magic: 3, defence: 10, hitpoints: 24, smithing: 15 };
+  const clothes = ['Blue wizard hat', 'Blue wizard robe', 'Amulet of magic'];
+  const names = (JSON.parse(readFileSync(new URL('../src/data/gear.json', import.meta.url), 'utf8')) as { items: { name: string }[] }).items.map(item => item.name);
+  const items = [...new Set([...names, 'Air rune', 'Mind rune', 'Water rune', 'Earth rune', 'Fire rune', 'Nature rune', 'Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'])].map(name => ({
+    name, carried: ['Air rune', 'Mind rune'].includes(name) ? 1000 : name === 'Trout' ? 5 : name === 'Staff of fire' ? 1 : 0,
+    noted: 0, bank: clothes.includes(name) ? 1 : 0,
+  }));
+  const gear = { equipment: [{ id: 1387, name: 'Staff of fire', slot: 'weapon', count: 1 }], inventory: [
+    { id: 556, name: 'Air rune', count: 1000 }, { id: 558, name: 'Mind rune', count: 1000 }, { id: 333, name: 'Trout', count: 5 },
+  ], coins: 0, bankCoins: 0 };
+  const { page, errors } = await open(browser, width, {
+    market: true, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: stats }),
+    localStorage: { 'osrs-put:active-step': 'S6-04' },
+    status: { protocol: 6, inGame: true, player: 'Magic Prep', activeStepId: 'S6-04', stats, ...gear },
+    events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
+  }, '#/skills/MA/magic');
+  await page.getByRole('tab', { name: 'Calculator', exact: true }).click();
+  await page.getByLabel('Goal', { exact: true }).fill('6');
+  await page.getByRole('button', { name: 'Follow to level 6', exact: true }).click();
+  await page.locator('.tracked-skill').waitFor();
+  const snapshot = () => page.evaluate(() => (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body);
+  await page.waitForFunction(() => (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.stepId === 'S0-06');
+  const first = await snapshot();
+  expect(/to 5/.test(first.step.goal), 'Magic: the first action ends at the next real spell milestone');
+  expect(first.step.checklist.some((item: any) => item.name === 'Mind rune') && first.step.checklist.some((item: any) => item.name === 'Air rune'), 'Magic: the followed session carries the actual casting ingredients');
+  expect(clothes.every(name => first.step.watchItems.includes(name)), 'Magic: bank scanning requests the verified robe, hat and amulet options');
+  expect(!first.step.completionTrigger && !first.skillPath, 'Magic: the canonical prepared step replaces the old Wiki path without synthetic completion');
+  await page.evaluate(next => {
+    const w = window as any; w.__status = { ...w.__status, stats: next }; w.__emit({ type: 'STATS', stats: next });
+  }, { ...stats, magic: 5 });
+  await page.waitForFunction(() => /to 6/.test((window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.goal ?? ''));
+  expect((await snapshot()).step.stepId === 'S0-06', 'Magic: the real level update advances the same session to its next leg');
+  expect(await noOverflow(page) && !errors.length, 'Magic: the staged guide fits the accepted Ledger without runtime errors');
+  await page.screenshot({ path: 'audit-temp/magic-guided-session-1280.png' });
+  await page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
+  await page.waitForFunction(() => (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.stepId === 'S6-04');
+  expect((await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'))).steps?.['S6-04'] !== 'done', 'Magic: stopping restores the quest without awarding the uncompleted Magic55 goal');
+  await page.context().close();
 }
 
 async function shoppingQuoteScenarios(browser: Browser) {

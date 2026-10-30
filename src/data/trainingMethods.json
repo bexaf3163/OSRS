@@ -1106,7 +1106,7 @@
       "cost": "cost",
       "risk": "low",
       "where": "The farms by Lumbridge",
-      "note": "Use the spell named by the plan and select its autocast setting if your staff supports it; otherwise cast manually. A confirmed owned elemental staff must be equipped to replace its rune type. Higher Strikes are selected only when at least 20 casts are already supplied; otherwise Wind Strike is the budget fallback. Refill a low rune supply with a starter batch of 100 casts. Remove metal armour and verify that damage and Magic XP are arriving. Bring the listed starter food, eat before health is low and bank when supplies run out. This is not a whole-goal budget, guaranteed profit or measured fastest method; confirmed completed sales alone fund purchases.",
+      "note": "Use the spell named by the plan and select its autocast setting if your staff supports it; otherwise cast manually. A confirmed owned elemental staff must be equipped to replace its rune type. Higher Strikes are selected only when at least 20 casts are already supplied; otherwise Wind Strike is the budget fallback. Refill a low rune supply with a starter batch of 100 casts. Follow the recommended equipment: accuracy, lost defence, food and banking all affect the practical result. Verify that damage and Magic XP are arriving. Bring the listed starter food, eat before health is low and bank when supplies run out. This is not a whole-goal budget, guaranteed profit or measured fastest method; confirmed completed sales alone fund purchases.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
       "place": "Lumbridge",
       "kit": "strike-spell",
