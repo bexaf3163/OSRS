@@ -2993,6 +2993,15 @@ async function rangedPreparationScenarios(browser: Browser) {
     expect((await text(page, '.training:visible')).includes('Giant frogs'), `ranged (${width}): the visible desktop advice matches the game target`);
     await page.screenshot({ path: `audit-temp/ranged-kit-${width}.png` });
     expect(await noOverflow(page) && !errors.length, `ranged (${width}): no overflow or runtime errors`);
+    await page.evaluate(() => { location.hash = '#/skills'; });
+    await page.locator('.skill-tile a[href$="/ranged"]').click();
+    expect(await page.locator('.skill-detail details').count() === 0, `ranged (${width}): the Train view gains no disclosure stack`);
+    await page.getByRole('tab', { name: 'Plan', exact: true }).click();
+    const goalText = await text(page, '.training-analysis');
+    expect(goalText.includes('Conditional goal supplies (estimate)') && goalText.includes('Salmon') && goalText.includes('arrow'), `ranged (${width}): Plan exposes the complete staged ammunition and food estimate`);
+    expect(goalText.includes('assumes safe arrow recovery') && goalText.includes('Future funding and product sales are not assumed'), `ranged (${width}): pickup and funding assumptions stay explicit`);
+    expect(await noOverflow(page) && !errors.length, `ranged (${width}): goal estimates fit the accepted Ledger`);
+    await page.screenshot({ path: `audit-temp/ranged-goal-plan-${width}.png` });
     await page.context().close();
   }
 }

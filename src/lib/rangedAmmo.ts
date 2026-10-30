@@ -142,6 +142,16 @@ export function methodFoe(m: Pick<TrainingMethod, 'npcNames' | 'where'>): Combat
 
 export interface GoalArrows extends AmmoEstimate { bow: string; arrow: string; goalLevel: number; changesKit?: boolean }
 
+/** One kit parser for current preparation, forecast arrows and goal recovery, independent of item order. */
+export function rangedKitOf(needs: readonly MethodNeed[], equipment: PlayerState['equipment']) {
+  const planned = needs.filter(n => n.type === 'item');
+  const bow = planned.find(n => n.equip && RANGED_GEAR.some(g => g.name === n.name && g.speed))?.name;
+  const arrow = planned.find(n => n.equip && RANGED_GEAR.some(g => g.name === n.name && g.slot === 'ammo'))?.name;
+  if (!bow || !arrow) return null;
+  const wornEquipment = rangedEquipment(equipment, planned);
+  return { bow, arrow, equipment: wornEquipment, worn: Object.entries(wornEquipment).filter(([slot]) => slot !== 'weapon' && slot !== 'ammo').map(([, name]) => name) };
+}
+
 /**
  * The arrows for the whole goal along the advice's path (each leg against its own opponent), with the bow and arrows the starter kit picks
  * now (rangedLoadout.rangedNeeds). null when a leg is not a bow method or lacks data, or the Ranged XP is unknown.
@@ -154,11 +164,9 @@ export function goalArrows(legs: readonly { method: TrainingMethod; fromLevel: n
   const kits = new Set<string>();
   const sum: AmmoEstimate = { shots: { low: 0, mid: 0, high: 0 }, lostPickingUp: { low: 0, mid: 0, high: 0 }, kills: 0, notCounted: [] };
   for (const leg of legs) {
-    const planned = (leg.needs ?? kit).filter(n => n.type === 'item');
-    const legBow = planned.find(n => n.equip && RANGED_GEAR.some(g => g.name === n.name && g.speed))?.name;
-    const legArrow = planned.find(n => n.equip && RANGED_GEAR.some(g => g.name === n.name && g.slot === 'ammo'))?.name;
-    if (!legBow || !legArrow) return null;
-    const worn = Object.entries(rangedEquipment(state.equipment, planned)).filter(([slot]) => slot !== 'weapon' && slot !== 'ammo').map(([, name]) => name);
+    const selected = rangedKitOf(leg.needs ?? kit, state.equipment);
+    if (!selected) return null;
+    const { bow: legBow, arrow: legArrow, worn } = selected;
     kits.add(JSON.stringify([legBow, legArrow, worn]));
     const foe = methodFoe(leg.method);
     const e = foe && arrowsForGoal({ xp: Math.max(xp, xpForLevel(leg.fromLevel)), goalLevel: leg.toLevel, bow: legBow, arrow: legArrow, worn, foe });

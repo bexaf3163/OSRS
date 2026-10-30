@@ -182,7 +182,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
       {advice.path.length > 1 && (
         <p className="small muted">Path: {advice.path.slice(0, 6).map((l) => `${l.fromLevel}–${l.toLevel} ${l.method.name}`).join(' → ')}{advice.path.length > 6 ? ' · Later stages update as you progress.' : ''}</p>
       )}
-      {view === 'analysis' && advice.goalNeeds && <p className="small muted">Conditional goal supplies (estimate): {advice.goalNeeds.flatMap(n => n.type === 'item' ? [`${n.name} ×${(n.count ?? 1).toLocaleString('en-US')}${n.anyOf?.length ? ' or the listed equivalent' : ''}`] : []).join(', ')}. Future funding and product sales are not assumed.</p>}
+      {view === 'analysis' && advice.goalNeeds && <p className="small muted">Conditional goal supplies (estimate): {advice.goalNeeds.flatMap(n => n.type === 'item' ? [`${n.name} ×${(n.count ?? 1).toLocaleString('en-US')}${n.anyOf?.length ? ' or the listed equivalent' : ''}`] : []).join(', ')}.{skill === 'ranged' ? ' Includes preparation buffers; assumes safe arrow recovery.' : ''} Future funding and product sales are not assumed.</p>}
       {advice.quests.length > 0 && (
         <p className="small muted">📜 Some levels are covered by quests: {advice.quests.map((q) => q.name).join('; ')}.</p>
       )}

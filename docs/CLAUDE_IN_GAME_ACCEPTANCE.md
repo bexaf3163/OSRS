@@ -1,5 +1,12 @@
 # In-game acceptance — assigned to Claude
 
+## 2.81.5 Ranged goal-supplies acceptance — not live-verified
+
+- Compare a reachable supported F2P Ranged goal’s current food/arrow stack with the conditional complete-goal projection. In-game preparation must remain one bag; Plan/whole-goal Shopping/funding may require several trips of food and additional ammunition. Verify no oversized inventory or forced purchase of the entire goal before starting.
+- At real bow/arrow/armour and trainer transitions, verify the kit, arrow type, physical quantities, bank withdrawals and whole-goal projection change together. Preserve already-owned compatible equipment/stock; unknown bank/health or prices must not become zero/missing/free supplies.
+- Compare actual food/arrow consumption over reachable sessions with the planning estimate; note gear, Defence/HP, encounter variant, player healing/pickup behaviour and bank trips. Food is a conservative estimate and safe arrow recovery is an explicit assumption. Never certify survival or precise GP/h from an automated test.
+- Check missing required food declarations and unsupported/Members setups do not advertise a complete F2P kit. Existing trainer ranking, saved/adopted plans, route completion, default Train presentation and Ledger fonts/layout must remain intact.
+
 ## 2.81.4 goal-supplies acceptance — not live-verified
 
 - On a reachable supported processing plan, compare Train's first bag with Plan's conditional whole-goal ingredients and the whole-goal Shopping/funding view. A long goal must not be priced as one bag; the immediate game checklist must still fit one batch and first-trip funding must not require buying the whole goal.

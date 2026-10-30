@@ -7,11 +7,39 @@ type Item = Extract<MethodNeed, { type: 'item' }>;
 const namesOf = (n: { name: string; anyOf?: string[] }) => [...new Set([n.name, ...n.anyOf ?? []].map(nameKey))].sort();
 const keyOf = (n: { name: string; anyOf?: string[]; equip?: boolean }) => JSON.stringify([!!n.equip, namesOf(n)]);
 
+/** Shared aggregation: consumed stacks add, reusable kit and preparation buffers use their maximum. */
+export function mergeGoalNeeds(materials: readonly Item[], kit: readonly Item[], buffers: readonly Item[] = []): MethodNeed[] | null {
+  const consumed = new Map<string, Item>();
+  const reusable = new Map<string, Item>();
+  for (const need of materials) {
+    if (!Number.isFinite(need.count) || need.count! < 0) return null;
+    const key = keyOf(need), old = consumed.get(key);
+    consumed.set(key, { ...need, count: (old?.count ?? 0) + need.count! });
+  }
+  for (const need of buffers) {
+    if (!Number.isFinite(need.count ?? 1) || (need.count ?? 1) <= 0) return null;
+    const key = keyOf({ ...need, equip: false }), old = consumed.get(key);
+    if (old) consumed.set(key, { ...old, count: Math.max(old.count ?? 0, need.count ?? 1) });
+  }
+  for (const need of kit) {
+    if (!Number.isFinite(need.count ?? 1) || (need.count ?? 1) <= 0) return null;
+    const key = keyOf(need), old = reusable.get(key);
+    reusable.set(key, { ...need, count: Math.max(old?.count ?? 0, need.count ?? 1) });
+  }
+  const result = [...reusable.values(), ...consumed.values()].filter(n => n.count! > 0).map(n => ({ ...n, count: Math.ceil(n.count!) }));
+  const allocated = new Set<string>();
+  for (const need of result) {
+    const names = namesOf(need);
+    if (!Number.isSafeInteger(need.count) || names.some(n => allocated.has(n))) return null;
+    names.forEach(n => allocated.add(n));
+  }
+  return result;
+}
+
 /** Conditional expected ingredients plus reusable kit, or null for incomplete/unsupported forecasts. */
 export function processingGoalNeeds(path: readonly PathLeg[], level: number, target: number, xp = xpForLevel(level)): MethodNeed[] | null {
   if (!path.length || !Number.isInteger(level) || !Number.isInteger(target) || !Number.isFinite(xp) || level < 1 || target > 99 || level >= target || xp < xpForLevel(level) || xp >= xpForLevel(level + 1)) return null;
-  const materials = new Map<string, Item>();
-  const tools = new Map<string, Item>();
+  const materials: Item[] = [], tools: Item[] = [];
   let end = level;
   for (const leg of path) {
     const { method } = leg;
@@ -21,27 +49,13 @@ export function processingGoalNeeds(path: readonly PathLeg[], level: number, tar
     const consumed = new Set(method.consumables.flatMap(namesOf));
     for (const input of method.consumables) {
       if (!Number.isFinite(input.qty) || input.qty <= 0) return null;
-      const need: Item = { type: 'item', name: input.name, count: Math.ceil(actions) * input.qty, ...(input.anyOf?.length ? { anyOf: [...input.anyOf] } : {}) };
-      const key = keyOf(need);
-      const old = materials.get(key);
-      materials.set(key, { ...need, count: (old?.count ?? 0) + need.count! });
+      materials.push({ type: 'item', name: input.name, count: Math.ceil(actions) * input.qty, ...(input.anyOf?.length ? { anyOf: [...input.anyOf] } : {}) });
     }
     for (const need of leg.needs ?? method.needs) {
-      if (need.type !== 'item' || namesOf(need).some(n => consumed.has(n))) continue;
-      const key = keyOf(need);
-      const old = tools.get(key);
-      tools.set(key, { ...need, count: Math.max(old?.count ?? 0, need.count ?? 1) });
+      if (need.type !== 'item') continue;
+      if (!namesOf(need).some(n => consumed.has(n))) tools.push(need);
     }
     end = leg.toLevel;
   }
-  if (end !== target) return null;
-  const result = [...tools.values(), ...materials.values()].map(n => ({ ...n, count: Math.ceil(n.count ?? 1) }));
-  const allocated = new Set<string>();
-  for (const need of result) {
-    // Overlapping, non-identical alternatives need an allocation plan, not a guessed full-goal total.
-    const names = namesOf(need);
-    if (!Number.isSafeInteger(need.count) || need.count <= 0 || names.some(n => allocated.has(n))) return null;
-    names.forEach(n => allocated.add(n));
-  }
-  return result;
+  return end === target ? mergeGoalNeeds(materials, tools) : null;
 }

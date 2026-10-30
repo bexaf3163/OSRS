@@ -22,7 +22,7 @@ import { STYLE_GEAR } from './styleGear';
 import { PROCESSING } from './processingRates';
 import { canWear, gearData, type Levels } from '../services/gearAdvisor';
 import { methodRate, rateKeyOf, type RateSpot, type ModelRate } from './methodRates';
-import { combatUpgrades } from './combatRates';
+import { combatUpgrades, rangedGoalNeeds } from './combatRates';
 import type { PriceView } from './funding/quotes';
 import { coinsPerMinute, coinTimeShare, earningsOrder } from './lootValue';
 import type { TradeRestriction } from './tradeRestriction';
@@ -696,7 +696,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const reason = best ? reasonFor(best, priority, level, upgrade) : 'There is no method in the list for this level and mode: see the skill training plan.';
   return {
     ...empty, best: best ? { ...best, reason } : null, others, quests, path, xpLeft, actionsLeft, actionTarget, time, upgrade, reason,
-    goalNeeds: processingGoalNeeds(path, level, target, xpNow) ?? undefined,
+    goalNeeds: (processingGoalNeeds(path, level, target, xpNow) ?? (skill === 'ranged' ? rangedGoalNeeds(path, state, xpNow, target, input.prices) : null)) ?? undefined,
     followed: followedV ? said(followedV) : null,
   };
 }

@@ -18,10 +18,11 @@ import { allSteps } from '../data';
 import { attacksToKill, combatMargin, combatRecovery, counterDamage, estimateCombat, foeVariants, hitChance, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
 import { spotsOf, termsFor, TRAINER_LEVELS } from './combatRoute/spots';
 import { coinsPerMinute, dropValue, lootSecondsPerKill } from './lootValue';
-import { ARROW_BREAK, methodFoe, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
+import { ARROW_BREAK, goalArrows, methodFoe, rangedKitOf, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
 import { rangedEquipment, rangedNeeds } from './rangedLoadout';
 import { STAFFS, strikeRecipe } from './magicPlan';
 import { FOODS } from './foodAdvice';
+import { mergeGoalNeeds } from './processingGoal';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from './playerState';
 import { STYLE_GEAR, usableStyleOption } from './styleGear';
 import { gearPieceByName, trainingWeapons, type Levels } from '../services/gearAdvisor';
@@ -171,7 +172,7 @@ function meleeRate(npc: string, skill: 'attack' | 'strength' | 'defence', state:
 /** All styles use the same incoming-hit, eating, free-heal and bank-trip model. A safespot is never inferred from a method's prose. */
 function styleRecovery(m: TrainingMethod, level: number, state: PlayerState, foe: CombatFoe,
   hit: { maxHit: number; chance: number; speedTicks: number }, perKillXp: number, prices?: PriceView | null,
-  needs: MethodNeed[] = m.needs, pickupSeconds = 0, zeroIsOne = true) {
+  needs: MethodNeed[] = m.needs, pickupSeconds = 0, zeroIsOne = true, goalKills?: number) {
   const hp = levelOf(state, 'hitpoints');
   const defence = levelOf(state, 'defence');
   const declared = termsOf(foe.name);
@@ -190,7 +191,7 @@ function styleRecovery(m: TrainingMethod, level: number, state: PlayerState, foe
   const bonus = pieces.reduce((sum, [, name]) => sum + (gearPieceByName(name)?.defence[foe.attackStyle as 'stab' | 'slash' | 'crush'] ?? 0), 0);
   const incoming = counterDamage(foe, hit.maxHit, hit.chance, hit.speedTicks, defence ?? 1, bonus, zeroIsOne);
   if (!Number.isFinite(incoming.mean) || !Number.isFinite(incoming.variance)) return null;
-  const kills = Math.max(1, Math.ceil((xpForLevel(Math.min(99, level + MELEE_LEVELS)) - xpForLevel(level)) / perKillXp));
+  const kills = goalKills === undefined ? Math.max(1, Math.ceil((xpForLevel(Math.min(99, level + MELEE_LEVELS)) - xpForLevel(level)) / perKillXp)) : Math.max(1, Math.ceil(goalKills));
   const between = terms.betweenKills ?? BETWEEN;
   const recovery = combatRecovery({ ...terms, foe, hitpoints: hp, food,
     foodSlots: foodNeed?.type === 'item' ? Math.max(1, Math.min(26, foodNeed.count ?? 26)) : 26,
@@ -204,6 +205,39 @@ function styleRecovery(m: TrainingMethod, level: number, state: PlayerState, foe
   const hours = recovery.totalMinutes.mid / 60;
   return { recovery, kills, hours, foodCost, food: food.name,
     warning: unknown ? 'Some worn defence bonuses are unknown; food and time are approximate.' : undefined };
+}
+
+/** Complete F2P bow-path demand using the existing arrow and recovery models; never grant a projected kit. */
+export function rangedGoalNeeds(legs: readonly { method: TrainingMethod; fromLevel: number; toLevel: number; needs?: MethodNeed[] }[], state: PlayerState, xp: number, target: number, prices?: PriceView | null): MethodNeed[] | null {
+  const level = levelOf(state, 'ranged');
+  if (state.mode !== 'f2p' || level === undefined || !Number.isInteger(target) || target <= level || target > 99 || !legs.length || !Number.isFinite(xp) || xp < xpForLevel(level) || xp >= xpForLevel(level + 1)) return null;
+  type Item = Extract<MethodNeed, { type: 'item' }>;
+  const materials: Item[] = [], kit: Item[] = [], buffers: Item[] = [];
+  let end = level;
+  for (const leg of legs) {
+    if (leg.method.kit !== 'f2p-bow' || !leg.needs || leg.fromLevel !== end || !Number.isInteger(leg.toLevel) || leg.toLevel <= end || leg.toLevel > 99) return null;
+    const selected = rangedKitOf(leg.needs, state.equipment), foe = methodFoe(leg.method);
+    const ammo = goalArrows([leg], state, Math.max(xp, xpForLevel(leg.fromLevel)), prices);
+    if (!selected || !foe || !ammo) return null;
+    const hit = rangedHit(leg.fromLevel, selected.bow, selected.arrow, selected.worn, foe, trainingRangedStyle(leg.fromLevel));
+    if (!hit) return null;
+    // Full leg horizon: do not repeatedly give the character a fresh HP pool for every three-level rate sample.
+    const perKill = xpPerKill(foe);
+    const kills = Math.ceil((xpForLevel(leg.toLevel) - Math.max(xp, xpForLevel(leg.fromLevel))) / perKill);
+    const sustained = styleRecovery(leg.method, leg.fromLevel, { ...state, equipment: selected.equipment }, foe, hit, perKill, prices, leg.needs, ARROW_PICKUP, true, kills);
+    if (!sustained) return null;
+    const food = leg.needs.find((n): n is Item => n.type === 'item' && FOODS.some(f => f.name === n.name));
+    if (sustained.recovery.food.high > 0 && (!food || !Number.isFinite(food.count) || food.count! <= 0)) return null; // A missing food declaration is not a funded/safe complete kit.
+    materials.push({ type: 'item', name: selected.arrow, count: Math.ceil(ammo.lostPickingUp.high) });
+    if (food) materials.push({ ...food, equip: undefined, count: Math.ceil(sustained.recovery.food.high) });
+    for (const n of leg.needs) {
+      if (n.type !== 'item') continue;
+      if (n.name === selected.arrow || FOODS.some(f => f.name === n.name)) buffers.push(n);
+      else kit.push(n);
+    }
+    end = leg.toLevel;
+  }
+  return end === target ? mergeGoalNeeds(materials, kit, buffers) : null;
 }
 
 function rangedRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): (ModelRate & { secondsPerKill: number }) | null {
