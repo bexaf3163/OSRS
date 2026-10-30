@@ -6,10 +6,12 @@ Updated 2026-10-31. Read this first; open historical records only for the area b
 
 Owner accepted Claude's Adventurer's Ledger2.81.1 (`57ec3ca`) on2026-10-30. Preserve its layout, controls and EB Garamond/Cinzel fonts. Current design contract: CLAUDE_REDESIGN_HANDOFF.md and REDESIGN_VERIFICATION.md. Functional WIP was backed up/stashed before fast-forwarding and reapplied without changing src/ledger, pages, App/main or the Ledger frame. No design issue identified during integration. Ledger desktop regressions preserve the accepted presentation.
 
-## Pending implementation — 2.81.10 gathering capacity
+## Verified delivery — 2.81.10 gathering capacity
+
+Normal Portable2.81.10 is on main, source `73b56c66c59a377d1e46d88ff86e3c7eb6f5eeff`. Exact-source Checks41141688623 and Release41141688525 passed. Downloaded EXE:102442918 bytes; SHA256 `7aad6ce696f3e5ec00939020d789bf73652d8d08d4ab969965e4ac2721e274b8`, matching the asset digest, SHA256SUMS.txt and tag source. No in-game verification claimed.
 
 - Gathering's shared tool resolution now frees an output slot only for a confirmed worn tool; meeting Attack to wield it is not worn-item evidence. A proposed unowned upgrade is evaluated carried, matching its actual preparation. Named-tool pacing and combined gathering/processing use the same placement semantics. No observed equipment is changed.
-- A synthetic-content regression reproduced equal carried/worn bank-trip rates before the fix; the corrected model differentiates them and matches an upgrade forecast to the actual purchased/carried tool. Local2420 unit tests/203 files,75 focused regressions, types/build, data0/0,23 targeted browser checks and testClasses/fresh jar passed. Full browser/native/Java/isolated Portable remain exact-source CI gates; unrelated local storage QA was not rerun for this numerical model correction.
+- A synthetic-content regression reproduced equal carried/worn bank-trip rates before the fix; the corrected model differentiates them and matches an upgrade forecast to the actual purchased/carried tool. Local2420 unit tests/203 files,75 focused regressions, types/build, data0/0,23 targeted browser checks and testClasses/fresh jar passed. Exact-source full browser/native/Java/isolated Portable CI gates passed; unrelated local storage QA was not rerun for this numerical model correction.
 - The estimates still assume the prepared skilling kit, not every unrelated item in a player's current bag or calibrated session performance. Live acceptance stays with Claude.
 
 ## New owner priority — legacy UI/content cleanup
