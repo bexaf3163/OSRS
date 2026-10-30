@@ -1,5 +1,12 @@
 # In-game acceptance — assigned to Claude
 
+## 2.81.6 guided Skills lifecycle — not live-verified
+
+- Start Ranged from Skills and from an older saved followed setting. Before buying/equipping, open the real bank so missing/unknown/owned are distinct. Verify the current bow, usable arrows, armour/amulet and food match the current checklist, Shopping, map and the single HUD. Seagulls must not remain the instruction to40; real level20 changes trainer/Willow kit, level30 offers the usable Maple kit. Do not manufacture levels on the real character.
+- With a genuinely known GP shortage, verify the existing earning guide takes over. Cancelling or pausing must persist across ordinary state ticks. Sufficient confirmed funds return to preparation; buying and wearing are user actions. Unknown prices, unread bank, wrong profile and unsupported loadouts must not become ready or start an invented financial plan.
+- Use a complete partial cooking/processing batch: it should finish before asking for another bank trip. Check actual healing-equivalent food consumption, the low-watermark refill, useful owned melee equipment, gathering tool unlocks and future milestone preparation. A previous bank/buy task must not permanently suppress a new stage/refill; do not sell protected training kit in a funding detour.
+- At a reachable F2P checkpoint, the trainer stops and the quest waits for explicit Back to the quest route. Stop and restart across login/reconnect/profile changes; saved quest marks/skips/notes, open UI and accepted Ledger/fonts must survive. Check an explicit Calculator goal separately. Unsupported combat clears the destination with a warning. Members/guide-only gaps remain documented, not claimed passed.
+
 ## 2.81.5 Ranged goal-supplies acceptance — not live-verified
 
 - Compare a reachable supported F2P Ranged goal’s current food/arrow stack with the conditional complete-goal projection. In-game preparation must remain one bag; Plan/whole-goal Shopping/funding may require several trips of food and additional ammunition. Verify no oversized inventory or forced purchase of the entire goal before starting.

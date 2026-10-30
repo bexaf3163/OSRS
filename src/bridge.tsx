@@ -126,6 +126,7 @@ interface BridgeValue {
   setPrepPart: <K extends 'gearHint' | 'bankTags' | 'plan' | 'cleanup' | 'funding'>(key: K, value: SnapshotParts[K]) => void;
   /** The tracked skill's path for the game (null: stop tracking). While there is one the plugin leads that skill instead of the quest step. */
   setSkillPath: (value: SkillPathPayload | null) => void;
+  setTrainingStep: (value: Step | null) => void;
   /** Which profile and character are current: whether levels and marks from the game may be written into the profile. */
   gate: ProfileGate;
   /** XP per hour by skill from this session's measurements; null — too few measurements. */
@@ -395,6 +396,16 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     sn.parts = { ...sn.parts, skillPath: value };
     if (!supportsSnapshot(pluginProtocol.current)) return;
     // With a path in the snapshot the plugin ignores the quest step, so the snapshot may go before the app knows its step; clearing waits for a synced one.
+    if (value) sn.synced = true;
+    else if (!sn.synced) return;
+    if (sn.timer) clearTimeout(sn.timer);
+    sn.timer = setTimeout(() => { sn.timer = null; void flushSnapshot(); }, 350);
+  }, [flushSnapshot]);
+
+  const setTrainingStep = useCallback((value: Step | null) => {
+    const sn = snapshot.current;
+    sn.parts = { ...sn.parts, trainingStep: value ? toInGameTarget(value) : undefined };
+    if (!supportsSnapshot(pluginProtocol.current)) return;
     if (value) sn.synced = true;
     else if (!sn.synced) return;
     if (sn.timer) clearTimeout(sn.timer);
@@ -895,11 +906,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       accountType: currentCharacter ? accountType : null, combatLog: currentCharacter ? combatLog : null,
       navigate, clearNav, releaseNav, userClearedAt, plugin,
       xp: currentCharacter ? xp : null, questsDone: currentCharacter ? questsDone : null, player,
-      position: currentCharacter ? position : null, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath,
+      position: currentCharacter ? position : null, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath, setTrainingStep,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, lastGears, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, accountType, combatLog, navigate, clearNav, releaseNav, userClearedAt, plugin,
-      xp, questsDone, player, position, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath, currentCharacter],
+      xp, questsDone, player, position, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath, setTrainingStep, currentCharacter],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }

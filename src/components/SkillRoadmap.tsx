@@ -12,6 +12,8 @@ import { alternativesFor, bracketsOf, buildPath, currentIndex, questRewardDone, 
 import { freeOnlyOf, setTracked, useTracked } from '../lib/skillTrack';
 import { useFeatures } from '../lib/features';
 import { priorityOf } from '../lib/playStyle';
+import { methodsFor } from '../lib/trainingRouter';
+import { useTrackedTraining } from '../readinessContext';
 
 type Lane = 'fast' | 'afk';
 const LANE_LABEL: Record<Lane, string> = { fast: 'Fastest', afk: 'Low effort' };
@@ -39,15 +41,16 @@ export function useQuestDone(): (step: SkillStep) => boolean {
 /** The step the game follows now: the tracked plan's current step, its skill and level; null while no plan is tracked or it is complete. */
 export function useTrackedStep(): { skill: SkillName; step: SkillStep; level: number } | null {
   const tracked = useTracked();
+  const training = useTrackedTraining();
   const done = useQuestDone();
   const level = useSkillLevel(tracked?.skill ?? 'attack');
   return useMemo(() => {
-    if (!tracked) return null;
+    if (!tracked || training || methodsFor(tracked.skill).length) return null;
     const guide = guideFor(tracked.skill);
     const path = buildPath(guide, tracked.mode, done, guide.start, freeOnlyOf(tracked));
     const step = path[currentIndex(path, level)];
     return step ? { skill: tracked.skill, step, level } : null;
-  }, [tracked, done, level]);
+  }, [tracked, done, level, training]);
 }
 
 /** The roadmap as a page section: the skill page's Training guide, under what to train now. */

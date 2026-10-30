@@ -21,6 +21,8 @@ import { NavigateButton } from './NavigateButton';
 import { usePriceView } from '../lib/funding/usePriceView';
 import { f2pAdviceFor } from '../lib/f2pSkillAdvice';
 import { useTradeRestriction } from '../lib/useTradeRestriction';
+import { setTracked, trackedPriority, useTracked } from '../lib/skillTrack';
+import { SKILL_NAMES, type SkillName } from '../lib/skillGuide';
 
 /** Skill advice from the shared player state; recomputed when levels, items, mode or style change. */
 export function useTrainingAdvice(skill: string | null, target: number, followed: string | null = null): TrainingAdvice | null {
@@ -29,7 +31,8 @@ export function useTrainingAdvice(skill: string | null, target: number, followed
   const { xp, xpRate } = useBridge();
   const features = useFeatures();
   const style = styleOf(features).style;
-  const priority = priorityOf(features);
+  const tracked = useTracked();
+  const priority = trackedPriority(tracked, skill ?? '', priorityOf(features));
   const have = skill ? xp?.[skill] ?? null : null;
   const measured = skill ? xpRate(skill) : null;
   // The exchange and the trade restriction: what a combat method's arrows, runes and drops are worth, as on the route's steps.
@@ -80,6 +83,8 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
   const profile = styleOf(features);
   const { state } = usePlayerState();
   const { xp } = useBridge();
+  const tracked = useTracked();
+  const selectedPriority = trackedPriority(tracked, skill, priorityOf(features));
   const prices = usePriceView(true);
   const equipmentHint = state.mode === 'f2p' ? f2pAdviceFor(skill)?.equipment : undefined;
   // T11: the arrows for the whole goal, leg by leg against each leg's opponent, with the bow and arrows the kit picks now.
@@ -91,7 +96,10 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
   }, [skill, advice, state, xp, target, prices]);
   if (!advice) return null;
   if (advice.level === null) return <section className="training" aria-label="What to train with"><p className="small muted">Level not checked. Connect RuneLite or enter your level in Reference → Levels and live experience.</p></section>;
-  if (advice.level >= target) return null;
+  if (advice.level >= target) return view === 'summary' ? <section className="training training-summary" aria-label="What to train with">
+    <p className="training-now"><strong>{skillTitle(skill)} checkpoint reached</strong> · level {advice.level}</p>
+    <p className="small muted">{state.mode === 'f2p' ? f2pAdviceFor(skill)?.reason ?? 'Your selected training goal is complete.' : 'Your selected training goal is complete.'}</p>
+  </section> : null;
   const { best } = advice;
   // The method the game follows (a tracked plan) leads the card with this player's figures; the pick, when it differs, is one line under it.
   const shown = advice.followed ?? best;
@@ -111,9 +119,12 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
       </p>
       <div className="skill-seg" role="group" aria-label="Training priority">
         {([['fastest', 'XP'], ['balanced', 'Balanced'], ['profit', 'Money']] as const).map(([priority, label]) => (
-          <button key={priority} type="button" className={`skill-seg-btn ${priorityOf(features) === priority ? 'is-on' : ''}`}
-            aria-pressed={priorityOf(features) === priority}
-            onClick={() => setFeatures({ efficient: priority === 'fastest', profitTraining: priority === 'profit', relaxedTraining: false })}>
+          <button key={priority} type="button" className={`skill-seg-btn ${selectedPriority === priority ? 'is-on' : ''}`}
+            aria-pressed={selectedPriority === priority}
+            onClick={() => {
+              if (tracked?.skill === skill && tracked.mode === 'afk') setTracked({ ...tracked, mode: 'fast' });
+              setFeatures({ efficient: priority === 'fastest', profitTraining: priority === 'profit', relaxedTraining: false });
+            }}>
             {label}
           </button>
         ))}
@@ -136,7 +147,12 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
                 {shown!.method.manualSetup && <p className="notice">Manual setup: {shown!.method.manualSetup}</p>}
               </>}
             </div>
-            <div className="training-location"><h3>Location</h3><p>{shown!.method.where}</p>{nav && <NavigateButton target={nav} label={view === 'summary' ? 'Show in game' : `To the place: ${nav.label}`} />}</div>
+            <div className="training-location"><h3>Location</h3><p>{shown!.method.where}</p>{view === 'summary' && SKILL_NAMES.includes(skill as SkillName)
+              ? <button type="button" className="btn btn-primary btn-sm training-follow" onClick={() => {
+                if (tracked?.skill !== skill) setTracked({ skill: skill as SkillName, mode: profile.style === 'chill' && priorityOf(features) === 'relaxed' ? 'afk' : 'fast', freeOnly: state.mode === 'f2p', target });
+                window.location.hash = '#/';
+              }}>{tracked?.skill === skill ? 'Continue training plan' : 'Follow training plan'}</button>
+              : nav && <NavigateButton target={nav} label={`To the place: ${nav.label}`} />}</div>
           </div>
           {advice.followed && <p className="small">Recommended for you: <strong>{best.method.name}</strong>{view === 'full' && <> — {advice.reason}</>}</p>}
           {!advice.followed && (<>

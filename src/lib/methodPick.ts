@@ -9,7 +9,7 @@ import type { GameMode, Step } from '../types';
 import { followedGoals, GOAL_REACHED, UNKNOWN_GOAL_PREFIX, type TrainingPick } from './methodStep';
 import { levelOf, type PlayerState } from './playerState';
 import type { MethodPriority, PlayStyle } from './playStyle';
-import { adviseTraining, methodNeeds, type TrainingMethod } from './trainingRouter';
+import { adviseTraining, preparationNeeds, type TrainingMethod } from './trainingRouter';
 import { alongRate, type AlongRate } from './skillingRates';
 import { xpForLevel } from './xp';
 import type { Market } from './methodRates';
@@ -33,7 +33,7 @@ export function pickMethods(steps: readonly Step[], state: PlayerState, mode: Ga
     const spot = along?.spot ?? best?.method.spot;
     // A model can resolve recipe supplies without a named kit or station (for example bank-side processing).
     if (best) picks[step.id] = best.method.kit || spot || best.method.needs.length || advice.actionTarget !== null ? {
-      methodId: best.method.id, untilLevel: advice.actionTarget ?? goal.target, goalNeeds: remaining.length === 1 ? advice.goalNeeds : undefined, needs: methodNeeds(best.method, state, market.prices), name: best.method.name,
+      methodId: best.method.id, modelled: best.method.rateSource === 'model', untilLevel: advice.actionTarget ?? goal.target, goalNeeds: remaining.length === 1 ? advice.goalNeeds : undefined, needs: preparationNeeds(advice, state, market.prices), name: best.method.name,
       ...(spot ? { spot: { label: spot.label, x: spot.place.x, y: spot.place.y, plane: spot.place.plane, ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }, where: best.method.where } : {}),
       ...(best.method.rateWarning ? { warning: best.method.rateWarning } : {}),
       ...(along ? { along: { skill: along.skill, station: along.station, products: along.products, how: along.spot.how } } : {}),

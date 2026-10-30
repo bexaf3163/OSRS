@@ -6,7 +6,7 @@ import { stepById } from '../data';
 import { useStore } from '../store';
 import { useQuestPoints } from '../lib/useQuestPoints';
 import { useBridge } from '../bridge';
-import { useReadinessEngine } from '../readinessContext';
+import { useReadinessEngine, useTrackedTraining } from '../readinessContext';
 import { firstOpen, nextStep, openAfter } from '../lib/next-step';
 import { IconChevron } from '../components/Icons';
 import { CompanionStrip } from '../components/CompanionStrip';
@@ -20,6 +20,7 @@ export function PathCompact({ focusStep }: { focusStep?: string }) {
   const qp = useQuestPoints();
   const { advance } = useBridge();
   const dependencies = useReadinessEngine().dependencies;
+  const training = useTrackedTraining();
   const suggested = nextStep(steps, progress, qp, dependencies) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
   const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested.id);
   const selected = steps.find((s) => s.id === selectedId) ?? suggested;
@@ -43,6 +44,7 @@ export function PathCompact({ focusStep }: { focusStep?: string }) {
     if (next) setSelectedId(next.id);
   };
 
+  if (training) return <Page side="r" className="compact" label="Training plan"><div className="page compact-page la-scroll"><TrackedSkillCard /></div></Page>;
   return (
     <Page side="r" className="compact" label="Current step">
     <div className="page compact-page la-scroll">

@@ -20,6 +20,9 @@ import { roadmapSkills, XpTable } from './Skills';
 import { trainingFocus, type TrainingFocus } from '../lib/skillFocus';
 import { F2pSkillNote } from '../components/F2pSkillNote';
 import { f2pAdviceFor, f2pAdviceLabel } from '../lib/f2pSkillAdvice';
+import { useTrackedTraining } from '../readinessContext';
+import { setTracked } from '../lib/skillTrack';
+import { SKILL_NAMES, type SkillName } from '../lib/skillGuide';
 
 export function SkillDetailPage({ id, selectedSkill }: { id: string; selectedSkill?: string }) {
   const skill = findSkill(id);
@@ -53,17 +56,22 @@ function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: str
   // "What to train with": the route decides first (a stage goal that is behind), the generic training row only when the route asks for nothing.
   const stage = currentStage(steps, progress);
   const focused = selectedSkill ? { ...skill, levelSkills: [selectedSkill] } : skill;
-  const focus = trainingFocus({
+  const routeFocus = trainingFocus({
     levelSkills: focused.levelSkills, stage, goals, levelOf: (id) => levelOf(progress, id), lastStage: stages[stages.length - 1]?.id,
     rowEnd: (_id, lv) => rangeForLevel(skill.plan.ranges, lv)?.range.to ?? null,
   });
+  const checkpoint = mode === 'f2p' ? f2pAdviceFor(routeFocus.skill)?.target : null;
+  const training = useTrackedTraining();
+  const ownTraining = training && focused.levelSkills.includes(training.step.followsMethod ?? '') ? training : null;
+  const focus: TrainingFocus = ownTraining ? { skill: ownTraining.step.followsMethod!, target: ownTraining.target, source: 'tracked' }
+    : checkpoint ? { skill: routeFocus.skill, target: checkpoint, source: 'checkpoint' } : routeFocus;
   // The level and plan row of the skill being trained (Melee: the one with a goal ahead, not a Defence kept at 1).
-  const { level, hit } = focusRange(focused, progress, goals, stage, stages[stages.length - 1]?.id);
+  const { level, hit } = focusRange({ ...focused, levelSkills: [focus.skill] }, progress, goals, stage, stages[stages.length - 1]?.id);
   const focusName = skill.levelSkills.length > 1 ? levelById.get(focus.skill)?.name : undefined;
   // A tracked plan of this page's skills leads the game: the card shows that skill and the plan's method, so the card and the game agree.
   const trackedStep = useTrackedStep();
   const follow = trackedStep && focused.levelSkills.includes(trackedStep.skill) ? trackedStep : null;
-  const card = follow
+  const card = ownTraining ? { skill: ownTraining.step.followsMethod!, target: ownTraining.target, followed: null } : follow
     ? { skill: follow.skill, target: focus.skill === follow.skill ? focus.target : follow.step.targetLevel, followed: methodOfGuideStep(follow.step)?.id ?? null }
     : { skill: focus.skill, target: focus.target, followed: null };
   const f2p = mode === 'f2p' ? f2pAdviceFor(card.skill) : null;
@@ -190,6 +198,8 @@ function ReachedNote({ skill, stage, focus }: { skill: Skill; stage: number; foc
 }
 
 function FocusNote({ focus }: { focus: TrainingFocus }) {
+  if (focus.source === 'checkpoint') return <p className="muted small focus-note">Suggested F2P checkpoint: {focus.target}. It is optional, not a membership requirement.</p>;
+  if (focus.source === 'tracked') return <p className="muted small focus-note">Following your selected training goal: {focus.target}.</p>;
   const name = levelById.get(focus.skill)?.name ?? focus.skill;
   if (focus.source === 'route') return <p className="muted small focus-note">Goal {focus.target} {name} comes from the route: stage {focus.stage}.</p>;
   if (focus.source === 'ahead') return <p className="muted small focus-note">Nothing is behind on the current stage. The next route goal is {name} {focus.target} (stage {focus.stage}).</p>;
@@ -223,7 +233,7 @@ interface CalcProps {
 }
 
 function Calculator({ levelIds, suggest }: CalcProps) {
-  const { progress, steps } = useStore();
+  const { progress, steps, mode } = useStore();
   const stage = currentStage(steps, progress);
   const [which, setWhich] = useState(levelIds[0]);
   const level = levelOf(progress, which);
@@ -278,6 +288,11 @@ function Calculator({ levelIds, suggest }: CalcProps) {
           ? <>Level {targetLevel} is already reached.</>
           : <><strong>{formatXp(left)}</strong> XP to level {targetLevel} <span className="muted">({name.toLowerCase()})</span></>}
       </p>
+      {SKILL_NAMES.includes(which as SkillName) && <button type="button" className="btn btn-primary training-custom-follow"
+        disabled={targetLevel <= level || mode === 'f2p' && Boolean(findSkill(levelById.get(which)?.skill ?? '')?.membersOnly)}
+        onClick={() => { setTracked({ skill: which as SkillName, mode: 'fast', freeOnly: mode === 'f2p', target: targetLevel }); window.location.hash = '#/'; }}>
+        Follow to level {targetLevel}
+      </button>}
       <p className="muted small" id={`${ids.xp}-hint`}>
         {hasExact ? `Now ${formatXp(exact)}` : `Level ${level} starts at ${formatXp(xpForLevel(level))}`} · level {targetLevel} — {formatXp(xpForLevel(targetLevel))} XP.
         {xpNow.trim() && !hasExact && ' The exact XP does not match the level — counting from the start of the level.'}

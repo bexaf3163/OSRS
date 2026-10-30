@@ -10,15 +10,16 @@ import { useStore } from '../store';
 import { useQuestPoints } from '../lib/useQuestPoints';
 import { useBridge } from '../bridge';
 import type { ReadinessAction } from '../lib/readiness';
-import { navKeyOf, reconcile, staleArrows, startDetour, type PrepTask } from '../lib/prepRoute';
+import { navKeyOf, reconcile, rearmReadyDetours, staleArrows, startDetour, type PrepTask } from '../lib/prepRoute';
 import { decideAuto, type QueueTask } from '../lib/prepQueue';
 import { declined, usePrep } from '../lib/usePrep';
 import { setFeatures, useFeatures } from '../lib/features';
 import { styleOf } from '../lib/playStyle';
 import { isClosed, nextStep } from '../lib/next-step';
-import { useReadinessEngine } from '../readinessContext';
+import { useReadinessEngine, useTrackedTraining } from '../readinessContext';
 import { NavigateButton } from './NavigateButton';
 import { useTracked } from '../lib/skillTrack';
+import { useTrainingFunding } from '../trainingSessionContext';
 
 const KIND_ICON: Record<PrepTask['kind'], string> = { block: '🔒', quest: '📜', stat: '⚡', buy: '🛒', money: '💰', bank: '🏦', equip: '🛡' };
 
@@ -54,6 +55,7 @@ export function usePrepFix(step: Step, onDetails: () => void): { available: bool
     set(res.state);
     const go = primary.guide ?? primary.action;
     if (go?.kind === 'nav') await navigate(go.target);
+    else if (go?.kind === 'link') window.location.hash = go.href;
     else onDetails();
   };
   return { available: !queue.ready && !!primary, underway, fix };
@@ -163,6 +165,15 @@ export function PrepWatcher() {
   const { prep, set } = usePrep();
   const { navTarget, releaseNav } = useBridge();
   useEffect(() => {
+    const candidates = new Set(prep.done.map(key => key.slice(0, key.indexOf(':'))));
+    const ready = new Set(engine.ctx.steps.filter(step => step.followsMethod && candidates.has(step.id)
+      && engine.prep(step).ready && engine.readiness(step).unknown.length === 0).map(step => step.id));
+    const rearmed = rearmReadyDetours(prep, ready);
+    if (rearmed !== prep) {
+      for (const key of declined) if (ready.has(key.slice(0, key.indexOf(':')))) declined.delete(key);
+      set(rearmed);
+      return;
+    }
     if (!prep.stack.length) return;
     const res = reconcile(prep, (stepId) => engine.openTasks(stepId));
     if (res.state.stack.length === prep.stack.length && res.state.done.length === prep.done.length) return;
@@ -195,8 +206,10 @@ export function PrepAuto() {
   const renavs = useRef(new Map<string, number>());
   // While a skill plan leads the game the quest route waits (TrackedSkillCard): its preparation does not take the arrow either.
   const tracked = useTracked();
+  const training = useTrackedTraining();
+  const funding = useTrainingFunding();
 
-  const focus = (activeStepId ? steps.find((s) => s.id === activeStepId && !isClosed(progress, s.id)) : undefined) ?? nextStep(steps, progress, qp, engine.dependencies);
+  const focus = training ? (training.complete ? undefined : training.step) : (activeStepId ? steps.find((s) => s.id === activeStepId && !isClosed(progress, s.id)) : undefined) ?? nextStep(steps, progress, qp, engine.dependencies);
 
   useEffect(() => {
     if (!focus) return;
@@ -212,7 +225,8 @@ export function PrepAuto() {
     const now = Date.now();
     const d = decideAuto({
       queue, stepId: focus.id, prep, enabled: features.autoPrep, online: link === 'online' && engine.ctx.state.connected,
-      navActive: navTarget !== null, standing: navTarget, announce: profile.announce, now, recent: recent.current, declined, routeWaits: tracked !== null,
+      navActive: navTarget !== null, standing: navTarget, announce: profile.announce, now, recent: recent.current, declined,
+      routeWaits: tracked !== null && !training || Boolean(training && (funding?.plan || funding?.assessment?.state !== 'COVERED') && queue.tasks[0]?.kind === 'buy'),
     });
     if (!d) return;
     if (d.kind === 'release') {
@@ -242,6 +256,6 @@ export function PrepAuto() {
       announced.current.add(d.key);
       notify(`➡️ Next in the preparation for ${focus.id}: ${d.task.label}.`);
     }
-  }, [focus, engine, prep, set, navTarget, navigate, releaseNav, features.autoPrep, profile, link, userClearedAt, notify, tracked]);
+  }, [focus, engine, prep, set, navTarget, navigate, releaseNav, features.autoPrep, profile, link, userClearedAt, notify, tracked, training, funding]);
   return null;
 }

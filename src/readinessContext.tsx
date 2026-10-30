@@ -12,8 +12,14 @@ import { useRecoveryTracker, type ActiveRecovery } from './lib/useRecoveryTracke
 import { useBridge } from './bridge';
 import type { QuestInstruction } from './services/runeliteBridge';
 import { usePriceView } from './lib/funding/usePriceView';
+import { trackedPriority, useTracked } from './lib/skillTrack';
+import { trackedTraining, type TrackedTraining } from './lib/trackedTraining';
+import { useFeatures } from './lib/features';
+import { priorityOf, styleOf } from './lib/playStyle';
+import { useTradeRestriction } from './lib/useTradeRestriction';
 
 const Ctx = createContext<ReadinessEngine | null>(null);
+const TrainingCtx = createContext<TrackedTraining | null>(null);
 const RecoveryCtx = createContext<{ active: ActiveRecovery | null; dismiss: () => void }>({ active: null, dismiss: () => {} });
 
 export function ReadinessProvider({ children }: { children: ReactNode }) {
@@ -23,6 +29,13 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
   const prices = usePriceView(true);
   const recovery = useRecoveryTracker();
   const bridge = useBridge();
+  const tracked = useTracked();
+  const features = useFeatures();
+  const style = styleOf(features).style, priority = trackedPriority(tracked, tracked?.skill ?? '', priorityOf(features));
+  const trade = useTradeRestriction();
+  const training = useMemo(() => trackedTraining(tracked, state, mode, style, priority, { prices, restriction: trade.state }),
+    [tracked, state, mode, style, priority, prices, trade.state]);
+  const engineSteps = useMemo(() => training ? [...steps, training.step] : steps, [steps, training]);
   const cursor = useRef<{ player: string | null; step: string; instruction: QuestInstruction } | null>(null);
   if (bridge.state !== 'online' || !bridge.inGame || !bridge.activeStepId || !bridge.questInstruction || cursor.current?.player !== (bridge.player ?? null) || cursor.current?.step !== bridge.activeStepId) cursor.current = null;
   if (bridge.state === 'online' && bridge.inGame && bridge.questInstruction && !bridge.questInstruction.peeking && bridge.questInstruction.stepId === bridge.activeStepId) {
@@ -30,15 +43,18 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
   }
   const questInstruction = cursor.current?.instruction ?? null;
   const engine = useMemo(
-    () => createReadinessEngine({ steps, progress, qp, mode, state, prices, recovery: recovery.active, questInstruction }),
-    [steps, progress, qp, mode, state, prices, recovery.active, questInstruction],
+    () => createReadinessEngine({ steps: engineSteps, progress, qp, mode, state, prices, recovery: recovery.active, questInstruction }),
+    [engineSteps, progress, qp, mode, state, prices, recovery.active, questInstruction],
   );
   return (
     <Ctx.Provider value={engine}>
-      <RecoveryCtx.Provider value={recovery}>{children}</RecoveryCtx.Provider>
+      <TrainingCtx.Provider value={training}><RecoveryCtx.Provider value={recovery}>{children}</RecoveryCtx.Provider></TrainingCtx.Provider>
     </Ctx.Provider>
   );
 }
+
+/** The same virtual training step for Skills, Path, preparation, Shopping and funding. Never part of saved quest progress. */
+export const useTrackedTraining = () => useContext(TrainingCtx);
 
 export function useReadinessEngine(): ReadinessEngine {
   const v = useContext(Ctx);

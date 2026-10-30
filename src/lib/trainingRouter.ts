@@ -9,18 +9,18 @@ import { nameKey } from './checklist';
 //  — the wiki speed is a guide, not a promise: the time to the goal is counted from the player's measurements, and when there are none —
 //    only as a "per the wiki" range and marked so. The XP per action is the game's exact number; "how many more actions" is counted from it.
 
-import type { GameMode } from '../types';
+import type { GameMode, Step } from '../types';
 import methodsJson from '../data/trainingMethods.json';
 import toolProgressionJson from '../data/toolProgression.json';
 import { evaluate, itemRequirement, type ReqState, type Requirement } from './requirements';
-import { coinsOf, levelOf, type PlayerState } from './playerState';
+import { coinsOf, heldExact, levelOf, type PlayerState } from './playerState';
 import { xpForLevel } from './xp';
 import type { MethodPriority, PlayStyle } from './playStyle';
 import { rangedEquipment, rangedNeeds, RANGED_WATCH } from './rangedLoadout';
 import { SPELLS, strikeRecipe, superheatNeeds } from './magicPlan';
 import { STYLE_GEAR } from './styleGear';
 import { PROCESSING } from './processingRates';
-import { canWear, gearData, type Levels } from '../services/gearAdvisor';
+import { adviseGear, canWear, gearData, gearPieceByName, stepFoes, type Levels } from '../services/gearAdvisor';
 import { methodRate, rateKeyOf, type RateSpot, type ModelRate } from './methodRates';
 import { combatUpgrades, rangedGoalNeeds } from './combatRates';
 import type { PriceView } from './funding/quotes';
@@ -30,6 +30,7 @@ import { requirementCost } from './funding/need';
 import { allocateMaterialStock } from './materialStock';
 import type { HeldUnits } from './doses';
 import { processingGoalNeeds } from './processingGoal';
+import { FOODS, heldFood } from './foodAdvice';
 
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
@@ -37,7 +38,7 @@ export type Risk = 'none' | 'low' | 'high';
 export type { PlayStyle };
 
 export type MethodNeed =
-  | { type: 'item'; name: string; count?: number; anyOf?: string[]; equip?: boolean }
+  | { type: 'item'; name: string; count?: number; anyOf?: string[]; equip?: boolean; refill?: number }
   /** Any axe / pickaxe of at least the suitable tier — taken from toolProgression.json. */
   | { type: 'tool'; skill: 'woodcutting' | 'mining' }
   | { type: 'quest'; quest: string }
@@ -190,12 +191,73 @@ export function viewMethod(m: TrainingMethod, state: PlayerState, prices?: Price
 }
 
 export function methodNeeds(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodNeed[] {
+  // A model-resolved recipe also carries its actual batch size and recovery food. Do not replace it with a generic starter kit.
+  if (m.rateSource === 'model' && (m.kit === 'strike-spell' || m.kit === 'superheat-iron')) return m.needs;
   if (m.kit === 'strike-spell') return strikeRecipe(state).needs;
   if (m.kit === 'superheat-iron') return superheatNeeds(state);
   // Stage 6 is F2P-only. Do not demand a weaker F2P bow from Members using an unmodelled weapon.
   if (m.kit === 'f2p-bow' && state.mode !== 'f2p') return m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name));
   return m.kit === 'f2p-bow' && m.kind === 'method'
     ? [...m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name)), ...rangedNeeds(state, prices)] : m.needs;
+}
+
+/** A worthwhile gathering upgrade uses the same preparation pipeline as the rest of the selected kit. */
+export function preparationNeeds(advice: Pick<TrainingAdvice, 'best' | 'upgrade'>, state: PlayerState, prices?: PriceView | null): MethodNeed[] {
+  if (!advice.best) return [];
+  const method = advice.best.method;
+  let needs = methodNeeds(method, state, prices);
+  // Finish a usable partial processing batch; do not send the player to the bank after every action.
+  if (method.consumables?.length) {
+    const lines = needs.flatMap((n, index) => n.type === 'item' && !n.equip ? [{ key: String(index), nameEn: n.name, count: n.count ?? 1, anyOf: n.anyOf }] : []);
+    const stock = allocateMaterialStock(state, lines);
+    const inputs = method.consumables.map(input => {
+      const index = needs.findIndex(n => n.type === 'item' && nameKey(n.name) === nameKey(input.name));
+      const key = String(index);
+      const bag = index < 0 ? null : stock.has(key) ? stock.get(key)!.bag : heldExact(state, input.name).bag;
+      return { index, qty: input.qty, actions: bag === null || !(input.qty > 0) ? 0 : Math.floor(bag / input.qty) };
+    });
+    const actions = Math.min(...inputs.map(input => input.actions));
+    if (actions > 0) needs = needs.map((n, index) => {
+      const input = inputs.find(input => input.index === index);
+      return n.type === 'item' && input ? { ...n, count: Math.min(n.count ?? 1, Math.ceil(actions * input.qty)) } : n;
+    });
+  }
+  // A low-watermark/refill policy for trainer food, using the canonical healing-equivalent stock allocator.
+  if (method.npcNames?.length) needs = needs.map(n => {
+    if (n.type !== 'item' || n.equip) return n;
+    const food = FOODS.find(food => food.name === n.name);
+    if (!food) return n;
+    const target = n.refill ?? n.count ?? 1;
+    const carried = heldFood(state, { nameEn: n.name, heals: food.heals, anyOf: n.anyOf }, undefined, levelOf(state, 'hitpoints')).bag;
+    return { ...n, count: carried !== null && carried >= Math.max(1, Math.floor(target / 5)) ? Math.min(target, Math.floor(carried)) : target };
+  });
+  const melee = method.skills.some(skill => ['attack', 'strength', 'defence'].includes(skill));
+  // Free usable improvements come from the Gear advisor for this trainer, never a later quest's opponent.
+  if (melee && state.equipmentItems && ['attack', 'strength', 'defence'].every(skill => levelOf(state, skill) !== undefined)) {
+    const foes = stepFoes({ foes: method.npcNames ?? [] } as Step);
+    if (foes.length) {
+      const levels = Object.fromEntries(Object.entries(state.levels).flatMap(([skill, value]) => value.known ? [[skill, value.value]] : []));
+      const wear = adviseGear({ levels, mode: state.mode, owned: state.owned,
+        gear: { equipment: state.equipmentItems.map(item => ({ ...item, id: gearPieceByName(item.name)?.id ?? 0 })), inventory: null,
+          coins: state.coins.bag.known ? state.coins.bag.value : null, bankCoins: state.coins.bank.known ? state.coins.bank.value : null },
+        foes, questsDone: state.quests.known ? new Set(state.quests.value) : undefined, geQuotes: new Map(), reserveUnknown: true,
+      }).actions.filter(action => action.how === 'wear');
+      const replaced = new Set(wear.map(action => action.slot));
+      const weapon = wear.find(action => action.slot === 'weapon')?.item ?? gearPieceByName(state.equipment.weapon ?? '');
+      if (weapon?.twoHanded) replaced.add('shield');
+      needs = [...needs.filter(n => {
+        const piece = n.type === 'item' && n.equip ? gearPieceByName(n.name) : null;
+        return !piece || !replaced.has(piece.slot);
+      }),
+        ...wear.filter(action => action.slot !== 'shield' || !weapon?.twoHanded).map(action => ({ type: 'item' as const, name: action.item.name, count: 1, equip: true }))];
+    }
+  }
+  const tool = advice.upgrade?.tool;
+  const weapon = tool && melee ? gearPieceByName(tool) : null;
+  if (weapon?.slot === 'weapon') return [...needs.filter(n => n.type !== 'item' || !n.equip || !['weapon', ...(weapon.twoHanded ? ['shield'] : [])].includes(gearPieceByName(n.name)?.slot ?? '')),
+    { type: 'item', name: weapon.name, count: 1, equip: true }];
+  return tool ? needs.map(n => n.type === 'tool' && tools[n.skill].some(t => t.tier === tool)
+    ? { type: 'item', name: tool, count: 1 } : n) : needs;
 }
 
 // ---------------------------------------------------------------------------

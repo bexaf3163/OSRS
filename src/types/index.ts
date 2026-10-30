@@ -377,6 +377,8 @@ export interface Step {
    * step ready. The static itemsRequired / mapLocation are the fallback while the level is unknown. See lib/methodStep.ts.
    */
   followsMethod?: string;
+  /** Runtime identity of the current training requirements; a later stage must not inherit an earlier preparation refusal/completion. */
+  trainingPhase?: string;
   /** Set at run time while a combat plan other than the route's own leads the step (lib/combatRoute/pick.ts): the plan's key, the phase in hand and who chose it. Never in the data. */
   combatPlan?: {
     key: string; phase: number; source: 'auto' | 'player';

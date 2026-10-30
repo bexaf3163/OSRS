@@ -8,7 +8,7 @@
 import { useMemo, useState } from 'react';
 import { stepById } from '../data';
 import { useStore } from '../store';
-import { useReadinessEngine } from '../readinessContext';
+import { useReadinessEngine, useTrackedTraining } from '../readinessContext';
 import { useBridge } from '../bridge';
 import { useFunding, useMoneyScreen, type MoneyScreen } from '../fundingContext';
 import { firstOpen, isClosed, nextStep } from '../lib/next-step';
@@ -323,14 +323,16 @@ function MoneyBody({ step }: { step: Step }) {
 }
 
 export function MoneyPage() {
+  const training = useTrackedTraining();
   const { steps, progress } = useStore();
   const { dependencies, ctx: { qp } } = useReadinessEngine();
   const { activeStepId } = useBridge();
   // The step in progress: the one started in the game, else the next open one the route allows (as on the Shopping page).
   const step = useMemo(() => {
+    if (training && !training.complete) return training.step;
     const started = activeStepId ? steps.find((s) => s.id === activeStepId && !isClosed(progress, s.id)) : undefined;
     return started ?? nextStep(steps, progress, qp, dependencies) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
-  }, [activeStepId, steps, progress, qp, dependencies]);
+  }, [activeStepId, steps, progress, qp, dependencies, training]);
   if (!step) return null;
   return <MoneyBody step={step} />;
 }

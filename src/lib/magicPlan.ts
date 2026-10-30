@@ -36,7 +36,7 @@ export function strikeRecipe(state: PlayerState): { spell: Spell; needs: MethodN
     { type: 'skill', skill: 'magic', min: spell.level },
     ...spent(spell).map(([element, qty]): MethodNeed => ({ type: 'item', name: `${element[0].toUpperCase()}${element.slice(1)} rune`, count: qty * batch })),
     ...(staff ? [{ type: 'item' as const, name: staff[1].name, equip: true }] : []),
-    { type: 'item', name: foods[0], count: foodCount, anyOf: foods.slice(1) },
+    { type: 'item', name: foods[0], count: foodCount, refill: 5, anyOf: foods.slice(1) },
   ] };
 }
 

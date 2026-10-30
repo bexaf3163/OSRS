@@ -28,7 +28,7 @@ export function SkillsPage({ param, selectedSkill }: { param?: string; selectedS
       <Eyebrow>CHARACTER SHEET</Eyebrow>
       <header className="page-head">
         <h1>Skills</h1>
-        <p className="muted">Choose a skill for a recommended method. Goals follow stage {stage}.</p>
+        <p className="muted">Choose a skill for a recommended method. {mode === 'f2p' ? 'Goals use suggested F2P checkpoints.' : `Goals follow stage ${stage}.`}</p>
       </header>
       {mode === 'f2p' && <p className="small muted f2p-priority-key">★ Good F2P value · ◇ Optional · ↓ Prefer members. Suggested checkpoints, not caps.</p>}
 

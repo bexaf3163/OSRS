@@ -102,6 +102,8 @@ const md = [
   'remain Wiki guides, not measured predictions. Missing prices stay unknown. Passive bone collection has no fixed bank-burying rate. Members methods',
   'beyond the verified registries and real-session calibration remain open; this catalogue coverage is not proof of in-game performance. Supported processing goals (2.81.4) and supported F2P Ranged goals (2.81.5) carry conditional whole-goal supplies through the shared planner/Shopping engine; immediate preparation stays one batch/trip. Ranged includes staged arrows, modelled food and reusable kit under safe arrow recovery. This does not establish Magic/melee-wide or unsupported/mixed-goal acquisition economics.',
   '',
+  'Catalogue-backed followed Skills (2.81.6) use the same staged training, preparation, Shopping and funding engines as Path, including current-leg kit and F2P checkpoints. This shared lifecycle does not establish missing skill mechanics or additional personalised models; guide-only coverage remains explicitly separate.',
+  '',
   '| Skill | Account | Guide | Methods | Route asks | Gaps and problems | Verification |',
   '|---|---|---|---|---|---|---|',
   ...rows.map((r) => `| ${r.skill} | ${r.modes} | ${r.guide} | ${r.methods} | ${r.route} | ${r.gaps} | ${r.status} |`),

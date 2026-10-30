@@ -222,6 +222,8 @@ export function planPayload(plan: PrepPlan, extras: PlanExtras = {}): PrepPlanPa
 
 export interface SnapshotParts {
   step: ActiveStepPayload | null;
+  /** App-local override; the wire still uses the ordinary step contract. The quest step is retained for return. */
+  trainingStep?: ActiveStepPayload | null;
   shopping: ShoppingPlanPayload | null;
   bankTags: BankTagsPayload | null;
   gearHint: GearHintPayload | null;
@@ -242,16 +244,18 @@ export function nextSeq(prev: number, now = Date.now()): number {
 }
 
 export function buildEnvelope(parts: SnapshotParts, seq: number): PrepEnvelope {
+  // The app advances the skill session from live levels; it must never mark a synthetic ID in quest progress.
+  const step = parts.trainingStep === undefined ? parts.step : parts.trainingStep ? { ...parts.trainingStep, completionTrigger: undefined } : null;
   return {
     v: SNAPSHOT_VERSION,
     seq,
-    step: parts.step,
+    step,
     shopping: parts.shopping && parts.shopping.items.length ? parts.shopping : null,
     // An empty list highlights nothing, as "cleared".
     bankTags: parts.bankTags && parts.bankTags.itemIds.length ? parts.bankTags : null,
     gearHint: parts.gearHint,
     // The plugin will not apply a plan from another step; we do not send the excess either.
-    plan: parts.plan && (!parts.step || parts.plan.stepId === parts.step.stepId) ? parts.plan : null,
+    plan: parts.plan && (!step || parts.plan.stepId === step.stepId) ? parts.plan : null,
     // Only when there is one: an app that tracks no skill sends the same snapshot as before.
     ...(parts.skillPath && parts.skillPath.steps.length ? { skillPath: parts.skillPath } : {}),
     // The same: an app with nothing to clean sends the snapshot an older plugin knows, byte for byte.

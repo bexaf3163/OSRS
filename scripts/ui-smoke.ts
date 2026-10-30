@@ -7,7 +7,7 @@
 import { spawn } from 'node:child_process';
 import { readFileSync, readdirSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright';
-import { PICKAXES } from '../src/lib/toolTiers.ts';
+import { PICKAXES, toolUse } from '../src/lib/toolTiers.ts';
 
 const PORT = 4179;
 const BASE = `http://127.0.0.1:${PORT}/`;
@@ -238,17 +238,21 @@ async function f2pSkillsScenarios(browser: Browser) {
     await page.screenshot({ path: `audit-temp/f2p-priorities-${width}.png` });
     await defence.click();
     await page.locator('.training').waitFor();
+    expect((await page.locator('.training').innerText()).includes('Defence checkpoint reached'), `Skills ${width}: a completed F2P checkpoint is explained instead of an empty Train pane`);
     expect((await text(page, 'h1')).includes('Defence'), `Skills ${width}: Defence opens directly`);
+    expect((await text(page, '.f2p-skill-checkpoint')).includes('10 reached'), `F2P ${width}: the detail uses the same checkpoint as its tile`);
+    await page.locator('.skill-tile a[href="#/skills/ME/attack"]').click();
     expect(await page.locator('[aria-label="Training priority"] button').count() === 3, `Skills ${width}: three priorities`);
     expect(await page.locator('[aria-label="Training priority"] button[aria-pressed="true"]').innerText() === 'Balanced', `Skills ${width}: Balanced is default`);
     expect(await page.locator('.skill-detail details').count() === 0, `Skills ${width}: default view contains no disclosure stack`);
-    expect((await text(page, '.f2p-skill-checkpoint')).includes('10 reached'), `F2P ${width}: the detail uses the same checkpoint as its tile`);
     expect(await page.locator('.training-analysis, .skill-level-editor, .skill-guide-roadmap').count() === 0, `Skills ${width}: supporting tools are absent from the default view`);
     for (const label of ['Money', 'XP', 'Balanced']) {
       await page.getByRole('group', { name: 'Training priority' }).getByRole('button', { name: label, exact: true }).click();
       expect(await page.locator('[aria-label="Training priority"] button[aria-pressed="true"]').innerText() === label, `Skills ${width}: ${label} priority remains directly available`);
     }
     await page.screenshot({ path: `audit-temp/skills-compact-${width}.png` });
+    await page.locator('.skill-tile a[href="#/skills/ME/defence"]').click();
+    await page.locator('h1').filter({ hasText: 'Defence' }).waitFor();
     await page.getByRole('tab', { name: 'Plan', exact: true }).click();
     expect(await page.locator('.skill-guide-roadmap').count() === 1 && await noOverflow(page), `Skills ${width}: plan remains accessible without a disclosure`);
     expect((await page.locator('.skill-roadmap-head h2').innerText()).includes('Defence'), `Skills ${width}: plan keeps the chosen combat skill`);
@@ -306,9 +310,11 @@ async function membersGatheringScenarios(browser: Browser) {
     const card = await text(page, '.training-summary');
     expect(card.includes('Teak trees') && card.includes('Estimated for your setup') && !card.includes('93,000'), `Members gathering ${width}: ordinary chopping replaces the mixed tick-manipulation range`);
     expect(card.includes('Isle of Souls') && card.includes('Earnings not estimated') && await page.locator('.training-summary details').count() === 0, `Members gathering ${width}: one compact modelled location without invented bank income`);
-    await page.getByRole('button', { name: 'Show in game', exact: true }).click();
-    const targets = await page.evaluate(() => (window as unknown as { __posts: { path: string; body?: { label?: string; objectNames?: string[] } }[] }).__posts.filter(p => p.path === '/nav-target').map(p => p.body));
-    expect(targets.some(t => t?.label === 'Isle of Souls' && t.objectNames?.includes('Teak tree')), `Members gathering ${width}: the arrow and scenery use the model's spot`);
+    await page.getByRole('button', { name: 'Follow training plan', exact: true }).click();
+    await page.waitForTimeout(1400);
+    const targets = await page.evaluate(() => (window as unknown as { __posts: { path: string; body?: any }[] }).__posts.filter(p => p.path === '/prep-plan').map(p => p.body?.step));
+    expect(targets.some(t => t?.worldPoint?.label?.includes('Isle of Souls') && t.objectNames?.includes('Teak tree')), `Members gathering ${width}: the prepared skill target and scenery use the model's spot`);
+    await page.evaluate(() => { location.hash = '#/skills/WC/woodcutting'; });
     await page.getByRole('tab', { name: 'Plan', exact: true }).click();
     expect((await text(page, '.training-analysis')).includes('drops logs because its banking route is not modelled'), `Members gathering ${width}: the banking limitation is explicit`);
     expect(await noOverflow(page) && !errors.length, `Members gathering ${width}: no overflow or console errors`);
@@ -768,6 +774,11 @@ async function run(browser: Browser) {
       status: { protocol: 6, stats: { fishing: 45 } }, events: [{ type: 'STATS', stats: { fishing: 45 } }],
     }, '#/skills/FI');
     await waitFor(page, '.training', 5000);
+    await page.getByRole('tab', { name: 'Calculator', exact: true }).click();
+    await page.getByLabel('Goal', { exact: true }).fill('50');
+    await page.getByRole('button', { name: 'Follow to level 50', exact: true }).click();
+    await page.evaluate(() => { location.hash = '#/skills/FI'; });
+    await page.locator('.training-method .training-now').waitFor();
     const recommendation = await page.locator('.training-method .training-now').innerText();
     const content = await page.locator('.training').innerText();
     expect(recommendation.includes('fly fishing'), `skill bracket (${width}): an unlocked faster method remains selectable after its suggested range`);
@@ -775,6 +786,7 @@ async function run(browser: Browser) {
     expect(await noOverflow(page) && !errors.length, `skill bracket (${width}): no overflow or console errors`);
     await page.evaluate(() => { location.hash = '#/step/S6-02'; });
     await page.waitForTimeout(800);
+    await page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
     expect(!(await page.locator('.spot-switch').allTextContents()).join(' ').includes('Musa Point'), `method map (${width}): the current method does not offer a future climb spot`);
     await (await stepButton(page, '🧭 Show in the game')).first().click();
     await page.waitForTimeout(800);
@@ -2934,7 +2946,8 @@ async function miningHandoverScenarios(browser: Browser) {
       await page.waitForTimeout(1300);
       const current = await snapshot();
       expect(current?.step?.worldPoint?.label?.includes(place) && JSON.stringify(current.step.objectNames) === JSON.stringify([object]), `Mining handover (${width}, WC${level}): one current Woodcutting scene and destination`);
-      expect(current?.step?.checklist?.length === 1 && current.step.checklist[0].name === 'Bronze axe', `Mining handover (${width}, WC${level}): axe replaces pickaxe preparation`);
+      const axe = current?.step?.checklist?.length === 1 ? toolUse(current.step.checklist[0].name) : null;
+      expect(axe?.skill === 'woodcutting' && !axe.members && axe.level <= level, `Mining handover (${width}, WC${level}): a usable F2P axe replaces pickaxe preparation`);
       expect(current?.step?.completionTrigger?.levels?.some((r: any) => r.skill === 'mining' && r.level === 45) && current.step.completionTrigger.levels.some((r: any) => r.skill === 'woodcutting' && r.level === 36) && current.step.completionTrigger.levels.some((r: any) => r.skill === 'firemaking' && r.level === 50), `Mining handover (${width}, WC${level}): all declared checkpoints remain`);
     }
     const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'));
@@ -3002,7 +3015,79 @@ async function rangedPreparationScenarios(browser: Browser) {
     expect(goalText.includes('assumes safe arrow recovery') && goalText.includes('Future funding and product sales are not assumed'), `ranged (${width}): pickup and funding assumptions stay explicit`);
     expect(await noOverflow(page) && !errors.length, `ranged (${width}): goal estimates fit the accepted Ledger`);
     await page.screenshot({ path: `audit-temp/ranged-goal-plan-${width}.png` });
+    await page.evaluate(() => { (window as any).__trainingMain = document.getElementById('main'); });
+    await page.getByRole('tab', { name: 'Train', exact: true }).click();
+    await page.locator('.training-follow').click();
+    await waitFor(page, '.tracked-skill', 5000);
+    await page.waitForTimeout(1800);
+    const followed = await snapshot();
+    expect(followed?.step?.stepId === 'S0-04' && !followed.skillPath && followed.step.checklist?.some((r: any) => r.name === 'Maple shortbow'), `ranged (${width}): the real Train button starts a prepared engine session, not a temporary location arrow`);
+    expect(followed?.plan?.stepId === 'S0-04' && !followed.step.completionTrigger, `ranged (${width}): the followed skill has canonical preparation without writing synthetic quest completion`);
+    expect(await page.evaluate(() => (window as any).__trainingMain === document.getElementById('main')), `ranged (${width}): starting training preserves the app tree and existing UI state`);
+    expect((await page.locator('.step-view').count()) === 0 && await noOverflow(page) && !errors.length, `ranged (${width}): the active skill replaces the quest workspace without a second guide or overflow`);
+    await page.screenshot({ path: `audit-temp/ranged-guided-session-${width}.png` });
+    await page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
+    await page.waitForTimeout(1200);
+    expect((await snapshot())?.step?.stepId === 'S6-01', `ranged (${width}): stopping restores the retained quest route`);
+    expect(await page.evaluate(() => (window as any).__trainingMain === document.getElementById('main')), `ranged (${width}): stopping training preserves the app tree`);
     await page.context().close();
+    const restarted = await open(browser, width, {
+      market: true, progress: progressBefore('S6-01', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-01', 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'fast', freeOnly: true }) },
+      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S6-01', stats, ...gear },
+      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/');
+    const last = () => restarted.page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    expect((await last())?.step?.stepId === 'S0-04' && !(await last())?.skillPath && /to 5/.test((await last())?.step?.goal), `ranged (${width}): an old saved Wiki-follow setting reloads into the current engine leg, never seagulls to40`);
+    await restarted.page.evaluate(() => {
+      const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void };
+      const stats = { ranged: 20, defence: 1, hitpoints: 30 };
+      w.__status = { ...w.__status, stats }; w.__emit({ type: 'STATS', stats });
+    });
+    await restarted.page.waitForTimeout(1600);
+    const advanced = await last();
+    expect(advanced?.step?.stepId === 'S0-04' && !advanced.step.npcNames?.includes('Seagull') && advanced.step.checklist?.some((i: any) => i.name === 'Willow shortbow'), `ranged (${width}): the followed session advances its trainer and required bow on a real-level event without another click`);
+    expect(await noOverflow(restarted.page) && !restarted.errors.length, `ranged (${width}): restored session has no overflow or runtime errors`);
+    await restarted.page.evaluate(() => {
+      const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void };
+      const stats = { ranged: 40, defence: 1, hitpoints: 30 };
+      w.__status = { ...w.__status, stats }; w.__emit({ type: 'STATS', stats });
+    });
+    await restarted.page.waitForTimeout(1600);
+    const reached = await last();
+    expect((await text(restarted.page, '.tracked-skill')).includes('checkpoint reached'), `ranged (${width}): the actual level40 event stops at the F2P checkpoint`);
+    expect(!reached?.skillPath && reached?.step?.stepId !== 'S6-01' && !reached?.step?.worldPoint && !reached?.step?.npcNames?.length, `ranged (${width}): completion clears the trainer without silently restoring the quest`);
+    await restarted.page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
+    await restarted.page.waitForTimeout(1100);
+    expect((await last())?.step?.stepId === 'S6-01', `ranged (${width}): only the explicit return restores the quest after completion`);
+    await restarted.page.context().close();
+    const poorStats = { ...stats, ranged: 20, attack: 30, strength: 21, mining: 18, woodcutting: 15 };
+    const poorGear = { ...gear, coins: 0, bankCoins: 0 };
+    const poor = await open(browser, width, {
+      market: true, progress: progressBefore('S6-01', { gameMode: 'f2p', levels: poorStats, sellRestrictions: 'lifted' }),
+      marketQuotes: { 'Willow shortbow': { id: 849, price: 100 } },
+      localStorage: { 'osrs-put:active-step': 'S6-01', 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'fast', freeOnly: true }) },
+      status: { protocol: 6, inGame: true, player: 'Range Fund', activeStepId: 'S6-01', stats: poorStats, questPoints: 40, totalLevel: 200, pos: { x: 3093, y: 3495, plane: 0 }, ...poorGear },
+      events: [{ type: 'STATS', stats: poorStats }, { type: 'GEAR', gear: poorGear }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/');
+    await waitFor(poor.page, '.funding-card.is-running', 12000).catch(async error => {
+      await poor.page.screenshot({ path: `audit-temp/ranged-funding-failure-${width}.png` });
+      throw new Error(`${String(error)}\n${await poor.page.locator('.tracked-skill').innerText()}`);
+    });
+    const poorSnapshot = () => poor.page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    await poor.page.waitForTimeout(900);
+    expect(Boolean((await poorSnapshot())?.funding?.action) && (await poorSnapshot())?.step?.stepId === 'S0-04', `ranged (${width}): a confirmed kit shortfall automatically starts the existing earning guide for the same skill session`);
+    await poor.page.locator('.funding-card.is-running').getByRole('button', { name: 'Cancel', exact: true }).click();
+    await poor.page.waitForTimeout(1400);
+    expect(await poor.page.locator('.funding-card.is-running').count() === 0, `ranged (${width}): cancelling the earning detour does not immediately restart it`);
+    await poor.page.evaluate(g => {
+      const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void };
+      w.__status = { ...w.__status, ...g }; w.__emit({ type: 'GEAR', gear: g });
+    }, { ...poorGear, coins: 100000 });
+    await poor.page.waitForTimeout(1400);
+    expect(!(await poorSnapshot())?.funding && (await poorSnapshot())?.plan?.stepId === 'S0-04', `ranged (${width}): available funds return to the same preparation flow`);
+    expect(await noOverflow(poor.page) && !poor.errors.length, `ranged (${width}): funding handover has no overflow or runtime errors`);
+    await poor.page.context().close();
   }
 }
 

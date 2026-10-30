@@ -8,7 +8,7 @@ import { useStore } from '../store';
 import { useQuestPoints } from '../lib/useQuestPoints';
 import { firstOpen, isClosed, nextStep, openAfter } from '../lib/next-step';
 import { useBridge } from '../bridge';
-import { useReadinessEngine } from '../readinessContext';
+import { useReadinessEngine, useTrackedTraining } from '../readinessContext';
 import { flashDone } from '../lib/flash';
 import { pendingReview } from '../lib/review';
 import { CockpitWorkspace } from '../components/CockpitWorkspace';
@@ -29,6 +29,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   const { advance, navTarget, questInstruction, state, inGame, activeStepId } = useBridge();
   const { setSuggested } = useWiki();
   const dependencies = useReadinessEngine().dependencies;
+  const training = useTrackedTraining();
   const suggested = nextStep(steps, progress, qp, dependencies) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
   const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested.id);
   // The rail highlights the clicked step at once; the heavy step card follows as a transition with a loading state.
@@ -134,7 +135,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
           <Road stages={road} unrolled={unrolled} onToggle={(key) => toggleStage(Number(key))} onSelectStep={(s) => select(s.id, false)} />
         </div>
       </Page>
-      <CockpitWorkspace
+      {training ? <Page side="r" label="Training plan"><div className="la-scroll"><TrackedSkillCard /></div></Page> : <CockpitWorkspace
         key={selected.id}
         step={selected}
         suggested={selected.id === suggested.id}
@@ -167,7 +168,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
           {/* A combat step has its own advice in the card — the banner does not repeat it. */}
           {!selected.foes?.length && <GearBanner step={selected} />}
         </>}
-      />
+      />}
     </div>
   );
 }

@@ -156,6 +156,9 @@ function Body({ step, fallback }: { step: Step; fallback: ReactNode }) {
     );
   }
 
+  if (a?.state === 'UNKNOWN' && (a.need.minimum.unpriced > 0 || a.required > 0 && a.budget.liquid.amount === null)) {
+    return <><p className="small notice funding-unknown" role="status">{a.headline} <a href="#/shopping">Check supplies and prices</a></p>{fallback}</>;
+  }
   if (!a || a.state !== 'SHORT' || a.gap === null) return <>{fallback}</>;
 
   const rec = a.recommendation;
@@ -182,7 +185,7 @@ export function FundingCard({ step, children }: { step: Step; children?: ReactNo
   const { plan, ended } = useFunding();
   const prep = useReadinessEngine().plan(step, { ahead: styleOf(useFeatures()).lookAhead });
   const mine = plan !== null && plan.sourceStepId === step.id;
-  const wanted = mine || prep.coins.need > 0 || ended?.stepId === step.id;
+  const wanted = mine || prep.coins.need > 0 || prep.now.some(line => line.where === 'MISSING' && line.timing === 'NOW') || ended?.stepId === step.id;
   if (!wanted) return <>{children}</>;
   return <Body step={step} fallback={children} />;
 }

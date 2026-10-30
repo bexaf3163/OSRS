@@ -8,7 +8,7 @@ import { useStore } from '../store';
 import { useFeatures } from '../lib/features';
 import { styleOf } from '../lib/playStyle';
 import { isClosed, openAfter } from '../lib/next-step';
-import { useReadinessEngine } from '../readinessContext';
+import { useReadinessEngine, useTrackedTraining } from '../readinessContext';
 import { usePlayerState } from '../playerStateContext';
 import { planPayload } from '../lib/prepEnvelope';
 import { checkStatus, supportsSnapshot } from '../services/runeliteBridge';
@@ -29,7 +29,8 @@ const FRESH_MOVE_MS = 4_000;
 export function PrepSync() {
   const { state, activeStepId, plugin, setPrepPart } = useBridge();
   const { steps, progress } = useStore();
-  const step = activeStepId ? steps.find((s) => s.id === activeStepId) ?? null : null;
+  const training = useTrackedTraining();
+  const step = training ? (training.complete ? null : training.step) : activeStepId ? steps.find((s) => s.id === activeStepId) ?? null : null;
   const live = state === 'online' && supportsSnapshot(plugin?.protocol ?? null);
   const open = Boolean(step) && !isClosed(progress, step!.id);
 

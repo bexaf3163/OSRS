@@ -164,6 +164,11 @@ function meleeRate(npc: string, skill: 'attack' | 'strength' | 'defence', state:
   const costPerHour = best.food.mid <= 0 ? 0 : foodPrice === null ? null : (best.food.mid * foodPrice * 60) / Math.max(1e-6, best.totalMinutes.mid);
   return {
     xph: [(xp * 60) / best.totalMinutes.high, (xp * 60) / Math.max(1e-6, best.totalMinutes.low)], costPerHour, ...(best.food.mid > 0 ? { costName: food.name.toLowerCase() } : {}),
+    exactNeeds: true,
+    needs: [
+      ...[gear.weapon, gear.neck, ...gear.armour].filter((p): p is GearPiece => p !== null).map(p => ({ type: 'item' as const, name: p.name, count: 1, equip: true })),
+      ...(best.nextTrip > 0 ? [{ type: 'item' as const, name: food.name, count: Math.ceil(best.nextTrip), refill: Math.ceil(best.nextTrip), anyOf: FOODS.filter(f => f.name !== food.name).map(f => f.name) }] : []),
+    ],
     basis: gear.weapon?.name ?? 'unarmed',
     secondsPerKill: (best.totalMinutes.mid * 60) / best.kills,
   };
@@ -194,7 +199,8 @@ function styleRecovery(m: TrainingMethod, level: number, state: PlayerState, foe
   const kills = goalKills === undefined ? Math.max(1, Math.ceil((xpForLevel(Math.min(99, level + MELEE_LEVELS)) - xpForLevel(level)) / perKillXp)) : Math.max(1, Math.ceil(goalKills));
   const between = terms.betweenKills ?? BETWEEN;
   const recovery = combatRecovery({ ...terms, foe, hitpoints: hp, food,
-    foodSlots: foodNeed?.type === 'item' ? Math.max(1, Math.min(26, foodNeed.count ?? 26)) : 26,
+    // Strike runes occupy one stack each; the declared ranged equipment is worn. Keep the food within the actual bag.
+    foodSlots: Math.max(1, Math.min(26, foodNeed?.type === 'item' ? foodNeed.refill ?? foodNeed.count ?? 26 : 26, 28 - needs.filter(n => n.type === 'item' && !n.equip && !FOODS.some(f => f.name === n.name)).length)),
     kills, fightMean: kills * a.mean * hit.speedTicks * TICK, fightVar: kills * a.variance * (hit.speedTicks * TICK) ** 2,
     damageMean: kills * incoming.mean, damageVar: kills * incoming.variance,
     margin: combatMargin(unknown ? 'basic' : 'formula', Boolean(foe.aggressive || terms.groupAggro)),
@@ -290,6 +296,9 @@ function magicRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | n
   if (!sustained) return null;
   const { recovery, kills, hours, foodCost } = sustained;
   const runes = Object.entries(spell.runes).filter(([element]) => element !== staff?.[0]);
+  const starterFood = needs.find((n): n is Extract<MethodNeed, { type: 'item' }> => n.type === 'item' && FOODS.some(f => f.name === n.name));
+  const foodCount = starterFood?.count ?? Math.ceil(recovery.nextTrip);
+  const refill = Math.max(starterFood?.refill ?? starterFood?.count ?? 0, Math.ceil(recovery.nextTrip));
   const perCast = runes.reduce<number | null>((a, [element, qty]) => {
     const p = supplyPrice(`${element[0].toUpperCase()}${element.slice(1)} rune`, prices, state.mode);
     return a === null || p === null ? null : a + p * qty;
@@ -297,6 +306,9 @@ function magicRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | n
   return {
     xph: [(kills * perKill * 60) / recovery.totalMinutes.high, (kills * perKill * 60) / recovery.totalMinutes.low],
     costPerHour: perCast === null || foodCost === null ? null : (kills * casts * perCast + foodCost) / hours,
+    exactNeeds: true,
+    needs: [...needs.filter(n => n.type !== 'item' || !FOODS.some(f => f.name === n.name)),
+      ...(foodCount > 0 ? [{ ...starterFood, type: 'item' as const, name: sustained.food, count: foodCount, refill }] : [])],
     costName: recovery.food.mid > 0 ? `runes and ${sustained.food.toLowerCase()}` : 'runes',
     basis: spell.name,
     secondsPerKill: (recovery.totalMinutes.mid * 60) / kills,

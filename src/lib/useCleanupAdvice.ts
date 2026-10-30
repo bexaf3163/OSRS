@@ -28,29 +28,31 @@ export interface CleanupState {
   player: string | null;
 }
 
-export function useCleanupAdvice(): CleanupState {
+export function useCleanupAdvice(enabled = true): CleanupState {
   const { state: playerState } = usePlayerState();
   const { gear, player, accountType, state, questsDone } = useBridge();
   const { progress, mode } = useStore();
   const steps = useReadinessEngine().ctx.steps;
   const trade = useTradeRestriction();
   const { prefs, update } = useCleanupPrefs(player ?? null);
-  const board = usePriceView(state === 'online' && gear?.inventory !== null);
+  const board = usePriceView(enabled && state === 'online' && gear?.inventory !== null);
   const book = useMemo(() => buildPriceBook(board, name => findLocalItem(name)?.id), [board]);
 
   const bag = gear?.inventory ?? null;
   const online = state === 'online';
   const account: AccountKind | null = accountType ?? prefs.account ?? null;
   const { openSteps, closedSteps } = useMemo(() => {
+    if (!enabled) return { openSteps: [], closedSteps: new Set<string>() };
     const selected = new Map(steps.map(s => [s.id, s]));
-    const all = stepsFor(mode).map(s => selected.get(s.id) ?? s);
+    // Runtime training steps reserve their kit too; a funding detour must not sell the equipment it is preparing.
+    const all = [...new Map([...stepsFor(mode), ...selected.values()].map(s => [s.id, s])).values()];
     const fact = questDependencyFacts(all, questsDone);
     return { openSteps: all.filter((s) => !isClosed(progress, s.id)), closedSteps: new Set(all.filter((s) => fact(s.id) ?? isCompleted(progress, s.id)).map((s) => s.id)) };
-  }, [mode, progress, steps, questsDone]);
-  const reserves = useMemo(() => protectionsFor(openSteps, playerState), [openSteps, playerState]);
+  }, [enabled, mode, progress, steps, questsDone]);
+  const reserves = useMemo(() => enabled ? protectionsFor(openSteps, playerState) : new Map(), [enabled, openSteps, playerState]);
   const result = useMemo(
     () => cleanupAdvice({
-      bag: online && bag ? bag.map((b) => ({ id: b.id, name: b.name, count: b.count ?? 1, noted: b.noted })) : null,
+      bag: enabled && online && bag ? bag.map((b) => ({ id: b.id, name: b.name, count: b.count ?? 1, noted: b.noted })) : null,
       worn: (gear?.equipment ?? []).map((e) => e.name),
       openSteps, closedSteps, reserves,
       bankSeen: gear?.bankCoins !== null && gear?.bankCoins !== undefined,
@@ -61,7 +63,7 @@ export function useCleanupAdvice(): CleanupState {
       tradeable: n => board.idOf(n) !== undefined || findLocalItem(n)?.gePrice ? true : null,
       prefs,
     }),
-    [online, bag, gear?.equipment, gear?.bankCoins, openSteps, closedSteps, reserves, account, trade.state, book, board, prefs],
+    [enabled, online, bag, gear?.equipment, gear?.bankCoins, openSteps, closedSteps, reserves, account, trade.state, book, board, prefs],
   );
-  return { result, prefs, update, account, live: online && !!bag, bag, player: player ?? null };
+  return { result, prefs, update, account, live: enabled && online && !!bag, bag, player: player ?? null };
 }

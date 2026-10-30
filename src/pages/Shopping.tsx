@@ -5,7 +5,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useStore } from '../store';
-import { useReadinessEngine } from '../readinessContext';
+import { useReadinessEngine, useTrackedTraining } from '../readinessContext';
 import { useBridge } from '../bridge';
 import { usePlayerState } from '../playerStateContext';
 import { currentStage, nextStep } from '../lib/next-step';
@@ -151,15 +151,17 @@ export function ShoppingPage() {
 
   // A followed skill plan (Skills → Follow this plan) leads the game instead of the quest route: its current step's tools come first in the list.
   const tracked = useTracked();
+  const training = useTrackedTraining();
   const trackedLevel = useSkillLevel(tracked?.skill ?? 'attack');
   const questDone = useQuestDone();
   const followed = useMemo(() => {
+    if (training) return training.complete ? null : training.step;
     if (!tracked) return null;
     const g = guideFor(tracked.skill);
     const path = buildPath(g, tracked.mode, questDone, g.start, freeOnlyOf(tracked));
     const st = path[currentIndex(path, trackedLevel)];
     return st ? followedShoppingStep(tracked.skill, st) : null;
-  }, [tracked, trackedLevel, questDone]);
+  }, [tracked, trackedLevel, questDone, training]);
 
   const built = useMemo(() => {
     // Missing prices/catalogue metadata cannot turn a known route item into "not sold".

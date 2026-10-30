@@ -429,33 +429,33 @@ function useEvalBase(step: Step | null, snap: FundingSnapshot | null, prices: Pr
  * The funding answer for one step: what it needs in coins, what the player has, and what to do about a shortage. Prices are loaded only while `wanted` -
  * a step that costs nothing never asks the exchange for anything.
  */
-export function useFundingScreen(step: Step, wanted: boolean): FundingScreen {
+export function useFundingScreen(step: Step | null, wanted: boolean): FundingScreen {
   const engine = useReadinessEngine();
   const { state, ledger } = usePlayerState();
   const { progress } = useStore();
   const bridge = useBridge();
   const { plan: running, refreshPosition } = useFunding();
-  const prices = usePriceView(wanted);
-  const snap = useFundingSnapshot(wanted ? step.id : null);
-  const cleanup = useCleanupAdvice();
+  const prices = usePriceView(wanted && step !== null);
+  const snap = useFundingSnapshot(wanted && step ? step.id : null);
+  const cleanup = useCleanupAdvice(wanted && step !== null);
   // The same window of steps ahead as the list the player is reading, so the two never disagree about what is needed.
   const ahead = styleOf(useFeatures()).lookAhead;
-  const plan = running && running.sourceStepId === step.id ? running : null;
+  const plan = running && running.sourceStepId === step?.id ? running : null;
 
   // Without a running plan the walk to a place is part of the estimate: the game is asked now and then where the player is.
   useEffect(() => {
-    if (!wanted || plan) return undefined;
+    if (!wanted || !step || plan) return undefined;
     refreshPosition();
     const t = window.setInterval(refreshPosition, POSITION_IDLE_MS);
     return () => window.clearInterval(t);
-  }, [wanted, plan, refreshPosition]);
+  }, [wanted, step?.id, plan, refreshPosition]);
 
   // The way last shown for this step stays on top while another is not clearly better, so the card does not change its mind with every price tick.
   const shown = useRef<{ stepId: string; id: string } | null>(null);
   // A running plan shows its own step in hand; the advice is not recomputed under it.
   const base = useEvalBase(wanted && !plan ? step : null, snap, prices);
   const assessment = useMemo(() => {
-    if (!wanted || !snap || plan || !base) return null;
+    if (!wanted || !step || !snap || plan || !base) return null;
     const prep = engine.plan(step, { ahead });
     const manual = Object.fromEntries(Object.entries(progress.ownedManual ?? {}).map(([k, v]) => [k, v.count]));
     const need = buildNeed({ step, prep, prices, owned: state.owned, manual, hitpoints: levelOf(state, 'hitpoints') });
@@ -467,7 +467,7 @@ export function useFundingScreen(step: Step, wanted: boolean): FundingScreen {
     return out;
   }, [wanted, snap, plan, base, engine, step, progress, state.owned, prices, bridge.gear, cleanup.live, cleanup.result.recs, ahead]);
 
-  const { view } = useFundingView(step.id);
+  const { view } = useFundingView(step?.id ?? '');
   const realized = useMemo(() => (plan ? realizedSince(ledger, plan.startedAt) : null), [plan, ledger]);
   return { assessment, snap, prices, plan, view, realized, live: cleanup.live };
 }

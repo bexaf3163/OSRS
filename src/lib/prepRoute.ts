@@ -60,7 +60,9 @@ function priorityOf(r: RequirementStatus): number {
   return 5;
 }
 
-export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id'>): PrepRoute {
+const taskId = (step: Pick<Step, 'trainingPhase'>, id: string) => step.trainingPhase ? `${id}@${step.trainingPhase}` : id;
+
+export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id' | 'trainingPhase'>): PrepRoute {
   const tasks: PrepTask[] = [];
   const bank: RequirementStatus[] = [];
   const buy: RequirementStatus[] = [];
@@ -97,6 +99,7 @@ export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id'>): PrepRo
     });
   }
   tasks.sort((a, b) => a.priority - b.priority || (a.id < b.id ? -1 : 1));
+  for (const task of tasks) task.id = taskId(step, task.id);
   const required = tasks.filter((t) => t.need === 'REQUIRED');
   const shown = required.length ? tasks : [];
   return {
@@ -115,13 +118,14 @@ export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id'>): PrepRo
  * only when the task is done by data, not when the data disappeared (the connection dropped, the page reloaded):
  * "unknown" is not "done".
  */
-export function openTaskIds(r: StepReadiness, step: Pick<Step, 'id'>): Set<string> {
+export function openTaskIds(r: StepReadiness, step: Pick<Step, 'id' | 'trainingPhase'>): Set<string> {
   const ids = new Set(buildPrepRoute(r, step).tasks.map((t) => t.id));
   for (const u of r.unknown) {
-    if (u.kind === 'skill') ids.add(`stat:${u.label.toLowerCase()}`);
-    else if (u.kind === 'item') { ids.add('buy'); ids.add('bank'); if (u.equip) ids.add(`equip:${u.item}`); }
-    else if (u.kind === 'coins') { ids.add('money'); ids.add('bank'); }
-    else ids.add(`${u.kind}:${u.label.toLowerCase()}`);
+    const add = (id: string) => ids.add(taskId(step, id));
+    if (u.kind === 'skill') add(`stat:${u.label.toLowerCase()}`);
+    else if (u.kind === 'item') { add('buy'); add('bank'); if (u.equip) add(`equip:${u.item}`); }
+    else if (u.kind === 'coins') { add('money'); add('bank'); }
+    else add(`${u.kind}:${u.label.toLowerCase()}`);
   }
   return ids;
 }
@@ -152,6 +156,12 @@ export interface PrepState {
 }
 
 export const emptyPrep = (): PrepState => ({ stack: [], done: [] });
+
+/** Observed readiness completes a preparation cycle. Later depletion may legitimately need the same bank trip again. */
+export function rearmReadyDetours(state: PrepState, ready: ReadonlySet<string>): PrepState {
+  const done = state.done.filter(key => !ready.has(key.slice(0, key.indexOf(':'))));
+  return done.length === state.done.length ? state : { ...state, done };
+}
 
 const doneKey = (stepId: string, detourId: string) => `${stepId}:${detourId}`;
 

@@ -4,6 +4,8 @@ The owner supplied Concept A (`concept-a-ledger.html` and the `src/ledger` compo
 
 # Current delivery — see authoritative takeover
 
+Guided Skills now use the canonical staged training/preparation/funding lifecycle (2.81.6); see the takeover for exact verification and remaining model/data work. Keep the accepted Ledger layout and fonts. Do not restore the Wiki-only followed path for a catalogue-backed skill or silently resume a quest when its training checkpoint is reached.
+
 Skills compact presentation (2.80.18): selecting a tile opens **Train**, one recommendation with estimates and visible preparation/risk/unknown states. **Plan** owns method analysis and the roadmap, **Calculator** retains XP tools, **Reference** owns manual levels, F2P comparisons, training reference and related route steps. Do not restore the stack of disclosures to Train. Existing route-step cards retain their original presentation. Engine/model coverage is explicitly partial; see docs/SKILLS_COVERAGE.md and the takeover. No save or formula migration.
 
 Start with [Claude takeover](docs/CLAUDE_NEXT_SESSION.md) for implemented repairs, exact release/evidence and remaining T01–T17. It supersedes historical pending/branch references below. The accepted design history remains for implementation context.

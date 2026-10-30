@@ -26,6 +26,7 @@ export const UNKNOWN_GOAL_PREFIX = 'goal-unknown:';
 /** A picked method: its id, or with what the player needs for it, a name for this player, and the spot the gathering engine chose (methodRates.ts). */
 export type TrainingPick = string | {
   methodId: string; untilLevel?: number; goalNeeds?: MethodNeed[]; needs: MethodNeed[]; name?: string; where?: string; warning?: string;
+  modelled?: boolean;
   /** The spot the engine picked; waypoints - the way in of a spot under the ground, entrance first. */
   spot?: { label: string; x: number; y: number; plane: number; waypoints?: { x: number; y: number; plane: number; label?: string }[] };
   /** The step's next skill trained on the same catches at a station beside the spot (fish cooked on the fire there), and what is done with them. */
@@ -148,6 +149,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
   const phaseTarget = typeof pick === 'object' && pick.untilLevel !== undefined ? Math.min(goal.target, pick.untilLevel) : goal.target;
   const equipmentHint = step.bondBranch ? f2pAdviceFor(goal.skill)?.equipment : undefined;
   const needs = typeof pick === 'string' ? m.needs ?? [] : pick.needs;
+  const trainingPhase = JSON.stringify([id, phaseTarget, needs.map(n => n.type === 'item' ? [n.name, !!n.equip, n.anyOf ?? []] : n)]);
   const gates = needs.filter((n): n is Extract<MethodNeed, { type: 'skill' | 'quest' }> => n.type === 'skill' || n.type === 'quest');
   const requirements = [...(step.requirements ?? []).filter(r => r.type !== 'skill' || !gates.some(n => n.type === 'skill' && n.skill === r.skill && n.min >= r.min)), ...gates];
   const itemsRequired = needs.map((n) => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null);
@@ -163,8 +165,9 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
     followsMethod: goal.skill,
     ...(equipmentHint ? { fields: [...(step.fields ?? []).filter(f => f.label !== 'Equipment'), { label: 'Equipment', text: equipmentHint }] } : {}),
     itemsRequired,
+    trainingPhase,
     requirements,
-    ...(goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' || goal.skill === 'ranged' || goal.skill === 'magic' ? {
+    ...(typeof pick === 'object' && pick.untilLevel !== undefined || goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' || goal.skill === 'ranged' || goal.skill === 'magic' ? {
       itemsRecommended: [], foes: undefined, threats: undefined, pacing: undefined,
       where: m.where, how: `Train ${goal.skill} to ${phaseTarget}: ${m.name}. ${m.note ?? ''}`.trim(),
       quickSteps: ['Bank finished-skill tools and surplus supplies before withdrawing the current batch.', `Prepare the listed supplies for ${m.name}.`, `Train ${goal.skill} to ${phaseTarget} at ${m.where}. ${m.note ?? ''}`.trim()],
@@ -174,6 +177,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
     ...(typeof pick !== 'string' && pick.warning ? { warning: [step.warning, pick.warning].filter(Boolean).join(' ') } : {}),
     // The static climb contains future places. Once a method is selected, map and plugin use only its point.
     mapLocation: at ?? undefined, resourceSpots: at ? [at] : [],
+    ...(['attack', 'strength', 'defence'].includes(goal.skill) && m.npcNames?.length ? { foes: m.npcNames } : {}),
     ...(step.inGame ? { inGame: {
       ...step.inGame,
       worldPoint: at ?? undefined, groundTiles: at ? [at] : [], pathWaypoints: chosen?.waypoints?.length ? chosen.waypoints.map((p) => ({ x: p.x, y: p.y, plane: p.plane })) : undefined,
