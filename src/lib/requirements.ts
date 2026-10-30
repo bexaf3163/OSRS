@@ -26,6 +26,14 @@ export type Requirement =
 
 export type ReqState = 'OK' | 'BANK' | 'PARTIAL' | 'MISSING' | 'UNKNOWN';
 
+/** Convert a declared item need once, so selection and kit pricing agree about interchangeable or worn items. */
+export function itemRequirement(n: { name: string; count?: number; anyOf?: readonly string[]; equip?: boolean }): Requirement {
+  const count = n.count ?? 1;
+  return n.equip ? { type: 'equipment', name: n.name, count, anyOf: n.anyOf ? [...n.anyOf] : undefined }
+    : n.anyOf?.length ? { type: 'alternative', requiredCount: count, alternatives: [n.name, ...n.anyOf].map(name => ({ name })) }
+    : { type: 'item', name: n.name, count };
+}
+
 export interface ReqResult {
   state: ReqState;
   /** How much there is and how much is needed (levels, pieces, coins; doses for a potion): for "N short". */

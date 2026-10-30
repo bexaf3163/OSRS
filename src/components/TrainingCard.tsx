@@ -151,7 +151,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
             </p>
           )}
           {profile.showTime && advice.time && (
-            <p className="small">⏱ {formatHours(advice.time)} to {target}{arrows?.changesKit ? ' (assumes planned gear; preparation time excluded)' : advice.time.source === 'wiki' ? ' (by the wiki speed — a guide)' : advice.time.source === 'model' ? ' (for your levels and gear)' : advice.time.source === 'forecast' ? ' (across your plan)' : ' (at your pace)'}.</p>
+            <p className="small">⏱ {formatHours(advice.time)} to {target}{best.method.batchActions !== undefined ? ' (assumes future supplies; purchasing time excluded)' : arrows?.changesKit ? ' (assumes planned gear; preparation time excluded)' : advice.time.source === 'wiki' ? ' (by the wiki speed — a guide)' : advice.time.source === 'model' ? ' (for your levels and gear)' : advice.time.source === 'forecast' ? ' (across your plan)' : ' (at your pace)'}.</p>
           )}
           {best.status === 'PREP' && (
             <p className="small">First: <strong>{best.missing.map((x) => x.label).join(', ')}</strong> <a href="#/shopping">To the shopping list</a></p>

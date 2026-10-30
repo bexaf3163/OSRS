@@ -179,3 +179,10 @@ Regressions: trainingStages.test.ts (generic new content, actual Ranged threshol
 
 
 2.81.2 delivery receipt: main source `6c2e4f41e33180fa4f7bb21d3ae849e952a49990`; Checks `40973832545` and Release `40973832590` succeeded. Downloaded normal Portable `102439126` bytes, SHA256 `f6c5eed9c79dcad468d6dcd9a07149e123323c050e0c9e3d1e48aea0f2a8ad1b`, verified against asset digest and manifest. Current takeover and outstanding live/unsupported-model work: docs/CLAUDE_NEXT_SESSION.md. Ledger design/fonts retained.
+
+
+## Processing feasibility and recipe identity — 2.81.3
+
+Use existing processing recipes, tools/access/staff declarations, shared requirementCost/itemRequirement and physical stock. Prefer confirmed feasible first batches over unconfirmed or proven unfundable ones; current sale forecasts are never starting funds. A partial batch must use its own banking timing and disclose unassumed replenishment. ModelRate.exactNeeds prevents personalize from broadening a resolved recipe into different mechanics. Inferred mixtures require identical registered XP/timing/access and cannot borrow one output's price. Cash updates reuse the existing complete rateKeyOf; no parallel cache or finance system. Tests: processingRates/materialStock/memberProcessing/funding processAdapter and ui-smoke processing-budget. Full depletion/acquisition models remain separate work.
+
+Processing ETA now explicitly assumes future supplies and excludes purchasing time; batchActions is observed-plan metadata, not a whole-goal funding claim.

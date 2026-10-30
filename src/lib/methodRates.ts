@@ -34,6 +34,10 @@ export interface ModelRate {
   xpPerAction?: number;
   /** Physical supplies for the recipe actually selected by the model. */
   needs?: MethodNeed[];
+  /** Selected recipe ingredients must not regain substitutes from a different recipe. */
+  exactNeeds?: boolean;
+  /** Executable initial processing actions, not supplies for the entire goal. */
+  batchActions?: number;
   /** What the cost is spent on, when it is not arrows (Ranged) or runes (Magic): "feathers". */
   costName?: string;
   /** What it was worked out for, in a few words: "Shortbow, Bronze arrows", "Rune axe". */

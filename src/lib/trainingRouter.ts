@@ -12,7 +12,7 @@ import { nameKey } from './checklist';
 import type { GameMode } from '../types';
 import methodsJson from '../data/trainingMethods.json';
 import toolProgressionJson from '../data/toolProgression.json';
-import { evaluate, type ReqState, type Requirement } from './requirements';
+import { evaluate, itemRequirement, type ReqState, type Requirement } from './requirements';
 import { coinsOf, levelOf, type PlayerState } from './playerState';
 import { xpForLevel } from './xp';
 import type { MethodPriority, PlayStyle } from './playStyle';
@@ -65,6 +65,8 @@ export interface TrainingMethod {
   rateSource?: 'model';
   /** Physical tool/recipe/loadout used by the rate, for useful progression milestones. */
   rateBasis?: string;
+  /** Initial processing batch; subsequent replenishment is not guaranteed. */
+  batchActions?: number;
   /** The spot the gathering engine picked among the method's candidates, and whether a full bag is banked or dropped there. */
   spot?: RateSpot;
   /** One safety line from the model: aggressive NPCs at the picked spot. */
@@ -139,10 +141,7 @@ function methodRequirement(n: MethodNeed, state: PlayerState): Requirement {
     const lv = levelOf(state, n.skill);
     return { type: 'alternative', requiredCount: 1, alternatives: tools[n.skill].filter((t) => lv === undefined || t.levelReq <= lv).map((t) => ({ name: t.tier })) };
   }
-  const count = n.count ?? 1;
-  return n.equip ? { type: 'equipment', name: n.name, count, anyOf: n.anyOf }
-    : n.anyOf?.length ? { type: 'alternative', requiredCount: count, alternatives: [n.name, ...n.anyOf].map(name => ({ name })) }
-    : { type: 'item', name: n.name, count };
+  return itemRequirement(n);
 }
 
 function needStatus(n: MethodNeed, state: PlayerState, allocated?: HeldUnits): NeedStatus {
@@ -409,11 +408,11 @@ export function personalize(methods: readonly TrainingMethod[], skill: string, s
     if (hit) return hit;
     const r = methodRate(m, skill, state, { prices, restriction, objective });
     const out: TrainingMethod = r ? {
-      ...m, xph: [Math.round(r.xph[0]), Math.round(r.xph[1])], rateSource: 'model', rateBasis: r.basis, costPerHour: r.costPerHour,
+      ...m, xph: [Math.round(r.xph[0]), Math.round(r.xph[1])], rateSource: 'model', rateBasis: r.basis, ...(r.batchActions !== undefined ? { batchActions: r.batchActions } : {}), costPerHour: r.costPerHour,
       ...(r.methodName ? { name: r.methodName } : {}),
       ...(r.xpPerAction !== undefined ? { xpa: r.xpPerAction } : {}),
       ...(r.needs ? { needs: [...m.needs.filter((n) => n.type === 'skill' || n.type === 'quest'), ...r.needs.map((n) => {
-        if (n.type !== 'item') return n;
+        if (n.type !== 'item' || r.exactNeeds) return n;
         if (n.equip) return n;
         const authored = m.needs.find((old) => old.type === 'item' && (old.name === n.name || old.anyOf?.includes(n.name) || n.anyOf?.includes(old.name)));
         if (authored?.type !== 'item') return n;

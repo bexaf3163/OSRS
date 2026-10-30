@@ -3,7 +3,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { PROCESSING, processPace, processRate, type ProcessingRegistry } from '../src/lib/processingRates';
-import { trainingMethods, type TrainingMethod } from '../src/lib/trainingRouter';
+import { personalize, trainingMethods, viewMethod, type TrainingMethod } from '../src/lib/trainingRouter';
 import { buildPlayerState } from '../src/lib/playerState';
 import { emptyProgress } from '../src/lib/progress';
 import type { PriceView } from '../src/lib/funding/quotes';
@@ -98,6 +98,148 @@ const SYNTHETIC: ProcessingRegistry = {
   methods: { 'sm-test': ['test-bar'] },
 };
 const TEST = { id: 'sm-test', kind: 'method', skills: ['smithing'] } as unknown as TrainingMethod;
+
+describe('a recipe must be feasible with the player’s current kit and budget', () => {
+  const reg: ProcessingRegistry = {
+    stations: [],
+    recipes: [
+      { id: 'future-fast', skill: 'smithing', level: 1, xp: 1000, ticks: 4, facility: null, tools: [], inputs: [{ name: 'Expensive input', qty: 1, stacks: false }], output: null },
+      { id: 'future-owned', skill: 'smithing', level: 1, xp: 10, ticks: 4, facility: null, tools: [], inputs: [{ name: 'Owned input', qty: 1, stacks: false }], output: null },
+    ], methods: { 'future-budget-method': ['future-fast', 'future-owned'] },
+  };
+  const m = { ...TEST, id: 'future-budget-method' };
+  const state = (cash: number | null, stock: boolean) => buildPlayerState({
+    mode: 'f2p', stats: null, progress: { ...emptyProgress(), levels: { smithing: 10 } }, questsDone: [], connected: true,
+    gear: cash === null ? null : { equipment: [], inventory: [], coins: cash, bankCoins: 0 } as never,
+    owned: { bankSeen: stock, items: new Map([
+      ['expensive input', { name: 'Expensive input', carried: 0, noted: 0, bank: stock ? 0 : undefined }],
+      ['owned input', { name: 'Owned input', carried: 0, noted: 0, bank: stock ? 28 : undefined }],
+    ]) },
+  });
+  const quotes = prices({ 'Expensive input': 100, 'Owned input': 1 }, {});
+
+  it.each(['balanced', 'fastest', 'profit'] as const)('chooses owned inputs over a kit the known wallet cannot buy (%s)', objective => {
+    expect(processRate(m, 'smithing', state(0, true), { prices: quotes, objective }, reg)?.basis).toBe('Owned input');
+  });
+
+  it('sizes a faster first batch to the known wallet without assuming future income', () => {
+    expect(processRate(m, 'smithing', state(99, true), { prices: quotes, objective: 'fastest' }, reg)?.basis).toBe('Owned input');
+    const small = processRate(m, 'smithing', state(100, true), { prices: quotes, objective: 'fastest' }, reg);
+    expect(small?.basis).toBe('Expensive input');
+    expect(small?.batchActions).toBe(1);
+    expect(small?.needs).toContainEqual({ type: 'item', name: 'Expensive input', count: 1 });
+    expect(small?.warning).toContain('replenishment is not assumed');
+    expect(processRate(m, 'smithing', state(2800, true), { prices: quotes, objective: 'fastest' }, reg)?.needs).toContainEqual({ type: 'item', name: 'Expensive input', count: 28 });
+  });
+
+  it('prefers a confirmed owned batch to a faster recipe whose starting capital is unread', () => {
+    expect(processRate(m, 'smithing', state(null, true), { prices: quotes, objective: 'fastest' }, reg)?.basis).toBe('Owned input');
+  });
+
+  it('can fund a first batch from observed bag coins while the bank balance remains unread', () => {
+    const st = state(100, true);
+    st.coins.bank = { known: false };
+    const r = processRate(m, 'smithing', st, { prices: quotes, objective: 'fastest' }, reg);
+    expect(r?.basis).toBe('Expensive input');
+    expect(r?.needs).toContainEqual({ type: 'item', name: 'Expensive input', count: 1 });
+    expect(st.coins.bank.known).toBe(false);
+  });
+
+  it('prices the bank visits for the actual small batch and never changes observed stock or cash', () => {
+    const st = state(100, true);
+    const before = structuredClone(st);
+    const small = processRate(m, 'smithing', st, { prices: quotes, objective: 'fastest' }, reg)!;
+    const full = processRate(m, 'smithing', state(2800, true), { prices: quotes, objective: 'fastest' }, reg)!;
+    expect(small.xph[1]).toBeLessThan(full.xph[1]);
+    expect(st).toEqual(before);
+  });
+
+  it('allows declared mixtures for newly added identical recipes, without inventing mixed sale income', () => {
+    const mixed = { ...m, name: 'Mixed future inputs', needs: [{ type: 'item' as const, name: 'Expensive input', count: 28, anyOf: ['Owned input'] }] };
+    const same = { ...reg, recipes: reg.recipes.map(r => ({ ...r, xp: 10 })) };
+    const st = state(0, true);
+    st.owned!.items.set('expensive input', { name: 'Expensive input', carried: 14, noted: 0, bank: 0 });
+    st.owned!.items.set('owned input', { name: 'Owned input', carried: 14, noted: 0, bank: 0 });
+    const r = processRate(mixed, 'smithing', st, { prices: quotes, objective: 'fastest' }, same)!;
+    expect(r.needs).toContainEqual({ type: 'item', name: 'Expensive input', count: 28, anyOf: ['Owned input'] });
+    expect(r.xpPerAction).toBe(10);
+    expect(r.costPerHour).toBeNull();
+    expect(r.lootPerHour).toBeUndefined();
+    expect(r.warning).toBeUndefined();
+  });
+
+  it('does not turn a different-XP recipe into an interchangeable material', () => {
+    const different = { ...m, needs: [{ type: 'item' as const, name: 'Expensive input', count: 28, anyOf: ['Owned input'] }] };
+    const r = processRate(different, 'smithing', state(0, true), { prices: quotes, objective: 'fastest' }, reg)!;
+    expect(r.needs).toContainEqual({ type: 'item', name: 'Owned input', count: 28 });
+    expect(r.needs?.some(n => n.type === 'item' && n.anyOf?.includes('Expensive input'))).toBe(false);
+    expect(r.xpPerAction).toBe(10);
+  });
+
+  it('keeps uncertain recipes available when no confirmed alternative exists', () => {
+    expect(processRate(m, 'smithing', state(0, false), { prices: quotes, objective: 'fastest' }, reg)?.basis).toBe('Expensive input');
+    const only = { ...reg, methods: { [m.id]: ['future-fast'] } };
+    expect(processRate(m, 'smithing', state(null, true), { prices: quotes, objective: 'fastest' }, only)?.basis).toBe('Expensive input');
+  });
+
+  it('does not invent a kit price when a required purchase is unpriced', () => {
+    const only = { ...reg, methods: { [m.id]: ['future-fast'] } };
+    expect(processRate(m, 'smithing', state(0, true), { prices: prices({}, {}), objective: 'fastest' }, only)?.costPerHour).toBeNull();
+    expect(processRate(m, 'smithing', state(0, true), { prices: prices({}, {}), objective: 'fastest' }, reg)?.basis).toBe('Owned input');
+  });
+
+  it('does not use forecast sale proceeds as starting capital', () => {
+    const profitable = { ...reg, recipes: [{ ...reg.recipes[0], output: { name: 'Future product', qty: 1 } }, reg.recipes[1]] };
+    expect(processRate(m, 'smithing', state(0, true), { prices: prices({ 'Expensive input': 100, 'Owned input': 1 }, { 'Future product': 10000 }), objective: 'profit' }, profitable)?.basis).toBe('Owned input');
+  });
+
+  it('prices required tools as well as inputs and counts banked tools before buying', () => {
+    const tools = { ...reg, recipes: [{ ...reg.recipes[0], inputs: reg.recipes[1].inputs, tools: ['Future tool'] }, reg.recipes[1]] };
+    const st = state(0, true);
+    st.owned!.items.set('future tool', { name: 'Future tool', carried: 0, noted: 0, bank: 0 });
+    const p = prices({ 'Owned input': 1, 'Future tool': 100 }, {});
+    expect(processRate(m, 'smithing', st, { prices: p, objective: 'fastest' }, tools)?.xpPerAction).toBe(10);
+    st.owned!.items.set('future tool', { name: 'Future tool', carried: 0, noted: 0, bank: 1 });
+    expect(processRate(m, 'smithing', st, { prices: p, objective: 'fastest' }, tools)?.xpPerAction).toBe(1000);
+  });
+
+  it('uses owned oak logs before demanding willow purchases, and refreshes the recipe after earning cash', () => {
+    const st = buildPlayerState({ mode: 'members', stats: null, progress: { ...emptyProgress(), levels: { fletching: 40 } }, questsDone: [], connected: true,
+      gear: { equipment: [], inventory: [], coins: 0, bankCoins: 0 } as never,
+      owned: { bankSeen: true, items: new Map([
+        ['oak logs', { name: 'Oak logs', carried: 0, noted: 0, bank: 28 }],
+        ['willow logs', { name: 'Willow logs', carried: 0, noted: 0, bank: 0 }],
+        ['knife', { name: 'Knife', carried: 1, noted: 0, bank: 0 }],
+      ]) } });
+    const p = prices({ 'Oak logs': 50, 'Willow logs': 50 }, {});
+    const r = processRate(method('fl-oak-willow'), 'fletching', st, { prices: p, objective: 'fastest' });
+    expect(r?.basis).toBe('Oak longbow (u)');
+    expect(r?.needs).toEqual(expect.arrayContaining([expect.objectContaining({ type: 'item', name: 'Oak logs' })]));
+    const count = r?.needs?.find(n => n.type === 'item' && n.name === 'Oak logs');
+    expect(count?.type === 'item' && count.count! > 0 && count.count! <= 28).toBe(true);
+    const selected = (s: typeof st) => personalize([method('fl-oak-willow')], 'fletching', s, p, undefined, 'fastest')[0];
+    expect(selected(st).needs).toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Oak logs' })]));
+    expect(selected(st).batchActions).toBe(r?.batchActions);
+    const richer = { ...st, coins: { ...st.coins, bag: { known: true as const, value: 10000, source: 'game' as const } } };
+    expect(selected(richer).needs).toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Willow logs' })]));
+  });
+
+  it('keeps the selected recipe’s physical ingredients instead of restoring another recipe’s authored substitutes', () => {
+    const st = buildPlayerState({ mode: 'f2p', stats: null, progress: { ...emptyProgress(), levels: { cooking: 60 } }, questsDone: [], connected: true,
+      gear: { equipment: [], inventory: [], coins: 0, bankCoins: 0 } as never,
+      owned: { bankSeen: true, items: new Map([
+        ['raw beef', { name: 'Raw beef', carried: 0, noted: 0, bank: 26 }],
+        ['raw chicken', { name: 'Raw chicken', carried: 0, noted: 0, bank: 26 }],
+      ]) } });
+    const p = prices({ 'Raw beef': 10, 'Raw chicken': 10 }, { 'Cooked meat': 1, 'Cooked chicken': 1000 });
+    const selected = personalize([method('ck-meat')], 'cooking', st, p, undefined, 'profit')[0];
+    expect(selected.name).toBe('Make Cooked chicken');
+    expect(selected.needs).toContainEqual({ type: 'item', name: 'Raw chicken', count: 26 });
+    const changed = { ...st, owned: { ...st.owned!, items: new Map(st.owned!.items) } };
+    changed.owned.items.set('raw chicken', { name: 'Raw chicken', carried: 0, noted: 0, bank: 0 });
+    expect(viewMethod(selected, changed, p).missing.some(n => n.label.includes('Raw chicken'))).toBe(true);
+  });
+});
 
 describe('a new recipe or station inherits the rules (synthetic registry)', () => {
   it('a members station is offered only to members, and the nearer bank makes it faster', () => {

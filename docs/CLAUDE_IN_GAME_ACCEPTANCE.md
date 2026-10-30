@@ -1,5 +1,11 @@
 # In-game acceptance — assigned to Claude
 
+## 2.81.3 processing acceptance — not live-verified
+
+- Open the real bank on a reachable processing skill. With a knife, owned oak logs and no willow logs/coins, a usable owned recipe must beat an unfundable faster recipe. Increase actual available coins or withdraw new materials and check the recipe/requirements refresh without changing tabs.
+- Check partial supplies, unread bank/balances, unknown prices, noted materials, required tools/access and owned staff rune substitution. A smaller first batch must not be presented as enough for the whole goal; unknown is not missing. No spending or game actions are automated.
+- Confirm desktop preparation and game supplies match the selected physical recipe; different-XP ingredients must not count as interchangeable. Compatible declared mixtures can train XP but must not inherit a single output's GP/h. Saved progress/adopted plans and current Ledger layout/fonts must remain intact.
+
 ## 2.81.2 Optional and staged training acceptance — not live-verified
 
 - Check Optional after Dragon Slayer: Ranged40, Fishing35/Cooking35, Mining45/Woodcutting36/Firemaking50, optional Magic55. Skip unwanted optional training; switching to Members must remain possible without completing it or buying a Bond. Saved marks/notes/skips must survive.

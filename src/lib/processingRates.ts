@@ -8,7 +8,9 @@ import processingJson from '../data/processing.json';
 import { bankTrip, tripMinutes } from './bankTrip';
 import { skillChance } from './skillChance';
 import { coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from './lootValue';
-import { heldOf, levelOf, type PlayerState } from './playerState';
+import { coinsOf, heldOf, levelOf, type PlayerState } from './playerState';
+import { itemRequirement } from './requirements';
+import { requirementCost } from './funding/need';
 import { isRestrictedItem } from './tradeRestriction';
 import { supplyPrice } from './sourceRouter';
 import { matchStrict } from '../services/locationResolver';
@@ -59,7 +61,35 @@ function placesFor(r: Recipe, state: PlayerState, reg: ProcessingRegistry): { sp
   });
 }
 
-interface Option { rate: ModelRate; score: number }
+/** Confirmed executable batches first, uncertain kits next, proven unfundable kits last. */
+interface Option { rate: ModelRate; score: number; fundingRank: 0 | 1 | 2 }
+
+/** Known coins can prove a purchase is affordable without pretending an unread balance is zero. */
+function batchFunding(needs: readonly MethodNeed[], state: PlayerState, prices?: Market['prices']): Option['fundingRank'] {
+  const cost = requirementCost(needs.flatMap(n => n.type === 'item' ? [itemRequirement(n)] : []), state, prices);
+  const cash = coinsOf(state);
+  const minimum = (cash.bag ?? 0) + (cash.bank ?? 0);
+  if (cost !== null && cost <= minimum) return 0;
+  return cost !== null && cash.total !== null ? 2 : 1;
+}
+
+
+/** An authored mixture is valid only when every variant has identical XP, timing and access mechanics. */
+function mixableRecipe(r: Recipe, method: TrainingMethod, ids: readonly string[], reg: ProcessingRegistry): Recipe | null {
+  if (r.inputs.length !== 1 || r.inputs[0].anyOf?.length) return null;
+  const need = method.needs?.find(n => n.type === 'item' && n.anyOf?.length && [n.name, ...n.anyOf].includes(r.inputs[0].name));
+  if (need?.type !== 'item' || !need.anyOf?.length) return null;
+  const shape = (q: Recipe) => JSON.stringify([
+    q.skill, q.level, q.xp, q.ticks, q.facility, q.tools,
+    q.success ? [q.success.low, q.success.high] : null, q.chance ?? 1, q.retry ?? false, q.members ?? false,
+    q.batchSize, q.batchWaitTicks, q.requires, q.wholeBatch, q.multiplierEvery, q.access, q.station,
+    q.inputs.map(i => [i.qty, i.stacks, i.staff]), q.output?.qty ?? 0,
+  ]);
+  const expected = shape(r);
+  const names = [...new Set([need.name, ...need.anyOf])];
+  if (!names.every(name => reg.recipes.some(q => ids.includes(q.id) && q.inputs.length === 1 && q.inputs[0].name === name && shape(q) === expected))) return null;
+  return { ...r, inputs: [{ ...r.inputs[0], name: need.name, anyOf: names.filter(n => n !== need.name) }] };
+}
 
 function recipeBag(r: Recipe, state: PlayerState, market: Market, method?: TrainingMethod) {
   const substituted = r.inputs.filter((i) => {
@@ -91,12 +121,32 @@ function recipeBag(r: Recipe, state: PlayerState, market: Market, method?: Train
     const n = method?.needs?.find((n) => n.type === 'item' && (n.name === i.name || n.anyOf?.includes(i.name) || i.anyOf?.includes(n.name)));
     return n?.type === 'item' && n.count !== undefined && n.count > 0 ? [Math.floor(n.count / i.qty)] : [];
   });
-  const actions = Math.min(r.batchSize ?? Infinity, ...planned, perAction > 0 ? Math.floor(free / perAction) : free);
-  return { actions, inputs, substituted, accessNeed };
+  const capacity = Math.min(r.batchSize ?? Infinity, ...planned, perAction > 0 ? Math.floor(free / perAction) : free);
+  const needsAt = (actions: number): MethodNeed[] => [
+    ...r.tools.map(name => ({ type: 'item' as const, name, count: 1 })),
+    ...(accessNeed ? [accessNeed] : []),
+    ...substituted.map(i => ({ type: 'item' as const, name: i.staff!, count: 1, equip: true })),
+    ...inputs.map(i => ({ type: 'item' as const, name: i.name, count: Math.ceil(i.qty * actions), ...(i.anyOf?.length ? { anyOf: i.anyOf } : {}) })),
+  ];
+  let actions = capacity;
+  if (method && capacity > 1) {
+    const confirmed = (n: number) => batchFunding(needsAt(n), state, market.prices) === 0;
+    if (!confirmed(capacity)) {
+      let lo = 0;
+      let hi = capacity - 1;
+      while (lo < hi) {
+        const mid = Math.ceil((lo + hi) / 2);
+        if (confirmed(mid)) lo = mid; else hi = mid - 1;
+      }
+      // No proven smaller batch: retain the original requirement and its missing/unknown state.
+      if (lo > 0) actions = lo;
+    }
+  }
+  return { actions, inputs, needs: needsAt(actions), capped: actions < capacity };
 }
 
 function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number] }, level: number, state: PlayerState, market: Market, coinRate: number | null, method: TrainingMethod): Option | null {
-  const { actions, inputs, substituted, accessNeed } = recipeBag(r, state, market, method);
+  const { actions, inputs, needs, capped } = recipeBag(r, state, market, method);
   if (actions <= 0) return null;
   const chance = r.success ? skillChance(r.success.low, r.success.high, level) : r.chance ?? 1;
   // A retried action (a log that did not light) is tried again: the failures cost time, and every action ends in a success.
@@ -119,21 +169,20 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number] }
   const outputQty = (r.output?.qty ?? 0) * (r.multiplierEvery ? 1 + Math.floor(level / r.multiplierEvery) : 1);
   const lootPerHour = costPerHour === null || !r.output ? 0 : value! * outputQty * success * done;
   const rate: ModelRate = {
-    xph, costPerHour, basis: r.output?.name ?? r.inputs[0].name, xpPerAction: r.xp * success,
-    needs: [
-      ...r.tools.map((name) => ({ type: 'item' as const, name, count: 1 })),
-      ...(accessNeed ? [accessNeed] : []),
-      ...substituted.map((i) => ({ type: 'item' as const, name: i.staff!, count: 1, equip: true })),
-      ...inputs.map((i) => ({ type: 'item' as const, name: i.name, count: Math.ceil(i.qty * actions), ...(i.anyOf?.length ? { anyOf: i.anyOf } : {}) })),
-    ],
+    xph, costPerHour, basis: r.output?.name ?? r.inputs[0].name, xpPerAction: r.xp * success, exactNeeds: true, batchActions: actions,
+    needs,
     ...(costPerHour !== null ? { costName: inputs.map((i) => i.name.toLowerCase()).join(', ') } : {}),
     ...(lootPerHour > 0 && r.output ? { lootPerHour, loot: r.output.name } : {}),
     ...(at.spot ? { spot: at.spot } : {}),
-    ...(r.wholeBatch ? { warning: 'Walking and banking estimate; no teleports or essence pouches.' } : {}),
+    ...((capped || r.wholeBatch) ? { warning: [
+      ...(capped ? [`First batch: ${actions} actions. Recheck supplies before refilling; replenishment is not assumed.`] : []),
+      ...(r.wholeBatch ? ['Walking and banking estimate; no teleports or essence pouches.'] : []),
+    ].join(' ') } : {}),
   };
   // Time per XP less what the coins are worth in time (lootValue): a loss counts in full, a gain at most half; unknown coins are left out.
   const saved = costPerHour === null || market.objective === 'fastest' ? 0 : coinTimeShare(lootPerHour - costPerHour, coinRate);
-  return { rate, score: (1 - saved) / ((xph[0] + xph[1]) / 2) };
+  const fundingRank = batchFunding(needs, state, market.prices);
+  return { rate, score: (1 - saved) / ((xph[0] + xph[1]) / 2), fundingRank };
 }
 
 /**
@@ -152,14 +201,27 @@ export function processRate(m: TrainingMethod, skill: string, state: PlayerState
     const r = reg.recipes.find((x) => x.id === id);
     if (!r || r.skill !== skill || level < r.level || (r.members && state.mode !== 'members')) continue;
     if (r.requires?.some((q) => (levelOf(state, q.skill) ?? 0) < q.level)) continue;
+    const mixed = market.objective !== 'profit' ? mixableRecipe(r, m, ids, reg) : null;
     for (const at of placesFor(r, state, reg)) {
-      const o = option(r, at, level, state, market, coinRate, m);
+      const o = option(mixed ?? r, at, level, state, market, coinRate, m);
       if (!o) continue;
-      if (ids.length > 1 && r.output) o.rate.methodName = `Make ${r.output.name}`;
+      if (mixed) {
+        // The XP mechanics match, but a mixture must not inherit one product's sale value or input price.
+        o.rate.methodName = m.name;
+        o.rate.basis = m.name;
+        o.rate.costPerHour = null;
+        delete o.rate.lootPerHour;
+        delete o.rate.loot;
+        delete o.rate.costName;
+        o.score = 1 / ((o.rate.xph[0] + o.rate.xph[1]) / 2);
+      } else if (ids.length > 1 && r.output) o.rate.methodName = `Make ${r.output.name}`;
       // A tie (within 2%) goes to the station nearer the method's own place, so the advice does not hop between equal stations.
       const far = (x: Option) => (home && x.rate.spot ? Math.max(Math.abs(x.rate.spot.place.x - home.x), Math.abs(x.rate.spot.place.y - home.y)) : 0);
       const earnings = best && market.objective === 'profit' ? earningsOrder(netEarnings(o.rate), netEarnings(best.rate)) : 0;
-      if (!best || earnings < 0 || (!earnings && (o.score < best.score * 0.98 || (o.score <= best.score * 1.02 && far(o) < far(best))))) best = o;
+      // Kit feasibility precedes XP/profit; an uncertain wallet is neither zero cash nor confirmed buying power.
+      const funding = best ? o.fundingRank - best.fundingRank : 0;
+      const byRate = best !== null && (o.score < best.score * 0.98 || (o.score <= best.score * 1.02 && far(o) < far(best)));
+      if (!best || funding < 0 || (!funding && (earnings < 0 || (!earnings && byRate)))) best = o;
     }
   }
   return best?.rate ?? null;

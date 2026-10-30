@@ -521,7 +521,35 @@ async function ledgerScenarios(browser: Browser) {
   await page.context().close();
 }
 
+async function processingBudgetScenarios(browser: Browser) {
+  for (const width of [1000, 1440]) {
+    const levels = { fletching: 40 };
+    const gear = { equipment: [], inventory: [{ id: 946, name: 'Knife', count: 1 }], coins: 0, bankCoins: 0 };
+    const { page, errors } = await open(browser, width, {
+      zen: true, progress: progressBefore('S9-01', { gameMode: 'members', levels }),
+      localStorage: { 'osrs-put:features': JSON.stringify({ efficient: true }) },
+      status: { protocol: 6, inGame: true, stats: levels, ...gear },
+      events: [{ type: 'STATS', stats: levels }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [
+        { name: 'Knife', carried: 1, noted: 0, bank: 0 },
+        { name: 'Oak logs', carried: 0, noted: 0, bank: 28 },
+        { name: 'Willow logs', carried: 0, noted: 0, bank: 0 },
+      ] }], market: true, marketQuotes: { 'Oak logs': { id: 1521, price: 100 }, 'Willow logs': { id: 1519, price: 100 } },
+    }, '#/skills/FL/fletching');
+    await page.locator('.training-method .training-now').filter({ hasText: 'Oak longbow (u)' }).waitFor();
+    expect((await text(page, '.training-summary')).includes('Oak longbow (u)'), `Processing ${width}: owned inputs beat an unfundable faster recipe`);
+    await page.evaluate(g => { (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'GEAR', gear: g }); }, { ...gear, coins: 10000 });
+    await page.locator('.training-method .training-now').filter({ hasText: 'Willow longbow (u)' }).waitFor();
+    expect((await text(page, '.training-summary')).includes('Willow logs'), `Processing ${width}: cash-only update refreshes recipe and required supplies`);
+    expect((await text(page, '.training-summary')).includes('assumes future supplies'), `Processing ${width}: training time does not promise funded replenishment`);
+    expect(await page.locator('.training-summary details').count() === 0 && await noOverflow(page) && !errors.length, `Processing ${width}: compact UI stays usable without console errors`);
+    await page.screenshot({ path: `audit-temp/processing-budget-${width}.png` });
+    await page.context().close();
+  }
+}
+
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'processing-budget') { await processingBudgetScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await processingBudgetScenarios(browser);
   if (process.env.UI_ONLY === 'ledger') { await ledgerScenarios(browser); return; }
   if (!process.env.UI_ONLY) await ledgerScenarios(browser);
   if (process.env.UI_ONLY === 'members-gathering') { await membersGatheringScenarios(browser); return; }
@@ -2878,7 +2906,7 @@ async function skillHandoverScenarios(browser: Browser) {
       names.map(name => ({ name, carried: 0, noted: 0, bank: name === 'Raw chicken' ? 26 : 0 })));
     await materialPage.waitForFunction(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.bankWithdrawals?.some((w: any) => w.itemName === 'Raw chicken' && w.quantity === 26));
     const banked = await materialPage.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
-    expect(banked.plan.lines.find((r: any) => r.name === 'Raw beef')?.where === 'BANK', `skill handover (${width}): banked chicken projects the actual alternative withdrawal`);
+    expect(banked.plan.lines.find((r: any) => r.name === 'Raw chicken')?.where === 'BANK', `skill handover (${width}): banked chicken is the named physical ingredient and withdrawal`);
     expect(await noOverflow(materialPage) && !materialErrors.length, `skill handover (${width}): mixed-material preparation has no overflow or console errors`);
     await materialPage.context().close();
   }
