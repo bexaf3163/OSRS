@@ -9,7 +9,7 @@ export interface TrainingFocus {
   skill: string;
   target: number;
   /** route: the goal of the current stage; ahead: the goal of a later stage; generic: the end of the training plan row. */
-  source: 'route' | 'ahead' | 'generic' | 'checkpoint' | 'tracked';
+  source: 'route' | 'ahead' | 'generic' | 'checkpoint' | 'tracked' | 'preparation';
   /** The stage the goal belongs to (route and ahead only). */
   stage?: number;
 }

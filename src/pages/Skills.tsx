@@ -15,7 +15,7 @@ import { Eyebrow, Page } from '../ledger';
 import { f2pAdviceFor, f2pAdviceLabel, F2P_PRIORITY_LABEL } from '../lib/f2pSkillAdvice';
 
 /** The Skills spread: the character sheet on the left, the chosen skill (or the followed one) on the right. */
-export function SkillsPage({ param, selectedSkill }: { param?: string; selectedSkill?: string }) {
+export function SkillsPage({ param, selectedSkill, goal }: { param?: string; selectedSkill?: string; goal?: number }) {
   const { progress, steps, mode } = useStore();
   const stage = currentStage(steps, progress);
   const tracked = useTracked();
@@ -49,7 +49,7 @@ export function SkillsPage({ param, selectedSkill }: { param?: string; selectedS
     <Page side="r" className="skills-detail" label="Skill">
       <div className="la-scroll">
         {shown ? (
-          <SkillDetailPage key={`${shown}:${selectedSkill ?? ''}`} id={shown} selectedSkill={param ? selectedSkill : tracked?.skill} />
+          <SkillDetailPage key={`${shown}:${selectedSkill ?? ''}:${goal ?? ''}`} id={shown} selectedSkill={param ? selectedSkill : tracked?.skill} requestedGoal={goal} />
         ) : (
           <div className="page">
             <Eyebrow>TRAINING</Eyebrow>

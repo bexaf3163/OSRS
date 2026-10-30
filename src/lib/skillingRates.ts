@@ -161,7 +161,7 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
     label: spot.label, place: spot.place, how: banks ? 'bank' : 'drop', ...(banks && trip ? { bank: trip.bank.label } : {}), ...(spot.waypoints ? { waypoints: spot.waypoints } : {}),
   };
   const rate: ModelRate = {
-    xph, costPerHour: r.bait ? (baitPrice === null ? null : items * baitPrice) : 0, basis: tool.name,
+    xph, costPerHour: r.bait ? (baitPrice === null ? null : items * baitPrice) : 0, basis: tool.name, selectedTool: tool.name,
     ...(r.bait ? { costName: r.bait === 'Feather' ? 'feathers' : r.bait.toLowerCase() } : {}),
     ...(lootPerHour > 0 ? { lootPerHour, loot: main.name } : {}), spot: where,
   };

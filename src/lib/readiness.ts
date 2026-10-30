@@ -176,7 +176,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
       const have = levelFrom(state, r.skill);
       const label = `${skillName(r.skill)} ${r.min}`;
       const page = skillPage(r.skill);
-      const action: ReadinessAction | undefined = page ? { kind: 'link', label: `⚡ Catch up ${skillName(r.skill)}`, href: `#/skills/${page}` } : undefined;
+      const action: ReadinessAction | undefined = page ? { kind: 'link', label: `⚡ Catch up ${skillName(r.skill)}`, href: `#/skills/${page}/${r.skill}?goal=${r.min}` } : undefined;
       const hard = r.when !== 'during';
       const note = r.when === 'during' ? ' Needed during the quest: you can start without it.' : '';
       const boost = r.boostable ? ' It can be raised temporarily (boost).' : '';

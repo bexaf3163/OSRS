@@ -44,6 +44,8 @@ export interface ModelRate {
   costName?: string;
   /** What it was worked out for, in a few words: "Shortbow, Bronze arrows", "Rune axe". */
   basis: string;
+  /** The exact usable tool selected by the gathering model, not text parsed from its display basis. */
+  selectedTool?: string;
   /** Coins an hour from what is banked and sold, when it pays for its time; then xph already has its pickups and bank trips in it. */
   lootPerHour?: number;
   /** What is banked: "Big bones", "Willow logs". */

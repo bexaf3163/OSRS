@@ -574,6 +574,8 @@ async function run(browser: Browser) {
   if (!process.env.UI_ONLY) await rangedPreparationScenarios(browser);
   if (process.env.UI_ONLY === 'magic-preparation') { await magicPreparationScenarios(browser); return; }
   if (!process.env.UI_ONLY) await magicPreparationScenarios(browser);
+  if (process.env.UI_ONLY === 'peaceful-preparation') { await nonCombatPreparationScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await nonCombatPreparationScenarios(browser);
   if (process.env.UI_ONLY === 'shopping-quotes') { await shoppingQuoteScenarios(browser); return; }
   if (!process.env.UI_ONLY) await shoppingQuoteScenarios(browser);
   if (process.env.UI_ONLY === 'journal-quotes') { await journalQuoteScenarios(browser); return; }
@@ -3092,6 +3094,57 @@ async function rangedPreparationScenarios(browser: Browser) {
     expect(!(await poorSnapshot())?.funding && (await poorSnapshot())?.plan?.stepId === 'S0-04', `ranged (${width}): available funds return to the same preparation flow`);
     expect(await noOverflow(poor.page) && !poor.errors.length, `ranged (${width}): funding handover has no overflow or runtime errors`);
     await poor.page.context().close();
+  }
+}
+
+async function nonCombatPreparationScenarios(browser: Browser) {
+  const stats = { mining: 1, smithing: 1, attack: 1, strength: 1, defence: 1, hitpoints: 10 };
+  const gear = { equipment: [], inventory: [{ id: 1265, name: 'Bronze pickaxe', count: 1 }], coins: 0, bankCoins: 0 };
+  const items = PICKAXES.map(name => ({ name, carried: name === 'Bronze pickaxe' ? 1 : 0, noted: 0, bank: name === 'Mithril pickaxe' ? 1 : 0 }));
+  const mock = {
+    market: true, progress: progressBefore('S2-07', { gameMode: 'f2p', levels: stats }),
+    localStorage: { 'osrs-put:active-step': 'S2-07' },
+    status: { protocol: 6, inGame: true, player: 'Preparation Target', activeStepId: 'S2-07', questsDone: [], stats, ...gear },
+    events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
+  };
+  {
+    const { page, errors } = await open(browser, 1280, mock, '#/skills/MI/mining?goal=10');
+    await page.locator('.training-follow').waitFor();
+    expect((await text(page, 'h1')).includes('Goal 10'), 'Preparation: Mining10 opens directly instead of the default45 checkpoint');
+    await page.locator('.training-follow').click();
+    await page.locator('.tracked-skill').waitFor();
+    await page.waitForFunction(() => JSON.parse(localStorage.getItem('osrs-put:skill-track') ?? '{}').target === 10);
+    await page.evaluate(() => { location.hash = '#/skills/MI/mining?goal=15'; });
+    await page.locator('h1').filter({ hasText: 'Goal 15' }).waitFor();
+    await page.locator('.training-follow').click();
+    await page.locator('.tracked-skill').waitFor();
+    await page.waitForFunction(() => JSON.parse(localStorage.getItem('osrs-put:skill-track') ?? '{}').target === 15);
+    expect(true, 'Preparation: following a new target updates an already followed skill');
+    await page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
+    await page.waitForFunction(() => (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.stepId === 'S2-07');
+    await page.evaluate(next => {
+      const w = window as any; w.__status = { ...w.__status, stats: next }; w.__emit({ type: 'STATS', stats: next });
+      location.hash = '#/skills/MI/mining?goal=25';
+    }, { ...stats, mining: 21 });
+    await page.locator('.training-follow').waitFor();
+    await page.locator('.training-follow').click();
+    await page.locator('.tracked-skill').waitFor();
+    await page.waitForFunction(() => (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.guide?.items?.some((item: any) => item.name === 'Mithril pickaxe'));
+    expect((await text(page, '.tracked-skill')).includes('Mithril pickaxe'), 'Preparation: the owned usable pickaxe is named even with Attack1');
+    expect(await noOverflow(page) && !errors.length, 'Preparation: exact goals and owned tools fit the accepted Ledger');
+    await page.screenshot({ path: 'audit-temp/peaceful-preparation-1280.png' });
+    await page.context().close();
+  }
+  {
+    const { page, errors } = await open(browser, 1280, mock, '#/skills/SM/smithing');
+    await page.getByRole('button', { name: 'Open quest guide', exact: true }).waitFor();
+    expect((await text(page, '.training')).includes("The Knight's Sword"), 'Smithing: the default29 checkpoint offers its actual XP quest rather than a bronze grind');
+    await page.getByRole('button', { name: 'Open quest guide', exact: true }).click();
+    await page.waitForFunction(() => location.hash === '#/step/S2-07' && (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.stepId === 'S2-07');
+    const progress = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'));
+    expect(!progress.steps?.['S2-07'] && progress.levels?.smithing === 1, 'Smithing: opening the real quest guide awards neither XP nor quest completion');
+    expect(await page.locator('.tracked-skill').count() === 0 && !errors.length, 'Smithing: the existing quest route starts without a parallel training engine');
+    await page.context().close();
   }
 }
 

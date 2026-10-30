@@ -9,11 +9,12 @@ import { nameKey } from './checklist';
 //  — the wiki speed is a guide, not a promise: the time to the goal is counted from the player's measurements, and when there are none —
 //    only as a "per the wiki" range and marked so. The XP per action is the game's exact number; "how many more actions" is counted from it.
 
-import type { GameMode, Step } from '../types';
+import type { GameMode, Progress, Step } from '../types';
 import methodsJson from '../data/trainingMethods.json';
 import toolProgressionJson from '../data/toolProgression.json';
 import { evaluate, itemRequirement, type ReqState, type Requirement } from './requirements';
-import { coinsOf, heldExact, levelOf, type PlayerState } from './playerState';
+import { coinsOf, heldExact, levelOf, questOf, type PlayerState } from './playerState';
+import { isClosed } from './next-step';
 import { xpForLevel } from './xp';
 import type { MethodPriority, PlayStyle } from './playStyle';
 import { rangedEquipment, rangedNeeds, RANGED_WATCH } from './rangedLoadout';
@@ -67,6 +68,7 @@ export interface TrainingMethod {
   rateSource?: 'model';
   /** Physical tool/recipe/loadout used by the rate, for useful progression milestones. */
   rateBasis?: string;
+  selectedTool?: string;
   /** Initial processing batch; subsequent replenishment is not guaranteed. */
   batchActions?: number;
   consumables?: ModelRate['consumables'];
@@ -101,12 +103,14 @@ export interface TrainingMethod {
   /** A quest with a one-time XP reward: it does not become the "best method", it is shown separately. */
   kind: 'method' | 'quest';
   xpTotal: number | null;
+  /** Existing full quest guide for this declared one-time checkpoint reward. */
+  questGuide?: { name: string; stepId: string };
 }
 
 interface Raw {
   id: string; skill: string | string[]; from: number; suggestedFrom?: number; introductory?: boolean; to: number | null; name: string; members: boolean;
   needs?: MethodNeed[]; kit?: TrainingMethod['kit']; manualSetup?: string; xph?: [number, number]; xpa?: number; act?: string; effort: Effort; cost: MethodCost; risk: Risk;
-  where: string; place?: string; objectNames?: string[]; npcNames?: string[]; note?: string; url: string; kind?: 'method' | 'quest'; xpTotal?: number;
+  where: string; place?: string; objectNames?: string[]; npcNames?: string[]; note?: string; url: string; kind?: 'method' | 'quest'; xpTotal?: number; questGuide?: TrainingMethod['questGuide'];
 }
 
 export const trainingMethods: TrainingMethod[] = (methodsJson as unknown as { methods: Raw[] }).methods.map((m) => ({
@@ -116,6 +120,7 @@ export const trainingMethods: TrainingMethod[] = (methodsJson as unknown as { me
   needs: m.needs ?? [], xph: m.xph ?? null, xpa: m.xpa ?? null, act: m.act ?? null,
   effort: m.effort, cost: m.cost, risk: m.risk, where: m.where, ...(m.place ? { place: m.place } : {}), ...(m.note ? { note: m.note } : {}), url: m.url,
   kind: m.kind ?? 'method', xpTotal: m.xpTotal ?? null,
+  ...(m.questGuide ? { questGuide: m.questGuide } : {}),
   ...(m.objectNames ? { objectNames: m.objectNames } : {}),
   ...(m.npcNames ? { npcNames: m.npcNames } : {}),
   ...(m.introductory ? { introductory: true } : {}),
@@ -266,8 +271,11 @@ export function preparationNeeds(advice: Pick<TrainingAdvice, 'best' | 'upgrade'
   const piece = melee || method.kit === 'strike-spell' || method.kit === 'f2p-bow' ? upgradePiece : null;
   if (piece) return [...needs.filter(n => n.type !== 'item' || !n.equip || ![piece.slot, ...(piece.slot === 'weapon' && piece.twoHanded ? ['shield'] : [])].includes(gearPieceByName(n.name)?.slot ?? '')),
     { type: 'item', name: piece.name, count: 1, equip: true }];
-  return tool ? needs.map(n => n.type === 'tool' && tools[n.skill].some(t => t.tier === tool)
-    ? { type: 'item', name: tool, count: 1 } : n) : needs;
+  return needs.map(n => {
+    const selected = tool ?? method.selectedTool;
+    return n.type === 'tool' && selected && tools[n.skill].some(t => t.tier === selected)
+      ? { type: 'item', name: selected, count: 1 } : n;
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -411,6 +419,21 @@ export interface TimeEstimate {
   maxHours: number;
 }
 
+/** Offer a declared quest checkpoint through its real guide, never award or infer its XP. */
+export function questTrainingStep(advice: TrainingAdvice, state: PlayerState, steps: readonly Step[], progress: Progress): Step | null {
+  if (advice.level === null || advice.level >= advice.target || advice.xpLeft === null) return null;
+  for (const method of advice.quests) {
+    const guide = method.questGuide;
+    if (!guide || method.kind !== 'quest' || !method.skills.includes(advice.skill) || (method.members && state.mode !== 'members')
+      || method.to !== advice.target || !method.xpTotal || method.xpTotal < advice.xpLeft
+      || questOf(state, guide.name) === 'DONE' || isClosed(progress, guide.stepId)) continue;
+    const step = steps.find(s => s.id === guide.stepId);
+    const trigger = step?.inGame?.completionTrigger;
+    if (step && trigger?.type === 'QUEST_COMPLETED' && trigger.questName && nameKey(trigger.questName) === nameKey(guide.name)) return step;
+  }
+  return null;
+}
+
 export interface TrainingAdvice {
   skill: string;
   /** null — the level is unknown: there is nothing to advise. */
@@ -488,6 +511,7 @@ export function personalize(methods: readonly TrainingMethod[], skill: string, s
     const out: TrainingMethod = r ? {
       ...m, xph: [Math.round(r.xph[0]), Math.round(r.xph[1])], rateSource: 'model', rateBasis: r.basis, ...(r.batchActions !== undefined ? { batchActions: r.batchActions } : {}), ...(r.consumables ? { consumables: r.consumables } : {}), costPerHour: r.costPerHour,
       ...(r.methodName ? { name: r.methodName } : {}),
+      ...(r.selectedTool ? { selectedTool: r.selectedTool } : {}),
       ...(r.xpPerAction !== undefined ? { xpa: r.xpPerAction } : {}),
       ...(r.needs ? { needs: [...m.needs.filter((n) => n.type === 'skill' || n.type === 'quest'), ...r.needs.map((n) => {
         if (n.type !== 'item' || r.exactNeeds) return n;

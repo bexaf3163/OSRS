@@ -11,6 +11,8 @@ export interface Route {
   step?: string;
   /** Direct skill selection within a grouped guide, for example ME/defence. */
   skill?: string;
+  /** Explicit preparation target; ordinary skill navigation keeps its normal suggested checkpoint. */
+  goal?: number;
   /** Grows with every navigation, so that a repeated click on the same link scrolls to the step again. */
   key: number;
 }
@@ -22,10 +24,13 @@ export function parseHash(hash: string): Route {
 }
 
 function parsePath(hash: string): Omit<Route, 'key'> {
-  const [first, second, third] = hash.replace(/^#\/?/, '').split('/').map(decodeURIComponent);
+  const [path, query] = hash.replace(/^#\/?/, '').split('?', 2);
+  const [first, second, third] = path.split('/').map(decodeURIComponent);
+  const rawGoal = new URLSearchParams(query).get('goal');
+  const goal = rawGoal && /^\d{1,2}$/.test(rawGoal) && Number(rawGoal) >= 2 ? Number(rawGoal) : undefined;
   switch (first) {
     case 'step': return { page: 'path', step: second };
-    case 'skills': return { page: 'skills', param: second, ...(third ? { skill: third } : {}) };
+    case 'skills': return { page: 'skills', param: second, ...(third ? { skill: third } : {}), ...(goal !== undefined ? { goal } : {}) };
     case 'goals': return { page: 'goals' };
     case 'quests': return { page: 'quests' };
     // The Journal groups Quests, Stage goals and Session. #/quests and #/goals keep working and open the matching tab.

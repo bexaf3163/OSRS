@@ -1,5 +1,12 @@
 # In-game acceptance — assigned to Claude
 
+## 2.81.8 non-combat preparation — not live-verified
+
+- From an actual quest prerequisite (for example Mining10 for The Knight's Sword), use the preparation action. Skills must open that exact skill/goal, start the normal prepared session and return to the retained quest on Stop, without XP/completion credits. Change the goal of an already followed skill and verify it really changes.
+- With a usable axe/pickaxe in bank and insufficient Attack to wield it, check that the normal guide names and withdraws that physical tool for carrying. Recheck after its real use-level unlock, a stock change and a worthwhile paid upgrade; unread bank/tool data must remain unknown.
+- At Smithing1 and an unfinished Knight's Sword, the default29 checkpoint should open its real quest guide, with normal materials and prerequisites. Completed/skipped quests must not be offered again or credited as newly completed. Prayer/Runecraft should defer default F2P grinding while allowing an explicit small goal.
+- Reachable Fishing/Cooking/Mining/Woodcutting/Smithing/Crafting/Firemaking and explicit Prayer/Runecraft legs: verify current tool/recipe, actual supplies, bank/funding detour, station/spot and next unlock agree across Skills, Path, Shopping and the one HUD. Test shortage/refill and return after earning. Mark unreachable states NOT REACHABLE, never PASS from automated coverage. Preserve Ledger fonts/layout.
+
 ## 2.81.7 Magic equipment/preparation — not live-verified
 
 - Follow a reachable Magic goal and verify its current spell, next real level boundary, runes, staff, food and destination agree in Skills, Path, Shopping and the single HUD. Stop restores the retained quest; a short custom goal must not complete the route's Magic55 objective.

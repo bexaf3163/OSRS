@@ -20,11 +20,16 @@ const owned = (items: Record<string, { carried?: number; bank?: number }>, bankS
 });
 
 describe('step readiness', () => {
+  it('a skill preparation action names its actual skill and minimum rather than the page default', () => {
+    const r = stepReadiness(input(step('S9-01'), { stats: { crafting: 20, woodcutting: 20, magic: 1 } }));
+    expect(r.problems.find(p => p.stat?.skill === 'crafting')?.action).toMatchObject({ kind: 'link', href: '#/skills/CR/crafting?goal=31' });
+    expect(r.problems.find(p => p.stat?.skill === 'woodcutting')?.action).toMatchObject({ kind: 'link', href: '#/skills/WC/woodcutting?goal=36' });
+  });
   it('levels: short — MISSING_STATS with "catch up"; enough — READY; unknown — not "no"', () => {
     const s = step('S9-01'); // Lost City: Crafting 31, Woodcutting 36
     const low = stepReadiness(input(s, { stats: { crafting: 28, woodcutting: 40 } }));
     expect(low.status).toBe('MISSING_STATS');
-    expect(low.problems[0]).toMatchObject({ kind: 'skill', label: 'Crafting 31', state: 'MISSING', action: { kind: 'link', href: '#/skills/CR' } });
+    expect(low.problems[0]).toMatchObject({ kind: 'skill', label: 'Crafting 31', state: 'MISSING', action: { kind: 'link', href: '#/skills/CR/crafting?goal=31' } });
     expect(low.problems[0].detail).toContain('3 short');
     const ok = stepReadiness(input(s, { stats: { crafting: 31, woodcutting: 36, magic: 13 } }));
     expect(ok.problems).toEqual([]);

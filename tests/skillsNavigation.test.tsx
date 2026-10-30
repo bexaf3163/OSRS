@@ -5,6 +5,7 @@ import { allStages, allSteps } from '../src/data';
 import { emptyProgress } from '../src/lib/progress';
 import { SkillsPage } from '../src/pages/Skills';
 import { SkillDetailPage } from '../src/pages/SkillDetail';
+import { parseHash } from '../src/lib/router';
 
 vi.mock('../src/store', () => ({ useStore: () => ({
   mode: 'f2p', stages: allStages.slice(0, 6), steps: allSteps,
@@ -20,6 +21,25 @@ vi.mock('../src/components/LevelInput', () => ({ LevelInput: () => null }));
 vi.mock('../src/components/LiveXp', () => ({ LiveXp: () => null }));
 
 describe('direct skill access without nested menus', () => {
+  it('preparation links select the exact skill and target beyond its default checkpoint', () => {
+    const route = parseHash('#/skills/ME/defence?goal=15');
+    expect(route).toMatchObject({ page: 'skills', param: 'ME', skill: 'defence', goal: 15 });
+    const html = renderToStaticMarkup(<SkillsPage param={route.param} selectedSkill={route.skill} goal={route.goal} />);
+    expect(html).toContain('data-training-skill="defence" data-target="15"');
+    expect(html).toContain('Goal 15');
+    expect(html).not.toContain('Goal 10');
+    expect(renderToStaticMarkup(<SkillDetailPage id="WC" selectedSkill="defence" requestedGoal={15} />)).not.toContain('Goal 15');
+  });
+  it.each(['1', '100', '-2', 'NaN', '10.5', 'Infinity', ''])('rejects an invalid preparation goal %s', goal => {
+    expect(parseHash(`#/skills/MI/mining?goal=${goal}`).goal).toBeUndefined();
+  });
+  it.each([['PR', 'prayer'], ['RC', 'runecraft']])('does not turn %s into an arbitrary default grind; explicit goals remain available', (id, skill) => {
+    const html = renderToStaticMarkup(<SkillDetailPage id={id} selectedSkill={skill} />);
+    expect(html).toContain('Save dedicated training for membership');
+    expect(html).not.toContain('data-training-skill=');
+    expect(html).not.toContain('→ Goal');
+    expect(renderToStaticMarkup(<SkillDetailPage id={id} selectedSkill={skill} requestedGoal={9} />)).toContain('data-target="9"');
+  });
   it('does not mark an unread profile checkpoint reached from unadmitted live character stats', () => {
     bridge.state = 'online';
     bridge.stats = { cooking: 99 };

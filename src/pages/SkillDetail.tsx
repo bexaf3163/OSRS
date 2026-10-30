@@ -24,7 +24,7 @@ import { useTrackedTraining } from '../readinessContext';
 import { setTracked } from '../lib/skillTrack';
 import { SKILL_NAMES, type SkillName } from '../lib/skillGuide';
 
-export function SkillDetailPage({ id, selectedSkill }: { id: string; selectedSkill?: string }) {
+export function SkillDetailPage({ id, selectedSkill, requestedGoal }: { id: string; selectedSkill?: string; requestedGoal?: number }) {
   const skill = findSkill(id);
   if (!skill) {
     return (
@@ -35,12 +35,14 @@ export function SkillDetailPage({ id, selectedSkill }: { id: string; selectedSki
       </div>
     );
   }
-  return <SkillView skill={skill} selectedSkill={selectedSkill && skill.levelSkills.includes(selectedSkill) ? selectedSkill : undefined} />;
+  const selected = selectedSkill && skill.levelSkills.includes(selectedSkill) ? selectedSkill : undefined;
+  const goal = selected && Number.isInteger(requestedGoal) && requestedGoal! >= 2 && requestedGoal! <= 99 ? requestedGoal : undefined;
+  return <SkillView skill={skill} selectedSkill={selected} requestedGoal={goal} />;
 }
 
 type SkillTab = 'guide' | 'plan' | 'calculator' | 'reference';
 
-function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: string }) {
+function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; selectedSkill?: string; requestedGoal?: number }) {
   const { progress, steps, stages, mode } = useStore();
   const [tab, setTab] = useState<SkillTab>('guide');
   const guides = roadmapSkills(skill);
@@ -63,7 +65,8 @@ function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: str
   const checkpoint = mode === 'f2p' ? f2pAdviceFor(routeFocus.skill)?.target : null;
   const training = useTrackedTraining();
   const ownTraining = training && focused.levelSkills.includes(training.step.followsMethod ?? '') ? training : null;
-  const focus: TrainingFocus = ownTraining ? { skill: ownTraining.step.followsMethod!, target: ownTraining.target, source: 'tracked' }
+  const focus: TrainingFocus = requestedGoal !== undefined && selectedSkill ? { skill: selectedSkill, target: requestedGoal, source: 'preparation' }
+    : ownTraining ? { skill: ownTraining.step.followsMethod!, target: ownTraining.target, source: 'tracked' }
     : checkpoint ? { skill: routeFocus.skill, target: checkpoint, source: 'checkpoint' } : routeFocus;
   // The level and plan row of the skill being trained (Melee: the one with a goal ahead, not a Defence kept at 1).
   const { level, hit } = focusRange({ ...focused, levelSkills: [focus.skill] }, progress, goals, stage, stages[stages.length - 1]?.id);
@@ -71,16 +74,18 @@ function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: str
   // A tracked plan of this page's skills leads the game: the card shows that skill and the plan's method, so the card and the game agree.
   const trackedStep = useTrackedStep();
   const follow = trackedStep && focused.levelSkills.includes(trackedStep.skill) ? trackedStep : null;
-  const card = ownTraining ? { skill: ownTraining.step.followsMethod!, target: ownTraining.target, followed: null } : follow
+  const card = focus.source === 'preparation' ? { skill: focus.skill, target: focus.target, followed: null }
+    : ownTraining ? { skill: ownTraining.step.followsMethod!, target: ownTraining.target, followed: null } : follow
     ? { skill: follow.skill, target: focus.skill === follow.skill ? focus.target : follow.step.targetLevel, followed: methodOfGuideStep(follow.step)?.id ?? null }
     : { skill: focus.skill, target: focus.target, followed: null };
   const f2p = mode === 'f2p' ? f2pAdviceFor(card.skill) : null;
+  const defer = f2p?.target === null && requestedGoal === undefined && !ownTraining;
 
   return (
     <div className="page skill-detail">
       <header className="page-head">
         <SkillGlyph skill={focus.skill} size={48} />
-        <h1>{selectedSkill ? levelById.get(selectedSkill)?.name ?? skill.name : skill.name}<span className="skill-level-goal">{focusName ?? 'Level'} {level} → Goal {focus.target}</span>{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
+        <h1>{selectedSkill ? levelById.get(selectedSkill)?.name ?? skill.name : skill.name}<span className="skill-level-goal">{focusName ?? 'Level'} {level}{!defer && <> → Goal {focus.target}</>}</span>{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
         <p className="muted">
           {(skill.nameEn ?? skill.subtitle) !== skill.name && <>{skill.nameEn ?? skill.subtitle} · </>}
           {skill.wiki && <a href={skill.wiki} target="_blank" rel="noopener noreferrer">Wiki <IconExternal /></a>}
@@ -104,8 +109,13 @@ function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: str
 
       {tab === 'guide' && (
       <>
-      {f2p && <p className="small muted f2p-skill-checkpoint">{f2pAdviceLabel(f2p, progress.levels?.[card.skill])} <button type="button" className="link-btn" onClick={() => setTab('reference')}>Why?</button></p>}
-      <TrainingCard skill={card.skill} target={card.target} followed={card.followed} view="summary" />
+      {focus.source === 'preparation' ? <FocusNote focus={focus} /> : f2p && <p className="small muted f2p-skill-checkpoint">{f2pAdviceLabel(f2p, progress.levels?.[card.skill])} <button type="button" className="link-btn" onClick={() => setTab('reference')}>Why?</button></p>}
+      {defer ? <section className="training training-summary" aria-label="What to train with">
+        <p className="training-now"><strong>Save dedicated training for membership</strong></p>
+        <p className="small muted">{f2p?.reason}</p>
+        {f2p?.equipment && <p className="small muted training-equipment">{f2p.equipment}</p>}
+        <button type="button" className="link-btn" onClick={() => setTab('calculator')}>Choose a custom goal</button>
+      </section> : <TrainingCard skill={card.skill} target={card.target} followed={card.followed} view="summary" />}
       <button type="button" className="link-btn skill-plan-link" onClick={() => setTab('plan')}>Method details &amp; leveling plan →</button>
       </>
       )}
@@ -159,7 +169,9 @@ function SkillView({ skill, selectedSkill }: { skill: Skill; selectedSkill?: str
       </>
       )}
 
-      {tab === 'calculator' && <Calculator levelIds={skill.levelSkills} suggest={(lid, level, stage) => defaultTarget(skill, lid, level, stage)} />}
+      {tab === 'calculator' && <Calculator levelIds={selectedSkill ? [selectedSkill] : skill.levelSkills} suggest={(lid, level, stage) =>
+        requestedGoal !== undefined && lid === selectedSkill ? requestedGoal
+          : mode === 'f2p' && f2pAdviceFor(lid)?.target === null ? Math.min(99, level + 1) : defaultTarget(skill, lid, level, stage)} />}
 
       {tab === 'reference' && (
         <>
@@ -198,6 +210,7 @@ function ReachedNote({ skill, stage, focus }: { skill: Skill; stage: number; foc
 }
 
 function FocusNote({ focus }: { focus: TrainingFocus }) {
+  if (focus.source === 'preparation') return <p className="muted small focus-note">Preparation needs {levelById.get(focus.skill)?.name ?? focus.skill} {focus.target}.</p>;
   if (focus.source === 'checkpoint') return <p className="muted small focus-note">Suggested F2P checkpoint: {focus.target}. It is optional, not a membership requirement.</p>;
   if (focus.source === 'tracked') return <p className="muted small focus-note">Following your selected training goal: {focus.target}.</p>;
   const name = levelById.get(focus.skill)?.name ?? focus.skill;

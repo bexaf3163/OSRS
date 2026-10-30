@@ -10,7 +10,7 @@ import { useBridge } from '../bridge';
 import { usePlayerState } from '../playerStateContext';
 import { setFeatures, useFeatures } from '../lib/features';
 import { priorityOf, styleOf } from '../lib/playStyle';
-import { adviseTraining, formatHours, type MethodView, type TrainingAdvice } from '../lib/trainingRouter';
+import { adviseTraining, formatHours, questTrainingStep, type MethodView, type TrainingAdvice } from '../lib/trainingRouter';
 import { actionForm } from '../lib/pacing';
 import { levelOf } from '../lib/playerState';
 import { trainingNav } from '../lib/trainingNav';
@@ -82,7 +82,8 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
   const features = useFeatures();
   const profile = styleOf(features);
   const { state } = usePlayerState();
-  const { xp } = useBridge();
+  const { xp, pointInGame } = useBridge();
+  const { steps, progress } = useStore();
   const tracked = useTracked();
   const selectedPriority = trackedPriority(tracked, skill, priorityOf(features));
   const prices = usePriceView(true);
@@ -100,6 +101,16 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
     <p className="training-now"><strong>{skillTitle(skill)} checkpoint reached</strong> · level {advice.level}</p>
     <p className="small muted">{state.mode === 'f2p' ? f2pAdviceFor(skill)?.reason ?? 'Your selected training goal is complete.' : 'Your selected training goal is complete.'}</p>
   </section> : null;
+  const quest = view === 'summary' && !tracked && questTrainingStep(advice, state, steps, progress);
+  if (quest) return <section className="training training-summary" aria-label="What to train with">
+    <p className="training-now"><strong>Quest checkpoint: {quest.title}</strong></p>
+    <p className="small muted">Use the existing quest guide for this XP reward instead of grinding to {target}. Its preparation and prerequisites are checked there.</p>
+    {equipmentHint && <p className="small muted training-equipment"><strong>Equipment:</strong> {equipmentHint}</p>}
+    <button type="button" className="btn btn-primary btn-sm training-follow" onClick={() => {
+      void pointInGame(quest);
+      window.location.hash = `#/step/${quest.id}`;
+    }}>Open quest guide</button>
+  </section>;
   const { best } = advice;
   // The method the game follows (a tracked plan) leads the card with this player's figures; the pick, when it differs, is one line under it.
   const shown = advice.followed ?? best;
@@ -149,7 +160,8 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
             </div>
             <div className="training-location"><h3>Location</h3><p>{shown!.method.where}</p>{view === 'summary' && SKILL_NAMES.includes(skill as SkillName)
               ? <button type="button" className="btn btn-primary btn-sm training-follow" onClick={() => {
-                if (tracked?.skill !== skill) setTracked({ skill: skill as SkillName, mode: profile.style === 'chill' && priorityOf(features) === 'relaxed' ? 'afk' : 'fast', freeOnly: state.mode === 'f2p', target });
+                setTracked(tracked?.skill === skill ? { ...tracked, target }
+                  : { skill: skill as SkillName, mode: profile.style === 'chill' && priorityOf(features) === 'relaxed' ? 'afk' : 'fast', freeOnly: state.mode === 'f2p', target });
                 window.location.hash = '#/';
               }}>{tracked?.skill === skill ? 'Continue training plan' : 'Follow training plan'}</button>
               : nav && <NavigateButton target={nav} label={`To the place: ${nav.label}`} />}</div>
