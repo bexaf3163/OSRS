@@ -26,4 +26,11 @@ describe('advisory F2P checkpoints', () => {
     expect(f2pAdviceLabel(cooking, NaN)).not.toContain('reached');
     for (const id of ['prayer', 'runecraft', 'hitpoints']) expect(f2pAdviceFor(id)?.target).toBeNull();
   });
+  it('provides concise equipment guidance for every supported peaceful F2P skill', () => {
+    for (const skill of ['cooking', 'fishing', 'woodcutting', 'mining', 'firemaking', 'smithing', 'crafting', 'runecraft', 'prayer']) {
+      expect(f2pAdviceFor(skill)?.equipment).toBeTruthy();
+      expect(f2pAdviceFor(skill)!.equipment!.length).toBeLessThan(180);
+    }
+  });
+
 });

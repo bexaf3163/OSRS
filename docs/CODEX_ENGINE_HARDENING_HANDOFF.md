@@ -188,3 +188,8 @@ Use existing processing recipes, tools/access/staff declarations, shared require
 Processing ETA now explicitly assumes future supplies and excludes purchasing time; batchActions is observed-plan metadata, not a whole-goal funding claim.
 
 2.81.3 verified delivery: main source `5e13bd3330e913fc85d8c19074b5fd00d8087b24`, Checks `40977812554` and Release `40977812561` succeeded, including full final-tree browser and isolated Portable gates. Downloaded EXE `102440650` bytes, SHA256 `05b3f9a1e114f10007ad224e3a0c0bccf8d85f2b28a13f157bd2aa13c225ae60`, matches asset digest, manifest and source. Current continuation/remaining work: docs/CLAUDE_NEXT_SESSION.md.
+
+
+## Conditional processing goal demand — 2.81.4 candidate
+
+Recipe.consumables comes from the existing processing engine's resolved inputs, after staff substitution. buildPath integrates processingActions using its existing rate samples without splitting the visible stage merely for a burn-rate change. processingGoalNeeds is aggregation only: complete supported path, expected action inputs, max reusable tools, safe whole quantities; incomplete/ambiguous paths stay unestimated. Advice→pick→step.goalItemsRequired uses existing Shopping/funding accounting, while itemsRequired keeps the first bag. A multi-goal route only exports a whole-step projection for its final unresolved skill. Regression: processingGoal.test.ts covers newly declared recipes, partial XP/sampled actions, fractional inputs, unsupported/overlap cases, immutable observed state, route shopping and separate minimum/objective/unknown funding. No future profit or purchase-fee/reinvestment model is implied.

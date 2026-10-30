@@ -261,7 +261,7 @@ async function f2pSkillsScenarios(browser: Browser) {
     await page.context().close();
   }
 
-  for (const [group, skill, tool] of [['WC', 'woodcutting', 'axe'], ['MI', 'mining', 'pickaxe'], ['FI', 'fishing', 'rod/net'], ['CO', 'cooking', 'ingredients'], ['FM', 'firemaking', 'tinderbox']] as const) {
+  for (const [group, skill, tool] of [['WC', 'woodcutting', 'axe'], ['MI', 'mining', 'pickaxe'], ['FI', 'fishing', 'rod/net'], ['CO', 'cooking', 'ingredients'], ['FM', 'firemaking', 'tinderbox'], ['SM', 'smithing', 'ores'], ['CR', 'crafting', 'recipe'], ['RC', 'runecraft', 'tiara'], ['PR', 'prayer', 'bones']] as const) {
     const { page, errors } = await open(browser, 1000, { zen: true, market: true,
       progress: progressBefore('S6-03', { gameMode: 'f2p', levels: { [skill]: 1 } }),
     }, `#/skills/${group}/${skill}`);
@@ -542,6 +542,9 @@ async function processingBudgetScenarios(browser: Browser) {
     expect((await text(page, '.training-summary')).includes('Willow logs'), `Processing ${width}: cash-only update refreshes recipe and required supplies`);
     expect((await text(page, '.training-summary')).includes('assumes future supplies'), `Processing ${width}: training time does not promise funded replenishment`);
     expect(await page.locator('.training-summary details').count() === 0 && await noOverflow(page) && !errors.length, `Processing ${width}: compact UI stays usable without console errors`);
+    await page.getByRole('tab', { name: 'Plan', exact: true }).click();
+    expect((await text(page, '.training-analysis')).includes('Conditional goal supplies (estimate)') && (await text(page, '.training-analysis')).includes('Future funding and product sales are not assumed'), `Processing ${width}: the full-goal estimate is in Plan, separated from starter preparation`);
+    expect(await noOverflow(page) && !errors.length, `Processing ${width}: goal quantities fit the current Ledger`);
     await page.screenshot({ path: `audit-temp/processing-budget-${width}.png` });
     await page.context().close();
   }

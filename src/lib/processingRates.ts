@@ -170,7 +170,7 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number] }
   const lootPerHour = costPerHour === null || !r.output ? 0 : value! * outputQty * success * done;
   const rate: ModelRate = {
     xph, costPerHour, basis: r.output?.name ?? r.inputs[0].name, xpPerAction: r.xp * success, exactNeeds: true, batchActions: actions,
-    needs,
+    needs, consumables: inputs.map(({ name, qty, anyOf }) => ({ name, qty, ...(anyOf?.length ? { anyOf: [...anyOf] } : {}) })),
     ...(costPerHour !== null ? { costName: inputs.map((i) => i.name.toLowerCase()).join(', ') } : {}),
     ...(lootPerHour > 0 && r.output ? { lootPerHour, loot: r.output.name } : {}),
     ...(at.spot ? { spot: at.spot } : {}),

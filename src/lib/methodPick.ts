@@ -19,7 +19,8 @@ export function pickMethods(steps: readonly Step[], state: PlayerState, mode: Ga
   for (const step of steps) {
     const goals = followedGoals(step);
     if (!goals.length) continue;
-    const goal = goals.find(g => { const level = levelOf(state, g.skill); return level === undefined || level < g.target; });
+    const remaining = goals.filter(g => { const level = levelOf(state, g.skill); return level === undefined || level < g.target; });
+    const goal = remaining[0];
     if (!goal) { picks[step.id] = GOAL_REACHED; continue; }
     const level = levelOf(state, goal.skill);
     if (level === undefined) {
@@ -32,7 +33,7 @@ export function pickMethods(steps: readonly Step[], state: PlayerState, mode: Ga
     const spot = along?.spot ?? best?.method.spot;
     // A model can resolve recipe supplies without a named kit or station (for example bank-side processing).
     if (best) picks[step.id] = best.method.kit || spot || best.method.needs.length || advice.actionTarget !== null ? {
-      methodId: best.method.id, untilLevel: advice.actionTarget ?? goal.target, needs: methodNeeds(best.method, state, market.prices), name: best.method.name,
+      methodId: best.method.id, untilLevel: advice.actionTarget ?? goal.target, goalNeeds: remaining.length === 1 ? advice.goalNeeds : undefined, needs: methodNeeds(best.method, state, market.prices), name: best.method.name,
       ...(spot ? { spot: { label: spot.label, x: spot.place.x, y: spot.place.y, plane: spot.place.plane, ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }, where: best.method.where } : {}),
       ...(best.method.rateWarning ? { warning: best.method.rateWarning } : {}),
       ...(along ? { along: { skill: along.skill, station: along.station, products: along.products, how: along.spot.how } } : {}),

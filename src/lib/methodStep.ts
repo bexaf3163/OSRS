@@ -25,7 +25,7 @@ export const UNKNOWN_GOAL_PREFIX = 'goal-unknown:';
 /** Resolved supplies travel with the method pick, as combat/food projections already do; the store never rebuilds a loadout from stale state. */
 /** A picked method: its id, or with what the player needs for it, a name for this player, and the spot the gathering engine chose (methodRates.ts). */
 export type TrainingPick = string | {
-  methodId: string; untilLevel?: number; needs: MethodNeed[]; name?: string; where?: string; warning?: string;
+  methodId: string; untilLevel?: number; goalNeeds?: MethodNeed[]; needs: MethodNeed[]; name?: string; where?: string; warning?: string;
   /** The spot the engine picked; waypoints - the way in of a spot under the ground, entrance first. */
   spot?: { label: string; x: number; y: number; plane: number; waypoints?: { x: number; y: number; plane: number; label?: string }[] };
   /** The step's next skill trained on the same catches at a station beside the spot (fish cooked on the fire there), and what is done with them. */
@@ -158,7 +158,8 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
   const at = chosen ? { x: chosen.x, y: chosen.y, plane: chosen.plane, label: pointLabel(m, chosen.label) } : methodPoint(id);
   return {
     ...step,
-    goalItemsRequired: undefined,
+    goalItemsRequired: typeof pick !== 'string' && pick.goalNeeds ? pick.goalNeeds.map(n => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null)
+      .map(r => ({ ...r, howToGet: 'For the remaining staged training goal (estimate); future preparation may change.' })) : undefined,
     followsMethod: goal.skill,
     ...(equipmentHint ? { fields: [...(step.fields ?? []).filter(f => f.label !== 'Equipment'), { label: 'Equipment', text: equipmentHint }] } : {}),
     itemsRequired,

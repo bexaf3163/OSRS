@@ -38,6 +38,8 @@ export interface ModelRate {
   exactNeeds?: boolean;
   /** Executable initial processing actions, not supplies for the entire goal. */
   batchActions?: number;
+  /** Physical inputs per modelled XP action; reusable tools/staff are excluded. */
+  consumables?: { name: string; qty: number; anyOf?: string[] }[];
   /** What the cost is spent on, when it is not arrows (Ranged) or runes (Magic): "feathers". */
   costName?: string;
   /** What it was worked out for, in a few words: "Shortbow, Bronze arrows", "Rune axe". */

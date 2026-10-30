@@ -21,7 +21,7 @@ import { SPELLS, strikeRecipe, superheatNeeds } from './magicPlan';
 import { STYLE_GEAR } from './styleGear';
 import { PROCESSING } from './processingRates';
 import { canWear, gearData, type Levels } from '../services/gearAdvisor';
-import { methodRate, rateKeyOf, type RateSpot } from './methodRates';
+import { methodRate, rateKeyOf, type RateSpot, type ModelRate } from './methodRates';
 import { combatUpgrades } from './combatRates';
 import type { PriceView } from './funding/quotes';
 import { coinsPerMinute, coinTimeShare, earningsOrder } from './lootValue';
@@ -29,6 +29,7 @@ import type { TradeRestriction } from './tradeRestriction';
 import { requirementCost } from './funding/need';
 import { allocateMaterialStock } from './materialStock';
 import type { HeldUnits } from './doses';
+import { processingGoalNeeds } from './processingGoal';
 
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
@@ -67,6 +68,7 @@ export interface TrainingMethod {
   rateBasis?: string;
   /** Initial processing batch; subsequent replenishment is not guaranteed. */
   batchActions?: number;
+  consumables?: ModelRate['consumables'];
   /** The spot the gathering engine picked among the method's candidates, and whether a full bag is banked or dropped there. */
   spot?: RateSpot;
   /** One safety line from the model: aggressive NPCs at the picked spot. */
@@ -326,6 +328,8 @@ export interface PathLeg {
   toLevel: number;
   /** Resolved future preparation, not a claim that these supplies are owned or already funded. */
   needs?: MethodNeed[];
+  /** Expected processing actions integrated at the existing forecast samples. */
+  processingActions?: number;
 }
 
 export interface TimeEstimate {
@@ -347,6 +351,8 @@ export interface TrainingAdvice {
   quests: TrainingMethod[];
   /** The path from the level to the goal: which method on which leg. */
   path: PathLeg[];
+  /** Conditional whole-goal materials/kit, separate from current-batch readiness. */
+  goalNeeds?: MethodNeed[];
   xpLeft: number | null;
   /** How many more actions with the best method to the end of its leg; null — the XP per action is unknown. */
   actionsLeft: number | null;
@@ -408,7 +414,7 @@ export function personalize(methods: readonly TrainingMethod[], skill: string, s
     if (hit) return hit;
     const r = methodRate(m, skill, state, { prices, restriction, objective });
     const out: TrainingMethod = r ? {
-      ...m, xph: [Math.round(r.xph[0]), Math.round(r.xph[1])], rateSource: 'model', rateBasis: r.basis, ...(r.batchActions !== undefined ? { batchActions: r.batchActions } : {}), costPerHour: r.costPerHour,
+      ...m, xph: [Math.round(r.xph[0]), Math.round(r.xph[1])], rateSource: 'model', rateBasis: r.basis, ...(r.batchActions !== undefined ? { batchActions: r.batchActions } : {}), ...(r.consumables ? { consumables: r.consumables } : {}), costPerHour: r.costPerHour,
       ...(r.methodName ? { name: r.methodName } : {}),
       ...(r.xpPerAction !== undefined ? { xpa: r.xpPerAction } : {}),
       ...(r.needs ? { needs: [...m.needs.filter((n) => n.type === 'skill' || n.type === 'quest'), ...r.needs.map((n) => {
@@ -593,8 +599,11 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
     const plannedNeeds = methodNeeds(pick, projected, input.prices);
     const setup = JSON.stringify([pick.rateBasis ?? '', plannedNeeds.map(n => n.type === 'item' && n.equip ? { ...n, count: 1 } : n)]);
     const review = milestones.has(lv);
-    if (last && last.method.id === pick.id && setup === previousSetup && !review) last.toLevel = lv + 1;
-    else legs.push({ method: pick, fromLevel: lv, toLevel: lv + 1, needs: plannedNeeds });
+    const processingActions = pick.consumables && pick.xpa && Number.isFinite(pick.xpa) && pick.xpa > 0 ? xp / pick.xpa : undefined;
+    if (last && last.method.id === pick.id && setup === previousSetup && !review) {
+      last.toLevel = lv + 1;
+      last.processingActions = last.processingActions !== undefined && processingActions !== undefined ? last.processingActions + processingActions : undefined;
+    } else legs.push({ method: pick, fromLevel: lv, toLevel: lv + 1, needs: plannedNeeds, ...(processingActions !== undefined ? { processingActions } : {}) });
     previousSetup = setup;
     if (pick.kit === 'f2p-bow') projectedState = forecastRangedEquipment(projected, plannedNeeds, input.prices);
   }
@@ -687,6 +696,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const reason = best ? reasonFor(best, priority, level, upgrade) : 'There is no method in the list for this level and mode: see the skill training plan.';
   return {
     ...empty, best: best ? { ...best, reason } : null, others, quests, path, xpLeft, actionsLeft, actionTarget, time, upgrade, reason,
+    goalNeeds: processingGoalNeeds(path, level, target, xpNow) ?? undefined,
     followed: followedV ? said(followedV) : null,
   };
 }

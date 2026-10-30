@@ -178,10 +178,11 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
         {shown.method.note && <p className="small muted">{shown.method.note}</p>}
         {arrows && arrows.shots.mid > 0 && <p className="small">To level {arrows.goalLevel}: approximately {arrows.shots.low.toLocaleString('en-US')}–{arrows.shots.high.toLocaleString('en-US')} shots with {arrows.bow} and {arrows.arrow}. Picking up arrows: about {arrows.lostPickingUp.mid.toLocaleString('en-US')} break; otherwise every shot costs one.{arrows.notCounted.length > 0 && ` Accuracy leaves out ${arrows.notCounted.join(', ')} (no ranged data).`}</p>}
       </>}
-      {(advice.path.length > 1 || advice.quests.length > 0) && <DetailSection className="small"><DetailHeading>Plan details</DetailHeading>
+      {(advice.path.length > 1 || advice.quests.length > 0 || (view === 'analysis' && (advice.goalNeeds?.length ?? 0) > 0)) && <DetailSection className="small"><DetailHeading>Plan details</DetailHeading>
       {advice.path.length > 1 && (
         <p className="small muted">Path: {advice.path.slice(0, 6).map((l) => `${l.fromLevel}–${l.toLevel} ${l.method.name}`).join(' → ')}{advice.path.length > 6 ? ' · Later stages update as you progress.' : ''}</p>
       )}
+      {view === 'analysis' && advice.goalNeeds && <p className="small muted">Conditional goal supplies (estimate): {advice.goalNeeds.flatMap(n => n.type === 'item' ? [`${n.name} ×${(n.count ?? 1).toLocaleString('en-US')}${n.anyOf?.length ? ' or the listed equivalent' : ''}`] : []).join(', ')}. Future funding and product sales are not assumed.</p>}
       {advice.quests.length > 0 && (
         <p className="small muted">📜 Some levels are covered by quests: {advice.quests.map((q) => q.name).join('; ')}.</p>
       )}

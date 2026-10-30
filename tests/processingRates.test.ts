@@ -321,6 +321,8 @@ describe('shared batch waits and consumed supplies', () => {
     expect(staff.costPerHour!).toBeLessThan(normal.costPerHour!);
     expect(staff.needs).toContainEqual({ type: 'item', name: 'Staff of fire', count: 1, equip: true });
     expect(staff.needs?.some((n) => n.type === 'item' && n.name === 'Fire rune')).toBe(false);
+    expect(staff.consumables?.some(n => n.name === 'Fire rune')).toBe(false);
+    expect(staff.consumables?.some(n => n.name === 'Staff of fire')).toBe(false);
   });
 });
 

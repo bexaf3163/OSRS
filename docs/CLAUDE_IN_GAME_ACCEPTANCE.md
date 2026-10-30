@@ -1,5 +1,12 @@
 # In-game acceptance — assigned to Claude
 
+## 2.81.4 goal-supplies acceptance — not live-verified
+
+- On a reachable supported processing plan, compare Train's first bag with Plan's conditional whole-goal ingredients and the whole-goal Shopping/funding view. A long goal must not be priced as one bag; the immediate game checklist must still fit one batch and first-trip funding must not require buying the whole goal.
+- Check recipe/level transitions, actual tools, banked/noted/alternative inputs, partial stock, unread bank and unpriced materials. Staff-substituted runes must not reappear in total supplies. Estimates may change as conditions change; no projected stock/cash is observed ownership.
+- On Optional Cooking after Fishing is complete, verify the active current recipe/arrow agrees with the next-batch checklist while the complete Cooking goal has its own estimate. Multi-skill routes with multiple unresolved goals must not label a single current-skill forecast as the whole step. Completed goals release the old supplies.
+- Confirm the four added peaceful F2P hints fit the accepted Ledger presentation; no fonts or controls were redesigned. No model can guarantee future product sales, funding or exact burn counts.
+
 ## 2.81.3 processing acceptance — not live-verified
 
 - Open the real bank on a reachable processing skill. With a knife, owned oak logs and no willow logs/coins, a usable owned recipe must beat an unfundable faster recipe. Increase actual available coins or withdraw new materials and check the recipe/requirements refresh without changing tabs.
