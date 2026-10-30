@@ -6,16 +6,22 @@ Updated 2026-10-30. Read this first; open historical records only for the area b
 
 Owner accepted Claude's Adventurer's Ledger2.81.1 (`57ec3ca`) on2026-10-30. Preserve its layout, controls and EB Garamond/Cinzel fonts. Current design contract: CLAUDE_REDESIGN_HANDOFF.md and REDESIGN_VERIFICATION.md. Functional WIP was backed up/stashed before fast-forwarding and reapplied without changing src/ledger, pages, App/main or the Ledger frame. No design issue identified during integration. Ledger desktop regressions preserve the accepted presentation.
 
-## Active batch — 2.81.4 goal supplies (not yet published)
+## Current delivery — 2.81.4 published and verified
+
+[Normal Portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.81.4). Product source `bdf49d151f62d452dd472b42feed752d47370a75` on main. [Checks](https://github.com/bexaf3163/OSRS/actions/runs/41022636385) and [Release](https://github.com/bexaf3163/OSRS/actions/runs/41022636301) succeeded, including complete final-tree browser, Java, native and isolated-EXE validation. Downloaded `102439114`-byte EXE SHA256 `d9266db3bf9dd0793d3906eb081eac14c92965ec4bd29075fb5bd5cfb75ff492` matches GitHub asset digest and SHA256SUMS; release tag/source and both CI head SHAs match. No 2.81.4 publication action remains.
+
+Local evidence: 2,343 unit tests/199 files, build/types/data0/0, Java647 and native92 passed. Focused processing Plan/first-batch checks, nine peaceful F2P hints and the corrected no-extra-route-disclosure Magic case passed. Both CI workflows subsequently passed the complete corrected browser suite. Ledger design/fonts remain unchanged. Live-game acceptance remains Claude-only.
+
+## Implemented goal supplies — 2.81.4
 
 - ProcessingRate exports consumables from the actual recipe, excluding tools and staff-substituted runes. The existing forecast integrates expected processing actions at its normal rate samples; it does not add arbitrary five-level UI stops. Pure processingGoalNeeds aggregates staged ingredients and reusable kit. No second recipe, inventory or finance engine.
 - Advice.goalNeeds travels through methodPick/methodStep into existing goalItemsRequired, whole-goal Shopping and funding. Current itemsRequired/readiness/first-trip minimum remain one batch. A route publishes a whole-step projection only when one unresolved skill goal remains; a partial current skill must not masquerade as all future goals.
 - Estimates include registered recipe changes, current partial XP where supplied and sampled burn/failure mechanics. Whole counts round conservatively by leg. Incomplete paths, absent models, invalid values and overlapping incompatible material groups return no full-goal projection. Tools are maxed rather than repeatedly consumed; no observed state is changed.
 - Plan adds one compact conditional-supplies paragraph; Train retains its layout. No CSS, fonts, frame or page changes. Added existing-style F2P equipment hints for Smithing/Crafting/Runecraft/Prayer, with no cosmetic purchases or invented bonuses. Members outfits remain separate future work.
-- Local2343unit/199files, build/types/data0/0 and full Java passed; focused processing Plan/first-batch/whole-goal UI and nine peaceful F2P hints passed. Native92 passed. The local full browser run reached Magic and caught an added route disclosure; the goal paragraph is now restricted to the existing Skills Plan tab and the focused Magic regression passes. Plan/default-Train and nine peaceful hints pass. Exact final-tree full browser/release gates remain required in CI before publication. No live-game acceptance or release claim.
+- Local2343unit/199files, build/types/data0/0 and full Java passed; focused processing Plan/first-batch/whole-goal UI and nine peaceful F2P hints passed. Native92 passed. The local full browser run reached Magic and caught an added route disclosure; the goal paragraph is now restricted to the existing Skills Plan tab and the focused Magic regression passes. Plan/default-Train and nine peaceful hints pass. The complete corrected final-tree browser/release gates subsequently passed in both CI workflows, and the downloadable Portable is verified above. No live-game acceptance claimed.
 - Limits: this is conditional material demand, not survival certainty, purchase routing/fees, future income/reinvestment or a guarantee of affordability. Unperformed quest rewards are not credited against a direct-training forecast. Route calculation uses observed level thresholds when exact XP is unavailable; the Skills forecast can use actual XP. Unsupported/mixed-goal projections remain explicitly partial.
 
-## Current delivery — 2.81.3 published and verified
+## Previous delivery — 2.81.3 published and verified
 
 [Normal Portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.81.3). Product source `5e13bd3330e913fc85d8c19074b5fd00d8087b24` on main. [Checks](https://github.com/bexaf3163/OSRS/actions/runs/40977812554) and [Release](https://github.com/bexaf3163/OSRS/actions/runs/40977812561) succeeded, including the exact final-tree full browser, Java, native and isolated-EXE gates. Downloaded `102440650`-byte EXE SHA256 `05b3f9a1e114f10007ad224e3a0c0bccf8d85f2b28a13f157bd2aa13c225ae60` matches GitHub asset metadata and SHA256SUMS; tag/source and both CI head SHAs match. No publication action remains.
 
@@ -50,7 +56,7 @@ Current design/fonts are preserved; no Ledger, frame, page, CSS or font files ch
 
 1. Claude: real-game acceptance for new Ranged equipment milestones, trainer transitions, food/ammo/unknown stock, shared peaceful handovers, saved progress and current Ledger UI. No mock screenshot is live acceptance.
 2. Wizard magic-defence/food/rune-drop model and exact NPC-variant highlight proof remain unsupported; do not enable automatic selection prematurely.
-3. Broader Members outfit advice/other peaceful-skill hints and full acquisition/consumable forecasts are not claimed complete. Existing shared models remain authoritative; add verified registry data, not per-step patches.
+3. All nine supported peaceful F2P skills have basic equipment hints; broader Members outfits remain unmodelled. Supported processing has conditional complete-skill material demand in2.81.4, but purchase routing/fees, reinvestment, quest shortcuts, unsupported or unresolved multi-skill projections and combat-wide supply forecasts are not claimed complete. Existing shared models remain authoritative; add verified registry data, not per-step patches.
 4. Processing-budget initial-batch feasibility and exact recipe supplies are shipped in2.81.3. The original parked patch is archival; do not reapply it or restore old files/cache code. Whole-goal acquisition/depletion/reinvestment remains separate work. No mobile work.
 
 ## Historical delivery — 2.80.20
