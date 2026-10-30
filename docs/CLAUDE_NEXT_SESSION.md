@@ -6,6 +6,16 @@ Updated 2026-10-31. Read this first; open historical records only for the area b
 
 Owner accepted Claude's Adventurer's Ledger2.81.1 (`57ec3ca`) on2026-10-30. Preserve its layout, controls and EB Garamond/Cinzel fonts. Current design contract: CLAUDE_REDESIGN_HANDOFF.md and REDESIGN_VERIFICATION.md. Functional WIP was backed up/stashed before fast-forwarding and reapplied without changing src/ledger, pages, App/main or the Ledger frame. No design issue identified during integration. Ledger desktop regressions preserve the accepted presentation.
 
+## Pending implementation — 2.81.10 gathering capacity
+
+- Gathering's shared tool resolution now frees an output slot only for a confirmed worn tool; meeting Attack to wield it is not worn-item evidence. A proposed unowned upgrade is evaluated carried, matching its actual preparation. Named-tool pacing and combined gathering/processing use the same placement semantics. No observed equipment is changed.
+- A synthetic-content regression reproduced equal carried/worn bank-trip rates before the fix; the corrected model differentiates them and matches an upgrade forecast to the actual purchased/carried tool. Local2420 unit tests/203 files,75 focused regressions, types/build, data0/0,23 targeted browser checks and testClasses/fresh jar passed. Full browser/native/Java/isolated Portable remain exact-source CI gates; unrelated local storage QA was not rerun for this numerical model correction.
+- The estimates still assume the prepared skilling kit, not every unrelated item in a player's current bag or calibrated session performance. Live acceptance stays with Claude.
+
+## New owner priority — legacy UI/content cleanup
+
+See [UI_CLEANUP_REVIEW.md](UI_CLEANUP_REVIEW.md) for the screenshots' decisions, confirmed consumers, pending surfaces and removal boundaries. This cleanup is separate from the capacity fix: retire Appearance/preview, copy-report Diagnostics and visible stage matrix; remove conflicting static training plans and fix failed map tiles. Keep actual training priorities, auto-preparation, Defence-at-1, RuneLite helpers, internal goals, updates, progress and operational logs. Preserve current Ledger typography/layout. Review every section and record unfinished content for follow-up; do not claim the queued cleanup implemented yet.
+
 ## Verified delivery — 2.81.9 training scope/tool names
 
 Normal [Portable2.81.9](https://github.com/bexaf3163/OSRS/releases/tag/v2.81.9), source `b16003fcde7114c167335b984c14d8a316c69280` on main. [Checks](https://github.com/bexaf3163/OSRS/actions/runs/41118757635) and [Release](https://github.com/bexaf3163/OSRS/actions/runs/41118757726) passed on that exact source. Downloaded EXE:102443834 bytes; SHA256 `7265b7105c5ca3618d17ba77fe8aaca706f07f3ba923d70216f9826ff3424825`, matching asset digest, SHA256SUMS.txt and tag/source. Release aggregate metadata briefly lagged the completed successful Windows job; verification completed after successful CI confirmation. No real-game tests claimed.

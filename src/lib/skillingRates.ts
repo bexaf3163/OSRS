@@ -76,8 +76,7 @@ function toolFor(r: Resource, level: number, state: PlayerState, reg: SkillingRe
       && !family.tiers.some(t => t.item.toLowerCase() === name.toLowerCase()) && heldExact(state, name).presence === 'PRESENT';
   })) return null;
   const tier = usable[Math.max(0, best)];
-  const attack = levelOf(state, 'attack');
-  return { tier, name: tier.item, owned: best >= 0, wielded: attack !== undefined && attack >= tier.wield };
+  return { tier, name: tier.item, owned: best >= 0, wielded: heldExact(state, tier.item).equipped > 0 };
 }
 
 interface SpotRate { rate: ModelRate; score: number; danger?: string }
@@ -205,14 +204,14 @@ function upgradesAt(r: Resource, spot: SkillSpot, level: number, state: PlayerSt
   const family = reg.tools[r.tool];
   const now = toolFor(r, level, state, reg);
   if (!family || !now?.tier) return [];
-  const attack = levelOf(state, 'attack');
   const from = family.tiers.findIndex((t) => t.item === now.tier!.item);
   return family.tiers.slice(from + 1).flatMap((tier) => {
     if (level < tier.level || (toolUse(tier.item)?.members && state.mode !== 'members') || (r.byTool && !r.byTool[tier.item])) return [];
     if (heldExact(state, tier.item).presence === 'PRESENT') return [];
     const price = supplyPrice(tier.item, market.prices, state.mode);
     if (price === null) return [];
-    const s = spotRate(r, spot, level, state, market, coinRate, reg, { tier, name: tier.item, wielded: attack !== undefined && attack >= tier.wield });
+    // A purchase prepares a carried tool; it does not observe or require a weapon-slot change.
+    const s = spotRate(r, spot, level, state, market, coinRate, reg, { tier, name: tier.item, wielded: false });
     return s ? [{ tool: tier.item, price, xph: s.rate.xph, costPerHour: s.rate.costPerHour }] : [];
   });
 }
@@ -250,8 +249,7 @@ export function gatherPace(product: string, near: Point & { plane?: number }, st
   const named = family && toolName ? family.tiers.find((t) => t.item.toLowerCase() === toolName.toLowerCase() && level >= t.level && !(toolUse(t.item)?.members && state.mode !== 'members')) : undefined;
   // An evaluator explicitly planned this tool: do not substitute another tool or use an unavailable tier.
   if (family && toolName && !named) return null;
-  const attack = levelOf(state, 'attack');
-  const tool = named ? { tier: named, name: named.item, wielded: attack !== undefined && attack >= named.wield } : toolFor(r, level, state, reg);
+  const tool = named ? { tier: named, name: named.item, wielded: heldExact(state, named.item).equipped > 0 } : toolFor(r, level, state, reg);
   if (!tool) return null;
   const pace = paceAt(r, spot, level, tool);
   const share = pace ? pace.chances[r.products.findIndex((p) => p.name.toLowerCase() === key)] / pace.any : 0;

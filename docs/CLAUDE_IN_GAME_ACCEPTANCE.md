@@ -1,5 +1,10 @@
 # In-game acceptance — assigned to Claude
 
+## 2.81.10 gathering capacity — not live-verified
+
+- With an already owned usable tool in a safe reachable state, compare carrying it with actually wearing it (only when wieldable). Prepared-bag capacity should free the tool slot only in the latter case; Attack level alone is not proof that it is worn. Do not buy or equip anything automatically for the test.
+- Verify a supported proposed upgrade remains a carried-tool preparation and does not silently change the weapon slot. Observed XP/levels/stock must not change from a forecast. Dedicated-kit rates remain estimates; unrelated inventory and exact banking pace need manual interpretation.
+
 ## 2.81.9 training scope/tools — not live-verified
 
 - At a reachable black axe/pickaxe use level with it confirmed in bank, verify Skills, Path and the single HUD name and withdraw that tool, without its Attack wielding requirement. Unknown/unmodelled tools must not acquire a fabricated rate.

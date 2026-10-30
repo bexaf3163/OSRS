@@ -178,6 +178,27 @@ const TEST_METHOD = { id: 'wc-test', kind: 'method', skills: ['woodcutting'] } a
 
 describe('a new gathering spot inherits the rules (synthetic registry)', () => {
   const s = (mode: 'f2p' | 'members' = 'f2p') => stateOf({ woodcutting: 40, attack: 40 }, { 'Bronze axe': [1, 0] }, mode);
+  it('an axe consumes a bag slot until actually worn, even if the player can wield it', () => {
+    const carried = s(), before = structuredClone(carried);
+    const worn = { ...carried, equipment: { weapon: 'Bronze axe' }, equipmentItems: [{ name: 'Bronze axe', count: 1 }] };
+    const market = { prices: prices({ 'Test logs': 400 }), objective: 'balanced' as const };
+    const a = gatherRate(TEST_METHOD, 'woodcutting', carried, market, SYNTHETIC)!;
+    const b = gatherRate(TEST_METHOD, 'woodcutting', worn, market, SYNTHETIC)!;
+    expect(a.spot?.how).toBe('bank');
+    expect(mid(b)).toBeGreaterThan(mid(a));
+    expect(carried).toEqual(before);
+  });
+  it('a proposed unworn upgrade uses the same capacity as the actual purchased-and-carried tool', () => {
+    const reg: SkillingRegistry = { ...SYNTHETIC, tools: { axe: { skill: 'woodcutting', tiers: [
+      ...SYNTHETIC.tools.axe.tiers, { item: 'Steel axe', level: 6, wield: 5 },
+    ] } }, resources: SYNTHETIC.resources.map(r => ({ ...r, byTool: { ...r.byTool, 'Steel axe': { low: 192, high: 256 } } })) };
+    const quote = { price: 1, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] };
+    const market = { prices: { ...prices({ 'Test logs': 400 }), buy: () => quote }, objective: 'balanced' as const };
+    const before = gatherRate(TEST_METHOD, 'woodcutting', s(), market, reg)!;
+    const purchased = stateOf({ woodcutting: 40, attack: 40 }, { 'Steel axe': [1, 0] });
+    const after = gatherRate(TEST_METHOD, 'woodcutting', purchased, market, reg)!;
+    expect(before.upgrades?.find(u => u.tool === 'Steel axe')?.xph).toEqual(after.xph);
+  });
   it('a valuable product: the spot by its bank wins, and banks', () => {
     const r = gatherRate(TEST_METHOD, 'woodcutting', s(), { prices: prices({ 'Test logs': 400 }), objective: 'balanced' }, SYNTHETIC)!;
     expect(r.spot).toMatchObject({ label: 'Bank grove', how: 'bank' });
