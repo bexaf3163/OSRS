@@ -10,7 +10,7 @@ filters ("Fastest / Quest-Driven", "AFK / Budget", "F2P Only") are two separate 
 members preview. "Use the best axe you can wield" now says the axe works from the bag at the Woodcutting level (wielding needs Attack).
 Rates and consumable costs are personalised where the shared combat, gathering or processing registry supports the method. Other catalogue rates
 remain Wiki guides, not measured predictions. Missing prices stay unknown. Passive bone collection has no fixed bank-burying rate. Members methods
-beyond the verified registries and real-session calibration remain open; this catalogue coverage is not proof of in-game performance.
+beyond the verified registries and real-session calibration remain open; this catalogue coverage is not proof of in-game performance. Supported processing goals (2.81.4) and supported F2P Ranged goals (2.81.5) carry conditional whole-goal supplies through the shared planner/Shopping engine; immediate preparation stays one batch/trip. Ranged includes staged arrows, modelled food and reusable kit under safe arrow recovery. This does not establish Magic/melee-wide or unsupported/mixed-goal acquisition economics.
 
 | Skill | Account | Guide | Methods | Route asks | Gaps and problems | Verification |
 |---|---|---|---|---|---|---|

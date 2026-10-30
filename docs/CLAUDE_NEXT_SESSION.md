@@ -6,16 +6,20 @@ Updated 2026-10-30. Read this first; open historical records only for the area b
 
 Owner accepted Claude's Adventurer's Ledger2.81.1 (`57ec3ca`) on2026-10-30. Preserve its layout, controls and EB Garamond/Cinzel fonts. Current design contract: CLAUDE_REDESIGN_HANDOFF.md and REDESIGN_VERIFICATION.md. Functional WIP was backed up/stashed before fast-forwarding and reapplied without changing src/ledger, pages, App/main or the Ledger frame. No design issue identified during integration. Ledger desktop regressions preserve the accepted presentation.
 
-## Active batch — 2.81.5 F2P Ranged goal demand (not yet published)
+## Current delivery — 2.81.5 published and verified
+
+[Normal Portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.81.5). Product source `c396f85b0931a4c3478bc18bfe5dea0e53d2a29b` on main. [Checks](https://github.com/bexaf3163/OSRS/actions/runs/41036838085) and [Release](https://github.com/bexaf3163/OSRS/actions/runs/41036838365) succeeded, including full browser, Java, native and isolated-EXE gates on that final source. Downloaded `102440887`-byte EXE SHA256 `97171615c0c21b1ca99970af87fb1266be58defdb33b6498277d2ccfafbd4c9b` matches GitHub asset digest and SHA256SUMS; tag and both CI head SHAs match. No2.81.5 publication action remains. The earlier pre-final Release41036523172 was cancelled before publication; it is not release evidence.
+
+### Implemented F2P Ranged goal demand
 
 - rangedGoalNeeds reuses goalArrows and styleRecovery, using each declared forecast leg’s concrete kit and full kill horizon. It does not repeatedly grant a fresh initial HP pool for every three-level rate sample. Planning food uses the existing recovery upper estimate; bows/armour remain conditional future preparation, not observed stock.
 - Arrow losses use the existing per-stage upper estimate under safe pickup. Shared mergeGoalNeeds adds consumed materials, maxes reusable kit and respects declared starter/refill buffers. Processing uses the same aggregation implementation and rejects invalid zero-attempt forecasts; no second inventory/finance system. rangedKitOf is the shared order-independent kit parser for arrow and recovery consumers.
 - Existing Advice.goalNeeds→methodPick→methodStep→wholeGoal Shopping/funding carries the projection; itemsRequired, immediate checklist and first-trip funds stay unchanged. No changes to trainer selection. The fragile-character unit explicitly follows the supported Frog method; it does not assert that every fragile character should automatically choose it.
 - Full estimates are withheld for missing/unread HP, unsupported or incomplete paths, Members loadouts, unresolved food declarations and incompatible stock overlaps. Model inputs are immutable. Current-method DPS/rate horizons retain their old defaults.
 - Plan’s existing conditional supplies paragraph names safe arrow recovery/preparation buffers. Train/route, fonts/CSS/frame/pages/controls are unchanged; this is not a new settings/menu stack. The model is not a calibrated survival guarantee or a purchase/price/reinvestment forecast. Banking routes and incoming damage retain their existing approximations; special mechanics still need verified support.
-- Final local gates passed: 2350 unit tests/200 files, full browser smoke, native Electron, build/types/data0/0 and full Java. Focused32 goal/processing/ammo/sustain tests passed. Release CI/Portable verification pending; no live acceptance claim.
+- Local2350 unit tests/200 files and build/types passed again after the final zero-attempt guard; full browser862, native, data0/0 and full Java also passed. Final-source CI and downloaded Portable are verified above. Ledger/fonts preserved. Live-game acceptance remains Claude-only.
 
-## Current delivery — 2.81.4 published and verified
+## Previous delivery — 2.81.4 published and verified
 
 [Normal Portable release](https://github.com/bexaf3163/OSRS/releases/tag/v2.81.4). Product source `bdf49d151f62d452dd472b42feed752d47370a75` on main. [Checks](https://github.com/bexaf3163/OSRS/actions/runs/41022636385) and [Release](https://github.com/bexaf3163/OSRS/actions/runs/41022636301) succeeded, including complete final-tree browser, Java, native and isolated-EXE validation. Downloaded `102439114`-byte EXE SHA256 `d9266db3bf9dd0793d3906eb081eac14c92965ec4bd29075fb5bd5cfb75ff492` matches GitHub asset digest and SHA256SUMS; release tag/source and both CI head SHAs match. No 2.81.4 publication action remains.
 
@@ -65,7 +69,7 @@ Current design/fonts are preserved; no Ledger, frame, page, CSS or font files ch
 
 1. Claude: real-game acceptance for new Ranged equipment milestones, trainer transitions, food/ammo/unknown stock, shared peaceful handovers, saved progress and current Ledger UI. No mock screenshot is live acceptance.
 2. Wizard magic-defence/food/rune-drop model and exact NPC-variant highlight proof remain unsupported; do not enable automatic selection prematurely.
-3. All nine supported peaceful F2P skills have basic equipment hints; broader Members outfits remain unmodelled. Supported processing has conditional complete-skill material demand in2.81.4, but purchase routing/fees, reinvestment, quest shortcuts, unsupported or unresolved multi-skill projections and combat-wide supply forecasts are not claimed complete. Existing shared models remain authoritative; add verified registry data, not per-step patches.
+3. All nine supported peaceful F2P skills have basic equipment hints; broader Members outfits remain unmodelled. Supported processing has conditional complete-skill material demand in2.81.4, but purchase routing/fees, reinvestment, quest shortcuts, unsupported or unresolved multi-skill projections and combat-wide supply forecasts are not claimed complete. Supported F2P Ranged goal food/ammo/kit projections shipped in2.81.5; Magic/melee-wide projections remain separate work. Existing shared models remain authoritative; add verified registry data, not per-step patches.
 4. Processing-budget initial-batch feasibility and exact recipe supplies are shipped in2.81.3. The original parked patch is archival; do not reapply it or restore old files/cache code. Whole-goal acquisition/depletion/reinvestment remains separate work. No mobile work.
 
 ## Historical delivery — 2.80.20
