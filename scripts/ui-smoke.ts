@@ -778,6 +778,7 @@ async function run(browser: Browser) {
     await page.getByRole('tab', { name: 'Calculator', exact: true }).click();
     await page.getByLabel('Goal', { exact: true }).fill('50');
     await page.getByRole('button', { name: 'Follow to level 50', exact: true }).click();
+    await page.locator('.tracked-skill').waitFor();
     await page.evaluate(() => { location.hash = '#/skills/FI'; });
     await page.locator('.training-method .training-now').waitFor();
     const recommendation = await page.locator('.training-method .training-now').innerText();
