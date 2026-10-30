@@ -242,6 +242,7 @@ async function f2pSkillsScenarios(browser: Browser) {
     expect((await text(page, 'h1')).includes('Defence'), `Skills ${width}: Defence opens directly`);
     expect((await text(page, '.f2p-skill-checkpoint')).includes('10 reached'), `F2P ${width}: the detail uses the same checkpoint as its tile`);
     await page.locator('.skill-tile a[href="#/skills/ME/attack"]').click();
+    await page.getByRole('group', { name: 'Training priority' }).waitFor();
     expect(await page.locator('[aria-label="Training priority"] button').count() === 3, `Skills ${width}: three priorities`);
     expect(await page.locator('[aria-label="Training priority"] button[aria-pressed="true"]').innerText() === 'Balanced', `Skills ${width}: Balanced is default`);
     expect(await page.locator('.skill-detail details').count() === 0, `Skills ${width}: default view contains no disclosure stack`);
