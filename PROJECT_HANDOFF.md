@@ -5,11 +5,11 @@ Updated 2026-10-31. **This is the only current project contract, architecture ma
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-Published and independently verified Portable: **2.81.12**, source `c93dd3bd84b1e1816ed5ead5c32249c5b1b53bff`. Exact-source Checks **41192058628** and Release **41192058621** passed, including full browser, Java, native-shell and isolated packaged-EXE gates.
+Published and independently verified Portable: **2.81.13**, source `d29e3349ee37efd276d93544ff83654c25a96454`. Exact-source Checks **41201972731** and Release **41201972692** passed, including complete browser, Java, native-shell and isolated packaged-EXE gates.
 
-Downloaded EXE: **102438773 bytes**. SHA256: `34e7fc1a9b1773695e7bd3ed3441c4759ccf23b0a55a4771fbfa9fd1e6655e3b`. Actual download, asset digest, SHA256SUMS.txt, size and source tag agree. Release assets are exactly the normal Portable, this handoff snapshot and the checksum; GitHub adds source archives separately.
+Downloaded EXE: **102439782 bytes**. SHA256: `7dc252e4242bd4775abf8c0493de94357c280f84b887976136a64f2d457aaf23`. Actual download, asset digest, manifest, size and release-tag/source agree. The distributed canonical handoff was separately downloaded and digest/source/version/policy verified; the release contains only EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt (plus GitHub's automatic source archives).
 
-Shared optional stock-up and documentation consolidation are shipped. All real-game acceptance remains Claude's; automated/native/packaged checks are not in-game evidence. Journal page changes and broader Skills/content/model gaps below are **not** claimed complete.
+Contextual Journal/Gear/Skills/Shopping improvements, shared activity selection and refill-budget protection are shipped. Accepted Ledger/fonts and working preparation/funding/session data are preserved. All real-game acceptance remains Claude's; automated/native/packaged checks are not in-game evidence. Broader P2 Skills/Optional and P3 content/model reviews below remain open.
 <!-- DELIVERY_END -->
 
 ## Documentation policy
@@ -156,7 +156,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 
 ## Current verification
 
-2.81.13 local source: types/build and fresh plugin jar passed; data validation 0 errors/0 warnings; 2,433 unit tests across 205 files; full Java suite 647 tests/0 failures; isolated native-shell E2E passed. The complete browser regression run identified an obsolete shortfall assertion after Checkout moved; the final focused Shopping/Gear/Journal/Skills cases pass after that assertion and the final unknown-budget wording/duplicate-action changes. Full exact-source CI, including the complete browser suite and isolated packaged Portable, must pass before release; independent delivery evidence belongs in the receipt above. No real-game verification is claimed.
+2.81.13: local types/build/fresh plugin jar, data validation 0 errors/0 warnings, 2,433 unit tests across 205 files, full Java suite 647 tests/0 failures and isolated native-shell E2E passed. Final focused Gear/Shopping/Journal/Skills checks passed, including the revised Checkout/closed-session workflow and honest unknown supply budget. Both exact-source GitHub workflows then passed the complete browser suite and isolated packaged Portable gates. The independently downloaded EXE and distributed handoff were verified against release metadata; source/run IDs and EXE digest are in the receipt above. No real-game verification is claimed.
 
 ## Completed baseline — preserve, do not redo
 
@@ -195,7 +195,7 @@ Gear and Shopping use the shared `resolveActiveActivity` / `useActiveActivity`: 
 
 Shopping keeps requirements on the left and an activity-specific Checkout on the right: current cost, checked cash, optional bank stock, refill allowance and confirmed shortfall. One primary action reuses funding, copy-order or preparation. Detailed budget calculations stay secondary. Skills keeps the same Ledger typography with a readable two-column icon index, a useful selection/tracked prompt instead of the unselected XP table, one existing Plan entry and a closed XP table in Calculator. Canonical phased training/model behavior is unchanged by this layout batch.
 
-Targeted automated coverage includes cross-page followed Ranged context versus active route, non-melee gloves/equipment, poor/rich bank stock, Journal selection/filter/review/completed/unknown completion/session retention and unchanged progress. Full-source and release verification must be recorded below before calling this batch delivered. All real-game checks remain Claude's responsibility.
+Targeted automated coverage includes cross-page followed Ranged context versus active route, non-melee gloves/equipment, poor/rich bank stock, Journal selection/filter/review/completed/unknown completion/session retention and unchanged progress. Local and complete exact-source CI/release evidence is recorded in Current verification and the delivery receipt. All real-game checks remain Claude's responsibility.
 
 ### P2 — finish staged Skills/Optional review using the existing engines
 
