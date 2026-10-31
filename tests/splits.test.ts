@@ -1,10 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { BREAK_SECONDS, completions, computeSplits, durationText } from '../src/lib/splits';
+import { durationText } from '../src/lib/splits';
 import { emptyProgress, normalizeProgress, withStep } from '../src/lib/progress';
-import type { Progress, Step } from '../src/types';
+import type { Progress } from '../src/types';
 
-const step = (id: string, stage: number): Step => ({ id, stage, title: id } as unknown as Step);
-const STEPS = [step('S1-01', 1), step('S1-02', 1), step('S1-03', 1), step('S2-01', 2), step('S2-02', 2)];
 const T0 = Date.parse('2026-10-05T10:00:00Z');
 const iso = (secondsAfter: number) => new Date(T0 + secondsAfter * 1000).toISOString();
 const prog = (done: Record<string, number | null>, extra: Partial<Progress> = {}): Progress => ({
@@ -14,49 +12,7 @@ const prog = (done: Record<string, number | null>, extra: Partial<Progress> = {}
   ...extra,
 });
 
-describe('time splits', () => {
-  it('each step is timed from the previous one; the first has no start, so no duration', () => {
-    const r = computeSplits(STEPS, prog({ 'S1-01': 0, 'S1-02': 120, 'S1-03': 420, 'S2-01': 480 }));
-    const all = r.stages.flatMap((g) => g.steps);
-    expect(all.map((s) => [s.id, s.seconds, s.kind])).toEqual([['S1-01', null, 'first'], ['S1-02', 120, 'active'], ['S1-03', 300, 'active'], ['S2-01', 60, 'active']]);
-    expect(r.stages.map((g) => [g.stage, g.activeSeconds])).toEqual([[1, 420], [2, 60]]);
-    expect(r.activeSeconds).toBe(480);
-    expect(r.slowest.map((s) => s.id)).toEqual(['S1-03', 'S1-02', 'S2-01']);
-  });
-
-  it('the order is the order things happened, not the route order', () => {
-    const r = computeSplits(STEPS, prog({ 'S2-01': 0, 'S1-01': 100, 'S1-02': 160 }));
-    expect(completions(STEPS, prog({ 'S2-01': 0, 'S1-01': 100, 'S1-02': 160 })).map((c) => c.id)).toEqual(['S2-01', 'S1-01', 'S1-02']);
-    expect(r.stages.find((g) => g.stage === 1)!.activeSeconds).toBe(160);
-  });
-
-  it('a long gap is a break: shown, but left out of the active time', () => {
-    const gap = BREAK_SECONDS + 1;
-    const r = computeSplits(STEPS, prog({ 'S1-01': 0, 'S1-02': 60, 'S1-03': 60 + gap, 'S2-01': 120 + gap }));
-    const s13 = r.stages[0].steps.find((s) => s.id === 'S1-03')!;
-    expect(s13).toMatchObject({ kind: 'break', seconds: gap });
-    expect(r.stages[0]).toMatchObject({ activeSeconds: 60, breaks: 1 });
-    expect(r.activeSeconds).toBe(120);
-    expect(r.slowest.map((s) => s.id), 'a break is never the slowest step').not.toContain('S1-03');
-    const exactly = computeSplits(STEPS, prog({ 'S1-01': 0, 'S1-02': BREAK_SECONDS }));
-    expect(exactly.stages[0].steps[1].kind, 'exactly the limit is still play time').toBe('active');
-  });
-
-  it('steps without a time are counted apart and never guessed', () => {
-    const r = computeSplits(STEPS, prog({ 'S1-01': null, 'S1-02': 0, 'S1-03': 90, 'S2-01': null }));
-    expect(r.untimed).toBe(2);
-    expect(r.stages.flatMap((g) => g.steps).map((s) => s.id)).toEqual(['S1-02', 'S1-03']);
-    expect(computeSplits(STEPS, prog({ 'S1-01': null })).stages).toEqual([]);
-    expect(computeSplits(STEPS, emptyProgress())).toMatchObject({ stages: [], slowest: [], activeSeconds: 0, untimed: 0 });
-  });
-
-  it('a time for a step that is no longer done, or a broken date, is ignored', () => {
-    const p = prog({ 'S1-01': 0, 'S1-02': 60 });
-    delete p.steps['S1-02'];
-    expect(completions(STEPS, p).map((c) => c.id)).toEqual(['S1-01']);
-    expect(completions(STEPS, { ...p, doneAt: { 'S1-01': 'not a date' } })).toEqual([]);
-  });
-
+describe('duration formatting', () => {
   it('durations are said in seconds, minutes, hours', () => {
     expect(durationText(0)).toBe('0 s');
     expect(durationText(89)).toBe('89 s');

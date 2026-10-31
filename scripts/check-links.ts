@@ -4,7 +4,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import type { Step, WikiItemDetail } from '../src/types/index.ts';
-import { MAP_VERSION, tileUrl } from '../src/lib/map.ts';
+import { MAP_METADATA_URL, mapSourceAt, parseMapSources, tileUrl } from '../src/lib/map.ts';
 import type { NpcSpot } from '../src/lib/stepPlaces.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -60,22 +60,22 @@ for (let i = 0; i < titles.length; i += 50) {
   await new Promise((r) => setTimeout(r, 400));
 }
 
-// The map tiles: the preview and the world map take them from maps.runescape.wiki by the render version from src/lib/map.ts.
+// Resolve the same published atlas metadata as previews and the full map.
 const mapProblems: string[] = [];
+const metadata = await fetch(MAP_METADATA_URL, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(15000) });
+const mapSources = metadata.ok ? parseMapSources(await metadata.json()) : [];
+if (!mapSources.length) mapProblems.push('no valid published map metadata');
+const surfaceSource = mapSourceAt(mapSources, { x: 3232, y: 3232 });
 const planes = new Set([...steps.flatMap((s) => [s.mapLocation, ...(s.resourceSpots ?? [])]).filter(Boolean).map((p) => p!.plane),
   ...Object.values(npcs).flat().map((r) => r.plane)]);
 for (const plane of planes) {
   // The Lumbridge tile at scale 2 — it exists on every floor.
-  const res = await fetch(tileUrl(2, plane, 50, 50), { headers: { 'User-Agent': UA } });
+  const res = await fetch(tileUrl(2, plane, 50, 50, surfaceSource), { headers: { 'User-Agent': UA } });
   if (!res.ok || !res.headers.get('content-type')?.startsWith('image/')) mapProblems.push(`the tile of floor ${plane}: HTTP ${res.status}`);
 }
-// The wiki itself draws the map previews from the tiles of its current version — we check against it.
-const page = await (await fetch('https://oldschool.runescape.wiki/w/Lumbridge', { headers: { 'User-Agent': UA } })).text();
-const current = page.match(/maps\.runescape\.wiki\/osrs\/versions\/([\w-]+)\/tiles/)?.[1];
-console.log(`Map tiles: version ${MAP_VERSION}, on the wiki now ${current ?? 'not found'}, floors on the route ${planes.size}`);
+console.log(`Map tiles: published surface base atlas ${surfaceSource.cacheVersion}; floors on the route ${planes.size}`);
 if (mapProblems.length) for (const m of mapProblems) console.log(`  ✗ ${m}`);
 else console.log('  ✓ the tiles are served');
-if (current && current !== MAP_VERSION) console.log(`  ! the wiki moved to ${current} — update MAP_VERSION in src/lib/map.ts (the old tiles still work)`);
 
 console.log(`Wiki links checked: ${titles.length}`);
 if (missing.length || mapProblems.length) {

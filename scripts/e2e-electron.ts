@@ -94,6 +94,8 @@ const bridgePort = (bridge.address() as { port: number }).port;
 // --- Launch ---
 const home = mkdtempSync(join(tmpdir(), 'osrs-put-e2e-'));
 const dataDir = join(exe ? dirname(exe) : home, 'OSRS-Put-data');
+mkdirSync(dataDir, { recursive: true });
+writeFileSync(join(dataDir, 'ui.json'), JSON.stringify({ zoom: 1.5, autoZoom: true, alwaysOnTop: false, backupOff: false }));
 const probe = http.createServer();
 await new Promise<void>(r => probe.listen(0, '127.0.0.1', r));
 const cdpPort = (probe.address() as { port:number }).port;
@@ -163,6 +165,15 @@ try {
   }
   const api = await page.evaluate(() => Object.keys((window as unknown as { osrsDesktop?: object }).osrsDesktop ?? {}).sort());
   expect(['backup', 'bridge', 'loadProgressFile', 'saveProgressFile', 'saveProgressFileChecked'].every((k) => api.includes(k)), `window: the shell API is in place (${api.length} methods)`);
+  expect(api.includes('getWindowPrefs') && !api.includes('getZoom') && !api.includes('setZoom') && !api.includes('onZoom'), 'window: retired zoom API is absent and the pin preference remains');
+  const pin = page.getByRole('button', { name: 'Always on top', exact: true });
+  await pin.click();
+  await page.waitForTimeout(200);
+  expect(await page.evaluate(async () => (await (window as any).osrsDesktop.getWindowPrefs()).alwaysOnTop) === true, 'window: the native pin still works');
+  await pin.click();
+  await page.waitForTimeout(200);
+  const prefs = JSON.parse(readFileSync(join(dataDir, 'ui.json'), 'utf8'));
+  expect(prefs.backupOff === false && prefs.alwaysOnTop === false && !('zoom' in prefs) && !('autoZoom' in prefs), 'window: retiring saved zoom preserves backup preferences and the pin');
   const localFont = await page.evaluate(async () => {
     const faces = await document.fonts.load('16px Inter');
     return faces.some(face => face.family === 'Inter' && face.status === 'loaded');
@@ -184,7 +195,8 @@ try {
   expect((await page.locator('main').innerText()).includes('Character profiles'), 'settings: character profiles are accessible');
   expect((await page.locator('main').innerText()).includes('E2E Tester'), 'bridge: the test character is shown in character profiles');
   await page.getByRole('tab', { name:'App', exact:true }).click();
-  expect((await page.locator('main').innerText()).includes('Diagnostics'), 'settings: diagnostics are accessible');
+  await page.getByRole('heading', { name: 'Updates', exact: true }).waitFor();
+  expect(!(await page.locator('main').innerText()).includes('Diagnostics') && await page.getByRole('heading', { name: 'Updates', exact: true }).count() === 1, 'settings: retired Diagnostics is absent and native updates remain');
 
   // The progress: a step mark goes into progress.json with an atomic write.
   await page.evaluate(() => { location.hash = '#/'; });

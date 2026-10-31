@@ -1,4 +1,4 @@
-// The 2.12 settings: character profiles, a scheduled progress copy, the session summary and "Diagnostics".
+// Character profiles, scheduled progress copies, updates and session history.
 
 import { useEffect, useState } from 'react';
 import { levelById } from '../data';
@@ -183,34 +183,6 @@ export function UpdatesSection() {
         {s.state === 'ready' && <button type="button" className="btn btn-primary" onClick={u.install}>Restart into the new version</button>}
       </div>
       {!s.canInstall && <p className="muted small">This build was not started from the portable exe — it only reports a new version.</p>}
-    </section>
-  );
-}
-
-export function DiagnosticsSection() {
-  const { diagnostics } = useBridge();
-  const [text, setText] = useState('');
-  const [note, setNote] = useState('');
-  const collect = async () => {
-    const report = await diagnostics();
-    setText(report);
-    try {
-      await navigator.clipboard.writeText(report);
-      setNote(`Copied to the clipboard (${report.split('\n').length} lines) — paste it into the chat.`);
-    } catch {
-      setNote('The clipboard is unavailable — select the text below and copy it yourself.');
-    }
-  };
-  return (
-    <section className="card section-card">
-      <h2 className="card-title">Diagnostics</h2>
-      <p className="muted small">
-        If something is not working, press "Copy the report": the app collects the versions, the RuneLite link state, the last bridge events and a summary of the plugin journal (how much is written, what oddities the watchdog found).
-        There are no bag, bank or notes in the report.
-      </p>
-      <div className="actions"><button type="button" className="btn" onClick={() => void collect()}>Copy the report</button></div>
-      {note && <p className="small" role="status">{note}</p>}
-      {text && <textarea className="diag" readOnly rows={8} value={text} aria-label="Report" />}
     </section>
   );
 }

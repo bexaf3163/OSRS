@@ -1,9 +1,10 @@
 // The map in the step card: a preview from OSRS Wiki tiles, a point switch and the full-screen world map.
 // The chosen point is one state for the preview, the switch and the world map: they always show the same place.
 
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import type { MapLocation, Step } from '../types';
-import { DEFAULT_ZOOM, floorLabel, initialPoint, isUnderground, tilesAround } from '../lib/map';
+import { DEFAULT_ZOOM, floorLabel, initialPoint, isUnderground, mapSourceAt, tilesAround } from '../lib/map';
+import { useMapSources } from '../lib/useMapSources';
 import { mapPlaces } from '../lib/stepPlaces';
 import { Inline } from './Inline';
 import { useBridge } from '../bridge';
@@ -108,30 +109,37 @@ function MapCaption({ point }: { point: Spot }) {
 
 /** A static preview: several tiles around the point and a visible marker in the centre. */
 function MapPreview({ point, onOpen }: { point: Spot; onOpen: () => void }) {
+  const [retry, setRetry] = useState(0);
+  const source = mapSourceAt(useMapSources(retry), point);
   const zoom = point.zoom ?? DEFAULT_ZOOM;
-  const tiles = tilesAround(point, zoom, PREVIEW_W, PREVIEW_H, ANCHOR_Y);
-  const key = `${point.x},${point.y},${point.plane},${zoom}`;
-  // We count failures per point: on switching the count starts over.
-  const [failed, setFailed] = useState<{ key: string; n: number }>({ key, n: 0 });
-  const errors = failed.key === key ? failed.n : 0;
+  const tiles = tilesAround(point, zoom, PREVIEW_W, PREVIEW_H, ANCHOR_Y, source);
+  const key = `${point.x},${point.y},${point.plane},${zoom},${source.mapId},${source.cacheVersion},${retry}`;
+  const current = useRef(key);
+  current.current = key;
+  const [failed, setFailed] = useState<{ key: string; urls: string[] }>({ key, urls: [] });
+  const errors = failed.key === key ? failed.urls.length : 0;
   const offline = errors >= tiles.length;
 
   return (
-    <button type="button" className={`map-preview ${offline ? 'is-offline' : ''}`} onClick={onOpen}
+    <><button type="button" className={`map-preview ${offline ? 'is-offline' : ''}`} onClick={onOpen}
+      title={`OSRS Wiki base imagery: ${source.cacheVersion.split('_')[0]}. Route markers use game coordinates.`}
       aria-label={`${point.label}: open on the world map`}>
       {offline ? (
-        <span className="map-offline small">The map did not load — no connection to the OSRS Wiki. Tile {point.x}, {point.y}</span>
+        <span className="map-offline small">Map imagery unavailable. Tile {point.x}, {point.y}. Directions remain available.</span>
       ) : (
         <span className="map-tiles" style={{ width: PREVIEW_W, height: PREVIEW_H }} key={key} aria-hidden="true">
           {tiles.map((t) => (
-            <img key={t.url} src={t.url} alt="" draggable={false} decoding="async" referrerPolicy="no-referrer"
+            <img key={t.url} src={retry ? `${t.url}?retry=${retry}` : t.url} alt="" draggable={false} decoding="async" referrerPolicy="no-referrer"
               style={{ left: t.left, top: t.top }}
-              onError={() => setFailed((f) => ({ key, n: (f.key === key ? f.n : 0) + 1 }))} />
+              onError={() => {
+                if (current.current !== key) return;
+                setFailed((f) => ({ key, urls: [...new Set([...(f.key === key ? f.urls : []), t.url])] }));
+              }} />
           ))}
           <span className="map-marker" />
         </span>
       )}
       <MapCaption point={point} />
-    </button>
+    </button>{offline && <button type="button" className="btn btn-sm" onClick={() => setRetry((n) => n + 1)}>Retry map</button>}</>
   );
 }

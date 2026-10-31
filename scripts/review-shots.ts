@@ -49,8 +49,8 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string, h
     w.__posts = posts;
     let progress = m.progress ? JSON.stringify(m.progress) : null;
     w.osrsDesktop = {
-      getZoom: async () => ({ zoom: 1, autoZoom: false, effective: 1, alwaysOnTop: false }),
-      setZoom() {}, setAlwaysOnTop() {}, onZoom: () => () => {},
+      getWindowPrefs: async () => ({ alwaysOnTop: false }),
+      setAlwaysOnTop() {},
       loadProgressFile: () => progress,
       saveProgressFile: (j: string) => { progress = j; w.__saved = j; },
       dataDir: () => 'C:/OSRS', isPortable: () => true,

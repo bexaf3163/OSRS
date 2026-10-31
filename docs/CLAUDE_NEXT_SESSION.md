@@ -1,10 +1,14 @@
 # Claude continuation - current authoritative handoff
 
-Updated 2026-10-31. Read this first; open historical records only for the area being changed.
+Updated 2026-10-31. Start with [CLAUDE_TAKEOVER.md](CLAUDE_TAKEOVER.md) for the architecture, design contract, completed work, verification boundaries and prioritized remaining work. Use this file for delivery receipts and relevant historical context; do not reconstruct or repeat completed batches.
 
 ## Current design baseline
 
-Owner accepted Claude's Adventurer's Ledger2.81.1 (`57ec3ca`) on2026-10-30. Preserve its layout, controls and EB Garamond/Cinzel fonts. Current design contract: CLAUDE_REDESIGN_HANDOFF.md and REDESIGN_VERIFICATION.md. Functional WIP was backed up/stashed before fast-forwarding and reapplied without changing src/ledger, pages, App/main or the Ledger frame. No design issue identified during integration. Ledger desktop regressions preserve the accepted presentation.
+Owner accepted Claude's Adventurer's Ledger2.81.1 (`57ec3ca`). Preserve its book/parchment layout and EB Garamond/Cinzel fonts. The owner subsequently authorized targeted removal of Appearance/preview/Compact/Inspector/diagnostic-report/stage-matrix features; that is not permission to restore an older redesign. The existing HUD remains one guide card. See CLAUDE_TAKEOVER.md and UI_CLEANUP_REVIEW.md.
+
+## Local cleanup WIP — not yet published
+
+Source changes remove the requested exclusive UI/state/IPC/CSS and competing static skill plans, retain active helpers/training/storage/updates, restore one map with metadata/retry and full-map point selection, and keep completed canonical Plans nonempty. Coordinated2.81.11 types/build/data0/0,2404 units/202 files,647 Java tests0 failures/errors +fresh jar, and native E2E passed. Dedicated cleanup/F2P Skills/quest-map cases passed. Full browser906 checks passed; two Journal assertions were corrected to count the embedded quest pane per leaf and the complete affected core rerun passed. Exact-source CI/normal Portable verification remains required. Buy-ahead bank stock is queued, not implemented. All live-game tests remain Claude's.
 
 ## Verified delivery — 2.81.10 gathering capacity
 

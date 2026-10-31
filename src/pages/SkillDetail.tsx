@@ -15,7 +15,7 @@ import { Table } from '../components/Table';
 import { LiveXp } from '../components/LiveXp';
 import { TrainingCard } from '../components/TrainingCard';
 import { RoadmapPane, useTrackedStep } from '../components/SkillRoadmap';
-import { methodOfGuideStep } from '../lib/trainingRouter';
+import { methodOfGuideStep, methodsFor } from '../lib/trainingRouter';
 import { roadmapSkills, XpTable } from './Skills';
 import { trainingFocus, type TrainingFocus } from '../lib/skillFocus';
 import { F2pSkillNote } from '../components/F2pSkillNote';
@@ -45,12 +45,14 @@ type SkillTab = 'guide' | 'plan' | 'calculator' | 'reference';
 function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; selectedSkill?: string; requestedGoal?: number }) {
   const { progress, steps, stages, mode } = useStore();
   const [tab, setTab] = useState<SkillTab>('guide');
-  const guides = roadmapSkills(skill);
+  const canonical = skill.levelSkills.some(id => methodsFor(id).length > 0);
+  const guides = roadmapSkills(skill).filter(id => id !== 'hitpoints' && !methodsFor(id).length);
   const tabs: [SkillTab, string][] = [
     ['guide', 'Train'], ['plan', 'Plan'], ['calculator', 'Calculator'], ['reference', 'Reference'],
   ];
   /** "Now by the plan" leads to the training plan row, which lives in the Reference tab. */
   const showPlan = () => {
+    if (canonical) { setTab('plan'); return; }
     setTab('reference');
     window.setTimeout(() => document.getElementById('plan')?.scrollIntoView({ behavior: 'smooth' }), 60);
   };
@@ -136,7 +138,7 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
           {skill.levelSkills.map((lid) => <LevelInput key={lid} id={lid} label={levelById.get(lid)!.name} />)}
         </div>
         <LiveXp targets={skill.levelSkills.map((lid) => ({ skill: lid, level: Math.min(99, levelOf(progress, lid) + 1) }))} />
-        {hit && (
+        {canonical ? <button type="button" className="link-btn current-range" onClick={showPlan}>View the current training plan</button> : hit && (
           <p className="current-range">
             Now by the plan:{' '}
             <button type="button" className="link-btn" onClick={showPlan}>
@@ -177,7 +179,7 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
         <>
           {skill.intro.length > 0 && <div className="prose section"><Blocks blocks={skill.intro} /></div>}
 
-          {skill.sections.map((sec, i) => (
+          {skill.sections.map((sec, i) => canonical && i === skill.plan.sectionIndex ? null : (
             <section key={sec.title} className="section prose" id={i === skill.plan.sectionIndex ? 'plan' : undefined}>
               <h2>{sec.title}</h2>
               {i === skill.plan.sectionIndex ? <PlanBlocks skill={skill} highlight={hit?.index} blocks={sec.blocks} /> : <Blocks blocks={sec.blocks} />}
@@ -197,7 +199,7 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
 /** The route's goal for this stage, when it is met: said plainly (2.70), so a finished goal never reads as work still to do. */
 function ReachedNote({ skill, stage, focus }: { skill: Skill; stage: number; focus: TrainingFocus }) {
   const { progress } = useStore();
-  if (focus.source === 'route') return null;
+  if (focus.source !== 'ahead' && focus.source !== 'generic') return null;
   const met = skill.levelSkills
     .map((id) => ({ id, goal: goalFor(goals, id, stage) }))
     .filter((g) => g.goal && g.goal.kind !== 'optional' && levelOf(progress, g.id) >= g.goal.min);

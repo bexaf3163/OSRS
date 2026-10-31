@@ -9,7 +9,8 @@ import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { MapLocation } from '../types';
-import { DEFAULT_ZOOM, floorLabel, isUnderground, MAP_ATTRIBUTION, MAX_ZOOM, MIN_ZOOM, tileUrl } from '../lib/map';
+import { DEFAULT_ZOOM, floorLabel, isUnderground, MAP_ATTRIBUTION, mapSourceAt, MAX_ZOOM, MIN_ZOOM, tileUrl, type MapTileSource } from '../lib/map';
+import { useMapSources } from '../lib/useMapSources';
 import type { NavTargetPayload } from '../services/runeliteBridge';
 import { NavigateButton } from './NavigateButton';
 import { sourceBadge, type MapTarget } from '../lib/places';
@@ -42,9 +43,13 @@ interface Props {
 }
 
 /** The wiki tiles in the game coordinate system: latitude is the tile y, longitude is x. The Leaflet tile (x, y) is the wiki tile (x, −y − 1). */
+type AtlasOptions = L.TileLayerOptions & { plane: number; sources: readonly MapTileSource[]; retry: number };
 const WikiTiles = L.TileLayer.extend({
-  getTileUrl(this: L.TileLayer & { options: { plane: number } }, c: L.Coords) {
-    return tileUrl(c.z, this.options.plane, c.x, -c.y - 1);
+  getTileUrl(this: { options: AtlasOptions; _map: L.Map }, c: L.Coords) {
+    const center = this._map.getCenter();
+    const source = mapSourceAt(this.options.sources, { x: center.lng, y: center.lat });
+    const url = tileUrl(c.z, this.options.plane, c.x, -c.y - 1, source);
+    return this.options.retry ? `${url}?retry=${this.options.retry}` : url;
   },
 });
 
@@ -65,6 +70,10 @@ const noop = () => {};
 export default function WorldMapModal({
   title, points: stepPoints = [], active = 0, onActive = noop, target, status, searchUrl, navigate, arrow, arrowLive, wikiUrl, onClose,
 }: Props) {
+  const [retry, setRetry] = useState(0);
+  const sources = useMapSources(retry);
+  const sourcesRef = useRef(sources);
+  sourcesRef.current = sources;
   const dialog = useRef<HTMLDialogElement>(null);
   const holder = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
@@ -103,8 +112,10 @@ export default function WorldMapModal({
     m.attributionControl.setPrefix(false);
     let loaded = 0;
     let failed = 0;
-    const layer = new (WikiTiles as unknown as new (url: string, o: L.TileLayerOptions & { plane: number }) => L.TileLayer)('', {
+    const layer = new (WikiTiles as unknown as new (url: string, o: AtlasOptions) => L.TileLayer)('', {
       plane: point.plane,
+      sources: sourcesRef.current,
+      retry: 0,
       minZoom: MIN_ZOOM,
       maxZoom: MAX_ZOOM + 2,
       minNativeZoom: MIN_ZOOM,
@@ -114,8 +125,9 @@ export default function WorldMapModal({
       bounds: L.latLngBounds([1150, 1000], [13000, 4300]),
       attribution: MAP_ATTRIBUTION,
     });
+    layer.on('loading', () => { loaded = 0; failed = 0; setOffline(false); });
     layer.on('tileload', () => { loaded++; setOffline(false); });
-    // No connection — we do not leave an empty window: a message on top and a wiki link.
+    // Missing imagery is not evidence of a broken internet connection.
     layer.on('tileerror', () => { failed++; if (!loaded && failed >= 4) setOffline(true); });
     layer.addTo(m);
     // The step is shown in the game, and the arrow leads not to the step point — the map opens where the arrow leads.
@@ -134,6 +146,15 @@ export default function WorldMapModal({
       markers.current = [];
     };
   }, [hasPoint]); // The map is created once per point appearance.
+
+  useEffect(() => {
+    const layer = tiles.current as (L.TileLayer & { options: AtlasOptions }) | null;
+    if (!layer) return;
+    layer.options.sources = sources;
+    layer.options.retry = retry;
+    setOffline(false);
+    layer.redraw();
+  }, [sources, retry, hasPoint]);
 
   // Markers of all points: the active one is larger and pulses, the caption is always visible.
   useEffect(() => {
@@ -258,7 +279,8 @@ export default function WorldMapModal({
           )}
           {offline && point && (
             <div className="map-modal-offline" role="status">
-              <p><strong>The map did not load.</strong> The map tiles come from maps.runescape.wiki — the internet is needed.</p>
+              <p><strong>Map imagery unavailable.</strong> The provider may be unavailable or have no imagery for this area.</p>
+              <button type="button" className="btn btn-sm" onClick={() => setRetry((n) => n + 1)}>Retry map</button>
               <p className="small">Place: {point.label}, tile {point.x}, {point.y}, {floorLabel(point.plane)}.</p>
             </div>
           )}

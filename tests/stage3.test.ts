@@ -209,6 +209,11 @@ describe('Save compatibility', () => {
     expect(parseFeatures('garbage')).toEqual(DEFAULT_FEATURES);
     expect(parseFeatures('{"pacing":false,"x":1,"bankTags":"no"}')).toEqual({ ...DEFAULT_FEATURES, pacing: false });
   });
+  it('ignores retired display modes while preserving active preparation and training preferences', () => {
+    const settings = parseFeatures(JSON.stringify({ compact: true, inspector: true, autoPrep: false, keepDefenceOne: true, profitTraining: true }));
+    expect(settings).toMatchObject({ autoPrep: false, keepDefenceOne: true, profitTraining: true, bankTags: true, pacing: true });
+    expect('compact' in settings || 'inspector' in settings).toBe(false);
+  });
 });
 
 // ---------- The bridge: a temporary target, the bank, gear, pace ----------

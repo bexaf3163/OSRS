@@ -1,5 +1,5 @@
 // Which skill of a combined section (Melee: Attack, Strength, Defence) to train next, and to which level.
-// The route sets the order (Damage First: Defence stays at 1 until the stage that needs it), so the choice follows the stage goals;
+// Focus follows the active route goals rather than imposing a universal combat-training order;
 // only when the route has nothing left to ask for does the generic "lagging skill, end of its training row" apply.
 
 import type { GoalsData } from '../types';

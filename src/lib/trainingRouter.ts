@@ -1,13 +1,13 @@
 import { nameKey } from './checklist';
-// "What to train with": by level, goal, game mode, items and play style (calm / efficient) it picks a training method
-// for the skill and shows the path to the goal. The methods are in src/data/trainingMethods.json (OSRS Wiki and the skills' training plans).
+// "What to train with": shared selection by level, goal, mode, stock, equipment, budget and preference.
+// It returns the current method and phased path; catalogue entries live in src/data/trainingMethods.json.
 //
 // The rules everything rests on:
 //  — only what is open is chosen: the level fits, the mode (F2P/Members) fits, the quest is done. What is missing
 //    in items is named ("a pickaxe is needed", "feathers are needed"), but the method stays — it is preparation, not a ban;
 //  — "unknown" is not "no": an item that cannot be checked does not remove a method from the choice;
-//  — the wiki speed is a guide, not a promise: the time to the goal is counted from the player's measurements, and when there are none —
-//    only as a "per the wiki" range and marked so. The XP per action is the game's exact number; "how many more actions" is counted from it.
+//  — measured, modelled and reference rates are distinct; estimates are not promises.
+//    Supported action-XP and remaining-work calculations use the shared models, not a second UI formula.
 
 import type { GameMode, Progress, Step } from '../types';
 import methodsJson from '../data/trainingMethods.json';

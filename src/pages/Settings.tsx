@@ -1,40 +1,31 @@
 // The "Settings" screen: appearance, the RuneLite link, helpers, progress export and import.
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { known } from '../data';
 import { useStore } from '../store';
-import { useQuestPoints } from '../lib/useQuestPoints';
-import { useReadinessEngine } from '../readinessContext';
 import { exportFileName, exportProgress, importProgress, type ImportResult } from '../lib/progress';
-import { applyTheme, loadTheme, type Theme } from '../lib/theme';
-import { applyLook, applySolid, loadLook, loadSolid, type Look } from '../lib/look';
-import { desktop, type RuneliteCheck, type ZoomState } from '../lib/desktop';
-import { applyTextScale, loadTextScale, percent, stepScale, TEXT_EVENT, TEXT_STEPS, ZOOM_STEPS } from '../lib/ui-scale';
+import { desktop, type RuneliteCheck } from '../lib/desktop';
 import { useBridge } from '../bridge';
 import { setFeatures, useFeatures, type Features } from '../lib/features';
 import { priorityOf } from '../lib/playStyle';
-import { DensityPills } from '../components/DensityToggle';
 import { BRIDGE_ORIGIN } from '../services/runeliteBridge';
 import { PluginUpdateNote } from '../components/PluginUpdateNote';
 import { plural } from '../lib/shopping';
 import { AccountSync } from '../components/AccountSync';
-import { BackupSection, DiagnosticsSection, UpdatesSection, ProfilesSection, SessionSection } from './SettingsExtra';
-import { CurrentAction } from '../components/StepWorkspace';
-import { nextStep } from '../lib/next-step';
+import { BackupSection, UpdatesSection, ProfilesSection, SessionSection } from './SettingsExtra';
 import { Eyebrow, Page } from '../ledger';
 
-type SettingsTab = 'look' | 'game' | 'progress' | 'app';
-const SETTINGS_TABS: [SettingsTab, string][] = [['look', 'Appearance'], ['game', 'RuneLite'], ['progress', 'Progress and copies'], ['app', 'App']];
+type SettingsTab = 'training' | 'game' | 'progress' | 'app';
+const SETTINGS_TABS: [SettingsTab, string][] = [['game', 'RuneLite'], ['training', 'Training'], ['progress', 'Progress and copies'], ['app', 'App']];
 const TAB_KEY = 'osrs-put-settings-tab';
 function loadTab(): SettingsTab {
   try {
     const v = localStorage.getItem(TAB_KEY);
-    return SETTINGS_TABS.some(([k]) => k === v) ? (v as SettingsTab) : 'look';
+    return SETTINGS_TABS.some(([k]) => k === v) ? (v as SettingsTab) : 'game';
   } catch {
-    return 'look';
+    return 'game';
   }
 }
 
-const THEMES: [Theme, string][] = [['light', 'Light'], ['dark', 'Dark'], ['system', 'System']];
 
 function download(name: string, text: string) {
   const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
@@ -48,11 +39,7 @@ function download(name: string, text: string) {
 }
 
 export function SettingsPage() {
-  const { progress, replace, reset, steps } = useStore();
-  const qp = useQuestPoints();
-  const { dependencies } = useReadinessEngine();
-  const { activeStepId } = useBridge();
-  const previewStep = steps.find(step => step.id === activeStepId) ?? nextStep(steps, progress, qp, dependencies);
+  const { progress, replace, reset } = useStore();
   const [pending, setPending] = useState<Extract<ImportResult, { ok: true }> | null>(null);
   const [importError, setImportError] = useState('');
   const [confirmReset, setConfirmReset] = useState(false);
@@ -98,20 +85,7 @@ export function SettingsPage() {
     </Page>
     <Page side="r" className="settings" label={SETTINGS_TABS.find(([k]) => k === tab)?.[1]}>
       <div className="settings-content la-scroll">
-      {tab === 'look' && (
-        <>
-        <div className="appearance-workspace">
-          <div>
-          <Appearance />
-          </div>
-          <aside className="appearance-preview"><h2>Preview</h2><p className="muted small">Your current action, with the selected appearance.</p>{previewStep ? <CurrentAction step={previewStep} /> : <p className="notice">All route steps are completed.</p>}</aside>
-        </div>
-        <details className="settings-advanced">
-          <summary>Advanced: play style, preparation and automation</summary>
-          <PlayStyleSection />
-        </details>
-        </>
-      )}
+      {tab === 'training' && <PlayStyleSection />}
       {tab === 'game' && (
         <>
           <RuneLiteBridge />
@@ -184,155 +158,11 @@ export function SettingsPage() {
       {tab === 'app' && (
         <>
           <UpdatesSection />
-          <DiagnosticsSection />
         </>
       )}
       </div>
     </Page>
     </>
-  );
-}
-
-function FontScale({ id, value, onChange }: { id:string; value:number; onChange:(value:number)=>void }) {
-  return <div className="scale-setting font-scale" role="group" aria-labelledby={id}>
-    <span className="setting-label" id={id}>Font size</span>
-    <span className="font-slider-row">
-      <button type="button" className="stepper-btn" aria-label="Font size: less" disabled={value <= TEXT_STEPS[0]} onClick={()=>onChange(stepScale(TEXT_STEPS,value,-1))}>−</button>
-      <input type="range" min="90" max="150" step="1" value={Math.round(value*100)} aria-label="Font size slider" aria-valuetext={percent(value)} onChange={e=>onChange(Number(e.target.value)/100)} />
-      <output>{percent(value)}</output>
-      <button type="button" className="stepper-btn" aria-label="Font size: more" disabled={value >= TEXT_STEPS[TEXT_STEPS.length-1]} onClick={()=>onChange(stepScale(TEXT_STEPS,value,1))}>+</button>
-    </span>
-    {value!==1 && <button type="button" className="btn btn-ghost" onClick={()=>onChange(1)}>Reset to 100%</button>}
-  </div>;
-}
-
-function Stepper({ id, label, value, steps, onChange }: { id: string; label: string; value: number; steps: number[]; onChange: (v: number) => void }) {
-  return (
-    <div className="scale-setting" role="group" aria-labelledby={id}>
-      <span className="setting-label" id={id}>{label}</span>
-      <span className="scale-row">
-        <span className="stepper">
-          <button type="button" className="stepper-btn" onClick={() => onChange(stepScale(steps, value, -1))}
-            disabled={value <= steps[0]} aria-label={`${label}: less`}>−</button>
-          <output className="stepper-value" aria-live="polite">{percent(value)}</output>
-          <button type="button" className="stepper-btn" onClick={() => onChange(stepScale(steps, value, 1))}
-            disabled={value >= steps[steps.length - 1]} aria-label={`${label}: more`}>+</button>
-        </span>
-        {value !== 1 && <button type="button" className="btn btn-ghost" onClick={() => onChange(1)}>Reset to 100%</button>}
-      </span>
-    </div>
-  );
-}
-
-function Appearance() {
-  const bridge = desktop();
-  const features = useFeatures();
-  const [theme, setTheme] = useState<Theme>(loadTheme);
-  const [look, setLook] = useState<Look>(loadLook);
-  const [solid, setSolid] = useState(loadSolid);
-  const [text, setText] = useState(loadTextScale);
-  const [zoom, setZoom] = useState<ZoomState | null>(null);
-  const ids = { theme: useId(), look: useId(), text: useId(), zoom: useId() };
-
-  useEffect(() => {
-    if (!bridge) return;
-    let alive = true;
-    bridge.getZoom().then((z) => alive && setZoom(z));
-    const off = bridge.onZoom(setZoom);
-    return () => { alive = false; off(); };
-  }, [bridge]);
-
-  // The font size could have been changed with the keys — we keep the switch in agreement.
-  useEffect(() => {
-    const on = () => setText(loadTextScale());
-    window.addEventListener(TEXT_EVENT, on);
-    return () => window.removeEventListener(TEXT_EVENT, on);
-  }, []);
-
-  const pickTheme = (t: Theme) => {
-    setTheme(t);
-    applyTheme(t);
-  };
-  const pickLook = (l: Look) => {
-    setLook(l);
-    applyLook(l);
-  };
-  const pickText = (v: number) => {
-    setText(v);
-    applyTextScale(v);
-  };
-  const pickZoom = (next: { zoom?: number; autoZoom?: boolean }) => {
-    if (!bridge || !zoom) return;
-    const z = { zoom: next.zoom ?? zoom.zoom, autoZoom: next.autoZoom ?? zoom.autoZoom };
-    setZoom({ ...zoom, ...z });
-    bridge.setZoom(z);
-  };
-
-  return (
-    <section className="card section-card">
-      <h2 className="card-title">Appearance</h2>
-
-      <div className="setting">
-        <span className="setting-label" id={ids.theme}>Theme</span>
-        <div className="segmented" role="group" aria-labelledby={ids.theme}>
-          {THEMES.map(([t, label]) => (
-            <button key={t} type="button" aria-pressed={theme === t} className={`seg ${theme === t ? 'is-active' : ''}`} onClick={() => pickTheme(t)}>
-              {label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="setting"><span className="setting-label">Density</span><DensityPills /></div>
-      <div className="setting"><span className="setting-label">View</span><div className="mode-toggle appearance-view" role="group" aria-label="Workspace view"><button type="button" className={`mode-btn ${!features.compact ? 'is-active' : ''}`} aria-pressed={!features.compact} onClick={() => setFeatures({compact:false})}>Full</button><button type="button" className={`mode-btn ${features.compact ? 'is-active' : ''}`} aria-pressed={features.compact} onClick={() => setFeatures({compact:true})}>Compact</button></div></div>
-      <div className="setting">
-        <FontScale id={ids.text} value={text} onChange={pickText} />
-        <p className="muted small">It changes only the text — the spacing and layout stay the same.</p>
-      </div>
-
-      <details className="appearance-advanced"><summary>Panel style, interface scale and window behavior</summary>
-      <div className="setting">
-        <span className="setting-label" id={ids.look}>Look</span>
-        <div className="segmented" role="group" aria-labelledby={ids.look}>
-          {([['glass', 'Glass'], ['classic', 'Classic']] as const).map(([l, label]) => (
-            <button key={l} type="button" aria-pressed={look === l} className={`seg ${look === l ? 'is-active' : ''}`} onClick={() => pickLook(l)}>
-              {label}
-            </button>
-          ))}
-        </div>
-        {look === 'glass' && (
-          <label className="switch">
-            <input type="checkbox" checked={solid} onChange={(e) => { setSolid(e.target.checked); applySolid(e.target.checked); }} />
-            <span>Solid panels (no blur) — for weak graphics</span>
-          </label>
-        )}
-      </div>
-
-      {bridge && zoom && (
-        <div className="setting">
-          <Stepper id={ids.zoom} label="Interface scale" value={zoom.zoom} steps={ZOOM_STEPS} onChange={(v) => pickZoom({ zoom: v })} />
-          <label className="switch">
-            <input type="checkbox" checked={zoom.autoZoom} onChange={(e) => pickZoom({ autoZoom: e.target.checked })} />
-            <span>Scale up on large windows (small windows keep your scale and rearrange the layout)</span>
-          </label>
-          <p className="muted small">
-            Now {percent(zoom.effective)}{zoom.autoZoom && Math.abs(zoom.effective - zoom.zoom) > 0.005 ? ' with the large window taken into account' : ''}.
-            Keys: <kbd>Ctrl</kbd> + <kbd>+</kbd> / <kbd>−</kbd>, <kbd>Ctrl</kbd> + <kbd>0</kbd> — reset, or <kbd>Ctrl</kbd> + the mouse wheel.
-          </p>
-        </div>
-      )}
-
-      {bridge && zoom && (
-        <div className="setting">
-          <label className="switch">
-            <input type="checkbox" checked={zoom.alwaysOnTop}
-              onChange={(e) => { setZoom({ ...zoom, alwaysOnTop: e.target.checked }); bridge.setAlwaysOnTop(e.target.checked); }} />
-            <span>On top of all windows — handy to keep next to the game</span>
-          </label>
-        </div>
-      )}
-      </details>
-    </section>
   );
 }
 
@@ -350,20 +180,6 @@ function PlayStyleSection() {
     <section className="card section-card" aria-label="Play style">
       <h2 className="card-title">Play style and preparation</h2>
       <div className="setting">
-        <p className="muted small">
-          <strong>Zen</strong> — the screen has the step, one status line, the "Done" button and critical warnings; the rest — under "More".
-          {' '}<strong>Inspector</strong> — all the step blocks are expanded: formulas, XP calculators, branches, item dossiers, economy.
-          In the game the list and the HUD are always visible; the plugin setting "Smart reveal" (off by default) hides the extra on the way.
-        </p>
-      </div>
-      <div className="setting">
-        <label className="switch">
-          <input type="checkbox" checked={features.compact} onChange={(e) => setFeatures({ compact: e.target.checked })} />
-          <span>Compact view: the current action and what it needs, for a narrow window beside the game</span>
-        </label>
-        <p className="muted small">It changes how Path is shown. The route, progress and every other page stay as they are; "Full workspace" in the header returns.</p>
-      </div>
-      <div className="setting">
         <div className="mode-toggle style-toggle" role="group" aria-label="Training choices">
           {([['balanced', 'Balanced'], ['fastest', 'Fastest'], ['profit', 'Money'], ['relaxed', 'Relaxed']] as const).map(([k, label]) => {
             const on = priorityOf(features) === k;
@@ -376,9 +192,7 @@ function PlayStyleSection() {
           })}
         </div>
         <p className="muted small">
-          How the guide picks training methods. <strong>Balanced</strong> (the default): the quickest practical way to the goal, counting getting the items, how much attention it
-          takes and what the materials cost. <strong>Fastest</strong>: speed first, with more hints and a look further ahead. <strong>Money</strong>: known positive net earnings first, within accessible methods. <strong>Relaxed</strong>: no risk and fewer clicks first.
-          Combat plans, the step requirements and safety do not depend on this.
+          Balanced weighs time, supplies and earnings. Choose Fastest, Money or Relaxed to change the preference; requirements and safety checks remain active.
         </p>
       </div>
       <div className="setting">
@@ -387,9 +201,7 @@ function PlayStyleSection() {
           <span>🧭 Auto preparation for a step</span>
         </label>
         <p className="muted small">
-          The app itself lines up what to take or do before a step and leads the arrow in the game: to the bank for an item, to the exchange for a purchase, to a training place.
-          When a task is done, it leads to the next one, and at the end returns to the step. It does not take over the arrow if a target is already set in the game, and goes quiet if you clear it yourself.
-          It buys and does nothing for you.
+          Guides you through banking, supplies and training, then returns to the step. Purchases and game actions stay manual.
         </p>
       </div>
       <div className="setting">
@@ -398,7 +210,7 @@ function PlayStyleSection() {
           <span>⚔️ Keep Defence at 1</span>
         </label>
         <p className="muted small">
-          Combat plans then never offer Defence training. Off by default: with no preference, training Defence first is compared with the rest, by time and food, like any other plan.
+          Excludes Defence training from suggested combat preparation.
         </p>
       </div>
     </section>

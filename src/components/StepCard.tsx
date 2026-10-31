@@ -31,7 +31,6 @@ import { TradeRestrictionNote } from './TradeRestrictionNote';
 import { StepTasks } from './StepTasks';
 import { StepTraining } from './TrainingCard';
 import { StepStatus } from './StepStatus';
-import { useFeatures } from '../lib/features';
 import { MagicPlan } from './MagicPlan';
 import { MoneyPlan } from './MoneyPlan';
 import { ItemIcon, useWiki } from './WikiDrawer';
@@ -97,11 +96,10 @@ function FieldRow({ field }: { field: Field }) {
 export type StepTab = 'steps' | 'prep' | 'travel' | 'details';
 
 /** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. noAside — the workspace shows the preparation list in its own column, Steps does not repeat it. statusAbove — the verdict is on a status line above, so Preparation does not say it again. verdictShown — a panel above already shows the readiness verdict card (the compact Bag tab's QuestSupplies). */
-export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = false, noAside = false, statusAbove = false, noManual = false, verdictShown = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab | 'safety'; onPrep?: () => void; safetyShown?: boolean; noAside?: boolean; statusAbove?: boolean; noManual?: boolean; verdictShown?: boolean }) {
+export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = false, noAside = false, statusAbove = false, noManual = false, verdictShown = false, mapShown = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab | 'safety'; onPrep?: () => void; safetyShown?: boolean; noAside?: boolean; statusAbove?: boolean; noManual?: boolean; verdictShown?: boolean; mapShown?: boolean }) {
   const { progress, mode, setStep, review, reactivate } = useStore();
   const qp = useQuestPoints();
   const { openNpc } = useWiki();
-  const zen = !useFeatures().inspector;
   const engine = useReadinessEngine();
   const recovering = engine.ctx.recovery?.stepId === step.id;
   const sub = useSubStep(step);
@@ -116,7 +114,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
     step.mapUrl && { href: step.mapUrl, label: 'Wiki map' },
   ].filter(Boolean) as { href: string; label: string }[];
 
-  // The blocks by meaning; "Zen" and "Inspector" assemble them differently — the calculations are the same in both modes.
+  // Shared blocks are composed into the current step tabs; calculations stay independent of presentation.
   const metaRow = (
     <div className="step-meta-row">
       <span className="muted small">{TYPE_LABEL[step.type]} · stage {step.stage}</span>
@@ -167,25 +165,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
 
   const warning = step.warning && <div className="plaque plaque-warning" role="note"><Inline text={step.warning} /></div>;
 
-  const helpers = (
-    <>
-      <ReadinessVerdictCard step={step} />
-      <ReadinessPanel step={step} />
-      <TradeRestrictionNote step={step} />
-      <MoneyGoal step={step} />
-      <StepTraining step={step} />
-      <MagicPlan step={step} />
-      <MoneyPlan step={step} />
-      <UpgradePrompt step={step} />
-      <GearPrompt step={step} />
-      <StepMap step={step} />
-      <InGamePanel step={step} />
-      <TravelPlan step={step} />
-      <FoodAdvice step={step} />
-      <StyleGear step={step} />
-      <BranchSuggestions step={step} />
-    </>
-  );
 
   const how = step.how && <p className="step-how"><Inline text={step.how} /></p>;
   const bring = step.bring && <p className="small"><span className="muted">Bring: </span><Inline text={step.bring} /></p>;
@@ -315,7 +294,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
     <div className="actions">
       {status === 'done'
         ? <button type="button" className="btn" onClick={() => setStep(step.id, null)}>Remove the mark</button>
-        : <button type="button" className="btn btn-primary btn-lg" onClick={() => onDone(step.id)}><IconCheck /> {zen ? 'Done' : 'Mark as done'}{nextId && <span className="btn-next"> → {nextId}</span>}</button>}
+        : <button type="button" className="btn btn-primary btn-lg" onClick={() => onDone(step.id)}><IconCheck /> Done{nextId && <span className="btn-next"> → {nextId}</span>}</button>}
       {step.optional && (status === 'skipped'
         ? <button type="button" className="btn" onClick={() => setStep(step.id, null)}>Return to the plan</button>
         : status !== 'done' && <button type="button" className="btn" onClick={() => setStep(step.id, 'skipped')}>Skip</button>)}
@@ -324,7 +303,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
 
   if (tab) {
     if (tab === 'safety') return <div className="workspace-safety">{reviewPlaque}{warning}{fieldList(fieldsWarn)}</div>;
-    const inspector = !zen;
     // Manual completion is a quiet, explicit action: the recommended action is the one at the top of the workspace.
     const manual = (
       <div className="manual-complete">
@@ -412,8 +390,8 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
     if (tab === 'travel') {
       return (
         <div className="step-details is-tab">
-          <TravelTip step={step} />
-          <StepMap step={step} />
+          {!mapShown && <TravelTip step={step} />}
+          {!mapShown && <StepMap step={step} />}
           <InGamePanel step={step} />
           <TravelPlan step={step} />
         </div>
@@ -433,7 +411,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
         {requires}
         {targets}
         {(step.itemsRequired?.length || step.itemsRecommended?.length || image || fieldsRest.length > 0) && (
-          <Fold title="Items, details and fields" hint="the raw step data" open={inspector}>
+          <Fold title="Items, details and fields" hint="the raw step data">
             {items}
             {image}
             {fieldList(fieldsRest)}
@@ -443,7 +421,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
     );
   }
 
-  if (zen) {
     // "Zen": the current sub-step as a hero card, its items, the status in one line, the "Done" button and critical warnings.
     // Everything else is folded: the future preparation, the full walkthrough, and "More".
     return (
@@ -476,35 +453,4 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
         </details>
       </div>
     );
-  }
-
-  // "Inspector": everything is expanded, as before.
-  return (
-    <div className="step-details">
-      {metaRow}
-      {reviewPlaque}
-      {!sub && where}
-      {warning}
-      {fieldList(fieldsWarn)}
-      {hero}
-      {helpers}
-      {!sub && how}
-      {bring}
-      {notes}
-      {requires}
-      {targets}
-      {doneWhen}
-      {actions}
-      {future}
-      {reference}
-      {routeWritten}
-      {(step.itemsRequired?.length || step.itemsRecommended?.length || image || fieldsRest.length > 0) && (
-        <Fold title="Items, details and fields" hint="the raw step data">
-          {items}
-          {image}
-          {fieldList(fieldsRest)}
-        </Fold>
-      )}
-    </div>
-  );
 }

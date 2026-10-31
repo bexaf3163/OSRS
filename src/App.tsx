@@ -17,10 +17,8 @@ import { FundingSync } from './components/FundingSync';
 import { PrepSync } from './components/PrepSync';
 import { SkillSync } from './components/TrackedSkillCard';
 import { PathPage } from './pages/Path';
-import { PathCompact } from './pages/PathCompact';
-import { setFeatures, useFeatures } from './lib/features';
 import { SkillsPage } from './pages/Skills';
-import { JournalPage, journalTabOf } from './pages/Journal';
+import { JournalPage } from './pages/Journal';
 import { ReferencePage } from './pages/Reference';
 import { SettingsPage } from './pages/Settings';
 import { ShoppingPage } from './pages/Shopping';
@@ -33,7 +31,7 @@ import { usePlayerSummary } from './ledger/adapters';
 
 /** The section a route belongs to: the old #/quests and #/goals hashes live inside the Journal. */
 function sectionOf(page: Page): string {
-  return page === 'quests' || page === 'goals' ? 'journal' : page;
+  return page === 'quests' ? 'journal' : page;
 }
 
 function pageTitle(page: Page, param?: string): string {
@@ -51,14 +49,13 @@ function pageTitle(page: Page, param?: string): string {
 export function App() {
   const route = useRoute();
   const { mode, setMode, persistenceWarning } = useStore();
-  const features = useFeatures();
   const player = usePlayerSummary();
   const [searchOpen, setSearchOpen] = useState(false);
   const desk = desktop();
   const [pinned, setPinned] = useState(false);
 
   useEffect(() => {
-    void desk?.getZoom().then((z) => setPinned(z.alwaysOnTop));
+    void desk?.getWindowPrefs().then((z) => setPinned(z.alwaysOnTop));
   }, [desk]);
 
   // "/" opens the search if the focus is not in an input field.
@@ -83,12 +80,6 @@ export function App() {
   }, [route]);
 
   const section = sectionOf(route.page);
-  // The compact view is a presentation of Path only; every other page opens as usual.
-  const compact = features.compact && route.page === 'path';
-  const toggleCompact = () => {
-    setFeatures({ compact: !features.compact });
-    if (!features.compact && route.page !== 'path') location.hash = '#/';
-  };
   const togglePin = () => {
     if (!desk) return;
     desk.setAlwaysOnTop(!pinned);
@@ -97,11 +88,10 @@ export function App() {
 
   let content;
   switch (route.page) {
-    case 'path': content = compact ? <PathCompact focusStep={route.step} /> : <PathPage focusStep={route.step} focusKey={route.key} />; break;
+    case 'path': content = <PathPage focusStep={route.step} focusKey={route.key} />; break;
     case 'skills': content = <SkillsPage param={route.param} selectedSkill={route.skill} goal={route.goal} />; break;
-    case 'goals':
     case 'quests':
-    case 'journal': content = <JournalPage tab={journalTabOf(route.page, route.param)} />; break;
+    case 'journal': content = <JournalPage />; break;
     case 'reference': content = <ReferencePage key={route.param ?? ''} section={route.param} />; break;
     case 'settings': content = <SettingsPage />; break;
     case 'shopping': content = <ShoppingPage />; break;
@@ -110,7 +100,7 @@ export function App() {
   }
 
   return (
-    <LedgerStage className={compact ? 'is-compact' : ''}>
+    <LedgerStage>
       <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>
         Skip to content
       </a>
@@ -120,8 +110,6 @@ export function App() {
         members={mode === 'members'}
         onMembers={(m) => setMode(m ? 'members' : 'f2p')}
         status={<><BridgeIndicator /><LaunchRuneLiteButton /></>}
-        compact={features.compact}
-        onToggleCompact={toggleCompact}
         onOpenSearch={() => setSearchOpen(true)}
         settingsActive={route.page === 'settings'}
       />
@@ -131,7 +119,7 @@ export function App() {
           <UpdateBanner />
           <ProfileBanner />
           {persistenceWarning && <div className="plaque plaque-warning progress-storage-warning" role="alert">{persistenceWarning} <a href="#/settings">Settings</a></div>}
-          <Book compact={compact}>
+          <Book>
             <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}>{content}</PageBoundary>
           </Book>
           <div id="la-hotbar-slot" />

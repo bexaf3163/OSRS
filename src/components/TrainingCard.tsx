@@ -98,7 +98,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
   }, [skill, advice, state, xp, target, prices]);
   if (!advice) return null;
   if (advice.level === null) return <section className="training" aria-label="What to train with"><p className="small muted">Level not checked. Connect RuneLite or enter your level in Reference → Levels and live experience.</p></section>;
-  if (advice.level >= target) return view === 'summary' ? <section className="training training-summary" aria-label="What to train with">
+  if (advice.level >= target) return view !== 'full' ? <section className="training training-summary" aria-label="What to train with">
     <p className="training-now"><strong>{skillTitle(skill)} checkpoint reached</strong> · level {advice.level}</p>
     <p className="small muted">{state.mode === 'f2p' ? f2pAdviceFor(skill)?.reason ?? 'Your selected training goal is complete.' : 'Your selected training goal is complete.'}</p>
   </section> : null;

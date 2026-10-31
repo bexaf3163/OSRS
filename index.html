@@ -5,19 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>OSRS Path</title>
     <meta name="description" content="A personal progress tracker for Old School RuneScape: the F2P and Members route, the OSRS Wiki item database" />
-    <script>
-      // The theme and font size before the first render, so there is no flicker.
-      try {
-        var t = localStorage.getItem('osrs-put:theme');
-        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
-        // The look (glass is the default) and solid panels, for the same reason.
-        if (localStorage.getItem('osrs-put:look') === 'classic') document.documentElement.dataset.look = 'classic';
-        if (localStorage.getItem('osrs-put:solid') === '1') document.documentElement.dataset.solid = '1';
-        // The font size too is before rendering — otherwise the text would jump after loading.
-        var s = Number(localStorage.getItem('osrs-put:text-scale'));
-        if (s >= 0.9 && s <= 1.5) document.documentElement.style.setProperty('--text-scale', String(s));
-      } catch (e) {}
-    </script>
   </head>
   <body>
     <div id="root"></div>

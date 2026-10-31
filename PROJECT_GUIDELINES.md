@@ -751,5 +751,10 @@ The objective is a reliable, intelligent, low-friction OSRS companion that proac
 
 - A mobile/phone version is no longer wanted. Do not develop mobile layouts, phone navigation, touch-specific flows, mobile packaging or phone-only features. Do not spend implementation or QA time supporting phone viewports.
 - Focus on the Windows desktop portable app and RuneLite integration. Preserve normal desktop window resizing, desktop minimum usable dimensions, Windows DPI/text scaling and accessibility. These remain desktop requirements, not mobile support.
+
 - Existing responsive code may remain where harmless; do not perform a risky blanket CSS/UI deletion simply to remove mobile support. Retire phone-specific development and test scenarios in the next relevant test-maintenance change, retaining equivalent functional checks at desktop sizes. Mobile gaps are no longer release blockers.
 - This decision applies to both Codex and Claude and supersedes older mobile/narrow-phone acceptance requests.
+
+### Current application controls — owner decision, 2026-10-31
+
+The desktop/DPI requirements above refer to native Windows accessibility and resizing. The owner cancelled custom app Appearance/theme/density/view/font/panel/zoom controls, Compact/Inspector display modes, their preview, Copy Report UI and the visible Journal stage matrix. Preserve the fixed Ledger design, native pinning, map/image zoom, shared goal/planning engines, data, backups and updates. Current architecture and takeover scope: docs/CLAUDE_TAKEOVER.md.

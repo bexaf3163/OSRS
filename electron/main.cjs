@@ -3,7 +3,7 @@
 // Copies of the progress also go to %APPDATA%\OSRS Path\progress-copies, so the exe and its data folder can be deleted safely.
 // The progress is stored twice: in the window's localStorage and as the file progress.json — the file survives a storage reset.
 
-const { app, BrowserWindow, Menu, dialog, ipcMain, nativeTheme, session, shell } = require('electron');
+const { app, BrowserWindow, Menu, dialog, ipcMain, session, shell } = require('electron');
 const fs = require('node:fs');
 const path = require('node:path');
 const { registerBridge } = require('./runelite-bridge.cjs');
@@ -64,12 +64,10 @@ function writeAtomic(name, text) {
   return atomicWrite(file(name), text);
 }
 
-// --- Scale ---
-const ZOOM_STEPS = [0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2];
-const BASE_WIDTH = 1280;
-const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
-const ui = readJson('ui.json', { zoom: 1, autoZoom: true, alwaysOnTop: false });
-ui.zoom = clamp(Number(ui.zoom) || 1, ZOOM_STEPS[0], ZOOM_STEPS[ZOOM_STEPS.length - 1]);
+// Window preferences share storage with backup settings; preserve unrelated saved fields.
+const ui = readJson('ui.json', { alwaysOnTop: false });
+delete ui.zoom;
+delete ui.autoZoom;
 
 const saveUi = () => writeAtomic('ui.json', JSON.stringify(ui));
 
@@ -78,40 +76,13 @@ const saveUi = () => writeAtomic('ui.json', JSON.stringify(ui));
 const autoCopyDir = path.join(app.getPath('appData'), 'OSRS Path', 'progress-copies');
 if (ui.backupOff !== true) restoreFromCopies(app.getPath('userData'), autoCopyDir, freshData);
 
-function stepZoom(current, dir) {
-  if (dir > 0) return ZOOM_STEPS.find((s) => s > current + 0.001) ?? ZOOM_STEPS[ZOOM_STEPS.length - 1];
-  return [...ZOOM_STEPS].reverse().find((s) => s < current - 0.001) ?? ZOOM_STEPS[0];
-}
 
 if (!app.requestSingleInstanceLock()) {
   app.quit();
 } else {
   let win = null;
 
-  /**
-   * The final scale: manual × the adaptation to the window width. A window wider than 1280 — larger (up to 1.5×);
-   * a narrower one keeps the manual scale and the layout reflows instead (the route becomes a drawer, panels stack). Shrinking the whole
-   * interface to keep three columns made the text too small to read. The window scale (zoomFactor) honestly changes the width for media queries.
-   */
-  function effectiveZoom() {
-    if (!win || !ui.autoZoom) return ui.zoom;
-    const [width] = win.getContentSize();
-    return Math.round(ui.zoom * clamp(width / BASE_WIDTH, 1, 1.5) * 100) / 100;
-  }
-
-  const zoomState = () => ({ zoom: ui.zoom, autoZoom: ui.autoZoom, effective: effectiveZoom(), alwaysOnTop: ui.alwaysOnTop });
-
-  function applyZoom() {
-    if (!win) return;
-    win.webContents.setZoomFactor(effectiveZoom());
-    win.webContents.send('zoom:changed', zoomState());
-  }
-
-  function setZoom(zoom) {
-    ui.zoom = clamp(zoom, ZOOM_STEPS[0], ZOOM_STEPS[ZOOM_STEPS.length - 1]);
-    saveUi();
-    applyZoom();
-  }
+  const windowPrefs = () => ({ alwaysOnTop: Boolean(ui.alwaysOnTop) });
 
   const windowState = () => readJson('window.json', {});
 
@@ -175,16 +146,11 @@ if (!app.requestSingleInstanceLock()) {
   });
   const flushProgress = () => progressWriter.flush();
 
-  ipcMain.handle('zoom:get', () => zoomState());
-  ipcMain.on('zoom:set', (_e, s) => {
-    ui.autoZoom = Boolean(s.autoZoom);
-    setZoom(Number(s.zoom) || 1);
-  });
+  ipcMain.handle('window-prefs:get', () => windowPrefs());
   ipcMain.on('top:set', (_e, on) => {
     ui.alwaysOnTop = Boolean(on);
     saveUi();
     win?.setAlwaysOnTop(ui.alwaysOnTop);
-    win?.webContents.send('zoom:changed', zoomState());
   });
   ipcMain.on('progress:load', (e, profileId) => {
     flushProgress();
@@ -299,7 +265,7 @@ if (!app.requestSingleInstanceLock()) {
       minHeight: 560,
       title: `OSRS Path ${app.getVersion()}`,
       icon: path.join(DIST, 'icon-512.png'),
-      backgroundColor: nativeTheme.shouldUseDarkColors ? '#111214' : '#f4f5f7',
+      backgroundColor: '#111214',
       autoHideMenuBar: true,
       alwaysOnTop: ui.alwaysOnTop,
       show: false,
@@ -322,27 +288,8 @@ if (!app.requestSingleInstanceLock()) {
     });
     win.on('closed', () => { win = null; });
 
-    let resizeTimer = null;
-    win.on('resize', () => {
-      if (!ui.autoZoom) return;
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(applyZoom, 60);
-    });
-    win.webContents.on('did-finish-load', applyZoom);
-
-    // Ctrl + the mouse wheel.
-    win.webContents.on('zoom-changed', (_e, direction) => setZoom(stepZoom(ui.zoom, direction === 'in' ? 1 : -1)));
-
-    // Ctrl + "+" / "−" / "0", including the numeric keypad: a menu item has only one shortcut, so we catch them ourselves.
-    win.webContents.on('before-input-event', (event, input) => {
-      if (input.type !== 'keyDown' || !(input.control || input.meta) || input.alt) return;
-      const k = input.key;
-      if (k === '+' || k === '=' || input.code === 'NumpadAdd') setZoom(stepZoom(ui.zoom, 1));
-      else if (k === '-' || k === '_' || input.code === 'NumpadSubtract') setZoom(stepZoom(ui.zoom, -1));
-      else if (k === '0' || input.code === 'Numpad0') setZoom(1);
-      else return;
-      event.preventDefault();
-    });
+    // Native DPI and responsive CSS handle window sizing; retired custom zoom is not restored.
+    win.webContents.once('did-finish-load', () => win?.webContents.setZoomFactor(1));
 
     // Links to the wiki and other sites — to an ordinary browser, not inside the app.
     win.webContents.setWindowOpenHandler(({ url }) => {
@@ -359,16 +306,12 @@ if (!app.requestSingleInstanceLock()) {
   }
 
   // The menu is hidden (shown with Alt) but gives the familiar shortcuts.
-  // The scale is only labelled here: the keys are handled by before-input-event.
   Menu.setApplicationMenu(Menu.buildFromTemplate([
     {
       label: 'View',
       submenu: [
         { role: 'reload', label: 'Reload' },
         { type: 'separator' },
-        { label: 'Zoom in', accelerator: 'CommandOrControl+=', registerAccelerator: false, click: () => setZoom(stepZoom(ui.zoom, 1)) },
-        { label: 'Zoom out', accelerator: 'CommandOrControl+-', registerAccelerator: false, click: () => setZoom(stepZoom(ui.zoom, -1)) },
-        { label: 'Actual size', accelerator: 'CommandOrControl+0', registerAccelerator: false, click: () => setZoom(1) },
         { type: 'separator' },
         { role: 'togglefullscreen', label: 'Full screen' },
         { role: 'toggleDevTools', label: 'Developer tools' },

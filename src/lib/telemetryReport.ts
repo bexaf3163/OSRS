@@ -1,7 +1,6 @@
 // Parsing the plugin's debug journal (osrs-path-telemetry/session-*.jsonl): it is used to find errors without replaying the game.
 // The plugin writes one JSON line per event (Telemetry.java); here: reading, finding oddities and a per-step summary.
-// Pure functions without files or network: the file scripts/analyze-telemetry.ts reads them, and the app takes the bridge summary
-// (summarizeBridge) for the diagnostics report.
+// Pure functions without files or network, consumed by scripts/analyze-telemetry.ts.
 
 export interface TelemetryEvent {
   t: number;
@@ -357,38 +356,4 @@ export function formatReport(r: Report): string {
     for (const sh of r.shots) out.push(`  ${sh.file} — ${sh.why}`);
   }
   return out.join('\n');
-}
-
-// ---------- Summary from the bridge (GET /telemetry) ----------
-
-export interface BridgeTelemetry {
-  enabled: boolean;
-  /** The file name only: the path contains the Windows user name, we do not carry it into the diagnostics report. */
-  file: string | null;
-  events: number;
-  anomalies: number;
-  truncated: boolean;
-  lastShot: string | null;
-  recentAnomalies: { code: string; message: string }[];
-}
-
-/** The bridge reply → a checked summary. Garbage and a disabled journal → null / enabled:false. */
-export function summarizeBridge(raw: unknown): BridgeTelemetry | null {
-  if (!raw || typeof raw !== 'object') return null;
-  const o = raw as Record<string, unknown>;
-  if (o.enabled !== true) return { enabled: false, file: null, events: 0, anomalies: 0, truncated: false, lastShot: null, recentAnomalies: [] };
-  const file = typeof o.file === 'string' ? o.file.split(/[\\/]/).pop() ?? null : null;
-  const rec = Array.isArray(o.recentAnomalies) ? o.recentAnomalies : [];
-  return {
-    enabled: true,
-    file: file && file.length <= 80 ? file : null,
-    events: num(o.events) ?? 0,
-    anomalies: num(o.anomalies) ?? 0,
-    truncated: o.truncated === true,
-    lastShot: typeof o.lastShot === 'string' && o.lastShot.length <= 120 ? o.lastShot : null,
-    recentAnomalies: rec
-      .filter((a): a is Record<string, unknown> => Boolean(a) && typeof a === 'object')
-      .slice(-5)
-      .map((a) => ({ code: String(a.code ?? '').slice(0, 30), message: String(a.message ?? '').slice(0, 300) })),
-  };
 }

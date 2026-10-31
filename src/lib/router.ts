@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-export type Page = 'path' | 'skills' | 'goals' | 'quests' | 'journal' | 'reference' | 'settings' | 'shopping' | 'gear' | 'money';
+export type Page = 'path' | 'skills' | 'quests' | 'journal' | 'reference' | 'settings' | 'shopping' | 'gear' | 'money';
 
 export interface Route {
   page: Page;
@@ -31,9 +31,9 @@ function parsePath(hash: string): Omit<Route, 'key'> {
   switch (first) {
     case 'step': return { page: 'path', step: second };
     case 'skills': return { page: 'skills', param: second, ...(third ? { skill: third } : {}), ...(goal !== undefined ? { goal } : {}) };
-    case 'goals': return { page: 'goals' };
+    case 'goals': return { page: 'journal', param: 'session' };
     case 'quests': return { page: 'quests' };
-    // The Journal groups Quests, Stage goals and Session. #/quests and #/goals keep working and open the matching tab.
+    // Old goal links open the surviving Journal; internal planning goals are independent of this retired screen.
     case 'journal': return { page: 'journal', param: second };
     case 'reference': return { page: 'reference', param: second };
     case 'settings': return { page: 'settings' };

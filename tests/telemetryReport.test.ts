@@ -1,10 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
-  analyze, formatDuration, formatReport, parseLog, summarizeBridge, SLOW_LINE_MS,
+  analyze, formatDuration, formatReport, parseLog, SLOW_LINE_MS,
   type TelemetryEvent,
 } from '../src/lib/telemetryReport';
-import { getTelemetry, BRIDGE_PATHS, type BridgeTransport } from '../src/services/runeliteBridge';
 
 const T0 = 1_700_000_000_000;
 const ev = (dt: number, kind: string, rest: Record<string, unknown> = {}): TelemetryEvent => ({ t: T0 + dt, ...rest, kind });
@@ -160,39 +159,6 @@ describe('formatDuration / formatReport', () => {
   it('a clean session — it says so', () => {
     const r = analyze([...header, ev(9000, 'end')]);
     expect(formatReport(r)).toContain('No errors or oddities found');
-  });
-});
-
-describe('bridge summary', () => {
-  it('a turned-off journal and garbage', () => {
-    expect(summarizeBridge(undefined)).toBeNull();
-    expect(summarizeBridge('x')).toBeNull();
-    expect(summarizeBridge({ enabled: false })).toMatchObject({ enabled: false, events: 0 });
-  });
-
-  it('the file path is cut down to the name: the Windows user name does not get into the report', () => {
-    const s = summarizeBridge({
-      enabled: true, file: 'C:\\Users\\Mark\\.runelite\\osrs-path-telemetry\\session-1.jsonl', events: 12, anomalies: 1,
-      lastShot: 'shot-1.png', recentAnomalies: [{ code: 'STUCK', message: 'm', t: 1 }, 7, null],
-    });
-    expect(s).toMatchObject({ enabled: true, file: 'session-1.jsonl', events: 12, anomalies: 1, lastShot: 'shot-1.png' });
-    expect(JSON.stringify(s)).not.toContain('Mark');
-    expect(s?.recentAnomalies).toEqual([{ code: 'STUCK', message: 'm' }]);
-  });
-
-  it('getTelemetry: the plugin answer is read, an old plugin (404) and offline — null', async () => {
-    expect(BRIDGE_PATHS).toContain('/telemetry');
-    const t = (res: { ok: boolean; status: number; data?: unknown }): BridgeTransport => ({
-      request: async (method, path) => {
-        expect(method).toBe('GET');
-        expect(path).toBe('/telemetry');
-        return res;
-      },
-      openEvents: () => () => undefined,
-    });
-    expect(await getTelemetry(t({ ok: true, status: 200, data: { enabled: true, events: 3, anomalies: 0 } }))).toMatchObject({ enabled: true, events: 3 });
-    expect(await getTelemetry(t({ ok: false, status: 404 }))).toBeNull();
-    expect(await getTelemetry(t({ ok: false, status: 0 }))).toBeNull();
   });
 });
 

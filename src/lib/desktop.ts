@@ -1,13 +1,6 @@
 // The bridge to the desktop app (electron/preload.cjs). Without it (the page during development) everything works, only without RuneLite and the progress file.
 
-export interface ZoomState {
-  /** The scale chosen manually. */
-  zoom: number;
-  /** Fit the scale to the window width. */
-  autoZoom: boolean;
-  /** The resulting scale now: manual x fit to the window. */
-  effective: number;
-  /** The window is on top of all other windows. */
+export interface WindowPrefs {
   alwaysOnTop: boolean;
 }
 
@@ -55,10 +48,8 @@ export interface UpdateState {
 }
 
 export interface DesktopBridge {
-  getZoom(): Promise<ZoomState>;
-  setZoom(settings: { zoom: number; autoZoom: boolean }): void;
+  getWindowPrefs(): Promise<WindowPrefs>;
   setAlwaysOnTop(on: boolean): void;
-  onZoom(callback: (state: ZoomState) => void): () => void;
   /** Progress as a file next to the app's data (in the portable version, next to the exe). */
   loadProgressFile(profileId?: string): string | null;
   saveProgressFile(json: string, profileId?: string): void;

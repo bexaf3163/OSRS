@@ -1,4 +1,6 @@
-# OSRS Path — the project map: what exists, where it lies, how it is connected
+# OSRS Path — historical project map
+
+> This is the historical2.48 inventory. For current engines, the accepted Ledger design, retired features and remaining work, start with [CLAUDE_TAKEOVER.md](docs/CLAUDE_TAKEOVER.md) and [CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md). Do not recreate a removed feature because it appears below.
 
 > This file is written so that it can be dropped whole into another chat with a request to suggest what to add or fix. Project version: **2.48.1** (bridge protocol 6). Repository: https://github.com/bexaf3163/OSRS. The language of the interface and the texts is English.
 > The inventory is compiled from the sources; a note **[not in the game]** means it was not checked in a live game, only by tests, a browser and a plugin imitation.

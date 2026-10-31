@@ -43,71 +43,11 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #11151c;
-    --surface: #1b222d;
-    --surface-2: #252f3d;
-    --surface-3: #161c25;
-    --text: #e7edf5;
-    --muted: #abb8c9;
-    --border: #354151;
-    --border-strong: #6c7d93;   /* the edge of a control or mark: 3:1 against the panel, unlike the decorative --border */
-    --accent: #a8cbff;
-    --accent-ink: #a8cbff;
-    --accent-soft: #1f2e46;
-    --on-accent: #13253d;
-    --gold: #c9a24b;
-    --gold-ink: #e8c17b;
-    --gold-soft: #2e281a;
-    --done: #90d5a4;
-    --done-soft: #1b2e24;
-    --warn: #e8c17b;
-    --warn-soft: #33291a;
-    --focus: #a8cbff;
-    --toast-accent: #174f99;
-    --danger: #ffaaa5;
-    --danger-soft: #3b2224;
-    --members: #b69cf0;
-    --members-soft: #26213a;
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme="dark"] {
-  --bg: #11151c;
-  --surface: #1b222d;
-  --surface-2: #252f3d;
-  --surface-3: #161c25;
-  --text: #e7edf5;
-  --muted: #abb8c9;
-  --border: #354151;
-  --border-strong: #6c7d93;   /* the edge of a control or mark: 3:1 against the panel, unlike the decorative --border */
-  --accent: #a8cbff;
-  --accent-ink: #a8cbff;
-  --accent-soft: #1f2e46;
-  --on-accent: #13253d;
-  --gold: #c9a24b;
-  --gold-ink: #e8c17b;
-  --gold-soft: #2e281a;
-  --done: #90d5a4;
-  --done-soft: #1b2e24;
-  --warn: #e8c17b;
-  --warn-soft: #33291a;
-  --focus: #a8cbff;
-  --toast-accent: #174f99;
-  --danger: #ffaaa5;
-  --danger-soft: #3b2224;
-  --members: #b69cf0;
-  --members-soft: #26213a;
-  color-scheme: dark;
-}
-
 *, *::before, *::after { box-sizing: border-box; }
 
 /* The font size from the settings: all fonts are in rem, spacing in px — only the text grows. */
 html {
-  font-size: calc(var(--text-scale, 1) * 100%);
+  font-size: 100%;
   -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--topbar-h) + 12px);
 }
 
@@ -499,9 +439,7 @@ main {
 
 .step.is-done .step-title { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--border-strong); }
 .step.is-skipped .step-title { color: var(--muted); }
-.step.is-blocked .step-toggle .code,
-.step.is-blocked .step-title,
-.step.is-blocked .type-icon { opacity: 0.55; }
+.step.is-blocked .step-toggle .code, .step.is-blocked .step-title, .step.is-blocked .type-icon { opacity: 0.55; }
 .step.is-open { background: color-mix(in srgb, var(--surface-2) 45%, var(--surface)); }
 
 .type-icon { display: inline-flex; flex: none; color: var(--muted); }
@@ -638,18 +576,10 @@ main {
 .swatch.is-reached { background: var(--done-soft); border-color: var(--done); }
 .swatch.is-current { background: var(--accent-soft); border-color: var(--accent); }
 .swatch.is-optional { border-style: dashed; }
-
-.goals-table { font-variant-numeric: tabular-nums; table-layout: fixed; min-width: 540px; }
-.goals-table thead th:first-child { width: 170px; }
-.goals-table th:first-child { position: sticky; left: 0; z-index: 1; background: var(--surface); min-width: 150px; }
-.goals-table thead th:first-child { background: var(--surface-2); }
-.goals-table tbody th a { color: var(--text); text-decoration: none; }
-.goals-table tbody th a:hover { text-decoration: underline; }
 .row-level {
   float: right; margin-left: 8px; font-family: var(--mono); font-size: 0.8rem; font-weight: 600;
   color: var(--accent-ink);
 }
-.goals-table td, .goals-table thead th:not(:first-child) { text-align: center; white-space: nowrap; }
 .goal { color: var(--muted); }
 .goal .icon { width: 13px; height: 13px; margin-left: 2px; vertical-align: -1px; }
 .goal.is-reached { background: var(--done-soft); color: var(--done); font-weight: 600; }
@@ -758,7 +688,6 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .mode-label { display: none; }
 .settings-tabs { align-self: flex-start; margin: 0 0 16px; max-width: 100%; height: auto; flex-wrap: wrap; border-radius: 22px; }
 .settings-tabs .mode-btn { padding: 8px 16px; }
-.density-btn { width: 40px; height: 40px; }
 @media (min-width: 520px) and (max-width: 899px), (min-width: 1180px) { .mode-label { display: inline; } }
 @media (min-width: 900px) and (max-width: 1179px) {
   .search-trigger { min-width: 44px !important; padding: 0 10px !important; justify-content: center !important; }
@@ -945,12 +874,6 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .setting { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border); }
 .setting:first-of-type { padding-top: 0; border-top: 0; }
 .setting-label { font-weight: 600; }
-.scale-setting { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
-.scale-row { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.stepper-value {
-  display: grid; place-items: center; min-width: 64px;
-  font-weight: 650; font-variant-numeric: tabular-nums;
-}
 .switch { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; }
 .switch input { width: 20px; height: 20px; accent-color: var(--accent); margin: 0; }
 .code-path { word-break: break-all; }
@@ -1541,12 +1464,12 @@ select option { background: var(--surface); color: var(--text); }
 .prep-action { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }
 
 /* ---------- Glass look (default; "Classic" in Settings turns it off, "Solid panels" turns the blur off) ---------- */
-/* Only tokens and surfaces: no layout and no content change. Every rule starts with :root:not([data-look="classic"]). */
+/* Only tokens and surfaces: no layout and no content change. Every rule starts with :root:root. */
 
 /* The ring and the chip strip exist only in the glass look. */
 .ready-ring, .prep-strip { display: none; }
 
-:root:not([data-look="classic"]) {
+:root:root {
   --radius: 14px;
   --radius-sm: 10px;
   --glass: rgba(255, 255, 255, 0.86);
@@ -1555,67 +1478,47 @@ select option { background: var(--surface); color: var(--text); }
   --bg-art: radial-gradient(900px 480px at 12% -8%, rgba(70, 110, 220, 0.14), transparent 70%),
     radial-gradient(760px 420px at 100% 40%, rgba(40, 170, 130, 0.10), transparent 70%);
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-look="classic"]):not([data-theme="light"]) {
-    --glass: rgba(27, 34, 45, 0.84); --glass-border: rgba(255, 255, 255, 0.12); --glass-glow: rgba(168, 203, 255, 0.06);
-    --bg-art: radial-gradient(900px 480px at 12% -8%, rgba(59, 91, 219, 0.22), transparent 70%),
-      radial-gradient(760px 420px at 100% 40%, rgba(18, 128, 106, 0.14), transparent 70%),
-      radial-gradient(700px 380px at 40% 110%, rgba(138, 90, 18, 0.12), transparent 70%);
-  }
-}
-:root:not([data-look="classic"])[data-theme="dark"] {
-  --glass: rgba(27, 34, 45, 0.84); --glass-border: rgba(255, 255, 255, 0.12); --glass-glow: rgba(168, 203, 255, 0.06);
-  --bg-art: radial-gradient(900px 480px at 12% -8%, rgba(59, 91, 219, 0.22), transparent 70%),
-    radial-gradient(760px 420px at 100% 40%, rgba(18, 128, 106, 0.14), transparent 70%),
-    radial-gradient(700px 380px at 40% 110%, rgba(138, 90, 18, 0.12), transparent 70%);
-}
 
-:root:not([data-look="classic"]) body { background: var(--bg-art), var(--bg); background-attachment: fixed; }
+:root:root body { background: var(--bg-art), var(--bg); background-attachment: fixed; }
 
 /* The panels: frosted glass. */
-:root:not([data-look="classic"]) .card,
-:root:not([data-look="classic"]) .step-status,
-:root:not([data-look="classic"]) .one-trip,
-:root:not([data-look="classic"]) .training,
-:root:not([data-look="classic"]) .dock > * {
+:root:root .card, :root:root .step-status, :root:root .one-trip, :root:root .training, :root:root .dock > * {
   background: var(--glass);
   border-color: var(--glass-border);
   -webkit-backdrop-filter: blur(14px) saturate(120%);
   backdrop-filter: blur(14px) saturate(120%);
 }
 /* A soft glow by the state instead of the hard strip on the left. */
-:root:not([data-look="classic"]) .step-status,
-:root:not([data-look="classic"]) .one-trip,
-:root:not([data-look="classic"]) .training { box-shadow: 0 0 24px var(--glass-glow); }
-:root:not([data-look="classic"]) .step-status.is-ready { box-shadow: 0 0 0 1px color-mix(in srgb, var(--done) 35%, transparent), 0 0 24px color-mix(in srgb, var(--done) 16%, transparent); }
-:root:not([data-look="classic"]) .step-status.is-prep { box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 38%, transparent), 0 0 24px color-mix(in srgb, var(--gold) 16%, transparent); }
-:root:not([data-look="classic"]) .step-status.is-blocked { box-shadow: 0 0 0 1px color-mix(in srgb, var(--danger) 40%, transparent), 0 0 24px color-mix(in srgb, var(--danger) 16%, transparent); }
-:root:not([data-look="classic"]) .step-status { padding: 12px 16px; }
+:root:root .step-status, :root:root .one-trip, :root:root .training { box-shadow: 0 0 24px var(--glass-glow); }
+:root:root .step-status.is-ready { box-shadow: 0 0 0 1px color-mix(in srgb, var(--done) 35%, transparent), 0 0 24px color-mix(in srgb, var(--done) 16%, transparent); }
+:root:root .step-status.is-prep { box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 38%, transparent), 0 0 24px color-mix(in srgb, var(--gold) 16%, transparent); }
+:root:root .step-status.is-blocked { box-shadow: 0 0 0 1px color-mix(in srgb, var(--danger) 40%, transparent), 0 0 24px color-mix(in srgb, var(--danger) 16%, transparent); }
+:root:root .step-status { padding: 12px 16px; }
 
 /* The stage list: the current step glows gold, as "in progress". */
-:root:not([data-look="classic"]) .rail-step.is-selected { background: var(--gold-soft); color: var(--text); box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 45%, transparent), 0 0 18px color-mix(in srgb, var(--gold) 14%, transparent); }
-:root:not([data-look="classic"]) .rail-stage.is-current > .rail-stage-btn { background: var(--gold-soft); }
-:root:not([data-look="classic"]) .rail-stage.is-current .rail-num { background: var(--gold); border-color: var(--gold); color: #1a1405; }
+:root:root .rail-step.is-selected { background: var(--gold-soft); color: var(--text); box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 45%, transparent), 0 0 18px color-mix(in srgb, var(--gold) 14%, transparent); }
+:root:root .rail-stage.is-current > .rail-stage-btn { background: var(--gold-soft); }
+:root:root .rail-stage.is-current .rail-num { background: var(--gold); border-color: var(--gold); color: #1a1405; }
 
 /* The verdict ring: the readiness percent in a ring, in the state colour. */
-:root:not([data-look="classic"]) .status-text { display: inline-flex; align-items: center; gap: 8px; }
-:root:not([data-look="classic"]) .ready-ring {
+:root:root .status-text { display: inline-flex; align-items: center; gap: 8px; }
+:root:root .ready-ring {
   --ring: var(--muted);
   display: inline-flex; align-items: center; justify-content: center; flex: none;
   width: 44px; height: 44px; border-radius: 50%;
   background: conic-gradient(var(--ring) calc(var(--p, 0) * 1%), color-mix(in srgb, var(--text) 10%, transparent) 0);
 }
-:root:not([data-look="classic"]) .ready-ring i {
+:root:root .ready-ring i {
   display: inline-flex; align-items: center; justify-content: center;
   width: 34px; height: 34px; border-radius: 50%; background: var(--surface);
   font-style: normal; font-size: 0.72rem; font-weight: 650; font-variant-numeric: tabular-nums;
 }
-:root:not([data-look="classic"]) .step-status.is-ready .ready-ring { --ring: var(--done); }
-:root:not([data-look="classic"]) .step-status.is-prep .ready-ring { --ring: var(--gold); }
-:root:not([data-look="classic"]) .step-status.is-blocked .ready-ring { --ring: var(--danger); }
+:root:root .step-status.is-ready .ready-ring { --ring: var(--done); }
+:root:root .step-status.is-prep .ready-ring { --ring: var(--gold); }
+:root:root .step-status.is-blocked .ready-ring { --ring: var(--danger); }
 
 /* The chip strip in "What you need": the state is in the words and the colour. */
-:root:not([data-look="classic"]) .prep-strip { display: flex; flex-direction: column; gap: 8px; }
+:root:root .prep-strip { display: flex; flex-direction: column; gap: 8px; }
 .prep-strip-group { display: flex; flex-direction: column; gap: 4px; }
 .prep-strip-label { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 .one-trip .prep-strip-chips { display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px; padding-left: 0; list-style: none; margin: 0; }
@@ -1626,15 +1529,7 @@ select option { background: var(--surface); color: var(--text); }
 .prep-pill.is-unknown { border-style: dashed; color: var(--muted); }
 
 /* Solid panels: no blur, opaque surfaces (weak graphics, or taste). */
-:root[data-solid="1"]:not([data-look="classic"]) .card,
-:root[data-solid="1"]:not([data-look="classic"]) .step-status,
-:root[data-solid="1"]:not([data-look="classic"]) .one-trip,
-:root[data-solid="1"]:not([data-look="classic"]) .training,
-:root[data-solid="1"]:not([data-look="classic"]) .dock > * {
-  background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none;
-}
-:root[data-solid="1"]:not([data-look="classic"]) body { background: var(--bg); }
-@media (prefers-reduced-motion: reduce) { :root:not([data-look="classic"]) * { transition-duration: 0.01ms !important; } }
+@media (prefers-reduced-motion: reduce) { :root:root * { transition-duration: 0.01ms !important; } }
 
 /* ---------- The cockpit step view: hero sub-step, its items, folded reference ---------- */
 .sub-hero {
@@ -1799,9 +1694,9 @@ select option { background: var(--surface); color: var(--text); }
 .quest-panel .overview-item:not(:last-child)::before { top: 44px; bottom: -12px; }
 .overview-item.is-past .overview-n { color: var(--muted); background: var(--surface-2); }
 .overview-item.is-past .overview-line { color: var(--muted); }
-:root:not([data-look="classic"]) .path-wide .rail-step.is-selected { background: var(--accent-soft); color: var(--accent-ink); box-shadow: 0 0 0 1px var(--accent-ink); }
-:root:not([data-look="classic"]) .path-wide .rail-stage.is-current > .rail-stage-btn { background: var(--surface-2); }
-:root:not([data-look="classic"]) .path-wide .rail-stage.is-current .rail-num { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+:root:root .path-wide .rail-step.is-selected { background: var(--accent-soft); color: var(--accent-ink); box-shadow: 0 0 0 1px var(--accent-ink); }
+:root:root .path-wide .rail-stage.is-current > .rail-stage-btn { background: var(--surface-2); }
+:root:root .path-wide .rail-stage.is-current .rail-num { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 @media (min-width: 1400px) {
   :root { --topbar-h: 76px; }
   .topbar-inner .tabs-top { gap: 8px; }
@@ -1892,15 +1787,7 @@ select option { background: var(--surface); color: var(--text); }
 
 /* ---------- Clear Path: the compact view ---------- */
 main.is-compact { max-width: 560px; }
-.topbar.is-compact .tabs-top, .topbar.is-compact .header-progress, .topbar.is-compact .mode-toggle, .topbar.is-compact .density-btn { display: none; }
 .tabs-bottom.is-compact { display: none; }
-.compact-page { gap: 12px; }
-.compact-page .step-view-title { font-size: 1.35rem; }
-.compact-page .current-action-title { font-size: 1.25rem; }
-.compact-page .current-action { padding: 12px; gap: 4px 12px; }
-.compact-page .current-action-icon { width: 44px; height: 44px; }
-.compact-more { padding: 4px 16px 12px; }
-@media (max-width: 719px) { .compact-btn { display: none; } }
 .gear-group-title { font-size: 1.125rem; margin-top: 8px; color: var(--muted); font-weight: 650; }
 .ownership-note { display: inline; }
 /* The skill cards keep their own height: the melee card (three levels) does not stretch its neighbours. */
@@ -1927,7 +1814,6 @@ button.subtab { background: none; border-top: 0; border-left: 0; border-right: 0
 }
 .topic-title { font-size: 1rem; color: var(--muted); font-weight: 650; }
 .related-reference { padding-top: 4px; }
-.goals-now-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; }
 @media (max-width: 419px) {
   .topbar-inner { gap: 6px; padding-inline: 10px; }
   .topbar-actions { gap: 2px; }

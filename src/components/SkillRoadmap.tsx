@@ -55,7 +55,9 @@ export function useTrackedStep(): { skill: SkillName; step: SkillStep; level: nu
 
 /** The roadmap as a page section: the skill page's Training guide, under what to train now. */
 export function RoadmapPane({ skills, label }: { skills: SkillName[]; label: string }) {
-  return <Roadmap skills={skills} label={label} />;
+  // Catalogue-backed skills already have one current staged plan; never show a second competing guide.
+  const legacy = skills.filter(skill => skill !== 'hitpoints' && !methodsFor(skill).length);
+  return legacy.length ? <Roadmap skills={legacy} label={label} /> : null;
 }
 
 function Roadmap({ skills, label }: { skills: SkillName[]; label: string }) {
@@ -81,6 +83,7 @@ function Roadmap({ skills, label }: { skills: SkillName[]; label: string }) {
     <div className="drawer-body skill-roadmap">
       <header className="skill-roadmap-head">
         <h2>{label} <span className="muted small">leveling roadmap</span></h2>
+        <p className="small muted">Reference guide; personalized preparation is not implemented for this skill.</p>
         {skills.length > 1 && (
           <div className="skill-seg" role="group" aria-label="Skill">
             {skills.map((s) => <button key={s} type="button" className={`skill-seg-btn ${s === skill ? 'is-on' : ''}`} aria-pressed={s === skill} onClick={() => setSkill(s)}>{s[0].toUpperCase() + s.slice(1)}</button>)}

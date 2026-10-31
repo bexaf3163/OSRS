@@ -1,11 +1,24 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
-import { floorLabel, initialPoint, isUnderground, pxPerSquare, stepPoints, TILE, tilesAround, tileUrl } from '../src/lib/map';
+import { floorLabel, initialPoint, isUnderground, mapSourceAt, parseMapSources, pxPerSquare, stepPoints, TILE, tilesAround, tileUrl } from '../src/lib/map';
 
 describe('wiki map tiles', () => {
-  it('tile address: render version, zoom, floor and number', () => {
-    expect(tileUrl(2, 0, 50, 50)).toMatch(/^https:\/\/maps\.runescape\.wiki\/osrs\/versions\/\d{4}-\d{2}-\d{2}_\w\/tiles\/rendered\/0\/2\/0_50_50\.png$/);
-    expect(tileUrl(-1, 2, 6, 6)).toContain('/0/-1/2_6_6.png');
+  it('uses the documented atlas schema and shares the selected source across a viewport', () => {
+    expect(tileUrl(2, 0, 47, 50)).toBe('https://maps.runescape.wiki/osrs/tiles/0_2019-10-31_1/2/0_47_50.png');
+    const source = { mapId: 6, cacheVersion: '2026-10-31_2' };
+    expect(tileUrl(-1, 2, 6, 6, source)).toContain('/6_2026-10-31_2/-1/2_6_6.png');
+    expect(tilesAround({ x: 3029, y: 3221, plane: 0 }, 2, 720, 132, 0.5, source).every((t) => t.url.includes('/6_2026-10-31_2/'))).toBe(true);
+  });
+
+  it('accepts published metadata, selects the smallest containing atlas and rejects malformed paths/bounds', () => {
+    const surface = { mapId: 0, cacheVersion: '2026-10-31_1', bounds: [[1000, 1000], [4300, 13000]] };
+    const dungeon = { ...surface, mapId: 6, bounds: [[3000, 9800], [3200, 10000]] };
+    const sources = parseMapSources({ baseMaps: [surface, dungeon, { ...surface, cacheVersion: '../bad' }, { ...surface, bounds: [[5, 5], [1, 1]] }, null] });
+    expect(sources).toHaveLength(2);
+    expect(mapSourceAt(sources, { x: 3050, y: 9850 }).mapId).toBe(6);
+    expect(mapSourceAt(sources, { x: 3029, y: 3221 }).mapId).toBe(0);
+    expect(parseMapSources(null)).toEqual([]);
+    expect(mapSourceAt([], { x: 3029, y: 3221 }).cacheVersion).toBe('2019-10-31_1');
   });
 
   it('the layout matches the preview map on the wiki page (Lumbridge, zoom 1)', () => {

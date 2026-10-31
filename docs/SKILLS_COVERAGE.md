@@ -12,6 +12,8 @@ Rates and consumable costs are personalised where the shared combat, gathering o
 remain Wiki guides, not measured predictions. Missing prices stay unknown. Passive bone collection has no fixed bank-burying rate. Members methods
 beyond the verified registries and real-session calibration remain open; this catalogue coverage is not proof of in-game performance. Supported processing goals (2.81.4) and supported F2P Ranged goals (2.81.5) carry conditional whole-goal supplies through the shared planner/Shopping engine; immediate preparation stays one batch/trip. Ranged includes staged arrows, modelled food and reusable kit under safe arrow recovery. This does not establish Magic/melee-wide or unsupported/mixed-goal acquisition economics.
 
+Since2.81.11, catalogue-backed Skills show one canonical Train/Plan result instead of the competing static roadmap. The old roadmap filter description above applies only to surviving guide-only views. Hitpoints is passive and has no separate roadmap.
+
 Catalogue-backed followed Skills (2.81.6) use the same staged training, preparation, Shopping and funding engines as Path, including current-leg kit and F2P checkpoints. This shared lifecycle does not establish missing skill mechanics or additional personalised models; guide-only coverage remains explicitly separate.
 
 | Skill | Account | Guide | Methods | Route asks | Gaps and problems | Verification |
@@ -23,15 +25,15 @@ Catalogue-backed followed Skills (2.81.6) use the same staged training, preparat
 | prayer | free to 99, members to 99 | 9 steps (8 free), levels 1-99 | 4 (4 free) | free route 15, whole route 43 | none | automated data checks; not verified in the game |
 | magic | free to 99, members to 99 | 13 steps (13 free), levels 1-99 | 6 (6 free) | free route 55, whole route 55 | none | automated data checks; not verified in the game |
 | runecraft | free to 99, members to 99 | 8 steps (5 free), levels 1-99 | 4 (4 free) | not asked | none | automated data checks; not verified in the game |
-| construction | members only | 3 steps (0 free), levels 1-99 | none: the card shows the training plan row | not asked | none | automated data checks; not verified in the game |
-| hitpoints | free to 99, members to 99 | 2 steps (2 free), levels 10-99 | none: the card shows the training plan row | not asked | none | automated data checks; not verified in the game |
+| construction | members only | 3 steps (0 free), levels 1-99 | none: guide-only or passive skill | not asked | none | automated data checks; not verified in the game |
+| hitpoints | free to 99, members to 99 | 2 steps (2 free), levels 10-99 | none: guide-only or passive skill | not asked | none | automated data checks; not verified in the game |
 | agility | members only | 14 steps (0 free), levels 1-99 | 9 (0 free) | free route -, whole route 31 | none | automated data checks; not verified in the game |
 | herblore | members only | 4 steps (0 free), levels 1-99 | 2 (0 free) | not asked | none | automated data checks; not verified in the game |
 | thieving | members only | 5 steps (0 free), levels 1-99 | 5 (0 free) | not asked | none | automated data checks; not verified in the game |
 | crafting | free to 99, members to 99 | 8 steps (6 free), levels 1-99 | 4 (4 free) | free route 8, whole route 31 | none | automated data checks; not verified in the game |
 | fletching | members only | 8 steps (0 free), levels 1-99 | 6 (0 free) | not asked | none | automated data checks; not verified in the game |
-| slayer | members only | 3 steps (0 free), levels 1-99 | none: the card shows the training plan row | free route -, whole route 20 | none | automated data checks; not verified in the game |
-| hunter | members only | 10 steps (0 free), levels 1-99 | none: the card shows the training plan row | not asked | none | automated data checks; not verified in the game |
+| slayer | members only | 3 steps (0 free), levels 1-99 | none: guide-only or passive skill | free route -, whole route 20 | none | automated data checks; not verified in the game |
+| hunter | members only | 10 steps (0 free), levels 1-99 | none: guide-only or passive skill | not asked | none | automated data checks; not verified in the game |
 | mining | free to 99, members to 99 | 11 steps (8 free), levels 1-99 | 3 (2 free) | free route 45, whole route 45 | none | automated data checks; not verified in the game |
 | smithing | free to 99, members to 99 | 8 steps (6 free), levels 1-99 | 6 (6 free) | free route 29, whole route 29 | none | automated data checks; not verified in the game |
 | fishing | free to 99, members to 99 | 12 steps (8 free), levels 1-99 | 7 (5 free) | free route 35, whole route 35 | none | automated data checks; not verified in the game |
@@ -40,11 +42,11 @@ Catalogue-backed followed Skills (2.81.6) use the same staged training, preparat
 | woodcutting | free to 99, members to 99 | 11 steps (7 free), levels 1-99 | 6 (4 free) | free route 36, whole route 36 | none | automated data checks; not verified in the game |
 | farming | members only | 3 steps (0 free), levels 1-99 | 3 (0 free) | not asked | none | automated data checks; not verified in the game |
 
-Catalogue: 95 entries. Skills with no catalogue method fall back to the training plan row of the skill page; they are said so, not shown as a full plan.
+Catalogue: 95 entries. Skills with no catalogue method are guide-only, except passive Hitpoints; none is presented as a personalized engine plan.
 
 ## Personalized engine support
 
-Counts below mean a method has a shared model dispatch, not that every item, spell, opponent, unlock or level is modelled. A model can return no prediction when data is unread or unsupported. Guide-only rates remain labelled Wiki estimates; no synthetic player stats fill the gaps. Agility, Thieving and Farming still have guide-only catalogue rates. Construction, Hunter, Slayer and Hitpoints use their guide row. Adding complete models for those is remaining work.
+Counts below mean a method has a shared model dispatch, not that every item, spell, opponent, unlock or level is modelled. A model can return no prediction when data is unread or unsupported. Guide-only rates remain labelled Wiki estimates; no synthetic player stats fill the gaps. Agility, Thieving and Farming still have guide-only catalogue rates. Construction, Hunter and Slayer remain guide-only; Hitpoints is passive. Adding complete models for those is remaining work.
 
 | Skill | Model-backed catalogue methods | Guide-only catalogue methods |
 |---|---|---|

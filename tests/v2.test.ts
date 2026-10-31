@@ -7,7 +7,6 @@ import { titleTargets } from '../src/lib/targets';
 import { createPriceService, PRICE_TTL_MS } from '../src/services/pricesApi';
 import { cleanWikiText } from '../src/services/wikiApi';
 import { stepText } from '../src/lib/search';
-import { clampScale, stepScale, TEXT_STEPS, ZOOM_STEPS } from '../src/lib/ui-scale';
 
 describe('game mode', () => {
   it('F2P — stages 1–6 without members steps', () => {
@@ -186,22 +185,5 @@ describe('step text for search', () => {
     const text = stepText(s);
     expect(text).toContain(s.npc!.nameEn);
     expect(text).toContain(s.doneWhen.slice(0, 20));
-  });
-});
-
-describe('scale', () => {
-  it('steps up and down with a stop at the edges', () => {
-    expect(stepScale(ZOOM_STEPS, 1, 1)).toBe(1.1);
-    expect(stepScale(ZOOM_STEPS, 1, -1)).toBe(0.9);
-    expect(stepScale(ZOOM_STEPS, 2, 1)).toBe(2);
-    expect(stepScale(TEXT_STEPS, 0.9, -1)).toBe(0.9);
-    // A value between steps sticks to the neighbour.
-    expect(stepScale(ZOOM_STEPS, 1.17, 1)).toBe(1.25);
-    expect(stepScale(ZOOM_STEPS, 1.17, -1)).toBe(1.1);
-  });
-
-  it('garbage in the storage does not break the scale', () => {
-    expect(clampScale(TEXT_STEPS, Number('abc'))).toBe(1);
-    expect(clampScale(TEXT_STEPS, 7)).toBe(1.5);
   });
 });

@@ -1,4 +1,4 @@
-// The bridge between the window and the app: scale, "always on top", the progress file and the link with the RuneLite plugin.
+// The bridge between the window and the app: pinning, progress files and the RuneLite link.
 // The window works in a sandbox — only these functions are exposed, without access to Node.
 
 const { contextBridge, ipcRenderer } = require('electron');
@@ -14,14 +14,8 @@ function loadSaved(channel, ...args) {
 }
 
 contextBridge.exposeInMainWorld('osrsDesktop', {
-  getZoom: () => ipcRenderer.invoke('zoom:get'),
-  setZoom: (settings) => ipcRenderer.send('zoom:set', { zoom: Number(settings.zoom), autoZoom: Boolean(settings.autoZoom) }),
+  getWindowPrefs: () => ipcRenderer.invoke('window-prefs:get'),
   setAlwaysOnTop: (on) => ipcRenderer.send('top:set', Boolean(on)),
-  onZoom: (callback) => {
-    const listener = (_event, state) => callback(state);
-    ipcRenderer.on('zoom:changed', listener);
-    return () => ipcRenderer.removeListener('zoom:changed', listener);
-  },
   // Synchronous: the progress is needed before the first render, otherwise an empty one would flash.
   loadProgressFile: (profileId) => loadSaved('progress:load', String(profileId ?? 'main')),
   saveProgressFile: (json, profileId) => ipcRenderer.send('progress:save', String(json), String(profileId ?? 'main')),

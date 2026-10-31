@@ -12,7 +12,7 @@ import { gateAllows, linkPlayer, guardedProfileGate as profileGate, readProfiles
 import { useStore } from './store';
 import { desktop, type RuneliteLaunch } from './lib/desktop';
 import {
-  checkStatus, clearActiveStep, clearNavTarget, connectEvents, getTelemetry, parseGear, parseNavTarget, parseMove, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, planAutoComplete, setNavTarget,
+  checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parseNavTarget, parseMove, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, planAutoComplete, setNavTarget,
   postPrepPlan, supportsSnapshot, syncActiveStep, syncBankTags, syncShoppingPlan, toInGameTarget,
   pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type CombatLogState, type ShoppingPlanPayload, type QuestInstruction,
 } from './services/runeliteBridge';
@@ -133,8 +133,6 @@ interface BridgeValue {
   xpRate: (skill: string) => number | null;
   /** The session: when it began and with what (the first levels and XP, closed steps) — for the summary. */
   session: SessionBase;
-  /** The text for an error report: versions, the link, the last bridge events. */
-  diagnostics: () => Promise<string>;
   /** Recent character jumps (death, teleport) — they turn on the recovery mode. */
   moves: MoveEvent[];
   /** Where the character is now: a fresh request to the plugin (protocol 5); null — no link, not in the game or the plugin does not report. */
@@ -218,20 +216,6 @@ function saveJson(key: string, value: unknown): void {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* it is remembered until a restart */ }
 }
 
-/** One line about a bridge event for the report: without the contents of the bag and bank. */
-function logEvent(log: { t: number; text: string }[], e: BridgeEvent): void {
-  const d = e as Record<string, unknown>;
-  const n = (v: unknown) => (Array.isArray(v) ? v.length : v && typeof v === 'object' ? Object.keys(v).length : v === null ? 0 : '?');
-  let text: string = e.type;
-  if (e.type === 'STEP_AUTO_COMPLETED') text += ` ${String(d.stepId)}`;
-  else if (e.type === 'STATUS') text += ` inGame=${String(d.inGame)}${d.player ? ' player=yes' : ''}`;
-  else if (e.type === 'STATS' || e.type === 'XP') text += ` skills=${n(d.stats ?? d.xp)}`;
-  else if (e.type === 'QUESTS') text += ` quests=${n(d.done)}`;
-  else if (e.type === 'OWNED') text += ` items=${n(d.items)} bank=${String(d.bankSeen)}`;
-  else if (e.type === 'PACING') text += ` ${String(d.stepId ?? '')}`;
-  log.push({ t: Date.now(), text });
-  if (log.length > 200) log.splice(0, log.length - 200);
-}
 
 /** The chosen quick variant of the step, if the step still has it. */
 function chosenBranch(step: Step, choice: Record<string, string>): StepBranch | undefined {
@@ -310,8 +294,6 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     closed0: Object.entries(progress.steps).filter(([, v]) => v === 'done' || v === 'skipped').map(([k]) => k),
   }));
   const tracker = useRef(new XpTracker());
-  /** The latest bridge events — for the "Diagnostics" button. */
-  const eventLog = useRef<{ t: number; text: string }[]>([]);
   const profiles = useProfiles();
   const gate = useMemo(() => profileGate(profiles, player), [profiles, player]);
   const [navTarget, setNavTargetState] = useState<NavTargetPayload | null>(null);
@@ -370,7 +352,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
         sn.sentKey = null;
         if (r.status === 413 && oversizedSnapshotKey.current !== key) {
           oversizedSnapshotKey.current = key;
-          logEvent(eventLog.current, { type: 'SNAPSHOT_REJECTED_413' });
+
           latest.current.notify('The game guide could not sync: its data exceeds the bridge size limit. Your game connection is still being checked normally.');
         }
       }
@@ -609,7 +591,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     };
     const onEvent = (e: BridgeEvent) => {
       if (!alive) return;
-      logEvent(eventLog.current, e);
+
       if (e.type !== 'STATUS' && liveIdentity.current.inGame === false
         && ['XP', 'QUESTS', 'STATS', 'OWNED', 'GEAR', 'PACING', 'MOVED', 'STEP_AUTO_COMPLETED'].includes(e.type)) return;
       freshness.event(e.type);
@@ -870,28 +852,6 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     return epoch === sessionEpoch.current && gateAllows(profileGate(readProfiles(), st.player)) && st.online && st.inGame ? st.pos : null;
   }, []);
 
-  const diagnostics = useCallback(async () => {
-    const st = await checkStatus();
-    // The plugin journal (since 2.23.0): how much is written and what oddities the watchdog found; details — npm run telemetry.
-    const log = st.online ? await getTelemetry() : null;
-    const done = Object.values(latest.current.progress.steps).filter((v) => v === 'done').length;
-    const report = {
-      app: __APP_VERSION__,
-      window: typeof navigator === 'undefined' ? '' : navigator.userAgent,
-      link: { enabled, state, inGame, plugin, activeStep: activeStepId },
-      pluginReply: {
-        online: st.online, protocol: st.protocol, version: st.pluginVersion, pluginStep: st.activeStepId,
-        levels: st.stats ? Object.keys(st.stats).length : 0, xp: Boolean(st.xp), quests: st.questsDone?.length ?? null, character: Boolean(st.player),
-      },
-      pluginJournal: log === null ? null : log.enabled
-        ? { file: log.file, events: log.events, anomalies: log.anomalies, truncated: log.truncated, lastShot: log.lastShot, recentAnomalies: log.recentAnomalies.map((x) => `${x.code}: ${x.message}`) }
-        : { enabled: false },
-      settings: { autoLaunch, features, mode: latest.current.progress.gameMode ?? null, profile: gate.kind },
-      progress: { done, total: latest.current.steps.length },
-      events: eventLog.current.slice(-100).map((x) => `${new Date(x.t).toLocaleTimeString('en-US')} ${x.text}`),
-    };
-    return JSON.stringify(report, null, 2);
-  }, [enabled, state, inGame, plugin, activeStepId, autoLaunch, features, gate.kind]);
 
   const currentCharacter = state === 'online' && inGame && gateAllows(gate);
   const value = useMemo<BridgeValue>(
@@ -906,11 +866,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       accountType: currentCharacter ? accountType : null, combatLog: currentCharacter ? combatLog : null,
       navigate, clearNav, releaseNav, userClearedAt, plugin,
       xp: currentCharacter ? xp : null, questsDone: currentCharacter ? questsDone : null, player,
-      position: currentCharacter ? position : null, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath, setTrainingStep,
+      position: currentCharacter ? position : null, gate, xpRate, session, locate, moves, setPrepPart, setSkillPath, setTrainingStep,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, lastGears, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, accountType, combatLog, navigate, clearNav, releaseNav, userClearedAt, plugin,
-      xp, questsDone, player, position, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath, setTrainingStep, currentCharacter],
+      xp, questsDone, player, position, gate, xpRate, session, locate, moves, setPrepPart, setSkillPath, setTrainingStep, currentCharacter],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }

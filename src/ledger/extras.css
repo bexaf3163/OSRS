@@ -1,5 +1,5 @@
 /* Additions the static reference did not need: states for real data and keyboard focus. */
-.la-root button:focus-visible,.la-root input:focus-visible{outline:2px solid var(--la-gold2);outline-offset:2px}
+.la-root button:focus-visible, .la-root input:focus-visible{outline:2px solid var(--la-gold2);outline-offset:2px}
 .la-root button:disabled{opacity:.45;cursor:default}
 .la-slot:disabled:hover{border-color:#4a3822;color:var(--la-parch2)}
 .la-gem.la-off{color:var(--la-mute)}

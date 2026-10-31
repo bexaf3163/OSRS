@@ -17,6 +17,6 @@ export function Page({ side, basis, className = '', label, children }: { side: '
   );
 }
 
-export function Book({ compact, children }: { compact?: boolean; children: ReactNode }) {
-  return <div className={`la-book${compact ? ' la-compact' : ''}`}>{children}</div>;
+export function Book({ children }: { children: ReactNode }) {
+  return <div className="la-book">{children}</div>;
 }

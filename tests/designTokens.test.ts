@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-// The Clear Path palette: the text pairs of DESIGN_SYSTEM.md must hold in both themes, and control edges must stay visible.
+// Surviving foundation palette contrast; the accepted Ledger has one fixed appearance.
 const css = readFileSync(new URL('../src/styles.css', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 
 function block(selector: string): Record<string, string> {
@@ -23,7 +23,7 @@ const ratio = (a: string, b: string) => {
   return (hi + 0.05) / (lo + 0.05);
 };
 
-const themes = { light: block(':root'), dark: block(':root[data-theme="dark"]') };
+const themes = { fixed: block(':root') };
 
 describe.each(Object.entries(themes))('%s theme tokens', (_name, t) => {
   it('normal text reaches 4.5:1 on the panel and the page', () => {
@@ -47,11 +47,5 @@ describe.each(Object.entries(themes))('%s theme tokens', (_name, t) => {
     for (const [fg, bg] of [['done', 'done-soft'], ['warn', 'warn-soft'], ['danger', 'danger-soft'], ['accent-ink', 'accent-soft'], ['members', 'members-soft']] as const) {
       expect(ratio(t[fg], t[bg]), `${fg} on ${bg}`).toBeGreaterThanOrEqual(4.5);
     }
-  });
-});
-
-describe('the documented values', () => {
-  it('dark base values match the design system', () => {
-    expect(themes.dark).toMatchObject({ bg: '#11151c', surface: '#1b222d', text: '#e7edf5', muted: '#abb8c9', accent: '#a8cbff', done: '#90d5a4' });
   });
 });

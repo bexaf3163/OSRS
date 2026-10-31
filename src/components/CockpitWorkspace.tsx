@@ -232,7 +232,7 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, 
                   <StepMap step={step} shownTarget={live ? target.worldPoint : null} mapRequest={mapRequest} onMapOpened={mapOpened} />
                 </section>
               )}
-              <StepBody step={step} onDone={onDone} nextId={nextId} tab="travel" onPrep={openPrep} safetyShown />
+              <StepBody step={step} onDone={onDone} nextId={nextId} tab="travel" onPrep={openPrep} safetyShown mapShown={Boolean(target)} />
             </>
           )}
           {view === 'details' && (

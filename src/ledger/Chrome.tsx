@@ -29,13 +29,11 @@ interface HudProps {
   onMembers: (members: boolean) => void;
   /** The RuneLite link: the app's own indicator and launch button. */
   status: ReactNode;
-  compact: boolean;
-  onToggleCompact: () => void;
   onOpenSearch: () => void;
   settingsActive: boolean;
 }
 
-export function Hud({ player, members, onMembers, status, compact, onToggleCompact, onOpenSearch, settingsActive }: HudProps) {
+export function Hud({ player, members, onMembers, status, onOpenSearch, settingsActive }: HudProps) {
   const R = 2 * Math.PI * 21;
   const offset = R * (1 - player.progress / 100);
   return (
@@ -80,10 +78,6 @@ export function Hud({ player, members, onMembers, status, compact, onToggleCompa
         <button type="button" className="la-tool" aria-label="Search" aria-keyshortcuts="/" onClick={onOpenSearch}>
           <Icon name="search" size={15} />
           <kbd>/</kbd>
-        </button>
-        <button type="button" className={`la-tool ${compact ? 'la-on' : ''}`} title={compact ? 'Back to the full workspace' : 'Compact view: keep the current action next to the game'} onClick={onToggleCompact}>
-          <Icon name="compact" size={15} />
-          {compact ? 'FULL WORKSPACE' : 'COMPACT'}
         </button>
         <a className={`la-tool ${settingsActive ? 'la-on' : ''}`} href="#/settings" title="Settings" aria-label="Settings" aria-current={settingsActive ? 'page' : undefined}>
           <Icon name="sliders" size={15} />

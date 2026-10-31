@@ -20,8 +20,6 @@ interface Mock {
   status?: Record<string, unknown>;
   events?: unknown[];
   localStorage?: Record<string, string>;
-  /** The "Zen" mode (by default the tests turn "Inspector" on: all the step blocks are expanded, as it was checked before). */
-  zen?: boolean;
   /** The exchange prices by item ID: they stand in for the prices.runescape.wiki reply (without them the network to the wiki is closed). */
   prices?: Record<number, number>;
   /** The exchange as captured on 2026-10-18 (tests/funding/fixtures), with its times moved to now: latest, hourly and the item reference. */
@@ -57,11 +55,6 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
   });
   await ctx.addInitScript((m: Mock) => {
     for (const [k, v] of Object.entries(m.localStorage ?? {})) localStorage.setItem(k, v);
-    try {
-      const f = JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as Record<string, unknown>;
-      if (f.inspector === undefined) f.inspector = !m.zen;
-      localStorage.setItem('osrs-put:features', JSON.stringify(f));
-    } catch { /* no storage */ }
     const w = window as unknown as Record<string, unknown>;
     const posts: unknown[] = [];
     w.__posts = posts;
@@ -69,8 +62,14 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
     w.__profileWriteFailure = !!m.profileWriteFailure;
     let progress = m.progress ? JSON.stringify(m.progress) : null;
     w.osrsDesktop = {
-      getZoom: async () => ({ zoom: 1, autoZoom: false, effective: 1, alwaysOnTop: false }),
-      setZoom() {}, setAlwaysOnTop() {}, onZoom: () => () => {},
+      getWindowPrefs: async () => ({ alwaysOnTop: false }),
+      setAlwaysOnTop() {},
+      updates: {
+        get: async () => ({ state: 'current', current: 'test', latest: null, notes: '', progress: 0, error: null, auto: true }),
+        check: async () => { w.__updateChecks = Number(w.__updateChecks ?? 0) + 1; return { state: 'current', current: 'test', latest: null, notes: '', progress: 0, error: null, auto: true }; },
+        download: async () => ({ state: 'current', current: 'test', latest: null, notes: '', progress: 0, error: null, auto: true }),
+        install: async () => false, setAuto() {}, onState: () => () => {},
+      },
       loadProgressFile: () => progress,
       loadProfilesFile: () => m.profileFile ? JSON.stringify(m.profileFile) : null,
       saveProfilesFile: (json: string) => { w.__savedProfiles = json; },
@@ -185,7 +184,7 @@ async function noOverflow(page: Page) {
 async function reveal(page: Page, sel: string) {
   if (await page.locator(sel).count()) return;
   // The Ledger's step page: Steps, Preparation, Route & game, Details and Wiki are ribbons. The companion strip: Now, Bag, Route and More are tabs.
-  const openers = [page.getByRole('tablist', { name: 'Step views' }).getByRole('tab'), page.getByRole('tablist', { name: 'Companion views' }).getByRole('tab')];
+  const openers = [page.getByRole('tablist', { name: 'Step views' }).getByRole('tab')];
   for (const group of openers) {
     const n = await group.count();
     for (let i = 0; i < n; i++) {
@@ -207,7 +206,7 @@ async function stepButton(page: Page, name: string | RegExp, role: 'button' | 'r
   // A button of the open ribbon; the last one is the one in front.
   const find = () => page.getByRole(role, { name }).last();
   if (await find().count()) return find();
-  const openers = [page.getByRole('tablist', { name: 'Step views' }).getByRole('tab'), page.getByRole('tablist', { name: 'Companion views' }).getByRole('tab')];
+  const openers = [page.getByRole('tablist', { name: 'Step views' }).getByRole('tab')];
   for (const group of openers) {
     const total = await group.count();
     for (let i = 0; i < total; i++) {
@@ -226,7 +225,7 @@ const text = async (page: Page, sel: string) => {
 
 async function f2pSkillsScenarios(browser: Browser) {
   for (const width of [1000, 1440]) {
-    const { page, errors } = await open(browser, width, { zen: true, progress: progressBefore('S3-03', { gameMode: 'f2p', levels: { attack: 30, strength: 21, defence: 10 } }) }, '#/skills');
+    const { page, errors } = await open(browser, width, { progress: progressBefore('S3-03', { gameMode: 'f2p', levels: { attack: 30, strength: 21, defence: 10 } }) }, '#/skills');
     const defence = page.locator('.skill-tile a[href="#/skills/ME/defence"]');
     expect(await defence.count() === 1, `Skills ${width}: Defence has one direct tile`);
     expect(await page.locator('.section-rail').count() === 0, `Skills ${width}: no duplicate skill menu`);
@@ -255,8 +254,9 @@ async function f2pSkillsScenarios(browser: Browser) {
     await page.locator('.skill-tile a[href="#/skills/ME/defence"]').click();
     await page.locator('h1').filter({ hasText: 'Defence' }).waitFor();
     await page.getByRole('tab', { name: 'Plan', exact: true }).click();
-    expect(await page.locator('.skill-guide-roadmap').count() === 1 && await noOverflow(page), `Skills ${width}: plan remains accessible without a disclosure`);
-    expect((await page.locator('.skill-roadmap-head h2').innerText()).includes('Defence'), `Skills ${width}: plan keeps the chosen combat skill`);
+    expect(await page.locator('.training').count() === 1 && await page.locator('.skill-guide-roadmap').count() === 0 && await noOverflow(page), `Skills ${width}: the canonical plan remains accessible without a competing roadmap`);
+    expect(await page.locator('.focus-reached').count() === 0 && (await text(page, '.training')).includes('checkpoint reached'), `Skills ${width}: completed checkpoint uses its actual goal without an obsolete stage-goal note`);
+    expect((await text(page, 'h1')).includes('Defence'), `Skills ${width}: plan keeps the chosen combat skill`);
     await page.getByRole('tab', { name: 'Calculator', exact: true }).click();
     expect(await page.locator('.calc').count() === 1, `Skills ${width}: calculator remains accessible`);
     await page.getByRole('tab', { name: 'Reference', exact: true }).click();
@@ -267,7 +267,7 @@ async function f2pSkillsScenarios(browser: Browser) {
   }
 
   for (const [group, skill, tool] of [['WC', 'woodcutting', 'axe'], ['MI', 'mining', 'pickaxe'], ['FI', 'fishing', 'rod/net'], ['CO', 'cooking', 'ingredients'], ['FM', 'firemaking', 'tinderbox'], ['SM', 'smithing', 'ores'], ['CR', 'crafting', 'recipe'], ['RC', 'runecraft', 'tiara'], ['PR', 'prayer', 'bones']] as const) {
-    const { page, errors } = await open(browser, 1000, { zen: true, market: true,
+    const { page, errors } = await open(browser, 1000, { market: true,
       progress: progressBefore('S6-03', { gameMode: 'f2p', levels: { [skill]: 1 } }),
     }, `#/skills/${group}/${skill}`);
     expect((await text(page, '.training-equipment:visible')).toLowerCase().includes(tool), `Skills equipment (${skill}): one practical hint accompanies the current method`);
@@ -276,12 +276,12 @@ async function f2pSkillsScenarios(browser: Browser) {
   }
 
   {
-    const { page, errors } = await open(browser, 1000, { theme: 'light', scale: 1.5, zen: true, progress: progressBefore('S3-03', { gameMode: 'f2p' }) }, '#/skills');
+    const { page, errors } = await open(browser, 1000, { theme: 'light', scale: 1.5, progress: progressBefore('S3-03', { gameMode: 'f2p' }) }, '#/skills');
     expect(await page.locator('.f2p-skill-badge').count() === 15 && await noOverflow(page) && !errors.length, 'F2P desktop light theme and 150% scaling: every marker remains readable without horizontal scrolling');
     await page.context().close();
   }
   {
-    const { page, errors } = await open(browser, 1280, { zen: true, theme: 'light', scale: 1.5,
+    const { page, errors } = await open(browser, 1280, { theme: 'light', scale: 1.5,
       progress: progressBefore('S9-01', { gameMode: 'members', levels: Object.fromEntries(readdirSync(new URL('../src/data/skills/', import.meta.url)).filter(f => f.endsWith('.json')).map(f => [f.slice(0, -5), 30])) }) }, '#/skills');
     expect(await page.locator('.f2p-skill-badge').count() === 0, 'Members: F2P preparation markers do not clutter the overview');
     const links = await page.locator('.skill-tile a').evaluateAll(els => els.map(el => ({ href: el.getAttribute('href')!, name: el.querySelector('.skill-name')!.textContent! })));
@@ -303,7 +303,7 @@ async function membersGatheringScenarios(browser: Browser) {
   for (const width of [1000, 1440]) {
     const levels = { woodcutting: 55, attack: 40 };
     const { page, errors } = await open(browser, width, {
-      zen: true, progress: progressBefore('S9-01', { gameMode: 'members', levels }),
+      progress: progressBefore('S9-01', { gameMode: 'members', levels }),
       localStorage: { 'osrs-put:features': JSON.stringify({ efficient: true }) },
       status: { protocol: 6, inGame: true, stats: levels, equipment: [], inventory: [{ id: 1359, name: 'Rune axe', count: 1 }], coins: 5000, bankCoins: 0 },
       events: [{ type: 'STATS', stats: levels }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Rune axe', carried: 1, noted: 0, bank: 0 }] }],
@@ -324,6 +324,135 @@ async function membersGatheringScenarios(browser: Browser) {
 }
 
 /** The Ledger frame (2.81.1): every spine link, HUD control, road control, ribbon and hotbar slot does what its label says. */
+async function pickStepMapPoint(page: Page, name: RegExp) {
+  await (await stepButton(page, /World map/)).click();
+  await page.locator('dialog.map-modal[open]').waitFor();
+  await page.getByRole('radio', { name }).click();
+  await page.keyboard.press('Escape');
+}
+
+async function mapNavigationScenario(browser: Browser, width = 1000) {
+    // A step point → the game: "Lead here in the game" sets a target with the point's NPC; "Show in the game" gives the RuneLite panel
+    // "what you need / where to get it / the step points".
+    {
+      const { page, errors } = await open(browser, width, { progress: progressBefore('S2-03') }, '#/step/S2-03');
+      await pickStepMapPoint(page, /Eye of newt — Betty/);
+      await (await stepButton(page, '🧭 Lead here in the game')).click();
+      await page.waitForTimeout(500);
+      type Post = { path: string; body: Record<string, unknown> };
+      const posts = () => page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts);
+      const nav = (await posts()).filter((p) => p.path === '/nav-target').pop()?.body;
+      expect(nav?.x === 3014 && JSON.stringify(nav?.npcNames) === '["Betty"]' && nav?.stepId === 'S2-03',
+        'step map: "Lead here in the game" — a target at Betty with the NPC highlighted');
+      await (await stepButton(page, '🧭 Show in the game')).first().click();
+      await page.waitForTimeout(500);
+      const guide = (await posts()).filter((p) => p.path === '/active-step').pop()?.body.guide as
+        { items: { name: string; where?: string }[]; places: { label: string; items?: string[] }[] } | undefined;
+      expect(guide?.items.length === 4 && guide.items.every((i) => i.where) && guide.places.length === 5,
+        'show in the game: 4 items with "where to get it" and 5 points go to the RuneLite panel');
+      expect(await noOverflow(page), 'step map: no horizontal scrolling');
+      expect(!errors.length, `step map: no console errors ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+}
+
+async function canonicalPlanScenario(browser: Browser, width = 1000) {
+    // A catalogue-backed skill uses its canonical plan and priorities, never the old competing roadmap.
+    {
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S4-03', { gameMode: 'f2p' }),
+        status: { stats: { woodcutting: 21, attack: 40 } },
+        events: [{ type: 'STATS', stats: { woodcutting: 21, attack: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Bronze axe', carried: 1, noted: 0, bank: 0 }, { name: 'Coins', carried: 10000, noted: 0, bank: 0 }] }],
+      }, '#/skills/WC/woodcutting');
+      await page.getByRole('group', { name: 'Training priority' }).waitFor();
+      expect(await page.getByRole('tab', { name: 'Train', exact: true }).getAttribute('aria-selected') === 'true', 'skill plan: opens on the compact recommendation');
+      await page.getByRole('group', { name: 'Training priority' }).getByRole('button', { name: 'XP', exact: true }).click();
+      expect(await page.getByRole('button', { name: 'XP', exact: true }).getAttribute('aria-pressed') === 'true', 'skill plan: the canonical priority remains editable');
+      await page.getByRole('tab', { name: 'Plan', exact: true }).click();
+      expect(await page.locator('.skill-guide-roadmap').count() === 0 && await page.locator('.training').count() === 1, 'skill plan: one canonical plan, no static duplicate');
+      await page.getByRole('tab', { name: 'Train', exact: true }).click();
+      await page.getByRole('button', { name: 'Follow training plan', exact: true }).click();
+      await waitFor(page, '.tracked-skill', 5000);
+      const tracked = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:skill-track') ?? 'null') as { skill?: string; target?: number } | null);
+      expect(tracked?.skill === 'woodcutting' && tracked.target === 36, 'skill plan: followed skill and actual checkpoint are preserved');
+      await page.getByRole('button', { name: /Back to the quest route/ }).click();
+      expect(await page.locator('.tracked-skill').count() === 0, 'skill plan: stopping returns to the quest route');
+      expect(await noOverflow(page) && !errors.length, 'skill plan: no overflow or runtime errors');
+      await page.context().close();
+    }
+
+}
+
+async function cleanupScenarios(browser: Browser) {
+  const { page, errors } = await open(browser, 1280, {
+    progress: progressBefore('S6-01', { gameMode: 'f2p' }),
+    status: { stats: { ranged: 12, attack: 40, strength: 44, defence: 44, hitpoints: 40 } },
+    events: [{ type: 'STATS', stats: { ranged: 12, attack: 40, strength: 44, defence: 44, hitpoints: 40 } }],
+    localStorage: {
+      'osrs-put:theme': 'dark', 'osrs-put:look': 'classic', 'osrs-put:solid': '1',
+      'osrs-put:text-scale': '1.5', 'osrs-put-settings-tab': 'look',
+      'osrs-put:features': JSON.stringify({ compact: true, inspector: true, profitTraining: true, autoPrep: false, keepDefenceOne: true }),
+    },
+  }, '#/settings');
+  expect(await page.getByRole('tab', { name: 'RuneLite', exact: true }).getAttribute('aria-selected') === 'true', 'cleanup: retired saved Appearance tab falls back to RuneLite');
+  expect(await page.getByRole('tab', { name: 'Appearance', exact: true }).count() === 0 && await page.getByRole('slider').count() === 0, 'cleanup: Appearance and font sliders are absent');
+  expect(await page.getByRole('button', { name: /compact|full workspace|inspector/i }).count() === 0, 'cleanup: legacy saved modes cannot restore retired controls');
+  expect(await page.evaluate(() => !document.documentElement.dataset.theme && !document.documentElement.dataset.look && !document.documentElement.style.getPropertyValue('--text-scale')), 'cleanup: retired saved appearance does not change the document');
+  await page.getByRole('tab', { name: 'Training', exact: true }).click();
+  const priorities = page.getByRole('group', { name: 'Training choices' });
+  expect(await priorities.getByRole('button', { name: 'Money', exact: true }).getAttribute('aria-pressed') === 'true', 'cleanup: active saved training priority survives');
+  expect(!await page.getByRole('checkbox', { name: /Auto preparation/ }).isChecked() && await page.getByRole('checkbox', { name: /Keep Defence/ }).isChecked(), 'cleanup: preparation and Defence preferences survive');
+  await priorities.getByRole('button', { name: 'Balanced', exact: true }).click();
+  expect(await priorities.getByRole('button', { name: 'Balanced', exact: true }).getAttribute('aria-pressed') === 'true', 'cleanup: training priority remains editable');
+  await page.screenshot({ path: 'audit-temp/cleanup-training-settings.png' });
+  await page.getByRole('tab', { name: 'RuneLite', exact: true }).click();
+  const helpers = page.locator('.settings-advanced').filter({ hasText: 'More helpers' });
+  await helpers.locator('summary').first().click();
+  expect(await helpers.getByRole('checkbox').count() === 5, 'cleanup: all five working RuneLite helper controls remain');
+  await page.getByRole('tab', { name: 'App', exact: true }).click();
+  await page.getByRole('button', { name: 'Check now', exact: true }).click();
+  expect(await page.evaluate(() => Number((window as unknown as { __updateChecks?: number }).__updateChecks)) === 1 && await page.getByRole('button', { name: 'Copy the report', exact: true }).count() === 0, 'cleanup: updates remain functional and retired Copy Report is absent');
+  await page.goto(`${BASE}#/goals`);
+  await page.waitForTimeout(500);
+  expect(await page.locator('.goals-table').count() === 0 && await page.getByRole('heading', { name: /Session/ }).count() > 0, 'cleanup: old goals links open the surviving journal/session');
+  await page.goto(`${BASE}#/skills/RA/ranged`);
+  await page.getByRole('group', { name: 'Training priority' }).waitFor();
+  expect(await page.locator('.skill-roadmap').count() === 0 && await page.locator('.training').count() === 1, 'cleanup: Ranged has one personalized plan, not a competing static roadmap');
+  await page.screenshot({ path: 'audit-temp/cleanup-ranged-plan.png' });
+
+  let failTiles = true;
+  const requested: string[] = [];
+  const png = readFileSync(new URL('../public/skill-icons/ranged.png', import.meta.url));
+  await page.route(/maps\.runescape\.wiki/, (route) => {
+    const url = route.request().url();
+    requested.push(url);
+    if (process.env.UI_REAL_MAP === '1' && !failTiles) return route.continue();
+    if (url.includes('/data/dataloader.json')) return route.fulfill({ json: { baseMaps: [{ mapId: 0, cacheVersion: '2019-10-31_1', bounds: [[1000, 1000], [4300, 13000]] }] } });
+    return route.fulfill({ status: failTiles ? 404 : 200, contentType: 'image/png', body: failTiles ? '' : png });
+  });
+  await page.goto(`${BASE}#/step/S6-01`);
+  await page.getByRole('tab', { name: 'Route & game', exact: true }).click();
+  await page.getByRole('button', { name: 'Retry map', exact: true }).waitFor();
+  expect(await page.locator('.map-preview').count() === 1, 'cleanup: Route has one map preview');
+  expect(!(await text(page, '.map-preview')).includes('no connection'), 'cleanup: a missing tile is not labelled an internet failure');
+  failTiles = false;
+  await page.getByRole('button', { name: 'Retry map', exact: true }).click();
+  await page.waitForFunction(() => {
+    const images = [...document.querySelectorAll<HTMLImageElement>('.map-preview .map-tiles img')];
+    return images.length > 0 && images.every((i) => i.complete && i.naturalWidth > 0);
+  });
+  expect(requested.some((u) => /\/osrs\/tiles\/0_2019-10-31_1\//.test(u) && u.includes('?retry=1')), 'cleanup: retry loads the documented atlas schema');
+  await page.getByRole('button', { name: /World map/i }).first().click();
+  await page.locator('dialog.map-modal[open]').waitFor();
+  await page.waitForFunction(() => [...document.querySelectorAll<HTMLImageElement>('dialog.map-modal .leaflet-tile')].some((i) => i.complete && i.naturalWidth > 0));
+  expect(await page.locator('dialog.map-modal[open]').count() === 1, 'cleanup: full map still loads after preview recovery');
+  if (process.env.UI_REAL_MAP === '1') await page.screenshot({ path: 'audit-temp/cleanup-real-wiki-map.png' });
+  await page.keyboard.press('Escape');
+  expect(await noOverflow(page) && !errors.length, 'cleanup: surviving navigation has no overflow or runtime errors');
+  await page.context().close();
+}
+
 async function ledgerScenarios(browser: Browser) {
   console.log('Ledger frame');
   const titleOf = (id: string) => (steps as unknown as { id: string; title: string }[]).find((s) => s.id === id)!.title;
@@ -379,12 +508,8 @@ async function ledgerScenarios(browser: Browser) {
   await hud.locator('a.la-stat').click();
   await page.waitForTimeout(300);
   expect(page.url().endsWith('#/') && await page.locator('.cockpit').count() === 1, 'ledger HUD: the quest-point ring opens the Path');
-  await hud.getByRole('button', { name: /compact/i }).click();
-  await page.waitForSelector('.strip', { timeout: 3000 });
-  expect(await page.locator('.la-pg.la-l').isVisible() === false, 'ledger HUD: COMPACT shows the companion strip alone');
-  await hud.getByRole('button', { name: /full workspace/i }).click();
-  await page.waitForSelector('.cockpit', { timeout: 3000 });
-  expect(await page.locator('.strip').count() === 0, 'ledger HUD: FULL WORKSPACE returns the book');
+  expect(await hud.getByRole('button', { name: /compact|full workspace/i }).count() === 0, 'ledger HUD: retired compact controls are absent');
+  expect(await page.locator('.la-pg.la-l').isVisible(), 'ledger HUD: the accepted full Ledger remains visible');
   await page.evaluate(() => { location.hash = '#/step/S2-09'; });
   await page.waitForTimeout(500);
 
@@ -491,12 +616,8 @@ async function ledgerScenarios(browser: Browser) {
   // The other pages' own menus.
   await page.evaluate(() => { location.hash = '#/journal'; });
   await page.waitForTimeout(500);
-  await page.getByRole('link', { name: /^session$/i }).click();
-  await page.waitForTimeout(400);
-  expect(page.url().endsWith('#/journal/session') && (await page.locator('.la-pg.la-r .journal-pane').innerText()).length > 20, 'ledger Journal: SESSION opens the session journal');
-  await page.getByRole('link', { name: /^stage goals$/i }).click();
-  await page.waitForTimeout(400);
-  expect(page.url().endsWith('#/journal/goals'), 'ledger Journal: STAGE GOALS opens the goals');
+  expect((await page.locator('.la-pg.la-r .journal-pane').innerText()).length > 20 && await page.getByRole('heading', { name: /Session/ }).count() > 0, 'ledger Journal: session remains alongside the quest list');
+  expect(await page.getByRole('link', { name: /^stage goals$/i }).count() === 0 && await page.locator('.goals-table').count() === 0, 'ledger Journal: retired stage matrix is absent');
   await page.evaluate(() => { location.hash = '#/reference'; });
   await page.waitForTimeout(500);
   const second = page.locator('.reference-index .nav-list a').nth(1);
@@ -506,7 +627,7 @@ async function ledgerScenarios(browser: Browser) {
   expect((await page.locator('.reference-article h1').innerText()).trim() === topic, `ledger Reference: an index link opens its article (${topic})`);
   await page.evaluate(() => { location.hash = '#/settings'; });
   await page.waitForTimeout(500);
-  for (const tab of ['RuneLite', 'Progress and copies', 'App', 'Appearance']) {
+  for (const tab of ['RuneLite', 'Training', 'Progress and copies', 'App']) {
     await page.getByRole('tab', { name: tab, exact: true }).click();
     await page.waitForTimeout(250);
     expect(await page.getByRole('tab', { name: tab, exact: true }).getAttribute('aria-selected') === 'true' && (await page.locator('.settings-content').innerText()).length > 20, `ledger Settings: ${tab} opens its section`);
@@ -533,7 +654,7 @@ async function processingBudgetScenarios(browser: Browser) {
     const levels = { fletching: 40 };
     const gear = { equipment: [], inventory: [{ id: 946, name: 'Knife', count: 1 }], coins: 0, bankCoins: 0 };
     const { page, errors } = await open(browser, width, {
-      zen: true, progress: progressBefore('S9-01', { gameMode: 'members', levels }),
+      progress: progressBefore('S9-01', { gameMode: 'members', levels }),
       localStorage: { 'osrs-put:features': JSON.stringify({ efficient: true }) },
       status: { protocol: 6, inGame: true, stats: levels, ...gear },
       events: [{ type: 'STATS', stats: levels }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [
@@ -558,6 +679,10 @@ async function processingBudgetScenarios(browser: Browser) {
 }
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'canonical-plan') { await canonicalPlanScenario(browser); return; }
+  if (process.env.UI_ONLY === 'map-navigation') { await mapNavigationScenario(browser); return; }
+  if (process.env.UI_ONLY === 'cleanup') { await cleanupScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await cleanupScenarios(browser);
   if (process.env.UI_ONLY === 'processing-budget') { await processingBudgetScenarios(browser); return; }
   if (!process.env.UI_ONLY) await processingBudgetScenarios(browser);
   if (process.env.UI_ONLY === 'ledger') { await ledgerScenarios(browser); return; }
@@ -658,7 +783,7 @@ async function run(browser: Browser) {
     await page.context().close();
   }
   {
-    const { page, errors } = await open(browser, 1280, { offline: true, fileWriteFailure: true, progress: progressBefore('S2-07'), zen: true }, '#/step/S2-07');
+    const { page, errors } = await open(browser, 1280, { offline: true, fileWriteFailure: true, progress: progressBefore('S2-07'), }, '#/step/S2-07');
     expect((await text(page, '.progress-storage-warning')).includes('desktop file could not be written'), 'save failure: working browser storage does not hide a failed desktop write');
     await page.evaluate(() => { const w = window as unknown as Record<string, unknown>; w.__fileWriteFailure = false; w.__holdSave = true; });
     await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
@@ -751,7 +876,7 @@ async function run(browser: Browser) {
     const gear = { equipment, inventory: [{ id: 330, name: 'Salmon', count: 40, noted: true }], coins: 500, bankCoins: 3000 };
     const { page, errors } = await open(browser, width, {
       // The route's own plan, chosen: noted Salmon is what is tested here, not which spot needs the least food (2.75: the monks need none).
-      zen: true, progress: progressBefore('S3-08'), localStorage: { 'osrs-put:active-step': 'S3-08', 'osrs-put:combat-plans:main:-': '{"S3-08":{"key":"route","at":1,"by":"player"}}' },
+      progress: progressBefore('S3-08'), localStorage: { 'osrs-put:active-step': 'S3-08', 'osrs-put:combat-plans:main:-': '{"S3-08":{"key":"route","at":1,"by":"player"}}' },
       status: { protocol: 6, ...gear, stats, activeStepId: 'S3-08' },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 40, bank: 0, exactCarried: 0, exactNoted: 40, exactBank: 0 }] }],
     }, '#/step/S3-08');
@@ -811,7 +936,7 @@ async function run(browser: Browser) {
   {
     const stats = { crafting: 31, woodcutting: 36, magic: 13, hitpoints: 31, attack: 40, strength: 40, defence: 33 };
     const { page, errors } = await open(browser, 1280, {
-      zen: true, progress: progressBefore('S9-01', { gameMode: 'members', levels: stats }),
+      progress: progressBefore('S9-01', { gameMode: 'members', levels: stats }),
       localStorage: { 'osrs-put:active-step': 'S9-01' }, status: { protocol: 6, inGame: true, player: 'Entrana Test', stats, activeStepId: 'S9-01', questInstruction: { stepId: 'S9-01', stageAt: 2, lineIndex: 0, peeking: false } },
       events: [{ type: 'STATS', stats }, { type: 'OWNED', bankSeen: true, items: [
         { name: 'Knife', carried: 1, noted: 0, bank: 0 }, { name: 'Bronze axe', carried: 0, noted: 0, bank: 1 },
@@ -846,7 +971,7 @@ async function run(browser: Browser) {
   if (process.env.UI_ONLY === 'entrana') return;
   {
     const { page, errors } = await open(browser, 1280, {
-      zen: true, progress: progressBefore('S8-02'),
+      progress: progressBefore('S8-02'),
       status: { protocol: 6, questsDone: [], questPoints: 60 },
       events: [{ type: 'QUESTS', done: [] }],
     }, '#/step/S8-02');
@@ -890,7 +1015,7 @@ async function run(browser: Browser) {
     const oldGear = { equipment: [{ id: 1329, name: 'Mithril scimitar', slot: 'weapon' }], inventory: [], coins: 100, bankCoins: 200 };
     const newGear = { ...oldGear, equipment: [{ id: 1331, name: 'Adamant scimitar', slot: 'weapon' }] };
     const { page, errors } = await open(browser, 1280, {
-      zen: true, progress: progressBefore('S3-08'),
+      progress: progressBefore('S3-08'),
       status: { protocol: 6, player: 'Session Test', stats: { attack: 22, strength: 20, defence: 1 }, ...oldGear },
     }, '#/gear');
     await page.getByRole('region', { name: 'Worn now', exact: true }).waitFor();
@@ -1090,7 +1215,7 @@ async function run(browser: Browser) {
       expect(await noOverflow(page), 'what to train with: no horizontal scrolling');
       await page.goto(`${BASE}#/settings`);
       await page.waitForTimeout(400);
-      await page.locator('details.settings-advanced > summary').click();
+      await page.getByRole('tab', { name: 'Training', exact: true }).click();
       await page.getByRole('group', { name: 'Training choices' }).getByRole('button', { name: 'Fastest' }).click();
       await page.waitForTimeout(200);
       const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { efficient?: boolean; relaxedTraining?: boolean });
@@ -1106,7 +1231,7 @@ async function run(browser: Browser) {
     // "Zen": instead of a stack of plaques — one status line; the details on a button, as tabs; ready — "Start the step".
     {
       const { page, errors } = await open(browser, width, {
-        zen: true,
+
         progress: progressBefore('S9-01'),
         status: { stats: { crafting: 28, woodcutting: 40 } },
         events: [{ type: 'STATS', stats: { crafting: 28, woodcutting: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Knife', carried: 0, noted: 0, bank: 1 }] }],
@@ -1130,7 +1255,7 @@ async function run(browser: Browser) {
 
     {
       const { page, errors } = await open(browser, width, {
-        zen: true,
+
         progress: progressBefore('S1-04'),
         status: { stats: {} },
       }, '#/step/S1-04');
@@ -1138,12 +1263,8 @@ async function run(browser: Browser) {
       const line = await text(page, '.status-line');
       expect(line.includes('Ready to set off') && !line.includes('Fix') && await page.getByRole('button', { name: /Show in game/ }).count() > 0, `Zen: ready — "Ready to set off" and the step has its own "Show in game" (${line.replace(/s+/g, ' ').slice(0, 80)})`);
       expect(await noOverflow(page), 'Zen (ready): no horizontal scrolling');
-      // "Inspector" brings back all the blocks; the switch is in Settings, Appearance.
       await page.goto(`${BASE}#/settings`);
-      await page.getByRole('button', { name: /^Inspector$/ }).click();
-      await page.waitForTimeout(300);
-      const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { inspector?: boolean });
-      expect(feat.inspector === true, 'Inspector: the switch in Settings is saved');
+      expect(await page.getByRole('button', { name: /^Inspector$/ }).count() === 0 && await page.getByRole('button', { name: /^Compact$/ }).count() === 0, 'Retired appearance modes do not return in Settings');
       expect(!errors.length, `Zen (ready): no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
@@ -1254,7 +1375,7 @@ async function run(browser: Browser) {
 
       // The same in the default "Zen" view: the step page and its Preparation view, for the visual review.
       const zen = await open(browser, width, {
-        zen: true,
+
         progress: progressBefore('S3-08'),
         localStorage: { 'osrs-put:active-step': 'S3-08', 'osrs-put:combat-plans:main:-': '{"S3-08":{"key":"route","at":1,"by":"player"}}' },
         status: { protocol: 5, ...gear, stats, xp, activeStepId: 'S3-08' },
@@ -1306,28 +1427,7 @@ async function run(browser: Browser) {
       await page.context().close();
     }
 
-    // A step point → the game: "Lead here in the game" sets a target with the point's NPC; "Show in the game" gives the RuneLite panel
-    // "what you need / where to get it / the step points".
-    {
-      const { page, errors } = await open(browser, width, { progress: progressBefore('S2-03') }, '#/step/S2-03');
-      await (await stepButton(page, /Eye of newt — Betty/, 'radio')).click();
-      await (await stepButton(page, '🧭 Lead here in the game')).click();
-      await page.waitForTimeout(500);
-      type Post = { path: string; body: Record<string, unknown> };
-      const posts = () => page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts);
-      const nav = (await posts()).filter((p) => p.path === '/nav-target').pop()?.body;
-      expect(nav?.x === 3014 && JSON.stringify(nav?.npcNames) === '["Betty"]' && nav?.stepId === 'S2-03',
-        'step map: "Lead here in the game" — a target at Betty with the NPC highlighted');
-      await (await stepButton(page, '🧭 Show in the game')).first().click();
-      await page.waitForTimeout(500);
-      const guide = (await posts()).filter((p) => p.path === '/active-step').pop()?.body.guide as
-        { items: { name: string; where?: string }[]; places: { label: string; items?: string[] }[] } | undefined;
-      expect(guide?.items.length === 4 && guide.items.every((i) => i.where) && guide.places.length === 5,
-        'show in the game: 4 items with "where to get it" and 5 points go to the RuneLite panel');
-      expect(await noOverflow(page), 'step map: no horizontal scrolling');
-      expect(!errors.length, `step map: no console errors ${errors.join('; ')}`);
-      await page.context().close();
-    }
+    await mapNavigationScenario(browser, width);
 
     // An earning step: coins against the goal.
     {
@@ -1369,39 +1469,7 @@ async function run(browser: Browser) {
       await fresh.page.context().close();
     }
 
-    // 2.42/2.70: the leveling roadmap is in the skill's Training guide (2.74.13: in place, not a drawer from the Skills page), the priority changes the path,
-    // "Follow this plan" pins the skill to the Path card and
-    // "Back to the quest route" stops it. A group's label covers its steps (no "Levels 30–40" over "Lvl 30 → 60").
-    {
-      const { page, errors } = await open(browser, width, { progress: progressBefore('S9-01') }, '#/skills');
-      await page.locator('.skill-tile a').first().click();
-      expect(await page.getByRole('tab', { name: 'Train', exact: true }).getAttribute('aria-selected') === 'true', 'roadmap: the skill opens on its compact recommendation');
-      await page.getByRole('tab', { name: 'Plan', exact: true }).click();
-      await waitFor(page, '.skill-guide-roadmap .skill-timeline', 5000);
-      expect(await page.getByRole('tab', { name: 'Plan', exact: true }).getAttribute('aria-selected') === 'true', 'roadmap: the full plan has its own view');
-      const before = await text(page, '.skill-timeline');
-      expect(/Levels \d+/.test(before), 'roadmap: the level brackets are shown');
-      expect(await noOverflow(page), 'roadmap: no horizontal scrolling');
-      const covered = await page.locator('.skill-bracket').evaluateAll((els) => els.every((el) => {
-        const head = /Levels (\d+)–(\d+)/.exec(el.querySelector('h3')?.textContent ?? '');
-        if (!head) return false;
-        const to = Number(head[2]);
-        return [...el.querySelectorAll('.skill-step-range')].every((r) => { const m = /→ (\d+)/.exec(r.textContent ?? ''); return !m || Number(m[1]) <= to; });
-      }));
-      expect(covered, 'roadmap: every group label covers the levels of its steps');
-      await page.getByRole('group', { name: 'Priority' }).getByRole('button', { name: 'Low effort' }).click();
-      expect((await page.locator('.skill-seg-btn.is-on').allInnerTexts()).some((x) => x.includes('Low effort')), 'roadmap: the priority is applied');
-      expect(await page.getByRole('button', { name: /AFK \/ Budget|F2P Only|Quest-Driven/ }).count() === 0, 'roadmap: no mixed filters');
-      await page.getByRole('button', { name: /Follow this plan/ }).click();
-      const tracked = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:skill-track') ?? 'null') as { mode?: string } | null);
-      expect(tracked?.mode === 'afk', 'roadmap: the followed plan was remembered with its priority');
-      await page.evaluate(() => { location.hash = '#/step/S9-01'; });
-      await waitFor(page, '.tracked-skill', 5000);
-      await page.getByRole('button', { name: /Back to the quest route/ }).click();
-      expect((await page.locator('.tracked-skill').count()) === 0, 'roadmap: stopping gives the quest route back');
-      expect(!errors.length, `roadmap: no console errors ${errors.join('; ')}`);
-      await page.context().close();
-    }
+    await canonicalPlanScenario(browser, width);
 
     // 2.12: another character does not write into the active profile and gets an offer; XP from the game is visible on the skill page.
     {
@@ -1640,7 +1708,7 @@ async function run(browser: Browser) {
     // The recovery mode: died in a dungeon and respawned in Lumbridge — instead of "kill zombies" a plan "collect the things, go back".
     {
       const { page, errors } = await open(browser, width, {
-        zen: true, localStorage: { 'osrs-put:active-step': 'S2-07' }, progress: progressBefore('S2-07'),
+        localStorage: { 'osrs-put:active-step': 'S2-07' }, progress: progressBefore('S2-07'),
         status: { activeStepId: 'S2-07', protocol: 5, pluginVersion: '2.20.0', stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [] },
         events: [
           { type: 'MOVED', kind: 'DEATH', from: { x: 3049, y: 9566, plane: 0 }, to: null },
@@ -1661,7 +1729,7 @@ async function run(browser: Browser) {
     // Protocol 6: the step, shopping, the bank highlight, the advice and the plan go to the game in one /prep-plan snapshot — there are no separate requests.
     {
       const { page, errors } = await open(browser, width, {
-        zen: true, localStorage: { 'osrs-put:active-step': 'S2-07', 'osrs-put:shopping-plan': '{"items":[{"name":"Iron bar","count":2}]}' }, progress: progressBefore('S2-07'),
+        localStorage: { 'osrs-put:active-step': 'S2-07', 'osrs-put:shopping-plan': '{"items":[{"name":"Iron bar","count":2}]}' }, progress: progressBefore('S2-07'),
         status: { protocol: 6, pluginVersion: '2.22.0', stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [] },
       }, '#/step/S2-07');
       await page.waitForTimeout(1500);
@@ -1698,7 +1766,7 @@ async function run(browser: Browser) {
       const chips = await page.locator('.spot-chip').allInnerTexts();
       expect(chips.some((c) => c.includes('Ned')) && chips.some((c) => c.includes('Lady Keli')) && chips.some((c) => c.includes('Prince Ali')),
         `step map: the quest NPC as points (${chips.length})`);
-      await (await stepButton(page, /Ned — a house in Draynor Village/, 'radio')).click();
+      await pickStepMapPoint(page, /Ned — a house in Draynor Village/);
       await (await stepButton(page, '🧭 Lead here in the game')).click();
       await page.waitForTimeout(500);
       const nav = await page.evaluate(() => (window as unknown as { __posts: { path: string; body: Record<string, unknown> }[] }).__posts
@@ -1801,36 +1869,24 @@ async function run(browser: Browser) {
     await page.context().close();
   }
 
-  // The companion strip (compact view): four tabs of the same step, the same stage-aware list, Done and Skip, a way back to the full workspace.
+  // A retired saved compact preference must not hide the working Guardian guide.
   {
-    const questData = JSON.parse(readFileSync(new URL('../src/data/questStages.json', import.meta.url),'utf8')).quests['S3-04'];
-    const stage = questData.stages.find((s: {do: {t:string;k?:string}[]}) => s.do.some(l => l.k === 'defeatGuardian'));
-    const lineIndex = stage.do.findIndex((l: {t:string;k?:string}) => l.k === 'defeatGuardian');
-    const {page, errors} = await open(browser, 1000, {
-      progress:progressBefore('S3-04'),
-      localStorage:{'osrs-put:active-step':'S3-04','osrs-put:features':JSON.stringify({compact:true})},
-      status:{protocol:6,inGame:true,activeStepId:'S3-04',questInstruction:{stepId:'S3-04',stageAt:stage.at,lineIndex,peeking:false},navTarget:{stepId:'S3-04',label:'Talk to Willow (south of Ice Mountain)',x:0,y:0,plane:0}},
+    const questData = JSON.parse(readFileSync(new URL('../src/data/questStages.json', import.meta.url), 'utf8')).quests['S3-04'];
+    const stage = questData.stages.find((s: { do: { k?: string }[] }) => s.do.some((l) => l.k === 'defeatGuardian'));
+    const lineIndex = stage.do.findIndex((l: { k?: string }) => l.k === 'defeatGuardian');
+    const { page, errors } = await open(browser, 1440, {
+      progress: progressBefore('S3-04'),
+      localStorage: { 'osrs-put:active-step': 'S3-04', 'osrs-put:features': JSON.stringify({ compact: true }) },
+      status: { protocol: 6, inGame: true, activeStepId: 'S3-04', questInstruction: { stepId: 'S3-04', stageAt: stage.at, lineIndex, peeking: false } },
     }, '#/step/S3-04');
-    await waitFor(page, '.strip', 5000);
-    const tabs = page.getByRole('tablist', { name: 'Companion views' }).getByRole('tab');
-    expect(await tabs.count() === 4 && (await tabs.allInnerTexts()).join('|') === 'Now|Bag|Route|More', 'strip: four tabs - Now, Bag, Route, More');
-    expect((await text(page, '.strip .current-action-title')).includes('Ancient Guardian'), 'strip: Now shows the confirmed game line');
-    expect(await page.locator('.strip .strip-next li').count() > 0, 'strip: Now lists the next lines');
-    expect(await page.locator('.strip .step-status').count() === 0 && await page.locator('.strip .overview').count() === 0, 'strip: Now carries no readiness panel or walkthrough (they are Bag and More)');
-    await tabs.nth(1).click();
-    const bag = await text(page, '#strip-panel');
-    expect(bag.includes('Needed for this stage') && bag.includes('Used earlier in this quest') && !bag.includes('Missing'), 'strip: Bag is stage-aware, earlier items are folded away');
-    await tabs.nth(2).click();
-    expect(await page.locator('.strip .strip-route li').count() > 1 && await page.locator('.strip .strip-step.is-current').count() === 1, 'strip: Route lists the stage with the current step marked');
-    await tabs.nth(3).click();
-    expect(await page.locator('.strip details.strip-fold').count() === 2, 'strip: More holds Travel and Details');
-    await tabs.nth(0).click();
-    expect(await page.getByRole('button', { name: /^Done/ }).count() === 1, 'strip: Done is one click away');
-    expect(await page.getByRole('button', { name: 'Full workspace' }).count() === 1, 'strip: a way back to the full workspace');
-    expect(errors.length === 0 && await noOverflow(page), `strip: no runtime errors or horizontal overflow ${errors.join('; ')}`);
-    await page.getByRole('button', { name: 'Full workspace' }).click();
-    await waitFor(page, '.cockpit, .path-wide', 5000);
-    expect(await page.locator('.strip').count() === 0, 'strip: Full workspace returns to the cockpit');
+    await waitFor(page, '.cockpit', 5000);
+    expect(await page.locator('.strip').count() === 0 && await page.locator('.la-pg.la-l').isVisible(), 'legacy display preference: the normal Ledger remains available');
+    expect(/guardian/i.test(await text(page, '.cockpit')), 'legacy display preference: the Guardian instructions remain available');
+    await page.getByRole('tab', { name: 'Preparation', exact: true }).click();
+    expect(await page.locator('.quest-supplies, .quest-preparation, .readiness').count() > 0, 'legacy display preference: preparation remains available');
+    await page.getByRole('tab', { name: 'Route & game', exact: true }).click();
+    expect(await page.locator('.step-map').count() === 1 && await page.locator('.ingame').count() > 0, 'legacy display preference: route and in-game controls remain available');
+    expect(errors.length === 0 && await noOverflow(page), 'legacy display preference: no runtime errors or overflow');
     await page.context().close();
   }
 
@@ -1904,6 +1960,12 @@ async function run(browser: Browser) {
   for (const [hash, least, links] of [['#/journal', 2, '.journal-views a'], ['#/reference', 3, '.reference-index .nav-list a']] as [string, number, string][]) {
     for (const width of [1000, 1440]) {
       const { page } = await open(browser, width, { progress: progressBefore('S3-03') }, hash);
+      if (hash === '#/journal') {
+        expect(await page.locator('.la-pg.journal').count() === 2 && await page.locator('.la-pg.la-l .journal-pane').count() === 1 && await page.locator('.la-pg.la-r .journal-pane').count() === 1 && await page.locator('.journal-views').count() === 0, `Journal ${width}: quests and session remain without the retired stage navigation`);
+        expect(await noOverflow(page), `Journal ${width}: no horizontal overflow`);
+        await page.context().close();
+        continue;
+      }
       const seen = await page.evaluate((links) => {
         const nav = document.querySelector(links)?.closest('.la-pg');
         if (!nav) return -1;
@@ -2023,7 +2085,7 @@ async function run(browser: Browser) {
     for (const scale of [1, 1.25, 1.5]) {
       for (const [name, hash] of pages) {
         const { page, errors } = await open(browser, Math.round(1920 / scale), {
-          scale, zen: true, progress: progressBefore('S3-08'), localStorage: { 'osrs-put:active-step': 'S3-08' },
+          scale, progress: progressBefore('S3-08'), localStorage: { 'osrs-put:active-step': 'S3-08' },
           status: { protocol: 6, ...gear, stats, xp, activeStepId: 'S3-08', player: 'Scale Test' },
           events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 0, bank: 13 }] }],
         }, hash);
@@ -2754,7 +2816,7 @@ async function dateFreeSettingsScenarios(browser: Browser) {
 async function marketPreparationScenarios(browser: Browser) {
   for (const width of [1280]) for (const unavailable of [false, true]) {
     const { page, errors } = await open(browser, width, {
-      zen: true, market: true, marketUnavailable: unavailable,
+      market: true, marketUnavailable: unavailable,
       progress: progressBefore('S4-04', { gameMode: 'f2p' }),
       localStorage: { 'osrs-put:active-step': 'S4-04' },
       status: { protocol: 6, activeStepId: 'S4-04', coins: 10000, bankCoins: 0 },
@@ -2783,7 +2845,7 @@ async function toolProofScenarios(browser: Browser) {
   for (const width of [1280]) {
     const rows = PICKAXES.map(name => ({ name, carried: 0, noted: 0, bank: 0, exactCarried: 0, exactNoted: 0, exactBank: 0 }));
     const { page, errors } = await open(browser, width, {
-      zen: true, progress: progressBefore('S1-12', { gameMode: 'f2p' }),
+      progress: progressBefore('S1-12', { gameMode: 'f2p' }),
       localStorage: { 'osrs-put:active-step': 'S1-12' },
       status: { protocol: 6, stats: { mining: 6 }, activeStepId: 'S1-12' },
       events: [{ type: 'STATS', stats: { mining: 6 } }, { type: 'OWNED', bankSeen: true, items: [rows[0]] }],

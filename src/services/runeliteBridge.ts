@@ -17,7 +17,6 @@ import { stepMaxHit } from '../lib/foodAdvice';
 import { npcSpot, stepPlaces } from '../lib/stepPlaces';
 import { shortLine } from '../lib/shortText';
 import { BANK_SPOTS } from '../lib/preflight';
-import { summarizeBridge, type BridgeTelemetry } from '../lib/telemetryReport';
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
 
@@ -670,12 +669,6 @@ export async function postPrepPlan(envelope: PrepEnvelope, t: BridgeTransport = 
     for (const [k, v] of Object.entries(d.rejected as Record<string, unknown>)) if (typeof v === 'string') rejected[k] = v;
   }
   return { ok: res.ok, stale: d.stale === true, rejected, status: res.status };
-}
-
-/** The summary of the plugin's debug journal (since 2.23.0; an old plugin answers 404 — null). */
-export async function getTelemetry(t: BridgeTransport = defaultTransport()): Promise<BridgeTelemetry | null> {
-  const res = await t.request('GET', '/telemetry');
-  return res.ok ? summarizeBridge(res.data) : null;
 }
 
 /** A bulk list for the exchange hint. An empty list removes the hint. */

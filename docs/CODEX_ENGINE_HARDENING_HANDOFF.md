@@ -2,7 +2,7 @@
 
 ## Desktop-only scope — owner decision, 2026-10-28
 
-No mobile/phone development or phone-only QA. Keep Windows desktop resizing, DPI/text scaling, themes and accessibility. See the authoritative desktop-only scope in [PROJECT_GUIDELINES.md](../PROJECT_GUIDELINES.md).
+No mobile/phone development or phone-only QA. Keep native Windows DPI, desktop resizing and accessibility. The later owner-approved cleanup retires custom app scaling/theme controls; preserve the fixed Ledger design. See CLAUDE_TAKEOVER.md for current scope. See the authoritative desktop-only scope in [PROJECT_GUIDELINES.md](../PROJECT_GUIDELINES.md).
 
 ## Current continuation — 2.80.14
 

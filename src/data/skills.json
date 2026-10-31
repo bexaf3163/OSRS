@@ -1293,7 +1293,7 @@
     "intro": [
       {
         "t": "p",
-        "text": "Your own weapons and armour: smelt bars in a furnace (Furnace), then forge on an anvil (Anvil) with a hammer (Hammer). The XP per item depends on the number of bars, so platebodies are the fastest to train: they take 5 bars."
+        "text": "Smelt bars in a furnace and forge items on an anvil with a hammer. Use Train for a recipe matched to your levels, supplies and budget; a higher-level recipe is not automatically the best choice."
       }
     ],
     "sections": [
@@ -2111,7 +2111,7 @@
       },
       {
         "t": "p",
-        "text": "**The order for a beginner:** raise Attack to the next metal, get the new weapon, then catch up Strength and Defence. For example: Attack 20, Strength 20, Defence 20, Attack 30."
+        "text": "Use Train for an order matched to your current goal, equipment, supplies and budget. There is no fixed Attack, Strength and Defence order for every account."
       }
     ],
     "sections": [
@@ -2419,7 +2419,7 @@
     "intro": [
       {
         "t": "p",
-        "text": "An archer hits from far away and can shoot from a safespot (safespot) the monster cannot reach. Bows are made with the Fletching skill, but it is members-only, so in the free version bows and arrows are bought on the Grand Exchange."
+        "text": "Ranged attacks can be used from a safespot where the target cannot reach you. The training plan checks your level, equipment and supplies, and directs you to an available shop or the Grand Exchange when something is needed."
       }
     ],
     "sections": [
@@ -2483,7 +2483,7 @@
               ],
               [
                 "Rapid",
-                "The fastest, all the XP to Ranged: the best for training"
+                "Trains Ranged; use the current plan for the selected setup."
               ],
               [
                 "Longrange",

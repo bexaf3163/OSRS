@@ -9,7 +9,6 @@ import { ReadinessProvider } from './readinessContext';
 import { FundingProvider } from './fundingContext';
 import { TrainingSessionProvider } from './trainingSessionContext';
 import { WikiProvider } from './components/WikiDrawer';
-import { applyTextScale, loadTextScale } from './lib/ui-scale';
 import './styles.css';
 import './clear-path.css';
 import './modern-path.css';
@@ -19,7 +18,6 @@ import './ledger/ledger.css';
 import './ledger/extras.css';
 import './ledger/app.css';
 
-applyTextScale(loadTextScale());
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
