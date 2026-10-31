@@ -61,7 +61,7 @@ A(s('ranged', 70, 99, 'MINIGAME', 'Nightmare Zone', 'Shoot bosses inside your ow
 A(s('prayer', 1, 9, 'QUEST', 'The Restless Ghost (XP skip)', 'A short free quest with a Prayer reward: your first levels without bones.', 'wiki:Father Aereck', 'both', False, quest='The Restless Ghost', npc='Father Aereck'))
 A(s('prayer', 1, 99, 'GATHER', 'Offer bones at a gilded altar', 'The fastest way: offer bought bones on a gilded altar in your own house, with both incense burners lit. It costs money.', 'Rimmington', 'fast', True))
 A(s('prayer', 1, 99, 'GATHER', 'Bury bones from combat', 'Bury every bone you get from combat: free, slow, and passive next to your combat training.', 'Lumbridge', 'afk', False))
-A(s('prayer', 7, 99, 'MINIGAME', 'Camdozaal fish offerings', 'Offer raw fish on the altar in the Ruins of Camdozaal: a free way after Below Ice Mountain, and it trains Fishing and Cooking too.', 'wiki:Ruins of Camdozaal', 'afk', False, quest='Below Ice Mountain'))
+A(s('prayer', 1, 99, 'MINIGAME', 'Camdozaal fish offerings', 'After Below Ice Mountain, net fish, prepare at the table with a knife, then offer prepared fish at the mysterious altar (Prayer 1). Fishing/Cooking: guppies 7, cavefish 20, tetras 33; both skills must qualify. Preparation can fail; raw fish cannot be offered. Full-cycle rate unmodelled.', 'wiki:Ruins of Camdozaal', 'afk', False, quest='Below Ice Mountain', items=[{'id': 303, 'name': 'Small fishing net', 'quantity': 1}, {'id': 946, 'name': 'Knife', 'quantity': 1}]))
 A(s('prayer', 1, 99, 'GATHER', 'Bury bones bought on the Grand Exchange', 'Buy bones on the Grand Exchange and bury them: a simple free-to-play fallback.', 'Grand Exchange', 'fast', False))
 
 # ---------------------------------------------------------------- Magic

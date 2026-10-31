@@ -89,7 +89,7 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
   const planNow = useReadinessEngine().plan(step, { ahead: styleOf(useFeatures()).lookAhead });
   // The ring beside the step's verdict counts the step's own items, the same scope as "Preparation required (N items)": the whole trip's share (the
   // next steps' items too) is the trip card's. "1 item" next to "ready 9%" read as a contradiction.
-  const percent = scopedPercent(planNow.lines, scope ?? STEP_ONLY, planNow.score.percent);
+  const percent = planNow.score.verdict === 'UNKNOWN' ? null : scopedPercent(planNow.lines, scope ?? STEP_ONLY, planNow.score.percent);
   const recovering = planNow.recovery;
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<TabKey>('prep');

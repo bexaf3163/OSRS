@@ -1354,12 +1354,13 @@
       "risk": "none",
       "where": "Wherever you fight (bones from giant frogs, giants)",
       "note": "Bury drops while training combat. The rate depends on the monsters and time spent fighting; the dedicated bank-burying rate does not apply to collecting your own bones.",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training",
+      "manualSetup": "Collect bones during an actual combat activity first. This passive supplement has no standalone training destination or fixed collection rate."
     },
     {
       "id": "pr-camdozaal",
       "skill": "prayer",
-      "from": 7,
+      "from": 1,
       "to": 99,
       "name": "Camdozaal: fish offerings",
       "members": false,
@@ -1367,18 +1368,35 @@
         {
           "type": "quest",
           "quest": "Below Ice Mountain"
+        },
+        {
+          "type": "skill",
+          "skill": "fishing",
+          "min": 7
+        },
+        {
+          "type": "skill",
+          "skill": "cooking",
+          "min": 7
+        },
+        {
+          "type": "item",
+          "name": "Small fishing net",
+          "count": 1
+        },
+        {
+          "type": "item",
+          "name": "Knife",
+          "count": 1
         }
-      ],
-      "xph": [
-        2400,
-        2400
       ],
       "effort": "medium",
       "cost": "free",
       "risk": "none",
       "where": "Ruins of Camdozaal",
-      "note": "Fishing and Cooking also train along the way.",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
+      "note": "Enter the ruins below Ice Mountain after Below Ice Mountain. Catch fish with the net, prepare them at the table with the knife, then offer prepared fish at the mysterious altar (Prayer 1). Guppies need Fishing/Cooking 7, cavefish 20, tetras 33: use only fish both skills allow. Preparation can fail; raw fish cannot be offered. This manual guide has no measured or fully modelled catch-to-offering rate.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training",
+      "place": "Ruins of Camdozaal"
     },
     {
       "id": "rc-air",

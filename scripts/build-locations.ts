@@ -57,6 +57,7 @@ const PLACES: [string, Kind, string[], string?][] = [
   ['Corsair Cove', 'city', []],
   ['Wizards\' Tower', 'landmark', ['Wizards Tower', "Wizard's Tower"]],
   ['Ice Mountain', 'landmark', []],
+  ['Ruins of Camdozaal', 'dungeon', ['Camdozaal']],
   ['Goblin Village', 'city', []],
   ['Edgeville Monastery', 'landmark', ['Monastery']],
   ['Mudskipper Point', 'landmark', []],

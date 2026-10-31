@@ -1202,6 +1202,17 @@
         "Lumbridge swamp mine"
       ],
       "page": "Copper rocks"
+    },
+    "Ruins of Camdozaal": {
+      "x": 2968,
+      "y": 5808,
+      "plane": 0,
+      "label": "Ruins of Camdozaal",
+      "kind": "dungeon",
+      "aliases": [
+        "Camdozaal"
+      ],
+      "page": "Ruins of Camdozaal"
     }
   }
 }

@@ -122,10 +122,10 @@ describe('the preparation route and detours', () => {
     expect(open({ ranged: 20 }).has('stat:ranged 20')).toBe(false);
   });
 
-  it('the bank was not opened — we do not ask to look for what we do not know: no preparation', () => {
+  it('an unread bank leaves preparation unverified without guessed tasks', () => {
     const step = mk('P2', [item('Lobster', 20)]);
     const r = buildPrepRoute(readinessOf(step, st(owned({}, false))), step);
-    expect(r.ready).toBe(true);
+    expect(r.ready).toBe(false);
     expect(r.tasks).toEqual([]);
   });
 

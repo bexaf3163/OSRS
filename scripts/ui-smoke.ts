@@ -430,25 +430,34 @@ async function stockScenarios(browser: Browser) {
 async function processingKitScenarios(browser: Browser) {
   const processing = JSON.parse(readFileSync(new URL('../src/data/processing.json', import.meta.url), 'utf8'));
   const watched = [...new Set<string>(processing.recipes.flatMap((r: any) => [...r.tools, ...r.inputs.map((i: any) => i.name)]))];
-  const samples: { skill: string; code: string; level: number; target: number; title: string; watch: string; items: Record<string, number>; object: string | null }[] = [
+  const samples: { skill: string; code: string; level: number; target: number; title: string; watch: string; extraStats?: Record<string, number>; quests?: string[]; unchecked?: boolean; items: Record<string, number>; object: string | null }[] = [
     { skill: 'crafting', code: 'CR', level: 1, target: 2, title: 'Leather gloves', watch: 'Thread', items: { Needle: 1, Thread: 2, Leather: 7 }, object: null },
     { skill: 'crafting', code: 'CR', level: 23, target: 24, title: 'Tiara', watch: 'Silver bar', items: { 'Tiara mould': 1, 'Silver bar': 7 }, object: 'Furnace' },
     { skill: 'smithing', code: 'SM', level: 30, target: 31, title: 'Steel bar', watch: 'Coal', items: { 'Iron ore': 3, Coal: 6 }, object: 'Furnace' },
     { skill: 'firemaking', code: 'FM', level: 30, target: 31, title: 'Willow logs', watch: 'Willow logs', items: { Tinderbox: 1, 'Willow logs': 7 }, object: null },
+    { skill: 'prayer', code: 'PR', level: 1, target: 2, title: 'Camdozaal', watch: 'Small fishing net', extraStats: { fishing: 7, cooking: 7 }, quests: ['Below Ice Mountain'], items: { 'Small fishing net': 1, Knife: 1 }, object: null },
+    { skill: 'prayer', code: 'PR', level: 1, target: 2, title: 'Camdozaal', watch: 'Small fishing net', extraStats: { cooking: 7 }, quests: ['Below Ice Mountain'], items: { 'Small fishing net': 1, Knife: 1 }, object: null, unchecked: true },
   ];
   for (const sample of samples) {
-    const stats = { [sample.skill]: sample.level, hitpoints: 40 };
+    const stats = { ...sample.extraStats, [sample.skill]: sample.level, hitpoints: 40 };
     const gear = { equipment: [], inventory: Object.entries(sample.items).map(([name, count]) => ({ id: 0, name, count })), coins: 0, bankCoins: 0 };
     const { page, errors } = await open(browser, 1280, {
       market: true, marketUnavailable: true,
       progress: progressBefore('S6-02', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
-      status: { protocol: 6, inGame: true, player: 'Processing kit', activeStepId: 'S6-02', stats, ...gear },
+      status: { protocol: 6, inGame: true, player: 'Processing kit', activeStepId: 'S6-02', stats, ...gear, ...(sample.quests ? { questsDone: sample.quests } : {}) },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true,
-        items: watched.map(name => ({ name, carried: sample.items[name] ?? 0, noted: 0, bank: 0 })) }],
+        items: [...new Set([...watched, ...Object.keys(sample.items)])].map(name => ({ name, carried: sample.items[name] ?? 0, noted: 0, bank: 0 })) }, ...(sample.quests ? [{ type: 'QUESTS', done: sample.quests }] : [])],
     }, `#/skills/${sample.code}/${sample.skill}?goal=${sample.target}`);
     await page.locator('.training-now').waitFor();
-    expect((await page.locator('.training-now').innerText()).includes(sample.title), 'Processing: owned usable recipe is recommended');
+    const recommendation = await page.locator('.training-now').innerText();
+    if (sample.unchecked) {
+      expect(!recommendation.includes(sample.title), 'Prayer: an unread cross-skill gate is not advertised as the confirmed recommended activity');
+      expect(await noOverflow(page) && !errors.length, 'Prayer: incomplete facts remain usable without UI errors');
+      await page.context().close();
+      continue;
+    }
+    expect(recommendation.includes(sample.title), 'Processing: owned usable recipe is recommended');
     await page.locator('.training-follow').click();
     await page.locator('.tracked-skill').waitFor();
     await page.waitForFunction(name => {

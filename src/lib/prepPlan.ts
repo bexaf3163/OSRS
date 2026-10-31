@@ -632,7 +632,8 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   if (coinsKnown) { total += 1; if ((coins.missing ?? 0) === 0) ready += 1; }
   total += blockers.length;
   const unknown = lines.filter((l) => (l.timing === 'NOW' || l.timing === 'SOON') && l.where === 'UNKNOWN').length
-    + (coins.need > 0 && coins.have === null ? 1 : 0);
+    + (coins.need > 0 && coins.have === null ? 1 : 0)
+    + i.readiness.unknown.filter(p => p.hard && p.kind !== 'item' && p.kind !== 'coins').length;
   const critical = counted.filter((l) => !satisfiedOf(l) && l.priority === 'CRITICAL').length
     + blockers.length + (coinsKnown && (coins.missing ?? 0) > 0 ? 1 : 0);
   const important = counted.filter((l) => !satisfiedOf(l) && l.priority === 'IMPORTANT').length;

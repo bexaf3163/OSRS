@@ -3073,7 +3073,7 @@
             "t": "ul",
             "items": [
               {
-                "text": "**Camdozaal fish offerings** (after Below Ice Mountain, Fishing and Cooking 7): slow, about 2 thousand XP an hour, but it trains Fishing and Cooking at the same time."
+                "text": "**Camdozaal fish offerings**: after Below Ice Mountain, catch fish with a small fishing net, prepare them with a knife, then offer prepared fish at the mysterious altar (Prayer 1). Guppies need Fishing/Cooking 7, cavefish 20, tetras 33; both skills must qualify. Preparation can fail; no fixed full-cycle XP rate is assumed."
               },
               {
                 "text": "**Bones left on the ground** at the cows, chickens and Lumbridge swamp: other players leave plenty."

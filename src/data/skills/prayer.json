@@ -79,12 +79,12 @@
       "id": "prayer-04",
       "skill": "prayer",
       "levelRange": [
-        7,
+        1,
         99
       ],
       "methodType": "MINIGAME",
       "title": "Camdozaal fish offerings",
-      "description": "Offer raw fish on the altar in the Ruins of Camdozaal: a free way after Below Ice Mountain, and it trains Fishing and Cooking too.",
+      "description": "After Below Ice Mountain, net fish, prepare at the table with a knife, then offer prepared fish at the mysterious altar (Prayer 1). Fishing/Cooking: guppies 7, cavefish 20, tetras 33; both skills must qualify. Preparation can fail; raw fish cannot be offered. Full-cycle rate unmodelled.",
       "targetLevel": 99,
       "lane": "afk",
       "members": false,
@@ -99,6 +99,18 @@
       "prerequisites": {
         "questIds": [
           "Below Ice Mountain"
+        ],
+        "items": [
+          {
+            "id": 303,
+            "name": "Small fishing net",
+            "quantity": 1
+          },
+          {
+            "id": 946,
+            "name": "Knife",
+            "quantity": 1
+          }
         ]
       }
     },

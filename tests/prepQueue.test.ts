@@ -5,7 +5,8 @@ import { buildPlayerState } from '../src/lib/playerState';
 import { contextOf, type ReadinessInput } from '../src/lib/readiness';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
 import { decideAuto, RENAV_GAP_MS, buildQueue, type AutoInput, type PrepQueue } from '../src/lib/prepQueue';
-import { emptyPrep, navKeyOf, reconcile, staleArrows, startDetour, type PrepState } from '../src/lib/prepRoute';
+import type { RequirementStatus, StepReadiness } from '../src/lib/readiness';
+import { buildPrepRoute, emptyPrep, navKeyOf, reconcile, staleArrows, startDetour, type PrepState } from '../src/lib/prepRoute';
 import { preflightItems, type OwnedState } from '../src/lib/checklist';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
@@ -35,6 +36,25 @@ function engineFor(over: Partial<ReadinessInput> & { item?: { carried: number; b
 const base = (queue: PrepQueue | null, over: Partial<AutoInput> = {}): AutoInput => ({
   queue, stepId: itemStep.id, prep: emptyPrep(), enabled: true, online: true, navActive: false, announce: 'full', now: 1_000_000,
   recent: new Map(), declined: new Set(), ...over,
+});
+
+describe('unknown required facts never complete preparation or invent a detour', () => {
+  it.each(['skill', 'quest', 'item', 'coins', 'qp', 'mode', 'step'] as const)('%s remains unverified without navigation or purchases', kind => {
+    const p: RequirementStatus = { kind, label: 'Future requirement', state: 'UNKNOWN', hard: true };
+    const r: StepReadiness = { stepId: itemStep.id, status: 'UNKNOWN', requirements: [p], problems: [], unknown: [p] };
+    const route = buildPrepRoute(r, itemStep);
+    expect(route.ready).toBe(false);
+    expect(route.tasks).toEqual([]);
+    const e = engineFor({ item: { carried: 0, bank: 1 } });
+    const q = buildQueue(route, { state: e.ctx.state, mode: 'f2p', style: 'chill' });
+    expect(decideAuto(base(q))).toBeNull();
+    const started = decideAuto(base(e.queue(itemStep, 'chill')));
+    if (started?.kind !== 'start') throw new Error('bank fixture did not start');
+    expect(decideAuto(base(q, { prep: started.state }))).toBeNull();
+    expect(started.state.stack).toHaveLength(1);
+    const optional = { ...p, hard: false };
+    expect(buildPrepRoute({ ...r, requirements: [optional], unknown: [optional] }, itemStep).ready).toBe(true);
+  });
 });
 
 describe('the preparation auto-queue', () => {

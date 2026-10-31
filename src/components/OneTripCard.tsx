@@ -149,7 +149,7 @@ export function OneTripCard({ step, inStatus = false, plain = false, nowShown = 
   const now = plan.now.filter(inStage);
   const soon = plan.soon.filter(inStage);
   const byTheWay = plan.byTheWay.filter(inStage);
-  const percent = scopedPercent(plan.lines, scope, plan.score.percent);
+  const percent = plan.score.verdict === 'UNKNOWN' ? null : scopedPercent(plan.lines, scope, plan.score.percent);
   const cleanup = bagCleanup(plan, engine.ctx.state);
   if (isClosed(progress, step.id)) return null;
   const { score, slots } = plan;

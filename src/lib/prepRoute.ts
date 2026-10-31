@@ -43,7 +43,7 @@ export interface PrepRoute {
   hidden: number;
   /** Where we return when all is done. */
   returnTo: string;
-  /** No preparation: the step is ready (no problems among the mandatory). */
+  /** Required needs are verified and satisfied; unread facts neither start guesses nor finish preparation. */
   ready: boolean;
 }
 
@@ -109,7 +109,8 @@ export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id' | 'traini
     next: shown.slice(1, 3),
     hidden: Math.max(0, shown.length - 3),
     returnTo: step.id,
-    ready: required.length === 0,
+    // Unknown facts neither start a guessed detour nor declare preparation complete.
+    ready: required.length === 0 && !r.unknown.some(p => p.hard),
   };
 }
 
