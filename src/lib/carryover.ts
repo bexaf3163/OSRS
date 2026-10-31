@@ -41,12 +41,3 @@ export function carryStatus(step: Pick<Step, 'carryover'>, state: Pick<PlayerSta
     return { item, have, state: have >= item.count ? ('OK' as const) : ('MISSING' as const) };
   });
 }
-
-/** What is still to be kept, as a short sentence for the step: null when there is nothing to keep or all of it is held. */
-export function carryNote(statuses: readonly CarryStatus[]): string | null {
-  const open = statuses.filter((s) => s.state !== 'OK');
-  if (!open.length) return null;
-  const names = open.map((s) => `${s.item.count > 1 ? `${s.item.count} × ` : ''}${s.item.item} (for ${s.item.forStep})`);
-  const unknown = open.every((s) => s.state === 'UNKNOWN');
-  return `${unknown ? 'Keep' : 'Still to keep'}: ${names.join(', ')}.`;
-}

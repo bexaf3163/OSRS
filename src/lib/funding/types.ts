@@ -135,16 +135,3 @@ export interface Catalogue {
   generatedAt: string;
   methods: FundingMethod[];
 }
-
-/** Wiki guide ids the audit looked at and what became of each (docs/FUNDING_COVERAGE.md is made from the same data). */
-export type CoverageStatus = 'supported' | 'unsupported';
-export interface CoverageEntry {
-  /** The id in moneyMaking.json. */
-  id: string;
-  status: CoverageStatus;
-  /** For supported entries: the catalogue method ids that implement it. */
-  methods?: string[];
-  family: Family;
-  /** For unsupported entries: why, in a short phrase. */
-  reason?: string;
-}

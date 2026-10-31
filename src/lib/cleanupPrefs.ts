@@ -75,6 +75,3 @@ export function useCleanupPrefs(player: string | null): { prefs: CleanupPrefs; u
   const update = useCallback((f: (p: CleanupPrefs) => CleanupPrefs) => write(key, f(read(key))), [key]);
   return { prefs, update };
 }
-
-/** For tests: forget what is held in memory. */
-export function resetCleanupCache(): void { cache.clear(); }

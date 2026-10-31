@@ -76,16 +76,6 @@ export interface SourceInput {
 }
 
 /**
- * A place where the item lies but the player cannot or should not get it: a members-only zone in F2P mode, a drop only by telekinesis
- * or in an inaccessible place, a task zone, the Wilderness. We do not pass such places off as "take it free nearby".
- */
-export function unusableSpawn(spawn: string, mode: 'f2p' | 'members'): boolean {
-  // Other players can attack in the Wilderness and take what you carry: a few free coins' worth is never worth it (2.72.2, live: Shopping put three
-  // planks from the Graveyard of Shadows "on the way" for a Defence 1 character). Guild doors and quest islands are checked too (shopAccess.ts).
-  return spawnAccess(spawn, { mode, quests: { known: false }, qp: null, level: () => null }).state === 'blocked';
-}
-
-/**
  * Items an NPC hands out for free, from the route step that already sends the player to that NPC (its place is the step's, never a second copy):
  * Duke Horacio gives the Anti-dragon shield during Dragon Slayer I and after it (OSRS Wiki, "Duke Horacio", "Anti-dragon shield"). Lumbridge is also
  * where the free Home Teleport lands, so the giver comes before any shop or the exchange however far the player is.

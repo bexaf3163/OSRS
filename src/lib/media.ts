@@ -3,8 +3,6 @@
 
 import { useEffect, useState } from 'react';
 
-/** The three columns of "Path": the stage strip + the step. */
-export const WIDE = '(min-width: 1080px)';
 /** The wiki dossier is pinned as the third column rather than sliding over the top. */
 export const DOCK = '(min-width: 1260px)';
 

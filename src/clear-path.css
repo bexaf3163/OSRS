@@ -17,17 +17,6 @@
 .search-input { font-size:1.15rem; }
 .search-results { padding:12px; }
 .search-hit { padding:14px 16px; border:1px solid var(--border); border-radius:6px; margin-bottom:7px; background:var(--surface); }
-.compass-mark { width:42px; height:42px; color:var(--gold-ink); flex-shrink:0; }
-.header-qp-label { display:none; }
-.header-qp-value::after { content:' QP'; }
-.header-qp-value { font-size:.94rem; white-space:nowrap; }
-.header-qp-value b { color:var(--text); }
-.header-mode { position:relative; color:var(--accent-ink); }
-.header-mode summary { list-style:none; cursor:pointer; border:1px solid var(--accent); border-radius:5px; padding:10px 15px; background:var(--accent-soft); font-size:.9rem; }
-.header-mode summary::-webkit-details-marker { display:none; }
-.header-mode-panel { position:absolute; z-index:30; top:calc(100% + 8px); left:0; padding:8px; border:1px solid var(--border); border-radius:6px; background:var(--surface); box-shadow:0 10px 30px #0004; min-width:175px; }
-.header-mode-panel .mode-toggle { display:flex; flex-direction:column; align-items:stretch; border:0; border-radius:0; background:transparent; }
-.header-mode-panel .mode-btn { justify-content:flex-start; }
 .bridge-indicator { border:1px solid var(--border); border-radius:5px; padding:8px 11px; background:var(--surface-3); font-size:.8rem; }
 .bridge-dot { font-size:0; }
 .bridge-dot::before { content:''; display:inline-block; width:8px; height:8px; border-radius:50%; background:#f05b59; }
@@ -77,11 +66,7 @@ main { max-width:1800px; }
 .quest.is-selected { border-color:var(--accent); background:var(--accent-soft); }
 .shop-controls { padding:14px 18px; }
 .shop-page .page-head { margin-bottom:22px; }
-@media(max-width:1199px) {
- .compass-mark { width:28px; height:28px; }
-}
 @media(max-width:700px) {
- .header-mode { display:none; }
  .step-view-title { font-size:1.65rem; }
  .current-action-title { font-size:1.4rem; }
 }

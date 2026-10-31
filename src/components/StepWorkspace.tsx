@@ -42,7 +42,7 @@ export function CurrentAction({ step, children }: { step: Step; children?: React
       <span className="current-action-icon" aria-hidden="true">{step.npc ? <IconTalk /> : <TypeIcon type={step.type} />}</span>
       <div className="current-action-body">
         <p className="eyebrow">{kicker}</p>
-        <h3 className={`current-action-title ${title.length > 64 ? 'is-long' : ''}`}>{alternative > 0 ? <><Inline text={title.slice(0, alternative)} />{' '}<span className="action-alternative"><Inline text={title.slice(alternative + 1)} /></span></> : <Inline text={title} />}</h3>
+        <h3 aria-level={2} className={`current-action-title ${title.length > 64 ? 'is-long' : ''}`}>{alternative > 0 ? <><Inline text={title.slice(0, alternative)} />{' '}<span className="action-alternative"><Inline text={title.slice(alternative + 1)} /></span></> : <Inline text={title} />}</h3>
         {place && <p className="current-action-place muted"><Inline text={place} /></p>}
       </div>
       <div className="current-action-side">

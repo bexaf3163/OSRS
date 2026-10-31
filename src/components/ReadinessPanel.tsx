@@ -123,27 +123,3 @@ export function ReadinessPanel({ step, bare = false, itemsListed = false }: { st
     </section>
   );
 }
-
-/** One line for "What to do now": the traffic light and the main thing that gets in the way. */
-export function ReadinessLine({ step }: { step: Step }) {
-  const r = useReadiness(step);
-  if (r?.goalMet && !r.problems.length) {
-    return (
-      <p className="readiness-line is-ready">
-        🟢 The step goal is already met: {r.goalMet.map((g) => `${g.skill} ${g.have}`).join(', ')} — no need to train again.{' '}
-        <a href={`#/step/${step.id}`}>More</a>
-      </p>
-    );
-  }
-  if (!r || !r.requirements.length) return null;
-  const s = STATUS_TEXT[r.status];
-  const first = r.problems[0];
-  return (
-    <p className={`readiness-line is-${r.status.toLowerCase()}`}>
-      <span aria-hidden="true">{s.icon}</span> {s.text}
-      {first && <>: <strong>{first.label}</strong>{first.detail ? <span className="muted"> — {first.detail}</span> : null}</>}
-      {r.problems.length > 1 && <span className="muted"> (and {r.problems.length - 1} more)</span>}
-      {' '}<a href={`#/step/${step.id}`}>More</a>
-    </p>
-  );
-}

@@ -13,3 +13,5 @@ runelite-bridge/.gradle/
 .codex/
 .serena/
 runelite-bridge/bin/
+audit-temp/
+docs/route-export.md

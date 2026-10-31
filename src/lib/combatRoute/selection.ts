@@ -53,8 +53,3 @@ export function selectPlan(report: PlanReport, stored: Adopted | undefined, trip
   }
   return { key: recommended, source: 'auto', recommended };
 }
-
-/** The plan of a selection, from its report. */
-export function selectedPlan(report: PlanReport, sel: PlanSelection): EvaluatedPlan | undefined {
-  return report.plans.find((p) => p.key === sel.key);
-}

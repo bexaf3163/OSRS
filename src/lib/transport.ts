@@ -5,7 +5,7 @@
 // The data has no game object or NPC ids for the transports (the wiki tables give names and tiles), so interactionId is 0 (unknown) and the NAME is what
 // the game highlights: the plugin already finds NPCs and objects by name. An id is added only where it is known.
 
-import { TILES_PER_SECOND, NET, TRANSPORT, effectiveTiles, shortOf, shortOnHand, stopText, type Point, type PrepStop, type TravelOption } from './travel';
+import { TILES_PER_SECOND, NET, TRANSPORT, effectiveTiles, shortOnHand, stopText, type Point, type PrepStop, type TravelOption } from './travel';
 import { TIP_MIN_SAVING_TILES } from './tips';
 
 export type TransportType = 'item_teleport' | 'tablet' | 'spell_teleport' | 'fairy_ring' | 'charter_ship' | 'canoe' | 'ferry' | 'npc_teleport' | 'spirit_tree' | 'glider';
@@ -259,9 +259,4 @@ export function recommendedTransport(options: readonly TravelOption[]): Recommen
     return finish({ type: 'tablet', destination: dest, item: tablet.item, text: `Teleport: ${tablet.item} tablet to ${placeOf(dest)} ${tail}`, chip: chipOf(use) }, use, `${cap(tablet.item)} tablet`);
   }
   return null;
-}
-
-/** The things of the chosen way that are short, for the tests and the diagnostics. */
-export function missingOf(o: TravelOption): { name: string; need: number; have: number | null; bank: number | null }[] {
-  return o.prepare ? o.prepare.missing : shortOf(o.needs);
 }

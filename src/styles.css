@@ -554,10 +554,8 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .mode-btn:hover { color: var(--text); }
 .mode-btn.is-active { background: var(--surface); color: var(--text); box-shadow: 0 0 0 1px var(--border); }
 .mode-btn.is-members.is-active { color: var(--members); box-shadow: 0 0 0 1px color-mix(in srgb, var(--members) 45%, transparent); }
-.mode-label { display: none; }
 .settings-tabs { align-self: flex-start; margin: 0 0 16px; max-width: 100%; height: auto; flex-wrap: wrap; border-radius: 22px; }
 .settings-tabs .mode-btn { padding: 8px 16px; }
-@media (min-width: 520px) and (max-width: 899px), (min-width: 1180px) { .mode-label { display: inline; } }
 
 /* ---------- Step card V2 ---------- */
 
@@ -737,24 +735,11 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .code-path { word-break: break-all; }
 
 /* ---------- Redesign D: the header with progress ---------- */
-
-.header-progress { display: none; align-items: center; gap: 10px; text-decoration: none; color: var(--text); padding: 4px 8px 4px 4px; border-radius: 999px; }
-.header-progress:hover { background: var(--surface-2); }
 .ring {
   --p: 0%;
   width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none;
   background: conic-gradient(var(--accent) var(--p), var(--border) 0);
 }
-.ring-value {
-  width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
-  background: var(--bg); font-size: 0.7rem; font-weight: 800; letter-spacing: -0.03em;
-}
-.header-qp { display: flex; flex-direction: column; line-height: 1.15; }
-.header-qp-label { font-size: 0.72rem; color: var(--muted); font-weight: 600; }
-.header-qp-value { font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
-.header-qp-value b { color: var(--gold-ink); font-size: 1rem; font-weight: 800; }
-@media (min-width: 640px) { .header-progress { display: inline-flex; } }
-@media (min-width: 900px) and (max-width: 1239px) { .header-qp { display: none; } }
 .badge-now { background: var(--accent-soft); color: var(--accent-ink); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
 .badge .icon { width: 12px; height: 12px; }
 .btn-next { font-weight: 600; opacity: 0.85; }
@@ -1144,7 +1129,6 @@ th .place-link { font-weight: inherit; }
 .ready-action { justify-self: end; }
 .ready-ok { color: var(--done); }
 .ready-unknown > summary { cursor: pointer; width: fit-content; color: var(--muted); }
-.readiness-line { margin: 8px 0 0; font-size: 0.9rem; }
 @media (max-width: 560px) {
   .ready-row { grid-template-columns: 18px minmax(0, 1fr); }
   .ready-action { grid-column: 2; justify-self: start; }

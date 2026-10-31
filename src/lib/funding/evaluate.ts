@@ -593,9 +593,3 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   };
 }
 
-/** The slot arithmetic on its own, for tests and the plan text: how many units one bag allows. */
-export function unitsForBag(bagSlots: number, slotsIn: number, slotsOut: number): number {
-  const per = Math.max(slotsIn, slotsOut);
-  return per > 0 ? Math.max(1, Math.floor(bagSlots / per)) : 1000;
-}
-

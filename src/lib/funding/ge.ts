@@ -7,7 +7,6 @@ import { nameKey } from '../itemKey';
 
 export const GE_TAX_RATE: number = exemptJson.rate;
 export const GE_TAX_CAP: number = exemptJson.cap;
-export const GE_TAX_SOURCE = { url: exemptJson.source, retrievedAt: exemptJson.retrievedAt };
 
 const EXEMPT = new Set(exemptJson.names.map(nameKey));
 

@@ -40,13 +40,6 @@ export function rangedEquipment(worn: Readonly<Record<string, string>>, needs: r
 const STARTER_ARROWS = 100;
 const LOW_ARROWS = 20;
 
-/** Ordinary starter bows occupy both hands; every prediction uses the kit that preparation actually equips. */
-export function bowEquipment(worn: Readonly<Record<string, string>>, bow: string, arrow: string): Record<string, string> {
-  const equipment = { ...worn, weapon: bow, ammo: arrow };
-  delete (equipment as Record<string, string>).shield;
-  return equipment;
-}
-
 export function rangedNeeds(state: PlayerState, prices?: PriceView | null): MethodNeed[] {
   const usable = bows.filter(o => usableStyleOption(o, (s) => levelOf(state, s), (q) => questOf(state, q) === 'DONE'));
   const options = usable.flatMap(o => o.names.map(name => ({ name, canonical: o.names[0] })));
