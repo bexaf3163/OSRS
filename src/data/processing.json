@@ -1991,6 +1991,268 @@
         "high": 292
       },
       "source": "https://oldschool.runescape.wiki/w/Swordfish"
+    },
+    {
+      "id": "mithril-bar",
+      "skill": "smithing",
+      "level": 50,
+      "xp": 30,
+      "ticks": 4,
+      "facility": "furnace",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Mithril ore",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Coal",
+          "qty": 4,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Mithril bar",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Mithril_bar"
+    },
+    {
+      "id": "adamantite-bar",
+      "skill": "smithing",
+      "level": 70,
+      "xp": 37.5,
+      "ticks": 4,
+      "facility": "furnace",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Adamantite ore",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Coal",
+          "qty": 6,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Adamantite bar",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Adamantite_bar"
+    },
+    {
+      "id": "runite-bar",
+      "skill": "smithing",
+      "level": 85,
+      "xp": 50,
+      "ticks": 4,
+      "facility": "furnace",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Runite ore",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Coal",
+          "qty": 8,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Runite bar",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Runite_bar"
+    },
+    {
+      "id": "iron-dagger",
+      "skill": "smithing",
+      "level": 15,
+      "xp": 25,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Iron bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Iron dagger",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Iron_dagger"
+    },
+    {
+      "id": "iron-warhammer",
+      "skill": "smithing",
+      "level": 24,
+      "xp": 75,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Iron bar",
+          "qty": 3,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Iron warhammer",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Iron_warhammer"
+    },
+    {
+      "id": "steel-dagger",
+      "skill": "smithing",
+      "level": 30,
+      "xp": 37.5,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Steel bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Steel dagger",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Steel_dagger"
+    },
+    {
+      "id": "steel-warhammer",
+      "skill": "smithing",
+      "level": 39,
+      "xp": 112.5,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Steel bar",
+          "qty": 3,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Steel warhammer",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Steel_warhammer"
+    },
+    {
+      "id": "mithril-dagger",
+      "skill": "smithing",
+      "level": 50,
+      "xp": 50,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Mithril bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Mithril dagger",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Mithril_dagger"
+    },
+    {
+      "id": "mithril-warhammer",
+      "skill": "smithing",
+      "level": 59,
+      "xp": 150,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Mithril bar",
+          "qty": 3,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Mithril warhammer",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Mithril_warhammer"
+    },
+    {
+      "id": "adamant-dagger",
+      "skill": "smithing",
+      "level": 70,
+      "xp": 62.5,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Adamantite bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Adamant dagger",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Adamant_dagger"
+    },
+    {
+      "id": "adamant-warhammer",
+      "skill": "smithing",
+      "level": 79,
+      "xp": 187.5,
+      "ticks": 5,
+      "facility": "anvil",
+      "tools": [
+        "Hammer"
+      ],
+      "inputs": [
+        {
+          "name": "Adamantite bar",
+          "qty": 3,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Adamant warhammer",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Adamant_warhammer"
     }
   ],
   "methods": {
@@ -2003,15 +2265,23 @@
       "bronze-platebody"
     ],
     "sm-iron": [
+      "iron-dagger",
+      "iron-warhammer",
       "iron-platebody"
     ],
     "sm-steel": [
+      "steel-dagger",
+      "steel-warhammer",
       "steel-platebody"
     ],
     "sm-mithril": [
+      "mithril-dagger",
+      "mithril-warhammer",
       "mithril-platebody"
     ],
     "sm-adamant": [
+      "adamant-dagger",
+      "adamant-warhammer",
       "adamant-platebody"
     ],
     "ck-meat": [
@@ -2130,6 +2400,16 @@
       "he-super-defence",
       "he-zamorak-brew",
       "he-saradomin-brew"
+    ],
+    "sm-smelting": [
+      "bronze-bar",
+      "iron-bar",
+      "silver-bar",
+      "steel-bar",
+      "gold-bar",
+      "mithril-bar",
+      "adamantite-bar",
+      "runite-bar"
     ]
   }
 }

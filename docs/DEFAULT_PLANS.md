@@ -37,6 +37,12 @@ older save stays as "Fastest"; "Relaxed" keeps the old calm order.
 | S6-04 Magic to 55 (High Level Alchemy) | magic 40 (F2P) | Wind Strike on Cow / Chicken | Wind Strike on Cow / Chicken | needs full attention; small risk; material costs |
 | Skills page: attack | level 10 → 20 (F2P) | Chickens and cows | Al Kharid warriors | steady clicking; small risk |
 | Skills page: defence | level 10 → 20 (F2P) | Chickens and cows | Al Kharid warriors | steady clicking; small risk |
+| Skills page: smithing | level 1 → 11 (F2P) | Make Bronze bar | Make Bronze axe | ≈ 10k–14k XP per hour for you; steady clicking; material costs |
+| Skills page: smithing | level 10 → 20 (F2P) | Make Bronze bar | Make Bronze warhammer | ≈ 19k–34k XP per hour for you; steady clicking; material costs |
+| Skills page: smithing | level 20 → 30 (F2P) | Make Silver bar | Bronze platebodies | ≈ 22k–47k XP per hour for you; steady clicking; material costs |
+| Skills page: smithing | level 30 → 40 (F2P) | Make Silver bar | Make Iron warhammer | ≈ 38k–68k XP per hour for you; steady clicking; material costs |
+| Skills page: smithing | level 40 → 50 (F2P) | Make Gold bar | Make Steel warhammer | ≈ 56k–101k XP per hour for you; steady clicking; material costs |
+| Skills page: smithing | level 50 → 60 (F2P) | Make Gold bar | Make Steel platebody | ≈ 66k–141k XP per hour for you; steady clicking; material costs |
 | Skills page: strength | level 10 → 20 (F2P) | Chickens and cows | Al Kharid warriors | steady clicking; small risk |
 
 Steps that follow a training method: S6-01, S6-02, S6-03, S6-04. Combat training stages: S3-08, S4-03 (the only steps with an opponent and a melee XP goal).

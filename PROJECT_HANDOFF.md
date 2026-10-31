@@ -156,7 +156,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 
 ## Current verification
 
-2.81.15 local source: types/build/fresh plugin jar, data validation0errors/0warnings,2,462 unit tests across207files, full Java647tests/0failures, complete browser suite and isolated native-shell E2E passed. New coverage includes safe charged-material quantities, future-content stock boundaries, average cost versus physical allowance, owned silver/mould/unlocks and Skills→guide→Checkout without needless buying/funding. Existing account/profile/recovery, tools/combat/processing and funding checks remain covered. Exact-source Checks and Release passed their complete gates; the downloaded EXE and canonical handoff were independently verified as recorded above. No real-game verification is claimed.
+2.81.16 local source:2,493 unit tests across208files, types/build/fresh16plugin jar, data0errors/0warnings and the complete browser suite passed. New regressions cover eight smelting input mixes/capacities, ordinary iron failure XP, four anvil tiers with one/three/five bars, unlock transitions, followed furnace readiness, Firemaking's five supported log tiers and the shared four-case processing UI flow. No runtime engine/transport code was changed; the recipe catalogue uses existing contracts. Exact-source CI still requires full Java, native-shell and isolated packaged-EXE gates before publication. Delivery evidence belongs in the receipt above; all real-game acceptance remains Claude's.
 
 ## Completed baseline — preserve, do not redo
 
@@ -165,6 +165,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 |2.80.8–12|Protected persistence/recovery, backup receipts and pre-write external-revision guards; RuneLite heap minimum. Not an automatic merger/watcher/lock or power-loss guarantee.|
 |2.80.13–17|Quest-entry food, physical alternative withdrawals, consumer-specific skill proofs, F2P checkpoints, acquisition fees separate from unit prices, one shared material allocator and method-selection integration.|
 |2.80.18–2.81.3|Compact skill access, model-driven combat/gathering/processing, staged Optional/training, per-recipe feasibility/batches. Basic Firemaking, Prayer, Runecraft and Superheat adapters already exist.|
+|2.81.16|Connected ordinary furnace smelting, practical partial-bar anvil products and true unlocks through existing models; reconciled Smithing claims; Firemaking/common browser progression coverage.|
 |2.81.15|Shared multi-use material consumption/partial-stock safety; Crafting Thread and silver tiara progression; reconciled corresponding legacy advice.|
 |2.81.14|Common F2P Cooking catch/recipe progression, verified Make-X timing/station targets, sustainable no-cash processing selection and reconciled legacy Cooking source; existing shared preparation/stock/funding lifecycle.|
 |2.81.13|Contextual Journal/selected quest, Gear/current activity, compact Skills index/Calculator reference, and Shopping Checkout; shared activity selection and protected refill budget. Accepted Ledger/fonts unchanged.|
@@ -212,6 +213,8 @@ Use [SKILLS_COVERAGE.md](docs/SKILLS_COVERAGE.md) as the capability inventory. R
 
 Keep unsupported members mechanics and uncalibrated rates explicit. Add missing mechanics to shared contracts/adapters, with regressions that also cover new/synthetic content. Do not solve each skill by copying the Ranged implementation.
 
+**Next confirmed Prayer data gap (not fixed in2.81.16):** pr-camdozaal currently has only the quest gate and starts at Prayer7. Primary [Raw guppy](https://oldschool.runescape.wiki/w/Raw_guppy) and [Guppy](https://oldschool.runescape.wiki/w/Guppy), checked2026-10-31, require Fishing7 with a Small fishing net, Cooking7 with a Knife/preparation table, and Prayer1 to offer. Add those declarative skill/kit gates and reconcile the matching guide; do not turn unavailable prerequisites into READY or claim a complete personalized Camdozaal process/rate model. Preserve untradeable fish/failure/sequence limitations explicitly. The same catalogue entry lacks place (methodPoint returns null), has an unsupported fixed2400XP/h, and legacy prayer-04 incorrectly says to offer raw fish. Reuse a verified named-location/guide mapping and correct catch→prepare→offer instructions; do not invent coordinates or call the incomplete activity a model.
+
 The confirmed Thread consumption gap has a shared correction in the 2.81.15 source section below; use its verification/delivery status rather than assuming unreleased edits are already installed. Continue the six-point review for other skills and unsupported mechanics. One Crafting correction is not completion of the whole P2 backlog.
 
 ### Cooking progression and shared batch fixes — 2.81.14 source
@@ -237,6 +240,19 @@ Primary facts checked2026-10-31: [Thread](https://oldschool.runescape.wiki/w/Thr
 - New synthetic multi-use tests cover every possible first-unit remainder, physical stock boundaries, ordinary inputs and invalid metadata. Real tracked Crafting tests cover partial thread, owned silver/mould, level unlocks, unchanged observed state and whole-goal demand. Browser cases exercise Skills→followed guide→Shopping at zero cash without unnecessary buying/funding.
 
 Verification and release status are recorded above. This is a common F2P Crafting correction, not a claim that all jewellery, leather products, Members mechanics or remaining skills have been audited. All real-game acceptance remains Claude's.
+
+### Smithing connection and Firemaking review — 2.81.16 source
+
+Primary facts checked2026-10-31 through the existing Wiki reader/builder: [F2P Smithing](https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training), each bar/dagger/warhammer Recipe, and the existing Firemaking definitions.
+
+- Furnace recipes existed but had no Skills method dispatch. The new sm-smelting catalogue family connects ordinary bronze/iron/silver/steel/gold/mithril/adamantite/runite smelting to the existing processing, preparation, stock, pricing and guide lifecycle. No new skill-specific buying/funding engine or UI was added.
+- Three missing ordinary higher-bar recipes use verified four/six/eight coal for mithril/adamantite/runite, with true unlocks50/70/85. Blast Furnace, catalysts and Superheat are separate mechanics, never imported as ordinary F2P furnace assumptions. Iron remains50% yield/XP without assuming a ring bonus; unsupported bonuses are explicit.
+- Existing iron/steel/mithril/adamant family IDs now include daggers, warhammers and platebodies. Their first unlocks15/30/50/70 and each recipe's own level control eligibility. Feasible one/three/five-bar leftovers can be used without buying enough bars for a platebody. Recipe speed, material opportunity cost, output quotes and wallet remain part of the shared model.
+- Legacy Smithing guide/source no longer promises a cheap sub-hour grind or mithril/adamant armour at40. Corresponding actual recipe thresholds and manual furnace-versus-anvil activities are explained; guide IDs/explicit goals are preserved. Generated coverage/default fixture inventories are refreshed.
+- Added regression coverage for all eight furnace input mixes, whole bag capacities, iron failure XP, all four anvil tiers at one/three/five bars, unlock transitions and the actual followed furnace/preparation path. Existing reusable processing browser cases now cover Crafting, Smithing and Firemaking without duplicating a separate test flow per skill.
+- Firemaking's five existing line-lighting families were reviewed and tested at actual log unlocks with an owned partial batch and reusable Tinderbox. This establishes those supported paths, not bonfire/Wintertodt modeling or live terrain/timing validation. Those and any unmodelled equipment effects remain outside this verification.
+
+Verification/delivery status is recorded above; all real-game acceptance remains Claude's. Remaining P2/P3 work still includes gathering/Prayer/Runecraft and unsupported mechanics/visible-consumer checks. This section is not a full-project completion claim.
 
 ### P3 — finish content review and reconcile visible consumers
 
@@ -272,7 +288,7 @@ Record actual version/source/plugin/protocol, account mode, admitted facts, expe
 |Melee/combat|Default practical/Balanced spot versus viable XP/Money alternatives; real damage, food, bank time/net proceeds; Strength versus Power/weapon and armour tradeoffs, actual style and Defence preference.|
 |Magic|Named spell/unlocks, rune quantities, elemental staff actually worn, full gear model and metal penalty. Superheat actual levels/unnoted iron/runes/staff, partial bag and bank coal; no stale NPC targets. Alchemy/splashing remain explicitly selected safe setups.|
 |Gathering|Woodcutting/Mining/Fishing methods, named tools actually carried/worn and skill versus Attack requirement; future-tier ownership, useful upgrades, correct spot/bank/entrance/floor and stage transition. No false inventory-slot credit from Attack alone.|
-|Processing/utility|Cooking/Smithing/Crafting/Firemaking and supported Members recipes, failure/inputs/output/fees, affordable partial batches, reusable tools and material alternatives. Crafting: one/two partial Thread spools without refill loops, no one-spool-per-item cost, silver/mould at23 and furnace guide; Cooking: owned catch/fire/unlocks/Make-X. Prayer/Runecraft default defer versus explicit goal; real altar entry/exit/timing.|
+|Processing/utility|Cooking/Smithing/Crafting/Firemaking and supported Members recipes, failure/inputs/output/fees, affordable partial batches, reusable tools and material alternatives. Smithing: furnace versus anvil, ore/coal bag capacity, ordinary iron failures and feasible one/three/five-bar stacks; Firemaking: log tiers, real clear ignition space and reusable Tinderbox. Crafting: one/two partial Thread spools without refill loops, no one-spool-per-item cost, silver/mould at23 and furnace guide; Cooking: owned catch/fire/unlocks/Make-X. Prayer/Runecraft default defer versus explicit goal; real altar entry/exit/timing.|
 |Mixed/quest XP|Fishing→Cooking and Mining→Woodcutting handover, every declared goal retained, no unearned XP/quest credit. Actual quest preparation deep-link/goal/return; stop/cancel/funding restores original route.|
 |Physical supplies|Noted food is owned but uneatable; correct bank withdrawal/unnote. Equivalent foods by healing still use real pieces/slots. Potions combine doses across sizes without pretending they were poured. Missing/unread facts stay distinct.|
 |Quests/branches|Reachable Oracle/Dragon Slayer entry/dialogue/map parts, Shield of Arrav branches, partial quest milestones and encounter-entry food/gear guards. Completed encounters are NOT REACHABLE, never replayed/reset just for testing.|

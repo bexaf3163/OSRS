@@ -427,41 +427,43 @@ async function stockScenarios(browser: Browser) {
   }
 }
 
-async function craftingKitScenarios(browser: Browser) {
+async function processingKitScenarios(browser: Browser) {
   const processing = JSON.parse(readFileSync(new URL('../src/data/processing.json', import.meta.url), 'utf8'));
   const watched = [...new Set<string>(processing.recipes.flatMap((r: any) => [...r.tools, ...r.inputs.map((i: any) => i.name)]))];
-  const samples: { level: number; target: number; title: string; items: Record<string, number>; object: string | null }[] = [
-    { level: 1, target: 2, title: 'Leather gloves', items: { Needle: 1, Thread: 2, Leather: 7 }, object: null },
-    { level: 23, target: 24, title: 'Tiara', items: { 'Tiara mould': 1, 'Silver bar': 7 }, object: 'Furnace' },
+  const samples: { skill: string; code: string; level: number; target: number; title: string; watch: string; items: Record<string, number>; object: string | null }[] = [
+    { skill: 'crafting', code: 'CR', level: 1, target: 2, title: 'Leather gloves', watch: 'Thread', items: { Needle: 1, Thread: 2, Leather: 7 }, object: null },
+    { skill: 'crafting', code: 'CR', level: 23, target: 24, title: 'Tiara', watch: 'Silver bar', items: { 'Tiara mould': 1, 'Silver bar': 7 }, object: 'Furnace' },
+    { skill: 'smithing', code: 'SM', level: 30, target: 31, title: 'Steel bar', watch: 'Coal', items: { 'Iron ore': 3, Coal: 6 }, object: 'Furnace' },
+    { skill: 'firemaking', code: 'FM', level: 30, target: 31, title: 'Willow logs', watch: 'Willow logs', items: { Tinderbox: 1, 'Willow logs': 7 }, object: null },
   ];
   for (const sample of samples) {
-    const stats = { crafting: sample.level, hitpoints: 40 };
+    const stats = { [sample.skill]: sample.level, hitpoints: 40 };
     const gear = { equipment: [], inventory: Object.entries(sample.items).map(([name, count]) => ({ id: 0, name, count })), coins: 0, bankCoins: 0 };
     const { page, errors } = await open(browser, 1280, {
       market: true, marketUnavailable: true,
       progress: progressBefore('S6-02', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
-      status: { protocol: 6, inGame: true, player: 'Crafting kit', activeStepId: 'S6-02', stats, ...gear },
+      status: { protocol: 6, inGame: true, player: 'Processing kit', activeStepId: 'S6-02', stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true,
         items: watched.map(name => ({ name, carried: sample.items[name] ?? 0, noted: 0, bank: 0 })) }],
-    }, `#/skills/CR/crafting?goal=${sample.target}`);
+    }, `#/skills/${sample.code}/${sample.skill}?goal=${sample.target}`);
     await page.locator('.training-now').waitFor();
-    expect((await page.locator('.training-now').innerText()).includes(sample.title), 'Crafting: owned usable recipe is recommended');
+    expect((await page.locator('.training-now').innerText()).includes(sample.title), 'Processing: owned usable recipe is recommended');
     await page.locator('.training-follow').click();
     await page.locator('.tracked-skill').waitFor();
-    await page.waitForFunction(title => {
+    await page.waitForFunction(name => {
       const step = (window as any).__posts.filter((p: any) => p.path === '/prep-plan').at(-1)?.body?.step;
-      return JSON.stringify(step).includes(title);
-    }, sample.level === 1 ? 'Thread' : 'Silver bar');
+      return JSON.stringify(step).includes(name);
+    }, sample.watch);
     if (sample.object) {
       const sent = await page.evaluate(() => (window as any).__posts.filter((p: any) => p.path === '/prep-plan').at(-1)?.body?.step);
-      expect(sent.objectNames?.includes(sample.object), 'Crafting: the selected furnace reaches the shared guide');
+      expect(sent.objectNames?.includes(sample.object), 'Processing: the selected station reaches the shared guide');
     }
     await page.goto(`${BASE}#/shopping`);
     await page.getByRole('region', { name: 'Checkout', exact: true }).waitFor();
-    expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 0, 'Crafting: partial usable kit does not require another purchase');
-    expect(await page.getByRole('link', { name: 'Prepare funding', exact: true }).count() === 0, 'Crafting: owned materials do not trigger funding');
-    expect(await noOverflow(page) && !errors.length, 'Crafting: staged guide and checkout fit the accepted Ledger');
+    expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 0, 'Processing: partial usable kit does not require another purchase');
+    expect(await page.getByRole('link', { name: 'Prepare funding', exact: true }).count() === 0, 'Processing: owned materials do not trigger funding');
+    expect(await noOverflow(page) && !errors.length, 'Processing: guide and checkout fit the accepted Ledger');
     await page.context().close();
   }
 }
@@ -834,8 +836,8 @@ async function processingBudgetScenarios(browser: Browser) {
 async function run(browser: Browser) {
   if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'gear') { await gearScenarios(browser); return; }
-  if (process.env.UI_ONLY === 'crafting-kit') { await craftingKitScenarios(browser); return; }
-  if (!process.env.UI_ONLY) await craftingKitScenarios(browser);
+  if (process.env.UI_ONLY === 'crafting-kit' || process.env.UI_ONLY === 'processing-kit') { await processingKitScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await processingKitScenarios(browser);
   if (process.env.UI_ONLY === 'cooking-catch') { await cookingCatchScenarios(browser); return; }
   if (!process.env.UI_ONLY) await cookingCatchScenarios(browser);
   if (process.env.UI_ONLY === 'workspace') { await workspaceScenarios(browser); return; }

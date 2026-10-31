@@ -922,9 +922,9 @@
     {
       "id": "sm-iron",
       "skill": "smithing",
-      "from": 33,
+      "from": 15,
       "to": 48,
-      "name": "Iron platebodies",
+      "name": "Iron anvil items",
       "members": false,
       "needs": [
         {
@@ -932,21 +932,20 @@
           "name": "Hammer"
         }
       ],
-      "xpa": 125,
-      "act": "platebody|platebodies",
       "effort": "medium",
       "cost": "cost",
       "risk": "none",
       "where": "The anvil by the west Varrock bank",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
-      "place": "Varrock West Bank"
+      "place": "Varrock West Bank",
+      "note": "The shared recipe model selects usable daggers, warhammers or platebodies, including affordable partial bar stacks. Bring a hammer; temporary boosts are not assumed."
     },
     {
       "id": "sm-steel",
       "skill": "smithing",
-      "from": 48,
+      "from": 30,
       "to": 68,
-      "name": "Steel platebodies",
+      "name": "Steel anvil items",
       "members": false,
       "needs": [
         {
@@ -954,21 +953,20 @@
           "name": "Hammer"
         }
       ],
-      "xpa": 187.5,
-      "act": "platebody|platebodies",
       "effort": "medium",
       "cost": "cost",
       "risk": "none",
       "where": "The anvil by the west Varrock bank",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
-      "place": "Varrock West Bank"
+      "place": "Varrock West Bank",
+      "note": "The shared recipe model selects usable daggers, warhammers or platebodies, including affordable partial bar stacks. Bring a hammer; temporary boosts are not assumed."
     },
     {
       "id": "sm-mithril",
       "skill": "smithing",
-      "from": 68,
+      "from": 50,
       "to": 88,
-      "name": "Mithril platebodies",
+      "name": "Mithril anvil items",
       "members": false,
       "needs": [
         {
@@ -976,22 +974,20 @@
           "name": "Hammer"
         }
       ],
-      "xpa": 250,
-      "act": "platebody|platebodies",
       "effort": "medium",
       "cost": "cost",
       "risk": "none",
       "where": "The anvil by the west Varrock bank",
-      "note": "Five mithril bars a platebody.",
+      "note": "The shared recipe model selects usable daggers, warhammers or platebodies, including affordable partial bar stacks. Bring a hammer; temporary boosts are not assumed.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
       "place": "Varrock West Bank"
     },
     {
       "id": "sm-adamant",
       "skill": "smithing",
-      "from": 88,
+      "from": 70,
       "to": null,
-      "name": "Adamant platebodies",
+      "name": "Adamant anvil items",
       "members": false,
       "needs": [
         {
@@ -999,13 +995,11 @@
           "name": "Hammer"
         }
       ],
-      "xpa": 312.5,
-      "act": "platebody|platebodies",
       "effort": "medium",
       "cost": "cost",
       "risk": "none",
       "where": "The anvil by the west Varrock bank",
-      "note": "Five adamantite bars a platebody. A dwarven stout boosts 87 to 88; the guide's last step is rune platebodies at 99 (98 boosted).",
+      "note": "The shared recipe model selects usable daggers, warhammers or platebodies, including affordable partial bar stacks. Bring a hammer; temporary boosts are not assumed.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
       "place": "Varrock West Bank"
     },
@@ -2545,6 +2539,22 @@
       "place": "Edgeville Bank",
       "note": "Withdraw owned unnoted bones first. Buying bones is a separate paid method; it does not include collecting them through combat. Check the price and your budget before buying.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
+    },
+    {
+      "id": "sm-smelting",
+      "skill": "smithing",
+      "from": 1,
+      "to": null,
+      "name": "Furnace smelting",
+      "members": false,
+      "needs": [],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "none",
+      "where": "An accessible furnace near a bank",
+      "note": "The model chooses a usable recipe from your ores, coal, level and current prices. Ordinary iron smelting assumes 50% success; ring of forging and Blast Furnace effects are not modelled. Profit is not guaranteed.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
+      "place": "Edgeville"
     }
   ]
 }

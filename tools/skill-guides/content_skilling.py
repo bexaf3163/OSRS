@@ -50,9 +50,9 @@ A(s('mining', 45, 99, 'GATHER', 'Granite', 'Mine granite at the quarry: the fast
 
 # ---------------------------------------------------------------- Smithing
 A(s('smithing', 1, 29, 'QUEST', "The Knight's Sword (XP skip)", 'A free quest that gives a huge block of Smithing XP in one go: it skips most of the early smithing. You need to mine blurite ore (Mining 10).', 'wiki:Squire', 'fast', False, quest="The Knight's Sword", npc='Squire'))
-A(s('smithing', 29, 40, 'GATHER', 'Smith at the Varrock anvil', 'Smith the best item you can make at the anvil just south of the Varrock west bank. It loses a little money but takes under an hour.', 'Varrock West Bank', 'fast', False, obj='Anvil'))
-A(s('smithing', 1, 40, 'GATHER', 'Anvil smithing', 'Smelt bars in a furnace and smith the best item at the anvil south of the Varrock west bank. Pick items that use several bars per action.', 'Varrock West Bank', 'both', False, obj='Anvil'))
-A(s('smithing', 40, 99, 'GATHER', 'Smith the best armour', 'Smith armour at the Varrock anvil with mithril or adamantite bars (free to play): slower, but works everywhere.', 'Varrock West Bank', 'both', False, obj='Anvil'))
+A(s('smithing', 29, 40, 'GATHER', 'Smith at the Varrock anvil', 'Use a hammer and a recipe matched to your level, usable bars and budget at the Varrock west-bank anvil. Time and net cost depend on the selected product and current prices.', 'Varrock West Bank', 'fast', False, obj='Anvil'))
+A(s('smithing', 1, 40, 'GATHER', 'Anvil smithing', 'Anvils use bars and a hammer; furnaces turn ores into bars. Follow the shared Skills plan for the selected activity. A one-bar dagger or three-bar warhammer can use leftovers that cannot make a five-bar platebody.', 'Varrock West Bank', 'both', False, obj='Anvil'))
+A(s('smithing', 40, 99, 'GATHER', 'Later anvil progression', 'Check the actual recipe level: steel platebodies need 48, mithril daggers 50 and platebodies 68, adamant daggers 70 and platebodies 88. The shared planner compares feasible products and current material costs.', 'Varrock West Bank', 'both', False, obj='Anvil'))
 A(s('smithing', 15, 99, 'MINIGAME', "Giants' Foundry", "Forge swords at Giants' Foundry: low effort, and it pays you. Needs Sleeping Giants.", "wiki:Giants' Foundry", 'afk', True, quest='Sleeping Giants', npc='Kovac'))
 A(s('smithing', 40, 99, 'GATHER', 'Blast Furnace gold bars', 'Smelt gold bars at the Blast Furnace: the fastest viable members method from level 40 (it costs money).', 'wiki:Blast Furnace', 'fast', True, obj='Bar dispenser'))
 
@@ -142,7 +142,7 @@ A(s('mining', 14, 99, 'GATHER', 'Barronite in Camdozaal', 'After Below Ice Mount
 A(s('mining', 10, 99, 'GATHER', 'Crashed stars', 'The most AFK way, about one click in seven minutes; a star-finding plugin helps.', 'Varrock', 'alt', False))
 A(s('mining', 30, 99, 'GATHER', 'Coal for steel', 'Barbarian Village coal: slower XP, but steel bars sell.', 'Barbarian Village mine', 'alt', False, obj='Coal rocks'))
 A(s('mining', 70, 99, 'GATHER', 'Adamantite in the Mining Guild', 'Two rocks: hop worlds instead of waiting.', 'Mining Guild', 'alt', False, obj='Adamantite rocks'))
-A(s('smithing', 1, 99, 'GATHER', 'Smelting bars at Edgeville', 'Almost AFK at the furnace next to the bank; steel, mithril and adamantite bars often sell above their ore.', 'Edgeville', 'alt', False, obj='Furnace'))
+A(s('smithing', 1, 99, 'GATHER', 'Smelting bars at Edgeville', 'Use the shared furnace plan for the ores and coal you can actually use. Compare current input cost and sale value; profit is not guaranteed. Ordinary iron has 50% success; ring of forging and Blast Furnace bonuses are not assumed.', 'Edgeville', 'alt', False, obj='Furnace'))
 A(s('smithing', 14, 99, 'GATHER', 'Barronite deposits', 'Crush deposits in Camdozaal after Below Ice Mountain: very slow, very calm.', 'wiki:Ruins of Camdozaal', 'alt', False, quest='Below Ice Mountain'))
 A(s('crafting', 5, 43, 'CRAFT', 'Gold and silver jewellery', 'Gold rings from 5, necklaces from 6, unstrung gold amulets from 8 and silver tiaras from 23. Bring the matching mould and bars to the furnace. Compare current net prices; profit is not guaranteed.', 'Edgeville', 'alt', False, obj='Furnace'))
 A(s('crafting', 8, 99, 'CRAFT', 'Bowls', 'The wheel and oven in Barbarian Village: cheap XP from clay.', 'Barbarian Village', 'alt', False))

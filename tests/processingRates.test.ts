@@ -72,7 +72,7 @@ describe('the processing engine against the wiki', () => {
 });
 
 describe('costs and gains by the shared rules', () => {
-  const steel = (p: PriceView, restriction?: 'RESTRICTED' | 'LIFTED') => processRate(method('sm-steel'), 'smithing', stateOf({ smithing: 50 }), { prices: p, restriction, objective: 'balanced' })!;
+  const steel = (p: PriceView, restriction?: 'RESTRICTED' | 'LIFTED') => processRate(method('sm-steel'), 'smithing', stateOf({ smithing: 50 }), { prices: p, restriction, objective: 'balanced' }, { ...PROCESSING, methods: { ...PROCESSING.methods, 'sm-steel': ['steel-platebody'] } })!;
   it('materials are a cost, the product a gain after tax; both known', () => {
     const r = steel(prices({ 'Steel bar': 500 }, { 'Steel platebody': 2_400 }));
     expect(r.costPerHour).toBeGreaterThan(0);

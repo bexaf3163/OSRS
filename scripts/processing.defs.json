@@ -552,6 +552,72 @@
       "skill": "cooking",
       "facility": "fire",
       "successLabel": "Fire"
+    },
+    {
+      "id": "mithril-bar",
+      "page": "Mithril bar",
+      "skill": "smithing",
+      "facility": "furnace"
+    },
+    {
+      "id": "adamantite-bar",
+      "page": "Adamantite bar",
+      "skill": "smithing",
+      "facility": "furnace"
+    },
+    {
+      "id": "runite-bar",
+      "page": "Runite bar",
+      "skill": "smithing",
+      "facility": "furnace"
+    },
+    {
+      "id": "iron-dagger",
+      "page": "Iron dagger",
+      "skill": "smithing",
+      "facility": "anvil"
+    },
+    {
+      "id": "iron-warhammer",
+      "page": "Iron warhammer",
+      "skill": "smithing",
+      "facility": "anvil"
+    },
+    {
+      "id": "steel-dagger",
+      "page": "Steel dagger",
+      "skill": "smithing",
+      "facility": "anvil"
+    },
+    {
+      "id": "steel-warhammer",
+      "page": "Steel warhammer",
+      "skill": "smithing",
+      "facility": "anvil"
+    },
+    {
+      "id": "mithril-dagger",
+      "page": "Mithril dagger",
+      "skill": "smithing",
+      "facility": "anvil"
+    },
+    {
+      "id": "mithril-warhammer",
+      "page": "Mithril warhammer",
+      "skill": "smithing",
+      "facility": "anvil"
+    },
+    {
+      "id": "adamant-dagger",
+      "page": "Adamant dagger",
+      "skill": "smithing",
+      "facility": "anvil"
+    },
+    {
+      "id": "adamant-warhammer",
+      "page": "Adamant warhammer",
+      "skill": "smithing",
+      "facility": "anvil"
     }
   ],
   "methods": {
@@ -564,15 +630,23 @@
       "bronze-platebody"
     ],
     "sm-iron": [
+      "iron-dagger",
+      "iron-warhammer",
       "iron-platebody"
     ],
     "sm-steel": [
+      "steel-dagger",
+      "steel-warhammer",
       "steel-platebody"
     ],
     "sm-mithril": [
+      "mithril-dagger",
+      "mithril-warhammer",
       "mithril-platebody"
     ],
     "sm-adamant": [
+      "adamant-dagger",
+      "adamant-warhammer",
       "adamant-platebody"
     ],
     "ck-meat": [
@@ -691,6 +765,16 @@
       "he-super-defence",
       "he-zamorak-brew",
       "he-saradomin-brew"
+    ],
+    "sm-smelting": [
+      "bronze-bar",
+      "iron-bar",
+      "silver-bar",
+      "steel-bar",
+      "gold-bar",
+      "mithril-bar",
+      "adamantite-bar",
+      "runite-bar"
     ]
   },
   "light": {
