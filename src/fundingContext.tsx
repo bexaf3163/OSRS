@@ -52,6 +52,8 @@ const SAVE_EVERY_MS = 60_000;
 /** A cancelled plan with at least this much work still teaches the pace. */
 const MIN_CREDIT_SECONDS = 120;
 const ENDED_SHOWN_MS = 90_000;
+/** One empty rate book for every render while another one loads, so the memos below keep their inputs. */
+const NO_RATES: RateBook = {};
 
 function ls(): Storage | undefined {
   try { return window.localStorage; } catch { return undefined; }
@@ -143,7 +145,7 @@ export function FundingProvider({ children }: { children: ReactNode }) {
   });
   const rKey = ratesKey(profiles.active, character);
   if (rates.key !== rKey) setRates({ key: rKey, book: loadRates(ls(), rKey) });
-  const rateBook = rates.key === rKey ? rates.book : {};
+  const rateBook = rates.key === rKey ? rates.book : NO_RATES;
   const rateRef = useRef({ key: rKey, book: rateBook });
   rateRef.current = { key: rKey, book: rateBook };
   const observed = useMemo(() => observedRates(rateBook), [rateBook]);
@@ -454,18 +456,19 @@ export function useFundingScreen(step: Step | null, wanted: boolean): FundingScr
   const shown = useRef<{ stepId: string; id: string } | null>(null);
   // A running plan shows its own step in hand; the advice is not recomputed under it.
   const base = useEvalBase(wanted && !plan ? step : null, snap, prices);
+  const hitpoints = levelOf(state, 'hitpoints');
   const assessment = useMemo(() => {
     if (!wanted || !step || !snap || plan || !base) return null;
     const prep = engine.plan(step, { ahead });
     const manual = Object.fromEntries(Object.entries(progress.ownedManual ?? {}).map(([k, v]) => [k, v.count]));
-    const need = buildNeed({ step, prep, prices, owned: state.owned, manual, hitpoints: levelOf(state, 'hitpoints') });
+    const need = buildNeed({ step, prep, prices, owned: state.owned, manual, hitpoints });
     const keep = shown.current?.stepId === step.id ? shown.current.id : null;
     const out = assess({
       step, need, snap, prices, recs: cleanup.live ? cleanup.result.recs : [], bankValue: bridge.gear?.bankValue ?? null, base, activeId: keep,
     });
     shown.current = out.recommendation ? { stepId: step.id, id: out.recommendation.id } : null;
     return out;
-  }, [wanted, snap, plan, base, engine, step, progress, state.owned, prices, bridge.gear, cleanup.live, cleanup.result.recs, ahead]);
+  }, [wanted, snap, plan, base, engine, step, progress, state.owned, hitpoints, prices, bridge.gear, cleanup.live, cleanup.result.recs, ahead]);
 
   const { view } = useFundingView(step?.id ?? '');
   const realized = useMemo(() => (plan ? realizedSince(ledger, plan.startedAt) : null), [plan, ledger]);

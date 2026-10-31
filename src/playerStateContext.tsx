@@ -84,6 +84,8 @@ function useLivePrices(needed: boolean): PriceBook {
 }
 
 const SESSION_START = Date.now();
+/** One empty journal for every render while another one loads, so the memos below keep their inputs. */
+const NO_ENTRIES: LedgerEntry[] = [];
 
 function ls(): Storage | undefined {
   try { return window.localStorage; } catch { return undefined; }
@@ -108,7 +110,7 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
   const key = ledgerKey(profiles.active, player);
   const [book, setBook] = useState<{ key: string; entries: LedgerEntry[] }>(() => ({ key, entries: loadLedger(ls(), key, Date.now()) }));
   if (book.key !== key) setBook({ key, entries: loadLedger(ls(), key, Date.now()) });
-  const ledger = book.key === key ? book.entries : [];
+  const ledger = book.key === key ? book.entries : NO_ENTRIES;
   const prices = useLivePrices(state.connected || ledger.some((e) => e.name !== 'Coins' && (e.reason === 'LOOT' || e.reason === 'PICKUP')));
   const priceRef = useRef(prices);
   priceRef.current = prices;
