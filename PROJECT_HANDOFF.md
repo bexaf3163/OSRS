@@ -188,6 +188,24 @@ Extras require an already-needed GE purchase, a live connection, a bank read in 
 
 Owner feedback, 2026-10-31: the session/resource counter does not justify occupying the whole right book page beside quests. Proposed layout: quest list/filters on the left; selected quest status, requirements, rewards and existing route/continue action on the right. A completed quest must show completed/review state, not invite repeating it; when every F2P quest is done, offer the existing next Skills/Optional activity rather than an invented quest. Reuse the existing quest data/actions; keep session statistics in a small optional section and preserve their underlying resource/session data. Do not invent replacement statistics or redesign fonts. This is queued feedback, not implemented in 2.81.12.
 
+### UI review queue — Gear, Skills and Shopping
+
+Owner request2026-10-31: review what belongs in each page and replace filler with the next useful decision. These are proposed changes, not shipped2.81.12 UI changes. Preserve Ledger/fonts, existing engines, data and actions; do not fill every empty space just to fill the book.
+
+| Section | Left page | Right page / default decision |
+|---|---|---|
+|Gear|Compact current kit, with relevant style/tool slots and live/remembered provenance.|One recommendation for the actual active activity: what to wear/withdraw/buy, a short measured/modelled benefit and affordable cost. Show "no worthwhile change" or unchecked state honestly; other comparisons/calculations stay secondary.|
+|Skills|Compact skill icons, levels and useful F2P checkpoint markers.|Current selected/tracked skill: this phase/goal/location, relevant kit/preparation, next worthwhile milestone and one Follow/Continue action. Balanced default; XP/Money remain simple alternatives. A raw XP table is Calculator/reference material, not the default right-page filler.|
+|Shopping|Required purchases/withdrawals/equipment actions, with compact optional bank stock.|Checkout for the same activity: current cost, available coins, protected refill/travel reserve, optional stock cost and any actual shortfall; one appropriate next action to bank/GE/funding. Do not allocate a whole page to a tiny Coin purse figure and unrelated notices.|
+
+Source findings to resolve before changing layout:
+- Gear currently builds its supply reserve from nextStep(store steps), while Shopping now prioritizes tracked training. Introduce/reuse one canonical active-activity resolution so recommendations and reserves agree; verify with an active skill while the quest route points elsewhere.
+- Gear explicitly falls back to a cow comparison when no supported opponent is selected. Prefer an honest no-context/setup state over an irrelevant comparison presented as the useful default. Do not claim a current bug from historical screenshots; reproduce the state with fixtures.
+- Skills currently displays the raw XP table when no skill is selected. Prefer the current tracked/selected skill or a concise selection prompt; no invented cross-skill recommendation or compulsory grind.
+- Shopping already has required grouping, budget, bank stock and earning links. Recompose those existing consumers rather than adding new engines, duplicate shopping/calculators, controls or tabs. Keep required and optional amounts distinct; unknown coins/prices/bank are never zero.
+
+Keep Money focused on earning, Journey on the current instruction, and Journal on quests. Share underlying activity/kit/budget facts without reproducing every section's full content on every page. Validate empty/offline/unknown/completed/budget-shortfall states, desktop wrapping and actual actions, not just populated screenshots.
+
 ### P2 — finish staged Skills/Optional review using the existing engines
 
 Use [SKILLS_COVERAGE.md](docs/SKILLS_COVERAGE.md) as the capability inventory. Review melee, Ranged and Magic as well as the peaceful skills; do not assume guide data means complete modeling. For each supported skill, verify:
