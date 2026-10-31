@@ -25,7 +25,8 @@ import { carryOf, displayName, doseKind, heldUnits, shortText, takeFromBank } fr
 import { nearestBank, type StepReadiness } from './readiness';
 import { planSources, type SourceOption } from './sourceRouter';
 import { tripWindow, type OneTripPlan } from './oneTrip';
-import { nameKey, preflightItems } from './checklist';
+import { preflightItems } from './checklist';
+import { nameKey } from './itemKey';
 import { weightAdvice, type WeightAdvice } from './weight';
 import { carryoverOf } from './carryover';
 import { questItemKeys } from './questItems';

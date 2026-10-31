@@ -7,7 +7,8 @@ import { shopRows, scopeList, geListText, type ShopRow } from '../src/lib/shoppi
 import { aggregateShopping, holdingFor, type ShoppingLine } from '../src/lib/shopping';
 import { buildPlayerState } from '../src/lib/playerState';
 import { evaluate } from '../src/lib/requirements';
-import { evaluatePreflight, preflightItems, nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
+import { evaluatePreflight, preflightItems, type OwnedItem, type OwnedState } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { planOneTrip } from '../src/lib/oneTrip';
 import { emptyProgress } from '../src/lib/progress';
 import { itemById } from '../src/data';

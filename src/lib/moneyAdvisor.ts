@@ -4,7 +4,7 @@
 
 import moneyJson from '../data/moneyMaking.json';
 import type { MoneyData, MoneyMethod, MoneyReq, Step } from '../types';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 
 export const MONEY = moneyJson as MoneyData;
 

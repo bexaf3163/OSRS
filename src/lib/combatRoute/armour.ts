@@ -2,7 +2,7 @@ import type { GameMode, GearPiece, StepItemRequirement } from '../../types';
 import { itemById } from '../../data';
 import { canWear, gearById, gearData, relevantDefence, type IncomingStyle, type Levels } from '../../services/gearAdvisor';
 import { heldExact, levelOf, type PlayerState } from '../playerState';
-import { nameKey } from '../checklist';
+import { nameKey } from '../itemKey';
 import type { PriceView } from '../funding/quotes';
 import { itemPrice } from '../itemPrice';
 

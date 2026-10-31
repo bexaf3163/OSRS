@@ -5,7 +5,8 @@
 
 import type { Step } from '../types';
 import { aggregateShopping, type ShoppingLine } from './shopping';
-import { nameKey, parseAmount } from './checklist';
+import { parseAmount } from './checklist';
+import { nameKey } from './itemKey';
 import { heldEquipment, levelOf, type PlayerState } from './playerState';
 import { allocateFoodStock, type FoodHolding } from './foodAdvice';
 import { allocateMaterialStock, type MaterialHolding } from './materialStock';

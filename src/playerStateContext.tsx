@@ -24,7 +24,7 @@ import type { Step } from './types';
 import { isClosed } from './lib/next-step';
 import { gateAllows, useProfiles } from './lib/profiles';
 import { ledgerKey, LEDGER_LIMIT, loadLedger, saveLedger, since } from './lib/ledgerStore';
-import { nameKey } from './lib/checklist';
+import { nameKey } from './lib/itemKey';
 import { buildPlayerState, diffPlayerState, heldOf, type PlayerState, type StateChange } from './lib/playerState';
 import { entriesFor, summarize, type LedgerEntry, type LedgerSummary } from './lib/ledger';
 import { buildPriceBook, reprice, type PriceBook } from './lib/priceBook';

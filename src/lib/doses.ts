@@ -5,7 +5,7 @@
 // Doses are not bag slots. A (3) and a (1) are 4 doses in 2 potions until the player uses one on the other; the app never pretends they were poured
 // together, it says when pouring them together frees a slot.
 
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import { heldOf, type Held, type PlayerState } from './playerState';
 import { doseKind, doseName } from './doseKind';
 

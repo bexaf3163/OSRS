@@ -1,7 +1,7 @@
 import type { QuestStageLine, StagePre } from '../types';
 import type { GearItem } from '../services/runeliteBridge';
 import { BANKS, EXCHANGE, bankTiles, type Point } from './travel';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import { usableAt } from './toolTiers';
 import { effectiveHeal, foodCarry, heldFood, FOODS } from './foodAdvice';
 import type { OwnedItem } from './checklist';

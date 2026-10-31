@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, itemById } from '../src/data';
 import { buildPlayerState } from '../src/lib/playerState';
-import { nameKey, type OwnedState } from '../src/lib/checklist';
+import type { OwnedState } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { emptyProgress } from '../src/lib/progress';
 import { planOneTrip } from '../src/lib/oneTrip';
 import { readinessOf } from '../src/lib/readiness';

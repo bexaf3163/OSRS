@@ -2,7 +2,8 @@
 // The items are collected from the itemsRequired of the selected steps, identical ones are summed by ID (without an ID, by name).
 
 import type { Step, StepItemRequirement } from '../types';
-import { nameKey, parseAmount, type OwnedState } from './checklist';
+import { parseAmount, type OwnedState } from './checklist';
+import { nameKey } from './itemKey';
 import { toolFamilyOf } from './toolTiers';
 import { doseKind, heldUnits } from './doses';
 import gearJson from '../data/gear.json';

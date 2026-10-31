@@ -7,7 +7,7 @@
 
 import type { StepTask } from '../types';
 import { heldOf, type PlayerState } from './playerState';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 
 export type TaskState = 'OK' | 'OPEN' | 'MISSING' | 'UNKNOWN';
 

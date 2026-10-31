@@ -4,7 +4,7 @@ import { arrowsForGoal, ARROW_BREAK, goalArrows, methodFoe, RANGED_GEAR } from '
 import { trainingMethods } from '../src/lib/trainingRouter';
 import { buildPlayerState } from '../src/lib/playerState';
 import { emptyProgress } from '../src/lib/progress';
-import { nameKey } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import type { GearItem } from '../src/services/runeliteBridge';
 import { COMBAT_FOES } from '../src/lib/combatEstimate';
 import { xpForLevel } from '../src/lib/xp';

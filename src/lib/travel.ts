@@ -5,7 +5,7 @@
 import transportJson from '../data/transport.json';
 import netJson from '../data/transportNet.json';
 import locationsJson from '../data/majorLocations.json';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import type { GearItem } from '../services/runeliteBridge';
 import { isInstancedPoint, isOverworld } from './instances';
 import { purchaseCost, purchaseFees, type PurchaseFee } from './purchaseCost';

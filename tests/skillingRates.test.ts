@@ -4,7 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildPlayerState, type PlayerState } from '../src/lib/playerState';
 import { emptyProgress } from '../src/lib/progress';
-import { nameKey } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { cascade, skillChance } from '../src/lib/skillChance';
 import { gatherPace, gatherRate, SKILLING, type SkillingRegistry } from '../src/lib/skillingRates';
 import { trainingNav } from '../src/lib/trainingNav';

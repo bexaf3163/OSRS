@@ -8,7 +8,8 @@ import { evaluate } from '../../src/lib/funding/evaluate';
 import { gatherPace } from '../../src/lib/skillingRates';
 import { buildPlayerState } from '../../src/lib/playerState';
 import { emptyProgress } from '../../src/lib/progress';
-import { nameKey, type OwnedItem } from '../../src/lib/checklist';
+import type { OwnedItem } from '../../src/lib/checklist';
+import { nameKey } from '../../src/lib/itemKey';
 import { ctxOf, fakePrices, fakeSnap } from './helpers';
 
 const stateOf = (levels: Record<string, number>, bank: Record<string, number> | null) => buildPlayerState({

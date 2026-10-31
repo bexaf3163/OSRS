@@ -3,7 +3,7 @@
 
 import type { Progress, Step } from '../types';
 import { isCompleted } from './next-step';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 
 export const SKILL_NAMES = [
   'attack', 'strength', 'defence', 'ranged', 'prayer', 'magic', 'runecraft', 'construction', 'hitpoints', 'agility', 'herblore', 'thieving', 'crafting',

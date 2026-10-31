@@ -8,7 +8,7 @@
 import type { Step } from '../types';
 import type { QuestInstruction } from '../services/runeliteBridge';
 import { items as itemData } from '../data';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import { isInstancedPoint, isOverworld } from './instances';
 import type { PlayerState } from './playerState';
 import { planSources } from './sourceRouter';

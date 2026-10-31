@@ -17,7 +17,7 @@ import type { PriceView } from './funding/quotes';
 import type { PlayerState } from './playerState';
 import type { MethodNeed, TrainingMethod } from './trainingRouter';
 import { gearData } from '../services/gearAdvisor';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import { levelForXp, xpForLevel } from './xp';
 
 export interface RangedGearItem { name: string; slot: string; rangedAttack: number; rangedStrength: number; speed?: number }
@@ -53,7 +53,9 @@ export interface AmmoEstimate {
   notCounted: string[];
 }
 
-const ranged = (name: string) => RANGED_GEAR.find((i) => nameKey(i.name) === nameKey(name));
+const RANGED_BY_KEY = new Map<string, (typeof RANGED_GEAR)[number]>();
+for (const i of RANGED_GEAR) if (!RANGED_BY_KEY.has(nameKey(i.name))) RANGED_BY_KEY.set(nameKey(i.name), i); // first match wins, like find()
+const ranged = (name: string) => RANGED_BY_KEY.get(nameKey(name));
 
 /** A worn item's ranged attack bonus: the ranged table, else the melee gear's own ranged column; null when neither knows it. */
 function rangedAttackOf(name: string): number | null {

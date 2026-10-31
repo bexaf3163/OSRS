@@ -8,7 +8,8 @@
 
 import type { Step } from '../types';
 import type { QuestInstruction } from '../services/runeliteBridge';
-import { nameKey, type OwnedState } from './checklist';
+import type { OwnedState } from './checklist';
+import { nameKey } from './itemKey';
 import { isInstancedPoint, isOverworld } from './instances';
 import { stepPlaces } from './stepPlaces';
 import { instructionSubStep } from './subStep';

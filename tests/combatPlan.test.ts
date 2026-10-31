@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
 import { combatPlanView, chooseVariant, ownedFood } from '../src/lib/combatPlan';
 import { estimateStep } from '../src/lib/combatEstimate';
-import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
+import type { OwnedItem, OwnedState } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { gearById } from '../src/services/gearAdvisor';
 import type { GearState } from '../src/services/runeliteBridge';
 

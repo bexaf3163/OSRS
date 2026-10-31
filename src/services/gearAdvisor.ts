@@ -13,9 +13,11 @@ import gearJson from '../data/gear.json';
 import monstersJson from '../data/monsters.json';
 import combatFoesJson from '../data/combatFoes.json';
 import type { Foe, FoeData, GameMode, GearData, GearPiece, GearSlot, Step } from '../types';
-import { nameKey, type OwnedState } from '../lib/checklist';
+import type { OwnedState } from '../lib/checklist';
+import { nameKey } from '../lib/itemKey';
 import { matchStrict } from './locationResolver';
 import { shopAccess } from '../lib/shopAccess';
+import { SAVE_GP } from '../lib/shopConstants';
 import type { GearState, NavTargetPayload } from './runeliteBridge';
 
 export const gearData = gearJson as GearData;
@@ -498,8 +500,6 @@ const PRAYERS: { name: string; level: number; kind: 'attack' | 'strength'; mult:
  * and was the HUD's first line). The threshold is low on purpose: any speed-up is worth showing, and the percent in the advice says how big it is.
  */
 const WORTH = { dps: 1.03, defence: 3, hitDrop: 0.03 };
-/** Among nearly equal ones we take the cheap one if it is at least twice as cheap and saves at least this much. */
-export const SAVE_GP = 100;
 
 export function adviseGear(input: AdvisorInput): GearAdvice {
   const data = input.data ?? gearData;

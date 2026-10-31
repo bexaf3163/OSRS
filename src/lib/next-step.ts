@@ -1,7 +1,7 @@
 // Step availability and the choice of "What to do now".
 
 import type { Progress, Step } from '../types';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 
 export function isClosed(p: Progress, id: string): boolean {
   return p.steps[id] === 'done' || p.steps[id] === 'skipped';

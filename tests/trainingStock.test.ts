@@ -3,7 +3,7 @@ import { stockUpShopping } from '../src/lib/trainingStock';
 import { budgetOf, exchangePlan, geListText, type RowContext } from '../src/lib/shoppingView';
 import { buildPlayerState, coinsOf } from '../src/lib/playerState';
 import { emptyProgress } from '../src/lib/progress';
-import { nameKey } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { trainingStockNeeds, type PathLeg, type TrainingMethod } from '../src/lib/trainingRouter';
 import type { Step, StepItemRequirement } from '../src/types';
 import type { PriceView, UnitPrice } from '../src/lib/funding/quotes';

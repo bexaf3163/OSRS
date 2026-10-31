@@ -5,7 +5,7 @@
 
 import type { Step, StepNpcInfo, QuestStage, QuestStageLine } from '../types';
 import type { NavTargetPayload, QuestInstruction } from '../services/runeliteBridge';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import { shortLine } from './shortText';
 import { npcSpot } from './stepPlaces';
 import { heldOf, type PlayerState } from './playerState';

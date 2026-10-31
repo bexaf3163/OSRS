@@ -29,10 +29,7 @@ export interface OwnedState {
   items: Map<string, OwnedItem>;
 }
 
-/** The name as a comparison key, the same way as ActiveTarget.nameKey in the plugin. */
-export function nameKey(s: string): string {
-  return s.replace(/<[^>]*>/g, '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
-}
+import { nameKey } from './itemKey';
 
 /**
  * The quantity from the route: 1, "23 (20 to hand in, 3 for the bank)" gives 23, "20+" gives 20, "1,000" gives 1000.

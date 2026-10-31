@@ -5,7 +5,8 @@
 // character; a plan saved for another character is not applied to it (see plan.ts).
 
 import type { Step } from '../../types';
-import { nameKey, parseAmount } from '../checklist';
+import { parseAmount } from '../checklist';
+import { nameKey } from '../itemKey';
 import { carryoverOf } from '../carryover';
 import { heldExact, heldOf, levelOf, questOf, type Held, type PlayerState, type QuestPresence, type WorldPoint } from '../playerState';
 import { aggregateShopping } from '../shopping';

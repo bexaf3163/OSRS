@@ -8,7 +8,7 @@ import { withTrainingMethod } from '../src/lib/methodStep';
 import { trainingMethods, type TrainingMethod } from '../src/lib/trainingRouter';
 import { buildPlayerState } from '../src/lib/playerState';
 import { emptyProgress } from '../src/lib/progress';
-import { nameKey } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { stepById } from '../src/data';
 import { market } from './funding/market';
 

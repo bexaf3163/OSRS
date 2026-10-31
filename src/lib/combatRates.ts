@@ -26,7 +26,7 @@ import { mergeGoalNeeds } from './processingGoal';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from './playerState';
 import { STYLE_GEAR, usableStyleOption } from './styleGear';
 import { gearPieceByName, trainingWeapons, type Levels } from '../services/gearAdvisor';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import { supplyPrice } from './sourceRouter';
 import { xpForLevel } from './xp';
 import type { PriceView } from './funding/quotes';

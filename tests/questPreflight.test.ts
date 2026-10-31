@@ -3,7 +3,7 @@ import { allSteps, stepById } from '../src/data';
 import type { QuestStageLine } from '../src/types';
 import { BANK_SPOTS, countOf, guardedDestination, itemPreflight, missingChip } from '../src/lib/preflight';
 import { dist, EXCHANGE } from '../src/lib/travel';
-import { nameKey } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { stepGuide } from '../src/services/runeliteBridge';
 import type { GearItem } from '../src/services/runeliteBridge';
 

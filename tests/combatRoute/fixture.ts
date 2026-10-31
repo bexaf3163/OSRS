@@ -7,7 +7,8 @@ import { gearById } from '../../src/services/gearAdvisor';
 import type { StepEstimateContext } from '../../src/lib/combatEstimate';
 import type { PlanInput } from '../../src/lib/combatRoute/plans';
 import { termsFor } from '../../src/lib/combatRoute/spots';
-import { nameKey, type OwnedItem, type OwnedState } from '../../src/lib/checklist';
+import type { OwnedItem, OwnedState } from '../../src/lib/checklist';
+import { nameKey } from '../../src/lib/itemKey';
 import type { Step } from '../../src/types';
 
 const gearId = (n: string) => [...gearById.values()].find((p) => p.name === n)!.id;

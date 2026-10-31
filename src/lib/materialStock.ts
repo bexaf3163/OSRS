@@ -1,6 +1,7 @@
 // Declared, interchangeable non-food supplies share physical stock across preparation lines.
 // Healing equivalents, equipment and tool tiers keep their existing specialised accounting.
-import { nameKey, type OwnedItem } from './checklist';
+import type { OwnedItem } from './checklist';
+import { nameKey } from './itemKey';
 import { doseKind, type HeldUnits } from './doses';
 import { heldExact, type Held, type PlayerState } from './playerState';
 import { toolFamilyOf } from './toolTiers';

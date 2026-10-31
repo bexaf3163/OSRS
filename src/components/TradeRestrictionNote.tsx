@@ -5,7 +5,7 @@
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
-import { nameKey } from '../lib/checklist';
+import { nameKey } from '../lib/itemKey';
 import { formatGp } from '../lib/shopping';
 import { wealthOf } from '../lib/wealth';
 import { fundingPlan, type PlanLine } from '../lib/fundingPlan';

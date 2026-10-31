@@ -8,7 +8,7 @@
 //   - the same item is never counted twice: a sold item leaves the unsold figure in the same step that the coins enter the realized one;
 //   - the pace the player really worked at is units of the method's main product over seconds of actual work, trusted only after enough of both.
 
-import { nameKey } from '../checklist';
+import { nameKey } from '../itemKey';
 import type { LedgerEntry } from '../ledger';
 import type { ObservedRate } from './evaluate';
 import { OBSERVED_MIN_SECONDS, OBSERVED_MIN_UNITS } from './evaluate';

@@ -3,7 +3,7 @@ import { allSteps, stepById } from '../src/data';
 import { emptyProgress } from '../src/lib/progress';
 import { contextOf, readinessOf } from '../src/lib/readiness';
 import { STAFFS } from '../src/lib/magicPlan';
-import { nameKey } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 
 describe('Magic training uses an owned elemental staff', () => {
   it.each(Object.values(STAFFS))('$name satisfies the staff requirement from the bank', staff => {

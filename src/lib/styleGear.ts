@@ -2,7 +2,7 @@
 // The wiki's slot options go from the best to the available. We take the best suitable one that you already have, otherwise — by your means.
 
 import styleJson from '../data/styleGear.json';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 
 export interface StyleReq { skill: string; level: number }
 export interface StyleOption { names: string[]; reqs: StyleReq[]; quests: string[]; note?: string }

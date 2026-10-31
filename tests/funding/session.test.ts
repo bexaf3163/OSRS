@@ -3,7 +3,8 @@ import { entriesFor, type LedgerEntry } from '../../src/lib/ledger';
 import { buildPlayerState, diffPlayerState, type PlayerState } from '../../src/lib/playerState';
 import { addWork, loadRates, observedRates, RATE_WINDOW_SECONDS, ratesKey, realizedSince, saveRates, unitsOf } from '../../src/lib/funding/session';
 import { OBSERVED_MIN_SECONDS, OBSERVED_MIN_UNITS } from '../../src/lib/funding/evaluate';
-import { nameKey, type OwnedItem, type OwnedState } from '../../src/lib/checklist';
+import type { OwnedItem, OwnedState } from '../../src/lib/checklist';
+import { nameKey } from '../../src/lib/itemKey';
 
 const T = 1_792_000_000_000;
 const e = (name: string, qty: number, reason: LedgerEntry['reason'], at = T, value?: number): LedgerEntry => ({ name, quantityDelta: qty, reason, timestamp: at, ...(value !== undefined ? { estimatedGpValue: value } : {}) });

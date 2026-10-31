@@ -17,7 +17,7 @@ import { aggregateShopping, holdingFor } from '../shopping';
 import { doseKind, dosePackage } from '../doses';
 import { evaluate, type Requirement } from '../requirements';
 import type { PlayerState } from '../playerState';
-import { nameKey } from '../checklist';
+import { nameKey } from '../itemKey';
 import { purchaseFees } from '../purchaseCost';
 import { allocateMaterialStock } from '../materialStock';
 import type { Confidence, PriceStatus, PriceView } from './quotes';

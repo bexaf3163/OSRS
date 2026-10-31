@@ -5,7 +5,7 @@
 // MISSING (surely none), UNKNOWN (nothing to check with). The unknown never turns into "none".
 
 import type { GameMode } from '../types';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import { coinsOf, heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from './playerState';
 import { countWorn } from './equipmentCount';
 import { heldUnits, needUnits, type HeldUnits } from './doses';

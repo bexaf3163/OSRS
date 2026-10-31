@@ -9,7 +9,8 @@ import { isClosed } from './next-step';
 import { stepGoals, type Fights, type StepEstimateContext } from './combatEstimate';
 import { combatPlanView } from './combatPlan';
 import type { OwnedState } from './checklist';
-import { nameKey, parseAmount } from './checklist';
+import { parseAmount } from './checklist';
+import { nameKey } from './itemKey';
 import { estimateStepFights } from './fightEstimate';
 import { termsFor } from './combatRoute/spots';
 

@@ -5,7 +5,8 @@ import { buildPrepRoute, emptyPrep, MAX_DETOUR_DEPTH, openTaskIds, parsePrep, re
 import { stepReadiness, type StepReadiness } from '../src/lib/readiness';
 import { allSteps } from '../src/data';
 import { emptyProgress } from '../src/lib/progress';
-import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
+import type { OwnedItem, OwnedState } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import type { Step } from '../src/types';
 
 const item = (nameEn: string, amount: string | number, extra: Record<string, unknown> = {}) => ({ nameEn, amount, howToGet: '', ...extra });

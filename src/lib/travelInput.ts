@@ -2,7 +2,8 @@
 
 import type { GameMode, PlayerStats } from '../types';
 import type { GearState } from '../services/runeliteBridge';
-import { nameKey, type OwnedItem, type OwnedState } from './checklist';
+import type { OwnedItem, OwnedState } from './checklist';
+import { nameKey } from './itemKey';
 import { NET, STAFF_NAMES, TRANSPORT, type ItemSource, type Point, type TravelInput } from './travel';
 
 /** What the bank holds, by name key: the planner looks for tablets there before it suggests buying them. */

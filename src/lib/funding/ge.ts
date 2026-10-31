@@ -3,7 +3,7 @@
 // the money received. Every funding figure that talks about "sale proceeds" goes through here.
 
 import exemptJson from '../../data/geTaxExempt.json';
-import { nameKey } from '../checklist';
+import { nameKey } from '../itemKey';
 
 export const GE_TAX_RATE: number = exemptJson.rate;
 export const GE_TAX_CAP: number = exemptJson.cap;

@@ -11,7 +11,7 @@
 // Arrival is never "done", a loot value is never a sale, and what cannot be seen is asked of the player: the sub-step says "confirm" instead of guessing.
 // The plan belongs to one character; another character's plan is never applied.
 
-import { nameKey } from '../checklist';
+import { nameKey } from '../itemKey';
 import type { FundingAssessment, FundingOption } from './assess';
 import { goalText, type MoneyGoal } from './browse';
 import type { MethodEvaluation } from './evaluate';

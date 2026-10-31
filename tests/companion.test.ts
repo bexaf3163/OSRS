@@ -2,7 +2,8 @@
 
 import { describe, expect, it } from 'vitest';
 import type { Progress, Step, StepItemRequirement } from '../src/types';
-import { evaluatePreflight, nameKey, parseAmount, parseOwned, preflightItems, type OwnedState } from '../src/lib/checklist';
+import { evaluatePreflight, parseAmount, parseOwned, preflightItems, type OwnedState } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { evaluateBranches, evaluateCondition, reasonLabel, watchedItems, type BranchContext } from '../src/lib/branching';
 import { aggregateShopping, carryOverFrom, plural, shoppingText } from '../src/lib/shopping';
 import { parseStats, toInGameTarget } from '../src/services/runeliteBridge';

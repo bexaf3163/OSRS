@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { allocateMaterialStock, materialTake } from '../src/lib/materialStock';
 import { buildPlayerState } from '../src/lib/playerState';
-import { evaluatePreflight, nameKey, preflightItems, type OwnedItem } from '../src/lib/checklist';
+import { evaluatePreflight, preflightItems, type OwnedItem } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { emptyProgress } from '../src/lib/progress';
 import { planOneTrip } from '../src/lib/oneTrip';
 import { buildPrepPlan } from '../src/lib/prepPlan';

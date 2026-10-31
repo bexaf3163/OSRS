@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
 import { buildPlayerState } from '../src/lib/playerState';
-import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
+import type { OwnedItem, OwnedState } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { decideTransport, supplyStop, SUPPLY_NEAR_TILES, transportSources } from '../src/lib/liveTransport';
 import { planTravelSupplies, roadLegs, roadSteps, savedText, stepTargets, SUPPLY_MIN_TOTAL_TILES, type TravelSupplies } from '../src/lib/travelSupplies';
 import { BANKS, EXCHANGE, STAFF_NAMES, STAIRS_TILES_PER_FLOOR, bankTiles, dist, staffCover, stavesFor, travelOptions, type TravelInput } from '../src/lib/travel';

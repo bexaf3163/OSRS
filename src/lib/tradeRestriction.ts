@@ -8,7 +8,7 @@
 //   LIFTED     - the player told us the restrictions are gone.
 // UNKNOWN is never shown as RESTRICTED or as LIFTED (PROJECT_HANDOFF: PRESENT | MISSING | UNKNOWN).
 
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 
 /** The conditions that lift the restrictions, all of them. */
 export const LIFT = { questPoints: 10, totalLevel: 100, hours: 20 } as const;

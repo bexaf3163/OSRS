@@ -18,7 +18,7 @@
 // Ranges, not points: fast / typical / slow, and the slow case also takes a haircut off low-confidence sale prices.
 
 import { PICKAXES, AXES, usableAt } from '../toolTiers';
-import { nameKey } from '../checklist';
+import { nameKey } from '../itemKey';
 import { isRestrictedItem } from '../tradeRestriction';
 import { TILES_PER_SECOND, type Point } from '../travel';
 import { geTax } from './ge';

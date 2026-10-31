@@ -5,10 +5,10 @@
 
 import type { WikiItemDetail } from '../types';
 import { matchStrict } from '../services/locationResolver';
-import { SAVE_GP } from '../services/gearAdvisor';
+import { SAVE_GP } from './shopConstants';
 import { heldOf, levelOf, type PlayerState, type WorldPoint } from './playerState';
 import { SHOP_TOWN, accessSuffix, shopAccess, shopKey, spawnAccess, type AccessState } from './shopAccess';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import { items } from '../data';
 import type { PriceView } from './funding/quotes';
 import locationsJson from '../data/majorLocations.json';

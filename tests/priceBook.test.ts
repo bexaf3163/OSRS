@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildPriceBook, priceNote, reprice } from '../src/lib/priceBook';
 import { createPriceService } from '../src/services/pricesApi';
-import { nameKey } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { buildPriceView } from '../src/lib/funding/quotes';
 import type { LedgerEntry } from '../src/lib/ledger';
 

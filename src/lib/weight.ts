@@ -8,7 +8,7 @@
 
 import weightsJson from '../data/weights.json';
 import type { Step } from '../types';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import type { PlayerState } from './playerState';
 import { FOODS } from './foodAdvice';
 

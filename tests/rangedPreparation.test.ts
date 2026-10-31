@@ -3,7 +3,7 @@ import { allSteps, stepById, stepsFor } from '../src/data';
 import goalsData from '../src/data/goals.json';
 import { emptyProgress } from '../src/lib/progress';
 import { buildPlayerState } from '../src/lib/playerState';
-import { nameKey } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { pickMethods, samePicks } from '../src/lib/methodPick';
 import { GOAL_REACHED, methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
 import { contextOf } from '../src/lib/readiness';

@@ -1,5 +1,5 @@
 // Aggregate the shared staged forecast; this does not select recipes, grant stock or finance future purchases.
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import { xpForLevel } from './xp';
 import { validConsumption } from './consumption';
 import type { MethodNeed, PathLeg } from './trainingRouter';

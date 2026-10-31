@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
 import { emptyProgress } from '../src/lib/progress';
 import { buildPlayerState } from '../src/lib/playerState';
-import { nameKey } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { pickMethods } from '../src/lib/methodPick';
 import { SKILLING } from '../src/lib/skillingRates';
 import { followedGoal, GOAL_REACHED, methodToolNames, UNKNOWN_GOAL_PREFIX, withTrainingMethod, pickedMethodId } from '../src/lib/methodStep';

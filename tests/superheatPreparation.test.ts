@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildPlayerState } from '../src/lib/playerState';
 import { emptyProgress } from '../src/lib/progress';
-import { nameKey } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { SUPERHEAT_WATCH, superheatNeeds } from '../src/lib/magicPlan';
 import { methodNeeds, trainingMethods, viewMethod } from '../src/lib/trainingRouter';
 import { methodToolNames, withTrainingMethod } from '../src/lib/methodStep';

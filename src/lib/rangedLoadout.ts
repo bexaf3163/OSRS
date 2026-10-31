@@ -4,7 +4,7 @@ import { coinsPerMinute } from './lootValue';
 import { STYLE_GEAR, ammoFits, usableStyleOption, type StyleOption } from './styleGear';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from './playerState';
 import { countWorn } from './equipmentCount';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import type { MethodNeed } from './trainingRouter';
 import { coinsOf } from './playerState';
 import { supplyPrice } from './sourceRouter';

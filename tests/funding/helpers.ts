@@ -5,7 +5,7 @@ import { tradeRestriction, type TradeRestriction } from '../../src/lib/tradeRest
 import type { Confidence, PriceStatus, PriceView, UnitPrice } from '../../src/lib/funding/quotes';
 import type { FundingSnapshot, Protection } from '../../src/lib/funding/snapshot';
 import type { EvalContext } from '../../src/lib/funding/evaluate';
-import { nameKey } from '../../src/lib/checklist';
+import { nameKey } from '../../src/lib/itemKey';
 
 export interface PriceSpec {
   buy?: number;

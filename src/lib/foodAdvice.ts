@@ -6,7 +6,8 @@ import type { GameMode, Step } from '../types';
 import type { PriceView } from './funding/quotes';
 import { supplyPrice } from './sourceRouter';
 import { heldExact, type Held, type PlayerState } from './playerState';
-import { nameKey, type OwnedItem } from './checklist';
+import type { OwnedItem } from './checklist';
+import { nameKey } from './itemKey';
 
 export interface Hit { n: number; label: string }
 export interface Threat { page: string; version?: string; hits: Hit[]; speedTicks: number; hitpoints: number; combat: number }

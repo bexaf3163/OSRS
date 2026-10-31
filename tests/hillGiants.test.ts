@@ -4,7 +4,8 @@ import type { Step } from '../src/types';
 import { allSteps, stepById } from '../src/data';
 import { stepReadiness } from '../src/lib/readiness';
 import { emptyProgress } from '../src/lib/progress';
-import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
+import type { OwnedItem, OwnedState } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { toInGameTarget, type GearState } from '../src/services/runeliteBridge';
 import { navigationTarget } from '../src/lib/navigation';
 

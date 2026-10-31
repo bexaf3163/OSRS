@@ -3,7 +3,8 @@
 // The main route is not hidden: an option only adds to it.
 
 import type { BranchCondition, BranchNeed, PlayerStats, Progress, Step, StepBranch } from '../types';
-import { nameKey, ownedTotal, type OwnedState } from './checklist';
+import { ownedTotal, type OwnedState } from './checklist';
+import { nameKey } from './itemKey';
 import { heldOf, levelsOf } from './playerState';
 
 /** available means the condition is met; locked means surely not met; unknown means no data (RuneLite is off, the level is not entered). */

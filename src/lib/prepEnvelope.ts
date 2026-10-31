@@ -16,7 +16,7 @@ import type { SkillPathPayload } from './skillGuide';
 import type { CleanupHintPayload } from './cleanupHint';
 import type { FundingHintPayload } from './fundingHint';
 import { items as itemData } from '../data';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 
 export const SNAPSHOT_VERSION = 6;
 

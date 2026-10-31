@@ -41,11 +41,30 @@ function csp(): Plugin {
   };
 }
 
+/** The app reads only the item requirements of src/data/questMachines.json ({ stepId: [{ ids, nm }] }); the plugin jar keeps the whole file. */
+function questItemReqs(): Plugin {
+  const ID = 'virtual:quest-item-reqs';
+  return {
+    name: 'quest-item-reqs',
+    resolveId: (id) => (id === ID ? '\0' + ID : null),
+    load(id) {
+      if (id !== '\0' + ID) return null;
+      const raw = JSON.parse(readFileSync('src/data/questMachines.json', 'utf8')) as { quests: Record<string, { reqs?: Record<string, { o?: string; nm?: string; ids?: number[] }> }> };
+      const out: Record<string, { ids?: number[]; nm?: string }[]> = {};
+      for (const [step, q] of Object.entries(raw.quests)) {
+        const items = Object.values(q.reqs ?? {}).filter((r) => r.o === 'item').map((r) => ({ ...(r.ids ? { ids: r.ids } : {}), ...(r.nm ? { nm: r.nm } : {}) }));
+        if (items.length) out[step] = items;
+      }
+      return `export default ${JSON.stringify(out)};`;
+    },
+  };
+}
+
 export default defineConfig({
   // The desktop app opens the build from disk (file://) — only relative paths.
   base: './',
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
-  plugins: [react(), csp()],
+  plugins: [react(), csp(), questItemReqs()],
   // Most of the build is the item database (~190 dossiers with shops and drops) and gear. The app
   // reads it from disk, so splitting into chunks makes little sense; the limit is there to notice unexpected growth.
   build: { chunkSizeWarningLimit: 900 },

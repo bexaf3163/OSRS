@@ -4,7 +4,7 @@
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
-import { nameKey } from '../lib/checklist';
+import { nameKey } from '../lib/itemKey';
 import { evaluatePreflight, preflightItems } from '../lib/checklist';
 
 export function PreflightPanel({ step }: { step: Step }) {

@@ -1,6 +1,7 @@
 // One combat objective projection for plan comparison, food preparation and shopping.
 import type { Step } from '../types';
-import { nameKey, type OwnedState } from './checklist';
+import type { OwnedState } from './checklist';
+import { nameKey } from './itemKey';
 import { estimateStep, foeVariants, stepGoals, xpPerKill, type CombatEstimate, type StepEstimateContext } from './combatEstimate';
 import { GUARANTEED_DROPS } from './combatRoute/spots';
 import { heldExact } from './playerState';

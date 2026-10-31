@@ -8,7 +8,7 @@
 
 import { stepById } from '../data';
 import type { Step } from '../types';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import { FOODS } from './foodAdvice';
 import type { PlayerState } from './playerState';
 import { BAG_SLOTS, stacks, type PrepPlan } from './prepPlan';

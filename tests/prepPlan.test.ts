@@ -6,7 +6,8 @@ import { readinessOf } from '../src/lib/readiness';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
 import { contextOf } from '../src/lib/readiness';
 import { emptyProgress } from '../src/lib/progress';
-import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
+import type { OwnedItem, OwnedState } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import type { Step, WikiItemDetail } from '../src/types';
 import type { UpgradeRecommendation } from '../src/services/gearUpgradeRouter';
 

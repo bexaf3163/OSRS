@@ -4,7 +4,8 @@
 import legacyCollect from '../combatRoute/legacyCollectStep.json';
 import { stepsFor } from '../../src/data';
 import { gearById } from '../../src/services/gearAdvisor';
-import { nameKey, type OwnedItem, type OwnedState } from '../../src/lib/checklist';
+import type { OwnedItem, OwnedState } from '../../src/lib/checklist';
+import { nameKey } from '../../src/lib/itemKey';
 import { combatPersonaliser } from '../../src/lib/funding/combatAdapter';
 import { assess, type AssessInput, type FundingAssessment } from '../../src/lib/funding/assess';
 import { buildNeed, type FundingNeed } from '../../src/lib/funding/need';

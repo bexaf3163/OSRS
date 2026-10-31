@@ -6,7 +6,7 @@
 
 import type { Step } from '../types';
 import type { QuestInstruction } from '../services/runeliteBridge';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import type { RequirementStatus, StepReadiness } from './readiness';
 import { prepSatisfied } from './prepPlan';
 

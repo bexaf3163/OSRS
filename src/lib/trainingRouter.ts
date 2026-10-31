@@ -1,4 +1,4 @@
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 // "What to train with": shared selection by level, goal, mode, stock, equipment, budget and preference.
 // It returns the current method and phased path; catalogue entries live in src/data/trainingMethods.json.
 //
@@ -518,9 +518,10 @@ function priceKeyOf(prices: PriceView | null | undefined): string {
  * ranked by what it gives this character, not by the wiki's guide for everyone. Other methods stay as they are.
  */
 export function personalize(methods: readonly TrainingMethod[], skill: string, state: PlayerState, prices?: PriceView | null, restriction?: TradeRestriction['state'], objective?: MethodPriority): TrainingMethod[] {
+  const stateKey = rateKeyOf(state);
   return methods.map((m) => {
     if (!m.skills.includes(skill) || m.kind !== 'method') return m;
-    const key = `${m.id}|${skill}|${rateKeyOf(state)}|${priceKeyOf(prices)}|${restriction ?? '-'}|${objective ?? '-'}`;
+    const key = `${m.id}|${skill}|${stateKey}|${priceKeyOf(prices)}|${restriction ?? '-'}|${objective ?? '-'}`;
     const cache = rateCache.get(m) ?? new Map<string, TrainingMethod>();
     if (!rateCache.has(m)) rateCache.set(m, cache);
     const hit = cache.get(key);

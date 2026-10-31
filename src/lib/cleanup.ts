@@ -8,7 +8,7 @@
 // The words never say "safe to discard": at most "no future use identified in the selected route".
 
 import type { Step } from '../types';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import { FOODS } from './foodAdvice';
 import { questUsing } from './questItems';
 import { questStepOf } from './questSteps';

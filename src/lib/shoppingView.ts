@@ -12,7 +12,8 @@ import { allocateMaterialStock, materialTake, type MaterialHolding } from './mat
 import { carryOf, doseKind, dosePackage, heldUnits, takeFromBank, type Carry, type DosePackage, type DoseSize } from './doses';
 import { legacyKeys } from './oneTrip';
 import { planSources } from './sourceRouter';
-import { nameKey, parseAmount } from './checklist';
+import { parseAmount } from './checklist';
+import { nameKey } from './itemKey';
 import { isClosed } from './next-step';
 import { tripWindow } from './oneTrip';
 import { gearData } from '../services/gearAdvisor';

@@ -3,7 +3,8 @@
 // combatEstimate's; here only the choice of the opponent version, counting the food you own by its healing, and rounding.
 
 import type { Step } from '../types';
-import { nameKey, type OwnedState } from './checklist';
+import type { OwnedState } from './checklist';
+import { nameKey } from './itemKey';
 import {
   CALIBRATED_KILLS, foeLabel, healsOf, observedFor, stepGoals, type Basis, type CombatEstimate, type Fights, type Range, type StepEstimateContext,
 } from './combatEstimate';

@@ -27,7 +27,7 @@ import { requirementCost } from '../funding/need';
 import { supplyPrice } from '../sourceRouter';
 import type { Step } from '../../types';
 import type { OwnedState } from '../checklist';
-import { nameKey } from '../checklist';
+import { nameKey } from '../itemKey';
 import {
   DEFAULT_FOOD_SLOTS, estimateStep, foeLabel, stepGoals, unsafe, xpPerKill, type Basis, type CombatEstimate, type CombatFoe, type Range, type StepEstimateContext,
 } from '../combatEstimate';

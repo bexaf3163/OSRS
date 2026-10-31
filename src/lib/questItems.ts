@@ -1,16 +1,13 @@
 // The items a quest's own steps check for (Quest Helper's requirements in src/data/questMachines.json): a quest still open in the route
 // needs them even when no shopping list names them, such as the relic, key or doll it hands over mid-quest.
 
-import machinesRaw from '../data/questMachines.json';
+import reqsByStep from 'virtual:quest-item-reqs';
 import type { Step } from '../types';
-import { nameKey } from './checklist';
-
-interface Req { o?: string; nm?: string; ids?: number[] }
+import { nameKey } from './itemKey';
 
 /** By route step id: the item ids and name keys its quest checks for. */
 const BY_STEP: ReadonlyMap<string, { ids: ReadonlySet<number>; keys: ReadonlySet<string> }> = new Map(
-  Object.entries((machinesRaw as unknown as { quests: Record<string, { reqs?: Record<string, Req> }> }).quests).map(([stepId, q]) => {
-    const items = Object.values(q.reqs ?? {}).filter((r) => r.o === 'item');
+  Object.entries(reqsByStep).map(([stepId, items]) => {
     return [stepId, { ids: new Set(items.flatMap((r) => r.ids ?? [])), keys: new Set(items.flatMap((r) => (r.nm ? [nameKey(r.nm)] : []))) }];
   }),
 );

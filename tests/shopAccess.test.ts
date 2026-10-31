@@ -6,7 +6,8 @@ import { accessSuffix, shopAccess, spawnAccess, type AccessContext } from '../sr
 import { planSources } from '../src/lib/sourceRouter';
 import { buildPlayerState } from '../src/lib/playerState';
 import { scopeList, shopRows, timingOf, budgetOf, budgetSum, type ShopRow } from '../src/lib/shoppingView';
-import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
+import type { OwnedItem, OwnedState } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { allSteps, itemById } from '../src/data';
 import type { ShoppingLine } from '../src/lib/shopping';
 import type { WikiItemDetail } from '../src/types';

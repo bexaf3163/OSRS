@@ -6,7 +6,8 @@
 
 import type { GameMode, PlayerStats, Progress } from '../types';
 import type { GearState } from '../services/runeliteBridge';
-import { nameKey, type OwnedState } from './checklist';
+import type { OwnedState } from './checklist';
+import { nameKey } from './itemKey';
 import { toolFamilyOf, toolUse, usableAt } from './toolTiers';
 import { countWorn, type WornItem } from './equipmentCount';
 

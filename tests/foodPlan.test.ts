@@ -4,7 +4,8 @@ import { assumptionsFor, foodPicks, stepWeapon, withFoodPlan } from '../src/lib/
 import { aggregateShopping } from '../src/lib/shopping';
 import { emptyProgress } from '../src/lib/progress';
 import { stepReadiness } from '../src/lib/readiness';
-import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
+import type { OwnedItem, OwnedState } from '../src/lib/checklist';
+import { nameKey } from '../src/lib/itemKey';
 import { gearById } from '../src/services/gearAdvisor';
 import type { GearState } from '../src/services/runeliteBridge';
 import type { Progress } from '../src/types';

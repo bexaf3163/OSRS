@@ -8,7 +8,7 @@
 // Requirements are from the OSRS Wiki (each shop's page and the guild's entry requirement).
 
 import type { GameMode } from '../types';
-import { nameKey } from './checklist';
+import { nameKey } from './itemKey';
 import type { Known } from './playerState';
 
 export type AccessState = 'open' | 'conditional' | 'blocked' | 'unverified';
