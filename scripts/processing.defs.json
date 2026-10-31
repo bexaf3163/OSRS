@@ -4,17 +4,20 @@
     {
       "kind": "furnace",
       "page": "Furnace",
-      "row": "[[Edgeville]]"
+      "row": "[[Edgeville]]",
+      "objectName": "Furnace"
     },
     {
       "kind": "furnace",
       "page": "Furnace",
-      "row": "[[Al Kharid]]"
+      "row": "[[Al Kharid]]",
+      "objectName": "Furnace"
     },
     {
       "kind": "furnace",
       "page": "Furnace",
-      "row": "[[Falador]]"
+      "row": "[[Falador]]",
+      "objectName": "Furnace"
     },
     {
       "kind": "anvil",
@@ -500,6 +503,49 @@
       "skill": "herblore",
       "facility": null,
       "members": true
+    },
+    {
+      "id": "shrimps",
+      "page": "Shrimps",
+      "skill": "cooking",
+      "facility": "fire"
+    },
+    {
+      "id": "anchovies",
+      "page": "Anchovies",
+      "skill": "cooking",
+      "facility": "fire"
+    },
+    {
+      "id": "sardine",
+      "page": "Sardine",
+      "skill": "cooking",
+      "facility": "fire"
+    },
+    {
+      "id": "herring",
+      "page": "Herring",
+      "skill": "cooking",
+      "facility": "fire"
+    },
+    {
+      "id": "pike",
+      "page": "Pike",
+      "skill": "cooking",
+      "facility": "fire"
+    },
+    {
+      "id": "lobster",
+      "page": "Lobster",
+      "skill": "cooking",
+      "facility": "fire"
+    },
+    {
+      "id": "swordfish",
+      "page": "Swordfish",
+      "skill": "cooking",
+      "facility": "fire",
+      "successLabel": "Fire"
     }
   ],
   "methods": {
@@ -525,13 +571,21 @@
     ],
     "ck-meat": [
       "cooked-chicken",
-      "cooked-meat"
+      "cooked-meat",
+      "shrimps",
+      "anchovies",
+      "sardine",
+      "herring"
     ],
     "ck-trout": [
-      "trout"
+      "trout",
+      "pike",
+      "salmon"
     ],
     "ck-tuna": [
-      "tuna"
+      "tuna",
+      "lobster",
+      "swordfish"
     ],
     "cr-leather": [
       "leather-gloves",

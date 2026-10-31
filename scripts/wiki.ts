@@ -66,6 +66,14 @@ export function templates(text: string, name: string): Record<string, string>[] 
 /** A number as the wiki writes it: "1,300", "37.5". NaN when it is not one. */
 export const num = (s: string | undefined): number => Number((s ?? '').replace(/,/g, '').trim());
 
+/** Ordinary Make-X timing, not the first manually selected item on a Wiki recipe. */
+export function recipeTicks(recipe: Record<string, string>): number {
+  const note = recipe.ticksnote ?? '';
+  const steady = /increases to (\d+)/i.exec(note) ?? /(\d+) ticks for the rest/i.exec(note)
+    ?? /then (\d+) ticks/i.exec(note) ?? /make[- ](?:all|x) is (\d+) ticks/i.exec(note);
+  return steady ? Number(steady[1]) : num(recipe.ticks);
+}
+
 /** One line of a {{Skilling success chart}}: the low and high values of the skilling success formula and the level it starts at. */
 export interface ChartLine { label: string; low: number; high: number; req: number }
 /** Every {{Skilling success chart}} of the text, in page order; cascade: the lines are rolled in order, the best first. */

@@ -665,8 +665,8 @@
       "id": "ck-meat",
       "skill": "cooking",
       "from": 1,
-      "to": 20,
-      "name": "Raw beef and chicken",
+      "to": 15,
+      "name": "Low-level cooking",
       "members": false,
       "needs": [
         {
@@ -674,7 +674,9 @@
           "name": "Raw beef",
           "count": 26,
           "anyOf": [
-            "Raw chicken"
+            "Raw chicken",
+            "Raw shrimps",
+            "Raw anchovies"
           ]
         }
       ],
@@ -684,16 +686,16 @@
       "cost": "cost",
       "risk": "none",
       "where": "The permanent fire west of the Barbarian Village fishing spots",
-      "note": "Withdraw owned raw meat first; 26 pieces is one starter bag, not the whole goal. The existing fire needs no logs or tinderbox. Burnt food gives no XP; buying refills needs confirmed coins.",
+      "note": "Use an owned usable catch or raw meat; current preparation is one executable batch, not the whole goal. The existing fire needs no logs or tinderbox. Burnt food gives no XP; buying refills needs confirmed coins.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
       "place": "Barbarian Village fishing spots"
     },
     {
       "id": "ck-trout",
       "skill": "cooking",
-      "from": 20,
-      "to": 30,
-      "name": "Trout",
+      "from": 15,
+      "to": 35,
+      "name": "Trout, pike or salmon",
       "members": false,
       "needs": [
         {
@@ -708,7 +710,7 @@
       "cost": "cost",
       "risk": "none",
       "where": "The permanent fire west of the Barbarian Village fishing spots",
-      "note": "Use banked raw trout first; 26 is one starter bag. Recheck supplies after each batch; burnt fish gives no XP. Buying refills needs confirmed coins.",
+      "note": "Use owned fish your Cooking level allows; current preparation is one executable batch. Recheck supplies after each batch; burnt fish gives no XP. Buying refills needs confirmed coins.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
       "place": "Barbarian Village fishing spots"
     },
@@ -717,7 +719,7 @@
       "skill": "cooking",
       "from": 30,
       "to": 35,
-      "name": "Tuna",
+      "name": "Tuna, lobster or swordfish",
       "members": false,
       "needs": [
         {
@@ -731,8 +733,8 @@
       "effort": "low",
       "cost": "cost",
       "risk": "none",
-      "where": "The permanent fire west of the Barbarian Village fishing spots; withdraw raw tuna first",
-      "note": "Use owned raw tuna first; 26 is one starter bag, not a whole-goal quantity. Burnt fish gives no XP. Buying refills needs confirmed coins.",
+      "where": "The permanent fire west of the Barbarian Village fishing spots; withdraw usable raw fish first",
+      "note": "Use owned fish your Cooking level allows; current preparation is one executable batch, not a whole-goal quantity. Burnt fish gives no XP. Buying refills needs confirmed coins.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
       "place": "Barbarian Village fishing spots"
     },

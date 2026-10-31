@@ -156,7 +156,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 
 ## Current verification
 
-2.81.13: local types/build/fresh plugin jar, data validation 0 errors/0 warnings, 2,433 unit tests across 205 files, full Java suite 647 tests/0 failures and isolated native-shell E2E passed. Final focused Gear/Shopping/Journal/Skills checks passed, including the revised Checkout/closed-session workflow and honest unknown supply budget. Both exact-source GitHub workflows then passed the complete browser suite and isolated packaged Portable gates. The independently downloaded EXE and distributed handoff were verified against release metadata; source/run IDs and EXE digest are in the receipt above. No real-game verification is claimed.
+2.81.14 local source: types/build/fresh plugin jar, data validation 0 errors/0 warnings, 2,454 unit tests across 206 files, full Java suite 647 tests/0 failures, complete browser suite and isolated native-shell E2E passed. New checks cover owned catches, physical partial batches, unlocks, shared observation/preparation, station targets and Make-X/burn timing; existing tool/combat/funding preferences remain covered. The exact-source release pipeline additionally runs its full browser/native/isolated-EXE gates before publication. Independent delivery evidence belongs in the receipt above. No real-game verification is claimed.
 
 ## Completed baseline — preserve, do not redo
 
@@ -165,6 +165,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 |2.80.8–12|Protected persistence/recovery, backup receipts and pre-write external-revision guards; RuneLite heap minimum. Not an automatic merger/watcher/lock or power-loss guarantee.|
 |2.80.13–17|Quest-entry food, physical alternative withdrawals, consumer-specific skill proofs, F2P checkpoints, acquisition fees separate from unit prices, one shared material allocator and method-selection integration.|
 |2.80.18–2.81.3|Compact skill access, model-driven combat/gathering/processing, staged Optional/training, per-recipe feasibility/batches. Basic Firemaking, Prayer, Runecraft and Superheat adapters already exist.|
+|2.81.14|Common F2P Cooking catch/recipe progression, verified Make-X timing/station targets, sustainable no-cash processing selection and reconciled legacy Cooking source; existing shared preparation/stock/funding lifecycle.|
 |2.81.13|Contextual Journal/selected quest, Gear/current activity, compact Skills index/Calculator reference, and Shopping Checkout; shared activity selection and protected refill budget. Accepted Ledger/fonts unchanged.|
 |2.81.4–6|Conditional processing/Ranged goal demand; one followed-Skills preparation/Shopping/funding lifecycle, with explicit goals and no fabricated XP.|
 |2.81.7–10|Complete Magic gear comparisons, selected physical tools, quest-XP alternatives, conservative account scope, tool capability versus purchase catalogues, carried versus actually worn gathering capacity.|
@@ -209,6 +210,18 @@ Use [SKILLS_COVERAGE.md](docs/SKILLS_COVERAGE.md) as the capability inventory. R
 6. Correct next action/completion and no old static recommendation elsewhere contradicting the current plan.
 
 Keep unsupported members mechanics and uncalibrated rates explicit. Add missing mechanics to shared contracts/adapters, with regressions that also cover new/synthetic content. Do not solve each skill by copying the Ranged implementation.
+
+### Cooking progression and shared batch fixes — 2.81.14 source
+
+Verified against the Wiki on 2026-10-31: [F2P Cooking](https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training) and each recipe's live Recipe/Skilling success chart via the existing Wiki reader. Seven missing recipes now cover shrimps, anchovies, sardines, herring, pike, lobster and swordfish; the existing salmon recipe is now connected to its training family. Trout is usable from Cooking15, pike20 and salmon25. The three existing method families select usable owned fish or funded alternatives through the same processing model. No new per-skill buying/funding loop or design changes.
+
+- The builder's shared `recipeTicks` reads ordinary Make-X timing including the Wiki's “Make-All is4 ticks” note; it must not import first-item one-tick timing as sustained cooking speed. Swordfish uses its **Fire** burn chart, not range/gauntlet bonuses. Existing recipes/station coordinates were unchanged by the rebuild.
+- At **confirmed zero cash**, Balanced/Profit keep an executable kit ahead of an **unpriced processing batch**. This does not ban ordinary tool/spot investment or change Fastest/Relaxed preferences. Known affordable purchases still compete on their existing time/profit/setup rules. Missing prices are never guessed.
+- Processing station scene targets are verified from the source page's object names. A multiple-name page needs an explicit validated selection in processing.defs.json; a future cooking range must not be labelled Fire merely because both use the cooking facility contract. `RateSpot.objectNames` flows through methodPick/withTrainingMethod and merges existing access hints.
+- Owned compatible partial catches use the shared material allocator without a refill trip after every action. New recipe inputs enter the shared bank/inventory watch automatically. Burn-adjusted XP, current batches, conditional goal/stock demand, acquisition and return to the original activity use existing engines.
+- Legacy Cooking guide content and its generator retain their IDs but now explain proper early unlocks, use the Barbarian Village fire instead of sending owned tuna to Karamja, and remove blanket cheap-wine/guaranteed Fishing-to-Cooking progress claims. Explicit saved goals remain explicit.
+
+Source verification/release status belongs in Current verification and the delivery receipt. This completes these common F2P Cooking progression fixes, **not every Cooking recipe, Members mechanic or skill/model factual review**. Remaining P2 checks still apply to the other skills; all real-game checks stay with Claude.
 
 ### P3 — finish content review and reconcile visible consumers
 

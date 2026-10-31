@@ -178,6 +178,10 @@ export interface MethodView {
   unchecked: NeedStatus[];
   /** Confirmed missing next-trip kit cost above known available coins; unknown stock/prices never imply a deficit. */
   fundingShortfall?: number;
+  /** Current kit is covered or its missing purchases are confirmed affordable. Unknown prices/cash are not funding. */
+  fundingReady?: boolean;
+  /** With no cash, an unpriced processing batch needs verification before replacing usable supplies. */
+  needsFundingCheck?: boolean;
 }
 
 export function viewMethod(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodView {
@@ -192,9 +196,12 @@ export function viewMethod(m: TrainingMethod, state: PlayerState, prices?: Price
   const prep = needs.filter((n) => (n.kind === 'item' || n.kind === 'tool') && (n.state === 'MISSING' || n.state === 'PARTIAL' || n.state === 'BANK'));
   const unchecked = needs.filter((n) => n.state === 'UNKNOWN');
   const cash = coinsOf(state).total;
-  const kit = cash !== null && prices ? requirementCost(declared.map(n => methodRequirement(n, state)), state, prices) : null;
+  // Reuse the allocated readiness result; unpriced forecasts do not need a second ownership pass.
+  const covered = needs.every(n => (n.kind !== 'item' && n.kind !== 'tool') || n.state === 'OK' || n.state === 'BANK');
+  const kit = covered ? 0 : cash !== null && prices ? requirementCost(declared.map(n => methodRequirement(n, state)), state, prices) : null;
+  const fundingReady = kit === 0 || (kit !== null && cash !== null && kit <= cash);
   const fundingShortfall = cash !== null && kit !== null && kit > cash ? Math.ceil(kit - cash) : 0;
-  return { method: m, status: locked.length ? 'LOCKED' : prep.length || m.manualSetup ? 'PREP' : 'READY', missing: [...locked, ...prep], unchecked, ...(fundingShortfall ? { fundingShortfall } : {}) };
+  return { method: m, status: locked.length ? 'LOCKED' : prep.length || m.manualSetup ? 'PREP' : 'READY', missing: [...locked, ...prep], unchecked, fundingReady, ...(m.consumables?.length && cash === 0 && kit === null ? { needsFundingCheck: true } : {}), ...(fundingShortfall ? { fundingShortfall } : {}) };
 }
 
 export function methodNeeds(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodNeed[] {
@@ -324,6 +331,12 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number, coin
     if (Boolean(a.method.manualSetup) !== Boolean(b.method.manualSetup)) return Number(Boolean(a.method.manualSetup)) - Number(Boolean(b.method.manualSetup));
     const uncheckedEntry = (v: MethodView) => v.unchecked.some(n => n.kind === 'skill' || n.kind === 'quest');
     if (uncheckedEntry(a) !== uncheckedEntry(b)) return Number(uncheckedEntry(a)) - Number(uncheckedEntry(b));
+    // A player with no cash can finish a usable batch instead of assuming an unpriced processing recipe is funded.
+    // A funded purchase still competes by time/profit; ordinary tool/spot investment keeps its existing setup comparison.
+    if (priority === 'balanced' || priority === 'profit') {
+      if (a.fundingReady && b.needsFundingCheck) return -1;
+      if (b.fundingReady && a.needsFundingCheck) return 1;
+    }
     // A method the level has outgrown (cows at Attack 45, seagulls at Ranged 60) does not beat a ready method made for this level just because the
     // newer one's supplies are unread or it is riskier. Where speed ranks (balanced, fastest), known speeds still decide; an outgrown method with
     // its supplies at hand still beats a new one that needs buying first.

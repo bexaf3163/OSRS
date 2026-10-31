@@ -28,7 +28,7 @@ export type TrainingPick = string | {
   methodId: string; untilLevel?: number; goalNeeds?: MethodNeed[]; stockNeeds?: MethodNeed[]; needs: MethodNeed[]; name?: string; where?: string; warning?: string;
   modelled?: boolean;
   /** The spot the engine picked; waypoints - the way in of a spot under the ground, entrance first. */
-  spot?: { label: string; x: number; y: number; plane: number; waypoints?: { x: number; y: number; plane: number; label?: string }[] };
+  spot?: { label: string; x: number; y: number; plane: number; objectNames?: string[]; waypoints?: { x: number; y: number; plane: number; label?: string }[] };
   /** The step's next skill trained on the same catches at a station beside the spot (fish cooked on the fire there), and what is done with them. */
   along?: { skill: string; station: { label: string; x: number; y: number; plane: number }; products: string[]; how: 'bank' | 'drop' };
 };
@@ -108,7 +108,7 @@ function requirement(n: MethodNeed, m: RawMethod): StepItemRequirement | null {
 }
 
 /** The label of a method's point, one rule for the catalogue place and the spot an engine picked: "Cooking: Tuna — Barbarian Village fire". */
-const pointLabel = (m: { name: string; skills: readonly string[] }, place: string) => `${m.skills.includes('cooking') ? 'Cooking: ' : ''}${m.name} — ${place}`;
+const pointLabel = (m: { name: string; skills: readonly string[] }, place: string) => `${m.skills.includes('cooking') ? 'Cooking: ' : ''}${m.skills.includes('cooking') ? m.name.replace(/^Cook\s+/, '') : m.name} — ${place}`;
 
 /** The place of a method as a step point, from the place dictionary only (no guessing from the text); null when it has none. */
 export function methodPoint(methodId: string): MapLocation | null {
@@ -183,7 +183,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
       ...step.inGame,
       worldPoint: at ?? undefined, groundTiles: at ? [at] : [], pathWaypoints: chosen?.waypoints?.length ? chosen.waypoints.map((p) => ({ x: p.x, y: p.y, plane: p.plane })) : undefined,
       goal: at?.label ?? `${m.name}: ${m.where}`,
-      objectNames: [...m.objectNames ?? [], ...(along ? ['Fire'] : [])], objectIds: [],
+      objectNames: [...new Set([...m.objectNames ?? [], ...chosen?.objectNames ?? [], ...(along ? ['Fire'] : [])])], objectIds: [],
       ...(m.npcNames || goal.skill !== step.followsMethod || goal.skill === 'ranged' || goal.skill === 'magic' ? { npcNames: m.npcNames ?? [], npcIds: [] } : {}),
       highlightItems: itemsRequired.map((i) => i.nameEn),
     } } : {}),

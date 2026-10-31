@@ -3,6 +3,9 @@
   "stations": [
     {
       "kind": "furnace",
+      "objectNames": [
+        "Furnace"
+      ],
       "label": "Edgeville furnace",
       "place": {
         "x": 3110,
@@ -15,6 +18,9 @@
     },
     {
       "kind": "furnace",
+      "objectNames": [
+        "Furnace"
+      ],
       "label": "Al Kharid furnace",
       "place": {
         "x": 3273,
@@ -27,6 +33,9 @@
     },
     {
       "kind": "furnace",
+      "objectNames": [
+        "Furnace"
+      ],
       "label": "Falador furnace",
       "place": {
         "x": 2976,
@@ -39,6 +48,9 @@
     },
     {
       "kind": "anvil",
+      "objectNames": [
+        "Anvil"
+      ],
       "label": "Varrock anvil building",
       "place": {
         "x": 3246,
@@ -51,6 +63,9 @@
     },
     {
       "kind": "fire",
+      "objectNames": [
+        "Fire"
+      ],
       "label": "Barbarian Village fire",
       "place": {
         "x": 3106,
@@ -63,6 +78,9 @@
     },
     {
       "kind": "altar",
+      "objectNames": [
+        "Altar"
+      ],
       "label": "Air Altar",
       "place": {
         "x": 2843,
@@ -86,6 +104,9 @@
     },
     {
       "kind": "altar",
+      "objectNames": [
+        "Altar"
+      ],
       "label": "Earth Altar",
       "place": {
         "x": 2657,
@@ -109,6 +130,9 @@
     },
     {
       "kind": "altar",
+      "objectNames": [
+        "Altar"
+      ],
       "label": "Fire Altar",
       "place": {
         "x": 2584,
@@ -132,6 +156,9 @@
     },
     {
       "kind": "altar",
+      "objectNames": [
+        "Altar"
+      ],
       "label": "Body Altar",
       "place": {
         "x": 2522,
@@ -1764,6 +1791,181 @@
         "qty": 1
       },
       "source": "https://oldschool.runescape.wiki/w/Saradomin_brew"
+    },
+    {
+      "id": "shrimps",
+      "skill": "cooking",
+      "level": 1,
+      "xp": 30,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Raw shrimps",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Shrimps",
+        "qty": 1
+      },
+      "success": {
+        "low": 128,
+        "high": 512
+      },
+      "source": "https://oldschool.runescape.wiki/w/Shrimps"
+    },
+    {
+      "id": "anchovies",
+      "skill": "cooking",
+      "level": 1,
+      "xp": 30,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Raw anchovies",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Anchovies",
+        "qty": 1
+      },
+      "success": {
+        "low": 128,
+        "high": 512
+      },
+      "source": "https://oldschool.runescape.wiki/w/Anchovies"
+    },
+    {
+      "id": "sardine",
+      "skill": "cooking",
+      "level": 1,
+      "xp": 40,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Raw sardine",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Sardine",
+        "qty": 1
+      },
+      "success": {
+        "low": 118,
+        "high": 492
+      },
+      "source": "https://oldschool.runescape.wiki/w/Sardine"
+    },
+    {
+      "id": "herring",
+      "skill": "cooking",
+      "level": 5,
+      "xp": 50,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Raw herring",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Herring",
+        "qty": 1
+      },
+      "success": {
+        "low": 108,
+        "high": 472
+      },
+      "source": "https://oldschool.runescape.wiki/w/Herring"
+    },
+    {
+      "id": "pike",
+      "skill": "cooking",
+      "level": 20,
+      "xp": 80,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Raw pike",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Pike",
+        "qty": 1
+      },
+      "success": {
+        "low": 78,
+        "high": 412
+      },
+      "source": "https://oldschool.runescape.wiki/w/Pike"
+    },
+    {
+      "id": "lobster",
+      "skill": "cooking",
+      "level": 40,
+      "xp": 120,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Raw lobster",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Lobster",
+        "qty": 1
+      },
+      "success": {
+        "low": 38,
+        "high": 332
+      },
+      "source": "https://oldschool.runescape.wiki/w/Lobster"
+    },
+    {
+      "id": "swordfish",
+      "skill": "cooking",
+      "level": 45,
+      "xp": 140,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Raw swordfish",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Swordfish",
+        "qty": 1
+      },
+      "success": {
+        "low": 18,
+        "high": 292
+      },
+      "source": "https://oldschool.runescape.wiki/w/Swordfish"
     }
   ],
   "methods": {
@@ -1789,13 +1991,21 @@
     ],
     "ck-meat": [
       "cooked-chicken",
-      "cooked-meat"
+      "cooked-meat",
+      "shrimps",
+      "anchovies",
+      "sardine",
+      "herring"
     ],
     "ck-trout": [
-      "trout"
+      "trout",
+      "pike",
+      "salmon"
     ],
     "ck-tuna": [
-      "tuna"
+      "tuna",
+      "lobster",
+      "swordfish"
     ],
     "cr-leather": [
       "leather-gloves",

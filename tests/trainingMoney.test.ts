@@ -67,6 +67,15 @@ describe('money means known proceeds after supplies, not gross drops', () => {
     expect(only.reason).toContain('earn at least 900 gp');
     expect(advice([costly], 'profit', state(false), board).best?.fundingShortfall).toBeUndefined();
   });
+  it.each(['balanced', 'profit'] as const)('%s at zero cash keeps an executable new-skill method ahead of an unpriced batch', priority => {
+    const supplied = method('future-supplied', { xph: [1000, 1000], needs: [] });
+    const unpriced = method('future-unpriced', { xph: [100000, 100000], consumables: [{ name: 'Test ore', qty: 1 }], needs: [{ type: 'item', name: 'Test ore', count: 1 }] });
+    const zero = state();
+    if (zero.coins.bag.known) zero.coins.bag.value = 0;
+    expect(advice([unpriced, supplied], priority, zero).best?.method.id).toBe(supplied.id);
+    // A real quote and enough money make the faster purchase comparable again.
+    if (priority === 'balanced') expect(advice([unpriced, supplied], priority, state(), prices({ 'Test ore': 1 }, {})).best?.method.id).toBe(unpriced.id);
+  });
   it('money banking still needs a positive sale, while fastest avoids extra pickup time', () => {
     expect(bankingPays(10, 100, null, 'profit')).toBe(true);
     expect(bankingPays(0, 1, null, 'profit')).toBe(false);

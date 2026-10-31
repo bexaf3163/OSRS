@@ -15,6 +15,8 @@ import { processRate } from './processingRates';
 /** Where a modelled method is done: the spot the engine picked among the candidates, and what happens with a full bag there. */
 export interface RateSpot {
   label: string;
+  /** Scene objects at the selected station; existing entrance/access hints remain available. */
+  objectNames?: string[];
   place: Point & { label: string };
   /** The way to a spot under the ground: its entrance first, then the spot (the plugin's path and the bank trip follow it). */
   waypoints?: (Point & { label?: string })[];

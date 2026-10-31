@@ -169,7 +169,7 @@ describe('S6-02 follows the training method of the real level', () => {
     expect(none.pick).toBeUndefined();
     expect(none.step).toBe(step);
     expect(needs(none.step)).toEqual(['Small fishing net']);
-    const cooking = resolved(50);
+    const cooking = resolved(50, { 'Raw tuna': 26 });
     expect(cooking.pick).toBe('ck-tuna');
     expect(needs(cooking.step)).toEqual(['Raw tuna x26']);
     const done = resolved(50, {}, 'chill', 50);
@@ -221,8 +221,8 @@ describe('S6-02 follows the training method of the real level', () => {
     // The old regression counted positive hazards here. Unchecked supplies no longer gain READY priority.
     // Keep watching every method: the additional information is still required for correct preparation.
     expect(hazard).toBe(0);
-    // Exhaustive (2 styles x 8 levels x 6 bags, several rounds each): about 2 s alone, over vitest's 5 s default when the whole suite runs in parallel.
-  }, 20_000);
+    // Exhaustive: 2 styles × 8 levels × 6 bags × 6 simulated bridge rounds. Allow the full-suite parallel CPU budget; retain every case/assertion.
+  }, 30_000);
 
   it('a step that does not follow a method is the same object whatever the pick says', () => {
     const other = stepById.get('S1-01')!;

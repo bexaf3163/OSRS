@@ -9,13 +9,13 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { chebyshev, locLines, mapPoint, middleOf, num, successCharts, templates, wikitables, wikitext, type Pt } from './wiki.ts';
+import { chebyshev, locLines, mapPoint, middleOf, num, recipeTicks, successCharts, templates, wikitables, wikitext, type Pt } from './wiki.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const OUT = `${root}src/data/processing.json`;
 
 type Kind = 'furnace' | 'anvil' | 'fire' | 'altar';
-interface StationDef { kind: Kind; page: string; row?: string; location?: string; near?: string; bank?: string }
+interface StationDef { objectName?: string; kind: Kind; page: string; row?: string; location?: string; near?: string; bank?: string }
 interface TickEvidence { page: string; evidence: string; ticks: number }
 interface RecipeDef { id: string; page: string; skill: string; facility: Kind | null; members?: boolean; /** Lit with a tinderbox (Firemaking): read from the log's {{Firemaking info}}. */ light?: boolean;
   consume?: { level: number; xp: number; xpEvidence: string; action: TickEvidence };
@@ -43,6 +43,11 @@ const page = async (p: string) => { if (!pages.has(p)) pages.set(p, await wikite
 for (const s of defs.stations) {
   const what = `${s.kind} @ ${s.row ?? s.location}`;
   const text = await page(s.page);
+  const sceneNames = [...new Set(templates(text, 'Infobox Scenery').flatMap(box => Object.entries(box)
+    .filter(([key]) => /^name\d*$/.test(key)).map(([, value]) => plain(value)).filter(Boolean)))];
+  const scene = s.objectName ?? (sceneNames.length === 1 ? sceneNames[0] : undefined);
+  if (!scene || !sceneNames.includes(scene)) { fail(what, 'select a verified scene object name from the station page'); continue; }
+  const objectNames = [scene];
   if (s.kind === 'altar') {
     const box = templates(text, 'Infobox Scenery')[0] ?? {};
     const at = mapPoint(box.map ?? '');
@@ -54,7 +59,7 @@ for (const s of defs.stations) {
     if (!at || !entry || !portal || chebyshev(at, portal) > 100 || !s.bank || places[s.bank]?.kind !== 'bank' || chebyshev(entry, places[s.bank]) > 500) {
       fail(s.page, 'altar/ruins/exit-portal maps or bank are missing/inconsistent'); continue;
     }
-    stations.push({ kind: s.kind, label: s.page, place: { ...at, label: s.page }, entry: { ...entry, label: `${s.page}: mysterious ruins` }, portal,
+    stations.push({ kind: s.kind, objectNames, label: s.page, place: { ...at, label: s.page }, entry: { ...entry, label: `${s.page}: mysterious ruins` }, portal,
       bank: s.bank, members: /^yes$/i.test(box.members ?? '') });
     continue;
   }
@@ -68,7 +73,7 @@ for (const s of defs.stations) {
     if (!at) { fail(what, 'the row has no map point'); continue; }
     if (!(tiles > 0)) { fail(what, `the row has no distance from the bank ("${row[1]}")`); continue; }
     const label = new RegExp(s.kind, 'i').test(plain(s.row)) ? plain(s.row) : `${plain(s.row)} ${s.kind}`;
-    stations.push({ kind: s.kind, label, place: { ...at, label }, bankTiles: tiles, members });
+    stations.push({ kind: s.kind, objectNames, label, place: { ...at, label }, bankTiles: tiles, members });
     continue;
   }
   // A spawn group of the object near a named place (the fire west of the Barbarian Village fishing spots), banked at a named bank.
@@ -79,7 +84,7 @@ for (const s of defs.stations) {
   const best = groups.map((g) => ({ g, mid: middleOf(g.pts) })).sort((a, b) => chebyshev(a.mid, near) - chebyshev(b.mid, near))[0];
   if (!best || chebyshev(best.mid, near) > 30) { fail(what, `no ObjectLocLine "${s.location}" on ${s.page} within 30 tiles of ${s.near}`); continue; }
   const label = `${plain(s.location ?? '')} ${s.kind}`;
-  stations.push({ kind: s.kind, label, place: { ...best.mid, label }, bank: s.bank, members: best.g.members });
+  stations.push({ kind: s.kind, objectNames, label, place: { ...best.mid, label }, bank: s.bank, members: best.g.members });
 }
 
 // Recipes.
@@ -94,11 +99,6 @@ async function stacks(item: string): Promise<boolean> {
   return stackCache.get(item)!;
 }
 /** The ticks of one action at the Make-X pace: the note's "increases to N" or "N ticks for the rest" when the first action is quicker. */
-function steadyTicks(r: Record<string, string>): number {
-  const note = r.ticksnote ?? '';
-  const later = /increases to (\d+)/i.exec(note) ?? /(\d+) ticks for the rest/i.exec(note) ?? /then (\d+) ticks/i.exec(note);
-  return later ? Number(later[1]) : num(r.ticks);
-}
 const FACILITY: Record<Kind, RegExp> = { furnace: /furnace/i, anvil: /anvil/i, fire: /range|fire/i, altar: /altar/i };
 
 // Lighting logs: one action length and one success chart for every log (Firemaking), checked on the wiki once.
@@ -189,7 +189,7 @@ for (const d of defs.recipes) {
     if (d.skill !== 'runecraft' || !carried || !equipped || !every || inputs.length !== 1 || inputs[0].name !== 'Rune essence'
       || !guide.includes('pure essence or rune essence')) { fail(d.id, 'whole-inventory crafting/access/essence evidence incomplete'); continue; }
   }
-  const ticks = d.batch?.workTicks ?? steadyTicks(r);
+  const ticks = d.batch?.workTicks ?? recipeTicks(r);
   if (d.batch && (!(d.batch.size > 0) || !Number.isInteger(d.batch.size) || !(d.batch.workTicks > 0) || !(d.batch.waitTicks >= 0)
     || num(r.ticks) !== d.batch.workTicks + d.batch.waitTicks || !(r.ticksnote ?? '').includes(d.batch.workEvidence)
     || !(r.ticksnote ?? '').includes(d.batch.waitEvidence))) { fail(d.id, 'batch work/wait evidence does not match the recipe'); continue; }

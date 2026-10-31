@@ -8,42 +8,42 @@
       "skill": "cooking",
       "levelRange": [
         1,
-        20
+        15
       ],
       "methodType": "GATHER",
-      "title": "Raw beef and chicken",
-      "description": "Cook raw beef and chicken on the range in the Lumbridge Castle kitchen (after Cook's Assistant) or on a fire.",
-      "targetLevel": 20,
+      "title": "Low-level cooking",
+      "description": "Cook owned shrimps, anchovies or sardines from level 1; herring unlocks at 5. Use a fire or an accessible range. The Plan checks your actual catch and budget.",
+      "targetLevel": 15,
       "lane": "both",
       "members": false,
       "location": {
-        "name": "Lumbridge Castle",
+        "name": "Barbarian Village fishing spots",
         "tile": [
-          3217,
-          3219,
+          3107,
+          3429,
           0
         ],
-        "objectName": "Range"
+        "objectName": "Fire"
       }
     },
     {
       "id": "cooking-02",
       "skill": "cooking",
       "levelRange": [
-        20,
+        15,
         30
       ],
       "methodType": "GATHER",
-      "title": "Trout",
-      "description": "Cook trout on a fire or range by the fishing spots at Barbarian Village.",
+      "title": "Trout, pike or salmon",
+      "description": "Trout unlocks at 15, pike at 20 and salmon at 25 Cooking. Use your owned fish first when practical; the Plan selects the usable recipe and its preparation.",
       "targetLevel": 30,
       "lane": "both",
       "members": false,
       "location": {
-        "name": "Barbarian Village",
+        "name": "Barbarian Village fishing spots",
         "tile": [
-          3080,
-          3427,
+          3107,
+          3429,
           0
         ],
         "objectName": "Fire"
@@ -57,19 +57,19 @@
         35
       ],
       "methodType": "GATHER",
-      "title": "Tuna",
-      "description": "Cook tuna on a range at Musa Point or after a trip to the bank.",
+      "title": "Tuna or owned lower-level fish",
+      "description": "Withdraw usable raw fish and cook at the permanent fire west of the Barbarian Village fishing spots. Cooking owned tuna does not require a fishing trip to Karamja.",
       "targetLevel": 35,
       "lane": "both",
       "members": false,
       "location": {
-        "name": "Musa Point",
+        "name": "Barbarian Village fishing spots",
         "tile": [
-          2904,
-          3162,
+          3107,
+          3429,
           0
         ],
-        "objectName": "Range"
+        "objectName": "Fire"
       }
     },
     {
@@ -81,7 +81,7 @@
       ],
       "methodType": "GATHER",
       "title": "Jugs of wine",
-      "description": "Use grapes on jugs of water by any bank: the wine ferments by itself, no range needed. The fastest free Cooking, and it costs little.",
+      "description": "Use grapes on jugs of water by any bank: the wine ferments by itself, no range needed. Check the current material cost and affordable batch first; failures consume ingredients and future sales are not guaranteed.",
       "targetLevel": 99,
       "lane": "both",
       "members": false,

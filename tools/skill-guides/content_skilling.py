@@ -34,10 +34,10 @@ A(s('fishing', 35, 99, 'MINIGAME', 'Tempoross', 'Fight the Tempoross on a busy w
 A(s('fishing', 58, 99, 'GATHER', 'Barbarian fishing', 'Catch leaping fish at the Barbarian Outpost: it also trains Strength and Agility.', 'wiki:Otto Godblessed', 'afk', True, npc='Fishing spot'))
 
 # ---------------------------------------------------------------- Cooking
-A(s('cooking', 1, 20, 'GATHER', 'Raw beef and chicken', 'Cook raw beef and chicken on the range in the Lumbridge Castle kitchen (after Cook\'s Assistant) or on a fire.', 'Lumbridge Castle', 'both', False, obj='Range'))
-A(s('cooking', 20, 30, 'GATHER', 'Trout', 'Cook trout on a fire or range by the fishing spots at Barbarian Village.', 'Barbarian Village', 'both', False, obj='Fire'))
-A(s('cooking', 30, 35, 'GATHER', 'Tuna', 'Cook tuna on a range at Musa Point or after a trip to the bank.', 'Musa Point', 'both', False, obj='Range'))
-A(s('cooking', 35, 99, 'GATHER', 'Jugs of wine', 'Use grapes on jugs of water by any bank: the wine ferments by itself, no range needed. The fastest free Cooking, and it costs little.', 'Grand Exchange', 'both', False))
+A(s('cooking', 1, 15, 'GATHER', 'Low-level cooking', 'Cook owned shrimps, anchovies or sardines from level 1; herring unlocks at 5. Use a fire or an accessible range. The Plan checks your actual catch and budget.', 'Barbarian Village fishing spots', 'both', False, obj='Fire'))
+A(s('cooking', 15, 30, 'GATHER', 'Trout, pike or salmon', 'Trout unlocks at 15, pike at 20 and salmon at 25 Cooking. Use your owned fish first when practical; the Plan selects the usable recipe and its preparation.', 'Barbarian Village fishing spots', 'both', False, obj='Fire'))
+A(s('cooking', 30, 35, 'GATHER', 'Tuna or owned lower-level fish', 'Withdraw usable raw fish and cook at the permanent fire west of the Barbarian Village fishing spots. Cooking owned tuna does not require a fishing trip to Karamja.', 'Barbarian Village fishing spots', 'both', False, obj='Fire'))
+A(s('cooking', 35, 99, 'GATHER', 'Jugs of wine', 'Use grapes on jugs of water by any bank: the wine ferments by itself, no range needed. Check the current material cost and affordable batch first; failures consume ingredients and future sales are not guaranteed.', 'Grand Exchange', 'both', False))
 A(s('cooking', 30, 99, 'GATHER', 'Cooked karambwan', 'Buy raw karambwan on the Grand Exchange and cook them on the Hosidius range: the fastest low-effort Cooking method.', 'wiki:Hosidius', 'fast', True, obj='Range'))
 
 # ---------------------------------------------------------------- Mining

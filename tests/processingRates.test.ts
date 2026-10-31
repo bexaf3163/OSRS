@@ -233,7 +233,7 @@ describe('a recipe must be feasible with the player’s current kit and budget',
       ]) } });
     const p = prices({ 'Raw beef': 10, 'Raw chicken': 10 }, { 'Cooked meat': 1, 'Cooked chicken': 1000 });
     const selected = personalize([method('ck-meat')], 'cooking', st, p, undefined, 'profit')[0];
-    expect(selected.name).toBe('Make Cooked chicken');
+    expect(selected.name).toBe('Cook chicken');
     expect(selected.needs).toContainEqual({ type: 'item', name: 'Raw chicken', count: 26 });
     const changed = { ...st, owned: { ...st.owned!, items: new Map(st.owned!.items) } };
     changed.owned.items.set('raw chicken', { name: 'Raw chicken', carried: 0, noted: 0, bank: 0 });
@@ -242,6 +242,15 @@ describe('a recipe must be feasible with the player’s current kit and budget',
 });
 
 describe('a new recipe or station inherits the rules (synthetic registry)', () => {
+  it('uses the scene target declared by a new station, not a guess from its cooking facility', () => {
+    const reg: ProcessingRegistry = { stations: [{ kind: 'fire', label: 'Future kitchen', objectNames: ['Cooking range'],
+      place: { x: 3095, y: 3240, plane: 0, label: 'Future kitchen' }, bankTiles: 5, members: false }],
+      recipes: [{ id: 'future-food', skill: 'cooking', level: 1, xp: 30, ticks: 4, facility: 'fire', tools: [],
+        inputs: [{ name: 'Future raw food', qty: 1, stacks: false }], output: { name: 'Future food', qty: 1 } }],
+      methods: { 'future-kitchen': ['future-food'] } };
+    const m = { ...method('ck-meat'), id: 'future-kitchen', needs: [] };
+    expect(processRate(m, 'cooking', stateOf({ cooking: 20 }), {}, reg)?.spot?.objectNames).toEqual(['Cooking range']);
+  });
   it('a members station is offered only to members, and the nearer bank makes it faster', () => {
     const f2p = processRate(TEST, 'smithing', stateOf({ smithing: 10 }), {}, SYNTHETIC)!;
     const members = processRate(TEST, 'smithing', stateOf({ smithing: 10 }, 'members'), {}, SYNTHETIC)!;

@@ -20,7 +20,7 @@ import type { TrainingMethod, MethodNeed } from './trainingRouter';
 import type { Point } from './travel';
 
 type Facility = 'furnace' | 'anvil' | 'fire' | 'altar';
-interface Station { kind: Facility; label: string; place: Point & { label: string }; bankTiles?: number; bank?: string; members: boolean; entry?: Point; portal?: Point }
+interface Station { objectNames?: string[]; kind: Facility; label: string; place: Point & { label: string }; bankTiles?: number; bank?: string; members: boolean; entry?: Point; portal?: Point }
 interface Recipe {
   id: string; skill: string; level: number; xp: number; ticks: number; facility: Facility | null; tools: string[];
   /** output: null - nothing kept (logs burnt). retry: a failed attempt keeps the material and costs only its time (lighting a log). */
@@ -56,7 +56,7 @@ function placesFor(r: Recipe, state: PlayerState, reg: ProcessingRegistry): { sp
     const walk = s.bankTiles !== undefined ? { minutes: tripMinutes(s.bankTiles, 0, BANK_VISIT), bank: undefined } : s.bank ? bankTrip({ place: s.place, bank: s.bank,
       ...(s.entry && s.portal ? { waypoints: [s.entry, s.portal, s.place] } : {}) }, BANK_VISIT) : null;
     if (!walk) return [];
-    return [{ spot: { label: s.label, place: s.place, how: 'bank' as const, ...(walk.bank ? { bank: walk.bank.label } : {}),
+    return [{ spot: { label: s.label, place: s.place, ...(s.objectNames?.length ? { objectNames: [...s.objectNames] } : {}), how: 'bank' as const, ...(walk.bank ? { bank: walk.bank.label } : {}),
       ...(s.entry ? { waypoints: [s.entry, s.place] } : {}) }, trip: walk.minutes }];
   });
 }
@@ -214,7 +214,7 @@ export function processRate(m: TrainingMethod, skill: string, state: PlayerState
         delete o.rate.loot;
         delete o.rate.costName;
         o.score = 1 / ((o.rate.xph[0] + o.rate.xph[1]) / 2);
-      } else if (ids.length > 1 && r.output) o.rate.methodName = `Make ${r.output.name}`;
+      } else if (ids.length > 1 && r.output) o.rate.methodName = `${r.skill === 'cooking' && r.facility === 'fire' ? 'Cook' : 'Make'} ${r.skill === 'cooking' ? r.output.name.replace(/^Cooked\s+/, '') : r.output.name}`;
       // A tie (within 2%) goes to the station nearer the method's own place, so the advice does not hop between equal stations.
       const far = (x: Option) => (home && x.rate.spot ? Math.max(Math.abs(x.rate.spot.place.x - home.x), Math.abs(x.rate.spot.place.y - home.y)) : 0);
       const earnings = best && market.objective === 'profit' ? earningsOrder(netEarnings(o.rate), netEarnings(best.rate)) : 0;

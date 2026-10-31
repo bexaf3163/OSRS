@@ -747,7 +747,7 @@
     "intro": [
       {
         "t": "p",
-        "text": "Cook what you catch: Cooking almost always keeps up with Fishing, and in the end you have your own food for combat."
+        "text": "Cook usable catches at your observed Cooking level. The Plan checks recipe unlocks, burning, supplies and budget; Fishing does not guarantee matching Cooking progress."
       }
     ],
     "sections": [

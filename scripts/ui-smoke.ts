@@ -427,6 +427,38 @@ async function stockScenarios(browser: Browser) {
   }
 }
 
+async function cookingCatchScenarios(browser: Browser) {
+  const processing = JSON.parse(readFileSync(new URL('../src/data/processing.json', import.meta.url), 'utf8'));
+  const watched = [...new Set<string>(processing.recipes.flatMap((r: any) => [...r.tools, ...r.inputs.map((i: any) => i.name)]))];
+  const stats = { cooking: 45, hitpoints: 40 };
+  const gear = { equipment: [], inventory: [{ id: 371, name: 'Raw swordfish', count: 7 }], coins: 0, bankCoins: 0 };
+  const { page, errors } = await open(browser, 1280, {
+    market: true, marketUnavailable: true,
+    progress: progressBefore('S6-02', { gameMode: 'f2p', levels: stats }),
+    localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
+    status: { protocol: 6, inGame: true, player: 'Cooking catch', activeStepId: 'S6-02', stats, ...gear },
+    events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true,
+      items: watched.map(name => ({ name, carried: name === 'Raw swordfish' ? 7 : 0, noted: 0, bank: 0 })) }],
+  }, '#/skills/CO/cooking?goal=46');
+  await page.locator('.training-now').waitFor();
+  expect((await page.locator('.training-now').innerText()).includes('Swordfish'), 'Cooking: owned catch wins over unpriced wine at zero cash');
+  await page.locator('.training-follow').click();
+  await page.locator('.tracked-skill').waitFor();
+  await page.waitForFunction(() => {
+    const step = (window as any).__posts.filter((p: any) => p.path === '/prep-plan').at(-1)?.body?.step;
+    return JSON.stringify(step).includes('Raw swordfish');
+  });
+  const sent = await page.evaluate(() => (window as any).__posts.filter((p: any) => p.path === '/prep-plan').at(-1)?.body?.step);
+  expect(!sent.npcNames?.length && sent.objectNames?.some((name: string) => /fire/i.test(name)), 'Cooking: shared guide sends the fire target without a stale combat NPC');
+  await page.goto(`${BASE}#/shopping`);
+  await page.getByRole('region', { name: 'Checkout', exact: true }).waitFor();
+  expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 0, 'Cooking: current partial catch does not trigger another ingredient purchase');
+  expect(await page.getByRole('link', { name: 'Prepare funding', exact: true }).count() === 0, 'Cooking: already-owned ingredients do not trigger funding');
+  await page.screenshot({ path: 'audit-temp/cooking-owned-catch.png' });
+  expect(await noOverflow(page) && !errors.length, 'Cooking: staged guide and checkout fit the accepted Ledger without errors');
+  await page.context().close();
+}
+
 async function workspaceScenarios(browser: Browser) {
   const saved = (page: Page) => page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}').steps ?? {});
   for (const width of [1000, 1440]) {
@@ -763,6 +795,8 @@ async function processingBudgetScenarios(browser: Browser) {
 async function run(browser: Browser) {
   if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'gear') { await gearScenarios(browser); return; }
+  if (process.env.UI_ONLY === 'cooking-catch') { await cookingCatchScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await cookingCatchScenarios(browser);
   if (process.env.UI_ONLY === 'workspace') { await workspaceScenarios(browser); return; }
   if (!process.env.UI_ONLY) await workspaceScenarios(browser);
   if (process.env.UI_ONLY === 'stock') { await stockScenarios(browser); return; }
@@ -3037,7 +3071,9 @@ async function styleQuoteScenarios(browser: Browser) {
 async function skillHandoverScenarios(browser: Browser) {
   for (const width of [1280]) {
     const stats = { fishing: 34, cooking: 30 };
-    const names = ['Small fishing net', 'Fishing rod', 'Fishing bait', 'Fly fishing rod', 'Feather', 'Lobster pot', 'Harpoon', 'Raw beef', 'Raw chicken', 'Raw trout', 'Raw tuna', 'Grapes', 'Jug of water'];
+    const recipes = JSON.parse(readFileSync(new URL('../src/data/processing.json', import.meta.url), 'utf8')).recipes;
+    const names = [...new Set<string>(['Small fishing net', 'Fishing rod', 'Fishing bait', 'Fly fishing rod', 'Feather', 'Lobster pot', 'Harpoon',
+      ...recipes.filter((r: any) => r.skill === 'cooking').flatMap((r: any) => r.inputs.map((i: any) => i.name))])];
     const items = names.map(name => ({ name, carried: 0, noted: 0, bank: name === 'Raw tuna' ? 26 : name === 'Grapes' || name === 'Jug of water' ? 13 : 0 }));
     const { page, errors } = await open(browser, width, {
       market: true, progress: progressBefore('S6-02', { gameMode: 'f2p', levels: stats }),
