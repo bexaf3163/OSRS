@@ -5,11 +5,11 @@ Updated 2026-11-01. **This is the only current project contract, architecture ma
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-Published and independently verified Portable: **2.81.17**, source `a58c20a77b9a8b116e45f12bce3d91a6504c8aec`. Exact-source Checks **41234444585** and Release **41234444606** passed, including browser, full Java, native-shell and isolated packaged-EXE gates.
+Published and independently verified Portable: **2.81.18**, source `754ac0a510f0e71dc7aa5e96e3716d00ee87ca35`. Exact-source Checks **41248886425** and Release **41248886508** passed, including browser, full Java, native-shell and isolated packaged-EXE gates.
 
-Downloaded EXE: **102441710 bytes**. SHA256: `8c462fed456aa021bdc40d2ffabad76f21243ff13dcb8080b5869f71e8068753`. Actual download, asset digest, manifest, size and release-tag/source agree. The canonical handoff was separately downloaded and digest/source/version/policy verified (SHA256 `5a63c74ad56978923523a6f522ee5fb198e5672f2c25e429b90163d5b652a494`). Exactly three release assets: EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt, plus GitHub's automatic source archives.
+Downloaded EXE: **102442313 bytes**. SHA256: `909131112367783078fa6a5a6920cbdd647af53091a0d895d0fd942422d5d3de`. Actual download, asset digest, SHA256SUMS.txt, size and release-tag/source agree. The release copy of the handoff matches its asset digest (SHA256 `07d563ac88e74bf0d32f821ccc2fa9ef3ff32f62e5cdde78060ff552327c3cc1`) and names 2.81.18 and its source. Exactly three release assets: EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt, plus GitHub's automatic source archives. Verified by Claude 2026-11-01.
 
-Prayer kit/access/map/prepared-fish guidance and shared UNKNOWN preparation readiness are corrected. Complete Camdozaal cycle rates and real-game acceptance remain unverified; Claude owns live tests. Ledger/fonts, stable IDs and existing saves are preserved. Broader remaining work is below.
+Monkfish, karambwan and Motherlode stay manual references until modelled. Complete Camdozaal cycle rates and real-game acceptance remain unverified; Claude owns live tests. Ledger/fonts, stable IDs and existing saves are preserved. Broader remaining work is below.
 <!-- DELIVERY_END -->
 
 ## Documentation policy
@@ -156,7 +156,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 
 ## Current verification
 
-2.81.17 is fully delivered and independently verified above. Its local2509-unit suite, complete browser, native-shell, types/build/data/fresh-jar checks and exact-source CI passed. The small2.81.18 source batch has2513passing unit tests across209files, types/build/fresh18plugin jar, data0errors/0warnings, documentation checks and targeted Members/F2P browser suites. The complete local browser and native-shell sweep passed on17;18 changes only declarative method boundaries, tests and the coordinated version, so those full local gates were not redundantly repeated. Exact-source18 CI still must run them. **Takeover checkpoint:** the finished18 source is `754ac0a510f0e71dc7aa5e96e3716d00ee87ca35` on main. Exact-source Checks **41248886425** and Release **41248886508** were still running at the last inspection. First inspect their final conclusions, then independently verify the normal2.81.18 Portable download/tag/source/size/SHA256 manifest and canonical handoff; update the receipt here after success. Do not mistake a later documentation-only Checks run for those source gates. A read-only local watcher may finish and write external `release-2-81-18-verification.json`; verify it against GitHub before recording success. Last independently verified delivery remains17 above. Small source work is finished; no new large work should be started by Codex before this requested handover. Continue P2/P3 source work and P4 live acceptance in Claude. No real-game acceptance was performed.
+2.81.17 is fully delivered and independently verified above. Its local2509-unit suite, complete browser, native-shell, types/build/data/fresh-jar checks and exact-source CI passed. The small2.81.18 source batch has2513passing unit tests across209files, types/build/fresh18plugin jar, data0errors/0warnings, documentation checks and targeted Members/F2P browser suites. The complete local browser and native-shell sweep passed on17;18 changes only declarative method boundaries, tests and the coordinated version, so those full local gates were not redundantly repeated. Exact-source 2.81.18 CI then passed, and Claude verified the Portable on 2026-11-01 (receipt above). Codex handed over after 2.81.18. Continue P2/P3 source work and P4 live acceptance in Claude. No real-game acceptance was performed.
 
 ## Completed baseline — preserve, do not redo
 
