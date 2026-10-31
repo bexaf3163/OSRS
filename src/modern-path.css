@@ -1,62 +1,20 @@
 /* Accepted modern Path direction. Theme preferences, Classic and compact views remain available. */
 :root { --radius:12px; --radius-sm:8px; --topbar-h:72px; --accent:#5262be; --accent-ink:#5262be; --accent-soft:#e7ebfa; --bg:#fbfcfe; --surface:#ffffff; --surface-2:#f2f5fa; --surface-3:#f2f4f8; --border:#e5e9f0; --text:#202737; --muted:#586478; --gold:#b18a43; --gold-ink:#7f5f24; --on-accent:#ffffff; --bg-art:none; }
 :root body { background:var(--bg); }
-.app-shell { display:grid; grid-template-columns:236px minmax(0,1fr); min-height:100dvh; }
-.app-content { min-width:0; }
-.app-sidebar { position:sticky; top:0; align-self:start; height:100dvh; overflow:auto; display:flex; flex-direction:column; padding:26px 18px 20px; background:var(--surface-3); border-right:1px solid var(--border); }
-.sidebar-identity { padding:0 9px 20px; }
-:root .app-sidebar .brand { color:var(--text); font-size:1.2rem; gap:10px; margin:0 0 20px; white-space:normal; }
-:root .app-sidebar .compass-mark { width:30px; height:30px; color:var(--gold-ink); }
-:root .app-sidebar .header-mode summary { padding:9px 0 16px; border:0; border-bottom:1px solid var(--border); border-radius:0; background:none; color:var(--muted); font-size:.8rem; }
 /* order:0 — the old header moved its tabs to a third row (order:3) below 1200px and at large text; in the sidebar that put them under Settings. */
-:root .app-sidebar .tabs-top { display:flex; flex-direction:column; gap:5px; width:100%; flex:0 0 auto; order:0; height:auto; overflow:visible; border:0; margin-left:0; }
-:root .app-sidebar .tabs-top .tab { display:flex; flex-direction:row; gap:12px; justify-content:flex-start; padding:11px 13px; width:100%; min-width:0; border:0; border-radius:8px; color:var(--muted); font-size:.85rem; min-height:43px; height:auto; }
-:root .app-sidebar .tabs-top .tab.is-active { background:var(--accent-soft); color:var(--accent-ink); border:0; box-shadow:none; }
-:root .app-sidebar .tabs-top .tab .icon { width:18px; height:18px; }
-:root .app-sidebar .tab-label { display:inline; }
-.sidebar-utilities { margin-top:auto; padding:28px 9px 0; }
-:root .sidebar-utilities .header-progress { display:flex; width:100%; padding:0; margin:0; }
-.sidebar-utilities .header-qp { display:flex; flex:1; align-items:center; justify-content:space-between; gap:8px; }
-.sidebar-utilities .header-qp { flex-direction:row; }
-.sidebar-utilities .ring { display:none; }
-.sidebar-utilities .header-qp-label { display:block; font-size:.75rem; color:var(--muted); }
-.sidebar-utilities .header-qp-value { font-size:.85rem; }
-.sidebar-utilities .header-qp-value::after { content:none; }
-.sidebar-settings { display:flex; gap:10px; align-items:center; padding:20px 0 0; margin-top:22px; border-top:1px solid var(--border); color:var(--muted); font-size:.8rem; }
-.sidebar-settings .icon { width:18px; height:18px; }
-.sidebar-settings.is-active { color:var(--accent-ink); }
-.sidebar-route { margin:36px 11px 24px; font-size:.8rem; }
-.sidebar-route > .eyebrow { margin-bottom:20px; font-size:.7rem; letter-spacing:.1em; color:var(--muted); }
-.sidebar-route-stage { display:flex; justify-content:space-between; margin-bottom:8px; }
-.sidebar-route-stage span { color:var(--muted); }
-.sidebar-route-current { padding-top:20px; color:var(--accent-ink); font-weight:500; }
-.sidebar-route-next { display:block; margin:12px 0 15px; color:var(--muted); font-size:.75rem; }
-.sidebar-route .btn { padding:4px 0; font-size:.75rem; color:var(--muted); }
-.sidebar-route .btn .icon { width:13px; height:13px; }
-:root .topbar { position:sticky; top:0; z-index:20; background:var(--bg); box-shadow:none; border-bottom:1px solid var(--border); height:auto; }
-:root .topbar-inner { display:flex; max-width:none; min-height:72px; height:auto; padding:12px 30px; gap:16px; flex-wrap:wrap; }
-.workspace-breadcrumb { color:var(--muted); font-size:.85rem; margin-right:auto; }
-.mobile-brand, .mobile-mode { display:none; }
-:root .topbar-actions { display:flex; flex-wrap:wrap; gap:14px; margin-left:auto; }
 :root .bridge-indicator { padding:5px 0; border:0; background:none; font-size:.75rem; }
 :root .bridge-indicator .bridge-label { display:none; }
 :root .bridge-indicator .bridge-label-short { display:inline; }
 :root .bridge-dot::before { width:6px; height:6px; }
-:root .search-trigger { border:0; background:none; padding:6px 4px; color:var(--muted); }
-:root .search-trigger .search-trigger-text { display:inline; }
-:root .topbar .settings-link-label { display:none; }
 :root .btn-primary, :root:root .btn-primary { background:var(--accent); border-color:var(--accent); color:var(--on-accent); border-radius:8px; box-shadow:none; }
 :root main#main { max-width:none; width:100%; padding:26px 30px 40px; }
 :root main#main:has(.path-wide) { padding:40px 48px 28px; }
-:root .path-wide, :root .path-wide.no-dock { display:grid; grid-template-columns:minmax(0,1fr); gap:24px; }
+:root .path-wide { display:grid; grid-template-columns:minmax(0,1fr); gap:24px; }
 :root .path-wide:has(.dock .dock-panel) { grid-template-columns:minmax(0,1fr) 290px; }
 :root .path-wide .center { height:auto; max-height:none; overflow:visible; padding:0; min-width:0; }
 :root .path-wide .dock { position:sticky; align-self:start; top:90px; max-height:calc(100dvh - 110px); }
-:root .path-wide .step-view { background:transparent; border:0; box-shadow:none; border-radius:0; overflow:visible; }
 :root .path-wide .step-view-nav { padding:22px 0 0; border:0; }
 :root .cockpit .step-view-head { position:static; display:flex; flex-direction:row; align-items:center; gap:14px; padding:0; margin:0 0 30px; background:none; border:0; }
-.modern-quest-icon { width:44px; height:44px; display:grid; place-items:center; color:var(--gold-ink); background:var(--surface); border-radius:12px; flex-shrink:0; }
-.modern-quest-icon .icon { width:24px; height:24px; }
 .cockpit .step-view-head > div { min-width:0; }
 :root .cockpit .step-view-title { font-size:1.1rem; font-weight:500; margin:4px 0 0; line-height:1.4; }
 .cockpit .step-view-head .eyebrow { font-size:.7rem; letter-spacing:.075em; color:var(--muted); }
@@ -84,42 +42,14 @@
 .quest-quick { margin-block:4px 16px; }
 .quest-quick .quick-steps { margin:0; }
 .quest-workspace-grid:not(:has(> .quest-sidebar)) { grid-template-columns:minmax(0,1fr); }
-:root .cockpit .workspace-panel { padding:0 0 10px; border:0; }
 :root .cockpit .step-details { padding:0; }
 :root .cockpit .step-status { box-shadow:none; border:0; background:transparent; padding:12px 0; }
-.modern-next { display:flex; align-items:center; gap:15px; padding-top:22px; margin-top:36px; border-top:1px solid var(--border); color:var(--text); font-size:.8rem; }
-.modern-next .eyebrow { color:var(--muted); font-size:.7rem; letter-spacing:.1em; }
-.modern-next .icon { margin-left:auto; width:15px; height:15px; }
-.modern-completed { display:flex; gap:8px; align-items:center; margin-top:20px; }
-:root .card, :root .training, :root .quest, :root .settings-block { box-shadow:none; border-radius:10px; }
-.section-shell { display:block; padding:12px 0; }
-.section-rail { position:static; padding:0 0 22px; min-width:0; }
-.section-rail h2, .section-rail-foot { display:none; }
-.section-rail nav { display:flex; gap:5px; overflow-x:auto; max-width:100%; }
+:root .card, :root .training, :root .quest { box-shadow:none; border-radius:10px; }
 /* width:auto — the sidebar-era "width:100%" made the first item fill the strip and pushed every other one out of view. */
-.section-nav-item { flex:0 0 auto; width:auto; font-size:.8rem; padding:8px 12px; }
-.section-nav-item .icon { width:16px; height:16px; }
-.section-content { container-type:inline-size; min-width:0; width:100%; }
 @container(max-width:840px) {
- .shop-head { display:none; }
- .shop-row:not(.is-quest) { grid-template-columns:repeat(3,minmax(0,1fr)); }
- .shop-row:not(.is-quest) .shop-item, .shop-row:not(.is-quest) .shop-actions { grid-column:1 / -1; }
- .shop-cell::before { display:block; content:attr(data-label); font-size:.75rem; font-weight:600; color:var(--muted); }
- .shop-item::before, .shop-actions::before { display:none; }
 }
 /* Settings has one entry: the sidebar's while it is shown, the top bar's gear when it is not (compact view, narrow window). */
-@media(min-width:1000px) { :root .app-shell .topbar-actions > .topbar-settings { display:none; } }
 @media(max-width:999px) {
- .app-shell { display:block; }
- .app-sidebar { display:none; }
- .mobile-brand, .mobile-mode { display:flex; }
- .mobile-brand.brand { margin:0; font-size:1rem; gap:7px; }
- .mobile-brand .compass-mark { width:26px; height:26px; }
- .workspace-breadcrumb { display:none; }
- :root .topbar-inner { padding:10px 16px; gap:10px; }
- :root .topbar-actions { gap:7px; }
- :root .mobile-mode summary { border:0; padding:7px; background:none; font-size:.8rem; }
- :root .tabs-bottom { display:grid; }
  :root main#main, :root main#main:has(.path-wide) { padding:24px 20px 90px; }
  :root .path-wide:has(.dock .dock-panel) { grid-template-columns:minmax(0,1fr); }
  :root .path-wide .dock { display:none; }
@@ -135,14 +65,10 @@
 .skill-detail .training-summary .training-location p { margin:0; color:var(--muted); }
 .skill-detail .training-summary .small { margin-block:8px; }
 .skill-detail .training-summary .actions { margin-block:8px; }
-.skill-detail .skill-plan-link { margin-top:8px; }
 .skill-detail .training-analysis { max-width:900px; }
 @media(max-width:520px) {
  :root main#main, :root main#main:has(.path-wide) { padding:20px 14px 90px; }
- :root .topbar-actions { gap:5px; }
- :root .search-trigger .search-trigger-text, :root .search-trigger kbd { display:none; }
  .cockpit .step-view-head { gap:10px; }
  :root .cockpit .current-action-title { font-size:1.7rem; }
  :root .cockpit .current-action { margin-bottom:28px; }
- .modern-next { gap:10px; flex-wrap:wrap; }
 }

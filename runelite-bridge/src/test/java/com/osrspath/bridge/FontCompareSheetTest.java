@@ -12,8 +12,8 @@ import org.junit.Test;
 
 /**
  * The owner's font re-check (Task 5): the in-game card's text drawn the way the plugin draws it - Java2D on the game canvas, grayscale anti-aliasing,
- * the card's sizes (14 px body, 16 px bold action; 18 / 20 px at the large scale) - for the faces that can be shipped (Sora, Inter: SIL OFL, both in
- * public/fonts) and, for reference, Windows' Segoe UI and Java's Dialog. Two things Java2D does to a variable font are shown side by side:
+ * the card's sizes (14 px body, 16 px bold action; 18 / 20 px at the large scale) - for the faces that can be shipped (Sora: SIL OFL, packaged in the
+ * plugin) and, for reference, Windows' Segoe UI and Java's Dialog. Two things Java2D does to a variable font are shown side by side:
  *  - the bold action line is the Regular outline made heavier by the renderer (Java2D cannot pick the font's 600/700 instance), and
  *  - with fractional metrics off (the plugin's setting) every letter's advance is rounded to a whole pixel, so the spacing of a wide face goes uneven.
  * Writes build/font-compare/*.png for the owner to choose from. Nothing in the plugin changes here.
@@ -26,13 +26,6 @@ public class FontCompareSheetTest
 		"Bring food: 24 Salmon (2 in the bag)",
 		"Raising coins: 12 / 27 Cowhide · 1,400 gp to go",
 	};
-
-	private static Font load(String path) throws Exception
-	{
-		File f = new File(path);
-		if (!f.exists()) return null;
-		return Font.createFont(Font.TRUETYPE_FONT, f);
-	}
 
 	private static Font resource(String name) throws Exception
 	{
@@ -92,17 +85,10 @@ public class FontCompareSheetTest
 	{
 		Font sora = resource("fonts/Sora-variable.ttf");
 		assertNotNull("the packaged Sora", sora);
-		Font inter = load("../public/fonts/Inter-variable.ttf");
 		List<Variant> variants = new ArrayList<>();
 		variants.add(new Variant("A  Sora, as shipped (bold made by Java, whole-pixel spacing)", sora, true, false));
 		variants.add(new Variant("B  Sora, exact spacing (fractional metrics on)", sora, true, true));
 		variants.add(new Variant("C  Sora, exact spacing, action line not thickened", sora, false, true));
-		if (inter != null)
-		{
-			variants.add(new Variant("D  Inter, as Sora is shipped", inter, true, false));
-			variants.add(new Variant("E  Inter, exact spacing", inter, true, true));
-			variants.add(new Variant("F  Inter, exact spacing, action line not thickened", inter, false, true));
-		}
 		Font segoe = new Font("Segoe UI", Font.PLAIN, 14);
 		if ("Segoe UI".equals(segoe.getFamily())) variants.add(new Variant("R1 Segoe UI (Windows' own: reference, cannot be shipped)", segoe, true, true));
 		variants.add(new Variant("R2 Dialog (Java's default sans: reference)", new Font(Font.DIALOG, Font.PLAIN, 14), true, false));

@@ -286,7 +286,7 @@ dialog::backdrop{background:#050302cc;backdrop-filter:blur(3px)}
 .la-root button.la-stagehead{width:100%;text-align:left;cursor:pointer}
 .la-root button.la-stagehead:hover span{color:var(--la-ember)}
 /* Numbers and codes use the Ledger's display face too, not the system monospace. */
-:root .la-pg .row-level, :root dialog code, :root .la-pg code{font-family:var(--la-disp);font-variant-numeric:tabular-nums lining-nums}
+:root dialog code, :root .la-pg code{font-family:var(--la-disp);font-variant-numeric:tabular-nums lining-nums}
 
 /* Existing Ledger surfaces: clearer role for each book leaf, without typography changes. */
 :root .skills-index .skill-grid-compact{grid-template-columns:repeat(2,minmax(0,1fr))}

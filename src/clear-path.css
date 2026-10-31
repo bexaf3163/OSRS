@@ -1,9 +1,6 @@
 /* Clear Path workspace geometry, shared by every section and both themes. */
-@font-face { font-family:Inter; src:url('/fonts/Inter-variable.ttf') format('truetype'); font-style:normal; font-weight:100 900; font-display:swap; }
 :root { --radius: 8px; --radius-sm: 5px; }
 :root:root .card, :root:root .training, :root:root .quest { border-radius:8px; background:var(--surface); box-shadow:0 2px 8px #0001; }
-:root:root .topbar { background:var(--surface-3); }
-:root:root .tabs-top .tab.is-active { background:var(--accent-soft); border:1px solid var(--accent); border-radius:5px; box-shadow:inset 0 -2px var(--accent); }
 :root:root .btn-primary { color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--accent); }
 .training-recommendation { display:grid; grid-template-columns:1.2fr 1fr; gap:16px; margin:16px 0; }
 .training-method, .training-location { padding:18px; border:1px solid var(--border); border-radius:6px; background:var(--surface-3); }
@@ -20,11 +17,8 @@
 .search-input { font-size:1.15rem; }
 .search-results { padding:12px; }
 .search-hit { padding:14px 16px; border:1px solid var(--border); border-radius:6px; margin-bottom:7px; background:var(--surface); }
-.topbar-inner { max-width:1800px; }
 .compass-mark { width:42px; height:42px; color:var(--gold-ink); flex-shrink:0; }
-.header-identity { display:flex; gap:18px; align-items:center; flex-shrink:0; }
-.header-identity .brand { margin-right:0; color:var(--gold-ink); }
-.header-identity .ring, .header-qp-label { display:none; }
+.header-qp-label { display:none; }
 .header-qp-value::after { content:' QP'; }
 .header-qp-value { font-size:.94rem; white-space:nowrap; }
 .header-qp-value b { color:var(--text); }
@@ -34,7 +28,6 @@
 .header-mode-panel { position:absolute; z-index:30; top:calc(100% + 8px); left:0; padding:8px; border:1px solid var(--border); border-radius:6px; background:var(--surface); box-shadow:0 10px 30px #0004; min-width:175px; }
 .header-mode-panel .mode-toggle { display:flex; flex-direction:column; align-items:stretch; border:0; border-radius:0; background:transparent; }
 .header-mode-panel .mode-btn { justify-content:flex-start; }
-.settings-link-label { display:none; }
 .bridge-indicator { border:1px solid var(--border); border-radius:5px; padding:8px 11px; background:var(--surface-3); font-size:.8rem; }
 .bridge-dot { font-size:0; }
 .bridge-dot::before { content:''; display:inline-block; width:8px; height:8px; border-radius:50%; background:#f05b59; }
@@ -52,51 +45,25 @@
 .search-heading p { margin:4px 0 0; color:var(--muted); font-size:.875rem; }
 .search-heading .icon-btn { margin-left:auto; }
 main { max-width:1800px; }
-main:has(.section-shell) { padding-top:8px; }
-.section-shell { padding-top:10px; }
 /* The preview wraps under the settings when both do not fit side by side (a narrow window, a large interface scale). */
 .gear-slot-glyph { width:52px; height:52px; color:var(--muted); opacity:.65; margin:8px auto; }
-.gear-slot-item { flex-direction:column; align-items:center; text-align:center; }
-.gear-slot-label { text-align:center; }
-.gear-slot-item .item-icon { margin:8px auto; }
 .skill-detail .training { order:0; }
 .skill-detail .skill-level-editor { order:1; }
 .skill-detail .focus-note { order:1; }
 .skill-detail .skill-related { order:2; }
-.shop-list { gap:0; border:1px solid var(--border); border-radius:6px; overflow:hidden; }
-.shop-list .shop-row { border:0; border-bottom:1px solid var(--border); border-radius:0; padding:14px 16px; }
-.shop-list .shop-row:last-child { border-bottom:0; }
-.shop-item .item-icon { width:32px; height:32px; }
-.shop-state.is-unknown { color:var(--gold-ink); background:var(--gold-soft); padding:4px 8px; border-radius:4px; }
-.shop-filter { background:transparent; border-bottom:1px solid var(--border); border-radius:0; }
-.shop-filter .seg.is-active { background:transparent; border-color:transparent; box-shadow:inset 0 -3px var(--accent); color:var(--accent-ink); }
 @media(min-width:1000px) {
  main:has(.path-wide) { max-width:1800px; }
  .path-wide { grid-template-columns:250px minmax(0,1fr); }
  .quest-walkthrough .overview-list { max-height:calc(100vh - 420px); min-height:280px; overflow:auto; padding-right:12px; }
  .path-wide .rail { position:sticky; top:100px; max-height:calc(100vh - 120px); overflow:auto; }
 }
-.section-shell { display:grid; grid-template-columns:210px minmax(0,1fr); gap:26px; padding:24px 20px; align-items:start; }
-.section-rail { position:sticky; top:calc(max(var(--topbar-h), 84px) + 16px); padding:12px 0; }
-.section-rail h2 { padding:0 14px 14px; margin:0; font-size:1.25rem; }
-.section-rail nav { display:grid; gap:4px; }
-.section-nav-item { display:flex; align-items:center; gap:12px; width:100%; padding:12px 14px; border:1px solid transparent; border-radius:6px; color:var(--muted); background:transparent; font:inherit; text-align:left; text-decoration:none; cursor:pointer; }
-.section-nav-item svg { width:22px; height:22px; flex-shrink:0; }
-.section-nav-item:hover { background:var(--surface); color:var(--text); }
-.section-nav-item.is-active { color:var(--accent-ink); border-color:var(--border); background:var(--accent-soft); box-shadow:inset 3px 0 var(--accent); }
-.section-rail-foot { color:var(--muted); font-size:.75rem; padding:24px 14px; }
-.section-content { min-width:0; }
 .rail-now .code { white-space:nowrap; flex-shrink:0; }
-.section-content > .page { max-width:none; margin:0; padding:12px 0; }
 .skill-glyph { object-fit:contain; image-rendering:pixelated; flex-shrink:0; }
 .page-head h1 { font-size:2rem; letter-spacing:-.025em; }
 .skill-detail .page-head { display:grid; grid-template-columns:56px 1fr; column-gap:16px; align-items:center; }
 .skill-detail .page-head > .skill-glyph { grid-row:1 / 3; }
 .skill-detail .page-head h1, .skill-detail .page-head p { margin:0; }
 .skill-level-goal { display:block; margin-top:8px; font-size:1rem; color:var(--muted); font-weight:400; letter-spacing:0; }
-.settings-layout { display:grid; grid-template-columns:210px minmax(0,1fr); gap:28px; }
-.settings-layout .settings-tabs { display:flex; flex-direction:column; align-self:start; background:transparent; gap:5px; border:0; }
-.settings-layout .settings-tabs button { text-align:left; padding:14px 16px; border-radius:6px; }
 .settings-content { min-width:0; }
 .settings-content input:not([type]) { min-height:44px; min-width:0; max-width:100%; padding:10px 12px; font:inherit; color:var(--text); background:var(--surface-3); border:1px solid var(--border-strong); border-radius:var(--radius-sm); }
 .settings-content input:not([type])::placeholder { color:var(--muted); }
@@ -108,49 +75,21 @@ main:has(.section-shell) { padding-top:8px; }
 .quest-preview .btn { margin-top:16px; }
 .quest-select { display:block; width:100%; background:none; color:inherit; border:0; padding:0; text-align:left; font:inherit; cursor:pointer; }
 .quest.is-selected { border-color:var(--accent); background:var(--accent-soft); }
-.gear-top { grid-template-columns:minmax(0,1fr); }
-.gear-paper { grid-template-columns:repeat(6,minmax(0,1fr)); }
-.gear-slot { min-height:118px; }
 .shop-controls { padding:14px 18px; }
 .shop-page .page-head { margin-bottom:22px; }
-@media(min-width:1200px) {
- .tabs-top .tab { flex-direction:column; gap:6px; padding:10px 17px; min-width:72px; font-size:.82rem; border-radius:0; }
- .tabs-top .tab svg { width:25px; height:25px; }
- .tabs-top .tab.is-active { background:transparent; color:var(--accent-ink); box-shadow:inset 0 -3px var(--accent); }
- .topbar-inner { min-height:84px; }
- .search-trigger-text, .search-trigger kbd { display:none; }
-}
-@media(min-width:1400px) {
- .header-identity .brand { font-size:1.5rem; }
- .topbar-inner .tabs-top .tab { min-width:76px; padding:10px 13px; }
- .settings-link-label, .search-trigger-text { display:inline; }
- .search-trigger kbd { display:none; }
- .search-trigger { min-width:160px; justify-content:flex-start; gap:10px; padding:10px 14px; }
-}
 @media(max-width:1199px) {
- .header-identity { gap:10px; }
- .header-identity .header-progress { display:none; }
  .compass-mark { width:28px; height:28px; }
 }
 @media(max-width:700px) {
  .header-mode { display:none; }
- .header-identity { flex-shrink:1; }
  .step-view-title { font-size:1.65rem; }
  .current-action-title { font-size:1.4rem; }
 }
 @media(max-width:1050px) {
- .section-shell { grid-template-columns:170px minmax(0,1fr); gap:18px; padding:18px 12px; }
  .quest-workspace { grid-template-columns:minmax(0,1fr); }
  .quest-preview { position:static; }
- .gear-paper { grid-template-columns:repeat(3,minmax(0,1fr)); }
 }
 @media(max-width:700px) {
- .section-shell, .settings-layout { display:block; padding:12px 0; }
- .section-rail { position:static; padding:0 12px 14px; }
- .section-rail h2, .section-rail-foot { display:none; }
- .section-rail nav, .settings-layout .settings-tabs { display:flex; flex-direction:row; overflow-x:auto; }
- .section-nav-item { width:auto; flex-shrink:0; padding:9px 12px; }
- .section-content > .page { padding:12px; }
  .training-recommendation { grid-template-columns:minmax(0,1fr); }
  .quest-workspace .quest-list { max-height:480px; }
 }
@@ -158,10 +97,7 @@ main:has(.section-shell) { padding-top:8px; }
 /* Reference-aligned presentation of the existing controls. */
 @media(min-width:900px) and (max-width:1919px) {
  :root[data-text-size="large"] { --topbar-h:156px; }
- :root[data-text-size="large"] .topbar-inner { flex-wrap:wrap; height:auto; min-height:var(--topbar-h); padding-block:6px; align-content:center; }
- :root[data-text-size="large"] .tabs-top { order:3; flex:1 0 100%; margin-left:0; }
 }
-.topbar-actions > .icon-btn { text-decoration:none; }
 .current-action-side { grid-column:1 / -1; display:flex; flex-direction:column; gap:8px; min-width:0; }
 :root:root .current-action-side .step-status { border:0; box-shadow:none; background:transparent; margin:0; padding:0; }
 .current-action-side .status-line { gap:6px; flex-wrap:wrap; }
@@ -179,10 +115,6 @@ main:has(.section-shell) { padding-top:8px; }
 :root .settings-content .mode-toggle .mode-btn, :root .settings-content .seg { border:1px solid var(--border); border-radius:5px; padding:10px 16px; min-width:100px; background:var(--surface-3); }
 :root:root .settings-content .mode-toggle .mode-btn.is-active, :root .settings-content .seg.is-active { border-color:var(--accent); color:var(--accent-ink); background:var(--accent-soft); box-shadow:inset 0 -1px var(--accent); }
 .settings-content .setting .mode-toggle span[aria-hidden="true"] { display:none; }
-.font-scale { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
-.font-slider-row { display:flex; gap:8px; align-items:center; flex:1; max-width:450px; }
-.font-slider-row input { width:100%; min-width:70px; accent-color:var(--accent); }
-.font-slider-row output { font-variant-numeric:tabular-nums; min-width:45px; }
 :root:root .skill-detail .training { background:transparent; border:0; box-shadow:none; padding:0; }
 .skill-detail .training > .readiness-head { display:none; }
 .skill-detail .training-recommendation { margin-top:0; }

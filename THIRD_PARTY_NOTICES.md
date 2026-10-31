@@ -72,12 +72,6 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 
-## Inter font
-
-The RuneLite plugin also bundles this same font and its OFL license for the modern Glass guide. It does not install a system font.
-
-`public/fonts/Inter-variable.ttf` is distributed under the SIL Open Font License 1.1, included in `public/fonts/OFL.txt`. Copyright 2020 The Inter Project Authors. Source: https://github.com/google/fonts/tree/main/ofl/inter .
-
 ## Cinzel and EB Garamond fonts
 
 The desktop's Ledger design bundles subsets of Cinzel and EB Garamond in `src/ledger/fonts` (WOFF2, latin and latin-ext), so the app works offline. Both are distributed under the SIL Open Font License 1.1, the same license as `public/fonts/OFL.txt`. Cinzel: Copyright 2020 The Cinzel Project Authors, source: https://github.com/NDISCOVER/Cinzel . EB Garamond: Copyright 2017 The EB Garamond Project Authors, source: https://github.com/octaviopardo/EBGaramond12 .

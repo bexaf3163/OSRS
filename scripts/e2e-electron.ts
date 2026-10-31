@@ -175,10 +175,10 @@ try {
   const prefs = JSON.parse(readFileSync(join(dataDir, 'ui.json'), 'utf8'));
   expect(prefs.backupOff === false && prefs.alwaysOnTop === false && !('zoom' in prefs) && !('autoZoom' in prefs), 'window: retiring saved zoom preserves backup preferences and the pin');
   const localFont = await page.evaluate(async () => {
-    const faces = await document.fonts.load('16px Inter');
-    return faces.some(face => face.family === 'Inter' && face.status === 'loaded');
+    const faces = [...await document.fonts.load('16px Cinzel'), ...await document.fonts.load('16px "EB Garamond"')];
+    return ['Cinzel', 'EB Garamond'].every(family => faces.some(face => face.family === family && face.status === 'loaded'));
   });
-  expect(localFont, 'window: the bundled Inter font loads from the local build');
+  expect(localFont, 'window: the bundled Ledger fonts (Cinzel, EB Garamond) load from the local build');
   for (const route of ['skills', 'gear', 'shopping', 'journal', 'reference', 'settings']) {
     await page.evaluate(route => { location.hash = `#/${route}`; }, route);
     await page.waitForTimeout(400);
