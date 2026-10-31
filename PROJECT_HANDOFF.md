@@ -5,11 +5,11 @@ Updated 2026-10-31. **This is the only current project contract, architecture ma
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-Published and independently verified Portable: **2.81.15**, source `24f6225fad2a5e9a9f54388e6531d5a0c32a6828`. Exact-source Checks **41226083568** and Release **41226083576** passed, including complete browser, Java, native-shell and isolated packaged-EXE gates.
+Published and independently verified Portable: **2.81.16**, source `287e860be6d42cec73fd50c04313ba5fa47aef90`. Exact-source Checks **41230201959** and Release **41230201933** passed, including complete browser, Java, native-shell and isolated packaged-EXE gates.
 
-Downloaded EXE: **102440744 bytes**. SHA256: `d97365179105ddd99db527fea8de979bedbfd02dd2202f0b6291f21a0cf5e956`. Actual download, asset digest, manifest, size and release-tag/source agree. The distributed canonical handoff was separately downloaded and digest/source/version/policy verified; the release contains only EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt (plus GitHub's automatic source archives).
+Downloaded EXE: **102439806 bytes**. SHA256: `e918829a3afa6c7b3fe22360b0579c91f8105570427a419e9a8e3e989f5275ff`. Actual download, asset digest, manifest, size and release-tag/source agree. The distributed canonical handoff was separately downloaded and digest/source/version/policy verified; the release contains only EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt (plus GitHub's automatic source archives).
 
-Shared multi-use material consumption, conservative partial-stock preparation, silver tiara progression and reconciled Crafting advice are shipped. Accepted Ledger/fonts and existing preparation/stock/funding behavior are preserved. All real-game acceptance remains Claude's; automated/native/packaged checks are not in-game evidence. Broader P2 Skills/Optional and P3 content/model reviews below remain open.
+Ordinary furnace smelting and feasible partial-bar anvil progression are connected through existing engines; Smithing legacy claims are reconciled and supported Firemaking paths have additional coverage. Ledger/fonts, IDs, explicit goals and existing preparation/stock/funding behavior are preserved. All real-game acceptance remains Claude's. Broader P2/P3 work below remains open.
 <!-- DELIVERY_END -->
 
 ## Documentation policy
@@ -156,7 +156,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 
 ## Current verification
 
-2.81.16 local source:2,493 unit tests across208files, types/build/fresh16plugin jar, data0errors/0warnings and the complete browser suite passed. New regressions cover eight smelting input mixes/capacities, ordinary iron failure XP, four anvil tiers with one/three/five bars, unlock transitions, followed furnace readiness, Firemaking's five supported log tiers and the shared four-case processing UI flow. No runtime engine/transport code was changed; the recipe catalogue uses existing contracts. Exact-source CI still requires full Java, native-shell and isolated packaged-EXE gates before publication. Delivery evidence belongs in the receipt above; all real-game acceptance remains Claude's.
+2.81.16 local source:2,493 unit tests across208files, types/build/fresh16plugin jar, data0errors/0warnings and the complete browser suite passed. New regressions cover eight smelting input mixes/capacities, ordinary iron failure XP, four anvil tiers with one/three/five bars, unlock transitions, followed furnace readiness, Firemaking's five supported log tiers and the shared four-case processing UI flow. No runtime engine/transport code was changed; the recipe catalogue uses existing contracts. Exact-source Checks and Release passed their full Java, native-shell and isolated packaged-EXE gates; actual EXE and canonical handoff downloads were independently verified. Delivery evidence belongs in the receipt above; all real-game acceptance remains Claude's.
 
 ## Completed baseline — preserve, do not redo
 
