@@ -84,4 +84,3 @@ function usable(q: ReturnType<PriceView['buy']>): q is NonNullable<ReturnType<Pr
   return !!q && q.basis === 'side' && q.confidence !== 'LOW' && q.ageMinutes !== null && q.ageMinutes >= 0
     && q.ageMinutes * 60_000 <= FRESH_MS && Number.isSafeInteger(q.price) && q.price > 0;
 }
-

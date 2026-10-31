@@ -5,9 +5,11 @@ Updated 2026-10-31. **This is the only current project contract, architecture ma
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-Last independently verified Portable: **2.81.11**, source `80f1292b012bbce660ba4e7f646d2760c92f34d6`. Checks41179927753 / Release41179927662 passed. Downloaded102435386 bytes, SHA256 `2233499d93f16aef68cd09bbca56f79819ec98f36050a3565e758e7cb58cb12b`; digest/manifest/size/tag agree.
+Published and independently verified Portable: **2.81.12**, source `c93dd3bd84b1e1816ed5ead5c32249c5b1b53bff`. Exact-source Checks **41192058628** and Release **41192058621** passed, including full browser, Java, native-shell and isolated packaged-EXE gates.
 
-**2.81.12 is local work under verification**, not yet a published verified release. It adds shared optional stock-up and this documentation consolidation. All live-game acceptance remains Claude's; automated/native/packaged tests are not live evidence.
+Downloaded EXE: **102438773 bytes**. SHA256: `34e7fc1a9b1773695e7bd3ed3441c4759ccf23b0a55a4771fbfa9fd1e6655e3b`. Actual download, asset digest, SHA256SUMS.txt, size and source tag agree. Release assets are exactly the normal Portable, this handoff snapshot and the checksum; GitHub adds source archives separately.
+
+Shared optional stock-up and documentation consolidation are shipped. All real-game acceptance remains Claude's; automated/native/packaged checks are not in-game evidence. Journal page changes and broader Skills/content/model gaps below are **not** claimed complete.
 <!-- DELIVERY_END -->
 
 ## Documentation policy
@@ -152,7 +154,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 
 ## Current verification
 
-Local 2.81.12 source: types/build passed; data validation found 0 errors/0 warnings; 2,426 unit tests across 204 files passed; the complete browser suite, isolated native-shell E2E, Java testClasses and fresh plugin jar passed. Documentation guards and an isolated execution of the release handoff/receipt generator passed. Full exact-source Checks/Release and independent Portable download verification remain required before publication is declared complete. No real-game verification is claimed.
+Local 2.81.12 source: types/build passed; data validation found 0 errors/0 warnings; 2,426 unit tests across 204 files passed; the complete browser suite, isolated native-shell E2E, Java testClasses and fresh plugin jar passed. Documentation guards and an isolated execution of the release handoff/receipt generator passed. Exact-source Checks/Release and independent Portable download verification also passed; the receipt above records the exact source, runs and digest. No real-game verification is claimed.
 
 ## Completed baseline — preserve, do not redo
 
@@ -164,7 +166,7 @@ Local 2.81.12 source: types/build passed; data validation found 0 errors/0 warni
 |2.81.4–6|Conditional processing/Ranged goal demand; one followed-Skills preparation/Shopping/funding lifecycle, with explicit goals and no fabricated XP.|
 |2.81.7–10|Complete Magic gear comparisons, selected physical tools, quest-XP alternatives, conservative account scope, tool capability versus purchase catalogues, carried versus actually worn gathering capacity.|
 |2.81.11|Retired duplicate UI controls/plans/report/matrix; preserved Ledger and active engines/storage/helpers; repaired shared maps with disclosed archival imagery and retry.|
-|Current 2.81.12 source|Shared optional bank-stock forecast/budget selection, one GE order per item, active-skill shopping precedence and duplicate-step protection; consolidated documentation. Release verification pending above.|
+|Current 2.81.12 source|Shared optional bank-stock forecast/budget selection, one GE order per item, active-skill shopping precedence and duplicate-step protection; consolidated documentation. Published and verified in the delivery receipt above.|
 
 Known limits: acquisition/travel fees remain bounded allowances, gathering competition/Forestry and Musa Point boat banking are approximations, altar timing assumes the supported exit/transition model, and combat food estimates are not survival guarantees or calibrated per-bite simulations. General alchemy/enchant/splashing retain explicit target/setup/budget safeguards. No implied parity for unsupported Members/HDOS mechanics.
 
@@ -174,9 +176,9 @@ Known limits: acquisition/travel fees remain bounded allowances, gathering compe
 
 The earlier cleanup is published and verified; current delivery status is in the receipt at the top. Do not repeat or restore the retired UI. Keep the accepted design/cleanup section above honest about remaining factual/model reviews. Future release workflow deliveries also attach this takeover file.
 
-### P1 — verify and refine shared bank stock
+### P1 — shared bank stock shipped; extend only missing models
 
-Current source adds trainingStockNeeds → TrainingPick.stockNeeds → Step.stockItems → stockUpShopping. It reuses selected phase/model needs, inventory allocations, acquisition sources, live quotes and existing shopping/exchange payloads. The horizon is current kit plus the next two distinct useful kit/recipe configurations, not three arbitrary model-rate reviews. At most two future reusable items and six optional rows are selected.
+Release 2.81.12 adds trainingStockNeeds → TrainingPick.stockNeeds → Step.stockItems → stockUpShopping. It reuses selected phase/model needs, inventory allocations, acquisition sources, live quotes and existing shopping/exchange payloads. The horizon is current kit plus the next two distinct useful kit/recipe configurations, not three arbitrary model-rate reviews. At most two future reusable items and six optional rows are selected.
 
 Extras require an already-needed GE purchase, a live connection, a bank read in this session, known cash and usable current quotes. Mandatory purchases/fares plus a full current consumable refill are reserved first. Useful gear precedes extra consumables; partial affordable reserves respect GE limits. Future stock never blocks readiness/completion/funding, forces a new trip or changes the current training target. Owned future items are not repurchased, including tools below today's use level. Shopping uses one compact optional list and the same GE quantities go to the plugin; identical active/followed steps count once.
 
@@ -184,7 +186,7 @@ Extras require an already-needed GE purchase, a live connection, a bank read in 
 
 ### Next UI task — Journal page usefulness
 
-Owner feedback, 2026-10-31: the session/resource counter does not justify occupying the whole right book page beside quests. Proposed layout: quest list/filters on the left; selected quest status, requirements, rewards and existing route/continue action on the right. Reuse the existing quest data/actions; keep session statistics in a small optional section and preserve their underlying resource/session data. Do not invent replacement statistics or redesign fonts. This is queued feedback, not implemented in 2.81.12.
+Owner feedback, 2026-10-31: the session/resource counter does not justify occupying the whole right book page beside quests. Proposed layout: quest list/filters on the left; selected quest status, requirements, rewards and existing route/continue action on the right. A completed quest must show completed/review state, not invite repeating it; when every F2P quest is done, offer the existing next Skills/Optional activity rather than an invented quest. Reuse the existing quest data/actions; keep session statistics in a small optional section and preserve their underlying resource/session data. Do not invent replacement statistics or redesign fonts. This is queued feedback, not implemented in 2.81.12.
 
 ### P2 — finish staged Skills/Optional review using the existing engines
 
