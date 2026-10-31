@@ -11,7 +11,7 @@ interface TitleBarProps {
 /** The window keeps its native frame, so the strip has no window buttons of its own. */
 export function TitleBar({ pinned, onTogglePin }: TitleBarProps) {
   return (
-    <div className="la-tb">
+    <div className="la-tb" role="region" aria-label="Title bar">
       <b>OSRS PATH</b> THE ADVENTURER&apos;S LEDGER
       <span className="la-sp" />
       {onTogglePin && (

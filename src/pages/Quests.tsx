@@ -115,7 +115,7 @@ export function QuestsPage({ embedded = false, render }: { embedded?: boolean; r
       {!visible.length && !matches(filter, base) && <p className="muted empty">Nothing here.</p>}
   </div>);
   const detail = (<>
-      {selected && <aside className="card quest-preview" aria-label="Selected quest">
+      {selected && <section className="card quest-preview" aria-label="Selected quest">
         <div className="quest-preview-heading"><TypeIcon type="quest" /><h2>{selected.quest.title}</h2></div>
         <p className="muted">Stage {selected.quest.stage} · {selected.status}</p>
         {selected.quest.qp > 0 && <p className="badge badge-qp">+{selected.quest.qp} quest points</p>}
@@ -127,7 +127,7 @@ export function QuestsPage({ embedded = false, render }: { embedded?: boolean; r
           {selectedStep?.itemsRequired?.length ? <ul>{selectedStep.itemsRequired.map((item,i) => <li key={`${item.nameEn}-${i}`}><ItemIcon src={item.iconUrl} alt="" size={28} /><span>{item.nameEn}{item.amount ? ` ×${item.amount}` : ''}</span></li>)}</ul> : <p className="muted small">No preparation items listed.</p>}
           {selectedStep?.doneWhen && <p className="muted small">Done when: {selectedStep.doneWhen}</p>}
         </details>
-      </aside>}
+      </section>}
 
     {!selected && <p className="muted empty">Select a quest from the list, or change the filter.</p>}
     {rows.length > 0 && rows.every(row => row.status === 'done' && !notInGame(row)) && <section className="card" aria-label="Quest route complete">

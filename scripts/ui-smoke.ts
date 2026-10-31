@@ -546,7 +546,7 @@ async function workspaceScenarios(browser: Browser) {
     const quest = page.locator('.quest-select').nth(1);
     const title = (await quest.locator('.quest-title').innerText()).trim();
     await quest.click();
-    expect((await page.getByRole('complementary', { name: 'Selected quest' }).innerText()).includes(title), 'workspace: selecting a quest changes the right page');
+    expect((await page.getByRole('region', { name: 'Selected quest' }).innerText()).includes(title), 'workspace: selecting a quest changes the right page');
     expect(await page.getByRole('link', { name: 'Review route' }).count() === 1, 'workspace: completed quest offers review');
     expect(await page.locator('.journal-session:not([open])').count() === 1, 'workspace: session statistics do not occupy the default quest page');
     await page.locator('.journal-session > summary').click();
@@ -809,7 +809,7 @@ async function ledgerScenarios(browser: Browser) {
   // The other pages' own menus.
   await page.evaluate(() => { location.hash = '#/journal'; });
   await page.waitForTimeout(500);
-  expect((await page.getByRole('complementary', { name: 'Selected quest' }).innerText()).length > 20 && await page.locator('.journal-session > summary').count() === 1, 'ledger Journal: session remains alongside the quest list');
+  expect((await page.getByRole('region', { name: 'Selected quest' }).innerText()).length > 20 && await page.locator('.journal-session > summary').count() === 1, 'ledger Journal: session remains alongside the quest list');
   expect(await page.getByRole('link', { name: /^stage goals$/i }).count() === 0 && await page.locator('.goals-table').count() === 0, 'ledger Journal: retired stage matrix is absent');
   await page.evaluate(() => { location.hash = '#/reference'; });
   await page.waitForTimeout(500);
@@ -2163,7 +2163,7 @@ async function run(browser: Browser) {
     for (const width of [1000, 1440]) {
       const { page } = await open(browser, width, { progress: progressBefore('S3-03') }, hash);
       if (hash === '#/journal') {
-        expect(await page.locator('.la-pg.journal').count() === 2 && await page.locator('.la-pg.la-l .journal-pane').count() === 1 && await page.getByRole('complementary', { name: 'Selected quest' }).count() === 1 && await page.locator('.journal-session:not([open])').count() === 1 && await page.locator('.journal-views').count() === 0, `Journal ${width}: quests and session remain without the retired stage navigation`);
+        expect(await page.locator('.la-pg.journal').count() === 2 && await page.locator('.la-pg.la-l .journal-pane').count() === 1 && await page.getByRole('region', { name: 'Selected quest' }).count() === 1 && await page.locator('.journal-session:not([open])').count() === 1 && await page.locator('.journal-views').count() === 0, `Journal ${width}: quests and session remain without the retired stage navigation`);
         expect(await noOverflow(page), `Journal ${width}: no horizontal overflow`);
         await page.context().close();
         continue;

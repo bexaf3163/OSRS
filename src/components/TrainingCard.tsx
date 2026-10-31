@@ -145,7 +145,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
         <>
           <div className="training-recommendation">
             <div className="training-method">
-              <h3>{advice.followed ? 'Your plan (the game follows it)' : 'Recommended method'}</h3>
+              <h3 aria-level={2}>{advice.followed ? 'Your plan (the game follows it)' : 'Recommended method'}</h3>
               <p className="training-now"><strong>{shown!.method.name}</strong>{advice.actionTarget != null && (!advice.followed || shown!.method.id === best.method.id) && <span className="muted"> · to {advice.actionTarget}</span>}</p>
               {equipmentHint && <p className="small muted training-equipment"><strong>Equipment:</strong> {equipmentHint}</p>}
               {view === 'full' ? <p className="small muted">{shown!.reason}</p> : <>
