@@ -21,10 +21,12 @@ import type { Point } from './travel';
 
 type Facility = 'furnace' | 'anvil' | 'fire' | 'altar';
 interface Station { objectNames?: string[]; kind: Facility; label: string; place: Point & { label: string }; bankTiles?: number; bank?: string; members: boolean; entry?: Point; portal?: Point }
+import { actionsForQuantity, quantityForActions, type Consumption } from './consumption';
+
 interface Recipe {
   id: string; skill: string; level: number; xp: number; ticks: number; facility: Facility | null; tools: string[];
   /** output: null - nothing kept (logs burnt). retry: a failed attempt keeps the material and costs only its time (lighting a log). */
-  inputs: { name: string; qty: number; stacks: boolean; staff?: string; anyOf?: string[] }[]; output: { name: string; qty: number } | null; retry?: boolean;
+  inputs: (Consumption & { name: string; stacks: boolean; staff?: string; anyOf?: string[] })[]; output: { name: string; qty: number } | null; retry?: boolean;
   /** The skilling success formula's low and high (cooking: the food is not burnt), or a flat chance (an iron bar); neither - always. */
   success?: { low: number; high: number }; chance?: number; members?: boolean;
   /** Plan-specific batch size and one shared wait after the batch, not a delay on every input. */
@@ -83,7 +85,7 @@ function mixableRecipe(r: Recipe, method: TrainingMethod, ids: readonly string[]
     q.skill, q.level, q.xp, q.ticks, q.facility, q.tools,
     q.success ? [q.success.low, q.success.high] : null, q.chance ?? 1, q.retry ?? false, q.members ?? false,
     q.batchSize, q.batchWaitTicks, q.requires, q.wholeBatch, q.multiplierEvery, q.access, q.station,
-    q.inputs.map(i => [i.qty, i.stacks, i.staff]), q.output?.qty ?? 0,
+    q.inputs.map(i => [i.qty, i.stacks, i.staff, i.initialReserve]), q.output?.qty ?? 0,
   ]);
   const expected = shape(r);
   const names = [...new Set([need.name, ...need.anyOf])];
@@ -119,14 +121,14 @@ function recipeBag(r: Recipe, state: PlayerState, market: Market, method?: Train
   const free = BAG - r.tools.length - inputs.filter((i) => i.stacks).length - (r.access && !wearsAccess ? 1 : 0);
   const planned = inputs.flatMap((i) => {
     const n = method?.needs?.find((n) => n.type === 'item' && (n.name === i.name || n.anyOf?.includes(i.name) || i.anyOf?.includes(n.name)));
-    return n?.type === 'item' && n.count !== undefined && n.count > 0 ? [Math.floor(n.count / i.qty)] : [];
+    return n?.type === 'item' && n.count !== undefined && n.count > 0 ? [actionsForQuantity(i, n.count)] : [];
   });
   const capacity = Math.min(r.batchSize ?? Infinity, ...planned, perAction > 0 ? Math.floor(free / perAction) : free);
   const needsAt = (actions: number): MethodNeed[] => [
     ...r.tools.map(name => ({ type: 'item' as const, name, count: 1 })),
     ...(accessNeed ? [accessNeed] : []),
     ...substituted.map(i => ({ type: 'item' as const, name: i.staff!, count: 1, equip: true })),
-    ...inputs.map(i => ({ type: 'item' as const, name: i.name, count: Math.ceil(i.qty * actions), ...(i.anyOf?.length ? { anyOf: i.anyOf } : {}) })),
+    ...inputs.map(i => ({ type: 'item' as const, name: i.name, count: quantityForActions(i, actions), ...(i.anyOf?.length ? { anyOf: i.anyOf } : {}) })),
   ];
   let actions = capacity;
   if (method && capacity > 1) {
@@ -170,7 +172,7 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number] }
   const lootPerHour = costPerHour === null || !r.output ? 0 : value! * outputQty * success * done;
   const rate: ModelRate = {
     xph, costPerHour, basis: r.output?.name ?? r.inputs[0].name, xpPerAction: r.xp * success, exactNeeds: true, batchActions: actions,
-    needs, consumables: inputs.map(({ name, qty, anyOf }) => ({ name, qty, ...(anyOf?.length ? { anyOf: [...anyOf] } : {}) })),
+    needs, consumables: inputs.map(({ name, qty, initialReserve, anyOf }) => ({ name, qty, ...(initialReserve !== undefined ? { initialReserve } : {}), ...(anyOf?.length ? { anyOf: [...anyOf] } : {}) })),
     ...(costPerHour !== null ? { costName: inputs.map((i) => i.name.toLowerCase()).join(', ') } : {}),
     ...(lootPerHour > 0 && r.output ? { lootPerHour, loot: r.output.name } : {}),
     ...(at.spot ? { spot: at.spot } : {}),

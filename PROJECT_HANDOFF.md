@@ -156,7 +156,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 
 ## Current verification
 
-2.81.14 local source: types/build/fresh plugin jar, data validation 0 errors/0 warnings, 2,454 unit tests across 206 files, full Java suite 647 tests/0 failures, complete browser suite and isolated native-shell E2E passed. New checks cover owned catches, physical partial batches, unlocks, shared observation/preparation, station targets and Make-X/burn timing; existing tool/combat/funding preferences remain covered. Exact-source Checks and Release passed their full browser/native/isolated-EXE gates; the published EXE and canonical handoff were independently downloaded and verified. Independent delivery evidence belongs in the receipt above. No real-game verification is claimed.
+2.81.15 local source: types/build/fresh plugin jar, data validation0errors/0warnings,2,462 unit tests across207files, full Java647tests/0failures, complete browser suite and isolated native-shell E2E passed. New coverage includes safe charged-material quantities, future-content stock boundaries, average cost versus physical allowance, owned silver/mould/unlocks and Skills→guide→Checkout without needless buying/funding. Existing account/profile/recovery, tools/combat/processing and funding checks remain covered. Exact-source CI and independent delivery evidence belong in the receipt above; no real-game verification is claimed.
 
 ## Completed baseline — preserve, do not redo
 
@@ -165,6 +165,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 |2.80.8–12|Protected persistence/recovery, backup receipts and pre-write external-revision guards; RuneLite heap minimum. Not an automatic merger/watcher/lock or power-loss guarantee.|
 |2.80.13–17|Quest-entry food, physical alternative withdrawals, consumer-specific skill proofs, F2P checkpoints, acquisition fees separate from unit prices, one shared material allocator and method-selection integration.|
 |2.80.18–2.81.3|Compact skill access, model-driven combat/gathering/processing, staged Optional/training, per-recipe feasibility/batches. Basic Firemaking, Prayer, Runecraft and Superheat adapters already exist.|
+|2.81.15|Shared multi-use material consumption/partial-stock safety; Crafting Thread and silver tiara progression; reconciled corresponding legacy advice.|
 |2.81.14|Common F2P Cooking catch/recipe progression, verified Make-X timing/station targets, sustainable no-cash processing selection and reconciled legacy Cooking source; existing shared preparation/stock/funding lifecycle.|
 |2.81.13|Contextual Journal/selected quest, Gear/current activity, compact Skills index/Calculator reference, and Shopping Checkout; shared activity selection and protected refill budget. Accepted Ledger/fonts unchanged.|
 |2.81.4–6|Conditional processing/Ranged goal demand; one followed-Skills preparation/Shopping/funding lifecycle, with explicit goals and no fabricated XP.|
@@ -211,7 +212,7 @@ Use [SKILLS_COVERAGE.md](docs/SKILLS_COVERAGE.md) as the capability inventory. R
 
 Keep unsupported members mechanics and uncalibrated rates explicit. Add missing mechanics to shared contracts/adapters, with regressions that also cover new/synthetic content. Do not solve each skill by copying the Ranged implementation.
 
-**Next concrete Crafting issue (not fixed in2.81.14):** the leather recipes currently charge one Thread per action. The [Thread Wiki page](https://oldschool.runescape.wiki/w/Thread), checked2026-10-31, states five actions per spool, independent of hides per action. Extend the existing shared recipe/material contract and builder rather than a Crafting-only UI exception. Check partial/unknown remaining uses conservatively, average costs versus physical rounded batch needs, whole-goal/stock allocations, readiness, shopping and bank/funding/resume. Preserve integer requirements for actual items and ordinary one-use materials. Then continue the six-point skill review above; this identified issue is not the whole remaining backlog.
+The confirmed Thread consumption gap has a shared correction in the 2.81.15 source section below; use its verification/delivery status rather than assuming unreleased edits are already installed. Continue the six-point review for other skills and unsupported mechanics. One Crafting correction is not completion of the whole P2 backlog.
 
 ### Cooking progression and shared batch fixes — 2.81.14 source
 
@@ -224,6 +225,18 @@ Verified against the Wiki on 2026-10-31: [F2P Cooking](https://oldschool.runesca
 - Legacy Cooking guide content and its generator retain their IDs but now explain proper early unlocks, use the Barbarian Village fire instead of sending owned tuna to Karamja, and remove blanket cheap-wine/guaranteed Fishing-to-Cooking progress claims. Explicit saved goals remain explicit.
 
 Source verification/release status belongs in Current verification and the delivery receipt. This completes these common F2P Cooking progression fixes, **not every Cooking recipe, Members mechanic or skill/model factual review**. Remaining P2 checks still apply to the other skills; all real-game checks stay with Claude.
+
+### Crafting materials and jewellery — 2.81.15 source
+
+Primary facts checked2026-10-31: [Thread](https://oldschool.runescape.wiki/w/Thread) has five uses per crafting action, irrespective of hides consumed; [Tiara](https://oldschool.runescape.wiki/w/Tiara) is F2P Crafting23,52.5XP, three ticks, one Silver bar and a Tiara mould at a furnace.
+
+- The builder's shared consumableUses facts require the source evidence and matching numeric uses. Every registered recipe using that ingredient inherits its average quantity and a one-time allowance for an unread partly used first unit. Ordinary materials and reusable needles are unchanged.
+- Shared consumption helpers round actual preparation quantities to whole items and conservatively invert available stock into executable actions. Partial-batch readiness, conditional whole-goal/stock demand and funding use that same allowance; average replacement cost uses only expected consumption. Do not use average fractions alone to guarantee an unknown partial spool's actions.
+- The existing cr-gold family now includes silver tiaras from23 and remains useful through43, competing with other usable methods under the existing budget/priority rules. Names reflect gold and silver; recipe IDs and saved selections are preserved. The selected mould/bars/station flow through the existing acquisition and guide engine. There is no new Crafting UI, buying loop or compulsory tiara purchase.
+- Corresponding legacy Crafting guide/generator and Reference jewellery advice no longer imply guaranteed profit or diamonds before43. An example starter leather batch requires26leather, six thread spools and one reusable needle, rather than arbitrary50thread. Main recommendations remain the dynamic planner.
+- New synthetic multi-use tests cover every possible first-unit remainder, physical stock boundaries, ordinary inputs and invalid metadata. Real tracked Crafting tests cover partial thread, owned silver/mould, level unlocks, unchanged observed state and whole-goal demand. Browser cases exercise Skills→followed guide→Shopping at zero cash without unnecessary buying/funding.
+
+Verification and release status are recorded above. This is a common F2P Crafting correction, not a claim that all jewellery, leather products, Members mechanics or remaining skills have been audited. All real-game acceptance remains Claude's.
 
 ### P3 — finish content review and reconcile visible consumers
 
@@ -259,7 +272,7 @@ Record actual version/source/plugin/protocol, account mode, admitted facts, expe
 |Melee/combat|Default practical/Balanced spot versus viable XP/Money alternatives; real damage, food, bank time/net proceeds; Strength versus Power/weapon and armour tradeoffs, actual style and Defence preference.|
 |Magic|Named spell/unlocks, rune quantities, elemental staff actually worn, full gear model and metal penalty. Superheat actual levels/unnoted iron/runes/staff, partial bag and bank coal; no stale NPC targets. Alchemy/splashing remain explicitly selected safe setups.|
 |Gathering|Woodcutting/Mining/Fishing methods, named tools actually carried/worn and skill versus Attack requirement; future-tier ownership, useful upgrades, correct spot/bank/entrance/floor and stage transition. No false inventory-slot credit from Attack alone.|
-|Processing/utility|Cooking/Smithing/Crafting/Firemaking and supported Members recipes, failure/inputs/output/fees, affordable partial batches, reusable tools and material alternatives. Prayer/Runecraft default defer versus explicit goal; real altar entry/exit/timing.|
+|Processing/utility|Cooking/Smithing/Crafting/Firemaking and supported Members recipes, failure/inputs/output/fees, affordable partial batches, reusable tools and material alternatives. Crafting: one/two partial Thread spools without refill loops, no one-spool-per-item cost, silver/mould at23 and furnace guide; Cooking: owned catch/fire/unlocks/Make-X. Prayer/Runecraft default defer versus explicit goal; real altar entry/exit/timing.|
 |Mixed/quest XP|Fishing→Cooking and Mining→Woodcutting handover, every declared goal retained, no unearned XP/quest credit. Actual quest preparation deep-link/goal/return; stop/cancel/funding restores original route.|
 |Physical supplies|Noted food is owned but uneatable; correct bank withdrawal/unnote. Equivalent foods by healing still use real pieces/slots. Potions combine doses across sizes without pretending they were poured. Missing/unread facts stay distinct.|
 |Quests/branches|Reachable Oracle/Dragon Slayer entry/dialogue/map parts, Shield of Arrav branches, partial quest milestones and encounter-entry food/gear guards. Completed encounters are NOT REACHABLE, never replayed/reset just for testing.|

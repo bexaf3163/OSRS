@@ -12,7 +12,7 @@
       ],
       "methodType": "CRAFT",
       "title": "Leather items",
-      "description": "Craft the best leather item you can with a needle and thread: gloves, boots, then the first body items.",
+      "description": "Use the shared Skills plan for the current leather recipe or jewellery alternative. Bring leather, a needle and thread; each thread spool serves five actions. Prepare one batch, not the entire level goal.",
       "targetLevel": 20,
       "lane": "both",
       "members": false,
@@ -34,7 +34,12 @@
           {
             "id": 1734,
             "name": "Thread",
-            "quantity": 50
+            "quantity": 6
+          },
+          {
+            "id": 1741,
+            "name": "Leather",
+            "quantity": 26
           }
         ]
       }
@@ -48,7 +53,7 @@
       ],
       "methodType": "CRAFT",
       "title": "Cutting gems",
-      "description": "Cut sapphires, emeralds, rubies and diamonds with a chisel: the fastest free-to-play method and safe.",
+      "description": "Cut sapphires from 20, emeralds from 27 and rubies from 34; diamonds unlock at 43. Check input cost against sale value and the available budget. Silver tiaras from 23 are an alternative through the shared planner.",
       "targetLevel": 43,
       "lane": "both",
       "members": false,
@@ -79,7 +84,7 @@
       ],
       "methodType": "CRAFT",
       "title": "Cutting diamonds",
-      "description": "Keep cutting diamonds with a chisel: the fastest free Crafting, at a loss on every cut.",
+      "description": "Diamonds unlock at 43 and give fast bank-side XP. Compare input cost, sale value and the available budget; a slower affordable method may be more practical.",
       "targetLevel": 99,
       "lane": "both",
       "members": false,
@@ -153,8 +158,8 @@
         43
       ],
       "methodType": "CRAFT",
-      "title": "Gold jewellery",
-      "description": "At the Edgeville furnace: unstrung gold amulets from 8 usually pay a little, then sapphire and emerald amulets.",
+      "title": "Gold and silver jewellery",
+      "description": "Gold rings from 5, necklaces from 6, unstrung gold amulets from 8 and silver tiaras from 23. Bring the matching mould and bars to the furnace. Compare current net prices; profit is not guaranteed.",
       "targetLevel": 43,
       "lane": "alt",
       "members": false,

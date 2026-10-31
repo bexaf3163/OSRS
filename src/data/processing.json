@@ -625,8 +625,9 @@
         },
         {
           "name": "Thread",
-          "qty": 1,
-          "stacks": true
+          "qty": 0.2,
+          "stacks": true,
+          "initialReserve": 0.8
         }
       ],
       "output": {
@@ -653,8 +654,9 @@
         },
         {
           "name": "Thread",
-          "qty": 1,
-          "stacks": true
+          "qty": 0.2,
+          "stacks": true,
+          "initialReserve": 0.8
         }
       ],
       "output": {
@@ -731,6 +733,29 @@
         "qty": 1
       },
       "source": "https://oldschool.runescape.wiki/w/Gold_amulet_(u)"
+    },
+    {
+      "id": "tiara",
+      "skill": "crafting",
+      "level": 23,
+      "xp": 52.5,
+      "ticks": 3,
+      "facility": "furnace",
+      "tools": [
+        "Tiara mould"
+      ],
+      "inputs": [
+        {
+          "name": "Silver bar",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Tiara",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Tiara"
     },
     {
       "id": "sapphire",
@@ -2014,7 +2039,8 @@
     "cr-gold": [
       "gold-ring",
       "gold-necklace",
-      "gold-amulet"
+      "gold-amulet",
+      "tiara"
     ],
     "cr-gems": [
       "sapphire",

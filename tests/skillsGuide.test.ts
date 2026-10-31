@@ -290,7 +290,7 @@ describe('a followed skill plan (2.70)', () => {
     const leather = path.find((x) => x.id === 'crafting-01')!;
     const step = followedShoppingStep('crafting', leather)!;
     const list = aggregateShopping([step]);
-    expect(list.required.map((l) => [l.nameEn, l.count])).toEqual(expect.arrayContaining([['Needle', 1], ['Thread', 50]]));
+    expect(list.required.map((l) => [l.nameEn, l.count])).toEqual(expect.arrayContaining([['Needle', 1], ['Thread', 6], ['Leather', 26]]));
     expect(followedShoppingStep('woodcutting', buildPath(skillGuides.woodcutting, 'fast')[0])).toBeNull();
   });
 

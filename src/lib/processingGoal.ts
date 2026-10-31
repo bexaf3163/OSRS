@@ -1,6 +1,7 @@
 // Aggregate the shared staged forecast; this does not select recipes, grant stock or finance future purchases.
 import { nameKey } from './checklist';
 import { xpForLevel } from './xp';
+import { validConsumption } from './consumption';
 import type { MethodNeed, PathLeg } from './trainingRouter';
 
 type Item = Extract<MethodNeed, { type: 'item' }>;
@@ -48,8 +49,8 @@ export function processingGoalNeeds(path: readonly PathLeg[], level: number, tar
     if (!Number.isFinite(actions) || actions <= 0) return null;
     const consumed = new Set(method.consumables.flatMap(namesOf));
     for (const input of method.consumables) {
-      if (!Number.isFinite(input.qty) || input.qty <= 0) return null;
-      materials.push({ type: 'item', name: input.name, count: Math.ceil(actions) * input.qty, ...(input.anyOf?.length ? { anyOf: [...input.anyOf] } : {}) });
+      if (!validConsumption(input)) return null;
+      materials.push({ type: 'item', name: input.name, count: Math.ceil(actions) * input.qty + (input.initialReserve ?? 0), ...(input.anyOf?.length ? { anyOf: [...input.anyOf] } : {}) });
     }
     for (const need of leg.needs ?? method.needs) {
       if (need.type !== 'item') continue;

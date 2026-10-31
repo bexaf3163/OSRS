@@ -57,9 +57,9 @@ A(s('smithing', 15, 99, 'MINIGAME', "Giants' Foundry", "Forge swords at Giants' 
 A(s('smithing', 40, 99, 'GATHER', 'Blast Furnace gold bars', 'Smelt gold bars at the Blast Furnace: the fastest viable members method from level 40 (it costs money).', 'wiki:Blast Furnace', 'fast', True, obj='Bar dispenser'))
 
 # ---------------------------------------------------------------- Crafting (free to play up to cutting diamonds)
-A(s('crafting', 1, 20, 'CRAFT', 'Leather items', 'Craft the best leather item you can with a needle and thread: gloves, boots, then the first body items.', 'Al Kharid Bank', 'both', False, items=[{'id': 1733, 'name': 'Needle', 'quantity': 1}, {'id': 1734, 'name': 'Thread', 'quantity': 50}]))
-A(s('crafting', 20, 43, 'CRAFT', 'Cutting gems', 'Cut sapphires, emeralds, rubies and diamonds with a chisel: the fastest free-to-play method and safe.', 'Grand Exchange', 'both', False, items=[{'id': 1755, 'name': 'Chisel', 'quantity': 1}]))
-A(s('crafting', 43, 99, 'CRAFT', 'Cutting diamonds', 'Keep cutting diamonds with a chisel: the fastest free Crafting, at a loss on every cut.', 'Grand Exchange', 'both', False, items=[{'id': 1755, 'name': 'Chisel', 'quantity': 1}]))
+A(s('crafting', 1, 20, 'CRAFT', 'Leather items', 'Use the shared Skills plan for the current leather recipe or jewellery alternative. Bring leather, a needle and thread; each thread spool serves five actions. Prepare one batch, not the entire level goal.', 'Al Kharid Bank', 'both', False, items=[{'id': 1733, 'name': 'Needle', 'quantity': 1}, {'id': 1734, 'name': 'Thread', 'quantity': 6}, {'id': 1741, 'name': 'Leather', 'quantity': 26}]))
+A(s('crafting', 20, 43, 'CRAFT', 'Cutting gems', 'Cut sapphires from 20, emeralds from 27 and rubies from 34; diamonds unlock at 43. Check input cost against sale value and the available budget. Silver tiaras from 23 are an alternative through the shared planner.', 'Grand Exchange', 'both', False, items=[{'id': 1755, 'name': 'Chisel', 'quantity': 1}]))
+A(s('crafting', 43, 99, 'CRAFT', 'Cutting diamonds', 'Diamonds unlock at 43 and give fast bank-side XP. Compare input cost, sale value and the available budget; a slower affordable method may be more practical.', 'Grand Exchange', 'both', False, items=[{'id': 1755, 'name': 'Chisel', 'quantity': 1}]))
 A(s('crafting', 62, 99, 'CRAFT', "Dragonhide bodies", "Craft green, blue and red dragonhide bodies: cheap bodies at the level where gem cutting gets expensive.", 'Grand Exchange', 'fast', True))
 A(s('crafting', 5, 99, 'CRAFT', 'Molten glass', 'Make molten glass and craft glass items: low effort, steady XP.', 'Edgeville', 'afk', True))
 
@@ -144,6 +144,6 @@ A(s('mining', 30, 99, 'GATHER', 'Coal for steel', 'Barbarian Village coal: slowe
 A(s('mining', 70, 99, 'GATHER', 'Adamantite in the Mining Guild', 'Two rocks: hop worlds instead of waiting.', 'Mining Guild', 'alt', False, obj='Adamantite rocks'))
 A(s('smithing', 1, 99, 'GATHER', 'Smelting bars at Edgeville', 'Almost AFK at the furnace next to the bank; steel, mithril and adamantite bars often sell above their ore.', 'Edgeville', 'alt', False, obj='Furnace'))
 A(s('smithing', 14, 99, 'GATHER', 'Barronite deposits', 'Crush deposits in Camdozaal after Below Ice Mountain: very slow, very calm.', 'wiki:Ruins of Camdozaal', 'alt', False, quest='Below Ice Mountain'))
-A(s('crafting', 5, 43, 'CRAFT', 'Gold jewellery', 'At the Edgeville furnace: unstrung gold amulets from 8 usually pay a little, then sapphire and emerald amulets.', 'Edgeville', 'alt', False, obj='Furnace'))
+A(s('crafting', 5, 43, 'CRAFT', 'Gold and silver jewellery', 'Gold rings from 5, necklaces from 6, unstrung gold amulets from 8 and silver tiaras from 23. Bring the matching mould and bars to the furnace. Compare current net prices; profit is not guaranteed.', 'Edgeville', 'alt', False, obj='Furnace'))
 A(s('crafting', 8, 99, 'CRAFT', 'Bowls', 'The wheel and oven in Barbarian Village: cheap XP from clay.', 'Barbarian Village', 'alt', False))
 A(s('crafting', 28, 99, 'CRAFT', 'Hardleather bodies', 'About 90 thousand XP an hour, but every hide costs money.', 'Al Kharid Bank', 'alt', False))

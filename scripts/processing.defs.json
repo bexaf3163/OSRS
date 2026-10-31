@@ -192,6 +192,12 @@
       "facility": "furnace"
     },
     {
+      "id": "tiara",
+      "page": "Tiara",
+      "skill": "crafting",
+      "facility": "furnace"
+    },
+    {
       "id": "sapphire",
       "page": "Sapphire",
       "skill": "crafting",
@@ -594,7 +600,8 @@
     "cr-gold": [
       "gold-ring",
       "gold-necklace",
-      "gold-amulet"
+      "gold-amulet",
+      "tiara"
     ],
     "cr-gems": [
       "sapphire",
@@ -697,5 +704,13 @@
       "label": "Firemaking success chance",
       "line": "Normal"
     }
-  }
+  },
+  "consumableUses": [
+    {
+      "name": "Thread",
+      "page": "Thread",
+      "uses": 5,
+      "evidence": "Each thread spool has 5 uses before it is consumed."
+    }
+  ]
 }

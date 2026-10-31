@@ -26,7 +26,7 @@ interface RecipeDef { id: string; page: string; skill: string; facility: Kind | 
 }
 /** Lighting logs: the action length (checked against its evidence line) and the lighting success chart, one for every log. */
 interface LightDef { ticks: { page: string; evidence: string; ticks: number }; chart: { page: string; label: string; line: string } }
-interface Defs { stations: StationDef[]; recipes: RecipeDef[]; methods: Record<string, string[]>; light?: LightDef }
+interface Defs { consumableUses?: { name: string; page: string; uses: number; evidence: string }[]; stations: StationDef[]; recipes: RecipeDef[]; methods: Record<string, string[]>; light?: LightDef }
 
 const defs = JSON.parse(readFileSync(`${root}scripts/processing.defs.json`, 'utf8')) as Defs;
 const places = (JSON.parse(readFileSync(`${root}src/data/majorLocations.json`, 'utf8')) as { locations: Record<string, Pt & { label: string; kind: string }> }).locations;
@@ -212,6 +212,22 @@ for (const d of defs.recipes) {
   });
 }
 
+// A charged ingredient is shared by every recipe that uses it; facts need explicit source evidence.
+const usesByName = new Map<string, number>();
+for (const fact of defs.consumableUses ?? []) {
+  if (!Number.isSafeInteger(fact.uses) || fact.uses <= 1 || !fact.evidence || Number(/\b(\d+) uses\b/.exec(fact.evidence)?.[1]) !== fact.uses || !plain(await page(fact.page)).includes(fact.evidence) || usesByName.has(fact.name)) {
+    fail(fact.name, 'invalid or unverified consumable uses'); continue;
+  }
+  usesByName.set(fact.name, fact.uses);
+}
+const builtRecipes = recipes.map(r => ({ ...r, inputs: r.inputs.map(i => {
+  const uses = usesByName.get(i.name);
+  if (!uses) return i;
+  if (!i.stacks) fail(i.name, 'multi-use materials must be stackable');
+  // The bridge cannot read the first spool's remaining uses; allow its worst-case partial use once.
+  return { ...i, qty: i.qty / uses, initialReserve: (uses - 1) / uses };
+}) }));
+
 // Methods: each lists recipes of its own skill; every recipe with a facility has a station of that kind.
 for (const [id, list] of Object.entries(defs.methods)) {
   const m = methods.find((x) => x.id === id);
@@ -231,6 +247,6 @@ if (problems.length) {
 }
 writeFileSync(OUT, `${JSON.stringify({
   about: 'Built by scripts/build-processing.ts from scripts/processing.defs.json and the OSRS Wiki; edit the definitions and rebuild.',
-  stations, recipes, methods: defs.methods,
+  stations, recipes: builtRecipes, methods: defs.methods,
 }, null, 2)}\n`);
 console.log(`Written ${recipes.length} recipes, ${stations.length} stations, ${Object.keys(defs.methods).length} methods to ${OUT}`);

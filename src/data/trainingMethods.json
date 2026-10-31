@@ -858,7 +858,10 @@
       "from": 1,
       "to": 29,
       "name": "The quest The Knight's Sword",
-      "questGuide": { "name": "The Knight's Sword", "stepId": "S2-07" },
+      "questGuide": {
+        "name": "The Knight's Sword",
+        "stepId": "S2-07"
+      },
       "members": false,
       "kind": "quest",
       "xpTotal": 12725,
@@ -1034,8 +1037,8 @@
       "id": "cr-gold",
       "skill": "crafting",
       "from": 5,
-      "to": 20,
-      "name": "Gold jewellery",
+      "to": 43,
+      "name": "Gold and silver jewellery",
       "members": false,
       "needs": [
         {
@@ -1051,7 +1054,7 @@
       "cost": "profit",
       "risk": "none",
       "where": "The Edgeville or Al Kharid furnace",
-      "note": "The wiki says it pays off; calculate by Grand Exchange prices.",
+      "note": "Gold rings from 5, necklaces from 6, unstrung gold amulets from 8 and silver tiaras from 23. The shared model compares usable owned materials and current prices; profit is not guaranteed.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Crafting_training",
       "place": "Edgeville"
     },
@@ -1094,7 +1097,7 @@
       "cost": "cost",
       "risk": "none",
       "where": "By a bank",
-      "note": "The guide's fastest free Crafting from 43; every cut loses money at exchange prices, so check the budget first.",
+      "note": "Diamond cutting unlocks at 43. Compare current input cost, sale value and the available budget; a slower affordable method may be more practical.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Crafting_training",
       "place": "Grand Exchange"
     },
@@ -1331,7 +1334,10 @@
       "from": 1,
       "to": 9,
       "name": "The quest The Restless Ghost",
-      "questGuide": { "name": "The Restless Ghost", "stepId": "S1-06" },
+      "questGuide": {
+        "name": "The Restless Ghost",
+        "stepId": "S1-06"
+      },
       "members": false,
       "kind": "quest",
       "xpTotal": 1125,

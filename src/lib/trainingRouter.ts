@@ -30,6 +30,7 @@ import { coinsPerMinute, coinTimeShare, earningsOrder } from './lootValue';
 import type { TradeRestriction } from './tradeRestriction';
 import { requirementCost } from './funding/need';
 import { allocateMaterialStock } from './materialStock';
+import { actionsForQuantity, quantityForActions } from './consumption';
 import type { HeldUnits } from './doses';
 import { processingGoalNeeds, mergeGoalNeeds } from './processingGoal';
 import { isReusable } from './shopping';
@@ -238,12 +239,12 @@ export function preparationNeeds(advice: Pick<TrainingAdvice, 'best' | 'upgrade'
       const index = needs.findIndex(n => n.type === 'item' && nameKey(n.name) === nameKey(input.name));
       const key = String(index);
       const bag = index < 0 ? null : stock.has(key) ? stock.get(key)!.bag : heldExact(state, input.name).bag;
-      return { index, qty: input.qty, actions: bag === null || !(input.qty > 0) ? 0 : Math.floor(bag / input.qty) };
+      return { ...input, index, actions: bag === null ? 0 : actionsForQuantity(input, bag) };
     });
     const actions = Math.min(...inputs.map(input => input.actions));
     if (actions > 0) needs = needs.map((n, index) => {
       const input = inputs.find(input => input.index === index);
-      return n.type === 'item' && input ? { ...n, count: Math.min(n.count ?? 1, Math.ceil(actions * input.qty)) } : n;
+      return n.type === 'item' && input ? { ...n, count: Math.min(n.count ?? 1, quantityForActions(input, actions)) } : n;
     });
   }
   // A low-watermark/refill policy for trainer food, using the canonical healing-equivalent stock allocator.
