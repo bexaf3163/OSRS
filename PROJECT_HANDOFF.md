@@ -1,15 +1,15 @@
 # OSRS Path — project handoff
 
-Updated 2026-10-31. **This is the only current project contract, architecture map, work state, backlog and handoff.** Read the relevant section, not the whole history, on every small change. AGENTS.md/CLAUDE.md are entry-point pointers; README.md is the product introduction. Detailed technical inventories are linked on demand.
+Updated 2026-11-01. **This is the only current project contract, architecture map, work state, backlog and handoff.** Read the relevant section, not the whole history, on every small change. AGENTS.md/CLAUDE.md are entry-point pointers; README.md is the product introduction. Detailed technical inventories are linked on demand.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-Published and independently verified Portable: **2.81.16**, source `287e860be6d42cec73fd50c04313ba5fa47aef90`. Exact-source Checks **41230201959** and Release **41230201933** passed, including complete browser, Java, native-shell and isolated packaged-EXE gates.
+Published and independently verified Portable: **2.81.17**, source `a58c20a77b9a8b116e45f12bce3d91a6504c8aec`. Exact-source Checks **41234444585** and Release **41234444606** passed, including browser, full Java, native-shell and isolated packaged-EXE gates.
 
-Downloaded EXE: **102439806 bytes**. SHA256: `e918829a3afa6c7b3fe22360b0579c91f8105570427a419e9a8e3e989f5275ff`. Actual download, asset digest, manifest, size and release-tag/source agree. The distributed canonical handoff was separately downloaded and digest/source/version/policy verified; the release contains only EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt (plus GitHub's automatic source archives).
+Downloaded EXE: **102441710 bytes**. SHA256: `8c462fed456aa021bdc40d2ffabad76f21243ff13dcb8080b5869f71e8068753`. Actual download, asset digest, manifest, size and release-tag/source agree. The canonical handoff was separately downloaded and digest/source/version/policy verified (SHA256 `5a63c74ad56978923523a6f522ee5fb198e5672f2c25e429b90163d5b652a494`). Exactly three release assets: EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt, plus GitHub's automatic source archives.
 
-Ordinary furnace smelting and feasible partial-bar anvil progression are connected through existing engines; Smithing legacy claims are reconciled and supported Firemaking paths have additional coverage. Ledger/fonts, IDs, explicit goals and existing preparation/stock/funding behavior are preserved. All real-game acceptance remains Claude's. Broader P2/P3 work below remains open.
+Prayer kit/access/map/prepared-fish guidance and shared UNKNOWN preparation readiness are corrected. Complete Camdozaal cycle rates and real-game acceptance remain unverified; Claude owns live tests. Ledger/fonts, stable IDs and existing saves are preserved. Broader remaining work is below.
 <!-- DELIVERY_END -->
 
 ## Documentation policy
@@ -156,7 +156,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 
 ## Current verification
 
-2.81.17 local source:2,509 unit tests across209files, types/build/fresh17plugin jar and data0errors/0warnings passed. The complete browser and isolated native-shell checks also passed. This batch adds cross-skill/kit/map/sequence Prayer coverage and shared hard-UNKNOWN/detour regressions; prior processing fixtures remain. Real-game acceptance remains Claude's. The last independently verified delivery is2.81.16 above; exact-source17 CI, packaged EXE and artifact verification are still required before claiming a new delivery.
+2.81.17 is fully delivered and independently verified above. Its local2509-unit suite, complete browser, native-shell, types/build/data/fresh-jar checks and exact-source CI passed. The small2.81.18 source batch has2513passing unit tests across209files, types/build/fresh18plugin jar, data0errors/0warnings, documentation checks and targeted Members/F2P browser suites. The complete local browser and native-shell sweep passed on17;18 changes only declarative method boundaries, tests and the coordinated version, so those full local gates were not redundantly repeated. Exact-source18 CI still must run them. Exact-source18 CI and Portable verification remain required before a new delivery claim. No real-game acceptance was performed.
 
 ## Completed baseline — preserve, do not redo
 
@@ -165,6 +165,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 |2.80.8–12|Protected persistence/recovery, backup receipts and pre-write external-revision guards; RuneLite heap minimum. Not an automatic merger/watcher/lock or power-loss guarantee.|
 |2.80.13–17|Quest-entry food, physical alternative withdrawals, consumer-specific skill proofs, F2P checkpoints, acquisition fees separate from unit prices, one shared material allocator and method-selection integration.|
 |2.80.18–2.81.3|Compact skill access, model-driven combat/gathering/processing, staged Optional/training, per-recipe feasibility/batches. Basic Firemaking, Prayer, Runecraft and Superheat adapters already exist.|
+|2.81.18|Bound incomplete gathering cycles to the existing manual-reference contract; preserve modeled defaults and remove duplicate F2P browser execution.|
 |2.81.17|Corrected Prayer gates/kit/map/prepared-fish instructions and shared UNKNOWN preparation completion/verdict; preserved layout and deferred full-cycle/live claims.|
 |2.81.16|Connected ordinary furnace smelting, practical partial-bar anvil products and true unlocks through existing models; reconciled Smithing claims; Firemaking/common browser progression coverage.|
 |2.81.15|Shared multi-use material consumption/partial-stock safety; Crafting Thread and silver tiara progression; reconciled corresponding legacy advice.|
@@ -212,7 +213,7 @@ Use [SKILLS_COVERAGE.md](docs/SKILLS_COVERAGE.md) as the capability inventory. R
 5. Logical F2P stopping guidance and the Optional chapter's ordering before membership; check route-specific targets against current F2P advice instead of assuming every target is identical.
 6. Correct next action/completion and no old static recommendation elsewhere contradicting the current plan.
 
-Keep unsupported members mechanics and uncalibrated rates explicit. Add missing mechanics to shared contracts/adapters, with regressions that also cover new/synthetic content. Do not solve each skill by copying the Ranged implementation. A concrete next review is the Members guide-only entries fi-monk, fi-karambwan and mi-motherlode: they currently have reference rates without full gathering models. Check default-selection/manual-setup behavior, actual access and map acquisition before treating them as autonomous supported plans; retain the reference information and stable IDs. The four existing Runecraft adapters already cover altar-specific surface entry, talisman/tiara, rune/pure essence and per-essence XP versus multiple-rune yield; do not rebuild those contracts.
+Keep unsupported members mechanics and uncalibrated rates explicit. Add missing mechanics to shared contracts/adapters, with regressions that also cover new/synthetic content. Do not solve each skill by copying the Ranged implementation. The2.81.18 source guard below keeps fi-monk, fi-karambwan and mi-motherlode as manual references; their complete mechanics/access/route/personalized models still need implementation before automatic use. The four existing Runecraft adapters already cover altar-specific surface entry, talisman/tiara, rune/pure essence and per-essence XP versus multiple-rune yield; do not rebuild those contracts.
 
 **Prayer corrections — 2.81.17 source:** `pr-camdozaal` now admits Prayer1 with actual Below Ice Mountain, Fishing7/Cooking7 and Small fishing net/Knife prerequisites. Its destination uses the existing named-location resolver and a primary-Wiki point (2968,5808,0); the location builder retains the entry. Unsupported 2400XP/h and raw-offering instructions are removed. Catalogue, legacy prayer-04 and Reference agree on catch → prepare → offer; cavefish require Fishing/Cooking20 and tetras33, all offered at Prayer1. These unlocks do not establish which full cycle is fastest: failures, catch chances and complete-cycle rates remain unmodelled. Verified2026-10-31 against [Raw guppy](https://oldschool.runescape.wiki/w/Raw_guppy), [Guppy](https://oldschool.runescape.wiki/w/Guppy), [Cavefish](https://oldschool.runescape.wiki/w/Cavefish), [Tetra](https://oldschool.runescape.wiki/w/Tetra) and [Ruins of Camdozaal](https://oldschool.runescape.wiki/w/Ruins_of_Camdozaal). Passive collect-and-bury guidance uses the existing manual-setup contract rather than becoming a standalone default without a destination. Stable IDs, explicit goals and the default pre-membership Prayer deferral remain.
 
@@ -256,6 +257,15 @@ Primary facts checked2026-10-31 through the existing Wiki reader/builder: [F2P S
 - Firemaking's five existing line-lighting families were reviewed and tested at actual log unlocks with an owned partial batch and reusable Tinderbox. This establishes those supported paths, not bonfire/Wintertodt modeling or live terrain/timing validation. Those and any unmodelled equipment effects remain outside this verification.
 
 Verification/delivery status is recorded above; all real-game acceptance remains Claude's. Remaining P2/P3 work still includes gathering/Prayer/Runecraft and unsupported mechanics/visible-consumer checks. This section is not a full-project completion claim.
+
+### Guide-only gathering boundary — 2.81.18 source
+
+- Existing shared manualSetup handling now keeps monkfish, karambwan and Motherlode Mine out of default recommendations and forecasts until their complete mechanics and routes are modelled. Stable method IDs, reference rates/information, supported gathering and F2P progression are retained. No new engine, selector, UI layout or font change.
+- Real-method tests confirm ordinary quest/kit facts can be ready but the incomplete cycle remains manual across Balanced/XP/Money/Relaxed. Full-catalogue forecasts and a synthetic future method inherit the same protection. Browser checks retain modeled teak navigation and compact Members default/reference behavior. Alternative lists remain intentionally capped; not every reference is displayed simultaneously.
+- The old priority test used unmodelled Motherlode as a default. It now tests both calm/efficient choices with isolated equal-rate synthetic methods, preserving and strengthening its intended comparison rather than reinstating unsupported behavior.
+- Removed one duplicate F2P browser-family invocation. A complete sweep still runs that family once, and its targeted selector remains available. No production behavior or test scenario family was removed.
+
+**Claude takeover order:** finish any pending release verification first; run the baseline and full reachable live matrix (P4). Then continue P2/P3 source work: actual unmodelled mechanics, remaining gathering/Prayer/Runecraft edge cases and stale visible Reference/consumer facts. Reuse existing engines and the accepted Ledger design. Do not mark all Skills/Members mechanics or the full audit complete from these bounded fixes. Do not restart already verified work. No new large task was started after the owner's low-quota request.
 
 ### P3 — finish content review and reconcile visible consumers
 

@@ -318,7 +318,8 @@
       "cost": "profit",
       "risk": "none",
       "where": "Piscatoris Fishing Colony",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training",
+      "manualSetup": "Reference method: verify Swan Song access and set up the Piscatoris catch/bank cycle manually. Its complete gathering route and personalized rate are not modelled yet."
     },
     {
       "id": "fi-karambwan",
@@ -345,7 +346,8 @@
       "cost": "profit",
       "risk": "none",
       "where": "Near the DKP fairy ring",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training",
+      "manualSetup": "Reference method: verify Tai Bwo Wannai Trio fishing access, vessel bait and an accessible banking route manually. Its complete catch/bait/bank cycle is not modelled yet."
     },
     {
       "id": "mi-ore",
@@ -429,7 +431,8 @@
       "cost": "profit",
       "risk": "none",
       "where": "Motherlode Mine (Falador)",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Mining_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Mining_training",
+      "manualSetup": "Reference method: set up the pay-dirt, hopper, sack and bank cycle manually. The complete processing route, yield and personalized rate are not modelled yet."
     },
     {
       "id": "ag-gnome",

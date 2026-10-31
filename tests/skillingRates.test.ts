@@ -10,15 +10,15 @@ import { gatherPace, gatherRate, SKILLING, type SkillingRegistry } from '../src/
 import { trainingNav } from '../src/lib/trainingNav';
 import { withTrainingMethod } from '../src/lib/methodStep';
 import { stepById } from '../src/data';
-import { adviseTraining, toolUpgrade, trainingMethods, type TrainingMethod } from '../src/lib/trainingRouter';
+import { adviseTraining, toolUpgrade, trainingMethods, viewMethod, type TrainingMethod } from '../src/lib/trainingRouter';
 import type { PriceView } from '../src/lib/funding/quotes';
 import { market } from './funding/market';
 
 const method = (id: string) => trainingMethods.find((m) => m.id === id) as TrainingMethod;
 /** A state with these levels and these items (bank checked): name → [carried, bank]. */
-function stateOf(levels: Record<string, number>, items: Record<string, [number, number]>, mode: 'f2p' | 'members' = 'f2p', bankSeen = true): PlayerState {
+function stateOf(levels: Record<string, number>, items: Record<string, [number, number]>, mode: 'f2p' | 'members' = 'f2p', bankSeen = true, questsDone: string[] = []): PlayerState {
   const owned = { bankSeen, items: new Map(Object.entries(items).map(([name, [carried, bank]]) => [nameKey(name), { name, carried, noted: 0, bank: bankSeen ? bank : null }])) };
-  return buildPlayerState({ mode, stats: levels as never, progress: { ...emptyProgress(), levels }, owned: owned as never, gear: { equipment: [], inventory: [], coins: 0, bankCoins: 0 } as never, questsDone: [], connected: true });
+  return buildPlayerState({ mode, stats: levels as never, progress: { ...emptyProgress(), levels }, owned: owned as never, gear: { equipment: [], inventory: [], coins: 0, bankCoins: 0 } as never, questsDone, connected: true });
 }
 /** A fixed exchange: these sell prices, and cowhides at 116 (the earning rate the keep rule compares with). */
 const prices = (sell: Record<string, number>): PriceView => ({
@@ -342,5 +342,35 @@ describe('a better tool is weighed against its price over the hours left', () =>
     expect(toolUpgrade(m, 300_000, 'relaxed', 100)).toBeNull();
     // Without prices the coins cannot be weighed: nothing is bought on balanced.
     expect(toolUpgrade(m, 300_000, 'balanced', null)).toBeNull();
+  });
+});
+
+
+describe('guide-only gathering methods use the shared manual-setup boundary', () => {
+  const state = () => stateOf({ fishing: 70, mining: 50, attack: 40 }, {
+    'Small fishing net': [1, 0], 'Karambwan vessel': [1, 0], 'Raw karambwanji': [100, 0], 'Rune pickaxe': [1, 0],
+  }, 'members', true, ['Swan Song']);
+  it.each(['fi-monk', 'fi-karambwan', 'mi-motherlode'])('%s stays available as reference, without an unsupported default route', id => {
+    const m = method(id), s = state(), skill = m.skills[0];
+    expect(gatherRate(m, skill, s)).toBeNull();
+    expect(m.manualSetup).toBeTruthy();
+    // Confirm that missing ordinary kit or quest facts are not what makes the reference manual.
+    expect(viewMethod({ ...m, manualSetup: undefined }, s).status).toBe('READY');
+    for (const priority of ['balanced', 'fastest', 'profit', 'relaxed'] as const) {
+      const advice = adviseTraining({ skill, target: 80, mode: 'members', state: s, style: 'chill', priority, methods: [m] });
+      expect(advice.best).toBeNull();
+      expect(advice.path).toEqual([]);
+      expect(advice.others[0]?.method.id).toBe(id);
+      expect(advice.others[0]?.unchecked).toContainEqual(expect.objectContaining({ label: m.manualSetup }));
+      const mixed = adviseTraining({ skill, target: 80, mode: 'members', state: s, style: 'chill', priority });
+      expect(mixed.best?.method.id).not.toBe(id);
+      expect(mixed.path.every(leg => leg.method.id !== id)).toBe(true);
+    }
+  });
+  it('a new manual activity inherits the same protection without an ID-specific selector', () => {
+    const future = { ...method('fi-monk'), id: 'future-manual-fishing' };
+    const advice = adviseTraining({ skill: 'fishing', target: 80, mode: 'members', state: state(), style: 'chill', methods: [future] });
+    expect(advice.best).toBeNull();
+    expect(advice.others[0]?.method.id).toBe(future.id);
   });
 });

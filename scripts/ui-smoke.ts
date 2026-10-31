@@ -321,6 +321,31 @@ async function membersGatheringScenarios(browser: Browser) {
     expect(await noOverflow(page) && !errors.length, `Members gathering ${width}: no overflow or console errors`);
     await page.context().close();
   }
+
+  for (const sample of [
+    { skill: 'fishing', code: 'FI', names: ['Monkfish', 'Karambwan'] },
+    { skill: 'mining', code: 'MI', names: ['Motherlode Mine'] },
+  ]) {
+    const stats = { fishing: 70, mining: 50, attack: 40 };
+    const items = ['Small fishing net', 'Fishing rod', 'Fly fishing rod', 'Feather', 'Fishing bait', 'Lobster pot', 'Harpoon', 'Karambwan vessel', 'Raw karambwanji', 'Rune pickaxe'];
+    const gear = { equipment: [], inventory: items.map(name => ({ id: 0, name, count: name === 'Feather' || name === 'Fishing bait' || name === 'Raw karambwanji' ? 100 : 1 })), coins: 500000, bankCoins: 0 };
+    const { page, errors } = await open(browser, 1280, {
+      progress: progressBefore('S9-01', { gameMode: 'members', levels: stats }),
+      status: { protocol: 6, inGame: true, stats, ...gear, questsDone: ['Swan Song'] },
+      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'QUESTS', done: ['Swan Song'] },
+        { type: 'OWNED', bankSeen: true, items: gear.inventory.map(i => ({ name: i.name, carried: i.count, noted: 0, bank: 0 })) }],
+    }, `#/skills/${sample.code}/${sample.skill}?goal=80`);
+    await page.locator('.training-now').waitFor();
+    const recommended = await page.locator('.training-now').innerText();
+    expect(sample.names.every(name => !recommended.includes(name)), `Members ${sample.skill}: an unmodelled cycle is not the automatic recommendation`);
+    await page.getByRole('tab', { name: 'Plan', exact: true }).click();
+    const explanation = await text(page, '.training-analysis');
+    // The compact alternative list is intentionally capped; catalogue retention for every method has separate unit coverage.
+    if (sample.skill === 'mining') expect(explanation.includes('Motherlode Mine') && explanation.includes('manual setup:'), 'Members mining: the visible reference retains its manual-setup label');
+    expect(await noOverflow(page) && !errors.length, `Members ${sample.skill}: the reference boundary preserves the accepted Ledger`);
+    await page.context().close();
+  }
+
 }
 
 /** The Ledger frame (2.81.1): every spine link, HUD control, road control, ribbon and hotbar slot does what its label says. */
@@ -2153,7 +2178,7 @@ async function run(browser: Browser) {
     }
   }
 
-  await f2pSkillsScenarios(browser);
+  // F2P skill scenarios already run once in the shared dispatch above.
 
   // The desktop action follows the quest cursor while the player stays logged in: the plugin announces a moved cursor with a STATUS event.
   {

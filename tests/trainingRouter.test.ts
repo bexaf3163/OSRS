@@ -80,7 +80,14 @@ describe('method choice', () => {
 
   it('at equal speed the calm one takes the quiet method, the efficient one — the later entry', () => {
     const state = levels({ mining: 35 });
-    expect(advise({ skill: 'mining', target: 45, state, style: 'chill' }).best?.method.id).toBe('mi-motherlode');
+    const base = { ...trainingMethods.find(m => m.id === 'mi-iron')!, to: null, needs: [], manualSetup: undefined,
+      xph: [20000, 20000] as [number, number], cost: 'free' as const, risk: 'none' as const };
+    const methods = [
+      { ...base, id: 'synthetic-calm', from: 15, effort: 'afk' as const },
+      { ...base, id: 'synthetic-later', from: 30, effort: 'high' as const },
+    ];
+    expect(advise({ skill: 'mining', target: 45, state, methods, style: 'chill' }).best?.method.id).toBe('synthetic-calm');
+    expect(advise({ skill: 'mining', target: 45, state, methods, style: 'efficient' }).best?.method.id).toBe('synthetic-later');
   });
 
   it('no item — the method stays, but names what to take; the item is present — ready', () => {
