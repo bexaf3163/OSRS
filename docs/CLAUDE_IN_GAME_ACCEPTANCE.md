@@ -1,5 +1,11 @@
 # In-game acceptance — assigned to Claude
 
+## 2.81.11 cleanup — not live-verified
+
+Start with docs/CLAUDE_TAKEOVER.md for current architecture/design/contracts and prioritized work. Verify the actual loaded app/plugin versions and follow its P4 matrix. Retired Appearance/Compact/Inspector/report/stage-matrix controls must stay absent; active training/helper/Pin/storage/update behavior must remain. Check the one map preview, full-map quest-point selection and arrow targets; the provider imagery is an explicitly labelled archive. Check completed/empty/current Skills Plans against the one HUD and actual bank/inventory updates. All automated/native checks use isolated fixtures and do not establish these live results.
+
+Budget-aware multi-tier bank stocking remains queued; do not mark it tested or implemented from conditional whole-goal demand alone.
+
 ## 2.81.10 gathering capacity — not live-verified
 
 - With an already owned usable tool in a safe reachable state, compare carrying it with actually wearing it (only when wieldable). Prepared-bag capacity should free the tool slot only in the latter case; Attack level alone is not proof that it is worn. Do not buy or equip anything automatically for the test.

@@ -4,9 +4,11 @@ Updated 2026-10-31. Read this together with [CLAUDE_NEXT_SESSION.md](CLAUDE_NEXT
 
 ## Current delivery boundary
 
-- Published and verified: normal Portable **2.81.10**, source `73b56c66c59a377d1e46d88ff86e3c7eb6f5eeff`. Checks41141688623 and Release41141688525 passed. Download:102442918 bytes, SHA256 `7aad6ce696f3e5ec00939020d789bf73652d8d08d4ab969965e4ac2721e274b8`. Receipt commit `656c5d3` is on main.
-- **The subsequent UI/content cleanup is currently local WIP, not yet a verified release.** Its implementation and verification state below must not be confused with the published10 artifact. Update this boundary after publication.
+- Published and verified: normal Portable **2.81.11**, source `80f1292b012bbce660ba4e7f646d2760c92f34d6`. Exact-source Checks41179927753 and Release41179927662 passed, including the full browser, Java, native-shell and isolated packaged-EXE gates.
+- Downloaded EXE: **102435386 bytes**; SHA256 `2233499d93f16aef68cd09bbca56f79819ec98f36050a3565e758e7cb58cb12b`. Actual download, asset digest, SHA256SUMS.txt, size and tag source agree.
+- Cleanup described below is included in that release. Budget-aware useful future-tier/consumable bank stocking is **not implemented**; P1 remains the next source task.
 - All real-game acceptance belongs to Claude. Browser mocks, native-shell tests, Java tests and rendered HUD fixtures are not in-game evidence.
+- The release-time CLAUDE_NEXT_SESSION attachment records the pre-publication state. This updated takeover and the latest main-branch handoff/receipt supersede that frozen attachment; the EXE assets are not overwritten.
 
 ## Owner requirements that remain binding
 
@@ -65,6 +67,14 @@ Do not construct independent plans in Path, Skills, Gear, Shopping and the plugi
 | Plugin | `runelite-bridge/`, especially `BridgeServer`, `HudModel`, `OsrsPathGuideOverlay` | One in-game guide card. Current action, status and at most one warning; details on demand. Do not resurrect the old multiple-HUD layout. |
 | Native shell and storage | `electron/main.cjs`, `electron/preload.cjs`, `src/lib/desktop.ts`, `electron/runelite-launcher.cjs` | Preserve atomic saves, recoverable damaged/external data, profile protection, backup history, updater and authenticated launcher behavior. |
 
+### Extending content without repeating old fixes
+
+1. Add factual catalogue/quest/spot/item data to the existing registry. Declare real prerequisites, kit and any special mechanic; a name/level and Wiki rate alone do not establish a supported model.
+2. Reuse the owning rate/capability adapter. If the mechanic is new, extend that shared contract first; include a synthetic/new-content regression so the fix is not tied to one existing ID.
+3. Let trainingRouter select phases and preparationNeeds resolve the physical current kit. methodStep projects this into the same requirements, current map target and goal demand consumed by the normal lifecycle.
+4. Keep optional future-bank demand separate from current carrying/readiness. Existing goalNeeds/goalItemsRequired and aggregateShopping(wholeGoal) are forecast plumbing, not automatic budget-safe stocking. prepRoute/prepQueue must retain cancellation, ownership observation and original-activity restoration.
+5. Verify the same action/kit/goal through Skills, Path, preparation, Shopping/funding and the single HUD. Update coverage/model limitations and the live acceptance ledger; do not create another UI-only calculator or copied per-skill acquisition loop.
+
 ### Important shared contracts and fixes to preserve
 
 - Catalogue-backed followed Skills use the Path preparation, Shopping and funding lifecycle. The old guide-only path data is not evidence of a fully personalized model. See [SKILLS_COVERAGE.md](SKILLS_COVERAGE.md).
@@ -92,7 +102,7 @@ The application is Claude's **Ledger**: dark outer shell, parchment/book pages, 
 
 Design entry points are `src/ledger/{Chrome.tsx,parts.tsx,icons.tsx,ledger.css,app.css,extras.css,fonts.css}` and the shell in `src/App.tsx`. Older foundation CSS still supports shared components. Preserve specificity and inspect every consumer before deleting it. `PROJECT_MAP.md`'s2.48 description is historical, not the target design.
 
-The local cleanup implements these owner decisions:
+The 2.81.11 cleanup implements these owner decisions:
 
 - Remove Appearance theme/density/view controls, custom font size, panel/look/solid settings, preview, Compact header/control/page and Inspector mode. Preserve the fixed accepted presentation and OS DPI/resizing.
 - Retire custom zoom IPC/keys/automatic zoom. Retain the native header Pin through `getWindowPrefs`/`setAlwaysOnTop`. Keep unrelated `ui.json` backup preferences and window geometry. Reset retired per-origin zoom to100% when the page loads.
@@ -108,22 +118,19 @@ The local cleanup implements these owner decisions:
 
 The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki's published atlas metadata and has a verified working **2019-10-31_1 archive fallback**. This is not current-world imagery. Preview tooltips/attribution disclose archive provenance; coordinates and game navigation remain separate. Replacing it with newer imagery requires verified projection and real tile evidence. Do not copy another atlas URL into the old coordinate scheme blindly.
 
-## Verification state for the local cleanup
+## Verification state for 2.81.11
 
-- Coordinated2.81.11 types/build and data validation passed (0 errors/0 warnings); the fresh Java suite passed647 tests with no failures/errors and produced the plugin jar.
-- Final feature-tree unit run: **2404 tests /202 files passed**. Later changes only corrected browser assertions and documentation/comments, including3 passing coverage-ledger generator checks.
-- Dedicated cleanup, F2P Skills and quest-map navigation scenarios passed. They cover legacy saved preferences, retained training/helpers/updater UI, completed Plan state, single map, retry and point navigation.
-- Native-shell E2E passed, including real pin IPC, legacy zoom retirement without losing backup settings, progress/profile protection and damaged/external-data recovery. It uses isolated test data and a bridge stub, not the real character.
-- The complete local browser run passed906 checks; two assertions counted the embedded Journal quest pane incorrectly and were corrected to check each book leaf explicitly. The corrected complete core run passed, including Journal at1000/1440px; fresh native E2E passed. The generated coverage ledger now also distinguishes canonical/guide-only/passive views (3 generator tests passed). Exact-source complete CI and the new Portable receipt remain required; this is not yet a published cleanup.
-- No real-game verification is claimed.
+- Local coordinated types/build and data validation passed (0 errors/0 warnings). Full units: **2404 tests /202 files**; Java: **647 tests,0 failures/errors** and fresh jar. Generated coverage-ledger checks:3 passed.
+- The initial full local browser run passed906 checks; two incorrect Journal pane-count assertions were fixed and the complete affected core rerun passed. **Exact-source full browser CI subsequently passed**, as did all other Checks/Release gates.
+- Dedicated cleanup, canonical completed Plans, F2P Skills, real-provider archive recovery and quest-map navigation scenarios passed. Native-shell E2E passed, including real Pin IPC, retired-zoom preference handling, unrelated backup settings, profiles and damaged/external-data recovery.
+- The actual packaged EXE passed the isolated-folder CI gate. The downloaded normal Portable was then independently verified against its digest/manifest/size/tag/source.
+- These tests use isolated data and bridge fixtures. **No real-game verification is claimed.**
 
 ## Remaining work in priority order
 
-### P0 — finish and release the cleanup
+### P0 — cleanup delivery complete
 
-Finish the complete browser regression run without restoring removed features or deleting surviving functional coverage. Check every affected navigation surface, reference/empty/completed states and map actions. Keep [UI_CLEANUP_REVIEW.md](UI_CLEANUP_REVIEW.md) honest about pending data reviews.
-
-Then coordinate package/lock/Java plugin versions, build a fresh jar, run the relevant full gates, publish main + normal single-EXE Portable, await exact-source Checks/Release, download and compare the EXE/hash/manifest/size/tag source, and update this document's delivery boundary. Do not overwrite an existing release asset.
+Main source and normal Portable 2.81.11 are published and verified above. Do not repeat or restore the retired UI. Keep UI_CLEANUP_REVIEW.md honest about remaining factual/model reviews. Future release workflow deliveries also attach this takeover file.
 
 ### P1 — shared useful buy-ahead and bank stock
 

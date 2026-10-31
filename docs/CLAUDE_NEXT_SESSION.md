@@ -6,9 +6,15 @@ Updated 2026-10-31. Start with [CLAUDE_TAKEOVER.md](CLAUDE_TAKEOVER.md) for the 
 
 Owner accepted Claude's Adventurer's Ledger2.81.1 (`57ec3ca`). Preserve its book/parchment layout and EB Garamond/Cinzel fonts. The owner subsequently authorized targeted removal of Appearance/preview/Compact/Inspector/diagnostic-report/stage-matrix features; that is not permission to restore an older redesign. The existing HUD remains one guide card. See CLAUDE_TAKEOVER.md and UI_CLEANUP_REVIEW.md.
 
-## Local cleanup WIP — not yet published
+## Verified delivery — 2.81.11 cleanup and takeover
 
-Source changes remove the requested exclusive UI/state/IPC/CSS and competing static skill plans, retain active helpers/training/storage/updates, restore one map with metadata/retry and full-map point selection, and keep completed canonical Plans nonempty. Coordinated2.81.11 types/build/data0/0,2404 units/202 files,647 Java tests0 failures/errors +fresh jar, and native E2E passed. Dedicated cleanup/F2P Skills/quest-map cases passed. Full browser906 checks passed; two Journal assertions were corrected to count the embedded quest pane per leaf and the complete affected core rerun passed. Exact-source CI/normal Portable verification remains required. Buy-ahead bank stock is queued, not implemented. All live-game tests remain Claude's.
+Normal Portable 2.81.11 is on main, source `80f1292b012bbce660ba4e7f646d2760c92f34d6`. Exact-source Checks41179927753 and Release41179927662 passed, including complete browser/native/Java/isolated packaged-EXE gates. Downloaded EXE:102435386 bytes; SHA256 `2233499d93f16aef68cd09bbca56f79819ec98f36050a3565e758e7cb58cb12b`, matching the asset digest, SHA256SUMS.txt and tag source.
+
+- Removes retired exclusive Appearance/preview/Compact/Inspector/report/stage-matrix code; preserves Ledger/fonts, shared planning, helper controls, training settings, Pin, progress/backups and updates.
+- Canonical Skills Plans replace competing static roadmaps; completed/explicit-goal states remain meaningful. Maps use published metadata, retry and disclosed archival imagery, with one preview and working full-map point selection/navigation.
+- Local types/build/data0/0,2404 units/202 files,647 Java tests0 failures/errors+fresh jar,native E2E and corrected browser core passed; full exact-source CI passed.
+- Full current architecture/contracts/design/completed/evidence/remaining plan: [CLAUDE_TAKEOVER.md](CLAUDE_TAKEOVER.md). Buy-ahead bank stock remains P1, not implemented. Staged Skills/Optional and content/model gaps remain P2/P3; every real-game test belongs to Claude(P4).
+- The frozen release-time NEXT_SESSION attachment predates this receipt. Read the current main version or the updated separate TAKEOVER attachment. No existing EXE asset is replaced.
 
 ## Verified delivery — 2.81.10 gathering capacity
 
