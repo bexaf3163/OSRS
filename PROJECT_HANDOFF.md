@@ -5,11 +5,11 @@ Updated 2026-10-31. **This is the only current project contract, architecture ma
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-Published and independently verified Portable: **2.81.13**, source `d29e3349ee37efd276d93544ff83654c25a96454`. Exact-source Checks **41201972731** and Release **41201972692** passed, including complete browser, Java, native-shell and isolated packaged-EXE gates.
+Published and independently verified Portable: **2.81.14**, source `4f7d9a301f9182e2011e27fae739c0b700d6252f`. Exact-source Checks **41209378280** and Release **41209378336** passed, including complete browser, Java, native-shell and isolated packaged-EXE gates.
 
-Downloaded EXE: **102439782 bytes**. SHA256: `7dc252e4242bd4775abf8c0493de94357c280f84b887976136a64f2d457aaf23`. Actual download, asset digest, manifest, size and release-tag/source agree. The distributed canonical handoff was separately downloaded and digest/source/version/policy verified; the release contains only EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt (plus GitHub's automatic source archives).
+Downloaded EXE: **102438912 bytes**. SHA256: `40a53a3c6a510145ab48379d7fd07168c7d983647cfe9c0dd80295a87d2a9ea4`. Actual download, asset digest, manifest, size and release-tag/source agree. The distributed canonical handoff was separately downloaded and digest/source/version/policy verified; the release contains only EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt (plus GitHub's automatic source archives).
 
-Contextual Journal/Gear/Skills/Shopping improvements, shared activity selection and refill-budget protection are shipped. Accepted Ledger/fonts and working preparation/funding/session data are preserved. All real-game acceptance remains Claude's; automated/native/packaged checks are not in-game evidence. Broader P2 Skills/Optional and P3 content/model reviews below remain open.
+Common F2P Cooking catch/recipe progression, verified Make-X timing and station targets, sustainable no-cash processing selection and reconciled legacy Cooking content are shipped. Accepted Ledger/fonts and shared preparation/stock/funding behavior are preserved. All real-game acceptance remains Claude's; automated/native/packaged checks are not in-game evidence. Broader P2 Skills/Optional and P3 content/model reviews below remain open.
 <!-- DELIVERY_END -->
 
 ## Documentation policy
@@ -156,7 +156,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 
 ## Current verification
 
-2.81.14 local source: types/build/fresh plugin jar, data validation 0 errors/0 warnings, 2,454 unit tests across 206 files, full Java suite 647 tests/0 failures, complete browser suite and isolated native-shell E2E passed. New checks cover owned catches, physical partial batches, unlocks, shared observation/preparation, station targets and Make-X/burn timing; existing tool/combat/funding preferences remain covered. The exact-source release pipeline additionally runs its full browser/native/isolated-EXE gates before publication. Independent delivery evidence belongs in the receipt above. No real-game verification is claimed.
+2.81.14 local source: types/build/fresh plugin jar, data validation 0 errors/0 warnings, 2,454 unit tests across 206 files, full Java suite 647 tests/0 failures, complete browser suite and isolated native-shell E2E passed. New checks cover owned catches, physical partial batches, unlocks, shared observation/preparation, station targets and Make-X/burn timing; existing tool/combat/funding preferences remain covered. Exact-source Checks and Release passed their full browser/native/isolated-EXE gates; the published EXE and canonical handoff were independently downloaded and verified. Independent delivery evidence belongs in the receipt above. No real-game verification is claimed.
 
 ## Completed baseline — preserve, do not redo
 
@@ -210,6 +210,8 @@ Use [SKILLS_COVERAGE.md](docs/SKILLS_COVERAGE.md) as the capability inventory. R
 6. Correct next action/completion and no old static recommendation elsewhere contradicting the current plan.
 
 Keep unsupported members mechanics and uncalibrated rates explicit. Add missing mechanics to shared contracts/adapters, with regressions that also cover new/synthetic content. Do not solve each skill by copying the Ranged implementation.
+
+**Next concrete Crafting issue (not fixed in2.81.14):** the leather recipes currently charge one Thread per action. The [Thread Wiki page](https://oldschool.runescape.wiki/w/Thread), checked2026-10-31, states five actions per spool, independent of hides per action. Extend the existing shared recipe/material contract and builder rather than a Crafting-only UI exception. Check partial/unknown remaining uses conservatively, average costs versus physical rounded batch needs, whole-goal/stock allocations, readiness, shopping and bank/funding/resume. Preserve integer requirements for actual items and ordinary one-use materials. Then continue the six-point skill review above; this identified issue is not the whole remaining backlog.
 
 ### Cooking progression and shared batch fixes — 2.81.14 source
 
