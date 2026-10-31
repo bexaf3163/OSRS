@@ -5,11 +5,11 @@ Updated 2026-10-31. **This is the only current project contract, architecture ma
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-Published and independently verified Portable: **2.81.14**, source `4f7d9a301f9182e2011e27fae739c0b700d6252f`. Exact-source Checks **41209378280** and Release **41209378336** passed, including complete browser, Java, native-shell and isolated packaged-EXE gates.
+Published and independently verified Portable: **2.81.15**, source `24f6225fad2a5e9a9f54388e6531d5a0c32a6828`. Exact-source Checks **41226083568** and Release **41226083576** passed, including complete browser, Java, native-shell and isolated packaged-EXE gates.
 
-Downloaded EXE: **102438912 bytes**. SHA256: `40a53a3c6a510145ab48379d7fd07168c7d983647cfe9c0dd80295a87d2a9ea4`. Actual download, asset digest, manifest, size and release-tag/source agree. The distributed canonical handoff was separately downloaded and digest/source/version/policy verified; the release contains only EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt (plus GitHub's automatic source archives).
+Downloaded EXE: **102440744 bytes**. SHA256: `d97365179105ddd99db527fea8de979bedbfd02dd2202f0b6291f21a0cf5e956`. Actual download, asset digest, manifest, size and release-tag/source agree. The distributed canonical handoff was separately downloaded and digest/source/version/policy verified; the release contains only EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt (plus GitHub's automatic source archives).
 
-Common F2P Cooking catch/recipe progression, verified Make-X timing and station targets, sustainable no-cash processing selection and reconciled legacy Cooking content are shipped. Accepted Ledger/fonts and shared preparation/stock/funding behavior are preserved. All real-game acceptance remains Claude's; automated/native/packaged checks are not in-game evidence. Broader P2 Skills/Optional and P3 content/model reviews below remain open.
+Shared multi-use material consumption, conservative partial-stock preparation, silver tiara progression and reconciled Crafting advice are shipped. Accepted Ledger/fonts and existing preparation/stock/funding behavior are preserved. All real-game acceptance remains Claude's; automated/native/packaged checks are not in-game evidence. Broader P2 Skills/Optional and P3 content/model reviews below remain open.
 <!-- DELIVERY_END -->
 
 ## Documentation policy
@@ -156,7 +156,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 
 ## Current verification
 
-2.81.15 local source: types/build/fresh plugin jar, data validation0errors/0warnings,2,462 unit tests across207files, full Java647tests/0failures, complete browser suite and isolated native-shell E2E passed. New coverage includes safe charged-material quantities, future-content stock boundaries, average cost versus physical allowance, owned silver/mould/unlocks and Skills→guide→Checkout without needless buying/funding. Existing account/profile/recovery, tools/combat/processing and funding checks remain covered. Exact-source CI and independent delivery evidence belong in the receipt above; no real-game verification is claimed.
+2.81.15 local source: types/build/fresh plugin jar, data validation0errors/0warnings,2,462 unit tests across207files, full Java647tests/0failures, complete browser suite and isolated native-shell E2E passed. New coverage includes safe charged-material quantities, future-content stock boundaries, average cost versus physical allowance, owned silver/mould/unlocks and Skills→guide→Checkout without needless buying/funding. Existing account/profile/recovery, tools/combat/processing and funding checks remain covered. Exact-source Checks and Release passed their complete gates; the downloaded EXE and canonical handoff were independently verified as recorded above. No real-game verification is claimed.
 
 ## Completed baseline — preserve, do not redo
 
@@ -242,7 +242,7 @@ Verification and release status are recorded above. This is a common F2P Craftin
 
 Review Path, Skills, Gear, Shopping, Money and Reference/search for stale recommendations, mismatched quantities, redundant controls and ambiguous unknown/missing states. Keep the concise default and reveal explanation only when useful. Useful factual tables can remain in Reference; competing default training plans cannot.
 
-The cleanup already removes the competing catalogue roadmaps and qualifies static melee-order/Smithing/Ranged purchasing advice. This is **not a claim that every Wiki fact, table, members method and price assumption has been revalidated**. Record exact remaining surfaces, source dates and model gaps; do not silently mark the old full-project audit backlog complete.
+The cleanup already removes the competing catalogue roadmaps and qualifies static melee-order/Smithing/Ranged purchasing advice. DEFAULT_PLANS.md is a generated regression inventory: its legacy collection cases are explicitly historical, while its live S4-03 heading is derived from current route data. Do not mistake the old50-bone fixture for the current Giant-frog XP-only step. This is **not a claim that every Wiki fact, table, members method and price assumption has been revalidated**. Record exact remaining surfaces, source dates and model gaps; do not silently mark the old full-project audit backlog complete.
 
 ### P4 — Claude's real-client acceptance
 
