@@ -56,6 +56,8 @@ export interface ShopRow {
   cost: number | null;
   priceLabel?: string;
   optional: boolean;
+  /** Budget-selected bank reserve, not a current readiness requirement. */
+  bankStock?: boolean;
   reusable: boolean;
   /** Sold at the exchange: only these go into the exchange list. */
   tradeable: boolean;
@@ -324,6 +326,7 @@ export function scopeSteps(scope: ScopeKind, steps: Step[], progress: Progress, 
 
 /** The list of a scope and what one trip takes of each line. */
 export function scopeList(steps: Step[]): { list: ShoppingList; trip: Map<string, number> } {
+  steps = [...new Map(steps.map(s => [s.id, s])).values()];
   const list = aggregateShopping(steps, { wholeGoal: true });
   const one = aggregateShopping(steps);
   return { list, trip: new Map([...one.required, ...one.recommended].map((l) => [l.key, l.count])) };
@@ -445,7 +448,7 @@ export interface ExchangePlan {
 
 /** The exchange hint for the game, from the rows of a scope. */
 export function exchangePlan(rows: readonly ShopRow[]): ExchangePlan {
-  const required = rows.filter((r) => !r.optional);
+  const required = rows.filter((r) => !r.optional || r.bankStock);
   // A potion goes as doses: the game counts every size toward them (ShoppingPlan.java); `count` stays potions for an older plugin.
   const items = required
     .filter((r) => (r.channel === 'ge' || (r.channel === 'unknown' && r.tradeable)) && r.qty > 0)
@@ -455,7 +458,12 @@ export function exchangePlan(rows: readonly ShopRow[]): ExchangePlan {
       return { name: r.name, ...(r.id !== undefined ? { id: r.id } : {}), count: Math.ceil(count / per), ...(r.unit === 'dose' ? { doses: count } : {}) };
     });
   const watch = [...new Set(rows.map((r) => r.name))].slice(0, EXCHANGE_WATCH_MAX);
-  return { items, watch };
+  const merged = new Map<string, typeof items[number]>();
+  for (const item of items) {
+    const key = nameKey(item.name), old = merged.get(key);
+    merged.set(key, old ? { ...item, count: Math.max(old.count, item.count) } : item);
+  }
+  return { items: [...merged.values()], watch };
 }
 
 /** The plugin refuses a longer list (ShoppingPlan.MAX_ITEMS). */
@@ -465,13 +473,19 @@ export const EXCHANGE_WATCH_MAX = 200;
 export function geListText(title: string, rows: readonly ShopRow[], coinsForSteps: number, ahead?: (r: ShopRow) => boolean): string | null {
   // A potion goes in as the potions to buy (Strength potion(4) x3, Strength potion(1) x1), as they are searched at the exchange.
   const line = (r: ShopRow) => (r.package ? r.package.lines.map((p) => `${p.name} x${p.count}`).join('\n') : `${r.name} x${r.qty}${r.exact ? '' : '+'}`);
-  const buy = rows.filter((r) => !r.optional && r.channel === 'ge' && r.qty > 0);
+  const buy = rows.filter((r) => (!r.optional || r.bankStock) && r.channel === 'ge' && r.qty > 0);
   const check = rows.filter((r) => !r.optional && r.channel === 'unknown' && r.tradeable && r.qty > 0);
   if (!buy.length && !check.length) return null;
   // Advance purchases for the next steps come after what the current step needs, under their own heading.
   const now = ahead ? buy.filter((r) => !ahead(r)) : buy;
   const later = ahead ? buy.filter(ahead) : [];
-  const out = [title, ...now.map(line)];
+  const combined = new Map<string, ShopRow>();
+  for (const row of now) {
+    const key = nameKey(row.name), old = combined.get(key);
+    combined.set(key, old ? { ...old, qty: old.qty + row.qty } : row);
+  }
+  const out = [title, ...[...combined.values()].map(line)];
+  if (buy.some(r => r.bankStock)) out.push('Includes optional bank stock for upcoming training stages.');
   if (later.length) out.push('For the next steps (optional now):', ...later.map(line));
   if (check.length) out.push('Not confirmed (check your bank first):', ...check.map(line));
   if (coinsForSteps > 0) out.push(`Coins ~${formatGp(coinsForSteps)} gp (for the steps themselves)`);

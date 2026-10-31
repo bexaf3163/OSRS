@@ -10,16 +10,12 @@ import { useBridge } from '../bridge';
 import { usePlayerState } from '../playerStateContext';
 import { currentStage, nextStep } from '../lib/next-step';
 import { coinsOf } from '../lib/playerState';
-import { formatGp, plural, type ShoppingLine } from '../lib/shopping';
+import { formatGp, plural } from '../lib/shopping';
 import {
   budgetOf, budgetSum, emptyStateOf, exchangePlan, geListText, scopeList, scopeSteps, shopRows, syncLine, timingOf, type Channel, type EmptyKind, type ScopeKind, type ShopRow, type StageRange,
 } from '../lib/shoppingView';
 import { MAX_OWNED } from '../lib/progress';
-import { itemById } from '../data';
-import { gearById } from '../services/gearAdvisor';
 import { usePriceView } from '../lib/funding/usePriceView';
-import { itemPrice } from '../lib/itemPrice';
-import { findLocalItem } from '../services/wikiService';
 import { ItemIcon } from '../components/WikiDrawer';
 import { copyText as copy } from '../lib/clipboard';
 import { Eyebrow, Page } from '../ledger';
@@ -29,6 +25,7 @@ import { useQuestDone, useSkillLevel } from '../components/SkillRoadmap';
 import { guideFor } from '../data/skillGuideRegistry';
 import { buildPath, currentIndex, followedShoppingStep } from '../lib/skillGuide';
 import { freeOnlyOf, useTracked } from '../lib/skillTrack';
+import { stockShoppingContext, stockUpShopping } from '../lib/trainingStock';
 
 const RANGE_KEY = 'osrs-put:shopping-range';
 const SCOPE_KEY = 'osrs-put:shopping-scope';
@@ -142,16 +139,16 @@ export function ShoppingPage() {
     });
   };
 
+  const training = useTrackedTraining();
   // The step in progress: the one started in the game, else the next open one the route allows.
   const { dependencies, ctx: { qp: effectiveQp } } = engine;
   const current = useMemo(() => {
     const started = activeStepId && steps.some((s) => s.id === activeStepId) ? activeStepId : null;
-    return started ?? nextStep(steps, progress, effectiveQp, dependencies)?.id ?? null;
-  }, [activeStepId, steps, progress, effectiveQp, dependencies]);
+    return training && !training.complete ? training.step.id : started ?? nextStep(steps, progress, effectiveQp, dependencies)?.id ?? null;
+  }, [activeStepId, steps, progress, effectiveQp, dependencies, training]);
 
   // A followed skill plan (Skills → Follow this plan) leads the game instead of the quest route: its current step's tools come first in the list.
   const tracked = useTracked();
-  const training = useTrackedTraining();
   const trackedLevel = useSkillLevel(tracked?.skill ?? 'attack');
   const questDone = useQuestDone();
   const followed = useMemo(() => {
@@ -164,20 +161,12 @@ export function ShoppingPage() {
   }, [tracked, trackedLevel, questDone, training]);
 
   const built = useMemo(() => {
-    // Missing prices/catalogue metadata cannot turn a known route item into "not sold".
-    // Explicit gear tradeability still wins; acquisition routing handles quest/free/in-step items.
-    const onGe = (l: ShoppingLine) => l.id !== undefined && (gearById.get(l.id)?.tradeable ?? true);
     try {
-      const selected = [...(followed && scope !== 'range' ? [followed] : []), ...scopeSteps(scope, steps, progress, current, range)];
-      const { list, trip } = scopeList(selected);
-      const rows = shopRows(list, {
-        state: player, onGe, detail: (id) => itemById.get(id), trip,
-        gePrice: (l) => itemPrice(prices, l.nameEn, l.id, 1).unit,
-        geLimit: (l) => prices?.limitOf(l.nameEn, l.id),
-        priceOf: (name) => itemPrice(prices, name, findLocalItem(name)?.id, 1).unit,
-        priceLabel: (name, id) => itemPrice(prices, name, id ?? findLocalItem(name)?.id, 1).label,
-        qp: questPoints,
-      });
+      const selected = [...new Map([...(followed && scope !== 'range' ? [followed] : []), ...scopeSteps(scope, steps, progress, current, range)].map(s => [s.id, s])).values()];
+      const shared = stockShoppingContext(player, prices, questPoints);
+      const stocked = scope === 'trip' && selected.some(s => s.stockItems?.length) ? stockUpShopping(selected, shared, prices) : null;
+      const { list, trip } = stocked ?? scopeList(selected);
+      const rows = stocked?.rows ?? shopRows(list, { ...shared, trip });
       return { selected, list, rows, error: false };
     } catch {
       return { selected: [], list: { required: [], recommended: [], coins: 0 }, rows: [] as ShopRow[], error: true };
@@ -206,7 +195,8 @@ export function ShoppingPage() {
   const total = split ? budgetOf(rows, list.coins, funds) : budget;
   const required = rows.filter((r) => !r.optional && !isAhead(r));
   const ahead = rows.filter((r) => !r.optional && isAhead(r) && r.channel !== 'have');
-  const optional = rows.filter((r) => r.optional && r.channel !== 'have');
+  const optional = rows.filter((r) => r.optional && !r.bankStock && r.channel !== 'have');
+  const bankStock = rows.filter(r => r.bankStock);
   const have = rows.filter((r) => !r.optional && r.channel === 'have');
   const aheadIds = [...new Set(ahead.flatMap((r) => r.sources.filter((s) => !s.carryOver && !nowIds.has(s.stepId)).map((s) => s.stepId)))];
 
@@ -368,6 +358,13 @@ export function ShoppingPage() {
             ) : null;
           })}
         </details>
+      )}
+      {listShown && bankStock.length > 0 && (
+        <section className="shop-group-v2 is-ahead" aria-label="Optional bank stock">
+          <h2 className="subhead">Bank stock · optional</h2>
+          <p className="small muted">Buy together · ≈ {formatGp(bankStock.reduce((sum, r) => sum + (r.cost ?? 0), 0))} gp. Bank these; follow Path for what to carry.</p>
+          <ul className="shop-items small">{bankStock.map(r => <li key={r.key}><strong>{r.name} ×{formatGp(r.qty)}</strong><span className="muted"> · ≈ {formatGp(r.cost ?? 0)} gp</span></li>)}</ul>
+        </section>
       )}
       {listShown && have.length > 0 && (
         <details className="shop-group-v2 is-have">

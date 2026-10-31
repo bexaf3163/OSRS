@@ -27,7 +27,7 @@ interface Mock {
   /** The item catalogue is available but market quotes are missing. */
   marketUnavailable?: boolean;
   /** Scenario-specific quotes added to the recorded market fixture. */
-  marketQuotes?: Record<string, { id: number; price: number }>;
+  marketQuotes?: Record<string, { id: number; price: number; limit?: number }>;
   marketAgeMinutes?: number;
   /** The plugin does not answer (RuneLite is not running). */
   offline?: boolean;
@@ -121,7 +121,7 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
     type Row = { id: number; limit: number | null; high: number | null; low: number | null; avgHigh: number | null; avgLow: number | null; highVolume: number; lowVolume: number };
     const rows = (JSON.parse(readFileSync(new URL('../tests/funding/fixtures/market-2026-10-18.json', import.meta.url), 'utf8')) as { items: Record<string, Row> }).items;
     for (const [name, quote] of Object.entries(mock.marketQuotes ?? {})) rows[name] = {
-      id: quote.id, limit: 100, high: quote.price, low: quote.price, avgHigh: quote.price, avgLow: quote.price, highVolume: 1000, lowVolume: 1000,
+      id: quote.id, limit: quote.limit ?? 100, high: quote.price, low: quote.price, avgHigh: quote.price, avgLow: quote.price, highVolume: 1000, lowVolume: 1000,
     };
     await page.route(/prices\.runescape\.wiki\/api\/v2\/osrs\/(latest|1h|mapping)/, (r) => {
       const kind = /\/osrs\/(latest|1h|mapping)/.exec(r.request().url())![1];
@@ -382,6 +382,43 @@ async function canonicalPlanScenario(browser: Browser, width = 1000) {
       await page.context().close();
     }
 
+}
+
+async function stockScenarios(browser: Browser) {
+  const catalog = JSON.parse(readFileSync(new URL('../src/data/f2p-items.json', import.meta.url), 'utf8')) as { nameEn: string; id: number }[];
+  const findLocalItem = (name: string) => catalog.find(item => item.nameEn === name);
+  const styles = JSON.parse(readFileSync(new URL('../src/data/styleGear.json', import.meta.url), 'utf8')).ranged as Record<string, { names: string[] }[]>;
+  const RANGED_WATCH = [...new Set([...Object.values(styles).flatMap(options => options.flatMap(option => option.names)), 'Longbow', 'Oak longbow', 'Willow longbow', 'Maple longbow'])];
+  const stats = { ranged: 1, attack: 40, strength: 40, defence: 1, hitpoints: 30 };
+  const equipped = ['Shortbow', 'Leather cowl', 'Leather body', 'Leather chaps', 'Leather vambraces', 'Leather boots'];
+  const equipment = equipped.map((name, i) => ({ name, id: findLocalItem(name)?.id ?? 50000 + i, count: 1, slot: ['weapon', 'head', 'body', 'legs', 'hands', 'feet'][i] }));
+  const marketQuotes = Object.fromEntries(RANGED_WATCH.flatMap(name => {
+    const id = findLocalItem(name)?.id;
+    return id === undefined ? [] : [[name, { id, price: name.endsWith('arrow') ? 1 : 100, limit: name.endsWith('arrow') ? 10000 : 100 }]];
+  }));
+  for (const cash of [20000, 120]) {
+    const gear = { equipment, inventory: [], coins: cash, bankCoins: 0 };
+    const items = RANGED_WATCH.map(name => ({ name, carried: 0, noted: 0, bank: 0 }));
+    const { page, errors } = await open(browser, 1280, {
+      market: true, marketQuotes, progress: progressBefore('S6-01', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'f2p', target: 40 }), 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
+      status: { inGame: true, protocol: 6, player: 'Stock fixture', activeStepId: 'S6-01', stats, ...gear },
+      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/shopping');
+    await page.waitForTimeout(1800);
+    const stock = page.getByRole('region', { name: 'Optional bank stock' });
+    if (cash > 1000) {
+      await stock.waitFor();
+      expect((await stock.innerText()).includes('Oak shortbow'), 'stock: next bow is offered on the existing shopping trip');
+      expect((await stock.innerText()).includes('Willow shortbow'), 'stock: second useful bow is included instead of stopping at a model-rate review');
+      const snapshot = await page.evaluate(() => (window as any).__posts.filter((p: any) => p.path === '/prep-plan').at(-1)?.body?.shopping);
+      expect(snapshot?.items?.some((i: any) => i.name === 'Oak shortbow'), 'stock: the same optional purchase reaches the in-game exchange list');
+      expect(!await page.locator('.shop-budget').innerText().then(t => /short [1-9]/.test(t)), 'stock: optional purchases do not create a funding shortfall');
+      await page.screenshot({ path: 'audit-temp/stock-shopping.png' });
+    } else expect(await stock.count() === 0, 'stock: a small budget retains the current kit without optional purchases');
+    expect(await noOverflow(page) && errors.length === 0, `stock (${cash}gp): Ledger fits without runtime errors`);
+    await page.context().close();
+  }
 }
 
 async function cleanupScenarios(browser: Browser) {
@@ -679,6 +716,8 @@ async function processingBudgetScenarios(browser: Browser) {
 }
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'stock') { await stockScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await stockScenarios(browser);
   if (process.env.UI_ONLY === 'canonical-plan') { await canonicalPlanScenario(browser); return; }
   if (process.env.UI_ONLY === 'map-navigation') { await mapNavigationScenario(browser); return; }
   if (process.env.UI_ONLY === 'cleanup') { await cleanupScenarios(browser); return; }

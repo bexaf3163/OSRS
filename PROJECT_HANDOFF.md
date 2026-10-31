@@ -1,14 +1,26 @@
-# OSRS Path: architecture, completed work and takeover plan
+# OSRS Path — project handoff
 
-Updated 2026-10-31. Read this together with [CLAUDE_NEXT_SESSION.md](CLAUDE_NEXT_SESSION.md), which records the latest published version and exact artifact receipt. Historical audit documents are context, not an instruction to repeat completed work.
+Updated 2026-10-31. **This is the only current project contract, architecture map, work state, backlog and handoff.** Read the relevant section, not the whole history, on every small change. AGENTS.md/CLAUDE.md are entry-point pointers; README.md is the product introduction. Detailed technical inventories are linked on demand.
 
-## Current delivery boundary
+<!-- DELIVERY_START -->
+## Delivery receipt
 
-- Published and verified: normal Portable **2.81.11**, source `80f1292b012bbce660ba4e7f646d2760c92f34d6`. Exact-source Checks41179927753 and Release41179927662 passed, including the full browser, Java, native-shell and isolated packaged-EXE gates.
-- Downloaded EXE: **102435386 bytes**; SHA256 `2233499d93f16aef68cd09bbca56f79819ec98f36050a3565e758e7cb58cb12b`. Actual download, asset digest, SHA256SUMS.txt, size and tag source agree.
-- Cleanup described below is included in that release. Budget-aware useful future-tier/consumable bank stocking is **not implemented**; P1 remains the next source task.
-- All real-game acceptance belongs to Claude. Browser mocks, native-shell tests, Java tests and rendered HUD fixtures are not in-game evidence.
-- The release-time CLAUDE_NEXT_SESSION attachment records the pre-publication state. This updated takeover and the latest main-branch handoff/receipt supersede that frozen attachment; the EXE assets are not overwritten.
+Last independently verified Portable: **2.81.11**, source `80f1292b012bbce660ba4e7f646d2760c92f34d6`. Checks41179927753 / Release41179927662 passed. Downloaded102435386 bytes, SHA256 `2233499d93f16aef68cd09bbca56f79819ec98f36050a3565e758e7cb58cb12b`; digest/manifest/size/tag agree.
+
+**2.81.12 is local work under verification**, not yet a published verified release. It adds shared optional stock-up and this documentation consolidation. All live-game acceptance remains Claude's; automated/native/packaged tests are not live evidence.
+<!-- DELIVERY_END -->
+
+## Documentation policy
+
+- **Binding on Claude Code, Codex and every future contributor:** use this exact file in this repository for all current instructions, architecture decisions, implemented work, remaining tasks, verification and takeover. Do not create a second HANDOFF, NEXT_SESSION, acceptance/status diary, copied instruction document, separate repository or Downloads variant. Update the relevant section here, reconcile conflicts and remove stale statements; keep uncertainty and unfinished work explicit. Do not move information to another location or drop it merely to shorten the file. Git history holds superseded detail; operational logs/generated test artifacts and required legal notices are not competing project instructions.
+- AGENTS.md and CLAUDE.md must remain tiny pointers here, without independently evolving rule/backlog copies. README.md is only the user/developer introduction. Maintain one canonical repository copy; a release or Downloads copy is a distribution snapshot with its version/source, not another editable authority.
+- Before handing over, check that current source, this file, release version and test evidence agree. Do not leave missing tasks, contradictory instructions or unexplained unverified results. Preserve existing functionality and accepted design; documentation consolidation must not change program behavior.
+- Update this snapshot in place; do not add another agent/session/handoff file or append a diary for every test/commit. Keep only the latest delivery receipt and concise completed-work history.
+- Immutable release notes remain short changelogs, not parallel task/rule documents; existing specialized/generated technical references are read only when relevant. Do not create new standalone instruction/architecture/status files.
+- New releases expose one PROJECT_HANDOFF.md, the normal Portable EXE and SHA256SUMS.txt. GitHub's automatically generated source archives are separate platform artifacts.
+- Relevant older decisions and fixes are consolidated below. Superseded diaries/maps/guidelines are removed from the active checkout. Original documents remain in Git history at `f3112228e97be4a8058eec5e2f995956b575ff9c`; consult them only for a specific historical incident, not to determine today's task.
+- SKILLS_COVERAGE.md and AUDIT_LEDGER.md under docs/ are technical inventories, not competing task lists. Open the matching row only when needed. Historical audit labels require current reproduction before new repair work.
+- Local .codex/work-state.md is an ignored/untracked interruption checkpoint, not another published project contract. It can record exact running commands and unfinished changes without duplicating this document.
 
 ## Owner requirements that remain binding
 
@@ -20,6 +32,26 @@ Updated 2026-10-31. Read this together with [CLAUDE_NEXT_SESSION.md](CLAUDE_NEXT
 6. Purchases and gameplay remain manual. The program recommends, detects, records and guides; it does not buy, move, fight or eat for the player.
 7. Windows desktop only. No mobile development or phone-only QA. Keep desktop resizing, OS DPI and accessibility.
 8. Do not modify RuneLite Optimizer, PC-Tune or experimental graphics repositories as part of this task.
+
+## Engineering and operating contract
+
+- English only for UI, comments, docs and communication; use canonical OSRS names. Be concise; correctness, full implementation, compatibility, accurate state and verification outrank token savings. Do not expose internal reasoning.
+- Inspect the relevant implementation and references before edits. Make focused changes, reuse existing registries/engines, preserve working behavior and update affected consumers together. No duplicate item database, bridge transport, state store or copied per-skill acquisition engine.
+- Preserve saves, profile identity, notes, skips, selected plans, completion conditions, item/task/step IDs and explicit goals. A route skip is not proof of a game prerequisite. Reordering Doric/Knight's Sword remains deferred; no migration is authorized by documentation cleanup.
+- UNKNOWN is not zero, missing, owned, connected or logged in. Distinguish bag/noted/bank/worn/usable quantities, doses and accepted alternatives; allocate physical stock once. Future simulated stats/gear never overwrite observed state or credit unearned quest XP/income.
+- The app reads stats, equipment, cash, inventory and bank when supported; unread or stale facts remain labelled. Every recommendation checks actual skill, equipment, quest, spell, account-mode, source/access and budget constraints, not just a level or numerical item bonus.
+- Preparation carries item/count/state/provenance/source/location/cost/priority/reason and physical carry/equip rules through one pipeline. Offer bank withdrawal before repurchase, accept usable owned equivalents, and keep current-trip requirements separate from future reserves.
+- Shopping uses centralized allocations, sources, quotes, fees and optionality. No double spending, fictitious proceeds, automatic GP spending or repeated purchases of confirmed owned items. Manual ownership remains supported where game data is unavailable.
+- Navigation has one current target; coordinate/floor/entrance, map, arrow, HUD and active phase agree. Verify actual transport eligibility, complete supplies and full detour cost. Never invent coordinates or transports. Map imagery can fail independently of directions.
+- Desktop/app UI testing is allowed with isolated data. Codex does not perform real-game tests; Claude does reachable acceptance. The companion must not automate movement, combat, skilling, looting, eating, dialogue/item-use loops or GP spending. Previously authorized limited manual UI inspection is not permission for bot-like control.
+- Keep the plugin lightweight: relevant event/dirty-state updates, caching/throttling, no repeated full scans/API reads/JSON parsing/expensive model work each tick. Heavy planning stays in TypeScript. Show GE/bank/navigation overlays only when relevant.
+- External failures must not crash the app or corrupt state. Preserve actionable unavailable/retry states and operational logs/watchdogs. Retired Copy Report UI is not permission to delete actual diagnostics or save recovery.
+- Preserve native updater digest/size validation, atomic writes, damaged/future-schema quarantine, pre-write external-revision guards, profile protection and backup receipts. Do not add watchers, automatic merges or locks from an old proposal without a reproduced current requirement.
+- Mode changes must not reset progress. F2P-only plans cannot leak Members prerequisites; explicit alternate strategies must carry their own requirements. Unsupported mechanics/rates remain explicit.
+- Keep JVM -ea and at least -Xmx1024m in the authenticated RuneLite launch. Preserve remaining JVM arguments. Jagex/RuneLite config.json does not override OSRS Path's direct Java arguments.
+- No mobile development, graphics/PC-Tune/Optimizer work or unrelated refactors. Preserve accepted Ledger typography/layout, native DPI/resizing/accessibility and current functional controls.
+- Run meaningful regression, type/build/data and applicable Java/browser/native/packaged gates. No weakened assertions or claimed PASS for skipped/unreachable scenarios. Source changes get a new coordinated version and normal release after verification; documentation-only receipts do not need an app rebuild.
+- Work through clear authorized tasks autonomously. Do not force-push/reset/clean away valid work, merge unrelated branches, overwrite released EXEs or publish private account/authentication data. Reconcile newer main changes before publishing.
 
 ## How the system is connected
 
@@ -77,7 +109,7 @@ Do not construct independent plans in Path, Skills, Gear, Shopping and the plugi
 
 ### Important shared contracts and fixes to preserve
 
-- Catalogue-backed followed Skills use the Path preparation, Shopping and funding lifecycle. The old guide-only path data is not evidence of a fully personalized model. See [SKILLS_COVERAGE.md](SKILLS_COVERAGE.md).
+- Catalogue-backed followed Skills use the Path preparation, Shopping and funding lifecycle. The old guide-only path data is not evidence of a fully personalized model. See [SKILLS_COVERAGE.md](docs/SKILLS_COVERAGE.md).
 - Explicit preparation/skill goals survive deep links and following a plan. A lower F2P checkpoint must not silently replace an explicit supported goal; a reference guide's level99 endpoint must not become the default goal either.
 - F2P-only scope remains F2P even on an eligible members account. Planning projections must not mutate actual membership or equipment facts.
 - Current-leg requirements are separate from conditional whole-goal demand. One inventory/batch can be ready while more supplies are needed later. Do not require a full goal's food/materials to fit in the current bag.
@@ -100,7 +132,7 @@ Do not construct independent plans in Path, Skills, Gear, Shopping and the plugi
 
 The application is Claude's **Ledger**: dark outer shell, parchment/book pages, gold navigation; **Cinzel** headings and **EB Garamond** body text. The existing game HUD has its own established typography. Do not replace either with the other system's fonts.
 
-Design entry points are `src/ledger/{Chrome.tsx,parts.tsx,icons.tsx,ledger.css,app.css,extras.css,fonts.css}` and the shell in `src/App.tsx`. Older foundation CSS still supports shared components. Preserve specificity and inspect every consumer before deleting it. `PROJECT_MAP.md`'s2.48 description is historical, not the target design.
+Design entry points are `src/ledger/{Chrome.tsx,parts.tsx,icons.tsx,ledger.css,app.css,extras.css,fonts.css}` and the shell in `src/App.tsx`. Older foundation CSS still supports shared components. Preserve specificity and inspect every consumer before deleting it. `PROJECT_HANDOFF.md`'s2.48 description is historical, not the target design.
 
 The 2.81.11 cleanup implements these owner decisions:
 
@@ -118,40 +150,45 @@ The 2.81.11 cleanup implements these owner decisions:
 
 The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki's published atlas metadata and has a verified working **2019-10-31_1 archive fallback**. This is not current-world imagery. Preview tooltips/attribution disclose archive provenance; coordinates and game navigation remain separate. Replacing it with newer imagery requires verified projection and real tile evidence. Do not copy another atlas URL into the old coordinate scheme blindly.
 
-## Verification state for 2.81.11
+## Current verification
 
-- Local coordinated types/build and data validation passed (0 errors/0 warnings). Full units: **2404 tests /202 files**; Java: **647 tests,0 failures/errors** and fresh jar. Generated coverage-ledger checks:3 passed.
-- The initial full local browser run passed906 checks; two incorrect Journal pane-count assertions were fixed and the complete affected core rerun passed. **Exact-source full browser CI subsequently passed**, as did all other Checks/Release gates.
-- Dedicated cleanup, canonical completed Plans, F2P Skills, real-provider archive recovery and quest-map navigation scenarios passed. Native-shell E2E passed, including real Pin IPC, retired-zoom preference handling, unrelated backup settings, profiles and damaged/external-data recovery.
-- The actual packaged EXE passed the isolated-folder CI gate. The downloaded normal Portable was then independently verified against its digest/manifest/size/tag/source.
-- These tests use isolated data and bridge fixtures. **No real-game verification is claimed.**
+Local 2.81.12 source: types/build passed; data validation found 0 errors/0 warnings; 2,426 unit tests across 204 files passed; the complete browser suite, isolated native-shell E2E, Java testClasses and fresh plugin jar passed. Documentation guards and an isolated execution of the release handoff/receipt generator passed. Full exact-source Checks/Release and independent Portable download verification remain required before publication is declared complete. No real-game verification is claimed.
+
+## Completed baseline — preserve, do not redo
+
+| Batch | Implemented behavior |
+|---|---|
+|2.80.8–12|Protected persistence/recovery, backup receipts and pre-write external-revision guards; RuneLite heap minimum. Not an automatic merger/watcher/lock or power-loss guarantee.|
+|2.80.13–17|Quest-entry food, physical alternative withdrawals, consumer-specific skill proofs, F2P checkpoints, acquisition fees separate from unit prices, one shared material allocator and method-selection integration.|
+|2.80.18–2.81.3|Compact skill access, model-driven combat/gathering/processing, staged Optional/training, per-recipe feasibility/batches. Basic Firemaking, Prayer, Runecraft and Superheat adapters already exist.|
+|2.81.4–6|Conditional processing/Ranged goal demand; one followed-Skills preparation/Shopping/funding lifecycle, with explicit goals and no fabricated XP.|
+|2.81.7–10|Complete Magic gear comparisons, selected physical tools, quest-XP alternatives, conservative account scope, tool capability versus purchase catalogues, carried versus actually worn gathering capacity.|
+|2.81.11|Retired duplicate UI controls/plans/report/matrix; preserved Ledger and active engines/storage/helpers; repaired shared maps with disclosed archival imagery and retry.|
+|Current 2.81.12 source|Shared optional bank-stock forecast/budget selection, one GE order per item, active-skill shopping precedence and duplicate-step protection; consolidated documentation. Release verification pending above.|
+
+Known limits: acquisition/travel fees remain bounded allowances, gathering competition/Forestry and Musa Point boat banking are approximations, altar timing assumes the supported exit/transition model, and combat food estimates are not survival guarantees or calibrated per-bite simulations. General alchemy/enchant/splashing retain explicit target/setup/budget safeguards. No implied parity for unsupported Members/HDOS mechanics.
 
 ## Remaining work in priority order
 
 ### P0 — cleanup delivery complete
 
-Main source and normal Portable 2.81.11 are published and verified above. Do not repeat or restore the retired UI. Keep UI_CLEANUP_REVIEW.md honest about remaining factual/model reviews. Future release workflow deliveries also attach this takeover file.
+The earlier cleanup is published and verified; current delivery status is in the receipt at the top. Do not repeat or restore the retired UI. Keep the accepted design/cleanup section above honest about remaining factual/model reviews. Future release workflow deliveries also attach this takeover file.
 
-### P1 — shared useful buy-ahead and bank stock
+### P1 — verify and refine shared bank stock
 
-Latest owner request: when buying supplies, consider a sensible larger ammunition/material reserve and the **next couple of useful equipment/tool/bow tiers** so the player does not repeatedly return to the Exchange. Future items can stay in the bank.
+Current source adds trainingStockNeeds → TrainingPick.stockNeeds → Step.stockItems → stockUpShopping. It reuses selected phase/model needs, inventory allocations, acquisition sources, live quotes and existing shopping/exchange payloads. The horizon is current kit plus the next two distinct useful kit/recipe configurations, not three arbitrary model-rate reviews. At most two future reusable items and six optional rows are selected.
 
-Reuse milestone/conditional whole-goal demand, allocations, acquisition sources, Shopping, quotes and funding. Avoid a second per-skill shopping system. Honor the actual stopping goal, availability/unlocks, already owned equivalents, known bank stock, price freshness and cash after current-kit/food/travel reserves. Unknown bank/price/cash is not permission to spend. Do not assume future earnings.
+Extras require an already-needed GE purchase, a live connection, a bank read in this session, known cash and usable current quotes. Mandatory purchases/fares plus a full current consumable refill are reserved first. Useful gear precedes extra consumables; partial affordable reserves respect GE limits. Future stock never blocks readiness/completion/funding, forces a new trip or changes the current training target. Owned future items are not repurchased, including tools below today's use level. Shopping uses one compact optional list and the same GE quantities go to the plugin; identical active/followed steps count once.
 
-Whole-goal demand is currently established for supported processing and Ranged cases, not every Magic/melee/gathering/mixed-goal mechanic. Where a forecast is absent, extend the owning shared model contract; do not manufacture quantities from a static guide.
+**Coverage limits:** reusable kits use shared method/tool/upgrade declarations across supported skills. Quantified extra consumables currently use supported processing and ordinary F2P Ranged forecasts. Unsupported Magic/melee/mixed-goal quantities are not invented. Optional potion stock is not selected; current potion refill costs are reserved in doses/pieces correctly. All of this needs Claude's live acceptance; extend missing model contracts rather than copying another skill's purchasing code.
 
-Future stock must not become a current wear/carry requirement, a red missing-item warning or a readiness blocker. Do not buy tiers beyond the goal or buy redundant grades. Present one concise shopping/trip recommendation, not a new stack of menus. Detect the resulting owned/banked stock and avoid repeated purchase requests. Verify poor/rich/unread-bank/already-owned/partially-filled scenarios and multiple skills with synthetic content.
+### Next UI task — Journal page usefulness
 
-- Do not launch funding or force a verification/bank detour solely to afford optional extras when the current activity can proceed.
-- Do not assume future levels in unrelated skills or quest unlocks just because the trained skill will rise.
-- Future bank stock must not pollute the current training NPC/resource/map target. At the relevant threshold, withdraw owned stock rather than suggesting the same purchase again.
-- Reuse existing reserve/refill and quantity semantics. Do not create a shopping trip after every arrow or food item is consumed.
-
-**Not implemented yet.** The existing whole-goal demand is a foundation, not proof that economical multi-tier purchase routing already works.
+Owner feedback, 2026-10-31: the session/resource counter does not justify occupying the whole right book page beside quests. Proposed layout: quest list/filters on the left; selected quest status, requirements, rewards and existing route/continue action on the right. Reuse the existing quest data/actions; keep session statistics in a small optional section and preserve their underlying resource/session data. Do not invent replacement statistics or redesign fonts. This is queued feedback, not implemented in 2.81.12.
 
 ### P2 — finish staged Skills/Optional review using the existing engines
 
-Use [SKILLS_COVERAGE.md](SKILLS_COVERAGE.md) as the capability inventory. Review melee, Ranged and Magic as well as the peaceful skills; do not assume guide data means complete modeling. For each supported skill, verify:
+Use [SKILLS_COVERAGE.md](docs/SKILLS_COVERAGE.md) as the capability inventory. Review melee, Ranged and Magic as well as the peaceful skills; do not assume guide data means complete modeling. For each supported skill, verify:
 
 1. Correct observed/saved/unknown level, target and account scope.
 2. A practical first method and relevant kit, consumables, equipment restrictions and costs.
@@ -183,6 +220,26 @@ At takeover, run a short baseline smoke first (loaded version, app/client link, 
 - For HDOS, verify only capabilities actually supplied by its adapter. Do not claim RuneLite parity without evidence.
 
 Record scenario, app/plugin versions, starting facts, expected/actual result and screenshots where useful. Separate implemented, automated, native-shell, live and unverified evidence. Fix a confirmed shared bug at its owning layer and rerun affected checks.
+
+### Consolidated live regression matrix — Claude owns every row
+
+Record actual version/source/plugin/protocol, account mode, admitted facts, expected/actual result and evidence; mark PASS / FAIL / NOT REACHABLE. Restore reversible settings and original activity. Prior screenshots/older-build results are not proof of current behavior.
+
+| Area | Required reachable checks |
+|---|---|
+|Launch/link/state|Authenticated app launch; loaded plugin/version, real login, World316 if appropriate; logout/hop/reconnect/restart, unread bank, profile switch and delayed old-session events.|
+|Ranged|Stage/actual NPC level, compatible owned shortbow/longbow and one ammo stack, worn quantities, bow/armour/arrow unlocks, food bank detour, current target stability.100→99 arrows must not cause a trip; low-watermark/refill behavior remains.|
+|Stock-up|Poor/rich/unknown-bank/remembered-bank cases; larger reserve plus useful next bows/tools at one GE visit; money held for current kit/refill; bank extras, later withdraw/equip without rebuy; optional stock never blocks progress.|
+|Melee/combat|Default practical/Balanced spot versus viable XP/Money alternatives; real damage, food, bank time/net proceeds; Strength versus Power/weapon and armour tradeoffs, actual style and Defence preference.|
+|Magic|Named spell/unlocks, rune quantities, elemental staff actually worn, full gear model and metal penalty. Superheat actual levels/unnoted iron/runes/staff, partial bag and bank coal; no stale NPC targets. Alchemy/splashing remain explicitly selected safe setups.|
+|Gathering|Woodcutting/Mining/Fishing methods, named tools actually carried/worn and skill versus Attack requirement; future-tier ownership, useful upgrades, correct spot/bank/entrance/floor and stage transition. No false inventory-slot credit from Attack alone.|
+|Processing/utility|Cooking/Smithing/Crafting/Firemaking and supported Members recipes, failure/inputs/output/fees, affordable partial batches, reusable tools and material alternatives. Prayer/Runecraft default defer versus explicit goal; real altar entry/exit/timing.|
+|Mixed/quest XP|Fishing→Cooking and Mining→Woodcutting handover, every declared goal retained, no unearned XP/quest credit. Actual quest preparation deep-link/goal/return; stop/cancel/funding restores original route.|
+|Physical supplies|Noted food is owned but uneatable; correct bank withdrawal/unnote. Equivalent foods by healing still use real pieces/slots. Potions combine doses across sizes without pretending they were poured. Missing/unread facts stay distinct.|
+|Quests/branches|Reachable Oracle/Dragon Slayer entry/dialogue/map parts, Shield of Arrav branches, partial quest milestones and encounter-entry food/gear guards. Completed encounters are NOT REACHABLE, never replayed/reset just for testing.|
+|Travel/funding|Real teleports/unlocks/charges/runes/cash and whole detour versus walking; unsupported canoes/transport explicit. Money methods respect account restrictions, input cost, tax/liquidity and actual earned session GP; no assumed future sales.|
+|HUD/map/UI|One collapsed/expanded guide, one leading risk warning, current/next-phase alignment, saved position/click/Alt-drag. One map preview, full-map point selection, actual arrow target. Accepted fonts/layout, wraps/scrolls/dialogs/buttons at desktop sizes/DPI; no mobile sweep.|
+|Persistence/updater|Use isolated profiles for corrupt/future/external-file recovery, backups/profile protection and actual old→new EXE update/handoff; never risk the owner's only save. Existing native automated proof does not establish a new live-game scenario.|
 
 ## Development and release procedure
 

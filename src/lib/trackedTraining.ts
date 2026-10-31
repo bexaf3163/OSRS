@@ -40,6 +40,8 @@ export function trackedTraining(tracked: TrackedSkill | null, observed: PlayerSt
   const combat = method?.npcNames?.length && (['attack', 'strength', 'defence'].includes(skill) || method.kit === 'f2p-bow' || method.kit === 'strike-spell');
   if (combat && typeof pick === 'object' && !pick.modelled) {
     const warning = 'Combat preparation is not checked for this setup. Read your stats and equipment in RuneLite; unsupported gear or mechanics need manual review.';
+    step.stockItems = undefined;
+    step.goalItemsRequired = undefined;
     step.warning = warning;
     step.mapLocation = undefined;
     step.resourceSpots = [];

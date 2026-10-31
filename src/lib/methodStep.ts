@@ -25,7 +25,7 @@ export const UNKNOWN_GOAL_PREFIX = 'goal-unknown:';
 /** Resolved supplies travel with the method pick, as combat/food projections already do; the store never rebuilds a loadout from stale state. */
 /** A picked method: its id, or with what the player needs for it, a name for this player, and the spot the gathering engine chose (methodRates.ts). */
 export type TrainingPick = string | {
-  methodId: string; untilLevel?: number; goalNeeds?: MethodNeed[]; needs: MethodNeed[]; name?: string; where?: string; warning?: string;
+  methodId: string; untilLevel?: number; goalNeeds?: MethodNeed[]; stockNeeds?: MethodNeed[]; needs: MethodNeed[]; name?: string; where?: string; warning?: string;
   modelled?: boolean;
   /** The spot the engine picked; waypoints - the way in of a spot under the ground, entrance first. */
   spot?: { label: string; x: number; y: number; plane: number; waypoints?: { x: number; y: number; plane: number; label?: string }[] };
@@ -128,7 +128,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
     const skill = id.slice(UNKNOWN_GOAL_PREFIX.length);
     if (!followedGoals(step).some(g => g.skill === skill)) return step;
     const message = `Check your ${skill} level in RuneLite or Skills before choosing its training method.`;
-    return { ...step, goalItemsRequired: undefined, followsMethod: skill, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
+    return { ...step, goalItemsRequired: undefined, stockItems: undefined, followsMethod: skill, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
       requirements: [...step.requirements ?? [], { type: 'skill', skill, min: 1 }],
       warning: message, how: message, where: 'Training level not checked', quickSteps: [message], pacing: undefined, foes: undefined, threats: undefined,
       ...(step.inGame ? { inGame: { ...step.inGame, worldPoint: undefined, groundTiles: [], pathWaypoints: undefined,
@@ -136,7 +136,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
     };
   }
   if (id === GOAL_REACHED) {
-    return { ...step, goalItemsRequired: undefined, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
+    return { ...step, goalItemsRequired: undefined, stockItems: undefined, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
       ...(step.inGame ? { inGame: { ...step.inGame, worldPoint: undefined, groundTiles: [], pathWaypoints: undefined,
         npcNames: [], npcIds: [], objectNames: [], objectIds: [], highlightItems: [], goal: 'Training goals reached' } } : {}),
     };
@@ -160,6 +160,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
   const at = chosen ? { x: chosen.x, y: chosen.y, plane: chosen.plane, label: pointLabel(m, chosen.label) } : methodPoint(id);
   return {
     ...step,
+    stockItems: typeof pick !== 'string' ? pick.stockNeeds?.map(n => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null) : undefined,
     goalItemsRequired: typeof pick !== 'string' && pick.goalNeeds ? pick.goalNeeds.map(n => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null)
       .map(r => ({ ...r, howToGet: 'For the remaining staged training goal (estimate); future preparation may change.' })) : undefined,
     followsMethod: goal.skill,

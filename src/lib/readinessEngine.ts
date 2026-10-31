@@ -8,13 +8,14 @@ import type { Step } from '../types';
 import { entryFoodStep } from './loadoutPhase';
 import { fixChainOf, readinessOf, type ChainLink, type ReadinessContext, type StepReadiness } from './readiness';
 import { buildPrepRoute, openTaskIds, type PrepRoute } from './prepRoute';
-import { planOneTrip, type OneTripPlan } from './oneTrip';
+import { planOneTrip, tripWindow, type OneTripPlan } from './oneTrip';
 import { buildQueue, type PrepQueue } from './prepQueue';
 import type { PlayStyle } from './playStyle';
 import { buildPrepPlan, type PrepPlan } from './prepPlan';
 import type { UpgradeRecommendation } from '../services/gearUpgradeRouter';
 import { dependencyFacts, type DependencyFact } from './next-step';
 import { levelOf, ownedCountOf } from './playerState';
+import { stockShoppingContext, stockUpShopping } from './trainingStock';
 
 export interface ReadinessEngine {
   readonly ctx: ReadinessContext;
@@ -66,6 +67,12 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
     const hit = prepMemo.get(step.id);
     if (hit) return hit;
     const r = buildPrepRoute(readiness(step), entry(step));
+    const buy = r.tasks.find(t => t.kind === 'buy' && t.need === 'REQUIRED');
+    if (buy && step.stockItems?.length) {
+      const window = tripWindow(ctx.steps, ctx.progress, step.id);
+      const stocked = stockUpShopping(window.length ? window : [entry(step)], stockShoppingContext(ctx.state, ctx.prices, ctx.qp), ctx.prices);
+      if (stocked.stock.length) buy.detail = `Buy together if convenient: ${stocked.stock.map(row => `${row.name} ×${row.qty}`).join(', ')}. Bank these extras for later; they do not block this step.`;
+    }
     prepMemo.set(step.id, r);
     return r;
   };

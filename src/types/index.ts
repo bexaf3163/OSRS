@@ -335,6 +335,8 @@ export interface Step {
   itemsRequired?: StepItemRequirement[];
   /** Runtime projection of all remaining combat phases, for purchases/protection only; carrying readiness uses itemsRequired. */
   goalItemsRequired?: StepItemRequirement[];
+  /** Optional future bank stock; excluded from readiness and completion. */
+  stockItems?: StepItemRequirement[];
   itemsRecommended?: StepItemRequirement[];
   /** Canonical baseline armour IDs for the route's combat preparation; usable owned equivalents are accepted. */
   combatArmour?: number[];

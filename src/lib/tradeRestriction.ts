@@ -6,7 +6,7 @@
 //   RESTRICTED - a condition the game told us is not met: selling those items surely fails;
 //   UNKNOWN    - what we can read is met (or cannot be read) and the hours are not observable: selling probably works, say so with a caveat;
 //   LIFTED     - the player told us the restrictions are gone.
-// UNKNOWN is never shown as RESTRICTED or as LIFTED (PROJECT_GUIDELINES: PRESENT | MISSING | UNKNOWN).
+// UNKNOWN is never shown as RESTRICTED or as LIFTED (PROJECT_HANDOFF: PRESENT | MISSING | UNKNOWN).
 
 import { nameKey } from './checklist';
 

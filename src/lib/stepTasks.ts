@@ -2,7 +2,7 @@
 // that feeds a skill goal). Each is checked against the player's state where the game can say, otherwise ticked by the player. A task never
 // completes or blocks its step.
 //
-// The answer has four outcomes, and UNKNOWN is never MISSING (PROJECT_GUIDELINES): the worn items that were not read, a bank that was not opened
+// The answer has four outcomes, and UNKNOWN is never MISSING (PROJECT_HANDOFF): the worn items that were not read, a bank that was not opened
 // and a quest list that is not there say "not checked".
 
 import type { StepTask } from '../types';

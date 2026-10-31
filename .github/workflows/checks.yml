@@ -105,7 +105,7 @@ jobs:
           Move-Item -LiteralPath $files[0].FullName -Destination $candidate
           $hash = (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  $name" | Set-Content -LiteralPath audit-candidate/SHA256SUMS.txt -Encoding utf8
-          $handoff = Join-Path audit-candidate 'CLAUDE_NEXT_SESSION.md'
-          Copy-Item -LiteralPath docs/CLAUDE_NEXT_SESSION.md -Destination $handoff
-          & gh release create $tag $candidate audit-candidate/SHA256SUMS.txt $handoff --prerelease --latest=false --target $env:SOURCE_SHA --title "OSRS Path audit test $short" --notes-file docs/CODEX_AUDIT_PREVIEW.md
+          $handoff = Join-Path audit-candidate 'PROJECT_HANDOFF.md'
+          Copy-Item -LiteralPath PROJECT_HANDOFF.md -Destination $handoff
+          & gh release create $tag $candidate audit-candidate/SHA256SUMS.txt $handoff --prerelease --latest=false --target $env:SOURCE_SHA --title "OSRS Path audit test $short" --notes "Isolated CI review build. Read PROJECT_HANDOFF.md for current project context. Normal Portable releases are published separately."
           if ($LASTEXITCODE -ne 0) { throw 'Audit preview publication failed.' }

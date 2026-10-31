@@ -31,7 +31,8 @@ import type { TradeRestriction } from './tradeRestriction';
 import { requirementCost } from './funding/need';
 import { allocateMaterialStock } from './materialStock';
 import type { HeldUnits } from './doses';
-import { processingGoalNeeds } from './processingGoal';
+import { processingGoalNeeds, mergeGoalNeeds } from './processingGoal';
+import { isReusable } from './shopping';
 import { FOODS, heldFood } from './foodAdvice';
 
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
@@ -449,6 +450,8 @@ export interface TrainingAdvice {
   path: PathLeg[];
   /** Conditional whole-goal materials/kit, separate from current-batch readiness. */
   goalNeeds?: MethodNeed[];
+  /** Optional bank-stock forecast for the current and next two stages; never carrying readiness. */
+  stockNeeds?: MethodNeed[];
   xpLeft: number | null;
   /** How many more actions with the best method to the end of its leg; null — the XP per action is unknown. */
   actionsLeft: number | null;
@@ -738,6 +741,29 @@ const FORECAST_STEP = 5;
 const atLevel = (state: PlayerState, skill: string, value: number): PlayerState =>
   ({ ...state, levels: { ...state.levels, [skill]: { ...(state.levels[skill] ?? { source: 'profile' }), known: true, value } } }) as PlayerState;
 
+/** Reuse the selected phases and model quantities; unsupported consumable forecasts stay absent. */
+export function trainingStockNeeds(path: readonly PathLeg[], skill: string, state: PlayerState, xp: number, prices?: PriceView | null, priority: MethodPriority = 'balanced'): MethodNeed[] | undefined {
+  const window: PathLeg[] = [];
+  const stages = new Set<string>();
+  const reusable: Extract<MethodNeed, { type: 'item' }>[] = [];
+  for (const leg of path) {
+    const projected = atLevel(state, skill, leg.fromLevel);
+    const upgrade = toolUpgrade(leg.method, Math.max(0, xpForLevel(leg.toLevel) - Math.max(xp, xpForLevel(leg.fromLevel))), priority, coinsPerMinute(prices));
+    const best: MethodView = { method: leg.method, status: 'READY', missing: [], unchecked: [] };
+    const kit = preparationNeeds({ best, upgrade }, projected, prices).filter((n): n is Extract<MethodNeed, { type: 'item' }> => n.type === 'item' && isReusable(n.name));
+    const key = kit.length ? JSON.stringify(kit.map(n => [n.name, n.anyOf ?? []]).sort()) : leg.method.id;
+    if (!stages.has(key) && stages.size >= 3) break;
+    stages.add(key);
+    window.push(leg);
+    reusable.push(...kit);
+  }
+  if (!window.length) return undefined;
+  const start = window[0].fromLevel, end = window[window.length - 1].toLevel;
+  const forecast = processingGoalNeeds(window, start, end, xp)
+    ?? (skill === 'ranged' ? rangedGoalNeeds(window, state, xp, end, prices) : null);
+  return mergeGoalNeeds([], [...(forecast ?? []).filter((n): n is Extract<MethodNeed, { type: 'item' }> => n.type === 'item'), ...reusable]) ?? undefined;
+}
+
 export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const { skill, target, state, mode, style } = input0;
   const objective: MethodPriority = input0.priority ?? (style === 'efficient' ? 'fastest' : 'relaxed');
@@ -796,6 +822,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   return {
     ...empty, best: best ? { ...best, reason } : null, others, quests, path, xpLeft, actionsLeft, actionTarget, time, upgrade, reason,
     goalNeeds: (processingGoalNeeds(path, level, target, xpNow) ?? (skill === 'ranged' ? rangedGoalNeeds(path, state, xpNow, target, input.prices) : null)) ?? undefined,
+    stockNeeds: trainingStockNeeds(path, skill, state, xpNow, input.prices, priority),
     followed: followedV ? said(followedV) : null,
   };
 }

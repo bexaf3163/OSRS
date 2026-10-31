@@ -6,6 +6,7 @@ import { nameKey, parseAmount, type OwnedState } from './checklist';
 import { toolFamilyOf } from './toolTiers';
 import { doseKind, heldUnits } from './doses';
 import gearJson from '../data/gear.json';
+import styleJson from '../data/styleGear.json';
 import { heldFood, type FoodHolding } from './foodAdvice';
 import type { MaterialHolding } from './materialStock';
 
@@ -22,10 +23,14 @@ export const REUSABLE = new Set([
 /** Anything worn (weapons, armour, amulets) is not used up either: the gear data knows every one of them. */
 const WORN = new Set((gearJson as { items: { name: string; slot?: string }[] }).items.filter((p) => p.slot).map((p) => nameKey(p.name)));
 
+// Style-specific equipment uses its existing registry too; ammunition remains consumable.
+const STYLE_WORN = new Set([styleJson.magic, styleJson.ranged].flatMap(style => Object.entries(style)
+  .flatMap(([slot, options]) => slot === 'ammo' ? [] : options.flatMap(option => option.names.map(nameKey)))));
+
 /** One is enough for every step: a tool of any tier, or something worn. */
 export function isReusable(nameEn: string): boolean {
   const k = nameKey(nameEn);
-  return REUSABLE.has(k) || WORN.has(k) || toolFamilyOf(nameEn) !== null;
+  return REUSABLE.has(k) || WORN.has(k) || STYLE_WORN.has(k) || toolFamilyOf(nameEn) !== null;
 }
 
 const COINS_ID = 995;

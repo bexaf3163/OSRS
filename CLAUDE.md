@@ -1,18 +1,5 @@
-# OSRS Path — project rules
+# Claude Code entry point
 
-Binding operating contract for every task in this repo: @PROJECT_GUIDELINES.md (verbatim copy of `OSRS_Path_Master_Project_Guidelines.md`). Follow it strictly; it overrides default habits.
+Read [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md). It is the only current project contract, architecture, task plan, evidence and handoff for Claude and Codex.
 
-For desktop or RuneLite interface work, also read @CLAUDE_REDESIGN_HANDOFF.md. It records the accepted Modern dark evolution of Clear Path, preserved functionality, implementation map, audit findings and regression checks; do not restore an older design over it.
-
-Key points to keep in mind every time:
-- Reply in concise English. Player-facing UI text (desktop, HUD, overlays, dialogs, warnings) is native English with canonical OSRS Wiki / Quest Helper names — no Cyrillic, no dual naming (section 3, amended). Code comments, commit messages and docs are English. The whole project is English now; do not reintroduce Cyrillic text (`tests/questStages.test.ts` guards the quest data).
-- Inspect existing code first, reuse existing systems, make small surgical diffs, no parallel implementations.
-- State is `PRESENT | MISSING | UNKNOWN`; never turn unavailable data into `0` or `MISSING`.
-- Never invent requirements, coordinates or availability; mark them for verification.
-- Automation is a companion, never a bot: in the game itself at most ~2 clicks every several minutes, no movement/combat/skilling; never spend GP automatically.
-- Before declaring completion run: `npm run build`, `npm test -- --reporter=dot`, `npm run check-data`, `cd runelite-bridge && ./gradlew -q testClasses` (plus the full Gradle `test` when plugin logic changed). Never report PASS if a check failed or was skipped.
-- Final response: changed files and verification results in 1–2 sentences.
-
-## Desktop-only scope — owner decision, 2026-10-28
-
-No mobile/phone development or phone-only QA. Keep Windows desktop resizing, DPI/text scaling, themes and accessibility. See the authoritative desktop-only scope in PROJECT_GUIDELINES.md.
+Update that file in place. Do not create new session/handoff/acceptance/status files, scatter notes across repositories or maintain independent copies. Use its accepted design, engine contracts, preservation rules and verification requirements. Historical documents are available through Git history, not a competing current plan.

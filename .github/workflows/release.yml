@@ -79,10 +79,19 @@ jobs:
           if ($files.Count -ne 1) { throw 'Expected one verified portable EXE.' }
           $hash = (Get-FileHash -LiteralPath $files[0].FullName -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  $($files[0].Name)" | Set-Content -LiteralPath release/SHA256SUMS.txt -Encoding utf8
-          Copy-Item -LiteralPath docs/CLAUDE_NEXT_SESSION.md -Destination release/CLAUDE_NEXT_SESSION.md
-          Copy-Item -LiteralPath docs/CLAUDE_TAKEOVER.md -Destination release/CLAUDE_TAKEOVER.md
-          Copy-Item -LiteralPath docs/CODEX_ENGINE_HARDENING_HANDOFF.md -Destination release/CODEX_ENGINE_HARDENING_HANDOFF.md
-          Copy-Item -LiteralPath docs/CLAUDE_IN_GAME_ACCEPTANCE.md -Destination release/CLAUDE_IN_GAME_ACCEPTANCE.md
+          $handoff = Get-Content -LiteralPath PROJECT_HANDOFF.md -Raw
+          $version = (Get-Content -LiteralPath package.json -Raw | ConvertFrom-Json).version
+          $receipt = @(
+            '<!-- DELIVERY_START -->',
+            '## Delivery receipt', '',
+            "Release: **$version**. Source: ``$env:GITHUB_SHA``.",
+            "Portable: $($files[0].Name), $($files[0].Length) bytes.",
+            "SHA256: ``$hash``.", '',
+            'Release build/data/unit/Java/browser/native/isolated-EXE gates passed before publication. No in-game verification is claimed. Independent post-download verification is recorded in the current main-branch handoff.',
+            '<!-- DELIVERY_END -->'
+          ) -join "`n"
+          $handoff = [regex]::Replace($handoff, '(?s)<!-- DELIVERY_START -->.*?<!-- DELIVERY_END -->', [System.Text.RegularExpressions.MatchEvaluator]{ param($m) $receipt })
+          [IO.File]::WriteAllText((Join-Path (Get-Location) 'release/PROJECT_HANDOFF.md'), $handoff, [Text.UTF8Encoding]::new($false))
       - if: steps.v.outputs.exists == 'false'
         uses: softprops/action-gh-release@v2
         with:
@@ -93,8 +102,5 @@ jobs:
           files: |
             release/*.exe
             release/SHA256SUMS.txt
-            release/CLAUDE_NEXT_SESSION.md
-            release/CLAUDE_TAKEOVER.md
-            release/CODEX_ENGINE_HARDENING_HANDOFF.md
-            release/CLAUDE_IN_GAME_ACCEPTANCE.md
+            release/PROJECT_HANDOFF.md
           fail_on_unmatched_files: true

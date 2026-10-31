@@ -9,3 +9,7 @@ release/
 # RuneLite bridge (Gradle)
 runelite-bridge/build/
 runelite-bridge/.gradle/
+# Local agent checkpoints/memory and generated IDE classes are not release inputs.
+.codex/
+.serena/
+runelite-bridge/bin/
