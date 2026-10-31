@@ -102,7 +102,8 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
         },
         openEvents: (onEvent: (d: string) => void, onState: (s: string) => void) => {
           w.__emit = (e: unknown) => onEvent(JSON.stringify(e));
-          setTimeout(() => { onState('open'); for (const e of m.events ?? []) onEvent(JSON.stringify(e)); }, 50);
+          w.__eventsDelivered = false;
+          setTimeout(() => { onState('open'); for (const e of m.events ?? []) onEvent(JSON.stringify(e)); w.__eventsDelivered = true; }, 50);
           return () => {};
         },
       },
@@ -133,7 +134,10 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
     });
   }
   await gotoServed(page, BASE + hash);
-  await page.waitForTimeout(1200);
+  // Ready instead of a fixed 1.2 s: the app shell attached, the mock events delivered, fonts loaded and two frames committed.
+  await page.waitForSelector('.la-root, main', { state: 'attached', timeout: 15000 }).catch(() => {});
+  await page.waitForFunction(() => (window as unknown as { __eventsDelivered?: boolean }).__eventsDelivered !== false && document.fonts.status === 'loaded', null, { timeout: 5000 }).catch(() => {});
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => r(null)))));
   return { page, errors };
 }
 

@@ -281,7 +281,11 @@ if (!app.requestSingleInstanceLock()) {
     if (saved.maximized) win.maximize();
     // The page has its own <title>; the window keeps the running version in its name.
     win.on('page-title-updated', (e) => e.preventDefault());
-    win.once('ready-to-show', () => { if (!isE2E) win.show(); });
+    win.once('ready-to-show', () => {
+      if (!isE2E) win.show();
+      // The startup time of this build, kept so a speed change can be checked in the real EXE; a failed write is ignored.
+      fs.writeFile(file('startup.log'), `${new Date().toISOString()} ${app.getVersion()} first page painted ${Math.round(performance.now())} ms after start\n`, () => {});
+    });
     win.on('close', () => {
       saveWindowState();
       flushProgress();
