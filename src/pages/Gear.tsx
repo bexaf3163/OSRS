@@ -6,15 +6,15 @@
 import { useMemo } from 'react';
 import { useBridge, type LastGear } from '../bridge';
 import { useStore } from '../store';
-import { useReadinessEngine } from '../readinessContext';
+import { useReadinessEngine, useActiveActivity } from '../readinessContext';
 import { usePlayerState } from '../playerStateContext';
 import { useProfiles } from '../lib/profiles';
-import { formatGp, type ShoppingLine } from '../lib/shopping';
-import { useGearAdvice } from '../lib/gearAdvice';
-import { nextStep } from '../lib/next-step';
-import { scopeList, scopeSteps, shopRows, supplyReserve } from '../lib/shoppingView';
+import { formatGp } from '../lib/shopping';
+import { useGearAdvice, meleeHintApplies } from '../lib/gearAdvice';
+import { tripWindow } from '../lib/oneTrip';
+import { stockShoppingContext, stockUpShopping } from '../lib/trainingStock';
+import { supplyReserve } from '../lib/shoppingView';
 import { usePriceView } from '../lib/funding/usePriceView';
-import { itemPrice } from '../lib/itemPrice';
 import { itemById } from '../data';
 import { questStepOf } from '../lib/questSteps';
 import {
@@ -169,32 +169,33 @@ function Recommendation({ advice, stepId, onShow, priceUnknown, pricesFailed }: 
         : 'What you wear is the best you can wear and afford at these levels.';
   return (
     <section className="card gear-reco is-none" aria-label="Recommendation" role="status">
-      <p className="gear-reco-head"><strong>No worthwhile change for this fight</strong></p>
+      <p className="gear-reco-head"><strong>{advice.reserveUnknown ? 'Supply budget not fully checked' : 'No worthwhile change for this fight'}</strong></p>
       <p className="small muted">{why}</p>
     </section>
   );
 }
 
 export function GearPage() {
-  const { dependencies, ctx: { qp: effectiveQp } } = useReadinessEngine();
-  const { state, stats, lastGears, lastGear } = useBridge();
+  const engine = useReadinessEngine();
+  const activity = useActiveActivity();
+  const { state, stats, gear, lastGears, lastGear } = useBridge();
   const { mode, steps, progress } = useStore();
   const { state: player } = usePlayerState();
   const profiles = useProfiles();
   const prices = usePriceView(true);
 
-  // Coins kept for the next trip's supplies: the same list as Shopping.
+  // The same activity, quantities and sources as Stock up; optional future stock never consumes the mandatory reserve.
   const reserve = useMemo(() => {
-    const current = nextStep(steps, progress, effectiveQp, dependencies)?.id ?? null;
-    const { list, trip } = scopeList(scopeSteps('trip', steps, progress, current, { from: 1, to: 1, openOnly: true }));
-    const rows = shopRows(list, {
-      state: player, trip, detail: (id) => itemById.get(id),
-      onGe: (l: ShoppingLine) => l.id !== undefined, gePrice: (l) => itemPrice(prices, l.nameEn, l.id, 1).unit,
-    });
-    return supplyReserve(rows, list.coins);
-  }, [steps, progress, effectiveQp, dependencies, player, prices]);
-
-  const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice(null, { reserve: reserve.amount, reserveUnknown: !reserve.complete });
+    if (!activity.step) return { amount: 0, complete: false };
+    const selected = tripWindow(engine.ctx.steps, progress, activity.step.id);
+    const stocked = stockUpShopping(selected.length ? selected : [activity.step], stockShoppingContext(player, prices, engine.ctx.qp), prices);
+    const required = supplyReserve(stocked.rows, stocked.list.coins);
+    return { amount: required.amount + (stocked.refillReserve ?? 0), complete: required.complete && stocked.refillReserve !== null };
+  }, [engine, progress, activity.step, player, prices]);
+  const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice(activity.step, { reserve: reserve.amount, reserveUnknown: !reserve.complete, strictContext: true });
+  const meleeContext = !!fightStep && meleeHintApplies(fightStep);
+  const preparation = activity.step ? engine.plan(activity.step, { ahead: 0 }) : null;
+  const kit = preparation?.lines.filter(line => line.usedIn.includes(activity.step!.id) && (line.priority === 'CRITICAL' || line.priority === 'IMPORTANT')) ?? [];
   const priceUnknown = !pricesReady && advice.goals.length > 0;
   const places = usePlaceMap();
   const lv = advice.levels;
@@ -210,10 +211,10 @@ export function GearPage() {
   const incoming = advice.incoming;
   const context = fightStep && foe
     ? <>For <a href={`#/step/${fightStep.id}`}>{fightStep.id}</a>: {foe.name}{incoming ? <>, attacks with {incoming.style}{incoming.maxHit ? `, hits up to ${incoming.maxHit}` : ''}</> : null}.</>
-    : <>No supported opponent selected: comparison uses a cow.</>;
+    : activity.step ? <>For {activity.step.title}.</> : <>Choose a training plan or quest to check its kit.</>;
   const coins = advice.coins;
   // Levels from the game or entered on the Skills page; without either the advisor works from level 1, which is not shown as the player's.
-  const levelsKnown = Boolean(stats?.attack || progress.levels.attack);
+  const levelsKnown = activity.step?.followsMethod ? player.levels[activity.step.followsMethod]?.known === true : Boolean(stats?.attack || progress.levels.attack);
 
   return (
     <div className="page gear-page la-spread">
@@ -224,9 +225,9 @@ export function GearPage() {
         <h1>Gear</h1>
         <p className="muted small gear-context">
           {context}{' '}
-          {levelsKnown
+          {meleeContext && levelsKnown
             ? <>Attack {lv.attack} · Strength {lv.strength} · Defence {lv.defence}{!stats?.attack && <> (<a href="#/skills">from your profile</a>)</>}</>
-            : <a href="#/skills">Your levels are not known yet</a>}
+            : !levelsKnown && <a href="#/skills">Check your skill levels</a>}
           {coins.total !== null && <> · {formatGp(coins.total)} gp{coins.bank === null ? ' (bank not checked)' : ''}{advice.reserve > 0 ? (coins.total < advice.reserve ? `, the next supplies need ${formatGp(advice.reserve)}` : `, ${formatGp(advice.reserve)} kept for the next supplies`) : ''}</>}
         </p>
       </header>
@@ -234,7 +235,10 @@ export function GearPage() {
       {advice.live ? (
         <section className="gear-now" aria-label="Worn now">
           <h2 className="subhead">Worn now</h2>
-          <WornList equipped={advice.equipped} stale={false} />
+          {meleeContext ? <WornList equipped={advice.equipped} stale={false} /> : <ul className="gear-worn-list">
+            {(gear?.equipment ?? []).map(item => <li key={`${item.slot}-${item.id}`} className="gear-worn-item is-filled"><ItemIcon src={itemById.get(item.id)?.iconUrl} alt="" size={28} /><span className="gear-worn-text"><span className="muted small">{item.slot ?? 'Equipment'}</span><span>{item.name}{(item.count ?? 1) > 1 ? ` ×${item.count}` : ''}</span></span></li>)}
+            {!gear?.equipment?.length && <li className="small muted">No items worn.</li>}
+          </ul>}
         </section>
       ) : snapshot && staleWorn ? (
         <section className="gear-now" aria-label="Last known">
@@ -253,10 +257,19 @@ export function GearPage() {
     </Page>
     <Page side="r" className="gear-advisor" label="Gear advisor">
     <div className="page la-scroll">
-      <Eyebrow>GEAR ADVISOR</Eyebrow>
-      {advice.live && <Recommendation advice={advice} stepId={fightStep?.id} onShow={places.show} priceUnknown={priceUnknown} pricesFailed={pricesFailed} />}
+      <Eyebrow>{meleeContext ? 'GEAR ADVISOR' : 'CURRENT ACTIVITY KIT'}</Eyebrow>
+      {!meleeContext && <section className="card" aria-label="Activity kit">
+        <h2 className="subhead">{activity.step?.title ?? 'Choose your next activity'}</h2>
+        {preparation ? <>
+          <p className="small">{preparation.score.verdict === 'UNKNOWN' ? 'Kit not fully checked. Open your bank in RuneLite.' : preparation.score.verdict === 'READY' ? 'Current kit is ready.' : 'Prepare the current kit before leaving.'}</p>
+          {kit.length > 0 && <ul className="small">{kit.slice(0, 6).map(line => <li key={line.key}><strong>{line.name}{line.count > 1 ? ` ×${line.count}` : ''}</strong> · {line.action?.label ?? ({ EQUIPPED: 'Worn', INVENTORY: 'With you', BANK: 'Take from bank', MISSING: 'Get before leaving', UNKNOWN: 'Not checked' }[line.where])}</li>)}</ul>}
+          {kit.length > 6 && <p className="small muted">{kit.length - 6} more items in Preparation.</p>}
+          <a className="btn btn-primary" href={activity.href}>Review current preparation</a>
+        </> : <><p className="small muted">Recommendations need a real activity and readable character data. No sample opponent is used here.</p><a className="btn btn-primary" href="#/skills">Choose training</a></>}
+      </section>}
+      {advice.live && meleeContext && <Recommendation advice={advice} stepId={fightStep?.id} onShow={places.show} priceUnknown={priceUnknown} pricesFailed={pricesFailed} />}
 
-      {advice.live && (advice.actions.length > 1 || advice.armour.length > 0 || advice.goals.length > 0) && (
+      {advice.live && meleeContext && (advice.actions.length > 1 || advice.armour.length > 0 || advice.goals.length > 0) && (
         <details className="gear-more">
           <summary className="subhead">Other options <span className="muted">· {Math.max(0, advice.actions.length - 1) + advice.armour.length + advice.goals.length}</span></summary>
           {advice.actions.length > 1 && <ul className="gear-list">{advice.actions.filter((a) => a !== (advice.actions.find((x) => x.how === 'wear') ?? advice.actions[0])).map((a) => <ActionRow key={`${a.slot}-${a.item.id}`} a={a} stepId={fightStep?.id} live onShow={places.show} />)}</ul>}
@@ -275,7 +288,7 @@ export function GearPage() {
         </details>
       )}
 
-      {advice.live && (
+      {advice.live && meleeContext && (
         <details className="gear-more gear-combat">
           <summary className="subhead">Combat numbers</summary>
           <div className="gear-metrics">
@@ -289,7 +302,7 @@ export function GearPage() {
         </details>
       )}
 
-      {levelsKnown && <details className="gear-more" id="gear-roadmap">
+      {levelsKnown && meleeContext && <details className="gear-more" id="gear-roadmap">
         <summary className="subhead">Future unlocks <span className="muted">· {roadmap.length}</span></summary>
         {roadmap.length > 0 ? <ul className="gear-roadmap">{roadmap.map((r) => <RoadmapRowView key={r.key} row={r} steps={steps} />)}</ul> : <p className="small muted">Nothing better within reach of your levels.</p>}
         <p className="gear-chips gear-prayers" aria-label="Prayers">

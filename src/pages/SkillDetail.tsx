@@ -118,7 +118,6 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
         {f2p?.equipment && <p className="small muted training-equipment">{f2p.equipment}</p>}
         <button type="button" className="link-btn" onClick={() => setTab('calculator')}>Choose a custom goal</button>
       </section> : <TrainingCard skill={card.skill} target={card.target} followed={card.followed} view="summary" />}
-      <button type="button" className="link-btn skill-plan-link" onClick={() => setTab('plan')}>Method details &amp; leveling plan →</button>
       </>
       )}
 
@@ -171,9 +170,9 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
       </>
       )}
 
-      {tab === 'calculator' && <Calculator levelIds={selectedSkill ? [selectedSkill] : skill.levelSkills} suggest={(lid, level, stage) =>
+      {tab === 'calculator' && <><Calculator levelIds={selectedSkill ? [selectedSkill] : skill.levelSkills} suggest={(lid, level, stage) =>
         requestedGoal !== undefined && lid === selectedSkill ? requestedGoal
-          : mode === 'f2p' && f2pAdviceFor(lid)?.target === null ? Math.min(99, level + 1) : defaultTarget(skill, lid, level, stage)} />}
+          : mode === 'f2p' && f2pAdviceFor(lid)?.target === null ? Math.min(99, level + 1) : defaultTarget(skill, lid, level, stage)} /><details className="section"><summary>XP table</summary><XpTable /></details></>}
 
       {tab === 'reference' && (
         <>

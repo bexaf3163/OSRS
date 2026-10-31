@@ -30,22 +30,27 @@ export function stockUpShopping(steps: Step[], ctx: RowContext, prices?: PriceVi
   const { list, trip } = scopeList(current);
   const rows = shopRows(list, { ...ctx, trip });
   const stock: ShopRow[] = [];
+  // The reserve is useful to equipment advice even when this trip needs no exchange purchase.
+  let refillReserve: number | null = null;
+  if (prices?.status === 'live') {
+    refillReserve = list.coins;
+    for (const line of list.required.filter(l => !isReusable(l.nameEn))) {
+      const quote = prices.buy(line.nameEn, line.id);
+      if (!usable(quote)) { refillReserve = null; break; }
+      refillReserve += quote.price * Math.ceil(line.count / (doseKind(line.nameEn)?.per ?? 1));
+    }
+  }
   const state = ctx.state, cash = coinsOf(state).total;
-  const result = () => ({ list, trip, rows: [...rows, ...stock], stock });
+  const result = () => ({ list, trip, rows: [...rows, ...stock], stock, refillReserve });
   // Do not create a GE trip, a bank-verification trip or a funding goal solely for extras.
   if (!rows.some(r => !r.optional && r.channel === 'ge' && r.qty > 0) || !state.connected || !state.bankSeen
     || !state.owned || state.owned.bankSavedAt !== undefined || cash === null || prices?.status !== 'live') return result();
   if (rows.some(r => !r.optional && r.channel === 'ge' && !usable(prices.buy(r.name, r.id)))) return result();
   const budget = budgetOf(rows, list.coins, coinsOf(state));
   if (budget.unpriced || budget.unknownRows || budget.shortfall !== 0) return result();
-  // Keep one full current consumable refill and the declared fares, in addition to paying current purchases.
-  let refill = list.coins;
-  for (const line of list.required.filter(l => !isReusable(l.nameEn))) {
-    const quote = prices.buy(line.nameEn, line.id);
-    if (!usable(quote)) return result();
-    refill += quote.price * Math.ceil(line.count / (doseKind(line.nameEn)?.per ?? 1));
-  }
-  let remaining = Math.max(0, cash - budget.required - list.coins - refill);
+  // Keep one full current consumable refill and fares in addition to current purchases.
+  if (refillReserve === null) return result();
+  let remaining = Math.max(0, cash - budget.required - list.coins - refillReserve);
   const candidates = steps.flatMap(s => s.stockItems?.length ? [{ ...s, itemsRequired: s.stockItems, goalItemsRequired: undefined, itemsRecommended: [] }] : []);
   const candidateList = aggregateShopping(candidates);
   // Allocate candidates together with every current line; alternatives cannot spend the same bank stock twice.

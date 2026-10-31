@@ -54,9 +54,8 @@ export function SkillsPage({ param, selectedSkill, goal }: { param?: string; sel
           <div className="page">
             <Eyebrow>TRAINING</Eyebrow>
             <h2 className="la-t">Choose a skill</h2>
-            <p className="muted">Pick a skill on the left: its recommended method, the calculator, the leveling plan and the reference open here.</p>
-            <h3 className="subhead">{xpData.title}</h3>
-            <XpTable />
+            <p className="muted">Select a skill to see its current method, required kit, destination and next training stage.</p>
+            <p className="small muted">An active training plan opens here automatically. XP tables and calculations remain in Calculator and Reference.</p>
           </div>
         )}
       </div>

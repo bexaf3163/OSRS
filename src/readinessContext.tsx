@@ -17,6 +17,7 @@ import { trackedTraining, type TrackedTraining } from './lib/trackedTraining';
 import { useFeatures } from './lib/features';
 import { priorityOf, styleOf } from './lib/playStyle';
 import { useTradeRestriction } from './lib/useTradeRestriction';
+import { resolveActiveActivity } from './lib/activeActivity';
 
 const Ctx = createContext<ReadinessEngine | null>(null);
 const TrainingCtx = createContext<TrackedTraining | null>(null);
@@ -55,6 +56,16 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
 
 /** The same virtual training step for Skills, Path, preparation, Shopping and funding. Never part of saved quest progress. */
 export const useTrackedTraining = () => useContext(TrainingCtx);
+
+/** Gear and Shopping use the same admitted active skill/game/route context. */
+export function useActiveActivity() {
+  const engine = useReadinessEngine();
+  const training = useTrackedTraining();
+  const bridge = useBridge();
+  return useMemo(() => resolveActiveActivity({ ...engine.ctx, dependencies: engine.dependencies, training,
+    activeStepId: engine.ctx.state.connected && bridge.inGame ? bridge.activeStepId : null,
+  }), [engine, training, bridge.inGame, bridge.activeStepId]);
+}
 
 export function useReadinessEngine(): ReadinessEngine {
   const v = useContext(Ctx);

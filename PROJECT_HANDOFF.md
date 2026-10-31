@@ -78,6 +78,8 @@ canonical current action / next phase → app + bridge payload → single Java H
 new observed levels / inventory / equipment / bank / quest state recompute the plan
 ```
 
+Cross-page activity selection lives in `src/lib/activeActivity.ts` with `useActiveActivity` in `readinessContext.tsx`. Gear and Shopping must use it rather than independently guessing the next quest/fight.
+
 Do not construct independent plans in Path, Skills, Gear, Shopping and the plugin. Those are consumers/projections of shared state. A display fix must not silently change the underlying requirements or completion rules.
 
 ### Responsibility map
@@ -154,7 +156,7 @@ The broken hardcoded2026 map URL returned404. The replacement resolves the Wiki'
 
 ## Current verification
 
-Local 2.81.12 source: types/build passed; data validation found 0 errors/0 warnings; 2,426 unit tests across 204 files passed; the complete browser suite, isolated native-shell E2E, Java testClasses and fresh plugin jar passed. Documentation guards and an isolated execution of the release handoff/receipt generator passed. Exact-source Checks/Release and independent Portable download verification also passed; the receipt above records the exact source, runs and digest. No real-game verification is claimed.
+2.81.13 local source: types/build and fresh plugin jar passed; data validation 0 errors/0 warnings; 2,433 unit tests across 205 files; full Java suite 647 tests/0 failures; isolated native-shell E2E passed. The complete browser regression run identified an obsolete shortfall assertion after Checkout moved; the final focused Shopping/Gear/Journal/Skills cases pass after that assertion and the final unknown-budget wording/duplicate-action changes. Full exact-source CI, including the complete browser suite and isolated packaged Portable, must pass before release; independent delivery evidence belongs in the receipt above. No real-game verification is claimed.
 
 ## Completed baseline — preserve, do not redo
 
@@ -163,6 +165,7 @@ Local 2.81.12 source: types/build passed; data validation found 0 errors/0 warni
 |2.80.8–12|Protected persistence/recovery, backup receipts and pre-write external-revision guards; RuneLite heap minimum. Not an automatic merger/watcher/lock or power-loss guarantee.|
 |2.80.13–17|Quest-entry food, physical alternative withdrawals, consumer-specific skill proofs, F2P checkpoints, acquisition fees separate from unit prices, one shared material allocator and method-selection integration.|
 |2.80.18–2.81.3|Compact skill access, model-driven combat/gathering/processing, staged Optional/training, per-recipe feasibility/batches. Basic Firemaking, Prayer, Runecraft and Superheat adapters already exist.|
+|2.81.13|Contextual Journal/selected quest, Gear/current activity, compact Skills index/Calculator reference, and Shopping Checkout; shared activity selection and protected refill budget. Accepted Ledger/fonts unchanged.|
 |2.81.4–6|Conditional processing/Ranged goal demand; one followed-Skills preparation/Shopping/funding lifecycle, with explicit goals and no fabricated XP.|
 |2.81.7–10|Complete Magic gear comparisons, selected physical tools, quest-XP alternatives, conservative account scope, tool capability versus purchase catalogues, carried versus actually worn gathering capacity.|
 |2.81.11|Retired duplicate UI controls/plans/report/matrix; preserved Ledger and active engines/storage/helpers; repaired shared maps with disclosed archival imagery and retry.|
@@ -184,27 +187,15 @@ Extras require an already-needed GE purchase, a live connection, a bank read in 
 
 **Coverage limits:** reusable kits use shared method/tool/upgrade declarations across supported skills. Quantified extra consumables currently use supported processing and ordinary F2P Ranged forecasts. Unsupported Magic/melee/mixed-goal quantities are not invented. Optional potion stock is not selected; current potion refill costs are reserved in doses/pieces correctly. All of this needs Claude's live acceptance; extend missing model contracts rather than copying another skill's purchasing code.
 
-### Next UI task — Journal page usefulness
+### Contextual page improvements — 2.81.13
 
-Owner feedback, 2026-10-31: the session/resource counter does not justify occupying the whole right book page beside quests. Proposed layout: quest list/filters on the left; selected quest status, requirements, rewards and existing route/continue action on the right. A completed quest must show completed/review state, not invite repeating it; when every F2P quest is done, offer the existing next Skills/Optional activity rather than an invented quest. Reuse the existing quest data/actions; keep session statistics in a small optional section and preserve their underlying resource/session data. Do not invent replacement statistics or redesign fonts. This is queued feedback, not implemented in 2.81.12.
+Journal now keeps filters/quest selection on the left and the selected quest's status, QP reward, current-part requirements and existing route action on the right. Completed/skipped quests offer Review route; all route quests complete offers existing Skills. Saved-only completion is labelled honestly. Session/resource history is retained in one closed section, not a whole book page; explicit session/legacy goals links still open it. Browsing never marks progress.
 
-### UI review queue — Gear, Skills and Shopping
+Gear and Shopping use the shared `resolveActiveActivity` / `useActiveActivity`: incomplete followed training, otherwise admitted live active route, otherwise the next route step. Completed/leftover synthetic activities never become fallbacks. This is cross-page context selection, not another training/acquisition engine. Gear compares melee only for the actual supported activity; other skills show current preparation from the existing readiness engine and all live equipment slots. It does not present the old sample cow/future fight as a current recommendation. Mandatory shopping and a quoted current consumable refill/fare reserve protect upgrade spending; unread refill prices cannot become zero.
 
-Owner request2026-10-31: review what belongs in each page and replace filler with the next useful decision. These are proposed changes, not shipped2.81.12 UI changes. Preserve Ledger/fonts, existing engines, data and actions; do not fill every empty space just to fill the book.
+Shopping keeps requirements on the left and an activity-specific Checkout on the right: current cost, checked cash, optional bank stock, refill allowance and confirmed shortfall. One primary action reuses funding, copy-order or preparation. Detailed budget calculations stay secondary. Skills keeps the same Ledger typography with a readable two-column icon index, a useful selection/tracked prompt instead of the unselected XP table, one existing Plan entry and a closed XP table in Calculator. Canonical phased training/model behavior is unchanged by this layout batch.
 
-| Section | Left page | Right page / default decision |
-|---|---|---|
-|Gear|Compact current kit, with relevant style/tool slots and live/remembered provenance.|One recommendation for the actual active activity: what to wear/withdraw/buy, a short measured/modelled benefit and affordable cost. Show "no worthwhile change" or unchecked state honestly; other comparisons/calculations stay secondary.|
-|Skills|Compact skill icons, levels and useful F2P checkpoint markers.|Current selected/tracked skill: this phase/goal/location, relevant kit/preparation, next worthwhile milestone and one Follow/Continue action. Balanced default; XP/Money remain simple alternatives. A raw XP table is Calculator/reference material, not the default right-page filler.|
-|Shopping|Required purchases/withdrawals/equipment actions, with compact optional bank stock.|Checkout for the same activity: current cost, available coins, protected refill/travel reserve, optional stock cost and any actual shortfall; one appropriate next action to bank/GE/funding. Do not allocate a whole page to a tiny Coin purse figure and unrelated notices.|
-
-Source findings to resolve before changing layout:
-- Gear currently builds its supply reserve from nextStep(store steps), while Shopping now prioritizes tracked training. Introduce/reuse one canonical active-activity resolution so recommendations and reserves agree; verify with an active skill while the quest route points elsewhere.
-- Gear explicitly falls back to a cow comparison when no supported opponent is selected. Prefer an honest no-context/setup state over an irrelevant comparison presented as the useful default. Do not claim a current bug from historical screenshots; reproduce the state with fixtures.
-- Skills currently displays the raw XP table when no skill is selected. Prefer the current tracked/selected skill or a concise selection prompt; no invented cross-skill recommendation or compulsory grind.
-- Shopping already has required grouping, budget, bank stock and earning links. Recompose those existing consumers rather than adding new engines, duplicate shopping/calculators, controls or tabs. Keep required and optional amounts distinct; unknown coins/prices/bank are never zero.
-
-Keep Money focused on earning, Journey on the current instruction, and Journal on quests. Share underlying activity/kit/budget facts without reproducing every section's full content on every page. Validate empty/offline/unknown/completed/budget-shortfall states, desktop wrapping and actual actions, not just populated screenshots.
+Targeted automated coverage includes cross-page followed Ranged context versus active route, non-melee gloves/equipment, poor/rich bank stock, Journal selection/filter/review/completed/unknown completion/session retention and unchanged progress. Full-source and release verification must be recorded below before calling this batch delivered. All real-game checks remain Claude's responsibility.
 
 ### P2 — finish staged Skills/Optional review using the existing engines
 

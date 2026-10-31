@@ -31,6 +31,16 @@ function run(s = state(), p = prices(), st = step()) {
 const extras = (r: ReturnType<typeof run>) => r.stock.reduce((sum, row) => sum + (row.cost ?? 0), 0);
 
 describe('shared optional bank stocking', () => {
+  it('exposes the refill reserve even when current supplies are already owned, without creating a GE trip', () => {
+    const r = run(state(2000, { 'Iron arrow': 100 }));
+    expect(r.refillReserve).toBe(200);
+    expect(r.stock).toEqual([]);
+    expect(exchangePlan(r.rows).items).toEqual([]);
+  });
+  it('keeps an unavailable refill price unknown rather than treating it as zero', () => {
+    expect(run(state(), prices({ buy: () => null })).refillReserve).toBeNull();
+    expect(run(state(), prices({ status: 'offline' })).refillReserve).toBeNull();
+  });
   it('buys the next two useful reusable items before a larger ammunition reserve, keeping a refill funded', () => {
     const s = state(), r = run(s);
     expect(r.stock.filter(row => row.reusable).map(row => row.name)).toEqual(['Oak shortbow', 'Willow shortbow']);

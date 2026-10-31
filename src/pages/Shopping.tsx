@@ -5,10 +5,10 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useStore } from '../store';
-import { useReadinessEngine, useTrackedTraining } from '../readinessContext';
+import { useReadinessEngine, useTrackedTraining, useActiveActivity } from '../readinessContext';
 import { useBridge } from '../bridge';
 import { usePlayerState } from '../playerStateContext';
-import { currentStage, nextStep } from '../lib/next-step';
+import { currentStage } from '../lib/next-step';
 import { coinsOf } from '../lib/playerState';
 import { formatGp, plural } from '../lib/shopping';
 import {
@@ -113,7 +113,7 @@ export function ShoppingPage() {
   const { stages, progress, notify, setOwnedManual } = useStore();
   const engine = useReadinessEngine();
   const steps = engine.ctx.steps;
-  const { state: link, owned, activeStepId, syncPlan, questPoints } = useBridge();
+  const { state: link, owned, syncPlan, questPoints } = useBridge();
   const { state: player } = usePlayerState();
   const prices = usePriceView(true);
   const [scope, setScopeState] = useState<ScopeKind>(loadScope);
@@ -140,12 +140,8 @@ export function ShoppingPage() {
   };
 
   const training = useTrackedTraining();
-  // The step in progress: the one started in the game, else the next open one the route allows.
-  const { dependencies, ctx: { qp: effectiveQp } } = engine;
-  const current = useMemo(() => {
-    const started = activeStepId && steps.some((s) => s.id === activeStepId) ? activeStepId : null;
-    return training && !training.complete ? training.step.id : started ?? nextStep(steps, progress, effectiveQp, dependencies)?.id ?? null;
-  }, [activeStepId, steps, progress, effectiveQp, dependencies, training]);
+  const activity = useActiveActivity();
+  const current = activity.step?.id ?? null;
 
   // A followed skill plan (Skills → Follow this plan) leads the game instead of the quest route: its current step's tools come first in the list.
   const tracked = useTracked();
@@ -167,12 +163,12 @@ export function ShoppingPage() {
       const stocked = scope === 'trip' && selected.some(s => s.stockItems?.length) ? stockUpShopping(selected, shared, prices) : null;
       const { list, trip } = stocked ?? scopeList(selected);
       const rows = stocked?.rows ?? shopRows(list, { ...shared, trip });
-      return { selected, list, rows, error: false };
+      return { selected, list, rows, refillReserve: stocked?.refillReserve ?? null, error: false };
     } catch {
-      return { selected: [], list: { required: [], recommended: [], coins: 0 }, rows: [] as ShopRow[], error: true };
+      return { selected: [], list: { required: [], recommended: [], coins: 0 }, rows: [] as ShopRow[], refillReserve: null, error: true };
     }
   }, [scope, steps, progress, current, range, player, prices, followed, questPoints]);
-  const { selected, list, rows, error } = built;
+  const { selected, list, rows, error, refillReserve } = built;
 
   const connected = link === 'online';
   const loaded = owned !== null;
@@ -224,7 +220,7 @@ export function ShoppingPage() {
     if (!exchange) return;
     notify(await copy(exchange) ? '📋 The exchange list is copied' : 'Could not copy: the clipboard is not available');
   };
-  const backHref = current ? `#/step/${current}` : '#/';
+  const backHref = activity.href;
 
   const rowView = (r: ShopRow, plain = false) => {
     const live = r.own.source === 'game';
@@ -284,7 +280,6 @@ export function ShoppingPage() {
       <div className={`card shop-empty is-${kind}`} role="status">
         <p><strong>{t.head}</strong></p>
         <p className="muted small">{t.body}</p>
-        {(kind === 'no-requirements' || kind === 'all-owned') && current && <a className="btn btn-primary" href={backHref}>Back to the step</a>}
         {kind === 'no-plan' && <button type="button" className="btn" onClick={() => setScope('range')}>Plan by stages</button>}
       </div>
     );
@@ -379,21 +374,30 @@ export function ShoppingPage() {
         </details>
       )}
 
-      {listShown && exchange && (
-        <p className="shop-buttons">
-          <button type="button" className="btn btn-primary" onClick={() => void copyList()}>📋 Copy the exchange list</button>
-          {connected && <span className="muted small"> The same list shows at the exchange in the game.</span>}
-        </p>
-      )}
 
     </div>
     </Page>
-    <Page side="r" className="shop-purse" label="Coin purse">
+    <Page side="r" className="shop-purse" label="Trip preparation">
     <div className="page la-scroll">
-      <Eyebrow>COUNTING HOUSE</Eyebrow>
-      <h2 className="la-t">Coin purse</h2>
+      <Eyebrow>TRIP PREPARATION</Eyebrow>
+      <h2 className="la-t">Ready for the next step</h2>
+      <p className="small muted">{scope === 'range' ? `Selected stages ${range.from}–${range.to}` : activity.step?.title ?? 'Choose a route or training plan'}</p>
+      {empty !== 'error' && <section className="card" aria-label="Checkout">
+        <dl className="checkout-totals">
+          <div><dt>Available coins</dt><dd>{coins.total === null ? 'Not fully checked' : `${formatGp(coins.total)} gp`}</dd></div>
+          <div><dt>Required now</dt><dd>{budget.unpriced || budget.unknownRows ? 'Not fully checked' : `≈ ${formatGp(budget.required + budget.coinsForSteps)} gp`}</dd></div>
+          {bankStock.length > 0 && <div><dt>Optional bank stock</dt><dd>≈ {formatGp(bankStock.reduce((sum, row) => sum + (row.cost ?? 0), 0))} gp</dd></div>}
+          {refillReserve !== null && <div><dt>Keep for a refill / fares</dt><dd>≈ {formatGp(refillReserve)} gp</dd></div>}
+          {budget.shortfall !== null && budget.shortfall > 0 && <div className="warn-text"><dt>Shortfall</dt><dd>{formatGp(budget.shortfall)} gp</dd></div>}
+        </dl>
+        <p className="small muted">{budget.unknownRows ? 'Check your bank before buying: unread items may already be yours.' : budget.unpriced ? `${budget.unpriced} without a price; the required total is not confirmed.` : empty === 'all-owned' ? 'Current requirements are covered. Follow Preparation for what to carry.' : 'Required items come first. Future bank stock stays optional.'}</p>
+        <div className="shop-buttons">
+          {budget.shortfall !== null && budget.shortfall > 0 ? <a className="btn btn-primary" href={backHref}>Prepare funding</a> : exchange ? <button type="button" className="btn btn-primary" onClick={() => void copyList()}>📋 Copy the exchange list</button> : current ? <a className="btn btn-primary" href={backHref}>Review preparation</a> : <a className="btn btn-primary" href="#/">Open Journey</a>}
+          {exchange && budget.shortfall !== null && budget.shortfall > 0 && <button type="button" className="link-btn" onClick={() => void copyList()}>Copy the exchange list</button>}
+        </div>
+      </section>}
       {listShown && purchase && (
-        <div className="shop-budget" aria-label="Budget">
+        <details className="shop-budget" aria-label="Budget"><summary className="small">Budget details</summary>
           {split ? (
             <>
               <p className="small">
@@ -432,7 +436,7 @@ export function ShoppingPage() {
             {total.optional > 0 && <p className="small muted">Optional extras ≈ {formatGp(total.optional)} gp, not counted above.</p>}
             <p className="small muted">Purchase quantities cover the selected steps, not one inventory; see Path for what to carry now. GE estimates are not offers. Cached prices are labelled; unpriced costs are excluded. NPC prices are separate.</p>
           </details>
-        </div>
+        </details>
       )}
       {empty !== 'error' && empty !== 'no-plan' && selected.length > 0 && (
         <RoadSupplies steps={selected} locate={scope !== 'range' || (range.openOnly && range.from <= currentStage(steps, progress))} heading="For the road" quietWhenEmpty />

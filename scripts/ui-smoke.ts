@@ -413,12 +413,57 @@ async function stockScenarios(browser: Browser) {
       expect((await stock.innerText()).includes('Willow shortbow'), 'stock: second useful bow is included instead of stopping at a model-rate review');
       const snapshot = await page.evaluate(() => (window as any).__posts.filter((p: any) => p.path === '/prep-plan').at(-1)?.body?.shopping);
       expect(snapshot?.items?.some((i: any) => i.name === 'Oak shortbow'), 'stock: the same optional purchase reaches the in-game exchange list');
-      expect(!await page.locator('.shop-budget').innerText().then(t => /short [1-9]/.test(t)), 'stock: optional purchases do not create a funding shortfall');
+      expect(await page.getByRole('region', { name: 'Checkout', exact: true }).getByText('Shortfall', { exact: true }).count() === 0, 'stock: optional purchases do not create a funding shortfall');
       await page.screenshot({ path: 'audit-temp/stock-shopping.png' });
     } else expect(await stock.count() === 0, 'stock: a small budget retains the current kit without optional purchases');
     expect(await noOverflow(page) && errors.length === 0, `stock (${cash}gp): Ledger fits without runtime errors`);
+    await page.goto(`${BASE}#/gear`);
+    await page.getByRole('region', { name: 'Activity kit' }).waitFor();
+    expect((await page.getByRole('region', { name: 'Activity kit' }).innerText()).includes('Ranged'), 'context: Gear uses the followed Ranged plan while the route is active');
+    expect(await page.locator('.gear-reco').count() === 0 && !/Cow|attacks with crush/.test(await text(page, '.gear-page .page-head')), 'context: a ranged kit has no unrelated melee comparison');
+    expect((await text(page, '.gear-now')).includes('Leather vambraces'), 'context: non-melee equipment includes gloves, not just the six melee slots');
+    await page.screenshot({ path: `audit-temp/context-gear-${cash}.png` });
     await page.context().close();
   }
+}
+
+async function workspaceScenarios(browser: Browser) {
+  const saved = (page: Page) => page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}').steps ?? {});
+  for (const width of [1000, 1440]) {
+    const { page, errors } = await open(browser, width, { progress: progressBefore('S4-03') }, '#/journal');
+    const before = JSON.stringify(await saved(page));
+    const quest = page.locator('.quest-select').nth(1);
+    const title = (await quest.locator('.quest-title').innerText()).trim();
+    await quest.click();
+    expect((await page.getByRole('complementary', { name: 'Selected quest' }).innerText()).includes(title), 'workspace: selecting a quest changes the right page');
+    expect(await page.getByRole('link', { name: 'Review route' }).count() === 1, 'workspace: completed quest offers review');
+    expect(await page.locator('.journal-session:not([open])').count() === 1, 'workspace: session statistics do not occupy the default quest page');
+    await page.locator('.journal-session > summary').click();
+    expect(await page.getByRole('heading', { name: /This session/i }).isVisible(), 'workspace: session statistics remain available');
+    expect(JSON.stringify(await saved(page)) === before, 'workspace: browsing quest details does not change progress');
+    await page.getByRole('group', { name: 'Quest filter' }).getByRole('button', { name: /^Blocked/ }).click();
+    if (await page.locator('.quest-select').count() === 0) expect((await page.locator('.la-r').innerText()).includes('Select a quest'), 'workspace: empty filter shows an honest prompt');
+    await page.screenshot({ path: `audit-temp/workspace-journal-${width}.png` });
+    expect(await noOverflow(page) && !errors.length, 'workspace: journal has no overflow or browser errors');
+    await page.goto(`${BASE}#/skills`);
+    expect(await page.locator('.skills-detail table').count() === 0, 'workspace: unselected Skills does not show a raw XP table');
+    expect(await page.locator('.skills-index .skill-card-link').evaluateAll(nodes => nodes.every(n => n.scrollWidth <= n.clientWidth + 1)), 'workspace: skill names fit the index');
+    await page.screenshot({ path: `audit-temp/workspace-skills-${width}.png` });
+    await page.locator('.skills-index .skill-card-link[href*="/ranged"]').click();
+    await page.getByRole('tab', { name: 'Calculator', exact: true }).click();
+    await page.getByText('XP table', { exact: true }).click();
+    expect(await page.locator('.skills-detail table').isVisible() && await noOverflow(page), 'workspace: XP table remains available on demand in Calculator');
+    await page.context().close();
+  }
+  const complete = Object.fromEntries(steps.map(step => [step.id, 'done']));
+  const { page, errors } = await open(browser, 1440, { progress: { ...progressBefore('S1-01'), steps: complete, gameMode: 'f2p' } }, '#/journal');
+  const card = page.getByRole('region', { name: 'Quest route complete' });
+  await card.waitFor();
+  expect(await card.getByRole('link', { name: 'Choose training' }).getAttribute('href') === '#/skills', 'workspace: finished quest route leads to existing training');
+  expect(/saved progress/.test(await card.innerText()), 'workspace: saved completion is not falsely presented as verified in game');
+  await page.screenshot({ path: 'audit-temp/workspace-quests-complete.png' });
+  expect(!errors.length, 'workspace: completed journal has no browser errors');
+  await page.context().close();
 }
 
 async function cleanupScenarios(browser: Browser) {
@@ -452,7 +497,7 @@ async function cleanupScenarios(browser: Browser) {
   expect(await page.evaluate(() => Number((window as unknown as { __updateChecks?: number }).__updateChecks)) === 1 && await page.getByRole('button', { name: 'Copy the report', exact: true }).count() === 0, 'cleanup: updates remain functional and retired Copy Report is absent');
   await page.goto(`${BASE}#/goals`);
   await page.waitForTimeout(500);
-  expect(await page.locator('.goals-table').count() === 0 && await page.getByRole('heading', { name: /Session/ }).count() > 0, 'cleanup: old goals links open the surviving journal/session');
+  expect(await page.locator('.goals-table').count() === 0 && await page.locator('.journal-session > summary').count() === 1, 'cleanup: old goals links open the surviving journal/session');
   await page.goto(`${BASE}#/skills/RA/ranged`);
   await page.getByRole('group', { name: 'Training priority' }).waitFor();
   expect(await page.locator('.skill-roadmap').count() === 0 && await page.locator('.training').count() === 1, 'cleanup: Ranged has one personalized plan, not a competing static roadmap');
@@ -653,7 +698,7 @@ async function ledgerScenarios(browser: Browser) {
   // The other pages' own menus.
   await page.evaluate(() => { location.hash = '#/journal'; });
   await page.waitForTimeout(500);
-  expect((await page.locator('.la-pg.la-r .journal-pane').innerText()).length > 20 && await page.getByRole('heading', { name: /Session/ }).count() > 0, 'ledger Journal: session remains alongside the quest list');
+  expect((await page.getByRole('complementary', { name: 'Selected quest' }).innerText()).length > 20 && await page.locator('.journal-session > summary').count() === 1, 'ledger Journal: session remains alongside the quest list');
   expect(await page.getByRole('link', { name: /^stage goals$/i }).count() === 0 && await page.locator('.goals-table').count() === 0, 'ledger Journal: retired stage matrix is absent');
   await page.evaluate(() => { location.hash = '#/reference'; });
   await page.waitForTimeout(500);
@@ -716,6 +761,10 @@ async function processingBudgetScenarios(browser: Browser) {
 }
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }
+  if (process.env.UI_ONLY === 'gear') { await gearScenarios(browser); return; }
+  if (process.env.UI_ONLY === 'workspace') { await workspaceScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await workspaceScenarios(browser);
   if (process.env.UI_ONLY === 'stock') { await stockScenarios(browser); return; }
   if (!process.env.UI_ONLY) await stockScenarios(browser);
   if (process.env.UI_ONLY === 'canonical-plan') { await canonicalPlanScenario(browser); return; }
@@ -1159,8 +1208,6 @@ async function run(browser: Browser) {
   if (process.env.UI_ONLY === 'phase') return;
   if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); await xpOnlyCombatScenario(browser); await retainedCombatFoodScenario(browser); return; }
-  if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }
-  if (process.env.UI_ONLY === 'gear') { await gearScenarios(browser); return; }
   if (process.env.UI_ONLY === 'money') { await moneyScenarios(browser); return; }
   for (const width of [1100]) {
     console.log(`Width ${width}`);
@@ -1362,7 +1409,8 @@ async function run(browser: Browser) {
       const gear = { equipment: [{ id: 1325, name: 'Steel scimitar', slot: 'weapon' }], inventory: [], coins: 500, bankCoins: 3000 };
       const stats = { attack: 20, strength: 20, defence: 1, ranged: 17 };
       const { page, errors } = await open(browser, width, {
-        status: { ...gear, stats },
+        progress: progressBefore('S4-03'),
+        status: { ...gear, stats, activeStepId: 'S4-03' },
         events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Coif', carried: 0, noted: 0, bank: 1 }] }],
       }, '#/gear');
       // Future unlocks are folded since 2.68: opened, the lock is there.
@@ -2000,7 +2048,7 @@ async function run(browser: Browser) {
     for (const width of [1000, 1440]) {
       const { page } = await open(browser, width, { progress: progressBefore('S3-03') }, hash);
       if (hash === '#/journal') {
-        expect(await page.locator('.la-pg.journal').count() === 2 && await page.locator('.la-pg.la-l .journal-pane').count() === 1 && await page.locator('.la-pg.la-r .journal-pane').count() === 1 && await page.locator('.journal-views').count() === 0, `Journal ${width}: quests and session remain without the retired stage navigation`);
+        expect(await page.locator('.la-pg.journal').count() === 2 && await page.locator('.la-pg.la-l .journal-pane').count() === 1 && await page.getByRole('complementary', { name: 'Selected quest' }).count() === 1 && await page.locator('.journal-session:not([open])').count() === 1 && await page.locator('.journal-views').count() === 0, `Journal ${width}: quests and session remain without the retired stage navigation`);
         expect(await noOverflow(page), `Journal ${width}: no horizontal overflow`);
         await page.context().close();
         continue;
@@ -2449,7 +2497,7 @@ async function shoppingScenarios(browser: Browser) {
       await page.waitForTimeout(1200);
       const body = await text(page, '.shop-page');
       expect(/Buy (at the Grand Exchange|in shops) · [12]/.test(body) && /Salmon[^]*×15/.test(body) && /5 more in the bank/.test(body), `shopping (${width} px): the buy list with the bank stock named`);
-      expect(/short [\d,]+ gp/.test(body) && await page.getByRole('link', { name: 'Raise the coins' }).count() === 1, `shopping (${width} px): the shortfall links to the coin plan`);
+      expect(/Shortfall[^]*[\d,]+ gp/.test(body) && await page.getByRole('link', { name: 'Prepare funding', exact: true }).count() === 1 && await page.locator('.shop-page .btn-primary').count() === 1, `shopping (${width} px): the shortfall links to the coin plan`);
       expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 1, `shopping (${width} px): one copy button for the exchange purchases`);
       expect(!/Still open|Partly owned|Unverified/.test(body), `shopping (${width} px): no status filter bar`);
       expect(/Bag and bank checked in this session/.test(body), `shopping (${width} px): the sync line says what was read`);
@@ -2463,7 +2511,7 @@ async function shoppingScenarios(browser: Browser) {
       const { page, errors } = await open(browser, width, base({ worn: true, items: [{ name: 'Mithril scimitar', carried: 1, noted: 0, bank: 0 }, { name: 'Salmon', carried: 20, noted: 0, bank: 0 }] }), '#/shopping');
       await page.waitForTimeout(1200);
       const body = await text(page, '.shop-page');
-      expect(/Everything for this step is with you/.test(body) && await page.getByRole('link', { name: 'Back to the step' }).count() === 1, `shopping all owned (${width} px): said, with the way back`);
+      expect(/Everything for this step is with you/.test(body) && await page.getByRole('link', { name: 'Review preparation', exact: true }).count() === 1 && await page.locator('.shop-page .btn-primary').count() === 1, `shopping all owned (${width} px): said, with the way back`);
       expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 0 && !/Purchases/.test(body), `shopping all owned (${width} px): no copy button, no budget`);
       expect(!errors.length, `shopping all owned (${width} px): no console errors ${errors.join('; ')}`);
       await shot(page, `owned-${width}`);
@@ -2484,6 +2532,7 @@ async function shoppingScenarios(browser: Browser) {
       await page.waitForTimeout(1200);
       const body = await text(page, '.shop-page');
       expect(/Not confirmed · \d/.test(body) && /Open your bank in RuneLite to refresh/.test(body), `shopping unknown bank (${width} px): not confirmed, with the honest way to refresh`);
+      expect((await page.getByRole('region', { name: 'Checkout', exact: true }).innerText()).includes('Not fully checked'), 'checkout: unread bank cash is not zero');
       expect(!/Everything for/.test(body), `shopping unknown bank (${width} px): no success message`);
       await shot(page, `unknown-${width}`);
       await page.context().close();
@@ -2714,16 +2763,25 @@ async function gearScenarios(browser: Browser) {
       await shot(page, `reco-${width}`);
       await page.context().close();
     }
-    // The best wearable weapon and amulet and no coins: said once, with the reason; no action.
+    // Best wearable weapon/amulet, but unread supply ownership: do not claim the full budget was checked.
     {
       const { page, errors } = await open(browser, width, live([RUNE, STRENGTH], { attack: 40, strength: 40, defence: 1, hitpoints: 40 }, 0), '#/gear');
       await page.waitForTimeout(1200);
       const reco = await text(page, '.gear-reco');
-      expect(/No worthwhile change for this fight/.test(reco) && await page.locator('.gear-reco .btn').count() === 0, `gear none (${width} px): no worthwhile change, no button`);
-      expect(reco.split('No worthwhile change').length === 2, `gear none (${width} px): said once`);
+      expect(/Supply budget not fully checked/.test(reco) && /Confirm Preparation/.test(reco) && await page.locator('.gear-reco .btn').count() === 0, `gear none (${width} px): unread supplies stay explicit, no purchase button`);
+      expect(reco.split('Supply budget not fully checked').length === 2, `gear none (${width} px): said once`);
       expect(await noOverflow(page), `gear none (${width} px): no horizontal scroll`);
       expect(!errors.length, `gear none (${width} px): no console errors ${errors.join('; ')}`);
       await shot(page, `none-${width}`);
+      await page.context().close();
+    }
+    // Unknown supply costs cannot become a best-affordable-kit verdict.
+    {
+      const fixture = live([RUNE, STRENGTH], { attack: 40, strength: 40, defence: 1, hitpoints: 40 }, 5000);
+      const { page } = await open(browser, width, { ...fixture, marketUnavailable: true }, '#/gear');
+      await page.waitForTimeout(1200);
+      const recommendation = await text(page, '.gear-reco');
+      expect(recommendation.includes('Supply budget not fully checked') && !/best you can wear and afford/.test(recommendation), 'gear: unknown supplies do not produce an affordable-kit verdict');
       await page.context().close();
     }
     // Offline with a snapshot: keep the character and stale-state disclosure, without rendering its internal timestamp.

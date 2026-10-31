@@ -91,7 +91,7 @@ export function App() {
     case 'path': content = <PathPage focusStep={route.step} focusKey={route.key} />; break;
     case 'skills': content = <SkillsPage param={route.param} selectedSkill={route.skill} goal={route.goal} />; break;
     case 'quests':
-    case 'journal': content = <JournalPage />; break;
+    case 'journal': content = <JournalPage session={route.param === 'session'} />; break;
     case 'reference': content = <ReferencePage key={route.param ?? ''} section={route.param} />; break;
     case 'settings': content = <SettingsPage />; break;
     case 'shopping': content = <ShoppingPage />; break;

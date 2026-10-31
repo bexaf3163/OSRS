@@ -54,26 +54,26 @@ export interface GearAdviceView {
   pricesFailed: boolean;
 }
 
-export function useGearAdvice(step?: Step | null, opts: { reserve?: number; reserveUnknown?: boolean } = {}): GearAdviceView {
+export function useGearAdvice(step?: Step | null, opts: { reserve?: number; reserveUnknown?: boolean; strictContext?: boolean } = {}): GearAdviceView {
   const { progress, mode, steps } = useStore();
   const { gear, stats, owned, questsDone } = useBridge();
   const board = usePriceView(true);
   const prices = useMemo(() => gearMarketPrices(board), [board]);
 
-  const fightStep = fightStepFor(steps, progress, step);
+  const fightStep = opts.strictContext ? step && meleeHintApplies(step) && stepFoes(step).length ? step : null : fightStepFor(steps, progress, step);
   const input = useMemo<AdvisorInput>(() => ({
     // Levels from the game win over manual ones: they are exact and fresh.
     levels: { ...progress.levels, ...(stats ?? {}) },
     gear,
     owned,
-    mode,
+    mode: step?.bondBranch ? 'f2p' : mode,
     geQuotes: prices,
     ...gearQuestEvidence(steps, progress, questsDone),
     routeNeeds: routeNeeds(steps, (id) => isClosed(progress, id)),
     foes: fightStep ? stepFoes(fightStep) : [],
     ...(opts.reserve ? { reserve: opts.reserve } : {}),
     ...(opts.reserveUnknown ? { reserveUnknown: true } : {}),
-  }), [progress, stats, gear, owned, mode, prices, steps, fightStep, opts.reserve, opts.reserveUnknown, questsDone]);
+  }), [progress, stats, gear, owned, mode, prices, steps, fightStep, opts.reserve, opts.reserveUnknown, questsDone, step?.bondBranch]);
   const advice = useMemo(() => adviseGear(input), [input]);
   return { advice, input, fightStep, pricesReady: [...prices.values()].some(p => p.unit !== null), pricesFailed: board.status === 'offline' || board.status === 'baked' };
 }

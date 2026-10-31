@@ -1,5 +1,5 @@
 // The "Quests" screen: the route quests, the quest points and what they unlock.
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { Progress, Quest } from '../types';
 import { allQuests, BASE_QP, BASE_QUEST, stepById } from '../data';
 import { useBridge } from '../bridge';
@@ -46,7 +46,7 @@ function questRow(q: Quest, p: Progress, qp: number, fact: DependencyFact): Row 
 const matches = (f: Filter, s: Status) => f === 'all' || f === s || (f === 'done' && s === 'skipped');
 const questKey = (title: string) => title.trim().toLowerCase().replace(/[’`]/g, "'");
 
-export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
+export function QuestsPage({ embedded = false, render }: { embedded?: boolean; render?: (list: ReactNode, detail: ReactNode) => ReactNode } = {}) {
   const { progress, mode } = useStore();
   const qp = useQuestPoints();
   const { dependencies } = useReadinessEngine();
@@ -61,10 +61,9 @@ export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
   const count = (f: Filter) => rows.filter((r) => matches(f, r.status)).length + (matches(f, base) ? 1 : 0);
   const visible = rows.filter((r) => matches(filter, r.status));
   const selected = visible.find(r => r.quest.stepId === selectedId) ?? visible.find(r => r.status === 'available') ?? visible[0];
-  const selectedStep = selected ? stepById.get(selected.quest.stepId) : undefined;
+  const selectedStep = selected ? stepById.get(selected.href.slice('#/step/'.length)) : undefined;
 
-  return (
-    <div className={embedded ? 'journal-pane' : 'page'}>
+  const list = (<div className={embedded ? 'journal-pane' : 'page'}>
       <header className="page-head">
         {embedded ? <h2>Quests</h2> : <h1>Quests</h1>}
         <p className="muted">{count('done')} of {rows.length + 1} · quest points {qp}</p>
@@ -79,7 +78,6 @@ export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
         ))}
       </div>
 
-      <div className="quest-workspace">
       <ul className="quest-list">
         {matches(filter, base) && (
           <li className="quest is-done">
@@ -114,6 +112,9 @@ export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
           </li>
         ))}
       </ul>
+      {!visible.length && !matches(filter, base) && <p className="muted empty">Nothing here.</p>}
+  </div>);
+  const detail = (<>
       {selected && <aside className="card quest-preview" aria-label="Selected quest">
         <div className="quest-preview-heading"><TypeIcon type="quest" /><h2>{selected.quest.title}</h2></div>
         <p className="muted">Stage {selected.quest.stage} · {selected.status}</p>
@@ -121,14 +122,19 @@ export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
         {notInGame(selected) && <p className="notice">Marked done here, but the game does not count it as finished: its quest points are not in your total.</p>}
         {selected.quest.parts.length > 0 && <p>{selected.partsDone} / {selected.quest.parts.length} route steps completed</p>}
         {selected.blocked && <p className="notice">First: {selected.blocked}</p>}
-        <a className="btn btn-primary" href={selected.href}>View route <IconChevron /></a>
+        <a className={`btn ${selected.status === 'done' || selected.status === 'skipped' ? 'btn-ghost' : 'btn-primary'}`} href={selected.href}>{selected.status === 'done' || selected.status === 'skipped' ? 'Review route' : selected.partsDone > 0 ? 'Continue quest' : 'View route'} <IconChevron /></a>
         <details className="quest-preview-requirements"><summary>Requirements</summary>
           {selectedStep?.itemsRequired?.length ? <ul>{selectedStep.itemsRequired.map((item,i) => <li key={`${item.nameEn}-${i}`}><ItemIcon src={item.iconUrl} alt="" size={28} /><span>{item.nameEn}{item.amount ? ` ×${item.amount}` : ''}</span></li>)}</ul> : <p className="muted small">No preparation items listed.</p>}
           {selectedStep?.doneWhen && <p className="muted small">Done when: {selectedStep.doneWhen}</p>}
         </details>
       </aside>}
-      </div>
-      {!visible.length && !matches(filter, base) && <p className="muted empty">Nothing here.</p>}
-    </div>
-  );
+
+    {!selected && <p className="muted empty">Select a quest from the list, or change the filter.</p>}
+    {rows.length > 0 && rows.every(row => row.status === 'done' && !notInGame(row)) && <section className="card" aria-label="Quest route complete">
+      <h2 className="subhead">Quest route complete</h2>
+      <p className="small muted">{gameDone ? 'These route quests are complete in the game.' : 'These route quests are marked complete in your saved progress.'} Choose a skill for your next activity.</p>
+      <a className="btn btn-primary" href="#/skills">Choose training</a>
+    </section>}
+  </>);
+  return render ? render(list, detail) : <div className="quest-workspace">{list}{detail}</div>;
 }

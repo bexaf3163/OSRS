@@ -287,3 +287,13 @@ dialog::backdrop{background:#050302cc;backdrop-filter:blur(3px)}
 .la-root button.la-stagehead:hover span{color:var(--la-ember)}
 /* Numbers and codes use the Ledger's display face too, not the system monospace. */
 :root .la-pg .row-level, :root dialog code, :root .la-pg code{font-family:var(--la-disp);font-variant-numeric:tabular-nums lining-nums}
+
+/* Existing Ledger surfaces: clearer role for each book leaf, without typography changes. */
+:root .skills-index .skill-grid-compact{grid-template-columns:repeat(2,minmax(0,1fr))}
+:root .journal .quest-preview{position:static;margin-top:0}
+:root .journal .quest-list{margin-top:16px}
+:root .journal-session{margin-top:20px;padding-top:12px;border-top:1px solid var(--la-goldd)}
+:root .checkout-totals{margin:0;display:grid;gap:10px}
+:root .checkout-totals>div{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+:root .checkout-totals dt{color:var(--la-ink2)}
+:root .checkout-totals dd{margin:0;font-weight:600}
