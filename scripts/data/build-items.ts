@@ -1,4 +1,4 @@
-// Builds src/data/f2p-items.json from the OSRS Wiki and fills in wikiItemId and iconUrl for the items in steps.json.
+// Builds src/data/generated/f2p-items.json from the OSRS Wiki and fills in wikiItemId and iconUrl for the items in steps.json.
 // It needs a network. Run: npm run build-items (about 2–4 minutes, the wiki asks not to hurry).
 //
 // The data is from the wiki only: the description, trader prices, alchemy, shops, drops, spawns.
@@ -11,8 +11,8 @@ import type { Step, StepItemRequirement, WikiItemDetail } from '../../src/types/
 import { fetchItemDetail, type MappingEntry } from '../../src/services/wikiApi.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const STEPS = `${root}src/data/steps.json`;
-const OUT = `${root}src/data/f2p-items.json`;
+const STEPS = `${root}src/data/authored/steps.json`;
+const OUT = `${root}src/data/generated/f2p-items.json`;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 
 /** The key F2P items outside the route: ores, bars, tools, fish, runes, equipment. */

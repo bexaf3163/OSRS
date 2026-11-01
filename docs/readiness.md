@@ -27,7 +27,7 @@ named in the cautions when the advice leans on the bank.
 ## Food
 
 - By healing, in pieces of the step's food (`ownedFood`: `carriedEq`, `bankEq`). The pre-entry guards (`preflight.ts` `countOf`, `Preflight.java`
-  `count`) do the same with the wiki food table (`src/data/threats.json`, bundled into the plugin). A food the table does not know counts as one
+  `count`) do the same with the wiki food table (`src/data/generated/threats.json`, bundled into the plugin). A food the table does not know counts as one
   piece of the named food, never more.
 - Edible items a later open quest needs are reserved (`foodReservations`) and taken out of the bag count first.
 - The trip need is the estimate's `nextTrip` (capped by the bag); the versions of an opponent are compared on the whole goal (food and time).

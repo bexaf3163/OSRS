@@ -41,7 +41,7 @@ function csp(): Plugin {
   };
 }
 
-/** The app reads only the item requirements of src/data/questMachines.json ({ stepId: [{ ids, nm }] }); the plugin jar keeps the whole file. */
+/** The app reads only the item requirements of src/data/generated/questMachines.json ({ stepId: [{ ids, nm }] }); the plugin jar keeps the whole file. */
 function questItemReqs(): Plugin {
   const ID = 'virtual:quest-item-reqs';
   return {
@@ -49,7 +49,7 @@ function questItemReqs(): Plugin {
     resolveId: (id) => (id === ID ? '\0' + ID : null),
     load(id) {
       if (id !== '\0' + ID) return null;
-      const raw = JSON.parse(readFileSync('src/data/questMachines.json', 'utf8')) as { quests: Record<string, { reqs?: Record<string, { o?: string; nm?: string; ids?: number[] }> }> };
+      const raw = JSON.parse(readFileSync('src/data/generated/questMachines.json', 'utf8')) as { quests: Record<string, { reqs?: Record<string, { o?: string; nm?: string; ids?: number[] }> }> };
       const out: Record<string, { ids?: number[]; nm?: string }[]> = {};
       for (const [step, q] of Object.entries(raw.quests)) {
         const items = Object.values(q.reqs ?? {}).filter((r) => r.o === 'item').map((r) => ({ ...(r.ids ? { ids: r.ids } : {}), ...(r.nm ? { nm: r.nm } : {}) }));

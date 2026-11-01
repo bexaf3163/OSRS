@@ -1,4 +1,4 @@
-// Builds src/data/threats.json from the OSRS Wiki: the max hits and speed of the step opponents (Bucket infobox_monster) and
+// Builds src/data/generated/threats.json from the OSRS Wiki: the max hits and speed of the step opponents (Bucket infobox_monster) and
 // how much health the free-version food restores (the first phrase "restores N Hitpoints" in the article). It needs a network.
 // Run: npm run build-threats (about a minute). No numbers of our own: only what is written in the wiki.
 
@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { templates } from './wiki.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/threats.json`;
+const OUT = `${root}src/data/generated/threats.json`;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 const API = 'https://oldschool.runescape.wiki/api.php';
 

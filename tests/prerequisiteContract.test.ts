@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { stepById } from '../src/data';
-import machines from '../src/data/questMachines.json';
+import { stepById, questMachinesJson as machines } from '../src/data';
 import { stepGuide } from '../src/domain/guide/inGameTarget';
 import { stepTargets } from '../src/domain/readiness/travelSupplies';
 import { questItemKeys } from '../src/domain/quests/questItems';

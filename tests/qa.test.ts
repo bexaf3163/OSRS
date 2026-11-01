@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { qa, type QaInput } from '../scripts/check/qa';
-import gear from '../src/data/gear.json';
-import questStages from '../src/data/questStages.json';
-import trainingMethods from '../src/data/trainingMethods.json';
-import majorLocations from '../src/data/majorLocations.json';
+import { gearJson as gear, questStagesJson as questStages, trainingMethodsJson as trainingMethods, majorLocationsJson as majorLocations } from '../src/data';
 import { allSteps, allLevelSkills } from '../src/data';
 
 const real = (): QaInput => ({

@@ -2,7 +2,7 @@
 
 The plugin follows a quest step the same way as [Quest Helper](https://github.com/Zoinkwiz/quest-helper): by what the player has done (chat and dialogue messages,
 the quest journal, items, place, variables), not only by place and bag. The order and conditions of Quest Helper (`ConditionalStep`) were extracted from its
-sources and live in `src/data/questMachines.json` — this is a plugin resource (`QhMachine.java` reads and evaluates it).
+sources and live in `src/data/generated/questMachines.json` — this is a plugin resource (`QhMachine.java` reads and evaluates it).
 Here are the scripts that build the file. None of this is needed to build the app or the plugin: it is needed when a new Quest Helper version comes out
 or a quest is added to the route.
 
@@ -16,7 +16,7 @@ The Quest Helper license (BSD 2-Clause) is in `THIRD_PARTY_NOTICES.md` in the re
 | `qhm/fetch_qh.py` | Clones Quest Helper (`--depth 1`, only `src/main/java`) and lays the quest sources out in `work/` |
 | `qhm/dump_consts.py` | Dumps the RuneLite API constants (`ItemID.GARLIC`, `NpcID.MORGAN`, `InterfaceID.Questjournal.TITLE`…) into `work/consts/` |
 | `qhm/jparse.py`, `qhm/interp.py` | A parser of the Java subset and the "symbolic" execution of each quest's `loadSteps()`: the result is a tree of steps with conditions |
-| `qhm/build.py`, `qhm/build_machines.py` | From the tree — the tables of nodes and conditions; `build_machines.py` writes `src/data/questMachines.json` |
+| `qhm/build.py`, `qhm/build_machines.py` | From the tree — the tables of nodes and conditions; `build_machines.py` writes `src/data/generated/questMachines.json` |
 | `qhm/qeval.py` | The reference evaluator (Python): three values "yes / no / unknown", latches, chat messages |
 | `qhm/golden.py` | Random and hand-picked sets of facts → the reference answers → `runelite-bridge/src/test/resources/qh-golden.json` |
 | `qhm/steps_info.py`, `qhm/export_fixture.py` | The tile, type and id of each Quest Helper step → `tests/fixtures/qh-steps.json` |
@@ -32,7 +32,7 @@ The working folder `work/` (it does not go into git) — or any other through `Q
 cd tools/qh-machines
 python qhm/fetch_qh.py            # the Quest Helper sources → work/ (work/QH_REVISION.txt says which commit was parsed)
 python qhm/dump_consts.py         # the RuneLite constants → work/consts/
-python qhm/build_machines.py      # src/data/questMachines.json (with --check it only compares and writes nothing)
+python qhm/build_machines.py      # src/data/generated/questMachines.json (with --check it only compares and writes nothing)
 python qhm/golden.py              # the reference vectors for QhGoldenTest
 python qhm/steps_info.py && python qhm/export_fixture.py   # tests/fixtures/qh-steps.json
 ```
@@ -42,7 +42,7 @@ highlight diverged) and `cd runelite-bridge && ./gradlew test` (`QhGoldenTest`: 
 
 If Quest Helper renamed or added a step:
 
-- the `k` field of the lines in `src/data/questStages.json` is the name of a Quest Helper step; a person sets it (the lines were written and checked by hand). A renamed step
+- the `k` field of the lines in `src/data/authored/questStages.json` is the name of a Quest Helper step; a person sets it (the lines were written and checked by hand). A renamed step
   — fix `k` on the line. A new step without a line is shown by `qhm/gaps.py`: decide whether it needs a line in the list.
 - the number of unreachable lines (`qhm/reach.py`) and of steps without a line (`qhm/gaps.py`) is capped in `tests/questMachines.test.ts`: it must not grow.
 

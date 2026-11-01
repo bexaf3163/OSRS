@@ -1,4 +1,4 @@
-// Builds src/data/portals.json — the ways between the surface, separate areas and dungeons (ladders, trapdoors, holes) the plugin points at when
+// Builds src/data/generated/portals.json — the ways between the surface, separate areas and dungeons (ladders, trapdoors, holes) the plugin points at when
 // the target is in another layer than the player. Source: the transport table of the Shortest Path plugin (Skretzo/shortest-path, BSD 2-Clause),
 // pinned to one commit so the file is reproducible. It needs a network. Run: npm run build-portals.
 //
@@ -11,7 +11,7 @@ import { dedupePortals, parseTransports, toRow } from '../../src/domain/travel/p
 const COMMIT = '99735452c7c257d3fe5ae79970429cdce907d571';
 const URL_TSV = `https://raw.githubusercontent.com/Skretzo/shortest-path/${COMMIT}/src/main/resources/transports/transports.tsv`;
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/portals.json`;
+const OUT = `${root}src/data/generated/portals.json`;
 
 const res = await fetch(URL_TSV, { headers: { 'User-Agent': 'OSRS-Path (https://github.com/bexaf3163/OSRS)' }, signal: AbortSignal.timeout(30_000) });
 if (!res.ok) throw new Error(`transports.tsv: HTTP ${res.status}`);

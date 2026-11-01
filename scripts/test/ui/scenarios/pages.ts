@@ -7,8 +7,8 @@ async function allPages(browser: Browser) {
   // All the pages: steps, skills, the reference — open without console errors, without a crash and horizontal scrolling.
   console.log('All the pages');
   const skillIds = [
-    ...(JSON.parse(readFileSync(new URL('../../../../src/data/skills.json', import.meta.url), 'utf8')) as { id: string }[]).map((x) => x.id),
-    ...(JSON.parse(readFileSync(new URL('../../../../src/data/members-skills.json', import.meta.url), 'utf8')) as { skills: { id: string }[] }).skills.map((x) => x.id),
+    ...(JSON.parse(readFileSync(new URL('../../../../src/data/authored/skills.json', import.meta.url), 'utf8')) as { id: string }[]).map((x) => x.id),
+    ...(JSON.parse(readFileSync(new URL('../../../../src/data/authored/members-skills.json', import.meta.url), 'utf8')) as { skills: { id: string }[] }).skills.map((x) => x.id),
   ];
   const routes = ['#/', '#/skills', '#/goals', '#/quests', '#/reference', '#/settings', '#/shopping', '#/gear',
     ...steps.map((x) => `#/step/${x.id}`), ...skillIds.map((id) => `#/skills/${id}`)];

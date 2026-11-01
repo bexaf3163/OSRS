@@ -1,14 +1,14 @@
-// npm run funding-coverage — writes docs/FUNDING_COVERAGE.md from src/data/fundingCoverage.json and fundingMethods.json: which of the wiki's free-to-play
+// npm run funding-coverage — writes docs/FUNDING_COVERAGE.md from src/data/authored/fundingCoverage.json and fundingMethods.json: which of the wiki's free-to-play
 // money-making guides the funding system can plan, which it cannot and why. No network; the data files are the record.
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { DATA_DIR } from '../check/paths.ts';
+import { dataFile } from '../check/paths.ts';
 
 interface Entry { id: string; status: 'supported' | 'unsupported'; family: string; reason?: string; methods?: string[]; note?: string }
 interface Coverage { version: number; generatedAt: string; source: string; entries: Entry[]; extras: Entry[] }
 interface Method { id: string; title: string; kind?: string; intensity?: string; rate: { basis: string; perHour: { typical: number } }; sources: { title: string; url: string; revision?: number }[] }
 
-const read = <T>(name: string): T => JSON.parse(readFileSync(`${DATA_DIR}/${name}.json`, 'utf8')) as T;
+const read = <T>(name: string): T => JSON.parse(readFileSync(dataFile(`${name}.json`), 'utf8')) as T;
 const cov = read<Coverage>('fundingCoverage');
 const methods = read<{ methods: Method[] }>('fundingMethods').methods;
 
@@ -20,7 +20,7 @@ for (const e of unsupported) byReason.set(e.reason ?? 'No reason recorded', [...
 const lines: string[] = [];
 lines.push('# Funding coverage');
 lines.push('');
-lines.push(`Generated from \`src/data/fundingCoverage.json\` (${cov.generatedAt}) against ${cov.source}. Do not edit by hand: change the data and run \`npm run funding-coverage\`.`);
+lines.push(`Generated from \`src/data/authored/fundingCoverage.json\` (${cov.generatedAt}) against ${cov.source}. Do not edit by hand: change the data and run \`npm run funding-coverage\`.`);
 lines.push('');
 lines.push(`${cov.entries.length} guides were read. **${supported.length} are planned by the engine**, ${unsupported.length} are not, each for a stated reason.`);
 lines.push('');

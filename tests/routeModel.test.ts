@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stagesFor, stepById, stepsFor } from '../src/data';
-import questStages from '../src/data/questStages.json';
+import { allSteps, stagesFor, stepById, stepsFor, questStagesJson as questStages } from '../src/data';
 import { alchMargin } from '../src/domain/economy/alchemy';
 import { carryoverOf, routeTrigger } from '../src/domain/prep/carryover';
 import { DAERO_SMALL, daeroAdvice } from '../src/domain/training/daero';

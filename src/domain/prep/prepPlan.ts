@@ -11,11 +11,10 @@
 // It buys nothing: the player decides and confirms.
 
 import type { Progress, Step, WikiItemDetail } from '../../types';
-import { itemById } from '../../data';
+import { itemById, recipesJson } from '../../data';
 import { foodCarry, type FoodCarry, type FoodHolding } from '../player/foodStock';
 import { THREATS } from '../../data/threats';
 import { stepFightNames } from '../combat/fightEstimate';
-import recipesJson from '../../data/recipes.json';
 import { npcSpot, nearestBank } from '../travel/stepPlaces';
 import type { NavTargetPayload, QuestInstruction } from '../../services/runeliteBridge';
 import { upgradeNav, type UpgradeRecommendation } from '../training/gearUpgradeRouter';

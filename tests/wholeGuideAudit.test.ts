@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../src/data';
-import stagesFile from '../src/data/questStages.json';
+import { allSteps, questStagesJson as stagesFile } from '../src/data';
 import { navigationTarget } from '../src/domain/guide/navigation';
 import { stepGuide } from '../src/domain/guide/inGameTarget';
 

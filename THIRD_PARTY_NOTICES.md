@@ -2,7 +2,7 @@
 
 ## Quest Helper
 
-The quest stages (`src/data/questStages.json`), the step state machines (`src/data/questMachines.json`), the reference files
+The quest stages (`src/data/authored/questStages.json`), the step state machines (`src/data/generated/questMachines.json`), the reference files
 (`tests/fixtures/qh-steps.json`, `runelite-bridge/src/test/resources/qh-golden.json`) and the generators (`tools/qh-machines`) were derived from the sources of the
 [Quest Helper](https://github.com/Zoinkwiz/quest-helper) RuneLite plugin: the order of steps, the conditions, the tiles and the highlights. The step texts were written and
 checked by hand. The step tiles (`tests/fixtures/qh-steps.json`) are also bundled in the RuneLite plugin
@@ -38,7 +38,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## Shortest Path
 
-The ways between the surface, separate areas and dungeons, and the staircases and ladders between floors (`src/data/portals.json`, bundled in the RuneLite
+The ways between the surface, separate areas and dungeons, and the staircases and ladders between floors (`src/data/generated/portals.json`, bundled in the RuneLite
 plugin as `portals.json`), were derived from the transport table (`src/main/resources/transports/transports.tsv`, commit `99735452`) of the
 [Shortest Path](https://github.com/Skretzo/shortest-path) RuneLite plugin by Skretzo and contributors, by `scripts/data/build-portals.ts`: only the rows that change the
 layer or the floor, with their tiles, object ids, menu words and requirements. The license of that repository, as published (its copyright line is a
@@ -84,4 +84,4 @@ The RuneLite BSD 2-Clause notice is included in `public/skill-icons/LICENSE.txt`
 
 ## Old School RuneScape item artwork
 
-The bundled item icons in `public/item-icons` are copies of the image URLs already referenced by the item catalog, downloaded from https://oldschool.runescape.wiki/ . They display the same game items when the app is offline. The artwork belongs to Jagex; caching these files does not change ownership. `src/data/iconAssets.json` records each source URL.
+The bundled item icons in `public/item-icons` are copies of the image URLs already referenced by the item catalog, downloaded from https://oldschool.runescape.wiki/ . They display the same game items when the app is offline. The artwork belongs to Jagex; caching these files does not change ownership. `src/data/authored/iconAssets.json` records each source URL.

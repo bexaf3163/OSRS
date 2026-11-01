@@ -1,4 +1,4 @@
-// Builds src/data/processing.json from scripts/data/processing.defs.json: what the processing engine (src/domain/training/processingRates.ts) needs, read from the OSRS
+// Builds src/data/generated/processing.json from scripts/data/processing.defs.json: what the processing engine (src/domain/training/processingRates.ts) needs, read from the OSRS
 // Wiki and checked, so a new recipe, furnace, anvil or fire is an entry in the definitions and a run of this script, not a change of code:
 //   - each recipe: the product page's free {{Recipe}} for the skill (level, XP, ticks at the Make-X pace, tools, materials and their amounts, output);
 //   - its success chance: the page's {{Skilling success chart}} line for a fire or range (cooking), or the recipe's "N% chance" note (an iron bar);
@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { chebyshev, locLines, mapPoint, middleOf, num, recipeTicks, successCharts, templates, wikitables, wikitext, type Pt } from './wiki.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/processing.json`;
+const OUT = `${root}src/data/generated/processing.json`;
 
 type Kind = 'furnace' | 'anvil' | 'fire' | 'altar';
 interface StationDef { objectName?: string; kind: Kind; page: string; row?: string; location?: string; near?: string; bank?: string }
@@ -29,8 +29,8 @@ interface LightDef { ticks: { page: string; evidence: string; ticks: number }; c
 interface Defs { consumableUses?: { name: string; page: string; uses: number; evidence: string }[]; stations: StationDef[]; recipes: RecipeDef[]; methods: Record<string, string[]>; light?: LightDef }
 
 const defs = JSON.parse(readFileSync(`${root}scripts/data/processing.defs.json`, 'utf8')) as Defs;
-const places = (JSON.parse(readFileSync(`${root}src/data/majorLocations.json`, 'utf8')) as { locations: Record<string, Pt & { label: string; kind: string }> }).locations;
-const methods = (JSON.parse(readFileSync(`${root}src/data/trainingMethods.json`, 'utf8')) as { methods: { id: string; skill: string; members: boolean }[] }).methods;
+const places = (JSON.parse(readFileSync(`${root}src/data/generated/majorLocations.json`, 'utf8')) as { locations: Record<string, Pt & { label: string; kind: string }> }).locations;
+const methods = (JSON.parse(readFileSync(`${root}src/data/authored/trainingMethods.json`, 'utf8')) as { methods: { id: string; skill: string; members: boolean }[] }).methods;
 
 const problems: string[] = [];
 const fail = (what: string, why: string) => problems.push(`${what}: ${why}`);
@@ -124,7 +124,7 @@ for (const d of defs.recipes) {
     if (!mat || !text.includes(s.successEvidence) || !ticks || !(num(box.level) > 0) || !(num(box.exp) > 0)
       || !Object.keys(runes).length || !(s.batchSize > 0) || !Number.isInteger(s.batchSize) || !mat.output1
       || !mat.skill1 || !(num(mat.skill1lvl) > 0)) { fail(d.id, 'spell/material evidence incomplete'); continue; }
-    const staffData = (JSON.parse(readFileSync(`${root}src/data/spells.json`, 'utf8')) as { staffs: Record<string, { name: string }> }).staffs;
+    const staffData = (JSON.parse(readFileSync(`${root}src/data/authored/spells.json`, 'utf8')) as { staffs: Record<string, { name: string }> }).staffs;
     const inputs = [];
     for (let i = 1; mat[`mat${i}`]; i++) {
       const name = plain(mat[`mat${i}`]);

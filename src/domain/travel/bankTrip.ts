@@ -1,7 +1,7 @@
 // The walk from a spot to its bank and back, banking included: one rule for every spot that banks, the combat training spots
 // (combatRoute/spots.ts) and the gathering spots (skillingRates.ts), so a fix to the walk reaches both.
 
-import locationsJson from '../../data/majorLocations.json';
+import { majorLocationsJson as locationsJson } from '../../data';
 import { BANKS, bankTiles, dist, TILES_PER_SECOND, type Point } from './travel';
 
 /** A spot as the bank trip needs it: where it is, the way in (ladders into a dungeon) and the named bank of majorLocations.json. */

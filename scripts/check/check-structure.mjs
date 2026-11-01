@@ -17,16 +17,33 @@ for (const f of src) { const t = readFileSync(f, 'utf8'); text.set(f, t); const 
 let idx = 0; const st = [], on = new Set(), ix = new Map(), low = new Map(), scc = [];
 const sc = (v) => { ix.set(v, idx); low.set(v, idx); idx++; st.push(v); on.add(v); for (const w of g.get(v) || []) { if (!ix.has(w)) { sc(w); low.set(v, Math.min(low.get(v), low.get(w))); } else if (on.has(w)) low.set(v, Math.min(low.get(v), ix.get(w))); } if (low.get(v) === ix.get(v)) { const c = []; let w; do { w = st.pop(); on.delete(w); c.push(w); } while (w !== v); if (c.length > 1) scc.push(c); } };
 for (const f of src) if (!ix.has(f)) sc(f);
-// Known debt that --strict still accepts until its batch lands (S8/S9 big files, S7 data); lower it as it shrinks, never raise it.
-const DEBT = { 'files over 1,000 lines': 5, 'JSON imports only in src/data': 27, 'folders of at most 25 files': 1 };
+// Known debt that --strict still accepts until its batch lands (S8 big files, src/styles.css); lower it as it shrinks, never raise it.
+const DEBT = { 'files over 1,000 lines': 5 };
 const check = (name, count, detail) => { const debt = DEBT[name] ?? 0; detail = [detail, debt && `known debt ${debt}${count < debt ? `, lower it to ${count}` : ''}`].filter(Boolean).join('; '); const ok = count <= debt; report.push(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? ' — ' + detail : ''}`); if (!ok) failed++; };
 check('runtime import cycles', scc.length, scc.map((c) => `${c.length} modules (${c.slice(0, 3).map((x) => x.replace('src/', '')).join(', ')}…)`).join('; '));
 const sized = [...walk('src'), ...walk('scripts'), ...walk('tests'), ...walk('runelite-bridge/src/main')].filter((f) => /\.(ts|tsx|java|css)$/.test(f)).map((f) => ({ f, n: readFileSync(f, 'utf8').split('\n').length }));
 const hard = sized.filter((x) => x.n > 1000), soft = sized.filter((x) => x.n > 600 && x.n <= 1000);
 check('files over 1,000 lines', hard.length, hard.map((x) => `${x.f} (${x.n})`).join(', '));
 report.push(`WARN  files over 600 lines: ${soft.length}`);
-const jsonOutside = src.filter((f) => !f.startsWith('src/data/') && /from\s*['"][^'"]+\.json['"]/.test(text.get(f)));
-check('JSON imports only in src/data', jsonOutside.length, `${jsonOutside.length} files`);
+// Code outside src/data, tests and scripts included, reads data through src/data/index.ts, so the data folders can move.
+const outside = [...walk('src'), ...walk('tests'), ...walk('scripts')].filter((f) => /\.(ts|tsx|mjs)$/.test(f) && !f.startsWith('src/data/'));
+const jsonOutside = outside.filter((f) => [...readFileSync(f, 'utf8').matchAll(/(?:from\s*|import\(\s*)['"]([^'"]+\.json)['"]/g)]
+  .some((m) => relative(process.cwd(), resolve(dirname(f), m[1])).replace(/\\/g, '/').startsWith('src/data/')));
+check('JSON imports only in src/data', jsonOutside.length, jsonOutside.join(', '));
+// Data JSON sits in src/data/authored (by hand) or src/data/generated, which holds exactly what src/data/manifest.json lists,
+// each from an existing command; an npm generator names the file it writes.
+const generated = JSON.parse(readFileSync('src/data/manifest.json', 'utf8')).generated;
+const npmScripts = JSON.parse(readFileSync('package.json', 'utf8')).scripts;
+const genFiles = readdirSync('src/data/generated').map((n) => (statSync(`src/data/generated/${n}`).isDirectory() ? `${n}/` : n));
+const dataProblems = [
+  ...readdirSync('src/data').filter((n) => n.endsWith('.json') && n !== 'manifest.json').map((n) => `${n} outside authored/ and generated/`),
+  ...genFiles.filter((n) => !(n in generated)).map((n) => `generated/${n} not in the manifest`),
+  ...Object.keys(generated).filter((n) => !genFiles.includes(n)).map((n) => `generated/${n} listed but missing`),
+  ...Object.entries(generated).filter(([n, c]) => (c.startsWith('npm run ')
+    ? !npmScripts[c.slice(8)] || !readFileSync(npmScripts[c.slice(8)].split(' ')[1], 'utf8').includes(`src/data/generated/${n}`)
+    : !existsSync(c.replace(/^python /, '')))).map(([n, c]) => `${c} does not write generated/${n}`),
+];
+check('generated data as src/data/manifest.json lists it', dataProblems.length, dataProblems.join(', '));
 const registry = /src\/domain\/pages\/pages\.ts$/; const hash = src.filter((f) => !registry.test(f) && /['"`]#\/[a-z]/.test(text.get(f)));
 check("no hard-coded '#/' links outside the page registry", hash.length, `${hash.length} files`);
 const keys = src.filter((f) => !f.endsWith('src/domain/persistence/storageKeys.ts') && /['"]osrs-put[:-]/.test(text.get(f)));

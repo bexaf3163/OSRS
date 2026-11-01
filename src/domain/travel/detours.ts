@@ -5,7 +5,7 @@
 // Every candidate is judged and the verdict is logged with its reason, so a suggestion that never shows can be explained from the log: the place is too far
 // out of the way, saves too little, has no price, or is a thing we do not fetch this way. The app only suggests: it never buys.
 
-import recipesJson from '../../data/recipes.json';
+import { recipesJson } from '../../data';
 import type { PrepLine, PrepPlan } from '../prep/prepPlan';
 import { OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MAX_EXCHANGE_TILES, TILES_PER_SECOND, bankOnRoute, dist, EXCHANGE, reachTiles, type Point, type TravelInput } from './travel';
 import { emitDecision, type DetourDecision } from './decisionLog';

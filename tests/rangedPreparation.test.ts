@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById, stepsFor } from '../src/data';
-import goalsData from '../src/data/goals.json';
+import { allSteps, stepById, stepsFor, goalsJson as goalsData } from '../src/data';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { nameKey } from '../src/domain/items/itemKey';

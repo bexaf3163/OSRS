@@ -1,6 +1,6 @@
 # Combat audit
 
-Written by `tests/combatAudit.test.ts` from `src/data/combatAudit.json` (revision 2026-10-28) and the route data. Do not edit by hand: change the ledger or the route and run `UPDATE_FIXTURES=1 npx vitest run tests/combatAudit.test.ts`.
+Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json` (revision 2026-10-28) and the route data. Do not edit by hand: change the ledger or the route and run `UPDATE_FIXTURES=1 npx vitest run tests/combatAudit.test.ts`.
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 

@@ -1,4 +1,4 @@
-// Builds src/data/combatFoes.json from the OSRS Wiki: what the combat estimate needs of a training opponent, for every version of the article
+// Builds src/data/generated/combatFoes.json from the OSRS Wiki: what the combat estimate needs of a training opponent, for every version of the article
 // (the level 12 and the level 27 Minotaur are separate): hitpoints, levels, the defence bonuses the player's hit is rolled against, and what it does
 // back (attack level and bonus, style, max hit, speed, aggression). monsters.json (build-gear) keeps one version per opponent for the gear advisor;
 // validate.ts checks the two agree. It needs a network. Run: npm run build-combat-foes. No numbers of our own: only the infobox.
@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { wikitext } from './wiki.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/combatFoes.json`;
+const OUT = `${root}src/data/generated/combatFoes.json`;
 
 /** The opponents whose fights are estimated: the route's, then the training spots' (scripts/data/trainers.defs.json, the one list to extend). */
 const TRAINER_FOES = (JSON.parse(readFileSync(`${root}scripts/data/trainers.defs.json`, 'utf8')) as { spots: { foe: string }[] }).spots.map((s) => s.foe);

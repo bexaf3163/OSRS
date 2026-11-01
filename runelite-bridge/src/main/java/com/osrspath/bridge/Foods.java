@@ -12,7 +12,7 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * How much each food heals (the app's src/data/threats.json, from the OSRS Wiki food articles). A pre-entry guard that asks for "10 Trout or other
+ * How much each food heals (the app's src/data/generated/threats.json, from the OSRS Wiki food articles). A pre-entry guard that asks for "10 Trout or other
  * food" counts what is carried by healing: 10 Cooked meat (3 each) are 4 Trout (7 each), not 10. The same rule as countOf in src/domain/readiness/preflight.ts.
  */
 @Slf4j

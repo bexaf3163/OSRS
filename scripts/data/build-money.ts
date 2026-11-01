@@ -1,4 +1,4 @@
-// Builds src/data/moneyMaking.json from the OSRS Wiki: the free-version money-making methods (the "Money making guide/
+// Builds src/data/generated/moneyMaking.json from the OSRS Wiki: the free-version money-making methods (the "Money making guide/
 // Free-to-play" list and the Mmgtable card of each article). It needs a network. Run: npm run build-money (about a minute).
 //
 // Only what the wiki says is taken: the name, the revenue per hour at the current exchange prices (a snapshot at the build date),
@@ -12,7 +12,7 @@ import type { MoneyData, MoneyMethod } from '../../src/types/index.ts';
 import { mmgFields, parseCapital, parseInputs, parseSkillsHtml, plain, skillsNote, wikiPlain } from './money-parse.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/moneyMaking.json`;
+const OUT = `${root}src/data/generated/moneyMaking.json`;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 const API = 'https://oldschool.runescape.wiki/api.php';
 

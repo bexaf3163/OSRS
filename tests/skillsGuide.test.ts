@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildEnvelope, envelopeKey, SNAPSHOT_VERSION } from '../src/domain/prep/prepEnvelope';
 import { skillGuides } from '../src/data/skillGuideRegistry';
-import locationsJson from '../src/data/majorLocations.json';
+import { majorLocationsJson as locationsJson } from '../src/data';
 import { membersSkills } from '../src/data';
 import {
   SKILL_NAMES, alternativesFor, bracketsOf, buildPath, chipText, currentIndex, f2pCovered, followedShoppingStep, onStatChanged, skillPathPayload,
@@ -10,7 +10,7 @@ import {
 import { aggregateShopping } from '../src/domain/prep/shopping';
 import { parseTracked, freeOnlyOf } from '../src/domain/training/skillTrack';
 
-// The 23 skill guides (src/data/skills/*.json): the schema, the coverage of every filter, the quest skips first, and the StatChanged rule the plugin follows.
+// The 23 skill guides (src/data/generated/skills/*.json): the schema, the coverage of every filter, the quest skips first, and the StatChanged rule the plugin follows.
 
 const METHODS = ['QUEST', 'GATHER', 'CRAFT', 'COMBAT', 'MINIGAME'];
 const LANES = ['fast', 'afk', 'both', 'alt'];

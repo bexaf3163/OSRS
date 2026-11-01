@@ -9,7 +9,7 @@
 //     bank wins whenever its shorter walk makes it better, and never only because it is near.
 // Nothing here names a tree, a rock, a spot or a bank: a new one, members ones too, is an entry in scripts/data/skilling.defs.json and a build.
 
-import skillingJson from '../../data/skilling.json';
+import { skillingJson } from '../../data';
 import { bankTrip } from '../travel/bankTrip';
 import { cascade, skillChance } from './skillChance';
 import { bankingPays, coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from '../market/lootValue';

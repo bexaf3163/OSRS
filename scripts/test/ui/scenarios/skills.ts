@@ -63,7 +63,7 @@ async function f2pSkillsScenarios(browser: Browser) {
   }
   {
     const { page, errors } = await open(browser, 1280, { theme: 'light', scale: 1.5,
-      progress: progressBefore('S9-01', { gameMode: 'members', levels: Object.fromEntries(readdirSync(new URL('../../../../src/data/skills/', import.meta.url)).filter(f => f.endsWith('.json')).map(f => [f.slice(0, -5), 30])) }) }, '#/skills');
+      progress: progressBefore('S9-01', { gameMode: 'members', levels: Object.fromEntries(readdirSync(new URL('../../../../src/data/generated/skills/', import.meta.url)).filter(f => f.endsWith('.json')).map(f => [f.slice(0, -5), 30])) }) }, '#/skills');
     expect(await page.locator('.f2p-skill-badge').count() === 0, 'Members: F2P preparation markers do not clutter the overview');
     const links = await page.locator('.skill-tile a').evaluateAll(els => els.map(el => ({ href: el.getAttribute('href')!, name: el.querySelector('.skill-name')!.textContent! })));
     for (const { href, name } of links) {
@@ -130,7 +130,7 @@ async function membersGatheringScenarios(browser: Browser) {
 }
 
 async function processingKitScenarios(browser: Browser) {
-  const processing = JSON.parse(readFileSync(new URL('../../../../src/data/processing.json', import.meta.url), 'utf8'));
+  const processing = JSON.parse(readFileSync(new URL('../../../../src/data/generated/processing.json', import.meta.url), 'utf8'));
   const watched = [...new Set<string>(processing.recipes.flatMap((r: any) => [...r.tools, ...r.inputs.map((i: any) => i.name)]))];
   const samples: { skill: string; code: string; level: number; target: number; title: string; watch: string; extraStats?: Record<string, number>; quests?: string[]; unchecked?: boolean; items: Record<string, number>; object: string | null }[] = [
     { skill: 'crafting', code: 'CR', level: 1, target: 2, title: 'Leather gloves', watch: 'Thread', items: { Needle: 1, Thread: 2, Leather: 7 }, object: null },
@@ -180,7 +180,7 @@ async function processingKitScenarios(browser: Browser) {
 }
 
 async function cookingCatchScenarios(browser: Browser) {
-  const processing = JSON.parse(readFileSync(new URL('../../../../src/data/processing.json', import.meta.url), 'utf8'));
+  const processing = JSON.parse(readFileSync(new URL('../../../../src/data/generated/processing.json', import.meta.url), 'utf8'));
   const watched = [...new Set<string>(processing.recipes.flatMap((r: any) => [...r.tools, ...r.inputs.map((i: any) => i.name)]))];
   const stats = { cooking: 45, hitpoints: 40 };
   const gear = { equipment: [], inventory: [{ id: 371, name: 'Raw swordfish', count: 7 }], coins: 0, bankCoins: 0 };
@@ -263,7 +263,7 @@ async function consumerDependencyScenarios(browser: Browser) {
 async function skillHandoverScenarios(browser: Browser) {
   for (const width of [1280]) {
     const stats = { fishing: 34, cooking: 30 };
-    const recipes = JSON.parse(readFileSync(new URL('../../../../src/data/processing.json', import.meta.url), 'utf8')).recipes;
+    const recipes = JSON.parse(readFileSync(new URL('../../../../src/data/generated/processing.json', import.meta.url), 'utf8')).recipes;
     const names = [...new Set<string>(['Small fishing net', 'Fishing rod', 'Fishing bait', 'Fly fishing rod', 'Feather', 'Lobster pot', 'Harpoon',
       ...recipes.filter((r: any) => r.skill === 'cooking').flatMap((r: any) => r.inputs.map((i: any) => i.name))])];
     const items = names.map(name => ({ name, carried: 0, noted: 0, bank: name === 'Raw tuna' ? 26 : name === 'Grapes' || name === 'Jug of water' ? 13 : 0 }));

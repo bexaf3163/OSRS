@@ -9,7 +9,7 @@ import { progressBefore, open, settle, expect, noOverflow, text } from '../harne
 async function shoppingScenarios(browser: Browser) {
   console.log('shopping');
   const scim = { id: 1329, name: 'Mithril scimitar', slot: 'weapon' };
-  const requirements = (JSON.parse(readFileSync(new URL('../../../../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { anyOf?: string[] }[] }[])
+  const requirements = (JSON.parse(readFileSync(new URL('../../../../src/data/authored/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { anyOf?: string[] }[] }[])
     .find(step => step.id === 'S3-08')!.itemsRequired ?? [];
   const absentAlternatives = [...new Set(requirements.flatMap(item => item.anyOf ?? []))].map(name => ({ name, carried: 0, noted: 0, bank: 0 }));
   const base = (o: { worn?: boolean; coins?: number; bankSeen?: boolean; items?: { name: string; carried: number; noted: number; bank?: number }[]; offline?: boolean }) => {

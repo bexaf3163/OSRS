@@ -3,8 +3,7 @@
 // in the "What is needed" list on the game screen (a click — an arrow and the path there).
 
 import type { GamePoint, MapLocation, Step, StepBranch } from '../../types';
-import npcJson from '../../data/npcLocations.json';
-import locationsJson from '../../data/majorLocations.json';
+import { npcLocationsJson as npcJson, majorLocationsJson as locationsJson } from '../../data';
 import { initialPoint, stepPoints } from './map';
 
 /** Where an NPC stands (the map of its OSRS Wiki article). steps — only for these steps: one name can belong to different NPCs. */

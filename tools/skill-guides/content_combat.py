@@ -2,7 +2,7 @@
 
 One call per step: s(skill, lo, hi, type, title, text, place, lane, members, **extra).
  lane: 'fast' (quest skips and the fastest accessible methods), 'afk' (AFK / budget) or 'both'.
- place: a key of src/data/majorLocations.json, 'wiki:Article' (the article's {{Map}} point) or 'tile:x,y,plane'.
+ place: a key of src/data/generated/majorLocations.json, 'wiki:Article' (the article's {{Map}} point) or 'tile:x,y,plane'.
  For QUEST steps lo/hi are recomputed by build.py from the quest's real XP reward on the wiki (a chain: each starts where the previous quest step ended).
 The method brackets follow the OSRS Wiki training guides (Fastest experience / Other methods); the step order in a lane is the order of preference.
 """

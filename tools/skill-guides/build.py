@@ -1,10 +1,10 @@
-"""Builds src/data/skills/<skill>.json (23 files) from content_*.py. Network: the OSRS Wiki (quest XP rewards, article map points), cached in work/.
+"""Builds src/data/generated/skills/<skill>.json (23 files) from content_*.py. Network: the OSRS Wiki (quest XP rewards, article map points), cached in work/.
 
     python tools/skill-guides/build.py            # write the files
     python tools/skill-guides/build.py --check    # build in memory and compare with the files (no writes)
     python tools/skill-guides/build.py --report   # also print every place with its resolved tile
 
-The coordinates are not typed: a place is a key of src/data/majorLocations.json or the {{Map}} point of a wiki article; the quest XP is read from the quest's
+The coordinates are not typed: a place is a key of src/data/generated/majorLocations.json or the {{Map}} point of a wiki article; the quest XP is read from the quest's
 {{SCP|Skill|xp}} reward lines, and the level a quest step ends on is computed from it with the XP table. Nothing here is a guess the wiki can contradict.
 """
 import json
@@ -16,7 +16,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
-OUT = os.path.join(ROOT, 'src', 'data', 'skills')
+OUT = os.path.join(ROOT, 'src', 'data', 'generated', 'skills')
 
 from wikifetch import wikitext  # noqa: E402
 import content_combat  # noqa: E402
@@ -91,8 +91,8 @@ def wiki_point(article):
     return None
 
 
-LOC = json.load(open(os.path.join(ROOT, 'src', 'data', 'majorLocations.json'), encoding='utf-8'))['locations']
-STEP_TITLES = {x['title']: x['id'] for x in json.load(open(os.path.join(ROOT, 'src', 'data', 'steps.json'), encoding='utf-8'))}
+LOC = json.load(open(os.path.join(ROOT, 'src', 'data', 'generated', 'majorLocations.json'), encoding='utf-8'))['locations']
+STEP_TITLES = {x['title']: x['id'] for x in json.load(open(os.path.join(ROOT, 'src', 'data', 'authored', 'steps.json'), encoding='utf-8'))}
 
 
 FAILED = []

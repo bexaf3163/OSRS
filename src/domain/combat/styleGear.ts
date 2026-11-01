@@ -1,7 +1,7 @@
 // "What to wear for magic and ranged": the wiki's recommendations (styleGear.json, build-style-gear) for your levels, quests and wallet.
 // The wiki's slot options go from the best to the available. We take the best suitable one that you already have, otherwise — by your means.
 
-import styleJson from '../../data/styleGear.json';
+import { styleGearJson as styleJson } from '../../data';
 import { nameKey } from '../items/itemKey';
 
 export interface StyleReq { skill: string; level: number }

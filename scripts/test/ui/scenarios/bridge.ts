@@ -123,7 +123,7 @@ async function protocol6(browser: Browser) {
 
 // A connected client at the login screen is not live guidance. Keep the target without claiming a visible arrow.
 async function loginScreen(browser: Browser) {
-  const questData = JSON.parse(readFileSync(new URL('../../../../src/data/questStages.json', import.meta.url),'utf8')).quests['S3-04'];
+  const questData = JSON.parse(readFileSync(new URL('../../../../src/data/authored/questStages.json', import.meta.url),'utf8')).quests['S3-04'];
   const stage = questData.stages.find((s: {do: {t:string;k?:string}[]}) => s.do.some(l => l.k === 'defeatGuardian'));
   const lineIndex = stage.do.findIndex((l: {t:string;k?:string}) => l.k === 'defeatGuardian');
   const {page, errors} = await open(browser,1440,{
@@ -177,7 +177,7 @@ async function loginScreenKeepsTarget(browser: Browser) {
 
 // The desktop action follows the quest cursor while the player stays logged in: the plugin announces a moved cursor with a STATUS event.
 async function questCursor(browser: Browser) {
-  const quest = JSON.parse(readFileSync(new URL('../../../../src/data/questStages.json', import.meta.url), 'utf8')).quests['S3-04'];
+  const quest = JSON.parse(readFileSync(new URL('../../../../src/data/authored/questStages.json', import.meta.url), 'utf8')).quests['S3-04'];
   const last = quest.stages.find((s: { do: { t: string; k?: string }[] }) => s.do.some((l) => l.k === 'defeatGuardian'));
   const earlier = quest.stages.find((s: { at: number; do: { t: string; k?: string }[] }) => s.at < last.at && s.do.length > 0 && s.do[0].k !== 'defeatGuardian');
   const { page } = await open(browser, 1440, {

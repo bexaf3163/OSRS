@@ -3,7 +3,7 @@
 // earn coins - killing cows for their hides (funding's cows-cowhide rate at the exchange's price after tax); then the coins count as the minutes that way
 // would take.
 
-import fundingJson from '../../data/fundingMethods.json';
+import { fundingMethodsJson as fundingJson } from '../../data';
 import { netEach } from './ge';
 import { isRestrictedItem, type TradeRestriction } from './tradeRestriction';
 import type { PriceView } from './quotes';

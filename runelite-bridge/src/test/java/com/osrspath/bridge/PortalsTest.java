@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 
-/** The ways in and out on the real table (src/data/portals.json, from the Shortest Path plugin's transports). */
+/** The ways in and out on the real table (src/data/generated/portals.json, from the Shortest Path plugin's transports). */
 public class PortalsTest
 {
 	@Test

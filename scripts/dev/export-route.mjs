@@ -12,10 +12,10 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const read = (f) => JSON.parse(fs.readFileSync(path.join(root, f), 'utf8'));
 const pkg = read('package.json');
-const stepsJson = read('src/data/steps.json');
-const stages = read('src/data/stages.json');
-const goals = read('src/data/goals.json');
-const stageTables = read('src/data/questStages.json').quests;
+const stepsJson = read('src/data/authored/steps.json');
+const stages = read('src/data/authored/stages.json');
+const goals = read('src/data/authored/goals.json');
+const stageTables = read('src/data/authored/questStages.json').quests;
 
 const steps = stepsJson.map((s) => {
   const q = stageTables[s.id];

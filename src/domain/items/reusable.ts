@@ -1,8 +1,7 @@
 // Items that a step uses without consuming them: tools, worn gear and style-specific equipment.
 import { nameKey } from './itemKey';
 import { toolFamilyOf } from './toolTiers';
-import gearJson from '../../data/gear.json';
-import styleJson from '../../data/styleGear.json';
+import { gearJson, styleGearJson as styleJson } from '../../data';
 
 /**
  * Tools and gear: they are not used up, so one is enough for all the steps: the largest

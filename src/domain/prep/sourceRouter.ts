@@ -9,8 +9,7 @@ import { SAVE_GP } from '../market/shopConstants';
 import { heldOf, levelOf, type PlayerState, type WorldPoint } from '../player/playerState';
 import { SHOP_TOWN, accessSuffix, shopAccess, shopKey, spawnAccess, type AccessState } from '../market/shopAccess';
 import { nameKey } from '../items/itemKey';
-import locationsJson from '../../data/majorLocations.json';
-import stepsJson from '../../data/steps.json';
+import { majorLocationsJson as locationsJson, stepsJson } from '../../data';
 import { purchaseCost, type PurchaseFee } from '../items/purchaseCost';
 import { NOT_SOLD_PRICE } from '../market/itemPrice';
 

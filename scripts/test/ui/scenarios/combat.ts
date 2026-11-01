@@ -8,7 +8,7 @@ async function combatRouteScenarios(browser: Browser) {
   const equipment = ([[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']] as [number, string, string][])
     .map(([id, name, slot]) => ({ id, name, slot }));
   const gear = { equipment, inventory: [], coins: 5000, bankCoins: 0 };
-  const all = JSON.parse(readFileSync(new URL('../../../../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
+  const all = JSON.parse(readFileSync(new URL('../../../../src/data/authored/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
   const from = all.findIndex((x) => x.id === 'S4-03');
   const worn = new Set(equipment.map((e) => e.name));
   const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))];
@@ -170,7 +170,7 @@ async function xpOnlyCombatScenario(browser: Browser) {
   const snapshots = await page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan'));
   const step = snapshots.at(-1)?.body?.step;
   // Whichever spot wins (2.75 compares every spot of the registry), the line names it and the game gets its NPC.
-  const trainers = (JSON.parse(readFileSync(new URL('../../../../src/data/trainers.json', import.meta.url), 'utf8')) as { trainers: { name: string; foe: string }[] }).trainers;
+  const trainers = (JSON.parse(readFileSync(new URL('../../../../src/data/generated/trainers.json', import.meta.url), 'utf8')) as { trainers: { name: string; foe: string }[] }).trainers;
   const named = /Plan: Train on ([^.]+)\./.exec(await text(page, '.status-combat-route'))?.[1];
   const spot = trainers.find((t) => t.name === named);
   expect(!!spot && step?.npcNames?.[0] === spot.foe, `XP-only training: the default trainer is adopted in the app and game payload (${named})`);

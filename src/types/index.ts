@@ -1,4 +1,4 @@
-// The app's data types. The V2 route is src/data/steps.json and stages.json;
+// The app's data types. The V2 route is src/data/authored/steps.json and stages.json;
 // the skills, goals and reference live in the other JSON files of src/data.
 
 export type StepType = 'quest' | 'skill' | 'gear' | 'prep';
@@ -419,7 +419,7 @@ export interface Step {
   useOn?: { item: string; target: string; kind?: 'object' | 'npc' | 'item' }[];
   /** Show the calculation "what it costs to reach a Magic goal with combat spells" (S2-04). */
   magicPlan?: { target: number; /** The level you start from on the route, if the game and the skill page say nothing. */ from: number };
-  /** Quest stages by a game variable: what to do and where to go right now (src/data/questStages.json). */
+  /** Quest stages by a game variable: what to do and where to go right now (src/data/authored/questStages.json). */
   questStages?: QuestStages;
   /** Other labelled lines: "Why", "Important", "Danger", "Combat", "Requirements". */
   fields?: Field[];

@@ -3,7 +3,7 @@
 // The order:
 // 0. The "where it lies for free" line: the spawn point from {{ItemSpawnLine}} on the item page — this is a tile,
 //    not the centre of a town. Without a network — on down the list.
-// 1. The dictionary src/data/majorLocations.json (collected from OSRS Wiki article maps): the exact name, a synonym,
+// 1. The dictionary src/data/generated/majorLocations.json (collected from OSRS Wiki article maps): the exact name, a synonym,
 //    the name without case and service words.
 // 2. OSRS Wiki: the {{Map}} map in the article of a shop, NPC or place. The wiki has no Cargo API
 //    (action=cargoquery answers "Unrecognized value") — so the article markup is parsed,

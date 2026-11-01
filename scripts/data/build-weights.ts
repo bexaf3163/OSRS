@@ -1,4 +1,4 @@
-// Builds src/data/weights.json from the OSRS Wiki: the item weight in kilograms (Bucket infobox_item, the weight field) — for
+// Builds src/data/generated/weights.json from the OSRS Wiki: the item weight in kilograms (Bucket infobox_item, the weight field) — for
 // the preparation plan: how much the bag and the worn items weigh, what is better left in the bank on a step without combat. The items taken are the app's:
 // the item database (f2p-items.json) and the gear (gear.json). It needs a network. Run: npm run build-weights
 // (about three minutes). No numbers of our own: no weight in the wiki — the item is not in the file, and its weight is unknown.
@@ -7,7 +7,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/weights.json`;
+const OUT = `${root}src/data/generated/weights.json`;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 const API = 'https://oldschool.runescape.wiki/api.php';
 
@@ -26,8 +26,8 @@ async function get(params: Record<string, string>): Promise<Record<string, unkno
 
 const read = <T>(rel: string): T => JSON.parse(readFileSync(`${root}${rel}`, 'utf8')) as T;
 const names = new Set<string>();
-for (const g of read<{ items: { name: string }[] }>('src/data/gear.json').items) names.add(g.name);
-for (const i of read<{ nameEn: string }[]>('src/data/f2p-items.json')) names.add(i.nameEn);
+for (const g of read<{ items: { name: string }[] }>('src/data/generated/gear.json').items) names.add(g.name);
+for (const i of read<{ nameEn: string }[]>('src/data/generated/f2p-items.json')) names.add(i.nameEn);
 // What usually lies in the bag on the route steps but is not always in the item database.
 for (const n of ['Coins', 'Lobster', 'Swordfish', 'Trout', 'Salmon', 'Tuna', 'Shrimps', 'Bread', 'Cooked chicken', 'Cooked meat', 'Stamina potion (4)', 'Energy potion (4)', 'Super energy (4)', 'Law rune', 'Air rune', 'Fire rune', 'Water rune', 'Earth rune', 'Mind rune', 'Body rune', 'Chaos rune', 'Bronze arrow', 'Iron arrow', 'Steel arrow', 'Shortbow', 'Oak shortbow', 'Staff', 'Staff of fire', 'Rope', 'Spade', 'Hammer', 'Tinderbox', 'Knife', 'Bucket', 'Pot', 'Shears']) names.add(n);
 

@@ -10,7 +10,7 @@ import { ARROW_BREAK_RATE, rangedMaximumHit, trainingRangedStyleBonus } from './
 // the target and are lost only when left there.
 // It never guesses: a bow or arrow without data, or an opponent without a ranged defence — no count.
 
-import rangedGearJson from '../../data/rangedGear.json';
+import { rangedGearJson } from '../../data';
 import { attacksToKill, foeVariants, spread, type CombatFoe, type Range } from './combatEstimate';
 import { rangedEquipment, rangedNeeds } from './rangedLoadout';
 import type { PriceView } from '../market/quotes';

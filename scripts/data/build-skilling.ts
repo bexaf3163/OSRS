@@ -1,4 +1,4 @@
-// Builds src/data/skilling.json from scripts/data/skilling.defs.json: what the gathering engine (src/domain/training/skillingRates.ts) needs, read from the OSRS Wiki and
+// Builds src/data/generated/skilling.json from scripts/data/skilling.defs.json: what the gathering engine (src/domain/training/skillingRates.ts) needs, read from the OSRS Wiki and
 // checked, so a new tree, rock, fishing spot or members area is an entry in the definitions and a run of this script, not a change of code:
 //   - each resource's {{Skilling success chart}} (low/high per axe for trees, one line for a rock, the cascade of a fishing spot, best fish first);
 //   - each product's level, XP and respawn from its {{Woodcutting info}}, {{Mining info}} or {{Fishing info}};
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { chebyshev, locLines, middleOf, num, pointsOf, successCharts, templates, wikitext, type Pt } from './wiki.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/skilling.json`;
+const OUT = `${root}src/data/generated/skilling.json`;
 
 interface ToolDef { skill: string; page: string; tiers: string[] }
 interface ResourceDef { id: string; skill: string; object: string; chart: string; products: string[]; tool: string; bait?: string; ticks?: string }
@@ -29,8 +29,8 @@ interface Defs {
 }
 
 const defs = JSON.parse(readFileSync(`${root}scripts/data/skilling.defs.json`, 'utf8')) as Defs;
-const places = (JSON.parse(readFileSync(`${root}src/data/majorLocations.json`, 'utf8')) as { locations: Record<string, Pt & { label: string; kind: string }> }).locations;
-const methods = (JSON.parse(readFileSync(`${root}src/data/trainingMethods.json`, 'utf8')) as { methods: { id: string; skill: string; members: boolean }[] }).methods;
+const places = (JSON.parse(readFileSync(`${root}src/data/generated/majorLocations.json`, 'utf8')) as { locations: Record<string, Pt & { label: string; kind: string }> }).locations;
+const methods = (JSON.parse(readFileSync(`${root}src/data/authored/trainingMethods.json`, 'utf8')) as { methods: { id: string; skill: string; members: boolean }[] }).methods;
 
 const problems: string[] = [];
 const fail = (what: string, why: string) => problems.push(`${what}: ${why}`);

@@ -5,9 +5,9 @@ import { PICKAXES } from '../../../../src/domain/items/toolTiers.ts';
 import { BASE, progressBefore, open, settle, expect, noOverflow, reveal, waitFor, text } from '../harness.ts';
 
 async function stockScenarios(browser: Browser) {
-  const catalog = JSON.parse(readFileSync(new URL('../../../../src/data/f2p-items.json', import.meta.url), 'utf8')) as { nameEn: string; id: number }[];
+  const catalog = JSON.parse(readFileSync(new URL('../../../../src/data/generated/f2p-items.json', import.meta.url), 'utf8')) as { nameEn: string; id: number }[];
   const findLocalItem = (name: string) => catalog.find(item => item.nameEn === name);
-  const styles = JSON.parse(readFileSync(new URL('../../../../src/data/styleGear.json', import.meta.url), 'utf8')).ranged as Record<string, { names: string[] }[]>;
+  const styles = JSON.parse(readFileSync(new URL('../../../../src/data/generated/styleGear.json', import.meta.url), 'utf8')).ranged as Record<string, { names: string[] }[]>;
   const RANGED_WATCH = [...new Set([...Object.values(styles).flatMap(options => options.flatMap(option => option.names)), 'Longbow', 'Oak longbow', 'Willow longbow', 'Maple longbow'])];
   const stats = { ranged: 1, attack: 40, strength: 40, defence: 1, hitpoints: 30 };
   const equipped = ['Shortbow', 'Leather cowl', 'Leather body', 'Leather chaps', 'Leather vambraces', 'Leather boots'];
@@ -397,7 +397,7 @@ async function nonCombatPreparationScenarios(browser: Browser) {
 async function magicPreparationScenarios(browser: Browser) {
   const width = 1280, stats = { magic: 3, defence: 10, hitpoints: 24, smithing: 15 };
   const clothes = ['Blue wizard hat', 'Blue wizard robe', 'Amulet of magic'];
-  const names = (JSON.parse(readFileSync(new URL('../../../../src/data/gear.json', import.meta.url), 'utf8')) as { items: { name: string }[] }).items.map(item => item.name);
+  const names = (JSON.parse(readFileSync(new URL('../../../../src/data/generated/gear.json', import.meta.url), 'utf8')) as { items: { name: string }[] }).items.map(item => item.name);
   const items = [...new Set([...names, 'Air rune', 'Mind rune', 'Water rune', 'Earth rune', 'Fire rune', 'Nature rune', 'Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'])].map(name => ({
     name, carried: ['Air rune', 'Mind rune'].includes(name) ? 1000 : name === 'Trout' ? 5 : name === 'Staff of fire' ? 1 : 0,
     noted: 0, bank: clothes.includes(name) ? 1 : 0,
@@ -467,7 +467,7 @@ async function autoQueue(browser: Browser) {
 // "One trip": the bank is open, the items of the step and the nearest ones are missing — what to take now, meanwhile and later; the unknown — separately.
 async function oneTrip(browser: Browser) {
   const width = 1100;
-  const route = JSON.parse(readFileSync(new URL('../../../../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; amount: string | number; inStep?: boolean }[] }[];
+  const route = JSON.parse(readFileSync(new URL('../../../../src/data/authored/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; amount: string | number; inStep?: boolean }[] }[];
   const at = route.findIndex((x) => x.id === 'S2-10');
   const names = route.slice(at, at + 4).flatMap((x) => (x.itemsRequired ?? []).filter((i) => !i.inStep).map((i) => i.nameEn));
   const { page, errors } = await open(browser, width, {

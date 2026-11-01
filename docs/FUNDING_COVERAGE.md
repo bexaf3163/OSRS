@@ -1,6 +1,6 @@
 # Funding coverage
 
-Generated from `src/data/fundingCoverage.json` (2026-10-18) against https://oldschool.runescape.wiki/w/Money_making_guide/Free-to-play. Do not edit by hand: change the data and run `npm run funding-coverage`.
+Generated from `src/data/authored/fundingCoverage.json` (2026-10-18) against https://oldschool.runescape.wiki/w/Money_making_guide/Free-to-play. Do not edit by hand: change the data and run `npm run funding-coverage`.
 
 91 guides were read. **23 are planned by the engine**, 68 are not, each for a stated reason.
 

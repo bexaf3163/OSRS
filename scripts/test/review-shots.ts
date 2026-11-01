@@ -11,7 +11,7 @@ const BASE = `http://127.0.0.1:${PORT}/`;
 const OUT = process.env.REVIEW_OUT ?? 'review-shots';
 const FILTER = process.argv[2] ?? '';
 type ShotItem = { nameEn: string; anyOf?: string[] };
-const steps = JSON.parse(readFileSync(new URL('../../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: ShotItem[]; itemsRecommended?: ShotItem[] }[];
+const steps = JSON.parse(readFileSync(new URL('../../src/data/authored/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: ShotItem[]; itemsRecommended?: ShotItem[] }[];
 /** The game reports every size of a potion once one is asked about (ItemCounts.report, 2.73.0). */
 const sizesOf = (name: string) => {
   const m = /^(.*\S)\((\d)\)$/.exec(name);

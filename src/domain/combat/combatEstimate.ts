@@ -14,7 +14,7 @@
 // Food is counted by the healing it gives, so Lobsters at hand count as more Salmon. It never guesses missing data: no weapon
 // data, no levels — no estimate.
 
-import combatFoesJson from '../../data/combatFoes.json';
+import { combatFoesJson } from '../../data';
 import { equippedBySlot, gearData, meleeAs, SLOTS, type TrainStyle } from './gearAdvisor';
 import type { GearState } from '../../services/runeliteBridge';
 import type { GearData, GearPiece, PacingSkill, Step } from '../../types';

@@ -85,7 +85,7 @@ public class QuestWalkTest
 	@Test
 	public void everyStepOfEveryQuestHasAPlaceAndAWayThere() throws Exception
 	{
-		JsonObject quests = read("osrsPath.stages", "../src/data/questStages.json").getAsJsonObject("quests");
+		JsonObject quests = read("osrsPath.stages", "../src/data/authored/questStages.json").getAsJsonObject("quests");
 		TreeSet<String> nothingToShow = new TreeSet<>();
 		TreeSet<String> noWayIn = new TreeSet<>();
 		TreeSet<String> noWayOut = new TreeSet<>();
@@ -186,7 +186,7 @@ public class QuestWalkTest
 	@Test
 	public void everyRouteStepUndergroundHasAWayIn() throws Exception
 	{
-		Path file = Paths.get(System.getProperty("osrsPath.steps", "../src/data/steps.json"));
+		Path file = Paths.get(System.getProperty("osrsPath.steps", "../src/data/authored/steps.json"));
 		JsonArray steps = new Gson().fromJson(new String(Files.readAllBytes(file), StandardCharsets.UTF_8), JsonArray.class);
 		TreeSet<String> missing = new TreeSet<>();
 		int off = 0;

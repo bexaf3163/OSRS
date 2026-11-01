@@ -338,7 +338,7 @@ async function recoveryMode(browser: Browser) {
 
 // A retired saved compact preference must not hide the working Guardian guide.
 async function compactPreference(browser: Browser) {
-  const questData = JSON.parse(readFileSync(new URL('../../../../src/data/questStages.json', import.meta.url), 'utf8')).quests['S3-04'];
+  const questData = JSON.parse(readFileSync(new URL('../../../../src/data/authored/questStages.json', import.meta.url), 'utf8')).quests['S3-04'];
   const stage = questData.stages.find((s: { do: { k?: string }[] }) => s.do.some((l) => l.k === 'defeatGuardian'));
   const lineIndex = stage.do.findIndex((l: { k?: string }) => l.k === 'defeatGuardian');
   const { page, errors } = await open(browser, 1440, {

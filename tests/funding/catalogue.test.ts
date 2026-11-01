@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allQuests, itemById } from '../../src/data';
-import coverageJson from '../../src/data/fundingCoverage.json';
-import moneyJson from '../../src/data/moneyMaking.json';
+import { allQuests, itemById, fundingCoverageJson as coverageJson, moneyMakingJson as moneyJson } from '../../src/data';
 import { COMBAT_FOES } from '../../src/domain/combat/combatEstimate';
 import { CATALOGUE, chanceOf, DEPENDABLE_CHANCE, expectedQty, isDependable, METHODS, methodById, validateCatalogue } from '../../src/domain/economy/funding/methods';
 import type { Catalogue } from '../../src/domain/economy/funding/types';

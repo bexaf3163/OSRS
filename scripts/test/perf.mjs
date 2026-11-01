@@ -13,7 +13,7 @@ const require = createRequire(ROOT + '/package.json');
 const { chromium } = require('playwright');
 const BASE = `http://127.0.0.1:${PORT}/`;
 const OUT = process.env.AUDIT_OUT || process.cwd();
-const steps = JSON.parse(readFileSync(`${ROOT}/src/data/steps.json`, 'utf8'));
+const steps = JSON.parse(readFileSync(`${ROOT}/src/data/authored/steps.json`, 'utf8'));
 const progressBefore = (id, extra = {}) => { const ids = steps.map(s => s.id); return { version: 3, steps: Object.fromEntries(ids.slice(0, ids.indexOf(id)).map(s => [s, 'done'])), levels: {}, notes: {}, updatedAt: '2026-09-27T10:00:00.000Z', gameMode: 'f2p', ...extra }; };
 const stats = { attack: 40, strength: 44, defence: 44, hitpoints: 40, ranged: 12, magic: 25, prayer: 15, woodcutting: 30, fishing: 30, cooking: 30, mining: 30, smithing: 20, crafting: 20, firemaking: 30, runecraft: 10 };
 const equipment = [[1329, 'Mithril scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']].map(([id, name, slot]) => ({ id, name, slot, count: 1 }));

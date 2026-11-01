@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 
 /**
- * A check of the app's route (src/data/steps.json) against this version of RuneLite:
+ * A check of the app's route (src/data/authored/steps.json) against this version of RuneLite:
  * every quest name for auto-tick is in Quest, the message patterns compile,
  * and the step targets pass the same check as the request to /active-step.
  */
@@ -31,7 +31,7 @@ public class RouteTargetsTest
 
 	private static List<JsonObject> targets() throws Exception
 	{
-		String path = System.getProperty("osrsPath.steps", "../src/data/steps.json");
+		String path = System.getProperty("osrsPath.steps", "../src/data/authored/steps.json");
 		Path file = Paths.get(path);
 		assertTrue("not found " + file.toAbsolutePath(), Files.exists(file));
 		JsonArray steps = new Gson().fromJson(new String(Files.readAllBytes(file), StandardCharsets.UTF_8), JsonArray.class);

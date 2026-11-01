@@ -13,7 +13,7 @@ import { matchStrict } from '../travel/locations';
 // guesses: an unknown level,
 // unread worn items, a weapon or bow the data does not know, an opponent without data, or a fight that is not safe - no rate, and the wiki's stays.
 
-import spellsJson from '../../data/spells.json';
+import { spellsJson } from '../../data';
 import { allSteps } from '../../data';
 import { attacksToKill, combatMargin, combatRecovery, counterDamage, estimateCombat, foeVariants, hitChance, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
 import { spotsOf, termsFor, TRAINER_LEVELS } from './route/spots';

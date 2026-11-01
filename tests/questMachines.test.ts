@@ -1,11 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import machinesRaw from '../src/data/questMachines.json';
-import stagesRaw from '../src/data/questStages.json';
+import { questMachinesJson as machinesRaw, questStagesJson as stagesRaw } from '../src/data';
 import qhSteps from './fixtures/qh-steps.json';
 import type { QuestStages } from '../src/types';
 
 /**
- * The Quest Helper state machines (src/data/questMachines.json) and the stage line keys (k).
+ * The Quest Helper state machines (src/data/generated/questMachines.json) and the stage line keys (k).
  * A machine chooses a leaf — a Quest Helper step; the plugin finds the list line with the same key k. These checks keep the data whole:
  * references do not dangle, every line has a key, and the line's tile and highlight match the Quest Helper step.
  */

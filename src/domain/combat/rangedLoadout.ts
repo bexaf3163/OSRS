@@ -9,7 +9,7 @@ import type { MethodNeed } from '../training/trainingRouter';
 import { coinsOf } from '../player/playerState';
 import { supplyPrice } from '../market/itemPrice';
 import type { PriceView } from '../market/quotes';
-import rangedGearJson from '../../data/rangedGear.json';
+import { rangedGearJson } from '../../data';
 
 // Ordinary F2P longbows share their corresponding shortbow's unlock and arrow cap (OSRS Wiki: Bow).
 const LONG: Readonly<Record<string, string>> = { Shortbow: 'Longbow', 'Oak shortbow': 'Oak longbow', 'Willow shortbow': 'Willow longbow', 'Maple shortbow': 'Maple longbow' };

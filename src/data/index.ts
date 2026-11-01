@@ -1,6 +1,6 @@
 // Typed access to the data.
 // The V2 route — steps.json and stages.json (the source of truth for the steps).
-// Skills, goals, experience, plugins and the reference — the JSON files in this folder.
+// Skills, goals, experience, plugins and the reference — the JSON files in authored/.
 // The item database — f2p-items.json from the OSRS Wiki (npm run build-items).
 
 import type {
@@ -8,17 +8,17 @@ import type {
 } from '../types';
 import { titleTargets } from './targets';
 import { deriveQuests } from './quests';
-import stepsJson from './steps.json';
-import questStagesJson from './questStages.json';
-import stagesJson from './stages.json';
-import skillsJson from './skills.json';
-import levelsJson from './levels.json';
-import membersSkillsJson from './members-skills.json';
-import goalsJson from './goals.json';
-import xpJson from './xp.json';
-import pluginsJson from './plugins.json';
-import referenceJson from './reference.json';
-import itemsJson from './f2p-items.json';
+import stepsJson from './authored/steps.json';
+import questStagesJson from './authored/questStages.json';
+import stagesJson from './authored/stages.json';
+import skillsJson from './authored/skills.json';
+import levelsJson from './authored/levels.json';
+import membersSkillsJson from './authored/members-skills.json';
+import goalsJson from './authored/goals.json';
+import xpJson from './authored/xp.json';
+import pluginsJson from './authored/plugins.json';
+import referenceJson from './authored/reference.json';
+import itemsJson from './generated/f2p-items.json';
 
 /** All V2 steps, including Members. Level goals are computed from the titles. */
 const stagesByStep = (questStagesJson as unknown as { quests: Record<string, Step['questStages']> }).quests;
@@ -98,3 +98,32 @@ export const known = {
   // Hitpoints is kept from the game though it has no level field: the combat plan is worked out from the last levels while the game is away (2.72.1).
   levelIds: new Set([...allLevelSkills.map((l) => l.id), 'hitpoints']),
 };
+
+/** The data files that engines read as they are, so the folders under src/data stay private to this module. */
+export { goalsJson, questStagesJson, referenceJson, stepsJson };
+export { default as combatAuditJson } from './authored/combatAudit.json';
+export { default as combatFoesJson } from './generated/combatFoes.json';
+export { default as dangerZonesJson } from './authored/dangerZones.json';
+export { default as fundingCoverageJson } from './authored/fundingCoverage.json';
+export { default as fundingMethodsJson } from './authored/fundingMethods.json';
+export { default as gearJson } from './generated/gear.json';
+export { default as geTaxExemptJson } from './authored/geTaxExempt.json';
+export { default as iconAssetsJson } from './authored/iconAssets.json';
+export { default as majorLocationsJson } from './generated/majorLocations.json';
+export { default as moneyMakingJson } from './generated/moneyMaking.json';
+export { default as monstersJson } from './generated/monsters.json';
+export { default as npcLocationsJson } from './authored/npcLocations.json';
+export { default as portalsJson } from './generated/portals.json';
+export { default as processingJson } from './generated/processing.json';
+export { default as questMachinesJson } from './generated/questMachines.json';
+export { default as rangedGearJson } from './generated/rangedGear.json';
+export { default as recipesJson } from './authored/recipes.json';
+export { default as skillingJson } from './generated/skilling.json';
+export { default as spellsJson } from './authored/spells.json';
+export { default as styleGearJson } from './generated/styleGear.json';
+export { default as toolProgressionJson } from './authored/toolProgression.json';
+export { default as trainersJson } from './generated/trainers.json';
+export { default as trainingMethodsJson } from './authored/trainingMethods.json';
+export { default as transportJson } from './authored/transport.json';
+export { default as transportNetJson } from './generated/transportNet.json';
+export { default as weightsJson } from './generated/weights.json';

@@ -3,9 +3,9 @@
 import { readFileSync } from 'node:fs';
 import { validate, type GuideData } from './validate.ts';
 import { qa, qaLines } from './qa.ts';
-import { DATA_DIR, readRoute } from './paths.ts';
+import { dataFile, readRoute } from './paths.ts';
 
-const read = (name: string) => JSON.parse(readFileSync(`${DATA_DIR}/${name}.json`, 'utf8'));
+const read = (name: string) => JSON.parse(readFileSync(dataFile(`${name}.json`), 'utf8'));
 
 let stored: GuideData;
 let route;

@@ -1,0 +1,22 @@
+{
+  "note": "Files in generated/ are written only by the command listed for them: run it again, never edit the file. Files in authored/ are written by hand, and npm run build-items also fills item IDs and icons in authored/steps.json.",
+  "generated": {
+    "combatFoes.json": "npm run build-combat-foes",
+    "f2p-items.json": "npm run build-items",
+    "gear.json": "npm run build-gear",
+    "majorLocations.json": "npm run build-locations",
+    "moneyMaking.json": "npm run build-money",
+    "monsters.json": "npm run build-gear",
+    "portals.json": "npm run build-portals",
+    "processing.json": "npm run build-processing",
+    "questMachines.json": "python tools/qh-machines/qhm/build_machines.py",
+    "rangedGear.json": "npm run build-ranged-gear",
+    "skilling.json": "npm run build-skilling",
+    "skills/": "python tools/skill-guides/build.py",
+    "styleGear.json": "npm run build-style-gear",
+    "threats.json": "npm run build-threats",
+    "trainers.json": "npm run build-trainers",
+    "transportNet.json": "npm run build-transport-net",
+    "weights.json": "npm run build-weights"
+  }
+}

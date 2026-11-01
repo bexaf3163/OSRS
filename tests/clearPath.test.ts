@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import reference from '../src/data/reference.json';
+import { referenceJson as reference } from '../src/data';
 import { linkStatus, LINK_LABEL, targetStatus, TARGET_LABEL } from '../src/domain/player/linkState';
 
 describe('link and target vocabulary', () => {

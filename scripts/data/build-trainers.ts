@@ -1,4 +1,4 @@
-// Builds src/data/trainers.json from scripts/data/trainers.defs.json: the training spots the combat plans may send the player to (2.75, T10). One list,
+// Builds src/data/generated/trainers.json from scripts/data/trainers.defs.json: the training spots the combat plans may send the player to (2.75, T10). One list,
 // checked against the OSRS Wiki and the route, so adding an opponent is an entry in the definitions and a run of this script, not a change of code:
 //   fromStep   - the route step must exist and name the opponent first; its place, way in and text stay the step's own (read at run time);
 //   formerStep - a place written out (a step used to give it): kept as written, a route step must stand within reach of it;
@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import { wikitext } from './wiki.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/trainers.json`;
+const OUT = `${root}src/data/generated/trainers.json`;
 
 interface Pt { x: number; y: number; plane: number; label?: string }
 interface Def {
@@ -44,8 +44,8 @@ interface Def {
 }
 
 const defs = JSON.parse(readFileSync(`${root}scripts/data/trainers.defs.json`, 'utf8')) as { reach: number; spots: Def[] };
-const steps = JSON.parse(readFileSync(`${root}src/data/steps.json`, 'utf8')) as { id: string; foes?: string[]; mapLocation?: Pt; inGame?: { pathWaypoints?: Pt[] } }[];
-const banks = (JSON.parse(readFileSync(`${root}src/data/majorLocations.json`, 'utf8')) as { locations: Record<string, { kind: string }> }).locations;
+const steps = JSON.parse(readFileSync(`${root}src/data/authored/steps.json`, 'utf8')) as { id: string; foes?: string[]; mapLocation?: Pt; inGame?: { pathWaypoints?: Pt[] } }[];
+const banks = (JSON.parse(readFileSync(`${root}src/data/generated/majorLocations.json`, 'utf8')) as { locations: Record<string, { kind: string }> }).locations;
 
 
 const chebyshev = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));

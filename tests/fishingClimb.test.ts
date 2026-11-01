@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Step } from '../src/types';
-import { stepById } from '../src/data';
-import locationsJson from '../src/data/majorLocations.json';
+import { stepById, majorLocationsJson as locationsJson } from '../src/data';
 import { stepPoints, initialPoint } from '../src/domain/travel/map';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';

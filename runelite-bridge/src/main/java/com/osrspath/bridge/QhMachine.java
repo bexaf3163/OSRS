@@ -17,7 +17,7 @@ import java.util.Map;
 import lombok.Value;
 
 /**
- * The quest state machine: the conditions by which Quest Helper chooses the current stage step. The data (src/data/questMachines.json)
+ * The quest state machine: the conditions by which Quest Helper chooses the current stage step. The data (src/data/generated/questMachines.json)
  * is built from its sources; here it is executed the same way: conditions are checked in turn, the first fulfilled one picks the step, otherwise
  * the default step; the "latches" Conditions(true, ...) remember that a condition was fulfilled at least once.
  *

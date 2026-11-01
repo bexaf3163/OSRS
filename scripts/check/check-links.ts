@@ -8,10 +8,10 @@ import { MAP_METADATA_URL, mapSourceAt, parseMapSources, tileUrl } from '../../s
 import type { NpcSpot } from '../../src/domain/travel/stepPlaces.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const steps = JSON.parse(readFileSync(`${root}src/data/steps.json`, 'utf8')) as Step[];
-const items = JSON.parse(readFileSync(`${root}src/data/f2p-items.json`, 'utf8')) as WikiItemDetail[];
-const reference = readFileSync(`${root}src/data/reference.json`, 'utf8');
-const npcs = (JSON.parse(readFileSync(`${root}src/data/npcLocations.json`, 'utf8')) as { npcs: Record<string, NpcSpot[]> }).npcs;
+const steps = JSON.parse(readFileSync(`${root}src/data/authored/steps.json`, 'utf8')) as Step[];
+const items = JSON.parse(readFileSync(`${root}src/data/generated/f2p-items.json`, 'utf8')) as WikiItemDetail[];
+const reference = readFileSync(`${root}src/data/authored/reference.json`, 'utf8');
+const npcs = (JSON.parse(readFileSync(`${root}src/data/authored/npcLocations.json`, 'utf8')) as { npcs: Record<string, NpcSpot[]> }).npcs;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 const API = 'https://oldschool.runescape.wiki/api.php';
 

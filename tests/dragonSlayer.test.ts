@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById } from '../src/data';
-import stagesFile from '../src/data/questStages.json';
-import zonesFile from '../src/data/dangerZones.json';
+import { allSteps, stepById, questStagesJson as stagesFile, dangerZonesJson as zonesFile } from '../src/data';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { emptyProgress } from '../src/domain/persistence/progress';

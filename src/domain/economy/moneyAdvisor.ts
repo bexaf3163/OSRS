@@ -2,7 +2,7 @@
 // Levels come from the game or are entered manually; what we do not know we do not invent but mark with "?". Income per hour is the wiki's estimate
 // at Grand Exchange prices on the snapshot date with good play: for a beginner it is lower, and the interface says so.
 
-import moneyJson from '../../data/moneyMaking.json';
+import { moneyMakingJson as moneyJson } from '../../data';
 import type { MoneyData, MoneyMethod, MoneyReq, Step } from '../../types';
 import { nameKey } from '../items/itemKey';
 import { combatLevel } from '../player/xp';

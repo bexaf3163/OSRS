@@ -13,7 +13,7 @@ export interface QaInput {
     route?: { title: string; steps: string[] }[];
     stages: { at: number; do: { t: string; s?: string; k?: string; at?: number[]; has?: string; need?: string; hl?: { npc?: unknown; obj?: unknown; on?: unknown; item?: unknown } }[]; go?: unknown; items?: { name: string }[] }[];
   }> };
-  /** The training methods (src/data/trainingMethods.json) and the place dictionary — for the method router rules. If absent — the rules are not applied. */
+  /** The training methods (src/data/authored/trainingMethods.json) and the place dictionary — for the method router rules. If absent — the rules are not applied. */
   training?: { methods: { id: string; skill: string | string[]; from: number; suggestedFrom?: number; to?: number | null; name: string; where: string; place?: string; objectNames?: string[]; npcNames?: string[]; kit?: string; manualSetup?: string; url: string; xph?: number[]; xpa?: number; kind?: string; xpTotal?: number; questGuide?: { name: string; stepId: string } }[] };
   places?: { locations: Record<string, unknown> };
   /** The skill identifiers with levels (levels.json + the members skills). */

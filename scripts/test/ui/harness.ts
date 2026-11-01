@@ -6,7 +6,7 @@ import type { Browser, Page } from 'playwright';
 
 const PORT = 4179;
 export const BASE = `http://127.0.0.1:${PORT}/`;
-export const steps = JSON.parse(readFileSync(new URL('../../../src/data/steps.json', import.meta.url), 'utf8')) as { id: string }[];
+export const steps = JSON.parse(readFileSync(new URL('../../../src/data/authored/steps.json', import.meta.url), 'utf8')) as { id: string }[];
 
 export interface Mock {
   progress?: unknown;

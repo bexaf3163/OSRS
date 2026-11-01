@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../src/data';
+import { allSteps, questStagesJson as stagesFile } from '../src/data';
 import { entryFoodStep } from '../src/domain/quests/loadoutPhase';
-import stagesFile from '../src/data/questStages.json';
 
 type Pre = { item: string; at?: number[]; alt?: string[] };
 type Line = { k?: string; has?: string; pre?: Pre[] };

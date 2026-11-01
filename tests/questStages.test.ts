@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../src/data';
+import { allSteps, questStagesJson as raw } from '../src/data';
 import { stepGuide } from '../src/domain/guide/inGameTarget';
-import raw from '../src/data/questStages.json';
 
 const quests = (raw as unknown as { quests: Record<string, import('../src/types').QuestStages> }).quests;
 const withStages = allSteps.filter((s) => s.questStages);

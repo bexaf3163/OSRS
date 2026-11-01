@@ -2,7 +2,7 @@
 // named source on a named date (see each method's `sources`), and validateCatalogue() refuses a method that lacks the structure the evaluator needs.
 // The wiki's guide pages are prose; what the evaluator may rely on for eligibility is only what is structured here.
 
-import catalogueJson from '../../../data/fundingMethods.json';
+import { fundingMethodsJson as catalogueJson } from '../../../data';
 import { ALL_SKILLS } from '../../market/tradeRestriction';
 import type { Catalogue, Flow, FundingMethod, Place } from './types';
 

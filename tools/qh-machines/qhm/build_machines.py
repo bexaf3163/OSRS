@@ -1,4 +1,4 @@
-"""Builds src/data/questMachines.json from the Quest Helper sources (the work/ folder, filled by fetch_qh.py).
+"""Builds src/data/generated/questMachines.json from the Quest Helper sources (the work/ folder, filled by fetch_qh.py).
   python qhm/build_machines.py           write the file
   python qhm/build_machines.py --check   only compare with what lies in the repository (exit code 1 if it differs)"""
 import json

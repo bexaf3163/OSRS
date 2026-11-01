@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, itemById, known, stepsFor } from '../src/data';
+import { allSteps, itemById, known, stepsFor, dangerZonesJson as dangerZones } from '../src/data';
 import type { Step } from '../src/types';
 import { emptyProgress, normalizeProgress, withUpgradeDismissed } from '../src/domain/persistence/progress';
 import { stageBankItemIds, stepBankItemIds, uniqueIds } from '../src/domain/prep/bankTags';
@@ -14,7 +14,6 @@ import { actionForm, etaText, pacingNext, pacingText } from '../src/domain/playe
 import { foeData } from '../src/domain/combat/gearAdvisor';
 import { mapTarget, navPayload, pageFromUrl, sourceBadge } from '../src/domain/travel/places';
 
-import dangerZones from '../src/data/dangerZones.json';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
 

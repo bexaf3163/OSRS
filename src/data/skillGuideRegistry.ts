@@ -1,30 +1,30 @@
-// The registry of the skill leveling guides: one JSON file per skill in ./skills (built by tools/skill-guides from the OSRS Wiki), typed once here.
+// The registry of the skill leveling guides: one JSON file per skill in ./generated/skills (built by tools/skill-guides from the OSRS Wiki), typed once here.
 
 import type { SkillGuideFile, SkillName } from '../domain/training/skillGuide';
 
-import attack from './skills/attack.json';
-import strength from './skills/strength.json';
-import defence from './skills/defence.json';
-import ranged from './skills/ranged.json';
-import prayer from './skills/prayer.json';
-import magic from './skills/magic.json';
-import runecraft from './skills/runecraft.json';
-import construction from './skills/construction.json';
-import hitpoints from './skills/hitpoints.json';
-import agility from './skills/agility.json';
-import herblore from './skills/herblore.json';
-import thieving from './skills/thieving.json';
-import crafting from './skills/crafting.json';
-import fletching from './skills/fletching.json';
-import slayer from './skills/slayer.json';
-import hunter from './skills/hunter.json';
-import mining from './skills/mining.json';
-import smithing from './skills/smithing.json';
-import fishing from './skills/fishing.json';
-import cooking from './skills/cooking.json';
-import firemaking from './skills/firemaking.json';
-import woodcutting from './skills/woodcutting.json';
-import farming from './skills/farming.json';
+import attack from './generated/skills/attack.json';
+import strength from './generated/skills/strength.json';
+import defence from './generated/skills/defence.json';
+import ranged from './generated/skills/ranged.json';
+import prayer from './generated/skills/prayer.json';
+import magic from './generated/skills/magic.json';
+import runecraft from './generated/skills/runecraft.json';
+import construction from './generated/skills/construction.json';
+import hitpoints from './generated/skills/hitpoints.json';
+import agility from './generated/skills/agility.json';
+import herblore from './generated/skills/herblore.json';
+import thieving from './generated/skills/thieving.json';
+import crafting from './generated/skills/crafting.json';
+import fletching from './generated/skills/fletching.json';
+import slayer from './generated/skills/slayer.json';
+import hunter from './generated/skills/hunter.json';
+import mining from './generated/skills/mining.json';
+import smithing from './generated/skills/smithing.json';
+import fishing from './generated/skills/fishing.json';
+import cooking from './generated/skills/cooking.json';
+import firemaking from './generated/skills/firemaking.json';
+import woodcutting from './generated/skills/woodcutting.json';
+import farming from './generated/skills/farming.json';
 
 /** All 23 guides by skill. The JSON is checked against the schema by tests/skillsGuide.test.ts. */
 export const skillGuides = {

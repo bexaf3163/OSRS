@@ -45,33 +45,33 @@ tasks.withType(JavaCompile).configureEach {
 	options.compilerArgs << '-Xlint:deprecation'
 }
 
-// The danger zones are the same data as the app: src/data/dangerZones.json goes into the jar next to the classes.
+// The danger zones are the same data as the app: src/data/authored/dangerZones.json goes into the jar next to the classes.
 processResources {
-	from('../src/data/dangerZones.json') {
+	from('../src/data/authored/dangerZones.json') {
 		into 'com/osrspath/bridge'
 	}
 	// The quest state machines (the Quest Helper conditions by which the stage step is chosen) are also the same data as the app.
-	from('../src/data/questMachines.json') {
+	from('../src/data/generated/questMachines.json') {
 		into 'com/osrspath/bridge'
 	}
-	// The ways in and out of dungeons and areas (built from the Shortest Path plugin's table, src/data/portals.json) and the tile of every Quest Helper step
+	// The ways in and out of dungeons and areas (built from the Shortest Path plugin's table, src/data/generated/portals.json) and the tile of every Quest Helper step
 	// (tests/fixtures/qh-steps.json): the arrow points at the hole or the ladder, not at a cave the player's map does not have.
-	from('../src/data/portals.json') {
+	from('../src/data/generated/portals.json') {
 		into 'com/osrspath/bridge'
 	}
 	from('../tests/fixtures/qh-steps.json') {
 		into 'com/osrspath/bridge'
 	}
-	// How much each food heals (OSRS Wiki, the app's src/data/threats.json): a pre-entry guard counts food by healing, not by pieces.
-	from('../src/data/threats.json') {
+	// How much each food heals (OSRS Wiki, the app's src/data/generated/threats.json): a pre-entry guard counts food by healing, not by pieces.
+	from('../src/data/generated/threats.json') {
 		into 'com/osrspath/bridge'
 	}
 }
 
 // The tests read the app's route to check quest names and message patterns.
 test {
-	systemProperty 'osrsPath.steps', file('../src/data/steps.json').absolutePath
-	systemProperty 'osrsPath.stages', file('../src/data/questStages.json').absolutePath
+	systemProperty 'osrsPath.steps', file('../src/data/authored/steps.json').absolutePath
+	systemProperty 'osrsPath.stages', file('../src/data/authored/questStages.json').absolutePath
 	// RuneLite fonts (FontManager) create the ~/.runelite/fonts folder on loading: in tests it is a separate one,
 	// the player's real RuneLite folder is not touched. Pictures are drawn without a window.
 	systemProperty 'user.home', layout.buildDirectory.dir('test-home').get().asFile.absolutePath

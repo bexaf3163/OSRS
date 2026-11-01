@@ -9,9 +9,7 @@
 // training, so the benefit is averaged over the nearest 10 Strength levels: the max hit grows
 // in steps, and at the very current level the best sword may hit the same as the old one.
 
-import gearJson from '../../data/gear.json';
-import monstersJson from '../../data/monsters.json';
-import combatFoesJson from '../../data/combatFoes.json';
+import { gearJson, monstersJson, combatFoesJson } from '../../data';
 import type { Foe, FoeData, GameMode, GearData, GearPiece, GearSlot, Step } from '../../types';
 import type { OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';

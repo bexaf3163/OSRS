@@ -1,4 +1,4 @@
-// Builds src/data/majorLocations.json — a dictionary of key places for the "📍" in the item inspector and the map.
+// Builds src/data/generated/majorLocations.json — a dictionary of key places for the "📍" in the item inspector and the map.
 // It needs a network. Run: npm run build-locations (about a minute).
 //
 // The coordinates are not written by hand: for each place an OSRS Wiki article and its map ({{Map}} in the card) are taken.
@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import { articleMapPoint, fetchWikitext, locLinePoint, type WikiPoint } from '../../src/services/wikiApi.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/majorLocations.json`;
+const OUT = `${root}src/data/generated/majorLocations.json`;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 
 type Kind = 'city' | 'bank' | 'shop' | 'npc' | 'guild' | 'landmark' | 'dungeon' | 'transport' | 'fishing' | 'mine';

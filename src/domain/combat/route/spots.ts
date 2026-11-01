@@ -7,7 +7,7 @@
 // Each spot also carries what it changes in the estimate: the walk to its bank and back, a lone boss's respawn, healing for the asking, a special
 // attack to keep health above, others joining a fight; and what the opponent always drops, with the one worth selling.
 
-import trainersJson from '../../../data/trainers.json';
+import { trainersJson } from '../../../data';
 import type { GamePoint, Step } from '../../../types';
 import type { SpotTerms } from '../combatEstimate';
 

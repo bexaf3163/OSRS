@@ -1,4 +1,4 @@
-// Builds src/data/styleGear.json from the OSRS Wiki: what to wear for magic and ranged in the free version — the block
+// Builds src/data/generated/styleGear.json from the OSRS Wiki: what to wear for magic and ranged in the free version — the block
 // "Recommended equipment" of the articles "Free-to-play Magic training" and "Free-to-play Ranged training". It needs a network.
 // Run: npm run build-style-gear. In the wiki block the variants of each slot go from the best to the available; next to them in <small> are the requirements.
 // Only the markup parsing is from us.
@@ -9,7 +9,7 @@ import { wikitext } from './wiki.ts';
 import { parseEquipment } from './style-gear-parse.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/styleGear.json`;
+const OUT = `${root}src/data/generated/styleGear.json`;
 
 
 const pages = { magic: 'Free-to-play Magic training', ranged: 'Free-to-play Ranged training' } as const;

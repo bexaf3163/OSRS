@@ -1,4 +1,4 @@
-// Builds src/data/rangedGear.json from the OSRS Wiki: the free-to-play bows, arrows and ranged armour with what the whole-goal arrow count
+// Builds src/data/generated/rangedGear.json from the OSRS Wiki: the free-to-play bows, arrows and ranged armour with what the whole-goal arrow count
 // (lib/rangedAmmo.ts) needs of them: ranged attack and ranged strength bonuses, and a weapon's attack speed. gear.json keeps the melee pieces
 // (their ranged attack bonus, often negative for metal armour, is read from there). It needs a network. Run: npm run build-ranged-gear.
 // No numbers of our own: only the Infobox Bonuses of each article.
@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { wikitext } from './wiki.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/rangedGear.json`;
+const OUT = `${root}src/data/generated/rangedGear.json`;
 
 /** The bows and arrows of styleGear.json's ranged list and their longbows (rangedLoadout.ts), and the free ranged armour and amulets. */
 const PAGES = [

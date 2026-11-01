@@ -1,4 +1,4 @@
-// The skill leveling guides (src/data/skills/<skill>.json, built by tools/skill-guides from the OSRS Wiki): the step schema, the path for a filter, and what goes to
+// The skill leveling guides (src/data/generated/skills/<skill>.json, built by tools/skill-guides from the OSRS Wiki): the step schema, the path for a filter, and what goes to
 // the game. A path is a list of level brackets in the order to train them: quest XP skips first, then the methods. Pure logic: the registry loads the files.
 
 import type { Progress, Step, Skill } from '../../types';

@@ -10,8 +10,7 @@ import { nameKey } from '../items/itemKey';
 //    Supported action-XP and remaining-work calculations use the shared models, not a second UI formula.
 
 import type { GameMode, Progress, Step } from '../../types';
-import methodsJson from '../../data/trainingMethods.json';
-import toolProgressionJson from '../../data/toolProgression.json';
+import { trainingMethodsJson as methodsJson, toolProgressionJson } from '../../data';
 import { toolUse } from '../items/toolTiers';
 import { evaluate, itemRequirement, type ReqState, type Requirement } from '../player/requirements';
 import { coinsOf, heldExact, levelOf, questOf, type PlayerState } from '../player/playerState';

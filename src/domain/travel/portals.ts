@@ -3,7 +3,7 @@
 // entrance is a hole on the beach, nowhere near the cave's coordinates). The plugin now points at the way in or out.
 //
 // The data is the Shortest Path plugin's transport table (Skretzo/shortest-path, BSD 2-Clause, see THIRD_PARTY_NOTICES.md): only the rows that
-// cross from one layer to another. Built by scripts/data/build-portals.ts into src/data/portals.json; the plugin reads that file (Portals.java).
+// cross from one layer to another. Built by scripts/data/build-portals.ts into src/data/generated/portals.json; the plugin reads that file (Portals.java).
 
 /** 0 the surface, 1 a separate area (the Stronghold of Security, Zanaris, instances), 2 a dungeon. The same split as Navigation.java. */
 export function layerOf(y: number): 0 | 1 | 2 {

@@ -1,5 +1,5 @@
-// Builds src/data/gear.json from the OSRS Wiki: the free-version melee weapons and armor, amulets and what
-// is handed out on Tutorial Island. And src/data/monsters.json — the defence of the opponents from the route steps (foes),
+// Builds src/data/generated/gear.json from the OSRS Wiki: the free-version melee weapons and armor, amulets and what
+// is handed out on Tutorial Island. And src/data/generated/monsters.json — the defence of the opponents from the route steps (foes),
 // which the weapons are compared against. It needs a network. Run: npm run build-gear (about a minute).
 //
 // The data is from the wiki only: ID, bonuses and speed (Bucket infobox_bonuses), shops and prices (storeline),
@@ -15,9 +15,9 @@ import type { Foe, FoeData, GearData, GearPiece, GearRequirements, GearSlot, Ste
 import { listedWithoutRequirements, requirementsFromText, setRule } from './gear-requirements.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/gear.json`;
-const OUT_FOES = `${root}src/data/monsters.json`;
-const styles = JSON.parse(readFileSync(`${root}src/data/styleGear.json`, 'utf8')) as Record<'magic' | 'ranged', { weapon: { names: string[]; reqs: { skill: string; level: number }[]; quests: string[] }[] }>;
+const OUT = `${root}src/data/generated/gear.json`;
+const OUT_FOES = `${root}src/data/generated/monsters.json`;
+const styles = JSON.parse(readFileSync(`${root}src/data/generated/styleGear.json`, 'utf8')) as Record<'magic' | 'ranged', { weapon: { names: string[]; reqs: { skill: string; level: number }[]; quests: string[] }[] }>;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 
 const METALS = ['bronze', 'iron', 'steel', 'black', 'mithril', 'adamant', 'rune'] as const;
@@ -186,7 +186,7 @@ for (const w of wanted) {
 
 // The step opponents: an article may have several versions — we take the free-world version and the
 // lowest-level one (Ghast from Nature Spirit — 30, Flesh Crawler — 28): the player meets it first.
-const steps = JSON.parse(readFileSync(`${root}src/data/steps.json`, 'utf8')) as Step[];
+const steps = JSON.parse(readFileSync(`${root}src/data/authored/steps.json`, 'utf8')) as Step[];
 // An item-only refresh must not rewrite independent monster facts as a side effect.
 const itemsOnly = process.argv.includes('--items-only');
 const foeNames = itemsOnly ? [] : [...new Set(steps.flatMap((s) => s.foes ?? []))];

@@ -4,7 +4,7 @@
 // trip to the bank (the wiki's distance from a furnace or anvil; the walk from a fire), times the chance it succeeds. Materials are a cost at their
 // price, the product a gain at its sale value after tax; a recipe, station or account rule added to the data reaches every method that lists it.
 
-import processingJson from '../../data/processing.json';
+import { processingJson } from '../../data';
 import { bankTrip, tripMinutes } from '../travel/bankTrip';
 import { skillChance } from './skillChance';
 import { coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from '../market/lootValue';

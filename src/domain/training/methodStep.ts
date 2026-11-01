@@ -7,10 +7,8 @@
 // see the same requirements. A level that is unknown keeps the step's own list: nothing is guessed.
 
 import type { MapLocation, Step, StepItemRequirement } from '../../types';
-import methodsJson from '../../data/trainingMethods.json';
-import processingJson from '../../data/processing.json';
 import type { ProcessingRegistry } from './processingRates';
-import { items as itemData } from '../../data';
+import { items as itemData, trainingMethodsJson as methodsJson, processingJson } from '../../data';
 import { matchStrict } from '../travel/locations';
 import { AXES, PICKAXES } from '../items/toolTiers';
 import type { MethodNeed } from './trainingRouter';

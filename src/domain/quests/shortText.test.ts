@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../../data';
+import { allSteps, questStagesJson as raw } from '../../data';
 import { shortLine, SHORT_MAX } from './shortText';
 import { stagePayload, stepGuide } from '../guide/inGameTarget';
-import raw from '../../data/questStages.json';
 
 const quests = (raw as unknown as { quests: Record<string, import('../../types').QuestStages> }).quests;
 

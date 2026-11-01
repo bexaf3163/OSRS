@@ -1,7 +1,7 @@
 // What it costs to bring Magic to a goal with strike combat spells (Wind/Water/Earth/Fire Strike) and whether the staff pays for itself.
 // Pure logic: the prices come from outside (the exchange), the spells from spells.json (wiki cards).
 
-import spellsJson from '../../data/spells.json';
+import { spellsJson } from '../../data';
 import { levelForXp, xpForLevel } from '../player/xp';
 import { heldExact, levelOf, questOf, wornItemsOf, type PlayerState } from '../player/playerState';
 import { countWorn } from '../items/equipmentCount';

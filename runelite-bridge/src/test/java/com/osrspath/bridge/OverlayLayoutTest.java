@@ -43,7 +43,7 @@ import org.junit.Test;
 public class OverlayLayoutTest
 {
 	private static final Gson GSON = new Gson();
-	private static final File DATA = new File(System.getProperty("osrsPath.steps")).getParentFile();
+	private static final File DATA = new File(System.getProperty("osrsPath.steps")).getParentFile().getParentFile();
 	private static final File OUT = new File("build/overlay-render");
 	private static final int MARGIN = 60;
 	/** A margin on the right: that much stuck-out text will surely get onto the picture. */
@@ -70,7 +70,7 @@ public class OverlayLayoutTest
 
 	private static JsonArray steps() throws IOException
 	{
-		JsonElement root = read("steps.json");
+		JsonElement root = read("authored/steps.json");
 		return root.isJsonArray() ? root.getAsJsonArray() : root.getAsJsonObject().getAsJsonArray("steps");
 	}
 
@@ -208,7 +208,7 @@ public class OverlayLayoutTest
 			null, false, null, false, null, false, null, null, false, null, 40, Preflight.chipText("Cabbage")));
 		String then = "Then: step " + longestTitle;
 		// Upgrade-router purchases: "Buy Steel axe from Bob", at the exchange from the clerk.
-		JsonObject tools = read("toolProgression.json").getAsJsonObject();
+		JsonObject tools = read("authored/toolProgression.json").getAsJsonObject();
 		for (String branch : tools.keySet())
 		{
 			if (!tools.get(branch).isJsonArray())
@@ -225,7 +225,7 @@ public class OverlayLayoutTest
 		}
 		// Gear (gear.json): a purchase from a seller and at the exchange, a HUD hint - as the app writes them
 		// (gearAdvisor.hudHint): "⚡ Wear ...", "⚡ Stronger: ... from ... (...), ... gp", "⚡ Stronger: ... at the exchange, ~... gp".
-		for (JsonElement e : read("gear.json").getAsJsonObject().getAsJsonArray("items"))
+		for (JsonElement e : read("generated/gear.json").getAsJsonObject().getAsJsonArray("items"))
 		{
 			JsonObject item = e.getAsJsonObject();
 			String name = str(item, "name");
@@ -245,7 +245,7 @@ public class OverlayLayoutTest
 		}
 		// "Go to: ..." - dictionary places and their other names, shops and cities from the item dossier.
 		Set<String> places = new LinkedHashSet<>();
-		JsonObject locations = read("majorLocations.json").getAsJsonObject().getAsJsonObject("locations");
+		JsonObject locations = read("generated/majorLocations.json").getAsJsonObject().getAsJsonObject("locations");
 		for (String name : locations.keySet())
 		{
 			places.add(name);
@@ -254,7 +254,7 @@ public class OverlayLayoutTest
 				places.add(a.getAsString());
 			}
 		}
-		for (JsonElement i : read("f2p-items.json").getAsJsonArray())
+		for (JsonElement i : read("generated/f2p-items.json").getAsJsonArray())
 		{
 			for (JsonElement b : arr(i.getAsJsonObject(), "buyLocations"))
 			{
@@ -277,7 +277,7 @@ public class OverlayLayoutTest
 	private static List<String> itemNames() throws IOException
 	{
 		List<String> out = new ArrayList<>();
-		for (JsonElement i : read("f2p-items.json").getAsJsonArray())
+		for (JsonElement i : read("generated/f2p-items.json").getAsJsonArray())
 		{
 			out.add(str(i.getAsJsonObject(), "nameEn"));
 		}

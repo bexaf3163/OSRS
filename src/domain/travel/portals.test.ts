@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import portalsFile from '../../data/portals.json';
+import { portalsJson as portalsFile } from '../../data';
 import { dedupePortals, fromRow, layerOf, parseTransports, pickPortal, type PortalRow } from './portals';
 
 const all = (portalsFile.portals as PortalRow[]).map(fromRow);

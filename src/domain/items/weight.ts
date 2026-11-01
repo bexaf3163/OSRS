@@ -6,7 +6,7 @@
 // The weight of items comes from the wiki (weights.json, npm run build-weights). No weight — the item is not in the file, its weight is unknown,
 // and the app does not name a number it does not know. It does nothing for the player: it advises and leads to the bank.
 
-import weightsJson from '../../data/weights.json';
+import { weightsJson } from '../../data';
 import type { Step } from '../../types';
 import { nameKey } from './itemKey';
 import type { PlayerState } from '../player/playerState';

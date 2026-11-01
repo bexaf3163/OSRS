@@ -1,4 +1,4 @@
-// Builds src/data/transportNet.json — the transport networks the route planner (src/domain/travel/travel.ts) uses besides the hand-written transport.json:
+// Builds src/data/generated/transportNet.json — the transport networks the route planner (src/domain/travel/travel.ts) uses besides the hand-written transport.json:
 // fairy rings (code and tile), charter ship ports with the full fare table, and the teleport tablets.
 // It needs a network. Run: npm run build-transport-net (a few seconds).
 //
@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { fetchWikitext } from '../../src/services/wikiApi.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const OUT = `${root}src/data/transportNet.json`;
+const OUT = `${root}src/data/generated/transportNet.json`;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 const fetchFn = (url: string) => fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(20_000) });
 

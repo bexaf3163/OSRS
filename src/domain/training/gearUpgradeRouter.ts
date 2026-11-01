@@ -7,9 +7,8 @@
 // in the name ("Bronze" in the name is not proof). Prices and sellers are from the project's item database (OSRS Wiki),
 // the shop point is from the place dictionary, like the map and the dossier.
 
-import toolProgressionJson from '../../data/toolProgression.json';
 import type { GameMode, Step, WikiItemDetail } from '../../types';
-import { itemById } from '../../data';
+import { itemById, toolProgressionJson } from '../../data';
 import { matchStrict } from '../travel/locations';
 import type { GearState, NavTargetPayload } from '../../services/runeliteBridge';
 

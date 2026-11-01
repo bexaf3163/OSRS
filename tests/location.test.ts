@@ -3,7 +3,7 @@ import { createWikiLocator, pruneStore, resolveLocationCoordinates, type WikiLoc
 import { isPoint, matchLoose, matchStrict, normalizeName } from '../src/domain/travel/locations';
 import { articleMapPoint, locLinePoint, mapTemplatePoints, spawnPoint } from '../src/services/wikiApi';
 import { cleanWikiText } from '../src/domain/text/md';
-import majorLocations from '../src/data/majorLocations.json';
+import { majorLocationsJson as majorLocations } from '../src/data';
 
 /** A wiki stub: answers with the markup of the articles from the table, counts the requests. */
 function fakeWiki(pages: Record<string, string>, fail = false) {

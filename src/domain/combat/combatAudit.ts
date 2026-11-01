@@ -1,6 +1,6 @@
 // The combat audit: every stage of the route where the player fights or can be attacked, found from the route data itself (the steps' opponents,
 // threats, combat training paces and safespots, and the quest stage lines that say kill, fight or attack), and the curated record of what was
-// checked for each (src/data/combatAudit.json). tests/combatAudit.test.ts holds the two together: a fight added to the route without an entry, or an
+// checked for each (src/data/authored/combatAudit.json). tests/combatAudit.test.ts holds the two together: a fight added to the route without an entry, or an
 // entry whose stage is gone, fails the tests, and docs/COMBAT_AUDIT.md is written from both.
 
 import type { Step } from '../../types';
@@ -98,7 +98,7 @@ export function auditMarkdown(ledger: AuditLedger, steps: readonly Step[]): stri
   const L: string[] = [];
   L.push('# Combat audit');
   L.push('');
-  L.push(`Written by \`tests/combatAudit.test.ts\` from \`src/data/combatAudit.json\` (revision ${ledger.revision}) and the route data. Do not edit by hand: change the ledger or the route and run \`UPDATE_FIXTURES=1 npx vitest run tests/combatAudit.test.ts\`.`);
+  L.push(`Written by \`tests/combatAudit.test.ts\` from \`src/data/authored/combatAudit.json\` (revision ${ledger.revision}) and the route data. Do not edit by hand: change the ledger or the route and run \`UPDATE_FIXTURES=1 npx vitest run tests/combatAudit.test.ts\`.`);
   L.push('');
   L.push(ledger.note);
   L.push('');

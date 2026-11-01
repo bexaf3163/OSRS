@@ -1,11 +1,9 @@
-// The combat audit ledger (src/data/combatAudit.json) against the route: every combat stage has an entry, no entry is stale, what an entry claims
+// The combat audit ledger (src/data/authored/combatAudit.json) against the route: every combat stage has an entry, no entry is stale, what an entry claims
 // about the app is true, and the mandatory fights are prepared before the danger. Also writes docs/COMBAT_AUDIT.md (npm run fixtures).
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import ledgerJson from '../../data/combatAudit.json';
-import questStages from '../../data/questStages.json';
-import dangerZones from '../../data/dangerZones.json';
+import { combatAuditJson as ledgerJson, questStagesJson as questStages, dangerZonesJson as dangerZones } from '../../data';
 import { allSteps, stepById } from '../../data';
 import { auditMarkdown, detectCombatStages, preparedFor, type AuditLedger } from './combatAudit';
 import { COMBAT_FOES } from './combatEstimate';

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import stages from '../src/data/questStages.json';
+import { questStagesJson as stages } from '../src/data';
 
 type Line = { t: string; s?: string; at?: number[]; hl?: { npc?: number[]; obj?: number[]; on?: string[]; item?: string[] } };
 const quests = (stages as unknown as { quests: Record<string, { stages: { at: number; do: Line[] }[] }> }).quests;

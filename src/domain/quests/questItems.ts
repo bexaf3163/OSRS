@@ -1,4 +1,4 @@
-// The items a quest's own steps check for (Quest Helper's requirements in src/data/questMachines.json): a quest still open in the route
+// The items a quest's own steps check for (Quest Helper's requirements in src/data/generated/questMachines.json): a quest still open in the route
 // needs them even when no shopping list names them, such as the relic, key or doll it hands over mid-quest.
 
 import reqsByStep from 'virtual:quest-item-reqs';

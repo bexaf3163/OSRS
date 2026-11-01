@@ -2,7 +2,7 @@
 // rounded down, at most 5,000,000 an item, nothing on the exempt list. The tax is taken from the seller, so a price shown by the exchange is never
 // the money received. Every funding figure that talks about "sale proceeds" goes through here.
 
-import exemptJson from '../../data/geTaxExempt.json';
+import { geTaxExemptJson as exemptJson } from '../../data';
 import { nameKey } from '../items/itemKey';
 
 export const GE_TAX_RATE: number = exemptJson.rate;

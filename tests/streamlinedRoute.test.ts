@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById } from '../src/data';
-import goalsFile from '../src/data/goals.json';
-import foeData from '../src/data/monsters.json';
+import { allSteps, stepById, goalsJson as goalsFile, monstersJson as foeData } from '../src/data';
 import { aggregateShopping } from '../src/domain/prep/shopping';
 import { titleTargets } from '../src/data/targets';
 import { triggerText } from '../src/domain/quests/triggers';

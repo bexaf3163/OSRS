@@ -2,9 +2,7 @@
 // The distances are straight lines (the obstacles are unknown), so this is a comparison of options, not an exact time. What is available now
 // is decided by the levels and things from the game; what we do not know (the bank was not opened) is marked, not invented.
 
-import transportJson from '../../data/transport.json';
-import netJson from '../../data/transportNet.json';
-import locationsJson from '../../data/majorLocations.json';
+import { transportJson, transportNetJson as netJson, majorLocationsJson as locationsJson } from '../../data';
 import { nameKey } from '../items/itemKey';
 import type { GearItem } from '../../services/runeliteBridge';
 import { isInstancedPoint, isOverworld } from './instances';

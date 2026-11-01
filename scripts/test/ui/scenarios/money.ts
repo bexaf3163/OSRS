@@ -11,7 +11,7 @@ async function fundingScenarios(browser: Browser) {
     .map(([id, name, slot]) => ({ id, name, slot }));
   const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
   // The plugin reports every item the route asks about, zero included; what is worn counts as carried.
-  const all = JSON.parse(readFileSync(new URL('../../../../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
+  const all = JSON.parse(readFileSync(new URL('../../../../src/data/authored/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
   const from = all.findIndex((x) => x.id === 'S4-03');
   const worn = new Set(equipment.map((e) => e.name));
   const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))];
@@ -79,7 +79,7 @@ async function moneyScenarios(browser: Browser) {
   console.log('money');
   const equipment = ([[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']] as [number, string, string][])
     .map(([id, name, slot]) => ({ id, name, slot }));
-  const all = JSON.parse(readFileSync(new URL('../../../../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
+  const all = JSON.parse(readFileSync(new URL('../../../../src/data/authored/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
   const from = all.findIndex((x) => x.id === 'S4-03');
   const worn = new Set(equipment.map((e) => e.name));
   const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))];

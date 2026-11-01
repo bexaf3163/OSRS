@@ -31,7 +31,7 @@ public class QhLineCoverageTest
 
 	private static JsonObject stagesData() throws Exception
 	{
-		Path file = Paths.get(System.getProperty("osrsPath.stages", "../src/data/questStages.json"));
+		Path file = Paths.get(System.getProperty("osrsPath.stages", "../src/data/authored/questStages.json"));
 		assertTrue("not found " + file.toAbsolutePath(), Files.exists(file));
 		return new Gson().fromJson(new String(Files.readAllBytes(file), StandardCharsets.UTF_8), JsonObject.class).getAsJsonObject("quests");
 	}

@@ -1,7 +1,7 @@
-// Place names to coordinates from the bundled dictionary (src/data/majorLocations.json): exact, alias, normalized,
+// Place names to coordinates from the bundled dictionary (src/data/generated/majorLocations.json): exact, alias, normalized,
 // substring and fuzzy matches. The wiki lookup with its cache lives in services/locationResolver.ts.
 
-import majorLocations from '../../data/majorLocations.json';
+import { majorLocationsJson as majorLocations } from '../../data';
 import type { WikiPoint } from '../../services/wikiApi';
 import { cleanWikiText } from '../text/md';
 

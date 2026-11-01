@@ -14,7 +14,7 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * The ways between the surface, the separate areas and the dungeons (src/data/portals.json, built from the Shortest Path plugin's transport table).
+ * The ways between the surface, the separate areas and the dungeons (src/data/generated/portals.json, built from the Shortest Path plugin's transport table).
  * A target in another layer than the player used to give only "Target is underground - find the way down" (The Corsair Curse, 2026-10-17): the cave
  * of Chief Tess is entered by a hole on the beach, nowhere near the cave's own coordinates. Now the arrow points at the way in or out.
  *

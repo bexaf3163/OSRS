@@ -17,7 +17,7 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * The danger radar: zones from src/data/dangerZones.json (Gradle puts it in the jar) and the player entering/leaving.
+ * The danger radar: zones from src/data/authored/dangerZones.json (Gradle puts it in the jar) and the player entering/leaving.
  *
  * Distances are squared (dx^2 + dy^2), without a root. Several zones are checked once per tick, which is cheap;
  * everything expensive (iterating NPCs, drawing the border) the plugin does only while the player is near a zone.

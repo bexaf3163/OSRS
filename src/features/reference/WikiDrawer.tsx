@@ -15,7 +15,7 @@ import { alchMargin, NATURE_RUNE_ID } from '../../domain/economy/alchemy';
 import { usePriceView } from '../../state/hooks/usePriceView';
 import { itemPrice, type ItemPrice } from '../../domain/market/itemPrice';
 import { IconClose, IconExternal } from '../../ui/Icons';
-import iconAssets from '../../data/iconAssets.json';
+import { iconAssetsJson as iconAssets } from '../../data';
 import { useFeatures } from '../../state/hooks/useFeatures';
 import { PlaceButton, PlaceMapView, PlaceNavButton, usePlaceMap, type PlaceQuery } from '../map/PlaceMap';
 import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
