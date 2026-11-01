@@ -143,6 +143,6 @@ describe('the state snapshot for the game (protocol 6)', () => {
     const now = `[\n${rows.join(',\n')}\n]\n`;
     if (process.env.UPDATE_FIXTURES === '1') writeFileSync(FILE, now);
     const saved = existsSync(FILE) ? readFileSync(FILE, 'utf8') : '';
-    expect(saved === now, 'runelite-bridge/src/test/resources/prep-snapshots.json is out of date — UPDATE_FIXTURES=1 npm test').toBe(true);
+    expect(saved === now, 'runelite-bridge/src/test/resources/prep-snapshots.json is out of date — npm run fixtures').toBe(true);
   });
 });

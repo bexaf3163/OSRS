@@ -1,7 +1,7 @@
 // What the app sends the plugin on /active-step — for every step and every quick variant. The copy lies in
 // runelite-bridge/src/test/resources/active-steps.json: the plugin tests check that it accepts all of it
 // (prepare) and that the "What you need" list on the game screen is drawn without overflows — on the real data, not on
-// a retelling of the route. This test makes sure the copy does not fall behind the app. To update: UPDATE_FIXTURES=1 npm test.
+// a retelling of the route. This test makes sure the copy does not fall behind the app. To update: npm run fixtures.
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -30,6 +30,6 @@ describe('step targets for the plugin tests', () => {
     const now = fresh();
     if (process.env.UPDATE_FIXTURES === '1') writeFileSync(FILE, now);
     const saved = existsSync(FILE) ? readFileSync(FILE, 'utf8') : '';
-    expect(saved === now, 'runelite-bridge/src/test/resources/active-steps.json is out of date — UPDATE_FIXTURES=1 npm test').toBe(true);
+    expect(saved === now, 'runelite-bridge/src/test/resources/active-steps.json is out of date — npm run fixtures').toBe(true);
   });
 });

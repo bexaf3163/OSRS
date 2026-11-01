@@ -1,6 +1,6 @@
 // The "golden" readiness snapshot: the status and the requirement states of every route step in six scenarios.
 // The unified engine replaced three separate calculations and was checked against the old code on this same data; the snapshot keeps this
-// behaviour: if an answer changed, the test shows which step and scenario. To update deliberately: UPDATE_FIXTURES=1 npm test.
+// behaviour: if an answer changed, the test shows which step and scenario. To update deliberately: npm run fixtures.
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -55,6 +55,6 @@ describe('step readiness: the golden snapshot', () => {
     const now = fresh();
     if (process.env.UPDATE_FIXTURES === '1') writeFileSync(FILE, now);
     const saved = existsSync(FILE) ? readFileSync(FILE, 'utf8') : '';
-    expect(saved === now, 'tests/fixtures/readiness.golden.json is out of date — UPDATE_FIXTURES=1 npx vitest run tests/readiness.golden.test.ts').toBe(true);
+    expect(saved === now, 'tests/fixtures/readiness.golden.json is out of date — npm run fixtures').toBe(true);
   });
 });

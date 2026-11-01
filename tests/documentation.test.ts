@@ -25,7 +25,7 @@ describe('single maintained project handoff', () => {
     expect(existsSync(new URL('index.html', root))).toBe(true);
   });
   it('publishes one handoff document, with generated version/source/hash context', () => {
-    const workflow = read('.github/workflows/release.yml');
+    const workflow = read('.github/workflows/checks.yml');
     const attached = workflow.slice(workflow.indexOf('          files: |')).match(/release\/[^\s]+\.md/g);
     expect(attached).toEqual(['release/PROJECT_HANDOFF.md']);
     expect(workflow).toContain('Get-Content -LiteralPath PROJECT_HANDOFF.md');

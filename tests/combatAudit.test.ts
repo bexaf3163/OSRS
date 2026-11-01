@@ -1,5 +1,5 @@
 // The combat audit ledger (src/data/combatAudit.json) against the route: every combat stage has an entry, no entry is stale, what an entry claims
-// about the app is true, and the mandatory fights are prepared before the danger. Also writes docs/COMBAT_AUDIT.md (UPDATE_FIXTURES=1).
+// about the app is true, and the mandatory fights are prepared before the danger. Also writes docs/COMBAT_AUDIT.md (npm run fixtures).
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -108,6 +108,6 @@ describe('docs/COMBAT_AUDIT.md', () => {
     const now = auditMarkdown(ledger, allSteps) + '\n';
     if (process.env.UPDATE_FIXTURES === '1') writeFileSync(FILE, now);
     const saved = existsSync(FILE) ? readFileSync(FILE, 'utf8') : '';
-    expect(saved === now, 'docs/COMBAT_AUDIT.md is out of date: UPDATE_FIXTURES=1 npx vitest run tests/combatAudit.test.ts').toBe(true);
+    expect(saved === now, 'docs/COMBAT_AUDIT.md is out of date: npm run fixtures').toBe(true);
   });
 });

@@ -48,7 +48,7 @@ Every fix, feature, removal or redesign (app, plugin, data, tests, CSS, docs, CI
 5. **Reuse before adding.** Extend the existing engine, parser, normalizer, allocator or component. A second implementation of a concept is a defect.
 6. **Remove in the same change.** Retiring something deletes its exclusive code, CSS, tests, fixtures, assets, data and docs in the same commit. [`npm run knip`, `npm run dead-css`]
 7. **CSS.** Ledger CSS holds tokens, base and fonts only. No new `:root:root`, `:root .la-*` overrides or `!important`. A CSS or layout change needs a base-versus-head screenshot diff with no unexplained pixels (`npm run perf -- <repo> dist <port> shots`, then `npm run pixeldiff`). [dead-css]
-8. **Tests.** Wait for conditions, never fixed sleeps (except a commented product timer). Never weaken or delete an assertion to make a change pass; adapt an obsolete one to the surviving behavior. Unit test files that mock modules or replace globals run isolated automatically (`vitest.config.ts`).
+8. **Tests.** Wait for conditions, never fixed sleeps (except a commented product timer). Never weaken or delete an assertion to make a change pass; adapt an obsolete one to the surviving behavior. Unit test files that mock modules or replace globals run isolated automatically (`vitest.config.ts`). Generated fixtures and documents come only from `npm run fixtures`.
 9. **RuneLite plugin.** One HUD. No per-tick or per-frame scans, JSON parsing, API reads or allocations without a dirty flag; heavy planning stays in TypeScript and overlays show only when relevant. Plugin-only assets (the HUD font Sora) live in `runelite-bridge/src/main/resources/`, not `public/`.
 10. **Performance does not regress.** For engines, providers or bridge handling, run `npm run perf -- <repo> dist <port> timing` twice on base and head and compare with `scripts/perf-compare.mjs`; over +10% per-update or start-up main-thread time needs an owner decision. Memoize by identity; no expensive work in render.
 11. **One contract document,** as the documentation policy says.
@@ -151,7 +151,7 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 - Gates: `npx tsc --noEmit`, `npm test`, `npm run check-data`, `npm run build`, `npm run test:ui`, `npm run test:e2e`, `runelite-bridge/gradlew -p runelite-bridge test jar` and the CI packaged-Portable gate; CI also runs `check-structure` (strict, with a shrinking known debt), `knip` and `dead-css`.
 - Browser tests use port 4179: one runner at a time, finish `dist` rebuilds first, never rebuild under a running suite. Electron e2e uses isolated data and a bridge stub. Screenshots go to the ignored `audit-temp/`.
 - Retiring a feature removes its exclusive UI, state, handlers, IPC, styles, imports and tests but keeps shared consumers, saves, backups and diagnostics; a selector can reach a nested dialog. Adapt obsolete assertions to surviving actions; never restore an obsolete screen for a test.
-- Release: `npm run bump -- X.Y.Z "summary"` (package, lock, `PLUGIN_VERSION`, notes stub), finish `release-notes/vX.Y.Z.md`, push to main. The Release workflow builds the Portable and publishes vX.Y.Z with the EXE, this file and SHA256SUMS.txt; existing releases are never overwritten. After exact-source CI and artifact verification, update the receipt; "asset exists" is not success.
+- Release: `npm run bump -- X.Y.Z "summary"` (package, lock, `PLUGIN_VERSION`, notes stub), finish `release-notes/vX.Y.Z.md`, push to main. When every Checks job passes, its release job publishes vX.Y.Z from the exact EXE the portable job verified, with this file (receipt filled in) and SHA256SUMS.txt, then downloads the assets and fails unless they match; existing releases are never overwritten. A release counts only when that job succeeds; "asset exists" is not success.
 - Structural work goes on a branch, rebased and merged after gates and live checks; large moves need a freeze window with the other agent idle. If interrupted, checkpoint the next action and separate local WIP from published code.
 - Never publish authentication material, real account or bank snapshots or private session logs; use isolated fixtures and redacted screenshots.
 
@@ -195,11 +195,10 @@ Record versions, account mode, facts, expected and actual result and evidence as
 
 Each batch releases after all gates and its Go threshold, and live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. Alternate timing-pair order: identical builds timed up to +10% script and +36% blocking when second. In order:
 
-1. **S11** receipts written by the release workflow and `npm run fixtures`; **C1** release reuses the Checks-verified EXE.
-2. **S5** TS-first bridge contract schema tested on both sides; first declare `alt` in `guide.stage.stages[*].items[*]`, which TS sends and `ActiveTarget.java` reads undeclared.
-3. **S6** tests beside code, browser scenarios per feature, conditions instead of the fixed sleeps left in `scripts/ui-smoke.ts`; Go: same checks, three green runs, at most 60% of today's time.
-4. **S9** CSS per feature, each batch pixel-diffed; **S7** authored/generated data with a manifest and **S10** scripts by purpose, in a freeze window.
-5. **S8** split oversized `OsrsPathBridgePlugin`, `HudModel`, `BridgeServer`, `ActiveTarget`, `types/index.ts`, `bridge.tsx` and `runeliteBridge.ts`, then run the full plugin live matrix.
+1. **S5** TS-first bridge contract schema tested on both sides; first declare `alt` in `guide.stage.stages[*].items[*]`, which TS sends and `ActiveTarget.java` reads undeclared.
+2. **S6** tests beside code, browser scenarios per feature, conditions instead of the fixed sleeps left in `scripts/ui-smoke.ts`; Go: same checks, three green runs, at most 60% of today's time.
+3. **S9** CSS per feature, each batch pixel-diffed; **S7** authored/generated data with a manifest and **S10** scripts by purpose, in a freeze window.
+4. **S8** split oversized `OsrsPathBridgePlugin`, `HudModel`, `BridgeServer`, `ActiveTarget`, `types/index.ts`, `bridge.tsx` and `runeliteBridge.ts`, then run the full plugin live matrix.
 
 Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3.8% page-only code), a V8 code cache via custom protocol (moves the `localStorage` origin), domain barrels, merged tiny modules. The React hooks lint needs TypeScript 5 beside TypeScript 7, so it stays an occasional review. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (kept by owner decision 2026-11-01). Merged remote branches and `audit-test-*` pre-releases were pruned on 2026-11-01; never delete normal `v*` releases.
 
@@ -227,7 +226,5 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-Published and independently verified Portable: **2.81.20**, source `b5119766b0847d04cf36a4fc8200be41868a966a`. Exact-source Checks **41270834253** (the packaged-EXE job passed on a rerun after one bridge-connect timeout) and Release **41270834237** passed, including browser, full Java, native-shell and isolated packaged-EXE gates.
-
-Downloaded EXE: **102021451 bytes**, SHA256 `0da68f2358bce78d64c95fe4f1e880cc10ca821f0d8bdbdeac2f3207397b2ce4`. Download, asset digest, SHA256SUMS.txt, size and release tag/source agree. The release copy of this file matches its digest (`3309561e1557beaddbf7f272fd7dd9a31edbd901be94c17a6d5470a840d556bd`) and names 2.81.20 and its source. Three assets: EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt. Verified by Claude 2026-11-01.
+Each release carries its receipt in its own copy of this file (version, source, EXE size and SHA-256), written by the release job in Checks, which then downloads the published assets and fails unless they match. Nothing is recorded here by hand; real-game acceptance stays in P4.
 <!-- DELIVERY_END -->

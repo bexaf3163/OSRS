@@ -1,6 +1,6 @@
 // The audit of the training stages whose default changed in 2.69 ("a sensible plan is selected by default"): for every affected stage and the
 // representative states, the old default, the new default and why. Written to docs/DEFAULT_PLANS.md from the same functions the app uses
-// (UPDATE_FIXTURES=1 npx vitest run tests/defaultPlans.test.ts); the test fails when the document is out of date.
+// (npm run fixtures); the test fails when the document is out of date.
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -109,6 +109,6 @@ describe('docs/DEFAULT_PLANS.md', () => {
     const FILE = new URL('../docs/DEFAULT_PLANS.md', import.meta.url);
     if (process.env.UPDATE_FIXTURES === '1') writeFileSync(FILE, md);
     const saved = existsSync(FILE) ? readFileSync(FILE, 'utf8') : '';
-    expect(saved === md, 'docs/DEFAULT_PLANS.md is out of date: UPDATE_FIXTURES=1 npx vitest run tests/defaultPlans.test.ts').toBe(true);
+    expect(saved === md, 'docs/DEFAULT_PLANS.md is out of date: npm run fixtures').toBe(true);
   });
 });

@@ -19,6 +19,7 @@
     "check-structure": "node scripts/check-structure.mjs --strict",
     "verify:quick": "node scripts/verify-quick.mjs",
     "bump": "node scripts/bump.mjs",
+    "fixtures": "node scripts/fixtures.mjs",
     "knip": "knip --include files,dependencies,unlisted",
     "dead-css": "node scripts/dead-css.mjs",
     "perf": "node scripts/perf.mjs",

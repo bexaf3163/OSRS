@@ -1,6 +1,6 @@
 // The skills coverage ledger (2.70): every skill the app supports, what it covers for a free and a members account, the route's requirements, the gaps
 // and the overlaps, what was fixed and how it is verified. Written to docs/SKILLS_COVERAGE.md from the data the app uses
-// (UPDATE_FIXTURES=1 npx vitest run tests/skillsCoverage.test.ts); the test fails when the document is out of date or a check breaks.
+// (npm run fixtures); the test fails when the document is out of date or a check breaks.
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -139,6 +139,6 @@ describe('skills coverage', () => {
     const FILE = new URL('../docs/SKILLS_COVERAGE.md', import.meta.url);
     if (process.env.UPDATE_FIXTURES === '1') writeFileSync(FILE, md);
     const saved = existsSync(FILE) ? readFileSync(FILE, 'utf8') : '';
-    expect(saved === md, 'docs/SKILLS_COVERAGE.md is out of date: UPDATE_FIXTURES=1 npx vitest run tests/skillsCoverage.test.ts').toBe(true);
+    expect(saved === md, 'docs/SKILLS_COVERAGE.md is out of date: npm run fixtures').toBe(true);
   });
 });

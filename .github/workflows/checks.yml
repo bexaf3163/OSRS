@@ -69,6 +69,14 @@ jobs:
       - name: Verify the isolated portable executable
         shell: pwsh
         run: ./.github/scripts/test-portable.ps1
+      - name: Keep the verified portable for the release job
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-portable
+          path: release/*.exe
+          if-no-files-found: error
+          retention-days: 3
       - name: Preserve the verified audit preview
         if: ((startsWith(github.head_ref, 'codex/audit-block-') || github.head_ref == 'codex/audit-test-build' || github.head_ref == 'codex/audit-test-build-2' || github.head_ref == 'codex/audit-test-build-3' || github.head_ref == 'codex/audit-test-build-4' || github.head_ref == 'codex/audit-test-build-5') && github.event.pull_request.head.repo.full_name == github.repository)
         uses: actions/upload-artifact@v4
@@ -113,3 +121,85 @@ jobs:
           Copy-Item -LiteralPath PROJECT_HANDOFF.md -Destination $handoff
           & gh release create $tag $candidate audit-candidate/SHA256SUMS.txt $handoff --prerelease --latest=false --target $env:SOURCE_SHA --title "OSRS Path audit test $short" --notes "Isolated CI review build. Read PROJECT_HANDOFF.md for current project context. Normal Portable releases are published separately."
           if ($LASTEXITCODE -ne 0) { throw 'Audit preview publication failed.' }
+
+  release:
+    # A new version in package.json on main publishes the exe that the portable job verified (no second build),
+    # then downloads the published assets and fails unless they match. An existing release is never overwritten.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [checks, runelite-bridge, portable]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: release-main
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - id: v
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(node -p "require('./package.json').version")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if gh release view "v$version" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release v$version already exists — skipping."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.v.outputs.exists == 'false'
+        uses: actions/download-artifact@v4
+        with:
+          name: verified-portable
+          path: release
+      - if: steps.v.outputs.exists == 'false'
+        name: Attach the continuation handoff and verified EXE digest
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $files = @(Get-ChildItem -LiteralPath release -Filter '*.exe')
+          if ($files.Count -ne 1) { throw 'Expected one verified portable EXE.' }
+          $hash = (Get-FileHash -LiteralPath $files[0].FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $($files[0].Name)" | Set-Content -LiteralPath release/SHA256SUMS.txt -Encoding utf8
+          $handoff = Get-Content -LiteralPath PROJECT_HANDOFF.md -Raw
+          $version = (Get-Content -LiteralPath package.json -Raw | ConvertFrom-Json).version
+          $receipt = @(
+            '<!-- DELIVERY_START -->',
+            '## Delivery receipt', '',
+            "Release: **$version**. Source: ``$env:GITHUB_SHA``.",
+            "Portable: $($files[0].Name), $($files[0].Length) bytes.",
+            "SHA256: ``$hash``.", '',
+            'Release build/data/unit/Java/browser/native/isolated-EXE gates passed before publication. No in-game verification is claimed. The release job downloads the published assets and fails unless they match this receipt.',
+            '<!-- DELIVERY_END -->'
+          ) -join "`n"
+          $handoff = [regex]::Replace($handoff, '(?s)<!-- DELIVERY_START -->.*?<!-- DELIVERY_END -->', [System.Text.RegularExpressions.MatchEvaluator]{ param($m) $receipt })
+          [IO.File]::WriteAllText((Join-Path (Get-Location) 'release/PROJECT_HANDOFF.md'), $handoff, [Text.UTF8Encoding]::new($false))
+      - if: steps.v.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.v.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          name: OSRS Path ${{ steps.v.outputs.version }}
+          body_path: release-notes/v${{ steps.v.outputs.version }}.md
+          files: |
+            release/*.exe
+            release/SHA256SUMS.txt
+            release/PROJECT_HANDOFF.md
+          fail_on_unmatched_files: true
+      - name: Download the published assets and check them against the verified build
+        if: steps.v.outputs.exists == 'false'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          v="v${{ steps.v.outputs.version }}"
+          dir="$RUNNER_TEMP/published"; mkdir -p "$dir"
+          gh release download "$v" --repo "$GITHUB_REPOSITORY" --dir "$dir"
+          for f in release/*; do cmp "$f" "$dir/$(basename "$f")"; done
+          (cd "$dir" && sha256sum -c SHA256SUMS.txt)
+          gh release view "$v" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[] | .name + " " + .digest' | while read -r name digest; do
+            [ "$digest" = "sha256:$(sha256sum "$dir/$name" | cut -d' ' -f1)" ] || { echo "::error::$name: published digest $digest does not match the download"; exit 1; }
+          done
+          echo "The published assets match the verified build."
