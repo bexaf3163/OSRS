@@ -41,10 +41,10 @@ Updated 2026-11-01. **This is the only current project contract, architecture ma
 
 Every fix, feature, removal or redesign (app, plugin, data, tests, CSS, docs, CI) leaves the project at least as simple as before. A change that fails a listed check is not finished. If a rule blocks legitimate work, change it here with the owner; never bypass it.
 
-1. **Put it where it belongs:** `src/app` shell, `src/state` providers and hooks, `src/ui` and `src/ledger` shared pieces, `src/features/<page>`, `src/domain/<area>` engines, `src/services` IO, `src/data`. No catch-all folder and none above 25 files. [`npm run check-structure`]
+1. **Put it where it belongs:** `src/app` shell, `src/state` providers, hooks and storage-backed stores, `src/ui` and `src/ledger` shared pieces, `src/features/<page>`, `src/domain/<area>` engines, `src/services` IO, `src/data` typed data. No catch-all folder and none above 25 files (`src/data` until S7). [`npm run check-structure`]
 2. **Size budget.** Soft 600, hard 1,000 lines for TS, Java and CSS. A touched file above 600 lines must not grow; split it by concern. No merging modules into big files and no one-line files without a reason (breaking a cycle is one). [check-structure]
 3. **One source of truth.** Versions change only through `npm run bump -- X.Y.Z "summary"`. Generated data comes only from its `scripts/build-*.ts` generator. Bridge payload fields change the TS types and Java DTOs together, tested on both sides. Reuse the existing route-link and storage-key constants.
-4. **One-way layers, no cycles.** `app → features → state/ui → domain → data/types`: `domain` has no React or IO, `services` only IO, and features never import other features. No runtime import cycles. Type-only imports use `import type` (under `verbatimModuleSyntax`, `import { type X }` still loads the module). [check-structure]
+4. **One-way layers, no cycles.** `app → features → ui/ledger → state → services → domain → data/types`. Domain areas depend bottom up: persistence and text, items, player and travel, market and quests, combat, training, prep, economy, readiness, guide. A feature may reuse another feature's component, never back. `domain` has no React and no network or desktop IO. No import cycles between files or folders. Type-only imports use `import type` (under `verbatimModuleSyntax`, `import { type X }` still loads the module). [check-structure, strict in CI]
 5. **Reuse before adding.** Extend the existing engine, parser, normalizer, allocator or component. A second implementation of a concept is a defect.
 6. **Remove in the same change.** Retiring something deletes its exclusive code, CSS, tests, fixtures, assets, data and docs in the same commit. [`npm run knip`, `npm run dead-css`]
 7. **CSS.** Ledger CSS holds tokens, base and fonts only. No new `:root:root`, `:root .la-*` overrides or `!important`. A CSS or layout change needs a base-versus-head screenshot diff with no unexplained pixels (`npm run perf -- <repo> dist <port> shots`, then `npm run pixeldiff`). [dead-css]
@@ -87,21 +87,21 @@ Cross-page activity selection is `resolveActiveActivity` in `src/domain/quests/a
 | Layer | Main entry points | Extension rule |
 |---|---|---|
 | Game link and facts | `src/state/bridge.tsx`, `src/domain/player/playerState.ts`, `src/state/playerStateContext.tsx`, `src/services/runeliteBridge.ts` | Keep observed/saved/unknown and account boundaries; reuse event processing before adding a scan or cache. |
-| Requirements and readiness | `src/domain/readiness/` (`requirements.ts`, `readinessEngine.ts`, `preflight.ts`), `src/state/readinessContext.tsx` | Same requirements everywhere. Owning, using, carrying and wearing are different facts. |
+| Requirements and readiness | `src/domain/player/requirements.ts`, `src/domain/readiness/` (`readinessEngine.ts`, `preflight.ts`), `src/state/readinessContext.tsx` | Same requirements everywhere. Owning, using, carrying and wearing are different facts. |
 | Training catalogue and orchestration | `src/data/trainingMethods.json`, `src/domain/training/trainingRouter.ts` | Data under an existing model; new calculations in a shared adapter, never an ID-specific UI branch. |
 | Rates and equipment | `src/domain/training/` (`methodRates.ts`, `skillingRates.ts`, `processingRates.ts`), `src/domain/combat/` (`rangedLoadout.ts`, `magicPlan.ts`, `styleGear.ts`, `gearAdvisor.ts`) | Reuse complete equipment and combat/recovery comparisons. Keep model, measured and reference rates apart. |
 | Tool capabilities | `src/domain/items/toolTiers.ts`, `src/data/toolProgression.json` | A purchase catalogue is not a usability whitelist. Skill and Attack requirements are separate. |
-| Followed Skills and virtual steps | `src/domain/training/` (`skillTrack.ts`, `trackedTraining.ts`, `methodStep.ts`), `src/state/trainingSessionContext.tsx` | Follow the selected goal and conservative mode scope; keep the return to the original activity and stable phase IDs. |
+| Followed Skills and virtual steps | `src/domain/training/` (`skillTrack.ts`, `trackedTraining.ts`, `methodStep.ts`), `src/state/hooks/useTracked.ts`, `src/state/trainingSessionContext.tsx` | Follow the selected goal and conservative mode scope; keep the return to the original activity and stable phase IDs. |
 | Acquisition | `src/domain/prep/` (`prepPlan.ts`, `prepQueue.ts`, `prepRoute.ts`, `prepEnvelope.ts`, `sourceRouter.ts`), `src/state/hooks/usePrep.ts` | Reuse banking, sources, task detection, cancellation and resumption. No per-skill procurement. |
-| Travel | `src/domain/travel/` (`travel.ts`, `transport.ts`, `travelInput.ts`, `liveTransport.ts`, `travelSupplies.ts`) | Real eligibility, complete supplies, whole detour cost, explicit supported modes. |
+| Travel | `src/domain/travel/` (`travel.ts`, `transport.ts`, `travelInput.ts`), `src/domain/readiness/` (`liveTransport.ts`, `travelSupplies.ts`) | Real eligibility, complete supplies, whole detour cost, explicit supported modes. |
 | Quests, goals and completion | `src/data/questStages.json`, `goals.json`, `src/domain/quests/` (`questSteps.ts`, `questItems.ts`, `goals.ts`, `triggers.ts`, `next-step.ts`) | Keep quest entry/preparation, branches, observed progress and prerequisite semantics. |
-| Economy | `src/domain/economy/` (`funding/`, `fundingPlan.ts`), `src/state/fundingContext.tsx` | Reuse quotes, freshness, volume/trade limits, budget and sessions. Cash is not equipment value; future earnings are conditional. |
-| Item keys | `src/domain/items/itemKey.ts` (memoized `nameKey`), `src/domain/prep/shopConstants.ts` (`SAVE_GP`) | Import-free leaves; never re-create `nameKey`. |
+| Economy | `src/domain/market/` (quotes, GE tax, prices, loot value, need pricing), `src/domain/economy/` (`funding/`, `fundingPlan.ts`), `src/state/fundingContext.tsx` | Reuse quotes, freshness, volume/trade limits, budget and sessions. Cash is not equipment value; future earnings are conditional. |
+| Item keys | `src/domain/items/itemKey.ts` (memoized `nameKey`), `src/domain/market/shopConstants.ts` (`SAVE_GP`) | Import-free leaves; never re-create `nameKey`. |
 | App recommendations | `src/features/skills/` (`TrainingCard.tsx`, `SkillDetail.tsx`, `Skills.tsx`), `src/domain/training/f2pSkillAdvice.ts` | Train is the compact recommendation; Plan explains the same result. Calculator and Reference never compete with it. |
 | Quest/current-action display | `src/features/path/` (`PathWide.tsx`, `CockpitWorkspace.tsx`, `step/`, `prep/`, `combat/`) | Keep current instruction, preparation, branches, completion and route restoration. |
 | Maps | `src/domain/travel/map.ts`, `src/state/hooks/useMapSources.ts`, `src/features/map/` (`StepMap.tsx`, `WorldMapModal.tsx`) | One preview, shared coordinates and sources, full-map point selection, game navigation. |
 | Knowledge UI | `src/features/reference/WikiDrawer.tsx`, `src/domain/travel/` (`places.ts`, `stepPlaces.ts`), reference/item/NPC data | Keep dossiers, pinning and source navigation. Reference is not a training plan. |
-| Plugin | `runelite-bridge/` (`BridgeServer`, `HudModel`, `OsrsPathGuideOverlay`, `GuideFont`) | One guide card: current action, status, at most one warning, details on demand. Never resurrect the multiple-HUD layout. |
+| Plugin | `src/domain/guide/inGameTarget.ts` (what the plugin shows for a step), `runelite-bridge/` (`BridgeServer`, `HudModel`, `OsrsPathGuideOverlay`, `GuideFont`) | One guide card: current action, status, at most one warning, details on demand. Never resurrect the multiple-HUD layout. |
 | Native shell and storage | `electron/main.cjs`, `preload.cjs`, `runelite-launcher.cjs`, `src/services/desktop.ts` | Keep atomic saves, recoverable damaged/external data, profile protection, backups, updater, authenticated launcher and `startup.log` (first-paint time). |
 | Tooling | `scripts/check-structure.mjs`, `verify-quick.mjs`, `bump.mjs`, `perf.mjs`, `perf-compare.mjs`, `pixeldiff.mjs`, `dead-css.mjs`, `knip.json`, `vitest.config.ts` | The guards of the hygiene rules. Extend them instead of adding parallel checks. |
 
@@ -148,7 +148,7 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 ## Development and release procedure
 
 - Read this file and `git status` first.
-- Gates: `npx tsc --noEmit`, `npm test`, `npm run check-data`, `npm run build`, `npm run test:ui`, `npm run test:e2e`, `runelite-bridge/gradlew -p runelite-bridge test jar` and the CI packaged-Portable gate; CI also runs `check-structure` (report), `knip` and `dead-css`.
+- Gates: `npx tsc --noEmit`, `npm test`, `npm run check-data`, `npm run build`, `npm run test:ui`, `npm run test:e2e`, `runelite-bridge/gradlew -p runelite-bridge test jar` and the CI packaged-Portable gate; CI also runs `check-structure` (strict, with a shrinking known debt), `knip` and `dead-css`.
 - Browser tests use port 4179: one runner at a time, finish `dist` rebuilds first, never rebuild under a running suite. Electron e2e uses isolated data and a bridge stub. Screenshots go to the ignored `audit-temp/`.
 - Retiring a feature removes its exclusive UI, state, handlers, IPC, styles, imports and tests but keeps shared consumers, saves, backups and diagnostics; a selector can reach a nested dialog. Adapt obsolete assertions to surviving actions; never restore an obsolete screen for a test.
 - Release: `npm run bump -- X.Y.Z "summary"` (package, lock, `PLUGIN_VERSION`, notes stub), finish `release-notes/vX.Y.Z.md`, push to main. The Release workflow builds the Portable and publishes vX.Y.Z with the EXE, this file and SHA256SUMS.txt; existing releases are never overwritten. After exact-source CI and artifact verification, update the receipt; "asset exists" is not success.
@@ -195,13 +195,12 @@ Record versions, account mode, facts, expected and actual result and evidence as
 
 Each batch releases after all gates and its Go threshold, and live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. Alternate timing-pair order: identical builds timed up to +10% script and +36% blocking when second. In order:
 
-1. **S3** move the remaining wrong-direction symbols (`FOODS`, `FRESH_MS`, `nearestBank`, `isClosed`, services importing engines) to zero layer violations and break the `Skills` ↔ `SkillDetail` cycle; then `check-structure --strict` in CI.
-2. **S4** page registry with `href.*()` (30 files hard-code `#/`) and one storage-key registry (26 keys in 19 files, byte-identical).
-3. **S11** receipts written by the release workflow and `npm run fixtures`; **C1** release reuses the Checks-verified EXE.
-4. **S5** TS-first bridge contract schema tested on both sides; first declare `alt` in `guide.stage.stages[*].items[*]`, which TS sends and `ActiveTarget.java` reads undeclared.
-5. **S6** tests beside code, browser scenarios per feature, conditions instead of the fixed sleeps left in `scripts/ui-smoke.ts`; Go: same checks, three green runs, at most 60% of today's time.
-6. **S9** CSS per feature, each batch pixel-diffed; **S7** authored/generated data with a manifest and **S10** scripts by purpose, in a freeze window.
-7. **S8** split oversized `OsrsPathBridgePlugin`, `HudModel`, `BridgeServer`, `ActiveTarget`, `types/index.ts`, `bridge.tsx` and `runeliteBridge.ts`, then run the full plugin live matrix.
+1. **S4** page registry with `href.*()` (30 files hard-code `#/`) and one storage-key registry (26 keys in 19 files, byte-identical).
+2. **S11** receipts written by the release workflow and `npm run fixtures`; **C1** release reuses the Checks-verified EXE.
+3. **S5** TS-first bridge contract schema tested on both sides; first declare `alt` in `guide.stage.stages[*].items[*]`, which TS sends and `ActiveTarget.java` reads undeclared.
+4. **S6** tests beside code, browser scenarios per feature, conditions instead of the fixed sleeps left in `scripts/ui-smoke.ts`; Go: same checks, three green runs, at most 60% of today's time.
+5. **S9** CSS per feature, each batch pixel-diffed; **S7** authored/generated data with a manifest and **S10** scripts by purpose, in a freeze window.
+6. **S8** split oversized `OsrsPathBridgePlugin`, `HudModel`, `BridgeServer`, `ActiveTarget`, `types/index.ts`, `bridge.tsx` and `runeliteBridge.ts`, then run the full plugin live matrix.
 
 Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3.8% page-only code), a V8 code cache via custom protocol (moves the `localStorage` origin), domain barrels, merged tiny modules. The React hooks lint needs TypeScript 5 beside TypeScript 7, so it stays an occasional review. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (kept by owner decision 2026-11-01). Merged remote branches and `audit-test-*` pre-releases were pruned on 2026-11-01; never delete normal `v*` releases.
 
@@ -229,7 +228,7 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-Published and independently verified Portable: **2.81.19**, source `62a3b4cdd9eba47f3f0eb55ab9b2227804fb75f4`. Exact-source Checks **41257110698** and Release **41257110675** passed, including browser, full Java, native-shell and isolated packaged-EXE gates.
+Published and independently verified Portable: **2.81.20**, source `b5119766b0847d04cf36a4fc8200be41868a966a`. Exact-source Checks **41270834253** (the packaged-EXE job passed on a rerun after one bridge-connect timeout) and Release **41270834237** passed, including browser, full Java, native-shell and isolated packaged-EXE gates.
 
-Downloaded EXE: **102019858 bytes**, SHA256 `bcef14712359ae0b4d75d8aa6d6381ec2dfe8dc6d449ca84e93dd70092bee1d3`. Download, asset digest, SHA256SUMS.txt, size and release tag/source agree. The release copy of this file matches its digest (`17cb250cc69ce34748f8bf46331c7628ad271eade844ddb2fa076a1833ce8bc7`) and names 2.81.19 and its source. Three assets: EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt. Verified by Claude 2026-11-01.
+Downloaded EXE: **102021451 bytes**, SHA256 `0da68f2358bce78d64c95fe4f1e880cc10ca821f0d8bdbdeac2f3207397b2ce4`. Download, asset digest, SHA256SUMS.txt, size and release tag/source agree. The release copy of this file matches its digest (`3309561e1557beaddbf7f272fd7dd9a31edbd901be94c17a6d5470a840d556bd`) and names 2.81.20 and its source. Three assets: EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt. Verified by Claude 2026-11-01.
 <!-- DELIVERY_END -->
