@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 // Surviving foundation palette contrast; the accepted Ledger has one fixed appearance.
-const css = readFileSync(new URL('../src/styles.css', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
+const css = readFileSync(new URL('../src/styles/tokens.css', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 
 function block(selector: string): Record<string, string> {
   const start = css.indexOf(`${selector} {\n`);

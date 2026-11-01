@@ -1,0 +1,134 @@
+/* ---------- V2.4: the in-game helper — the departure check, quick variants, the bulk list ---------- */
+/* In a narrow window there is no room in the header — the list opens from the "What to do now" card and from shopping steps. */
+/* 320 px: the header did not fit by 16 px and cut off the settings — the name hides, the icon stays a link home. */
+.ingame-route { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 2px; font-size: 0.86rem; }
+
+.preflight { border-top: 1px dashed var(--border); padding-top: 8px; margin-top: 2px; }
+.preflight-details > summary { cursor: pointer; color: var(--muted); margin-bottom: 4px; }
+.preflight-list { list-style: none; margin: 0 0 6px; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.preflight-row { display: grid; grid-template-columns: 18px 1fr auto; align-items: baseline; gap: 6px; font-size: 0.88rem; }
+.preflight-mark { font-weight: 700; text-align: center; }
+.preflight-row.is-ok .preflight-mark { color: var(--done); }
+.preflight-row.is-missing .preflight-mark { color: var(--danger); }
+.preflight-row.is-absent .preflight-mark { color: var(--warn); }
+.preflight-count { font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.preflight-row.is-ok .preflight-count { color: var(--done); }
+.preflight-verdict { margin: 0; font-weight: 600; color: var(--warn); }
+.preflight-verdict.is-ready { color: var(--done); }
+
+.branches { gap: 6px; }
+.branch-list, .branch-locked { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.branch {
+  border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; background: var(--surface-3);
+  display: flex; flex-direction: column; gap: 4px; align-items: flex-start;
+}
+.branch.is-available { border-color: color-mix(in srgb, var(--gold) 55%, transparent); background: var(--gold-soft); }
+.branch.is-chosen { box-shadow: inset 3px 0 0 var(--done); }
+.branch.is-unknown { opacity: 0.85; }
+.branch p { margin: 0; }
+.branch-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+.branch-text { font-size: 0.88rem; }
+.branch-locked li { padding-left: 2px; }
+
+.shop-page { gap: 12px; }
+.shop-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.shop-controls select { margin-left: 4px; }
+.shop-check { display: inline-flex; align-items: center; gap: 6px; }
+.owned-input { display: inline-flex; align-items: center; gap: 4px; }
+.owned-input input {
+  width: 5.5em; min-height: 32px; padding: 0 6px; text-align: center; font: inherit; font-variant-numeric: tabular-nums;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface); color: var(--text);
+}
+.shop-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.warn-text { color: var(--warn); }
+.ok-text { color: var(--done); }
+
+
+/* Places from the wiki dossier: "📍 place" opens the map, "🧭" leads the arrow in the game. */
+.drawer-list.is-places { list-style: none; padding-left: 0; gap: 2px; }
+.place-row { display: flex; align-items: center; gap: 2px; margin: 0; }
+.place-link {
+  font: inherit; color: var(--accent-ink); background: none; border: 0; border-radius: 6px; padding: 3px 6px; margin-left: -6px;
+  text-align: left; cursor: pointer; text-decoration: underline dotted color-mix(in srgb, var(--accent-ink) 45%, transparent);
+  text-underline-offset: 3px; transition: background var(--ease);
+}
+.place-link:hover { background: var(--accent-soft); text-decoration-style: solid; }
+th .place-link { font-weight: inherit; }
+.icon-btn.nav-btn { width: 30px; height: 30px; flex: none; font-size: 0.95rem; vertical-align: middle; }
+.icon-btn.nav-btn:hover { background: var(--gold-soft); }
+.icon-btn.nav-btn:disabled { opacity: 0.5; cursor: progress; }
+.nav-state { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.nav-offline { color: var(--warn); }
+.map-source { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; }
+.map-source-badge {
+  display: inline-block; padding: 2px 10px; border-radius: 999px; font-weight: 600;
+  background: var(--gold-soft); color: var(--gold-ink); border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
+}
+.map-modal-status { inset: 50% 12px auto; transform: translateY(-50%); max-width: 460px; margin: 0 auto; text-align: center; display: flex; flex-direction: column; gap: 6px; align-items: center; }
+
+/* The stage's Bank Tags: a button above the stage steps (and in the left column of a wide screen). */
+
+/* The training pace from the game. */
+.pacing { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0; font-size: 0.92rem; }
+.pacing-main { font-weight: 600; font-variant-numeric: tabular-nums; }
+.pacing-eta { color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+.pacing.is-good .pacing-main { color: var(--done); }
+
+/* ⚡ Speed upgrade: an in-game plate with an amber accent, without blinking. */
+.upgrade {
+  display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); background: var(--gold-soft);
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+.upgrade p { margin: 0; }
+.upgrade-kicker { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-ink); }
+.upgrade-title { font-size: 1rem; }
+.upgrade-where .place-link { margin-left: 0; }
+.upgrade-cash { border-top: 1px dashed color-mix(in srgb, var(--gold) 45%, transparent); padding-top: 6px; margin-top: 2px; }
+.upgrade-cash ul { margin: 2px 0 0; padding-left: 1.2rem; }
+.upgrade-going { color: var(--done); font-weight: 600; }
+.upgrade-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 4px; }
+.upgrade.is-poor { box-shadow: inset 3px 0 0 var(--warn); }
+.gear-more { margin: 2px 0 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 2px; }
+.gear-ok { margin: 0; color: var(--done); }
+.gear-ok a { color: inherit; }
+
+/* ⚔️ Gear */
+.gear-page { gap: 12px; }
+.gear-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.gear-row { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: start; }
+.gear-row .item-icon { margin-top: 2px; }
+.gear-main { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.gear-main p { margin: 0; overflow-wrap: anywhere; }
+.lock-chip { display: inline-block; padding: 0 6px; border-radius: 6px; background: var(--warn-soft); color: var(--warn); font-size: 0.85em; font-weight: 600; white-space: nowrap; }
+.lock-note { margin: 0; color: var(--warn); }
+
+
+/* Step readiness: a traffic light and actions. */
+.readiness { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; background: var(--surface-3); }
+.readiness p { margin: 0; }
+.readiness.is-ready { box-shadow: inset 3px 0 0 var(--done); }
+.readiness.is-minor_prep { box-shadow: inset 3px 0 0 var(--gold); }
+.readiness.is-missing_item, .readiness.is-missing_money, .readiness.is-missing_stats { box-shadow: inset 3px 0 0 var(--warn); }
+.readiness.is-missing_quest, .readiness.is-blocked { box-shadow: inset 3px 0 0 var(--danger); }
+.readiness.is-unknown { box-shadow: inset 3px 0 0 var(--border-strong); }
+.ready-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.ready-row { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 6px; align-items: baseline; font-size: 0.88rem; }
+.ready-row.is-missing .ready-mark, .ready-row.is-partial .ready-mark { color: var(--warn); }
+.ready-row.is-ok .ready-mark { color: var(--done); }
+.ready-text { overflow-wrap: anywhere; }
+.ready-action { justify-self: end; }
+.ready-ok { color: var(--done); }
+.ready-unknown > summary { cursor: pointer; width: fit-content; color: var(--muted); }
+@media (max-width: 560px) {
+  .ready-row { grid-template-columns: 18px minmax(0, 1fr); }
+  .ready-action { grid-column: 2; justify-self: start; }
+}
+.readiness-detour { color: var(--gold-ink); }
+
+/* 💰 The goal of an earning step. */
+.money-goal { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; background: var(--surface-3); box-shadow: inset 3px 0 0 var(--gold); }
+.money-goal p { margin: 0; }
+.money-bar { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.money-bar > span { display: block; height: 100%; background: var(--gold); border-radius: inherit; }
+

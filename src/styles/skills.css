@@ -1,0 +1,119 @@
+/* ---------- Levels ---------- */
+
+.level-input { display: flex; flex-direction: column; gap: 4px; }
+.level-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); }
+.stepper {
+  display: inline-flex; align-items: stretch; height: 44px; width: max-content;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface); overflow: hidden;
+}
+.stepper:focus-within { border-color: var(--accent); }
+.stepper-btn {
+  width: 40px; border: 0; background: none; cursor: pointer; font-size: 1.15rem; color: var(--muted);
+}
+.stepper-btn:hover:not(:disabled) { background: var(--surface-2); color: var(--text); }
+.stepper-btn:disabled { opacity: 0.35; cursor: default; }
+.stepper-input {
+  width: 3ch; min-width: 44px; border: 0; background: none; text-align: center;
+  font-weight: 650; font-size: 1.05rem; font-variant-numeric: tabular-nums; padding: 0;
+}
+.stepper-input:focus { outline: none; }
+.level-input.is-compact .stepper-btn { width: 36px; }
+
+/* ---------- Skills ---------- */
+
+.skill-grid.skill-grid-compact { grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); }
+.skill-tile .skill-card-link { flex-direction: column; justify-content: center; text-align: center; margin: 0; min-height: 90px; }
+.skill-tile .skill-name { overflow-wrap: anywhere; }
+.f2p-skill-badge { font-size: 0.75rem; line-height: 1.4; color: var(--muted); overflow-wrap: anywhere; }
+.f2p-skill-badge.is-good { color: var(--accent); }
+.f2p-skill-note { margin-block: 12px; padding-left: 12px; border-left: 2px solid var(--border-strong); }
+.f2p-skill-note > p { margin: 0 0 6px; }
+.f2p-skill-note summary { cursor: pointer; color: var(--muted); }
+.skill-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 560px) { .skill-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .skill-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.skill-card { display: flex; flex-direction: column; gap: 12px; padding: 14px; }
+.skill-card-link {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  color: var(--text); text-decoration: none; min-height: 44px; margin: -6px 0;
+}
+.skill-card-link:hover .skill-name { text-decoration: underline; text-underline-offset: 3px; }
+.skill-name { display: block; font-weight: 650; font-size: 1.05rem; }
+.goal-chip {
+  display: inline-flex; align-items: center; gap: 4px; min-height: 26px;
+  padding: 0 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2);
+  font-size: 0.8rem; font-weight: 600; color: var(--muted); white-space: nowrap; margin-bottom: 9px;
+}
+.goal-chip.is-reached { background: var(--done-soft); border-color: transparent; color: var(--done); }
+.goal-chip .icon { width: 14px; height: 14px; }
+/* The card leads with what to train: the glyph and name, the level as a number while the game reports it, "Now: …" and the guide. */
+.skill-card-link > span { flex: 1; min-width: 0; }
+.skill-card.is-tracked { border-color: var(--accent); }
+.skill-guide-roadmap { padding: 0; margin: 16px 0; }
+.skill-guide-roadmap .skill-roadmap { padding: 18px; }
+
+.levels-card { display: flex; flex-direction: column; gap: 12px; }
+.levels-row { display: flex; flex-wrap: wrap; gap: 12px 20px; }
+.current-range { font-size: 0.9rem; }
+
+.calc { display: flex; flex-direction: column; gap: 12px; }
+.calc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+@media (min-width: 700px) { .calc-grid { grid-template-columns: repeat(4, 1fr); } }
+.calc-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.calc-field label, .calc-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); }
+.calc-field input, .calc-field select {
+  height: 44px; padding: 0 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background-color: var(--surface); font-variant-numeric: tabular-nums; min-width: 0; width: 100%;
+}
+.calc-field select { padding-right: 32px; }
+.calc-field input:focus, .calc-field select:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 1px var(--accent); }
+.calc-static { height: 44px; display: flex; align-items: center; font-weight: 650; font-size: 1.05rem; }
+.calc-result { font-size: 1.05rem; }
+.calc-result strong { font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+
+.link-list { list-style: none; margin: 0; padding: 0; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); overflow: hidden; }
+.link-list li + li { border-top: 1px solid var(--border); }
+.link-list a {
+  display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 8px 14px;
+  color: var(--text); text-decoration: none;
+}
+.link-list a:hover { background: var(--surface-2); }
+.link-list .is-done span { color: var(--muted); }
+.done-mark { color: var(--done); margin-left: auto; width: 18px; height: 18px; }
+
+/* ---------- Goals ---------- */
+
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.8rem; color: var(--muted); }
+.goal { color: var(--muted); }
+.goal .icon { width: 13px; height: 13px; margin-left: 2px; vertical-align: -1px; }
+.goal.is-reached { background: var(--done-soft); color: var(--done); font-weight: 600; }
+.goal.is-optional { font-style: italic; outline: 1px dashed var(--border-strong); outline-offset: -3px; }
+.is-current-col { box-shadow: inset 1px 0 0 var(--accent), inset -1px 0 0 var(--accent); }
+thead .is-current-col { color: var(--accent-ink) !important; }
+
+/* ---------- Quests ---------- */
+
+.quest-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.quest-link {
+  display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 10px 14px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  color: var(--text); text-decoration: none;
+}
+a.quest-link:hover { border-color: var(--border-strong); }
+.quest-status {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border-strong); color: var(--muted);
+}
+.quest-status .icon { width: 15px; height: 15px; }
+.quest.is-done .quest-status { background: var(--done); border-color: var(--done); color: var(--surface); }
+.quest.is-available .quest-status { border-color: var(--accent); box-shadow: inset 0 0 0 4px var(--surface), inset 0 0 0 10px var(--accent); }
+.quest.is-skipped .quest-status { border-style: dashed; }
+.quest-body { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.quest-title { font-weight: 600; }
+.quest.is-done .quest-title, .quest.is-skipped .quest-title { color: var(--muted); }
+.quest.is-blocked .quest-title { opacity: 0.6; }
+.quest-meta { font-size: 0.8rem; color: var(--muted); }
+.quest.is-available .quest-state { color: var(--accent-ink); font-weight: 600; }
+.quest-blocked { font-size: 0.8rem; color: var(--muted); }
+

@@ -1,0 +1,114 @@
+/* 2.12: XP from the game, profiles, diagnostics */
+.live-xp { display: grid; gap: 6px; margin-top: 10px; }
+.live-xp-row { display: grid; grid-template-columns: 7em 1fr; gap: 2px 10px; align-items: center; font-size: 0.88rem; }
+.live-xp-name { font-weight: 600; }
+.live-xp-row .bar { grid-column: 1 / -1; }
+.live-xp-text { color: var(--muted); }
+.profile-list { list-style: none; margin: 8px 0 12px; padding: 0; display: grid; gap: 6px; }
+.profile { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; justify-content: space-between; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); }
+.profile.is-active { border-color: var(--accent); }
+.profile-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* 2.13: the magic calculation and "how to make up the money" */
+.magic-plan, .money-plan { margin-top: 12px; }
+.money-plan > summary { cursor: pointer; }
+.money-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
+.money-method { padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); }
+.money-method p { margin: 0; }
+
+/* 2.14: how to get there */
+.travel-plan { margin-top: 12px; }
+.travel-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
+/* 2.53: supplies for the road */
+.road-supplies { margin-top: 16px; }
+.travel-option { padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); }
+.travel-option p { margin: 0; }
+.travel-option.is-locked { opacity: 0.75; }
+.travel-option.is-ready { border-color: var(--accent); }
+
+/* Drop-down lists: a shared look instead of the system window — in tune with the app's fields and buttons. */
+select {
+  appearance: none; -webkit-appearance: none;
+  min-height: 34px; padding: 0 32px 0 12px; max-width: 100%;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%239d9fa6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 11px center;
+  color: var(--text); cursor: pointer;
+  transition: border-color var(--ease), box-shadow var(--ease), background-color var(--ease);
+}
+select:hover { border-color: var(--accent); background-color: var(--surface-2); }
+select:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
+select:disabled { opacity: 0.55; cursor: not-allowed; }
+select option { background: var(--surface); color: var(--text); }
+.select-field { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; min-width: 0; }
+.select-field select { min-width: 0; text-overflow: ellipsis; }
+
+/* Ways to get there: the name on the left, the mark on the right, the on-foot line separately, with no text overlap. */
+.travel-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; }
+.travel-title { font-size: 1rem; min-width: 0; overflow-wrap: anywhere; }
+.travel-walk { margin-top: 2px; }
+.travel-badge.is-ready { background: var(--done-soft); color: var(--done); border-color: color-mix(in srgb, var(--done) 35%, transparent); }
+.travel-badge.is-maybe { background: var(--gold-soft); color: var(--gold-ink); border-color: color-mix(in srgb, var(--gold) 35%, transparent); }
+.travel-badge.is-locked { background: var(--surface-2); color: var(--muted); }
+.travel-option p + p { margin-top: 2px; }
+
+/* The preparation route and "one trip" (2.17). */
+.prep-route { display: flex; flex-direction: column; gap: 6px; padding: 8px 10px; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); }
+.prep-route p { margin: 0; }
+.prep-primary { display: flex; flex-direction: column; gap: 6px; }
+.prep-primary .actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.prep-next { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
+.style-toggle .style-label { display: inline; }
+/* The unified step status ("Zen"): one line, details on a button. */
+.step-status { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; display: flex; flex-direction: column; gap: 8px; background: var(--surface-3); box-shadow: inset 3px 0 0 var(--border-strong); }
+.step-status.is-ready { box-shadow: inset 3px 0 0 var(--done); }
+.step-status.is-prep { box-shadow: inset 3px 0 0 var(--gold); }
+.step-status.is-blocked { box-shadow: inset 3px 0 0 var(--danger); }
+.status-line { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.status-text { min-width: 0; }
+.status-actions { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.status-arrow { margin: 0; }
+.status-tabs { display: flex; flex-wrap: wrap; gap: 4px; padding-top: 6px; border-top: 1px solid var(--border); }
+.status-tab { border: 1px solid var(--border); background: var(--surface); color: var(--muted); border-radius: 999px; padding: 4px 10px; font: inherit; font-size: 0.85rem; cursor: pointer; }
+.status-tab:hover { color: var(--text); }
+.status-tab.is-active { color: var(--text); border-color: var(--border-strong); box-shadow: 0 0 0 1px var(--border-strong); font-weight: 600; }
+.status-panel { display: flex; flex-direction: column; gap: 8px; }
+.status-panel[hidden] { display: none; }
+.zen-more { border-top: 1px dashed var(--border); padding-top: 6px; }
+.zen-more > summary { cursor: pointer; color: var(--muted); }
+.zen-more[open] > summary { margin-bottom: 8px; }
+.zen-more[open] { display: flex; flex-direction: column; gap: 14px; }
+.combat-plan .zen-more[open] { gap: 6px; }
+.combat-plan .zen-more ul { margin: 0; }
+.prep-more { margin: 0; }
+.training { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; background: var(--surface-3); box-shadow: inset 3px 0 0 var(--accent, var(--gold)); }
+.training p, .training ul { margin: 0; }
+.training ul { padding-left: 18px; display: flex; flex-direction: column; gap: 2px; }
+.training .actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.one-trip { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; background: var(--surface-3); box-shadow: inset 3px 0 0 var(--gold); }
+.one-trip p, .one-trip ul { margin: 0; }
+.one-trip ul { padding-left: 18px; display: flex; flex-direction: column; gap: 2px; }
+.prep-title { margin-top: 2px; }
+.prep-score { font-weight: 600; }
+.prep-score.is-ready { color: var(--ok, #2e8b57); }
+.prep-score.is-not_ready { color: var(--warn); }
+.prep-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.prep-chip { border: 1px solid var(--border); border-radius: 999px; padding: 1px 8px; background: var(--surface); }
+.prep-chip.is-critical { border-color: var(--warn); }
+.prep-line { list-style: none; margin-left: -18px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 4px; }
+.prep-where { width: 1.4em; text-align: center; flex: none; }
+.prep-line.is-missing .prep-where { color: var(--warn); }
+.prep-line.is-bank .prep-where { color: var(--gold); }
+.prep-line.is-inventory .prep-where, .prep-line.is-equipped .prep-where { color: var(--ok, #2e8b57); }
+.prep-why { flex-basis: 100%; padding-left: calc(1.4em + 4px); }
+.prep-supply.is-low { color: var(--gold); }
+.prep-supply.is-critical { color: var(--warn); font-weight: 600; }
+.prep-weight { border-left: 3px solid var(--border); padding-left: 8px; display: flex; flex-direction: column; gap: 2px; }
+.prep-weight.is-heavy { border-left-color: var(--warn); }
+.prep-recovery { border: 1px solid var(--warn); border-radius: var(--radius-sm); padding: 8px 10px; background: var(--surface); display: flex; flex-direction: column; gap: 4px; }
+.prep-recovery p, .prep-recovery ol { margin: 0; }
+.prep-recovery ol { padding-left: 20px; }
+.prep-recovery-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.prep-action { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+
