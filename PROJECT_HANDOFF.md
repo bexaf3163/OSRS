@@ -222,6 +222,8 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 
 2.81.20–21 (S1, S3 and S4; no visible change): 255 files moved into `app`, `state`, `ui`, `features` and `domain` (largest code folder 139 → 19 files); 0 layer violations (from 29) and no folder or import cycles (from 26 two-way folder pairs); React only in UI layers; page links only from `hrefTo` and window-storage keys only from `STORAGE_KEYS`; `check-structure` strict in CI. Update events on the ranged and Gear pages, 72 per kind and build in alternating sessions: 127.3 → 121.7 ms in total, no kind slower beyond noise. Local gates pass (2,516 unit, 874 browser, 95 Electron, 647 Java with Sora in the jar).
 
+2.81.22 (C1, S11 and S5; no visible change, the web build was byte-identical to 2.81.21 before the bump): releases come from the Checks release job, fixtures from `npm run fixtures`, and the 131 bridge payload fields from one list that tsc, the app test and `BridgeContractTest` check; deliberate one-sided fields fail them. Local gates pass (2,519 unit, 648 Java).
+
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
