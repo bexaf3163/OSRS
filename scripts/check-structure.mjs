@@ -1,6 +1,7 @@
 // Structure guard (the change hygiene rules in PROJECT_HANDOFF.md). Usage: npm run check-structure (strict: exits 1 when a check exceeds its known debt); without --strict it only reports
 // Checks: runtime import cycles, file-size budget, JSON imports outside src/data, hard-coded '#/' links outside the page registry,
-// folder size, handoff length, and layer rules, folder dependency cycles and React placement once src/domain exists.
+// folder size, handoff length, extensions in modules Node loads, and layer rules, folder dependency cycles and React
+// placement once src/domain exists.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { dirname, resolve, relative } from 'node:path';
 const t0 = Date.now(); const strict = process.argv.includes('--strict');
@@ -29,6 +30,11 @@ const registry = /src\/domain\/pages\/pages\.ts$/; const hash = src.filter((f) =
 check("no hard-coded '#/' links outside the page registry", hash.length, `${hash.length} files`);
 const keys = src.filter((f) => !f.endsWith('src/domain/persistence/storageKeys.ts') && /['"]osrs-put[:-]/.test(text.get(f)));
 check('storage keys only in the key registry', keys.length, keys.join(', '));
+// Node runs scripts/ and electron/ without a bundler, so every module they load names relative files with their extension.
+const nodeLoads = new Set(), noExt = [];
+const load = (f) => { if (nodeLoads.has(f) || !existsSync(f)) return; nodeLoads.add(f); for (const m of readFileSync(f, 'utf8').matchAll(/^(?:import|export)\s+(?!type\b)[^;]*?from\s+'(\.[^']+)'/gm)) { if (!/\.(ts|tsx|mjs|cjs|js|json)$/.test(m[1])) noExt.push(`${relative(process.cwd(), f).replace(/\\/g, '/')} -> ${m[1]}`); else if (/\.(ts|mjs|js)$/.test(m[1])) load(resolve(dirname(f), m[1])); } };
+for (const f of [...walk('scripts'), ...walk('electron')]) if (/\.(ts|mjs|js)$/.test(f)) load(resolve(f));
+check('extensions in modules Node loads', noExt.length, noExt.join(', '));
 const perDir = new Map(); for (const f of walk('src')) { const d = f.slice(0, f.lastIndexOf('/')); perDir.set(d, (perDir.get(d) || 0) + 1); }
 const crowded = [...perDir].filter(([, n]) => n > 25);
 check('folders of at most 25 files', crowded.length, crowded.map(([d, n]) => `${d} (${n})`).join(', '));

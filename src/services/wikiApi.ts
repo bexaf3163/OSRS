@@ -1,9 +1,9 @@
 // Requests to the OSRS Wiki: the item card, shops, drops, spawns, NPCs.
 // Shared code for the app (live requests) and scripts/build-items.ts (building the local database).
-// No relative imports: the file runs both in Vite and directly in Node.
+// Relative imports keep their extension: the file runs both in Vite and directly in Node.
 
 import type { WikiItemDetail } from '../types/index.ts';
-import { cleanWikiText } from '../domain/text/md';
+import { cleanWikiText } from '../domain/text/md.ts';
 
 export const WIKI_ORIGIN = 'https://oldschool.runescape.wiki';
 const API = `${WIKI_ORIGIN}/api.php`;
