@@ -6,7 +6,7 @@ import { currentPhase, phaseDone, resolvePick, samePicks, withCombatPlan } from 
 import { foodPicks, foodPlanApplied, stepResendKey, withFoodPlan } from '../../src/domain/combat/foodPlan';
 import { aggregateShopping } from '../../src/domain/economy/shopping';
 import { emptyProgress } from '../../src/domain/persistence/progress';
-import { stepGuide, toInGameTarget } from '../../src/services/runeliteBridge';
+import { stepGuide, toInGameTarget } from '../../src/domain/guide/inGameTarget';
 import { allSteps } from '../../src/data';
 import { market } from '../funding/market';
 import { gearOf, HISTORICAL, planInput } from './fixture';

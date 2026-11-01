@@ -9,7 +9,7 @@ import type { MethodView, TrainingMethod } from '../src/domain/training/training
 import { withTrainingMethod } from '../src/domain/training/methodStep';
 import type { Step } from '../src/types';
 import { methodRate } from '../src/domain/training/methodRates';
-import { toInGameTarget } from '../src/services/runeliteBridge';
+import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { combatUpgrades } from '../src/domain/combat/combatRates';
 
 const quote = { price: 1, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] };

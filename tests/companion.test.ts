@@ -6,7 +6,8 @@ import { evaluatePreflight, parseAmount, parseOwned, preflightItems, type OwnedS
 import { nameKey } from '../src/domain/items/itemKey';
 import { evaluateBranches, evaluateCondition, reasonLabel, watchedItems, type BranchContext } from '../src/domain/quests/branching';
 import { aggregateShopping, carryOverFrom, plural, shoppingText } from '../src/domain/economy/shopping';
-import { parseStats, toInGameTarget } from '../src/services/runeliteBridge';
+import { parseStats } from '../src/services/runeliteBridge';
+import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { stepsFor } from '../src/data';
 
 const item = (nameEn: string, amount: string | number, extra: Partial<StepItemRequirement> = {}): StepItemRequirement =>

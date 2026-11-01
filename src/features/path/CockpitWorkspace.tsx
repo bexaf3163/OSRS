@@ -10,7 +10,7 @@ import { useQuestPoints } from '../../state/hooks/useQuestPoints';
 import { useBridge } from '../../state/bridge';
 import { useReadinessEngine } from '../../state/readinessContext';
 import { blockerParts, blockersOf, isClosed } from '../../domain/quests/next-step';
-import { toInGameTarget } from '../../services/runeliteBridge';
+import { toInGameTarget } from '../../domain/guide/inGameTarget';
 import { TYPE_LABEL, IconLock } from '../../ui/Icons';
 import { CurrentAction } from './step/StepWorkspace';
 import { StepBody, type StepTab } from './step/StepCard';

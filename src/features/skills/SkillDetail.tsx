@@ -21,7 +21,7 @@ import { trainingFocus, type TrainingFocus } from '../../domain/training/skillFo
 import { F2pSkillNote } from './F2pSkillNote';
 import { f2pAdviceFor, f2pAdviceLabel } from '../../domain/training/f2pSkillAdvice';
 import { useTrackedTraining } from '../../state/readinessContext';
-import { setTracked } from '../../domain/training/skillTrack';
+import { setTracked } from '../../state/hooks/useTracked';
 import { SKILL_NAMES, type SkillName } from '../../domain/training/skillGuide';
 
 export function SkillDetailPage({ id, selectedSkill, requestedGoal }: { id: string; selectedSkill?: string; requestedGoal?: number }) {

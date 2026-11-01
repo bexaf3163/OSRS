@@ -2,20 +2,16 @@
 // First the local database (f2p-items.json), then a wiki search. UI market estimates use the shared quote board.
 
 import type { WikiItemDetail } from '../types';
-import { itemById, items } from '../data';
 import { fold } from '../domain/text/md';
 import { getGePrice, getMapping } from './pricesApi';
 import { fetchItemDetail, fetchNpc, openSearch, type FetchFn, type NpcInfo } from './wikiApi';
+import { findLocalItem } from '../domain/items/localItem';
+
 
 /** A hung wiki request must not leave a dossier "loading" forever. */
 const WIKI_TIMEOUT_MS = 12_000;
 const fetchFn: FetchFn = (url) => fetch(url, { signal: AbortSignal.timeout(WIKI_TIMEOUT_MS) });
 
-export function findLocalItem(query: string | number): WikiItemDetail | undefined {
-  if (typeof query === 'number') return itemById.get(query);
-  const q = fold(query.trim());
-  return items.find((i) => fold(i.nameEn) === q);
-}
 
 /** A dossier with the exchange price. No price because it is not traded and no price because there is no connection are different things. */
 async function withPrice(d: WikiItemDetail): Promise<WikiItemDetail> {

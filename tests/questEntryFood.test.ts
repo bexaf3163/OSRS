@@ -9,7 +9,7 @@ import { aggregateShopping } from '../src/domain/economy/shopping';
 import { shopRows } from '../src/domain/economy/shoppingView';
 import { protectionsFor } from '../src/domain/economy/funding/snapshot';
 import { bankWithdrawalsOf } from '../src/domain/prep/prepEnvelope';
-import { toInGameTarget } from '../src/services/runeliteBridge';
+import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import type { OwnedState } from '../src/domain/items/checklist';
 
 const step = stepById.get('S9-01')!;

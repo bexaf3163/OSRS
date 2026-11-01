@@ -9,7 +9,7 @@ import { Table } from '../../ui/Table';
 import { SkillGlyph } from '../../ui/SectionShell';
 import { useBridge } from '../../state/bridge';
 import { SKILL_NAMES, type SkillName } from '../../domain/training/skillGuide';
-import { useTracked } from '../../domain/training/skillTrack';
+import { useTracked } from '../../state/hooks/useTracked';
 import { SkillDetailPage } from './SkillDetail';
 import { Eyebrow, Page } from '../../ledger';
 import { f2pAdviceFor, f2pAdviceLabel, F2P_PRIORITY_LABEL } from '../../domain/training/f2pSkillAdvice';

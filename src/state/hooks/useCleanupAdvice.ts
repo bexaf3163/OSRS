@@ -10,10 +10,10 @@ import { protectionsFor } from '../../domain/economy/funding/snapshot';
 import { stepsFor } from '../../data';
 import { isClosed, isCompleted, questDependencyFacts } from '../../domain/quests/next-step';
 import { cleanupAdvice, type AccountKind, type CleanupPrefs, type CleanupResult } from '../../domain/prep/cleanup';
-import { useCleanupPrefs } from '../../domain/persistence/cleanupPrefs';
+import { useCleanupPrefs } from './useCleanupPrefs';
 import { buildPriceBook } from '../../domain/items/priceBook';
 import { usePriceView } from './usePriceView';
-import { findLocalItem } from '../../services/wikiService';
+import { findLocalItem } from '../../domain/items/localItem';
 import { useTradeRestriction } from './useTradeRestriction';
 import type { GearItem } from '../../services/runeliteBridge';
 

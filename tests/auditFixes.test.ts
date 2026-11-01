@@ -5,7 +5,7 @@ import { stepReadiness } from '../src/domain/readiness/readiness';
 import { emptyProgress, normalizeProgress, RETIRED_STEPS, withStep } from '../src/domain/persistence/progress';
 import { nextStep } from '../src/domain/quests/next-step';
 import { isInstancedPoint } from '../src/domain/travel/instances';
-import { navigationTarget } from '../src/domain/travel/navigation';
+import { navigationTarget } from '../src/domain/guide/navigation';
 import { travelOptions } from '../src/domain/travel/travel';
 import { fairyRingsUnlocked, travelInputOf } from '../src/domain/travel/travelInput';
 import { xpForLevel } from '../src/domain/player/xp';

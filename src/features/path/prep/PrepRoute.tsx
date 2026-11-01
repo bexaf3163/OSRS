@@ -13,12 +13,12 @@ import type { ReadinessAction } from '../../../domain/readiness/readiness';
 import { navKeyOf, reconcile, rearmReadyDetours, staleArrows, startDetour, type PrepTask } from '../../../domain/prep/prepRoute';
 import { decideAuto, type QueueTask } from '../../../domain/prep/prepQueue';
 import { declined, usePrep } from '../../../state/hooks/usePrep';
-import { setFeatures, useFeatures } from '../../../domain/persistence/features';
+import { setFeatures, useFeatures } from '../../../state/hooks/useFeatures';
 import { styleOf } from '../../../domain/persistence/playStyle';
 import { isClosed, nextStep } from '../../../domain/quests/next-step';
 import { useReadinessEngine, useTrackedTraining } from '../../../state/readinessContext';
 import { NavigateButton } from '../../../ui/NavigateButton';
-import { useTracked } from '../../../domain/training/skillTrack';
+import { useTracked } from '../../../state/hooks/useTracked';
 import { useTrainingFunding } from '../../../state/trainingSessionContext';
 
 const KIND_ICON: Record<PrepTask['kind'], string> = { block: '🔒', quest: '📜', stat: '⚡', buy: '🛒', money: '💰', bank: '🏦', equip: '🛡' };

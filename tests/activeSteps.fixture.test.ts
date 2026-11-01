@@ -6,7 +6,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
-import { toInGameTarget } from '../src/services/runeliteBridge';
+import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 
 const FILE = new URL('../runelite-bridge/src/test/resources/active-steps.json', import.meta.url);
 

@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useRef, type ReactNode } from 'react';
 import { useTrackedTraining } from './readinessContext';
 import { useFunding, useFundingScreen, type FundingScreen } from './fundingContext';
-import { useProfiles } from '../domain/persistence/profiles';
+import { useProfiles } from './profiles';
 
 const Ctx = createContext<FundingScreen | null>(null);
 export const useTrainingFunding = () => useContext(Ctx);

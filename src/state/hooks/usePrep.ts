@@ -1,7 +1,8 @@
 // The state of the preparation detours: kept in the window (separately for each profile) and survives a refresh and a restart.
 
 import { useCallback, useSyncExternalStore } from 'react';
-import { activeOf, profileStorageKey, useProfiles } from '../../domain/persistence/profiles';
+import { activeOf, profileStorageKey } from '../../domain/persistence/profiles';
+import { useProfiles } from '../profiles';
 import { emptyPrep, parsePrep, PREP_KEY, type PrepState } from '../../domain/prep/prepRoute';
 
 const EMPTY = emptyPrep();

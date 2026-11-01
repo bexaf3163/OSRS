@@ -1,9 +1,8 @@
 // The player's own say in the inventory cleanup: "Always keep" and dismissed suggestions. Saved per profile AND per character, so another
 // character on the same profile starts clean and never inherits the first one's choices.
 
-import { useCallback, useSyncExternalStore } from 'react';
 import { emptyCleanupPrefs, type AccountKind, type CleanupPrefs } from '../prep/cleanup';
-import { activeOf, useProfiles } from './profiles';
+
 
 export const CLEANUP_KEY = 'osrs-put:cleanup';
 const LIMIT = 300;
@@ -41,37 +40,3 @@ export const withAccount = (p: CleanupPrefs, account: AccountKind | null): Clean
   void _drop;
   return account ? { ...rest, account } : rest;
 };
-
-const cache = new Map<string, CleanupPrefs>();
-const listeners = new Set<() => void>();
-const EMPTY = emptyCleanupPrefs();
-
-function read(key: string): CleanupPrefs {
-  const hit = cache.get(key);
-  if (hit) return hit;
-  let raw: string | null = null;
-  try { raw = localStorage.getItem(key); } catch { /* no storage */ }
-  const p = parseCleanupPrefs(raw);
-  cache.set(key, p);
-  return p;
-}
-
-function write(key: string, p: CleanupPrefs): void {
-  cache.set(key, p);
-  try { localStorage.setItem(key, JSON.stringify(p)); } catch { /* remembered until a restart */ }
-  for (const l of listeners) l();
-}
-
-function subscribe(l: () => void): () => void {
-  listeners.add(l);
-  return () => listeners.delete(l);
-}
-
-/** The preferences of the current profile and character; they switch when either changes. */
-export function useCleanupPrefs(player: string | null): { prefs: CleanupPrefs; update: (f: (p: CleanupPrefs) => CleanupPrefs) => void } {
-  const profiles = useProfiles();
-  const key = cleanupKey(activeOf(profiles).id, player);
-  const prefs = useSyncExternalStore(subscribe, () => read(key), () => EMPTY);
-  const update = useCallback((f: (p: CleanupPrefs) => CleanupPrefs) => write(key, f(read(key))), [key]);
-  return { prefs, update };
-}

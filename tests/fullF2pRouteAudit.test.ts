@@ -1,8 +1,8 @@
 import { afterAll, describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
 import stagesFile from '../src/data/questStages.json';
-import { stepGuide } from '../src/services/runeliteBridge';
-import { navigationTarget } from '../src/domain/travel/navigation';
+import { stepGuide } from '../src/domain/guide/inGameTarget';
+import { navigationTarget } from '../src/domain/guide/navigation';
 import { itemSource } from '../src/domain/travel/stepPlaces';
 import { isUnderground } from '../src/domain/travel/map';
 import { TRANSPORT, bankOnRoute } from '../src/domain/travel/travel';

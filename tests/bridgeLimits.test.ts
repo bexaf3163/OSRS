@@ -4,7 +4,7 @@ import { createServer, type Server } from 'node:http';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
 import { buildEnvelope, EMPTY_PARTS } from '../src/domain/prep/prepEnvelope';
-import { toInGameTarget } from '../src/services/runeliteBridge';
+import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 
 type Reply = { ok: boolean; status: number; data?: unknown };
 type Bridge = {

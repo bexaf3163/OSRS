@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useBridge } from '../../state/bridge';
 import { useStore } from '../../state/store';
-import { useFeatures } from '../../domain/persistence/features';
+import { useFeatures } from '../../state/hooks/useFeatures';
 import { styleOf } from '../../domain/persistence/playStyle';
 import { isClosed, openAfter } from '../../domain/quests/next-step';
 import { useReadinessEngine, useTrackedTraining } from '../../state/readinessContext';

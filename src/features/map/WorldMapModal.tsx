@@ -14,7 +14,7 @@ import { useMapSources } from '../../state/hooks/useMapSources';
 import type { NavTargetPayload } from '../../services/runeliteBridge';
 import { NavigateButton } from '../../ui/NavigateButton';
 import { sourceBadge, type MapTarget } from '../../domain/travel/places';
-import { SOURCE_TEXT, type NavigationTarget } from '../../domain/travel/navigation';
+import { SOURCE_TEXT, type NavigationTarget } from '../../domain/guide/navigation';
 
 export type { MapTarget } from '../../domain/travel/places';
 import { IconClose, IconExternal } from '../../ui/Icons';

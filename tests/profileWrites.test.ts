@@ -22,7 +22,7 @@ afterEach(() => vi.unstubAllGlobals());
 
 describe('confirmed profile persistence', () => {
   it('does not publish a rename or change browser bytes when the physical native write fails', async () => {
-    const api = await import('../src/domain/persistence/profiles');
+    const api = { ...(await import('../src/domain/persistence/profiles')), ...(await import('../src/state/profiles')) };
     api.readProfiles(); shell.saveProfilesFileChecked.mockReturnValue({ ok: false, error: 'ENOSPC' });
     expect(api.writeProfiles(api.renameProfile(original, 'alt', 'Renamed'))).toBe(false);
     expect(api.readProfiles()).toEqual(original);
@@ -32,7 +32,7 @@ describe('confirmed profile persistence', () => {
   });
 
   it('does not switch or reload after a thrown native write', async () => {
-    const api = await import('../src/domain/persistence/profiles');
+    const api = { ...(await import('../src/domain/persistence/profiles')), ...(await import('../src/state/profiles')) };
     api.readProfiles(); shell.saveProfilesFileChecked.mockImplementation(() => { throw Error('IPC failed'); });
     api.switchProfile('alt');
     expect(reload).not.toHaveBeenCalled();
@@ -41,7 +41,7 @@ describe('confirmed profile persistence', () => {
   });
 
   it('a successful retry persists the intended switch and only then reloads once', async () => {
-    const api = await import('../src/domain/persistence/profiles');
+    const api = { ...(await import('../src/domain/persistence/profiles')), ...(await import('../src/state/profiles')) };
     api.readProfiles(); shell.saveProfilesFileChecked.mockReturnValue({ ok: false, error: 'ENOSPC' });
     api.switchProfile('alt');
     shell.saveProfilesFileChecked.mockReturnValue({ ok: true, error: null });
@@ -54,7 +54,7 @@ describe('confirmed profile persistence', () => {
   });
 
   it('a failed browser copy also prevents switching, and retry retains the intended edit', async () => {
-    const api = await import('../src/domain/persistence/profiles');
+    const api = { ...(await import('../src/domain/persistence/profiles')), ...(await import('../src/state/profiles')) };
     api.readProfiles(); browserFailure = true;
     api.switchProfile('alt');
     expect(reload).not.toHaveBeenCalled();
@@ -66,7 +66,7 @@ describe('confirmed profile persistence', () => {
   });
 
   it('the most recent failed edit replaces an older retry without publishing either early', async () => {
-    const api = await import('../src/domain/persistence/profiles');
+    const api = { ...(await import('../src/domain/persistence/profiles')), ...(await import('../src/state/profiles')) };
     api.readProfiles(); shell.saveProfilesFileChecked.mockReturnValue({ ok: false, error: 'EACCES' });
     api.writeProfiles(api.renameProfile(original, 'alt', 'First'));
     api.writeProfiles(api.renameProfile(original, 'alt', 'Latest'));
@@ -79,7 +79,7 @@ describe('confirmed profile persistence', () => {
   it('deleting the active alternate reloads Main only after the deletion is confirmed', async () => {
     const active = { ...original, active: 'alt' };
     data.set(key, JSON.stringify(active)); shell.loadProfilesFile.mockReturnValue(JSON.stringify(active));
-    const api = await import('../src/domain/persistence/profiles');
+    const api = { ...(await import('../src/domain/persistence/profiles')), ...(await import('../src/state/profiles')) };
     api.readProfiles(); shell.saveProfilesFileChecked.mockReturnValue({ ok: false, error: 'ENOSPC' });
     expect(api.writeProfiles(api.removeProfile(active, 'alt'))).toBe(false);
     expect(api.readProfiles()).toEqual(active);

@@ -22,7 +22,7 @@ afterEach(() => vi.unstubAllGlobals());
 
 describe('profile list conflict: the player chooses', () => {
   it('offers both lists and a merge that keeps every profile and this window\'s active one', async () => {
-    const { profileConflict } = await import('../src/domain/persistence/profiles');
+    const { profileConflict } = await import('../src/state/profiles');
     const c = profileConflict()!;
     expect(c.local).toEqual(browser);
     expect(c.file).toEqual(native);
@@ -30,7 +30,7 @@ describe('profile list conflict: the player chooses', () => {
   });
 
   it('merge writes the merged list to both sources after keeping both originals, then reloads', async () => {
-    const { resolveProfileConflict, guardedProfileGate, readProfiles } = await import('../src/domain/persistence/profiles');
+    const { resolveProfileConflict, guardedProfileGate, readProfiles } = await import('../src/state/profiles');
     expect(resolveProfileConflict('merge')).toBe(true);
     const merged = JSON.parse(data.get(key)!);
     expect(merged.list.map((p: { id: string }) => p.id)).toEqual(['main', 'alt', 'third']);
@@ -42,14 +42,14 @@ describe('profile list conflict: the player chooses', () => {
   });
 
   it.each(['local', 'file'] as const)('keeping one list (%s) writes exactly that list', async (choice) => {
-    const { resolveProfileConflict } = await import('../src/domain/persistence/profiles');
+    const { resolveProfileConflict } = await import('../src/state/profiles');
     expect(resolveProfileConflict(choice)).toBe(true);
     expect(JSON.parse(data.get(key)!)).toEqual(choice === 'local' ? browser : native);
   });
 
   it('no merge when one profile id is bound to two characters; keeping one list still works', async () => {
     shell.loadProfilesFile.mockReturnValue(JSON.stringify({ ...browser, list: [browser.list[0], { ...browser.list[1], player: 'Someone' }] }));
-    const { profileConflict, resolveProfileConflict } = await import('../src/domain/persistence/profiles');
+    const { profileConflict, resolveProfileConflict } = await import('../src/state/profiles');
     expect(profileConflict()!.merged).toBeNull();
     expect(resolveProfileConflict('merge')).toBe(false);
     expect(shell.saveProfilesFileChecked).not.toHaveBeenCalled();
@@ -58,7 +58,7 @@ describe('profile list conflict: the player chooses', () => {
 
   it('a failed native write changes nothing in the browser and does not reload', async () => {
     shell.saveProfilesFileChecked.mockReturnValue({ ok: false, error: 'WRITE_FAILED' });
-    const { resolveProfileConflict, guardedProfileGate, readProfiles } = await import('../src/domain/persistence/profiles');
+    const { resolveProfileConflict, guardedProfileGate, readProfiles } = await import('../src/state/profiles');
     expect(resolveProfileConflict('merge')).toBe(false);
     expect(data.get(key)).toBe(JSON.stringify(browser));
     expect(reload).not.toHaveBeenCalled();
@@ -67,7 +67,7 @@ describe('profile list conflict: the player chooses', () => {
 
   it.each(['{broken', '{"version":99,"list":[]}'])('damage or a newer format is not a conflict the player can resolve: %s', async (raw) => {
     shell.loadProfilesFile.mockReturnValue(raw);
-    const { profileConflict, resolveProfileConflict } = await import('../src/domain/persistence/profiles');
+    const { profileConflict, resolveProfileConflict } = await import('../src/state/profiles');
     expect(profileConflict()).toBeNull();
     expect(resolveProfileConflict('local')).toBe(false);
     expect(shell.saveProfilesFileChecked).not.toHaveBeenCalled();

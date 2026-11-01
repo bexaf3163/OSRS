@@ -9,7 +9,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type 
 import type { Step } from '../../../types';
 import { useStore } from '../../../state/store';
 import { useBridge } from '../../../state/bridge';
-import { toInGameTarget } from '../../../services/runeliteBridge';
+import { toInGameTarget } from '../../../domain/guide/inGameTarget';
 import { isClosed } from '../../../domain/quests/next-step';
 import { STATUS_TEXT } from '../../../domain/readiness/readiness';
 import { plural } from '../../../domain/economy/shopping';
@@ -20,7 +20,7 @@ import { scopedPercent, type StageScope } from '../../../domain/quests/stageScop
 
 /** No stage cut: the step's own items (the "now" lines) only. */
 const STEP_ONLY: StageScope = { stageAt: 0, out: new Set() };
-import { useFeatures } from '../../../domain/persistence/features';
+import { useFeatures } from '../../../state/hooks/useFeatures';
 import { styleOf } from '../../../domain/persistence/playStyle';
 import { usePrepFix } from '../prep/PrepRoute';
 import { ReadinessPanel } from '../prep/ReadinessPanel';

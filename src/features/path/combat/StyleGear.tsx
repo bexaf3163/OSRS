@@ -9,7 +9,7 @@ import { wealthOf } from '../../../domain/economy/wealth';
 import { adviseStyle, shoppingTotal, SLOT_LABEL, STYLE_GEAR, type PickStatus } from '../../../domain/combat/styleGear';
 import { usePriceView } from '../../../state/hooks/usePriceView';
 import { itemPrice, type ItemPrice } from '../../../domain/items/itemPrice';
-import { findLocalItem } from '../../../services/wikiService';
+import { findLocalItem } from '../../../domain/items/localItem';
 import { gearQuestEvidence } from '../../../domain/combat/gearAdvice';
 
 const STATUS: Record<PickStatus, string> = { worn: '✓ worn', bag: '✓ in the bag', buy: 'buy', save: 'save up', find: 'obtain', locked: 'locked for now' };

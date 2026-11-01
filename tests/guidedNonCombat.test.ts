@@ -4,7 +4,7 @@ import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { adviseTraining, preparationNeeds, questTrainingStep, trainingMethods, type TrainingAdvice } from '../src/domain/training/trainingRouter';
 import { trackedTraining } from '../src/domain/training/trackedTraining';
-import { toInGameTarget } from '../src/services/runeliteBridge';
+import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import type { SkillName } from '../src/domain/training/skillGuide';
 import { qa } from '../scripts/qa';
 

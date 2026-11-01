@@ -11,7 +11,7 @@ vi.mock('../src/state/fundingContext', () => ({
   useFundingScreen: () => ({ assessment: view.assessment, prices: market(), plan: null, view: null, snap: null }),
 }));
 vi.mock('../src/state/readinessContext', () => ({ useReadinessEngine: () => ({ plan: () => ({ coins: { need: 1 } }) }) }));
-vi.mock('../src/domain/persistence/features', () => ({ useFeatures: () => ({ efficient: false }) }));
+vi.mock('../src/state/hooks/useFeatures', () => ({ useFeatures: () => ({ efficient: false }) }));
 
 describe('funding totals with incomplete goal evidence', () => {
   it.each([{ unknown: 1, unpriced: 0 }, { unknown: 0, unpriced: 1 }])('does not present a partial subtotal as the full goal: %j', uncertainty => {

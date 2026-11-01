@@ -4,7 +4,7 @@ import type { QuestStageLine } from '../src/types';
 import { BANK_SPOTS, countOf, guardedDestination, itemPreflight, missingChip } from '../src/domain/readiness/preflight';
 import { dist, EXCHANGE } from '../src/domain/travel/travel';
 import { nameKey } from '../src/domain/items/itemKey';
-import { stepGuide } from '../src/services/runeliteBridge';
+import { stepGuide } from '../src/domain/guide/inGameTarget';
 import type { GearItem } from '../src/services/runeliteBridge';
 
 // The item pre-flight guard: a quest stage step that uses an item does not lead the arrow to its tile while the item is missing.

@@ -9,7 +9,7 @@ import { isOutOfStage } from '../../../domain/quests/stageScope';
 import { lineAmount, type PrepLine } from '../../../domain/prep/prepPlan';
 import { Inline } from '../../../ui/Inline';
 import { ItemIcon } from '../../reference/WikiDrawer';
-import { findLocalItem } from '../../../services/wikiService';
+import { findLocalItem } from '../../../domain/items/localItem';
 import { formatGp } from '../../../domain/economy/shopping';
 import { ReadinessVerdictCard } from './ReadinessVerdict';
 

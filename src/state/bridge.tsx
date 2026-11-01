@@ -8,20 +8,18 @@ import type { PlayerStats, Step, StepBranch } from '../types';
 import { levelById } from '../data';
 import { XpTracker } from '../domain/player/xpRate';
 import type { SessionBase } from '../domain/player/session';
-import { gateAllows, linkPlayer, guardedProfileGate as profileGate, readProfiles, useProfiles, writeProfiles, type ProfileGate } from '../domain/persistence/profiles';
+import { gateAllows, linkPlayer, type ProfileGate } from '../domain/persistence/profiles';
+import { guardedProfileGate as profileGate, readProfiles, useProfiles, writeProfiles } from './profiles';
 import { useStore } from './store';
 import { desktop, type RuneliteLaunch } from '../services/desktop';
-import {
-  checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parseNavTarget, parseMove, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, planAutoComplete, setNavTarget,
-  postPrepPlan, supportsSnapshot, syncActiveStep, syncBankTags, syncShoppingPlan, toInGameTarget,
-  pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type CombatLogState, type ShoppingPlanPayload, type QuestInstruction,
-} from '../services/runeliteBridge';
+import { checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parseNavTarget, parseMove, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, setNavTarget, postPrepPlan, supportsSnapshot, syncActiveStep, syncBankTags, syncShoppingPlan, pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type CombatLogState, type ShoppingPlanPayload, type QuestInstruction } from '../services/runeliteBridge';
+import { planAutoComplete, toInGameTarget } from '../domain/guide/inGameTarget';
 import { parseOwned, preflightItems, type OwnedState } from '../domain/items/checklist';
 import { doseKind } from '../domain/items/doseKind';
 import { tripWindow } from '../domain/prep/oneTrip';
 import type { MoveEvent } from '../domain/readiness/recovery';
 import { stageBankItemIds } from '../domain/prep/bankTags';
-import { useFeatures } from '../domain/persistence/features';
+import { useFeatures } from './hooks/useFeatures';
 import { isClosed, openAfter, dependencyFacts } from '../domain/quests/next-step';
 import { BridgeFreshness, type StatusTicket } from '../domain/player/bridgeFreshness';
 import { stepResendKey } from '../domain/combat/foodPlan';

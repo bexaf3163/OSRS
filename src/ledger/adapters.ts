@@ -1,7 +1,7 @@
 // Adapters: the store, the route and the RuneLite link mapped onto the Ledger's view-models. No state of their own.
 import { useStore } from '../state/store';
 import { useBridge } from '../state/bridge';
-import { useProfiles } from '../domain/persistence/profiles';
+import { useProfiles } from '../state/profiles';
 import { useQuestPoints } from '../state/hooks/useQuestPoints';
 import { levelOf } from '../domain/persistence/progress';
 import { combatLevel } from '../domain/economy/moneyAdvisor';

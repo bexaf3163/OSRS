@@ -216,7 +216,7 @@ describe('food for combat', () => {
 });
 
 import { fixChain } from '../src/domain/readiness/readiness';
-import { toInGameTarget } from '../src/services/runeliteBridge';
+import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 
 describe('the chain to readiness (§12) and data to the game', () => {
   const s = (id: string, requires: string[] = [], extra: Partial<Step> = {}): Step =>

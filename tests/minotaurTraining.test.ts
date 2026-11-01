@@ -5,9 +5,10 @@ import { emptyProgress } from '../src/domain/persistence/progress';
 import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
 import { nameKey } from '../src/domain/items/itemKey';
 import { pacingLevels, pacingText } from '../src/domain/player/pacing';
-import { toInGameTarget, type GearState, type PacingState } from '../src/services/runeliteBridge';
+import type { GearState, PacingState } from '../src/services/runeliteBridge';
+import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { isOverworld, isSeparateArea } from '../src/domain/travel/instances';
-import { navigationTarget } from '../src/domain/travel/navigation';
+import { navigationTarget } from '../src/domain/guide/navigation';
 
 // S3-08 after the owner's report of 2026-10-15 ("nothing shows what to do", "nothing about food, just kill minotaurs") and the combat brief:
 // Strength first on Aggressive, the level 12 Minotaurs, food and Strength potions, what to do in the game. The numbers in the step's text are estimates

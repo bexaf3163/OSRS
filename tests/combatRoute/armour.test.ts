@@ -9,7 +9,7 @@ import { emptyProgress } from '../../src/domain/persistence/progress';
 import { evaluatePreflight, preflightItems } from '../../src/domain/items/checklist';
 import { createReadinessEngine } from '../../src/domain/readiness/readinessEngine';
 import { bankWithdrawalsOf, planPayload } from '../../src/domain/prep/prepEnvelope';
-import { toInGameTarget } from '../../src/services/runeliteBridge';
+import { toInGameTarget } from '../../src/domain/guide/inGameTarget';
 import { buildPriceView } from '../../src/domain/economy/funding/quotes';
 import { ownedOf, planInput } from './fixture';
 import { market } from '../funding/market';

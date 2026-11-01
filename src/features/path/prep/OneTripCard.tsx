@@ -7,7 +7,7 @@ import type { Step } from '../../../types';
 import { useStore } from '../../../state/store';
 import { isClosed } from '../../../domain/quests/next-step';
 import { useReadinessEngine, useRecovery } from '../../../state/readinessContext';
-import { useFeatures } from '../../../domain/persistence/features';
+import { useFeatures } from '../../../state/hooks/useFeatures';
 import { isOutOfStage, scopedPercent } from '../../../domain/quests/stageScope';
 import { useStageScope } from '../../../state/hooks/useStageScope';
 import { styleOf } from '../../../domain/persistence/playStyle';

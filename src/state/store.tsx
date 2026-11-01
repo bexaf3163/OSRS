@@ -7,7 +7,8 @@ import {
   emptyProgress, gameModeOf, STORAGE_KEY,
   withGameMode, withLevel, withLevels, withNote, withReactivated, withReviewed, withStep, withUpgradeDismissed, withOwnedManual, withSellRestrictions, withTaskDone,
 } from '../domain/persistence/progress';
-import { profileStorageKey, readProfiles } from '../domain/persistence/profiles';
+import { profileStorageKey } from '../domain/persistence/profiles';
+import { readProfiles } from './profiles';
 import { questPoints } from '../domain/quests/qp';
 import { desktop } from '../services/desktop';
 import { readProgressText, restoreProgress, type RestoredProgress } from '../domain/persistence/progressStorage';

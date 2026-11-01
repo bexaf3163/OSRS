@@ -8,7 +8,7 @@ import { useMemo } from 'react';
 import type { Step } from '../../../types';
 import { useStore } from '../../../state/store';
 import { useBridge } from '../../../state/bridge';
-import { useFeatures } from '../../../domain/persistence/features';
+import { useFeatures } from '../../../state/hooks/useFeatures';
 import { isClosed } from '../../../domain/quests/next-step';
 import { coinRewardAhead } from '../../../domain/quests/stepRewards';
 import { allSteps } from '../../../data';

@@ -8,7 +8,7 @@ import { pickMethods } from '../src/domain/training/methodPick';
 import { adviseTraining, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
 import { contextOf } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
-import { toInGameTarget } from '../src/services/runeliteBridge';
+import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 
 const base = stepById.get('S6-04')!;
 function scenario(magic: number | null, smithing: number | null = 15, stock: Record<string, { carried?: number; bank?: number }> = {}, fireStaff = false, unread = false) {

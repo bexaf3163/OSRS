@@ -2,7 +2,7 @@
 import type { Step } from '../../types';
 import { itemById } from '../../data';
 import { gearById } from '../combat/gearAdvisor';
-import { findLocalItem } from '../../services/wikiService';
+import { findLocalItem } from '../items/localItem';
 import { coinsOf, type PlayerState } from '../player/playerState';
 import { itemPrice } from '../items/itemPrice';
 import { doseKind } from '../items/doseKind';

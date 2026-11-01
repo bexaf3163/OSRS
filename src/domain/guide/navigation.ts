@@ -3,8 +3,9 @@
 // to a point from inGame.worldPoint or to a temporary target (a shop, a bank, a place from the dossier), which was not on the map.
 
 import type { Step, StepBranch } from '../../types';
-import { toInGameTarget, type NavTargetPayload } from '../../services/runeliteBridge';
-import { isInstancedPoint, isSeparateArea } from './instances';
+import type { NavTargetPayload } from '../../services/runeliteBridge';
+import { toInGameTarget } from './inGameTarget';
+import { isInstancedPoint, isSeparateArea } from '../travel/instances';
 
 export interface NavigationTarget {
   stepId: string;

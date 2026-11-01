@@ -9,7 +9,7 @@ import type { OwnedItem } from '../src/domain/items/checklist';
 import { nameKey } from '../src/domain/items/itemKey';
 import { stepReadiness } from '../src/domain/readiness/readiness';
 import { GOAL_REACHED, followedGoal, methodPoint, methodToolNames, pickedMethodId, withTrainingMethod } from '../src/domain/training/methodStep';
-import { toInGameTarget } from '../src/services/runeliteBridge';
+import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { pickMethods, samePicks } from '../src/domain/training/methodPick';
 import { SKILLING } from '../src/domain/training/skillingRates';
 import { trainingMethods } from '../src/domain/training/trainingRouter';

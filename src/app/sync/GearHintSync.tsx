@@ -7,9 +7,9 @@
 import { useEffect, useRef } from 'react';
 import { useBridge } from '../../state/bridge';
 import { useStore } from '../../state/store';
-import { useFeatures } from '../../domain/persistence/features';
+import { useFeatures } from '../../state/hooks/useFeatures';
 import { isClosed } from '../../domain/quests/next-step';
-import { useGearAdvice } from '../../domain/combat/gearAdvice';
+import { useGearAdvice } from '../../state/hooks/useGearAdvice';
 import { hudHint, watchNames } from '../../domain/combat/gearAdvisor';
 import { setGearHint, supportsSnapshot, type GearHintPayload } from '../../services/runeliteBridge';
 import { useTrackedTraining } from '../../state/readinessContext';

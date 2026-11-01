@@ -5,7 +5,7 @@ import { emptyProgress } from '../../src/domain/persistence/progress';
 import { xpForLevel } from '../../src/domain/player/xp';
 import { evaluatePlans } from '../../src/domain/combat/route/plans';
 import { resolvePick, withCombatPlan } from '../../src/domain/combat/route/pick';
-import { toInGameTarget } from '../../src/services/runeliteBridge';
+import { toInGameTarget } from '../../src/domain/guide/inGameTarget';
 import { HISTORICAL, planInput } from './fixture';
 
 const afterAttack = () => planInput({

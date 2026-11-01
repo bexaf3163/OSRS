@@ -7,7 +7,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { createPortal } from 'react-dom';
 import { DOCK, useMediaQuery } from '../../state/hooks/media';
 import type { StepNpcInfo, WikiItemDetail } from '../../types';
-import { findLocalItem, getItemDetail, getNpcDetail } from '../../services/wikiService';
+import { getItemDetail, getNpcDetail } from '../../services/wikiService';
+import { findLocalItem } from '../../domain/items/localItem';
 import type { NpcInfo } from '../../services/wikiApi';
 import { formatXp } from '../../domain/quests/goals';
 import { alchMargin, NATURE_RUNE_ID } from '../../domain/economy/alchemy';
@@ -15,7 +16,7 @@ import { usePriceView } from '../../state/hooks/usePriceView';
 import { itemPrice, type ItemPrice } from '../../domain/items/itemPrice';
 import { IconClose, IconExternal } from '../../ui/Icons';
 import iconAssets from '../../data/iconAssets.json';
-import { useFeatures } from '../../domain/persistence/features';
+import { useFeatures } from '../../state/hooks/useFeatures';
 import { PlaceButton, PlaceMapView, PlaceNavButton, usePlaceMap, type PlaceQuery } from '../map/PlaceMap';
 
 /** Margin after the Nature rune, before fire costs. Unknown quotes cannot imply a profit. */

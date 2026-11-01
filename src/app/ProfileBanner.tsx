@@ -1,7 +1,8 @@
 // The game has a different character than the active profile: levels and marks from the game are not written until the player chooses.
 
 import { useBridge } from '../state/bridge';
-import { addProfile, profileConflict, readProfiles, resolveProfileConflict, retryProfileSave, switchProfile, useProfileSaveError, writeProfiles, type ProfilesState } from '../domain/persistence/profiles';
+import { addProfile, type ProfilesState } from '../domain/persistence/profiles';
+import { profileConflict, readProfiles, resolveProfileConflict, retryProfileSave, switchProfile, useProfileSaveError, writeProfiles } from '../state/profiles';
 
 export function ProfileBanner() {
   const { gate } = useBridge();

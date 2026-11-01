@@ -24,7 +24,8 @@ import { InventoryCleanup } from './InventoryCleanup';
 import { useQuestDone, useSkillLevel } from '../skills/SkillRoadmap';
 import { guideFor } from '../../data/skillGuideRegistry';
 import { buildPath, currentIndex, followedShoppingStep } from '../../domain/training/skillGuide';
-import { freeOnlyOf, useTracked } from '../../domain/training/skillTrack';
+import { freeOnlyOf } from '../../domain/training/skillTrack';
+import { useTracked } from '../../state/hooks/useTracked';
 import { stockShoppingContext, stockUpShopping } from '../../domain/training/trainingStock';
 
 const RANGE_KEY = 'osrs-put:shopping-range';

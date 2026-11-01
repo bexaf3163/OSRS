@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import type { InGameTarget, Step } from '../../types';
 import { useBridge } from '../../state/bridge';
-import { toInGameTarget } from '../../services/runeliteBridge';
+import { toInGameTarget } from '../../domain/guide/inGameTarget';
 import { PreflightPanel } from './prep/PreflightPanel';
 import { PacingLine } from './step/PacingLine';
 import { PluginUpdateNote } from '../settings/PluginUpdateNote';

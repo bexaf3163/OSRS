@@ -8,7 +8,7 @@ import { selectPlan } from '../../src/domain/combat/route/selection';
 import type { Adopted } from '../../src/domain/combat/route/adopt';
 import { foodPicks, withFoodPlan } from '../../src/domain/combat/foodPlan';
 import { emptyProgress } from '../../src/domain/persistence/progress';
-import { stepGuide, toInGameTarget } from '../../src/services/runeliteBridge';
+import { stepGuide, toInGameTarget } from '../../src/domain/guide/inGameTarget';
 import { allSteps, stepById } from '../../src/data';
 import { stepGoals } from '../../src/domain/combat/combatEstimate';
 import { levelForXp } from '../../src/domain/player/xp';

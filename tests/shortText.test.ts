@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
 import { shortLine, SHORT_MAX } from '../src/domain/quests/shortText';
-import { stagePayload, stepGuide } from '../src/services/runeliteBridge';
+import { stagePayload, stepGuide } from '../src/domain/guide/inGameTarget';
 import raw from '../src/data/questStages.json';
 
 const quests = (raw as unknown as { quests: Record<string, import('../src/types').QuestStages> }).quests;

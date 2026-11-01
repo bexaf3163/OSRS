@@ -8,7 +8,7 @@ import { rangeForLevel } from '../../domain/training/ranges';
 import { useStore } from '../../state/store';
 import { useBridge } from '../../state/bridge';
 import { usePlayerState } from '../../state/playerStateContext';
-import { setFeatures, useFeatures } from '../../domain/persistence/features';
+import { setFeatures, useFeatures } from '../../state/hooks/useFeatures';
 import { priorityOf, styleOf } from '../../domain/persistence/playStyle';
 import { adviseTraining, formatHours, questTrainingStep, type MethodView, type TrainingAdvice } from '../../domain/training/trainingRouter';
 import { actionForm } from '../../domain/player/pacing';
@@ -21,7 +21,8 @@ import { NavigateButton } from '../../ui/NavigateButton';
 import { usePriceView } from '../../state/hooks/usePriceView';
 import { f2pAdviceFor } from '../../domain/training/f2pSkillAdvice';
 import { useTradeRestriction } from '../../state/hooks/useTradeRestriction';
-import { setTracked, trackedPriority, trackedTrainingContext, useTracked } from '../../domain/training/skillTrack';
+import { trackedPriority, trackedTrainingContext } from '../../domain/training/skillTrack';
+import { setTracked, useTracked } from '../../state/hooks/useTracked';
 import { SKILL_NAMES, type SkillName } from '../../domain/training/skillGuide';
 
 /** Skill advice from the shared player state; recomputed when levels, items, mode or style change. */

@@ -12,7 +12,7 @@ import { Inline } from '../../../ui/Inline';
 import { NavigateButton } from '../../../ui/NavigateButton';
 import { ItemIcon } from '../../reference/WikiDrawer';
 import { ItemMarketPrice } from '../prep/ItemMarketPrice';
-import { findLocalItem } from '../../../services/wikiService';
+import { findLocalItem } from '../../../domain/items/localItem';
 
 /** The sub-step the arrow is on for this step; null while closed, offline, or on a detour. */
 export function useSubStep(step: Step): SubStep | null {

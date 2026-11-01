@@ -8,7 +8,7 @@ import { useMapSources } from '../../state/hooks/useMapSources';
 import { mapPlaces } from '../../domain/travel/stepPlaces';
 import { Inline } from '../../ui/Inline';
 import { useBridge } from '../../state/bridge';
-import { navigationTarget } from '../../domain/travel/navigation';
+import { navigationTarget } from '../../domain/guide/navigation';
 import { usePrep } from '../../state/hooks/usePrep';
 import { NavigateButton } from '../../ui/NavigateButton';
 import { ImageModal } from '../path/step/StepImage';

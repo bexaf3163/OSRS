@@ -5,7 +5,7 @@ import type { Step } from '../../types';
 import { useStore } from '../../state/store';
 import { useBridge } from '../../state/bridge';
 import { isClosed } from '../../domain/quests/next-step';
-import { toInGameTarget } from '../../services/runeliteBridge';
+import { toInGameTarget } from '../../domain/guide/inGameTarget';
 import { IconChevron } from '../../ui/Icons';
 import { NavigateButton } from '../../ui/NavigateButton';
 import { useSubStep } from './step/SubStepHero';

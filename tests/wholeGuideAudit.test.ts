@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
 import stagesFile from '../src/data/questStages.json';
-import { navigationTarget } from '../src/domain/travel/navigation';
-import { stepGuide } from '../src/services/runeliteBridge';
+import { navigationTarget } from '../src/domain/guide/navigation';
+import { stepGuide } from '../src/domain/guide/inGameTarget';
 
 // The whole guide, F2P and members, from S1-01 to the last step. The F2P route audit (fullF2pRouteAudit.test.ts) stops at the Dragon Slayer
 // finale and only looks at the quests that have a stage table, so a quest without one passed unseen: Shield of Arrav's card stayed on "Talk to

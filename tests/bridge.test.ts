@@ -3,10 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { allSteps, stepsFor } from '../src/data';
 import { emptyProgress, withStep } from '../src/domain/persistence/progress';
 import { ownedText, triggerText } from '../src/domain/quests/triggers';
-import {
-  APP_PROTOCOL, backoffMs, BRIDGE_PATHS, checkStatus, clearActiveStep, connectEvents, missingWithPlugin, parseEvent, parseNavTarget, parseQuestInstruction, planAutoComplete,
-  pluginCompat, syncActiveStep, toInGameTarget, type BridgeEvent, type BridgeTransport,
-} from '../src/services/runeliteBridge';
+import { APP_PROTOCOL, backoffMs, BRIDGE_PATHS, checkStatus, clearActiveStep, connectEvents, missingWithPlugin, parseEvent, parseNavTarget, parseQuestInstruction, pluginCompat, syncActiveStep, type BridgeEvent, type BridgeTransport } from '../src/services/runeliteBridge';
+import { planAutoComplete, toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { mapPlaces, stepPlaces } from '../src/domain/travel/stepPlaces';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;

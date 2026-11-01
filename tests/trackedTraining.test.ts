@@ -4,7 +4,7 @@ import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { RANGED_WATCH } from '../src/domain/combat/rangedLoadout';
 import { buildEnvelope, EMPTY_PARTS, envelopeKey } from '../src/domain/prep/prepEnvelope';
-import { toInGameTarget } from '../src/services/runeliteBridge';
+import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { stepById } from '../src/data';
 import { parseTracked, trackedTrainingContext } from '../src/domain/training/skillTrack';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';

@@ -11,7 +11,8 @@ import { planPayload } from '../src/domain/prep/prepEnvelope';
 import { transportKey, transportWatch, travelInputOf } from '../src/domain/travel/travelInput';
 import { travelOptions } from '../src/domain/travel/travel';
 import { recommendedTransport } from '../src/domain/travel/transport';
-import { toInGameTarget, WATCH_MAX, type GearState, type QuestInstruction } from '../src/services/runeliteBridge';
+import type { GearState, QuestInstruction } from '../src/services/runeliteBridge';
+import { toInGameTarget, WATCH_MAX } from '../src/domain/guide/inGameTarget';
 
 // The live transport decision for the step shown in the game (the audit of 2026-10-14): what the card says, what it prepares, and what it never claims.
 // The positions and bank contents are fixtures; the planner, the item data and the source router are the real ones.

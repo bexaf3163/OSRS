@@ -6,10 +6,11 @@
 import type { Step } from '../../types';
 import { useStore } from '../../state/store';
 import { useBridge } from '../../state/bridge';
-import { useFeatures } from '../../domain/persistence/features';
+import { useFeatures } from '../../state/hooks/useFeatures';
 import { isClosed } from '../../domain/quests/next-step';
 import { formatGp } from '../../domain/economy/shopping';
-import { meleeHintApplies, useGearAdvice } from '../../domain/combat/gearAdvice';
+import { meleeHintApplies } from '../../domain/combat/gearAdvice';
+import { useGearAdvice } from '../../state/hooks/useGearAdvice';
 import { actionNav, gainText, missingText, sourceText, type GearAction, type GearAdvice } from '../../domain/combat/gearAdvisor';
 import type { Foe } from '../../types';
 import { NavigateButton } from '../../ui/NavigateButton';

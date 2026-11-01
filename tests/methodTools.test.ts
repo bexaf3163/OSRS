@@ -7,7 +7,7 @@ import { nameKey } from '../src/domain/items/itemKey';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { contextOf, stepReadiness } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
-import { toInGameTarget } from '../src/services/runeliteBridge';
+import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import type { Step } from '../src/types';
 
 function training(skill: 'mining' | 'woodcutting'): Step {

@@ -12,9 +12,10 @@ import { useRecoveryTracker, type ActiveRecovery } from './hooks/useRecoveryTrac
 import { useBridge } from './bridge';
 import type { QuestInstruction } from '../services/runeliteBridge';
 import { usePriceView } from './hooks/usePriceView';
-import { trackedPriority, useTracked } from '../domain/training/skillTrack';
+import { trackedPriority } from '../domain/training/skillTrack';
+import { useTracked } from './hooks/useTracked';
 import { trackedTraining, type TrackedTraining } from '../domain/training/trackedTraining';
-import { useFeatures } from '../domain/persistence/features';
+import { useFeatures } from './hooks/useFeatures';
 import { priorityOf, styleOf } from '../domain/persistence/playStyle';
 import { useTradeRestriction } from './hooks/useTradeRestriction';
 import { resolveActiveActivity } from '../domain/quests/activeActivity';

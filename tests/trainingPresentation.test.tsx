@@ -12,10 +12,10 @@ const fixture = vi.hoisted(() => ({ advice: null as TrainingAdvice | null, mode:
 vi.mock('../src/state/store', () => ({ useStore: () => ({ mode: fixture.mode }) }));
 vi.mock('../src/state/bridge', () => ({ useBridge: () => ({ xp: null, xpRate: () => null }) }));
 vi.mock('../src/state/playerStateContext', () => ({ usePlayerState: () => ({ state: fixture.state ?? {} }) }));
-vi.mock('../src/domain/training/skillTrack', async importOriginal => ({
-  ...await importOriginal<typeof import('../src/domain/training/skillTrack')>(), useTracked: () => fixture.tracked,
+vi.mock('../src/state/hooks/useTracked', async importOriginal => ({
+  ...await importOriginal<typeof import('../src/state/hooks/useTracked')>(), useTracked: () => fixture.tracked,
 }));
-vi.mock('../src/domain/persistence/features', () => ({ useFeatures: () => ({}), setFeatures: vi.fn() }));
+vi.mock('../src/state/hooks/useFeatures', () => ({ useFeatures: () => ({}), setFeatures: vi.fn() }));
 vi.mock('../src/state/hooks/usePriceView', () => ({ usePriceView: () => null }));
 vi.mock('../src/state/hooks/useTradeRestriction', () => ({ useTradeRestriction: () => ({ state: 'unknown' }) }));
 vi.mock('../src/domain/training/trainingNav', () => ({ trainingNav: () => null }));

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
 import machines from '../src/data/questMachines.json';
-import { stepGuide } from '../src/services/runeliteBridge';
+import { stepGuide } from '../src/domain/guide/inGameTarget';
 import { stepTargets } from '../src/domain/travel/travelSupplies';
 import { questItemKeys } from '../src/domain/quests/questItems';
 

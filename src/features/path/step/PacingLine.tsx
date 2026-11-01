@@ -4,7 +4,7 @@
 
 import type { Step } from '../../../types';
 import { useBridge } from '../../../state/bridge';
-import { useFeatures } from '../../../domain/persistence/features';
+import { useFeatures } from '../../../state/hooks/useFeatures';
 import { etaText, PACING_ICON as ICON, pacingLevels, pacingNext, pacingText } from '../../../domain/player/pacing';
 
 export function PacingLine({ step }: { step: Step }) {

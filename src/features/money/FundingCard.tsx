@@ -8,7 +8,7 @@ import type { ReactNode } from 'react';
 import type { Step } from '../../types';
 import { useFunding, useFundingScreen, useFundingView } from '../../state/fundingContext';
 import { useReadinessEngine } from '../../state/readinessContext';
-import { useFeatures } from '../../domain/persistence/features';
+import { useFeatures } from '../../state/hooks/useFeatures';
 import { styleOf } from '../../domain/persistence/playStyle';
 import { formatGp } from '../../domain/economy/shopping';
 import type { FundingAssessment, FundingOption } from '../../domain/economy/funding/assess';
