@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.Value;
 import net.runelite.api.Client;
@@ -77,7 +78,9 @@ class OsrsPathGuideOverlay extends Overlay
 	/** What a row of the card is, for drawing. */
 	enum Part
 	{
-		HEADER, STATUS, PROGRESS, THEN, WARNING, STEP, LABEL, LINE, MORE, RULE
+		HEADER, STATUS, PROGRESS, THEN, WARNING, STEP, LABEL, LINE, MORE, RULE,
+		/** The Ledger card's own rows: its headline (the header row is then only the click area), a tab, the next step's footer. */
+		TITLE, TAB, FOOT
 	}
 
 	/** One drawn row of the card, in the card's own coordinates. */
@@ -199,18 +202,23 @@ class OsrsPathGuideOverlay extends Overlay
 			Font font = GuideFont.font(scale);
 			Font small = GuideFont.font(scale * SMALL);
 			Font head = GuideFont.font(scale * HEAD);
-			int width = width(Hud.panelWidth(this, Math.round(WIDTH * scale)), scale);
+			boolean ledger = config.overlayTheme() == OsrsPathBridgeConfig.OverlayTheme.LEDGER;
+			int width = ledger ? LedgerGuide.width(Hud.panelWidth(this, Math.round(LedgerGuide.WIDTH * scale)), scale)
+				: width(Hud.panelWidth(this, Math.round(WIDTH * scale)), scale);
 			int maxHeight = Math.max(160, (int) (client.getCanvasHeight() * MAX_HEIGHT_SHARE));
-			boolean advice = plugin.isAdviceOpen();
-			Object key = Arrays.asList(card, expanded, advice, width, font, maxHeight);
+			int tab = plugin.getHudTab();
+			boolean advice = ledger ? tab == LedgerGuide.ADVICE : plugin.isAdviceOpen();
+			Object key = Arrays.asList(card, expanded, advice, width, font, maxHeight, ledger, tab);
 			if (!key.equals(builtFor))
 			{
-				layout = layout(card, expanded, advice, own, font, small, head, width, maxHeight);
+				layout = ledger ? LedgerGuide.layout(card, expanded, tab, own, scale, width, maxHeight)
+					: layout(card, expanded, advice, own, font, small, head, width, maxHeight);
 				builtFor = key;
 				plugin.debug.uiShown("hud", card.plain(expanded, advice));
 			}
 			Row under = under(layout);
-			paint(own, layout, under, config.hudOpacity());
+			if (ledger) LedgerGuide.paint(own, layout, under, config.hudOpacity());
+			else paint(own, layout, under, config.hudOpacity());
 			remember(layout);
 			paintTooltip(own, layout, under, small);
 			plugin.debug.guideShown(true);
@@ -374,24 +382,31 @@ class OsrsPathGuideOverlay extends Overlay
 
 	static Row lineRow(Part part, HudModel.Line l, FontMetrics fm, FontMetrics sm, Font font, Font small, int width, int y)
 	{
+		return lineRow(part, l, fm, sm, font, small, width, y, PAD_X, OsrsPathGuideOverlay::toneColor);
+	}
+
+	/** A line at a side padding, coloured by a theme's inks (the Ledger page is light). */
+	static Row lineRow(Part part, HudModel.Line l, FontMetrics fm, FontMetrics sm, Font font, Font small, int width, int y, int pad,
+		Function<HudModel.Tone, Color> ink)
+	{
 		boolean isSmall = l.isSmall() || part != Part.LINE;
 		FontMetrics m = isSmall ? sm : fm;
 		boolean icon = l.getIcon() != HudModel.Icon.NONE;
-		int textX = PAD_X + (icon ? ICON + 5 : 0);
+		int textX = pad + (icon ? ICON + 5 : 0);
 		int rightW = l.getRight() == null ? 0 : m.stringWidth(l.getRight()) + 8;
-		int textW = width - textX - PAD_X - rightW;
+		int textW = width - textX - pad - rightW;
 		// A warning is read whole: "Do not board the ship without it: Elvarg's fire hits…" lost the reason on the screen (2.74.14 session).
 		boolean warning = l.getTone() == HudModel.Tone.CAUTION || l.getTone() == HudModel.Tone.DANGER;
 		int max = part == Part.STEP ? 2 : warning ? WARNING_LINES : isSmall ? 3 : 2;
 		List<String> wrapped = OverlayText.wrap(l.getText(), m, textW);
 		List<String> texts = clip(wrapped, max, m, textW);
 		int h = texts.size() * m.getHeight();
-		Color color = part == Part.LABEL ? MUTED : part == Part.MORE ? LINK : toneColor(l.getTone());
+		Color color = ink.apply(part == Part.LABEL ? HudModel.Tone.MUTED : part == Part.MORE ? HudModel.Tone.LINK : l.getTone());
 		// A line cut short keeps its whole text in the hint beside the card.
 		String hint = texts == wrapped || l.getHint() != null && l.getHint().startsWith(l.getText()) ? l.getHint()
 			: l.getText() + (l.getHint() == null ? "" : ". " + l.getHint());
-		return new Row(part, new Rectangle(PAD_X - 4, y, width - 2 * PAD_X + 8, h + 2), textX, texts, l.getRight(), isSmall ? small : font, color, l.getIcon(),
-			toneColor(l.getTone()), l.getAction(), hint);
+		return new Row(part, new Rectangle(pad - 4, y, width - 2 * pad + 8, h + 2), textX, texts, l.getRight(), isSmall ? small : font, color, l.getIcon(),
+			ink.apply(l.getTone()), l.getAction(), hint);
 	}
 
 	/** A warning keeps up to this many lines: its reason is the point, and the safety texts are written to fit. */
@@ -504,14 +519,14 @@ class OsrsPathGuideOverlay extends Overlay
 				g.fillRoundRect(b.x, b.y, b.width, b.height, 7, 7);
 				g.setColor(new Color(tone.getRed(), tone.getGreen(), tone.getBlue(), 170));
 				g.drawRoundRect(b.x, b.y, b.width, b.height, 7, 7);
-				paintIcon(g, r.getIcon(), PAD_X, b.y + 5 + (fm.getAscent() - ICON) / 2 + 1, ICON, tone);
+				HudIcons.paint(g, r.getIcon(), PAD_X, b.y + 5 + (fm.getAscent() - ICON) / 2 + 1, ICON, tone);
 				paintText(g, r, b.y + 5);
 				return;
 			}
 			case HEADER:
 			{
 				int top = PAD_TOP;
-				paintIcon(g, r.getIcon(), PAD_X, top + (fm.getAscent() - ICON) / 2 + 2, ICON, r.getIconColor());
+				HudIcons.paint(g, r.getIcon(), PAD_X, top + (fm.getAscent() - ICON) / 2 + 2, ICON, r.getIconColor());
 				paintText(g, r, top);
 				boolean open = r.getHint() != null && r.getHint().startsWith("Click to close");
 				paintChevron(g, b.x + b.width - PAD_X + 2 - CHEVRON, top + (fm.getAscent() - CHEVRON) / 2 + 2, CHEVRON, open, MUTED);
@@ -522,7 +537,7 @@ class OsrsPathGuideOverlay extends Overlay
 				if (r.getIcon() != HudModel.Icon.NONE)
 				{
 					int size = ICON - 2;
-					paintIcon(g, r.getIcon(), PAD_X, b.y + 1 + (fm.getAscent() - size) / 2 + 1, size, r.getIconColor());
+					HudIcons.paint(g, r.getIcon(), PAD_X, b.y + 1 + (fm.getAscent() - size) / 2 + 1, size, r.getIconColor());
 				}
 				paintText(g, r, b.y + 1);
 				if (r.getRight() != null)
@@ -534,7 +549,7 @@ class OsrsPathGuideOverlay extends Overlay
 		}
 	}
 
-	private static void paintText(Graphics2D g, Row r, int top)
+	static void paintText(Graphics2D g, Row r, int top)
 	{
 		FontMetrics fm = GuideFont.metrics(g, r.getFont());
 		g.setColor(r.getColor());
@@ -590,139 +605,6 @@ class OsrsPathGuideOverlay extends Overlay
 			p.lineTo(x + m, y + m + dir * q * 0.6f);
 			p.lineTo(x + m + q * 1.4f, y + m - dir * q * 0.6f);
 			k.draw(p);
-		}
-		finally
-		{
-			k.dispose();
-		}
-	}
-
-	/** The card's small vector icons, all from the same strokes: no emoji, no font glyphs. (x, y) is the icon box's top left. */
-	static void paintIcon(Graphics2D g, HudModel.Icon icon, int x, int y, int s, Color c)
-	{
-		if (icon == HudModel.Icon.NONE || c == null)
-		{
-			return;
-		}
-		Graphics2D k = (Graphics2D) g.create();
-		try
-		{
-			k.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			k.setColor(c);
-			k.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-			float m = s / 2f;
-			Path2D p = new Path2D.Float();
-			switch (icon)
-			{
-				case QUEST:
-				{
-					// A small hexagon: the quest marker of the old card, smaller.
-					for (int i = 0; i < 6; i++)
-					{
-						double a = Math.PI / 3 * i - Math.PI / 2;
-						float px = (float) (x + m + Math.cos(a) * (m - 0.5));
-						float py = (float) (y + m + Math.sin(a) * (m - 0.5));
-						if (i == 0)
-						{
-							p.moveTo(px, py);
-						}
-						else
-						{
-							p.lineTo(px, py);
-						}
-					}
-					p.closePath();
-					k.draw(p);
-					k.fillOval(Math.round(x + m - 1.5f), Math.round(y + m - 1.5f), 3, 3);
-					return;
-				}
-				case TRAIN:
-					// A target: what the training aims at.
-					k.drawOval(x + 1, y + 1, s - 2, s - 2);
-					k.fillOval(Math.round(x + m - 2), Math.round(y + m - 2), 4, 4);
-					return;
-				case PREPARE:
-					// A bag with a handle.
-					k.drawRoundRect(x + 1, y + 4, s - 2, s - 5, 3, 3);
-					k.drawArc(Math.round(x + m - 3), y + 1, 6, 6, 0, 180);
-					return;
-				case GO:
-					p.moveTo(x + 1.5f, y + m);
-					p.lineTo(x + s - 2f, y + m);
-					p.moveTo(x + s - 6f, y + m - 3.5f);
-					p.lineTo(x + s - 2f, y + m);
-					p.lineTo(x + s - 6f, y + m + 3.5f);
-					k.draw(p);
-					return;
-				case NEXT:
-					p.moveTo(x + m - 2f, y + m - 3.5f);
-					p.lineTo(x + m + 1.5f, y + m);
-					p.lineTo(x + m - 2f, y + m + 3.5f);
-					k.draw(p);
-					return;
-				case BACK:
-					p.moveTo(x + m + 2f, y + m - 3.5f);
-					p.lineTo(x + m - 1.5f, y + m);
-					p.lineTo(x + m + 2f, y + m + 3.5f);
-					k.draw(p);
-					return;
-				case MORE:
-					p.moveTo(x + m - 3.5f, y + m - 1.5f);
-					p.lineTo(x + m, y + m + 2f);
-					p.lineTo(x + m + 3.5f, y + m - 1.5f);
-					k.draw(p);
-					return;
-				case CHECK:
-					p.moveTo(x + 2f, y + m);
-					p.lineTo(x + m - 1f, y + s - 3f);
-					p.lineTo(x + s - 1.5f, y + 2.5f);
-					k.draw(p);
-					return;
-				case MISSING:
-					k.drawOval(x + 1, y + 1, s - 2, s - 2);
-					k.drawLine(Math.round(x + m - 2.5f), Math.round(y + m - 2.5f), Math.round(x + m + 2.5f), Math.round(y + m + 2.5f));
-					k.drawLine(Math.round(x + m + 2.5f), Math.round(y + m - 2.5f), Math.round(x + m - 2.5f), Math.round(y + m + 2.5f));
-					return;
-				case BANK:
-					// A chest: the bank.
-					k.drawRoundRect(x + 1, y + 3, s - 2, s - 5, 2, 2);
-					k.drawLine(x + 1, Math.round(y + m), x + s - 1, Math.round(y + m));
-					return;
-				case UNKNOWN:
-				{
-					// A dashed circle: not checked.
-					float r = m - 1;
-					for (int i = 0; i < 8; i += 2)
-					{
-						k.drawArc(Math.round(x + m - r), Math.round(y + m - r), Math.round(2 * r), Math.round(2 * r), i * 45 + 10, 25);
-					}
-					return;
-				}
-				case WARN:
-				case DANGER:
-				{
-					p.moveTo(x + m, y + 1f);
-					p.lineTo(x + s - 0.5f, y + s - 1.5f);
-					p.lineTo(x + 0.5f, y + s - 1.5f);
-					p.closePath();
-					if (icon == HudModel.Icon.DANGER)
-					{
-						k.fill(p);
-						k.setColor(FILL);
-					}
-					else
-					{
-						k.draw(p);
-					}
-					k.fillRect(Math.round(x + m - 0.75f), y + 4, 2, Math.max(2, s - 9));
-					k.fillRect(Math.round(x + m - 0.75f), y + s - 4, 2, 2);
-					return;
-				}
-				case DOT:
-					k.fillOval(Math.round(x + m - 1.5f), Math.round(y + m - 1.5f), 3, 3);
-					return;
-				default:
-			}
 		}
 		finally
 		{

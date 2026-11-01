@@ -34,6 +34,8 @@ final class GuideList
 		TRANSPORT,
 		/** "More advice": show or hide the optional recommendations under the guide's details. */
 		MORE,
+		/** A tab of the Ledger card: show that section (the tab's number in place). */
+		TAB,
 	}
 
 	@Value
@@ -56,6 +58,11 @@ final class GuideList
 		static Action place(int index)
 		{
 			return new Action(Kind.PLACE, index);
+		}
+
+		static Action tab(int index)
+		{
+			return new Action(Kind.TAB, index);
 		}
 
 		boolean isClickable()

@@ -103,11 +103,13 @@ public class GlassCardTest
 	}
 
 	@Test
-	public void theConfigDefaultsToGlass_underANewStableKey() throws Exception
+	public void theConfigDefaultsToLedger_underTheStableKey() throws Exception
 	{
-		assertEquals(GLASS, new OsrsPathBridgeConfig() { }.overlayTheme());
+		// The owner's pick of 2026-11-01: the app's Ledger look; Glass and Classic stay selectable.
+		assertEquals(OsrsPathBridgeConfig.OverlayTheme.LEDGER, new OsrsPathBridgeConfig() { }.overlayTheme());
 		ConfigItem item = OsrsPathBridgeConfig.class.getMethod("overlayTheme").getAnnotation(ConfigItem.class);
 		assertEquals("overlayTheme", item.keyName());
+		assertEquals("Ledger", OsrsPathBridgeConfig.OverlayTheme.LEDGER.toString());
 		assertEquals("Glass", GLASS.toString());
 		assertEquals("Classic", CLASSIC.toString());
 	}

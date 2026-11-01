@@ -579,6 +579,9 @@ final class PluginQuests
 			case MORE:
 				plugin.adviceOpen = !plugin.adviceOpen;
 				break;
+			case TAB:
+				plugin.hudTab = a.getPlace();
+				break;
 			case PLACE:
 				goToPlace(a.getPlace());
 				break;

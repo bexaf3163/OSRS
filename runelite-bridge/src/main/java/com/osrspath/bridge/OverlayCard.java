@@ -81,6 +81,11 @@ final class OverlayCard
 				paintGlass(c, w, h, accent, opacityPercent);
 				return;
 			}
+			if (theme == OsrsPathBridgeConfig.OverlayTheme.LEDGER)
+			{
+				paintLedger(c, w, h, accent, opacityPercent);
+				return;
+			}
 			int a = alpha(opacityPercent);
 			Shape card = new RoundRectangle2D.Float(0.5f, 0.5f, w - 1, h - 1, RADIUS, RADIUS);
 			c.setPaint(new GradientPaint(0, 0, withAlpha(TOP, a), 0, h, withAlpha(BOTTOM, a)));
@@ -132,6 +137,27 @@ final class OverlayCard
 			c.setColor(accent);
 			c.fillOval(DOT_X, DOT_Y, DOT, DOT);
 		}
+	}
+
+	/** The Ledger plate: the guide's leather and gold frame, the state as a strip on the left as in Classic, nearly opaque. */
+	private static void paintLedger(Graphics2D c, int w, int h, Color accent, int opacityPercent)
+	{
+		int a = Math.max(alpha(opacityPercent), 236);
+		Shape card = new RoundRectangle2D.Float(0.5f, 0.5f, w - 1, h - 1, RADIUS, RADIUS);
+		c.setPaint(new GradientPaint(0, 0, withAlpha(LedgerGuide.LEATHER, a), 0, h, withAlpha(LedgerGuide.LEATHER_DARK, a)));
+		c.fill(card);
+		if (accent != null)
+		{
+			c.setClip(card);
+			c.setColor(accent);
+			c.fillRect(0, 0, BAR, h);
+			c.setClip(null);
+		}
+		c.setColor(new Color(201, 162, 75, 45));
+		c.draw(new RoundRectangle2D.Float(3.5f, 3.5f, w - 7, h - 7, RADIUS - 3, RADIUS - 3));
+		c.setColor(LedgerGuide.GOLD_DARK);
+		c.setStroke(new BasicStroke(1f));
+		c.draw(card);
 	}
 
 	/** The modern guide uses a quiet surface; other overlay styles retain their existing rendering. */

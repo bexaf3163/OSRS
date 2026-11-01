@@ -49,7 +49,7 @@ Every fix, feature, removal or redesign (app, plugin, data, tests, CSS, docs, CI
 6. **Remove in the same change.** Retiring something deletes its exclusive code, CSS, tests, fixtures, assets, data and docs in the same commit. [`npm run knip`, `npm run dead-css`]
 7. **CSS.** Ledger CSS holds tokens, base and fonts only. No new `:root:root`, `:root .la-*` overrides or `!important`. A CSS or layout change needs a base-versus-head screenshot diff with no unexplained pixels (`npm run perf -- <repo> dist <port> shots`, then `npm run pixeldiff`). [dead-css]
 8. **Tests.** Wait for conditions, never fixed sleeps (except a commented product timer); browser scenarios use `settle(page)`, which waits until no short timer, request or React work is pending [check-structure]. Never weaken or delete an assertion to make a change pass; adapt an obsolete one to the surviving behavior. Unit test files that mock modules or replace globals run isolated automatically (`vitest.config.ts`). Generated fixtures and documents come only from `npm run fixtures`.
-9. **RuneLite plugin.** One HUD. No per-tick or per-frame scans, JSON parsing, API reads or allocations without a dirty flag; heavy planning stays in TypeScript and overlays show only when relevant. Plugin-only assets (the HUD font Sora) live in `runelite-bridge/src/main/resources/`, not `public/`.
+9. **RuneLite plugin.** One HUD. No per-tick or per-frame scans, JSON parsing, API reads or allocations without a dirty flag; heavy planning stays in TypeScript and overlays show only when relevant. Plugin-only assets (the HUD fonts) live in `runelite-bridge/src/main/resources/`, not `public/`.
 10. **Performance does not regress.** For engines, providers or bridge handling, run `npm run perf -- <repo> dist <port> timing` twice on base and head and compare with `scripts/test/perf-compare.mjs`; over +10% per-update or start-up main-thread time needs an owner decision. Memoize by identity; no expensive work in render.
 11. **One contract document,** as the documentation policy says.
 12. **Verify before merge.** `npm run verify:quick` on every change; all gates before a release. Report skipped or unreachable gates; never claim them as passed.
@@ -132,7 +132,7 @@ Cross-page activity selection is `resolveActiveActivity` in `src/domain/quests/a
 
 ## Accepted design and cleanup boundaries
 
-The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **Cinzel** headings and **EB Garamond** text (subsets in `src/ledger/fonts`). The in-game HUD keeps its own face, **Sora**, in the plugin jar. Never swap the two systems' fonts. Design entry points: `src/ledger/{Chrome.tsx,parts.tsx,icons.tsx,ledger.css,app.css,extras.css,fonts.css}` and `src/app/App.tsx`. Older CSS (`styles.css`, `clear-path.css`, `modern-path.css`, `cockpit.css`) still styles shared components; check consumers and pixel-diff before removing more.
+The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **Cinzel** headings and **EB Garamond** text (subsets in `src/ledger/fonts`). The HUD's default Ledger plate uses Cinzel and EB Garamond; Classic and Glass keep **Sora**. Design entry points: `src/ledger/{Chrome.tsx,parts.tsx,icons.tsx,ledger.css,app.css,extras.css,fonts.css}` and `src/app/App.tsx`. Older CSS (`styles.css`, `clear-path.css`, `modern-path.css`, `cockpit.css`) still styles shared components; check consumers and pixel-diff before removing more.
 
 2.81.11 to 2.81.13 cleanup decisions that stay:
 
@@ -169,7 +169,7 @@ Review Path, Skills, Gear, Shopping, Money and Reference/search for stale recomm
 
 ### P4 — Claude's real-client acceptance
 
-Use the published Portable and restart its client so the plugin version is known; verify real login and link, not a port; respect the owner's limited-input rules. Smoke first (version, link, Sora HUD, provenance, one current action in app, arrow and HUD), then the matrix. Without the desktop, leave live evidence pending. For HDOS, verify only what its adapter supplies. Keep implemented, automated, native-shell, live and unverified evidence apart, and fix confirmed shared bugs at their layer.
+Use the published Portable and restart its client so the plugin version is known; verify real login and link, not a port; respect the owner's limited-input rules. Smoke first (version, link, Ledger HUD, provenance, one current action in app, arrow and HUD), then the matrix. Without the desktop, leave live evidence pending. For HDOS, verify only what its adapter supplies. Keep implemented, automated, native-shell, live and unverified evidence apart, and fix confirmed shared bugs at their layer.
 
 ### Consolidated live regression matrix — Claude owns every row
 
@@ -188,7 +188,7 @@ Record versions, account mode, facts, expected and actual result and evidence as
 | Physical supplies | Noted food owned but not eatable; withdrawal/unnote; equivalent foods still use real pieces/slots; potion doses combine without pretend pouring. |
 | Quests/branches | Oracle/Dragon Slayer entry, dialogue, map parts, Shield of Arrav branches, milestones, encounter food/gear guards; completed encounters NOT REACHABLE, never replayed. |
 | Travel/funding | Teleports, unlocks, charges, runes, cash, whole detour versus walking; money methods respect restrictions, input cost, tax/liquidity and real session GP. |
-| HUD/map/UI | One collapsed/expanded Sora guide, one warning, phases agree, saved position, click, Alt-drag; one map preview, point selection, real arrow target; Ledger fonts, wraps, dialogs at 100/125/150% DPI. |
+| HUD/map/UI | One collapsed/expanded Ledger guide with its tabs, one warning, phases agree, saved position, click, Alt-drag; one map preview, point selection, real arrow target; Ledger fonts, wraps, dialogs at 100/125/150% DPI. |
 | Persistence/updater | Isolated profiles for corrupt/future/external-file recovery, backups, profile protection and a real old → new EXE update; never risk the owner's only save. |
 
 ### P5 — project optimization (2026-11, verify-first)
@@ -216,7 +216,9 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 
 2.81.19 (optimization batches 1 and 2; owner's Windows PC, at least two runs per build): per-update script 70.3 → 20.5 ms, start-up blocking −53…−74%, page switches within +0.7 ms, web build −26%, unit run 72 → 9 s, axe 0 on nine pages, screenshots identical apart from known noise. Real-game acceptance is pending (P4).
 
-2.81.20–30 (S1, S3–S8, S10, C1, S11, X2, X8, X9; no visible change): code in `app`, `state`, `ui`, `features` and `domain` (largest folder 139 → 19 files), 0 layer violations (from 29), no import or folder cycles; one list each for page links, storage keys and the 131 bridge payload fields; releases from the Checks release job; unit tests beside their modules; browser scenarios per feature with `settle()` and two workers, 874 of 874 checks in 131–158 s over three runs (from 319 s); data JSON in `authored/` and `generated/` behind `src/data/index.ts` (files importing JSON directly 49 → 0), its manifest tied to each generator; scripts in five purpose folders, every npm script run (wiki generators offline); review shots on the harness, 29 areas in 37 s; splits: `OsrsPathBridgePlugin` 4,231 → 797 lines plus eight section classes, `HudModel` 1,175 → 468, `ActiveTarget` 1,078 → 298, `src/types` in seven topic files (bundle byte-identical), `runeliteBridge.ts` 627 → 522, `BridgeServer` 1,162 → 796, `bridge.tsx` 881 → 60 (state in `bridgeCore.ts`), `styles.css` in 14 files (byte-identical); files over 1,000 lines 5 → 0; knip fails on dead exports (15 removed). Local gates pass (2,519 unit, 874 browser, 95 Electron, 648 Java with Sora in the jar).
+2.81.20–30 (S1, S3–S8, S10, C1, S11, X2, X8, X9; no visible change): code in `app`, `state`, `ui`, `features` and `domain` (largest folder 139 → 19 files), 0 layer violations (from 29); one list each for page links, storage keys and the 131 bridge payload fields; browser scenarios per feature with `settle()` and two workers, 874 of 874 checks in 131–158 s over three runs (from 319 s); data JSON in `authored/` and `generated/` behind `src/data/index.ts` (files importing JSON directly 49 → 0), its manifest tied to each generator; splits: `OsrsPathBridgePlugin` 4,231 → 797 lines plus eight section classes, `HudModel` 1,175 → 468, `ActiveTarget` 1,078 → 298, `src/types` in seven topic files (bundle byte-identical), `runeliteBridge.ts` 627 → 522, `BridgeServer` 1,162 → 796, `bridge.tsx` 881 → 60 (state in `bridgeCore.ts`), `styles.css` in 14 files (byte-identical); files over 1,000 lines 5 → 0; knip fails on dead exports (15 removed). Local gates pass (2,519 unit, 874 browser, 95 Electron, 648 Java).
+
+2.81.31 (owner's pick): the HUD's default Ledger plate (ring, step code, NOW stamp, tabs Now/Prepare/Next/Advice) from the same card rows; drawn once per change, then copied (84–254 against 154–634 µs per frame); 653 Java tests. Real-game check pending.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt

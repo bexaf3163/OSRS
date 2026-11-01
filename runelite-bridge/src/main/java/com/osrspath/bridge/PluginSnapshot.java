@@ -339,6 +339,7 @@ final class PluginSnapshot
 			plugin.quests.stageKey = null;
 			plugin.quests.qhReset();
 			plugin.adviceOpen = false;
+			plugin.hudTab = LedgerGuide.NOW;
 		}
 		plugin.target = t;
 		plugin.highlights.lineHlKey = null;

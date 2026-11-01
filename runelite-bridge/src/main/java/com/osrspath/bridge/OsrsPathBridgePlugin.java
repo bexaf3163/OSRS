@@ -165,6 +165,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	/** "More advice" is open on the in-game guide. Closed again when the step changes: a new step's advice is new. */
 	@Getter
 	boolean adviceOpen;
+	/** The Ledger card's open tab ({@link LedgerGuide#NOW} and on); back to Now when the step changes, like "More advice". */
+	@Getter
+	int hudTab;
 	/** The in-game guide's card, built from one snapshot of the state each time it changes ({@link PluginNavigation#rebuildCard}); null means nothing to show. */
 	@Getter
 	volatile HudModel.Card hudCard;
