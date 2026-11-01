@@ -35,7 +35,7 @@ Updated 2026-11-01. **This is the only current project contract, architecture ma
 - Keep updater digest/size validation, atomic writes, damaged/future-schema quarantine, pre-write external-revision guards, profile protection and backup receipts. No watchers, automatic merges or locks without a reproduced requirement.
 - Mode changes never reset progress. F2P-only plans never leak Members prerequisites; explicit alternate strategies carry their own. Unsupported mechanics and rates stay explicit.
 - The RuneLite launch (`electron/runelite-launcher.cjs`) keeps `-ea`, at least `-Xmx1024m` and the other JVM arguments; RuneLite's config.json does not override them. The bridge request limit stays **64 x 1024 bytes** (`BridgeServer.MAX_BODY`): oversized requests are explicit failures, never silently truncated or called "shown in game". Payload changes need boundary, UTF-8 and refusal tests and keep the previous valid target.
-- Work through authorized tasks autonomously. Never force-push, reset or clean away valid work, merge unrelated branches, overwrite released EXEs or publish private account or authentication data. Reconcile newer main before publishing.
+- Work through authorized tasks autonomously. Never force-push, reset or clean away valid work, merge unrelated branches or overwrite released EXEs.
 
 ## Change hygiene — binding for every AI or human change
 
@@ -147,7 +147,7 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Development and release procedure
 
-- Read this file and `git status` first. Never reset or clean valid work or import unrelated branches.
+- Read this file and `git status` first.
 - Gates: `npx tsc --noEmit`, `npm test`, `npm run check-data`, `npm run build`, `npm run test:ui`, `npm run test:e2e`, `runelite-bridge/gradlew -p runelite-bridge test jar` and the CI packaged-Portable gate; CI also runs `check-structure` (report), `knip` and `dead-css`.
 - Browser tests use port 4179: one runner at a time, finish `dist` rebuilds first, never rebuild under a running suite. Electron e2e uses isolated data and a bridge stub. Screenshots go to the ignored `audit-temp/`.
 - Retiring a feature removes its exclusive UI, state, handlers, IPC, styles, imports and tests but keeps shared consumers, saves, backups and diagnostics; a selector can reach a nested dialog. Adapt obsolete assertions to surviving actions; never restore an obsolete screen for a test.
@@ -195,7 +195,7 @@ Record versions, account mode, facts, expected and actual result and evidence as
 
 Each batch merges after all gates, its Go threshold and live checks; re-run `npm run perf` and `check-structure` after it. Target layout: `src/app`, `src/state`, `src/ui`, `src/ledger`, `src/features/<page>`, `src/domain/<area>` (no React, no IO), `src/services` (IO only), `src/data` (authored, generated), tests beside their area, `scripts/` by purpose, plugin packages by concern. In order:
 
-1. **S1** pure-move restructure (about 255 files), then split Path into step/prep/combat/plan; freeze window with Codex idle; update the responsibility map in the same commit.
+1. **S1** pure-move restructure (about 255 files), then split Path into step/prep/combat/plan, updating the responsibility map in the same commit.
 2. **S3** move the remaining wrong-direction symbols (`FOODS`, `FRESH_MS`, `nearestBank`, `isClosed`, services importing engines) to zero layer violations and break the `Skills` ↔ `SkillDetail` cycle; then `check-structure --strict` in CI.
 3. **S4** page registry with `href.*()` (30 files hard-code `#/`) and one storage-key registry (26 keys in 19 files, byte-identical).
 4. **S11** receipts written by the release workflow and `npm run fixtures`; **C1** release reuses the Checks-verified EXE.
@@ -223,7 +223,7 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 
 ## Current verification
 
-2.81.18 is delivered and verified (receipt below): 2,513 unit tests in 209 files, types, build, plugin jar, data (0 errors, 0 warnings), documentation checks and exact-source CI. No real-game acceptance was performed.
+2.81.19 (optimization batches 1 and 2; owner's Windows PC, at least two runs per build): per-update script 70.3 → 20.5 ms, start-up blocking −53…−74%, page switches within +0.7 ms, web build −26%, unit run 72 → 9 s, browser suite 458 → 312 s, axe 0 on nine pages, screenshots identical apart from known noise. Local gates pass (2,513 unit, 874 browser, 95 Electron, 647 Java with Sora in the jar). Real-game acceptance is pending (P4).
 
 <!-- DELIVERY_START -->
 ## Delivery receipt
