@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { moneyGoalProgress, wealthOf } from './wealth';
-import { parseGear } from '../../services/runeliteBridge';
+import { parseGear } from '../../services/bridgeEvents';
 import { allSteps } from '../../data';
 
 const gear = (coins: number, bankCoins: number | null, carriedValue: number | null, bankValue: number | null) =>

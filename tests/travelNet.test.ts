@@ -3,7 +3,7 @@ import {
   EXCHANGE, NET, OPPORTUNISTIC_MAX_COST, cooldownText, OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MIN_SAVING_TILES, TRANSPORT, dist, travelOptions, type TravelInput, type TravelOption,
 } from '../src/domain/travel/travel';
 import { nameKey } from '../src/domain/items/itemKey';
-import { parseSeconds } from '../src/services/runeliteBridge';
+import { parseSeconds } from '../src/services/bridgeEvents';
 import type { GearItem } from '../src/services/runeliteBridge';
 
 const at = (x: number, y: number, plane = 0) => ({ x, y, plane });

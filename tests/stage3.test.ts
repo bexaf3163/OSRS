@@ -4,7 +4,8 @@ import type { Step } from '../src/types';
 import { emptyProgress, normalizeProgress, withUpgradeDismissed } from '../src/domain/persistence/progress';
 import { stageBankItemIds, stepBankItemIds, uniqueIds } from '../src/domain/prep/bankTags';
 import { DEFAULT_FEATURES, parseFeatures } from '../src/domain/persistence/features';
-import { checkStatus, clearNavTarget, parseGear, parsePacing, setGearHint, setNavTarget, syncBankTags, type BridgeTransport, type GearState } from '../src/services/runeliteBridge';
+import { checkStatus, clearNavTarget, setGearHint, setNavTarget, syncBankTags, type BridgeTransport, type GearState } from '../src/services/runeliteBridge';
+import { parseGear, parsePacing } from '../src/services/bridgeEvents';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import {
   recommendFor, recommendUpgrade, showsPrompt, stepUpgradeCategories, toolProgression, upgradeNav, type RouterInput, type ToolProgression,

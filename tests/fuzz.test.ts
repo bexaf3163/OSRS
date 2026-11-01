@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { parseGear, parseNavTarget, parsePacing, parsePlayer, parsePos, parseQuests, parseStats, parseXp } from '../src/services/runeliteBridge';
+import { parseNavTarget } from '../src/services/runeliteBridge';
+import { parseGear, parsePacing, parsePlayer, parsePos, parseQuests, parseStats, parseXp } from '../src/services/bridgeEvents';
 import { parseOwned } from '../src/domain/items/checklist';
 import { normalizeProgress, ownedManualOf } from '../src/domain/persistence/progress';
 import { allSteps as steps, known as knownData, stepById } from '../src/data';

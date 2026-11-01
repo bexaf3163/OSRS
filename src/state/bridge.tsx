@@ -12,7 +12,8 @@ import { gateAllows, linkPlayer, type ProfileGate } from '../domain/persistence/
 import { guardedProfileGate as profileGate, readProfiles, useProfiles, writeProfiles } from './profiles';
 import { useStore } from './store';
 import { desktop, type RuneliteLaunch } from '../services/desktop';
-import { checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parseNavTarget, parseMove, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, setNavTarget, postPrepPlan, supportsSnapshot, syncActiveStep, syncBankTags, syncShoppingPlan, pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type CombatLogState, type ShoppingPlanPayload, type QuestInstruction } from '../services/runeliteBridge';
+import { checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseNavTarget, parseMove, setNavTarget, postPrepPlan, supportsSnapshot, syncActiveStep, syncBankTags, syncShoppingPlan, pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type CombatLogState, type ShoppingPlanPayload, type QuestInstruction } from '../services/runeliteBridge';
+import { parseGear, parsePacing, parsePlayer, parseQuests, parseStats, parseXp } from '../services/bridgeEvents';
 import { planAutoComplete, toInGameTarget } from '../domain/guide/inGameTarget';
 import { parseOwned, type OwnedState } from '../domain/items/checklist';
 import { preflightItems } from '../domain/prep/stepItems';

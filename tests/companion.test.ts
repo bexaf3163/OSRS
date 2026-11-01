@@ -9,7 +9,7 @@ import { nameKey } from '../src/domain/items/itemKey';
 import { evaluateBranches, evaluateCondition, reasonLabel, watchedItems, type BranchContext } from '../src/domain/quests/branching';
 import { aggregateShopping, carryOverFrom, shoppingText } from '../src/domain/prep/shopping';
 import { plural } from '../src/domain/text/format';
-import { parseStats } from '../src/services/runeliteBridge';
+import { parseStats } from '../src/services/bridgeEvents';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { stepsFor } from '../src/data';
 

@@ -211,7 +211,7 @@ describe('inventory cleanup', () => {
 
 describe('cleanup data from the plugin', () => {
   it('banknotes are told apart from the item; a plugin that does not send the flag means "the item itself"', async () => {
-    const { parseGear } = await import('../../services/runeliteBridge');
+    const { parseGear } = await import('../../services/bridgeEvents');
     const g = parseGear({ inventory: [{ id: 1759, name: 'Ball of wool', count: 3 }, { id: 1760, name: 'Ball of wool', count: 10, noted: true }, { id: 1, name: 'Odd', count: 1, noted: 'yes' }], equipment: [] });
     expect(g!.inventory![0].noted).toBeUndefined();
     expect(g!.inventory![1].noted).toBe(true);
