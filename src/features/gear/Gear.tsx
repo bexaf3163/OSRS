@@ -4,7 +4,8 @@
 // against the opponent's attack style, never as a sum of three styles; gear is bought only from what the next trip's supplies leave.
 
 import { useMemo } from 'react';
-import { useBridge, type LastGear } from '../../state/bridge';
+import { useBridge } from '../../state/bridge';
+import type { LastGear } from '../../state/lastGear';
 import { useStore } from '../../state/store';
 import { useReadinessEngine, useActiveActivity } from '../../state/readinessContext';
 import { usePlayerState } from '../../state/playerStateContext';

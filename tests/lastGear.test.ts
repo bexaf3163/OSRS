@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseLastGear } from '../src/state/bridge';
+import { parseLastGear } from '../src/state/lastGear';
 
 const gear = { equipment: [{ id: 1351, name: 'Bronze axe', slot: 'weapon' }], inventory: [{ id: 995, name: 'Coins', count: 250 }], coins: 250, bankCoins: 1000 };
 

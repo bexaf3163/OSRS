@@ -3,7 +3,7 @@
 // and the last known gear kept per character.
 
 import { describe, expect, it } from 'vitest';
-import { newestGear, parseLastGears } from '../src/state/bridge';
+import { newestGear, parseLastGears } from '../src/state/lastGear';
 import {
   adviseGear, canWear, foeAttack, foeData, gainText, gearData, incomingChance, meleeWith, relevantDefence,
   type AdvisorInput, type GearAction,
