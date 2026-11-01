@@ -16,7 +16,7 @@ import static com.osrspath.bridge.ActiveTarget.tooLong;
 final class TargetNeeds
 {
 	// Pacing, auto-tick triggers and the levels and items a step needs, as the app sends them.
-	/** The same as StepPacing in src/types/index.ts. */
+	/** The same as StepPacing in src/types/inGame.ts. */
 	@Data
 	public static class Pacing
 	{

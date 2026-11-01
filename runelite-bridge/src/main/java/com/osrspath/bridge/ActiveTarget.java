@@ -17,7 +17,7 @@ import com.osrspath.bridge.TargetNeeds.Trigger;
 import com.osrspath.bridge.TargetStages.Stage;
 
 /**
- * The current step sent by the app: the same as InGameTarget in src/types/index.ts, plus the step's code and title.
+ * The current step sent by the app: the same as InGameTarget in src/types/inGame.ts, plus the step's code and title.
  * Gson fills the fields; the sets for fast comparison are built by {@link #prepare()}.
  */
 @Data
