@@ -213,7 +213,7 @@ export async function noOverflow(page: Page) {
  */
 export async function reveal(page: Page, sel: string) {
   if (await page.locator(sel).count()) return;
-  // The Ledger's step page: Steps, Preparation, Route & game, Details and Wiki are ribbons. The companion strip: Now, Bag, Route and More are tabs.
+  // The Ledger's step page: Steps, Preparation, Route & game, Details and Wiki are ribbons.
   const openers = [page.getByRole('tablist', { name: 'Step views' }).getByRole('tab')];
   for (const group of openers) {
     const n = await group.count();

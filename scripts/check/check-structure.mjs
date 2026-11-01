@@ -53,8 +53,8 @@ const nodeLoads = new Set(), noExt = [];
 const load = (f) => { if (nodeLoads.has(f) || !existsSync(f)) return; nodeLoads.add(f); for (const m of readFileSync(f, 'utf8').matchAll(/^(?:import|export)\s+(?!type\b)[^;]*?from\s+'(\.[^']+)'/gm)) { if (!/\.(ts|tsx|mjs|cjs|js|json)$/.test(m[1])) noExt.push(`${relative(process.cwd(), f).replace(/\\/g, '/')} -> ${m[1]}`); else if (/\.(ts|mjs|js)$/.test(m[1])) load(resolve(dirname(f), m[1])); } };
 for (const f of [...walk('scripts'), ...walk('electron')]) if (/\.(ts|mjs|js)$/.test(f)) load(resolve(f));
 check('extensions in modules Node loads', noExt.length, noExt.join(', '));
-// Browser scenarios wait with settle(); a fixed sleep needs a comment naming the product timer it waits for.
-const sleeps = walk('scripts/test/ui').filter((f) => f.endsWith('.ts')).filter((f) => readFileSync(f, 'utf8').split('\n').some((l) => /waitForTimeout\(/.test(l) && !l.includes('//')));
+// Browser scenarios and review shots wait with settle(); a fixed sleep needs a comment naming the product timer it waits for.
+const sleeps = [...walk('scripts/test/ui'), 'scripts/test/review-shots.ts'].filter((f) => f.endsWith('.ts')).filter((f) => readFileSync(f, 'utf8').split('\n').some((l) => /waitForTimeout\(/.test(l) && !l.includes('//')));
 check('no fixed sleeps in browser scenarios', sleeps.length, sleeps.join(', '));
 // Scripts sit in a purpose folder: data (generators), check, test, release or dev.
 const loose = readdirSync('scripts').filter((n) => statSync(`scripts/${n}`).isFile());
