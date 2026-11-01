@@ -96,8 +96,6 @@ class GuideMouse extends MouseAdapter
 				return "Arrow back to step";
 			case TOGGLE:
 				return "Details";
-			case MORE:
-				return "More advice";
 			case NEXT:
 				return "Line done";
 			case PREV:

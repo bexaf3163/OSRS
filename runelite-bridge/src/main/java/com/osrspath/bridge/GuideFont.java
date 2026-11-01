@@ -3,33 +3,11 @@ package com.osrspath.bridge;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.io.InputStream;
 
-/** The in-game panel face (Sora, SIL OFL, from the owner's pick 2026-10-18), loaded once. Missing icon glyphs use a local fallback only for that glyph. */
+/** Text drawing for the HUD faces: a glyph the face lacks (an icon) uses a local fallback only for that glyph. */
 final class GuideFont
 {
-	private static final Font BASE = load();
 	private static final java.util.Map<java.util.List<Object>, FontMetrics> METRICS = new java.util.HashMap<>();
-
-	private static Font load()
-	{
-		try (InputStream in = GuideFont.class.getResourceAsStream("fonts/Sora-variable.ttf"))
-		{
-			if (in != null) return Font.createFont(Font.TRUETYPE_FONT, in);
-		}
-		catch (Exception ignored) { /* A damaged font resource must not prevent guidance. */ }
-		return new Font(Font.SANS_SERIF, Font.PLAIN, 14);
-	}
-
-	static Font font(float scale)
-	{
-		return BASE.deriveFont(Font.PLAIN, (float) Math.max(10, Math.round(14 * scale)));
-	}
-
-	static Font action(Font font)
-	{
-		return font.deriveFont(Font.BOLD, (float) Math.round(font.getSize2D() * 1.14f));
-	}
 
 	private static Font fallback(Font font)
 	{

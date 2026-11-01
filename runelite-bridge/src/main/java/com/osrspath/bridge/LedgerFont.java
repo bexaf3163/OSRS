@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * The app's faces on the Ledger HUD (SIL OFL, the owner's pick 2026-11-01): Cinzel for titles and labels, EB Garamond for the text, the
- * same families as the app's Ledger pages. Loaded once; a missing file falls back to the HUD's own face, so guidance still shows.
+ * same families as the app's Ledger pages. Loaded once; a missing file falls back to the system serif, so guidance still shows.
  */
 final class LedgerFont
 {
@@ -32,7 +32,7 @@ final class LedgerFont
 		{
 			// A damaged font resource must not prevent guidance.
 		}
-		return GuideFont.font(1f);
+		return new Font(Font.SERIF, Font.PLAIN, 14);
 	}
 
 	static Font display(float size)

@@ -7,21 +7,18 @@ import org.junit.Test;
 
 public class GuideFontTest
 {
-	@Test public void packagedTypefaceIsSoraAndScaleIsIndependentOfGameFont()
+	@Test public void theHudFacesAreTheAppsLedgerFaces()
 	{
-		assertEquals("Sora", GuideFont.font(1).getFamily());
-		assertEquals(14, GuideFont.font(1).getSize());
-		assertEquals(13, GuideFont.font(OsrsPathGuideOverlay.SMALL).getSize());
-		assertEquals(18, GuideFont.font(Hud.LARGE).getSize());
-		assertEquals("Sora", GuideFont.action(GuideFont.font(1)).getFamily());
-		assertEquals(16, GuideFont.action(GuideFont.font(1)).getSize());
-		assertTrue(GuideFont.action(GuideFont.font(1)).isBold());
+		assertEquals("Cinzel", LedgerFont.display(15.5f).getFamily());
+		assertEquals("EB Garamond", LedgerFont.text(14.5f).getFamily());
+		assertEquals(15, LedgerFont.text(14.5f).getSize());
+		assertEquals(18, LedgerFont.text(14.5f * Hud.LARGE).getSize());
 	}
 
 	@Test public void unsupportedIconUsesTheSameMeasuredAdvanceAsItsFallback()
 	{
 		Graphics2D g = new BufferedImage(500, 100, BufferedImage.TYPE_INT_ARGB).createGraphics();
-		Font f = GuideFont.font(1);
+		Font f = LedgerFont.text(14);
 		assertFalse(f.canDisplay('⚡'));
 		int expected = g.getFontMetrics(f).stringWidth("Detour ") + g.getFontMetrics(new Font(Font.DIALOG, Font.PLAIN, 14)).stringWidth("⚡")
 			+ g.getFontMetrics(f).stringWidth(" to the bank");

@@ -133,7 +133,7 @@ Cross-page activity selection is `resolveActiveActivity` in `src/domain/quests/a
 
 ## Accepted design and cleanup boundaries
 
-The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **Cinzel** headings and **EB Garamond** text (subsets in `src/ledger/fonts`). The HUD's default Ledger plate uses Cinzel and EB Garamond; Classic and Glass keep **Sora**. Design entry points: `src/ledger/{Chrome.tsx,parts.tsx,icons.tsx,ledger.css,app.css,extras.css,fonts.css}` and `src/app/App.tsx`. Older CSS (`styles.css`, `clear-path.css`, `modern-path.css`, `cockpit.css`) still styles shared components; check consumers and pixel-diff before removing more.
+The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **Cinzel** headings and **EB Garamond** text (subsets in `src/ledger/fonts`). The HUD and every plugin plate use the Ledger look in Cinzel and EB Garamond. Design entry points: `src/ledger/{Chrome.tsx,parts.tsx,icons.tsx,ledger.css,app.css,extras.css,fonts.css}` and `src/app/App.tsx`. Older CSS (`styles.css`, `clear-path.css`, `modern-path.css`, `cockpit.css`) still styles shared components; check consumers and pixel-diff before removing more.
 
 2.81.11 to 2.81.13 cleanup decisions that stay:
 
@@ -170,7 +170,7 @@ Review Path, Skills, Gear, Shopping, Money and Reference/search for stale recomm
 
 ### P4 — Claude's real-client acceptance
 
-Use the published Portable and restart its client so the plugin version is known; verify real login and link, not a port; respect the owner's limited-input rules. Smoke first (version, link, Ledger HUD, provenance, one current action in app, arrow and HUD), then the matrix. Without the desktop, leave live evidence pending. For HDOS, verify only what its adapter supplies. Keep implemented, automated, native-shell, live and unverified evidence apart, and fix confirmed shared bugs at their layer. Once the owner accepts the Ledger HUD in game, delete Classic and Glass with their layout, plates, setting, Sora and tests.
+Use the published Portable and restart its client so the plugin version is known; verify real login and link, not a port; respect the owner's limited-input rules. Smoke first (version, link, Ledger HUD, provenance, one current action in app, arrow and HUD), then the matrix. Without the desktop, leave live evidence pending. For HDOS, verify only what its adapter supplies. Keep implemented, automated, native-shell, live and unverified evidence apart, and fix confirmed shared bugs at their layer.
 
 ### Consolidated live regression matrix — Claude owns every row
 
@@ -219,7 +219,7 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 
 2.81.20–30 (S1, S3–S8, S10, C1, S11, X2, X8, X9; no visible change): largest folder 139 → 19 files, 0 layer violations (from 29), files importing JSON directly 49 → 0; 874 browser checks in 131–158 s (from 319 s); splits: `OsrsPathBridgePlugin` 4,231 → 797 lines plus eight section classes, `HudModel` 1,175 → 468, `ActiveTarget` 1,078 → 298, `src/types` in seven topic files (bundle byte-identical), `runeliteBridge.ts` 627 → 522, `BridgeServer` 1,162 → 796, `bridge.tsx` 881 → 60 (state in `bridgeCore.ts`), `styles.css` in 14 files (byte-identical); files over 1,000 lines 5 → 0; knip fails on dead exports (15 removed). Local gates pass (2,519 unit, 874 browser, 95 Electron, 648 Java).
 
-2.81.31 (owner's pick): the HUD's default Ledger plate with tabs, from the same card rows; drawn once per change, then copied (84–254 against 154–634 µs per frame); 653 Java tests. Real-game check pending.
+2.81.31–32 (owner's pick): Ledger is the only HUD look, drawn once per change (84–254 against 154–634 µs per frame); checked in game 2026-11-02 (tabs, Next line, hints, collapse, link); Classic, Glass and Sora deleted; 643 Java tests.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt

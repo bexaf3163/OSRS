@@ -75,7 +75,7 @@ class InventoryCheckOverlay extends OverlayPanel
 			build(panelComponent, r, target.getStepId(), g.getFontMetrics(font), width, config.hudOpacity());
 			builtFor = key;
 		}
-		OverlayCard.paint(g, last.width, last.height, accent(r), Math.max(config.hudOpacity(), 85), config.overlayTheme());
+		OverlayCard.paint(g, last.width, last.height, accent(r), Math.max(config.hudOpacity(), 85));
 		Dimension d = super.render(g);
 		last = d == null ? new Dimension() : d;
 		return d;

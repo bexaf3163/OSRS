@@ -60,7 +60,8 @@ public class ModernGuideTest
 			{
 				assertEquals("the action is not repeated as a details row\n" + text, 1, count(text, "Mining 10"));
 			}
-			assertTrue(text, text.startsWith("Defeat the Ancient Guardian\n"));
+			assertEquals(text, "Defeat the Ancient Guardian", l.getRows().stream().filter(r -> r.getPart() == OsrsPathGuideOverlay.Part.TITLE)
+				.findFirst().map(r -> String.join(" ", r.getTexts())).orElse(null));
 		}
 	}
 
@@ -130,9 +131,7 @@ public class ModernGuideTest
 		HudModel.Card c = HudModel.build(HudModelTest.input(view(travelPlan(true)), far(), null));
 		BufferedImage image = new BufferedImage(400, 400, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = image.createGraphics();
-		Font font = GuideFont.font(1f);
-		OsrsPathGuideOverlay.Layout l = OsrsPathGuideOverlay.layout(c, true, false, g, font, GuideFont.font(OsrsPathGuideOverlay.SMALL),
-			GuideFont.font(OsrsPathGuideOverlay.HEAD), 300, 2000);
+		OsrsPathGuideOverlay.Layout l = LedgerGuide.layout(c, true, LedgerGuide.NOW, g, 1f, 300, 2000);
 		for (int y = 0; y < image.getHeight(); y++)
 		{
 			for (int x = 0; x < image.getWidth(); x++)
@@ -140,7 +139,7 @@ public class ModernGuideTest
 				assertEquals("nothing is painted by the layout", 0, image.getRGB(x, y));
 			}
 		}
-		OsrsPathGuideOverlay.paint(g, l, null, 85);
+		LedgerGuide.paint(g, l, null, 85);
 		g.dispose();
 		int painted = 0;
 		for (int y = 0; y < image.getHeight(); y++)

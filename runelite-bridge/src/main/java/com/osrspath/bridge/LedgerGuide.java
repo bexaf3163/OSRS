@@ -55,7 +55,9 @@ final class LedgerGuide
 	private static final Color GOOD = new Color(63, 125, 98);
 	private static final Color CAUTION = new Color(138, 90, 16);
 	private static final Color DANGER = new Color(168, 50, 28);
-	private static final int PAD = 12, TOP = 10, PAGE_PAD = 16;
+	static final int PAD = 12, TOP = 10, PAGE_PAD = 16;
+	/** The size of the page's and the hints' text at the normal scale. */
+	static final float SMALL = 14.5f;
 	private static final TexturePaint GRAIN = grain();
 
 	private LedgerGuide()
@@ -87,8 +89,8 @@ final class LedgerGuide
 
 	static Layout layout(HudModel.Card c, boolean expanded, int tab, Graphics2D g, float scale, int width, int maxHeight)
 	{
-		Font title = LedgerFont.display(15.5f * scale), body = LedgerFont.text(14.5f * scale), small = LedgerFont.text(13.5f * scale);
-		Font label = LedgerFont.label(8.5f * scale), step = LedgerFont.display(12.5f * scale);
+		Font title = LedgerFont.display(16f * scale), body = LedgerFont.text(15.5f * scale), small = LedgerFont.text(SMALL * scale);
+		Font label = LedgerFont.label(9f * scale), step = LedgerFont.display(13.5f * scale);
 		FontMetrics tm = GuideFont.metrics(g, title), fm = GuideFont.metrics(g, body), sm = GuideFont.metrics(g, small), stm = GuideFont.metrics(g, step);
 		List<Row> rows = new ArrayList<>();
 		int ring = ring(scale), x0 = PAD + ring + 12, y = TOP;
@@ -154,7 +156,7 @@ final class LedgerGuide
 		if (!c.getNext().isEmpty()) tabs.add(NEXT);
 		if (c.adviceCount() > 0) tabs.add(ADVICE);
 		int active = tabs.contains(tab) ? tab : NOW;
-		Font tf = LedgerFont.label(9.5f * scale);
+		Font tf = LedgerFont.label(10f * scale);
 		int th = Math.round(28 * scale), inner = width - 20, n = tabs.size();
 		// The open tab is wide enough for its icon, name and badge; the others share the rest and show their icon.
 		int activeW = n == 1 ? inner : Math.min(inner - (n - 1) * Math.round(34 * scale), tabContent(g, TABS[active], badge(c, active), tf, scale, true) + 20);
@@ -207,8 +209,10 @@ final class LedgerGuide
 		y += 8;
 		if (footer)
 		{
-			HudModel.Line next = c.getNext().get(0);
-			int tx = PAGE_PAD + 14 + LedgerFont.advance(g, "NEXT", LedgerFont.label(8.5f * scale)) + 10, tw = width - tx - PAGE_PAD;
+			// The first line the page does not already show: on a detour the next line is the step's own activity, titled like the step.
+			String shown = rest(c.getStep());
+			HudModel.Line next = c.getNext().stream().filter(l -> !l.getText().equalsIgnoreCase(shown)).findFirst().orElse(c.getNext().get(0));
+			int tx = PAGE_PAD + 14 + LedgerFont.advance(g, "NEXT", LedgerFont.label(9f * scale)) + 10, tw = width - tx - PAGE_PAD;
 			List<String> wrapped = OverlayText.wrap(next.getText(), fm, tw);
 			List<String> one = OsrsPathGuideOverlay.clip(wrapped, 1, fm, tw);
 			rows.add(new Row(Part.FOOT, new Rectangle(0, y, width, fh), tx, one, null, body, INK, HudModel.Icon.NEXT, EMBER, GuideList.Action.tab(NEXT),
@@ -379,7 +383,7 @@ final class LedgerGuide
 				return;
 			}
 			case THEN:
-				LedgerFont.draw(g, "THEN", LedgerFont.label(8.5f * scale), GOLD, b.x, b.y + GuideFont.metrics(g, r.getFont()).getAscent() - 1);
+				LedgerFont.draw(g, "THEN", LedgerFont.label(9f * scale), GOLD, b.x, b.y + GuideFont.metrics(g, r.getFont()).getAscent() - 1);
 				OsrsPathGuideOverlay.paintText(g, r, b.y);
 				return;
 			case WARNING:
@@ -397,7 +401,7 @@ final class LedgerGuide
 				FontMetrics fm = GuideFont.metrics(g, r.getFont());
 				int top = b.y + (b.height - fm.getHeight()) / 2;
 				HudIcons.paint(g, HudModel.Icon.NEXT, PAGE_PAD - 2, b.y + (b.height - 12) / 2, 12, EMBER);
-				LedgerFont.draw(g, "NEXT", LedgerFont.label(8.5f * scale), EMBER, PAGE_PAD + 14, top + fm.getAscent() - 1);
+				LedgerFont.draw(g, "NEXT", LedgerFont.label(9f * scale), EMBER, PAGE_PAD + 14, top + fm.getAscent() - 1);
 				OsrsPathGuideOverlay.paintText(g, r, top);
 				return;
 			}

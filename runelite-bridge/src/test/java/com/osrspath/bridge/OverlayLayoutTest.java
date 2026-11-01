@@ -381,16 +381,6 @@ public class OverlayLayoutTest
 		{
 			OUT.mkdirs();
 			ImageIO.write(img, "png", new File(OUT, save + ".png"));
-			BufferedImage glass = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-			Graphics2D glassGraphics = glass.createGraphics();
-			glassGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			glassGraphics.setFont(font);
-			glassGraphics.translate(MARGIN, MARGIN);
-			OverlayCard.paint(glassGraphics, size.width, size.height, OverlayCard.GOLD, 85, OsrsPathBridgeConfig.OverlayTheme.GLASS);
-			glassGraphics.translate(-MARGIN, -MARGIN);
-			panel.render(glassGraphics);
-			glassGraphics.dispose();
-			ImageIO.write(glass, "png", new File(OUT, save + "-glass.png"));
 		}
 		return outside;
 	}
@@ -499,7 +489,18 @@ public class OverlayLayoutTest
 	 */
 	private static int overflowHud(HudModel.Card c, boolean expanded, boolean advice, float scale, int width, boolean hover, String save) throws IOException
 	{
-		OsrsPathGuideOverlay.Layout l = HudRenderTest.layout(c, expanded, advice, width, scale, 2000);
+		// Open, every tab is laid out; the picture is of the tab the scenario opens.
+		int shown = !expanded ? LedgerGuideTest.CLOSED : advice ? LedgerGuide.ADVICE : LedgerGuide.NOW;
+		int outside = 0;
+		for (int state : expanded ? new int[]{LedgerGuide.NOW, LedgerGuide.PREPARE, LedgerGuide.NEXT, LedgerGuide.ADVICE} : new int[]{shown})
+		{
+			outside += overflowHud(LedgerGuideTest.layout(c, state, width, scale, 2000), hover, state == shown ? save : null);
+		}
+		return outside;
+	}
+
+	private static int overflowHud(OsrsPathGuideOverlay.Layout l, boolean hover, String save) throws IOException
+	{
 		Dimension d = l.getSize();
 		int w = MARGIN * 2 + d.width + SPARE;
 		int h = MARGIN * 2 + d.height;
@@ -513,7 +514,7 @@ public class OverlayLayoutTest
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 		g.translate(MARGIN, MARGIN);
-		OsrsPathGuideOverlay.paint(g, l, hovered, 85);
+		LedgerGuide.paint(g, l, hovered, 85);
 		g.dispose();
 		int[] px = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
 		int outside = 0;
@@ -603,7 +604,7 @@ public class OverlayLayoutTest
 		{
 			float scale = large ? Hud.LARGE : 1f;
 			// Its own width, the narrowest and the widest the player can stretch it to.
-			for (int width : new int[]{OsrsPathGuideOverlay.WIDTH, OsrsPathGuideOverlay.MIN_WIDTH, OsrsPathGuideOverlay.MAX_WIDTH})
+			for (int width : new int[]{LedgerGuide.WIDTH, LedgerGuide.MIN_WIDTH, OsrsPathGuideOverlay.MAX_WIDTH})
 			{
 				for (HudModel.Card c : cards)
 				{
@@ -612,7 +613,7 @@ public class OverlayLayoutTest
 						String save = null;
 						String sample = c.getStep() != null && c.getStep().startsWith(SHOWN) ? SHOWN
 							: c.getHeadline().equals("Buy Steel axe from Bob") ? "buy" : c.getHeadline().equals("Go to: Lumbridge Swamp fishing spots") ? "place" : null;
-						if (width == OsrsPathGuideOverlay.WIDTH && sample != null && saved.add(sample + large + expanded))
+						if (width == LedgerGuide.WIDTH && sample != null && saved.add(sample + large + expanded))
 						{
 							save = "hud-data-" + sample + (expanded ? "-open" : "-closed") + (large ? "-large" : "");
 						}
@@ -681,7 +682,7 @@ public class OverlayLayoutTest
 		for (boolean large : new boolean[]{false, true})
 		{
 			float scale = large ? Hud.LARGE : 1f;
-			for (int width : new int[]{OsrsPathGuideOverlay.MIN_WIDTH, OsrsPathGuideOverlay.WIDTH, OsrsPathGuideOverlay.MAX_WIDTH})
+			for (int width : new int[]{LedgerGuide.MIN_WIDTH, LedgerGuide.WIDTH, OsrsPathGuideOverlay.MAX_WIDTH})
 			{
 				for (String distance : distances())
 				{
@@ -739,7 +740,7 @@ public class OverlayLayoutTest
 		for (boolean large : new boolean[]{false, true})
 		{
 			float scale = large ? Hud.LARGE : 1f;
-			for (int width : new int[]{OsrsPathGuideOverlay.WIDTH, OsrsPathGuideOverlay.MIN_WIDTH})
+			for (int width : new int[]{LedgerGuide.WIDTH, LedgerGuide.MIN_WIDTH})
 			{
 				for (StepGuide.View v : views)
 				{
@@ -753,7 +754,7 @@ public class OverlayLayoutTest
 							+ (mode == 0 ? "-closed" : mode == 1 ? "-open" : "-hover") + (large ? "-large" : "");
 						String save = null;
 						// For the eye: the first view (the bank was not opened) of S2-03 as in the old screenshot, a quest with many NPCs and Cook's Assistant.
-						if (width == OsrsPathGuideOverlay.WIDTH && (id.equals("S2-03") || id.equals("S3-03") || id.equals("S2-10") || id.equals("S1-03")
+						if (width == LedgerGuide.WIDTH && (id.equals("S2-03") || id.equals("S3-03") || id.equals("S2-10") || id.equals("S1-03")
 							|| (id.equals("S2-07") && v.getStage() != null && v.getStage().getCursor() > 0)) && v.getDetour() == null && saved.add(name))
 						{
 							save = name;

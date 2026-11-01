@@ -18,13 +18,13 @@ public class WarningLinesTest
 
 	private static OsrsPathGuideOverlay.Row row(HudModel.Tone tone)
 	{
-		Font font = GuideFont.font(1f);
-		Font small = GuideFont.font(OsrsPathGuideOverlay.SMALL);
+		Font font = LedgerFont.text(15.5f);
+		Font small = LedgerFont.text(LedgerGuide.SMALL);
 		Graphics2D g = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();
-		FontMetrics fm = g.getFontMetrics(font);
-		FontMetrics sm = g.getFontMetrics(small);
+		FontMetrics fm = GuideFont.metrics(g, font);
+		FontMetrics sm = GuideFont.metrics(g, small);
 		HudModel.Line line = HudModel.Line.small(HudModel.Icon.WARN, TEXT, tone);
-		return OsrsPathGuideOverlay.lineRow(OsrsPathGuideOverlay.Part.LINE, line, fm, sm, font, small, OsrsPathGuideOverlay.MIN_WIDTH, 0);
+		return OsrsPathGuideOverlay.lineRow(OsrsPathGuideOverlay.Part.LINE, line, fm, sm, font, small, LedgerGuide.MIN_WIDTH, 0, LedgerGuide.PAGE_PAD, LedgerGuide::ink);
 	}
 
 	@Test
@@ -46,7 +46,7 @@ public class WarningLinesTest
 		HudModel.Line w = HudModel.Line.small(HudModel.Icon.WARN, TEXT, HudModel.Tone.DANGER);
 		HudModel.Card c = new HudModel.Card(HudModel.Icon.GO, HudModel.Tone.TEXT, "Board the Lady Lumbridge", null, null, 0, w, null, null,
 			Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
-		OsrsPathGuideOverlay.Layout l = HudRenderTest.layout(c, false, false, OsrsPathGuideOverlay.MIN_WIDTH, 1f, 400);
+		OsrsPathGuideOverlay.Layout l = HudRenderTest.layout(c, false, false, LedgerGuide.MIN_WIDTH, 1f, 400);
 		OsrsPathGuideOverlay.Row r = l.getRows().stream().filter(x -> x.getPart() == OsrsPathGuideOverlay.Part.WARNING).findFirst().orElseThrow(AssertionError::new);
 		String shown = String.join(" ", r.getTexts());
 		assertFalse(shown, shown.endsWith("…"));

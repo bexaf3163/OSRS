@@ -32,8 +32,6 @@ final class GuideList
 		DETOUR,
 		/** The recommended way that is not walking: the arrow to its first stop and a frame on the item it uses. */
 		TRANSPORT,
-		/** "More advice": show or hide the optional recommendations under the guide's details. */
-		MORE,
 		/** A tab of the Ledger card: show that section (the tab's number in place). */
 		TAB,
 	}
@@ -49,7 +47,6 @@ final class GuideList
 		static final Action RESUME = new Action(Kind.RESUME, -1);
 		static final Action DETOUR = new Action(Kind.DETOUR, -1);
 		static final Action TRANSPORT = new Action(Kind.TRANSPORT, -1);
-		static final Action MORE = new Action(Kind.MORE, -1);
 
 		Kind kind;
 		/** The number of the step's point for PLACE. */

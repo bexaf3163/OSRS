@@ -130,7 +130,7 @@ class OsrsPathShopOverlay extends Overlay
 		plugin.debug.shopWindowShown(true);
 		plugin.debug.uiShown("shop", ShopWindow.plain(r));
 		Rectangle frame = o.frame != null && !o.frame.isHidden() ? o.frame.getBounds() : null;
-		Dimension size = paint(g, r, WIDTH, config.hudLarge() ? Hud.LARGE : 1f, config.hudOpacity(), place(frame, client.getCanvasWidth(), client.getCanvasHeight(), r, g), config.overlayTheme());
+		Dimension size = paint(g, r, WIDTH, config.hudLarge() ? Hud.LARGE : 1f, config.hudOpacity(), place(frame, client.getCanvasWidth(), client.getCanvasHeight(), r, g));
 		return size;
 	}
 
@@ -155,11 +155,6 @@ class OsrsPathShopOverlay extends Overlay
 
 	/** Drawing apart from the client: a test draws with the real fonts and takes a picture. Returns the card size. */
 	static Dimension paint(Graphics2D g, ShopWindow.Result r, int width, float scale, int opacity, java.awt.Point at)
-	{
-		return paint(g, r, width, scale, opacity, at, OsrsPathBridgeConfig.OverlayTheme.CLASSIC);
-	}
-
-	static Dimension paint(Graphics2D g, ShopWindow.Result r, int width, float scale, int opacity, java.awt.Point at, OsrsPathBridgeConfig.OverlayTheme theme)
 	{
 		Font font = OverlayText.font(g.getFont(), scale);
 		g.setFont(font);
@@ -191,7 +186,7 @@ class OsrsPathShopOverlay extends Overlay
 		Color accent = r.getRows().stream().anyMatch(x -> x.getMark() == ShopWindow.Mark.BAD) ? OverlayCard.RED
 			: r.getTodo() > 0 ? OverlayCard.GOLD : OverlayCard.GREEN;
 		g.translate(at.x, at.y);
-		OverlayCard.paint(g, width, h, accent, Math.max(opacity, 85), theme);
+		OverlayCard.paint(g, width, h, accent, Math.max(opacity, 85));
 		int y = PAD + fm.getAscent();
 		for (int i = 0; i < lines.size(); i++)
 		{

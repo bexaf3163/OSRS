@@ -25,11 +25,12 @@ import net.runelite.client.ui.overlay.OverlayPosition;
  */
 class OsrsPathArrowOverlay extends Overlay
 {
-	static final Color FAR = new Color(177, 180, 255);
-	static final Color CLOSE = new Color(255, 210, 90);
-	static final Color NEAR = new Color(90, 220, 120);
-	static final Color OTHER = new Color(255, 170, 60);
-	private static final Color OUTLINE = new Color(20, 20, 20, 220);
+	// The Ledger's metals on the scene: gold far off, light gold on approach, green on arrival, ember for another floor.
+	static final Color FAR = LedgerGuide.GOLD;
+	static final Color CLOSE = LedgerGuide.GOLD_LIGHT;
+	static final Color NEAR = new Color(110, 200, 140);
+	static final Color OTHER = new Color(232, 119, 74);
+	private static final Color OUTLINE = new Color(22, 16, 11, 230);
 	private static final int PAD = 6;
 	private static final int TEXT_GAP = 3;
 
@@ -91,9 +92,7 @@ class OsrsPathArrowOverlay extends Overlay
 		boolean modernGuide = plugin.debug.guideOnScreen();
 		// The guide already carries the distance. Retain layer/arrival feedback on the marker itself.
 		if (modernGuide && layer == 0 && state != ArrowGeometry.State.VERY_CLOSE) text = null;
-		Font font = config.overlayTheme() == OsrsPathBridgeConfig.OverlayTheme.GLASS
-			? GuideFont.font(config.hudLarge() ? Hud.LARGE : 1f)
-			: OverlayText.font(g.getFont(), config.hudLarge() ? Hud.LARGE : 1f);
+		Font font = LedgerFont.display(13f * (config.hudLarge() ? Hud.LARGE : 1f));
 		return draw(g, font, state, angle, layer, text, modernGuide ? Math.round(config.arrowSize().diameter * .65f) : config.arrowSize().diameter);
 	}
 
@@ -138,7 +137,8 @@ class OsrsPathArrowOverlay extends Overlay
 			double a = Math.abs(layer) == 2 ? (layer > 0 ? -Math.PI / 2 : Math.PI / 2) : angle;
 			double scale = state == ArrowGeometry.State.APPROACHING ? 1.0 : 0.92;
 			Polygon p = ArrowGeometry.arrow(cx, cy, r * scale, a);
-			g.setColor(color);
+			java.awt.Rectangle pb = p.getBounds();
+			g.setPaint(new java.awt.GradientPaint(0, pb.y, color.brighter(), 0, pb.y + pb.height, color.darker()));
 			g.fillPolygon(p);
 			g.setColor(OUTLINE);
 			g.setStroke(new BasicStroke(state == ArrowGeometry.State.APPROACHING ? 3f : 2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
@@ -150,12 +150,12 @@ class OsrsPathArrowOverlay extends Overlay
 			int baseline = PAD + diameter + TEXT_GAP + fm.getAscent();
 			int x = (int) Math.round(cx - textW / 2.0);
 			// A stroke on four sides and a shadow: without a plate the label must be readable on any background.
-			g.setColor(new Color(0, 0, 0, 230));
+			g.setColor(OUTLINE);
 			for (int[] d : new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {1, 1}})
 			{
 				g.drawString(label, x + d[0], baseline + d[1]);
 			}
-			g.setColor(state == ArrowGeometry.State.VERY_CLOSE ? NEAR : Color.WHITE);
+			g.setColor(state == ArrowGeometry.State.VERY_CLOSE ? NEAR : LedgerGuide.PARCH);
 			g.drawString(label, x, baseline);
 		}
 		return new Dimension(width, height);

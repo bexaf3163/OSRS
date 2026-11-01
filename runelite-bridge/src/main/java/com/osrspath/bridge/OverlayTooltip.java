@@ -22,9 +22,9 @@ final class OverlayTooltip
 	static final int TEXT_WIDTH = 220;
 	static final int PAD = 6;
 	static final int GAP = 6;
-	private static final Color FILL = new Color(18, 22, 30);
-	private static final Color BORDER = new Color(255, 255, 255, 70);
-	private static final Color TEXT = new Color(235, 235, 235);
+	private static final Color FILL = LedgerGuide.LEATHER;
+	private static final Color BORDER = LedgerGuide.GOLD_DARK;
+	private static final Color TEXT = LedgerGuide.PARCH;
 
 	private OverlayTooltip()
 	{

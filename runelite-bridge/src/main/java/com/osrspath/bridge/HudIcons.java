@@ -82,12 +82,6 @@ final class HudIcons
 					p.lineTo(x + m + 2f, y + m + 3.5f);
 					k.draw(p);
 					return;
-				case MORE:
-					p.moveTo(x + m - 3.5f, y + m - 1.5f);
-					p.lineTo(x + m, y + m + 2f);
-					p.lineTo(x + m + 3.5f, y + m - 1.5f);
-					k.draw(p);
-					return;
 				case CHECK:
 					p.moveTo(x + 2f, y + m);
 					p.lineTo(x + m - 1f, y + s - 3f);

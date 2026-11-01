@@ -1,6 +1,9 @@
 package com.osrspath.bridge;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
@@ -19,16 +22,16 @@ import javax.imageio.ImageIO;
 import org.junit.Test;
 
 /**
- * The Ledger plaque laid out with its real faces at the widths and text sizes a player can set, under the same rules as the classic card:
+ * The Ledger plaque laid out with its real faces at the widths and text sizes a player can set, under these rules:
  * every row inside, no text past its row, buttons apart and each with a hint, the closed plaque small, the open one within its share of the
  * window, every tab reachable. Pictures for the eye: build/overlay-render/ledger-*.png.
  */
 public class LedgerGuideTest
 {
-	private static final int[] WIDTHS = {OsrsPathGuideOverlay.MIN_WIDTH, LedgerGuide.WIDTH, OsrsPathGuideOverlay.MAX_WIDTH};
+	private static final int[] WIDTHS = {LedgerGuide.MIN_WIDTH, LedgerGuide.WIDTH, OsrsPathGuideOverlay.MAX_WIDTH};
 	private static final float[] SCALES = {1f, Hud.LARGE};
 	private static final int[] MAX_HEIGHTS = {(int) (503 * OsrsPathGuideOverlay.MAX_HEIGHT_SHARE), (int) (1050 * OsrsPathGuideOverlay.MAX_HEIGHT_SHARE)};
-	private static final int CLOSED = -1;
+	static final int CLOSED = -1;
 	private static final int[] STATES = {CLOSED, LedgerGuide.NOW, LedgerGuide.PREPARE, LedgerGuide.NEXT, LedgerGuide.ADVICE};
 
 	private static Graphics2D scratch()
@@ -147,7 +150,7 @@ public class LedgerGuideTest
 	@Test
 	public void theOpenPlaqueIsCutWithAPointer_neverPastItsShare()
 	{
-		OsrsPathGuideOverlay.Layout tall = layout(HudRenderTest.cards().get("food"), LedgerGuide.NOW, OsrsPathGuideOverlay.MIN_WIDTH, Hud.LARGE, 230);
+		OsrsPathGuideOverlay.Layout tall = layout(HudRenderTest.cards().get("food"), LedgerGuide.NOW, LedgerGuide.MIN_WIDTH, Hud.LARGE, 230);
 		assertTrue(tall.getSize().height <= 230);
 		OsrsPathGuideOverlay.Row last = tall.getRows().get(tall.getRows().size() - 1);
 		assertEquals("More in the OSRS Path panel on the right", String.join(" ", last.getTexts()));
@@ -199,5 +202,73 @@ public class LedgerGuideTest
 		LedgerGuide.paint(g, l, null, opacity);
 		g.dispose();
 		return img;
+	}
+
+	@Test
+	public void theFooterSkipsANextLineThePageAlreadyShows()
+	{
+		// A detour: the next line is the step's own activity, titled like the step the Now page shows above.
+		List<HudModel.Line> next = java.util.Arrays.asList(
+			new HudModel.Line(HudModel.Icon.NEXT, "Ranged to 40: prepare your kit", null, HudModel.Tone.TEXT, false, GuideList.Action.NONE, null),
+			new HudModel.Line(HudModel.Icon.GO, "Seagulls at Port Sarim", null, HudModel.Tone.LINK, true, GuideList.Action.NONE, null));
+		HudModel.Card c = new HudModel.Card(HudModel.Icon.GO, HudModel.Tone.TEXT, "Get Iron arrow", "Iron arrow: 0 / 100", null, 0, null,
+			"Then: Ranged to 40: prepare your kit", "S6-01 · Ranged to 40: prepare your kit", java.util.Collections.emptyList(),
+			java.util.Collections.emptyList(), next, java.util.Collections.emptyList());
+		OsrsPathGuideOverlay.Row foot = layout(c, LedgerGuide.NOW, LedgerGuide.WIDTH, 1f, 2000).getRows().stream()
+			.filter(r -> r.getPart() == OsrsPathGuideOverlay.Part.FOOT).findFirst().orElse(null);
+		assertEquals("Seagulls at Port Sarim", String.join(" ", foot.getTexts()));
+	}
+
+	@Test
+	public void theClosedPlaqueKeepsItsWordsWhole()
+	{
+		for (Map.Entry<String, HudModel.Card> e : HudRenderTest.cards().entrySet())
+		{
+			for (float scale : SCALES)
+			{
+				for (OsrsPathGuideOverlay.Row r : layout(e.getValue(), CLOSED, LedgerGuide.WIDTH, scale, MAX_HEIGHTS[0]).getRows())
+				{
+					for (String t : r.getTexts())
+					{
+						assertFalse(e.getKey() + " x" + scale + ": cut " + r.getTexts(), t.endsWith("..."));
+					}
+				}
+			}
+		}
+	}
+
+	@Test
+	public void aHintComesWithEveryButtonAndEveryCutLine()
+	{
+		for (Map.Entry<String, HudModel.Card> e : HudRenderTest.cards().entrySet())
+		{
+			for (int state : STATES)
+			{
+				OsrsPathGuideOverlay.Layout l = layout(e.getValue(), state, LedgerGuide.MIN_WIDTH, Hud.LARGE, 2000);
+				for (OsrsPathGuideOverlay.Row r : l.getRows())
+				{
+					boolean cut = !r.getTexts().isEmpty() && r.getTexts().get(r.getTexts().size() - 1).endsWith("...");
+					if (r.getAction().isClickable() || cut)
+					{
+						assertNotNull(e.getKey() + " " + state + ": " + r.getTexts(), r.getHint());
+					}
+					if (r.getAction().isClickable() || r.getHint() != null)
+					{
+						Rectangle b = r.getBox();
+						assertEquals(e.getKey() + " " + state, r, OsrsPathGuideOverlay.rowAt(l, b.x + 3, b.y + b.height / 2));
+					}
+				}
+				assertNull("outside the rows: no hint, no button", OsrsPathGuideOverlay.rowAt(l, -5, -5));
+			}
+		}
+	}
+
+	@Test
+	public void theWidthKeepsToItsLimits()
+	{
+		assertEquals(LedgerGuide.MIN_WIDTH, LedgerGuide.width(100, 1f));
+		assertEquals(OsrsPathGuideOverlay.MAX_WIDTH, LedgerGuide.width(2000, 1f));
+		assertEquals(310, LedgerGuide.width(310, 1f));
+		assertEquals(Math.round(LedgerGuide.MIN_WIDTH * Hud.LARGE), LedgerGuide.width(100, Hud.LARGE));
 	}
 }

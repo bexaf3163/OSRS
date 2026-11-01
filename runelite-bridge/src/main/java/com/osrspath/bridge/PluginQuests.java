@@ -576,9 +576,6 @@ final class PluginQuests
 				// The details open or close by this click only, and the choice is kept across steps and log-ins.
 				plugin.configManager.setConfiguration(OsrsPathBridgeConfig.GROUP, "hudExpanded", !plugin.config.hudExpanded());
 				break;
-			case MORE:
-				plugin.adviceOpen = !plugin.adviceOpen;
-				break;
 			case TAB:
 				plugin.hudTab = a.getPlace();
 				break;

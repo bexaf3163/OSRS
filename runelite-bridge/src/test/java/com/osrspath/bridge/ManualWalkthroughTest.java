@@ -106,7 +106,7 @@ public class ManualWalkthroughTest
 		HudModel.Card c = HudModel.build(HudModelTest.input(v, HudModelTest.state("~7 tiles ↑", 7), null));
 		for (boolean open : new boolean[]{false, true})
 		{
-			OsrsPathGuideOverlay.Layout l = HudRenderTest.layout(c, open, false, OsrsPathGuideOverlay.WIDTH, 1f, 2000);
+			OsrsPathGuideOverlay.Layout l = HudRenderTest.layout(c, open, false, LedgerGuide.WIDTH, 1f, 2000);
 			if (open)
 			{
 				String flat = c.plain(true, false).replaceAll("\\s+", " ");

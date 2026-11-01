@@ -10,7 +10,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Path2D;
-import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,10 +26,9 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 /**
  * The one OSRS Path HUD on the game screen (2.74.0): {@link HudModel} decides what it says, this class draws it and tells clicks where they landed.
  *
- * Collapsed (the default): the current action, one status line, a progress strip when there is progress, "Then: ..." when something comes first, and at most
- * one warning. A click on the header (or its chevron) opens the details on the same card: the route step in full, how to do the action, the preparation,
- * what comes next and, on request, "More advice". The open or closed choice is saved (the hidden setting hudExpanded) and is never changed by the mouse
- * passing over the card or by a state update.
+ * {@link LedgerGuide} lays the card out and paints it: closed, the current action, its status and what comes first; open, the
+ * route step and one section at a time behind tabs. The open or closed choice is saved (the hidden setting hudExpanded) and is
+ * never changed by the mouse passing over the card or by a state update.
  *
  * The class keeps its old name, from when it was the "What you need" card beside a second HUD plate: RuneLite saves an overlay's place and size under the
  * class name, so a player who moved the card keeps that place. A fresh layout puts the card top right, beside the minimap: clear of RuneLite's hover text
@@ -43,20 +41,11 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 class OsrsPathGuideOverlay extends Overlay
 {
 	/** The card width in logical pixels at the normal text size; stretched with Alt, it keeps the player's width within the limits. */
-	static final int WIDTH = 300;
-	static final int MIN_WIDTH = 240;
 	static final int MAX_WIDTH = 420;
-	/** The secondary text and the headline, as a share of the body text size. */
-	static final float SMALL = 0.9f;
-	static final float HEAD = 1.14f;
 	/** The open card takes at most this share of the window height; the rest is in the side panel. */
 	static final double MAX_HEIGHT_SHARE = 0.6;
-	static final int PAD_X = 10;
-	static final int PAD_TOP = 9;
 	static final int PAD_BOTTOM = 9;
 	static final int ICON = 12;
-	static final int ICON_GAP = 7;
-	static final int CHEVRON = 10;
 	static final int HEAD_LINES = 3;
 
 	static final Color TEXT = new Color(231, 237, 245);
@@ -68,17 +57,13 @@ class OsrsPathGuideOverlay extends Overlay
 	static final Color GOLD = Hud.TITLE;
 	static final Color TRAIN = new Color(125, 185, 245);
 	static final Color FILL = new Color(17, 23, 32);
-	static final Color BORDER = new Color(64, 74, 92);
-	static final Color RULE = new Color(255, 255, 255, 26);
-	static final Color HOVER = new Color(255, 255, 255, 24);
-	static final Color TRACK = new Color(255, 255, 255, 36);
 	/** For how long after the last frame a click still counts against the card: hidden for longer, clicks go to the game. */
 	private static final long FRESH_NANOS = 500_000_000L;
 
 	/** What a row of the card is, for drawing. */
 	enum Part
 	{
-		HEADER, STATUS, PROGRESS, THEN, WARNING, STEP, LABEL, LINE, MORE, RULE,
+		HEADER, STATUS, THEN, WARNING, STEP, LABEL, LINE,
 		/** The Ledger card's own rows: its headline (the header row is then only the click area), a tab, the next step's footer. */
 		TITLE, TAB, FOOT
 	}
@@ -165,7 +150,7 @@ class OsrsPathGuideOverlay extends Overlay
 		setPriority(PRIORITY_LOW);
 		setMovable(true);
 		setResizable(true);
-		setMinimumSize(MIN_WIDTH);
+		setMinimumSize(LedgerGuide.MIN_WIDTH);
 	}
 
 	@Override
@@ -197,30 +182,22 @@ class OsrsPathGuideOverlay extends Overlay
 			own.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			own.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 			own.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            boolean expanded = expanded(config.hudExpanded());
+			boolean expanded = expanded(config.hudExpanded());
 			float scale = config.hudLarge() ? Hud.LARGE : 1f;
-			Font font = GuideFont.font(scale);
-			Font small = GuideFont.font(scale * SMALL);
-			Font head = GuideFont.font(scale * HEAD);
-			boolean ledger = config.overlayTheme() == OsrsPathBridgeConfig.OverlayTheme.LEDGER;
-			int width = ledger ? LedgerGuide.width(Hud.panelWidth(this, Math.round(LedgerGuide.WIDTH * scale)), scale)
-				: width(Hud.panelWidth(this, Math.round(WIDTH * scale)), scale);
+			int width = LedgerGuide.width(Hud.panelWidth(this, Math.round(LedgerGuide.WIDTH * scale)), scale);
 			int maxHeight = Math.max(160, (int) (client.getCanvasHeight() * MAX_HEIGHT_SHARE));
 			int tab = plugin.getHudTab();
-			boolean advice = ledger ? tab == LedgerGuide.ADVICE : plugin.isAdviceOpen();
-			Object key = Arrays.asList(card, expanded, advice, width, font, maxHeight, ledger, tab);
+			Object key = Arrays.asList(card, expanded, scale, width, maxHeight, tab);
 			if (!key.equals(builtFor))
 			{
-				layout = ledger ? LedgerGuide.layout(card, expanded, tab, own, scale, width, maxHeight)
-					: layout(card, expanded, advice, own, font, small, head, width, maxHeight);
+				layout = LedgerGuide.layout(card, expanded, tab, own, scale, width, maxHeight);
 				builtFor = key;
-				plugin.debug.uiShown("hud", card.plain(expanded, advice));
+				plugin.debug.uiShown("hud", card.plain(expanded, tab == LedgerGuide.ADVICE));
 			}
 			Row under = under(layout);
-			if (ledger) LedgerGuide.paint(own, layout, under, config.hudOpacity());
-			else paint(own, layout, under, config.hudOpacity());
+			LedgerGuide.paint(own, layout, under, config.hudOpacity());
 			remember(layout);
-			paintTooltip(own, layout, under, small);
+			paintTooltip(own, layout, under, LedgerFont.text(LedgerGuide.SMALL * scale));
 			plugin.debug.guideShown(true);
 			return layout.getSize();
 		}
@@ -230,6 +207,7 @@ class OsrsPathGuideOverlay extends Overlay
 		}
 	}
 
+
 	/**
 	 * Only an explicit header choice opens the details. Travel and exchange contexts must not make that click appear to do nothing.
 	 */
@@ -238,152 +216,8 @@ class OsrsPathGuideOverlay extends Overlay
 		return chosen;
 	}
 
-	/** The player's width (Alt-stretched) kept within the limits, scaled with the text. */
-	static int width(int wanted, float scale)
-	{
-		return Math.max(Math.round(MIN_WIDTH * scale), Math.min(Math.round(MAX_WIDTH * scale), wanted));
-	}
-
 	// ------------------------------------------------------------------------------------------------------------
 	// Layout: pure, so a test lays the card out with the real fonts and checks every row is inside it.
-
-	static Layout layout(HudModel.Card c, boolean expanded, boolean adviceOpen, Graphics2D g, Font font, Font small, Font head, int width, int maxHeight)
-	{
-		FontMetrics fm = GuideFont.metrics(g, font);
-		FontMetrics sm = GuideFont.metrics(g, small);
-		FontMetrics hm = GuideFont.metrics(g, head);
-		List<Row> rows = new ArrayList<>();
-		Color accent = accent(c);
-		int textX = PAD_X + ICON + ICON_GAP;
-		int headW = width - textX - PAD_X - CHEVRON - 6;
-		int y = PAD_TOP;
-		List<String> wrapped = OverlayText.wrap(c.getHeadline(), hm, headW);
-		List<String> headline = clip(wrapped, HEAD_LINES, hm, headW);
-		int h = headline.size() * hm.getHeight();
-		String toggle = expanded ? "Click to close the details." : "Click for the details: the route step, how, what to prepare, what comes next.";
-		rows.add(new Row(Part.HEADER, new Rectangle(2, 2, width - 4, y + h - 2), textX, headline, null, head, TEXT, c.getIcon(), accent,
-			GuideList.Action.TOGGLE, headline == wrapped ? toggle : c.getHeadline() + ". " + toggle));
-		y += h;
-		int bodyW = width - textX - PAD_X;
-		if (c.getStatus() != null)
-		{
-			List<String> st = clip(OverlayText.wrap(c.getStatus(), sm, bodyW), 2, sm, bodyW);
-			rows.add(new Row(Part.STATUS, new Rectangle(textX, y, bodyW, st.size() * sm.getHeight()), textX, st, null, small,
-				c.getTone() == HudModel.Tone.TEXT ? MUTED : TEXT, HudModel.Icon.NONE, null, GuideList.Action.NONE, null));
-			y += st.size() * sm.getHeight();
-		}
-		if (c.getProgress() != null)
-		{
-			y += 5;
-			rows.add(new Row(Part.PROGRESS, new Rectangle(textX, y, bodyW, 4), textX, Collections.emptyList(), null, small, accent, HudModel.Icon.NONE,
-				null, GuideList.Action.NONE, null));
-			y += 4;
-		}
-		if (c.getThen() != null && !(expanded && c.thenInNext()))
-		{
-			y += 3;
-			List<String> th = clip(OverlayText.wrap(c.getThen(), sm, bodyW), 2, sm, bodyW);
-			rows.add(new Row(Part.THEN, new Rectangle(textX, y, bodyW, th.size() * sm.getHeight()), textX, th, null, small, MUTED, HudModel.Icon.NONE,
-				null, GuideList.Action.NONE, null));
-			y += th.size() * sm.getHeight();
-		}
-		if (c.getWarning() != null)
-		{
-			y += 8;
-			HudModel.Line w = c.getWarning();
-			int wx = PAD_X + ICON + ICON_GAP;
-			int ww = width - wx - PAD_X - 4;
-			List<String> wl = clip(OverlayText.wrap(w.getText(), sm, ww), WARNING_LINES, sm, ww);
-			int wh = wl.size() * sm.getHeight() + 10;
-			rows.add(new Row(Part.WARNING, new Rectangle(PAD_X - 4, y, width - 2 * PAD_X + 8, wh), wx, wl, null, small, TEXT, w.getIcon(), toneColor(w.getTone()),
-				GuideList.Action.NONE, w.getHint()));
-			y += wh;
-		}
-		if (expanded)
-		{
-			y = details(rows, c, adviceOpen, fm, sm, font, small, width, y, maxHeight);
-		}
-		y += PAD_BOTTOM;
-		return new Layout(Collections.unmodifiableList(rows), new Dimension(width, y), c.getProgress(), c.getSegments(), accent,
-			c.getWarning() == null ? null : c.getWarning().getTone());
-	}
-
-	/** The open card's sections, cut short (with a pointer to the side panel) when they would pass maxHeight. */
-	private static int details(List<Row> rows, HudModel.Card c, boolean adviceOpen, FontMetrics fm, FontMetrics sm, Font font, Font small, int width, int y,
-		int maxHeight)
-	{
-		int inner = width - 2 * PAD_X;
-		y += 8;
-		rows.add(new Row(Part.RULE, new Rectangle(PAD_X, y, inner, 1), PAD_X, Collections.emptyList(), null, small, RULE, HudModel.Icon.NONE, null,
-			GuideList.Action.NONE, null));
-		y += 7;
-		List<Part> parts = new ArrayList<>();
-		List<HudModel.Line> lines = new ArrayList<>();
-		if (c.getStep() != null)
-		{
-			parts.add(Part.STEP);
-			lines.add(HudModel.Line.small(HudModel.Icon.NONE, c.getStep(), HudModel.Tone.MUTED));
-		}
-		for (HudModel.Line l : c.getNow())
-		{
-			parts.add(Part.LINE);
-			lines.add(l);
-		}
-		section(parts, lines, "Prepare", c.getPrepare());
-		section(parts, lines, "Next", c.getNext());
-		if (!c.getAdvice().isEmpty())
-		{
-			parts.add(Part.MORE);
-			lines.add(new HudModel.Line(HudModel.Icon.MORE, "More advice · " + c.adviceCount(), null, HudModel.Tone.LINK, true, GuideList.Action.MORE,
-				adviceOpen ? "Click to hide the optional advice." : "Click for the optional advice: stops on the way, gear, weight, cleanup."));
-			if (adviceOpen)
-			{
-				for (HudModel.Line l : c.getAdvice())
-				{
-					parts.add(Part.LINE);
-					lines.add(l);
-				}
-			}
-		}
-		for (int i = 0; i < lines.size(); i++)
-		{
-			Part part = parts.get(i);
-			Row r = lineRow(part, lines.get(i), fm, sm, font, small, width, y + (part == Part.LABEL || part == Part.MORE ? 6 : 0));
-			int bottom = r.getBox().y + r.getBox().height;
-			// The row must leave room for the pointer to the side panel, unless it is the last of all.
-			boolean last = i == lines.size() - 1;
-			if (bottom + PAD_BOTTOM + (last ? 0 : 2 * sm.getHeight() + 8) > maxHeight)
-			{
-				Row more = lineRow(Part.LINE, HudModel.Line.small(HudModel.Icon.DOT, "More in the OSRS Path panel on the right", HudModel.Tone.MUTED), fm, sm, font,
-					small, width, y + 2);
-				rows.add(more);
-				return more.getBox().y + more.getBox().height;
-			}
-			rows.add(r);
-			y = bottom + (part == Part.STEP ? 4 : 2);
-		}
-		return y;
-	}
-
-	private static void section(List<Part> parts, List<HudModel.Line> lines, String label, List<HudModel.Line> section)
-	{
-		if (section.isEmpty())
-		{
-			return;
-		}
-		parts.add(Part.LABEL);
-		lines.add(HudModel.Line.small(HudModel.Icon.NONE, label, HudModel.Tone.MUTED));
-		for (HudModel.Line l : section)
-		{
-			parts.add(Part.LINE);
-			lines.add(l);
-		}
-	}
-
-	static Row lineRow(Part part, HudModel.Line l, FontMetrics fm, FontMetrics sm, Font font, Font small, int width, int y)
-	{
-		return lineRow(part, l, fm, sm, font, small, width, y, PAD_X, OsrsPathGuideOverlay::toneColor);
-	}
 
 	/** A line at a side padding, coloured by a theme's inks (the Ledger page is light). */
 	static Row lineRow(Part part, HudModel.Line l, FontMetrics fm, FontMetrics sm, Font font, Font small, int width, int y, int pad,
@@ -401,7 +235,7 @@ class OsrsPathGuideOverlay extends Overlay
 		List<String> wrapped = OverlayText.wrap(l.getText(), m, textW);
 		List<String> texts = clip(wrapped, max, m, textW);
 		int h = texts.size() * m.getHeight();
-		Color color = ink.apply(part == Part.LABEL ? HudModel.Tone.MUTED : part == Part.MORE ? HudModel.Tone.LINK : l.getTone());
+		Color color = ink.apply(part == Part.LABEL ? HudModel.Tone.MUTED : l.getTone());
 		// A line cut short keeps its whole text in the hint beside the card.
 		String hint = texts == wrapped || l.getHint() != null && l.getHint().startsWith(l.getText()) ? l.getHint()
 			: l.getText() + (l.getHint() == null ? "" : ". " + l.getHint());
@@ -475,80 +309,6 @@ class OsrsPathGuideOverlay extends Overlay
 	// ------------------------------------------------------------------------------------------------------------
 	// Painting.
 
-	/** Draws the laid-out card from (0, 0), the button under the mouse highlighted. Static: a test paints it into an image. */
-	static void paint(Graphics2D g, Layout l, Row hovered, int opacity)
-	{
-		Dimension d = l.getSize();
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		RoundRectangle2D card = new RoundRectangle2D.Float(0.5f, 0.5f, d.width - 1, d.height - 1, 9, 9);
-		// Dark and nearly opaque whatever the setting says, so the text reads over snow and grass alike.
-		g.setColor(new Color(FILL.getRed(), FILL.getGreen(), FILL.getBlue(), Math.max(OverlayCard.alpha(opacity), 236)));
-		g.fill(card);
-		g.setColor(BORDER);
-		g.setStroke(new BasicStroke(1f));
-		g.draw(card);
-		for (Row r : l.getRows())
-		{
-			if (r == hovered && r.getAction().isClickable())
-			{
-				g.setColor(HOVER);
-				Rectangle b = r.getBox();
-				g.fillRoundRect(b.x, b.y, b.width, b.height, 7, 7);
-			}
-			paintRow(g, r, l);
-		}
-	}
-
-	private static void paintRow(Graphics2D g, Row r, Layout l)
-	{
-		Rectangle b = r.getBox();
-		FontMetrics fm = GuideFont.metrics(g, r.getFont());
-		switch (r.getPart())
-		{
-			case RULE:
-				g.setColor(RULE);
-				g.fillRect(b.x, b.y, b.width, 1);
-				return;
-			case PROGRESS:
-				paintProgress(g, b, l.getProgress() == null ? 0 : l.getProgress(), l.getSegments(), r.getColor());
-				return;
-			case WARNING:
-			{
-				Color tone = r.getIconColor();
-				g.setColor(new Color(tone.getRed() / 3, tone.getGreen() / 4, tone.getBlue() / 5, 150));
-				g.fillRoundRect(b.x, b.y, b.width, b.height, 7, 7);
-				g.setColor(new Color(tone.getRed(), tone.getGreen(), tone.getBlue(), 170));
-				g.drawRoundRect(b.x, b.y, b.width, b.height, 7, 7);
-				HudIcons.paint(g, r.getIcon(), PAD_X, b.y + 5 + (fm.getAscent() - ICON) / 2 + 1, ICON, tone);
-				paintText(g, r, b.y + 5);
-				return;
-			}
-			case HEADER:
-			{
-				int top = PAD_TOP;
-				HudIcons.paint(g, r.getIcon(), PAD_X, top + (fm.getAscent() - ICON) / 2 + 2, ICON, r.getIconColor());
-				paintText(g, r, top);
-				boolean open = r.getHint() != null && r.getHint().startsWith("Click to close");
-				paintChevron(g, b.x + b.width - PAD_X + 2 - CHEVRON, top + (fm.getAscent() - CHEVRON) / 2 + 2, CHEVRON, open, MUTED);
-				return;
-			}
-			default:
-			{
-				if (r.getIcon() != HudModel.Icon.NONE)
-				{
-					int size = ICON - 2;
-					HudIcons.paint(g, r.getIcon(), PAD_X, b.y + 1 + (fm.getAscent() - size) / 2 + 1, size, r.getIconColor());
-				}
-				paintText(g, r, b.y + 1);
-				if (r.getRight() != null)
-				{
-					g.setColor(TEXT);
-					GuideFont.draw(g, r.getRight(), r.getFont(), b.x + b.width - 4 - fm.stringWidth(r.getRight()), b.y + 1 + fm.getAscent());
-				}
-			}
-		}
-	}
-
 	static void paintText(Graphics2D g, Row r, int top)
 	{
 		FontMetrics fm = GuideFont.metrics(g, r.getFont());
@@ -558,33 +318,6 @@ class OsrsPathGuideOverlay extends Overlay
 		{
 			GuideFont.draw(g, t, r.getFont(), r.getTextX(), y);
 			y += fm.getHeight();
-		}
-	}
-
-	/** A thin strip: plain, or one segment per quest stage. */
-	static void paintProgress(Graphics2D g, Rectangle b, double fraction, int segments, Color color)
-	{
-		double f = Math.max(0, Math.min(1, fraction));
-		if (segments > 1)
-		{
-			int gap = 3;
-			int done = (int) Math.round(f * segments);
-			for (int i = 0; i < segments; i++)
-			{
-				int left = b.x + i * b.width / segments;
-				int right = b.x + (i + 1) * b.width / segments - gap;
-				g.setColor(i < done ? color : TRACK);
-				g.fillRoundRect(left, b.y, Math.max(1, right - left), b.height, b.height, b.height);
-			}
-			return;
-		}
-		g.setColor(TRACK);
-		g.fillRoundRect(b.x, b.y, b.width, b.height, b.height, b.height);
-		int filled = (int) Math.round(b.width * f);
-		if (filled > 0)
-		{
-			g.setColor(color);
-			g.fillRoundRect(b.x, b.y, Math.max(b.height, filled), b.height, b.height, b.height);
 		}
 	}
 

@@ -264,7 +264,6 @@ public class GuideListTest
 		assertEquals("Arrow to", GuideMouse.menuOption(GuideList.Action.place(0)));
 		assertEquals("Arrow back to step", GuideMouse.menuOption(GuideList.Action.BACK));
 		assertEquals("Details", GuideMouse.menuOption(GuideList.Action.TOGGLE));
-		assertEquals("More advice", GuideMouse.menuOption(GuideList.Action.MORE));
 		assertEquals("List", GuideMouse.menuOption(GuideList.Action.NONE));
 		for (GuideList.Kind k : GuideList.Kind.values())
 		{

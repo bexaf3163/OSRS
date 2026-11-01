@@ -44,7 +44,7 @@ final class HudModel
 	/** The small vector icons of the card, drawn by the overlay (no emoji: one icon style, independent of the font). */
 	enum Icon
 	{
-		NONE, QUEST, TRAIN, PREPARE, GO, CHECK, MISSING, BANK, UNKNOWN, WARN, DANGER, NEXT, BACK, MORE, DOT
+		NONE, QUEST, TRAIN, PREPARE, GO, CHECK, MISSING, BANK, UNKNOWN, WARN, DANGER, NEXT, BACK, DOT
 	}
 
 	/** One line of the card: its icon, its text (wrapped by the overlay), a short figure on the right, its tone, a click and the hover hint. */

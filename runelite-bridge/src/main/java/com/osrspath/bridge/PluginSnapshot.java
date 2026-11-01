@@ -338,7 +338,6 @@ final class PluginSnapshot
 			gotStep = stepId;
 			plugin.quests.stageKey = null;
 			plugin.quests.qhReset();
-			plugin.adviceOpen = false;
 			plugin.hudTab = LedgerGuide.NOW;
 		}
 		plugin.target = t;

@@ -126,8 +126,8 @@ public class SmartViewTest
 	public void theClosedCardIsMuchShorterThanTheOpenOne()
 	{
 		HudModel.Card c = card(full("Dark wizards", false, "HP 15/40 - time to eat. Hits up to 8", false));
-		int closed = HudRenderTest.layout(c, false, false, OsrsPathGuideOverlay.WIDTH, 1f, 2000).getSize().height;
-		int open = HudRenderTest.layout(c, true, true, OsrsPathGuideOverlay.WIDTH, 1f, 2000).getSize().height;
+		int closed = HudRenderTest.layout(c, false, false, LedgerGuide.WIDTH, 1f, 2000).getSize().height;
+		int open = HudRenderTest.layout(c, true, true, LedgerGuide.WIDTH, 1f, 2000).getSize().height;
 		assertTrue("closed " + closed + " against open " + open, closed < open);
 	}
 

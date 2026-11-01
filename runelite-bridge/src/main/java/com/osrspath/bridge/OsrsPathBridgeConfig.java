@@ -144,39 +144,6 @@ public interface OsrsPathBridgeConfig extends Config
 		return false;
 	}
 
-	/** The look of the helper plates: the app's Ledger (a leather plaque, the guide's sections behind tabs), the earlier flat card with a coloured strip, or the frosted glass card. */
-	enum OverlayTheme
-	{
-		LEDGER("Ledger"),
-		CLASSIC("Classic"),
-		GLASS("Glass");
-
-		private final String label;
-
-		OverlayTheme(String label)
-		{
-			this.label = label;
-		}
-
-		@Override
-		public String toString()
-		{
-			return label;
-		}
-	}
-
-	@ConfigItem(
-		keyName = "overlayTheme",
-		name = "Plate style",
-		description = "Look of the helper plates: Ledger matches the app, with a progress ring and the guide's sections behind tabs; Glass is a frosted card with a state dot and a soft glow; Classic is the earlier flat card with a coloured strip",
-		section = companion,
-		position = 14
-	)
-	default OverlayTheme overlayTheme()
-	{
-		return OverlayTheme.LEDGER;
-	}
-
 
 	@ConfigItem(
 		keyName = "showChecklist",
