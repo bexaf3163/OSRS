@@ -313,7 +313,7 @@ public class HudModelTest
 	public void acceptedSubstitutesCount_noBankingBecauseOneNamedFishIsAbsent()
 	{
 		// The app lists Trout and Tuna beside Salmon: 21 Trout in the bag are the step's food (the shared count with alternatives).
-		ActiveTarget.GuideItem food = GSON.fromJson("{\"name\":\"Salmon\",\"id\":329,\"count\":21,\"alt\":[\"Trout\",\"Tuna\"]}", ActiveTarget.GuideItem.class);
+		TargetGuide.GuideItem food = GSON.fromJson("{\"name\":\"Salmon\",\"id\":329,\"count\":21,\"alt\":[\"Trout\",\"Tuna\"]}", TargetGuide.GuideItem.class);
 		StepGuide.ItemLine l = StepGuide.item(food, Collections.emptyList(), StepGuideTest.counts(333, "Trout", 21), StepGuideTest.counts());
 		assertEquals(StepGuide.Have.BAG, l.getHave());
 		assertEquals(21, l.getCount());
@@ -498,9 +498,9 @@ public class HudModelTest
 
 	// ---------- Quest stages ----------
 
-	static ActiveTarget.StageLine stageLine(String text)
+	static TargetStages.StageLine stageLine(String text)
 	{
-		ActiveTarget.StageLine l = new ActiveTarget.StageLine();
+		TargetStages.StageLine l = new TargetStages.StageLine();
 		l.setT(text);
 		l.setS(text);
 		return l;

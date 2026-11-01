@@ -84,7 +84,7 @@ final class HudActivity
 			a.status = "The step ticks itself once the app sees it";
 			return;
 		}
-		List<ActiveTarget.StageLine> lines = stage.getSteps();
+		List<TargetStages.StageLine> lines = stage.getSteps();
 		if (lines == null || lines.isEmpty())
 		{
 			a.headline = withoutCode(v.getTitle());
@@ -92,7 +92,7 @@ final class HudActivity
 			return;
 		}
 		int cur = Math.max(0, Math.min(stage.getCursor(), lines.size() - 1));
-		ActiveTarget.StageLine line = lines.get(cur);
+		TargetStages.StageLine line = lines.get(cur);
 		String shown = headlineOf(GuideList.withoutDoneErrands(v, line.shown()));
 		int or = GuideList.alternativeAt(shown);
 		a.headline = or > 0 ? shown.substring(0, or) : shown;
@@ -128,7 +128,7 @@ final class HudActivity
 		}
 		else if (cur > 0)
 		{
-			ActiveTarget.StageLine prev = lines.get(cur - 1);
+			TargetStages.StageLine prev = lines.get(cur - 1);
 			a.next.add(new Line(Icon.BACK, "Previous line", null, Tone.LINK, true, GuideList.Action.PREV,
 				"Click to read the previous line again: " + prev.getT() + " After a minute the card returns to the current line by itself."));
 		}

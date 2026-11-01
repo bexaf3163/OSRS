@@ -32,9 +32,9 @@ public class GuideListTest
 		return new StepGuide.ItemLine(name, "", have, "", -1, name, "");
 	}
 
-	private static ActiveTarget.StageLine stageLine(String text)
+	private static TargetStages.StageLine stageLine(String text)
 	{
-		ActiveTarget.StageLine l = new ActiveTarget.StageLine();
+		TargetStages.StageLine l = new TargetStages.StageLine();
 		l.setT(text);
 		l.setS(text);
 		return l;

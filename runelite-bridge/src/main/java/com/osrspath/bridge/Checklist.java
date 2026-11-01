@@ -113,12 +113,12 @@ final class Checklist
 	}
 
 	/** bank == null means the bank's contents are unknown (the bank was not opened in this session). */
-	static Result evaluate(List<ActiveTarget.ChecklistItem> items, ItemCounts carried, ItemCounts bank)
+	static Result evaluate(List<TargetGuide.ChecklistItem> items, ItemCounts carried, ItemCounts bank)
 	{
 		return evaluate(items, carried, bank, null);
 	}
 
-	static Result evaluate(List<ActiveTarget.ChecklistItem> items, ItemCounts carried, ItemCounts bank, ItemCounts worn)
+	static Result evaluate(List<TargetGuide.ChecklistItem> items, ItemCounts carried, ItemCounts bank, ItemCounts worn)
 	{
 		if (items == null || items.isEmpty())
 		{
@@ -128,13 +128,13 @@ final class Checklist
 		java.util.Map<String, Integer> remaining = new java.util.HashMap<>();
 		java.util.Map<String, Integer> usedBag = new java.util.HashMap<>();
 		java.util.Map<String, Integer> usedBank = new java.util.HashMap<>();
-		for (ActiveTarget.ChecklistItem item : items)
+		for (TargetGuide.ChecklistItem item : items)
 		{
 			remaining.merge(ActiveTarget.nameKey(item.getName()), Math.max(1, item.getCount()),
 				(a, b) -> (int) Math.min(Integer.MAX_VALUE, (long) a + b));
 		}
 		boolean ready = true;
-		for (ActiveTarget.ChecklistItem item : items)
+		for (TargetGuide.ChecklistItem item : items)
 		{
 			// A potion is counted in doses of every size (the app sends them): a (3) and a (1) cover a "Strength potion(4)".
 			boolean dose = item.getDoses() != null && item.getDoses() > 0 && ItemCounts.doseBase(item.getName()) != null;
@@ -155,11 +155,11 @@ final class Checklist
 				}
 			}
 			int onHand = dose ? carried.doses(item.getName()) : food ? Foods.count(carried, item.getId(), item.getName(), item.getAlt(), item.getHeals(), usedBag, bagReserved)
-				: ActiveTarget.countWithAlt(carried, item.getId(), item.getName(), item.getAlt());
+				: TargetGuide.countWithAlt(carried, item.getId(), item.getName(), item.getAlt());
 			boolean equip = Boolean.TRUE.equals(item.getEquip());
-			int have = equip ? worn == null ? 0 : ActiveTarget.countWithAlt(worn, item.getId(), item.getName(), item.getAlt()) : onHand;
+			int have = equip ? worn == null ? 0 : TargetGuide.countWithAlt(worn, item.getId(), item.getName(), item.getAlt()) : onHand;
 			int inBank = bank == null ? -1 : dose ? bank.doses(item.getName()) : food ? Foods.count(bank, item.getId(), item.getName(), item.getAlt(), item.getHeals(), usedBank, bankReserved)
-				: ActiveTarget.countWithAlt(bank, item.getId(), item.getName(), item.getAlt());
+				: TargetGuide.countWithAlt(bank, item.getId(), item.getName(), item.getAlt());
 			if (food && bank != null)
 			{
 				long health = Foods.healing(carried, item.getId(), item.getName(), item.getAlt(), item.getHeals(), usedBag, bagReserved)

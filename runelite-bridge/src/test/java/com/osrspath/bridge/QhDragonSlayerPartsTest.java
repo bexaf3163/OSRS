@@ -31,9 +31,9 @@ public class QhDragonSlayerPartsTest
 		throw new AssertionError("no stage " + step);
 	}
 
-	private static List<ActiveTarget.StageLine> lines(String step)
+	private static List<TargetStages.StageLine> lines(String step)
 	{
-		List<ActiveTarget.StageStep> stages = target(step).getGuide().getStage().getStages();
+		List<TargetStages.StageStep> stages = target(step).getGuide().getStage().getStages();
 		return stages.get(stages.size() - 1).getSteps();
 	}
 
@@ -52,7 +52,7 @@ public class QhDragonSlayerPartsTest
 
 	private static int line(String step, String k)
 	{
-		List<ActiveTarget.StageLine> lines = lines(step);
+		List<TargetStages.StageLine> lines = lines(step);
 		for (int i = 0; i < lines.size(); i++)
 		{
 			if (k.equals(lines.get(i).getK()))
@@ -191,7 +191,7 @@ public class QhDragonSlayerPartsTest
 	@Test
 	public void wormbrainsStageAsksOnlyForTheCoins()
 	{
-		for (ActiveTarget.GuideItem i : target("S5-05").getGuide().getStage().getStages().get(0).getItems())
+		for (TargetGuide.GuideItem i : target("S5-05").getGuide().getStage().getStages().get(0).getItems())
 		{
 			assertNotEquals("Wormbrain's own piece is not a thing to bring", "Map part", i.getName());
 		}

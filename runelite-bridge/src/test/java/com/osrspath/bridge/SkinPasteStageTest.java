@@ -18,15 +18,15 @@ public class SkinPasteStageTest
 	private static final int AGGIE_X = 3086;
 	private static final int AGGIE_Y = 3257;
 
-	private static List<ActiveTarget.StageLine> lines()
+	private static List<TargetStages.StageLine> lines()
 	{
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
 			if (ID.equals(s.target.getStepId()) && s.target.getGuide() != null && s.target.getGuide().getStage() != null)
 			{
-				for (ActiveTarget.StageStep st : s.target.getGuide().getStage().getStages())
+				for (TargetStages.StageStep st : s.target.getGuide().getStage().getStages())
 				{
-					for (ActiveTarget.StageLine l : st.getSteps())
+					for (TargetStages.StageLine l : st.getSteps())
 					{
 						if ("talkToAggie".equals(l.getK()))
 						{
@@ -39,7 +39,7 @@ public class SkinPasteStageTest
 		throw new AssertionError("no S2-10 stage with the Aggie step");
 	}
 
-	private static int indexOf(List<ActiveTarget.StageLine> lines, String key)
+	private static int indexOf(List<TargetStages.StageLine> lines, String key)
 	{
 		for (int i = 0; i < lines.size(); i++)
 		{
@@ -68,7 +68,7 @@ public class SkinPasteStageTest
 	@Test
 	public void pasteInTheBagAtAggie_thePasteStepIsDone_nextIsTheKeyPrint()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		int aggie = indexOf(lines, "talkToAggie");
 		int keli = indexOf(lines, "talkToKeli");
 		StageTracker t = new StageTracker();
@@ -92,7 +92,7 @@ public class SkinPasteStageTest
 	@Test
 	public void keyPrintInTheBag_theKeliStepIsDone_nextIsTheFurnace()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		int keli = indexOf(lines, "talkToKeli");
 		int key = indexOf(lines, "makeKey");
 		StageTracker t = new StageTracker();
@@ -106,7 +106,7 @@ public class SkinPasteStageTest
 	@Test
 	public void machineThatCannotDecide_alwaysOffersDone()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		StageTracker t = new StageTracker();
 		t.update(ID, 20, lines, 3127, 3244, 0, bag(true, true));
 		assertFalse("no flag from the machine: only the steps the game cannot see", t.canStepForward(lines) && !StageTracker.needsManualStep(lines, t.cursor()));
@@ -123,7 +123,7 @@ public class SkinPasteStageTest
 	public void itemsTheFinishedLinesUsedUp_areNotNeededNow()
 	{
 		ActiveTarget t = target();
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		int keli = indexOf(lines, "talkToKeli");
 		StepGuide.View v = StepGuide.view(t, new ItemCounts(), ItemCounts.EMPTY, null, 0, 0, 0, new java.util.HashSet<String>(), 20, false, keli);
 		for (StepGuide.ItemLine i : v.getItems())
@@ -144,7 +144,7 @@ public class SkinPasteStageTest
 	@Test
 	public void gameRestartedWithTheKeyAlreadyMade_theListDoesNotRollBackToKeli()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		int leela = indexOf(lines, "talkToLeela");
 		// The key print was used up making the key, so only the key is left in the bag (live report: the list went back to "Lady Keli").
 		ItemCounts bag = bag(true, true);

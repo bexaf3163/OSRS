@@ -40,7 +40,7 @@ final class PacingTracker
 		boolean done;
 	}
 
-	private final ActiveTarget.Pacing pacing;
+	private final TargetNeeds.Pacing pacing;
 	/** The skill of this measurement: a combat step has several, each with its own. */
 	private final String skill;
 	private final int history;
@@ -48,16 +48,16 @@ final class PacingTracker
 	private final Deque<long[]> gains = new ArrayDeque<>();
 	private int xp = -1;
 
-	PacingTracker(ActiveTarget.Pacing pacing)
+	PacingTracker(TargetNeeds.Pacing pacing)
 	{
 		this(pacing, pacing.getSkill());
 	}
 
-	PacingTracker(ActiveTarget.Pacing pacing, String skill)
+	PacingTracker(TargetNeeds.Pacing pacing, String skill)
 	{
 		this.pacing = pacing;
 		this.skill = skill;
-		boolean combat = ActiveTarget.Pacing.COMBAT.contains(skill);
+		boolean combat = TargetNeeds.Pacing.COMBAT.contains(skill);
 		history = combat ? COMBAT_HISTORY : HISTORY;
 		minGains = combat ? COMBAT_MIN_GAINS : MIN_GAINS;
 	}
@@ -73,7 +73,7 @@ final class PacingTracker
 		return xp;
 	}
 
-	ActiveTarget.Pacing getPacing()
+	TargetNeeds.Pacing getPacing()
 	{
 		return pacing;
 	}

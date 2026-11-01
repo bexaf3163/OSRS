@@ -775,7 +775,7 @@ final class QhMachine
 	}
 
 	/** The stage line the leaf picked: by line key (k): the leaf, its parents from addSubSteps or nested conditional steps. -1 means no such line. */
-	int lineFor(Verdict v, List<ActiveTarget.StageLine> lines)
+	int lineFor(Verdict v, List<TargetStages.StageLine> lines)
 	{
 		if (v == null || v.getLeaf() == null)
 		{

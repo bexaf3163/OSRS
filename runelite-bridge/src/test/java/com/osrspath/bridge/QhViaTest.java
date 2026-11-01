@@ -12,9 +12,9 @@ import org.junit.Test;
 
 public class QhViaTest
 {
-	private static ActiveTarget.StageLine line(String k, int x, int y, int plane)
+	private static TargetStages.StageLine line(String k, int x, int y, int plane)
 	{
-		ActiveTarget.StageLine l = new ActiveTarget.StageLine();
+		TargetStages.StageLine l = new TargetStages.StageLine();
 		l.setT(k);
 		l.setK(k);
 		l.setX(x);

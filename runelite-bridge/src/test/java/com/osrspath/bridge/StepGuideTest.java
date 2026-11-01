@@ -117,13 +117,13 @@ public class StepGuideTest
 	@Test
 	public void hudLineNamesWhatIsMissing()
 	{
-		ActiveTarget.ChecklistItem meat = new ActiveTarget.ChecklistItem();
+		TargetGuide.ChecklistItem meat = new TargetGuide.ChecklistItem();
 		meat.setName("Burnt meat");
 		meat.setCount(1);
-		ActiveTarget.ChecklistItem lobster = new ActiveTarget.ChecklistItem();
+		TargetGuide.ChecklistItem lobster = new TargetGuide.ChecklistItem();
 		lobster.setName("Lobster");
 		lobster.setCount(20);
-		ActiveTarget.ChecklistItem rope = new ActiveTarget.ChecklistItem();
+		TargetGuide.ChecklistItem rope = new TargetGuide.ChecklistItem();
 		rope.setName("Rope");
 		rope.setCount(1);
 

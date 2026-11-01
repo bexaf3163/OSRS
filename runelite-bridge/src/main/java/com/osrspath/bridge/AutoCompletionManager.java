@@ -54,7 +54,7 @@ public class AutoCompletionManager
 	public interface ItemChecker
 	{
 		/** How much of this item the player has: bag, worn, notes and the bank if it was opened in this session. */
-		int owned(ActiveTarget.ItemNeed need);
+		int owned(TargetNeeds.ItemNeed need);
 	}
 
 	private final QuestChecker quests;
@@ -68,8 +68,8 @@ public class AutoCompletionManager
 	private String stepId;
 	private String type;
 	private String questName;
-	private List<ActiveTarget.LevelNeed> needLevels = Collections.emptyList();
-	private List<ActiveTarget.ItemNeed> needItems = Collections.emptyList();
+	private List<TargetNeeds.LevelNeed> needLevels = Collections.emptyList();
+	private List<TargetNeeds.ItemNeed> needItems = Collections.emptyList();
 	/** ITEM_OWNED: any one of the items completes the step. */
 	private boolean anyItem;
 	private Pattern chatPattern;
@@ -113,13 +113,13 @@ public class AutoCompletionManager
 		atLeast = false;
 		fired = false;
 		ticks = 0;
-		ActiveTarget.Trigger t = target == null ? null : target.getCompletionTrigger();
+		TargetNeeds.Trigger t = target == null ? null : target.getCompletionTrigger();
 		if (t == null || t.getType() == null)
 		{
 			return;
 		}
-		List<ActiveTarget.LevelNeed> lv = t.getLevels() == null ? Collections.emptyList() : t.getLevels();
-		List<ActiveTarget.ItemNeed> it = t.getItems() == null ? Collections.emptyList() : t.getItems();
+		List<TargetNeeds.LevelNeed> lv = t.getLevels() == null ? Collections.emptyList() : t.getLevels();
+		List<TargetNeeds.ItemNeed> it = t.getItems() == null ? Collections.emptyList() : t.getItems();
 		switch (t.getType())
 		{
 			case "QUEST_COMPLETED":
@@ -209,12 +209,12 @@ public class AutoCompletionManager
 			Boolean finished = quests.isFinished(questName);
 			out.add("Quest(" + questName + ") = " + (finished == null ? "?" : String.valueOf(finished).toUpperCase()));
 		}
-		for (ActiveTarget.LevelNeed l : needLevels)
+		for (TargetNeeds.LevelNeed l : needLevels)
 		{
 			Integer level = levels.level(l.getSkill());
 			out.add("Skill(" + l.getSkill() + " ≥ " + l.getLevel() + ") = " + (level == null ? "?" : level >= l.getLevel() ? "TRUE" : "FALSE (" + level + ")"));
 		}
-		for (ActiveTarget.ItemNeed i : needItems)
+		for (TargetNeeds.ItemNeed i : needItems)
 		{
 			int have = items.owned(i);
 			out.add("Item(" + (i.getNames() != null && !i.getNames().isEmpty() ? String.join("/", i.getNames()) : String.valueOf(i.getId())) + " ×" + i.getCount() + ") = " + (have >= i.getCount() ? "TRUE" : "FALSE") + " " + have + "/" + i.getCount());
@@ -328,7 +328,7 @@ public class AutoCompletionManager
 				return;
 			}
 		}
-		for (ActiveTarget.LevelNeed l : needLevels)
+		for (TargetNeeds.LevelNeed l : needLevels)
 		{
 			Integer level = levels.level(l.getSkill());
 			if (level == null || level < l.getLevel())
@@ -347,7 +347,7 @@ public class AutoCompletionManager
 	private boolean itemsMet()
 	{
 		boolean any = false;
-		for (ActiveTarget.ItemNeed i : needItems)
+		for (TargetNeeds.ItemNeed i : needItems)
 		{
 			boolean held = items.owned(i) >= i.getCount();
 			if (anyItem ? held : !held)

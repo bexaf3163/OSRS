@@ -14,15 +14,15 @@ public class GoblinDiplomacyStageTest
 {
 	private static final String ID = "S2-12";
 
-	private static List<ActiveTarget.StageLine> lines()
+	private static List<TargetStages.StageLine> lines()
 	{
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
 			if (ID.equals(s.target.getStepId()) && s.target.getGuide() != null && s.target.getGuide().getStage() != null)
 			{
-				for (ActiveTarget.StageStep st : s.target.getGuide().getStage().getStages())
+				for (TargetStages.StageStep st : s.target.getGuide().getStage().getStages())
 				{
-					for (ActiveTarget.StageLine l : st.getSteps())
+					for (TargetStages.StageLine l : st.getSteps())
 					{
 						if ("goUpLadder".equals(l.getK()))
 						{
@@ -35,7 +35,7 @@ public class GoblinDiplomacyStageTest
 		throw new AssertionError("no S2-12 stage");
 	}
 
-	private static int indexOf(List<ActiveTarget.StageLine> lines, String key)
+	private static int indexOf(List<TargetStages.StageLine> lines, String key)
 	{
 		for (int i = 0; i < lines.size(); i++)
 		{
@@ -68,7 +68,7 @@ public class GoblinDiplomacyStageTest
 	@Test
 	public void eachMailInTheBag_movesTheListToTheNextCrate()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		StageTracker t = new StageTracker();
 		int x = 2954;
 		int y = 3497;
@@ -81,7 +81,7 @@ public class GoblinDiplomacyStageTest
 	@Test
 	public void mailsOfAnyColourCount_soARestartAfterDyeingDoesNotRollBack()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		int general = indexOf(lines, "talkToGeneral1");
 		// One plain, one blue and one orange mail: the three crates and both dyeings are done.
 		assertEquals(general, new StageTracker().update(ID, 3, lines, 2958, 3512, 0, bag(1, 1, 1)));
@@ -90,7 +90,7 @@ public class GoblinDiplomacyStageTest
 	@Test
 	public void theCrateUpstairsIsHighlightedWithTheLadder()
 	{
-		ActiveTarget.StageLine first = lines().get(0);
+		TargetStages.StageLine first = lines().get(0);
 		List<Integer> ids = first.getHl().getObj();
 		assertTrue(ids.toString(), ids.contains(16450) && ids.contains(16561));
 	}
@@ -98,7 +98,7 @@ public class GoblinDiplomacyStageTest
 	@Test
 	public void theOtherCratesHaveTilesForTheArrow()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		assertTrue(lines.get(indexOf(lines, "getCrate2")).hasPoint());
 		assertTrue(lines.get(indexOf(lines, "getCrate3")).hasPoint());
 	}

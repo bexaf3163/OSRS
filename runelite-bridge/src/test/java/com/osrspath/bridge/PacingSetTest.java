@@ -15,9 +15,9 @@ public class PacingSetTest
 	private static final int XP_30 = 13_363;
 
 	/** S3-08: Al Kharid warriors, 19 health: 76 style XP per warrior. */
-	private static ActiveTarget.Pacing warriors()
+	private static TargetNeeds.Pacing warriors()
 	{
-		ActiveTarget.Pacing p = new ActiveTarget.Pacing();
+		TargetNeeds.Pacing p = new TargetNeeds.Pacing();
 		p.setSkill("attack");
 		p.setAlso(List.of("strength", "defence"));
 		p.setTargetLevel(30);
@@ -136,7 +136,7 @@ public class PacingSetTest
 	@Test
 	public void oneSkillAsBefore()
 	{
-		ActiveTarget.Pacing p = new ActiveTarget.Pacing();
+		TargetNeeds.Pacing p = new TargetNeeds.Pacing();
 		p.setSkill("fishing");
 		p.setTargetLevel(20);
 		p.setTargetExp(4470);
@@ -150,14 +150,14 @@ public class PacingSetTest
 	}
 
 	/** S3-08 from 2.55.1: Strength to 20 first (4,470 XP), then Attack to 30; a Minotaur is 40 style XP. */
-	private static ActiveTarget.Pacing minotaurs()
+	private static TargetNeeds.Pacing minotaurs()
 	{
-		ActiveTarget.Pacing p = new ActiveTarget.Pacing();
+		TargetNeeds.Pacing p = new TargetNeeds.Pacing();
 		p.setSkill("strength");
 		p.setAlso(List.of("attack"));
 		p.setTargetLevel(20);
 		p.setTargetExp(4_470);
-		ActiveTarget.Pacing.Goal attack = new ActiveTarget.Pacing.Goal();
+		TargetNeeds.Pacing.Goal attack = new TargetNeeds.Pacing.Goal();
 		attack.setLevel(30);
 		attack.setExp(XP_30);
 		p.setGoals(java.util.Map.of("attack", attack));
@@ -169,7 +169,7 @@ public class PacingSetTest
 	@Test
 	public void eachSkillCountsToItsOwnGoal()
 	{
-		ActiveTarget.Pacing p = minotaurs();
+		TargetNeeds.Pacing p = minotaurs();
 		assertNull(p.problem());
 		assertFalse(p.oneGoal());
 		PacingSet set = new PacingSet(p);
@@ -231,20 +231,20 @@ public class PacingSetTest
 	@Test
 	public void goalsAreChecked()
 	{
-		ActiveTarget.Pacing defence = minotaurs();
-		ActiveTarget.Pacing.Goal g = new ActiveTarget.Pacing.Goal();
+		TargetNeeds.Pacing defence = minotaurs();
+		TargetNeeds.Pacing.Goal g = new TargetNeeds.Pacing.Goal();
 		g.setLevel(30);
 		g.setExp(XP_30);
 		defence.setGoals(java.util.Map.of("defence", g));
 		assertEquals("a goal for a skill the step does not train", "invalid pacing target", defence.problem());
-		ActiveTarget.Pacing silly = minotaurs();
-		ActiveTarget.Pacing.Goal bad = new ActiveTarget.Pacing.Goal();
+		TargetNeeds.Pacing silly = minotaurs();
+		TargetNeeds.Pacing.Goal bad = new TargetNeeds.Pacing.Goal();
 		bad.setLevel(120);
 		bad.setExp(XP_30);
 		silly.setGoals(java.util.Map.of("attack", bad));
 		assertEquals("invalid pacing target", silly.problem());
 		// Without goals (an app before 2.55.1) every skill has the one goal, as before.
-		ActiveTarget.Pacing old = minotaurs();
+		TargetNeeds.Pacing old = minotaurs();
 		old.setGoals(null);
 		assertTrue(old.oneGoal());
 		assertEquals(20, old.targetLevelOf("attack"));
@@ -253,15 +253,15 @@ public class PacingSetTest
 	@Test
 	public void severalSkillsOnlyInCombat()
 	{
-		ActiveTarget.Pacing ok = warriors();
+		TargetNeeds.Pacing ok = warriors();
 		assertNull(ok.problem());
-		ActiveTarget.Pacing fishing = warriors();
+		TargetNeeds.Pacing fishing = warriors();
 		fishing.setSkill("fishing");
 		assertEquals("invalid pacing skill list", fishing.problem());
-		ActiveTarget.Pacing repeat = warriors();
+		TargetNeeds.Pacing repeat = warriors();
 		repeat.setAlso(List.of("attack"));
 		assertEquals("invalid pacing skill list", repeat.problem());
-		ActiveTarget.Pacing magic = warriors();
+		TargetNeeds.Pacing magic = warriors();
 		magic.setAlso(List.of("magic"));
 		assertEquals("invalid pacing skill list", magic.problem());
 	}

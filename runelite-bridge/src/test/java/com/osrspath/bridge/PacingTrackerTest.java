@@ -11,9 +11,9 @@ import org.junit.Test;
 public class PacingTrackerTest
 {
 	/** Shrimp to Fishing 20: 4,470 XP, 10 per catch. */
-	private static ActiveTarget.Pacing shrimp(Double seconds)
+	private static TargetNeeds.Pacing shrimp(Double seconds)
 	{
-		ActiveTarget.Pacing p = new ActiveTarget.Pacing();
+		TargetNeeds.Pacing p = new TargetNeeds.Pacing();
 		p.setSkill("fishing");
 		p.setTargetLevel(20);
 		p.setTargetExp(4470);

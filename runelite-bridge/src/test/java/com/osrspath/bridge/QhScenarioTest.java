@@ -19,7 +19,7 @@ public class QhScenarioTest
 	private static final int RUM = 431;
 	private static final int WHITE_APRON = 1005;
 
-	private static List<ActiveTarget.StageLine> lines()
+	private static List<TargetStages.StageLine> lines()
 	{
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
@@ -53,7 +53,7 @@ public class QhScenarioTest
 	@Test
 	public void allStageLinesHaveAQuestHelperStepKey()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		assertEquals(10, lines.size());
 		String[] keys = {"smuggleRum.goToKaramja", "smuggleRum.talkToZambo", "smuggleRum.talkToLuthas", "smuggleRum.addRumToCrate",
 			"smuggleRum.addBananasToCrate", "smuggleRum.talkToLuthasAgain", "smuggleRum.talkToCustomsOfficer", "smuggleRum.getWhiteApron",

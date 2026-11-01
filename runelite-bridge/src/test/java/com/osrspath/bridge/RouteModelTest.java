@@ -30,7 +30,7 @@ public class RouteModelTest
 	{
 		ActiveTarget t = new ActiveTarget();
 		t.setStepId("S9-03");
-		ActiveTarget.Trigger tr = new ActiveTarget.Trigger();
+		TargetNeeds.Trigger tr = new TargetNeeds.Trigger();
 		tr.setType("VARBIT_CHANGED");
 		tr.setVarbitId(2326);
 		tr.setTargetValue(40);
@@ -126,18 +126,18 @@ public class RouteModelTest
 
 	// ---- a tool counts in any tier
 
-	private static ActiveTarget.StageLine pickaxeLine(String alt)
+	private static TargetStages.StageLine pickaxeLine(String alt)
 	{
-		ActiveTarget.StageLine l = GSON.fromJson("{\"t\":\"Mine a Structural pillar.\",\"x\":3050,\"y\":9570,\"plane\":0,\"k\":\"defeatGuardian\",\"mh\":7,"
-			+ "\"pre\":[{\"item\":\"Bronze pickaxe\",\"id\":1265" + alt + "}]}", ActiveTarget.StageLine.class);
-		assertNull(ActiveTarget.Pre.problem(l.getPre()));
+		TargetStages.StageLine l = GSON.fromJson("{\"t\":\"Mine a Structural pillar.\",\"x\":3050,\"y\":9570,\"plane\":0,\"k\":\"defeatGuardian\",\"mh\":7,"
+			+ "\"pre\":[{\"item\":\"Bronze pickaxe\",\"id\":1265" + alt + "}]}", TargetStages.StageLine.class);
+		assertNull(TargetStages.Pre.problem(l.getPre()));
 		return l;
 	}
 
 	@Test
 	public void aBetterPickaxeSatisfiesThePreflight()
 	{
-		ActiveTarget.StageLine l = pickaxeLine(",\"alt\":[\"Iron pickaxe\",\"Rune pickaxe\"]");
+		TargetStages.StageLine l = pickaxeLine(",\"alt\":[\"Iron pickaxe\",\"Rune pickaxe\"]");
 		assertNotNull("no pickaxe at all is missing", Preflight.check("S3-04", l, true, new ItemCounts(), null, 3050, 9570, 0, Collections.emptyList()));
 		assertNull("a rune pickaxe does the job", Preflight.check("S3-04", l, true, bag(1275, "Rune pickaxe", 1), null, 3050, 9570, 0, Collections.emptyList()));
 		assertNull("the named one still counts", Preflight.check("S3-04", l, true, bag(1265, "Bronze pickaxe", 1), null, 3050, 9570, 0, Collections.emptyList()));
@@ -146,28 +146,28 @@ public class RouteModelTest
 	@Test
 	public void withoutAltOnlyTheNamedItemCounts()
 	{
-		ActiveTarget.StageLine l = pickaxeLine("");
+		TargetStages.StageLine l = pickaxeLine("");
 		assertNotNull(Preflight.check("S3-04", l, true, bag(1275, "Rune pickaxe", 1), null, 3050, 9570, 0, Collections.emptyList()));
 	}
 
 	@Test
 	public void aTooLongOrEmptyAltIsRefused()
 	{
-		ActiveTarget.StageLine empty = GSON.fromJson("{\"t\":\"x\",\"pre\":[{\"item\":\"Bronze pickaxe\",\"alt\":[\"\"]}]}", ActiveTarget.StageLine.class);
-		assertNotNull(ActiveTarget.Pre.problem(empty.getPre()));
+		TargetStages.StageLine empty = GSON.fromJson("{\"t\":\"x\",\"pre\":[{\"item\":\"Bronze pickaxe\",\"alt\":[\"\"]}]}", TargetStages.StageLine.class);
+		assertNotNull(TargetStages.Pre.problem(empty.getPre()));
 		StringBuilder many = new StringBuilder("[");
 		for (int i = 0; i < 17; i++)
 		{
 			many.append(i == 0 ? "" : ",").append("\"Pickaxe ").append(i).append('"');
 		}
-		ActiveTarget.StageLine tooMany = GSON.fromJson("{\"t\":\"x\",\"pre\":[{\"item\":\"Bronze pickaxe\",\"alt\":" + many + "]}]}", ActiveTarget.StageLine.class);
-		assertNotNull(ActiveTarget.Pre.problem(tooMany.getPre()));
+		TargetStages.StageLine tooMany = GSON.fromJson("{\"t\":\"x\",\"pre\":[{\"item\":\"Bronze pickaxe\",\"alt\":" + many + "]}]}", TargetStages.StageLine.class);
+		assertNotNull(TargetStages.Pre.problem(tooMany.getPre()));
 	}
 
 	@Test
 	public void theChecklistAndThePanelCountAlternativesToo()
 	{
-		ActiveTarget.ChecklistItem pick = new ActiveTarget.ChecklistItem();
+		TargetGuide.ChecklistItem pick = new TargetGuide.ChecklistItem();
 		pick.setName("Bronze pickaxe");
 		pick.setId(1265);
 		pick.setCount(1);
@@ -176,7 +176,7 @@ public class RouteModelTest
 		assertTrue(r.isReady());
 		assertEquals(1, r.getRows().get(0).getHave());
 
-		ActiveTarget.GuideItem g = GSON.fromJson("{\"name\":\"Bronze pickaxe\",\"id\":1265,\"alt\":[\"Rune pickaxe\"]}", ActiveTarget.GuideItem.class);
+		TargetGuide.GuideItem g = GSON.fromJson("{\"name\":\"Bronze pickaxe\",\"id\":1265,\"alt\":[\"Rune pickaxe\"]}", TargetGuide.GuideItem.class);
 		assertEquals(StepGuide.Have.BAG, StepGuide.item(g, Collections.emptyList(), bag(1275, "Rune pickaxe", 1), null).getHave());
 		assertFalse(StepGuide.item(g, Collections.emptyList(), new ItemCounts(), null).getHave() == StepGuide.Have.BAG);
 	}

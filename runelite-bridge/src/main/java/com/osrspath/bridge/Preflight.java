@@ -112,7 +112,7 @@ final class Preflight
 	 * How many of the item the container holds: exactly by ID with one, else by name. Food counts by healing, in pieces of the named food: 10 Cooked meat
 	 * (3 each) are 4 Trout (7 each). A food the table does not know counts as one piece of the named one, never more.
 	 */
-	static int count(ItemCounts items, ActiveTarget.Pre p)
+	static int count(ItemCounts items, TargetStages.Pre p)
 	{
 		Integer unit = Foods.heals(p.getItem());
 		if (unit != null)
@@ -140,7 +140,7 @@ final class Preflight
 	 * The first missing item of the line and where to get it; null means the line may go on. bagKnown is false before the inventory was read,
 	 * bank is null while the bank was never seen.
 	 */
-	private static String foodBankInstruction(ActiveTarget.Pre p, ItemCounts carried, ItemCounts notes, ItemCounts bank)
+	private static String foodBankInstruction(TargetStages.Pre p, ItemCounts carried, ItemCounts notes, ItemCounts bank)
 	{
 		Integer healing = Foods.heals(p.getItem());
 		if (healing == null) return null;
@@ -164,20 +164,20 @@ final class Preflight
 		return (unnote ? "Withdraw or unnote " : "Take ") + String.join(", ", pieces) + " from the bank";
 	}
 
-	static Block check(String stepId, ActiveTarget.StageLine line, boolean bagKnown, ItemCounts carried, ItemCounts bank, int px, int py, int plane,
-		List<ActiveTarget.Spot> banks)
+	static Block check(String stepId, TargetStages.StageLine line, boolean bagKnown, ItemCounts carried, ItemCounts bank, int px, int py, int plane,
+		List<TargetStages.Spot> banks)
 	{
 		return check(stepId, line, bagKnown, carried, ItemCounts.EMPTY, bank, px, py, plane, banks);
 	}
 
-	static Block check(String stepId, ActiveTarget.StageLine line, boolean bagKnown, ItemCounts carried, ItemCounts notes, ItemCounts bank, int px, int py, int plane,
-		List<ActiveTarget.Spot> banks)
+	static Block check(String stepId, TargetStages.StageLine line, boolean bagKnown, ItemCounts carried, ItemCounts notes, ItemCounts bank, int px, int py, int plane,
+		List<TargetStages.Spot> banks)
 	{
 		if (line == null || line.getPre() == null || line.getPre().isEmpty() || !bagKnown || carried == null)
 		{
 			return null;
 		}
-		for (ActiveTarget.Pre p : line.getPre())
+		for (TargetStages.Pre p : line.getPre())
 		{
 			int have = count(carried, p);
 			if (have >= p.need())
@@ -190,7 +190,7 @@ final class Preflight
 			String foodTake = foodBankInstruction(p, carried, notes, bank);
 			if (count(ItemCounts.sum(carried, notes, bank), p) >= p.need())
 			{
-				ActiveTarget.Spot b = nearest(banks, px, py, plane);
+				TargetStages.Spot b = nearest(banks, px, py, plane);
 				if (b != null)
 				{
 					return new Block(p.getItem(), p.need(), have, Via.BANK,
@@ -205,7 +205,7 @@ final class Preflight
 			}
 			if (bank == null)
 			{
-				ActiveTarget.Spot b = nearest(banks, px, py, plane);
+				TargetStages.Spot b = nearest(banks, px, py, plane);
 				return new Block(p.getItem(), p.need(), have, Via.CHECK_BANK,
 					b == null ? null : target(stepId, "Check your bank for " + p.getItem(), b.getX(), b.getY(), b.getPlane(), null, null), sx, sy, sp);
 			}
@@ -219,11 +219,11 @@ final class Preflight
 	static final int STAIRS_TILES_PER_FLOOR = 15;
 
 	/** The nearest bank, the stairs to one on another floor counted as the app's bankTiles does. */
-	static ActiveTarget.Spot nearest(List<ActiveTarget.Spot> banks, int px, int py, int plane)
+	static TargetStages.Spot nearest(List<TargetStages.Spot> banks, int px, int py, int plane)
 	{
-		ActiveTarget.Spot best = null;
+		TargetStages.Spot best = null;
 		double bestD = Double.MAX_VALUE;
-		for (ActiveTarget.Spot b : banks == null ? Collections.<ActiveTarget.Spot>emptyList() : banks)
+		for (TargetStages.Spot b : banks == null ? Collections.<TargetStages.Spot>emptyList() : banks)
 		{
 			double d = Math.sqrt(DangerRadar.distanceSq(px, py, b.getX(), b.getY())) + Math.abs(b.getPlane() - plane) * STAIRS_TILES_PER_FLOOR;
 			if (d < bestD)

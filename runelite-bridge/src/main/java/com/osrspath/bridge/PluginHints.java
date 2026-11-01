@@ -138,7 +138,7 @@ final class PluginHints
 	/** The step's pacing again: a new step, the setting was turned on or the character changed. */
 	void setupPacing()
 	{
-		ActiveTarget.Pacing p = plugin.target == null ? null : plugin.target.getPacing();
+		TargetNeeds.Pacing p = plugin.target == null ? null : plugin.target.getPacing();
 		plugin.pacing = p == null || !plugin.config.smartPacing() ? null : new PacingSet(p);
 		if (plugin.pacing != null && plugin.client.getGameState() == GameState.LOGGED_IN)
 		{
@@ -153,7 +153,7 @@ final class PluginHints
 		long now = System.currentTimeMillis();
 		for (String skill : plugin.pacing.skills())
 		{
-			plugin.pacing.update(skill, plugin.client.getSkillExperience(ActiveTarget.skillOf(skill)), now);
+			plugin.pacing.update(skill, plugin.client.getSkillExperience(TargetNeeds.skillOf(skill)), now);
 		}
 	}
 
@@ -164,7 +164,7 @@ final class PluginHints
 			return null;
 		}
 		PacingTracker.Snapshot s = plugin.pacing.snapshot();
-		ActiveTarget.Pacing p = plugin.pacing.getPacing();
+		TargetNeeds.Pacing p = plugin.pacing.getPacing();
 		Map<String, Object> m = new LinkedHashMap<>();
 		m.put("skill", plugin.pacing.getActive());
 		// The goal of the skill shown now: a combat step can have one per skill (S3-08: Strength 20, Attack 30).

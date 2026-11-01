@@ -156,7 +156,7 @@ final class StageTracker
 	 * Recalculate the cursor. stepId and stage are which step and which stage are shown; lines are its steps; x, y, plane are the player;
 	 * bag is the bag, worn items and notes. Returns the current step (zero-based).
 	 */
-	int update(String stepId, int stage, List<ActiveTarget.StageLine> lines, int x, int y, int plane, ItemCounts bag)
+	int update(String stepId, int stage, List<TargetStages.StageLine> lines, int x, int y, int plane, ItemCounts bag)
 	{
 		return update(stepId, stage, lines, x, y, plane, bag, null);
 	}
@@ -165,7 +165,7 @@ final class StageTracker
 	 * The same, but with a Quest Helper machine pick. If it has evidence (pick is not null), it sets the cursor, as in Quest Helper:
 	 * position and items keep counting, but only when there is no evidence. Viewing "back" and a pressed "done" are stronger.
 	 */
-	int update(String stepId, int stage, List<ActiveTarget.StageLine> lines, int x, int y, int plane, ItemCounts bag, QhPick pick)
+	int update(String stepId, int stage, List<TargetStages.StageLine> lines, int x, int y, int plane, ItemCounts bag, QhPick pick)
 	{
 		qhStrong = false;
 		int before = cursor;
@@ -184,7 +184,7 @@ final class StageTracker
 		return result;
 	}
 
-	private int updateByFacts(String stepId, int stage, List<ActiveTarget.StageLine> lines, int x, int y, int plane, ItemCounts bag)
+	private int updateByFacts(String stepId, int stage, List<TargetStages.StageLine> lines, int x, int y, int plane, ItemCounts bag)
 	{
 		String next = stepId + "#" + stage;
 		boolean fresh = !next.equals(key);
@@ -219,7 +219,7 @@ final class StageTracker
 		cursor = StepGuide.advance(lines, cursor, x, y, plane, window, bag);
 		for (int i = 0; i < lines.size(); i++)
 		{
-			ActiveTarget.StageLine l = lines.get(i);
+			TargetStages.StageLine l = lines.get(i);
 			if (l.hasPoint() && l.getPlane() == plane && Math.abs(l.getX() - x) <= VISIT_RADIUS && Math.abs(l.getY() - y) <= VISIT_RADIUS)
 			{
 				seen.add(i);
@@ -238,7 +238,7 @@ final class StageTracker
 				{
 					cursor = g;
 					gated = true;
-					ActiveTarget.StageLine stop = lines.get(g);
+					TargetStages.StageLine stop = lines.get(g);
 					if (bag != null && stop.hasNeed() && !delivered.contains(g) && bag.count(null, stop.getNeed()) > 0)
 					{
 						warning = stop.getNeed() + " is still in your bag - first: " + stop.shown();
@@ -277,7 +277,7 @@ final class StageTracker
 	 * Watch the items of "give X" steps: how many X were in the bag and whether it left near the step's point; then the step is handed in,
 	 * and so is everything before it (you cannot hand in without having done the previous one).
 	 */
-	private void observe(List<ActiveTarget.StageLine> lines, int x, int y, int plane, ItemCounts bag)
+	private void observe(List<TargetStages.StageLine> lines, int x, int y, int plane, ItemCounts bag)
 	{
 		if (bag == null)
 		{
@@ -286,7 +286,7 @@ final class StageTracker
 		int last = lines.size() - 1;
 		for (int i = 0; i < lines.size(); i++)
 		{
-			ActiveTarget.StageLine l = lines.get(i);
+			TargetStages.StageLine l = lines.get(i);
 			if (!l.hasNeed() || delivered.contains(i))
 			{
 				continue;
@@ -315,15 +315,15 @@ final class StageTracker
 		}
 	}
 
-	private static boolean near(ActiveTarget.StageLine l, int x, int y, int plane)
+	private static boolean near(TargetStages.StageLine l, int x, int y, int plane)
 	{
 		return l.getPlane() == plane && Math.abs(l.getX() - x) <= DELIVER_RADIUS && Math.abs(l.getY() - y) <= DELIVER_RADIUS;
 	}
 
 	/** A step is done by itself: handed in (need) or the needed item is in the bag now (has). */
-	private boolean ownSatisfied(List<ActiveTarget.StageLine> lines, int i, ItemCounts bag)
+	private boolean ownSatisfied(List<TargetStages.StageLine> lines, int i, ItemCounts bag)
 	{
-		ActiveTarget.StageLine l = lines.get(i);
+		TargetStages.StageLine l = lines.get(i);
 		return delivered.contains(i) || l.holds(bag);
 	}
 
@@ -331,13 +331,13 @@ final class StageTracker
 	 * A step is done: by itself, or because the item it obtained (has) has already moved on - the next step handed it in
 	 * (need of the same item). So "buy beer" stays done when the beer has been given to Dr. Harlow and the stake is in the bag instead.
 	 */
-	private boolean satisfied(List<ActiveTarget.StageLine> lines, int i, ItemCounts bag)
+	private boolean satisfied(List<TargetStages.StageLine> lines, int i, ItemCounts bag)
 	{
 		if (ownSatisfied(lines, i, bag))
 		{
 			return true;
 		}
-		ActiveTarget.StageLine l = lines.get(i);
+		TargetStages.StageLine l = lines.get(i);
 		if (!l.hasHas())
 		{
 			return false;
@@ -345,7 +345,7 @@ final class StageTracker
 		String item = ActiveTarget.nameKey(l.primaryHas());
 		for (int j = i + 1; j < lines.size(); j++)
 		{
-			ActiveTarget.StageLine later = lines.get(j);
+			TargetStages.StageLine later = lines.get(j);
 			if (later.hasNeed() && ActiveTarget.nameKey(later.getNeed()).equals(item) && ownSatisfied(lines, j, bag))
 			{
 				return true;
@@ -360,7 +360,7 @@ final class StageTracker
 	 * items can be collected in any order. The last step of a stage is not skipped: the stage ends when the game changes the
 	 * variable's value.
 	 */
-	private int skip(List<ActiveTarget.StageLine> lines, int from, ItemCounts bag)
+	private int skip(List<TargetStages.StageLine> lines, int from, ItemCounts bag)
 	{
 		int last = lines.size() - 1;
 		int at = from;
@@ -374,7 +374,7 @@ final class StageTracker
 			int ahead = -1;
 			for (int k = at + 1; k < last && k <= at + StepGuide.STEP_WINDOW; k++)
 			{
-				ActiveTarget.StageLine skipped = lines.get(k - 1);
+				TargetStages.StageLine skipped = lines.get(k - 1);
 				if (skipped.hasHas() || skipped.hasNeed())
 				{
 					break;
@@ -395,7 +395,7 @@ final class StageTracker
 	}
 
 	/** The first not-yet-handed-in "give X" step while X is in the bag: the cursor does not go past it. -1 means there is none. */
-	private int blocker(List<ActiveTarget.StageLine> lines, int upTo, ItemCounts bag)
+	private int blocker(List<TargetStages.StageLine> lines, int upTo, ItemCounts bag)
 	{
 		if (bag == null)
 		{
@@ -403,7 +403,7 @@ final class StageTracker
 		}
 		for (int i = 0; i <= Math.min(upTo, lines.size() - 1); i++)
 		{
-			ActiveTarget.StageLine l = lines.get(i);
+			TargetStages.StageLine l = lines.get(i);
 			if (l.hasNeed() && !satisfied(lines, i, bag) && bag.count(null, l.getNeed()) > 0)
 			{
 				return i;
@@ -412,7 +412,7 @@ final class StageTracker
 		return -1;
 	}
 
-	private void clamp(List<ActiveTarget.StageLine> lines, ItemCounts bag)
+	private void clamp(List<TargetStages.StageLine> lines, ItemCounts bag)
 	{
 		int b = blocker(lines, cursor - 1, bag);
 		if (b >= 0 && b < cursor)
@@ -439,15 +439,15 @@ final class StageTracker
 	}
 
 	/** A transition step ("Enter...", "Go down...", "Return to..."): arriving at the place means doing it. */
-	static boolean isMove(ActiveTarget.StageLine l)
+	static boolean isMove(TargetStages.StageLine l)
 	{
 		return !l.hasHas() && !l.hasNeed() && MOVE.matcher(l.shown().trim()).find();
 	}
 
 	/** Whether this step can be passed by position: it is a transition, confirmed by an item, or the player was at its point. */
-	private boolean passable(List<ActiveTarget.StageLine> lines, int j, ItemCounts bag)
+	private boolean passable(List<TargetStages.StageLine> lines, int j, ItemCounts bag)
 	{
-		ActiveTarget.StageLine l = lines.get(j);
+		TargetStages.StageLine l = lines.get(j);
 		if (isMove(l) || satisfied(lines, j, bag))
 		{
 			return true;
@@ -465,14 +465,14 @@ final class StageTracker
 	 * Draynor Manor). Only for steps where the game has no other way to confirm the deed: this and the next step have a tile,
 	 * there are no has/need conditions on them, the points differ and are on the same plane. Standing by an NPC without leaving keeps the step.
 	 */
-	private void leave(List<ActiveTarget.StageLine> lines, int x, int y, int plane)
+	private void leave(List<TargetStages.StageLine> lines, int x, int y, int plane)
 	{
 		if (visitedAt != cursor)
 		{
 			visitedAt = cursor;
 			visited = false;
 		}
-		ActiveTarget.StageLine cur = lines.get(cursor);
+		TargetStages.StageLine cur = lines.get(cursor);
 		if (!isMove(cur))
 		{
 			// Walking away from "fill the crate" does not mean filling it: only transitions are closed by leaving.
@@ -486,7 +486,7 @@ final class StageTracker
 		{
 			return;
 		}
-		ActiveTarget.StageLine nx = lines.get(cursor + 1);
+		TargetStages.StageLine nx = lines.get(cursor + 1);
 		// The next step may have its own conditions (an item in the bag): that does not prevent finishing the transition - it is finished when the player left.
 		if (!cur.hasPoint() || !nx.hasPoint() || cur.hasNeed() || cur.hasHas() || cur.getPlane() != plane || nx.getPlane() != plane || sameSpot(cur, nx))
 		{
@@ -505,15 +505,15 @@ final class StageTracker
 	 * Whether the player leaves the step by themselves: the next step has a tile not at the same place (arrived: the cursor moved on) or an item (obtained
 	 * or handed in); the last step of a stage is changed by the game. Otherwise the step is manual only: in a row at one place or without a place, nothing tells them apart.
 	 */
-	static boolean needsManualStep(List<ActiveTarget.StageLine> lines, int i)
+	static boolean needsManualStep(List<TargetStages.StageLine> lines, int i)
 	{
 		if (lines == null || i < 0 || i >= lines.size() - 1)
 		{
 			return false;
 		}
 		// It is the next step that decides: while it is not visible in the game, its text will not show (two levers in a row: the second is hidden).
-		ActiveTarget.StageLine cur = lines.get(i);
-		ActiveTarget.StageLine nx = lines.get(i + 1);
+		TargetStages.StageLine cur = lines.get(i);
+		TargetStages.StageLine nx = lines.get(i + 1);
 		if (nx.hasHas() || nx.hasNeed())
 		{
 			return false;
@@ -526,14 +526,14 @@ final class StageTracker
 		return !(nx.hasPoint() && !(cur.hasPoint() && sameSpot(cur, nx)));
 	}
 
-	private static boolean sameSpot(ActiveTarget.StageLine a, ActiveTarget.StageLine b)
+	private static boolean sameSpot(TargetStages.StageLine a, TargetStages.StageLine b)
 	{
 		return a.getPlane().equals(b.getPlane()) && Math.abs(a.getX() - b.getX()) <= StepGuide.STEP_RADIUS
 			&& Math.abs(a.getY() - b.getY()) <= StepGuide.STEP_RADIUS;
 	}
 
 	/** Whether "done" can be pressed on the current step: it is one the game will not see by itself. */
-	boolean canStepForward(List<ActiveTarget.StageLine> lines)
+	boolean canStepForward(List<TargetStages.StageLine> lines)
 	{
 		// The button also stays when the step is led by the Quest Helper machine: if the game message did not arrive or was reworded, the player is not stuck.
 		// A pressed "done" is stronger than the machine (floor): it will not return the cursor back.
@@ -549,7 +549,7 @@ final class StageTracker
 	}
 
 	/** Click "done": only on a step that cannot be determined by the game; it does nothing on the others. true means the cursor moved. */
-	boolean forward(List<ActiveTarget.StageLine> lines)
+	boolean forward(List<TargetStages.StageLine> lines)
 	{
 		if (!canStepForward(lines))
 		{

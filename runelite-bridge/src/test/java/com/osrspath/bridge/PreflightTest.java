@@ -27,11 +27,11 @@ public class PreflightTest
 	private static final String PIE = "{\"t\":\"Talk to Thurgo.\",\"x\":3000,\"y\":3145,\"plane\":0,\"pre\":[{\"item\":\"Redberry pie\",\"id\":2325}]}";
 	private static final String BARS = "{\"t\":\"Return to Thurgo.\",\"x\":3000,\"y\":3145,\"plane\":0,\"pre\":[{\"item\":\"Blurite ore\"},{\"item\":\"Iron bar\",\"n\":2}]}";
 
-	private static final List<ActiveTarget.Spot> BANKS = List.of(spot(3185, 3436, "Varrock West"), spot(2946, 3368, "Falador West"), spot(3165, 3490, "Grand Exchange"));
+	private static final List<TargetStages.Spot> BANKS = List.of(spot(3185, 3436, "Varrock West"), spot(2946, 3368, "Falador West"), spot(3165, 3490, "Grand Exchange"));
 
-	private static ActiveTarget.Spot spot(int x, int y, String label)
+	private static TargetStages.Spot spot(int x, int y, String label)
 	{
-		ActiveTarget.Spot s = new ActiveTarget.Spot();
+		TargetStages.Spot s = new TargetStages.Spot();
 		s.setX(x);
 		s.setY(y);
 		s.setPlane(0);
@@ -39,10 +39,10 @@ public class PreflightTest
 		return s;
 	}
 
-	private static ActiveTarget.StageLine line(String json)
+	private static TargetStages.StageLine line(String json)
 	{
-		ActiveTarget.StageLine l = new Gson().fromJson(json, ActiveTarget.StageLine.class);
-		assertNull(ActiveTarget.Pre.problem(l.getPre()));
+		TargetStages.StageLine l = new Gson().fromJson(json, TargetStages.StageLine.class);
+		assertNull(TargetStages.Pre.problem(l.getPre()));
 		return l;
 	}
 
@@ -56,7 +56,7 @@ public class PreflightTest
 		return c;
 	}
 
-	private static Preflight.Block check(ActiveTarget.StageLine l, ItemCounts carried, ItemCounts bank, int px, int py)
+	private static Preflight.Block check(TargetStages.StageLine l, ItemCounts carried, ItemCounts bank, int px, int py)
 	{
 		return Preflight.check("S3-02", l, true, carried, bank, px, py, 0, BANKS);
 	}
@@ -92,7 +92,7 @@ public class PreflightTest
 	@Test
 	public void theDraynorManorCabbageDoesNotCountButTheFieldCabbageDoes()
 	{
-		ActiveTarget.StageLine l = line(DOOR);
+		TargetStages.StageLine l = line(DOOR);
 		assertNotNull(check(l, bag(1967, "Cabbage", 1), null, 3016, 3514));
 		assertNull(check(l, bag(1965, "Cabbage", 1), null, 3016, 3514));
 	}
@@ -134,7 +134,7 @@ public class PreflightTest
 	@Test
 	public void countsAreChecked()
 	{
-		ActiveTarget.StageLine l = line(BARS);
+		TargetStages.StageLine l = line(BARS);
 		Preflight.Block b = check(l, bag(1, "Blurite ore", 1, 2, "Iron bar", 1), null, 3000, 3145);
 		assertEquals("Iron bar", b.getItem());
 		assertEquals(2, b.getNeed());
@@ -163,7 +163,7 @@ public class PreflightTest
 	@Test
 	public void theKeyChangesWithWhatIsMissingAndWhereItIs()
 	{
-		ActiveTarget.StageLine l = line(BARS);
+		TargetStages.StageLine l = line(BARS);
 		String first = check(l, new ItemCounts(), null, 3000, 3145).key();
 		String second = check(l, bag(1, "Blurite ore", 1), null, 3000, 3145).key();
 		assertTrue(!first.equals(second));
@@ -173,28 +173,28 @@ public class PreflightTest
 	@Test
 	public void badGuardsAreRefused()
 	{
-		ActiveTarget.Pre p = new ActiveTarget.Pre();
+		TargetStages.Pre p = new TargetStages.Pre();
 		p.setItem("");
-		assertEquals("invalid pre-flight item", ActiveTarget.Pre.problem(Collections.singletonList(p)));
+		assertEquals("invalid pre-flight item", TargetStages.Pre.problem(Collections.singletonList(p)));
 		p.setItem("Cabbage");
 		p.setAt(List.of(3058, 3290));
-		assertEquals("invalid pre-flight item", ActiveTarget.Pre.problem(Collections.singletonList(p)));
+		assertEquals("invalid pre-flight item", TargetStages.Pre.problem(Collections.singletonList(p)));
 		p.setAt(List.of(3058, 3290, 0));
 		p.setN(0);
-		assertEquals("invalid pre-flight item", ActiveTarget.Pre.problem(Collections.singletonList(p)));
+		assertEquals("invalid pre-flight item", TargetStages.Pre.problem(Collections.singletonList(p)));
 		p.setN(1);
-		assertNull(ActiveTarget.Pre.problem(Collections.singletonList(p)));
-		assertNull(ActiveTarget.Pre.problem(null));
-		ActiveTarget.Spot bad = new ActiveTarget.Spot();
+		assertNull(TargetStages.Pre.problem(Collections.singletonList(p)));
+		assertNull(TargetStages.Pre.problem(null));
+		TargetStages.Spot bad = new TargetStages.Spot();
 		assertEquals("invalid point", bad.problem());
 	}
 
 	@Test
 	public void anUpstairsBankCostsItsStairs()
 	{
-		ActiveTarget.Spot castle = spot(3208, 3220, "Lumbridge Bank (castle top floor)");
+		TargetStages.Spot castle = spot(3208, 3220, "Lumbridge Bank (castle top floor)");
 		castle.setPlane(2);
-		List<ActiveTarget.Spot> banks = List.of(spot(3093, 3243, "Draynor Bank"), castle);
+		List<TargetStages.Spot> banks = List.of(spot(3093, 3243, "Draynor Bank"), castle);
 		assertEquals("in the courtyard the castle's bank is nearest", castle, Preflight.nearest(banks, 3222, 3219, 0));
 		assertEquals("halfway to Draynor the stairs tip it", "Draynor Bank", Preflight.nearest(banks, 3162, 3235, 0).getLabel());
 		assertEquals("on the top floor already, no stairs", castle, Preflight.nearest(banks, 3150, 3225, 2));
@@ -224,7 +224,7 @@ public class PreflightTest
 	@Test
 	public void partialBitesAcrossContainersLeadToTheBank()
 	{
-		ActiveTarget.StageLine l = line("{\"pre\":[{\"item\":\"Salmon\",\"n\":1,\"alt\":[\"Shrimps\",\"Cooked meat\"]}]}");
+		TargetStages.StageLine l = line("{\"pre\":[{\"item\":\"Salmon\",\"n\":1,\"alt\":[\"Shrimps\",\"Cooked meat\"]}]}");
 		Preflight.Block block = check(l, bag(315, "Shrimps", 2), bag(2142, "Cooked meat", 1), 3222, 3218);
 		assertNotNull(block);
 		assertEquals(Preflight.Via.BANK, block.getVia());
@@ -233,7 +233,7 @@ public class PreflightTest
 	@Test
 	public void foodGuardNamesActualBankPiecesAndRefreshesItsKey()
 	{
-		ActiveTarget.StageLine l = line("{\"pre\":[{\"item\":\"Tuna\",\"id\":361,\"n\":4,\"alt\":[\"Salmon\",\"Trout\"]}]}");
+		TargetStages.StageLine l = line("{\"pre\":[{\"item\":\"Tuna\",\"id\":361,\"n\":4,\"alt\":[\"Salmon\",\"Trout\"]}]}");
 		Preflight.Block salmon = check(l, bag(), bag(329, "Salmon", 5), 3047, 3236);
 		assertEquals("Take 5 Salmon from the bank", salmon.getTarget().getLabel());
 		assertTrue(salmon.reason().contains("Take 5 Salmon"));

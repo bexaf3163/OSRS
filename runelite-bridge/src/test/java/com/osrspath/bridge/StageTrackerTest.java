@@ -28,7 +28,7 @@ public class StageTrackerTest
 	private static final int[] SQUIRE = {2978, 3341};
 	private static final int[] FAR = {3200, 3200};
 
-	private static List<ActiveTarget.StageLine> lines()
+	private static List<TargetStages.StageLine> lines()
 	{
 		return QuestStageTest.thurgoOre().getGuide().getStage().getStages().get(0).getSteps();
 	}
@@ -73,8 +73,8 @@ public class StageTrackerTest
 	@Test
 	public void stepsWithItemsAreNotJumped_itemsInAnyOrder()
 	{
-		List<ActiveTarget.StageLine> l = new Gson().fromJson("[{\"t\":\"A\",\"has\":\"Onion\"},{\"t\":\"B\",\"has\":\"Eye of newt\"},{\"t\":\"C\"}]",
-			new TypeToken<List<ActiveTarget.StageLine>>() { }.getType());
+		List<TargetStages.StageLine> l = new Gson().fromJson("[{\"t\":\"A\",\"has\":\"Onion\"},{\"t\":\"B\",\"has\":\"Eye of newt\"},{\"t\":\"C\"}]",
+			new TypeToken<List<TargetStages.StageLine>>() { }.getType());
 		ItemCounts onlyNewt = new ItemCounts();
 		onlyNewt.add(221, ActiveTarget.nameKey("Eye of newt"), 1);
 		StageTracker t = new StageTracker();
@@ -133,17 +133,17 @@ public class StageTrackerTest
 	}
 
 	/** Levers in a row at one place: the game shows nothing between them. */
-	private static List<ActiveTarget.StageLine> levers()
+	private static List<TargetStages.StageLine> levers()
 	{
 		return new Gson().fromJson("[{\"t\":\"A\",\"x\":3100,\"y\":3300,\"plane\":0},{\"t\":\"B\",\"x\":3101,\"y\":3301,\"plane\":0},"
 			+ "{\"t\":\"C\",\"x\":3200,\"y\":3300,\"plane\":0},{\"t\":\"D\"},{\"t\":\"E\",\"x\":3300,\"y\":3300,\"plane\":0}]",
-			new TypeToken<List<ActiveTarget.StageLine>>() { }.getType());
+			new TypeToken<List<TargetStages.StageLine>>() { }.getType());
 	}
 
 	@Test
 	public void forwardByClick_onlyWhereTheGameCannotSee_inARowAtOnePlace()
 	{
-		List<ActiveTarget.StageLine> l = levers();
+		List<TargetStages.StageLine> l = levers();
 		assertTrue("A->B at one place", StageTracker.needsManualStep(l, 0));
 		assertFalse("B->C: C is at another place: arrived, the cursor moved on", StageTracker.needsManualStep(l, 1));
 		assertTrue("C->D: D has no place or item: manual", StageTracker.needsManualStep(l, 2));
@@ -164,7 +164,7 @@ public class StageTrackerTest
 	{
 		AtomicLong now = new AtomicLong(0);
 		StageTracker t = new StageTracker(now::get);
-		List<ActiveTarget.StageLine> l = levers();
+		List<TargetStages.StageLine> l = levers();
 		t.update("S2-11", 0, l, 3101, 3301, 0, null);
 		t.forward(l);
 		t.back();
@@ -297,14 +297,14 @@ public class StageTrackerTest
 	private static final int[] STAIRS = {3116, 3358};
 	private static final int[] COFFIN = {3078, 9776};
 
-	private static List<ActiveTarget.StageLine> vampire()
+	private static List<TargetStages.StageLine> vampire()
 	{
 		return new Gson().fromJson("[{\"t\":\"Buy a beer.\",\"s\":\"Buy a beer from the Blue Moon Inn bartender\",\"has\":\"Beer\"},"
 			+ "{\"t\":\"Give the beer to Dr. Harlow.\",\"s\":\"Give Dr. Harlow the beer for a stake\",\"x\":3222,\"y\":3399,\"plane\":0,\"need\":\"Beer\",\"has\":\"Stake\"},"
 			+ "{\"t\":\"Prepare for combat and enter.\",\"s\":\"Prepare for combat and enter Draynor Manor\",\"x\":3108,\"y\":3353,\"plane\":0},"
 			+ "{\"t\":\"Go down to the basement.\",\"s\":\"Go down to the Draynor Manor basement\",\"x\":3116,\"y\":3358,\"plane\":0},"
 			+ "{\"t\":\"Open the coffin.\",\"s\":\"Open the coffin, kill Count Draynor\",\"x\":3078,\"y\":9776,\"plane\":0}]",
-			new TypeToken<List<ActiveTarget.StageLine>>() { }.getType());
+			new TypeToken<List<TargetStages.StageLine>>() { }.getType());
 	}
 
 	private static ItemCounts vbag(int beer, int stake)
@@ -361,10 +361,10 @@ public class StageTrackerTest
 	}
 
 	/** S2-08 (from a player's screenshot): "enter Draynor Manor" at the door, "go down to the basement" eight tiles away, inside the house. */
-	private static List<ActiveTarget.StageLine> manor()
+	private static List<TargetStages.StageLine> manor()
 	{
 		return new Gson().fromJson("[{\"t\":\"Enter\",\"x\":3108,\"y\":3353,\"plane\":0},{\"t\":\"Go down to the basement\",\"x\":3116,\"y\":3358,\"plane\":0},"
-			+ "{\"t\":\"Kill the count\",\"x\":3077,\"y\":9770,\"plane\":0}]", new TypeToken<List<ActiveTarget.StageLine>>() {}.getType());
+			+ "{\"t\":\"Kill the count\",\"x\":3077,\"y\":9770,\"plane\":0}]", new TypeToken<List<TargetStages.StageLine>>() {}.getType());
 	}
 
 	private static int manor(StageTracker t, int x, int y)
@@ -406,8 +406,8 @@ public class StageTrackerTest
 	@Test
 	public void stepWithConditionIsNotClosedByLeaving()
 	{
-		List<ActiveTarget.StageLine> l = new Gson().fromJson("[{\"t\":\"Give\",\"x\":3108,\"y\":3353,\"plane\":0,\"need\":\"Beer\"},"
-			+ "{\"t\":\"Next\",\"x\":3116,\"y\":3358,\"plane\":0}]", new TypeToken<List<ActiveTarget.StageLine>>() {}.getType());
+		List<TargetStages.StageLine> l = new Gson().fromJson("[{\"t\":\"Give\",\"x\":3108,\"y\":3353,\"plane\":0,\"need\":\"Beer\"},"
+			+ "{\"t\":\"Next\",\"x\":3116,\"y\":3358,\"plane\":0}]", new TypeToken<List<TargetStages.StageLine>>() {}.getType());
 		ItemCounts beer = new ItemCounts();
 		beer.add(1, ActiveTarget.nameKey("Beer"), 1);
 		StageTracker t = new StageTracker();
@@ -416,10 +416,10 @@ public class StageTrackerTest
 	}
 
 	/** S2-09 (from a player's screenshot): "put the rum in the crate" and "fill the crate" at one place, then Luthas five tiles away. */
-	private static List<ActiveTarget.StageLine> crate()
+	private static List<TargetStages.StageLine> crate()
 	{
 		return new Gson().fromJson("[{\"t\":\"Put the rum\",\"x\":2939,\"y\":3149,\"plane\":0},{\"t\":\"Fill the crate\",\"x\":2939,\"y\":3149,\"plane\":0},"
-			+ "{\"t\":\"Tell Luthas\",\"x\":2938,\"y\":3156,\"plane\":0},{\"t\":\"Return\",\"x\":3027,\"y\":3222,\"plane\":0}]", new TypeToken<List<ActiveTarget.StageLine>>() {}.getType());
+			+ "{\"t\":\"Tell Luthas\",\"x\":2938,\"y\":3156,\"plane\":0},{\"t\":\"Return\",\"x\":3027,\"y\":3222,\"plane\":0}]", new TypeToken<List<TargetStages.StageLine>>() {}.getType());
 	}
 
 	private static int crate(StageTracker t, int x, int y)

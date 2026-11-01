@@ -351,9 +351,9 @@ final class PluginPlayer
 	String checklistStage;
 
 	/** The current quest stage's items; null means there are no stages or the stage has no list of its own (then the step's items). */
-	private List<ActiveTarget.GuideItem> stageItems()
+	private List<TargetGuide.GuideItem> stageItems()
 	{
-		ActiveTarget.Stage st = PluginQuests.stageOf(plugin.target);
+		TargetStages.Stage st = PluginQuests.stageOf(plugin.target);
 		Integer value = st == null ? null : plugin.quests.stageValue(st);
 		return value == null ? null : st.getStages().get(st.indexFor(value)).getItems();
 	}
@@ -361,15 +361,15 @@ final class PluginPlayer
 	void recomputeChecklist()
 	{
 		// The quest was handed in: items were spent or given away, "missing" no longer says anything: the departure check empties.
-		List<ActiveTarget.ChecklistItem> items = plugin.target == null || plugin.quests.questDone(plugin.target) ? null : plugin.target.getChecklist();
-		List<ActiveTarget.GuideItem> forStage = items == null ? null : stageItems();
+		List<TargetGuide.ChecklistItem> items = plugin.target == null || plugin.quests.questDone(plugin.target) ? null : plugin.target.getChecklist();
+		List<TargetGuide.GuideItem> forStage = items == null ? null : stageItems();
 		if (forStage != null)
 		{
 			// Needed now is only what the stage names: yesterday's items (the pie, the pickaxe) no longer wait.
-			List<ActiveTarget.ChecklistItem> kept = new ArrayList<>();
-			for (ActiveTarget.ChecklistItem c : items)
+			List<TargetGuide.ChecklistItem> kept = new ArrayList<>();
+			for (TargetGuide.ChecklistItem c : items)
 			{
-				for (ActiveTarget.GuideItem g : forStage)
+				for (TargetGuide.GuideItem g : forStage)
 				{
 					if (ActiveTarget.nameKey(g.getName()).equals(ActiveTarget.nameKey(c.getName())) || (g.getId() != null && g.getId().equals(c.getId())))
 					{
@@ -388,7 +388,7 @@ final class PluginPlayer
 			Checklist.Row row = plugin.checklist.getRows().get(i);
 			if (row.getState() != Checklist.State.IN_BAG_READY && row.getState() != Checklist.State.NOT_EQUIPPED && row.getInBank() != 0)
 			{
-				ActiveTarget.ChecklistItem item = items.get(i);
+				TargetGuide.ChecklistItem item = items.get(i);
 				if (item.getId() != null)
 				{
 					ids.add(item.getId());
@@ -466,7 +466,7 @@ final class PluginPlayer
 	}
 
 	/** For auto-tick: how much of the item the player has: bag, worn, notes and the bank if it was opened. */
-	int ownedCount(ActiveTarget.ItemNeed need)
+	int ownedCount(TargetNeeds.ItemNeed need)
 	{
 		return ItemCounts.sum(plugin.carried, plugin.noted, plugin.bank).count(need);
 	}
@@ -477,7 +477,7 @@ final class PluginPlayer
 		Map<String, Map<String, Object>> out = new LinkedHashMap<>();
 		if (plugin.target != null && plugin.target.getChecklist() != null)
 		{
-			for (ActiveTarget.ChecklistItem i : plugin.target.getChecklist())
+			for (TargetGuide.ChecklistItem i : plugin.target.getChecklist())
 			{
 				report(out, i.getName(), i.getId());
 			}
@@ -608,7 +608,7 @@ final class PluginPlayer
 		{
 			plugin.completion.onVarbitChanged(e.getVarbitId(), e.getValue());
 		}
-		ActiveTarget.Stage st = PluginQuests.stageOf(plugin.target);
+		TargetStages.Stage st = PluginQuests.stageOf(plugin.target);
 		boolean questVar = st != null && !st.isManual() && (st.isVarp() ? e.getVarpId() == st.getId() : e.getVarbitId() == st.getId());
 		if (questVar)
 		{

@@ -89,7 +89,7 @@ final class PluginHighlights
 	}
 
 	/** What to highlight on the current quest stage step (per Quest Helper): NPCs, objects, items in the bag. Changes with the cursor. */
-	volatile ActiveTarget.LineHighlight lineHl = ActiveTarget.LineHighlight.NONE;
+	volatile TargetStages.LineHighlight lineHl = TargetStages.LineHighlight.NONE;
 
 	String lineHlKey;
 
@@ -104,14 +104,14 @@ final class PluginHighlights
 	}
 
 	/** The cursor moved to another step: that step's highlight; the previous one goes out. at is the line whose tile picks its object, or null. Client thread. */
-	void applyLineHighlight(String key, ActiveTarget.Highlight hl, ActiveTarget.StageLine at)
+	void applyLineHighlight(String key, TargetStages.Highlight hl, TargetStages.StageLine at)
 	{
 		if (Objects.equals(key, lineHlKey))
 		{
 			return;
 		}
 		lineHlKey = key;
-		lineHl = hl == null ? ActiveTarget.LineHighlight.NONE : new ActiveTarget.LineHighlight(hl, at);
+		lineHl = hl == null ? TargetStages.LineHighlight.NONE : new TargetStages.LineHighlight(hl, at);
 		plugin.debug.tel("highlight", "key", key, "npc", hl == null ? null : hl.getNpc(), "obj", hl == null ? null : hl.getObj(), "on", hl == null ? null : hl.getOn(),
 			"item", hl == null ? null : hl.getItem());
 		rescan();
@@ -160,7 +160,7 @@ final class PluginHighlights
 		{
 			return;
 		}
-		ActiveTarget.LineHighlight line = lineHl;
+		TargetStages.LineHighlight line = lineHl;
 		Set<Integer> stepIds = step == null ? Collections.emptySet() : step.getObjectIdSet();
 		Set<String> stepNames = step == null ? Collections.emptySet() : step.getObjectNameSet();
 		if (stepIds.isEmpty() && stepNames.isEmpty() && line.objectIds.isEmpty() && line.objectNames.isEmpty() && navObjects.isEmpty())
@@ -192,7 +192,7 @@ final class PluginHighlights
 	 */
 	boolean objectShown(TileObject o)
 	{
-		ActiveTarget.LineHighlight line = lineHl;
+		TargetStages.LineHighlight line = lineHl;
 		ActiveTarget step = plugin.target;
 		if (!line.objectIds.contains(o.getId()) || (step != null && step.getObjectIdSet().contains(o.getId())))
 		{

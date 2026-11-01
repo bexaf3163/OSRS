@@ -62,7 +62,7 @@ public class TrainingFoodTest
 	@Test
 	public void foodPerKillIsChecked()
 	{
-		ActiveTarget.Pacing p = new ActiveTarget.Pacing();
+		TargetNeeds.Pacing p = new TargetNeeds.Pacing();
 		p.setSkill("strength");
 		p.setTargetLevel(20);
 		p.setTargetExp(4470);

@@ -232,7 +232,7 @@ final class PluginNavigation
 	}
 
 	/** Quest Helper's step as a via, or null (see QhVia). Client thread: the NPC and object names come from the game's definitions. */
-	QhVia.Via currentVia(ActiveTarget t, ActiveTarget.StageLine line)
+	QhVia.Via currentVia(ActiveTarget t, TargetStages.StageLine line)
 	{
 		String leaf = plugin.qhLeaf;
 		if (t == null || leaf == null || !plugin.config.qhMachine())
@@ -276,12 +276,12 @@ final class PluginNavigation
 			properStep = t.getStepId();
 			properWords.clear();
 			QhVia.properWords(t.getTitle(), properWords);
-			ActiveTarget.Stage st = PluginQuests.stageOf(t);
+			TargetStages.Stage st = PluginQuests.stageOf(t);
 			if (st != null && st.getStages() != null)
 			{
-				for (ActiveTarget.StageStep e : st.getStages())
+				for (TargetStages.StageStep e : st.getStages())
 				{
-					for (ActiveTarget.StageLine l : e.getSteps())
+					for (TargetStages.StageLine l : e.getSteps())
 					{
 						QhVia.properWords(l.getT(), properWords);
 					}
@@ -551,7 +551,7 @@ final class PluginNavigation
 		Hud.State s = plugin.hud;
 		NavTarget n = plugin.navTarget;
 		boolean loggedIn = plugin.client.getGameState() == GameState.LOGGED_IN;
-		ActiveTarget.Plan plan = plugin.target == null || plugin.target.getGuide() == null ? null : plugin.target.getGuide().getPlan();
+		TargetGuide.Plan plan = plugin.target == null || plugin.target.getGuide() == null ? null : plugin.target.getGuide().getPlan();
 		// A temporary target the step does not lead to by itself: a place the player chose, a purchase, a stop on the way. The funding plan's arrow is the
 		// funding plan's own line, and a stage's arrow is the stage's.
 		String detour = null;
@@ -583,7 +583,7 @@ final class PluginNavigation
 		{
 			return null;
 		}
-		ActiveTarget.Pacing pc = p.getPacing();
+		TargetNeeds.Pacing pc = p.getPacing();
 		String shown = p.getActive();
 		PacingTracker.Snapshot snap = p.snapshot();
 		boolean switchStyle = false;
@@ -668,8 +668,8 @@ final class PluginNavigation
 	/** The max hit named by the stage line the cursor is on; null when the line names none or there is no stage. */
 	private Integer currentLineMaxHit()
 	{
-		ActiveTarget.Stage st = plugin.target == null ? null : PluginQuests.stageOf(plugin.target);
-		List<ActiveTarget.StageLine> lines = st == null ? null : plugin.debug.currentLines(st);
+		TargetStages.Stage st = plugin.target == null ? null : PluginQuests.stageOf(plugin.target);
+		List<TargetStages.StageLine> lines = st == null ? null : plugin.debug.currentLines(st);
 		if (lines == null || lines.isEmpty())
 		{
 			return null;

@@ -35,17 +35,17 @@ public class AutoCompletionManagerTest
 		return need.getNames().stream().mapToInt(n -> byName.getOrDefault(n, 0)).sum();
 	}, completed::add);
 
-	private static ActiveTarget.LevelNeed level(String skill, int level)
+	private static TargetNeeds.LevelNeed level(String skill, int level)
 	{
-		ActiveTarget.LevelNeed l = new ActiveTarget.LevelNeed();
+		TargetNeeds.LevelNeed l = new TargetNeeds.LevelNeed();
 		l.setSkill(skill);
 		l.setLevel(level);
 		return l;
 	}
 
-	private static ActiveTarget.ItemNeed item(Integer id, int count, String... names)
+	private static TargetNeeds.ItemNeed item(Integer id, int count, String... names)
 	{
-		ActiveTarget.ItemNeed i = new ActiveTarget.ItemNeed();
+		TargetNeeds.ItemNeed i = new TargetNeeds.ItemNeed();
 		i.setNames(List.of(names));
 		i.setId(id);
 		i.setCount(count);
@@ -56,7 +56,7 @@ public class AutoCompletionManagerTest
 	{
 		ActiveTarget t = new ActiveTarget();
 		t.setStepId(stepId);
-		ActiveTarget.Trigger tr = new ActiveTarget.Trigger();
+		TargetNeeds.Trigger tr = new TargetNeeds.Trigger();
 		tr.setType(type);
 		t.setCompletionTrigger(tr);
 		return t;
@@ -200,7 +200,7 @@ public class AutoCompletionManagerTest
 		t.getCompletionTrigger().setVarpId(177);
 		t.getCompletionTrigger().setBitMask(0xf800);
 		t.getCompletionTrigger().setTargetValue(0);
-		ActiveTarget.ItemNeed key = new ActiveTarget.ItemNeed();
+		TargetNeeds.ItemNeed key = new TargetNeeds.ItemNeed();
 		key.setNames(List.of("Maze key"));
 		key.setCount(1);
 		t.getCompletionTrigger().setItems(List.of(key));

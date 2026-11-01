@@ -19,7 +19,7 @@ public class QhMelzarsMazeTest
 	/** Dragon Slayer I while the map pieces are gathered (varp 176). */
 	private static final int VALUE = 2;
 
-	private static List<ActiveTarget.StageLine> lines()
+	private static List<TargetStages.StageLine> lines()
 	{
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
@@ -51,7 +51,7 @@ public class QhMelzarsMazeTest
 
 	private static int line(String k)
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		for (int i = 0; i < lines.size(); i++)
 		{
 			if (k.equals(lines.get(i).getK()))
@@ -104,11 +104,11 @@ public class QhMelzarsMazeTest
 	@Test
 	public void ofTheSameColouredDoors_onlyTheNearestToTheLineTileCounts()
 	{
-		ActiveTarget.StageLine door = lines().get(line("openRedDoor") - 1);
-		ActiveTarget.LineHighlight h = new ActiveTarget.LineHighlight(door.getHl(), door);
+		TargetStages.StageLine door = lines().get(line("openRedDoor") - 1);
+		TargetStages.LineHighlight h = new TargetStages.LineHighlight(door.getHl(), door);
 		assertEquals(0, h.distance(2926, 3253, 0));
 		assertEquals(3, h.distance(2929, 3256, 0));
 		assertEquals("another floor is never nearer", Integer.MAX_VALUE / 2, h.distance(2926, 3253, 1));
-		assertEquals("without a tile no distance is known", 0, new ActiveTarget.LineHighlight(door.getHl()).distance(0, 0, 0));
+		assertEquals("without a tile no distance is known", 0, new TargetStages.LineHighlight(door.getHl()).distance(0, 0, 0));
 	}
 }

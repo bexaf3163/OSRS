@@ -202,7 +202,7 @@ final class StepGuide
 		int index;
 		int total;
 		/** What to do in the stage: the steps in order. */
-		List<ActiveTarget.StageLine> steps;
+		List<TargetStages.StageLine> steps;
 		/** The number of the step the player is on now (zero-based): everything before it is done. */
 		int cursor;
 		/** The quest is complete (Quest.getState): stages are not needed any more. */
@@ -214,17 +214,17 @@ final class StepGuide
 		/** The game will not see the current step by itself (several in a row at one place): then there is a "done" button; the other steps have none. */
 		boolean manual;
 
-		StageView(int index, int total, List<ActiveTarget.StageLine> steps, int cursor, boolean finished)
+		StageView(int index, int total, List<TargetStages.StageLine> steps, int cursor, boolean finished)
 		{
 			this(index, total, steps, cursor, finished, null, false, false);
 		}
 
-		StageView(int index, int total, List<ActiveTarget.StageLine> steps, int cursor, boolean finished, String warning, boolean peeking)
+		StageView(int index, int total, List<TargetStages.StageLine> steps, int cursor, boolean finished, String warning, boolean peeking)
 		{
 			this(index, total, steps, cursor, finished, warning, peeking, false);
 		}
 
-		StageView(int index, int total, List<ActiveTarget.StageLine> steps, int cursor, boolean finished, String warning, boolean peeking,
+		StageView(int index, int total, List<TargetStages.StageLine> steps, int cursor, boolean finished, String warning, boolean peeking,
 			boolean manual)
 		{
 			this.manual = manual;
@@ -312,7 +312,7 @@ final class StepGuide
 	 * Where to move the current stage step by the player's position. Standing at their own step: stays; reached one of the nearest
 	 * next ones: moves to it. Steps without a tile (think, wait) are skipped when the player has gone further.
 	 */
-	static int advance(List<ActiveTarget.StageLine> lines, int cursor, int x, int y, int plane)
+	static int advance(List<TargetStages.StageLine> lines, int cursor, int x, int y, int plane)
 	{
 		return advance(lines, cursor, x, y, plane, STEP_WINDOW);
 	}
@@ -332,7 +332,7 @@ final class StepGuide
 	 * window is how far ahead to look. The stage is opened for the first time (the cursor is at zero, the player may have done some steps already, for example
 	 * a stage that is a whole route): search the whole list, the first match.
 	 */
-	static int advance(List<ActiveTarget.StageLine> lines, int cursor, int x, int y, int plane, int window)
+	static int advance(List<TargetStages.StageLine> lines, int cursor, int x, int y, int plane, int window)
 	{
 		return advance(lines, cursor, x, y, plane, window, null);
 	}
@@ -341,7 +341,7 @@ final class StepGuide
 	 * carried is what is in the bag: a step with a need condition ("give back the ore") counts by place only if the item is there.
 	 * null means items are unknown, conditions are not checked.
 	 */
-	static int advance(List<ActiveTarget.StageLine> lines, int cursor, int x, int y, int plane, int window, ItemCounts carried)
+	static int advance(List<TargetStages.StageLine> lines, int cursor, int x, int y, int plane, int window, ItemCounts carried)
 	{
 		if (lines == null || lines.isEmpty())
 		{
@@ -362,7 +362,7 @@ final class StepGuide
 		return at;
 	}
 
-	private static boolean reached(ActiveTarget.StageLine l, int x, int y, int plane, ItemCounts carried)
+	private static boolean reached(TargetStages.StageLine l, int x, int y, int plane, ItemCounts carried)
 	{
 		if (!near(l, x, y, plane))
 		{
@@ -375,7 +375,7 @@ final class StepGuide
 	 * Steps that are already done by items: the step names an item (has) and it is in the bag, so we move on. The last step
 	 * of the stage is not skipped: the stage ends by itself when the game changes the variable's value.
 	 */
-	static int skipDone(List<ActiveTarget.StageLine> lines, int cursor, ItemCounts carried)
+	static int skipDone(List<TargetStages.StageLine> lines, int cursor, ItemCounts carried)
 	{
 		if (lines == null || lines.isEmpty() || carried == null)
 		{
@@ -389,7 +389,7 @@ final class StepGuide
 		return at;
 	}
 
-	private static boolean near(ActiveTarget.StageLine l, int x, int y, int plane)
+	private static boolean near(TargetStages.StageLine l, int x, int y, int plane)
 	{
 		return l.hasPoint() && l.getPlane() == plane && Math.abs(l.getX() - x) <= STEP_RADIUS && Math.abs(l.getY() - y) <= STEP_RADIUS;
 	}
@@ -409,12 +409,12 @@ final class StepGuide
 		{
 			return EMPTY;
 		}
-		ActiveTarget.Guide g = t.getGuide();
-		List<ActiveTarget.GuidePlace> places = g == null || g.getPlaces() == null ? Collections.emptyList() : g.getPlaces();
-		ActiveTarget.Stage stage = g == null ? null : g.getStage();
+		TargetGuide.Guide g = t.getGuide();
+		List<TargetGuide.GuidePlace> places = g == null || g.getPlaces() == null ? Collections.emptyList() : g.getPlaces();
+		TargetStages.Stage stage = g == null ? null : g.getStage();
 		StageView stageView = null;
-		ActiveTarget.StageStep cur = null;
-		List<ActiveTarget.GuideItem> source = g == null || g.getItems() == null ? Collections.emptyList() : g.getItems();
+		TargetStages.StageStep cur = null;
+		List<TargetGuide.GuideItem> source = g == null || g.getItems() == null ? Collections.emptyList() : g.getItems();
 		if (stage != null && (stageValue != null || questDone))
 		{
 			int idx = stageValue == null ? stage.getStages().size() - 1 : stage.indexFor(stageValue);
@@ -433,7 +433,7 @@ final class StepGuide
 			}
 		}
 		List<ItemLine> items = new ArrayList<>();
-		for (ActiveTarget.GuideItem i : source)
+		for (TargetGuide.GuideItem i : source)
 		{
 			ItemLine line = remembered(item(i, places, carried, bank, worn), i.getName(), got);
 			// Once the stage is under way, an item a line still to come guards with its own bag check is counted by that line, for what that line uses
@@ -458,7 +458,7 @@ final class StepGuide
 				// A stage has one point, where to go now; the step's other places do not belong to it.
 				continue;
 			}
-			ActiveTarget.GuidePlace p = places.get(i);
+			TargetGuide.GuidePlace p = places.get(i);
 			boolean active = navLabel != null && p.getX() == navX && p.getY() == navY && p.getPlane() == navPlane;
 			String npc = p.getNpc() == null || p.getNpc().isEmpty() ? null : p.getNpc();
 			placeLines.add(new PlaceLine(p.getLabel(), i, active, npc, stageView == null && p.getItems() != null && !p.getItems().isEmpty()));
@@ -470,7 +470,7 @@ final class StepGuide
 		String detour = navLabel;
 		if (staged && !stageView.isFinished() && navLabel != null)
 		{
-			ActiveTarget.StageLine now = stageView.getSteps().get(stageView.getCursor());
+			TargetStages.StageLine now = stageView.getSteps().get(stageView.getCursor());
 			boolean atStep = now.hasPoint() && now.getX() == navX && now.getY() == navY && now.getPlane() == navPlane;
 			boolean atGo = cur.getGo() != null && cur.getGo() >= 0 && cur.getGo() < places.size()
 				&& places.get(cur.getGo()).getX() == navX && places.get(cur.getGo()).getY() == navY && places.get(cur.getGo()).getPlane() == navPlane;
@@ -486,7 +486,7 @@ final class StepGuide
 	 * An item that is not in the bag or the bank, that a finished stage line talks about and no line from the current one on does: it was used up by those lines
 	 * (the wool for the wig, the ashes for the paste). An item nobody names, or one in the bag or bank, stays as it is.
 	 */
-	static boolean spentByEarlierLines(ItemLine l, String rawName, List<ActiveTarget.StageLine> lines, int cursor)
+	static boolean spentByEarlierLines(ItemLine l, String rawName, List<TargetStages.StageLine> lines, int cursor)
 	{
 		if (cursor <= 0 || l.getHave() == Have.BAG || l.getHave() == Have.BANK || l.getHave() == Have.DONE)
 		{
@@ -495,7 +495,7 @@ final class StepGuide
 		boolean before = false;
 		for (int i = 0; i < lines.size(); i++)
 		{
-			ActiveTarget.StageLine s = lines.get(i);
+			TargetStages.StageLine s = lines.get(i);
 			if (!names(s, rawName))
 			{
 				continue;
@@ -510,7 +510,7 @@ final class StepGuide
 	}
 
 	/** Whether the stage is under way (past its first line) and the current or a later line checks this item in the bag before it goes on. */
-	static boolean guardedByLinesAhead(String rawName, List<ActiveTarget.StageLine> lines, int cursor)
+	static boolean guardedByLinesAhead(String rawName, List<TargetStages.StageLine> lines, int cursor)
 	{
 		if (cursor <= 0)
 		{
@@ -519,12 +519,12 @@ final class StepGuide
 		String key = ActiveTarget.nameKey(PrepPlan.rawName(rawName));
 		for (int i = cursor; i < lines.size(); i++)
 		{
-			List<ActiveTarget.Pre> pre = lines.get(i).getPre();
+			List<TargetStages.Pre> pre = lines.get(i).getPre();
 			if (pre == null)
 			{
 				continue;
 			}
-			for (ActiveTarget.Pre p : pre)
+			for (TargetStages.Pre p : pre)
 			{
 				if (p != null && p.getItem() != null && ActiveTarget.nameKey(p.getItem()).equals(key))
 				{
@@ -536,7 +536,7 @@ final class StepGuide
 	}
 
 	/** Whether a stage line names the item, in its full or its short text; "Pot of flour" is also named by "flour" (a container is not what the line is about). */
-	private static boolean names(ActiveTarget.StageLine s, String rawName)
+	private static boolean names(TargetStages.StageLine s, String rawName)
 	{
 		String bare = GuideList.baseName(rawName).replaceFirst("(?i)^(pot|bucket|jug|vial|bowl|glass|bottle) of ", "");
 		for (String text : new String[] {s.getT(), s.getS()})
@@ -572,13 +572,13 @@ final class StepGuide
 		return l;
 	}
 
-	private static String finale(ActiveTarget.Guide g)
+	private static String finale(TargetGuide.Guide g)
 	{
 		return g == null || g.getSteps() == null || g.getSteps().isEmpty() ? null : g.getSteps().get(g.getSteps().size() - 1);
 	}
 
 	/** The last item of the step's quick path when everything needed is already collected; otherwise null, the item list is enough. */
-	private static String next(ActiveTarget.Guide g, List<ItemLine> items)
+	private static String next(TargetGuide.Guide g, List<ItemLine> items)
 	{
 		if (g == null || g.getSteps() == null || g.getSteps().isEmpty() || items.isEmpty())
 		{
@@ -594,19 +594,19 @@ final class StepGuide
 		return g.getSteps().get(g.getSteps().size() - 1);
 	}
 
-	static ItemLine item(ActiveTarget.GuideItem i, List<ActiveTarget.GuidePlace> places, ItemCounts carried, ItemCounts bank)
+	static ItemLine item(TargetGuide.GuideItem i, List<TargetGuide.GuidePlace> places, ItemCounts carried, ItemCounts bank)
 	{
 		return item(i, places, carried, bank, null);
 	}
 
-	static ItemLine item(ActiveTarget.GuideItem i, List<ActiveTarget.GuidePlace> places, ItemCounts carried, ItemCounts bank, ItemCounts worn)
+	static ItemLine item(TargetGuide.GuideItem i, List<TargetGuide.GuidePlace> places, ItemCounts carried, ItemCounts bank, ItemCounts worn)
 	{
 		// A potion is counted in doses of every size (the app sends how many): a (3) and a (1) are 4 doses of "Strength potion(4)".
 		boolean dose = i.getDoses() != null && i.getDoses() > 0 && ItemCounts.doseBase(i.getName()) != null;
 		int need = dose ? i.getDoses() : i.getCount() == null ? 1 : i.getCount();
-		int have = carried == null ? 0 : dose ? carried.doses(i.getName()) : ActiveTarget.countWithAlt(carried, i.getId(), i.getName(), i.getAlt());
-		int inBank = bank == null ? -1 : dose ? bank.doses(i.getName()) : ActiveTarget.countWithAlt(bank, i.getId(), i.getName(), i.getAlt());
-		int wearing = worn == null || dose ? 0 : ActiveTarget.countWithAlt(worn, i.getId(), i.getName(), i.getAlt());
+		int have = carried == null ? 0 : dose ? carried.doses(i.getName()) : TargetGuide.countWithAlt(carried, i.getId(), i.getName(), i.getAlt());
+		int inBank = bank == null ? -1 : dose ? bank.doses(i.getName()) : TargetGuide.countWithAlt(bank, i.getId(), i.getName(), i.getAlt());
+		int wearing = worn == null || dose ? 0 : TargetGuide.countWithAlt(worn, i.getId(), i.getName(), i.getAlt());
 		String u = dose ? " doses" : "";
 		Have h;
 		String status;
@@ -649,12 +649,12 @@ final class StepGuide
 	/** A temporary target at step point number index; null means there is no point. No item is set: the target is cleared on arrival. */
 	static NavTarget navTo(ActiveTarget t, int index)
 	{
-		ActiveTarget.Guide g = t == null ? null : t.getGuide();
+		TargetGuide.Guide g = t == null ? null : t.getGuide();
 		if (g == null || g.getPlaces() == null || index < 0 || index >= g.getPlaces().size())
 		{
 			return null;
 		}
-		ActiveTarget.GuidePlace p = g.getPlaces().get(index);
+		TargetGuide.GuidePlace p = g.getPlaces().get(index);
 		NavTarget n = new NavTarget();
 		n.setLabel(p.getLabel());
 		n.setX(p.getX());
@@ -669,7 +669,7 @@ final class StepGuide
 	}
 
 	/** The arrow target is the stage step's tile; the label is the first sentence of its text. null means the step has no tile. */
-	static NavTarget navToLine(ActiveTarget t, ActiveTarget.StageLine line)
+	static NavTarget navToLine(ActiveTarget t, TargetStages.StageLine line)
 	{
 		if (t == null || line == null || !line.hasPoint())
 		{
@@ -690,7 +690,7 @@ final class StepGuide
 	}
 
 	/** A point where an item is obtained: the point's items hold its name. */
-	static int placeOf(String name, List<ActiveTarget.GuidePlace> places)
+	static int placeOf(String name, List<TargetGuide.GuidePlace> places)
 	{
 		String key = ActiveTarget.nameKey(name);
 		for (int p = 0; p < places.size(); p++)

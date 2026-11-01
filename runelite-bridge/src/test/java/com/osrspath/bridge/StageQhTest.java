@@ -15,7 +15,7 @@ public class StageQhTest
 {
 	private static final String ID = "S2-09";
 
-	private static List<ActiveTarget.StageLine> lines()
+	private static List<TargetStages.StageLine> lines()
 	{
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
@@ -32,7 +32,7 @@ public class StageQhTest
 		return new StageTracker.QhPick(line, "test");
 	}
 
-	private static int update(StageTracker t, List<ActiveTarget.StageLine> lines, int x, int y, StageTracker.QhPick pick)
+	private static int update(StageTracker t, List<TargetStages.StageLine> lines, int x, int y, StageTracker.QhPick pick)
 	{
 		return t.update(ID, 1, lines, x, y, 0, new ItemCounts(), pick);
 	}
@@ -40,7 +40,7 @@ public class StageQhTest
 	@Test
 	public void machineEvidence_setsTheCursorWherePlaceAndItemsDoNotSee()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		StageTracker t = new StageTracker();
 		assertEquals("without the machine, on the quay: the first line", 0, update(t, lines, 3028, 3220, null));
 		assertFalse(t.qhStrong());
@@ -54,7 +54,7 @@ public class StageQhTest
 	@Test
 	public void withoutEvidence_placeAndItemsAsBefore()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		StageTracker t = new StageTracker();
 		update(t, lines, 3040, 3235, null);
 		update(t, lines, 3028, 3220, null);
@@ -66,7 +66,7 @@ public class StageQhTest
 	@Test
 	public void theMachineCanReturnTheCursorBack_itKnowsMore()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		StageTracker t = new StageTracker();
 		update(t, lines, 2938, 3154, pick(6));
 		// The journal and the latches were recounted: now Quest Helper thinks the crate is not yet filled.
@@ -76,7 +76,7 @@ public class StageQhTest
 	@Test
 	public void aChoiceOutsideTheList_isIgnored()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		StageTracker t = new StageTracker();
 		assertEquals(0, update(t, lines, 3028, 3220, pick(lines.size())));
 		assertEquals(0, update(t, lines, 3028, 3220, pick(-1)));
@@ -86,7 +86,7 @@ public class StageQhTest
 	@Test
 	public void theDoneButtonRemainsEvenWithAMachineChoice_andTheMachineDoesNotReturnTheCursorBack()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		StageTracker t = new StageTracker();
 		// "Put the rum in the crate" and "fill the crate" stand at the crate in a row: the game tells them apart only by the message.
 		assertEquals(3, update(t, lines, 2939, 3149, pick(3)));
@@ -102,7 +102,7 @@ public class StageQhTest
 	@Test
 	public void viewBack_strongerThanTheMachine()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		StageTracker t = new StageTracker();
 		update(t, lines, 2938, 3154, pick(6));
 		t.back();
@@ -117,7 +117,7 @@ public class StageQhTest
 	@Test
 	public void aNewStage_resetsTheMarksAndTellsAgain()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		StageTracker t = new StageTracker();
 		update(t, lines, 2939, 3149, pick(3));
 		assertTrue(t.forward(lines));
@@ -129,7 +129,7 @@ public class StageQhTest
 	@Test
 	public void withoutAMachineChoice_allAsBefore_tickByTickOnTheSameWay()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		StageTracker old = new StageTracker();
 		StageTracker now = new StageTracker();
 		ItemCounts rum = new ItemCounts();

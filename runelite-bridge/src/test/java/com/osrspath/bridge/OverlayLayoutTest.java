@@ -121,7 +121,7 @@ public class OverlayLayoutTest
 		{
 			return out;
 		}
-		ActiveTarget.Pacing p = GSON.fromJson(obj(step, "pacing"), ActiveTarget.Pacing.class);
+		TargetNeeds.Pacing p = GSON.fromJson(obj(step, "pacing"), TargetNeeds.Pacing.class);
 		int per = (int) Math.ceil(p.getExpPerAction());
 		PacingTracker far = new PacingTracker(p);
 		far.update(1, 0);
@@ -552,7 +552,7 @@ public class OverlayLayoutTest
 		{
 			return null;
 		}
-		ActiveTarget.Pacing p = GSON.fromJson(obj(step, "pacing"), ActiveTarget.Pacing.class);
+		TargetNeeds.Pacing p = GSON.fromJson(obj(step, "pacing"), TargetNeeds.Pacing.class);
 		String skill = PacingTracker.skillName(p.getSkill());
 		return new HudModel.Pace(skill, Math.max(1, p.getTargetLevel() - 9), p.getTargetLevel(), PacingTracker.styleOf(p.getSkill()), switchStyle, 1733,
 			PacingTracker.actionForm(p.getActionName(), 1733), "~193 min", progress > 0.5, progress, false, skill + " " + p.getTargetLevel());
@@ -708,21 +708,21 @@ public class OverlayLayoutTest
 			views.add(StepGuide.view(t, new ItemCounts(), null, null, 0, 0, 0));
 			views.add(StepGuide.view(t, new ItemCounts(), new ItemCounts(), null, 0, 0, 0));
 			ItemCounts all = new ItemCounts();
-			for (ActiveTarget.GuideItem i : t.getGuide().getItems())
+			for (TargetGuide.GuideItem i : t.getGuide().getItems())
 			{
 				all.add(i.getId() == null ? -1 : i.getId(), ActiveTarget.nameKey(i.getName()), 10_000);
 			}
 			views.add(StepGuide.view(t, all, null, null, 0, 0, 0));
 			if (!t.getGuide().getPlaces().isEmpty())
 			{
-				ActiveTarget.GuidePlace p = t.getGuide().getPlaces().get(0);
+				TargetGuide.GuidePlace p = t.getGuide().getPlaces().get(0);
 				views.add(StepGuide.view(t, new ItemCounts(), new ItemCounts(), p.getLabel(), p.getX(), p.getY(), p.getPlane()));
 			}
-			ActiveTarget.Stage st = t.getGuide().getStage();
+			TargetStages.Stage st = t.getGuide().getStage();
 			if (st != null)
 			{
 				// Quest stages: each stage with the first, the middle and the last step, and "quest complete".
-				for (ActiveTarget.StageStep ss : st.getStages())
+				for (TargetStages.StageStep ss : st.getStages())
 				{
 					int n = ss.getSteps().size();
 					for (int cursor : new int[]{0, n / 2, n - 1})

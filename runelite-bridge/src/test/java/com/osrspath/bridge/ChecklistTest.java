@@ -11,9 +11,9 @@ import org.junit.Test;
 
 public class ChecklistTest
 {
-	private static ActiveTarget.ChecklistItem item(String name, Integer id, int count, Integer heals)
+	private static TargetGuide.ChecklistItem item(String name, Integer id, int count, Integer heals)
 	{
-		ActiveTarget.ChecklistItem i = new ActiveTarget.ChecklistItem();
+		TargetGuide.ChecklistItem i = new TargetGuide.ChecklistItem();
 		i.setName(name);
 		i.setId(id);
 		i.setCount(count);
@@ -31,14 +31,14 @@ public class ChecklistTest
 		return c;
 	}
 
-	private static final ActiveTarget.ChecklistItem ROPE = item("Rope", 954, 1, null);
+	private static final TargetGuide.ChecklistItem ROPE = item("Rope", 954, 1, null);
 
 	@Test
 	public void oneAlternativeStackCannotCoverTwoFoodRequirements()
 	{
-		ActiveTarget.ChecklistItem salmon = item("Salmon", 329, 7, 9);
+		TargetGuide.ChecklistItem salmon = item("Salmon", 329, 7, 9);
 		salmon.setAlt(Collections.singletonList("Trout"));
-		ActiveTarget.ChecklistItem lobster = item("Lobster", 379, 1, 12);
+		TargetGuide.ChecklistItem lobster = item("Lobster", 379, 1, 12);
 		lobster.setAlt(Collections.singletonList("Trout"));
 		Checklist.Result result = Checklist.evaluate(Arrays.asList(salmon, lobster), counts(333, "Trout", 9), counts());
 		assertFalse(result.isReady());
@@ -49,9 +49,9 @@ public class ChecklistTest
 	@Test
 	public void anExactQuestIngredientIsKeptOutOfCombatFood()
 	{
-		ActiveTarget.ChecklistItem salmon = item("Salmon", 329, 7, 9);
+		TargetGuide.ChecklistItem salmon = item("Salmon", 329, 7, 9);
 		salmon.setAlt(Collections.singletonList("Trout"));
-		ActiveTarget.ChecklistItem ingredient = item("Trout", 333, 1, null);
+		TargetGuide.ChecklistItem ingredient = item("Trout", 333, 1, null);
 		Checklist.Result result = Checklist.evaluate(Arrays.asList(salmon, ingredient), counts(333, "Trout", 9), counts());
 		assertFalse(result.isReady());
 		assertEquals(6, result.getRows().get(0).getHave());
@@ -60,7 +60,7 @@ public class ChecklistTest
 	@Test
 	public void weakerFoodMustCoverTheSameHealing()
 	{
-		ActiveTarget.ChecklistItem salmon = item("Salmon", 329, 20, 9);
+		TargetGuide.ChecklistItem salmon = item("Salmon", 329, 20, 9);
 		salmon.setAlt(Arrays.asList("Trout", "trout", "Salmon"));
 		Checklist.Row row = Checklist.evaluate(Collections.singletonList(salmon), counts(333, "Trout", 20), counts()).getRows().get(0);
 		assertEquals(15, row.getHave());
@@ -70,7 +70,7 @@ public class ChecklistTest
 	@Test
 	public void mixedFoodIsRoundedAfterAddingHealing()
 	{
-		ActiveTarget.ChecklistItem salmon = item("Salmon", 329, 1, 9);
+		TargetGuide.ChecklistItem salmon = item("Salmon", 329, 1, 9);
 		salmon.setAlt(Arrays.asList("Shrimps", "Cooked meat"));
 		assertTrue(Checklist.evaluate(Collections.singletonList(salmon), counts(315, "Shrimps", 2, 2142, "Cooked meat", 1), counts()).isReady());
 	}
@@ -81,12 +81,12 @@ public class ChecklistTest
 		ItemCounts.setLevels(1, 1, 10);
 		try
 		{
-			ActiveTarget.ChecklistItem salmon = item("Salmon", 329, 25, 9);
+			TargetGuide.ChecklistItem salmon = item("Salmon", 329, 25, 9);
 			salmon.setAlt(Collections.singletonList("Tuna"));
 			Checklist.Result result = Checklist.evaluate(Collections.singletonList(salmon), counts(361, "Tuna", 23), counts());
 			assertFalse(result.isReady());
 			assertEquals(23, result.getRows().get(0).getHave());
-			ActiveTarget.ChecklistItem tuna = item("Tuna", 361, 1, 10);
+			TargetGuide.ChecklistItem tuna = item("Tuna", 361, 1, 10);
 			assertEquals(Integer.valueOf(9), Checklist.evaluate(Collections.singletonList(tuna), counts(361, "Tuna", 1), counts()).getRows().get(0).getHeals());
 		}
 		finally
@@ -98,9 +98,9 @@ public class ChecklistTest
 	@Test
 	public void equippedAmmunitionRequiresTheActualStackQuantity()
 	{
-		ActiveTarget.ChecklistItem arrows = item("Bronze arrow", 882, 100, null);
+		TargetGuide.ChecklistItem arrows = item("Bronze arrow", 882, 100, null);
 		arrows.setEquip(true);
-		List<ActiveTarget.ChecklistItem> items = Collections.singletonList(arrows);
+		List<TargetGuide.ChecklistItem> items = Collections.singletonList(arrows);
 		ItemCounts carried = counts(882, "Bronze arrow", 100);
 		Checklist.Result oneWorn = Checklist.evaluate(items, carried, counts(), counts(882, "Bronze arrow", 1));
 		assertFalse(oneWorn.isReady());
@@ -115,11 +115,11 @@ public class ChecklistTest
 	@Test
 	public void requiredArmourMustBeWornAndOwnedAlternativesCount()
 	{
-		ActiveTarget.ChecklistItem helm = item("Black full helm", 1165, 1, null);
+		TargetGuide.ChecklistItem helm = item("Black full helm", 1165, 1, null);
 		helm.setEquip(true);
 		helm.setAlt(Collections.singletonList("Mithril full helm"));
 		ItemCounts carried = counts(1159, "Mithril full helm", 1);
-		List<ActiveTarget.ChecklistItem> items = Collections.singletonList(helm);
+		List<TargetGuide.ChecklistItem> items = Collections.singletonList(helm);
 		Checklist.Result bag = Checklist.evaluate(items, carried, counts(), counts());
 		assertFalse(bag.isReady());
 		assertEquals(Checklist.State.NOT_EQUIPPED, bag.getRows().get(0).getState());
@@ -152,7 +152,7 @@ public class ChecklistTest
 	@Test
 	public void aStackIsCountedByQuantity()
 	{
-		ActiveTarget.ChecklistItem coins = item("Coins", 995, 90, null);
+		TargetGuide.ChecklistItem coins = item("Coins", 995, 90, null);
 		assertTrue(Checklist.evaluate(Collections.singletonList(coins), counts(995, "Coins", 120), null).isReady());
 		Checklist.Row row = Checklist.evaluate(Collections.singletonList(coins), counts(995, "Coins", 60), counts(995, "Coins", 10)).getRows().get(0);
 		assertEquals(60, row.getHave());
@@ -164,7 +164,7 @@ public class ChecklistTest
 	{
 		// Five chicken in different bag slots, the food is labelled "+3 HP".
 		ItemCounts bag = counts(2140, "Cooked chicken", 1, 2140, "Cooked chicken", 1);
-		ActiveTarget.ChecklistItem chicken = item("Cooked chicken", 2140, 5, 3);
+		TargetGuide.ChecklistItem chicken = item("Cooked chicken", 2140, 5, 3);
 		Checklist.Row row = Checklist.evaluate(Collections.singletonList(chicken), bag, counts(2140, "Cooked chicken", 10)).getRows().get(0);
 		assertEquals(2, row.getHave());
 		assertEquals(Integer.valueOf(3), row.getHeals());
@@ -193,7 +193,7 @@ public class ChecklistTest
 	@Test
 	public void aFullSetAndSearchByName()
 	{
-		List<ActiveTarget.ChecklistItem> items = Arrays.asList(ROPE, item("Hammer", null, 1, null), item("Tinderbox", 590, 1, null));
+		List<TargetGuide.ChecklistItem> items = Arrays.asList(ROPE, item("Hammer", null, 1, null), item("Tinderbox", 590, 1, null));
 		// The hammer without an ID is found by name, the case does not matter.
 		Checklist.Result r = Checklist.evaluate(items, counts(954, "Rope", 1, 2347, "HAMMER", 1, 590, "Tinderbox", 1), counts());
 		assertTrue(r.isReady());
@@ -216,7 +216,7 @@ public class ChecklistTest
 	@Test
 	public void partialFoodHealingAcrossBagAndBankIsOwned()
 	{
-		ActiveTarget.ChecklistItem salmon = item("Salmon", 329, 1, 9);
+		TargetGuide.ChecklistItem salmon = item("Salmon", 329, 1, 9);
 		salmon.setAlt(Arrays.asList("Shrimps", "Cooked meat"));
 		Checklist.Row row = Checklist.evaluate(Collections.singletonList(salmon), counts(315, "Shrimps", 2), counts(2142, "Cooked meat", 1)).getRows().get(0);
 		assertEquals(0, row.getHave());

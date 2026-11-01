@@ -14,20 +14,20 @@ import org.junit.Test;
  */
 public class DragonSlayerStageTest
 {
-	private static List<ActiveTarget.StageLine> lines(String stepId)
+	private static List<TargetStages.StageLine> lines(String stepId)
 	{
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
 			if (stepId.equals(s.target.getStepId()) && s.target.getGuide() != null && s.target.getGuide().getStage() != null)
 			{
-				List<ActiveTarget.StageStep> stages = s.target.getGuide().getStage().getStages();
+				List<TargetStages.StageStep> stages = s.target.getGuide().getStage().getStages();
 				return stages.get(stages.size() - 1).getSteps();
 			}
 		}
 		throw new AssertionError("no stage for " + stepId);
 	}
 
-	private static int indexOf(List<ActiveTarget.StageLine> lines, String key)
+	private static int indexOf(List<TargetStages.StageLine> lines, String key)
 	{
 		for (int i = 0; i < lines.size(); i++)
 		{
@@ -52,7 +52,7 @@ public class DragonSlayerStageTest
 	@Test
 	public void melzarsMazeIsWalkedFloorByFloorWithAPlaneOnEveryLine()
 	{
-		List<ActiveTarget.StageLine> l = lines("S5-03");
+		List<TargetStages.StageLine> l = lines("S5-03");
 		String[][] floors = {
 			{"enterMelzarsMaze", "0"}, {"killRat", "0"}, {"openRedDoor", "0"}, {"goUpRatLadder", "0"},
 			{"killGhost", "1"}, {"openOrangeDoor", "1"}, {"goUpGhostLadder", "1"},
@@ -76,7 +76,7 @@ public class DragonSlayerStageTest
 	@Test
 	public void everyDoorAndKeyHolderIsHighlightedByItsOwnId()
 	{
-		List<ActiveTarget.StageLine> l = lines("S5-03");
+		List<TargetStages.StageLine> l = lines("S5-03");
 		Object[][] ids = {
 			{"enterMelzarsMaze", 2595}, {"openRedDoor", 2596}, {"openOrangeDoor", 2597}, {"openYellowDoor", 2598}, {"openBlueDoor", 2599},
 			{"openMagntaDoor", 2600}, {"openGreenDoor", 2601}, {"openMelzarChest", 2603},
@@ -96,7 +96,7 @@ public class DragonSlayerStageTest
 	@Test
 	public void theCursorFollowsThePlayerUpTheFloorsAndDownIntoTheBasement()
 	{
-		List<ActiveTarget.StageLine> l = lines("S5-03");
+		List<TargetStages.StageLine> l = lines("S5-03");
 		StageTracker t = new StageTracker();
 		String id = "S5-03";
 		assertEquals(indexOf(l, "enterMelzarsMaze"), t.update(id, 2, l, 2941, 3248, 0, bag()));
@@ -116,7 +116,7 @@ public class DragonSlayerStageTest
 	{
 		for (String id : new String[] {"S5-03", "S5-04", "S5-06", "S5-08"})
 		{
-			for (ActiveTarget.StageLine line : lines(id))
+			for (TargetStages.StageLine line : lines(id))
 			{
 				if (!line.hasPoint())
 				{
@@ -135,7 +135,7 @@ public class DragonSlayerStageTest
 	@Test
 	public void theThreeMapPartsMergeIntoTheCrandorMap()
 	{
-		List<ActiveTarget.StageLine> l = lines("S5-07");
+		List<TargetStages.StageLine> l = lines("S5-07");
 		int merge = indexOf(l, "repairMap");
 		int ned = indexOf(l, "talkToNed");
 		StageTracker t = new StageTracker();
@@ -149,7 +149,7 @@ public class DragonSlayerStageTest
 	@Test
 	public void eachPlankOfTheHullMovesTheListOneRepair()
 	{
-		List<ActiveTarget.StageLine> l = lines("S5-06");
+		List<TargetStages.StageLine> l = lines("S5-06");
 		String id = "S5-06";
 		StageTracker t = new StageTracker();
 		int x = 3047;
@@ -162,7 +162,7 @@ public class DragonSlayerStageTest
 	@Test
 	public void theDragonsHeadInTheBagFinishesTheKill()
 	{
-		List<ActiveTarget.StageLine> l = lines("S5-08");
+		List<TargetStages.StageLine> l = lines("S5-08");
 		int kill = indexOf(l, "killElvarg");
 		assertEquals("Elvarg's head", l.get(kill).getHas());
 		assertEquals(kill, new StageTracker().update("S5-08", 8, l, 2855, 9637, 0, bag()));

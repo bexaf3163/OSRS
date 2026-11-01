@@ -78,9 +78,9 @@ public class ToolLevelTest
 	@Test
 	public void thePreflightCountsFoodByHealing()
 	{
-		ActiveTarget.StageLine l = GSON.fromJson("{\"t\":\"Re-enter the dungeon.\",\"x\":3000,\"y\":3494,\"plane\":0,\"k\":\"reenterDungeon\","
-			+ "\"pre\":[{\"item\":\"Trout\",\"n\":10,\"alt\":[\"Salmon\",\"Cooked meat\",\"Shark\"]}]}", ActiveTarget.StageLine.class);
-		assertNull(ActiveTarget.Pre.problem(l.getPre()));
+		TargetStages.StageLine l = GSON.fromJson("{\"t\":\"Re-enter the dungeon.\",\"x\":3000,\"y\":3494,\"plane\":0,\"k\":\"reenterDungeon\","
+			+ "\"pre\":[{\"item\":\"Trout\",\"n\":10,\"alt\":[\"Salmon\",\"Cooked meat\",\"Shark\"]}]}", TargetStages.StageLine.class);
+		assertNull(TargetStages.Pre.problem(l.getPre()));
 		assertNull(Preflight.check("S3-04", l, true, bag(329, "Salmon", 8), null, 3000, 3494, 0, Collections.emptyList()));
 		Preflight.Block seven = Preflight.check("S3-04", l, true, bag(329, "Salmon", 7), null, 3000, 3494, 0, Collections.emptyList());
 		assertNotNull(seven);
@@ -95,9 +95,9 @@ public class ToolLevelTest
 	@Test
 	public void thePreflightDoesNotTakeAToolTheLevelCannotUse()
 	{
-		ActiveTarget.StageLine l = GSON.fromJson("{\"t\":\"Mine a Structural pillar.\",\"x\":3050,\"y\":9570,\"plane\":0,\"k\":\"defeatGuardian\",\"mh\":7,"
-			+ "\"pre\":[{\"item\":\"Bronze pickaxe\",\"id\":1265,\"alt\":[\"Iron pickaxe\",\"Rune pickaxe\"]}]}", ActiveTarget.StageLine.class);
-		assertNull(ActiveTarget.Pre.problem(l.getPre()));
+		TargetStages.StageLine l = GSON.fromJson("{\"t\":\"Mine a Structural pillar.\",\"x\":3050,\"y\":9570,\"plane\":0,\"k\":\"defeatGuardian\",\"mh\":7,"
+			+ "\"pre\":[{\"item\":\"Bronze pickaxe\",\"id\":1265,\"alt\":[\"Iron pickaxe\",\"Rune pickaxe\"]}]}", TargetStages.StageLine.class);
+		assertNull(TargetStages.Pre.problem(l.getPre()));
 		ItemCounts.setToolLevels(10, 1);
 		assertNotNull("a Rune pickaxe at Mining 10 is turned back", Preflight.check("S3-04", l, true, bag(1275, "Rune pickaxe", 1), null, 3050, 9570, 0, Collections.emptyList()));
 		assertNull("an Iron one does the job", Preflight.check("S3-04", l, true, bag(1267, "Iron pickaxe", 1), null, 3050, 9570, 0, Collections.emptyList()));

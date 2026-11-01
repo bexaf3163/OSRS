@@ -54,7 +54,7 @@ public class ShortTextTest
 	@Test
 	public void aReadyShortTextOfTheStepWins_anEmptyOneFallsBackToShortening()
 	{
-		ActiveTarget.StageLine l = new ActiveTarget.StageLine();
+		TargetStages.StageLine l = new TargetStages.StageLine();
 		l.setT("Take the sword to the Squire — quest complete. Dialogue: 'x'.");
 		assertEquals("Take the sword to the Squire — quest complete", l.shown());
 		l.setS("Take the sword to the Squire");
@@ -88,9 +88,9 @@ public class ShortTextTest
 			{
 				continue;
 			}
-			for (ActiveTarget.StageStep st : s.target.getGuide().getStage().getStages())
+			for (TargetStages.StageStep st : s.target.getGuide().getStage().getStages())
 			{
-				for (ActiveTarget.StageLine l : st.getSteps())
+				for (TargetStages.StageLine l : st.getSteps())
 				{
 					if (l.getT() == null || !l.getT().contains("Dialogue:"))
 					{
@@ -122,9 +122,9 @@ public class ShortTextTest
 			{
 				continue;
 			}
-			for (ActiveTarget.StageStep st : s.target.getGuide().getStage().getStages())
+			for (TargetStages.StageStep st : s.target.getGuide().getStage().getStages())
 			{
-				for (ActiveTarget.StageLine l : st.getSteps())
+				for (TargetStages.StageLine l : st.getSteps())
 				{
 					if (l.getT() == null)
 					{

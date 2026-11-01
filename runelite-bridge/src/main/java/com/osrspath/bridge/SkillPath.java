@@ -177,8 +177,8 @@ public class SkillPath
 		t.setNpcIds(l.getNpcId() == null ? Collections.emptyList() : Collections.singletonList(l.getNpcId()));
 		t.setObjectNames(l.getObjectName() == null ? Collections.emptyList() : Collections.singletonList(l.getObjectName()));
 		t.setObjectIds(l.getObjectId() == null ? Collections.emptyList() : Collections.singletonList(l.getObjectId()));
-		ActiveTarget.Guide g = new ActiveTarget.Guide();
-		ActiveTarget.GuidePlace gp = new ActiveTarget.GuidePlace();
+		TargetGuide.Guide g = new TargetGuide.Guide();
+		TargetGuide.GuidePlace gp = new TargetGuide.GuidePlace();
 		gp.setX(l.getX());
 		gp.setY(l.getY());
 		gp.setPlane(l.getPlane());

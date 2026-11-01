@@ -23,7 +23,7 @@ final class PacingSet
 	 */
 	static final long TRAINING_MS = 120_000L;
 
-	private final ActiveTarget.Pacing pacing;
+	private final TargetNeeds.Pacing pacing;
 	private final Map<String, PacingTracker> trackers = new LinkedHashMap<>();
 	private String active;
 	/** When the shown skill last got XP; null means there have been no gains yet. */
@@ -31,7 +31,7 @@ final class PacingSet
 	/** When any of the step's skills last got XP; null means there have been no gains yet (the first reading is not a gain). */
 	private Long lastGainAt;
 
-	PacingSet(ActiveTarget.Pacing pacing)
+	PacingSet(TargetNeeds.Pacing pacing)
 	{
 		this.pacing = pacing;
 		for (String skill : pacing.skills())
@@ -41,7 +41,7 @@ final class PacingSet
 		active = pacing.getSkill();
 	}
 
-	ActiveTarget.Pacing getPacing()
+	TargetNeeds.Pacing getPacing()
 	{
 		return pacing;
 	}

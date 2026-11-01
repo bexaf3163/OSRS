@@ -342,7 +342,7 @@ final class PluginSnapshot
 		}
 		plugin.target = t;
 		plugin.highlights.lineHlKey = null;
-		plugin.highlights.lineHl = ActiveTarget.LineHighlight.NONE;
+		plugin.highlights.lineHl = TargetStages.LineHighlight.NONE;
 		snapshotStepKey = null;
 		plugin.guideMessage = null;
 		if (plugin.completion != null)

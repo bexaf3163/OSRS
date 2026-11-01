@@ -37,7 +37,7 @@ public class QhLineCoverageTest
 	}
 
 	/** The lines of the stage the plugin uses for a variable value: the last one whose "at" is not above it. */
-	private static List<ActiveTarget.StageLine> linesFor(JsonObject quest, int value)
+	private static List<TargetStages.StageLine> linesFor(JsonObject quest, int value)
 	{
 		JsonObject pick = null;
 		for (JsonElement e : quest.getAsJsonArray("stages"))
@@ -48,13 +48,13 @@ public class QhLineCoverageTest
 				pick = st;
 			}
 		}
-		List<ActiveTarget.StageLine> out = new ArrayList<>();
+		List<TargetStages.StageLine> out = new ArrayList<>();
 		if (pick != null)
 		{
 			JsonArray lines = pick.getAsJsonArray("do");
 			for (JsonElement l : lines)
 			{
-				ActiveTarget.StageLine line = new ActiveTarget.StageLine();
+				TargetStages.StageLine line = new TargetStages.StageLine();
 				JsonObject o = l.getAsJsonObject();
 				line.setT(o.get("t").getAsString());
 				if (o.has("k"))
@@ -71,10 +71,10 @@ public class QhLineCoverageTest
 	public void theCorsairCurseDoesNotStayOnColinAfterHeIsTalkedTo()
 	{
 		QhMachine m = QhMachine.all().get("S4-01");
-		List<ActiveTarget.StageLine> lines = new ArrayList<>();
+		List<TargetStages.StageLine> lines = new ArrayList<>();
 		for (String k : Arrays.asList("talkToIthoi", "talkToGnocci", "talkToArsen", "talkToColin", "grabTinderbox"))
 		{
-			ActiveTarget.StageLine l = new ActiveTarget.StageLine();
+			TargetStages.StageLine l = new TargetStages.StageLine();
 			l.setT(k);
 			l.setK(k);
 			lines.add(l);
@@ -88,8 +88,8 @@ public class QhLineCoverageTest
 	public void aStepThatIsNotAMoveKeepsItsOldBehaviour()
 	{
 		QhMachine m = QhMachine.all().get("S4-01");
-		List<ActiveTarget.StageLine> lines = new ArrayList<>();
-		ActiveTarget.StageLine l = new ActiveTarget.StageLine();
+		List<TargetStages.StageLine> lines = new ArrayList<>();
+		TargetStages.StageLine l = new TargetStages.StageLine();
 		l.setT("x");
 		l.setK("talkToIthoi");
 		lines.add(l);
@@ -112,7 +112,7 @@ public class QhLineCoverageTest
 			JsonObject quest = quests.getAsJsonObject(e.getKey());
 			for (int value : e.getValue().stageValues())
 			{
-				List<ActiveTarget.StageLine> lines = linesFor(quest, value);
+				List<TargetStages.StageLine> lines = linesFor(quest, value);
 				if (lines.size() < 2)
 				{
 					continue;

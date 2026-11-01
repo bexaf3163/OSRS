@@ -168,17 +168,17 @@ public class QuestStageTest
 	}
 
 	/** A stage of five steps with tiles: two steps without a tile (think, wait) and two at one place (a lever down and up). */
-	private static List<ActiveTarget.StageLine> manor()
+	private static List<TargetStages.StageLine> manor()
 	{
 		String json = "[{\"t\":\"A\",\"x\":3100,\"y\":3300,\"plane\":0},{\"t\":\"B\"},{\"t\":\"C\",\"x\":3110,\"y\":3300,\"plane\":0},"
 			+ "{\"t\":\"D\",\"x\":3120,\"y\":9700,\"plane\":0},{\"t\":\"C-again\",\"x\":3110,\"y\":3300,\"plane\":0},{\"t\":\"E\",\"x\":3200,\"y\":3300,\"plane\":0}]";
-		return GSON.fromJson(json, new com.google.gson.reflect.TypeToken<List<ActiveTarget.StageLine>>() { }.getType());
+		return GSON.fromJson(json, new com.google.gson.reflect.TypeToken<List<TargetStages.StageLine>>() { }.getType());
 	}
 
 	@Test
 	public void currentStepMovesWhenThePlayerReachesTheNext()
 	{
-		List<ActiveTarget.StageLine> l = manor();
+		List<TargetStages.StageLine> l = manor();
 		assertEquals("standing at the first: the first", 0, StepGuide.advance(l, 0, 3101, 3299, 0));
 		assertEquals("a step without a tile is jumped when we reach C", 2, StepGuide.advance(l, 0, 3111, 3301, 0));
 		assertEquals("at C we stay on C", 2, StepGuide.advance(l, 2, 3110, 3300, 0));
@@ -225,8 +225,8 @@ public class QuestStageTest
 	@Test
 	public void theShortTextLeads_theFullOneIsInTheDetails()
 	{
-		List<ActiveTarget.StageLine> l = GSON.fromJson("[{\"t\":\"Talk to the Squire in the courtyard of White Knights' castle in Falador. Dialogue: “Yes”.\",\"s\":\"Talk to the Squire (Falador)\"},{\"t\":\"Second step. In detail.\"}]",
-			new com.google.gson.reflect.TypeToken<List<ActiveTarget.StageLine>>() { }.getType());
+		List<TargetStages.StageLine> l = GSON.fromJson("[{\"t\":\"Talk to the Squire in the courtyard of White Knights' castle in Falador. Dialogue: “Yes”.\",\"s\":\"Talk to the Squire (Falador)\"},{\"t\":\"Second step. In detail.\"}]",
+			new com.google.gson.reflect.TypeToken<List<TargetStages.StageLine>>() { }.getType());
 		HudModel.Card c = card(stage(new StepGuide.StageView(1, 1, l, 0, false)));
 		assertEquals("Talk to the Squire (Falador)", c.getHeadline());
 		assertFalse("the dialogue is not on the closed card", c.plain(false, false).contains("Dialogue"));
@@ -329,19 +329,19 @@ public class QuestStageTest
 	}
 
 	/** S2-07, the "Forge the sword" stage: Thurgo sent them for ore, the player stands next to him. */
-	private static List<ActiveTarget.StageLine> ore()
+	private static List<TargetStages.StageLine> ore()
 	{
 		String json = "[{\"t\":\"Climb down into the Ice Dungeon\",\"x\":3008,\"y\":3150,\"plane\":0},"
 			+ "{\"t\":\"Mine blurite ore\",\"x\":3049,\"y\":9566,\"plane\":0},"
 			+ "{\"t\":\"Give Thurgo the ore\",\"x\":3000,\"y\":3145,\"plane\":0,\"need\":\"Blurite ore\"},"
 			+ "{\"t\":\"Bring the sword to the Squire\",\"x\":2978,\"y\":3341,\"plane\":0}]";
-		return GSON.fromJson(json, new com.google.gson.reflect.TypeToken<List<ActiveTarget.StageLine>>() { }.getType());
+		return GSON.fromJson(json, new com.google.gson.reflect.TypeToken<List<TargetStages.StageLine>>() { }.getType());
 	}
 
 	@Test
 	public void afterThurgoTheArrowLeadsIntoTheDungeon_doesNotStayAtThurgo()
 	{
-		List<ActiveTarget.StageLine> l = ore();
+		List<TargetStages.StageLine> l = ore();
 		ItemCounts empty = new ItemCounts();
 		assertEquals("at Thurgo without the ore: to the dungeon entrance, not 'give back the ore'", 0, StepGuide.advance(l, 0, 3000, 3145, 0, l.size(), empty));
 		ItemCounts bag = new ItemCounts();
@@ -354,7 +354,7 @@ public class QuestStageTest
 	@Test
 	public void stageChangedBeforeOurEyes_countFromTheFirstStep_loginIntoStartedStage_byTheWholeList()
 	{
-		List<ActiveTarget.StageLine> l = manor();
+		List<TargetStages.StageLine> l = manor();
 		// The player is at step E (the last) at the moment the stage has just changed: the stage's steps are not done yet, so the start.
 		assertEquals(0, StepGuide.advance(l, 0, 3200, 3300, 0, StepGuide.freshWindow(true, l.size())));
 		// The same player logs in in the middle of the stage: search the whole list.
@@ -366,7 +366,7 @@ public class QuestStageTest
 	{
 		ActiveTarget t = sword();
 		assertNull(t.prepare());
-		List<ActiveTarget.StageLine> lines = t.getGuide().getStage().getStages().get(0).getSteps();
+		List<TargetStages.StageLine> lines = t.getGuide().getStage().getStages().get(0).getSteps();
 		assertEquals("no portrait: we stay", 0, StepGuide.skipDone(lines, 0, new ItemCounts()));
 		ItemCounts bag = new ItemCounts();
 		bag.add(666, ActiveTarget.nameKey("Portrait"), 1);

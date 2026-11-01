@@ -80,7 +80,7 @@ final class PluginTick
 	{
 		PacingSet p = plugin.pacing;
 		ActiveTarget t = plugin.target;
-		String step = p != null && t != null && ActiveTarget.Pacing.COMBAT.contains(p.getPacing().getSkill()) ? t.getStepId() : null;
+		String step = p != null && t != null && TargetNeeds.Pacing.COMBAT.contains(p.getPacing().getSkill()) ? t.getStepId() : null;
 		ItemContainer worn = plugin.client.getItemContainer(InventoryID.WORN);
 		Item weapon = worn == null ? null : worn.getItem(EquipmentInventorySlot.WEAPON.getSlotIdx());
 		combatLog.context(step, weapon == null ? -1 : weapon.getId());

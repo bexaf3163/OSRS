@@ -26,12 +26,12 @@ public class ManualWalkthroughTest
 	@Test public void theQuestWithoutStageDataGetsItsWholeWalkthrough()
 	{
 		ActiveTarget t = arrav();
-		ActiveTarget.Stage stage = t.getGuide().getStage();
+		TargetStages.Stage stage = t.getGuide().getStage();
 		assertNotNull("the walkthrough stands in for the missing stages", stage);
 		assertTrue(stage.isManual());
-		List<ActiveTarget.StageLine> lines = stage.getStages().get(0).getSteps();
+		List<TargetStages.StageLine> lines = stage.getStages().get(0).getSteps();
 		assertEquals("no line of the quick path is lost (two paragraphs used to be over the size limit and were dropped)", t.getGuide().getSteps().size(), lines.size());
-		String all = lines.stream().map(ActiveTarget.StageLine::getT).collect(Collectors.joining("\n"));
+		String all = lines.stream().map(TargetStages.StageLine::getT).collect(Collectors.joining("\n"));
 		for (String must : new String[]{"Reldo", "Baraek", "Straven", "Jonny the beard", "Katrine", "Weaponsmaster", "Haig Halen", "King Roald"})
 		{
 			assertTrue(must + "\n" + all, all.contains(must));
@@ -50,7 +50,7 @@ public class ManualWalkthroughTest
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
 			assertNull(s.name, s.target.prepare());
-			ActiveTarget.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
+			TargetStages.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
 			assertFalse(s.name + ": every quest the app sends has stage data (Shield of Arrav since 2.53)", st != null && st.isManual());
 		}
 		assertTrue("the old sample still becomes a walkthrough", arrav().getGuide().getStage().isManual());
@@ -73,7 +73,7 @@ public class ManualWalkthroughTest
 
 	@Test public void onlyDoneMovesTheLineAndARestartKeepsIt()
 	{
-		List<ActiveTarget.StageLine> lines = arrav().getGuide().getStage().getStages().get(0).getSteps();
+		List<TargetStages.StageLine> lines = arrav().getGuide().getStage().getStages().get(0).getSteps();
 		StageTracker tracker = new StageTracker(() -> 1_000L);
 		// Walking around Varrock moves nothing: the lines have no tiles and no items for the game to confirm.
 		for (int i = 0; i < 40; i++)

@@ -26,9 +26,9 @@ public class PotionDoseTest
 		return c;
 	}
 
-	private static ActiveTarget.ChecklistItem check(String name, int count, Integer doses)
+	private static TargetGuide.ChecklistItem check(String name, int count, Integer doses)
 	{
-		ActiveTarget.ChecklistItem i = new ActiveTarget.ChecklistItem();
+		TargetGuide.ChecklistItem i = new TargetGuide.ChecklistItem();
 		i.setName(name);
 		i.setCount(count);
 		i.setDoses(doses);
@@ -120,7 +120,7 @@ public class PotionDoseTest
 	@Test
 	public void theStepCardSaysDoses()
 	{
-		ActiveTarget.GuideItem g = new ActiveTarget.GuideItem();
+		TargetGuide.GuideItem g = new TargetGuide.GuideItem();
 		g.setName("Energy potion(4)");
 		g.setCount(5);
 		g.setDoses(20);

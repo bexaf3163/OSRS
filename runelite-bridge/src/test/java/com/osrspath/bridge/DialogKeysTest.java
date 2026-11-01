@@ -42,14 +42,14 @@ public class DialogKeysTest
 		Set<String> arravRow = new HashSet<>();
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
-			ActiveTarget.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
+			TargetStages.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
 			if (st == null)
 			{
 				continue;
 			}
-			for (ActiveTarget.StageStep row : st.getStages())
+			for (TargetStages.StageStep row : st.getStages())
 			{
-				for (ActiveTarget.StageLine l : row.getSteps())
+				for (TargetStages.StageLine l : row.getSteps())
 				{
 					if (l.getT() != null && l.getT().contains("Dialogue:"))
 					{

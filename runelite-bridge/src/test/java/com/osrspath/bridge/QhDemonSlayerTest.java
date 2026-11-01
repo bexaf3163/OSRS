@@ -22,7 +22,7 @@ public class QhDemonSlayerTest
 	/** The quest variable value for "keys, then Silverlight" (varbit 2561 = 2). */
 	private static final int VALUE = 2;
 
-	private static List<ActiveTarget.StageLine> lines()
+	private static List<TargetStages.StageLine> lines()
 	{
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
@@ -67,7 +67,7 @@ public class QhDemonSlayerTest
 	@Test
 	public void theKillLineIsTheSeventhAndHasTheQuestHelperKey()
 	{
-		List<ActiveTarget.StageLine> lines = lines();
+		List<TargetStages.StageLine> lines = lines();
 		assertEquals(7, lines.size());
 		assertEquals("returnToPrysin", lines.get(5).getK());
 		assertEquals("killDelrithStep", lines.get(6).getK());

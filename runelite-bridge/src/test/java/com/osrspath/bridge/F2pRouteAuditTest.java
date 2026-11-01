@@ -35,7 +35,7 @@ public class F2pRouteAuditTest
 		int steps = 0;
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
-			ActiveTarget.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
+			TargetStages.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
 			if (st == null || !inRoute(s.target.getStepId()))
 			{
 				continue;
@@ -68,7 +68,7 @@ public class F2pRouteAuditTest
 			{
 				sawWormbrain = true;
 				StringBuilder text = new StringBuilder();
-				for (ActiveTarget.StageLine l : s.target.getGuide().getStage().getStages().get(0).getSteps())
+				for (TargetStages.StageLine l : s.target.getGuide().getStage().getStages().get(0).getSteps())
 				{
 					text.append(l.getT()).append(' ').append(l.shown()).append(' ');
 				}
@@ -84,14 +84,14 @@ public class F2pRouteAuditTest
 		int points = 0;
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
-			ActiveTarget.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
+			TargetStages.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
 			if (st == null || !inRoute(s.target.getStepId()))
 			{
 				continue;
 			}
-			for (ActiveTarget.StageStep row : st.getStages())
+			for (TargetStages.StageStep row : st.getStages())
 			{
-				for (ActiveTarget.StageLine l : row.getSteps())
+				for (TargetStages.StageLine l : row.getSteps())
 				{
 					if (!l.hasPoint())
 					{
@@ -113,14 +113,14 @@ public class F2pRouteAuditTest
 		int counted = 0;
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
-			ActiveTarget.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
+			TargetStages.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
 			if (st == null || !inRoute(s.target.getStepId()))
 			{
 				continue;
 			}
-			for (ActiveTarget.StageStep row : st.getStages())
+			for (TargetStages.StageStep row : st.getStages())
 			{
-				for (ActiveTarget.StageLine l : row.getSteps())
+				for (TargetStages.StageLine l : row.getSteps())
 				{
 					if (!l.hasHas() || l.hasCount() < 2)
 					{
@@ -141,7 +141,7 @@ public class F2pRouteAuditTest
 	@Test
 	public void threeGoblinMailsOfDifferentColoursCountTogether()
 	{
-		ActiveTarget.StageLine line = new ActiveTarget.StageLine();
+		TargetStages.StageLine line = new TargetStages.StageLine();
 		line.setHas("Goblin mail|Blue goblin mail|Orange goblin mail x3");
 		ItemCounts b = new ItemCounts();
 		b.add(288, ActiveTarget.nameKey("Goblin mail"), 1);

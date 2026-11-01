@@ -26,7 +26,7 @@ public class QuestStageWalkTest
 	}
 
 	/** The player walks the steps: at a step with has takes the item, at a step with need brings and hands it in. Returns where it got stuck, or null. */
-	static String walk(String name, int stage, List<ActiveTarget.StageLine> lines)
+	static String walk(String name, int stage, List<TargetStages.StageLine> lines)
 	{
 		StageTracker t = new StageTracker();
 		java.util.Map<String, Integer> items = new java.util.HashMap<>();
@@ -37,7 +37,7 @@ public class QuestStageWalkTest
 		t.update(name, stage, lines, x, y, plane, bag);
 		for (int i = 0; i < lines.size(); i++)
 		{
-			ActiveTarget.StageLine l = lines.get(i);
+			TargetStages.StageLine l = lines.get(i);
 			if (l.hasPoint())
 			{
 				x = l.getX();
@@ -93,14 +93,14 @@ public class QuestStageWalkTest
 		int lines = 0;
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
-			ActiveTarget.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
+			TargetStages.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
 			if (st == null)
 			{
 				continue;
 			}
 			for (int idx = 0; idx < st.getStages().size(); idx++)
 			{
-				List<ActiveTarget.StageLine> l = st.getStages().get(idx).getSteps();
+				List<TargetStages.StageLine> l = st.getStages().get(idx).getSteps();
 				stages++;
 				lines += l.size();
 				for (int i = 0; i < l.size(); i++)

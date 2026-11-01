@@ -38,13 +38,13 @@ public class QuestWalkTest
 			? new Gson().fromJson(new String(Files.readAllBytes(file), StandardCharsets.UTF_8), JsonObject.class) : null;
 	}
 
-	private static List<ActiveTarget.StageLine> lines(JsonObject stage)
+	private static List<TargetStages.StageLine> lines(JsonObject stage)
 	{
-		List<ActiveTarget.StageLine> out = new ArrayList<>();
+		List<TargetStages.StageLine> out = new ArrayList<>();
 		for (JsonElement l : stage.getAsJsonArray("do"))
 		{
 			JsonObject o = l.getAsJsonObject();
-			ActiveTarget.StageLine line = new ActiveTarget.StageLine();
+			TargetStages.StageLine line = new TargetStages.StageLine();
 			line.setT(o.get("t").getAsString());
 			if (o.has("k"))
 			{
@@ -100,14 +100,14 @@ public class QuestWalkTest
 			JsonObject quest = quests.getAsJsonObject(id);
 			for (int value : e.getValue().stageValues())
 			{
-				List<ActiveTarget.StageLine> ls = lines(stageFor(quest, value));
+				List<TargetStages.StageLine> ls = lines(stageFor(quest, value));
 				List<int[]> places = new ArrayList<>();
 				for (List<String> path : e.getValue().leafPaths(value))
 				{
 					picks++;
 					String leaf = path.get(path.size() - 1);
 					int at = e.getValue().lineFor(new QhMachine.Verdict(leaf, path, true, false), ls);
-					ActiveTarget.StageLine line = at < 0 ? null : ls.get(at);
+					TargetStages.StageLine line = at < 0 ? null : ls.get(at);
 					QhSteps.Tile tile = QhSteps.tile(id, leaf);
 					QhVia.Via via = QhVia.of(leaf, tile, line, null, Collections.<String>emptySet());
 					int[] place = via != null ? new int[] {via.getX(), via.getY(), via.getPlane()}
@@ -159,7 +159,7 @@ public class QuestWalkTest
 			}
 			for (JsonElement st : q.getValue().getAsJsonObject().getAsJsonArray("stages"))
 			{
-				for (ActiveTarget.StageLine l : lines(st.getAsJsonObject()))
+				for (TargetStages.StageLine l : lines(st.getAsJsonObject()))
 				{
 					if (l.hasPoint() && noWayIn(l.getX(), l.getY()))
 					{

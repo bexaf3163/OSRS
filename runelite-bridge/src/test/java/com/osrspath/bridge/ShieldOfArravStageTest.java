@@ -9,13 +9,13 @@ import org.junit.Test;
 /** Shield of Arrav, stage 1 (varp 145 = 1): the book in the bag moves the card from "search" to "read" (live game: the card kept saying "search the bookcase"). */
 public class ShieldOfArravStageTest
 {
-	private static List<ActiveTarget.StageLine> row(int at)
+	private static List<TargetStages.StageLine> row(int at)
 	{
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
 			if (s.name.equals("S3-05"))
 			{
-				for (ActiveTarget.StageStep r : s.target.getGuide().getStage().getStages())
+				for (TargetStages.StageStep r : s.target.getGuide().getStage().getStages())
 				{
 					if (r.getAt() == at)
 					{
@@ -29,7 +29,7 @@ public class ShieldOfArravStageTest
 
 	@Test public void theBookInTheBagMovesTheCardToReadingIt()
 	{
-		List<ActiveTarget.StageLine> lines = row(1);
+		List<TargetStages.StageLine> lines = row(1);
 		assertEquals(2, lines.size());
 		StageTracker t = new StageTracker(() -> 1_000L);
 		// In the library, nothing in the bag: search the bookcase.

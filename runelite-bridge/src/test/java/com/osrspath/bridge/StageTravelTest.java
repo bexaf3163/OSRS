@@ -16,7 +16,7 @@ import org.junit.Test;
  */
 public class StageTravelTest
 {
-	private static List<ActiveTarget.StageLine> stage(String stepId, int idx)
+	private static List<TargetStages.StageLine> stage(String stepId, int idx)
 	{
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
@@ -28,7 +28,7 @@ public class StageTravelTest
 		throw new AssertionError("no stage " + stepId + "#" + idx);
 	}
 
-	private static int at(StageTracker t, String id, int idx, List<ActiveTarget.StageLine> lines, int x, int y)
+	private static int at(StageTracker t, String id, int idx, List<TargetStages.StageLine> lines, int x, int y)
 	{
 		return t.update(id, idx, lines, x, y, 0, new ItemCounts());
 	}
@@ -36,7 +36,7 @@ public class StageTravelTest
 	@Test
 	public void s209_sailedToMusaPoint_cursorOnZembo_notBackToTheQuay()
 	{
-		List<ActiveTarget.StageLine> lines = stage("S2-09", 1);
+		List<TargetStages.StageLine> lines = stage("S2-09", 1);
 		assertTrue("the 'sail' step is a transition: " + lines.get(0).shown(), StageTracker.isMove(lines.get(0)));
 		StageTracker t = new StageTracker();
 		assertEquals("far from the quay: the first step", 0, at(t, "S2-09", 1, lines, 3040, 3235));
@@ -54,7 +54,7 @@ public class StageTravelTest
 	@Test
 	public void s209_ranPastZemboAndLuthas_stepsAreNotSkipped()
 	{
-		List<ActiveTarget.StageLine> lines = stage("S2-09", 1);
+		List<TargetStages.StageLine> lines = stage("S2-09", 1);
 		StageTracker t = new StageTracker();
 		at(t, "S2-09", 1, lines, 3040, 3235);
 		at(t, "S2-09", 1, lines, 3028, 3220);
@@ -75,11 +75,11 @@ public class StageTravelTest
 	@Test
 	public void s208_preparedAndEnteredTheHouse_arrowToTheBasementAtOnce()
 	{
-		List<ActiveTarget.StageLine> lines = stage("S2-08", 2);
-		ActiveTarget.StageLine door = lines.get(2);
+		List<TargetStages.StageLine> lines = stage("S2-08", 2);
+		TargetStages.StageLine door = lines.get(2);
 		assertTrue("'Prepare for combat and enter...' is a transition: " + door.shown(), StageTracker.isMove(door));
 		// We start from this step: before it the player has already been to the bar and handed in the beer.
-		List<ActiveTarget.StageLine> from = lines.subList(2, lines.size());
+		List<TargetStages.StageLine> from = lines.subList(2, lines.size());
 		StageTracker t = new StageTracker();
 		assertEquals(0, at(t, "S2-08", 2, from, 3110, 3329));
 		assertEquals(0, at(t, "S2-08", 2, from, door.getX(), door.getY() - 1));
@@ -94,18 +94,18 @@ public class StageTravelTest
 		List<String> bad = new ArrayList<>();
 		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
 		{
-			ActiveTarget.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
+			TargetStages.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
 			if (st == null)
 			{
 				continue;
 			}
 			for (int idx = 0; idx < st.getStages().size(); idx++)
 			{
-				List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
+				List<TargetStages.StageLine> lines = st.getStages().get(idx).getSteps();
 				for (int i = 0; i < lines.size() - 1; i++)
 				{
-					ActiveTarget.StageLine cur = lines.get(i);
-					ActiveTarget.StageLine nx = lines.get(i + 1);
+					TargetStages.StageLine cur = lines.get(i);
+					TargetStages.StageLine nx = lines.get(i + 1);
 					if (!StageTracker.isMove(cur) || !cur.hasPoint() || !nx.hasPoint() || cur.getPlane() != nx.getPlane() || cur.hasNeed() || cur.hasHas())
 					{
 						continue;
@@ -116,7 +116,7 @@ public class StageTravelTest
 						continue;
 					}
 					checked++;
-					List<ActiveTarget.StageLine> from = lines.subList(i, lines.size());
+					List<TargetStages.StageLine> from = lines.subList(i, lines.size());
 					StageTracker t = new StageTracker();
 					String id = s.target.getStepId();
 					t.update(id, idx, from, cur.getX() + 60, cur.getY() + 60, cur.getPlane(), new ItemCounts());

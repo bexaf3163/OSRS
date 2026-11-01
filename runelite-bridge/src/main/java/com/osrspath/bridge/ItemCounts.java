@@ -279,7 +279,7 @@ final class ItemCounts
 	 * For auto-tick: with an ID, only that item (the Dragon Slayer I map pieces share one name among three),
 	 * without an ID, all the names together.
 	 */
-	int count(ActiveTarget.ItemNeed need)
+	int count(TargetNeeds.ItemNeed need)
 	{
 		if (need.getId() != null)
 		{

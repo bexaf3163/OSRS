@@ -30,7 +30,7 @@ final class PluginQuests
 	/** Recompute the view (client thread): the in-game list draws it, and it goes to the panel only if it changed. */
 	void refreshGuide()
 	{
-		ActiveTarget.Stage stage = stageOf(plugin.target);
+		TargetStages.Stage stage = stageOf(plugin.target);
 		trackStageCursor(stage);
 		String stageNow = stage == null ? null : stageTracker.key() + "|" + questDone(plugin.target);
 		if (!Objects.equals(stageNow, plugin.player.checklistStage))
@@ -171,7 +171,7 @@ final class PluginQuests
 	 * The Quest Helper machine's pick for the stage lines, or null: there is no machine, it does not decide ("unknown" in a condition) or it picked the step "by default",
 	 * that is, there is no evidence and the line will be decided by place and items. The pick is written to the log when it changes.
 	 */
-	private StageTracker.QhPick qhPick(String stepId, int value, List<ActiveTarget.StageLine> lines)
+	private StageTracker.QhPick qhPick(String stepId, int value, List<TargetStages.StageLine> lines)
 	{
 		qhHint = null;
 		plugin.qhLeaf = null;
@@ -227,7 +227,7 @@ final class PluginQuests
 	/** Once per tick: a message, dialogue or item arrived and the machine picked another step; the view is recomputed at once, not at the player's next step. */
 	void qhTick()
 	{
-		ActiveTarget.Stage st = stageOf(plugin.target);
+		TargetStages.Stage st = stageOf(plugin.target);
 		if (st == null || plugin.client.getGameState() != GameState.LOGGED_IN || questDone(plugin.target))
 		{
 			return;
@@ -300,7 +300,7 @@ final class PluginQuests
 	Preflight.Block preBlock;
 
 	/** The pre-flight check of a stage step: unknown (the bag not read yet) blocks nothing. */
-	private Preflight.Block guard(ActiveTarget.Stage st, ActiveTarget.StageLine line, WorldPoint pos)
+	private Preflight.Block guard(TargetStages.Stage st, TargetStages.StageLine line, WorldPoint pos)
 	{
 		if (line == null || line.getPre() == null || plugin.client.getItemContainer(InventoryID.INV) == null)
 		{
@@ -310,7 +310,7 @@ final class PluginQuests
 	}
 
 	/** Recompute the current stage step from the player's position and items. Client thread. */
-	private void trackStageCursor(ActiveTarget.Stage st)
+	private void trackStageCursor(TargetStages.Stage st)
 	{
 		preBlock = null;
 		plugin.stageVia = null;
@@ -337,7 +337,7 @@ final class PluginQuests
 			return;
 		}
 		WorldPoint pos = me.getWorldLocation();
-		List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
+		List<TargetStages.StageLine> lines = st.getStages().get(idx).getSteps();
 		stageTracker.update(plugin.target.getStepId(), idx, lines, pos.getX(), pos.getY(), pos.getPlane(), ItemCounts.sum(plugin.carried, plugin.noted),
 			qhPick(plugin.target.getStepId(), value, lines));
 		restoreWalk(st, lines);
@@ -369,7 +369,7 @@ final class PluginQuests
 	}
 
 	/** Only "done" moves a hand-advanced walkthrough, so a client restart would put the player back on line 1: the reached line is kept in the config. */
-	private void restoreWalk(ActiveTarget.Stage st, List<ActiveTarget.StageLine> lines)
+	private void restoreWalk(TargetStages.Stage st, List<TargetStages.StageLine> lines)
 	{
 		String stepId = plugin.target.getStepId();
 		if (!st.isManual() || stepId.equals(walkRestored))
@@ -385,7 +385,7 @@ final class PluginQuests
 	}
 
 	/** The log: entering a stage, a quest variable change, where and why the cursor moved, warnings. */
-	private void logStage(ActiveTarget.Stage st, int idx, int value, List<ActiveTarget.StageLine> lines, WorldPoint pos)
+	private void logStage(TargetStages.Stage st, int idx, int value, List<TargetStages.StageLine> lines, WorldPoint pos)
 	{
 		if (plugin.debug.telemetry == null)
 		{
@@ -401,11 +401,11 @@ final class PluginQuests
 		}
 	}
 
-	private void logStageUnsafe(ActiveTarget.Stage st, int idx, int value, List<ActiveTarget.StageLine> lines, WorldPoint pos)
+	private void logStageUnsafe(TargetStages.Stage st, int idx, int value, List<TargetStages.StageLine> lines, WorldPoint pos)
 	{
 		String key = stageTracker.key();
 		int cur = stageTracker.cursor();
-		ActiveTarget.StageLine line = lines.isEmpty() ? null : lines.get(Math.max(0, Math.min(cur, lines.size() - 1)));
+		TargetStages.StageLine line = lines.isEmpty() ? null : lines.get(Math.max(0, Math.min(cur, lines.size() - 1)));
 		int[] at = {pos.getX(), pos.getY(), pos.getPlane()};
 		if (!Objects.equals(plugin.debug.lastStageVar, value))
 		{
@@ -450,13 +450,13 @@ final class PluginQuests
 	/** The arrow was set by the stage, not the player: on arrival it stays at the NPC (does not jump back to the step) until the stage changes. */
 	boolean navSticky;
 
-	static ActiveTarget.Stage stageOf(ActiveTarget t)
+	static TargetStages.Stage stageOf(ActiveTarget t)
 	{
 		return t == null || t.getGuide() == null ? null : t.getGuide().getStage();
 	}
 
 	/** The quest variable's value; null means not in the game. Client thread. */
-	Integer stageValue(ActiveTarget.Stage st)
+	Integer stageValue(TargetStages.Stage st)
 	{
 		if (plugin.client.getGameState() != GameState.LOGGED_IN)
 		{
@@ -473,7 +473,7 @@ final class PluginQuests
 	/** The step's quest is complete by game data (a step with the "quest complete" trigger). */
 	boolean questDone(ActiveTarget t)
 	{
-		ActiveTarget.Trigger trig = t == null ? null : t.getCompletionTrigger();
+		TargetNeeds.Trigger trig = t == null ? null : t.getCompletionTrigger();
 		if (trig == null || trig.getQuestName() == null || plugin.client.getGameState() != GameState.LOGGED_IN)
 		{
 			return false;
@@ -488,7 +488,7 @@ final class PluginQuests
 	private void followStage()
 	{
 		ActiveTarget t = plugin.target;
-		ActiveTarget.Stage st = stageOf(t);
+		TargetStages.Stage st = stageOf(t);
 		if (st == null)
 		{
 			stageKey = null;
@@ -501,10 +501,10 @@ final class PluginQuests
 		}
 		boolean done = questDone(t);
 		int idx = st.indexFor(value);
-		List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
+		List<TargetStages.StageLine> lines = st.getStages().get(idx).getSteps();
 		// The arrow follows the current stage step if it has a tile; if not, the stage's point.
 		int cursor = Math.max(0, Math.min(stageTracker.cursor(), lines.size() - 1));
-		ActiveTarget.StageLine now = done || lines.isEmpty() ? null : lines.get(cursor);
+		TargetStages.StageLine now = done || lines.isEmpty() ? null : lines.get(cursor);
 		boolean byStep = now != null && now.hasPoint();
 		String stageOnly = t.getStepId() + "#" + (done ? "done" : String.valueOf(idx));
 		Preflight.Block block = done ? null : preBlock;
@@ -638,7 +638,7 @@ final class PluginQuests
 			case NEXT:
 			{
 				// Only a step the game does not see by itself (several in a row at one place); the others cannot be skipped.
-				ActiveTarget.Stage st = stageOf(plugin.target);
+				TargetStages.Stage st = stageOf(plugin.target);
 				Integer value = st == null ? null : stageValue(st);
 				if (value != null && stageTracker.forward(st.getStages().get(st.indexFor(value)).getSteps()))
 				{

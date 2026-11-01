@@ -316,10 +316,10 @@ final class PluginDebug
 		}
 		if (t != null && tickCount % WATCH_TICKS == 0)
 		{
-			ActiveTarget.Stage st = PluginQuests.stageOf(plugin.target);
+			TargetStages.Stage st = PluginQuests.stageOf(plugin.target);
 			StepGuide.View v = plugin.guideView;
 			WorldPoint p = me.getWorldLocation();
-			List<ActiveTarget.StageLine> lines = currentLines(st);
+			List<TargetStages.StageLine> lines = currentLines(st);
 			int cur = plugin.quests.stageTracker.cursor();
 			boolean manual = lines != null && StageTracker.needsManualStep(lines, cur);
 			StepGuide.StageView sv = v == null ? null : v.getStage();
@@ -342,7 +342,7 @@ final class PluginDebug
 	}
 
 	/** The lines of the stage the dialogue keys below were built for (compared by identity), and the keys. */
-	private List<ActiveTarget.StageLine> dialogLines;
+	private List<TargetStages.StageLine> dialogLines;
 
 	private Set<String> dialogKeys = Collections.emptySet();
 
@@ -357,8 +357,8 @@ final class PluginDebug
 		{
 			return Collections.emptySet();
 		}
-		ActiveTarget.Stage st = PluginQuests.stageOf(t);
-		List<ActiveTarget.StageLine> lines = st == null ? null : currentLines(st);
+		TargetStages.Stage st = PluginQuests.stageOf(t);
+		List<TargetStages.StageLine> lines = st == null ? null : currentLines(st);
 		if (lines == null || lines.isEmpty())
 		{
 			return t.getDialogSet();
@@ -366,7 +366,7 @@ final class PluginDebug
 		if (lines != dialogLines)
 		{
 			Set<String> keys = new HashSet<>(t.getDialogSet());
-			for (ActiveTarget.StageLine l : lines)
+			for (TargetStages.StageLine l : lines)
 			{
 				keys.addAll(ActiveTarget.dialogKeysOf(l.getT()));
 			}
@@ -376,7 +376,7 @@ final class PluginDebug
 		return dialogKeys;
 	}
 
-	List<ActiveTarget.StageLine> currentLines(ActiveTarget.Stage st)
+	List<TargetStages.StageLine> currentLines(TargetStages.Stage st)
 	{
 		Integer value = st == null ? null : plugin.quests.stageValue(st);
 		return value == null ? null : st.getStages().get(st.indexFor(value)).getSteps();
@@ -385,11 +385,11 @@ final class PluginDebug
 	/** The engine state for the developer badge and for the screenshot. Client thread. */
 	private DebugView.State buildDebugState()
 	{
-		ActiveTarget.Stage st = PluginQuests.stageOf(plugin.target);
+		TargetStages.Stage st = PluginQuests.stageOf(plugin.target);
 		Integer value = st == null ? null : plugin.quests.stageValue(st);
-		List<ActiveTarget.StageLine> lines = currentLines(st);
+		List<TargetStages.StageLine> lines = currentLines(st);
 		int cur = plugin.quests.stageTracker.cursor();
-		ActiveTarget.StageLine line = lines == null || lines.isEmpty() ? null : lines.get(Math.max(0, Math.min(cur, lines.size() - 1)));
+		TargetStages.StageLine line = lines == null || lines.isEmpty() ? null : lines.get(Math.max(0, Math.min(cur, lines.size() - 1)));
 		ItemCounts bag = ItemCounts.sum(plugin.carried, plugin.noted);
 		List<String> conditions = new ArrayList<>();
 		if (line != null && line.hasHas())

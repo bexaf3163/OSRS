@@ -17,7 +17,7 @@ public class ModernGuideTest
 {
 	private StepGuide.View view(PrepPlan prep)
 	{
-		ActiveTarget.StageLine line = new ActiveTarget.StageLine();
+		TargetStages.StageLine line = new TargetStages.StageLine();
 		line.setT("Defeat the Ancient Guardian or mine 4 pillars (Mining 10)");
 		line.setS(line.getT());
 		return new StepGuide.View("[S3-04] Below Ice Mountain", null, Collections.emptyList(), Collections.emptyList(), null, null, null, null,

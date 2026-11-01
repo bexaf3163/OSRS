@@ -33,9 +33,9 @@ final class QhVia
 		int npcId;
 		int objectId;
 
-		ActiveTarget.Highlight highlight()
+		TargetStages.Highlight highlight()
 		{
-			ActiveTarget.Highlight h = new ActiveTarget.Highlight();
+			TargetStages.Highlight h = new TargetStages.Highlight();
 			if (npcId > 0)
 			{
 				h.setNpc(Collections.singletonList(npcId));
@@ -57,7 +57,7 @@ final class QhVia
 	 * line's tile. name is the NPC's or object's name from the game (null when unknown); proper are the capitalised words of the quest's lines
 	 * (names keep their capital in the label).
 	 */
-	static Via of(String leaf, QhSteps.Tile tile, ActiveTarget.StageLine line, String name, Set<String> proper)
+	static Via of(String leaf, QhSteps.Tile tile, TargetStages.StageLine line, String name, Set<String> proper)
 	{
 		if (leaf == null || tile == null)
 		{
