@@ -193,7 +193,7 @@ Record versions, account mode, facts, expected and actual result and evidence as
 
 ### P5 — project optimization (2026-11, verify-first)
 
-Each batch releases after all gates and its Go threshold, and live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. In order:
+Each batch releases after all gates and its Go threshold, and live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. Alternate timing-pair order: identical builds timed up to +10% script and +36% blocking when second. In order:
 
 1. **S3** move the remaining wrong-direction symbols (`FOODS`, `FRESH_MS`, `nearestBank`, `isClosed`, services importing engines) to zero layer violations and break the `Skills` ↔ `SkillDetail` cycle; then `check-structure --strict` in CI.
 2. **S4** page registry with `href.*()` (30 files hard-code `#/`) and one storage-key registry (26 keys in 19 files, byte-identical).
@@ -224,10 +224,12 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 
 2.81.19 (optimization batches 1 and 2; owner's Windows PC, at least two runs per build): per-update script 70.3 → 20.5 ms, start-up blocking −53…−74%, page switches within +0.7 ms, web build −26%, unit run 72 → 9 s, browser suite 458 → 312 s, axe 0 on nine pages, screenshots identical apart from known noise. Local gates pass (2,513 unit, 874 browser, 95 Electron, 647 Java with Sora in the jar). Real-game acceptance is pending (P4).
 
+2.81.20 (S1, 255 files moved into `app`, `state`, `ui`, `features` and `domain`): the web build was byte-identical to 2.81.19 before the version bump, so runtime is unchanged. The largest code folder fell from 139 to 19 files. Gates and counts are unchanged.
+
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-Published and independently verified Portable: **2.81.18**, source `754ac0a510f0e71dc7aa5e96e3716d00ee87ca35`. Exact-source Checks **41248886425** and Release **41248886508** passed, including browser, full Java, native-shell and isolated packaged-EXE gates.
+Published and independently verified Portable: **2.81.19**, source `62a3b4cdd9eba47f3f0eb55ab9b2227804fb75f4`. Exact-source Checks **41257110698** and Release **41257110675** passed, including browser, full Java, native-shell and isolated packaged-EXE gates.
 
-Downloaded EXE: **102442313 bytes**, SHA256 `909131112367783078fa6a5a6920cbdd647af53091a0d895d0fd942422d5d3de`. Download, asset digest, SHA256SUMS.txt, size and release tag/source agree. The release copy of this file matches its digest (`07d563ac88e74bf0d32f821ccc2fa9ef3ff32f62e5cdde78060ff552327c3cc1`) and names 2.81.18 and its source. Three assets: EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt. Verified by Claude 2026-11-01.
+Downloaded EXE: **102019858 bytes**, SHA256 `bcef14712359ae0b4d75d8aa6d6381ec2dfe8dc6d449ca84e93dd70092bee1d3`. Download, asset digest, SHA256SUMS.txt, size and release tag/source agree. The release copy of this file matches its digest (`17cb250cc69ce34748f8bf46331c7628ad271eade844ddb2fa076a1833ce8bc7`) and names 2.81.19 and its source. Three assets: EXE, PROJECT_HANDOFF.md and SHA256SUMS.txt. Verified by Claude 2026-11-01.
 <!-- DELIVERY_END -->
