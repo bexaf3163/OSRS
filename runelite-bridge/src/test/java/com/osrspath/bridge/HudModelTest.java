@@ -30,12 +30,12 @@ public class HudModelTest
 		p.line("Black full helm").setEquip(true);
 		StepGuide.ItemLine helm = item("Black full helm", StepGuide.Have.BAG, 1, 1, 0, 0, null, true);
 		HudModel.Input in = input(view(S403, p, helm), quiet(), null);
-		assertTrue(HudModel.blocks(helm, p, in));
+		assertTrue(HudBlocks.blocks(helm, p, in));
 		assertEquals("Equip Black full helm", HudModel.build(in).getHeadline());
-		assertFalse(HudModel.prepareLines(in, null).stream().anyMatch(l -> l.getText().contains("with you")));
+		assertFalse(HudAdvice.prepareLines(in, null).stream().anyMatch(l -> l.getText().contains("with you")));
 		StepGuide.ItemLine worn = item("Black full helm", StepGuide.Have.BAG, 1, 1, 0, 1, null, true);
-		assertFalse(HudModel.blocks(worn, p, in));
-		assertNull(HudModel.block(input(view(S403, p, worn), quiet(), null)));
+		assertFalse(HudBlocks.blocks(worn, p, in));
+		assertNull(HudBlocks.block(input(view(S403, p, worn), quiet(), null)));
 	}
 
 	// ---------- Builders ----------
