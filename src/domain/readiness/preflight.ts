@@ -2,9 +2,14 @@ import type { QuestStageLine, StagePre } from '../../types';
 import type { GearItem } from '../../services/runeliteBridge';
 import { BANKS, EXCHANGE, bankTiles, type Point } from '../travel/travel';
 import { nameKey } from '../items/itemKey';
-import { usableAt } from '../items/toolTiers';
-import { effectiveHeal, foodCarry, heldFood, FOODS } from '../combat/foodAdvice';
-import type { OwnedItem } from '../items/checklist';
+import { usableAt, toolFamilyOf } from '../items/toolTiers';
+import { effectiveHeal, foodCarry, heldFood, allocateFoodStock } from '../player/foodStock';
+import { FOODS } from '../../data/threats';
+import type { OwnedItem, OwnedState } from '../items/checklist';
+import { allocateMaterialStock } from '../player/materialStock';
+import { doseKind, doseName } from '../items/doseKind';
+import { countWorn, type WornItem } from '../items/equipmentCount';
+import type { PreflightItem } from '../prep/stepItems';
 
 /**
  * The item pre-flight guard for a quest stage step: while an item the step uses is not in the bag (or worn), the arrow does not lead to the step.
@@ -147,4 +152,53 @@ export function guardedDestination(line: QuestStageLine, inp: PreflightInput): (
   const block = itemPreflight(line, inp);
   if (block) return block.target;
   return line.at ? { x: line.at[0], y: line.at[1], plane: line.at[2] } : null;
+}
+
+export type PreflightState = 'IN_BAG_READY' | 'MISSING_FROM_BAG' | 'NOT_FOUND_IN_BANK' | 'NOT_EQUIPPED' | 'UNKNOWN';
+export interface PreflightRow {
+  item: PreflightItem;
+  have: number;
+  /** null means the bank was not opened yet. */
+  inBank: number | null;
+  state: PreflightState;
+}
+export interface PreflightResult {
+  rows: PreflightRow[];
+  /** READY_TO_DEPART: everything is on hand. */
+  ready: boolean;
+  missing: number;
+}
+export function evaluatePreflight(items: PreflightItem[], owned: OwnedState, levels?: Partial<Record<string, number>> | null, equipment?: readonly WornItem[] | null): PreflightResult {
+  const foods = allocateFoodStock({ owned, bankSeen: owned.bankSeen, equipment: {}, manual: {} },
+    items.map((item, index) => ({ ...item, key: `departure:${index}`, anyOf: item.alt })), levels?.hitpoints);
+  const materials = allocateMaterialStock({ owned, bankSeen: owned.bankSeen, equipment: {}, manual: {} },
+    items.map((item, index) => ({ ...item, key: `departure:${index}`, anyOf: item.alt })));
+  const rows = items.map((item, index): PreflightRow => {
+    // A potion counts in doses across its four sizes, each potion by its own doses: a (3) and a (1) are 4.
+    const dose = item.doses !== undefined ? doseKind(item.nameEn) : null;
+    const all = dose
+      ? [1, 2, 3, 4].map((d) => ({ o: owned.items.get(nameKey(doseName(dose.base, d))), w: d }))
+      : [...new Set([item.nameEn, ...(item.alt ?? [])].map(nameKey))]
+        .filter((n) => usableAt(n, (skill) => levels?.[skill] ?? null))
+        .map((n) => ({ o: owned.items.get(n), w: 1 }));
+    const need = item.doses ?? item.count;
+    const legacy = Boolean(toolFamilyOf(item.nameEn)) && all.some(({ o }) => o?.legacyToolCount);
+    const count = (where: 'carried' | 'bank') => legacy ? Math.max(0, ...all.map(({ o }) => o?.[where] ?? 0)) : all.reduce((s, { o, w }) => s + (o?.[where] ?? 0) * w, 0);
+    const food = foods.get(`departure:${index}`);
+    const material = materials.get(`departure:${index}`);
+    const carried = material ? material.bag ?? 0 : food ? food.bag ?? 0 : count('carried');
+    const accepted = new Set([item.nameEn, ...(item.alt ?? [])].map(nameKey));
+    const worn = countWorn(equipment, n => accepted.has(nameKey(n)));
+    const have = item.equip ? worn.count : carried;
+    const inBank = material ? material.bank : food ? food.bank : owned.bankSeen && all.every(({ o }) => o?.bank !== undefined) ? count('bank') : null;
+    let state: PreflightState;
+    if (have >= need) state = 'IN_BAG_READY';
+    else if (item.equip && !worn.known) state = 'UNKNOWN';
+    else if (item.equip && carried >= need) state = 'NOT_EQUIPPED';
+    else if (inBank === null || carried + inBank + (material?.noted ?? 0) >= need) state = 'MISSING_FROM_BAG';
+    else state = 'NOT_FOUND_IN_BANK';
+    return { item, have, inBank, state };
+  });
+  const missing = rows.filter((r) => r.state !== 'IN_BAG_READY').length;
+  return { rows, ready: rows.length > 0 && missing === 0, missing };
 }

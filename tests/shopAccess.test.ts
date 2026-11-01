@@ -2,14 +2,14 @@
 // against the player's state; what cannot be confirmed is offered as "if …" beside a verified way, never as the place to go.
 
 import { describe, expect, it } from 'vitest';
-import { accessSuffix, shopAccess, spawnAccess, type AccessContext } from '../src/domain/prep/shopAccess';
+import { accessSuffix, shopAccess, spawnAccess, type AccessContext } from '../src/domain/market/shopAccess';
 import { planSources } from '../src/domain/prep/sourceRouter';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { scopeList, shopRows, timingOf, budgetOf, budgetSum, type ShopRow } from '../src/domain/economy/shoppingView';
 import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
 import { nameKey } from '../src/domain/items/itemKey';
 import { allSteps, itemById } from '../src/data';
-import type { ShoppingLine } from '../src/domain/economy/shopping';
+import type { ShoppingLine } from '../src/domain/prep/shopping';
 import type { WikiItemDetail } from '../src/types';
 
 const ctx = (over: Partial<AccessContext> = {}): AccessContext => ({ mode: 'f2p', quests: { known: false }, qp: null, level: () => null, ...over });

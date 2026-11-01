@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { preflightItems } from '../src/domain/items/checklist';
+import { preflightItems } from '../src/domain/prep/stepItems';
 import { nameKey } from '../src/domain/items/itemKey';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';

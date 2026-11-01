@@ -11,7 +11,7 @@ import { trainingNav } from '../src/domain/training/trainingNav';
 import { withTrainingMethod } from '../src/domain/training/methodStep';
 import { stepById } from '../src/data';
 import { adviseTraining, toolUpgrade, trainingMethods, viewMethod, type TrainingMethod } from '../src/domain/training/trainingRouter';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { PriceView } from '../src/domain/market/quotes';
 import { market } from './funding/market';
 
 const method = (id: string) => trainingMethods.find((m) => m.id === id) as TrainingMethod;
@@ -292,7 +292,7 @@ describe('the gathering registry and the Skills catalogue', () => {
 
 describe('the cowhide baseline is bounded', () => {
   it('banked coins never count for more than half the time, so a rich spot cannot outrank a much faster one on coins alone', async () => {
-    const { coinTimeShare, COIN_SHARE_CAP } = await import('../src/domain/economy/lootValue');
+    const { coinTimeShare, COIN_SHARE_CAP } = await import('../src/domain/market/lootValue');
     expect(COIN_SHARE_CAP).toBe(0.5);
     expect(coinTimeShare(1e9, 100)).toBe(0.5);
     expect(coinTimeShare(3000, 100)).toBeCloseTo(0.5, 6);
@@ -344,7 +344,6 @@ describe('a better tool is weighed against its price over the hours left', () =>
     expect(toolUpgrade(m, 300_000, 'balanced', null)).toBeNull();
   });
 });
-
 
 describe('guide-only gathering methods use the shared manual-setup boundary', () => {
   const state = () => stateOf({ fishing: 70, mining: 50, attack: 40 }, {

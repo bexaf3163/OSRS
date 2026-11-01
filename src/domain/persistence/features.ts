@@ -2,8 +2,6 @@
 // but also do nothing: they look up no coordinates, send no stage items to RuneLite, offer no upgrades.
 // What happens in the game itself is also turned off in the OSRS Path Bridge plugin's settings.
 
-
-
 export interface Features {
   /** 📍 at places in the wiki dossier: the map and an arrow in the game. */
   autoLocation: boolean;

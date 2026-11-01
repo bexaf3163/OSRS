@@ -6,10 +6,11 @@
 
 import type { GameMode } from '../../types';
 import { nameKey } from '../items/itemKey';
-import { coinsOf, heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from '../player/playerState';
+import { coinsOf, heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from './playerState';
 import { countWorn } from '../items/equipmentCount';
-import { heldUnits, needUnits, type HeldUnits } from '../items/doses';
-import { heldFood } from '../combat/foodAdvice';
+import { needUnits } from '../items/doses';
+import { heldUnits, type HeldUnits } from './heldUnits';
+import { heldFood } from './foodStock';
 
 export type ItemRef = { name: string; id?: number; /** The manual "already have" mark key. */ manualKey?: string };
 

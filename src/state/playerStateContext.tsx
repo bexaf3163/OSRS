@@ -18,8 +18,8 @@ import { resolvePick, withCombatPlan, type CombatPick } from '../domain/combat/r
 import { selectPlan, type PlanSelection } from '../domain/combat/route/selection';
 import { stepGoals } from '../domain/combat/combatEstimate';
 import { usePriceView } from './hooks/usePriceView';
-import type { PriceView } from '../domain/economy/funding/quotes';
-import { itemPrice } from '../domain/items/itemPrice';
+import type { PriceView } from '../domain/market/quotes';
+import { itemPrice } from '../domain/market/itemPrice';
 import { useTradeRestriction } from './hooks/useTradeRestriction';
 import type { Step } from '../types';
 import { isClosed } from '../domain/quests/next-step';
@@ -29,7 +29,7 @@ import { ledgerKey, LEDGER_LIMIT, loadLedger, saveLedger, since } from '../domai
 import { nameKey } from '../domain/items/itemKey';
 import { buildPlayerState, diffPlayerState, heldOf, type PlayerState, type StateChange } from '../domain/player/playerState';
 import { entriesFor, summarize, type LedgerEntry, type LedgerSummary } from '../domain/persistence/ledger';
-import { buildPriceBook, reprice, type PriceBook } from '../domain/items/priceBook';
+import { buildPriceBook, reprice, type PriceBook } from '../domain/market/priceBook';
 
 interface PlayerStateValue {
   state: PlayerState;

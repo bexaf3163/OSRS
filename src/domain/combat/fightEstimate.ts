@@ -7,7 +7,7 @@ import { equippedBySlot, gearData, meleeAs, SLOTS, type TrainStyle } from './gea
 import type { GearState } from '../../services/runeliteBridge';
 import type { GearPiece, Step } from '../../types';
 import { attackCounts, attacksToKill, COMBAT_FOES, foeLabel, hitChance, spread, swingDamage, swingsPerFight, type CombatFoe, type Range } from './combatEstimate';
-import { THREATS } from './foodAdvice';
+import { THREATS } from '../../data/threats';
 
 const TICK = 0.6;
 const STYLES: TrainStyle[] = ['accurate', 'aggressive', 'defensive'];

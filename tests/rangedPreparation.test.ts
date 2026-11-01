@@ -13,7 +13,7 @@ import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { methodNeeds, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
 import { market } from './funding/market';
 import type { Market } from '../src/domain/training/methodRates';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { PriceView } from '../src/domain/market/quotes';
 
 const base = stepById.get('S6-01')!;
 function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}, chosenMethod?: string, dressed = true) {

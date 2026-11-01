@@ -4,11 +4,11 @@ import { useMemo } from 'react';
 import type { Step } from '../../../types';
 import { useBridge } from '../../../state/bridge';
 import { useStore } from '../../../state/store';
-import { formatGp } from '../../../domain/economy/shopping';
+import { formatGp } from '../../../domain/prep/shopping';
 import { wealthOf } from '../../../domain/economy/wealth';
 import { adviseStyle, shoppingTotal, SLOT_LABEL, STYLE_GEAR, type PickStatus } from '../../../domain/combat/styleGear';
 import { usePriceView } from '../../../state/hooks/usePriceView';
-import { itemPrice, type ItemPrice } from '../../../domain/items/itemPrice';
+import { itemPrice, type ItemPrice } from '../../../domain/market/itemPrice';
 import { findLocalItem } from '../../../domain/items/localItem';
 import { gearQuestEvidence } from '../../../domain/combat/gearAdvice';
 

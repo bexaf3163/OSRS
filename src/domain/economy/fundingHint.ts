@@ -2,7 +2,7 @@
 // what to do now and how far it has gone. The plan is the app's (lib/funding/plan.ts); this is its FundingView, the same one the Preparation panel draws,
 // so the app and the game never say different things. The plugin only draws it: it recomputes nothing, and an older plugin ignores the field.
 
-import { clipText } from '../prep/prepEnvelope';
+import { clipText } from '../text/format';
 import type { FundingPlanState, FundingView } from './funding/plan';
 
 export interface FundingHintPayload {

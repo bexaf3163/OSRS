@@ -10,7 +10,7 @@ import { lineAmount, type PrepLine } from '../../../domain/prep/prepPlan';
 import { Inline } from '../../../ui/Inline';
 import { ItemIcon } from '../../reference/WikiDrawer';
 import { findLocalItem } from '../../../domain/items/localItem';
-import { formatGp } from '../../../domain/economy/shopping';
+import { formatGp } from '../../../domain/prep/shopping';
 import { ReadinessVerdictCard } from './ReadinessVerdict';
 
 const LABEL = { EQUIPPED: 'Equipped', INVENTORY: 'In your bag', BANK: 'Take from bank', MISSING: 'Missing', UNKNOWN: 'Not checked' };

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { buildPriceView } from '../src/domain/economy/funding/quotes';
-import { itemPrice } from '../src/domain/items/itemPrice';
+import { buildPriceView } from '../src/domain/market/quotes';
+import { itemPrice } from '../src/domain/market/itemPrice';
 import { castCost, OPTIONS, planFor, RUNE_IDS, SPELLS, STAFFS, staffPayback } from '../src/domain/combat/magicPlan';
 import { xpForLevel } from '../src/domain/player/xp';
 

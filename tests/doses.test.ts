@@ -2,12 +2,15 @@
 // every size counts toward a need, doses are not bag slots, and a shortfall is bought as a package of potions, never as "another full potion" per dose.
 
 import { describe, expect, it } from 'vitest';
-import { carryOf, doseKind, dosePackage, doseValue, heldUnits, needUnits, shortText, takeFromBank } from '../src/domain/items/doses';
+import { carryOf, doseKind, dosePackage, doseValue, needUnits, shortText, takeFromBank } from '../src/domain/items/doses';
+import { heldUnits } from '../src/domain/player/heldUnits';
 import { shopRows, scopeList, geListText, type ShopRow } from '../src/domain/economy/shoppingView';
-import { aggregateShopping, holdingFor, type ShoppingLine } from '../src/domain/economy/shopping';
+import { aggregateShopping, holdingFor, type ShoppingLine } from '../src/domain/prep/shopping';
 import { buildPlayerState } from '../src/domain/player/playerState';
-import { evaluate } from '../src/domain/readiness/requirements';
-import { evaluatePreflight, preflightItems, type OwnedItem, type OwnedState } from '../src/domain/items/checklist';
+import { evaluate } from '../src/domain/player/requirements';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { evaluatePreflight } from '../src/domain/readiness/preflight';
+import { preflightItems } from '../src/domain/prep/stepItems';
 import { nameKey } from '../src/domain/items/itemKey';
 import { planOneTrip } from '../src/domain/prep/oneTrip';
 import { emptyProgress } from '../src/domain/persistence/progress';

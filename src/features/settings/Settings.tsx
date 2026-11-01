@@ -10,7 +10,7 @@ import { setFeatures, useFeatures } from '../../state/hooks/useFeatures';
 import { priorityOf } from '../../domain/persistence/playStyle';
 import { BRIDGE_ORIGIN } from '../../services/runeliteBridge';
 import { PluginUpdateNote } from './PluginUpdateNote';
-import { plural } from '../../domain/economy/shopping';
+import { plural } from '../../domain/text/format';
 import { AccountSync } from '../../ui/AccountSync';
 import { BackupSection, UpdatesSection, ProfilesSection, SessionSection } from './SettingsExtra';
 import { Eyebrow, Page } from '../../ledger';
@@ -26,7 +26,6 @@ function loadTab(): SettingsTab {
     return 'game';
   }
 }
-
 
 function download(name: string, text: string) {
   const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));

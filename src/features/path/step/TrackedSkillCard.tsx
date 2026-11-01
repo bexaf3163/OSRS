@@ -20,7 +20,7 @@ import { useFeatures } from '../../../state/hooks/useFeatures';
 import { styleOf } from '../../../domain/persistence/playStyle';
 import { useTrainingFunding } from '../../../state/trainingSessionContext';
 import { levelById } from '../../../data';
-import { nearestBank } from '../../../domain/readiness/readiness';
+import { nearestBank } from '../../../domain/travel/stepPlaces';
 
 /** Sends the tracked skill's path with every change of the quests done; nothing is sent while no skill is tracked. */
 export function SkillSync() {

@@ -9,7 +9,7 @@
 //  - A plan that is gone (its conditions changed: the bones are already in hand) or not safe gives way at once: safety does not wait for a bank trip.
 
 import type { Adopted } from './adopt';
-import { earningsOrder } from '../../economy/lootValue';
+import { earningsOrder } from '../../market/lootValue';
 import { gainOver, MIN_GAIN, planKeyOf, planNetPerHour, type EvaluatedPlan, type PlanReport } from './plans';
 
 /** Whether the player is in the middle of a trip on this step: then a better plan waits for the next bank trip instead of moving the arrow. */

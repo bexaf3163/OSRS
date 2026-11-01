@@ -9,15 +9,16 @@
 
 import type { Step } from '../../types';
 import { nameKey } from '../items/itemKey';
-import { FOODS } from '../combat/foodAdvice';
+import { FOODS } from '../../data/threats';
 import { questUsing } from '../quests/questItems';
 import { questStepOf } from '../quests/questSteps';
 import { allSteps } from '../../data';
-import { aggregateShopping, REUSABLE, type ShoppingLine } from '../economy/shopping';
-import { isRestrictedItem } from '../economy/tradeRestriction';
+import { aggregateShopping, type ShoppingLine } from './shopping';
+import { REUSABLE } from '../items/reusable';
+import { isRestrictedItem } from '../market/tradeRestriction';
+import type { AccountKind, CleanupPrefs } from '../persistence/cleanupPrefs';
 
 export type CleanupAction = 'keep' | 'sell' | 'drop' | 'review';
-export type AccountKind = 'normal' | 'ironman';
 
 export interface BagStack {
   id?: number;
@@ -26,17 +27,6 @@ export interface BagStack {
   /** A banknote: the same item name, but a different thing in the bag (it sells without a trip, and a step that needs the item itself is not met by it). */
   noted?: boolean;
 }
-
-export interface CleanupPrefs {
-  /** nameKey of items the player marked "Always keep". */
-  keep: string[];
-  /** "nameKey|action" of suggestions the player dismissed: a different suggestion for the same item shows again. */
-  dismissed: string[];
-  /** The player's word about the account when the game did not say. */
-  account?: AccountKind;
-}
-
-export const emptyCleanupPrefs = (): CleanupPrefs => ({ keep: [], dismissed: [] });
 
 export interface CleanupInput {
   /** null — the bag has not arrived from the game: there is no advice (unknown is not "empty"). */

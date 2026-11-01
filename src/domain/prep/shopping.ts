@@ -4,35 +4,11 @@
 import type { Step, StepItemRequirement } from '../../types';
 import { parseAmount, type OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
-import { toolFamilyOf } from '../items/toolTiers';
-import { doseKind, heldUnits } from '../items/doses';
-import gearJson from '../../data/gear.json';
-import styleJson from '../../data/styleGear.json';
-import { heldFood, type FoodHolding } from '../combat/foodAdvice';
-import type { MaterialHolding } from '../items/materialStock';
-
-/**
- * Tools and gear: they are not used up, so one is enough for all the steps: the largest
- * quantity per step is taken, not the sum. Everything else (ore, food, quest items) is summed.
- */
-export const REUSABLE = new Set([
-  'bronze axe', 'bronze pickaxe', 'mithril axe', 'small fishing net', 'fly fishing rod', 'harpoon', 'lobster pot',
-  'tinderbox', 'spade', 'hammer', 'knife', 'shears', 'chisel', 'secateurs', 'ghostspeak amulet', 'dramen staff',
-  'anti-dragon shield', 'rune sword', 'rune scimitar', 'adamant scimitar', 'holy symbol',
-]);
-
-/** Anything worn (weapons, armour, amulets) is not used up either: the gear data knows every one of them. */
-const WORN = new Set((gearJson as { items: { name: string; slot?: string }[] }).items.filter((p) => p.slot).map((p) => nameKey(p.name)));
-
-// Style-specific equipment uses its existing registry too; ammunition remains consumable.
-const STYLE_WORN = new Set([styleJson.magic, styleJson.ranged].flatMap(style => Object.entries(style)
-  .flatMap(([slot, options]) => slot === 'ammo' ? [] : options.flatMap(option => option.names.map(nameKey)))));
-
-/** One is enough for every step: a tool of any tier, or something worn. */
-export function isReusable(nameEn: string): boolean {
-  const k = nameKey(nameEn);
-  return REUSABLE.has(k) || WORN.has(k) || STYLE_WORN.has(k) || toolFamilyOf(nameEn) !== null;
-}
+import { doseKind } from '../items/doses';
+import { heldUnits } from '../player/heldUnits';
+import { heldFood, type FoodHolding } from '../player/foodStock';
+import type { MaterialHolding } from '../player/materialStock';
+import { isReusable } from '../items/reusable';
 
 const COINS_ID = 995;
 /** "From step S2-01", "From S4-05: ...", "The ones saved from S1-04!", "The spare one from step S1-03". */
@@ -185,11 +161,6 @@ export function aggregateShopping(steps: Step[], opts: { wholeGoal?: boolean } =
   const recommended = collect(steps, (s) => s.itemsRecommended, selected)
     .filter((l) => !requiredKeys.has(l.key) && !requiredKeys.has(`name:${nameKey(l.nameEn)}`));
   return { required, recommended, coins: coins.n, coinLines: coins.lines };
-}
-
-/** English plural: plural(21, 'item', 'items') gives "items"; plural(1, ...) gives "item". */
-export function plural(n: number, one: string, many: string): string {
-  return n === 1 ? one : many;
 }
 
 export function formatGp(n: number): string {

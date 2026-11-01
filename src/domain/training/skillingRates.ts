@@ -10,17 +10,17 @@
 // Nothing here names a tree, a rock, a spot or a bank: a new one, members ones too, is an entry in scripts/skilling.defs.json and a build.
 
 import skillingJson from '../../data/skilling.json';
-import { bankTrip } from '../prep/bankTrip';
+import { bankTrip } from '../travel/bankTrip';
 import { cascade, skillChance } from './skillChance';
-import { bankingPays, coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from '../economy/lootValue';
+import { bankingPays, coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from '../market/lootValue';
 import { heldExact, levelOf, type PlayerState } from '../player/playerState';
 import { toolFamilyOf, toolUse } from '../items/toolTiers';
 import type { Market, ModelRate, RateSpot } from './methodRates';
 import type { TrainingMethod } from './trainingRouter';
 import { attacksPlayer, hostileText } from './aggression';
 import { matchStrict } from '../travel/locations';
-import { combatLevel } from '../economy/moneyAdvisor';
-import { supplyPrice } from '../prep/sourceRouter';
+import { combatLevel } from '../player/xp';
+import { supplyPrice } from '../market/itemPrice';
 import { PROCESSING, type ProcessingRegistry } from './processingRates';
 import { TILES_PER_SECOND, type Point } from '../travel/travel';
 

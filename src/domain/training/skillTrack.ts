@@ -6,7 +6,6 @@ import type { MethodPriority } from '../persistence/playStyle';
 import type { GameMode } from '../../types';
 import type { PlayerState } from '../player/playerState';
 
-
 /** The followed skill plan: the skill, its priority and (2.70) whether members steps are left out. An older save's 'f2p' mode is the fast lane, free only. */
 export interface TrackedSkill { skill: SkillName; mode: GuideMode; freeOnly?: boolean; target?: number }
 

@@ -7,8 +7,6 @@
 // before 2.69 that meant the route's own plan by default, which the guide now replaces with its recommendation. Entries written before 2.69 have no
 // "by": they were all made with a button, so they are the player's.
 
-
-
 export const ADOPT_KEY = 'osrs-put:combat-plans';
 
 export type ChosenBy = 'auto' | 'player';

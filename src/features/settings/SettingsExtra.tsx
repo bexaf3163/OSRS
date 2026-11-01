@@ -9,8 +9,8 @@ import { readProfiles, switchProfile, useProfiles, writeProfiles } from '../../s
 import { sessionSummary } from '../../domain/player/session';
 import { useStore } from '../../state/store';
 import { usePlayerState } from '../../state/playerStateContext';
-import { formatGp } from '../../domain/economy/shopping';
-import { priceNote } from '../../domain/items/priceBook';
+import { formatGp } from '../../domain/prep/shopping';
+import { priceNote } from '../../domain/market/priceBook';
 import { percent, useUpdates } from '../../state/hooks/useUpdates';
 
 export function ProfilesSection() {

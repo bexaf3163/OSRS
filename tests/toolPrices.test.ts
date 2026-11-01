@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
-import { buildPriceView } from '../src/domain/economy/funding/quotes';
-import { itemPrice } from '../src/domain/items/itemPrice';
+import { buildPriceView } from '../src/domain/market/quotes';
+import { itemPrice } from '../src/domain/market/itemPrice';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { contextOf } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';

@@ -4,11 +4,11 @@ import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { DEFAULT_FEATURES, parseFeatures } from '../src/domain/persistence/features';
 import { priorityOf } from '../src/domain/persistence/playStyle';
-import { bankingPays, earningsOrder, netEarnings } from '../src/domain/economy/lootValue';
+import { bankingPays, earningsOrder, netEarnings } from '../src/domain/market/lootValue';
 import { processRate, type ProcessingRegistry } from '../src/domain/training/processingRates';
 import { gatherRate, type SkillingRegistry } from '../src/domain/training/skillingRates';
 import { parseHash } from '../src/app/router';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { PriceView } from '../src/domain/market/quotes';
 
 const method = (id: string, extra: Partial<TrainingMethod> = {}): TrainingMethod => ({
   id, name: id, skills: ['fishing'], from: 1, to: null, members: false, kind: 'method', needs: [],

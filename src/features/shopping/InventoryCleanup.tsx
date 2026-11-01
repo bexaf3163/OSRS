@@ -1,10 +1,11 @@
 // "Inventory cleanup": what in the bag can be sold or looked at because nothing ahead in the route asks for it. Advice only: the app sells,
 // drops and destroys nothing. The engine is lib/cleanup.ts; the player's "Always keep" and dismissals are saved per profile and character.
 
-import { ACTION_LABEL, proceedsText, recLabel, type AccountKind, type CleanupRec } from '../../domain/prep/cleanup';
+import { ACTION_LABEL, proceedsText, recLabel, type CleanupRec } from '../../domain/prep/cleanup';
+import type { AccountKind } from '../../domain/persistence/cleanupPrefs';
 import { withAccount, withDismissed, withKeep } from '../../domain/persistence/cleanupPrefs';
 import { useCleanupAdvice } from '../../state/hooks/useCleanupAdvice';
-import { formatGp } from '../../domain/economy/shopping';
+import { formatGp } from '../../domain/prep/shopping';
 
 export function InventoryCleanup() {
   const { result, prefs, update, account, live } = useCleanupAdvice();

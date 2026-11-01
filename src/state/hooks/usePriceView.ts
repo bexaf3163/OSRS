@@ -2,7 +2,7 @@
 // does not subscribe. A missing market quote stays missing; static guide prices never become runtime acquisition or profit estimates.
 
 import { useMemo, useSyncExternalStore } from 'react';
-import { buildPriceView, type BakedPrice, type PriceView } from '../../domain/economy/funding/quotes';
+import { buildPriceView, type BakedPrice, type PriceView } from '../../domain/market/quotes';
 import { quoteStore } from '../../services/quoteStore';
 
 const NO_PLANNING_FALLBACK: ReadonlyMap<string, BakedPrice> = new Map();

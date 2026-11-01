@@ -16,7 +16,7 @@
     "preview": "vite preview",
     "test": "vitest run --testTimeout=30000",
     "check-data": "node scripts/check-data.ts",
-    "check-structure": "node scripts/check-structure.mjs",
+    "check-structure": "node scripts/check-structure.mjs --strict",
     "verify:quick": "node scripts/verify-quick.mjs",
     "bump": "node scripts/bump.mjs",
     "knip": "knip --include files,dependencies,unlisted",

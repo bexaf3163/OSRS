@@ -8,8 +8,8 @@ import { methodRate } from '../src/domain/training/methodRates';
 import { attacksToKill } from '../src/domain/combat/combatEstimate';
 import { TRAINER_SPOTS } from '../src/domain/combat/route/spots';
 import { market } from './funding/market';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
-import { supplyPrice } from '../src/domain/prep/sourceRouter';
+import type { PriceView } from '../src/domain/market/quotes';
+import { supplyPrice } from '../src/domain/market/itemPrice';
 
 const prices = market();
 /** A fixed exchange for the costs: every rune 5 gp, every arrow 3 gp (the recorded market has neither). */

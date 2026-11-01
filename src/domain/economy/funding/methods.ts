@@ -3,7 +3,7 @@
 // The wiki's guide pages are prose; what the evaluator may rely on for eligibility is only what is structured here.
 
 import catalogueJson from '../../../data/fundingMethods.json';
-import { ALL_SKILLS } from '../tradeRestriction';
+import { ALL_SKILLS } from '../../market/tradeRestriction';
 import type { Catalogue, Flow, FundingMethod, Place } from './types';
 
 export const CATALOGUE = catalogueJson as unknown as Catalogue;

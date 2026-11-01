@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
 import { assumptionsFor, foodPicks, stepWeapon, withFoodPlan } from '../src/domain/combat/foodPlan';
-import { aggregateShopping } from '../src/domain/economy/shopping';
+import { aggregateShopping } from '../src/domain/prep/shopping';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { stepReadiness } from '../src/domain/readiness/readiness';
 import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';

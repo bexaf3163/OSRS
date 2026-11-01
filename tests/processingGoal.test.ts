@@ -7,11 +7,11 @@ import { buildPlayerState } from '../src/domain/player/playerState';
 import { stepById } from '../src/data';
 import { methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
 import { pickMethods } from '../src/domain/training/methodPick';
-import { aggregateShopping } from '../src/domain/economy/shopping';
+import { aggregateShopping } from '../src/domain/prep/shopping';
 import { contextOf } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { buildNeed } from '../src/domain/economy/funding/need';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { PriceView } from '../src/domain/market/quotes';
 
 const leg = (fromLevel: number, toLevel: number, xpa = 10): PathLeg => ({ fromLevel, toLevel,
   method: { ...trainingMethods.find(m => m.id === 'ck-meat')!, id: 'new-processing-method', xpa,

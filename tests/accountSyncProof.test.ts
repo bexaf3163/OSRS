@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { syncCandidates, earlierUnverified } from '../src/domain/player/accountSync';
+import { syncCandidates, earlierUnverified } from '../src/domain/quests/accountSync';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import type { Step } from '../src/types';
 

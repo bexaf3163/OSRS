@@ -1,6 +1,6 @@
 // The list of quests from the route steps. A quest of several steps (Dragon Slayer I) is one entry.
 
-import type { Quest, Step } from '../../types';
+import type { Quest, Step } from '../types';
 
 /** The quest name from a wiki link: .../w/Dragon_Slayer_I gives "Dragon Slayer I". */
 function questName(step: Step): string {

@@ -1,4 +1,4 @@
-import { foodCarry, heldFood } from '../src/domain/combat/foodAdvice';
+import { foodCarry, heldFood } from '../src/domain/player/foodStock';
 import { itemPreflight } from '../src/domain/readiness/preflight';
 import { describe, expect, it } from 'vitest';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';

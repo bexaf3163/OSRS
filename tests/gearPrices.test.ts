@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildPriceView } from '../src/domain/economy/funding/quotes';
+import { buildPriceView } from '../src/domain/market/quotes';
 import { gearMarketPrices } from '../src/domain/combat/gearAdvice';
 import { adviseGear, gearData, hudHint, sourceText } from '../src/domain/combat/gearAdvisor';
 

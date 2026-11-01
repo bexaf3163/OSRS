@@ -6,22 +6,22 @@
 
 import type { GameMode, PlayerStats, Progress, Step } from '../../types';
 import { levelById } from '../../data';
-import locationsJson from '../../data/majorLocations.json';
 import { isCompleted, blockersOf, dependencyFacts } from '../quests/next-step';
-import { preflightItems, type OwnedState } from '../items/checklist';
+import type { OwnedState } from '../items/checklist';
+import { preflightItems } from '../prep/stepItems';
 import { nameKey } from '../items/itemKey';
-import type { GearState, NavTargetPayload } from '../../services/runeliteBridge';
-import { plural } from '../economy/shopping';
+import type { GearState, NavTargetPayload, QuestInstruction } from '../../services/runeliteBridge';
+import { plural } from '../text/format';
 import { buildPlayerState, coinsOf, heldOf, levelOf, ownedCountOf, questOf, unusableTools, type Held, type PlayerState } from '../player/playerState';
-import { evaluate } from './requirements';
-import { allocateFoodStock } from '../combat/foodAdvice';
-import { allocateMaterialStock, materialTake } from '../items/materialStock';
+import { evaluate } from '../player/requirements';
+import { allocateFoodStock } from '../player/foodStock';
+import { allocateMaterialStock, materialTake } from '../player/materialStock';
 import { toolFamilyOf } from '../items/toolTiers';
-import { doseKind, heldUnits, needUnits } from '../items/doses';
-import { currentLoadoutStep, loadoutPhase } from './loadoutPhase';
-import { npcSpot } from '../travel/stepPlaces';
-import type { QuestInstruction } from '../../services/runeliteBridge';
-import type { PriceView } from '../economy/funding/quotes';
+import { doseKind, needUnits } from '../items/doses';
+import { heldUnits } from '../player/heldUnits';
+import { currentLoadoutStep, loadoutPhase } from '../quests/loadoutPhase';
+import { npcSpot, type Place, nearestBank } from '../travel/stepPlaces';
+import type { PriceView } from '../market/quotes';
 import { questStepOf } from '../quests/questSteps';
 
 export type ReadinessStatus =
@@ -91,20 +91,6 @@ export interface ReadinessInput {
 
 const COINS_ID = 995;
 
-interface Place { x: number; y: number; plane: number; label: string; kind: string }
-const places = Object.values((locationsJson as { locations: Record<string, Place> }).locations);
-const banks = places.filter((p) => p.kind === 'bank');
-
-/** The bank nearest to the step's place: go there for things, not across half the map. */
-export function nearestBank(step: Step): Place | null {
-  const at = step.mapLocation;
-  if (!at || !banks.length) return null;
-  return banks.reduce((a, b) => (dist(b, at) < dist(a, at) ? b : a));
-}
-const dist = (a: { x: number; y: number }, b: { x: number; y: number }) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2;
-
-export { questStepOf } from '../quests/questSteps';
-
 /** A skill's level from the single state: from the game, otherwise the one entered in the profile, otherwise unknown. */
 function levelFrom(state: PlayerState, skill: string): { level: number; source: 'game' | 'profile' } | null {
   const l = state.levels[skill];
@@ -128,7 +114,7 @@ export interface ReadinessContext {
   /** Last confirmed cursor for the active character/step; manual peeks do not replace it. */
   questInstruction?: QuestInstruction | null;
   /** A setback on a step shown in the game (a death, a teleport): the preparation plan goes into recovery mode. */
-  recovery?: { stepId: string; recovery: import('./recovery').Recovery } | null;
+  recovery?: { stepId: string; recovery: import('../travel/recovery').Recovery } | null;
 }
 
 /** Context from "raw" data (tests and places where there is no single state yet). */

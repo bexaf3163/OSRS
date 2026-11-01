@@ -17,7 +17,6 @@ import './ledger/ledger.css';
 import './ledger/extras.css';
 import './ledger/app.css';
 
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <StoreProvider>

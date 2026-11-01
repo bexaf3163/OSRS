@@ -108,3 +108,14 @@ export function mapPlaces(step: Step): MapLocation[] {
   if (main >= 0 && step.npc && !points[main].npc) points[main] = { ...points[main], npc: step.npc.nameEn };
   return withSources(step, points, main, undefined);
 }
+
+export interface Place { x: number; y: number; plane: number; label: string; kind: string }
+const places = Object.values((locationsJson as { locations: Record<string, Place> }).locations);
+const banks = places.filter((p) => p.kind === 'bank');
+/** The bank nearest to the step's place: go there for things, not across half the map. */
+export function nearestBank(step: Step): Place | null {
+  const at = step.mapLocation;
+  if (!at || !banks.length) return null;
+  return banks.reduce((a, b) => (dist(b, at) < dist(a, at) ? b : a));
+}
+const dist = (a: { x: number; y: number }, b: { x: number; y: number }) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2;

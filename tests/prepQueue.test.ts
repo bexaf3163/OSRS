@@ -7,7 +7,8 @@ import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { decideAuto, RENAV_GAP_MS, buildQueue, type AutoInput, type PrepQueue } from '../src/domain/prep/prepQueue';
 import type { RequirementStatus, StepReadiness } from '../src/domain/readiness/readiness';
 import { buildPrepRoute, emptyPrep, navKeyOf, reconcile, staleArrows, startDetour, type PrepState } from '../src/domain/prep/prepRoute';
-import { preflightItems, type OwnedState } from '../src/domain/items/checklist';
+import type { OwnedState } from '../src/domain/items/checklist';
+import { preflightItems } from '../src/domain/prep/stepItems';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
 const done = (ids: string[]) => ids.reduce((p, id) => withStep(p, id, 'done'), emptyProgress());

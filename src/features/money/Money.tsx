@@ -12,7 +12,7 @@ import { useReadinessEngine, useTrackedTraining } from '../../state/readinessCon
 import { useBridge } from '../../state/bridge';
 import { useFunding, useMoneyScreen, type MoneyScreen } from '../../state/fundingContext';
 import { firstOpen, isClosed, nextStep } from '../../domain/quests/next-step';
-import { formatGp } from '../../domain/economy/shopping';
+import { formatGp } from '../../domain/prep/shopping';
 import { minutesText } from '../../domain/economy/funding/assess';
 import {
   browse, CATEGORY_LABEL, DEFAULT_FILTERS, goalText, INTENSITY_LABEL, type BrowseFilters, type BrowseRow, type BrowseSort, type Category, type MoneyGoal,

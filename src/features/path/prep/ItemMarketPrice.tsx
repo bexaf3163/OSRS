@@ -1,5 +1,5 @@
 import { useReadinessEngine } from '../../../state/readinessContext';
-import { marketItemPrice } from '../../../domain/items/itemPrice';
+import { marketItemPrice } from '../../../domain/market/itemPrice';
 
 /** Supporting item metadata, served by the same market snapshot as preparation and the game. */
 export function ItemMarketPrice({ name, id, quantity }: { name: string; id?: number; quantity: number | null }) {

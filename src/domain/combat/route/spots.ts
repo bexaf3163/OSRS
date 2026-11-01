@@ -119,8 +119,8 @@ export function spotsOf(steps: readonly Step[], members: boolean): Map<string, S
   return out;
 }
 
-export { bankTrip } from '../../prep/bankTrip';
-import { bankTrip } from '../../prep/bankTrip';
+export { bankTrip } from '../../travel/bankTrip';
+import { bankTrip } from '../../travel/bankTrip';
 
 /** What each trainer's spot changes in the combat estimate, by the opponent's name: the bank trip and the spot's own traits. */
 export function spotTerms(spots: ReadonlyMap<string, Spot>): Record<string, SpotTerms> {

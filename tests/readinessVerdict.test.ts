@@ -242,7 +242,8 @@ describe('the verdict in the snapshot and the cleanup beside it', () => {
   });
 
   it('cleanup never offers what the open fight needs: the weapon and the food stay, only the stray ore is advice', async () => {
-    const { cleanupAdvice, emptyCleanupPrefs } = await import('../src/domain/prep/cleanup');
+    const { cleanupAdvice } = await import('../src/domain/prep/cleanup');
+    const { emptyCleanupPrefs } = await import('../src/domain/persistence/cleanupPrefs');
     const r = cleanupAdvice({
       bag: [{ id: 1329, name: 'Mithril scimitar', count: 1 }, { id: 329, name: 'Salmon', count: 26 }, { id: 440, name: 'Iron ore', count: 10 }],
       openSteps: [s308], bankSeen: true, account: 'normal', restriction: 'LIFTED', price: () => 50, tradeable: () => true, prefs: emptyCleanupPrefs(),

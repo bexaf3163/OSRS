@@ -16,9 +16,9 @@ import { useUpgradeRecommendation } from '../../features/path/combat/UpgradeProm
 import type { Step } from '../../types';
 import { procurementDetour, type Detour } from '../../domain/travel/detours';
 import { fairyRingsUnlocked, oneTimeUsedOf, transportKey, travelInputOf } from '../../domain/travel/travelInput';
-import { decideTransport, publishTransport, transportSources, transportTarget } from '../../domain/travel/liveTransport';
+import { decideTransport, publishTransport, transportSources, transportTarget } from '../../domain/readiness/liveTransport';
 import type { RecommendedTransport } from '../../domain/travel/transport';
-import { planTravelSupplies, roadSteps } from '../../domain/travel/travelSupplies';
+import { planTravelSupplies, roadSteps } from '../../domain/readiness/travelSupplies';
 import { useReadinessVerdict } from '../../features/path/prep/ReadinessVerdict';
 
 /** How often the position is read for the purchase detour: the text is rounded, so the snapshot does not change on every step. */

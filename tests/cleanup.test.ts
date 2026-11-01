@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
-import { cleanupAdvice, emptyCleanupPrefs, OBSOLETE, recLabel, type CleanupInput, type CleanupPrefs } from '../src/domain/prep/cleanup';
+import { cleanupAdvice, OBSOLETE, recLabel, type CleanupInput } from '../src/domain/prep/cleanup';
+import { emptyCleanupPrefs, type CleanupPrefs } from '../src/domain/persistence/cleanupPrefs';
 import type { Step } from '../src/types';
 import { questStepOf } from '../src/domain/quests/questSteps';
 

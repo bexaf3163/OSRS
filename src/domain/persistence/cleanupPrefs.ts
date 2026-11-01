@@ -1,9 +1,6 @@
 // The player's own say in the inventory cleanup: "Always keep" and dismissed suggestions. Saved per profile AND per character, so another
 // character on the same profile starts clean and never inherits the first one's choices.
 
-import { emptyCleanupPrefs, type AccountKind, type CleanupPrefs } from '../prep/cleanup';
-
-
 export const CLEANUP_KEY = 'osrs-put:cleanup';
 const LIMIT = 300;
 
@@ -40,3 +37,14 @@ export const withAccount = (p: CleanupPrefs, account: AccountKind | null): Clean
   void _drop;
   return account ? { ...rest, account } : rest;
 };
+
+export type AccountKind = 'normal' | 'ironman';
+export interface CleanupPrefs {
+  /** nameKey of items the player marked "Always keep". */
+  keep: string[];
+  /** "nameKey|action" of suggestions the player dismissed: a different suggestion for the same item shows again. */
+  dismissed: string[];
+  /** The player's word about the account when the game did not say. */
+  account?: AccountKind;
+}
+export const emptyCleanupPrefs = (): CleanupPrefs => ({ keep: [], dismissed: [] });

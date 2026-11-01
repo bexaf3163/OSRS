@@ -1,5 +1,5 @@
 import { ARROW_BREAK_RATE, rangedMaximumHit, trainingRangedStyleBonus } from './combatEstimate';
-import { coinsPerMinute } from '../economy/lootValue';
+import { coinsPerMinute } from '../market/lootValue';
 // One level-appropriate ranged kit for preparation and forecasts; unlocks and arrow compatibility reuse StyleGear.
 import { STYLE_GEAR, ammoFits, usableStyleOption, type StyleOption } from './styleGear';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from '../player/playerState';
@@ -7,8 +7,8 @@ import { countWorn } from '../items/equipmentCount';
 import { nameKey } from '../items/itemKey';
 import type { MethodNeed } from '../training/trainingRouter';
 import { coinsOf } from '../player/playerState';
-import { supplyPrice } from '../prep/sourceRouter';
-import type { PriceView } from '../economy/funding/quotes';
+import { supplyPrice } from '../market/itemPrice';
+import type { PriceView } from '../market/quotes';
 import rangedGearJson from '../../data/rangedGear.json';
 
 // Ordinary F2P longbows share their corresponding shortbow's unlock and arrow cap (OSRS Wiki: Bow).

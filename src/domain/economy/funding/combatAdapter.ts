@@ -11,7 +11,7 @@ import { estimateStep, healsOf, observedFor, type CombatEstimate, type Fights, t
 import { chooseVariant } from '../../combat/combatPlan';
 import type { GearState } from '../../../services/runeliteBridge';
 import type { Personalised } from './evaluate';
-import type { PriceView } from './quotes';
+import type { PriceView } from '../../market/quotes';
 import type { FundingMethod } from './types';
 
 export interface CombatLive {

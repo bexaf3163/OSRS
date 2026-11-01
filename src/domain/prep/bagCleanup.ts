@@ -9,7 +9,7 @@
 import { stepById } from '../../data';
 import type { Step } from '../../types';
 import { nameKey } from '../items/itemKey';
-import { FOODS } from '../combat/foodAdvice';
+import { FOODS } from '../../data/threats';
 import type { PlayerState } from '../player/playerState';
 import { BAG_SLOTS, stacks, type PrepPlan } from './prepPlan';
 import { questUsing } from '../quests/questItems';

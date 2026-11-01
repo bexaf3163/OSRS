@@ -1,7 +1,8 @@
 // What the RuneLite plugin shows for a step (guide panel, quest stages, in-game target, auto-completion), built from the shared engines.
 import type { Progress, Step, StepBranch } from '../../types';
 import { isClosed, openAfter, type DependencyFact } from '../quests/next-step';
-import { parseAmount, preflightItems } from '../items/checklist';
+import { parseAmount } from '../items/checklist';
+import { preflightItems } from '../prep/stepItems';
 import { nameKey } from '../items/itemKey';
 import { watchedItems } from '../quests/branching';
 import { methodToolNames } from '../training/methodStep';

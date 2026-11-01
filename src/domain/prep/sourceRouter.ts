@@ -5,15 +5,14 @@
 
 import type { WikiItemDetail } from '../../types';
 import { matchStrict } from '../travel/locations';
-import { SAVE_GP } from './shopConstants';
+import { SAVE_GP } from '../market/shopConstants';
 import { heldOf, levelOf, type PlayerState, type WorldPoint } from '../player/playerState';
-import { SHOP_TOWN, accessSuffix, shopAccess, shopKey, spawnAccess, type AccessState } from './shopAccess';
+import { SHOP_TOWN, accessSuffix, shopAccess, shopKey, spawnAccess, type AccessState } from '../market/shopAccess';
 import { nameKey } from '../items/itemKey';
-import { items } from '../../data';
-import type { PriceView } from '../economy/funding/quotes';
 import locationsJson from '../../data/majorLocations.json';
 import stepsJson from '../../data/steps.json';
 import { purchaseCost, type PurchaseFee } from '../items/purchaseCost';
+import { NOT_SOLD_PRICE } from '../market/itemPrice';
 
 export type SourceKind = 'bag' | 'bank' | 'free' | 'shop' | 'ge' | 'drop';
 
@@ -97,24 +96,6 @@ function freeGiver(name: string, here: WorldPoint | undefined): SourceOption | n
     kind: 'free', label: `Free: ${p.label}`, price: 0, note: g.note, giver: true,
     point: { x: p.x, y: p.y, plane: p.plane, label: p.label }, ...(here ? { distance: dist(p, here) } : {}),
   };
-}
-
-/** A shop price at or above this is the item data's "not sold here" placeholder, not a price. */
-const NOT_SOLD_PRICE = 1e9;
-
-const DETAIL = new Map(items.map((i) => [nameKey(i.nameEn), i]));
-/**
- * What one unit of a used-up supply (arrows, runes, bait, food) costs to replace, for the rate models: the exchange buy price, else the cheapest
- * shop of the item data that sells it for coins to this account (a members shop never on a free one). null when neither is known: unknown,
- * never free. Travel to the shop is not in it.
- */
-export function supplyPrice(name: string, prices: PriceView | null | undefined, mode: 'f2p' | 'members'): number | null {
-  const ge = prices?.buy(name)?.price;
-  if (ge !== undefined) return ge;
-  const shop = (DETAIL.get(nameKey(name))?.buyLocations ?? [])
-    .filter((b) => !(b.members && mode === 'f2p') && b.stock !== 0 && b.price < NOT_SOLD_PRICE)
-    .reduce<number | null>((a, b) => (a === null || b.price < a ? b.price : a), null);
-  return shop;
 }
 
 export function planSources(input: SourceInput, s: PlayerState): SourcePlan {

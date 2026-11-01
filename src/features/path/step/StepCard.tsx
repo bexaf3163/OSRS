@@ -34,7 +34,7 @@ import { StepStatus } from './StepStatus';
 import { MagicPlan } from '../combat/MagicPlan';
 import { MoneyPlan } from '../prep/MoneyPlan';
 import { ItemIcon, useWiki } from '../../reference/WikiDrawer';
-import { plural } from '../../../domain/economy/shopping';
+import { plural } from '../../../domain/text/format';
 import { LiveXp } from '../../../ui/LiveXp';
 import { SubStepHero, SubStepItems, useSubStep } from './SubStepHero';
 import { QuestOverview } from '../QuestOverview';
@@ -164,7 +164,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
   );
 
   const warning = step.warning && <div className="plaque plaque-warning" role="note"><Inline text={step.warning} /></div>;
-
 
   const how = step.how && <p className="step-how"><Inline text={step.how} /></p>;
   const bring = step.bring && <p className="small"><span className="muted">Bring: </span><Inline text={step.bring} /></p>;

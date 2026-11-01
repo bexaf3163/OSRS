@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { parseOwned, evaluatePreflight } from '../src/domain/items/checklist';
+import { parseOwned } from '../src/domain/items/checklist';
+import { evaluatePreflight } from '../src/domain/readiness/preflight';
 import { buildPlayerState, heldOf } from '../src/domain/player/playerState';
-import { evaluate } from '../src/domain/readiness/requirements';
+import { evaluate } from '../src/domain/player/requirements';
 import { ownedFood, combatPlanView } from '../src/domain/combat/combatPlan';
 import { combatReadiness } from '../src/domain/combat/combatReadiness';
 import { stepById } from '../src/data';

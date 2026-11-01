@@ -3,8 +3,8 @@
 // answers null when it has nothing honest to say; then the wiki's guide stays.
 
 import { coinsOf, type PlayerState } from '../player/playerState';
-import type { PriceView } from '../economy/funding/quotes';
-import type { TradeRestriction } from '../economy/tradeRestriction';
+import type { PriceView } from '../market/quotes';
+import type { TradeRestriction } from '../market/tradeRestriction';
 import type { TrainingMethod, MethodNeed } from './trainingRouter';
 import type { Point } from '../travel/travel';
 import type { MethodPriority } from '../persistence/playStyle';

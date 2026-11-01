@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { itemPrice } from '../src/domain/items/itemPrice';
-import { buildPriceView } from '../src/domain/economy/funding/quotes';
+import { itemPrice } from '../src/domain/market/itemPrice';
+import { buildPriceView } from '../src/domain/market/quotes';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { planPayload } from '../src/domain/prep/prepEnvelope';

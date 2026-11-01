@@ -10,7 +10,7 @@ import weightsJson from '../../data/weights.json';
 import type { Step } from '../../types';
 import { nameKey } from './itemKey';
 import type { PlayerState } from '../player/playerState';
-import { FOODS } from '../combat/foodAdvice';
+import { FOODS } from '../../data/threats';
 
 const FOOD_KEYS = new Set(FOODS.map((f) => nameKey(f.name)));
 

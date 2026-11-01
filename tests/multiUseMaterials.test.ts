@@ -6,7 +6,7 @@ import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { trackedTraining } from '../src/domain/training/trackedTraining';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { PriceView } from '../src/domain/market/quotes';
 import { trainingMethods, type PathLeg } from '../src/domain/training/trainingRouter';
 
 const thread = { qty: 0.2, initialReserve: 0.8 };

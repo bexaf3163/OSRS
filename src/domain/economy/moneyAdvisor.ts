@@ -5,22 +5,11 @@
 import moneyJson from '../../data/moneyMaking.json';
 import type { MoneyData, MoneyMethod, MoneyReq, Step } from '../../types';
 import { nameKey } from '../items/itemKey';
+import { combatLevel } from '../player/xp';
 
 export const MONEY = moneyJson as MoneyData;
 
 export type Levels = Readonly<Record<string, number | undefined>>;
-
-/** The combat level by the game's formula; null means Attack, Strength or Defence is unknown. */
-export function combatLevel(l: Levels): number | null {
-  const { attack, strength, defence } = l;
-  if (attack === undefined || strength === undefined || defence === undefined) return null;
-  const hp = l.hitpoints ?? 10;
-  const base = 0.25 * (defence + hp + Math.floor((l.prayer ?? 1) / 2));
-  const melee = 0.325 * (attack + strength);
-  const ranged = 0.325 * Math.floor(1.5 * (l.ranged ?? 1));
-  const magic = 0.325 * Math.floor(1.5 * (l.magic ?? 1));
-  return Math.floor(base + Math.max(melee, ranged, magic));
-}
 
 export interface ReqState {
   req: MoneyReq;

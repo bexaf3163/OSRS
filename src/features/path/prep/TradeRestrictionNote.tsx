@@ -6,10 +6,10 @@ import type { Step } from '../../../types';
 import { useBridge } from '../../../state/bridge';
 import { useStore } from '../../../state/store';
 import { nameKey } from '../../../domain/items/itemKey';
-import { formatGp } from '../../../domain/economy/shopping';
+import { formatGp } from '../../../domain/prep/shopping';
 import { wealthOf } from '../../../domain/economy/wealth';
 import { fundingPlan, type PlanLine } from '../../../domain/economy/fundingPlan';
-import { isRestrictedItem, LIFT, restrictionSummary } from '../../../domain/economy/tradeRestriction';
+import { isRestrictedItem, LIFT, restrictionSummary } from '../../../domain/market/tradeRestriction';
 import { useTradeRestriction } from '../../../state/hooks/useTradeRestriction';
 
 const line = (l: PlanLine) => `${l.name}${l.amount > 1 ? ` ×${l.amount}` : ''} ≈ ${formatGp(l.total)} gp`;

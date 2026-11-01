@@ -1,9 +1,7 @@
 // One-line tips for the step status. A tip says something the cards below do not say at a glance, and only when it is clearly worth a line.
 
 import { EXCHANGE, TILES_PER_SECOND, effectiveTiles, shortOnHand, stopText, type TravelOption } from '../travel/travel';
-
-/** A way shorter than walking by at least this many tiles (about half a minute of running) earns a tip. */
-export const TIP_MIN_SAVING_TILES = 80;
+import { TIP_MIN_SAVING_TILES } from '../travel/transport';
 
 /**
  * The fastest way that is not walking, from the planner's options: "Fastest: Fairy ring DIS → AJR — saves ~330 tiles". An available way beats one that

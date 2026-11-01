@@ -6,9 +6,9 @@
 
 import type { Step } from '../../../types';
 import { healsOf } from '../../combat/combatEstimate';
-import { effectiveHeal } from '../../combat/foodAdvice';
-import type { NeedLine } from './need';
-import { minConfidence, type Confidence, type PriceView } from './quotes';
+import { effectiveHeal } from '../../player/foodStock';
+import type { NeedLine } from '../../market/needPrice';
+import { minConfidence, type Confidence, type PriceView } from '../../market/quotes';
 
 /** Food slots in the bag (28 less the weapon and two for potions or loot, as the combat model assumes). */
 export const FOOD_SLOTS = 26;

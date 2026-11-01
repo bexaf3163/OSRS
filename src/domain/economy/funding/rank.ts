@@ -6,7 +6,7 @@
 // The choice is steady: the plan already running stays unless another is clearly better or the running one has become unsuitable.
 
 import type { MethodEvaluation } from './evaluate';
-import { CONFIDENCE_RANK, type Confidence } from './quotes';
+import { CONFIDENCE_RANK, type Confidence } from '../../market/quotes';
 
 /** The slow time is multiplied by this for the confidence the number deserves. */
 export const CONFIDENCE_PENALTY: Record<Confidence, number> = { HIGH: 1, MEDIUM: 1.15, LOW: 1.5 };

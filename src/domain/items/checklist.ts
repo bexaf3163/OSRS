@@ -1,12 +1,8 @@
-// The departure check: whether everything from the step's items is in the bag before leaving the bank.
-// The count comes from RuneLite (the OWNED event); the rules are the same as in the plugin (Checklist.java).
+// Owned items shared by the engines: amounts from step text and the OWNED event from RuneLite. The departure check
+// that uses them (the same rules as the plugin's Checklist.java) is in src/domain/readiness/preflight.ts.
 
-import type { Step, StepItemRequirement } from '../../types';
-import { alternativesOf, toolUse, toolFamilyOf, usableAt } from './toolTiers';
-import { allocateMaterialStock } from './materialStock';
-import { doseKind, doseName } from './doseKind';
-import { countWorn, type WornItem } from './equipmentCount';
-import { allocateFoodStock } from '../combat/foodAdvice';
+import { toolUse, toolFamilyOf } from './toolTiers';
+import { nameKey } from './itemKey';
 
 /** How many of an item the player has, by the plugin's data. bank is undefined until the bank was opened in this session. */
 export interface OwnedItem {
@@ -29,8 +25,6 @@ export interface OwnedState {
   items: Map<string, OwnedItem>;
 }
 
-import { nameKey } from './itemKey';
-
 /**
  * The quantity from the route: 1, "23 (20 to hand in, 3 for the bank)" gives 23, "20+" gives 20, "1,000" gives 1000.
  * null means the quantity is not a number ("As many as you have", "One per alchemy").
@@ -42,92 +36,6 @@ export function parseAmount(amount: string | number): number | null {
   const n = Number(m[1].replace(/[,  ]/g, ''));
   return n > 0 ? n : null;
 }
-
-export interface PreflightItem {
-  equip?: boolean;
-  nameEn: string;
-  id?: number;
-  count: number;
-  /** false means the route's quantity is not a number: "at least one is there" is checked. */
-  exact: boolean;
-  heals?: number;
-  /** Other items that count in its place (every pickaxe tier for "Bronze pickaxe"). */
-  alt?: string[];
-  /** Food with a personal plan: what the whole remaining goal needs (`count` is one trip). */
-  total?: number;
-  /** A potion: the doses `count` potions hold ("Strength potion(4)" ×4 is 16); every size counts toward them (doses.ts, Checklist.java). */
-  doses?: number;
-}
-
-/** What to check at the bank: the required items except those obtained during the step itself. */
-export function preflightItems(step: Step): PreflightItem[] {
-  return (step.itemsRequired ?? [])
-    .filter((i: StepItemRequirement) => !i.inStep)
-    .map((i) => {
-      const n = parseAmount(i.amount);
-      const alt = alternativesOf(i.nameEn, i.anyOf);
-      const dose = doseKind(i.nameEn);
-      return {
-        nameEn: i.nameEn, id: i.wikiItemId, count: n ?? 1, exact: n !== null, heals: i.heals, ...(alt.length ? { alt } : {}),
-        ...(i.equip ? { equip: true } : {}),
-        ...(i.totalAmount !== undefined && n !== null && i.totalAmount > n ? { total: i.totalAmount } : {}),
-        ...(dose ? { doses: (n ?? 1) * dose.per } : {}),
-      };
-    });
-}
-
-export type PreflightState = 'IN_BAG_READY' | 'MISSING_FROM_BAG' | 'NOT_FOUND_IN_BANK' | 'NOT_EQUIPPED' | 'UNKNOWN';
-
-export interface PreflightRow {
-  item: PreflightItem;
-  have: number;
-  /** null means the bank was not opened yet. */
-  inBank: number | null;
-  state: PreflightState;
-}
-
-export interface PreflightResult {
-  rows: PreflightRow[];
-  /** READY_TO_DEPART: everything is on hand. */
-  ready: boolean;
-  missing: number;
-}
-
-export function evaluatePreflight(items: PreflightItem[], owned: OwnedState, levels?: Partial<Record<string, number>> | null, equipment?: readonly WornItem[] | null): PreflightResult {
-  const foods = allocateFoodStock({ owned, bankSeen: owned.bankSeen, equipment: {}, manual: {} },
-    items.map((item, index) => ({ ...item, key: `departure:${index}`, anyOf: item.alt })), levels?.hitpoints);
-  const materials = allocateMaterialStock({ owned, bankSeen: owned.bankSeen, equipment: {}, manual: {} },
-    items.map((item, index) => ({ ...item, key: `departure:${index}`, anyOf: item.alt })));
-  const rows = items.map((item, index): PreflightRow => {
-    // A potion counts in doses across its four sizes, each potion by its own doses: a (3) and a (1) are 4.
-    const dose = item.doses !== undefined ? doseKind(item.nameEn) : null;
-    const all = dose
-      ? [1, 2, 3, 4].map((d) => ({ o: owned.items.get(nameKey(doseName(dose.base, d))), w: d }))
-      : [...new Set([item.nameEn, ...(item.alt ?? [])].map(nameKey))]
-        .filter((n) => usableAt(n, (skill) => levels?.[skill] ?? null))
-        .map((n) => ({ o: owned.items.get(n), w: 1 }));
-    const need = item.doses ?? item.count;
-    const legacy = Boolean(toolFamilyOf(item.nameEn)) && all.some(({ o }) => o?.legacyToolCount);
-    const count = (where: 'carried' | 'bank') => legacy ? Math.max(0, ...all.map(({ o }) => o?.[where] ?? 0)) : all.reduce((s, { o, w }) => s + (o?.[where] ?? 0) * w, 0);
-    const food = foods.get(`departure:${index}`);
-    const material = materials.get(`departure:${index}`);
-    const carried = material ? material.bag ?? 0 : food ? food.bag ?? 0 : count('carried');
-    const accepted = new Set([item.nameEn, ...(item.alt ?? [])].map(nameKey));
-    const worn = countWorn(equipment, n => accepted.has(nameKey(n)));
-    const have = item.equip ? worn.count : carried;
-    const inBank = material ? material.bank : food ? food.bank : owned.bankSeen && all.every(({ o }) => o?.bank !== undefined) ? count('bank') : null;
-    let state: PreflightState;
-    if (have >= need) state = 'IN_BAG_READY';
-    else if (item.equip && !worn.known) state = 'UNKNOWN';
-    else if (item.equip && carried >= need) state = 'NOT_EQUIPPED';
-    else if (inBank === null || carried + inBank + (material?.noted ?? 0) >= need) state = 'MISSING_FROM_BAG';
-    else state = 'NOT_FOUND_IN_BANK';
-    return { item, have, inBank, state };
-  });
-  const missing = rows.filter((r) => r.state !== 'IN_BAG_READY').length;
-  return { rows, ready: rows.length > 0 && missing === 0, missing };
-}
-
 
 /** Parsing of the OWNED event from the plugin; junk is dropped. */
 export function parseOwned(e: unknown): OwnedState | null {

@@ -17,6 +17,7 @@ import type { CleanupHintPayload } from './cleanupHint';
 import type { FundingHintPayload } from '../economy/fundingHint';
 import { items as itemData } from '../../data';
 import { nameKey } from '../items/itemKey';
+import { clipText } from '../text/format';
 
 export const SNAPSHOT_VERSION = 6;
 
@@ -28,7 +29,6 @@ const MAX_BLOCKERS = 4;
 export const MAX_WITHDRAWALS = 12;
 /** Purchases of a transport listed in the shop window (PrepPlan.RecommendedTransport.MAX_BUYS). */
 export const MAX_BUYS = 8;
-const MAX_TEXT = 200;
 
 export interface PrepPlanPayload {
   stepId: string;
@@ -79,14 +79,6 @@ export interface PrepEnvelope {
   cleanup?: CleanupHintPayload;
   /** The running funding plan for the HUD (plugin 2.64.1 and later; an older one ignores the field). Absent means none. */
   funding?: FundingHintPayload;
-}
-
-/** A string no longer than the plugin's limit: cut at a word, with an ellipsis. */
-export function clipText(s: string, max = MAX_TEXT): string {
-  const t = s.replace(/\s+/g, ' ').trim();
-  if (t.length <= max) return t;
-  const cut = t.slice(0, max - 1);
-  return `${cut.slice(0, Math.max(cut.lastIndexOf(' '), Math.floor(max / 2)))}…`;
 }
 
 const countOf = (l: Pick<PrepLine, 'name' | 'count' | 'unit'>) => (l.unit === 'dose' ? `${l.name} (${l.count} ${l.count === 1 ? 'dose' : 'doses'})` : l.count > 1 ? `${l.name} ×${l.count}` : l.name);

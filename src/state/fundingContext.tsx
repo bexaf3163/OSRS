@@ -36,7 +36,7 @@ import { methodById } from '../domain/economy/funding/methods';
 import { usePriceView } from './hooks/usePriceView';
 import type { EvalContext, MethodEvaluation, ObservedRate } from '../domain/economy/funding/evaluate';
 import { moneyList, type MoneyGoal, type MoneyList } from '../domain/economy/funding/browse';
-import type { PriceView } from '../domain/economy/funding/quotes';
+import type { PriceView } from '../domain/market/quotes';
 import type { Step } from '../types';
 
 /** The arrow of a funding plan carries this prefix, so it is only ever taken down by the plan that set it. */

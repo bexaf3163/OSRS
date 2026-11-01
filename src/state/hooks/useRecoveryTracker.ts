@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
-import { detectRecovery, stepPoint, type Point, type Recovery } from '../../domain/readiness/recovery';
+import { detectRecovery, stepPoint, type Point, type Recovery } from '../../domain/travel/recovery';
 
 const DISMISS_KEY = 'osrs-put:recovery-dismissed';
 const POLL_MS = 30_000;

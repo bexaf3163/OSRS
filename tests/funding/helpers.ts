@@ -1,8 +1,8 @@
 // Builders for the funding tests: a price view with exact prices, a player snapshot with exact holdings. Nothing here computes anything the code under test computes.
 
 import type { Held } from '../../src/domain/player/playerState';
-import { tradeRestriction, type TradeRestriction } from '../../src/domain/economy/tradeRestriction';
-import type { Confidence, PriceStatus, PriceView, UnitPrice } from '../../src/domain/economy/funding/quotes';
+import { tradeRestriction, type TradeRestriction } from '../../src/domain/market/tradeRestriction';
+import type { Confidence, PriceStatus, PriceView, UnitPrice } from '../../src/domain/market/quotes';
 import type { FundingSnapshot, Protection } from '../../src/domain/economy/funding/snapshot';
 import type { EvalContext } from '../../src/domain/economy/funding/evaluate';
 import { nameKey } from '../../src/domain/items/itemKey';

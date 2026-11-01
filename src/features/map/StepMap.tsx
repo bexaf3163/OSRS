@@ -11,7 +11,7 @@ import { useBridge } from '../../state/bridge';
 import { navigationTarget } from '../../domain/guide/navigation';
 import { usePrep } from '../../state/hooks/usePrep';
 import { NavigateButton } from '../../ui/NavigateButton';
-import { ImageModal } from '../path/step/StepImage';
+import { ImageModal } from './ImageModal';
 
 const WorldMapModal = lazy(() => import('./WorldMapModal'));
 

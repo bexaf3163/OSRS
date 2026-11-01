@@ -7,7 +7,7 @@ import { xpForLevel } from '../src/domain/player/xp';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { trainingMethods } from '../src/domain/training/trainingRouter';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { PriceView } from '../src/domain/market/quotes';
 
 const method = (id: string) => trainingMethods.find((m) => m.id === id)!;
 const quote = (price: number) => ({ price, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] });

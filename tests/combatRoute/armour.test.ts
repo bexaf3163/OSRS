@@ -6,15 +6,16 @@ import { currentPhase, resolvePick, withCombatPlan } from '../../src/domain/comb
 import { gearById } from '../../src/domain/combat/gearAdvisor';
 import { buildPlayerState } from '../../src/domain/player/playerState';
 import { emptyProgress } from '../../src/domain/persistence/progress';
-import { evaluatePreflight, preflightItems } from '../../src/domain/items/checklist';
+import { evaluatePreflight } from '../../src/domain/readiness/preflight';
+import { preflightItems } from '../../src/domain/prep/stepItems';
 import { createReadinessEngine } from '../../src/domain/readiness/readinessEngine';
 import { bankWithdrawalsOf, planPayload } from '../../src/domain/prep/prepEnvelope';
 import { toInGameTarget } from '../../src/domain/guide/inGameTarget';
-import { buildPriceView } from '../../src/domain/economy/funding/quotes';
+import { buildPriceView } from '../../src/domain/market/quotes';
 import { ownedOf, planInput } from './fixture';
 import { market } from '../funding/market';
-import { requirementCost } from '../../src/domain/economy/funding/need';
-import { aggregateShopping } from '../../src/domain/economy/shopping';
+import { requirementCost } from '../../src/domain/market/needPrice';
+import { aggregateShopping } from '../../src/domain/prep/shopping';
 import { protectionsFor } from '../../src/domain/economy/funding/snapshot';
 
 const step = stepById.get('S4-03')!;

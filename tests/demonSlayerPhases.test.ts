@@ -2,7 +2,7 @@
 // stone circle only Silverlight and food matter.
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { currentLoadoutStep, loadoutPhase } from '../src/domain/readiness/loadoutPhase';
+import { currentLoadoutStep, loadoutPhase } from '../src/domain/quests/loadoutPhase';
 import type { QuestInstruction } from '../src/services/runeliteBridge';
 
 const step = stepById.get('S3-03')!;

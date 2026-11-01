@@ -9,7 +9,7 @@ import { stepById } from '../src/data';
 import { parseTracked, trackedTrainingContext } from '../src/domain/training/skillTrack';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { emptyPrep, rearmReadyDetours, startDetour } from '../src/domain/prep/prepRoute';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { PriceView } from '../src/domain/market/quotes';
 
 const state = (ranged?: number) => buildPlayerState({ mode: 'f2p', connected: true,
   stats: { ...(ranged === undefined ? {} : { ranged }), defence: 33, hitpoints: 31 }, progress: emptyProgress(), questsDone: [],

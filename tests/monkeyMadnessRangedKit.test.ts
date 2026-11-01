@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
 import stagesFile from '../src/data/questStages.json';
-import { loadoutNeed } from '../src/domain/readiness/loadoutPhase';
-import { evaluate } from '../src/domain/readiness/requirements';
+import { loadoutNeed } from '../src/domain/quests/loadoutPhase';
+import { evaluate } from '../src/domain/player/requirements';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 

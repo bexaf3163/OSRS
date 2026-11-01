@@ -13,7 +13,7 @@ import { ARROW_BREAK_RATE, rangedMaximumHit, trainingRangedStyleBonus } from './
 import rangedGearJson from '../../data/rangedGear.json';
 import { attacksToKill, foeVariants, spread, type CombatFoe, type Range } from './combatEstimate';
 import { rangedEquipment, rangedNeeds } from './rangedLoadout';
-import type { PriceView } from '../economy/funding/quotes';
+import type { PriceView } from '../market/quotes';
 import type { PlayerState } from '../player/playerState';
 import type { MethodNeed, TrainingMethod } from '../training/trainingRouter';
 import { gearData } from './gearAdvisor';

@@ -2,8 +2,8 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   allQuests, allStages, allSteps, items, itemById, maxQpFor, membersSkills, stagesFor, stepsFor,
 } from '../src/data';
-import { deriveQuests } from '../src/domain/quests/quests';
-import { titleTargets } from '../src/domain/quests/targets';
+import { deriveQuests } from '../src/data/quests';
+import { titleTargets } from '../src/data/targets';
 import { createPriceService, PRICE_TTL_MS } from '../src/services/pricesApi';
 import { cleanWikiText } from '../src/domain/text/md';
 import { stepText } from '../src/domain/quests/search';

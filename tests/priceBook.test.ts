@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { buildPriceBook, priceNote, reprice } from '../src/domain/items/priceBook';
+import { buildPriceBook, priceNote, reprice } from '../src/domain/market/priceBook';
 import { createPriceService } from '../src/services/pricesApi';
 import { nameKey } from '../src/domain/items/itemKey';
-import { buildPriceView } from '../src/domain/economy/funding/quotes';
+import { buildPriceView } from '../src/domain/market/quotes';
 import type { LedgerEntry } from '../src/domain/persistence/ledger';
 
 const baked = new Map<string, number>([[nameKey('Lobster'), 100], [nameKey('Rare thing'), 7]]);

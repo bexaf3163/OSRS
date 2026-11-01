@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
 import { itemPreflight } from '../src/domain/readiness/preflight';
-import { entryFoodStep } from '../src/domain/readiness/loadoutPhase';
+import { entryFoodStep } from '../src/domain/quests/loadoutPhase';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { emptyProgress } from '../src/domain/persistence/progress';
-import { aggregateShopping } from '../src/domain/economy/shopping';
+import { aggregateShopping } from '../src/domain/prep/shopping';
 import { shopRows } from '../src/domain/economy/shoppingView';
 import { protectionsFor } from '../src/domain/economy/funding/snapshot';
 import { bankWithdrawalsOf } from '../src/domain/prep/prepEnvelope';

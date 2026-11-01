@@ -7,9 +7,9 @@ import type { Step } from '../../types';
 import { useBridge } from '../../state/bridge';
 import { useStore } from '../../state/store';
 import { usePlayerState } from '../../state/playerStateContext';
-import { transportSources } from '../../domain/travel/liveTransport';
-import { planTravelSupplies, savedText, type SupplyItem } from '../../domain/travel/travelSupplies';
-import { formatGp } from '../../domain/economy/shopping';
+import { transportSources } from '../../domain/readiness/liveTransport';
+import { planTravelSupplies, savedText, type SupplyItem } from '../../domain/readiness/travelSupplies';
+import { formatGp } from '../../domain/prep/shopping';
 import type { Point } from '../../domain/travel/travel';
 
 function haveText(i: SupplyItem, connected: boolean, chargesKnown: boolean): string {

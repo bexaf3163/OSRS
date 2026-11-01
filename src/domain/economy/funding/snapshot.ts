@@ -9,12 +9,13 @@ import { parseAmount } from '../../items/checklist';
 import { nameKey } from '../../items/itemKey';
 import { carryoverOf } from '../../prep/carryover';
 import { heldExact, heldOf, levelOf, questOf, type Held, type PlayerState, type QuestPresence, type WorldPoint } from '../../player/playerState';
-import { aggregateShopping } from '../shopping';
+import { aggregateShopping } from '../../prep/shopping';
 import { doseKind, doseNames } from '../../items/doseKind';
-import { effectiveHeal, FOODS } from '../../combat/foodAdvice';
+import { effectiveHeal } from '../../player/foodStock';
+import { FOODS } from '../../../data/threats';
 import { toolFamilyOf, usableAt } from '../../items/toolTiers';
 import { questItemKeys } from '../../quests/questItems';
-import { totalLevelOf, tradeRestriction, type SellOverride, type TradeRestriction } from '../tradeRestriction';
+import { totalLevelOf, tradeRestriction, type SellOverride, type TradeRestriction } from '../../market/tradeRestriction';
 
 /** Coins that can be spent: the number and how much of it is certain. */
 export interface Liquid {

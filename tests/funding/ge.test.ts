@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { geTax, GE_TAX_CAP, isTaxExempt, netEach, netSale, taxOnSale } from '../../src/domain/economy/funding/ge';
+import { geTax, GE_TAX_CAP, isTaxExempt, netEach, netSale, taxOnSale } from '../../src/domain/market/ge';
 
 // Reference figures worked by hand from the wiki rule (2% of one item's price, rounded down, at most 5,000,000, exempt list pays nothing).
 describe('Grand Exchange tax', () => {

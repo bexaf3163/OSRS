@@ -3,8 +3,6 @@
 // progress-<id>.json. The app recognises the character by the name from the game (the plugin, protocol 5): the first character seen
 // is bound to a profile without a name, and another one does not write levels and marks into it until the player chooses.
 
-
-
 export interface Profile {
   id: string;
   name: string;

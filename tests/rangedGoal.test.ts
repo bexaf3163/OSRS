@@ -5,11 +5,11 @@ import { xpForLevel } from '../src/domain/player/xp';
 import { rangedGoalNeeds } from '../src/domain/combat/combatRates';
 import { rangedNeeds, RANGED_WATCH } from '../src/domain/combat/rangedLoadout';
 import { adviseTraining, trainingMethods, type PathLeg, type MethodNeed } from '../src/domain/training/trainingRouter';
-import { mergeGoalNeeds } from '../src/domain/training/processingGoal';
+import { mergeGoalNeeds } from '../src/domain/items/consumption';
 import { withTrainingMethod } from '../src/domain/training/methodStep';
-import { aggregateShopping } from '../src/domain/economy/shopping';
+import { aggregateShopping } from '../src/domain/prep/shopping';
 import { stepById } from '../src/data';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { PriceView } from '../src/domain/market/quotes';
 
 const quote = { price: 2, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] };
 const prices: PriceView = { status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, buy: () => quote, sell: () => quote };

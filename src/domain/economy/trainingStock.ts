@@ -4,11 +4,12 @@ import { itemById } from '../../data';
 import { gearById } from '../combat/gearAdvisor';
 import { findLocalItem } from '../items/localItem';
 import { coinsOf, type PlayerState } from '../player/playerState';
-import { itemPrice } from '../items/itemPrice';
+import { itemPrice } from '../market/itemPrice';
 import { doseKind } from '../items/doseKind';
-import { FRESH_MS, type PriceView } from '../economy/funding/quotes';
-import { aggregateShopping, isReusable } from '../economy/shopping';
-import { budgetOf, scopeList, shopRows, type RowContext, type ShopRow } from '../economy/shoppingView';
+import { FRESH_MS, type PriceView } from '../market/quotes';
+import { aggregateShopping } from '../prep/shopping';
+import { isReusable } from '../items/reusable';
+import { budgetOf, scopeList, shopRows, type RowContext, type ShopRow } from './shoppingView';
 
 export function stockShoppingContext(state: PlayerState, prices?: PriceView | null, qp?: number | null): RowContext {
   return {

@@ -5,7 +5,6 @@ import type { Progress, Step, Skill } from '../../types';
 import { isCompleted } from '../quests/next-step';
 import { nameKey } from '../items/itemKey';
 
-
 export const SKILL_NAMES = [
   'attack', 'strength', 'defence', 'ranged', 'prayer', 'magic', 'runecraft', 'construction', 'hitpoints', 'agility', 'herblore', 'thieving', 'crafting',
   'fletching', 'slayer', 'hunter', 'mining', 'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'farming',

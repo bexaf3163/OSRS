@@ -6,7 +6,9 @@
 // the game highlights: the plugin already finds NPCs and objects by name. An id is added only where it is known.
 
 import { TILES_PER_SECOND, NET, TRANSPORT, effectiveTiles, shortOnHand, stopText, type Point, type PrepStop, type TravelOption } from './travel';
-import { TIP_MIN_SAVING_TILES } from '../readiness/tips';
+
+/** A way shorter than walking by at least this many tiles (about half a minute of running) earns a tip. */
+export const TIP_MIN_SAVING_TILES = 80;
 
 export type TransportType = 'item_teleport' | 'tablet' | 'spell_teleport' | 'fairy_ring' | 'charter_ship' | 'canoe' | 'ferry' | 'npc_teleport' | 'spirit_tree' | 'glider';
 /** ready: usable now. check: usable if what the app cannot see is fine (charges, a cooldown, a quest). prepare: usable after the listed stop. */

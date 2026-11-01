@@ -3,7 +3,8 @@
 import type { Step } from '../../../types';
 import { useBridge } from '../../../state/bridge';
 import { useStore } from '../../../state/store';
-import { effectiveHeal, foodInBag, foodsCovering, threatKeys, viewThreat } from '../../../domain/combat/foodAdvice';
+import { foodInBag, foodsCovering, threatKeys, viewThreat } from '../../../domain/combat/foodAdvice';
+import { effectiveHeal } from '../../../domain/player/foodStock';
 import { estimateStepFights, fightLine, OTHER_METHOD } from '../../../domain/combat/fightEstimate';
 import { foeLabel } from '../../../domain/combat/combatEstimate';
 import { CombatPlan, useCombatPlan } from './CombatPlan';

@@ -4,7 +4,7 @@ import { buildPlayerState } from '../src/domain/player/playerState';
 import { gearData, trainingWeapons } from '../src/domain/combat/gearAdvisor';
 import { trainingMethods, toolUpgrade, adviseTraining, methodNeeds } from '../src/domain/training/trainingRouter';
 import { emptyProgress } from '../src/domain/persistence/progress';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { PriceView } from '../src/domain/market/quotes';
 import { STYLE_GEAR } from '../src/domain/combat/styleGear';
 
 const method = trainingMethods.find((m) => m.id === 'me-frog')!;

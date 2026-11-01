@@ -3,7 +3,7 @@
 // a price that was an hour ago is not the price now.
 
 import type { LedgerEntry } from '../persistence/ledger';
-import type { PriceView } from '../economy/funding/quotes';
+import type { PriceView } from './quotes';
 import { itemPrice, type ItemPrice } from './itemPrice';
 
 export interface PriceBook {

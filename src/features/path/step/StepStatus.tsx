@@ -12,7 +12,7 @@ import { useBridge } from '../../../state/bridge';
 import { toInGameTarget } from '../../../domain/guide/inGameTarget';
 import { isClosed } from '../../../domain/quests/next-step';
 import { STATUS_TEXT } from '../../../domain/readiness/readiness';
-import { plural } from '../../../domain/economy/shopping';
+import { plural } from '../../../domain/text/format';
 import { TARGET_LABEL } from '../../../domain/player/linkState';
 import { useReadinessEngine } from '../../../state/readinessContext';
 import { useScopedReadiness, useStageScope } from '../../../state/hooks/useStageScope';

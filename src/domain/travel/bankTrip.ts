@@ -2,7 +2,7 @@
 // (combatRoute/spots.ts) and the gathering spots (skillingRates.ts), so a fix to the walk reaches both.
 
 import locationsJson from '../../data/majorLocations.json';
-import { BANKS, bankTiles, dist, TILES_PER_SECOND, type Point } from '../travel/travel';
+import { BANKS, bankTiles, dist, TILES_PER_SECOND, type Point } from './travel';
 
 /** A spot as the bank trip needs it: where it is, the way in (ladders into a dungeon) and the named bank of majorLocations.json. */
 export interface BankedSpot { place: Point; waypoints?: Point[]; bank?: string }

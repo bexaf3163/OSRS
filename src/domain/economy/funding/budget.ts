@@ -6,10 +6,10 @@
 //   the bank's value - the plugin's total for items it cannot itemise: shown, never offered as something to sell.
 // A coin is counted once: the surplus is items, the liquid is coins, and a sale moves value from one to the other only when the coins arrive.
 
-import { netSale } from './ge';
-import type { PriceView } from './quotes';
+import { netSale } from '../../market/ge';
+import type { PriceView } from '../../market/quotes';
 import { protectedQty, type FundingSnapshot, type Liquid } from './snapshot';
-import { isRestrictedItem } from '../tradeRestriction';
+import { isRestrictedItem } from '../../market/tradeRestriction';
 import type { FundingNeed } from './need';
 
 /** What the cleanup advice says about one stack (a subset of CleanupRec: the funding code does not depend on its other fields). */

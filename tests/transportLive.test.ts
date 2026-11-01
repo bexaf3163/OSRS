@@ -6,7 +6,7 @@ import { emptyProgress } from '../src/domain/persistence/progress';
 import { allSteps } from '../src/data';
 import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
 import { nameKey } from '../src/domain/items/itemKey';
-import { decideTransport, transportReport, transportSources, transportTarget, type TransportInput } from '../src/domain/travel/liveTransport';
+import { decideTransport, transportReport, transportSources, transportTarget, type TransportInput } from '../src/domain/readiness/liveTransport';
 import { planPayload } from '../src/domain/prep/prepEnvelope';
 import { transportKey, transportWatch, travelInputOf } from '../src/domain/travel/travelInput';
 import { travelOptions } from '../src/domain/travel/travel';

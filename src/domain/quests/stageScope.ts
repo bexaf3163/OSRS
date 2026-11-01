@@ -8,7 +8,6 @@ import type { Step } from '../../types';
 import type { QuestInstruction } from '../../services/runeliteBridge';
 import { nameKey } from '../items/itemKey';
 import type { RequirementStatus, StepReadiness } from '../readiness/readiness';
-import { prepSatisfied } from '../prep/prepPlan';
 
 export interface StageScope {
   stageAt: number;
@@ -73,3 +72,5 @@ export function scopeReadiness(r: StepReadiness, scope: StageScope | null): Step
   const status = problems.length === 0 ? (unknown.length ? 'UNKNOWN' : 'READY') : r.status;
   return { ...r, problems, unknown, requirements: r.requirements.filter((x) => !drop(x)), status };
 }
+
+export const prepSatisfied = (l: { where: string; equip?: boolean }) => l.where === 'EQUIPPED' || (l.where === 'INVENTORY' && !l.equip);

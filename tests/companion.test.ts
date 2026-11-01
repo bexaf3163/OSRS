@@ -2,10 +2,13 @@
 
 import { describe, expect, it } from 'vitest';
 import type { Progress, Step, StepItemRequirement } from '../src/types';
-import { evaluatePreflight, parseAmount, parseOwned, preflightItems, type OwnedState } from '../src/domain/items/checklist';
+import { parseAmount, parseOwned, type OwnedState } from '../src/domain/items/checklist';
+import { evaluatePreflight } from '../src/domain/readiness/preflight';
+import { preflightItems } from '../src/domain/prep/stepItems';
 import { nameKey } from '../src/domain/items/itemKey';
 import { evaluateBranches, evaluateCondition, reasonLabel, watchedItems, type BranchContext } from '../src/domain/quests/branching';
-import { aggregateShopping, carryOverFrom, plural, shoppingText } from '../src/domain/economy/shopping';
+import { aggregateShopping, carryOverFrom, shoppingText } from '../src/domain/prep/shopping';
+import { plural } from '../src/domain/text/format';
 import { parseStats } from '../src/services/runeliteBridge';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { stepsFor } from '../src/data';

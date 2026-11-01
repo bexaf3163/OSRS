@@ -10,12 +10,12 @@ import type { Step } from '../../types';
 import type { QuestInstruction } from '../../services/runeliteBridge';
 import type { OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
-import { isInstancedPoint, isOverworld } from './instances';
-import { stepPlaces } from './stepPlaces';
+import { isInstancedPoint, isOverworld } from '../travel/instances';
+import { stepPlaces } from '../travel/stepPlaces';
 import { instructionSubStep } from '../quests/subStep';
-import { TIP_MIN_SAVING_TILES } from '../readiness/tips';
-import { journeyTiles } from './transport';
-import { TILES_PER_SECOND, TRANSPORT, dist, runeName, staffCover, travelOptions, type ItemSource, type Point, type TravelInput } from './travel';
+import { TIP_MIN_SAVING_TILES } from '../travel/transport';
+import { journeyTiles } from '../travel/transport';
+import { TILES_PER_SECOND, TRANSPORT, dist, runeName, staffCover, travelOptions, type ItemSource, type Point, type TravelInput } from '../travel/travel';
 import type { GearItem, GearState } from '../../services/runeliteBridge';
 
 /** How many open steps ahead "the road" covers in the game: about one stage of the route. */

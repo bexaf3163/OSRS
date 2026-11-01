@@ -16,8 +16,8 @@ import type { Foe, FoeData, GameMode, GearData, GearPiece, GearSlot, Step } from
 import type { OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
 import { matchStrict } from '../travel/locations';
-import { shopAccess } from '../prep/shopAccess';
-import { SAVE_GP } from '../prep/shopConstants';
+import { shopAccess } from '../market/shopAccess';
+import { SAVE_GP } from '../market/shopConstants';
 import type { GearState, NavTargetPayload } from '../../services/runeliteBridge';
 
 export const gearData = gearJson as GearData;
@@ -332,7 +332,7 @@ export interface AdvisorInput {
   /** Exchange prices by ID. */
   gePrices?: ReadonlyMap<number, number>;
   /** Shared acquisition quotes, including cached/indicative labels; preferred over legacy numeric inputs. */
-  geQuotes?: ReadonlyMap<number, import('../items/itemPrice').ItemPrice>;
+  geQuotes?: ReadonlyMap<number, import('../market/itemPrice').ItemPrice>;
   /** The Al Kharid toll gate is free (Prince Ali Rescue is done). */
   freeToll?: boolean;
   /** Which items the route still buys: nameKey → step code. */

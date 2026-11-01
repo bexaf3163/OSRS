@@ -1,7 +1,7 @@
 // The shapes of the funding system: the method catalogue (data), the player snapshot it is judged against, and the answer.
 // Nothing here computes; the files next to it do. Every fact the catalogue states carries where it came from and when it was checked.
 
-import type { Confidence } from './quotes';
+import type { Confidence } from '../../market/quotes';
 
 export type { Confidence };
 

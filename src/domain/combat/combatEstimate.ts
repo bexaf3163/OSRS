@@ -18,7 +18,8 @@ import combatFoesJson from '../../data/combatFoes.json';
 import { equippedBySlot, gearData, meleeAs, SLOTS, type TrainStyle } from './gearAdvisor';
 import type { GearState } from '../../services/runeliteBridge';
 import type { GearData, GearPiece, PacingSkill, Step } from '../../types';
-import { effectiveHeal, FOODS } from './foodAdvice';
+import { effectiveHeal } from '../player/foodStock';
+import { FOODS } from '../../data/threats';
 import { levelForXp, xpForLevel } from '../player/xp';
 
 /** Shared ranged defaults and damage math (OSRS Wiki DPS/Ranged and Arrows). */

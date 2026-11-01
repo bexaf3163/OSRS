@@ -4,9 +4,9 @@
 // would take.
 
 import fundingJson from '../../data/fundingMethods.json';
-import { netEach } from './funding/ge';
+import { netEach } from './ge';
 import { isRestrictedItem, type TradeRestriction } from './tradeRestriction';
-import type { PriceView } from './funding/quotes';
+import type { PriceView } from './quotes';
 import type { MethodPriority } from '../persistence/playStyle';
 
 /** Seconds to pick one drop up: the click and a step or two, the fast and the slow end. */

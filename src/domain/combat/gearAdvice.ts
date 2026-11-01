@@ -3,10 +3,9 @@
 
 import type { Progress, Step } from '../../types';
 import { isClosed, isCompleted, questDependencyFacts } from '../quests/next-step';
-import type { PriceView } from '../economy/funding/quotes';
-import { itemPrice, type ItemPrice } from '../items/itemPrice';
+import type { PriceView } from '../market/quotes';
+import { itemPrice, type ItemPrice } from '../market/itemPrice';
 import { gearData } from './gearAdvisor';
-
 
 /** Keep quote certainty with each canonical gear ID; database planning values are not acquisition quotes. */
 export function gearMarketPrices(board: PriceView): ReadonlyMap<number, ItemPrice> {

@@ -10,12 +10,12 @@ import { useFunding, useFundingScreen, useFundingView } from '../../state/fundin
 import { useReadinessEngine } from '../../state/readinessContext';
 import { useFeatures } from '../../state/hooks/useFeatures';
 import { styleOf } from '../../domain/persistence/playStyle';
-import { formatGp } from '../../domain/economy/shopping';
+import { formatGp } from '../../domain/prep/shopping';
 import type { FundingAssessment, FundingOption } from '../../domain/economy/funding/assess';
 import type { MethodEvaluation } from '../../domain/economy/funding/evaluate';
-import type { PriceView } from '../../domain/economy/funding/quotes';
+import type { PriceView } from '../../domain/market/quotes';
 import type { Realized } from '../../domain/economy/funding/session';
-import type { Tier } from '../../domain/economy/funding/need';
+import type { Tier } from '../../domain/market/needPrice';
 
 const gp = (n: number) => `${formatGp(Math.round(n))} gp`;
 

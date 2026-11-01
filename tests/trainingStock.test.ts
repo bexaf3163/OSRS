@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { stockUpShopping } from '../src/domain/training/trainingStock';
+import { stockUpShopping } from '../src/domain/economy/trainingStock';
 import { budgetOf, exchangePlan, geListText, type RowContext } from '../src/domain/economy/shoppingView';
 import { buildPlayerState, coinsOf } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { nameKey } from '../src/domain/items/itemKey';
 import { trainingStockNeeds, type PathLeg, type TrainingMethod } from '../src/domain/training/trainingRouter';
 import type { Step, StepItemRequirement } from '../src/types';
-import type { PriceView, UnitPrice } from '../src/domain/economy/funding/quotes';
+import type { PriceView, UnitPrice } from '../src/domain/market/quotes';
 import { xpForLevel } from '../src/domain/player/xp';
-import { isReusable } from '../src/domain/economy/shopping';
+import { isReusable } from '../src/domain/items/reusable';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 
 const names = ['Iron arrow', 'Oak shortbow', 'Willow shortbow', 'Maple shortbow', 'Bronze axe', 'Steel axe', 'Mithril axe', 'Hammer', 'Copper ore'];

@@ -11,7 +11,7 @@ import { assess, type AssessInput, type FundingAssessment } from '../../src/doma
 import { buildNeed, type FundingNeed } from '../../src/domain/economy/funding/need';
 import { buildSnapshot, type FundingSnapshot } from '../../src/domain/economy/funding/snapshot';
 import type { SurplusRec } from '../../src/domain/economy/funding/budget';
-import type { PriceView } from '../../src/domain/economy/funding/quotes';
+import type { PriceView } from '../../src/domain/market/quotes';
 import type { MethodEvaluation, ObservedRate } from '../../src/domain/economy/funding/evaluate';
 import { emptyProgress } from '../../src/domain/persistence/progress';
 import { buildPlayerState, type PlayerState } from '../../src/domain/player/playerState';

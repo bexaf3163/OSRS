@@ -1,7 +1,7 @@
 // A diagram or screenshot inside the step card: a collapsible block and a full-size view.
 
-import { useEffect, useRef, useState } from 'react';
-import { IconClose } from '../../../ui/Icons';
+import { useState } from 'react';
+import { ImageModal } from '../../map/ImageModal';
 
 export function StepImage({ src, caption }: { src: string; caption?: string }) {
   const [failed, setFailed] = useState(false);
@@ -26,22 +26,5 @@ export function StepImage({ src, caption }: { src: string; caption?: string }) {
       </figure>
       {zoomed && <ImageModal src={src} alt={alt} caption={caption} onClose={() => setZoomed(false)} />}
     </details>
-  );
-}
-
-export function ImageModal({ src, alt, caption, onClose }: { src: string; alt: string; caption?: string; onClose: () => void }) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    dialog.current?.showModal();
-  }, []);
-  return (
-    <dialog ref={dialog} className="image-modal" aria-label={caption ?? alt}
-      onClose={onClose} onClick={(e) => { if (e.target === dialog.current) dialog.current?.close(); }}>
-      <button type="button" className="icon-btn image-modal-close" onClick={() => dialog.current?.close()} aria-label="Close">
-        <IconClose />
-      </button>
-      <img src={src} alt={alt} referrerPolicy="no-referrer" />
-      {caption && <p className="image-modal-caption">{caption}</p>}
-    </dialog>
   );
 }

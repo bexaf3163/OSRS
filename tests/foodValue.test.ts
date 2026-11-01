@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { effectiveHeal, foodAllowed, foodInBag, foodsCovering, FOODS } from '../src/domain/combat/foodAdvice';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import { foodAllowed, foodInBag, foodsCovering } from '../src/domain/combat/foodAdvice';
+import { effectiveHeal } from '../src/domain/player/foodStock';
+import { FOODS } from '../src/data/threats';
+import type { PriceView } from '../src/domain/market/quotes';
 
 const quote = (price: number) => ({ price, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] });
 const prices = (values: Record<string, number | null>, fallback: number | null = 100000): PriceView => ({

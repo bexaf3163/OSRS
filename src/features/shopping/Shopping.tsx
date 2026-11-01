@@ -10,7 +10,8 @@ import { useBridge } from '../../state/bridge';
 import { usePlayerState } from '../../state/playerStateContext';
 import { currentStage } from '../../domain/quests/next-step';
 import { coinsOf } from '../../domain/player/playerState';
-import { formatGp, plural } from '../../domain/economy/shopping';
+import { formatGp } from '../../domain/prep/shopping';
+import { plural } from '../../domain/text/format';
 import {
   budgetOf, budgetSum, emptyStateOf, exchangePlan, geListText, scopeList, scopeSteps, shopRows, syncLine, timingOf, type Channel, type EmptyKind, type ScopeKind, type ShopRow, type StageRange,
 } from '../../domain/economy/shoppingView';
@@ -26,7 +27,7 @@ import { guideFor } from '../../data/skillGuideRegistry';
 import { buildPath, currentIndex, followedShoppingStep } from '../../domain/training/skillGuide';
 import { freeOnlyOf } from '../../domain/training/skillTrack';
 import { useTracked } from '../../state/hooks/useTracked';
-import { stockShoppingContext, stockUpShopping } from '../../domain/training/trainingStock';
+import { stockShoppingContext, stockUpShopping } from '../../domain/economy/trainingStock';
 
 const RANGE_KEY = 'osrs-put:shopping-range';
 const SCOPE_KEY = 'osrs-put:shopping-scope';
@@ -374,7 +375,6 @@ export function ShoppingPage() {
           <ul className="shop-items">{optional.map((r) => rowView(r))}</ul>
         </details>
       )}
-
 
     </div>
     </Page>

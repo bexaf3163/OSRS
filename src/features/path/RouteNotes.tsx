@@ -9,7 +9,7 @@ import { daeroAdvice } from '../../domain/training/daero';
 import { useBridge } from '../../state/bridge';
 import { levelOf } from '../../domain/player/playerState';
 import { useReadinessEngine } from '../../state/readinessContext';
-import { loadoutPhase } from '../../domain/readiness/loadoutPhase';
+import { loadoutPhase } from '../../domain/quests/loadoutPhase';
 
 const MARK: Record<CarryState, string> = { OK: '✓', MISSING: '✗', UNKNOWN: '?' };
 const WORD: Record<CarryState, string> = { OK: 'kept', MISSING: 'not kept yet', UNKNOWN: 'not checked' };

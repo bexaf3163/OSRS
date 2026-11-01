@@ -4,7 +4,7 @@
 import { useMemo, useState } from 'react';
 import { stepById } from '../data';
 import { useBridge } from '../state/bridge';
-import { earlierUnverified, syncCandidates } from '../domain/player/accountSync';
+import { earlierUnverified, syncCandidates } from '../domain/quests/accountSync';
 import { gateAllows } from '../domain/persistence/profiles';
 import { withReviewed, withStep } from '../domain/persistence/progress';
 import { useStore } from '../state/store';

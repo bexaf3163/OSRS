@@ -3,7 +3,7 @@
 // result of cleanupAdvice, the same advice the Shopping page shows.
 
 import { OBSOLETE, type CleanupRec, type CleanupResult } from './cleanup';
-import { clipText } from './prepEnvelope';
+import { clipText } from '../text/format';
 
 export type CleanupHintAction = 'sell' | 'drop' | 'destroy' | 'review';
 

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
 import machines from '../src/data/questMachines.json';
 import { stepGuide } from '../src/domain/guide/inGameTarget';
-import { stepTargets } from '../src/domain/travel/travelSupplies';
+import { stepTargets } from '../src/domain/readiness/travelSupplies';
 import { questItemKeys } from '../src/domain/quests/questItems';
 
 describe('the Fairytale II route milestone', () => {

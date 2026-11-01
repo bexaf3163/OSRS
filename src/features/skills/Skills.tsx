@@ -11,8 +11,6 @@ import { SkillDetailPage } from './SkillDetail';
 import { Eyebrow, Page } from '../../ledger';
 import { f2pAdviceFor, f2pAdviceLabel, F2P_PRIORITY_LABEL } from '../../domain/training/f2pSkillAdvice';
 
-
-
 /** The Skills spread: the character sheet on the left, the chosen skill (or the followed one) on the right. */
 export function SkillsPage({ param, selectedSkill, goal }: { param?: string; selectedSkill?: string; goal?: number }) {
   const { progress, steps, mode } = useStore();
@@ -62,8 +60,6 @@ export function SkillsPage({ param, selectedSkill, goal }: { param?: string; sel
     </>
   );
 }
-
-
 
 /** One skill per tile; recommendations and manual level editing live on its detail page. */
 function SkillCard({ skill, id }: { skill: Skill; id: string }) {

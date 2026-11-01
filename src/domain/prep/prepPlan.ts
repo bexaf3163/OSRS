@@ -12,31 +12,34 @@
 
 import type { Progress, Step, WikiItemDetail } from '../../types';
 import { itemById } from '../../data';
-import { foodCarry, THREATS, type FoodCarry, type FoodHolding } from '../combat/foodAdvice';
+import { foodCarry, type FoodCarry, type FoodHolding } from '../player/foodStock';
+import { THREATS } from '../../data/threats';
 import { stepFightNames } from '../combat/fightEstimate';
 import recipesJson from '../../data/recipes.json';
-import { npcSpot } from '../travel/stepPlaces';
-import type { NavTargetPayload } from '../../services/runeliteBridge';
+import { npcSpot, nearestBank } from '../travel/stepPlaces';
+import type { NavTargetPayload, QuestInstruction } from '../../services/runeliteBridge';
 import { upgradeNav, type UpgradeRecommendation } from '../training/gearUpgradeRouter';
-import { aggregateShopping, plural, type ShoppingLine } from '../economy/shopping';
+import { aggregateShopping, type ShoppingLine } from './shopping';
+import { plural } from '../text/format';
 import { heldOf, wornItemsOf, type PlayerState } from '../player/playerState';
 import { countWorn } from '../items/equipmentCount';
-import { carryOf, displayName, doseKind, heldUnits, shortText, takeFromBank } from '../items/doses';
-import { nearestBank, type StepReadiness } from '../readiness/readiness';
+import { carryOf, displayName, doseKind, shortText, takeFromBank } from '../items/doses';
+import { heldUnits } from '../player/heldUnits';
+import type { StepReadiness } from '../readiness/readiness';
 import { planSources, type SourceOption } from './sourceRouter';
 import { tripWindow, type OneTripPlan } from './oneTrip';
-import { preflightItems } from '../items/checklist';
+import { preflightItems } from './stepItems';
 import { nameKey } from '../items/itemKey';
 import { weightAdvice, type WeightAdvice } from '../items/weight';
 import { carryoverOf } from './carryover';
 import { questItemKeys } from '../quests/questItems';
-import { recoverySteps, type Recovery, type RecoveryStep } from '../readiness/recovery';
-import { loadoutNeed, loadoutPhase } from '../readiness/loadoutPhase';
-import type { QuestInstruction } from '../../services/runeliteBridge';
-import type { PriceView } from '../economy/funding/quotes';
-import { itemPrice, marketItemPrice, type ItemPrice } from '../items/itemPrice';
+import { recoverySteps, type Recovery, type RecoveryStep } from '../travel/recovery';
+import { loadoutNeed, loadoutPhase } from '../quests/loadoutPhase';
+import type { PriceView } from '../market/quotes';
+import { itemPrice, marketItemPrice, type ItemPrice } from '../market/itemPrice';
 import { purchaseCost, purchaseFees, type PurchaseFee } from '../items/purchaseCost';
-import { materialTake, type MaterialTake } from '../items/materialStock';
+import { materialTake, type MaterialTake } from '../player/materialStock';
+import { prepSatisfied } from '../quests/stageScope';
 
 /** Critical: the step cannot be done without it; important: better to prepare before leaving; an improvement saves time or money; optional is a convenience. */
 export type PrepPriority = 'CRITICAL' | 'IMPORTANT' | 'OPTIMIZATION' | 'OPTIONAL';
@@ -101,8 +104,6 @@ export interface PrepLine {
   /** Additional usable units allocated to this deadline; the same bag stock cannot cover another deadline again. */
   bagShortfall?: number;
 }
-
-export const prepSatisfied = (l: { where: string; equip?: boolean }) => l.where === 'EQUIPPED' || (l.where === 'INVENTORY' && !l.equip);
 
 export interface PrepScore {
   /** Done out of what can be checked; null means there is nothing to check with yet (no data from the game). */

@@ -19,7 +19,7 @@ import { themOf, type Spot } from './spots';
 import { armourDefence, armourItems, armourReady } from './armour';
 import { gearById } from '../gearAdvisor';
 import type { PlayerState } from '../../player/playerState';
-import type { PriceView } from '../../economy/funding/quotes';
+import type { PriceView } from '../../market/quotes';
 
 export interface CombatPick {
   /** Conservative food for every unfinished phase, not the current bag. */

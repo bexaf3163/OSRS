@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { etaMinutes, etaText, XpTracker } from '../src/domain/player/xpRate';
 import { sessionSummary } from '../src/domain/player/session';
-import { earlierUnverified, questKey, syncCandidates } from '../src/domain/player/accountSync';
+import { earlierUnverified, questKey, syncCandidates } from '../src/domain/quests/accountSync';
 import { addProfile, defaultProfiles, gateAllows, linkPlayer, MAIN_ID, parseProfiles, profileFileName, profileGate, profileStorageKey, removeProfile, renameProfile } from '../src/domain/persistence/profiles';
 import { parsePlayer, parsePos, parseQuests, parseXp } from '../src/services/runeliteBridge';
 import { emptyProgress } from '../src/domain/persistence/progress';

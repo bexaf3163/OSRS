@@ -4,12 +4,12 @@
 import { describe, expect, it } from 'vitest';
 import { evaluatePlans, planNetPerHour, planWhy, type PlanReport } from '../../src/domain/combat/route/plans';
 import { selectPlan } from '../../src/domain/combat/route/selection';
-import { COIN_SHARE_CAP } from '../../src/domain/economy/lootValue';
+import { COIN_SHARE_CAP } from '../../src/domain/market/lootValue';
 import type { MethodPriority } from '../../src/domain/persistence/playStyle';
 import { market } from '../funding/market';
 import { planInput, type Over } from './fixture';
 import { doseValue } from '../../src/domain/items/doses';
-import { supplyPrice } from '../../src/domain/prep/sourceRouter';
+import { supplyPrice } from '../../src/domain/market/itemPrice';
 
 const prices = market();
 const report = (o: Over, objective?: MethodPriority): PlanReport =>

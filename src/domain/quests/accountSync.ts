@@ -2,7 +2,7 @@
 // Ownership and carryover goals need separate evidence and remain unverified here.
 
 import type { PlayerStats, Progress, Step } from '../../types';
-import { isClosed } from '../quests/next-step';
+import { isClosed } from './next-step';
 
 export interface SyncCandidate {
   step: Step;

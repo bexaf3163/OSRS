@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildPlayerState, coinsOf, diffPlayerState, heldExact, heldOf, levelOf, questOf, type PlayerStateInput } from '../src/domain/player/playerState';
-import { describe as describeReq, evaluate, type Requirement } from '../src/domain/readiness/requirements';
+import { describe as describeReq, evaluate, type Requirement } from '../src/domain/player/requirements';
 import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
 import { nameKey } from '../src/domain/items/itemKey';
 import type { GearState } from '../src/services/runeliteBridge';

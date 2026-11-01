@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { castCost, hidesToCover, OPTIONS, planFor, SPELLS, staffPayback, STAFFS, RUNE_IDS, COWHIDE_ID } from '../src/domain/combat/magicPlan';
-import { adviseMoney, combatLevel, hoursToCover, reqText, viewMethod } from '../src/domain/economy/moneyAdvisor';
+import { adviseMoney, hoursToCover, reqText, viewMethod } from '../src/domain/economy/moneyAdvisor';
+import { combatLevel } from '../src/domain/player/xp';
 import { xpForLevel } from '../src/domain/player/xp';
 import type { MoneyMethod, Step } from '../src/types';
 
@@ -183,7 +184,8 @@ describe('data 2.13', () => {
   });
 });
 
-import { foodInBag, foodsCovering, threatKeys, typicalHit, viewThreat, FOODS, THREATS } from '../src/domain/combat/foodAdvice';
+import { foodInBag, foodsCovering, threatKeys, typicalHit, viewThreat } from '../src/domain/combat/foodAdvice';
+import { FOODS, THREATS } from '../src/data/threats';
 
 describe('food for combat', () => {
   it('wiki data: Elvarg — the shield lowers the flame to 10; Brutus — the special hit 19; food heals as on the wiki', () => {

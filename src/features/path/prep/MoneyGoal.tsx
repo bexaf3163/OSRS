@@ -3,12 +3,12 @@
 
 import type { Step } from '../../../types';
 import { useBridge } from '../../../state/bridge';
-import { formatGp } from '../../../domain/economy/shopping';
+import { formatGp } from '../../../domain/prep/shopping';
 import { moneyGoalProgress, wealthOf } from '../../../domain/economy/wealth';
 import { usePlayerState } from '../../../state/playerStateContext';
 import { ratePerMinute, resourceGoal } from '../../../domain/persistence/ledger';
-import { priceNote } from '../../../domain/items/priceBook';
-import { isRestrictedItem } from '../../../domain/economy/tradeRestriction';
+import { priceNote } from '../../../domain/market/priceBook';
+import { isRestrictedItem } from '../../../domain/market/tradeRestriction';
 import { useTradeRestriction } from '../../../state/hooks/useTradeRestriction';
 
 export function MoneyGoal({ step }: { step: Step }) {

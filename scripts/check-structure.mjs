@@ -1,6 +1,6 @@
-// Structure guard (the change hygiene rules in PROJECT_HANDOFF.md). Usage: npm run check-structure [-- --strict]   (report-only by default; --strict exits 1 when a check exceeds its known debt)
+// Structure guard (the change hygiene rules in PROJECT_HANDOFF.md). Usage: npm run check-structure (strict: exits 1 when a check exceeds its known debt); without --strict it only reports
 // Checks: runtime import cycles, file-size budget, JSON imports outside src/data, hard-coded '#/' links outside the page registry,
-// folder size, handoff length, and layer rules, two-way folder dependencies and React placement once src/domain exists.
+// folder size, handoff length, and layer rules, folder dependency cycles and React placement once src/domain exists.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { dirname, resolve, relative } from 'node:path';
 const t0 = Date.now(); const strict = process.argv.includes('--strict');
@@ -16,7 +16,7 @@ let idx = 0; const st = [], on = new Set(), ix = new Map(), low = new Map(), scc
 const sc = (v) => { ix.set(v, idx); low.set(v, idx); idx++; st.push(v); on.add(v); for (const w of g.get(v) || []) { if (!ix.has(w)) { sc(w); low.set(v, Math.min(low.get(v), low.get(w))); } else if (on.has(w)) low.set(v, Math.min(low.get(v), ix.get(w))); } if (low.get(v) === ix.get(v)) { const c = []; let w; do { w = st.pop(); on.delete(w); c.push(w); } while (w !== v); if (c.length > 1) scc.push(c); } };
 for (const f of src) if (!ix.has(f)) sc(f);
 // Known debt that --strict still accepts until its batch lands (S4 links, S6/S8/S9 big files, S7 data); lower it as it shrinks, never raise it.
-const DEBT = { 'files over 1,000 lines': 7, 'JSON imports only in src/data': 29, "no hard-coded '#/' links outside the page registry": 30, 'folders of at most 25 files': 1 };
+const DEBT = { 'files over 1,000 lines': 7, 'JSON imports only in src/data': 27, "no hard-coded '#/' links outside the page registry": 30, 'folders of at most 25 files': 1 };
 const check = (name, count, detail) => { const debt = DEBT[name] ?? 0; detail = [detail, debt && `known debt ${debt}${count < debt ? `, lower it to ${count}` : ''}`].filter(Boolean).join('; '); const ok = count <= debt; report.push(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? ' — ' + detail : ''}`); if (!ok) failed++; };
 check('runtime import cycles', scc.length, scc.map((c) => `${c.length} modules (${c.slice(0, 3).map((x) => x.replace('src/', '')).join(', ')}…)`).join('; '));
 const sized = [...walk('src'), ...walk('scripts'), ...walk('tests'), ...walk('runelite-bridge/src/main')].filter((f) => /\.(ts|tsx|java|css)$/.test(f)).map((f) => ({ f, n: readFileSync(f, 'utf8').split('\n').length }));
@@ -38,11 +38,13 @@ if (existsSync('src/domain')) {
   const allowed = { domain: ['domain', 'data', 'types'], services: ['services', 'domain', 'data', 'types'], state: ['state', 'domain', 'services', 'data', 'types'], ui: ['ui', 'ledger', 'state', 'types', 'domain', 'data'], ledger: ['ledger', 'ui', 'state', 'types', 'domain', 'data'], features: ['features', 'ui', 'ledger', 'state', 'domain', 'services', 'data', 'types'], app: ['app', 'features', 'ui', 'ledger', 'state', 'domain', 'services', 'data', 'types'], data: ['data', 'types', 'domain'], types: ['types', 'data'], root: ['app', 'ledger', 'state', 'ui', 'types', 'data', 'services', 'domain'] };
   let v = 0; for (const [a, ds] of g) for (const b of ds) if (!(allowed[layer(a)] || []).includes(layer(b))) v++;
   check('layer rules', v, `${v} violating imports`);
-  // A feature may reuse another feature's component and a domain area another area's engine, one way only.
+  // A feature may reuse another feature's component and a domain area another area's engine, one way only, also through a third folder.
   const group = (f) => { const p = f.split('/'); return p[1] === 'domain' || p[1] === 'features' ? `${p[1]}/${p[2]}` : p.length > 2 ? p[1] : 'root'; };
-  const links = new Set(); for (const [a, ds] of g) for (const b of ds) links.add(`${group(a)}|${group(b)}`);
-  const twoWay = [...links].filter((k) => { const [a, b] = k.split('|'); return a < b && links.has(`${b}|${a}`); });
-  check('no two-way folder dependencies', twoWay.length, twoWay.map((k) => k.replace('|', ' <-> ')).join(', '));
+  const fg = new Map(); for (const [a, ds] of g) for (const b of ds) { const x = group(a), y = group(b); if (x !== y) { if (!fg.has(x)) fg.set(x, new Set()); fg.get(x).add(y); } }
+  let n = 0; const fix = new Map(), flow = new Map(), fst = [], fon = new Set(), loops = [];
+  const visit = (v) => { fix.set(v, n); flow.set(v, n); n++; fst.push(v); fon.add(v); for (const w of fg.get(v) || []) { if (!fix.has(w)) { visit(w); flow.set(v, Math.min(flow.get(v), flow.get(w))); } else if (fon.has(w)) flow.set(v, Math.min(flow.get(v), fix.get(w))); } if (flow.get(v) === fix.get(v)) { const c = []; let w; do { w = fst.pop(); fon.delete(w); c.push(w); } while (w !== v); if (c.length > 1) loops.push(c); } };
+  for (const v of fg.keys()) if (!fix.has(v)) visit(v);
+  check('no folder dependency cycles', loops.length, loops.map((c) => c.join(' -> ')).join('; '));
   const react = src.filter((f) => ['domain', 'services', 'data', 'types'].includes(layer(f)) && /^import (?!type )[^;]*from 'react(-dom)?'/m.test(text.get(f)));
   check('React only in app, state, ui, ledger and features', react.length, react.join(', '));
 }

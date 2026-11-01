@@ -5,10 +5,10 @@ import type { Step } from '../../../types';
 import { useBridge } from '../../../state/bridge';
 import { useStore } from '../../../state/store';
 import { nameKey } from '../../../domain/items/itemKey';
-import { formatGp } from '../../../domain/economy/shopping';
+import { formatGp } from '../../../domain/prep/shopping';
 import { wealthOf } from '../../../domain/economy/wealth';
 import { adviseMoney, hoursToCover, reqText, type MethodView } from '../../../domain/economy/moneyAdvisor';
-import { RESTRICTED_METHOD_IDS } from '../../../domain/economy/tradeRestriction';
+import { RESTRICTED_METHOD_IDS } from '../../../domain/market/tradeRestriction';
 import { useTradeRestriction } from '../../../state/hooks/useTradeRestriction';
 
 const SHOWN = 5;

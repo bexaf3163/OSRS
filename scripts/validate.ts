@@ -5,7 +5,7 @@ import type {
   FoeData, GoalsData, LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
 } from '../src/types/index.ts';
 import { xpForLevel } from '../src/domain/player/xp.ts';
-import { titleTargets } from '../src/domain/quests/targets.ts';
+import { titleTargets } from '../src/data/targets.ts';
 import { RETIRED_STEPS } from '../src/domain/persistence/progress.ts';
 
 export interface GuideData {

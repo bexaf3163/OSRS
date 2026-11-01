@@ -9,9 +9,9 @@ import {
   CALIBRATED_KILLS, foeLabel, healsOf, observedFor, stepGoals, type Basis, type CombatEstimate, type Fights, type Range, type StepEstimateContext,
 } from './combatEstimate';
 import { durationText } from './splits';
-import { heldUnits } from '../items/doses';
+import { heldUnits } from '../player/heldUnits';
 import { heldExact } from '../player/playerState';
-import { effectiveHeal } from './foodAdvice';
+import { effectiveHeal } from '../player/foodStock';
 import { currentXp, itemGoal, objectiveEstimates } from './combatObjectives';
 
 export const BASIS_LABEL: Record<Basis, string> = {

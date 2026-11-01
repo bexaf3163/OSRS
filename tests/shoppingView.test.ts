@@ -3,7 +3,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { budgetOf, budgetSum, emptyStateOf, exchangePlan, geListText, ownershipOf, scopeList, scopeSteps, shopRows, supplyReserve, syncLine, type ShopRow } from '../src/domain/economy/shoppingView';
-import { aggregateShopping, type ShoppingLine } from '../src/domain/economy/shopping';
+import { aggregateShopping, type ShoppingLine } from '../src/domain/prep/shopping';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
 import { nameKey } from '../src/domain/items/itemKey';

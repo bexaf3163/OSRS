@@ -4,7 +4,7 @@ import { evaluatePlans } from '../../src/domain/combat/route/plans';
 import { xpPerKill } from '../../src/domain/combat/combatEstimate';
 import { currentPhase, phaseDone, resolvePick, samePicks, withCombatPlan } from '../../src/domain/combat/route/pick';
 import { foodPicks, foodPlanApplied, stepResendKey, withFoodPlan } from '../../src/domain/combat/foodPlan';
-import { aggregateShopping } from '../../src/domain/economy/shopping';
+import { aggregateShopping } from '../../src/domain/prep/shopping';
 import { emptyProgress } from '../../src/domain/persistence/progress';
 import { stepGuide, toInGameTarget } from '../../src/domain/guide/inGameTarget';
 import { allSteps } from '../../src/data';

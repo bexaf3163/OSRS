@@ -3,7 +3,7 @@ import { PROCESSING, processRate } from '../src/domain/training/processingRates'
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { personalize, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { PriceView } from '../src/domain/market/quotes';
 
 const method = (id: string) => trainingMethods.find((m) => m.id === id)!;
 const state = (skill: string, level: number, mode: 'f2p' | 'members' = 'members', questsDone: string[] = ['Druidic Ritual']) => buildPlayerState({

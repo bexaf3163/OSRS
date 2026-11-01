@@ -1,5 +1,7 @@
 // The standard OSRS XP formula. check-data compares it with the "How much XP is needed per level" table in src/data/xp.json.
 
+import type { Levels } from '../economy/moneyAdvisor';
+
 export const MIN_LEVEL = 1;
 export const MAX_LEVEL = 99;
 
@@ -29,4 +31,16 @@ export function levelForXp(xp: number): number {
   let level = MIN_LEVEL;
   while (level < MAX_LEVEL && table[level + 1] <= xp) level++;
   return level;
+}
+
+/** The combat level by the game's formula; null means Attack, Strength or Defence is unknown. */
+export function combatLevel(l: Levels): number | null {
+  const { attack, strength, defence } = l;
+  if (attack === undefined || strength === undefined || defence === undefined) return null;
+  const hp = l.hitpoints ?? 10;
+  const base = 0.25 * (defence + hp + Math.floor((l.prayer ?? 1) / 2));
+  const melee = 0.325 * (attack + strength);
+  const ranged = 0.325 * Math.floor(1.5 * (l.ranged ?? 1));
+  const magic = 0.325 * Math.floor(1.5 * (l.magic ?? 1));
+  return Math.floor(base + Math.max(melee, ranged, magic));
 }

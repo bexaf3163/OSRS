@@ -3,8 +3,8 @@ import { itemById } from '../../../data';
 import { canWear, gearById, gearData, relevantDefence, type IncomingStyle, type Levels } from '../gearAdvisor';
 import { heldExact, levelOf, type PlayerState } from '../../player/playerState';
 import { nameKey } from '../../items/itemKey';
-import type { PriceView } from '../../economy/funding/quotes';
-import { itemPrice } from '../../items/itemPrice';
+import type { PriceView } from '../../market/quotes';
+import { itemPrice } from '../../market/itemPrice';
 
 const STYLES: IncomingStyle[] = ['stab', 'slash', 'crush', 'magic', 'ranged'];
 const styleOf = (style: string): IncomingStyle | null => STYLES.find(s => s === style) ?? null;

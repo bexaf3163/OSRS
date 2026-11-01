@@ -17,7 +17,7 @@ import { cheaperSupply, type CheaperOption } from './cheaper';
 import { evaluate, type EvalContext, type MethodEvaluation, type Range3 } from './evaluate';
 import { METHODS } from './methods';
 import type { FundingNeed } from './need';
-import type { Confidence, PriceView } from './quotes';
+import type { Confidence, PriceView } from '../../market/quotes';
 import { rankMethods, type Ranking } from './rank';
 import type { FundingSnapshot } from './snapshot';
 import type { FundingMethod } from './types';

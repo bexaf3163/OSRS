@@ -8,7 +8,7 @@ import { useStore } from '../../state/store';
 import { useBridge } from '../../state/bridge';
 import { useFeatures } from '../../state/hooks/useFeatures';
 import { isClosed } from '../../domain/quests/next-step';
-import { formatGp } from '../../domain/economy/shopping';
+import { formatGp } from '../../domain/prep/shopping';
 import { meleeHintApplies } from '../../domain/combat/gearAdvice';
 import { useGearAdvice } from '../../state/hooks/useGearAdvice';
 import { actionNav, gainText, missingText, sourceText, type GearAction, type GearAdvice } from '../../domain/combat/gearAdvisor';

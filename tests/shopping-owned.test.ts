@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { holdingFor, pluginCount, shoppingText } from '../src/domain/economy/shopping';
+import { holdingFor, pluginCount, shoppingText } from '../src/domain/prep/shopping';
 import { emptyProgress, normalizeProgress, withOwnedManual, MAX_OWNED } from '../src/domain/persistence/progress';
 import { known } from '../src/data';
 
@@ -97,7 +97,7 @@ describe('manual marks are kept in the progress', () => {
 
 describe('unverified items are not purchases', () => {
   it('summarizeShopping keeps confirmed shortages, unverified items and budgets apart', async () => {
-    const { summarizeShopping } = await import('../src/domain/economy/shopping');
+    const { summarizeShopping } = await import('../src/domain/prep/shopping');
     const s = summarizeShopping([
       { h: { status: 'MISSING', buy: 2 }, unitPrice: 100 },
       { h: { status: 'PARTIAL', buy: 1 }, unitPrice: 50 },
@@ -110,7 +110,7 @@ describe('unverified items are not purchases', () => {
   });
 
   it('no observation at all: every item is unverified and none is a confirmed purchase', async () => {
-    const { summarizeShopping } = await import('../src/domain/economy/shopping');
+    const { summarizeShopping } = await import('../src/domain/prep/shopping');
     const rows = ['Bones', 'Bucket', 'Knife'].map((nameEn) => ({
       h: holdingFor({ nameEn, count: 1, exact: true }, null), unitPrice: 10,
     }));

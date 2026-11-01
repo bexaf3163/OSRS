@@ -13,9 +13,9 @@ import { fairyRingsUnlocked, oneTimeUsedOf, travelInputOf } from '../../../domai
 import { stepPlaces } from '../../../domain/travel/stepPlaces';
 import { dist, travelOptions, TRANSPORT, walkText, type Availability, type Point, type TravelOption } from '../../../domain/travel/travel';
 import { isOverworld } from '../../../domain/travel/instances';
-import { transportSources } from '../../../domain/travel/liveTransport';
+import { transportSources } from '../../../domain/readiness/liveTransport';
 import { RoadSupplies } from '../../shopping/RoadSupplies';
-import { roadSteps } from '../../../domain/travel/travelSupplies';
+import { roadSteps } from '../../../domain/readiness/travelSupplies';
 import { isClosed } from '../../../domain/quests/next-step';
 
 const BADGE: Record<Availability, string> = { ready: '✓ available now', maybe: '? check', locked: '🔒 not yet' };

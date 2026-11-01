@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { evaluate, type Personalised } from '../../src/domain/economy/funding/evaluate';
 import { methodById } from '../../src/domain/economy/funding/methods';
 import type { FundingMethod } from '../../src/domain/economy/funding/types';
-import { tradeRestriction } from '../../src/domain/economy/tradeRestriction';
+import { tradeRestriction } from '../../src/domain/market/tradeRestriction';
 import { ctxOf, fakePrices, fakeSnap } from './helpers';
 
 const steel = methodById('smelt-steel-bars')!;

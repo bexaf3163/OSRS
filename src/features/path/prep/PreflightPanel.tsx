@@ -5,7 +5,8 @@ import type { Step } from '../../../types';
 import { useBridge } from '../../../state/bridge';
 import { useStore } from '../../../state/store';
 import { nameKey } from '../../../domain/items/itemKey';
-import { evaluatePreflight, preflightItems } from '../../../domain/items/checklist';
+import { evaluatePreflight } from '../../../domain/readiness/preflight';
+import { preflightItems } from '../../../domain/prep/stepItems';
 
 export function PreflightPanel({ step }: { step: Step }) {
   const { state, inGame, activeStepId, owned, questsDone, stats, gear } = useBridge();

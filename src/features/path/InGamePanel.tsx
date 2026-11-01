@@ -10,7 +10,7 @@ import { PacingLine } from './step/PacingLine';
 import { PluginUpdateNote } from '../settings/PluginUpdateNote';
 import { triggerText } from '../../domain/quests/triggers';
 import { routeTrigger } from '../../domain/prep/carryover';
-import { plural } from '../../domain/economy/shopping';
+import { plural } from '../../domain/text/format';
 import { TARGET_LABEL } from '../../domain/player/linkState';
 
 const GROUPS: [keyof InGameTarget, string][] = [

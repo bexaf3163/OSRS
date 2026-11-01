@@ -11,7 +11,7 @@ import { useFeatures } from '../../../state/hooks/useFeatures';
 import { isOutOfStage, scopedPercent } from '../../../domain/quests/stageScope';
 import { useStageScope } from '../../../state/hooks/useStageScope';
 import { styleOf } from '../../../domain/persistence/playStyle';
-import { formatGp } from '../../../domain/economy/shopping';
+import { formatGp } from '../../../domain/prep/shopping';
 import { kgText } from '../../../domain/items/weight';
 import { prepChipGroups } from '../../../domain/prep/prepChips';
 import { bagCleanup, cleanupLine } from '../../../domain/prep/bagCleanup';

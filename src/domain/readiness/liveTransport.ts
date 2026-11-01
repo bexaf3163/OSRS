@@ -9,15 +9,15 @@ import type { Step } from '../../types';
 import type { QuestInstruction } from '../../services/runeliteBridge';
 import { items as itemData } from '../../data';
 import { nameKey } from '../items/itemKey';
-import { isInstancedPoint, isOverworld } from './instances';
+import { isInstancedPoint, isOverworld } from '../travel/instances';
 import type { PlayerState } from '../player/playerState';
 import { planSources } from '../prep/sourceRouter';
-import { stepPlaces } from './stepPlaces';
+import { stepPlaces } from '../travel/stepPlaces';
 import { instructionSubStep } from '../quests/subStep';
-import { TIP_MIN_SAVING_TILES } from '../readiness/tips';
-import { judgeTransport, journeyTiles, recommendedTransport, type RecommendedTransport, type TransportVerdict } from './transport';
-import { EXCHANGE, NET, STAIRS_TILES_PER_FLOOR, TRANSPORT, dist, effectiveTiles, nearestBank, prepareFor, shortOf, travelOptions, type DetourDecision, type ItemSource, type Point, type TravelOption } from './travel';
-import { travelInputOf, type TravelInputSources } from './travelInput';
+import { TIP_MIN_SAVING_TILES } from '../travel/transport';
+import { judgeTransport, journeyTiles, recommendedTransport, type RecommendedTransport, type TransportVerdict } from '../travel/transport';
+import { EXCHANGE, NET, STAIRS_TILES_PER_FLOOR, TRANSPORT, dist, effectiveTiles, nearestBank, prepareFor, shortOf, travelOptions, type DetourDecision, type ItemSource, type Point, type TravelOption } from '../travel/travel';
+import { travelInputOf, type TravelInputSources } from '../travel/travelInput';
 import { SUPPLY_MIN_TOTAL_TILES, savedText, type SupplyItem, type TravelSupplies } from './travelSupplies';
 
 /** Where the transport has to bring the player: the tile of the quest line the game confirms, otherwise the step's own place. */

@@ -8,8 +8,8 @@
 // A missing side is never filled in from the other one silently; the substitute is used only as a LOW-confidence estimate and says so.
 // No documented order book exists, so the volume is a plausibility check on a quantity, not a promise that a sale will fill.
 
-import type { Quote, QuoteBoard } from '../../../services/pricesApi';
-import { nameKey } from '../../items/itemKey';
+import type { Quote, QuoteBoard } from '../../services/pricesApi';
+import { nameKey } from '../items/itemKey';
 
 export type Confidence = 'HIGH' | 'MEDIUM' | 'LOW';
 export const CONFIDENCE_RANK: Record<Confidence, number> = { LOW: 0, MEDIUM: 1, HIGH: 2 };

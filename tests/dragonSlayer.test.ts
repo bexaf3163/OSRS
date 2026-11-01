@@ -9,7 +9,7 @@ import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
 import { nameKey } from '../src/domain/items/itemKey';
 import { safetyBlockers, safetyRulesOf, SAFETY_RULES, type PrepPlan } from '../src/domain/prep/prepPlan';
 import { stepFightNames } from '../src/domain/combat/fightEstimate';
-import { THREATS } from '../src/domain/combat/foodAdvice';
+import { THREATS } from '../src/data/threats';
 
 // Dragon Slayer I (S5-01..S5-09): the stage data, the 32-QP gate, the shield check before the ship, the map pieces.
 

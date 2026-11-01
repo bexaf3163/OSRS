@@ -4,12 +4,13 @@
 // way, or open the bank first. Unknown ownership is never "missing" and never "owned".
 
 import type { Progress, Step, WikiItemDetail } from '../../types';
-import { aggregateShopping, formatGp, type ShoppingLine, type ShoppingList, type ShoppingSource } from './shopping';
+import { aggregateShopping, formatGp, type ShoppingLine, type ShoppingList, type ShoppingSource } from '../prep/shopping';
 import { heldEquipment, heldOf, levelOf, type PlayerState } from '../player/playerState';
-import { allocateFoodStock, foodCarry, heldFood, type FoodHolding } from '../combat/foodAdvice';
+import { allocateFoodStock, foodCarry, heldFood, type FoodHolding } from '../player/foodStock';
 import { purchaseFees, type PurchaseFee } from '../items/purchaseCost';
-import { allocateMaterialStock, materialTake, type MaterialHolding } from '../items/materialStock';
-import { carryOf, doseKind, dosePackage, heldUnits, takeFromBank, type Carry, type DosePackage, type DoseSize } from '../items/doses';
+import { allocateMaterialStock, materialTake, type MaterialHolding } from '../player/materialStock';
+import { carryOf, doseKind, dosePackage, takeFromBank, type Carry, type DosePackage, type DoseSize } from '../items/doses';
+import { heldUnits } from '../player/heldUnits';
 import { legacyKeys } from '../prep/oneTrip';
 import { planSources } from '../prep/sourceRouter';
 import { parseAmount } from '../items/checklist';

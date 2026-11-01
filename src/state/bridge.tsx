@@ -14,10 +14,11 @@ import { useStore } from './store';
 import { desktop, type RuneliteLaunch } from '../services/desktop';
 import { checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parseNavTarget, parseMove, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, setNavTarget, postPrepPlan, supportsSnapshot, syncActiveStep, syncBankTags, syncShoppingPlan, pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type CombatLogState, type ShoppingPlanPayload, type QuestInstruction } from '../services/runeliteBridge';
 import { planAutoComplete, toInGameTarget } from '../domain/guide/inGameTarget';
-import { parseOwned, preflightItems, type OwnedState } from '../domain/items/checklist';
+import { parseOwned, type OwnedState } from '../domain/items/checklist';
+import { preflightItems } from '../domain/prep/stepItems';
 import { doseKind } from '../domain/items/doseKind';
 import { tripWindow } from '../domain/prep/oneTrip';
-import type { MoveEvent } from '../domain/readiness/recovery';
+import type { MoveEvent } from '../domain/travel/recovery';
 import { stageBankItemIds } from '../domain/prep/bankTags';
 import { useFeatures } from './hooks/useFeatures';
 import { isClosed, openAfter, dependencyFacts } from '../domain/quests/next-step';
@@ -213,7 +214,6 @@ function loadBranchChoice(): Record<string, string> {
 function saveJson(key: string, value: unknown): void {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* it is remembered until a restart */ }
 }
-
 
 /** The chosen quick variant of the step, if the step still has it. */
 function chosenBranch(step: Step, choice: Record<string, string>): StepBranch | undefined {
@@ -849,7 +849,6 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     const st = await checkStatus();
     return epoch === sessionEpoch.current && gateAllows(profileGate(readProfiles(), st.player)) && st.online && st.inGame ? st.pos : null;
   }, []);
-
 
   const currentCharacter = state === 'online' && inGame && gateAllows(gate);
   const value = useMemo<BridgeValue>(

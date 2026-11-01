@@ -5,14 +5,14 @@
 // price, the product a gain at its sale value after tax; a recipe, station or account rule added to the data reaches every method that lists it.
 
 import processingJson from '../../data/processing.json';
-import { bankTrip, tripMinutes } from '../prep/bankTrip';
+import { bankTrip, tripMinutes } from '../travel/bankTrip';
 import { skillChance } from './skillChance';
-import { coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from '../economy/lootValue';
+import { coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from '../market/lootValue';
 import { coinsOf, heldOf, levelOf, type PlayerState } from '../player/playerState';
-import { itemRequirement } from '../readiness/requirements';
-import { requirementCost } from '../economy/funding/need';
-import { isRestrictedItem } from '../economy/tradeRestriction';
-import { supplyPrice } from '../prep/sourceRouter';
+import { itemRequirement } from '../player/requirements';
+import { requirementCost } from '../market/needPrice';
+import { isRestrictedItem } from '../market/tradeRestriction';
+import { supplyPrice } from '../market/itemPrice';
 import { matchStrict } from '../travel/locations';
 import { canWear, gearPieceByName } from '../combat/gearAdvisor';
 import type { Market, ModelRate, RateSpot } from './methodRates';
@@ -74,7 +74,6 @@ function batchFunding(needs: readonly MethodNeed[], state: PlayerState, prices?:
   if (cost !== null && cost <= minimum) return 0;
   return cost !== null && cash.total !== null ? 2 : 1;
 }
-
 
 /** An authored mixture is valid only when every variant has identical XP, timing and access mechanics. */
 function mixableRecipe(r: Recipe, method: TrainingMethod, ids: readonly string[], reg: ProcessingRegistry): Recipe | null {

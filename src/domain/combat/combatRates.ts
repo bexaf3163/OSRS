@@ -1,4 +1,4 @@
-import { bankTrip } from '../prep/bankTrip';
+import { bankTrip } from '../travel/bankTrip';
 import { matchStrict } from '../travel/locations';
 // What a combat training method gives this player per hour, from the same combat model the fight plans use (2.76, T10): one engine for melee, Ranged
 // and Magic, so the Skills page and the route's steps never disagree about where to train.
@@ -17,19 +17,19 @@ import spellsJson from '../../data/spells.json';
 import { allSteps } from '../../data';
 import { attacksToKill, combatMargin, combatRecovery, counterDamage, estimateCombat, foeVariants, hitChance, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
 import { spotsOf, termsFor, TRAINER_LEVELS } from './route/spots';
-import { coinsPerMinute, dropValue, lootSecondsPerKill } from '../economy/lootValue';
+import { coinsPerMinute, dropValue, lootSecondsPerKill } from '../market/lootValue';
 import { ARROW_BREAK, goalArrows, methodFoe, rangedKitOf, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
 import { rangedEquipment, rangedNeeds } from './rangedLoadout';
 import { STAFFS, strikeRecipe } from './magicPlan';
-import { FOODS } from './foodAdvice';
-import { mergeGoalNeeds } from '../training/processingGoal';
+import { FOODS } from '../../data/threats';
+import { mergeGoalNeeds } from '../items/consumption';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from '../player/playerState';
 import { STYLE_GEAR, usableStyleOption } from './styleGear';
 import { gearPieceByName, trainingWeapons, type Levels } from './gearAdvisor';
 import { nameKey } from '../items/itemKey';
-import { supplyPrice } from '../prep/sourceRouter';
+import { supplyPrice } from '../market/itemPrice';
 import { xpForLevel } from '../player/xp';
-import type { PriceView } from '../economy/funding/quotes';
+import type { PriceView } from '../market/quotes';
 import type { Market, ModelRate } from '../training/methodRates';
 import type { MethodNeed, TrainingMethod } from '../training/trainingRouter';
 import type { GearPiece } from '../../types';

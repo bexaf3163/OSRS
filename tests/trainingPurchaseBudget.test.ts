@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { requirementCost } from '../src/domain/economy/funding/need';
+import { requirementCost } from '../src/domain/market/needPrice';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { adviseTraining, type TrainingMethod } from '../src/domain/training/trainingRouter';
 import { emptyProgress } from '../src/domain/persistence/progress';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { PriceView } from '../src/domain/market/quotes';
 
 const prices = (buy: Record<string, number>): PriceView => ({
   status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, sell: () => null,

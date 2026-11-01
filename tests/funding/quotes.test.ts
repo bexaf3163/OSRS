@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Quote, QuoteBoard } from '../../src/services/pricesApi';
-import { absorbs, buildPriceView, buyOf, sellOf, THIN_VOLUME } from '../../src/domain/economy/funding/quotes';
+import { absorbs, buildPriceView, buyOf, sellOf, THIN_VOLUME } from '../../src/domain/market/quotes';
 
 const NOW = 1_792_000_000_000;
 const min = (m: number) => NOW - m * 60_000;

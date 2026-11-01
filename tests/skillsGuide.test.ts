@@ -7,7 +7,7 @@ import {
   SKILL_NAMES, alternativesFor, bracketsOf, buildPath, chipText, currentIndex, f2pCovered, followedShoppingStep, onStatChanged, skillPathPayload,
   type GuideMode, type SkillGuideFile, type SkillStep,
 } from '../src/domain/training/skillGuide';
-import { aggregateShopping } from '../src/domain/economy/shopping';
+import { aggregateShopping } from '../src/domain/prep/shopping';
 import { parseTracked, freeOnlyOf } from '../src/domain/training/skillTrack';
 
 // The 23 skill guides (src/data/skills/*.json): the schema, the coverage of every filter, the quest skips first, and the StatChanged rule the plugin follows.
@@ -282,7 +282,6 @@ describe('skill guides: what goes to the game', () => {
     expect(envelopeKey({ ...base, skillPath: path })).not.toBe(envelopeKey(base));
   });
 });
-
 
 describe('a followed skill plan (2.70)', () => {
   it('feeds the shopping list: the current step\'s tools become required lines; a step without items adds nothing', () => {

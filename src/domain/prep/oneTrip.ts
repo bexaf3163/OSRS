@@ -4,13 +4,13 @@
 // "Needed later" does not mean "buy now": each line has an urgency NOW / SOON / LATER.
 
 import type { Step } from '../../types';
-import { aggregateShopping, type ShoppingLine } from '../economy/shopping';
+import { aggregateShopping, type ShoppingLine } from './shopping';
 import { parseAmount } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
 import { heldEquipment, levelOf, type PlayerState } from '../player/playerState';
-import { allocateFoodStock, type FoodHolding } from '../combat/foodAdvice';
-import { allocateMaterialStock, type MaterialHolding } from '../items/materialStock';
-import { heldUnits, type HeldUnits } from '../items/doses';
+import { allocateFoodStock, type FoodHolding } from '../player/foodStock';
+import { allocateMaterialStock, type MaterialHolding } from '../player/materialStock';
+import { heldUnits, type HeldUnits } from '../player/heldUnits';
 import { isClosed } from '../quests/next-step';
 import type { Progress } from '../../types';
 import type { Urgency } from './prepRoute';

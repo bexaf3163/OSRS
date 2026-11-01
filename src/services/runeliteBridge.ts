@@ -2,12 +2,11 @@
 // Requests go through the Electron main process (preload → ipc): the plugin accepts only them, and a request
 // from a page in a browser (with an Origin header) is rejected. There is no remote server: the bridge listens on loopback only.
 
-import type { MoveEvent } from '../domain/readiness/recovery';
+import type { MoveEvent } from '../domain/travel/recovery';
 import type { PrepEnvelope } from '../domain/prep/prepEnvelope';
 import type { InGameTarget, PacingSkill, StageHighlight, StagePre, PlayerStats, Step, StepBranch, StepPacing } from '../types';
 import { desktop } from './desktop';
 import { toInGameTarget } from '../domain/guide/inGameTarget';
-
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
 
@@ -253,10 +252,6 @@ export interface StagePayload {
   stages: { at: number; steps: { t: string; s?: string; x?: number; y?: number; plane?: number; has?: string; need?: string; hl?: StageHighlight; k?: string; pre?: StagePre[]; mh?: number }[]; /** The index of the point in places. */ go?: number; items?: { name: string; id?: number; count?: number; where?: string; inStep?: boolean }[] }[];
 }
 
-
-
-
-
 /** A bulk list for the exchange hint: name — the English name, count — how many are needed in all. */
 export interface ShoppingPlanPayload {
   /** doses: a potion, counted in doses of every size (ShoppingPlan.java); count stays potions for an older plugin. */
@@ -274,8 +269,6 @@ export function parseEvent(text: string): BridgeEvent | null {
   }
   return null;
 }
-
-
 
 /** Levels from an event or a /status reply: numbers only, sensible ones only. */
 export function parseStats(raw: unknown): PlayerStats | null {

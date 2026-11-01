@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { itemPrice } from '../src/domain/items/itemPrice';
-import { buildPriceView } from '../src/domain/economy/funding/quotes';
+import { itemPrice } from '../src/domain/market/itemPrice';
+import { buildPriceView } from '../src/domain/market/quotes';
 import { alchMargin } from '../src/domain/economy/alchemy';
 
 const now = 1_800_000_000_000;

@@ -1,5 +1,6 @@
-import type { PriceView } from '../economy/funding/quotes';
-import { FRESH_MS } from '../economy/funding/quotes';
+import { type PriceView, FRESH_MS } from './quotes';
+import { nameKey } from '../items/itemKey';
+import { items } from '../../data';
 
 /** A market estimate for display/acquisition; database planning prices cannot masquerade as market quotes. */
 export interface ItemPrice {
@@ -34,4 +35,21 @@ export function itemPrice(prices: PriceView | null | undefined, name: string, id
     text: `${label}: ≈ ${gp(total)} gp${quantity > 1 ? ` (${gp(q.price)} each)` : ''}`,
     detail: [...q.notes, ...(side === 'sell' ? ['Before any exchange tax.'] : []), 'An estimate, not a guaranteed offer price.'].join(' '),
   };
+}
+
+/** A shop price at or above this is the item data's "not sold here" placeholder, not a price. */
+export const NOT_SOLD_PRICE = 1e9;
+const DETAIL = new Map(items.map((i) => [nameKey(i.nameEn), i]));
+/**
+ * What one unit of a used-up supply (arrows, runes, bait, food) costs to replace, for the rate models: the exchange buy price, else the cheapest
+ * shop of the item data that sells it for coins to this account (a members shop never on a free one). null when neither is known: unknown,
+ * never free. Travel to the shop is not in it.
+ */
+export function supplyPrice(name: string, prices: PriceView | null | undefined, mode: 'f2p' | 'members'): number | null {
+  const ge = prices?.buy(name)?.price;
+  if (ge !== undefined) return ge;
+  const shop = (DETAIL.get(nameKey(name))?.buyLocations ?? [])
+    .filter((b) => !(b.members && mode === 'f2p') && b.stock !== 0 && b.price < NOT_SOLD_PRICE)
+    .reduce<number | null>((a, b) => (a === null || b.price < a ? b.price : a), null);
+  return shop;
 }

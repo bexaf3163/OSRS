@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { currentLoadoutStep, loadoutNeed, loadoutPhase } from '../src/domain/readiness/loadoutPhase';
+import { currentLoadoutStep, loadoutNeed, loadoutPhase } from '../src/domain/quests/loadoutPhase';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { emptyProgress } from '../src/domain/persistence/progress';

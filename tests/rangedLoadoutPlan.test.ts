@@ -4,7 +4,7 @@ import { emptyProgress } from '../src/domain/persistence/progress';
 import { RANGED_WATCH, rangedEquipment, rangedNeeds } from '../src/domain/combat/rangedLoadout';
 import { methodNeeds, personalize, trainingMethods } from '../src/domain/training/trainingRouter';
 import { methodRate, rateKeyOf } from '../src/domain/training/methodRates';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { PriceView } from '../src/domain/market/quotes';
 
 const prices: PriceView = { status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, sell: () => null,
   buy: name => ({ price: name.startsWith('Gilded') ? 1000000 : name.endsWith(' arrow') || name === 'Salmon' ? 1 : 10,

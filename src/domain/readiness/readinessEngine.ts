@@ -5,7 +5,7 @@
 // The memory lives exactly until the snapshot changes: the engine is created anew when the player's state, the marks or the mode change.
 
 import type { Step } from '../../types';
-import { entryFoodStep } from './loadoutPhase';
+import { entryFoodStep } from '../quests/loadoutPhase';
 import { fixChainOf, readinessOf, type ChainLink, type ReadinessContext, type StepReadiness } from './readiness';
 import { buildPrepRoute, openTaskIds, type PrepRoute } from '../prep/prepRoute';
 import { planOneTrip, tripWindow, type OneTripPlan } from '../prep/oneTrip';
@@ -15,7 +15,7 @@ import { buildPrepPlan, type PrepPlan } from '../prep/prepPlan';
 import type { UpgradeRecommendation } from '../training/gearUpgradeRouter';
 import { dependencyFacts, type DependencyFact } from '../quests/next-step';
 import { levelOf, ownedCountOf } from '../player/playerState';
-import { stockShoppingContext, stockUpShopping } from '../training/trainingStock';
+import { stockShoppingContext, stockUpShopping } from '../economy/trainingStock';
 
 export interface ReadinessEngine {
   readonly ctx: ReadinessContext;

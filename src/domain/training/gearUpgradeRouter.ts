@@ -46,7 +46,7 @@ export interface UpgradeRecommendation {
   approxCost?: number;
   shopPrice?: number;
   gePrice?: number;
-  geQuote?: import('../items/itemPrice').ItemPrice;
+  geQuote?: import('../market/itemPrice').ItemPrice;
   priceLabel?: string;
   efficiencyBoost?: string;
   npc?: string;
@@ -66,7 +66,7 @@ export interface RouterInput {
   gear: GearState | null;
   dismissed?: readonly string[];
   gePrices?: ReadonlyMap<number, number>;
-  geQuotes?: ReadonlyMap<number, import('../items/itemPrice').ItemPrice>;
+  geQuotes?: ReadonlyMap<number, import('../market/itemPrice').ItemPrice>;
   data?: ToolProgression;
   item?: (id: number) => WikiItemDetail | undefined;
 }

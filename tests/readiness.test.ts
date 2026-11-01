@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, items, allStages } from '../src/data';
 import { emptyProgress, withOwnedManual, withStep } from '../src/domain/persistence/progress';
-import { contextOf, nearestBank, readinessOf, stepReadiness, type ReadinessInput } from '../src/domain/readiness/readiness';
+import { contextOf, readinessOf, stepReadiness, type ReadinessInput } from '../src/domain/readiness/readiness';
+import { nearestBank } from '../src/domain/travel/stepPlaces';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { validate } from '../scripts/validate';
 import type { Progress, Step } from '../src/types';

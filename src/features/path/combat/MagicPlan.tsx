@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import type { Step } from '../../../types';
 import { useBridge } from '../../../state/bridge';
 import { useStore } from '../../../state/store';
-import { formatGp } from '../../../domain/economy/shopping';
+import { formatGp } from '../../../domain/prep/shopping';
 import { usePlayerState } from '../../../state/playerStateContext';
 import { heldExact } from '../../../domain/player/playerState';
 import { liquidOf } from '../../../domain/economy/funding/snapshot';
@@ -13,7 +13,7 @@ import { gapFor } from '../../../domain/economy/funding/budget';
 import { useTradeRestriction } from '../../../state/hooks/useTradeRestriction';
 import { xpForLevel } from '../../../domain/player/xp';
 import { usePriceView } from '../../../state/hooks/usePriceView';
-import { itemPrice } from '../../../domain/items/itemPrice';
+import { itemPrice } from '../../../domain/market/itemPrice';
 import { itemById } from '../../../data';
 import {
   OPTIONS, planFor, PLAN_PRICE_IDS, SPELLS, STAFFS, staffPayback, type PlanResult, type PriceMap,

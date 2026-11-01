@@ -9,7 +9,7 @@
 
 import type { Step } from '../../../types';
 import { usePlayerState, type CombatPlanEntry } from '../../../state/playerStateContext';
-import { formatGp } from '../../../domain/economy/shopping';
+import { formatGp } from '../../../domain/prep/shopping';
 import { planWhy, type EvaluatedPlan, type PlanPhase } from '../../../domain/combat/route/plans';
 
 export interface CombatRouteState {

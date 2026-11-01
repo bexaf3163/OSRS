@@ -3,8 +3,8 @@ import { adviseTraining, methodNeeds, preparationNeeds, trainingMethods, viewMet
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { gearData } from '../src/domain/combat/gearAdvisor';
-import { FOODS } from '../src/domain/combat/foodAdvice';
-import type { PriceView } from '../src/domain/economy/funding/quotes';
+import { FOODS } from '../src/data/threats';
+import type { PriceView } from '../src/domain/market/quotes';
 import type { MethodView, TrainingMethod } from '../src/domain/training/trainingRouter';
 import { withTrainingMethod } from '../src/domain/training/methodStep';
 import type { Step } from '../src/types';

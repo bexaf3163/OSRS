@@ -319,7 +319,6 @@ describe('copies outside the app and the restore of a fresh data folder', () => 
   });
 });
 
-
 describe('skipped copy diagnostics preserve every protected record', () => {
   const api = createRequire(import.meta.url)('../electron/progress-files.cjs') as {
     dailyBackup(dir: string, target: string, now?: Date, onSkipped?: (file: string, kind: string) => void): number;
@@ -353,7 +352,6 @@ describe('skipped copy diagnostics preserve every protected record', () => {
     for (const name of names) expect(readFileSync(join(out, name), 'utf8')).toBe(raw);
   });
 });
-
 
 describe('native progress revision guard', () => {
   const { createProgressGuard } = createRequire(import.meta.url)('../electron/progress-files.cjs') as {

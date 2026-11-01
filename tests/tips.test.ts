@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { TIP_MIN_SAVING_TILES, travelTip } from '../src/domain/readiness/tips';
+import { travelTip } from '../src/domain/readiness/tips';
+import { TIP_MIN_SAVING_TILES } from '../src/domain/travel/transport';
 import { bankCounts, travelInputOf } from '../src/domain/travel/travelInput';
 import { travelOptions, type TravelInput } from '../src/domain/travel/travel';
 import type { GearState } from '../src/services/runeliteBridge';

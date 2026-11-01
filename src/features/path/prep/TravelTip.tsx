@@ -13,7 +13,7 @@ import { travelOptions, type Point } from '../../../domain/travel/travel';
 import { fairyRingsUnlocked, oneTimeUsedOf, travelInputOf } from '../../../domain/travel/travelInput';
 import { travelTip } from '../../../domain/readiness/tips';
 import { isOverworld } from '../../../domain/travel/instances';
-import { lastTransport, subscribeTransport, transportSources } from '../../../domain/travel/liveTransport';
+import { lastTransport, subscribeTransport, transportSources } from '../../../domain/readiness/liveTransport';
 
 export function TravelTip({ step }: { step: Step }) {
   const { progress, mode } = useStore();

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
-import { totalLevelOf, tradeRestriction, type TradeRestriction } from '../../domain/economy/tradeRestriction';
+import { totalLevelOf, tradeRestriction, type TradeRestriction } from '../../domain/market/tradeRestriction';
 
 /**
  * Whether a new account's Grand Exchange sale restrictions still apply: from the game's quest points and total level (the total also from the levels

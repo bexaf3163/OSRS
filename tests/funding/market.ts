@@ -3,7 +3,7 @@
 
 import fixture from './fixtures/market-2026-10-18.json';
 import type { Quote, QuoteBoard } from '../../src/services/pricesApi';
-import { buildPriceView, type PriceView } from '../../src/domain/economy/funding/quotes';
+import { buildPriceView, type PriceView } from '../../src/domain/market/quotes';
 
 interface Row { id: number; limit: number | null; high: number | null; highTime: number | null; low: number | null; lowTime: number | null; avgHigh: number | null; avgLow: number | null; highVolume: number; lowVolume: number }
 const rows = fixture.items as unknown as Record<string, Row>;

@@ -4,7 +4,7 @@ import { useBridge } from '../state/bridge';
 import { useProfiles } from '../state/profiles';
 import { useQuestPoints } from '../state/hooks/useQuestPoints';
 import { levelOf } from '../domain/persistence/progress';
-import { combatLevel } from '../domain/economy/moneyAdvisor';
+import { combatLevel } from '../domain/player/xp';
 import { SKILL_NAMES } from '../domain/training/skillGuide';
 import { blockerParts, blockersOf, isClosed } from '../domain/quests/next-step';
 import type { Progress, Stage, Step } from '../types';

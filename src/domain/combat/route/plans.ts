@@ -21,10 +21,10 @@
 // Then the plan's time includes that work and its score counts the coins as the minutes they save. A restricted account does not count what it cannot sell.
 
 import type { MethodPriority } from '../../persistence/playStyle';
-import { bankingPays, earningsOrder } from '../../economy/lootValue';
+import { bankingPays, earningsOrder } from '../../market/lootValue';
 import { doseValue } from '../../items/doses';
-import { requirementCost } from '../../economy/funding/need';
-import { supplyPrice } from '../../prep/sourceRouter';
+import { requirementCost } from '../../market/needPrice';
+import { supplyPrice } from '../../market/itemPrice';
 import type { Step } from '../../../types';
 import type { OwnedState } from '../../items/checklist';
 import { nameKey } from '../../items/itemKey';
@@ -34,16 +34,16 @@ import {
 import { chooseVariant, strengthDoses } from '../combatPlan';
 import { asked, currentXp, dropEstimates, itemGoal, objectiveEstimates } from '../combatObjectives';
 import { levelForXp, xpForLevel } from '../../player/xp';
-import type { PriceView } from '../../economy/funding/quotes';
-import type { TradeRestriction } from '../../economy/tradeRestriction';
+import type { PriceView } from '../../market/quotes';
+import type { TradeRestriction } from '../../market/tradeRestriction';
 import { laterDefence, type LaterDefence } from './later';
 import { SELL_DROP, spotsOf, spotTerms, TRAINER_LEVELS, TRAINERS, type Spot } from './spots';
-import { coinsPerMinute, dropValue, LOOT_SLOTS, PICKUP_SECONDS, COIN_SHARE_CAP } from '../../economy/lootValue';
+import { coinsPerMinute, dropValue, LOOT_SLOTS, PICKUP_SECONDS, COIN_SHARE_CAP } from '../../market/lootValue';
 import { questOf } from '../../player/playerState';
-import { questStepOf } from '../../readiness/readiness';
+import { questStepOf } from '../../quests/questSteps';
 import { armourDefence, armourItems, armourReady } from './armour';
 import type { PlayerState } from '../../player/playerState';
-import { nearestBank } from '../../readiness/readiness';
+import { nearestBank } from '../../travel/stepPlaces';
 
 export type MeleeSkill = 'attack' | 'strength' | 'defence';
 export interface Goal { skill: MeleeSkill; exp: number }
@@ -246,7 +246,6 @@ function afterPhase(ctx: StepEstimateContext, first: CombatEstimate, xp: Partial
 function bestOf(list: CombatEstimate[]): CombatEstimate | null {
   return [...list].sort((a, b) => a.totalMinutes.high - b.totalMinutes.high || a.food.mid - b.food.mid || (a.foe.combat - b.foe.combat))[0] ?? null;
 }
-
 
 function risksOf(phases: PlanPhase[], hp: number): { risks: string[]; blockers: string[] } {
   const risks: string[] = [];

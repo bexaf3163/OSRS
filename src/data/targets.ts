@@ -1,7 +1,7 @@
 // Level targets from a step title: "Fishing to 20 and Cooking to 15" → fishing 20, cooking 15.
 // No relative imports: the file is used by both the app and the check scripts in Node.
 
-import type { Target } from '../../types/index.ts';
+import type { Target } from '../types/index.ts';
 
 /** Word stems in step titles → skill level ids. */
 const TITLE_SKILL_WORDS: [RegExp, string[]][] = [

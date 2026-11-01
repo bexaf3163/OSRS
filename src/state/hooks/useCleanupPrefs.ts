@@ -1,6 +1,6 @@
 // The cleanup preferences of the current profile and character, kept in window storage.
 import { useCallback, useSyncExternalStore } from 'react';
-import { emptyCleanupPrefs, type CleanupPrefs } from '../../domain/prep/cleanup';
+import { emptyCleanupPrefs, type CleanupPrefs } from '../../domain/persistence/cleanupPrefs';
 import { activeOf } from '../../domain/persistence/profiles';
 import { useProfiles } from '../profiles';
 import { cleanupKey, parseCleanupPrefs } from '../../domain/persistence/cleanupPrefs';

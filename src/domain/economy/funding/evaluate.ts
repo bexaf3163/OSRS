@@ -19,11 +19,11 @@
 
 import { PICKAXES, AXES, usableAt } from '../../items/toolTiers';
 import { nameKey } from '../../items/itemKey';
-import { isRestrictedItem } from '../tradeRestriction';
+import { isRestrictedItem } from '../../market/tradeRestriction';
 import { TILES_PER_SECOND, type Point } from '../../travel/travel';
-import { geTax } from './ge';
+import { geTax } from '../../market/ge';
 import { expectedQty, isDependable } from './methods';
-import { absorbs, ABSORB_SHARE, CONFIDENCE_RANK, type Confidence, type PriceView, type UnitPrice } from './quotes';
+import { absorbs, ABSORB_SHARE, CONFIDENCE_RANK, type Confidence, type PriceView, type UnitPrice } from '../../market/quotes';
 import { protectedQty, reserveGap, type FundingSnapshot } from './snapshot';
 import type { Flow, FundingMethod, Requirement } from './types';
 

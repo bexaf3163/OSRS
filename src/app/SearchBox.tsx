@@ -7,7 +7,7 @@ import { useStore } from '../state/store';
 import { buildIndex, search, type SearchHit, type SearchKind } from '../domain/quests/search';
 import { go } from './router';
 import { usePriceView } from '../state/hooks/usePriceView';
-import { marketItemPrice } from '../domain/items/itemPrice';
+import { marketItemPrice } from '../domain/market/itemPrice';
 import { IconBook, IconClose, IconJournal, IconSearch, IconSkills, TYPE_LABEL } from '../ui/Icons';
 import { ItemIcon, useWiki } from '../features/reference/WikiDrawer';
 

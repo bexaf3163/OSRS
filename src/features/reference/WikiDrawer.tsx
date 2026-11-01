@@ -13,7 +13,7 @@ import type { NpcInfo } from '../../services/wikiApi';
 import { formatXp } from '../../domain/quests/goals';
 import { alchMargin, NATURE_RUNE_ID } from '../../domain/economy/alchemy';
 import { usePriceView } from '../../state/hooks/usePriceView';
-import { itemPrice, type ItemPrice } from '../../domain/items/itemPrice';
+import { itemPrice, type ItemPrice } from '../../domain/market/itemPrice';
 import { IconClose, IconExternal } from '../../ui/Icons';
 import iconAssets from '../../data/iconAssets.json';
 import { useFeatures } from '../../state/hooks/useFeatures';
