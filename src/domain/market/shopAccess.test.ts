@@ -2,15 +2,15 @@
 // against the player's state; what cannot be confirmed is offered as "if …" beside a verified way, never as the place to go.
 
 import { describe, expect, it } from 'vitest';
-import { accessSuffix, shopAccess, spawnAccess, type AccessContext } from '../src/domain/market/shopAccess';
-import { planSources } from '../src/domain/prep/sourceRouter';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { scopeList, shopRows, timingOf, budgetOf, budgetSum, type ShopRow } from '../src/domain/economy/shoppingView';
-import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
-import { nameKey } from '../src/domain/items/itemKey';
-import { allSteps, itemById } from '../src/data';
-import type { ShoppingLine } from '../src/domain/prep/shopping';
-import type { WikiItemDetail } from '../src/types';
+import { accessSuffix, shopAccess, spawnAccess, type AccessContext } from './shopAccess';
+import { planSources } from '../prep/sourceRouter';
+import { buildPlayerState } from '../player/playerState';
+import { scopeList, shopRows, timingOf, budgetOf, budgetSum, type ShopRow } from '../economy/shoppingView';
+import type { OwnedItem, OwnedState } from '../items/checklist';
+import { nameKey } from '../items/itemKey';
+import { allSteps, itemById } from '../../data';
+import type { ShoppingLine } from '../prep/shopping';
+import type { WikiItemDetail } from '../../types';
 
 const ctx = (over: Partial<AccessContext> = {}): AccessContext => ({ mode: 'f2p', quests: { known: false }, qp: null, level: () => null, ...over });
 const state = (o: { quests?: string[]; levels?: Record<string, number>; owned?: OwnedState | null; position?: { x: number; y: number; plane: number } } = {}) => buildPlayerState({

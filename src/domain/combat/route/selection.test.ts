@@ -2,19 +2,19 @@
 // plan in the middle of a trip, and gives way at once when a plan is gone or unsafe. The representative states of the owner's request, as fixtures.
 
 import { describe, expect, it } from 'vitest';
-import { evaluatePlans, planWhy, type PlanReport } from '../../src/domain/combat/route/plans';
-import { resolvePick, withCombatPlan } from '../../src/domain/combat/route/pick';
-import { selectPlan } from '../../src/domain/combat/route/selection';
-import type { Adopted } from '../../src/domain/combat/route/adopt';
-import { foodPicks, withFoodPlan } from '../../src/domain/combat/foodPlan';
-import { emptyProgress } from '../../src/domain/persistence/progress';
-import { stepGuide, toInGameTarget } from '../../src/domain/guide/inGameTarget';
-import { allSteps, stepById } from '../../src/data';
-import { stepGoals } from '../../src/domain/combat/combatEstimate';
-import { levelForXp } from '../../src/domain/player/xp';
-import { market } from '../funding/market';
-import { gearOf, HISTORICAL, planInput, type Over } from './fixture';
-import type { Step } from '../../src/types';
+import { evaluatePlans, planWhy, type PlanReport } from './plans';
+import { resolvePick, withCombatPlan } from './pick';
+import { selectPlan } from './selection';
+import type { Adopted } from './adopt';
+import { foodPicks, withFoodPlan } from '../foodPlan';
+import { emptyProgress } from '../../persistence/progress';
+import { stepGuide, toInGameTarget } from '../../guide/inGameTarget';
+import { allSteps, stepById } from '../../../data';
+import { stepGoals } from '../combatEstimate';
+import { levelForXp } from '../../player/xp';
+import { market } from '../../../../tests/funding/market';
+import { gearOf, HISTORICAL, planInput, type Over } from '../../../../tests/combatRoute/fixture';
+import type { Step } from '../../../types';
 
 // Selection is about who decides and when, not about money: no cowhide price, so no loot is valued and the plans are told apart by time and food alone.
 const prices = market({ Cowhide: { high: null, low: null, avgHigh: null, avgLow: null } });

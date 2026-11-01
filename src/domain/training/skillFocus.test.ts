@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { goals, skillById } from '../src/data';
-import { trainingFocus } from '../src/domain/training/skillFocus';
-import { defaultGuideMode } from '../src/domain/training/skillGuide';
-import { guideFor } from '../src/data/skillGuideRegistry';
-import { rangeForLevel } from '../src/domain/training/ranges';
+import { goals, skillById } from '../../data';
+import { trainingFocus } from './skillFocus';
+import { defaultGuideMode } from './skillGuide';
+import { guideFor } from '../../data/skillGuideRegistry';
+import { rangeForLevel } from './ranges';
 
 const melee = skillById.get('ME')!;
 const focus = (levels: Record<string, number>, stage: number, skill = melee) =>
@@ -52,7 +52,7 @@ describe('roadmap default filter', () => {
   });
 
   it('the default F2P path has no Members step', async () => {
-    const { buildPath } = await import('../src/domain/training/skillGuide');
+    const { buildPath } = await import('./skillGuide');
     const wc = guideFor('woodcutting');
     const path = buildPath(wc, defaultGuideMode(wc, 'f2p'));
     expect(path.length).toBeGreaterThan(0);

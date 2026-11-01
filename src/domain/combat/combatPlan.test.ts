@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { stepById } from '../src/data';
-import { combatPlanView, chooseVariant, ownedFood } from '../src/domain/combat/combatPlan';
-import { estimateStep } from '../src/domain/combat/combatEstimate';
-import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
-import { nameKey } from '../src/domain/items/itemKey';
-import { gearById } from '../src/domain/combat/gearAdvisor';
-import type { GearState } from '../src/services/runeliteBridge';
+import { stepById } from '../../data';
+import { combatPlanView, chooseVariant, ownedFood } from './combatPlan';
+import { estimateStep } from './combatEstimate';
+import type { OwnedItem, OwnedState } from '../items/checklist';
+import { nameKey } from '../items/itemKey';
+import { gearById } from './gearAdvisor';
+import type { GearState } from '../../services/runeliteBridge';
 
 // The minotaur example of the brief: S3-08 from Attack 22 / Strength 16, Defence 1, 22 health, Mithril scimitar and iron armour,
 // 13 Salmon and 3 Lobsters in the bank. Trip, whole goal, reserve, owned and deficit are separate numbers; the level 27 Minotaur is

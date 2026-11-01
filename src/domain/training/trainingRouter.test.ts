@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { adviseTraining, formatHours, methodsFor, trainingMethods, viewMethod, type AdviceInput } from '../src/domain/training/trainingRouter';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import { xpForLevel } from '../src/domain/player/xp';
-import { allLevelSkills } from '../src/data';
+import { adviseTraining, formatHours, methodsFor, trainingMethods, viewMethod, type AdviceInput } from './trainingRouter';
+import { buildPlayerState } from '../player/playerState';
+import { emptyProgress } from '../persistence/progress';
+import { xpForLevel } from '../player/xp';
+import { allLevelSkills } from '../../data';
 
 const levels = (l: Record<string, number> | null, owned: Record<string, { carried?: number; bank?: number }> | null = null, bankSeen = false) =>
   buildPlayerState({

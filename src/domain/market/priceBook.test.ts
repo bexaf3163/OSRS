@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { buildPriceBook, priceNote, reprice } from '../src/domain/market/priceBook';
-import { createPriceService } from '../src/services/pricesApi';
-import { nameKey } from '../src/domain/items/itemKey';
-import { buildPriceView } from '../src/domain/market/quotes';
-import type { LedgerEntry } from '../src/domain/persistence/ledger';
+import { buildPriceBook, priceNote, reprice } from './priceBook';
+import { createPriceService } from '../../services/pricesApi';
+import { nameKey } from '../items/itemKey';
+import { buildPriceView } from './quotes';
+import type { LedgerEntry } from '../persistence/ledger';
 
 const baked = new Map<string, number>([[nameKey('Lobster'), 100], [nameKey('Rare thing'), 7]]);
 const at = 1_800_000_000_000;

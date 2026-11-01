@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { ledgerKey, LEDGER_LIMIT, LEDGER_MAX_AGE_MS, loadLedger, saveLedger, since, trim } from '../src/domain/persistence/ledgerStore';
-import type { LedgerEntry } from '../src/domain/persistence/ledger';
+import { ledgerKey, LEDGER_LIMIT, LEDGER_MAX_AGE_MS, loadLedger, saveLedger, since, trim } from './ledgerStore';
+import type { LedgerEntry } from './ledger';
 
 function memory(): Pick<Storage, 'getItem' | 'setItem' | 'removeItem'> & { data: Map<string, string> } {
   const data = new Map<string, string>();

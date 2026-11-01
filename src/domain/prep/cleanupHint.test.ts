@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../src/data';
-import { cleanupAdvice, type CleanupInput } from '../src/domain/prep/cleanup';
-import { emptyCleanupPrefs } from '../src/domain/persistence/cleanupPrefs';
-import { cleanupHintPayload, MAX_CLEANUP_LINES } from '../src/domain/prep/cleanupHint';
-import { buildEnvelope, EMPTY_PARTS, envelopeKey } from '../src/domain/prep/prepEnvelope';
-import type { Step } from '../src/types';
+import { allSteps } from '../../data';
+import { cleanupAdvice, type CleanupInput } from './cleanup';
+import { emptyCleanupPrefs } from '../persistence/cleanupPrefs';
+import { cleanupHintPayload, MAX_CLEANUP_LINES } from './cleanupHint';
+import { buildEnvelope, EMPTY_PARTS, envelopeKey } from './prepEnvelope';
+import type { Step } from '../../types';
 
 const open = (...ids: string[]): Step[] => ids.map((id) => allSteps.find((s) => s.id === id)!);
 const PRICES: Record<string, number> = { 'Ball of wool': 60, 'Oak logs': 90 };

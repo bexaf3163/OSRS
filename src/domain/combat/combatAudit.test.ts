@@ -3,14 +3,14 @@
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import ledgerJson from '../src/data/combatAudit.json';
-import questStages from '../src/data/questStages.json';
-import dangerZones from '../src/data/dangerZones.json';
-import { allSteps, stepById } from '../src/data';
-import { auditMarkdown, detectCombatStages, preparedFor, type AuditLedger } from '../src/domain/combat/combatAudit';
-import { COMBAT_FOES } from '../src/domain/combat/combatEstimate';
-import { OTHER_METHOD, stepFightFoes } from '../src/domain/combat/fightEstimate';
-import type { Step } from '../src/types';
+import ledgerJson from '../../data/combatAudit.json';
+import questStages from '../../data/questStages.json';
+import dangerZones from '../../data/dangerZones.json';
+import { allSteps, stepById } from '../../data';
+import { auditMarkdown, detectCombatStages, preparedFor, type AuditLedger } from './combatAudit';
+import { COMBAT_FOES } from './combatEstimate';
+import { OTHER_METHOD, stepFightFoes } from './fightEstimate';
+import type { Step } from '../../types';
 
 const ledger = ledgerJson as unknown as AuditLedger;
 const quests = (questStages as { quests: Record<string, { route?: { steps?: string[] }[] }> }).quests;
@@ -104,7 +104,7 @@ describe('the mandatory fights are prepared before the danger', () => {
 
 describe('docs/COMBAT_AUDIT.md', () => {
   it('is written from the ledger and the route', () => {
-    const FILE = new URL('../docs/COMBAT_AUDIT.md', import.meta.url);
+    const FILE = new URL('../../../docs/COMBAT_AUDIT.md', import.meta.url);
     const now = auditMarkdown(ledger, allSteps) + '\n';
     if (process.env.UPDATE_FIXTURES === '1') writeFileSync(FILE, now);
     const saved = existsSync(FILE) ? readFileSync(FILE, 'utf8') : '';

@@ -1,13 +1,14 @@
 // Structure guard (the change hygiene rules in PROJECT_HANDOFF.md). Usage: npm run check-structure (strict: exits 1 when a check exceeds its known debt); without --strict it only reports
 // Checks: runtime import cycles, file-size budget, JSON imports outside src/data, hard-coded '#/' links outside the page registry,
-// folder size, handoff length, extensions in modules Node loads, and layer rules, folder dependency cycles and React
-// placement once src/domain exists.
+// folder size, handoff length, extensions in modules Node loads, fixed sleeps in browser scenarios, and layer rules, folder
+// dependency cycles and React placement once src/domain exists.
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { dirname, resolve, relative } from 'node:path';
 const t0 = Date.now(); const strict = process.argv.includes('--strict');
 // Paths use '/' on every OS, so the folder rules below also hold on Windows.
 const walk = (d) => existsSync(d) ? readdirSync(d).flatMap((n) => { const p = `${d}/${n}`; return statSync(p).isDirectory() ? (n === 'node_modules' || n === 'build' ? [] : walk(p)) : [p]; }) : [];
-const src = walk('src').filter((f) => /\.(ts|tsx)$/.test(f)); const set = new Set(src); const report = []; let failed = 0;
+// Unit tests beside their module are not part of the app: the size check below still counts them.
+const src = walk('src').filter((f) => /\.(ts|tsx)$/.test(f) && !/\.test\.tsx?$/.test(f)); const set = new Set(src); const report = []; let failed = 0;
 const res = (from, spec) => { if (!spec.startsWith('.')) return null; const b = resolve(dirname(from), spec); for (const c of [b, b + '.ts', b + '.tsx', b + '/index.ts', b + '/index.tsx']) { const r = relative(process.cwd(), c).replace(/\\/g, '/'); if (set.has(r)) return r; } return null; };
 // runtime edges (verbatimModuleSyntax: `import type` is erased, `import { type X }` is NOT). Static imports only:
 // `import('x').T` in a type annotation is erased, and lazy import() cannot create load-order cycles.
@@ -16,8 +17,8 @@ for (const f of src) { const t = readFileSync(f, 'utf8'); text.set(f, t); const 
 let idx = 0; const st = [], on = new Set(), ix = new Map(), low = new Map(), scc = [];
 const sc = (v) => { ix.set(v, idx); low.set(v, idx); idx++; st.push(v); on.add(v); for (const w of g.get(v) || []) { if (!ix.has(w)) { sc(w); low.set(v, Math.min(low.get(v), low.get(w))); } else if (on.has(w)) low.set(v, Math.min(low.get(v), ix.get(w))); } if (low.get(v) === ix.get(v)) { const c = []; let w; do { w = st.pop(); on.delete(w); c.push(w); } while (w !== v); if (c.length > 1) scc.push(c); } };
 for (const f of src) if (!ix.has(f)) sc(f);
-// Known debt that --strict still accepts until its batch lands (S6/S8/S9 big files, S7 data); lower it as it shrinks, never raise it.
-const DEBT = { 'files over 1,000 lines': 6, 'JSON imports only in src/data': 27, 'folders of at most 25 files': 1 };
+// Known debt that --strict still accepts until its batch lands (S8/S9 big files, S7 data); lower it as it shrinks, never raise it.
+const DEBT = { 'files over 1,000 lines': 5, 'JSON imports only in src/data': 27, 'folders of at most 25 files': 1 };
 const check = (name, count, detail) => { const debt = DEBT[name] ?? 0; detail = [detail, debt && `known debt ${debt}${count < debt ? `, lower it to ${count}` : ''}`].filter(Boolean).join('; '); const ok = count <= debt; report.push(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? ' — ' + detail : ''}`); if (!ok) failed++; };
 check('runtime import cycles', scc.length, scc.map((c) => `${c.length} modules (${c.slice(0, 3).map((x) => x.replace('src/', '')).join(', ')}…)`).join('; '));
 const sized = [...walk('src'), ...walk('scripts'), ...walk('tests'), ...walk('runelite-bridge/src/main')].filter((f) => /\.(ts|tsx|java|css)$/.test(f)).map((f) => ({ f, n: readFileSync(f, 'utf8').split('\n').length }));
@@ -35,7 +36,10 @@ const nodeLoads = new Set(), noExt = [];
 const load = (f) => { if (nodeLoads.has(f) || !existsSync(f)) return; nodeLoads.add(f); for (const m of readFileSync(f, 'utf8').matchAll(/^(?:import|export)\s+(?!type\b)[^;]*?from\s+'(\.[^']+)'/gm)) { if (!/\.(ts|tsx|mjs|cjs|js|json)$/.test(m[1])) noExt.push(`${relative(process.cwd(), f).replace(/\\/g, '/')} -> ${m[1]}`); else if (/\.(ts|mjs|js)$/.test(m[1])) load(resolve(dirname(f), m[1])); } };
 for (const f of [...walk('scripts'), ...walk('electron')]) if (/\.(ts|mjs|js)$/.test(f)) load(resolve(f));
 check('extensions in modules Node loads', noExt.length, noExt.join(', '));
-const perDir = new Map(); for (const f of walk('src')) { const d = f.slice(0, f.lastIndexOf('/')); perDir.set(d, (perDir.get(d) || 0) + 1); }
+// Browser scenarios wait with settle(); a fixed sleep needs a comment naming the product timer it waits for.
+const sleeps = walk('scripts/test').filter((f) => f.endsWith('.ts')).filter((f) => readFileSync(f, 'utf8').split('\n').some((l) => /waitForTimeout\(/.test(l) && !l.includes('//')));
+check('no fixed sleeps in browser scenarios', sleeps.length, sleeps.join(', '));
+const perDir = new Map(); for (const f of walk('src').filter((x) => !/\.test\.tsx?$/.test(x))) { const d = f.slice(0, f.lastIndexOf('/')); perDir.set(d, (perDir.get(d) || 0) + 1); }
 const crowded = [...perDir].filter(([, n]) => n > 25);
 check('folders of at most 25 files', crowded.length, crowded.map(([d, n]) => `${d} (${n})`).join(', '));
 // Words contain a letter or digit, so table pipes, arrows and list marks do not count.

@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { travelTip } from '../src/domain/readiness/tips';
-import { TIP_MIN_SAVING_TILES } from '../src/domain/travel/transport';
-import { bankCounts, travelInputOf } from '../src/domain/travel/travelInput';
-import { travelOptions, type TravelInput } from '../src/domain/travel/travel';
-import type { GearState } from '../src/services/runeliteBridge';
+import { travelTip } from './tips';
+import { TIP_MIN_SAVING_TILES } from '../travel/transport';
+import { bankCounts, travelInputOf } from '../travel/travelInput';
+import { travelOptions, type TravelInput } from '../travel/travel';
+import type { GearState } from '../../services/runeliteBridge';
 
 const at = (x: number, y: number, plane = 0) => ({ x, y, plane });
 const gear = (...rows: [string, number][]): GearState => ({

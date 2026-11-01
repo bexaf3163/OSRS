@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { combatPlanView } from '../../src/domain/combat/combatPlan';
-import { evaluatePlans, gainOver, KEEP_MARGIN, MIN_GAIN } from '../../src/domain/combat/route/plans';
-import { bankTrip, spotsOf, termsFor, TRAINER_SPOTS } from '../../src/domain/combat/route/spots';
-import { netEach } from '../../src/domain/market/ge';
-import { allSteps, stepById } from '../../src/data';
-import { market } from '../funding/market';
-import { HISTORICAL, gearOf, ownedOf, planInput } from './fixture';
+import { combatPlanView } from '../combatPlan';
+import { evaluatePlans, gainOver, KEEP_MARGIN, MIN_GAIN } from './plans';
+import { bankTrip, spotsOf, termsFor, TRAINER_SPOTS } from './spots';
+import { netEach } from '../../market/ge';
+import { allSteps, stepById } from '../../../data';
+import { market } from '../../../../tests/funding/market';
+import { HISTORICAL, gearOf, ownedOf, planInput } from '../../../../tests/combatRoute/fixture';
 
 const prices = market();
 const withMarket = (o: Parameters<typeof planInput>[0] = {}, restriction: 'LIFTED' | 'RESTRICTED' | 'UNKNOWN' = 'LIFTED') =>

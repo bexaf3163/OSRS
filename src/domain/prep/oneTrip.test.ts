@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { planOneTrip, tripWindow, LOOK_AHEAD } from '../src/domain/prep/oneTrip';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { buildPrepRoute, emptyPrep, MAX_DETOUR_DEPTH, openTaskIds, parsePrep, reconcile, startDetour, type DetourFrame } from '../src/domain/prep/prepRoute';
-import { stepReadiness, type StepReadiness } from '../src/domain/readiness/readiness';
-import { allSteps } from '../src/data';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
-import { nameKey } from '../src/domain/items/itemKey';
-import type { Step } from '../src/types';
+import { planOneTrip, tripWindow, LOOK_AHEAD } from './oneTrip';
+import { buildPlayerState } from '../player/playerState';
+import { buildPrepRoute, emptyPrep, MAX_DETOUR_DEPTH, openTaskIds, parsePrep, reconcile, startDetour, type DetourFrame } from './prepRoute';
+import { stepReadiness, type StepReadiness } from '../readiness/readiness';
+import { allSteps } from '../../data';
+import { emptyProgress } from '../persistence/progress';
+import type { OwnedItem, OwnedState } from '../items/checklist';
+import { nameKey } from '../items/itemKey';
+import type { Step } from '../../types';
 
 const item = (nameEn: string, amount: string | number, extra: Record<string, unknown> = {}) => ({ nameEn, amount, howToGet: '', ...extra });
 const mk = (id: string, items: ReturnType<typeof item>[]): Step => ({ id, stage: 1, type: 'combat', title: id, requires: [], itemsRequired: items } as unknown as Step);

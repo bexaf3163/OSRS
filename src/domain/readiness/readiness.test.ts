@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, items, allStages } from '../src/data';
-import { emptyProgress, withOwnedManual, withStep } from '../src/domain/persistence/progress';
-import { contextOf, readinessOf, stepReadiness, type ReadinessInput } from '../src/domain/readiness/readiness';
-import { nearestBank } from '../src/domain/travel/stepPlaces';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { validate } from '../scripts/validate';
-import type { Progress, Step } from '../src/types';
-import { alternativesOf } from '../src/domain/items/toolTiers';
+import { allSteps, items, allStages } from '../../data';
+import { emptyProgress, withOwnedManual, withStep } from '../persistence/progress';
+import { contextOf, readinessOf, stepReadiness, type ReadinessInput } from './readiness';
+import { nearestBank } from '../travel/stepPlaces';
+import { buildPlayerState } from '../player/playerState';
+import { validate } from '../../../scripts/validate';
+import type { Progress, Step } from '../../types';
+import { alternativesOf } from '../items/toolTiers';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
 const done = (ids: string[], p: Progress = emptyProgress()) => ids.reduce((acc, id) => withStep(acc, id, 'done'), p);

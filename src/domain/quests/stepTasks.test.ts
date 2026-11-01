@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, known, stepById } from '../src/data';
-import { emptyProgress, normalizeProgress, withStep, withTaskDone } from '../src/domain/persistence/progress';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { taskKey, taskStatus } from '../src/domain/quests/stepTasks';
-import { routeTrigger } from '../src/domain/prep/carryover';
-import type { StepTask } from '../src/types';
-import type { GearState } from '../src/services/runeliteBridge';
-import type { OwnedState } from '../src/domain/items/checklist';
+import { allSteps, known, stepById } from '../../data';
+import { emptyProgress, normalizeProgress, withStep, withTaskDone } from '../persistence/progress';
+import { buildPlayerState } from '../player/playerState';
+import { taskKey, taskStatus } from './stepTasks';
+import { routeTrigger } from '../prep/carryover';
+import type { StepTask } from '../../types';
+import type { GearState } from '../../services/runeliteBridge';
+import type { OwnedState } from '../items/checklist';
 
 const gear = (equipment: string[] | null): GearState => ({
   equipment: equipment === null ? null : equipment.map((name, i) => ({ id: i + 1, name, slot: `slot${i}` })),

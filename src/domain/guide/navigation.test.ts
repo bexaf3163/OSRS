@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../src/data';
-import { navigationTarget } from '../src/domain/guide/navigation';
+import { allSteps } from '../../data';
+import { navigationTarget } from './navigation';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
 

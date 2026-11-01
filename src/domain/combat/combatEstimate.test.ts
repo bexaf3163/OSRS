@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { attacksToKill, estimateCombat, foeVariants, hitChance, type CombatFoe, type EstimateInput } from '../src/domain/combat/combatEstimate';
-import { gearById, meleeHit } from '../src/domain/combat/gearAdvisor';
-import type { GearPiece } from '../src/types';
+import { attacksToKill, estimateCombat, foeVariants, hitChance, type CombatFoe, type EstimateInput } from './combatEstimate';
+import { gearById, meleeHit } from './gearAdvisor';
+import type { GearPiece } from '../../types';
 
 // The estimate against an independent reference: a tick-by-tick simulation of the fights that rolls the game's dice itself —
 // an attack roll 0..A against a defence roll 0..D (a hit when the first is higher), damage 0..max (the player's 0 on a hit counted
@@ -239,7 +239,7 @@ describe('trip and total', () => {
 
 describe('the combat log from /status', () => {
   it('parses what the plugin sends and drops what does not look like it', async () => {
-    const { parseCombatLog } = await import('../src/services/runeliteBridge');
+    const { parseCombatLog } = await import('../../services/runeliteBridge');
     expect(parseCombatLog({ stepId: 'S3-08', foes: [{ name: 'Minotaur', combat: 12, kills: 14, seconds: 120.5, damage: 40 }, { name: 'x', combat: -1 }] }))
       .toEqual({ stepId: 'S3-08', foes: [{ name: 'Minotaur', combat: 12, kills: 14, seconds: 120.5, damage: 40 }] });
     expect(parseCombatLog({ stepId: 'S3-08', foes: [] })).toBeNull();

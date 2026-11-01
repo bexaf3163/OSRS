@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { durationText } from '../src/domain/combat/splits';
-import { emptyProgress, normalizeProgress, withStep } from '../src/domain/persistence/progress';
-import type { Progress } from '../src/types';
+import { durationText } from './splits';
+import { emptyProgress, normalizeProgress, withStep } from '../persistence/progress';
+import type { Progress } from '../../types';
 
 const T0 = Date.parse('2026-10-05T10:00:00Z');
 const iso = (secondsAfter: number) => new Date(T0 + secondsAfter * 1000).toISOString();

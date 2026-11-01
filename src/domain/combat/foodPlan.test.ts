@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById } from '../src/data';
-import { assumptionsFor, foodPicks, stepWeapon, withFoodPlan } from '../src/domain/combat/foodPlan';
-import { aggregateShopping } from '../src/domain/prep/shopping';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import { stepReadiness } from '../src/domain/readiness/readiness';
-import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
-import { nameKey } from '../src/domain/items/itemKey';
-import { gearById } from '../src/domain/combat/gearAdvisor';
-import type { GearState } from '../src/services/runeliteBridge';
-import type { Progress } from '../src/types';
+import { allSteps, stepById } from '../../data';
+import { assumptionsFor, foodPicks, stepWeapon, withFoodPlan } from './foodPlan';
+import { aggregateShopping } from '../prep/shopping';
+import { emptyProgress } from '../persistence/progress';
+import { stepReadiness } from '../readiness/readiness';
+import type { OwnedItem, OwnedState } from '../items/checklist';
+import { nameKey } from '../items/itemKey';
+import { gearById } from './gearAdvisor';
+import type { GearState } from '../../services/runeliteBridge';
+import type { Progress } from '../../types';
 
 // The plan into the route: readiness asks for one trip, the shopping list buys the whole goal; S4-03 is estimated from where S3-08 leaves you.
 

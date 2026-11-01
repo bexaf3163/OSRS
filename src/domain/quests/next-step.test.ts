@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import type { GameMode, Progress, Step, StepStatus } from '../src/types';
-import { BASE_QP, stepsFor } from '../src/data';
-import { blockersOf, currentStage, nextStep, openAfter, questDependencyFacts, dependencyFacts } from '../src/domain/quests/next-step';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import { questPoints } from '../src/domain/quests/qp';
+import type { GameMode, Progress, Step, StepStatus } from '../../types';
+import { BASE_QP, stepsFor } from '../../data';
+import { blockersOf, currentStage, nextStep, openAfter, questDependencyFacts, dependencyFacts } from './next-step';
+import { emptyProgress } from '../persistence/progress';
+import { questPoints } from './qp';
 
 const f2p = stepsFor('f2p');
 

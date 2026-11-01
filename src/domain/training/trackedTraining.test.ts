@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { trackedTraining } from '../src/domain/training/trackedTraining';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import { RANGED_WATCH } from '../src/domain/combat/rangedLoadout';
-import { buildEnvelope, EMPTY_PARTS, envelopeKey } from '../src/domain/prep/prepEnvelope';
-import { toInGameTarget } from '../src/domain/guide/inGameTarget';
-import { stepById } from '../src/data';
-import { parseTracked, trackedTrainingContext } from '../src/domain/training/skillTrack';
-import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
-import { emptyPrep, rearmReadyDetours, startDetour } from '../src/domain/prep/prepRoute';
-import type { PriceView } from '../src/domain/market/quotes';
+import { trackedTraining } from './trackedTraining';
+import { buildPlayerState } from '../player/playerState';
+import { emptyProgress } from '../persistence/progress';
+import { RANGED_WATCH } from '../combat/rangedLoadout';
+import { buildEnvelope, EMPTY_PARTS, envelopeKey } from '../prep/prepEnvelope';
+import { toInGameTarget } from '../guide/inGameTarget';
+import { stepById } from '../../data';
+import { parseTracked, trackedTrainingContext } from './skillTrack';
+import { createReadinessEngine } from '../readiness/readinessEngine';
+import { emptyPrep, rearmReadyDetours, startDetour } from '../prep/prepRoute';
+import type { PriceView } from '../market/quotes';
 
 const state = (ranged?: number) => buildPlayerState({ mode: 'f2p', connected: true,
   stats: { ...(ranged === undefined ? {} : { ranged }), defence: 33, hitpoints: 31 }, progress: emptyProgress(), questsDone: [],

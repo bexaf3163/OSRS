@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { detectRecovery, DEATH_WINDOW_MS, FAR, inHub, NEAR, RECOVERY_TTL_MS, RESPAWN, recoverySteps, stepPoint, type MoveEvent, type Point } from '../src/domain/travel/recovery';
-import { parseMove } from '../src/services/runeliteBridge';
+import { detectRecovery, DEATH_WINDOW_MS, FAR, inHub, NEAR, RECOVERY_TTL_MS, RESPAWN, recoverySteps, stepPoint, type MoveEvent, type Point } from './recovery';
+import { parseMove } from '../../services/runeliteBridge';
 
 const NOW = 1_800_000_000_000;
 const at = (x: number, y: number, plane = 0): Point => ({ x, y, plane });

@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { adoptStorageKey, loadAdopted, saveAdopted, withAdopted } from '../../src/domain/combat/route/adopt';
-import { evaluatePlans } from '../../src/domain/combat/route/plans';
-import { xpPerKill } from '../../src/domain/combat/combatEstimate';
-import { currentPhase, phaseDone, resolvePick, samePicks, withCombatPlan } from '../../src/domain/combat/route/pick';
-import { foodPicks, foodPlanApplied, stepResendKey, withFoodPlan } from '../../src/domain/combat/foodPlan';
-import { aggregateShopping } from '../../src/domain/prep/shopping';
-import { emptyProgress } from '../../src/domain/persistence/progress';
-import { stepGuide, toInGameTarget } from '../../src/domain/guide/inGameTarget';
-import { allSteps } from '../../src/data';
-import { market } from '../funding/market';
-import { gearOf, HISTORICAL, planInput } from './fixture';
-import type { Step } from '../../src/types';
+import { adoptStorageKey, loadAdopted, saveAdopted, withAdopted } from './adopt';
+import { evaluatePlans } from './plans';
+import { xpPerKill } from '../combatEstimate';
+import { currentPhase, phaseDone, resolvePick, samePicks, withCombatPlan } from './pick';
+import { foodPicks, foodPlanApplied, stepResendKey, withFoodPlan } from '../foodPlan';
+import { aggregateShopping } from '../../prep/shopping';
+import { emptyProgress } from '../../persistence/progress';
+import { stepGuide, toInGameTarget } from '../../guide/inGameTarget';
+import { allSteps } from '../../../data';
+import { market } from '../../../../tests/funding/market';
+import { gearOf, HISTORICAL, planInput } from '../../../../tests/combatRoute/fixture';
+import type { Step } from '../../../types';
 
 // The mechanics of a picked plan, told apart by time and food: no cowhide price, so no loot is valued (tests/combatRoute/plans.test.ts covers loot).
 const prices = market({ Cowhide: { high: null, low: null, avgHigh: null, avgLow: null } });

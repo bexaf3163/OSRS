@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, known, stepById } from '../src/data';
-import { emptyProgress, normalizeProgress, withSellRestrictions } from '../src/domain/persistence/progress';
-import { MONEY } from '../src/domain/economy/moneyAdvisor';
-import { fundingPlan, costThroughTier } from '../src/domain/economy/fundingPlan';
+import { allSteps, known, stepById } from '../../data';
+import { emptyProgress, normalizeProgress, withSellRestrictions } from '../persistence/progress';
+import { MONEY } from '../economy/moneyAdvisor';
+import { fundingPlan, costThroughTier } from '../economy/fundingPlan';
 import {
   isRestrictedItem, LIFT, RESTRICTED_ITEMS, RESTRICTED_METHOD_IDS, restrictionSummary, totalLevelOf, tradeRestriction, ALL_SKILLS,
-} from '../src/domain/market/tradeRestriction';
-import { checkStatus, type BridgeTransport } from '../src/services/runeliteBridge';
+} from './tradeRestriction';
+import { checkStatus, type BridgeTransport } from '../../services/runeliteBridge';
 
 // A new free-to-play account cannot sell some items on the Grand Exchange until 20 h of play, 10 quest points and total level 100.
 

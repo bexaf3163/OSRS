@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { buildPlayerState, coinsOf, diffPlayerState, heldExact, heldOf, levelOf, questOf, type PlayerStateInput } from '../src/domain/player/playerState';
-import { describe as describeReq, evaluate, type Requirement } from '../src/domain/player/requirements';
-import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
-import { nameKey } from '../src/domain/items/itemKey';
-import type { GearState } from '../src/services/runeliteBridge';
+import { buildPlayerState, coinsOf, diffPlayerState, heldExact, heldOf, levelOf, questOf, type PlayerStateInput } from './playerState';
+import { describe as describeReq, evaluate, type Requirement } from './requirements';
+import type { OwnedItem, OwnedState } from '../items/checklist';
+import { nameKey } from '../items/itemKey';
+import type { GearState } from '../../services/runeliteBridge';
 
 function owned(items: Record<string, Partial<OwnedItem>>, bankSeen: boolean): OwnedState {
   const map = new Map<string, OwnedItem>();

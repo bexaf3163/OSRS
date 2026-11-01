@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   analyze, formatDuration, formatReport, parseLog, SLOW_LINE_MS,
   type TelemetryEvent,
-} from '../src/domain/telemetry/telemetryReport';
+} from './telemetryReport';
 
 const T0 = 1_700_000_000_000;
 const ev = (dt: number, kind: string, rest: Record<string, unknown> = {}): TelemetryEvent => ({ t: T0 + dt, ...rest, kind });
@@ -164,7 +164,7 @@ describe('formatDuration / formatReport', () => {
 
 describe('a journal sample from the plugin', () => {
   // The file is written by the Java test TelemetryTest (line format, encoding, escaping); here the app parser reads it.
-  const text = readFileSync(new URL('../runelite-bridge/src/test/resources/telemetry-session.jsonl', import.meta.url), 'utf8');
+  const text = readFileSync(new URL('../../../runelite-bridge/src/test/resources/telemetry-session.jsonl', import.meta.url), 'utf8');
 
   it('is read whole, not a single broken line', () => {
     const { events, bad } = parseLog(text);

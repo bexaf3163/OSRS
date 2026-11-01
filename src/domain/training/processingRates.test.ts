@@ -2,11 +2,11 @@
 // new recipe or station inherits them. Synthetic recipes below exist only in this test.
 
 import { describe, expect, it } from 'vitest';
-import { PROCESSING, processPace, processRate, type ProcessingRegistry } from '../src/domain/training/processingRates';
-import { personalize, trainingMethods, viewMethod, type TrainingMethod } from '../src/domain/training/trainingRouter';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import type { PriceView } from '../src/domain/market/quotes';
+import { PROCESSING, processPace, processRate, type ProcessingRegistry } from './processingRates';
+import { personalize, trainingMethods, viewMethod, type TrainingMethod } from './trainingRouter';
+import { buildPlayerState } from '../player/playerState';
+import { emptyProgress } from '../persistence/progress';
+import type { PriceView } from '../market/quotes';
 
 const method = (id: string) => trainingMethods.find((m) => m.id === id) as TrainingMethod;
 const stateOf = (levels: Record<string, number>, mode: 'f2p' | 'members' = 'f2p') =>

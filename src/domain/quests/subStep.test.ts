@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { stepById } from '../src/data';
-import { actionOf, alternativeAt, dialogueOf, findSubStep, instructionSubStep, itemStatus, overviewCurrent, overviewOf, subStepItems, subStepNpcInfo, type SubStep } from '../src/domain/quests/subStep';
-import type { NavTargetPayload } from '../src/services/runeliteBridge';
+import { stepById } from '../../data';
+import { actionOf, alternativeAt, dialogueOf, findSubStep, instructionSubStep, itemStatus, overviewCurrent, overviewOf, subStepItems, subStepNpcInfo, type SubStep } from './subStep';
+import type { NavTargetPayload } from '../../services/runeliteBridge';
 
 const ali = stepById.get('S2-10')!;
 const nav = (label: string, extra: Partial<NavTargetPayload> = {}): NavTargetPayload => ({ label, x: 0, y: 0, plane: 0, stepId: 'S2-10', ...extra });

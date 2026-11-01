@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../src/data';
-import { cleanupAdvice, OBSOLETE, recLabel, type CleanupInput } from '../src/domain/prep/cleanup';
-import { emptyCleanupPrefs, type CleanupPrefs } from '../src/domain/persistence/cleanupPrefs';
-import type { Step } from '../src/types';
-import { questStepOf } from '../src/domain/quests/questSteps';
+import { allSteps } from '../../data';
+import { cleanupAdvice, OBSOLETE, recLabel, type CleanupInput } from './cleanup';
+import { emptyCleanupPrefs, type CleanupPrefs } from '../persistence/cleanupPrefs';
+import type { Step } from '../../types';
+import { questStepOf } from '../quests/questSteps';
 
 const open = (...ids: string[]): Step[] => ids.map((id) => allSteps.find((s) => s.id === id)!);
 const PRICES: Record<string, number> = { 'Ball of wool': 60, 'Oak logs': 90, 'Bronze bar': 30, 'Cowhide': 150, 'Yew logs': 300 };
@@ -211,7 +211,7 @@ describe('inventory cleanup', () => {
 
 describe('cleanup data from the plugin', () => {
   it('banknotes are told apart from the item; a plugin that does not send the flag means "the item itself"', async () => {
-    const { parseGear } = await import('../src/services/runeliteBridge');
+    const { parseGear } = await import('../../services/runeliteBridge');
     const g = parseGear({ inventory: [{ id: 1759, name: 'Ball of wool', count: 3 }, { id: 1760, name: 'Ball of wool', count: 10, noted: true }, { id: 1, name: 'Odd', count: 1, noted: 'yes' }], equipment: [] });
     expect(g!.inventory![0].noted).toBeUndefined();
     expect(g!.inventory![1].noted).toBe(true);
@@ -221,7 +221,7 @@ describe('cleanup data from the plugin', () => {
 
 describe('cleanup preferences storage', () => {
   it('are kept per profile and per character, and unreadable data means none', async () => {
-    const m = await import('../src/domain/persistence/cleanupPrefs');
+    const m = await import('../persistence/cleanupPrefs');
     expect(m.cleanupKey('main', 'Bexqq')).not.toBe(m.cleanupKey('main', 'Other'));
     expect(m.cleanupKey('main', 'Bexqq')).not.toBe(m.cleanupKey('alt', 'Bexqq'));
     expect(m.cleanupKey('main', ' bexqq ')).toBe(m.cleanupKey('main', 'Bexqq'));

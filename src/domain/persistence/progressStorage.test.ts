@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { known } from '../src/data';
-import { emptyProgress, normalizeProgress, STORAGE_KEY } from '../src/domain/persistence/progress';
-import { readProgressText, restoreProgress } from '../src/domain/persistence/progressStorage';
+import { known } from '../../data';
+import { emptyProgress, normalizeProgress, STORAGE_KEY } from './progress';
+import { readProgressText, restoreProgress } from './progressStorage';
 
 const saved = (step = 'S2-01', at = '2026-10-01T00:00:00.000Z') => ({ ...emptyProgress(), steps: { [step]: 'done' as const }, updatedAt: at });
 function memory(raw: string | null = null) {

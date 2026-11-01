@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { stepById } from '../src/data';
-import { currentLoadoutStep, loadoutNeed, loadoutPhase } from '../src/domain/quests/loadoutPhase';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import { stageScope } from '../src/domain/quests/stageScope';
+import { stepById } from '../../data';
+import { currentLoadoutStep, loadoutNeed, loadoutPhase } from './loadoutPhase';
+import { buildPlayerState } from '../player/playerState';
+import { createReadinessEngine } from '../readiness/readinessEngine';
+import { emptyProgress } from '../persistence/progress';
+import { stageScope } from './stageScope';
 
 const waterfall = stepById.get('S7-01')!;
 const cursor = (stageAt: number, lineIndex: number) => ({ stepId: waterfall.id, stageAt, lineIndex, peeking: false });

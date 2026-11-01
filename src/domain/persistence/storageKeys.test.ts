@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { STORAGE_KEYS } from '../src/domain/persistence/storageKeys';
+import { STORAGE_KEYS } from './storageKeys';
 
 describe('storage keys', () => {
   it('gives every feature its own key', () => {

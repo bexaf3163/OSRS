@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { energyUnits, HEAVY_SAVING, isCalm, kgText, runLengthRatio, weightAdvice, weightOf } from '../src/domain/items/weight';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { parseGear } from '../src/services/runeliteBridge';
-import { allSteps } from '../src/data';
-import type { Step } from '../src/types';
+import { energyUnits, HEAVY_SAVING, isCalm, kgText, runLengthRatio, weightAdvice, weightOf } from './weight';
+import { buildPlayerState } from '../player/playerState';
+import { parseGear } from '../../services/runeliteBridge';
+import { allSteps } from '../../data';
+import type { Step } from '../../types';
 
 const calm = { type: 'skill' } as Pick<Step, 'type' | 'foes' | 'threats' | 'targets'>;
 const gear = (over: Record<string, unknown> = {}) => ({

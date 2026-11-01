@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../src/data';
-import { emptyProgress, withStep } from '../src/domain/persistence/progress';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { contextOf, type ReadinessInput } from '../src/domain/readiness/readiness';
-import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
-import { decideAuto, RENAV_GAP_MS, buildQueue, type AutoInput, type PrepQueue } from '../src/domain/prep/prepQueue';
-import type { RequirementStatus, StepReadiness } from '../src/domain/readiness/readiness';
-import { buildPrepRoute, emptyPrep, navKeyOf, reconcile, staleArrows, startDetour, type PrepState } from '../src/domain/prep/prepRoute';
-import type { OwnedState } from '../src/domain/items/checklist';
-import { preflightItems } from '../src/domain/prep/stepItems';
+import { allSteps } from '../../data';
+import { emptyProgress, withStep } from '../persistence/progress';
+import { buildPlayerState } from '../player/playerState';
+import { contextOf, type ReadinessInput } from '../readiness/readiness';
+import { createReadinessEngine } from '../readiness/readinessEngine';
+import { decideAuto, RENAV_GAP_MS, buildQueue, type AutoInput, type PrepQueue } from './prepQueue';
+import type { RequirementStatus, StepReadiness } from '../readiness/readiness';
+import { buildPrepRoute, emptyPrep, navKeyOf, reconcile, staleArrows, startDetour, type PrepState } from './prepRoute';
+import type { OwnedState } from '../items/checklist';
+import { preflightItems } from './stepItems';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
 const done = (ids: string[]) => ids.reduce((p, id) => withStep(p, id, 'done'), emptyProgress());

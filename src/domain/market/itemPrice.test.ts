@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { itemPrice } from '../src/domain/market/itemPrice';
-import { buildPriceView } from '../src/domain/market/quotes';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
-import { planPayload } from '../src/domain/prep/prepEnvelope';
-import { planSources } from '../src/domain/prep/sourceRouter';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import { itemById } from '../src/data';
-import type { Step } from '../src/types';
+import { itemPrice } from './itemPrice';
+import { buildPriceView } from './quotes';
+import { buildPlayerState } from '../player/playerState';
+import { createReadinessEngine } from '../readiness/readinessEngine';
+import { planPayload } from '../prep/prepEnvelope';
+import { planSources } from '../prep/sourceRouter';
+import { emptyProgress } from '../persistence/progress';
+import { itemById } from '../../data';
+import type { Step } from '../../types';
 
 const NOW = 1_800_000_000_000;
 function prices(unit: number | null = 200, status: 'live' | 'stale' = 'live', age = 1, onlySell = false, mapping = true) {

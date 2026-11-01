@@ -2,20 +2,20 @@
 // every size counts toward a need, doses are not bag slots, and a shortfall is bought as a package of potions, never as "another full potion" per dose.
 
 import { describe, expect, it } from 'vitest';
-import { carryOf, doseKind, dosePackage, doseValue, needUnits, shortText, takeFromBank } from '../src/domain/items/doses';
-import { heldUnits } from '../src/domain/player/heldUnits';
-import { shopRows, scopeList, geListText, type ShopRow } from '../src/domain/economy/shoppingView';
-import { aggregateShopping, holdingFor, type ShoppingLine } from '../src/domain/prep/shopping';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { evaluate } from '../src/domain/player/requirements';
-import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
-import { evaluatePreflight } from '../src/domain/readiness/preflight';
-import { preflightItems } from '../src/domain/prep/stepItems';
-import { nameKey } from '../src/domain/items/itemKey';
-import { planOneTrip } from '../src/domain/prep/oneTrip';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import { itemById } from '../src/data';
-import type { Step, StepItemRequirement } from '../src/types';
+import { carryOf, doseKind, dosePackage, doseValue, needUnits, shortText, takeFromBank } from './doses';
+import { heldUnits } from '../player/heldUnits';
+import { shopRows, scopeList, geListText, type ShopRow } from '../economy/shoppingView';
+import { aggregateShopping, holdingFor, type ShoppingLine } from '../prep/shopping';
+import { buildPlayerState } from '../player/playerState';
+import { evaluate } from '../player/requirements';
+import type { OwnedItem, OwnedState } from './checklist';
+import { evaluatePreflight } from '../readiness/preflight';
+import { preflightItems } from '../prep/stepItems';
+import { nameKey } from './itemKey';
+import { planOneTrip } from '../prep/oneTrip';
+import { emptyProgress } from '../persistence/progress';
+import { itemById } from '../../data';
+import type { Step, StepItemRequirement } from '../../types';
 
 const item = (nameEn: string, amount: number, extra: Partial<StepItemRequirement> = {}): StepItemRequirement => ({ nameEn, amount, howToGet: '', ...extra });
 const step = (id: string, items: StepItemRequirement[], rec: StepItemRequirement[] = []): Step =>

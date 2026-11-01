@@ -1,27 +1,27 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../src/data';
-import { buildPrepPlan, type PrepPlan } from '../src/domain/prep/prepPlan';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { planOneTrip } from '../src/domain/prep/oneTrip';
-import { readinessOf } from '../src/domain/readiness/readiness';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
-import { nameKey } from '../src/domain/items/itemKey';
-import type { Recovery } from '../src/domain/travel/recovery';
-import { buildEnvelope, envelopeKey, MAX_PLAN_LINES, nextSeq, planPayload, EMPTY_PARTS, SNAPSHOT_VERSION, type SnapshotParts } from '../src/domain/prep/prepEnvelope';
-import { clipText } from '../src/domain/text/format';
-import { supportsSnapshot, APP_PROTOCOL, BRIDGE_PATHS, missingWithPlugin } from '../src/services/runeliteBridge';
-import { toInGameTarget } from '../src/domain/guide/inGameTarget';
-import type { Step } from '../src/types';
-import { fundingHintPayload } from '../src/domain/economy/fundingHint';
-import { startPlan, tick, viewOf } from '../src/domain/economy/funding/plan';
-import { methodById } from '../src/domain/economy/funding/methods';
-import { market } from './funding/market';
-import { scenario } from './funding/scenario';
-import { fakeSnap } from './funding/helpers';
+import { allSteps } from '../../data';
+import { buildPrepPlan, type PrepPlan } from './prepPlan';
+import { buildPlayerState } from '../player/playerState';
+import { planOneTrip } from './oneTrip';
+import { readinessOf } from '../readiness/readiness';
+import { emptyProgress } from '../persistence/progress';
+import type { OwnedItem, OwnedState } from '../items/checklist';
+import { nameKey } from '../items/itemKey';
+import type { Recovery } from '../travel/recovery';
+import { buildEnvelope, envelopeKey, MAX_PLAN_LINES, nextSeq, planPayload, EMPTY_PARTS, SNAPSHOT_VERSION, type SnapshotParts } from './prepEnvelope';
+import { clipText } from '../text/format';
+import { supportsSnapshot, APP_PROTOCOL, BRIDGE_PATHS, missingWithPlugin } from '../../services/runeliteBridge';
+import { toInGameTarget } from '../guide/inGameTarget';
+import type { Step } from '../../types';
+import { fundingHintPayload } from '../economy/fundingHint';
+import { startPlan, tick, viewOf } from '../economy/funding/plan';
+import { methodById } from '../economy/funding/methods';
+import { market } from '../../../tests/funding/market';
+import { scenario } from '../../../tests/funding/scenario';
+import { fakeSnap } from '../../../tests/funding/helpers';
 
-const FILE = new URL('../runelite-bridge/src/test/resources/prep-snapshots.json', import.meta.url);
+const FILE = new URL('../../../runelite-bridge/src/test/resources/prep-snapshots.json', import.meta.url);
 
 function owned(items: Record<string, Partial<OwnedItem>>, bankSeen = true): OwnedState {
   const map = new Map<string, OwnedItem>();

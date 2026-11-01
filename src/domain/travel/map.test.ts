@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../src/data';
-import { floorLabel, initialPoint, isUnderground, mapSourceAt, parseMapSources, pxPerSquare, stepPoints, TILE, tilesAround, tileUrl } from '../src/domain/travel/map';
+import { allSteps } from '../../data';
+import { floorLabel, initialPoint, isUnderground, mapSourceAt, parseMapSources, pxPerSquare, stepPoints, TILE, tilesAround, tileUrl } from './map';
 
 describe('wiki map tiles', () => {
   it('uses the documented atlas schema and shares the selected source across a viewport', () => {
@@ -13,7 +13,7 @@ describe('wiki map tiles', () => {
   it('accepts published metadata, selects the smallest containing atlas and rejects malformed paths/bounds', () => {
     const surface = { mapId: 0, cacheVersion: '2026-10-31_1', bounds: [[1000, 1000], [4300, 13000]] };
     const dungeon = { ...surface, mapId: 6, bounds: [[3000, 9800], [3200, 10000]] };
-    const sources = parseMapSources({ baseMaps: [surface, dungeon, { ...surface, cacheVersion: '../bad' }, { ...surface, bounds: [[5, 5], [1, 1]] }, null] });
+    const sources = parseMapSources({ baseMaps: [surface, dungeon, { ...surface, cacheVersion: '../../../bad' }, { ...surface, bounds: [[5, 5], [1, 1]] }, null] });
     expect(sources).toHaveLength(2);
     expect(mapSourceAt(sources, { x: 3050, y: 9850 }).mapId).toBe(6);
     expect(mapSourceAt(sources, { x: 3029, y: 3221 }).mapId).toBe(0);

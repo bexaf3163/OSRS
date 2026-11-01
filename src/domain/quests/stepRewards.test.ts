@@ -1,8 +1,8 @@
 // The reward text read one way for every feature: the coin tip of the upgrade prompt finds its step by the reward, not by a step code.
 
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../src/data';
-import { coinRewardAhead, rewardCoins } from '../src/domain/quests/stepRewards';
+import { allSteps } from '../../data';
+import { coinRewardAhead, rewardCoins } from './stepRewards';
 
 describe('step rewards', () => {
   it('reads the coins of a reward, the total before a breakdown', () => {

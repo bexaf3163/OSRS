@@ -7,7 +7,7 @@ import postcss from 'postcss';
 const write = process.argv.includes('--write');
 const walk = (d) => readdirSync(d).flatMap((n) => { const p = `${d}/${n}`; return statSync(p).isDirectory() ? walk(p) : [p]; });
 const files = walk('src');
-const code = files.filter((f) => /\.(ts|tsx)$/.test(f)).map((f) => readFileSync(f, 'utf8')).join('\n') + readFileSync('index.html', 'utf8');
+const code = files.filter((f) => /\.(ts|tsx)$/.test(f) && !/\.test\.tsx?$/.test(f)).map((f) => readFileSync(f, 'utf8')).join('\n') + readFileSync('index.html', 'utf8');
 const tokens = new Set(code.match(/[A-Za-z][A-Za-z0-9_-]*/g));
 const prefixes = [...new Set([...code.matchAll(/([a-z][a-z0-9-]*-)\$\{/g)].map((m) => m[1]).concat([...code.matchAll(/'([a-z][a-z0-9-]*-)'\s*\+/g)].map((m) => m[1])))];
 const live = (c) => tokens.has(c) || prefixes.some((p) => c.startsWith(p));

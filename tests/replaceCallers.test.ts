@@ -13,7 +13,7 @@ function sources(dir: string): string[] {
 
 describe('the save guard: who may call replace()', () => {
   it('only the Settings import and the store itself (reset)', () => {
-    const callers = sources('src').filter((f) => /(^|[^.\w])replace\(/.test(readFileSync(f, 'utf8'))).map((f) => f.replace(/\\/g, '/'));
+    const callers = sources('src').filter((f) => !/\.test\.tsx?$/.test(f) && /(^|[^.\w])replace\(/.test(readFileSync(f, 'utf8'))).map((f) => f.replace(/\\/g, '/'));
     expect(callers.sort()).toEqual(['src/features/settings/Settings.tsx', 'src/state/store.tsx']);
   });
 

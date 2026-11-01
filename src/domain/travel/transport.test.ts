@@ -1,10 +1,10 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { allSteps, items, plugins, reference, skills, stepsFor } from '../src/data';
-import { blocksText, buildIndex, search } from '../src/domain/quests/search';
-import { parseHash } from '../src/app/router';
-import { Inline } from '../src/ui/Inline';
+import { allSteps, items, plugins, reference, skills, stepsFor } from '../../data';
+import { blocksText, buildIndex, search } from '../quests/search';
+import { parseHash } from '../../app/router';
+import { Inline } from '../../ui/Inline';
 
 const transport = reference.sections.find((s) => s.id === 'transport');
 const transportText = blocksText(transport?.blocks ?? []);
@@ -97,14 +97,14 @@ describe('links inside the app', () => {
 });
 
 // ---------- The recommended transport on its way to the game ----------
-import { stepById } from '../src/data';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import { planPayload, buildEnvelope, EMPTY_PARTS } from '../src/domain/prep/prepEnvelope';
-import { recommendedTransport, type RecommendedTransport } from '../src/domain/travel/transport';
-import { travelOptions, type TravelInput } from '../src/domain/travel/travel';
-import type { GearItem } from '../src/services/runeliteBridge';
+import { stepById } from '../../data';
+import { buildPlayerState } from '../player/playerState';
+import { createReadinessEngine } from '../readiness/readinessEngine';
+import { emptyProgress } from '../persistence/progress';
+import { planPayload, buildEnvelope, EMPTY_PARTS } from '../prep/prepEnvelope';
+import { recommendedTransport, type RecommendedTransport } from './transport';
+import { travelOptions, type TravelInput } from './travel';
+import type { GearItem } from '../../services/runeliteBridge';
 
 describe('bridge serialization: the transport carries its kind, its stop, its interaction and a short chip', () => {
   const at = (x: number, y: number, plane = 0) => ({ x, y, plane });

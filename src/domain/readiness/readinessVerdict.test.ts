@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { stepById } from '../src/data';
-import { buildPrepPlan, type PrepPlan } from '../src/domain/prep/prepPlan';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { planOneTrip } from '../src/domain/prep/oneTrip';
-import { readinessOf } from '../src/domain/readiness/readiness';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
-import { nameKey } from '../src/domain/items/itemKey';
-import { combatPlanView, foodReservations, ownedFood } from '../src/domain/combat/combatPlan';
-import { combatReadiness } from '../src/domain/combat/combatReadiness';
-import { bankFreshness, readinessVerdict, PERCENT_NOTE } from '../src/domain/readiness/readinessVerdict';
-import { gearById } from '../src/domain/combat/gearAdvisor';
-import type { GearState } from '../src/services/runeliteBridge';
-import type { Step } from '../src/types';
+import { stepById } from '../../data';
+import { buildPrepPlan, type PrepPlan } from '../prep/prepPlan';
+import { buildPlayerState } from '../player/playerState';
+import { planOneTrip } from '../prep/oneTrip';
+import { readinessOf } from './readiness';
+import { emptyProgress } from '../persistence/progress';
+import type { OwnedItem, OwnedState } from '../items/checklist';
+import { nameKey } from '../items/itemKey';
+import { combatPlanView, foodReservations, ownedFood } from '../combat/combatPlan';
+import { combatReadiness } from '../combat/combatReadiness';
+import { bankFreshness, readinessVerdict, PERCENT_NOTE } from './readinessVerdict';
+import { gearById } from '../combat/gearAdvisor';
+import type { GearState } from '../../services/runeliteBridge';
+import type { Step } from '../../types';
 
 // The owner's example (spec 2026-10-17): S3-08 with iron armour and a Mithril scimitar, the level 12 and level 27 Minotaurs judged separately, then
 // the same verdict for any step: what is with you, what is in the bank, what to get, what is not known.
@@ -234,7 +234,7 @@ describe('tools by level: a tier the player cannot use does not do the job', () 
 
 describe('the verdict in the snapshot and the cleanup beside it', () => {
   it('the plan carries the verdict only when the app gives one: an older plugin ignores the field', async () => {
-    const { planPayload } = await import('../src/domain/prep/prepEnvelope');
+    const { planPayload } = await import('../prep/prepEnvelope');
     const p = planFor(mk('G1', [item('Trout', 10, { heals: 7 })]), owned({ Trout: [0, 12] }));
     expect('readiness' in planPayload(p)).toBe(false);
     const withIt = planPayload(p, { readiness: { status: 'PREP_NEEDED', headline: 'Bank: withdraw Trout ×10 — you already own it.' } });
@@ -242,8 +242,8 @@ describe('the verdict in the snapshot and the cleanup beside it', () => {
   });
 
   it('cleanup never offers what the open fight needs: the weapon and the food stay, only the stray ore is advice', async () => {
-    const { cleanupAdvice } = await import('../src/domain/prep/cleanup');
-    const { emptyCleanupPrefs } = await import('../src/domain/persistence/cleanupPrefs');
+    const { cleanupAdvice } = await import('../prep/cleanup');
+    const { emptyCleanupPrefs } = await import('../persistence/cleanupPrefs');
     const r = cleanupAdvice({
       bag: [{ id: 1329, name: 'Mithril scimitar', count: 1 }, { id: 329, name: 'Salmon', count: 26 }, { id: 440, name: 'Iron ore', count: 10 }],
       openSteps: [s308], bankSeen: true, account: 'normal', restriction: 'LIFTED', price: () => 50, tradeable: () => true, prefs: emptyCleanupPrefs(),

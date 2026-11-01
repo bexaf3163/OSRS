@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { buildPrepPlan, BAG_SLOTS, stacks, type PrepPlan } from '../src/domain/prep/prepPlan';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { planOneTrip } from '../src/domain/prep/oneTrip';
-import { readinessOf } from '../src/domain/readiness/readiness';
-import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
-import { contextOf } from '../src/domain/readiness/readiness';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
-import { nameKey } from '../src/domain/items/itemKey';
-import type { Step, WikiItemDetail } from '../src/types';
-import type { UpgradeRecommendation } from '../src/domain/training/gearUpgradeRouter';
+import { buildPrepPlan, BAG_SLOTS, stacks, type PrepPlan } from './prepPlan';
+import { buildPlayerState } from '../player/playerState';
+import { planOneTrip } from './oneTrip';
+import { readinessOf } from '../readiness/readiness';
+import { createReadinessEngine } from '../readiness/readinessEngine';
+import { contextOf } from '../readiness/readiness';
+import { emptyProgress } from '../persistence/progress';
+import type { OwnedItem, OwnedState } from '../items/checklist';
+import { nameKey } from '../items/itemKey';
+import type { Step, WikiItemDetail } from '../../types';
+import type { UpgradeRecommendation } from '../training/gearUpgradeRouter';
 
 const item = (nameEn: string, amount: string | number, extra: Record<string, unknown> = {}) => ({ nameEn, amount, howToGet: '', ...extra });
 const mk = (id: string, items: ReturnType<typeof item>[], extra: Record<string, unknown> = {}): Step =>

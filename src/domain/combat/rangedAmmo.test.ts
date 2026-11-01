@@ -1,13 +1,13 @@
 // T11: the whole-goal arrow count from the wiki's ranged formulas, the opponents' standard ranged defence and the bows' and arrows' bonuses.
 import { describe, expect, it } from 'vitest';
-import { arrowsForGoal, ARROW_BREAK, goalArrows, methodFoe, RANGED_GEAR } from '../src/domain/combat/rangedAmmo';
-import { trainingMethods } from '../src/domain/training/trainingRouter';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import { nameKey } from '../src/domain/items/itemKey';
-import type { GearItem } from '../src/services/runeliteBridge';
-import { COMBAT_FOES } from '../src/domain/combat/combatEstimate';
-import { xpForLevel } from '../src/domain/player/xp';
+import { arrowsForGoal, ARROW_BREAK, goalArrows, methodFoe, RANGED_GEAR } from './rangedAmmo';
+import { trainingMethods } from '../training/trainingRouter';
+import { buildPlayerState } from '../player/playerState';
+import { emptyProgress } from '../persistence/progress';
+import { nameKey } from '../items/itemKey';
+import type { GearItem } from '../../services/runeliteBridge';
+import { COMBAT_FOES } from './combatEstimate';
+import { xpForLevel } from '../player/xp';
 
 const foe = (name: string, version?: string) => COMBAT_FOES.find((f) => f.name === name && (!version || f.version === version))!;
 

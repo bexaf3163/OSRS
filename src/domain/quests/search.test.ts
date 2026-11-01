@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { items, plugins, reference, skills, stepsFor } from '../src/data';
-import { buildIndex, search } from '../src/domain/quests/search';
+import { items, plugins, reference, skills, stepsFor } from '../../data';
+import { buildIndex, search } from './search';
 
 const index = buildIndex({ steps: stepsFor('members'), skills, reference, plugins, items, typeLabel: { quest: 'Quest', skill: 'Skill', gear: 'Gear', prep: 'Preparation' } });
 

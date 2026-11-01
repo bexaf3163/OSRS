@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { evaluate, type Personalised } from '../../src/domain/economy/funding/evaluate';
-import { methodById } from '../../src/domain/economy/funding/methods';
-import type { FundingMethod } from '../../src/domain/economy/funding/types';
-import { tradeRestriction } from '../../src/domain/market/tradeRestriction';
-import { ctxOf, fakePrices, fakeSnap } from './helpers';
+import { evaluate, type Personalised } from './evaluate';
+import { methodById } from './methods';
+import type { FundingMethod } from './types';
+import { tradeRestriction } from '../../market/tradeRestriction';
+import { ctxOf, fakePrices, fakeSnap } from '../../../../tests/funding/helpers';
 
 const steel = methodById('smelt-steel-bars')!;
 const hill = methodById('hill-giants')!;

@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById } from '../src/data';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
-import { nameKey } from '../src/domain/items/itemKey';
-import { decideTransport, supplyStop, SUPPLY_NEAR_TILES, transportSources } from '../src/domain/readiness/liveTransport';
-import { planTravelSupplies, roadLegs, roadSteps, savedText, stepTargets, SUPPLY_MIN_TOTAL_TILES, type TravelSupplies } from '../src/domain/readiness/travelSupplies';
-import { BANKS, EXCHANGE, STAFF_NAMES, STAIRS_TILES_PER_FLOOR, bankTiles, dist, staffCover, stavesFor, travelOptions, type TravelInput } from '../src/domain/travel/travel';
-import { recommendedTransport } from '../src/domain/travel/transport';
-import { planPayload } from '../src/domain/prep/prepEnvelope';
-import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import { transportWatch } from '../src/domain/travel/travelInput';
-import { isOverworld } from '../src/domain/travel/instances';
-import type { GearItem, GearState } from '../src/services/runeliteBridge';
+import { allSteps, stepById } from '../../data';
+import { buildPlayerState } from '../player/playerState';
+import type { OwnedItem, OwnedState } from '../items/checklist';
+import { nameKey } from '../items/itemKey';
+import { decideTransport, supplyStop, SUPPLY_NEAR_TILES, transportSources } from './liveTransport';
+import { planTravelSupplies, roadLegs, roadSteps, savedText, stepTargets, SUPPLY_MIN_TOTAL_TILES, type TravelSupplies } from './travelSupplies';
+import { BANKS, EXCHANGE, STAFF_NAMES, STAIRS_TILES_PER_FLOOR, bankTiles, dist, staffCover, stavesFor, travelOptions, type TravelInput } from '../travel/travel';
+import { recommendedTransport } from '../travel/transport';
+import { planPayload } from '../prep/prepEnvelope';
+import { createReadinessEngine } from './readinessEngine';
+import { emptyProgress } from '../persistence/progress';
+import { transportWatch } from '../travel/travelInput';
+import { isOverworld } from '../travel/instances';
+import type { GearItem, GearState } from '../../services/runeliteBridge';
 
 // Supplies for the road (the 2.53 request): before a long run the guide says how many teleports pay off and what to buy for them, a wielded staff
 // counts as runes, the Chronicle's charges are read from the game, and the Grand Exchange and Lumbridge Castle banks are stops.

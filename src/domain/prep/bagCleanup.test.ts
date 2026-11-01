@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { bagCleanup, cleanupLine, MIN_SLOTS_TO_ADVISE } from '../src/domain/prep/bagCleanup';
-import type { PlayerState } from '../src/domain/player/playerState';
-import type { PrepLine, PrepPlan } from '../src/domain/prep/prepPlan';
+import { bagCleanup, cleanupLine, MIN_SLOTS_TO_ADVISE } from './bagCleanup';
+import type { PlayerState } from '../player/playerState';
+import type { PrepLine, PrepPlan } from './prepPlan';
 
 const line = (name: string, timing: PrepLine['timing'] = 'NOW'): PrepLine => ({
   key: `${name}:${timing}`, name, count: 1, exact: true, where: 'INVENTORY',

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { skills } from '../src/data';
-import { f2pAdviceFor, f2pAdviceLabel, F2P_SKILL_ADVICE } from '../src/domain/training/f2pSkillAdvice';
+import { skills } from '../../data';
+import { f2pAdviceFor, f2pAdviceLabel, F2P_SKILL_ADVICE } from './f2pSkillAdvice';
 
 describe('advisory F2P checkpoints', () => {
   it('covers every free skill and passive Hitpoints, without recommendations for members-only skills', () => {

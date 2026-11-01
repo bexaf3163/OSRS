@@ -33,7 +33,7 @@ function codeLines(text: string): { n: number; line: string }[] {
 
 describe('no rule is tied to one route step', () => {
   it('the app logic names no step code', () => {
-    const hits = ['src/app', 'src/domain', 'src/features', 'src/services', 'src/state', 'src/ui'].flatMap((d) => files(d, /\.tsx?$/))
+    const hits = ['src/app', 'src/domain', 'src/features', 'src/services', 'src/state', 'src/ui'].flatMap((d) => files(d, /(?<!\.test)\.tsx?$/))
       .filter((f) => !ALLOWED.has(f))
       .flatMap((f) => codeLines(readFileSync(f, 'utf8')).filter(({ line }) => CODE.test(line)).map(({ n, line }) => `${f}:${n}: ${line.trim()}`));
     expect(hits).toEqual([]);

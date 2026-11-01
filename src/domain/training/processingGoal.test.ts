@@ -1,17 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { processingGoalNeeds } from '../src/domain/training/processingGoal';
-import { adviseTraining, trainingMethods, type PathLeg } from '../src/domain/training/trainingRouter';
-import { xpForLevel } from '../src/domain/player/xp';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { stepById } from '../src/data';
-import { methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
-import { pickMethods } from '../src/domain/training/methodPick';
-import { aggregateShopping } from '../src/domain/prep/shopping';
-import { contextOf } from '../src/domain/readiness/readiness';
-import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
-import { buildNeed } from '../src/domain/economy/funding/need';
-import type { PriceView } from '../src/domain/market/quotes';
+import { processingGoalNeeds } from './processingGoal';
+import { adviseTraining, trainingMethods, type PathLeg } from './trainingRouter';
+import { xpForLevel } from '../player/xp';
+import { emptyProgress } from '../persistence/progress';
+import { buildPlayerState } from '../player/playerState';
+import { stepById } from '../../data';
+import { methodToolNames, withTrainingMethod } from './methodStep';
+import { pickMethods } from './methodPick';
+import { aggregateShopping } from '../prep/shopping';
+import { contextOf } from '../readiness/readiness';
+import { createReadinessEngine } from '../readiness/readinessEngine';
+import { buildNeed } from '../economy/funding/need';
+import type { PriceView } from '../market/quotes';
 
 const leg = (fromLevel: number, toLevel: number, xpa = 10): PathLeg => ({ fromLevel, toLevel,
   method: { ...trainingMethods.find(m => m.id === 'ck-meat')!, id: 'new-processing-method', xpa,

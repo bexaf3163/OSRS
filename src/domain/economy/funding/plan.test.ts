@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { cancel, confirm, FUNDING_PLAN_KEY, isRunning, loadPlan, MAX_GAP_SECONDS, pause, planKey, resume, savePlan, startPlan, STALE_AFTER_MS, tick, viewOf, type FundingPlanState } from '../../src/domain/economy/funding/plan';
-import { methodById } from '../../src/domain/economy/funding/methods';
-import { market } from './market';
-import { scenario } from './scenario';
-import { fakeSnap } from './helpers';
+import { cancel, confirm, FUNDING_PLAN_KEY, isRunning, loadPlan, MAX_GAP_SECONDS, pause, planKey, resume, savePlan, startPlan, STALE_AFTER_MS, tick, viewOf, type FundingPlanState } from './plan';
+import { methodById } from './methods';
+import { market } from '../../../../tests/funding/market';
+import { scenario } from '../../../../tests/funding/scenario';
+import { fakeSnap } from '../../../../tests/funding/helpers';
 
 const T0 = 1_792_000_000_000;
 const COW_FIELD = { x: 3253, y: 3278, plane: 0 };

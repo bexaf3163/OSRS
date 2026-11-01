@@ -2,13 +2,13 @@
 // method, a search, filters and a sort. The scenarios use the real catalogue, the recorded market and the production snapshot (scenario.ts).
 
 import { describe, expect, it } from 'vitest';
-import { badgeOf, browse, BROWSE_TARGET, capitalText, DEFAULT_FILTERS, moneyList, netText, type BrowseFilters } from '../../src/domain/economy/funding/browse';
-import { evaluate, type MethodEvaluation } from '../../src/domain/economy/funding/evaluate';
-import { methodById, METHODS } from '../../src/domain/economy/funding/methods';
-import { goalBlocker } from '../../src/domain/economy/funding/plan';
-import { market } from './market';
-import { HISTORICAL, scenario } from './scenario';
-import { fakePrices } from './helpers';
+import { badgeOf, browse, BROWSE_TARGET, capitalText, DEFAULT_FILTERS, moneyList, netText, type BrowseFilters } from './browse';
+import { evaluate, type MethodEvaluation } from './evaluate';
+import { methodById, METHODS } from './methods';
+import { goalBlocker } from './plan';
+import { market } from '../../../../tests/funding/market';
+import { HISTORICAL, scenario } from '../../../../tests/funding/scenario';
+import { fakePrices } from '../../../../tests/funding/helpers';
 
 const byId = (evals: readonly MethodEvaluation[], id: string) => evals.find((e) => e.method.id === id)!;
 const only = (f: Partial<BrowseFilters>): BrowseFilters => ({ ...DEFAULT_FILTERS, ...f });

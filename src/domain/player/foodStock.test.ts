@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { allocateFoodStock, heldFood } from '../src/domain/player/foodStock';
-import { buildPlayerState } from '../src/domain/player/playerState';
-import { evaluate } from '../src/domain/player/requirements';
-import type { OwnedState } from '../src/domain/items/checklist';
-import { evaluatePreflight } from '../src/domain/readiness/preflight';
-import { preflightItems } from '../src/domain/prep/stepItems';
-import { nameKey } from '../src/domain/items/itemKey';
-import { ownershipOf, shopRows } from '../src/domain/economy/shoppingView';
-import { ownedFood } from '../src/domain/combat/combatPlan';
-import { readinessOf } from '../src/domain/readiness/readiness';
-import { aggregateShopping, holdingFor } from '../src/domain/prep/shopping';
-import { planOneTrip } from '../src/domain/prep/oneTrip';
-import { emptyProgress } from '../src/domain/persistence/progress';
-import type { Step } from '../src/types';
+import { allocateFoodStock, heldFood } from './foodStock';
+import { buildPlayerState } from './playerState';
+import { evaluate } from './requirements';
+import type { OwnedState } from '../items/checklist';
+import { evaluatePreflight } from '../readiness/preflight';
+import { preflightItems } from '../prep/stepItems';
+import { nameKey } from '../items/itemKey';
+import { ownershipOf, shopRows } from '../economy/shoppingView';
+import { ownedFood } from '../combat/combatPlan';
+import { readinessOf } from '../readiness/readiness';
+import { aggregateShopping, holdingFor } from '../prep/shopping';
+import { planOneTrip } from '../prep/oneTrip';
+import { emptyProgress } from '../persistence/progress';
+import type { Step } from '../../types';
 
 const food = { nameEn: 'Salmon', heals: 9, anyOf: ['Trout', 'Tuna', 'Cooked meat', 'Shrimps'] };
 function snapshot(stock: Record<string, [number, number | null]>, hp = 24, bankSeen = true) {

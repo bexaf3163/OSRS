@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { buildPlayerState, diffPlayerState, type PlayerStateInput } from '../src/domain/player/playerState';
-import { entriesFor, MIN_ETA_SECONDS, ratePerMinute, resourceGoal, summarize, type LedgerEntry } from '../src/domain/persistence/ledger';
-import { planSources } from '../src/domain/prep/sourceRouter';
-import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
-import { nameKey } from '../src/domain/items/itemKey';
-import type { WikiItemDetail } from '../src/types';
+import { buildPlayerState, diffPlayerState, type PlayerStateInput } from '../player/playerState';
+import { entriesFor, MIN_ETA_SECONDS, ratePerMinute, resourceGoal, summarize, type LedgerEntry } from './ledger';
+import { planSources } from '../prep/sourceRouter';
+import type { OwnedItem, OwnedState } from '../items/checklist';
+import { nameKey } from '../items/itemKey';
+import type { WikiItemDetail } from '../../types';
 
 function owned(items: Record<string, Partial<OwnedItem>>, bankSeen: boolean): OwnedState {
   const map = new Map<string, OwnedItem>();

@@ -2,13 +2,13 @@
 // personalised by processingRates.processPace; anything else keeps the published pace.
 
 import { describe, expect, it } from 'vitest';
-import { processPersonaliser } from '../../src/domain/economy/funding/processAdapter';
-import { methodById } from '../../src/domain/economy/funding/methods';
-import { evaluate } from '../../src/domain/economy/funding/evaluate';
-import { processPace } from '../../src/domain/training/processingRates';
-import { buildPlayerState } from '../../src/domain/player/playerState';
-import { emptyProgress } from '../../src/domain/persistence/progress';
-import { ctxOf, fakePrices, fakeSnap } from './helpers';
+import { processPersonaliser } from './processAdapter';
+import { methodById } from './methods';
+import { evaluate } from './evaluate';
+import { processPace } from '../../training/processingRates';
+import { buildPlayerState } from '../../player/playerState';
+import { emptyProgress } from '../../persistence/progress';
+import { ctxOf, fakePrices, fakeSnap } from '../../../../tests/funding/helpers';
 
 const stateOf = (levels: Record<string, number>) =>
   buildPlayerState({ mode: 'f2p', stats: null, progress: { ...emptyProgress(), levels }, gear: null, questsDone: null, connected: false, owned: null });

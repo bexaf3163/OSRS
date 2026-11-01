@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { cheapestFood, combatPersonaliser } from '../../src/domain/economy/funding/combatAdapter';
-import { evaluate } from '../../src/domain/economy/funding/evaluate';
-import { methodById } from '../../src/domain/economy/funding/methods';
-import { gearById } from '../../src/domain/combat/gearAdvisor';
-import { ctxOf, fakePrices, fakeSnap } from './helpers';
+import { cheapestFood, combatPersonaliser } from './combatAdapter';
+import { evaluate } from './evaluate';
+import { methodById } from './methods';
+import { gearById } from '../../combat/gearAdvisor';
+import { ctxOf, fakePrices, fakeSnap } from '../../../../tests/funding/helpers';
 
 const id = (n: string) => [...gearById.values()].find((p) => p.name === n)!.id;
 // The character of the Hill Giants report: Attack 30, Strength 21, Defence 1, 24 hitpoints, an Adamant scimitar and iron armour.

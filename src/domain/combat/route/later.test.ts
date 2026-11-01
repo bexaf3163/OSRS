@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { defenceXpOf, laterDefence } from '../../src/domain/combat/route/later';
-import { allSteps, stepById } from '../../src/data';
+import { defenceXpOf, laterDefence } from './later';
+import { allSteps, stepById } from '../../../data';
 
 describe('the Defence XP the route gives later', () => {
   it('reads the stated amounts, and leaves out a reward the player chooses', () => {
