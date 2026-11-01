@@ -24,6 +24,7 @@ import { useTradeRestriction } from '../../state/hooks/useTradeRestriction';
 import { trackedPriority, trackedTrainingContext } from '../../domain/training/skillTrack';
 import { setTracked, useTracked } from '../../state/hooks/useTracked';
 import { SKILL_NAMES, type SkillName } from '../../domain/training/skillGuide';
+import { hrefTo } from '../../domain/pages/pages';
 
 /** Skill advice from the shared player state; recomputed when levels, items, mode or style change. */
 export function useTrainingAdvice(skill: string | null, target: number, followed: string | null = null): TrainingAdvice | null {
@@ -74,7 +75,7 @@ function GuideRow({ skill, level, fallback }: { skill: string; level: number; fa
   return (
     <>
       <p className="training-now"><strong>{r.what}</strong>{r.where && <span className="muted"> — {r.where}</span>}</p>
-      <p className="small muted">From the skill's training plan ({r.code}, levels {r.levels}){r.notes ? `: ${r.notes}` : ''}. <a href={`#/skills/${guide.id}`}>The whole plan</a></p>
+      <p className="small muted">From the skill's training plan ({r.code}, levels {r.levels}){r.notes ? `: ${r.notes}` : ''}. <a href={hrefTo.skills(guide.id)}>The whole plan</a></p>
     </>
   );
 }
@@ -110,7 +111,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
     {equipmentHint && <p className="small muted training-equipment"><strong>Equipment:</strong> {equipmentHint}</p>}
     <button type="button" className="btn btn-primary btn-sm training-follow" onClick={() => {
       void pointInGame(quest);
-      window.location.hash = `#/step/${quest.id}`;
+      window.location.hash = hrefTo.step(quest.id);
     }}>Open quest guide</button>
   </section>;
   const { best } = advice;
@@ -164,7 +165,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
               ? <button type="button" className="btn btn-primary btn-sm training-follow" onClick={() => {
                 setTracked(tracked?.skill === skill ? { ...tracked, target }
                   : { skill: skill as SkillName, mode: profile.style === 'chill' && priorityOf(features) === 'relaxed' ? 'afk' : 'fast', freeOnly: state.mode === 'f2p', target });
-                window.location.hash = '#/';
+                window.location.hash = hrefTo.path();
               }}>{tracked?.skill === skill ? 'Continue training plan' : 'Follow training plan'}</button>
               : nav && <NavigateButton target={nav} label={`To the place: ${nav.label}`} />}</div>
           </div>
@@ -184,14 +185,14 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
             <p className="small">⏱ {formatHours(advice.time)} to {target}{best.method.batchActions !== undefined ? ' (assumes future supplies; purchasing time excluded)' : arrows?.changesKit ? ' (assumes planned gear; preparation time excluded)' : advice.time.source === 'wiki' ? ' (by the wiki speed — a guide)' : advice.time.source === 'model' ? ' (for your levels and gear)' : advice.time.source === 'forecast' ? ' (across your plan)' : ' (at your pace)'}.</p>
           )}
           {best.status === 'PREP' && (
-            <p className="small">First: <strong>{best.missing.map((x) => x.label).join(', ')}</strong> <a href="#/shopping">To the shopping list</a></p>
+            <p className="small">First: <strong>{best.missing.map((x) => x.label).join(', ')}</strong> <a href={hrefTo.shopping()}>To the shopping list</a></p>
           )}
           {best.unchecked.length > 0 && <p className="small muted">Not checked: {best.unchecked.map((x) => x.label).join(', ')} — open the bank in the game.</p>}
           {view === 'full' && best.method.note && <p className="small muted">{best.method.note}</p>}
           </>)}
           {view === 'summary' && shown!.fundingShortfall != null && shown!.fundingShortfall > 0 && <p className="notice">Earn at least {shown!.fundingShortfall.toLocaleString('en-US')} gp for the missing next-trip kit first.</p>}
           {view === 'summary' && advice.followed && <>
-            {shown!.missing.length > 0 && <p className="small">First: <strong>{shown!.missing.map(x => x.label).join(', ')}</strong> <a href="#/shopping">Shopping</a></p>}
+            {shown!.missing.length > 0 && <p className="small">First: <strong>{shown!.missing.map(x => x.label).join(', ')}</strong> <a href={hrefTo.shopping()}>Shopping</a></p>}
             {shown!.unchecked.length > 0 && <p className="small muted">Not checked: {shown!.unchecked.map(x => x.label).join(', ')} — open the bank in the game.</p>}
           </>}
           {view === 'full' && <div className="actions">

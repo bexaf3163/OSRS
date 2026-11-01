@@ -28,9 +28,11 @@ import { buildPath, currentIndex, followedShoppingStep } from '../../domain/trai
 import { freeOnlyOf } from '../../domain/training/skillTrack';
 import { useTracked } from '../../state/hooks/useTracked';
 import { stockShoppingContext, stockUpShopping } from '../../domain/economy/trainingStock';
+import { hrefTo } from '../../domain/pages/pages';
+import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
 
-const RANGE_KEY = 'osrs-put:shopping-range';
-const SCOPE_KEY = 'osrs-put:shopping-scope';
+const RANGE_KEY = STORAGE_KEYS.shoppingRange;
+const SCOPE_KEY = STORAGE_KEYS.shoppingScope;
 
 const SCOPES: { id: ScopeKind; label: string }[] = [
   { id: 'trip', label: 'Stock up' },
@@ -393,7 +395,7 @@ export function ShoppingPage() {
         </dl>
         <p className="small muted">{budget.unknownRows ? 'Check your bank before buying: unread items may already be yours.' : budget.unpriced ? `${budget.unpriced} without a price; the required total is not confirmed.` : empty === 'all-owned' ? 'Current requirements are covered. Follow Preparation for what to carry.' : 'Required items come first. Future bank stock stays optional.'}</p>
         <div className="shop-buttons">
-          {budget.shortfall !== null && budget.shortfall > 0 ? <a className="btn btn-primary" href={backHref}>Prepare funding</a> : exchange ? <button type="button" className="btn btn-primary" onClick={() => void copyList()}>📋 Copy the exchange list</button> : current ? <a className="btn btn-primary" href={backHref}>Review preparation</a> : <a className="btn btn-primary" href="#/">Open Journey</a>}
+          {budget.shortfall !== null && budget.shortfall > 0 ? <a className="btn btn-primary" href={backHref}>Prepare funding</a> : exchange ? <button type="button" className="btn btn-primary" onClick={() => void copyList()}>📋 Copy the exchange list</button> : current ? <a className="btn btn-primary" href={backHref}>Review preparation</a> : <a className="btn btn-primary" href={hrefTo.path()}>Open Journey</a>}
           {exchange && budget.shortfall !== null && budget.shortfall > 0 && <button type="button" className="link-btn" onClick={() => void copyList()}>Copy the exchange list</button>}
         </div>
       </section>}
@@ -427,7 +429,7 @@ export function ShoppingPage() {
           {!sum && <p className="small muted">Your coins are not known yet: open your bank in RuneLite.</p>}
           {total.unpriced > 0 && <p className="small muted">{total.unpriced} without a price, not counted.</p>}
           {total.shortfall !== null && total.shortfall > 0 && current && (
-            <p className="small"><a href={backHref}>Raise the coins</a> <span className="muted">— the step's coin plan picks a way that suits your account.</span> <a href="#/money">Browse earning methods</a></p>
+            <p className="small"><a href={backHref}>Raise the coins</a> <span className="muted">— the step's coin plan picks a way that suits your account.</span> <a href={hrefTo.money()}>Browse earning methods</a></p>
           )}
           {/* The figures added up, so the shortfall can be checked against them: one click away, not a wall of numbers above the list. */}
           <details className="zen-more shop-budget-how">

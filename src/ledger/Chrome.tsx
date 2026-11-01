@@ -2,6 +2,7 @@
 import { useEffect, type ReactNode } from 'react';
 import { Icon } from './icons';
 import { LEDGER_NAV, type HotbarAction, type HotbarHandlers, type Player } from './model';
+import { hrefTo } from '../domain/pages/pages';
 
 interface TitleBarProps {
   pinned: boolean;
@@ -60,7 +61,7 @@ export function Hud({ player, members, onMembers, status, onOpenSearch, settings
           MEMBERS
         </button>
       </div>
-      <a className="la-stat" href="#/" title={`Done ${player.progress}%, quest points ${player.qp} of ${player.maxQp}`} aria-label={`Done ${player.progress}%, quest points ${player.qp} of ${player.maxQp}`}>
+      <a className="la-stat" href={hrefTo.path()} title={`Done ${player.progress}%, quest points ${player.qp} of ${player.maxQp}`} aria-label={`Done ${player.progress}%, quest points ${player.qp} of ${player.maxQp}`}>
         <div className="la-ring" aria-hidden="true">
           <svg width="48" height="48">
             <circle cx="24" cy="24" r="21" fill="none" stroke="#3a2a18" strokeWidth="4" />
@@ -79,7 +80,7 @@ export function Hud({ player, members, onMembers, status, onOpenSearch, settings
           <Icon name="search" size={15} />
           <kbd>/</kbd>
         </button>
-        <a className={`la-tool ${settingsActive ? 'la-on' : ''}`} href="#/settings" title="Settings" aria-label="Settings" aria-current={settingsActive ? 'page' : undefined}>
+        <a className={`la-tool ${settingsActive ? 'la-on' : ''}`} href={hrefTo.settings()} title="Settings" aria-label="Settings" aria-current={settingsActive ? 'page' : undefined}>
           <Icon name="sliders" size={15} />
         </a>
       </div>

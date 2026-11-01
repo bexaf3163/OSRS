@@ -4,8 +4,9 @@
 // Records older than 30 days and over the limit are dropped; broken records are not loaded.
 
 import type { LedgerEntry, LedgerReason } from './ledger';
+import { STORAGE_KEYS } from './storageKeys';
 
-export const LEDGER_KEY = 'osrs-put:ledger';
+export const LEDGER_KEY = STORAGE_KEYS.ledger;
 export const LEDGER_LIMIT = 2000;
 export const LEDGER_MAX_AGE_MS = 30 * 24 * 3600_000;
 

@@ -7,12 +7,8 @@
 
 import recipesJson from '../../data/recipes.json';
 import type { PrepLine, PrepPlan } from '../prep/prepPlan';
-import {
-  OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MAX_EXCHANGE_TILES, TILES_PER_SECOND, bankOnRoute, dist, emitDecision, EXCHANGE, reachTiles,
-  type DetourDecision, type Point, type TravelInput,
-} from './travel';
-
-export type { DetourDecision, DetourRejection } from './travel';
+import { OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MAX_EXCHANGE_TILES, TILES_PER_SECOND, bankOnRoute, dist, EXCHANGE, reachTiles, type Point, type TravelInput } from './travel';
+import { emitDecision, type DetourDecision } from './decisionLog';
 
 export type DetourAction = 'BUY' | 'GET' | 'WITHDRAW';
 

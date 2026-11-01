@@ -5,6 +5,7 @@ import { Blocks } from '../../ui/Blocks';
 import { IconChevron } from '../../ui/Icons';
 import { Inline } from '../../ui/Inline';
 import { Eyebrow, Page } from '../../ledger';
+import { hrefTo } from '../../domain/pages/pages';
 
 /** The index is grouped by what the player is trying to do; every section stays in exactly one group. */
 const TOPICS: { title: string; ids: string[] }[] = [
@@ -37,7 +38,7 @@ export function ReferencePage({ section }: { section?: string }) {
             <ul className="nav-list card">
               {items.map((s) => (
                 <li key={s.id}>
-                  <a href={`#/reference/${s.id}`} aria-current={s.id === shown ? 'page' : undefined}><span>{s.title}</span><IconChevron className="chevron" /></a>
+                  <a href={hrefTo.reference(s.id)} aria-current={s.id === shown ? 'page' : undefined}><span>{s.title}</span><IconChevron className="chevron" /></a>
                 </li>
               ))}
             </ul>

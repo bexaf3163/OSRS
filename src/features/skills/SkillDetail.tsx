@@ -24,13 +24,14 @@ import { f2pAdviceFor, f2pAdviceLabel } from '../../domain/training/f2pSkillAdvi
 import { useTrackedTraining } from '../../state/readinessContext';
 import { setTracked } from '../../state/hooks/useTracked';
 import { SKILL_NAMES, type SkillName } from '../../domain/training/skillGuide';
+import { hrefTo } from '../../domain/pages/pages';
 
 export function SkillDetailPage({ id, selectedSkill, requestedGoal }: { id: string; selectedSkill?: string; requestedGoal?: number }) {
   const skill = findSkill(id);
   if (!skill) {
     return (
       <div className="page">
-        <a className="back" href="#/skills"><IconBack />Skills</a>
+        <a className="back" href={hrefTo.skills()}><IconBack />Skills</a>
         <h1>Skill not found</h1>
         <p className="muted">There is no skill with the code "{id}".</p>
       </div>
@@ -100,7 +101,7 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
 
       {skill.levelSkills.length > 1 && <nav className="skill-seg" aria-label="Combat skill">
         {skill.levelSkills.map(id => <a key={id} className={`skill-seg-btn ${focus.skill === id ? 'is-on' : ''}`}
-          aria-current={focus.skill === id ? 'page' : undefined} href={`#/skills/${skill.id}/${id}`}>{levelById.get(id)?.name ?? id}</a>)}
+          aria-current={focus.skill === id ? 'page' : undefined} href={hrefTo.skills(skill.id, id)}>{levelById.get(id)?.name ?? id}</a>)}
       </nav>}
       <nav className="subtabs" aria-label="Skill sections" role="tablist">
         {tabs.map(([id, label]) => (
@@ -156,7 +157,7 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
           <ul className="link-list">
             {related.map((s) => (
               <li key={s.id} className={isClosed(progress, s.id) ? 'is-done' : ''}>
-                <a href={`#/step/${s.id}`}>
+                <a href={hrefTo.step(s.id)}>
                   <code className="code">{s.id}</code>
                   <TypeIcon type={s.type} />
                   <span>{s.title}</span>
@@ -305,7 +306,7 @@ function Calculator({ levelIds, suggest }: CalcProps) {
       </p>
       {SKILL_NAMES.includes(which as SkillName) && <button type="button" className="btn btn-primary training-custom-follow"
         disabled={targetLevel <= level || mode === 'f2p' && Boolean(findSkill(levelById.get(which)?.skill ?? '')?.membersOnly)}
-        onClick={() => { setTracked({ skill: which as SkillName, mode: 'fast', freeOnly: mode === 'f2p', target: targetLevel }); window.location.hash = '#/'; }}>
+        onClick={() => { setTracked({ skill: which as SkillName, mode: 'fast', freeOnly: mode === 'f2p', target: targetLevel }); window.location.hash = hrefTo.path(); }}>
         Follow to level {targetLevel}
       </button>}
       <p className="muted small" id={`${ids.xp}-hint`}>

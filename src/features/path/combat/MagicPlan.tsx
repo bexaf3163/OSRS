@@ -18,6 +18,7 @@ import { itemById } from '../../../data';
 import {
   OPTIONS, planFor, PLAN_PRICE_IDS, SPELLS, STAFFS, staffPayback, type PlanResult, type PriceMap,
 } from '../../../domain/combat/magicPlan';
+import { hrefTo } from '../../../domain/pages/pages';
 
 /** The Magic level the user needs, from the step's goal. */
 function targetLevel(step: Step): number {
@@ -104,7 +105,7 @@ export function MagicPlan({ step }: { step: Step }) {
           : progress.gameMode === 'f2p' && restriction.state === 'UNKNOWN'
             ? 'Cowhide sales are unconfirmed; check the account selling limits before relying on that income. '
             : 'Only a completed sale replenishes your coins; future drops are not an available budget. '}
-          <a href="#/money">Compare available earning methods in Money.</a>
+          <a href={hrefTo.money()}>Compare available earning methods in Money.</a>
         </li>
         {pay && (
           <li>The staff of fire replaces {formatGp(pay.perCast)} gp of fire runes per Fire Strike at these prices (about {pay.casts} casts to cover its quoted price). {has(STAFFS.fire.name) ? 'You already own it; withdraw or unnote it if needed.' : 'Compare its upfront cost with your available coins before buying.'}</li>

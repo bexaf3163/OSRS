@@ -6,6 +6,7 @@ import { useStore } from '../../../state/store';
 import { focusRange } from '../../../domain/training/ranges';
 import { currentStage } from '../../../domain/quests/next-step';
 import { Inline } from '../../../ui/Inline';
+import { hrefTo } from '../../../domain/pages/pages';
 
 export function stepSkills(step: Step) {
   const ids = [...new Set((step.targets ?? []).map((t) => levelById.get(t.skill)?.skill).filter(Boolean) as string[])];
@@ -26,7 +27,7 @@ export function RangeHints({ step }: { step: Step }) {
         const r = hit.range;
         return (
           <li key={skill.id} className="hint">
-            <a className="hint-code" href={`#/skills/${skill.id}`}>{r.code}</a>
+            <a className="hint-code" href={hrefTo.skills(skill.id)}>{r.code}</a>
             <div className="hint-body">
               <div className="hint-title">
                 <span className="muted">{skill.name}, {skill.levelSkills.length > 1 ? levelById.get(focus.skill)?.name ?? 'level' : 'level'} {focus.level} · {r.levels}</span>

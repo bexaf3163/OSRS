@@ -14,10 +14,11 @@ import { plural } from '../../domain/text/format';
 import { AccountSync } from '../../ui/AccountSync';
 import { BackupSection, UpdatesSection, ProfilesSection, SessionSection } from './SettingsExtra';
 import { Eyebrow, Page } from '../../ledger';
+import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
 
 type SettingsTab = 'training' | 'game' | 'progress' | 'app';
 const SETTINGS_TABS: [SettingsTab, string][] = [['game', 'RuneLite'], ['training', 'Training'], ['progress', 'Progress and copies'], ['app', 'App']];
-const TAB_KEY = 'osrs-put-settings-tab';
+const TAB_KEY = STORAGE_KEYS.settingsTab;
 function loadTab(): SettingsTab {
   try {
     const v = localStorage.getItem(TAB_KEY);

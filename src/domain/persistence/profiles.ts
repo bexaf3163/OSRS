@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from './storageKeys';
 // Profiles: several characters, each with its own progress. The first profile ("Main") is stored where it was
 // before (the key and the file did not change), so nothing is lost. The others are under the key progress:p:<id> and the file
 // progress-<id>.json. The app recognises the character by the name from the game (the plugin, protocol 5): the first character seen
@@ -15,7 +16,7 @@ export interface ProfilesState {
   list: Profile[];
 }
 
-export const PROFILES_KEY = 'osrs-put:profiles';
+export const PROFILES_KEY = STORAGE_KEYS.profiles;
 export const MAIN_ID = 'main';
 export const MAX_PROFILES = 8;
 const ID = /^[a-z0-9]{1,12}$/;

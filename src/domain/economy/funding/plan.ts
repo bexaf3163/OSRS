@@ -17,6 +17,7 @@ import { goalText, type MoneyGoal } from './browse';
 import type { MethodEvaluation } from './evaluate';
 import type { FundingSnapshot } from './snapshot';
 import type { FundingMethod, GuideKind, Place } from './types';
+import { STORAGE_KEYS } from '../../persistence/storageKeys';
 
 export type PlanStatus = 'ACTIVE' | 'PAUSED' | 'CANCELLED' | 'DONE';
 
@@ -433,7 +434,7 @@ export function viewOf(plan: FundingPlanState, snap: FundingSnapshot): FundingVi
 // ---------------------------------------------------------------------------
 // Saving
 
-export const FUNDING_PLAN_KEY = 'osrs-put:funding-plan';
+export const FUNDING_PLAN_KEY = STORAGE_KEYS.fundingPlan;
 
 export function planKey(profileId: string, character: string | null | undefined): string {
   const who = (character ?? '').trim().toLowerCase().replace(/\s+/g, ' ');

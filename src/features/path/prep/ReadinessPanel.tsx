@@ -10,6 +10,7 @@ import { useReadiness, useReadinessEngine } from '../../../state/readinessContex
 import { useScopedReadiness } from '../../../state/hooks/useStageScope';
 import { NavigateButton } from '../../../ui/NavigateButton';
 import { PrepRouteBlock } from './PrepRoute';
+import { hrefTo } from '../../../domain/pages/pages';
 
 export { useReadiness };
 
@@ -64,7 +65,7 @@ function Chain({ step }: { step: Step }) {
       <ol className="small">
         {chain.map((l) => (
           <li key={l.step.id}>
-            <a href={`#/step/${l.step.id}`}><strong>{l.step.id}</strong> {l.step.title}</a>
+            <a href={hrefTo.step(l.step.id)}><strong>{l.step.id}</strong> {l.step.title}</a>
             {l.why.length > 0 && <span className="muted"> — still needed: {l.why.map((w) => w.label).join(', ')}</span>}
           </li>
         ))}

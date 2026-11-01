@@ -23,6 +23,7 @@ import { currentLoadoutStep, loadoutPhase } from '../quests/loadoutPhase';
 import { npcSpot, type Place, nearestBank } from '../travel/stepPlaces';
 import type { PriceView } from '../market/quotes';
 import { questStepOf } from '../quests/questSteps';
+import { hrefTo } from '../pages/pages';
 
 export type ReadinessStatus =
   | 'READY'
@@ -146,13 +147,13 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     const s = steps.find((x) => x.id === id);
     reqs.push({
       kind: 'step', label: `First ${id}${s ? ` "${s.title}"` : ''}`, state: 'MISSING', hard: true, source: 'route',
-      action: { kind: 'link', label: `To step ${id}`, href: `#/step/${id}` },
+      action: { kind: 'link', label: `To step ${id}`, href: hrefTo.step(id) },
     });
   }
   if (b?.qp) {
     reqs.push({
       kind: 'qp', label: `${b.qp.need} quest ${plural(b.qp.need, 'point', 'points')}`, state: 'MISSING', hard: true, detail: `now ${b.qp.have}, ${b.qp.need - b.qp.have} short`, source: 'route',
-      action: { kind: 'link', label: 'Quests', href: '#/quests' },
+      action: { kind: 'link', label: 'Quests', href: hrefTo.quests() },
     });
   }
 
@@ -163,7 +164,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
       const have = levelFrom(state, r.skill);
       const label = `${skillName(r.skill)} ${r.min}`;
       const page = skillPage(r.skill);
-      const action: ReadinessAction | undefined = page ? { kind: 'link', label: `⚡ Catch up ${skillName(r.skill)}`, href: `#/skills/${page}/${r.skill}?goal=${r.min}` } : undefined;
+      const action: ReadinessAction | undefined = page ? { kind: 'link', label: `⚡ Catch up ${skillName(r.skill)}`, href: hrefTo.skills(page, r.skill, r.min) } : undefined;
       const hard = r.when !== 'during';
       const note = r.when === 'during' ? ' Needed during the quest: you can start without it.' : '';
       const boost = r.boostable ? ' It can be raised temporarily (boost).' : '';
@@ -187,13 +188,13 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
       } else if (game === 'NOT_DONE') {
         reqs.push({
           kind: 'quest', label: r.quest, state: 'MISSING', hard: true, detail: 'not completed in the game', source: 'game',
-          ...(qs ? { action: { kind: 'link' as const, label: `🧭 To the quest: ${qs.id}`, href: `#/step/${qs.id}` } } : {}),
+          ...(qs ? { action: { kind: 'link' as const, label: `🧭 To the quest: ${qs.id}`, href: hrefTo.step(qs.id) } } : {}),
         });
       } else if (qs && isCompleted(p, qs.id)) {
         reqs.push({ kind: 'quest', label: r.quest, state: 'OK', hard: true, detail: `step ${qs.id} is marked done; game completion has not been checked`, source: 'route' });
       } else {
         reqs.push({ kind: 'quest', label: r.quest, state: 'UNKNOWN', hard: true, detail: qs && p.steps[qs.id] === 'skipped' ? `step ${qs.id} was skipped; game completion has not been checked` : 'game quest completion has not been checked',
-          ...(qs ? { action: { kind: 'link' as const, label: `🧭 To the quest: ${qs.id}`, href: `#/step/${qs.id}` } } : {}),
+          ...(qs ? { action: { kind: 'link' as const, label: `🧭 To the quest: ${qs.id}`, href: hrefTo.step(qs.id) } } : {}),
         });
       }
     }
@@ -226,7 +227,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
         const earn = steps.slice(0, at >= 0 ? at + 1 : steps.length).filter((x) => x.moneyGoal).pop() ?? steps.find((x) => x.moneyGoal);
         reqs.push({
           kind: 'coins', label, state: 'MISSING', hard: true, detail: `${gp(c.total ?? c.bag ?? 0)} in all, ${gp(res.missing ?? it.count)} short`, source: 'game',
-          ...(earn ? { action: { kind: 'link' as const, label: `💰 Earn: ${earn.id}`, href: `#/step/${earn.id}` } } : {}),
+          ...(earn ? { action: { kind: 'link' as const, label: `💰 Earn: ${earn.id}`, href: hrefTo.step(earn.id) } } : {}),
         });
       }
       continue;
@@ -253,7 +254,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     const doses = !alt && doseKind(it.nameEn) ? needUnits(it.nameEn, it.count) : null;
     const u = doses !== null ? ' doses' : '';
     const label = `${it.nameEn}${it.count > 1 ? ` ×${it.count}${it.exact ? '' : '+'}` : ''}${doses !== null ? ` (${doses} doses)` : ''}${alt ? ` (or ${alt.slice(0, 2).join(', ')}${alt.length > 2 ? '…' : ''})` : ''}`;
-    const shop: ReadinessAction = { kind: 'link', label: '🛒 To shopping', href: '#/shopping' };
+    const shop: ReadinessAction = { kind: 'link', label: '🛒 To shopping', href: hrefTo.shopping() };
     // Food with a personal plan: the row is about one trip, and says what the whole goal still needs bought, so one exchange visit does it.
     const whole = (have: number) => (it.total !== undefined && it.total > have ? `; buy about ${it.total - have} for the whole goal` : '');
     // A tool you own but cannot use yet is said, so "no pickaxe" next to a Rune pickaxe in the bag is not a riddle.
@@ -325,7 +326,7 @@ export interface ChainLink {
   why: RequirementStatus[];
 }
 
-/** The step number from a link action "#/step/S2-03"; null means the link is not to a step. */
+/** The route step a link action opens (for example S2-03); null means the link is not to a step. */
 const stepOfHref = (a?: ReadinessAction): string | null => (a?.kind === 'link' ? /^#\/step\/(S\d-\d{2})$/.exec(a.href)?.[1] ?? null : null);
 
 /**

@@ -1,7 +1,8 @@
+import { STORAGE_KEYS } from './storageKeys';
 // The player's own say in the inventory cleanup: "Always keep" and dismissed suggestions. Saved per profile AND per character, so another
 // character on the same profile starts clean and never inherits the first one's choices.
 
-export const CLEANUP_KEY = 'osrs-put:cleanup';
+export const CLEANUP_KEY = STORAGE_KEYS.cleanup;
 const LIMIT = 300;
 
 export function cleanupKey(profileId: string, player: string | null | undefined): string {

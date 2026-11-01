@@ -40,6 +40,7 @@ import { itemPrice, marketItemPrice, type ItemPrice } from '../market/itemPrice'
 import { purchaseCost, purchaseFees, type PurchaseFee } from '../items/purchaseCost';
 import { materialTake, type MaterialTake } from '../player/materialStock';
 import { prepSatisfied } from '../quests/stageScope';
+import { hrefTo } from '../pages/pages';
 
 /** Critical: the step cannot be done without it; important: better to prepare before leaving; an improvement saves time or money; optional is a convenience. */
 export type PrepPriority = 'CRITICAL' | 'IMPORTANT' | 'OPTIMIZATION' | 'OPTIONAL';
@@ -238,7 +239,7 @@ function bankAction(step: Step, name: string, n: number, doses = false, unnote =
 }
 
 function sourceAction(src: SourceOption | null, name: string, toGet: number, coinsTotal: number | null, stepId: string): PrepAction | undefined {
-  if (!src) return { kind: 'BUY', label: 'Buy at the exchange or in a shop', href: '#/shopping' };
+  if (!src) return { kind: 'BUY', label: 'Buy at the exchange or in a shop', href: hrefTo.shopping() };
   const nav = src.point ? { label: `${src.point.label}: ${name}`, x: src.point.x, y: src.point.y, plane: src.point.plane, itemName: name, stepId } : undefined;
   if (src.kind === 'free') return { kind: 'GATHER', label: src.label, ...(nav ? { nav } : {}) };
   if (src.kind === 'drop') return { kind: 'GATHER', label: src.label };
@@ -247,7 +248,7 @@ function sourceAction(src: SourceOption | null, name: string, toGet: number, coi
   const purchase = src.kind === 'shop' || src.kind === 'ge' ? { source: src.kind, ...(src.fee ? { fee: src.fee } : {}) } : undefined;
   // Not enough money: "buy" would be an empty piece of advice, so earn first.
   if (total !== null && coinsTotal !== null && coinsTotal < total) {
-    return { kind: 'EARN', label: `Short of ${gp(total - coinsTotal)} gp for ${name}: earn it first`, ...(src.price !== undefined ? { price: src.price } : {}), purchase, href: '#/shopping' };
+    return { kind: 'EARN', label: `Short of ${gp(total - coinsTotal)} gp for ${name}: earn it first`, ...(src.price !== undefined ? { price: src.price } : {}), purchase, href: hrefTo.shopping() };
   }
   return {
     kind: 'BUY',
@@ -255,7 +256,7 @@ function sourceAction(src: SourceOption | null, name: string, toGet: number, coi
     purchase,
     ...(src.price !== undefined ? { price: src.price } : {}),
     ...(nav ? { nav } : {}),
-    ...(nav ? {} : { href: '#/shopping' }),
+    ...(nav ? {} : { href: hrefTo.shopping() }),
   };
 }
 
@@ -422,7 +423,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
         action = { kind: 'GATHER', label: acquired.howToGet, ...(spot ? { nav: { label: `${acquired.from}: ${acquired.nameEn}`, x: spot.x, y: spot.y, plane: spot.plane, itemName: acquired.nameEn, stepId: step.id } } : {}) };
       } else if (where === 'MISSING' && dose) {
         // Doses, not potions: the shortfall and the sizes that cover it; Shopping prices every size and names the package.
-        action = { kind: 'BUY', label: shortText(t.line.nameEn, g.missing), href: '#/shopping' };
+        action = { kind: 'BUY', label: shortText(t.line.nameEn, g.missing), href: hrefTo.shopping() };
       } else if (where === 'MISSING') {
         const plan = planSources({ name: t.line.nameEn, need: g.missing, shortage: true, detail: t.line.id !== undefined ? detail(t.line.id) : undefined, manualKey: t.line.key,
           ...(i.prices !== undefined ? { gePrice: itemPrice(i.prices, t.line.nameEn, t.line.id, g.missing).unit } : {}),
@@ -435,7 +436,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       } else if (where === 'UNKNOWN') {
         action = state.connected
           ? { kind: 'CONNECT', label: 'Open the bank in the game and I will check what you have' }
-          : { kind: 'CONNECT', label: 'Connect RuneLite and I will check what you have', href: '#/settings' };
+          : { kind: 'CONNECT', label: 'Connect RuneLite and I will check what you have', href: hrefTo.settings() };
       }
       // A consumable is counted by what the nearest deadline needs: whether it is enough to go out with.
       const supply = timing === 'NOW' ? supplyOf(g.need, g.bag, t.line.reusable, danger) : undefined;
@@ -480,7 +481,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       delete l.unnote;
     } else if (!state.connected || !state.equipmentKnown || !worn.known) {
       l.where = 'UNKNOWN';
-      l.action = { kind: 'CONNECT', label: 'Refresh RuneLite equipment so worn quantities can be checked', href: '#/settings' };
+      l.action = { kind: 'CONNECT', label: 'Refresh RuneLite equipment so worn quantities can be checked', href: hrefTo.settings() };
     } else if (l.where !== 'INVENTORY' && l.where !== 'EQUIPPED') {
       continue;
     } else {
@@ -514,7 +515,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
     const bank = (held.bank ?? 0) > 0 || held.noted > 0;
     const bagHas = held.bag ?? 0;
     const short = held.total !== null && held.bank !== null ? Math.max(0, r.count - held.total) : 0;
-    const buy: PrepAction | null = r.dose && short > 0 ? { kind: 'BUY', label: shortText(r.nameEn, short), href: '#/shopping' } : null;
+    const buy: PrepAction | null = r.dose && short > 0 ? { kind: 'BUY', label: shortText(r.nameEn, short), href: hrefTo.shopping() } : null;
     optimizations.push({
       key: `rec:${r.key}`, name: r.nameEn, count: r.count, exact: r.exact,
       where: held.presence === 'UNKNOWN' ? 'UNKNOWN' : bank ? 'BANK' : 'MISSING',
@@ -551,7 +552,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   const coinsMissing = coinsHave === null ? null : Math.max(0, coinsNeed - coinsHave);
   const coins: PrepPlan['coins'] = {
     need: coinsNeed, have: coinsHave, missing: coinsMissing,
-    ...(coinsMissing !== null && coinsMissing > 0 ? { action: { kind: 'EARN' as const, label: `Short of ${gp(coinsMissing)} gp: earn it`, href: '#/shopping' } } : {}),
+    ...(coinsMissing !== null && coinsMissing > 0 ? { action: { kind: 'EARN' as const, label: `Short of ${gp(coinsMissing)} gp: earn it`, href: hrefTo.shopping() } } : {}),
   };
 
   // What items cannot fix: levels, quests, a closed step. Then the hard safety checks: an item without which the step ends in a death.

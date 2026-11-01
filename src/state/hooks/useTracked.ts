@@ -1,8 +1,9 @@
 // The followed skill plan, kept in window storage.
 import { useSyncExternalStore } from 'react';
 import { type TrackedSkill, parseTracked } from '../../domain/training/skillTrack';
+import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
 
-const KEY = 'osrs-put:skill-track';
+const KEY = STORAGE_KEYS.skillTrack;
 const listeners = new Set<() => void>();
 let cache: TrackedSkill | null | undefined;
 function load(): TrackedSkill | null {

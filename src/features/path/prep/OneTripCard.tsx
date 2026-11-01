@@ -18,6 +18,7 @@ import { bagCleanup, cleanupLine } from '../../../domain/prep/bagCleanup';
 import { BAG_SLOTS, lineAmount, unitsOf, type PrepPlan, type PrepAction, type PrepLine, type PrepWhere, type Supply } from '../../../domain/prep/prepPlan';
 import { NavigateButton } from '../../../ui/NavigateButton';
 import { useUpgradeRecommendation } from '../combat/UpgradePrompt';
+import { hrefTo } from '../../../domain/pages/pages';
 
 const WHERE: Record<PrepWhere, { icon: string; text: string }> = {
   EQUIPPED: { icon: '🛡', text: 'worn' },
@@ -242,7 +243,7 @@ export function OneTripCard({ step, inStatus = false, plain = false, nowShown = 
           <ul>{plan.optimizations.map((l) => <Row key={l.key} l={l} />)}</ul>
         </details>
       )}
-      <p className="small"><a className="btn btn-ghost btn-sm" href="#/shopping">🛒 Open the shopping list</a></p>
+      <p className="small"><a className="btn btn-ghost btn-sm" href={hrefTo.shopping()}>🛒 Open the shopping list</a></p>
     </section>
   );
 }

@@ -90,7 +90,8 @@ import { stepPlaces } from '../src/domain/travel/stepPlaces';
 import { planPayload } from '../src/domain/prep/prepEnvelope';
 import { recommendedTransport } from '../src/domain/travel/transport';
 import { DETOUR_MAX_EXTRA_TILES, procurementDetour } from '../src/domain/travel/detours';
-import { EXCHANGE, OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MAX_EXCHANGE_TILES, OPPORTUNISTIC_MIN_SAVING_TILES, reachTiles, setDetourLog, type DetourDecision } from '../src/domain/travel/travel';
+import { EXCHANGE, OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MAX_EXCHANGE_TILES, OPPORTUNISTIC_MIN_SAVING_TILES, reachTiles } from '../src/domain/travel/travel';
+import { setDetourLog, type DetourDecision } from '../src/domain/travel/decisionLog';
 import type { PrepPlan } from '../src/domain/prep/prepPlan';
 
 describe('fetch it first: every verdict has a reason, and the thresholds do not starve the routes', () => {

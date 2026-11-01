@@ -10,6 +10,7 @@ import { useBridge } from '../../state/bridge';
 import { levelOf } from '../../domain/player/playerState';
 import { useReadinessEngine } from '../../state/readinessContext';
 import { loadoutPhase } from '../../domain/quests/loadoutPhase';
+import { hrefTo } from '../../domain/pages/pages';
 
 const MARK: Record<CarryState, string> = { OK: '✓', MISSING: '✗', UNKNOWN: '?' };
 const WORD: Record<CarryState, string> = { OK: 'kept', MISSING: 'not kept yet', UNKNOWN: 'not checked' };
@@ -32,7 +33,7 @@ export function CarryNote({ step }: { step: Step }) {
         {status.map((s) => (
           <li key={s.item.item}>
             <span aria-hidden="true">{MARK[s.state]}</span>{' '}
-            {s.item.count > 1 ? `${s.item.count} × ` : ''}{s.item.item} — {s.item.where === 'bank' ? 'in the bank' : 'in the bag'} for <a href={`#/step/${s.item.forStep}`}>{s.item.forStep}</a>
+            {s.item.count > 1 ? `${s.item.count} × ` : ''}{s.item.item} — {s.item.where === 'bank' ? 'in the bank' : 'in the bag'} for <a href={hrefTo.step(s.item.forStep)}>{s.item.forStep}</a>
             {' '}<span className="muted">({WORD[s.state]}) {s.item.why}</span>
           </li>
         ))}

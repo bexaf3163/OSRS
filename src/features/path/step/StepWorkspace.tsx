@@ -11,6 +11,8 @@ import { IconTalk, TypeIcon } from '../../../ui/Icons';
 import { Inline } from '../../../ui/Inline';
 import { useSubStep } from './SubStepHero';
 import { alternativeAt, overviewOf, subStepNpcInfo } from '../../../domain/quests/subStep';
+import { hrefTo } from '../../../domain/pages/pages';
+import { STORAGE_KEYS } from '../../../domain/persistence/storageKeys';
 
 /** The place line of a step: where it starts and on which floor. */
 export function placeOf(step: Step): string {
@@ -61,7 +63,7 @@ export function CurrentAction({ step, children }: { step: Step; children?: React
                 : target === 'saved'
                   ? 'RuneLite is not connected. The target is saved and the arrow appears when it connects.'
                   : 'RuneLite is not connected, so the arrow and highlights in the game are off.'}
-              {state !== 'connecting' && <> <a href="#/settings" onClick={() => { try { localStorage.setItem('osrs-put-settings-tab', 'game'); } catch { /* the tab opens on its own */ } }}>Set up RuneLite</a></>}
+              {state !== 'connecting' && <> <a href={hrefTo.settings()} onClick={() => { try { localStorage.setItem(STORAGE_KEYS.settingsTab, 'game'); } catch { /* the tab opens on its own */ } }}>Set up RuneLite</a></>}
             </p>
           )}
         </div>

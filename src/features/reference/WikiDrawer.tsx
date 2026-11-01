@@ -18,6 +18,7 @@ import { IconClose, IconExternal } from '../../ui/Icons';
 import iconAssets from '../../data/iconAssets.json';
 import { useFeatures } from '../../state/hooks/useFeatures';
 import { PlaceButton, PlaceMapView, PlaceNavButton, usePlaceMap, type PlaceQuery } from '../map/PlaceMap';
+import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
 
 /** Margin after the Nature rune, before fire costs. Unknown quotes cannot imply a profit. */
 function AlchProfit({ highAlch, price, nature }: { highAlch?: number; price: ItemPrice; nature: ItemPrice }) {
@@ -49,7 +50,7 @@ interface WikiContextValue {
   setPinned: (v: boolean) => void;
 }
 
-const PIN_KEY = 'osrs-put:wiki-pinned';
+const PIN_KEY = STORAGE_KEYS.wikiPinned;
 function loadPinned(): boolean {
   try { return localStorage.getItem(PIN_KEY) === '1'; } catch { return false; }
 }

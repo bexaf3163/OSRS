@@ -10,6 +10,7 @@ import { useTracked } from '../../state/hooks/useTracked';
 import { SkillDetailPage } from './SkillDetail';
 import { Eyebrow, Page } from '../../ledger';
 import { f2pAdviceFor, f2pAdviceLabel, F2P_PRIORITY_LABEL } from '../../domain/training/f2pSkillAdvice';
+import { hrefTo } from '../../domain/pages/pages';
 
 /** The Skills spread: the character sheet on the left, the chosen skill (or the followed one) on the right. */
 export function SkillsPage({ param, selectedSkill, goal }: { param?: string; selectedSkill?: string; goal?: number }) {
@@ -83,7 +84,7 @@ function SkillCard({ skill, id }: { skill: Skill; id: string }) {
   return (
     <article className={`skill-card card skill-tile ${skill.membersOnly ? 'is-members' : ''} ${isTracked ? 'is-tracked' : ''}`}>
       {id === 'hitpoints' ? <div className="skill-card-link">{content}<span className="visually-hidden">Gained in combat; no separate F2P target.</span></div>
-        : <a className="skill-card-link" href={`#/skills/${skill.id}/${id}`} aria-label={`${name}, level ${levelOf(progress, id)}${live ? ', live' : ', saved'}${advice ? `, ${F2P_PRIORITY_LABEL[advice.priority]}, ${f2pAdviceLabel(advice, knownLevel)}` : ''}`}>
+        : <a className="skill-card-link" href={hrefTo.skills(skill.id, id)} aria-label={`${name}, level ${levelOf(progress, id)}${live ? ', live' : ', saved'}${advice ? `, ${F2P_PRIORITY_LABEL[advice.priority]}, ${f2pAdviceLabel(advice, knownLevel)}` : ''}`}>
           {content}
         </a>}
     </article>

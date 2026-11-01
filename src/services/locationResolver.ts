@@ -19,6 +19,7 @@ import { cleanWikiText } from '../domain/text/md';
 import { pageFromUrl, type PlaceQuery } from '../domain/travel/places';
 import { matchLoose, matchStrict, type ResolveContext, type ResolvedLocation, type ResolvedPoint } from '../domain/travel/locations';
 import { articleMapPoint, fetchWikitext, spawnPoint, WIKI_ORIGIN, type FetchFn, type WikiPoint } from './wikiApi';
+import { STORAGE_KEYS } from '../domain/persistence/storageKeys';
 
 export function searchUrl(query: string): string {
   return `${WIKI_ORIGIN}/w/Special:Search?search=${encodeURIComponent(query)}`;
@@ -29,7 +30,7 @@ export function searchUrl(query: string): string {
 const TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const FAIL_TTL_MS = 60 * 1000;
 const TEXT_TTL_MS = 10 * 60 * 1000;
-const STORAGE_KEY = 'osrs-put:location-cache';
+const STORAGE_KEY = STORAGE_KEYS.locationCache;
 const TIMEOUT_MS = 8000;
 
 export interface Cached {

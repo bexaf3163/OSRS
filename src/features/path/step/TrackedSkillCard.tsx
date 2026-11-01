@@ -21,6 +21,7 @@ import { styleOf } from '../../../domain/persistence/playStyle';
 import { useTrainingFunding } from '../../../state/trainingSessionContext';
 import { levelById } from '../../../data';
 import { nearestBank } from '../../../domain/travel/stepPlaces';
+import { hrefTo } from '../../../domain/pages/pages';
 
 /** Sends the tracked skill's path with every change of the quests done; nothing is sent while no skill is tracked. */
 export function SkillSync() {
@@ -66,7 +67,7 @@ function EngineTrackedCard() {
   const queue = engine.queue(step, profile.style);
   const funding = useTrainingFunding();
   const blocked = Boolean(funding?.plan || funding?.assessment?.state !== 'COVERED');
-  const fix = usePrepFix(step, () => { window.location.hash = '#/shopping'; });
+  const fix = usePrepFix(step, () => { window.location.hash = hrefTo.shopping(); });
   const place = step.mapLocation;
   const unchecked = engine.readiness(step).unknown.some(item => item.hard);
   const bank = unchecked ? nearestBank(step) : null;
@@ -83,7 +84,7 @@ function EngineTrackedCard() {
           : unchecked && bank ? <NavigateButton target={{ label: `${bank.label}: check your bank`, x: bank.x, y: bank.y, plane: bank.plane }} label="Check your bank" />
           : queue.ready && !unchecked && place && <NavigateButton target={{ label: place.label, x: place.x, y: place.y, plane: place.plane, npcNames: step.inGame?.npcNames, objectNames: step.inGame?.objectNames }} label="Go to the training spot" />}
       </FundingCard>
-      <p className="small muted">Levels and supplies update this stage automatically. <a href={`#/skills/${levelById.get(step.followsMethod ?? '')?.skill ?? step.followsMethod}/${step.followsMethod}`}>Skill plan</a></p>
+      <p className="small muted">Levels and supplies update this stage automatically. <a href={hrefTo.skills(levelById.get(step.followsMethod ?? '')?.skill ?? step.followsMethod, step.followsMethod)}>Skill plan</a></p>
     </>}
     <button type="button" className="btn btn-ghost" onClick={() => setTracked(null)}>Back to the quest route</button>
   </section>;

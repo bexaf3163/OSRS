@@ -1,5 +1,6 @@
 import { Component, type ReactNode } from 'react';
 import { Page } from '../ledger';
+import { hrefTo } from '../domain/pages/pages';
 
 interface Props {
   /** A page change clears the error: a broken section must not lock the others. */
@@ -37,7 +38,7 @@ export class PageBoundary extends Component<Props, State> {
         <p className="muted small">{error.message}</p>
         <div className="page-error-actions">
           <button type="button" className="btn btn-primary" onClick={() => this.setState({ error: null })}>Reopen</button>
-          <a className="btn" href="#/">To the path</a>
+          <a className="btn" href={hrefTo.path()}>To the path</a>
         </div>
       </div>
       </Page>

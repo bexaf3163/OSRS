@@ -18,6 +18,7 @@ import { itemPrice } from '../../../domain/market/itemPrice';
 import { recommendUpgrade, showsPrompt, stepUpgradeCategories, toolProgression, upgradeNav, type UpgradeRecommendation } from '../../../domain/training/gearUpgradeRouter';
 import { NavigateButton } from '../../../ui/NavigateButton';
 import { PlaceButton, PlaceMapView, usePlaceMap } from '../../map/PlaceMap';
+import { hrefTo } from '../../../domain/pages/pages';
 
 const SKILL_LABEL = { woodcutting: 'Woodcutting', mining: 'Mining' } as const;
 
@@ -81,7 +82,7 @@ export function UpgradePrompt({ step }: { step: Step }) {
           <p className="small"><strong>💰 Not enough coins:</strong> ~{formatGp(rec.approxCost ?? 0)} gp needed ({rec.priceLabel ?? 'estimate'}), you have {formatGp(rec.coins ?? 0)} gp with the bank. It is too early to go to the shop.</p>
           <p className="small muted">How to make it up quickly — guidelines, not a promised income:</p>
           <ul className="small">
-            {coinStep && <li>Complete <a href={`#/step/${coinStep.step.id}`}>{coinStep.step.title}</a> — it gives {formatGp(coinStep.coins)} coins.</li>}
+            {coinStep && <li>Complete <a href={hrefTo.step(coinStep.step.id)}>{coinStep.step.title}</a> — it gives {formatGp(coinStep.coins)} coins.</li>}
             <li>Collect feathers from the chickens at the Lumbridge farm and sell them on the Grand Exchange.</li>
             <li>Sell on the Grand Exchange what you will not need on the route.</li>
           </ul>

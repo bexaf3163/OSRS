@@ -44,6 +44,7 @@ import { QuestPreparation } from '../prep/QuestPreparation';
 import { TravelTip } from '../prep/TravelTip';
 import { ItemMarketPrice } from '../prep/ItemMarketPrice';
 import { parseAmount } from '../../../domain/items/checklist';
+import { hrefTo } from '../../../domain/pages/pages';
 
 const WARN_LABELS = new Set(['Dangerous', 'Attention', 'Combat']);
 
@@ -183,7 +184,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
         </section>
       )}
       {step.type === 'gear' && step.itemsRequired?.length ? (
-        <p className="muted small"><a href="#/shopping">🛒 Grand Exchange shopping list</a> — buying for several stages ahead at once.</p>
+        <p className="muted small"><a href={hrefTo.shopping()}>🛒 Grand Exchange shopping list</a> — buying for several stages ahead at once.</p>
       ) : null}
     </>
   );
@@ -247,7 +248,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
           {step.requires.map((r, i) => (
             <span key={r}>
               {i > 0 && ', '}
-              <a href={`#/step/${r}`} className={`step-ref ${!dependencyBlockers?.steps.includes(r) ? 'is-met' : ''}`}>{r}</a>
+              <a href={hrefTo.step(r)} className={`step-ref ${!dependencyBlockers?.steps.includes(r) ? 'is-met' : ''}`}>{r}</a>
               {!dependencyBlockers?.steps.includes(r) && <span className="visually-hidden"> (met)</span>}
             </span>
           ))}
@@ -259,7 +260,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
       {suggested.length > 0 && (
         <p className="requires small">
           <span className="muted">Better after (optional): </span>
-          {suggested.map((r, i) => <span key={r}>{i > 0 && ', '}<a href={`#/step/${r}`} className="step-ref">{r}</a></span>)}
+          {suggested.map((r, i) => <span key={r}>{i > 0 && ', '}<a href={hrefTo.step(r)} className="step-ref">{r}</a></span>)}
           <span className="muted"> — you can skip {suggested.length > 1 ? 'them' : 'it'} and this step still opens.</span>
         </p>
       )}
@@ -402,7 +403,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
         {where}
         <p className="small related-reference">
           <span className="muted">Reference: </span>
-          <a href="#/reference/transport">Teleports, canoes and boats</a> · <a href="#/reference/plugins">RuneLite plugins</a> · <a href="#/reference/stuck">If you do not know what to do</a>
+          <a href={hrefTo.reference('transport')}>Teleports, canoes and boats</a> · <a href={hrefTo.reference('plugins')}>RuneLite plugins</a> · <a href={hrefTo.reference('stuck')}>If you do not know what to do</a>
         </p>
         {metaRow}
         {notes}

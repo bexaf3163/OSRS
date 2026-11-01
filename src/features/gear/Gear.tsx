@@ -28,6 +28,7 @@ import { NavigateButton } from '../../ui/NavigateButton';
 import { PlaceMapView, usePlaceMap } from '../map/PlaceMap';
 import { ActionNotes, ActionSource, ActionTitle, OwnershipNote } from './GearPrompt';
 import { Eyebrow, Page } from '../../ledger';
+import { hrefTo } from '../../domain/pages/pages';
 
 const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 function SlotGlyph({ slot }: { slot: GearSlot }) {
@@ -99,14 +100,14 @@ function RoadmapRowView({ row, steps }: { row: RoadmapRow; steps: Step[] }) {
             <div key={s.skill} className="req-bar" role="img" aria-label={`${SKILL_EN[s.skill]} ${s.have} of ${s.need}, ${left} missing`}>
               <span className="req-bar-label">{SKILL_EN[s.skill]} {s.have}/{s.need}</span>
               <span className="req-bar-track"><span className="req-bar-fill" style={{ width: `${width}%` }} /></span>
-              <span className="req-bar-left muted small">{left} missing <a href={`#/skills/${SKILL_PAGE[s.skill]}`} title="How to make up">⚡</a></span>
+              <span className="req-bar-left muted small">{left} missing <a href={hrefTo.skills(SKILL_PAGE[s.skill])} title="How to make up">⚡</a></span>
             </div>
           );
         })}
         {row.quests.map((q) => {
           const step = questStep(steps, q);
           return (
-            <p key={q} className="small">✗ quest {q}{step ? <> <a href={`#/step/${step.id}`}>🧭 to step {step.id}</a></> : <span className="muted"> — not on the route</span>}</p>
+            <p key={q} className="small">✗ quest {q}{step ? <> <a href={hrefTo.step(step.id)}>🧭 to step {step.id}</a></> : <span className="muted"> — not on the route</span>}</p>
           );
         })}
       </div>
@@ -211,7 +212,7 @@ export function GearPage() {
   const staleWorn = snapshot ? equippedBySlot(snapshot.gear, gearData) : null;
   const incoming = advice.incoming;
   const context = fightStep && foe
-    ? <>For <a href={`#/step/${fightStep.id}`}>{fightStep.id}</a>: {foe.name}{incoming ? <>, attacks with {incoming.style}{incoming.maxHit ? `, hits up to ${incoming.maxHit}` : ''}</> : null}.</>
+    ? <>For <a href={hrefTo.step(fightStep.id)}>{fightStep.id}</a>: {foe.name}{incoming ? <>, attacks with {incoming.style}{incoming.maxHit ? `, hits up to ${incoming.maxHit}` : ''}</> : null}.</>
     : activity.step ? <>For {activity.step.title}.</> : <>Choose a training plan or quest to check its kit.</>;
   const coins = advice.coins;
   // Levels from the game or entered on the Skills page; without either the advisor works from level 1, which is not shown as the player's.
@@ -227,8 +228,8 @@ export function GearPage() {
         <p className="muted small gear-context">
           {context}{' '}
           {meleeContext && levelsKnown
-            ? <>Attack {lv.attack} · Strength {lv.strength} · Defence {lv.defence}{!stats?.attack && <> (<a href="#/skills">from your profile</a>)</>}</>
-            : !levelsKnown && <a href="#/skills">Check your skill levels</a>}
+            ? <>Attack {lv.attack} · Strength {lv.strength} · Defence {lv.defence}{!stats?.attack && <> (<a href={hrefTo.skills()}>from your profile</a>)</>}</>
+            : !levelsKnown && <a href={hrefTo.skills()}>Check your skill levels</a>}
           {coins.total !== null && <> · {formatGp(coins.total)} gp{coins.bank === null ? ' (bank not checked)' : ''}{advice.reserve > 0 ? (coins.total < advice.reserve ? `, the next supplies need ${formatGp(advice.reserve)}` : `, ${formatGp(advice.reserve)} kept for the next supplies`) : ''}</>}
         </p>
       </header>
@@ -266,7 +267,7 @@ export function GearPage() {
           {kit.length > 0 && <ul className="small">{kit.slice(0, 6).map(line => <li key={line.key}><strong>{line.name}{line.count > 1 ? ` ×${line.count}` : ''}</strong> · {line.action?.label ?? ({ EQUIPPED: 'Worn', INVENTORY: 'With you', BANK: 'Take from bank', MISSING: 'Get before leaving', UNKNOWN: 'Not checked' }[line.where])}</li>)}</ul>}
           {kit.length > 6 && <p className="small muted">{kit.length - 6} more items in Preparation.</p>}
           <a className="btn btn-primary" href={activity.href}>Review current preparation</a>
-        </> : <><p className="small muted">Recommendations need a real activity and readable character data. No sample opponent is used here.</p><a className="btn btn-primary" href="#/skills">Choose training</a></>}
+        </> : <><p className="small muted">Recommendations need a real activity and readable character data. No sample opponent is used here.</p><a className="btn btn-primary" href={hrefTo.skills()}>Choose training</a></>}
       </section>}
       {advice.live && meleeContext && <Recommendation advice={advice} stepId={fightStep?.id} onShow={places.show} priceUnknown={priceUnknown} pricesFailed={pricesFailed} />}
 

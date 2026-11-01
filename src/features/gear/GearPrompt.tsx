@@ -15,6 +15,7 @@ import { actionNav, gainText, missingText, sourceText, type GearAction, type Gea
 import type { Foe } from '../../types';
 import { NavigateButton } from '../../ui/NavigateButton';
 import { PlaceButton, PlaceMapView, usePlaceMap } from '../map/PlaceMap';
+import { hrefTo } from '../../domain/pages/pages';
 
 /** "against Cow (level 2)", "against Al Kharid warrior (level 9) and Flesh Crawler (level 28)". */
 export const foesText = (foes: Foe[]) => `against ${foes.map((f) => `${f.name} (level ${f.combat})`).join(' and ')}`;
@@ -66,7 +67,7 @@ export function ActionNotes({ a }: { a: GearAction }) {
   return (
     <>
       {a.routeStep && (
-        <> The route buys it at step <a href={`#/step/${a.routeStep}`}>{a.routeStep}</a> — taking it earlier gives its benefit sooner.</>
+        <> The route buys it at step <a href={hrefTo.step(a.routeStep)}>{a.routeStep}</a> — taking it earlier gives its benefit sooner.</>
       )}
       {a.twoHanded && <> Two-handed: the shield will have to come off.</>}
     </>
@@ -124,7 +125,7 @@ function GearPromptBody({ step }: { step: Step }) {
             : 'Turn on the RuneLite link — the app will see what is worn and how many coins you have, and say whether a change is worth it.'}
         </p>
         <div className="upgrade-actions">
-          <a className="btn btn-sm" href="#/gear">The full gear analysis</a>
+          <a className="btn btn-sm" href={hrefTo.gear()}>The full gear analysis</a>
           {skip}
         </div>
       </section>
@@ -137,7 +138,7 @@ function GearPromptBody({ step }: { step: Step }) {
         <p className="small gear-ok">
           ✓ The weapon is the best possible at your levels {vs}
           {goal ? <>; next — {goal.item.name}{goal.short !== undefined ? <>, {formatGp(goal.short)} gp missing</> : null}</> : null}.
-          {' '}<a href="#/gear">Gear analysis</a>
+          {' '}<a href={hrefTo.gear()}>Gear analysis</a>
         </p>
         <LockedOwnedNote advice={advice} />
       </>
@@ -170,7 +171,7 @@ function GearPromptBody({ step }: { step: Step }) {
       <LockedOwnedNote advice={advice} />
       <div className="upgrade-actions">
         {nav && <NavigateButton target={nav} label={`🧭 Point ${seller === 'Grand Exchange' ? 'to the Grand Exchange' : `to ${seller}`}`} />}
-        <a className="btn btn-ghost btn-sm" href="#/gear">The full analysis</a>
+        <a className="btn btn-ghost btn-sm" href={hrefTo.gear()}>The full analysis</a>
         {skip}
       </div>
       <PlaceMapView view={places.view} onClose={places.close} />
@@ -201,7 +202,7 @@ function GearBannerBody() {
       <p className="upgrade-kicker">⚔️ Suggested gear change</p>
       <p className="small"><ActionTitle a={top} /> — {gainText(top)} {foesText(advice.foes)}.</p>
       <div className="upgrade-actions">
-        <a className="btn btn-sm" href="#/gear">Gear analysis</a>
+        <a className="btn btn-sm" href={hrefTo.gear()}>Gear analysis</a>
         {fightStep && <button type="button" className="btn btn-ghost btn-sm" onClick={() => dismissUpgrade(fightStep.id)}>✕ Hide</button>}
       </div>
     </section>

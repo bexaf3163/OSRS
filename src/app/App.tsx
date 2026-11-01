@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { findSkill, reference } from '../data';
 import { useStore } from '../state/store';
-import { useRoute, type Page } from './router';
+import { useRoute } from './router';
+import type { Page } from '../domain/pages/pages';
 import { desktop } from '../services/desktop';
 import { SearchBox } from './SearchBox';
 import { BridgeIndicator } from './BridgeIndicator';
@@ -29,6 +30,7 @@ import { ProfileBanner } from './ProfileBanner';
 import { UpdateBanner } from './UpdateBanner';
 import { Book, Hud, LedgerStage, Spine, TitleBar, LEDGER_NAV } from '../ledger';
 import { usePlayerSummary } from '../ledger/adapters';
+import { hrefTo } from '../domain/pages/pages';
 
 /** The section a route belongs to: the old #/quests and #/goals hashes live inside the Journal. */
 function sectionOf(page: Page): string {
@@ -119,7 +121,7 @@ export function App() {
         <main id="main" tabIndex={-1} className="la-main">
           <UpdateBanner />
           <ProfileBanner />
-          {persistenceWarning && <div className="plaque plaque-warning progress-storage-warning" role="alert">{persistenceWarning} <a href="#/settings">Settings</a></div>}
+          {persistenceWarning && <div className="plaque plaque-warning progress-storage-warning" role="alert">{persistenceWarning} <a href={hrefTo.settings()}>Settings</a></div>}
           <Book>
             <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}>{content}</PageBoundary>
           </Book>

@@ -9,6 +9,7 @@ import { nameKey } from '../items/itemKey';
 import type { GearItem } from '../../services/runeliteBridge';
 import { isInstancedPoint, isOverworld } from './instances';
 import { purchaseCost, purchaseFees, type PurchaseFee } from '../items/purchaseCost';
+import { type DetourRejection, type DetourDecision, emitDecision } from './decisionLog';
 
 export interface Point { x: number; y: number; plane: number }
 export interface Teleport {
@@ -134,34 +135,6 @@ export const OPPORTUNISTIC_MAX_DETOUR_TILES = 300;
 /** The Grand Exchange sells everything, so a longer walk to it is worth it (Al Kharid, Lumbridge and Port Sarim are 320 to 400 tiles away). */
 export const OPPORTUNISTIC_MAX_EXCHANGE_TILES = 500;
 export const OPPORTUNISTIC_MAX_COST = 3000;
-
-/** Why a fetch-first suggestion was dropped (or kept with a caveat). The same reasons are used for the purchase detours in detours.ts. */
-export type DetourRejection = 'exceeds_detour_limit' | 'insufficient_savings' | 'price_unknown' | 'missing_coins' | 'not_whitelisted' | 'price_too_high' | 'no_source';
-
-export interface DetourDecision {
-  /** What was judged: an item name, or the stop for a group of items. */
-  subject: string;
-  outcome: 'offered' | 'rejected';
-  reason?: DetourRejection;
-  /** An offered suggestion with a caveat: the price is unknown, or the coins in the bag do not cover it. */
-  caveat?: 'price_unknown' | 'missing_coins';
-  /** The numbers behind the verdict, in tiles unless said otherwise. */
-  detail: Record<string, number | string | null>;
-}
-
-const decisionSink: { log: ((d: DetourDecision) => void) | null } = { log: null };
-/** The debug sink: set it to see every verdict (tests, the developer console). */
-export function setDetourLog(fn: ((d: DetourDecision) => void) | null): void {
-  decisionSink.log = fn;
-}
-/** Record a verdict: to the caller's callback, to the debug sink, and to the console when localStorage "osrs-put:debug-fetch" is "1". */
-export function emitDecision(d: DetourDecision, extra?: (d: DetourDecision) => void): void {
-  extra?.(d);
-  decisionSink.log?.(d);
-  try {
-    if (typeof localStorage !== 'undefined' && localStorage.getItem('osrs-put:debug-fetch') === '1') console.debug('[fetch-first]', JSON.stringify(d));
-  } catch { /* no storage */ }
-}
 
 export const dist = (a: Point, b: Point): number => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 

@@ -1,47 +1,12 @@
 // Hash routes: they work on GitHub Pages and from any folder without server setup.
 
 import { useEffect, useState } from 'react';
-
-export type Page = 'path' | 'skills' | 'quests' | 'journal' | 'reference' | 'settings' | 'shopping' | 'gear' | 'money';
-
-export interface Route {
-  page: Page;
-  /** The code of a skill, a reference section or a step (#/step/S3-05 opens Path with the step expanded). */
-  param?: string;
-  step?: string;
-  /** Direct skill selection within a grouped guide, for example ME/defence. */
-  skill?: string;
-  /** Explicit preparation target; ordinary skill navigation keeps its normal suggested checkpoint. */
-  goal?: number;
-  /** Grows with every navigation, so that a repeated click on the same link scrolls to the step again. */
-  key: number;
-}
+import { type Route, parsePath } from '../domain/pages/pages';
 
 let counter = 0;
 
 export function parseHash(hash: string): Route {
   return { ...parsePath(hash), key: ++counter };
-}
-
-function parsePath(hash: string): Omit<Route, 'key'> {
-  const [path, query] = hash.replace(/^#\/?/, '').split('?', 2);
-  const [first, second, third] = path.split('/').map(decodeURIComponent);
-  const rawGoal = new URLSearchParams(query).get('goal');
-  const goal = rawGoal && /^\d{1,2}$/.test(rawGoal) && Number(rawGoal) >= 2 ? Number(rawGoal) : undefined;
-  switch (first) {
-    case 'step': return { page: 'path', step: second };
-    case 'skills': return { page: 'skills', param: second, ...(third ? { skill: third } : {}), ...(goal !== undefined ? { goal } : {}) };
-    case 'goals': return { page: 'journal', param: 'session' };
-    case 'quests': return { page: 'quests' };
-    // Old goal links open the surviving Journal; internal planning goals are independent of this retired screen.
-    case 'journal': return { page: 'journal', param: second };
-    case 'reference': return { page: 'reference', param: second };
-    case 'settings': return { page: 'settings' };
-    case 'shopping': return { page: 'shopping' };
-    case 'gear': return { page: 'gear' };
-    case 'money': return { page: 'money' };
-    default: return { page: 'path' };
-  }
 }
 
 export function useRoute(): Route {

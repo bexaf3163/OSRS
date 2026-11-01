@@ -9,6 +9,7 @@ import { blockerParts, blockersOf, isClosed, type DependencyFact } from '../../d
 import { useReadinessEngine } from '../../state/readinessContext';
 import { IconCheck, IconChevron, IconLock, TypeIcon } from '../../ui/Icons';
 import { ItemIcon } from '../reference/WikiDrawer';
+import { hrefTo, stepIdOf } from '../../domain/pages/pages';
 
 type Status = 'done' | 'skipped' | 'available' | 'blocked';
 type Filter = 'all' | 'done' | 'available' | 'blocked';
@@ -33,12 +34,12 @@ function questRow(q: Quest, p: Progress, qp: number, fact: DependencyFact): Row 
   const parts = q.parts.length ? q.parts : [q.stepId];
   const partsDone = parts.filter((id) => isClosed(p, id)).length;
   const firstOpen = parts.find((id) => !isClosed(p, id));
-  const href = `#/step/${firstOpen ?? q.stepId}`;
+  const href = hrefTo.step(firstOpen ?? q.stepId);
   if (final === 'done') return { quest: q, status: 'done', href, partsDone };
   if (final === 'skipped') return { quest: q, status: 'skipped', href, partsDone };
   const open = parts.filter((id) => !isClosed(p, id)).map((id) => stepById.get(id)!);
   const ready = open.find((s) => !blockersOf(s, p, qp, fact));
-  if (ready) return { quest: q, status: 'available', href: `#/step/${ready.id}`, partsDone };
+  if (ready) return { quest: q, status: 'available', href: hrefTo.step(ready.id), partsDone };
   const b = blockersOf(open[0], p, qp, fact);
   return { quest: q, status: 'blocked', href, partsDone, blocked: b ? blockerParts(b).join(', ') : undefined };
 }
@@ -61,7 +62,7 @@ export function QuestsPage({ embedded = false, render }: { embedded?: boolean; r
   const count = (f: Filter) => rows.filter((r) => matches(f, r.status)).length + (matches(f, base) ? 1 : 0);
   const visible = rows.filter((r) => matches(filter, r.status));
   const selected = visible.find(r => r.quest.stepId === selectedId) ?? visible.find(r => r.status === 'available') ?? visible[0];
-  const selectedStep = selected ? stepById.get(selected.href.slice('#/step/'.length)) : undefined;
+  const selectedStep = selected ? stepById.get(stepIdOf(selected.href) ?? '') : undefined;
 
   const list = (<div className={embedded ? 'journal-pane' : 'page'}>
       <header className="page-head">
@@ -133,7 +134,7 @@ export function QuestsPage({ embedded = false, render }: { embedded?: boolean; r
     {rows.length > 0 && rows.every(row => row.status === 'done' && !notInGame(row)) && <section className="card" aria-label="Quest route complete">
       <h2 className="subhead">Quest route complete</h2>
       <p className="small muted">{gameDone ? 'These route quests are complete in the game.' : 'These route quests are marked complete in your saved progress.'} Choose a skill for your next activity.</p>
-      <a className="btn btn-primary" href="#/skills">Choose training</a>
+      <a className="btn btn-primary" href={hrefTo.skills()}>Choose training</a>
     </section>}
   </>);
   return render ? render(list, detail) : <div className="quest-workspace">{list}{detail}</div>;

@@ -3,8 +3,9 @@
 
 import type { GameMode, ManualOwned, Progress, StepStatus } from '../../types/index.ts';
 import { EXPORT_APP, PROGRESS_VERSION } from '../../../electron/saved-data.mjs';
+import { STORAGE_KEYS } from './storageKeys';
 
-export const STORAGE_KEY = 'osrs-put:progress';
+export const STORAGE_KEY = STORAGE_KEYS.progress;
 export { EXPORT_APP, PROGRESS_VERSION };
 const MAX_NOTE = 5000;
 

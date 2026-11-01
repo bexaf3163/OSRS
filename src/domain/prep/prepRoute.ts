@@ -5,6 +5,8 @@
 
 import type { Step } from '../../types';
 import type { ReadinessAction, RequirementStatus, StepReadiness } from '../readiness/readiness';
+import { hrefTo } from '../pages/pages';
+import { STORAGE_KEYS } from '../persistence/storageKeys';
 
 /** How urgent: now, soon (the next steps), later. */
 export type Urgency = 'NOW' | 'SOON' | 'LATER';
@@ -95,7 +97,7 @@ export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id' | 'traini
   if (buy.length) {
     tasks.push({
       id: 'buy', kind: 'buy', label: `Buy: ${buy.map((b) => b.label).join(', ')}`, priority: 3, need: 'REQUIRED', urgency: 'NOW',
-      action: { kind: 'link', label: '🛒 To shopping', href: '#/shopping' }, items: buy.flatMap((b) => (b.item ? [b.item] : [])), from: buy,
+      action: { kind: 'link', label: '🛒 To shopping', href: hrefTo.shopping() }, items: buy.flatMap((b) => (b.item ? [b.item] : [])), from: buy,
     });
   }
   tasks.sort((a, b) => a.priority - b.priority || (a.id < b.id ? -1 : 1));
@@ -215,7 +217,7 @@ export function staleArrows(before: PrepState, after: PrepState, standing: { x: 
   return before.stack.some((f) => f.nav === key && !after.stack.includes(f)) && !left.has(key);
 }
 
-export const PREP_KEY = 'osrs-put:prep';
+export const PREP_KEY = STORAGE_KEYS.prep;
 
 /** Broken data in storage means an empty state: nothing crashes. */
 export function parsePrep(raw: string | null): PrepState {

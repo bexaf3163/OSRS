@@ -12,6 +12,7 @@ import { nameKey } from '../../items/itemKey';
 import type { LedgerEntry } from '../../persistence/ledger';
 import type { ObservedRate } from './evaluate';
 import { OBSERVED_MIN_SECONDS, OBSERVED_MIN_UNITS } from './evaluate';
+import { STORAGE_KEYS } from '../../persistence/storageKeys';
 
 export interface UnsoldLine { name: string; qty: number; estimated: number }
 
@@ -106,7 +107,7 @@ export function observedRates(book: RateBook): Map<string, ObservedRate> {
   return out;
 }
 
-export const RATES_KEY = 'osrs-put:funding-rates';
+export const RATES_KEY = STORAGE_KEYS.fundingRates;
 export const ratesKey = (profileId: string, character: string | null | undefined): string => {
   const who = (character ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
   return `${RATES_KEY}:${profileId}:${who || '-'}`;

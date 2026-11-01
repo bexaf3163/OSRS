@@ -23,6 +23,8 @@ import type { Ranking } from '../../domain/economy/funding/rank';
 import type { Step } from '../../types';
 import { Economics, FundingCard, PriceNote } from './FundingCard';
 import { Eyebrow, Page } from '../../ledger';
+import { hrefTo } from '../../domain/pages/pages';
+import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
 
 const gp = (n: number) => `${formatGp(Math.round(n))} gp`;
 
@@ -31,7 +33,7 @@ const PAGE = 6;
 /** The amount the goal field starts with. */
 const DEFAULT_AMOUNT = 10_000;
 
-const FILTERS_KEY = 'osrs-put:money-filters';
+const FILTERS_KEY = STORAGE_KEYS.moneyFilters;
 
 function loadFilters(): BrowseFilters {
   try {
@@ -233,7 +235,7 @@ function MoneyBody({ step }: { step: Step }) {
       {running && source && (
         <section className="money-running" aria-label="Your money plan">
           <FundingCard step={source} />
-          <p className="small muted">Started from <a href={`#/step/${source.id}`}>{source.id}</a>: the route step is not changed and waits for you.{running.goal ? ` Goal: ${goalText(running.goal).toLowerCase()}.` : ''}</p>
+          <p className="small muted">Started from <a href={hrefTo.step(source.id)}>{source.id}</a>: the route step is not changed and waits for you.{running.goal ? ` Goal: ${goalText(running.goal).toLowerCase()}.` : ''}</p>
         </section>
       )}
 

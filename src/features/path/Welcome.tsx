@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import { useStore } from '../../state/store';
+import { hrefTo } from '../../domain/pages/pages';
+import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
 
-const KEY = 'osrs-put:welcome-done';
+const KEY = STORAGE_KEYS.welcomeDone;
 
 function dismissed(): boolean {
   try { return localStorage.getItem(KEY) === '1'; } catch { return false; }
@@ -32,7 +34,7 @@ export function Welcome({ compact = false }: { compact?: boolean }) {
       </div>
       <div className="welcome-actions">
         <button type="button" className="btn btn-primary" onClick={close}>Got it</button>
-        <a className="btn btn-ghost" href="#/settings" onClick={() => { try { localStorage.setItem('osrs-put-settings-tab', 'game'); } catch { /* the tab opens on its own */ } }}>Set up RuneLite</a>
+        <a className="btn btn-ghost" href={hrefTo.settings()} onClick={() => { try { localStorage.setItem(STORAGE_KEYS.settingsTab, 'game'); } catch { /* the tab opens on its own */ } }}>Set up RuneLite</a>
       </div>
     </section>
   );

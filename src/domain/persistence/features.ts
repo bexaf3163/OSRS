@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from './storageKeys';
 // The stage 3 helpers in the app: they can be turned off in the settings, and then they not only hide
 // but also do nothing: they look up no coordinates, send no stage items to RuneLite, offer no upgrades.
 // What happens in the game itself is also turned off in the OSRS Path Bridge plugin's settings.
@@ -25,7 +26,7 @@ export interface Features {
   keepDefenceOne: boolean;
 }
 
-export const FEATURES_KEY = 'osrs-put:features';
+export const FEATURES_KEY = STORAGE_KEYS.features;
 export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true, levelsFromGame: true, autoPrep: true, efficient: false, relaxedTraining: false, profitTraining: false, keepDefenceOne: false };
 
 /** What is saved; the unfamiliar and the broken fall back to the default (a new feature is on). */

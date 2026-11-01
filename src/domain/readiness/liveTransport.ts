@@ -16,9 +16,11 @@ import { stepPlaces } from '../travel/stepPlaces';
 import { instructionSubStep } from '../quests/subStep';
 import { TIP_MIN_SAVING_TILES } from '../travel/transport';
 import { judgeTransport, journeyTiles, recommendedTransport, type RecommendedTransport, type TransportVerdict } from '../travel/transport';
-import { EXCHANGE, NET, STAIRS_TILES_PER_FLOOR, TRANSPORT, dist, effectiveTiles, nearestBank, prepareFor, shortOf, travelOptions, type DetourDecision, type ItemSource, type Point, type TravelOption } from '../travel/travel';
+import { EXCHANGE, NET, STAIRS_TILES_PER_FLOOR, TRANSPORT, dist, effectiveTiles, nearestBank, prepareFor, shortOf, travelOptions, type ItemSource, type Point, type TravelOption } from '../travel/travel';
+import type { DetourDecision } from '../travel/decisionLog';
 import { travelInputOf, type TravelInputSources } from '../travel/travelInput';
 import { SUPPLY_MIN_TOTAL_TILES, savedText, type SupplyItem, type TravelSupplies } from './travelSupplies';
+import { STORAGE_KEYS } from '../persistence/storageKeys';
 
 /** Where the transport has to bring the player: the tile of the quest line the game confirms, otherwise the step's own place. */
 export interface TransportTarget { point: Point & { label?: string }; source: 'instruction' | 'step' }
@@ -354,14 +356,14 @@ const listeners = new Set<() => void>();
 const keyOf = (d: TransportDecision | null) => (d ? JSON.stringify({ ...d, at: 0 }) : '');
 
 /**
- * Publish the decision of the step shown in the game (null: no step is shown). With localStorage "osrs-put:debug-transport" = "1" the report is logged when
+ * Publish the decision of the step shown in the game (null: no step is shown). With localStorage STORAGE_KEYS.debugTransport = "1" the report is logged when
  * it changes and kept at window.__osrsPathTransport; without the flag nothing is logged and nothing is put on the window.
  */
 export function publishTransport(d: TransportDecision | null): void {
   if (keyOf(d) === keyOf(last)) return;
   last = d;
   try {
-    if (typeof localStorage !== 'undefined' && localStorage.getItem('osrs-put:debug-transport') === '1') {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem(STORAGE_KEYS.debugTransport) === '1') {
       // For the developer only: the report in the console when it changes, and the latest one on the window for the DevTools.
       const report = d ? transportReport(d) : null;
       (globalThis as { __osrsPathTransport?: unknown }).__osrsPathTransport = report;

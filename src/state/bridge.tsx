@@ -28,17 +28,18 @@ import { withKillEstimate } from '../domain/combat/gearAdvisor';
 import { buildEnvelope, EMPTY_PARTS, envelopeKey, nextSeq, type SnapshotParts } from '../domain/prep/prepEnvelope';
 import type { SkillPathPayload } from '../domain/training/skillGuide';
 import { transportWatch } from '../domain/travel/travelInput';
+import { STORAGE_KEYS } from '../domain/persistence/storageKeys';
 
-const ENABLED_KEY = 'osrs-put:runelite-bridge';
-const AUTOLAUNCH_KEY = 'osrs-put:runelite-autolaunch';
+const ENABLED_KEY = STORAGE_KEYS.runeliteBridge;
+const AUTOLAUNCH_KEY = STORAGE_KEYS.runeliteAutolaunch;
 /** The chosen quick variants: { 'S2-05': 'varrock-teleport' }. */
-const BRANCH_KEY = 'osrs-put:branch-choice';
+const BRANCH_KEY = STORAGE_KEYS.branchChoice;
 /** The last bulk list — goes to the game again when RuneLite was restarted. */
-const PLAN_KEY = 'osrs-put:shopping-plan';
-const MOVES_KEY = 'osrs-put:moves';
-const GEAR_KEY = 'osrs-put:last-gear';
+const PLAN_KEY = STORAGE_KEYS.shoppingPlan;
+const MOVES_KEY = STORAGE_KEYS.moves;
+const GEAR_KEY = STORAGE_KEYS.lastGear;
 /** The step shown in the game: after a restart of the app or RuneLite it returns to the game by itself. */
-const ACTIVE_KEY = 'osrs-put:active-step';
+const ACTIVE_KEY = STORAGE_KEYS.activeStep;
 /** Auto-launch — once per app launch (in development StrictMode runs the effects twice). */
 let autoLaunchDone = false;
 

@@ -16,6 +16,7 @@ import type { MethodEvaluation } from '../../domain/economy/funding/evaluate';
 import type { PriceView } from '../../domain/market/quotes';
 import type { Realized } from '../../domain/economy/funding/session';
 import type { Tier } from '../../domain/market/needPrice';
+import { hrefTo } from '../../domain/pages/pages';
 
 const gp = (n: number) => `${formatGp(Math.round(n))} gp`;
 
@@ -157,7 +158,7 @@ function Body({ step, fallback }: { step: Step; fallback: ReactNode }) {
   }
 
   if (a?.state === 'UNKNOWN' && (a.need.minimum.unpriced > 0 || a.required > 0 && a.budget.liquid.amount === null)) {
-    return <><p className="small notice funding-unknown" role="status">{a.headline} <a href="#/shopping">Check supplies and prices</a></p>{fallback}</>;
+    return <><p className="small notice funding-unknown" role="status">{a.headline} <a href={hrefTo.shopping()}>Check supplies and prices</a></p>{fallback}</>;
   }
   if (!a || a.state !== 'SHORT' || a.gap === null) return <>{fallback}</>;
 
@@ -171,7 +172,7 @@ function Body({ step, fallback }: { step: Step; fallback: ReactNode }) {
       <p className="small muted">{rec ? rec.detail : 'What is known about your account and the market does not point to one. Details below.'}</p>
       <p className="funding-actions">
         {rec && <button type="button" className="btn btn-primary" disabled={!snap} onClick={() => snap && f.start(a, rec, snap)}>Start</button>}
-        <a className="small funding-browse" href="#/money">Browse earning methods</a>
+        <a className="small funding-browse" href={hrefTo.money()}>Browse earning methods</a>
       </p>
       <Details a={a} prices={prices} onUse={snap ? (o) => f.start(a, o, snap) : undefined} />
     </section>

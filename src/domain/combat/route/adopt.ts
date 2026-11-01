@@ -1,3 +1,4 @@
+import { STORAGE_KEYS } from '../../persistence/storageKeys';
 // The plan in effect for each combat training step, kept per profile and character: the step and the key of the plan ("split", "defence-first:20"), and
 // who chose it. Only the choice is saved, never a phase or a number: the phase in hand and the figures are worked out again from what the game shows, so
 // they follow the player's levels and the items in hand and a save from an older version stays valid.
@@ -7,7 +8,7 @@
 // before 2.69 that meant the route's own plan by default, which the guide now replaces with its recommendation. Entries written before 2.69 have no
 // "by": they were all made with a button, so they are the player's.
 
-export const ADOPT_KEY = 'osrs-put:combat-plans';
+export const ADOPT_KEY = STORAGE_KEYS.combatPlans;
 
 export type ChosenBy = 'auto' | 'player';
 export interface Adopted { key: string; at: number; by: ChosenBy }

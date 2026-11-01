@@ -1,5 +1,6 @@
 // View-models of the Ledger. Components are presentational: adapters (./adapters.ts) map store / readiness / bridge data onto these.
 import type { IconName } from './icons';
+import { hrefTo } from '../domain/pages/pages';
 
 export type StepState = 'done' | 'current' | 'todo' | 'locked';
 export type StepKind = 'quest' | 'skill' | 'task';
@@ -41,10 +42,10 @@ export type HotbarAction = 'prev' | 'fix' | 'start' | 'game' | 'done' | 'map' | 
 export type HotbarHandlers = Partial<Record<HotbarAction, () => void>>;
 
 export const LEDGER_NAV: { section: string; href: string; label: string; icon: IconName }[] = [
-  { section: 'path', href: '#/', label: 'Journey', icon: 'compass' },
-  { section: 'skills', href: '#/skills', label: 'Skills', icon: 'star' },
-  { section: 'journal', href: '#/journal', label: 'Journal', icon: 'book' },
-  { section: 'gear', href: '#/gear', label: 'Gear', icon: 'shield' },
-  { section: 'shopping', href: '#/shopping', label: 'Shopping', icon: 'cart' },
-  { section: 'money', href: '#/money', label: 'Money', icon: 'coin' },
+  { section: 'path', href: hrefTo.path(), label: 'Journey', icon: 'compass' },
+  { section: 'skills', href: hrefTo.skills(), label: 'Skills', icon: 'star' },
+  { section: 'journal', href: hrefTo.journal(), label: 'Journal', icon: 'book' },
+  { section: 'gear', href: hrefTo.gear(), label: 'Gear', icon: 'shield' },
+  { section: 'shopping', href: hrefTo.shopping(), label: 'Shopping', icon: 'cart' },
+  { section: 'money', href: hrefTo.money(), label: 'Money', icon: 'coin' },
 ];

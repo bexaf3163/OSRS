@@ -2,6 +2,7 @@
 
 import type { Block, PluginsData, ReferenceData, Skill, Step, WikiItemDetail } from '../../types';
 import { fold, stripMd } from '../text/md';
+import { hrefTo } from '../pages/pages';
 
 export type SearchKind = 'step' | 'item' | 'range' | 'skill' | 'ref' | 'plugin';
 
@@ -71,7 +72,7 @@ export function stepText(s: Step): string {
 export function buildIndex({ steps, skills, reference, plugins, items = [], typeLabel }: SearchSources): SearchItem[] {
   const out: SearchItem[] = [];
   for (const s of steps) {
-    out.push(item('step', s.title, `${typeLabel[s.type]} · stage ${s.stage}${s.membersOnly ? ' · Members' : ''}`, `#/step/${s.id}`, stepText(s), s.id));
+    out.push(item('step', s.title, `${typeLabel[s.type]} · stage ${s.stage}${s.membersOnly ? ' · Members' : ''}`, hrefTo.step(s.id), stepText(s), s.id));
   }
   for (const it of items) {
     const row = item('item', it.nameEn, 'Item', `item:${it.id}`, '');
@@ -79,23 +80,23 @@ export function buildIndex({ steps, skills, reference, plugins, items = [], type
   }
   for (const sk of skills) {
     for (const r of sk.plan.ranges) {
-      out.push(item('range', r.what, `${sk.name} · levels ${r.levels}`, `#/skills/${sk.id}`, stripMd(r.cells.slice(2).join(' · ')), r.code));
+      out.push(item('range', r.what, `${sk.name} · levels ${r.levels}`, hrefTo.skills(sk.id), stripMd(r.cells.slice(2).join(' · ')), r.code));
     }
     const text = [blocksText(sk.intro), ...sk.sections.map((sec) => `${sec.title}\n${blocksText(sec.blocks)}`)].join('\n');
-    out.push(item('skill', sk.name, sk.nameEn ?? sk.subtitle ?? 'Skill', `#/skills/${sk.id}`, text));
+    out.push(item('skill', sk.name, sk.nameEn ?? sk.subtitle ?? 'Skill', hrefTo.skills(sk.id), text));
   }
   for (const sec of reference.sections) {
     if (sec.id === 'plugins') continue;
-    out.push(item('ref', sec.title, 'Reference', `#/reference/${sec.id}`, blocksText(sec.blocks)));
+    out.push(item('ref', sec.title, 'Reference', hrefTo.reference(sec.id), blocksText(sec.blocks)));
   }
-  out.push(item('ref', reference.training.title, 'Skills', '#/skills', blocksText(reference.training.blocks)));
+  out.push(item('ref', reference.training.title, 'Skills', hrefTo.skills(), blocksText(reference.training.blocks)));
   // Gear analysis is an app page, not a guide section: it is found by the words people search it with.
-  out.push(item('ref', 'Gear: weapon, amulet, armour, equipment, upgrades', 'What to wear and buy to hit faster', '#/gear',
+  out.push(item('ref', 'Gear: weapon, amulet, armour, equipment, upgrades', 'What to wear and buy to hit faster', hrefTo.gear(),
     'Gear analysis: weapon, amulet, armour, equipment, upgrade, boost. Scimitar, sword, amulet of strength: '
     + 'what is better at your levels, where to buy, how much to save. Equipment, gear, weapon, armour, upgrade.'));
   for (const g of plugins.groups) {
     for (const pl of g.plugins) {
-      out.push(item('plugin', pl.name, `Plugin · ${pl.sourceLabel} · ${g.title}`, `#/reference/plugins`, pl.why));
+      out.push(item('plugin', pl.name, `Plugin · ${pl.sourceLabel} · ${g.title}`, hrefTo.reference('plugins'), pl.why));
     }
   }
   return out;

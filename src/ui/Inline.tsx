@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { stepById } from '../data';
+import { hrefTo } from '../domain/pages/pages';
 
 const TOKEN = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)\s]+\)|\bS[1-6]-\d{2}\b)/g;
 
@@ -24,15 +25,15 @@ function render(text: string, linkSteps: boolean): ReactNode[] {
     } else if (tok.startsWith('[')) {
       const lm = tok.match(/^\[([^\]]+)\]\(([^)]+)\)$/)!;
       const external = /^https?:\/\//.test(lm[2]);
-      // "#/reference/transport" is a page of the app itself: it opens here, without a new tab.
-      const internal = lm[2].startsWith('#/');
+      // A page of the app itself (such as the transport reference) opens here, without a new tab.
+      const internal = lm[2].startsWith(hrefTo.path());
       out.push(external
         ? <a key={key++} href={lm[2]} target="_blank" rel="noopener noreferrer">{lm[1]}</a>
         : internal
           ? <a key={key++} href={lm[2]}>{lm[1]}</a>
           : <span key={key++}>{lm[1]}</span>);
     } else if (linkSteps && stepById.has(tok)) {
-      out.push(<a key={key++} className="step-ref" href={`#/step/${tok}`}>{tok}</a>);
+      out.push(<a key={key++} className="step-ref" href={hrefTo.step(tok)}>{tok}</a>);
     } else {
       out.push(tok);
     }
