@@ -19,6 +19,7 @@ Updated 2026-11-01. **This is the only current project contract, architecture ma
 6. Purchases and gameplay stay manual. The program recommends, detects, records and guides; it never buys, moves, fights or eats for the player.
 7. Windows desktop only. No mobile development or phone-only QA. Keep desktop resizing, OS DPI and accessibility.
 8. Do not modify RuneLite Optimizer, PC-Tune or experimental graphics repositories in this work.
+9. Speed, quality and optimization decide every change. Replace, never stockpile: when something new replaces something that will not be used again, delete the old code, assets, settings and tests.
 
 ## Engineering and operating contract
 
@@ -169,7 +170,7 @@ Review Path, Skills, Gear, Shopping, Money and Reference/search for stale recomm
 
 ### P4 — Claude's real-client acceptance
 
-Use the published Portable and restart its client so the plugin version is known; verify real login and link, not a port; respect the owner's limited-input rules. Smoke first (version, link, Ledger HUD, provenance, one current action in app, arrow and HUD), then the matrix. Without the desktop, leave live evidence pending. For HDOS, verify only what its adapter supplies. Keep implemented, automated, native-shell, live and unverified evidence apart, and fix confirmed shared bugs at their layer.
+Use the published Portable and restart its client so the plugin version is known; verify real login and link, not a port; respect the owner's limited-input rules. Smoke first (version, link, Ledger HUD, provenance, one current action in app, arrow and HUD), then the matrix. Without the desktop, leave live evidence pending. For HDOS, verify only what its adapter supplies. Keep implemented, automated, native-shell, live and unverified evidence apart, and fix confirmed shared bugs at their layer. Once the owner accepts the Ledger HUD in game, delete Classic and Glass with their layout, plates, setting, Sora and tests.
 
 ### Consolidated live regression matrix — Claude owns every row
 
@@ -216,9 +217,9 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 
 2.81.19 (optimization batches 1 and 2; owner's Windows PC, at least two runs per build): per-update script 70.3 → 20.5 ms, start-up blocking −53…−74%, page switches within +0.7 ms, web build −26%, unit run 72 → 9 s, axe 0 on nine pages, screenshots identical apart from known noise. Real-game acceptance is pending (P4).
 
-2.81.20–30 (S1, S3–S8, S10, C1, S11, X2, X8, X9; no visible change): code in `app`, `state`, `ui`, `features` and `domain` (largest folder 139 → 19 files), 0 layer violations (from 29); one list each for page links, storage keys and the 131 bridge payload fields; browser scenarios per feature with `settle()` and two workers, 874 of 874 checks in 131–158 s over three runs (from 319 s); data JSON in `authored/` and `generated/` behind `src/data/index.ts` (files importing JSON directly 49 → 0), its manifest tied to each generator; splits: `OsrsPathBridgePlugin` 4,231 → 797 lines plus eight section classes, `HudModel` 1,175 → 468, `ActiveTarget` 1,078 → 298, `src/types` in seven topic files (bundle byte-identical), `runeliteBridge.ts` 627 → 522, `BridgeServer` 1,162 → 796, `bridge.tsx` 881 → 60 (state in `bridgeCore.ts`), `styles.css` in 14 files (byte-identical); files over 1,000 lines 5 → 0; knip fails on dead exports (15 removed). Local gates pass (2,519 unit, 874 browser, 95 Electron, 648 Java).
+2.81.20–30 (S1, S3–S8, S10, C1, S11, X2, X8, X9; no visible change): largest folder 139 → 19 files, 0 layer violations (from 29), files importing JSON directly 49 → 0; 874 browser checks in 131–158 s (from 319 s); splits: `OsrsPathBridgePlugin` 4,231 → 797 lines plus eight section classes, `HudModel` 1,175 → 468, `ActiveTarget` 1,078 → 298, `src/types` in seven topic files (bundle byte-identical), `runeliteBridge.ts` 627 → 522, `BridgeServer` 1,162 → 796, `bridge.tsx` 881 → 60 (state in `bridgeCore.ts`), `styles.css` in 14 files (byte-identical); files over 1,000 lines 5 → 0; knip fails on dead exports (15 removed). Local gates pass (2,519 unit, 874 browser, 95 Electron, 648 Java).
 
-2.81.31 (owner's pick): the HUD's default Ledger plate (ring, step code, NOW stamp, tabs Now/Prepare/Next/Advice) from the same card rows; drawn once per change, then copied (84–254 against 154–634 µs per frame); 653 Java tests. Real-game check pending.
+2.81.31 (owner's pick): the HUD's default Ledger plate with tabs, from the same card rows; drawn once per change, then copied (84–254 against 154–634 µs per frame); 653 Java tests. Real-game check pending.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt
