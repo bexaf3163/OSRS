@@ -7,7 +7,7 @@
 
 import { doseKind, doseName } from './doseKind';
 
-export { doseKind, doseName, doseNames, type DoseKind } from './doseKind';
+export { doseKind } from './doseKind';
 
 /** Every size of a potion is 1 to 4 doses (the free-world and route potions). */
 export const DOSE_SIZES = [4, 3, 2, 1] as const;
@@ -17,12 +17,6 @@ const MAX_DOSES = 4;
 export function needUnits(name: string, count: number): number {
   const k = doseKind(name);
   return k ? count * k.per : count;
-}
-
-/** "16 doses" for a potion, "×16" for anything else; nothing for a single piece. */
-export function amountText(name: string, units: number, exact = true): string {
-  if (doseKind(name)) return `${units} ${units === 1 ? 'dose' : 'doses'}`;
-  return units > 1 ? `×${units}${exact ? '' : '+'}` : '';
 }
 
 /** A potion line's name without its size: "Strength potion" for "Strength potion(4)". */

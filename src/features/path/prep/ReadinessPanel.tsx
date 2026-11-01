@@ -6,13 +6,11 @@ import { useStore } from '../../../state/store';
 import { useBridge } from '../../../state/bridge';
 import { isClosed } from '../../../domain/quests/next-step';
 import { STATUS_TEXT, type ReadinessAction, type RequirementStatus, type StepReadiness } from '../../../domain/readiness/readiness';
-import { useReadiness, useReadinessEngine } from '../../../state/readinessContext';
+import { useReadinessEngine } from '../../../state/readinessContext';
 import { useScopedReadiness } from '../../../state/hooks/useStageScope';
 import { NavigateButton } from '../../../ui/NavigateButton';
 import { PrepRouteBlock } from './PrepRoute';
 import { hrefTo } from '../../../domain/pages/pages';
-
-export { useReadiness };
 
 const MARK: Record<RequirementStatus['state'], string> = { OK: '✓', BANK: '🏦', PARTIAL: '◐', MISSING: '✗', UNKNOWN: '?' };
 

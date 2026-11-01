@@ -12,7 +12,7 @@ import { buildNeed, type FundingNeed } from '../../src/domain/economy/funding/ne
 import { buildSnapshot, type FundingSnapshot } from '../../src/domain/economy/funding/snapshot';
 import type { SurplusRec } from '../../src/domain/economy/funding/budget';
 import type { PriceView } from '../../src/domain/market/quotes';
-import type { MethodEvaluation, ObservedRate } from '../../src/domain/economy/funding/evaluate';
+import type { ObservedRate } from '../../src/domain/economy/funding/evaluate';
 import { emptyProgress } from '../../src/domain/persistence/progress';
 import { buildPlayerState, type PlayerState } from '../../src/domain/player/playerState';
 import { buildPrepPlan, type PrepPlan } from '../../src/domain/prep/prepPlan';
@@ -108,16 +108,4 @@ export function scenario(prices: PriceView, o: ScenarioOpts = {}): Scenario {
     activeId: o.activeId, allowHighEffort: o.allowHighEffort,
   });
   return { step, state, prep, need, snap, assessment, base };
-}
-
-export function summary(a: FundingAssessment): string[] {
-  const f = (e: MethodEvaluation) => `${e.method.id} elig=${e.eligible} conf=${e.confidence} min=${e.minutes ? `${e.minutes.fast.toFixed(0)}-${e.minutes.slow.toFixed(0)}` : '-'}`;
-  return [
-    `state=${a.state} required=${a.required} gap=${a.gap} headline=${a.headline}`,
-    `min tier ${JSON.stringify(a.need.minimum.lines.map((l) => `${l.name}x${l.qty}@${l.unit}`))} cost=${a.need.minimum.cost} rec=${a.need.recommended.cost} obj=${a.need.objective.cost} opt=${a.need.optional.cost} unknown=${a.need.unknown}`,
-    `recommendation=${a.recommendation ? `${a.recommendation.kind} ${a.recommendation.title} | ${a.recommendation.detail}` : 'none'}`,
-    ...a.alternatives.map((o) => `alt=${o.kind} ${o.title} | ${o.detail}`),
-    ...a.notOffered.map((n) => `not offered: ${n.method}: ${n.why}`),
-    ...(a.recommendation?.evaluation ? [f(a.recommendation.evaluation)] : []),
-  ];
 }

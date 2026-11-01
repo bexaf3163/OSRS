@@ -3,5 +3,5 @@ export { LedgerStage } from './LedgerStage';
 export { TitleBar, Hud, Spine, Hotbar } from './Chrome';
 export { Road } from './Road';
 export { Book, Eyebrow, Page } from './parts';
-export { Icon, type IconName } from './icons';
+export { Icon } from './icons';
 export * from './model';

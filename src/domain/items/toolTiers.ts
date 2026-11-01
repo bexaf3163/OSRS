@@ -1,15 +1,15 @@
 // Tool tiers. The route names a tool by its weakest tier ("Bronze pickaxe"); a better one does the same job, so any tier counts.
-// No imports: the checklist, the player state and the bridge all read it.
+// It imports only the import-free itemKey, so the checklist, the player state and the bridge can all read it without a cycle.
+
+import { nameKey } from './itemKey.ts';
 
 /** Weakest first. */
 export const PICKAXES = ['Bronze pickaxe', 'Iron pickaxe', 'Steel pickaxe', 'Black pickaxe', 'Mithril pickaxe', 'Adamant pickaxe', 'Rune pickaxe', 'Dragon pickaxe', 'Crystal pickaxe', 'Infernal pickaxe', '3rd age pickaxe', 'Gilded pickaxe'] as const;
 export const AXES = ['Bronze axe', 'Iron axe', 'Steel axe', 'Black axe', 'Mithril axe', 'Adamant axe', 'Rune axe', 'Dragon axe', 'Crystal axe', 'Infernal axe', '3rd age axe', 'Gilded axe'] as const;
 
-const key = (s: string): string => s.replace(/\s+/g, ' ').trim().toLowerCase();
-
 /** Every tier that does the job of this name, or null when the name is not a tool the route names by its weakest tier. */
 export function toolFamilyOf(nameEn: string): readonly string[] | null {
-  const k = key(nameEn);
+  const k = nameKey(nameEn);
   if (k === 'bronze pickaxe' || k === 'pickaxe') return PICKAXES;
   if (k === 'bronze axe' || k === 'axe') return AXES;
   return null;
@@ -28,7 +28,7 @@ const MEMBERS_TIERS = new Set(['dragon', 'infernal', '3rd age', 'crystal', 'gild
 
 /** What a pickaxe or axe tier needs: the skill, the level and whether it is a members item; null for anything else. */
 export function toolUse(nameEn: string): { skill: 'mining' | 'woodcutting'; level: number; members: boolean } | null {
-  const k = key(nameEn);
+  const k = nameKey(nameEn);
   const kind = k.endsWith(' pickaxe') ? 'pickaxe' : k.endsWith(' axe') ? 'axe' : null;
   if (!kind) return null;
   const tier = k.slice(0, k.length - kind.length - 1);
@@ -51,5 +51,5 @@ export function usableAt(nameEn: string, levelOf: (skill: string) => number | nu
 /** The other names that count in place of this one: the step's own list, else the tool family without the name itself. */
 export function alternativesOf(nameEn: string, own?: readonly string[]): string[] {
   const names = own?.length ? own : toolFamilyOf(nameEn) ?? [];
-  return names.filter((n) => key(n) !== key(nameEn));
+  return names.filter((n) => nameKey(n) !== nameKey(nameEn));
 }

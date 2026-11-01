@@ -5,7 +5,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
-import { detectRecovery, stepPoint, type Point, type Recovery } from '../../domain/travel/recovery';
+import { detectRecovery, type Point, type Recovery } from '../../domain/travel/recovery';
 import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
 
 const DISMISS_KEY = STORAGE_KEYS.recoveryDismissed;
@@ -59,5 +59,3 @@ export function useRecoveryTracker(): { active: ActiveRecovery | null; dismiss: 
   const value = useMemo<ActiveRecovery | null>(() => (step && candidate ? { stepId: step.id, recovery: candidate } : null), [step, candidate]);
   return { active: value, dismiss };
 }
-
-export { stepPoint };

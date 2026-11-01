@@ -60,8 +60,6 @@ export interface TrainerEntry extends Partial<Omit<Spot, 'foe' | 'stepId' | 'nam
 }
 export const TRAINER_SPOTS: readonly TrainerEntry[] = (trainersJson as unknown as { trainers: TrainerEntry[] }).trainers;
 
-/** How the guide says an opponent: the registry's name ("Giant frogs"), else the name with an s. */
-export const nameOf = (foe: string): string => TRAINER_SPOTS.find((t) => t.foe === foe)?.name ?? `${foe}s`;
 /** "the cows", "Brutus": the opponents as the object of a sentence. */
 export const themOf = (spot: Pick<Spot, 'name' | 'proper'>): string => (spot.proper ? spot.name : `the ${spot.name}`);
 

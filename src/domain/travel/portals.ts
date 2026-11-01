@@ -86,35 +86,6 @@ export function dedupePortals(list: Portal[]): Portal[] {
   return out;
 }
 
-/** How far from the target a staircase or ladder may come out and still be the way up to its floor: the same building. */
-export const FLOOR_REACH = 20;
-/** How far from the player a way down may be: the building the player is in. */
-export const FLOOR_NEAR = 40;
-
-/**
- * The staircase or ladder to take toward a target on another floor of the same layer (Arsen in the central hut, a floor up), or null. Only the first
- * flight. Up: the one that comes out nearest the target (the target's building). Down: the one nearest the player (out of the building the player is
- * in, wherever the target is). The same rules as Portals.pickFloor.
- */
-export function pickFloor(floors: readonly Portal[], px: number, py: number, pplane: number, tx: number, ty: number, tplane: number): Portal | null {
-  if (layerOf(py) !== layerOf(ty) || pplane === tplane) return null;
-  const up = tplane > pplane;
-  let best: Portal | null = null;
-  let bestScore = Infinity;
-  for (const pass of [false, true]) {
-    for (const p of floors) {
-      if (Boolean(p.req) !== pass || p.plane !== pplane || (p.toPlane > p.plane) !== up) continue;
-      const toTarget = dist(p.toX, p.toY, tx, ty);
-      const toPlayer = dist(p.x, p.y, px, py);
-      if (up ? toTarget > FLOOR_REACH : toPlayer > FLOOR_NEAR) continue;
-      const score = up ? toTarget + toPlayer / 10 : toPlayer + toTarget / 100;
-      if (score < bestScore) { best = p; bestScore = score; }
-    }
-    if (best) return best;
-  }
-  return null;
-}
-
 /** The compact row the file holds: [x, y, plane, toX, toY, toPlane, id, action, req]. */
 export type PortalRow = [number, number, number, number, number, number, number, string, string];
 

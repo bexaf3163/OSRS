@@ -8,8 +8,6 @@ export type { Confidence };
 /** An item by its exchange id and name. Coins are id 995. */
 export interface ItemRef { id: number; name: string }
 
-export const COINS: ItemRef = { id: 995, name: 'Coins' };
-
 /**
  * One item moved by one unit of the activity (a kill, an ore, a log, a bar). The expected amount per unit is qty x chance; no chance means every time.
  * Coins are an ordinary flow with the Coins item.

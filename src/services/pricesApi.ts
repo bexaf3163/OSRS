@@ -253,10 +253,6 @@ export function getMapping(): Promise<Map<number, MappingRow>> {
   return prices.getMapping();
 }
 
-export function getAllPrices(): Promise<{ at: number; prices: Map<number, GePrice> }> {
-  return prices.getAllPrices();
-}
-
 /** Both sides of every quote with their own times (and the hourly volumes when asked); an outage is a status, not an exception. */
 export function getQuoteBoard(opts?: { volumes?: boolean }): Promise<QuoteBoard> {
   return prices.getQuoteBoard(opts);
