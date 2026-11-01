@@ -1,6 +1,6 @@
 // The in-game arrow for a training method: the point is taken only from the place dictionary by the method key — without guessing from the text.
 
-import { matchStrict } from '../../services/locationResolver';
+import { matchStrict } from '../travel/locations';
 import { navPayload } from '../travel/places';
 import type { NavTargetPayload } from '../../services/runeliteBridge';
 import type { TrainingMethod } from './trainingRouter';

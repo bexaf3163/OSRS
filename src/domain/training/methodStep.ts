@@ -11,7 +11,7 @@ import methodsJson from '../../data/trainingMethods.json';
 import processingJson from '../../data/processing.json';
 import type { ProcessingRegistry } from './processingRates';
 import { items as itemData } from '../../data';
-import { matchStrict } from '../../services/locationResolver';
+import { matchStrict } from '../travel/locations';
 import { AXES, PICKAXES } from '../items/toolTiers';
 import type { MethodNeed } from './trainingRouter';
 import { RANGED_WATCH } from '../combat/rangedLoadout';

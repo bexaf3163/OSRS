@@ -3,7 +3,7 @@
 
 import type { WikiItemDetail } from '../types';
 import { itemById, items } from '../data';
-import { fold } from '../ui/md';
+import { fold } from '../domain/text/md';
 import { getGePrice, getMapping } from './pricesApi';
 import { fetchItemDetail, fetchNpc, openSearch, type FetchFn, type NpcInfo } from './wikiApi';
 

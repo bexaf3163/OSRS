@@ -1,7 +1,7 @@
 // The first screen for a new player: what this is and the three things to do. It goes away on its own with the first mark or on "Got it".
 
 import { useState } from 'react';
-import { useStore } from '../state/store';
+import { useStore } from '../../state/store';
 
 const KEY = 'osrs-put:welcome-done';
 

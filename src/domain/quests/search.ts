@@ -1,7 +1,7 @@
 // Global search over steps, the item database, skills, training rows and the reference.
 
 import type { Block, PluginsData, ReferenceData, Skill, Step, WikiItemDetail } from '../../types';
-import { fold, stripMd } from '../../ui/md';
+import { fold, stripMd } from '../text/md';
 
 export type SearchKind = 'step' | 'item' | 'range' | 'skill' | 'ref' | 'plugin';
 

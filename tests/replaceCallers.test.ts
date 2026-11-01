@@ -18,7 +18,7 @@ describe('the save guard: who may call replace()', () => {
   });
 
   it('Account Sync marks through markSteps, which leaves a paused save paused', () => {
-    const sync = readFileSync('src/app/sync/AccountSync.tsx', 'utf8');
+    const sync = readFileSync('src/ui/AccountSync.tsx', 'utf8');
     expect(sync).toMatch(/markSteps\(p, /);
     const store = readFileSync('src/state/store.tsx', 'utf8');
     const mark = store.slice(store.indexOf('const markSteps'), store.indexOf('const replace'));

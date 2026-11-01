@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import {
-  createWikiLocator, isPoint, matchLoose, matchStrict, normalizeName, pruneStore, resolveLocationCoordinates, type WikiLocator,
-} from '../src/services/locationResolver';
-import { articleMapPoint, cleanWikiText, locLinePoint, mapTemplatePoints, spawnPoint } from '../src/services/wikiApi';
+import { createWikiLocator, pruneStore, resolveLocationCoordinates, type WikiLocator } from '../src/services/locationResolver';
+import { isPoint, matchLoose, matchStrict, normalizeName } from '../src/domain/travel/locations';
+import { articleMapPoint, locLinePoint, mapTemplatePoints, spawnPoint } from '../src/services/wikiApi';
+import { cleanWikiText } from '../src/domain/text/md';
 import majorLocations from '../src/data/majorLocations.json';
 
 /** A wiki stub: answers with the markup of the articles from the table, counts the requests. */

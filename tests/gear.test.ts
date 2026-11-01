@@ -10,7 +10,7 @@ import {
   sourceText, statsText, stepFoes, watchNames, withKillEstimate, WINDOW,
   type AdvisorInput,
 } from '../src/domain/combat/gearAdvisor';
-import { matchStrict } from '../src/services/locationResolver';
+import { matchStrict } from '../src/domain/travel/locations';
 import type { GearState } from '../src/services/runeliteBridge';
 import type { OwnedState } from '../src/domain/items/checklist';
 import type { GearData, GearPiece } from '../src/types';

@@ -10,7 +10,7 @@
 import toolProgressionJson from '../../data/toolProgression.json';
 import type { GameMode, Step, WikiItemDetail } from '../../types';
 import { itemById } from '../../data';
-import { matchStrict } from '../../services/locationResolver';
+import { matchStrict } from '../travel/locations';
 import type { GearState, NavTargetPayload } from '../../services/runeliteBridge';
 
 export type UpgradeCategory = 'woodcutting' | 'mining';

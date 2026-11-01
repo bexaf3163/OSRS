@@ -8,7 +8,6 @@ import { PlayerStateProvider } from './state/playerStateContext';
 import { ReadinessProvider } from './state/readinessContext';
 import { FundingProvider } from './state/fundingContext';
 import { TrainingSessionProvider } from './state/trainingSessionContext';
-import { WikiProvider } from './features/reference/WikiDrawer';
 import './styles.css';
 import './clear-path.css';
 import './modern-path.css';
@@ -27,9 +26,7 @@ createRoot(document.getElementById('root')!).render(
           <ReadinessProvider>
             <FundingProvider>
               <TrainingSessionProvider>
-              <WikiProvider>
-                <App />
-              </WikiProvider>
+              <App />
               </TrainingSessionProvider>
             </FundingProvider>
           </ReadinessProvider>

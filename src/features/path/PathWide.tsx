@@ -16,8 +16,8 @@ import { useWiki } from '../reference/WikiDrawer';
 import { findSubStep, instructionSubStep, subStepNpcInfo } from '../../domain/quests/subStep';
 import { GearBanner } from '../gear/GearPrompt';
 import { TrackedSkillCard } from './step/TrackedSkillCard';
-import { AccountSync } from '../../app/sync/AccountSync';
-import { Welcome } from '../../app/Welcome';
+import { AccountSync } from '../../ui/AccountSync';
+import { Welcome } from './Welcome';
 import { Eyebrow, Icon, Page, Road } from '../../ledger';
 import { roadStages } from '../../ledger/adapters';
 

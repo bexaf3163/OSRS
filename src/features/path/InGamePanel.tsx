@@ -7,7 +7,7 @@ import { useBridge } from '../../state/bridge';
 import { toInGameTarget } from '../../services/runeliteBridge';
 import { PreflightPanel } from './prep/PreflightPanel';
 import { PacingLine } from './step/PacingLine';
-import { PluginUpdateNote } from '../../app/PluginUpdateNote';
+import { PluginUpdateNote } from '../settings/PluginUpdateNote';
 import { triggerText } from '../../domain/quests/triggers';
 import { routeTrigger } from '../../domain/prep/carryover';
 import { plural } from '../../domain/economy/shopping';

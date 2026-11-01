@@ -10,7 +10,7 @@ import {
 import {
   recommendFor, recommendUpgrade, showsPrompt, stepUpgradeCategories, toolProgression, upgradeNav, type RouterInput, type ToolProgression,
 } from '../src/domain/training/gearUpgradeRouter';
-import { matchStrict } from '../src/services/locationResolver';
+import { matchStrict } from '../src/domain/travel/locations';
 import { actionForm, etaText, pacingNext, pacingText } from '../src/domain/player/pacing';
 import { foeData } from '../src/domain/combat/gearAdvisor';
 import { mapTarget, navPayload, pageFromUrl, sourceBadge } from '../src/domain/travel/places';

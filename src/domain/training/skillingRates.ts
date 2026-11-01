@@ -18,7 +18,7 @@ import { toolFamilyOf, toolUse } from '../items/toolTiers';
 import type { Market, ModelRate, RateSpot } from './methodRates';
 import type { TrainingMethod } from './trainingRouter';
 import { attacksPlayer, hostileText } from './aggression';
-import { matchStrict } from '../../services/locationResolver';
+import { matchStrict } from '../travel/locations';
 import { combatLevel } from '../economy/moneyAdvisor';
 import { supplyPrice } from '../prep/sourceRouter';
 import { PROCESSING, type ProcessingRegistry } from './processingRates';

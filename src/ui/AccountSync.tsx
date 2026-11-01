@@ -2,12 +2,12 @@
 // can be closed at once. It only marks (removes nothing) and has undo.
 
 import { useMemo, useState } from 'react';
-import { stepById } from '../../data';
-import { useBridge } from '../../state/bridge';
-import { earlierUnverified, syncCandidates } from '../../domain/player/accountSync';
-import { gateAllows } from '../../domain/persistence/profiles';
-import { withReviewed, withStep } from '../../domain/persistence/progress';
-import { useStore } from '../../state/store';
+import { stepById } from '../data';
+import { useBridge } from '../state/bridge';
+import { earlierUnverified, syncCandidates } from '../domain/player/accountSync';
+import { gateAllows } from '../domain/persistence/profiles';
+import { withReviewed, withStep } from '../domain/persistence/progress';
+import { useStore } from '../state/store';
 
 /** compact — a plaque at the top of "Path" (hidden if there is nothing to mark); otherwise a card in settings. */
 export function AccountSync({ compact = false }: { compact?: boolean }) {

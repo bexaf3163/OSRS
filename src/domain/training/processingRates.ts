@@ -13,7 +13,7 @@ import { itemRequirement } from '../readiness/requirements';
 import { requirementCost } from '../economy/funding/need';
 import { isRestrictedItem } from '../economy/tradeRestriction';
 import { supplyPrice } from '../prep/sourceRouter';
-import { matchStrict } from '../../services/locationResolver';
+import { matchStrict } from '../travel/locations';
 import { canWear, gearPieceByName } from '../combat/gearAdvisor';
 import type { Market, ModelRate, RateSpot } from './methodRates';
 import type { TrainingMethod, MethodNeed } from './trainingRouter';

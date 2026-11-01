@@ -15,7 +15,7 @@ import combatFoesJson from '../../data/combatFoes.json';
 import type { Foe, FoeData, GameMode, GearData, GearPiece, GearSlot, Step } from '../../types';
 import type { OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
-import { matchStrict } from '../../services/locationResolver';
+import { matchStrict } from '../travel/locations';
 import { shopAccess } from '../prep/shopAccess';
 import { SAVE_GP } from '../prep/shopConstants';
 import type { GearState, NavTargetPayload } from '../../services/runeliteBridge';

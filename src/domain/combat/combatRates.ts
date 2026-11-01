@@ -1,5 +1,5 @@
 import { bankTrip } from '../prep/bankTrip';
-import { matchStrict } from '../../services/locationResolver';
+import { matchStrict } from '../travel/locations';
 // What a combat training method gives this player per hour, from the same combat model the fight plans use (2.76, T10): one engine for melee, Ranged
 // and Magic, so the Skills page and the route's steps never disagree about where to train.
 //   melee  - combatEstimate.estimateCombat for the next few levels: the worn weapon, amulet and armour, eating, the spot's bank trips and respawns;

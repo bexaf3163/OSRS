@@ -4,7 +4,7 @@
 // 150 gp at the exchange 400 tiles away against 200 gp in a shop 20 away: we take the shop. It buys nothing.
 
 import type { WikiItemDetail } from '../../types';
-import { matchStrict } from '../../services/locationResolver';
+import { matchStrict } from '../travel/locations';
 import { SAVE_GP } from './shopConstants';
 import { heldOf, levelOf, type PlayerState, type WorldPoint } from '../player/playerState';
 import { SHOP_TOWN, accessSuffix, shopAccess, shopKey, spawnAccess, type AccessState } from './shopAccess';

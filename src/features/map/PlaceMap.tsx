@@ -6,9 +6,10 @@ import { lazy, Suspense, useCallback, useEffect, useRef, useState, type ReactNod
 import { createPortal } from 'react-dom';
 import { useBridge } from '../../state/bridge';
 import { useStore } from '../../state/store';
-import { isPoint } from '../../services/locationResolver';
+import { isPoint } from '../../domain/travel/locations';
+import { resolvePlace } from '../../services/locationResolver';
 import type { NavTargetPayload } from '../../services/runeliteBridge';
-import { mapTarget, navPayload, resolvePlace, type MapTarget, type PlaceQuery } from '../../domain/travel/places';
+import { mapTarget, navPayload, type MapTarget, type PlaceQuery } from '../../domain/travel/places';
 import type { MapStatus } from './WorldMapModal';
 
 export type { PlaceQuery } from '../../domain/travel/places';

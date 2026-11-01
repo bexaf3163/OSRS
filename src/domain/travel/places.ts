@@ -2,7 +2,7 @@
 // what to look for (a spawn line, a shop, a seller, a town), where the coordinates came from and what goes to the game.
 
 import type { WikiItemDetail } from '../../types';
-import { resolveLocationCoordinates, type ResolvedPoint, type ResolveContext } from '../../services/locationResolver';
+import type { ResolvedPoint } from './locations';
 import type { NavTargetPayload } from '../../services/runeliteBridge';
 
 /** What kind of place: a "where it lies for free" line, a shop (and its seller, town) or an NPC. */
@@ -37,17 +37,6 @@ export function pageFromUrl(url: string): string | undefined {
   } catch {
     return undefined;
   }
-}
-
-export function resolvePlace(q: PlaceQuery): ReturnType<typeof resolveLocationCoordinates> {
-  const ctx: ResolveContext = {};
-  if (q.kind === 'spawn' && q.item) {
-    ctx.itemPage = pageFromUrl(q.item.wikiUrl);
-    ctx.itemName = q.item.nameEn;
-  }
-  // A click on a town is a town; on a shop or seller it is the shop itself, which is more exact.
-  if (q.kind !== 'city' && q.shop) ctx.shopName = q.shop;
-  return resolveLocationCoordinates(q.location, q.kind === 'city' ? undefined : q.npc, ctx);
 }
 
 const MATCH_TEXT: Record<ResolvedPoint['match'], string> = {

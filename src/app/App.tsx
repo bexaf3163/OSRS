@@ -20,6 +20,7 @@ import { PathPage } from '../features/path/Path';
 import { SkillsPage } from '../features/skills/Skills';
 import { JournalPage } from '../features/journal/Journal';
 import { ReferencePage } from '../features/reference/Reference';
+import { WikiProvider } from '../features/reference/WikiDrawer';
 import { SettingsPage } from '../features/settings/Settings';
 import { ShoppingPage } from '../features/shopping/Shopping';
 import { GearPage } from '../features/gear/Gear';
@@ -100,7 +101,7 @@ export function App() {
   }
 
   return (
-    <LedgerStage>
+    <WikiProvider><LedgerStage>
       <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>
         Skip to content
       </a>
@@ -135,6 +136,6 @@ export function App() {
       <PrepSync />
       <SkillSync />
       <SearchBox open={searchOpen} onClose={() => setSearchOpen(false)} />
-    </LedgerStage>
+    </LedgerStage></WikiProvider>
   );
 }

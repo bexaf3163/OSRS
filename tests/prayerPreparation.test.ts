@@ -6,7 +6,7 @@ import { methodPoint, withTrainingMethod } from '../src/domain/training/methodSt
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { stepById } from '../src/data';
 import { skillGuides } from '../src/data/skillGuideRegistry';
-import { matchStrict } from '../src/services/locationResolver';
+import { matchStrict } from '../src/domain/travel/locations';
 
 const method = trainingMethods.find(m => m.id === 'pr-camdozaal')!;
 function character(levels: Record<string, number> = { prayer: 1, fishing: 7, cooking: 7 }, knife = 1, quest = true) {

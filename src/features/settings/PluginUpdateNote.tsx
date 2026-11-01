@@ -3,8 +3,8 @@
 // it must be restarted. Before, only the header ("Update the RuneLite plugin") and settings said so — and the player
 // did not see the new "What you need" list in the game and did not understand why.
 
-import { useBridge } from '../state/bridge';
-import { APP_PROTOCOL, missingWithPlugin } from '../services/runeliteBridge';
+import { useBridge } from '../../state/bridge';
+import { APP_PROTOCOL, missingWithPlugin } from '../../services/runeliteBridge';
 
 export function PluginUpdateNote() {
   const { state, plugin, canLaunch } = useBridge();

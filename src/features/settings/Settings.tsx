@@ -8,9 +8,9 @@ import { useBridge } from '../../state/bridge';
 import { setFeatures, useFeatures, type Features } from '../../domain/persistence/features';
 import { priorityOf } from '../../domain/persistence/playStyle';
 import { BRIDGE_ORIGIN } from '../../services/runeliteBridge';
-import { PluginUpdateNote } from '../../app/PluginUpdateNote';
+import { PluginUpdateNote } from './PluginUpdateNote';
 import { plural } from '../../domain/economy/shopping';
-import { AccountSync } from '../../app/sync/AccountSync';
+import { AccountSync } from '../../ui/AccountSync';
 import { BackupSection, UpdatesSection, ProfilesSection, SessionSection } from './SettingsExtra';
 import { Eyebrow, Page } from '../../ledger';
 

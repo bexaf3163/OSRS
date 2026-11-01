@@ -5,7 +5,7 @@ import {
 import { deriveQuests } from '../src/domain/quests/quests';
 import { titleTargets } from '../src/domain/quests/targets';
 import { createPriceService, PRICE_TTL_MS } from '../src/services/pricesApi';
-import { cleanWikiText } from '../src/services/wikiApi';
+import { cleanWikiText } from '../src/domain/text/md';
 import { stepText } from '../src/domain/quests/search';
 
 describe('game mode', () => {
