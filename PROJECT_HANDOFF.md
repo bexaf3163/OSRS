@@ -195,10 +195,10 @@ Record versions, account mode, facts, expected and actual result and evidence as
 
 Each batch releases after all gates and its Go threshold, and live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. Alternate timing-pair order: identical builds timed up to +10% script and +36% blocking when second. In order:
 
-1. **S9** CSS per feature, each batch pixel-diffed; **S7** authored/generated data with a manifest and **S10** scripts by purpose, in a freeze window.
+1. **S7** authored/generated data with a manifest and **S10** scripts by purpose, in a freeze window.
 2. **S8** split oversized `OsrsPathBridgePlugin`, `HudModel`, `BridgeServer`, `ActiveTarget`, `types/index.ts`, `bridge.tsx` and `runeliteBridge.ts`, then run the full plugin live matrix.
 
-Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3.8% page-only code), a V8 code cache via custom protocol (moves the `localStorage` origin), domain barrels, merged tiny modules. The React hooks lint needs TypeScript 5 beside TypeScript 7, so it stays an occasional review. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (kept by owner decision 2026-11-01). Merged remote branches and `audit-test-*` pre-releases were pruned on 2026-11-01; never delete normal `v*` releases.
+Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3.8% page-only code), a V8 code cache via custom protocol (moves the `localStorage` origin), domain barrels, merged tiny modules, an automatic CSS split per feature (S9: classes combine at run time, as `Icon` merges a caller's class, and file order settles equal-specificity ties, so even a checked split changed computed styles, chevrons 18 → 20 px; the design layers need a manual merge checked by comparing computed styles page by page). The React hooks lint needs TypeScript 5 beside TypeScript 7, so it stays an occasional review. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (kept by owner decision 2026-11-01). Merged remote branches and `audit-test-*` pre-releases were pruned on 2026-11-01; never delete normal `v*` releases.
 
 ## Completed baseline — preserve, do not redo
 
