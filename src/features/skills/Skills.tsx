@@ -1,18 +1,17 @@
 // The list of skills: what to train now in each, and the way into each skill's training guide (its method, place and leveling roadmap).
-import { levelById, membersSkills, skills, xpData } from '../../data';
+import { levelById, membersSkills, skills } from '../../data';
 import { useStore } from '../../state/store';
 import { currentStage } from '../../domain/quests/next-step';
-import { formatXp } from '../../domain/quests/goals';
 import { levelOf } from '../../domain/persistence/progress';
 import type { Skill } from '../../types';
-import { Table } from '../../ui/Table';
 import { SkillGlyph } from '../../ui/SectionShell';
 import { useBridge } from '../../state/bridge';
-import { SKILL_NAMES, type SkillName } from '../../domain/training/skillGuide';
 import { useTracked } from '../../state/hooks/useTracked';
 import { SkillDetailPage } from './SkillDetail';
 import { Eyebrow, Page } from '../../ledger';
 import { f2pAdviceFor, f2pAdviceLabel, F2P_PRIORITY_LABEL } from '../../domain/training/f2pSkillAdvice';
+
+
 
 /** The Skills spread: the character sheet on the left, the chosen skill (or the followed one) on the right. */
 export function SkillsPage({ param, selectedSkill, goal }: { param?: string; selectedSkill?: string; goal?: number }) {
@@ -64,20 +63,7 @@ export function SkillsPage({ param, selectedSkill, goal }: { param?: string; sel
   );
 }
 
-export function XpTable() {
-  const half = Math.ceil(xpData.points.length / 2);
-  const rows = xpData.points.slice(0, half).map((p, i) => {
-    const q = xpData.points[i + half];
-    return [String(p.level), formatXp(p.xp), q ? String(q.level) : '', q ? formatXp(q.xp) : ''];
-  });
-  return <Table head={['Level', 'XP', 'Level', 'XP']} rows={rows} caption="XP to level" />;
-}
 
-/** The skills of the card that have a leveling roadmap: the melee card also opens Hitpoints. */
-export function roadmapSkills(skill: Skill): SkillName[] {
-  const ids = skill.id === 'ME' ? [...skill.levelSkills, 'hitpoints'] : skill.levelSkills;
-  return ids.filter((id): id is SkillName => (SKILL_NAMES as readonly string[]).includes(id));
-}
 
 /** One skill per tile; recommendations and manual level editing live on its detail page. */
 function SkillCard({ skill, id }: { skill: Skill; id: string }) {

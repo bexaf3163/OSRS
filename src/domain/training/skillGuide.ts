@@ -1,9 +1,10 @@
 // The skill leveling guides (src/data/skills/<skill>.json, built by tools/skill-guides from the OSRS Wiki): the step schema, the path for a filter, and what goes to
 // the game. A path is a list of level brackets in the order to train them: quest XP skips first, then the methods. Pure logic: the registry loads the files.
 
-import type { Progress, Step } from '../../types';
+import type { Progress, Step, Skill } from '../../types';
 import { isCompleted } from '../quests/next-step';
 import { nameKey } from '../items/itemKey';
+
 
 export const SKILL_NAMES = [
   'attack', 'strength', 'defence', 'ranged', 'prayer', 'magic', 'runecraft', 'construction', 'hitpoints', 'agility', 'herblore', 'thieving', 'crafting',
@@ -226,4 +227,10 @@ export function bracketsOf(path: readonly SkillStep[]): { from: number; to: numb
     to: Math.max(...g.steps.map((x) => x.targetLevel)),
     steps: g.steps,
   }));
+}
+
+/** The skills of the card that have a leveling roadmap: the melee card also opens Hitpoints. */
+export function roadmapSkills(skill: Skill): SkillName[] {
+  const ids = skill.id === 'ME' ? [...skill.levelSkills, 'hitpoints'] : skill.levelSkills;
+  return ids.filter((id): id is SkillName => (SKILL_NAMES as readonly string[]).includes(id));
 }
