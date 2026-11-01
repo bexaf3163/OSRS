@@ -249,7 +249,7 @@ export interface StagePayload {
   banks?: { x: number; y: number; plane: number; label: string }[];
   kind: 'varp' | 'varbit';
   id: number;
-  stages: { at: number; steps: { t: string; s?: string; x?: number; y?: number; plane?: number; has?: string; need?: string; hl?: StageHighlight; k?: string; pre?: StagePre[]; mh?: number }[]; /** The index of the point in places. */ go?: number; items?: { name: string; id?: number; count?: number; where?: string; inStep?: boolean }[] }[];
+  stages: { at: number; steps: { t: string; s?: string; x?: number; y?: number; plane?: number; has?: string; need?: string; hl?: StageHighlight; k?: string; pre?: StagePre[]; mh?: number }[]; /** The index of the point in places. */ go?: number; /** The guide's item shape: the plugin reads both lists as GuideItem. */ items?: StepGuidePayload['items'] }[];
 }
 
 /** A bulk list for the exchange hint: name — the English name, count — how many are needed in all. */
