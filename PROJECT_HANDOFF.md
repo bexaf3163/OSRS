@@ -43,7 +43,7 @@ Every fix, feature, removal or redesign (app, plugin, data, tests, CSS, docs, CI
 
 1. **Put it where it belongs:** `src/app` shell, `src/state` providers, hooks and storage-backed stores, `src/ui` and `src/ledger` shared pieces, `src/features/<page>`, `src/domain/<area>` engines, `src/services` IO, `src/data` typed data. No catch-all folder and none above 25 files (`src/data` until S7). [`npm run check-structure`]
 2. **Size budget.** Soft 600, hard 1,000 lines for TS, Java and CSS. A touched file above 600 lines must not grow; split it by concern. No merging modules into big files and no one-line files without a reason (breaking a cycle is one). [check-structure]
-3. **One source of truth.** Versions change only through `npm run bump -- X.Y.Z "summary"`. Generated data comes only from its `scripts/build-*.ts` generator. Bridge payload fields change the TS types and Java DTOs together, tested on both sides. Reuse the existing route-link and storage-key constants.
+3. **One source of truth.** Versions change only through `npm run bump -- X.Y.Z "summary"`. Generated data comes only from its `scripts/build-*.ts` generator. Bridge payload fields change the TS types and Java DTOs together, tested on both sides. Page links come only from `hrefTo` in `src/domain/pages/pages.ts` and window-storage keys only from `STORAGE_KEYS` in `src/domain/persistence/storageKeys.ts`. [check-structure]
 4. **One-way layers, no cycles.** `app → features → ui/ledger → state → services → domain → data/types`. Domain areas depend bottom up: persistence and text, items, player and travel, market and quests, combat, training, prep, economy, readiness, guide. A feature may reuse another feature's component, never back. `domain` has no React and no network or desktop IO. No import cycles between files or folders. Type-only imports use `import type` (under `verbatimModuleSyntax`, `import { type X }` still loads the module). [check-structure, strict in CI]
 5. **Reuse before adding.** Extend the existing engine, parser, normalizer, allocator or component. A second implementation of a concept is a defect.
 6. **Remove in the same change.** Retiring something deletes its exclusive code, CSS, tests, fixtures, assets, data and docs in the same commit. [`npm run knip`, `npm run dead-css`]
@@ -195,12 +195,11 @@ Record versions, account mode, facts, expected and actual result and evidence as
 
 Each batch releases after all gates and its Go threshold, and live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. Alternate timing-pair order: identical builds timed up to +10% script and +36% blocking when second. In order:
 
-1. **S4** page registry with `href.*()` (30 files hard-code `#/`) and one storage-key registry (26 keys in 19 files, byte-identical).
-2. **S11** receipts written by the release workflow and `npm run fixtures`; **C1** release reuses the Checks-verified EXE.
-3. **S5** TS-first bridge contract schema tested on both sides; first declare `alt` in `guide.stage.stages[*].items[*]`, which TS sends and `ActiveTarget.java` reads undeclared.
-4. **S6** tests beside code, browser scenarios per feature, conditions instead of the fixed sleeps left in `scripts/ui-smoke.ts`; Go: same checks, three green runs, at most 60% of today's time.
-5. **S9** CSS per feature, each batch pixel-diffed; **S7** authored/generated data with a manifest and **S10** scripts by purpose, in a freeze window.
-6. **S8** split oversized `OsrsPathBridgePlugin`, `HudModel`, `BridgeServer`, `ActiveTarget`, `types/index.ts`, `bridge.tsx` and `runeliteBridge.ts`, then run the full plugin live matrix.
+1. **S11** receipts written by the release workflow and `npm run fixtures`; **C1** release reuses the Checks-verified EXE.
+2. **S5** TS-first bridge contract schema tested on both sides; first declare `alt` in `guide.stage.stages[*].items[*]`, which TS sends and `ActiveTarget.java` reads undeclared.
+3. **S6** tests beside code, browser scenarios per feature, conditions instead of the fixed sleeps left in `scripts/ui-smoke.ts`; Go: same checks, three green runs, at most 60% of today's time.
+4. **S9** CSS per feature, each batch pixel-diffed; **S7** authored/generated data with a manifest and **S10** scripts by purpose, in a freeze window.
+5. **S8** split oversized `OsrsPathBridgePlugin`, `HudModel`, `BridgeServer`, `ActiveTarget`, `types/index.ts`, `bridge.tsx` and `runeliteBridge.ts`, then run the full plugin live matrix.
 
 Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3.8% page-only code), a V8 code cache via custom protocol (moves the `localStorage` origin), domain barrels, merged tiny modules. The React hooks lint needs TypeScript 5 beside TypeScript 7, so it stays an occasional review. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (kept by owner decision 2026-11-01). Merged remote branches and `audit-test-*` pre-releases were pruned on 2026-11-01; never delete normal `v*` releases.
 
