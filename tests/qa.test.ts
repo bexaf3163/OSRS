@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { qa, type QaInput } from '../scripts/qa';
+import { qa, type QaInput } from '../scripts/check/qa';
 import gear from '../src/data/gear.json';
 import questStages from '../src/data/questStages.json';
 import trainingMethods from '../src/data/trainingMethods.json';

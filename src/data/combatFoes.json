@@ -1,5 +1,5 @@
 {
-  "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/build-combat-foes.ts)",
+  "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
   "generatedAt": "2026-10-25",
   "foes": [
     {

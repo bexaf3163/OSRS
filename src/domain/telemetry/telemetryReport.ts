@@ -1,6 +1,6 @@
 // Parsing the plugin's debug journal (osrs-path-telemetry/session-*.jsonl): it is used to find errors without replaying the game.
 // The plugin writes one JSON line per event (Telemetry.java); here: reading, finding oddities and a per-step summary.
-// Pure functions without files or network, consumed by scripts/analyze-telemetry.ts.
+// Pure functions without files or network, consumed by scripts/dev/analyze-telemetry.ts.
 
 export interface TelemetryEvent {
   t: number;

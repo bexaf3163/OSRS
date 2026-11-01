@@ -1,5 +1,5 @@
 {
-  "source": "scripts/skilling.defs.json checked against the OSRS Wiki (skilling success charts, info templates, tool tables, action lengths, ObjectLocLine spawns) by scripts/build-skilling.ts",
+  "source": "scripts/data/skilling.defs.json checked against the OSRS Wiki (skilling success charts, info templates, tool tables, action lengths, ObjectLocLine spawns) by scripts/data/build-skilling.ts",
   "generatedAt": "2026-10-29",
   "tools": {
     "axe": {

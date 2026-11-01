@@ -1,5 +1,5 @@
 // The processing engine (2.79): one rate model for every skill that turns materials into a product at a station — Smithing at an anvil, Crafting at a
-// furnace or by a bank, Cooking at a fire. A recipe is the wiki's own (data/processing.json, built by scripts/build-processing.ts): level, XP, ticks at the
+// furnace or by a bank, Cooking at a fire. A recipe is the wiki's own (data/processing.json, built by scripts/data/build-processing.ts): level, XP, ticks at the
 // Make-X pace, tools, materials, output, success chance. The rate is the actions a bag allows between bank trips, each at the recipe's ticks, plus the
 // trip to the bank (the wiki's distance from a furnace or anvil; the walk from a fire), times the chance it succeeds. Materials are a cost at their
 // price, the product a gain at its sale value after tax; a recipe, station or account rule added to the data reaches every method that lists it.

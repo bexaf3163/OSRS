@@ -1,5 +1,5 @@
 {
-  "source": "scripts/trainers.defs.json checked against the OSRS Wiki (LocLine spawns, drop tables) and the route (scripts/build-trainers.ts)",
+  "source": "scripts/data/trainers.defs.json checked against the OSRS Wiki (LocLine spawns, drop tables) and the route (scripts/data/build-trainers.ts)",
   "generatedAt": "2026-10-25",
   "trainers": [
     {

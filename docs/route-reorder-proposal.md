@@ -20,7 +20,7 @@ Items 2, 4 and 5 do not move steps. Items 1 and 3 do.
 - Progress is saved by **step id** (`progress.steps["S2-07"] = "done"`), plus notes by id, `doneAt` by id, `qpKept`, `tasksDone` by `"<id>:<task>"`.
   Position is not saved. Moving a step in `steps.json` does not touch any save.
 - "What to do now" is the first open step in **array order** whose `requires` are closed (`next-step.ts`); `softRequires` only suggest.
-- `scripts/validate.ts` currently demands that ids run 01, 02, 03 in array order inside a stage (a retired id may leave a gap). That rule is what a
+- `scripts/check/validate.ts` currently demands that ids run 01, 02, 03 in array order inside a stage (a retired id may leave a gap). That rule is what a
   reorder would break, not any runtime code.
 - The plugin receives the active step id from the app; it holds no route order of its own (`RouteTargets` is built from the step data it is given).
   To be re-verified before the change.

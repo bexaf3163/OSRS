@@ -9,7 +9,7 @@ describe('the shared Wiki reader used by content builders', () => {
     const times: number[] = [];
     const fetcher = vi.fn(async () => { times.push(Date.now()); return response({ parse: { wikitext: '{{Infobox|value=raw}}' } }); });
     vi.stubGlobal('fetch', fetcher);
-    const { wikitext } = await import('../scripts/wiki');
+    const { wikitext } = await import('../scripts/data/wiki');
     const run = async () => [await wikitext('A page'), await wikitext('Another page')];
     const result = run();
     await vi.runAllTimersAsync();
@@ -24,7 +24,7 @@ describe('the shared Wiki reader used by content builders', () => {
     const fetcher = vi.fn().mockResolvedValueOnce(response({}, 429)).mockResolvedValueOnce(response({}, 503))
       .mockResolvedValueOnce(response({ parse: { wikitext: 'verified source' } }));
     vi.stubGlobal('fetch', fetcher);
-    const { wikitext } = await import('../scripts/wiki');
+    const { wikitext } = await import('../scripts/data/wiki');
     const result = wikitext('Source');
     await vi.runAllTimersAsync();
     expect(await result).toBe('verified source');
@@ -33,7 +33,7 @@ describe('the shared Wiki reader used by content builders', () => {
   it('does not endlessly retry a permanent HTTP failure', async () => {
     const fetcher = vi.fn().mockResolvedValue(response({}, 404));
     vi.stubGlobal('fetch', fetcher);
-    const { wikitext } = await import('../scripts/wiki');
+    const { wikitext } = await import('../scripts/data/wiki');
     const check = expect(wikitext('Missing')).rejects.toThrow('Missing: 404');
     await vi.runAllTimersAsync();
     await check;
@@ -41,7 +41,7 @@ describe('the shared Wiki reader used by content builders', () => {
   });
   it('does not turn a Wiki API error into an empty source', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response({ error: { info: 'page unavailable' } })));
-    const { wikitext } = await import('../scripts/wiki');
+    const { wikitext } = await import('../scripts/data/wiki');
     const check = expect(wikitext('Missing')).rejects.toThrow('Missing: page unavailable');
     await vi.runAllTimersAsync();
     await check;

@@ -37,7 +37,7 @@ function stopAll() {
 }
 
 function env(bridgePort) {
-  // As the release's packaged E2E (scripts/e2e-electron.ts) starts the portable exe on the same runner: the home folders and OSRS_PUT_E2E_ROOT
+  // As the release's packaged E2E (scripts/test/e2e-electron.ts) starts the portable exe on the same runner: the home folders and OSRS_PUT_E2E_ROOT
   // point into the run folder, so Electron's own paths are set before the app reads them. The portable launcher sets PORTABLE_EXECUTABLE_* itself.
   const e = { ...process.env, USERPROFILE: home, HOME: home, APPDATA: path.join(home, 'appdata'), LOCALAPPDATA: home, OSRS_PUT_E2E_ROOT: home,
     OSRS_PUT_BRIDGE_PORT: String(bridgePort) };

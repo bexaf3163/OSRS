@@ -99,7 +99,7 @@ export interface FairyRing { code: string; x: number; y: number; place: string; 
 export interface CharterPort { id: string; name: string; x: number; y: number; note: string }
 export interface Tablet { id: string; item: string; spell: string }
 
-/** Fairy rings, charter ports with the fare table and the teleport tablets: generated from the wiki by scripts/build-transport-net.ts. */
+/** Fairy rings, charter ports with the fare table and the teleport tablets: generated from the wiki by scripts/data/build-transport-net.ts. */
 export const NET = netJson as unknown as {
   checked: string;
   fairyRings: FairyRing[];

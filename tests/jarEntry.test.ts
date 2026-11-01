@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { deflateRawSync } from 'node:zlib';
 import { afterEach, describe, expect, it } from 'vitest';
-import { jarEntry } from '../scripts/jarEntry';
+import { jarEntry } from '../scripts/test/jarEntry';
 
 /** A zip with the given entries, each stored (0) or deflated (8), with a central directory as Gradle writes it. */
 function zip(entries: { name: string; data: string; method: 0 | 8 }[]): Buffer {

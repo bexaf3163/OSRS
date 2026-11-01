@@ -786,7 +786,7 @@ export interface MoneyReq {
   plus?: boolean;
 }
 
-/** An earning method from the wiki's "Money making guide/Free-to-play" (scripts/build-money.ts). */
+/** An earning method from the wiki's "Money making guide/Free-to-play" (scripts/data/build-money.ts). */
 export interface MoneyMethod {
   id: string;
   title: string;

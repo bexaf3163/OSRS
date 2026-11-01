@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The ways between the surface, separate areas and dungeons, and the staircases and ladders between floors (`src/data/portals.json`, bundled in the RuneLite
 plugin as `portals.json`), were derived from the transport table (`src/main/resources/transports/transports.tsv`, commit `99735452`) of the
-[Shortest Path](https://github.com/Skretzo/shortest-path) RuneLite plugin by Skretzo and contributors, by `scripts/build-portals.ts`: only the rows that change the
+[Shortest Path](https://github.com/Skretzo/shortest-path) RuneLite plugin by Skretzo and contributors, by `scripts/data/build-portals.ts`: only the rows that change the
 layer or the floor, with their tiles, object ids, menu words and requirements. The license of that repository, as published (its copyright line is a
 placeholder):
 

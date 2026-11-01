@@ -1,5 +1,5 @@
 {
-  "about": "Built by scripts/build-processing.ts from scripts/processing.defs.json and the OSRS Wiki; edit the definitions and rebuild.",
+  "about": "Built by scripts/data/build-processing.ts from scripts/data/processing.defs.json and the OSRS Wiki; edit the definitions and rebuild.",
   "stations": [
     {
       "kind": "furnace",

@@ -6,7 +6,7 @@
 const http = require('node:http');
 
 const HOST = '127.0.0.1';
-// The port can be replaced only for checks (scripts/e2e-electron.ts): a stub on a free port, not the player's live plugin.
+// The port can be replaced only for checks (scripts/test/e2e-electron.ts): a stub on a free port, not the player's live plugin.
 const PORT = Number(process.env.OSRS_PUT_BRIDGE_PORT) || 38282;
 const PATHS = new Set(['/status', '/active-step', '/clear', '/shopping-plan', '/nav-target', '/bank-tags', '/gear-hint', '/prep-plan', '/telemetry']);
 const REQUEST_TIMEOUT_MS = 1500;

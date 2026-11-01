@@ -4,7 +4,7 @@ import { emptyProgress, withOwnedManual, withStep } from '../persistence/progres
 import { contextOf, readinessOf, stepReadiness, type ReadinessInput } from './readiness';
 import { nearestBank } from '../travel/stepPlaces';
 import { buildPlayerState } from '../player/playerState';
-import { validate } from '../../../scripts/validate';
+import { validate } from '../../../scripts/check/validate';
 import type { Progress, Step } from '../../types';
 import { alternativesOf } from '../items/toolTiers';
 

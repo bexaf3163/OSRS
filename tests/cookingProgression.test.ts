@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { recipeTicks } from '../scripts/wiki';
+import { recipeTicks } from '../scripts/data/wiki';
 import { PROCESSING, processRate } from '../src/domain/training/processingRates';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';

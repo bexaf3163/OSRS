@@ -1,5 +1,5 @@
 // What a gathering method (Woodcutting, Fishing, Mining) gives this player per hour, and where: one engine for every tree, rock and fishing spot, the same
-// way the combat engines work (combatRates.ts). From data/skilling.json (built from the OSRS Wiki by scripts/build-skilling.ts):
+// way the combat engines work (combatRates.ts). From data/skilling.json (built from the OSRS Wiki by scripts/data/build-skilling.ts):
 //   - the chance per roll by the skilling success function (skillChance.ts) for the level and the best usable tool the player has (a better axe is a
 //     better chance, a better pickaxe a faster roll), the fishing cascade best fish first;
 //   - the time per roll (action lengths), the trees' despawn timers and the rocks' respawns shared by the rocks of the spot;
@@ -7,7 +7,7 @@
 //     (lootValue.bankingPays, the same rule as combat loot); bait used up is the cost;
 //   - every candidate spot of the method is worked out and the best one wins: the most XP, counting the coins banked as time saved. A spot next to a
 //     bank wins whenever its shorter walk makes it better, and never only because it is near.
-// Nothing here names a tree, a rock, a spot or a bank: a new one, members ones too, is an entry in scripts/skilling.defs.json and a build.
+// Nothing here names a tree, a rock, a spot or a bank: a new one, members ones too, is an entry in scripts/data/skilling.defs.json and a build.
 
 import skillingJson from '../../data/skilling.json';
 import { bankTrip } from '../travel/bankTrip';

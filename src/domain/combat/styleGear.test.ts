@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseOption } from '../../../scripts/style-gear-parse';
+import { parseOption } from '../../../scripts/data/style-gear-parse';
 import { adviseStyle, shoppingTotal, STYLE_GEAR, unmet, type StyleInput } from './styleGear';
 
 const base = (over: Partial<StyleInput>): StyleInput => ({

@@ -1,5 +1,5 @@
-// Where each opponent of the combat plans can be fought: the registry data/trainers.json, built from scripts/trainers.defs.json and checked against the
-// OSRS Wiki and the route (scripts/build-trainers.ts). Nothing here names an opponent, a place or a bank: a new spot (a members one too) is an entry
+// Where each opponent of the combat plans can be fought: the registry data/trainers.json, built from scripts/data/trainers.defs.json and checked against the
+// OSRS Wiki and the route (scripts/data/build-trainers.ts). Nothing here names an opponent, a place or a bank: a new spot (a members one too) is an entry
 // in the definitions and a build, and every rule below applies to it as it is. A spot is
 //   - a route step's own (fromStep): the step that sends the player to that opponent has the place, the NPC, the way in and the text;
 //   - a place a route step used to give (formerStep), written out as it was played;

@@ -1,5 +1,5 @@
 // Requests to the OSRS Wiki: the item card, shops, drops, spawns, NPCs.
-// Shared code for the app (live requests) and scripts/build-items.ts (building the local database).
+// Shared code for the app (live requests) and scripts/data/build-items.ts (building the local database).
 // Relative imports keep their extension: the file runs both in Vite and directly in Node.
 
 import type { WikiItemDetail } from '../types/index.ts';

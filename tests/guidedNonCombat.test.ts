@@ -6,7 +6,7 @@ import { adviseTraining, preparationNeeds, questTrainingStep, trainingMethods, t
 import { trackedTraining } from '../src/domain/training/trackedTraining';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import type { SkillName } from '../src/domain/training/skillGuide';
-import { qa } from '../scripts/qa';
+import { qa } from '../scripts/check/qa';
 
 const stateFor = (skill: string, level: number, tool?: string) => buildPlayerState({
   connected: true, player: 'Non-combat test', mode: 'f2p', progress: emptyProgress(),

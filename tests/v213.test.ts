@@ -118,7 +118,7 @@ describe('how to make up the money', () => {
   });
 });
 
-import { mmgFields, parseCapital, parseInputs, parseSkillsHtml, skillsNote } from '../scripts/money-parse';
+import { mmgFields, parseCapital, parseInputs, parseSkillsHtml, skillsNote } from '../scripts/data/money-parse';
 
 const scp = (skill: string, level: string, tail = '') =>
   `<span class="scp" data-skill="${skill}" data-level="${level}" style="position:relative"><span class="mw-default-size"><a href="/w/${skill}" title="${skill}"><img alt="${skill}" src="x.png" /></a></span> ${level} </span>${tail}`;
