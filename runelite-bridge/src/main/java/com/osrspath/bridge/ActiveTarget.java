@@ -1,15 +1,12 @@
 package com.osrspath.bridge;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.Data;
-import net.runelite.api.Skill;
 import com.osrspath.bridge.TargetGuide.ChecklistItem;
 import com.osrspath.bridge.TargetGuide.Guide;
 import com.osrspath.bridge.TargetNeeds.Pacing;
