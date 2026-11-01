@@ -38,7 +38,7 @@
     "build-style-gear": "node scripts/build-style-gear.ts",
     "check-links": "node scripts/check-links.ts",
     "bridge:jar": "node scripts/build-bridge-jar.ts",
-    "test:ui": "node scripts/ui-smoke.ts",
+    "test:ui": "node scripts/test/ui/run.ts",
     "test:e2e": "node scripts/e2e-electron.ts",
     "check-runelite": "node scripts/check-runelite-compat.ts",
     "telemetry": "node scripts/analyze-telemetry.ts",

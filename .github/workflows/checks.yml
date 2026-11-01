@@ -28,7 +28,7 @@ jobs:
       - run: npm run dead-css
       - run: npm test
       - run: npm run build
-      # The interface in a real browser: readiness, shopping, gear, the map, the header (scripts/ui-smoke.ts).
+      # The interface in a real browser: readiness, shopping, gear, the map, the header (scripts/test/ui).
       - run: npx playwright install --with-deps chromium
       - run: npm run test:ui
 

@@ -15,5 +15,5 @@ if (changed.some((f) => /^src\/data\/|^scripts\/(validate|qa|check-data)\.ts$|\.
 if (changed.some((f) => /^(vite\.config\.ts|index\.html|package\.json)$/.test(f))) run('vite build', 'npx', ['vite', 'build']);
 const java = changed.filter((f) => /^runelite-bridge\/src\/(main|test)\/java\/.*\.java$/.test(f)).map((f) => f.replace(/.*\//, '').replace(/(Test)?\.java$/, ''));
 if (java.length) run('java tests', process.platform === 'win32' ? 'runelite-bridge\\gradlew.bat' : 'runelite-bridge/gradlew', ['-p', 'runelite-bridge', '--no-daemon', 'test', ...[...new Set(java)].flatMap((c) => ['--tests', `*${c}*`])]);
-if (changed.some((f) => /^src\/(components|pages|ledger|features|ui|app)\/|\.css$/.test(f))) console.log('verify-quick: UI files changed — run the browser scenarios (npm run test:ui).');
+if (changed.some((f) => /^src\/(components|pages|ledger|features|ui|app)\/|\.css$/.test(f))) console.log('verify-quick: UI files changed — run the browser scenarios of that feature (npm run test:ui -- --only <feature>; --list names them).');
 run('structure', 'node', ['scripts/check-structure.mjs', '--strict']);

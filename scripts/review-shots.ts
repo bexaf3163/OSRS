@@ -1,5 +1,5 @@
 // Screenshots for a review package: every work area of the guide in the built page with a stub desktop app and a stub RuneLite bridge (the same
-// mock as scripts/ui-smoke.ts). These are FIXTURE screenshots: the player state is written here, not read from a game. They are labelled so in the
+// mock as scripts/test/ui/harness.ts). These are FIXTURE screenshots: the player state is written here, not read from a game. They are labelled so in the
 // manifest. Usage: npm run build, then REVIEW_OUT=<folder> node scripts/review-shots.ts [filter]. Writes <folder>/<nn>-<name>.png and manifest.json.
 
 import { spawn } from 'node:child_process';
