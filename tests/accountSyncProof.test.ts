@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { syncCandidates, earlierUnverified } from '../src/lib/accountSync';
-import { emptyProgress } from '../src/lib/progress';
+import { syncCandidates, earlierUnverified } from '../src/domain/player/accountSync';
+import { emptyProgress } from '../src/domain/persistence/progress';
 import type { Step } from '../src/types';
 
 const training = {

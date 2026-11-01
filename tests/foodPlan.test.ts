@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
-import { assumptionsFor, foodPicks, stepWeapon, withFoodPlan } from '../src/lib/foodPlan';
-import { aggregateShopping } from '../src/lib/shopping';
-import { emptyProgress } from '../src/lib/progress';
-import { stepReadiness } from '../src/lib/readiness';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { gearById } from '../src/services/gearAdvisor';
+import { assumptionsFor, foodPicks, stepWeapon, withFoodPlan } from '../src/domain/combat/foodPlan';
+import { aggregateShopping } from '../src/domain/economy/shopping';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { stepReadiness } from '../src/domain/readiness/readiness';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { gearById } from '../src/domain/combat/gearAdvisor';
 import type { GearState } from '../src/services/runeliteBridge';
 import type { Progress } from '../src/types';
 

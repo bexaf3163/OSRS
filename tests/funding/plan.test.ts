@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { cancel, confirm, FUNDING_PLAN_KEY, isRunning, loadPlan, MAX_GAP_SECONDS, pause, planKey, resume, savePlan, startPlan, STALE_AFTER_MS, tick, viewOf, type FundingPlanState } from '../../src/lib/funding/plan';
-import { methodById } from '../../src/lib/funding/methods';
+import { cancel, confirm, FUNDING_PLAN_KEY, isRunning, loadPlan, MAX_GAP_SECONDS, pause, planKey, resume, savePlan, startPlan, STALE_AFTER_MS, tick, viewOf, type FundingPlanState } from '../../src/domain/economy/funding/plan';
+import { methodById } from '../../src/domain/economy/funding/methods';
 import { market } from './market';
 import { scenario } from './scenario';
 import { fakeSnap } from './helpers';

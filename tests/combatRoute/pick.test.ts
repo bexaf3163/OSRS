@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { adoptStorageKey, loadAdopted, saveAdopted, withAdopted } from '../../src/lib/combatRoute/adopt';
-import { evaluatePlans } from '../../src/lib/combatRoute/plans';
-import { xpPerKill } from '../../src/lib/combatEstimate';
-import { currentPhase, phaseDone, resolvePick, samePicks, withCombatPlan } from '../../src/lib/combatRoute/pick';
-import { foodPicks, foodPlanApplied, stepResendKey, withFoodPlan } from '../../src/lib/foodPlan';
-import { aggregateShopping } from '../../src/lib/shopping';
-import { emptyProgress } from '../../src/lib/progress';
+import { adoptStorageKey, loadAdopted, saveAdopted, withAdopted } from '../../src/domain/combat/route/adopt';
+import { evaluatePlans } from '../../src/domain/combat/route/plans';
+import { xpPerKill } from '../../src/domain/combat/combatEstimate';
+import { currentPhase, phaseDone, resolvePick, samePicks, withCombatPlan } from '../../src/domain/combat/route/pick';
+import { foodPicks, foodPlanApplied, stepResendKey, withFoodPlan } from '../../src/domain/combat/foodPlan';
+import { aggregateShopping } from '../../src/domain/economy/shopping';
+import { emptyProgress } from '../../src/domain/persistence/progress';
 import { stepGuide, toInGameTarget } from '../../src/services/runeliteBridge';
 import { allSteps } from '../../src/data';
 import { market } from '../funding/market';

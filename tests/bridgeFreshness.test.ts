@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BridgeFreshness } from '../src/lib/bridgeFreshness';
+import { BridgeFreshness } from '../src/domain/player/bridgeFreshness';
 
 describe('status and event freshness', () => {
   it('preserves newer gear without dropping an unrelated status fact', () => {

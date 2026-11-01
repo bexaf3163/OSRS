@@ -41,10 +41,10 @@ Updated 2026-11-01. **This is the only current project contract, architecture ma
 
 Every fix, feature, removal or redesign (app, plugin, data, tests, CSS, docs, CI) leaves the project at least as simple as before. A change that fails a listed check is not finished. If a rule blocks legitimate work, change it here with the owner; never bypass it.
 
-1. **Put it where it belongs.** New code goes to its owning layer in the responsibility map, preferably a sub-folder of `src/lib` by concern (`funding/`, `combatRoute/`). No catch-all folders. [`npm run check-structure`]
+1. **Put it where it belongs:** `src/app` shell, `src/state` providers and hooks, `src/ui` and `src/ledger` shared pieces, `src/features/<page>`, `src/domain/<area>` engines, `src/services` IO, `src/data`. No catch-all folder and none above 25 files. [`npm run check-structure`]
 2. **Size budget.** Soft 600, hard 1,000 lines for TS, Java and CSS. A touched file above 600 lines must not grow; split it by concern. No merging modules into big files and no one-line files without a reason (breaking a cycle is one). [check-structure]
 3. **One source of truth.** Versions change only through `npm run bump -- X.Y.Z "summary"`. Generated data comes only from its `scripts/build-*.ts` generator. Bridge payload fields change the TS types and Java DTOs together, tested on both sides. Reuse the existing route-link and storage-key constants.
-4. **One-way layers, no cycles.** Engines in `src/lib` get no new React or IO imports; services do IO. No runtime import cycles. Type-only imports use `import type` (under `verbatimModuleSyntax`, `import { type X }` still loads the module). [check-structure]
+4. **One-way layers, no cycles.** `app → features → state/ui → domain → data/types`: `domain` has no React or IO, `services` only IO, and features never import other features. No runtime import cycles. Type-only imports use `import type` (under `verbatimModuleSyntax`, `import { type X }` still loads the module). [check-structure]
 5. **Reuse before adding.** Extend the existing engine, parser, normalizer, allocator or component. A second implementation of a concept is a defect.
 6. **Remove in the same change.** Retiring something deletes its exclusive code, CSS, tests, fixtures, assets, data and docs in the same commit. [`npm run knip`, `npm run dead-css`]
 7. **CSS.** Ledger CSS holds tokens, base and fonts only. No new `:root:root`, `:root .la-*` overrides or `!important`. A CSS or layout change needs a base-versus-head screenshot diff with no unexplained pixels (`npm run perf -- <repo> dist <port> shots`, then `npm run pixeldiff`). [dead-css]
@@ -80,29 +80,29 @@ canonical current action / next phase → app + bridge payload → single Java H
 new observed levels / inventory / equipment / bank / quest state recompute the plan
 ```
 
-Cross-page activity selection is `resolveActiveActivity` in `src/lib/activeActivity.ts` (`useActiveActivity` in `readinessContext.tsx`): incomplete followed training, else the admitted live route, else the next route step; completed or synthetic leftovers never become fallbacks. Path, Skills, Gear, Shopping and the plugin only project shared state, and a display fix never changes requirements or completion.
+Cross-page activity selection is `resolveActiveActivity` in `src/domain/quests/activeActivity.ts` (`useActiveActivity` in `src/state/readinessContext.tsx`): incomplete followed training, else the admitted live route, else the next route step; completed or synthetic leftovers never become fallbacks. Path, Skills, Gear, Shopping and the plugin only project shared state, and a display fix never changes requirements or completion.
 
 ### Responsibility map
 
 | Layer | Main entry points | Extension rule |
 |---|---|---|
-| Game link and facts | `src/bridge.tsx`, `src/lib/playerState.ts`, `src/playerStateContext.tsx`, `src/services/runeliteBridge.ts` | Keep observed/saved/unknown and account boundaries; reuse event processing before adding a scan or cache. |
-| Requirements and readiness | `src/lib/requirements.ts`, `readinessEngine.ts`, `preflight.ts`, `src/readinessContext.tsx` | Same requirements everywhere. Owning, using, carrying and wearing are different facts. |
-| Training catalogue and orchestration | `src/data/trainingMethods.json`, `src/lib/trainingRouter.ts` | Data under an existing model; new calculations in a shared adapter, never an ID-specific UI branch. |
-| Rates and equipment | `src/lib/methodRates.ts`, `skillingRates.ts`, `processingRates.ts`, `rangedLoadout.ts`, `magicPlan.ts`, `styleGear.ts`, `src/services/gearAdvisor.ts` | Reuse complete equipment and combat/recovery comparisons. Keep model, measured and reference rates apart. |
-| Tool capabilities | `src/lib/toolTiers.ts`, `src/data/toolProgression.json` | A purchase catalogue is not a usability whitelist. Skill and Attack requirements are separate. |
-| Followed Skills and virtual steps | `src/lib/skillTrack.ts`, `trackedTraining.ts`, `methodStep.ts`, `src/trainingSessionContext.tsx` | Follow the selected goal and conservative mode scope; keep the return to the original activity and stable phase IDs. |
-| Acquisition | `src/lib/prepPlan.ts`, `prepQueue.ts`, `prepRoute.ts`, `prepEnvelope.ts`, `sourceRouter.ts`, `usePrep.ts` | Reuse banking, sources, task detection, cancellation and resumption. No per-skill procurement. |
-| Travel | `src/lib/travel.ts`, `transport.ts`, `travelInput.ts`, `liveTransport.ts`, `travelSupplies.ts` | Real eligibility, complete supplies, whole detour cost, explicit supported modes. |
-| Quests, goals and completion | `src/data/questStages.json`, `goals.json`, `src/lib/questSteps.ts`, `questItems.ts`, `goals.ts`, `triggers.ts`, `next-step.ts` | Keep quest entry/preparation, branches, observed progress and prerequisite semantics. |
-| Economy | `src/lib/funding/`, `src/lib/fundingPlan.ts`, `src/fundingContext.tsx` | Reuse quotes, freshness, volume/trade limits, budget and sessions. Cash is not equipment value; future earnings are conditional. |
-| Item keys | `src/lib/itemKey.ts` (memoized `nameKey`), `src/lib/shopConstants.ts` (`SAVE_GP`) | Import-free leaves; never re-create `nameKey`. |
-| App recommendations | `src/components/TrainingCard.tsx`, `src/pages/SkillDetail.tsx`, `src/pages/Skills.tsx`, `src/lib/f2pSkillAdvice.ts` | Train is the compact recommendation; Plan explains the same result. Calculator and Reference never compete with it. |
-| Quest/current-action display | `src/pages/PathWide.tsx`, `src/components/CockpitWorkspace.tsx`, `src/components/StepCard.tsx` | Keep current instruction, preparation, branches, completion and route restoration. |
-| Maps | `src/lib/map.ts`, `src/lib/useMapSources.ts`, `src/components/StepMap.tsx`, `WorldMapModal.tsx` | One preview, shared coordinates and sources, full-map point selection, game navigation. |
-| Knowledge UI | `src/components/WikiDrawer.tsx`, `src/lib/places.ts`, `stepPlaces.ts`, reference/item/NPC data | Keep dossiers, pinning and source navigation. Reference is not a training plan. |
+| Game link and facts | `src/state/bridge.tsx`, `src/domain/player/playerState.ts`, `src/state/playerStateContext.tsx`, `src/services/runeliteBridge.ts` | Keep observed/saved/unknown and account boundaries; reuse event processing before adding a scan or cache. |
+| Requirements and readiness | `src/domain/readiness/` (`requirements.ts`, `readinessEngine.ts`, `preflight.ts`), `src/state/readinessContext.tsx` | Same requirements everywhere. Owning, using, carrying and wearing are different facts. |
+| Training catalogue and orchestration | `src/data/trainingMethods.json`, `src/domain/training/trainingRouter.ts` | Data under an existing model; new calculations in a shared adapter, never an ID-specific UI branch. |
+| Rates and equipment | `src/domain/training/` (`methodRates.ts`, `skillingRates.ts`, `processingRates.ts`), `src/domain/combat/` (`rangedLoadout.ts`, `magicPlan.ts`, `styleGear.ts`, `gearAdvisor.ts`) | Reuse complete equipment and combat/recovery comparisons. Keep model, measured and reference rates apart. |
+| Tool capabilities | `src/domain/items/toolTiers.ts`, `src/data/toolProgression.json` | A purchase catalogue is not a usability whitelist. Skill and Attack requirements are separate. |
+| Followed Skills and virtual steps | `src/domain/training/` (`skillTrack.ts`, `trackedTraining.ts`, `methodStep.ts`), `src/state/trainingSessionContext.tsx` | Follow the selected goal and conservative mode scope; keep the return to the original activity and stable phase IDs. |
+| Acquisition | `src/domain/prep/` (`prepPlan.ts`, `prepQueue.ts`, `prepRoute.ts`, `prepEnvelope.ts`, `sourceRouter.ts`), `src/state/hooks/usePrep.ts` | Reuse banking, sources, task detection, cancellation and resumption. No per-skill procurement. |
+| Travel | `src/domain/travel/` (`travel.ts`, `transport.ts`, `travelInput.ts`, `liveTransport.ts`, `travelSupplies.ts`) | Real eligibility, complete supplies, whole detour cost, explicit supported modes. |
+| Quests, goals and completion | `src/data/questStages.json`, `goals.json`, `src/domain/quests/` (`questSteps.ts`, `questItems.ts`, `goals.ts`, `triggers.ts`, `next-step.ts`) | Keep quest entry/preparation, branches, observed progress and prerequisite semantics. |
+| Economy | `src/domain/economy/` (`funding/`, `fundingPlan.ts`), `src/state/fundingContext.tsx` | Reuse quotes, freshness, volume/trade limits, budget and sessions. Cash is not equipment value; future earnings are conditional. |
+| Item keys | `src/domain/items/itemKey.ts` (memoized `nameKey`), `src/domain/prep/shopConstants.ts` (`SAVE_GP`) | Import-free leaves; never re-create `nameKey`. |
+| App recommendations | `src/features/skills/` (`TrainingCard.tsx`, `SkillDetail.tsx`, `Skills.tsx`), `src/domain/training/f2pSkillAdvice.ts` | Train is the compact recommendation; Plan explains the same result. Calculator and Reference never compete with it. |
+| Quest/current-action display | `src/features/path/` (`PathWide.tsx`, `CockpitWorkspace.tsx`, `step/`, `prep/`, `combat/`) | Keep current instruction, preparation, branches, completion and route restoration. |
+| Maps | `src/domain/travel/map.ts`, `src/state/hooks/useMapSources.ts`, `src/features/map/` (`StepMap.tsx`, `WorldMapModal.tsx`) | One preview, shared coordinates and sources, full-map point selection, game navigation. |
+| Knowledge UI | `src/features/reference/WikiDrawer.tsx`, `src/domain/travel/` (`places.ts`, `stepPlaces.ts`), reference/item/NPC data | Keep dossiers, pinning and source navigation. Reference is not a training plan. |
 | Plugin | `runelite-bridge/` (`BridgeServer`, `HudModel`, `OsrsPathGuideOverlay`, `GuideFont`) | One guide card: current action, status, at most one warning, details on demand. Never resurrect the multiple-HUD layout. |
-| Native shell and storage | `electron/main.cjs`, `preload.cjs`, `runelite-launcher.cjs`, `src/lib/desktop.ts` | Keep atomic saves, recoverable damaged/external data, profile protection, backups, updater, authenticated launcher and `startup.log` (first-paint time). |
+| Native shell and storage | `electron/main.cjs`, `preload.cjs`, `runelite-launcher.cjs`, `src/services/desktop.ts` | Keep atomic saves, recoverable damaged/external data, profile protection, backups, updater, authenticated launcher and `startup.log` (first-paint time). |
 | Tooling | `scripts/check-structure.mjs`, `verify-quick.mjs`, `bump.mjs`, `perf.mjs`, `perf-compare.mjs`, `pixeldiff.mjs`, `dead-css.mjs`, `knip.json`, `vitest.config.ts` | The guards of the hygiene rules. Extend them instead of adding parallel checks. |
 
 ### Extending content without repeating old fixes
@@ -132,7 +132,7 @@ Cross-page activity selection is `resolveActiveActivity` in `src/lib/activeActiv
 
 ## Accepted design and cleanup boundaries
 
-The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **Cinzel** headings and **EB Garamond** text (subsets in `src/ledger/fonts`). The in-game HUD keeps its own face, **Sora**, in the plugin jar. Never swap the two systems' fonts. Design entry points: `src/ledger/{Chrome.tsx,parts.tsx,icons.tsx,ledger.css,app.css,extras.css,fonts.css}` and `src/App.tsx`. Older CSS (`styles.css`, `clear-path.css`, `modern-path.css`, `cockpit.css`) still styles shared components; check consumers and pixel-diff before removing more.
+The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **Cinzel** headings and **EB Garamond** text (subsets in `src/ledger/fonts`). The in-game HUD keeps its own face, **Sora**, in the plugin jar. Never swap the two systems' fonts. Design entry points: `src/ledger/{Chrome.tsx,parts.tsx,icons.tsx,ledger.css,app.css,extras.css,fonts.css}` and `src/app/App.tsx`. Older CSS (`styles.css`, `clear-path.css`, `modern-path.css`, `cockpit.css`) still styles shared components; check consumers and pixel-diff before removing more.
 
 2.81.11 to 2.81.13 cleanup decisions that stay:
 
@@ -193,18 +193,17 @@ Record versions, account mode, facts, expected and actual result and evidence as
 
 ### P5 — project optimization (2026-11, verify-first)
 
-Each batch merges after all gates, its Go threshold and live checks; re-run `npm run perf` and `check-structure` after it. Target layout: `src/app`, `src/state`, `src/ui`, `src/ledger`, `src/features/<page>`, `src/domain/<area>` (no React, no IO), `src/services` (IO only), `src/data` (authored, generated), tests beside their area, `scripts/` by purpose, plugin packages by concern. In order:
+Each batch releases after all gates and its Go threshold, and live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. In order:
 
-1. **S1** pure-move restructure (about 255 files), then split Path into step/prep/combat/plan, updating the responsibility map in the same commit.
-2. **S3** move the remaining wrong-direction symbols (`FOODS`, `FRESH_MS`, `nearestBank`, `isClosed`, services importing engines) to zero layer violations and break the `Skills` ↔ `SkillDetail` cycle; then `check-structure --strict` in CI.
-3. **S4** page registry with `href.*()` (30 files hard-code `#/`) and one storage-key registry (26 keys in 19 files, byte-identical).
-4. **S11** receipts written by the release workflow and `npm run fixtures`; **C1** release reuses the Checks-verified EXE.
-5. **S5** TS-first bridge contract schema tested on both sides; first declare `alt` in `guide.stage.stages[*].items[*]`, which TS sends and `ActiveTarget.java` reads undeclared.
-6. **S6** tests beside code, browser scenarios per feature, conditions instead of the fixed sleeps left in `scripts/ui-smoke.ts`; Go: same checks, three green runs, at most 60% of today's time.
-7. **S9** CSS per feature, each batch pixel-diffed; **S7** authored/generated data with a manifest and **S10** scripts by purpose, in a second freeze window.
-8. **S8** split oversized `OsrsPathBridgePlugin`, `HudModel`, `BridgeServer`, `ActiveTarget`, `types/index.ts`, `bridge.tsx` and `runeliteBridge.ts`, then run the full plugin live matrix.
+1. **S3** move the remaining wrong-direction symbols (`FOODS`, `FRESH_MS`, `nearestBank`, `isClosed`, services importing engines) to zero layer violations and break the `Skills` ↔ `SkillDetail` cycle; then `check-structure --strict` in CI.
+2. **S4** page registry with `href.*()` (30 files hard-code `#/`) and one storage-key registry (26 keys in 19 files, byte-identical).
+3. **S11** receipts written by the release workflow and `npm run fixtures`; **C1** release reuses the Checks-verified EXE.
+4. **S5** TS-first bridge contract schema tested on both sides; first declare `alt` in `guide.stage.stages[*].items[*]`, which TS sends and `ActiveTarget.java` reads undeclared.
+5. **S6** tests beside code, browser scenarios per feature, conditions instead of the fixed sleeps left in `scripts/ui-smoke.ts`; Go: same checks, three green runs, at most 60% of today's time.
+6. **S9** CSS per feature, each batch pixel-diffed; **S7** authored/generated data with a manifest and **S10** scripts by purpose, in a freeze window.
+7. **S8** split oversized `OsrsPathBridgePlugin`, `HudModel`, `BridgeServer`, `ActiveTarget`, `types/index.ts`, `bridge.tsx` and `runeliteBridge.ts`, then run the full plugin live matrix.
 
-Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3.8% page-only code), a V8 code cache via custom protocol (moves the `localStorage` origin), domain barrels, merged tiny modules. The React hooks lint needs TypeScript 5 beside TypeScript 7, so it stays an occasional review. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (confirm their open items here first) and before pruning stale branches or `audit-test-*` pre-releases; never delete normal `v*` releases.
+Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3.8% page-only code), a V8 code cache via custom protocol (moves the `localStorage` origin), domain barrels, merged tiny modules. The React hooks lint needs TypeScript 5 beside TypeScript 7, so it stays an occasional review. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (kept by owner decision 2026-11-01). Merged remote branches and `audit-test-*` pre-releases were pruned on 2026-11-01; never delete normal `v*` releases.
 
 ## Completed baseline — preserve, do not redo
 

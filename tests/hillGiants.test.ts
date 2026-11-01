@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest';
 import legacyCollect from './combatRoute/legacyCollectStep.json';
 import type { Step } from '../src/types';
 import { allSteps, stepById } from '../src/data';
-import { stepReadiness } from '../src/lib/readiness';
-import { emptyProgress } from '../src/lib/progress';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
+import { stepReadiness } from '../src/domain/readiness/readiness';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
 import { toInGameTarget, type GearState } from '../src/services/runeliteBridge';
-import { navigationTarget } from '../src/lib/navigation';
+import { navigationTarget } from '../src/domain/travel/navigation';
 
 // S4-03 after the combat brief: the food is part of the kit, with the numbers the wiki stats give (Hill Giant: 35 hit points, Attack 18, attack bonus
 // +18, Defence 26, max hit 4, every 6 ticks, aggressive) at Defence 1 in iron armour; what to do in the game; the route into the dungeon.

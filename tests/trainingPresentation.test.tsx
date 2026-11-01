@@ -1,26 +1,26 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
-import type { AdviceInput, TrainingAdvice } from '../src/lib/trainingRouter';
-import type { TrackedSkill } from '../src/lib/skillTrack';
-import type { PlayerState } from '../src/lib/playerState';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { TrainingCard } from '../src/components/TrainingCard';
+import type { AdviceInput, TrainingAdvice } from '../src/domain/training/trainingRouter';
+import type { TrackedSkill } from '../src/domain/training/skillTrack';
+import type { PlayerState } from '../src/domain/player/playerState';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { TrainingCard } from '../src/features/skills/TrainingCard';
 
 const fixture = vi.hoisted(() => ({ advice: null as TrainingAdvice | null, mode: 'f2p' as 'f2p' | 'members',
   state: null as PlayerState | null, tracked: null as TrackedSkill | null, input: null as AdviceInput | null }));
-vi.mock('../src/store', () => ({ useStore: () => ({ mode: fixture.mode }) }));
-vi.mock('../src/bridge', () => ({ useBridge: () => ({ xp: null, xpRate: () => null }) }));
-vi.mock('../src/playerStateContext', () => ({ usePlayerState: () => ({ state: fixture.state ?? {} }) }));
-vi.mock('../src/lib/skillTrack', async importOriginal => ({
-  ...await importOriginal<typeof import('../src/lib/skillTrack')>(), useTracked: () => fixture.tracked,
+vi.mock('../src/state/store', () => ({ useStore: () => ({ mode: fixture.mode }) }));
+vi.mock('../src/state/bridge', () => ({ useBridge: () => ({ xp: null, xpRate: () => null }) }));
+vi.mock('../src/state/playerStateContext', () => ({ usePlayerState: () => ({ state: fixture.state ?? {} }) }));
+vi.mock('../src/domain/training/skillTrack', async importOriginal => ({
+  ...await importOriginal<typeof import('../src/domain/training/skillTrack')>(), useTracked: () => fixture.tracked,
 }));
-vi.mock('../src/lib/features', () => ({ useFeatures: () => ({}), setFeatures: vi.fn() }));
-vi.mock('../src/lib/funding/usePriceView', () => ({ usePriceView: () => null }));
-vi.mock('../src/lib/useTradeRestriction', () => ({ useTradeRestriction: () => ({ state: 'unknown' }) }));
-vi.mock('../src/lib/trainingNav', () => ({ trainingNav: () => null }));
-vi.mock('../src/lib/trainingRouter', async importOriginal => ({
-  ...await importOriginal<typeof import('../src/lib/trainingRouter')>(),
+vi.mock('../src/domain/persistence/features', () => ({ useFeatures: () => ({}), setFeatures: vi.fn() }));
+vi.mock('../src/state/hooks/usePriceView', () => ({ usePriceView: () => null }));
+vi.mock('../src/state/hooks/useTradeRestriction', () => ({ useTradeRestriction: () => ({ state: 'unknown' }) }));
+vi.mock('../src/domain/training/trainingNav', () => ({ trainingNav: () => null }));
+vi.mock('../src/domain/training/trainingRouter', async importOriginal => ({
+  ...await importOriginal<typeof import('../src/domain/training/trainingRouter')>(),
   adviseTraining: (input: AdviceInput) => { fixture.input = input; return fixture.advice; },
 }));
 

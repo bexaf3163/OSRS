@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { dist, travelOptions, TRANSPORT, walkText, type TravelInput } from '../src/lib/travel';
+import { dist, travelOptions, TRANSPORT, walkText, type TravelInput } from '../src/domain/travel/travel';
 import type { GearItem } from '../src/services/runeliteBridge';
 
 const at = (x: number, y: number, plane = 0) => ({ x, y, plane });
@@ -81,17 +81,17 @@ describe('how to get there', () => {
 
 // ---------- Fetch it first: why it did not show live, and the purchase detour ----------
 import { allSteps as routeSteps, stepById } from '../src/data';
-import { buildPlayerState } from '../src/lib/playerState';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { emptyProgress } from '../src/lib/progress';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { stepPlaces } from '../src/lib/stepPlaces';
-import { planPayload } from '../src/lib/prepEnvelope';
-import { recommendedTransport } from '../src/lib/transport';
-import { DETOUR_MAX_EXTRA_TILES, procurementDetour } from '../src/lib/detours';
-import { EXCHANGE, OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MAX_EXCHANGE_TILES, OPPORTUNISTIC_MIN_SAVING_TILES, reachTiles, setDetourLog, type DetourDecision } from '../src/lib/travel';
-import type { PrepPlan } from '../src/lib/prepPlan';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { stepPlaces } from '../src/domain/travel/stepPlaces';
+import { planPayload } from '../src/domain/prep/prepEnvelope';
+import { recommendedTransport } from '../src/domain/travel/transport';
+import { DETOUR_MAX_EXTRA_TILES, procurementDetour } from '../src/domain/travel/detours';
+import { EXCHANGE, OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MAX_EXCHANGE_TILES, OPPORTUNISTIC_MIN_SAVING_TILES, reachTiles, setDetourLog, type DetourDecision } from '../src/domain/travel/travel';
+import type { PrepPlan } from '../src/domain/prep/prepPlan';
 
 describe('fetch it first: every verdict has a reason, and the thresholds do not starve the routes', () => {
   const falador = at(2970, 3380);
@@ -330,8 +330,8 @@ describe('bridge payload: the transport and the detour reach the game together',
 });
 
 // ---------- Fast travel: acquired along the route, chosen over walking, and shown in the game ----------
-import { itemSource } from '../src/lib/stepPlaces';
-import { MIN_SAVING_TILES } from '../src/lib/travel';
+import { itemSource } from '../src/domain/travel/stepPlaces';
+import { MIN_SAVING_TILES } from '../src/domain/travel/travel';
 
 describe('fast travel in the route: Chronicle, runes and the unlock levels', () => {
   const draynor = at(3093, 3244);

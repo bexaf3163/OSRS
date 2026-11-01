@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { buildPriceView } from '../src/lib/funding/quotes';
-import { itemPrice } from '../src/lib/itemPrice';
-import { castCost, OPTIONS, planFor, RUNE_IDS, SPELLS, STAFFS, staffPayback } from '../src/lib/magicPlan';
-import { xpForLevel } from '../src/lib/xp';
+import { buildPriceView } from '../src/domain/economy/funding/quotes';
+import { itemPrice } from '../src/domain/items/itemPrice';
+import { castCost, OPTIONS, planFor, RUNE_IDS, SPELLS, STAFFS, staffPayback } from '../src/domain/combat/magicPlan';
+import { xpForLevel } from '../src/domain/player/xp';
 
 const wind = SPELLS.find(s => s.id === 'wind-strike')!;
 describe('Magic acquisition quote safety', () => {

@@ -23,7 +23,7 @@ can no longer follow the route). "Always keep" and "Dismiss" in the app take the
 
 Wire format: snapshot part `cleanup` = `{player, lines:[{name, id, qty, noted?, action: sell|drop|destroy|review, why, proceeds?}]}`, at most 16
 lines, sent only when there is at least one (an app with nothing to clean sends exactly the snapshot older plugins know). Lines without an item id are
-not sent. Built by `src/lib/cleanupHint.ts`; checked by `CleanupHint.java`.
+not sent. Built by `src/domain/prep/cleanupHint.ts`; checked by `CleanupHint.java`.
 
 ## The four verdicts
 
@@ -56,7 +56,7 @@ a number ("as many as you have") makes the whole stack a Keep. Recommended (opti
 
 * **Always keep** (per item) and **Dismiss** (per item and verdict: a different verdict for the same item shows again). Saved per profile **and** character, so another character starts clean. "Show dismissed suggestions" brings them back.
 
-## Verified Drop/Destroy table (`OBSOLETE` in `src/lib/cleanup.ts`)
+## Verified Drop/Destroy table (`OBSOLETE` in `src/domain/prep/cleanup.ts`)
 
 Only items whose wiki page says what is stated here, and a quest that must be closed first:
 

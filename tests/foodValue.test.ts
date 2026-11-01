@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { effectiveHeal, foodAllowed, foodInBag, foodsCovering, FOODS } from '../src/lib/foodAdvice';
-import type { PriceView } from '../src/lib/funding/quotes';
+import { effectiveHeal, foodAllowed, foodInBag, foodsCovering, FOODS } from '../src/domain/combat/foodAdvice';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
 
 const quote = (price: number) => ({ price, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] });
 const prices = (values: Record<string, number | null>, fallback: number | null = 100000): PriceView => ({

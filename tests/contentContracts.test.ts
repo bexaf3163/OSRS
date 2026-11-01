@@ -2,18 +2,18 @@
 // exists only in this test; the rules it meets are the production ones (prepPlan, readinessVerdict, the training ranking).
 
 import { describe, expect, it } from 'vitest';
-import { buildPrepPlan, type PrepPlan } from '../src/lib/prepPlan';
-import { buildPlayerState } from '../src/lib/playerState';
-import { planOneTrip } from '../src/lib/oneTrip';
-import { readinessOf } from '../src/lib/readiness';
-import { emptyProgress } from '../src/lib/progress';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { readinessVerdict } from '../src/lib/readinessVerdict';
-import { adviseTraining, trainingMethods } from '../src/lib/trainingRouter';
-import { protectionsFor } from '../src/lib/funding/snapshot';
-import { withTrainingMethod } from '../src/lib/methodStep';
-import { withFoodPlan } from '../src/lib/foodPlan';
+import { buildPrepPlan, type PrepPlan } from '../src/domain/prep/prepPlan';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { planOneTrip } from '../src/domain/prep/oneTrip';
+import { readinessOf } from '../src/domain/readiness/readiness';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { readinessVerdict } from '../src/domain/readiness/readinessVerdict';
+import { adviseTraining, trainingMethods } from '../src/domain/training/trainingRouter';
+import { protectionsFor } from '../src/domain/economy/funding/snapshot';
+import { withTrainingMethod } from '../src/domain/training/methodStep';
+import { withFoodPlan } from '../src/domain/combat/foodPlan';
 import type { Step } from '../src/types';
 
 type Have = { carried?: number; noted?: number; bank?: number };

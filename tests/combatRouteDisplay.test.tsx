@@ -1,13 +1,13 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
-import { CombatRoute } from '../src/components/CombatRoute';
-import type { CombatPlanEntry } from '../src/playerStateContext';
-import { evaluatePlans } from '../src/lib/combatRoute/plans';
-import { selectPlan } from '../src/lib/combatRoute/selection';
+import { CombatRoute } from '../src/features/path/combat/CombatRoute';
+import type { CombatPlanEntry } from '../src/state/playerStateContext';
+import { evaluatePlans } from '../src/domain/combat/route/plans';
+import { selectPlan } from '../src/domain/combat/route/selection';
 import { planInput } from './combatRoute/fixture';
 
 const view = vi.hoisted(() => ({ entry: null as CombatPlanEntry | null }));
-vi.mock('../src/playerStateContext', () => ({ usePlayerState: () => ({ combatPlans: { 'S4-03': view.entry }, choosePlan: vi.fn() }) }));
+vi.mock('../src/state/playerStateContext', () => ({ usePlayerState: () => ({ combatPlans: { 'S4-03': view.entry }, choosePlan: vi.fn() }) }));
 
 describe('compact combat comparison economics', () => {
   it.each([-500, -20, 0, 20, 500, null])('shows net %s rather than gross drops, inside the existing folded comparison', net => {

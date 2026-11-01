@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { buildRoadmap, gainLabel, prayerChips } from '../src/lib/gearRoadmap';
-import type { Gain, LockedItem } from '../src/services/gearAdvisor';
+import { buildRoadmap, gainLabel, prayerChips } from '../src/domain/combat/gearRoadmap';
+import type { Gain, LockedItem } from '../src/domain/combat/gearAdvisor';
 
 const melee = { maxHit: 4, hitChance: 0.9, dps: 0.8, style: 'aggressive' as const, speed: 2.4 };
 const dps = (ratio: number, extra: Partial<Extract<Gain, { kind: 'dps' }>> = {}): Gain => ({ kind: 'dps', before: melee, after: melee, ratio, ...extra });

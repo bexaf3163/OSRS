@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { allocateFoodStock, heldFood } from '../src/lib/foodAdvice';
-import { buildPlayerState } from '../src/lib/playerState';
-import { evaluate } from '../src/lib/requirements';
-import { evaluatePreflight, preflightItems, type OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { ownershipOf, shopRows } from '../src/lib/shoppingView';
-import { ownedFood } from '../src/lib/combatPlan';
-import { readinessOf } from '../src/lib/readiness';
-import { aggregateShopping, holdingFor } from '../src/lib/shopping';
-import { planOneTrip } from '../src/lib/oneTrip';
-import { emptyProgress } from '../src/lib/progress';
+import { allocateFoodStock, heldFood } from '../src/domain/combat/foodAdvice';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { evaluate } from '../src/domain/readiness/requirements';
+import { evaluatePreflight, preflightItems, type OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { ownershipOf, shopRows } from '../src/domain/economy/shoppingView';
+import { ownedFood } from '../src/domain/combat/combatPlan';
+import { readinessOf } from '../src/domain/readiness/readiness';
+import { aggregateShopping, holdingFor } from '../src/domain/economy/shopping';
+import { planOneTrip } from '../src/domain/prep/oneTrip';
+import { emptyProgress } from '../src/domain/persistence/progress';
 import type { Step } from '../src/types';
 
 const food = { nameEn: 'Salmon', heals: 9, anyOf: ['Trout', 'Tuna', 'Cooked meat', 'Shrimps'] };

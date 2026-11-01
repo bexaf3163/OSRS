@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { combatUpgrades, combatRate } from '../src/lib/combatRates';
-import { buildPlayerState } from '../src/lib/playerState';
-import { gearData, trainingWeapons } from '../src/services/gearAdvisor';
-import { trainingMethods, toolUpgrade, adviseTraining, methodNeeds } from '../src/lib/trainingRouter';
-import { emptyProgress } from '../src/lib/progress';
-import type { PriceView } from '../src/lib/funding/quotes';
-import { STYLE_GEAR } from '../src/lib/styleGear';
+import { combatUpgrades, combatRate } from '../src/domain/combat/combatRates';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { gearData, trainingWeapons } from '../src/domain/combat/gearAdvisor';
+import { trainingMethods, toolUpgrade, adviseTraining, methodNeeds } from '../src/domain/training/trainingRouter';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
+import { STYLE_GEAR } from '../src/domain/combat/styleGear';
 
 const method = trainingMethods.find((m) => m.id === 'me-frog')!;
 const quote = (price: number) => ({ price, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] });

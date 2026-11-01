@@ -2,14 +2,14 @@
 // and worn gear, and the spot registry and the Skills catalogue kept in step.
 
 import { describe, expect, it } from 'vitest';
-import { buildPlayerState, type PlayerState } from '../src/lib/playerState';
-import { adviseTraining, trainingMethods, type TrainingMethod } from '../src/lib/trainingRouter';
-import { methodRate } from '../src/lib/methodRates';
-import { attacksToKill } from '../src/lib/combatEstimate';
-import { TRAINER_SPOTS } from '../src/lib/combatRoute/spots';
+import { buildPlayerState, type PlayerState } from '../src/domain/player/playerState';
+import { adviseTraining, trainingMethods, type TrainingMethod } from '../src/domain/training/trainingRouter';
+import { methodRate } from '../src/domain/training/methodRates';
+import { attacksToKill } from '../src/domain/combat/combatEstimate';
+import { TRAINER_SPOTS } from '../src/domain/combat/route/spots';
 import { market } from './funding/market';
-import type { PriceView } from '../src/lib/funding/quotes';
-import { supplyPrice } from '../src/lib/sourceRouter';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
+import { supplyPrice } from '../src/domain/prep/sourceRouter';
 
 const prices = market();
 /** A fixed exchange for the costs: every rune 5 gp, every arrow 3 gp (the recorded market has neither). */

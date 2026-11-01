@@ -2,11 +2,11 @@
 // the target is in another layer than the player. Source: the transport table of the Shortest Path plugin (Skretzo/shortest-path, BSD 2-Clause),
 // pinned to one commit so the file is reproducible. It needs a network. Run: npm run build-portals.
 //
-// Only rows that cross layers are kept (src/lib/portals.ts); the same ladder listed from four tiles becomes one row.
+// Only rows that cross layers are kept (src/domain/travel/portals.ts); the same ladder listed from four tiles becomes one row.
 
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dedupePortals, parseTransports, toRow } from '../src/lib/portals.ts';
+import { dedupePortals, parseTransports, toRow } from '../src/domain/travel/portals.ts';
 
 const COMMIT = '99735452c7c257d3fe5ae79970429cdce907d571';
 const URL_TSV = `https://raw.githubusercontent.com/Skretzo/shortest-path/${COMMIT}/src/main/resources/transports/transports.tsv`;

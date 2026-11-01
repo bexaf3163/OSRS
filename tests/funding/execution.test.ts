@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { evaluate } from '../../src/lib/funding/evaluate';
-import { methodById } from '../../src/lib/funding/methods';
-import { confirm, startMethodPlan, tick, type FundingPlanState } from '../../src/lib/funding/plan';
+import { evaluate } from '../../src/domain/economy/funding/evaluate';
+import { methodById } from '../../src/domain/economy/funding/methods';
+import { confirm, startMethodPlan, tick, type FundingPlanState } from '../../src/domain/economy/funding/plan';
 import { ctxOf, fakePrices, fakeSnap } from './helpers';
 
 const now = 1_792_000_000_000;

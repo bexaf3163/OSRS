@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import type { Step, StepItemRequirement } from '../src/types';
-import { protectionsFor } from '../src/lib/funding/snapshot';
-import { buildPlayerState } from '../src/lib/playerState';
-import { cleanupAdvice, emptyCleanupPrefs } from '../src/lib/cleanup';
-import { aggregateShopping } from '../src/lib/shopping';
+import { protectionsFor } from '../src/domain/economy/funding/snapshot';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { cleanupAdvice, emptyCleanupPrefs } from '../src/domain/prep/cleanup';
+import { aggregateShopping } from '../src/domain/economy/shopping';
 
 const item = (nameEn: string, amount: number, extra: Partial<StepItemRequirement> = {}): StepItemRequirement => ({ nameEn, amount, howToGet: 'Get it', ...extra });
 const step = (id: string, itemsRequired: StepItemRequirement[]): Step => ({ id, stage: 1, type: 'skill', title: id, requires: [], doneWhen: 'Done', itemsRequired });

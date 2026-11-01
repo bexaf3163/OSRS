@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, itemById, items, plugins, reference, skills, stepsFor } from '../src/data';
-import { emptyProgress, withStep } from '../src/lib/progress';
+import { emptyProgress, withStep } from '../src/domain/persistence/progress';
 import type { Step } from '../src/types';
-import { fightStepFor } from '../src/lib/gearAdvice';
-import { buildIndex, search } from '../src/lib/search';
-import { parseHash } from '../src/lib/router';
+import { fightStepFor } from '../src/domain/combat/gearAdvice';
+import { buildIndex, search } from '../src/domain/quests/search';
+import { parseHash } from '../src/app/router';
 import {
   actionNav, adviseGear, canWear, DEFAULT_FOE, foeData, gainText, gearById, gearData, hudHint, killSeconds, meleeHit, meleeValue, meleeWith, routeNeeds,
   sourceText, statsText, stepFoes, watchNames, withKillEstimate, WINDOW,
   type AdvisorInput,
-} from '../src/services/gearAdvisor';
+} from '../src/domain/combat/gearAdvisor';
 import { matchStrict } from '../src/services/locationResolver';
 import type { GearState } from '../src/services/runeliteBridge';
-import type { OwnedState } from '../src/lib/checklist';
+import type { OwnedState } from '../src/domain/items/checklist';
 import type { GearData, GearPiece } from '../src/types';
 
 const byName = (name: string): GearPiece => {

@@ -1,7 +1,7 @@
 # Readiness verdict (2.62.0, quest fights 2.63.0)
 
-One answer on top of the preparation plan (`src/lib/prepPlan.ts`, the single decision of what a step needs): `src/lib/readinessVerdict.ts`.
-It adds no requirement of its own. For a combat training step the kit check `src/lib/combatReadiness.ts` (on the personal estimate,
+One answer on top of the preparation plan (`src/domain/prep/prepPlan.ts`, the single decision of what a step needs): `src/domain/readiness/readinessVerdict.ts`.
+It adds no requirement of its own. For a combat training step the kit check `src/domain/combat/combatReadiness.ts` (on the personal estimate,
 `combatPlan.ts` / `combatEstimate.ts`) supplies the weapon, armour, trip food and opponent version.
 
 ## Statuses
@@ -46,7 +46,7 @@ for healing and tool levels.
 
 ## Quest fights (2.63.0)
 
-`src/lib/fightEstimate.ts`: one fight at the current levels with the worn gear, the same rolls as the training estimate, the melee style that takes the
+`src/domain/combat/fightEstimate.ts`: one fight at the current levels with the worn gear, the same rolls as the training estimate, the melee style that takes the
 least damage. Magic attackers (Ithoi, Melzar) are rolled against the player's magic defence (70% Magic, 30% Defence; their magic attack bonus counted
 as 0, Magic counted as 1 when unknown). Attacks above the modelled max hit (dragonfire, specials) are named and the food is called a lower bound.
 `OTHER_METHOD` keeps the fights the route does another way out of the melee estimate (the Lesser demon from the safespot, the Ancient Guardian by

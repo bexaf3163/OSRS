@@ -2,14 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
 import stagesFile from '../src/data/questStages.json';
 import zonesFile from '../src/data/dangerZones.json';
-import { buildPlayerState } from '../src/lib/playerState';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { emptyProgress } from '../src/lib/progress';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { safetyBlockers, safetyRulesOf, SAFETY_RULES, type PrepPlan } from '../src/lib/prepPlan';
-import { stepFightNames } from '../src/lib/fightEstimate';
-import { THREATS } from '../src/lib/foodAdvice';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { safetyBlockers, safetyRulesOf, SAFETY_RULES, type PrepPlan } from '../src/domain/prep/prepPlan';
+import { stepFightNames } from '../src/domain/combat/fightEstimate';
+import { THREATS } from '../src/domain/combat/foodAdvice';
 
 // Dragon Slayer I (S5-01..S5-09): the stage data, the 32-QP gate, the shield check before the ship, the map pieces.
 

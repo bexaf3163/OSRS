@@ -1,6 +1,6 @@
 // The registry of the skill leveling guides: one JSON file per skill in ./skills (built by tools/skill-guides from the OSRS Wiki), typed once here.
 
-import type { SkillGuideFile, SkillName } from '../lib/skillGuide';
+import type { SkillGuideFile, SkillName } from '../domain/training/skillGuide';
 
 import attack from './skills/attack.json';
 import strength from './skills/strength.json';

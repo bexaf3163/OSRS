@@ -3,8 +3,8 @@ import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { known } from '../src/data';
-import { emptyProgress, STORAGE_KEY } from '../src/lib/progress';
-import { restoreProgress } from '../src/lib/progressStorage';
+import { emptyProgress, STORAGE_KEY } from '../src/domain/persistence/progress';
+import { restoreProgress } from '../src/domain/persistence/progressStorage';
 
 const require = createRequire(import.meta.url);
 const fs = require('node:fs') as typeof import('node:fs');

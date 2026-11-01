@@ -1,6 +1,6 @@
 import type { WikiItemDetail } from '../../src/types';
 import { describe, expect, it } from 'vitest';
-import { netSale } from '../../src/lib/funding/ge';
+import { netSale } from '../../src/domain/economy/funding/ge';
 import { market } from './market';
 import { scenario } from './scenario';
 

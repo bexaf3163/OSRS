@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { chipOf, prepChipGroups } from '../src/lib/prepChips';
-import type { PrepLine, PrepWhere } from '../src/lib/prepPlan';
+import { chipOf, prepChipGroups } from '../src/domain/prep/prepChips';
+import type { PrepLine, PrepWhere } from '../src/domain/prep/prepPlan';
 
 const line = (name: string, where: PrepWhere, count = 1, exact = true): PrepLine => ({
   key: `${name}:${where}`, name, count, exact, where,

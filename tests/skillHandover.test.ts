@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
-import { emptyProgress } from '../src/lib/progress';
-import { buildPlayerState } from '../src/lib/playerState';
-import { nameKey } from '../src/lib/itemKey';
-import { pickMethods } from '../src/lib/methodPick';
-import { SKILLING } from '../src/lib/skillingRates';
-import { followedGoal, GOAL_REACHED, methodToolNames, UNKNOWN_GOAL_PREFIX, withTrainingMethod, pickedMethodId } from '../src/lib/methodStep';
-import { contextOf } from '../src/lib/readiness';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { nameKey } from '../src/domain/items/itemKey';
+import { pickMethods } from '../src/domain/training/methodPick';
+import { SKILLING } from '../src/domain/training/skillingRates';
+import { followedGoal, GOAL_REACHED, methodToolNames, UNKNOWN_GOAL_PREFIX, withTrainingMethod, pickedMethodId } from '../src/domain/training/methodStep';
+import { contextOf } from '../src/domain/readiness/readiness';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { parseNavTarget, toInGameTarget } from '../src/services/runeliteBridge';
-import { trainingMethods, viewMethod } from '../src/lib/trainingRouter';
-import { trainingNav } from '../src/lib/trainingNav';
+import { trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
+import { trainingNav } from '../src/domain/training/trainingNav';
 import type { Step } from '../src/types';
 
 // Keep longer-goal engine regressions; actual Optional checkpoints have their own acceptance tests.

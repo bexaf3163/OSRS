@@ -1,12 +1,12 @@
 // Adapters: the store, the route and the RuneLite link mapped onto the Ledger's view-models. No state of their own.
-import { useStore } from '../store';
-import { useBridge } from '../bridge';
-import { useProfiles } from '../lib/profiles';
-import { useQuestPoints } from '../lib/useQuestPoints';
-import { levelOf } from '../lib/progress';
-import { combatLevel } from '../lib/moneyAdvisor';
-import { SKILL_NAMES } from '../lib/skillGuide';
-import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
+import { useStore } from '../state/store';
+import { useBridge } from '../state/bridge';
+import { useProfiles } from '../domain/persistence/profiles';
+import { useQuestPoints } from '../state/hooks/useQuestPoints';
+import { levelOf } from '../domain/persistence/progress';
+import { combatLevel } from '../domain/economy/moneyAdvisor';
+import { SKILL_NAMES } from '../domain/training/skillGuide';
+import { blockerParts, blockersOf, isClosed } from '../domain/quests/next-step';
 import type { Progress, Stage, Step } from '../types';
 import type { Player, RouteStage, StepKind } from './model';
 

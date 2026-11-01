@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { guideFor } from '../src/data/skillGuideRegistry';
-import { emptyProgress } from '../src/lib/progress';
-import { questRewardDone } from '../src/lib/skillGuide';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { questRewardDone } from '../src/domain/training/skillGuide';
 
 const quest = guideFor('smithing').steps.find(s => s.reward?.quest === "The Knight's Sword")!;
 const progress = (status?: 'done' | 'skipped') => ({ ...emptyProgress(), steps: status ? { [quest.reward!.routeStepId!]: status } : {} });

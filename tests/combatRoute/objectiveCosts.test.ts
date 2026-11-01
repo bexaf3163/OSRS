@@ -2,14 +2,14 @@
 // time (the cowhide baseline is rough), and the player's objective decides whether coins trade against time at all.
 
 import { describe, expect, it } from 'vitest';
-import { evaluatePlans, planNetPerHour, planWhy, type PlanReport } from '../../src/lib/combatRoute/plans';
-import { selectPlan } from '../../src/lib/combatRoute/selection';
-import { COIN_SHARE_CAP } from '../../src/lib/lootValue';
-import type { MethodPriority } from '../../src/lib/playStyle';
+import { evaluatePlans, planNetPerHour, planWhy, type PlanReport } from '../../src/domain/combat/route/plans';
+import { selectPlan } from '../../src/domain/combat/route/selection';
+import { COIN_SHARE_CAP } from '../../src/domain/economy/lootValue';
+import type { MethodPriority } from '../../src/domain/persistence/playStyle';
 import { market } from '../funding/market';
 import { planInput, type Over } from './fixture';
-import { doseValue } from '../../src/lib/doses';
-import { supplyPrice } from '../../src/lib/sourceRouter';
+import { doseValue } from '../../src/domain/items/doses';
+import { supplyPrice } from '../../src/domain/prep/sourceRouter';
 
 const prices = market();
 const report = (o: Over, objective?: MethodPriority): PlanReport =>

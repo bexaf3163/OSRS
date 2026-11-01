@@ -6,8 +6,8 @@
 import type {
   GameMode, GoalsData, LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
 } from '../types';
-import { titleTargets } from '../lib/targets';
-import { deriveQuests } from '../lib/quests';
+import { titleTargets } from '../domain/quests/targets';
+import { deriveQuests } from '../domain/quests/quests';
 import stepsJson from './steps.json';
 import questStagesJson from './questStages.json';
 import stagesJson from './stages.json';

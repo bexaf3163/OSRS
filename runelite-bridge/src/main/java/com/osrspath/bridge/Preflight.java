@@ -8,7 +8,7 @@ import java.util.List;
 import lombok.Value;
 
 /**
- * The item pre-flight guard for a quest stage step (the app's copy is src/lib/preflight.ts). While an item the step uses is not in the bag or worn, the
+ * The item pre-flight guard for a quest stage step (the app's copy is src/domain/readiness/preflight.ts). While an item the step uses is not in the bag or worn, the
  * arrow does not lead to the step: it leads where the item is, the nearest bank if the bank snapshot holds it, else the place named in the data, else the
  * Grand Exchange after the current-session bank was checked. An unread bank first leads to a bank check before buying.
  * Unknown is not missing: no bag read yet blocks nothing.

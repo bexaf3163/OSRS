@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { adviseTraining, type TrainingMethod } from '../src/lib/trainingRouter';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { DEFAULT_FEATURES, parseFeatures } from '../src/lib/features';
-import { priorityOf } from '../src/lib/playStyle';
-import { bankingPays, earningsOrder, netEarnings } from '../src/lib/lootValue';
-import { processRate, type ProcessingRegistry } from '../src/lib/processingRates';
-import { gatherRate, type SkillingRegistry } from '../src/lib/skillingRates';
-import { parseHash } from '../src/lib/router';
-import type { PriceView } from '../src/lib/funding/quotes';
+import { adviseTraining, type TrainingMethod } from '../src/domain/training/trainingRouter';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { DEFAULT_FEATURES, parseFeatures } from '../src/domain/persistence/features';
+import { priorityOf } from '../src/domain/persistence/playStyle';
+import { bankingPays, earningsOrder, netEarnings } from '../src/domain/economy/lootValue';
+import { processRate, type ProcessingRegistry } from '../src/domain/training/processingRates';
+import { gatherRate, type SkillingRegistry } from '../src/domain/training/skillingRates';
+import { parseHash } from '../src/app/router';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
 
 const method = (id: string, extra: Partial<TrainingMethod> = {}): TrainingMethod => ({
   id, name: id, skills: ['fishing'], from: 1, to: null, members: false, kind: 'method', needs: [],

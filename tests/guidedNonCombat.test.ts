@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { adviseTraining, preparationNeeds, questTrainingStep, trainingMethods, type TrainingAdvice } from '../src/lib/trainingRouter';
-import { trackedTraining } from '../src/lib/trackedTraining';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { adviseTraining, preparationNeeds, questTrainingStep, trainingMethods, type TrainingAdvice } from '../src/domain/training/trainingRouter';
+import { trackedTraining } from '../src/domain/training/trackedTraining';
 import { toInGameTarget } from '../src/services/runeliteBridge';
-import type { SkillName } from '../src/lib/skillGuide';
+import type { SkillName } from '../src/domain/training/skillGuide';
 import { qa } from '../scripts/qa';
 
 const stateFor = (skill: string, level: number, tool?: string) => buildPlayerState({

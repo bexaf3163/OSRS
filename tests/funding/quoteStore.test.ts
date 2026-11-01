@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createQuoteStore } from '../../src/lib/funding/quoteStore';
+import { createQuoteStore } from '../../src/services/quoteStore';
 import type { MappingRow, QuoteBoard } from '../../src/services/pricesApi';
-import { buildPriceView } from '../../src/lib/funding/quotes';
+import { buildPriceView } from '../../src/domain/economy/funding/quotes';
 
 const board = (status: QuoteBoard['status'], tag = 0): QuoteBoard => ({ at: 1_000 + tag, hourAt: 1_000 + tag, quotes: new Map(), status });
 const mapping = new Map<number, MappingRow>();

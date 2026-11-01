@@ -7,7 +7,7 @@ import lombok.Value;
 
 /**
  * The departure check: is everything for the step in the bag (or worn), and for what is missing, is it in the bank.
- * Pure logic without RuneLite: src/lib/checklist.ts in the app repeats it.
+ * Pure logic without RuneLite: src/domain/items/checklist.ts in the app repeats it.
  */
 final class Checklist
 {

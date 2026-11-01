@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById, stepsFor } from '../src/data';
 import goalsData from '../src/data/goals.json';
-import { emptyProgress } from '../src/lib/progress';
-import { buildPlayerState } from '../src/lib/playerState';
-import { nameKey } from '../src/lib/itemKey';
-import { pickMethods, samePicks } from '../src/lib/methodPick';
-import { GOAL_REACHED, methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
-import { contextOf } from '../src/lib/readiness';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { nameKey } from '../src/domain/items/itemKey';
+import { pickMethods, samePicks } from '../src/domain/training/methodPick';
+import { GOAL_REACHED, methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
+import { contextOf } from '../src/domain/readiness/readiness';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { toInGameTarget, type GearItem } from '../src/services/runeliteBridge';
-import { methodNeeds, trainingMethods, viewMethod } from '../src/lib/trainingRouter';
+import { methodNeeds, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
 import { market } from './funding/market';
-import type { Market } from '../src/lib/methodRates';
-import type { PriceView } from '../src/lib/funding/quotes';
+import type { Market } from '../src/domain/training/methodRates';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
 
 const base = stepById.get('S6-01')!;
 function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}, chosenMethod?: string, dressed = true) {

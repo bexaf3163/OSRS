@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   analyze, formatDuration, formatReport, parseLog, SLOW_LINE_MS,
   type TelemetryEvent,
-} from '../src/lib/telemetryReport';
+} from '../src/domain/telemetry/telemetryReport';
 
 const T0 = 1_700_000_000_000;
 const ev = (dt: number, kind: string, rest: Record<string, unknown> = {}): TelemetryEvent => ({ t: T0 + dt, ...rest, kind });

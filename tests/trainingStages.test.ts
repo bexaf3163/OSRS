@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { emptyProgress } from '../src/lib/progress';
-import { buildPlayerState } from '../src/lib/playerState';
-import { adviseTraining, trainingMethods } from '../src/lib/trainingRouter';
-import { RANGED_WATCH } from '../src/lib/rangedLoadout';
-import { methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
-import { pickMethods } from '../src/lib/methodPick';
-import { goalArrows } from '../src/lib/rangedAmmo';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { adviseTraining, trainingMethods } from '../src/domain/training/trainingRouter';
+import { RANGED_WATCH } from '../src/domain/combat/rangedLoadout';
+import { methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
+import { pickMethods } from '../src/domain/training/methodPick';
+import { goalArrows } from '../src/domain/combat/rangedAmmo';
 import { market } from './funding/market';
 
 const state = (levels: Record<string, number>, stock: Record<string, number> = {}) => buildPlayerState({

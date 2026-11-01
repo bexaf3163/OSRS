@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { castCost, hidesToCover, OPTIONS, planFor, SPELLS, staffPayback, STAFFS, RUNE_IDS, COWHIDE_ID } from '../src/lib/magicPlan';
-import { adviseMoney, combatLevel, hoursToCover, reqText, viewMethod } from '../src/lib/moneyAdvisor';
-import { xpForLevel } from '../src/lib/xp';
+import { castCost, hidesToCover, OPTIONS, planFor, SPELLS, staffPayback, STAFFS, RUNE_IDS, COWHIDE_ID } from '../src/domain/combat/magicPlan';
+import { adviseMoney, combatLevel, hoursToCover, reqText, viewMethod } from '../src/domain/economy/moneyAdvisor';
+import { xpForLevel } from '../src/domain/player/xp';
 import type { MoneyMethod, Step } from '../src/types';
 
 // Prices as on the exchange on 03.10.2026: runes 6, mind 3, fire staff 940, air staff 1542, hide 125.
@@ -151,7 +151,7 @@ describe('wiki parsing for earning methods', () => {
   });
 });
 
-import { MONEY } from '../src/lib/moneyAdvisor';
+import { MONEY } from '../src/domain/economy/moneyAdvisor';
 import { allSteps } from '../src/data';
 
 describe('data 2.13', () => {
@@ -183,7 +183,7 @@ describe('data 2.13', () => {
   });
 });
 
-import { foodInBag, foodsCovering, threatKeys, typicalHit, viewThreat, FOODS, THREATS } from '../src/lib/foodAdvice';
+import { foodInBag, foodsCovering, threatKeys, typicalHit, viewThreat, FOODS, THREATS } from '../src/domain/combat/foodAdvice';
 
 describe('food for combat', () => {
   it('wiki data: Elvarg — the shield lowers the flame to 10; Brutus — the special hit 19; food heals as on the wiki', () => {
@@ -215,7 +215,7 @@ describe('food for combat', () => {
   });
 });
 
-import { fixChain } from '../src/lib/readiness';
+import { fixChain } from '../src/domain/readiness/readiness';
 import { toInGameTarget } from '../src/services/runeliteBridge';
 
 describe('the chain to readiness (§12) and data to the game', () => {

@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { evaluatePreflight, preflightItems } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { contextOf } from '../src/lib/readiness';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { evaluatePreflight, preflightItems } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { contextOf } from '../src/domain/readiness/readiness';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import type { GearItem } from '../src/services/runeliteBridge';
 
 const step = { ...stepById.get('S6-02')!, id: 'TEST-AMMO', requirements: [], itemsRecommended: [],

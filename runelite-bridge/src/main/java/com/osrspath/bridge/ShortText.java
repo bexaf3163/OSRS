@@ -3,7 +3,7 @@ package com.osrspath.bridge;
 /**
  * One short line instead of a paragraph for the game screen: the game needs "what to do now", the details stay in the app and
  * in the hover hint. The app sends a ready short text for the step (field s); this fallback is for when there is none
- * (the app is older than the plugin). The rules are the same as in the app (src/lib/shortText.ts):
+ * (the app is older than the plugin). The rules are the same as in the app (src/domain/quests/shortText.ts):
  *  1) "Dialogue: ..." at the end is dropped - the game itself highlights the right answer option;
  *  2) the first sentence is taken;
  *  3) if longer than the limit, cut at " - " or a comma, otherwise at a word, with an ellipsis.

@@ -1,17 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
-import { buildPlayerState } from '../src/lib/playerState';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { decideTransport, supplyStop, SUPPLY_NEAR_TILES, transportSources } from '../src/lib/liveTransport';
-import { planTravelSupplies, roadLegs, roadSteps, savedText, stepTargets, SUPPLY_MIN_TOTAL_TILES, type TravelSupplies } from '../src/lib/travelSupplies';
-import { BANKS, EXCHANGE, STAFF_NAMES, STAIRS_TILES_PER_FLOOR, bankTiles, dist, staffCover, stavesFor, travelOptions, type TravelInput } from '../src/lib/travel';
-import { recommendedTransport } from '../src/lib/transport';
-import { planPayload } from '../src/lib/prepEnvelope';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { emptyProgress } from '../src/lib/progress';
-import { transportWatch } from '../src/lib/travelInput';
-import { isOverworld } from '../src/lib/instances';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { decideTransport, supplyStop, SUPPLY_NEAR_TILES, transportSources } from '../src/domain/travel/liveTransport';
+import { planTravelSupplies, roadLegs, roadSteps, savedText, stepTargets, SUPPLY_MIN_TOTAL_TILES, type TravelSupplies } from '../src/domain/travel/travelSupplies';
+import { BANKS, EXCHANGE, STAFF_NAMES, STAIRS_TILES_PER_FLOOR, bankTiles, dist, staffCover, stavesFor, travelOptions, type TravelInput } from '../src/domain/travel/travel';
+import { recommendedTransport } from '../src/domain/travel/transport';
+import { planPayload } from '../src/domain/prep/prepEnvelope';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { transportWatch } from '../src/domain/travel/travelInput';
+import { isOverworld } from '../src/domain/travel/instances';
 import type { GearItem, GearState } from '../src/services/runeliteBridge';
 
 // Supplies for the road (the 2.53 request): before a long run the guide says how many teleports pay off and what to buy for them, a wielded staff

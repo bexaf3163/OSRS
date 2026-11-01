@@ -2,14 +2,14 @@
 // by skillingRates.gatherPace, the tool the evaluator plans included; a method the registry has no spot for keeps the published pace.
 
 import { describe, expect, it } from 'vitest';
-import { gatherPersonaliser } from '../../src/lib/funding/gatherAdapter';
-import { methodById } from '../../src/lib/funding/methods';
-import { evaluate } from '../../src/lib/funding/evaluate';
-import { gatherPace } from '../../src/lib/skillingRates';
-import { buildPlayerState } from '../../src/lib/playerState';
-import { emptyProgress } from '../../src/lib/progress';
-import type { OwnedItem } from '../../src/lib/checklist';
-import { nameKey } from '../../src/lib/itemKey';
+import { gatherPersonaliser } from '../../src/domain/economy/funding/gatherAdapter';
+import { methodById } from '../../src/domain/economy/funding/methods';
+import { evaluate } from '../../src/domain/economy/funding/evaluate';
+import { gatherPace } from '../../src/domain/training/skillingRates';
+import { buildPlayerState } from '../../src/domain/player/playerState';
+import { emptyProgress } from '../../src/domain/persistence/progress';
+import type { OwnedItem } from '../../src/domain/items/checklist';
+import { nameKey } from '../../src/domain/items/itemKey';
 import { ctxOf, fakePrices, fakeSnap } from './helpers';
 
 const stateOf = (levels: Record<string, number>, bank: Record<string, number> | null) => buildPlayerState({

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { cheapestFood, combatPersonaliser } from '../../src/lib/funding/combatAdapter';
-import { evaluate } from '../../src/lib/funding/evaluate';
-import { methodById } from '../../src/lib/funding/methods';
-import { gearById } from '../../src/services/gearAdvisor';
+import { cheapestFood, combatPersonaliser } from '../../src/domain/economy/funding/combatAdapter';
+import { evaluate } from '../../src/domain/economy/funding/evaluate';
+import { methodById } from '../../src/domain/economy/funding/methods';
+import { gearById } from '../../src/domain/combat/gearAdvisor';
 import { ctxOf, fakePrices, fakeSnap } from './helpers';
 
 const id = (n: string) => [...gearById.values()].find((p) => p.name === n)!.id;

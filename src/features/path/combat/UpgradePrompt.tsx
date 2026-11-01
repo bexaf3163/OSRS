@@ -1,0 +1,107 @@
+// "⚡ SPEED UPGRADE": before a long training — a cheap better tool, if the level already allows.
+// Weapons and armor on combat steps are advised by GearPrompt (the gear analysis).
+// The button leads the in-game arrow to the seller (a temporary target): they are highlighted with the caption "[Buy: …]", the item is in the shop
+// window. When the item is in the bag or worn, the target is cleared by itself and the arrow leads to the step again.
+// It buys and spends nothing — only hints. "✕ Skip" hides the hint on this step.
+
+import { useMemo } from 'react';
+import type { Step } from '../../../types';
+import { useStore } from '../../../state/store';
+import { useBridge } from '../../../state/bridge';
+import { useFeatures } from '../../../domain/persistence/features';
+import { isClosed } from '../../../domain/quests/next-step';
+import { coinRewardAhead } from '../../../domain/quests/stepRewards';
+import { allSteps } from '../../../data';
+import { formatGp } from '../../../domain/economy/shopping';
+import { usePriceView } from '../../../state/hooks/usePriceView';
+import { itemPrice } from '../../../domain/items/itemPrice';
+import { recommendUpgrade, showsPrompt, stepUpgradeCategories, toolProgression, upgradeNav, type UpgradeRecommendation } from '../../../domain/training/gearUpgradeRouter';
+import { NavigateButton } from '../../../ui/NavigateButton';
+import { PlaceButton, PlaceMapView, usePlaceMap } from '../../map/PlaceMap';
+
+const SKILL_LABEL = { woodcutting: 'Woodcutting', mining: 'Mining' } as const;
+
+/** The tool advice for a step (gearUpgradeRouter): shared by the hint and the preparation plan. */
+export function useUpgradeRecommendation(step: Step): UpgradeRecommendation | null {
+  const { upgradeRouter } = useFeatures();
+  const { progress, mode } = useStore();
+  const { gear, stats } = useBridge();
+  const relevant = upgradeRouter && stepUpgradeCategories(step).length > 0 && !isClosed(progress, step.id);
+  const board = usePriceView(relevant);
+  const prices = useMemo(() => new Map([...toolProgression.woodcutting, ...toolProgression.mining]
+    .flatMap(t => t.itemId === undefined ? [] : [[t.itemId, itemPrice(board, t.tier, t.itemId, 1)] as const])), [board]);
+
+  const rec = useMemo(() => {
+    if (!relevant) return null;
+    // The levels from the game outrank the hand-entered ones: they are exact and fresh.
+    const levels: Record<string, number | undefined> = { ...progress.levels, ...(stats ?? {}) };
+    return recommendUpgrade({ step, mode, levels, gear, dismissed: progress.upgradeDismissedForSteps, geQuotes: prices });
+  }, [relevant, step, mode, progress.levels, progress.upgradeDismissedForSteps, stats, gear, prices]);
+
+  return rec;
+}
+
+export function UpgradePrompt({ step }: { step: Step }) {
+  const { progress, dismissUpgrade } = useStore();
+  const { stats, navTarget, clearNav } = useBridge();
+  const places = usePlaceMap();
+  const rec = useUpgradeRecommendation(step);
+
+  if (!showsPrompt(rec)) return null;
+  const nav = upgradeNav(rec, step.id);
+  const going = navTarget?.itemName === rec.recommendedItem && navTarget?.stepId === step.id;
+  const level = (stats ?? {})[rec.skill] ?? progress.levels[rec.skill];
+  const skillName = SKILL_LABEL[rec.skill];
+  const where = rec.shop ? `${rec.shop} • ${rec.city}` : 'Grand Exchange';
+  const coinStep = coinRewardAhead(allSteps, step.stage, (id) => isClosed(progress, id));
+
+  return (
+    <section className={`upgrade ${rec.status === 'UPGRADE_NOT_AFFORDABLE' ? 'is-poor' : ''}`} aria-label="Speed upgrade">
+      <p className="upgrade-kicker">⚡ Speed upgrade</p>
+      <p className="upgrade-title">
+        {rec.currentItem ? <>Replace {rec.currentItem} → </> : <>Get </>}<strong>{rec.recommendedItem}</strong>
+      </p>
+      <p className="small">
+        {level ? <>You have {skillName} {level}, and </> : null}{rec.recommendedItem} is available from level {rec.levelReq}. {rec.efficiencyBoost}
+      </p>
+      <p className="small upgrade-where">
+        <span className="muted">Where to get it: </span>
+        {rec.shop
+          ? <PlaceButton query={{ kind: 'shop', location: rec.city ?? '', shop: rec.shop, npc: rec.npc }} onShow={places.show}>{where}</PlaceButton>
+          : where}
+        {rec.npc && <span className="muted"> · seller {rec.npc}</span>}
+        {rec.approxCost !== undefined ? <span title={!rec.shop ? rec.geQuote?.detail : undefined}> · ~{formatGp(rec.approxCost)} gp ({rec.priceLabel ?? (rec.shop ? 'NPC price' : 'GE estimate')})</span> : <> · Price unavailable</>}
+        {rec.shopPrice !== undefined && rec.gePrice !== undefined && rec.gePrice < rec.shopPrice && (
+          <span className="muted"> (shop {formatGp(rec.shopPrice)} gp)</span>
+        )}
+      </p>
+
+      {rec.status === 'UPGRADE_NOT_AFFORDABLE' ? (
+        <div className="upgrade-cash">
+          <p className="small"><strong>💰 Not enough coins:</strong> ~{formatGp(rec.approxCost ?? 0)} gp needed ({rec.priceLabel ?? 'estimate'}), you have {formatGp(rec.coins ?? 0)} gp with the bank. It is too early to go to the shop.</p>
+          <p className="small muted">How to make it up quickly — guidelines, not a promised income:</p>
+          <ul className="small">
+            {coinStep && <li>Complete <a href={`#/step/${coinStep.step.id}`}>{coinStep.step.title}</a> — it gives {formatGp(coinStep.coins)} coins.</li>}
+            <li>Collect feathers from the chickens at the Lumbridge farm and sell them on the Grand Exchange.</li>
+            <li>Sell on the Grand Exchange what you will not need on the route.</li>
+          </ul>
+        </div>
+      ) : going ? (
+        <p className="small upgrade-going" role="status">
+          ● The in-game arrow leads to {rec.npc ?? 'Grand Exchange'}. When {rec.recommendedItem} is in the bag, it will return to the step by itself.
+        </p>
+      ) : null}
+
+      <div className="upgrade-actions">
+        {rec.status === 'UPGRADE_AVAILABLE' && nav && !going && (
+          <NavigateButton target={nav} label={`🧭 Point ${rec.npc ? `to ${rec.npc}` : 'to the Grand Exchange'}`} />
+        )}
+        {going && <button type="button" className="btn btn-sm" onClick={() => void clearNav()}>Return the arrow to the step</button>}
+        <button type="button" className="btn btn-ghost btn-sm" onClick={() => { if (going) void clearNav(); dismissUpgrade(step.id); }}>
+          ✕ Skip
+        </button>
+      </div>
+      <PlaceMapView view={places.view} onClose={places.close} />
+    </section>
+  );
+}

@@ -1,13 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { parseOwned, evaluatePreflight } from '../src/lib/checklist';
-import { buildPlayerState, heldOf } from '../src/lib/playerState';
-import { evaluate } from '../src/lib/requirements';
-import { ownedFood, combatPlanView } from '../src/lib/combatPlan';
-import { combatReadiness } from '../src/lib/combatReadiness';
+import { parseOwned, evaluatePreflight } from '../src/domain/items/checklist';
+import { buildPlayerState, heldOf } from '../src/domain/player/playerState';
+import { evaluate } from '../src/domain/readiness/requirements';
+import { ownedFood, combatPlanView } from '../src/domain/combat/combatPlan';
+import { combatReadiness } from '../src/domain/combat/combatReadiness';
 import { stepById } from '../src/data';
-import { gearById } from '../src/services/gearAdvisor';
-import { PICKAXES } from '../src/lib/toolTiers';
+import { gearById } from '../src/domain/combat/gearAdvisor';
+import { PICKAXES } from '../src/domain/items/toolTiers';
 
 const cases = JSON.parse(readFileSync(new URL('../runelite-bridge/src/test/resources/item-ownership.json', import.meta.url), 'utf8')) as {
   name: string; mining: number; bank: unknown[] | null; rows: Record<string, unknown>[];

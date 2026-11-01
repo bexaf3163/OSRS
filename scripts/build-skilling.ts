@@ -1,4 +1,4 @@
-// Builds src/data/skilling.json from scripts/skilling.defs.json: what the gathering engine (src/lib/skillingRates.ts) needs, read from the OSRS Wiki and
+// Builds src/data/skilling.json from scripts/skilling.defs.json: what the gathering engine (src/domain/training/skillingRates.ts) needs, read from the OSRS Wiki and
 // checked, so a new tree, rock, fishing spot or members area is an entry in the definitions and a run of this script, not a change of code:
 //   - each resource's {{Skilling success chart}} (low/high per axe for trees, one line for a rock, the cascade of a fishing spot, best fish first);
 //   - each product's level, XP and respawn from its {{Woodcutting info}}, {{Mining info}} or {{Fishing info}};

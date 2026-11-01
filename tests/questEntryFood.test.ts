@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { itemPreflight } from '../src/lib/preflight';
-import { entryFoodStep } from '../src/lib/loadoutPhase';
-import { buildPlayerState } from '../src/lib/playerState';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { emptyProgress } from '../src/lib/progress';
-import { aggregateShopping } from '../src/lib/shopping';
-import { shopRows } from '../src/lib/shoppingView';
-import { protectionsFor } from '../src/lib/funding/snapshot';
-import { bankWithdrawalsOf } from '../src/lib/prepEnvelope';
+import { itemPreflight } from '../src/domain/readiness/preflight';
+import { entryFoodStep } from '../src/domain/readiness/loadoutPhase';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { aggregateShopping } from '../src/domain/economy/shopping';
+import { shopRows } from '../src/domain/economy/shoppingView';
+import { protectionsFor } from '../src/domain/economy/funding/snapshot';
+import { bankWithdrawalsOf } from '../src/domain/prep/prepEnvelope';
 import { toInGameTarget } from '../src/services/runeliteBridge';
-import type { OwnedState } from '../src/lib/checklist';
+import type { OwnedState } from '../src/domain/items/checklist';
 
 const step = stepById.get('S9-01')!;
 const cursor = (stageAt = 2, lineIndex = 0) => ({ stepId: step.id, stageAt, lineIndex, peeking: false });

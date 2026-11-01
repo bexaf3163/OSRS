@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { moneyGoalProgress, wealthOf } from '../src/lib/wealth';
+import { moneyGoalProgress, wealthOf } from '../src/domain/economy/wealth';
 import { parseGear } from '../src/services/runeliteBridge';
 import { allSteps } from '../src/data';
 

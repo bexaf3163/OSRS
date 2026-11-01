@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
-import { emptyProgress, withStep } from '../src/lib/progress';
-import { buildPlayerState } from '../src/lib/playerState';
-import { contextOf, readinessOf, fixChain, type ReadinessInput } from '../src/lib/readiness';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { buildPrepRoute } from '../src/lib/prepRoute';
-import { planOneTrip } from '../src/lib/oneTrip';
+import { emptyProgress, withStep } from '../src/domain/persistence/progress';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { contextOf, readinessOf, fixChain, type ReadinessInput } from '../src/domain/readiness/readiness';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { buildPrepRoute } from '../src/domain/prep/prepRoute';
+import { planOneTrip } from '../src/domain/prep/oneTrip';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
 const done = (ids: string[]) => ids.reduce((p, id) => withStep(p, id, 'done'), emptyProgress());

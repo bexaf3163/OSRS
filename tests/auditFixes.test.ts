@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById, stepsFor } from '../src/data';
-import { canWear, gearData } from '../src/services/gearAdvisor';
-import { stepReadiness } from '../src/lib/readiness';
-import { emptyProgress, normalizeProgress, RETIRED_STEPS, withStep } from '../src/lib/progress';
-import { nextStep } from '../src/lib/next-step';
-import { isInstancedPoint } from '../src/lib/instances';
-import { navigationTarget } from '../src/lib/navigation';
-import { travelOptions } from '../src/lib/travel';
-import { fairyRingsUnlocked, travelInputOf } from '../src/lib/travelInput';
-import { xpForLevel } from '../src/lib/xp';
+import { canWear, gearData } from '../src/domain/combat/gearAdvisor';
+import { stepReadiness } from '../src/domain/readiness/readiness';
+import { emptyProgress, normalizeProgress, RETIRED_STEPS, withStep } from '../src/domain/persistence/progress';
+import { nextStep } from '../src/domain/quests/next-step';
+import { isInstancedPoint } from '../src/domain/travel/instances';
+import { navigationTarget } from '../src/domain/travel/navigation';
+import { travelOptions } from '../src/domain/travel/travel';
+import { fairyRingsUnlocked, travelInputOf } from '../src/domain/travel/travelInput';
+import { xpForLevel } from '../src/domain/player/xp';
 import type { GearState } from '../src/services/runeliteBridge';
-import type { OwnedState } from '../src/lib/checklist';
+import type { OwnedState } from '../src/domain/items/checklist';
 import type { Step } from '../src/types';
 
 // The route audit fixes: weapon before Attack 40, the quest alone completes Dragon Slayer I, map pieces by identity, instances, fairy rings,

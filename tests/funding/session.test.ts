@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { entriesFor, type LedgerEntry } from '../../src/lib/ledger';
-import { buildPlayerState, diffPlayerState, type PlayerState } from '../../src/lib/playerState';
-import { addWork, loadRates, observedRates, RATE_WINDOW_SECONDS, ratesKey, realizedSince, saveRates, unitsOf } from '../../src/lib/funding/session';
-import { OBSERVED_MIN_SECONDS, OBSERVED_MIN_UNITS } from '../../src/lib/funding/evaluate';
-import type { OwnedItem, OwnedState } from '../../src/lib/checklist';
-import { nameKey } from '../../src/lib/itemKey';
+import { entriesFor, type LedgerEntry } from '../../src/domain/persistence/ledger';
+import { buildPlayerState, diffPlayerState, type PlayerState } from '../../src/domain/player/playerState';
+import { addWork, loadRates, observedRates, RATE_WINDOW_SECONDS, ratesKey, realizedSince, saveRates, unitsOf } from '../../src/domain/economy/funding/session';
+import { OBSERVED_MIN_SECONDS, OBSERVED_MIN_UNITS } from '../../src/domain/economy/funding/evaluate';
+import type { OwnedItem, OwnedState } from '../../src/domain/items/checklist';
+import { nameKey } from '../../src/domain/items/itemKey';
 
 const T = 1_792_000_000_000;
 const e = (name: string, qty: number, reason: LedgerEntry['reason'], at = T, value?: number): LedgerEntry => ({ name, quantityDelta: qty, reason, timestamp: at, ...(value !== undefined ? { estimatedGpValue: value } : {}) });

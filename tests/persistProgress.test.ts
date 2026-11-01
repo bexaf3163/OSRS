@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { emptyProgress, saveProgress } from '../src/lib/progress';
-import { persistProgress } from '../src/lib/persistProgress';
+import { emptyProgress, saveProgress } from '../src/domain/persistence/progress';
+import { persistProgress } from '../src/domain/persistence/persistProgress';
 
 const p = emptyProgress();
 const broken = { setItem() { throw new Error('quota'); } };

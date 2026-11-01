@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
-import { cleanupAdvice, emptyCleanupPrefs, OBSOLETE, recLabel, type CleanupInput, type CleanupPrefs } from '../src/lib/cleanup';
+import { cleanupAdvice, emptyCleanupPrefs, OBSOLETE, recLabel, type CleanupInput, type CleanupPrefs } from '../src/domain/prep/cleanup';
 import type { Step } from '../src/types';
-import { questStepOf } from '../src/lib/questSteps';
+import { questStepOf } from '../src/domain/quests/questSteps';
 
 const open = (...ids: string[]): Step[] => ids.map((id) => allSteps.find((s) => s.id === id)!);
 const PRICES: Record<string, number> = { 'Ball of wool': 60, 'Oak logs': 90, 'Bronze bar': 30, 'Cowhide': 150, 'Yew logs': 300 };
@@ -220,7 +220,7 @@ describe('cleanup data from the plugin', () => {
 
 describe('cleanup preferences storage', () => {
   it('are kept per profile and per character, and unreadable data means none', async () => {
-    const m = await import('../src/lib/cleanupPrefs');
+    const m = await import('../src/domain/persistence/cleanupPrefs');
     expect(m.cleanupKey('main', 'Bexqq')).not.toBe(m.cleanupKey('main', 'Other'));
     expect(m.cleanupKey('main', 'Bexqq')).not.toBe(m.cleanupKey('alt', 'Bexqq'));
     expect(m.cleanupKey('main', ' bexqq ')).toBe(m.cleanupKey('main', 'Bexqq'));

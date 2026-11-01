@@ -2,12 +2,12 @@
 // Fixtures are built by hand from the route's own items (S3-08's Salmon, S4-05's tools) and a player state the game could send.
 
 import { describe, expect, it } from 'vitest';
-import { budgetOf, budgetSum, emptyStateOf, exchangePlan, geListText, ownershipOf, scopeList, scopeSteps, shopRows, supplyReserve, syncLine, type ShopRow } from '../src/lib/shoppingView';
-import { aggregateShopping, type ShoppingLine } from '../src/lib/shopping';
-import { buildPlayerState } from '../src/lib/playerState';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { emptyProgress } from '../src/lib/progress';
+import { budgetOf, budgetSum, emptyStateOf, exchangePlan, geListText, ownershipOf, scopeList, scopeSteps, shopRows, supplyReserve, syncLine, type ShopRow } from '../src/domain/economy/shoppingView';
+import { aggregateShopping, type ShoppingLine } from '../src/domain/economy/shopping';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { emptyProgress } from '../src/domain/persistence/progress';
 import { allSteps, itemById } from '../src/data';
 import type { Step, StepItemRequirement } from '../src/types';
 

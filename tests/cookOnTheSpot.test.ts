@@ -2,13 +2,13 @@
 // (skillingRates.alongRate). The step with both goals takes it when it reaches both goals sooner (methodPick), and says so in one line.
 
 import { describe, expect, it } from 'vitest';
-import { alongRate, gatherRate } from '../src/lib/skillingRates';
-import { pickMethods } from '../src/lib/methodPick';
-import { withTrainingMethod } from '../src/lib/methodStep';
-import { trainingMethods, type TrainingMethod } from '../src/lib/trainingRouter';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { nameKey } from '../src/lib/itemKey';
+import { alongRate, gatherRate } from '../src/domain/training/skillingRates';
+import { pickMethods } from '../src/domain/training/methodPick';
+import { withTrainingMethod } from '../src/domain/training/methodStep';
+import { trainingMethods, type TrainingMethod } from '../src/domain/training/trainingRouter';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { nameKey } from '../src/domain/items/itemKey';
 import { stepById } from '../src/data';
 import { market } from './funding/market';
 

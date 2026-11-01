@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
-import { stepReadiness } from '../src/lib/readiness';
-import { emptyProgress } from '../src/lib/progress';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { pacingLevels, pacingText } from '../src/lib/pacing';
+import { stepReadiness } from '../src/domain/readiness/readiness';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { pacingLevels, pacingText } from '../src/domain/player/pacing';
 import { toInGameTarget, type GearState, type PacingState } from '../src/services/runeliteBridge';
-import { isOverworld, isSeparateArea } from '../src/lib/instances';
-import { navigationTarget } from '../src/lib/navigation';
+import { isOverworld, isSeparateArea } from '../src/domain/travel/instances';
+import { navigationTarget } from '../src/domain/travel/navigation';
 
 // S3-08 after the owner's report of 2026-10-15 ("nothing shows what to do", "nothing about food, just kill minotaurs") and the combat brief:
 // Strength first on Aggressive, the level 12 Minotaurs, food and Strength potions, what to do in the game. The numbers in the step's text are estimates

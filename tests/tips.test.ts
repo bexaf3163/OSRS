@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { TIP_MIN_SAVING_TILES, travelTip } from '../src/lib/tips';
-import { bankCounts, travelInputOf } from '../src/lib/travelInput';
-import { travelOptions, type TravelInput } from '../src/lib/travel';
+import { TIP_MIN_SAVING_TILES, travelTip } from '../src/domain/readiness/tips';
+import { bankCounts, travelInputOf } from '../src/domain/travel/travelInput';
+import { travelOptions, type TravelInput } from '../src/domain/travel/travel';
 import type { GearState } from '../src/services/runeliteBridge';
 
 const at = (x: number, y: number, plane = 0) => ({ x, y, plane });

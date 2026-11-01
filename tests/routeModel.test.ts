@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stagesFor, stepById, stepsFor } from '../src/data';
 import questStages from '../src/data/questStages.json';
-import { alchMargin } from '../src/lib/alchemy';
-import { carryoverOf, routeTrigger } from '../src/lib/carryover';
-import { DAERO_SMALL, daeroAdvice } from '../src/lib/daero';
-import { blockersOf, nextStep, stepState, suggestedBefore } from '../src/lib/next-step';
-import { emptyProgress } from '../src/lib/progress';
-import { alternativesOf, PICKAXES, toolFamilyOf } from '../src/lib/toolTiers';
-import { xpForLevel } from '../src/lib/xp';
+import { alchMargin } from '../src/domain/economy/alchemy';
+import { carryoverOf, routeTrigger } from '../src/domain/prep/carryover';
+import { DAERO_SMALL, daeroAdvice } from '../src/domain/training/daero';
+import { blockersOf, nextStep, stepState, suggestedBefore } from '../src/domain/quests/next-step';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { alternativesOf, PICKAXES, toolFamilyOf } from '../src/domain/items/toolTiers';
+import { xpForLevel } from '../src/domain/player/xp';
 
 // The route model of 2.49: dependencies, optional branches, carryover, loadouts, tool tiers, Daero, alchemy and the S3-04 rework.
 

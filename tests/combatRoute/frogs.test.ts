@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../../src/data';
-import { evaluatePlans } from '../../src/lib/combatRoute/plans';
-import { resolvePick, withCombatPlan } from '../../src/lib/combatRoute/pick';
+import { evaluatePlans } from '../../src/domain/combat/route/plans';
+import { resolvePick, withCombatPlan } from '../../src/domain/combat/route/pick';
 import { liveInput } from './fixture';
 
 describe('the real S4-03 route separates training from funding', () => {

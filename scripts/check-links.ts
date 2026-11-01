@@ -4,8 +4,8 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import type { Step, WikiItemDetail } from '../src/types/index.ts';
-import { MAP_METADATA_URL, mapSourceAt, parseMapSources, tileUrl } from '../src/lib/map.ts';
-import type { NpcSpot } from '../src/lib/stepPlaces.ts';
+import { MAP_METADATA_URL, mapSourceAt, parseMapSources, tileUrl } from '../src/domain/travel/map.ts';
+import type { NpcSpot } from '../src/domain/travel/stepPlaces.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const steps = JSON.parse(readFileSync(`${root}src/data/steps.json`, 'utf8')) as Step[];

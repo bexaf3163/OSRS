@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
-import { stepReadiness } from '../src/lib/readiness';
-import { buildPlayerState } from '../src/lib/playerState';
-import { evaluate, type Requirement } from '../src/lib/requirements';
-import { navigationTarget } from '../src/lib/navigation';
+import { stepReadiness } from '../src/domain/readiness/readiness';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { evaluate, type Requirement } from '../src/domain/readiness/requirements';
+import { navigationTarget } from '../src/domain/travel/navigation';
 import { toInGameTarget } from '../src/services/runeliteBridge';
-import { emptyProgress } from '../src/lib/progress';
-import { preflightItems, type OwnedItem, type OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { preflightItems, type OwnedItem, type OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
 import type { GearState } from '../src/services/runeliteBridge';
 import type { Step } from '../src/types';
-import { toolFamilyOf } from '../src/lib/toolTiers';
+import { toolFamilyOf } from '../src/domain/items/toolTiers';
 
 // The new requirements engine and the step readiness — one state, one answer.
 // If they diverge, one screen will say "short", another — "ready".

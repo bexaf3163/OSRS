@@ -3,8 +3,8 @@ import { allSteps, known, stepById } from '../src/data';
 import {
   emptyProgress, exportFileName, exportProgress, gameModeOf, importProgress, loadProgress, normalizeProgress, saveProgress, STORAGE_KEY,
   RETIRED_STEPS, V2_FROM_V1, V3_FROM_V2, withGameMode, withLevel, withNote, withReviewed, withStep,
-} from '../src/lib/progress';
-import { needsReview, pendingReview } from '../src/lib/review';
+} from '../src/domain/persistence/progress';
+import { needsReview, pendingReview } from '../src/domain/readiness/review';
 
 function memoryStorage() {
   const data = new Map<string, string>();

@@ -2,16 +2,16 @@
 // plan in the middle of a trip, and gives way at once when a plan is gone or unsafe. The representative states of the owner's request, as fixtures.
 
 import { describe, expect, it } from 'vitest';
-import { evaluatePlans, planWhy, type PlanReport } from '../../src/lib/combatRoute/plans';
-import { resolvePick, withCombatPlan } from '../../src/lib/combatRoute/pick';
-import { selectPlan } from '../../src/lib/combatRoute/selection';
-import type { Adopted } from '../../src/lib/combatRoute/adopt';
-import { foodPicks, withFoodPlan } from '../../src/lib/foodPlan';
-import { emptyProgress } from '../../src/lib/progress';
+import { evaluatePlans, planWhy, type PlanReport } from '../../src/domain/combat/route/plans';
+import { resolvePick, withCombatPlan } from '../../src/domain/combat/route/pick';
+import { selectPlan } from '../../src/domain/combat/route/selection';
+import type { Adopted } from '../../src/domain/combat/route/adopt';
+import { foodPicks, withFoodPlan } from '../../src/domain/combat/foodPlan';
+import { emptyProgress } from '../../src/domain/persistence/progress';
 import { stepGuide, toInGameTarget } from '../../src/services/runeliteBridge';
 import { allSteps, stepById } from '../../src/data';
-import { stepGoals } from '../../src/lib/combatEstimate';
-import { levelForXp } from '../../src/lib/xp';
+import { stepGoals } from '../../src/domain/combat/combatEstimate';
+import { levelForXp } from '../../src/domain/player/xp';
 import { market } from '../funding/market';
 import { gearOf, HISTORICAL, planInput, type Over } from './fixture';
 import type { Step } from '../../src/types';

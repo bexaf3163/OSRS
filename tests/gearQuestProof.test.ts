@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { stepsFor } from '../src/data';
-import { emptyProgress } from '../src/lib/progress';
-import { gearQuestEvidence } from '../src/lib/gearAdvice';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { gearQuestEvidence } from '../src/domain/combat/gearAdvice';
 
 const steps = stepsFor('members');
 const prince = steps.find(s => s.title === 'Prince Ali Rescue')!;

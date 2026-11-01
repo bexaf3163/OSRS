@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
-import { coinRewardAhead, rewardCoins } from '../src/lib/stepRewards';
+import { coinRewardAhead, rewardCoins } from '../src/domain/quests/stepRewards';
 
 describe('step rewards', () => {
   it('reads the coins of a reward, the total before a breakdown', () => {

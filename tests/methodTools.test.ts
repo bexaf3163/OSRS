@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { AXES, PICKAXES } from '../src/lib/toolTiers';
-import { methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
-import { preflightItems, type OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { emptyProgress } from '../src/lib/progress';
-import { contextOf, stepReadiness } from '../src/lib/readiness';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
+import { AXES, PICKAXES } from '../src/domain/items/toolTiers';
+import { methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
+import { preflightItems, type OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { contextOf, stepReadiness } from '../src/domain/readiness/readiness';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { toInGameTarget } from '../src/services/runeliteBridge';
 import type { Step } from '../src/types';
 

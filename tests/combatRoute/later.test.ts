@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { defenceXpOf, laterDefence } from '../../src/lib/combatRoute/later';
+import { defenceXpOf, laterDefence } from '../../src/domain/combat/route/later';
 import { allSteps, stepById } from '../../src/data';
 
 describe('the Defence XP the route gives later', () => {

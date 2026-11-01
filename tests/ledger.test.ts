@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { buildPlayerState, diffPlayerState, type PlayerStateInput } from '../src/lib/playerState';
-import { entriesFor, MIN_ETA_SECONDS, ratePerMinute, resourceGoal, summarize, type LedgerEntry } from '../src/lib/ledger';
-import { planSources } from '../src/lib/sourceRouter';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
+import { buildPlayerState, diffPlayerState, type PlayerStateInput } from '../src/domain/player/playerState';
+import { entriesFor, MIN_ETA_SECONDS, ratePerMinute, resourceGoal, summarize, type LedgerEntry } from '../src/domain/persistence/ledger';
+import { planSources } from '../src/domain/prep/sourceRouter';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
 import type { WikiItemDetail } from '../src/types';
 
 function owned(items: Record<string, Partial<OwnedItem>>, bankSeen: boolean): OwnedState {

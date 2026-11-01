@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { isOutOfStage, scopeReadiness, stageScope } from '../src/lib/stageScope';
-import type { RequirementStatus, StepReadiness } from '../src/lib/readiness';
+import { isOutOfStage, scopeReadiness, stageScope } from '../src/domain/quests/stageScope';
+import type { RequirementStatus, StepReadiness } from '../src/domain/readiness/readiness';
 
 const mountain = stepById.get('S3-04')!;
 const at = (stageAt: number) => ({ stepId: 'S3-04', stageAt, lineIndex: 0, peeking: false });

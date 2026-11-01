@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { findSkill, items, levelById, membersGuide, membersSkills, plugins, reference, skillById, skills, stepById, stepsFor } from '../src/data';
-import { rangeForLevel, skillRange } from '../src/lib/ranges';
-import { buildIndex, search } from '../src/lib/search';
-import { stepSkills } from '../src/components/RangeHints';
-import { emptyProgress } from '../src/lib/progress';
+import { rangeForLevel, skillRange } from '../src/domain/training/ranges';
+import { buildIndex, search } from '../src/domain/quests/search';
+import { stepSkills } from '../src/features/path/combat/RangeHints';
+import { emptyProgress } from '../src/domain/persistence/progress';
 
 const progress = (levels: Record<string, number>) => ({ ...emptyProgress(), levels });
 

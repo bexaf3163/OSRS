@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { combatPlanView, ownedFood } from '../src/lib/combatPlan';
-import { combatReadiness } from '../src/lib/combatReadiness';
-import { nameKey } from '../src/lib/itemKey';
+import { combatPlanView, ownedFood } from '../src/domain/combat/combatPlan';
+import { combatReadiness } from '../src/domain/combat/combatReadiness';
+import { nameKey } from '../src/domain/items/itemKey';
 import { planInput } from './combatRoute/fixture';
 
 const inputFor = () => {

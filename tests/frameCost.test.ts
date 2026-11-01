@@ -1,6 +1,6 @@
 // T09: the heartbeats carry the client's FPS and our overlays' draw time; the session report turns them into one line of acceptance data.
 import { describe, expect, it } from 'vitest';
-import { analyze, formatReport, frameCost, type TelemetryEvent } from '../src/lib/telemetryReport';
+import { analyze, formatReport, frameCost, type TelemetryEvent } from '../src/domain/telemetry/telemetryReport';
 
 const beat = (t: number, fps: number, drawUs: number, drawMaxUs: number): TelemetryEvent => ({ t, kind: 'beat', tick: t, fps, drawUs, drawMaxUs }) as TelemetryEvent;
 

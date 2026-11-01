@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { allQuests, itemById } from '../../src/data';
 import coverageJson from '../../src/data/fundingCoverage.json';
 import moneyJson from '../../src/data/moneyMaking.json';
-import { COMBAT_FOES } from '../../src/lib/combatEstimate';
-import { CATALOGUE, chanceOf, DEPENDABLE_CHANCE, expectedQty, isDependable, METHODS, methodById, validateCatalogue } from '../../src/lib/funding/methods';
-import type { Catalogue } from '../../src/lib/funding/types';
+import { COMBAT_FOES } from '../../src/domain/combat/combatEstimate';
+import { CATALOGUE, chanceOf, DEPENDABLE_CHANCE, expectedQty, isDependable, METHODS, methodById, validateCatalogue } from '../../src/domain/economy/funding/methods';
+import type { Catalogue } from '../../src/domain/economy/funding/types';
 
 const quests = new Set(allQuests.map((q) => q.title));
 const foes = new Map<string, string[]>();

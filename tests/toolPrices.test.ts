@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
-import { buildPriceView } from '../src/lib/funding/quotes';
-import { itemPrice } from '../src/lib/itemPrice';
-import { emptyProgress } from '../src/lib/progress';
-import { contextOf } from '../src/lib/readiness';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { recommendUpgrade, upgradeNav } from '../src/services/gearUpgradeRouter';
+import { buildPriceView } from '../src/domain/economy/funding/quotes';
+import { itemPrice } from '../src/domain/items/itemPrice';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { contextOf } from '../src/domain/readiness/readiness';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { recommendUpgrade, upgradeNav } from '../src/domain/training/gearUpgradeRouter';
 
 const now = 1_800_000_000_000;
 const step = stepById.get('S1-08')!;

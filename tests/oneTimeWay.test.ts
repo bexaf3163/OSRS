@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { TRANSPORT, travelOptions, type TravelInput } from '../src/lib/travel';
-import { fairyRingsUnlocked, networkUnlocked, oneTimeUsedOf, travelInputOf } from '../src/lib/travelInput';
+import { TRANSPORT, travelOptions, type TravelInput } from '../src/domain/travel/travel';
+import { fairyRingsUnlocked, networkUnlocked, oneTimeUsedOf, travelInputOf } from '../src/domain/travel/travelInput';
 import { stepById } from '../src/data';
-import { judgeTransport, recommendedTransport } from '../src/lib/transport';
+import { judgeTransport, recommendedTransport } from '../src/domain/travel/transport';
 
 // Count Check: one free teleport from the Lumbridge graveyard to the Stronghold of Security entrance, once, only if it was never entered.
 

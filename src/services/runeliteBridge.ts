@@ -2,22 +2,22 @@
 // Requests go through the Electron main process (preload → ipc): the plugin accepts only them, and a request
 // from a page in a browser (with an Origin header) is rejected. There is no remote server: the bridge listens on loopback only.
 
-import type { MoveEvent } from '../lib/recovery';
-import type { PrepEnvelope } from '../lib/prepEnvelope';
+import type { MoveEvent } from '../domain/readiness/recovery';
+import type { PrepEnvelope } from '../domain/prep/prepEnvelope';
 import type { InGameTarget, PacingSkill, StageHighlight, StagePre, PlayerStats, Progress, Step, StepBranch, StepPacing } from '../types';
-import { desktop } from '../lib/desktop';
-import { isClosed, openAfter, type DependencyFact } from '../lib/next-step';
-import { parseAmount, preflightItems } from '../lib/checklist';
-import { nameKey } from '../lib/itemKey';
-import { watchedItems } from '../lib/branching';
-import { methodToolNames } from '../lib/methodStep';
-import { routeTrigger } from '../lib/carryover';
-import { alternativesOf, toolFamilyOf } from '../lib/toolTiers';
-import { doseKind, doseNames } from '../lib/doseKind';
-import { stepMaxHit } from '../lib/foodAdvice';
-import { npcSpot, stepPlaces } from '../lib/stepPlaces';
-import { shortLine } from '../lib/shortText';
-import { BANK_SPOTS } from '../lib/preflight';
+import { desktop } from './desktop';
+import { isClosed, openAfter, type DependencyFact } from '../domain/quests/next-step';
+import { parseAmount, preflightItems } from '../domain/items/checklist';
+import { nameKey } from '../domain/items/itemKey';
+import { watchedItems } from '../domain/quests/branching';
+import { methodToolNames } from '../domain/training/methodStep';
+import { routeTrigger } from '../domain/prep/carryover';
+import { alternativesOf, toolFamilyOf } from '../domain/items/toolTiers';
+import { doseKind, doseNames } from '../domain/items/doseKind';
+import { stepMaxHit } from '../domain/combat/foodAdvice';
+import { npcSpot, stepPlaces } from '../domain/travel/stepPlaces';
+import { shortLine } from '../domain/quests/shortText';
+import { BANK_SPOTS } from '../domain/readiness/preflight';
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
 

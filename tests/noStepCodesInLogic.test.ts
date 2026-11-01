@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 /** Where a step code is data, not a rule: the save migration map of retired and renumbered codes, and a search box example. */
-const ALLOWED = new Set(['src/lib/progress.ts', 'src/components/SearchBox.tsx']);
+const ALLOWED = new Set(['src/domain/persistence/progress.ts', 'src/app/SearchBox.tsx']);
 const CODE = /["'`]S\d+-\d{2}["'`]/;
 
 /** The Windows path separator, a backslash. */
@@ -33,7 +33,7 @@ function codeLines(text: string): { n: number; line: string }[] {
 
 describe('no rule is tied to one route step', () => {
   it('the app logic names no step code', () => {
-    const hits = ['src/lib', 'src/components', 'src/services', 'src/pages'].flatMap((d) => files(d, /\.tsx?$/))
+    const hits = ['src/app', 'src/domain', 'src/features', 'src/services', 'src/state', 'src/ui'].flatMap((d) => files(d, /\.tsx?$/))
       .filter((f) => !ALLOWED.has(f))
       .flatMap((f) => codeLines(readFileSync(f, 'utf8')).filter(({ line }) => CODE.test(line)).map(({ n, line }) => `${f}:${n}: ${line.trim()}`));
     expect(hits).toEqual([]);

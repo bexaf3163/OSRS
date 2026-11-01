@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { actionOf, alternativeAt, dialogueOf, findSubStep, instructionSubStep, itemStatus, overviewCurrent, overviewOf, subStepItems, subStepNpcInfo, type SubStep } from '../src/lib/subStep';
+import { actionOf, alternativeAt, dialogueOf, findSubStep, instructionSubStep, itemStatus, overviewCurrent, overviewOf, subStepItems, subStepNpcInfo, type SubStep } from '../src/domain/quests/subStep';
 import type { NavTargetPayload } from '../src/services/runeliteBridge';
 
 const ali = stepById.get('S2-10')!;

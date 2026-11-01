@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { evaluatePlans } from '../../src/lib/combatRoute/plans';
-import { currentPhase, phaseDone, phaseInstruction, resolvePick, withCombatPlan } from '../../src/lib/combatRoute/pick';
-import { xpForLevel } from '../../src/lib/xp';
+import { evaluatePlans } from '../../src/domain/combat/route/plans';
+import { currentPhase, phaseDone, phaseInstruction, resolvePick, withCombatPlan } from '../../src/domain/combat/route/pick';
+import { xpForLevel } from '../../src/domain/player/xp';
 import { stepById } from '../../src/data';
 import { HISTORICAL, planInput } from './fixture';
-import { estimateStep, xpPerKill } from '../../src/lib/combatEstimate';
+import { estimateStep, xpPerKill } from '../../src/domain/combat/combatEstimate';
 
 describe('combined combat objectives', () => {
   it('carries only unused whole Strength doses into the next phase', () => {

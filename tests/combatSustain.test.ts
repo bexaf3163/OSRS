@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { attackCounts, attacksToKill, combatRecovery, foeVariants } from '../src/lib/combatEstimate';
-import { combatRate } from '../src/lib/combatRates';
-import { rangedNeeds } from '../src/lib/rangedLoadout';
-import { goalArrows } from '../src/lib/rangedAmmo';
-import { xpForLevel } from '../src/lib/xp';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { trainingMethods } from '../src/lib/trainingRouter';
-import type { PriceView } from '../src/lib/funding/quotes';
+import { attackCounts, attacksToKill, combatRecovery, foeVariants } from '../src/domain/combat/combatEstimate';
+import { combatRate } from '../src/domain/combat/combatRates';
+import { rangedNeeds } from '../src/domain/combat/rangedLoadout';
+import { goalArrows } from '../src/domain/combat/rangedAmmo';
+import { xpForLevel } from '../src/domain/player/xp';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { trainingMethods } from '../src/domain/training/trainingRouter';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
 
 const method = (id: string) => trainingMethods.find((m) => m.id === id)!;
 const quote = (price: number) => ({ price, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { xpData } from '../src/data';
-import { clampLevel, levelForXp, xpBetween, xpForLevel } from '../src/lib/xp';
+import { clampLevel, levelForXp, xpBetween, xpForLevel } from '../src/domain/player/xp';
 
 describe('experience', () => {
   it('matches the guide table', () => {

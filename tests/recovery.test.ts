@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { detectRecovery, DEATH_WINDOW_MS, FAR, inHub, NEAR, RECOVERY_TTL_MS, RESPAWN, recoverySteps, stepPoint, type MoveEvent, type Point } from '../src/lib/recovery';
+import { detectRecovery, DEATH_WINDOW_MS, FAR, inHub, NEAR, RECOVERY_TTL_MS, RESPAWN, recoverySteps, stepPoint, type MoveEvent, type Point } from '../src/domain/readiness/recovery';
 import { parseMove } from '../src/services/runeliteBridge';
 
 const NOW = 1_800_000_000_000;

@@ -3,12 +3,12 @@
 // too when a sale leaves it short. The route step is never touched: the plan only names the step to go back to.
 
 import { describe, expect, it } from 'vitest';
-import { moneyList } from '../../src/lib/funding/browse';
-import { methodById } from '../../src/lib/funding/methods';
+import { moneyList } from '../../src/domain/economy/funding/browse';
+import { methodById } from '../../src/domain/economy/funding/methods';
 import {
   cancel, coinsMade, confirm, goalBlocker, loadPlan, pause, planKey, resume, savePlan, startMethodPlan, startPlan, tick, viewOf, type FundingPlanState,
-} from '../../src/lib/funding/plan';
-import { fundingHintPayload } from '../../src/lib/fundingHint';
+} from '../../src/domain/economy/funding/plan';
+import { fundingHintPayload } from '../../src/domain/economy/fundingHint';
 import { market } from './market';
 import { scenario } from './scenario';
 import { fakeSnap } from './helpers';

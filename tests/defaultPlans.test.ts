@@ -4,12 +4,12 @@
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { evaluatePlans, planWhy, type PlanReport } from '../src/lib/combatRoute/plans';
-import { selectPlan } from '../src/lib/combatRoute/selection';
-import { adviseTraining, trainingMethods } from '../src/lib/trainingRouter';
-import { buildPlayerState } from '../src/lib/playerState';
+import { evaluatePlans, planWhy, type PlanReport } from '../src/domain/combat/route/plans';
+import { selectPlan } from '../src/domain/combat/route/selection';
+import { adviseTraining, trainingMethods } from '../src/domain/training/trainingRouter';
+import { buildPlayerState } from '../src/domain/player/playerState';
 import { allSteps } from '../src/data';
-import { followedGoal } from '../src/lib/methodStep';
+import { followedGoal } from '../src/domain/training/methodStep';
 import { market } from './funding/market';
 import { planInput, type Over } from './combatRoute/fixture';
 

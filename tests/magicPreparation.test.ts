@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
-import { emptyProgress } from '../src/lib/progress';
-import { contextOf, readinessOf } from '../src/lib/readiness';
-import { STAFFS } from '../src/lib/magicPlan';
-import { nameKey } from '../src/lib/itemKey';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { contextOf, readinessOf } from '../src/domain/readiness/readiness';
+import { STAFFS } from '../src/domain/combat/magicPlan';
+import { nameKey } from '../src/domain/items/itemKey';
 
 describe('Magic training uses an owned elemental staff', () => {
   it.each(Object.values(STAFFS))('$name satisfies the staff requirement from the bank', staff => {

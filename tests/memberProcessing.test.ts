@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { PROCESSING, processRate } from '../src/lib/processingRates';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { personalize, trainingMethods, viewMethod } from '../src/lib/trainingRouter';
-import type { PriceView } from '../src/lib/funding/quotes';
+import { PROCESSING, processRate } from '../src/domain/training/processingRates';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { personalize, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
 
 const method = (id: string) => trainingMethods.find((m) => m.id === id)!;
 const state = (skill: string, level: number, mode: 'f2p' | 'members' = 'members', questsDone: string[] = ['Druidic Ritual']) => buildPlayerState({

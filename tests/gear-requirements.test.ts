@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { listedWithoutRequirements, requirementsFromText, setRule } from '../scripts/gear-requirements';
-import { adviseGear, canWear, gearData, missingRequirements, missingText, watchNames } from '../src/services/gearAdvisor';
-import { questStep } from '../src/pages/Gear';
+import { adviseGear, canWear, gearData, missingRequirements, missingText, watchNames } from '../src/domain/combat/gearAdvisor';
+import { questStep } from '../src/features/gear/Gear';
 import { allSteps } from '../src/data';
 
 const item = (name: string) => gearData.items.find((i) => i.name === name)!;

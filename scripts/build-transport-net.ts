@@ -1,4 +1,4 @@
-// Builds src/data/transportNet.json — the transport networks the route planner (src/lib/travel.ts) uses besides the hand-written transport.json:
+// Builds src/data/transportNet.json — the transport networks the route planner (src/domain/travel/travel.ts) uses besides the hand-written transport.json:
 // fairy rings (code and tile), charter ship ports with the full fare table, and the teleport tablets.
 // It needs a network. Run: npm run build-transport-net (a few seconds).
 //

@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { preflightItems } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
+import { preflightItems } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 
 const step = stepById.get('S9-01')!;
 

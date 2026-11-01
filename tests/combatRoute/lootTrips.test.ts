@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { estimateStep } from '../../src/lib/combatEstimate';
-import { evaluatePlans } from '../../src/lib/combatRoute/plans';
-import { xpForLevel } from '../../src/lib/xp';
+import { estimateStep } from '../../src/domain/combat/combatEstimate';
+import { evaluatePlans } from '../../src/domain/combat/route/plans';
+import { xpForLevel } from '../../src/domain/player/xp';
 import { HISTORICAL, planInput } from './fixture';
 
 describe('mandatory retained loot and combat duration', () => {

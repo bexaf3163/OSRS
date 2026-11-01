@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { parseGear, parseNavTarget, parsePacing, parsePlayer, parsePos, parseQuests, parseStats, parseXp } from '../src/services/runeliteBridge';
-import { parseOwned } from '../src/lib/checklist';
-import { normalizeProgress, ownedManualOf } from '../src/lib/progress';
+import { parseOwned } from '../src/domain/items/checklist';
+import { normalizeProgress, ownedManualOf } from '../src/domain/persistence/progress';
 import { allSteps as steps, known as knownData, stepById } from '../src/data';
-import { wealthOf } from '../src/lib/wealth';
-import { adviseStyle } from '../src/lib/styleGear';
-import { adviseMoney } from '../src/lib/moneyAdvisor';
-import { travelOptions } from '../src/lib/travel';
+import { wealthOf } from '../src/domain/economy/wealth';
+import { adviseStyle } from '../src/domain/combat/styleGear';
+import { adviseMoney } from '../src/domain/economy/moneyAdvisor';
+import { travelOptions } from '../src/domain/travel/travel';
 
 // A deterministic generator: the test is reproducible, not "fails sometimes".
 function rng(seed: number) {

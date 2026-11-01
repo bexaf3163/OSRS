@@ -1,19 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, itemById, known, stepsFor } from '../src/data';
 import type { Step } from '../src/types';
-import { emptyProgress, normalizeProgress, withUpgradeDismissed } from '../src/lib/progress';
-import { stageBankItemIds, stepBankItemIds, uniqueIds } from '../src/lib/bankTags';
-import { DEFAULT_FEATURES, parseFeatures } from '../src/lib/features';
+import { emptyProgress, normalizeProgress, withUpgradeDismissed } from '../src/domain/persistence/progress';
+import { stageBankItemIds, stepBankItemIds, uniqueIds } from '../src/domain/prep/bankTags';
+import { DEFAULT_FEATURES, parseFeatures } from '../src/domain/persistence/features';
 import {
   checkStatus, clearNavTarget, parseGear, parsePacing, setGearHint, setNavTarget, syncBankTags, toInGameTarget, type BridgeTransport, type GearState,
 } from '../src/services/runeliteBridge';
 import {
   recommendFor, recommendUpgrade, showsPrompt, stepUpgradeCategories, toolProgression, upgradeNav, type RouterInput, type ToolProgression,
-} from '../src/services/gearUpgradeRouter';
+} from '../src/domain/training/gearUpgradeRouter';
 import { matchStrict } from '../src/services/locationResolver';
-import { actionForm, etaText, pacingNext, pacingText } from '../src/lib/pacing';
-import { foeData } from '../src/services/gearAdvisor';
-import { mapTarget, navPayload, pageFromUrl, sourceBadge } from '../src/lib/places';
+import { actionForm, etaText, pacingNext, pacingText } from '../src/domain/player/pacing';
+import { foeData } from '../src/domain/combat/gearAdvisor';
+import { mapTarget, navPayload, pageFromUrl, sourceBadge } from '../src/domain/travel/places';
 
 import dangerZones from '../src/data/dangerZones.json';
 

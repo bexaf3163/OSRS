@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
-import { shortLine, SHORT_MAX } from '../src/lib/shortText';
+import { shortLine, SHORT_MAX } from '../src/domain/quests/shortText';
 import { stagePayload, stepGuide } from '../src/services/runeliteBridge';
 import raw from '../src/data/questStages.json';
 

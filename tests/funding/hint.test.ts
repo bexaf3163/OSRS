@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { buildEnvelope, EMPTY_PARTS, envelopeKey } from '../../src/lib/prepEnvelope';
-import { briefOf, fundingHintPayload, MAX_FUNDING_BRIEF, MAX_FUNDING_TEXT } from '../../src/lib/fundingHint';
-import { pause, startPlan, viewOf, type FundingPlanState } from '../../src/lib/funding/plan';
-import { methodById } from '../../src/lib/funding/methods';
+import { buildEnvelope, EMPTY_PARTS, envelopeKey } from '../../src/domain/prep/prepEnvelope';
+import { briefOf, fundingHintPayload, MAX_FUNDING_BRIEF, MAX_FUNDING_TEXT } from '../../src/domain/economy/fundingHint';
+import { pause, startPlan, viewOf, type FundingPlanState } from '../../src/domain/economy/funding/plan';
+import { methodById } from '../../src/domain/economy/funding/methods';
 import { market } from './market';
 import { scenario } from './scenario';
 import { fakeSnap } from './helpers';

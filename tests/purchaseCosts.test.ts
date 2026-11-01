@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, itemById } from '../src/data';
-import { buildPlayerState } from '../src/lib/playerState';
-import type { OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { emptyProgress } from '../src/lib/progress';
-import { planOneTrip } from '../src/lib/oneTrip';
-import { readinessOf } from '../src/lib/readiness';
-import { buildPrepPlan } from '../src/lib/prepPlan';
-import { scopeList, shopRows, budgetOf } from '../src/lib/shoppingView';
-import { buildNeed } from '../src/lib/funding/need';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import type { OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { planOneTrip } from '../src/domain/prep/oneTrip';
+import { readinessOf } from '../src/domain/readiness/readiness';
+import { buildPrepPlan } from '../src/domain/prep/prepPlan';
+import { scopeList, shopRows, budgetOf } from '../src/domain/economy/shoppingView';
+import { buildNeed } from '../src/domain/economy/funding/need';
 import { market } from './funding/market';
-import { planSources } from '../src/lib/sourceRouter';
-import { purchaseCost } from '../src/lib/purchaseCost';
-import { prepareFor, stopText, type TravelInput } from '../src/lib/travel';
+import { planSources } from '../src/domain/prep/sourceRouter';
+import { purchaseCost } from '../src/domain/items/purchaseCost';
+import { prepareFor, stopText, type TravelInput } from '../src/domain/travel/travel';
 import type { Step } from '../src/types';
 
 // Use S8-06 supplies, with a smaller batch within the recorded shop stock.

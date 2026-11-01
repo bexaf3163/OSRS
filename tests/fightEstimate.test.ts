@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { estimateFight, estimateStepFights, fightLine, stepFightFoes } from '../src/lib/fightEstimate';
-import { COMBAT_FOES } from '../src/lib/combatEstimate';
-import { gearById } from '../src/services/gearAdvisor';
+import { estimateFight, estimateStepFights, fightLine, stepFightFoes } from '../src/domain/combat/fightEstimate';
+import { COMBAT_FOES } from '../src/domain/combat/combatEstimate';
+import { gearById } from '../src/domain/combat/gearAdvisor';
 import type { GearState } from '../src/services/runeliteBridge';
 
 // Combat estimate group 7: the quest fights of the route, one fight each, with the player's real kit.
@@ -64,7 +64,7 @@ describe('one quest fight with your kit', () => {
 
 describe('the opponents of a step (combat audit, 2.66.0)', () => {
   it('a members quest fight is estimated with its members version when there is no free one', async () => {
-    const { stepFightFoes, stepFightNames } = await import('../src/lib/fightEstimate');
+    const { stepFightFoes, stepFightNames } = await import('../src/domain/combat/fightEstimate');
     const { stepById } = await import('../src/data');
     expect(stepFightFoes(stepById.get('S8-01')!).map((f) => [f.name, f.members])).toEqual([['Temple Guardian', true]]);
     expect(stepFightFoes(stepById.get('S8-02')!).map((f) => f.name)).toEqual(['Ghast']);

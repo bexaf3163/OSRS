@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
-import { dependencyFacts, blockersOf, openAfter } from '../src/lib/next-step';
-import { emptyProgress, withStep } from '../src/lib/progress';
-import { contextOf } from '../src/lib/readiness';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
+import { dependencyFacts, blockersOf, openAfter } from '../src/domain/quests/next-step';
+import { emptyProgress, withStep } from '../src/domain/persistence/progress';
+import { contextOf } from '../src/domain/readiness/readiness';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import type { Step } from '../src/types';
 
 const producer = stepById.get('S8-04')!;

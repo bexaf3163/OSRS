@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { attacksToKill, estimateCombat, foeVariants, hitChance, type CombatFoe, type EstimateInput } from '../src/lib/combatEstimate';
-import { gearById, meleeHit } from '../src/services/gearAdvisor';
+import { attacksToKill, estimateCombat, foeVariants, hitChance, type CombatFoe, type EstimateInput } from '../src/domain/combat/combatEstimate';
+import { gearById, meleeHit } from '../src/domain/combat/gearAdvisor';
 import type { GearPiece } from '../src/types';
 
 // The estimate against an independent reference: a tick-by-tick simulation of the fights that rolls the game's dice itself —

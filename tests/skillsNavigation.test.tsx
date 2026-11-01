@@ -2,23 +2,23 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import { allStages, allSteps } from '../src/data';
-import { emptyProgress } from '../src/lib/progress';
-import { SkillsPage } from '../src/pages/Skills';
-import { SkillDetailPage } from '../src/pages/SkillDetail';
-import { parseHash } from '../src/lib/router';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { SkillsPage } from '../src/features/skills/Skills';
+import { SkillDetailPage } from '../src/features/skills/SkillDetail';
+import { parseHash } from '../src/app/router';
 
-vi.mock('../src/store', () => ({ useStore: () => ({
+vi.mock('../src/state/store', () => ({ useStore: () => ({
   mode: 'f2p', stages: allStages.slice(0, 6), steps: allSteps,
   progress: { ...emptyProgress(), levels: { attack: 30, strength: 21, defence: 10 } },
 }) }));
 const bridge = vi.hoisted(() => ({ state: 'offline', stats: null as Record<string, number> | null, xp: null }));
-vi.mock('../src/bridge', () => ({ useBridge: () => bridge }));
-vi.mock('../src/lib/skillTrack', () => ({ useTracked: () => null }));
-vi.mock('../src/components/SkillRoadmap', () => ({ RoadmapPane: () => null, useTrackedStep: () => null }));
-vi.mock('../src/components/TrainingCard', () => ({ TrainingCard: ({ skill, target, view }: { skill: string; target: number; view?: string }) =>
+vi.mock('../src/state/bridge', () => ({ useBridge: () => bridge }));
+vi.mock('../src/domain/training/skillTrack', () => ({ useTracked: () => null }));
+vi.mock('../src/features/skills/SkillRoadmap', () => ({ RoadmapPane: () => null, useTrackedStep: () => null }));
+vi.mock('../src/features/skills/TrainingCard', () => ({ TrainingCard: ({ skill, target, view }: { skill: string; target: number; view?: string }) =>
   createElement('div', { 'data-training-skill': skill, 'data-target': target, 'data-view': view }) }));
-vi.mock('../src/components/LevelInput', () => ({ LevelInput: () => null }));
-vi.mock('../src/components/LiveXp', () => ({ LiveXp: () => null }));
+vi.mock('../src/ui/LevelInput', () => ({ LevelInput: () => null }));
+vi.mock('../src/ui/LiveXp', () => ({ LiveXp: () => null }));
 
 describe('direct skill access without nested menus', () => {
   it('preparation links select the exact skill and target beyond its default checkpoint', () => {

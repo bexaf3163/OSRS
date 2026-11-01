@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { nameKey } from '../src/lib/itemKey';
-import { SUPERHEAT_WATCH, superheatNeeds } from '../src/lib/magicPlan';
-import { methodNeeds, trainingMethods, viewMethod } from '../src/lib/trainingRouter';
-import { methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { nameKey } from '../src/domain/items/itemKey';
+import { SUPERHEAT_WATCH, superheatNeeds } from '../src/domain/combat/magicPlan';
+import { methodNeeds, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
+import { methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
 import { stepById } from '../src/data';
 
 const method = trainingMethods.find(m => m.id === 'ma-superheat')!;

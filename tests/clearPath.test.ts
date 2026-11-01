@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import reference from '../src/data/reference.json';
-import { linkStatus, LINK_LABEL, targetStatus, TARGET_LABEL } from '../src/lib/linkState';
+import { linkStatus, LINK_LABEL, targetStatus, TARGET_LABEL } from '../src/domain/player/linkState';
 
 describe('link and target vocabulary', () => {
   it('connected and in game, waiting for the character, offline and off are different states', () => {
@@ -32,7 +32,7 @@ describe('reference advice matches the route', () => {
 
 describe('journal routes', () => {
   it('old goal links open the surviving Journal without resurrecting its retired matrix', async () => {
-    const { parseHash } = await import('../src/lib/router');
+    const { parseHash } = await import('../src/app/router');
     expect(parseHash('#/journal/session')).toMatchObject({ page: 'journal', param: 'session' });
     expect(parseHash('#/quests').page).toBe('quests');
     expect(parseHash('#/goals')).toMatchObject({ page: 'journal', param: 'session' });

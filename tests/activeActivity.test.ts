@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { resolveActiveActivity } from '../src/lib/activeActivity';
-import { emptyProgress } from '../src/lib/progress';
+import { resolveActiveActivity } from '../src/domain/quests/activeActivity';
+import { emptyProgress } from '../src/domain/persistence/progress';
 import type { Step } from '../src/types';
 
 const step = (id: string, stage = 1): Step => ({ id, stage, type: 'skill', title: id, requires: [], doneWhen: 'Finished' });

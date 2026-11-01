@@ -21,18 +21,18 @@ final class Navigation
 	 * standing at the entrance to climb down must not flip the route back and forth.
 	 */
 	static final int REWIND_BEYOND = 8;
-	/** Dungeons in the game lie 6400 tiles north of the surface (like src/lib/map.ts isUnderground). */
+	/** Dungeons in the game lie 6400 tiles north of the surface (like src/domain/travel/map.ts isUnderground). */
 	static final int UNDERGROUND_Y = 6400;
 	/**
 	 * The surface of the world map ends here; between it and the dungeons lie the separate areas: the Stronghold of Security floors, instances
-	 * (like src/lib/instances.ts OVERWORLD_MAX_Y). A straight line from one of them to the surface is not a distance.
+	 * (like src/domain/travel/instances.ts OVERWORLD_MAX_Y). A straight line from one of them to the surface is not a distance.
 	 */
 	static final int OVERWORLD_MAX_Y = 4200;
 
 	private static final String[] ARROWS = {"→", "↗", "↑", "↖", "←", "↙", "↓", "↘"};
 
 	/**
-	 * The template region of the Misthalin Mystery manor (like src/lib/instances.ts): the game shows an instance at coordinates that are not a place
+	 * The template region of the Misthalin Mystery manor (like src/domain/travel/instances.ts): the game shows an instance at coordinates that are not a place
 	 * on the world map, so a point there is not sent to Shortest Path and not marked on the world map. The arrow and highlights still work inside.
 	 */
 	static boolean isInstanced(int x, int y)

@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { buildPlayerState } from '../src/lib/playerState';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { emptyProgress } from '../src/lib/progress';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { emptyProgress } from '../src/domain/persistence/progress';
 import { allSteps } from '../src/data';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { decideTransport, transportReport, transportSources, transportTarget, type TransportInput } from '../src/lib/liveTransport';
-import { planPayload } from '../src/lib/prepEnvelope';
-import { transportKey, transportWatch, travelInputOf } from '../src/lib/travelInput';
-import { travelOptions } from '../src/lib/travel';
-import { recommendedTransport } from '../src/lib/transport';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { decideTransport, transportReport, transportSources, transportTarget, type TransportInput } from '../src/domain/travel/liveTransport';
+import { planPayload } from '../src/domain/prep/prepEnvelope';
+import { transportKey, transportWatch, travelInputOf } from '../src/domain/travel/travelInput';
+import { travelOptions } from '../src/domain/travel/travel';
+import { recommendedTransport } from '../src/domain/travel/transport';
 import { toInGameTarget, WATCH_MAX, type GearState, type QuestInstruction } from '../src/services/runeliteBridge';
 
 // The live transport decision for the step shown in the game (the audit of 2026-10-14): what the card says, what it prepares, and what it never claims.

@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { itemPrice } from '../src/lib/itemPrice';
-import { buildPriceView } from '../src/lib/funding/quotes';
-import { buildPlayerState } from '../src/lib/playerState';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { planPayload } from '../src/lib/prepEnvelope';
-import { planSources } from '../src/lib/sourceRouter';
-import { emptyProgress } from '../src/lib/progress';
+import { itemPrice } from '../src/domain/items/itemPrice';
+import { buildPriceView } from '../src/domain/economy/funding/quotes';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { planPayload } from '../src/domain/prep/prepEnvelope';
+import { planSources } from '../src/domain/prep/sourceRouter';
+import { emptyProgress } from '../src/domain/persistence/progress';
 import { itemById } from '../src/data';
 import type { Step } from '../src/types';
 

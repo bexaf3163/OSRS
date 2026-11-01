@@ -2,16 +2,16 @@
 // objective, the best of every candidate spot, and the registry kept in step with the Skills catalogue. Synthetic spots below exist only in this test.
 
 import { describe, expect, it } from 'vitest';
-import { buildPlayerState, type PlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { nameKey } from '../src/lib/itemKey';
-import { cascade, skillChance } from '../src/lib/skillChance';
-import { gatherPace, gatherRate, SKILLING, type SkillingRegistry } from '../src/lib/skillingRates';
-import { trainingNav } from '../src/lib/trainingNav';
-import { withTrainingMethod } from '../src/lib/methodStep';
+import { buildPlayerState, type PlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { nameKey } from '../src/domain/items/itemKey';
+import { cascade, skillChance } from '../src/domain/training/skillChance';
+import { gatherPace, gatherRate, SKILLING, type SkillingRegistry } from '../src/domain/training/skillingRates';
+import { trainingNav } from '../src/domain/training/trainingNav';
+import { withTrainingMethod } from '../src/domain/training/methodStep';
 import { stepById } from '../src/data';
-import { adviseTraining, toolUpgrade, trainingMethods, viewMethod, type TrainingMethod } from '../src/lib/trainingRouter';
-import type { PriceView } from '../src/lib/funding/quotes';
+import { adviseTraining, toolUpgrade, trainingMethods, viewMethod, type TrainingMethod } from '../src/domain/training/trainingRouter';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
 import { market } from './funding/market';
 
 const method = (id: string) => trainingMethods.find((m) => m.id === id) as TrainingMethod;
@@ -292,7 +292,7 @@ describe('the gathering registry and the Skills catalogue', () => {
 
 describe('the cowhide baseline is bounded', () => {
   it('banked coins never count for more than half the time, so a rich spot cannot outrank a much faster one on coins alone', async () => {
-    const { coinTimeShare, COIN_SHARE_CAP } = await import('../src/lib/lootValue');
+    const { coinTimeShare, COIN_SHARE_CAP } = await import('../src/domain/economy/lootValue');
     expect(COIN_SHARE_CAP).toBe(0.5);
     expect(coinTimeShare(1e9, 100)).toBe(0.5);
     expect(coinTimeShare(3000, 100)).toBeCloseTo(0.5, 6);

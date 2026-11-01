@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
-import { cleanupAdvice, emptyCleanupPrefs, type CleanupInput } from '../src/lib/cleanup';
-import { cleanupHintPayload, MAX_CLEANUP_LINES } from '../src/lib/cleanupHint';
-import { buildEnvelope, EMPTY_PARTS, envelopeKey } from '../src/lib/prepEnvelope';
+import { cleanupAdvice, emptyCleanupPrefs, type CleanupInput } from '../src/domain/prep/cleanup';
+import { cleanupHintPayload, MAX_CLEANUP_LINES } from '../src/domain/prep/cleanupHint';
+import { buildEnvelope, EMPTY_PARTS, envelopeKey } from '../src/domain/prep/prepEnvelope';
 import type { Step } from '../src/types';
 
 const open = (...ids: string[]): Step[] => ids.map((id) => allSteps.find((s) => s.id === id)!);

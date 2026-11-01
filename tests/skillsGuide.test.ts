@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { buildEnvelope, envelopeKey, SNAPSHOT_VERSION } from '../src/lib/prepEnvelope';
+import { buildEnvelope, envelopeKey, SNAPSHOT_VERSION } from '../src/domain/prep/prepEnvelope';
 import { skillGuides } from '../src/data/skillGuideRegistry';
 import locationsJson from '../src/data/majorLocations.json';
 import { membersSkills } from '../src/data';
 import {
   SKILL_NAMES, alternativesFor, bracketsOf, buildPath, chipText, currentIndex, f2pCovered, followedShoppingStep, onStatChanged, skillPathPayload,
   type GuideMode, type SkillGuideFile, type SkillStep,
-} from '../src/lib/skillGuide';
-import { aggregateShopping } from '../src/lib/shopping';
-import { parseTracked, freeOnlyOf } from '../src/lib/skillTrack';
+} from '../src/domain/training/skillGuide';
+import { aggregateShopping } from '../src/domain/economy/shopping';
+import { parseTracked, freeOnlyOf } from '../src/domain/training/skillTrack';
 
 // The 23 skill guides (src/data/skills/*.json): the schema, the coverage of every filter, the quest skips first, and the StatChanged rule the plugin follows.
 

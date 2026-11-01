@@ -3,21 +3,21 @@
 
 import legacyCollect from '../combatRoute/legacyCollectStep.json';
 import { stepsFor } from '../../src/data';
-import { gearById } from '../../src/services/gearAdvisor';
-import type { OwnedItem, OwnedState } from '../../src/lib/checklist';
-import { nameKey } from '../../src/lib/itemKey';
-import { combatPersonaliser } from '../../src/lib/funding/combatAdapter';
-import { assess, type AssessInput, type FundingAssessment } from '../../src/lib/funding/assess';
-import { buildNeed, type FundingNeed } from '../../src/lib/funding/need';
-import { buildSnapshot, type FundingSnapshot } from '../../src/lib/funding/snapshot';
-import type { SurplusRec } from '../../src/lib/funding/budget';
-import type { PriceView } from '../../src/lib/funding/quotes';
-import type { MethodEvaluation, ObservedRate } from '../../src/lib/funding/evaluate';
-import { emptyProgress } from '../../src/lib/progress';
-import { buildPlayerState, type PlayerState } from '../../src/lib/playerState';
-import { buildPrepPlan, type PrepPlan } from '../../src/lib/prepPlan';
-import { planOneTrip, tripWindow } from '../../src/lib/oneTrip';
-import { readinessOf } from '../../src/lib/readiness';
+import { gearById } from '../../src/domain/combat/gearAdvisor';
+import type { OwnedItem, OwnedState } from '../../src/domain/items/checklist';
+import { nameKey } from '../../src/domain/items/itemKey';
+import { combatPersonaliser } from '../../src/domain/economy/funding/combatAdapter';
+import { assess, type AssessInput, type FundingAssessment } from '../../src/domain/economy/funding/assess';
+import { buildNeed, type FundingNeed } from '../../src/domain/economy/funding/need';
+import { buildSnapshot, type FundingSnapshot } from '../../src/domain/economy/funding/snapshot';
+import type { SurplusRec } from '../../src/domain/economy/funding/budget';
+import type { PriceView } from '../../src/domain/economy/funding/quotes';
+import type { MethodEvaluation, ObservedRate } from '../../src/domain/economy/funding/evaluate';
+import { emptyProgress } from '../../src/domain/persistence/progress';
+import { buildPlayerState, type PlayerState } from '../../src/domain/player/playerState';
+import { buildPrepPlan, type PrepPlan } from '../../src/domain/prep/prepPlan';
+import { planOneTrip, tripWindow } from '../../src/domain/prep/oneTrip';
+import { readinessOf } from '../../src/domain/readiness/readiness';
 import type { Step, WikiItemDetail } from '../../src/types';
 import { GE, walk } from './helpers';
 

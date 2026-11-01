@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { PROCESSING, processRate } from '../src/lib/processingRates';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { trackedTraining } from '../src/lib/trackedTraining';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { trainingMethods } from '../src/lib/trainingRouter';
+import { PROCESSING, processRate } from '../src/domain/training/processingRates';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { trackedTraining } from '../src/domain/training/trackedTraining';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { trainingMethods } from '../src/domain/training/trainingRouter';
 
 const names = [...new Set(PROCESSING.recipes.flatMap(r => [...r.tools, ...r.inputs.map(i => i.name)]))];
 function character(level: number, carried: Record<string, number>, skill = 'smithing') {

@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { actionsForQuantity, quantityForActions, validConsumption } from '../src/lib/consumption';
-import { PROCESSING, processRate } from '../src/lib/processingRates';
-import { processingGoalNeeds } from '../src/lib/processingGoal';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { trackedTraining } from '../src/lib/trackedTraining';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import type { PriceView } from '../src/lib/funding/quotes';
-import { trainingMethods, type PathLeg } from '../src/lib/trainingRouter';
+import { actionsForQuantity, quantityForActions, validConsumption } from '../src/domain/items/consumption';
+import { PROCESSING, processRate } from '../src/domain/training/processingRates';
+import { processingGoalNeeds } from '../src/domain/training/processingGoal';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { trackedTraining } from '../src/domain/training/trackedTraining';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
+import { trainingMethods, type PathLeg } from '../src/domain/training/trainingRouter';
 
 const thread = { qty: 0.2, initialReserve: 0.8 };
 const names = [...new Set(PROCESSING.recipes.flatMap(r => [...r.tools, ...r.inputs.map(i => i.name)]))];

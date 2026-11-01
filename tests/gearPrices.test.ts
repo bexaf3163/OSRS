@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { buildPriceView } from '../src/lib/funding/quotes';
-import { gearMarketPrices } from '../src/lib/gearAdvice';
-import { adviseGear, gearData, hudHint, sourceText } from '../src/services/gearAdvisor';
+import { buildPriceView } from '../src/domain/economy/funding/quotes';
+import { gearMarketPrices } from '../src/domain/combat/gearAdvice';
+import { adviseGear, gearData, hudHint, sourceText } from '../src/domain/combat/gearAdvisor';
 
 const now = 1_800_000_000_000;
 const steel = gearData.items.find(i => i.name === 'Steel scimitar')!;

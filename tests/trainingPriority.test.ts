@@ -2,12 +2,12 @@
 // material cost - instead of the old "Calm" default that put AFK methods first. An explicit "Efficient" from an older save stays as "Fastest".
 
 import { describe, expect, it } from 'vitest';
-import { adviseTraining, BANK_SETUP_HOURS, practicalRate, SETUP_HOURS, type TrainingMethod } from '../src/lib/trainingRouter';
-import { buildPlayerState } from '../src/lib/playerState';
-import { priorityOf } from '../src/lib/playStyle';
-import { DEFAULT_FEATURES, parseFeatures } from '../src/lib/features';
-import { xpForLevel } from '../src/lib/xp';
-import type { OwnedState } from '../src/lib/checklist';
+import { adviseTraining, BANK_SETUP_HOURS, practicalRate, SETUP_HOURS, type TrainingMethod } from '../src/domain/training/trainingRouter';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { priorityOf } from '../src/domain/persistence/playStyle';
+import { DEFAULT_FEATURES, parseFeatures } from '../src/domain/persistence/features';
+import { xpForLevel } from '../src/domain/player/xp';
+import type { OwnedState } from '../src/domain/items/checklist';
 
 const progress = { version: 3, steps: {}, levels: {}, notes: {}, updatedAt: '' };
 const stateAt = (skill: string, level: number, owned: OwnedState | null = null) =>

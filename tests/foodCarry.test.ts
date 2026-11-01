@@ -1,10 +1,10 @@
-import { foodCarry, heldFood } from '../src/lib/foodAdvice';
-import { itemPreflight } from '../src/lib/preflight';
+import { foodCarry, heldFood } from '../src/domain/combat/foodAdvice';
+import { itemPreflight } from '../src/domain/readiness/preflight';
 import { describe, expect, it } from 'vitest';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { bankWithdrawalsOf } from '../src/lib/prepEnvelope';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { bankWithdrawalsOf } from '../src/domain/prep/prepEnvelope';
 import type { Step } from '../src/types';
 
 describe('physical carrying space for banked food alternatives', () => {

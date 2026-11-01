@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps as routeSteps, stepById } from '../src/data';
-import { buildPlayerState } from '../src/lib/playerState';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { emptyProgress } from '../src/lib/progress';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { stepPlaces } from '../src/lib/stepPlaces';
-import { procurementDetour } from '../src/lib/detours';
-import { bankOnRoute, dist, travelOptions, type TravelInput } from '../src/lib/travel';
-import { bankWithdrawalsOf, planPayload } from '../src/lib/prepEnvelope';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { stepPlaces } from '../src/domain/travel/stepPlaces';
+import { procurementDetour } from '../src/domain/travel/detours';
+import { bankOnRoute, dist, travelOptions, type TravelInput } from '../src/domain/travel/travel';
+import { bankWithdrawalsOf, planPayload } from '../src/domain/prep/prepEnvelope';
 import type { GearItem } from '../src/services/runeliteBridge';
 
 // What the bank holds is never bought: the plan says "take it from the bank", the stop on the way is a bank, and the plugin is told what to withdraw.

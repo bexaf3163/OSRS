@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { buildPrepPlan, type PrepPlan } from '../src/lib/prepPlan';
-import { buildPlayerState } from '../src/lib/playerState';
-import { planOneTrip } from '../src/lib/oneTrip';
-import { readinessOf } from '../src/lib/readiness';
-import { emptyProgress } from '../src/lib/progress';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { combatPlanView, foodReservations, ownedFood } from '../src/lib/combatPlan';
-import { combatReadiness } from '../src/lib/combatReadiness';
-import { bankFreshness, readinessVerdict, PERCENT_NOTE } from '../src/lib/readinessVerdict';
-import { gearById } from '../src/services/gearAdvisor';
+import { buildPrepPlan, type PrepPlan } from '../src/domain/prep/prepPlan';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { planOneTrip } from '../src/domain/prep/oneTrip';
+import { readinessOf } from '../src/domain/readiness/readiness';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { combatPlanView, foodReservations, ownedFood } from '../src/domain/combat/combatPlan';
+import { combatReadiness } from '../src/domain/combat/combatReadiness';
+import { bankFreshness, readinessVerdict, PERCENT_NOTE } from '../src/domain/readiness/readinessVerdict';
+import { gearById } from '../src/domain/combat/gearAdvisor';
 import type { GearState } from '../src/services/runeliteBridge';
 import type { Step } from '../src/types';
 
@@ -234,7 +234,7 @@ describe('tools by level: a tier the player cannot use does not do the job', () 
 
 describe('the verdict in the snapshot and the cleanup beside it', () => {
   it('the plan carries the verdict only when the app gives one: an older plugin ignores the field', async () => {
-    const { planPayload } = await import('../src/lib/prepEnvelope');
+    const { planPayload } = await import('../src/domain/prep/prepEnvelope');
     const p = planFor(mk('G1', [item('Trout', 10, { heals: 7 })]), owned({ Trout: [0, 12] }));
     expect('readiness' in planPayload(p)).toBe(false);
     const withIt = planPayload(p, { readiness: { status: 'PREP_NEEDED', headline: 'Bank: withdraw Trout ×10 — you already own it.' } });
@@ -242,7 +242,7 @@ describe('the verdict in the snapshot and the cleanup beside it', () => {
   });
 
   it('cleanup never offers what the open fight needs: the weapon and the food stay, only the stray ore is advice', async () => {
-    const { cleanupAdvice, emptyCleanupPrefs } = await import('../src/lib/cleanup');
+    const { cleanupAdvice, emptyCleanupPrefs } = await import('../src/domain/prep/cleanup');
     const r = cleanupAdvice({
       bag: [{ id: 1329, name: 'Mithril scimitar', count: 1 }, { id: 329, name: 'Salmon', count: 26 }, { id: 440, name: 'Iron ore', count: 10 }],
       openSteps: [s308], bankSeen: true, account: 'normal', restriction: 'LIFTED', price: () => 50, tradeable: () => true, prefs: emptyCleanupPrefs(),

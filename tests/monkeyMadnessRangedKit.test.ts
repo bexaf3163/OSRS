@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
 import stagesFile from '../src/data/questStages.json';
-import { loadoutNeed } from '../src/lib/loadoutPhase';
-import { evaluate } from '../src/lib/requirements';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
+import { loadoutNeed } from '../src/domain/readiness/loadoutPhase';
+import { evaluate } from '../src/domain/readiness/requirements';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
 
 const step = stepById.get('S9-04')!;
 type Line = { k: string; t: string; pre?: { item: string }[] };

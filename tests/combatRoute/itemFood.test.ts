@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { combatPlanView } from '../../src/lib/combatPlan';
-import { foodPicks, withFoodPlan } from '../../src/lib/foodPlan';
-import { emptyProgress } from '../../src/lib/progress';
-import { xpForLevel } from '../../src/lib/xp';
-import { evaluatePlans } from '../../src/lib/combatRoute/plans';
-import { resolvePick, withCombatPlan } from '../../src/lib/combatRoute/pick';
+import { combatPlanView } from '../../src/domain/combat/combatPlan';
+import { foodPicks, withFoodPlan } from '../../src/domain/combat/foodPlan';
+import { emptyProgress } from '../../src/domain/persistence/progress';
+import { xpForLevel } from '../../src/domain/player/xp';
+import { evaluatePlans } from '../../src/domain/combat/route/plans';
+import { resolvePick, withCombatPlan } from '../../src/domain/combat/route/pick';
 import { toInGameTarget } from '../../src/services/runeliteBridge';
 import { HISTORICAL, planInput } from './fixture';
 

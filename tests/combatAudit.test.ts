@@ -7,9 +7,9 @@ import ledgerJson from '../src/data/combatAudit.json';
 import questStages from '../src/data/questStages.json';
 import dangerZones from '../src/data/dangerZones.json';
 import { allSteps, stepById } from '../src/data';
-import { auditMarkdown, detectCombatStages, preparedFor, type AuditLedger } from '../src/lib/combatAudit';
-import { COMBAT_FOES } from '../src/lib/combatEstimate';
-import { OTHER_METHOD, stepFightFoes } from '../src/lib/fightEstimate';
+import { auditMarkdown, detectCombatStages, preparedFor, type AuditLedger } from '../src/domain/combat/combatAudit';
+import { COMBAT_FOES } from '../src/domain/combat/combatEstimate';
+import { OTHER_METHOD, stepFightFoes } from '../src/domain/combat/fightEstimate';
 import type { Step } from '../src/types';
 
 const ledger = ledgerJson as unknown as AuditLedger;

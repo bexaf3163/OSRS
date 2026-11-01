@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { goals, skillById } from '../src/data';
-import { emptyProgress } from '../src/lib/progress';
-import { focusRange, rangeForLevel, skillLevel, skillRange } from '../src/lib/ranges';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { focusRange, rangeForLevel, skillLevel, skillRange } from '../src/domain/training/ranges';
 
 const ranges = (id: string) => skillById.get(id)!.plan.ranges;
 

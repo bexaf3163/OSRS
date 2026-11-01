@@ -1,13 +1,13 @@
 import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepsFor } from '../src/data';
-import { emptyProgress, withStep } from '../src/lib/progress';
-import { ownedText, triggerText } from '../src/lib/triggers';
+import { emptyProgress, withStep } from '../src/domain/persistence/progress';
+import { ownedText, triggerText } from '../src/domain/quests/triggers';
 import {
   APP_PROTOCOL, backoffMs, BRIDGE_PATHS, checkStatus, clearActiveStep, connectEvents, missingWithPlugin, parseEvent, parseNavTarget, parseQuestInstruction, planAutoComplete,
   pluginCompat, syncActiveStep, toInGameTarget, type BridgeEvent, type BridgeTransport,
 } from '../src/services/runeliteBridge';
-import { mapPlaces, stepPlaces } from '../src/lib/stepPlaces';
+import { mapPlaces, stepPlaces } from '../src/domain/travel/stepPlaces';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
 const f2p = stepsFor('f2p');

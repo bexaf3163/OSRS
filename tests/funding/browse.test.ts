@@ -2,10 +2,10 @@
 // method, a search, filters and a sort. The scenarios use the real catalogue, the recorded market and the production snapshot (scenario.ts).
 
 import { describe, expect, it } from 'vitest';
-import { badgeOf, browse, BROWSE_TARGET, capitalText, DEFAULT_FILTERS, moneyList, netText, type BrowseFilters } from '../../src/lib/funding/browse';
-import { evaluate, type MethodEvaluation } from '../../src/lib/funding/evaluate';
-import { methodById, METHODS } from '../../src/lib/funding/methods';
-import { goalBlocker } from '../../src/lib/funding/plan';
+import { badgeOf, browse, BROWSE_TARGET, capitalText, DEFAULT_FILTERS, moneyList, netText, type BrowseFilters } from '../../src/domain/economy/funding/browse';
+import { evaluate, type MethodEvaluation } from '../../src/domain/economy/funding/evaluate';
+import { methodById, METHODS } from '../../src/domain/economy/funding/methods';
+import { goalBlocker } from '../../src/domain/economy/funding/plan';
 import { market } from './market';
 import { HISTORICAL, scenario } from './scenario';
 import { fakePrices } from './helpers';

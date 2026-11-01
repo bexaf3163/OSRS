@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
 import stagesFile from '../src/data/questStages.json';
-import { navigationTarget } from '../src/lib/navigation';
+import { navigationTarget } from '../src/domain/travel/navigation';
 import { stepGuide } from '../src/services/runeliteBridge';
 
 // The whole guide, F2P and members, from S1-01 to the last step. The F2P route audit (fullF2pRouteAudit.test.ts) stops at the Dragon Slayer

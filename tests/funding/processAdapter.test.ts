@@ -2,12 +2,12 @@
 // personalised by processingRates.processPace; anything else keeps the published pace.
 
 import { describe, expect, it } from 'vitest';
-import { processPersonaliser } from '../../src/lib/funding/processAdapter';
-import { methodById } from '../../src/lib/funding/methods';
-import { evaluate } from '../../src/lib/funding/evaluate';
-import { processPace } from '../../src/lib/processingRates';
-import { buildPlayerState } from '../../src/lib/playerState';
-import { emptyProgress } from '../../src/lib/progress';
+import { processPersonaliser } from '../../src/domain/economy/funding/processAdapter';
+import { methodById } from '../../src/domain/economy/funding/methods';
+import { evaluate } from '../../src/domain/economy/funding/evaluate';
+import { processPace } from '../../src/domain/training/processingRates';
+import { buildPlayerState } from '../../src/domain/player/playerState';
+import { emptyProgress } from '../../src/domain/persistence/progress';
 import { ctxOf, fakePrices, fakeSnap } from './helpers';
 
 const stateOf = (levels: Record<string, number>) =>

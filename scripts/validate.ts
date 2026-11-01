@@ -4,9 +4,9 @@
 import type {
   FoeData, GoalsData, LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
 } from '../src/types/index.ts';
-import { xpForLevel } from '../src/lib/xp.ts';
-import { titleTargets } from '../src/lib/targets.ts';
-import { RETIRED_STEPS } from '../src/lib/progress.ts';
+import { xpForLevel } from '../src/domain/player/xp.ts';
+import { titleTargets } from '../src/domain/quests/targets.ts';
+import { RETIRED_STEPS } from '../src/domain/persistence/progress.ts';
 
 export interface GuideData {
   skills: Skill[];
@@ -183,7 +183,7 @@ export function validate(d: GuideData | null, route: Route): Report {
     return (m ? Number(m[1]) : 0) !== (s.qp ?? 0) && !(s.qp === undefined && !m);
   }).map((s) => `${s.id} (qp ${s.qp ?? 0}, in "Reward" ${s.reward?.match(/(\d+) QP/)?.[1] ?? 0})`);
   check(!qpMismatch.length, 'The points of each quest match the "Reward" text', `They do not match the "Reward": ${qpMismatch.join('; ')}`);
-  // One number format for every reward reader (src/lib/stepRewards.ts, combatRoute/later.ts): "2 500 Coins" would be read as 500.
+  // One number format for every reward reader (src/domain/quests/stepRewards.ts, combatRoute/later.ts): "2 500 Coins" would be read as 500.
   const spacedNumbers = steps.filter((s) => typeof s.reward === 'string' && /\d[ \u00a0\u202f]\d{3}\b/.test(s.reward)).map((s) => s.id);
   check(!spacedNumbers.length, 'Reward numbers use comma thousands ("2,500 Coins")', `A space inside a reward number: ${spacedNumbers.join(', ')}`);
   // --- Step requirements (readiness): levels and quests from the quest article ---

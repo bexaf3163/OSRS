@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { TRANSPORT, travelOptions, wildernessLevel, type TravelInput } from '../src/lib/travel';
-import { transportWatch, travelInputOf } from '../src/lib/travelInput';
-import { recommendedTransport } from '../src/lib/transport';
+import { TRANSPORT, travelOptions, wildernessLevel, type TravelInput } from '../src/domain/travel/travel';
+import { transportWatch, travelInputOf } from '../src/domain/travel/travelInput';
+import { recommendedTransport } from '../src/domain/travel/transport';
 import type { GearItem } from '../src/services/runeliteBridge';
 
 // The transport the audit asked for and 2.54.1 left out (River Dougne canoes, spirit trees, gnome gliders, the Cowbell amulet). Each checked against the

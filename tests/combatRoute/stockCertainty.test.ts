@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { itemGoal } from '../../src/lib/combatObjectives';
-import { evaluatePlans } from '../../src/lib/combatRoute/plans';
+import { itemGoal } from '../../src/domain/combat/combatObjectives';
+import { evaluatePlans } from '../../src/domain/combat/route/plans';
 import { planInput } from './fixture';
 
 describe('required combat loot uses per-item bank certainty', () => {

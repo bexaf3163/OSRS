@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { assess } from '../../src/lib/funding/assess';
-import { buildNeed } from '../../src/lib/funding/need';
+import { assess } from '../../src/domain/economy/funding/assess';
+import { buildNeed } from '../../src/domain/economy/funding/need';
 import { market } from './market';
 import { scenario } from './scenario';
 

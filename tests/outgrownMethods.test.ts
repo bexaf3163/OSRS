@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { adviseTraining, trainingMethods } from '../src/lib/trainingRouter';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
+import { adviseTraining, trainingMethods } from '../src/domain/training/trainingRouter';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
 
 // The owner's report (2.74.20): the melee card kept "Chickens and cows" from 20 to 60 on the relaxed priority. A free skill's card must not pick a
 // method the level has outgrown while a method made for that level is open. Magic keeps its strike kit on purpose (alchemy and splashing need a manual setup).

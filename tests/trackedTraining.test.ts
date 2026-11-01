@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { trackedTraining } from '../src/lib/trackedTraining';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { RANGED_WATCH } from '../src/lib/rangedLoadout';
-import { buildEnvelope, EMPTY_PARTS, envelopeKey } from '../src/lib/prepEnvelope';
+import { trackedTraining } from '../src/domain/training/trackedTraining';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { RANGED_WATCH } from '../src/domain/combat/rangedLoadout';
+import { buildEnvelope, EMPTY_PARTS, envelopeKey } from '../src/domain/prep/prepEnvelope';
 import { toInGameTarget } from '../src/services/runeliteBridge';
 import { stepById } from '../src/data';
-import { parseTracked, trackedTrainingContext } from '../src/lib/skillTrack';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { emptyPrep, rearmReadyDetours, startDetour } from '../src/lib/prepRoute';
-import type { PriceView } from '../src/lib/funding/quotes';
+import { parseTracked, trackedTrainingContext } from '../src/domain/training/skillTrack';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { emptyPrep, rearmReadyDetours, startDetour } from '../src/domain/prep/prepRoute';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
 
 const state = (ranged?: number) => buildPlayerState({ mode: 'f2p', connected: true,
   stats: { ...(ranged === undefined ? {} : { ranged }), defence: 33, hitpoints: 31 }, progress: emptyProgress(), questsDone: [],

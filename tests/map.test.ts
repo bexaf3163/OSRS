@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
-import { floorLabel, initialPoint, isUnderground, mapSourceAt, parseMapSources, pxPerSquare, stepPoints, TILE, tilesAround, tileUrl } from '../src/lib/map';
+import { floorLabel, initialPoint, isUnderground, mapSourceAt, parseMapSources, pxPerSquare, stepPoints, TILE, tilesAround, tileUrl } from '../src/domain/travel/map';
 
 describe('wiki map tiles', () => {
   it('uses the documented atlas schema and shares the selected source across a viewport', () => {

@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { stepById, stepsFor } from '../src/data';
-import { emptyProgress } from '../src/lib/progress';
-import { buildPlayerState } from '../src/lib/playerState';
-import { F2P_SKILL_ADVICE } from '../src/lib/f2pSkillAdvice';
-import { pickMethods } from '../src/lib/methodPick';
-import { followedGoals, GOAL_REACHED, methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
-import { stepUpgradeCategories } from '../src/services/gearUpgradeRouter';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { F2P_SKILL_ADVICE } from '../src/domain/training/f2pSkillAdvice';
+import { pickMethods } from '../src/domain/training/methodPick';
+import { followedGoals, GOAL_REACHED, methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
+import { stepUpgradeCategories } from '../src/domain/training/gearUpgradeRouter';
 import { market } from './funding/market';
 
 const run = (id: string, levels: Record<string, number>) => {

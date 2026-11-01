@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { adviseTraining, trainingMethods, viewMethod } from '../src/lib/trainingRouter';
-import { methodPoint, withTrainingMethod } from '../src/lib/methodStep';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { adviseTraining, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
+import { methodPoint, withTrainingMethod } from '../src/domain/training/methodStep';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { stepById } from '../src/data';
 import { skillGuides } from '../src/data/skillGuideRegistry';
 import { matchStrict } from '../src/services/locationResolver';

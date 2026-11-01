@@ -4,7 +4,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { analyze, formatReport, parseLog } from '../src/lib/telemetryReport.ts';
+import { analyze, formatReport, parseLog } from '../src/domain/telemetry/telemetryReport.ts';
 
 const args = process.argv.slice(2);
 const json = args.includes('--json');

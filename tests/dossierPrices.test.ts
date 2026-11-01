@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { itemPrice } from '../src/lib/itemPrice';
-import { buildPriceView } from '../src/lib/funding/quotes';
-import { alchMargin } from '../src/lib/alchemy';
+import { itemPrice } from '../src/domain/items/itemPrice';
+import { buildPriceView } from '../src/domain/economy/funding/quotes';
+import { alchMargin } from '../src/domain/economy/alchemy';
 
 const now = 1_800_000_000_000;
 function prices(low: number | null = 100, status: 'live' | 'stale' = 'live') {

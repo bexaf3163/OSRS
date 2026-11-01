@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 public class FundingHint
 {
-	/** The text the app puts in front of the label of the arrow it sets for a funding plan (src/fundingContext.tsx FUNDING_ARROW). */
+	/** The text the app puts in front of the label of the arrow it sets for a funding plan (src/state/fundingContext.tsx FUNDING_ARROW). */
 	static final String ARROW_PREFIX = "Funding: ";
 	static final int MAX_TEXT = 120;
 	static final int MAX_SHORT = 80;

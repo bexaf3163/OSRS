@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { combatPlanView } from '../../src/lib/combatPlan';
-import { evaluatePlans, gainOver, KEEP_MARGIN, MIN_GAIN } from '../../src/lib/combatRoute/plans';
-import { bankTrip, spotsOf, termsFor, TRAINER_SPOTS } from '../../src/lib/combatRoute/spots';
-import { netEach } from '../../src/lib/funding/ge';
+import { combatPlanView } from '../../src/domain/combat/combatPlan';
+import { evaluatePlans, gainOver, KEEP_MARGIN, MIN_GAIN } from '../../src/domain/combat/route/plans';
+import { bankTrip, spotsOf, termsFor, TRAINER_SPOTS } from '../../src/domain/combat/route/spots';
+import { netEach } from '../../src/domain/economy/funding/ge';
 import { allSteps, stepById } from '../../src/data';
 import { market } from '../funding/market';
 import { HISTORICAL, gearOf, ownedOf, planInput } from './fixture';

@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { combatPlanView, chooseVariant, ownedFood } from '../src/lib/combatPlan';
-import { estimateStep } from '../src/lib/combatEstimate';
-import type { OwnedItem, OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { gearById } from '../src/services/gearAdvisor';
+import { combatPlanView, chooseVariant, ownedFood } from '../src/domain/combat/combatPlan';
+import { estimateStep } from '../src/domain/combat/combatEstimate';
+import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { gearById } from '../src/domain/combat/gearAdvisor';
 import type { GearState } from '../src/services/runeliteBridge';
 
 // The minotaur example of the brief: S3-08 from Attack 22 / Strength 16, Defence 1, 22 health, Mithril scimitar and iron armour,

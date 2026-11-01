@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { StepStatus } from '../src/types';
 import { BASE_QP, maxQpFor, stagesFor, stepById, stepsFor } from '../src/data';
-import { emptyProgress, withReactivated, withStep } from '../src/lib/progress';
-import { questPoints, reachableQuestPoints, stageQuestPoints } from '../src/lib/qp';
+import { emptyProgress, withReactivated, withStep } from '../src/domain/persistence/progress';
+import { questPoints, reachableQuestPoints, stageQuestPoints } from '../src/domain/quests/qp';
 
 const f2p = stepsFor('f2p');
 const withSteps = (s: Record<string, StepStatus>) => ({ ...emptyProgress(), steps: s });

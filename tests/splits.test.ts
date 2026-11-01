@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { durationText } from '../src/lib/splits';
-import { emptyProgress, normalizeProgress, withStep } from '../src/lib/progress';
+import { durationText } from '../src/domain/combat/splits';
+import { emptyProgress, normalizeProgress, withStep } from '../src/domain/persistence/progress';
 import type { Progress } from '../src/types';
 
 const T0 = Date.parse('2026-10-05T10:00:00Z');

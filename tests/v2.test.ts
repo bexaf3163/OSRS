@@ -2,11 +2,11 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   allQuests, allStages, allSteps, items, itemById, maxQpFor, membersSkills, stagesFor, stepsFor,
 } from '../src/data';
-import { deriveQuests } from '../src/lib/quests';
-import { titleTargets } from '../src/lib/targets';
+import { deriveQuests } from '../src/domain/quests/quests';
+import { titleTargets } from '../src/domain/quests/targets';
 import { createPriceService, PRICE_TTL_MS } from '../src/services/pricesApi';
 import { cleanWikiText } from '../src/services/wikiApi';
-import { stepText } from '../src/lib/search';
+import { stepText } from '../src/domain/quests/search';
 
 describe('game mode', () => {
   it('F2P — stages 1–6 without members steps', () => {

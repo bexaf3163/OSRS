@@ -6,10 +6,10 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { skillGuides } from '../src/data/skillGuideRegistry';
 import { goals } from '../src/data';
-import { bracketsOf, buildPath, SKILL_NAMES, type SkillGuideFile, type SkillName } from '../src/lib/skillGuide';
-import { methodsFor, trainingMethods, type TrainingMethod } from '../src/lib/trainingRouter';
-import { PROCESSING } from '../src/lib/processingRates';
-import { SKILLING } from '../src/lib/skillingRates';
+import { bracketsOf, buildPath, SKILL_NAMES, type SkillGuideFile, type SkillName } from '../src/domain/training/skillGuide';
+import { methodsFor, trainingMethods, type TrainingMethod } from '../src/domain/training/trainingRouter';
+import { PROCESSING } from '../src/domain/training/processingRates';
+import { SKILLING } from '../src/domain/training/skillingRates';
 
 const F2P_STAGES = 6;
 const routeMax = (skill: string, last: number) => {

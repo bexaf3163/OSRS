@@ -3,13 +3,13 @@
 // and the last known gear kept per character.
 
 import { describe, expect, it } from 'vitest';
-import { newestGear, parseLastGears } from '../src/bridge';
+import { newestGear, parseLastGears } from '../src/state/bridge';
 import {
   adviseGear, canWear, foeAttack, foeData, gainText, gearData, incomingChance, meleeWith, relevantDefence,
   type AdvisorInput, type GearAction,
-} from '../src/services/gearAdvisor';
+} from '../src/domain/combat/gearAdvisor';
 import type { GearState } from '../src/services/runeliteBridge';
-import type { OwnedState } from '../src/lib/checklist';
+import type { OwnedState } from '../src/domain/items/checklist';
 
 const byName = (n: string) => {
   const p = gearData.items.find((i) => i.name === n);

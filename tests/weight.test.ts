@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { energyUnits, HEAVY_SAVING, isCalm, kgText, runLengthRatio, weightAdvice, weightOf } from '../src/lib/weight';
-import { buildPlayerState } from '../src/lib/playerState';
+import { energyUnits, HEAVY_SAVING, isCalm, kgText, runLengthRatio, weightAdvice, weightOf } from '../src/domain/items/weight';
+import { buildPlayerState } from '../src/domain/player/playerState';
 import { parseGear } from '../src/services/runeliteBridge';
 import { allSteps } from '../src/data';
 import type { Step } from '../src/types';

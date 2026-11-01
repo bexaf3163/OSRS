@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { recipeTicks } from '../scripts/wiki';
-import { PROCESSING, processRate } from '../src/lib/processingRates';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { adviseTraining, trainingMethods } from '../src/lib/trainingRouter';
-import { trackedTraining } from '../src/lib/trackedTraining';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { methodToolNames } from '../src/lib/methodStep';
+import { PROCESSING, processRate } from '../src/domain/training/processingRates';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { adviseTraining, trainingMethods } from '../src/domain/training/trainingRouter';
+import { trackedTraining } from '../src/domain/training/trackedTraining';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { methodToolNames } from '../src/domain/training/methodStep';
 
 const names = [...new Set(PROCESSING.recipes.flatMap(r => [...r.tools, ...r.inputs.map(i => i.name)]))];
 function character(level: number, carried: Record<string, number>, bank: Record<string, number> = {}) {

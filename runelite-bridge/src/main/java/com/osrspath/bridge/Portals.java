@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
  * A target in another layer than the player used to give only "Target is underground - find the way down" (The Corsair Curse, 2026-10-17): the cave
  * of Chief Tess is entered by a hole on the beach, nowhere near the cave's own coordinates. Now the arrow points at the way in or out.
  *
- * The same rules as src/lib/portals.ts (pickPortal), checked by PortalsTest on the real file.
+ * The same rules as src/domain/travel/portals.ts (pickPortal), checked by PortalsTest on the real file.
  */
 @Slf4j
 final class Portals
@@ -188,7 +188,7 @@ final class Portals
 	/**
 	 * The staircase or ladder toward a target on another floor of the same layer (Arsen in the central hut, a floor up), or null. Only the first flight.
 	 * Up: the one that comes out nearest the target (its building). Down: the one nearest the player (out of the player's building). As pickFloor in
-	 * src/lib/portals.ts.
+	 * src/domain/travel/portals.ts.
 	 */
 	static Portal pickFloor(List<Portal> floors, int px, int py, int pplane, int tx, int ty, int tplane)
 	{

@@ -1,4 +1,4 @@
-// Builds src/data/processing.json from scripts/processing.defs.json: what the processing engine (src/lib/processingRates.ts) needs, read from the OSRS
+// Builds src/data/processing.json from scripts/processing.defs.json: what the processing engine (src/domain/training/processingRates.ts) needs, read from the OSRS
 // Wiki and checked, so a new recipe, furnace, anvil or fire is an entry in the definitions and a run of this script, not a change of code:
 //   - each recipe: the product page's free {{Recipe}} for the skill (level, XP, ticks at the Make-X pace, tools, materials and their amounts, output);
 //   - its success chance: the page's {{Skilling success chart}} line for a fire or range (cooking), or the recipe's "N% chance" note (an iron bar);

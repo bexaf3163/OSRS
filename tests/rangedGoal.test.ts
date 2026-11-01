@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { xpForLevel } from '../src/lib/xp';
-import { rangedGoalNeeds } from '../src/lib/combatRates';
-import { rangedNeeds, RANGED_WATCH } from '../src/lib/rangedLoadout';
-import { adviseTraining, trainingMethods, type PathLeg, type MethodNeed } from '../src/lib/trainingRouter';
-import { mergeGoalNeeds } from '../src/lib/processingGoal';
-import { withTrainingMethod } from '../src/lib/methodStep';
-import { aggregateShopping } from '../src/lib/shopping';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { xpForLevel } from '../src/domain/player/xp';
+import { rangedGoalNeeds } from '../src/domain/combat/combatRates';
+import { rangedNeeds, RANGED_WATCH } from '../src/domain/combat/rangedLoadout';
+import { adviseTraining, trainingMethods, type PathLeg, type MethodNeed } from '../src/domain/training/trainingRouter';
+import { mergeGoalNeeds } from '../src/domain/training/processingGoal';
+import { withTrainingMethod } from '../src/domain/training/methodStep';
+import { aggregateShopping } from '../src/domain/economy/shopping';
 import { stepById } from '../src/data';
-import type { PriceView } from '../src/lib/funding/quotes';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
 
 const quote = { price: 2, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] };
 const prices: PriceView = { status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, buy: () => quote, sell: () => quote };

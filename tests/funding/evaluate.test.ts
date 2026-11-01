@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { evaluate, type Personalised } from '../../src/lib/funding/evaluate';
-import { methodById } from '../../src/lib/funding/methods';
-import type { FundingMethod } from '../../src/lib/funding/types';
-import { tradeRestriction } from '../../src/lib/tradeRestriction';
+import { evaluate, type Personalised } from '../../src/domain/economy/funding/evaluate';
+import { methodById } from '../../src/domain/economy/funding/methods';
+import type { FundingMethod } from '../../src/domain/economy/funding/types';
+import { tradeRestriction } from '../../src/domain/economy/tradeRestriction';
 import { ctxOf, fakePrices, fakeSnap } from './helpers';
 
 const steel = methodById('smelt-steel-bars')!;

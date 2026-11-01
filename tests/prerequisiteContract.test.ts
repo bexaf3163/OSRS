@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
 import machines from '../src/data/questMachines.json';
 import { stepGuide } from '../src/services/runeliteBridge';
-import { stepTargets } from '../src/lib/travelSupplies';
-import { questItemKeys } from '../src/lib/questItems';
+import { stepTargets } from '../src/domain/travel/travelSupplies';
+import { questItemKeys } from '../src/domain/quests/questItems';
 
 describe('the Fairytale II route milestone', () => {
   it('ends both the walkthrough and game state machine before the rest of the quest', () => {

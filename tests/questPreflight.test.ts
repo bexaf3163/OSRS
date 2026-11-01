@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
 import type { QuestStageLine } from '../src/types';
-import { BANK_SPOTS, countOf, guardedDestination, itemPreflight, missingChip } from '../src/lib/preflight';
-import { dist, EXCHANGE } from '../src/lib/travel';
-import { nameKey } from '../src/lib/itemKey';
+import { BANK_SPOTS, countOf, guardedDestination, itemPreflight, missingChip } from '../src/domain/readiness/preflight';
+import { dist, EXCHANGE } from '../src/domain/travel/travel';
+import { nameKey } from '../src/domain/items/itemKey';
 import { stepGuide } from '../src/services/runeliteBridge';
 import type { GearItem } from '../src/services/runeliteBridge';
 

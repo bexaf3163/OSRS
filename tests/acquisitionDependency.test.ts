@@ -2,8 +2,8 @@
 // already worn does not block Elvarg because "Get the Anti-dragon shield" was never ticked. Positive only, and never from a shared name.
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
-import { blockersOf, dependencyFacts } from '../src/lib/next-step';
-import { emptyProgress, withStep } from '../src/lib/progress';
+import { blockersOf, dependencyFacts } from '../src/domain/quests/next-step';
+import { emptyProgress, withStep } from '../src/domain/persistence/progress';
 import type { Progress } from '../src/types';
 
 const elvarg = stepById.get('S5-08')!;

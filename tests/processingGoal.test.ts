@@ -1,17 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { processingGoalNeeds } from '../src/lib/processingGoal';
-import { adviseTraining, trainingMethods, type PathLeg } from '../src/lib/trainingRouter';
-import { xpForLevel } from '../src/lib/xp';
-import { emptyProgress } from '../src/lib/progress';
-import { buildPlayerState } from '../src/lib/playerState';
+import { processingGoalNeeds } from '../src/domain/training/processingGoal';
+import { adviseTraining, trainingMethods, type PathLeg } from '../src/domain/training/trainingRouter';
+import { xpForLevel } from '../src/domain/player/xp';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { buildPlayerState } from '../src/domain/player/playerState';
 import { stepById } from '../src/data';
-import { methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
-import { pickMethods } from '../src/lib/methodPick';
-import { aggregateShopping } from '../src/lib/shopping';
-import { contextOf } from '../src/lib/readiness';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { buildNeed } from '../src/lib/funding/need';
-import type { PriceView } from '../src/lib/funding/quotes';
+import { methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
+import { pickMethods } from '../src/domain/training/methodPick';
+import { aggregateShopping } from '../src/domain/economy/shopping';
+import { contextOf } from '../src/domain/readiness/readiness';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
+import { buildNeed } from '../src/domain/economy/funding/need';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
 
 const leg = (fromLevel: number, toLevel: number, xpa = 10): PathLeg => ({ fromLevel, toLevel,
   method: { ...trainingMethods.find(m => m.id === 'ck-meat')!, id: 'new-processing-method', xpa,

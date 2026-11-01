@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { adviseTraining, trainingMethods, type TrainingMethod } from '../src/lib/trainingRouter';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { xpForLevel } from '../src/lib/xp';
+import { adviseTraining, trainingMethods, type TrainingMethod } from '../src/domain/training/trainingRouter';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { xpForLevel } from '../src/domain/player/xp';
 
 const method = (id: string, from: number, xph: [number, number] | null, extra: Partial<TrainingMethod> = {}): TrainingMethod => ({
   ...trainingMethods[0], id, skills: ['mining'], kind: 'method', from, to: null, xph, needs: [], members: false,

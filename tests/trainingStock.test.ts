@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { stockUpShopping } from '../src/lib/trainingStock';
-import { budgetOf, exchangePlan, geListText, type RowContext } from '../src/lib/shoppingView';
-import { buildPlayerState, coinsOf } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { nameKey } from '../src/lib/itemKey';
-import { trainingStockNeeds, type PathLeg, type TrainingMethod } from '../src/lib/trainingRouter';
+import { stockUpShopping } from '../src/domain/training/trainingStock';
+import { budgetOf, exchangePlan, geListText, type RowContext } from '../src/domain/economy/shoppingView';
+import { buildPlayerState, coinsOf } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { nameKey } from '../src/domain/items/itemKey';
+import { trainingStockNeeds, type PathLeg, type TrainingMethod } from '../src/domain/training/trainingRouter';
 import type { Step, StepItemRequirement } from '../src/types';
-import type { PriceView, UnitPrice } from '../src/lib/funding/quotes';
-import { xpForLevel } from '../src/lib/xp';
-import { isReusable } from '../src/lib/shopping';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
+import type { PriceView, UnitPrice } from '../src/domain/economy/funding/quotes';
+import { xpForLevel } from '../src/domain/player/xp';
+import { isReusable } from '../src/domain/economy/shopping';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 
 const names = ['Iron arrow', 'Oak shortbow', 'Willow shortbow', 'Maple shortbow', 'Bronze axe', 'Steel axe', 'Mithril axe', 'Hammer', 'Copper ore'];
 const item = (nameEn: string, amount: number): StepItemRequirement => ({ nameEn, amount, howToGet: '', wikiItemId: 1000 + names.indexOf(nameEn) });

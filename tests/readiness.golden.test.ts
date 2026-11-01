@@ -5,13 +5,13 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
-import { stepReadiness } from '../src/lib/readiness';
-import { emptyProgress, withStep } from '../src/lib/progress';
-import { preflightItems, type OwnedItem, type OwnedState } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
+import { stepReadiness } from '../src/domain/readiness/readiness';
+import { emptyProgress, withStep } from '../src/domain/persistence/progress';
+import { preflightItems, type OwnedItem, type OwnedState } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
 import type { GearState } from '../src/services/runeliteBridge';
 import type { Step } from '../src/types';
-import { toolFamilyOf } from '../src/lib/toolTiers';
+import { toolFamilyOf } from '../src/domain/items/toolTiers';
 
 const FILE = new URL('./fixtures/readiness.golden.json', import.meta.url);
 

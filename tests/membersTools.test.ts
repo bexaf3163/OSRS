@@ -1,9 +1,9 @@
 // T03: a members tool tier (Dragon pickaxe kept from an old membership) is not "a pickaxe" on a free-to-play account, at any level; a
 // members account and an unknown mode keep counting it. The plugin applies the same rule to the world it is on (ToolLevelTest).
 import { describe, expect, it } from 'vitest';
-import { parseOwned } from '../src/lib/checklist';
-import { buildPlayerState, heldOf, unusableTools } from '../src/lib/playerState';
-import { PICKAXES, toolUse, usableAt } from '../src/lib/toolTiers';
+import { parseOwned } from '../src/domain/items/checklist';
+import { buildPlayerState, heldOf, unusableTools } from '../src/domain/player/playerState';
+import { PICKAXES, toolUse, usableAt } from '../src/domain/items/toolTiers';
 
 const complete = (have: Record<string, number>) => PICKAXES.map((name) => {
   const n = have[name] ?? 0;

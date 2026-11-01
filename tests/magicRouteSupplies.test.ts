@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
-import { emptyProgress } from '../src/lib/progress';
-import { buildPlayerState } from '../src/lib/playerState';
-import { nameKey } from '../src/lib/itemKey';
-import { methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
-import { pickMethods } from '../src/lib/methodPick';
-import { adviseTraining, trainingMethods, viewMethod } from '../src/lib/trainingRouter';
-import { contextOf } from '../src/lib/readiness';
-import { createReadinessEngine } from '../src/lib/readinessEngine';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { nameKey } from '../src/domain/items/itemKey';
+import { methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
+import { pickMethods } from '../src/domain/training/methodPick';
+import { adviseTraining, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
+import { contextOf } from '../src/domain/readiness/readiness';
+import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { toInGameTarget } from '../src/services/runeliteBridge';
 
 const base = stepById.get('S6-04')!;

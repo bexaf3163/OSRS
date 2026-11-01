@@ -3,12 +3,12 @@ import legacyCollect from './legacyCollectStep.json';
 // the estimator's inputs. Tests state what differs from it.
 
 import { allSteps, stepById } from '../../src/data';
-import { gearById } from '../../src/services/gearAdvisor';
-import type { StepEstimateContext } from '../../src/lib/combatEstimate';
-import type { PlanInput } from '../../src/lib/combatRoute/plans';
-import { termsFor } from '../../src/lib/combatRoute/spots';
-import type { OwnedItem, OwnedState } from '../../src/lib/checklist';
-import { nameKey } from '../../src/lib/itemKey';
+import { gearById } from '../../src/domain/combat/gearAdvisor';
+import type { StepEstimateContext } from '../../src/domain/combat/combatEstimate';
+import type { PlanInput } from '../../src/domain/combat/route/plans';
+import { termsFor } from '../../src/domain/combat/route/spots';
+import type { OwnedItem, OwnedState } from '../../src/domain/items/checklist';
+import { nameKey } from '../../src/domain/items/itemKey';
 import type { Step } from '../../src/types';
 
 const gearId = (n: string) => [...gearById.values()].find((p) => p.name === n)!.id;

@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { etaMinutes, etaText, XpTracker } from '../src/lib/xpRate';
-import { sessionSummary } from '../src/lib/session';
-import { earlierUnverified, questKey, syncCandidates } from '../src/lib/accountSync';
-import { addProfile, defaultProfiles, gateAllows, linkPlayer, MAIN_ID, parseProfiles, profileFileName, profileGate, profileStorageKey, removeProfile, renameProfile } from '../src/lib/profiles';
+import { etaMinutes, etaText, XpTracker } from '../src/domain/player/xpRate';
+import { sessionSummary } from '../src/domain/player/session';
+import { earlierUnverified, questKey, syncCandidates } from '../src/domain/player/accountSync';
+import { addProfile, defaultProfiles, gateAllows, linkPlayer, MAIN_ID, parseProfiles, profileFileName, profileGate, profileStorageKey, removeProfile, renameProfile } from '../src/domain/persistence/profiles';
 import { parsePlayer, parsePos, parseQuests, parseXp } from '../src/services/runeliteBridge';
-import { emptyProgress } from '../src/lib/progress';
+import { emptyProgress } from '../src/domain/persistence/progress';
 import type { Step } from '../src/types';
 
 describe('XpTracker', () => {

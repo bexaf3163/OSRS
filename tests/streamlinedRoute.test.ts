@@ -2,11 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
 import goalsFile from '../src/data/goals.json';
 import foeData from '../src/data/monsters.json';
-import { aggregateShopping } from '../src/lib/shopping';
-import { titleTargets } from '../src/lib/targets';
-import { triggerText } from '../src/lib/triggers';
-import { xpForLevel } from '../src/lib/xp';
-import { RETIRED_STEPS, normalizeProgress } from '../src/lib/progress';
+import { aggregateShopping } from '../src/domain/economy/shopping';
+import { titleTargets } from '../src/domain/quests/targets';
+import { triggerText } from '../src/domain/quests/triggers';
+import { xpForLevel } from '../src/domain/player/xp';
+import { RETIRED_STEPS, normalizeProgress } from '../src/domain/persistence/progress';
 
 // Stages 3 and 4 after the streamlining: damage first (Attack and Strength), no Defence grind before Dragon Slayer I, the Adamant scimitar alone, the food bought.
 

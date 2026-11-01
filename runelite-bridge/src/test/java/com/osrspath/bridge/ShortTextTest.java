@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-/** A fallback shortening of a step line when the app did not send a short text: the same rules as in src/lib/shortText.ts. */
+/** A fallback shortening of a step line when the app did not send a short text: the same rules as in src/domain/quests/shortText.ts. */
 public class ShortTextTest
 {
 	@Test

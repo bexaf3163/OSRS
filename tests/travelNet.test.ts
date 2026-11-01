@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   EXCHANGE, NET, OPPORTUNISTIC_MAX_COST, cooldownText, OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MIN_SAVING_TILES, TRANSPORT, dist, travelOptions, type TravelInput, type TravelOption,
-} from '../src/lib/travel';
-import { nameKey } from '../src/lib/itemKey';
+} from '../src/domain/travel/travel';
+import { nameKey } from '../src/domain/items/itemKey';
 import { parseSeconds } from '../src/services/runeliteBridge';
 import type { GearItem } from '../src/services/runeliteBridge';
 

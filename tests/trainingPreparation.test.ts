@@ -1,16 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { adviseTraining, methodNeeds, preparationNeeds, trainingMethods, viewMethod } from '../src/lib/trainingRouter';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import { gearData } from '../src/services/gearAdvisor';
-import { FOODS } from '../src/lib/foodAdvice';
-import type { PriceView } from '../src/lib/funding/quotes';
-import type { MethodView, TrainingMethod } from '../src/lib/trainingRouter';
-import { withTrainingMethod } from '../src/lib/methodStep';
+import { adviseTraining, methodNeeds, preparationNeeds, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import { gearData } from '../src/domain/combat/gearAdvisor';
+import { FOODS } from '../src/domain/combat/foodAdvice';
+import type { PriceView } from '../src/domain/economy/funding/quotes';
+import type { MethodView, TrainingMethod } from '../src/domain/training/trainingRouter';
+import { withTrainingMethod } from '../src/domain/training/methodStep';
 import type { Step } from '../src/types';
-import { methodRate } from '../src/lib/methodRates';
+import { methodRate } from '../src/domain/training/methodRates';
 import { toInGameTarget } from '../src/services/runeliteBridge';
-import { combatUpgrades } from '../src/lib/combatRates';
+import { combatUpgrades } from '../src/domain/combat/combatRates';
 
 const quote = { price: 1, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] };
 const prices: PriceView = { status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, buy: () => quote, sell: () => quote };

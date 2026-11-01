@@ -2,18 +2,18 @@ import { describe, expect, it } from 'vitest';
 import type { Step } from '../src/types';
 import { stepById } from '../src/data';
 import locationsJson from '../src/data/majorLocations.json';
-import { stepPoints, initialPoint } from '../src/lib/map';
-import { buildPlayerState } from '../src/lib/playerState';
-import { emptyProgress } from '../src/lib/progress';
-import type { OwnedItem } from '../src/lib/checklist';
-import { nameKey } from '../src/lib/itemKey';
-import { stepReadiness } from '../src/lib/readiness';
-import { GOAL_REACHED, followedGoal, methodPoint, methodToolNames, pickedMethodId, withTrainingMethod } from '../src/lib/methodStep';
+import { stepPoints, initialPoint } from '../src/domain/travel/map';
+import { buildPlayerState } from '../src/domain/player/playerState';
+import { emptyProgress } from '../src/domain/persistence/progress';
+import type { OwnedItem } from '../src/domain/items/checklist';
+import { nameKey } from '../src/domain/items/itemKey';
+import { stepReadiness } from '../src/domain/readiness/readiness';
+import { GOAL_REACHED, followedGoal, methodPoint, methodToolNames, pickedMethodId, withTrainingMethod } from '../src/domain/training/methodStep';
 import { toInGameTarget } from '../src/services/runeliteBridge';
-import { pickMethods, samePicks } from '../src/lib/methodPick';
-import { SKILLING } from '../src/lib/skillingRates';
-import { trainingMethods } from '../src/lib/trainingRouter';
-import type { PlayStyle } from '../src/lib/playStyle';
+import { pickMethods, samePicks } from '../src/domain/training/methodPick';
+import { SKILLING } from '../src/domain/training/skillingRates';
+import { trainingMethods } from '../src/domain/training/trainingRouter';
+import type { PlayStyle } from '../src/domain/persistence/playStyle';
 
 // Fishing 1-50 (S6-02). The first version put the climb on the map in level order and, in 2.54.2, let any later tool stand in for the net. A live
 // check showed the arrow still sending a level-1 account to buy a harpoon; the owner's rule: a harpoon or a lobster pot must not make net fishing

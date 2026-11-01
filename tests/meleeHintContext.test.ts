@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { meleeHintApplies } from '../src/lib/gearAdvice';
+import { meleeHintApplies } from '../src/domain/combat/gearAdvice';
 
 describe('melee hints belong to their training context', () => {
   it.each(['S2-04', 'S6-01', 'S6-02', 'S6-03', 'S6-04', 'S8-04', 'S1-08'])('%s does not borrow a future melee upgrade during non-melee training', id => {
