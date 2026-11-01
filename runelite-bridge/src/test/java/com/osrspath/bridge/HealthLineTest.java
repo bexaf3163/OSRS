@@ -15,18 +15,18 @@ public class HealthLineTest
 	@Test
 	public void silentWhileHealthSufficesOrHitUnknown()
 	{
-		assertNull(OsrsPathBridgePlugin.healthLine(40, 40, 10));
-		assertNull("exactly two hits is still early", OsrsPathBridgePlugin.healthLine(20, 40, 10));
-		assertNull("hit unknown", OsrsPathBridgePlugin.healthLine(5, 40, null));
-		assertNull("not in the game", OsrsPathBridgePlugin.healthLine(0, 0, 10));
+		assertNull(PluginNavigation.healthLine(40, 40, 10));
+		assertNull("exactly two hits is still early", PluginNavigation.healthLine(20, 40, 10));
+		assertNull("hit unknown", PluginNavigation.healthLine(5, 40, null));
+		assertNull("not in the game", PluginNavigation.healthLine(0, 0, 10));
 	}
 
 	@Test
 	public void warnsBelowTwoHitsAndShoutsBelowOne()
 	{
-		assertEquals("HP 19/40 - time to eat. Hits up to 10", OsrsPathBridgePlugin.healthLine(19, 40, 10));
-		assertEquals("HP 10/40 - EAT NOW! Hits up to 10", OsrsPathBridgePlugin.healthLine(10, 40, 10));
-		assertEquals("HP 1/10 - EAT NOW! Hits up to 3", OsrsPathBridgePlugin.healthLine(1, 10, 3));
+		assertEquals("HP 19/40 - time to eat. Hits up to 10", PluginNavigation.healthLine(19, 40, 10));
+		assertEquals("HP 10/40 - EAT NOW! Hits up to 10", PluginNavigation.healthLine(10, 40, 10));
+		assertEquals("HP 1/10 - EAT NOW! Hits up to 3", PluginNavigation.healthLine(1, 10, 3));
 	}
 
 	@Test
@@ -62,11 +62,11 @@ public class HealthLineTest
 		ActiveTarget t = new Gson().fromJson("{\"stepId\":\"S2-03\",\"title\":\"Witch's Potion\","
 			+ "\"useOn\":[{\"item\":\"Raw rat meat\",\"target\":\"Fireplace\"}]}", ActiveTarget.class);
 		assertNull(t.prepare());
-		assertNull("no meat yet", OsrsPathBridgePlugin.useLine(t, StepGuideTest.counts()));
-		assertEquals("Use Raw rat meat on Fireplace", OsrsPathBridgePlugin.useLine(t, StepGuideTest.counts(2134, "Raw rat meat", 1)));
+		assertNull("no meat yet", PluginNavigation.useLine(t, StepGuideTest.counts()));
+		assertEquals("Use Raw rat meat on Fireplace", PluginNavigation.useLine(t, StepGuideTest.counts(2134, "Raw rat meat", 1)));
 		assertTrue("the fireplace is highlighted as the step's object", t.getObjectNameSet().contains("fireplace"));
 		assertTrue("the meat is highlighted in the bag", t.getItemNameSet().contains("raw rat meat"));
-		assertNull(OsrsPathBridgePlugin.useLine(null, StepGuideTest.counts()));
+		assertNull(PluginNavigation.useLine(null, StepGuideTest.counts()));
 		ActiveTarget bad = new Gson().fromJson("{\"stepId\":\"S2-03\",\"title\":\"x\",\"useOn\":[{\"item\":\"\",\"target\":\"Fireplace\"}]}", ActiveTarget.class);
 		assertNotNull(bad.prepare());
 		ActiveTarget npc = new Gson().fromJson("{\"stepId\":\"S2-03\",\"title\":\"x\",\"useOn\":[{\"item\":\"Bones\",\"target\":\"Cow\",\"kind\":\"npc\"}]}", ActiveTarget.class);

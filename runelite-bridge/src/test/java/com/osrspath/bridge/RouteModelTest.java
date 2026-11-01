@@ -205,8 +205,8 @@ public class RouteModelTest
 	public void theHealthWarningFollowsTheLineFigure()
 	{
 		// The Ancient Guardian hits up to 7: warn from 14 down, not from 2x the step's general figure.
-		assertNull(OsrsPathBridgePlugin.healthLine(14, 30, 7));
-		assertNotNull(OsrsPathBridgePlugin.healthLine(13, 30, 7));
-		assertNull("no figure, no warning", OsrsPathBridgePlugin.healthLine(5, 30, null));
+		assertNull(PluginNavigation.healthLine(14, 30, 7));
+		assertNotNull(PluginNavigation.healthLine(13, 30, 7));
+		assertNull("no figure, no warning", PluginNavigation.healthLine(5, 30, null));
 	}
 }

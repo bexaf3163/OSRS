@@ -185,7 +185,7 @@ class OsrsPathGuideOverlay extends Overlay
 		if (card == null || !config.showGuide() || client.getGameState() != GameState.LOGGED_IN)
 		{
 			hits = Hits.NONE;
-			plugin.guideShown(false);
+			plugin.debug.guideShown(false);
 			return null;
 		}
 		Graphics2D own = (Graphics2D) g.create();
@@ -207,13 +207,13 @@ class OsrsPathGuideOverlay extends Overlay
 			{
 				layout = layout(card, expanded, advice, own, font, small, head, width, maxHeight);
 				builtFor = key;
-				plugin.uiShown("hud", card.plain(expanded, advice));
+				plugin.debug.uiShown("hud", card.plain(expanded, advice));
 			}
 			Row under = under(layout);
 			paint(own, layout, under, config.hudOpacity());
 			remember(layout);
 			paintTooltip(own, layout, under, small);
-			plugin.guideShown(true);
+			plugin.debug.guideShown(true);
 			return layout.getSize();
 		}
 		finally

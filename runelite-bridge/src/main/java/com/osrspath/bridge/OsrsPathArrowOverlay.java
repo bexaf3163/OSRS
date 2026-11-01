@@ -68,7 +68,7 @@ class OsrsPathArrowOverlay extends Overlay
 
 	private Dimension draw(Graphics2D g)
 	{
-		WorldPoint target = config.bigArrow() ? plugin.arrowTarget() : null;
+		WorldPoint target = config.bigArrow() ? plugin.navigation.arrowTarget() : null;
 		Player me = client.getLocalPlayer();
 		// The world map is open: the arrow is drawn over the windows and would lie on the map, where the target is shown by the marker.
 		if (target == null || me == null || InventoryCheckOverlay.visible(client.getWidget(net.runelite.api.gameval.InterfaceID.Worldmap.WINDOW)))
@@ -84,11 +84,11 @@ class OsrsPathArrowOverlay extends Overlay
 		int dx = target.getX() - pos.getX();
 		int dy = target.getY() - pos.getY();
 		ArrowGeometry.State state = ArrowGeometry.state(Navigation.distance(pos.getX(), pos.getY(), target.getX(), target.getY()),
-			layer == 0, plugin.isNavNear());
+			layer == 0, plugin.navigation.isNavNear());
 		angle = ArrowGeometry.smooth(angle, ArrowGeometry.screenAngle(dx, dy, client.getCameraYawTarget()));
 		Hud.State hud = plugin.getHud();
 		String text = hud != null ? label(hud.getDistance()) : null;
-		boolean modernGuide = plugin.guideOnScreen();
+		boolean modernGuide = plugin.debug.guideOnScreen();
 		// The guide already carries the distance. Retain layer/arrival feedback on the marker itself.
 		if (modernGuide && layer == 0 && state != ArrowGeometry.State.VERY_CLOSE) text = null;
 		Font font = config.overlayTheme() == OsrsPathBridgeConfig.OverlayTheme.GLASS

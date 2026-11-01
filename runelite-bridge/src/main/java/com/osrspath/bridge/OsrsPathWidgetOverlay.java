@@ -47,7 +47,7 @@ class OsrsPathWidgetOverlay extends Overlay
 		{
 			return null;
 		}
-		java.util.Set<String> wanted = plugin.dialogKeysNow();
+		java.util.Set<String> wanted = plugin.debug.dialogKeysNow();
 		if (wanted.isEmpty())
 		{
 			return null;

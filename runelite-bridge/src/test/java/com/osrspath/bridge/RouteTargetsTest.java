@@ -65,7 +65,7 @@ public class RouteTargetsTest
 			quests++;
 			String name = t.get("questName").getAsString();
 			assertNotNull("quest '" + name + "' (" + g.get("stepId").getAsString() + ") is not found in net.runelite.api.Quest",
-				OsrsPathBridgePlugin.knownQuests().get(ActiveTarget.nameKey(name)));
+				PluginPlayer.knownQuests().get(ActiveTarget.nameKey(name)));
 		}
 		// 34 route quests are counted by themselves (2.7); fewer means auto-tick went missing from the data.
 		assertTrue("quests with auto-tick " + quests, quests >= 30);

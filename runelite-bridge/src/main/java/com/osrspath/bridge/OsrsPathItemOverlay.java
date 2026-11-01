@@ -52,18 +52,18 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 		ActiveTarget target = plugin.getTarget();
 		boolean inBank = isBank(item.getWidget());
 		// The stage's items (Bank Tags) only in the bank, with a soft frame, even with no step.
-		boolean tagged = inBank && config.bankHighlight() && plugin.isBankTagged(itemId);
-		boolean upgrades = plugin.hasUpgradeItems();
+		boolean tagged = inBank && config.bankHighlight() && plugin.snapshot.isBankTagged(itemId);
+		boolean upgrades = plugin.snapshot.hasUpgradeItems();
 		// The cleanup names bag stacks only, never the bank's.
-		Color clean = inBank ? null : plugin.cleanupFrame(itemId);
+		Color clean = inBank ? null : plugin.snapshot.cleanupFrame(itemId);
 		if (target == null && !tagged && !upgrades && clean == null)
 		{
 			return;
 		}
 		boolean checklist = target != null && inBank && config.showChecklist();
-		boolean wanted = checklist && plugin.isWantedFromBank(itemId);
-		boolean transport = target != null && !inBank && plugin.hasTransportFrame();
-		boolean named = target != null && (!target.getItemNameSet().isEmpty() || plugin.hasLineItems());
+		boolean wanted = checklist && plugin.player.isWantedFromBank(itemId);
+		boolean transport = target != null && !inBank && plugin.player.hasTransportFrame();
+		boolean named = target != null && (!target.getItemNameSet().isEmpty() || plugin.highlights.hasLineItems());
 		boolean stepItem = false;
 		boolean upgrade = false;
 		if (!wanted && (named || checklist || upgrades || transport))
@@ -73,9 +73,9 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 				ItemComposition c = itemManager.getItemComposition(id);
 				return c == null ? "" : ActiveTarget.nameKey(c.getName());
 			});
-			wanted = checklist && plugin.isWantedFromBank(name);
-			stepItem = (named && (target.getItemNameSet().contains(name) || plugin.isLineItem(name))) || (transport && plugin.isTransportItem(name));
-			upgrade = upgrades && plugin.isUpgradeItem(name);
+			wanted = checklist && plugin.player.isWantedFromBank(name);
+			stepItem = (named && (target.getItemNameSet().contains(name) || plugin.highlights.isLineItem(name))) || (transport && plugin.player.isTransportItem(name));
+			upgrade = upgrades && plugin.snapshot.isUpgradeItem(name);
 		}
 		if (!wanted && !stepItem && !tagged && !upgrade && clean == null)
 		{

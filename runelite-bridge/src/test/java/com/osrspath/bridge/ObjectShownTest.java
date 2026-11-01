@@ -47,8 +47,8 @@ public class ObjectShownTest
 		TileObject far = object(LADDER, 2466, 3495, 0);
 		List<TileObject> tracked = List.of(glough, far);
 		int[] player = {2478, 3460, 0};
-		assertTrue(OsrsPathBridgePlugin.nearestOfItsId(glough, tracked, player));
-		assertFalse("another ladder across the stronghold is not the line's", OsrsPathBridgePlugin.nearestOfItsId(far, tracked, player));
+		assertTrue(PluginHighlights.nearestOfItsId(glough, tracked, player));
+		assertFalse("another ladder across the stronghold is not the line's", PluginHighlights.nearestOfItsId(far, tracked, player));
 	}
 
 	@Test
@@ -58,8 +58,8 @@ public class ObjectShownTest
 		TileObject here = object(LADDER, 2470, 3470, 1);
 		List<TileObject> tracked = List.of(below, here);
 		int[] upstairs = {2476, 3463, 1};
-		assertTrue(OsrsPathBridgePlugin.nearestOfItsId(here, tracked, upstairs));
-		assertFalse(OsrsPathBridgePlugin.nearestOfItsId(below, tracked, upstairs));
+		assertTrue(PluginHighlights.nearestOfItsId(here, tracked, upstairs));
+		assertFalse(PluginHighlights.nearestOfItsId(below, tracked, upstairs));
 	}
 
 	@Test
@@ -67,6 +67,6 @@ public class ObjectShownTest
 	{
 		TileObject ladder = object(LADDER, 2490, 3490, 0);
 		TileObject cupboard = object(2434, 2477, 3462, 0);
-		assertTrue(OsrsPathBridgePlugin.nearestOfItsId(ladder, List.of(ladder, cupboard), new int[] {2476, 3463, 0}));
+		assertTrue(PluginHighlights.nearestOfItsId(ladder, List.of(ladder, cupboard), new int[] {2476, 3463, 0}));
 	}
 }

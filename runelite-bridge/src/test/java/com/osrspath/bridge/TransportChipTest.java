@@ -131,19 +131,19 @@ public class TransportChipTest
 	public void theChipIsOnTheHudWhileNothingElseLeadsTheArrowAndWhileTheTransportDoes()
 	{
 		PrepPlan p = plan(transport(CHRONICLE));
-		assertEquals("⚡ Use Chronicle → Champions' Guild", OsrsPathBridgePlugin.transportChip(p, false, false));
-		assertEquals("the arrow leads to the transport's own stop", "⚡ Use Chronicle → Champions' Guild", OsrsPathBridgePlugin.transportChip(p, true, true));
-		assertNull("a shop or a place has its own heading", OsrsPathBridgePlugin.transportChip(p, true, false));
-		assertNull("no plan, no chip", OsrsPathBridgePlugin.transportChip(null, false, false));
-		assertNull("a plan without a transport", OsrsPathBridgePlugin.transportChip(new PrepPlan(), false, false));
+		assertEquals("⚡ Use Chronicle → Champions' Guild", PluginNavigation.transportChip(p, false, false));
+		assertEquals("the arrow leads to the transport's own stop", "⚡ Use Chronicle → Champions' Guild", PluginNavigation.transportChip(p, true, true));
+		assertNull("a shop or a place has its own heading", PluginNavigation.transportChip(p, true, false));
+		assertNull("no plan, no chip", PluginNavigation.transportChip(null, false, false));
+		assertNull("a plan without a transport", PluginNavigation.transportChip(new PrepPlan(), false, false));
 	}
 
 	@Test
 	public void aJumpEndsATransportStopButNotAPlaceTarget()
 	{
-		assertTrue(OsrsPathBridgePlugin.transportStopOutdated(true, true));
-		assertFalse("walking on keeps the dock arrow", OsrsPathBridgePlugin.transportStopOutdated(true, false));
-		assertFalse("a shop target is still the goal after a teleport", OsrsPathBridgePlugin.transportStopOutdated(false, true));
+		assertTrue(PluginNavigation.transportStopOutdated(true, true));
+		assertFalse("walking on keeps the dock arrow", PluginNavigation.transportStopOutdated(true, false));
+		assertFalse("a shop target is still the goal after a teleport", PluginNavigation.transportStopOutdated(false, true));
 	}
 
 	@Test
@@ -202,15 +202,15 @@ public class TransportChipTest
 		stage.setY(3360);
 		stage.setStepId("S5-01");
 		// The live case: Champions' Guild stayed on the arrow and "~132 tiles" on the card after the step became a walkthrough line with no tile.
-		assertTrue(OsrsPathBridgePlugin.navOutdatedFor(stage, true, "S3-05"));
-		assertTrue("a stop made for the old step", OsrsPathBridgePlugin.navOutdatedFor(stage, false, "S3-05"));
-		assertTrue("the step was cleared", OsrsPathBridgePlugin.navOutdatedFor(stage, false, null));
-		assertFalse("the same step keeps its stop", OsrsPathBridgePlugin.navOutdatedFor(stage, false, "S5-01"));
+		assertTrue(PluginSnapshot.navOutdatedFor(stage, true, "S3-05"));
+		assertTrue("a stop made for the old step", PluginSnapshot.navOutdatedFor(stage, false, "S3-05"));
+		assertTrue("the step was cleared", PluginSnapshot.navOutdatedFor(stage, false, null));
+		assertFalse("the same step keeps its stop", PluginSnapshot.navOutdatedFor(stage, false, "S5-01"));
 		NavTarget own = new NavTarget();
 		own.setLabel("Varrock West Bank");
 		own.setX(3185);
 		own.setY(3440);
-		assertFalse("the player's own place has no step behind it", OsrsPathBridgePlugin.navOutdatedFor(own, false, "S3-05"));
-		assertFalse(OsrsPathBridgePlugin.navOutdatedFor(null, true, "S3-05"));
+		assertFalse("the player's own place has no step behind it", PluginSnapshot.navOutdatedFor(own, false, "S3-05"));
+		assertFalse(PluginSnapshot.navOutdatedFor(null, true, "S3-05"));
 	}
 }

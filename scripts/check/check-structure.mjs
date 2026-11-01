@@ -18,7 +18,7 @@ let idx = 0; const st = [], on = new Set(), ix = new Map(), low = new Map(), scc
 const sc = (v) => { ix.set(v, idx); low.set(v, idx); idx++; st.push(v); on.add(v); for (const w of g.get(v) || []) { if (!ix.has(w)) { sc(w); low.set(v, Math.min(low.get(v), low.get(w))); } else if (on.has(w)) low.set(v, Math.min(low.get(v), ix.get(w))); } if (low.get(v) === ix.get(v)) { const c = []; let w; do { w = st.pop(); on.delete(w); c.push(w); } while (w !== v); if (c.length > 1) scc.push(c); } };
 for (const f of src) if (!ix.has(f)) sc(f);
 // Known debt that --strict still accepts until its batch lands (S8 big files, src/styles.css); lower it as it shrinks, never raise it.
-const DEBT = { 'files over 1,000 lines': 5 };
+const DEBT = { 'files over 1,000 lines': 4 };
 const check = (name, count, detail) => { const debt = DEBT[name] ?? 0; detail = [detail, debt && `known debt ${debt}${count < debt ? `, lower it to ${count}` : ''}`].filter(Boolean).join('; '); const ok = count <= debt; report.push(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? ' — ' + detail : ''}`); if (!ok) failed++; };
 check('runtime import cycles', scc.length, scc.map((c) => `${c.length} modules (${c.slice(0, 3).map((x) => x.replace('src/', '')).join(', ')}…)`).join('; '));
 const sized = [...walk('src'), ...walk('scripts'), ...walk('tests'), ...walk('runelite-bridge/src/main')].filter((f) => /\.(ts|tsx|java|css)$/.test(f)).map((f) => ({ f, n: readFileSync(f, 'utf8').split('\n').length }));

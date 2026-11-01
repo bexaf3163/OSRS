@@ -91,7 +91,7 @@ class OsrsPathShopOverlay extends Overlay
 	/** The step's card for this game window with the inventory cleanup under it (or the cleanup alone); null means nothing to show. */
 	private ShopWindow.Result result(Open o)
 	{
-		return ShopWindow.withCleanup(ShopWindow.build(o.place, plugin.getGuideView(), atTransportStop()), o.place, plugin.cleanupLines());
+		return ShopWindow.withCleanup(ShopWindow.build(o.place, plugin.getGuideView(), atTransportStop()), o.place, plugin.snapshot.cleanupLines());
 	}
 
 	/** The player stands by the stop the transport's preparation leads to (the shop that sells its supplies). */
@@ -124,11 +124,11 @@ class OsrsPathShopOverlay extends Overlay
 		}
 		if (r == null)
 		{
-			plugin.shopWindowShown(false);
+			plugin.debug.shopWindowShown(false);
 			return null;
 		}
-		plugin.shopWindowShown(true);
-		plugin.uiShown("shop", ShopWindow.plain(r));
+		plugin.debug.shopWindowShown(true);
+		plugin.debug.uiShown("shop", ShopWindow.plain(r));
 		Rectangle frame = o.frame != null && !o.frame.isHidden() ? o.frame.getBounds() : null;
 		Dimension size = paint(g, r, WIDTH, config.hudLarge() ? Hud.LARGE : 1f, config.hudOpacity(), place(frame, client.getCanvasWidth(), client.getCanvasHeight(), r, g), config.overlayTheme());
 		return size;
