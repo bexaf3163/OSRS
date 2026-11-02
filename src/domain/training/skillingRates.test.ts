@@ -236,7 +236,7 @@ describe('a spot under the ground (synthetic): the way in is walked, followed in
   it('the step follows the way in and the arrow points at it', () => {
     const r = gatherRate(TEST_METHOD, 'woodcutting', st, valuable, reg)!;
     expect(trainingNav({ spot: r.spot })).toMatchObject({ x: door.x, y: door.y, label: 'Test cave (way in)' });
-    const fishing = stepById.get('S6-02')!;
+    const fishing = stepById.get('S6-01')!;
     const step = withTrainingMethod(fishing, { methodId: 'fi-fly', needs: [], spot: { label: 'Test cave', x: below.x, y: below.y, plane: 0, waypoints: [door, below] } });
     expect(step.inGame?.pathWaypoints).toEqual([{ x: door.x, y: door.y, plane: 0 }, { x: below.x, y: below.y, plane: 0 }]);
   });

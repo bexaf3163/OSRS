@@ -19,8 +19,8 @@ function extended(step: Step, target: number): Step {
   return { ...step, targets: step.targets?.filter(t => t.skill !== 'firemaking').map(t => ({ ...t, level: target })),
     inGame: { ...step.inGame!, completionTrigger: { ...step.inGame!.completionTrigger!, levels: step.inGame!.completionTrigger!.levels!.filter(t => t.skill !== 'firemaking').map(t => ({ ...t, level: target })) } } };
 }
-const base = extended(stepById.get('S6-02')!, 50);
-function scenario(stats: Record<string, number>, stock: Record<string, { carried?: number; bank?: number }> = {}, base: Step = extended(stepById.get('S6-02')!, 50)) {
+const base = extended(stepById.get('S6-01')!, 50);
+function scenario(stats: Record<string, number>, stock: Record<string, { carried?: number; bank?: number }> = {}, base: Step = extended(stepById.get('S6-01')!, 50)) {
   const names = [...new Set([...methodToolNames(base), ...Object.keys(stock)])];
   const owned = { bankSeen: true, items: new Map(names.map(name => [nameKey(name), { name, carried: stock[name]?.carried ?? 0, noted: 0, bank: stock[name]?.bank ?? 0 }])) };
   const progress = emptyProgress();
@@ -120,7 +120,7 @@ describe('one coherent Fishing/Cooking handover', () => {
 });
 
 describe('one coherent Mining/Woodcutting handover', () => {
-  const mining = extended(stepById.get('S6-03')!, 60);
+  const mining = extended(stepById.get('S6-02')!, 60);
   it.each([1, 14, 15, 59])('Mining%s projects only the unlocked mining resource and usable tool family', level => {
     const s = scenario({ mining: level, woodcutting: 1 }, { 'Bronze pickaxe': { carried: 1 } }, mining);
     expect(s.pick).toBe(level < 15 ? 'mi-ore' : 'mi-iron');

@@ -20,9 +20,9 @@ async function stockScenarios(browser: Browser) {
     const gear = { equipment, inventory: [], coins: cash, bankCoins: 0 };
     const items = RANGED_WATCH.map(name => ({ name, carried: 0, noted: 0, bank: 0 }));
     const { page, errors } = await open(browser, 1280, {
-      market: true, marketQuotes, progress: progressBefore('S6-01', { gameMode: 'f2p', levels: stats }),
+      market: true, marketQuotes, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'f2p', target: 40 }), 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
-      status: { inGame: true, protocol: 6, player: 'Stock fixture', activeStepId: 'S6-01', stats, ...gear },
+      status: { inGame: true, protocol: 6, player: 'Stock fixture', activeStepId: 'S6-04', stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/shopping');
     await settle(page);
@@ -49,7 +49,7 @@ async function stockScenarios(browser: Browser) {
 
 async function cleanupScenarios(browser: Browser) {
   const { page, errors } = await open(browser, 1280, {
-    progress: progressBefore('S6-01', { gameMode: 'f2p' }),
+    progress: progressBefore('S6-04', { gameMode: 'f2p' }),
     status: { stats: { ranged: 12, attack: 40, strength: 44, defence: 44, hitpoints: 40 } },
     events: [{ type: 'STATS', stats: { ranged: 12, attack: 40, strength: 44, defence: 44, hitpoints: 40 } }],
     localStorage: {
@@ -94,7 +94,7 @@ async function cleanupScenarios(browser: Browser) {
     if (url.includes('/data/dataloader.json')) return route.fulfill({ json: { baseMaps: [{ mapId: 0, cacheVersion: '2019-10-31_1', bounds: [[1000, 1000], [4300, 13000]] }] } });
     return route.fulfill({ status: failTiles ? 404 : 200, contentType: 'image/png', body: failTiles ? '' : png });
   });
-  await page.goto(`${BASE}#/step/S6-01`);
+  await page.goto(`${BASE}#/step/S6-04`);
   await page.getByRole('tab', { name: 'Route & game', exact: true }).click();
   await page.getByRole('button', { name: 'Retry map', exact: true }).waitFor();
   expect(await page.locator('.map-preview').count() === 1, 'cleanup: Route has one map preview');
@@ -228,11 +228,11 @@ async function rangedPreparationScenarios(browser: Browser) {
     const names = ['Maple shortbow', 'Maple longbow', 'Willow shortbow', 'Willow longbow', 'Oak shortbow', 'Oak longbow', 'Shortbow', 'Longbow', 'Adamant arrow', 'Mithril arrow', 'Steel arrow', 'Iron arrow', 'Bronze arrow', 'Salmon', 'Tuna', 'Lobster', 'Swordfish', ...clothes.map(c => c.name), 'Coif', 'Studded body', 'Studded chaps', "Green d'hide body", "Green d'hide chaps", "Green d'hide vambraces", 'Amulet of power', 'Amulet of accuracy'];
     const items = names.map(name => ({ name, carried: name === 'Shortbow' ? 1 : name === 'Bronze arrow' ? 100 : 0, noted: 0, bank: name === 'Salmon' ? 10 : clothes.some(c => c.name === name) ? 1 : 0 }));
     const { page, errors } = await open(browser, width, {
-      market: true, progress: progressBefore('S6-01', { gameMode: 'f2p', levels: stats }),
-      localStorage: { 'osrs-put:active-step': 'S6-01' },
-      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S6-01', stats, ...gear },
+      market: true, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-04' },
+      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S6-04', stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
-    }, '#/step/S6-01');
+    }, '#/step/S6-04');
     const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
     const initial = await snapshot();
     expect(/Train ranged to 5 at /.test(JSON.stringify(initial?.step?.guide?.steps)), `ranged (${width}): the actual game guide stops at the first bow milestone, not40`);
@@ -280,13 +280,13 @@ async function rangedPreparationScenarios(browser: Browser) {
     await page.screenshot({ path: `audit-temp/ranged-guided-session-${width}.png` });
     await page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
     await settle(page);
-    expect((await snapshot())?.step?.stepId === 'S6-01', `ranged (${width}): stopping restores the retained quest route`);
+    expect((await snapshot())?.step?.stepId === 'S6-04', `ranged (${width}): stopping restores the retained quest route`);
     expect(await page.evaluate(() => (window as any).__trainingMain === document.getElementById('main')), `ranged (${width}): stopping training preserves the app tree`);
     await page.context().close();
     const restarted = await open(browser, width, {
-      market: true, progress: progressBefore('S6-01', { gameMode: 'f2p', levels: stats }),
-      localStorage: { 'osrs-put:active-step': 'S6-01', 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'fast', freeOnly: true }) },
-      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S6-01', stats, ...gear },
+      market: true, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-04', 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'fast', freeOnly: true }) },
+      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S6-04', stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/');
     const last = () => restarted.page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
@@ -308,18 +308,18 @@ async function rangedPreparationScenarios(browser: Browser) {
     await settle(restarted.page);
     const reached = await last();
     expect((await text(restarted.page, '.tracked-skill')).includes('checkpoint reached'), `ranged (${width}): the actual level40 event stops at the F2P checkpoint`);
-    expect(!reached?.skillPath && reached?.step?.stepId !== 'S6-01' && !reached?.step?.worldPoint && !reached?.step?.npcNames?.length, `ranged (${width}): completion clears the trainer without silently restoring the quest`);
+    expect(!reached?.skillPath && reached?.step?.stepId !== 'S6-04' && !reached?.step?.worldPoint && !reached?.step?.npcNames?.length, `ranged (${width}): completion clears the trainer without silently restoring the quest`);
     await restarted.page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
     await settle(restarted.page);
-    expect((await last())?.step?.stepId === 'S6-01', `ranged (${width}): only the explicit return restores the quest after completion`);
+    expect((await last())?.step?.stepId === 'S6-04', `ranged (${width}): only the explicit return restores the quest after completion`);
     await restarted.page.context().close();
     const poorStats = { ...stats, ranged: 20, attack: 30, strength: 21, mining: 18, woodcutting: 15 };
     const poorGear = { ...gear, coins: 0, bankCoins: 0 };
     const poor = await open(browser, width, {
-      market: true, progress: progressBefore('S6-01', { gameMode: 'f2p', levels: poorStats, sellRestrictions: 'lifted' }),
+      market: true, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: poorStats, sellRestrictions: 'lifted' }),
       marketQuotes: { 'Willow shortbow': { id: 849, price: 100 } },
-      localStorage: { 'osrs-put:active-step': 'S6-01', 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'fast', freeOnly: true }) },
-      status: { protocol: 6, inGame: true, player: 'Range Fund', activeStepId: 'S6-01', stats: poorStats, questPoints: 40, totalLevel: 200, pos: { x: 3093, y: 3495, plane: 0 }, ...poorGear },
+      localStorage: { 'osrs-put:active-step': 'S6-04', 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'fast', freeOnly: true }) },
+      status: { protocol: 6, inGame: true, player: 'Range Fund', activeStepId: 'S6-04', stats: poorStats, questPoints: 40, totalLevel: 200, pos: { x: 3093, y: 3495, plane: 0 }, ...poorGear },
       events: [{ type: 'STATS', stats: poorStats }, { type: 'GEAR', gear: poorGear }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/');
     await waitFor(poor.page, '.funding-card.is-running', 12000).catch(async error => {
@@ -406,9 +406,9 @@ async function magicPreparationScenarios(browser: Browser) {
     { id: 556, name: 'Air rune', count: 1000 }, { id: 558, name: 'Mind rune', count: 1000 }, { id: 333, name: 'Trout', count: 5 },
   ], coins: 0, bankCoins: 0 };
   const { page, errors } = await open(browser, width, {
-    market: true, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: stats }),
-    localStorage: { 'osrs-put:active-step': 'S6-04' },
-    status: { protocol: 6, inGame: true, player: 'Magic Prep', activeStepId: 'S6-04', stats, ...gear },
+    market: true, progress: progressBefore('S6-03', { gameMode: 'f2p', levels: stats }),
+    localStorage: { 'osrs-put:active-step': 'S6-03' },
+    status: { protocol: 6, inGame: true, player: 'Magic Prep', activeStepId: 'S6-03', stats, ...gear },
     events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
   }, '#/skills/MA/magic');
   await page.getByRole('tab', { name: 'Calculator', exact: true }).click();
@@ -430,8 +430,8 @@ async function magicPreparationScenarios(browser: Browser) {
   expect(await noOverflow(page) && !errors.length, 'Magic: the staged guide fits the accepted Ledger without runtime errors');
   await page.screenshot({ path: 'audit-temp/magic-guided-session-1280.png' });
   await page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
-  await page.waitForFunction(() => (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.stepId === 'S6-04');
-  expect((await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'))).steps?.['S6-04'] !== 'done', 'Magic: stopping restores the quest without awarding the uncompleted Magic55 goal');
+  await page.waitForFunction(() => (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.stepId === 'S6-03');
+  expect((await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'))).steps?.['S6-03'] !== 'done', 'Magic: stopping restores the quest without awarding the uncompleted Magic55 goal');
   await page.context().close();
 }
 

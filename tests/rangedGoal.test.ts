@@ -60,7 +60,7 @@ describe('complete supported F2P Ranged demand', () => {
     expect(rangedGoalNeeds([{ ...path[0], fromLevel: 27 }], st, xpForLevel(26), 30, prices)).toBeNull();
   });
   it('route and goal Shopping get conservative totals while the game still asks for one bag', () => {
-    const st = state(), base = stepById.get('S6-01')!;
+    const st = state(), base = stepById.get('S6-04')!;
     const planned = leg(26, 40, st);
     const step = withTrainingMethod(base, { methodId: planned.method.id, needs: planned.needs!, goalNeeds: rangedGoalNeeds([planned], st, xpForLevel(26), 40, prices)!, untilLevel: 40 });
     expect(step.itemsRequired!.find(n => n.nameEn === 'Salmon')!.amount).toBe(10);

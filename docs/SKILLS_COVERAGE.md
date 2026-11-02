@@ -37,7 +37,7 @@ Catalogue-backed followed Skills (2.81.6) use the same staged training, preparat
 | mining | free to 99, members to 99 | 11 steps (8 free), levels 1-99 | 4 (2 free) | free route 45, whole route 45 | none | automated data checks; not verified in the game |
 | smithing | free to 99, members to 99 | 8 steps (6 free), levels 1-99 | 7 (7 free) | free route 29, whole route 29 | none | automated data checks; not verified in the game |
 | fishing | free to 99, members to 99 | 12 steps (8 free), levels 1-99 | 7 (5 free) | free route 35, whole route 35 | none | automated data checks; not verified in the game |
-| cooking | free to 99, members to 99 | 8 steps (7 free), levels 1-99 | 4 (4 free) | free route 35, whole route 35 | none | automated data checks; not verified in the game |
+| cooking | free to 99, members to 99 | 8 steps (7 free), levels 1-99 | 4 (4 free) | free route 68, whole route 68 | none | automated data checks; not verified in the game |
 | firemaking | free to 99, members to 99 | 7 steps (6 free), levels 1-99 | 5 (5 free) | free route 50, whole route 50 | none | automated data checks; not verified in the game |
 | woodcutting | free to 99, members to 99 | 11 steps (7 free), levels 1-99 | 6 (4 free) | free route 36, whole route 36 | none | automated data checks; not verified in the game |
 | farming | members only | 3 steps (0 free), levels 1-99 | 3 (0 free) | not asked | none | automated data checks; not verified in the game |

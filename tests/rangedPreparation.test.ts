@@ -14,7 +14,7 @@ import { market } from './funding/market';
 import type { Market } from '../src/domain/training/methodRates';
 import type { PriceView } from '../src/domain/market/quotes';
 
-const base = stepById.get('S6-01')!;
+const base = stepById.get('S6-04')!;
 function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}, chosenMethod?: string, dressed = true) {
   if (dressed) equipment = [
     ...[['Leather cowl', 'head'], ['Leather body', 'body'], ['Leather chaps', 'legs'], ['Leather vambraces', 'hands'], ['Leather boots', 'feet']]
@@ -37,7 +37,7 @@ function scenario(level: number, equipment: GearItem[] = [], stock: Record<strin
 }
 const piece = (name: string, count = 1): GearItem => ({ id: name.includes('arrow') ? 882 : 841, name, count, slot: name.includes('arrow') ? 'ammo' : 'weapon' });
 
-describe('S6-01 actual ranged preparation', () => {
+describe('S6-04 actual ranged preparation', () => {
   it('keeps training with a usable worn stack and replenishes only when the stack is low', () => {
     for (const count of [100, 99, 20]) {
       const s = scenario(1, [piece('Shortbow'), piece('Bronze arrow', count)]);

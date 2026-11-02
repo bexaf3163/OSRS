@@ -29,7 +29,7 @@ export const V2_FROM_V1: Record<string, string[]> = {
   'S4-01': ['S4-01'], 'S4-02': ['S4-02'], 'S4-03': ['S4-03'], 'S4-04': ['S4-06'], 'S4-05': ['S4-07', 'S4-08'],
   'S5-01': ['S5-01'], 'S5-02': ['S5-03'], 'S5-03': ['S5-04'], 'S5-04': ['S5-05'], 'S5-05': ['S5-06'],
   'S5-06': ['S5-07'], 'S5-07': ['S5-08'], 'S5-08': ['S5-10'], 'S5-09': ['S5-11'],
-  'S6-04': ['S6-06'],
+  'S6-03': ['S6-06'],
 };
 
 /** Steps taken out of the route: a save that still has them drops them on load, and the old numbers that led to them are retired too. */

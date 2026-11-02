@@ -12,7 +12,7 @@ import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import type { Step } from '../src/types';
 
 function training(skill: 'mining' | 'woodcutting'): Step {
-  return { ...stepById.get('S6-02')!, id: `TEST-${skill}`, followsMethod: skill, requires: [],
+  return { ...stepById.get('S6-01')!, id: `TEST-${skill}`, followsMethod: skill, requires: [],
     requirements: [], itemsRecommended: [],
     inGame: { completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill, level: 60 }] } },
   };

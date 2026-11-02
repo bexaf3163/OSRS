@@ -61,7 +61,7 @@ describe('Superheat iron starter preparation', () => {
     expect(view.unchecked).toEqual(expect.arrayContaining([expect.objectContaining({ label: 'Smithing 15' }), expect.objectContaining({ label: 'Iron ore ×25' })]));
   });
   it('projects resolved inputs and watches the optional staff through the existing method path', () => {
-    const step = { ...stepById.get('S6-04')!, followsMethod: 'magic' };
+    const step = { ...stepById.get('S6-03')!, followsMethod: 'magic' };
     const projected = withTrainingMethod(step, { methodId: method.id, needs: methodNeeds(method, state({ 'Staff of fire': { bank: 1 } })) });
     expect(projected.itemsRequired).toEqual(expect.arrayContaining([expect.objectContaining({ nameEn: 'Iron ore', amount: 25 }), expect.objectContaining({ nameEn: 'Staff of fire', equip: true })]));
     expect(projected.itemsRequired?.some(n => n.nameEn === 'Fire rune')).toBe(false);

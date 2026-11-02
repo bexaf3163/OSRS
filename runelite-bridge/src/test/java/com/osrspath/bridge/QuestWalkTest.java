@@ -220,7 +220,7 @@ public class QuestWalkTest
 			}
 		}
 		System.out.println("route walk: " + off + " places off the surface; with no way in: " + missing.size());
-		// S4-03 uses surface frogs and S6-01 starts at Port Sarim; both remaining underground anchors are checked.
+		// S4-03 uses surface frogs and S6-04 starts at Port Sarim; both remaining underground anchors are checked.
 		assertEquals("off-surface places walked", 2, off);
 		assertEquals("route places underground with no known way in", new TreeSet<String>(), missing);
 	}

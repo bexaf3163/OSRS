@@ -14,12 +14,12 @@ import { SKILLING } from '../src/domain/training/skillingRates';
 import { trainingMethods } from '../src/domain/training/trainingRouter';
 import type { PlayStyle } from '../src/domain/persistence/playStyle';
 
-// Fishing 1-50 (S6-02). The first version put the climb on the map in level order and, in 2.54.2, let any later tool stand in for the net. A live
+// Fishing 1-50 (S6-01). The first version put the climb on the map in level order and, in 2.54.2, let any later tool stand in for the net. A live
 // check showed the arrow still sending a level-1 account to buy a harpoon; the owner's rule: a harpoon or a lobster pot must not make net fishing
 // ready. The step now follows the training method the app recommends for the real level (Step.followsMethod), with the tools of that method only.
 
 const LOCATIONS = (locationsJson as { locations: Record<string, { x: number; y: number; plane: number }> }).locations;
-const routeStep = stepById.get('S6-02')!;
+const routeStep = stepById.get('S6-01')!;
 // Longer user-selected goals remain supported; the real Optional35 checkpoint is covered separately.
 const step: Step = { ...routeStep, title: 'Fishing to 50 and Cooking to 50', targets: routeStep.targets?.map(t => ({ ...t, level: 50 })),
   inGame: { ...routeStep.inGame!, completionTrigger: { ...routeStep.inGame!.completionTrigger!, levels: [{ skill: 'fishing', level: 50 }, { skill: 'cooking', level: 50 }] } } };
@@ -54,7 +54,7 @@ function readyOf(fishing: number, bag: Record<string, number>, style: PlayStyle 
   return { ...r, status: rd.status, reqs: rd.requirements.map((x) => `${x.label}:${x.state}`) };
 }
 
-describe('S6-02 Fishing: the places of the climb are on the map in level order', () => {
+describe('S6-01 Fishing: the places of the climb are on the map in level order', () => {
   it('the static optional arrow starts at net spots, then fly fishing without an unnecessary Karamja leg', () => {
     const points = stepPoints(step);
     expect(points.map((p) => p.label)).toEqual([
@@ -72,7 +72,7 @@ describe('S6-02 Fishing: the places of the climb are on the map in level order',
   });
 });
 
-describe('S6-02 follows the training method of the real level', () => {
+describe('S6-01 follows the training method of the real level', () => {
   it('knows its goal: the fishing level its own completion check asks for', () => {
     expect(step.followsMethod).toBe('fishing');
     expect(followedGoal(step)).toEqual({ skill: 'fishing', target: 50 });
@@ -231,8 +231,8 @@ describe('S6-02 follows the training method of the real level', () => {
   });
 
   it('the picks are compared by content, so an unchanged answer keeps the store steady', () => {
-    expect(samePicks({ 'S6-02': 'fi-fly' }, { 'S6-02': 'fi-fly' })).toBe(true);
-    expect(samePicks({ 'S6-02': 'fi-fly' }, { 'S6-02': 'fi-lobster' })).toBe(false);
-    expect(samePicks({}, { 'S6-02': 'fi-fly' })).toBe(false);
+    expect(samePicks({ 'S6-01': 'fi-fly' }, { 'S6-01': 'fi-fly' })).toBe(true);
+    expect(samePicks({ 'S6-01': 'fi-fly' }, { 'S6-01': 'fi-lobster' })).toBe(false);
+    expect(samePicks({}, { 'S6-01': 'fi-fly' })).toBe(false);
   });
 });

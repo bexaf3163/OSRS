@@ -4985,6 +4985,237 @@
     "id": "S6-01",
     "stage": 6,
     "type": "skill",
+    "title": "Fishing to 35 and Cooking to 68",
+    "requires": [],
+    "floor": "Ground floor",
+    "mapLocation": {
+      "x": 3086,
+      "y": 3229,
+      "plane": 0,
+      "label": "Net fishing — Draynor Village (Fishing 1-20)"
+    },
+    "where": "Follow the current Fishing method to 35, then Cooking to 68: wine from Cooking 35 is the fastest Cooking in both modes. No Karamja trip or harpoon is required.",
+    "itemsRequired": [
+      {
+        "nameEn": "Small fishing net",
+        "amount": 1,
+        "howToGet": "The starter net is from Gerrant in Port Sarim. The live method selects the tool for your actual Fishing level; fly fishing uses a fly fishing rod and feathers from 20.",
+        "wikiItemId": 303,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
+      }
+    ],
+    "fields": [
+      {
+        "label": "Plan",
+        "text": "Follow the current trainer and its supplies. Net fish from 1; fly fishing opens at 20. The shared planner compares cooking your catch beside the spot with finishing Cooking separately."
+      },
+      {
+        "label": "Stop here",
+        "text": "Fishing 35 is the F2P checkpoint: members fish far faster from there. Cooking goes on to 68 because wine (from 35, up to 470,000–490,000 XP/h near 68, about 66 gp lost per jug) is the fastest Cooking for members too (OSRS Wiki)."
+      }
+    ],
+    "doneWhen": "Fishing 35 and Cooking 68. Skip any optional training you do not want before membership.",
+    "inGame": {
+      "npcNames": [
+        "Fishing spot"
+      ],
+      "objectNames": [
+        "Range"
+      ],
+      "highlightItems": [
+        "Small fishing net"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "fishing",
+            "level": 35
+          },
+          {
+            "skill": "cooking",
+            "level": 68
+          }
+        ]
+      }
+    },
+    "bondBranch": true,
+    "optional": true,
+    "resourceSpots": [
+      {
+        "x": 3086,
+        "y": 3229,
+        "plane": 0,
+        "label": "Net fishing — Draynor Village (Fishing 1-20)",
+        "note": "Small fishing net: shrimps, then anchovies from 15."
+      },
+      {
+        "x": 3107,
+        "y": 3429,
+        "plane": 0,
+        "label": "Fly fishing — Barbarian Village (Fishing 20-35)",
+        "note": "Fly fishing rod and feathers: trout from 20, salmon from 30."
+      }
+    ],
+    "followsMethod": "fishing"
+  },
+  {
+    "id": "S6-02",
+    "stage": 6,
+    "type": "skill",
+    "title": "Mining to 45, Woodcutting to 36 and Firemaking to 50",
+    "requires": [],
+    "mapLocation": {
+      "x": 3229,
+      "y": 3146,
+      "plane": 0,
+      "label": "Copper and tin — East Lumbridge Swamp mine (Mining 1-15)"
+    },
+    "fields": [
+      {
+        "label": "Plan",
+        "text": "Follow Mining to 45, Woodcutting to 36, then Firemaking to 50. Each phase uses the current Skills method, usable owned tools and its actual supplies; bank the previous phase tools before starting the next."
+      },
+      {
+        "label": "Why these levels",
+        "text": "45 is a sensible iron-mining checkpoint. Woodcutting 36 prepares Lost City. Firemaking 50 unlocks members Wintertodt. Mining Guild 60 and yews 60 are not required before membership."
+      },
+      {
+        "label": "Supplies",
+        "text": "Keep logs you want to burn when the bank trip is practical. Firemaking selects logs your level allows; do not burn all logs before checking upcoming needs. No long grind or purchase is required to subscribe."
+      },
+      {
+        "label": "Requirements",
+        "text": "Mining 1. Each later phase checks its own level, tool and materials."
+      }
+    ],
+    "doneWhen": "Mining 45, Woodcutting 36 and Firemaking 50. These are optional checkpoints, not membership requirements.",
+    "inGame": {
+      "objectNames": [
+        "Copper rocks",
+        "Tin rocks"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "mining",
+            "level": 45
+          },
+          {
+            "skill": "woodcutting",
+            "level": 36
+          },
+          {
+            "skill": "firemaking",
+            "level": 50
+          }
+        ]
+      }
+    },
+    "bondBranch": true,
+    "optional": true,
+    "followsMethod": "mining",
+    "requirements": [
+      {
+        "type": "skill",
+        "skill": "mining",
+        "min": 1
+      }
+    ],
+    "itemsRequired": [
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "anyOf": [
+          "Iron pickaxe",
+          "Steel pickaxe",
+          "Mithril pickaxe",
+          "Adamant pickaxe",
+          "Rune pickaxe"
+        ],
+        "wikiItemId": 1265,
+        "howToGet": "Use an owned pickaxe that your Mining level allows; withdraw it first. Only buy a tool when no usable owned alternative is available.",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      }
+    ]
+  },
+  {
+    "id": "S6-03",
+    "stage": 6,
+    "type": "skill",
+    "title": "Magic to 55 (High Level Alchemy)",
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/High_Level_Alchemy",
+    "how": "Follow the current spell and its listed supplies. Strike spells are the budget fallback; at Magic 43 and Smithing 15, compare a prepared Superheat Item batch. Alchemy requires chosen expendable targets and verified costs; it is not an automatic unfunded default. Magic 55 unlocks High Level Alchemy but does not guarantee profit.",
+    "itemsRequired": [
+      {
+        "nameEn": "Mind rune",
+        "amount": 100,
+        "howToGet": "Starter Wind Strike batch; the current method replaces this with its actual supplies.",
+        "wikiItemId": 558,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 100,
+        "howToGet": "Wind Strike uses one air per cast; an equipped owned Staff of air can replace it.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 5,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "heals": 7,
+        "howToGet": "Starter combat food, not the whole goal. Bank when supplies run out.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "doneWhen": "Magic 55.",
+    "inGame": {
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "magic",
+            "level": 55
+          }
+        ]
+      }
+    },
+    "bondBranch": true,
+    "optional": true,
+    "fields": [
+      {
+        "label": "Optional checkpoint",
+        "text": "Magic 55 unlocks High Level Alchemy; it is not required before membership. Train only while the current spell and supplies fit your budget. High Alchemy is not guaranteed profit; use Money for a funding plan when needed."
+      },
+      {
+        "label": "Requirements",
+        "text": "Magic 1. The current method checks its actual spell and Smithing unlocks."
+      }
+    ],
+    "followsMethod": "magic",
+    "requirements": [
+      {
+        "type": "skill",
+        "skill": "magic",
+        "min": 1
+      }
+    ],
+    "where": "The current method supplies its location after your Magic level is checked."
+  },
+  {
+    "id": "S6-04",
+    "stage": 6,
+    "type": "skill",
     "title": "Ranged to 40: prepare your kit and follow the current trainer",
     "requires": [
       "S4-01"
@@ -5067,237 +5298,6 @@
         "howToGet": "A compatible equipped bow and starter arrow stack. Withdraw owned usable supplies first; do not buy replacements for an adequate owned loadout."
       }
     ]
-  },
-  {
-    "id": "S6-02",
-    "stage": 6,
-    "type": "skill",
-    "title": "Fishing to 35 and Cooking to 35",
-    "requires": [],
-    "floor": "Ground floor",
-    "mapLocation": {
-      "x": 3086,
-      "y": 3229,
-      "plane": 0,
-      "label": "Net fishing — Draynor Village (Fishing 1-20)"
-    },
-    "where": "Follow the current Fishing method to 35, then finish Cooking 35 with the current affordable method. No Karamja trip or harpoon is required for these checkpoints.",
-    "itemsRequired": [
-      {
-        "nameEn": "Small fishing net",
-        "amount": 1,
-        "howToGet": "The starter net is from Gerrant in Port Sarim. The live method selects the tool for your actual Fishing level; fly fishing uses a fly fishing rod and feathers from 20.",
-        "wikiItemId": 303,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
-      }
-    ],
-    "fields": [
-      {
-        "label": "Plan",
-        "text": "Follow the current trainer and its supplies. Net fish from 1; fly fishing opens at 20. The shared planner compares cooking your catch beside the spot with finishing Cooking separately."
-      },
-      {
-        "label": "Stop here",
-        "text": "Fishing 35 is the Skills F2P checkpoint. Cooking 35 opens wine; continuing towards 68 can be useful with an affordable supply budget, but is optional. Members methods and quests can be faster."
-      }
-    ],
-    "doneWhen": "Fishing 35 and Cooking 35. Skip any optional training you do not want before membership.",
-    "inGame": {
-      "npcNames": [
-        "Fishing spot"
-      ],
-      "objectNames": [
-        "Range"
-      ],
-      "highlightItems": [
-        "Small fishing net"
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "fishing",
-            "level": 35
-          },
-          {
-            "skill": "cooking",
-            "level": 35
-          }
-        ]
-      }
-    },
-    "bondBranch": true,
-    "optional": true,
-    "resourceSpots": [
-      {
-        "x": 3086,
-        "y": 3229,
-        "plane": 0,
-        "label": "Net fishing — Draynor Village (Fishing 1-20)",
-        "note": "Small fishing net: shrimps, then anchovies from 15."
-      },
-      {
-        "x": 3107,
-        "y": 3429,
-        "plane": 0,
-        "label": "Fly fishing — Barbarian Village (Fishing 20-35)",
-        "note": "Fly fishing rod and feathers: trout from 20, salmon from 30."
-      }
-    ],
-    "followsMethod": "fishing"
-  },
-  {
-    "id": "S6-03",
-    "stage": 6,
-    "type": "skill",
-    "title": "Mining to 45, Woodcutting to 36 and Firemaking to 50",
-    "requires": [],
-    "mapLocation": {
-      "x": 3229,
-      "y": 3146,
-      "plane": 0,
-      "label": "Copper and tin — East Lumbridge Swamp mine (Mining 1-15)"
-    },
-    "fields": [
-      {
-        "label": "Plan",
-        "text": "Follow Mining to 45, Woodcutting to 36, then Firemaking to 50. Each phase uses the current Skills method, usable owned tools and its actual supplies; bank the previous phase tools before starting the next."
-      },
-      {
-        "label": "Why these levels",
-        "text": "45 is a sensible iron-mining checkpoint. Woodcutting 36 prepares Lost City. Firemaking 50 unlocks members Wintertodt. Mining Guild 60 and yews 60 are not required before membership."
-      },
-      {
-        "label": "Supplies",
-        "text": "Keep logs you want to burn when the bank trip is practical. Firemaking selects logs your level allows; do not burn all logs before checking upcoming needs. No long grind or purchase is required to subscribe."
-      },
-      {
-        "label": "Requirements",
-        "text": "Mining 1. Each later phase checks its own level, tool and materials."
-      }
-    ],
-    "doneWhen": "Mining 45, Woodcutting 36 and Firemaking 50. These are optional checkpoints, not membership requirements.",
-    "inGame": {
-      "objectNames": [
-        "Copper rocks",
-        "Tin rocks"
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "mining",
-            "level": 45
-          },
-          {
-            "skill": "woodcutting",
-            "level": 36
-          },
-          {
-            "skill": "firemaking",
-            "level": 50
-          }
-        ]
-      }
-    },
-    "bondBranch": true,
-    "optional": true,
-    "followsMethod": "mining",
-    "requirements": [
-      {
-        "type": "skill",
-        "skill": "mining",
-        "min": 1
-      }
-    ],
-    "itemsRequired": [
-      {
-        "nameEn": "Bronze pickaxe",
-        "amount": 1,
-        "anyOf": [
-          "Iron pickaxe",
-          "Steel pickaxe",
-          "Mithril pickaxe",
-          "Adamant pickaxe",
-          "Rune pickaxe"
-        ],
-        "wikiItemId": 1265,
-        "howToGet": "Use an owned pickaxe that your Mining level allows; withdraw it first. Only buy a tool when no usable owned alternative is available.",
-        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
-      }
-    ]
-  },
-  {
-    "id": "S6-04",
-    "stage": 6,
-    "type": "skill",
-    "title": "Magic to 55 (High Level Alchemy)",
-    "requires": [],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/High_Level_Alchemy",
-    "how": "Follow the current spell and its listed supplies. Strike spells are the budget fallback; at Magic 43 and Smithing 15, compare a prepared Superheat Item batch. Alchemy requires chosen expendable targets and verified costs; it is not an automatic unfunded default. Magic 55 unlocks High Level Alchemy but does not guarantee profit.",
-    "itemsRequired": [
-      {
-        "nameEn": "Mind rune",
-        "amount": 100,
-        "howToGet": "Starter Wind Strike batch; the current method replaces this with its actual supplies.",
-        "wikiItemId": 558,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
-      },
-      {
-        "nameEn": "Air rune",
-        "amount": 100,
-        "howToGet": "Wind Strike uses one air per cast; an equipped owned Staff of air can replace it.",
-        "wikiItemId": 556,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
-      },
-      {
-        "nameEn": "Trout",
-        "amount": 5,
-        "anyOf": [
-          "Salmon",
-          "Tuna",
-          "Lobster",
-          "Swordfish"
-        ],
-        "heals": 7,
-        "howToGet": "Starter combat food, not the whole goal. Bank when supplies run out.",
-        "wikiItemId": 333,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
-      }
-    ],
-    "doneWhen": "Magic 55.",
-    "inGame": {
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "magic",
-            "level": 55
-          }
-        ]
-      }
-    },
-    "bondBranch": true,
-    "optional": true,
-    "fields": [
-      {
-        "label": "Optional checkpoint",
-        "text": "Magic 55 unlocks High Level Alchemy; it is not required before membership. Train only while the current spell and supplies fit your budget. High Alchemy is not guaranteed profit; use Money for a funding plan when needed."
-      },
-      {
-        "label": "Requirements",
-        "text": "Magic 1. The current method checks its actual spell and Smithing unlocks."
-      }
-    ],
-    "followsMethod": "magic",
-    "requirements": [
-      {
-        "type": "skill",
-        "skill": "magic",
-        "min": 1
-      }
-    ],
-    "where": "The current method supplies its location after your Magic level is checked."
   },
   {
     "id": "S6-05",
@@ -5943,7 +5943,7 @@
           "Lobster",
           "Swordfish"
         ],
-        "howToGet": "Your own catch from S6-02, or the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. For the Temple Guardian (level 30, hits up to 3; immune to magic). Preparation sizes the amount for your levels and armour."
+        "howToGet": "Your own catch from S6-01, or the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. For the Temple Guardian (level 30, hits up to 3; immune to magic). Preparation sizes the amount for your levels and armour."
       }
     ],
     "reward": "1 QP, 1,406 Prayer XP, the Wolfbane dagger, access to the region of Morytania and the town of Canifis.",
@@ -6037,7 +6037,7 @@
           "Tuna",
           "Salmon"
         ],
-        "howToGet": "Your own catch from S6-02, or buy on the Grand Exchange. Ghasts turn food in your inventory into rot, so bring spares: three ghasts must be killed."
+        "howToGet": "Your own catch from S6-01, or buy on the Grand Exchange. Ghasts turn food in your inventory into rot, so bring spares: three ghasts must be killed."
       }
     ],
     "itemsRecommended": [

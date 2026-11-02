@@ -13,7 +13,7 @@ const state = (levels: Record<string, number>, stock: Record<string, number> = {
   mode: 'f2p', connected: true, stats: { hitpoints: 31, defence: 33, ...levels },
   progress: { ...emptyProgress(), levels }, questsDone: ['Dragon Slayer I'],
   gear: { equipment: [], inventory: [], coins: 10000, bankCoins: 0 },
-  owned: { bankSeen: true, items: new Map([...new Set([...RANGED_WATCH, ...methodToolNames(stepById.get('S6-03')!), ...Object.keys(stock)])].map(name => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: stock[name] ?? 0 }])) },
+  owned: { bankSeen: true, items: new Map([...new Set([...RANGED_WATCH, ...methodToolNames(stepById.get('S6-02')!), ...Object.keys(stock)])].map(name => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: stock[name] ?? 0 }])) },
 });
 
 describe('shared staged training, not a starter grind to the final goal', () => {
@@ -28,7 +28,7 @@ describe('shared staged training, not a starter grind to the final goal', () => 
     const arrows = goalArrows(advice.path, st, 0, market());
     expect(arrows).toMatchObject({ goalLevel: 40, changesKit: true });
     expect(arrows!.shots.mid).toBeGreaterThan(0);
-    const base = stepById.get('S6-01')!;
+    const base = stepById.get('S6-04')!;
     const pick = pickMethods([base], st, 'f2p', 'chill', 'balanced', { prices: market() })[base.id];
     const resolved = withTrainingMethod(base, pick);
     expect(resolved.how).toContain('to 5:');

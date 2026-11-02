@@ -111,9 +111,9 @@ describe('progress: storage', () => {
 describe('progress: moving from V1 to V2', () => {
   const v1 = {
     app: 'osrs-put', version: 1, updatedAt: '2026-05-01T10:00:00.000Z',
-    steps: { 'S1-03': 'done', 'S1-06': 'done', 'S2-03': 'done', 'S4-07': 'done', 'S4-08': 'done', 'S3-07': 'skipped', 'S6-01': 'done' },
+    steps: { 'S1-03': 'done', 'S1-06': 'done', 'S2-03': 'done', 'S4-07': 'done', 'S4-08': 'done', 'S3-07': 'skipped', 'S6-04': 'done' },
     levels: { fishing: 30 },
-    notes: { 'S1-06': 'ghost at the graveyard', 'S6-01': 'old note' },
+    notes: { 'S1-06': 'ghost at the graveyard', 'S6-04': 'old note' },
   };
 
   it('marks move by the table, the whole old progress stays in legacy', () => {

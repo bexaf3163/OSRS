@@ -17,8 +17,8 @@ const stateOf = (fishing: number, cooking: number) => buildPlayerState({
   mode: 'f2p', stats: { fishing, cooking } as never, progress: emptyProgress(), gear: null, questsDone: [], connected: true,
   owned: { bankSeen: true, items: new Map([['Fly fishing rod', 1], ['Feather', 1000]].map(([n, q]) => [nameKey(n as string), { name: n as string, carried: q as number, noted: 0, bank: 0 }])) } as never,
 });
-const s602 = stepById.get('S6-02')!;
-const pickFor = (fishing: number, cooking: number) => pickMethods([s602], stateOf(fishing, cooking), 'f2p', 'chill', 'balanced', { prices: market() })['S6-02'];
+const s602 = stepById.get('S6-01')!;
+const pickFor = (fishing: number, cooking: number) => pickMethods([s602], stateOf(fishing, cooking), 'f2p', 'chill', 'balanced', { prices: market() })['S6-01'];
 
 describe('fishing and cooking the same catches at the fire beside the spot', () => {
   it('the Barbarian Village fly spot has the fire beside it: both skills train, fishing a little slower than fishing alone', () => {
@@ -33,7 +33,7 @@ describe('fishing and cooking the same catches at the fire beside the spot', () 
     expect(alongRate(fly, 'fishing', 'cooking', stateOf(35, 30), { prices: market() })!.products).toEqual(['Salmon', 'Trout']);
     expect(alongRate(fly, 'fishing', 'cooking', stateOf(30, 10), { prices: market() })).toBeNull();
   });
-  it('S6-02 (Fishing 50 and Cooking 50) takes it while it reaches both goals sooner, and the step says it in one line', () => {
+  it('S6-01 (Fishing 50 and Cooking 50) takes it while it reaches both goals sooner, and the step says it in one line', () => {
     const pick = pickFor(30, 20);
     expect(typeof pick === 'string' ? null : pick.along?.station.label).toBe('Barbarian Village fire');
     const step = withTrainingMethod(s602, pick);

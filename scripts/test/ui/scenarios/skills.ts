@@ -49,7 +49,7 @@ async function f2pSkillsScenarios(browser: Browser) {
 
   for (const [group, skill, tool] of [['WC', 'woodcutting', 'axe'], ['MI', 'mining', 'pickaxe'], ['FI', 'fishing', 'rod/net'], ['CO', 'cooking', 'ingredients'], ['FM', 'firemaking', 'tinderbox'], ['SM', 'smithing', 'ores'], ['CR', 'crafting', 'recipe'], ['RC', 'runecraft', 'tiara'], ['PR', 'prayer', 'bones']] as const) {
     const { page, errors } = await open(browser, 1000, { market: true,
-      progress: progressBefore('S6-03', { gameMode: 'f2p', levels: { [skill]: 1 } }),
+      progress: progressBefore('S6-02', { gameMode: 'f2p', levels: { [skill]: 1 } }),
     }, `#/skills/${group}/${skill}`);
     expect((await text(page, '.training-equipment:visible')).toLowerCase().includes(tool), `Skills equipment (${skill}): one practical hint accompanies the current method`);
     expect(await page.locator('.skill-detail details').count() === 0 && await noOverflow(page) && !errors.length, `Skills equipment (${skill}): compact without a disclosure stack or errors`);
@@ -145,9 +145,9 @@ async function processingKitScenarios(browser: Browser) {
     const gear = { equipment: [], inventory: Object.entries(sample.items).map(([name, count]) => ({ id: 0, name, count })), coins: 0, bankCoins: 0 };
     const { page, errors } = await open(browser, 1280, {
       market: true, marketUnavailable: true,
-      progress: progressBefore('S6-02', { gameMode: 'f2p', levels: stats }),
+      progress: progressBefore('S6-01', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
-      status: { protocol: 6, inGame: true, player: 'Processing kit', activeStepId: 'S6-02', stats, ...gear, ...(sample.quests ? { questsDone: sample.quests } : {}) },
+      status: { protocol: 6, inGame: true, player: 'Processing kit', activeStepId: 'S6-01', stats, ...gear, ...(sample.quests ? { questsDone: sample.quests } : {}) },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true,
         items: [...new Set([...watched, ...Object.keys(sample.items)])].map(name => ({ name, carried: sample.items[name] ?? 0, noted: 0, bank: 0 })) }, ...(sample.quests ? [{ type: 'QUESTS', done: sample.quests }] : [])],
     }, `#/skills/${sample.code}/${sample.skill}?goal=${sample.target}`);
@@ -186,9 +186,9 @@ async function cookingCatchScenarios(browser: Browser) {
   const gear = { equipment: [], inventory: [{ id: 371, name: 'Raw swordfish', count: 7 }], coins: 0, bankCoins: 0 };
   const { page, errors } = await open(browser, 1280, {
     market: true, marketUnavailable: true,
-    progress: progressBefore('S6-02', { gameMode: 'f2p', levels: stats }),
+    progress: progressBefore('S6-01', { gameMode: 'f2p', levels: stats }),
     localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
-    status: { protocol: 6, inGame: true, player: 'Cooking catch', activeStepId: 'S6-02', stats, ...gear },
+    status: { protocol: 6, inGame: true, player: 'Cooking catch', activeStepId: 'S6-01', stats, ...gear },
     events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true,
       items: watched.map(name => ({ name, carried: name === 'Raw swordfish' ? 7 : 0, noted: 0, bank: 0 })) }],
   }, '#/skills/CO/cooking?goal=46');
@@ -268,11 +268,11 @@ async function skillHandoverScenarios(browser: Browser) {
       ...recipes.filter((r: any) => r.skill === 'cooking').flatMap((r: any) => r.inputs.map((i: any) => i.name))])];
     const items = names.map(name => ({ name, carried: 0, noted: 0, bank: name === 'Raw tuna' ? 26 : name === 'Grapes' || name === 'Jug of water' ? 13 : 0 }));
     const { page, errors } = await open(browser, width, {
-      market: true, progress: progressBefore('S6-02', { gameMode: 'f2p', levels: stats }),
-      localStorage: { 'osrs-put:active-step': 'S6-02' },
-      status: { protocol: 6, inGame: true, player: 'Skill Handover', activeStepId: 'S6-02', stats, coins: 1000, bankCoins: 0, equipment: [], inventory: [] },
+      market: true, progress: progressBefore('S6-01', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-01' },
+      status: { protocol: 6, inGame: true, player: 'Skill Handover', activeStepId: 'S6-01', stats, coins: 1000, bankCoins: 0, equipment: [], inventory: [] },
       events: [{ type: 'STATS', stats }, { type: 'OWNED', bankSeen: true, items }],
-    }, '#/step/S6-02');
+    }, '#/step/S6-01');
     const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
     const setLevels = async (levels: Record<string, number>, destination: string) => {
       await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, levels);
@@ -287,28 +287,28 @@ async function skillHandoverScenarios(browser: Browser) {
     expect(cooking?.step?.worldPoint?.label?.includes('Cooking: Tuna') && cooking.step.worldPoint.label.includes('Barbarian Village') && cooking.step.checklist?.some((r: any) => r.name === 'Raw tuna' && r.count === 26), `skill handover (${width}): completing Fishing projects Cooking supplies and destination into the game`);
     expect(!cooking?.step?.npcNames?.includes('Fishing spot') && !cooking?.step?.checklist?.some((r: any) => /fishing net|fishing rod|harpoon/i.test(r.name)), `skill handover (${width}): no obsolete Fishing targets or tools`);
     const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'));
-    expect(saved.steps?.['S6-02'] !== 'done', `skill handover (${width}): Fishing alone cannot complete the combined goal`);
+    expect(saved.steps?.['S6-01'] !== 'done', `skill handover (${width}): Fishing alone cannot complete the combined goal`);
     await reveal(page, '.training:visible');
     expect((await text(page, '.training:visible')).includes('Cooking'), `skill handover (${width}): the visible method follows the same remaining skill`);
-    // Optional stops at35; extended wine batches are covered by the shared handover engine regressions.
+    // Optional goes on to Cooking 68, the Skills checkpoint: at 35 the step moves on to wine, the fastest Cooking for members too.
     await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { fishing: 35, cooking: 35 });
     await page.waitForFunction(() => {
       const step = (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.step;
-      return step && (step.checklist ?? []).length === 0;
-    });
-    const finished = await snapshot();
-    expect(!finished?.step?.checklist?.some((r: any) => r.name === 'Grapes' || r.name === 'Jug of water'), `skill handover (${width}): Cooking35 releases its kit rather than imposing a wine grind`);
+      return step && (step.checklist ?? []).some((r: any) => r.name === 'Grapes' || r.name === 'Jug of water');
+    }, undefined, { timeout: 10000 });
+    const wine = await snapshot();
+    expect(wine?.step?.checklist?.some((r: any) => r.name === 'Grapes' || r.name === 'Jug of water'), `skill handover (${width}): Cooking 35 moves on to wine towards 68`);
     expect(await noOverflow(page) && !errors.length, `skill handover (${width}): no overflow or console errors`);
     await page.context().close();
     // A fresh low-level profile: do not simulate Cooking dropping from35 to1 on the admitted character.
     const low = { fishing: 35, cooking: 1 };
     const mixedItems = names.map(name => ({ name, carried: name === 'Raw beef' || name === 'Raw chicken' ? 13 : 0, noted: 0, bank: 0 }));
     const { page: materialPage, errors: materialErrors } = await open(browser, width, {
-      market: true, progress: progressBefore('S6-02', { gameMode: 'f2p', levels: low }),
-      localStorage: { 'osrs-put:active-step': 'S6-02' },
-      status: { protocol: 6, inGame: true, player: 'Material Handover', activeStepId: 'S6-02', stats: low, coins: 1000, bankCoins: 0, equipment: [], inventory: [] },
+      market: true, progress: progressBefore('S6-01', { gameMode: 'f2p', levels: low }),
+      localStorage: { 'osrs-put:active-step': 'S6-01' },
+      status: { protocol: 6, inGame: true, player: 'Material Handover', activeStepId: 'S6-01', stats: low, coins: 1000, bankCoins: 0, equipment: [], inventory: [] },
       events: [{ type: 'STATS', stats: low }, { type: 'OWNED', bankSeen: true, items: mixedItems }],
-    }, '#/step/S6-02');
+    }, '#/step/S6-01');
     await materialPage.waitForFunction(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.lines?.some((r: any) => r.name === 'Raw beef' && r.where === 'INVENTORY' && r.need === 26));
     const mixed = await materialPage.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
     expect(mixed.plan.lines.some((r: any) => r.name === 'Raw beef' && r.where === 'INVENTORY' && r.need === 26), `skill handover (${width}): mixed beef/chicken covers one bag without buying duplicate beef`);
@@ -328,11 +328,11 @@ async function miningHandoverScenarios(browser: Browser) {
     const names = ['Bronze pickaxe', 'Iron pickaxe', 'Steel pickaxe', 'Mithril pickaxe', 'Adamant pickaxe', 'Rune pickaxe', 'Bronze axe', 'Iron axe', 'Steel axe', 'Mithril axe', 'Adamant axe', 'Rune axe', 'Tinderbox', 'Logs', 'Oak logs', 'Willow logs', 'Maple logs', 'Yew logs'];
     const items = names.map(name => ({ name, carried: name === 'Rune pickaxe' ? 1 : 0, noted: 0, bank: name === 'Bronze axe' || name === 'Tinderbox' ? 1 : name === 'Logs' ? 27 : 0 }));
     const { page, errors } = await open(browser, width, {
-      market: true, progress: progressBefore('S6-03', { gameMode: 'f2p', levels: stats }),
-      localStorage: { 'osrs-put:active-step': 'S6-03' },
-      status: { protocol: 6, inGame: true, player: 'Mining Handover', activeStepId: 'S6-03', stats, coins: 1000, bankCoins: 0, equipment: [], inventory: [] },
+      market: true, progress: progressBefore('S6-02', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-02' },
+      status: { protocol: 6, inGame: true, player: 'Mining Handover', activeStepId: 'S6-02', stats, coins: 1000, bankCoins: 0, equipment: [], inventory: [] },
       events: [{ type: 'STATS', stats }, { type: 'OWNED', bankSeen: true, items }],
-    }, '#/step/S6-03');
+    }, '#/step/S6-02');
     const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
     const mining = await snapshot();
     expect(mining?.step?.worldPoint?.label?.includes('South-east Varrock mine') && JSON.stringify(mining.step.objectNames) === JSON.stringify(['Iron rocks']), `Mining handover (${width}): current Mining task has only iron scenery`);
@@ -346,7 +346,7 @@ async function miningHandoverScenarios(browser: Browser) {
       expect(current?.step?.completionTrigger?.levels?.some((r: any) => r.skill === 'mining' && r.level === 45) && current.step.completionTrigger.levels.some((r: any) => r.skill === 'woodcutting' && r.level === 36) && current.step.completionTrigger.levels.some((r: any) => r.skill === 'firemaking' && r.level === 50), `Mining handover (${width}, WC${level}): all declared checkpoints remain`);
     }
     const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'));
-    expect(saved.steps?.['S6-03'] !== 'done', `Mining handover (${width}): Mining alone cannot complete this step`);
+    expect(saved.steps?.['S6-02'] !== 'done', `Mining handover (${width}): Mining alone cannot complete this step`);
     await reveal(page, '.training:visible');
     expect((await text(page, '.training:visible')).includes('Woodcutting'), `Mining handover (${width}): desktop method and game payload agree`);
     await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { mining: 45, woodcutting: 36, firemaking: 1 });
@@ -370,9 +370,9 @@ async function trainingScopeScenarios(browser: Browser) {
     const items = ['Bronze axe', 'Iron axe', 'Steel axe', 'Black axe', 'Mithril axe', 'Adamant axe', 'Rune axe', 'Dragon axe']
       .map(name => ({ name, carried: 0, noted: 0, bank: mode === 'f2p' ? Number(name === 'Black axe') : Number(['Rune axe', 'Dragon axe'].includes(name)) }));
     const { page, errors } = await open(browser, 1280, {
-      market: true, progress: progressBefore('S6-03', { gameMode: mode, levels: stats }),
-      localStorage: { 'osrs-put:active-step': 'S6-03', 'osrs-put:skill-track': JSON.stringify({ skill: 'woodcutting', mode: 'fast', freeOnly, target: level + 4 }) },
-      status: { protocol: 6, inGame: true, player: 'Scoped Tool', activeStepId: 'S6-03', questsDone: [], stats, ...gear },
+      market: true, progress: progressBefore('S6-02', { gameMode: mode, levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-02', 'osrs-put:skill-track': JSON.stringify({ skill: 'woodcutting', mode: 'fast', freeOnly, target: level + 4 }) },
+      status: { protocol: 6, inGame: true, player: 'Scoped Tool', activeStepId: 'S6-02', questsDone: [], stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/skills/WC/woodcutting');
     await page.locator('.training-follow').waitFor();
@@ -388,7 +388,7 @@ async function trainingScopeScenarios(browser: Browser) {
 async function fishingStep(browser: Browser) {
   for (const width of [1280]) {
     const { page, errors } = await open(browser, width, {
-      progress: progressBefore('S6-02', { gameMode: 'f2p', levels: { fishing: 45 } }),
+      progress: progressBefore('S6-01', { gameMode: 'f2p', levels: { fishing: 45 } }),
       localStorage: { 'osrs-put:features': JSON.stringify({ efficient: true }) },
       status: { protocol: 6, stats: { fishing: 45 } }, events: [{ type: 'STATS', stats: { fishing: 45 } }],
     }, '#/skills/FI');
@@ -404,7 +404,7 @@ async function fishingStep(browser: Browser) {
     expect(recommendation.includes('fly fishing'), `skill bracket (${width}): an unlocked faster method remains selectable after its suggested range`);
     expect(/\bto 50\b/.test(content) && !content.includes('to level 40') && !/≈ 0 more/.test(content), `skill bracket (${width}): the card retains the future route goal without an expired action target`);
     expect(await noOverflow(page) && !errors.length, `skill bracket (${width}): no overflow or console errors`);
-    await page.evaluate(() => { location.hash = '#/step/S6-02'; });
+    await page.evaluate(() => { location.hash = '#/step/S6-01'; });
     await settle(page);
     await page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
     expect(!(await page.locator('.spot-switch').allTextContents()).join(' ').includes('Musa Point'), `method map (${width}): the current method does not offer a future climb spot`);

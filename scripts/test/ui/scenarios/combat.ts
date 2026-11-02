@@ -186,11 +186,11 @@ async function magicRouteScenarios(browser: Browser) {
     const stats = { magic: 1, smithing: 15 };
     const gear = { equipment: [], inventory: [], coins: 0, bankCoins: 0 };
     const { page, errors } = await open(browser, width, {
-      market: true, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: stats }),
-      localStorage: { 'osrs-put:active-step': 'S6-04' },
-      status: { protocol: 6, inGame: true, activeStepId: 'S6-04', player: 'Magic Supplies', stats, ...gear },
+      market: true, progress: progressBefore('S6-03', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-03' },
+      status: { protocol: 6, inGame: true, activeStepId: 'S6-03', player: 'Magic Supplies', stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: stock({}) }],
-    }, '#/step/S6-04');
+    }, '#/step/S6-03');
     const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
     const initial = await snapshot();
     expect(initial?.step?.checklist?.some((r: any) => r.name === 'Mind rune' && r.count === 100) && !initial.step.checklist.some((r: any) => r.name === 'Nature rune'), `magic (${width}): a beginner gets actual Strike inputs instead of a nature-only placeholder`);

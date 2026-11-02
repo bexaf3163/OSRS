@@ -69,7 +69,7 @@ describe('followed skills use the shared staged route', () => {
     expect(parseTracked({ skill: 'ranged', mode: 'fast', target: 100 })).toBeNull();
   });
   it('overrides the wire step without overwriting the quest; unknown training can suppress the quest and stopping restores it', () => {
-    const quest = toInGameTarget(stepById.get('S6-01')!)!;
+    const quest = toInGameTarget(stepById.get('S6-04')!)!;
     const training = toInGameTarget(plan(20)!.step)!;
     expect(training.stepId).toMatch(/^S0-\d{2}$/);
     const original = { ...EMPTY_PARTS, step: quest };

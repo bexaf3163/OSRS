@@ -18,7 +18,7 @@ function character(levels: Record<string, number> = { prayer: 1, fishing: 7, coo
   });
 }
 function projected() {
-  const base = stepById.get('S6-01')!;
+  const base = stepById.get('S6-04')!;
   return withTrainingMethod({ ...base, requires: [], requirements: [], minQp: undefined, followsMethod: 'prayer',
     inGame: { ...base.inGame!, completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill: 'prayer', level: 2 }] } },
   }, { methodId: method.id, needs: method.needs, untilLevel: 2 });

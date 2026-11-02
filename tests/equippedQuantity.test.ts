@@ -9,7 +9,7 @@ import { contextOf } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import type { GearItem } from '../src/services/runeliteBridge';
 
-const step = { ...stepById.get('S6-02')!, id: 'TEST-AMMO', requirements: [], itemsRecommended: [],
+const step = { ...stepById.get('S6-01')!, id: 'TEST-AMMO', requirements: [], itemsRecommended: [],
   itemsRequired: [{ nameEn: 'Bronze arrow', wikiItemId: 882, amount: 100, equip: true, howToGet: 'Equip a starter stack.' }] };
 function scenario(worn: GearItem[] | null, carried = 100, bank = 0) {
   const progress = emptyProgress();

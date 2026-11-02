@@ -212,7 +212,7 @@ public class LedgerGuideTest
 			new HudModel.Line(HudModel.Icon.NEXT, "Ranged to 40: prepare your kit", null, HudModel.Tone.TEXT, false, GuideList.Action.NONE, null),
 			new HudModel.Line(HudModel.Icon.GO, "Seagulls at Port Sarim", null, HudModel.Tone.LINK, true, GuideList.Action.NONE, null));
 		HudModel.Card c = new HudModel.Card(HudModel.Icon.GO, HudModel.Tone.TEXT, "Get Iron arrow", "Iron arrow: 0 / 100", null, 0, null,
-			"Then: Ranged to 40: prepare your kit", "S6-01 · Ranged to 40: prepare your kit", java.util.Collections.emptyList(),
+			"Then: Ranged to 40: prepare your kit", "S6-04 · Ranged to 40: prepare your kit", java.util.Collections.emptyList(),
 			java.util.Collections.emptyList(), next, java.util.Collections.emptyList());
 		OsrsPathGuideOverlay.Row foot = layout(c, LedgerGuide.NOW, LedgerGuide.WIDTH, 1f, 2000).getRows().stream()
 			.filter(r -> r.getPart() == OsrsPathGuideOverlay.Part.FOOT).findFirst().orElse(null);

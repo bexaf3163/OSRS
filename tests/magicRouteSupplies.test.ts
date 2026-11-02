@@ -10,7 +10,7 @@ import { contextOf } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 
-const base = stepById.get('S6-04')!;
+const base = stepById.get('S6-03')!;
 function scenario(magic: number | null, smithing: number | null = 15, stock: Record<string, { carried?: number; bank?: number }> = {}, fireStaff = false, unread = false) {
   const progress = emptyProgress();
   for (const s of allSteps) { if (s.id === base.id) break; progress.steps[s.id] = 'done'; }
@@ -25,7 +25,7 @@ function scenario(magic: number | null, smithing: number | null = 15, stock: Rec
   return { state, pick, step, engine, payload: toInGameTarget(step)! };
 }
 
-describe('S6-04 spell-dependent supplies', () => {
+describe('S6-03 spell-dependent supplies', () => {
   it.each([1, 25, 35])('Magic%s without confirmed higher-spell inputs gets real Wind Strike runes instead of nature-only preparation', level => {
     const s = scenario(level);
     expect(s.pick).toMatchObject({ methodId: 'ma-strike', name: 'Wind Strike on Cow / Chicken' });

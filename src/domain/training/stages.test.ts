@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { buildPlayerState } from '../player/playerState';
 import { emptyProgress } from '../persistence/progress';
-import { adviseTraining, methodNeeds, trainingMethods } from './trainingRouter';
+import { adviseTraining, methodNeeds, trainingMethods, viewMethod } from './trainingRouter';
+import { gearData } from '../combat/gearAdvisor';
 import { stagesOf, toolTierAt, withPlannedKit } from './stages';
 
 const player = (skill: string, level: number) =>
@@ -57,5 +58,20 @@ describe('the melee kit of a trainer', () => {
     expect(names).toEqual(expect.arrayContaining(['Bronze scimitar', 'Amulet of strength', 'Adamant platelegs']));
     expect(names.filter((n) => /scimitar|sword|mace|axe/i.test(n))).toEqual(['Bronze scimitar']);
     expect(methodNeeds(trainingMethods.find((m) => m.id === 'me-monk')!, state, null).some((n) => n.type === 'item' && n.name === 'Adamant platelegs')).toBe(false);
+  });
+
+
+  it('keeps the best kit the levels allow when coins fall short, and reports the shortfall to earn', () => {
+    const poor = buildPlayerState({
+      mode: 'f2p', connected: true, stats: { attack: 30, strength: 30, defence: 30, hitpoints: 35 }, progress: emptyProgress(), questsDone: [],
+      gear: { equipment: [{ id: 1321, name: 'Bronze scimitar', slot: 'weapon', count: 1 }], inventory: [], coins: 1_000, bankCoins: 0 },
+      // The plugin watches the step's items, so after a bank read the kit reports as absent, not unread.
+      owned: { bankSeen: true, items: new Map(gearData.items.map((i) => [i.name.toLowerCase(), { name: i.name, carried: 0, noted: 0, bank: 0 }])) },
+    } as never);
+    const prices = { status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, sell: () => null,
+      buy: () => ({ price: 500, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] }) };
+    const monks = trainingMethods.find((m) => m.id === 'me-monk')!;
+    expect(methodNeeds(monks, poor, prices as never).some((n) => n.type === 'item' && n.name === 'Adamant platebody')).toBe(true);
+    expect(viewMethod(monks, poor, prices as never).fundingShortfall).toBeGreaterThan(0);
   });
 });
