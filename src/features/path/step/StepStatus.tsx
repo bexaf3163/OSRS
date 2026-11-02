@@ -38,7 +38,7 @@ import { FoodAdvice } from '../combat/FoodAdvice';
 import { StepMap } from '../../map/StepMap';
 import { InGamePanel } from '../InGamePanel';
 import { TravelPlan } from '../prep/TravelPlan';
-import { StepTraining } from '../../skills/TrainingCard';
+import { F2pStops, StepTraining } from '../../skills/TrainingCard';
 import { BranchSuggestions } from '../BranchSuggestions';
 import { TravelTip } from '../prep/TravelTip';
 
@@ -200,7 +200,7 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
       {!headline && open && current === 'route' && (
         <div className="status-panel" role="tabpanel"><StepMap step={step} /><InGamePanel step={step} /><TravelPlan step={step} /></div>
       )}
-      {!headline && panel('plan', <><StepTraining step={step} /><BranchSuggestions step={step} /></>)}
+      {!headline && panel('plan', <><StepTraining step={step} /><BranchSuggestions step={step} />{step.bondBranch && step.type === 'prep' && <F2pStops />}</>)}
     </section>
   );
 }

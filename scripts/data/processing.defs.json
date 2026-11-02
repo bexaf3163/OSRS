@@ -174,6 +174,36 @@
       "facility": null
     },
     {
+      "id": "leather-cowl",
+      "page": "Leather cowl",
+      "skill": "crafting",
+      "facility": null
+    },
+    {
+      "id": "leather-vambraces",
+      "page": "Leather vambraces",
+      "skill": "crafting",
+      "facility": null
+    },
+    {
+      "id": "leather-body",
+      "page": "Leather body",
+      "skill": "crafting",
+      "facility": null
+    },
+    {
+      "id": "leather-chaps",
+      "page": "Leather chaps",
+      "skill": "crafting",
+      "facility": null
+    },
+    {
+      "id": "hardleather-body",
+      "page": "Hardleather body",
+      "skill": "crafting",
+      "facility": null
+    },
+    {
       "id": "gold-ring",
       "page": "Gold ring",
       "skill": "crafting",
@@ -669,7 +699,11 @@
     ],
     "cr-leather": [
       "leather-gloves",
-      "leather-boots"
+      "leather-boots",
+      "leather-cowl",
+      "leather-vambraces",
+      "leather-body",
+      "leather-chaps"
     ],
     "cr-gold": [
       "gold-ring",
@@ -775,6 +809,9 @@
       "mithril-bar",
       "adamantite-bar",
       "runite-bar"
+    ],
+    "cr-hardleather": [
+      "hardleather-body"
     ]
   },
   "light": {

@@ -34,7 +34,7 @@
       "id": "wc-oak",
       "skill": "woodcutting",
       "from": 15,
-      "to": 30,
+      "to": 60,
       "name": "Oak trees",
       "members": false,
       "needs": [
@@ -1030,8 +1030,8 @@
       "id": "cr-leather",
       "skill": "crafting",
       "from": 1,
-      "to": 9,
-      "name": "Leather gloves and boots",
+      "to": 28,
+      "name": "Leather armour (gloves to chaps)",
       "members": false,
       "needs": [
         {
@@ -1049,6 +1049,31 @@
       "where": "By a bank (leather from Al Kharid)",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Crafting_training",
       "place": "Al Kharid Bank"
+    },
+    {
+      "id": "cr-hardleather",
+      "skill": "crafting",
+      "from": 28,
+      "to": null,
+      "name": "Hardleather bodies",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Needle"
+        },
+        {
+          "type": "item",
+          "name": "Thread"
+        }
+      ],
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "By a bank (hard leather from the Al Kharid tanner)",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Crafting_training",
+      "place": "Al Kharid Bank",
+      "note": "The best F2P armour crafting: about 91,000 XP/h with banked hard leather, needle and thread (OSRS Wiki, checked 2026-11-02)."
     },
     {
       "id": "cr-gold",
@@ -1791,6 +1816,53 @@
       "kit": "f2p-bow",
       "npcNames": [
         "Flesh Crawler"
+      ]
+    },
+    {
+      "id": "ra-brutus",
+      "skill": "ranged",
+      "from": 1,
+      "suggestedFrom": 15,
+      "to": null,
+      "name": "Brutus from a safespot",
+      "members": false,
+      "effort": "high",
+      "cost": "cost",
+      "risk": "medium",
+      "where": "Brutus's pen in the cow field east of Lumbridge",
+      "note": "The best F2P Ranged XP: about 45,000–50,000 XP/h at Ranged 63 with adamant arrows (OSRS Wiki, checked 2026-11-02). Rotate between the safespots of the Brutus strategy page and bring enough arrows to stay there; he hits up to 19 if he reaches you. Ringing the cowbell amulet shortens his respawn.",
+      "url": "https://oldschool.runescape.wiki/w/Brutus/Strategies",
+      "place": "Lumbridge",
+      "kit": "f2p-bow",
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "The Ides of Milk"
+        },
+        {
+          "type": "item",
+          "name": "Shortbow",
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Bronze arrow",
+          "count": 100,
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Salmon",
+          "count": 10,
+          "anyOf": [
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
+        }
+      ],
+      "npcNames": [
+        "Brutus"
       ]
     },
     {

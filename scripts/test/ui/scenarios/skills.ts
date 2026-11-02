@@ -336,7 +336,7 @@ async function miningHandoverScenarios(browser: Browser) {
     const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
     const mining = await snapshot();
     expect(mining?.step?.worldPoint?.label?.includes('South-east Varrock mine') && JSON.stringify(mining.step.objectNames) === JSON.stringify(['Iron rocks']), `Mining handover (${width}): current Mining task has only iron scenery`);
-    for (const [level, object, place] of [[1, 'Tree', 'Lumbridge'], [15, 'Oak tree', 'Draynor Bank'], [30, 'Willow tree', 'Port Sarim']] as const) {
+    for (const [level, object, place] of [[1, 'Tree', 'Lumbridge'], [15, 'Oak tree', 'Draynor Bank'], [30, 'Oak tree', 'Draynor Bank']] as const) { // Oaks until 60 when logs are dropped (OSRS Wiki).
       await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { mining: 45, woodcutting: level, firemaking: 1 });
       await settle(page);
       const current = await snapshot();

@@ -666,6 +666,151 @@
       "source": "https://oldschool.runescape.wiki/w/Leather_boots"
     },
     {
+      "id": "leather-cowl",
+      "skill": "crafting",
+      "level": 9,
+      "xp": 18.5,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Needle"
+      ],
+      "inputs": [
+        {
+          "name": "Leather",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Thread",
+          "qty": 0.2,
+          "stacks": true,
+          "initialReserve": 0.8
+        }
+      ],
+      "output": {
+        "name": "Leather cowl",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Leather_cowl"
+    },
+    {
+      "id": "leather-vambraces",
+      "skill": "crafting",
+      "level": 11,
+      "xp": 22,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Needle"
+      ],
+      "inputs": [
+        {
+          "name": "Leather",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Thread",
+          "qty": 0.2,
+          "stacks": true,
+          "initialReserve": 0.8
+        }
+      ],
+      "output": {
+        "name": "Leather vambraces",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Leather_vambraces"
+    },
+    {
+      "id": "leather-body",
+      "skill": "crafting",
+      "level": 14,
+      "xp": 25,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Needle"
+      ],
+      "inputs": [
+        {
+          "name": "Leather",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Thread",
+          "qty": 0.2,
+          "stacks": true,
+          "initialReserve": 0.8
+        }
+      ],
+      "output": {
+        "name": "Leather body",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Leather_body"
+    },
+    {
+      "id": "leather-chaps",
+      "skill": "crafting",
+      "level": 18,
+      "xp": 27,
+      "ticks": 3,
+      "facility": null,
+      "tools": [
+        "Needle"
+      ],
+      "inputs": [
+        {
+          "name": "Leather",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Thread",
+          "qty": 0.2,
+          "stacks": true,
+          "initialReserve": 0.8
+        }
+      ],
+      "output": {
+        "name": "Leather chaps",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Leather_chaps"
+    },
+    {
+      "id": "hardleather-body",
+      "skill": "crafting",
+      "level": 28,
+      "xp": 35,
+      "ticks": 2,
+      "facility": null,
+      "tools": [
+        "Needle"
+      ],
+      "inputs": [
+        {
+          "name": "Hard leather",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Thread",
+          "qty": 0.2,
+          "stacks": true,
+          "initialReserve": 0.8
+        }
+      ],
+      "output": {
+        "name": "Hardleather body",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Hardleather_body"
+    },
+    {
       "id": "gold-ring",
       "skill": "crafting",
       "level": 5,
@@ -2304,7 +2449,11 @@
     ],
     "cr-leather": [
       "leather-gloves",
-      "leather-boots"
+      "leather-boots",
+      "leather-cowl",
+      "leather-vambraces",
+      "leather-body",
+      "leather-chaps"
     ],
     "cr-gold": [
       "gold-ring",
@@ -2410,6 +2559,9 @@
       "mithril-bar",
       "adamantite-bar",
       "runite-bar"
+    ],
+    "cr-hardleather": [
+      "hardleather-body"
     ]
   }
 }

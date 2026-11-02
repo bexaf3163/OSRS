@@ -21,7 +21,7 @@ Catalogue-backed followed Skills (2.81.6) use the same staged training, preparat
 | attack | free to 99, members to 99 | 22 steps (16 free), levels 1-99 | 11 (10 free) | free route 40, whole route 49 | none | automated data checks; not verified in the game |
 | strength | free to 99, members to 99 | 21 steps (17 free), levels 1-99 | 11 (10 free) | free route 35, whole route 39 | none | automated data checks; not verified in the game |
 | defence | free to 99, members to 99 | 20 steps (17 free), levels 1-99 | 11 (10 free) | free route 33, whole route 34 | none | automated data checks; not verified in the game |
-| ranged | free to 99, members to 99 | 14 steps (11 free), levels 1-99 | 7 (7 free) | free route 40, whole route 40 | none | automated data checks; not verified in the game |
+| ranged | free to 99, members to 99 | 14 steps (11 free), levels 1-99 | 8 (8 free) | free route 40, whole route 40 | none | automated data checks; not verified in the game |
 | prayer | free to 99, members to 99 | 9 steps (8 free), levels 1-99 | 4 (4 free) | free route 15, whole route 43 | none | automated data checks; not verified in the game |
 | magic | free to 99, members to 99 | 13 steps (13 free), levels 1-99 | 6 (6 free) | free route 55, whole route 55 | none | automated data checks; not verified in the game |
 | runecraft | free to 99, members to 99 | 8 steps (5 free), levels 1-99 | 4 (4 free) | not asked | none | automated data checks; not verified in the game |
@@ -30,7 +30,7 @@ Catalogue-backed followed Skills (2.81.6) use the same staged training, preparat
 | agility | members only | 14 steps (0 free), levels 1-99 | 9 (0 free) | free route -, whole route 31 | none | automated data checks; not verified in the game |
 | herblore | members only | 4 steps (0 free), levels 1-99 | 2 (0 free) | not asked | none | automated data checks; not verified in the game |
 | thieving | members only | 5 steps (0 free), levels 1-99 | 5 (0 free) | not asked | none | automated data checks; not verified in the game |
-| crafting | free to 99, members to 99 | 8 steps (6 free), levels 1-99 | 4 (4 free) | free route 8, whole route 31 | none | automated data checks; not verified in the game |
+| crafting | free to 99, members to 99 | 8 steps (6 free), levels 1-99 | 5 (5 free) | free route 8, whole route 31 | none | automated data checks; not verified in the game |
 | fletching | members only | 8 steps (0 free), levels 1-99 | 6 (0 free) | not asked | none | automated data checks; not verified in the game |
 | slayer | members only | 3 steps (0 free), levels 1-99 | none: guide-only or passive skill | free route -, whole route 20 | none | automated data checks; not verified in the game |
 | hunter | members only | 10 steps (0 free), levels 1-99 | none: guide-only or passive skill | not asked | none | automated data checks; not verified in the game |
@@ -42,7 +42,7 @@ Catalogue-backed followed Skills (2.81.6) use the same staged training, preparat
 | woodcutting | free to 99, members to 99 | 11 steps (7 free), levels 1-99 | 6 (4 free) | free route 36, whole route 36 | none | automated data checks; not verified in the game |
 | farming | members only | 3 steps (0 free), levels 1-99 | 3 (0 free) | not asked | none | automated data checks; not verified in the game |
 
-Catalogue: 97 entries. Skills with no catalogue method are guide-only, except passive Hitpoints; none is presented as a personalized engine plan.
+Catalogue: 99 entries. Skills with no catalogue method are guide-only, except passive Hitpoints; none is presented as a personalized engine plan.
 
 ## Personalized engine support
 
@@ -53,7 +53,7 @@ Counts below mean a method has a shared model dispatch, not that every item, spe
 | attack | 10: combat | 1 |
 | strength | 10: combat | 1 |
 | defence | 10: combat | 1 |
-| ranged | 7: combat | 0 |
+| ranged | 8: combat | 0 |
 | prayer | 2: processing | 2 |
 | magic | 2: combat, processing | 4 |
 | runecraft | 4: processing | 0 |
@@ -62,7 +62,7 @@ Counts below mean a method has a shared model dispatch, not that every item, spe
 | agility | none | 9 |
 | herblore | 2: processing | 0 |
 | thieving | none | 5 |
-| crafting | 4: processing | 0 |
+| crafting | 5: processing | 0 |
 | fletching | 6: processing | 0 |
 | slayer | none | 0 |
 | hunter | none | 0 |

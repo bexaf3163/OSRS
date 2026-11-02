@@ -133,7 +133,7 @@ describe('one coherent Mining/Woodcutting handover', () => {
     expect(s.payload.completionTrigger).toEqual(mining.inGame!.completionTrigger);
     expect(s.engine.readiness(s.step).requirements.find(r => r.item === 'Bronze pickaxe')?.state).toBe('OK');
   });
-  it.each([[1, 'wc-tree', 'Tree'], [15, 'wc-oak', 'Oak tree'], [30, 'wc-willow', 'Willow tree'], [59, 'wc-willow', 'Willow tree']] as const)(
+  it.each([[1, 'wc-tree', 'Tree'], [15, 'wc-oak', 'Oak tree'], [30, 'wc-oak', 'Oak tree'], [59, 'wc-oak', 'Oak tree']] as const)( // Dropped logs: oaks beat willows until 60 (OSRS Wiki).
     'Mining60/Woodcutting%s switches supplies, scene and task together', (level, pick, object) => {
       const s = scenario({ mining: 60, woodcutting: level }, { 'Bronze axe': { bank: 1 }, 'Rune pickaxe': { carried: 1 } }, mining);
       expect(s.pick).toBe(pick);
@@ -146,7 +146,7 @@ describe('one coherent Mining/Woodcutting handover', () => {
       expect(s.payload.completionTrigger).toEqual(mining.inGame!.completionTrigger);
       expect(chosenSpotOf(s.pick!, s.payload.worldPoint?.label)).toBe(true);
       if (level >= 30) {
-        expect(s.step.how).toContain('Willow trees');
+        expect(s.step.how).toContain('Oak trees');
       }
     });
   it('does not treat an unread primary skill as ready or complete', () => {

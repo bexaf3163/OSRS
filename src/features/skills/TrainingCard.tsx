@@ -20,7 +20,7 @@ import { xpForLevel } from '../../domain/player/xp';
 import type { NavTargetPayload } from '../../services/runeliteBridge';
 import { NavigateButton } from '../../ui/NavigateButton';
 import { usePriceView } from '../../state/hooks/usePriceView';
-import { f2pAdviceFor } from '../../domain/training/f2pSkillAdvice';
+import { F2P_SKILL_ADVICE, f2pAdviceFor } from '../../domain/training/f2pSkillAdvice';
 import { useTradeRestriction } from '../../state/hooks/useTradeRestriction';
 import { trackedPriority, trackedTrainingContext } from '../../domain/training/skillTrack';
 import { setTracked, useTracked } from '../../state/hooks/useTracked';
@@ -231,7 +231,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
         <p className="small muted">📜 Some levels are covered by quests: {advice.quests.map((q) => q.name).join('; ')}.</p>
       )}
       </DetailSection>}
-      {view === 'analysis' && state.mode === 'f2p' && <MembersFromHere skill={skill} />}
+      {state.mode === 'f2p' && <MembersFromHere skill={skill} />}
       {showOthers && (
         <DetailSection className="small">
           <DetailHeading>Other methods{view === 'full' ? `: ${advice.others.length}` : ''}</DetailHeading>
@@ -290,3 +290,18 @@ function MembersFromHere({ skill }: { skill: string }) {
     </section>
   );
 }
+
+/** The membership decision: every skill's F2P stop beside what membership gives from there (the Optional chapter's summary). */
+export function F2pStops() {
+  return (
+    <section className="section small stage-members" aria-label="Where F2P stops">
+      <h3>Where F2P stops and membership pays more</h3>
+      <ul>
+        {Object.entries(F2P_SKILL_ADVICE).filter(([, a]) => a.priority !== 'passive').map(([id, a]) => (
+          <li key={id}><strong>{skillTitle(id)}{a.target !== null ? ` ${a.target}` : ''}</strong> · {a.comparison}</li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
