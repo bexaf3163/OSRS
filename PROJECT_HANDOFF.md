@@ -160,7 +160,7 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ### P2 — finish staged Skills and Optional review with the existing engines
 
-Review melee, Ranged, Magic and the peaceful skills against docs/SKILLS_COVERAGE.md. For each supported skill verify: (1) level, target and account scope; (2) a practical first method with kit, consumables, restrictions and costs; (3) automatic preparation, banking, acquisition, funding and resumption; (4) worthwhile method and equipment changes as levels rise; (5) logical F2P stopping guidance and Optional order per route target; (6) correct next action and completion with no contradicting static advice.
+Review melee, Ranged, Magic and the peaceful skills against docs/SKILLS_COVERAGE.md. Done: Mining and Magic (2.81.33); Plan lists stages (`stages.ts`), later legs rated with the kit they recommend. Next, in route order: Ranged, Fishing/Cooking, Woodcutting/Firemaking, the rest, members skills; each fixes its S6 continuation-review row. For each supported skill verify: (1) level, target and account scope; (2) a practical first method with kit, consumables, restrictions and costs; (3) automatic preparation, banking, acquisition, funding and resumption; (4) worthwhile method and equipment changes as levels rise; (5) logical F2P stopping guidance and Optional order per route target; (6) correct next action and completion with no contradicting static advice.
 
 Add missing mechanics to shared contracts with synthetic-content regressions, never per-skill copies. Open: models for the three manual references, Camdozaal full-cycle rates (catch chances, failures, phases), bonfire/Wintertodt Firemaking, remaining gathering/Prayer/Runecraft edge cases. The four Runecraft adapters (altar surface entry, talisman/tiara, rune/pure essence, per-essence XP versus multiple-rune yield) and the Firemaking, Prayer and Superheat adapters exist; do not rebuild them.
 
@@ -219,7 +219,7 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 
 2.81.20–30 (S1, S3–S8, S10, C1, S11, X2, X8, X9; no visible change): largest folder 139 → 19 files, 0 layer violations (from 29), files importing JSON directly 49 → 0; 874 browser checks in 131–158 s (from 319 s); splits: `OsrsPathBridgePlugin` 4,231 → 797 lines plus eight section classes, `HudModel` 1,175 → 468, `ActiveTarget` 1,078 → 298, `src/types` in seven topic files (bundle byte-identical), `runeliteBridge.ts` 627 → 522, `BridgeServer` 1,162 → 796, `bridge.tsx` 881 → 60 (state in `bridgeCore.ts`), `styles.css` in 14 files (byte-identical); files over 1,000 lines 5 → 0; knip fails on dead exports (15 removed). Local gates pass (2,519 unit, 874 browser, 95 Electron, 648 Java).
 
-2.81.31–32 (owner's pick): Ledger is the only HUD look, drawn once per change (84–254 against 154–634 µs per frame); checked in game 2026-11-02 (tabs, Next line, hints, collapse, link); Classic, Glass and Sora deleted; 643 Java tests.
+2.81.31–32: Ledger is the only HUD look (84–254 µs per frame), checked in game 2026-11-02; Classic, Glass and Sora deleted; 643 Java tests.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt

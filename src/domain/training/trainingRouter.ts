@@ -11,6 +11,7 @@ import { nameKey } from '../items/itemKey';
 
 import type { GameMode, Progress, Step } from '../../types';
 import { trainingMethodsJson as methodsJson, toolProgressionJson } from '../../data';
+import { withPlannedKit } from './stages';
 import { toolUse } from '../items/toolTiers';
 import { evaluate, itemRequirement, type ReqState, type Requirement } from '../player/requirements';
 import { coinsOf, heldExact, levelOf, questOf, type PlayerState } from '../player/playerState';
@@ -18,7 +19,7 @@ import { isClosed } from '../quests/next-step';
 import { xpForLevel } from '../player/xp';
 import type { MethodPriority, PlayStyle } from '../persistence/playStyle';
 import { rangedEquipment, rangedNeeds, RANGED_WATCH } from '../combat/rangedLoadout';
-import { SPELLS, STAFFS, strikeRecipe, superheatNeeds } from '../combat/magicPlan';
+import { SPELLS, STAFFS, isCombatSpell, strikeRecipe, superheatNeeds } from '../combat/magicPlan';
 import { STYLE_GEAR } from '../combat/styleGear';
 import { PROCESSING } from './processingRates';
 import { adviseGear, canWear, gearData, gearPieceByName, stepFoes, type Levels } from '../combat/gearAdvisor';
@@ -225,7 +226,7 @@ export function preparationNeeds(advice: Pick<TrainingAdvice, 'best' | 'upgrade'
   const upgradePiece = advice.upgrade?.tool ? gearPieceByName(advice.upgrade.tool) : null;
   if (method.kit === 'strike-spell' && upgradePiece?.slot === 'weapon' && !advice.upgrade?.needs) {
     const supplies = new Set([
-      ...SPELLS.filter(spell => spell.id.endsWith('-strike')).flatMap(spell => Object.keys(spell.runes).map(element => `${element} rune`)),
+      ...SPELLS.filter(isCombatSpell).flatMap(spell => Object.keys(spell.runes).map(element => `${element} rune`)),
       ...Object.values(STAFFS).map(staff => nameKey(staff.name)),
     ]);
     const isSupply = (need: MethodNeed) => need.type === 'item' && supplies.has(nameKey(need.name));
@@ -563,7 +564,7 @@ function netCoinsPerHour(m: TrainingMethod): number | null {
 }
 
 /** "≈ 8k–11k XP per hour", "for you" when it is the model's figure for this player. */
-const rateText = (m: TrainingMethod) => {
+export const rateText = (m: TrainingMethod) => {
   const r = m.xph!;
   return `${fmtK(r[0]) === fmtK(r[1]) ? `≈ ${fmtK(r[0])}` : `≈ ${fmtK(r[0])}–${fmtK(r[1])}`} XP per hour${m.rateSource === 'model' ? ' for you' : ''}`;
 };
@@ -689,7 +690,8 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
     // then compared on its own model rate, not on the wiki's guide against today's model rates.
     if (lv === level || lv % FORECAST_STEP === 0 || milestones.has(lv)) ratedAt = lv;
     const at = ratedAt;
-    const projected = atLevel(projectedState, skill, lv);
+    // Later legs carry the kit their stage recommends, so the rate matches the advice.
+    const projected = lv === level ? atLevel(projectedState, skill, lv) : withPlannedKit(atLevel(projectedState, skill, lv), skill, lv, level);
     const methods = at === level ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(projected, skill, at), input.prices, input.restriction, priority);
     // Advance only this skill in a copy; other skill/quest entry proofs must still be satisfied.
     const cands = methodsFor(skill, methods).filter((m) => !m.manualSetup && recommendedAt(m, lv, input.mode)).map((m) => viewMethod(m, projected, input.prices)).filter((v) => v.status !== 'LOCKED');

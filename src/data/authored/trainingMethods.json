@@ -394,8 +394,8 @@
         }
       ],
       "xph": [
-        45000,
-        55000
+        20000,
+        50000
       ],
       "xpa": 35,
       "act": "ore",
@@ -403,8 +403,8 @@
       "cost": "free",
       "risk": "none",
       "where": "South-east Varrock mine; use the iron rocks.",
-      "note": "Drop unwanted ore for XP or bank it if you need the materials. Use a pickaxe your Mining level allows; it can stay in your bag. The app avoids a mine whose monsters would attack you (the scorpions of Al Kharid mine attack combat level 28 or lower).",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Mining_training",
+      "note": "Drop unwanted ore for XP or bank it if you need the materials. Use a pickaxe your Mining level allows; it can stay in your bag. The app avoids a mine whose monsters would attack you (the scorpions of Al Kharid mine attack combat level 28 or lower). About 50,000 XP/h from 41 with a rune pickaxe and three rocks in reach; lower tiers mine slower (OSRS Wiki, checked 2026-11-02).",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Mining_training",
       "place": "South-east Varrock mine",
       "objectNames": [
         "Iron rocks"
@@ -423,16 +423,36 @@
           "skill": "mining"
         }
       ],
-      "xph": [
-        45000,
-        55000
-      ],
+      "xph": null,
       "effort": "afk",
       "cost": "profit",
       "risk": "none",
       "where": "Motherlode Mine (Falador)",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Mining_training",
-      "manualSetup": "Reference method: set up the pay-dirt, hopper, sack and bank cycle manually. The complete processing route, yield and personalized rate are not modelled yet."
+      "manualSetup": "Reference method: set up the pay-dirt, hopper, sack and bank cycle manually. The complete processing route, yield and personalized rate are not modelled yet.",
+      "note": "The Wiki gives a rate only at level 90 with top gear (about 52,000–62,000 XP/h). Golden nuggets from the sack buy the prospector kit (+2.5% Mining XP) (OSRS Wiki, checked 2026-11-02)."
+    },
+    {
+      "id": "mi-granite",
+      "skill": "mining",
+      "from": 45,
+      "to": null,
+      "name": "Granite in the Desert Quarry",
+      "members": true,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "mining"
+        }
+      ],
+      "xph": null,
+      "effort": "high",
+      "cost": "free",
+      "risk": "low",
+      "where": "Desert Quarry, south of the Shantay Pass",
+      "note": "The fastest members Mining: about 87,000 XP/h at 45 rising to 126,000 at 99 with 3-tick mining; at most about 63,000 without tick manipulation. Bring waterskins against the desert heat (OSRS Wiki, checked 2026-11-02).",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Mining_training",
+      "manualSetup": "Reference method: waterskins and 3-tick mining are set up manually; the rate is not modelled yet."
     },
     {
       "id": "ag-gnome",

@@ -14,6 +14,8 @@ export interface Spell { id: string; name: string; level: number; xp: number; ru
 export interface Staff { name: string; id: number }
 
 export const SPELLS = spellsJson.spells as unknown as Spell[];
+/** The elemental combat spells: Strike, Bolt and Blast. */
+export const isCombatSpell = (s: Spell): boolean => /-(strike|bolt|blast)$/.test(s.id);
 export const RUNE_IDS = spellsJson.runeIds as Record<string, number>;
 export const STAFFS = spellsJson.staffs as Record<string, Staff>;
 export const COWHIDE_ID = spellsJson.cowhideId;
@@ -50,7 +52,7 @@ export function strikeRecipe(state: PlayerState, preparedWeapon?: string): { spe
   const staff = preparedWeapon !== undefined ? staves.find(([, s]) => s.name.toLowerCase() === preparedWeapon.toLowerCase())
     : staves.find(([, s]) => countWorn(worn, n => n.toLowerCase() === s.name.toLowerCase()).count > 0)
       ?? staves.find(([, s]) => (heldExact(state, s.name).total ?? 0) > 0);
-  const pool = SPELLS.filter(s => s.id.endsWith('-strike') && s.level <= (levelOf(state, 'magic') ?? 1));
+  const pool = SPELLS.filter((s) => isCombatSpell(s) && s.level <= (levelOf(state, 'magic') ?? 1));
   const spent = (s: Spell) => Object.entries(s.runes).filter(([element]) => element !== staff?.[0]);
   const spell = [...pool].reverse().find(s => spent(s).every(([element, qty]) => (heldExact(state, `${element[0].toUpperCase()}${element.slice(1)} rune`).total ?? 0) >= qty * 20)) ?? pool[0];
   const batch = spent(spell).every(([element, qty]) => (heldExact(state, `${element[0].toUpperCase()}${element.slice(1)} rune`).total ?? 0) >= qty * 20) ? 20 : 100;

@@ -44,7 +44,7 @@ const SPELL_TICKS = 5;
 /** Levels ahead the melee estimate is made for: long enough to average the rolls, short enough to stay "now". */
 const MELEE_LEVELS = 3;
 
-const MAX_HIT = (spellsJson as unknown as { maxHit: Record<'strike' | 'bolt', [number, number][]> }).maxHit;
+const MAX_HIT = (spellsJson as unknown as { maxHit: Record<'strike' | 'bolt' | 'blast', [number, number][]> }).maxHit;
 
 const MELEE = new Set(['attack', 'strength', 'defence']);
 
@@ -323,7 +323,8 @@ function magicKitRate(m: TrainingMethod, state: PlayerState, prices: PriceView |
     if (piece) equipment[piece.slot] = piece.name;
   }
   if (equipment.weapon && !gearPieceByName(equipment.weapon)) return null;
-  const maxHit = [...MAX_HIT.strike].reverse().find(([from]) => from <= level)?.[1];
+  const tier = spell.id.slice(spell.id.lastIndexOf('-') + 1) as keyof typeof MAX_HIT;
+  const maxHit = [...(MAX_HIT[tier] ?? [])].reverse().find(([from]) => from <= level)?.[1];
   if (!maxHit) return null;
   // The magic attack bonus of what is worn; an item the gear data does not know counts as 0.
   const bonus = Object.values(equipment).reduce((a, n) => a + (gearPieceByName(n)?.attack.magic ?? 0), 0);

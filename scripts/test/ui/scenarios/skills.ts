@@ -443,7 +443,8 @@ async function whatToTrainWith(browser: Browser) {
   await page.goto(`${BASE}#/skills/WC`);
   await waitFor(page, '.training', 5000);
   const fast = await text(page, '.training');
-  expect(/wiki speed/.test(fast), 'what to train with: "Fastest" shows the time and the speed "per the wiki"');
+  // The goal passes the rune axe (41): the time is a forecast across the plan with the planned axe.
+  expect(/across your plan/.test(fast), 'what to train with: "Fastest" shows the time across the plan');
   expect(!errors.length, `what to train with: no console errors ${errors.join('; ')}`);
   await page.context().close();
 }

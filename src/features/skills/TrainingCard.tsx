@@ -10,7 +10,8 @@ import { useBridge } from '../../state/bridge';
 import { usePlayerState } from '../../state/playerStateContext';
 import { setFeatures, useFeatures } from '../../state/hooks/useFeatures';
 import { priorityOf, styleOf } from '../../domain/persistence/playStyle';
-import { adviseTraining, formatHours, questTrainingStep, type MethodView, type TrainingAdvice } from '../../domain/training/trainingRouter';
+import { adviseTraining, formatHours, methodsFor, questTrainingStep, rateText, type MethodView, type TrainingAdvice } from '../../domain/training/trainingRouter';
+import { stagesOf } from '../../domain/training/stages';
 import { actionForm } from '../../domain/player/pacing';
 import { levelOf } from '../../domain/player/playerState';
 import { trainingNav } from '../../domain/training/trainingNav';
@@ -211,13 +212,26 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
       </>}
       {(advice.path.length > 1 || advice.quests.length > 0 || (view === 'analysis' && (advice.goalNeeds?.length ?? 0) > 0)) && <DetailSection className="small"><DetailHeading>Plan details</DetailHeading>
       {advice.path.length > 1 && (
-        <p className="small muted">Path: {advice.path.slice(0, 6).map((l) => `${l.fromLevel}–${l.toLevel} ${l.method.name}`).join(' → ')}{advice.path.length > 6 ? ' · Later stages update as you progress.' : ''}</p>
+        <ol className="stage-list" aria-label="Stages">
+              {stagesOf(advice.path, skill, state.mode).map((st, i) => (
+                <li key={st.fromLevel}>
+                  <span className="stage-levels">{st.fromLevel}–{st.toLevel}</span>
+                  <span>
+                    <strong>{st.leg.method.name}</strong>
+                    {st.leg.method.xph && <span className="muted"> · {rateText(st.leg.method)}</span>}
+                    {st.leg.method.where && <span className="stage-where muted">{st.leg.method.where}</span>}
+                    {st.changes.length > 0 && <span className="stage-new">{i === 0 ? 'Bring' : 'New'}: {st.changes.join(', ')}</span>}
+                  </span>
+                </li>
+              ))}
+            </ol>
       )}
       {view === 'analysis' && advice.goalNeeds && <p className="small muted">Conditional goal supplies (estimate): {advice.goalNeeds.flatMap(n => n.type === 'item' ? [`${n.name} ×${(n.count ?? 1).toLocaleString('en-US')}${n.anyOf?.length ? ' or the listed equivalent' : ''}`] : []).join(', ')}.{skill === 'ranged' ? ' Includes preparation buffers; assumes safe arrow recovery.' : ''} Future funding and product sales are not assumed.</p>}
       {advice.quests.length > 0 && (
         <p className="small muted">📜 Some levels are covered by quests: {advice.quests.map((q) => q.name).join('; ')}.</p>
       )}
       </DetailSection>}
+      {view === 'analysis' && state.mode === 'f2p' && <MembersFromHere skill={skill} />}
       {showOthers && (
         <DetailSection className="small">
           <DetailHeading>Other methods{view === 'full' ? `: ${advice.others.length}` : ''}</DetailHeading>
@@ -251,4 +265,28 @@ export function StepTraining({ step }: { step: Step }) {
   }, [ownMethod, trig, state, step.followsMethod]);
   if (!pick) return null;
   return <TrainingCard skill={pick.skill} target={pick.target} />;
+}
+
+/** On a free account: why the F2P checkpoint stops where it does and what membership opens by then, from the method catalogue. */
+function MembersFromHere({ skill }: { skill: string }) {
+  const f2p = f2pAdviceFor(skill);
+  if (!f2p) return null;
+  const stop = f2p.target;
+  const mid = (x: readonly number[] | null | undefined) => (x ? (x[0] + x[1]) / 2 : 0);
+  const members = methodsFor(skill)
+    .filter((m) => m.kind === 'method' && m.members && (stop === null || m.from <= stop))
+    .sort((a, b) => mid(b.xph) - mid(a.xph))
+    .slice(0, 3);
+  if (!members.length) return null;
+  return (
+    <section className="section small stage-members" aria-label="With membership">
+      <h3>{stop !== null ? `After ${stop}: with membership` : 'With membership'}</h3>
+      <p className="muted">{f2p.reason} {f2p.comparison}</p>
+      <ul>
+        {members.map((m) => (
+          <li key={m.id}><strong>{m.name}</strong> · from {m.from}{m.xph ? ` · ${rateText(m)}` : ''}{m.where ? ` · ${m.where}` : ''}</li>
+        ))}
+      </ul>
+    </section>
+  );
 }

@@ -1,9 +1,9 @@
 {
   "source": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
-  "checked": "2026-10-03",
+  "checked": "2026-11-02",
   "note": "Level, XP and runes come from the wiki spell cards (Infobox Spell). Spells of the same tier hit equally hard, and the choice does not affect accuracy. The Varrock and Lumbridge teleports also come from the wiki's spell cards (Infobox Spell): 35 and 41 XP per cast.",
   "maxHit": {
-    "source": "OSRS Wiki, Wind Strike and Wind Bolt: Damage (checked 2026-10-25). Every spell of a tier has the base max hit of the highest spell of that tier the Magic level unlocks.",
+    "source": "OSRS Wiki, Wind Strike, Wind Bolt and Wind Blast: Damage (checked 2026-11-02). Every spell of a tier has the base max hit of the highest spell of that tier the Magic level unlocks.",
     "strike": [
       [
         1,
@@ -38,6 +38,24 @@
       [
         35,
         12
+      ]
+    ],
+    "blast": [
+      [
+        41,
+        13
+      ],
+      [
+        47,
+        14
+      ],
+      [
+        53,
+        15
+      ],
+      [
+        59,
+        16
       ]
     ]
   },
@@ -90,6 +108,100 @@
       "element": "fire"
     },
     {
+      "id": "wind-bolt",
+      "name": "Wind Bolt",
+      "level": 17,
+      "xp": 13.5,
+      "runes": {
+        "air": 2,
+        "chaos": 1
+      },
+      "element": "air"
+    },
+    {
+      "id": "water-bolt",
+      "name": "Water Bolt",
+      "level": 23,
+      "xp": 16.5,
+      "runes": {
+        "water": 2,
+        "air": 2,
+        "chaos": 1
+      },
+      "element": "water"
+    },
+    {
+      "id": "earth-bolt",
+      "name": "Earth Bolt",
+      "level": 29,
+      "xp": 19.5,
+      "runes": {
+        "earth": 3,
+        "air": 2,
+        "chaos": 1
+      },
+      "element": "earth"
+    },
+    {
+      "id": "fire-bolt",
+      "name": "Fire Bolt",
+      "level": 35,
+      "xp": 22.5,
+      "runes": {
+        "fire": 4,
+        "air": 3,
+        "chaos": 1
+      },
+      "element": "fire"
+    },
+    {
+      "id": "wind-blast",
+      "name": "Wind Blast",
+      "level": 41,
+      "xp": 25.5,
+      "runes": {
+        "air": 3,
+        "death": 1
+      },
+      "element": "air"
+    },
+    {
+      "id": "water-blast",
+      "name": "Water Blast",
+      "level": 47,
+      "xp": 28.5,
+      "runes": {
+        "water": 3,
+        "air": 3,
+        "death": 1
+      },
+      "element": "water"
+    },
+    {
+      "id": "earth-blast",
+      "name": "Earth Blast",
+      "level": 53,
+      "xp": 31.5,
+      "runes": {
+        "earth": 4,
+        "air": 3,
+        "death": 1
+      },
+      "element": "earth"
+    },
+    {
+      "id": "fire-blast",
+      "name": "Fire Blast",
+      "level": 59,
+      "xp": 34.5,
+      "runes": {
+        "fire": 5,
+        "air": 4,
+        "death": 1
+      },
+      "element": "fire"
+    },
+    {
       "id": "varrock-teleport",
       "name": "Varrock Teleport",
       "level": 25,
@@ -120,7 +232,9 @@
     "water": 555,
     "earth": 557,
     "fire": 554,
-    "law": 563
+    "law": 563,
+    "chaos": 562,
+    "death": 560
   },
   "staffs": {
     "air": {

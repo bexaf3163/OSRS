@@ -16,7 +16,10 @@ const opt = (id: string) => OPTIONS.find((o) => o.id === id)!;
 describe('the magic plan', () => {
   it('the spell table — as on the wiki', () => {
     expect(SPELLS.map((s) => [s.name, s.level, s.xp])).toEqual([
-      ['Wind Strike', 1, 5.5], ['Water Strike', 5, 7.5], ['Earth Strike', 9, 9.5], ['Fire Strike', 13, 11.5], ['Varrock Teleport', 25, 35], ['Lumbridge Teleport', 31, 41],
+      ['Wind Strike', 1, 5.5], ['Water Strike', 5, 7.5], ['Earth Strike', 9, 9.5], ['Fire Strike', 13, 11.5],
+      ['Wind Bolt', 17, 13.5], ['Water Bolt', 23, 16.5], ['Earth Bolt', 29, 19.5], ['Fire Bolt', 35, 22.5],
+      ['Wind Blast', 41, 25.5], ['Water Blast', 47, 28.5], ['Earth Blast', 53, 31.5], ['Fire Blast', 59, 34.5],
+      ['Varrock Teleport', 25, 35], ['Lumbridge Teleport', 31, 41],
     ]);
     expect(spell('fire-strike').runes).toEqual({ fire: 3, air: 2, mind: 1 });
   });

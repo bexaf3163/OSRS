@@ -28,9 +28,9 @@ older save stays as "Fastest"; "Relaxed" keeps the old calm order.
 | S6-02 Fishing to 35 and Cooking to 35 | fishing 20 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 12k–15k XP per hour for you; almost no clicks; drop when full; feathers ≈ 600 gp per hour |
 | S6-02 Fishing to 35 and Cooking to 35 | fishing 30 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 23k–28k XP per hour for you; almost no clicks; drop when full; feathers ≈ 900 gp per hour |
 | S6-03 Mining to 45, Woodcutting to 36 and Firemaking to 50 | mining 1 (F2P) | Copper and tin | Copper and tin | ≈ 15k–20k XP per hour; almost no clicks |
-| S6-03 Mining to 45, Woodcutting to 36 and Firemaking to 50 | mining 20 (F2P) | Iron, dropping the ore | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
-| S6-03 Mining to 45, Woodcutting to 36 and Firemaking to 50 | mining 30 (F2P) | Iron, dropping the ore | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
-| S6-03 Mining to 45, Woodcutting to 36 and Firemaking to 50 | mining 40 (F2P) | Iron, dropping the ore | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
+| S6-03 Mining to 45, Woodcutting to 36 and Firemaking to 50 | mining 20 (F2P) | Iron, dropping the ore | Iron, dropping the ore | ≈ 20k–50k XP per hour; steady clicking |
+| S6-03 Mining to 45, Woodcutting to 36 and Firemaking to 50 | mining 30 (F2P) | Iron, dropping the ore | Iron, dropping the ore | ≈ 20k–50k XP per hour; steady clicking |
+| S6-03 Mining to 45, Woodcutting to 36 and Firemaking to 50 | mining 40 (F2P) | Iron, dropping the ore | Iron, dropping the ore | ≈ 20k–50k XP per hour; steady clicking |
 | S6-04 Magic to 55 (High Level Alchemy) | magic 1 (F2P) | Wind Strike on Cow / Chicken | Wind Strike on Cow / Chicken | needs full attention; small risk; material costs |
 | S6-04 Magic to 55 (High Level Alchemy) | magic 20 (F2P) | Wind Strike on Cow / Chicken | Wind Strike on Cow / Chicken | needs full attention; small risk; material costs |
 | S6-04 Magic to 55 (High Level Alchemy) | magic 30 (F2P) | Wind Strike on Cow / Chicken | Wind Strike on Cow / Chicken | needs full attention; small risk; material costs |

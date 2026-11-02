@@ -206,7 +206,7 @@ async function magicRouteScenarios(browser: Browser) {
     expect(remaining?.step?.checklist?.some((r: any) => r.name === 'Staff of fire' && r.equip) && remaining.step.checklist.some((r: any) => r.name === 'Iron ore' && r.count === 24) && !remaining.step.checklist.some((r: any) => r.name === 'Fire rune'), `magic (${width}): worn staff substitution and the remaining castable bag reach one snapshot`);
     await reveal(page, '.training:visible');
     expect((await text(page, '.training:visible')).includes('Superheat Item') && !(await text(page, '.training-recommendation')).includes('Alchemy'), `magic (${width}): desktop and game share the usable method`);
-    expect(Boolean((await page.locator('.training details').textContent())?.includes('manual setup')), `magic (${width}): unverified alternatives remain disclosed behind details`);
+    expect(Boolean((await page.locator('.training details', { hasText: 'Other methods' }).textContent())?.includes('manual setup')), `magic (${width}): unverified alternatives remain disclosed behind details`);
     expect(await noOverflow(page) && !errors.length, `magic (${width}): no overflow or runtime errors`);
     await page.context().close();
   }

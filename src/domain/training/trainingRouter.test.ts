@@ -135,7 +135,7 @@ describe('path, actions and time', () => {
     expect(a.path[0].fromLevel).toBe(1);
     expect(a.path[a.path.length - 1].toLevel).toBe(60);
     for (let i = 1; i < a.path.length; i++) expect(a.path[i].fromLevel).toBe(a.path[i - 1].toLevel);
-    expect(a.path.filter((l, i) => i === 0 || l.method.id !== a.path[i - 1].method.id).map(l => l.method.id)).toEqual(['wc-tree', 'wc-oak', 'wc-willow']);
+    expect(a.path.filter((l, i) => i === 0 || l.method.id !== a.path[i - 1].method.id).map(l => l.method.id)).toEqual(['wc-tree', 'wc-oak']); // Dropped logs: oaks beat willows until 60 (OSRS Wiki, F2P Woodcutting training).
     expect(a.path.some(l => l.fromLevel === 21)).toBe(true); // Mithril axe review, even when the tree stays the same.
   });
 
@@ -150,10 +150,11 @@ describe('path, actions and time', () => {
   });
 
   it('time: by the player\'s measurements exactly; without measurements — a range "by the wiki"; no speed — no time', () => {
-    const state = levels({ woodcutting: 30 });
+    // One axe tier (adamant, 31-40): a later tier would make the plan a forecast with the planned axe.
+    const state = levels({ woodcutting: 31 });
     const measured = advise({ skill: 'woodcutting', target: 40, state, mode: 'f2p', measuredXph: 20_000 });
     expect(measured.time?.source).toBe('measured');
-    expect(measured.time?.minHours).toBeCloseTo((xpForLevel(40) - xpForLevel(30)) / 20_000);
+    expect(measured.time?.minHours).toBeCloseTo((xpForLevel(40) - xpForLevel(31)) / 20_000);
     const wiki = advise({ skill: 'woodcutting', target: 40, state, mode: 'f2p' });
     expect(wiki.time?.source).toBe('wiki');
     expect(wiki.time!.minHours).toBeLessThan(wiki.time!.maxHours);
