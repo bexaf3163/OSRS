@@ -14,7 +14,7 @@ import { trainingMethodsJson as methodsJson, toolProgressionJson } from '../../d
 import { withPlannedKit } from './stages';
 import { toolUse } from '../items/toolTiers';
 import { evaluate, itemRequirement, type ReqState, type Requirement } from '../player/requirements';
-import { coinsOf, heldExact, levelOf, questOf, type PlayerState } from '../player/playerState';
+import { coinsOf, heldExact, heldOf, levelOf, questOf, type PlayerState } from '../player/playerState';
 import { isClosed } from '../quests/next-step';
 import { xpForLevel } from '../player/xp';
 import type { MethodPriority, PlayStyle } from '../persistence/playStyle';
@@ -22,7 +22,8 @@ import { rangedEquipment, rangedNeeds, RANGED_WATCH } from '../combat/rangedLoad
 import { SPELLS, STAFFS, isCombatSpell, strikeRecipe, superheatNeeds } from '../combat/magicPlan';
 import { STYLE_GEAR } from '../combat/styleGear';
 import { PROCESSING } from './processingRates';
-import { adviseGear, canWear, gearData, gearPieceByName, stepFoes, type Levels } from '../combat/gearAdvisor';
+import { canWear, gearData, gearPieceByName, levelsOf, type Levels } from '../combat/gearAdvisor';
+import { pickKit } from '../combat/kitPick';
 import { methodRate, rateKeyOf, type RateSpot, type ModelRate } from './methodRates';
 import { combatUpgrades, rangedGoalNeeds } from '../combat/combatRates';
 import type { PriceView } from '../market/quotes';
@@ -221,30 +222,34 @@ export function methodNeeds(m: TrainingMethod, state: PlayerState, prices?: Pric
 const MELEE_SKILLS = ['attack', 'strength', 'defence'];
 
 /**
- * The melee kit of a trainer, from the Gear advisor against its opponents: owned upgrades are worn for free, and with known
- * coins and prices the best affordable amulet and armour are bought after the method's own supplies. Unknown levels,
- * worn gear or prices leave the authored needs.
+ * The melee kit of a trainer through the one kit rule of every style (pickKit): per slot the best owned piece is worn and, with
+ * known coins and prices, a better amulet or armour piece is bought after the method's own supplies. Pieces rank by melee
+ * strength, then attack, then total defence. Weapons are only worn here; buying one is the shared upgrade evaluator's job.
+ * Unknown levels or worn gear leave the authored needs.
  */
 function meleeNeeds(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodNeed[] {
-  const foes = stepFoes({ foes: m.npcNames ?? [] } as Step);
-  if (!foes.length || !state.equipmentItems || !MELEE_SKILLS.every(skill => levelOf(state, skill) !== undefined)) return m.needs;
-  const levels = Object.fromEntries(Object.entries(state.levels).flatMap(([skill, value]) => value.known ? [[skill, value.value]] : []));
-  const gePrices = new Map(prices ? gearData.items.flatMap(i => { const p = prices.buy(i.name)?.price; return p != null ? [[i.id, p] as [number, number]] : []; }) : []);
+  if (!m.npcNames?.length || !state.equipmentItems || !MELEE_SKILLS.every(skill => levelOf(state, skill) !== undefined)) return m.needs;
+  const lv = levelsOf(Object.fromEntries(Object.entries(state.levels).flatMap(([skill, value]) => value.known ? [[skill, value.value]] : [])));
+  const quests = state.quests.known ? new Set(state.quests.value) : undefined;
   // The method's own supplies at full price come first, as the bow's arrows and food do: unknown stock never frees coins.
   const supplies = m.needs.reduce<number | null>((sum, n) => { if (sum === null || n.type !== 'item' || n.equip) return sum; const p = prices?.buy(n.name)?.price; return p == null ? null : sum + p * (n.count ?? 1); }, 0);
-  const advice = adviseGear({ levels, mode: state.mode, owned: state.owned,
-    gear: { equipment: state.equipmentItems.map(item => ({ ...item, id: gearPieceByName(item.name)?.id ?? 0 })), inventory: null, coins: state.coins.bag.known ? state.coins.bag.value : null, bankCoins: state.coins.bank.known ? state.coins.bank.value : null },
-    foes, questsDone: state.quests.known ? new Set(state.quests.value) : undefined, gePrices, reserve: supplies ?? 0, reserveUnknown: !prices || supplies === null,
+  const cash = coinsOf(state).total;
+  const twoHanded = gearPieceByName(state.equipment.weapon ?? '')?.twoHanded;
+  const slots = (['weapon', 'neck', 'head', 'body', 'legs', 'shield'] as const).filter(slot => slot !== 'shield' || !twoHanded);
+  const usable = (slot: string) => gearData.items
+    .filter(p => p.slot === slot && (state.mode === 'members' || !p.members) && !p.reqUnverified && canWear(p, lv, quests))
+    .map(p => p.name);
+  const kit = pickKit({
+    slots: slots.map(slot => ({ slot, names: usable(slot), wearOnly: slot === 'weapon' })),
+    rank: name => { const p = gearPieceByName(name)!; return [p.strength, Math.max(p.attack.stab, p.attack.slash, p.attack.crush), p.defence.stab + p.defence.slash + p.defence.crush]; },
+    owned: name => (heldExact(state, name).total ?? heldExact(state, name).equipped) > 0,
+    // Once the bank was opened, a piece it did not report is not owned, as the Gear advisor reads it.
+    price: name => (state.owned?.bankSeen && heldOf(state, name).presence !== 'PRESENT' ? prices?.buy(name)?.price ?? null : null),
+    budget: cash === null || supplies === null || !prices ? null : Math.max(0, cash - supplies),
   });
-  // Weapon purchases belong to the shared upgrade evaluator (combatUpgrades) for every style; here only an owned weapon is worn.
-  const kit = [...advice.actions, ...advice.armour].filter(action => action.slot !== 'weapon' || action.how === 'wear');
-  // The advisor decides the whole worn kit: what it changes, and the gear already worn in the other analysed slots.
-  const changed = new Set(kit.map(action => action.slot));
-  if (kit.find(action => action.slot === 'weapon')?.item.twoHanded) changed.add('shield');
-  const kept = state.equipmentItems.flatMap(item => { const piece = gearPieceByName(item.name); return piece && !changed.has(piece.slot) ? [piece.name] : []; });
   return [
     ...m.needs.filter(n => n.type !== 'item' || !n.equip || !gearPieceByName(n.name)),
-    ...[...kit.map(action => action.item.name), ...kept].map(name => ({ type: 'item' as const, name, count: 1, equip: true })),
+    ...kit.map(k => ({ type: 'item' as const, name: k.name, count: 1, equip: true })),
   ];
 }
 

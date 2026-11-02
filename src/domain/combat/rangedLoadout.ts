@@ -2,6 +2,7 @@ import { ARROW_BREAK_RATE, rangedMaximumHit, trainingRangedStyleBonus } from './
 import { coinsPerMinute } from '../market/lootValue';
 // One level-appropriate ranged kit for preparation and forecasts; unlocks and arrow compatibility reuse StyleGear.
 import { gearPieceByName } from './gearAdvisor';
+import { pickKit } from './kitPick';
 import { STYLE_GEAR, ammoFits, usableStyleOption, type StyleOption } from './styleGear';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from '../player/playerState';
 import { countWorn } from '../items/equipmentCount';
@@ -110,33 +111,17 @@ export function rangedNeeds(state: PlayerState, prices?: PriceView | null): Meth
     const priced = candidates.filter(o => price(o.name) !== null).sort((a, b) => price(a.name)! - price(b.name)!);
     arrow = priced[0] ?? arrow;
   }
-  // Armour ranks by Ranged attack, then by total defence (studded beats hardleather at the same +8 once Defence allows it).
-  const rank = (name: string): [number, number] => {
-    const g = stats.find((x) => x.name === name);
-    return [g?.rangedAttack ?? 0, g?.defence ?? 0];
-  };
-  const above = (a: string, b: string | undefined): boolean => {
-    if (!b) return true;
-    const [x, y] = [rank(a), rank(b)];
-    return x[0] > y[0] || (x[0] === y[0] && x[1] > y[1]);
-  };
-  const armour: MethodNeed[] = [];
-  for (const slot of armourSlots) {
-    const allowed = (STYLE_GEAR.ranged[slot] ?? []).filter(o => usableStyleOption(o, s => levelOf(state, s), q => questOf(state, q) === 'DONE'));
-    const seen = allowed.flatMap(o => o.names).find(owned);
-    let chosen = seen;
-    const paid = allowed.flatMap(o => o.names).filter(name => stats.some(g => g.name === name) && canBuy(name))
-      .sort((a, b) => (above(b, a) ? 1 : above(a, b) ? -1 : price(a)! - price(b)!));
-    const better = paid.find((name) => above(name, seen));
-    if (better && !['feet', 'cape'].includes(slot)) {
-      chosen = better;
-      budget! -= price(better)!;
-    }
-    if (!chosen && !['neck', 'cape'].includes(slot)) {
-      chosen = starter(allowed);
-    }
-    if (chosen) armour.push({ type: 'item', name: chosen, count: 1, equip: true });
-  }
+  // Armour through the one kit rule of every style: Ranged attack first, then total defence (studded beats hardleather at +8).
+  const armour: MethodNeed[] = pickKit({
+    slots: armourSlots.map(slot => {
+      const allowed = (STYLE_GEAR.ranged[slot] ?? []).filter(o => usableStyleOption(o, s => levelOf(state, s), q => questOf(state, q) === 'DONE'));
+      return { slot, names: allowed.flatMap(o => o.names), wearOnly: ['feet', 'cape'].includes(slot), starter: ['neck', 'cape'].includes(slot) ? null : starter(allowed) };
+    }),
+    rank: name => { const g = stats.find(x => x.name === name); return [g?.rangedAttack ?? 0, g?.defence ?? 0]; },
+    owned,
+    price: name => (stats.some(g => g.name === name) && canBuy(name) ? price(name) : null),
+    budget,
+  }).map(k => ({ type: 'item', name: k.name, count: 1, equip: true }));
   return [
     ...(levelOf(state, 'ranged') === undefined ? [{ type: 'skill' as const, skill: 'ranged', min: 1 }] : []),
     { type: 'item', name: bow.name, equip: true },

@@ -352,7 +352,7 @@ export interface AdvisorInput {
 export const TOLL = 10;
 
 /** Levels with a default: without data — 1 (so the advice does not promise what cannot be worn yet). */
-function levelsOf(raw: Partial<Record<string, number>>): Levels {
+export function levelsOf(raw: Partial<Record<string, number>>): Levels {
   const n = (k: string) => (typeof raw[k] === 'number' && raw[k]! >= 1 ? raw[k]! : 1);
   const opt = (k: 'prayer' | 'ranged' | 'magic') => (typeof raw[k] === 'number' && raw[k]! >= 1 ? { [k]: raw[k] } : {});
   return { attack: n('attack'), strength: n('strength'), defence: n('defence'), ...opt('prayer'), ...opt('ranged'), ...opt('magic') };
