@@ -10,7 +10,7 @@ import { useBridge } from '../../state/bridge';
 import { usePlayerState } from '../../state/playerStateContext';
 import { setFeatures, useFeatures } from '../../state/hooks/useFeatures';
 import { priorityOf, styleOf } from '../../domain/persistence/playStyle';
-import { adviseTraining, formatHours, methodsFor, questTrainingStep, rateText, type MethodView, type TrainingAdvice } from '../../domain/training/trainingRouter';
+import { adviseTraining, atLevel, formatHours, methodsFor, questTrainingStep, rateText, type MethodView, type TrainingAdvice } from '../../domain/training/trainingRouter';
 import { stagesOf } from '../../domain/training/stages';
 import { actionForm } from '../../domain/player/pacing';
 import { levelOf } from '../../domain/player/playerState';
@@ -42,8 +42,15 @@ export function useTrainingAdvice(skill: string | null, target: number, followed
   // The exchange and the trade restriction: what a combat method's arrows, runes and drops are worth, as on the route's steps.
   const prices = usePriceView(true);
   const trade = useTradeRestriction();
-  return useMemo(
-    () => (skill ? adviseTraining({ skill, target, ...context, style, priority, xp: have, measuredXph: measured, prices, restriction: trade.state, followed }) : null),
+  return useMemo(() => {
+    if (!skill) return null;
+    const input = { skill, target, ...context, style, priority, xp: have, measuredXph: measured, prices, restriction: trade.state, followed };
+    const advice = adviseTraining(input);
+    if (advice.level === null || advice.level <= 1 || advice.level >= target) return advice;
+    // The guide from level 1: the same router at level 1, so passed stages read as the route that led here.
+    const ladder = adviseTraining({ ...input, state: atLevel(input.state, skill, 1), xp: null, measuredXph: null, followed: null }).path;
+    return { ...advice, ladder };
+  },
     [skill, target, context, style, priority, have, measured, prices, trade.state, followed],
   );
 }
@@ -210,14 +217,14 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
         {shown.method.note && <p className="small muted">{shown.method.note}</p>}
         {arrows && arrows.shots.mid > 0 && <p className="small">To level {arrows.goalLevel}: approximately {arrows.shots.low.toLocaleString('en-US')}–{arrows.shots.high.toLocaleString('en-US')} shots with {arrows.bow} and {arrows.arrow}. Picking up arrows: about {arrows.lostPickingUp.mid.toLocaleString('en-US')} break; otherwise every shot costs one.{arrows.notCounted.length > 0 && ` Accuracy leaves out ${arrows.notCounted.join(', ')} (no ranged data).`}</p>}
       </>}
-      {(advice.path.length > 1 || advice.quests.length > 0 || (view === 'analysis' && (advice.goalNeeds?.length ?? 0) > 0)) && <DetailSection className="small"><DetailHeading>Plan details</DetailHeading>
-      {advice.path.length > 1 && (
+      {(advice.path.length > 0 || advice.quests.length > 0 || (view === 'analysis' && (advice.goalNeeds?.length ?? 0) > 0)) && <DetailSection className="small"><DetailHeading>Plan details</DetailHeading>
+      {advice.path.length > 0 && (
         <ol className="stage-list" aria-label="Stages">
-              {stagesOf(advice.path, skill, state.mode).map((st, i) => (
-                <li key={st.fromLevel}>
+              {stagesOf(advice.ladder ?? advice.path, skill, state.mode).map((st, i) => (
+                <li key={st.fromLevel} className={st.toLevel <= advice.level! ? 'is-done' : st.fromLevel <= advice.level! ? 'is-current' : undefined}>
                   <span className="stage-levels">{st.fromLevel}–{st.toLevel}</span>
                   <span>
-                    <strong>{st.leg.method.name}</strong>
+                    <strong>{st.leg.method.name}</strong>{st.fromLevel <= advice.level! && st.toLevel > advice.level! && <span className="stage-now"> · you are here</span>}
                     {st.leg.method.xph && <span className="muted"> · {rateText(st.leg.method)}</span>}
                     {st.leg.method.where && <span className="stage-where muted">{st.leg.method.where}</span>}
                     {st.changes.length > 0 && <span className="stage-new">{i === 0 ? 'Bring' : 'New'}: {st.changes.join(', ')}</span>}
@@ -272,21 +279,20 @@ function MembersFromHere({ skill }: { skill: string }) {
   const f2p = f2pAdviceFor(skill);
   if (!f2p) return null;
   const stop = f2p.target;
-  const mid = (x: readonly number[] | null | undefined) => (x ? (x[0] + x[1]) / 2 : 0);
+  // Members methods near the stop, by level: what membership opens next.
   const members = methodsFor(skill)
-    .filter((m) => m.kind === 'method' && m.members && (stop === null || m.from <= stop))
-    .sort((a, b) => mid(b.xph) - mid(a.xph))
+    .filter((m) => m.kind === 'method' && m.members && (stop === null || m.from <= stop + 20))
+    .sort((a, b) => a.from - b.from)
     .slice(0, 3);
-  if (!members.length) return null;
   return (
     <section className="section small stage-members" aria-label="With membership">
       <h3>{stop !== null ? `After ${stop}: with membership` : 'With membership'}</h3>
       <p className="muted">{f2p.reason} {f2p.comparison}</p>
-      <ul>
+      {members.length > 0 && <ul>
         {members.map((m) => (
           <li key={m.id}><strong>{m.name}</strong> · from {m.from}{m.xph ? ` · ${rateText(m)}` : ''}{m.where ? ` · ${m.where}` : ''}</li>
         ))}
-      </ul>
+      </ul>}
     </section>
   );
 }

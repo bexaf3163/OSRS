@@ -123,3 +123,5 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .stage-where, .stage-new { display: block; font-size: 0.85rem; }
 .stage-new { color: var(--accent-ink); }
 .stage-members ul { margin: 6px 0 0; padding-left: 18px; }
+.stage-list li.is-done { opacity: 0.55; }
+.stage-list li.is-current .stage-levels, .stage-now { color: var(--accent-ink); font-weight: 600; }

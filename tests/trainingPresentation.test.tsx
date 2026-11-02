@@ -11,7 +11,7 @@ const fixture = vi.hoisted(() => ({ advice: null as TrainingAdvice | null, mode:
   state: null as PlayerState | null, tracked: null as TrackedSkill | null, input: null as AdviceInput | null }));
 vi.mock('../src/state/store', () => ({ useStore: () => ({ mode: fixture.mode }) }));
 vi.mock('../src/state/bridge', () => ({ useBridge: () => ({ xp: null, xpRate: () => null }) }));
-vi.mock('../src/state/playerStateContext', () => ({ usePlayerState: () => ({ state: fixture.state ?? {} }) }));
+vi.mock('../src/state/playerStateContext', () => ({ usePlayerState: () => ({ state: fixture.state ?? buildPlayerState({ mode: 'f2p', connected: false, progress: emptyProgress(), stats: {}, owned: null, gear: null, questsDone: null }) }) }));
 vi.mock('../src/state/hooks/useTracked', async importOriginal => ({
   ...await importOriginal<typeof import('../src/state/hooks/useTracked')>(), useTracked: () => fixture.tracked,
 }));
@@ -21,7 +21,8 @@ vi.mock('../src/state/hooks/useTradeRestriction', () => ({ useTradeRestriction: 
 vi.mock('../src/domain/training/trainingNav', () => ({ trainingNav: () => null }));
 vi.mock('../src/domain/training/trainingRouter', async importOriginal => ({
   ...await importOriginal<typeof import('../src/domain/training/trainingRouter')>(),
-  adviseTraining: (input: AdviceInput) => { fixture.input = input; return fixture.advice; },
+  // The card's own advice is the first call; a second one at level 1 builds the guide ladder.
+  adviseTraining: (input: AdviceInput) => { fixture.input ??= input; return fixture.advice; },
 }));
 
 function advice(): TrainingAdvice {
@@ -42,7 +43,7 @@ function advice(): TrainingAdvice {
 describe('compact skill recommendations without hiding required preparation', () => {
   it('the card uses the same restricted planning context as a followed F2P-only step', () => {
     const observed = buildPlayerState({ mode: 'members', connected: true, progress: emptyProgress(), stats: { woodcutting: 61 }, owned: null, gear: null, questsDone: null });
-    fixture.advice = advice(); fixture.mode = 'members'; fixture.state = observed;
+    fixture.advice = advice(); fixture.input = null as AdviceInput | null; fixture.mode = 'members'; fixture.state = observed;
     fixture.tracked = { skill: 'woodcutting', mode: 'fast', freeOnly: true, target: 65 };
     try {
       renderToStaticMarkup(<TrainingCard skill="woodcutting" target={65} view="summary" />);
@@ -52,7 +53,7 @@ describe('compact skill recommendations without hiding required preparation', ()
     } finally { fixture.mode = 'f2p'; fixture.state = null; fixture.tracked = null; }
   });
   it('shows one method, estimates, risk, missing stock, unread stock and funding need without disclosures', () => {
-    fixture.advice = advice();
+    fixture.advice = advice(); fixture.input = null as AdviceInput | null;
     const html = renderToStaticMarkup(<TrainingCard skill="attack" target={20} view="summary" />);
     for (const text of ['New method', '1,000–2,000 XP/h', 'Loot ≈ 500 gp/h', 'Supplies ≈ 100 gp/h',
       'Aggressive enemies nearby', 'Food', 'Not checked: Bank supplies', '250 gp']) expect(html).toContain(text);
@@ -62,7 +63,7 @@ describe('compact skill recommendations without hiding required preparation', ()
   });
 
   it('keeps analysis accessible without duplicating recommendation controls', () => {
-    fixture.advice = advice();
+    fixture.advice = advice(); fixture.input = null as AdviceInput | null;
     const html = renderToStaticMarkup(<TrainingCard skill="attack" target={20} view="analysis" />);
     for (const text of ['Long explanation with calculations', 'Extended method explanation', 'Alternative method', 'Plan details']) expect(html).toContain(text);
     expect(html).not.toContain('aria-label="Training priority"');
@@ -70,7 +71,7 @@ describe('compact skill recommendations without hiding required preparation', ()
   });
 
   it('retains the route card disclosure behaviour for callers using the original presentation', () => {
-    fixture.advice = advice();
+    fixture.advice = advice(); fixture.input = null as AdviceInput | null;
     const html = renderToStaticMarkup(<TrainingCard skill="attack" target={20} />);
     expect(html).toContain('<details');
     expect(html).toContain('Long explanation with calculations');

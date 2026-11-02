@@ -458,6 +458,8 @@ export interface TrainingAdvice {
   level: number | null;
   target: number;
   best: MethodView | null;
+  /** The whole plan from level 1 to the goal (the guide), when the player is past level 1; the path is the part still ahead. */
+  ladder?: PathLeg[];
   /** Up to three other methods of this level. */
   others: MethodView[];
   /** Quests with an XP reward in this range — separately from the methods. */
@@ -756,7 +758,7 @@ function trainingMilestones(skill: string, methods: readonly TrainingMethod[], m
 /** Future legs of the path are re-rated every this many levels. */
 const FORECAST_STEP = 5;
 /** The same player at another level of one skill: what the path forecasts with. */
-const atLevel = (state: PlayerState, skill: string, value: number): PlayerState =>
+export const atLevel = (state: PlayerState, skill: string, value: number): PlayerState =>
   ({ ...state, levels: { ...state.levels, [skill]: { ...(state.levels[skill] ?? { source: 'profile' }), known: true, value } } }) as PlayerState;
 
 /** Reuse the selected phases and model quantities; unsupported consumable forecasts stay absent. */
