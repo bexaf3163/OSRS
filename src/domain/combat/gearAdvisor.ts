@@ -9,8 +9,8 @@
 // training, so the benefit is averaged over the nearest 10 Strength levels: the max hit grows
 // in steps, and at the very current level the best sword may hit the same as the old one.
 
-import { gearJson, monstersJson, combatFoesJson } from '../../data';
-import type { Foe, FoeData, GameMode, GearData, GearPiece, GearSlot, Step } from '../../types';
+import { gearJson, combatFoesJson } from '../../data';
+import type { Foe, GameMode, GearData, GearPiece, GearSlot, Step } from '../../types';
 import type { OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
 import { matchStrict } from '../travel/locations';
@@ -35,8 +35,11 @@ const GAME_SLOT: Record<string, GearSlot> = { weapon: 'weapon', amulet: 'neck', 
 /** The weapons we advise buying. Axes and pickaxes are tools: we recognise them as weapons but do not advise them. */
 const WEAPON_KINDS = new Set(['dagger', 'sword', 'scimitar', 'longsword', 'mace', 'warhammer', 'battleaxe', '2h sword']);
 
-export const foeData = monstersJson as FoeData;
-const foeByName = new Map(foeData.foes.map((f) => [f.name, f]));
+/** One version per opponent, as the player meets it: the free-world version, then the lowest combat level (Ghast 30, Flesh Crawler 28). */
+const foeByName = new Map<string, Foe>();
+for (const f of [...(combatFoesJson as { foes: Foe[] }).foes].sort((a, b) => Number(a.members) - Number(b.members) || a.combat - b.combat)) {
+  if (!foeByName.has(f.name)) foeByName.set(f.name, f);
+}
 /** Without a step we compare with a cow — the first opponent of the route (S1-13). */
 export const DEFAULT_FOE: Foe = foeByName.get('Cow')!;
 
@@ -493,11 +496,11 @@ const PRAYERS: { name: string; level: number; kind: 'attack' | 'strength'; mult:
 ];
 
 /**
- * From what benefit we advise: damage per second at least +3% (averaged over the training), defence — at least +3, and for advice to act
- * on, when the opponent's attack is known, it must hit at least 3 points less often (2.72.1, live: +7 crush against a cow moved 23% → 22%
- * and was the HUD's first line). The threshold is low on purpose: any speed-up is worth showing, and the percent in the advice says how big it is.
+ * From what benefit we advise: damage per second at least +3% (averaged over the training), defence at least +3, and against an
+ * opponent whose attack is known any armour that makes it hit less often: the player trains in the best gear the levels and
+ * coins allow, as the Ranged kit does (owner, 2026-11-02).
  */
-const WORTH = { dps: 1.03, defence: 3, hitDrop: 0.03 };
+const WORTH = { dps: 1.03, defence: 3, hitDrop: 1e-6 };
 
 export function adviseGear(input: AdvisorInput): GearAdvice {
   const data = input.data ?? gearData;

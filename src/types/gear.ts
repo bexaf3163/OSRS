@@ -81,8 +81,3 @@ export interface Foe {
   members: boolean;
 }
 
-export interface FoeData {
-  source: string;
-  updated: string;
-  foes: Foe[];
-}

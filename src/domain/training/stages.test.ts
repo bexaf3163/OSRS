@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildPlayerState } from '../player/playerState';
 import { emptyProgress } from '../persistence/progress';
-import { adviseTraining } from './trainingRouter';
+import { adviseTraining, methodNeeds, trainingMethods } from './trainingRouter';
 import { stagesOf, toolTierAt, withPlannedKit } from './stages';
 
 const player = (skill: string, level: number) =>
@@ -41,5 +41,21 @@ describe('the training plan told as stages', () => {
     const state = player('mining', 25);
     expect(withPlannedKit(state, 'mining', 30, 25)).toBe(state);
     expect(withPlannedKit(state, 'mining', 31, 25)).not.toBe(state);
+  });
+});
+
+describe('the melee kit of a trainer', () => {
+  it('buys the best affordable armour and amulet for its opponents, leaving weapon purchases to the shared upgrade evaluator', () => {
+    const state = buildPlayerState({
+      mode: 'f2p', connected: true, stats: { attack: 30, strength: 30, defence: 30, hitpoints: 35 }, progress: emptyProgress(), questsDone: [],
+      gear: { equipment: [{ id: 1321, name: 'Bronze scimitar', slot: 'weapon', count: 1 }], inventory: [], coins: 50_000, bankCoins: 0 },
+      owned: { bankSeen: true, items: new Map() },
+    } as never);
+    const prices = { status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, sell: () => null,
+      buy: () => ({ price: 500, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] }) };
+    const names = methodNeeds(trainingMethods.find((m) => m.id === 'me-monk')!, state, prices as never).flatMap((n) => (n.type === 'item' ? [n.name] : []));
+    expect(names).toEqual(expect.arrayContaining(['Bronze scimitar', 'Amulet of strength', 'Adamant platelegs']));
+    expect(names.filter((n) => /scimitar|sword|mace|axe/i.test(n))).toEqual(['Bronze scimitar']);
+    expect(methodNeeds(trainingMethods.find((m) => m.id === 'me-monk')!, state, null).some((n) => n.type === 'item' && n.name === 'Adamant platelegs')).toBe(false);
   });
 });

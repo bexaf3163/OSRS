@@ -214,8 +214,38 @@ export function methodNeeds(m: TrainingMethod, state: PlayerState, prices?: Pric
   if (m.kit === 'superheat-iron') return superheatNeeds(state);
   // Stage 6 is F2P-only. Do not demand a weaker F2P bow from Members using an unmodelled weapon.
   if (m.kit === 'f2p-bow' && state.mode !== 'f2p') return m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name));
-  return m.kit === 'f2p-bow' && m.kind === 'method'
-    ? [...m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name)), ...rangedNeeds(state, prices)] : m.needs;
+  if (m.kit === 'f2p-bow' && m.kind === 'method') return [...m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name)), ...rangedNeeds(state, prices)];
+  return m.kind === 'method' && m.skills.some(skill => MELEE_SKILLS.includes(skill)) ? meleeNeeds(m, state, prices) : m.needs;
+}
+
+const MELEE_SKILLS = ['attack', 'strength', 'defence'];
+
+/**
+ * The melee kit of a trainer, from the Gear advisor against its opponents: owned upgrades are worn for free, and with known
+ * coins and prices the best affordable amulet and armour are bought after the method's own supplies. Unknown levels,
+ * worn gear or prices leave the authored needs.
+ */
+function meleeNeeds(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodNeed[] {
+  const foes = stepFoes({ foes: m.npcNames ?? [] } as Step);
+  if (!foes.length || !state.equipmentItems || !MELEE_SKILLS.every(skill => levelOf(state, skill) !== undefined)) return m.needs;
+  const levels = Object.fromEntries(Object.entries(state.levels).flatMap(([skill, value]) => value.known ? [[skill, value.value]] : []));
+  const gePrices = new Map(prices ? gearData.items.flatMap(i => { const p = prices.buy(i.name)?.price; return p != null ? [[i.id, p] as [number, number]] : []; }) : []);
+  // The method's own supplies at full price come first, as the bow's arrows and food do: unknown stock never frees coins.
+  const supplies = m.needs.reduce<number | null>((sum, n) => { if (sum === null || n.type !== 'item' || n.equip) return sum; const p = prices?.buy(n.name)?.price; return p == null ? null : sum + p * (n.count ?? 1); }, 0);
+  const advice = adviseGear({ levels, mode: state.mode, owned: state.owned,
+    gear: { equipment: state.equipmentItems.map(item => ({ ...item, id: gearPieceByName(item.name)?.id ?? 0 })), inventory: null, coins: state.coins.bag.known ? state.coins.bag.value : null, bankCoins: state.coins.bank.known ? state.coins.bank.value : null },
+    foes, questsDone: state.quests.known ? new Set(state.quests.value) : undefined, gePrices, reserve: supplies ?? 0, reserveUnknown: !prices || supplies === null,
+  });
+  // Weapon purchases belong to the shared upgrade evaluator (combatUpgrades) for every style; here only an owned weapon is worn.
+  const kit = [...advice.actions, ...advice.armour].filter(action => action.slot !== 'weapon' || action.how === 'wear');
+  // The advisor decides the whole worn kit: what it changes, and the gear already worn in the other analysed slots.
+  const changed = new Set(kit.map(action => action.slot));
+  if (kit.find(action => action.slot === 'weapon')?.item.twoHanded) changed.add('shield');
+  const kept = state.equipmentItems.flatMap(item => { const piece = gearPieceByName(item.name); return piece && !changed.has(piece.slot) ? [piece.name] : []; });
+  return [
+    ...m.needs.filter(n => n.type !== 'item' || !n.equip || !gearPieceByName(n.name)),
+    ...[...kit.map(action => action.item.name), ...kept].map(name => ({ type: 'item' as const, name, count: 1, equip: true })),
+  ];
 }
 
 /** A worthwhile gathering upgrade uses the same preparation pipeline as the rest of the selected kit. */
@@ -258,27 +288,7 @@ export function preparationNeeds(advice: Pick<TrainingAdvice, 'best' | 'upgrade'
     const carried = heldFood(state, { nameEn: n.name, heals: food.heals, anyOf: n.anyOf }, undefined, levelOf(state, 'hitpoints')).bag;
     return { ...n, count: carried !== null && carried >= Math.max(1, Math.floor(target / 5)) ? Math.min(target, Math.floor(carried)) : target };
   });
-  const melee = method.skills.some(skill => ['attack', 'strength', 'defence'].includes(skill));
-  // Free usable improvements come from the Gear advisor for this trainer, never a later quest's opponent.
-  if (melee && state.equipmentItems && ['attack', 'strength', 'defence'].every(skill => levelOf(state, skill) !== undefined)) {
-    const foes = stepFoes({ foes: method.npcNames ?? [] } as Step);
-    if (foes.length) {
-      const levels = Object.fromEntries(Object.entries(state.levels).flatMap(([skill, value]) => value.known ? [[skill, value.value]] : []));
-      const wear = adviseGear({ levels, mode: state.mode, owned: state.owned,
-        gear: { equipment: state.equipmentItems.map(item => ({ ...item, id: gearPieceByName(item.name)?.id ?? 0 })), inventory: null,
-          coins: state.coins.bag.known ? state.coins.bag.value : null, bankCoins: state.coins.bank.known ? state.coins.bank.value : null },
-        foes, questsDone: state.quests.known ? new Set(state.quests.value) : undefined, geQuotes: new Map(), reserveUnknown: true,
-      }).actions.filter(action => action.how === 'wear');
-      const replaced = new Set(wear.map(action => action.slot));
-      const weapon = wear.find(action => action.slot === 'weapon')?.item ?? gearPieceByName(state.equipment.weapon ?? '');
-      if (weapon?.twoHanded) replaced.add('shield');
-      needs = [...needs.filter(n => {
-        const piece = n.type === 'item' && n.equip ? gearPieceByName(n.name) : null;
-        return !piece || !replaced.has(piece.slot);
-      }),
-        ...wear.filter(action => action.slot !== 'shield' || !weapon?.twoHanded).map(action => ({ type: 'item' as const, name: action.item.name, count: 1, equip: true }))];
-    }
-  }
+  const melee = method.skills.some(skill => MELEE_SKILLS.includes(skill));
   const tool = advice.upgrade?.tool;
   const piece = melee || method.kit === 'strike-spell' || method.kit === 'f2p-bow' ? upgradePiece : null;
   if (piece) return [...needs.filter(n => n.type !== 'item' || !n.equip || ![piece.slot, ...(piece.slot === 'weapon' && piece.twoHanded ? ['shield'] : [])].includes(gearPieceByName(n.name)?.slot ?? '')),
@@ -664,9 +674,15 @@ function reasonFor(v: MethodView, priority: MethodPriority, level: number, upgra
  * only when it is clearly better in practice (SWITCH_GAIN): changing method for a sliver costs a trip and a new setup.
  */
 /** Conditional future preparation in a copy: never grant this kit/coins to the live player. */
-function forecastRangedEquipment(state: PlayerState, needs: readonly MethodNeed[], prices?: PriceView | null): PlayerState {
-  const equipmentNeeds = needs.filter(n => n.type === 'item' && n.equip);
-  const cost = requirementCost(equipmentNeeds.map(n => methodRequirement(n, state)), state, prices);
+function forecastEquipment(state: PlayerState, needs: readonly MethodNeed[], prices?: PriceView | null): PlayerState {
+  const equipmentNeeds = needs.filter((n): n is Extract<MethodNeed, { type: 'item' }> => n.type === 'item' && Boolean(n.equip));
+  // What is not already held is bought at its price; an untracked stock counts as none, so coins are never invented.
+  const cost = equipmentNeeds.reduce<number | null>((sum, n) => {
+    const held = heldExact(state, n.name);
+    const missing = Math.max(0, (n.count ?? 1) - (held.total ?? held.equipped));
+    const price = missing ? prices?.buy(n.name)?.price : 0;
+    return sum === null || price == null ? null : sum + price * missing;
+  }, 0);
   const cash = coinsOf(state).total;
   const equipmentItems = equipmentNeeds.flatMap(n => n.type === 'item' ? [{ name: n.name,
     count: Math.max(n.count ?? 1, state.equipmentItems?.find(i => nameKey(i.name) === nameKey(n.name))?.count ?? 0) }] : []);
@@ -726,7 +742,7 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
       last.processingActions = last.processingActions !== undefined && processingActions !== undefined ? last.processingActions + processingActions : undefined;
     } else legs.push({ method: pick, fromLevel: lv, toLevel: lv + 1, needs: plannedNeeds, ...(processingActions !== undefined ? { processingActions } : {}) });
     previousSetup = setup;
-    if (pick.kit === 'f2p-bow') projectedState = forecastRangedEquipment(projected, plannedNeeds, input.prices);
+    if (plannedNeeds.some(n => n.type === 'item' && n.equip)) projectedState = forecastEquipment(projected, plannedNeeds, input.prices);
   }
   const source = sources.size === 1 ? [...sources][0] : 'forecast';
   return { legs, time: timed && legs.length > 0 ? { source, minHours, maxHours } : null };

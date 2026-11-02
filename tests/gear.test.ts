@@ -6,7 +6,7 @@ import { fightStepFor } from '../src/domain/combat/gearAdvice';
 import { buildIndex, search } from '../src/domain/quests/search';
 import { parseHash } from '../src/app/router';
 import {
-  actionNav, adviseGear, canWear, DEFAULT_FOE, foeData, gainText, gearById, gearData, hudHint, killSeconds, meleeHit, meleeValue, meleeWith, routeNeeds,
+  actionNav, adviseGear, canWear, DEFAULT_FOE, gainText, gearById, gearData, hudHint, killSeconds, meleeHit, meleeValue, meleeWith, routeNeeds,
   sourceText, statsText, stepFoes, watchNames, withKillEstimate, WINDOW,
   type AdvisorInput,
 } from '../src/domain/combat/gearAdvisor';
@@ -61,7 +61,7 @@ describe('damage formulas (OSRS Wiki, Damage per second/Melee)', () => {
     expect(meleeWith(lv, byName('Mithril scimitar'), null).type).toBe('slash');
     expect(meleeWith(lv, byName('Mithril mace'), null).type).toBe('crush');
     // Against the target's defence: the Flesh Crawler (defence level 10, bonus 15) is harder to hit than a cow.
-    const crawler = foeData.foes.find((f) => f.name === 'Flesh Crawler')!;
+    const crawler = stepFoes({ foes: ['Flesh Crawler'] })[0];
     const hit = meleeWith(lv, byName('Mithril scimitar'), null, {}, crawler).hitChance;
     const vsCow = meleeWith(lv, byName('Mithril scimitar'), null).hitChance;
     expect(hit).toBeLessThan(vsCow);
@@ -297,8 +297,8 @@ describe('step opponents (monsters.json)', () => {
       }
     }
     // The S3-08 and S4-03 opponents are named in "where": the minotaur 12 and the giant 42 — their levels are in the text.
-    expect(foeData.foes.find((f) => f.name === 'Minotaur')!.combat).toBe(12);
-    expect(foeData.foes.find((f) => f.name === 'Moss giant')!.combat).toBe(42);
+    expect(stepFoes({ foes: ['Minotaur'] })[0].combat).toBe(12);
+    expect(stepFoes({ foes: ['Moss giant'] })[0].combat).toBe(42);
   });
 
   it('quest opponents with a special weapon do not get into the advice: Delrith — Silverlight, Tanglefoot — secateurs', () => {
@@ -313,7 +313,7 @@ describe('step opponents (monsters.json)', () => {
 
 describe('the first estimate of the combat pace', () => {
   const s308 = allSteps.find((s) => s.id === 'S3-08')!;
-  const warrior = foeData.foes.find((f) => f.name === 'Minotaur')!;
+  const warrior = stepFoes({ foes: ['Minotaur'] })[0];
   const lv = { attack: 20, strength: 20, defence: 1 };
   const iron: GearState = { equipment: [{ id: 1323, name: 'Iron scimitar', slot: 'weapon' }], inventory: [], coins: 0, bankCoins: null };
 

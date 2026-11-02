@@ -111,44 +111,6 @@ export async function fetchBonuses(fetchFn: FetchFn, pages: string[]): Promise<M
   return out;
 }
 
-/** A monster's defence from the {{Infobox Monster}} card: an article may have several versions (levels). */
-export interface MonsterStats {
-  page: string;
-  version?: string;
-  combat: number;
-  hitpoints: number;
-  defenceLevel: number;
-  defence: { stab: number; slash: number; crush: number };
-  members: boolean;
-}
-
-/** All monster versions in a batch by article titles: article → versions. */
-export async function fetchMonsters(fetchFn: FetchFn, pages: string[]): Promise<Map<string, MonsterStats[]>> {
-  const out = new Map<string, MonsterStats[]>();
-  const n = (r: Record<string, unknown>, k: string) => num(r[k]) ?? 0;
-  for (let i = 0; i < pages.length; i += 20) {
-    const where = pages.slice(i, i + 20).map((p) => `{'page_name',${quote(p)}}`).join(',');
-    const rows = await bucket(fetchFn,
-      `bucket('infobox_monster').select('page_name','version_anchor','combat_level','hitpoints','defence_level','stab_defence_bonus','slash_defence_bonus','crush_defence_bonus','is_members_only').where(bucket.Or(${where})).limit(200).run()`);
-    for (const r of rows) {
-      const page = first(r.page_name);
-      const version = first(r.version_anchor);
-      const list = out.get(page) ?? [];
-      list.push({
-        page,
-        ...(version ? { version } : {}),
-        combat: n(r, 'combat_level'),
-        hitpoints: n(r, 'hitpoints'),
-        defenceLevel: n(r, 'defence_level'),
-        defence: { stab: n(r, 'stab_defence_bonus'), slash: n(r, 'slash_defence_bonus'), crush: n(r, 'crush_defence_bonus') },
-        members: flag(r, 'is_members_only'),
-      });
-      out.set(page, list);
-    }
-  }
-  return out;
-}
-
 type Store = NonNullable<WikiItemDetail['buyLocations']>[number];
 
 /** Shops that sell an item: price, stock, town and owner. */

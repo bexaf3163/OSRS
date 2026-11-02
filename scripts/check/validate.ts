@@ -2,7 +2,7 @@
 // Used by check-data.ts and the tests. No network.
 
 import type {
-  FoeData, GoalsData, LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
+  GoalsData, LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
 } from '../../src/types/index.ts';
 import { xpForLevel } from '../../src/domain/player/xp.ts';
 import { titleTargets } from '../../src/data/targets.ts';
@@ -25,8 +25,6 @@ export interface Route {
   steps: Step[];
   stages: Stage[];
   items: WikiItemDetail[];
-  /** The opponents of the steps (monsters.json): for the combat pace — health, from which the XP per opponent comes. */
-  monsters?: FoeData;
   /** Every version of the training opponents with their attack (combatFoes.json): for the time and food estimate. */
   combatFoes?: { foes: { name: string; version?: string; combat: number; members: boolean; hitpoints: number; defenceLevel: number; defence: Record<string, number>; maxHit: number; speedTicks: number }[] };
   /** Where the steps' NPCs stand (npcLocations.json) — for "Where to go" and the step map points. */
@@ -414,7 +412,8 @@ export function validate(d: GuideData | null, route: Route): Report {
   // The training pace: the skill and level are those in the step title; the XP to a level is by the game formula.
   const COMBAT = new Set(['attack', 'strength', 'defence']);
   const PACING_SKILLS = new Set(['fishing', 'woodcutting', 'cooking', 'mining', ...COMBAT]);
-  const foeHp = new Map((route.monsters?.foes ?? []).map((f) => [f.name, f.hitpoints]));
+  // One version per opponent, as the Gear advisor picks it: the free-world version, then the lowest combat level.
+  const foeHp = new Map([...(route.combatFoes?.foes ?? [])].sort((a, b) => Number(a.members) - Number(b.members) || a.combat - b.combat).reverse().map((f) => [f.name, f.hitpoints]));
   const badPacing = steps.flatMap((s) => {
     const p = s.pacing;
     if (!p) return [];
@@ -440,30 +439,25 @@ export function validate(d: GuideData | null, route: Route): Report {
     // Combat: the action is an opponent, the XP of the style skill is 4 per point of damage, that is 4 × its health.
     if (COMBAT.has(p.skill)) {
       const hp = foeHp.get(s.foes?.[0] ?? '');
-      if (hp === undefined) out.push(`${s.id}: a combat pace without an opponent from monsters.json`);
+      if (hp === undefined) out.push(`${s.id}: a combat pace without an opponent in combatFoes.json`);
       else if (p.expPerAction !== 4 * hp) out.push(`${s.id}: the XP per opponent ${p.expPerAction} ≠ 4 × ${hp}`);
     }
     if (p.secondsPerAction !== undefined && !(p.secondsPerAction > 0)) out.push(`${s.id}: seconds per action ${p.secondsPerAction}`);
     return out;
   });
   const paced = steps.filter((s) => s.pacing).length;
-  // The time and food estimate: every combat pace has its opponent's versions with an attack; the version monsters.json keeps for the gear
-  // advisor is one of them, number for number (the two files come from the same infobox by two scripts).
+  // The time and food estimate: every combat pace has its opponent's versions with an attack; the Gear advisor uses one of them.
   if (route.combatFoes) {
     const cf = route.combatFoes.foes;
     const badFoes = steps.filter((s) => s.pacing && COMBAT.has(s.pacing.skill)).flatMap((s) => {
       const name = s.foes?.[0] ?? '';
       const versions = cf.filter((f) => f.name === name && !f.members);
       if (!versions.length) return [`${s.id}: no ${name} in combatFoes.json`];
-      const kept = route.monsters?.foes.find((f) => f.name === name);
-      const same = (f: (typeof cf)[number]) => kept && f.hitpoints === kept.hitpoints && f.defenceLevel === kept.defenceLevel
-        && (['stab', 'slash', 'crush'] as const).every((t) => f.defence[t] === kept.defence[t]);
       return [
-        ...(kept && !versions.some(same) ? [`${s.id}: ${name} in monsters.json matches no version in combatFoes.json`] : []),
         ...versions.filter((f) => !(f.maxHit >= 0 && f.speedTicks > 0)).map((f) => `${name} ${f.version ?? ''}: max hit ${f.maxHit}, speed ${f.speedTicks}`),
       ];
     });
-    check(!badFoes.length, 'The combat estimate has every training opponent, and it agrees with monsters.json', `The combat opponents: ${badFoes.join('; ')}`);
+    check(!badFoes.length, 'The combat estimate has every training opponent', `The combat opponents: ${badFoes.join('; ')}`);
   }
   // The training spots (2.75): every entry is usable as it is, and every combat training step's opponent has one, so a new step or spot needs data only.
   if (route.trainers && route.combatFoes) {

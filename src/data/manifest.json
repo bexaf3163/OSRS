@@ -6,7 +6,6 @@
     "gear.json": "npm run build-gear",
     "majorLocations.json": "npm run build-locations",
     "moneyMaking.json": "npm run build-money",
-    "monsters.json": "npm run build-gear",
     "portals.json": "npm run build-portals",
     "processing.json": "npm run build-processing",
     "questMachines.json": "python tools/qh-machines/qhm/build_machines.py",

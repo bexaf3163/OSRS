@@ -10,13 +10,12 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { fetchBonuses, fetchItemInfobox, fetchMonsters, fetchStores, fetchWikitext, type ItemBonuses } from '../../src/services/wikiApi.ts';
-import type { Foe, FoeData, GearData, GearPiece, GearRequirements, GearSlot, Step } from '../../src/types/index.ts';
+import { fetchBonuses, fetchItemInfobox, fetchStores, fetchWikitext, type ItemBonuses } from '../../src/services/wikiApi.ts';
+import type { GearData, GearPiece, GearRequirements, GearSlot } from '../../src/types/index.ts';
 import { listedWithoutRequirements, requirementsFromText, setRule } from './gear-requirements.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const OUT = `${root}src/data/generated/gear.json`;
-const OUT_FOES = `${root}src/data/generated/monsters.json`;
 const styles = JSON.parse(readFileSync(`${root}src/data/generated/styleGear.json`, 'utf8')) as Record<'magic' | 'ranged', { weapon: { names: string[]; reqs: { skill: string; level: number }[]; quests: string[] }[] }>;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 
@@ -184,24 +183,6 @@ for (const w of wanted) {
   saveCache();
 }
 
-// The step opponents: an article may have several versions — we take the free-world version and the
-// lowest-level one (Ghast from Nature Spirit — 30, Flesh Crawler — 28): the player meets it first.
-const steps = JSON.parse(readFileSync(`${root}src/data/authored/steps.json`, 'utf8')) as Step[];
-// An item-only refresh must not rewrite independent monster facts as a side effect.
-const itemsOnly = process.argv.includes('--items-only');
-const foeNames = itemsOnly ? [] : [...new Set(steps.flatMap((s) => s.foes ?? []))];
-const monsters = itemsOnly ? new Map() : await fetchMonsters(fetchFn, foeNames);
-const foes: Foe[] = [];
-for (const name of foeNames) {
-  const versions = monsters.get(name);
-  if (!versions?.length) { problems.push(`${name}: no monster card`); continue; }
-  const v = [...versions].sort((a, b) => Number(a.members) - Number(b.members) || a.combat - b.combat)[0];
-  foes.push({
-    name, ...(v.version ? { version: v.version } : {}),
-    combat: v.combat, hitpoints: v.hitpoints, defenceLevel: v.defenceLevel, defence: v.defence, members: v.members,
-  });
-}
-
 if (problems.length) console.log(`\nFor review:\n  ${problems.join('\n  ')}`);
 const hard = problems.filter((p) => /no item card|no bonuses|slot/.test(p));
 if (hard.length) {
@@ -216,12 +197,4 @@ const data: GearData = {
 };
 writeFileSync(OUT, JSON.stringify(data, null, 2) + '\n');
 console.log(`\nWritten ${items.length} items to ${OUT}; members: ${items.filter((i) => i.members).map((i) => i.name).join(', ') || 'none'}`);
-const foeData: FoeData = {
-  source: 'OSRS Wiki: monster infoboxes (Bucket infobox_monster): the opponents from the route steps (the foes field in steps.json)',
-  updated: data.updated,
-  foes,
-};
-if (!itemsOnly) {
-  writeFileSync(OUT_FOES, JSON.stringify(foeData, null, 2) + '\n');
-  console.log(`Written ${foes.length} opponents to ${OUT_FOES}: ${foes.map((f) => `${f.name} (${f.combat})`).join(', ')}`);
-}
+

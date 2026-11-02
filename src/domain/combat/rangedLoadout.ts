@@ -1,6 +1,7 @@
 import { ARROW_BREAK_RATE, rangedMaximumHit, trainingRangedStyleBonus } from './combatEstimate';
 import { coinsPerMinute } from '../market/lootValue';
 // One level-appropriate ranged kit for preparation and forecasts; unlocks and arrow compatibility reuse StyleGear.
+import { gearPieceByName } from './gearAdvisor';
 import { STYLE_GEAR, ammoFits, usableStyleOption, type StyleOption } from './styleGear';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from '../player/playerState';
 import { countWorn } from '../items/equipmentCount';
@@ -29,7 +30,8 @@ export function rangedEquipment(worn: Readonly<Record<string, string>>, needs: r
     if (n.type !== 'item' || !n.equip) continue;
     const declaredSlot = stats.find(g => nameKey(g.name) === nameKey(n.name))?.slot
       ?? Object.entries(STYLE_GEAR.ranged).find(([, options]) => options.some(o => o.names.includes(n.name)))?.[0];
-    const slot = declaredSlot === '2h' ? 'weapon' : declaredSlot;
+    // Melee pieces from the Gear advisor take their slot from the gear table.
+    const slot = declaredSlot === '2h' ? 'weapon' : declaredSlot ?? gearPieceByName(n.name)?.slot;
     if (slot) equipment[slot] = n.name;
   }
   delete equipment.shield;

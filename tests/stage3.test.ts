@@ -12,7 +12,7 @@ import {
 } from '../src/domain/training/gearUpgradeRouter';
 import { matchStrict } from '../src/domain/travel/locations';
 import { actionForm, etaText, pacingNext, pacingText } from '../src/domain/player/pacing';
-import { foeData } from '../src/domain/combat/gearAdvisor';
+import { stepFoes } from '../src/domain/combat/gearAdvisor';
 import { mapTarget, navPayload, pageFromUrl, sourceBadge } from '../src/domain/travel/places';
 
 
@@ -372,7 +372,7 @@ describe('Steps with a pace', () => {
   });
 
   it('combat pace: the skills of the step, each to its goal, experience per opponent — 4 × its health', () => {
-    const hp = new Map(foeData.foes.map((f) => [f.name, f.hitpoints]));
+    const hp = { get: (name: string) => stepFoes({ foes: [name] })[0]?.hitpoints };
     for (const id of ['S3-08', 'S4-03']) {
       const s = allSteps.find((x) => x.id === id)!;
       expect(s.pacing!.expPerAction).toBe(4 * hp.get(s.foes![0])!);

@@ -5,7 +5,7 @@
 import { describe, expect, it } from 'vitest';
 import { newestGear, parseLastGears } from '../src/state/lastGear';
 import {
-  adviseGear, canWear, foeAttack, foeData, gainText, gearData, incomingChance, meleeWith, relevantDefence,
+  adviseGear, canWear, foeAttack, stepFoes, gainText, gearData, incomingChance, meleeWith, relevantDefence,
   type AdvisorInput, type GearAction,
 } from '../src/domain/combat/gearAdvisor';
 import type { GearState } from '../src/services/runeliteBridge';
@@ -19,7 +19,7 @@ const byName = (n: string) => {
 const item = (n: string) => ({ id: byName(n).id, name: n, slot: byName(n).slot === 'neck' ? 'amulet' : byName(n).slot });
 const wearing = (names: string[], coins = 0, bankCoins = 0): GearState => ({ equipment: names.map(item), inventory: [], coins, bankCoins });
 const foe = (n: string) => {
-  const f = foeData.foes.find((x) => x.name === n);
+  const f = stepFoes({ foes: [n] })[0];
   if (!f) throw new Error(`no ${n} in monsters.json`);
   return f;
 };
@@ -168,14 +168,14 @@ describe('defence is judged against the style that hits', () => {
 });
 
 describe('what is worth doing now', () => {
-  it('a defence change that barely moves the hit chance is not advised (live, 2.72.1: a chainbody against a cow, 23% to 22%)', () => {
+  it('any affordable armour that lowers the hit chance is advised: the best gear the levels allow (owner, 2026-11-02; a chainbody against a cow, 23% to 22%)', () => {
     const a = adviseGear(input({
       levels: { attack: 30, strength: 21, defence: 1 },
       gear: wearing(['Adamant scimitar', 'Iron platebody', 'Iron kiteshield', 'Iron full helm', 'Iron plateskirt'], 0, 1827),
       owned: owned({ 'Iron chainbody': 1 }), foes: [foe('Cow')],
     }));
-    expect(all(a).some((x) => x.item.name === 'Iron chainbody')).toBe(false);
-    // What is still offered against an opponent the model knows makes it hit at least 3 points less often.
+    expect(all(a).some((x) => x.item.name === 'Iron chainbody')).toBe(true);
+    // What is offered against an opponent the model knows makes it hit less often.
     let judged = 0;
     for (const opponent of ['Cow', 'Hill Giant']) {
       const b = adviseGear(input({ levels: { attack: 30, strength: 21, defence: 1 }, gear: wearing(['Adamant scimitar'], 100_000), foes: [foe(opponent)] }));
@@ -183,7 +183,7 @@ describe('what is worth doing now', () => {
         const g = x.gain as { kind: string; hitBefore?: number; hitAfter?: number };
         if (g.kind !== 'defence' || g.hitBefore === undefined || g.hitAfter === undefined) continue;
         judged++;
-        expect(g.hitBefore - g.hitAfter, x.item.name + ' against ' + opponent).toBeGreaterThanOrEqual(0.03);
+        expect(g.hitBefore - g.hitAfter, x.item.name + ' against ' + opponent).toBeGreaterThan(0);
       }
     }
     expect(judged).toBeGreaterThan(0);

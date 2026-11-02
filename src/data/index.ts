@@ -111,7 +111,6 @@ export { default as geTaxExemptJson } from './authored/geTaxExempt.json';
 export { default as iconAssetsJson } from './authored/iconAssets.json';
 export { default as majorLocationsJson } from './generated/majorLocations.json';
 export { default as moneyMakingJson } from './generated/moneyMaking.json';
-export { default as monstersJson } from './generated/monsters.json';
 export { default as npcLocationsJson } from './authored/npcLocations.json';
 export { default as portalsJson } from './generated/portals.json';
 export { default as processingJson } from './generated/processing.json';

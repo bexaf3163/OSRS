@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById, goalsJson as goalsFile, monstersJson as foeData } from '../src/data';
+import { allSteps, stepById, goalsJson as goalsFile } from '../src/data';
+import { stepFoes } from '../src/domain/combat/gearAdvisor';
 import { aggregateShopping } from '../src/domain/prep/shopping';
 import { titleTargets } from '../src/data/targets';
 import { triggerText } from '../src/domain/quests/triggers';
@@ -67,10 +68,9 @@ describe('S3-08 and S4-03: Attack and Strength, no Defence', () => {
   });
 
   it('the pace per kill is 4 x the hit points of the opponent in the monster data: a minotaur has 10, so 40 XP', () => {
-    const hp = new Map((foeData as unknown as { foes: { name: string; hitpoints: number }[] }).foes.map((f) => [f.name, f.hitpoints]));
+    const hp = { get: (name: string) => stepFoes({ foes: [name] })[0]?.hitpoints };
     expect(hp.get('Minotaur')).toBe(10);
     expect(step('S3-08').pacing!.expPerAction).toBe(4 * hp.get('Minotaur')!);
-    expect(hp.has('Al Kharid warrior')).toBe(false);
   });
 });
 
