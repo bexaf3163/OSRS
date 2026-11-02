@@ -1,12 +1,13 @@
 {
   "source": "OSRS Wiki: Infobox Bonuses of each article (scripts/data/build-ranged-gear.ts)",
-  "generatedAt": "2026-10-24",
+  "generatedAt": "2026-11-02",
   "items": [
     {
       "name": "Shortbow",
       "slot": "2h",
       "rangedAttack": 8,
       "rangedStrength": 0,
+      "defence": 0,
       "speed": 4
     },
     {
@@ -14,6 +15,7 @@
       "slot": "2h",
       "rangedAttack": 8,
       "rangedStrength": 0,
+      "defence": 0,
       "speed": 6
     },
     {
@@ -21,6 +23,7 @@
       "slot": "2h",
       "rangedAttack": 14,
       "rangedStrength": 0,
+      "defence": 0,
       "speed": 4
     },
     {
@@ -28,6 +31,7 @@
       "slot": "2h",
       "rangedAttack": 14,
       "rangedStrength": 0,
+      "defence": 0,
       "speed": 6
     },
     {
@@ -35,6 +39,7 @@
       "slot": "2h",
       "rangedAttack": 20,
       "rangedStrength": 0,
+      "defence": 0,
       "speed": 4
     },
     {
@@ -42,6 +47,7 @@
       "slot": "2h",
       "rangedAttack": 20,
       "rangedStrength": 0,
+      "defence": 0,
       "speed": 6
     },
     {
@@ -49,6 +55,7 @@
       "slot": "2h",
       "rangedAttack": 29,
       "rangedStrength": 0,
+      "defence": 0,
       "speed": 4
     },
     {
@@ -56,127 +63,148 @@
       "slot": "2h",
       "rangedAttack": 29,
       "rangedStrength": 0,
+      "defence": 0,
       "speed": 6
     },
     {
       "name": "Bronze arrow",
       "slot": "ammo",
       "rangedAttack": 0,
-      "rangedStrength": 7
+      "rangedStrength": 7,
+      "defence": 0
     },
     {
       "name": "Iron arrow",
       "slot": "ammo",
       "rangedAttack": 0,
-      "rangedStrength": 10
+      "rangedStrength": 10,
+      "defence": 0
     },
     {
       "name": "Steel arrow",
       "slot": "ammo",
       "rangedAttack": 0,
-      "rangedStrength": 16
+      "rangedStrength": 16,
+      "defence": 0
     },
     {
       "name": "Mithril arrow",
       "slot": "ammo",
       "rangedAttack": 0,
-      "rangedStrength": 22
+      "rangedStrength": 22,
+      "defence": 0
     },
     {
       "name": "Adamant arrow",
       "slot": "ammo",
       "rangedAttack": 0,
-      "rangedStrength": 31
+      "rangedStrength": 31,
+      "defence": 0
     },
     {
       "name": "Coif",
       "slot": "head",
       "rangedAttack": 2,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 26
     },
     {
       "name": "Leather cowl",
       "slot": "head",
       "rangedAttack": 1,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 14
     },
     {
       "name": "Leather body",
       "slot": "body",
       "rangedAttack": 2,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 40
     },
     {
       "name": "Hardleather body",
       "slot": "body",
       "rangedAttack": 8,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 66
     },
     {
       "name": "Studded body",
       "slot": "body",
       "rangedAttack": 8,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 98
     },
     {
       "name": "Green d'hide body",
       "slot": "body",
       "rangedAttack": 15,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 124
     },
     {
       "name": "Leather chaps",
       "slot": "legs",
       "rangedAttack": 4,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 5
     },
     {
       "name": "Studded chaps",
       "slot": "legs",
       "rangedAttack": 6,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 70
     },
     {
       "name": "Green d'hide chaps",
       "slot": "legs",
       "rangedAttack": 8,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 70
     },
     {
       "name": "Leather vambraces",
       "slot": "hands",
       "rangedAttack": 4,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 5
     },
     {
       "name": "Green d'hide vambraces",
       "slot": "hands",
       "rangedAttack": 8,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 7
     },
     {
       "name": "Leather gloves",
       "slot": "hands",
       "rangedAttack": 0,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 3
     },
     {
       "name": "Leather boots",
       "slot": "feet",
       "rangedAttack": 0,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 2
     },
     {
       "name": "Amulet of accuracy",
       "slot": "neck",
       "rangedAttack": 4,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 0
     },
     {
       "name": "Amulet of power",
       "slot": "neck",
       "rangedAttack": 6,
-      "rangedStrength": 0
+      "rangedStrength": 0,
+      "defence": 30
     }
   ]
 }

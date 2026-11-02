@@ -41,7 +41,7 @@ final class HudAdvice
 				continue;
 			}
 			// Handed in or used up during the step: done, neither with you nor to get.
-			if (h == StepGuide.Have.DONE || block != null && key.equals(block.key))
+			if (h == StepGuide.Have.DONE || block != null && block.covers(key))
 			{
 				continue;
 			}

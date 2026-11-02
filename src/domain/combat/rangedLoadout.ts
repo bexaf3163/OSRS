@@ -108,14 +108,24 @@ export function rangedNeeds(state: PlayerState, prices?: PriceView | null): Meth
     const priced = candidates.filter(o => price(o.name) !== null).sort((a, b) => price(a.name)! - price(b.name)!);
     arrow = priced[0] ?? arrow;
   }
+  // Armour ranks by Ranged attack, then by total defence (studded beats hardleather at the same +8 once Defence allows it).
+  const rank = (name: string): [number, number] => {
+    const g = stats.find((x) => x.name === name);
+    return [g?.rangedAttack ?? 0, g?.defence ?? 0];
+  };
+  const above = (a: string, b: string | undefined): boolean => {
+    if (!b) return true;
+    const [x, y] = [rank(a), rank(b)];
+    return x[0] > y[0] || (x[0] === y[0] && x[1] > y[1]);
+  };
   const armour: MethodNeed[] = [];
   for (const slot of armourSlots) {
     const allowed = (STYLE_GEAR.ranged[slot] ?? []).filter(o => usableStyleOption(o, s => levelOf(state, s), q => questOf(state, q) === 'DONE'));
     const seen = allowed.flatMap(o => o.names).find(owned);
     let chosen = seen;
     const paid = allowed.flatMap(o => o.names).filter(name => stats.some(g => g.name === name) && canBuy(name))
-      .sort((a, b) => (stats.find(g => g.name === b)?.rangedAttack ?? 0) - (stats.find(g => g.name === a)?.rangedAttack ?? 0) || price(a)! - price(b)!);
-    const better = paid.find(name => !seen || (stats.find(g => g.name === name)?.rangedAttack ?? 0) > (stats.find(g => g.name === seen)?.rangedAttack ?? 0));
+      .sort((a, b) => (above(b, a) ? 1 : above(a, b) ? -1 : price(a)! - price(b)!));
+    const better = paid.find((name) => above(name, seen));
     if (better && !['feet', 'cape'].includes(slot)) {
       chosen = better;
       budget! -= price(better)!;

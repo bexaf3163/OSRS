@@ -38,6 +38,22 @@ public class HudModelTest
 		assertNull(HudBlocks.block(input(view(S403, p, worn), quiet(), null)));
 	}
 
+	@Test
+	public void missingPurchasesShareOneShoppingCard()
+	{
+		PrepPlan p = plan(line("Willow shortbow", 1, "INVENTORY", "CRITICAL", "NOW", null, null), line("Mithril arrow", 100, "INVENTORY", "CRITICAL", "NOW", null, null),
+			line("Coif", 1, "INVENTORY", "CRITICAL", "NOW", null, null));
+		StepGuide.View v = view(S403, p, item("Willow shortbow", StepGuide.Have.NONE, 0, 1, 0, 0, null, false),
+			item("Mithril arrow", StepGuide.Have.NONE, 0, 100, 0, 0, null, false), item("Coif", StepGuide.Have.NONE, 0, 1, 0, 0, null, false));
+		HudModel.Input in = input(v, quiet(), null);
+		HudBlocks.Block b = HudBlocks.block(in);
+		assertEquals("Buy 3 items", b.headline);
+		assertEquals("Willow shortbow, 100 Mithril arrow, Coif", b.status);
+		assertTrue(b.now.stream().anyMatch(l -> l.getText().startsWith("Coif")));
+		assertTrue("the Prepare tab does not repeat the shopping card",
+			HudAdvice.prepareLines(in, b).stream().noneMatch(l -> l.getText().startsWith("Coif") || l.getText().startsWith("Mithril")));
+	}
+
 	// ---------- Builders ----------
 
 	/** An item with its live figures: name, state, with you, needed, in the bank (-1 not seen), worn, healing (food), substitutes. */

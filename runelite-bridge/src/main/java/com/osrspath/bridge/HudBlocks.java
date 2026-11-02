@@ -17,7 +17,14 @@ final class HudBlocks
 		boolean danger;
 		/** The item's name key, so the preparation list does not say it twice. */
 		String key;
+		/** The other items bought on the same trip (a shopping card), by name key. */
+		final List<String> alsoKeys = new ArrayList<>();
 		final List<Line> now = new ArrayList<>();
+
+		boolean covers(String k)
+		{
+			return k.equals(key) || alsoKeys.contains(k);
+		}
 	}
 
 	/**
@@ -96,9 +103,52 @@ final class HudBlocks
 			{
 				b.now.add(Line.small(Icon.DOT, "Other items the step accepts count too.", Tone.MUTED));
 			}
+			if (i.getHave() == StepGuide.Have.NONE)
+			{
+				shopping(b, i, v, prep, in);
+			}
 			return b;
 		}
 		return null;
+	}
+
+	/**
+	 * Every other item the step still needs to buy (missing, not in the bank) joins the first one on one card, so the player
+	 * shops once instead of item by item: the headline counts them, the status names them, a line each says where.
+	 */
+	private static void shopping(Block b, StepGuide.ItemLine first, StepGuide.View v, PrepPlan prep, Input in)
+	{
+		List<StepGuide.ItemLine> buys = new ArrayList<>();
+		buys.add(first);
+		for (StepGuide.ItemLine i : scope(v))
+		{
+			PrepPlan.Line plan = prep == null ? null : prep.line(i.getName());
+			if (i != first && i.getHave() == StepGuide.Have.NONE && (plan == null || "CRITICAL".equals(plan.getPriority())))
+			{
+				buys.add(i);
+			}
+		}
+		if (buys.size() < 2)
+		{
+			return;
+		}
+		List<String> names = new ArrayList<>();
+		for (StepGuide.ItemLine i : buys)
+		{
+			String name = PrepPlan.rawName(i.getName());
+			int left = i.getCount() < 0 ? i.getNeed() : i.getNeed() - i.getCount();
+			names.add(left > 1 ? left + " " + name : name);
+			if (i != first)
+			{
+				b.alsoKeys.add(ActiveTarget.nameKey(name));
+				GuideList.Action action = i.getPlace() >= 0 ? GuideList.Action.place(i.getPlace()) : GuideList.Action.NONE;
+				String where = i.getWhere() == null || i.getWhere().isEmpty() ? whereWord(i, in) : i.getWhere();
+				b.now.add(new Line(Icon.MISSING, name + " · " + where, figure(i), Tone.CAUTION, true, action,
+					name + ": " + where + (action.isClickable() ? " Click for the arrow and path there." : "")));
+			}
+		}
+		b.headline = "Buy " + buys.size() + " items";
+		b.status = String.join(", ", names);
 	}
 
 	/** Whether a required item stops the activity now. */

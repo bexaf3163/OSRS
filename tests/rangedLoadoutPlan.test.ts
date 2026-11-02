@@ -30,6 +30,10 @@ describe('one complete, level-appropriate F2P ranged kit', () => {
     expect(kit.some(n => n.startsWith('Gilded'))).toBe(false);
     expect(kit).not.toContain('Amulet of strength');
   });
+  it('upgrades owned hardleather to studded once Ranged and Defence allow it: same +8 Ranged, more defence', () => {
+    expect(names(state(20, 44, 10000, { 'Hardleather body': 1 }))).toContain('Studded body');
+  });
+
   it('reuses an owned bow, compatible banked arrows and owned armour with no cash', () => {
     const kit = names(state(40, 40, 0, { 'Maple shortbow': 1, 'Adamant arrow': 100, "Green d'hide chaps": 1, 'Amulet of power': 1 }));
     expect(kit[0]).toBe('Maple shortbow');

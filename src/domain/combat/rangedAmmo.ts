@@ -20,7 +20,7 @@ import { gearData } from './gearAdvisor';
 import { nameKey } from '../items/itemKey';
 import { levelForXp, xpForLevel } from '../player/xp';
 
-export interface RangedGearItem { name: string; slot: string; rangedAttack: number; rangedStrength: number; speed?: number }
+export interface RangedGearItem { name: string; slot: string; rangedAttack: number; rangedStrength: number; defence: number; speed?: number }
 export const RANGED_GEAR = (rangedGearJson as { items: RangedGearItem[] }).items;
 
 export type RangedStyle = 'accurate' | 'rapid' | 'longrange';

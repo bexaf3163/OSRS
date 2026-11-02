@@ -38,6 +38,8 @@ export interface RangedGearItem {
   slot: string;
   rangedAttack: number;
   rangedStrength: number;
+  /** Stab + slash + crush + magic + ranged defence: ranks armour of the same Ranged attack. */
+  defence: number;
   /** A weapon's ticks between attacks (before Rapid). */
   speed?: number;
 }
@@ -49,9 +51,10 @@ for (const page of PAGES) {
   const rangedAttack = num(f.get('arange'));
   const rangedStrength = num(f.get('rstr'));
   const slot = (f.get('slot') ?? '').toLowerCase();
+  const defence = ['dstab', 'dslash', 'dcrush', 'dmagic', 'drange'].reduce((s, k) => s + (num(f.get(k)) ?? 0), 0);
   if (rangedAttack === null || rangedStrength === null || !slot) { problems.push(`${page}: no ${[rangedAttack === null && 'arange', rangedStrength === null && 'rstr', !slot && 'slot'].filter(Boolean).join(', ')}`); continue; }
   const speed = num(f.get('speed'));
-  items.push({ name: page, slot, rangedAttack, rangedStrength, ...(speed !== null && /weapon|2h/.test(slot) ? { speed } : {}) });
+  items.push({ name: page, slot, rangedAttack, rangedStrength, defence, ...(speed !== null && /weapon|2h/.test(slot) ? { speed } : {}) });
 }
 if (problems.length) {
   console.error(`rangedGear.json was not written:\n  ${problems.join('\n  ')}`);
