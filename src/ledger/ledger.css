@@ -54,8 +54,7 @@
 .la-stat small{display:block;font-family:var(--la-disp);font-size:10px;letter-spacing:.2em;color:var(--la-mute)}
 .la-stat b{font-family:var(--la-disp);font-size:20px;color:var(--la-gold2);font-weight:600}
 .la-gem{display:flex;align-items:center;gap:9px;font-size:15px;color:#a8d6bf;font-style:italic}
-.la-gem i{width:12px;height:12px;transform:rotate(45deg);background:radial-gradient(circle at 30% 30%,#b8ffe0,#2f9a72);box-shadow:0 0 12px #3fcf95aa;animation:la-pl 2.4s infinite}
-@keyframes la-pl{50%{box-shadow:0 0 3px #3fcf9566}}
+.la-gem i{width:12px;height:12px;transform:rotate(45deg);background:radial-gradient(circle at 30% 30%,#b8ffe0,#2f9a72);box-shadow:0 0 12px #3fcf95aa}
 .la-tools{display:flex;gap:6px}
 .la-tool{height:36px;min-width:36px;padding:0 10px;display:flex;align-items:center;gap:7px;border:1px solid #3d2c19;color:var(--la-parch2);background:#120b07;font-family:var(--la-disp);font-size:10px;letter-spacing:.14em}
 .la-tool:hover{border-color:var(--la-gold);color:var(--la-gold2)}

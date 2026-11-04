@@ -75,9 +75,7 @@ export function Road({ stages, unrolled, onToggle, onSelectStep }: RoadProps) {
                 {points.map(({ x, y, step }) =>
                   step.state === 'current' ? (
                     <g key={step.id}>
-                      <circle cx={x} cy={y} r="14" fill="#c4512a30">
-                        <animate attributeName="r" values="11;17;11" dur="2.4s" repeatCount="indefinite" />
-                      </circle>
+                      <circle cx={x} cy={y} r="14" fill="#c4512a30" />
                       <circle cx={x} cy={y} r="9" fill={nodeColor(step)} stroke="#2b1d11" strokeWidth="1.5" />
                     </g>
                   ) : (

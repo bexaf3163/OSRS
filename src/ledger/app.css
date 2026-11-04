@@ -28,14 +28,13 @@ body{background:#050302}
 .la-gem .bridge-indicator.is-online{color:#a8d6bf}
 .la-gem .bridge-indicator.is-stale{color:var(--la-gold2)}
 .la-gem .bridge-dot{width:12px;height:12px;flex:none;font-size:0;transform:rotate(45deg);background:#5a4a38;box-shadow:none;border-radius:0}
-.la-gem .is-online .bridge-dot{background:radial-gradient(circle at 30% 30%,#b8ffe0,#2f9a72);box-shadow:0 0 12px #3fcf95aa;animation:la-pl 2.4s infinite}
+.la-gem .is-online .bridge-dot{background:radial-gradient(circle at 30% 30%,#b8ffe0,#2f9a72);box-shadow:0 0 12px #3fcf95aa}
 .la-gem .is-stale .bridge-dot{background:radial-gradient(circle at 30% 30%,#ffe7a8,#b98a2f)}
 .la-gem .bridge-label-short{display:none}
 :root .la-root .la-gem .bridge-label{max-width:none;overflow:visible;white-space:nowrap}
 :root .la-root .la-gem .launch-runelite{height:32px;padding:0 10px;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--la-gold);background:#150e09;color:var(--la-gold2);font-family:var(--la-disp);font-style:normal;font-weight:600;font-size:10px;letter-spacing:.14em;border-radius:0;box-shadow:none}
 :root .la-root .la-gem .launch-runelite [aria-hidden="true"]{display:none}
 :root .la-root .la-gem .launch-runelite:hover{background:#2a1d0e}
-@media (prefers-reduced-motion: reduce){.la-gem .is-online .bridge-dot, .la-gem i{animation:none}}
 
 /* ---- notices above the book ---- */
 .la-main>:is(.update-banner,.profile-banner,.plaque,[role="alert"]):not(.la-book){margin:0 0 18px;background:linear-gradient(90deg,#2a1d12,#3a281a);color:var(--la-parch);border:1px solid #8a6d3a;border-radius:0;box-shadow:inset 0 0 0 3px #2a1d12,inset 0 0 0 4px #7b6030;padding:9px 14px;font-size:15.5px}
