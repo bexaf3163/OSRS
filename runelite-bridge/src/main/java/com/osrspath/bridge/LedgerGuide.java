@@ -3,6 +3,7 @@ package com.osrspath.bridge;
 import com.osrspath.bridge.OsrsPathGuideOverlay.Layout;
 import com.osrspath.bridge.OsrsPathGuideOverlay.Part;
 import com.osrspath.bridge.OsrsPathGuideOverlay.Row;
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -292,10 +293,18 @@ final class LedgerGuide
 	{
 		if (drawn == null || l != drawnLayout || hovered != drawnHover || opacity != drawnOpacity)
 		{
-			BufferedImage img = new BufferedImage(l.getSize().width, l.getSize().height, BufferedImage.TYPE_INT_ARGB);
+			int w = l.getSize().width, h = l.getSize().height;
+			boolean reuse = drawn != null && drawn.getWidth() == w && drawn.getHeight() == h;
+			BufferedImage img = reuse ? drawn : new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D c = img.createGraphics();
 			try
 			{
+				if (reuse)
+				{
+					c.setComposite(AlphaComposite.Clear);
+					c.fillRect(0, 0, w, h);
+					c.setComposite(AlphaComposite.SrcOver);
+				}
 				c.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 				c.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 				draw(c, l, hovered, opacity);

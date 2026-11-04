@@ -1,6 +1,6 @@
 # OSRS Path — project handoff
 
-Updated 2026-11-01. **This is the only current project contract, architecture map, work state, backlog and handoff.** Stable rules come first, changing state (remaining work, verification, receipt) last. Read the section a change needs. AGENTS.md and CLAUDE.md point here; README.md introduces the product.
+Updated 2026-11-04. **This is the only current project contract, architecture map, work state, backlog and handoff.** Stable rules come first, changing state (remaining work, verification, receipt) last. Read the section a change needs. AGENTS.md and CLAUDE.md point here; README.md introduces the product.
 
 ## Documentation policy
 
@@ -215,11 +215,11 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 
 ## Current verification
 
-2.81.19 (optimization batches 1 and 2; owner's Windows PC, at least two runs per build): per-update script 70.3 → 20.5 ms, start-up blocking −53…−74%, page switches within +0.7 ms, web build −26%, unit run 72 → 9 s, axe 0 on nine pages, screenshots identical apart from known noise. Real-game acceptance is pending (P4).
+2.81.19 (batches 1–2; Windows PC, >=2 runs/build): per-update script 70.3 → 20.5 ms, start-up blocking −53…−74%, page switches within +0.7 ms, web build −26%, unit run 72 → 9 s, axe 0 on nine pages, screenshots identical apart from known noise. Real-game acceptance pending (P4).
 
 2.81.20–30 (S1, S3–S8, S10, C1, S11, X2, X8, X9; no visible change): largest folder 139 → 19 files, 0 layer violations (from 29), files importing JSON directly 49 → 0; 874 browser checks in 131–158 s (from 319 s); splits: `OsrsPathBridgePlugin` 4,231 → 797 lines plus eight section classes, `HudModel` 1,175 → 468, `ActiveTarget` 1,078 → 298, `src/types` in seven topic files (bundle byte-identical), `runeliteBridge.ts` 627 → 522, `BridgeServer` 1,162 → 796, `bridge.tsx` 881 → 60 (state in `bridgeCore.ts`), `styles.css` in 14 files (byte-identical); files over 1,000 lines 5 → 0; knip fails on dead exports (15 removed). Local gates pass (2,519 unit, 874 browser, 95 Electron, 648 Java).
 
-2.81.31–32: Ledger is the only HUD look (84–254 µs per frame), checked in game 2026-11-02; Classic, Glass and Sora deleted; 643 Java tests.
+2.81.31–40: Ledger is the only HUD look (84–254 µs/frame), checked in game 2026-11-02; Classic/Glass/Sora deleted; 2 GB G1GC RuneLite launch, HUD image/font reuse, opt-in debug shots; 644 Java tests.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt

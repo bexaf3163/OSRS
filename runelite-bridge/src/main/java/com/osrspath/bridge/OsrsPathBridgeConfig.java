@@ -457,7 +457,7 @@ public interface OsrsPathBridgeConfig extends Config
 	)
 	default boolean telemetryShots()
 	{
-		return true;
+		return false;
 	}
 
 	@ConfigItem(
@@ -483,7 +483,7 @@ public interface OsrsPathBridgeConfig extends Config
 	)
 	default boolean telemetryEventShots()
 	{
-		return true;
+		return false;
 	}
 
 	@ConfigItem(

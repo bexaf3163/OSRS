@@ -25,4 +25,11 @@ public class ConfigDefaultsTest
 		ConfigItem item = OsrsPathBridgeConfig.class.getMethod("smartOverlays").getAnnotation(ConfigItem.class);
 		assertEquals("smartView", item.keyName());
 	}
+
+	@Test
+	public void automaticScreenshotsAreOffByDefault()
+	{
+		assertFalse("anomaly screenshots cause full-canvas GL readbacks and stay opt-in", defaults().telemetryShots());
+		assertFalse("step screenshots cause full-canvas GL readbacks and stay opt-in", defaults().telemetryEventShots());
+	}
 }

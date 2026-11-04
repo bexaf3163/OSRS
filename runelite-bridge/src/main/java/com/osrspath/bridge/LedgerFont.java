@@ -35,14 +35,14 @@ final class LedgerFont
 		return new Font(Font.SERIF, Font.PLAIN, 14);
 	}
 
-	static Font display(float size)
+	static synchronized Font display(float size)
 	{
-		return DISPLAY.deriveFont(Font.PLAIN, (float) Math.round(size));
+		return DISPLAYS.computeIfAbsent(Math.round(size), s -> DISPLAY.deriveFont(Font.PLAIN, (float) s));
 	}
 
-	static Font text(float size)
+	static synchronized Font text(float size)
 	{
-		return TEXT.deriveFont(Font.PLAIN, (float) Math.round(size));
+		return TEXTS.computeIfAbsent(Math.round(size), s -> TEXT.deriveFont(Font.PLAIN, (float) s));
 	}
 
 	/** Spaced capitals as in the app's stamps, tabs and section names; kept per size, since the card asks for them every frame. */
@@ -57,6 +57,8 @@ final class LedgerFont
 		});
 	}
 
+	private static final Map<Integer, Font> DISPLAYS = new HashMap<>();
+	private static final Map<Integer, Font> TEXTS = new HashMap<>();
 	private static final Map<Float, Font> LABELS = new HashMap<>();
 
 	static int advance(Graphics2D g, String s, Font f)
