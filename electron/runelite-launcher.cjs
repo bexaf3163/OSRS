@@ -13,16 +13,13 @@ const http = require('node:http');
 const MAIN_CLASS = 'com.osrspath.bridge.OsrsPathLauncher';
 const PLUGIN_JAR = 'osrs-path-bridge.jar';
 // As in the RuneLite launcher (its config.json); -ea is needed by loadBuiltin.
-// Heap is 2048 MB with 8 MB G1 regions and a 10 ms pause target so 117 HD, Quest Helper, Shortest Path
-// and HUD surfaces avoid G1 humongous-allocation stalls (triggered >512 KB on 1 MB regions at 1024 MB).
+// 1536 MB ceiling + 4 MB G1 regions raise the humongous threshold from 512 KB to 2 MB for 117 HD / HUD
+// buffers while keeping OpenJDK 17's default 200 ms G1 target so startup and zone streaming stay fast.
 const JVM_ARGS = [
   '-ea',
-  '-Xms1024m',
-  '-Xmx2048m',
+  '-Xmx1536m',
   '-Xss2m',
-  '-XX:+UseG1GC',
-  '-XX:G1HeapRegionSize=8m',
-  '-XX:MaxGCPauseMillis=10',
+  '-XX:G1HeapRegionSize=4m',
   '-XX:CompileThreshold=1500',
   '-XX:+DisableAttachMechanism',
 ];

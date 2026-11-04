@@ -219,7 +219,7 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 
 2.81.20–30 (S1, S3–S8, S10, C1, S11, X2, X8, X9; no visible change): largest folder 139 → 19 files, 0 layer violations (from 29), files importing JSON directly 49 → 0; 874 browser checks in 131–158 s (from 319 s); splits: `OsrsPathBridgePlugin` 4,231 → 797 lines plus eight section classes, `HudModel` 1,175 → 468, `ActiveTarget` 1,078 → 298, `src/types` in seven topic files (bundle byte-identical), `runeliteBridge.ts` 627 → 522, `BridgeServer` 1,162 → 796, `bridge.tsx` 881 → 60 (state in `bridgeCore.ts`), `styles.css` in 14 files (byte-identical); files over 1,000 lines 5 → 0; knip fails on dead exports (15 removed). Local gates pass (2,519 unit, 874 browser, 95 Electron, 648 Java).
 
-2.81.31–40: Ledger is the only HUD look (84–254 µs/frame), checked in game 2026-11-02; Classic/Glass/Sora deleted; 2 GB G1GC RuneLite launch, HUD image/font reuse, opt-in debug shots; 644 Java tests.
+2.81.31–41: Ledger is the only HUD look (84–254 µs/frame), checked in game 2026-11-02; Classic/Glass/Sora deleted; 1.5 GB / 4 MB G1 RuneLite launch, HUD image/font reuse, opt-in debug shots; 644 Java tests.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt
