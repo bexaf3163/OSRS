@@ -120,23 +120,27 @@ async function marketPreparationScenarios(browser: Browser) {
   for (const width of [1280]) for (const unavailable of [false, true]) {
     const { page, errors } = await open(browser, width, {
       market: true, marketUnavailable: unavailable,
-      progress: progressBefore('S4-04', { gameMode: 'f2p' }),
-      localStorage: { 'osrs-put:active-step': 'S4-04' },
-      status: { protocol: 6, activeStepId: 'S4-04', coins: 10000, bankCoins: 0 },
-      events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Lobster', carried: 0, noted: 0, bank: 0 }] }],
-    }, '#/step/S4-04');
-    // The quest's items are on the Preparation ribbon.
+      progress: progressBefore('S3-01', { gameMode: 'f2p' }),
+      localStorage: { 'osrs-put:active-step': 'S3-01' },
+      status: { protocol: 6, activeStepId: 'S3-01', coins: 10000, bankCoins: 0 },
+      events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Clay', carried: 0, noted: 0, bank: 0 }] }],
+    }, '#/step/S3-01');
+    // The quest's items are on the Preparation ribbon. The quote is checked on Doric's 6 Clay: S4-04's dragon food is only a
+    // suggestion since 2.82.1 (no fight estimate yet), so it is not a preparation line.
     await reveal(page, '.quest-supply-list');
     const supplies = page.locator('.quest-supply-list');
-    await supplies.getByText(unavailable ? 'Price unavailable' : 'GE estimate: ≈ 2,280 gp (114 each)', { exact: true }).waitFor({ timeout: 6000 });
-    expect(await supplies.getByText(unavailable ? 'Price unavailable' : 'GE estimate: ≈ 2,280 gp (114 each)', { exact: true }).count() === 1,
+    const quote = unavailable ? /^Price unavailable$/ : /^GE estimate: ≈ ([\d,]+) gp \((\d+) each\)$/;
+    await supplies.locator('li', { hasText: 'Clay' }).getByText(quote).waitFor({ timeout: 6000 });
+    const clay = await supplies.locator('li', { hasText: 'Clay' }).getByText(quote).allInnerTexts();
+    const parts = clay[0]?.match(quote);
+    expect(clay.length === 1 && (unavailable || Number(parts![1].replace(/,/g, '')) === 6 * Number(parts![2])),
       'market preparation (' + width + ', unavailable=' + unavailable + '): one supporting estimate, multiplied from the current quote');
     await settle(page);
     const price = await page.evaluate(() => {
       const w = window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; price?: string }[] } } }[] };
-      return w.__posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.lines.find(l => l.name === 'Lobster')?.price;
+      return w.__posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.lines.find(l => l.name === 'Clay')?.price;
     });
-    expect(unavailable ? price === 'Price unavailable' : !!price?.startsWith('GE estimate: ≈ 2,280 gp'),
+    expect(unavailable ? price === 'Price unavailable' : price === clay[0],
       'market preparation (' + width + ', unavailable=' + unavailable + '): the game receives the same estimate or honest absence');
     expect(!(await page.locator('main').innerText()).includes('26 Sep 2026'), 'market preparation (' + width + '): no historical route price date');
     expect(await noOverflow(page) && !errors.length, 'market preparation (' + width + '): no overflow or console errors');
@@ -253,7 +257,8 @@ async function rangedPreparationScenarios(browser: Browser) {
       const current = await snapshot();
       expect(JSON.stringify(current?.step?.npcNames) === JSON.stringify([npc]) && !current?.step?.worldPoint?.label?.includes('Corsair'), `ranged (${width}, level${level}): method, scenery and destination advance together`);
       expect(current?.step?.checklist?.some((r: any) => r.name === (level >= 30 ? 'Maple shortbow' : 'Willow shortbow') && r.equip), `ranged (${width}, level${level}): the current bow unlock is actual preparation`);
-      if (level === 26) expect(current?.step?.checklist?.some((r: any) => r.name === 'Salmon' && r.count === 10) && current.plan?.lines?.find((r: any) => r.name === 'Salmon')?.where === 'BANK', `ranged (${width}): the later combat method asks for owned banked food`);
+      // Training food is only a suggestion (owner report 2026-11-08: the HUD asked for "Salmon or similar 0/10" on Ranged training).
+      if (level === 26) expect(!current?.step?.checklist?.some((r: any) => r.name === 'Salmon') && !current?.plan?.lines?.some((r: any) => r.name === 'Salmon'), `ranged (${width}): the later combat method does not require the guide's food`);
     }
     await reveal(page, '.training:visible');
     expect((await text(page, '.training:visible')).includes('Giant frogs'), `ranged (${width}): the visible desktop advice matches the game target`);

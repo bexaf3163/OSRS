@@ -11,7 +11,7 @@ import {
 import { durationText } from './splits';
 import { heldUnits } from '../player/heldUnits';
 import { heldExact } from '../player/playerState';
-import { effectiveHeal } from '../player/foodStock';
+import { effectiveHeal, stepFood } from '../player/foodStock';
 import { currentXp, itemGoal, objectiveEstimates } from './combatObjectives';
 
 export const BASIS_LABEL: Record<Basis, string> = {
@@ -44,8 +44,8 @@ export interface OwnedFood {
 export type FoodReservations = ReadonlyMap<string, { count: number; stepId: string }>;
 
 /** What open steps other than this one need of each food the step accepts: those pieces are for the quest, never to be eaten. */
-export function foodReservations(step: Pick<Step, 'id' | 'itemsRequired'>, open: readonly Pick<Step, 'id' | 'itemsRequired'>[]): FoodReservations {
-  const item = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
+export function foodReservations(step: Pick<Step, 'id' | 'itemsRequired' | 'itemsRecommended'>, open: readonly Pick<Step, 'id' | 'itemsRequired'>[]): FoodReservations {
+  const item = stepFood(step);
   const out = new Map<string, { count: number; stepId: string }>();
   if (!item) return out;
   const foods = new Set([item.nameEn, ...(item.anyOf ?? [])].map(nameKey));
@@ -104,8 +104,8 @@ export const minutesText = (r: Range) => {
 };
 
 /** The food of the step and its alternatives you own, counted in pieces of the step's food by healing. Unknown — null. */
-export function ownedFood(step: Pick<Step, 'itemsRequired'>, owned: OwnedState | null, reserved: FoodReservations = new Map(), hitpoints?: number): OwnedFood | null {
-  const item = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
+export function ownedFood(step: Pick<Step, 'itemsRequired' | 'itemsRecommended'>, owned: OwnedState | null, reserved: FoodReservations = new Map(), hitpoints?: number): OwnedFood | null {
+  const item = stepFood(step);
   if (!item || !owned) return null;
   let carried = 0;
   let bank = 0;
@@ -203,7 +203,7 @@ export function combatPlanView(
   const project = (strengthDoses: number) => goals.length && foe ? objectiveEstimates(step, foe, goals, remaining, { ...ctx, strengthDoses }) : [];
   const list = project(doses);
   const primary = chooseVariant(list, ctx.fights);
-  const item = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
+  const item = stepFood(step);
   if (!primary || !item) return null;
   const food = item.nameEn;
   const total = roundPieces(primary.food);

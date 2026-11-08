@@ -12,15 +12,15 @@ async function fundingScenarios(browser: Browser) {
   const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
   // The plugin reports every item the route asks about, zero included; what is worn counts as carried.
   const all = JSON.parse(readFileSync(new URL('../../../../src/data/authored/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
-  const from = all.findIndex((x) => x.id === 'S4-03');
+  const from = all.findIndex((x) => x.id === 'S2-10');
   const worn = new Set(equipment.map((e) => e.name));
   const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))];
   const owned = asked.map((name) => ({ name, carried: worn.has(name) ? 1 : 0, noted: 0, bank: 0 }));
   for (const width of [1440]) {
     const { page, errors } = await open(browser, width, {
-      progress: progressBefore('S4-03', { gameMode: 'f2p' }),
+      progress: progressBefore('S2-10', { gameMode: 'f2p' }),
       status: {
-        protocol: 6, inGame: true, player: 'Funding Test', activeStepId: 'S4-03', questPoints: 30, totalLevel: 150,
+        protocol: 6, inGame: true, player: 'Funding Test', activeStepId: 'S2-10', questPoints: 30, totalLevel: 150,
         stats: { attack: 30, strength: 21, defence: 1, hitpoints: 24 }, pos: { x: 3093, y: 3495, plane: 0 }, ...gear,
       },
       events: [
@@ -28,7 +28,7 @@ async function fundingScenarios(browser: Browser) {
         { type: 'STATS', stats: { attack: 30, strength: 21, defence: 1, hitpoints: 24 } }, { type: 'XP', xp: { attack: 13363, strength: 2000, defence: 0, hitpoints: 3500 } },
       ],
       market: true,
-    }, '#/step/S4-03');
+    }, '#/step/S2-10');
     await reveal(page, '.one-trip');
     await settle(page);
     const posts = async () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts);
@@ -57,7 +57,7 @@ async function fundingScenarios(browser: Browser) {
     expect((await text(page, '.status-funding')).includes(String(sentPlan?.action ?? '\u0000')), `funding (${width} px): the app and the game say the same sentence`);
     expect(await page.locator('.funding-card.is-running').count() === 1, `funding (${width} px): the card shows the step in hand`);
     const saved = await page.evaluate(() => Object.entries(localStorage).filter(([k]) => k.startsWith('osrs-put:funding-plan')).map(([, v]) => JSON.parse(v)));
-    expect(saved.length === 1 && saved[0].sourceStepId === 'S4-03' && saved[0].character === 'Funding Test', `funding (${width} px): the plan is saved for this character`);
+    expect(saved.length === 1 && saved[0].sourceStepId === 'S2-10' && saved[0].character === 'Funding Test', `funding (${width} px): the plan is saved for this character`);
     if (process.env.UI_SHOTS) await page.locator('.funding-card').screenshot({ path: `${process.env.UI_SHOTS}/funding-running-${width}.png` }).catch(() => {});
     await page.locator('.funding-card.is-running').getByRole('button', { name: 'Cancel', exact: true }).click();
     await settle(page);
@@ -67,7 +67,7 @@ async function fundingScenarios(browser: Browser) {
     const gone = await page.evaluate(() => Object.keys(localStorage).filter((k) => k.startsWith('osrs-put:funding-plan')).length);
     expect(gone === 0, `funding (${width} px): nothing is left saved`);
     const done = await page.evaluate(() => { const j = (window as unknown as { __saved?: string }).__saved; return j ? JSON.parse(j) : null; });
-    expect(!done || !done.steps || done.steps['S4-03'] === undefined, `funding (${width} px): the route step was not touched`);
+    expect(!done || !done.steps || done.steps['S2-10'] === undefined, `funding (${width} px): the route step was not touched`);
     expect(errors.length === 0, `funding (${width} px): no console errors ${errors.join('; ')}`);
     await page.context().close();
   }
@@ -80,19 +80,19 @@ async function moneyScenarios(browser: Browser) {
   const equipment = ([[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']] as [number, string, string][])
     .map(([id, name, slot]) => ({ id, name, slot }));
   const all = JSON.parse(readFileSync(new URL('../../../../src/data/authored/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
-  const from = all.findIndex((x) => x.id === 'S4-03');
+  const askedFor = (id: string) => { const from = all.findIndex((x) => x.id === id); return [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))]; };
   const worn = new Set(equipment.map((e) => e.name));
-  const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))];
   const stats = { attack: 30, strength: 21, defence: 1, hitpoints: 24 };
-  const hero = (o: { bankSeen?: boolean; offline?: boolean; coins?: number } = {}): Mock => {
+  const hero = (o: { bankSeen?: boolean; offline?: boolean; coins?: number; step?: string } = {}): Mock => {
+    const step = o.step ?? 'S4-03', asked = askedFor(step);
     const gear = { equipment, inventory: [], coins: o.coins ?? 400, bankCoins: o.bankSeen === false ? null : 0 };
     const owned = asked.map((name) => ({ name, carried: worn.has(name) ? 1 : 0, noted: 0, ...(o.bankSeen === false ? {} : { bank: 0 }) }));
     return {
-      progress: progressBefore('S4-03', { gameMode: 'f2p' }),
-      localStorage: { 'osrs-put:active-step': 'S4-03' },
+      progress: progressBefore(step, { gameMode: 'f2p' }),
+      localStorage: { 'osrs-put:active-step': step },
       market: true,
       ...(o.offline ? { offline: true } : {
-        status: { protocol: 6, inGame: true, player: 'Money Test', activeStepId: 'S4-03', questPoints: 30, totalLevel: 150, stats, pos: { x: 3093, y: 3495, plane: 0 }, ...gear },
+        status: { protocol: 6, inGame: true, player: 'Money Test', activeStepId: step, questPoints: 30, totalLevel: 150, stats, pos: { x: 3093, y: 3495, plane: 0 }, ...gear },
         events: [
           { type: 'OWNED', bankSeen: o.bankSeen !== false, items: owned }, { type: 'GEAR', gear }, { type: 'QUESTS', done: [] },
           { type: 'STATS', stats }, { type: 'XP', xp: { attack: 13363, strength: 2000, defence: 0, hitpoints: 3500 } },
@@ -225,7 +225,8 @@ async function moneyScenarios(browser: Browser) {
 
   // The coin card leads here.
   {
-    const { page, errors } = await open(browser, 1440, hero({ coins: 0 }), '#/step/S4-03');
+    // A real quest shortfall (Prince Ali Rescue): S4-03's training food is only a suggestion since 2.82.1.
+    const { page, errors } = await open(browser, 1440, hero({ coins: 0, step: 'S2-10' }), '#/step/S2-10');
     await reveal(page, '.one-trip');
     await settle(page);
     const card = (await page.locator('.funding-card .funding-line').first().innerText()).trim();
@@ -235,7 +236,7 @@ async function moneyScenarios(browser: Browser) {
     const best = (await page.locator('.money-reco-head strong').innerText()).trim();
     expect(card === best, `money: the coin card and the Money section recommend the same method (${card} / ${best})`);
     await page.locator('.money-reco').getByRole('button', { name: 'Start…' }).click();
-    expect(/Cover the [\d,]+ gp S4-03 is short/.test(await page.locator('.money-reco .money-goal').innerText()), 'money: the zero-coin account still gets its real step-shortfall goal');
+    expect(/Cover the [\d,]+ gp S2-10 is short/.test(await page.locator('.money-reco .money-goal').innerText()), 'money: the zero-coin account still gets its real step-shortfall goal');
     expect(errors.length === 0, `money (card link): no console errors ${errors.join('; ')}`);
     await page.context().close();
   }

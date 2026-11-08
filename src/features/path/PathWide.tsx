@@ -20,6 +20,8 @@ import { Welcome } from './Welcome';
 import { ManualConfirm } from './ManualConfirm';
 import { Eyebrow, Icon, Page, Road } from '../../ledger';
 import { roadStages } from '../../ledger/adapters';
+import { plannerOrder, useDecision } from '../../state/decision';
+import { PlannerOrder } from './PlannerOrder';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -31,6 +33,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   const dependencies = useReadinessEngine().dependencies;
   const training = useTrackedTraining();
   const activity = useActiveActivity();
+  const decision = useDecision();
   // The committed Decision's step; with none (offline, waiting for data) the first open step is only where browsing starts.
   const suggested = activity.source === 'training' ? null : activity.step;
   // Without a Decision nothing is "current"; the first open step is only where browsing starts.
@@ -125,6 +128,10 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   }, []);
 
   const at = steps.findIndex((s) => s.id === selected.id);
+  // Previous/Next follow the planner's live order of quests, never the guide's written order between quests.
+  const order = useMemo(() => plannerOrder(decision, progress), [decision, progress]);
+  const ranked = order.findIndex((row) => row.stepId === selected.id);
+  const near = (index: number) => steps.find((s) => s.id === order[index]?.stepId);
   const road = useMemo(() => roadStages(stages, steps, progress, qp, dependencies, suggested?.id, railId), [stages, steps, progress, qp, dependencies, suggested?.id, railId]);
   const chapters = road.length;
   const unrolled = useMemo(() => new Set([...openStages].map(String)), [openStages]);
@@ -143,6 +150,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
           </button>
         </div>
         <div className="la-scroll">
+          <PlannerOrder rows={order} confidence={decision?.confidence ?? null} selectedId={selected.id} onSelect={(id) => select(id, false)} />
+          <Eyebrow>GUIDE WALKTHROUGH · WRITTEN ORDER, FOR REFERENCE</Eyebrow>
           <Road stages={road} unrolled={unrolled} onToggle={(key) => toggleStage(Number(key))} onSelectStep={(s) => select(s.id, false)} />
         </div>
       </Page>
@@ -152,8 +161,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
         suggested={selected.id === suggested?.id}
         onDone={complete}
         nextId={upcoming?.id}
-        prev={steps[at - 1]}
-        next={steps[at + 1]}
+        prev={ranked > 0 ? near(ranked - 1) : undefined}
+        next={ranked >= 0 ? near(ranked + 1) : undefined}
         onSelect={select}
         position={{ at, total: steps.length }}
         busy={switching}

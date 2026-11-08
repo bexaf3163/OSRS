@@ -3,6 +3,12 @@ import { heldExact, type Held, type PlayerState } from './playerState';
 import type { OwnedItem } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
 import { FOODS, type Food } from '../../data/threats';
+import type { Step } from '../../types';
+
+/** The step's own combat food: required when the player's estimate needs it, otherwise the recommended one (training, unestimated fights). */
+export function stepFood(step: Pick<Step, 'itemsRequired' | 'itemsRecommended'>) {
+  return (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number') ?? (step.itemsRecommended ?? []).find((i) => typeof i.heals === 'number');
+}
 
 /** Only explicit combat food may use edible alternatives; a quest ingredient stays an exact item. */
 export interface FoodRequirement { nameEn: string; heals: number; anyOf?: readonly string[] }

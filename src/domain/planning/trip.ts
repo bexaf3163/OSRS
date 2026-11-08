@@ -5,17 +5,26 @@ import { acceptsDecision } from './scope';
 import type { ActionCost, DecisionScope, Minutes } from './contracts';
 import { noTime, sumMinutes } from './cost';
 
-const pointKey = (p: WorldPoint) => `${p.x},${p.y},${p.plane}`;
+/** Tiles counted for one floor change by stairs or a ladder. */
+const STAIRS_TILES = 15;
+const pointKey =(p: WorldPoint) => `${p.x},${p.y},${p.plane}`;
 const samePoint = (a: WorldPoint, b: WorldPoint) => pointKey(a) === pointKey(b);
 const validPoint = (p: WorldPoint) => Number.isSafeInteger(p.x) && Number.isSafeInteger(p.y) && p.x >= 0 && p.y >= 0 && [0, 1, 2, 3].includes(p.plane);
 
-/** Read worker evidence once. No path search, straight-line substitute, floor guess or transport invention occurs here. */
+/** Read worker evidence once. No path search or transport invention occurs here; a destination the search ended within 10 tiles of gets a labelled door/stairs allowance. */
 export function createWalkingCosts(scope: DecisionScope, batches: readonly RouteBatch[]) {
   const costs = new Map<string, Minutes | null>();
   for (const batch of batches) {
     if (!acceptsDecision(scope, batch.scope) || batch.targets.length !== batch.routes.length || !validPoint(batch.from)) continue;
     batch.targets.forEach((target, index) => {
       const key = `${pointKey(batch.from)}>${pointKey(target)}`, route = batch.routes[index];
+      // shortcut: door and stairs edges are not in the routing data, so the last few tiles from the nearest reached tile are an allowance; replace with sourced door/stairs edges.
+      const near = route.status === 'UNKNOWN' ? route.nearest : undefined;
+      if (near && validPoint(target) && Number.isSafeInteger(near.tiles) && near.tiles >= 0 && Number.isSafeInteger(near.gap) && near.gap >= 0) {
+        const fast = (near.tiles + near.gap + STAIRS_TILES * Math.abs(target.plane - batch.from.plane)) / TILES_PER_SECOND / 60, slow = fast * 2;
+        costs.set(key, { fast, typical: (fast + slow) / 2, slow, source: `${route.source}; the last ${near.gap} tiles (door or stairs) are an allowance, not a checked path` });
+        return;
+      }
       if (!validPoint(target) || route.status !== 'ESTIMATED' || route.tiles === null || !Number.isSafeInteger(route.tiles) || route.tiles < 0
         || route.path.length !== route.tiles + 1 || !route.source.trim() || !samePoint(route.path[0], batch.from)
         || !samePoint(route.path[route.path.length - 1], target) || batch.from.plane !== target.plane

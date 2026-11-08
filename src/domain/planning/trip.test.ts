@@ -14,6 +14,17 @@ function batch(from: number, to: number): RouteBatch {
 const time = (n: number) => ({ ...noTime(), fast: n, typical: n, slow: n });
 
 describe('shared full-trip cost', () => {
+  it('prices a door or stairs leg as a labelled allowance from the nearest reached tile, never a silent straight line', () => {
+    const near = (to: ReturnType<typeof point>): RouteBatch => ({ scope, from: point(3000), targets: [to], routes: [{ status: 'UNKNOWN', source: 'Synthetic sourced topology', tiles: null, path: [], reason: 'door', nearest: { tiles: 20, gap: 4 } }] });
+    const walk = createWalkingCosts(scope, [near(point(3024)), near(point(3024, 1))]);
+    const ground = walk(point(3000), point(3024))!, upstairs = walk(point(3000), point(3024, 1))!;
+    expect(ground.fast * 60).toBeCloseTo(24 / (2 / 0.6), 5);
+    expect(ground.source).toContain('the last 4 tiles (door or stairs) are an allowance');
+    expect(upstairs.fast).toBeGreaterThan(ground.fast);
+    // A route the search could not get near stays unknown.
+    expect(createWalkingCosts(scope, [batch(3000, 3002), { ...near(point(3050)), routes: [{ status: 'UNKNOWN', source: 'x', tiles: null, path: [], reason: 'far' }] }])(point(3000), point(3050))).toBeNull();
+  });
+
   it('includes initial preparation, bank, exchange, work and return legs exactly once', () => {
     const walk = createWalkingCosts(scope, [batch(3000, 3002), batch(3002, 3005), batch(3005, 3009), batch(3009, 3002)]);
     const trip = costTrip(point(3000), [

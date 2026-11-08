@@ -3,6 +3,7 @@ import { useState, type ReactNode } from 'react';
 import type { Progress, Quest } from '../../types';
 import { allQuests, BASE_QP, BASE_QUEST, stepById } from '../../data';
 import { useBridge } from '../../state/bridge';
+import { useDecision } from '../../state/decision';
 import { useStore } from '../../state/store';
 import { useQuestPoints } from '../../state/hooks/useQuestPoints';
 import { blockerParts, blockersOf, isClosed, type DependencyFact } from '../../domain/quests/next-step';
@@ -48,21 +49,27 @@ const matches = (f: Filter, s: Status) => f === 'all' || f === s || (f === 'done
 const questKey = (title: string) => title.trim().toLowerCase().replace(/[’`]/g, "'");
 
 export function QuestsPage({ embedded = false, render }: { embedded?: boolean; render?: (list: ReactNode, detail: ReactNode) => ReactNode } = {}) {
-  const { progress, mode } = useStore();
+  const { progress, mode, steps } = useStore();
   const qp = useQuestPoints();
   const { dependencies } = useReadinessEngine();
   const { questsDone } = useBridge();
+  // The planner's live rank orders the list; quests it did not rank (done, members) keep the guide's order after them.
+  const decision = useDecision();
+  const planned = new Map((decision?.candidates ?? []).map((row) => [questKey(row.id), row]));
+  const planOf = (r: Row) => planned.get(questKey(r.quest.title));
   // Marked done here but not finished in the game (an optional quest that cannot be finished alone): said, and not in the game's points.
   const gameDone = questsDone ? new Set(questsDone.map(questKey)) : null;
   const notInGame = (r: Row) => r.status === 'done' && gameDone !== null && !gameDone.has(questKey(r.quest.title));
   const [filter, setFilter] = useState<Filter>('all');
   const [selectedId, setSelectedId] = useState<string>();
-  const rows = allQuests.filter((q) => mode === 'members' || !q.membersOnly).map((q) => questRow(q, progress, qp, dependencies));
+  const rows = allQuests.filter((q) => mode === 'members' || !q.membersOnly).map((q) => questRow(q, progress, qp, dependencies))
+    .sort((a, b) => (planOf(a)?.rank ?? 1e9) - (planOf(b)?.rank ?? 1e9));
   const base: Status = 'done';
   const count = (f: Filter) => rows.filter((r) => matches(f, r.status)).length + (matches(f, base) ? 1 : 0);
   const visible = rows.filter((r) => matches(filter, r.status));
   const selected = visible.find(r => r.quest.stepId === selectedId) ?? visible.find(r => r.status === 'available') ?? visible[0];
-  const selectedStep = selected ? stepById.get(stepIdOf(selected.href) ?? '') : undefined;
+  // The planned step (personal food plan), never the raw guide step.
+  const selectedStep = selected ? steps.find((s) => s.id === stepIdOf(selected.href)) : undefined;
 
   const list = (<div className={embedded ? 'journal-pane' : 'page'}>
       <header className="page-head">
@@ -104,6 +111,7 @@ export function QuestsPage({ embedded = false, render }: { embedded?: boolean; r
                   {r.quest.parts.length > 0 && ` · steps ${r.partsDone} / ${r.quest.parts.length}`}
                   {' · '}
                   <span className="quest-state">{{ done: 'done', skipped: 'skipped', available: 'available', blocked: 'blocked' }[r.status]}</span>
+                  {planOf(r) && <span className="quest-plan"> · planner #{planOf(r)!.rank}</span>}
                   {notInGame(r) && ' · not finished in the game'}
                 </span>
                 {r.blocked && <span className="quest-blocked">First: {r.blocked}</span>}
@@ -122,6 +130,7 @@ export function QuestsPage({ embedded = false, render }: { embedded?: boolean; r
         {selected.quest.qp > 0 && <p className="badge badge-qp">+{selected.quest.qp} quest points</p>}
         {notInGame(selected) && <p className="notice">Marked done here, but the game does not count it as finished: its quest points are not in your total.</p>}
         {selected.quest.parts.length > 0 && <p>{selected.partsDone} / {selected.quest.parts.length} route steps completed</p>}
+        {planOf(selected) && <p className="muted small">Planner #{planOf(selected)!.rank}: {planOf(selected)!.verdict}</p>}
         {selected.blocked && <p className="notice">First: {selected.blocked}</p>}
         <a className={`btn ${selected.status === 'done' || selected.status === 'skipped' ? 'btn-ghost' : 'btn-primary'}`} href={selected.href}>{selected.status === 'done' || selected.status === 'skipped' ? 'Review route' : selected.partsDone > 0 ? 'Continue quest' : 'View route'} <IconChevron /></a>
         <details className="quest-preview-requirements"><summary>Requirements</summary>

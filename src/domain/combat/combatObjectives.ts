@@ -8,13 +8,14 @@ import { heldExact } from '../player/playerState';
 import { levelForXp, xpForLevel } from '../player/xp';
 
 type Goal = ReturnType<typeof stepGoals>[number];
-type EstimatedStep = Pick<Step, 'pacing' | 'foes' | 'itemsRequired'>;
+type EstimatedStep = Pick<Step, 'pacing' | 'foes' | 'itemsRequired' | 'itemsRecommended'>;
 
 export function asked(step: EstimatedStep, foe: string, goals: readonly Goal[]): EstimatedStep {
   const [first, ...rest] = goals;
   return {
     foes: [foe],
     ...(step.itemsRequired ? { itemsRequired: step.itemsRequired } : {}),
+    ...(step.itemsRecommended ? { itemsRecommended: step.itemsRecommended } : {}),
     pacing: {
       skill: first.skill, targetLevel: levelForXp(first.exp), targetExp: first.exp, actionName: 'kill', expPerAction: 1,
       ...(rest.length ? { also: rest.map(g => g.skill), goals: Object.fromEntries(rest.map(g => [g.skill, { level: levelForXp(g.exp), exp: g.exp }])) } : {}),

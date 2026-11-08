@@ -3,6 +3,7 @@
 // defence, its swings while the fight lasts against the worn armour. One fight, at the current levels, with the safest melee style (the least
 // damage taken). It is an estimate: the range holds about 9 outcomes in 10, and no kit guarantees survival.
 
+import { stepFood as foodOfStep } from '../player/foodStock';
 import { equippedBySlot, gearData, meleeAs, SLOTS, type TrainStyle } from './gearAdvisor';
 import type { GearState } from '../../services/runeliteBridge';
 import type { GearPiece, Step } from '../../types';
@@ -142,7 +143,7 @@ export function stepFightFoes(step: Pick<Step, 'foes' | 'threats' | 'pacing'>): 
 
 /** The estimate for each quest fight of the step with the player's worn gear and levels; empty when the game has not given them. */
 export function estimateStepFights(
-  step: Pick<Step, 'foes' | 'threats' | 'pacing' | 'itemsRequired'>, stats: Partial<Record<string, number>> | null, gear: GearState | null,
+  step: Pick<Step, 'foes' | 'threats' | 'pacing' | 'itemsRequired' | 'itemsRecommended'>, stats: Partial<Record<string, number>> | null, gear: GearState | null,
   food?: { name: string; heals: number },
 ): FightEstimate[] {
   const foes = stepFightFoes(step);
@@ -154,7 +155,7 @@ export function estimateStepFights(
   if (eq.weapon && !eq.weapon.piece) return [];
   const armour = (['head', 'body', 'legs', 'shield'] as const).map((s) => eq[s]?.piece).filter((p): p is GearPiece => Boolean(p));
   const unknownPieces = SLOTS.filter((s) => s !== 'weapon' && eq[s] && !eq[s]!.piece).length;
-  const stepFood = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
+  const stepFood = foodOfStep(step);
   const f = food ?? (stepFood ? { name: stepFood.nameEn, heals: stepFood.heals! } : { name: 'Trout', heals: 7 });
   const magic = need('magic');
   return foes.flatMap((foe) => {

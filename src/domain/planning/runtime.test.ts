@@ -304,6 +304,36 @@ describe('different characters through the integrated runtime (brief 39 counterf
     expect(checked('Vampyre Slayer')).toMatchObject({ kind: 'VERIFY', title: expect.stringMatching(/Count Draynor/) });
   });
 
+  // Owner report 2026-11-08: "quests still appear in the old predefined order; recommendations do not feel adaptive".
+  const ranked = (snap: PlanningSnapshot) => runtimeDecision(input(snap, { walk, prices, earn: (step, gp, _budget, goalId) => earnAction(snap, step, goalId, gp, rate) }))!;
+  it('every ranked quest has a candidate row with its own costs, unknown parts, XP and a reason; none is placed by name', () => {
+    const decision = ranked(counted(lumbridge));
+    const rows = decision.candidates!;
+    expect(rows.length).toBeGreaterThan(15);
+    expect(new Set(rows.map(row => row.id)).size).toBe(rows.length);
+    expect(rows[0]).toMatchObject({ id: decision.objectiveId, rank: 1, verdict: expect.stringMatching(/^Chosen/) });
+    for (const row of rows) {
+      expect(row.verdict, row.id).not.toMatch(/by name/);
+      expect(row.minutes === null ? row.unknown.length : 0, row.id).toBe(row.minutes === null ? row.unknown.length : 0);
+      if (row.minutes !== null) expect(row.unknown, row.id).toEqual([]);
+    }
+    expect(rows.some(row => Object.keys(row.xp).length > 0)).toBe(true);
+  });
+
+  it('a fresh character and a trained, rich one get different orders, and neither is the guide order', () => {
+    const order = (snap: PlanningSnapshot) => ranked(snap).candidates!.map(row => row.id);
+    const fresh = order(counted(lumbridge));
+    const trained = order(counted(lumbridge, [], { coins: 500_000, stats: { attack: 40, strength: 40, defence: 40, hitpoints: 40, mining: 30, smithing: 30, crafting: 30, cooking: 30 } }));
+    expect(trained).not.toEqual(fresh);
+    const guide = questCatalogue.filter(q => !q.members).map(q => q.id);
+    for (const ids of [fresh, trained]) expect(ids.slice(0, 6)).not.toEqual(guide.filter(id => ids.includes(id)).slice(0, 6));
+  });
+
+  it('unexpected levels: a character who already has the Mining a quest needs sees that quest cheaper', () => {
+    const knightsSword = (snap: PlanningSnapshot) => ranked(snap).candidates!.find(row => row.id === "The Knight's Sword")!;
+    expect(knightsSword(counted(lumbridge, [], { stats: { mining: 30 } })).knownMinutes).toBeLessThan(knightsSword(counted(lumbridge)).knownMinutes);
+  });
+
   it('extra GP gives a different plan', () => {
     expect(plan(counted(lumbridge, [], { coins: 100_000 }))).not.toBe(plan(counted(lumbridge)));
   });

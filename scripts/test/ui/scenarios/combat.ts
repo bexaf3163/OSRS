@@ -139,7 +139,8 @@ async function retainedCombatFoodScenario(browser: Browser) {
       const posts = (window as unknown as { __posts: { path: string; body?: { step?: { completionTrigger?: { levels?: { skill: string; level: number }[]; items?: { count: number }[] } }; plan?: { lines: { name: string; need: number }[] } } }[] }).__posts;
       return posts.filter(p => p.path === '/prep-plan').at(-1)?.body;
     });
-    expect((snapshot?.plan?.lines.find(l => l.name === 'Salmon')?.need ?? 0) > 25, `retained combat (${width}): the game receives the personal carried-food requirement`);
+    // Training food is planned and shown, but only as a suggestion: a trip can always end to heal (owner report 2026-11-08).
+    expect(!snapshot?.plan?.lines.some(l => l.name === 'Salmon'), `retained combat (${width}): the game receives no required training-food line`);
     expect(snapshot?.step?.completionTrigger?.levels?.[0]?.level === 40 && !snapshot.step.completionTrigger.items?.length, `retained combat (${width}): completion stays Attack 40 and fifty bones`);
     await page.evaluate(nextItems => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items: nextItems }), items.filter(i => i.name !== 'Lobster').map(i => i.name === 'Salmon' ? { ...i, bank: 13 } : i));
     await settle(page);
@@ -283,11 +284,13 @@ async function minotaurRoute(browser: Browser) {
   await settle(zen.page);
   if (process.env.UI_SHOTS) await zen.page.screenshot({ path: `${process.env.UI_SHOTS}/zen-s308-prep-${width}.png`, fullPage: true }).catch(() => {});
   const prep = await zen.page.locator('body').innerText();
-  expect(prep.includes('Salmon ×26') && !prep.includes('Salmon ×110'), 'food plan (Zen): Preparation asks for one bag (26), not the whole goal');
+  // Training food is a suggestion (owner report 2026-11-08): never a Preparation requirement, never the whole goal.
+  expect(!prep.includes('Salmon ×110'), 'food plan (Zen): Preparation never asks for the whole goal of training food');
   // The readiness verdict (2.62.0): the status, the bank first (13 Salmon owned), then what to buy; both Minotaur versions; the weapon judged.
   const verdict = await text(zen.page, '.readiness-verdict');
-  expect(verdict.includes('Preparation needed') && verdict.includes('Bank: withdraw 13 Salmon') && verdict.includes('Then buy about 13 Salmon'),
-    `readiness (Zen): the next action names the bank and the purchase (${verdict.replace(/\s+/g, ' ').slice(0, 200)})`);
+  // Training food never blocks the step (owner report 2026-11-08): ready, with the food named as optional.
+  expect(verdict.startsWith('Ready: your kit suits Minotaur') && verdict.includes('food is optional') && !verdict.includes('Preparation needed'),
+    `readiness (Zen): training food is optional, never a preparation block (${verdict.replace(/\s+/g, ' ').slice(0, 200)})`);
   expect(verdict.includes('Minotaur (level 12) suits your current kit best') && verdict.includes('Minotaur (level 27):'), 'readiness (Zen): both Minotaur versions are compared');
   // Preparation opens on its ribbon: its own card is the one in the step view's panel.
   await zen.page.locator('#step-view-panel .readiness-verdict summary').first().click();

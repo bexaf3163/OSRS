@@ -133,7 +133,9 @@ describe('one plan for every screen and the game', () => {
     const collection = foodPicks([step], emptyProgress(), live)[route.id];
     const giants = foodPicks([route], emptyProgress(), live)[route.id];
     expect(collection && giants).toBeTruthy();
-    expect(withFoodPlan(step, collection).itemsRequired?.find((i) => i.heals)?.totalAmount).toBeLessThan(withFoodPlan(route, giants).itemsRequired!.find((i) => i.heals)!.totalAmount as number);
+    // Training food is a recommendation (a trip can always end to heal), never a required purchase.
+    expect(withFoodPlan(step, collection).itemsRequired?.some((i) => i.heals)).toBe(false);
+    expect(withFoodPlan(step, collection).itemsRecommended?.find((i) => i.heals)?.totalAmount).toBeLessThan(withFoodPlan(route, giants).itemsRecommended!.find((i) => i.heals)!.totalAmount as number);
   });
 
   it('an item phase goes to the game as a short action, not the whole sentence', () => {

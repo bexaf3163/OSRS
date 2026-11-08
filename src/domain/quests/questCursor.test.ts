@@ -21,12 +21,15 @@ describe('shared validated quest cursor', () => {
     expect(scoped.questStages).toBe(step.questStages);
     expect(step.itemsRequired!.some(item => item.nameEn === 'Beer')).toBe(true);
   });
-  it('inherits confirmed entry food and removes that entry-only guard on the following line', () => {
+  it('gives confirmed entry food the entry amount as a recommendation and drops it on the following line', () => {
     const step = stepById.get('S9-01')!;
     const entering = stepAtQuestCursor(step, { stepId: step.id, stageAt: 2, lineIndex: 0, peeking: false });
-    expect(entering.itemsRequired?.find(item => item.nameEn === 'Tuna')?.amount).toBe(4);
+    // Guide food is never a requirement on its own (owner rule 2026-11-08); the entry amount is the suggestion.
+    expect(entering.itemsRecommended?.find(item => item.nameEn === 'Tuna')?.amount).toBe(4);
+    expect(entering.itemsRequired?.some(item => item.nameEn === 'Tuna')).toBe(false);
     const inside = stepAtQuestCursor(step, { stepId: step.id, stageAt: 2, lineIndex: 2, peeking: false });
     expect(inside.itemsRequired?.some(item => item.nameEn === 'Tuna')).toBe(false);
+    expect(inside.itemsRecommended?.find(item => item.nameEn === 'Tuna')?.amount).toBe(step.itemsRecommended?.find(item => item.nameEn === 'Tuna')?.amount);
     expect(step.itemsRequired?.some(item => item.nameEn === 'Tuna')).toBe(false);
   });
   it('retires only declared encounters strictly before an observed authored cursor', () => {

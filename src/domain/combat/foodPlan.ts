@@ -1,8 +1,8 @@
-// The food of combat training steps from this player's estimate, into the route itself: readiness asks for one trip (the next bag), the shopping
-// list buys for the whole remaining goal. A step later on the route is estimated from the levels the earlier steps reach and the weapon it asks
-// for. Without the game's levels and gear nothing is picked and every step keeps the amounts written in the route.
+// The food of combat steps from this player's estimate. Quest-fight food the estimate needs is required (one trip);
+// training food is only recommended, since a trip can always end to heal. Without the game's levels and gear, or for
+// a fight with no estimate, the route's amount is only recommended, never required.
 
-import type { Progress, Step } from '../../types';
+import type { Progress, Step, StepItemRequirement } from '../../types';
 import { gearById, gearData } from './gearAdvisor';
 import type { GearPiece } from '../../types';
 import { isClosed } from '../quests/next-step';
@@ -21,6 +21,11 @@ export interface FoodPick {
   total: number;
   /** Health a kill costs net of regeneration, to a tenth: the game's training plate turns the bag's food into kills. */
   hpPerKill: number;
+  /** Survival food for a quest fight (required); otherwise only recommended. */
+  essential: boolean;
+  /** Recommended pieces beyond the estimate where it leaves mechanics out, and which ones. */
+  extra?: number;
+  extraWhy?: string;
 }
 
 type Live = Omit<StepEstimateContext, 'assume' | 'fights'> & {
@@ -59,22 +64,23 @@ export function assumptionsFor(step: Step, steps: Step[], progress: Progress): S
 }
 
 /**
- * A quest fight is one trip: the high end of the estimate for each fight with the kit worn now, added up, never below what the route writes (the
- * estimate leaves out specials and dragonfire, so it only ever raises the route's amount). Only for a fight with no open training step before it:
- * the levels it would reach are not the game's yet.
+ * A quest fight is one trip: the high end of the estimate for each fight with the kit worn now, added up.
+ * The guide's amount is never a floor: a fight the estimate says needs no healing needs no food. Where the
+ * estimate leaves mechanics out, the guide's surplus is only a recommendation. Only for a fight with no open
+ * training step before it (the levels it would reach are not the game's yet).
  */
 function fightPick(s: Step, steps: Step[], progress: Progress, live: Live): FoodPick | null {
   const food = (s.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
   if (!food || assumptionsFor(s, steps, progress) !== null) return null;
   const fights = estimateStepFights(s, live.stats as Partial<Record<string, number>> | null, live.gear ?? null, { name: food.nameEn, heals: food.heals! });
   if (!fights.length) return null;
-  const need = fights.reduce((a, f) => a + Math.max(0, f.food.high), 0);
-  const written = parseAmount(food.amount) ?? 0;
+  const need = Math.ceil(fights.reduce((a, f) => a + Math.max(0, f.food.high), 0));
   // One bag at most, beside the step's other items: a fight that needs more is not won by buying more, and the readiness verdict says so.
   const others = (s.itemsRequired ?? []).filter((i) => i !== food && !i.inStep).length;
-  const slots = Math.max(1, Math.min(26, 28 - others));
-  const trip = Math.min(Math.max(need, written), Math.max(slots, written));
-  return trip > written ? { trip, total: trip, hpPerKill: 0 } : null;
+  const trip = Math.min(need, Math.max(1, Math.min(26, 28 - others)));
+  const missing = [...new Set(fights.flatMap((f) => f.unmodelled))];
+  const extra = missing.length ? Math.max(0, (parseAmount(food.amount) ?? 0) - trip) : 0;
+  return { trip, total: trip, hpPerKill: 0, essential: true, ...(extra ? { extra, extraWhy: missing.join(', ') } : {}) };
 }
 
 /** The food picks of the open combat steps; a step without an estimate gets none. */
@@ -89,7 +95,7 @@ export function foodPicks(steps: Step[], progress: Progress, live: Live): Record
     }
     const fights = live.combatLog?.stepId === s.id ? live.combatLog.foes : null;
     const v = combatPlanView(s, { ...live, fights, assume: assumptionsFor(s, steps, progress), terms: termsFor(steps) });
-    if (v) out[s.id] = { trip: v.nextTrip, total: v.plan, hpPerKill: Math.round(v.primary.hpPerKill * 10) / 10 };
+    if (v) out[s.id] = { trip: v.nextTrip, total: v.plan, hpPerKill: Math.round(v.primary.hpPerKill * 10) / 10, essential: false };
   }
   return out;
 }
@@ -97,13 +103,9 @@ export function foodPicks(steps: Step[], progress: Progress, live: Live): Record
 export function sameFoodPicks(a: Record<string, FoodPick>, b: Record<string, FoodPick>): boolean {
   const ka = Object.keys(a);
   return ka.length === Object.keys(b).length
-    && ka.every((k) => b[k] && a[k].trip === b[k].trip && a[k].total === b[k].total && a[k].hpPerKill === b[k].hpPerKill);
+    && ka.every((k) => b[k] && a[k].trip === b[k].trip && a[k].total === b[k].total && a[k].hpPerKill === b[k].hpPerKill && a[k].essential === b[k].essential && a[k].extra === b[k].extra);
 }
 
-/**
- * The step with its food set to the pick: `amount` one trip, `totalAmount` the whole goal. No food needed at all (health comes back faster than it
- * goes) — the food is not asked for. No pick — the same object.
- */
 /** The personal food plan has replaced the route's own food amount, or there is no food to plan: no food item is left without a total. */
 export function foodPlanApplied(step: Pick<Step, 'itemsRequired'>): boolean {
   return !(step.itemsRequired ?? []).some((i) => typeof i.heals === 'number' && i.totalAmount === undefined);
@@ -118,15 +120,34 @@ export function stepResendKey(step: Step): string {
   return JSON.stringify([step.combatPlan ?? null, step.foes?.[0] ?? null, step.mapLocation && [step.mapLocation.x, step.mapLocation.y], foodPlanApplied(step)]);
 }
 
+/**
+ * The step with its food set by the player's own estimate. Essential quest-fight food is required at the estimated
+ * amount; training food, the guide's surplus over a partial estimate and food for an unestimated fight are only
+ * recommended. A fight that needs no food asks for none.
+ */
 export function withFoodPlan(step: Step, pick: FoodPick | undefined): Step {
   const at = step.itemsRequired?.findIndex((i) => typeof i.heals === 'number') ?? -1;
-  if (!pick || at < 0) return step;
+  if (at < 0) return step;
+  const food = step.itemsRequired![at], key = nameKey(food.nameEn);
   const items = [...step.itemsRequired!];
-  if (pick.trip <= 0 && pick.total <= 0) items.splice(at, 1);
-  else items[at] = { ...items[at], amount: pick.trip, totalAmount: pick.total };
+  items.splice(at, 1);
+  const recommended = (step.itemsRecommended ?? []).filter((item) => nameKey(item.nameEn) !== key);
+  const { totalAmount: _total, ...plain } = food;
+  const advise = (amount: StepItemRequirement['amount'], why: string): StepItemRequirement =>
+    ({ ...plain, amount, howToGet: `Optional: ${why}.${food.howToGet ? ` ${food.howToGet}` : ''}` });
+  const essential = !!pick?.essential && pick.trip > 0;
+  if (essential) items.splice(at, 0, { ...food, amount: pick!.trip, totalAmount: pick!.total });
+  if (!pick) recommended.push(advise(food.amount, 'the risk of this fight is not estimated yet, so the guide amount is only a suggestion'));
+  else if (!pick.essential) {
+    // The adopted combat plan's later phases (goalItemsRequired) still count toward the whole-goal suggestion.
+    const later = step.goalItemsRequired?.find((item) => nameKey(item.nameEn) === key);
+    const goal = Math.max(pick.total, Number(later?.totalAmount ?? later?.amount) || 0);
+    if (pick.trip > 0 || goal > 0) recommended.push({ ...advise(pick.trip, 'more kills per trip; you can always leave to heal'), totalAmount: goal });
+  }
+  else if (pick.extra) recommended.push(advise(pick.extra, `a margin, because the estimate leaves out ${pick.extraWhy}`));
   // The game's training plate: the food in the bag as kills (plugin 2.57+; an older plugin ignores the field).
-  const pacing = step.pacing && pick.hpPerKill > 0 && pick.hpPerKill <= 500 ? { ...step.pacing, foodHpPerKill: pick.hpPerKill } : step.pacing;
-  const goalItemsRequired = step.goalItemsRequired?.map(item => nameKey(item.nameEn) === nameKey(step.itemsRequired![at].nameEn)
-    ? { ...item, amount: Math.max(Number(item.totalAmount ?? item.amount) || 0, pick.total), totalAmount: Math.max(Number(item.totalAmount ?? item.amount) || 0, pick.total) } : item);
-  return { ...step, itemsRequired: items, ...(goalItemsRequired ? { goalItemsRequired } : {}), ...(pacing ? { pacing } : {}) };
+  const pacing = step.pacing && pick && pick.hpPerKill > 0 && pick.hpPerKill <= 500 ? { ...step.pacing, foodHpPerKill: pick.hpPerKill } : step.pacing;
+  const goalItemsRequired = step.goalItemsRequired?.flatMap((item) => nameKey(item.nameEn) !== key ? [item]
+    : essential ? [{ ...item, amount: pick!.total, totalAmount: pick!.total }] : []);
+  return { ...step, itemsRequired: items, itemsRecommended: recommended, ...(goalItemsRequired ? { goalItemsRequired } : {}), ...(pacing ? { pacing } : {}) };
 }

@@ -1,7 +1,7 @@
 // The step workspace: scenarios of the browser suite (npm run test:ui -- --only step).
 import { readFileSync } from 'node:fs';
 import type { Browser, Page } from 'playwright';
-import { BASE, steps, progressBefore, open, settle, expect, noOverflow, reveal, waitFor, stepButton, text } from '../harness.ts';
+import { BASE, steps, progressBefore, questStatesBefore, open, settle, expect, noOverflow, reveal, waitFor, stepButton, text } from '../harness.ts';
 
 async function canonicalPlanScenario(browser: Browser, width = 1000) {
     // A catalogue-backed skill uses its canonical plan and priorities, never the old competing roadmap.
@@ -76,11 +76,13 @@ async function stepS308(browser: Browser) {
     const stats = { attack: 22, strength: 16, defence: 1, hitpoints: 22 };
     const gear = { equipment, inventory: [{ id: 330, name: 'Salmon', count: 40, noted: true }], coins: 500, bankCoins: 3000 };
     const { page, errors } = await open(browser, width, {
-      // The route's own plan, chosen: noted Salmon is what is tested here, not which spot needs the least food (2.75: the monks need none).
-      progress: progressBefore('S3-08'), localStorage: { 'osrs-put:active-step': 'S3-08', 'osrs-put:combat-plans:main:-': '{"S3-08":{"key":"route","at":1,"by":"player"}}' },
-      status: { protocol: 6, ...gear, stats, activeStepId: 'S3-08' },
+      // Noted Salmon is what is tested here, on a quest fight whose food this character's estimate requires (Ithoi, S4-01).
+      // Training food (S3-08) is only a recommendation since 2.82.1, so it never creates a required unnote action.
+      progress: progressBefore('S4-01'), localStorage: { 'osrs-put:active-step': 'S4-01', 'osrs-put:combat-plans:main:-': '{"S3-08":{"key":"route","at":1,"by":"player"}}' },
+      // The player is mid-quest at the Ithoi fight: a started quest keeps the game's step over the planner's choice.
+        status: { protocol: 6, ...gear, stats, activeStepId: 'S4-01', player: 'Fixture', questStates: (() => { const q = questStatesBefore('S4-01'); return { ...q, states: { ...q.states, 'The Corsair Curse': 'IN_PROGRESS' } }; })() },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 40, bank: 0, exactCarried: 0, exactNoted: 40, exactBank: 0 }] }],
-    }, '#/step/S3-08');
+    }, '#/step/S4-01');
     await reveal(page, 'text=/Bank: unnote/i');
     await page.getByText(/Bank: unnote/i).first().waitFor({ timeout: 8000 });
     expect((await page.locator('main').innerText()).includes('Unnote at bank'), `notes (${width}): notes are an action, not ready-to-eat food`);
@@ -121,7 +123,8 @@ async function stepS901(browser: Browser) {
   });
   expect(plan?.lines.find(l => l.name === 'Bronze axe')?.timing === 'IN_STEP', 'Entrana: the game snapshot keeps the dungeon axe as an acquired-during-quest item');
   expect(!plan?.bankWithdrawals?.some(l => l.itemName === 'Bronze axe'), 'Entrana: departure withdrawals do not tell the player to take the banked axe');
-  expect(Boolean(plan?.bankWithdrawals?.some(l => l.itemName === 'Salmon')), 'Entrana: the confirmed entry sends the physical Salmon alternative to the game');
+  // Guide entry food is only a suggestion (owner rule 2026-11-08): the banked Salmon is not ordered out without a fight estimate.
+  expect(!plan?.bankWithdrawals?.some(l => l.itemName === 'Salmon'), 'Entrana: guide entry food sends no withdrawal order to the game');
   await page.evaluate(() => {
     const w = window as unknown as { __status: unknown; __emit: (e: unknown) => void };
     w.__status = { questInstruction: { stepId: 'S9-01', stageAt: 2, lineIndex: 2, peeking: false } };

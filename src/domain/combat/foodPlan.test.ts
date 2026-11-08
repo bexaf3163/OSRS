@@ -79,13 +79,16 @@ describe('the picks', () => {
 
 describe('into readiness and shopping', () => {
   const s = stepById.get('S3-08')!;
-  const picked = withFoodPlan(s, { trip: 26, total: 110, hpPerKill: 3.4 });
+  const picked = withFoodPlan(s, { trip: 26, total: 110, hpPerKill: 3.4, essential: true });
 
   it('the food asks for one trip and carries the whole goal; other items are untouched', () => {
     const salmon = picked.itemsRequired!.find((i) => i.nameEn === 'Salmon')!;
     expect(salmon).toMatchObject({ amount: 26, totalAmount: 110 });
     expect(picked.itemsRequired!.find((i) => i.nameEn === 'Mithril scimitar')).toBe(s.itemsRequired!.find((i) => i.nameEn === 'Mithril scimitar'));
-    expect(withFoodPlan(s, undefined)).toBe(s);
+    // No estimate: the route's amount is only a suggestion, never a requirement.
+    const unestimated = withFoodPlan(s, undefined);
+    expect(unestimated.itemsRequired!.some((i) => i.nameEn === 'Salmon')).toBe(false);
+    expect(unestimated.itemsRecommended!.find((i) => i.nameEn === 'Salmon')).toMatchObject({ amount: s.itemsRequired!.find((i) => i.nameEn === 'Salmon')!.amount, howToGet: expect.stringMatching(/^Optional: the risk of this fight is not estimated/) });
   });
 
   it('readiness: 20 Salmon was enough before, now one bag is 26', () => {
@@ -104,14 +107,21 @@ describe('into readiness and shopping', () => {
     expect(aggregateShopping([picked]).required.find((l) => l.nameEn === 'Salmon')!.count).toBe(26);
   });
 
+  it('training food is only recommended: a trip can always end to heal', () => {
+    const t = withFoodPlan(s, { trip: 26, total: 110, hpPerKill: 3.4, essential: false });
+    expect(t.itemsRequired!.some((i) => i.nameEn === 'Salmon')).toBe(false);
+    expect(t.itemsRecommended!.find((i) => i.nameEn === 'Salmon')).toMatchObject({ amount: 26, totalAmount: 110 });
+    expect(aggregateShopping([t], { wholeGoal: true }).required.some((l) => l.nameEn === 'Salmon')).toBe(false);
+  });
+
   it('no food needed at all: the food is not asked for', () => {
-    expect(withFoodPlan(s, { trip: 0, total: 0, hpPerKill: 0 }).itemsRequired!.some((i) => i.nameEn === 'Salmon')).toBe(false);
+    expect(withFoodPlan(s, { trip: 0, total: 0, hpPerKill: 0, essential: false }).itemsRequired!.some((i) => i.nameEn === 'Salmon')).toBe(false);
   });
 });
 
 describe('one number to buy', () => {
   it('the food row is about the trip and names the whole-goal purchase', () => {
-    const picked = withFoodPlan(stepById.get('S3-08')!, { trip: 26, total: 110, hpPerKill: 3.4 });
+    const picked = withFoodPlan(stepById.get('S3-08')!, { trip: 26, total: 110, hpPerKill: 3.4, essential: true });
     const o: OwnedState = owned({ 'Mithril scimitar': 1, Salmon: 13, Trout: 0, Tuna: 0, Lobster: 0, Swordfish: 0 });
     const row = stepReadiness({ step: picked, steps: allSteps, progress, qp: 20, mode: 'f2p', stats, owned: o, gear })
       .requirements.find((q) => q.label.startsWith('Salmon'))!;
@@ -126,7 +136,7 @@ describe('the food line in the game', () => {
     expect(pick.hpPerKill).toBeLessThan(4.5);
     expect(withFoodPlan(stepById.get('S3-08')!, pick).pacing!.foodHpPerKill).toBe(pick.hpPerKill);
     // Health that comes back faster than it goes: nothing to send.
-    expect(withFoodPlan(stepById.get('S3-08')!, { trip: 0, total: 0, hpPerKill: 0 }).pacing!.foodHpPerKill).toBeUndefined();
+    expect(withFoodPlan(stepById.get('S3-08')!, { trip: 0, total: 0, hpPerKill: 0, essential: false }).pacing!.foodHpPerKill).toBeUndefined();
   });
 });
 
@@ -145,9 +155,14 @@ describe('the food of a quest fight (combat audit, 2.66.0)', () => {
     expect(aggregateShopping([s], { wholeGoal: true }).required.find((l) => l.nameEn === 'Salmon')?.count).toBe(pick.trip);
   });
 
-  it("never lowers the route's amount: a strong kit keeps what the route writes", () => {
+  it("a strong kit asks for its own smaller amount: the route's amount is never a floor", () => {
     const strong = { ...live, stats: { attack: 60, strength: 60, defence: 60, hitpoints: 60 }, owned: owned({}) };
-    expect(foodPicks(allSteps, at, strong)['S4-01']).toBeUndefined();
+    const pick = foodPicks(allSteps, at, strong)['S4-01'];
+    const written = Number(stepById.get('S4-01')!.itemsRequired!.find((i) => i.nameEn === 'Salmon')!.amount);
+    expect(pick).toMatchObject({ essential: true });
+    expect(pick.trip).toBeLessThan(written);
+    expect(pick.trip).toBeLessThan(foodPicks(allSteps, at, weak)['S4-01'].trip);
+    expect(withFoodPlan(stepById.get('S4-01')!, pick).itemsRequired!.find((i) => i.nameEn === 'Salmon')!.amount).toBe(pick.trip);
   });
 
   it('a fight after an open training step is not sized from the levels of now', () => {

@@ -13,8 +13,15 @@ describe('one guided activity for cross-page consumers', () => {
       .toEqual({ step: training, source: 'training', href: '#/' });
   });
 
-  it('uses an explicitly active unfinished route step before the committed Decision', () => {
-    expect(resolveActiveActivity({ ...input(), activeStepId: second.id })).toEqual({ step: second, source: 'game', href: '#/step/S1-02' });
+  it('uses the game\'s unfinished step when it belongs to the Decision\'s objective', () => {
+    expect(resolveActiveActivity({ ...input(), activeStepId: second.id, objectiveSteps: new Set([first.id, second.id]) })).toEqual({ step: second, source: 'game', href: '#/step/S1-02' });
+  });
+
+  it('never lets a leftover game step of another objective outrank the Decision (2.82.0 kept the old route order)', () => {
+    expect(resolveActiveActivity({ ...input(), activeStepId: second.id, objectiveSteps: new Set([first.id]) })).toEqual({ step: first, source: 'decision', href: '#/step/S1-01' });
+    expect(resolveActiveActivity({ ...input(), activeStepId: second.id })).toEqual({ step: first, source: 'decision', href: '#/step/S1-01' });
+    // Without a Decision (offline, waiting for data) the game's step is still the honest context.
+    expect(resolveActiveActivity({ ...input(), decided: null, activeStepId: second.id })).toEqual({ step: second, source: 'game', href: '#/step/S1-02' });
   });
 
   it('does not revive completed training from a stale synthetic game target', () => {

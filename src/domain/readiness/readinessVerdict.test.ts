@@ -178,12 +178,13 @@ describe('the readiness verdict', () => {
     expect(v.reasons[0].group).toBe('access');
   });
 
-  it('a fight: the food line comes from the kit check (by healing), with the bank named first', () => {
+  it('a training fight: the food line comes from the kit check (by healing) as an optional suggestion, bank first', () => {
     const c = combatOf(owned({ Salmon: [0, 40] }))!;
     const fight = mk('F1', [item('Salmon', 20, { heals: 9 })], { type: 'combat' });
     const v = readinessVerdict({ plan: planFor(fight, owned({ Salmon: [0, 40] })), connected: true, owned: owned({ Salmon: [0, 40] }), isFood, combat: c });
-    expect(v.level).toBe('PREP_NEEDED');
-    expect(v.headline).toBe('Bank: withdraw 26 Salmon — you already own it.');
+    // Training food is a suggestion (owner report 2026-11-08): the step is ready, and the bank food is named as optional.
+    expect(v.level).toBe('READY');
+    expect(v.reasons.some((r) => r.group === 'optional' && r.state === 'bank' && r.text.startsWith('Bank: withdraw 26 Salmon'))).toBe(true);
     expect(v.reasons.filter((r) => r.text.startsWith('Salmon ×'))).toEqual([]);
     expect(v.reasons.some((r) => r.group === 'equipment' && r.text.startsWith('Mithril scimitar: suitable'))).toBe(true);
   });

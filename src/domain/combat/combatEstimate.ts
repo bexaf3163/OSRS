@@ -18,7 +18,7 @@ import { combatFoesJson } from '../../data';
 import { equippedBySlot, gearData, meleeAs, SLOTS, type TrainStyle } from './gearAdvisor';
 import type { GearState } from '../../services/runeliteBridge';
 import type { GearData, GearPiece, PacingSkill, Step } from '../../types';
-import { effectiveHeal } from '../player/foodStock';
+import { effectiveHeal, stepFood } from '../player/foodStock';
 import { FOODS } from '../../data/threats';
 import { levelForXp, xpForLevel } from '../player/xp';
 
@@ -549,7 +549,7 @@ export function observedFor(foe: CombatFoe, fights: Fights[] | null | undefined)
  * required food. Empty — no melee goal, no opponent data, no levels or no gear from the game, or a weapon the gear data does not know:
  * then there is nothing honest to say.
  */
-export function estimateStep(step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired'>, ctx: StepEstimateContext): CombatEstimate[] {
+export function estimateStep(step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired' | 'itemsRecommended'>, ctx: StepEstimateContext): CombatEstimate[] {
   const goals = stepGoals(step);
   const name = step.foes?.[0];
   const st = ctx.stats;
@@ -558,7 +558,7 @@ export function estimateStep(step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired
   const levels = { attack: need('attack'), strength: need('strength'), defence: need('defence'), hitpoints: need('hitpoints') };
   if (Object.values(levels).some((v) => v === null)) return [];
   const later = ctx.assume?.xp ?? {};
-  const foodItem = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
+  const foodItem = stepFood(step);
   const food = foodItem ? { name: foodItem.nameEn, heals: foodItem.heals! } : null;
   if (!food) return [];
   const equipped = equippedBySlot(ctx.gear, ctx.data ?? gearData);

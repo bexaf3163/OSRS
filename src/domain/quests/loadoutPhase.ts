@@ -9,7 +9,8 @@ function confirmedLine(step: Step, instruction: QuestInstruction | null) {
   return step.questStages?.stages.find(stage => stage.at === instruction.stageAt)?.do[instruction.lineIndex] ?? null;
 }
 
-/** An explicitly recommended food becomes required at a confirmed entry guard, then returns to optional after that entry. */
+/** At a confirmed entry guard the recommended food takes the guide's amount and advice for that entry, and stays a recommendation:
+ * only the player's own fight estimate makes food required (combat/foodPlan.ts). */
 export function entryFoodStep(step: Step, instruction: QuestInstruction | null = null): Step {
   if (step.type !== 'quest' || step.itemsRequired?.some(item => item.heals)) return step;
   const line = confirmedLine(step, instruction);
@@ -28,12 +29,7 @@ export function entryFoodStep(step: Step, instruction: QuestInstruction | null =
     });
   }
   if (!added.size) return step;
-  const food = [...added.values()];
-  return { ...step, itemsRequired: [...(step.itemsRequired ?? []), ...food],
-    itemsRecommended: step.itemsRecommended?.filter(item => !added.has(nameKey(item.nameEn))),
-    ...(step.goalItemsRequired && !step.goalItemsRequired.some(item => item.heals)
-      ? { goalItemsRequired: [...step.goalItemsRequired, ...food] } : {}),
-  };
+  return { ...step, itemsRecommended: step.itemsRecommended!.map(item => added.get(nameKey(item.nameEn)) ?? item) };
 }
 
 /** Use confirmed canonical line keys: a coarse quest var can cover several bank-to-bank phases. */

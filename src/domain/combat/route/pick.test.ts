@@ -157,7 +157,12 @@ describe('the whole app reads the same step: food, shopping, arrow, game', () =>
   });
 
   it('the shopping list buys what the plan needs, not what the route would', () => {
-    const list = (s: Step) => aggregateShopping([s], { wholeGoal: true }).required.find((l) => l.nameEn === 'Salmon')?.count ?? 0;
+    // Training food is a recommendation (a trip can always end to heal), so it is never a required purchase.
+    const list = (s: Step) => {
+      const shop = aggregateShopping([s], { wholeGoal: true });
+      expect(shop.required.some((l) => l.nameEn === 'Salmon')).toBe(false);
+      return shop.recommended.find((l) => l.nameEn === 'Salmon')?.count ?? 0;
+    };
     const cows = foodPicks([adopted], emptyProgress(), live)['S4-03'];
     const baseNeed = list(withFoodPlan(route, foodPicks([route], emptyProgress(), live)['S4-03']));
     const planNeed = list(withFoodPlan(adopted, cows));
@@ -186,7 +191,7 @@ describe('the whole app reads the same step: food, shopping, arrow, game', () =>
     const changed = { ...pick, remainingFood: pick.remainingFood! + 10 };
     expect(samePicks({ step: pick }, { step: changed })).toBe(false);
     expect(stepResendKey(withCombatPlan(route, pick))).toBe(stepResendKey(withCombatPlan(route, changed)));
-    const noFood = withFoodPlan(withCombatPlan(route, { ...pick, remainingFood: 0 }), { trip: 0, total: 0, hpPerKill: 0 });
+    const noFood = withFoodPlan(withCombatPlan(route, { ...pick, remainingFood: 0 }), { trip: 0, total: 0, hpPerKill: 0, essential: false });
     expect(aggregateShopping([noFood], { wholeGoal: true }).required.some(item => item.nameEn === 'Salmon')).toBe(false);
   });
 

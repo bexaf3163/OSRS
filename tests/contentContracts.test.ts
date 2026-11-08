@@ -130,9 +130,9 @@ describe('changing an adopted plan changes what is prepared and kept', () => {
   });
   it('another food plan: the bag takes the trip, the reserve keeps the whole goal, and no food leaves nothing kept', () => {
     const fight = step('S99-08', [item('Lobster', 10, { heals: 12 })]);
-    const planned = withFoodPlan(fight, { trip: 6, total: 40, hpPerKill: 2 });
+    const planned = withFoodPlan(fight, { trip: 6, total: 40, hpPerKill: 2, essential: true });
     expect(planFor(planned, owned({ Lobster: { bank: 60 } })).lines.find((l) => l.name === 'Lobster')?.count).toBe(6);
     expect(protectionsFor([planned]).get('lobster')?.qty).toBe(40);
-    expect(protectionsFor([withFoodPlan(fight, { trip: 0, total: 0, hpPerKill: 0 })]).has('lobster')).toBe(false);
+    expect(protectionsFor([withFoodPlan(fight, { trip: 0, total: 0, hpPerKill: 0, essential: true })]).has('lobster')).toBe(false);
   });
 });

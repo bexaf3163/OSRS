@@ -5,21 +5,22 @@ import { progressBefore, open, settle, expect, noOverflow, text } from '../harne
 
 // Another way to do the Hill Giants step: the character with 24 hitpoints and Defence 1 is offered a split (cows for Attack, then the giants for the bones).
 // Adopting it moves the arrow, the pace line and the food to the cows for the app and the game alike, and leaves the route's own step open; going back undoes it.
+// The required item is Doric's Clay (S3-01): guide food with no fight estimate is only a suggestion since 2.82.1.
 // Shopping 2.67: one list for the step in progress, grouped by what to do; each state said as what it is (lib/shoppingView.ts).
 async function shoppingScenarios(browser: Browser) {
   console.log('shopping');
   const scim = { id: 1329, name: 'Mithril scimitar', slot: 'weapon' };
   const requirements = (JSON.parse(readFileSync(new URL('../../../../src/data/authored/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { anyOf?: string[] }[] }[])
-    .find(step => step.id === 'S3-08')!.itemsRequired ?? [];
+    .find(step => step.id === 'S3-01')!.itemsRequired ?? [];
   const absentAlternatives = [...new Set(requirements.flatMap(item => item.anyOf ?? []))].map(name => ({ name, carried: 0, noted: 0, bank: 0 }));
   const base = (o: { worn?: boolean; coins?: number; bankSeen?: boolean; items?: { name: string; carried: number; noted: number; bank?: number }[]; offline?: boolean }) => {
     const gear = { equipment: o.worn ? [scim] : [], inventory: [], coins: o.coins ?? 100, bankCoins: o.bankSeen === false ? null : 0 };
     return {
-      progress: progressBefore('S3-08'),
-      localStorage: { 'osrs-put:active-step': 'S3-08', 'osrs-put:shopping-scope': 'step' },
+      progress: progressBefore('S3-01'),
+      localStorage: { 'osrs-put:active-step': 'S3-01', 'osrs-put:shopping-scope': 'step' },
       market: true,
       ...(o.offline ? { offline: true } : {
-        status: { protocol: 6, inGame: true, player: 'Shop Test', activeStepId: 'S3-08', questPoints: 20, totalLevel: 120, ...gear },
+        status: { protocol: 6, inGame: true, player: 'Shop Test', activeStepId: 'S3-01', questPoints: 20, totalLevel: 120, ...gear },
         events: [{ type: 'OWNED', bankSeen: o.bankSeen !== false, items: o.items ?? [] }, { type: 'GEAR', gear }],
       }),
     };
@@ -30,10 +31,10 @@ async function shoppingScenarios(browser: Browser) {
   for (const width of [1440]) {
     // Real shortages: the purchases, the money short, the way to the coin plan, the exchange list.
     {
-      const { page, errors } = await open(browser, width, base({ items: [...absentAlternatives, { name: 'Mithril scimitar', carried: 0, noted: 0, bank: 0 }, { name: 'Salmon', carried: 0, noted: 0, bank: 5 }] }), '#/shopping');
+      const { page, errors } = await open(browser, width, base({ items: [...absentAlternatives, { name: 'Mithril scimitar', carried: 0, noted: 0, bank: 0 }, { name: 'Clay', carried: 0, noted: 0, bank: 2 }, { name: 'Copper ore', carried: 4, noted: 0, bank: 0 }, { name: 'Iron ore', carried: 2, noted: 0, bank: 0 }] }), '#/shopping');
       await settle(page);
       const body = await text(page, '.shop-page');
-      expect(/Buy (at the Grand Exchange|in shops) · [12]/.test(body) && /Salmon[^]*×15/.test(body) && /5 more in the bank/.test(body), `shopping (${width} px): the buy list with the bank stock named`);
+      expect(/Buy (at the Grand Exchange|in shops) · [12]/.test(body) && /Clay[^]*×4/.test(body) && /2 more in the bank/.test(body), `shopping (${width} px): the buy list with the bank stock named`);
       expect(/Shortfall[^]*[\d,]+ gp/.test(body) && await page.getByRole('link', { name: 'Prepare funding', exact: true }).count() === 1 && await page.locator('.shop-page .btn-primary').count() === 1, `shopping (${width} px): the shortfall links to the coin plan`);
       expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 1, `shopping (${width} px): one copy button for the exchange purchases`);
       expect(!/Still open|Partly owned|Unverified/.test(body), `shopping (${width} px): no status filter bar`);
@@ -45,7 +46,7 @@ async function shoppingScenarios(browser: Browser) {
     }
     // Everything owned: worn and in the bag. The way back to the step, no copy button, no budget.
     {
-      const { page, errors } = await open(browser, width, base({ worn: true, items: [{ name: 'Mithril scimitar', carried: 1, noted: 0, bank: 0 }, { name: 'Salmon', carried: 20, noted: 0, bank: 0 }] }), '#/shopping');
+      const { page, errors } = await open(browser, width, base({ worn: true, items: [{ name: 'Mithril scimitar', carried: 1, noted: 0, bank: 0 }, { name: 'Clay', carried: 6, noted: 0, bank: 0 }, { name: 'Copper ore', carried: 4, noted: 0, bank: 0 }, { name: 'Iron ore', carried: 2, noted: 0, bank: 0 }] }), '#/shopping');
       await settle(page);
       const body = await text(page, '.shop-page');
       expect(/Everything for this step is with you/.test(body) && await page.getByRole('link', { name: 'Review preparation', exact: true }).count() === 1 && await page.locator('.shop-page .btn-primary').count() === 1, `shopping all owned (${width} px): said, with the way back`);
@@ -56,16 +57,16 @@ async function shoppingScenarios(browser: Browser) {
     }
     // In the bank, not with you: take, not buy.
     {
-      const { page } = await open(browser, width, base({ worn: true, items: [{ name: 'Mithril scimitar', carried: 1, noted: 0, bank: 0 }, { name: 'Salmon', carried: 0, noted: 0, bank: 30 }] }), '#/shopping');
+      const { page } = await open(browser, width, base({ worn: true, items: [{ name: 'Mithril scimitar', carried: 1, noted: 0, bank: 0 }, { name: 'Clay', carried: 0, noted: 0, bank: 30 }, { name: 'Copper ore', carried: 4, noted: 0, bank: 0 }, { name: 'Iron ore', carried: 2, noted: 0, bank: 0 }] }), '#/shopping');
       await settle(page);
       const body = await text(page, '.shop-page');
-      expect(/Take from the bank · 1/.test(body) && /Take 20 from the bank/.test(body) && !/Buy (at the Grand Exchange|in shops) · /.test(body), `shopping bank (${width} px): a withdrawal, not a purchase`);
+      expect(/Take from the bank · 1/.test(body) && /Take 6 from the bank/.test(body) && !/Buy (at the Grand Exchange|in shops) · /.test(body), `shopping bank (${width} px): a withdrawal, not a purchase`);
       expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 0, `shopping bank (${width} px): a withdrawal is not in the exchange list`);
       await page.context().close();
     }
     // The bank not opened: not confirmed, never "missing" or "owned".
     {
-      const { page } = await open(browser, width, base({ bankSeen: false, items: [{ name: 'Salmon', carried: 3, noted: 0 }] }), '#/shopping');
+      const { page } = await open(browser, width, base({ bankSeen: false, items: [{ name: 'Clay', carried: 3, noted: 0 }] }), '#/shopping');
       await settle(page);
       const body = await text(page, '.shop-page');
       expect(/Not confirmed · \d/.test(body) && /Open your bank in RuneLite to refresh/.test(body), `shopping unknown bank (${width} px): not confirmed, with the honest way to refresh`);
@@ -86,15 +87,18 @@ async function shoppingScenarios(browser: Browser) {
   }
 }
 
+// Quote labels are checked on Ithoi's Salmon, which a weak character's fight estimate requires: S4-04's dragon food is only
+// a suggestion since 2.82.1 (no fight estimate yet).
 async function shoppingQuoteScenarios(browser: Browser) {
   for (const width of [1280]) for (const state of ['current', 'cached', 'missing']) {
     const { page, errors } = await open(browser, width, {
       market: true, marketUnavailable: state === 'missing', marketAgeMinutes: state === 'cached' ? 120 : undefined,
-      progress: progressBefore('S4-04'), localStorage: { 'osrs-put:active-step': 'S4-04', 'osrs-put:shopping-scope': 'step' },
-      status: { protocol: 6, inGame: true, player: 'Shopping Quotes', activeStepId: 'S4-04', coins: 100000, bankCoins: 0, equipment: [], inventory: [] },
-      events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Lobster', carried: 0, noted: 0, bank: 0 }] }],
+      progress: progressBefore('S4-01'), localStorage: { 'osrs-put:active-step': 'S4-01', 'osrs-put:shopping-scope': 'step' },
+      status: { protocol: 6, inGame: true, player: 'Shopping Quotes', activeStepId: 'S4-01', coins: 100000, bankCoins: 0, equipment: [{ id: 1329, name: 'Mithril scimitar', slot: 'weapon' }], inventory: [],
+        stats: { attack: 10, strength: 10, defence: 1, hitpoints: 14, magic: 1 } },
+      events: [{ type: 'OWNED', bankSeen: true, items: ['Salmon', 'Trout', 'Tuna', 'Lobster', 'Swordfish'].map(name => ({ name, carried: 0, noted: 0, bank: 0 })) }],
     }, '#/shopping');
-    const row = page.locator('.shop-item-row').filter({ has: page.getByText('Lobster', { exact: true }) }).first();
+    const row = page.locator('.shop-item-row').filter({ has: page.getByText('Salmon', { exact: true }) }).first();
     await row.waitFor({ state: 'visible' });
     await settle(page);
     const quote = await row.locator('.shop-cost').innerText();

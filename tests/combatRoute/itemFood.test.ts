@@ -25,7 +25,9 @@ describe('retained item combat and food use the same objective', () => {
     expect(picks[input.step.id].total).toBe(view!.plan);
     expect(picks[input.step.id].trip).toBeLessThanOrEqual(26);
     const resolved = withFoodPlan(input.step, picks[input.step.id]);
-    expect(resolved.itemsRequired!.find(i => i.nameEn === 'Salmon')!.totalAmount).toBe(view!.plan);
+    // Training food is a recommendation (a trip can always end to heal), never a required purchase.
+    expect(resolved.itemsRequired!.some(i => i.nameEn === 'Salmon')).toBe(false);
+    expect(resolved.itemsRecommended!.find(i => i.nameEn === 'Salmon')!.totalAmount).toBe(view!.plan);
     expect(toInGameTarget(resolved)!.completionTrigger).toEqual(input.step.inGame!.completionTrigger);
   });
 

@@ -1,5 +1,5 @@
-import type { CommittedDecision, CostExpression, ExpectedEffect, Minutes, ObjectiveEvaluation, PlannerModel, PlanningSnapshot, Projection } from './contracts';
-import { comparableKnown, exactCost, noTime, sumExpressions, sumMinutes, totalCost, unresolvedKey, validActionCost, validExpression, validMinutes } from './cost';
+import type { CandidateRow, CommittedDecision,CostExpression, ExpectedEffect, Minutes, ObjectiveEvaluation, PlannerModel, PlanningSnapshot, Projection } from './contracts';
+import { comparableKnown, exactCost, noTime, sumExpressions, sumMinutes, totalCost, validActionCost, validExpression, validMinutes } from './cost';
 import { coherentSkillXp, levelForXp, xpForLevel } from '../player/xp';
 import { observedResources, projectResources } from './resources';
 import { sameSession } from './scope';
@@ -86,8 +86,22 @@ function compareEstimates(a: Estimate, b: Estimate): number {
   if (a.estimate && b.estimate) return a.estimate.typical - b.estimate.typical;
   if (a.estimate || b.estimate) return a.estimate ? -1 : 1;
   if (comparableKnown(a.expression, b.expression)) return a.expression!.known.typical - b.expression!.known.typical;
-  // Different unknown terms are not a time comparison. Use stable groups, then the caller's stable objective ID.
-  return compareId(a.expression ? unresolvedKey(a.expression) : '~', b.expression ? unresolvedKey(b.expression) : '~');
+  // Different unknown terms are not a time comparison. Never order by the text of those terms (2.82.0 put every quest
+  // with an unknown preparation first because "prepare:" sorts before "preparation:"): fewer unknown terms first, then
+  // the lower known minimum; decide() names the rows this leaves uncompared, and the caller's ID is the last tie-break.
+  const unknowns = (e: Estimate) => e.expression?.unresolved.length ?? Number.MAX_SAFE_INTEGER;
+  const floor = (e: Estimate) => e.expression?.known.typical ?? Number.MAX_SAFE_INTEGER;
+  return unknowns(a) - unknowns(b) || floor(a) - floor(b);
+}
+
+/** Equal totals (both orders finish the same quests): the option whose own time is known and shorter goes first. */
+function ownCost(value: ObjectiveEvaluation): [number, number] {
+  const parts = Object.values(value.cost);
+  return [parts.filter(m => !validMinutes(m)).length, parts.reduce((n, m) => n + (validMinutes(m) ? m.typical : 0), 0)];
+}
+function compareOwn(a: ObjectiveEvaluation, b: ObjectiveEvaluation): number {
+  const [ua, ka] = ownCost(a), [ub, kb] = ownCost(b);
+  return ua - ub || ka - kb;
 }
 
 /** Two quest horizons; a bounded shortlist avoids a graph search on every observation. */
@@ -113,7 +127,7 @@ export function decide(snapshot: PlanningSnapshot, model: PlannerModel, options:
   });
   // Beam search (brief 08): the second horizon re-estimates the whole remaining route once per pair, so only the best few
   // executable objectives, the running one and an owner lock look one quest further; the rest keep their one-step estimate.
-  const beam = new Set(scored.filter(row => row.after).sort(compareEstimates).slice(0, BEAM).map(row => row.value.objectiveId));
+  const beam = new Set(scored.filter(row => row.after).sort((a, b) => compareEstimates(a, b) || compareOwn(a.value, b.value)).slice(0, BEAM).map(row => row.value.objectiveId));
   for (const id of [options.previous?.objectiveId, options.lockedObjectiveId]) if (id) beam.add(id);
   for (const row of scored) {
     const { value, after, cost, costExpression } = row;
@@ -137,7 +151,7 @@ export function decide(snapshot: PlanningSnapshot, model: PlannerModel, options:
   // Reliable executable work outranks an unrelated unknown/partner check. Explicit locks can still request a check.
   const priority = (v: ObjectiveEvaluation) => v.activeAction.kind === 'MANUAL_WAIT' ? 2 : v.activeAction.kind === 'VERIFY' ? 1 : 0;
   scored.sort((a, b) => priority(a.value) - priority(b.value) || compareEstimates(a, b)
-    || compareId(a.value.objectiveId, b.value.objectiveId));
+    || compareOwn(a.value, b.value) || compareId(a.value.objectiveId, b.value.objectiveId));
   let chosen = scored.find(row => row.value.objectiveId === options.lockedObjectiveId) ?? scored[0];
   if (!chosen) return null;
   const previous = options.previous;
@@ -156,14 +170,39 @@ export function decide(snapshot: PlanningSnapshot, model: PlannerModel, options:
   const bound = estimate?.typical ?? chosen.expression?.known.typical ?? Infinity;
   const unranked = scored.filter(row => row !== chosen && priority(row.value) === priority(chosen.value)
     && !(row.estimate && estimate) && !comparableKnown(row.expression, chosen.expression) && (row.expression?.known.fast ?? 0) < bound);
-  return { ...snapshot.scope, revision: (previous?.revision ?? 0) + 1, objectiveId: value.objectiveId,
+  const ordered = [chosen, ...scored.filter(row => row !== chosen)];
+  const total = (row: typeof chosen) => row.estimate ? Math.round(row.estimate.typical) : null;
+  const candidates = ordered.map((row, index): CandidateRow => {
+    const parts = Object.entries(row.value.cost) as [string, Minutes | null][];
+    const unknown = parts.filter(([, m]) => !validMinutes(m)).map(([key]) => key);
+    const knownMinutes = Math.round(parts.reduce((n, [, m]) => n + (validMinutes(m) ? m.typical : 0), 0));
+    const xp = Object.fromEntries(row.value.effects.flatMap(e => e.kind === 'xp' ? [[e.skill, e.amount]] : []));
+    const verdict = row === chosen
+      ? (options.lockedObjectiveId && row.value.objectiveId === options.lockedObjectiveId ? 'Chosen: your selected goal'
+        : row === incumbent && row !== scored[0] ? 'Chosen: current objective kept; nothing else is clearly faster'
+        : priority(row.value) > 0 ? `Chosen: no objective is ready to do; first ${row.value.activeAction.title}`
+        : total(row) !== null ? `Chosen: lowest known total time (about ${total(row)} min to finish the open quests)`
+        : comparableUnmeasured ? `Chosen: lowest known time (about ${Math.round(row.expression!.known.typical)} min); unmeasured quests are assumed to cost the same either way`
+        : `Chosen with no full time comparison: fewest unknown parts (${row.expression?.unresolved.length ?? 'all'}), then the lowest known minimum (about ${knownMinutes} min)`)
+      : priority(row.value) > priority(chosen.value) ? `${row.value.activeAction.kind === 'MANUAL_WAIT' ? 'Blocked' : 'Needs a check first'}: ${row.value.activeAction.title}`
+      : total(row) !== null && total(chosen) !== null ? `Slower: about ${total(row)} min in total, against ${total(chosen)} min`
+      : comparableKnown(row.expression, chosen.expression) && Math.round(row.expression!.known.typical) === Math.round(chosen.expression!.known.typical)
+        ? `Same known total as the choice (about ${Math.round(row.expression!.known.typical)} min); ranked lower by its own time (${unknown.length ? `unknown ${unknown.join(', ')}` : `${knownMinutes} min`})`
+      : comparableKnown(row.expression, chosen.expression) ? `Slower on the known part: about ${Math.round(row.expression!.known.typical)} min against ${Math.round(chosen.expression!.known.typical)} min (unmeasured parts assumed equal)`
+      : unranked.includes(row) ? `Not compared: its time is unknown (${unknown.join(', ') || 'later quests'}), so it could be faster`
+      : `Not compared on time: ${unknown.length ? `unknown ${unknown.join(', ')}` : 'later quests have unknown parts'}; ranked by fewer unknown parts, then its known minimum (about ${knownMinutes} min)`;
+    const laterUnknown = [...new Set((row.expression?.unresolved ?? []).map(term => term.replace(/:branch\d+/g, '')))];
+    return { id: row.value.objectiveId, action: row.value.activeAction.kind, minutes: unknown.length ? null : knownMinutes, knownMinutes, unknown, laterUnknown, xp, rank: index + 1, verdict };
+  });
+  return { ...snapshot.scope, revision: (previous?.revision ?? 0) + 1, objectiveId: value.objectiveId, candidates,
     ...(options.lockedObjectiveId ? { requestedObjectiveId: options.lockedObjectiveId } : {}), activeAction: value.activeAction,
     ...(chosen.followingObjectiveId ? { followingObjectiveId: chosen.followingObjectiveId } : {}),
     alternatives: [...unranked, ...scored.filter(row => row !== chosen && !unranked.includes(row))].slice(0, 3).map(row => ({ id: row.value.objectiveId, minutes: row.estimate?.typical ?? null,
       comparisonReason: unranked.includes(row) ? 'Time unknown, so it could be faster; not ranked below the choice' : priority(row.value) ? 'Needs verification or a manual blocker resolved' : row.estimate ? 'Compared by total remaining minutes'
         : comparableKnown(row.expression, chosen.expression) ? 'Compared known minutes; identical unmeasured work is shared' : 'Total time is not yet known' })),
     expectedNext: { effects: value.activeAction.kind === 'VERIFY' || value.activeAction.kind === 'MANUAL_WAIT' ? [] : value.activeAction.expectedEffects,
-      evidenceRequired: value.activeAction.completionEvidence }, confidence: unranked.length ? 'LOW' : value.confidence,
+      evidenceRequired: value.activeAction.completionEvidence }, // A choice made without a full time (unmeasured parts assumed equal) is never claimed as HIGH or MEDIUM.
+    confidence: unranked.length || (!estimate && scored.length > 1) ? 'LOW' : value.confidence,
     why: [...value.activeAction.reasons, ...(unranked.length ? [`Not compared because their time is unknown: ${unranked.slice(0, 5).map(row => row.value.objectiveId).join(', ')}`] : []), ...(comparableUnmeasured && chosen.expression?.unresolved.length
       ? ['Comparable known costs exclude shared unmeasured work; total remaining time is unknown'] : []), ...(options.lockedObjectiveId && value.objectiveId !== options.lockedObjectiveId
       ? [`Resolve required quest progress for your selected goal: ${options.lockedObjectiveId}`] : []), ...(begun ? ['Continue the quest already in progress'] : []),

@@ -25,15 +25,19 @@ function engine(stageAt = 2, lineIndex = 0, magic: number | null = 13, connected
 }
 
 describe('confirmed quest entry food through the existing readiness engine', () => {
-  it('shares the banked alternative with preparation, Shopping and funding protection', () => {
+  it('keeps confirmed entry food a recommendation: no readiness requirement, withdrawal order, purchase or protection (owner rule 2026-11-08)', () => {
     const e = engine();
-    expect(e.readiness(step).requirements.find(req => req.item === 'Tuna')).toMatchObject({ state: 'BANK' });
+    expect(e.ctx.steps[0].itemsRequired?.some(item => item.nameEn === 'Tuna')).toBe(false);
+    expect(e.ctx.steps[0].itemsRecommended?.find(item => item.nameEn === 'Tuna')).toMatchObject({ amount: 4 });
+    expect(e.readiness(step).requirements.some(req => req.item === 'Tuna')).toBe(false);
     const plan = e.plan(step, { ahead: 0 });
-    expect(plan.now.find(line => line.name === 'Tuna')?.action?.label).toContain('5 Salmon');
-    expect(bankWithdrawalsOf(plan)).toContainEqual({ itemId: 329, itemName: 'Salmon', quantity: 5 });
+    expect(plan.now.some(line => line.name === 'Tuna')).toBe(false);
+    expect(bankWithdrawalsOf(plan).some(w => w.itemName === 'Salmon')).toBe(false);
     const rows = shopRows(aggregateShopping(e.ctx.steps), { state: e.ctx.state, onGe: () => true, detail: () => undefined, gePrice: () => 50 });
-    expect(rows.find(row => row.name === 'Tuna')).toMatchObject({ channel: 'bank', action: 'Take 5 Salmon at the bank' });
-    expect(protectionsFor(e.ctx.steps, e.ctx.state).get('salmon')?.qty).toBeGreaterThanOrEqual(5);
+    expect(aggregateShopping(e.ctx.steps).required.some(line => line.nameEn === 'Tuna')).toBe(false);
+    expect(aggregateShopping(e.ctx.steps).recommended.some(line => line.nameEn === 'Tuna')).toBe(true);
+    expect(rows.find(row => row.name === 'Tuna')).toMatchObject({ optional: true });
+    expect(protectionsFor(e.ctx.steps, e.ctx.state).get('salmon')?.qty ?? 0).toBe(0);
     expect(step.itemsRequired?.some(item => item.nameEn === 'Tuna')).toBe(false);
     expect(step.itemsRecommended?.some(item => item.nameEn === 'Tuna')).toBe(true);
   });
@@ -47,7 +51,8 @@ describe('confirmed quest entry food through the existing readiness engine', () 
 
   it('does not turn unread alternatives into a purchase shortage', () => {
     const e = engine(2, 0, 13, true, false);
-    expect(e.readiness(step).requirements.find(req => req.item === 'Tuna')).toMatchObject({ state: 'UNKNOWN' });
+    expect(e.readiness(step).requirements.some(req => req.item === 'Tuna')).toBe(false);
+    expect(aggregateShopping(e.ctx.steps).required.some(line => line.nameEn === 'Tuna')).toBe(false);
   });
 
   it('checks the chosen Fire Strike strategy and preserves an unknown Magic level', () => {

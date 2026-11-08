@@ -6,7 +6,6 @@
 // panel and the in-game line follow it); the route step stays where it was and the plan goes back to it.
 
 import { useMemo, useState } from 'react';
-import { stepById } from '../../data';
 import { useStore } from '../../state/store';
 import { useActiveActivity } from '../../state/readinessContext';
 import { useBridge } from '../../state/bridge';
@@ -192,6 +191,8 @@ function Row({ row, m, step, open, starting, onOpen, onStart, onClose }: {
 }
 
 function MoneyBody({ step }: { step: Step }) {
+  // The planned steps (personal food, combat and training plans), never the raw guide step: guide food is not a requirement.
+  const { steps } = useStore();
   const m = useMoneyScreen(step);
   const f = useFunding();
   const { state: link, inGame } = useBridge();
@@ -212,7 +213,7 @@ function MoneyBody({ step }: { step: Step }) {
   const bestRow = best ? { badge: result.rows.find((r) => r.evaluation === best)?.badge ?? { text: 'Can do now', tone: 'ok' as const } } : null;
   const rows = result.rows.filter((r) => r.evaluation !== best);
   const running = f.plan && (f.plan.status === 'ACTIVE' || f.plan.status === 'PAUSED') ? f.plan : null;
-  const source = running ? stepById.get(running.sourceStepId) : undefined;
+  const source = running ? steps.find((s) => s.id === running.sourceStepId) : undefined;
   const coins = m.snap?.liquid;
   const live = link === 'online' && inGame;
   const advanced = Number(!filters.availableOnly) + Number(filters.noCapital) + Number(filters.relaxedOnly) + Number(filters.category !== 'all');

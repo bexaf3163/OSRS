@@ -22,6 +22,23 @@ describe('verified surface subset routing', () => {
     expect(route.tiles).toBe(4);
     expect(route.path).toEqual([point(1, 1), point(1, 2), point(2, 2), point(3, 2), point(3, 1)]);
   });
+  it('reports the nearest reached tile for a destination behind a door, without inventing a path', () => {
+    const grid = synthetic();
+    for (const x of [0, 1, 2]) grid.set(x, 0, 2); // east along a corridor; tile 3 has no way east (a closed door)
+    const [route] = walkRoutes(grid.topology(), point(0, 0), [point(5, 0)]);
+    expect(route).toMatchObject({ status: 'UNKNOWN', tiles: null, path: [], nearest: { tiles: 3, gap: 2 } });
+    // Too far from anything reached: no allowance at all.
+    expect(walkRoutes(grid.topology(), point(0, 0), [point(30, 0)])[0].nearest).toBeUndefined();
+  });
+
+  it('starts from the nearest open tile when the origin is enclosed (the Grand Exchange centre), as an allowance only', () => {
+    const grid = synthetic();
+    grid.set(11, 10, 2);
+    grid.set(12, 10, 2);
+    const [route] = walkRoutes(grid.topology(), point(10, 10), [point(13, 10)]);
+    expect(route).toMatchObject({ status: 'UNKNOWN', tiles: null, path: [], nearest: { tiles: 3, gap: 0 } });
+  });
+
   it('does not fabricate entrances, transports, paths across unknown regions or unreachable elapsed time', () => {
     const grid = synthetic(), topology = grid.topology();
     const routes = walkRoutes(topology, point(1, 1), [point(2, 1), point(70, 1), { ...point(1, 1), plane: 1 }]);

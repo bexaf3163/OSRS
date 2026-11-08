@@ -51,6 +51,26 @@ describe('canonical decision and source isolation', () => {
     expect(decision.confidence).toBe('LOW');
   });
 
+  it('never ranks by the text of unknown terms: a fully timed quest beats one whose own preparation is unknown, which is named as uncompared (2.82.0 regression)', () => {
+    const later = { known: minutes(0), unresolved: ['preparation:Later quest'] };
+    const model: PlannerModel = {
+      objectiveIds: ['a-unmeasured', 'b-measured'],
+      evaluate: id => id === 'a-unmeasured'
+        ? { ...evaluation(id, 5), cost: { ...evaluation(id, 5).cost, prepare: null }, comparisonCost: { known: minutes(5), unresolved: ['prepare:a-unmeasured:branch1'] } }
+        : evaluation(id, 30),
+      remaining: () => null,
+      remainingExpression: () => later,
+    };
+    const decision = decide(snapshot(), model)!;
+    // 2.82.0 chose 'a-unmeasured' only because "prepare:" sorts before "preparation:".
+    expect(decision.objectiveId).toBe('b-measured');
+    expect(decision.confidence).toBe('LOW');
+    expect(decision.candidates).toMatchObject([
+      { id: 'b-measured', rank: 1, minutes: 30, unknown: [], laterUnknown: ['prepare:a-unmeasured', 'preparation:Later quest'], verdict: expect.stringMatching(/^Chosen/) },
+      { id: 'a-unmeasured', rank: 2, minutes: null, unknown: ['prepare'], verdict: 'Same known total as the choice (about 35 min); ranked lower by its own time (unknown prepare)' },
+    ]);
+  });
+
   it('counts quest reward XP in hypothetical lookahead without awarding it to observed state', () => {
     const observed = snapshot();
     const model: PlannerModel = { objectiveIds: ['training-quest', 'xp-quest'], evaluate: (id, p) => {

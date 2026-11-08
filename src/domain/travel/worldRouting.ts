@@ -10,6 +10,8 @@ export interface WalkRoute {
   tiles: number | null;
   path: readonly WorldPoint[];
   reason: string;
+  /** UNKNOWN only: the reached tile closest to the target, so a cost layer may add a labelled door/stairs allowance. */
+  nearest?: { tiles: number; gap: number };
 }
 const DELTAS = [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]] as const;
 
@@ -45,14 +47,30 @@ export function collisionSubset(data: CollisionSubset) {
 }
 export type SurfaceTopology = ReturnType<typeof collisionSubset>;
 
+const DOOR_REACH = 10;
+
 /** One bounded flood for all requested targets. Run in a worker, never a React render or RuneLite tick. */
 export function walkRoutes(topology: SurfaceTopology, from: WorldPoint, targets: readonly WorldPoint[], limit = 150_000): WalkRoute[] {
   const unknown = (reason: string): WalkRoute => ({ status: 'UNKNOWN', source: topology.source, tiles: null, path: [], reason });
   if (!topology.covers(from)) return targets.map(() => unknown('Origin is outside the sourced surface coverage'));
   const key = (x: number, y: number) => `${x},${y}`;
-  const remaining = new Set(targets.filter(topology.covers).map(p => key(p.x, p.y)));
+  // Uncovered targets (upstairs, behind a door) are searched on the ground floor too, for the nearest reached tile.
+  const remaining = new Set(targets.map(p => key(p.x, p.y)));
   const visited = new Map<string, number>([[key(from.x, from.y), 0]]);
-  const points: WorldPoint[] = [from], parents: number[] = [-1];
+  const points: WorldPoint[] = [from], parents: number[] = [-1], depth: number[] = [0];
+  // An origin inside furniture or a booth ring (the Grand Exchange centre) cannot step anywhere: the search starts from the
+  // nearest tiles that can, and every leg from it is only an allowance (UNKNOWN with `nearest`), never a checked path.
+  const enclosed = !DELTAS.some(([dx, dy]) => topology.canStep(from.x, from.y, dx, dy));
+  for (let r = 1; enclosed && r <= DOOR_REACH && points.length === 1; r++) {
+    for (let dx = -r; dx <= r; dx++) for (let dy = -r; dy <= r; dy++) {
+      const x = from.x + dx, y = from.y + dy;
+      if (Math.max(Math.abs(dx), Math.abs(dy)) !== r || !DELTAS.some(([sx, sy]) => topology.canStep(x, y, sx, sy))) continue;
+      visited.set(key(x, y), points.length);
+      points.push({ x, y, plane: 0 });
+      parents.push(-1);
+      depth.push(r);
+    }
+  }
   let at = 0;
   while (at < points.length && at < limit && remaining.size) {
     const p = points[at];
@@ -63,13 +81,29 @@ export function walkRoutes(topology: SurfaceTopology, from: WorldPoint, targets:
       visited.set(id, points.length);
       points.push({ x: p.x + dx, y: p.y + dy, plane: 0 });
       parents.push(at);
+      depth.push(depth[at] + 1);
     }
     at++;
   }
+  // A door or stairs ends most unreached legs within a few tiles of a reached one.
+  const nearest = (target: WorldPoint) => {
+    let best: { tiles: number; gap: number } | undefined;
+    for (let i = 0; i < points.length; i++) {
+      const gap = Math.max(Math.abs(points[i].x - target.x), Math.abs(points[i].y - target.y));
+      const total = gap + depth[i], bestTotal = best ? best.gap + best.tiles : Infinity;
+      // Shortest estimate first; on a tie, the fewest unchecked tiles.
+      if (gap <= DOOR_REACH && (total < bestTotal || (total === bestTotal && gap < best!.gap))) best = { tiles: depth[i], gap };
+    }
+    return best;
+  };
+  const miss = (target: WorldPoint, reason: string): WalkRoute => {
+    const near = nearest(target);
+    return near ? { ...unknown(reason), nearest: near } : unknown(reason);
+  };
   return targets.map(target => {
-    if (!topology.covers(target)) return unknown('Destination needs an entrance, floor change or another data source');
+    if (!topology.covers(target)) return miss(target, 'Destination needs an entrance, floor change or another data source');
     const index = visited.get(key(target.x, target.y));
-    if (index === undefined) return unknown(at >= limit ? 'Bounded route search reached its work limit' : 'No sourced outdoor connection; doors and transports may be required');
+    if (index === undefined || enclosed) return miss(target, enclosed ? 'The origin tile is enclosed; the route starts from the nearest open tile' : at >= limit ? 'Bounded route search reached its work limit' : 'No sourced outdoor connection; doors and transports may be required');
     const path: WorldPoint[] = [];
     for (let i = index; i >= 0; i = parents[i]) path.push(points[i]);
     path.reverse();

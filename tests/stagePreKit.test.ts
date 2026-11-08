@@ -28,7 +28,9 @@ describe('the in-game bag checks match the step kit', () => {
         const got = new Set<string>();
         for (const [lineIndex, line] of st.do.entries()) {
           const current = entryFoodStep(step, { stepId: step.id, stageAt: st.at, lineIndex, peeking: false });
-          const entry = new Set([...listed, ...(current.itemsRequired ?? []).flatMap(item => [item.nameEn, ...(item.anyOf ?? [])]).map(key)]);
+          // Entry food is checked as a recommendation: guide food is never a requirement on its own (owner rule 2026-11-08).
+          const food = (current.itemsRecommended ?? []).filter(item => typeof item.heals === 'number');
+          const entry = new Set([...listed, ...[...(current.itemsRequired ?? []), ...food].flatMap(item => [item.nameEn, ...(item.anyOf ?? [])]).map(key)]);
           for (const p of line.pre ?? []) {
             if (p.at || got.has(key(p.item)) || entry.has(key(p.item)) || (p.alt ?? []).some((a) => entry.has(key(a)))) continue;
             if (RECOMMENDED_ON_PURPOSE.has(`${step.id} ${p.item}`) || ONLY_AFTER_A_DEATH.has(`${step.id} ${p.item}`)) continue;

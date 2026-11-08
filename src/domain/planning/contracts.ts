@@ -145,6 +145,24 @@ export interface PlannerModel {
   /** Optional accounting of common unmeasured work; it never fabricates an absolute duration. */
   remainingExpression?: (projection: Projection) => CostExpression | null;
 }
+export interface CandidateRow {
+  id: string;
+  action: ActionKind;
+  /** Typical minutes of this objective's own action costs; null when any part is unknown. */
+  minutes: number | null;
+  /** Typical minutes of the known parts only. */
+  knownMinutes: number;
+  /** Own cost parts with no estimate (prepare, travel, work, ...). */
+  unknown: readonly string[];
+  /** XP the objective's success grants, by skill. */
+  xp: Readonly<Record<string, number>>;
+  /** Unmeasured terms of the whole remaining route after this choice (search branch dropped), e.g. `quest-work:Shield of Arrav`. */
+  laterUnknown: readonly string[];
+  /** Position in the planner's order (1 = chosen); null when it was not ranked. */
+  rank: number | null;
+  verdict: string;
+}
+
 export interface CommittedDecision extends DecisionScope {
   revision: number;
   objectiveId: string;
@@ -154,6 +172,8 @@ export interface CommittedDecision extends DecisionScope {
   followingObjectiveId?: string;
   alternatives: readonly { id: string; minutes: number | null; comparisonReason: string }[];
   expectedNext: { effects: readonly ExpectedEffect[]; evidenceRequired: readonly Evidence[] };
+  /** Every open objective the planner looked at, with its own costs and why it was or was not chosen. */
+  candidates?: readonly CandidateRow[];
   confidence: Confidence;
   why: readonly string[];
   estimatedRemaining: Minutes | null;

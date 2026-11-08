@@ -101,12 +101,20 @@ async function ledgerScenarios(browser: Browser) {
   }
   await page.getByRole('tab', { name: 'Steps', exact: true }).click();
 
-  // The hotbar.
+  // The planner's live order is shown apart from the guide's walkthrough, every row with its reason (owner report 2026-11-08).
+  const plannerSteps = await page.locator('.planner-order button[data-step]').evaluateAll((els) => els.map((el) => el.getAttribute('data-step') ?? ''));
+  const reasons = await page.locator('.planner-order .planner-why').allInnerTexts();
+  expect(plannerSteps.length > 3 && reasons.length === plannerSteps.length && reasons.every((r) => r.trim().length > 10), `ledger planner: the open quests are listed with reasons (${plannerSteps.length})`);
+  expect(/^Chosen/.test(reasons[0]) && await page.getByText(/GUIDE WALKTHROUGH/).count() === 1, 'ledger planner: the first row is the choice; the guide walkthrough is labelled as reference');
+  const nextId = plannerSteps[plannerSteps.indexOf('S2-09') + 1];
+  expect(plannerSteps.includes('S2-09') && !!nextId, `ledger planner: S2-09 has a quest after it in the planner's order (${plannerSteps.join(', ')})`);
+
+  // The hotbar: NEXT and PREVIOUS follow the planner's order between quests, never the guide's written order.
   const bar = page.getByRole('toolbar', { name: 'Step actions' });
   const slot = (name: RegExp) => bar.getByRole('button', { name });
   await slot(/next/i).click();
   await settle(page);
-  expect((await title()) === titleOf('S2-10'), 'ledger hotbar: NEXT opens the next step');
+  expect((await title()) === titleOf(nextId), "ledger hotbar: NEXT opens the planner's next quest");
   await slot(/previous/i).click();
   await settle(page);
   expect((await title()) === titleOf('S2-09'), 'ledger hotbar: PREVIOUS opens the step before');
@@ -115,7 +123,7 @@ async function ledgerScenarios(browser: Browser) {
   const afterE = await title();
   await page.keyboard.press('q');
   await settle(page);
-  expect(afterE === titleOf('S2-10') && (await title()) === titleOf('S2-09'), 'ledger hotbar: E and Q move between steps');
+  expect(afterE === titleOf(nextId) && (await title()) === titleOf('S2-09'), 'ledger hotbar: E and Q move between steps');
   const fix = slot(/^f\s*(fix|preparation)$/i);
   const fixLabel = (await fix.innerText()).toLowerCase();
   const before = await navPosts(page);
@@ -131,10 +139,10 @@ async function ledgerScenarios(browser: Browser) {
   expect((await sent(page, 'S2-09')) > n, 'ledger hotbar: SHOW IN GAME sends the step to RuneLite');
   await slot(/next/i).click();
   await settle(page);
-  n = await sent(page, 'S2-10');
+  n = await sent(page, nextId);
   await slot(/start the step/i).click();
   await settle(page);
-  expect((await sent(page, 'S2-10')) > n, 'ledger hotbar: START THE STEP sends the step to RuneLite');
+  expect((await sent(page, nextId)) > n, 'ledger hotbar: START THE STEP sends the step to RuneLite');
   await slot(/previous/i).click();
   await settle(page);
   await slot(/world map/i).click();
@@ -173,6 +181,10 @@ async function ledgerScenarios(browser: Browser) {
   await settle(page);
   expect((await page.getByRole('region', { name: 'Selected quest' }).innerText()).length > 20 && await page.locator('.journal-session > summary').count() === 1, 'ledger Journal: session remains alongside the quest list');
   expect(await page.getByRole('link', { name: /^stage goals$/i }).count() === 0 && await page.locator('.goals-table').count() === 0, 'ledger Journal: retired stage matrix is absent');
+  // The Journal lists quests in the planner's live rank, not the guide's order, and says why the selected one is placed there.
+  const ranks = (await page.locator('.quest-list .quest-plan').allInnerTexts()).map((t) => Number(t.replace(/\D+/g, '')));
+  expect(ranks.length > 3 && ranks.every((r, i) => i === 0 || r > ranks[i - 1]) && ranks[0] === 1, `ledger Journal: quests follow the planner's rank (${ranks.join(', ')})`);
+  expect(/Planner #\d+: /.test(await page.getByRole('region', { name: 'Selected quest' }).innerText()), "ledger Journal: the selected quest shows the planner's reason");
   await page.evaluate(() => { location.hash = '#/reference'; });
   await settle(page);
   const second = page.locator('.reference-index .nav-list a').nth(1);

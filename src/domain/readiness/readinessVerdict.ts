@@ -170,7 +170,8 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
   if (combat) {
     const f = combat.food;
     const state: ReasonState = f.short === 0 ? 'ok' : f.carried === null || (f.toBuy === null && f.short > 0) ? 'unknown' : f.toBuy === 0 ? 'bank' : 'missing';
-    reasons.push({ group: state === 'unknown' ? 'unknown' : 'safety', state, text: f.text });
+    // Training food is a suggestion (a trip can always end to heal): it never blocks the step (owner report 2026-11-08).
+    reasons.push({ group: state === 'ok' ? 'safety' : 'optional', state, text: f.text });
     reasons.push({ group: 'equipment', state: combat.weapon.ok === false ? 'missing' : combat.weapon.ok === null ? 'unknown' : 'ok', text: combat.weapon.text });
     reasons.push({ group: 'safety', state: combat.armour.empty.length ? 'caution' : 'ok', text: combat.armour.text });
     cautions.push(...combat.cautions.filter((c) => c !== combat.weapon.text));
@@ -237,7 +238,7 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
     headline = `Ready with cautions: ${cautions[0]}`;
   } else {
     level = 'READY';
-    headline = combat ? `Ready: your kit and food suit ${combat.foe}.` : 'Ready: everything this step needs is with you.';
+    headline = combat ? (combat.food.short > 0 ? `Ready: your kit suits ${combat.foe}; food is optional.` : `Ready: your kit and food suit ${combat.foe}.`) : 'Ready: everything this step needs is with you.';
   }
   return { level, label: LEVEL_LABEL[level], headline, reasons, cautions, bank, bankInHeadline: headline === BANK_NEVER || headline === OFFLINE, percentNote: PERCENT_NOTE };
 }
@@ -246,26 +247,26 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
 function prepHeadline(plan: PrepPlan, combat: CombatReadiness | null, isFood: (n: string) => boolean): string {
   const equip = plan.now.find(l => l.equip && l.where === 'INVENTORY');
   if (equip) return `Equip ${equip.name} before training — it is in your bag.`;
-  if (combat?.food.unnote) return combat.food.text;
+  // Training food is a suggestion (a trip can always end to heal): it is named after what is needed, never as a requirement.
+  const fromBank = combat?.food.fromBank ?? 0, toBuy = combat?.food.toBuy ?? 0;
+  const food = !combat ? '' : combat.food.unnote ? ` Optional food: ${combat.food.text}`
+    : fromBank > 0 || toBuy > 0 ? ` Food is optional: ${[fromBank > 0 ? `${fromBank} ${combat.food.name} from the bank` : '', toBuy > 0 ? `buy about ${toBuy} ${combat.food.name}` : ''].filter(Boolean).join(', ')}.` : '';
   const notes = plan.lines.find((l) => l.timing === 'NOW' && l.unnote && l.priority !== 'OPTIONAL');
-  if (notes) return `Bank: unnote ${count(notes, notes.unnote)} before using it${isFood(notes.name) ? ' as food' : ''}.`;
+  if (notes) return `Bank: unnote ${count(notes, notes.unnote)} before using it${isFood(notes.name) ? ' as food' : ''}.${food}`;
   const now = plan.lines.filter((l) => l.timing === 'NOW' && l.priority !== 'OPTIONAL' && !(combat && isFood(l.name)));
   const bank = now.filter((l) => l.where === 'BANK').map((l) => count(l, l.toGet ?? l.count));
-  if (combat && combat.food.fromBank > 0) bank.push(`${combat.food.fromBank} ${combat.food.name}`);
   const get = now.filter((l) => l.where === 'MISSING');
-  const foodToBuy = combat && combat.food.toBuy ? combat.food.toBuy : 0;
   if (bank.length) {
-    const then = get.length ? ` Then get ${count(get[0], get[0].toGet ?? get[0].count)}.` : foodToBuy ? ` Then buy about ${foodToBuy} ${combat!.food.name}.` : '';
-    return `Bank: withdraw ${bank.slice(0, 3).join(', ')}${bank.length > 3 ? ' and more' : ''} — you already own ${bank.length === 1 ? 'it' : 'them'}.${then}`;
+    const then = get.length ? ` Then get ${count(get[0], get[0].toGet ?? get[0].count)}.` : '';
+    return `Bank: withdraw ${bank.slice(0, 3).join(', ')}${bank.length > 3 ? ' and more' : ''} — you already own ${bank.length === 1 ? 'it' : 'them'}.${then}${food}`;
   }
-  if (combat && combat.weapon.ok === false) return `Preparation needed: ${combat.weapon.text}`;
-  if (foodToBuy && !get.length) return `Preparation needed: bring food before going — buy about ${foodToBuy} ${combat!.food.name} (or food that heals as much).`;
+  if (combat && combat.weapon.ok === false) return `Preparation needed: ${combat.weapon.text}${food}`;
   const first = get[0];
   if (first) {
     const what = count(first, first.toGet ?? first.count);
     const how = first.action?.label ? ` (${first.action.label})` : '';
-    return isFood(first.name) ? `Preparation needed: bring food before going — ${what}${how}.` : `Preparation needed: get ${what}${how}.`;
+    return isFood(first.name) ? `Preparation needed: bring food before going — ${what}${how}.` : `Preparation needed: get ${what}${how}.${food}`;
   }
-  if (plan.coins.missing) return `Preparation needed: ${plan.coins.missing.toLocaleString('en-US')} gp short for the purchases.`;
-  return 'Preparation needed: see the list below.';
+  if (plan.coins.missing) return `Preparation needed: ${plan.coins.missing.toLocaleString('en-US')} gp short for the purchases.${food}`;
+  return `Preparation needed: see the list below.${food}`;
 }

@@ -28,6 +28,7 @@ import { supplyPrice } from '../../market/itemPrice';
 import type { Step } from '../../../types';
 import type { OwnedState } from '../../items/checklist';
 import { nameKey } from '../../items/itemKey';
+import { stepFood } from '../../player/foodStock';
 import {
   DEFAULT_FOOD_SLOTS, estimateStep, foeLabel, stepGoals, unsafe, xpPerKill, type Basis, type CombatEstimate, type CombatFoe, type Range, type StepEstimateContext,
 } from '../combatEstimate';
@@ -356,7 +357,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const spots = new Map([...allSpots].filter(([name, s]) => name === foe || !s.requires || questDone(s.requires.quest)));
   const locked: PlanReport['locked'] = [...allSpots.values()].filter((s) => !spots.has(s.foe)).map((s) => ({ name: s.name, why: `after ${s.requires!.quest}` }));
   const routeSpot = spots.get(foe);
-  const foodItem = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
+  const foodItem = stepFood(step);
   if (!routeSpot || !foodItem || !ctx.stats || typeof ctx.stats.hitpoints !== 'number') return null;
   const hp = ctx.stats.hitpoints;
   const price = inp.foodPrice ?? null;
