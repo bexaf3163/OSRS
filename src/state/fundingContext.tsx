@@ -6,11 +6,11 @@
 // open and exactly where it was, and a plan ending only takes down its own arrow.
 
 import { useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react';
-import { stepsFor } from '../data';
+import { roadFrom, tripWindow } from '../domain/prep/oneTrip';
+import { usePlanWindow } from './decision';
 import { useBridge } from './bridge';
 import { FundingPlanProvider, useFunding } from './fundingPlanContext';
 export { useFunding } from './fundingPlanContext';
-import { tripWindow } from '../domain/prep/oneTrip';
 import { useStore } from './store';
 import { usePlayerState } from './playerStateContext';
 import { levelOf } from '../domain/player/playerState';
@@ -54,7 +54,8 @@ export function useSnapshotFactory() {
   return useCallback((stepId: string | null, position: Pos): FundingSnapshot | null => {
     if (!stepId) return null;
     // Preserve actual occurrences: distinct virtual phases may retain the same saved step ID.
-    const window = tripWindow(engine.ctx.steps, progress, stepId);
+    const step = engine.ctx.steps.find((s) => s.id === stepId);
+    const window = step ? tripWindow(engine.road(step), progress, step) : [];
     return buildSnapshot({ state, window, questPoints, questObservation: questStates, totalLevel,
       ironman: accountType === null ? null : accountType === 'ironman', sellOverride: override, position: state.connected ? position : null });
   }, [engine, state, progress, questPoints, questStates, totalLevel, accountType, override]);
@@ -103,11 +104,10 @@ export interface FundingScreen {
   live: boolean;
 }
 
-/** The first melee skill an open combat step trains: the player's style, which a detour for money does not change. */
-function trainingSkill(steps: readonly Step[], progress: Parameters<typeof isClosed>[0], from: Step): 'attack' | 'strength' | 'defence' | null {
+/** The first melee skill an open combat step on the planner's road trains: the player's style, which a detour for money does not change. */
+function trainingSkill(road: readonly Step[], progress: Parameters<typeof isClosed>[0]): 'attack' | 'strength' | 'defence' | null {
   const MELEE = new Set(['attack', 'strength', 'defence']);
-  const ahead = steps.slice(Math.max(0, steps.findIndex((s) => s.id === from.id)));
-  for (const s of ahead) {
+  for (const s of road) {
     if (isClosed(progress, s.id)) continue;
     const skill = s.pacing?.skill;
     if (skill && MELEE.has(skill) && (s.foes?.length ?? 0) > 0) return skill as 'attack' | 'strength' | 'defence';
@@ -133,9 +133,11 @@ export function useEvalBaseFactory() {
   const { progress, mode } = useStore();
   const bridge = useBridge();
   const { observed } = useFunding();
+  const planWindow = usePlanWindow();
   return useCallback((step: Step | null, snap: FundingSnapshot | null, prices: PriceView): EvalBase | null => {
     if (!step || !snap) return null;
-    const route = stepsFor(mode);
+    // The road is the planner's window from this step (2.82.2), not the guide's next steps.
+    const road = roadFrom(planWindow, step);
     const reach = (from: { x: number; y: number; plane: number } | null, to: { x: number; y: number; plane: number }) => {
       if (!from) return null;
       const inp = travelInputOf({ from, to, levels: progress.levels, stats: bridge.stats, gear: bridge.gear, owned: state.owned, mode });
@@ -146,14 +148,14 @@ export function useEvalBaseFactory() {
       xp: bridge.xp as Partial<Record<string, number>> | null,
       gear: bridge.gear,
       fights: bridge.combatLog?.foes ?? null,
-      train: trainingSkill(route, progress, step),
+      train: trainingSkill(road, progress),
     };
     const combat = combatPersonaliser(live, prices);
     const gather = gatherPersonaliser(state);
     const process = processPersonaliser(state);
     const personalise = (m: FundingMethod, tool?: string | null) => combat(m) ?? gather(m, tool) ?? process(m);
     return { now: Date.now(), prices, snap, reach, exchange: GRAND_EXCHANGE, personalise, observed, active: { foes: step.foes } };
-  }, [mode, progress, state, bridge.stats, bridge.xp, bridge.gear, bridge.combatLog, observed]);
+  }, [mode, progress, state, bridge.stats, bridge.xp, bridge.gear, bridge.combatLog, observed, planWindow]);
 }
 
 /**

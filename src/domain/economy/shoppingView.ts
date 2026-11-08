@@ -318,12 +318,12 @@ export function shopRows(list: ShoppingList, ctx: RowContext): ShopRow[] {
 
 export interface StageRange { from: number; to: number; openOnly: boolean }
 
-/** The steps of a scope: the next trip (the current step and the next open ones, as the step's preparation), this step, or the stages picked. */
-export function scopeSteps(scope: ScopeKind, steps: Step[], progress: Progress, currentId: string | null, range: StageRange): Step[] {
+/** The steps of a scope: the next trip (the current step and the next open ones on the planner's `road`, as the step's preparation), this step, or the stages picked. */
+export function scopeSteps(scope: ScopeKind, steps: Step[], progress: Progress, currentId: string | null, range: StageRange, road: Step[] = []): Step[] {
   if (scope === 'range') return steps.filter((s) => s.stage >= range.from && s.stage <= range.to && (!range.openOnly || !isClosed(progress, s.id)));
   if (!currentId) return [];
   if (scope === 'step') return steps.filter((s) => s.id === currentId);
-  return tripWindow(steps, progress, currentId);
+  return tripWindow(road, progress, currentId);
 }
 
 /** The list of a scope and what one trip takes of each line. */

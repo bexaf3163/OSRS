@@ -12,15 +12,14 @@ import { isClosed } from '../../domain/quests/next-step';
 import { useGearAdvice } from '../../state/hooks/useGearAdvice';
 import { hudHint, watchNames } from '../../domain/combat/gearAdvisor';
 import { setGearHint, supportsSnapshot, type GearHintPayload } from '../../services/runeliteBridge';
-import { useTrackedTraining } from '../../state/readinessContext';
+import { useActiveActivity } from '../../state/readinessContext';
 
 export function GearHintSync() {
-  const { state, activeStepId, plugin, setPrepPart } = useBridge();
+  const { state, plugin, setPrepPart } = useBridge();
   const snapshot = supportsSnapshot(plugin?.protocol ?? null);
-  const { steps, progress } = useStore();
+  const { progress } = useStore();
   const { upgradeRouter } = useFeatures();
-  const training = useTrackedTraining();
-  const step = training ? (training.complete ? null : training.step) : activeStepId ? steps.find((s) => s.id === activeStepId) ?? null : null;
+  const { step } = useActiveActivity();
   const { advice, input } = useGearAdvice(step);
   /** What is already in the plugin on this connection; null — nothing. */
   const sent = useRef<string | null>(null);

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Step } from '../types';
-import { decisionStep, roadFrom } from './decision';
+import { decisionStep } from './decision';
+import { roadFrom } from '../domain/prep/oneTrip';
 
 const step = (id: string): Step => ({ id, stage: 1, type: 'quest', title: id, requires: [], doneWhen: 'Finished' });
 const [a, b, c, other] = ['S1-01', 'S1-02', 'S2-01', 'S9-09'].map(step);

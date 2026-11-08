@@ -8,8 +8,9 @@ import { useStore } from '../../state/store';
 import { useFeatures } from '../../state/hooks/useFeatures';
 import { styleOf } from '../../domain/persistence/playStyle';
 import { isClosed } from '../../domain/quests/next-step';
-import { roadFrom, useDecisionWindow } from '../../state/decision';
-import { useReadinessEngine, useTrackedTraining } from '../../state/readinessContext';
+import { useDecisionWindow } from '../../state/decision';
+import { roadFrom } from '../../domain/prep/oneTrip';
+import { useReadinessEngine, useActiveActivity } from '../../state/readinessContext';
 import { usePlayerState } from '../../state/playerStateContext';
 import { planPayload } from '../../domain/prep/prepEnvelope';
 import { checkStatus, supportsSnapshot } from '../../services/runeliteBridge';
@@ -28,10 +29,10 @@ const DETOUR_POLL_MS = 15_000;
 const FRESH_MOVE_MS = 4_000;
 
 export function PrepSync() {
-  const { state, activeStepId, plugin, setPrepPart } = useBridge();
-  const { steps, progress } = useStore();
-  const training = useTrackedTraining();
-  const step = training ? (training.complete ? null : training.step) : activeStepId ? steps.find((s) => s.id === activeStepId) ?? null : null;
+  const { state, plugin, setPrepPart } = useBridge();
+  const { progress } = useStore();
+  // The same step every screen shows (tracked training, else the game step the Decision follows, else the Decision's).
+  const { step } = useActiveActivity();
   const live = state === 'online' && supportsSnapshot(plugin?.protocol ?? null);
   const open = Boolean(step) && !isClosed(progress, step!.id);
 

@@ -72,7 +72,7 @@ export function combatPersonaliser(live: CombatLive, prices: PriceView): (m: Fun
     const observed = observedFor(e.foe, live.fights);
     const notes = [
       `Kill time and food from the combat model for ${e.foe.name}${e.foe.version && versions && versions.length > 1 ? ` (level ${e.foe.combat})` : ''}, training ${skill}`,
-      ...(live.train ? [] : ['No combat step is open, so Strength training is assumed']),
+      ...(live.train ? [] : ['This quest has no open fight, so Strength training is assumed']),
       ...e.assumed,
     ];
     return {

@@ -19,7 +19,7 @@ import { useFeatures } from './hooks/useFeatures';
 import { priorityOf, styleOf } from '../domain/persistence/playStyle';
 import { useTradeRestriction } from './hooks/useTradeRestriction';
 import { resolveActiveActivity } from '../domain/quests/activeActivity';
-import { decisionStep, followedSteps, useDecision } from './decision';
+import { decisionStep, followedSteps, useDecision, usePlanWindow } from './decision';
 
 const Ctx = createContext<ReadinessEngine | null>(null);
 const TrainingCtx = createContext<TrackedTraining | null>(null);
@@ -33,6 +33,7 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
   const recovery = useRecoveryTracker();
   const bridge = useBridge();
   const tracked = useTracked();
+  const planWindow = usePlanWindow();
   const features = useFeatures();
   const style = styleOf(features).style, priority = trackedPriority(tracked, tracked?.skill ?? '', priorityOf(features));
   const trade = useTradeRestriction();
@@ -46,8 +47,8 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
   }
   const questInstruction = cursor.current?.instruction ?? null;
   const engine = useMemo(
-    () => createReadinessEngine({ steps: engineSteps, progress, qp, mode, state, prices, recovery: recovery.active, questInstruction }),
-    [engineSteps, progress, qp, mode, state, prices, recovery.active, questInstruction],
+    () => createReadinessEngine({ steps: engineSteps, progress, qp, mode, state, prices, recovery: recovery.active, questInstruction, window: planWindow }),
+    [engineSteps, progress, qp, mode, state, prices, recovery.active, questInstruction, planWindow],
   );
   return (
     <Ctx.Provider value={engine}>

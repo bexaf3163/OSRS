@@ -116,6 +116,8 @@ export interface ReadinessContext {
   questInstruction?: QuestInstruction | null;
   /** A setback on a step shown in the game (a death, a teleport): the preparation plan goes into recovery mode. */
   recovery?: { stepId: string; recovery: import('../travel/recovery').Recovery } | null;
+  /** The planner's committed window; preparation looks ahead only along it (2.82.2). Missing: each step alone. */
+  window?: readonly Step[];
 }
 
 /** Context from "raw" data (tests and places where there is no single state yet). */

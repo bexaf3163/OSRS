@@ -1,7 +1,7 @@
 // The one committed Decision for the whole app (v14): every page, the prep sync and the RuneLite bridge read what to do now
 // from here. It is recomputed only when the facts it reads change (levels, items, quests, prices, marks, the owner's goal), and
 // the previous decision is kept so a running objective stays sticky instead of being re-ranked from scratch.
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { createWalkingCosts } from '../domain/planning/trip';
 import { acceptsDecision, type DecisionStamp } from '../domain/planning/scope';
 import type { WorldPoint } from '../domain/player/playerState';
@@ -21,13 +21,21 @@ import { runtimeDecision } from '../domain/planning/runtime';
 import { planningWindow } from '../domain/planning/window';
 import type { CommittedDecision } from '../domain/planning/contracts';
 import { firstOpen } from '../domain/quests/next-step';
-import { DecisionCtx, decisionStep, type DecisionValue } from './decision';
+import { DecisionCtx, PlanWindowCtx, decisionStep, type DecisionValue } from './decision';
+import type { Step } from '../types';
 import { bestEarnRate, earnAction, gatherTime, levelledEarnRates, type EarnRate, type LevelledRate, type SupplyBase } from '../domain/planning/earn';
 import { liquidOf } from '../domain/economy/funding/snapshot';
 import { useEvalBaseFactory, useFunding, useSnapshotFactory } from './fundingContext';
 import { levelForXp } from '../domain/player/xp';
 import type { Minutes } from '../domain/planning/contracts';
 import { travelInputOf } from '../domain/travel/travelInput';
+
+/** Holds the Decision's window above the providers that prepare for it (readiness, funding, the bridge). */
+export function PlanWindowProvider({ children }: { children: ReactNode }) {
+  const [window, setWindow] = useState<readonly Step[]>([]);
+  const value = useMemo(() => ({ window, setWindow }), [window]);
+  return <PlanWindowCtx.Provider value={value}>{children}</PlanWindowCtx.Provider>;
+}
 
 export function DecisionProvider({ children }: { children: ReactNode }) {
   const { progress, steps } = useStore();
@@ -111,6 +119,11 @@ export function DecisionProvider({ children }: { children: ReactNode }) {
     };
   }, [snapshot, routes, rate, levelled, teleports, gather, bridge.accountType, steps, progress, prices, trade.state, intent, readOnly]);
   useEffect(() => { if (value.decision) previous.current = value.decision; }, [value.decision]);
+  // Published upward only when its steps change: a new array of the same steps must not recompute readiness.
+  const { setWindow } = useContext(PlanWindowCtx);
+  const windowKey = value.window.map(s => `${s.id}:${s.type}`).join(',');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => setWindow(value.window), [windowKey, setWindow]);
   useLegRoutes(snapshot, value.missed, setRoutes);
   return <DecisionCtx.Provider value={value}>{children}</DecisionCtx.Provider>;
 }

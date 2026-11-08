@@ -64,7 +64,15 @@ export interface OneTripPlan {
   coins: TripCoins;
 }
 
-/** The current step and the following unclosed ones (in route order): the preparation window. */
+/** The road ahead from a step: the planner's window from that step when it is in it, otherwise the step alone.
+ *  The guide's order never extends it (2.82.2): the planner, not the walkthrough, picks the next quest. */
+export function roadFrom(window: readonly Step[], step: Step): Step[] {
+  const at = window.findIndex((s) => s.id === step.id);
+  return at < 0 ? [step] : window.slice(at);
+}
+
+/** The current step and the following unclosed ones of `steps`, which callers pass in the order they will be done
+ *  (the planner's road, see roadFrom): the preparation window. */
 export function tripWindow(steps: Step[], progress: Progress, current: string | Step, ahead = LOOK_AHEAD): Step[] {
   const at = typeof current === 'string' ? steps.findIndex((s) => s.id === current) : steps.indexOf(current);
   if (at < 0) return [];

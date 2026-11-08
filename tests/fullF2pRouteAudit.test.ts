@@ -321,7 +321,7 @@ describe('F2P route audit: the 28-slot bag', () => {
     const state = buildPlayerState({
       mode: 'f2p', stats: null, progress: { levels: {} }, owned: owned(rows), gear: { equipment: [], inventory: [], coins: 600, bankCoins: 0, inventorySlots: used }, questsDone: null, connected: true,
     });
-    return createReadinessEngine({ steps: allSteps, progress: emptyProgress(), qp: 40, mode: 'f2p', state }).plan(stepById.get(id)!);
+    return createReadinessEngine({ steps: allSteps, window: allSteps, progress: emptyProgress(), qp: 40, mode: 'f2p', state }).plan(stepById.get(id)!);
   };
 
   it('Goblin Diplomacy: with the dyes in hand and room for them but not for three goblin mails, the plan warns before the first mail is picked up', () => {
@@ -379,7 +379,7 @@ describe('F2P route audit: where things come from and when the plan says so', ()
     const state = buildPlayerState({
       mode: 'f2p', stats: null, progress: { levels: {} }, owned: owned(rows, bankSeen), gear: { equipment: [], inventory: [], coins: 3000, bankCoins: 0 }, questsDone: null, connected: true,
     });
-    return createReadinessEngine({ steps: allSteps, progress: emptyProgress(), qp: 40, mode: 'f2p', state }).plan(stepById.get(id)!);
+    return createReadinessEngine({ steps: allSteps, window: allSteps, progress: emptyProgress(), qp: 40, mode: 'f2p', state }).plan(stepById.get(id)!);
   };
 
   const ORACLE = ['Silk', 'Lobster pot', 'Unfired bowl', "Wizard's mind bomb"];
@@ -515,7 +515,7 @@ describe('F2P route audit: the multi-floor and underground quests, one by one', 
 describe('F2P route audit: dialogue, puzzles and quest prep', () => {
   const planFor = (id: string) => {
     const state = buildPlayerState({ mode: 'f2p', stats: null, progress: { levels: {} }, owned: { bankSeen: true, items: new Map() }, gear: { equipment: [], inventory: [], coins: 3000, bankCoins: 0 }, questsDone: null, connected: true });
-    return createReadinessEngine({ steps: allSteps, progress: emptyProgress(), qp: 40, mode: 'f2p', state }).plan(stepById.get(id)!);
+    return createReadinessEngine({ steps: allSteps, window: allSteps, progress: emptyProgress(), qp: 40, mode: 'f2p', state }).plan(stepById.get(id)!);
   };
 
   it("Demon Slayer: Delrith's words are never written into the data: the order comes from the game (varbits 2562..2566)", () => {
@@ -552,7 +552,7 @@ describe('F2P route audit: a player walks S2-12 to the finale', () => {
     expect(walk[walk.length - 1].id).toBe(FINALE);
     for (const s of walk) {
       const state = buildPlayerState({ mode: 'f2p', stats: null, progress: { levels: {} }, owned: { bankSeen: true, items: new Map() }, gear: { equipment: [], inventory: [], coins: 3000, bankCoins: 0 }, questsDone: null, connected: true });
-      const plan = createReadinessEngine({ steps: allSteps, progress: progressBefore(s.id), qp: 40, mode: 'f2p', state }).plan(s);
+      const plan = createReadinessEngine({ steps: allSteps, window: allSteps, progress: progressBefore(s.id), qp: 40, mode: 'f2p', state }).plan(s);
       stats.plans++;
       expect(plan.stepId, s.id).toBe(s.id);
       const nav = navigationTarget(s);

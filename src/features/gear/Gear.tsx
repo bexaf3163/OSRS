@@ -190,7 +190,7 @@ export function GearPage() {
   // The same activity, quantities and sources as Stock up; optional future stock never consumes the mandatory reserve.
   const reserve = useMemo(() => {
     if (!activity.step) return { amount: 0, complete: false };
-    const selected = tripWindow(engine.ctx.steps, progress, activity.step.id);
+    const selected = tripWindow(engine.road(activity.step), progress, activity.step);
     const stocked = stockUpShopping(selected.length ? selected : [activity.step], stockShoppingContext(player, prices, engine.ctx.qp), prices);
     const required = supplyReserve(stocked.rows, stocked.list.coins);
     return { amount: required.amount + (stocked.refillReserve ?? 0), complete: required.complete && stocked.refillReserve !== null };

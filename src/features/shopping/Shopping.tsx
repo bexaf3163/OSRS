@@ -162,7 +162,7 @@ export function ShoppingPage() {
 
   const built = useMemo(() => {
     try {
-      const selected = [...new Map([...(followed && scope !== 'range' ? [followed] : []), ...scopeSteps(scope, steps, progress, current, range)].map(s => [s.id, s])).values()];
+      const selected = [...new Map([...(followed && scope !== 'range' ? [followed] : []), ...scopeSteps(scope, steps, progress, current, range, activity.step ? engine.road(activity.step) : [])].map(s => [s.id, s])).values()];
       const shared = stockShoppingContext(player, prices, questPoints);
       const stocked = scope === 'trip' && selected.some(s => s.stockItems?.length) ? stockUpShopping(selected, shared, prices) : null;
       const { list, trip } = stocked ?? scopeList(selected);
@@ -171,7 +171,7 @@ export function ShoppingPage() {
     } catch {
       return { selected: [], list: { required: [], recommended: [], coins: 0 }, rows: [] as ShopRow[], refillReserve: null, error: true };
     }
-  }, [scope, steps, progress, current, range, player, prices, followed, questPoints]);
+  }, [scope, steps, progress, current, range, player, prices, followed, questPoints, engine, activity.step]);
   const { selected, list, rows, error, refillReserve } = built;
 
   const connected = link === 'online';

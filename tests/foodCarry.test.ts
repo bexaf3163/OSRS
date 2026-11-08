@@ -66,7 +66,8 @@ describe('physical carrying space for banked food alternatives', () => {
         ['trout', { name: 'Trout', carried: 0, noted: 0, bank: 3 }],
       ]) },
     });
-    const plan = createReadinessEngine({ steps, progress, mode: 'f2p', qp: 0, state }).plan(steps[0], { ahead: 1 });
+    // The two steps are the planner's road (its window), in this order.
+  const plan = createReadinessEngine({ steps, window: steps, progress, mode: 'f2p', qp: 0, state }).plan(steps[0], { ahead: 1 });
     expect(plan.slots).toMatchObject({ used: 2, adding: 3, over: 0 });
     const withdrawals = bankWithdrawalsOf(plan);
     expect(withdrawals.every(item => item.itemName === 'Trout')).toBe(true);

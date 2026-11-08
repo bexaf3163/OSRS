@@ -68,7 +68,7 @@ export function createTacticalResolver(input: TacticalInput) {
     const window = [execution, ...input.window.filter((_, index) => index !== replaceAt)].slice(0, PLANNING_WINDOW_SIZE);
     // Validated stage/DAG evidence chooses the current action. Saved route marks never prove its game prerequisites.
     const progress = { ...input.progress, steps: {} };
-    const engine = createReadinessEngine({ steps: window, progress, qp: snapshot.questPoints.known ? snapshot.questPoints.value : 0,
+    const engine = createReadinessEngine({ steps: window, window, progress, qp: snapshot.questPoints.known ? snapshot.questPoints.value : 0,
       mode: snapshot.scope.mode, state: snapshot.player, prices: input.prices, questInstruction: snapshot.instruction });
     const plan = engine.plan(execution, { ahead: 2 }), readiness = engine.readiness(execution);
     const need = buildNeed({ step: execution, prep: plan, prices: input.prices, owned: snapshot.player.owned, manual: snapshot.player.manual,

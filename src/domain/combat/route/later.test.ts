@@ -20,10 +20,12 @@ describe('the Defence XP the route gives later', () => {
     expect([...order].sort((a, b) => a - b)).toEqual(order);
   });
 
-  it('a step already closed gives nothing more, and one behind the current step is not ahead', () => {
+  it('a step already closed gives nothing more, the current step is not ahead, and an open step earlier in the guide still is', () => {
     expect(laterDefence(allSteps, 'S4-03', (id) => id === 'S5-09').some((l) => l.stepId === 'S5-09')).toBe(false);
     expect(laterDefence(allSteps, 'S4-03', () => true)).toEqual([]);
     expect(laterDefence(allSteps, 'S5-09').some((l) => l.stepId === 'S5-09')).toBe(false);
+    // The planner picks the order (2.82.2): Dragon Slayer I is still ahead of Nature Spirit until it is done.
+    expect(laterDefence(allSteps, 'S8-02').some((l) => l.stepId === 'S5-09')).toBe(true);
     expect(laterDefence(allSteps, 'nonsense')).toEqual([]);
   });
 

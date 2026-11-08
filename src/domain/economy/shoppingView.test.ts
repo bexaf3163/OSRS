@@ -112,11 +112,13 @@ describe('quantities across steps', () => {
     expect(list.required[0].anyOf).toEqual(['Trout', 'Tuna', 'Lobster']);
   });
 
-  it('the next trip is the current step and the next open ones, the same window as the step\'s preparation', () => {
+  it('the next trip is the current step and the next open ones on the planner\'s road, the same window as the step\'s preparation', () => {
     const p = emptyProgress();
-    const ids = scopeSteps('trip', allSteps, p, 'S1-01', { from: 1, to: 1, openOnly: true }).map((s) => s.id);
-    expect(ids[0]).toBe('S1-01');
-    expect(ids.length).toBe(4);
+    const range = { from: 1, to: 1, openOnly: true };
+    const road = ['S1-01', 'S3-01', 'S2-09', 'S1-05'].map((id) => allSteps.find((s) => s.id === id)!);
+    expect(scopeSteps('trip', allSteps, p, 'S1-01', range, road).map((s) => s.id)).toEqual(['S1-01', 'S3-01', 'S2-09', 'S1-05']);
+    // No planner road: the step alone, never the guide's next steps.
+    expect(scopeSteps('trip', allSteps, p, 'S1-01', range, [road[0]]).map((s) => s.id)).toEqual(['S1-01']);
     expect(scopeSteps('step', allSteps, p, 'S1-01', { from: 1, to: 1, openOnly: true }).map((s) => s.id)).toEqual(['S1-01']);
     expect(scopeSteps('trip', allSteps, p, null, { from: 1, to: 1, openOnly: true })).toEqual([]);
   });

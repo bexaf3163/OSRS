@@ -21,12 +21,12 @@ export function defenceXpOf(reward: string | undefined): number {
   return m ? Number(m[1].replace(/,/g, '')) : 0;
 }
 
-/** The steps after `stepId` whose reward gives Defence XP, in route order, leaving out the ones already closed. */
+/** The open steps other than `stepId` whose reward gives Defence XP, listed in guide order, leaving out the ones already closed. */
 export function laterDefence(steps: readonly Step[], stepId: string, done?: (id: string) => boolean): LaterDefence[] {
-  const at = steps.findIndex((s) => s.id === stepId);
-  if (at < 0) return [];
+  if (!steps.some((s) => s.id === stepId)) return [];
   const out: LaterDefence[] = [];
-  for (const s of steps.slice(at + 1)) {
+  // Every open step is still ahead, whatever its place in the guide: the planner picks the order (2.82.2).
+  for (const s of steps.filter((x) => x.id !== stepId)) {
     const xp = defenceXpOf(s.reward);
     if (xp > 0 && !done?.(s.id)) out.push({ stepId: s.id, title: s.title, xp });
   }

@@ -15,6 +15,18 @@ const input = (s: string, over: Partial<ReadinessInput> = {}): ReadinessInput =>
 });
 
 describe('the single readiness engine', () => {
+  it('looks ahead along the planner\'s window, never the guide\'s next steps', () => {
+    const ctx = contextOf({ ...input('S1-01'), progress: emptyProgress() });
+    const guided = createReadinessEngine(ctx);
+    expect(guided.road(step('S1-01')).map((s) => s.id)).toEqual(['S1-01']);
+    expect(guided.trip('S1-01').stepIds).toEqual(['S1-01']);
+    const planned = createReadinessEngine({ ...ctx, window: [step('S1-01'), step('S3-01'), step('S2-09')] });
+    expect(planned.road(step('S1-01')).map((s) => s.id)).toEqual(['S1-01', 'S3-01', 'S2-09']);
+    expect(planned.trip('S1-01').stepIds).toEqual(['S1-01', 'S3-01', 'S2-09']);
+    // A step the planner has not committed to is prepared for alone.
+    expect(planned.road(step('S1-02')).map((s) => s.id)).toEqual(['S1-02']);
+  });
+
   it('keeps candidate and phase caches separate even when their historical step IDs match', () => {
     const first = { ...step('S1-03'), id: 'S0-01', requires: [], itemsRequired: [{ nameEn: 'Bucket', amount: 1, howToGet: '' }] };
     const second = { ...first, itemsRequired: [{ nameEn: 'Pot', amount: 2, howToGet: '' }] };
@@ -71,7 +83,8 @@ describe('the single readiness engine', () => {
     for (const id of ['S1-03', 'S2-04', 'S9-01', 'S7-05', 'S8-02']) {
       const inp = input(id);
       const ctx = contextOf(inp);
-      const e = createReadinessEngine(ctx);
+      // The planner's window is supplied as the whole list, so the direct one-trip computation walks the same road.
+      const e = createReadinessEngine({ ...ctx, window: ctx.steps });
       expect(e.readiness(step(id))).toEqual(readinessOf(step(id), ctx));
       expect(e.prep(step(id))).toEqual(buildPrepRoute(readinessOf(step(id), ctx), step(id)));
       expect(e.chain(step(id)).map((l) => l.step.id)).toEqual(fixChain(inp).map((l) => l.step.id));

@@ -8,7 +8,8 @@ import { clearActiveStep, supportsSnapshot, syncActiveStep } from '../services/r
 import { autoCompletes, toInGameTarget } from '../domain/guide/inGameTarget';
 import { preflightItems } from '../domain/prep/stepItems';
 import { doseKind } from '../domain/items/doseKind';
-import { tripWindow } from '../domain/prep/oneTrip';
+import { roadFrom, tripWindow } from '../domain/prep/oneTrip';
+import { usePlanWindow } from './decision';
 import { isClosed } from '../domain/quests/next-step';
 import { stepResendKey } from '../domain/combat/foodPlan';
 import { withKillEstimate } from '../domain/combat/gearAdvisor';
@@ -20,15 +21,19 @@ import type { PointResult } from './bridgeValue';
 /** Sending the step into the game and taking it out, and the auto-mark from the game. */
 export function useStepSending({ activeStepId, setAdvance, liveIdentity, sessionEpoch, pluginProtocol, snapshot, latest, handled }: BridgeCore, { flushSnapshot }: ReturnType<typeof useSnapshot>) {
   const nonce = useRef(0);
+  // The items of the planner's next steps, never the guide's next ones (2.82.2); read at send time.
+  const planWindow = usePlanWindow();
+  const plan = useRef(planWindow);
+  plan.current = planWindow;
 
   /** A step into the game. For a combat step — with a first time estimate per opponent by the current weapon and levels. */
   const sendStep = useCallback(async (step: Step, branch?: StepBranch): Promise<boolean> => {
     if (!gateAllows(profileGate(readProfiles(), liveIdentity.current.player))) return false;
     const epoch = sessionEpoch.current;
-    const { progress: p, stats: live, gear: g, steps: list } = latest.current;
+    const { progress: p, stats: live, gear: g } = latest.current;
     // The items of the current and the nearest steps — the plugin counts them in advance: "one trip" knows what is already there.
     // Potions the window recommends are counted too (every size, in doses): Shopping's optional rows and the trip read them.
-    const ahead = tripWindow(list, p, step.id).slice(1).flatMap((s) => [
+    const ahead = tripWindow(roadFrom(plan.current, step), p, step).slice(1).flatMap((s) => [
       ...preflightItems(s).map((i) => i.nameEn), ...(s.itemsRecommended ?? []).filter((i) => doseKind(i.nameEn)).map((i) => i.nameEn),
     ]);
     const target = withKillEstimate(step, { ...p.levels, ...(live ?? {}) }, g);

@@ -30,11 +30,13 @@ export function useDecisionStage(): number {
   return decisionStep(useDecision(), steps)?.stage ?? currentStage(steps, progress);
 }
 
-/** The road ahead from a step, for teleport supplies and the bag: the Decision's window from that step when it is in it,
- * otherwise the step alone. Route order never extends it. */
-export function roadFrom(window: readonly Step[], step: Step): Step[] {
-  const at = window.findIndex(s => s.id === step.id);
-  return at < 0 ? [step] : window.slice(at);
+/** The Decision's window for the providers above it (readiness, funding, the bridge): the provider publishes it here,
+ * so preparation looks ahead along the planner's road, never the guide's next steps (2.82.2). */
+export const PlanWindowCtx = createContext<{ window: readonly Step[]; setWindow: (window: readonly Step[]) => void }>({ window: [], setWindow: () => {} });
+
+/** The planner's window as the providers above the Decision read it; empty before the first Decision. */
+export function usePlanWindow(): readonly Step[] {
+  return useContext(PlanWindowCtx).window;
 }
 
 /** The authored step the Decision's current action runs on, or null (a VERIFY action, or a step outside these steps). */

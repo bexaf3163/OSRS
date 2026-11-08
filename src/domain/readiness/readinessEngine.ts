@@ -8,7 +8,7 @@ import type { Step } from '../../types';
 import { stepAtQuestCursor } from '../quests/questCursor';
 import { fixChainOf, readinessOf, type ChainLink, type ReadinessContext, type StepReadiness } from './readiness';
 import { buildPrepRoute, openTaskIds, type PrepRoute } from '../prep/prepRoute';
-import { planOneTrip, tripWindow, type OneTripPlan } from '../prep/oneTrip';
+import { planOneTrip, roadFrom, tripWindow, type OneTripPlan } from '../prep/oneTrip';
 import { buildQueue, type PrepQueue } from '../prep/prepQueue';
 import type { PlayStyle } from '../persistence/playStyle';
 import { buildPrepPlan, type PrepPlan } from '../prep/prepPlan';
@@ -32,6 +32,8 @@ export interface ReadinessEngine {
   queue(step: Step, style: PlayStyle): PrepQueue;
   /** "One trip" for this step and the nearest ones. */
   trip(current: string | Step, ahead?: number): OneTripPlan;
+  /** The planner's road from a step (its committed window after it); the step alone when the planner has none. */
+  road(step: Step): Step[];
   /**
    * The preparation plan: one decision "what is needed", from which the in-app "What you need", the in-game list and the bank
    * check are drawn (prepPlan.ts). upgrade is a tool tip, if there is one.
@@ -63,6 +65,8 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
   const planMemo = new WeakMap<Step, Map<string, PrepPlan>>();
   const computed = { readiness: 0, trip: 0, plan: 0 };
   const stepOf = (id: string) => ctx.steps.find((s) => s.id === id);
+  /** The planner's road from a step: its committed window after it, never the guide's next steps (2.82.2). */
+  const road = (step: Step): Step[] => [step, ...roadFrom(ctx.window ?? [], step).slice(1).map(entry)];
 
   const readiness = (step: Step): StepReadiness => {
     step = entry(step);
@@ -81,7 +85,7 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
     const r = buildPrepRoute(readiness(step), step);
     const buy = r.tasks.find(t => t.kind === 'buy' && t.need === 'REQUIRED');
     if (buy && step.stockItems?.length) {
-      const window = tripWindow(ctx.steps, ctx.progress, step);
+      const window = tripWindow(road(step), ctx.progress, step);
       const stocked = stockUpShopping(window.length ? window : [entry(step)], stockShoppingContext(ctx.state, ctx.prices, ctx.qp), ctx.prices);
       if (stocked.stock.length) buy.detail = `Buy together if convenient: ${stocked.stock.map(row => `${row.name} ×${row.qty}`).join(', ')}. Bank these extras for later; they do not block this step.`;
     }
@@ -98,7 +102,7 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
     if (hit) return hit;
     computed.trip++;
     // A caller-supplied candidate absent from this context gets its own kit, never another phase with the same ID.
-    const window = ctx.steps.includes(step) ? ctx.steps : [step];
+    const window = road(step);
     const t = planOneTrip(window, ctx.progress, step, ctx.state, ahead);
     const rows = memo ?? new Map<string, OneTripPlan>();
     rows.set(key, t);
@@ -135,6 +139,7 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
       return step ? openTaskIds(readiness(step), step) : null;
     },
     trip: tripOf,
+    road: (step) => road(entry(step)),
     plan(step, opts = {}) {
       step = entry(step);
       const up = opts.upgrade;
@@ -145,7 +150,7 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
       if (hit) return hit;
       computed.plan++;
       const p = buildPrepPlan({
-        step, steps: ctx.steps, progress: ctx.progress, state: ctx.state,
+        step, steps: road(step), progress: ctx.progress, state: ctx.state,
         trip: tripOf(step, opts.ahead), readiness: readiness(step), prices: ctx.prices, upgrade: up ?? null, recovery: rec, questInstruction: ctx.state.connected ? ctx.questInstruction : null,
       });
       const rows = memo ?? new Map<string, PrepPlan>();

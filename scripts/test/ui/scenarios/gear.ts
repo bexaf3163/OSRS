@@ -40,13 +40,15 @@ async function gearScenarios(browser: Browser) {
       await shot(page, `reco-${width}`);
       await page.context().close();
     }
-    // Best wearable weapon/amulet, but unread supply ownership: do not claim the full budget was checked.
+    // Best wearable weapon/amulet and nothing to reserve on the planner's road (2.82.2: the guide's next steps no longer
+    // add supplies): no change, the next real step up with its shortfall, no purchase button, no invented budget warning.
+    // The warning for supplies that cannot be priced is checked in the case below.
     {
       const { page, errors } = await open(browser, width, live([RUNE, STRENGTH], { attack: 40, strength: 40, defence: 1, hitpoints: 40 }, 0), '#/gear');
       await settle(page);
       const reco = await text(page, '.gear-reco');
-      expect(/Supply budget not fully checked/.test(reco) && /Confirm Preparation/.test(reco) && await page.locator('.gear-reco .btn').count() === 0, `gear none (${width} px): unread supplies stay explicit, no purchase button`);
-      expect(reco.split('Supply budget not fully checked').length === 2, `gear none (${width} px): said once`);
+      expect(/No worthwhile change for this fight/.test(reco) && /Iron chainbody: 210 gp short/.test(reco) && await page.locator('.gear-reco .btn').count() === 0, `gear none (${width} px): no change, the next step up, no purchase button`);
+      expect(!/not fully checked/.test(reco) && reco.split('No worthwhile change').length === 2, `gear none (${width} px): said once, no budget warning without a supply`);
       expect(await noOverflow(page), `gear none (${width} px): no horizontal scroll`);
       expect(!errors.length, `gear none (${width} px): no console errors ${errors.join('; ')}`);
       await shot(page, `none-${width}`);

@@ -6,7 +6,7 @@ import { StoreProvider } from './state/store';
 import { BridgeProvider } from './state/bridge';
 import { PlayerStateProvider } from './state/playerStateContext';
 import { ReadinessProvider } from './state/readinessContext';
-import { DecisionProvider } from './state/decisionContext';
+import { DecisionProvider, PlanWindowProvider } from './state/decisionContext';
 import { FundingProvider } from './state/fundingContext';
 import { TrainingSessionProvider } from './state/trainingSessionContext';
 import './styles.css';
@@ -21,7 +21,7 @@ import './ledger/app.css';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <StoreProvider>
-      <BridgeProvider>
+      <PlanWindowProvider><BridgeProvider>
         <PlayerStateProvider>
           <ReadinessProvider>
             <FundingProvider>
@@ -34,7 +34,7 @@ createRoot(document.getElementById('root')!).render(
             </FundingProvider>
           </ReadinessProvider>
         </PlayerStateProvider>
-      </BridgeProvider>
+      </BridgeProvider></PlanWindowProvider>
     </StoreProvider>
   </StrictMode>,
 );
