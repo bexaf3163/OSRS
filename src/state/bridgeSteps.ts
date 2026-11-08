@@ -47,7 +47,7 @@ export function useStepSending({ activeStepId, setAdvance, liveIdentity, session
     const sn = snapshot.current;
     sn.parts = { ...sn.parts, step: payload };
     sn.synced = true;
-    return flushSnapshot(['step', 'skillPath']);
+    return flushSnapshot(['step']);
   }, [flushSnapshot]);
 
   /** Remove the step in the game: with a snapshot — as part of it, otherwise — by a separate request. */

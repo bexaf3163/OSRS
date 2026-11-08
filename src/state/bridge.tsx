@@ -29,7 +29,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const { runelite, autoLaunch, setAutoLaunch, launchRuneLite } = useLaunch(c);
   const { pointInGame, clear, chooseBranch } = useStepFollow(c, sending);
   const { session, xpRate } = useCharacter(c);
-  const { setPrepPart, setSkillPath, setTrainingStep, syncPlan } = snap;
+  const { setPrepPart, setTrainingStep, syncPlan } = snap;
   const { navigate, clearNav, releaseNav, userClearedAt } = nav;
   const currentCharacter = state === 'online' && inGame && gateAllows(gate);
   const value = useMemo<BridgeValue>(
@@ -44,11 +44,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       accountType: currentCharacter ? accountType : null, combatLog: currentCharacter ? combatLog : null,
       navigate, clearNav, releaseNav, userClearedAt, plugin,
       xp: currentCharacter ? xp : null, questsDone: currentCharacter ? questsDone : null, questStates: currentCharacter ? c.questStates : null, player,
-      position: currentCharacter ? position : null, gate, xpRate, session, locate, moves, setPrepPart, setSkillPath, setTrainingStep,
+      position: currentCharacter ? position : null, gate, xpRate, session, locate, moves, setPrepPart, setTrainingStep,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, lastGears, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, accountType, combatLog, navigate, clearNav, releaseNav, userClearedAt, plugin,
-      xp, questsDone, c.questStates, player, position, gate, xpRate, session, locate, moves, setPrepPart, setSkillPath, setTrainingStep, currentCharacter],
+      xp, questsDone, c.questStates, player, position, gate, xpRate, session, locate, moves, setPrepPart, setTrainingStep, currentCharacter],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }

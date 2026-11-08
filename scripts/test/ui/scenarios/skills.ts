@@ -1,7 +1,8 @@
 // Skills and training: scenarios of the browser suite (npm run test:ui -- --only skills).
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import type { Browser } from 'playwright';
 import { toolUse } from '../../../../src/domain/items/toolTiers.ts';
+import { SKILL_NAMES } from '../../../../src/domain/training/skillTrack.ts';
 import { BASE, progressBefore, open, settle, expect, noOverflow, reveal, waitFor, stepButton, text } from '../harness.ts';
 
 async function f2pSkillsScenarios(browser: Browser) {
@@ -63,7 +64,7 @@ async function f2pSkillsScenarios(browser: Browser) {
   }
   {
     const { page, errors } = await open(browser, 1280, { theme: 'light', scale: 1.5,
-      progress: progressBefore('S9-01', { gameMode: 'members', levels: Object.fromEntries(readdirSync(new URL('../../../../src/data/generated/skills/', import.meta.url)).filter(f => f.endsWith('.json')).map(f => [f.slice(0, -5), 30])) }) }, '#/skills');
+      progress: progressBefore('S9-01', { gameMode: 'members', levels: Object.fromEntries(SKILL_NAMES.map((skill) => [skill, 30])) }) }, '#/skills');
     expect(await page.locator('.f2p-skill-badge').count() === 0, 'Members: F2P preparation markers do not clutter the overview');
     const links = await page.locator('.skill-tile a').evaluateAll(els => els.map(el => ({ href: el.getAttribute('href')!, name: el.querySelector('.skill-name')!.textContent! })));
     for (const { href, name } of links) {

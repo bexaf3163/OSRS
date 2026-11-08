@@ -5,7 +5,6 @@ import { adviseTraining, trainingMethods, viewMethod } from '../src/domain/train
 import { methodPoint, withTrainingMethod } from '../src/domain/training/methodStep';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { stepById } from '../src/data';
-import { skillGuides } from '../src/data/skillGuideRegistry';
 import { matchStrict } from '../src/domain/travel/locations';
 
 const method = trainingMethods.find(m => m.id === 'pr-camdozaal')!;
@@ -69,9 +68,8 @@ describe('Camdozaal is eligible only with its actual cross-skill kit', () => {
     expect(viewMethod(future, character()).status).toBe('LOCKED');
   });
   it('uses the verified shared destination rather than an absent map', () => {
-    const guide = skillGuides.prayer.steps.find(s => s.id === 'prayer-04')!;
     const at = methodPoint(method.id)!;
-    expect([at.x, at.y, at.plane]).toEqual(guide.location.tile);
+    expect([at.x, at.y, at.plane]).toEqual([2968, 5808, 0]);
     expect(matchStrict('Camdozaal')).toMatchObject({ page: 'Ruins of Camdozaal', source: 'dictionary' });
     expect(projected().mapLocation).toMatchObject({ x: at.x, y: at.y, plane: at.plane });
   });
@@ -79,6 +77,5 @@ describe('Camdozaal is eligible only with its actual cross-skill kit', () => {
     expect(method.xph).toBeNull();
     expect(method.note).toContain('offer prepared fish');
     expect(projected().quickSteps?.join(' ')).toContain('raw fish cannot be offered');
-    expect(skillGuides.prayer.steps.find(s => s.id === 'prayer-04')!.description).toContain('prepared fish');
   });
 });

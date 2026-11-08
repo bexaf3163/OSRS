@@ -113,7 +113,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
       <Page side="l" className="path-road" label="Route">
         <Eyebrow>YOUR PATH</Eyebrow>
         <h2 className="la-t" style={{ marginTop: 4 }}>The planner's order</h2>
-        <div className="la-chips" style={{ marginTop: 8 }}>
+        <div className="la-chips" style={{ marginTop: 8, marginBottom: 10 }}>
           <span className="la-chip">{qp} → {maxQp} QP</span>
           <button type="button" className="la-btn la-d rail-now" style={{ padding: '3px 10px', marginLeft: 'auto' }} disabled={!suggested || selected?.id === suggested.id} onClick={() => { if (suggested) select(suggested.id); }}>
             <Icon name="target" size={12} /> TO THE CURRENT STEP

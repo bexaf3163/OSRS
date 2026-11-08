@@ -532,36 +532,6 @@
       ]
     }
   ],
-  "training": {
-    "id": "training",
-    "title": "Skill training: how it works",
-    "blocks": [
-      {
-        "t": "p",
-        "text": "The sections below are a reference for the step-by-step plan. The free skills are written for the free version, and what opens only with membership is marked separately. The eight members skills are gathered at the end, in the \"Members skills\" section."
-      },
-      {
-        "t": "ul",
-        "items": [
-          {
-            "text": "**Range codes.** Every row in the training tables has a code: `WC-2` is Woodcutting, the second level range. The tracker app can show the right row for you from your skill level."
-          },
-          {
-            "text": "**Tools.** Axes and pickaxes: bronze and iron from level 1, steel from 6, black from 11, mithril from 21, adamant from 31, rune from 41. The speed rises noticeably with every metal: buy the best available."
-          },
-          {
-            "text": "**Skill chains:** Woodcutting to Firemaking; Fishing to Cooking to food; Mining to Smithing to armour and weapons; combat to bones and hides to Prayer and Crafting."
-          },
-          {
-            "text": "**Banks:** Lumbridge (the top floor of the castle), Draynor, Varrock (two), Falador (two), Edgeville, Al Kharid."
-          },
-          {
-            "text": "**Drop or bank?** For fast XP drop what you gather (turn on \"Shift click to drop\" in the settings). For money and your own materials carry it to the bank."
-          }
-        ]
-      }
-    ]
-  },
   "graph": {
     "edges": [
       {

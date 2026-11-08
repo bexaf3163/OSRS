@@ -8,7 +8,6 @@ import type { GearState, NavResult, NavTargetPayload, PacingState, PluginCompat,
 import type { OwnedState } from '../domain/items/checklist';
 import type { MoveEvent } from '../domain/travel/recovery';
 import type { SnapshotParts } from '../domain/prep/prepEnvelope';
-import type { SkillPathPayload } from '../domain/training/skillGuide';
 import type { LastGear } from './lastGear';
 import type { QuestObservation } from '../domain/player/questObservation';
 
@@ -93,8 +92,6 @@ export interface BridgeValue {
    * with everything else in one request; for a plugin older than protocol 6 the call does nothing — it has its own separate requests.
    */
   setPrepPart: <K extends 'gearHint' | 'bankTags' | 'plan' | 'cleanup' | 'funding' | 'decision'>(key: K, value: SnapshotParts[K]) => void;
-  /** The tracked skill's path for the game (null: stop tracking). While there is one the plugin leads that skill instead of the quest step. */
-  setSkillPath: (value: SkillPathPayload | null) => void;
   setTrainingStep: (value: Step | null) => void;
   /** Which profile and character are current: whether levels and marks from the game may be written into the profile. */
   gate: ProfileGate;

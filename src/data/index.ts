@@ -43,7 +43,7 @@ export const allStages = stagesJson as Stage[];
 /** The free skills of the guide. */
 export const skills = skillsJson as Skill[];
 export const levelSkills = levelsJson as LevelSkill[];
-/** The "Members skills" section of the guide: an intro and eight skills with training plans. */
+/** The "Members skills": eight skills trained only with membership. */
 export const membersGuide = membersSkillsJson as MembersSkillsData;
 export const membersSkills = membersGuide.skills;
 export const xpData = xpJson as XpData;

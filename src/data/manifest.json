@@ -12,7 +12,6 @@
     "questFacts.json": "npm run build-quest-facts",
     "rangedGear.json": "npm run build-ranged-gear",
     "skilling.json": "npm run build-skilling",
-    "skills/": "python tools/skill-guides/build.py",
     "styleGear.json": "npm run build-style-gear",
     "threats.json": "npm run build-threats",
     "trainers.json": "npm run build-trainers",

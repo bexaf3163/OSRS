@@ -19,8 +19,8 @@ export function PlannerOrder({ rows, confidence, selectedId, onSelect, updatesWh
           <li key={row.id} data-objective={row.id}>
             <button type="button" className="planner-row" data-step={row.stepId ?? ''} disabled={!row.stepId}
               aria-current={row.stepId === selectedId ? 'step' : undefined} onClick={() => row.stepId && onSelect(row.stepId)}>
-              <strong>{row.rank}. {row.id}</strong>
-              <span className="muted small"> · {row.minutes !== null ? `about ${row.minutes} min` : row.unknown.length ? `time unknown (${row.unknown.join(', ')})` : 'time unknown'}</span>
+              <strong>{row.rank}. {row.title}</strong>
+              {row.minutes !== null && <span className="muted small"> · about {row.minutes} min</span>}
               <span className="muted small planner-why">{row.verdict}</span>
             </button>
           </li>

@@ -1,25 +1,13 @@
-// A tracked leveling plan and the engine name one activity once (2.79.2): the guide step is linked to its catalogue method by what is trained, the card
-// shows the followed method with this player's figures (XP and coins an hour), and every method listed carries the same summary.
+// A followed method is shown with this player's figures (2.79.2): the card shows the followed method with its XP and coins an hour, and
+// every method listed carries the same summary.
 
 import { describe, expect, it } from 'vitest';
-import { guideFor } from '../src/data/skillGuideRegistry';
-import { adviseTraining, methodOfGuideStep } from '../src/domain/training/trainingRouter';
+import { adviseTraining } from '../src/domain/training/trainingRouter';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { market } from './funding/market';
 
-const step = (skill: string, title: string) => guideFor(skill as never).steps.find((s) => s.title === title)!;
 
-describe('a guide step is the catalogue method that trains the same thing', () => {
-  it('by the opponent for combat and by the object for gathering', () => {
-    expect(methodOfGuideStep(step('strength', 'Giant frogs'))?.id).toBe('me-frog');
-    expect(methodOfGuideStep(step('defence', 'Brutus'))?.id).toBe('me-brutus');
-    expect(methodOfGuideStep(step('woodcutting', 'Oak trees'))?.id).toBe('wc-oak');
-  });
-  it('none when it cannot be told apart (every fishing spot is the same NPC)', () => {
-    expect(methodOfGuideStep(step('fishing', 'Lobsters'))).toBeNull();
-  });
-});
 
 describe('the followed method is shown with this player\'s figures', () => {
   // A connected fighter (levels and a worn weapon): the combat model rates every method, as in the live report (Brutus picked, the frogs followed).

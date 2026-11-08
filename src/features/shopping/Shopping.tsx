@@ -20,11 +20,6 @@ import { copyText as copy } from '../../ui/clipboard';
 import { Eyebrow, Page } from '../../ledger';
 import { RoadSupplies } from './RoadSupplies';
 import { InventoryCleanup } from './InventoryCleanup';
-import { useQuestDone, useSkillLevel } from '../skills/SkillRoadmap';
-import { guideFor } from '../../data/skillGuideRegistry';
-import { buildPath, currentIndex, followedShoppingStep } from '../../domain/training/skillGuide';
-import { freeOnlyOf } from '../../domain/training/skillTrack';
-import { useTracked } from '../../state/hooks/useTracked';
 import { stockShoppingContext, stockUpShopping } from '../../domain/economy/trainingStock';
 import { hrefTo } from '../../domain/pages/pages';
 import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
@@ -109,18 +104,8 @@ export function ShoppingPage() {
   const activity = useActiveActivity();
   const current = activity.step?.id ?? null;
 
-  // A followed skill plan (Skills → Follow this plan) leads the game instead of the quest route: its current step's tools come first in the list.
-  const tracked = useTracked();
-  const trackedLevel = useSkillLevel(tracked?.skill ?? 'attack');
-  const questDone = useQuestDone();
-  const followed = useMemo(() => {
-    if (training) return training.complete ? null : training.step;
-    if (!tracked) return null;
-    const g = guideFor(tracked.skill);
-    const path = buildPath(g, tracked.mode, questDone, g.start, freeOnlyOf(tracked));
-    const st = path[currentIndex(path, trackedLevel)];
-    return st ? followedShoppingStep(tracked.skill, st) : null;
-  }, [tracked, trackedLevel, questDone, training]);
+  // A followed skill (Skills → Follow training plan) leads the game instead of the quest route: its training step's tools come first in the list.
+  const followed = training && !training.complete ? training.step : null;
 
   const built = useMemo(() => {
     try {

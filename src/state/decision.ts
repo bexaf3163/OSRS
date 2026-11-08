@@ -67,13 +67,19 @@ export function followedSteps(decision: CommittedDecision | null, gameStepId: st
   return steps;
 }
 
-export interface PlannerRow extends CandidateRow { stepId: string | null }
+export interface PlannerRow extends CandidateRow { stepId: string | null; title: string }
+
+/** A readable name for an objective: quests are named already; "training:ranged:40" reads "Train Ranged to 40". */
+export function objectiveTitle(id: string): string {
+  const m = /^training:([a-z]+):(\d+)$/.exec(id);
+  return m ? `Train ${m[1][0].toUpperCase()}${m[1].slice(1)} to ${m[2]}` : id;
+}
 
 /** The planner's live order of open objectives, each with the step it opens: the chosen one at its current action, the rest at their first open step. */
 export function plannerOrder(decision: CommittedDecision | null, progress: Progress): PlannerRow[] {
   return (decision?.candidates ?? []).map(row => {
     const own = row.id === decision!.objectiveId ? decision!.activeAction.stepId : undefined;
-    return { ...row, stepId: own ?? questCatalogue.find(quest => quest.id === row.id)?.stepIds.find(id => !isClosed(progress, id)) ?? null };
+    return { ...row, title: objectiveTitle(row.id), stepId: own ?? questCatalogue.find(quest => quest.id === row.id)?.stepIds.find(id => !isClosed(progress, id)) ?? null };
   });
 }
 

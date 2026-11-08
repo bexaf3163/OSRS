@@ -9,9 +9,6 @@ describe('search', () => {
     expect(search(index, 's3-05')[0].item.href).toBe('#/step/S3-05');
   });
 
-  it('a range code leads to the skill', () => {
-    expect(search(index, 'WC-3')[0].item.href).toBe('#/skills/WC');
-  });
 
   it('a quest name', () => {
     expect(search(index, 'vampyre')[0].item.code).toBe('S2-08');

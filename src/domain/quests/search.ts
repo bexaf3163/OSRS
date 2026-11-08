@@ -79,9 +79,6 @@ export function buildIndex({ steps, skills, reference, plugins, items = [], type
     out.push({ ...row, itemId: it.id, icon: it.iconUrl });
   }
   for (const sk of skills) {
-    for (const r of sk.plan.ranges) {
-      out.push(item('range', r.what, `${sk.name} · levels ${r.levels}`, hrefTo.skills(sk.id), stripMd(r.cells.slice(2).join(' · ')), r.code));
-    }
     const text = [blocksText(sk.intro), ...sk.sections.map((sec) => `${sec.title}\n${blocksText(sec.blocks)}`)].join('\n');
     out.push(item('skill', sk.name, sk.nameEn ?? sk.subtitle ?? 'Skill', hrefTo.skills(sk.id), text));
   }
@@ -89,7 +86,6 @@ export function buildIndex({ steps, skills, reference, plugins, items = [], type
     if (sec.id === 'plugins') continue;
     out.push(item('ref', sec.title, 'Reference', hrefTo.reference(sec.id), blocksText(sec.blocks)));
   }
-  out.push(item('ref', reference.training.title, 'Skills', hrefTo.skills(), blocksText(reference.training.blocks)));
   // Gear analysis is an app page, not a guide section: it is found by the words people search it with.
   out.push(item('ref', 'Gear: weapon, amulet, armour, equipment, upgrades', 'What to wear and buy to hit faster', hrefTo.gear(),
     'Gear analysis: weapon, amulet, armour, equipment, upgrade, boost. Scimitar, sword, amulet of strength: '

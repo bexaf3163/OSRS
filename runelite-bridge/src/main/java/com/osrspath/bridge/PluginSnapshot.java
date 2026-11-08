@@ -10,8 +10,6 @@ import java.util.Set;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.Player;
-import net.runelite.api.Skill;
-import net.runelite.api.SoundEffectID;
 import net.runelite.api.coords.WorldPoint;
 
 /** State snapshot from the app (protocol 6): a section of {@link OsrsPathBridgePlugin}, which owns the injected services and the state the sections share. */
@@ -28,11 +26,6 @@ final class PluginSnapshot
 
 	/** The step of the last snapshot (JSON): the same step does not restart the target and arrow. null means the step is not from a snapshot or was cleared. */
 	String snapshotStepKey;
-
-	/** The tracked skill's path from the app and the step of it that is applied now ("2:mining-04"); null while no skill is led. Client thread. */
-	SkillPath skillPath;
-
-	private String skillStepKey;
 
 	/** The preparation plan from the app; null means it did not send one. The "What you need" list draws it. */
 	volatile PrepPlan prep;
@@ -96,26 +89,7 @@ final class PluginSnapshot
 		appSeenAt = plugin.debug.lastSnapshotAt;
 		plugin.debug.lastSnapshotSeq = e.getSeq();
 		// Invalid and disabled parts retain their last applied values; valid absent parts are cleared.
-		boolean skillLed = skillPath != null;
-		if (!bad.containsKey(PrepEnvelope.SKILL_PATH))
-		{
-			SkillPath sp = e.getSkillPath();
-			if (sp != null)
-			{
-				skillLed = true;
-				applySkillPath(sp);
-			}
-			else if (skillPath != null)
-			{
-				// Tracking stopped: the quest step comes back from this very snapshot.
-				skillPath = null;
-				skillStepKey = null;
-				snapshotStepKey = null;
-				skillLed = false;
-				plugin.debug.tel("skill", "event", "released");
-			}
-		}
-		if (!skillLed && !bad.containsKey(PrepEnvelope.STEP))
+		if (!bad.containsKey(PrepEnvelope.STEP))
 		{
 			ActiveTarget t = e.getStep();
 			if (t == null)
@@ -171,7 +145,7 @@ final class PluginSnapshot
 			decisionTitle = e.getDecision() == null ? null : e.getDecision().getTitle();
 			plugin.ownedDirty = true;
 		}
-		plugin.debug.planPercent = skillPath != null || prep == null || prep.getScore() == null ? null : prep.getScore().getPercent();
+		plugin.debug.planPercent = prep == null || prep.getScore() == null ? null : prep.getScore().getPercent();
 		Map<String, String> allRejected = new LinkedHashMap<>(bad);
 		allRejected.putAll(refused);
 		plugin.debug.tel("snapshot", "seq", e.getSeq(), "step", e.getStep() == null ? null : e.getStep().getStepId(), "plan", e.getPlan() != null, "percent", plugin.debug.planPercent,
@@ -233,50 +207,6 @@ final class PluginSnapshot
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * The path of the tracked skill arrived (or arrived again, with the same content on most snapshots): the step for the real level becomes the target. The cursor
-	 * is a fact (the first step above the real level), never a stored number, so a restart or a late snapshot cannot put it wrong. Client thread.
-	 */
-	private void applySkillPath(SkillPath sp)
-	{
-		skillPath = sp;
-		syncSkillTarget(false);
-	}
-
-	/** Make the target match the real level; a chime when a level moved the cursor on. */
-	void syncSkillTarget(boolean chime)
-	{
-		SkillPath sp = skillPath;
-		Skill skill = sp == null ? null : sp.skillEnum();
-		if (sp == null || skill == null || plugin.client.getGameState() != GameState.LOGGED_IN)
-		{
-			return;
-		}
-		int idx = sp.indexFor(plugin.client.getRealSkillLevel(skill));
-		String key = idx + ":" + (idx < sp.getSteps().size() ? sp.getSteps().get(idx).getId() : "done");
-		if (key.equals(skillStepKey))
-		{
-			return;
-		}
-		boolean moved = skillStepKey != null;
-		skillStepKey = key;
-		ActiveTarget t = sp.targetFor(idx);
-		if (t != null && t.prepare() != null)
-		{
-			t = null;
-		}
-		if (plugin.navTarget != null)
-		{
-			plugin.navigation.finishNav("cleared");
-		}
-		applyTarget(t);
-		plugin.debug.tel("skill", "skill", sp.getSkill(), "index", idx, "of", sp.getSteps().size(), "step", t == null ? null : t.getTitle());
-		if (chime && moved && plugin.config.completionSound())
-		{
-			plugin.client.playSoundEffect(SoundEffectID.UI_BOOP);
-		}
 	}
 
 	/** An item from the gear advice: highlight it in the bag and bank. name is the ActiveTarget.nameKey key. */

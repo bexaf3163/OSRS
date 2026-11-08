@@ -1173,17 +1173,6 @@
           "type": "item",
           "name": "Air rune",
           "count": 100
-        },
-        {
-          "type": "item",
-          "name": "Trout",
-          "count": 5,
-          "anyOf": [
-            "Salmon",
-            "Tuna",
-            "Lobster",
-            "Swordfish"
-          ]
         }
       ],
       "npcNames": [
@@ -1668,16 +1657,6 @@
           "name": "Bronze arrow",
           "count": 100,
           "equip": true
-        },
-        {
-          "type": "item",
-          "name": "Salmon",
-          "count": 10,
-          "anyOf": [
-            "Tuna",
-            "Lobster",
-            "Swordfish"
-          ]
         }
       ],
       "npcNames": [
@@ -1712,16 +1691,6 @@
           "name": "Bronze arrow",
           "count": 100,
           "equip": true
-        },
-        {
-          "type": "item",
-          "name": "Salmon",
-          "count": 10,
-          "anyOf": [
-            "Tuna",
-            "Lobster",
-            "Swordfish"
-          ]
         }
       ],
       "npcNames": [
@@ -1755,16 +1724,6 @@
           "name": "Bronze arrow",
           "count": 100,
           "equip": true
-        },
-        {
-          "type": "item",
-          "name": "Salmon",
-          "count": 10,
-          "anyOf": [
-            "Tuna",
-            "Lobster",
-            "Swordfish"
-          ]
         }
       ],
       "npcNames": [
@@ -1794,16 +1753,6 @@
           "name": "Bronze arrow",
           "count": 100,
           "equip": true
-        },
-        {
-          "type": "item",
-          "name": "Salmon",
-          "count": 10,
-          "anyOf": [
-            "Tuna",
-            "Lobster",
-            "Swordfish"
-          ]
         }
       ],
       "effort": "afk",
@@ -1849,16 +1798,6 @@
           "name": "Bronze arrow",
           "count": 100,
           "equip": true
-        },
-        {
-          "type": "item",
-          "name": "Salmon",
-          "count": 10,
-          "anyOf": [
-            "Tuna",
-            "Lobster",
-            "Swordfish"
-          ]
         }
       ],
       "npcNames": [
@@ -1891,16 +1830,6 @@
           "name": "Bronze arrow",
           "count": 100,
           "equip": true
-        },
-        {
-          "type": "item",
-          "name": "Salmon",
-          "count": 10,
-          "anyOf": [
-            "Tuna",
-            "Lobster",
-            "Swordfish"
-          ]
         }
       ],
       "npcNames": [
@@ -2085,19 +2014,7 @@
       "to": 60,
       "name": "Hill Giants",
       "members": false,
-      "needs": [
-        {
-          "type": "item",
-          "name": "Salmon",
-          "count": 10,
-          "anyOf": [
-            "Trout",
-            "Tuna",
-            "Lobster",
-            "Swordfish"
-          ]
-        }
-      ],
+      "needs": [],
       "effort": "medium",
       "cost": "profit",
       "risk": "low",
@@ -2121,19 +2038,7 @@
       "to": 80,
       "name": "Moss giants",
       "members": false,
-      "needs": [
-        {
-          "type": "item",
-          "name": "Salmon",
-          "count": 15,
-          "anyOf": [
-            "Trout",
-            "Tuna",
-            "Lobster",
-            "Swordfish"
-          ]
-        }
-      ],
+      "needs": [],
       "effort": "medium",
       "cost": "profit",
       "risk": "low",
@@ -2156,19 +2061,7 @@
       "to": null,
       "name": "Lesser demons",
       "members": false,
-      "needs": [
-        {
-          "type": "item",
-          "name": "Salmon",
-          "count": 20,
-          "anyOf": [
-            "Trout",
-            "Tuna",
-            "Lobster",
-            "Swordfish"
-          ]
-        }
-      ],
+      "needs": [],
       "effort": "medium",
       "cost": "profit",
       "risk": "high",

@@ -12,7 +12,6 @@ import { kgText } from '../items/weight';
 import type { PrepLine, PrepPlan, PrepPriority, PrepTiming, PrepWhere, Supply } from './prepPlan';
 import type { Detour } from '../travel/detours';
 import type { RecommendedTransport } from '../travel/transport';
-import type { SkillPathPayload } from '../training/skillGuide';
 import type { CleanupHintPayload } from './cleanupHint';
 import type { FundingHintPayload } from '../economy/fundingHint';
 import { items as itemData } from '../../data';
@@ -74,7 +73,6 @@ export interface PrepEnvelope {
   bankTags: BankTagsPayload | null;
   gearHint: GearHintPayload | null;
   plan: PrepPlanPayload | null;
-  skillPath?: SkillPathPayload;
   /** The inventory cleanup lines for the game (plugin 2.61.0 and later; an older one ignores the field). Absent means none. */
   cleanup?: CleanupHintPayload;
   /** The running funding plan for the HUD (plugin 2.64.1 and later; an older one ignores the field). Absent means none. */
@@ -232,8 +230,6 @@ export interface SnapshotParts {
   bankTags: BankTagsPayload | null;
   gearHint: GearHintPayload | null;
   plan: PrepPlanPayload | null;
-  /** The tracked skill's whole path (Skills → "Track Skill Path"): while it is there the plugin leads the skill step and ignores the quest step. */
-  skillPath?: SkillPathPayload | null;
   /** The inventory cleanup advice for the bag (lib/cleanupHint.ts). */
   cleanup?: CleanupHintPayload | null;
   /** The running funding plan (lib/fundingHint.ts). */
@@ -261,8 +257,6 @@ export function buildEnvelope(parts: SnapshotParts, seq: number): PrepEnvelope {
     gearHint: parts.gearHint,
     // The plugin will not apply a plan from another step; we do not send the excess either.
     plan: parts.plan && (!step || parts.plan.stepId === step.stepId) ? parts.plan : null,
-    // Only when there is one: an app that tracks no skill sends the same snapshot as before.
-    ...(parts.skillPath && parts.skillPath.steps.length ? { skillPath: parts.skillPath } : {}),
     // The same: an app with nothing to clean sends the snapshot an older plugin knows, byte for byte.
     ...(parts.cleanup && parts.cleanup.lines.length ? { cleanup: parts.cleanup } : {}),
     // The same: no plan running, no field.

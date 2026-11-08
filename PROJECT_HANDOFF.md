@@ -140,7 +140,7 @@ The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **
 - Removed: Appearance theme/density/view controls, custom font size, panel/look/solid settings, preview, Compact modes, the Inspector display mode, custom zoom, the Copy Report UI and the Journal stage-goal matrix. Kept: OS DPI/resizing, the header Pin (`getWindowPrefs`/`setAlwaysOnTop`), `ui.json` backup preferences and geometry, map/image magnification, the `splits.ts` duration formatter, `WikiDrawer`'s `DockedInspector` (pinned dossier), logs, telemetry/watchdogs, the analysis CLI and shared goal data. Trace consumers; never delete by name ("Inspector", "zoom", "goals").
 - Training settings keep Balanced/Fastest/Money/Relaxed, automatic preparation and Defence-at-1. The five RuneLite helper flags stay (places, bank highlighting, pace, level import, upgrades); mocked tests do not prove their real-game behavior.
 - Journal: filters left; status, QP, current-part requirements and route action right; Review route for completed/skipped quests; saved-only completion labelled; one closed session history; browsing never marks progress; old goals hashes open it.
-- Skills hides the static roadmap for catalogue-backed skills but keeps reference facts, calculators and labelled guide-only coverage; a completed skill's Plan says its checkpoint is reached. Two-column icon index, one Plan entry, XP table in Calculator.
+- Skills has no leveling guide or bracket table (2.83.0): the training engine sets method, goal and plan. A completed skill's Plan says its checkpoint is reached. Two-column icon index, XP table in Calculator.
 - Gear compares melee only for a supported current activity; other skills show current preparation and live equipment, never the old sample cow. Mandatory shopping and a quoted refill/fare reserve protect upgrade spending; unread prices never count as zero. Shopping: requirements left, Checkout right (cost, checked cash, optional bank stock, refill allowance, shortfall), one primary action through funding, copy-order or preparation.
 - One Where preview; the compact card omits the place list and the **full map keeps the place picker**. Preview-only CSS uses direct-child selectors so a nested dialog's picker stays visible.
 
@@ -168,7 +168,7 @@ Worktree `C:/Users/Mark/Desktop/Ors-x9`, baseline `f035305`, branch `codex/v14-a
 
 Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent entry for explicit goals and phased training/preparation; costs precede rewards; only sourced, order-independent unknowns cancel. Cursors retire past stages; certificate proof stays physical. Procurement shares allocations/packages/fees; unknown flows weaken balances; start-only rewards never repeat; unknown hand-ins never buy; protection requires wearing; funding excludes stale/unsold cash. Shortest Path `375ce2c061df5c3961116dda6443f307df3223f1` (BSD, 64 regions, ESTIMATED); trip legs bounded, deduplicated, revision-guarded.
 
-2,816 units; quick/UI/E2E/structure/Java gates pass. Perf: 2.82.9 Ranged page −30%, updates +1%. Evidence: `work/osrs-v14-audit`. Released 2.82.9; live pending.
+2,775 units; quick/UI/E2E/structure/Java gates pass. Perf: 2.83.0 updates +7% (mean). Evidence: `work/osrs-v14-audit`. Released 2.83.0; live pending.
 
 Takeover inputs: `.codex/v14-brief/`; hashes: `.codex/transfer/receipt.json`.
 

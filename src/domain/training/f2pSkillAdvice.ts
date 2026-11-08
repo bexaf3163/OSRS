@@ -1,4 +1,4 @@
-import type { SkillName } from './skillGuide';
+import type { SkillName } from './skillTrack';
 
 export interface F2pSkillAdvice {
   priority: 'good' | 'optional' | 'members' | 'passive';

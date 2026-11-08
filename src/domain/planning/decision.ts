@@ -180,7 +180,7 @@ export function decide(snapshot: PlanningSnapshot, model: PlannerModel, options:
     const verdict = row === chosen
       ? (options.lockedObjectiveId && row.value.objectiveId === options.lockedObjectiveId ? 'Chosen: your selected goal'
         : row === incumbent && row !== scored[0] ? 'Chosen: current objective kept; nothing else is clearly faster'
-        : priority(row.value) > 0 ? `Chosen: no objective is ready to do; first ${row.value.activeAction.title}`
+        : priority(row.value) > 0 ? `Chosen: no objective is ready to do yet. First: ${row.value.activeAction.title}`
         : total(row) !== null ? `Chosen: lowest known total time (about ${total(row)} min to finish the open quests)`
         : comparableUnmeasured ? `Chosen: lowest known time (about ${Math.round(row.expression!.known.typical)} min); unmeasured quests are assumed to cost the same either way`
         : `Chosen with no full time comparison: fewest unknown parts (${row.expression?.unresolved.length ?? 'all'}), then the lowest known minimum (about ${knownMinutes} min)`)

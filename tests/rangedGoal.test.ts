@@ -4,7 +4,7 @@ import { emptyProgress } from '../src/domain/persistence/progress';
 import { xpForLevel } from '../src/domain/player/xp';
 import { rangedGoalNeeds } from '../src/domain/combat/combatRates';
 import { rangedNeeds, RANGED_WATCH } from '../src/domain/combat/rangedLoadout';
-import { adviseTraining, trainingMethods, type PathLeg, type MethodNeed } from '../src/domain/training/trainingRouter';
+import { adviseTraining, personalize, trainingMethods, type PathLeg, type MethodNeed } from '../src/domain/training/trainingRouter';
 import { mergeGoalNeeds } from '../src/domain/items/consumption';
 import { withTrainingMethod } from '../src/domain/training/methodStep';
 import { aggregateShopping } from '../src/domain/prep/shopping';
@@ -13,12 +13,13 @@ import type { PriceView } from '../src/domain/market/quotes';
 
 const quote = { price: 2, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] };
 const prices: PriceView = { status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, buy: () => quote, sell: () => quote };
-const state = (ranged = 26) => buildPlayerState({ mode: 'f2p', connected: true,
-  stats: { ranged, defence: 1, hitpoints: 24 }, progress: emptyProgress(), questsDone: [],
+const state = (ranged = 26, hitpoints = 24) => buildPlayerState({ mode: 'f2p', connected: true,
+  stats: { ranged, defence: 1, hitpoints }, progress: emptyProgress(), questsDone: [],
   gear: { equipment: [], inventory: [], coins: 100000, bankCoins: 0 },
   owned: { bankSeen: true, items: new Map([...RANGED_WATCH, 'Salmon', 'Tuna', 'Lobster', 'Swordfish'].map(name => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: 0 }])) } });
 const leg = (fromLevel: number, toLevel: number, s = state(fromLevel), id = 'ra-frog'): PathLeg => {
-  const method = trainingMethods.find(m => m.id === id)!;
+  // The fight model's food for this character (2.83.0): the catalogue no longer fixes an amount.
+  const method = personalize([trainingMethods.find((m) => m.id === id)!], 'ranged', s, prices)[0];
   const food = method.needs.filter(n => n.type === 'item' && n.name === 'Salmon');
   return { method, fromLevel, toLevel, needs: [...food, ...rangedNeeds(s, prices)] }; // Food before bow is deliberate.
 };
@@ -60,11 +61,13 @@ describe('complete supported F2P Ranged demand', () => {
     expect(rangedGoalNeeds([{ ...path[0], fromLevel: 27 }], st, xpForLevel(26), 30, prices)).toBeNull();
   });
   it('route and goal Shopping get conservative totals while the game still asks for one bag', () => {
-    const st = state(), base = stepById.get('S6-04')!;
+    // 10 Hitpoints: a frog fight can reach the eating point, so the food is required, one bag a trip.
+    const st = state(26, 10), base = stepById.get('S6-04')!;
     const planned = leg(26, 40, st);
     const step = withTrainingMethod(base, { methodId: planned.method.id, needs: planned.needs!, goalNeeds: rangedGoalNeeds([planned], st, xpForLevel(26), 40, prices)!, untilLevel: 40 });
-    expect(step.itemsRequired!.find(n => n.nameEn === 'Salmon')!.amount).toBe(10);
-    expect(step.goalItemsRequired!.find(n => n.nameEn === 'Salmon')!.amount).toBeGreaterThan(10);
+    const bag = items(planned.needs ?? null).find((n) => n.name === 'Salmon')!.count!;
+    expect(step.itemsRequired!.find((n) => n.nameEn === 'Salmon')!.amount).toBe(bag);
+    expect(step.goalItemsRequired!.find((n) => n.nameEn === 'Salmon')!.amount).toBeGreaterThan(bag);
     const now = aggregateShopping([step]).required.find(n => n.nameEn === 'Salmon')!;
     const goal = aggregateShopping([step], { wholeGoal: true }).required.find(n => n.nameEn === 'Salmon')!;
     expect(goal.count).toBeGreaterThan(now.count);

@@ -1,121 +1,78 @@
-// The skills coverage ledger (2.70): every skill the app supports, what it covers for a free and a members account, the route's requirements, the gaps
-// and the overlaps, what was fixed and how it is verified. Written to docs/SKILLS_COVERAGE.md from the data the app uses
-// (npm run fixtures); the test fails when the document is out of date or a check breaks.
-
+// The skills coverage ledger: every skill the app supports, which account trains it, where the training engine's
+// method catalogue leaves levels uncovered, and which shared model rates the methods. Written to
+// docs/SKILLS_COVERAGE.md from the data the app uses (npm run fixtures); the test fails when the document is out of date.
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { skillGuides } from '../src/data/skillGuideRegistry';
-import { bracketsOf, buildPath, SKILL_NAMES, type SkillGuideFile, type SkillName } from '../src/domain/training/skillGuide';
+import { levelById, skillById } from '../src/data';
+import { SKILL_NAMES } from '../src/domain/training/skillTrack';
 import { methodsFor, trainingMethods, type TrainingMethod } from '../src/domain/training/trainingRouter';
 import { PROCESSING } from '../src/domain/training/processingRates';
 import { SKILLING } from '../src/domain/training/skillingRates';
 
-/** The levels a list of methods leaves uncovered between 1 and the cap: "15-20". */
-function methodGaps(skill: string, members: boolean, cap: number): string[] {
+const membersOnly = (skill: string) => skillById.get(levelById.get(skill)?.skill ?? '')?.membersOnly === true;
+
+/** The levels below 99 where no method of the list is open yet: "1-14". */
+function methodGaps(skill: string, members: boolean): string[] {
   const list = methodsFor(skill).filter((m) => m.kind === 'method' && (members || !m.members));
-  const gaps: string[] = [];
-  let start: number | null = null;
-  for (let lv = 1; lv < cap; lv++) {
-    const covered = list.some((m) => m.from <= lv && (m.to === null || lv < m.to));
-    if (!covered && start === null) start = lv;
-    if (covered && start !== null) { gaps.push(`${start}-${lv - 1}`); start = null; }
-  }
-  if (start !== null) gaps.push(`${start}-${cap - 1}`);
-  return gaps;
+  if (!list.length) return [];
+  const first = Math.min(...list.map((m) => m.from));
+  return first > 1 ? [`1-${first - 1}`] : [];
 }
 
-/** Where a path stops short of where it should reach, or has a hole. */
-function pathProblems(g: SkillGuideFile, mode: 'fast' | 'afk', freeOnly: boolean): string[] {
-  const path = buildPath(g, mode, () => false, g.start, freeOnly);
-  const want = freeOnly ? g.f2pCap : 99;
-  const out: string[] = [];
-  const end = path.length ? path[path.length - 1].targetLevel : g.start;
-  if (want > g.start && end < want) out.push(`${mode}${freeOnly ? ' free' : ''} ends at ${end}`);
-  path.forEach((s, i) => { if (i && s.levelRange[0] !== path[i - 1].targetLevel) out.push(`${mode} hole before ${s.id}`); });
-  for (const b of bracketsOf(path)) for (const s of b.steps) if (s.levelRange[0] < b.from || s.targetLevel > b.to) out.push(`${mode} label ${b.from}-${b.to} narrower than ${s.id}`);
-  if (freeOnly) for (const s of path) if (s.members) out.push(`${mode} free path has members step ${s.id}`);
-  return out;
-}
-
-interface Row {
-  skill: SkillName;
-  modes: string;
-  guide: string;
-  methods: string;
-  gaps: string;
-  status: string;
-}
-
+interface Row { skill: string; account: string; methods: string; gaps: string }
 const rows: Row[] = SKILL_NAMES.map((skill) => {
-  const g = skillGuides[skill];
-  const free = g.steps.filter((s) => !s.members).length;
-  const membersOnly = g.f2pCap === 0;
   const m = methodsFor(skill).filter((x) => x.kind === 'method');
-  const mFree = m.filter((x) => !x.members).length;
-  const problems = [
-    ...(membersOnly ? [] : [...pathProblems(g, 'fast', true), ...pathProblems(g, 'afk', true)]),
-    ...pathProblems(g, 'fast', false), ...pathProblems(g, 'afk', false),
+  const free = m.filter((x) => !x.members).length;
+  const gaps = [
+    ...(membersOnly(skill) ? [] : methodGaps(skill, false).map((g) => `free ${g}`)),
+    ...methodGaps(skill, true).map((g) => `members ${g}`),
   ];
-  const gapsFree = membersOnly || !m.length ? [] : methodGaps(skill, false, g.f2pCap);
   return {
     skill,
-    modes: membersOnly ? 'members only' : `free to ${g.f2pCap}, members to 99`,
-    guide: `${g.steps.length} steps (${free} free), levels ${g.start}-99`,
-    methods: m.length ? `${m.length} (${mFree} free)` : 'none: guide-only or passive skill',
-    gaps: [...problems, ...gapsFree.map((x) => `no catalogue method for free levels ${x}`)].join('; ') || 'none',
-    status: 'automated data checks; not verified in the game',
+    account: membersOnly(skill) ? 'members only' : 'free and members',
+    methods: m.length ? `${m.length} (${free} free)` : skill === 'hitpoints' ? 'none: trained by combat' : 'none: no engine method yet',
+    gaps: gaps.join(', ') || 'none',
   };
 });
 
-/** Registry support is distinct from a guide's bracket coverage, and still requires real readable player state. */
+/** Which shared model rates a method for this player; null means the catalogue's Wiki rate. */
 const modelOwner = (m: TrainingMethod): string | null => PROCESSING.methods[m.id] ? 'processing'
   : SKILLING.methods[m.id] ? 'gathering'
-  : m.npcNames?.length && m.skills.some(s => ['attack', 'strength', 'defence', 'ranged', 'magic'].includes(s)) ? 'combat' : null;
-const modelRows = SKILL_NAMES.map(skill => {
-  const methods = methodsFor(skill).filter(m => m.kind === 'method');
-  const modelled = methods.filter(m => modelOwner(m));
+    : m.npcNames?.length && m.skills.some((s) => ['attack', 'strength', 'defence', 'ranged', 'magic'].includes(s)) ? 'combat' : null;
+const modelRows = SKILL_NAMES.map((skill) => {
+  const methods = methodsFor(skill).filter((m) => m.kind === 'method');
+  const modelled = methods.filter((m) => modelOwner(m));
   return `| ${skill} | ${modelled.length ? `${modelled.length}: ${[...new Set(modelled.map(modelOwner))].join(', ')}` : 'none'} | ${methods.length - modelled.length} |`;
 });
+
 const md = [
   '# Skills coverage ledger',
   '',
-  'Every skill the app supports. **Guide**: the leveling roadmap (`src/data/generated/skills/<skill>.json`, built by `tools/skill-guides` from the OSRS Wiki). **Methods**:',
-  'the training method catalogue (`src/data/authored/trainingMethods.json`) behind "What to train with" and the steps that follow a method.',
-  '**Gaps**: levels a path or the catalogue does not cover, and labels narrower',
-  'than their steps. Generated by `tests/skillsCoverage.test.ts`.',
+  'Every skill the app supports. The training engine (`src/domain/training/trainingRouter.ts`) picks the method, the goal and the',
+  'plan from its method catalogue (`src/data/authored/trainingMethods.json`) for this player\'s levels, items, coins and play style.',
+  'There is no fixed leveling guide or bracket table. Generated by `tests/skillsCoverage.test.ts`.',
   '',
-  'Fixed in 2.70: roadmap groups were labelled by fixed brackets ("Levels 30-40" over a step "Lvl 30 → 60"): labels now cover their steps. The three mixed',
-  'filters ("Fastest / Quest-Driven", "AFK / Budget", "F2P Only") are two separate controls: priority (Fastest / Low effort) and, for a free account, a',
-  'members preview. "Use the best axe you can wield" now says the axe works from the bag at the Woodcutting level (wielding needs Attack).',
-  'Rates and consumable costs are personalised where the shared combat, gathering or processing registry supports the method. Other catalogue rates',
-  'remain Wiki guides, not measured predictions. Missing prices stay unknown. Passive bone collection has no fixed bank-burying rate. Members methods',
-  'beyond the verified registries and real-session calibration remain open; this catalogue coverage is not proof of in-game performance. Supported processing goals (2.81.4) and supported F2P Ranged goals (2.81.5) carry conditional whole-goal supplies through the shared planner/Shopping engine; immediate preparation stays one batch/trip. Ranged includes staged arrows, modelled food and reusable kit under safe arrow recovery. This does not establish Magic/melee-wide or unsupported/mixed-goal acquisition economics.',
+  '| Skill | Account | Methods | Levels without a method |',
+  '|---|---|---|---|',
+  ...rows.map((r) => `| ${r.skill} | ${r.account} | ${r.methods} | ${r.gaps} |`),
   '',
-  'Since2.81.11, catalogue-backed Skills show one canonical Train/Plan result instead of the competing static roadmap. The old roadmap filter description above applies only to surviving guide-only views. Hitpoints is passive and has no separate roadmap.',
-  '',
-  'Catalogue-backed followed Skills (2.81.6) use the same staged training, preparation, Shopping and funding engines as Path, including current-leg kit and F2P checkpoints. This shared lifecycle does not establish missing skill mechanics or additional personalised models; guide-only coverage remains explicitly separate.',
-  '',
-  '| Skill | Account | Guide | Methods | Gaps and problems | Verification |',
-  '|---|---|---|---|---|---|',
-  ...rows.map((r) => `| ${r.skill} | ${r.modes} | ${r.guide} | ${r.methods} | ${r.gaps} | ${r.status} |`),
-  '',
-  `Catalogue: ${trainingMethods.length} entries. Skills with no catalogue method are guide-only, except passive Hitpoints; none is presented as a personalized engine plan.`,
+  `Catalogue: ${trainingMethods.length} entries. Skills without a catalogue method get no training advice yet, except Hitpoints, which combat trains.`,
   '',
   '## Personalized engine support',
   '',
-  'Counts below mean a method has a shared model dispatch, not that every item, spell, opponent, unlock or level is modelled. A model can return no prediction when data is unread or unsupported. Guide-only rates remain labelled Wiki estimates; no synthetic player stats fill the gaps. Agility, Thieving and Farming still have guide-only catalogue rates. Construction, Hunter and Slayer remain guide-only; Hitpoints is passive. Adding complete models for those is remaining work.',
+  'Counts below mean a method has a shared model, not that every item, spell, opponent, unlock or level is modelled. A model can',
+  'return no prediction when data is unread or unsupported. Other methods use their Wiki rate, labelled as such.',
   '',
-  '| Skill | Model-backed catalogue methods | Guide-only catalogue methods |',
+  '| Skill | Model-backed methods | Wiki-rate methods |',
   '|---|---|---|',
   ...modelRows,
 ].join('\n') + '\n';
 
 describe('skills coverage', () => {
-  it('every guide path reaches its cap without holes, free paths hold no members step, and no group label is narrower than its steps', () => {
-    const bad = rows.filter((r) => r.gaps !== 'none' && !/^no catalogue method/.test(r.gaps.split('; ')[0]));
-    expect(bad.map((r) => `${r.skill}: ${r.gaps}`)).toEqual([]);
+  it('every free skill with methods has a free method from level 1', () => {
+    const holes = rows.filter((r) => r.account !== 'members only' && /free /.test(r.gaps)).map((r) => `${r.skill}: ${r.gaps}`);
+    expect(holes).toEqual([]);
   });
-
 
   it('is written from the data the app uses', () => {
     const FILE = new URL('../docs/SKILLS_COVERAGE.md', import.meta.url);

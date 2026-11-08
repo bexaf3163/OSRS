@@ -1,16 +1,11 @@
 // The tracked skill on the Path screen: the current step of its path as a card (the action chip, where, what to do), and the sync that hands the whole path to the
 // game. While a skill is tracked the plugin leads it (arrow, highlight, HUD chip) and the quest route waits; "Back to the quest route" gives it back.
 
-import { useEffect, useMemo } from 'react';
-import { guideFor } from '../../../data/skillGuideRegistry';
+import { useEffect } from 'react';
 import { useBridge } from '../../../state/bridge';
 import { supportsSnapshot } from '../../../services/runeliteBridge';
-import { buildPath, chipText, currentIndex, skillPathPayload, type GuideMode, type SkillName } from '../../../domain/training/skillGuide';
-import { freeOnlyOf } from '../../../domain/training/skillTrack';
 import { setTracked, useTracked } from '../../../state/hooks/useTracked';
-import { laneLabel, useQuestDone, useSkillLevel } from '../../skills/SkillRoadmap';
 import { useReadinessEngine, useTrackedTraining } from '../../../state/readinessContext';
-import { methodsFor } from '../../../domain/training/trainingRouter';
 import { f2pAdviceFor } from '../../../domain/training/f2pSkillAdvice';
 import { ReadinessVerdictCard } from '../prep/ReadinessVerdict';
 import { FundingCard } from '../../money/FundingCard';
@@ -23,27 +18,19 @@ import { levelById } from '../../../data';
 import { nearestBank } from '../../../domain/travel/stepPlaces';
 import { hrefTo } from '../../../domain/pages/pages';
 
-/** Sends the tracked skill's path with every change of the quests done; nothing is sent while no skill is tracked. */
+/** Sends the tracked skill's training step with every change; nothing is sent while no skill is tracked. */
 export function SkillSync() {
-  const tracked = useTracked();
-  const { state, plugin, setSkillPath, setTrainingStep } = useBridge();
+  const { state, plugin, setTrainingStep } = useBridge();
   const training = useTrackedTraining();
-  const done = useQuestDone();
   const live = state === 'online' && supportsSnapshot(plugin?.protocol ?? null);
-  const payload = useMemo(() => {
-    if (!tracked || training || methodsFor(tracked.skill).length) return null;
-    const guide = guideFor(tracked.skill);
-    const path = buildPath(guide, tracked.mode, done, guide.start, freeOnlyOf(tracked));
-    return path.length ? skillPathPayload(tracked.skill, tracked.mode, path) : null;
-  }, [tracked, done, training]);
   // A reached checkpoint remains stopped until the player explicitly returns to the quest route.
   const step = training?.step ?? null;
-  const key = JSON.stringify([payload, step]);
+  const key = JSON.stringify(step);
   useEffect(() => {
-    if (live) { setSkillPath(payload); setTrainingStep(step); }
-    // payload is rebuilt on every change of its inputs; the content is watched through key.
+    if (live) setTrainingStep(step);
+    // step is rebuilt on every change of its inputs; the content is watched through key.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [live, key, setSkillPath, setTrainingStep]);
+  }, [live, key, setTrainingStep]);
   return null;
 }
 
@@ -52,11 +39,10 @@ export function TrackedSkillCard() {
   const training = useTrackedTraining();
   if (!tracked) return null;
   if (training) return <EngineTrackedCard />;
-  if (methodsFor(tracked.skill).length) return <section className="tracked-skill card" aria-label="Tracked skill">
+  return <section className="tracked-skill card" aria-label="Tracked skill">
     <p>{f2pAdviceFor(tracked.skill)?.reason ?? 'No supported training goal is selected for this account.'}</p>
     <button type="button" className="btn" onClick={() => setTracked(null)}>Back to the quest route</button>
   </section>;
-  return <TrackedCard skill={tracked.skill} mode={tracked.mode} freeOnly={freeOnlyOf(tracked)} />;
 }
 
 function EngineTrackedCard() {
@@ -90,31 +76,3 @@ function EngineTrackedCard() {
   </section>;
 }
 
-function TrackedCard({ skill, mode, freeOnly }: { skill: SkillName; mode: GuideMode; freeOnly: boolean }) {
-  const level = useSkillLevel(skill);
-  const done = useQuestDone();
-  const path = useMemo(() => { const g = guideFor(skill); return buildPath(g, mode, done, g.start, freeOnly); }, [skill, mode, done, freeOnly]);
-  const at = currentIndex(path, level);
-  const step = path[at];
-  const name = skill[0].toUpperCase() + skill.slice(1);
-  return (
-    <section className="tracked-skill card" aria-label="Tracked skill">
-      <p className="eyebrow">Your {name} plan · {laneLabel(mode)}{freeOnly ? ' · free steps' : ''}</p>
-      {step ? (
-        <>
-          <h2 className="next-title">{chipText(step, level)}</h2>
-          <p>{step.description}</p>
-          <p className="muted small">
-            📍 {step.location.name}{step.location.objectName && <> · {step.location.objectName}</>}{step.location.npcName && <> · {step.location.npcName}</>}
-            {step.recommendedXpRate && <> · {step.recommendedXpRate}</>} · step {at + 1} of {path.length}
-          </p>
-        </>
-      ) : (
-        <h2 className="next-title">{name} path complete at level {level}</h2>
-      )}
-      <div className="actions">
-        <button type="button" className="btn" onClick={() => setTracked(null)}>Back to the quest route</button>
-      </div>
-    </section>
-  );
-}

@@ -3,8 +3,7 @@
 
 import { useMemo } from 'react';
 import type { Step } from '../../types';
-import { levelById, skillById } from '../../data';
-import { rangeForLevel } from '../../domain/training/ranges';
+import { levelById } from '../../data';
 import { useStore } from '../../state/store';
 import { useBridge } from '../../state/bridge';
 import { usePlayerState } from '../../state/playerStateContext';
@@ -25,7 +24,7 @@ import { F2P_SKILL_ADVICE, f2pAdviceFor } from '../../domain/training/f2pSkillAd
 import { useTradeRestriction } from '../../state/hooks/useTradeRestriction';
 import { trackedPriority, trackedTrainingContext } from '../../domain/training/skillTrack';
 import { setTracked, useTracked } from '../../state/hooks/useTracked';
-import { SKILL_NAMES, type SkillName } from '../../domain/training/skillGuide';
+import { SKILL_NAMES, type SkillName } from '../../domain/training/skillTrack';
 import { hrefTo } from '../../domain/pages/pages';
 
 /** Skill advice from the shared player state; recomputed when levels, items, mode or style change. */
@@ -98,19 +97,6 @@ function Alternative({ v }: { v: MethodView }) {
   );
 }
 
-/** No methods in the list (Hunter, Construction, Slayer…) — the training plan row for this level. */
-function GuideRow({ skill, level, fallback }: { skill: string; level: number; fallback: string }) {
-  const guide = skillById.get(levelById.get(skill)?.skill ?? '');
-  const hit = guide ? rangeForLevel(guide.plan.ranges, level) : null;
-  if (!guide || !hit) return <p className="small muted">{fallback}</p>;
-  const r = hit.range;
-  return (
-    <>
-      <p className="training-now"><strong>{r.what}</strong>{r.where && <span className="muted"> — {r.where}</span>}</p>
-      <p className="small muted">From the skill's training plan ({r.code}, levels {r.levels}){r.notes ? `: ${r.notes}` : ''}. <a href={hrefTo.skills(guide.id)}>The whole plan</a></p>
-    </>
-  );
-}
 
 export function TrainingCard({ skill, target, followed = null, view = 'full', advice: given }: { skill: string; target: number; followed?: string | null; view?: 'full' | 'summary' | 'analysis'; /** Advice the page already computed for this skill and goal. */ advice?: TrainingAdvice }) {
   const own = useTrainingAdvice(given ? null : skill, target, followed);
@@ -233,7 +219,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
           </div>}
         </>
       ) : (
-        <GuideRow skill={skill} level={advice.level} fallback={advice.reason} />
+        <p className="small muted">{advice.reason}</p>
       )}
       </>}
       {analysis && <>

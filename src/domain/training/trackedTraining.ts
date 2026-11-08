@@ -2,7 +2,7 @@
 import type { GameMode, Step } from '../../types';
 import type { PlayerState } from '../player/playerState';
 import { levelOf } from '../player/playerState';
-import { SKILL_NAMES } from './skillGuide';
+import { SKILL_NAMES } from './skillTrack';
 import type { TrackedSkill } from './skillTrack';
 import { trackedTrainingContext } from './skillTrack';
 import { f2pAdviceFor } from './f2pSkillAdvice';

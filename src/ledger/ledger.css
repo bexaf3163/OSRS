@@ -85,7 +85,7 @@
 h1.la-t{font-family:var(--la-disp);font-weight:600;font-size:38px;line-height:1.08;color:var(--la-ink);letter-spacing:.01em;margin:6px 0 10px}
 h2.la-t{font-family:var(--la-disp);font-weight:600;font-size:22px;color:var(--la-ink);letter-spacing:.04em}
 .la-rule{height:12px;margin:10px 0;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='12'><path d='M0 6h170M230 6h170' stroke='%238a6d3a' stroke-width='1'/><path d='M200 1l5 5-5 5-5-5z' fill='%238a6d3a'/><circle cx='180' cy='6' r='1.5' fill='%238a6d3a'/><circle cx='220' cy='6' r='1.5' fill='%238a6d3a'/></svg>") center/100% 12px no-repeat}
-.la-chips{display:flex;gap:8px;flex-wrap:wrap}
+.la-chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .la-chip{font-family:var(--la-disp);font-size:10px;letter-spacing:.14em;padding:3px 10px;border:1px solid #8a6d3a;color:var(--la-ink2);background:#c9b78d55}
 .la-chip.la-e{border-color:var(--la-ember);color:var(--la-ember)}
 .la-plaque{display:flex;align-items:center;gap:14px;padding:11px 16px;background:linear-gradient(90deg,#2a1d12,#3a281a);color:var(--la-parch);border:1px solid #8a6d3a;box-shadow:inset 0 0 0 3px #2a1d12,inset 0 0 0 4px #7b6030}

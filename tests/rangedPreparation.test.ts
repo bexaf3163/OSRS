@@ -9,13 +9,13 @@ import { contextOf } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import type { GearItem } from '../src/services/runeliteBridge';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
-import { methodNeeds, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
+import { methodNeeds, personalize, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
 import { market } from './funding/market';
 import type { Market } from '../src/domain/training/methodRates';
 import type { PriceView } from '../src/domain/market/quotes';
 
 const base = stepById.get('S6-04')!;
-function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}, chosenMethod?: string, dressed = true) {
+function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}, chosenMethod?: string, dressed = true, hitpoints = Math.max(30, level)) {
   if (dressed) equipment = [
     ...[['Leather cowl', 'head'], ['Leather body', 'body'], ['Leather chaps', 'legs'], ['Leather vambraces', 'hands'], ['Leather boots', 'feet']]
       .filter(([, slot]) => !equipment.some(e => e.slot === slot))
@@ -26,11 +26,11 @@ function scenario(level: number, equipment: GearItem[] = [], stock: Record<strin
   for (const s of allSteps) { if (s.id === base.id) break; progress.steps[s.id] = 'done'; }
   const names = [...new Set([...methodToolNames(base), ...Object.keys(stock)])].filter(n => complete || n === 'Shortbow' || n === 'Bronze arrow');
   const owned = { bankSeen: true, items: new Map(names.map(name => [nameKey(name), { name, carried: stock[name]?.carried ?? equipment.filter(e => e.name === name).reduce((n, e) => n + (e.count ?? 1), 0), noted: 0, bank: stock[name]?.bank ?? 0 }])) };
-  const stats = { ranged: level, hitpoints: Math.max(30, level), ...(defence === null ? {} : { defence }) };
+  const stats = { ranged: level, hitpoints, ...(defence === null ? {} : { defence }) };
   const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
   const state = buildPlayerState({ mode: 'f2p', stats, progress, owned, gear, questsDone: ['The Corsair Curse'], connected: true });
   const picks = pickMethods([base], state, 'f2p', 'chill', 'balanced', trade);
-  const pick = chosenMethod ? { methodId: chosenMethod, needs: methodNeeds(trainingMethods.find(m => m.id === chosenMethod)!, state) } : picks[base.id];
+  const pick = chosenMethod ? { methodId: chosenMethod, needs: methodNeeds(personalize([trainingMethods.find(m => m.id === chosenMethod)!], 'ranged', state)[0], state) } : picks[base.id];
   const step = withTrainingMethod(base, pick);
   const engine = createReadinessEngine({ ...contextOf({ step, steps: allSteps.map(s => s.id === step.id ? step : s), progress, mode: 'f2p', qp: 44, gear, owned, stats }), state });
   return { state, picks, pick, step, engine, payload: toInGameTarget(step)! };
@@ -48,15 +48,22 @@ describe('S6-04 actual ranged preparation', () => {
     expect(low.step.itemsRequired?.find(r => r.nameEn === 'Bronze arrow')?.amount).toBe(100);
     expect(low.engine.readiness(low.step).status).not.toBe('READY');
   });
-  it('banked food remains withdrawal preparation when a player selects the frog plan', () => {
-    const m = trainingMethods.find(m => m.id === 'ra-frog')!;
+  it('banked food is a withdrawal only where a frog fight can reach the eating point', () => {
+    const m = trainingMethods.find((x) => x.id === 'ra-frog')!;
+    // 30 Hitpoints in leather: no frog fight reaches the eating point, so the Salmon is recommended, not a withdrawal step.
     const s = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)], { Salmon: { bank: 10 } }, 1, true, {}, m.id);
-    expect(s.engine.plan(s.step).lines.find(r => r.name === 'Salmon')?.where).toBe('BANK');
+    expect(s.step.itemsRequired?.some((r) => r.nameEn === 'Salmon')).toBe(false);
+    expect(s.step.itemsRecommended?.some((r) => r.nameEn === 'Salmon')).toBe(true);
+    expect(s.engine.plan(s.step).lines.find((r) => r.name === 'Salmon')).toBeUndefined();
     expect(viewMethod(m, s.state).status).not.toBe('LOCKED');
-    const absentFood = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)], {}, 1, true, {}, m.id);
-    expect(absentFood.engine.plan(absentFood.step).lines.find(r => r.name === 'Salmon')?.where).not.toBe('BANK');
+    // 10 Hitpoints without armour: a frog fight can reach the eating point, so banked food is required and withdrawn.
+    const weak = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)], { Salmon: { bank: 30 } }, 1, true, {}, m.id, false, 10);
+    expect(weak.engine.plan(weak.step).lines.find((r) => r.name === 'Salmon')?.where).toBe('BANK');
+    const absentFood = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)], {}, 1, true, {}, m.id, false, 10);
+    expect(absentFood.engine.plan(absentFood.step).lines.find((r) => r.name === 'Salmon')?.where).not.toBe('BANK');
   });
-  it.each([[1, 'ra-lumb', 'Seagull'], [20, 'ra-monk', 'Monk'], [26, 'ra-monk', 'Monk'], [39, 'ra-monk', 'Monk']] as const)(
+  // With 30 Hitpoints no frog or barbarian fight reaches the eating point, so their food is optional and the faster spot wins (2.83.0).
+  it.each([[1, 'ra-lumb', 'Seagull'], [20, 'ra-barbarian', 'Barbarian'], [26, 'ra-frog', 'Giant frog'], [39, 'ra-frog', 'Giant frog']] as const)(
     'Ranged%s gets its current trainer, kit and unchanged goal', (level, id, npc) => {
       const s = scenario(level);
       expect(s.pick).toMatchObject({ methodId: id });

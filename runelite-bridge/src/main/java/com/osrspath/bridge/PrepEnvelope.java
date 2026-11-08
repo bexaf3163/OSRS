@@ -20,7 +20,6 @@ public class PrepEnvelope
 	static final String BANK_TAGS = "bankTags";
 	static final String GEAR_HINT = "gearHint";
 	static final String PLAN = "plan";
-	static final String SKILL_PATH = "skillPath";
 	static final String CLEANUP = "cleanup";
 	static final String FUNDING = "funding";
 	static final String DECISION = "decision";
@@ -33,8 +32,6 @@ public class PrepEnvelope
 	private BankTags bankTags;
 	private GearHint gearHint;
 	private PrepPlan plan;
-	/** The tracked skill's path: while it is there the plugin leads that skill instead of the quest step. Absent means no skill is tracked. */
-	private SkillPath skillPath;
 	/** The inventory cleanup advice for the bag (since 2.61.0). Absent means none. */
 	private CleanupHint cleanup;
 	/** The running funding plan for the HUD (since 2.64.1). Absent means none. */
@@ -78,7 +75,6 @@ public class PrepEnvelope
 		check(bad, BANK_TAGS, bankTags == null ? null : bankTags.prepare());
 		check(bad, GEAR_HINT, gearHint == null ? null : gearHint.prepare());
 		check(bad, PLAN, plan == null ? null : plan.prepare());
-		check(bad, SKILL_PATH, skillPath == null ? null : skillPath.prepare());
 		check(bad, CLEANUP, cleanup == null ? null : cleanup.prepare());
 		check(bad, FUNDING, funding == null ? null : funding.prepare());
 		check(bad, DECISION, decision == null ? null : decision.prepare());

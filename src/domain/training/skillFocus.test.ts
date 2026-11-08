@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { skillById } from '../../data';
 import { methodStop, trainingFocus } from './skillFocus';
-import { defaultGuideMode } from './skillGuide';
-import { guideFor } from '../../data/skillGuideRegistry';
 import { adviseTraining } from './trainingRouter';
 import { buildPlayerState } from '../player/playerState';
 import { emptyProgress } from '../persistence/progress';
@@ -72,20 +70,3 @@ describe('the training engine sets the goal without a planner need', () => {
   });
 });
 
-describe('roadmap default filter', () => {
-  it('a free account opens on F2P Only; members and members-only skills open on Fastest', () => {
-    const wc = guideFor('woodcutting');
-    expect(wc.f2pCap).toBeGreaterThan(0);
-    expect(defaultGuideMode(wc, 'f2p')).toBe('f2p');
-    expect(defaultGuideMode(wc, 'members')).toBe('fast');
-    expect(defaultGuideMode({ f2pCap: 0 }, 'f2p')).toBe('fast');
-  });
-
-  it('the default F2P path has no Members step', async () => {
-    const { buildPath } = await import('./skillGuide');
-    const wc = guideFor('woodcutting');
-    const path = buildPath(wc, defaultGuideMode(wc, 'f2p'));
-    expect(path.length).toBeGreaterThan(0);
-    expect(path.some((s) => s.members)).toBe(false);
-  });
-});

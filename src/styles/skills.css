@@ -50,12 +50,9 @@
 /* The card leads with what to train: the glyph and name, the level as a number while the game reports it, "Now: …" and the guide. */
 .skill-card-link > span { flex: 1; min-width: 0; }
 .skill-card.is-tracked { border-color: var(--accent); }
-.skill-guide-roadmap { padding: 0; margin: 16px 0; }
-.skill-guide-roadmap .skill-roadmap { padding: 18px; }
 
 .levels-card { display: flex; flex-direction: column; gap: 12px; }
 .levels-row { display: flex; flex-wrap: wrap; gap: 12px 20px; }
-.current-range { font-size: 0.9rem; }
 
 .calc { display: flex; flex-direction: column; gap: 12px; }
 .calc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }

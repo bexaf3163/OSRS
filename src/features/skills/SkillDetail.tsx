@@ -1,30 +1,25 @@
 import { useEffect, useId, useState } from 'react';
 import type { Skill } from '../../types';
-import { findSkill, levelById, reference, membersGuide, xpData } from '../../data';
+import { findSkill, levelById, xpData } from '../../data';
 import { useStore } from '../../state/store';
 import { isClosed } from '../../domain/quests/next-step';
 import { usePlannerSkillGoals } from '../../state/decision';
 import { formatXp } from '../../domain/quests/goals';
 import { levelOf } from '../../domain/persistence/progress';
-import { focusRange } from '../../domain/training/ranges';
 import { clampLevel, levelForXp, MAX_LEVEL, xpForLevel } from '../../domain/player/xp';
 import { SkillGlyph } from '../../ui/SectionShell';
 import { Blocks } from '../../ui/Blocks';
 import { IconBack, IconCheck, IconExternal, TypeIcon } from '../../ui/Icons';
 import { LevelInput } from '../../ui/LevelInput';
-import { Table } from '../../ui/Table';
 import { LiveXp } from '../../ui/LiveXp';
 import { TrainingCard, useMethodStops, useTrainingAdvice } from './TrainingCard';
-import { RoadmapPane, useTrackedStep } from './SkillRoadmap';
-import { methodOfGuideStep, methodsFor } from '../../domain/training/trainingRouter';
 import { XpTable } from './XpTable';
-import { roadmapSkills } from '../../domain/training/skillGuide';
 import { methodStop, trainingFocus, type TrainingFocus } from '../../domain/training/skillFocus';
 import { F2pSkillNote } from './F2pSkillNote';
 import { f2pAdviceFor, f2pAdviceLabel } from '../../domain/training/f2pSkillAdvice';
 import { useTrackedTraining } from '../../state/readinessContext';
 import { setTracked } from '../../state/hooks/useTracked';
-import { SKILL_NAMES, type SkillName } from '../../domain/training/skillGuide';
+import { SKILL_NAMES, type SkillName } from '../../domain/training/skillTrack';
 import { hrefTo } from '../../domain/pages/pages';
 
 export function SkillDetailPage({ id, selectedSkill, requestedGoal }: { id: string; selectedSkill?: string; requestedGoal?: number }) {
@@ -48,17 +43,9 @@ type SkillTab = 'guide' | 'plan' | 'calculator' | 'reference';
 function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; selectedSkill?: string; requestedGoal?: number }) {
   const { progress, steps, mode } = useStore();
   const [tab, setTab] = useState<SkillTab>('guide');
-  const canonical = skill.levelSkills.some(id => methodsFor(id).length > 0);
-  const guides = roadmapSkills(skill).filter(id => id !== 'hitpoints' && !methodsFor(id).length);
   const tabs: [SkillTab, string][] = [
     ['guide', 'Train'], ['plan', 'Plan'], ['calculator', 'Calculator'], ['reference', 'Reference'],
   ];
-  /** "Now by the plan" leads to the training plan row, which lives in the Reference tab. */
-  const showPlan = () => {
-    if (canonical) { setTab('plan'); return; }
-    setTab('reference');
-    window.setTimeout(() => document.getElementById('plan')?.scrollIntoView({ behavior: 'smooth' }), 60);
-  };
   const related = steps.filter((s) => s.targets?.some((t) => levelById.get(t.skill)?.skill === skill.id));
   // "What to train with": the planner decides first (a level its Decision needs), the training engine's next method change only when it needs none.
   const plannerGoals = usePlannerSkillGoals();
@@ -78,16 +65,10 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
   const focus: TrainingFocus = requestedGoal !== undefined && selectedSkill ? { skill: selectedSkill, target: requestedGoal, source: 'preparation' }
     : ownTraining ? { skill: ownTraining.step.followsMethod!, target: ownTraining.target, source: 'tracked' }
     : checkpoint ? { skill: routeFocus.skill, target: checkpoint, source: 'checkpoint' } : routeFocus;
-  // The level and plan row of the skill being trained (Melee: the one with a goal ahead, not a Defence kept at 1).
-  const { level, hit } = focusRange({ ...focused, levelSkills: [focus.skill] }, progress, goalOf);
+  const level = levelOf(progress, focus.skill);
   const focusName = skill.levelSkills.length > 1 ? levelById.get(focus.skill)?.name : undefined;
-  // A tracked plan of this page's skills leads the game: the card shows that skill and the plan's method, so the card and the game agree.
-  const trackedStep = useTrackedStep();
-  const follow = trackedStep && focused.levelSkills.includes(trackedStep.skill) ? trackedStep : null;
   const card = focus.source === 'preparation' ? { skill: focus.skill, target: focus.target, followed: null }
-    : ownTraining ? { skill: ownTraining.step.followsMethod!, target: ownTraining.target, followed: null } : follow
-    ? { skill: follow.skill, target: focus.skill === follow.skill ? focus.target : follow.step.targetLevel, followed: methodOfGuideStep(follow.step)?.id ?? null }
-    : { skill: focus.skill, target: focus.target, followed: null };
+    : ownTraining ? { skill: ownTraining.step.followsMethod!, target: ownTraining.target, followed: null } : { skill: focus.skill, target: focus.target, followed: null };
   const shared = engine && card.skill === engine.skill && card.target === engine.target && !card.followed ? engine : undefined;
   const f2p = mode === 'f2p' ? f2pAdviceFor(card.skill) : null;
   const defer = f2p?.target === null && requestedGoal === undefined && !ownTraining;
@@ -133,7 +114,6 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
       {tab === 'plan' && <>
         <FocusNote focus={focus} why={plannerGoals.get(focus.skill)?.why} />
         <TrainingCard skill={card.skill} target={card.target} followed={card.followed} advice={shared} view="analysis" />
-        {guides.length > 0 && <section className="card skill-guide-roadmap"><RoadmapPane skills={selectedSkill ? guides.filter(id => id === selectedSkill) : guides} label={selectedSkill ? levelById.get(selectedSkill)?.name ?? skill.name : skill.name} /></section>}
       </>}
 
       {tab === 'reference' && (<>
@@ -145,15 +125,6 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
           {skill.levelSkills.map((lid) => <LevelInput key={lid} id={lid} label={levelById.get(lid)!.name} />)}
         </div>
         <LiveXp targets={skill.levelSkills.map((lid) => ({ skill: lid, level: Math.min(99, levelOf(progress, lid) + 1) }))} />
-        {canonical ? <button type="button" className="link-btn current-range" onClick={showPlan}>View the current training plan</button> : hit && (
-          <p className="current-range">
-            Now by the plan:{' '}
-            <button type="button" className="link-btn" onClick={showPlan}>
-              <code className="code">{hit.range.code}</code>
-            </button> · {hit.range.levels}
-            {focusName && <span className="muted"> ({focusName} {level})</span>}
-          </p>
-        )}
       </section>
       </section>
 
@@ -186,15 +157,10 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
         <>
           {skill.intro.length > 0 && <div className="prose section"><Blocks blocks={skill.intro} /></div>}
 
-          {skill.sections.map((sec, i) => canonical && i === skill.plan.sectionIndex ? null : (
-            <section key={sec.title} className="section prose" id={i === skill.plan.sectionIndex ? 'plan' : undefined}>
-              <h2>{sec.title}</h2>
-              {i === skill.plan.sectionIndex ? <PlanBlocks skill={skill} highlight={hit?.index} blocks={sec.blocks} /> : <Blocks blocks={sec.blocks} />}
-            </section>
+          {skill.sections.map((sec) => (
+            <section key={sec.title} className="section prose"><h2>{sec.title}</h2><Blocks blocks={sec.blocks} /></section>
           ))}
-          <section className="section prose"><h2>{reference.training.title}</h2><Blocks blocks={reference.training.blocks} />
-            {mode === 'members' && <Blocks blocks={membersGuide.intro} />}
-            <h3>{xpData.title}</h3><XpTable /><Blocks blocks={xpData.note} />
+          <section className="section prose"><h2>{xpData.title}</h2><XpTable /><Blocks blocks={xpData.note} />
           </section>
         </>
       )}
@@ -212,17 +178,6 @@ function FocusNote({ focus, why }: { focus: TrainingFocus; why?: string }) {
   return <p className="muted small focus-note">The planner needs no {name} level now. Goal {focus.target}: {focus.next ? `the training engine switches to ${focus.next} there` : focus.next === null ? 'no other training method takes over before it' : 'the next level'}.</p>;
 }
 
-function PlanBlocks({ skill, highlight, blocks }: { skill: Skill; highlight?: number; blocks: Skill['sections'][number]['blocks'] }) {
-  const tableAt = blocks.findIndex((b) => b.t === 'table');
-  return (
-    <>
-      <Blocks blocks={blocks.slice(0, tableAt)} />
-      <Table head={skill.plan.head} rows={skill.plan.ranges.map((r) => r.cells)} highlight={highlight}
-        highlightLabel="now" codeColumn caption={`Training plan: ${skill.name}`} />
-      <Blocks blocks={blocks.slice(tableAt + 1)} />
-    </>
-  );
-}
 
 interface CalcProps {
   levelIds: string[];

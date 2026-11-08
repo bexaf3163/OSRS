@@ -277,6 +277,8 @@ export interface CombatEstimate {
   damage: Range;
   /** Pieces of food over the remaining goal. */
   food: Range;
+  /** No fight can take full health to the eating point and you may rest between fights: food only saves time. */
+  foodOptional: boolean;
   foodSlots: number;
   /** Kills one bag of food lasts; Infinity — regeneration keeps up, no food needed. */
   killsPerTrip: number;
@@ -454,6 +456,10 @@ export function combatRecovery(inp: SpotTerms & {
   // Health below two of its max hits is where you eat (above a special attack's max hit when it has one); what is above that at the start is free.
   const eatAt = Math.max(2 * foe.maxHit, (inp.specialMaxHit ?? 0) + 1);
   const buffer = Math.max(0, startHp - eatAt);
+  // Food is optional when one fight at its worst cannot take full health down to the eating point and the opponent lets
+  // you rest (not aggressive, no group): you can always finish the fight and recover before the next, so eating only
+  // saves the resting time. Low defence, weak armour or a hard hitter make the worst fight bigger, so food is needed.
+  const foodOptional = !foe.aggressive && !inp.groupAggro && kills > 0 && spread(damageMean / kills, damageVar / kills, margin).high < maxHp - eatAt;
   const netMid = Math.max(0, damageMean - regen - buffer);
   const damage = spread(netMid, damageVar, margin);
   // A monk's healing replaces the food: 2 + 20% of the Hitpoints level each time it is asked for.
@@ -484,7 +490,7 @@ export function combatRecovery(inp: SpotTerms & {
     mid: minutes(fight.mid + kills * avg(between) + eatSeconds(food.mid) + healSeconds.mid) + (trips.mid - 1) * avg(trip),
     high: minutes(fight.high + kills * between[1] + eatSeconds(food.high) + healSeconds.high) + (trips.high - 1) * trip[1],
   };
-  return { combatMinutes, totalMinutes, damage, food, foodSlots, killsPerTrip, trips,
+  return { combatMinutes, totalMinutes, damage, food, foodOptional, foodSlots, killsPerTrip, trips,
     hpPerKill: Math.max(0, perKillNet), secondsPerKill: fightMean / kills + avg(between),
     nextTrip: Math.min(foodSlots, food.high), reserve: food.high - food.mid,
     bankTripMinutes: { low: trip[0], mid: avg(trip), high: trip[1] },

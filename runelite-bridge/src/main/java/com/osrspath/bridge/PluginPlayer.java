@@ -89,11 +89,6 @@ final class PluginPlayer
 			ItemCounts.setLevels(plugin.client.getRealSkillLevel(Skill.MINING), plugin.client.getRealSkillLevel(Skill.WOODCUTTING), plugin.client.getRealSkillLevel(Skill.HITPOINTS));
 			plugin.ownedDirty = true;
 		}
-		// The tracked skill reached the target level of its step: the next step leads (chime, arrow to its place, its object or NPC highlighted).
-		if (plugin.snapshot.skillPath != null && e.getSkill() == plugin.snapshot.skillPath.skillEnum())
-		{
-			plugin.snapshot.syncSkillTarget(true);
-		}
 		String key = skillKey(e.getSkill());
 		Integer oldXp = plugin.xp.put(key, e.getXp());
 		if (oldXp == null || oldXp != e.getXp())

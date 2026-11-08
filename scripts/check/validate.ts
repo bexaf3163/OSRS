@@ -527,25 +527,12 @@ export function validate(d: GuideData | null, route: Route): Report {
 
     // --- Skills, goals and XP ---
     lines.push('Skills, goals and XP');
-    check(d.skills.length === EXPECTED.skills, `Skills ${d.skills.length}: ${d.skills.map((s) => `${s.id}(${s.plan.ranges.length})`).join(' ')}`, `Expected ${EXPECTED.skills} skills, found ${d.skills.length}`);
-    let planErrors = 0;
-    for (const s of d.skills) {
-      const bad = s.plan.ranges.filter((r, i) => r.code !== `${s.id}-${i + 1}` || (r.to !== null && r.to <= r.from));
-      if (bad.length) { planErrors++; fail(`${s.id}: wrong plan rows ${bad.map((r) => r.code).join(', ')}`); }
-    }
-    if (!planErrors) ok('Every skill has a training plan with codes in order');
+    check(d.skills.length === EXPECTED.skills, `Skills ${d.skills.length}: ${d.skills.map((s) => s.id).join(' ')}`, `Expected ${EXPECTED.skills} skills, found ${d.skills.length}`);
 
-    // Members skills: a plan row must be found for any level 1–99, otherwise "Now by the plan" disappears.
+    // Members skills.
     const ms = d.members.skills;
-    check(ms.length === EXPECTED.members, `Members skills ${ms.length}: ${ms.map((s) => `${s.id}(${s.plan.ranges.length})`).join(' ')}`,
+    check(ms.length === EXPECTED.members, `Members skills ${ms.length}: ${ms.map((s) => s.id).join(' ')}`,
       `Expected ${EXPECTED.members} members skills, found ${ms.length}`);
-    const holes = ms.filter((s) => {
-      const r = s.plan.ranges;
-      return r[0].from !== 1 || r[r.length - 1].to !== null
-        || r.some((x, i) => x.code !== `${s.id}-${i + 1}` || (i > 0 && r[i - 1].to !== x.from) || (x.to !== null && x.to <= x.from));
-    }).map((s) => s.id);
-    check(!holes.length, 'The members skill plans run from level 1 without gaps, the codes in order',
-      `A members skill plan not from level 1, with a gap or not in order: ${holes.join(', ')}`);
     const f2pLevels = new Set(d.levels.map((l) => l.id));
     const badMembers = ms.filter((s) => s.membersOnly !== true || s.levelSkills.length !== 1 || f2pLevels.has(s.levelSkills[0])
       || d.skills.some((f) => f.id === s.id) || s.wiki !== `https://oldschool.runescape.wiki/w/${s.nameEn}`).map((s) => s.id);

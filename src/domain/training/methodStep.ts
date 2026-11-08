@@ -150,7 +150,10 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
   const trainingPhase = JSON.stringify([id, phaseTarget, needs.map(n => n.type === 'item' ? [n.name, !!n.equip, n.anyOf ?? []] : n)]);
   const gates = needs.filter((n): n is Extract<MethodNeed, { type: 'skill' | 'quest' }> => n.type === 'skill' || n.type === 'quest');
   const requirements = [...(step.requirements ?? []).filter(r => r.type !== 'skill' || !gates.some(n => n.type === 'skill' && n.skill === r.skill && n.min >= r.min)), ...gates];
-  const itemsRequired = needs.map((n) => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null);
+  // Optional food (no fight brings you to the eating point) is recommended, not required.
+  const optional = (n: MethodNeed) => n.type === 'item' && n.optional === true;
+  const itemsRequired = needs.filter((n) => !optional(n)).map((n) => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null);
+  const itemsRecommended = needs.filter(optional).map((n) => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null);
   const chosen = typeof pick !== 'string' ? pick.spot : undefined;
   const along = typeof pick !== 'string' ? pick.along : undefined;
   // One line for the station beside the spot: the catches are processed there before they are banked or dropped.
@@ -167,7 +170,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
     trainingPhase,
     requirements,
     ...(typeof pick === 'object' && pick.untilLevel !== undefined || goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' || goal.skill === 'ranged' || goal.skill === 'magic' ? {
-      itemsRecommended: [], foes: undefined, threats: undefined, pacing: undefined,
+      itemsRecommended, foes: undefined, threats: undefined, pacing: undefined,
       where: m.where, how: `Train ${goal.skill} to ${phaseTarget}: ${m.name}. ${m.note ?? ''}`.trim(),
       quickSteps: ['Bank finished-skill tools and surplus supplies before withdrawing the current batch.', `Prepare the listed supplies for ${m.name}.`, `Train ${goal.skill} to ${phaseTarget} at ${m.where}. ${m.note ?? ''}`.trim()],
     } : {}),

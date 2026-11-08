@@ -48,6 +48,15 @@ const MAX_HIT = (spellsJson as unknown as { maxHit: Record<'strike' | 'bolt' | '
 
 const MELEE = new Set(['attack', 'strength', 'defence']);
 
+/** The food one trip needs by the fight model; optional when no fight can bring you to the eating point. */
+function modelFood(recovery: { nextTrip: number; foodOptional: boolean }, name: string): MethodNeed[] {
+  const count = Math.ceil(recovery.nextTrip);
+  return count > 0 ? [{
+    type: 'item', name, count, refill: count, anyOf: FOODS.filter((f) => f.name !== name).map((f) => f.name),
+    ...(recovery.foodOptional ? { optional: true } : {}),
+  }] : [];
+}
+
 /** Rate the selected trainer's eligible equipment purchases with the existing complete fight model. */
 export function combatUpgrades(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): NonNullable<ModelRate['upgrades']> {
   if (state.equipmentKnown !== true || !m.npcNames?.length || (!MELEE.has(skill) && !(skill === 'ranged' && m.kit === 'f2p-bow') && !(skill === 'magic' && m.kit === 'strike-spell'))) return [];
@@ -174,7 +183,7 @@ function meleeRate(npc: string, skill: 'attack' | 'strength' | 'defence', state:
     exactNeeds: true,
     needs: [
       ...[gear.weapon, gear.neck, ...gear.armour].filter((p): p is GearPiece => p !== null).map(p => ({ type: 'item' as const, name: p.name, count: 1, equip: true })),
-      ...(best.nextTrip > 0 ? [{ type: 'item' as const, name: food.name, count: Math.ceil(best.nextTrip), refill: Math.ceil(best.nextTrip), anyOf: FOODS.filter(f => f.name !== food.name).map(f => f.name) }] : []),
+      ...(best.nextTrip > 0 ? [{ type: 'item' as const, name: food.name, count: Math.ceil(best.nextTrip), refill: Math.ceil(best.nextTrip), anyOf: FOODS.filter(f => f.name !== food.name).map(f => f.name), ...(best.foodOptional ? { optional: true } : {}) }] : []),
     ],
     basis: gear.weapon?.name ?? 'unarmed',
     secondsPerKill: (best.totalMinutes.mid * 60) / best.kills,
@@ -277,6 +286,8 @@ function rangedRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | 
     costPerHour: ammoCost === null || foodCost === null ? null : (ammoCost + foodCost) / hours,
     costName: recovery.food.mid > 0 ? `arrows and ${sustained.food.toLowerCase()}` : 'arrows',
     basis: `${bow}, ${arrow}`,
+    exactNeeds: true,
+    needs: [...m.needs.filter((n) => n.type === 'item' && !FOODS.some((f) => f.name === n.name)), ...modelFood(recovery, sustained.food)],
     secondsPerKill: (recovery.totalMinutes.mid * 60) / kills,
     ...(sustained.warning ? { warning: sustained.warning } : {}),
   };
@@ -337,9 +348,6 @@ function magicKitRate(m: TrainingMethod, state: PlayerState, prices: PriceView |
   if (!sustained) return null;
   const { recovery, kills, hours, foodCost } = sustained;
   const runes = Object.entries(spell.runes).filter(([element]) => element !== staff?.[0]);
-  const starterFood = needs.find((n): n is Extract<MethodNeed, { type: 'item' }> => n.type === 'item' && FOODS.some(f => f.name === n.name));
-  const foodCount = starterFood?.count ?? Math.ceil(recovery.nextTrip);
-  const refill = Math.max(starterFood?.refill ?? starterFood?.count ?? 0, Math.ceil(recovery.nextTrip));
   const perCast = runes.reduce<number | null>((a, [element, qty]) => {
     const p = supplyPrice(`${element[0].toUpperCase()}${element.slice(1)} rune`, prices, state.mode);
     return a === null || p === null ? null : a + p * qty;
@@ -349,7 +357,7 @@ function magicKitRate(m: TrainingMethod, state: PlayerState, prices: PriceView |
     costPerHour: perCast === null || foodCost === null ? null : (kills * casts * perCast + foodCost) / hours,
     exactNeeds: true,
     needs: [...needs.filter(n => n.type !== 'item' || !FOODS.some(f => f.name === n.name)),
-      ...(foodCount > 0 ? [{ ...starterFood, type: 'item' as const, name: sustained.food, count: foodCount, refill }] : [])],
+      ...modelFood(recovery, sustained.food)],
     costName: recovery.food.mid > 0 ? `runes and ${sustained.food.toLowerCase()}` : 'runes',
     basis: spell.name,
     secondsPerKill: (recovery.totalMinutes.mid * 60) / kills,

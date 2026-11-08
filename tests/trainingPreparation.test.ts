@@ -93,7 +93,11 @@ describe('one prepared kit from the existing combat and Gear models', () => {
     const advice = adviseTraining({ skill: 'magic', target: 40, mode: 'f2p', state, style: 'efficient', priority: 'balanced', methods: [method], prices });
     expect(advice.upgrade?.tool).toMatch(/^Staff of (air|water|earth|fire)$/);
     expect(preparationNeeds(advice, state, prices)).toContainEqual({ type: 'item', name: advice.upgrade!.tool, count: 1, equip: true });
-    expect(advice.upgrade?.kitCost).toBe(5);
+    // Price 1 each: the kit beside the staff costs the model-sized food and other supplies (no fixed catalogue amount since 2.83.0).
+    // The runes are owned, so the cost is the fight model's food alone.
+    const food = preparationNeeds(advice, state, prices).filter((n) => n.type === 'item' && FOODS.some((f) => f.name === n.name));
+    expect(food.length).toBe(1);
+    expect(advice.upgrade?.kitCost).toBe(food.reduce((a, n) => a + (n.type === 'item' ? n.count ?? 1 : 0), 0));
     expect(state).toEqual(before);
   });
   it('owned verified Magic clothing joins the same kit and the recovery model uses the prepared outfit', () => {

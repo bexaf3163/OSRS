@@ -45,7 +45,9 @@ export type Risk = 'none' | 'low' | 'high';
 export type { PlayStyle };
 
 export type MethodNeed =
-  | { type: 'item'; name: string; count?: number; anyOf?: string[]; equip?: boolean; refill?: number }
+  | { type: 'item'; name: string; count?: number; anyOf?: string[]; equip?: boolean; refill?: number;
+    /** Not needed to start: the fight model found no fight that brings you to the eating point; food only saves resting time. */
+    optional?: boolean }
   /** Any axe / pickaxe of at least the suitable tier — taken from toolProgression.json. */
   | { type: 'tool'; skill: 'woodcutting' | 'mining' }
   | { type: 'quest'; quest: string }
@@ -522,7 +524,7 @@ export interface AdviceInput {
    * advice's target, XP, time and supplies run to it; `next` names the method that takes over. */
   untilChange?: boolean;
   methods?: readonly TrainingMethod[];
-  /** The method the game follows now (a tracked leveling plan's step, methodOfGuideStep): shown with this player's figures beside the pick. */
+  /** The method the game follows now (a followed training plan): shown with this player's figures beside the pick. */
   followed?: string | null;
   /** The exchange, for what arrows and runes cost and the drops bring an hour; without it neither is said nor counted. */
   prices?: PriceView | null;
@@ -595,21 +597,6 @@ export const rateText = (m: TrainingMethod) => {
   return `${fmtK(r[0]) === fmtK(r[1]) ? `≈ ${fmtK(r[0])}` : `≈ ${fmtK(r[0])}–${fmtK(r[1])}`} XP per hour${m.rateSource === 'model' ? ' for you' : ''}`;
 };
 
-/**
- * The catalogue method a leveling-guide step is: the same skill, the same opponent (a combat step's NPC) or object (a tree, a rock), overlapping
- * levels. The roadmap and the engine then name one activity once, so a followed plan is shown with this player's figures. null when none or more
- * than one fits (a fishing spot is not told apart by its NPC).
- */
-export function methodOfGuideStep(step: { skill: string; levelRange: readonly [number, number]; location: { npcName?: string; objectName?: string } },
-  methods: readonly TrainingMethod[] = trainingMethods): TrainingMethod | null {
-  const key = (n: string) => n.trim().toLowerCase();
-  const npc = step.location.npcName ? key(step.location.npcName) : null;
-  const obj = step.location.objectName ? key(step.location.objectName) : null;
-  const hits = methods.filter((m) => m.kind === 'method' && m.skills.includes(step.skill)
-    && m.from <= step.levelRange[1] && (m.to === null || m.to > step.levelRange[0])
-    && ((npc !== null && (m.npcNames ?? []).some((n) => key(n) === npc)) || (obj !== null && (m.objectNames ?? []).some((o) => key(o) === obj))));
-  return hits.length === 1 ? hits[0] : null;
-}
 
 export interface ToolUpgrade { tool: string; price: number; hours: number; /** Net consumable savings after the purchase when the benefit is coins instead of meaningful time. */ coinsSaved?: number; /** The player's coins when they are known and fall short of the price. */ short?: number;
   /** Missing next-trip supplies, not the price of an entire future goal. null means stock/prices are unchecked. */ kitCost?: number | null;
@@ -879,7 +866,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
     ...(cash !== null && cash < found.price ? { short: Math.round(cash) }
       : afterKit !== null && afterKit < found.price ? { afterKit: Math.floor(afterKit) } : {}),
   } : null;
-  const reason = best ? reasonFor(best, priority, level, upgrade) + switched : 'There is no method in the list for this level and mode: see the skill training plan.';
+  const reason = best ? reasonFor(best, priority, level, upgrade) + switched : 'The training engine has no method for this skill at this level and mode yet.';
   return {
     ...empty, target, ...(input.untilChange ? { next: forecast.handover ?? null } : {}), best: best ? { ...best, reason } : null, others, quests, path, xpLeft, actionsLeft, actionTarget, time, upgrade, reason,
     goalNeeds: (processingGoalNeeds(path, level, target, xpNow) ?? (skill === 'ranged' ? rangedGoalNeeds(path, state, xpNow, target, input.prices) : null)) ?? undefined,

@@ -10,7 +10,6 @@ import { roadBankItemIds } from '../domain/prep/bankTags';
 import { roadFrom } from '../domain/prep/oneTrip';
 import { usePlanWindow } from './decision';
 import { buildEnvelope, envelopeKey, nextSeq, type SnapshotParts } from '../domain/prep/prepEnvelope';
-import type { SkillPathPayload } from '../domain/training/skillGuide';
 import { PLAN_KEY, saveJson, type BridgeCore } from './bridgeCore';
 import { clipText } from '../domain/text/format';
 
@@ -59,17 +58,6 @@ export function useSnapshot({ liveIdentity, sessionEpoch, pluginProtocol, snapsh
     sn.timer = setTimeout(() => { sn.timer = null; void flushSnapshot(); }, 350);
   }, [flushSnapshot]);
 
-  const setSkillPath = useCallback((value: SkillPathPayload | null) => {
-    const sn = snapshot.current;
-    sn.parts = { ...sn.parts, skillPath: value };
-    if (!supportsSnapshot(pluginProtocol.current)) return;
-    // With a path in the snapshot the plugin ignores the quest step, so the snapshot may go before the app knows its step; clearing waits for a synced one.
-    if (value) sn.synced = true;
-    else if (!sn.synced) return;
-    if (sn.timer) clearTimeout(sn.timer);
-    sn.timer = setTimeout(() => { sn.timer = null; void flushSnapshot(); }, 350);
-  }, [flushSnapshot]);
-
   const setTrainingStep = useCallback((value: Step | null) => {
     const sn = snapshot.current;
     sn.parts = { ...sn.parts, trainingStep: value ? toInGameTarget(value) : undefined };
@@ -88,7 +76,7 @@ export function useSnapshot({ liveIdentity, sessionEpoch, pluginProtocol, snapsh
     // The step in the snapshot is not known yet (the app has just started) — the snapshot goes when it is; the list is saved.
     return sn.synced ? flushSnapshot(['shopping']) : true;
   }, [flushSnapshot]);
-  return { flushSnapshot, setPrepPart, setSkillPath, setTrainingStep, syncPlan };
+  return { flushSnapshot, setPrepPart, setTrainingStep, syncPlan };
 }
 
 /** The bank highlight of the shown step and the planner's next steps. */

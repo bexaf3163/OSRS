@@ -5,7 +5,7 @@ import { useProfiles } from '../state/profiles';
 import { useQuestPoints } from '../state/hooks/useQuestPoints';
 import { levelOf } from '../domain/persistence/progress';
 import { combatLevel } from '../domain/player/xp';
-import { SKILL_NAMES } from '../domain/training/skillGuide';
+import { SKILL_NAMES } from '../domain/training/skillTrack';
 import { isClosed } from '../domain/quests/next-step';
 import type { Player } from './model';
 
