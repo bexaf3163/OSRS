@@ -94,7 +94,7 @@ public class HudModelTest
 
 	static HudModel.Input input(StepGuide.View v, Hud.State s, HudModel.Pace pace)
 	{
-		return new HudModel.Input(v, s, pace, null, null, null, false, null, null, null, false, false, false, false);
+		return new HudModel.Input(v, s, pace, null, null, null, false, null, null, null, false, false, false, false, null);
 	}
 
 	static HudModel.Input with(HudModel.Input in, String field, Object value)
@@ -113,7 +113,8 @@ public class HudModelTest
 			field.equals("bankOpen") ? (Boolean) value : in.isBankOpen(),
 			field.equals("started") ? (Boolean) value : in.isStarted(),
 			field.equals("bankStale") ? (Boolean) value : in.isBankStale(),
-			field.equals("bankLoading") ? (Boolean) value : in.isBankLoading());
+			field.equals("bankLoading") ? (Boolean) value : in.isBankLoading(),
+			field.equals("plannerAction") ? (String) value : in.getPlannerAction());
 	}
 
 	/** The app's plan for the step: one line per item (name, where, priority, timing, supply). */
@@ -655,6 +656,17 @@ public class HudModelTest
 		assertNull(HudModel.build(input(null, null, null)));
 		assertNull(HudModel.build(input(StepGuide.EMPTY, quiet(), null)));
 		HudModel.Card buy = HudModel.build(with(input(null, state("~12 tiles ↑", 12), null), "detour", "Buy Hammer from Rommik"));
+		assertEquals("Buy Hammer from Rommik", buy.getHeadline());
+	}
+
+	@Test
+	public void plannerActionWithoutStep_isTheCard()
+	{
+		// The planner's action has no route step (a quest-journal check): the HUD still says what to do (app 2.82.7).
+		HudModel.Card check = HudModel.build(with(input(null, null, null), "plannerAction", "Read Below Ice Mountain in the quest journal"));
+		assertEquals("Read Below Ice Mountain in the quest journal", check.getHeadline());
+		// A detour leads; the planner's action does not replace it.
+		HudModel.Card buy = HudModel.build(with(with(input(null, state("~12 tiles ↑", 12), null), "detour", "Buy Hammer from Rommik"), "plannerAction", "Read the quest journal"));
 		assertEquals("Buy Hammer from Rommik", buy.getHeadline());
 	}
 

@@ -18,7 +18,7 @@ function reply(scope: RouteBatch['scope'], from: RouteBatch['from'], targets: Ro
     return { status: 'ESTIMATED', tiles: path.length - 1, path, source: 'Synthetic sourced topology', reason: 'Not a live route' };
   }) };
 }
-beforeEach(() => { request.mockReset(); request.mockImplementation(async (...args) => reply(...args)); });
+beforeEach(() => { request.mockReset(); request.mockImplementation(async (scope, from, targets) => reply(scope, from, targets)); });
 
 describe('complete itinerary through the existing route worker', () => {
   it('requests every directed initial, bank, exchange, work and return leg once and reuses actual trip costing', async () => {

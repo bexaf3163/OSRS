@@ -30,6 +30,20 @@ describe('shared off-thread routing boundary', () => {
     worker.reply(worker.messages[1].id);
     expect((await Promise.all(jobs)).every(job => job === null)).toBe(true);
   });
+  it('keeps one waiting request per lane: live travel advice never cancels the planner, and the planner goes first', async () => {
+    const running = requestWorldRoutes(scope, from, [to]);
+    const planner = requestWorldRoutes({ ...scope, snapshotRevision: 2 }, from, [to]);
+    const travel = requestWorldRoutes({ ...scope, snapshotRevision: 3 }, to, [from], 'travel');
+    const worker = FakeWorker.created[0];
+    worker.reply(worker.messages[0].id);
+    expect(worker.messages[1].scope.snapshotRevision).toBe(2);
+    worker.reply(worker.messages[1].id);
+    expect(worker.messages[2].scope.snapshotRevision).toBe(3);
+    worker.reply(worker.messages[2].id);
+    await Promise.all([running, planner, travel]);
+    expect(worker.messages).toHaveLength(3);
+  });
+
   it('times out unavailable work and settles the queued caller instead of leaking jobs or inventing a route', async () => {
     const first = requestWorldRoutes(scope, from, [to]), next = requestWorldRoutes({ ...scope, snapshotRevision: 2 }, from, [to]);
     await vi.advanceTimersByTimeAsync(15_001);

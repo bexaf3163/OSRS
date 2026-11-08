@@ -44,6 +44,8 @@ final class PluginSnapshot
 	volatile FundingHint funding;
 	/** The items the committed Decision needs counted (app v14); empty without one. */
 	volatile java.util.List<String> decisionWatch = java.util.Collections.emptyList();
+	/** The committed Decision's action title; the HUD shows it only when no route step is shown. */
+	volatile String decisionTitle;
 
 	/** The funding line the HUD shows now, so that a change (the app gone too long, another character) redraws it. */
 	volatile String fundingShown;
@@ -166,6 +168,7 @@ final class PluginSnapshot
 		if (!bad.containsKey(PrepEnvelope.DECISION))
 		{
 			decisionWatch = e.getDecision() == null || e.getDecision().getWatch() == null ? java.util.Collections.emptyList() : e.getDecision().getWatch();
+			decisionTitle = e.getDecision() == null ? null : e.getDecision().getTitle();
 			plugin.ownedDirty = true;
 		}
 		plugin.debug.planPercent = skillPath != null || prep == null || prep.getScore() == null ? null : prep.getScore().getPercent();

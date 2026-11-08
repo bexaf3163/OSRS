@@ -1,10 +1,13 @@
-// The planner's live order of the open quests, apart from the guide's walkthrough order below it. Every row says why it is
-// or is not next, with its own minutes or the parts whose time is unknown; a low-confidence choice says it was not optimised.
+// The planner's live order of the open quests. Every row says why it is
+// or is not next, with its own minutes or the parts whose time is unknown; a low-confidence choice says it was not optimised. The
+// line under it says when the plan updates: the evidence that ends the current action, and the facts it always watches.
 import { Eyebrow } from '../../ledger';
 import type { PlannerRow } from '../../state/decision';
 
-export function PlannerOrder({ rows, confidence, selectedId, onSelect }: {
+export function PlannerOrder({ rows, confidence, selectedId, onSelect, updatesWhen = [] }: {
   rows: readonly PlannerRow[]; confidence: string | null; selectedId: string; onSelect: (stepId: string) => void;
+  /** What ends the current action (the Decision's completion evidence). */
+  updatesWhen?: readonly string[];
 }) {
   if (!rows.length) return null;
   return (
@@ -23,6 +26,7 @@ export function PlannerOrder({ rows, confidence, selectedId, onSelect }: {
           </li>
         ))}
       </ol>
+      <p className="muted small planner-replan">The plan updates when {updatesWhen.length ? `${updatesWhen.join('; ')}, or when` : ''} your levels, items, coins, quests or goal change.</p>
     </section>
   );
 }

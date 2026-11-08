@@ -16,7 +16,7 @@ import { stepPlaces } from '../travel/stepPlaces';
 import { instructionSubStep } from '../quests/subStep';
 import { TIP_MIN_SAVING_TILES } from '../travel/transport';
 import { judgeTransport, journeyTiles, recommendedTransport, type RecommendedTransport, type TransportVerdict } from '../travel/transport';
-import { EXCHANGE, NET, STAIRS_TILES_PER_FLOOR, TRANSPORT, dist, effectiveTiles, nearestBank, prepareFor, shortOf, travelOptions, type ItemSource, type Point, type TravelOption } from '../travel/travel';
+import { EXCHANGE, NET, STAIRS_TILES_PER_FLOOR, TRANSPORT, dist, effectiveTiles, nearestBank, prepareFor, shortOf, travelOptions, type ItemSource, type Point, type TravelOption, type TravelInput } from '../travel/travel';
 import type { DetourDecision } from '../travel/decisionLog';
 import { travelInputOf, type TravelInputSources } from '../travel/travelInput';
 import { SUPPLY_MIN_TOTAL_TILES, savedText, type SupplyItem, type TravelSupplies } from './travelSupplies';
@@ -71,7 +71,7 @@ export interface TransportDecision {
   target: TransportTarget['source'] | null;
   /** Why nothing was judged: no position from the game, no place for the step, a point off the world map. */
   skipped?: 'no_position' | 'no_target' | 'off_map';
-  /** The straight-line walk, in tiles. */
+  /** The walk in tiles: its real route when known, else the straight line. */
   walkTiles: number | null;
   recommended: RecommendedTransport | null;
   /** Every candidate with its verdict. */
@@ -86,6 +86,8 @@ export interface TransportDecision {
 
 export interface TransportInput extends Omit<TravelInputSources, 'from' | 'to'> {
   step: Step;
+  /** Real walking tiles for the legs from the player or to the target (services/routedWalk); absent: straight lines. */
+  walk?: TravelInput['walk'];
   /** Where the player is; null: the game did not say. */
   pos: Point | null;
   instruction: QuestInstruction | null;
@@ -329,12 +331,12 @@ export function decideTransport(i: TransportInput): TransportDecision {
   const to = target.point;
   if (!isOverworld(i.pos) || !isOverworld(to) || isInstancedPoint(i.pos) || isInstancedPoint(to)) return { ...base, skipped: 'off_map' };
   const fetch: DetourDecision[] = [];
-  const { step: _s, pos: _p, instruction: _q, nextStep: _n, now: _t, supplies: _u, ...sources } = i;
+  const { step: _s, pos: _p, instruction: _q, nextStep: _n, now: _t, supplies: _u, walk: _w, ...sources } = i;
   const src: TravelInputSources = { ...sources, from: i.pos, to };
-  const options = travelOptions({ ...travelInputOf(src), onDecision: (d) => fetch.push(d) });
+  const options = travelOptions({ ...travelInputOf(src), walk: i.walk, onDecision: (d) => fetch.push(d) });
   const { verdicts } = judgeTransport(options);
   const here = recommendedTransport(options);
-  const walkTiles = dist(i.pos, to);
+  const walkTiles = i.walk?.(i.pos, to) ?? dist(i.pos, to);
   // A shop that sells what the road ahead needs (cards for the book, runes for the spells): standing by it, stocking up comes first (it takes a moment
   // and the way of this leg is still there afterwards); on the way to it, only when this leg has no way of its own.
   const stock = i.supplies ? supplyStop(i.supplies, i.pos, to) : null;

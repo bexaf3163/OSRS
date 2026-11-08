@@ -87,6 +87,8 @@ export interface PrepEnvelope {
 export interface DecisionRefPayload {
   id: string;
   objectiveId: string;
+  /** The action's title, shown in the game when the action has no route step (a quest-journal check); since 2.82.7. */
+  title?: string;
   /** The items every open step needs, counted by plugins that know the field (decisionWatch). */
   watch?: string[];
 }

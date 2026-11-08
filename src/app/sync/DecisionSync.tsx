@@ -18,7 +18,9 @@ export function DecisionSync() {
   const objectiveId = decision?.objectiveId ?? null;
   const watch = useMemo(() => decisionWatch(steps, progress), [steps, progress]);
   // The snapshot names the Decision it carries out, so the plugin can tell a superseded action from the current one.
-  useEffect(() => { setPrepPart('decision', id && objectiveId ? { id, objectiveId, watch } : null); }, [id, objectiveId, watch, setPrepPart]);
+  // The title goes too: with no route step (a quest-journal check) the HUD shows it instead of nothing.
+  const title = decision?.activeAction.title.slice(0, 200);
+  useEffect(() => { setPrepPart('decision', id && objectiveId ? { id, objectiveId, watch, ...(title ? { title } : {}) } : null); }, [id, objectiveId, watch, title, setPrepPart]);
   const sent = useRef<string | null>(null);
   useEffect(() => {
     if (!inGame) { sent.current = null; return; }

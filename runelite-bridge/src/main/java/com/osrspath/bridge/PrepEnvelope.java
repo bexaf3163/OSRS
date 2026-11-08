@@ -49,10 +49,12 @@ public class PrepEnvelope
 		private String objectiveId;
 		/** Items every unfinished quest needs: the plugin counts them so the planner never reads an uncounted item as none. */
 		private java.util.List<String> watch;
+		/** The action's title, for the HUD when it has no route step (a quest-journal check; app 2.82.7). Absent from older apps. */
+		private String title;
 
 		String prepare()
 		{
-			if (id == null || id.isEmpty() || ActiveTarget.tooLong(id) || objectiveId == null || objectiveId.isEmpty() || ActiveTarget.tooLong(objectiveId))
+			if (id == null || id.isEmpty() || ActiveTarget.tooLong(id) || objectiveId == null || objectiveId.isEmpty() || ActiveTarget.tooLong(objectiveId) || ActiveTarget.tooLong(title))
 			{
 				return "invalid decision";
 			}

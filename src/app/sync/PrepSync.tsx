@@ -8,7 +8,8 @@ import { useStore } from '../../state/store';
 import { useFeatures } from '../../state/hooks/useFeatures';
 import { styleOf } from '../../domain/persistence/playStyle';
 import { isClosed } from '../../domain/quests/next-step';
-import { useDecisionWindow } from '../../state/decision';
+import { useDecision, useDecisionWindow } from '../../state/decision';
+import { routedWalk } from '../../services/routedWalk';
 import { roadFrom } from '../../domain/prep/oneTrip';
 import { useReadinessEngine, useActiveActivity } from '../../state/readinessContext';
 import { usePlayerState } from '../../state/playerStateContext';
@@ -58,6 +59,10 @@ function StepPlan({ step }: { step: Step }) {
   const planRef = useRef(plan);
   planRef.current = plan;
   const ahead = useDecisionWindow();
+  // The Decision's scope admits route searches for the walking legs; read at run time, so a new Decision does not restart the timer.
+  const committed = useDecision();
+  const scopeRef = useRef(committed);
+  scopeRef.current = committed;
   // The road ahead: this step and the next open ones, for the supplies the teleports on it need.
   const road = roadFrom(ahead, step).filter((s) => !isClosed(progress, s.id));
   const nextStep = road[1] ?? null;
@@ -93,7 +98,7 @@ function StepPlan({ step }: { step: Step }) {
         steps: b.road, from: null, instruction: b.questInstruction, levels: { ...b.levels, ...(b.stats ?? {}) }, members: b.mode === 'members',
         gear: b.gear, owned: b.owned, spellbook: live ? st.spellbook : null, chronicleCharges: charges, sourceOf,
       }) : null;
-      const decision = decideTransport({
+      const input = {
         step, pos, instruction: b.questInstruction, nextStep: b.nextStep,
         levels: b.levels, stats: b.stats, gear: b.gear, owned: b.owned, mode: b.mode, fairyRings: b.fairyRings, oneTimeUsed: b.oneTimeUsed, questsDone: b.questsDone, priceOf: b.priceOf,
         homeCooldownSec: live ? st.homeTeleportSeconds : null,
@@ -101,7 +106,12 @@ function StepPlan({ step }: { step: Step }) {
         homeCooldownKnown: live && st.homeTeleportKnown === true,
         ...(live ? { spellbook: st.spellbook, chronicleCharges: charges } : {}),
         sourceOf, supplies,
-      });
+      };
+      // Real walks for the legs from the player and to the target (2.82.7); without a Decision or a position, straight lines.
+      const scope = scopeRef.current, target = to;
+      const walk = scope && pos && target ? await routedWalk(scope, pos, target, (w) => decideTransport({ ...input, walk: w })) : undefined;
+      if (dead) return;
+      const decision = decideTransport({ ...input, walk });
       publishTransport(decision);
       setTransport(decision.recommended);
       const at = decision.to;

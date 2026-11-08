@@ -254,6 +254,8 @@ final class HudModel
 		boolean bankStale;
 		/** Right after log-in the saved bank is still being looked for: "not checked" may only be "not read yet". */
 		boolean bankLoading;
+		/** The planner's action when it has no route step ("Read Below Ice Mountain in the quest journal"); null otherwise. */
+		String plannerAction;
 	}
 
 	/** The arrow's distance readout in the status line only when the target is farther than this (tiles): nearby it says nothing new. */
@@ -355,7 +357,7 @@ final class HudModel
 	{
 		Hud.State s = in.getState();
 		Funding f = in.getFunding();
-		String headline = f != null ? clean(f.getAction()) : in.getDetour() != null ? clean(in.getDetour()) : null;
+		String headline = f != null ? clean(f.getAction()) : in.getDetour() != null ? clean(in.getDetour()) : in.getPlannerAction() != null ? clean(in.getPlannerAction()) : null;
 		if (headline == null)
 		{
 			return null;

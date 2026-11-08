@@ -137,6 +137,8 @@ export const OPPORTUNISTIC_MAX_EXCHANGE_TILES = 500;
 export const OPPORTUNISTIC_MAX_COST = 3000;
 
 export const dist = (a: Point, b: Point): number => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
+/** A walking leg from the player or to the target: its real route when known, else the straight line. */
+const leg = (inp: Pick<TravelInput, 'walk'>, a: Point, b: Point): number => inp.walk?.(a, b) ?? dist(a, b);
 
 export type Availability = 'ready' | 'maybe' | 'locked';
 /** A thing a way needs on hand: how many, how many are in the bag or worn, and how many the bank holds. null is "not known", never zero. */
@@ -198,6 +200,9 @@ export interface TravelOption {
 export interface TravelInput {
   from: Point;
   to: Point;
+  /** Walking tiles of the real route for a leg from `from` or to `to` (the shared route worker, 2.82.7); null or absent
+   *  when it is not routed: the straight line then stands in, and the walk option says so. */
+  walk?: (a: Point, b: Point) => number | null;
   /** Levels from the game or entered by hand. */
   levels: Readonly<Record<string, number | undefined>>;
   /** Equipped items and the bag from the game; null — no game. */
@@ -346,7 +351,7 @@ function fairyOption(inp: TravelInput): TravelOption | null {
   for (const a of rings) {
     for (const b of rings) {
       if (a.code === b.code) continue;
-      const tiles = dist(inp.from, { ...a, plane: 0 }) + dist({ ...b, plane: 0 }, inp.to);
+      const tiles = leg(inp, inp.from, { ...a, plane: 0 }) + leg(inp, { ...b, plane: 0 }, inp.to);
       if (!best || tiles < best.tiles) best = { a, b, tiles };
     }
   }
@@ -364,9 +369,9 @@ function fairyOption(inp: TravelInput): TravelOption | null {
   return {
     id: 'fairy', title: `Fairy ring ${a.code} → ${b.code}`,
     legs: [
-      { kind: 'walk', label: `to the fairy ring ${a.code} (${a.place})`, tiles: dist(inp.from, { ...a, plane: 0 }) },
+      { kind: 'walk', label: `to the fairy ring ${a.code} (${a.place})`, tiles: leg(inp, inp.from, { ...a, plane: 0 }) },
       { kind: 'fairy', label: `code ${a.code} → ${b.code}: ${b.place}`, tiles: 0 },
-      { kind: 'walk', label: 'then on foot', tiles: dist({ ...b, plane: 0 }, inp.to) },
+      { kind: 'walk', label: 'then on foot', tiles: leg(inp, { ...b, plane: 0 }, inp.to) },
     ],
     walkTiles: best.tiles, availability: locked ? 'locked' : unsure ? 'maybe' : 'ready', needs,
     go: { x: a.x, y: a.y, plane: 0, label: `Fairy ring ${a.code} — ${a.place}` },
@@ -477,7 +482,7 @@ function cowbellOption(inp: TravelInput): TravelOption | null {
   else if (empty && air > 0) needs.push({ text: `${c.item} is empty: use an ${c.chargeWith} on it (one rune, one teleport)`, ok: true, action: `use an ${c.chargeWith} on the ${c.item}` });
   else if (empty) needs.push({ text: `${c.item} is empty: it needs an ${c.chargeWith} (one per teleport)`, ok: inp.bankSeen ? false : null, item: { name: c.chargeWith, need: 1, have: air, bank: bankOf(inp, c.chargeWith) } });
   else needs.push({ text: `${c.item}: charged or empty is not known (check it)`, ok: null });
-  const tail = dist(c.dest, inp.to);
+  const tail = leg(inp, c.dest, inp.to);
   return {
     id: 'cowbell', title: c.item,
     legs: [{ kind: 'teleport', label: `${c.item} → ${c.dest.label}`, tiles: 0 }, { kind: 'walk', label: 'then on foot', tiles: tail }],
@@ -494,7 +499,7 @@ function charterOption(inp: TravelInput): TravelOption | null {
     for (let j = 0; j < ports.length; j++) {
       const fare = fares[i]?.[j];
       if (i === j || fare === null || fare === undefined) continue;
-      const tiles = dist(inp.from, { ...ports[i], plane: 0 }) + dist({ ...ports[j], plane: 0 }, inp.to);
+      const tiles = leg(inp, inp.from, { ...ports[i], plane: 0 }) + leg(inp, { ...ports[j], plane: 0 }, inp.to);
       if (!best || tiles < best.tiles || (tiles === best.tiles && fare < best.fare)) best = { i, j, tiles, fare };
     }
   }
@@ -512,9 +517,9 @@ function charterOption(inp: TravelInput): TravelOption | null {
   return {
     id: 'charter', title: `Charter ship ${a.name} → ${b.name}`,
     legs: [
-      { kind: 'walk', label: `to the dock ${a.name}`, tiles: dist(inp.from, { ...a, plane: 0 }) },
+      { kind: 'walk', label: `to the dock ${a.name}`, tiles: leg(inp, inp.from, { ...a, plane: 0 }) },
       { kind: 'charter', label: `charter ship for ${best.fare} gp`, tiles: 0 },
-      { kind: 'walk', label: `from ${b.name} to the target`, tiles: dist({ ...b, plane: 0 }, inp.to) },
+      { kind: 'walk', label: `from ${b.name} to the target`, tiles: leg(inp, { ...b, plane: 0 }, inp.to) },
     ],
     walkTiles: best.tiles, availability: locked ? 'locked' : unsure ? 'maybe' : 'ready', needs,
     note: 'The fare is halved with Cabin Fever done or a Ring of Charos worn.',
@@ -711,7 +716,7 @@ function itemTeleportOptions(inp: TravelInput, direct: number): TravelOption[] {
     if (t.kind === 'item' && t.items?.length) entries.push({ id: t.id, item: t.items[0], title: t.name, dest: t.dest, plain: false, ...(t.note ? { note: t.note } : {}), ...(t.charges ? { charges: t.charges } : {}) });
   }
   for (const e of entries) {
-    const tail = dist(e.dest, inp.to);
+    const tail = leg(inp, e.dest, inp.to);
     const carried = inp.carried ? count(inp.carried, [e.item]) > 0 : null;
     if (carried === true) {
       // The Chronicle in the bag is already in the plain teleport list.
@@ -790,11 +795,11 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
   // and a straight line from the surface to it is not a distance.
   if (isInstancedPoint(inp.from) || isInstancedPoint(inp.to) || !isOverworld(inp.from) || !isOverworld(inp.to)) return [];
   const out: TravelOption[] = [];
-  const direct = dist(inp.from, inp.to);
-  out.push({ id: 'walk', title: 'On foot', legs: [{ kind: 'walk', label: 'running in a straight line', tiles: direct }], walkTiles: direct, availability: 'ready', needs: [] });
+  const direct = leg(inp, inp.from, inp.to);
+  out.push({ id: 'walk', title: 'On foot', legs: [{ kind: 'walk', label: inp.walk?.(inp.from, inp.to) != null ? 'running by the shortest known path' : 'running in a straight line', tiles: direct }], walkTiles: direct, availability: 'ready', needs: [] });
 
   for (const t of TRANSPORT.teleports) {
-    const tail = dist(t.dest, inp.to);
+    const tail = leg(inp, t.dest, inp.to);
     const { needs, availability } = teleportNeeds(t, inp);
     const legs: Leg[] = [{ kind: 'teleport', label: `${t.name} → ${t.dest.label}`, tiles: 0 }, { kind: 'walk', label: 'then on foot', tiles: tail }];
     const option: TravelOption = {
@@ -824,7 +829,7 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
           const stops = Math.abs(a - b);
           const type = types.find((ty) => ty.stops >= stops && (!stations[b].wakaOnly || ty.name === 'Waka') && usable(ty));
           if (!type) continue;
-          const tiles = dist(inp.from, stations[a]) + dist(stations[b], inp.to);
+          const tiles = leg(inp, inp.from, stations[a]) + leg(inp, stations[b], inp.to);
           if (!best || tiles < best.tiles) best = { a, b, tiles, type };
         }
       }
@@ -845,9 +850,9 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
       return {
         id, title: `Canoe ${a.name} → ${b.name}`,
         legs: [
-          { kind: 'walk', label: `to station ${a.name}`, tiles: dist(inp.from, a) },
+          { kind: 'walk', label: `to station ${a.name}`, tiles: leg(inp, inp.from, a) },
           { kind: 'canoe', label: `${best.type.name}: ${Math.abs(best.a - best.b)} stops`, tiles: 0 },
-          { kind: 'walk', label: `from station ${b.name} to the target`, tiles: dist(b, inp.to) },
+          { kind: 'walk', label: `from station ${b.name} to the target`, tiles: leg(inp, b, inp.to) },
         ],
         walkTiles: best.tiles,
         availability: levelOk === false || extra.some((n) => n.ok === false) ? 'locked' : levelOk === null || axeOk === null || extra.some((n) => n.ok === null) ? 'maybe' : 'ready',
@@ -867,7 +872,7 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
       const b = stations[best.b];
       const prepared = withPreparation(option, inp, direct, (from) => ({
         legs: [{ kind: 'walk', label: `to station ${a.name}`, tiles: dist(from, a) }, option.legs[1], option.legs[2]],
-        tiles: dist(from, a) + dist(b, inp.to),
+        tiles: dist(from, a) + leg(inp, b, inp.to),
       }));
       if (prepared) out.push(prepared);
     };
@@ -888,8 +893,8 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
   // game's data, so the way is possible, and it goes away when the route step that uses it is closed.
   for (const w of TRANSPORT.oneTime ?? []) {
     if (inp.oneTimeUsed?.includes(w.id)) continue;
-    const toNpc = dist(inp.from, w.at);
-    const tail = dist(w.dest, inp.to);
+    const toNpc = leg(inp, inp.from, w.at);
+    const tail = leg(inp, w.dest, inp.to);
     if (toNpc + tail + MIN_SAVING_TILES > direct) continue;
     out.push({
       id: w.id, title: `${w.name}: one free teleport`,
@@ -905,14 +910,14 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
 
   // Boats: pier to pier for 30 coins.
   for (const b of TRANSPORT.boats) {
-    const tiles = dist(inp.from, b.from) + dist(b.to, inp.to);
+    const tiles = leg(inp, inp.from, b.from) + leg(inp, b.to, inp.to);
     const coins = inp.carried ? count(inp.carried, ['Coins']) : null;
     const ok = b.cost <= 0 ? true : coins === null ? null : coins >= b.cost ? true : inp.bankSeen ? false : null;
     const ride: Leg = { kind: 'boat', label: b.cost > 0 ? `boat for ${b.cost} gp` : 'free ferry', tiles: 0 };
-    const landing: Leg = { kind: 'walk', label: `from ${b.to.label} to the target`, tiles: dist(b.to, inp.to) };
+    const landing: Leg = { kind: 'walk', label: `from ${b.to.label} to the target`, tiles: leg(inp, b.to, inp.to) };
     const option: TravelOption = {
       id: b.id, title: b.name,
-      legs: [{ kind: 'walk', label: `to ${b.from.label}`, tiles: dist(inp.from, b.from) }, ride, landing],
+      legs: [{ kind: 'walk', label: `to ${b.from.label}`, tiles: leg(inp, inp.from, b.from) }, ride, landing],
       walkTiles: tiles,
       availability: ok === false ? 'locked' : ok && !b.needs?.length ? 'ready' : 'maybe',
       needs: [
@@ -925,7 +930,7 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
     // The fare is in the bank: the same boat after a stop there.
     const prepared = withPreparation(option, inp, direct, (from) => ({
       legs: [{ kind: 'walk', label: `to ${b.from.label}`, tiles: dist(from, b.from) }, ride, landing],
-      tiles: dist(from, b.from) + dist(b.to, inp.to),
+      tiles: dist(from, b.from) + leg(inp, b.to, inp.to),
     }));
     if (prepared) out.push(prepared);
   }

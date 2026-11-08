@@ -120,7 +120,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
           </button>
         </div>
         <div className="la-scroll">
-          <PlannerOrder rows={order} confidence={decision?.confidence ?? null} selectedId={selected?.id ?? ''} onSelect={(id) => select(id, false)} />
+          <PlannerOrder rows={order} confidence={decision?.confidence ?? null} selectedId={selected?.id ?? ''} onSelect={(id) => select(id, false)}
+            updatesWhen={decision?.expectedNext.evidenceRequired.map((e) => e.predicate) ?? []} />
         </div>
       </Page>
       {training ? <Page side="r" label="Training plan"><div className="la-scroll"><TrackedSkillCard /></div></Page> : !selected ? (

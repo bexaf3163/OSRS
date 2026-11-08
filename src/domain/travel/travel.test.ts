@@ -26,6 +26,21 @@ describe('how to get there', () => {
     expect(TRANSPORT.teleports.find((t) => t.id === 'varrock-teleport')).toMatchObject({ magic: 25, runes: { law: 1, air: 3, fire: 1 } });
   });
 
+  it('a known route replaces the straight line for the walk and for a teleport\'s walk to the target', () => {
+    const runes = bag(['Law rune', 1], ['Air rune', 3], ['Fire rune', 1]);
+    const base = input({ levels: { magic: 25 }, carried: runes });
+    const plain = travelOptions(base);
+    expect(plain.find((o) => o.id === 'walk')?.legs[0].label).toBe('running in a straight line');
+    // A river doubles every walk to the target; the walk from the player is a route too.
+    const walk: TravelInput['walk'] = (a, b) => 2 * dist(a, b);
+    const routed = travelOptions({ ...base, walk });
+    const foot = routed.find((o) => o.id === 'walk')!;
+    expect(foot.walkTiles).toBe(2 * dist(base.from, base.to));
+    expect(foot.legs[0].label).toBe('running by the shortest known path');
+    const varrock = routed.find((o) => o.id === 'varrock-teleport');
+    expect(varrock!.legs.at(-1)!.tiles).toBe(2 * dist(TRANSPORT.teleports.find((t) => t.id === 'varrock-teleport')!.dest, base.to));
+  });
+
   it('distance — in a straight line with the diagonal', () => {
     expect(dist(at(0, 0), at(3, 4))).toBe(4);
     expect(walkText(0)).toBe('on the spot');

@@ -99,6 +99,9 @@ async function ledgerScenarios(browser: Browser) {
   const reasons = await page.locator('.planner-order .planner-why').allInnerTexts();
   expect(plannerSteps.length > 3 && reasons.length === plannerSteps.length && reasons.every((r) => r.trim().length > 10), `ledger planner: the open quests are listed with reasons (${plannerSteps.length})`);
   expect(/^Chosen/.test(reasons[0]) && await page.getByText(/GUIDE WALKTHROUGH/).count() === 0, 'ledger planner: the first row is the choice; no guide walkthrough');
+  // The Decision output names its replan condition: the evidence that ends the current action.
+  const replan = await page.locator('.planner-replan').innerText();
+  expect(/^The plan updates when .+, or when your levels, items, coins, quests or goal change.$/.test(replan.trim()), `ledger planner: the replan condition is shown (${replan})`);
   const nextId = plannerSteps[plannerSteps.indexOf('S2-09') + 1];
   expect(plannerSteps.includes('S2-09') && !!nextId, `ledger planner: S2-09 has a quest after it in the planner's order (${plannerSteps.join(', ')})`);
 

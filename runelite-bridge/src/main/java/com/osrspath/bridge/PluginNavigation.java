@@ -571,7 +571,7 @@ final class PluginNavigation
 		HudModel.Input in = new HudModel.Input(v, s, hudPace(), plan == null ? null : plan.getNow(), plan == null ? null : plan.getNext(),
 			detour, n != null && n.isPurchase(), fund, n == null ? useLine(plugin.target, ItemCounts.sum(plugin.carried, plugin.noted)) : null,
 			loggedIn && me != null ? plugin.quests.preBlock : null, bankOpen, p != null && p.started(), plugin.bankFromSave,
-			loggedIn && plugin.bank == null && plugin.bankLoadTicks < OsrsPathBridgePlugin.BANK_LOAD_TICKS);
+			loggedIn && plugin.bank == null && plugin.bankLoadTicks < OsrsPathBridgePlugin.BANK_LOAD_TICKS, plugin.snapshot.decisionTitle);
 		plugin.hudCard = HudModel.build(in);
 	}
 

@@ -1,19 +1,20 @@
 // "🧭 How to get there": where you are now (the plugin) and how best to reach the step's place — on foot, by teleport, canoe, fairy ring or charter ship,
 // and, when it is clearly worth it, by way of the bank or the exchange to fetch a teleport tablet first (the app only suggests; it never buys).
-// What is available is counted from the levels and items from the game; what we do not know (the bank was not opened) is marked "?". The distances are in a
-// straight line: this is a comparison of options, not an exact time.
+// What is available is counted from the levels and items from the game; what we do not know (the bank was not opened) is marked "?". Walks follow the
+// shortest known path when the route worker has one (2.82.7), else a labelled straight line: a comparison, not an exact time.
 
 import { useMemo, useState } from 'react';
 import type { Step } from '../../../types';
 import { useBridge } from '../../../state/bridge';
 import { useStore } from '../../../state/store';
-import { useDecisionWindow } from '../../../state/decision';
+import { useDecision, useDecisionWindow } from '../../../state/decision';
+import { routedWalk } from '../../../services/routedWalk';
 import { roadFrom } from '../../../domain/prep/oneTrip';
 import { usePlayerState } from '../../../state/playerStateContext';
 import { checkStatus } from '../../../services/runeliteBridge';
 import { fairyRingsUnlocked, oneTimeUsedOf, travelInputOf } from '../../../domain/travel/travelInput';
 import { stepPlaces } from '../../../domain/travel/stepPlaces';
-import { dist, travelOptions, TRANSPORT, walkText, type Availability, type Point, type TravelOption } from '../../../domain/travel/travel';
+import { dist, travelOptions, TRANSPORT, walkText, type Availability, type Point, type TravelInput, type TravelOption } from '../../../domain/travel/travel';
 import { isOverworld } from '../../../domain/travel/instances';
 import { transportSources } from '../../../domain/readiness/liveTransport';
 import { RoadSupplies } from '../../shopping/RoadSupplies';
@@ -37,15 +38,30 @@ export function TravelPlan({ step }: { step: Step }) {
   const [asked, setAsked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [to, setTo] = useState(0);
+  const decision = useDecision();
+  /** Real walks for one start and destination (routedWalk); another pair falls back to the labelled straight line. */
+  const [routed, setRouted] = useState<{ key: string; walk: NonNullable<TravelInput['walk']> } | null>(null);
   if (!enabled || !places.length) return null;
   const target = places[Math.min(to, places.length - 1)];
 
+  const pairKey = (a: Point, b: Point) => `${a.x},${a.y},${a.plane}>${b.x},${b.y},${b.plane}`;
+  const inputOf = (from: Point, dest: Point): TravelInput => travelInputOf({
+    from, to: dest, levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: homeCooldown, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), questsDone,
+    ...(homeKnown !== null ? { homeCooldownKnown: homeKnown } : {}),
+    spellbook, chronicleCharges: charges, sourceOf: transportSources(player, prices.priceOf),
+  });
+  const routeFor = async (from: Point, dest: Point) => {
+    if (!decision || !isOverworld(from) || !isOverworld(dest)) return;
+    const walk = await routedWalk(decision, from, dest, (w) => travelOptions({ ...inputOf(from, dest), walk: w }));
+    setRouted({ key: pairKey(from, dest), walk });
+  };
   const ask = async () => {
     setBusy(true);
     // One reply gives the place and the Home Teleport cooldown (plugin 2.37+).
     const st = await checkStatus();
     const live = st.online && st.inGame;
     setPos(live ? st.pos : null);
+    if (live && st.pos) void routeFor(st.pos, target);
     setHomeCooldown(live ? st.homeTeleportSeconds : null);
     setHomeKnown(live ? st.homeTeleportKnown : null);
     setSpellbook(live ? st.spellbook : null);
@@ -55,12 +71,8 @@ export function TravelPlan({ step }: { step: Step }) {
   };
 
   const onMap = Boolean(pos) && isOverworld(pos) && isOverworld(target);
-  const all: TravelOption[] = pos && onMap
-    ? travelOptions(travelInputOf({
-      from: pos, to: target, levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: homeCooldown, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), questsDone,
-      ...(homeKnown !== null ? { homeCooldownKnown: homeKnown } : {}), spellbook, chronicleCharges: charges, sourceOf: transportSources(player, prices.priceOf),
-    }))
-    : [];
+  const walk = pos && routed?.key === pairKey(pos, target) ? routed.walk : undefined;
+  const all: TravelOption[] = pos && onMap ? travelOptions({ ...inputOf(pos, target), walk }) : [];
   // A way and the same way "after a stop" are one line: the one with the stop says what is missing and where to get it.
   const options = all.filter((o) => !all.some((x) => x.id === `${o.id}-prepare`));
 
@@ -73,7 +85,7 @@ export function TravelPlan({ step }: { step: Step }) {
         {places.length > 1 && (
           <label className="small select-field">
             <span className="muted">to</span>
-            <select value={to} onChange={(e) => setTo(Number(e.target.value))} aria-label="Where to go">
+            <select value={to} onChange={(e) => { const n = Number(e.target.value); setTo(n); if (pos) void routeFor(pos, places[n]); }} aria-label="Where to go">
               {places.map((p, i) => <option key={`${p.x},${p.y},${i}`} value={i}>{p.label}</option>)}
             </select>
           </label>
@@ -88,7 +100,7 @@ export function TravelPlan({ step }: { step: Step }) {
       )}
       {pos && options.length > 0 && (
         <>
-          <p className="small">You are at tile {pos.x}, {pos.y} — to "{target.label}" in a straight line {dist(pos, target)} tiles.</p>
+          <p className="small">You are at tile {pos.x}, {pos.y} — to "{target.label}" {walk?.(pos, target) != null ? <>{walk(pos, target)} tiles on foot by the shortest known path</> : <>in a straight line {dist(pos, target)} tiles</>}.</p>
           <ul className="travel-list">
             {options.slice(0, 4).map((o) => (
               <li key={o.id} className={`travel-option is-${o.availability}`}>
@@ -113,7 +125,7 @@ export function TravelPlan({ step }: { step: Step }) {
               </li>
             ))}
           </ul>
-          <p className="muted small">Points and conditions from the OSRS Wiki. The distance is in a straight line: the app does not know the obstacles, in combat and at low energy it takes longer.</p>
+          <p className="muted small">Points and conditions from the OSRS Wiki. {walk ? 'Walks follow the shortest known path; doors and stairs are labelled allowances.' : 'The distance is in a straight line: the route is not known yet.'} In combat and at low energy it takes longer.</p>
         </>
       )}
       {pos && options.length === 1 && (
