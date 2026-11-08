@@ -1,10 +1,10 @@
 // Typed access to the data.
 // The V2 route — steps.json and stages.json (the source of truth for the steps).
-// Skills, goals, experience, plugins and the reference — the JSON files in authored/.
+// Skills, experience, plugins and the reference — the JSON files in authored/.
 // The item database — f2p-items.json from the OSRS Wiki (npm run build-items).
 
 import type {
-  GameMode, GoalsData, LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
+  GameMode, LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
 } from '../types';
 import { titleTargets } from './targets';
 import { deriveQuests } from './quests';
@@ -14,7 +14,6 @@ import stagesJson from './authored/stages.json';
 import skillsJson from './authored/skills.json';
 import levelsJson from './authored/levels.json';
 import membersSkillsJson from './authored/members-skills.json';
-import goalsJson from './authored/goals.json';
 import xpJson from './authored/xp.json';
 import pluginsJson from './authored/plugins.json';
 import referenceJson from './authored/reference.json';
@@ -47,7 +46,6 @@ export const levelSkills = levelsJson as LevelSkill[];
 /** The "Members skills" section of the guide: an intro and eight skills with training plans. */
 export const membersGuide = membersSkillsJson as MembersSkillsData;
 export const membersSkills = membersGuide.skills;
-export const goals = goalsJson as GoalsData;
 export const xpData = xpJson as XpData;
 export const plugins = pluginsJson as PluginsData;
 export const reference = referenceJson as ReferenceData;
@@ -103,7 +101,7 @@ export const known = {
 };
 
 /** The data files that engines read as they are, so the folders under src/data stay private to this module. */
-export { goalsJson, questStagesJson, referenceJson, stepsJson };
+export { questStagesJson, referenceJson, stepsJson };
 export { default as combatAuditJson } from './authored/combatAudit.json';
 export { default as combatFoesJson } from './generated/combatFoes.json';
 export { default as dangerZonesJson } from './authored/dangerZones.json';

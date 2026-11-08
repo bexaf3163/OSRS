@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById, stepsFor, goalsJson as goalsData } from '../src/data';
+import { allSteps, stepById, stepsFor } from '../src/data';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { nameKey } from '../src/domain/items/itemKey';
@@ -124,7 +124,6 @@ describe('S6-04 actual ranged preparation', () => {
   });
   it('finishes the optional checkpoint at Ranged 40 without keeping a farming kit active', () => {
     expect(base.inGame?.completionTrigger?.levels).toEqual([{ skill: 'ranged', level: 40 }]);
-    expect(goalsData.rows.find(r => r.id === 'ranged')?.values[5]).toMatchObject({ min: 40, raw: '40', kind: 'optional' });
     const s = scenario(40);
     expect(s.pick).toBe(GOAL_REACHED);
     expect(s.step.itemsRequired ?? []).toHaveLength(0);

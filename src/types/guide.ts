@@ -44,37 +44,11 @@ export interface MembersSkillsData {
   skills: Skill[];
 }
 
-/** A skill with its own level: a row of the "Goals by stage" table. */
+/** A skill with its own level. */
 export interface LevelSkill {
   id: string;
   name: string;
   skill: string;
-}
-
-export interface GoalValue {
-  raw: string;
-  /** The level the route itself guarantees by the end of the stage (for an optional cell: the target of the optional step). */
-  min: number;
-  /** What the likely extras reach (Strength 25, iron ore, a Daero option). Never a requirement. */
-  max?: number;
-  /** "optional": the cell belongs to an optional branch (stage 6, the Bond): nobody is behind on it. */
-  kind?: 'optional';
-  /** The steps of the route that produce the rise to this value. */
-  from?: string[];
-}
-
-export interface GoalRow {
-  /** The skill's level id, or 'qp' for the "Quest points" row. */
-  id: string;
-  label: string;
-  values: GoalValue[];
-}
-
-export interface GoalsData {
-  intro: string;
-  note?: string;
-  stages: string[];
-  rows: GoalRow[];
 }
 
 export interface XpData {

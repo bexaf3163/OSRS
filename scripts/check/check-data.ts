@@ -11,7 +11,7 @@ let stored: GuideData;
 let route;
 try {
   stored = {
-    skills: read('skills'), members: read('members-skills'), levels: read('levels'), goals: read('goals'), xp: read('xp'),
+    skills: read('skills'), members: read('members-skills'), levels: read('levels'), xp: read('xp'),
     plugins: read('plugins'), reference: read('reference'),
   };
   route = readRoute();
