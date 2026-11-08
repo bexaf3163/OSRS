@@ -6,7 +6,7 @@ import type { Field, Step, StepItemRequirement } from '../../../types';
 import { levelById } from '../../../data';
 import { useStore } from '../../../state/store';
 import { useQuestPoints } from '../../../state/hooks/useQuestPoints';
-import { blockerParts, blockersOf, isClosed, suggestedBefore } from '../../../domain/quests/next-step';
+import { blockerParts, blockersOf, isClosed } from '../../../domain/quests/next-step';
 import { levelOf } from '../../../domain/persistence/progress';
 import { needsReview } from '../../../domain/readiness/review';
 import { IconCheck, IconExternal, TYPE_LABEL } from '../../../ui/Icons';
@@ -107,7 +107,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
   const status = progress.steps[step.id];
   const dependencyBlockers = blockersOf(step, progress, qp, engine.dependencies);
   const blockers = isClosed(progress, step.id) ? null : dependencyBlockers;
-  const suggested = isClosed(progress, step.id) ? [] : suggestedBefore(step, progress);
   const reviewing = needsReview(step, progress);
   const links = [
     step.wikiUrl && { href: step.wikiUrl, label: 'Wiki' },
@@ -255,13 +254,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
           {step.minQp !== undefined && (
             <span className={qp >= step.minQp ? 'is-met' : ''}>{step.requires.length ? ', ' : ''}quest points ≥ {step.minQp} (now {qp})</span>
           )}
-        </p>
-      )}
-      {suggested.length > 0 && (
-        <p className="requires small">
-          <span className="muted">Better after (optional): </span>
-          {suggested.map((r, i) => <span key={r}>{i > 0 && ', '}<a href={hrefTo.step(r)} className="step-ref">{r}</a></span>)}
-          <span className="muted"> — you can skip {suggested.length > 1 ? 'them' : 'it'} and this step still opens.</span>
         </p>
       )}
       {blockers && <p className="notice small">The step can be marked now too, but by the plan first: {blockerParts(blockers).join(', ')}.</p>}

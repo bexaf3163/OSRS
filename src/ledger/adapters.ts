@@ -6,12 +6,8 @@ import { useQuestPoints } from '../state/hooks/useQuestPoints';
 import { levelOf } from '../domain/persistence/progress';
 import { combatLevel } from '../domain/player/xp';
 import { SKILL_NAMES } from '../domain/training/skillGuide';
-import { blockerParts, blockersOf, isClosed } from '../domain/quests/next-step';
-import type { Progress, Stage, Step } from '../types';
-import type { Player, RouteStage, StepKind } from './model';
-
-const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-export const roman = (n: number) => ROMAN[n] ?? String(n);
+import { isClosed } from '../domain/quests/next-step';
+import type { Player } from './model';
 
 export function usePlayerSummary(): Player {
   const { progress, steps, maxQp } = useStore();
@@ -33,39 +29,3 @@ export function usePlayerSummary(): Player {
   };
 }
 
-const kindOf = (s: Step): StepKind => (s.type === 'quest' ? 'quest' : s.type === 'skill' ? 'skill' : 'task');
-
-/** The route as chapters of the road: closed, the suggested step, locked by its blockers, or open. */
-export function roadStages(
-  stages: Stage[],
-  steps: Step[],
-  progress: Progress,
-  qp: number,
-  dependencies: Parameters<typeof blockersOf>[3],
-  suggestedId: string | undefined,
-  selectedId: string,
-): RouteStage[] {
-  return stages
-    .map((st) => ({
-      id: roman(st.id),
-      key: String(st.id),
-      name: st.title,
-      members: st.membersOnly,
-      steps: steps
-        .filter((s) => s.stage === st.id)
-        .map((s) => {
-          const closed = isClosed(progress, s.id);
-          const blockers = closed ? null : blockersOf(s, progress, qp, dependencies);
-          return {
-            id: s.id,
-            name: s.title,
-            kind: kindOf(s),
-            qp: s.qp ?? 0,
-            state: closed ? 'done' : s.id === suggestedId ? 'current' : blockers ? 'locked' : 'todo',
-            selected: s.id === selectedId,
-            lock: blockers ? blockerParts(blockers).join(', ') : undefined,
-          } as const;
-        }),
-    }))
-    .filter((st) => st.steps.length);
-}

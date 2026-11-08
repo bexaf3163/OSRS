@@ -24,7 +24,6 @@ import { usePrepFix } from './prep/PrepRoute';
 import { useSubStep } from './step/SubStepHero';
 import { WikiDock, useWiki } from '../reference/WikiDrawer';
 import { Eyebrow, Hotbar, Page } from '../../ledger';
-import { roman } from '../../ledger/adapters';
 import { GUIDE_UNCONFIRMED } from '../../domain/player/linkState';
 
 type View = StepTab | 'wiki';
@@ -46,7 +45,8 @@ interface Props {
   prev?: Step;
   next?: Step;
   onSelect: (id: string) => void;
-  position: { at: number; total: number };
+  /** The step's place in the planner's order; null when the planner has not ranked it (a step opened by a link). */
+  position: { at: number; total: number } | null;
   /** Cards above the step: the review banner, the welcome, the tracked skill. */
   notices?: ReactNode;
   /** The step card is still loading after a pick on the road. */
@@ -174,7 +174,7 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, 
       <div className="la-scroll" ref={scrollRef} aria-busy={busy}>
         {notices}
         <Eyebrow>
-          CHAPTER {roman(step.stage)} · STEP {position.at + 1} OF {position.total} · {TYPE_LABEL[step.type].toUpperCase()}
+          {position ? `PLANNER #${position.at + 1} OF ${position.total}` : "NOT IN THE PLANNER'S ORDER"} · {TYPE_LABEL[step.type].toUpperCase()}
         </Eyebrow>
         <h1 className="la-t step-view-title" id="step-view-title" tabIndex={-1}>{step.title}</h1>
         <div className="la-chips">

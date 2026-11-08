@@ -198,8 +198,14 @@ try {
   await page.getByRole('heading', { name: 'Updates', exact: true }).waitFor();
   expect(!(await page.locator('main').innerText()).includes('Diagnostics') && await page.getByRole('heading', { name: 'Updates', exact: true }).count() === 1, 'settings: retired Diagnostics is absent and native updates remain');
 
-  // The progress: a step mark goes into progress.json with an atomic write.
-  await page.evaluate(() => { location.hash = '#/'; });
+  // The progress: a step mark goes into progress.json with an atomic write. Each mark opens its step by link: after a mark
+  // Path stays on it (2.82.4: no jump along the old guide's order).
+  const doneOn = async (id: string) => {
+    await page.evaluate((hash) => { location.hash = hash; }, `#/step/${id}`);
+    await page.waitForTimeout(800);
+    await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
+  };
+  await page.evaluate(() => { location.hash = '#/step/S1-01'; });
   await page.waitForTimeout(1000);
   // The cockpit has the manual-completion button next to the open walkthrough, without a tab to open first.
   await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
@@ -215,12 +221,12 @@ try {
   const priorText = readFileSync(file, 'utf8');
   mkdirSync(`${file}.tmp`);
   try {
-    await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
+    await doneOn('S1-02');
     await page.waitForSelector('.progress-storage-warning');
     expect((await page.locator('.progress-storage-warning').innerText()).includes('desktop file could not be written'), 'progress write failure: the real IPC acknowledgement exposes a failed file write');
     expect(readFileSync(file, 'utf8') === priorText, 'progress write failure: the previous native save remains intact');
   } finally { rmdirSync(`${file}.tmp`); }
-  await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
+  await doneOn('S1-03');
   await page.waitForFunction(() => !document.querySelector('.progress-storage-warning'));
   expect(readFileSync(file, 'utf8') !== priorText, 'progress write retry: a later successful write clears the warning and persists the latest state');
 
@@ -230,7 +236,7 @@ try {
   externallyChanged.updatedAt = new Date().toISOString();
   const externalBytes = JSON.stringify(externallyChanged);
   writeFileSync(file, externalBytes);
-  await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
+  await doneOn('S1-04');
   await page.waitForSelector('.progress-storage-warning');
   expect((await page.locator('.progress-storage-warning').innerText()).includes('not overwritten'),
     'external save: the normal UI explains the protected external replacement');
@@ -269,7 +275,7 @@ try {
   };
   const doneButtons = page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ });
   const tryMark = async () => {
-    await page.evaluate(() => { location.hash = '#/'; });
+    await page.evaluate(() => { location.hash = '#/step/S1-05'; });
     await page.waitForTimeout(800);
     if (await doneButtons.count()) await doneButtons.first().click();
     await page.waitForTimeout(2500);

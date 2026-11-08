@@ -175,8 +175,6 @@ body{background:#050302}
 .la-rrow.la-sel{background:linear-gradient(90deg,transparent 52px,#c4512a14 52px)}
 .la-rrow.la-sel::after{content:"";position:absolute;left:52px;top:8px;bottom:8px;width:3px;background:var(--la-ember)}
 .la-stagehead.la-members b{border-color:#6a4a8a}
-.la-rrow.flash, .la-rrow.is-flash{animation:la-flash 1.2s}
-@keyframes la-flash{from{background:#4f8f7440}}
 
 /* ---- Skills: the character sheet's tiles ---- */
 :root .skills-index .skill-grid-compact{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}

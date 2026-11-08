@@ -34,41 +34,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
   background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; font-size: 0.85rem; cursor: pointer;
 }
 .rail-now.is-here { border-style: solid; border-color: var(--border); background: none; color: var(--muted); font-weight: 500; cursor: default; }
-.rail-stages { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
-.rail-stage-btn {
-  width: 100%; display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; gap: 10px;
-  padding: 8px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--muted); text-align: left; cursor: pointer;
-}
-.rail-stage-btn:hover { background: var(--surface-2); color: var(--text); }
-.rail-num {
-  width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
-  border: 1.5px solid var(--border-strong); font-size: 0.72rem; font-weight: 800; color: var(--muted);
-}
-.rail-num .icon { width: 14px; height: 14px; }
-.rail-stage-title { font-size: 0.84rem; line-height: 1.25; font-weight: 600; }
-.rail-count { font-size: 0.72rem; font-variant-numeric: tabular-nums; }
-.rail-stage.is-current > .rail-stage-btn { background: var(--accent-soft); color: var(--text); }
-.rail-stage.is-current .rail-num { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-.rail-stage.is-complete .rail-num { border-color: var(--done); color: var(--done); background: var(--done-soft); }
-.rail-stage.is-members .rail-num { border-color: color-mix(in srgb, var(--members) 55%, var(--border)); color: var(--members); }
-.rail-stage.is-members.is-current .rail-num { background: var(--members); border-color: var(--members); color: var(--surface); }
 
-.rail-steps { list-style: none; margin: 2px 0 8px 22px; padding: 0 0 0 12px; border-left: 1px solid var(--border); display: flex; flex-direction: column; gap: 1px; }
-.rail-step {
-  width: 100%; display: grid; grid-template-columns: 14px 3.4em minmax(0, 1fr) auto; align-items: center; gap: 6px;
-  padding: 5px 8px; border: 0; border-radius: 6px; background: none; color: var(--muted);
-  text-align: left; font-size: 0.8rem; line-height: 1.3; cursor: pointer;
-}
-.rail-step:hover { background: var(--surface-2); color: var(--text); }
-.rail-step.is-selected { background: var(--surface); color: var(--text); box-shadow: 0 0 0 1px var(--border-strong); }
-.rail-step.is-closed .rail-step-title { text-decoration: line-through; text-decoration-color: var(--border-strong); opacity: 0.7; }
-.rail-step.is-next:not(.is-selected) { color: var(--accent-ink); }
-.rail-step-mark { display: inline-flex; color: var(--done); }
-.rail-step-mark .icon { width: 13px; height: 13px; }
-.rail-step:not(.is-closed) .rail-step-mark { color: var(--muted); }
-.rail-step-code { font-family: var(--mono); font-size: 0.7rem; }
-.rail-step-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
-.rail-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warn); }
 
 .center.is-switching > * { opacity: 0.55; transition: opacity 120ms; }
 .center.is-switching::before {

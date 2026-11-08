@@ -62,27 +62,20 @@ async function ledgerScenarios(browser: Browser) {
   await page.evaluate(() => { location.hash = '#/step/S2-09'; });
   await settle(page);
 
-  // The road: a complete chapter unrolls and folds back; a row opens its step; "To the current step" returns.
-  const rows = () => page.locator('.la-rrow').count();
-  const folded = await rows();
-  await page.locator('.la-seal6').first().click();
+  // The planner's order is the only list on Path (2.82.4: the old guide's walkthrough is gone): a row opens its step and
+  // "To the current step" returns to the Decision's step.
+  const row = (id: string) => page.locator(`.planner-row[data-step="${id}"]`);
+  expect(await page.locator('.la-rrow, [id^="rail-"]').count() === 0, 'ledger path: no guide walkthrough rows');
+  const ids = await page.locator('.planner-row').evaluateAll((els) => els.map((el) => el.getAttribute('data-step') ?? ''));
+  const other = ids.slice(1).find((id) => id && id !== 'S2-09')!;
+  await row(other).click();
   await settle(page);
-  const unrolled = await rows();
-  expect(unrolled > folded && await page.locator('#rail-S1-01').count() === 1, `ledger road: Unroll shows a complete chapter's steps (${folded} -> ${unrolled})`);
-  await page.locator('button.la-stagehead').first().click();
-  await settle(page);
-  expect(await rows() === folded && await page.locator('#rail-S1-01').count() === 0, 'ledger road: the chapter heading folds it again');
-  await page.locator('#rail-S2-10').click();
-  await settle(page);
-  expect((await title()) === titleOf('S2-10') && await page.locator('#rail-S2-10[aria-current="step"]').count() === 1, 'ledger road: a row opens its step');
-  // The current step is the committed Decision's step (ranked live, not the first open one).
-  if (await page.locator('button.rail-now').isDisabled()) { await page.locator('#rail-S2-09').click(); await settle(page); }
+  expect((await title()) === titleOf(other) && await row(other).getAttribute('aria-current') === 'step', `ledger path: a planner row opens its step (${other})`);
   const from = await title();
   await page.getByRole('button', { name: /to the current step/i }).click();
   await settle(page);
-  expect((await title()) !== from && await page.getByText('CURRENT STEP', { exact: true }).count() > 0 && await page.locator('button.rail-now').isDisabled(),
-    "ledger road: To the current step opens the Decision's step");
-  await page.locator('#rail-S2-09').click();
+  expect((await title()) !== from && await page.getByText('CURRENT STEP', { exact: true }).count() > 0 && await page.locator('button.rail-now').isDisabled(), "ledger path: To the current step opens the Decision's step");
+  await row('S2-09').click();
   await settle(page);
 
   // The ribbons: each one opens its own view; P, T and D too.
@@ -105,7 +98,7 @@ async function ledgerScenarios(browser: Browser) {
   const plannerSteps = await page.locator('.planner-order button[data-step]').evaluateAll((els) => els.map((el) => el.getAttribute('data-step') ?? ''));
   const reasons = await page.locator('.planner-order .planner-why').allInnerTexts();
   expect(plannerSteps.length > 3 && reasons.length === plannerSteps.length && reasons.every((r) => r.trim().length > 10), `ledger planner: the open quests are listed with reasons (${plannerSteps.length})`);
-  expect(/^Chosen/.test(reasons[0]) && await page.getByText(/GUIDE WALKTHROUGH/).count() === 1, 'ledger planner: the first row is the choice; the guide walkthrough is labelled as reference');
+  expect(/^Chosen/.test(reasons[0]) && await page.getByText(/GUIDE WALKTHROUGH/).count() === 0, 'ledger planner: the first row is the choice; no guide walkthrough');
   const nextId = plannerSteps[plannerSteps.indexOf('S2-09') + 1];
   expect(plannerSteps.includes('S2-09') && !!nextId, `ledger planner: S2-09 has a quest after it in the planner's order (${plannerSteps.join(', ')})`);
 
@@ -162,7 +155,10 @@ async function ledgerScenarios(browser: Browser) {
   await bar.getByRole('button', { name: /^done$/i }).click();
   await settle(page);
   expect((await saved(page))['S2-09'] === 'done' && (await title()) !== titleOf('S2-09'), 'ledger hotbar: DONE marks the step and opens the next one');
-  await page.locator('#rail-S2-09').click();
+  // A done quest leaves the planner's order; its link still opens it.
+  await page.evaluate(() => { location.hash = '#/journal'; });
+  await settle(page);
+  await page.evaluate(() => { location.hash = '#/step/S2-09'; });
   await settle(page);
   await slot(/remove mark/i).click();
   await settle(page);

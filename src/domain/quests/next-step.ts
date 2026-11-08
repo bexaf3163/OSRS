@@ -102,11 +102,6 @@ export function stepState(p: Progress, id: string): StepState {
   return s === 'done' ? 'done' : s === 'skipped' ? 'skipped' : 'open';
 }
 
-/** The steps that are suggested before this one and not yet closed (they never block, see Step.softRequires). */
-export function suggestedBefore(step: Pick<Step, 'softRequires'>, p: Progress): string[] {
-  return (step.softRequires ?? []).filter((id) => !isClosed(p, id));
-}
-
 export interface Blockers {
   steps: string[];
   qp?: { need: number; have: number };
@@ -120,10 +115,6 @@ export function blockersOf(step: Step, p: Progress, qp: number, fact?: Dependenc
   return { steps, ...(needQp ? { qp: { need: step.minQp!, have: qp } } : {}) };
 }
 
-/** The first unclosed step at all, even if it is blocked. */
-export function firstOpen(steps: Step[], p: Progress): Step | null {
-  return steps.find((s) => !isClosed(p, s.id)) ?? null;
-}
 
 export function blockerParts(b: Blockers): string[] {
   const parts = [...b.steps];

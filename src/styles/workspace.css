@@ -51,9 +51,6 @@
 .quest-panel .overview-item:not(:last-child)::before { top: 44px; bottom: -12px; }
 .overview-item.is-past .overview-n { color: var(--muted); background: var(--surface-2); }
 .overview-item.is-past .overview-line { color: var(--muted); }
-:root:root .path-wide .rail-step.is-selected { background: var(--accent-soft); color: var(--accent-ink); box-shadow: 0 0 0 1px var(--accent-ink); }
-:root:root .path-wide .rail-stage.is-current > .rail-stage-btn { background: var(--surface-2); }
-:root:root .path-wide .rail-stage.is-current .rail-num { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 @media (min-width: 1400px) {
   :root { --topbar-h: 76px; }
 }
@@ -115,10 +112,7 @@
 .path-wide.is-narrow { grid-template-columns: minmax(0, 1fr); }
 .path-wide.is-narrow .center { position: static; height: auto; overflow: visible; padding: 0; }
 .path-wide.is-narrow .step-view-head { top: var(--topbar-h); }
-.drawer.rail-drawer { inset: 0 auto 0 0; width: min(360px, 92vw); border-left: 0; border-right: 1px solid var(--border-strong); }
-.drawer.rail-drawer[open] { animation-name: drawer-in-left; }
 @keyframes drawer-in-left { from { transform: translateX(-100%); } to { transform: none; } }
-@media (prefers-reduced-motion: reduce) { .drawer.rail-drawer[open] { animation: none; } }
 .rail.is-drawer { position: static; height: auto; overflow: visible; }
 
 /* ---------- Clear Path: the compact view ---------- */

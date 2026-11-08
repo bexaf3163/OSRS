@@ -20,7 +20,6 @@ import { questCatalogue } from '../domain/planning/catalogue';
 import { runtimeDecision } from '../domain/planning/runtime';
 import { planningWindow } from '../domain/planning/window';
 import type { CommittedDecision } from '../domain/planning/contracts';
-import { firstOpen } from '../domain/quests/next-step';
 import { DecisionCtx, PlanWindowCtx, decisionStep, type DecisionValue } from './decision';
 import type { Step } from '../types';
 import { bestEarnRate, earnAction, gatherTime, levelledEarnRates, type EarnRate, type LevelledRate, type SupplyBase } from '../domain/planning/earn';
@@ -71,19 +70,19 @@ export function DecisionProvider({ children }: { children: ReactNode }) {
     const { from, to, ...rest } = travelInputOf({ from: here, to: here, levels: progress.levels, stats: heldStats, gear: heldGear, owned: heldState.owned, mode: heldState.mode });
     return rest;
   }, [progress.levels, heldStats, heldGear, heldState.owned, heldState.mode]);
-  // shortcut: the funding rate is ranked at the previous Decision's step (else the first open one) because the method barely
-  // depends on the step; replace when the Money ranking is computed per objective.
-  const rateStep = decisionStep(previous.current ?? null, steps) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
+  // shortcut: the funding rate is ranked at the previous Decision's step (else the step the game shows; none before either, never
+  // the old guide's first open step) because the method barely depends on the step; replace when Money ranks per objective.
+  const rateStep = decisionStep(previous.current ?? null, steps) ?? steps.find(s => s.id === bridge.activeStepId) ?? null;
   const snapshotFor = useSnapshotFactory();
   const baseFor = useEvalBaseFactory();
   const { position } = useFunding();
   const cash = liquidOf(heldState).amount;
   // The Money ranking and the gathering estimates are heavy, so they run only when the plan first asks for them, and are
   // redone only on a material change (step, levels, mode, restriction, a price fetch, thousands of coins).
-  const material = `${rateStep.id}|${levelsKey}|${heldState.mode}|${trade.state}|${prices.at}|${cash === null ? '-' : Math.round(cash / 1000)}`;
+  const material = `${rateStep?.id ?? '-'}|${levelsKey}|${heldState.mode}|${trade.state}|${prices.at}|${cash === null ? '-' : Math.round(cash / 1000)}`;
   const { rate, levelled, gather } = useMemo(() => {
     let supply: SupplyBase | null | undefined;
-    const base = () => (supply === undefined ? (supply = baseFor(rateStep, snapshotFor(rateStep.id, position), prices)) : supply);
+    const base = () => (supply === undefined ? (supply = baseFor(rateStep, snapshotFor(rateStep?.id ?? null, position), prices)) : supply);
     const known = new Map<string, Minutes | null>();
     const gatherOne = (name: string, count: number) => {
       const key = `${name}:${count}`;

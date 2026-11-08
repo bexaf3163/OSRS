@@ -3,7 +3,7 @@ import { allSteps, stagesFor, stepById, stepsFor, questStagesJson as questStages
 import { alchMargin } from '../src/domain/economy/alchemy';
 import { carryoverOf, routeTrigger } from '../src/domain/prep/carryover';
 import { DAERO_SMALL, daeroAdvice } from '../src/domain/training/daero';
-import { blockersOf, stepState, suggestedBefore } from '../src/domain/quests/next-step';
+import { blockersOf, stepState } from '../src/domain/quests/next-step';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { alternativesOf, PICKAXES, toolFamilyOf } from '../src/domain/items/toolTiers';
 import { xpForLevel } from '../src/domain/player/xp';
@@ -51,9 +51,7 @@ describe('the step graph', () => {
     expect(step('S3-06').requires).not.toContain('S3-05');
     for (const id of step('S3-06').requires) p.steps[id] = 'done';
     expect(blockersOf(step('S3-06'), p, 99)).toBeNull();
-    expect(suggestedBefore(step('S3-06'), p)).toEqual(['S3-05']);
     p.steps['S3-05'] = 'skipped';
-    expect(suggestedBefore(step('S3-06'), p)).toEqual([]);
     expect(stepState(p, 'S3-05')).toBe('skipped');
     expect(stepState(p, 'S3-06')).toBe('open');
   });

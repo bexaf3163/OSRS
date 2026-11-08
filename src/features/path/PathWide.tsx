@@ -1,14 +1,13 @@
-// "Path": the Journey spread of the Ledger. The left page is the road of the route (stages and steps), the right page
-// the chosen step with its ribbons, and the hotbar under the book holds the step's actions. The whole route and the step are in view at once.
+// "Path": the Journey spread of the Ledger. The left page is the planner's order of open quests, the right page
+// the chosen step with its ribbons, and the hotbar under the book holds the step's actions. The order and the step are in view at once.
 
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { stepById } from '../../data';
 import { useStore } from '../../state/store';
 import { useQuestPoints } from '../../state/hooks/useQuestPoints';
-import { firstOpen, isClosed } from '../../domain/quests/next-step';
+import { isClosed } from '../../domain/quests/next-step';
 import { useBridge } from '../../state/bridge';
-import { useActiveActivity, useReadinessEngine, useTrackedTraining } from '../../state/readinessContext';
-import { flashDone } from '../../ui/flash';
+import { useActiveActivity, useTrackedTraining } from '../../state/readinessContext';
 import { pendingReview } from '../../domain/readiness/review';
 import { CockpitWorkspace } from './CockpitWorkspace';
 import { useWiki } from '../reference/WikiDrawer';
@@ -18,46 +17,39 @@ import { TrackedSkillCard } from './step/TrackedSkillCard';
 import { AccountSync } from '../../ui/AccountSync';
 import { Welcome } from './Welcome';
 import { ManualConfirm } from './ManualConfirm';
-import { Eyebrow, Icon, Page, Road } from '../../ledger';
-import { roadStages } from '../../ledger/adapters';
-import { plannerOrder, useDecision } from '../../state/decision';
+import { Eyebrow, Icon, Page } from '../../ledger';
+import { objectiveSteps, plannerOrder, useDecision } from '../../state/decision';
 import { PlannerOrder } from './PlannerOrder';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey: number }) {
-  const { progress, maxQp, steps, stages, setStep, review, reactivate } = useStore();
+  const { progress, maxQp, steps, setStep, review, reactivate } = useStore();
   const qp = useQuestPoints();
   const { advance, navTarget, questInstruction, state, inGame, activeStepId } = useBridge();
   const { setSuggested } = useWiki();
-  const dependencies = useReadinessEngine().dependencies;
   const training = useTrackedTraining();
   const activity = useActiveActivity();
   const decision = useDecision();
-  // The committed Decision's step; with none (offline, waiting for data) the first open step is only where browsing starts.
-  const suggested = activity.source === 'training' ? null : activity.step;
-  // Without a Decision nothing is "current"; the first open step is only where browsing starts.
-  const start = suggested ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
-  const [selectedId, setSelectedId] = useState(() => focusStep ?? start.id);
-  // The rail highlights the clicked step at once; the heavy step card follows as a transition with a loading state.
-  const [railId, setRailId] = useState(selectedId);
+  // The committed Decision's step; with none (offline, waiting for data) nothing is current.
+  // A Decision whose current action has no step of its own (VERIFY a level) still has an objective: its quest's first open step.
+  const objectiveStart = useMemo(() => { const own = objectiveSteps(decision); return steps.find((s) => own.has(s.id) && !isClosed(progress, s.id)) ?? null; }, [decision, steps, progress]);
+  const suggested = activity.source === 'training' ? null : activity.step ?? objectiveStart;
+  // Without a Decision nothing is "current", and no step is guessed from the old guide's order (2.82.4): the page waits
+  // for the planner, or shows a step a link opened.
+  const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested?.id ?? null);
   const [switching, startSwitch] = useTransition();
-  const selected = steps.find((s) => s.id === selectedId) ?? start;
-  const [openStages, setOpenStages] = useState<Set<number>>(() => new Set([selected.stage]));
+  const selected = steps.find((s) => s.id === selectedId) ?? suggested;
   const center = useRef<HTMLDivElement>(null);
   const pending = pendingReview(steps, progress);
 
   const select = useCallback((id: string, focus = true) => {
     const step = stepById.get(id);
     if (!step) return;
-    setRailId(id);
     startSwitch(() => setSelectedId(id));
-    setOpenStages((o) => (o.has(step.stage) ? o : new Set(o).add(step.stage)));
     // A new step — from the start: the central column scrolls by itself, the page stays still.
     center.current?.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
     if (focus) window.setTimeout(() => center.current?.querySelector<HTMLElement>('.step-view-title')?.focus({ preventScroll: true }), 0);
-    // The chosen step in the ribbon — within the visible area.
-    window.setTimeout(() => document.getElementById(`rail-${id}`)?.scrollIntoView({ block: 'nearest' }), 0);
   }, []);
 
   // Navigation by the link #/step/S3-05.
@@ -65,12 +57,6 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
     if (focusStep && steps.some((s) => s.id === focusStep)) select(focusStep);
   }, [focusStep, focusKey, steps, select]);
 
-  const toggleStage = (id: number) => setOpenStages((o) => {
-    const n = new Set(o);
-    if (n.has(id)) n.delete(id);
-    else n.add(id);
-    return n;
-  });
 
   // The step is done in the game (RuneLite): as after the "Mark as done" button — the next one is in the centre.
   // "Mark as done" here or in the game: the planner decides again from the new marks, and the centre follows its step.
@@ -79,7 +65,6 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   useEffect(() => {
     if (!advance || advance.nonce === seenAdvance.current) return;
     seenAdvance.current = advance.nonce;
-    flashDone(`rail-${advance.from}`);
     setFollow(true);
   }, [advance]);
 
@@ -87,8 +72,6 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   const complete = (id: string) => {
     setStep(id, 'done');
     setFollow(true);
-    // Without a Decision (offline, nothing read yet) browsing moves on to the next open step instead of stalling.
-    if (!suggested) { const next = firstOpen(steps, { ...progress, steps: { ...progress.steps, [id]: 'done' } }); if (next) select(next.id); }
   };
   useEffect(() => {
     if (!follow || !suggested || isClosed(progress, suggested.id)) return;
@@ -97,13 +80,13 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   }, [follow, progress, suggested, select]);
 
   const showChanges = () => {
-    setOpenStages((o) => new Set([...o, ...pending.map((s) => s.stage)]));
     select(pending[0].id);
   };
 
   // The dossier column is never an empty hint: with nothing chosen by hand it shows the NPC of the current sub-step (or the step's own NPC);
   // with neither, the column folds away and the step takes its width.
   const dossierNpc = useMemo(() => {
+    if (!selected) return null;
     const confirmed = state === 'online' && inGame && activeStepId === selected.id && questInstruction?.stepId === selected.id;
     const sub = isClosed(progress, selected.id) ? null : confirmed ? instructionSubStep(selected, questInstruction) : findSubStep(selected, navTarget);
     return (sub ? subStepNpcInfo(selected, sub) : null) ?? (confirmed ? null : selected.npc ?? null);
@@ -117,45 +100,37 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   }, [dossierKey, setSuggested]);
 
   // Marking the Decision's own step done hands the choice back to the planner; another step's mark opens the Decision's step.
-  const upcoming = suggested && selected.id !== suggested.id ? suggested : undefined;
+  const upcoming = suggested && selected?.id !== suggested.id ? suggested : undefined;
 
-  // The road opens at the chosen step, in the middle of its page.
-  useEffect(() => {
-    const row = document.getElementById(`rail-${selectedId}`);
-    const road = row?.closest<HTMLElement>('.la-scroll');
-    if (row && road) road.scrollTop += row.getBoundingClientRect().top - road.getBoundingClientRect().top - road.clientHeight / 2;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const at = steps.findIndex((s) => s.id === selected.id);
   // Previous/Next follow the planner's live order of quests, never the guide's written order between quests.
   const order = useMemo(() => plannerOrder(decision, progress), [decision, progress]);
-  const ranked = order.findIndex((row) => row.stepId === selected.id);
+  const ranked = order.findIndex((row) => row.stepId === selected?.id);
   const near = (index: number) => steps.find((s) => s.id === order[index]?.stepId);
-  const road = useMemo(() => roadStages(stages, steps, progress, qp, dependencies, suggested?.id, railId), [stages, steps, progress, qp, dependencies, suggested?.id, railId]);
-  const chapters = road.length;
-  const unrolled = useMemo(() => new Set([...openStages].map(String)), [openStages]);
 
   return (
     <div className="path-wide la-spread">
       <h1 className="visually-hidden">Path</h1>
       <Page side="l" className="path-road" label="Route">
-        <Eyebrow>THE ROAD AHEAD</Eyebrow>
-        <h2 className="la-t" style={{ marginTop: 4 }}>Route · {steps.length} steps</h2>
+        <Eyebrow>YOUR PATH</Eyebrow>
+        <h2 className="la-t" style={{ marginTop: 4 }}>The planner's order</h2>
         <div className="la-chips" style={{ marginTop: 8 }}>
-          <span className="la-chip">{chapters} CHAPTERS</span>
           <span className="la-chip">{qp} → {maxQp} QP</span>
-          <button type="button" className="la-btn la-d rail-now" style={{ padding: '3px 10px', marginLeft: 'auto' }} disabled={!suggested || selected.id === suggested.id} onClick={() => { if (suggested) select(suggested.id); }}>
+          <button type="button" className="la-btn la-d rail-now" style={{ padding: '3px 10px', marginLeft: 'auto' }} disabled={!suggested || selected?.id === suggested.id} onClick={() => { if (suggested) select(suggested.id); }}>
             <Icon name="target" size={12} /> TO THE CURRENT STEP
           </button>
         </div>
         <div className="la-scroll">
-          <PlannerOrder rows={order} confidence={decision?.confidence ?? null} selectedId={selected.id} onSelect={(id) => select(id, false)} />
-          <Eyebrow>GUIDE WALKTHROUGH · WRITTEN ORDER, FOR REFERENCE</Eyebrow>
-          <Road stages={road} unrolled={unrolled} onToggle={(key) => toggleStage(Number(key))} onSelectStep={(s) => select(s.id, false)} />
+          <PlannerOrder rows={order} confidence={decision?.confidence ?? null} selectedId={selected?.id ?? ''} onSelect={(id) => select(id, false)} />
         </div>
       </Page>
-      {training ? <Page side="r" label="Training plan"><div className="la-scroll"><TrackedSkillCard /></div></Page> : <CockpitWorkspace
+      {training ? <Page side="r" label="Training plan"><div className="la-scroll"><TrackedSkillCard /></div></Page> : !selected ? (
+        <Page side="r" label="Next action"><div className="la-scroll">
+          <Eyebrow>THE PLANNER'S NEXT ACTION</Eyebrow>
+          <h1 className="la-t">{decision ? decision.activeAction.title : 'Waiting for the planner'}</h1>
+          {decision ? <ul className="small">{decision.why.map((w) => <li key={w}>{w}</li>)}</ul>
+            : <p className="muted">Connect RuneLite and log in, or open a quest from the Journal.</p>}
+        </div></Page>
+      ) : <CockpitWorkspace
         key={selected.id}
         step={selected}
         suggested={selected.id === suggested?.id}
@@ -164,7 +139,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
         prev={ranked > 0 ? near(ranked - 1) : undefined}
         next={ranked >= 0 ? near(ranked + 1) : undefined}
         onSelect={select}
-        position={{ at, total: steps.length }}
+        position={ranked >= 0 ? { at: ranked, total: order.length } : null}
         busy={switching}
         scrollRef={center}
         notices={<>
