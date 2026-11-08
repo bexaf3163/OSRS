@@ -105,9 +105,6 @@
 }
 .review-title { font-size: 1.05rem; }
 
-.stage.is-members .stage-num { border-color: color-mix(in srgb, var(--members) 55%, var(--border)); color: var(--members); }
-.stage.is-members.is-current .stage-num { background: var(--members); border-color: var(--members); color: var(--surface); }
-.stage.is-members .stage-kicker { color: var(--members); }
 .next.is-members { box-shadow: inset 4px 0 0 var(--members); }
 .skill-card.is-members { border-color: color-mix(in srgb, var(--members) 30%, var(--border)); }
 

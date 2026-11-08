@@ -1,13 +1,12 @@
 // The one committed Decision as the pages, syncs and hooks read it (v14). Only the provider (decisionContext.tsx) writes it;
 // readers import this module so they never pull in the provider's funding and route dependencies.
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import type { Progress, Step } from '../types';
 import type { QuestObservation } from '../domain/player/questObservation';
 import type { QuestInstruction } from '../services/runeliteBridge';
 import type { CandidateRow, CommittedDecision } from '../domain/planning/contracts';
-import { currentStage, isClosed } from '../domain/quests/next-step';
+import { isClosed } from '../domain/quests/next-step';
 import { questCatalogue } from '../domain/planning/catalogue';
-import { useStore } from './store';
 
 export interface DecisionValue { decision: CommittedDecision | null; window: readonly Step[] }
 
@@ -18,16 +17,24 @@ export function useDecision(): CommittedDecision | null {
   return useContext(DecisionCtx).decision;
 }
 
+/** The levels the committed Decision's current action needs (its skill-floor effects), with that action as the reason.
+ * Skills, combat range hints and the calculator take their goals from here, never from the old guide's stages. */
+export function plannerSkillGoals(decision: CommittedDecision | null): ReadonlyMap<string, { level: number; why: string }> {
+  const out = new Map<string, { level: number; why: string }>();
+  for (const effect of decision?.activeAction.expectedEffects ?? []) {
+    if (effect.kind === 'skill-floor' && effect.level > (out.get(effect.skill)?.level ?? 0)) out.set(effect.skill, { level: effect.level, why: decision!.activeAction.title });
+  }
+  return out;
+}
+
+export function usePlannerSkillGoals(): ReadonlyMap<string, { level: number; why: string }> {
+  const decision = useDecision();
+  return useMemo(() => plannerSkillGoals(decision), [decision]);
+}
+
 /** The steps the Decision runs next: its current step and at most two successors (planningWindow). Empty without one. */
 export function useDecisionWindow(): readonly Step[] {
   return useContext(DecisionCtx).window;
-}
-
-/** The stage the Decision's step is in: Skills, Shopping and the range hints scope their goals by it. */
-export function useDecisionStage(): number {
-  const { progress, steps } = useStore();
-  // shortcut: before the first Decision (connected, character not read yet) the first open stage scopes the pages; drop it when those pages get a waiting state.
-  return decisionStep(useDecision(), steps)?.stage ?? currentStage(steps, progress);
 }
 
 /** The Decision's window for the providers above it (readiness, funding, the bridge): the provider publishes it here,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { goals, skillById } from '../../data';
+import { skillById } from '../../data';
 import { emptyProgress } from '../persistence/progress';
 import { focusRange, rangeForLevel, skillLevel, skillRange } from './ranges';
 
@@ -37,10 +37,10 @@ describe('the training plan row by level', () => {
     expect(skillRange(me, p)?.range.code).toBe('ME-3');
   });
 
-  it('melee "Now" follows the skill the route trains, not a Defence kept at 1 (Attack 30 toward 40 → giant frogs)', () => {
+  it('melee "Now" follows the skill the planner needs, not a Defence kept at 1 (Attack 30 toward 40 → giant frogs)', () => {
     const me = skillById.get('ME')!;
     const p = { ...emptyProgress(), levels: { attack: 30, strength: 21, defence: 1 } };
-    const f = focusRange(me, p, goals, 4);
+    const f = focusRange(me, p, (id) => (id === 'attack' ? 40 : undefined));
     expect(f).toMatchObject({ skill: 'attack', level: 30, target: 40 });
     expect(f.hit?.range.what).toContain('Giant frogs');
     expect(skillRange(me, p)?.range.what).toContain('Cows');

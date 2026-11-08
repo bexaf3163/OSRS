@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { allSteps, itemById, known, stepsFor, dangerZonesJson as dangerZones } from '../src/data';
 import type { Step } from '../src/types';
 import { emptyProgress, normalizeProgress, withUpgradeDismissed } from '../src/domain/persistence/progress';
-import { stageBankItemIds, stepBankItemIds, uniqueIds } from '../src/domain/prep/bankTags';
+import { roadBankItemIds, stepBankItemIds, uniqueIds } from '../src/domain/prep/bankTags';
 import { DEFAULT_FEATURES, parseFeatures } from '../src/domain/persistence/features';
 import { checkStatus, clearNavTarget, setGearHint, setNavTarget, syncBankTags, type BridgeTransport, type GearState } from '../src/services/runeliteBridge';
 import { parseGear, parsePacing } from '../src/services/bridgeEvents';
@@ -36,8 +36,10 @@ describe('Stage items for the bank highlight', () => {
     expect(uniqueIds([1351, 590, 1351, 0, -4, 2.5, 590, 995])).toEqual([1351, 590, 995]);
   });
 
-  it('stage 1 in F2P: items from the bank, without those handed out during the step', () => {
-    const ids = stageBankItemIds(1, 'f2p');
+  // The highlight follows the planner's road (2.82.3); a road of the first F2P steps stands in for it here.
+  const road = (stage: number, mode: 'f2p' | 'members') => stepsFor(mode).filter((s) => s.stage === stage);
+  it('a road of F2P steps: items from the bank, without those handed out during the step', () => {
+    const ids = roadBankItemIds(road(1, 'f2p'), 'f2p');
     expect(ids).toContain(1351); // Bronze axe
     expect(ids).toContain(1265); // Bronze pickaxe
     expect(new Set(ids).size).toBe(ids.length);
@@ -49,11 +51,11 @@ describe('Stage items for the bank highlight', () => {
 
   it('F2P without Members items, Members — with all of them', () => {
     for (const stage of [1, 2, 3, 4, 5, 6]) {
-      for (const id of stageBankItemIds(stage, 'f2p')) expect(itemById.get(id)?.members).not.toBe(true);
+      for (const id of roadBankItemIds(road(stage, 'f2p'), 'f2p')) expect(itemById.get(id)?.members).not.toBe(true);
     }
     // Members stages in F2P are empty: their steps do not exist in F2P mode.
-    expect(stageBankItemIds(8, 'f2p')).toEqual([]);
-    expect(stageBankItemIds(1, 'members').length).toBeGreaterThanOrEqual(stageBankItemIds(1, 'f2p').length);
+    expect(roadBankItemIds(road(8, 'f2p'), 'f2p')).toEqual([]);
+    expect(roadBankItemIds(road(1, 'members'), 'members').length).toBeGreaterThanOrEqual(roadBankItemIds(road(1, 'f2p'), 'f2p').length);
   });
 });
 

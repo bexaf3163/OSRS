@@ -1,10 +1,10 @@
 // The matching row of the "Training plan" for a step — by the current levels.
 
 import type { Step } from '../../../types';
-import { goals, levelById, skillById } from '../../../data';
+import { levelById, skillById } from '../../../data';
 import { useStore } from '../../../state/store';
 import { focusRange } from '../../../domain/training/ranges';
-import { useDecisionStage } from '../../../state/decision';
+import { usePlannerSkillGoals } from '../../../state/decision';
 import { Inline } from '../../../ui/Inline';
 import { hrefTo } from '../../../domain/pages/pages';
 
@@ -14,14 +14,14 @@ export function stepSkills(step: Step) {
 }
 
 export function RangeHints({ step }: { step: Step }) {
-  const { progress, stages } = useStore();
+  const { progress } = useStore();
   const skills = stepSkills(step);
-  const stage = useDecisionStage();
+  const goals = usePlannerSkillGoals();
   if (!skills.length) return null;
   return (
     <ul className="hints" aria-label="Training plan rows for your levels">
       {skills.map((skill) => {
-        const focus = focusRange(skill, progress, goals, stage, stages[stages.length - 1]?.id);
+        const focus = focusRange(skill, progress, (id) => goals.get(id)?.level);
         const hit = focus.hit;
         if (!hit) return null;
         const r = hit.range;

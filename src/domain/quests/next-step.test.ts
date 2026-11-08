@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { GameMode, Progress, Step, StepStatus } from '../../types';
 import { BASE_QP, stepsFor } from '../../data';
-import { blockersOf, currentStage, isClosed, questDependencyFacts, dependencyFacts } from './next-step';
+import { blockersOf, isClosed, questDependencyFacts, dependencyFacts } from './next-step';
 import { emptyProgress } from '../persistence/progress';
 import { questPoints } from './qp';
 
@@ -123,17 +123,12 @@ describe('"What to do now"', () => {
     expect(fact('Q')).toBe(false);
   });
 
-  it('when everything is closed — null; the last F2P stage is 6, Members — 9', () => {
-    for (const [mode, last] of [['f2p', 6], ['members', 9]] as [GameMode, number][]) {
+  it('when everything is closed, no step stays open in either mode', () => {
+    for (const mode of ['f2p', 'members'] as GameMode[]) {
       const steps = stepsFor(mode);
       const p = progressWith(Object.fromEntries(steps.map((s) => [s.id, 'done' as const])));
       expect(steps.some((s) => !isClosed(p, s.id) && !blockersOf(s, p, questPoints(steps, p, BASE_QP)))).toBe(false);
-      expect(currentStage(steps, p)).toBe(last);
-    }
-  });
-
-  it('the current stage — the stage of the first unclosed step', () => {
-    expect(currentStage(f2p, progressWith(allBefore('S3-01')))).toBe(3);
+      }
   });
 
   it.each(['f2p', 'members'] as GameMode[])('walking the plan (%s) always gives the next step — a plan without dead ends', (mode) => {

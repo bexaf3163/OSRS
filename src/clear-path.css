@@ -64,7 +64,6 @@ main { max-width:1800px; }
 .quest-preview .btn { margin-top:16px; }
 .quest-select { display:block; width:100%; background:none; color:inherit; border:0; padding:0; text-align:left; font:inherit; cursor:pointer; }
 .quest.is-selected { border-color:var(--accent); background:var(--accent-soft); }
-.shop-controls { padding:14px 18px; }
 .shop-page .page-head { margin-bottom:22px; }
 @media(max-width:700px) {
  .step-view-title { font-size:1.65rem; }

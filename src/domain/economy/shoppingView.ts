@@ -15,11 +15,10 @@ import { legacyKeys } from '../prep/oneTrip';
 import { planSources } from '../prep/sourceRouter';
 import { parseAmount } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
-import { isClosed } from '../quests/next-step';
 import { tripWindow } from '../prep/oneTrip';
 import { gearData } from '../combat/gearAdvisor';
 
-export type ScopeKind = 'trip' | 'step' | 'range';
+export type ScopeKind = 'trip' | 'step';
 /** What to do with a row: buy at the exchange, buy in a shop, take from the bank, put on, get on the way, check first, nothing. */
 export type Channel = 'ge' | 'shop' | 'bank' | 'equip' | 'along' | 'unknown' | 'have';
 
@@ -316,11 +315,9 @@ export function shopRows(list: ShoppingList, ctx: RowContext): ShopRow[] {
 // ---------------------------------------------------------------------------
 // The scope
 
-export interface StageRange { from: number; to: number; openOnly: boolean }
 
 /** The steps of a scope: the next trip (the current step and the next open ones on the planner's `road`, as the step's preparation), this step, or the stages picked. */
-export function scopeSteps(scope: ScopeKind, steps: Step[], progress: Progress, currentId: string | null, range: StageRange, road: Step[] = []): Step[] {
-  if (scope === 'range') return steps.filter((s) => s.stage >= range.from && s.stage <= range.to && (!range.openOnly || !isClosed(progress, s.id)));
+export function scopeSteps(scope: ScopeKind, steps: Step[], progress: Progress, currentId: string | null, road: Step[] = []): Step[] {
   if (!currentId) return [];
   if (scope === 'step') return steps.filter((s) => s.id === currentId);
   return tripWindow(road, progress, currentId);
@@ -409,7 +406,7 @@ export function emptyStateOf(i: {
   error: boolean; scope: ScopeKind; current: string | null; rows: readonly ShopRow[]; connected: boolean; hasSnapshot: boolean; loaded: boolean;
 }): EmptyKind | null {
   if (i.error) return 'error';
-  if (i.scope !== 'range' && !i.current) return 'no-plan';
+  if (!i.current) return 'no-plan';
   const req = i.rows.filter((r) => !r.optional);
   if (!req.length) return 'no-requirements';
   if (req.every((r) => r.channel === 'have')) return 'all-owned';

@@ -1,7 +1,7 @@
 // The list of skills: what to train now in each, and the way into each skill's training guide (its method, place and leveling roadmap).
 import { levelById, membersSkills, skills } from '../../data';
 import { useStore } from '../../state/store';
-import { useDecisionStage } from '../../state/decision';
+import { usePlannerSkillGoals } from '../../state/decision';
 import { levelOf } from '../../domain/persistence/progress';
 import type { Skill } from '../../types';
 import { SkillGlyph } from '../../ui/SectionShell';
@@ -15,7 +15,7 @@ import { hrefTo } from '../../domain/pages/pages';
 /** The Skills spread: the character sheet on the left, the chosen skill (or the followed one) on the right. */
 export function SkillsPage({ param, selectedSkill, goal }: { param?: string; selectedSkill?: string; goal?: number }) {
   const { mode } = useStore();
-  const stage = useDecisionStage();
+  const plannerGoals = usePlannerSkillGoals();
   const tracked = useTracked();
   const trackedHome = tracked ? [...skills, ...membersSkills].find((s) => s.levelSkills.includes(tracked.skill)) : undefined;
   const shown = param ?? trackedHome?.id;
@@ -26,7 +26,7 @@ export function SkillsPage({ param, selectedSkill, goal }: { param?: string; sel
       <Eyebrow>CHARACTER SHEET</Eyebrow>
       <header className="page-head">
         <h1>Skills</h1>
-        <p className="muted">Choose a skill for a recommended method. {mode === 'f2p' ? 'Goals use suggested F2P checkpoints.' : `Goals follow stage ${stage}.`}</p>
+        <p className="muted">Choose a skill for a recommended method. {plannerGoals.size ? `Goals follow the planner: ${[...plannerGoals.values()][0].why}.` : 'The planner needs no training now; each skill shows its next training row.'}</p>
       </header>
       {mode === 'f2p' && <p className="small muted f2p-priority-key">★ Good F2P value · ◇ Optional · ↓ Prefer members. Suggested checkpoints, not caps.</p>}
 

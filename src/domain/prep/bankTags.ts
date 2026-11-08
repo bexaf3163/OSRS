@@ -1,9 +1,8 @@
-// The stage's items for the bank: the OSRS Path Bridge plugin softly highlights them in the main RuneLite bank window
-// (POST /bank-tags) while the stage's step is shown in the game. There is no separate tab and no import string: the highlight
-// arrives by itself and changes with the stage, whereas a string would have to be copied and pasted again at every stage.
+// The road's items for the bank: the OSRS Path Bridge plugin softly highlights them in the main RuneLite bank window
+// (POST /bank-tags, or the snapshot) while the step is shown in the game. The highlight follows the planner's road.
 
 import type { GameMode, Step } from '../../types';
-import { itemById, stepsFor } from '../../data';
+import { itemById } from '../../data';
 
 /** IDs without repeats and junk, in the original order. */
 export function uniqueIds(ids: Iterable<number>): number[] {
@@ -24,11 +23,9 @@ export function stepBankItemIds(step: Step): number[] {
   return items.filter((i) => !i.inStep && i.wikiItemId).map((i) => i.wikiItemId!);
 }
 
-/**
- * The stage's items for the bank: from all the stage's steps in the chosen mode, without repeats.
- * Members items are left out of F2P, by the wiki item database.
- */
-export function stageBankItemIds(stage: number, mode: GameMode = 'f2p', steps: Step[] = stepsFor(mode)): number[] {
-  const ids = uniqueIds(steps.filter((s) => s.stage === stage).flatMap(stepBankItemIds));
+/** The items of the planner's road (the step in the game and the Decision's next steps) for the bank highlight; the old guide's
+ * stage no longer chooses them (2.82.3). Members items are left out of F2P, by the wiki item database. */
+export function roadBankItemIds(road: readonly Step[], mode: GameMode = 'f2p'): number[] {
+  const ids = uniqueIds(road.flatMap(stepBankItemIds));
   return mode === 'members' ? ids : ids.filter((id) => itemById.get(id)?.members !== true);
 }

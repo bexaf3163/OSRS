@@ -1,42 +1,41 @@
 import { describe, expect, it } from 'vitest';
-import { goals, skillById } from '../../data';
+import { skillById } from '../../data';
 import { trainingFocus } from './skillFocus';
 import { defaultGuideMode } from './skillGuide';
 import { guideFor } from '../../data/skillGuideRegistry';
 import { rangeForLevel } from './ranges';
 
 const melee = skillById.get('ME')!;
-const focus = (levels: Record<string, number>, stage: number, skill = melee) =>
+const focus = (levels: Record<string, number>, needs: Record<string, number>, skill = melee) =>
   trainingFocus({
-    levelSkills: skill.levelSkills, stage, goals,
+    levelSkills: skill.levelSkills, goalOf: (id) => needs[id],
     levelOf: (id) => levels[id] ?? 1,
     rowEnd: (_id, lv) => rangeForLevel(skill.plan.ranges, lv)?.range.to ?? null,
   });
 
-describe('route-aware melee focus', () => {
-  it('Attack 21, Strength 14, Defence 1 on stage 3: train a skill the route asks for, not Defence to 10', () => {
-    const f = focus({ attack: 21, strength: 14, defence: 1 }, 3);
+// The planner's Decision names the levels it needs (2.82.3); the old guide's stage goals no longer steer training.
+describe('planner-aware melee focus', () => {
+  it('Attack 21, Strength 14, Defence 1 and the planner needs Attack 30: train Attack, not Defence to 10', () => {
+    const f = focus({ attack: 21, strength: 14, defence: 1 }, { attack: 30 });
     expect(f.skill).not.toBe('defence');
-    expect(f.source).toBe('route');
-    expect(f).toMatchObject({ skill: 'attack', target: 30, stage: 3 });
+    expect(f).toMatchObject({ skill: 'attack', target: 30, source: 'planner' });
   });
 
-  it('the stage is satisfied: look ahead to the next goal instead of falling back to Defence 1 -> 10', () => {
-    const f = focus({ attack: 30, strength: 25, defence: 1 }, 3);
-    expect(f.source).toBe('ahead');
-    expect(f).toMatchObject({ skill: 'attack', target: 40, stage: 4 });
+  it('the planner needs nothing: the lagging skill and the end of its training row, labelled generic', () => {
+    const f = focus({ attack: 30, strength: 25, defence: 1 }, {});
+    expect(f).toMatchObject({ skill: 'defence', source: 'generic' });
+    expect(f.target).toBeGreaterThan(1);
   });
 
-  it('Defence is trained when the route asks for it', () => {
-    const f = focus({ attack: 40, strength: 36, defence: 1 }, 5);
-    expect(f).toMatchObject({ skill: 'defence', target: 33, source: 'route' });
+  it('Defence is trained when the planner needs it, the biggest gap first', () => {
+    const f = focus({ attack: 40, strength: 36, defence: 1 }, { attack: 41, defence: 33 });
+    expect(f).toMatchObject({ skill: 'defence', target: 33, source: 'planner' });
   });
 
   it('a single skill keeps its own goal, then its training row', () => {
     const wc = skillById.get('WC')!;
     const f = trainingFocus({
-      levelSkills: wc.levelSkills, stage: 1, goals,
-      levelOf: () => 99, rowEnd: () => null,
+      levelSkills: wc.levelSkills, goalOf: () => undefined, levelOf: () => 99, rowEnd: () => null,
     });
     expect(f.source).toBe('generic');
   });

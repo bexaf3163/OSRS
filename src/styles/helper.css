@@ -31,9 +31,6 @@
 .branch-locked li { padding-left: 2px; }
 
 .shop-page { gap: 12px; }
-.shop-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
-.shop-controls select { margin-left: 4px; }
-.shop-check { display: inline-flex; align-items: center; gap: 6px; }
 .owned-input { display: inline-flex; align-items: center; gap: 4px; }
 .owned-input input {
   width: 5.5em; min-height: 32px; padding: 0 6px; text-align: center; font: inherit; font-variant-numeric: tabular-nums;

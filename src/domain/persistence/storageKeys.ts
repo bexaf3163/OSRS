@@ -14,7 +14,6 @@ export const STORAGE_KEYS = {
   welcomeDone: 'osrs-put:welcome-done',
   wikiPinned: 'osrs-put:wiki-pinned',
   settingsTab: 'osrs-put-settings-tab',
-  shoppingRange: 'osrs-put:shopping-range',
   shoppingScope: 'osrs-put:shopping-scope',
   locationCache: 'osrs-put:location-cache',
   runeliteBridge: 'osrs-put:runelite-bridge',

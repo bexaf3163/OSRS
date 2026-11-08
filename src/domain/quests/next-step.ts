@@ -125,11 +125,6 @@ export function firstOpen(steps: Step[], p: Progress): Step | null {
   return steps.find((s) => !isClosed(p, s.id)) ?? null;
 }
 
-/** The current stage is the stage of the first unclosed step; when everything is closed, the last one. */
-export function currentStage(steps: Step[], p: Progress): number {
-  return firstOpen(steps, p)?.stage ?? steps[steps.length - 1]?.stage ?? 1;
-}
-
 export function blockerParts(b: Blockers): string[] {
   const parts = [...b.steps];
   if (b.qp) parts.push(`quest points ${b.qp.need} (now ${b.qp.have})`);

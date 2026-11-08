@@ -1,5 +1,5 @@
-// Shopping: "what do I still have to obtain before I go on?" For the next trip by default (the current step and the next open ones, the same window
-// as the step's preparation), for this step alone, or for stages the player picks. Rows are grouped by what to do: buy (at the exchange or in a
+// Shopping: "what do I still have to obtain before I go on?" For the next trip by default (the current step and the planner's next steps, the
+// same window as the step's preparation) or for this step alone. The old guide's stage ranges are gone (2.82.3). Rows are grouped by what to do: buy (at the exchange or in a
 // shop), take from the bank, put on, check first, get on the way; what is already owned and what is optional are folded away. The model is
 // lib/shoppingView.ts; the app buys nothing: the player places the orders.
 
@@ -8,12 +8,10 @@ import { useStore } from '../../state/store';
 import { useReadinessEngine, useTrackedTraining, useActiveActivity } from '../../state/readinessContext';
 import { useBridge } from '../../state/bridge';
 import { usePlayerState } from '../../state/playerStateContext';
-import { useDecisionStage } from '../../state/decision';
 import { coinsOf } from '../../domain/player/playerState';
 import { formatGp } from '../../domain/prep/shopping';
-import { plural } from '../../domain/text/format';
 import {
-  budgetOf, budgetSum, emptyStateOf, exchangePlan, geListText, scopeList, scopeSteps, shopRows, syncLine, timingOf, type Channel, type EmptyKind, type ScopeKind, type ShopRow, type StageRange,
+  budgetOf, budgetSum, emptyStateOf, exchangePlan, geListText, scopeList, scopeSteps, shopRows, syncLine, timingOf, type Channel, type EmptyKind, type ScopeKind, type ShopRow,
 } from '../../domain/economy/shoppingView';
 import { MAX_OWNED } from '../../domain/persistence/progress';
 import { usePriceView } from '../../state/hooks/usePriceView';
@@ -31,13 +29,11 @@ import { stockShoppingContext, stockUpShopping } from '../../domain/economy/trai
 import { hrefTo } from '../../domain/pages/pages';
 import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
 
-const RANGE_KEY = STORAGE_KEYS.shoppingRange;
 const SCOPE_KEY = STORAGE_KEYS.shoppingScope;
 
 const SCOPES: { id: ScopeKind; label: string }[] = [
   { id: 'trip', label: 'Stock up' },
   { id: 'step', label: 'This step' },
-  { id: 'range', label: 'Stages' },
 ];
 
 function loadScope(): ScopeKind {
@@ -46,22 +42,6 @@ function loadScope(): ScopeKind {
     return SCOPES.some((s) => s.id === v) ? (v as ScopeKind) : 'trip';
   } catch {
     return 'trip';
-  }
-}
-
-/** The saved range; `null`, an array and other garbage in the storage: as if nothing had been saved. */
-function loadRange(): Partial<StageRange> {
-  try {
-    const data = JSON.parse(localStorage.getItem(RANGE_KEY) ?? '{}') as unknown;
-    if (!data || typeof data !== 'object' || Array.isArray(data)) return {};
-    const r = data as Record<string, unknown>;
-    return {
-      from: typeof r.from === 'number' ? r.from : undefined,
-      to: typeof r.to === 'number' ? r.to : undefined,
-      openOnly: typeof r.openOnly === 'boolean' ? r.openOnly : undefined,
-    };
-  } catch {
-    return {};
   }
 }
 
@@ -114,8 +94,7 @@ function whereText(r: ShopRow): string {
 }
 
 export function ShoppingPage() {
-  const { stages, progress, notify, setOwnedManual } = useStore();
-  const cur = useDecisionStage();
+  const { progress, notify, setOwnedManual } = useStore();
   const engine = useReadinessEngine();
   const steps = engine.ctx.steps;
   const { state: link, owned, syncPlan, questPoints } = useBridge();
@@ -126,23 +105,6 @@ export function ShoppingPage() {
     setScopeState(s);
     try { localStorage.setItem(SCOPE_KEY, s); } catch { /* until a restart */ }
   };
-  const stageIds = useMemo(() => stages.map((s) => s.id).filter((id) => steps.some((st) => st.stage === id)), [stages, steps]);
-  const [range, setRange] = useState<StageRange>(() => {
-    const saved = loadRange();
-    const ok = (n: unknown) => typeof n === 'number' && stageIds.includes(n);
-    const from = ok(saved.from) ? saved.from! : cur;
-    const to = ok(saved.to) && saved.to! >= from ? saved.to! : Math.min(from + 1, stageIds[stageIds.length - 1] ?? from);
-    return { from, to, openOnly: saved.openOnly ?? true };
-  });
-  const update = (patch: Partial<StageRange>) => {
-    setRange((r) => {
-      const next = { ...r, ...patch };
-      if (next.to < next.from) next.to = next.from;
-      try { localStorage.setItem(RANGE_KEY, JSON.stringify(next)); } catch { /* until a restart */ }
-      return next;
-    });
-  };
-
   const training = useTrackedTraining();
   const activity = useActiveActivity();
   const current = activity.step?.id ?? null;
@@ -162,7 +124,7 @@ export function ShoppingPage() {
 
   const built = useMemo(() => {
     try {
-      const selected = [...new Map([...(followed && scope !== 'range' ? [followed] : []), ...scopeSteps(scope, steps, progress, current, range, activity.step ? engine.road(activity.step) : [])].map(s => [s.id, s])).values()];
+      const selected = [...new Map([...(followed ? [followed] : []), ...scopeSteps(scope, steps, progress, current, activity.step ? engine.road(activity.step) : [])].map(s => [s.id, s])).values()];
       const shared = stockShoppingContext(player, prices, questPoints);
       const stocked = scope === 'trip' && selected.some(s => s.stockItems?.length) ? stockUpShopping(selected, shared, prices) : null;
       const { list, trip } = stocked ?? scopeList(selected);
@@ -171,7 +133,7 @@ export function ShoppingPage() {
     } catch {
       return { selected: [], list: { required: [], recommended: [], coins: 0 }, rows: [] as ShopRow[], refillReserve: null, error: true };
     }
-  }, [scope, steps, progress, current, range, player, prices, followed, questPoints, engine, activity.step]);
+  }, [scope, steps, progress, current, player, prices, followed, questPoints, engine, activity.step]);
   const { selected, list, rows, error, refillReserve } = built;
 
   const connected = link === 'online';
@@ -183,7 +145,7 @@ export function ShoppingPage() {
   // steps of their own; their list is not what S4-03 needs before going on).
   const split = scope === 'trip' && current !== null;
   // A followed skill plan leads the game: its tools are needed now too.
-  const nowIds = new Set([current, followed && scope !== 'range' ? followed.id : null].filter((x): x is string => x !== null));
+  const nowIds = new Set([current, followed ? followed.id : null].filter((x): x is string => x !== null));
   const isAhead = (r: ShopRow) => split && timingOf(r, nowIds) === 'ahead';
   const coinLines = list.coinLines ?? [];
   const nowCoins = split ? coinLines.filter((c) => nowIds.has(c.stepId)) : coinLines;
@@ -213,12 +175,8 @@ export function ShoppingPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planKey, link, syncPlan]);
 
-  const scopeName = scope === 'trip' ? 'the upcoming steps' : scope === 'step' ? 'this step' : `stage${range.from === range.to ? ` ${range.from}` : `s ${range.from}–${range.to}`}`;
-  const scopeLine = scope === 'range'
-    ? `Stages ${range.from}–${range.to}${range.openOnly ? ', unfinished steps' : ''}: ${selected.length} ${plural(selected.length, 'step', 'steps')}.`
-    : current
-      ? `${scope === 'trip' ? selected.map((s) => s.id).join(', ') : current}.`
-      : '';
+  const scopeName = scope === 'trip' ? 'the upcoming steps' : 'this step';
+  const scopeLine = current ? `${scope === 'trip' ? selected.map((s) => s.id).join(', ') : current}.` : '';
   const exchange = geListText(`Grand Exchange: ${scopeName}`, rows, list.coins, split ? isAhead : undefined);
   const copyList = async () => {
     if (!exchange) return;
@@ -273,7 +231,7 @@ export function ShoppingPage() {
   const emptyView = (kind: EmptyKind) => {
     const text: Record<EmptyKind, { head: string; body: string }> = {
       'error': { head: 'The list could not be worked out', body: 'Your progress is safe. Switch the scope or reopen the page; if it stays, the route data needs a look.' },
-      'no-plan': { head: 'No step in progress', body: 'Every step is closed or blocked. Pick a step on the Path, or plan ahead by stages.' },
+      'no-plan': { head: 'No step in progress', body: 'The planner has no step for you yet. Pick a quest in the Journal, or follow a skill plan.' },
       'no-requirements': { head: `Nothing to obtain for ${scopeName}`, body: 'The steps here ask for no items.' },
       'all-owned': { head: `Everything for ${scopeName} is with you`, body: 'No purchases and nothing to take from the bank.' },
       'offline': { head: 'Offline — ownership not confirmed', body: 'Connect RuneLite and log in: the app then checks your bag and bank. The list below is what the steps ask for.' },
@@ -284,7 +242,6 @@ export function ShoppingPage() {
       <div className={`card shop-empty is-${kind}`} role="status">
         <p><strong>{t.head}</strong></p>
         <p className="muted small">{t.body}</p>
-        {kind === 'no-plan' && <button type="button" className="btn" onClick={() => setScope('range')}>Plan by stages</button>}
       </div>
     );
   };
@@ -307,23 +264,6 @@ export function ShoppingPage() {
           ))}
         </div>
       </header>
-      {scope === 'range' && (
-        <div className="shop-controls">
-          <label>From stage{' '}
-            <select value={range.from} onChange={(e) => update({ from: Number(e.target.value) })}>
-              {stageIds.map((id) => <option key={id} value={id}>{id}</option>)}
-            </select>
-          </label>
-          <label>to{' '}
-            <select value={range.to} onChange={(e) => update({ to: Number(e.target.value) })}>
-              {stageIds.filter((id) => id >= range.from).map((id) => <option key={id} value={id}>{id}</option>)}
-            </select>
-          </label>
-          <label className="shop-check">
-            <input type="checkbox" checked={range.openOnly} onChange={(e) => update({ openOnly: e.target.checked })} /> unfinished steps only
-          </label>
-        </div>
-      )}
       {/* Offline and waiting are said once, by their own card. */}
       <p className="muted small shop-scope-line">{scopeLine ? `For ${scopeLine} ` : ''}{empty === 'offline' || empty === 'not-loaded' ? '' : sync}</p>
 
@@ -384,7 +324,7 @@ export function ShoppingPage() {
     <div className="page la-scroll">
       <Eyebrow>TRIP PREPARATION</Eyebrow>
       <h2 className="la-t">Ready for the next step</h2>
-      <p className="small muted">{scope === 'range' ? `Selected stages ${range.from}–${range.to}` : activity.step?.title ?? 'Choose a route or training plan'}</p>
+      <p className="small muted">{activity.step?.title ?? 'Choose a quest or training plan'}</p>
       {empty !== 'error' && <section className="card" aria-label="Checkout">
         <dl className="checkout-totals">
           <div><dt>Available coins</dt><dd>{coins.total === null ? 'Not fully checked' : `${formatGp(coins.total)} gp`}</dd></div>
@@ -442,7 +382,7 @@ export function ShoppingPage() {
         </details>
       )}
       {empty !== 'error' && empty !== 'no-plan' && selected.length > 0 && (
-        <RoadSupplies steps={selected} locate={scope !== 'range' || (range.openOnly && range.from <= cur)} heading="For the road" quietWhenEmpty />
+        <RoadSupplies steps={selected} locate heading="For the road" quietWhenEmpty />
       )}
       <CleanupFold />
       <p className="muted small">The app buys nothing by itself: you place the orders.</p>

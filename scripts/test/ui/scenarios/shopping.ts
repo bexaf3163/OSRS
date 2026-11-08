@@ -131,11 +131,14 @@ async function shoppingPage(browser: Browser) {
 // Bulk shopping: "already have" changes "buy", is saved and goes into the exchange hint.
 async function bulkShopping(browser: Browser) {
   const width = 1100;
-  const { page, errors } = await open(browser, width, {
+  // The step in the game (2.82.3: the old guide's stage ranges are gone): S2-01 asks for five Energy potion(4) and seven Clay.
+  const at = (step: string) => ({
+    progress: progressBefore(step, { gameMode: 'f2p' }), localStorage: { 'osrs-put:active-step': step },
+    status: { inGame: true, player: 'Bulk Test', activeStepId: step },
     events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Clay', carried: 3, noted: 0, bank: 2 }] }],
-  }, '#/shopping');
-  // The stages the old page opened on: the next trip is the default now, a range is chosen.
-  await page.getByRole('button', { name: 'Stages', exact: true }).click();
+  });
+  const { page, errors } = await open(browser, width, at('S2-01'), '#/shopping');
+  await page.getByRole('button', { name: 'This step', exact: true }).click();
   await settle(page);
   const potion = page.locator('.shop-item-row', { hasText: 'Energy potion(4)' }).first();
   await potion.locator('.shop-why > summary').click();

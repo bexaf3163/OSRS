@@ -114,13 +114,12 @@ describe('quantities across steps', () => {
 
   it('the next trip is the current step and the next open ones on the planner\'s road, the same window as the step\'s preparation', () => {
     const p = emptyProgress();
-    const range = { from: 1, to: 1, openOnly: true };
     const road = ['S1-01', 'S3-01', 'S2-09', 'S1-05'].map((id) => allSteps.find((s) => s.id === id)!);
-    expect(scopeSteps('trip', allSteps, p, 'S1-01', range, road).map((s) => s.id)).toEqual(['S1-01', 'S3-01', 'S2-09', 'S1-05']);
+    expect(scopeSteps('trip', allSteps, p, 'S1-01', road).map((s) => s.id)).toEqual(['S1-01', 'S3-01', 'S2-09', 'S1-05']);
     // No planner road: the step alone, never the guide's next steps.
-    expect(scopeSteps('trip', allSteps, p, 'S1-01', range, [road[0]]).map((s) => s.id)).toEqual(['S1-01']);
-    expect(scopeSteps('step', allSteps, p, 'S1-01', { from: 1, to: 1, openOnly: true }).map((s) => s.id)).toEqual(['S1-01']);
-    expect(scopeSteps('trip', allSteps, p, null, { from: 1, to: 1, openOnly: true })).toEqual([]);
+    expect(scopeSteps('trip', allSteps, p, 'S1-01', [road[0]]).map((s) => s.id)).toEqual(['S1-01']);
+    expect(scopeSteps('step', allSteps, p, 'S1-01').map((s) => s.id)).toEqual(['S1-01']);
+    expect(scopeSteps('trip', allSteps, p, null)).toEqual([]);
   });
 
   it('a long training step buys the whole goal but takes one bag from the bank', () => {
@@ -201,8 +200,6 @@ describe('the six states are told apart', () => {
     expect(emptyStateOf({ ...base, current: null, rows: [] })).toBe('no-plan');
     expect(emptyStateOf({ ...base, rows: [] })).toBe('no-requirements');
     expect(emptyStateOf({ ...base, rows: have })).toBe('all-owned');
-    // A range needs no current step.
-    expect(emptyStateOf({ ...base, scope: 'range', current: null, rows: [] })).toBe('no-requirements');
   });
 
   it('offline and not loaded are not "everything owned" and not "nothing to buy"', () => {

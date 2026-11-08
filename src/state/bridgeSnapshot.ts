@@ -6,7 +6,9 @@ import { gateAllows } from '../domain/persistence/profiles';
 import { guardedProfileGate as profileGate, readProfiles } from './profiles';
 import { postPrepPlan, snapshotAccepted, supportsSnapshot, syncBankTags, syncShoppingPlan, type ShoppingPlanPayload } from '../services/runeliteBridge';
 import { toInGameTarget } from '../domain/guide/inGameTarget';
-import { stageBankItemIds } from '../domain/prep/bankTags';
+import { roadBankItemIds } from '../domain/prep/bankTags';
+import { roadFrom } from '../domain/prep/oneTrip';
+import { usePlanWindow } from './decision';
 import { buildEnvelope, envelopeKey, nextSeq, type SnapshotParts } from '../domain/prep/prepEnvelope';
 import type { SkillPathPayload } from '../domain/training/skillGuide';
 import { PLAN_KEY, saveJson, type BridgeCore } from './bridgeCore';
@@ -89,19 +91,20 @@ export function useSnapshot({ liveIdentity, sessionEpoch, pluginProtocol, snapsh
   return { flushSnapshot, setPrepPart, setSkillPath, setTrainingStep, syncPlan };
 }
 
-/** The bank highlight of the shown step's stage. */
+/** The bank highlight of the shown step and the planner's next steps. */
 export function useBankTags({ steps, mode, state, activeStepId, plugin, features, bankSent }: BridgeCore, { setPrepPart }: ReturnType<typeof useSnapshot>) {
-  // The items of the stage of the step shown in the game — to the plugin, for a soft highlight in the bank.
-  // They go on a step (and stage) change, after a reconnect and when the feature is turned on; turned off — the highlight is removed.
+  const planWindow = usePlanWindow();
+  // The items of the step shown in the game and the planner's next steps — to the plugin, for a soft highlight in the bank.
+  // They go on a step or road change, after a reconnect and when the feature is turned on; turned off — the highlight is removed.
   useEffect(() => {
     if (state !== 'online') return;
     const step = activeStepId ? steps.find((s) => s.id === activeStepId) : undefined;
-    const ids = features.bankTags && step ? stageBankItemIds(step.stage, mode) : [];
+    const ids = features.bankTags && step ? roadBankItemIds(roadFrom(planWindow, step), mode) : [];
     const snap = supportsSnapshot(plugin?.protocol ?? null);
-    const key = `${snap ? 'v6' : 'v5'}|${step?.stage ?? '-'}|${mode}|${ids.join(',')}`;
+    const key = `${snap ? 'v6' : 'v5'}|${step?.id ?? '-'}|${mode}|${ids.join(',')}`;
     if (key === bankSent.current || (!ids.length && !bankSent.current)) return;
     bankSent.current = key;
-    if (snap) setPrepPart('bankTags', ids.length ? { stageId: step ? `stage-${step.stage}` : 'none', itemIds: ids } : null);
-    else void syncBankTags(step ? `stage-${step.stage}` : 'none', ids);
-  }, [state, activeStepId, steps, mode, features.bankTags, plugin?.protocol, setPrepPart]);
+    if (snap) setPrepPart('bankTags', ids.length ? { stageId: step ? `road-${step.id}` : 'none', itemIds: ids } : null);
+    else void syncBankTags(step ? `road-${step.id}` : 'none', ids);
+  }, [state, activeStepId, steps, mode, features.bankTags, plugin?.protocol, setPrepPart, planWindow]);
 }
