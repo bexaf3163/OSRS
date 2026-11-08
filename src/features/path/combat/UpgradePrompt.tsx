@@ -5,6 +5,8 @@
 // It buys and spends nothing — only hints. "✕ Skip" hides the hint on this step.
 
 import { useMemo } from 'react';
+import { usePlayerState } from '../../../state/playerStateContext';
+import { nameKey } from '../../../domain/items/itemKey';
 import type { Step } from '../../../types';
 import { useStore } from '../../../state/store';
 import { useBridge } from '../../../state/bridge';
@@ -27,6 +29,7 @@ export function useUpgradeRecommendation(step: Step): UpgradeRecommendation | nu
   const { upgradeRouter } = useFeatures();
   const { progress, mode } = useStore();
   const { gear, stats } = useBridge();
+  const { state } = usePlayerState();
   const relevant = upgradeRouter && stepUpgradeCategories(step).length > 0 && !isClosed(progress, step.id);
   const board = usePriceView(relevant);
   const prices = useMemo(() => new Map([...toolProgression.woodcutting, ...toolProgression.mining]
@@ -36,8 +39,10 @@ export function useUpgradeRecommendation(step: Step): UpgradeRecommendation | nu
     if (!relevant) return null;
     // The levels from the game outrank the hand-entered ones: they are exact and fresh.
     const levels: Record<string, number | undefined> = { ...progress.levels, ...(stats ?? {}) };
-    return recommendUpgrade({ step, mode, levels, gear, dismissed: progress.upgradeDismissedForSteps, geQuotes: prices });
-  }, [relevant, step, mode, progress.levels, progress.upgradeDismissedForSteps, stats, gear, prices]);
+    const owned = state.owned;
+    const banked = (name: string) => owned?.bankSeen ? owned.items.get(nameKey(name))?.bank ?? null : null;
+    return recommendUpgrade({ step, mode, levels, gear, dismissed: progress.upgradeDismissedForSteps, geQuotes: prices, banked });
+  }, [relevant, step, mode, progress.levels, progress.upgradeDismissedForSteps, stats, gear, prices, state.owned]);
 
   return rec;
 }

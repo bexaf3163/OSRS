@@ -3653,6 +3653,7 @@
    ]
   },
   "S2-08": {
+   "encounters": [{ "foe": "Count Draynor", "throughLine": "openCoffin" }],
    "var": [
     "varp",
     178
@@ -6728,6 +6729,7 @@
    ]
   },
   "S3-04": {
+   "encounters": [{ "foe": "Ancient Guardian", "throughLine": "defeatGuardian" }],
    "var": [
     "varbit",
     12063
@@ -7198,6 +7200,7 @@
    ]
   },
   "S3-05": {
+  "manualProofs": [{"requirement": "partner", "carriedId": 769, "atLines": ["talkToRoald"], "source": "https://oldschool.runescape.wiki/w/Certificate_(Shield_of_Arrav)?oldid=15185740"}],
    "var": [
     "varp",
     145
@@ -7747,6 +7750,7 @@
    ]
   },
   "S4-01": {
+   "encounters": [{ "foe": "Ithoi the Navigator", "throughLine": "killIthoi" }],
    "var": [
     "varbit",
     6071
@@ -8346,6 +8350,7 @@
    ]
   },
   "S4-02": {
+   "encounters": [{ "foe": "Brutus", "throughLine": "openBullPen" }],
    "var": [
     "varbit",
     20106
@@ -15250,6 +15255,7 @@
    ]
   },
   "S5-03": {
+   "encounters": [{ "foe": "Melzar the Mad", "throughLine": "killMelzar" }, { "foe": "Lesser demon", "throughLine": "killLesserDemon" }],
    "var": [
     "varp",
     176
@@ -16093,6 +16099,7 @@
    ]
   },
   "S5-08": {
+   "encounters": [{ "foe": "Elvarg", "throughLine": "killElvarg" }],
    "var": [
     "varp",
     176

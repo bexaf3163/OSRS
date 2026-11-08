@@ -29,17 +29,6 @@ export function isRestrictedItem(name: string): boolean {
   return KEYS.has(k) || (k.endsWith('s') && KEYS.has(k.slice(0, -1))) || KEYS.has(`${k}s`);
 }
 
-/**
- * The money-making methods (moneyMaking.json ids) whose product is on the list, early enough for a new account to try them. Their income needs
- * the sale, so a restricted account is shown them apart from the ones that work.
- */
-export const RESTRICTED_METHOD_IDS: readonly string[] = [
-  'tanning-cowhide', 'collecting-and-tanning-cowhide', 'killing-cows-and-tanning-cowhide', 'mining-iron-ore-free-to-play', 'collecting-iron-ore',
-  'mining-coal-free-to-play', 'mining-clay', 'smelting-steel-bars', 'catching-lobsters', 'catching-lobsters-free-to-play', 'cutting-oak-logs',
-  'cutting-yew-logs-free-to-play', 'collecting-ashes', 'collecting-red-spiders-eggs-free-to-play', 'buying-feather-packs', 'buying-jug-packs',
-  'mining-adamantite-ore-free-to-play', 'mining-runite-ore-free-to-play', 'collecting-nature-runes', 'collecting-chaos-runes',
-];
-
 export type TradeState = 'RESTRICTED' | 'UNKNOWN' | 'LIFTED';
 
 export interface TradeUnmet {

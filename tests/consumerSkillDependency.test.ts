@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../src/data';
-import { dependencyFacts, blockersOf, openAfter } from '../src/domain/quests/next-step';
+import { dependencyFacts, blockersOf } from '../src/domain/quests/next-step';
 import { emptyProgress, withStep } from '../src/domain/persistence/progress';
 import { contextOf } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
@@ -26,7 +26,7 @@ describe('a consumer uses its actual skill subset without completing the produce
     const engine = createReadinessEngine(contextOf({ step: city, steps: allSteps, progress: p, qp: 200, mode: 'members', stats: levels, owned: null, gear: null }));
     expect(engine.readiness(city).problems.some(r => r.kind === 'step' && r.label.includes(producer.id))).toBe(false);
     expect(engine.chain(city).some(link => link.step.id === producer.id)).toBe(false);
-    expect(openAfter(allSteps, p, 'S8-06', 200, fact)?.id).toBe(city.id);
+    expect(blockersOf(allSteps.find((s) => s.id === city.id)!, { ...p, steps: { ...p.steps, ['S8-06']: 'done' as const } }, 200, fact)).toBeNull();
     expect(p.steps[producer.id]).toBe('skipped');
   });
 

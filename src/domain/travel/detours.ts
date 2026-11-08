@@ -7,7 +7,7 @@
 
 import { recipesJson } from '../../data';
 import type { PrepLine, PrepPlan } from '../prep/prepPlan';
-import { OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MAX_EXCHANGE_TILES, TILES_PER_SECOND, bankOnRoute, dist, EXCHANGE, reachTiles, type Point, type TravelInput } from './travel';
+import { OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MAX_EXCHANGE_TILES, TILES_PER_SECOND, bankOnRoute, dist, EXCHANGE, reachTiles, type Point } from './travel';
 import { emitDecision, type DetourDecision } from './decisionLog';
 
 export type DetourAction = 'BUY' | 'GET' | 'WITHDRAW';
@@ -73,7 +73,7 @@ function candidatesOf(plan: Pick<PrepPlan, 'now' | 'soon'>, log: (d: DetourDecis
 }
 
 /** The player's inventory side of the planner input: what the teleports need. Without it the way to a stop is on foot. */
-export type DetourTravel = Pick<TravelInput, 'levels' | 'carried' | 'bankSeen' | 'homeCooldownSec'>;
+export type DetourTravel = Omit<Parameters<typeof reachTiles>[0], 'from'>;
 
 /**
  * The best stop on the way, or null. from/to: where the player is and where the step goes; coins: what the bag holds (null: unknown).
@@ -84,7 +84,7 @@ export function procurementDetour(i: {
 }): Detour | null {
   const log = (d: DetourDecision) => emitDecision(d, i.onDecision);
   const direct = dist(i.from, i.to);
-  const inv = { from: i.from, levels: i.travel?.levels ?? {}, carried: i.travel?.carried ?? null, bankSeen: i.travel?.bankSeen ?? false, homeCooldownSec: i.travel?.homeCooldownSec ?? null };
+  const inv = { ...i.travel, from: i.from, levels: i.travel?.levels ?? {}, carried: i.travel?.carried ?? null, bankSeen: i.travel?.bankSeen ?? false };
   const groups = new Map<string, { stop: Point & { label: string }; items: Candidate[] }>();
   for (const c of candidatesOf(i.plan, log, i.from, i.to)) {
     if (c.stop.plane !== i.from.plane) {

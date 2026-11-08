@@ -52,17 +52,22 @@ describe('a renamed step keeps its rules', () => {
 
 describe('a new encounter with a supported hazard gets its safety check', () => {
   const dragon = (id = 'S99-01') => step(id, [item('Anti-dragon shield', 1)], { threats: ['Elvarg'] });
-  it('missing: a hard block with the opponent\'s own hit; in the bank: "in the bank"; carried: none', () => {
+  it('missing or banked protection blocks; carrying it requires equipping; only observed wearing satisfies the rule', () => {
     const missing = planFor(dragon(), owned({ 'Anti-dragon shield': {} }));
     expect(missing.blockers.find((b) => b.label === 'No Anti-dragon shield with you')?.detail).toMatch(/dragonfire hits up to 70/);
     expect(planFor(dragon(), owned({ 'Anti-dragon shield': { bank: 1 } })).blockers[0]?.label).toBe('Anti-dragon shield is in the bank, not with you');
-    expect(planFor(dragon(), owned({ 'Anti-dragon shield': { carried: 1 } })).blockers).toEqual([]);
+    expect(planFor(dragon(), owned({ 'Anti-dragon shield': { carried: 1 } })).blockers[0]?.label).toBe('Equip Anti-dragon shield before the fight');
+    expect(planFor(dragon(), owned({ 'Anti-dragon shield': {} }), [{ name: 'Anti-dragon shield', slot: 'shield' }]).blockers).toEqual([]);
   });
   it('a fight without the hazard gets no such rule, whatever its code', () => {
     expect(planFor(step('S5-08', [item('Anti-dragon shield', 1)]), owned({ 'Anti-dragon shield': {} })).safety).toEqual([]);
   });
-  it('an unread bank is not "missing": no block is claimed', () => {
-    expect(planFor(dragon(), owned({}, false)).blockers).toEqual([]);
+  it('an unread bank stays unknown, but a known empty shield slot proves missing worn protection', () => {
+    expect(planFor(dragon(), owned({}, false)).blockers[0]?.label).toBe('Equip Anti-dragon shield before the fight');
+  });
+  it('does not silently waive protection when new authored content omits its item line', () => {
+    expect(planFor(step('S99-42', [], { threats: ['Elvarg'] }), owned({})).blockers[0]?.label)
+      .toBe('Equip Anti-dragon shield before the fight');
   });
 });
 

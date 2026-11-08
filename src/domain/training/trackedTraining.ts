@@ -7,15 +7,16 @@ import type { TrackedSkill } from './skillTrack';
 import { trackedTrainingContext } from './skillTrack';
 import { f2pAdviceFor } from './f2pSkillAdvice';
 import { methodsFor } from './trainingRouter';
-import { pickMethods } from './methodPick';
+import { pickTraining } from './methodPick';
+import type { TrainingAdvice } from './trainingRouter';
 import { withTrainingMethod } from './methodStep';
 import type { MethodPriority, PlayStyle } from '../persistence/playStyle';
 import type { Market } from './methodRates';
 
-export interface TrackedTraining { step: Step; target: number; complete: boolean }
+export interface TrackedTraining { step: Step; target: number; complete: boolean; advice?: TrainingAdvice | null }
 
 export function trackedTraining(tracked: TrackedSkill | null, observed: PlayerState, mode: GameMode,
-  style: PlayStyle, priority: MethodPriority, market: Market = {}): TrackedTraining | null {
+  style: PlayStyle, priority: MethodPriority, market: Market = {}, xp?: Readonly<Record<string, number>>): TrackedTraining | null {
   if (!tracked || !methodsFor(tracked.skill).length) return null;
   const context = trackedTrainingContext(tracked, tracked.skill, observed, mode);
   const state = context.state, free = context.mode === 'f2p';
@@ -33,7 +34,7 @@ export function trackedTraining(tracked: TrackedSkill | null, observed: PlayerSt
     how: `Check your ${skill} level before choosing a training stage.`,
     inGame: { completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill, level: target }] } },
   };
-  const pick = pickMethods([base], state, context.mode, style, priority, market)[id];
+  const { pick, advice } = pickTraining(base, state, context.mode, style, priority, market, xp);
   const step = withTrainingMethod(base, pick);
   if (typeof pick === 'object' && step.inGame) step.inGame = { ...step.inGame, goal: `${pick.name ?? name}: train ${skill} to ${pick.untilLevel ?? target}` };
   const method = typeof pick === 'object' ? methodsFor(skill).find(method => method.id === pick.methodId) : null;
@@ -49,5 +50,5 @@ export function trackedTraining(tracked: TrackedSkill | null, observed: PlayerSt
     step.quickSteps = [warning];
     step.inGame = { ...step.inGame, goal: 'Check combat preparation before training', worldPoint: undefined, groundTiles: [], pathWaypoints: undefined, npcNames: [], npcIds: [], objectNames: [], objectIds: [] };
   }
-  return { step, target, complete: (levelOf(state, skill) ?? -1) >= target };
+  return { step, target, complete: (levelOf(state, skill) ?? -1) >= target, advice };
 }

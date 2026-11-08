@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { processingGoalNeeds } from './processingGoal';
+import { processingGoalFlows, processingGoalNeeds } from './processingGoal';
 import { adviseTraining, trainingMethods, type PathLeg } from './trainingRouter';
 import { xpForLevel } from '../player/xp';
 import { emptyProgress } from '../persistence/progress';
@@ -33,6 +33,13 @@ describe('conditional full-goal processing supplies through the shared path', ()
     expect(needs).toContainEqual({ type: 'item', name: 'Future tool', count: 1 });
     expect(needs).toContainEqual({ type: 'item', name: 'Future ingredient', count: Math.ceil(xpForLevel(2) / 10) + Math.ceil((xpForLevel(3) - xpForLevel(2)) / 20) });
   });
+  it('keeps consumed ingredients apart from reusable kit for the planner', () => {
+    const flows = processingGoalFlows([leg(1, 2)], 1, 2)!;
+    expect(flows.materials.map(m => m.name)).toEqual(['Future ingredient']);
+    expect(flows.tools.map(t => t.name)).toEqual(['Future tool']);
+    expect(processingGoalFlows([leg(1, 2)], 1, 3)).toBeNull();
+  });
+
   it('uses observed partial XP when provided, without subtracting it twice', () => {
     expect(processingGoalNeeds([leg(1, 2)], 1, 2, 73)).toContainEqual({ type: 'item', name: 'Future ingredient', count: 1 });
   });

@@ -8,13 +8,15 @@ import type { Step } from '../../../types';
 import { parseAmount } from '../../items/checklist';
 import { nameKey } from '../../items/itemKey';
 import { carryoverOf } from '../../prep/carryover';
-import { heldExact, heldOf, levelOf, questOf, type Held, type PlayerState, type QuestPresence, type WorldPoint } from '../../player/playerState';
+import { currentBankView, heldExact, heldOf, levelOf, questOf, type Held, type PlayerState, type QuestPresence, type WorldPoint } from '../../player/playerState';
 import { aggregateShopping } from '../../prep/shopping';
+import type { QuestObservation } from '../../player/questObservation';
 import { doseKind, doseNames } from '../../items/doseKind';
 import { effectiveHeal } from '../../player/foodStock';
 import { FOODS } from '../../../data/threats';
 import { toolFamilyOf, usableAt } from '../../items/toolTiers';
 import { questItemKeys } from '../../quests/questItems';
+import { combatLevel } from '../../player/xp';
 import { totalLevelOf, tradeRestriction, type SellOverride, type TradeRestriction } from '../../market/tradeRestriction';
 
 /** Coins that can be spent: the number and how much of it is certain. */
@@ -40,6 +42,8 @@ export interface FundingSnapshot {
   connected: boolean;
   level(skill: string): number | undefined;
   quest(name: string): QuestPresence;
+  /** A completed-only list cannot prove whether an unfinished quest has been started. */
+  questStarted?(name: string): boolean | null;
   questPoints: number | null;
   coins: { bag: number | null; bank: number | null };
   liquid: Liquid;
@@ -54,9 +58,9 @@ export interface FundingSnapshot {
   protections: ReadonlyMap<string, Protection>;
 }
 
-export function liquidOf(s: Pick<PlayerState, 'coins'>): Liquid {
+export function liquidOf(s: Pick<PlayerState, 'coins'> & Partial<Pick<PlayerState, 'owned'>>): Liquid {
   const bag = s.coins.bag.known ? s.coins.bag.value : null;
-  const bank = s.coins.bank.known ? s.coins.bank.value : null;
+  const bank = s.owned?.bankSavedAt == null && s.coins.bank.known ? s.coins.bank.value : null;
   if (bag === null) return { amount: bank, complete: false };
   if (bank === null) return { amount: bag, complete: false };
   return { amount: bag + bank, complete: true };
@@ -158,6 +162,8 @@ export interface SnapshotInput {
   /** The steps the preparation looks at (the current one and the next few). */
   window: readonly Step[];
   questPoints: number | null;
+  /** Already admitted by the bridge's profile/login/revision guard; no second poll or saved-route inference. */
+  questObservation?: QuestObservation | null;
   /** The game's total level, or null. */
   totalLevel?: number | null;
   ironman: boolean | null;
@@ -168,7 +174,9 @@ export interface SnapshotInput {
 }
 
 export function buildSnapshot(i: SnapshotInput): FundingSnapshot {
-  const s = i.state;
+  const s = currentBankView(i.state);
+  const observation = s.connected && s.player && i.questObservation && nameKey(i.questObservation.player) === nameKey(s.player) ? i.questObservation : null;
+  const questStates = new Map(Object.entries(observation?.states ?? {}).map(([name, state]) => [nameKey(name), state]));
   const levels: Record<string, number> = {};
   for (const [k, v] of Object.entries(s.levels)) if (v.known) levels[k] = v.value;
   const total = i.totalLevel ?? totalLevelOf(levels);
@@ -177,13 +185,18 @@ export function buildSnapshot(i: SnapshotInput): FundingSnapshot {
     members: s.mode === 'members',
     ironman: i.ironman,
     connected: s.connected,
-    level: (skill) => levelOf(s, skill),
+    level: (skill) => (skill === 'combat' ? combatLevel(levels) ?? undefined : levelOf(s, skill)),
     quest: (name) => questOf(s, name),
+    questStarted: name => {
+      if (!s.connected) return null;
+      const state = questStates.get(nameKey(name));
+      return state === 'IN_PROGRESS' || state === 'COMPLETED' || questOf(s, name) === 'DONE' ? true : state === 'NOT_STARTED' ? false : null;
+    },
     questPoints: i.questPoints,
     coins: { bag: s.coins.bag.known ? s.coins.bag.value : null, bank: s.coins.bank.known ? s.coins.bank.value : null },
     liquid: liquidOf(s),
     bankSeen: s.bankSeen,
-    bankSavedAt: i.bankSavedAt ?? null,
+    bankSavedAt: i.bankSavedAt !== undefined ? i.bankSavedAt : s.owned?.bankSavedAt ?? null,
     held: (name) => heldOf(s, name),
     bag: s.bagItems.known ? s.bagItems.value : null,
     position: i.position !== undefined ? i.position : s.position.known ? s.position.value : null,

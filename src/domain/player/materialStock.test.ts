@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allocateMaterialStock, materialTake } from './materialStock';
+import { allocateMaterialStock, consumeMaterialStock, materialTake } from './materialStock';
 import { buildPlayerState } from './playerState';
 import type { OwnedItem } from '../items/checklist';
 import { evaluatePreflight } from '../readiness/preflight';
@@ -40,6 +40,22 @@ function models(s: ReturnType<typeof state>, step = meat) {
 }
 
 describe('interchangeable physical materials', () => {
+  it('projects physical consumption through the same primary/alternative reservation and preserves the observations', () => {
+    const s = state({ 'Raw beef': { carried: 1, bank: 0 }, 'Raw chicken': { noted: 2, bank: 1 } });
+    const demands = [{ name: 'Raw beef', count: 3, anyOf: ['Raw chicken'] }, { name: 'Raw chicken', count: 1 }];
+    expect(consumeMaterialStock(s, demands)).toEqual([{ name: 'Raw beef', count: 1 }, { name: 'Raw chicken', count: 3 }]);
+    expect(consumeMaterialStock(s, [...demands, { name: 'Raw chicken', count: 1 }])).toBeNull();
+    expect(s.owned?.items.get('raw chicken')).toMatchObject({ noted: 2, bank: 1 });
+  });
+
+  it('never spends a manual mark or a fractional, negative, overflowed or unobserved piece', () => {
+    expect(consumeMaterialStock(state({}, { 'name:raw beef': 10 }), [{ name: 'Raw beef', count: 1 }])).toBeNull();
+    expect(consumeMaterialStock(state({}, {}, false), [{ name: 'Raw beef', count: 1 }])).toBeNull();
+    for (const count of [-1, 0, 1.5, Infinity, Number.MAX_SAFE_INTEGER + 1]) {
+      expect(consumeMaterialStock(state({ 'Raw beef': { carried: 5, bank: 0 } }), [{ name: 'Raw beef', count }])).toBeNull();
+    }
+  });
+
   it('13 beef plus 13 chicken is one ready bag in every consumer', () => {
     const m = models(state({ 'Raw beef': { carried: 13, bank: 0 }, 'Raw chicken': { carried: 13, bank: 0 } }));
     expect(m.readiness.requirements.find(r => r.item === 'Raw beef')?.state).toBe('OK');

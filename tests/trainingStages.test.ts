@@ -47,12 +47,19 @@ describe('shared staged training, not a starter grind to the final goal', () => 
     const advice = adviseTraining({ skill: 'crafting', target: 20, mode: 'f2p', style: 'chill', priority: 'balanced', state: state({ crafting: 1 }), methods: [starter, later] });
     expect(advice.path.map(l => [l.method.id, l.fromLevel, l.toLevel])).toEqual([['future-intro', 1, 10], ['future-next', 10, 20]]);
   });
-  it('includes the Wiki level21 barbarian stage for XP, with its actual level10 opponent', () => {
+  it('offers the Wiki level21 barbarian stage with its actual level10 opponent; the modelled faster target wins, not the bracket (S05)', () => {
     const advice = adviseTraining({ skill: 'ranged', target: 26, mode: 'f2p', style: 'efficient', priority: 'fastest', state: state({ ranged: 21 }, { Salmon: 20 }), prices: market() });
-    expect(advice.best?.method.id).toBe('ra-barbarian');
+    expect(advice.best?.method.id).toBe('ra-frog');
+    const barbarians = advice.others.find(v => v.method.id === 'ra-barbarian');
     expect(advice.actionTarget).toBeLessThanOrEqual(26);
-    expect(advice.best?.method.where).toContain('level 10');
+    expect(barbarians?.method.where).toContain('level 10');
   });
+  it('S05: Ranged 24 with Defence 44 trains on giant frogs (more XP, big bones), not the monks of a fixed bracket', () => {
+    const advice = adviseTraining({ skill: 'ranged', target: 40, mode: 'f2p', style: 'chill', priority: 'balanced', state: state({ ranged: 24, attack: 40, strength: 44, defence: 44, hitpoints: 40 }, { Salmon: 20 }), prices: market() });
+    expect(advice.best?.method.id).toBe('ra-frog');
+    expect(advice.others.map(v => v.method.id)).toContain('ra-monk');
+  });
+
   it('does not silently assume another skill is trained in a future forecast', () => {
     const base = trainingMethods.find(m => m.id === 'wc-tree')!;
     const early = { ...base, id: 'future-safe', skills: ['crafting'], from: 1, to: 99, needs: [], xph: [1000, 1000] as [number, number] };

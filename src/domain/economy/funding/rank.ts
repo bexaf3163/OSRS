@@ -1,15 +1,13 @@
 // Choosing among evaluated methods. Two stages, as the evaluator already did the first:
 //   eligibility - done: only methods the account can do now, whose first batch it can afford, whose product it may sell, are candidates;
-//   comparison  - here: the conservative time to the target (the slow case), with a penalty for low confidence so that a shaky number cannot win on luck,
+//   comparison  - here: expected time to the target; confidence is a tie-break, not another multiplier on a pessimistic time range,
 //                 then the money at risk, then the synergy with what the player is already doing, then how much attention it needs.
-// A method that needs the player's full attention (high intensity) is held back unless the player asked for it.
+// A method that needs the player's full attention (high intensity) or risks the loot (the Wilderness) is held back unless the player asked for it.
 // The choice is steady: the plan already running stays unless another is clearly better or the running one has become unsuitable.
 
 import type { MethodEvaluation } from './evaluate';
-import { CONFIDENCE_RANK, type Confidence } from '../../market/quotes';
+import { CONFIDENCE_RANK } from '../../market/quotes';
 
-/** The slow time is multiplied by this for the confidence the number deserves. */
-export const CONFIDENCE_PENALTY: Record<Confidence, number> = { HIGH: 1, MEDIUM: 1.15, LOW: 1.5 };
 /** The running plan is kept while its score is within this factor of the best. */
 export const KEEP_MARGIN = 1.25;
 
@@ -32,7 +30,7 @@ export interface Ranking {
   kept: boolean;
 }
 
-export const score = (e: MethodEvaluation): number => (e.minutes ? e.minutes.slow * CONFIDENCE_PENALTY[e.confidence] : Infinity);
+export const score = (e: MethodEvaluation): number => (e.minutes?.typical ?? Infinity);
 
 const INTENSITY: Record<MethodEvaluation['method']['intensity'], number> = { low: 0, moderate: 1, high: 2 };
 
@@ -40,7 +38,7 @@ export function rankMethods(evals: readonly MethodEvaluation[], prefs: RankPrefs
   const eligible = evals.filter((e) => e.eligible);
   const cannotReach = eligible.filter((e) => !e.minutes).map((e) => ({ evaluation: e, reason: e.minutesReason ?? 'It does not reach the target' }));
   const withTime = eligible.filter((e) => e.minutes);
-  const needsAttention = withTime.filter((e) => e.method.intensity === 'high' && !prefs.allowHighEffort && e.method.id !== prefs.activeId);
+  const needsAttention = withTime.filter((e) => (e.method.intensity === 'high' || e.method.risk === 'high') && !prefs.allowHighEffort && e.method.id !== prefs.activeId);
   const list = withTime
     .filter((e) => !needsAttention.includes(e))
     .sort((a, b) =>

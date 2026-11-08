@@ -71,6 +71,7 @@ export interface AssessInput {
   methods?: readonly FundingMethod[];
   activeId?: string | null;
   allowHighEffort?: boolean;
+  committedWindow?: boolean;
 }
 
 const gp = (n: number) => Math.round(n).toLocaleString('en-US');
@@ -95,14 +96,14 @@ function earnOption(e: MethodEvaluation, gap: number): FundingOption {
 
 export function assess(i: AssessInput): FundingAssessment {
   const { need, snap, prices } = i;
-  const budget = buildBudget({ snap, need, recs: i.recs, prices, bankValue: i.bankValue });
-  const required = need.minimum.cost + need.fees.now;
+  const budget = buildBudget({ snap, need, recs: i.recs, prices, bankValue: i.bankValue, committedWindow: i.committedWindow });
+  const required = need.minimum.cost + budget.reserve;
   const gap = gapFor(required, budget.liquid);
   const base: FundingAssessment = {
     stepId: need.stepId, state: 'COVERED', required, gap, need, budget, recommendation: null, alternatives: [], needsAttention: [], notOffered: [], headline: '',
   };
 
-  if (need.minimum.cost === 0 && need.fees.now === 0 && need.minimum.lines.length === 0) {
+  if (need.minimum.cost === 0 && budget.reserve === 0 && need.minimum.lines.length === 0) {
     // Nothing is known to be missing. If the reason is that nothing could be checked, say that: unknown is not covered.
     return (need.minimum.unknown ?? need.unknown) > 0
       ? { ...base, state: 'UNKNOWN', headline: snap.connected ? 'Open your bank to check your supplies.' : 'Connect RuneLite to check your supplies.' }
@@ -149,8 +150,8 @@ export function assess(i: AssessInput): FundingAssessment {
     });
   }
 
-  // 4 and 5. Gather or earn, judged against what is still short after the spare items.
-  const earnTarget = Math.max(1, gap - surplus.net);
+  // These are alternative plans, not a composed sell-then-earn itinerary. Unsold surplus cannot reduce their cash target.
+  const earnTarget = gap;
   const methods = i.methods ?? METHODS;
   const spendable = budget.spendable;
   const earnEvals = methods.map((m) => evaluate(m, { ...i.base, cash: spendable, mode: 'earn', target: earnTarget }));

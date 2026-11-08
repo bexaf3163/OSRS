@@ -33,7 +33,15 @@ export interface FightEstimate {
   assumed: string[];
   /** Its other attacks from the wiki (a special, dragonfire): said, not modelled. */
   extra: string[];
+  /** Ordinary damage rolls cannot prove readiness when a required mechanic is outside the model. */
+  unmodelled: readonly string[];
 }
+
+// Capability boundaries, not another combat calculator. Source-backed mechanics remain unknown until modelled.
+const UNMODELLED: Readonly<Record<string, string>> = {
+  'Count Draynor': 'regeneration, recurring garlic effects and the hammer/stake finishing condition (https://oldschool.runescape.wiki/w/Count_Draynor)',
+  Delrith: 'Silverlight damage, nearby wizards and the personal banishment incantation (https://oldschool.runescape.wiki/w/Delrith)',
+};
 
 export interface FightInput {
   foe: CombatFoe;
@@ -98,9 +106,13 @@ export function estimateFight(inp: FightInput): FightEstimate | null {
   const threat = Object.values(THREATS).find((t) => t.page === foe.name);
   const extra = (threat?.hits ?? []).filter((h) => h.n > foe.maxHit).map((h) => `${h.n}${h.label ? ` (${h.label})` : ''}`);
   if (extra.length) assumed.push(`its other attacks (${extra.join(', ')}) are not counted: the food is a lower bound`);
+  const unmodelled = [...(UNMODELLED[foe.name] ? [UNMODELLED[foe.name]] : []), ...extra.map(hit => `additional attack: ${hit}`),
+    ...(inp.unknownPieces ? ['worn equipment without verified combat bonuses'] : []),
+    ...(foe.attackStyle === 'magic' && inp.levels.magic === undefined ? ['unread Magic level for incoming magic defence'] : []),
+    ...(foe.maxHit > 0 && !['stab', 'slash', 'crush', 'magic'].includes(foe.attackStyle) ? [`unsupported incoming ${foe.attackStyle} attack model`] : [])];
   return {
     foe, style: best.style, seconds, damage, food, foodName: inp.food.name, hitChance: best.chance, maxHit: best.max, foeHitChance: best.foeC,
-    assumed: [...new Set(assumed)], extra,
+    assumed: [...new Set(assumed)], extra, unmodelled,
   };
 }
 
@@ -160,5 +172,5 @@ const sec = (s: number) => (s < 90 ? `${Math.round(s)} s` : `${Math.round(s / 60
 export function fightLine(e: FightEstimate): string {
   const dmg = `you take about ${Math.round(e.damage.mid)} damage (up to ${Math.ceil(e.damage.high)})`;
   const food = e.food.high <= 0 ? 'your health covers it; carry a few pieces anyway' : `bring ${e.food.high} ${e.foodName} or more`;
-  return `${foeLabel(e.foe)}: about ${sec(e.seconds.mid)} on ${STYLE_WORD[e.style]}; ${dmg}; ${food}.`;
+  return `${foeLabel(e.foe)}: about ${sec(e.seconds.mid)} on ${STYLE_WORD[e.style]}; ${dmg}; ${food}.${e.unmodelled.length ? ' Partial estimate: some combat facts or mechanics are not included.' : ''}`;
 }

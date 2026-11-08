@@ -3,8 +3,8 @@ import { xpForLevel } from '../player/xp';
 import { validConsumption, namesOf, mergeGoalNeeds, type Item } from '../items/consumption';
 import type { MethodNeed, PathLeg } from './trainingRouter';
 
-/** Conditional expected ingredients plus reusable kit, or null for incomplete/unsupported forecasts. */
-export function processingGoalNeeds(path: readonly PathLeg[], level: number, target: number, xp = xpForLevel(level)): MethodNeed[] | null {
+/** The whole goal's expected ingredients (consumed) and reusable kit (kept), or null for incomplete/unsupported forecasts. */
+export function processingGoalFlows(path: readonly PathLeg[], level: number, target: number, xp = xpForLevel(level)): { materials: Item[]; tools: Item[] } | null {
   if (!path.length || !Number.isInteger(level) || !Number.isInteger(target) || !Number.isFinite(xp) || level < 1 || target > 99 || level >= target || xp < xpForLevel(level) || xp >= xpForLevel(level + 1)) return null;
   const materials: Item[] = [], tools: Item[] = [];
   let end = level;
@@ -24,5 +24,11 @@ export function processingGoalNeeds(path: readonly PathLeg[], level: number, tar
     }
     end = leg.toLevel;
   }
-  return end === target ? mergeGoalNeeds(materials, tools) : null;
+  return end === target ? { materials, tools } : null;
+}
+
+/** Conditional expected ingredients plus reusable kit, or null for incomplete/unsupported forecasts. */
+export function processingGoalNeeds(path: readonly PathLeg[], level: number, target: number, xp = xpForLevel(level)): MethodNeed[] | null {
+  const flows = processingGoalFlows(path, level, target, xp);
+  return flows ? mergeGoalNeeds(flows.materials, flows.tools) : null;
 }

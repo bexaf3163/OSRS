@@ -23,7 +23,7 @@ function recommendation(status: 'live' | 'stale' = 'live', available = true) {
 describe('shared tool acquisition quotes', () => {
   it('routes to the exchange when its quoted price supplies the affordability calculation', () => {
     const rec = recommendation();
-    expect(rec).toMatchObject({ approxCost: 150, shopPrice: 200, gePrice: 150, priceLabel: 'GE estimate' });
+    expect(rec).toMatchObject({ approxCost: 165, shopPrice: 200, gePrice: 165, priceLabel: 'GE estimate' });
     expect(rec.shop).toBeUndefined();
     expect(upgradeNav(rec, step.id)).toMatchObject({ label: 'Grand Exchange', itemId: 1353 });
   });
@@ -40,7 +40,7 @@ describe('shared tool acquisition quotes', () => {
     expect(cached).not.toBe(fresh);
     const line = cached.optimizations.find(l => l.name === 'Steel axe')!;
     expect(line.action?.label).toContain('Cached GE estimate');
-    expect(line.marketPrice).toMatchObject({ state: 'cached', unit: 150 });
+    expect(line.marketPrice).toMatchObject({ state: 'cached', unit: 165 });
     expect(line.action?.nav?.label).toBe('Grand Exchange');
   });
 });

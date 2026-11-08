@@ -20,7 +20,7 @@ async function canonicalPlanScenario(browser: Browser, width = 1000) {
       await page.getByRole('tab', { name: 'Train', exact: true }).click();
       await page.getByRole('button', { name: 'Follow training plan', exact: true }).click();
       await waitFor(page, '.tracked-skill', 5000);
-      const tracked = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:skill-track') ?? 'null') as { skill?: string; target?: number } | null);
+      const tracked = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:planning-intent') ?? '{}').intent?.training as { skill?: string; target?: number } | undefined);
       expect(tracked?.skill === 'woodcutting' && tracked.target === 36, 'skill plan: followed skill and actual checkpoint are preserved');
       await page.getByRole('button', { name: /Back to the quest route/ }).click();
       expect(await page.locator('.tracked-skill').count() === 0, 'skill plan: stopping returns to the quest route');

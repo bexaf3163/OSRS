@@ -7,7 +7,6 @@
 import { useEffect, useRef } from 'react';
 import type { Step } from '../../../types';
 import { useStore } from '../../../state/store';
-import { useQuestPoints } from '../../../state/hooks/useQuestPoints';
 import { useBridge } from '../../../state/bridge';
 import type { ReadinessAction } from '../../../domain/readiness/readiness';
 import { navKeyOf, reconcile, rearmReadyDetours, staleArrows, startDetour, type PrepTask } from '../../../domain/prep/prepRoute';
@@ -15,8 +14,7 @@ import { decideAuto, type QueueTask } from '../../../domain/prep/prepQueue';
 import { declined, usePrep } from '../../../state/hooks/usePrep';
 import { setFeatures, useFeatures } from '../../../state/hooks/useFeatures';
 import { styleOf } from '../../../domain/persistence/playStyle';
-import { isClosed, nextStep } from '../../../domain/quests/next-step';
-import { useReadinessEngine, useTrackedTraining } from '../../../state/readinessContext';
+import { useActiveActivity, useReadinessEngine, useTrackedTraining } from '../../../state/readinessContext';
 import { NavigateButton } from '../../../ui/NavigateButton';
 import { useTracked } from '../../../state/hooks/useTracked';
 import { useTrainingFunding } from '../../../state/trainingSessionContext';
@@ -195,9 +193,8 @@ export function PrepWatcher() {
 export function PrepAuto() {
   const features = useFeatures();
   const profile = styleOf(features);
-  const { steps, progress, notify } = useStore();
-  const qp = useQuestPoints();
-  const { activeStepId, navTarget, navigate, releaseNav, state: link, userClearedAt } = useBridge();
+  const { notify } = useStore();
+  const { navTarget, navigate, releaseNav, state: link, userClearedAt } = useBridge();
   const engine = useReadinessEngine();
   const { prep, set } = usePrep();
   const recent = useRef(new Map<string, number>());
@@ -209,7 +206,9 @@ export function PrepAuto() {
   const training = useTrackedTraining();
   const funding = useTrainingFunding();
 
-  const focus = training ? (training.complete ? undefined : training.step) : (activeStepId ? steps.find((s) => s.id === activeStepId && !isClosed(progress, s.id)) : undefined) ?? nextStep(steps, progress, qp, engine.dependencies);
+  // Training, the step the game shows, else the committed Decision's step (useActiveActivity); finished training still waits.
+  const activity = useActiveActivity();
+  const focus = training?.complete ? undefined : activity.step ?? undefined;
 
   useEffect(() => {
     if (!focus) return;

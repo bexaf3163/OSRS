@@ -314,6 +314,8 @@ const COST_RANK: Record<MethodCost, number> = { profit: 0, free: 0, cost: 1 };
 const STATUS_RANK: Record<MethodStatus, number> = { READY: 0, PREP: 1, LOCKED: 2 };
 
 /** For ordering we take the lower speed bound: the wiki's upper one often needs special tricks (ticks, inventory). */
+/** How much faster a new method must be before a running one is dropped; the same margin as the planner (decide). */
+const SWITCH_MARGIN = 0.12;
 const rateLow = (m: TrainingMethod): number | null => (m.xph ? m.xph[0] : null);
 
 /** How much of its listed speed a method keeps in practice: attention it needs, materials it costs and risk it carries (2.69, "balanced"). */
@@ -433,7 +435,9 @@ const availableAt = (m: TrainingMethod, level: number, mode: GameMode): boolean 
   m.kind === 'method' && m.from <= level && (mode === 'members' || !m.members);
 
 const recommendedAt = (m: TrainingMethod, level: number, mode: GameMode): boolean =>
-  availableAt(m, level, mode) && (m.suggestedFrom ?? m.from) <= level && (!m.introductory || m.to === null || level < m.to);
+  // The authored bracket (suggestedFrom) is only a tie-break in compare(); hiding a valid target below it forced monks over
+  // giant frogs at Ranged 24 (acceptance S05).
+  availableAt(m, level, mode) && (!m.introductory || m.to === null || level < m.to);
 
 export interface PathLeg {
   method: TrainingMethod;
@@ -820,7 +824,13 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const coinRate = coinsPerMinute(input.prices);
   const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level, coinRate);
   const views = methodsFor(skill, methods).filter((m) => recommendedAt(m, level, mode) || (m.id === input0.followed && availableAt(m, level, mode))).map((m) => viewMethod(m, state, input.prices)).sort(cmp);
-  const pickV = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
+  const top = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
+  // S04: the method the game already follows stays the pick while it is ready and the new top is not materially faster
+  // (the planner's switch threshold), so a level-up never flips the plan for a marginal gain.
+  const running = input0.followed ? views.find((v) => v.method.id === input0.followed && v.status === 'READY') : undefined;
+  const keep = running && top && running !== top && (rateLow(running.method) ?? 0) >= (rateLow(top.method) ?? Infinity) * (1 - SWITCH_MARGIN);
+  const pickV = keep ? running : top;
+  const switched = running && top && !keep && running !== top ? ` Switched from ${running.method.name}: it is materially slower now.` : '';
   const said = (v: MethodView): MethodView => ({ ...v, reason: reasonFor(v, priority, level) });
   const followedV = input0.followed ? views.find((v) => v.method.id === input0.followed && v !== pickV) ?? null : null;
   const others = views.filter((v) => v !== pickV && v !== followedV).slice(0, 3).map(said);
@@ -859,7 +869,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
     ...(cash !== null && cash < found.price ? { short: Math.round(cash) }
       : afterKit !== null && afterKit < found.price ? { afterKit: Math.floor(afterKit) } : {}),
   } : null;
-  const reason = best ? reasonFor(best, priority, level, upgrade) : 'There is no method in the list for this level and mode: see the skill training plan.';
+  const reason = best ? reasonFor(best, priority, level, upgrade) + switched : 'There is no method in the list for this level and mode: see the skill training plan.';
   return {
     ...empty, best: best ? { ...best, reason } : null, others, quests, path, xpLeft, actionsLeft, actionTarget, time, upgrade, reason,
     goalNeeds: (processingGoalNeeds(path, level, target, xpNow) ?? (skill === 'ranged' ? rangedGoalNeeds(path, state, xpNow, target, input.prices) : null)) ?? undefined,

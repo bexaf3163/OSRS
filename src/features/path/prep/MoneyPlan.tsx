@@ -1,102 +1,45 @@
-// "💰 How to make up the money": money-making methods from the wiki for the player's levels, on steps where money is needed (moneyGoal, magicPlan).
-// The revenue is the wiki's estimate at exchange prices on the snapshot date and with good play: lower for a beginner. If the levels are unknown, we mark "?".
-
+// "How to make up the money" on steps that need coins (moneyGoal, magicPlan): the funding catalogue, evaluator and ranking of the
+// Money page, in short. The method it recommends, the next ones the player can do now, and those a few levels away with what to
+// train. Details and Start live on the Money page.
+import { useMemo } from 'react';
 import type { Step } from '../../../types';
-import { useBridge } from '../../../state/bridge';
-import { useStore } from '../../../state/store';
-import { nameKey } from '../../../domain/items/itemKey';
 import { formatGp } from '../../../domain/prep/shopping';
-import { wealthOf } from '../../../domain/economy/wealth';
-import { adviseMoney, hoursToCover, reqText, type MethodView } from '../../../domain/economy/moneyAdvisor';
-import { RESTRICTED_METHOD_IDS } from '../../../domain/market/tradeRestriction';
-import { useTradeRestriction } from '../../../state/hooks/useTradeRestriction';
+import { browse, DEFAULT_FILTERS, unlockOf, type BrowseRow } from '../../../domain/economy/funding/browse';
+import { hrefTo } from '../../../domain/pages/pages';
+import { useMoneyScreen } from '../../../state/fundingContext';
 
-const SHOWN = 5;
-const INVEST_SHOWN = 3;
-const SOON_SHOWN = 3;
-
-const hoursText = (h: number): string => (h < 1 ? `≈ ${Math.max(5, Math.round(h * 60 / 5) * 5)} min` : `≈ ${h < 10 ? h.toFixed(1) : Math.round(h)} h`);
+const SHOWN = 3;
 
 export function MoneyPlan({ step }: { step: Step }) {
-  const { progress, steps } = useStore();
-  const { stats, gear, questsDone: gameQuests } = useBridge();
-  const trade = useTradeRestriction();
-  if (!step.moneyGoal && !step.magicPlan) return null;
-
-  const levels = { ...progress.levels, ...(stats ?? {}) };
-  const done = new Set<string>([
-    ...steps.filter((s) => s.type === 'quest' && progress.steps[s.id] === 'done').map((s) => nameKey(s.title)),
-    ...(gameQuests ?? []).map(nameKey),
-  ]);
-  const w = wealthOf(gear);
-  const cash = w ? (w.cash.total ?? w.cash.bag ?? null) : null;
-  const advice = adviseMoney(levels, steps, done, undefined, cash);
-  const missing = step.moneyGoal && cash !== null ? Math.max(0, step.moneyGoal - cash) : null;
-  const known = Object.keys(levels).length > 0;
-  // A restricted account cannot sell what these methods produce (cowhides, ore, logs...): they are shown apart, not as the way to the money.
-  const stuck = (v: MethodView) => trade.state === 'RESTRICTED' && RESTRICTED_METHOD_IDS.includes(v.method.id);
-  const blocked = [...advice.free, ...advice.invest].filter(stuck);
-  const top = advice.free.filter((v) => !stuck(v)).slice(0, SHOWN);
-  const invest = advice.invest.filter((v) => !stuck(v)).slice(0, INVEST_SHOWN);
-  const soon = advice.soon.slice(0, SOON_SHOWN);
-
-  const row = (v: MethodView, soonRow = false) => {
-    const hours = missing ? hoursToCover(missing, v.method.profit) : null;
-    return (
-      <li key={v.method.id} className="money-method">
-        <p>
-          <a href={v.method.url} target="_blank" rel="noopener noreferrer"><strong>{v.method.title}</strong></a>
-          <span className="muted small"> · ≈ {formatGp(v.method.profit)} gp/h · {intensityLabel(v.method.intensity)}</span>
-          {hours !== null && !soonRow && <span className="small"> · {formatGp(missing!)} missing — {hoursText(hours)}</span>}
-        </p>
-        <p className="muted small">
-          {soonRow
-            ? <>Missing: {v.missing.map((m) => `${reqText(m.req)} (you have ${m.have})`).join(', ')}. </>
-            : v.unknown.length ? <>Needs: {v.unknown.map((u) => reqText(u.req)).join(', ')} — the level is unknown (?). </> : null}
-          {!soonRow && v.method.skills.some((s) => s.required) && !v.unknown.length ? <>Needs: {v.method.skills.filter((s) => s.required).map((s) => reqText(s)).join(', ')} — you have it. </> : null}
-          {v.advice.length > 0 && <>Recommended: {v.advice.map((a) => `${reqText(a.req)} (you have ${a.have})`).join(', ')}. </>}
-          {v.method.skillsNote && <>Per the wiki: {v.method.skillsNote}. </>}
-          {v.method.quests && <>Quests: {v.method.quests}. </>}
-          {v.cost === 'invest' && <>Investment: {v.method.capital ? `from ${formatGp(v.method.capital)} gp` : ''}{v.method.capital && v.method.inputs?.length ? '; ' : ''}{v.method.inputs?.length ? `you buy ${v.method.inputs.slice(0, 3).join(', ')}` : ''}. </>}
-        </p>
-      </li>
-    );
-  };
-
-  return (
-    <details className="step-section money-plan" open={missing !== null && missing > 0}>
-      <summary><strong>💰 How to make up the money</strong>{missing !== null && missing > 0 && <span className="muted small"> — {formatGp(missing)} gp missing</span>}</summary>
-      {!known && <p className="muted small">The levels are unknown: start RuneLite with the bridge or enter them on the "Skills" page — then I will hide what is not yet available to you.</p>}
-      {top.length === 0
-        ? <p className="small">No methods without investment were found for your levels — check the levels on the "Skills" page.</p>
-        : <ul className="money-list">{top.map((v) => row(v))}</ul>}
-      {invest.length > 0 && (
-        <>
-          <h5 className="subhead">If you have something to invest{cash !== null ? ` (you have ${formatGp(cash)} gp)` : ''}</h5>
-          <ul className="money-list">{invest.map((v) => row(v))}</ul>
-        </>
-      )}
-      {blocked.length > 0 && (
-        <>
-          <h5 className="subhead">Not yet: the account cannot sell these items</h5>
-          <p className="muted small">{blocked.map((v) => v.method.title).join('; ')}. They work after 20 hours of play, 10 quest points and total level 100.</p>
-        </>
-      )}
-      {soon.length > 0 && (
-        <>
-          <h5 className="subhead">Opening soon</h5>
-          <ul className="money-list">{soon.map((v) => row(v, true))}</ul>
-        </>
-      )}
-      <p className="muted small">
-        The revenue is an OSRS Wiki estimate with good play: lower for a beginner, prices change. Some methods
-        need an investment or a stock of items — read the method's article. Here is only what the game and the wiki confirm for the free version.
-      </p>
-    </details>
-  );
+  return step.moneyGoal || step.magicPlan ? <MoneyPlanBody step={step} /> : null;
 }
 
-function intensityLabel(s: string): string {
-  const k = s.toLowerCase();
-  return k === 'low' ? 'relaxed' : k === 'moderate' ? 'moderate load' : k === 'high' ? 'many clicks' : s;
+function MoneyPlanBody({ step }: { step: Step }) {
+  const m = useMoneyScreen(step);
+  const result = useMemo(() => browse(m.evals, m.ranking, DEFAULT_FILTERS, 'recommended'), [m.evals, m.ranking]);
+  const missing = m.shortfall?.coins ?? null;
+  const now = result.rows.slice(0, SHOWN);
+  const soon = result.soon.slice(0, SHOWN);
+  const row = (r: BrowseRow, hint: string) => (
+    <li key={r.evaluation.method.id} className="money-method">
+      <p><strong>{r.evaluation.method.title}</strong> <span className="muted small">· {r.net} · {r.capital}</span></p>
+      <p className="small">{hint}</p>
+    </li>
+  );
+  return (
+    <details className="step-section money-plan" open={missing !== null}>
+      <summary><strong>How to make up the money</strong>{missing !== null && <span className="muted small"> — {formatGp(missing)} gp missing</span>}</summary>
+      {!m.snap && <p className="muted small">Connect RuneLite so the methods match your levels; until then nothing is confirmed.</p>}
+      {now.length > 0
+        ? <ul className="money-list">{now.map((r) => row(r, r.evaluation === result.recommended ? 'Recommended: the quickest way for you.' : r.badge.text))}</ul>
+        : <p className="small">Nothing you can do now was found.</p>}
+      {soon.length > 0 && (
+        <>
+          <h5 className="subhead">Opens with a few more levels</h5>
+          <ul className="money-list">{soon.map((r) => row(r, `${unlockOf(r.evaluation)!.text} opens it`))}</ul>
+        </>
+      )}
+      <p className="small"><a href={hrefTo.money()}>All {m.evals.length} methods, with details and Start, on the Money page</a></p>
+    </details>
+  );
 }

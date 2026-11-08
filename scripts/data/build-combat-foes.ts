@@ -25,7 +25,8 @@ const PAGES = [...new Set(['Minotaur', 'Hill Giant', 'Giant frog', 'Cow', 'Flesh
 function fields(text: string): Map<string, string> {
   const box = /\{\{Infobox Monster([\s\S]*?)\n\}\}/.exec(text)?.[1] ?? '';
   const out = new Map<string, string>();
-  for (const m of box.matchAll(/^\|\s*([a-z0-9 ]+?)\s*=\s*(.*)$/gim)) out.set(m[1].toLowerCase(), m[2].trim());
+  // Spaces only, never a line break: an empty field ("|xpbonus = ") must not take the next line as its value.
+  for (const m of box.matchAll(/^\|[ \t]*([a-z0-9 ]+?)[ \t]*=[ \t]*(.*)$/gim)) out.set(m[1].toLowerCase(), m[2].trim());
   return out;
 }
 

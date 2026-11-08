@@ -10,7 +10,7 @@ import { fakeSnap } from './helpers';
 const T0 = 1_792_000_000_000;
 
 function running(): { plan: FundingPlanState; snap: ReturnType<typeof fakeSnap> } {
-  const s = scenario(market(), { bagCoins: 400, bankCoins: 0 });
+  const s = scenario(market(), { bagCoins: 400, bankCoins: 0, methods: [methodById('cows-cowhide')!] });
   const plan = startPlan(s.assessment, s.assessment.recommendation!, s.snap, methodById('cows-cowhide'), T0)!;
   return { plan, snap: fakeSnap({ character: 'Tester', position: { x: 3253, y: 3278, plane: 0 }, bag: [{ name: 'Cowhide', count: 12 }], bagCoins: 400, bankCoins: 0 }) };
 }

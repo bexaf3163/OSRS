@@ -107,6 +107,23 @@ export function buildPlayerState(i: PlayerStateInput): PlayerState {
   return state;
 }
 
+const currentBankViews = new WeakMap<PlayerState, PlayerState>();
+/** Current calculations may use the bag/worn observations, but a remembered bank is not ownership or spendable-cash proof. */
+export function currentBankView(observed: PlayerState): PlayerState {
+  if (observed.owned?.bankSavedAt == null) return observed;
+  const cached = currentBankViews.get(observed);
+  if (cached) return cached;
+  const items = new Map([...observed.owned.items].map(([key, item]) => {
+    const { bank: _bank, ...current } = item;
+    return [key, current] as const;
+  }));
+  const current = { ...observed, bankSeen: false, coins: { ...observed.coins, bank: unknown },
+    owned: { ...observed.owned, bankSeen: false, items }, fingerprint: `${observed.fingerprint}:bank-unread` };
+  currentBankViews.set(observed, current);
+  currentBankViews.set(current, current);
+  return current;
+}
+
 function fingerprintOf(s: PlayerState): string {
   const lv = Object.entries(s.levels).map(([k, v]) => `${k}${v.known ? v.value : '?'}`).sort().join(',');
   const items = s.owned ? [...s.owned.items.entries()].map(([k, o]) => `${k}:${o.carried}/${o.noted}/${o.bank ?? '?'}/${o.legacyToolCount ? 'legacy' : 'exact'}`).sort().join(';') : '-';
@@ -116,7 +133,7 @@ function fingerprintOf(s: PlayerState): string {
   const eqCounts = s.equipmentItems?.map(i => `${nameKey(i.name)}:${i.count ?? '?'}`).sort().join(',') ?? '?';
   const man = Object.entries(s.manual).map(([k, v]) => `${k}=${v}`).sort().join(',');
   const pos = s.position.known ? `${s.position.value.x},${s.position.value.y},${s.position.value.plane}` : '?';
-  return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, JSON.stringify(s.player), s.equipmentKnown ? 1 : 0, pos, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, eqCounts, man, items].join('|');
+  return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, s.owned?.bankSavedAt ?? '-', JSON.stringify(s.player), s.equipmentKnown ? 1 : 0, pos, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, eqCounts, man, items].join('|');
 }
 
 /** The skill's level; undefined means unknown. */
@@ -220,10 +237,22 @@ export function unusableTools(s: Pick<PlayerState, 'owned' | 'equipment' | 'manu
   return out;
 }
 
+// Worn counts by item key, built once per worn list: the training advice asks for them ~100,000 times per update.
+const wornByKey = new WeakMap<object, Map<string, { count: number; known: boolean }>>();
+function wornCount(s: Pick<PlayerState, 'equipment' | 'equipmentItems'>, nameEn: string) {
+  const owner = s.equipmentItems === undefined ? s.equipment : s.equipmentItems;
+  const key = nameKey(nameEn);
+  let byKey = owner ? wornByKey.get(owner) : undefined;
+  if (owner && !byKey) wornByKey.set(owner, byKey = new Map());
+  let hit = byKey?.get(key);
+  if (!hit) { hit = countWorn(wornItemsOf(s), n => nameKey(n) === key); byKey?.set(key, hit); }
+  return hit;
+}
+
 /** Physical named stock, without generic tool substitution. Allocation must not spend one Rune pickaxe through several tier names. */
 export function heldExact(s: Pick<PlayerState, 'owned' | 'equipment' | 'equipmentItems' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {
   const o = s.owned?.items.get(nameKey(nameEn));
-  const equipped = countWorn(wornItemsOf(s), n => nameKey(n) === nameKey(nameEn)).count;
+  const equipped = wornCount(s, nameEn).count;
   const manual = manualKey ? s.manual[manualKey] : undefined;
   // A global bank observation does not prove every tracked row's quantity. A new/unreported row remains unknown.
   if (o && s.bankSeen && o.bank !== undefined) {

@@ -13,8 +13,6 @@
 import type { Progress, Step, WikiItemDetail } from '../../types';
 import { itemById, recipesJson } from '../../data';
 import { foodCarry, type FoodCarry, type FoodHolding } from '../player/foodStock';
-import { THREATS } from '../../data/threats';
-import { stepFightNames } from '../combat/fightEstimate';
 import { npcSpot, nearestBank } from '../travel/stepPlaces';
 import type { NavTargetPayload, QuestInstruction } from '../../services/runeliteBridge';
 import { upgradeNav, type UpgradeRecommendation } from '../training/gearUpgradeRouter';
@@ -25,7 +23,13 @@ import { countWorn } from '../items/equipmentCount';
 import { carryOf, displayName, doseKind, shortText, takeFromBank } from '../items/doses';
 import { heldUnits } from '../player/heldUnits';
 import type { StepReadiness } from '../readiness/readiness';
-import { planSources, type SourceOption } from './sourceRouter';
+import { planSources } from './sourceRouter';
+import type { SourceOption } from './sourceRouter';
+import { sourceAction } from './acquisitionAction';
+import { safetyBlockers, safetyRulesOf } from './safety';
+import type { StepSafety } from './safety';
+export { SAFETY_RULES, safetyBlockers, safetyRulesOf } from './safety';
+export type { StepSafety } from './safety';
 import { tripWindow, type OneTripPlan } from './oneTrip';
 import { preflightItems } from './stepItems';
 import { nameKey } from '../items/itemKey';
@@ -36,7 +40,7 @@ import { recoverySteps, type Recovery, type RecoveryStep } from '../travel/recov
 import { loadoutNeed, loadoutPhase } from '../quests/loadoutPhase';
 import type { PriceView } from '../market/quotes';
 import { itemPrice, marketItemPrice, type ItemPrice } from '../market/itemPrice';
-import { purchaseCost, purchaseFees, type PurchaseFee } from '../items/purchaseCost';
+import { purchaseFees, type PurchaseFee } from '../items/purchaseCost';
 import { materialTake, type MaterialTake } from '../player/materialStock';
 import { prepSatisfied } from '../quests/stageScope';
 import { hrefTo } from '../pages/pages';
@@ -53,6 +57,8 @@ export type Supply = 'ENOUGH' | 'LOW' | 'CRITICAL';
 export type PrepActionKind = 'TAKE' | 'BUY' | 'EARN' | 'GATHER' | 'CONNECT' | 'UPGRADE';
 
 export interface PrepAction {
+  /** Typed source evidence; labels never establish drop/recipe eligibility. Local only, not a bridge field. */
+  acquisition?: Readonly<SourceOption>;
   purchase?: { source: 'shop' | 'ge'; fee?: PurchaseFee };
   kind: PrepActionKind;
   label: string;
@@ -237,71 +243,7 @@ function bankAction(step: Step, name: string, n: number, doses = false, unnote =
   };
 }
 
-function sourceAction(src: SourceOption | null, name: string, toGet: number, coinsTotal: number | null, stepId: string): PrepAction | undefined {
-  if (!src) return { kind: 'BUY', label: 'Buy at the exchange or in a shop', href: hrefTo.shopping() };
-  const nav = src.point ? { label: `${src.point.label}: ${name}`, x: src.point.x, y: src.point.y, plane: src.point.plane, itemName: name, stepId } : undefined;
-  if (src.kind === 'free') return { kind: 'GATHER', label: src.label, ...(nav ? { nav } : {}) };
-  if (src.kind === 'drop') return { kind: 'GATHER', label: src.label };
-  if (src.kind === 'bag' || src.kind === 'bank') return undefined;
-  const total = purchaseCost(src, toGet);
-  const purchase = src.kind === 'shop' || src.kind === 'ge' ? { source: src.kind, ...(src.fee ? { fee: src.fee } : {}) } : undefined;
-  // Not enough money: "buy" would be an empty piece of advice, so earn first.
-  if (total !== null && coinsTotal !== null && coinsTotal < total) {
-    return { kind: 'EARN', label: `Short of ${gp(total - coinsTotal)} gp for ${name}: earn it first`, ...(src.price !== undefined ? { price: src.price } : {}), purchase, href: hrefTo.shopping() };
-  }
-  return {
-    kind: 'BUY',
-    label: `Buy: ${src.label}${src.price ? `, ${gp(src.price)} gp` : ''}${toGet > 1 && src.price ? ` each` : ''}${src.fee ? ` + ${gp(src.fee.coins)} gp ${src.fee.label}` : ''}`,
-    purchase,
-    ...(src.price !== undefined ? { price: src.price } : {}),
-    ...(nav ? { nav } : {}),
-    ...(nav ? {} : { href: hrefTo.shopping() }),
-  };
-}
 
-/**
- * An item no fight of a certain kind may start without: not a level or a quest, but a death when missing. A rule is keyed by the hazard, as the wiki
- * labels the opponent's attack (threats.json, build-threats), never by a step: every step whose fight has that attack gets it, a new one included.
- */
-interface SafetyRule { hazard: RegExp; names: string[]; label: string; detail: (foe: string, hit: number) => string }
-export const SAFETY_RULES: readonly SafetyRule[] = [{
-  hazard: /dragonfire/i,
-  names: ['Anti-dragon shield', 'Dragonfire shield', 'Dragonfire ward', 'Ancient wyvern shield'],
-  label: 'No Anti-dragon shield with you',
-  detail: (foe, hit) => `Do not go without it: ${foe}'s dragonfire hits up to ${hit}. Duke Horacio in Lumbridge Castle gives it free.`,
-}];
-
-/** A safety rule a step's fights call for: the items that satisfy it, what to say when none is with the player, and why (the opponent's hit). */
-export interface StepSafety { names: string[]; label: string; detail: string }
-
-/**
- * The safety rules a step's fights call for, read from the step's own facts (its foes and threats against threats.json), never from its code: a step
- * renamed or added later with the same fight gets the same rule.
- */
-export function safetyRulesOf(step: Pick<Step, 'foes' | 'threats' | 'pacing'>): StepSafety[] {
-  const out: StepSafety[] = [];
-  for (const rule of SAFETY_RULES) {
-    for (const foe of stepFightNames(step)) {
-      const hit = Math.max(0, ...(THREATS[foe]?.hits ?? []).filter((h) => rule.hazard.test(h.label)).map((h) => h.n));
-      if (hit > 0) { out.push({ names: rule.names, label: rule.label, detail: rule.detail(foe, hit) }); break; }
-    }
-  }
-  return out;
-}
-
-/**
- * The safety blockers of a step: a rule is broken only when the plan SAW the item missing or in the bank (not in the bag or worn). An item that was not
- * checked (no game connection, bank not opened) is unknown, never a block: the plan does not claim what it does not know.
- */
-export function safetyBlockers(rules: readonly StepSafety[], lines: readonly PrepLine[]): { label: string; detail?: string }[] {
-  const out: { label: string; detail?: string }[] = [];
-  for (const rule of rules) {
-    const mine = lines.filter((l) => rule.names.includes(l.name));
-    if (!mine.length || mine.some((l) => l.where === 'INVENTORY' || l.where === 'EQUIPPED' || l.where === 'UNKNOWN')) continue;
-    out.push({ label: mine.some((l) => l.where === 'BANK') ? `${rule.names[0]} is in the bank, not with you` : rule.label, detail: rule.detail });
-  }
-  return out;
-}
 
 interface Recipe { makeAt: string; from: { nameEn: string; count: number; how: string; npc?: string }[] }
 const RECIPES = (recipesJson as { recipes: Record<string, Recipe> }).recipes;
@@ -351,7 +293,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   const phase = loadoutPhase(step, i.questInstruction);
 
   for (const t of trip.lines) {
-    const inStep = t.line.inStepOnly && !(phase?.confirmed && t.line.sources.some(s => s.stepId === step.id && s.phase === phase.id));
+    const inStep = t.line.inStepOnly && !(phase?.confirmed && t.line.sources.some(s => s.stepId === step.id && (s.stepIndex ?? 0) === 0 && s.phase === phase.id));
     const dose = Boolean(t.line.dose);
     const equipped = t.held.equipped;
     const allIds = t.allocation.filter((x) => x.need > 0).map((x) => x.stepId);
@@ -364,9 +306,9 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
     const known = t.held.presence !== 'UNKNOWN';
     const groups = new Map<PrepTiming, { need: number; ids: string[]; bag: number; bank: number; noted: number; missing: number; unknown: number }>();
     for (const a of t.allocation.filter((x) => x.need > 0)) {
-      const idx = ids.indexOf(a.stepId);
+      const idx = a.stepIndex ?? ids.indexOf(a.stepId);
       // An item of a later loadout of the same step is taken on the next visit to the bank, not before the first stretch (no runes into the tomb).
-      const phaseNeed = idx <= 0 ? loadoutNeed(step, t.line.nameEn, t.line.sources.filter(s => s.stepId === a.stepId), phase) : 'NOW';
+      const phaseNeed = idx <= 0 ? loadoutNeed(step, t.line.nameEn, t.line.sources.filter(s => s.stepId === a.stepId && (s.stepIndex === undefined || s.stepIndex === idx)), phase) : 'NOW';
       if (idx <= 0 && phaseNeed === 'PAST') continue;
       const later = !inStep && idx <= 0 && phaseNeed === 'SOON';
       const timing: PrepTiming = inStep ? 'IN_STEP' : later ? 'LATER' : idx <= 0 ? 'NOW' : idx <= 2 ? 'SOON' : 'LATER';
@@ -555,7 +497,8 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   };
 
   // What items cannot fix: levels, quests, a closed step. Then the hard safety checks: an item without which the step ends in a death.
-  const safety = safetyRulesOf(step);
+  const safety = safetyRulesOf(step).map(rule => rule.worn ? { ...rule,
+    equipped: state.equipmentKnown ? countWorn(wornItemsOf(state), name => rule.names.some(variant => nameKey(variant) === nameKey(name))).count > 0 : null } : rule);
   const blockers = [
     ...i.readiness.problems
       .filter((p) => p.hard && (p.kind === 'skill' || p.kind === 'quest' || p.kind === 'step' || p.kind === 'qp' || p.kind === 'mode'))

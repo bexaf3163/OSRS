@@ -1,12 +1,14 @@
-// The method catalogue: typed, validated data (data/fundingMethods.json). Nothing here reads the web at run time. Every figure in the file was read from a
+// The method catalogue: typed, validated data, the hand-modelled methods (authored/fundingMethods.json) and every other
+// free-to-play wiki guide built from its card (generated/fundingWiki.json, npm run build-money). Nothing here reads the web at run time. Every figure in the file was read from a
 // named source on a named date (see each method's `sources`), and validateCatalogue() refuses a method that lacks the structure the evaluator needs.
 // The wiki's guide pages are prose; what the evaluator may rely on for eligibility is only what is structured here.
 
-import { fundingMethodsJson as catalogueJson } from '../../../data';
+import { fundingMethodsJson as catalogueJson, fundingWikiJson } from '../../../data';
 import { ALL_SKILLS } from '../../market/tradeRestriction';
 import type { Catalogue, Flow, FundingMethod, Place } from './types';
 
-export const CATALOGUE = catalogueJson as unknown as Catalogue;
+const authored = catalogueJson as unknown as Catalogue;
+export const CATALOGUE: Catalogue = { ...authored, methods: [...authored.methods, ...(fundingWikiJson as unknown as Catalogue).methods] };
 export const METHODS: readonly FundingMethod[] = CATALOGUE.methods;
 const BY_ID = new Map(METHODS.map((m) => [m.id, m]));
 
@@ -95,7 +97,7 @@ export function validateCatalogue(c: Catalogue, ctx: ValidationContext = {}): st
     if (!(m.saleSeconds >= 0)) note(m.id, 'saleSeconds must be >= 0');
     for (const q of m.requirements) {
       if (q.kind === 'level') {
-        if (!(ALL_SKILLS as readonly string[]).includes(q.skill) || !(q.level >= 1 && q.level <= 99)) note(m.id, `requirement: ${q.skill} ${q.level}`);
+        if (!([...ALL_SKILLS, 'combat'] as readonly string[]).includes(q.skill) ||!(q.level >= 1 && q.level <= 99)) note(m.id, `requirement: ${q.skill} ${q.level}`);
       } else if (q.kind === 'quest') {
         if (ctx.quests && !ctx.quests.has(q.quest)) note(m.id, `requirement: the route has no quest called "${q.quest}"`);
         if (q.state !== 'complete' && q.state !== 'started') note(m.id, 'requirement: quest state');
@@ -104,10 +106,13 @@ export function validateCatalogue(c: Catalogue, ctx: ValidationContext = {}): st
       } else if (q.kind === 'fare') {
         if (!(q.coins > 0)) note(m.id, 'requirement: a fare must be positive');
         if (q.unlessQuest && ctx.quests && !ctx.quests.has(q.unlessQuest)) note(m.id, `requirement: the route has no quest called "${q.unlessQuest}"`);
+      } else if (q.kind === 'check') {
+        if (!q.text.trim() || (q.hard !== undefined && typeof q.hard !== 'boolean')) note(m.id, 'requirement: a manual check needs text and an optional boolean hard flag');
       }
     }
     if (m.family === 'combat') {
-      if (!m.combat) note(m.id, 'a combat method needs its combat profile');
+      // A wiki-paced method may lack one (its page lists several monsters): it keeps the wiki's pace, never personalised.
+      if (!m.combat) { if (m.rate.basis !== 'wiki-guide') note(m.id, 'a combat method needs its combat profile'); }
       else if (ctx.foes) {
         const versions = ctx.foes.get(m.combat.foe);
         if (!versions) note(m.id, `combat: no data for ${m.combat.foe}`);

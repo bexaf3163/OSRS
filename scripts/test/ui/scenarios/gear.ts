@@ -97,6 +97,8 @@ async function gearPage(browser: Browser) {
   const { page, errors } = await open(browser, 1280, {
     progress: progressBefore('S3-08'),
     status: { protocol: 6, player: 'Session Test', stats: { attack: 22, strength: 20, defence: 1 }, ...oldGear },
+    // The game shows the S3-08 fight: with no quest data the Decision waits, and no route order stands in for it (v14).
+    localStorage: { 'osrs-put:active-step': 'S3-08' },
   }, '#/gear');
   await page.getByRole('region', { name: 'Worn now', exact: true }).waitFor();
   await page.evaluate((gear) => {
@@ -147,6 +149,8 @@ async function coifInBank(browser: Browser) {
   const { page, errors } = await open(browser, width, {
     progress: progressBefore('S4-03'),
     status: { ...gear, stats, activeStepId: 'S4-03' },
+    // The game shows the fight step: with no quest data the Decision waits, and no route order stands in for it (v14).
+    localStorage: { 'osrs-put:active-step': 'S4-03' },
     events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Coif', carried: 0, noted: 0, bank: 1 }] }],
   }, '#/gear');
   // Future unlocks are folded since 2.68: opened, the lock is there.

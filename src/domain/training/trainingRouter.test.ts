@@ -173,3 +173,24 @@ describe('path, actions and time', () => {
     expect(a.best?.method.kind).toBe('method');
   });
 });
+
+describe('a level-up does not flip the running method for a marginal gain (S04)', () => {
+  const base = (id: string) => trainingMethods.find((m) => m.id === id)!;
+  // Fresh ids keep the synthetic speeds: the live rate model only re-rates catalogue methods it knows.
+  const oak = { ...base('wc-oak'), id: 'test-slow', xph: [20_000, 25_000] as [number, number] };
+  const willow = (low: number) => ({ ...base('wc-willow'), id: 'test-fast', xph: [low, low + 5_000] as [number, number] });
+  const run = (next: ReturnType<typeof willow>) => advise({ skill: 'woodcutting', target: 45, followed: 'test-slow', methods: [oak, next], priority: 'balanced',
+    state: levels({ woodcutting: 30 }, { 'Steel axe': { carried: 1 } }, true) });
+
+  it('keeps the running method when the new one is only slightly faster', () => {
+    expect(run(willow(22_000)).best?.method.id).toBe('test-slow');
+    // Without a running method the same 10% gain does win, so the margin is what keeps it.
+    expect(advise({ skill: 'woodcutting', target: 45, methods: [oak, willow(22_000)], priority: 'balanced', state: levels({ woodcutting: 30 }, { 'Steel axe': { carried: 1 } }, true) }).best?.method.id).toBe('test-fast');
+  });
+
+  it('switches with an explanation when the new one is materially faster', () => {
+    const advice = run(willow(40_000));
+    expect(advice.best?.method.id).toBe('test-fast');
+    expect(advice.best?.reason).toContain('Switched from');
+  });
+});

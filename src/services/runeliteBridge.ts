@@ -6,6 +6,13 @@ import type { MoveEvent } from '../domain/travel/recovery';
 import type { PrepEnvelope } from '../domain/prep/prepEnvelope';
 import type { InGameTarget, PacingSkill, StageHighlight, StagePre, PlayerStats, Step, StepBranch, StepPacing } from '../types';
 import { desktop } from './desktop';
+import { parseQuestObservation } from '../domain/player/questObservation';
+import type { QuestObservation } from '../domain/player/questObservation';
+export type { QuestObservation };
+import { parseQuestInstruction } from '../domain/quests/questCursor';
+import type { QuestInstruction } from '../domain/quests/questCursor';
+export { parseQuestInstruction };
+export type { QuestInstruction };
 import { toInGameTarget } from '../domain/guide/inGameTarget';
 import { parseEvent, parseStats, parseXp, parseQuests, parsePos, parseSeconds, parsePlayer, parseGear } from './bridgeEvents';
 
@@ -33,6 +40,8 @@ export interface BridgeStatus {
   xp: PlayerStats | null;
   /** Names of completed quests (protocol 5); null — unknown. */
   questsDone: string[] | null;
+  /** Optional full state; an unlisted quest is not necessarily unstarted. */
+  questStates?: QuestObservation | null;
   /** The character name (protocol 5); null — not in the game or the plugin does not report. */
   player: string | null;
   /** Where the character stands (protocol 5): game coordinates; null — unknown. */
@@ -183,7 +192,7 @@ export type BridgeEvent =
   | { type: 'STEP_AUTO_COMPLETED'; stepId: string }
   | { type: 'STATUS'; inGame: boolean; player?: string | null }
   | { type: 'XP'; xp?: PlayerStats | null }
-  | { type: 'QUESTS'; done?: string[] | null }
+  | { type: 'QUESTS'; done?: string[] | null; questStates?: QuestObservation | null }
   | { type: 'STATS'; stats?: PlayerStats | null }
   | { type: 'OWNED'; bankSeen: boolean; items: unknown[] }
   | { type: string; [key: string]: unknown };
@@ -302,21 +311,11 @@ export function defaultTransport(): BridgeTransport {
 
 // ---------- Requests ----------
 
-export interface QuestInstruction { stepId: string; stageAt: number; lineIndex: number; peeking: boolean }
-
-export function parseQuestInstruction(raw: unknown): QuestInstruction | null {
-  if (!raw || typeof raw !== 'object') return null;
-  const r = raw as Record<string, unknown>;
-  if (typeof r.stepId !== 'string' || !r.stepId || r.stepId.length > 100 || !Number.isInteger(r.stageAt) || !Number.isInteger(r.lineIndex)
-    || (r.stageAt as number) < 0 || (r.lineIndex as number) < 0 || typeof r.peeking !== 'boolean') return null;
-  return { stepId: r.stepId, stageAt: r.stageAt as number, lineIndex: r.lineIndex as number, peeking: r.peeking };
-}
-
 export async function checkStatus(t: BridgeTransport = defaultTransport()): Promise<BridgeStatus> {
   const res = await t.request('GET', '/status');
   const d = res.data as {
     status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown; protocol?: unknown; pluginVersion?: unknown;
-    navTarget?: unknown; questInstruction?: unknown; xp?: unknown; questsDone?: unknown; player?: unknown; pos?: unknown; homeTeleportSeconds?: unknown;
+    navTarget?: unknown; questInstruction?: unknown; xp?: unknown; questsDone?: unknown; questStates?: unknown; player?: unknown; pos?: unknown; homeTeleportSeconds?: unknown;
     homeTeleportKnown?: unknown; spellbook?: unknown; chronicleCharges?: unknown; questPoints?: unknown; totalLevel?: unknown;
     combatLog?: unknown; accountType?: unknown;
   } | undefined;
@@ -336,6 +335,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     navTarget: online ? parseNavTarget(d?.navTarget) : null,
     xp: inGame ? parseXp(d?.xp) : null,
     questsDone: inGame ? parseQuests(d?.questsDone) : null,
+    questStates: inGame ? parseQuestObservation(d?.questStates) : null,
     player: inGame ? parsePlayer(d?.player) : null,
     pos: inGame ? parsePos(d?.pos) : null,
     homeTeleportSeconds: inGame ? parseSeconds(d?.homeTeleportSeconds) : null,
@@ -400,16 +400,24 @@ export interface SnapshotResult {
 
 /**
  * The state snapshot into the game (protocol 6): step, shopping, bank highlight, gear advice and plan — in one request.
- * ok false — there is no bridge or the plugin answered with an error (an old plugin does not know the address: 404).
+ * ok reports a valid transport reply. Use snapshotAccepted for the parts a caller requires; optional helpers may be disabled independently.
  */
 export async function postPrepPlan(envelope: PrepEnvelope, t: BridgeTransport = defaultTransport()): Promise<SnapshotResult & { status: number }> {
   const res = await t.request('POST', '/prep-plan', envelope);
+  if (res.data === null || typeof res.data !== 'object' || Array.isArray(res.data)) return { ok: false, stale: false, rejected: {}, status: res.status };
   const d = (res.data ?? {}) as { stale?: unknown; rejected?: unknown };
   const rejected: Record<string, string> = {};
   if (d.rejected && typeof d.rejected === 'object') {
     for (const [k, v] of Object.entries(d.rejected as Record<string, unknown>)) if (typeof v === 'string') rejected[k] = v;
   }
-  return { ok: res.ok, stale: d.stale === true, rejected, status: res.status };
+  const malformedRejection = d.rejected != null && (typeof d.rejected !== 'object' || Array.isArray(d.rejected) || Object.values(d.rejected).some(v => typeof v !== 'string'));
+  const malformed = d.stale !== undefined && typeof d.stale !== 'boolean';
+  return { ok: res.ok && !malformed && !malformedRejection, stale: d.stale === true, rejected, status: res.status };
+}
+
+/** A valid HTTP reply is not application acceptance. A disabled unrelated helper must not block an accepted target. */
+export function snapshotAccepted(result: SnapshotResult, required?: readonly string[]): boolean {
+  return result.ok && !result.stale && Object.keys(result.rejected).every(part => required !== undefined && !required.includes(part));
 }
 
 /** A bulk list for the exchange hint. An empty list removes the hint. */

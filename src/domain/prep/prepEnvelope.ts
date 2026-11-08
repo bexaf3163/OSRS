@@ -79,6 +79,16 @@ export interface PrepEnvelope {
   cleanup?: CleanupHintPayload;
   /** The running funding plan for the HUD (plugin 2.64.1 and later; an older one ignores the field). Absent means none. */
   funding?: FundingHintPayload;
+  /** The committed Decision this snapshot carries out (v14); an older plugin ignores the field. Absent means none. */
+  decision?: DecisionRefPayload;
+}
+
+/** Which committed Decision the snapshot belongs to: its action and objective. Freshness stays with `seq`. */
+export interface DecisionRefPayload {
+  id: string;
+  objectiveId: string;
+  /** The items every open step needs, counted by plugins that know the field (decisionWatch). */
+  watch?: string[];
 }
 
 const countOf = (l: Pick<PrepLine, 'name' | 'count' | 'unit'>) => (l.unit === 'dose' ? `${l.name} (${l.count} ${l.count === 1 ? 'dose' : 'doses'})` : l.count > 1 ? `${l.name} ×${l.count}` : l.name);
@@ -226,6 +236,7 @@ export interface SnapshotParts {
   cleanup?: CleanupHintPayload | null;
   /** The running funding plan (lib/fundingHint.ts). */
   funding?: FundingHintPayload | null;
+  decision?: DecisionRefPayload | null;
 }
 
 export const EMPTY_PARTS: SnapshotParts = { step: null, shopping: null, bankTags: null, gearHint: null, plan: null };
@@ -254,6 +265,7 @@ export function buildEnvelope(parts: SnapshotParts, seq: number): PrepEnvelope {
     ...(parts.cleanup && parts.cleanup.lines.length ? { cleanup: parts.cleanup } : {}),
     // The same: no plan running, no field.
     ...(parts.funding ? { funding: parts.funding } : {}),
+    ...(parts.decision ? { decision: parts.decision } : {}),
   };
 }
 

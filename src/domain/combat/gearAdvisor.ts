@@ -9,7 +9,7 @@
 // training, so the benefit is averaged over the nearest 10 Strength levels: the max hit grows
 // in steps, and at the very current level the best sword may hit the same as the old one.
 
-import { gearJson, combatFoesJson } from '../../data';
+import { combatFoesJson } from '../../data';
 import type { Foe, GameMode, GearData, GearPiece, GearSlot, Step } from '../../types';
 import type { OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
@@ -17,12 +17,12 @@ import { matchStrict } from '../travel/locations';
 import { shopAccess } from '../market/shopAccess';
 import { SAVE_GP } from '../market/shopConstants';
 import type { GearState, NavTargetPayload } from '../../services/runeliteBridge';
-
-export const gearData = gearJson as GearData;
-export const gearById = new Map(gearData.items.map((i) => [i.id, i]));
-const gearByName = new Map(gearData.items.map((i) => [nameKey(i.name), i]));
-/** A piece of gear by its name, as the game writes it; null - the gear data does not know it. */
-export const gearPieceByName = (name: string): GearPiece | null => gearByName.get(nameKey(name)) ?? null;
+import { gearData, gearById, gearByName } from '../items/gearRegistry';
+import { canWear, missingRequirements, REQ_SKILLS } from '../items/gearRequirements';
+import type { MissingRequirement } from '../items/gearRequirements';
+export { gearData, gearById, gearPieceByName } from '../items/gearRegistry';
+export { canWear, missingRequirements } from '../items/gearRequirements';
+export type { MissingRequirement } from '../items/gearRequirements';
 
 export const SLOTS: GearSlot[] = ['weapon', 'neck', 'head', 'body', 'legs', 'shield'];
 export const SLOT_LABEL: Record<GearSlot, string> = {
@@ -358,34 +358,9 @@ export function levelsOf(raw: Partial<Record<string, number>>): Levels {
   return { attack: n('attack'), strength: n('strength'), defence: n('defence'), ...opt('prayer'), ...opt('ranged'), ...opt('magic') };
 }
 
-const REQ_SKILLS = ['attack', 'strength', 'defence', 'ranged', 'magic', 'prayer'] as const;
 const SKILL_EN: Record<(typeof REQ_SKILLS)[number], string> = {
   attack: 'Attack', strength: 'Strength', defence: 'Defence', ranged: 'Ranged', magic: 'Magic', prayer: 'Prayer',
 };
-
-export type MissingRequirement =
-  | { kind: 'skill'; skill: (typeof REQ_SKILLS)[number]; need: number; have: number }
-  | { kind: 'quest'; quest: string };
-
-/**
- * What is missing to wear: the levels of all combat skills and the quests. An unknown level counts as the first,
- * an unknown quest as not done: the advice must not promise what may not be wearable.
- */
-export function missingRequirements(p: GearPiece, lv: Levels, quests: ReadonlySet<string> = new Set()): MissingRequirement[] {
-  const r = p.req ?? {};
-  const out: MissingRequirement[] = [];
-  for (const skill of REQ_SKILLS) {
-    const need = r[skill] ?? 1;
-    const have = lv[skill] ?? 1;
-    if (need > have) out.push({ kind: 'skill', skill, need, have });
-  }
-  for (const quest of r.quests ?? []) if (!quests.has(quest)) out.push({ kind: 'quest', quest });
-  return out;
-}
-
-export function canWear(p: GearPiece, lv: Levels, quests?: ReadonlySet<string>): boolean {
-  return missingRequirements(p, lv, quests).length === 0;
-}
 
 /** "20 Ranged (now 17), quest Dragon Slayer I" — what is missing for the item. */
 export function missingText(missing: MissingRequirement[]): string {

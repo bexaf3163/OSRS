@@ -23,6 +23,7 @@ public class PrepEnvelope
 	static final String SKILL_PATH = "skillPath";
 	static final String CLEANUP = "cleanup";
 	static final String FUNDING = "funding";
+	static final String DECISION = "decision";
 
 	/** The snapshot version; 6. */
 	private int v;
@@ -38,6 +39,30 @@ public class PrepEnvelope
 	private CleanupHint cleanup;
 	/** The running funding plan for the HUD (since 2.64.1). Absent means none. */
 	private FundingHint funding;
+	/** The committed Decision this snapshot carries out (app v14): its action and objective. Absent from an older app. */
+	private DecisionRef decision;
+
+	@Data
+	public static class DecisionRef
+	{
+		private String id;
+		private String objectiveId;
+		/** Items every unfinished quest needs: the plugin counts them so the planner never reads an uncounted item as none. */
+		private java.util.List<String> watch;
+
+		String prepare()
+		{
+			if (id == null || id.isEmpty() || ActiveTarget.tooLong(id) || objectiveId == null || objectiveId.isEmpty() || ActiveTarget.tooLong(objectiveId))
+			{
+				return "invalid decision";
+			}
+			if (watch != null && (watch.size() > ShoppingPlan.MAX_ITEMS || watch.stream().anyMatch(n -> n == null || n.isEmpty() || ActiveTarget.tooLong(n))))
+			{
+				return "invalid watch list";
+			}
+			return null;
+		}
+	}
 
 	/** The step as it came (JSON): if it did not change, the plugin does not restart the target and arrow. Set by the server. */
 	private transient String stepKey;
@@ -54,6 +79,7 @@ public class PrepEnvelope
 		check(bad, SKILL_PATH, skillPath == null ? null : skillPath.prepare());
 		check(bad, CLEANUP, cleanup == null ? null : cleanup.prepare());
 		check(bad, FUNDING, funding == null ? null : funding.prepare());
+		check(bad, DECISION, decision == null ? null : decision.prepare());
 		return bad;
 	}
 

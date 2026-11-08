@@ -329,4 +329,28 @@ public class PrepSnapshotTest
 		assertNull(StepGuide.withPlanFor(v, null, t).getPrep());
 		assertNull(StepGuide.withPlanFor(v, p, null).getPrep());
 	}
+
+	@Test
+	public void readsTheCommittedDecision()
+	{
+		PrepEnvelope e = GSON.fromJson("{\"v\":6,\"seq\":1,\"decision\":{\"id\":\"a1\",\"objectiveId\":\"q1\"}}", PrepEnvelope.class);
+		assertEquals("a1", e.getDecision().getId());
+		assertEquals("q1", e.getDecision().getObjectiveId());
+		assertNull(GSON.fromJson("{\"v\":6,\"seq\":2}", PrepEnvelope.class).getDecision());
+	}
+
+	@Test
+	public void decisionWatchListIsBoundedAndCounted()
+	{
+		PrepEnvelope ok = GSON.fromJson("{\"v\":6,\"seq\":1,\"decision\":{\"id\":\"a1\",\"objectiveId\":\"q1\",\"watch\":[\"Spade\"]}}", PrepEnvelope.class);
+		assertFalse(ok.prepare().containsKey(PrepEnvelope.DECISION));
+		assertEquals(java.util.List.of("Spade"), ok.getDecision().getWatch());
+		StringBuilder many = new StringBuilder();
+		for (int i = 0; i <= ShoppingPlan.MAX_ITEMS; i++)
+		{
+			many.append(i == 0 ? "" : ",").append("\"Item ").append(i).append("\"");
+		}
+		PrepEnvelope tooMany = GSON.fromJson("{\"v\":6,\"seq\":2,\"decision\":{\"id\":\"a1\",\"objectiveId\":\"q1\",\"watch\":[" + many + "]}}", PrepEnvelope.class);
+		assertEquals("invalid watch list", tooMany.prepare().get(PrepEnvelope.DECISION));
+	}
 }

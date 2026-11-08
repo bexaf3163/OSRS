@@ -97,13 +97,13 @@
     {
       "stepId": "S3-03", "kind": "quest-fight", "mandatory": true, "method": "melee",
       "objective": "Kill Delrith (27, 7 hit points, hits up to 3) with Silverlight while the dark wizards (7 and 20, magic up to 6) attack on sight.",
-      "enemies": [{ "name": "Delrith", "level": 27, "maxHit": 3 }, { "name": "Dark wizard", "level": 20, "maxHit": 6 }],
+      "enemies": [{ "name": "Delrith", "level": 27, "maxHit": 3, "table": true }, { "name": "Dark wizard", "level": 20, "maxHit": 6 }],
       "lines": ["0.0", "1.0", "4.1"],
       "assumptions": ["Delrith dies in a few hits; the risk is the wizards' magic."],
-      "problems": ["The Trout (5) is only recommended: the 25 Bones for Traiborn and the food do not fit the bag together in the item list, and the step has no loadouts that would take the food on a later bank visit.", "The app has no numbers for Delrith (the wiki infobox gives the generator no single max hit) or the dark wizards: the fight is not estimated."],
+      "problems": ["The Trout (5) is only recommended: the 25 Bones for Traiborn and the food do not fit the bag together in the item list, and the step has no loadouts that would take the food on a later bank visit.", "The app had no numbers for Delrith (the generator read an empty infobox field as the next line, fixed in v14) and has none for the dark wizards; Silverlight's doubled damage is not modelled, so the fight is not estimated."],
       "alternatives": [],
       "decision": "defer",
-      "evidence": ["Step field \"Combat\"; quest stage line 4.1 (lines 0.0 and 1.0 are dialogue).", "Danger zone dark-wizards-varrock warns on the way."],
+      "evidence": ["Step field \"Combat\"; quest stage line 4.1 (lines 0.0 and 1.0 are dialogue).", "Danger zone dark-wizards-varrock warns on the way.", "combatFoes.json has Delrith since v14 (7 hit points, max hit 3), but the estimate does not model Silverlight's doubled damage, so he stays out of the step's foes (tests/gear.test.ts)."],
       "zones": ["dark-wizards-varrock"]
     },
     {

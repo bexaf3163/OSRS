@@ -11,7 +11,8 @@ async function clearedArrow(browser: Browser) {
     progress: progressBefore('S9-01'),
     status: { protocol: 5, stats: { crafting: 40, woodcutting: 40 }, navTarget: target },
     events: [{ type: 'STATS', stats: { crafting: 40, woodcutting: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Knife', carried: 0, noted: 0, bank: 1 }] }],
-    localStorage: { 'osrs-put:prep': JSON.stringify({ stack: [{ sourceStepId: 'S9-01', detourId: 'bank', reason: 'Take it from the bank', startedAt: 1, returnCondition: 'done' }], done: [] }) },
+    // The game follows S9-01, so the prep machine runs under it whatever the Decision ranks first.
+    localStorage: { 'osrs-put:active-step': 'S9-01', 'osrs-put:prep': JSON.stringify({ stack: [{ sourceStepId: 'S9-01', detourId: 'bank', reason: 'Take it from the bank', startedAt: 1, returnCondition: 'done' }], done: [] }) },
   }, '#/step/S9-01');
   await (await stepButton(page, /Return to the step now/)).click();
   await settle(page);
@@ -121,6 +122,32 @@ async function protocol6(browser: Browser) {
   await page.context().close();
 }
 
+async function snapshotRefusal(browser: Browser) {
+  for (const snapshotReply of [{ stale: true }, { rejected: { step: 'Step guidance is disabled' } }]) {
+    const { page, errors } = await open(browser, 1100, {
+      snapshotReply, progress: progressBefore('S2-07'), status: { protocol: 6, pluginVersion: '2.81.42' },
+    }, '#/step/S2-07');
+    await page.locator('.modern-show').click();
+    await settle(page);
+    expect((await page.getByText(/The game guide was not confirmed/).count()) > 0, 'snapshot refusal: HTTP 200 does not claim the guide is confirmed');
+    expect(await page.getByRole('button', { name: /Shown in the game/ }).count() === 0, 'snapshot refusal: no successful target indicator');
+    expect(await page.evaluate(() => localStorage.getItem('osrs-put:active-step')) === null, 'snapshot refusal: a failed target is not saved as active');
+    expect(await page.locator('.bridge-indicator.is-online').count() === 1, 'snapshot refusal: the reachable bridge stays online');
+    expect(!errors.length, 'snapshot refusal: no console errors');
+    await page.context().close();
+  }
+  const { page, errors } = await open(browser, 1100, {
+    snapshotReply: { rejected: { bankTags: 'Bank highlights are disabled' } }, progress: progressBefore('S2-07'),
+    status: { protocol: 6, pluginVersion: '2.81.42' },
+  }, '#/step/S2-07');
+  await page.locator('.modern-show').click();
+  await settle(page);
+  expect(await page.evaluate(() => localStorage.getItem('osrs-put:active-step')) === 'S2-07', 'snapshot refusal: disabling an optional bank helper still permits the accepted quest target');
+  expect(await page.getByText(/The game guide was not confirmed/).count() === 0, 'snapshot refusal: optional refusal does not claim the target failed');
+  expect(!errors.length, 'snapshot refusal: optional refusal has no console errors');
+  await page.context().close();
+}
+
 // A connected client at the login screen is not live guidance. Keep the target without claiming a visible arrow.
 async function loginScreen(browser: Browser) {
   const questData = JSON.parse(readFileSync(new URL('../../../../src/data/authored/questStages.json', import.meta.url),'utf8')).quests['S3-04'];
@@ -196,7 +223,84 @@ async function questCursor(browser: Browser) {
   await page.context().close();
 }
 
+async function questObservationFreshness(browser: Browser) {
+  const observation = { player: 'Fixture', sessionId: 'login-current', revision: 1, questPoints: 3, states: { "Doric's Quest": 'NOT_STARTED' } };
+  const { page, errors } = await open(browser, 1280, {
+    progress: progressBefore('S1-03', { gameMode: 'f2p' }),
+    status: { protocol: 6, inGame: true, player: 'Fixture', questPoints: 3, questsDone: [], questStates: observation },
+  }, '#/journal');
+  await page.locator('.la-stat b').filter({ hasText: /^3$/ }).waitFor();
+  await page.evaluate(() => {
+    const w = window as unknown as { __holdStatus: boolean; __emit: (event: unknown) => void };
+    w.__holdStatus = true;
+    w.__emit({ type: 'STATUS', inGame: true, player: 'Fixture' });
+  });
+  await page.waitForFunction(() => typeof (window as unknown as { __releaseStatus?: unknown }).__releaseStatus === 'function');
+  await page.evaluate(observation => {
+    const w = window as unknown as { __emit: (event: unknown) => void; __releaseStatus: () => void };
+    w.__emit({ type: 'QUESTS', done: ["Doric's Quest"], questStates: { ...observation, revision: 2, questPoints: 4, states: { "Doric's Quest": 'COMPLETED' } } });
+    w.__releaseStatus();
+  }, observation);
+  await settle(page);
+  expect((await text(page, '.la-stat b')) === '4', 'quest observations: a delayed status cannot overwrite newer quest points');
+  await page.evaluate(observation => {
+    const w = window as unknown as { __emit: (event: unknown) => void };
+    w.__emit({ type: 'QUESTS', done: [], questStates: observation });
+    w.__emit({ type: 'QUESTS', done: [], questStates: { ...observation, sessionId: 'old-login', revision: 99 } });
+  }, observation);
+  await settle(page);
+  expect((await text(page, '.la-stat b')) === '4', 'quest observations: old revisions and old login sessions cannot restore old totals');
+  await page.evaluate(() => (window as unknown as { __emit: (event: unknown) => void }).__emit({ type: 'QUESTS', done: [] }));
+  await settle(page);
+  expect((await text(page, '.la-stat b')) === '4', 'quest observations: an unversioned event cannot downgrade the admitted observation or its QP');
+  await page.getByRole('button', { name: 'Dismiss bank reminder', exact: true }).click();
+  await page.evaluate(() => {
+    const w = window as unknown as { __holdStatus: boolean; __emit: (event: unknown) => void };
+    w.__holdStatus = false;
+    w.__emit({ type: 'STATUS', inGame: true, player: 'Fixture' });
+  });
+  await settle(page);
+  expect(await page.getByRole('button', { name: 'Dismiss bank reminder', exact: true }).count() === 0, 'bank reminder: reconnect with the same login does not repeat it');
+  await page.reload();
+  await settle(page);
+  expect(await page.getByRole('button', { name: 'Dismiss bank reminder', exact: true }).count() === 0, 'bank reminder: acknowledgement survives app reload during the same login');
+  await page.evaluate(observation => {
+    const w = window as unknown as { __status: unknown; __emit: (event: unknown) => void };
+    w.__status = { questPoints: 4, questsDone: ["Doric's Quest"], questStates: { ...observation, sessionId: 'next-real-login', questPoints: 4 } };
+    w.__emit({ type: 'STATUS', inGame: true, player: 'Fixture' });
+  }, observation);
+  await page.getByRole('button', { name: 'Dismiss bank reminder', exact: true }).waitFor();
+  expect(true, 'bank reminder: a verified new login offers one refresh again');
+  expect(!errors.length, 'quest observations: no runtime errors');
+  await page.context().close();
+}
+
+async function protectedGoalStorage(browser: Browser) {
+  const future = '{"version":99,"intent":{"kind":"unknown-future-goal"}}';
+  for (const external of [false, true]) {
+    const { page, errors } = await open(browser, 1280, {
+      progress: progressBefore('S4-03', { gameMode: 'f2p' }),
+      localStorage: external ? {} : { 'osrs-put:planning-intent': future },
+      status: { stats: { woodcutting: 21, attack: 40 } },
+      events: [{ type: 'STATS', stats: { woodcutting: 21, attack: 40 } },
+        { type: 'OWNED', bankSeen: true, items: [{ name: 'Bronze axe', carried: 1, noted: 0, bank: 0 }] }],
+    }, '#/skills/WC/woodcutting');
+    await page.locator('.training-follow').waitFor();
+    if (external) await page.evaluate(value => localStorage.setItem('osrs-put:planning-intent', value), future);
+    await page.locator('.training-follow').click();
+    await settle(page);
+    expect(page.url().includes('#/skills/WC/woodcutting'), `goal protection (${external ? 'external change' : 'future format'}): a refused goal does not claim to follow another route`);
+    expect(await page.evaluate(() => localStorage.getItem('osrs-put:planning-intent')) === future, 'goal protection: the original saved intention remains byte-for-byte intact');
+    expect((await page.locator('[role="alert"]').allTextContents()).some(value => value.includes(external ? 'outside this window' : 'newer app')), 'goal protection: the reason is visible');
+    expect(!errors.length, 'goal protection: no runtime errors');
+    await page.context().close();
+  }
+}
+
 export const scenarios = {
+  'snapshot-refusal': snapshotRefusal,
+  'protected-goal-storage': protectedGoalStorage,
+  'quest-observation-freshness': questObservationFreshness,
   'cleared-arrow': clearedArrow,
   'launch-runelite': launchRunelite,
   'old-plugin': oldPlugin,

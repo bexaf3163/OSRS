@@ -22,6 +22,7 @@ export type TripStatus = 'HAVE' | 'BANK' | 'GET' | 'UNKNOWN';
 
 export interface TripAllocation {
   stepId: string;
+  stepIndex?: number;
   need: number;
   /** How much of what is needed is covered by what you already have (assigned to this step). */
   covered: number;
@@ -64,8 +65,8 @@ export interface OneTripPlan {
 }
 
 /** The current step and the following unclosed ones (in route order): the preparation window. */
-export function tripWindow(steps: Step[], progress: Progress, currentId: string, ahead = LOOK_AHEAD): Step[] {
-  const at = steps.findIndex((s) => s.id === currentId);
+export function tripWindow(steps: Step[], progress: Progress, current: string | Step, ahead = LOOK_AHEAD): Step[] {
+  const at = typeof current === 'string' ? steps.findIndex((s) => s.id === current) : steps.indexOf(current);
   if (at < 0) return [];
   const out: Step[] = [steps[at]];
   for (let i = at + 1; i < steps.length && out.length < ahead + 1; i++) {
@@ -74,20 +75,21 @@ export function tripWindow(steps: Step[], progress: Progress, currentId: string,
   return out;
 }
 
-function perStepNeed(line: ShoppingLine, stepIds: string[]): { stepId: string; need: number }[] {
-  const out: { stepId: string; need: number }[] = [];
+function perStepNeed(line: ShoppingLine, stepIds: string[]): Omit<TripAllocation, 'covered'>[] {
+  const out: Omit<TripAllocation, 'covered'>[] = [];
   let reusableTaken = false;
-  for (const stepId of stepIds) {
-    const src = line.sources.filter((s) => s.stepId === stepId && !s.carryOver);
+  for (let index = 0; index < stepIds.length; index++) {
+    const stepId = stepIds[index];
+    const src = line.sources.filter((s) => s.stepId === stepId && (s.stepIndex === undefined || s.stepIndex === index) && !s.carryOver);
     if (!src.length) continue;
     const n = src.reduce((sum, s) => sum + (parseAmount(s.amount) ?? 1) * (s.per ?? 1), 0);
     if (line.reusable) {
       // One tool serves all the steps: take the largest, not the sum.
       if (reusableTaken) continue;
       reusableTaken = true;
-      out.push({ stepId, need: line.count });
+      out.push({ stepId, ...(src[0].stepIndex !== undefined ? { stepIndex: index } : {}), need: line.count });
     } else {
-      out.push({ stepId, need: n });
+      out.push({ stepId, ...(src[0].stepIndex !== undefined ? { stepIndex: index } : {}), need: n });
     }
   }
   return out;
@@ -99,8 +101,8 @@ export function legacyKeys(line: Pick<ShoppingLine, 'dose' | 'id' | 'nameEn'>): 
   return [...(line.id !== undefined ? [`id:${line.id}`] : []), `name:${nameKey(line.nameEn)}`];
 }
 
-export function planOneTrip(steps: Step[], progress: Progress, currentId: string, state: PlayerState, ahead = LOOK_AHEAD): OneTripPlan {
-  const window = tripWindow(steps, progress, currentId, ahead);
+export function planOneTrip(steps: Step[], progress: Progress, current: string | Step, state: PlayerState, ahead = LOOK_AHEAD): OneTripPlan {
+  const window = tripWindow(steps, progress, current, ahead);
   const ids = window.map((s) => s.id);
   const list = aggregateShopping(window);
   const foodStock = allocateFoodStock(state, list.required, levelOf(state, 'hitpoints'));
@@ -116,7 +118,7 @@ export function planOneTrip(steps: Step[], progress: Progress, currentId: string
     const allocation: TripAllocation[] = needs.map((n) => {
       const covered = Math.min(pool, n.need);
       pool -= covered;
-      return { stepId: n.stepId, need: n.need, covered };
+      return { ...n, covered };
     });
     const missing = allocation.reduce((sum, a) => sum + (a.need - a.covered), 0);
     const bagHas = held.bag ?? 0;
@@ -136,7 +138,7 @@ export function planOneTrip(steps: Step[], progress: Progress, currentId: string
       toGet = 0;
     }
     const firstGap = allocation.findIndex((a) => a.need > a.covered);
-    const idx = firstGap >= 0 ? ids.indexOf(allocation[firstGap].stepId) : 0;
+    const idx = firstGap >= 0 ? allocation[firstGap].stepIndex ?? ids.indexOf(allocation[firstGap].stepId) : 0;
     const urgency: Urgency = idx <= 0 ? 'NOW' : idx <= 2 ? 'SOON' : 'LATER';
     lines.push({ line, held, allocation, toGet, status, urgency, ...(foodStock.has(line.key) ? { food: foodStock.get(line.key) } : {}),
       ...(materialStock.has(line.key) ? { material: materialStock.get(line.key) } : {}) });

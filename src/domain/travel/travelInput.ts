@@ -108,9 +108,9 @@ export function travelInputOf(s: TravelInputSources): TravelInput {
     bank: s.owned?.bankSeen ? bankReport(s.owned.items.values(), s.gear?.bankCoins) : null,
     priceOf: s.priceOf, members: s.mode === 'members', homeCooldownSec: s.homeCooldownSec ?? null,
     ...(s.fairyRings === undefined ? {} : { fairyRings: s.fairyRings }),
-    ...(s.homeCooldownKnown === undefined ? {} : { homeCooldownKnown: s.homeCooldownKnown }),
-    // Free-to-play has only the standard spellbook; a members account is asked, and an unanswered question stays a thing to check.
-    ...(typeof s.spellbook === 'number' ? { standardSpellbook: s.spellbook === 0 } : s.mode === 'members' && s.spellbook === null ? { standardSpellbook: null } : {}),
+    homeCooldownKnown: s.homeCooldownKnown === true,
+    // Account membership is not observation of the active spellbook.
+    standardSpellbook: typeof s.spellbook === 'number' ? s.spellbook === 0 : null,
     ...(s.sourceOf ? { sourceOf: s.sourceOf } : {}),
     ...(s.oneTimeUsed ? { oneTimeUsed: s.oneTimeUsed } : {}),
     ...(s.questsDone !== undefined ? { questsDone: s.questsDone } : {}),

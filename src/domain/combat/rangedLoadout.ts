@@ -43,7 +43,17 @@ export function rangedEquipment(worn: Readonly<Record<string, string>>, needs: r
 const STARTER_ARROWS = 100;
 const LOW_ARROWS = 20;
 
-export function rangedNeeds(state: PlayerState, prices?: PriceView | null): MethodNeed[] {
+// The kit depends only on the state and prices, but the training advice asks once per method viewed (~40 per advice).
+const rangedCache = new WeakMap<PlayerState, Map<PriceView | null | undefined, readonly MethodNeed[]>>();
+export function rangedNeeds(state: PlayerState, prices?: PriceView | null): readonly MethodNeed[] {
+  let byPrices = rangedCache.get(state);
+  if (!byPrices) rangedCache.set(state, byPrices = new Map());
+  let hit = byPrices.get(prices);
+  if (!hit) byPrices.set(prices, hit = computeRangedNeeds(state, prices));
+  return hit;
+}
+
+function computeRangedNeeds(state: PlayerState, prices?: PriceView | null): MethodNeed[] {
   const usable = bows.filter(o => usableStyleOption(o, (s) => levelOf(state, s), (q) => questOf(state, q) === 'DONE'));
   const options = usable.flatMap(o => o.names.map(name => ({ name, canonical: o.names[0] })));
   const worn = new Set(Object.values(state.equipment).map(nameKey));

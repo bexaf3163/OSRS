@@ -1,0 +1,7763 @@
+{
+ "version": 1,
+ "generatedAt": "2026-11-02",
+ "source": "https://oldschool.runescape.wiki/w/Money_making_guide/Free-to-play",
+ "methods": [
+  {
+   "id": "blessing-unblessed-symbols",
+   "title": "Blessing unblessed symbols",
+   "family": "processing",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Blessing unblessed symbols. ",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "prayer",
+     "level": 31
+    },
+    {
+     "kind": "check",
+     "text": "Bring: + recommended"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 1716,
+      "name": "Unblessed symbol"
+     },
+     "qty": 1
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1718,
+      "name": "Holy symbol"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "holy symbol",
+    "perHour": {
+     "slow": 198,
+     "typical": 288,
+     "fast": 360
+    },
+    "basis": "wiki-guide",
+    "assumes": "360 holy symbol an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Unblessed symbol at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Grand Exchange.",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Grand Exchange"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Blessing unblessed symbols until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Blessing_unblessed_symbols",
+     "title": "Money making guide/Blessing unblessed symbols",
+     "revision": 15104046,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "buying-ale-from-the-rising-sun-inn",
+   "title": "Buying ale from the Rising Sun Inn",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting wizard's mind bombs, Asgarnian ales, or dwarven stouts. Rising Sun Inn",
+   "requirements": [
+    {
+     "kind": "check",
+     "text": "Bring: +, Coins"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 3,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1907,
+      "name": "Wizard's mind bomb"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "wizard's mind bomb",
+    "perHour": {
+     "slow": 275,
+     "typical": 400,
+     "fast": 500
+    },
+    "basis": "wiki-guide",
+    "assumes": "500 wizard's mind bomb an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 2958,
+    "y": 3372,
+    "plane": 0,
+    "label": "Rising Sun Inn"
+   },
+   "bank": {
+    "x": 2947,
+    "y": 3366,
+    "plane": 0,
+    "label": "Falador West Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "high",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Coins at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Rising Sun Inn.",
+     "place": {
+      "x": 2958,
+      "y": 3372,
+      "plane": 0,
+      "label": "Rising Sun Inn"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting wizard's mind bombs, Asgarnian ales, or dwarven stouts until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Falador West Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_ale_from_the_Rising_Sun_Inn",
+     "title": "Money making guide/Buying ale from the Rising Sun Inn",
+     "revision": 14381436,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "buying-team-capes",
+   "title": "Buying team capes",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Buying team capes. Wilderness",
+   "requirements": [
+    {
+     "kind": "check",
+     "text": "Bring: + recommended, Coins"
+    },
+    {
+     "kind": "check",
+     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 56.2593,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 3008,
+      "name": "Energy potion(4)"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      48
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 4325,
+      "name": "Team-6 cape"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "team-6 cape",
+    "perHour": {
+     "slow": 2200,
+     "typical": 3200,
+     "fast": 4000
+    },
+    "basis": "wiki-guide",
+    "assumes": "4,000 team-6 cape an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3000,
+    "y": 3929,
+    "plane": 0,
+    "label": "Wilderness"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "high",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Coins, Energy potion(4) at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Wilderness.",
+     "place": {
+      "x": 3000,
+      "y": 3929,
+      "plane": 0,
+      "label": "Wilderness"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Buying team capes until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_team_capes",
+     "title": "Money making guide/Buying team capes",
+     "revision": 14876465,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "casting-bones-to-bananas",
+   "title": "Casting Bones to Bananas",
+   "family": "processing",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Casting Bones to Bananas. Bank or bank chest",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "magic",
+     "level": 15
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Mud battlestaff, Water staff (F2P)"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 526,
+      "name": "Bones"
+     },
+     "qty": 27
+    },
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 1,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1963,
+      "name": "Banana"
+     },
+     "qty": 27
+    }
+   ],
+   "rate": {
+    "unit": "action",
+    "perHour": {
+     "slow": 429,
+     "typical": 624,
+     "fast": 780
+    },
+    "basis": "wiki-guide",
+    "assumes": "780 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Bank or bank chest"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "high",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Bones, Nature rune at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Bank or bank chest.",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Bank or bank chest"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Casting Bones to Bananas until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Casting_Bones_to_Bananas",
+     "title": "Money making guide/Casting Bones to Bananas",
+     "revision": 15174068,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "catching-lobsters-free-to-play",
+   "title": "Catching lobsters (free-to-play)",
+   "family": "gathering",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Catching lobsters (free-to-play). Corsair Cove Resource Area",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "fishing",
+     "level": 40
+    },
+    {
+     "kind": "quest",
+     "quest": "The Corsair Curse",
+     "state": "complete"
+    },
+    {
+     "kind": "quest",
+     "quest": "Dragon Slayer I",
+     "state": "complete"
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Lobster pot"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 377,
+      "name": "Raw lobster"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "raw lobster",
+    "perHour": {
+     "slow": 77,
+     "typical": 112,
+     "fast": 140
+    },
+    "basis": "wiki-guide",
+    "assumes": "140 raw lobster an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 2477,
+    "y": 2892,
+    "plane": 0,
+    "label": "Corsair Cove Resource Area"
+   },
+   "bank": {
+    "x": 2947,
+    "y": 3366,
+    "plane": 0,
+    "label": "Falador West Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Corsair Cove Resource Area.",
+     "place": {
+      "x": 2477,
+      "y": 2892,
+      "plane": 0,
+      "label": "Corsair Cove Resource Area"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Catching lobsters (free-to-play) until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Falador West Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_lobsters_(free-to-play)",
+     "title": "Money making guide/Catching lobsters (free-to-play)",
+     "revision": 14378142,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "catching-sardines-herring",
+   "title": "Catching sardines & herring",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Catching sardines & herring. Draynor Village",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "fishing",
+     "level": 10
+    },
+    {
+     "kind": "level",
+     "skill": "combat",
+     "level": 15
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Fishing rod"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 313,
+      "name": "Fishing bait"
+     },
+     "qty": 1
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 327,
+      "name": "Raw sardine"
+     },
+     "qty": 0.53
+    },
+    {
+     "item": {
+      "id": 345,
+      "name": "Raw herring"
+     },
+     "qty": 0.47
+    }
+   ],
+   "rate": {
+    "unit": "action",
+    "perHour": {
+     "slow": 272,
+     "typical": 395,
+     "fast": 494
+    },
+    "basis": "wiki-guide",
+    "assumes": "494 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3103,
+    "y": 3265,
+    "plane": 0,
+    "label": "Draynor Village"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3243,
+    "plane": 0,
+    "label": "Draynor Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Fishing bait at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Draynor Village.",
+     "place": {
+      "x": 3103,
+      "y": 3265,
+      "plane": 0,
+      "label": "Draynor Village"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Catching sardines & herring until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Draynor Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_sardines_&_herring",
+     "title": "Money making guide/Catching sardines & herring",
+     "revision": 14957916,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "catching-shrimp-anchovies",
+   "title": "Catching shrimp & anchovies",
+   "family": "gathering",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Catching shrimps & anchovies (free-to-play). Draynor Village",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "fishing",
+     "level": 15
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Small net"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 321,
+      "name": "Raw anchovies"
+     },
+     "qty": 0.4
+    },
+    {
+     "item": {
+      "id": 317,
+      "name": "Raw shrimps"
+     },
+     "qty": 0.6
+    }
+   ],
+   "rate": {
+    "unit": "action",
+    "perHour": {
+     "slow": 341,
+     "typical": 496,
+     "fast": 620
+    },
+    "basis": "wiki-guide",
+    "assumes": "620 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3103,
+    "y": 3265,
+    "plane": 0,
+    "label": "Draynor Village"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3243,
+    "plane": 0,
+    "label": "Draynor Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Draynor Village.",
+     "place": {
+      "x": 3103,
+      "y": 3265,
+      "plane": 0,
+      "label": "Draynor Village"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Catching shrimps & anchovies (free-to-play) until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Draynor Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_shrimp_&_anchovies",
+     "title": "Money making guide/Catching shrimp & anchovies",
+     "revision": 14957332,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "catching-tuna-swordfish-free-to-play",
+   "title": "Catching tuna & swordfish (free-to-play)",
+   "family": "gathering",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Catching tuna & swordfish (free-to-play). Musa Point",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "fishing",
+     "level": 50
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Harpoon * ~ for ferry"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 371,
+      "name": "Raw swordfish"
+     },
+     "qty": 0.4
+    },
+    {
+     "item": {
+      "id": 359,
+      "name": "Raw tuna"
+     },
+     "qty": 0.6
+    }
+   ],
+   "rate": {
+    "unit": "action",
+    "perHour": {
+     "slow": 107,
+     "typical": 156,
+     "fast": 195
+    },
+    "basis": "wiki-guide",
+    "assumes": "195 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 2904,
+    "y": 3162,
+    "plane": 0,
+    "label": "Musa Point"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3243,
+    "plane": 0,
+    "label": "Draynor Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Musa Point.",
+     "place": {
+      "x": 2904,
+      "y": 3162,
+      "plane": 0,
+      "label": "Musa Point"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Catching tuna & swordfish (free-to-play) until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Draynor Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_tuna_&_swordfish_(free-to-play)",
+     "title": "Money making guide/Catching tuna & swordfish (free-to-play)",
+     "revision": 14483592,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-air-talismans",
+   "title": "Collecting air talismans",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting Air talismans from Duke Horacio. Lumbridge Castle",
+   "requirements": [
+    {
+     "kind": "quest",
+     "quest": "Rune Mysteries",
+     "state": "complete"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 1438,
+      "name": "Air talisman"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "air talisman",
+    "perHour": {
+     "slow": 179,
+     "typical": 260,
+     "fast": 325
+    },
+    "basis": "wiki-guide",
+    "assumes": "325 air talisman an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3217,
+    "y": 3219,
+    "plane": 0,
+    "label": "Lumbridge Castle"
+   },
+   "bank": {
+    "x": 3208,
+    "y": 3220,
+    "plane": 2,
+    "label": "Lumbridge Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Lumbridge Castle.",
+     "place": {
+      "x": 3217,
+      "y": 3219,
+      "plane": 0,
+      "label": "Lumbridge Castle"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting Air talismans from Duke Horacio until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Lumbridge Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_air_talismans",
+     "title": "Money making guide/Collecting air talismans",
+     "revision": 15010937,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-and-tanning-cowhide",
+   "title": "Collecting and tanning cowhide",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting and tanning cowhide. Lumbridge cow field",
+   "requirements": [
+    {
+     "kind": "check",
+     "text": "Bring: * Amulet of glory and/or Ring of dueling (recommended) * Weight-reducing clothing (recommended) * (Super) energy or Stamina potions (recommended), Coins"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 3,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1743,
+      "name": "Hard leather"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "hard leather",
+    "perHour": {
+     "slow": 206,
+     "typical": 300,
+     "fast": 375
+    },
+    "basis": "wiki-guide",
+    "assumes": "375 hard leather an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3253,
+    "y": 3277,
+    "plane": 0,
+    "label": "Lumbridge cow field"
+   },
+   "bank": {
+    "x": 3208,
+    "y": 3220,
+    "plane": 2,
+    "label": "Lumbridge Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Coins at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Lumbridge cow field.",
+     "place": {
+      "x": 3253,
+      "y": 3277,
+      "plane": 0,
+      "label": "Lumbridge cow field"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting and tanning cowhide until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Lumbridge Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_and_tanning_cowhide",
+     "title": "Money making guide/Collecting and tanning cowhide",
+     "revision": 15265661,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-ashes",
+   "title": "Collecting ashes",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting ashes. Any place that provides a long strip of land near a bank (e.g. Grand Exchange, Varrock west bank, Seers' Village, Falador east bank, the Emir's Arena, or Piscatoris Fishing Colony)",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "firemaking",
+     "level": 30
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Tinderbox * Maple logs (recommended) or * Willow logs"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 1517,
+      "name": "Maple logs"
+     },
+     "qty": 1
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 592,
+      "name": "Ashes"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "ashes",
+    "perHour": {
+     "slow": 550,
+     "typical": 800,
+     "fast": 1000
+    },
+    "basis": "wiki-guide",
+    "assumes": "1,000 ashes an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Any place that provides a long strip of land near a bank (e.g"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Maple logs at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Any place that provides a long strip of land near a bank (e.g.",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Any place that provides a long strip of land near a bank (e.g"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting ashes until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_ashes",
+     "title": "Money making guide/Collecting ashes",
+     "revision": 15386459,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-beer-glasses",
+   "title": "Collecting beer glasses",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting beer glasses. Al Kharid",
+   "requirements": [],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 1919,
+      "name": "Beer glass"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "beer glass",
+    "perHour": {
+     "slow": 429,
+     "typical": 624,
+     "fast": 780
+    },
+    "basis": "wiki-guide",
+    "assumes": "780 beer glass an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3325,
+    "y": 3137,
+    "plane": 0,
+    "label": "Al Kharid"
+   },
+   "bank": {
+    "x": 3269,
+    "y": 3167,
+    "plane": 0,
+    "label": "Al Kharid Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Al Kharid.",
+     "place": {
+      "x": 3325,
+      "y": 3137,
+      "plane": 0,
+      "label": "Al Kharid"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting beer glasses until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Al Kharid Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_beer_glasses",
+     "title": "Money making guide/Collecting beer glasses",
+     "revision": 15118236,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-big-bones-from-the-bone-yard",
+   "title": "Collecting big bones from the Bone Yard",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting big bones from the Bone Yard. Bone Yard, in circa level 26-30 Wilderness",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "prayer",
+     "level": 25
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Adamant armour (helm, platebody and legs/skirt) or better * Amulet of glory and Games necklace (or an Air staff with 6 law and 6 fire runes to cast Varrock Teleport) * Looting bag * (Super) Energy potion or Stamina potion (optional)"
+    },
+    {
+     "kind": "check",
+     "text": "Magic 25 recommended for Varrock Teleport (optional)"
+    },
+    {
+     "kind": "check",
+     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 563,
+      "name": "Law rune"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      27
+     ],
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 554,
+      "name": "Fire rune"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      27
+     ],
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 532,
+      "name": "Big bones"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "big bones",
+    "perHour": {
+     "slow": 116,
+     "typical": 168,
+     "fast": 210
+    },
+    "basis": "wiki-guide",
+    "assumes": "210 big bones an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3246,
+    "y": 3736,
+    "plane": 0,
+    "label": "Bone Yard, in circa level 26-30 Wilderness"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "high",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Law rune, Fire rune at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Bone Yard, in circa level 26-30 Wilderness.",
+     "place": {
+      "x": 3246,
+      "y": 3736,
+      "plane": 0,
+      "label": "Bone Yard, in circa level 26-30 Wilderness"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting big bones from the Bone Yard until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_big_bones_from_the_Bone_Yard",
+     "title": "Money making guide/Collecting big bones from the Bone Yard",
+     "revision": 14716893,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-bronze-pickaxes",
+   "title": "Collecting bronze pickaxes",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting bronze pickaxes from a barrel. Ruins of Camdozaal",
+   "requirements": [
+    {
+     "kind": "quest",
+     "quest": "Below Ice Mountain",
+     "state": "complete"
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Bronze pickaxe"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 1265,
+      "name": "Bronze pickaxe"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "bronze pickaxe",
+    "perHour": {
+     "slow": 1100,
+     "typical": 1600,
+     "fast": 2000
+    },
+    "basis": "wiki-guide",
+    "assumes": "2,000 bronze pickaxe an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 2968,
+    "y": 5808,
+    "plane": 0,
+    "label": "Ruins of Camdozaal"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "high",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Ruins of Camdozaal.",
+     "place": {
+      "x": 2968,
+      "y": 5808,
+      "plane": 0,
+      "label": "Ruins of Camdozaal"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting bronze pickaxes from a barrel until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_bronze_pickaxes",
+     "title": "Money making guide/Collecting bronze pickaxes",
+     "revision": 14381020,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-chaos-runes",
+   "title": "Collecting chaos runes",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting chaos runes within the Dark Warrior's Fortress. Dark Warriors' Fortress",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "magic",
+     "level": 25
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Armour (optional) * Food to survive attacks from hostile NPCs and PKers * Law and air runes to teleport to Varrock * Energy potions"
+    },
+    {
+     "kind": "check",
+     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 562,
+      "name": "Chaos rune"
+     },
+     "qty": 1,
+     "stack": true
+    }
+   ],
+   "rate": {
+    "unit": "chaos rune",
+    "perHour": {
+     "slow": 825,
+     "typical": 1200,
+     "fast": 1500
+    },
+    "basis": "wiki-guide",
+    "assumes": "1,500 chaos rune an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3029,
+    "y": 3630,
+    "plane": 0,
+    "label": "Dark Warriors' Fortress"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "high",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Dark Warriors' Fortress.",
+     "place": {
+      "x": 3029,
+      "y": 3630,
+      "plane": 0,
+      "label": "Dark Warriors' Fortress"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting chaos runes within the Dark Warrior's Fortress until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_chaos_runes",
+     "title": "Money making guide/Collecting chaos runes",
+     "revision": 14435949,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-fish-food",
+   "title": "Collecting fish food",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting fish food in Draynor Manor. Draynor Manor",
+   "requirements": [],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 272,
+      "name": "Fish food"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "fish food",
+    "perHour": {
+     "slow": 132,
+     "typical": 192,
+     "fast": 240
+    },
+    "basis": "wiki-guide",
+    "assumes": "240 fish food an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3109,
+    "y": 3357,
+    "plane": 1,
+    "label": "Draynor Manor"
+   },
+   "bank": {
+    "x": 3185,
+    "y": 3440,
+    "plane": 0,
+    "label": "Varrock West Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Draynor Manor.",
+     "place": {
+      "x": 3109,
+      "y": 3357,
+      "plane": 1,
+      "label": "Draynor Manor"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting fish food in Draynor Manor until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Varrock West Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_fish_food",
+     "title": "Money making guide/Collecting fish food",
+     "revision": 14385382,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-garlic",
+   "title": "Collecting garlic",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting Garlic from Morgan's house. Draynor Village",
+   "requirements": [],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 1550,
+      "name": "Garlic"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "garlic",
+    "perHour": {
+     "slow": 424,
+     "typical": 616,
+     "fast": 770
+    },
+    "basis": "wiki-guide",
+    "assumes": "770 garlic an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3099,
+    "y": 3269,
+    "plane": 0,
+    "label": "Draynor Village"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3243,
+    "plane": 0,
+    "label": "Draynor Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Draynor Village.",
+     "place": {
+      "x": 3099,
+      "y": 3269,
+      "plane": 0,
+      "label": "Draynor Village"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting Garlic from Morgan's house until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Draynor Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_garlic",
+     "title": "Money making guide/Collecting garlic",
+     "revision": 14216376,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-monk-s-robes",
+   "title": "Collecting monk's robes",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting monk's robes. Edgeville Monastery",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "prayer",
+     "level": 31
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 542,
+      "name": "Monk's robe"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 544,
+      "name": "Monk's robe top"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "monk's robe",
+    "perHour": {
+     "slow": 100,
+     "typical": 146,
+     "fast": 182
+    },
+    "basis": "wiki-guide",
+    "assumes": "182 monk's robe an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3052,
+    "y": 3490,
+    "plane": 0,
+    "label": "Edgeville Monastery"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Edgeville Monastery.",
+     "place": {
+      "x": 3052,
+      "y": 3490,
+      "plane": 0,
+      "label": "Edgeville Monastery"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting monk's robes until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_monk's_robes",
+     "title": "Money making guide/Collecting monk's robes",
+     "revision": 14372233,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-nature-runes",
+   "title": "Collecting nature runes",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting Nature Runes from the Lava Island south-east of Demonic Ruins.. South-east of Demonic Ruins in level 42-43 Wilderness",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "prayer",
+     "level": 43
+    },
+    {
+     "kind": "level",
+     "skill": "magic",
+     "level": 33
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Staff of air and law runes to cast Telekinetic Grab * Fire runes to teleport to Varrock * Food to survive attacks from the lesser demons and PKers"
+    },
+    {
+     "kind": "check",
+     "text": "This guide assumes that you are getting both spawns before hopping worlds. Some decent armour that provides some defence bonus."
+    },
+    {
+     "kind": "check",
+     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 563,
+      "name": "Law rune"
+     },
+     "qty": 1,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 3.5,
+     "stack": true
+    }
+   ],
+   "rate": {
+    "unit": "action",
+    "perHour": {
+     "slow": 297,
+     "typical": 432,
+     "fast": 540
+    },
+    "basis": "wiki-guide",
+    "assumes": "540 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3289,
+    "y": 3885,
+    "plane": 0,
+    "label": "South-east of Demonic Ruins in level 42-43 Wilderness"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "high",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Law rune at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to South-east of Demonic Ruins in level 42-43 Wilderness.",
+     "place": {
+      "x": 3289,
+      "y": 3885,
+      "plane": 0,
+      "label": "South-east of Demonic Ruins in level 42-43 Wilderness"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting Nature Runes from the Lava Island south-east of Demonic Ruins. until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_nature_runes",
+     "title": "Money making guide/Collecting nature runes",
+     "revision": 14381445,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-red-spiders-eggs-free-to-play",
+   "title": "Collecting red spiders' eggs (free-to-play)",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting Red spiders' eggs. Varrock Sewers",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "combat",
+     "level": 69
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Staff of air"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 563,
+      "name": "Law rune"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      26
+     ],
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 554,
+      "name": "Fire rune"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      26
+     ],
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 3008,
+      "name": "Energy potion(4)"
+     },
+     "qty": 0.0962
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 223,
+      "name": "Red spiders' eggs"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "red spiders' eggs",
+    "perHour": {
+     "slow": 215,
+     "typical": 312,
+     "fast": 390
+    },
+    "basis": "wiki-guide",
+    "assumes": "390 red spiders' eggs an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3210,
+    "y": 3448,
+    "plane": 0,
+    "label": "Varrock Sewers"
+   },
+   "bank": {
+    "x": 3185,
+    "y": 3440,
+    "plane": 0,
+    "label": "Varrock West Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Law rune, Fire rune, Energy potion(4) at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Varrock Sewers.",
+     "place": {
+      "x": 3210,
+      "y": 3448,
+      "plane": 0,
+      "label": "Varrock Sewers"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting Red spiders' eggs until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Varrock West Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_red_spiders'_eggs_(free-to-play)",
+     "title": "Money making guide/Collecting red spiders' eggs (free-to-play)",
+     "revision": 14659488,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-ruby-rings",
+   "title": "Collecting ruby rings",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting Ruby rings from the basement of Varrock West Bank. Varrock West Bank",
+   "requirements": [
+    {
+     "kind": "check",
+     "text": "Bring: Ruby Ring"
+    },
+    {
+     "kind": "check",
+     "text": "Completed steps to obtain the Robes of Ruin."
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 1641,
+      "name": "Ruby ring"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "ruby ring",
+    "perHour": {
+     "slow": 138,
+     "typical": 200,
+     "fast": 250
+    },
+    "basis": "wiki-guide",
+    "assumes": "250 ruby ring an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3185,
+    "y": 3440,
+    "plane": 0,
+    "label": "Varrock West Bank"
+   },
+   "bank": {
+    "x": 3185,
+    "y": 3440,
+    "plane": 0,
+    "label": "Varrock West Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Varrock West Bank.",
+     "place": {
+      "x": 3185,
+      "y": 3440,
+      "plane": 0,
+      "label": "Varrock West Bank"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting Ruby rings from the basement of Varrock West Bank until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Varrock West Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_ruby_rings",
+     "title": "Money making guide/Collecting ruby rings",
+     "revision": 15203464,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-spades",
+   "title": "Collecting spades",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting spades in Falador. Estate agent house in Falador",
+   "requirements": [],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 952,
+      "name": "Spade"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "spade",
+    "perHour": {
+     "slow": 185,
+     "typical": 269,
+     "fast": 336
+    },
+    "basis": "wiki-guide",
+    "assumes": "336 spade an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 2983,
+    "y": 3369,
+    "plane": 0,
+    "label": "Estate agent house in Falador"
+   },
+   "bank": {
+    "x": 3017,
+    "y": 3356,
+    "plane": 0,
+    "label": "Falador East Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Estate agent house in Falador.",
+     "place": {
+      "x": 2983,
+      "y": 3369,
+      "plane": 0,
+      "label": "Estate agent house in Falador"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting spades in Falador until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Falador East Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_spades",
+     "title": "Money making guide/Collecting spades",
+     "revision": 14107401,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-steel-platebodies",
+   "title": "Collecting steel platebodies",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting and banking steel platebodies. Lava maze",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "prayer",
+     "level": 43
+    },
+    {
+     "kind": "level",
+     "skill": "magic",
+     "level": 25
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Armour (optional) * Knife or a slash weapon (required to cut the web) * Food to survive attacks from hostile NPCs and PKers * Law and air runes to teleport to Varrock * Energy potions"
+    },
+    {
+     "kind": "check",
+     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 554,
+      "name": "Fire rune"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      25
+     ],
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 563,
+      "name": "Law rune"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      25
+     ],
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1119,
+      "name": "Steel platebody"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "steel platebody",
+    "perHour": {
+     "slow": 138,
+     "typical": 200,
+     "fast": 250
+    },
+    "basis": "wiki-guide",
+    "assumes": "250 steel platebody an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3070,
+    "y": 3853,
+    "plane": 0,
+    "label": "Lava maze"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "high",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Fire rune, Law rune at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Lava maze.",
+     "place": {
+      "x": 3070,
+      "y": 3853,
+      "plane": 0,
+      "label": "Lava maze"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting and banking steel platebodies until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_steel_platebodies",
+     "title": "Money making guide/Collecting steel platebodies",
+     "revision": 14856630,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-steel-platebodies-high-alchemy",
+   "title": "Collecting steel platebodies (High Alchemy)",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting and alching steel platebodies. Lava Maze",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "magic",
+     "level": 55
+    },
+    {
+     "kind": "level",
+     "skill": "prayer",
+     "level": 43
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Staff of fire and nature runes for High Level Alchemy * Armour (optional) * Knife or a slash weapon (required to cut the web) * Food to survive attacks from hostile NPCs and PKers * Law and air runes to teleport to Varrock * Energy potions"
+    },
+    {
+     "kind": "check",
+     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 1,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1119,
+      "name": "Steel platebody"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "steel platebody",
+    "perHour": {
+     "slow": 132,
+     "typical": 192,
+     "fast": 240
+    },
+    "basis": "wiki-guide",
+    "assumes": "240 steel platebody an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3072,
+    "y": 3854,
+    "plane": 0,
+    "label": "Lava Maze"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "high",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Nature rune at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Lava Maze.",
+     "place": {
+      "x": 3072,
+      "y": 3854,
+      "plane": 0,
+      "label": "Lava Maze"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting and alching steel platebodies until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_steel_platebodies_(High_Alchemy)",
+     "title": "Money making guide/Collecting steel platebodies (High Alchemy)",
+     "revision": 14708436,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-tinderboxes",
+   "title": "Collecting tinderboxes",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collect tinderboxes from the old bookshelf in the Wise Old Man's house. Draynor Village",
+   "requirements": [],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 590,
+      "name": "Tinderbox"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "tinderbox",
+    "perHour": {
+     "slow": 924,
+     "typical": 1344,
+     "fast": 1680
+    },
+    "basis": "wiki-guide",
+    "assumes": "1,680 tinderbox an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3089,
+    "y": 3253,
+    "plane": 0,
+    "label": "Draynor Village"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3243,
+    "plane": 0,
+    "label": "Draynor Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "high",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Draynor Village.",
+     "place": {
+      "x": 3089,
+      "y": 3253,
+      "plane": 0,
+      "label": "Draynor Village"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collect tinderboxes from the old bookshelf in the Wise Old Man's house until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Draynor Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_tinderboxes",
+     "title": "Money making guide/Collecting tinderboxes",
+     "revision": 14912496,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "collecting-wine-of-zamorak-free-to-play",
+   "title": "Collecting wine of zamorak (free-to-play)",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Collecting Wine of Zamorak. Chaos Temple",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "magic",
+     "level": 37
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Staff of air * Zamorak monk top * Zamorak monk bottom"
+    },
+    {
+     "kind": "check",
+     "text": "At least 500 total level (in free-to-play skills)"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 563,
+      "name": "Law rune"
+     },
+     "qty": 1.0385,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 555,
+      "name": "Water rune"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      26
+     ],
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 245,
+      "name": "Wine of Zamorak"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "wine of zamorak",
+    "perHour": {
+     "slow": 57,
+     "typical": 83,
+     "fast": 104
+    },
+    "basis": "wiki-guide",
+    "assumes": "104 wine of zamorak an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 2947,
+    "y": 3369,
+    "plane": 0,
+    "label": "Chaos Temple"
+   },
+   "bank": {
+    "x": 2947,
+    "y": 3366,
+    "plane": 0,
+    "label": "Falador West Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Law rune, Water rune at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Chaos Temple.",
+     "place": {
+      "x": 2947,
+      "y": 3369,
+      "plane": 0,
+      "label": "Chaos Temple"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Collecting Wine of Zamorak until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Falador West Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_wine_of_zamorak_(free-to-play)",
+     "title": "Money making guide/Collecting wine of zamorak (free-to-play)",
+     "revision": 15293976,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "cooking-plain-pizzas",
+   "title": "Cooking plain pizzas",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Cooking plain pizzas. ",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "cooking",
+     "level": 35
+    },
+    {
+     "kind": "check",
+     "text": "Bring: +"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 2283,
+      "name": "Pizza base"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 1982,
+      "name": "Tomato"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 1985,
+      "name": "Cheese"
+     },
+     "qty": 1
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 2289,
+      "name": "Plain pizza"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "plain pizza",
+    "perHour": {
+     "slow": 297,
+     "typical": 432,
+     "fast": 540
+    },
+    "basis": "wiki-guide",
+    "assumes": "540 plain pizza an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Pizza base, Tomato, Cheese at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Grand Exchange.",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Grand Exchange"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Cooking plain pizzas until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_plain_pizzas",
+     "title": "Money making guide/Cooking plain pizzas",
+     "revision": 14720686,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "firecycling",
+   "title": "Firecycling",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Picking up ashes from players Firemaking. ",
+   "requirements": [],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 592,
+      "name": "Ashes"
+     },
+     "qty": 1400
+    }
+   ],
+   "rate": {
+    "unit": "action",
+    "perHour": {
+     "slow": 1,
+     "typical": 1,
+     "fast": 1
+    },
+    "basis": "wiki-guide",
+    "assumes": "1 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Grand Exchange.",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Grand Exchange"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Picking up ashes from players Firemaking until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Firecycling",
+     "title": "Money making guide/Firecycling",
+     "revision": 15376181,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "killing-ankou-free-to-play",
+   "title": "Killing ankou (free-to-play)",
+   "family": "combat",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Killing ankou. Stronghold of Security (Level 4)",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "combat",
+     "level": 60
+    },
+    {
+     "kind": "level",
+     "skill": "attack",
+     "level": 60
+    },
+    {
+     "kind": "level",
+     "skill": "strength",
+     "level": 60
+    },
+    {
+     "kind": "level",
+     "skill": "defence",
+     "level": 60
+    },
+    {
+     "kind": "level",
+     "skill": "prayer",
+     "level": 43
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Rune armour (chainbody, platelegs/skirt) for melee * Green d'hide armour for Ranged * Boots, leather gloves or green d'hide vambraces and any cape * Amulet of power * Chisel (to cut left skull halves into bone fragments"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 361,
+      "name": "Tuna"
+     },
+     "qty": 0.2
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1436,
+      "name": "Rune essence"
+     },
+     "qty": 0.75
+    },
+    {
+     "item": {
+      "id": 581,
+      "name": "Black robe"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      20
+     ]
+    },
+    {
+     "item": {
+      "id": 563,
+      "name": "Law rune"
+     },
+     "qty": 0.4,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 890,
+      "name": "Adamant arrow"
+     },
+     "qty": 0.38,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 447,
+      "name": "Mithril ore"
+     },
+     "qty": 0.25
+    },
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 13.44,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 1623,
+      "name": "Uncut sapphire"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      200
+     ]
+    },
+    {
+     "item": {
+      "id": 1621,
+      "name": "Uncut emerald"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      400
+     ]
+    },
+    {
+     "item": {
+      "id": 1619,
+      "name": "Uncut ruby"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      800
+     ]
+    },
+    {
+     "item": {
+      "id": 1617,
+      "name": "Uncut diamond"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      3200
+     ]
+    },
+    {
+     "item": {
+      "id": 25139,
+      "name": "Bone fragments"
+     },
+     "qty": 0.15
+    }
+   ],
+   "rate": {
+    "unit": "kill",
+    "perHour": {
+     "slow": 66,
+     "typical": 96,
+     "fast": 120
+    },
+    "basis": "wiki-guide",
+    "assumes": "120 kill an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 1972,
+    "y": 4927,
+    "plane": 0,
+    "label": "Stronghold of Security (Level 4)"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "moderate",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Take food and your best gear from the bank."
+    },
+    {
+     "kind": "prepare",
+     "text": "Buy Tuna at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Stronghold of Security (Level 4).",
+     "place": {
+      "x": 1972,
+      "y": 4927,
+      "plane": 0,
+      "label": "Stronghold of Security (Level 4)"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Killing ankou until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_ankou_(free-to-play)",
+     "title": "Money making guide/Killing ankou (free-to-play)",
+     "revision": 15266182,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "killing-bears",
+   "title": "Killing bears",
+   "family": "combat",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Killing Bears. South of Mind Altar",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "combat",
+     "level": 30
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Combat equipment"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 948,
+      "name": "Bear fur"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 2136,
+      "name": "Raw bear meat"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "kill",
+    "perHour": {
+     "slow": 51,
+     "typical": 74,
+     "fast": 92
+    },
+    "basis": "wiki-guide",
+    "assumes": "92 kill an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 2785,
+    "y": 4840,
+    "plane": 0,
+    "label": "South of Mind Altar"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "moderate",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Take food and your best gear from the bank."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to South of Mind Altar.",
+     "place": {
+      "x": 2785,
+      "y": 4840,
+      "plane": 0,
+      "label": "South of Mind Altar"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Killing Bears until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_bears",
+     "title": "Money making guide/Killing bears",
+     "revision": 14378144,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "killing-bryophyta-free-to-play",
+   "title": "Killing Bryophyta (free-to-play)",
+   "family": "combat",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Killing Bryophyta (free-to-play). Bryophyta's lair, Varrock sewers, Wilderness.",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "attack",
+     "level": 50
+    },
+    {
+     "kind": "level",
+     "skill": "strength",
+     "level": 50
+    },
+    {
+     "kind": "level",
+     "skill": "defence",
+     "level": 50
+    },
+    {
+     "kind": "level",
+     "skill": "prayer",
+     "level": 43
+    },
+    {
+     "kind": "level",
+     "skill": "woodcutting",
+     "level": 57
+    },
+    {
+     "kind": "item",
+     "role": "tool",
+     "any": [],
+     "family": "axe"
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Bronze axe or better, Full rune (rune chainbody, rune platelegs, rune kiteshield), Cheap armour for in wilderness (leather chaps, leather cowl, black sq shield), Rune scimitar, Amulet of power, red cape, leather boots, leather gloves."
+    },
+    {
+     "kind": "check",
+     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 373,
+      "name": "Swordfish"
+     },
+     "qty": 30
+    },
+    {
+     "item": {
+      "id": 113,
+      "name": "Strength potion(4)"
+     },
+     "qty": 0.5
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 532,
+      "name": "Big bones"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 22372,
+      "name": "Bryophyta's essence"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      118
+     ]
+    },
+    {
+     "item": {
+      "id": 1303,
+      "name": "Rune longsword"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      20
+     ]
+    },
+    {
+     "item": {
+      "id": 1147,
+      "name": "Rune med helm"
+     },
+     "qty": 0.1271
+    },
+    {
+     "item": {
+      "id": 1093,
+      "name": "Rune plateskirt"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      20
+     ]
+    },
+    {
+     "item": {
+      "id": 1079,
+      "name": "Rune platelegs"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      20
+     ]
+    },
+    {
+     "item": {
+      "id": 1185,
+      "name": "Rune sq shield"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      20
+     ]
+    },
+    {
+     "item": {
+      "id": 1289,
+      "name": "Rune sword"
+     },
+     "qty": 0.0847
+    },
+    {
+     "item": {
+      "id": 1123,
+      "name": "Adamant platebody"
+     },
+     "qty": 0.1271
+    },
+    {
+     "item": {
+      "id": 1163,
+      "name": "Rune full helm"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      59
+     ]
+    },
+    {
+     "item": {
+      "id": 1199,
+      "name": "Adamant kiteshield"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      118
+     ]
+    },
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 6.7797,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 564,
+      "name": "Cosmic rune"
+     },
+     "qty": 5.0839,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 563,
+      "name": "Law rune"
+     },
+     "qty": 5.0839,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 562,
+      "name": "Chaos rune"
+     },
+     "qty": 7.6258,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 560,
+      "name": "Death rune"
+     },
+     "qty": 4.2373,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 890,
+      "name": "Adamant arrow"
+     },
+     "qty": 0.8475,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 2363,
+      "name": "Runite bar"
+     },
+     "qty": 0.1017
+    },
+    {
+     "item": {
+      "id": 1619,
+      "name": "Uncut ruby"
+     },
+     "qty": 0.1695
+    },
+    {
+     "item": {
+      "id": 1617,
+      "name": "Uncut diamond"
+     },
+     "qty": 0.1695
+    },
+    {
+     "item": {
+      "id": 2353,
+      "name": "Steel bar"
+     },
+     "qty": 0.6356
+    },
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 559.322,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 113,
+      "name": "Strength potion(4)"
+     },
+     "qty": 0.6356
+    }
+   ],
+   "rate": {
+    "unit": "kill",
+    "perHour": {
+     "slow": 1,
+     "typical": 1,
+     "fast": 1
+    },
+    "basis": "wiki-guide",
+    "assumes": "1 kill an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3220,
+    "y": 9933,
+    "plane": 0,
+    "label": "Bryophyta's lair, Varrock sewers, Wilderness."
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "high",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Take food and your best gear from the bank."
+    },
+    {
+     "kind": "prepare",
+     "text": "Buy Swordfish, Strength potion(4) at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Bryophyta's lair, Varrock sewers, Wilderness..",
+     "place": {
+      "x": 3220,
+      "y": 9933,
+      "plane": 0,
+      "label": "Bryophyta's lair, Varrock sewers, Wilderness."
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Killing Bryophyta (free-to-play) until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_Bryophyta_(free-to-play)",
+     "title": "Money making guide/Killing Bryophyta (free-to-play)",
+     "revision": 15347393,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "killing-chaos-dwarves",
+   "title": "Killing chaos dwarves",
+   "family": "combat",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Killing chaos dwarves. East of The Forgotten Cemetery, north of Bone Yard",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "combat",
+     "level": 60
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Emergency teleport, armour, a weapon"
+    },
+    {
+     "kind": "check",
+     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 373,
+      "name": "Swordfish"
+     },
+     "qty": 0.2963
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 0.2109,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 563,
+      "name": "Law rune"
+     },
+     "qty": 0.0938,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 558,
+      "name": "Mind rune"
+     },
+     "qty": 0.8672,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 564,
+      "name": "Cosmic rune"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      21
+     ],
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 556,
+      "name": "Air rune"
+     },
+     "qty": 0.5625,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 555,
+      "name": "Water rune"
+     },
+     "qty": 0.0781,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 562,
+      "name": "Chaos rune"
+     },
+     "qty": 0.2344,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 560,
+      "name": "Death rune"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      43
+     ],
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 54.9297,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 991,
+      "name": "Muddy key"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      18
+     ]
+    },
+    {
+     "item": {
+      "id": 2359,
+      "name": "Mithril bar"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      21
+     ]
+    },
+    {
+     "item": {
+      "id": 453,
+      "name": "Coal"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      128
+     ]
+    },
+    {
+     "item": {
+      "id": 1157,
+      "name": "Steel full helm"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      64
+     ]
+    },
+    {
+     "item": {
+      "id": 1299,
+      "name": "Mithril longsword"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      128
+     ]
+    },
+    {
+     "item": {
+      "id": 1181,
+      "name": "Mithril sq shield"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      128
+     ]
+    },
+    {
+     "item": {
+      "id": 1623,
+      "name": "Uncut sapphire"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      102
+     ]
+    },
+    {
+     "item": {
+      "id": 1621,
+      "name": "Uncut emerald"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      205
+     ]
+    },
+    {
+     "item": {
+      "id": 1619,
+      "name": "Uncut ruby"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      410
+     ]
+    },
+    {
+     "item": {
+      "id": 1617,
+      "name": "Uncut diamond"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      1638
+     ]
+    }
+   ],
+   "rate": {
+    "unit": "kill",
+    "perHour": {
+     "slow": 74,
+     "typical": 108,
+     "fast": 135
+    },
+    "basis": "wiki-guide",
+    "assumes": "135 kill an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3021,
+    "y": 3761,
+    "plane": 0,
+    "label": "East of The Forgotten Cemetery, north of Bone Yard"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "high",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Take food and your best gear from the bank."
+    },
+    {
+     "kind": "prepare",
+     "text": "Buy Swordfish at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to East of The Forgotten Cemetery, north of Bone Yard.",
+     "place": {
+      "x": 3021,
+      "y": 3761,
+      "plane": 0,
+      "label": "East of The Forgotten Cemetery, north of Bone Yard"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Killing chaos dwarves until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_chaos_dwarves",
+     "title": "Money making guide/Killing chaos dwarves",
+     "revision": 15230438,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "killing-elemental-wizards",
+   "title": "Killing elemental wizards",
+   "family": "combat",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Killing fire wizards. South of Falador",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "combat",
+     "level": 31
+    },
+    {
+     "kind": "level",
+     "skill": "ranged",
+     "level": 30
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Any shortbow, green dragonhide armour, amulet of power"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 888,
+      "name": "Mithril arrow"
+     },
+     "qty": 4,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 1993,
+      "name": "Jug of wine"
+     },
+     "qty": 0.25
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 554,
+      "name": "Fire rune"
+     },
+     "qty": 7.125,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 1442,
+      "name": "Fire talisman"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      40
+     ]
+    }
+   ],
+   "rate": {
+    "unit": "kill",
+    "perHour": {
+     "slow": 220,
+     "typical": 320,
+     "fast": 400
+    },
+    "basis": "wiki-guide",
+    "assumes": "400 kill an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 2991,
+    "y": 3271,
+    "plane": 0,
+    "label": "South of Falador"
+   },
+   "bank": {
+    "x": 3017,
+    "y": 3356,
+    "plane": 0,
+    "label": "Falador East Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "moderate",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Take food and your best gear from the bank."
+    },
+    {
+     "kind": "prepare",
+     "text": "Buy Mithril arrow, Jug of wine at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to South of Falador.",
+     "place": {
+      "x": 2991,
+      "y": 3271,
+      "plane": 0,
+      "label": "South of Falador"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Killing fire wizards until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Falador East Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_elemental_wizards",
+     "title": "Money making guide/Killing elemental wizards",
+     "revision": 14909026,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "killing-imps",
+   "title": "Killing imps",
+   "family": "combat",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Killing imps. South of Falador",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "combat",
+     "level": 30
+    },
+    {
+     "kind": "check",
+     "text": "Bring: A weapon"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 25766,
+      "name": "Fiendish ashes"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 1448,
+      "name": "Mind talisman"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      18
+     ]
+    },
+    {
+     "item": {
+      "id": 1470,
+      "name": "Red bead"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      26
+     ]
+    },
+    {
+     "item": {
+      "id": 1472,
+      "name": "Yellow bead"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      26
+     ]
+    },
+    {
+     "item": {
+      "id": 1476,
+      "name": "White bead"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      26
+     ]
+    },
+    {
+     "item": {
+      "id": 1474,
+      "name": "Black bead"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      26
+     ]
+    }
+   ],
+   "rate": {
+    "unit": "kill",
+    "perHour": {
+     "slow": 94,
+     "typical": 136,
+     "fast": 170
+    },
+    "basis": "wiki-guide",
+    "assumes": "170 kill an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 2949,
+    "y": 3345,
+    "plane": 0,
+    "label": "South of Falador"
+   },
+   "bank": {
+    "x": 2947,
+    "y": 3366,
+    "plane": 0,
+    "label": "Falador West Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "moderate",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Take food and your best gear from the bank."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to South of Falador.",
+     "place": {
+      "x": 2949,
+      "y": 3345,
+      "plane": 0,
+      "label": "South of Falador"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Killing imps until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Falador West Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_imps",
+     "title": "Money making guide/Killing imps",
+     "revision": 14457220,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "killing-monkeys",
+   "title": "Killing monkeys",
+   "family": "combat",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Killing monkeys. Karamja",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "combat",
+     "level": 5
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Combat equipment, coins, Coins"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 2.2222,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 3183,
+      "name": "Monkey bones"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "kill",
+    "perHour": {
+     "slow": 99,
+     "typical": 144,
+     "fast": 180
+    },
+    "basis": "wiki-guide",
+    "assumes": "180 kill an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 2843,
+    "y": 3070,
+    "plane": 0,
+    "label": "Karamja"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3243,
+    "plane": 0,
+    "label": "Draynor Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "moderate",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Take food and your best gear from the bank."
+    },
+    {
+     "kind": "prepare",
+     "text": "Buy Coins at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Karamja.",
+     "place": {
+      "x": 2843,
+      "y": 3070,
+      "plane": 0,
+      "label": "Karamja"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Killing monkeys until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Draynor Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_monkeys",
+     "title": "Money making guide/Killing monkeys",
+     "revision": 14990458,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "killing-ogress-shamans",
+   "title": "Killing ogress shamans",
+   "family": "combat",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Killing ogress shamans. Corsair Cove Dungeon",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "ranged",
+     "level": 40
+    },
+    {
+     "kind": "quest",
+     "quest": "The Corsair Curse",
+     "state": "complete"
+    },
+    {
+     "kind": "quest",
+     "quest": "Dragon Slayer I",
+     "state": "complete"
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Coif, cape, leather boots, amulet of power, green d'hide armour (body, chaps, and vambraces), rune scimitar, 3-5x strength potion (4), chisel (optional)"
+    },
+    {
+     "kind": "check",
+     "text": "Magic 55 for High Level Alchemy (optional)"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 379,
+      "name": "Lobster"
+     },
+     "qty": 0.1875
+    },
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 0.1053,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 554,
+      "name": "Fire rune"
+     },
+     "qty": 0.5267,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1197,
+      "name": "Mithril kiteshield"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      17
+     ]
+    },
+    {
+     "item": {
+      "id": 884,
+      "name": "Iron arrow"
+     },
+     "qty": 1.2931,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 886,
+      "name": "Steel arrow"
+     },
+     "qty": 0.9052,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 888,
+      "name": "Mithril arrow"
+     },
+     "qty": 0.6034,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 556,
+      "name": "Air rune"
+     },
+     "qty": 0.6466,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 558,
+      "name": "Mind rune"
+     },
+     "qty": 0.6466,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 555,
+      "name": "Water rune"
+     },
+     "qty": 0.6466,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 557,
+      "name": "Earth rune"
+     },
+     "qty": 0.6466,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 554,
+      "name": "Fire rune"
+     },
+     "qty": 0.6466,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 562,
+      "name": "Chaos rune"
+     },
+     "qty": 1.3578,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 564,
+      "name": "Cosmic rune"
+     },
+     "qty": 0.5388,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 0.694,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 563,
+      "name": "Law rune"
+     },
+     "qty": 0.694,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 560,
+      "name": "Death rune"
+     },
+     "qty": 0.5948,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 58.4052,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 225,
+      "name": "Limpwurt root"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      23
+     ]
+    },
+    {
+     "item": {
+      "id": 1623,
+      "name": "Uncut sapphire"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      29
+     ]
+    },
+    {
+     "item": {
+      "id": 1621,
+      "name": "Uncut emerald"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      29
+     ]
+    },
+    {
+     "item": {
+      "id": 1619,
+      "name": "Uncut ruby"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      29
+     ]
+    },
+    {
+     "item": {
+      "id": 1617,
+      "name": "Uncut diamond"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      29
+     ]
+    },
+    {
+     "item": {
+      "id": 1147,
+      "name": "Rune med helm"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      40
+     ]
+    },
+    {
+     "item": {
+      "id": 1163,
+      "name": "Rune full helm"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      100
+     ]
+    },
+    {
+     "item": {
+      "id": 1373,
+      "name": "Rune battleaxe"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      100
+     ]
+    },
+    {
+     "item": {
+      "id": 21838,
+      "name": "Shaman mask"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      1200
+     ]
+    },
+    {
+     "item": {
+      "id": 532,
+      "name": "Big bones"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "kill",
+    "perHour": {
+     "slow": 44,
+     "typical": 64,
+     "fast": 80
+    },
+    "basis": "wiki-guide",
+    "assumes": "80 kill an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 2002,
+    "y": 8989,
+    "plane": 0,
+    "label": "Corsair Cove Dungeon"
+   },
+   "bank": {
+    "x": 2947,
+    "y": 3366,
+    "plane": 0,
+    "label": "Falador West Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "moderate",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Take food and your best gear from the bank."
+    },
+    {
+     "kind": "prepare",
+     "text": "Buy Lobster, Nature rune, Fire rune at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Corsair Cove Dungeon.",
+     "place": {
+      "x": 2002,
+      "y": 8989,
+      "plane": 0,
+      "label": "Corsair Cove Dungeon"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Killing ogress shamans until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Falador West Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_ogress_shamans",
+     "title": "Money making guide/Killing ogress shamans",
+     "revision": 14516606,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "killing-ogress-warriors",
+   "title": "Killing ogress warriors",
+   "family": "combat",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Killing Ogress Warrior. South of Falador",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "ranged",
+     "level": 40
+    },
+    {
+     "kind": "quest",
+     "quest": "The Corsair Curse",
+     "state": "started"
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Coif, Amulet of power, Green d'hide body, Green d'hide chaps, Green d'hide vambraces, Maple Shortbow / Maple Longbow"
+    },
+    {
+     "kind": "check",
+     "text": "Magic 55 for High Level Alchemy (Optional)"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 884,
+      "name": "Iron arrow"
+     },
+     "qty": 12,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 532,
+      "name": "Big bones"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 1197,
+      "name": "Mithril kiteshield"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      17
+     ]
+    },
+    {
+     "item": {
+      "id": 884,
+      "name": "Iron arrow"
+     },
+     "qty": 1.2931,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 886,
+      "name": "Steel arrow"
+     },
+     "qty": 0.8621,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 888,
+      "name": "Mithril arrow"
+     },
+     "qty": 0.6035,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 556,
+      "name": "Air rune"
+     },
+     "qty": 0.6466,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 558,
+      "name": "Mind rune"
+     },
+     "qty": 0.6466,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 555,
+      "name": "Water rune"
+     },
+     "qty": 0.6466,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 557,
+      "name": "Earth rune"
+     },
+     "qty": 0.6466,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 554,
+      "name": "Fire rune"
+     },
+     "qty": 0.6466,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 562,
+      "name": "Chaos rune"
+     },
+     "qty": 1.3579,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 564,
+      "name": "Cosmic rune"
+     },
+     "qty": 0.5388,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 0.694,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 563,
+      "name": "Law rune"
+     },
+     "qty": 0.694,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 560,
+      "name": "Death rune"
+     },
+     "qty": 0.5949,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 58.4052,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 225,
+      "name": "Limpwurt root"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      23
+     ]
+    },
+    {
+     "item": {
+      "id": 1623,
+      "name": "Uncut sapphire"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      29
+     ]
+    },
+    {
+     "item": {
+      "id": 1621,
+      "name": "Uncut emerald"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      29
+     ]
+    },
+    {
+     "item": {
+      "id": 1619,
+      "name": "Uncut ruby"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      29
+     ]
+    },
+    {
+     "item": {
+      "id": 1617,
+      "name": "Uncut diamond"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      29
+     ]
+    },
+    {
+     "item": {
+      "id": 329,
+      "name": "Salmon"
+     },
+     "qty": 0.1
+    },
+    {
+     "item": {
+      "id": 1147,
+      "name": "Rune med helm"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      40
+     ]
+    },
+    {
+     "item": {
+      "id": 1163,
+      "name": "Rune full helm"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      100
+     ]
+    },
+    {
+     "item": {
+      "id": 1373,
+      "name": "Rune battleaxe"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      100
+     ]
+    },
+    {
+     "item": {
+      "id": 21838,
+      "name": "Shaman mask"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      1200
+     ]
+    }
+   ],
+   "rate": {
+    "unit": "kill",
+    "perHour": {
+     "slow": 28,
+     "typical": 40,
+     "fast": 50
+    },
+    "basis": "wiki-guide",
+    "assumes": "50 kill an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 1996,
+    "y": 8985,
+    "plane": 0,
+    "label": "South of Falador"
+   },
+   "bank": {
+    "x": 2947,
+    "y": 3366,
+    "plane": 0,
+    "label": "Falador West Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "moderate",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Take food and your best gear from the bank."
+    },
+    {
+     "kind": "prepare",
+     "text": "Buy Iron arrow at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to South of Falador.",
+     "place": {
+      "x": 1996,
+      "y": 8985,
+      "plane": 0,
+      "label": "South of Falador"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Killing Ogress Warrior until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Falador West Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_ogress_warriors",
+     "title": "Money making guide/Killing ogress warriors",
+     "revision": 14868637,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "killing-wizards",
+   "title": "Killing wizards",
+   "family": "combat",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Killing wizards. Wizard's tower",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "combat",
+     "level": 20
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Equipment with high magic defence such as studded or green dragonhide armour"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 333,
+      "name": "Trout"
+     },
+     "qty": 0.2
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 579,
+      "name": "Blue wizard hat"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      43
+     ]
+    },
+    {
+     "item": {
+      "id": 577,
+      "name": "Blue wizard robe"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      18
+     ]
+    },
+    {
+     "item": {
+      "id": 562,
+      "name": "Chaos rune"
+     },
+     "qty": 0.125,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 0.125,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 563,
+      "name": "Law rune"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      64
+     ],
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 556,
+      "name": "Air rune"
+     },
+     "qty": 0.3047,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 554,
+      "name": "Fire rune"
+     },
+     "qty": 0.3047,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 555,
+      "name": "Water rune"
+     },
+     "qty": 0.3047,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 557,
+      "name": "Earth rune"
+     },
+     "qty": 0.3047,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 558,
+      "name": "Mind rune"
+     },
+     "qty": 0.3047,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 559,
+      "name": "Body rune"
+     },
+     "qty": 0.3047,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 1448,
+      "name": "Mind talisman"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      32
+     ]
+    },
+    {
+     "item": {
+      "id": 1444,
+      "name": "Water talisman"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      43
+     ]
+    }
+   ],
+   "rate": {
+    "unit": "kill",
+    "perHour": {
+     "slow": 99,
+     "typical": 144,
+     "fast": 180
+    },
+    "basis": "wiki-guide",
+    "assumes": "180 kill an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3109,
+    "y": 9558,
+    "plane": 0,
+    "label": "Wizard's tower"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3243,
+    "plane": 0,
+    "label": "Draynor Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "moderate",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Take food and your best gear from the bank."
+    },
+    {
+     "kind": "prepare",
+     "text": "Buy Trout at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Wizard's tower.",
+     "place": {
+      "x": 3109,
+      "y": 9558,
+      "plane": 0,
+      "label": "Wizard's tower"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Killing wizards until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Draynor Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_wizards",
+     "title": "Money making guide/Killing wizards",
+     "revision": 15271238,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "making-dough-at-cooks-guild",
+   "title": "Making dough at Cooks' Guild",
+   "family": "processing",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Making dough. Cooks' Guild",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "cooking",
+     "level": 32
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Chef's hat * Pot * Jug"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 2283,
+      "name": "Pizza base"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "pizza base",
+    "perHour": {
+     "slow": 186,
+     "typical": 270,
+     "fast": 338
+    },
+    "basis": "wiki-guide",
+    "assumes": "338 pizza base an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3144,
+    "y": 3450,
+    "plane": 0,
+    "label": "Cooks' Guild"
+   },
+   "bank": {
+    "x": 3164,
+    "y": 3489,
+    "plane": 0,
+    "label": "Grand Exchange bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "high",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Cooks' Guild.",
+     "place": {
+      "x": 3144,
+      "y": 3450,
+      "plane": 0,
+      "label": "Cooks' Guild"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Making dough until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_dough_at_Cooks'_Guild",
+     "title": "Money making guide/Making dough at Cooks' Guild",
+     "revision": 14488874,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "making-dyes",
+   "title": "Making dyes",
+   "family": "processing",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Making dyes. Draynor Village",
+   "requirements": [
+    {
+     "kind": "check",
+     "text": "Bring: + recommended, Coins"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 1793,
+      "name": "Woad leaf"
+     },
+     "qty": 2
+    },
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 5,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1767,
+      "name": "Blue dye"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "blue dye",
+    "perHour": {
+     "slow": 686,
+     "typical": 998,
+     "fast": 1248
+    },
+    "basis": "wiki-guide",
+    "assumes": "1,248 blue dye an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3103,
+    "y": 3265,
+    "plane": 0,
+    "label": "Draynor Village"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3243,
+    "plane": 0,
+    "label": "Draynor Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "high",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Woad leaf, Coins at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Draynor Village.",
+     "place": {
+      "x": 3103,
+      "y": 3265,
+      "plane": 0,
+      "label": "Draynor Village"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Making dyes until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Draynor Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_dyes",
+     "title": "Money making guide/Making dyes",
+     "revision": 14390648,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "making-flour",
+   "title": "Making flour",
+   "family": "processing",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Making flour. Cooks' Guild, Mill Lane Mill, Draynor Village",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "cooking",
+     "level": 32
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Chronicle * Chef's hat"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 1931,
+      "name": "Pot"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 1947,
+      "name": "Grain"
+     },
+     "qty": 1
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1933,
+      "name": "Pot of flour"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "pot of flour",
+    "perHour": {
+     "slow": 220,
+     "typical": 320,
+     "fast": 400
+    },
+    "basis": "wiki-guide",
+    "assumes": "400 pot of flour an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3144,
+    "y": 3450,
+    "plane": 0,
+    "label": "Cooks' Guild, Mill Lane Mill, Draynor Village"
+   },
+   "bank": {
+    "x": 3164,
+    "y": 3489,
+    "plane": 0,
+    "label": "Grand Exchange bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Pot, Grain at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Cooks' Guild, Mill Lane Mill, Draynor Village.",
+     "place": {
+      "x": 3144,
+      "y": 3450,
+      "plane": 0,
+      "label": "Cooks' Guild, Mill Lane Mill, Draynor Village"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Making flour until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_flour",
+     "title": "Money making guide/Making flour",
+     "revision": 14380730,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "making-pastry-dough",
+   "title": "Making pastry dough",
+   "family": "processing",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Making pastry dough. Grand Exchange",
+   "requirements": [
+    {
+     "kind": "check",
+     "text": "Bring: + recommended"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 1933,
+      "name": "Pot of flour"
+     },
+     "qty": 1
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1953,
+      "name": "Pastry dough"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 1931,
+      "name": "Pot"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "pastry dough",
+    "perHour": {
+     "slow": 1320,
+     "typical": 1920,
+     "fast": 2400
+    },
+    "basis": "wiki-guide",
+    "assumes": "2,400 pastry dough an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Pot of flour at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Grand Exchange.",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Grand Exchange"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Making pastry dough until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_pastry_dough",
+     "title": "Money making guide/Making pastry dough",
+     "revision": 15128189,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "mining-adamantite-ore-free-to-play",
+   "title": "Mining adamantite ore (free-to-play)",
+   "family": "gathering",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Mining adamantite ore. Mining Guild, Dwarven Mine",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "mining",
+     "level": 70
+    },
+    {
+     "kind": "item",
+     "role": "tool",
+     "any": [],
+     "family": "pickaxe"
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Rune pickaxe"
+    },
+    {
+     "kind": "check",
+     "text": "Access to the Mining Guild (below Falador)"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 449,
+      "name": "Adamantite ore"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "adamantite ore",
+    "perHour": {
+     "slow": 66,
+     "typical": 96,
+     "fast": 120
+    },
+    "basis": "wiki-guide",
+    "assumes": "120 adamantite ore an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3019,
+    "y": 3339,
+    "plane": 0,
+    "label": "Mining Guild, Dwarven Mine"
+   },
+   "bank": {
+    "x": 3017,
+    "y": 3356,
+    "plane": 0,
+    "label": "Falador East Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Mining Guild, Dwarven Mine.",
+     "place": {
+      "x": 3019,
+      "y": 3339,
+      "plane": 0,
+      "label": "Mining Guild, Dwarven Mine"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Mining adamantite ore until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Falador East Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_adamantite_ore_(free-to-play)",
+     "title": "Money making guide/Mining adamantite ore (free-to-play)",
+     "revision": 14381448,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "mining-clay",
+   "title": "Mining clay",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Mining clay. Wilderness Rune Mine, Heroes' Guild Mine, et. al.",
+   "requirements": [
+    {
+     "kind": "check",
+     "text": "Bring: Rune pickaxe or lower"
+    },
+    {
+     "kind": "check",
+     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 13658,
+      "name": "Teleport card"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      28
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 434,
+      "name": "Clay"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 1623,
+      "name": "Uncut sapphire"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      1024
+     ]
+    },
+    {
+     "item": {
+      "id": 1621,
+      "name": "Uncut emerald"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      2048
+     ]
+    },
+    {
+     "item": {
+      "id": 1619,
+      "name": "Uncut ruby"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      4096
+     ]
+    },
+    {
+     "item": {
+      "id": 1617,
+      "name": "Uncut diamond"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      16384
+     ]
+    }
+   ],
+   "rate": {
+    "unit": "clay",
+    "perHour": {
+     "slow": 440,
+     "typical": 640,
+     "fast": 800
+    },
+    "basis": "wiki-guide",
+    "assumes": "800 clay an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 2917,
+    "y": 9907,
+    "plane": 0,
+    "label": "Wilderness Rune Mine, Heroes' Guild Mine, et"
+   },
+   "bank": {
+    "x": 2947,
+    "y": 3366,
+    "plane": 0,
+    "label": "Falador West Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "high",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Teleport card at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Wilderness Rune Mine, Heroes' Guild Mine, et.",
+     "place": {
+      "x": 2917,
+      "y": 9907,
+      "plane": 0,
+      "label": "Wilderness Rune Mine, Heroes' Guild Mine, et"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Mining clay until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Falador West Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_clay",
+     "title": "Money making guide/Mining clay",
+     "revision": 14380736,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "mining-coal-and-superheating-adamantite-bars",
+   "title": "Mining coal and superheating Adamantite bars",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Mining coal and superheating Adamantite bars. ",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "mining",
+     "level": 30
+    },
+    {
+     "kind": "level",
+     "skill": "smithing",
+     "level": 70
+    },
+    {
+     "kind": "level",
+     "skill": "magic",
+     "level": 43
+    },
+    {
+     "kind": "item",
+     "role": "tool",
+     "any": [],
+     "family": "pickaxe"
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Rune pickaxe * Staff of Fire"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 449,
+      "name": "Adamantite ore"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 1,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 2361,
+      "name": "Adamantite bar"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "adamantite bar",
+    "perHour": {
+     "slow": 33,
+     "typical": 48,
+     "fast": 60
+    },
+    "basis": "wiki-guide",
+    "assumes": "60 adamantite bar an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Adamantite ore, Nature rune at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Grand Exchange.",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Grand Exchange"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Mining coal and superheating Adamantite bars until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_and_superheating_Adamantite_bars",
+     "title": "Money making guide/Mining coal and superheating Adamantite bars",
+     "revision": 14997912,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "mining-coal-and-superheating-mithril-bars",
+   "title": "Mining coal and superheating Mithril bars",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Mining coal and superheating Mithril bars. ",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "mining",
+     "level": 30
+    },
+    {
+     "kind": "level",
+     "skill": "smithing",
+     "level": 50
+    },
+    {
+     "kind": "level",
+     "skill": "magic",
+     "level": 43
+    },
+    {
+     "kind": "item",
+     "role": "tool",
+     "any": [],
+     "family": "pickaxe"
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Rune pickaxe * Staff of Fire"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 447,
+      "name": "Mithril ore"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 1,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 2359,
+      "name": "Mithril bar"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "mithril bar",
+    "perHour": {
+     "slow": 48,
+     "typical": 70,
+     "fast": 88
+    },
+    "basis": "wiki-guide",
+    "assumes": "88 mithril bar an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Mithril ore, Nature rune at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Grand Exchange.",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Grand Exchange"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Mining coal and superheating Mithril bars until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_and_superheating_Mithril_bars",
+     "title": "Money making guide/Mining coal and superheating Mithril bars",
+     "revision": 14997911,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "mining-coal-and-superheating-runite-bars",
+   "title": "Mining coal and superheating Runite bars",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Mining coal and superheating Runite bars. ",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "mining",
+     "level": 30
+    },
+    {
+     "kind": "level",
+     "skill": "smithing",
+     "level": 85
+    },
+    {
+     "kind": "level",
+     "skill": "magic",
+     "level": 43
+    },
+    {
+     "kind": "item",
+     "role": "tool",
+     "any": [],
+     "family": "pickaxe"
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Rune pickaxe * Staff of Fire"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 451,
+      "name": "Runite ore"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 1,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 2363,
+      "name": "Runite bar"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "runite bar",
+    "perHour": {
+     "slow": 30,
+     "typical": 43,
+     "fast": 54
+    },
+    "basis": "wiki-guide",
+    "assumes": "54 runite bar an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Runite ore, Nature rune at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Grand Exchange.",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Grand Exchange"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Mining coal and superheating Runite bars until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_and_superheating_Runite_bars",
+     "title": "Money making guide/Mining coal and superheating Runite bars",
+     "revision": 14997906,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "mining-runite-ore-free-to-play",
+   "title": "Mining runite ore (free-to-play)",
+   "family": "gathering",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Mining runite ore. Lava Maze runite mine",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "mining",
+     "level": 85
+    },
+    {
+     "kind": "level",
+     "skill": "attack",
+     "level": 40
+    },
+    {
+     "kind": "level",
+     "skill": "defence",
+     "level": 40
+    },
+    {
+     "kind": "level",
+     "skill": "magic",
+     "level": 25
+    },
+    {
+     "kind": "item",
+     "role": "tool",
+     "any": [],
+     "family": "pickaxe"
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Rune pickaxe, Rune armour (optional), Runes for teleportation spells, Bladed weapon for cutting maze webs"
+    },
+    {
+     "kind": "check",
+     "text": "Anchovy pizza or Swordfish"
+    },
+    {
+     "kind": "check",
+     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 451,
+      "name": "Runite ore"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "runite ore",
+    "perHour": {
+     "slow": 22,
+     "typical": 32,
+     "fast": 40
+    },
+    "basis": "wiki-guide",
+    "assumes": "40 runite ore an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3060,
+    "y": 3884,
+    "plane": 0,
+    "label": "Lava Maze runite mine"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "high",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Lava Maze runite mine.",
+     "place": {
+      "x": 3060,
+      "y": 3884,
+      "plane": 0,
+      "label": "Lava Maze runite mine"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Mining runite ore until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_runite_ore_(free-to-play)",
+     "title": "Money making guide/Mining runite ore (free-to-play)",
+     "revision": 14863994,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "smelting-adamantite-bars-superheat-item",
+   "title": "Smelting adamantite bars (Superheat Item)",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Smelting adamantite bars with superheat item. Anywhere (typically grand exchange)",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "smithing",
+     "level": 70
+    },
+    {
+     "kind": "level",
+     "skill": "magic",
+     "level": 43
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Staff of fire"
+    },
+    {
+     "kind": "check",
+     "text": "Starting bankroll to buy materials (recommended ~)"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 449,
+      "name": "Adamantite ore"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 453,
+      "name": "Coal"
+     },
+     "qty": 6
+    },
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 1,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 2361,
+      "name": "Adamantite bar"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "adamantite bar",
+    "perHour": {
+     "slow": 1045,
+     "typical": 1520,
+     "fast": 1900
+    },
+    "basis": "wiki-guide",
+    "assumes": "1,900 adamantite bar an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Anywhere (typically grand exchange)"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Adamantite ore, Coal, Nature rune at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Anywhere (typically grand exchange).",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Anywhere (typically grand exchange)"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Smelting adamantite bars with superheat item until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_adamantite_bars_(Superheat_Item)",
+     "title": "Money making guide/Smelting adamantite bars (Superheat Item)",
+     "revision": 15352277,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "smelting-iron-bars",
+   "title": "Smelting iron bars",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Smithing iron bars. Edgeville",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "smithing",
+     "level": 15
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Ring of forging * Iron ore * Varrock armour (optional but gives 10% chance of smelting two bars at once)"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 440,
+      "name": "Iron ore"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 2568,
+      "name": "Ring of forging"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      140
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 2351,
+      "name": "Iron bar"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "iron bar",
+    "perHour": {
+     "slow": 539,
+     "typical": 784,
+     "fast": 980
+    },
+    "basis": "wiki-guide",
+    "assumes": "980 iron bar an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3080,
+    "y": 3492,
+    "plane": 0,
+    "label": "Edgeville"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Iron ore, Ring of forging at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Edgeville.",
+     "place": {
+      "x": 3080,
+      "y": 3492,
+      "plane": 0,
+      "label": "Edgeville"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Smithing iron bars until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_iron_bars",
+     "title": "Money making guide/Smelting iron bars",
+     "revision": 15260339,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "smelting-runite-bars",
+   "title": "Smelting runite bars",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Smelting runite bars. Edgeville Furnace",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "smithing",
+     "level": 85
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Coal, runite ore, energy potion (optional)"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 451,
+      "name": "Runite ore"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 453,
+      "name": "Coal"
+     },
+     "qty": 8
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 2363,
+      "name": "Runite bar"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "runite bar",
+    "perHour": {
+     "slow": 220,
+     "typical": 320,
+     "fast": 400
+    },
+    "basis": "wiki-guide",
+    "assumes": "400 runite bar an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3095,
+    "y": 3487,
+    "plane": 0,
+    "label": "Edgeville Furnace"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3495,
+    "plane": 0,
+    "label": "Edgeville Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Runite ore, Coal at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Edgeville Furnace.",
+     "place": {
+      "x": 3095,
+      "y": 3487,
+      "plane": 0,
+      "label": "Edgeville Furnace"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Smelting runite bars until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Edgeville Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_runite_bars",
+     "title": "Money making guide/Smelting runite bars",
+     "revision": 14640352,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "smelting-runite-bars-superheat-item",
+   "title": "Smelting runite bars (Superheat Item)",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Smelting runite bars with superheat item. Anywhere (typically grand exchange)",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "smithing",
+     "level": 85
+    },
+    {
+     "kind": "level",
+     "skill": "magic",
+     "level": 43
+    },
+    {
+     "kind": "check",
+     "text": "Bring: Staff of fire"
+    },
+    {
+     "kind": "check",
+     "text": "Starting bankroll to buy materials (recommended ~), (Optional: Dwarven Stout if you are only Smithing 84)"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 451,
+      "name": "Runite ore"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 453,
+      "name": "Coal"
+     },
+     "qty": 8
+    },
+    {
+     "item": {
+      "id": 561,
+      "name": "Nature rune"
+     },
+     "qty": 1,
+     "stack": true
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 2363,
+      "name": "Runite bar"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "runite bar",
+    "perHour": {
+     "slow": 633,
+     "typical": 920,
+     "fast": 1150
+    },
+    "basis": "wiki-guide",
+    "assumes": "1,150 runite bar an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Anywhere (typically grand exchange)"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "moderate",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Runite ore, Coal, Nature rune at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Anywhere (typically grand exchange).",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Anywhere (typically grand exchange)"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Smelting runite bars with superheat item until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_runite_bars_(Superheat_Item)",
+     "title": "Money making guide/Smelting runite bars (Superheat Item)",
+     "revision": 14878439,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "smithing-rune-items",
+   "title": "Smithing rune items",
+   "family": "production",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Smithing rune items. ",
+   "requirements": [
+    {
+     "kind": "level",
+     "skill": "smithing",
+     "level": 99
+    },
+    {
+     "kind": "check",
+     "text": "Bring: * Hammer * coins * Recommended: * Smiths' Uniform"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 2363,
+      "name": "Runite bar"
+     },
+     "qty": 3
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1319,
+      "name": "Rune 2h sword"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "rune 2h sword",
+    "perHour": {
+     "slow": 495,
+     "typical": 720,
+     "fast": 900
+    },
+    "basis": "wiki-guide",
+    "assumes": "900 rune 2h sword an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Runite bar at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Grand Exchange.",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Grand Exchange"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Smithing rune items until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smithing_rune_items",
+     "title": "Money making guide/Smithing rune items",
+     "revision": 15352416,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "stealing-wydin-s-bananas",
+   "title": "Stealing Wydin's bananas",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Stealing from Wydin. Port Sarim",
+   "requirements": [
+    {
+     "kind": "quest",
+     "quest": "Pirate's Treasure",
+     "state": "complete"
+    },
+    {
+     "kind": "check",
+     "text": "Bring: White apron"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 1963,
+      "name": "Banana"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "banana",
+    "perHour": {
+     "slow": 330,
+     "typical": 480,
+     "fast": 600
+    },
+    "basis": "wiki-guide",
+    "assumes": "600 banana an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3029,
+    "y": 3221,
+    "plane": 0,
+    "label": "Port Sarim"
+   },
+   "bank": {
+    "x": 3093,
+    "y": 3243,
+    "plane": 0,
+    "label": "Draynor Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "high",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Port Sarim.",
+     "place": {
+      "x": 3029,
+      "y": 3221,
+      "plane": 0,
+      "label": "Port Sarim"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Stealing from Wydin until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Draynor Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stealing_Wydin's_bananas",
+     "title": "Money making guide/Stealing Wydin's bananas",
+     "revision": 14379455,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "taking-from-the-infinite-money-bag-while-picking-up-coin-spawns-in-varrock-west-bank",
+   "title": "Taking from the infinite money bag while picking up coin spawns in Varrock West bank",
+   "family": "collecting",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Taking from the infinite money bag while picking up coin spawns in Varrock West bank (free-to-play). Varrock west bank",
+   "requirements": [
+    {
+     "kind": "check",
+     "text": "Bring: Infinite money bag"
+    }
+   ],
+   "inputs": [],
+   "outputs": [
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 90,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 225,
+     "stack": true
+    }
+   ],
+   "rate": {
+    "unit": "action",
+    "perHour": {
+     "slow": 33,
+     "typical": 48,
+     "fast": 60
+    },
+    "basis": "wiki-guide",
+    "assumes": "60 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3185,
+    "y": 3440,
+    "plane": 0,
+    "label": "Varrock west bank"
+   },
+   "bank": {
+    "x": 3185,
+    "y": 3440,
+    "plane": 0,
+    "label": "Varrock West Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "high",
+   "guide": [
+    {
+     "kind": "travel",
+     "text": "Go to Varrock west bank.",
+     "place": {
+      "x": 3185,
+      "y": 3440,
+      "plane": 0,
+      "label": "Varrock west bank"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Taking from the infinite money bag while picking up coin spawns in Varrock West bank (free-to-play) until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Varrock West Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Taking_from_the_infinite_money_bag_while_picking_up_coin_spawns_in_Varrock_West_bank",
+     "title": "Money making guide/Taking from the infinite money bag while picking up coin spawns in Varrock West bank",
+     "revision": 14824293,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
+   "id": "tanning-cowhide",
+   "title": "Tanning cowhide",
+   "family": "processing",
+   "access": "f2p",
+   "repeatable": true,
+   "summary": "Tanning cowhide. Al Kharid",
+   "requirements": [
+    {
+     "kind": "check",
+     "text": "Bring: * + * Weight-reducing clothing * Energy potions (optional) * Cowhides, Coins"
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 995,
+      "name": "Coins"
+     },
+     "qty": 3,
+     "stack": true
+    },
+    {
+     "item": {
+      "id": 1739,
+      "name": "Cowhide"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 3008,
+      "name": "Energy potion(4)"
+     },
+     "qty": 1,
+     "chance": [
+      1,
+      26
+     ]
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 1743,
+      "name": "Hard leather"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "hard leather",
+    "perHour": {
+     "slow": 1925,
+     "typical": 2800,
+     "fast": 3500
+    },
+    "basis": "wiki-guide",
+    "assumes": "3,500 hard leather an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3274,
+    "y": 3192,
+    "plane": 0,
+    "label": "Al Kharid"
+   },
+   "bank": {
+    "x": 3269,
+    "y": 3167,
+    "plane": 0,
+    "label": "Al Kharid Bank"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "low",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Coins, Cowhide, Energy potion(4) at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Al Kharid.",
+     "place": {
+      "x": 3274,
+      "y": 3192,
+      "plane": 0,
+      "label": "Al Kharid"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Tanning cowhide until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Al Kharid Bank."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Tanning_cowhide",
+     "title": "Money making guide/Tanning cowhide",
+     "revision": 15304759,
+     "retrievedAt": "2026-11-02",
+     "used": "pace, inputs, outputs, levels, quests and place"
+    }
+   ],
+   "verifiedAt": "2026-11-02",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  }
+ ],
+ "notBuilt": [
+  {
+   "id": "high-alching-profitable-free-to-play-items",
+   "title": "High alching profitable free-to-play items",
+   "reason": "no pace"
+  },
+  {
+   "id": "crafting-diamond-jewellery",
+   "title": "Crafting diamond jewellery",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "stringing-amulets",
+   "title": "Stringing amulets",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "crafting-emerald-jewellery",
+   "title": "Crafting emerald jewellery",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "crafting-ruby-jewellery",
+   "title": "Crafting ruby jewellery",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "collecting-cosmic-runes",
+   "title": "Collecting cosmic runes",
+   "reason": "no place for \"Far north-western corner of the free-to-play wilderness.\""
+  },
+  {
+   "id": "crafting-sapphire-jewellery",
+   "title": "Crafting sapphire jewellery",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "crafting-gold-jewellery",
+   "title": "Crafting gold jewellery",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "mining-gold-ore-crafting-guild",
+   "title": "Mining gold ore (Crafting Guild)",
+   "reason": "no Mmgtable"
+  }
+ ]
+}

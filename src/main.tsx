@@ -6,6 +6,7 @@ import { StoreProvider } from './state/store';
 import { BridgeProvider } from './state/bridge';
 import { PlayerStateProvider } from './state/playerStateContext';
 import { ReadinessProvider } from './state/readinessContext';
+import { DecisionProvider } from './state/decisionContext';
 import { FundingProvider } from './state/fundingContext';
 import { TrainingSessionProvider } from './state/trainingSessionContext';
 import './styles.css';
@@ -24,9 +25,12 @@ createRoot(document.getElementById('root')!).render(
         <PlayerStateProvider>
           <ReadinessProvider>
             <FundingProvider>
-              <TrainingSessionProvider>
-              <App />
-              </TrainingSessionProvider>
+              {/* Below Funding: the planner prices a coin shortfall with the Money ranking. */}
+              <DecisionProvider>
+                <TrainingSessionProvider>
+                  <App />
+                </TrainingSessionProvider>
+              </DecisionProvider>
             </FundingProvider>
           </ReadinessProvider>
         </PlayerStateProvider>

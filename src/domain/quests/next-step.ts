@@ -120,11 +120,6 @@ export function blockersOf(step: Step, p: Progress, qp: number, fact?: Dependenc
   return { steps, ...(needQp ? { qp: { need: step.minQp!, have: qp } } : {}) };
 }
 
-/** The first unclosed step in order whose dependencies are met and for which there are enough quest points. */
-export function nextStep(steps: Step[], p: Progress, qp: number, fact?: DependencyFact): Step | null {
-  return steps.find((s) => !isClosed(p, s.id) && !blockersOf(s, p, qp, fact)) ?? null;
-}
-
 /** The first unclosed step at all, even if it is blocked. */
 export function firstOpen(steps: Step[], p: Progress): Step | null {
   return steps.find((s) => !isClosed(p, s.id)) ?? null;
@@ -141,11 +136,3 @@ export function blockerParts(b: Blockers): string[] {
   return parts;
 }
 
-/** The next unclosed step after id (cyclically from the start of the list): "Mark as done" opens it. */
-export function openAfter(steps: Step[], p: Progress, id: string, qp = Number.POSITIVE_INFINITY, fact?: DependencyFact): Step | undefined {
-  const at = steps.findIndex((s) => s.id === id);
-  // The completion button previews its destination before the store processes the mark.
-  const after: Progress = isClosed(p, id) ? p : { ...p, steps: { ...p.steps, [id]: 'done' } };
-  const open = (s: Step) => s.id !== id && !isClosed(p, s.id) && !blockersOf(s, after, qp, fact);
-  return steps.slice(at + 1).find(open) ?? steps.slice(0, Math.max(0, at)).find(open);
-}

@@ -5,10 +5,21 @@ import type { GearItem } from '../../services/runeliteBridge';
 const at = (x: number, y: number, plane = 0) => ({ x, y, plane });
 const bag = (...rows: [string, number][]): GearItem[] => rows.map(([name, count], i) => ({ id: i + 1, name, count }));
 const input = (over: Partial<TravelInput>): TravelInput => ({
-  from: at(3222, 3218), to: at(3213, 3424), levels: {}, carried: null, bankSeen: false, ...over,
+  from: at(3222, 3218), to: at(3213, 3424), levels: {}, carried: null, bankSeen: false, standardSpellbook: true, homeCooldownKnown: true, ...over,
 });
 
 describe('how to get there', () => {
+  it('does not default an omitted cooldown or spellbook to ready, including Lumbridge Home Teleport', () => {
+    const runes = bag(['Law rune', 1], ['Air rune', 3], ['Fire rune', 1]);
+    expect(travelOptions(input({ levels: { magic: 25 }, carried: runes, standardSpellbook: undefined }))
+      .find(option => option.id === 'varrock-teleport')?.availability).toBe('maybe');
+    const home = (over: Partial<TravelInput>) => travelOptions(input({ from: at(3213, 3424), to: at(3222, 3218), ...over }))
+      .find(option => option.id === 'lumbridge-home');
+    expect(home({ homeCooldownKnown: undefined })?.availability).toBe('maybe');
+    expect(home({ standardSpellbook: undefined })?.availability).toBe('maybe');
+    expect(home({ standardSpellbook: false })?.availability).toBe('locked');
+    expect(home({ homeCooldownKnown: true, standardSpellbook: true })?.availability).toBe('ready');
+  });
   it('data: five teleport points and five canoe stations, as on the wiki', () => {
     expect(TRANSPORT.teleports.map((t) => t.id)).toEqual(['lumbridge-home', 'lumbridge-teleport', 'varrock-teleport', 'falador-teleport', 'chronicle']);
     expect(TRANSPORT.canoe.stations.map((s) => s.name)).toEqual(["Lumbridge", "Champions' Guild", 'Barbarian Village', 'Edgeville', 'Ferox Enclave']);
@@ -21,7 +32,7 @@ describe('how to get there', () => {
     expect(walkText(30)).toBe('30 tiles · running at least 9 s');
   });
 
-  it('Lumbridge → Varrock: Varrock Teleport without Magic 25 is locked, with runes — ready, the home one — always available', () => {
+  it('Lumbridge → Varrock: Varrock Teleport requires its level, runes and observed spellbook; home requires a known ready cooldown', () => {
     const none = travelOptions(input({ levels: { magic: 20 }, carried: bag(['Coins', 100]) }));
     const v0 = none.find((o) => o.id === 'varrock-teleport')!;
     expect(v0.availability).toBe('locked');
@@ -34,9 +45,11 @@ describe('how to get there', () => {
     expect(near.map((o) => o.id)).toEqual(['walk']);
   });
 
-  it('a staff replaces air and fire runes; the bank was not opened — "maybe", opened — "no"', () => {
+  it('one staff supplies its own runes; two inventory staves cannot occupy one casting weapon slot', () => {
     const staff = travelOptions(input({ levels: { magic: 25 }, carried: bag(['Law rune', 1], ['Staff of fire', 1], ['Staff of air', 1]), bankSeen: true }));
-    expect(staff.find((o) => o.id === 'varrock-teleport')!.availability).toBe('ready');
+    expect(staff.find((o) => o.id === 'varrock-teleport')!.availability).toBe('locked');
+    const usable = travelOptions(input({ levels: { magic: 25 }, carried: bag(['Law rune', 1], ['Staff of air', 1], ['Fire rune', 1]), bankSeen: true }));
+    expect(usable.find(o => o.id === 'varrock-teleport')!.availability).toBe('ready');
     const maybe = travelOptions(input({ levels: { magic: 25 }, carried: bag(['Coins', 5]), bankSeen: false }));
     expect(maybe.find((o) => o.id === 'varrock-teleport')!.availability).toBe('maybe');
     const no = travelOptions(input({ levels: { magic: 25 }, carried: bag(['Coins', 5]), bankSeen: true }));
@@ -274,24 +287,29 @@ describe('detour caps by kind of place, and teleports that shorten the way to th
   it('a Chronicle or a Varrock tablet in the bag makes the exchange close: the way there is counted from the landing tile', () => {
     const noTele = reachTiles({ from: alKharid, levels: {}, carried: bag(['Coins', 100]), bankSeen: true }, EXCHANGE);
     expect(noTele.via).toBeUndefined();
-    const chronicle = reachTiles({ from: alKharid, levels: {}, carried: bag(['Chronicle', 1]), bankSeen: true }, EXCHANGE);
+    const chronicle = reachTiles({ from: alKharid, levels: {}, carried: bag(['Chronicle', 1]), bankSeen: true, chronicleCharges: 1 }, EXCHANGE);
     expect(chronicle.via).toBe('Chronicle');
     expect(chronicle.tiles).toBeLessThan(noTele.tiles);
-    const tab = reachTiles({ from: alKharid, levels: {}, carried: bag(['Varrock teleport', 1]), bankSeen: true }, EXCHANGE);
+    const tab = reachTiles({ from: alKharid, levels: {}, carried: bag(['Varrock teleport', 1]), bankSeen: true, members: true }, EXCHANGE);
     expect(tab.via).toBe('Varrock teleport tablet');
     expect(tab.tiles).toBeLessThan(dist(at(3213, 3424), EXCHANGE) + 1);
   });
 
   it('a teleport that may be available (unknown bag) or a spell without runes is never assumed', () => {
+    expect(reachTiles({ from: alKharid, levels: {}, carried: bag(['Chronicle', 1]), bankSeen: true }, EXCHANGE).via).toBeUndefined();
+    expect(reachTiles({ from: alKharid, levels: {}, carried: bag(['Chronicle', 1]), bankSeen: true, chronicleCharges: 0 }, EXCHANGE).via).toBeUndefined();
+    expect(reachTiles({ from: alKharid, levels: {}, carried: bag(['Varrock teleport', 1]), bankSeen: true }, EXCHANGE).via).toBeUndefined();
+    expect(travelOptions(input({ carried: bag(['Varrock teleport', 1]), members: null })).find(option => option.title === 'Varrock teleport tablet'))
+      .toMatchObject({ availability: 'maybe', needs: expect.arrayContaining([{ text: 'a members account', ok: null }]) });
     expect(reachTiles({ from: alKharid, levels: { magic: 99 }, carried: null, bankSeen: false }, EXCHANGE).via).toBeUndefined();
     expect(reachTiles({ from: alKharid, levels: { magic: 99 }, carried: bag(['Coins', 1]), bankSeen: true }, EXCHANGE).via).toBeUndefined();
-    const withRunes = reachTiles({ from: alKharid, levels: { magic: 25 }, carried: bag(['Law rune', 1], ['Air rune', 3], ['Fire rune', 1]), bankSeen: true }, EXCHANGE);
+    const withRunes = reachTiles({ from: alKharid, levels: { magic: 25 }, carried: bag(['Law rune', 1], ['Air rune', 3], ['Fire rune', 1]), bankSeen: true, standardSpellbook: true }, EXCHANGE);
     expect(withRunes.via).toMatch(/Varrock Teleport/i);
   });
 
   it('with a teleport in the bag the stop is cheaper and says how', () => {
     const none = procurementDetour({ plan: { now: [orange], soon: [] }, stepId: 'S2-12', from: alKharid, to: goblinVillage, coins: 600 })!;
-    const tele = procurementDetour({ plan: { now: [orange], soon: [] }, stepId: 'S2-12', from: alKharid, to: goblinVillage, coins: 600, travel: { levels: {}, carried: bag(['Varrock teleport', 1]), bankSeen: true } })!;
+    const tele = procurementDetour({ plan: { now: [orange], soon: [] }, stepId: 'S2-12', from: alKharid, to: goblinVillage, coins: 600, travel: { levels: {}, carried: bag(['Varrock teleport', 1]), bankSeen: true, members: true } })!;
     expect(tele.via).toBe('Varrock teleport tablet');
     expect(tele.extraTiles).toBeLessThan(none.extraTiles);
     expect(tele.text).toContain('by Varrock teleport tablet');
@@ -370,7 +388,7 @@ describe('fast travel in the route: Chronicle, runes and the unlock levels', () 
   });
 
   it('the teleport landing is the origin of the rest of the way: from Draynor with a Varrock tablet the exchange is a short walk', () => {
-    const r = reachTiles({ from: draynor, levels: {}, carried: bag(['Varrock teleport', 1]), bankSeen: true }, EXCHANGE);
+    const r = reachTiles({ from: draynor, levels: {}, carried: bag(['Varrock teleport', 1]), bankSeen: true, members: true }, EXCHANGE);
     expect(r.via).toBe('Varrock teleport tablet');
     expect(r.landing).toMatchObject({ x: 3213, y: 3424 });
     expect(r.tiles).toBeLessThan(dist(draynor, EXCHANGE) - 40);
@@ -378,13 +396,13 @@ describe('fast travel in the route: Chronicle, runes and the unlock levels', () 
 
   it('the spells unlock at the Magic levels: Varrock 25, Lumbridge 31, Falador 37, locked below and ready at the level with runes', () => {
     const runes = bag(['Law rune', 5], ['Air rune', 20], ['Fire rune', 5], ['Earth rune', 5], ['Water rune', 5]);
-    const far = (magic: number) => travelOptions({ from: at(3093, 3244), to: at(2957, 3512), levels: { magic }, carried: runes, bankSeen: true });
+    const far = (magic: number) => travelOptions({ from: at(3093, 3244), to: at(2957, 3512), levels: { magic }, carried: runes, bankSeen: true, standardSpellbook: true });
     expect(TRANSPORT.teleports.find((t) => t.id === 'varrock-teleport')!.magic).toBe(25);
     expect(TRANSPORT.teleports.find((t) => t.id === 'lumbridge-teleport')!.magic).toBe(31);
     expect(TRANSPORT.teleports.find((t) => t.id === 'falador-teleport')!.magic).toBe(37);
     expect(far(36).find((x) => x.id === 'falador-teleport')!.availability).toBe('locked');
     expect(far(37).find((x) => x.id === 'falador-teleport')!.availability).toBe('ready');
-    const lum = (magic: number) => travelOptions({ from: at(3213, 3428), to: at(3222, 3218), levels: { magic }, carried: runes, bankSeen: true }).find((x) => x.id === 'lumbridge-teleport');
+    const lum = (magic: number) => travelOptions({ from: at(3213, 3428), to: at(3222, 3218), levels: { magic }, carried: runes, bankSeen: true, standardSpellbook: true }).find((x) => x.id === 'lumbridge-teleport');
     expect(lum(30)!.availability).toBe('locked');
     expect(lum(31)!.availability).toBe('ready');
   });

@@ -201,13 +201,17 @@ function subSteps(option: FundingOption, assessment: Shortfall, method: FundingM
 
 export function startPlan(assessment: FundingAssessment, option: FundingOption, snap: FundingSnapshot, method: FundingMethod | undefined, now: number): FundingPlanState | null {
   if (!snap.character || assessment.state !== 'SHORT' || assessment.gap === null) return null;
+  if (option.kind === 'EARN' || option.kind === 'SELF_GATHER') {
+    const prefix = option.kind === 'EARN' ? 'earn:' : 'gather:';
+    if (!method || !option.evaluation?.eligible || option.evaluation.method.id !== method.id || option.id !== prefix + method.id) return null;
+  }
   const built = subSteps(option, { gap: assessment.gap, surplusNet: assessment.budget.surplus.net }, method);
   const steps = built.steps;
   const reserved = [...snap.protections.values()].filter((p) => Number.isFinite(p.qty) && p.qty > 0).map((p) => ({ name: p.name, qty: p.qty }));
   const plan: FundingPlanState = {
     v: 1, id: `${option.id}@${now}`, version: 1, character: snap.character, optionId: option.id, kind: option.kind,
     ...(method ? { methodId: method.id } : {}), title: option.title, sourceStepId: assessment.stepId,
-    target: { required: assessment.required, gap: assessment.gap, liquidAtStart: snap.liquid.amount },
+    target: { required: assessment.required, gap: assessment.gap, liquidAtStart: snap.liquid.amount, completeAtStart: snap.liquid.complete },
     reserved, status: 'ACTIVE', startedAt: now, updatedAt: now, active: 0, subSteps: steps,
     baseline: baselineOf(snap), workSeconds: 0, lastTickAt: now, expectedNet: built.expectedNet,
     ...(built.loop ? { loop: built.loop, trips: 1 } : {}),

@@ -2,7 +2,8 @@ import { useEffect, useId, useState } from 'react';
 import type { Skill } from '../../types';
 import { findSkill, goals, levelById, reference, membersGuide, xpData } from '../../data';
 import { useStore } from '../../state/store';
-import { currentStage, isClosed } from '../../domain/quests/next-step';
+import { isClosed } from '../../domain/quests/next-step';
+import { useDecisionStage } from '../../state/decision';
 import { formatXp, goalFor } from '../../domain/quests/goals';
 import { levelOf } from '../../domain/persistence/progress';
 import { focusRange, rangeForLevel } from '../../domain/training/ranges';
@@ -60,7 +61,7 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
   };
   const related = steps.filter((s) => s.targets?.some((t) => levelById.get(t.skill)?.skill === skill.id));
   // "What to train with": the route decides first (a stage goal that is behind), the generic training row only when the route asks for nothing.
-  const stage = currentStage(steps, progress);
+  const stage = useDecisionStage();
   const focused = selectedSkill ? { ...skill, levelSkills: [selectedSkill] } : skill;
   const routeFocus = trainingFocus({
     levelSkills: focused.levelSkills, stage, goals, levelOf: (id) => levelOf(progress, id), lastStage: stages[stages.length - 1]?.id,
@@ -249,8 +250,8 @@ interface CalcProps {
 }
 
 function Calculator({ levelIds, suggest }: CalcProps) {
-  const { progress, steps, mode } = useStore();
-  const stage = currentStage(steps, progress);
+  const { progress, mode } = useStore();
+  const stage = useDecisionStage();
   const [which, setWhich] = useState(levelIds[0]);
   const level = levelOf(progress, which);
   const [target, setTarget] = useState(() => String(suggest(which, level, stage)));
@@ -306,7 +307,7 @@ function Calculator({ levelIds, suggest }: CalcProps) {
       </p>
       {SKILL_NAMES.includes(which as SkillName) && <button type="button" className="btn btn-primary training-custom-follow"
         disabled={targetLevel <= level || mode === 'f2p' && Boolean(findSkill(levelById.get(which)?.skill ?? '')?.membersOnly)}
-        onClick={() => { setTracked({ skill: which as SkillName, mode: 'fast', freeOnly: mode === 'f2p', target: targetLevel }); window.location.hash = hrefTo.path(); }}>
+        onClick={() => { if (setTracked({ skill: which as SkillName, mode: 'fast', freeOnly: mode === 'f2p', target: targetLevel })) window.location.hash = hrefTo.path(); }}>
         Follow to level {targetLevel}
       </button>}
       <p className="muted small" id={`${ids.xp}-hint`}>

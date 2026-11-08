@@ -11,6 +11,8 @@ export interface QaInput {
   questStages: { quests: Record<string, {
     var: [string, number];
     route?: { title: string; steps: string[] }[];
+    encounters?: { foe: string; throughLine: string }[];
+    manualProofs?: { requirement: string; carriedId: number; atLines: string[]; source: string }[];
     stages: { at: number; do: { t: string; s?: string; k?: string; at?: number[]; has?: string; need?: string; hl?: { npc?: unknown; obj?: unknown; on?: unknown; item?: unknown } }[]; go?: unknown; items?: { name: string }[] }[];
   }> };
   /** The training methods (src/data/authored/trainingMethods.json) and the place dictionary — for the method router rules. If absent — the rules are not applied. */
@@ -93,6 +95,19 @@ export function qa(input: QaInput): QaIssue[] {
   }
   for (const [id, q] of Object.entries(input.questStages.quests)) {
     if (!ids.has(id)) add('stages-step', id, 'there is no such step on the route');
+    const step = input.steps.find(step => step.id === id), foes = new Set([...(step?.foes ?? []), ...(step?.threats ?? [])]);
+    const lineKeys = new Set(q.stages.flatMap(stage => stage.do.map(line => line.k)));
+    for (const proof of q.manualProofs ?? []) {
+      if (!proof.requirement.trim() || !Number.isSafeInteger(proof.carriedId) || proof.carriedId <= 0 || !proof.atLines.length
+        || proof.atLines.some(key => !key || !lineKeys.has(key)) || !/^https:\/\//.test(proof.source)) {
+        add('stages-manual-proof', id, 'Manual proof must bind a requirement, exact item ID, authored lines and HTTPS source');
+      }
+    }
+    for (const encounter of q.encounters ?? []) {
+      if (!foes.has(encounter.foe) || !encounter.throughLine || !lineKeys.has(encounter.throughLine)) {
+        add('stages-encounter', id, `Encounter ${encounter.foe} must name a declared foe and an existing throughLine`);
+      }
+    }
     if (!['varp', 'varbit'].includes(q.var[0]) || !Number.isInteger(q.var[1]) || q.var[1] < 1) add('stages-var', id, `the variable ${q.var.join(' ')}`);
     let last = -1;
     for (const st of q.stages) {

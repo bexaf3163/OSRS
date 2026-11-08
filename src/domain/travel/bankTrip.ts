@@ -10,7 +10,7 @@ export interface BankedSpot { place: Point; waypoints?: Point[]; bank?: string }
 const LOCATIONS = (locationsJson as unknown as { locations: Record<string, Point & { label: string; kind: string }> }).locations;
 
 /** Seconds at the bank (open it, deposit, take the food) and on each ladder or door between the bank and the spot: the fast and the slow end. */
-const BANK_SECONDS: [number, number] = [20, 45];
+export const BANK_SECONDS: [number, number] = [20, 45];
 const CLIMB_SECONDS: [number, number] = [5, 15];
 /** A straight line on the map is the fast end of a walk; paths around rivers, fences and buildings make the slow end this much longer, at walking pace. */
 const WINDING = 1.4;

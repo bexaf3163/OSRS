@@ -1,0 +1,890 @@
+{
+  "items": [
+    {
+      "id": "Cook's Assistant",
+      "stepIds": [
+        "S1-03"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": ""
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {
+          "cooking": 300
+        },
+        "coins": 0
+      },
+      "resourceFlow": {
+        "consumes": [
+          {
+            "name": "Egg",
+            "count": 1
+          },
+          {
+            "name": "Bucket of milk",
+            "count": 1
+          },
+          {
+            "name": "Pot of flour",
+            "count": 1
+          }
+        ],
+        "receives": [],
+        "uncertainReceipts": [
+          "Bucket",
+          "Pot"
+        ],
+        "partialDelivery": true
+      },
+      "length": "Very Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15375073",
+        "title": "Cook's Assistant",
+        "revision": 15375073,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Sheep Shearer",
+      "stepIds": [
+        "S1-04"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": ""
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {
+          "crafting": 150
+        },
+        "coins": 60
+      },
+      "resourceFlow": {
+        "consumes": [
+          {
+            "name": "Ball of wool",
+            "count": 20
+          }
+        ],
+        "receives": [],
+        "acquisitionTools": [
+          "Shears"
+        ],
+        "partialDelivery": true
+      },
+      "length": "Very Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15367050",
+        "title": "Sheep Shearer",
+        "revision": 15367050,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "X Marks the Spot",
+      "stepIds": [
+        "S1-05"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": ""
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {},
+        "coins": 200
+      },
+      "resourceFlow": {
+        "consumes": [],
+        "receives": [],
+        "unknownItems": [
+          "Treasure scroll",
+          "Mysterious orb",
+          "Ancient casket"
+        ],
+        "uncertainReceipts": [
+          "Antique lamp",
+          "Scroll box (beginner)"
+        ],
+        "partialDelivery": false,
+        "fromStartOnly": true
+      },
+      "length": "Very Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15367156",
+        "title": "X Marks the Spot",
+        "revision": 15367156,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "The Restless Ghost",
+      "stepIds": [
+        "S1-06"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [
+          "survival"
+        ],
+        "unparsed": null,
+        "text": "Capable of killing or running away from a [[combat level]] 13 [[skeleton]]."
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {
+          "prayer": 1125
+        },
+        "coins": 0
+      },
+      "resourceFlow": {
+        "consumes": [],
+        "receives": [],
+        "unknownItems": [
+          "Ghost's skull"
+        ],
+        "uncertainReceipts": [
+          "Ghostspeak amulet"
+        ],
+        "partialDelivery": false,
+        "fromStartOnly": true
+      },
+      "length": "Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15390078",
+        "title": "The Restless Ghost",
+        "revision": 15390078,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Misthalin Mystery",
+      "stepIds": [
+        "S1-07"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": ""
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {
+          "crafting": 600
+        },
+        "coins": 0
+      },
+      "resourceFlow": null,
+      "length": "Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15367068",
+        "title": "Misthalin Mystery",
+        "revision": 15367068,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Imp Catcher",
+      "stepIds": [
+        "S2-02"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": ""
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {
+          "magic": 875
+        },
+        "coins": 0
+      },
+      "resourceFlow": {
+        "consumes": [
+          {
+            "name": "Black bead",
+            "count": 1
+          },
+          {
+            "name": "Yellow bead",
+            "count": 1
+          },
+          {
+            "name": "Red bead",
+            "count": 1
+          },
+          {
+            "name": "White bead",
+            "count": 1
+          }
+        ],
+        "receives": [
+          {
+            "name": "Amulet of accuracy",
+            "count": 1,
+            "when": "complete"
+          }
+        ],
+        "partialDelivery": false
+      },
+      "length": "Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15375330",
+        "title": "Imp Catcher",
+        "revision": 15375330,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Witch's Potion",
+      "stepIds": [
+        "S2-03"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": ""
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {
+          "magic": 325
+        },
+        "coins": 0
+      },
+      "resourceFlow": null,
+      "length": "Very Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15367062",
+        "title": "Witch's Potion",
+        "revision": 15367062,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Romeo & Juliet",
+      "stepIds": [
+        "S2-05"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": ""
+      },
+      "rewards": {
+        "questPoints": 5,
+        "xp": {},
+        "coins": 0
+      },
+      "resourceFlow": {
+        "consumes": [
+          {
+            "name": "Cadava berries",
+            "count": 1
+          }
+        ],
+        "receives": [],
+        "unknownItems": [
+          "Message",
+          "Cadava potion"
+        ],
+        "partialDelivery": false,
+        "fromStartOnly": true
+      },
+      "length": "Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15390733",
+        "title": "Romeo & Juliet",
+        "revision": 15390733,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Rune Mysteries",
+      "stepIds": [
+        "S2-06"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": ""
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {
+          "runecraft": 500
+        },
+        "coins": 0
+      },
+      "resourceFlow": {
+        "consumes": [],
+        "receives": [
+          {
+            "name": "Air talisman",
+            "count": 1,
+            "when": "complete"
+          }
+        ],
+        "unknownItems": [
+          "Research package",
+          "Notes"
+        ],
+        "partialDelivery": false,
+        "fromStartOnly": true
+      },
+      "length": "Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15390926",
+        "title": "Rune Mysteries",
+        "revision": 15390926,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "The Knight's Sword",
+      "stepIds": [
+        "S2-07"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {
+          "mining": 10
+        },
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [
+          "evasion"
+        ],
+        "unparsed": null,
+        "text": "* {{SCP|Mining|10|link=yes}} {{Boostable|yes}} {{Questreqstart|no}}\n* The ability to run from [[combat level|level]] 57 [[ice warrior]]s and level 53 [[ice giant]]s could help."
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {
+          "smithing": 12725
+        },
+        "coins": 0
+      },
+      "resourceFlow": null,
+      "length": "Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15389667",
+        "title": "The Knight's Sword",
+        "revision": 15389667,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Vampyre Slayer",
+      "stepIds": [
+        "S2-08"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [
+          "combat",
+          "regeneration"
+        ],
+        "unparsed": null,
+        "text": "Able to defeat a [[combat level]] 34 [[Count Draynor|vampyre]] with a very high health recovery rate."
+      },
+      "rewards": {
+        "questPoints": 3,
+        "xp": {
+          "attack": 4825
+        },
+        "coins": 0
+      },
+      "resourceFlow": null,
+      "length": "Very Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15393822",
+        "title": "Vampyre Slayer",
+        "revision": 15393822,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Pirate's Treasure",
+      "stepIds": [
+        "S2-09"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [
+          "survival"
+        ],
+        "unparsed": null,
+        "text": "Able to defeat or run away from a [[Combat level]] 4 [[gardener]]."
+      },
+      "rewards": {
+        "questPoints": 2,
+        "xp": {
+          "cooking": 800
+        },
+        "coins": null
+      },
+      "resourceFlow": null,
+      "length": "Very Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15390925",
+        "title": "Pirate's Treasure",
+        "revision": 15390925,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Prince Ali Rescue",
+      "stepIds": [
+        "S2-10"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [
+          "evasion"
+        ],
+        "unparsed": null,
+        "text": "The ability to get past [[aggressive]] [[combat level]] 26 [[jail guard]]s."
+      },
+      "rewards": {
+        "questPoints": 3,
+        "xp": {
+          "smithing": 500,
+          "crafting": 500
+        },
+        "coins": 700
+      },
+      "resourceFlow": null,
+      "length": "Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15390923",
+        "title": "Prince Ali Rescue",
+        "revision": 15390923,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Ernest the Chicken",
+      "stepIds": [
+        "S2-11"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [
+          "combat"
+        ],
+        "unparsed": null,
+        "text": "*The ability to defend from a level 22 [[Skeleton]]."
+      },
+      "rewards": {
+        "questPoints": 4,
+        "xp": {},
+        "coins": 300
+      },
+      "resourceFlow": {
+        "consumes": [],
+        "receives": [],
+        "unknownItems": [
+          "Fish food",
+          "Poison",
+          "Poisoned fish food",
+          "Pressure gauge",
+          "Rubber tube",
+          "Oil can",
+          "Key"
+        ],
+        "uncertainReceipts": [
+          "Spade",
+          "Antique lamp"
+        ],
+        "partialDelivery": false,
+        "fromStartOnly": true
+      },
+      "length": "Very Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15390916",
+        "title": "Ernest the Chicken",
+        "revision": 15390916,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Goblin Diplomacy",
+      "stepIds": [
+        "S2-12"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": ""
+      },
+      "rewards": {
+        "questPoints": 5,
+        "xp": {
+          "crafting": 200
+        },
+        "coins": 0
+      },
+      "resourceFlow": null,
+      "length": "Very Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15379720",
+        "title": "Goblin Diplomacy",
+        "revision": 15379720,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Doric's Quest",
+      "stepIds": [
+        "S3-01"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": "None"
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {
+          "mining": 1300
+        },
+        "coins": 180
+      },
+      "resourceFlow": {
+        "consumes": [
+          {
+            "name": "Clay",
+            "count": 6
+          },
+          {
+            "name": "Copper ore",
+            "count": 4
+          },
+          {
+            "name": "Iron ore",
+            "count": 2
+          }
+        ],
+        "receives": [
+          {
+            "name": "Bronze pickaxe",
+            "count": 1,
+            "when": "start"
+          }
+        ],
+        "partialDelivery": false
+      },
+      "length": "Very Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15367060",
+        "title": "Doric's Quest",
+        "revision": 15367060,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Black Knights' Fortress",
+      "stepIds": [
+        "S3-02"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 12,
+        "quests": [],
+        "manual": [],
+        "capabilities": [
+          "evasion"
+        ],
+        "unparsed": null,
+        "text": "* {{SCP|Quest|12}} [[Quest points]] {{Questreqstart|yes}}\n* The ability to evade level 33 [[Black Knight]]s"
+      },
+      "rewards": {
+        "questPoints": 3,
+        "xp": {},
+        "coins": 2500
+      },
+      "resourceFlow": null,
+      "length": "Very Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15390878",
+        "title": "Black Knights' Fortress",
+        "revision": 15390878,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Demon Slayer",
+      "stepIds": [
+        "S3-03"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [
+          "combat"
+        ],
+        "unparsed": null,
+        "text": "The ability to defeat a level 27 [[Delrith|demon]] aided by three level 20 [[Dark wizard]]s and two level 7 Dark wizards using the [[Silverlight]] in melee."
+      },
+      "rewards": {
+        "questPoints": 3,
+        "xp": {},
+        "coins": null
+      },
+      "resourceFlow": null,
+      "length": "Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15393003",
+        "title": "Demon Slayer",
+        "revision": 15393003,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Below Ice Mountain",
+      "stepIds": [
+        "S3-04"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 16,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": "*{{SCP|Quest|16|link=yes}} {{Questreqstart|yes}}"
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {
+          "mining": 1200
+        },
+        "coins": 2000
+      },
+      "resourceFlow": null,
+      "length": "Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15394096",
+        "title": "Below Ice Mountain",
+        "revision": 15394096,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Shield of Arrav",
+      "stepIds": [
+        "S3-05"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [
+          "partner"
+        ],
+        "capabilities": [],
+        "unparsed": null,
+        "text": "* A trustworthy friend or partner. Players can join the official [[chat-channel]] \"OSRS SOA\" to look for a partner."
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {},
+        "coins": 600
+      },
+      "resourceFlow": null,
+      "length": "Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15390839",
+        "title": "Shield of Arrav",
+        "revision": 15390839,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "The Corsair Curse",
+      "stepIds": [
+        "S4-01"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": ""
+      },
+      "rewards": {
+        "questPoints": 2,
+        "xp": {
+          "firemaking": 1200
+        },
+        "coins": 0
+      },
+      "resourceFlow": null,
+      "length": "Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15393806",
+        "title": "The Corsair Curse",
+        "revision": 15393806,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "The Ides of Milk",
+      "stepIds": [
+        "S4-02"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 0,
+        "quests": [],
+        "manual": [],
+        "capabilities": [],
+        "unparsed": null,
+        "text": "None"
+      },
+      "rewards": {
+        "questPoints": 1,
+        "xp": {},
+        "coins": 0
+      },
+      "resourceFlow": null,
+      "length": "Short",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15387198",
+        "title": "The Ides of Milk",
+        "revision": 15387198,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    },
+    {
+      "id": "Dragon Slayer I",
+      "stepIds": [
+        "S5-01",
+        "S5-03",
+        "S5-04",
+        "S5-05",
+        "S5-06",
+        "S5-07",
+        "S5-08",
+        "S5-09"
+      ],
+      "members": false,
+      "requirements": {
+        "skills": {},
+        "questPoints": 32,
+        "quests": [],
+        "manual": [],
+        "capabilities": [
+          "combat"
+        ],
+        "unparsed": null,
+        "text": "* {{SCP|Quest|32}} [[Quest points]] to enter the Champions' Guild  {{Questreqstart|yes}}\n* The ability to defeat a level 83 [[Elvarg|dragon]]"
+      },
+      "rewards": {
+        "questPoints": 2,
+        "xp": {
+          "strength": 18650,
+          "defence": 18650
+        },
+        "coins": 0
+      },
+      "resourceFlow": null,
+      "length": "Medium",
+      "source": {
+        "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15392151",
+        "title": "Dragon Slayer I",
+        "revision": 15392151,
+        "retrievedAt": "2026-11-07T14:30:09.500Z"
+      }
+    }
+  ]
+}

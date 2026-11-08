@@ -1,6 +1,6 @@
 // What the RuneLite plugin shows for a step (guide panel, quest stages, in-game target, auto-completion), built from the shared engines.
 import type { Progress, Step, StepBranch } from '../../types';
-import { isClosed, openAfter, type DependencyFact } from '../quests/next-step';
+import { isClosed } from '../quests/next-step';
 import { parseAmount } from '../items/checklist';
 import { preflightItems } from '../prep/stepItems';
 import { nameKey } from '../items/itemKey';
@@ -154,25 +154,8 @@ export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: stri
   return empty ? null : payload;
 }
 // ---------- Auto-completion ----------
-export interface AutoCompletePlan {
-  /** Mark a step as done. */
-  mark: boolean;
-  /** The next unclosed step — the pages open it. */
-  next?: Step;
-  /** What to send to the game after the mark: the next step, clear, or touch nothing. */
-  inGame: 'sync-next' | 'clear' | 'keep';
-}
-/**
- * What to do with the STEP_AUTO_COMPLETED event. handled — the events already processed: a repeat changes nothing.
- * The next step goes to the game only if the game was showing exactly the completed one — we do not override someone else's.
- */
-export function planAutoComplete(steps: Step[], p: Progress, stepId: string, activeStepId: string | null, handled: ReadonlySet<string>, qp = Number.POSITIVE_INFINITY, fact?: DependencyFact): AutoCompletePlan {
-  const idle: AutoCompletePlan = { mark: false, inGame: 'keep' };
-  if (handled.has(stepId)) return idle;
-  const step = steps.find((s) => s.id === stepId);
-  if (!step || isClosed(p, stepId)) return idle;
-  // This event confirms this milestone only. Other prerequisites still need their own evidence.
-  const next = openAfter(steps, p, stepId, qp, (id) => id === stepId ? true : fact?.(id));
-  if (activeStepId !== stepId) return { mark: true, next, inGame: 'keep' };
-  return { mark: true, next, inGame: next && toInGameTarget(next) ? 'sync-next' : 'clear' };
+/** Whether a STEP_AUTO_COMPLETED event marks its step done: not a repeat (handled), a known open step. It confirms this
+ * milestone only; what the game shows next is the committed Decision's (app/sync/DecisionSync), never route order. */
+export function autoCompletes(steps: readonly Step[], p: Progress, stepId: string, handled: ReadonlySet<string>): boolean {
+  return !handled.has(stepId) && steps.some(s => s.id === stepId) && !isClosed(p, stepId);
 }

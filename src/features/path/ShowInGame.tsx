@@ -9,6 +9,7 @@ import { toInGameTarget } from '../../domain/guide/inGameTarget';
 import { IconChevron } from '../../ui/Icons';
 import { NavigateButton } from '../../ui/NavigateButton';
 import { useSubStep } from './step/SubStepHero';
+import { GUIDE_UNCONFIRMED } from '../../domain/player/linkState';
 
 export function ShowInGame({ step }: { step: Step }) {
   const { progress } = useStore();
@@ -21,7 +22,7 @@ export function ShowInGame({ step }: { step: Step }) {
   const show = async () => {
     setSending(true);
     const result = await pointInGame(step);
-    setProblem(result === 'ok' ? '' : result === 'offline' ? 'RuneLite is offline. Target saved.' : 'No game target is available for this step.');
+    setProblem(result === 'ok' ? '' : result === 'offline' ? GUIDE_UNCONFIRMED : 'No game target is available for this step.');
     setSending(false);
   };
   return (

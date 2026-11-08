@@ -3,12 +3,13 @@
   "generated": {
     "combatFoes.json": "npm run build-combat-foes",
     "f2p-items.json": "npm run build-items",
+    "fundingWiki.json": "npm run build-money",
     "gear.json": "npm run build-gear",
     "majorLocations.json": "npm run build-locations",
-    "moneyMaking.json": "npm run build-money",
-    "portals.json": "npm run build-portals",
+        "portals.json": "npm run build-portals",
     "processing.json": "npm run build-processing",
     "questMachines.json": "python tools/qh-machines/qhm/build_machines.py",
+    "questFacts.json": "npm run build-quest-facts",
     "rangedGear.json": "npm run build-ranged-gear",
     "skilling.json": "npm run build-skilling",
     "skills/": "python tools/skill-guides/build.py",
@@ -16,6 +17,7 @@
     "threats.json": "npm run build-threats",
     "trainers.json": "npm run build-trainers",
     "transportNet.json": "npm run build-transport-net",
-    "weights.json": "npm run build-weights"
+    "weights.json": "npm run build-weights",
+    "worldRouting.json": "npm run build-world-routing"
   }
 }

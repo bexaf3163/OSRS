@@ -15,6 +15,32 @@ const input = (s: string, over: Partial<ReadinessInput> = {}): ReadinessInput =>
 });
 
 describe('the single readiness engine', () => {
+  it('keeps candidate and phase caches separate even when their historical step IDs match', () => {
+    const first = { ...step('S1-03'), id: 'S0-01', requires: [], itemsRequired: [{ nameEn: 'Bucket', amount: 1, howToGet: '' }] };
+    const second = { ...first, itemsRequired: [{ nameEn: 'Pot', amount: 2, howToGet: '' }] };
+    const ctx = contextOf({ ...input('S1-03'), steps: [first, second] });
+    const engine = createReadinessEngine(ctx);
+    const one = engine.readiness(first), two = engine.readiness(second);
+    expect(two).not.toBe(one);
+    expect(engine.readiness(first)).toBe(one);
+    expect(engine.plan(first, { ahead: 0 }).lines.map(line => line.name)).toContain('Bucket');
+    expect(engine.plan(second, { ahead: 0 }).lines.map(line => [line.name, line.count])).toEqual([['Pot', 2]]);
+    expect(engine.trip(second, 0).lines.map(line => line.line.nameEn)).toEqual(['Pot']);
+    expect(engine.queue(second, 'chill')).not.toBe(engine.queue(first, 'chill'));
+    const external = { ...second, itemsRequired: [{ nameEn: 'Rope', amount: 1, howToGet: '' }] };
+    expect(engine.plan(external, { ahead: 0 }).lines.map(line => line.name)).toEqual(['Rope']);
+    expect(engine.ctx.steps).toEqual([first, second]);
+  });
+  it('shares the validated execution projection across readiness, preparation and UI consumers', () => {
+    const ctx = contextOf(input('S3-04', { stats: { mining: 10 } }));
+    const engine = createReadinessEngine({ ...ctx, questInstruction: { stepId: 'S3-04', stageAt: 40, lineIndex: 0, peeking: false } });
+    const execution = engine.ctx.steps.find(step => step.id === 'S3-04')!;
+    expect(execution.threats).toEqual([]);
+    expect(execution.itemsRequired).toEqual([]);
+    expect(engine.plan(step('S3-04')).lines.some(line => ['Beer', 'Bread', 'Cooked meat', 'Knife'].includes(line.name))).toBe(false);
+    expect(engine.readiness(execution)).toBe(engine.readiness(step('S3-04')));
+    expect(step('S3-04').threats).toContain('Ancient Guardian');
+  });
   it.each<{ consumer: string; producer: string; stats: Record<string, number> }>([
     { consumer: 'S7-05', producer: 'S7-04', stats: { agility: 25 } },
     { consumer: 'S8-05', producer: 'S8-04', stats: { ranged: 30, slayer: 18, crafting: 31, woodcutting: 36, cooking: 10 } },

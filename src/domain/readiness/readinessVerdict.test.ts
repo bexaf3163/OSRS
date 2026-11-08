@@ -259,11 +259,11 @@ describe('a shield the fight needs, displaced by a two-handed weapon', () => {
     const ship = mk('S99-01', [item('Anti-dragon shield', 1)], { threats: ['Elvarg'] });
     const o = owned({ 'Anti-dragon shield': [1, 0] });
     const base = { plan: planFor(ship, o), connected: true, owned: o, isFood };
-    expect(readinessVerdict(base).level).toBe('READY');
+    expect(readinessVerdict(base).level).toBe('PREP_NEEDED'); // Carrying the shield is not wearing it, even with a one-handed weapon.
     const v = readinessVerdict({ ...base, worn: { weapon: 'Iron 2h sword', twoHanded: true } });
     expect(v.level).toBe('PREP_NEEDED');
     expect(v.headline).toBe('Preparation needed: Iron 2h sword is two-handed: it leaves no room for the Anti-dragon shield.');
-    expect(readinessVerdict({ ...base, worn: { weapon: 'Mithril scimitar', twoHanded: false } }).level).toBe('READY');
+    expect(readinessVerdict({ ...base, worn: { weapon: 'Mithril scimitar', twoHanded: false } }).level).toBe('PREP_NEEDED');
   });
 });
 
@@ -317,10 +317,10 @@ describe('a quest fight that cannot be judged is never Ready (combat audit, 2.66
     expect(v.headline).toMatch(/Ithoi the Navigator: this fight is not assessed yet/);
   });
 
-  it('an opponent the app has no numbers for: a caution to prepare as written, not a silent Ready', () => {
+  it('an opponent without a combat model stays unknown, rather than Ready with a caution', () => {
     const v = readinessVerdict({ ...base, fights: [], fightNames: [{ name: 'Gorak', known: false }], carriedFood: 5 });
-    expect(v.level).toBe('READY_CAUTIONS');
-    expect(v.cautions).toContain('Gorak: the app has no combat numbers for it; prepare as the walkthrough says.');
+    expect(v.level).toBe('UNKNOWN');
+    expect(v.reasons).toContainEqual({ group: 'unknown', state: 'unknown', text: "Gorak: the app has no combat model for it; verify the walkthrough's strategy." });
   });
 
   it('an estimated fight is not reported twice, and a fight that needs no food does not wait for the bag', () => {

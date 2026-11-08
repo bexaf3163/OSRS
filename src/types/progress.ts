@@ -16,8 +16,8 @@ export interface Progress {
   reviewedV2Steps?: string[];
   /** Steps returned to active after V2: their quest points are already earned in the game and are not rolled back. */
   qpKept?: string[];
-  /** A full copy of the old route's (V1) progress before the move to V2, so that nothing is lost. */
-  legacy?: { steps: Record<string, StepStatus>; notes: Record<string, string> };
+  /** Historical route marks/notes retained across migrations or content retirement; never current quest facts. */
+  legacy?: { steps: Record<string, StepStatus>; notes: Record<string, string>; doneAt?: Record<string, string> };
   /** Steps where the player pressed "✕ Skip" on a gear upgrade hint. */
   upgradeDismissedForSteps?: string[];
   /**

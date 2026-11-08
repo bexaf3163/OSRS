@@ -5,11 +5,12 @@
 
 import type { WikiItemDetail } from '../../types';
 import { matchStrict } from '../travel/locations';
+import { nearestBankTo } from '../travel/stepPlaces';
 import { SAVE_GP } from '../market/shopConstants';
 import { heldOf, levelOf, type PlayerState, type WorldPoint } from '../player/playerState';
 import { SHOP_TOWN, accessSuffix, shopAccess, shopKey, spawnAccess, type AccessState } from '../market/shopAccess';
 import { nameKey } from '../items/itemKey';
-import { majorLocationsJson as locationsJson, stepsJson } from '../../data';
+import { stepsJson } from '../../data';
 import { purchaseCost, type PurchaseFee } from '../items/purchaseCost';
 import { NOT_SOLD_PRICE } from '../market/itemPrice';
 
@@ -27,6 +28,8 @@ export interface SourceOption {
   note?: string;
   /** A shop: whether the player may walk in (shopAccess.ts). Only an open shop is ever the primary source. */
   access?: AccessState;
+  /** A free quest giver is not an unconditional spawn. Rich started-state evidence is checked by the planner. */
+  questAccess?: { quest: string; state: 'started' | 'completed' };
   /** An NPC who gives the item for free (FREE_GIVERS): first after what the player already has, whatever the distance. */
   giver?: boolean;
 }
@@ -41,19 +44,12 @@ export interface SourcePlan {
   total: number;
 }
 
-interface Place { x: number; y: number; plane: number; label: string; kind: string }
-const banks = Object.values((locationsJson as { locations: Record<string, Place> }).locations).filter((p) => p.kind === 'bank');
-
 /** A free one farther than this counts as "not nearby". */
 export const FREE_NEAR = 150;
 
 const dist = (a: WorldPoint, b: WorldPoint) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 
-function nearestBank(from: WorldPoint | undefined): Place | null {
-  if (!banks.length) return null;
-  if (!from) return null;
-  return banks.reduce((a, b) => (dist(b, from) < dist(a, from) ? b : a));
-}
+
 
 export interface SourceInput {
   name: string;
@@ -78,8 +74,8 @@ export interface SourceInput {
  * Duke Horacio gives the Anti-dragon shield during Dragon Slayer I and after it (OSRS Wiki, "Duke Horacio", "Anti-dragon shield"). Lumbridge is also
  * where the free Home Teleport lands, so the giver comes before any shop or the exchange however far the player is.
  */
-export const FREE_GIVERS: Record<string, { npc: string; note: string }> = {
-  'anti-dragon shield': { npc: 'Duke Horacio', note: 'during or after Dragon Slayer I; Home Teleport takes you to Lumbridge' },
+export const FREE_GIVERS: Record<string, { npc: string; note: string; questAccess?: SourceOption['questAccess'] }> = {
+  'anti-dragon shield': { npc: 'Duke Horacio', note: 'during or after Dragon Slayer I; Home Teleport takes you to Lumbridge', questAccess: { quest: 'Dragon Slayer I', state: 'started' } },
 };
 
 /** The route step that visits an NPC: the first whose own NPC it is. */
@@ -92,7 +88,7 @@ function freeGiver(name: string, here: WorldPoint | undefined): SourceOption | n
   if (!g || !step?.mapLocation) return null;
   const p = step.mapLocation;
   return {
-    kind: 'free', label: `Free: ${p.label}`, price: 0, note: g.note, giver: true,
+    kind: 'free', label: `Free: ${p.label}`, price: 0, note: g.note, giver: true, ...(g.questAccess ? { questAccess: g.questAccess } : {}),
     point: { x: p.x, y: p.y, plane: p.plane, label: p.label }, ...(here ? { distance: dist(p, here) } : {}),
   };
 }
@@ -106,7 +102,7 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
     return { satisfied: true, primary: { kind: 'bag', label: `In the bag: ${have}`, price: 0 }, alternatives: [], total: 1 };
   }
   if (!input.shortage && (held.bank ?? 0) > 0 && have + (held.bank ?? 0) >= input.need) {
-    const b = nearestBank(here);
+    const b = nearestBankTo(here);
     out.push({
       kind: 'bank', label: `In the bank: ${held.bank}`, price: 0,
       ...(b ? { point: { x: b.x, y: b.y, plane: b.plane, label: b.label }, distance: here ? dist(b, here) : undefined } : {}),
@@ -176,11 +172,13 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
     // The wiki names some drop tables with an anchor ("Scurrius#non-MVP"): the monster is the part before it.
     out.push({ kind: 'drop', label: `Dropped by ${top.monster.replace(/#.*/, '')}`, note: top.rate });
   }
-  // First the free and the already owned, the rest in the found order.
+  // An unlocated acquisition is a reference, not a nearby free trip. Prefer a usable placed source before it.
+  // Already owned stock stays first even when the current position/bank destination is unread.
   // "Free nearby" is no farther than FREE_NEAR tiles; farther, the free one goes on a par with the shop and the exchange.
   const rank = (o: SourceOption): number =>
     o.kind === 'bag' || o.kind === 'bank' ? 0 : o.access !== undefined && o.access !== 'open' ? 2.6
-      : o.kind === 'free' ? (o.giver || o.distance === undefined || o.distance <= FREE_NEAR ? 1 : 2.5) : o.kind === 'drop' ? 3 : 2;
+      : o.kind === 'drop' ? 3 : !o.point ? 2.75
+        : o.kind === 'free' ? (o.giver || o.distance === undefined || o.distance <= FREE_NEAR ? 1 : 2.5) : 2;
   const ordered = out
     .filter((o) => !input.kinds || input.kinds.includes(o.kind))
     .map((o, i) => ({ o, i }))

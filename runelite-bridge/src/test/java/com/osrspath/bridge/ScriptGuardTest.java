@@ -48,4 +48,27 @@ public class ScriptGuardTest
 	{
 		assertFalse(new ScriptGuard().isSafe());
 	}
+
+	@Test
+	public void typedFreshReadsNeverSubstituteAnOldStateAfterRefusal()
+	{
+		ScriptGuard guard = new ScriptGuard();
+		assertNull(guard.readCurrent(() -> "IN_PROGRESS"));
+		guard.safe(true);
+		assertEquals("IN_PROGRESS", guard.readCurrent(() -> "IN_PROGRESS"));
+		assertNull(guard.readCurrent(() -> { throw new AssertionError("scripts are not reentrant"); }));
+		guard.safe(false);
+		assertNull(guard.readCurrent(() -> "COMPLETED"));
+	}
+
+	@Test
+	public void completionCacheIsClearedAtTheCharacterBoundary()
+	{
+		ScriptGuard guard = new ScriptGuard();
+		guard.safe(true);
+		assertTrue(guard.read("q", () -> true));
+		guard.clear();
+		guard.safe(false);
+		assertNull(guard.read("q", () -> true));
+	}
 }

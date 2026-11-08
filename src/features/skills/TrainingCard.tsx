@@ -144,7 +144,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
           <button key={priority} type="button" className={`skill-seg-btn ${selectedPriority === priority ? 'is-on' : ''}`}
             aria-pressed={selectedPriority === priority}
             onClick={() => {
-              if (tracked?.skill === skill && tracked.mode === 'afk') setTracked({ ...tracked, mode: 'fast' });
+              if (tracked?.skill === skill && tracked.mode === 'afk' && !setTracked({ ...tracked, mode: 'fast' })) return;
               setFeatures({ efficient: priority === 'fastest', profitTraining: priority === 'profit', relaxedTraining: false });
             }}>
             {label}
@@ -171,8 +171,8 @@ export function TrainingCard({ skill, target, followed = null, view = 'full' }: 
             </div>
             <div className="training-location"><h3>Location</h3><p>{shown!.method.where}</p>{view === 'summary' && SKILL_NAMES.includes(skill as SkillName)
               ? <button type="button" className="btn btn-primary btn-sm training-follow" onClick={() => {
-                setTracked(tracked?.skill === skill ? { ...tracked, target }
-                  : { skill: skill as SkillName, mode: profile.style === 'chill' && priorityOf(features) === 'relaxed' ? 'afk' : 'fast', freeOnly: state.mode === 'f2p', target });
+                if (!setTracked(tracked?.skill === skill ? { ...tracked, target }
+                  : { skill: skill as SkillName, mode: profile.style === 'chill' && priorityOf(features) === 'relaxed' ? 'afk' : 'fast', freeOnly: state.mode === 'f2p', target })) return;
                 window.location.hash = hrefTo.path();
               }}>{tracked?.skill === skill ? 'Continue training plan' : 'Follow training plan'}</button>
               : nav && <NavigateButton target={nav} label={`To the place: ${nav.label}`} />}</div>

@@ -16,6 +16,7 @@ import { GearHintSync } from './sync/GearHintSync';
 import { CleanupSync } from './sync/CleanupSync';
 import { FundingSync } from './sync/FundingSync';
 import { PrepSync } from './sync/PrepSync';
+import { DecisionSync } from './sync/DecisionSync';
 import { SkillSync } from '../features/path/step/TrackedSkillCard';
 import { PathPage } from '../features/path/Path';
 import { SkillsPage } from '../features/skills/Skills';
@@ -31,6 +32,8 @@ import { UpdateBanner } from './UpdateBanner';
 import { Book, Hud, LedgerStage, Spine, TitleBar, LEDGER_NAV } from '../ledger';
 import { usePlayerSummary } from '../ledger/adapters';
 import { hrefTo } from '../domain/pages/pages';
+import { usePlanningIntent } from '../state/planningIntent';
+import { BankNotice } from './BankNotice';
 
 /** The section a route belongs to: the old #/quests and #/goals hashes live inside the Journal. */
 function sectionOf(page: Page): string {
@@ -53,6 +56,7 @@ export function App() {
   const route = useRoute();
   const { mode, setMode, persistenceWarning } = useStore();
   const player = usePlayerSummary();
+  const goal = usePlanningIntent();
   const [searchOpen, setSearchOpen] = useState(false);
   const desk = desktop();
   const [pinned, setPinned] = useState(false);
@@ -121,6 +125,8 @@ export function App() {
         <main id="main" tabIndex={-1} className="la-main">
           <UpdateBanner />
           <ProfileBanner />
+          <BankNotice />
+          {goal.warning && <div className="plaque plaque-warning" role="alert">{goal.warning}</div>}
           {persistenceWarning && <div className="plaque plaque-warning progress-storage-warning" role="alert">{persistenceWarning} <a href={hrefTo.settings()}>Settings</a></div>}
           <Book>
             <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}>{content}</PageBoundary>
@@ -136,6 +142,7 @@ export function App() {
       <CleanupSync />
       <FundingSync />
       <PrepSync />
+      <DecisionSync />
       <SkillSync />
       <SearchBox open={searchOpen} onClose={() => setSearchOpen(false)} />
     </LedgerStage></WikiProvider>

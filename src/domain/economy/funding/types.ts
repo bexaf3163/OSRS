@@ -36,7 +36,7 @@ export type Requirement =
   /** Coins that must be paid on the way (a ferry, a trip fee), per round trip. */
   | { kind: 'fare'; coins: number; reason: string; /** The fare is not paid once this quest is complete (the Al Kharid toll gate). */ unlessQuest?: string }
   /** A world-state fact the game cannot tell us, shown as "check" and never assumed. */
-  | { kind: 'check'; text: string };
+  | { kind: 'check'; text: string; /** Explicitly advisory facts never block execution. Absent means a required manual check. */ hard?: boolean };
 
 export interface Place { x: number; y: number; plane: number; label: string }
 

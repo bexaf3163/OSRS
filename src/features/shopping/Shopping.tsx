@@ -8,7 +8,7 @@ import { useStore } from '../../state/store';
 import { useReadinessEngine, useTrackedTraining, useActiveActivity } from '../../state/readinessContext';
 import { useBridge } from '../../state/bridge';
 import { usePlayerState } from '../../state/playerStateContext';
-import { currentStage } from '../../domain/quests/next-step';
+import { useDecisionStage } from '../../state/decision';
 import { coinsOf } from '../../domain/player/playerState';
 import { formatGp } from '../../domain/prep/shopping';
 import { plural } from '../../domain/text/format';
@@ -115,6 +115,7 @@ function whereText(r: ShopRow): string {
 
 export function ShoppingPage() {
   const { stages, progress, notify, setOwnedManual } = useStore();
+  const cur = useDecisionStage();
   const engine = useReadinessEngine();
   const steps = engine.ctx.steps;
   const { state: link, owned, syncPlan, questPoints } = useBridge();
@@ -128,7 +129,6 @@ export function ShoppingPage() {
   const stageIds = useMemo(() => stages.map((s) => s.id).filter((id) => steps.some((st) => st.stage === id)), [stages, steps]);
   const [range, setRange] = useState<StageRange>(() => {
     const saved = loadRange();
-    const cur = currentStage(steps, progress);
     const ok = (n: unknown) => typeof n === 'number' && stageIds.includes(n);
     const from = ok(saved.from) ? saved.from! : cur;
     const to = ok(saved.to) && saved.to! >= from ? saved.to! : Math.min(from + 1, stageIds[stageIds.length - 1] ?? from);
@@ -442,7 +442,7 @@ export function ShoppingPage() {
         </details>
       )}
       {empty !== 'error' && empty !== 'no-plan' && selected.length > 0 && (
-        <RoadSupplies steps={selected} locate={scope !== 'range' || (range.openOnly && range.from <= currentStage(steps, progress))} heading="For the road" quietWhenEmpty />
+        <RoadSupplies steps={selected} locate={scope !== 'range' || (range.openOnly && range.from <= cur)} heading="For the road" quietWhenEmpty />
       )}
       <CleanupFold />
       <p className="muted small">The app buys nothing by itself: you place the orders.</p>

@@ -26,6 +26,8 @@ export const STORAGE_KEYS = {
   activeStep: 'osrs-put:active-step',
   recoveryDismissed: 'osrs-put:recovery-dismissed',
   skillTrack: 'osrs-put:skill-track',
+  planningIntent: 'osrs-put:planning-intent',
+  bankSessions: 'osrs-put:bank-sessions',
   debugTransport: 'osrs-put:debug-transport',
   debugFetch: 'osrs-put:debug-fetch',
 } as const;

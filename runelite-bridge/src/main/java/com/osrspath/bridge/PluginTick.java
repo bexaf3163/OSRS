@@ -1,7 +1,7 @@
 package com.osrspath.bridge;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.Objects;
 import net.runelite.api.Client;
 import net.runelite.api.EquipmentInventorySlot;
@@ -245,6 +245,8 @@ final class PluginTick
 		String name = share ? me.getName() : null;
 		if (!Objects.equals(name, plugin.playerSent))
 		{
+			plugin.scripts.clear();
+			plugin.questsSent = null;
 			plugin.playerSent = name;
 			plugin.server.setPlayer(name);
 		}
@@ -260,26 +262,25 @@ final class PluginTick
 		if (plugin.questsSent == null || ++questTicks >= QUESTS_EVERY_TICKS)
 		{
 			questTicks = 0;
-			List<String> done = completedQuests();
-			if (!done.equals(plugin.questsSent))
-			{
-				plugin.questsSent = done;
-				plugin.server.setQuests(done);
-			}
+			Map<String, String> states = questStates();
+			plugin.questsSent = states.entrySet().stream().filter(e -> "COMPLETED".equals(e.getValue()))
+				.map(Map.Entry::getKey).collect(java.util.stream.Collectors.toList());
+			plugin.server.reports.setQuestStates(states);
 		}
 	}
 
-	/** Names of quests in the FINISHED state (the game calls them the same way). */
-	List<String> completedQuests()
+	/** Full quest state is distinct from the validated local walkthrough stage. */
+	Map<String, String> questStates()
 	{
-		List<String> done = new ArrayList<>();
+		Map<String, String> states = new LinkedHashMap<>();
 		for (Quest quest : Quest.values())
 		{
-			if (Boolean.TRUE.equals(plugin.scripts.read(quest.name(), () -> quest.getState(plugin.client) == QuestState.FINISHED)))
-			{
-				done.add(quest.getName());
-			}
+			QuestState state = plugin.scripts.readCurrent(() -> quest.getState(plugin.client));
+			// Existing event handlers read the guarded completion cache; keep it populated without a second client-script call.
+			if (state != null) plugin.scripts.read(quest.name(), () -> state == QuestState.FINISHED);
+			states.put(quest.getName(), state == null ? "UNKNOWN" : state == QuestState.FINISHED ? "COMPLETED"
+				: state == QuestState.IN_PROGRESS ? "IN_PROGRESS" : "NOT_STARTED");
 		}
-		return done;
+		return states;
 	}
 }

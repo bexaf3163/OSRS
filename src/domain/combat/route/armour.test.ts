@@ -70,7 +70,7 @@ describe('structured Black armour preparation on the real route', () => {
       const requirements = armourItems(kit, 'crush', future, prices).map(item => ({ type: 'equipment' as const, name: item.nameEn, count: 1, anyOf: item.anyOf }));
       const expected = requirementCost(requirements, future, prices);
       expect(expected).not.toBeNull();
-      expect(expected).toBe(3000);
+      expect(expected).toBe(3300);
       const r = evaluatePlans({ ...i, prices })!;
       for (const p of r.plans) {
         expect(p.armourCost).toBe(expected);
@@ -177,7 +177,7 @@ describe('structured Black armour preparation on the real route', () => {
     expect(selected[0].wikiItemId).toBe(1089);
     const s = { ...step, foes: [], itemsRequired: selected };
     const prep = engine(i, s, prices).plan(s, { ahead: 0 });
-    expect(prep.lines[0].marketPrice).toMatchObject({ unit: 1000, total: 1000, state: 'current' });
+    expect(prep.lines[0].marketPrice).toMatchObject({ unit: 1100, total: 1100, state: 'current' });
     expect(planPayload(prep).lines[0].price).toBe(prep.lines[0].marketPrice!.text);
   });
 });

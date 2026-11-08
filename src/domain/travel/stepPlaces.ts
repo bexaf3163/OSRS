@@ -113,7 +113,12 @@ const places = Object.values((locationsJson as { locations: Record<string, Place
 const banks = places.filter((p) => p.kind === 'bank');
 /** The bank nearest to the step's place: go there for things, not across half the map. */
 export function nearestBank(step: Step): Place | null {
-  const at = step.mapLocation;
+  return nearestBankTo(step.mapLocation);
+}
+
+/** The bank nearest to a point. shortcut: straight-line guide hint, not a routed walk (planner costs use routes, S40); replace
+ * with the routed chooser when the hints move onto the route worker. */
+export function nearestBankTo(at: { x: number; y: number } | null | undefined): Place | null {
   if (!at || !banks.length) return null;
   return banks.reduce((a, b) => (dist(b, at) < dist(a, at) ? b : a));
 }

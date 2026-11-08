@@ -4,7 +4,7 @@ import { buildPlayerState } from '../player/playerState';
 import type { OwnedItem, OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
 import { decideTransport, supplyStop, SUPPLY_NEAR_TILES, transportSources } from './liveTransport';
-import { planTravelSupplies, roadLegs, roadSteps, savedText, stepTargets, SUPPLY_MIN_TOTAL_TILES, type TravelSupplies } from './travelSupplies';
+import { planTravelSupplies, roadLegs, savedText, stepTargets, SUPPLY_MIN_TOTAL_TILES, type TravelSupplies } from './travelSupplies';
 import { BANKS, EXCHANGE, STAFF_NAMES, STAIRS_TILES_PER_FLOOR, bankTiles, dist, staffCover, stavesFor, travelOptions, type TravelInput } from '../travel/travel';
 import { recommendedTransport } from '../travel/transport';
 import { planPayload } from '../prep/prepEnvelope';
@@ -28,7 +28,7 @@ const gear = (inventory: GearItem[], equipment: GearItem[] = []): GearState => (
 const DIANGO = at(3081, 3246);
 const diango = (name: string) => (name === 'Teleport card' ? { kind: 'shop' as const, where: "Diango's Toy Store — Draynor Village", point: DIANGO, price: 150 }
   : name === 'Chronicle' ? { kind: 'shop' as const, where: "Diango's Toy Store — Draynor Village", point: DIANGO, price: 300 } : null);
-const input = (over: Partial<TravelInput>): TravelInput => ({ from: at(3222, 3219), to: at(3190, 3360), levels: { magic: 25 }, carried: bag(['Coins', 5000]), bankSeen: true, bank: new Map(), members: false, sourceOf: diango, ...over });
+const input = (over: Partial<TravelInput>): TravelInput => ({ from: at(3222, 3219), to: at(3190, 3360), levels: { magic: 25 }, carried: bag(['Coins', 5000]), bankSeen: true, bank: new Map(), members: false, standardSpellbook: true, homeCooldownKnown: true, sourceOf: diango, ...over });
 
 describe('a wielded staff is runes', () => {
   it('the wiki table: the four staves are free-to-play, the battle, mystic and combination ones are members; a combination staff gives two runes', () => {
@@ -47,8 +47,8 @@ describe('a wielded staff is runes', () => {
     expect(inBag.actions).toEqual(['wield your Staff of air']);
     expect(staffCover('air', { carried: bag(['Smoke battlestaff', 1]), worn: bag(['Smoke battlestaff', 1]), members: false })).toBeNull();
     expect(staffCover('fire', { carried: bag(['Smoke battlestaff', 1]), worn: bag(['Smoke battlestaff', 1]), members: true })).toEqual({ staff: 'Smoke battlestaff', worn: true });
-    // Without a separate list of what is worn (an older plugin) a staff anywhere counts, as before.
-    expect(staffCover('air', { carried: bag(['Staff of air', 1]), members: false })).toEqual({ staff: 'Staff of air', worn: true });
+    // An older plugin without a worn list can establish possession, never that the staff is already wielded.
+    expect(staffCover('air', { carried: bag(['Staff of air', 1]), members: false })).toEqual({ staff: 'Staff of air', worn: false });
   });
 });
 
@@ -138,10 +138,6 @@ describe('supplies for the road', () => {
     expect(staffInBag.staffHints.join(' ')).toContain('wield your Staff of air');
   });
 
-  it('the road is the open steps from the shown one on', () => {
-    const road = roadSteps(allSteps, (id) => id !== 'S5-02', 'S5-01', 4);
-    expect(road.map((s) => s.id)).toEqual(['S5-01', 'S5-03', 'S5-04', 'S5-05']);
-  });
 });
 
 describe('"stock up here" on the game card', () => {
@@ -214,7 +210,7 @@ describe('"stock up here" on the game card', () => {
     const ow = owned({ 'Law rune': 0, 'Air rune': 632, 'Fire rune': 0, 'Teleport card': 0, Chronicle: 0 });
     const g = gear(bag(['Chronicle', 1], ['Coins', 2005]));
     const st = buildPlayerState({ mode: 'f2p', stats: null, progress: { levels: {} }, owned: ow, gear: g, questsDone: null, connected: true });
-    const base = { steps: roadSteps(allSteps, () => true, 'S3-05').slice(0, 1), levels: { magic: 25, woodcutting: 15 }, members: false, gear: g, owned: ow, spellbook: 0, chronicleCharges: 0, sourceOf: transportSources(st) };
+    const base = { steps: allSteps.filter((st) => st.id === 'S3-05'), levels: { magic: 25, woodcutting: 15 }, members: false, gear: g, owned: ow, spellbook: 0, chronicleCharges: 0, sourceOf: transportSources(st) };
     const lumbridge = at(3222, 3219);
     const reldo = at(3210, 3494);
     // The drawer's list starts at the player: this leg's Varrock Teleport is part of what to bring.

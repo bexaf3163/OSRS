@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allQuests, itemById, fundingCoverageJson as coverageJson, moneyMakingJson as moneyJson } from '../../src/data';
+import { allQuests, itemById, fundingCoverageJson as coverageJson, fundingWikiJson } from '../../src/data';
 import { COMBAT_FOES } from '../../src/domain/combat/combatEstimate';
 import { CATALOGUE, chanceOf, DEPENDABLE_CHANCE, expectedQty, isDependable, METHODS, methodById, validateCatalogue } from '../../src/domain/economy/funding/methods';
 import type { Catalogue } from '../../src/domain/economy/funding/types';
@@ -8,6 +8,9 @@ const quests = new Set(allQuests.map((q) => q.title));
 const foes = new Map<string, string[]>();
 for (const f of COMBAT_FOES) if (!f.members) foes.set(f.name, [...(foes.get(f.name) ?? []), f.version ?? '']);
 const ctx = { quests, foes };
+const wiki = fundingWikiJson as unknown as { methods: { id: string }[]; notBuilt: { id: string }[] };
+const WIKI = new Set(wiki.methods.map((m) => m.id));
+const authored = METHODS.filter((m) => !WIKI.has(m.id));
 
 describe('the method catalogue', () => {
   it('passes its own validation against the route and the combat data', () => {
@@ -15,7 +18,7 @@ describe('the method catalogue', () => {
   });
 
   it('has the methods the audit promised, with stable ids', () => {
-    expect(METHODS.map((m) => m.id).sort()).toEqual([
+    expect(authored.map((m) => m.id).sort()).toEqual([
       'anchovy-pizzas', 'apple-pies', 'berry-pies', 'chocolate-cakes', 'chop-oak-draynor', 'chop-yew-edgeville', 'collect-iron-al-kharid',
       'cows-cowhide', 'feather-packs', 'fill-jugs-falador', 'fish-lobster-musa', 'giant-frogs', 'grind-chocolate', 'hill-giants', 'jug-packs',
       'kebabs-al-kharid', 'meat-pies', 'mine-coal-dwarven', 'mine-iron-dwarven', 'oziach-shields', 'pie-shells', 'pizza-bases', 'smelt-silver-bars',
@@ -78,9 +81,10 @@ describe('the method catalogue', () => {
 describe('the coverage ledger', () => {
   const entries = coverageJson.entries;
 
-  it('accounts for every guide in moneyMaking.json, once', () => {
-    const ids = moneyJson.methods.map((m) => m.id).sort();
-    expect(entries.map((e) => e.id).sort()).toEqual(ids);
+  it('accounts for every wiki guide once: hand-modelled or excluded in the ledger, built from its card, or listed as not built', () => {
+    const ids = [...entries.map((e) => e.id), ...WIKI, ...wiki.notBuilt.map((n) => n.id)];
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ids.length).toBeGreaterThanOrEqual(85);
   });
 
   it('every supported entry points at catalogue methods, and every method is covered', () => {
@@ -98,7 +102,7 @@ describe('the coverage ledger', () => {
     }
     // A method that is no wiki guide (Giant frogs, 2.74.19) is covered by an extra that names it.
     for (const x of coverageJson.extras as { status: string; methods?: string[] }[]) if (x.status === 'supported') for (const id of x.methods ?? []) covered.add(id);
-    expect([...covered].sort()).toEqual(METHODS.map((m) => m.id).sort());
+    expect([...covered].sort()).toEqual(authored.map((m) => m.id).sort());
   });
 
   it('names the families that are not wiki rows too, and says no to one-time rewards as a plan', () => {

@@ -1,6 +1,6 @@
 // The Ledger frame: scenarios of the browser suite (npm run test:ui -- --only ledger).
 import type { Browser, Page } from 'playwright';
-import { steps, progressBefore, open, settle, expect, noOverflow } from '../harness.ts';
+import { steps, progressBefore, questStatesBefore, open, settle, expect, noOverflow } from '../harness.ts';
 
 async function ledgerScenarios(browser: Browser) {
   console.log('Ledger frame');
@@ -9,7 +9,7 @@ async function ledgerScenarios(browser: Browser) {
   // What reached RuneLite for a step: the snapshot (protocol 6), the active step or a navigation target that names it.
   const sent = (page: Page, id: string) => page.evaluate((id) => (window as unknown as { __posts: { path: string; body?: unknown }[] }).__posts.filter((p) => p.path !== '/status' && JSON.stringify(p.body ?? '').includes(`"${id}"`)).length, id);
   const navPosts = (page: Page) => page.evaluate(() => (window as unknown as { __posts: { path: string }[] }).__posts.filter((p) => p.path === '/nav-target').length);
-  const { page, errors } = await open(browser, 1440, { progress: progressBefore('S2-09'), status: { protocol: 6, inGame: true, activeStepId: null } }, '#/step/S2-09');
+  const { page, errors } = await open(browser, 1440, { progress: progressBefore('S2-09'), status: { protocol: 6, inGame: true, activeStepId: null, player: 'Fixture', questStates: questStatesBefore('S2-09') } }, '#/step/S2-09');
   await page.waitForSelector('.la-hotbar', { timeout: 5000 });
   const title = () => page.locator('#step-view-title').innerText();
   const hud = page.locator('.la-hud');
@@ -75,9 +75,15 @@ async function ledgerScenarios(browser: Browser) {
   await page.locator('#rail-S2-10').click();
   await settle(page);
   expect((await title()) === titleOf('S2-10') && await page.locator('#rail-S2-10[aria-current="step"]').count() === 1, 'ledger road: a row opens its step');
+  // The current step is the committed Decision's step (ranked live, not the first open one).
+  if (await page.locator('button.rail-now').isDisabled()) { await page.locator('#rail-S2-09').click(); await settle(page); }
+  const from = await title();
   await page.getByRole('button', { name: /to the current step/i }).click();
   await settle(page);
-  expect((await title()) === titleOf('S2-09'), 'ledger road: To the current step returns to it');
+  expect((await title()) !== from && await page.getByText('CURRENT STEP', { exact: true }).count() > 0 && await page.locator('button.rail-now').isDisabled(),
+    "ledger road: To the current step opens the Decision's step");
+  await page.locator('#rail-S2-09').click();
+  await settle(page);
 
   // The ribbons: each one opens its own view; P, T and D too.
   for (const [name, id] of [['Preparation', 'prep'], ['Route & game', 'travel'], ['Details', 'details'], ['Steps', 'steps']]) {

@@ -167,8 +167,18 @@ describe('what the game is asked to count, and what goes to the plugin', () => {
 });
 
 describe('the Home Teleport and the spellbook', () => {
+  it.each(['f2p', 'members'] as const)('%s membership cannot substitute for an unread active spellbook', mode => {
+    const facts = { from: DRAYNOR, to: at(3210, 3494), levels: { magic: 25 }, stats: null,
+      gear: gear([['Law rune', 1], ['Air rune', 3], ['Fire rune', 1]]), owned: owned({}), mode };
+    for (const spellbook of [undefined, null]) {
+      const input = travelInputOf({ ...facts, spellbook });
+      expect(input.standardSpellbook).toBeNull();
+      expect(travelOptions(input).find(option => option.id === 'varrock-teleport')?.availability).toBe('maybe');
+    }
+    expect(travelOptions(travelInputOf({ ...facts, spellbook: 0 })).find(option => option.id === 'varrock-teleport')?.availability).toBe('ready');
+  });
   const lumbridgeFrom = (over: Parameters<typeof travelInputOf>[0] extends infer T ? Partial<T> : never) => travelOptions(travelInputOf({
-    from: PALACE, to: at(3222, 3218), levels: {}, stats: null, gear: gear([]), owned: owned({}), mode: 'f2p', ...over,
+    from: PALACE, to: at(3222, 3218), levels: {}, stats: null, gear: gear([]), owned: owned({}), mode: 'f2p', spellbook: 0, ...over,
   }));
 
   it('the cast time counts in the trip, and an unread cooldown is a thing to check, not "ready"', () => {

@@ -7,4 +7,3 @@ export type * from './stages';
 export type * from './gear';
 export type * from './guide';
 export type * from './progress';
-export type * from './money';

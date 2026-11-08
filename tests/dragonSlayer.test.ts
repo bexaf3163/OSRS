@@ -94,24 +94,25 @@ describe('Dragon Slayer I: the checks before the quest and before the ship', () 
     expect(planFor('S5-01', {}, { qp: 32 }).blockers).toEqual([]);
   });
 
-  it('boarding without the Anti-dragon shield is a hard block, in the bank it says so, in the bag or unknown it does not block', () => {
+  it('requires the shield worn: banked and carried states are preparation, and an unread bank does not prove protection', () => {
     const none = planFor('S5-08', { 'Anti-dragon shield': { carried: 0, bank: 0 } });
     const safety = (p: PrepPlan) => p.blockers.filter((b) => b.detail?.startsWith('Do not go without it'));
     expect(safety(none)).toHaveLength(1);
     const inBank = planFor('S5-08', { 'Anti-dragon shield': { carried: 0, bank: 1 } });
     expect(safety(inBank)[0].label).toMatch(/in the bank/);
-    expect(safety(planFor('S5-08', { 'Anti-dragon shield': { carried: 1 } }))).toEqual([]);
-    // The bank was never opened and the bag is not known: not checked is not missing.
-    expect(safety(planFor('S5-08', {}, { bankSeen: false }))).toEqual([]);
+    expect(safety(planFor('S5-08', { 'Anti-dragon shield': { carried: 1 } }))[0].label).toMatch(/^Equip /);
+    // Equipment was read and empty; ownership in an unread bank is still a separate unknown.
+    expect(safety(planFor('S5-08', {}, { bankSeen: false }))[0].label).toMatch(/^Equip /);
   });
 
   it('the rule follows the opponent, not a step: any fight whose attack the wiki labels dragonfire, and any dragonfire shield satisfies it', () => {
     expect(allSteps.filter((s) => safetyRulesOf(s).length).map((s) => s.id)).toEqual(['S5-08']);
     expect(safetyRulesOf(stepById.get('S5-08')!)[0].detail).toBe("Do not go without it: Elvarg's dragonfire hits up to 70. Duke Horacio in Lumbridge Castle gives it free.");
-    const line = (name: string, where: 'MISSING' | 'INVENTORY') => ({ name, where }) as never;
+    const line = (name: string, where: 'MISSING' | 'INVENTORY' | 'EQUIPPED') => ({ name, where }) as never;
     const rules = (id: string) => safetyRulesOf(stepById.get(id)!);
     expect(safetyBlockers(rules('S5-07'), [line('Anti-dragon shield', 'MISSING')])).toEqual([]);
-    expect(safetyBlockers(rules('S5-08'), [line('Dragonfire shield', 'INVENTORY')])).toEqual([]);
+    expect(safetyBlockers(rules('S5-08'), [line('Dragonfire shield', 'EQUIPPED')])).toEqual([]);
+    expect(safetyBlockers(rules('S5-08'), [line('Dragonfire shield', 'INVENTORY')])[0].label).toMatch(/^Equip /);
     expect(safetyBlockers(rules('S5-08'), [line('Anti-dragon shield', 'MISSING')])).toHaveLength(1);
   });
 

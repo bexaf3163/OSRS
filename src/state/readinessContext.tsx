@@ -19,6 +19,7 @@ import { useFeatures } from './hooks/useFeatures';
 import { priorityOf, styleOf } from '../domain/persistence/playStyle';
 import { useTradeRestriction } from './hooks/useTradeRestriction';
 import { resolveActiveActivity } from '../domain/quests/activeActivity';
+import { decisionStep, useDecision } from './decision';
 
 const Ctx = createContext<ReadinessEngine | null>(null);
 const TrainingCtx = createContext<TrackedTraining | null>(null);
@@ -63,9 +64,11 @@ export function useActiveActivity() {
   const engine = useReadinessEngine();
   const training = useTrackedTraining();
   const bridge = useBridge();
-  return useMemo(() => resolveActiveActivity({ ...engine.ctx, dependencies: engine.dependencies, training,
+  const decision = useDecision();
+  return useMemo(() => resolveActiveActivity({ steps: engine.ctx.steps, progress: engine.ctx.progress, training,
+    decided: decisionStep(decision, engine.ctx.steps),
     activeStepId: engine.ctx.state.connected && bridge.inGame ? bridge.activeStepId : null,
-  }), [engine, training, bridge.inGame, bridge.activeStepId]);
+  }), [engine, training, decision, bridge.inGame, bridge.activeStepId]);
 }
 
 export function useReadinessEngine(): ReadinessEngine {

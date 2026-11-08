@@ -73,6 +73,12 @@ describe('Smart Tool & Gear Upgrade Router', () => {
     expect(stepUpgradeCategories(step('S1-03'))).toEqual([]);
   });
 
+  it('a steel axe already in the bank is withdrawn, never bought again; an unread bank still suggests buying', () => {
+    const banked = recommendUpgrade(input({ banked: name => (name === 'Steel axe' ? 1 : 0) }))!;
+    expect(banked).toMatchObject({ status: 'UPGRADE_OWNED', recommendedItem: 'Steel axe', reason: expect.stringContaining('in the bank') });
+    expect(recommendUpgrade(input({ banked: () => null }))!.status).toBe('UPGRADE_AVAILABLE');
+  });
+
   it('1. Bronze axe and Woodcutting 6 → Steel axe from Bob in Lumbridge', () => {
     const r = recommendUpgrade(input())!;
     expect(r.status).toBe('UPGRADE_AVAILABLE');

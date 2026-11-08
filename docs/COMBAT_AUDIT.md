@@ -214,12 +214,13 @@ Assumptions:
 Problems:
 
 - The Trout (5) is only recommended: the 25 Bones for Traiborn and the food do not fit the bag together in the item list, and the step has no loadouts that would take the food on a later bank visit.
-- The app has no numbers for Delrith (the wiki infobox gives the generator no single max hit) or the dark wizards: the fight is not estimated.
+- The app had no numbers for Delrith (the generator read an empty infobox field as the next line, fixed in v14) and has none for the dark wizards; Silverlight's doubled damage is not modelled, so the fight is not estimated.
 
 Evidence:
 
 - Step field "Combat"; quest stage line 4.1 (lines 0.0 and 1.0 are dialogue).
 - Danger zone dark-wizards-varrock warns on the way.
+- combatFoes.json has Delrith since v14 (7 hit points, max hit 3), but the estimate does not model Silverlight's doubled damage, so he stays out of the step's foes (tests/gear.test.ts).
 
 In-game danger zones: dark-wizards-varrock.
 

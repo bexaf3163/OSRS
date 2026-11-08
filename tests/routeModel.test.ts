@@ -3,7 +3,7 @@ import { allSteps, stagesFor, stepById, stepsFor, questStagesJson as questStages
 import { alchMargin } from '../src/domain/economy/alchemy';
 import { carryoverOf, routeTrigger } from '../src/domain/prep/carryover';
 import { DAERO_SMALL, daeroAdvice } from '../src/domain/training/daero';
-import { blockersOf, nextStep, stepState, suggestedBefore } from '../src/domain/quests/next-step';
+import { blockersOf, stepState, suggestedBefore } from '../src/domain/quests/next-step';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { alternativesOf, PICKAXES, toolFamilyOf } from '../src/domain/items/toolTiers';
 import { xpForLevel } from '../src/domain/player/xp';
@@ -75,7 +75,7 @@ describe('the step graph', () => {
     const f2p = stepsFor('members').filter((s) => s.stage <= 5);
     for (const s of f2p) p.steps[s.id] = 'done';
     const qp = 46;
-    expect(nextStep(stepsFor('members'), p, qp)?.id).toBe('S7-01');
+    expect(blockersOf(stepsFor('members').find((s) => s.id === 'S7-01')!, p, qp)).toBeNull();
   });
 });
 

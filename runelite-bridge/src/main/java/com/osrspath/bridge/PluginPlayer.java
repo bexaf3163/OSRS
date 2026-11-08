@@ -501,6 +501,10 @@ final class PluginPlayer
 				report(out, name, null);
 			}
 		}
+		for (String name : plugin.snapshot.decisionWatch)
+		{
+			report(out, name, null);
+		}
 		GearHint h = plugin.gearHint;
 		if (h != null)
 		{

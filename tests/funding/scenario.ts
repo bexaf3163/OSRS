@@ -42,6 +42,8 @@ export interface ScenarioOpts {
   recs?: SurplusRec[];
   activeId?: string | null;
   allowHighEffort?: boolean;
+  /** Pin a local-method fixture without asserting that this method is the global recommendation. */
+  methods?: AssessInput['methods'];
   observed?: ReadonlyMap<string, ObservedRate>;
   train?: 'attack' | 'strength' | 'defence' | null;
   sellOverride?: 'lifted' | 'active';
@@ -106,6 +108,7 @@ export function scenario(prices: PriceView, o: ScenarioOpts = {}): Scenario {
   const assessment = assess({
     step, need, snap, prices, recs: o.recs ?? [], bankValue: null, base,
     activeId: o.activeId, allowHighEffort: o.allowHighEffort,
+    methods: o.methods,
   });
   return { step, state, prep, need, snap, assessment, base };
 }

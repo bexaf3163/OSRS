@@ -128,15 +128,15 @@ async function marketPreparationScenarios(browser: Browser) {
     // The quest's items are on the Preparation ribbon.
     await reveal(page, '.quest-supply-list');
     const supplies = page.locator('.quest-supply-list');
-    await supplies.getByText(unavailable ? 'Price unavailable' : 'GE estimate: ≈ 2,060 gp (103 each)', { exact: true }).waitFor({ timeout: 6000 });
-    expect(await supplies.getByText(unavailable ? 'Price unavailable' : 'GE estimate: ≈ 2,060 gp (103 each)', { exact: true }).count() === 1,
+    await supplies.getByText(unavailable ? 'Price unavailable' : 'GE estimate: ≈ 2,280 gp (114 each)', { exact: true }).waitFor({ timeout: 6000 });
+    expect(await supplies.getByText(unavailable ? 'Price unavailable' : 'GE estimate: ≈ 2,280 gp (114 each)', { exact: true }).count() === 1,
       'market preparation (' + width + ', unavailable=' + unavailable + '): one supporting estimate, multiplied from the current quote');
     await settle(page);
     const price = await page.evaluate(() => {
       const w = window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; price?: string }[] } } }[] };
       return w.__posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.lines.find(l => l.name === 'Lobster')?.price;
     });
-    expect(unavailable ? price === 'Price unavailable' : !!price?.startsWith('GE estimate: ≈ 2,060 gp'),
+    expect(unavailable ? price === 'Price unavailable' : !!price?.startsWith('GE estimate: ≈ 2,280 gp'),
       'market preparation (' + width + ', unavailable=' + unavailable + '): the game receives the same estimate or honest absence');
     expect(!(await page.locator('main').innerText()).includes('26 Sep 2026'), 'market preparation (' + width + '): no historical route price date');
     expect(await noOverflow(page) && !errors.length, 'market preparation (' + width + '): no overflow or console errors');
@@ -245,8 +245,9 @@ async function rangedPreparationScenarios(browser: Browser) {
     const ready = await snapshot();
     expect(ready?.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where === 'EQUIPPED', `ranged (${width}): a GEAR-only quantity update reaches the canonical preparation snapshot`);
     expect(clothes.every(c => ready?.plan?.lines?.find((r: any) => r.name === c.name)?.where === 'EQUIPPED'), `ranged (${width}): actual equipped outfit clears its preparation lines`);
-    // Known HP/Defence are needed for personalized recovery; prices and owned food make the frog kit practical.
-    for (const [level, npc] of [[20, 'Monk'], [26, 'Giant frog'], [30, 'Giant frog']] as const) {
+    // Known HP/Defence are needed for personalized recovery; prices and owned food make the frog kit practical, and its big
+  // bones beat the monks from Ranged 20 (acceptance S05: no fixed bracket).
+    for (const [level, npc] of [[20, 'Giant frog'], [26, 'Giant frog'], [30, 'Giant frog']] as const) {
       await page.evaluate(s => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { ranged: level, defence: 1, hitpoints: 30 });
       await settle(page);
       const current = await snapshot();
@@ -359,12 +360,12 @@ async function nonCombatPreparationScenarios(browser: Browser) {
     expect((await text(page, 'h1')).includes('Goal 10'), 'Preparation: Mining10 opens directly instead of the default45 checkpoint');
     await page.locator('.training-follow').click();
     await page.locator('.tracked-skill').waitFor();
-    await page.waitForFunction(() => JSON.parse(localStorage.getItem('osrs-put:skill-track') ?? '{}').target === 10);
+    await page.waitForFunction(() => JSON.parse(localStorage.getItem('osrs-put:planning-intent') ?? '{}').intent?.training?.target === 10);
     await page.evaluate(() => { location.hash = '#/skills/MI/mining?goal=15'; });
     await page.locator('h1').filter({ hasText: 'Goal 15' }).waitFor();
     await page.locator('.training-follow').click();
     await page.locator('.tracked-skill').waitFor();
-    await page.waitForFunction(() => JSON.parse(localStorage.getItem('osrs-put:skill-track') ?? '{}').target === 15);
+    await page.waitForFunction(() => JSON.parse(localStorage.getItem('osrs-put:planning-intent') ?? '{}').intent?.training?.target === 15);
     expect(true, 'Preparation: following a new target updates an already followed skill');
     await page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
     await page.waitForFunction(() => (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.stepId === 'S2-07');
@@ -442,6 +443,8 @@ async function autoQueue(browser: Browser) {
   const { page, errors } = await open(browser, width, {
     progress: progressBefore('S9-01'),
     status: { stats: { crafting: 40, woodcutting: 40 } },
+    // The game follows S9-01, so the prep machine runs under it whatever the Decision ranks first.
+    localStorage: { 'osrs-put:active-step': 'S9-01' },
     events: [{ type: 'STATS', stats: { crafting: 40, woodcutting: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Knife', carried: 0, noted: 0, bank: 1 }] }],
   }, '#/step/S9-01');
   type Post = { path: string; body: Record<string, unknown> };

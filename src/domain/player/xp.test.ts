@@ -1,8 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { xpData } from '../../data';
-import { clampLevel, levelForXp, xpBetween, xpForLevel } from './xp';
+import { clampLevel, coherentSkillXp, levelForXp, xpBetween, xpForLevel } from './xp';
 
 describe('experience', () => {
+  it('validates exact XP against real level without clamping invalid facts into valid ones', () => {
+    expect(coherentSkillXp(82, 1)).toBe(true);
+    expect(coherentSkillXp(83, 1)).toBe(false);
+    expect(coherentSkillXp(0, 10)).toBe(false);
+    expect(coherentSkillXp(200_000_000, 99)).toBe(true);
+    for (const value of [-1, 0.5, 200_000_001, NaN, Infinity, '83', null]) expect(coherentSkillXp(value)).toBe(false);
+    expect(coherentSkillXp(200_000_000, 126)).toBe(false);
+  });
   it('matches the guide table', () => {
     for (const { level, xp } of xpData.points) expect(xpForLevel(level)).toBe(xp);
   });

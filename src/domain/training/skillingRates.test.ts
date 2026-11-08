@@ -218,6 +218,30 @@ describe('a new gathering spot inherits the rules (synthetic registry)', () => {
   });
 });
 
+describe('S94: two methods with the same XP, one far from its bank (synthetic registry)', () => {
+  // Same tree, same spot size, same product; only the walk to the bank differs.
+  const [far, near] = SYNTHETIC.spots.filter(spot => !spot.members);
+  const reg: SkillingRegistry = {
+    ...SYNTHETIC,
+    resources: [{ ...SYNTHETIC.resources[0], id: 'far-tree' }, { ...SYNTHETIC.resources[0], id: 'near-tree' }],
+    spots: [{ ...far, resource: 'far-tree' }, { ...near, resource: 'near-tree' }],
+    methods: { 'wc-far': ['far-tree'], 'wc-near': ['near-tree'] },
+  };
+  const s = () => stateOf({ woodcutting: 40, attack: 40 }, { 'Bronze axe': [1, 0] }, 'f2p');
+  const rate = (id: string, sell: number) => gatherRate({ ...TEST_METHOD, id }, 'woodcutting', s(), { prices: prices({ 'Test logs': sell }), objective: 'balanced' }, reg)!;
+
+  it('the recurring bank walk of a banked product ranks the near method first', () => {
+    const [n, f] = [rate('wc-near', 400), rate('wc-far', 400)];
+    expect([n.spot?.how, f.spot?.how]).toEqual(['bank', 'bank']);
+    expect(n.xph[0]).toBeGreaterThan(f.xph[0]);
+    expect(mid(n)).toBeGreaterThan(mid(f));
+  });
+
+  it('a dropped product has no bank trip, so the two stay equal', () => {
+    expect(rate('wc-near', 1).xph).toEqual(rate('wc-far', 1).xph);
+  });
+});
+
 describe('a spot under the ground (synthetic): the way in is walked, followed in the game and pointed at', () => {
   // The same grove twice: once on the surface by the bank, once in the dungeon space under a point further from it, entered there.
   const door = { x: 3093, y: 3150, plane: 0, label: 'Test hatch' };

@@ -12,13 +12,21 @@ const IRON = ['Mithril scimitar', 'Iron full helm', 'Iron platebody', 'Iron plat
 const foe = (name: string) => COMBAT_FOES.find((f) => f.name === name && !f.members)!;
 
 describe('one quest fight with your kit', () => {
+  it('keeps missing equipment bonuses, unread magic defence and a new incoming attack formula out of readiness proof', () => {
+    const base = { foe: foe('Black Knight'), levels: { attack: 40, strength: 40, defence: 40, hitpoints: 40 },
+      weapon: gearById.get(id('Mithril scimitar'))!, neck: null, armour: [], food: { name: 'Trout', heals: 7 } };
+    expect(estimateFight({ ...base, unknownPieces: 1 })?.unmodelled).toContain('worn equipment without verified combat bonuses');
+    expect(estimateFight({ ...base, foe: foe('Ithoi the Navigator') })?.unmodelled).toContain('unread Magic level for incoming magic defence');
+    expect(estimateFight({ ...base, foe: { ...base.foe, name: 'Synthetic ranged foe', attackStyle: 'ranged' } })?.unmodelled)
+      .toContain('unsupported incoming ranged attack model');
+  });
   it('every route quest fight the table knows has a free version', () => {
     for (const n of ['Count Draynor', 'Ithoi the Navigator', 'Brutus', 'Melzar the Mad', 'Lesser demon', 'Elvarg', 'Black Knight', 'Ancient Guardian']) {
       expect(foe(n), n).toBeTruthy();
     }
   });
 
-  it('Count Draynor at Attack 20 / Strength 20 / Defence 1 with iron armour: a short fight, little damage, the safest style picked', () => {
+  it('keeps the ordinary Count Draynor damage estimate explicitly partial until regeneration and the finishing condition are modelled', () => {
     const [e] = estimateStepFights(stepById.get('S2-08')!, { attack: 20, strength: 20, defence: 1, hitpoints: 20 }, gearOf(IRON));
     expect(e.foe.name).toBe('Count Draynor');
     expect(e.seconds.mid).toBeGreaterThan(5);
@@ -26,6 +34,8 @@ describe('one quest fight with your kit', () => {
     expect(e.damage.low).toBeLessThanOrEqual(e.damage.mid);
     expect(e.damage.mid).toBeLessThanOrEqual(e.damage.high);
     expect(fightLine(e)).toMatch(/^Count Draynor: about \d+ s on (Accurate|Aggressive|Defensive); you take about \d+ damage \(up to \d+\); /);
+    expect(e.unmodelled.join(' ')).toMatch(/regeneration.*hammer\/stake/);
+    expect(fightLine(e)).toContain('Partial estimate');
   });
 
   it('better armour means less damage taken from the same fight', () => {
@@ -53,12 +63,19 @@ describe('one quest fight with your kit', () => {
   it('Elvarg names its dragonfire beside the melee estimate', () => {
     const e = estimateFight({ foe: foe('Elvarg'), levels: { attack: 40, strength: 40, defence: 30, hitpoints: 40 }, weapon: gearById.get(id('Mithril scimitar'))!, neck: null, armour: [], food: { name: 'Lobster', heals: 12 } })!;
     expect(e.extra.join(' ')).toMatch(/Dragonfire/);
+    expect(e.unmodelled.join(' ')).toMatch(/Dragonfire/);
   });
 
   it('a training step is left to the training estimate; no game data, no estimate', () => {
     expect(stepFightFoes(stepById.get('S3-08')!)).toEqual([]);
     expect(estimateStepFights(stepById.get('S2-08')!, null, gearOf(IRON))).toEqual([]);
     expect(estimateStepFights(stepById.get('S2-08')!, { attack: 20, strength: 20, defence: 1, hitpoints: 20 }, null)).toEqual([]);
+  });
+
+  it('S03: an unread Hitpoints level gives no estimate, never a guessed full health', () => {
+    const step = stepById.get('S2-08')!;
+    expect(estimateStepFights(step, { attack: 20, strength: 20, defence: 1, hitpoints: 20 }, gearOf(IRON))).toHaveLength(1);
+    expect(estimateStepFights(step, { attack: 20, strength: 20, defence: 1 }, gearOf(IRON))).toEqual([]);
   });
 });
 

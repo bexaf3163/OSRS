@@ -8,6 +8,10 @@ import type { GearItem } from '../../services/runeliteBridge';
 import { isInstancedPoint, isOverworld } from './instances';
 import { purchaseCost, purchaseFees, type PurchaseFee } from '../items/purchaseCost';
 import { type DetourRejection, type DetourDecision, emitDecision } from './decisionLog';
+import { selectCastingStaff } from './castingStaff';
+import type { RuneStaff } from './castingStaff';
+export { staffCover, stavesFor } from './castingStaff';
+export type { RuneStaff } from './castingStaff';
 
 export interface Point { x: number; y: number; plane: number }
 export interface Teleport {
@@ -25,8 +29,6 @@ export interface Teleport {
   charges?: { item: string; perItem: number; max: number; note?: string };
   note?: string;
 }
-/** A staff that, wielded, gives unlimited runes of its elements. */
-export interface RuneStaff { item: string; runes: string[]; members: boolean }
 export interface CanoeStation { id: string; name: string; x: number; y: number; plane: number; wakaOnly?: boolean; /** The station attendant (River Dougne). */ npc?: string }
 
 /**
@@ -200,7 +202,7 @@ export interface TravelInput {
   levels: Readonly<Record<string, number | undefined>>;
   /** Equipped items and the bag from the game; null — no game. */
   carried: readonly GearItem[] | null;
-  /** The equipped items alone: a staff gives its runes only while wielded. null: not known; absent: not told apart (a staff anywhere counts). */
+  /** The equipped items alone; absent/null never proves that an inventory staff is worn. */
   worn?: readonly GearItem[] | null;
   /** The Chronicle's charges from the game's messages; null or absent: unknown (a thing to check, never zero). */
   chronicleCharges?: number | null;
@@ -216,9 +218,9 @@ export interface TravelInput {
   fairyRings?: boolean | null;
   /** Seconds until the Home Teleport can be cast again (from the game); null or absent means it is ready or unknown. */
   homeCooldownSec?: number | null;
-  /** false: the game did not tell whether the Home Teleport is ready (the cooldown is unknown, not zero). Absent: as before, ready unless on cooldown. */
+  /** true: the game read the cooldown. False/absent means unknown, never zero. */
   homeCooldownKnown?: boolean;
-  /** The standard spellbook is active: false locks its spells, null is unknown (shown as a thing to check). Absent: not asked. */
+  /** The standard spellbook is active: false locks its spells, null/absent is unknown (a thing to check). */
   standardSpellbook?: boolean | null;
   /** Where a missing thing can be got (the app's source router). Absent: the runes, coins and tools of a way are not fetched, only what the bank holds. */
   sourceOf?: (name: string, need: number) => ItemSource | null;
@@ -235,25 +237,7 @@ const count = (items: readonly GearItem[], names: readonly string[]): number =>
 
 /** Every staff that stands in for a rune of a teleport (the wiki's elemental, battle, mystic and combination staves). */
 export const STAFF_NAMES: readonly string[] = TRANSPORT.staves.list.map((s) => s.item);
-/** The staves that give a rune; a members staff is not wielded on a known free-to-play account. */
-export function stavesFor(rune: string, members?: boolean | null): string[] {
-  return TRANSPORT.staves.list.filter((s) => s.runes.includes(rune) && !(s.members && members === false)).map((s) => s.item);
-}
 export const runeName = (rune: string): string => `${rune[0].toUpperCase()}${rune.slice(1)} rune`;
-
-/**
- * A rune a staff gives: worn, it costs nothing; in the bag, it does once the staff is wielded (an action on the spot). null: no staff on hand for it.
- * When the game does not tell worn from carried (no `worn`), a staff anywhere on the player counts as worn, as before.
- */
-export function staffCover(rune: string, inp: Pick<TravelInput, 'carried' | 'worn' | 'members'>): { staff: string; worn: boolean } | null {
-  const names = stavesFor(rune, inp.members);
-  if (!names.length) return null;
-  const pick = (items: readonly GearItem[] | null | undefined) => items?.find((i) => names.includes(i.name))?.name ?? null;
-  const worn = inp.worn === undefined ? pick(inp.carried) : pick(inp.worn);
-  if (worn) return { staff: worn, worn: true };
-  const bag = inp.worn === undefined ? null : pick(inp.carried);
-  return bag ? { staff: bag, worn: false } : null;
-}
 
 /** How many of a thing the bank holds: null when the bank was not seen or the game did not report this thing (unknown is not zero). */
 function bankOf(inp: Pick<TravelInput, 'bankSeen' | 'bank'>, name: string): number | null {
@@ -266,9 +250,9 @@ function teleportNeeds(t: Teleport, inp: TravelInput): { needs: Need[]; availabi
     // The game's cooldown: a locked way with the time left, not a promise the button will work.
     const left = inp.homeCooldownSec ?? 0;
     if (left > 0) return { needs: [{ text: `Home Teleport is on cooldown: ready in ${cooldownText(left)}`, ok: false }], availability: 'locked' };
-    // The game did not say whether it is ready: a thing to check, never "ready".
-    if (inp.homeCooldownKnown === false) return { needs: [{ text: 'the Home Teleport cooldown (once every 30 minutes)', ok: null }], availability: 'maybe' };
-    return { needs: [], availability: 'ready' };
+    if (inp.standardSpellbook === false) return { needs: [{ text: 'the standard spellbook (another one is active)', ok: false }], availability: 'locked' };
+    const needs: Need[] = [...(inp.homeCooldownKnown !== true ? [{ text: 'the Home Teleport cooldown (once every 30 minutes)', ok: null }] : []), ...(inp.standardSpellbook !== true ? [{ text: 'the standard spellbook', ok: null }] : [])];
+    return { needs, availability: needs.length ? 'maybe' : 'ready' };
   }
   if (t.kind === 'item') {
     const held = inp.carried ? count(inp.carried, t.items ?? []) : null;
@@ -307,13 +291,14 @@ function teleportNeeds(t: Teleport, inp: TravelInput): { needs: Need[]; availabi
   if (inp.standardSpellbook === false) {
     needs.push({ text: 'the standard spellbook (another one is active)', ok: false });
     locked = true;
-  } else if (inp.standardSpellbook === null) {
+  } else if (inp.standardSpellbook !== true) {
     needs.push({ text: 'the standard spellbook', ok: null });
     unsure = true;
   }
+  const castingStaff = selectCastingStaff(inp, Object.keys(t.runes ?? {}));
   for (const [rune, qty] of Object.entries(t.runes ?? {})) {
     // A staff gives the rune: wielded, nothing to carry; in the bag, wield it first.
-    const staff = staffCover(rune, inp);
+    const staff = castingStaff?.runes.includes(rune) ? castingStaff : null;
     if (staff) {
       needs.push(staff.worn
         ? { text: `${runeName(rune)} ×${qty}: your ${staff.staff} gives it`, ok: true }
@@ -555,11 +540,10 @@ export function reachTiles(inp: Pick<TravelInput, 'from' | 'levels' | 'carried' 
   for (const t of TRANSPORT.teleports) {
     // The Home Teleport is a teleport like the others, but its cooldown and the long cast make it a poor shortcut: it is left out of the reach.
     if (t.kind === 'home') continue;
-    // An item teleport (the Chronicle) is "maybe" for its unknown charges, but one in the bag is a way to use: it counts.
-    const held = t.kind === 'item' && inp.carried ? count(inp.carried, t.items ?? []) > 0 && !(t.charges && inp.chronicleCharges === 0) : false;
-    if (held || teleportNeeds(t, probe).availability === 'ready') consider(t.name, t.dest);
+    // Unknown charges cannot establish a usable shortcut, even when the book itself is carried.
+    if (teleportNeeds(t, probe).availability === 'ready') consider(t.name, t.dest);
   }
-  if (inp.carried && inp.members !== false) {
+  if (inp.carried && inp.members === true) {
     for (const tb of NET.tablets) {
       const spell = TRANSPORT.teleports.find((t) => t.id === tb.spell);
       if (spell && count(inp.carried, [tb.item]) > 0) consider(`${tb.item} tablet`, spell.dest);
@@ -733,7 +717,8 @@ function itemTeleportOptions(inp: TravelInput, direct: number): TravelOption[] {
       // The Chronicle in the bag is already in the plain teleport list.
       if (e.plain) {
         out.push({ id: e.id, title: e.title, legs: [{ kind: 'teleport', label: `${e.item} → ${e.dest.label}`, tiles: 0 }, { kind: 'walk', label: 'then on foot', tiles: tail }],
-          walkTiles: tail, availability: 'ready', needs: [{ text: `${e.item} in the bag`, ok: true }] });
+          walkTiles: tail, availability: inp.members === true ? 'ready' : 'maybe', needs: [{ text: `${e.item} in the bag`, ok: true },
+            ...(inp.members === true ? [] : [{ text: 'a members account', ok: null }])] });
       }
       continue;
     }

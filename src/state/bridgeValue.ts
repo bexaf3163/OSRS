@@ -10,6 +10,7 @@ import type { MoveEvent } from '../domain/travel/recovery';
 import type { SnapshotParts } from '../domain/prep/prepEnvelope';
 import type { SkillPathPayload } from '../domain/training/skillGuide';
 import type { LastGear } from './lastGear';
+import type { QuestObservation } from '../domain/player/questObservation';
 
 /** off — the link is turned off in settings; connecting — the first attempt; offline — no plugin; online — there. */
 export type BridgeState = 'off' | 'connecting' | 'offline' | 'online';
@@ -17,7 +18,6 @@ export type PointResult = 'ok' | 'offline' | 'empty';
 
 export interface AutoAdvance {
   from: string;
-  to?: string;
   nonce: number;
 }
 
@@ -83,6 +83,7 @@ export interface BridgeValue {
   xp: PlayerStats | null;
   /** Names of completed quests (protocol 5); null — unknown. */
   questsDone: string[] | null;
+  questStates?: QuestObservation | null;
   /** The character name from the game (protocol 5). */
   player: string | null;
   /** Last current-session position from status or a move event; funding also polls while its plan is active. */
@@ -91,7 +92,7 @@ export interface BridgeValue {
    * A part of the snapshot for the game (protocol 6): gear advice, items for the bank, the preparation plan. It goes to the plugin together
    * with everything else in one request; for a plugin older than protocol 6 the call does nothing — it has its own separate requests.
    */
-  setPrepPart: <K extends 'gearHint' | 'bankTags' | 'plan' | 'cleanup' | 'funding'>(key: K, value: SnapshotParts[K]) => void;
+  setPrepPart: <K extends 'gearHint' | 'bankTags' | 'plan' | 'cleanup' | 'funding' | 'decision'>(key: K, value: SnapshotParts[K]) => void;
   /** The tracked skill's path for the game (null: stop tracking). While there is one the plugin leads that skill instead of the quest step. */
   setSkillPath: (value: SkillPathPayload | null) => void;
   setTrainingStep: (value: Step | null) => void;

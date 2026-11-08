@@ -2,13 +2,12 @@
 // the chosen step with its ribbons, and the hotbar under the book holds the step's actions. The whole route and the step are in view at once.
 
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
-import type { Step } from '../../types';
 import { stepById } from '../../data';
 import { useStore } from '../../state/store';
 import { useQuestPoints } from '../../state/hooks/useQuestPoints';
-import { firstOpen, isClosed, nextStep, openAfter } from '../../domain/quests/next-step';
+import { firstOpen, isClosed } from '../../domain/quests/next-step';
 import { useBridge } from '../../state/bridge';
-import { useReadinessEngine, useTrackedTraining } from '../../state/readinessContext';
+import { useActiveActivity, useReadinessEngine, useTrackedTraining } from '../../state/readinessContext';
 import { flashDone } from '../../ui/flash';
 import { pendingReview } from '../../domain/readiness/review';
 import { CockpitWorkspace } from './CockpitWorkspace';
@@ -18,6 +17,7 @@ import { GearBanner } from '../gear/GearPrompt';
 import { TrackedSkillCard } from './step/TrackedSkillCard';
 import { AccountSync } from '../../ui/AccountSync';
 import { Welcome } from './Welcome';
+import { ManualConfirm } from './ManualConfirm';
 import { Eyebrow, Icon, Page, Road } from '../../ledger';
 import { roadStages } from '../../ledger/adapters';
 
@@ -30,12 +30,16 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   const { setSuggested } = useWiki();
   const dependencies = useReadinessEngine().dependencies;
   const training = useTrackedTraining();
-  const suggested = nextStep(steps, progress, qp, dependencies) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
-  const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested.id);
+  const activity = useActiveActivity();
+  // The committed Decision's step; with none (offline, waiting for data) the first open step is only where browsing starts.
+  const suggested = activity.source === 'training' ? null : activity.step;
+  // Without a Decision nothing is "current"; the first open step is only where browsing starts.
+  const start = suggested ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
+  const [selectedId, setSelectedId] = useState(() => focusStep ?? start.id);
   // The rail highlights the clicked step at once; the heavy step card follows as a transition with a loading state.
   const [railId, setRailId] = useState(selectedId);
   const [switching, startSwitch] = useTransition();
-  const selected = steps.find((s) => s.id === selectedId) ?? suggested;
+  const selected = steps.find((s) => s.id === selectedId) ?? start;
   const [openStages, setOpenStages] = useState<Set<number>>(() => new Set([selected.stage]));
   const center = useRef<HTMLDivElement>(null);
   const pending = pendingReview(steps, progress);
@@ -65,23 +69,29 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
     return n;
   });
 
-  const nextAfter = (id: string): Step | undefined => openAfter(steps, progress, id, qp, dependencies);
-
   // The step is done in the game (RuneLite): as after the "Mark as done" button — the next one is in the centre.
+  // "Mark as done" here or in the game: the planner decides again from the new marks, and the centre follows its step.
+  const [follow, setFollow] = useState(false);
   const seenAdvance = useRef(advance?.nonce);
   useEffect(() => {
     if (!advance || advance.nonce === seenAdvance.current) return;
     seenAdvance.current = advance.nonce;
     flashDone(`rail-${advance.from}`);
-    if (advance.to && steps.some((s) => s.id === advance.to)) select(advance.to);
-  }, [advance, steps, select]);
+    setFollow(true);
+  }, [advance]);
 
   /** "Mark as done": the step closes, the next unclosed one is at once in the centre. */
   const complete = (id: string) => {
-    const next = nextAfter(id);
     setStep(id, 'done');
-    if (next) select(next.id);
+    setFollow(true);
+    // Without a Decision (offline, nothing read yet) browsing moves on to the next open step instead of stalling.
+    if (!suggested) { const next = firstOpen(steps, { ...progress, steps: { ...progress.steps, [id]: 'done' } }); if (next) select(next.id); }
   };
+  useEffect(() => {
+    if (!follow || !suggested || isClosed(progress, suggested.id)) return;
+    setFollow(false);
+    select(suggested.id);
+  }, [follow, progress, suggested, select]);
 
   const showChanges = () => {
     setOpenStages((o) => new Set([...o, ...pending.map((s) => s.stage)]));
@@ -103,7 +113,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dossierKey, setSuggested]);
 
-  const upcoming = nextAfter(selected.id);
+  // Marking the Decision's own step done hands the choice back to the planner; another step's mark opens the Decision's step.
+  const upcoming = suggested && selected.id !== suggested.id ? suggested : undefined;
 
   // The road opens at the chosen step, in the middle of its page.
   useEffect(() => {
@@ -114,7 +125,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   }, []);
 
   const at = steps.findIndex((s) => s.id === selected.id);
-  const road = useMemo(() => roadStages(stages, steps, progress, qp, dependencies, suggested.id, railId), [stages, steps, progress, qp, dependencies, suggested.id, railId]);
+  const road = useMemo(() => roadStages(stages, steps, progress, qp, dependencies, suggested?.id, railId), [stages, steps, progress, qp, dependencies, suggested?.id, railId]);
   const chapters = road.length;
   const unrolled = useMemo(() => new Set([...openStages].map(String)), [openStages]);
 
@@ -127,7 +138,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
         <div className="la-chips" style={{ marginTop: 8 }}>
           <span className="la-chip">{chapters} CHAPTERS</span>
           <span className="la-chip">{qp} → {maxQp} QP</span>
-          <button type="button" className="la-btn la-d rail-now" style={{ padding: '3px 10px', marginLeft: 'auto' }} disabled={selected.id === suggested.id} onClick={() => select(suggested.id)}>
+          <button type="button" className="la-btn la-d rail-now" style={{ padding: '3px 10px', marginLeft: 'auto' }} disabled={!suggested || selected.id === suggested.id} onClick={() => { if (suggested) select(suggested.id); }}>
             <Icon name="target" size={12} /> TO THE CURRENT STEP
           </button>
         </div>
@@ -138,7 +149,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
       {training ? <Page side="r" label="Training plan"><div className="la-scroll"><TrackedSkillCard /></div></Page> : <CockpitWorkspace
         key={selected.id}
         step={selected}
-        suggested={selected.id === suggested.id}
+        suggested={selected.id === suggested?.id}
         onDone={complete}
         nextId={upcoming?.id}
         prev={steps[at - 1]}
@@ -163,6 +174,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
             </div>
           )}
           <Welcome />
+          <ManualConfirm />
           <AccountSync compact />
           <TrackedSkillCard />
           {/* A combat step has its own advice in the card — the banner does not repeat it. */}

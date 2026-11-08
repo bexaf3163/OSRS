@@ -58,6 +58,17 @@ describe('one trip: the window and the reserve', () => {
     expect(plan.soon.map((l) => l.line.nameEn).sort()).toEqual(['Energy potion', 'Silk']);
   });
 
+  it('reserves distinct future phases sharing a historical ID without doubling their demand or making it due now', () => {
+    const phases = [mk('S0-01', [item('Iron arrow', 100), item('Hammer', 1)]), mk('S0-01', [item('Iron arrow', 200), item('Hammer', 1)])];
+    const plan = planOneTrip(phases, emptyProgress(), 'S0-01', st(owned({ 'Iron arrow': { carried: 100, bank: 0 }, Hammer: { carried: 1, bank: 0 } }, true)));
+    const arrows = plan.lines.find(line => line.line.nameEn === 'Iron arrow')!;
+    expect(arrows.allocation).toEqual([{ stepId: 'S0-01', stepIndex: 0, need: 100, covered: 100 }, { stepId: 'S0-01', stepIndex: 1, need: 200, covered: 0 }]);
+    expect(arrows.toGet).toBe(200);
+    expect(arrows.urgency).toBe('SOON');
+    expect(plan.now).toEqual([]);
+    expect(plan.lines.find(line => line.line.nameEn === 'Hammer')?.line.count).toBe(1);
+  });
+
   it('an item in the bank — BANK ("collect it"), not a purchase; the bank was not opened — UNKNOWN, not "no"', () => {
     const inBank = planOneTrip(steps, emptyProgress(), 'A1', st(owned({ Lobster: { carried: 0, bank: 40 }, Hammer: { carried: 0, bank: 1 } }, true)));
     expect(inBank.lines.find((l) => l.line.nameEn === 'Lobster')).toMatchObject({ status: 'BANK', toGet: 0 });

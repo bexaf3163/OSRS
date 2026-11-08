@@ -15,7 +15,7 @@
 //   - the bag: a trip yields only as many units as the slots allow (inputs go out, outputs come back);
 //   - the market: a product cannot be sold faster than a quarter of an hour's trades (quotes.ts), nor an input bought faster than its exchange limit;
 //   - the way: the walk to the work, to the bank and to the exchange (tiles from the travel model).
-// Ranges, not points: fast / typical / slow, and the slow case also takes a haircut off low-confidence sale prices.
+// Pace ranges remain fast / typical / slow. Shared market quotes already contain the one planning price margin.
 
 import { PICKAXES, AXES, usableAt } from '../../items/toolTiers';
 import { nameKey } from '../../items/itemKey';
@@ -73,7 +73,11 @@ export interface EvalContext {
 }
 
 export type BlockerKind = 'membership' | 'ironman' | 'level' | 'quest' | 'qp' | 'tool' | 'sale' | 'price' | 'capital' | 'combat' | 'market';
-export interface Blocker { kind: BlockerKind; text: string; /** true — the player can fix it (train, buy, finish a quest). */ fixable: boolean }
+export interface Blocker {
+  kind: BlockerKind; text: string; /** true — the player can fix it (train, buy, finish a quest). */ fixable: boolean;
+  /** A level blocker: the skill and how many levels are missing. */
+  levels?: { skill: string; missing: number };
+}
 
 /**
  * One requirement as this player meets it, for the details of the Money section (2.71): the same checks that make the blockers and the cautions, one line
@@ -90,9 +94,9 @@ export interface MethodEvaluation {
   checks: RequirementCheck[];
   confidence: Confidence;
   confidenceReasons: string[];
-  unitsPerHour: Range3;
+  unitsPerHour: Range3 | null;
   /** Coins an hour of steady work leaves after the tax and the supplies; dependable income only. */
-  netPerHour: Range3;
+  netPerHour: Range3 | null;
   perUnit: { sale: number; coins: number; tax: number; inputs: number; net: number; upside: number };
   upfront: {
     /** Reusable tool bought for the work (not charged again). */
@@ -126,8 +130,6 @@ const MIN_BATCH_UNITS = 3;
 const MAX_TRIPS = 400;
 /** Sell once per this many trips in steady state. */
 const TRIPS_PER_SALE = 4;
-/** The slow case takes this off sale prices that are not HIGH confidence. */
-const HAIRCUT: Record<Confidence, number> = { HIGH: 0, MEDIUM: 0.1, LOW: 0.25 };
 const gp = (n: number) => Math.round(n).toLocaleString('en-US');
 
 // ---------------------------------------------------------------------------
@@ -293,10 +295,11 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
     if (r.kind === 'level') {
       const lv = snap.level(r.skill);
       if (lv === undefined) { cautions.push(`Your ${r.skill} level is not known`); cap('MEDIUM', `${r.skill} level unknown`); checks.push({ text: `${r.skill} ${r.level}: your level is not known`, status: 'unknown' }); }
-      else if (lv < r.level) { blockers.push({ kind: 'level', text: `Needs ${r.skill} ${r.level} (you have ${lv})`, fixable: true }); checks.push({ text: `Needs ${r.skill} ${r.level} (you have ${lv})`, status: 'missing' }); }
+      else if (lv < r.level) { blockers.push({ kind: 'level', text: `Needs ${r.skill} ${r.level} (you have ${lv})`, fixable: true, levels: { skill: r.skill, missing: r.level - lv } }); checks.push({ text: `Needs ${r.skill} ${r.level} (you have ${lv})`, status: 'missing' }); }
       else checks.push({ text: `${r.skill} ${r.level} (you have ${lv})`, status: 'ok' });
     } else if (r.kind === 'quest') {
-      const q = snap.quest(r.quest);
+      const started = r.state === 'started' ? snap.questStarted?.(r.quest) ?? (snap.quest(r.quest) === 'DONE' ? true : null) : null;
+      const q = r.state === 'started' ? started === true ? 'DONE' : started === false ? 'NOT_DONE' : 'UNKNOWN' : snap.quest(r.quest);
       const what = `${r.quest}${r.state === 'started' ? ' started' : ''}`;
       if (q === 'NOT_DONE') { blockers.push({ kind: 'quest', text: `Needs ${what}`, fixable: true }); checks.push({ text: `Needs ${what}`, status: 'missing' }); }
       else if (q === 'UNKNOWN') { cautions.push(`${r.quest} could not be checked`); cap('MEDIUM', `${r.quest} unknown`); checks.push({ text: `${what}: could not be checked`, status: 'unknown' }); }
@@ -391,7 +394,6 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   let restrictedUnknown = false;
   let anySellable = false;
   let marketCapPerHour = Infinity;
-  const sellConfidences: Confidence[] = [];
   for (const f of m.outputs) {
     const per = expectedQty(f);
     const dep = isDependable(f);
@@ -413,7 +415,6 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
     const reserve = reserveGap(snap, f.item.name);
     if (dep && sellable && price) {
       anySellable = true;
-      sellConfidences.push(price.confidence);
       saleGrossPerUnit += sellEach * per;
       taxPerUnit += taxEach * per;
       if (CONFIDENCE_RANK[price.confidence] < CONFIDENCE_RANK[confidence]) cap(price.confidence, `${f.item.name} price: ${price.notes[0] ?? 'low confidence'}`);
@@ -461,12 +462,12 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
 
   const tiles = (a: Point | null, b: Point) => ctx.reach(a, b);
   const tilesFirst = tiles(snap.position, m.spot);
-  if (tilesFirst === null) cautions.push(snap.position === null ? 'Where you are is not known, so the walk is not counted' : 'No known way to the place');
-  const firstLegSeconds = (tilesFirst ?? 400) / TILES_PER_SECOND + (snap.position ? 0 : 60);
-  if (!snap.position) notes.push('Your location is not known: a minute is added for getting there');
-  const toGe = tiles(m.bank, ctx.exchange) ?? 150;
-  const fromGe = tiles(ctx.exchange, m.spot) ?? 150;
-  const saleSeconds = (toGe + fromGe) / TILES_PER_SECOND + m.saleSeconds;
+  const validTiles = (n: number | null): n is number => n !== null && Number.isFinite(n) && n >= 0;
+  const firstLegSeconds = validTiles(tilesFirst) ? tilesFirst / TILES_PER_SECOND : null;
+  if (firstLegSeconds === null) cautions.push(snap.position === null ? 'Your location is unknown; total trip time is not assessed' : 'The route to the activity is unknown; total trip time is not assessed');
+  const toGe = tiles(m.bank, ctx.exchange), fromGe = tiles(ctx.exchange, m.spot);
+  const saleSeconds = validTiles(toGe) && validTiles(fromGe) ? (toGe + fromGe) / TILES_PER_SECOND + m.saleSeconds : null;
+  if (saleSeconds === null) cautions.push('The bank/exchange cycle is unknown; full-cycle rates are not assessed');
 
   // --- Setup (a reusable tool) and the cash
   const setup = tools.reduce((sum, t) => sum + (!t.owned && !t.unknown ? t.cost : 0), 0);
@@ -502,38 +503,38 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
 
   // --- Economics per unit
   const netPerUnit = coinsPerUnit + saleGrossPerUnit - taxPerUnit - inputCashPerUnit;
-  const sellHaircut = sellConfidences.length ? HAIRCUT[sellConfidences.reduce((a, b) => (CONFIDENCE_RANK[b] < CONFIDENCE_RANK[a] ? b : a))] : 0;
-  const slowNet = coinsPerUnit + (saleGrossPerUnit - taxPerUnit) * (1 - sellHaircut) - inputCashPerUnit;
   const eff = (secPerUnit: number) => {
     const perSaleUnits = unitsPerTrip * TRIPS_PER_SALE;
-    return 3600 / (secPerUnit + m.trip.overheadSeconds / unitsPerTrip + saleSeconds / perSaleUnits);
+    return 3600 / (secPerUnit + m.trip.overheadSeconds / unitsPerTrip + saleSeconds! / perSaleUnits);
   };
-  const unitsPerHour: Range3 = { fast: eff(sec.fast), typical: eff(sec.typical), slow: eff(sec.slow) };
-  const netPerHour: Range3 = { fast: netPerUnit * unitsPerHour.fast, typical: netPerUnit * unitsPerHour.typical, slow: slowNet * unitsPerHour.slow };
+  const unitsPerHour: Range3 | null = saleSeconds === null ? null : { fast: eff(sec.fast), typical: eff(sec.typical), slow: eff(sec.slow) };
+  const netPerHour: Range3 | null = unitsPerHour ? { fast: netPerUnit * unitsPerHour.fast, typical: netPerUnit * unitsPerHour.typical, slow: netPerUnit * unitsPerHour.slow } : null;
   if (ctx.mode === 'earn' && netPerUnit <= 0 && !blockers.some((b) => b.kind === 'price')) {
     blockers.push({ kind: 'market', text: `At today's prices it loses about ${gp(-netPerUnit)} gp per ${m.rate.unit}`, fixable: false });
   }
 
   // --- Time to the target
   const target = Math.max(0, ctx.target);
-  const baseSim = (pace: keyof Range3, haircut: number, cash: number): SimInput => ({
-    unitsPerTrip, tripSeconds: m.trip.overheadSeconds, firstLegSeconds: firstLegSeconds + (setup > 0 ? saleSeconds : 0),
+  const baseSim = (pace: keyof Range3, cash: number, timing: { first: number; sale: number }): SimInput => ({
+    unitsPerTrip, tripSeconds: m.trip.overheadSeconds, firstLegSeconds: timing.first + (setup > 0 ? timing.sale : 0),
     workSecPerUnit: workSec[pace],
-    saleSeconds, faresPerTrip, cash: cash - setup, target,
+    saleSeconds: timing.sale, faresPerTrip, cash: cash - setup, target,
     inputs: inputs.map((i) => ({ price: i.price, perUnit: i.per, owned: i.owned, buySecPerUnit: i.buySecPerUnit })),
     coinsPerUnit,
-    outputs: outs.filter((o) => o.dependable && o.sellable).map((o) => ({ netEach: o.netEach * (1 - haircut), perUnit: o.per, reserve: o.reserve })),
+    outputs: outs.filter((o) => o.dependable && o.sellable).map((o) => ({ netEach: o.netEach, perUnit: o.per, reserve: o.reserve })),
     minUnits: MIN_BATCH_UNITS,
   });
   let minutes: Range3 | null = null;
   let minutesReason: string | undefined;
   let saves: number | null = null;
-  if (ctx.mode === 'earn') {
+  if (firstLegSeconds === null || (ctx.mode === 'earn' && saleSeconds === null)) {
+    minutesReason = 'Full-trip travel is unknown; no total time is estimated';
+  } else if (ctx.mode === 'earn' && saleSeconds !== null) {
     if (blockers.length === 0 && spendable !== null) {
       const runs = [
-        simulate(baseSim('fast', 0, spendable)),
-        simulate(baseSim('typical', 0, spendable)),
-        simulate(baseSim('slow', sellHaircut, spendable)),
+        simulate(baseSim('fast', spendable, { first: firstLegSeconds, sale: saleSeconds })),
+        simulate(baseSim('typical', spendable, { first: firstLegSeconds, sale: saleSeconds })),
+        simulate(baseSim('slow', spendable, { first: firstLegSeconds, sale: saleSeconds })),
       ];
       if (runs.every((r) => r.ok)) minutes = { fast: runs[0].seconds / 60, typical: runs[1].seconds / 60, slow: runs[2].seconds / 60 };
       else minutesReason = runs.find((r) => !r.ok)?.reason;
@@ -560,7 +561,8 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   // --- Working capital: the most the method has out before it turns around, with unlimited cash and the protected items filled first.
   let workingCapital: number | null = null;
   if (ctx.mode === 'earn' && blockers.every((b) => b.kind === 'capital')) {
-    const dry = simulate({ ...baseSim('typical', 0, 1e12), cash: 1e12, target: Math.max(target, 1), sellEveryTrip: true });
+    // This dry run measures cash exposure only; it cannot supply a time/rate when travel is unknown.
+    const dry = simulate({ ...baseSim('typical', 1e12, { first: 0, sale: 0 }), cash: 1e12, target: Math.max(target, 1), sellEveryTrip: true });
     workingCapital = Math.round(dry.peakOut) + setup;
     // Only when the run with the player's own coins does not get there, as the badge says. When smaller first batches do (the time
     // already counts them), "Can do now" next to "is out before it pays for itself" read as a contradiction (2.72.1, live: pie shells).

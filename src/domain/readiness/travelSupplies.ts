@@ -15,11 +15,11 @@ import { stepPlaces } from '../travel/stepPlaces';
 import { instructionSubStep } from '../quests/subStep';
 import { TIP_MIN_SAVING_TILES } from '../travel/transport';
 import { journeyTiles } from '../travel/transport';
-import { TILES_PER_SECOND, TRANSPORT, dist, runeName, staffCover, travelOptions, type ItemSource, type Point, type TravelInput } from '../travel/travel';
+import { TILES_PER_SECOND, TRANSPORT, dist, runeName, travelOptions, type ItemSource, type Point, type TravelInput } from '../travel/travel';
+import { selectCastingStaff } from '../travel/castingStaff';
 import type { GearItem, GearState } from '../../services/runeliteBridge';
 
 /** How many open steps ahead "the road" covers in the game: about one stage of the route. */
-export const SUPPLY_HORIZON_STEPS = 8;
 /** Targets closer than this to the one before are the same place (two lines with the same NPC). */
 const SAME_PLACE_TILES = 10;
 /** A supply run is worth suggesting only when the teleports it buys save at least this much in all (about two tip-sized savings). */
@@ -109,7 +109,7 @@ export interface SupplyInput {
   /** Worn and carried things from the game; null: no game. */
   gear: GearState | null;
   owned: OwnedState | null | undefined;
-  /** The spellbook from the game (0 standard); null or absent: assumed standard (the route's spells are on it). */
+  /** The spellbook from the game (0 standard); null or absent remains unknown. */
   spellbook?: number | null;
   chronicleCharges?: number | null;
   sourceOf?: (name: string, need: number) => ItemSource | null;
@@ -163,7 +163,7 @@ export function planTravelSupplies(inp: SupplyInput): TravelSupplies {
     levels: inp.levels, carried, worn: inp.gear?.equipment ?? null, bankSeen: true, bank: null, members: inp.members,
     chronicleCharges: PLENTY,
     // The Home Teleport is free but once every 30 minutes: it is not a supply, and it is not counted on.
-    homeCooldownSec: 30 * 60, standardSpellbook: inp.spellbook === undefined || inp.spellbook === null ? true : inp.spellbook === 0,
+    homeCooldownSec: 30 * 60, standardSpellbook: inp.spellbook === undefined || inp.spellbook === null ? null : inp.spellbook === 0,
   };
   const supplied = new Set(TRANSPORT.teleports.filter((t) => t.kind === 'spell' || t.charges).map((t) => t.id));
   for (const leg of roadLegs(inp)) {
@@ -193,8 +193,8 @@ export function planTravelSupplies(inp: SupplyInput): TravelSupplies {
     needs.set(name, e);
   };
   const staffHints: string[] = [];
-  const wornOnly = { carried: inp.gear?.equipment ?? null, worn: inp.gear?.equipment ?? null, members: inp.members };
-  const bagToo = { carried: [...(inp.gear?.equipment ?? []), ...(inp.gear?.inventory ?? [])], worn: inp.gear?.equipment ?? null, members: inp.members };
+  const wornOnly = { carried: inp.gear?.equipment ?? null, worn: inp.gear?.equipment ?? null, members: inp.members, levels: inp.levels };
+  const bagToo = { carried: [...(inp.gear?.equipment ?? []), ...(inp.gear?.inventory ?? [])], worn: inp.gear?.equipment ?? null, members: inp.members, levels: inp.levels };
   for (const u of uses) {
     const t = TRANSPORT.teleports.find((x) => x.id === u.wayId);
     if (!t) continue;
@@ -205,9 +205,10 @@ export function planTravelSupplies(inp: SupplyInput): TravelSupplies {
       add(book, 1, label);
       continue;
     }
+    const castRunes = Object.keys(t.runes ?? {}), wornStaff = selectCastingStaff(wornOnly, castRunes), carriedStaff = selectCastingStaff(bagToo, castRunes);
     for (const [rune, qty] of Object.entries(t.runes ?? {})) {
-      if (staffCover(rune, wornOnly)) continue;
-      const inBag = staffCover(rune, bagToo);
+      if (wornStaff?.runes.includes(rune)) continue;
+      const inBag = carriedStaff?.runes.includes(rune) ? carriedStaff : null;
       if (inBag && !inBag.worn) staffHints.push(`wield your ${inBag.staff}: no ${runeName(rune)}s needed for ${t.name}`);
       add(runeName(rune), qty * u.count, label);
     }
@@ -252,9 +253,3 @@ export function savedText(tiles: number): string {
   return s < 90 ? `~${s} s` : `~${Math.round(s / 60)} min`;
 }
 
-/** The open steps of the road from a step on: the step itself (when open) and the next ones in route order. */
-export function roadSteps(steps: readonly Step[], isOpen: (id: string) => boolean, fromId: string, n = SUPPLY_HORIZON_STEPS): Step[] {
-  const at = steps.findIndex((s) => s.id === fromId);
-  if (at < 0) return [];
-  return steps.slice(at).filter((s) => isOpen(s.id)).slice(0, n);
-}

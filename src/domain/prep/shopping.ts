@@ -20,6 +20,8 @@ export function carryOverFrom(item: StepItemRequirement): string | null {
 
 export interface ShoppingSource {
   stepId: string;
+  /** Window position when historical IDs repeat across distinct virtual phases. Not a replacement saved ID. */
+  stepIndex?: number;
   amount: string | number;
   /** The same item as bought/obtained in an earlier selected step: not counted a second time. */
   carryOver: boolean;
@@ -66,7 +68,7 @@ export interface ShoppingList {
 
 interface Acc {
   line: ShoppingLine;
-  perStep: Map<string, number>;
+  perStep: Map<number, number>;
   allInStep: boolean;
 }
 
@@ -78,11 +80,13 @@ function wholeGoal(i: StepItemRequirement): StepItemRequirement {
 function collect(
   steps: Step[], pick: (s: Step) => StepItemRequirement[] | undefined, selected: Set<string>,
   coinsOut?: { n: number; lines: { stepId: string; amount: number; why: string }[] },
+  positional = false,
 ): ShoppingLine[] {
   const byId = new Map<number, Acc>();
   const byName = new Map<string, Acc>();
   const order: Acc[] = [];
-  for (const step of steps) {
+  for (let index = 0; index < steps.length; index++) {
+    const step = steps[index];
     for (const item of pick(step) ?? []) {
       const n = parseAmount(item.amount);
       if (item.wikiItemId === COINS_ID || nameKey(item.nameEn) === 'coins') {
@@ -129,13 +133,14 @@ function collect(
         }
       }
       byName.set(name, acc);
-      acc.line.sources.push({ stepId: step.id, amount: item.amount, carryOver, ...(item.phase ? { phase: item.phase } : {}), ...(dose ? { per: dose.per } : {}) });
+      acc.line.sources.push({ stepId: step.id, ...(positional ? { stepIndex: index } : {}), amount: item.amount, carryOver, ...(item.phase ? { phase: item.phase } : {}), ...(dose ? { per: dose.per } : {}) });
       if (carryOver) continue;
       if (n === null) acc.line.exact = false;
       // In a purchase step (gear) "during the step" means "buy at the exchange".
       if (!item.inStep || step.type === 'gear') acc.allInStep = false;
       // Two rows of one item in one step are different needs (a trap for fish and for the Oracle): they are summed.
-      acc.perStep.set(step.id, (acc.perStep.get(step.id) ?? 0) + (n ?? 1) * (dose?.per ?? 1));
+      // Virtual training stages can retain the same historical ID. Each supplied stage has its own demand; tools still reuse across stages.
+      acc.perStep.set(index, (acc.perStep.get(index) ?? 0) + (n ?? 1) * (dose?.per ?? 1));
     }
   }
   return order
@@ -154,11 +159,12 @@ function collect(
  */
 export function aggregateShopping(steps: Step[], opts: { wholeGoal?: boolean } = {}): ShoppingList {
   const selected = new Set(steps.map((s) => s.id));
+  const positional = selected.size !== steps.length;
   const coins = { n: 0, lines: [] as { stepId: string; amount: number; why: string }[] };
-  const required = collect(steps, (s) => (opts.wholeGoal ? (s.goalItemsRequired ?? s.itemsRequired)?.map(wholeGoal) : s.itemsRequired), selected, coins);
+  const required = collect(steps, (s) => (opts.wholeGoal ? (s.goalItemsRequired ?? s.itemsRequired)?.map(wholeGoal) : s.itemsRequired), selected, coins, positional);
   const requiredKeys = new Set(required.flatMap((l) => [l.key, `name:${nameKey(l.nameEn)}`]));
   // A recommended item that is already in the required list (by ID or by name) is not shown a second time.
-  const recommended = collect(steps, (s) => s.itemsRecommended, selected)
+  const recommended = collect(steps, (s) => s.itemsRecommended, selected, undefined, positional)
     .filter((l) => !requiredKeys.has(l.key) && !requiredKeys.has(`name:${nameKey(l.nameEn)}`));
   return { required, recommended, coins: coins.n, coinLines: coins.lines };
 }

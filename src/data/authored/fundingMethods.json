@@ -10,7 +10,7 @@
       "repeatable": true,
       "summary": "Big bones on every kill, plus coins, limpwurt roots and runes.",
       "requirements": [
-        { "kind": "check", "text": "A Brass key opens the locked door by the giants and saves the walk past the skeletons; it is not required." }
+        { "kind": "check", "hard": false, "text": "A Brass key opens the locked door by the giants and saves the walk past the skeletons; it is not required." }
       ],
       "inputs": [],
       "outputs": [
@@ -122,7 +122,7 @@
       "requirements": [
         { "kind": "level", "skill": "mining", "level": 15 },
         { "kind": "item", "role": "tool", "any": [], "family": "pickaxe", "note": "Carried or wielded: a pickaxe is used by Mining level alone." },
-        { "kind": "check", "text": "Combat level 65 or more keeps the king scorpions from being aggressive." }
+        { "kind": "check", "hard": false, "text": "Combat level 65 or more keeps the king scorpions from being aggressive." }
       ],
       "inputs": [],
       "outputs": [
@@ -175,7 +175,7 @@
       "requirements": [
         { "kind": "level", "skill": "mining", "level": 30 },
         { "kind": "item", "role": "tool", "any": [], "family": "pickaxe", "note": "Carried or wielded: a pickaxe is used by Mining level alone." },
-        { "kind": "check", "text": "Combat level 65 or more keeps the king scorpions from being aggressive." }
+        { "kind": "check", "hard": false, "text": "Combat level 65 or more keeps the king scorpions from being aggressive." }
       ],
       "inputs": [],
       "outputs": [

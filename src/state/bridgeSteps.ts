@@ -5,11 +5,11 @@ import type { Step, StepBranch } from '../types';
 import { gateAllows } from '../domain/persistence/profiles';
 import { guardedProfileGate as profileGate, readProfiles } from './profiles';
 import { clearActiveStep, supportsSnapshot, syncActiveStep } from '../services/runeliteBridge';
-import { planAutoComplete, toInGameTarget } from '../domain/guide/inGameTarget';
+import { autoCompletes, toInGameTarget } from '../domain/guide/inGameTarget';
 import { preflightItems } from '../domain/prep/stepItems';
 import { doseKind } from '../domain/items/doseKind';
 import { tripWindow } from '../domain/prep/oneTrip';
-import { isClosed, openAfter, dependencyFacts } from '../domain/quests/next-step';
+import { isClosed } from '../domain/quests/next-step';
 import { stepResendKey } from '../domain/combat/foodPlan';
 import { withKillEstimate } from '../domain/combat/gearAdvisor';
 import { transportWatch } from '../domain/travel/travelInput';
@@ -18,7 +18,7 @@ import type { useSnapshot } from './bridgeSnapshot';
 import type { PointResult } from './bridgeValue';
 
 /** Sending the step into the game and taking it out, and the auto-mark from the game. */
-export function useStepSending({ activeStepId, setActiveStepId, setAdvance, liveIdentity, sessionEpoch, stepIntent, pluginProtocol, snapshot, latest, handled }: BridgeCore, { flushSnapshot }: ReturnType<typeof useSnapshot>) {
+export function useStepSending({ activeStepId, setAdvance, liveIdentity, sessionEpoch, pluginProtocol, snapshot, latest, handled }: BridgeCore, { flushSnapshot }: ReturnType<typeof useSnapshot>) {
   const nonce = useRef(0);
 
   /** A step into the game. For a combat step — with a first time estimate per opponent by the current weapon and levels. */
@@ -42,7 +42,7 @@ export function useStepSending({ activeStepId, setActiveStepId, setAdvance, live
     const sn = snapshot.current;
     sn.parts = { ...sn.parts, step: payload };
     sn.synced = true;
-    return flushSnapshot();
+    return flushSnapshot(['step', 'skillPath']);
   }, [flushSnapshot]);
 
   /** Remove the step in the game: with a snapshot — as part of it, otherwise — by a separate request. */
@@ -55,25 +55,15 @@ export function useStepSending({ activeStepId, setActiveStepId, setAdvance, live
   }, [flushSnapshot]);
 
   const onCompleted = useCallback((id: string) => {
-    const { progress: p, steps: list, setStep: mark, activeStepId: active } = latest.current;
+    const { progress: p, steps: list, setStep: mark } = latest.current;
     // The game has a different character than this profile — its quests and levels are not written here.
     if (liveIdentity.current.inGame === false || !gateAllows(profileGate(readProfiles(), liveIdentity.current.player))) return;
-    const epoch = sessionEpoch.current;
-    const plan = planAutoComplete(list, p, id, active, handled.current, latest.current.qp, dependencyFacts(list, latest.current.questsDone, skill => latest.current.stats?.[skill] ?? p.levels[skill]));
+    const marks = autoCompletes(list, p, id, handled.current);
     handled.current.add(id);
-    if (!plan.mark) return;
-    const intent = ++stepIntent.current;
-    const next = plan.next;
-    mark(id, 'done', `🎮 RuneLite: ${id} done in the game${next ? ` — next ${next.id}` : ''}`);
-    setAdvance({ from: id, to: next?.id, nonce: ++nonce.current });
-    if (plan.inGame === 'sync-next' && next) {
-      handled.current.delete(next.id);
-      void sendStep(next, chosenBranch(next, latest.current.branchChoice)).then((ok) => { if (epoch === sessionEpoch.current && intent === stepIntent.current) setActiveStepId(ok ? next.id : null); });
-    } else if (plan.inGame === 'clear') {
-      void clearStep();
-      setActiveStepId(null);
-    }
-  }, [sendStep, clearStep]);
+    if (!marks) return;
+    mark(id, 'done', `RuneLite: ${id} done in the game`);
+    setAdvance({ from: id, nonce: ++nonce.current });
+  }, []);
 
   useEffect(() => {
     try {
@@ -87,27 +77,7 @@ export function useStepSending({ activeStepId, setActiveStepId, setAdvance, live
 }
 
 /** The next step after a mark, a step sent again when its method or plan changes, and the choices from the pages. */
-export function useStepFollow({ progress, steps, activeStepId, setActiveStepId, stats, setBranchChoice, questsDone, sessionEpoch, stepIntent, qp, latest, handled }: BridgeCore, { sendStep, clearStep }: ReturnType<typeof useStepSending>) {
-  // A step that leads in the game was marked in the app (by a button or a tick) — the next open step goes to the game at once.
-  // The auto-mark from the game does not repeat this: its step is already in handled, and onCompleted moves by itself.
-  // Only the "was open → closed" transition: an already completed step shown in the game by hand stays where it is.
-  const activeWasOpen = useRef<string | null>(null);
-  useEffect(() => {
-    if (!activeStepId) return;
-    if (!isClosed(progress, activeStepId)) { activeWasOpen.current = activeStepId; return; }
-    if (activeWasOpen.current !== activeStepId || handled.current.has(activeStepId)) return;
-    const next = openAfter(steps, progress, activeStepId, qp, dependencyFacts(steps, questsDone, skill => stats?.[skill] ?? progress.levels[skill]));
-    const branch = next ? chosenBranch(next, latest.current.branchChoice) : undefined;
-    if (!next || !toInGameTarget(next, branch)) {
-      void clearStep();
-      setActiveStepId(null);
-      return;
-    }
-    handled.current.delete(next.id);
-    setActiveStepId(next.id);
-    void sendStep(next, branch);
-  }, [activeStepId, progress, steps, sendStep, clearStep, qp, questsDone, stats]);
-
+export function useStepFollow({ steps, activeStepId, setActiveStepId, setBranchChoice, sessionEpoch, stepIntent, latest, handled }: BridgeCore, { sendStep, clearStep }: ReturnType<typeof useStepSending>) {
   // A step that follows a training method asks for different tools, and leads to another place, when the level (or what is carried) moves the player to
   // another method: the game gets the new list and place without a press. The first sight of a step is not a change: whoever activated it sent it.
   const shown = activeStepId ? steps.find((s) => s.id === activeStepId) : undefined;

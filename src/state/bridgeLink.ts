@@ -8,6 +8,8 @@ import { checkStatus, connectEvents, parseNavTarget, parseMove, supportsSnapshot
 import { parseGear, parsePacing, parsePlayer, parseQuests, parseStats, parseXp } from '../services/bridgeEvents';
 import { parseOwned } from '../domain/items/checklist';
 import { BridgeFreshness, type StatusTicket } from '../domain/player/bridgeFreshness';
+import { admitQuestObservation, parseQuestObservation } from '../domain/player/questObservation';
+import type { QuestObservation } from '../domain/player/questObservation';
 import { STORAGE_KEYS } from '../domain/persistence/storageKeys';
 import { chosenBranch, ENABLED_KEY, loadJson, MOVES_KEY, PLAN_KEY, saveJson, type BridgeCore } from './bridgeCore';
 import type { useNavTarget } from './bridgeNav';
@@ -34,7 +36,7 @@ const LAUNCH_TEXT: Partial<Record<RuneliteLaunch['state'], string>> = {
 };
 
 /** Status requests and the event stream fill the game facts, and a restart of either side sends the step again. */
-export function useLink({ enabled, setEnabledState, setState, setInGame, setStats, setOwned, setShortestPath, setGear, setPacing, setXp, setQuestsDone, setMoves, setPlayer, setPosition, liveIdentity, sessionEpoch, tracker, setNavTargetState, setQuestInstruction, setChronicleCharges, setSpellbook, setQuestPoints, setCombatLog, setTotalLevel, setAccountType, setPlugin, bankSent, navSeq, pluginProtocol, snapshot, latest, handled }: BridgeCore, { flushSnapshot }: ReturnType<typeof useSnapshot>, { sendStep, onCompleted }: ReturnType<typeof useStepSending>, { setNavFromPlugin, onNavDone }: ReturnType<typeof useNavTarget>) {
+export function useLink({ enabled, setEnabledState, setState, setInGame, setStats, setOwned, setShortestPath, setGear, setPacing, setXp, setQuestsDone, setQuestStates, setMoves, setPlayer, setPosition, liveIdentity, sessionEpoch, tracker, setNavTargetState, setQuestInstruction, setChronicleCharges, setSpellbook, setQuestPoints, setCombatLog, setTotalLevel, setAccountType, setPlugin, bankSent, navSeq, pluginProtocol, snapshot, latest, handled }: BridgeCore, { flushSnapshot }: ReturnType<typeof useSnapshot>, { sendStep, onCompleted }: ReturnType<typeof useStepSending>, { setNavFromPlugin, onNavDone }: ReturnType<typeof useNavTarget>) {
   const setEnabled = useCallback((on: boolean) => {
     setEnabledState(on);
     try { localStorage.setItem(ENABLED_KEY, on ? '1' : '0'); } catch { /* it is remembered until a restart */ }
@@ -42,7 +44,19 @@ export function useLink({ enabled, setEnabledState, setState, setInGame, setStat
 
   useEffect(() => {
     const freshness = new BridgeFreshness();
+    let questObservation: QuestObservation | null = null;
+    const acceptQuests = (raw: unknown, player: string | null, authoritative = false): boolean => {
+      if (raw == null) return questObservation === null; // Legacy lists cannot downgrade an admitted versioned observation.
+      const parsed = parseQuestObservation(raw);
+      if (!parsed) return false;
+      const admitted = admitQuestObservation(parsed, questObservation, player, authoritative);
+      if (admitted !== parsed) return false;
+      questObservation = admitted;
+      setQuestStates(admitted);
+      return true;
+    };
     const clearCharacter = () => {
+      questObservation = null;
       sessionEpoch.current++;
       handled.current.clear();
       liveIdentity.current = { inGame: false, player: null };
@@ -57,6 +71,7 @@ export function useLink({ enabled, setEnabledState, setState, setInGame, setStat
       setPacing(null);
       setXp(null);
       setQuestsDone(null);
+      setQuestStates(null);
       setPlayer(null);
       setPosition(null);
       setQuestPoints(null);
@@ -86,11 +101,23 @@ export function useLink({ enabled, setEnabledState, setState, setInGame, setStat
     setState('connecting');
     let alive = true;
     let statusPoll = 0;
+    let questPointsPoll = 0;
     const refresh = (resync = false) => {
       const seq = navSeq.current;
       const poll = ++statusPoll;
+      questPointsPoll++; // A newer full status owns this fact too.
       const ticket = freshness.capture();
       void checkStatus().then((s) => { if (poll === statusPoll) onStatus(s, resync, seq, ticket); });
+    };
+    const refreshQuestPoints = () => {
+      const poll = ++questPointsPoll, mainPoll = statusPoll, ticket = freshness.capture();
+      void checkStatus().then(s => {
+        if (!alive || poll !== questPointsPoll || mainPoll !== statusPoll || !freshness.accepts(ticket, 'QUESTS')) return;
+        const identity = liveIdentity.current;
+        if (!s.online || !s.inGame || !identity.inGame || s.player?.toLowerCase() !== identity.player?.toLowerCase()) return;
+        // A legacy event already supplied the latest completed names. This request only fills its missing QP field.
+        setQuestPoints(s.questPoints);
+      }).catch(() => undefined);
     };
     const onStatus = (s: Awaited<ReturnType<typeof checkStatus>>, resync: boolean, seq: number, ticket: StatusTicket) => {
       if (!alive || !freshness.accepts(ticket)) return;
@@ -118,13 +145,18 @@ export function useLink({ enabled, setEnabledState, setState, setInGame, setStat
         if (s.inGame && s.xp) tracker.current.push(s.xp, Date.now());
         else tracker.current.reset();
       }
-      if (freshness.accepts(ticket, 'QUESTS')) setQuestsDone(s.inGame ? s.questsDone : null);
+      if (freshness.accepts(ticket, 'QUESTS')) {
+        if (!s.inGame) setQuestStates(null);
+        if (acceptQuests(s.questStates, s.player, true)) {
+          setQuestsDone(s.inGame ? s.questsDone : null);
+          setQuestPoints(s.inGame ? s.questPoints : null);
+        }
+      }
       setPlayer(s.inGame ? s.player : null);
       if (freshness.accepts(ticket, 'GEAR')) setGear(s.inGame ? s.gear : null);
       if (freshness.accepts(ticket, 'MOVED')) setPosition(s.inGame ? s.pos : null);
       setChronicleCharges(s.inGame ? s.chronicleCharges : null);
       setSpellbook(s.inGame ? s.spellbook : null);
-      setQuestPoints(s.inGame ? s.questPoints : null);
       setTotalLevel(s.inGame ? s.totalLevel : null);
       setAccountType(s.inGame ? s.accountType ?? null : null);
       setCombatLog((prev) => (s.inGame && s.combatLog ? (JSON.stringify(prev) === JSON.stringify(s.combatLog) ? prev : s.combatLog) : null));
@@ -165,7 +197,14 @@ export function useLink({ enabled, setEnabledState, setState, setInGame, setStat
         setXp(next);
         if (next) tracker.current.push(next, Date.now());
         else tracker.current.reset();
-      } else if (e.type === 'QUESTS') setQuestsDone(parseQuests((e as { done?: unknown }).done));
+      } else if (e.type === 'QUESTS') {
+        if (acceptQuests(e.questStates, liveIdentity.current.player)) {
+          setQuestsDone(parseQuests((e as { done?: unknown }).done));
+          const points = questObservation?.questPoints ?? null;
+          setQuestPoints(points);
+          if (points === null) refreshQuestPoints(); // Never infer QP from quest rewards or overwrite the event's other facts.
+        }
+      }
       else if (e.type === 'STATUS') {
         const loggedIn = (e as { inGame?: unknown }).inGame === true;
         const nextPlayer = loggedIn ? parsePlayer((e as { player?: unknown }).player) : null;

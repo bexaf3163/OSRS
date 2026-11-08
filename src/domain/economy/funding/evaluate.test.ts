@@ -14,6 +14,42 @@ const steelPrices = () => fakePrices({ 'Iron ore': IRON, Coal: COAL, 'Steel bar'
 const smither = { levels: { smithing: 40 }, position: { x: 3093, y: 3495, plane: 0 } };
 
 describe('economics worked by hand: smelting steel bars', () => {
+  it('does not mistake an unfinished quest for an unstarted quest or require completing a started-only prerequisite', () => {
+    const method: FundingMethod = { ...steel, requirements: [{ kind: 'quest', quest: 'Synthetic access quest', state: 'started' }] };
+    const context = ctxOf({ prices: steelPrices(), snap: fakeSnap(smither), cash: 5000 });
+    const questCheck = (result: ReturnType<typeof evaluate>) => result.checks.find(check => check.text.includes('Synthetic access quest'))!.status;
+    expect(questCheck(evaluate(method, context))).toBe('unknown');
+    expect(evaluate(method, { ...context, snap: { ...context.snap, questStarted: () => false } }).blockers.some(blocker => blocker.kind === 'quest')).toBe(true);
+    expect(questCheck(evaluate(method, { ...context, snap: { ...context.snap, questStarted: () => true } }))).toBe('ok');
+    const completionRequired: FundingMethod = { ...method, requirements: [{ kind: 'quest', quest: 'Synthetic access quest', state: 'complete' }] };
+    expect(questCheck(evaluate(completionRequired, { ...context, snap: { ...context.snap, questStarted: () => true } }))).toBe('unknown');
+  });
+  it('keeps unknown initial travel out of total minutes without inventing a distance', () => {
+    const e = evaluate(steel, ctxOf({ prices: steelPrices(), snap: fakeSnap({ ...smither, position: null }), cash: 5000 }));
+    expect(e.minutes).toBeNull();
+    expect(e.minutesReason).toMatch(/travel is unknown/);
+    expect(e.unitsPerHour).not.toBeNull(); // Steady-state bank/GE cycle is separately known.
+    expect(e.workingCapital).not.toBeNull(); // Cash-only dry run is still meaningful.
+  });
+  it('uses observed work pace without dropping banking, sale, initial travel or input costs from the full cycle', () => {
+    const context = ctxOf({ prices: steelPrices(), snap: fakeSnap(smither), cash: 5000, target: 500,
+      observed: new Map([[steel.id, { units: 400, activeSeconds: 1200, unitsPerHour: 1200 }]]) });
+    const e = evaluate(steel, context);
+    expect(e.unitsPerHour!.typical).toBeCloseTo(3600 / (3 + 10 / 9 + 98.4 / 36), 6);
+    expect(e.minutes!.typical).toBeCloseTo((4.8 + 10 + 9 * 3 + 98.4) / 60, 6);
+    expect(e.perUnit.net).toBe(153);
+    expect(e.netPerHour!.typical).toBeCloseTo(e.unitsPerHour!.typical * 153, 6);
+    expect(evaluate(steel, { ...context, reach: () => null }).minutes).toBeNull();
+    expect(evaluate(steel, { ...context, cash: 200 }).eligible).toBe(false);
+  });
+  it('does not present a full-cycle rate or target time when the bank/exchange route is unknown', () => {
+    const e = evaluate(steel, ctxOf({ prices: steelPrices(), snap: fakeSnap(smither), cash: 5000,
+      reach: (from, to) => from === steel.bank ? null : from ? Math.max(Math.abs(from.x - to.x), Math.abs(from.y - to.y)) : null }));
+    expect(e.minutes).toBeNull();
+    expect(e.unitsPerHour).toBeNull();
+    expect(e.netPerHour).toBeNull();
+    expect(e.cautions.join(' ')).toMatch(/full-cycle rates are not assessed/);
+  });
   // A bar sells for 522 (tax floor(522 x 2%) = 10, so 512 net) and costs 77 + 2 x 141 = 359 of ore and coal: 153 clear a bar.
   // A bag of 28 holds 9 sets (1 ore + 2 coal = 3 slots), so a trip makes 9 bars. The published pace is 775 an hour; typical is 80% = 620, one bar in 5.806 s.
   // A trip adds 10 s at the bank. The exchange is 72 tiles from the bank and 56 from the furnace: (72 + 56) / (2 / 0.6) = 38.4 s walking plus 60 s at
@@ -24,14 +60,14 @@ describe('economics worked by hand: smelting steel bars', () => {
     expect(e.perUnit.net).toBe(153);
     expect(e.perUnit.tax).toBe(10);
     expect(e.unitsPerTrip).toBe(9);
-    expect(e.unitsPerHour.typical).toBeCloseTo(3600 / (3600 / 620 + 10 / 9 + 98.4 / 36), 2);
-    expect(e.unitsPerHour.typical).toBeGreaterThan(372);
-    expect(e.unitsPerHour.typical).toBeLessThan(374);
-    expect(e.netPerHour.typical).toBeGreaterThan(153 * 372);
-    expect(e.netPerHour.typical).toBeLessThan(153 * 374);
-    // fast <= typical <= slow in time; the slow case is also priced with a haircut only when the quote is not HIGH confidence.
-    expect(e.netPerHour.fast).toBeGreaterThan(e.netPerHour.typical);
-    expect(e.netPerHour.typical).toBeGreaterThan(e.netPerHour.slow);
+    expect(e.unitsPerHour!.typical).toBeCloseTo(3600 / (3600 / 620 + 10 / 9 + 98.4 / 36), 2);
+    expect(e.unitsPerHour!.typical).toBeGreaterThan(372);
+    expect(e.unitsPerHour!.typical).toBeLessThan(374);
+    expect(e.netPerHour!.typical).toBeGreaterThan(153 * 372);
+    expect(e.netPerHour!.typical).toBeLessThan(153 * 374);
+    // fast <= typical <= slow in time; price uncertainty is already in the shared once-only margin.
+    expect(e.netPerHour!.fast).toBeGreaterThan(e.netPerHour!.typical);
+    expect(e.netPerHour!.typical).toBeGreaterThan(e.netPerHour!.slow);
   });
 
   it('a 500 coin target is met in one trip and one sale: about 2.76 minutes at the typical pace', () => {
@@ -46,7 +82,7 @@ describe('economics worked by hand: smelting steel bars', () => {
   it('an attractive hourly profit does not make an unaffordable first batch eligible', () => {
     // Three bars cost 1,077; with 200 coins even that is out of reach.
     const e = evaluate(steel, ctxOf({ prices: steelPrices(), snap: fakeSnap(smither), cash: 200 }));
-    expect(e.netPerHour.typical).toBeGreaterThan(50_000);
+    expect(e.netPerHour!.typical).toBeGreaterThan(50_000);
     expect(e.eligible).toBe(false);
     expect(e.blockers.map((b) => b.kind)).toEqual(['capital']);
     expect(e.blockers[0].text).toMatch(/1,077/);
@@ -223,8 +259,8 @@ describe('zero capital and tools', () => {
     // A trip is 26 ore (a gem may take the 27th slot), 90 s at the bank, one 148.5 s sale per 104 ore. Rune: 448 an hour = 8.036 s an ore;
     // a bronze pickaxe is scaled to 60%: 13.393 s.
     const overhead = 90 / 26 + 148.5 / 104;
-    expect(rune.unitsPerHour.typical).toBeCloseTo(3600 / (3600 / 448 + overhead), 1);
-    expect(bronze.unitsPerHour.typical).toBeCloseTo(3600 / (3600 / (448 * 0.6) + overhead), 1);
+    expect(rune.unitsPerHour!.typical).toBeCloseTo(3600 / (3600 / 448 + overhead), 1);
+    expect(bronze.unitsPerHour!.typical).toBeCloseTo(3600 / (3600 / (448 * 0.6) + overhead), 1);
   });
 
   it('whether a tool is owned is not known without the bank: no purchase is invented, confidence drops', () => {
@@ -253,7 +289,7 @@ describe('the market limits the pace', () => {
     const snap = fakeSnap({ quests: { 'Dragon Slayer I': 'DONE' }, position: { x: 3067, y: 3516, plane: 0 } });
     const e = evaluate(shields, ctxOf({ prices, snap, cash: 100_000 }));
     // A quarter of an hour's trades is 200 shields, and the trips and the sale cost time on top of that: well below 200 an hour.
-    expect(e.unitsPerHour.typical).toBeLessThan(200);
+    expect(e.unitsPerHour!.typical).toBeLessThan(200);
     expect(e.notes.join(' ')).toMatch(/market takes about 200 Anti-dragon shield an hour/);
   });
 
@@ -264,12 +300,20 @@ describe('the market limits the pace', () => {
     expect(e.confidence).toBe('LOW');
   });
 
+  it('S97: a low-confidence quote lowers the confidence only; the money and the time are not discounted a second time', () => {
+    const at = (conf: 'HIGH' | 'LOW') => evaluate(steel, ctxOf({ prices: fakePrices({ 'Iron ore': IRON, Coal: COAL, 'Steel bar': { ...BAR, conf } }), snap: fakeSnap(smither), cash: 5000 }));
+    const [high, low] = [at('HIGH'), at('LOW')];
+    expect([high.confidence === 'LOW', low.confidence]).toEqual([false, 'LOW']);
+    expect(low.netPerHour).toEqual(high.netPerHour);
+    expect(low.unitsPerHour).toEqual(high.unitsPerHour);
+  });
+
   it('the exchange buy limit on an input caps the pace (500 pie dishes every four hours)', () => {
     const prices = fakePrices({
       'Pastry dough': { buy: 186, volume: 6039, limit: 13000 }, 'Pie dish': { buy: 5, volume: 4665, limit: 500 }, 'Pie shell': { sell: 313, volume: 11069 },
     });
     const e = evaluate(pie, ctxOf({ prices, snap: fakeSnap({ position: { x: 3165, y: 3490, plane: 0 } }), cash: 100_000 }));
-    expect(e.unitsPerHour.fast).toBeLessThanOrEqual(125.01);
+    expect(e.unitsPerHour!.fast).toBeLessThanOrEqual(125.01);
     expect(e.notes.join(' ')).toMatch(/buy limit on Pie dish caps this at about 125 an hour/);
   });
 
@@ -280,7 +324,7 @@ describe('the market limits the pace', () => {
     const unconstrained = evaluate(pie, ctxOf({ prices: fakePrices({ ...quote, 'Pie dish': { ...quote['Pie dish'], limit: 13000 } }), snap, cash: 100_000, target: 500 }));
     expect(limited.minutes).not.toBeNull();
     for (const pace of ['fast', 'typical', 'slow'] as const) expect(limited.minutes![pace]).toBeCloseTo(unconstrained.minutes![pace], 8);
-    expect(limited.unitsPerHour.typical).toBeLessThanOrEqual(125);
+    expect(limited.unitsPerHour!.typical).toBeLessThanOrEqual(125);
   });
 
   it('reapplies replenishment pacing after owned stock runs out', () => {

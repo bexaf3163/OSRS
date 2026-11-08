@@ -1,6 +1,7 @@
 // Read-only performance and visual harness for a built OSRS Path page (no repo writes); results go to stdout as JSON.
-// Usage: AUDIT_OUT=<dir> npm run perf -- <repoRoot> <distDir> <port> <timing|switches|shots|selprobe|fonts>
+// Usage: AUDIT_OUT=<dir> npm run perf -- <repoRoot> <distDir> <port> <timing|events|switches|shots|selprobe|fonts>
 //   timing: cold start, page switches and per-update script time; run twice per build and compare with scripts/test/perf-compare.mjs.
+//   events: same event measurements only; EVENT_ROUTES narrows representative routes (comma-separated), with 3-decimal metrics. Focused diagnosis, not a full timing gate.
 //   switches: page switches only (SWITCH_IDLE=2500). shots: screenshots to $AUDIT_OUT/shots-$SHOTS_LABEL for scripts/test/pixeldiff.mjs
 //   (SHOT_W, SHOT_S, SHOT_R narrow widths, scales, routes). selprobe: do the selectors in $AUDIT_OUT/removed-selectors.json match anything.
 //   fonts: font files requested and the families text renders in.
@@ -9,6 +10,9 @@ import { createRequire } from 'node:module';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 const [,, ROOT, DIST, PORT, MODE = 'timing'] = process.argv;
+const EVENT_PAGES = ['#/path', '#/shopping', '#/gear', '#/skills/RA/ranged'];
+const eventPages = MODE === 'events' && process.env.EVENT_ROUTES ? process.env.EVENT_ROUTES.split(',').map(route => route.trim()) : EVENT_PAGES;
+if (eventPages.some(route => !EVENT_PAGES.includes(route))) throw Error('EVENT_ROUTES must name representative event pages');
 const require = createRequire(ROOT + '/package.json');
 const { chromium } = require('playwright');
 const BASE = `http://127.0.0.1:${PORT}/`;
@@ -72,9 +76,10 @@ async function newPage(opts = {}) {
 }
 const idle = (page, ms = 1500) => page.waitForTimeout(ms);
 const out = {};
-if (MODE === 'timing') {
+if (MODE === 'timing' || MODE === 'events') {
   // 1) Cold start per route, 5 runs each (fresh context = no HTTP cache, like a first app start).
   out.cold = {};
+  if (MODE === 'timing') {
   for (const r of ['#/path', '#/shopping', '#/skills/RA/ranged']) {
     const runs = [];
     for (let i = 0; i < 5; i++) {
@@ -92,10 +97,12 @@ if (MODE === 'timing') {
     out.cold[r] = { dcl: k(x => x.dcl), load: k(x => x.load), fcp: k(x => x.fcp), longSum: k(x => x.longSum), longMax: k(x => x.longMax), tbt: k(x => x.tbt), scriptMs: k(x => x.script), layoutMs: k(x => x.layout), styleMs: k(x => x.style), taskMs: k(x => x.task), heapMB: k(x => x.heapMB) };
     if (r === '#/path') out.requests = runs[0].reqs.filter(q => !/prices/.test(q.url)).sort((a, b) => b.bytes - a.bytes).slice(0, 15);
   }
+  }
   // 2) In-session page switches (warm), 3 rounds; cost = main-thread task time until idle.
   const { ctx, page, cdp, errors } = await newPage();
   await page.goto(BASE + '#/path', { waitUntil: 'load' }); await idle(page, 3000);
   out.switch = {};
+  if (MODE === 'timing') {
   for (let round = 0; round < 3; round++) for (const r of ROUTES) {
     await page.evaluate(() => { window.__long = []; });
     const a = await metrics(cdp); const t0 = Date.now();
@@ -104,9 +111,10 @@ if (MODE === 'timing') {
     (out.switch[r] ||= []).push({ task: (b.TaskDuration - a.TaskDuration) * 1000, script: (b.ScriptDuration - a.ScriptDuration) * 1000, style: (b.RecalcStyleDuration - a.RecalcStyleDuration) * 1000, layout: (b.LayoutDuration - a.LayoutDuration) * 1000, longMax: Math.max(0, ...long.map(x => x.d)) });
   }
   for (const r of ROUTES) { const xs = out.switch[r]; out.switch[r] = { taskMs: +med(xs.map(x => x.task)).toFixed(1), scriptMs: +med(xs.map(x => x.script)).toFixed(1), styleMs: +med(xs.map(x => x.style)).toFixed(1), layoutMs: +med(xs.map(x => x.layout)).toFixed(1), longMaxMs: +med(xs.map(x => x.longMax)).toFixed(1) }; }
+  }
   // 3) Per game-event cost on representative pages: alternate coins (GEAR) and a stats change; 8 events each.
   out.events = {};
-  for (const r of ['#/path', '#/shopping', '#/gear', '#/skills/RA/ranged']) {
+  for (const r of eventPages) {
     await page.evaluate((h) => { location.hash = h; }, r); await idle(page, 1500);
     for (const kind of ['XP', 'GEAR', 'STATS', 'OWNED']) {
       const xs = [];
@@ -124,7 +132,8 @@ if (MODE === 'timing') {
         const posts = await page.evaluate((n) => window.__posts.slice(n).map(p => p.path + ':' + p.size), before);
         xs.push({ task: (b.TaskDuration - a.TaskDuration) * 1000, script: (b.ScriptDuration - a.ScriptDuration) * 1000, posts });
       }
-      out.events[`${r} ${kind}`] = { taskMs: +med(xs.map(x => x.task)).toFixed(1), scriptMs: +med(xs.map(x => x.script)).toFixed(1), bridgePostsPerEvent: med(xs.map(x => x.posts.length)), samplePosts: xs[3].posts.slice(0, 8) };
+      const decimals = MODE === 'events' ? 3 : 1;
+      out.events[`${r} ${kind}`] = { taskMs: +med(xs.map(x => x.task)).toFixed(decimals), scriptMs: +med(xs.map(x => x.script)).toFixed(decimals), bridgePostsPerEvent: med(xs.map(x => x.posts.length)), samplePosts: xs[3].posts.slice(0, 8) };
     }
   }
   // 4) Idle cost: 10 s with no input (polling/timers), and bridge requests during it.

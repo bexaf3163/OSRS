@@ -25,13 +25,13 @@ function advice(geQuotes: ReturnType<typeof gearMarketPrices>) {
 describe('shared gear acquisition prices', () => {
   it('uses canonical IDs even without the mapping request and preserves current source certainty', () => {
     const action = advice(gearMarketPrices(board())).actions[0];
-    expect(action).toMatchObject({ item: { id: steel.id }, cost: 150, source: { kind: 'ge', price: 150, priceLabel: 'GE estimate' } });
+    expect(action).toMatchObject({ item: { id: steel.id }, cost: 165, source: { kind: 'ge', price: 165, priceLabel: 'GE estimate' } });
     expect(sourceText(action.source)).toContain('GE estimate');
-    expect(hudHint(action)).toContain('150 gp (GE estimate)');
+    expect(hudHint(action)).toContain('165 gp (GE estimate)');
   });
   it('keeps cached costs labelled through the action, source and HUD', () => {
     const action = advice(gearMarketPrices(board('stale'))).actions[0];
-    expect(action.cost).toBe(150);
+    expect(action.cost).toBe(165);
     expect(sourceText(action.source)).toContain('Cached GE estimate');
     expect(hudHint(action)).toContain('Cached GE estimate');
   });

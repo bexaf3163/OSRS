@@ -43,12 +43,12 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       questPoints: currentCharacter ? questPoints : null, totalLevel: currentCharacter ? totalLevel : null,
       accountType: currentCharacter ? accountType : null, combatLog: currentCharacter ? combatLog : null,
       navigate, clearNav, releaseNav, userClearedAt, plugin,
-      xp: currentCharacter ? xp : null, questsDone: currentCharacter ? questsDone : null, player,
+      xp: currentCharacter ? xp : null, questsDone: currentCharacter ? questsDone : null, questStates: currentCharacter ? c.questStates : null, player,
       position: currentCharacter ? position : null, gate, xpRate, session, locate, moves, setPrepPart, setSkillPath, setTrainingStep,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, lastGears, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, accountType, combatLog, navigate, clearNav, releaseNav, userClearedAt, plugin,
-      xp, questsDone, player, position, gate, xpRate, session, locate, moves, setPrepPart, setSkillPath, setTrainingStep, currentCharacter],
+      xp, questsDone, c.questStates, player, position, gate, xpRate, session, locate, moves, setPrepPart, setSkillPath, setTrainingStep, currentCharacter],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }

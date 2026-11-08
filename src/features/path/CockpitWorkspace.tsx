@@ -25,6 +25,7 @@ import { useSubStep } from './step/SubStepHero';
 import { WikiDock, useWiki } from '../reference/WikiDrawer';
 import { Eyebrow, Hotbar, Page } from '../../ledger';
 import { roman } from '../../ledger/adapters';
+import { GUIDE_UNCONFIRMED } from '../../domain/player/linkState';
 
 type View = StepTab | 'wiki';
 
@@ -109,7 +110,7 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId, prev, next, 
   // The same messages as the step's own buttons when the game cannot take the target.
   const point = async () => {
     const r = await pointInGame(step);
-    if (r !== 'ok') notify(r === 'offline' ? 'RuneLite is offline. Target saved.' : 'No game target is available for this step.');
+    if (r !== 'ok') notify(r === 'offline' ? GUIDE_UNCONFIRMED : 'No game target is available for this step.');
   };
   const game = live
     ? confirmed && sub?.target

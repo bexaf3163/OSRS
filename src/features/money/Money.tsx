@@ -8,10 +8,9 @@
 import { useMemo, useState } from 'react';
 import { stepById } from '../../data';
 import { useStore } from '../../state/store';
-import { useReadinessEngine, useTrackedTraining } from '../../state/readinessContext';
+import { useActiveActivity } from '../../state/readinessContext';
 import { useBridge } from '../../state/bridge';
 import { useFunding, useMoneyScreen, type MoneyScreen } from '../../state/fundingContext';
-import { firstOpen, isClosed, nextStep } from '../../domain/quests/next-step';
 import { formatGp } from '../../domain/prep/shopping';
 import { minutesText } from '../../domain/economy/funding/assess';
 import {
@@ -69,7 +68,11 @@ function whyOf(e: MethodEvaluation, ranking: Ranking, rankedFor: MoneyScreen['ra
   if (ranking.best?.method.id === e.method.id) {
     return `${ranking.kept ? 'Kept, as it is the method you are running' : 'The quickest way for you'} to ${goal}${e.minutes ? `: ${minutesText(e.minutes)}` : ''}.`;
   }
-  if (ranking.needsAttention.some((x) => x.method.id === e.method.id)) return 'It needs full attention (tick-perfect or very repetitive), so it is not recommended unless you pick it.';
+  if (ranking.needsAttention.some((x) => x.method.id === e.method.id)) {
+    return e.method.risk === 'high'
+      ? 'It is in the Wilderness, where other players can take what you carry, so it is not recommended unless you pick it.'
+      : 'It needs full attention (tick-perfect or very repetitive), so it is not recommended unless you pick it.';
+  }
   const cannot = ranking.cannotReach.find((c) => c.evaluation.method.id === e.method.id);
   if (cannot) return `${cannot.reason}.`;
   if (e.minutes && ranking.best?.minutes) return `${minutesText(e.minutes)} to ${goal}; ${ranking.best.method.title} is quicker for you (${minutesText(ranking.best.minutes)}).`;
@@ -152,7 +155,7 @@ function Details({ e, m, whyShown = false }: { e: MethodEvaluation; m: MoneyScre
         <summary className="small">Sources and calculations</summary>
         <ul className="small funding-facts">
           <li>Per {method.rate.unit}: sold for {gp(pu.sale)}{pu.coins > 0 ? ` and ${gp(pu.coins)} in coins` : ''}, tax {gp(pu.tax)}, supplies {gp(pu.inputs)}: {gp(pu.net)} net.</li>
-          <li>{Math.round(e.unitsPerHour.typical)} {method.rate.unit}s an hour with banking and selling (between {Math.round(e.unitsPerHour.slow)} and {Math.round(e.unitsPerHour.fast)}); {e.unitsPerTrip >= 1000 ? 'no bag limit' : `${e.unitsPerTrip} a trip`}.</li>
+          <li>{e.unitsPerHour ? <>{Math.round(e.unitsPerHour.typical)} {method.rate.unit}s an hour with banking and selling (between {Math.round(e.unitsPerHour.slow)} and {Math.round(e.unitsPerHour.fast)})</> : 'Full-cycle rate unknown: the bank/exchange route has not been assessed'}; {e.unitsPerTrip >= 1000 ? 'no bag limit' : `${e.unitsPerTrip} a trip`}.</li>
           <li>To start: {e.upfront.setup > 0 ? `${gp(e.upfront.setup)} for the tool, ` : ''}{gp(e.upfront.firstTrip)} for a full first trip.</li>
           {pu.upside > 0 && <li>Rare drops worth about {gp(pu.upside)} per {method.rate.unit} on average are not counted.</li>}
           {e.notes.map((n) => <li key={n}>{n}.</li>)}
@@ -318,6 +321,17 @@ function MoneyBody({ step }: { step: Step }) {
           <button type="button" className="btn btn-link" onClick={() => { setFiltersState(() => { const all = { ...DEFAULT_FILTERS, availableOnly: false }; saveFilters(all); return all; }); }}>Show all</button>
         </p>
       )}
+      {filters.availableOnly && result.soon.length > 0 && (
+        <>
+          <h3 className="small subhead">Opens with a few more levels</h3>
+          <ul className="money-list" aria-label="Opens soon">
+            {result.soon.slice(0, PAGE).map((row) => (
+              <Row key={row.evaluation.method.id} row={row} m={m} step={step} open={open === row.evaluation.method.id} starting={false}
+                onOpen={() => toggle(row.evaluation.method.id)} onStart={() => undefined} onClose={() => setStarting(null)} />
+            ))}
+          </ul>
+        </>
+      )}
     </div>
     </Page>
     </div>
@@ -325,16 +339,10 @@ function MoneyBody({ step }: { step: Step }) {
 }
 
 export function MoneyPage() {
-  const training = useTrackedTraining();
-  const { steps, progress } = useStore();
-  const { dependencies, ctx: { qp } } = useReadinessEngine();
-  const { activeStepId } = useBridge();
-  // The step in progress: the one started in the game, else the next open one the route allows (as on the Shopping page).
-  const step = useMemo(() => {
-    if (training && !training.complete) return training.step;
-    const started = activeStepId ? steps.find((s) => s.id === activeStepId && !isClosed(progress, s.id)) : undefined;
-    return started ?? nextStep(steps, progress, qp, dependencies) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
-  }, [activeStepId, steps, progress, qp, dependencies, training]);
+  const { steps } = useStore();
+  // The step the committed Decision runs (or the game shows) gives the shortfall context; with none, the list still browses
+  // against the route's last step, which asks for no coins.
+  const step = useActiveActivity().step ?? steps[steps.length - 1];
   if (!step) return null;
   return <MoneyBody step={step} />;
 }

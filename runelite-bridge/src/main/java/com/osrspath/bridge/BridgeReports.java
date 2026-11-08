@@ -12,6 +12,7 @@ import java.util.Objects;
 final class BridgeReports
 {
 	private final BridgeServer bridge;
+	private final QuestObservations questStates = new QuestObservations();
 
 	BridgeReports(BridgeServer bridge)
 	{
@@ -119,6 +120,7 @@ final class BridgeReports
 	/** Completed quests (since protocol 5). The same list is not broadcast. */
 	public void setQuests(List<String> value)
 	{
+		if (value == null) questStates.invalidate();
 		List<String> copy = value == null ? null : new ArrayList<>(value);
 		if (Objects.equals(bridge.questsDone, copy))
 		{
@@ -126,6 +128,23 @@ final class BridgeReports
 		}
 		bridge.questsDone = copy;
 		broadcast(questsEvent());
+	}
+
+	/** One poll reads each quest once, preserving UNKNOWN on unavailable client scripts. */
+	void setQuestStates(Map<String, String> states)
+	{
+		if (!bridge.inGame || !questStates.update(bridge.player, states, questPoints)) return;
+		List<String> done = new ArrayList<>();
+		states.forEach((name, state) -> { if ("COMPLETED".equals(state)) done.add(name); });
+		bridge.questsDone = done;
+		broadcast(questsEvent());
+	}
+
+	/** A real login-screen boundary, not a world hop, SSE reconnect or temporary loss of game state. */
+	void endQuestSession()
+	{
+		questStates.reset();
+		bridge.questsDone = null;
 	}
 
 	/** Where the character stands (since protocol 5): /status answers, no events. */
@@ -225,6 +244,10 @@ final class BridgeReports
 		{
 			if (value != null && !Objects.equals(bridge.pendingCompletionPlayer, value)) clearPendingCompletion();
 		}
+		questStates.identity(value);
+		bridge.questsDone = null;
+		questPoints = null;
+		totalLevel = null;
 		bridge.player = value;
 		broadcast(statusEvent());
 	}
@@ -408,6 +431,7 @@ final class BridgeReports
 		Map<String, Object> e = new LinkedHashMap<>();
 		e.put("type", "QUESTS");
 		e.put("done", bridge.questsDone);
+		e.put("questStates", bridge.inGame ? questStates.snapshot() : null);
 		return e;
 	}
 
@@ -454,6 +478,7 @@ final class BridgeReports
 		status.put("stats", bridge.stats);
 		status.put("xp", bridge.xp);
 		status.put("questsDone", bridge.questsDone);
+		status.put("questStates", bridge.inGame ? questStates.snapshot() : null);
 		status.put("player", bridge.player);
 		status.put("pos", pos);
 		status.put("shortestPath", shortestPath);

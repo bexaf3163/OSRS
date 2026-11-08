@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
-  "generatedAt": "2026-10-25",
+  "generatedAt": "2026-11-07",
   "foes": [
     {
       "name": "Minotaur",
@@ -349,6 +349,7 @@
     },
     {
       "name": "Brutus",
+      "version": "Post-quest",
       "combat": 30,
       "members": false,
       "hitpoints": 58,
@@ -369,6 +370,52 @@
       "speedTicks": 5,
       "aggressive": true,
       "xpBonus": 100
+    },
+    {
+      "name": "Brutus",
+      "version": "Charging",
+      "combat": 30,
+      "members": false,
+      "hitpoints": 60,
+      "attackLevel": 15,
+      "strengthLevel": 30,
+      "defenceLevel": 10,
+      "magicLevel": 0,
+      "attackBonus": 0,
+      "defence": {
+        "stab": -7,
+        "slash": -7,
+        "crush": -7,
+        "magic": -3,
+        "ranged": -7
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 5,
+      "aggressive": true,
+      "xpBonus": 100
+    },
+    {
+      "name": "Delrith",
+      "combat": 27,
+      "members": false,
+      "hitpoints": 7,
+      "attackLevel": 32,
+      "strengthLevel": 25,
+      "defenceLevel": 27,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 6,
+      "aggressive": false
     },
     {
       "name": "Elvarg",

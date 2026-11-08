@@ -44,3 +44,5 @@ export const TARGET_LABEL: Record<Exclude<TargetStatus, 'none'>, string> = {
   live: 'Shown in the game',
   saved: 'Target saved. Waiting for RuneLite',
 };
+
+export const GUIDE_UNCONFIRMED = 'The game guide was not confirmed. Check the connection and any RuneLite bridge error before retrying.';

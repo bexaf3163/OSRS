@@ -13,6 +13,23 @@ describe('data consistency check', () => {
     expect(qa(real())).toEqual([]);
   });
 
+  it('encounter scoping must bind a declared foe to an existing authored line', () => {
+    const base = real(), id = 'S3-04', quest = base.questStages.quests[id];
+    for (const encounters of [[{ foe: 'Unclassified foe', throughLine: 'defeatGuardian' }],
+      [{ foe: 'Ancient Guardian', throughLine: 'missingLine' }]]) {
+      const questStages = { quests: { ...base.questStages.quests, [id]: { ...quest, encounters } } };
+      expect(qa({ ...base, questStages }).filter(issue => issue.rule === 'stages-encounter')).toHaveLength(1);
+    }
+  });
+
+  it('manual proof rejects an unspecified item, unknown line or unversioned local source', () => {
+    const base = real(), id = 'S3-05', quest = base.questStages.quests[id], proof = quest.manualProofs![0];
+    for (const change of [{ carriedId: 0 }, { atLines: [] }, { atLines: ['absent'] }, { source: 'local guess' }, { requirement: '' }]) {
+      const questStages = { quests: { ...base.questStages.quests, [id]: { ...quest, manualProofs: [{ ...proof, ...change }] } } };
+      expect(qa({ ...base, questStages }).filter(issue => issue.rule === 'stages-manual-proof')).toHaveLength(1);
+    }
+  });
+
   it('Coif without the 20 Ranged requirement is caught, with it — not', () => {
     const base = real();
     const broken = { ...base, gear: { items: base.gear.items.map((g) => (g.name === 'Coif' ? { ...g, req: undefined } : g)) } };

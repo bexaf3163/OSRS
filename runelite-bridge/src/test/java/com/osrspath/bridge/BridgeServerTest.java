@@ -543,11 +543,11 @@ public class BridgeServerTest
 				server.setXp(xp);
 				assertEquals("{\"type\":\"XP\",\"xp\":{\"magic\":1234}}", lines.poll(3, TimeUnit.SECONDS));
 				server.setXp(new java.util.LinkedHashMap<>(xp));
+				server.setPlayer("Bexqq");
+				assertEquals("{\"type\":\"STATUS\",\"inGame\":false,\"player\":\"Bexqq\"}", lines.poll(3, TimeUnit.SECONDS));
 				server.setQuests(java.util.Arrays.asList("Rune Mysteries", "Imp Catcher"));
 				assertEquals("{\"type\":\"QUESTS\",\"done\":[\"Rune Mysteries\",\"Imp Catcher\"]}", lines.poll(3, TimeUnit.SECONDS));
 				server.setQuests(java.util.Arrays.asList("Rune Mysteries", "Imp Catcher"));
-				server.setPlayer("Bexqq");
-				assertEquals("{\"type\":\"STATUS\",\"inGame\":false,\"player\":\"Bexqq\"}", lines.poll(3, TimeUnit.SECONDS));
 				assertNull("repeats are not sent", lines.poll(300, TimeUnit.MILLISECONDS));
 			}
 			String status = get("/status").body();

@@ -169,7 +169,7 @@ describe('opportunistic routing: fetch the teleport first when it is clearly wor
   });
 
   it('a tablet already in the bag is just a ready option, with no detour', () => {
-    const opts = run({ from: nearGE, to: falador, carried: bag(['Falador teleport', 1]) });
+    const opts = run({ from: nearGE, to: falador, carried: bag(['Falador teleport', 1]), members: true });
     const o = find(opts, 'falador-tab')!;
     expect(o.availability).toBe('ready');
     expect(o.acquire).toBeUndefined();
@@ -189,10 +189,10 @@ describe('opportunistic routing: fetch the teleport first when it is clearly wor
 
 describe('Home Teleport cooldown from the game', () => {
   // Draynor to Lumbridge Castle: far enough that Home Teleport is worth listing.
-  const far = { from: at(3700, 3500), to: at(3222, 3218) };
+  const far = { from: at(3700, 3500), to: at(3222, 3218), standardSpellbook: true };
 
   it('ready: a plain ready option; on cooldown: locked, with the time left', () => {
-    const ready = find(run({ ...far }), 'lumbridge-home')!;
+    const ready = find(run({ ...far, homeCooldownKnown: true }), 'lumbridge-home')!;
     expect(ready.availability).toBe('ready');
     const wait = find(run({ ...far, homeCooldownSec: 12 * 60 }), 'lumbridge-home')!;
     expect(wait.availability).toBe('locked');
@@ -200,8 +200,11 @@ describe('Home Teleport cooldown from the game', () => {
     expect(wait.needs[0].text).toContain('ready in 12 min');
   });
 
-  it('unknown or zero is not a cooldown: it stays ready', () => {
-    for (const v of [null, undefined, 0]) expect(find(run({ ...far, homeCooldownSec: v }), 'lumbridge-home')!.availability).toBe('ready');
+  it('an unread cooldown stays unverified; a known ready cooldown permits the standard home spell', () => {
+    for (const v of [null, undefined, 0]) {
+      expect(find(run({ ...far, homeCooldownSec: v }), 'lumbridge-home')!.availability).toBe('maybe');
+      expect(find(run({ ...far, homeCooldownSec: v, homeCooldownKnown: true }), 'lumbridge-home')!.availability).toBe('ready');
+    }
   });
 
   it('the time is said in minutes, or in seconds when it is nearly over', () => {

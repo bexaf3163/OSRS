@@ -50,7 +50,7 @@ export interface NeedInput {
  */
 function buyable(l: PrepLine, prices: PriceView): boolean {
   if (!l.action || BUYING.has(l.action.kind)) return true;
-  if (l.action.kind === 'GATHER' && /^Dropped by /.test(l.action.label)) return prices.buy(l.name) !== null || healsOf(l.name) !== null;
+  if (l.action.kind === 'GATHER' && l.action.acquisition?.kind === 'drop') return prices.buy(l.name) !== null || healsOf(l.name) !== null;
   return false;
 }
 

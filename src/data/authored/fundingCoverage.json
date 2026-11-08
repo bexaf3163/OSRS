@@ -16,66 +16,6 @@
       "reason": "Player-to-player trading or a market gamble"
     },
     {
-      "id": "smelting-runite-bars-superheat-item",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
-    },
-    {
-      "id": "smelting-adamantite-bars-superheat-item",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
-    },
-    {
-      "id": "smithing-rune-items",
-      "status": "unsupported",
-      "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
-    },
-    {
-      "id": "high-alching-profitable-free-to-play-items",
-      "status": "unsupported",
-      "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
-    },
-    {
-      "id": "mining-runite-ore-free-to-play",
-      "status": "unsupported",
-      "family": "gathering",
-      "reason": "Wilderness: not offered as a default plan"
-    },
-    {
-      "id": "stringing-amulets",
-      "status": "unsupported",
-      "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
-    },
-    {
-      "id": "tanning-cowhide",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Tanning is not modelled; raw hides are supported by cows-cowhide"
-    },
-    {
-      "id": "crafting-diamond-jewellery",
-      "status": "unsupported",
-      "family": "production",
-      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
-    },
-    {
-      "id": "smelting-runite-bars",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
-    },
-    {
-      "id": "crafting-ruby-jewellery",
-      "status": "unsupported",
-      "family": "production",
-      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
-    },
-    {
       "id": "collecting-anti-dragon-shields-free-to-play",
       "status": "supported",
       "family": "shop",
@@ -84,24 +24,12 @@
       ]
     },
     {
-      "id": "collecting-steel-platebodies-high-alchemy",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Wilderness: not offered as a default plan"
-    },
-    {
       "id": "grinding-chocolate-bars",
       "status": "supported",
       "family": "production",
       "methods": [
         "grind-chocolate"
       ]
-    },
-    {
-      "id": "crafting-emerald-jewellery",
-      "status": "unsupported",
-      "family": "production",
-      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
     },
     {
       "id": "buying-feather-packs",
@@ -120,72 +48,12 @@
       ]
     },
     {
-      "id": "casting-bones-to-bananas",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Skill training first, money second: belongs to the Skills plan"
-    },
-    {
       "id": "making-pie-shells",
       "status": "supported",
       "family": "production",
       "methods": [
         "pie-shells"
       ]
-    },
-    {
-      "id": "crafting-sapphire-jewellery",
-      "status": "unsupported",
-      "family": "production",
-      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
-    },
-    {
-      "id": "collecting-steel-platebodies",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Wilderness: not offered as a default plan"
-    },
-    {
-      "id": "collecting-ruby-rings",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "World spawn: respawn timers and other players are not modelled"
-    },
-    {
-      "id": "collecting-bronze-pickaxes",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Needs quest state or an area the catalogue does not check yet"
-    },
-    {
-      "id": "making-pastry-dough",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
-    },
-    {
-      "id": "buying-team-capes",
-      "status": "unsupported",
-      "family": "shop",
-      "reason": "Wilderness: not offered as a default plan"
-    },
-    {
-      "id": "collecting-nature-runes",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Wilderness: not offered as a default plan"
-    },
-    {
-      "id": "collecting-cosmic-runes",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Wilderness: not offered as a default plan"
-    },
-    {
-      "id": "collecting-tinderboxes",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "World spawn: respawn timers and other players are not modelled"
     },
     {
       "id": "smelting-steel-bars",
@@ -196,30 +64,6 @@
       ]
     },
     {
-      "id": "cooking-plain-pizzas",
-      "status": "unsupported",
-      "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
-    },
-    {
-      "id": "collecting-chaos-runes",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Wilderness: not offered as a default plan"
-    },
-    {
-      "id": "killing-ogress-shamans",
-      "status": "unsupported",
-      "family": "combat",
-      "reason": "High-level combat or a boss: the combat model is not asked for it"
-    },
-    {
-      "id": "crafting-gold-jewellery",
-      "status": "unsupported",
-      "family": "production",
-      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
-    },
-    {
       "id": "making-uncooked-apple-pies",
       "status": "supported",
       "family": "production",
@@ -228,30 +72,12 @@
       ]
     },
     {
-      "id": "collecting-monk-s-robes",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Skill training first, money second: belongs to the Skills plan"
-    },
-    {
       "id": "cutting-yew-logs-free-to-play",
       "status": "supported",
       "family": "gathering",
       "methods": [
         "chop-yew-edgeville"
       ]
-    },
-    {
-      "id": "collecting-fish-food",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "World spawn: respawn timers and other players are not modelled"
-    },
-    {
-      "id": "making-dyes",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
     },
     {
       "id": "making-uncooked-berry-pies",
@@ -270,48 +96,12 @@
       ]
     },
     {
-      "id": "smelting-iron-bars",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Iron bars smelt with a 50% failure without a ring of forging: the failure model is not built"
-    },
-    {
       "id": "making-pizza-bases",
       "status": "supported",
       "family": "production",
       "methods": [
         "pizza-bases"
       ]
-    },
-    {
-      "id": "killing-ogress-warriors",
-      "status": "unsupported",
-      "family": "combat",
-      "reason": "High-level combat or a boss: the combat model is not asked for it"
-    },
-    {
-      "id": "mining-coal-and-superheating-runite-bars",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
-    },
-    {
-      "id": "buying-ale-from-the-rising-sun-inn",
-      "status": "unsupported",
-      "family": "shop",
-      "reason": "The product is whichever of three drinks pays most at the moment: one fixed output cannot model it"
-    },
-    {
-      "id": "collecting-and-tanning-cowhide",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Tanning is not modelled; raw hides are supported by cows-cowhide"
-    },
-    {
-      "id": "collecting-wine-of-zamorak-free-to-play",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Wilderness: not offered as a default plan"
     },
     {
       "id": "making-chocolate-cake",
@@ -331,42 +121,12 @@
       "note": "Raw hides only: tanning is not modelled"
     },
     {
-      "id": "mining-coal-and-superheating-adamantite-bars",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
-    },
-    {
-      "id": "blessing-unblessed-symbols",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Skill training first, money second: belongs to the Skills plan"
-    },
-    {
-      "id": "mining-adamantite-ore-free-to-play",
-      "status": "unsupported",
-      "family": "gathering",
-      "reason": "Level 70 mining: not curated for a low-level default"
-    },
-    {
-      "id": "killing-chaos-dwarves",
-      "status": "unsupported",
-      "family": "combat",
-      "reason": "Wilderness: not offered as a default plan"
-    },
-    {
       "id": "killing-hill-giants",
       "status": "supported",
       "family": "combat",
       "methods": [
         "hill-giants"
       ]
-    },
-    {
-      "id": "collecting-big-bones-from-the-bone-yard",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Wilderness: not offered as a default plan"
     },
     {
       "id": "smelting-silver-bars",
@@ -377,36 +137,6 @@
       ]
     },
     {
-      "id": "collecting-air-talismans",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Drop trick: depends on a quest stage the route moves past"
-    },
-    {
-      "id": "catching-sardines-herring",
-      "status": "unsupported",
-      "family": "gathering",
-      "reason": "Needs a cooking success model that is not built"
-    },
-    {
-      "id": "collecting-red-spiders-eggs-free-to-play",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Needs Telekinetic Grab timing that cannot be guided"
-    },
-    {
-      "id": "killing-imps",
-      "status": "unsupported",
-      "family": "combat",
-      "reason": "Income is mostly rare drops: shown as upside only, never as a plan"
-    },
-    {
-      "id": "mining-coal-and-superheating-mithril-bars",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
-    },
-    {
       "id": "buying-kebabs-in-al-kharid",
       "status": "supported",
       "family": "shop",
@@ -415,48 +145,12 @@
       ]
     },
     {
-      "id": "making-dough-at-cooks-guild",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Needs quest state or an area the catalogue does not check yet"
-    },
-    {
-      "id": "firecycling",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "World spawn: respawn timers and other players are not modelled"
-    },
-    {
-      "id": "mining-clay",
-      "status": "unsupported",
-      "family": "gathering",
-      "reason": "Wilderness: not offered as a default plan"
-    },
-    {
       "id": "cutting-oak-logs",
       "status": "supported",
       "family": "gathering",
       "methods": [
         "chop-oak-draynor"
       ]
-    },
-    {
-      "id": "collecting-spades",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "World spawn: respawn timers and other players are not modelled"
-    },
-    {
-      "id": "killing-bryophyta-free-to-play",
-      "status": "unsupported",
-      "family": "combat",
-      "reason": "High-level combat or a boss: the combat model is not asked for it"
-    },
-    {
-      "id": "killing-monkeys",
-      "status": "unsupported",
-      "family": "combat",
-      "reason": "The place is not precise enough to guide an arrow"
     },
     {
       "id": "collecting-iron-ore",
@@ -475,24 +169,12 @@
       ]
     },
     {
-      "id": "mining-iron-and-superheating-iron-bars",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
-    },
-    {
       "id": "making-uncooked-meat-pies",
       "status": "supported",
       "family": "production",
       "methods": [
         "meat-pies"
       ]
-    },
-    {
-      "id": "stealing-wydin-s-bananas",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Needs quest state or an area the catalogue does not check yet"
     },
     {
       "id": "filling-water-containers",
@@ -511,90 +193,12 @@
       ]
     },
     {
-      "id": "killing-elemental-wizards",
-      "status": "unsupported",
-      "family": "combat",
-      "reason": "High-level combat or a boss: the combat model is not asked for it"
-    },
-    {
-      "id": "killing-ankou-free-to-play",
-      "status": "unsupported",
-      "family": "combat",
-      "reason": "High-level combat or a boss: the combat model is not asked for it"
-    },
-    {
-      "id": "cooking-raw-chicken",
-      "status": "unsupported",
-      "family": "production",
-      "reason": "Needs a cooking success model that is not built"
-    },
-    {
-      "id": "collecting-ashes",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "Skill training first, money second: belongs to the Skills plan"
-    },
-    {
-      "id": "killing-wizards",
-      "status": "unsupported",
-      "family": "combat",
-      "reason": "The place is not precise enough to guide an arrow"
-    },
-    {
       "id": "catching-lobsters",
       "status": "supported",
       "family": "gathering",
       "methods": [
         "fish-lobster-musa"
       ]
-    },
-    {
-      "id": "killing-zamorak-monks",
-      "status": "unsupported",
-      "family": "combat",
-      "reason": "High-level combat or a boss: the combat model is not asked for it"
-    },
-    {
-      "id": "making-flour",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Needs quest state or an area the catalogue does not check yet"
-    },
-    {
-      "id": "catching-tuna-swordfish-free-to-play",
-      "status": "unsupported",
-      "family": "gathering",
-      "reason": "Needs quest state or an area the catalogue does not check yet"
-    },
-    {
-      "id": "killing-bears",
-      "status": "unsupported",
-      "family": "combat",
-      "reason": "The place is not precise enough to guide an arrow"
-    },
-    {
-      "id": "taking-from-the-infinite-money-bag-while-picking-up-coin-spawns-in-varrock-west-bank",
-      "status": "unsupported",
-      "family": "direct-coin",
-      "reason": "Needs quest state or an area the catalogue does not check yet"
-    },
-    {
-      "id": "collecting-beer-glasses",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "World spawn: respawn timers and other players are not modelled"
-    },
-    {
-      "id": "collecting-garlic",
-      "status": "unsupported",
-      "family": "collecting",
-      "reason": "World spawn: respawn timers and other players are not modelled"
-    },
-    {
-      "id": "catching-lobsters-free-to-play",
-      "status": "unsupported",
-      "family": "gathering",
-      "reason": "Needs quest state or an area the catalogue does not check yet"
     }
   ],
   "extras": [

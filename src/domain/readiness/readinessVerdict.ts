@@ -80,6 +80,8 @@ export interface VerdictInput {
    * worn gear, or the app has no numbers for that opponent. Never "ok".
    */
   fightNames?: { name: string; known: boolean }[];
+  /** Explicit omissions from the shared combat model; no amount of ordinary food/armour proves these mechanics. */
+  fightGaps?: readonly { name: string; reason: string }[];
   /** The step's food carried now, in pieces of that food by healing; null — unknown. */
   carriedFood?: number | null;
   /** The worn weapon, when known: a two-handed one leaves no room for a shield a safety rule asks to be worn (Elvarg's Anti-dragon shield). */
@@ -142,14 +144,17 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
   const safetyBlocks = plan.blockers.filter((b) => safetyLabels.has(b.label));
   // A shield the rule needs is carried, but a two-handed weapon is worn: it cannot be worn with it, so it protects nothing.
   const shieldRule = (plan.safety ?? []).find((r) => r.names.some((n) => /shield|ward/i.test(n)));
-  if (shieldRule && i.worn?.twoHanded && !safetyBlocks.length) {
-    safetyBlocks.push({
+  if (shieldRule && i.worn?.twoHanded) {
+    safetyBlocks.unshift({
       label: `${i.worn.weapon ?? 'Your weapon'} is two-handed: it leaves no room for the ${shieldRule.names[0]}`,
       detail: 'Wield a one-handed weapon for this fight, so the shield can be worn.',
     });
   }
   for (const b of access) reasons.push({ group: 'access', state: 'missing', text: b.detail ? `${b.label}: ${b.detail}` : b.label });
   for (const b of safetyBlocks) reasons.push({ group: 'safety', state: 'missing', text: b.detail ? `${b.label}. ${b.detail}` : b.label });
+  for (const rule of plan.safety ?? []) if (rule.worn && rule.equipped == null) {
+    reasons.push({ group: 'unknown', state: 'unknown', text: `${rule.names[0]}: worn protection has not been checked.` });
+  }
 
   // What this step needs now. Food goes to the kit check when there is one (it counts by healing, not by pieces).
   const now = plan.lines.filter((l) => l.timing === 'NOW' && l.priority !== 'OPTIONAL');
@@ -171,6 +176,7 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
     cautions.push(...combat.cautions.filter((c) => c !== combat.weapon.text));
   }
   const overmatched: string[] = [];
+  for (const gap of i.fightGaps ?? []) reasons.push({ group: 'unknown', state: 'unknown', text: `${gap.name}: strategy not assessed — ${gap.reason}.` });
   for (const f of i.fights ?? []) {
     // Food the fight needs, with the bag not read: unknown, not fine.
     const unread = f.foodHigh > 0 && (i.carriedFood === null || i.carriedFood === undefined);
@@ -187,7 +193,7 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
   const assessed = new Set((i.fights ?? []).map((f) => f.name ?? f.foe));
   for (const n of (i.fightNames ?? []).filter((x) => !assessed.has(x.name))) {
     if (n.known) reasons.push({ group: 'unknown', state: 'unknown', text: `${n.name}: this fight is not assessed yet: your levels and worn gear have not been read from the game.` });
-    else cautions.push(`${n.name}: the app has no combat numbers for it; prepare as the walkthrough says.`);
+    else reasons.push({ group: 'unknown', state: 'unknown', text: `${n.name}: the app has no combat model for it; verify the walkthrough's strategy.` });
   }
   for (const l of plan.optimizations.slice(0, 4)) {
     reasons.push({ group: 'optional', state: l.where === 'BANK' ? 'bank' : l.where === 'UNKNOWN' ? 'unknown' : 'missing', text: `${l.name}: ${l.why}${l.action?.label ? ` — ${l.action.label}` : ''}.` });

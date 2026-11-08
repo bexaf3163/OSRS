@@ -2,6 +2,7 @@
 // player, gear, pacing). Anything malformed becomes null, never a guess.
 import type { PacingSkill, PlayerStats } from '../types';
 import type { GearItem, GearState, PacingState, BridgeEvent } from './runeliteBridge';
+import { coherentSkillXp } from '../domain/player/xp';
 
 export function parseEvent(text: string): BridgeEvent | null {
   try {
@@ -28,7 +29,7 @@ export function parseXp(raw: unknown): PlayerStats | null {
   if (!raw || typeof raw !== 'object') return null;
   const out: PlayerStats = {};
   for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
-    if (/^[a-z]{3,16}$/.test(k) && typeof v === 'number' && Number.isInteger(v) && v >= 0 && v <= 200_000_000) out[k] = v;
+    if (/^[a-z]{3,16}$/.test(k) && coherentSkillXp(v)) out[k] = v;
   }
   return Object.keys(out).length ? out : null;
 }

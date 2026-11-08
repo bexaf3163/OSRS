@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { castCost, hidesToCover, OPTIONS, planFor, SPELLS, staffPayback, STAFFS, RUNE_IDS, COWHIDE_ID } from '../src/domain/combat/magicPlan';
-import { adviseMoney, hoursToCover, reqText, viewMethod } from '../src/domain/economy/moneyAdvisor';
 import { combatLevel } from '../src/domain/player/xp';
 import { xpForLevel } from '../src/domain/player/xp';
-import type { MoneyMethod, Step } from '../src/types';
+import type { FundingMethod } from '../src/domain/economy/funding/types';
+import type { Step } from '../src/types';
 
 // Prices as on the exchange on 03.10.2026: runes 6, mind 3, fire staff 940, air staff 1542, hide 125.
 const prices = new Map<number, number>([
@@ -66,110 +66,50 @@ describe('the magic plan', () => {
   });
 });
 
-const method = (over: Partial<MoneyMethod>): MoneyMethod =>
-  ({ id: 'm', title: 'M', url: 'https://x', profit: 1000, intensity: 'Low', category: 'c', skills: [], ...over });
-const quest = (title: string): Step => ({ id: 'Q', stage: 2, type: 'quest', title, requires: [], doneWhen: '' }) as Step;
-
-describe('how to make up the money', () => {
-  it('the combat level — as in the game', () => {
+describe('the combat level', () => {
+  it('as in the game', () => {
     expect(combatLevel({ attack: 1, strength: 1, defence: 1, hitpoints: 10 })).toBe(3);
     expect(combatLevel({ attack: 40, strength: 40, defence: 40, hitpoints: 40, prayer: 20, magic: 1, ranged: 1 })).toBe(Math.floor(0.25 * (40 + 40 + 10) + 0.325 * 80));
     expect(combatLevel({ attack: 40 })).toBeNull();
   });
-  it('a mandatory level cuts off, a recommended one is only a hint, an unknown one — "?"', () => {
-    const hard = method({ skills: [{ skill: 'mining', level: 15, required: true }] });
-    const soft = method({ skills: [{ skill: 'combat', level: 20, required: false }] });
-    expect(viewMethod(hard, { mining: 10 }, [], new Set()).missing).toHaveLength(1);
-    expect(viewMethod(hard, { mining: 15 }, [], new Set()).missing).toHaveLength(0);
-    expect(viewMethod(hard, {}, [], new Set()).unknown).toHaveLength(1);
-    const v = viewMethod(soft, { attack: 5, strength: 5, defence: 5 }, [], new Set());
-    expect(v.missing).toHaveLength(0);
-    expect(v.advice).toHaveLength(1);
-  });
-  it('sorting by income; unavailable and soon available are separated', () => {
-    const a = method({ id: 'a', profit: 5000 });
-    const b = method({ id: 'b', profit: 9000, skills: [{ skill: 'mining', level: 40, required: true }] });
-    const c = method({ id: 'c', profit: 7000, skills: [{ skill: 'mining', level: 12, required: true }] });
-    const adv = adviseMoney({ mining: 10 }, [], new Set(), [a, b, c]);
-    expect(adv.free.map((v) => v.method.id)).toEqual(['a']);
-    expect(adv.soon.map((v) => v.method.id)).toEqual(['c']);
-  });
-  it('investments: without capital — "free", with capital within reach — "invest", out of reach — cut off', () => {
-    const free = method({ id: 'f', profit: 1000 });
-    const cheap = method({ id: 'c', profit: 9000, capital: 5000 });
-    const rich = method({ id: 'r', profit: 20000, capital: 400000 });
-    const buys = method({ id: 'b', profit: 8000, inputs: ['Gold bar'] });
-    const adv = adviseMoney({}, [], new Set(), [free, cheap, rich, buys], 6000);
-    expect(adv.free.map((v) => v.method.id)).toEqual(['f']);
-    expect(adv.invest.map((v) => v.method.id)).toEqual(['c', 'b']);
-    // The coins are unknown — the expensive ones are not cut off.
-    expect(adviseMoney({}, [], new Set(), [rich], null).invest).toHaveLength(1);
-  });
-  it('a quest from a hard condition, not completed, closes a method; "recommended" — does not', () => {
-    const q = method({ quests: 'Dragon Slayer I' });
-    const rec = method({ quests: 'Prince Ali Rescue strongly recommended' });
-    const steps = [quest('Dragon Slayer I'), quest('Prince Ali Rescue')];
-    expect(viewMethod(q, {}, steps, new Set()).questsMissing).toEqual(['Dragon Slayer I']);
-    expect(viewMethod(q, {}, steps, new Set(['dragon slayer i'])).questsMissing).toEqual([]);
-    expect(viewMethod(rec, {}, steps, new Set()).questsMissing).toEqual([]);
-  });
-  it('hours to the goal and the requirement caption', () => {
-    expect(hoursToCover(5000, 10000)).toBe(0.5);
-    expect(hoursToCover(0, 10000)).toBeNull();
-    expect(reqText({ skill: 'combat', level: 20, required: false, plus: true })).toBe('combat 20+');
-    expect(reqText({ skill: 'mining', level: 15, required: true })).toBe('Mining 15');
-  });
 });
 
-import { mmgFields, parseCapital, parseInputs, parseSkillsHtml, skillsNote } from '../scripts/data/money-parse';
+import { mmgFields, parseSkillsHtml } from '../scripts/data/money-parse';
 
 const scp = (skill: string, level: string, tail = '') =>
   `<span class="scp" data-skill="${skill}" data-level="${level}" style="position:relative"><span class="mw-default-size"><a href="/w/${skill}" title="${skill}"><img alt="${skill}" src="x.png" /></a></span> ${level} </span>${tail}`;
 
 describe('wiki parsing for earning methods', () => {
-  it('levels from the rendered cell: mandatory, recommended, "+", combat', () => {
+  it('levels from the rendered cell: every level, the recommended ones too (the pace is measured at them), and combat', () => {
     const cell = `${scp('Mining', '85+')}, ${scp('Attack', '40')} (optional), ${scp('Combat level', '20+')} recommended`;
-    expect(parseSkillsHtml(cell)).toEqual([
-      { skill: 'mining', level: 85, required: true, plus: true },
-      { skill: 'attack', level: 40, required: false },
-      { skill: 'combat', level: 20, required: false, plus: true },
-    ]);
+    expect(parseSkillsHtml(cell)).toEqual([{ skill: 'mining', level: 85 }, { skill: 'attack', level: 40 }, { skill: 'combat', level: 20 }]);
     expect(parseSkillsHtml('None')).toEqual([]);
-    expect(parseSkillsHtml(scp('Crafting', '56'))).toEqual([{ skill: 'crafting', level: 56, required: true }]);
+    expect(parseSkillsHtml(scp('Crafting', '56'))).toEqual([{ skill: 'crafting', level: 56 }]);
   });
-  it('capital — only explicit coins; template variables are not counted', () => {
-    expect(parseCapital('{{Coins|100000}}+ recommended')).toBe(100000);
-    expect(parseCapital('* {{Coins|400,000}}+\n* [[Cowhide]]s')).toBe(400000);
-    expect(parseCapital('{{#var:mould}}')).toBeUndefined();
-    expect(parseCapital('')).toBeUndefined();
-  });
+
   it('the Mmgtable card: top-level fields, nested templates do not break', () => {
     const f = mmgFields('{{Mmgtable\n|Activity = Tanning [[cowhide]]\n|Skill = {{SCP|Crafting|{{#var:skill}}}}\n|Input1 = Coins\n|Input2 = Cowhide\n|Input3 = Energy potion(4)\n|Quest = None\n}}');
     expect(f.activity).toBe('Tanning [[cowhide]]');
     expect(f.skill).toBe('{{SCP|Crafting|{{#var:skill}}}}');
-    expect(parseInputs(f)).toEqual(['Cowhide', 'Energy potion(4)']);
-  });
-  it('"Decent…" — a note about combat preparation', () => {
-    expect(skillsNote(`Decent and recommended ${scp('Prayer', '43')} recommended`)).toContain('Decent');
-    expect(skillsNote(scp('Mining', '15'))).toBeUndefined();
+    expect([f.input2, f.input3]).toEqual(['Cowhide', 'Energy potion(4)']);
   });
 });
 
-import { MONEY } from '../src/domain/economy/moneyAdvisor';
-import { allSteps } from '../src/data';
+import { allSteps, fundingWikiJson } from '../src/data';
 
 describe('data 2.13', () => {
-  it('earning methods: unique ids, wiki links, income in descending order, F2P only', () => {
-    expect(MONEY.methods.length).toBeGreaterThan(60);
-    expect(new Set(MONEY.methods.map((m) => m.id)).size).toBe(MONEY.methods.length);
-    for (const m of MONEY.methods) {
-      expect(m.url.startsWith('https://oldschool.runescape.wiki/w/')).toBe(true);
-      expect(m.profit).toBeGreaterThan(0);
-      for (const r of m.skills) expect(r.level).toBeGreaterThan(0);
+  it('earning methods from the wiki: unique ids, wiki sources, free to play, a pace and a product sold every unit', () => {
+    const methods = (fundingWikiJson as unknown as { methods: FundingMethod[] }).methods;
+    expect(methods.length).toBeGreaterThan(40);
+    expect(new Set(methods.map((m) => m.id)).size).toBe(methods.length);
+    for (const m of methods) {
+      expect(m.sources[0].url.startsWith('https://oldschool.runescape.wiki/w/')).toBe(true);
+      expect(m.access).toBe('f2p');
+      expect(m.rate.perHour.typical).toBeGreaterThan(0);
+      expect(m.outputs.some((o) => !o.chance)).toBe(true);
     }
-    const profits = MONEY.methods.map((m) => m.profit);
-    expect(profits).toEqual([...profits].sort((a, b) => b - a));
   });
+
   it('S2-04: described in detail — items, a quick path with buying runes and the magic calculation', () => {
     const s = allSteps.find((x) => x.id === 'S2-04')!;
     expect(s.magicPlan).toEqual({ target: 25, from: 10 });

@@ -6,34 +6,21 @@ import { useMemo } from 'react';
 import type { Step } from '../../../types';
 import { useBridge } from '../../../state/bridge';
 import { useReadinessEngine } from '../../../state/readinessContext';
-import { combatReadiness, type CombatReadiness } from '../../../domain/combat/combatReadiness';
-import { healsOf } from '../../../domain/combat/combatEstimate';
-import { GROUP_LABEL, readinessVerdict, type ReadinessVerdict, type ReasonGroup } from '../../../domain/readiness/readinessVerdict';
+import type { CombatReadiness } from '../../../domain/combat/combatReadiness';
+import { GROUP_LABEL, type ReadinessVerdict, type ReasonGroup } from '../../../domain/readiness/readinessVerdict';
 import { useCombatPlan } from '../combat/CombatPlan';
-import { ownedFood } from '../../../domain/combat/combatPlan';
-import { estimateStepFights, fightLine, stepFightNames } from '../../../domain/combat/fightEstimate';
-import { COMBAT_FOES, foeLabel } from '../../../domain/combat/combatEstimate';
-import { equippedBySlot, gearData } from '../../../domain/combat/gearAdvisor';
+import { assessStepReadiness } from '../../../domain/readiness/stepAssessment';
 
 /** The verdict for a step with what the app knows now; recomputed when the plan, the kit or the bank changes. */
 export function useReadinessVerdict(step: Step): { verdict: ReadinessVerdict; combat: CombatReadiness | null } {
-  const plan = useReadinessEngine().plan(step, { ahead: 0 });
+  const engine = useReadinessEngine();
+  const execution = engine.ctx.steps.find(candidate => candidate.id === step.id) ?? step;
+  const plan = engine.plan(execution, { ahead: 0 });
   const { state, owned, gear, stats } = useBridge();
-  const view = useCombatPlan(step);
+  const view = useCombatPlan(execution);
   const connected = state === 'online';
-  return useMemo(() => {
-    const food = new Set((step.itemsRequired ?? []).filter((i) => typeof i.heals === 'number').flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])]).map((n) => n.toLowerCase()));
-    const isFood = (n: string) => food.has(n.toLowerCase()) || healsOf(n) !== null;
-    const combat = combatReadiness(step, view, gear, owned?.bankSeen === true);
-    const w = gear?.equipment ? equippedBySlot(gear, gearData).weapon : undefined;
-    const worn = w ? { weapon: w.name, twoHanded: Boolean(w.piece?.twoHanded) } : null;
-    // A quest fight: one fight with the kit worn now, and the step's food carried, counted by healing.
-    const fights = estimateStepFights(step, stats as Partial<Record<string, number>> | null, gear)
-      .map((f) => ({ line: fightLine(f), foodHigh: f.food.high, foodMid: f.food.mid, foodName: f.foodName, foe: foeLabel(f.foe), name: f.foe.name }));
-    const fightNames = stepFightNames(step).map((name) => ({ name, known: COMBAT_FOES.some((f) => f.name === name) }));
-    const carriedFood = ownedFood(step, owned)?.carriedEq ?? null;
-    return { verdict: readinessVerdict({ plan, connected, owned, isFood, combat, worn, fights, fightNames, carriedFood }), combat };
-  }, [step, plan, view, gear, owned, connected, stats]);
+  return useMemo(() => assessStepReadiness({ step: execution, plan, connected, owned, stats, gear, view }),
+    [execution, plan, view, gear, owned, connected, stats]);
 }
 
 const upperFirst = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);

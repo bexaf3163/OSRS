@@ -13,7 +13,7 @@ import { toInGameTarget } from '../../../domain/guide/inGameTarget';
 import { isClosed } from '../../../domain/quests/next-step';
 import { STATUS_TEXT } from '../../../domain/readiness/readiness';
 import { plural } from '../../../domain/text/format';
-import { TARGET_LABEL } from '../../../domain/player/linkState';
+import { GUIDE_UNCONFIRMED, TARGET_LABEL } from '../../../domain/player/linkState';
 import { useReadinessEngine } from '../../../state/readinessContext';
 import { useScopedReadiness, useStageScope } from '../../../state/hooks/useStageScope';
 import { scopedPercent, type StageScope } from '../../../domain/quests/stageScope';
@@ -173,7 +173,7 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
       <FundingStatusLine step={step} onOpen={openDetails} />
       <CombatRouteLine step={step} onOpen={() => { if (headline) { onPrep?.(); return; } setTab('food'); setOpen(true); }} />
       {!recovering && !headline && <TravelTip step={step} />}
-      {sent === 'offline' && <p className="small muted" role="status">RuneLite bridge offline{link === 'online' ? ' or refused' : ''}. Start RuneLite with the OSRS Path Bridge plugin.</p>}
+      {sent === 'offline' && <p className="small muted" role="status">{GUIDE_UNCONFIRMED}</p>}
       {detour ? (
         live
           ? <p className="small status-arrow">🧭 The arrow leads to: {detour.label}</p>

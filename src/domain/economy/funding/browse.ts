@@ -54,6 +54,8 @@ const UNKNOWN: [RegExp, (m: RegExpExecArray) => string][] = [
 
 /** The one badge of a row: can do now, not confirmed (and what could not be checked), or locked (and what is missing). The details say it in full. */
 export function badgeOf(e: MethodEvaluation): Badge {
+  const unlock = unlockOf(e);
+  if (unlock) return { text: `${unlock.text} opens it`, tone: 'locked' };
   if (!e.eligible) return { text: e.blockers[0]?.text ?? 'Not available', tone: 'locked' };
   for (const c of e.cautions) {
     for (const [re, say] of UNKNOWN) {
@@ -66,6 +68,19 @@ export function badgeOf(e: MethodEvaluation): Badge {
 }
 
 const k = (n: number) => (Math.abs(n) >= 1000 ? `${Math.round(n / 100) / 10}k` : String(Math.round(n)));
+
+/** A locked method that only levels hold back: what to train ("Attack +2, Mining +3") and the levels in all. */
+export function unlockOf(e: Pick<MethodEvaluation, 'eligible' | 'blockers'>): { text: string; missing: number } | null {
+  if (e.eligible || !e.blockers.length || !e.blockers.every((b) => b.levels)) return null;
+  const levels = e.blockers.map((b) => b.levels!);
+  return {
+    text: levels.map((l) => `${l.skill.charAt(0).toUpperCase()}${l.skill.slice(1)} +${l.missing}`).join(', '),
+    missing: levels.reduce((sum, l) => sum + l.missing, 0),
+  };
+}
+
+/** Locked methods this many levels or fewer away are offered as "Opens soon". */
+export const SOON_LEVELS = 10;
 
 /** "60k-85k gp/h net" from the slow and the fast case, or "Estimate unavailable" when the evaluator has none. */
 export function netText(e: Pick<MethodEvaluation, 'netPerHour' | 'eligible' | 'blockers'>): string {
@@ -101,6 +116,8 @@ export interface BrowseResult {
   /** The personal pick: the ranking's best (what "Start" defaults to). null - nothing the player can do was found. */
   recommended: MethodEvaluation | null;
   rows: BrowseRow[];
+  /** Locked methods a few levels away (SOON_LEVELS), the fewest levels first, then the better pay. */
+  soon: BrowseRow[];
   /** Methods the filters hide: how many and the reason the most common. */
   hidden: number;
 }
@@ -137,7 +154,9 @@ export function browse(evals: readonly MethodEvaluation[], ranking: Ranking, f: 
   const tie = (a: BrowseRow, b: BrowseRow) => (a.badge.tone === b.badge.tone ? 0 : a.badge.tone === 'ok' ? -1 : b.badge.tone === 'ok' ? 1 : a.badge.tone === 'unknown' ? -1 : 1);
   // Without a ranking (the coins are not known) the personal order has nothing to go on: the better-paying method comes first, then the name.
   const rows = [...shown].sort((a, b) => by[sort](a, b) || tie(a, b) || profitOf(b.evaluation) - profitOf(a.evaluation) || (a.evaluation.method.title < b.evaluation.method.title ? -1 : 1));
-  return { recommended: ranking.best, rows, hidden: all.length - shown.length };
+  const soon = all.filter((r) => (unlockOf(r.evaluation)?.missing ?? Infinity) <= SOON_LEVELS)
+    .sort((a, b) => unlockOf(a.evaluation)!.missing - unlockOf(b.evaluation)!.missing || profitOf(b.evaluation) - profitOf(a.evaluation));
+  return { recommended: ranking.best, rows, hidden: all.length - shown.length, soon };
 }
 
 /** What the Money section ranks the methods for when no step is short: the time to make this many more coins. */

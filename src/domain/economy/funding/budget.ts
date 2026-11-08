@@ -76,9 +76,11 @@ export function surplusOf(recs: readonly SurplusRec[], snap: FundingSnapshot, pr
   return { lines, net: lines.reduce((s, l) => s + l.net, 0), excluded };
 }
 
-export function buildBudget(i: { snap: FundingSnapshot; need: FundingNeed; recs: readonly SurplusRec[]; prices: PriceView; bankValue: number | null }): Budget {
+export function buildBudget(i: { snap: FundingSnapshot; need: FundingNeed; recs: readonly SurplusRec[]; prices: PriceView; bankValue: number | null;
+  /** Only the canonical committed window may reserve future payments; an authored route slice is not that window. */
+  committedWindow?: boolean }): Budget {
   const liquid = i.snap.liquid;
-  const reserve = i.need.fees.now;
+  const reserve = i.committedWindow ? Math.max(i.need.fees.now, i.need.fees.window) : i.need.fees.now;
   return {
     liquid, reserve,
     spendable: liquid.amount === null ? null : Math.max(0, liquid.amount - reserve),

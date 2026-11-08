@@ -5,15 +5,15 @@ import { market } from './market';
 import { scenario } from './scenario';
 
 // The reported character at S4-03 (Attack 30 to 40 and bank 50 Big bones): Attack 30, Strength 21, Defence 1, 24 hitpoints, an Adamant scimitar and iron
-// armour, with the exchange as it was on 2026-10-18. The step wants 25 Salmon (33 gp each = 825 gp).
+// armour, with the exchange as it was on 2026-10-18. The step wants 25 Salmon (33 reference, 37 planned each = 925 gp).
 
 describe('Hill Giants with the reported character and little money', () => {
-  it('400 coins is 425 short: a feasible plan is found, and it is not Hill Giants', () => {
+  it('400 coins is 525 short at buffered prices: a feasible plan is found, and it is not Hill Giants', () => {
     const { assessment: a } = scenario(market(), { bagCoins: 400, bankCoins: 0 });
     expect(a.state).toBe('SHORT');
-    expect(a.need.minimum.lines.map((l) => [l.name, l.qty, l.unit])).toContainEqual(['Salmon', 25, 33]);
-    expect(a.required).toBe(825);
-    expect(a.gap).toBe(425);
+    expect(a.need.minimum.lines.map((l) => [l.name, l.qty, l.unit])).toContainEqual(['Salmon', 25, 37]);
+    expect(a.required).toBe(925);
+    expect(a.gap).toBe(525);
     const r = a.recommendation!;
     expect(r.kind).toBe('EARN');
     expect(r.evaluation!.eligible).toBe(true);
@@ -25,8 +25,8 @@ describe('Hill Giants with the reported character and little money', () => {
 
   it('owned Salmon reduce the shortfall: 15 in the bag leave 10 to buy, which 400 coins cover', () => {
     const { assessment: a } = scenario(market(), { bagCoins: 400, bankCoins: 0, items: { Salmon: [15, 0] } });
-    expect(a.need.minimum.lines.find((l) => l.name === 'Salmon')).toMatchObject({ qty: 10, cost: 330 });
-    expect(a.required).toBe(330);
+    expect(a.need.minimum.lines.find((l) => l.name === 'Salmon')).toMatchObject({ qty: 10, cost: 370 });
+    expect(a.required).toBe(370);
     expect(a.state).toBe('COVERED');
     expect(a.recommendation).toBeNull();
   });
@@ -59,13 +59,20 @@ describe('Hill Giants with the reported character and little money', () => {
     expect(a.gap).toBeNull();
     expect(a.headline).toMatch(/bank/);
     // ...but a bag that already pays for everything settles it.
-    expect(scenario(market(), { bagCoins: 900, bankCoins: null }).assessment.state).toBe('COVERED');
+    expect(scenario(market(), { bagCoins: 1000, bankCoins: null }).assessment.state).toBe('COVERED');
   });
 
   it('an unaffordable first batch is named, whatever the hourly profit', () => {
     const { assessment: a } = scenario(market(), { bagCoins: 400, bankCoins: 0 });
-    expect(a.notOffered.find((n) => n.method === 'Smelt steel bars')?.why).toMatch(/first batch costs about 1,077/);
+    expect(a.notOffered.find((n) => n.method === 'Smelt steel bars')?.why).toMatch(/first batch costs about 1,191/);
     expect(a.recommendation!.id).not.toBe('earn:smelt-steel-bars');
+  });
+
+  it('keeps lower-confidence pace ranges without discounting already buffered sale prices again', () => {
+    const { assessment } = scenario(market({ Cowhide: { highAgeMin: 600, lowAgeMin: 600 } }), { bagCoins: 400, bankCoins: 0 });
+    const evaluation = assessment.recommendation!.evaluation!;
+    expect(evaluation.confidence).not.toBe('HIGH');
+    expect(evaluation.netPerHour!.slow / evaluation.unitsPerHour!.slow).toBeCloseTo(evaluation.perUnit.net, 8);
   });
 
   it('with no coins at all the recommendation is something that can really be started', () => {
@@ -82,9 +89,19 @@ describe('what may be sold, and what is protected', () => {
 
   it('spare items that cover the shortage are the recommendation, valued after the exchange tax', () => {
     const { assessment: a } = scenario(market(), { bagCoins: 400, bankCoins: 0, recs: cowhides(40), items: { Cowhide: [40, 0] }, sellOverride: 'lifted' });
-    expect(a.budget.surplus.net).toBe(netSale(116, 40, 'Cowhide'));
+    expect(a.budget.surplus.net).toBe(netSale(104, 40, 'Cowhide')); // floor(116 * .9), then per-item tax once.
     expect(a.recommendation).toMatchObject({ kind: 'SELL_SURPLUS' });
-    expect(a.recommendation!.closes).toBe(425);
+    expect(a.recommendation!.closes).toBe(525);
+  });
+  it('does not lower a standalone earning target by a partial, unperformed surplus sale', () => {
+    const base = scenario(market(), { bagCoins: 400, bankCoins: 0, sellOverride: 'lifted' });
+    const withSurplus = scenario(market(), { bagCoins: 400, bankCoins: 0, sellOverride: 'lifted', recs: cowhides(1), items: { Cowhide: [1, 0] } });
+    const earning = [withSurplus.assessment.recommendation, ...withSurplus.assessment.alternatives].find(option => option?.kind === 'EARN')!;
+    expect(withSurplus.assessment.budget.surplus.net).toBeGreaterThan(0);
+    expect(withSurplus.assessment.budget.surplus.net).toBeLessThan(withSurplus.assessment.gap!);
+    expect(earning.closes).toBe(withSurplus.assessment.gap);
+    expect(earning.closes).toBe(base.assessment.gap);
+    expect(withSurplus.assessment.budget.liquid.amount).toBe(400);
   });
 
   it('a restricted account cannot count on restricted items: they are left out with the reason', () => {
@@ -110,7 +127,7 @@ describe('what may be sold, and what is protected', () => {
     const bones = a.budget.surplus.lines.find((l) => l.name === 'Big bones');
     // 60 held, 50 protected by S4-03: only 10 are spare.
     expect(bones?.qty).toBe(10);
-    expect(bones?.net).toBe(netSale(325, 10, 'Big bones'));
+    expect(bones?.net).toBe(netSale(292, 10, 'Big bones'));
     expect(a.budget.surplus.lines.some((l) => l.name === 'Adamant scimitar')).toBe(false);
     expect(a.budget.surplus.excluded).toContainEqual({ name: 'Adamant scimitar', why: 'Kept for your route' });
   });
@@ -135,12 +152,12 @@ describe('a cheaper valid supply comes before any earning', () => {
   });
 
   it('Tuna for the same health costs less than Salmon at these prices and fits the bag', () => {
-    // Salmon at 60 makes 25 cost 1,500 against 1,400 coins. 225 health in Tuna (heals 10) is 23 pieces at 43 = 989.
+    // Planned Salmon is ceil(60*1.1)=66, total1,650. Tuna at ceil(43*1.1)=48 needs23 pieces, total1,104.
     const { assessment: a } = scenario(market({ Salmon: { high: 60, avgHigh: 60 } }), { bagCoins: 1400, bankCoins: 0 });
-    expect(a.gap).toBe(100);
+    expect(a.gap).toBe(250);
     expect(a.recommendation).toMatchObject({ kind: 'CHEAPER_SUPPLY', id: 'cheaper:Tuna' });
-    expect(a.recommendation!.detail).toMatch(/23 Tuna give the same health for 989 gp instead of 1,500/);
-    expect(a.recommendation!.closes).toBe(100);
+    expect(a.recommendation!.detail).toMatch(/23 Tuna give the same health for 1,104 gp instead of 1,650/);
+    expect(a.recommendation!.closes).toBe(250);
   });
 
   it('a substitute that does not fit the bag is not offered (33 Trout for 225 health would need 33 slots)', () => {

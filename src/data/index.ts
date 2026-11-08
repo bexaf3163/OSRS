@@ -19,6 +19,9 @@ import xpJson from './authored/xp.json';
 import pluginsJson from './authored/plugins.json';
 import referenceJson from './authored/reference.json';
 import itemsJson from './generated/f2p-items.json';
+import questFactsJson from './generated/questFacts.json';
+import worldRoutingJson from './generated/worldRouting.json';
+export { questFactsJson, worldRoutingJson };
 
 /** All V2 steps, including Members. Level goals are computed from the titles. */
 const stagesByStep = (questStagesJson as unknown as { quests: Record<string, Step['questStages']> }).quests;
@@ -106,11 +109,11 @@ export { default as combatFoesJson } from './generated/combatFoes.json';
 export { default as dangerZonesJson } from './authored/dangerZones.json';
 export { default as fundingCoverageJson } from './authored/fundingCoverage.json';
 export { default as fundingMethodsJson } from './authored/fundingMethods.json';
+export { default as fundingWikiJson } from './generated/fundingWiki.json';
 export { default as gearJson } from './generated/gear.json';
 export { default as geTaxExemptJson } from './authored/geTaxExempt.json';
 export { default as iconAssetsJson } from './authored/iconAssets.json';
 export { default as majorLocationsJson } from './generated/majorLocations.json';
-export { default as moneyMakingJson } from './generated/moneyMaking.json';
 export { default as npcLocationsJson } from './authored/npcLocations.json';
 export { default as portalsJson } from './generated/portals.json';
 export { default as processingJson } from './generated/processing.json';

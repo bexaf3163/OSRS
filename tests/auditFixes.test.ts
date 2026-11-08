@@ -3,7 +3,7 @@ import { allSteps, stepById, stepsFor } from '../src/data';
 import { canWear, gearData } from '../src/domain/combat/gearAdvisor';
 import { stepReadiness } from '../src/domain/readiness/readiness';
 import { emptyProgress, normalizeProgress, RETIRED_STEPS, withStep } from '../src/domain/persistence/progress';
-import { nextStep } from '../src/domain/quests/next-step';
+import { blockersOf } from '../src/domain/quests/next-step';
 import { isInstancedPoint } from '../src/domain/travel/instances';
 import { navigationTarget } from '../src/domain/guide/navigation';
 import { travelOptions } from '../src/domain/travel/travel';
@@ -190,7 +190,7 @@ describe('retired and trimmed grinds', () => {
     const f2p = stepsFor('f2p');
     let p = emptyProgress();
     for (const s of f2p) { if (s.id === 'S1-12') break; p = withStep(p, s.id, 'done'); }
-    expect(nextStep(f2p, p, 0)!.id).toBe('S1-12');
+    expect(blockersOf(f2p.find((s) => s.id === 'S1-12')!, p, 0)).toBeNull();
     const known = { stepIds: new Set(allSteps.map((s) => s.id)), levelIds: new Set<string>() };
     const n = normalizeProgress({ version: 3, steps: { 'S1-11': 'done', 'S1-12': 'done', 'S4-03': 'done' } }, known)!;
     expect(Object.keys(n.progress.steps).sort()).toEqual(['S1-12', 'S4-03']);

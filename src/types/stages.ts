@@ -80,6 +80,10 @@ export interface QuestStage {
 export interface QuestStages {
   var: ['varp' | 'varbit', number];
   stages: QuestStage[];
+  /** Last authored line requiring an encounter. Only a validated later game cursor can retire that fight. */
+  encounters?: { foe: string; throughLine: string }[];
+  /** Source-backed manual prerequisite already fulfilled, proven by an exact live carried item at these authored lines. */
+  manualProofs?: { requirement: string; carriedId: number; atLines: string[]; source: string }[];
   /** The whole quest by sections (like the Quest Helper panel): the step's "Walkthrough" is built from it. */
   route?: { title: string; steps: string[] }[];
 }

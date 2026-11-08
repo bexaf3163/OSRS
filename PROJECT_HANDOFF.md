@@ -1,12 +1,12 @@
 # OSRS Path — project handoff
 
-Updated 2026-11-04. **This is the only current project contract, architecture map, work state, backlog and handoff.** Stable rules come first, changing state (remaining work, verification, receipt) last. Read the section a change needs. AGENTS.md and CLAUDE.md point here; README.md introduces the product.
+Updated 2026-11-07. **This file alone holds project rules, architecture, state, backlog and handoff.** Stable rules precede current state/verification. AGENTS.md/CLAUDE.md point here; README.md introduces the product.
 
 ## Documentation policy
 
-- **Binding on Claude Code, Codex and every future contributor:** keep all current instructions, decisions, implemented work, remaining tasks, verification and takeover state in this one file. Never create another handoff, next-session, acceptance or status diary, copied instruction file, separate repository or Downloads variant. Update sections in place, reconcile conflicts, remove stale statements and keep uncertainty explicit.
-- Stay within **5,000 words** by removing repetition and narrative, never by dropping a fact or moving it elsewhere. Keep only the current delivery receipt; Git history and the immutable release notes hold the rest.
-- AGENTS.md and CLAUDE.md stay tiny pointers; a release copy of this file is a snapshot. Before handing over, check that source, this file, release version and test evidence agree.
+- **Binding on Claude Code, Codex and every contributor:** maintain current instructions, decisions, implemented work, backlog, verification and takeover state here. Never duplicate handoffs, next-session/acceptance/status diaries, copied instructions, repositories or Downloads variants. Update in place; reconcile conflicts; remove stale statements; keep uncertainty explicit.
+- Stay within **5,000 words** by removing repetition and narrative, never by dropping a fact or moving it elsewhere. Keep the current delivery receipt; Git history/immutable release notes retain previous receipts.
+- AGENTS.md and CLAUDE.md stay tiny pointers; a release copy of this file is a snapshot. Before handover, reconcile source, this file, version and test evidence.
 - docs/ holds references, not task lists: SKILLS_COVERAGE.md, AUDIT_LEDGER.md (reproduce a row before repairing) and the generated COMBAT_AUDIT.md, DEFAULT_PLANS.md and FUNDING_COVERAGE.md. Removed documents and old release-note links resolve in Git history (`f3112228e97be4a8058eec5e2f995956b575ff9c` and later). `.codex/work-state.md` is Codex's ignored checkpoint.
 
 ## Owner requirements that remain binding
@@ -19,13 +19,13 @@ Updated 2026-11-04. **This is the only current project contract, architecture ma
 6. Purchases and gameplay stay manual. The program recommends, detects, records and guides; it never buys, moves, fights or eats for the player.
 7. Windows desktop only. No mobile development or phone-only QA. Keep desktop resizing, OS DPI and accessibility.
 8. Do not modify RuneLite Optimizer, PC-Tune or experimental graphics repositories in this work.
-9. Speed, quality and optimization decide every change. Replace, never stockpile: when something new replaces something that will not be used again, delete the old code, assets, settings and tests.
+9. Prioritize correctness, speed and simplicity. Replace retired behavior and remove its exclusive code, assets, settings and tests.
 
 ## Engineering and operating contract
 
 - English only for UI, comments, docs and communication, with canonical OSRS names. Correctness, full implementation, compatibility, accurate state and verification outrank token savings.
 - Inspect code and references before editing. Make focused changes, reuse registries and engines, keep working behavior, update every consumer together. No duplicate item database, bridge transport, state store or per-skill acquisition engine.
-- Preserve saves, profile identity, notes, skips, selected plans, completion conditions, item/task/step/phase IDs and explicit goals. A route skip is not proof of a game prerequisite. Reordering Doric/Knight's Sword stays deferred.
+- Preserve saves, profile identity, notes, skips, selected plans, completion conditions, item/task/step/phase IDs and explicit goals. A route skip is not proof of a game prerequisite. V14 may reorder independent quest objectives; mandatory authored intra-quest order and historical IDs remain protected.
 - UNKNOWN is not zero, owned, connected or logged in. Distinguish bag, noted, bank, worn and usable quantities, doses and accepted alternatives; allocate physical stock once; never let simulated future stats or gear overwrite observed state.
 - The app reads stats, equipment, cash, inventory and bank where supported and labels unread or stale facts. Recommendations check real skill, equipment, quest, spell, account-mode, source/access and budget constraints, not just a level or bonus.
 - Preparation carries item, count, state, provenance, source, location, cost, priority, reason and carry/equip rules through one pipeline: bank withdrawal before repurchase, usable owned equivalents accepted, current-trip needs separate from future reserves.
@@ -35,7 +35,7 @@ Updated 2026-11-04. **This is the only current project contract, architecture ma
 - External failures never crash the app or corrupt state. Keep actionable unavailable/retry states, operational logs, watchdogs and save recovery.
 - Keep updater digest/size validation, atomic writes, damaged/future-schema quarantine, pre-write external-revision guards, profile protection and backup receipts. No watchers, automatic merges or locks without a reproduced requirement.
 - Mode changes never reset progress. F2P-only plans never leak Members prerequisites; explicit alternate strategies carry their own. Unsupported mechanics and rates stay explicit.
-- The RuneLite launch (`electron/runelite-launcher.cjs`) keeps `-ea`, at least `-Xmx1024m` and the other JVM arguments; RuneLite's config.json does not override them. The bridge request limit stays **64 x 1024 bytes** (`BridgeServer.MAX_BODY`): oversized requests are explicit failures, never silently truncated or called "shown in game". Payload changes need boundary, UTF-8 and refusal tests and keep the previous valid target.
+- The RuneLite launch (`electron/runelite-launcher.cjs`) keeps `-ea`, at least `-Xmx1024m` and the other JVM arguments; RuneLite's config.json does not override them. Bridge limits remain **64 KiB** generally (`BridgeServer.MAX_BODY`), **384 KiB** for `/prep-plan` (`MAX_SNAPSHOT`): oversized requests are explicit failures, never silently truncated or called "shown in game". Payload changes need boundary, UTF-8 and refusal tests and keep the previous valid target.
 - Work through authorized tasks autonomously. Never force-push, reset or clean away valid work, merge unrelated branches or overwrite released EXEs.
 
 ## Change hygiene — binding for every AI or human change
@@ -96,7 +96,7 @@ Cross-page activity selection is `resolveActiveActivity` in `src/domain/quests/a
 | Acquisition | `src/domain/prep/` (`prepPlan.ts`, `prepQueue.ts`, `prepRoute.ts`, `prepEnvelope.ts`, `sourceRouter.ts`), `src/state/hooks/usePrep.ts` | Reuse banking, sources, task detection, cancellation and resumption. No per-skill procurement. |
 | Travel | `src/domain/travel/` (`travel.ts`, `transport.ts`, `travelInput.ts`), `src/domain/readiness/` (`liveTransport.ts`, `travelSupplies.ts`) | Real eligibility, complete supplies, whole detour cost, explicit supported modes. |
 | Quests, goals and completion | `src/data/authored/questStages.json`, `goals.json`, `src/domain/quests/` (`questSteps.ts`, `questItems.ts`, `goals.ts`, `triggers.ts`, `next-step.ts`) | Keep quest entry/preparation, branches, observed progress and prerequisite semantics. |
-| Economy | `src/domain/market/` (quotes, GE tax, prices, loot value, need pricing), `src/domain/economy/` (`funding/`, `fundingPlan.ts`), `src/state/fundingContext.tsx` | Reuse quotes, freshness, volume/trade limits, budget and sessions. Cash is not equipment value; future earnings are conditional. |
+| Economy | `src/domain/market/` (quotes, GE tax, prices, loot value, need pricing), `src/domain/economy/` (`funding/`, `fundingPlan.ts`), `src/state/{fundingPlanContext,fundingContext}.tsx` | Reuse quotes, freshness, volume/trade limits, budget and sessions. Cash is not equipment value; future earnings are conditional. |
 | Item keys | `src/domain/items/itemKey.ts` (memoized `nameKey`), `src/domain/market/shopConstants.ts` (`SAVE_GP`) | Import-free leaves; never re-create `nameKey`. |
 | App recommendations | `src/features/skills/` (`TrainingCard.tsx`, `SkillDetail.tsx`, `Skills.tsx`), `src/domain/training/f2pSkillAdvice.ts` | Train is the compact recommendation; Plan explains the same result. Calculator and Reference never compete with it. |
 | Quest/current-action display | `src/features/path/` (`PathWide.tsx`, `CockpitWorkspace.tsx`, `step/`, `prep/`, `combat/`) | Keep current instruction, preparation, branches, completion and route restoration. |
@@ -118,7 +118,7 @@ Cross-page activity selection is `resolveActiveActivity` in `src/domain/quests/a
 
 - Catalogue-backed followed Skills use the Path preparation, Shopping and funding lifecycle; guide-only data is not a personalized model. Explicit preparation and skill goals survive deep links; a lower F2P checkpoint never replaces an explicit supported goal, and a guide's level-99 endpoint never becomes the default.
 - F2P-only scope stays F2P on a members account; projections never change real membership or equipment facts.
-- Current-leg needs are separate from conditional whole-goal demand; a goal's supplies need not fit in the current bag. `preparationNeeds` carries the selected model and upgrade kit; the UI never rebuilds a kit from a generic table.
+- Current-leg needs differ from conditional whole-goal demand; the full goal need not fit in the bag. `preparationNeeds` carries the selected model and upgrade kit; the UI never rebuilds a kit from a generic table.
 - Reusable tools are not consumed and stock is never spent twice. Black/Dragon tool validation uses the tool registry. Only a confirmed worn tool frees its slot; the Attack level alone is no evidence (2.81.10).
 - Magic and combat gear use the complete damage/recovery model; a bigger bonus proves nothing and Strength versus Power amulets are judged on the real setup. Preparation accepts equivalent-or-better gear, never forcing an exact item or full black set.
 - Model food, ammunition, potions, damage in and out, eating, banking and supply costs; killability is not efficiency. Never restore fixed claims like "20 fish always covers 60 kills".
@@ -158,15 +158,21 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Remaining work in priority order
 
-### P2 — finish staged Skills and Optional review with the existing engines
+### V14 — adaptive rebuild
 
-Review melee, Ranged, Magic and the peaceful skills against docs/SKILLS_COVERAGE.md. Done (2.81.33–35): all free skills checked against the Wiki F2P guides, F2P stops carry members rates, Plan lists stages (`stages.ts`), shopping is one HUD card, Ranged armour ranks by defence. Kit: `kitPick.ts`. Members waits for F2P. For each supported skill verify: (1) level, target and account scope; (2) a practical first method with kit, consumables, restrictions and costs; (3) automatic preparation, banking, acquisition, funding and resumption; (4) worthwhile method and equipment changes as levels rise; (5) logical F2P stopping guidance and Optional order per route target; (6) correct next action and completion with no contradicting static advice.
+Receiving AI continues v14. Brief: `.codex/v14-brief/01_MASTER_EXECUTION_PROMPT.md`. Pack47 documents/49 hashes/106 scenario IDs verified. ZIP SHA256 `ac3a92165e790688d1ac5c4319d94e0b805d2cb083b7a04701354e4abd82996d`.
 
-Add missing mechanics to shared contracts with synthetic-content regressions, never per-skill copies. Open: models for the three manual references, Camdozaal full-cycle rates (catch chances, failures, phases), bonfire/Wintertodt Firemaking, remaining gathering/Prayer/Runecraft edge cases. The four Runecraft adapters (altar surface entry, talisman/tiara, rune/pure essence, per-essence XP versus multiple-rune yield) and the Firemaking, Prayer and Superheat adapters exist; do not rebuild them.
+Target: deterministic quest-first F2P planning from observations; one profile/session/snapshot-bound Decision feeds Ledger/existing bridge/HUD. Supply estimates stay soft; prerequisites/protection hard. Optional Members preparation never gates F2P completion. No runtime LLM, gameplay automation or linear fallback.
 
-### P3 — finish content review and reconcile visible consumers
+Worktree `C:/Users/Mark/Desktop/Ors-x9`, baseline `f035305`, branch `codex/v14-adaptive-rebuild`;26 original funding changes preserved, including fundingWiki.json. Rehearsed backup/restore: external `work/backups/osrs-v14-20261106T145307Z`,5098 verified hashes, Git history/index/WIP and private durable app/plugin data. Never reset/clean WIP or alter real saves.
 
-Review Path, Skills, Gear, Shopping, Money and Reference/search for stale recommendations, mismatched quantities, redundant controls and unclear unknown/missing states; Reference keeps factual tables, never a competing plan. Static melee-order, Smithing and Ranged purchasing advice is already qualified. In the generated DEFAULT_PLANS.md, legacy collection cases are historical and the S4-03 heading comes from route data (the 50-bone fixture is not the Giant-frog XP-only step). Record unrevalidated Wiki facts, members methods and prices with source dates.
+Foundations; **runtime cutover live**:23-quest DAG/scoped decisions; one intent entry shares explicit goals and phased training/preparation, conditional XP/stock/GP; costs precede rewards. Only sourced, order-independent unknowns cancel. Cursors retire past stages/encounters; certificate proof stays physical. Current+next2 reservations follow committed lookahead, preserving duplicate-ID kits. FundingPlanContext retains local lifecycle. Procurement shares allocations/packages/fees; unknown/omitted flows weaken balances. Flows: Cook/Doric/Imp/Sheep/Rune Mysteries/Romeo/X Marks/Restless Ghost/Ernest; start-only rewards never repeat. Exchanges retire named stock; uncertain returns preserve other balances; unknown hand-ins never trigger guessed purchases. Worn provenance preserved; protection requires wearing; sources check access/cash/trading; partial fights prove nothing; funding excludes stale/unsold cash and invented distances. Shortest Path `375ce2c061df5c3961116dda6443f307df3223f1`: BSD,64-region worker, ESTIMATED. Trip requests: bounded/deduplicated legs, decision-revision guards; unsupported connections UNKNOWN.
+
+2,798 units; quick/UI/E2E/structure/Java gates pass. Perf: updates +3%, start-up +3..7%, decision p95 ≈66ms, Portable +0.08%. Evidence: external `work/osrs-v14-audit`. Released 2.82.0; live pending.
+
+Takeover ZIP: root is the unpublished checkout with independent Git history. Start/verify/prompt: `.codex/work-state.md`; original inputs: `.codex/v14-brief/`; hashes: `.codex/transfer/receipt.json`. Dependencies, private game data and release EXE are excluded.
+
+Resume from `.codex/work-state.md` and Git diff. Live: `DecisionProvider` (below Funding) → `runtimeDecision` drives pages, prep, maps and `DecisionSync` (game step, snapshot `decision{id,objectiveId,watch}`); linear selectors deleted. Costs: quest-length bands are provisional, unmeasured heuristics (not Wiki timings or release validation), kept apart from walking/preparation; worker legs plus castable teleports; EARN priced by the Money ranking; unknown-time objectives are listed, never dropped. GP/tool/position/Magic/restriction counterfactuals pass route-wide; Money methods time self-gathered items. Next: live acceptance (checkpoint LIVE/PARTIAL rows, RUNBOOK). Claude owns live checks.
 
 ### P4 — Claude's real-client acceptance
 
@@ -224,5 +230,5 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-Each release carries its receipt in its own copy of this file (version, source, EXE size and SHA-256), written by the release job in Checks, which then downloads the published assets and fails unless they match. Nothing is recorded here by hand; real-game acceptance stays in P4.
+The Checks release job writes version/source/EXE size/SHA-256 into the released copy, downloads published assets and fails on mismatch. Never enter receipts manually; real-game acceptance remains P4.
 <!-- DELIVERY_END -->

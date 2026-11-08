@@ -32,7 +32,7 @@ export const V2_FROM_V1: Record<string, string[]> = {
   'S6-03': ['S6-06'],
 };
 
-/** Steps taken out of the route: a save that still has them drops them on load, and the old numbers that led to them are retired too. */
+/** Historical step IDs: retained as history when absent from the current route, never treated as active completion facts. */
 export const RETIRED_STEPS = ['S1-11', 'S2-13', 'S3-09'];
 
 /**
@@ -87,7 +87,7 @@ export function migrateV1(steps: Record<string, StepStatus>, notes: Record<strin
 
 export interface Normalized {
   progress: Progress;
-  /** How many records were dropped: unknown steps, skills or invalid values. */
+  /** Invalid records discarded; valid retired marks and notes are preserved in legacy history. */
   dropped: number;
   /** A save of the route's first version (V1): the marks were carried over by the table. */
   migrated: boolean;
@@ -116,7 +116,6 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
   const rawStepCount = isObject(raw.steps) ? Object.keys(raw.steps).length : 0;
   for (const [id, status] of Object.entries(steps)) {
     if (known.stepIds.has(id)) p.steps[id] = status;
-    else dropped++;
   }
   if (!migrated) dropped += rawStepCount - Object.keys(steps).length;
 
@@ -127,7 +126,6 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
   }
   for (const [id, note] of Object.entries(notes)) {
     if (known.stepIds.has(id)) p.notes[id] = note;
-    else if (!migrated) dropped++;
   }
   // Notes that are not a string (or are empty) were dropped on reading: we count them too.
   if (!migrated && isObject(raw.notes)) dropped += Object.keys(raw.notes).length - Object.keys(notes).length;
@@ -167,6 +165,25 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
       if (Object.keys(ticks).length) p.tasksDone = ticks;
     }
     if (isObject(raw.legacy)) p.legacy = { steps: statusMap(raw.legacy.steps), notes: stringMap(raw.legacy.notes) };
+  }
+  // Content retirement must not erase historical player input during an otherwise valid autosave.
+  // History is deliberately separate: it never supplies quest prerequisites or active route completion.
+  if (!migrated) {
+    const old = p.legacy ?? { steps: {}, notes: {} };
+    const retired = (id: string) => !known.stepIds.has(id);
+    const archivedSteps = Object.fromEntries(Object.entries(steps).filter(([id]) => retired(id)));
+    const archivedNotes = Object.fromEntries(Object.entries(notes).filter(([id]) => retired(id)));
+    const times = isObject(raw.doneAt) ? raw.doneAt : {};
+    const archivedTimes = Object.fromEntries(Object.entries(fromV2 ? renamed(times) : times)
+      .filter(([id, at]) => retired(id) && typeof at === 'string' && !Number.isNaN(Date.parse(at)))) as Record<string, string>;
+    const priorTimes = isObject(raw.legacy) && isObject(raw.legacy.doneAt)
+      ? Object.fromEntries(Object.entries(raw.legacy.doneAt).filter(([, at]) => typeof at === 'string' && !Number.isNaN(Date.parse(at)))) as Record<string, string>
+      : {};
+    if (p.legacy || Object.keys(archivedSteps).length || Object.keys(archivedNotes).length || Object.keys(archivedTimes).length) {
+      const doneAt = { ...priorTimes, ...archivedTimes };
+      p.legacy = { steps: { ...old.steps, ...archivedSteps }, notes: { ...old.notes, ...archivedNotes },
+        ...(Object.keys(doneAt).length ? { doneAt } : {}) };
+    }
   }
   return { progress: p, dropped, migrated };
 }

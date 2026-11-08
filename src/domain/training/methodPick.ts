@@ -13,33 +13,41 @@ import { adviseTraining, preparationNeeds, type TrainingMethod } from './trainin
 import { alongRate, type AlongRate } from './skillingRates';
 import { xpForLevel } from '../player/xp';
 import type { Market } from './methodRates';
+import type { TrainingAdvice } from './trainingRouter';
+
+/** The picked execution data and its estimate come from one advice calculation. */
+export function pickTraining(step: Step, state: PlayerState, mode: GameMode, style: PlayStyle, priority?: MethodPriority,
+  market: Market = {}, xp?: Readonly<Record<string, number>>): { pick?: TrainingPick; advice: TrainingAdvice | null } {
+  const goals = followedGoals(step);
+  if (!goals.length) return { advice: null };
+  const remaining = goals.filter(g => { const level = levelOf(state, g.skill); return level === undefined || level < g.target; });
+  const goal = remaining[0];
+  if (!goal) return { pick: GOAL_REACHED, advice: null };
+  if (levelOf(state, goal.skill) === undefined) return { advice: null,
+    ...(goal.skill !== step.followsMethod ? { pick: `${UNKNOWN_GOAL_PREFIX}${goal.skill}` } : {}) };
+  const advice = adviseTraining({ skill: goal.skill, target: goal.target, state, mode, style, priority, ...market,
+    ...(xp?.[goal.skill] !== undefined ? { xp: xp[goal.skill] } : {}) });
+  const best = advice.best;
+  if (!best) return { advice };
+  const along = alongPlan(step, goal, best.method, state, mode, style, priority, market);
+  const spot = along?.spot ?? best.method.spot;
+  const pick = best.method.kit || spot || best.method.needs.length || advice.actionTarget !== null ? {
+    methodId: best.method.id, modelled: best.method.rateSource === 'model', untilLevel: advice.actionTarget ?? goal.target,
+    goalNeeds: remaining.length === 1 ? advice.goalNeeds : undefined, stockNeeds: remaining.length === 1 ? advice.stockNeeds : undefined,
+    needs: preparationNeeds(advice, state, market.prices), name: best.method.name,
+    ...(spot ? { spot: { label: spot.label, x: spot.place.x, y: spot.place.y, plane: spot.place.plane,
+      ...(spot.objectNames ? { objectNames: [...spot.objectNames] } : {}), ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }, where: best.method.where } : {}),
+    ...(best.method.rateWarning ? { warning: best.method.rateWarning } : {}),
+    ...(along ? { along: { skill: along.skill, station: along.station, products: along.products, how: along.spot.how } } : {}),
+  } : best.method.id;
+  return { pick, advice };
+}
 
 export function pickMethods(steps: readonly Step[], state: PlayerState, mode: GameMode, style: PlayStyle, priority?: MethodPriority, market: Market = {}): Record<string, TrainingPick> {
-  const picks: Record<string, TrainingPick> = {};
-  for (const step of steps) {
-    const goals = followedGoals(step);
-    if (!goals.length) continue;
-    const remaining = goals.filter(g => { const level = levelOf(state, g.skill); return level === undefined || level < g.target; });
-    const goal = remaining[0];
-    if (!goal) { picks[step.id] = GOAL_REACHED; continue; }
-    const level = levelOf(state, goal.skill);
-    if (level === undefined) {
-      if (goal.skill !== step.followsMethod) picks[step.id] = `${UNKNOWN_GOAL_PREFIX}${goal.skill}`;
-      continue;
-    }
-    const advice = adviseTraining({ skill: goal.skill, target: goal.target, state, mode, style, priority, ...market });
-    const best = advice.best;
-    const along = best ? alongPlan(step, goal, best.method, state, mode, style, priority, market) : null;
-    const spot = along?.spot ?? best?.method.spot;
-    // A model can resolve recipe supplies without a named kit or station (for example bank-side processing).
-    if (best) picks[step.id] = best.method.kit || spot || best.method.needs.length || advice.actionTarget !== null ? {
-      methodId: best.method.id, modelled: best.method.rateSource === 'model', untilLevel: advice.actionTarget ?? goal.target, goalNeeds: remaining.length === 1 ? advice.goalNeeds : undefined, stockNeeds: remaining.length === 1 ? advice.stockNeeds : undefined, needs: preparationNeeds(advice, state, market.prices), name: best.method.name,
-      ...(spot ? { spot: { label: spot.label, x: spot.place.x, y: spot.place.y, plane: spot.place.plane, ...(spot.objectNames ? { objectNames: [...spot.objectNames] } : {}), ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }, where: best.method.where } : {}),
-      ...(best.method.rateWarning ? { warning: best.method.rateWarning } : {}),
-      ...(along ? { along: { skill: along.skill, station: along.station, products: along.products, how: along.spot.how } } : {}),
-    } : best.method.id;
-  }
-  return picks;
+  return Object.fromEntries(steps.flatMap(step => {
+    const { pick } = pickTraining(step, state, mode, style, priority, market);
+    return pick === undefined ? [] : [[step.id, pick]];
+  }));
 }
 
 /**

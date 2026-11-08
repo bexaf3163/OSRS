@@ -31,9 +31,9 @@ describe('prices for the loot estimate', () => {
   it('canonical physical IDs win over another variant and acquisition keeps the buy side', () => {
     const b = book();
     expect(b.source).toBe('live');
-    expect(b.priceOf('Lobster')).toBe(150);
-    expect(b.buyPriceOf('Lobster')).toBe(160);
-    expect(b.priceOf('Logs')).toBe(90);
+    expect(b.priceOf('Lobster')).toBe(135);
+    expect(b.buyPriceOf('Lobster')).toBe(176);
+    expect(b.priceOf('Logs')).toBe(81);
     expect(priceNote(b)).toContain('GE sell estimates');
     expect(priceNote(b)).not.toMatch(/\d\d:\d\d|2026/);
     expect(b.at).toBe(at);
@@ -47,7 +47,7 @@ describe('prices for the loot estimate', () => {
     expect(book(true, true).source).toBe('cached');
     expect(book(true, true).quoteOf('Lobster').label).toBe('Cached GE sell estimate');
     expect(priceNote(book(true, true))).toContain('cached');
-    expect(book(true, false, false).priceOf('Lobster')).toBe(150);
+    expect(book(true, false, false).priceOf('Lobster')).toBe(135);
   });
 
   it('the estimate is recomputed at current prices; coins and nameless ones are left alone', () => {
@@ -57,7 +57,7 @@ describe('prices for the loot estimate', () => {
       { name: 'Unknown item', quantityDelta: 1, reason: 'LOOT', timestamp: 3, estimatedGpValue: 99 },
     ];
     const out = reprice(entries, book());
-    expect(out[0].estimatedGpValue).toBe(1500);
+    expect(out[0].estimatedGpValue).toBe(1350);
     expect(out[1].estimatedGpValue).toBe(500);
     // The price is gone — we do not keep the old estimate: it would show something we do not know.
     expect(out[2].estimatedGpValue).toBeUndefined();

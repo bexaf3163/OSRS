@@ -15,13 +15,13 @@ function prices(low: number | null = 100, status: 'live' | 'stale' = 'live') {
 describe('dossier buy/sell and alchemy estimates', () => {
   it('keeps actual market sides distinct without name mapping and multiplies physical quantities', () => {
     const view = prices();
-    expect(itemPrice(view, 'Lobster', 379, 20)).toMatchObject({ unit: 200, total: 4000, label: 'GE estimate' });
-    expect(itemPrice(view, 'Lobster', 379, 20, 'sell')).toMatchObject({ unit: 100, total: 2000, label: 'GE sell estimate' });
+    expect(itemPrice(view, 'Lobster', 379, 20)).toMatchObject({ unit: 220, total: 4400, label: 'GE estimate' });
+    expect(itemPrice(view, 'Lobster', 379, 20, 'sell')).toMatchObject({ unit: 90, total: 1800, label: 'GE sell estimate' });
     expect(itemPrice(view, 'Lobster', 379, 20, 'sell').detail).toContain('Before any exchange tax');
   });
   it('labels stale sell estimates and opposite-side substitutes', () => {
     expect(itemPrice(prices(100, 'stale'), 'Lobster', 379, 1, 'sell')).toMatchObject({ state: 'cached', label: 'Cached GE sell estimate' });
-    expect(itemPrice(prices(null), 'Lobster', 379, 1, 'sell')).toMatchObject({ unit: 175, label: 'Indicative GE sell estimate' });
+    expect(itemPrice(prices(null), 'Lobster', 379, 1, 'sell')).toMatchObject({ unit: 180, label: 'Indicative GE sell estimate' });
   });
   it('cannot promote a database fallback to a displayed market sale or alchemy profit', () => {
     const view = buildPriceView({ now, board: null, mapping: null, baked: new Map([['lobster', { buy: 10, sell: 9 }]]) });

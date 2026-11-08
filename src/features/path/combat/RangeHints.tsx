@@ -4,7 +4,7 @@ import type { Step } from '../../../types';
 import { goals, levelById, skillById } from '../../../data';
 import { useStore } from '../../../state/store';
 import { focusRange } from '../../../domain/training/ranges';
-import { currentStage } from '../../../domain/quests/next-step';
+import { useDecisionStage } from '../../../state/decision';
 import { Inline } from '../../../ui/Inline';
 import { hrefTo } from '../../../domain/pages/pages';
 
@@ -14,9 +14,9 @@ export function stepSkills(step: Step) {
 }
 
 export function RangeHints({ step }: { step: Step }) {
-  const { progress, steps, stages } = useStore();
+  const { progress, stages } = useStore();
   const skills = stepSkills(step);
-  const stage = currentStage(steps, progress);
+  const stage = useDecisionStage();
   if (!skills.length) return null;
   return (
     <ul className="hints" aria-label="Training plan rows for your levels">

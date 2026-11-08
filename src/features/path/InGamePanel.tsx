@@ -11,7 +11,7 @@ import { PluginUpdateNote } from '../settings/PluginUpdateNote';
 import { triggerText } from '../../domain/quests/triggers';
 import { routeTrigger } from '../../domain/prep/carryover';
 import { plural } from '../../domain/text/format';
-import { TARGET_LABEL } from '../../domain/player/linkState';
+import { GUIDE_UNCONFIRMED, TARGET_LABEL } from '../../domain/player/linkState';
 
 const GROUPS: [keyof InGameTarget, string][] = [
   ['npcNames', 'NPC'],
@@ -53,10 +53,10 @@ export function InGamePanel({ step }: { step: Step }) {
       </div>
       {notice === 'offline' && (
         <p className="muted small" id={`ingame-${step.id}`} role="status">
-          RuneLite bridge offline{state === 'online' ? ' or refused' : ''}
-          {canLaunch
-            ? <>. <button type="button" className="btn btn-sm" onClick={() => void launchRuneLite()}>🎮 Launch RuneLite</button> — in ~10 seconds press "Show in the game" again.</>
-            : <>: start RuneLite with the OSRS Path Bridge plugin (how — in the README, the "RuneLite bridge" section).</>}
+          {GUIDE_UNCONFIRMED}
+          {canLaunch && state !== 'online'
+            ? <> <button type="button" className="btn btn-sm" onClick={() => void launchRuneLite()}>🎮 Launch RuneLite</button> — in ~10 seconds press "Show in the game" again.</>
+            : null}
         </p>
       )}
       {active && <PluginUpdateNote />}

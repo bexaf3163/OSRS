@@ -7,6 +7,7 @@ import { useMemo, useState } from 'react';
 import type { Step } from '../../../types';
 import { useBridge } from '../../../state/bridge';
 import { useStore } from '../../../state/store';
+import { roadFrom, useDecisionWindow } from '../../../state/decision';
 import { usePlayerState } from '../../../state/playerStateContext';
 import { checkStatus } from '../../../services/runeliteBridge';
 import { fairyRingsUnlocked, oneTimeUsedOf, travelInputOf } from '../../../domain/travel/travelInput';
@@ -15,7 +16,6 @@ import { dist, travelOptions, TRANSPORT, walkText, type Availability, type Point
 import { isOverworld } from '../../../domain/travel/instances';
 import { transportSources } from '../../../domain/readiness/liveTransport';
 import { RoadSupplies } from '../../shopping/RoadSupplies';
-import { roadSteps } from '../../../domain/readiness/travelSupplies';
 import { isClosed } from '../../../domain/quests/next-step';
 
 const BADGE: Record<Availability, string> = { ready: '✓ available now', maybe: '? check', locked: '🔒 not yet' };
@@ -23,7 +23,8 @@ const BADGE: Record<Availability, string> = { ready: '✓ available now', maybe:
 const badgeOf = (o: TravelOption) => (o.availability !== 'locked' && (o.prepare || o.acquire) ? '⇢ after a stop' : BADGE[o.availability]);
 
 export function TravelPlan({ step }: { step: Step }) {
-  const { progress, mode, steps } = useStore();
+  const { progress, mode } = useStore();
+  const ahead = useDecisionWindow();
   const { prices, state: player } = usePlayerState();
   const { enabled, state, inGame, stats, gear, owned, navigate, questsDone } = useBridge();
   const places = useMemo(() => stepPlaces(step), [step]);
@@ -117,7 +118,7 @@ export function TravelPlan({ step }: { step: Step }) {
       {pos && options.length === 1 && (
         <p className="small">You are already close — neither a teleport nor a canoe beats walking.</p>
       )}
-      <RoadSupplies steps={roadSteps(steps, (id) => !isClosed(progress, id), step.id)} from={pos} locate heading="Supplies for the road ahead" quietWhenEmpty />
+      <RoadSupplies steps={roadFrom(ahead, step).filter((s) => !isClosed(progress, s.id))} from={pos} locate heading="Supplies for the road ahead" quietWhenEmpty />
     </section>
   );
 }

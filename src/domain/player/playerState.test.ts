@@ -18,6 +18,14 @@ function state(over: Partial<PlayerStateInput> = {}) {
 }
 
 describe('the single player state', () => {
+  it('invalidates cached calculations when a remembered bank is refreshed even if every quantity stays identical', () => {
+    const bank = owned({ Bucket: { carried: 0, bank: 1 } }, true);
+    const remembered = state({ owned: { ...bank, bankSavedAt: 1000 }, gear: gear({ bankCoins: 500 }) });
+    const refreshed = state({ owned: bank, gear: gear({ bankCoins: 500 }) });
+    expect(remembered.fingerprint).not.toBe(refreshed.fingerprint);
+    expect(remembered.owned?.bankSavedAt).toBe(1000);
+    expect(refreshed.owned?.bankSavedAt).toBeUndefined();
+  });
   it('an absent bronze tool does not prove an unreported usable tier is missing', () => {
     const s = state({ stats: { mining: 41 }, owned: owned({ 'Bronze pickaxe': { bank: 0 } }, true) });
     expect(heldOf(s, 'Bronze pickaxe')).toMatchObject({ presence: 'UNKNOWN', bank: null, total: null });

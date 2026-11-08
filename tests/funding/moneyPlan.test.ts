@@ -128,7 +128,7 @@ describe('what cannot start, and why', () => {
 
 describe('the coin card\'s own plan (2.71)', () => {
   function cardPlan() {
-    const s = scenario(market(), { bagCoins: 400, bankCoins: 0 });
+    const s = scenario(market(), { bagCoins: 400, bankCoins: 0, methods: [methodById('cows-cowhide')!] });
     const rec = s.assessment.recommendation!;
     return { s, plan: startPlan(s.assessment, rec, s.snap, methodById('cows-cowhide'), T0)! };
   }

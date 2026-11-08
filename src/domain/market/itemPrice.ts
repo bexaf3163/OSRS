@@ -33,7 +33,8 @@ export function itemPrice(prices: PriceView | null | undefined, name: string, id
   return {
     state: cached ? 'cached' : 'current', unit: q.price, total, quantity, label,
     text: `${label}: ≈ ${gp(total)} gp${quantity > 1 ? ` (${gp(q.price)} each)` : ''}`,
-    detail: [...q.notes, ...(side === 'sell' ? ['Before any exchange tax.'] : []), 'An estimate, not a guaranteed offer price.'].join(' '),
+    detail: [...q.notes, ...(q.planningPolicy ? [`Planning reference ${gp(q.referencePrice!)} gp; ${side === 'buy' ? '+10%' : '−10%'} applied once.`] : []),
+      ...(side === 'sell' ? ['Before any exchange tax.'] : []), 'An estimate, not a guaranteed offer price.'].join(' '),
   };
 }
 

@@ -11,7 +11,7 @@ import { nameKey } from '../items/itemKey';
 import type { Recovery } from '../travel/recovery';
 import { buildEnvelope, envelopeKey, MAX_PLAN_LINES, nextSeq, planPayload, EMPTY_PARTS, SNAPSHOT_VERSION, type SnapshotParts } from './prepEnvelope';
 import { clipText } from '../text/format';
-import { supportsSnapshot, APP_PROTOCOL, BRIDGE_PATHS, missingWithPlugin } from '../../services/runeliteBridge';
+import { postPrepPlan, snapshotAccepted, supportsSnapshot, APP_PROTOCOL, BRIDGE_PATHS, missingWithPlugin } from '../../services/runeliteBridge';
 import { toInGameTarget } from '../guide/inGameTarget';
 import type { Step } from '../../types';
 import { fundingHintPayload } from '../economy/fundingHint';
@@ -46,6 +46,32 @@ function planOf(stepId: string, have: Record<string, Partial<OwnedItem>>, extra:
 const DEATH: Recovery = { reason: 'DEATH', since: 1, landedAt: { x: 3222, y: 3218, plane: 0 }, diedAt: null, distance: 120, target: { x: 3000, y: 3145, plane: 0 } };
 
 describe('the state snapshot for the game (protocol 6)', () => {
+  it('names the committed Decision only when there is one', () => {
+    expect(buildEnvelope({ ...EMPTY_PARTS, decision: { id: 'a1', objectiveId: 'q1' } }, 1).decision).toEqual({ id: 'a1', objectiveId: 'q1' });
+    expect('decision' in buildEnvelope({ ...EMPTY_PARTS, decision: null }, 2)).toBe(false);
+  });
+
+  it('does not acknowledge stale or partially rejected snapshots merely because the HTTP request succeeded', async () => {
+    const envelope = buildEnvelope(EMPTY_PARTS, 1);
+    const send = (data: unknown, status = 200) => postPrepPlan(envelope, {
+      request: async () => ({ ok: status === 200, status, data }), openEvents: () => () => {},
+    });
+    expect(await send({ stale: false, rejected: {} })).toMatchObject({ ok: true, stale: false });
+    const stale = await send({ stale: true, rejected: {} });
+    expect(snapshotAccepted(stale, ['step'])).toBe(false);
+    expect(stale.stale).toBe(true);
+    const step = await send({ rejected: { step: 'Step guidance is disabled' } });
+    expect(snapshotAccepted(step, ['step'])).toBe(false);
+    const optional = await send({ rejected: { bankTags: 'Bank highlights are disabled' } });
+    expect(snapshotAccepted(optional)).toBe(false);
+    expect(snapshotAccepted(optional, ['step'])).toBe(true);
+    expect(snapshotAccepted(optional, ['bankTags'])).toBe(false);
+    expect(snapshotAccepted(step, ['shopping'])).toBe(true);
+    for (const rejected of ['invalid', [], { step: 123 }, { step: 'disabled', shopping: 123 }]) expect(await send({ rejected })).toMatchObject({ ok: false });
+    for (const receipt of [null, [], 'ok', { stale: 'true' }]) expect(await send(receipt)).toMatchObject({ ok: false });
+    expect(await send({}, 413)).toMatchObject({ ok: false, status: 413 });
+  });
+
   it('the app declares protocol 6 and the /prep-plan address; an older plugin — we ask to update', () => {
     expect(APP_PROTOCOL).toBe(6);
     expect(BRIDGE_PATHS).toContain('/prep-plan');
@@ -131,7 +157,8 @@ describe('the state snapshot for the game (protocol 6)', () => {
       })],
       ['S4-03: raising coins, the cow field reached and 12 hides taken', (() => {
         // The plan as the app runs it: started for the Hill Giants step, then ticked with what the game shows at the field.
-        const f = scenario(market(), { bagCoins: 400, bankCoins: 0 });
+        // Pin this cross-language cow-trip fixture, independently of the global method ranking.
+        const f = scenario(market(), { bagCoins: 400, bankCoins: 0, methods: [methodById('cows-cowhide')!] });
         const started = startPlan(f.assessment, f.assessment.recommendation!, f.snap, methodById('cows-cowhide'), 1_792_000_000_000)!;
         const at = fakeSnap({ character: 'Tester', position: { x: 3253, y: 3278, plane: 0 }, bag: [{ name: 'Cowhide', count: 12 }], bagCoins: 400, bankCoins: 0 });
         const plan = tick(started, at, 1_792_000_060_000);

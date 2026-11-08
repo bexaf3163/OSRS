@@ -4,19 +4,20 @@ import { useCallback, useEffect, useRef } from 'react';
 import type { Step } from '../types';
 import { gateAllows } from '../domain/persistence/profiles';
 import { guardedProfileGate as profileGate, readProfiles } from './profiles';
-import { postPrepPlan, supportsSnapshot, syncBankTags, syncShoppingPlan, type ShoppingPlanPayload } from '../services/runeliteBridge';
+import { postPrepPlan, snapshotAccepted, supportsSnapshot, syncBankTags, syncShoppingPlan, type ShoppingPlanPayload } from '../services/runeliteBridge';
 import { toInGameTarget } from '../domain/guide/inGameTarget';
 import { stageBankItemIds } from '../domain/prep/bankTags';
 import { buildEnvelope, envelopeKey, nextSeq, type SnapshotParts } from '../domain/prep/prepEnvelope';
 import type { SkillPathPayload } from '../domain/training/skillGuide';
 import { PLAN_KEY, saveJson, type BridgeCore } from './bridgeCore';
+import { clipText } from '../domain/text/format';
 
 /** Sending the snapshot, and setting its parts. */
 export function useSnapshot({ liveIdentity, sessionEpoch, pluginProtocol, snapshot, latest }: BridgeCore) {
-  const oversizedSnapshotKey = useRef<string | null>(null);
+  const rejectedSnapshotKey = useRef<string | null>(null);
 
   /** Send the snapshot now. true — the plugin received it (or already had the same). */
-  const flushSnapshot = useCallback(async (): Promise<boolean> => {
+  const flushSnapshot = useCallback(async (requiredParts?: readonly string[]): Promise<boolean> => {
     if (!gateAllows(profileGate(readProfiles(), liveIdentity.current.player))) return false;
     const epoch = sessionEpoch.current;
     const sn = snapshot.current;
@@ -27,24 +28,27 @@ export function useSnapshot({ liveIdentity, sessionEpoch, pluginProtocol, snapsh
     sn.seq = seq;
     const r = await postPrepPlan(buildEnvelope(sn.parts, seq));
     if (epoch !== sessionEpoch.current) return false;
-    if (!r.ok) {
+    if (!snapshotAccepted(r)) {
       if (sn.seq === seq) {
         sn.sentKey = null;
-        if (r.status === 413 && oversizedSnapshotKey.current !== key) {
-          oversizedSnapshotKey.current = key;
-
-          latest.current.notify('The game guide could not sync: its data exceeds the bridge size limit. Your game connection is still being checked normally.');
+        const reason = r.status === 413 ? 'The game guide could not sync: its data exceeds the bridge size limit. Your game connection is still being checked normally.'
+          : r.stale ? 'RuneLite ignored an outdated guide update. The new guide is not confirmed; retry after reconnecting.'
+            : Object.keys(r.rejected).length ? `RuneLite did not fully accept the guide: ${clipText(Object.values(r.rejected)[0], 120)}. Check OSRS Path Bridge settings.` : null;
+        const failureKey = reason;
+        if (reason && rejectedSnapshotKey.current !== failureKey) {
+          rejectedSnapshotKey.current = failureKey;
+          latest.current.notify(reason);
         }
       }
-      return false;
+      return snapshotAccepted(r, requiredParts);
     }
-    oversizedSnapshotKey.current = null;
+    rejectedSnapshotKey.current = null;
     // The answer of a late snapshot must not overwrite what was sent after it.
     if (sn.seq === seq) sn.sentKey = key;
     return true;
   }, []);
 
-  const setPrepPart = useCallback(<K extends 'gearHint' | 'bankTags' | 'plan' | 'cleanup' | 'funding'>(key: K, value: SnapshotParts[K]) => {
+  const setPrepPart = useCallback(<K extends 'gearHint' | 'bankTags' | 'plan' | 'cleanup' | 'funding' | 'decision'>(key: K, value: SnapshotParts[K]) => {
     const sn = snapshot.current;
     sn.parts = { ...sn.parts, [key]: value };
     if (!supportsSnapshot(pluginProtocol.current) || !sn.synced) return;
@@ -80,7 +84,7 @@ export function useSnapshot({ liveIdentity, sessionEpoch, pluginProtocol, snapsh
     const sn = snapshot.current;
     sn.parts = { ...sn.parts, shopping: plan };
     // The step in the snapshot is not known yet (the app has just started) — the snapshot goes when it is; the list is saved.
-    return sn.synced ? flushSnapshot() : true;
+    return sn.synced ? flushSnapshot(['shopping']) : true;
   }, [flushSnapshot]);
   return { flushSnapshot, setPrepPart, setSkillPath, setTrainingStep, syncPlan };
 }

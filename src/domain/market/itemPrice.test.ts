@@ -32,8 +32,8 @@ function state(count: number | null = 0) {
 
 describe('shared market price presentation', () => {
   it('uses the canonical ID without a mapping and multiplies physical quantities', () => {
-    expect(itemPrice(prices(200, 'live', 1, false, false), 'Different display name', 379, 1)).toMatchObject({ unit: 200, total: 200, state: 'current' });
-    expect(itemPrice(prices(), 'Lobster', 379, 20)).toMatchObject({ unit: 200, total: 4000, text: 'GE estimate: ≈ 4,000 gp (200 each)' });
+    expect(itemPrice(prices(200, 'live', 1, false, false), 'Different display name', 379, 1)).toMatchObject({ unit: 220, total: 220, state: 'current' });
+    expect(itemPrice(prices(), 'Lobster', 379, 20)).toMatchObject({ unit: 220, total: 4400, text: 'GE estimate: ≈ 4,400 gp (220 each)' });
   });
   it('does not present a baked planning fallback as a market price', () => {
     expect(itemPrice(prices(null), 'Lobster', 379, 20)).toMatchObject({ state: 'unavailable', unit: null, total: null, text: 'Price unavailable' });
@@ -51,12 +51,12 @@ describe('shared market price presentation', () => {
     const run = (unit: number | null, count: number | null = 0) => createReadinessEngine({ steps: [step], progress, qp: 0,
       mode: 'f2p', state: state(count), prices: prices(unit) }).plan(step, { ahead: 0 });
     const first = run(200);
-    expect(first.lines[0].marketPrice?.total).toBe(4000);
-    expect(first.lines[0].action).toMatchObject({ kind: 'BUY', price: 200 });
+    expect(first.lines[0].marketPrice?.total).toBe(4400);
+    expect(first.lines[0].action).toMatchObject({ kind: 'BUY', price: 220 });
     expect(planPayload(first).lines[0].price).toBe(first.lines[0].marketPrice?.text);
     const increased = run(400);
-    expect(increased.lines[0].marketPrice?.total).toBe(8000);
-    expect(increased.lines[0].action).toMatchObject({ kind: 'EARN', price: 400 });
+    expect(increased.lines[0].marketPrice?.total).toBe(8800);
+    expect(increased.lines[0].action).toMatchObject({ kind: 'EARN', price: 440 });
     expect(run(null).lines[0].action?.price).toBeUndefined();
     expect(run(null).lines[0].marketPrice?.state).toBe('unavailable');
     expect(run(200, null).lines[0]).toMatchObject({ where: 'UNKNOWN', toGet: null, action: { kind: 'CONNECT' } });

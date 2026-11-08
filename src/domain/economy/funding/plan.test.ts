@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cancel, confirm, FUNDING_PLAN_KEY, isRunning, loadPlan, MAX_GAP_SECONDS, pause, planKey, resume, savePlan, startPlan, STALE_AFTER_MS, tick, viewOf, type FundingPlanState } from './plan';
+import { cancel, coinsMade, confirm, FUNDING_PLAN_KEY, isRunning, loadPlan, MAX_GAP_SECONDS, pause, planKey, resume, savePlan, startPlan, STALE_AFTER_MS, tick, viewOf, type FundingPlanState } from './plan';
 import { methodById } from './methods';
 import { market } from '../../../../tests/funding/market';
 import { scenario } from '../../../../tests/funding/scenario';
@@ -10,7 +10,8 @@ const COW_FIELD = { x: 3253, y: 3278, plane: 0 };
 const LUMBRIDGE_BANK = { x: 3208, y: 3220, plane: 2 };
 
 function cowPlan(): { plan: FundingPlanState; required: number } {
-  const s = scenario(market(), { bagCoins: 400, bankCoins: 0 });
+  // Exercise this local state machine explicitly; global ranking may choose a faster method.
+  const s = scenario(market(), { bagCoins: 400, bankCoins: 0, methods: [methodById('cows-cowhide')!] });
   const rec = s.assessment.recommendation!;
   expect(rec.id).toBe('earn:cows-cowhide');
   const plan = startPlan(s.assessment, rec, s.snap, methodById('cows-cowhide'), T0)!;
@@ -22,17 +23,28 @@ const seen = (o: { pos?: { x: number; y: number; plane: number } | null; bag?: {
   fakeSnap({ character: o.character ?? 'Tester', position: o.pos === undefined ? { x: 3093, y: 3495, plane: 0 } : o.pos, bag: o.bag === undefined ? [] : o.bag, bagCoins: o.bagCoins === undefined ? 400 : o.bagCoins, bankCoins: o.bankCoins === undefined ? 0 : o.bankCoins, connected: o.connected });
 
 describe('starting a funding plan', () => {
+  it('refuses a stale recommendation paired with another method instead of mixing its title, recipe and navigation', () => {
+    const s = scenario(market(), { bagCoins: 400, bankCoins: 0, methods: [methodById('cows-cowhide')!] });
+    const assessment = s.assessment;
+    const option = assessment.recommendation!;
+    expect(startPlan(assessment, option, s.snap, methodById('collect-iron-al-kharid'), T0)).toBeNull();
+    expect(startPlan(assessment, { ...option, id: 'earn:another-method' }, s.snap, methodById('cows-cowhide'), T0)).toBeNull();
+    expect(startPlan(assessment, option, s.snap, methodById('cows-cowhide'), T0)).not.toBeNull();
+  });
   it('lists the steps of the cow method and starts at the way there, leaving the route step open', () => {
     const { plan } = cowPlan();
     expect(plan.subSteps.map((s) => s.id)).toEqual(['travel', 'perform', 'bank', 'sell', 'restock', 'resume']);
     expect(plan.active).toBe(0);
     expect(plan.status).toBe('ACTIVE');
     expect(plan.sourceStepId).toBe('S4-03');
-    expect(plan.target).toMatchObject({ required: 825, gap: 425, liquidAtStart: 400 });
+    expect(plan.target).toMatchObject({ required: 925, gap: 525, liquidAtStart: 400 });
     expect(plan.character).toBe('Tester');
     expect(plan.version).toBe(1);
-    // The plan has no way to say a route step is done: nothing in its state names a completion.
-    expect(JSON.stringify(plan)).not.toMatch(/complete/i);
+    expect(plan.target.completeAtStart).toBe(true); // Cash comparability, never route completion.
+    // Apart from the cash provenance, no state names a route completion.
+    expect(JSON.stringify({ ...plan, target: undefined })).not.toMatch(/complete/i);
+    expect(coinsMade(plan, seen({ bagCoins: 500, bankCoins: 0 }))).toBe(100);
+    expect(coinsMade(plan, seen({ bagCoins: 500, bankCoins: null }))).toBeNull();
   });
 
   it('copies the route\'s reserve (the 50 Big bones) so the plan cannot be asked to sell it', () => {
@@ -181,7 +193,7 @@ describe('what the app and the game both show', () => {
     // An unknown bag shows no count rather than 0.
     expect(viewOf(p, seen({ bag: null })).progress).toBe(`0 / ${goal.qty} Cowhide`);
     p = confirm(p, 'bank', seen({}), T0 + 2000);
-    expect(viewOf(p, seen({ bagCoins: 500 })).progress).toBe('325 gp to go');
+    expect(viewOf(p, seen({ bagCoins: 500 })).progress).toBe('425 gp to go');
   });
 
   it('loot that has not been sold is labelled an estimate', () => {

@@ -32,6 +32,10 @@ export type PriceBasis = 'side' | 'average' | 'other-side' | 'baked';
 export interface UnitPrice {
   /** Whole gp for one item. */
   price: number;
+  /** Unbuffered chosen reference (instant side or documented hourly fallback). Never overwritten by planning policy. */
+  referencePrice?: number;
+  planningSide?: 'buy' | 'sell';
+  planningPolicy?: 'v14-10pct';
   basis: PriceBasis;
   confidence: Confidence;
   /** Age of the side the price comes from, minutes; null when unknown (a baked price). */
@@ -126,7 +130,7 @@ export function buyOf(q: Quote | undefined, now: number): UnitPrice | null {
 
 /**
  * What one item brings when sold now, before the tax: the low side, and never more than the hour's average low (conservative: a plan must not count
- * on a lucky print). A missing low side falls back to the high side at a discount, flagged and LOW. No price at all — null.
+ * on a lucky print). A missing low side uses the high reference, flagged LOW; the planning boundary applies the one sale margin.
  */
 export function sellOf(q: Quote | undefined, now: number): UnitPrice | null {
   if (!q) return null;
@@ -135,9 +139,9 @@ export function sellOf(q: Quote | undefined, now: number): UnitPrice | null {
   if (q.low.price === null) {
     if (q.high.price === null) return null;
     return {
-      price: Math.floor(q.high.price * (1 - WIDE_SPREAD / 2)), basis: 'other-side', confidence: 'LOW',
+      price: Math.floor(q.high.price), basis: 'other-side', confidence: 'LOW',
       ageMinutes: q.high.at === null ? null : minutes(now - q.high.at), volumePerHour: volume,
-      notes: ['No recent sell price: the buy price less a margin stands in', ...m.notes],
+      notes: ['No recent sell price: the buy reference stands in', ...m.notes],
     };
   }
   const age = q.low.at === null ? Infinity : Math.max(0, now - q.low.at);
@@ -154,6 +158,17 @@ export function sellOf(q: Quote | undefined, now: number): UnitPrice | null {
     notes.push('The last sell price is above the hour average: the average is used');
   }
   return { price: Math.floor(price), basis, confidence, ageMinutes: Number.isFinite(age) ? minutes(age) : null, volumePerHour: volume, notes };
+}
+
+/** Owner policy is applied once at the shared quote boundary; tax remains a separate per-item calculation. */
+export function planningQuote(quote: UnitPrice | null, side: 'buy' | 'sell'): UnitPrice | null {
+  if (!quote) return null;
+  const reference = quote.referencePrice ?? quote.price;
+  if (!Number.isFinite(reference) || reference <= 0) return null;
+  if (quote.planningPolicy === 'v14-10pct' && quote.planningSide === side) return quote;
+  const price = side === 'buy' ? Math.ceil(reference * 110 / 100) : Math.floor(reference * 90 / 100);
+  if (!Number.isSafeInteger(price)) return null;
+  return { ...quote, price, referencePrice: reference, planningSide: side, planningPolicy: 'v14-10pct' };
 }
 
 export interface Absorb {
@@ -213,11 +228,21 @@ export function buildPriceView(i: ViewInput): PriceView {
     if (!p || status !== 'stale') return p;
     return { ...p, confidence: minConfidence(p.confidence, 'LOW'), notes: ['The exchange did not answer: these are earlier prices', ...p.notes] };
   };
+  const cache = { buy: new Map<string, UnitPrice | null>(), sell: new Map<string, UnitPrice | null>() };
+  const priceOf = (side: 'buy' | 'sell', name: string, id?: number): UnitPrice | null => {
+    // The board, fallback database and clock are immutable for this view. Cache absence as well as a quote.
+    const key = `${id ?? ''}:${nameKey(name)}`;
+    if (cache[side].has(key)) return cache[side].get(key)!;
+    const raw = (side === 'buy' ? buyOf : sellOf)(quoteOf(name, id), i.now);
+    const price = planningQuote(capStale(raw) ?? bakedOf(name, side), side);
+    cache[side].set(key, price);
+    return price;
+  };
   return {
     status,
     at: usable ? i.board!.at : null,
-    buy: (name, id) => capStale(buyOf(quoteOf(name, id), i.now)) ?? bakedOf(name, 'buy'),
-    sell: (name, id) => capStale(sellOf(quoteOf(name, id), i.now)) ?? bakedOf(name, 'sell'),
+    buy: (name, id) => priceOf('buy', name, id),
+    sell: (name, id) => priceOf('sell', name, id),
     idOf: (name) => byName.get(nameKey(name))?.id,
     limitOf: (name, id) => {
       const use = id && id > 0 ? id : byName.get(nameKey(name))?.id;

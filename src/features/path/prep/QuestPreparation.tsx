@@ -15,15 +15,13 @@ import { ReadinessVerdictCard } from './ReadinessVerdict';
 
 const LABEL = { EQUIPPED: 'Equipped', INVENTORY: 'In your bag', BANK: 'Take from bank', MISSING: 'Missing', UNKNOWN: 'Not checked' };
 
-function Row({ step, l, quiet = false, linked = true }: { step: Step; l: PrepLine; quiet?: boolean; linked?: boolean }) {
+function Row({ step, l, linked = true }: { step: Step; l: PrepLine; linked?: boolean }) {
   const item = step.itemsRequired?.find((i) => i.nameEn.toLowerCase() === l.name.toLowerCase());
   return (
-    <li className={`quest-supply is-${l.where.toLowerCase()} ${quiet ? 'is-quiet' : ''}`}>
+    <li className={`quest-supply is-${l.where.toLowerCase()}`}>
       <span className="quest-supply-icon"><ItemIcon src={item?.iconUrl ?? findLocalItem(l.name)?.iconUrl} alt="" size={32} /></span>
-      <span className="quest-supply-name">{l.name}{lineAmount(l)}{!quiet && l.marketPrice && <><br /><span className="muted small" title={l.marketPrice.detail}>{l.marketPrice.text}</span></>}</span>
-      {quiet
-        ? <span className="quest-supply-state">Handled</span>
-        : <span className="quest-supply-state"><span aria-hidden="true">{l.where === 'UNKNOWN' ? '○' : l.where === 'MISSING' ? '!' : l.where === 'BANK' || l.equip && l.where === 'INVENTORY' ? '↗' : '✓'}</span> {l.equip && l.where === 'INVENTORY' ? 'Equip' : l.unnote ? 'Unnote at bank' : l.where === 'UNKNOWN' && !linked ? 'Bring' : LABEL[l.where]}</span>}
+      <span className="quest-supply-name">{l.name}{lineAmount(l)}{l.marketPrice && <><br /><span className="muted small" title={l.marketPrice.detail}>{l.marketPrice.text}</span></>}</span>
+      <span className="quest-supply-state"><span aria-hidden="true">{l.where === 'UNKNOWN' ? '○' : l.where === 'MISSING' ? '!' : l.where === 'BANK' || l.equip && l.where === 'INVENTORY' ? '↗' : '✓'}</span> {l.equip && l.where === 'INVENTORY' ? 'Equip' : l.unnote ? 'Unnote at bank' : l.where === 'UNKNOWN' && !linked ? 'Bring' : LABEL[l.where]}</span>
     </li>
   );
 }
@@ -38,10 +36,11 @@ export function QuestSupplies({ step, onReview, status, statusAbove = false }: {
   const linked = useBridge().state === 'online';
   const all = plan.lines.filter((l) => l.timing === 'NOW');
   const lines = all.filter((l) => !isOutOfStage(scope, l.name));
-  const handled = all.filter((l) => isOutOfStage(scope, l.name));
+  // Retired requirements remain readable history; never recompute an obsolete preparation plan to display them.
+  const handled = (step.itemsRequired ?? []).filter(item => isOutOfStage(scope, item.nameEn));
   const unknown = lines.filter((l) => l.where === 'UNKNOWN').length;
   // Nothing to bring, no budget and no blocker: no empty box; Preparation stays one click away.
-  if (!all.length && plan.coins.need <= 0 && plan.blockers.length === 0) return status ? <>{status}</> : null;
+  if (!all.length && !handled.length && plan.coins.need <= 0 && plan.blockers.length === 0) return status ? <>{status}</> : null;
   return (
     <section className="quest-panel quest-preparation">
       <header className="quest-panel-heading">
@@ -65,7 +64,11 @@ export function QuestSupplies({ step, onReview, status, statusAbove = false }: {
       {handled.length > 0 && (
         <details className="quest-handled">
           <summary>Used earlier in this quest · {handled.length}</summary>
-          <ul className="quest-supply-list">{handled.map((l) => <Row key={l.key} step={step} l={l} quiet />)}</ul>
+          <ul className="quest-supply-list">{handled.map((item, index) => <li key={`${item.nameEn}:${index}`} className="quest-supply is-quiet">
+            <span className="quest-supply-icon"><ItemIcon src={item.iconUrl ?? findLocalItem(item.nameEn)?.iconUrl} alt="" size={32} /></span>
+            <span className="quest-supply-name">{item.nameEn}{item.amount !== 1 && <> ×{item.amount}</>}</span>
+            <span className="quest-supply-state">Handled</span>
+          </li>)}</ul>
         </details>
       )}
       {onReview && <button type="button" className="btn quest-review" onClick={onReview}>☷ Review preparation</button>}

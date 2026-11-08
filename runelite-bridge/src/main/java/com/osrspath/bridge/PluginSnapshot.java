@@ -42,6 +42,8 @@ final class PluginSnapshot
 
 	/** The running funding plan from the app (snapshot part "funding"); null means none. One HUD line and the app's own arrow; nothing is acted on. */
 	volatile FundingHint funding;
+	/** The items the committed Decision needs counted (app v14); empty without one. */
+	volatile java.util.List<String> decisionWatch = java.util.Collections.emptyList();
 
 	/** The funding line the HUD shows now, so that a change (the app gone too long, another character) redraws it. */
 	volatile String fundingShown;
@@ -161,12 +163,17 @@ final class PluginSnapshot
 		{
 			funding = e.getFunding();
 		}
+		if (!bad.containsKey(PrepEnvelope.DECISION))
+		{
+			decisionWatch = e.getDecision() == null || e.getDecision().getWatch() == null ? java.util.Collections.emptyList() : e.getDecision().getWatch();
+			plugin.ownedDirty = true;
+		}
 		plugin.debug.planPercent = skillPath != null || prep == null || prep.getScore() == null ? null : prep.getScore().getPercent();
 		Map<String, String> allRejected = new LinkedHashMap<>(bad);
 		allRejected.putAll(refused);
 		plugin.debug.tel("snapshot", "seq", e.getSeq(), "step", e.getStep() == null ? null : e.getStep().getStepId(), "plan", e.getPlan() != null, "percent", plugin.debug.planPercent,
 			"shopping", e.getShopping() != null, "bankTags", e.getBankTags() != null, "gearHint", e.getGearHint() != null,
-			"cleanup", e.getCleanup() == null || e.getCleanup().getLines() == null ? 0 : e.getCleanup().getLines().size(), "funding", e.getFunding() != null, "rejected", allRejected.isEmpty() ? null : allRejected);
+			"cleanup", e.getCleanup() == null || e.getCleanup().getLines() == null ? 0 : e.getCleanup().getLines().size(), "funding", e.getFunding() != null, "decision", e.getDecision() == null ? null : e.getDecision().getId(), "rejected", allRejected.isEmpty() ? null : allRejected);
 		Telemetry log = plugin.debug.telemetry;
 		if (log != null)
 		{

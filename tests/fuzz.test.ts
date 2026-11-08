@@ -3,10 +3,9 @@ import { parseNavTarget } from '../src/services/runeliteBridge';
 import { parseGear, parsePacing, parsePlayer, parsePos, parseQuests, parseStats, parseXp } from '../src/services/bridgeEvents';
 import { parseOwned } from '../src/domain/items/checklist';
 import { normalizeProgress, ownedManualOf } from '../src/domain/persistence/progress';
-import { allSteps as steps, known as knownData, stepById } from '../src/data';
+import { known as knownData, stepById } from '../src/data';
 import { wealthOf } from '../src/domain/economy/wealth';
 import { adviseStyle } from '../src/domain/combat/styleGear';
-import { adviseMoney } from '../src/domain/economy/moneyAdvisor';
 import { travelOptions } from '../src/domain/travel/travel';
 
 // A deterministic generator: the test is reproducible, not "fails sometimes".
@@ -79,10 +78,9 @@ describe('garbage input does not crash the program', () => {
         style: r() < 0.5 ? 'magic' : 'ranged', levels: stats ?? {}, quests: new Set(), worn: new Set((gear?.equipment ?? []).map((x) => x.name)),
         bag: new Set((gear?.inventory ?? []).map((x) => x.name)), cash, price: () => (r() < 0.5 ? null : Math.floor(r() * 1e6)),
       })).not.toThrow();
-      expect(() => adviseMoney(stats ?? {}, steps, new Set(), undefined, cash)).not.toThrow();
       const pos = parsePos({ x: Math.floor(r() * 5000), y: Math.floor(r() * 5000), plane: Math.floor(r() * 4) });
       if (pos) expect(() => travelOptions({ from: pos, to: { x: 3213, y: 3424, plane: 0 }, levels: stats ?? {}, carried: gear ? [...(gear.equipment ?? []), ...(gear.inventory ?? [])] : null, bankSeen: r() < 0.5 })).not.toThrow();
     }
-    // 1,500 rounds of three advisers take 4 to 6 s here when the whole suite runs in parallel: the default 5 s limit made the run flaky, not the code.
+    // 1,500 rounds of two advisers take 4 to 6 s here when the whole suite runs in parallel: the default 5 s limit made the run flaky, not the code.
   }, 20_000);
 });

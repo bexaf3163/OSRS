@@ -56,7 +56,7 @@ describe('progress: export and import', () => {
     expect(r).toEqual({ ok: false, error: expect.stringContaining('newer version') });
   });
 
-  it('unknown steps, skills and wrong values are dropped', () => {
+  it('valid retired history is kept while invalid records are dropped', () => {
     const r = importProgress(JSON.stringify({
       version: 3,
       steps: { 'S1-01': 'done', 'S9-99': 'done', 'S1-02': 'maybe' },
@@ -68,11 +68,46 @@ describe('progress: export and import', () => {
     expect(r.progress.steps).toEqual({ 'S1-01': 'done' });
     expect(r.progress.levels).toEqual({ fishing: 99, cooking: 15 });
     expect(r.progress.notes).toEqual({ 'S1-01': 'ok' });
-    expect(r.stats.dropped).toBe(6);
+    expect(r.progress.legacy).toEqual({ steps: { 'S9-99': 'done' }, notes: { 'S9-99': 'no' } });
+    expect(r.stats.dropped).toBe(4);
   });
 });
 
 describe('progress: storage', () => {
+  it('content retirement preserves done, skipped, notes and times through export and repeated autosaves', () => {
+    const previous = {
+      ...emptyProgress(), steps: { 'S1-13': 'done', 'S3-06': 'skipped', 'S6-01': 'done' },
+      notes: { 'S1-13': 'Kept for the next quest', 'S3-06': 'Deliberately skipped', 'S6-01': 'My custom goal' },
+      doneAt: { 'S1-13': '2026-10-30T12:00:00Z', 'S6-01': '2026-10-31T12:00:00Z' },
+      legacy: { steps: { 'old-quest': 'done' }, notes: { 'old-quest': 'Earlier migration' } },
+    };
+    const retired = new Set(Object.keys(previous.steps));
+    const reduced = { ...known, stepIds: new Set([...known.stepIds].filter(id => !retired.has(id))) };
+    const first = normalizeProgress(previous, reduced)!;
+    expect(first.dropped).toBe(0);
+    expect(first.progress.steps).toEqual({});
+    expect(first.progress.notes).toEqual({});
+    expect(first.progress.legacy).toEqual({
+      steps: { 'old-quest': 'done', ...previous.steps }, notes: { 'old-quest': 'Earlier migration', ...previous.notes }, doneAt: previous.doneAt,
+    });
+    const store = memoryStorage();
+    expect(saveProgress(store, first.progress)).toBe(true);
+    const restored = loadProgress(store, reduced);
+    expect(restored).toEqual(first.progress);
+    const imported = importProgress(exportProgress(restored), reduced);
+    expect(imported.ok && imported.progress).toEqual(first.progress);
+    // Reintroducing content does not silently promote historical skips/marks to actual current completion.
+    expect(normalizeProgress(restored, known)!.progress.steps).toEqual({});
+  });
+
+  it('the latest retired input wins without discarding a prior unrelated history record', () => {
+    const input = { ...emptyProgress(), steps: { retired: 'skipped' }, notes: { retired: 'Current note' },
+      legacy: { steps: { retired: 'done', other: 'done' }, notes: { retired: 'Old note', other: 'Keep' } } };
+    expect(normalizeProgress(input, known)!.progress.legacy).toEqual({
+      steps: { retired: 'skipped', other: 'done' }, notes: { retired: 'Current note', other: 'Keep' },
+    });
+  });
+
   it('Hitpoints from the game is kept, though it has no level field: the combat plan is worked out from the last levels while the game is away (2.72.1)', () => {
     // Live: the saved levels had no Hitpoints, so before the game connected the step fell back to the route as written (Hill Giants).
     const n = normalizeProgress({ version: 3, steps: {}, levels: { attack: 30, defence: 1, hitpoints: 24 }, notes: {} }, known)!;
@@ -183,6 +218,16 @@ describe('progress: moving from V2 (2.0.0) to V2.1', () => {
     const targets = Object.values(V3_FROM_V2);
     expect(new Set(targets).size).toBe(targets.length);
     for (const id of targets) expect(stepById.has(id) || RETIRED_STEPS.includes(id), id).toBe(true);
+  });
+
+  it('archives retired V2 timestamps under the same renamed IDs as their marks and notes', () => {
+    const reduced = { ...known, stepIds: new Set([...known.stepIds].filter(id => id !== 'S1-10')) };
+    const input = { ...v2, doneAt: { 'S1-06': '2026-09-26T11:00:00Z', 'S1-10': '2026-09-26T11:30:00Z' } };
+    const result = normalizeProgress(input, reduced)!.progress;
+    expect(result.legacy).toEqual({ steps: { 'S1-10': 'done' }, notes: { 'S1-10': 'book in the inventory' },
+      doneAt: { 'S1-10': '2026-09-26T11:00:00Z' } });
+    expect(result.doneAt).toEqual({ 'S1-09': '2026-09-26T11:30:00Z' });
+    expect(normalizeProgress(JSON.parse(exportProgress(result)), reduced)!.progress).toEqual(result);
   });
 });
 

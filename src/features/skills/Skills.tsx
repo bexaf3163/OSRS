@@ -1,7 +1,7 @@
 // The list of skills: what to train now in each, and the way into each skill's training guide (its method, place and leveling roadmap).
 import { levelById, membersSkills, skills } from '../../data';
 import { useStore } from '../../state/store';
-import { currentStage } from '../../domain/quests/next-step';
+import { useDecisionStage } from '../../state/decision';
 import { levelOf } from '../../domain/persistence/progress';
 import type { Skill } from '../../types';
 import { SkillGlyph } from '../../ui/SectionShell';
@@ -14,8 +14,8 @@ import { hrefTo } from '../../domain/pages/pages';
 
 /** The Skills spread: the character sheet on the left, the chosen skill (or the followed one) on the right. */
 export function SkillsPage({ param, selectedSkill, goal }: { param?: string; selectedSkill?: string; goal?: number }) {
-  const { progress, steps, mode } = useStore();
-  const stage = currentStage(steps, progress);
+  const { mode } = useStore();
+  const stage = useDecisionStage();
   const tracked = useTracked();
   const trackedHome = tracked ? [...skills, ...membersSkills].find((s) => s.levelSkills.includes(tracked.skill)) : undefined;
   const shown = param ?? trackedHome?.id;

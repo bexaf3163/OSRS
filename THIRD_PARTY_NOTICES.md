@@ -85,3 +85,35 @@ The RuneLite BSD 2-Clause notice is included in `public/skill-icons/LICENSE.txt`
 ## Old School RuneScape item artwork
 
 The bundled item icons in `public/item-icons` are copies of the image URLs already referenced by the item catalog, downloaded from https://oldschool.runescape.wiki/ . They display the same game items when the app is offline. The artwork belongs to Jagex; caching these files does not change ownership. `src/data/authored/iconAssets.json` records each source URL.
+
+## Shortest Path collision topology subset
+
+The limited mainland surface topology in `src/data/generated/worldRouting.json` is derived from the collision-map resource in [Skretzo/shortest-path](https://github.com/Skretzo/shortest-path/tree/375ce2c061df5c3961116dda6443f307df3223f1), revision `375ce2c061df5c3961116dda6443f307df3223f1`. Its manifest records the input SHA256, format and unsupported edges. This is movement topology, not game artwork, models or animation. Upstream repository license (retained verbatim):
+
+```text
+BSD 2-Clause License
+
+Copyright (c) <YEAR>, <COPYRIGHT HOLDER>
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```

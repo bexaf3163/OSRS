@@ -68,6 +68,8 @@ export interface RouterInput {
   geQuotes?: ReadonlyMap<number, import('../market/itemPrice').ItemPrice>;
   data?: ToolProgression;
   item?: (id: number) => WikiItemDetail | undefined;
+  /** How many of an item the bank holds, by name; null or absent — the bank was not read. */
+  banked?: (name: string) => number | null;
 }
 
 const BOOST: Record<UpgradeCategory, string> = {
@@ -137,7 +139,8 @@ export function recommendFor(category: UpgradeCategory, input: RouterInput): Upg
     efficiencyBoost: target.efficiencyBoost ?? BOOST[category],
     geOnly: Boolean(target.geOnly),
   };
-  if (best <= owned) return { ...rec, status: 'UPGRADE_OWNED', reason: `${target.tier} is already owned — wield it` };
+  // The recommended tool already in the bank is withdrawn, never bought a second time.
+  if ((input.banked?.(target.tier) ?? 0) > 0) return { ...rec, status: 'UPGRADE_OWNED', reason: `${target.tier} is in the bank — withdraw it` };
   if (input.dismissed?.includes(input.step.id)) return { ...rec, status: 'SKIPPED' };
 
   if (target.shop && !target.geOnly) {

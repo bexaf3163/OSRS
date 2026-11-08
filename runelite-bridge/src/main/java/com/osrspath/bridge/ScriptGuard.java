@@ -3,6 +3,7 @@ package com.osrspath.bridge;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 /**
  * Reads that run a client script (Quest.getState is one) are only safe outside a script. A chat message, a varbit or a widget load can be
@@ -28,22 +29,33 @@ final class ScriptGuard
 		return safe;
 	}
 
+	void clear()
+	{
+		last.clear();
+	}
+
 	/** The value of read, run only when it is safe; otherwise (or when the game refuses) the last one for the key, null if none. */
 	Boolean read(String key, BooleanSupplier read)
+	{
+		Boolean current = readCurrent(read::getAsBoolean);
+		if (current != null) last.put(key, current);
+		return last.get(key);
+	}
+
+	/** A fresh typed observation. On refusal return UNKNOWN, never another login's cached quest state. */
+	<T> T readCurrent(Supplier<T> read)
 	{
 		if (safe)
 		{
 			try
 			{
-				boolean v = read.getAsBoolean();
-				last.put(key, v);
-				return v;
+				return read.get();
 			}
 			catch (AssertionError e)
 			{
 				// "scripts are not reentrant": we are inside a script after all. The old value stands; the next tick reads again.
 			}
 		}
-		return last.get(key);
+		return null;
 	}
 }

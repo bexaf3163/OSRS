@@ -2,7 +2,8 @@
 // method, a search, filters and a sort. The scenarios use the real catalogue, the recorded market and the production snapshot (scenario.ts).
 
 import { describe, expect, it } from 'vitest';
-import { badgeOf, browse, BROWSE_TARGET, capitalText, DEFAULT_FILTERS, moneyList, netText, type BrowseFilters } from './browse';
+import { badgeOf, browse, BROWSE_TARGET, capitalText, DEFAULT_FILTERS, moneyList, netText, unlockOf, type BrowseFilters } from './browse';
+import { combatLevel } from '../../player/xp';
 import { evaluate, type MethodEvaluation } from './evaluate';
 import { methodById, METHODS } from './methods';
 import { goalBlocker } from './plan';
@@ -167,7 +168,7 @@ describe('search, filters and sort', () => {
   });
 
   it('sorts by profit, by coins to start and by effort; the default order is the ranking', () => {
-    const profit = browse(list.evals, list.ranking, all, 'profit').rows.map((r) => r.evaluation.netPerHour.slow);
+    const profit = browse(list.evals, list.ranking, all, 'profit').rows.map((r) => r.evaluation.netPerHour!.slow);
     expect([...profit].sort((a, b) => b - a)).toEqual(profit);
     const capital = browse(list.evals, list.ranking, all, 'capital').rows.map((r) => r.evaluation.upfront.minimum);
     expect([...capital].sort((a, b) => a - b)).toEqual(capital);
@@ -192,5 +193,23 @@ describe('the details: every requirement and how the player meets it', () => {
     const shields = byId(evals, 'oziach-shields');
     expect(shields.checks.some((c) => /Dragon Slayer I/.test(c.text) && c.status !== 'ok')).toBe(true);
     for (const e of evals) expect(e.checks.some((c) => /coins needed to start|Coins to start|costs|first batch/.test(c.text)), e.method.id).toBe(true);
+  });
+});
+
+describe('methods a few levels away (every wiki guide is in the catalogue, unlocked by the levels it lists)', () => {
+  it('a method only levels hold back names what to train; any other blocker keeps it plainly locked', () => {
+    const level = (skill: string, missing: number) => ({ kind: 'level' as const, text: '', fixable: true, levels: { skill, missing } });
+    expect(unlockOf({ eligible: false, blockers: [level('attack', 2), level('mining', 3)] })).toEqual({ text: 'Attack +2, Mining +3', missing: 5 });
+    expect(unlockOf({ eligible: false, blockers: [level('attack', 2), { kind: 'quest', text: 'Needs X', fixable: true }] })).toBeNull();
+    expect(unlockOf({ eligible: true, blockers: [] })).toBeNull();
+  });
+
+  it('the combat level gates a combat card, and a Wilderness method is never the default pick', () => {
+    const s = scenario(market(), { bagCoins: 5000, bankCoins: 20000, stats: SKILLED });
+    const list = moneyList(s.base, s.assessment);
+    expect(byId(list.evals, 'killing-chaos-dwarves').blockers.find((b) => b.kind === 'level')?.levels)
+      .toEqual({ skill: 'combat', missing: 60 - combatLevel(SKILLED)! });
+    expect(list.ranking.best?.method.risk).not.toBe('high');
+    expect(list.ranking.needsAttention.map((e) => e.method.id)).toContain('collecting-chaos-runes');
   });
 });

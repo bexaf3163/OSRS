@@ -7,7 +7,8 @@ import { useBridge } from '../../state/bridge';
 import { useStore } from '../../state/store';
 import { useFeatures } from '../../state/hooks/useFeatures';
 import { styleOf } from '../../domain/persistence/playStyle';
-import { isClosed, openAfter } from '../../domain/quests/next-step';
+import { isClosed } from '../../domain/quests/next-step';
+import { roadFrom, useDecisionWindow } from '../../state/decision';
 import { useReadinessEngine, useTrackedTraining } from '../../state/readinessContext';
 import { usePlayerState } from '../../state/playerStateContext';
 import { planPayload } from '../../domain/prep/prepEnvelope';
@@ -18,7 +19,7 @@ import { procurementDetour, type Detour } from '../../domain/travel/detours';
 import { fairyRingsUnlocked, oneTimeUsedOf, transportKey, travelInputOf } from '../../domain/travel/travelInput';
 import { decideTransport, publishTransport, transportSources, transportTarget } from '../../domain/readiness/liveTransport';
 import type { RecommendedTransport } from '../../domain/travel/transport';
-import { planTravelSupplies, roadSteps } from '../../domain/readiness/travelSupplies';
+import { planTravelSupplies } from '../../domain/readiness/travelSupplies';
 import { useReadinessVerdict } from '../../features/path/prep/ReadinessVerdict';
 
 /** How often the position is read for the purchase detour: the text is rounded, so the snapshot does not change on every step. */
@@ -44,7 +45,7 @@ export function PrepSync() {
 
 function StepPlan({ step }: { step: Step }) {
   const { setPrepPart, stats, gear, owned, moves, questInstruction, chronicleCharges, questsDone } = useBridge();
-  const { progress, mode, steps } = useStore();
+  const { progress, mode } = useStore();
   const { prices } = usePlayerState();
   const profile = styleOf(useFeatures());
   const upgrade = useUpgradeRecommendation(step);
@@ -55,9 +56,10 @@ function StepPlan({ step }: { step: Step }) {
   const [transport, setTransport] = useState<RecommendedTransport | null>(null);
   const planRef = useRef(plan);
   planRef.current = plan;
-  const nextStep = openAfter(steps, progress, step.id, engine.ctx.qp, engine.dependencies) ?? null;
+  const ahead = useDecisionWindow();
   // The road ahead: this step and the next open ones, for the supplies the teleports on it need.
-  const road = roadSteps(steps, (id) => !isClosed(progress, id), step.id);
+  const road = roadFrom(ahead, step).filter((s) => !isClosed(progress, s.id));
+  const nextStep = road[1] ?? null;
   const roadKey = road.map((s) => s.id).join(',');
   const bagRef = useRef({ levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), questsDone, state: engine.ctx.state, priceOf: prices.buyPriceOf, questInstruction, nextStep, road });
   bagRef.current = { levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), questsDone, state: engine.ctx.state, priceOf: prices.buyPriceOf, questInstruction, nextStep, road };
@@ -94,8 +96,8 @@ function StepPlan({ step }: { step: Step }) {
         step, pos, instruction: b.questInstruction, nextStep: b.nextStep,
         levels: b.levels, stats: b.stats, gear: b.gear, owned: b.owned, mode: b.mode, fairyRings: b.fairyRings, oneTimeUsed: b.oneTimeUsed, questsDone: b.questsDone, priceOf: b.priceOf,
         homeCooldownSec: live ? st.homeTeleportSeconds : null,
-        // An older plugin does not say whether the Home Teleport is ready: then it is as before (ready unless it reports a cooldown).
-        ...(live && st.homeTeleportKnown !== null ? { homeCooldownKnown: st.homeTeleportKnown } : {}),
+        // An unread cooldown stays a check, including with an older plugin.
+        homeCooldownKnown: live && st.homeTeleportKnown === true,
         ...(live ? { spellbook: st.spellbook, chronicleCharges: charges } : {}),
         sourceOf, supplies,
       });
@@ -104,7 +106,8 @@ function StepPlan({ step }: { step: Step }) {
       const at = decision.to;
       if (!pos || !at || decision.skipped) { setDetour(null); return; }
       // The bag and the levels: a teleport that is ready shortens the way to the stop.
-      const t = travelInputOf({ from: pos, to: at, levels: b.levels, stats: b.stats, gear: b.gear, owned: b.owned, mode: b.mode, fairyRings: b.fairyRings, oneTimeUsed: b.oneTimeUsed, questsDone: b.questsDone });
+      const t = travelInputOf({ from: pos, to: at, levels: b.levels, stats: b.stats, gear: b.gear, owned: b.owned, mode: b.mode, fairyRings: b.fairyRings, oneTimeUsed: b.oneTimeUsed, questsDone: b.questsDone,
+        ...(live ? { spellbook: st.spellbook, chronicleCharges: charges } : {}) });
       setDetour(procurementDetour({ plan: planRef.current, stepId: step.id, from: pos, to: at, coins, travel: t }));
     };
     void run();

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Quote, QuoteBoard } from '../../services/pricesApi';
-import { absorbs, buildPriceView, buyOf, sellOf, THIN_VOLUME } from './quotes';
+import { absorbs, buildPriceView, buyOf, sellOf, planningQuote, THIN_VOLUME } from './quotes';
 
 const NOW = 1_792_000_000_000;
 const min = (m: number) => NOW - m * 60_000;
@@ -15,6 +15,38 @@ const quote = (id: number, high: [number | null, number | null], low: [number | 
 // Real shapes seen on 2026-10-18 (Big bones 334/325 with a deep market; Black scimitar 3050/1744 with almost no trades).
 const bigBones = quote(532, [334, min(1)], [325, min(2)], { avgHigh: 344.87, avgLow: 331.74, highVolume: 19738, lowVolume: 13046 });
 const blackScimitar = quote(1327, [3050, min(40)], [1744, min(300)], { avgHigh: 3000, avgLow: 1800, highVolume: 3, lowVolume: 2 });
+
+describe('once-only conservative planning policy', () => {
+  it('retains the reference and metadata, rounds correctly and never compounds the margin', () => {
+    const raw = buyOf(quote(1, [170, min(2)], [170, min(2)]), NOW)!;
+    const buy = planningQuote(raw, 'buy')!;
+    expect(buy.price).toBe(187); // 170*1.1 can exceed187 slightly in binary floating point.
+    expect(buy.referencePrice).toBe(170);
+    expect(buy.ageMinutes).toBe(raw.ageMinutes);
+    expect(buy.confidence).toBe(raw.confidence);
+    expect(planningQuote(buy, 'buy')).toBe(buy);
+    expect(planningQuote(buy, 'sell')).toMatchObject({ price: 153, referencePrice: 170 });
+    expect(raw.price).toBe(170);
+    expect(raw.planningPolicy).toBeUndefined();
+  });
+  it('S96: a 1,000 GP reference plans a 1,100 buy and a 900 sell; low confidence adds no second haircut', () => {
+    const raw = buyOf(quote(1, [1000, min(2)], [1000, min(2)]), NOW)!;
+    for (const confidence of ['HIGH', 'LOW'] as const) {
+      const buy = planningQuote({ ...raw, confidence }, 'buy')!, sell = planningQuote({ ...raw, confidence }, 'sell')!;
+      expect([buy.price, sell.price, buy.confidence, sell.referencePrice]).toEqual([1100, 900, confidence, 1000]);
+      expect(planningQuote(sell, 'sell')!.price).toBe(900);
+    }
+  });
+
+  it('uses the same single reference for a missing side and refuses invalid prices', () => {
+    const only = quote(2, [501, min(1)], [null, null]);
+    expect(planningQuote(buyOf(only, NOW), 'buy')?.price).toBe(552);
+    expect(planningQuote(sellOf(only, NOW), 'sell')?.price).toBe(450);
+    expect(planningQuote(null, 'buy')).toBeNull();
+    const raw = buyOf(only, NOW)!;
+    for (const price of [NaN, Infinity, -1, 0, Number.MAX_SAFE_INTEGER]) expect(planningQuote({ ...raw, price }, 'buy')).toBeNull();
+  });
+});
 
 describe('buying and selling prices', () => {
   it('a deep, fresh market is HIGH confidence with no notes', () => {
@@ -60,7 +92,8 @@ describe('buying and selling prices', () => {
     const s = sellOf(onlyHigh, NOW)!;
     expect(s.basis).toBe('other-side');
     expect(s.confidence).toBe('LOW');
-    expect(s.price).toBeLessThan(500);
+    expect(s.price).toBe(500); // The raw substitute has no second arbitrary haircut.
+    expect(planningQuote(s, 'sell')?.price).toBe(450);
     expect(s.notes[0]).toMatch(/No recent sell price/);
     const onlyLow = quote(3, [null, null], [40, min(1)], null);
     const b = buyOf(onlyLow, NOW)!;
@@ -105,28 +138,29 @@ describe('the price view', () => {
   it('prices by name from the board', () => {
     const v = buildPriceView({ board: board('live', [bigBones]), mapping, baked, now: NOW });
     expect(v.status).toBe('live');
-    expect(v.buy('Big bones')!.price).toBe(334);
+    expect(v.buy('Big bones')!.price).toBe(368);
+    expect(v.buy('BIG BONES')).toBe(v.buy('Big bones'));
     expect(v.idOf('big BONES')).toBe(532);
     expect(v.sell('Nothing named this')).toBeNull();
   });
   it('a known item ID can use its real quote even when the name mapping is unavailable', () => {
     const v = buildPriceView({ board: board('live', [bigBones]), mapping: null, baked, now: NOW });
     expect(v.status).toBe('live');
-    expect(v.buy('Different display label', 532)).toMatchObject({ price: 334, basis: 'side' });
+    expect(v.buy('Different display label', 532)).toMatchObject({ price: 368, referencePrice: 334, basis: 'side' });
     expect(v.buy('Big bones')).toMatchObject({ basis: 'baked' });
     expect(v.idOf('Big bones')).toBeUndefined();
   });
 
   it('a name the board does not know falls back to the guide database, marked LOW', () => {
     const v = buildPriceView({ board: board('live', [bigBones]), mapping, baked, now: NOW });
-    expect(v.buy('Salmon')).toMatchObject({ price: 30, basis: 'baked', confidence: 'LOW' });
+    expect(v.buy('Salmon')).toMatchObject({ price: 33, referencePrice: 30, basis: 'baked', confidence: 'LOW' });
   });
 
   it('an offline board is baked prices only, and says so', () => {
     const v = buildPriceView({ board: { at: 0, hourAt: null, quotes: new Map(), status: 'offline', error: 'x' }, mapping: null, baked, now: NOW });
     expect(v.status).toBe('baked');
     expect(v.at).toBeNull();
-    expect(v.sell('Big bones')).toMatchObject({ price: 290, confidence: 'LOW', basis: 'baked' });
+    expect(v.sell('Big bones')).toMatchObject({ price: 261, referencePrice: 290, confidence: 'LOW', basis: 'baked' });
   });
   it('a runtime view without planning fallbacks remains offline with no buy or sale estimate', () => {
     const v = buildPriceView({ board: null, mapping, baked: new Map(), now: NOW });

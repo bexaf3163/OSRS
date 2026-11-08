@@ -5,7 +5,7 @@ import { emptyProgress, withStep } from '../src/domain/persistence/progress';
 import { ownedText, triggerText } from '../src/domain/quests/triggers';
 import { APP_PROTOCOL, backoffMs, BRIDGE_PATHS, checkStatus, clearActiveStep, connectEvents, missingWithPlugin, parseNavTarget, parseQuestInstruction, pluginCompat, syncActiveStep, type BridgeEvent, type BridgeTransport } from '../src/services/runeliteBridge';
 import { parseEvent } from '../src/services/bridgeEvents';
-import { planAutoComplete, toInGameTarget } from '../src/domain/guide/inGameTarget';
+import { autoCompletes, toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { mapPlaces, stepPlaces } from '../src/domain/travel/stepPlaces';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
@@ -246,53 +246,26 @@ describe('the event stream', () => {
 });
 
 describe('auto-mark from the game', () => {
-  it('advances only to a destination whose other prerequisites and quest points are satisfied', () => {
-    const base = f2p[0];
-    const list = [
-      { ...base, id: 'A', requires: [] },
-      { ...base, id: 'B', requires: ['A'], minQp: 10 },
-      { ...base, id: 'C', requires: ['X'] },
-      { ...base, id: 'D', requires: ['A'] },
-    ];
-    const p = emptyProgress();
-    const plan = planAutoComplete(list, p, 'A', 'A', new Set(), 1, () => false);
-    expect(plan.mark).toBe(true);
-    expect(plan.next?.id).toBe('D');
-    expect(p.steps).toEqual({});
-  });
-
-  it('marks the step and sends the next one to the game, if this one was in the game', () => {
-    const plan = planAutoComplete(f2p, emptyProgress(), 'S1-03', 'S1-03', new Set());
-    expect(plan.mark).toBe(true);
-    expect(plan.next?.id).toBe('S1-04');
-    expect(plan.inGame).toBe('sync-next');
-  });
-
-  it('the next step has nothing to show in the game — the hints are cleared', () => {
-    // After the last F2P step the next one is S1-01 (client setup): no place, no highlight.
-    const plan = planAutoComplete(f2p, emptyProgress(), 'S6-05', 'S6-05', new Set());
-    expect(plan.next?.id).toBe('S1-01');
-    expect(plan.inGame).toBe('clear');
+  it('marks the completed step only: no route order picks what the game shows next (the committed Decision does)', () => {
+    expect(autoCompletes(f2p, emptyProgress(), 'S1-03', new Set())).toBe(true);
   });
 
   it('a repeat of the same event does nothing', () => {
-    const plan = planAutoComplete(f2p, emptyProgress(), 'S1-03', 'S1-03', new Set(['S1-03']));
-    expect(plan).toEqual({ mark: false, inGame: 'keep' });
+    expect(autoCompletes(f2p, emptyProgress(), 'S1-03', new Set(['S1-03']))).toBe(false);
   });
 
   it('an already marked step is left alone', () => {
     const p = withStep(emptyProgress(), 'S1-03', 'done');
-    expect(planAutoComplete(f2p, p, 'S1-03', 'S1-03', new Set()).mark).toBe(false);
+    expect(autoCompletes(f2p, p, 'S1-03', new Set())).toBe(false);
   });
 
-  it('another step is shown in the game — we mark, but do not override the hints in the game', () => {
-    const plan = planAutoComplete(f2p, emptyProgress(), 'S1-04', 'S1-06', new Set());
-    expect(plan).toMatchObject({ mark: true, inGame: 'keep' });
+  it('another step is shown in the game — the completed one is still marked', () => {
+    expect(autoCompletes(f2p, emptyProgress(), 'S1-04', new Set())).toBe(true);
   });
 
   it('a Members step in F2P mode and an unknown code are ignored', () => {
-    expect(planAutoComplete(f2p, emptyProgress(), 'S7-04', 'S7-04', new Set()).mark).toBe(false);
-    expect(planAutoComplete(f2p, emptyProgress(), 'S0-00', null, new Set()).mark).toBe(false);
+    expect(autoCompletes(f2p, emptyProgress(), 'S7-04', new Set())).toBe(false);
+    expect(autoCompletes(f2p, emptyProgress(), 'S0-00', new Set())).toBe(false);
   });
 });
 

@@ -384,10 +384,12 @@ final class PluginHighlights
 			plugin.xp.clear();
 			plugin.xpDirty = true;
 			plugin.questsSent = null;
+			plugin.scripts.clear();
 			plugin.playerSent = null;
 			if (plugin.server != null)
 			{
 				plugin.server.setQuests(null);
+				plugin.server.reports.endQuestSession();
 				plugin.server.setPlayer(null);
 				plugin.server.setPos(null, null, null);
 			}

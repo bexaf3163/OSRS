@@ -9,21 +9,29 @@ const GAP_MS = 400;
 export interface Pt { x: number; y: number; plane: number; label?: string }
 
 let last = 0;
-/** The article's wikitext; a redirect is followed. Throws on a missing page or after repeated server errors. */
-export async function wikitext(page: string): Promise<string> {
+export interface WikiArticle { title: string; revision: number; wikitext: string }
+
+/** The article and its revision; a redirect is followed. Never label an unversioned response as verified. */
+export async function wikiArticle(page: string): Promise<WikiArticle> {
   for (let attempt = 1; ; attempt++) {
     const wait = last + GAP_MS - Date.now();
     if (wait > 0) await new Promise((r) => setTimeout(r, wait));
     last = Date.now();
-    const res = await fetch(`${API}?${new URLSearchParams({ action: 'parse', page, prop: 'wikitext', format: 'json', formatversion: '2', redirects: '1' })}`, { headers: { 'User-Agent': UA } });
+    const res = await fetch(`${API}?${new URLSearchParams({ action: 'parse', page, prop: 'wikitext|revid', format: 'json', formatversion: '2', redirects: '1' })}`, { headers: { 'User-Agent': UA } });
     if (res.ok) {
-      const json = (await res.json()) as { parse?: { wikitext: string }; error?: { info: string } };
+      const json = (await res.json()) as { parse?: WikiArticle & { revid: number }; error?: { info: string } };
       if (!json.parse) throw new Error(`${page}: ${json.error?.info ?? 'no page'}`);
-      return json.parse.wikitext;
+      if (!Number.isSafeInteger(json.parse.revid) || json.parse.revid <= 0 || !json.parse.title || typeof json.parse.wikitext !== 'string') throw new Error(`${page}: incomplete article provenance`);
+      return { title: json.parse.title, revision: json.parse.revid, wikitext: json.parse.wikitext };
     }
     if (attempt >= 6 || (res.status !== 429 && res.status < 500)) throw new Error(`${page}: ${res.status}`);
     await new Promise((r) => setTimeout(r, 4000 * attempt));
   }
+}
+
+/** Shared text-only convenience for builders that do not retain revision metadata. */
+export async function wikitext(page: string): Promise<string> {
+  return (await wikiArticle(page)).wikitext;
 }
 
 /** Every {{Name ...}} of the text with its parameters (named ones by name, positional ones by 1, 2, ...); nested templates stay as text inside. */

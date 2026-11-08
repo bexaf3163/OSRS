@@ -28,6 +28,8 @@ export interface Mock {
   offline?: boolean;
   /** A reachable bridge rejects the guide snapshot for its size. */
   oversizedSnapshot?: boolean;
+  /** HTTP success can still carry a protocol-level refusal. */
+  snapshotReply?: { stale?: boolean; rejected?: Record<string, string> };
   /** A physical file-save failure, independent of working browser storage. */
   fileWriteFailure?: boolean;
   profileWriteFailure?: boolean;
@@ -41,6 +43,14 @@ export function progressBefore(id: string, extra: Record<string, unknown> = {}) 
   const ids = steps.map((s) => s.id);
   const done = Object.fromEntries(ids.slice(0, ids.indexOf(id)).map((s) => [s, 'done']));
   return { version: 3, steps: done, levels: {}, notes: {}, updatedAt: '2026-09-27T10:00:00.000Z', gameMode: 'members', ...extra };
+}
+
+const quests = JSON.parse(readFileSync(new URL('../../../src/data/generated/questFacts.json', import.meta.url), 'utf8')).items as { id: string; stepIds: string[] }[];
+/** The plugin's quest states for the same character: quests wholly before the step are complete, the rest not started. */
+export function questStatesBefore(id: string) {
+  const ids = steps.map((s) => s.id), at = ids.indexOf(id);
+  const states = Object.fromEntries(quests.map((q) => [q.id, q.stepIds.every((s) => ids.indexOf(s) < at && ids.includes(s)) ? 'COMPLETED' : 'NOT_STARTED']));
+  return { player: 'Fixture', sessionId: 'login-current', revision: 1, questPoints: 3, states };
 }
 
 export async function open(browser: Browser, width: number, mock: Mock, hash: string): Promise<{ page: Page; errors: string[] }> {
@@ -117,6 +127,7 @@ export async function open(browser: Browser, width: number, mock: Mock, hash: st
             return reply;
           }
           if (path === '/prep-plan' && m.oversizedSnapshot) return { ok: false, status: 413, data: { error: 'body too large' } };
+          if (path === '/prep-plan' && m.snapshotReply) return { ok: true, status: 200, data: m.snapshotReply };
           return { ok: true, status: 200, data: { ok: true } };
         },
         openEvents: (onEvent: (d: string) => void, onState: (s: string) => void) => {

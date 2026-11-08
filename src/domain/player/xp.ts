@@ -1,6 +1,7 @@
 // The standard OSRS XP formula. check-data compares it with the "How much XP is needed per level" table in src/data/xp.json.
 
-import type { Levels } from '../economy/moneyAdvisor';
+/** Levels by skill name; undefined means unknown. */
+export type Levels = Readonly<Record<string, number | undefined>>;
 
 export const MIN_LEVEL = 1;
 export const MAX_LEVEL = 99;
@@ -19,6 +20,13 @@ export function clampLevel(level: number): number {
 /** The XP at which a level begins. */
 export function xpForLevel(level: number): number {
   return table[clampLevel(level)];
+}
+
+/** A live exact XP value must also fit its independently reported real level. */
+export function coherentSkillXp(xp: unknown, level?: number): xp is number {
+  return typeof xp === 'number' && Number.isSafeInteger(xp) && xp >= 0 && xp <= 200_000_000
+    && (level === undefined || (Number.isInteger(level) && level >= MIN_LEVEL && level <= MAX_LEVEL
+      && xp >= xpForLevel(level) && (level === MAX_LEVEL || xp < xpForLevel(level + 1))));
 }
 
 /** How much XP from the start of level `from` to the start of level `to`. */

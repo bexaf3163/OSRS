@@ -87,7 +87,7 @@ describe('the shared quote board: one fetch loop for every screen', () => {
     expect(cached.quotes).toBe(first.quotes);
     expect(first.status).toBe('live');
     const view = buildPriceView({ board: cached, mapping: new Map([[1, { name: 'Test item' }]]), baked: new Map(), now: 1_001 });
-    expect(view.buy('Test item', 1)).toMatchObject({ price: 100, confidence: 'LOW' });
+    expect(view.buy('Test item', 1)).toMatchObject({ price: 110, referencePrice: 100, confidence: 'LOW' });
     expect(view.buy('Test item', 1)?.notes.join(' ')).toContain('earlier prices');
     await vi.advanceTimersByTimeAsync(300_000);
     expect(store.getState().board?.status).toBe('live');

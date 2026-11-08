@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, known, stepById } from '../../data';
 import { emptyProgress, normalizeProgress, withSellRestrictions } from '../persistence/progress';
-import { MONEY } from '../economy/moneyAdvisor';
 import { fundingPlan, costThroughTier } from '../economy/fundingPlan';
 import {
-  isRestrictedItem, LIFT, RESTRICTED_ITEMS, RESTRICTED_METHOD_IDS, restrictionSummary, totalLevelOf, tradeRestriction, ALL_SKILLS,
+  isRestrictedItem, LIFT, RESTRICTED_ITEMS, restrictionSummary, totalLevelOf, tradeRestriction, ALL_SKILLS,
 } from './tradeRestriction';
 import { checkStatus, type BridgeTransport } from '../../services/runeliteBridge';
 
@@ -63,10 +62,6 @@ describe('the restricted items', () => {
     for (const n of ['Big bones', 'Bones', 'Iron bar', 'Cooked meat', 'Uncut sapphire', 'Leather boots', 'Redberry pie', 'Nature rune', 'Coins']) expect(isRestrictedItem(n), n).toBe(false);
   });
 
-  it('every money method named as restricted exists in the money data', () => {
-    const ids = new Set(MONEY.methods.map((m) => m.id));
-    for (const id of RESTRICTED_METHOD_IDS) expect(ids.has(id), id).toBe(true);
-  });
 });
 
 describe('the funding plan of S2-01 without selling', () => {

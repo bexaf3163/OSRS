@@ -54,8 +54,28 @@ function holding(state: StockState, line: Demand, reserved: ReadonlyMap<string, 
 
 /** Required primary stacks are reserved before alternatives are allocated, then physical pieces are spent once. */
 export function allocateMaterialStock(state: StockState, lines: readonly Demand[], reservations?: ReadonlyMap<string, number>): Map<string, MaterialHolding> {
-  if (!lines.some(material)) return new Map();
-  const names = new Set(lines.filter(material).flatMap(line => [line.nameEn, ...(line.anyOf ?? [])]).map(nameKey));
+  return allocateStock(state, lines, reservations);
+}
+
+/** Cost projections use the same physical allocation as preparation, including primary reservations and alternatives. */
+export function consumeMaterialStock(state: StockState, demands: readonly { name: string; count: number; anyOf?: readonly string[] }[]): { name: string; count: number }[] | null {
+  const total = demands.reduce((sum, d) => sum + d.count, 0);
+  if (!Number.isSafeInteger(total) || demands.some(d => !nameKey(d.name) || !Number.isSafeInteger(d.count) || d.count <= 0 || d.anyOf?.some(n => !nameKey(n)))) return null;
+  const lines = demands.map((d, index) => ({ key: `consume:${index}`, nameEn: d.name, count: d.count, anyOf: d.anyOf }));
+  const used = new Map<string, { name: string; count: number }>();
+  let allocated = 0;
+  allocateStock({ ...state, manual: {} }, lines, undefined, (name, count) => {
+    const key = nameKey(name);
+    used.set(key, { name, count: (used.get(key)?.count ?? 0) + count });
+    allocated += count;
+  });
+  return allocated === total && [...used.values()].every(item => Number.isSafeInteger(item.count)) ? [...used.values()] : null;
+}
+
+function allocateStock(state: StockState, lines: readonly Demand[], reservations?: ReadonlyMap<string, number>, spent?: (name: string, count: number) => void): Map<string, MaterialHolding> {
+  const eligible = (line: Demand) => spent !== undefined || material(line);
+  if (!lines.some(eligible)) return new Map();
+  const names = new Set(lines.filter(eligible).flatMap(line => [line.nameEn, ...(line.anyOf ?? [])]).map(nameKey));
   const items = new Map<string, OwnedItem>([...names].flatMap(key => {
     const value = state.owned?.items.get(key);
     return value ? [[key, { ...value }] as [string, OwnedItem]] : [];
@@ -65,7 +85,7 @@ export function allocateMaterialStock(state: StockState, lines: readonly Demand[
   if (!reservations) for (const line of lines) reserved.set(nameKey(line.nameEn), (reserved.get(nameKey(line.nameEn)) ?? 0) + line.count);
   const result = new Map<string, MaterialHolding>();
   for (const line of lines) {
-    if (!material(line)) continue;
+    if (!eligible(line)) continue;
     const primary = nameKey(line.nameEn);
     reserved.set(primary, Math.max(0, (reserved.get(primary) ?? 0) - (line.reservedCount ?? line.count)));
     const held = holding(pool, line, reserved);
@@ -79,6 +99,7 @@ export function allocateMaterialStock(state: StockState, lines: readonly Demand[
         const field = where === 'bag' ? 'carried' : where;
         record[field] = Math.max(0, (record[field] ?? 0) - take);
         left -= take;
+        spent?.(part.name, take);
         if (nameKey(part.name) === primary) primaryUsed += take;
       }
     }

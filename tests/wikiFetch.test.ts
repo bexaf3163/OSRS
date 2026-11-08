@@ -7,7 +7,7 @@ const response = (body: unknown, status = 200) => new Response(JSON.stringify(bo
 describe('the shared Wiki reader used by content builders', () => {
   it('preserves wikitext, follows redirects and keeps sequential requests throttled', async () => {
     const times: number[] = [];
-    const fetcher = vi.fn(async () => { times.push(Date.now()); return response({ parse: { wikitext: '{{Infobox|value=raw}}' } }); });
+    const fetcher = vi.fn(async () => { times.push(Date.now()); return response({ parse: { title: 'Source', revid: 7, wikitext: '{{Infobox|value=raw}}' } }); });
     vi.stubGlobal('fetch', fetcher);
     const { wikitext } = await import('../scripts/data/wiki');
     const run = async () => [await wikitext('A page'), await wikitext('Another page')];
@@ -18,11 +18,12 @@ describe('the shared Wiki reader used by content builders', () => {
     const [url, options] = fetcher.mock.calls[0] as unknown as [string, RequestInit];
     expect(new URL(url).searchParams.get('redirects')).toBe('1');
     expect(new URL(url).searchParams.get('page')).toBe('A page');
+    expect(new URL(url).searchParams.get('prop')).toBe('wikitext|revid');
     expect(options.headers).toHaveProperty('User-Agent');
   });
   it('retries rate limits and server errors while preserving the successful response', async () => {
     const fetcher = vi.fn().mockResolvedValueOnce(response({}, 429)).mockResolvedValueOnce(response({}, 503))
-      .mockResolvedValueOnce(response({ parse: { wikitext: 'verified source' } }));
+      .mockResolvedValueOnce(response({ parse: { title: 'Source', revid: 9, wikitext: 'verified source' } }));
     vi.stubGlobal('fetch', fetcher);
     const { wikitext } = await import('../scripts/data/wiki');
     const result = wikitext('Source');
@@ -43,6 +44,18 @@ describe('the shared Wiki reader used by content builders', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(response({ error: { info: 'page unavailable' } })));
     const { wikitext } = await import('../scripts/data/wiki');
     const check = expect(wikitext('Missing')).rejects.toThrow('Missing: page unavailable');
+    await vi.runAllTimersAsync();
+    await check;
+  });
+  it('retains the exact revision and rejects missing provenance', async () => {
+    const fetcher = vi.fn().mockResolvedValueOnce(response({ parse: { title: 'Resolved title', revid: 12, wikitext: 'raw' } }))
+      .mockResolvedValueOnce(response({ parse: { title: 'Unversioned', wikitext: 'raw' } }));
+    vi.stubGlobal('fetch', fetcher);
+    const { wikiArticle } = await import('../scripts/data/wiki');
+    const first = wikiArticle('Redirect');
+    await vi.runAllTimersAsync();
+    expect(await first).toEqual({ title: 'Resolved title', revision: 12, wikitext: 'raw' });
+    const check = expect(wikiArticle('Unversioned')).rejects.toThrow(/incomplete article provenance/);
     await vi.runAllTimersAsync();
     await check;
   });
