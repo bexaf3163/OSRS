@@ -117,7 +117,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
   // Shared blocks are composed into the current step tabs; calculations stay independent of presentation.
   const metaRow = (
     <div className="step-meta-row">
-      <span className="muted small">{TYPE_LABEL[step.type]} · stage {step.stage}</span>
+      <span className="muted small">{TYPE_LABEL[step.type]}</span>
       {links.length > 0 && (
         <span className="link-chips">
           {links.map((l) => (
@@ -183,7 +183,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
         </section>
       )}
       {step.type === 'gear' && step.itemsRequired?.length ? (
-        <p className="muted small"><a href={hrefTo.shopping()}>🛒 Grand Exchange shopping list</a> — buying for several stages ahead at once.</p>
+        <p className="muted small"><a href={hrefTo.shopping()}>🛒 Grand Exchange shopping list</a> — buying for the planner's next steps at once.</p>
       ) : null}
     </>
   );

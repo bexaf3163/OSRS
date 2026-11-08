@@ -98,7 +98,7 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
         </p>
       </header>
       {skill.membersOnly && mode === 'f2p' && (
-        <p className="notice">This skill can be trained only with membership. Switch the mode to Members in the header to see stages 7–9.</p>
+        <p className="notice">This skill can be trained only with membership. Switch the mode to Members in the header to see its training.</p>
       )}
 
       {skill.levelSkills.length > 1 && <nav className="skill-seg" aria-label="Combat skill">

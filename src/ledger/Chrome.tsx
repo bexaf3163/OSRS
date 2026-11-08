@@ -54,10 +54,10 @@ export function Hud({ player, members, onMembers, status, onOpenSearch, settings
       </div>
       <span className="la-sp" />
       <div className="la-world" role="group" aria-label="Game mode">
-        <button type="button" className={members ? '' : 'la-on'} aria-pressed={!members} title="Free version: stages 1–6" onClick={() => onMembers(false)}>
+        <button type="button" className={members ? '' : 'la-on'} aria-pressed={!members} title="Free version: free quests and skills" onClick={() => onMembers(false)}>
           FREE
         </button>
-        <button type="button" className={members ? 'la-on' : ''} aria-pressed={members} title="Membership: stages 1–9 and members skills" onClick={() => onMembers(true)}>
+        <button type="button" className={members ? 'la-on' : ''} aria-pressed={members} title="Membership: members quests and skills" onClick={() => onMembers(true)}>
           MEMBERS
         </button>
       </div>

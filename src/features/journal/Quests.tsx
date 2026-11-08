@@ -107,7 +107,7 @@ export function QuestsPage({ embedded = false, render }: { embedded?: boolean; r
               <span className="quest-body">
                 <span className="quest-title">{r.quest.title}</span>
                 <span className="quest-meta">
-                  Stage {r.quest.stage}{r.quest.membersOnly && ' · Members'}{r.quest.qp > 0 && ` · +${r.quest.qp} QP`}
+                  {r.quest.membersOnly ? 'Members' : 'Free'}{r.quest.qp > 0 && ` · +${r.quest.qp} QP`}
                   {r.quest.parts.length > 0 && ` · steps ${r.partsDone} / ${r.quest.parts.length}`}
                   {' · '}
                   <span className="quest-state">{{ done: 'done', skipped: 'skipped', available: 'available', blocked: 'blocked' }[r.status]}</span>
@@ -126,7 +126,7 @@ export function QuestsPage({ embedded = false, render }: { embedded?: boolean; r
   const detail = (<>
       {selected && <section className="card quest-preview" aria-label="Selected quest">
         <div className="quest-preview-heading"><TypeIcon type="quest" /><h2>{selected.quest.title}</h2></div>
-        <p className="muted">Stage {selected.quest.stage} · {selected.status}</p>
+        <p className="muted">{selected.status}</p>
         {selected.quest.qp > 0 && <p className="badge badge-qp">+{selected.quest.qp} quest points</p>}
         {notInGame(selected) && <p className="notice">Marked done here, but the game does not count it as finished: its quest points are not in your total.</p>}
         {selected.quest.parts.length > 0 && <p>{selected.partsDone} / {selected.quest.parts.length} route steps completed</p>}
