@@ -12,7 +12,6 @@ import { needsReview } from '../../../domain/readiness/review';
 import { IconCheck, IconExternal, TYPE_LABEL } from '../../../ui/Icons';
 import { Inline } from '../../../ui/Inline';
 import { LevelInput } from '../../../ui/LevelInput';
-import { RangeHints } from '../combat/RangeHints';
 import { StepImage } from './StepImage';
 import { StepMap } from '../../map/StepMap';
 import { InGamePanel } from '../InGamePanel';
@@ -276,7 +275,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
         })}
       </div>
       <LiveXp targets={step.targets} />
-      <RangeHints step={step} />
     </div>
   );
 

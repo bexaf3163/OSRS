@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { findSkill, items, levelById, membersGuide, membersSkills, plugins, reference, skillById, skills, stepById, stepsFor } from '../src/data';
 import { rangeForLevel, skillRange } from '../src/domain/training/ranges';
 import { buildIndex, search } from '../src/domain/quests/search';
-import { stepSkills } from '../src/features/path/combat/RangeHints';
 import { emptyProgress } from '../src/domain/persistence/progress';
 
 const progress = (levels: Record<string, number>) => ({ ...emptyProgress(), levels });
@@ -45,9 +44,10 @@ describe('members skills: plans from the guide', () => {
     expect(skillById.size).toBe(20);
   });
 
-  it('route steps with agility and slayer show a plan row', () => {
-    expect(stepSkills(stepById.get('S7-04')!).map((s) => s.id)).toEqual(['AG']);
-    expect(stepSkills(stepById.get('S8-04')!).map((s) => s.id).sort()).toEqual(['CO', 'CR', 'RA', 'SL', 'WC']);
+  it('route steps with agility and slayer link their skill sections', () => {
+    const sectionsOf = (id: string) => [...new Set((stepById.get(id)!.targets ?? []).map((t) => levelById.get(t.skill)!.skill))];
+    expect(sectionsOf('S7-04')).toEqual(['AG']);
+    expect(sectionsOf('S8-04').sort()).toEqual(['CO', 'CR', 'RA', 'SL', 'WC']);
     const ag = skillById.get('AG')!;
     expect(skillRange(ag, progress({ agility: 1 }))?.range.code).toBe('AG-1');
     expect(skillRange(ag, progress({ agility: 25 }))?.range.code).toBe('AG-2');

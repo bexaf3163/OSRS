@@ -421,6 +421,25 @@ async function fishingStep(browser: Browser) {
   }
 }
 
+// A step with two open skills: the engine's card for the followed skill (Fishing) and a one-line engine hint
+// for the other (Cooking), instead of training-table rows.
+async function stepSkillHints(browser: Browser) {
+  const stats = { fishing: 20, cooking: 30 };
+  const { page, errors } = await open(browser, 1280, {
+    progress: progressBefore('S6-01', { gameMode: 'f2p', levels: stats }),
+    status: { protocol: 6, stats }, events: [{ type: 'STATS', stats }],
+  }, '#/step/S6-01');
+  await settle(page);
+  await page.getByRole('tab', { name: 'Preparation', exact: true }).click();
+  await settle(page);
+  const hint = page.locator('p.small', { hasText: 'Cooking to 68:' });
+  const line = (await hint.count()) ? await hint.first().innerText() : '';
+  expect(await hint.locator('strong').count() >= 1 && /, then .+ from \d+/.test(line), `step hints: Cooking gets the engine's methods in one line (${line})`);
+  expect(await page.locator('.hint-code').count() === 0, 'step hints: no training-table rows');
+  expect(await noOverflow(page) && !errors.length, `step hints: no overflow or console errors ${errors.join('; ')}`);
+  await page.context().close();
+}
+
 // "What to train with": the balanced choice by default (2.69), with no mode switch on the card; "Fastest" in Settings shows the time estimate.
 async function whatToTrainWith(browser: Browser) {
   const width = 1100;
@@ -468,4 +487,5 @@ export const scenarios = {
   'training-scope': trainingScopeScenarios,
   'fishing-step': fishingStep,
   'what-to-train-with': whatToTrainWith,
+  'step-skill-hints': stepSkillHints,
 };

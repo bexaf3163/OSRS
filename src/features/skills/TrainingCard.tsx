@@ -284,19 +284,38 @@ export function StepTraining({ step }: { step: Step }) {
   const trig = step.inGame?.completionTrigger;
   // A combat step with its own opponents and pace (S3-08 Minotaurs, S4-03 Hill Giants) is itself the method: another place would contradict it.
   const ownMethod = Boolean(step.foes?.length && step.pacing);
-  const pick = useMemo(() => {
-    if (ownMethod || trig?.type !== 'SKILL_LEVEL' || !trig.levels?.length || trig.items?.length) return null;
+  const order = useMemo(() => {
+    if (ownMethod || trig?.type !== 'SKILL_LEVEL' || !trig.levels?.length || trig.items?.length) return [];
     // How much is left to the goal — for the lagging skill; the level is unknown — we take the first.
     const rows = trig.levels.map((l) => ({ skill: l.skill, target: l.level, lv: levelOf(state, l.skill) }));
     const open = rows.filter((r) => r.lv === undefined || r.lv < r.target);
-    if (!open.length) return null;
     // A step that follows a skill's method shows that skill's card while it is open: the card, the tools and the arrow are one answer.
     const followed = open.find((r) => r.skill === step.followsMethod);
-    if (followed) return followed;
-    return open.sort((a, b) => (a.lv ?? 0) - a.target - ((b.lv ?? 0) - b.target))[0];
+    // Then the biggest gap first; the skills after the card get one-line hints.
+    const rest = open.filter((r) => r !== followed).sort((a, b) => (a.lv ?? 0) - a.target - ((b.lv ?? 0) - b.target));
+    return followed ? [followed, ...rest] : rest;
   }, [ownMethod, trig, state, step.followsMethod]);
+  const [pick, ...others] = order;
   if (!pick) return null;
-  return <TrainingCard skill={pick.skill} target={pick.target} />;
+  return (
+    <>
+      <TrainingCard skill={pick.skill} target={pick.target} />
+      {others.map((r) => <OtherSkillHint key={r.skill} skill={r.skill} target={r.target} />)}
+    </>
+  );
+}
+
+/** Another open skill of the same step: the engine's method toward its level in one line; its page has the full card. */
+function OtherSkillHint({ skill, target }: { skill: string; target: number }) {
+  const advice = useTrainingAdvice(skill, target);
+  const best = advice?.best;
+  const then = best && advice.path.find((l) => l.method.name !== best.method.name);
+  return (
+    <p className="small">
+      <a href={hrefTo.skills(levelById.get(skill)?.skill ?? '', skill)}>{skillTitle(skill)}</a> to {target}:{' '}
+      {best ? <><strong>{best.method.name}</strong>{best.method.where && <span className="muted"> — {best.method.where}</span>}{then && <>, then <strong>{then.method.name}</strong> from {then.fromLevel}</>}{advice.time && <> · {formatHours(advice.time)}</>}</> : <span className="muted">{advice?.reason}</span>}
+    </p>
+  );
 }
 
 /** On a free account: why the F2P checkpoint stops where it does and what membership opens by then, from the method catalogue. */
