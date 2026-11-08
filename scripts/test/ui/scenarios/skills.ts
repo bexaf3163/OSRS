@@ -442,8 +442,15 @@ async function whatToTrainWith(browser: Browser) {
   expect(feat.efficient === true && feat.relaxedTraining === false, 'training choices: "Fastest" was remembered in the settings');
   await page.goto(`${BASE}#/skills/WC`);
   await waitFor(page, '.training', 5000);
+  // No planner need: the goal is where the engine changes method, Willow trees until Teak trees take over at 41.
+  const head = await text(page, '.page-head');
+  await page.getByRole('tab', { name: 'Plan', exact: true }).click();
+  const note = await text(page, '.focus-note');
+  expect(head.includes('Goal 41') && note.includes('switches to Teak trees'), `what to train with: the default goal is the engine's next method (${head} / ${note})`);
+  // An explicit goal past the rune axe (41): the time is a forecast across the plan with the planned axe.
+  await page.goto(`${BASE}#/skills/WC/woodcutting?goal=50`);
+  await waitFor(page, '.training', 5000);
   const fast = await text(page, '.training');
-  // The goal passes the rune axe (41): the time is a forecast across the plan with the planned axe.
   expect(/across your plan/.test(fast), 'what to train with: "Fastest" shows the time across the plan');
   expect(!errors.length, `what to train with: no console errors ${errors.join('; ')}`);
   await page.context().close();

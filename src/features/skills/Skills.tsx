@@ -26,7 +26,7 @@ export function SkillsPage({ param, selectedSkill, goal }: { param?: string; sel
       <Eyebrow>CHARACTER SHEET</Eyebrow>
       <header className="page-head">
         <h1>Skills</h1>
-        <p className="muted">Choose a skill for a recommended method. {plannerGoals.size ? `Goals follow the planner: ${[...plannerGoals.values()][0].why}.` : 'The planner needs no training now; each skill shows its next training row.'}</p>
+        <p className="muted">Choose a skill for a recommended method. {plannerGoals.size ? `Goals follow the planner: ${[...plannerGoals.values()][0].why}.` : 'The planner needs no training now; each skill trains up to where its training method changes.'}</p>
       </header>
       {mode === 'f2p' && <p className="small muted f2p-priority-key">★ Good F2P value · ◇ Optional · ↓ Prefer members. Suggested checkpoints, not caps.</p>}
 

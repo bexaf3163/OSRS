@@ -6,7 +6,7 @@ import { isClosed } from '../../domain/quests/next-step';
 import { usePlannerSkillGoals } from '../../state/decision';
 import { formatXp } from '../../domain/quests/goals';
 import { levelOf } from '../../domain/persistence/progress';
-import { focusRange, rangeForLevel } from '../../domain/training/ranges';
+import { focusRange } from '../../domain/training/ranges';
 import { clampLevel, levelForXp, MAX_LEVEL, xpForLevel } from '../../domain/player/xp';
 import { SkillGlyph } from '../../ui/SectionShell';
 import { Blocks } from '../../ui/Blocks';
@@ -14,12 +14,12 @@ import { IconBack, IconCheck, IconExternal, TypeIcon } from '../../ui/Icons';
 import { LevelInput } from '../../ui/LevelInput';
 import { Table } from '../../ui/Table';
 import { LiveXp } from '../../ui/LiveXp';
-import { TrainingCard } from './TrainingCard';
+import { TrainingCard, useMethodStops, useTrainingAdvice } from './TrainingCard';
 import { RoadmapPane, useTrackedStep } from './SkillRoadmap';
 import { methodOfGuideStep, methodsFor } from '../../domain/training/trainingRouter';
 import { XpTable } from './XpTable';
 import { roadmapSkills } from '../../domain/training/skillGuide';
-import { trainingFocus, type TrainingFocus } from '../../domain/training/skillFocus';
+import { methodStop, trainingFocus, type TrainingFocus } from '../../domain/training/skillFocus';
 import { F2pSkillNote } from './F2pSkillNote';
 import { f2pAdviceFor, f2pAdviceLabel } from '../../domain/training/f2pSkillAdvice';
 import { useTrackedTraining } from '../../state/readinessContext';
@@ -60,17 +60,21 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
     window.setTimeout(() => document.getElementById('plan')?.scrollIntoView({ behavior: 'smooth' }), 60);
   };
   const related = steps.filter((s) => s.targets?.some((t) => levelById.get(t.skill)?.skill === skill.id));
-  // "What to train with": the planner decides first (a level its Decision needs), the generic training row only when it needs none.
+  // "What to train with": the planner decides first (a level its Decision needs), the training engine's next method change only when it needs none.
   const plannerGoals = usePlannerSkillGoals();
   const goalOf = (id: string) => plannerGoals.get(id)?.level;
+  const stops = useMethodStops();
   const focused = selectedSkill ? { ...skill, levelSkills: [selectedSkill] } : skill;
-  const routeFocus = trainingFocus({
-    levelSkills: focused.levelSkills, goalOf, levelOf: (id) => levelOf(progress, id),
-    rowEnd: (_id, lv) => rangeForLevel(skill.plan.ranges, lv)?.range.to ?? null,
-  });
-  const checkpoint = mode === 'f2p' ? f2pAdviceFor(routeFocus.skill)?.target : null;
+  const planned = trainingFocus({ levelSkills: focused.levelSkills, goalOf, levelOf: (id) => levelOf(progress, id) });
+  const checkpoint = mode === 'f2p' ? f2pAdviceFor(planned.skill)?.target : null;
   const training = useTrackedTraining();
   const ownTraining = training && focused.levelSkills.includes(training.step.followsMethod ?? '') ? training : null;
+  // Without a planner need and nothing else setting the goal, one engine advice for the lagging skill sets it; the card
+  // below reuses that advice. Otherwise the engine is not asked for a goal nobody sees.
+  const generic = planned.source === 'generic' && !(requestedGoal !== undefined && selectedSkill) && !ownTraining && !checkpoint;
+  const engine = useTrainingAdvice(generic ? planned.skill : null, MAX_LEVEL, null, true);
+  const stopOf = (id: string) => (engine && id === engine.skill ? methodStop(engine) : stops(id));
+  const routeFocus = generic ? trainingFocus({ levelSkills: focused.levelSkills, goalOf, levelOf: (id) => levelOf(progress, id), stopOf }) : planned;
   const focus: TrainingFocus = requestedGoal !== undefined && selectedSkill ? { skill: selectedSkill, target: requestedGoal, source: 'preparation' }
     : ownTraining ? { skill: ownTraining.step.followsMethod!, target: ownTraining.target, source: 'tracked' }
     : checkpoint ? { skill: routeFocus.skill, target: checkpoint, source: 'checkpoint' } : routeFocus;
@@ -84,6 +88,7 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
     : ownTraining ? { skill: ownTraining.step.followsMethod!, target: ownTraining.target, followed: null } : follow
     ? { skill: follow.skill, target: focus.skill === follow.skill ? focus.target : follow.step.targetLevel, followed: methodOfGuideStep(follow.step)?.id ?? null }
     : { skill: focus.skill, target: focus.target, followed: null };
+  const shared = engine && card.skill === engine.skill && card.target === engine.target && !card.followed ? engine : undefined;
   const f2p = mode === 'f2p' ? f2pAdviceFor(card.skill) : null;
   const defer = f2p?.target === null && requestedGoal === undefined && !ownTraining;
 
@@ -121,13 +126,13 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
         <p className="small muted">{f2p?.reason}</p>
         {f2p?.equipment && <p className="small muted training-equipment">{f2p.equipment}</p>}
         <button type="button" className="link-btn" onClick={() => setTab('calculator')}>Choose a custom goal</button>
-      </section> : <TrainingCard skill={card.skill} target={card.target} followed={card.followed} view="summary" />}
+      </section> : <TrainingCard skill={card.skill} target={card.target} followed={card.followed} advice={shared} view="summary" />}
       </>
       )}
 
       {tab === 'plan' && <>
         <FocusNote focus={focus} why={plannerGoals.get(focus.skill)?.why} />
-        <TrainingCard skill={card.skill} target={card.target} followed={card.followed} view="analysis" />
+        <TrainingCard skill={card.skill} target={card.target} followed={card.followed} advice={shared} view="analysis" />
         {guides.length > 0 && <section className="card skill-guide-roadmap"><RoadmapPane skills={selectedSkill ? guides.filter(id => id === selectedSkill) : guides} label={selectedSkill ? levelById.get(selectedSkill)?.name ?? skill.name : skill.name} /></section>}
       </>}
 
@@ -175,7 +180,7 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
 
       {tab === 'calculator' && <><Calculator levelIds={selectedSkill ? [selectedSkill] : skill.levelSkills} suggest={(lid, level) =>
         requestedGoal !== undefined && lid === selectedSkill ? requestedGoal
-          : mode === 'f2p' && f2pAdviceFor(lid)?.target === null ? Math.min(99, level + 1) : defaultTarget(skill, level, plannerGoals.get(lid)?.level)} /><details className="section"><summary>XP table</summary><XpTable /></details></>}
+          : mode === 'f2p' && f2pAdviceFor(lid)?.target === null ? Math.min(99, level + 1) : trainingFocus({ levelSkills: [lid], goalOf, levelOf: () => level, stopOf }).target} /><details className="section"><summary>XP table</summary><XpTable /></details></>}
 
       {tab === 'reference' && (
         <>
@@ -197,14 +202,14 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
   );
 }
 
-/** Says where the goal below comes from: a level the planner needs (with its action), or only the generic training row. */
+/** Says where the goal below comes from: a level the planner needs (with its action), or the training engine's next method change. */
 function FocusNote({ focus, why }: { focus: TrainingFocus; why?: string }) {
   if (focus.source === 'preparation') return <p className="muted small focus-note">Preparation needs {levelById.get(focus.skill)?.name ?? focus.skill} {focus.target}.</p>;
   if (focus.source === 'checkpoint') return <p className="muted small focus-note">Suggested F2P checkpoint: {focus.target}. It is optional, not a membership requirement.</p>;
   if (focus.source === 'tracked') return <p className="muted small focus-note">Following your selected training goal: {focus.target}.</p>;
   const name = levelById.get(focus.skill)?.name ?? focus.skill;
   if (focus.source === 'planner') return <p className="muted small focus-note">The planner needs {name} {focus.target}{why ? <>: {why}</> : null}.</p>;
-  return <p className="muted small focus-note">The planner needs no {name} level now. Goal {focus.target} is the end of the training row.</p>;
+  return <p className="muted small focus-note">The planner needs no {name} level now. Goal {focus.target}: {focus.next ? `the training engine switches to ${focus.next} there` : focus.next === null ? 'no other training method takes over before it' : 'the next level'}.</p>;
 }
 
 function PlanBlocks({ skill, highlight, blocks }: { skill: Skill; highlight?: number; blocks: Skill['sections'][number]['blocks'] }) {
@@ -219,16 +224,9 @@ function PlanBlocks({ skill, highlight, blocks }: { skill: Skill; highlight?: nu
   );
 }
 
-function defaultTarget(skill: Skill, level: number, goal: number | undefined): number {
-  if (goal && goal > level) return goal;
-  const hit = rangeForLevel(skill.plan.ranges, level);
-  if (hit?.range.to && hit.range.to > level) return hit.range.to;
-  return Math.min(MAX_LEVEL, level + 1);
-}
-
 interface CalcProps {
   levelIds: string[];
-  /** The default goal: the level the planner needs or the end of the current plan row. */
+  /** The default goal: the level the planner needs, else where the training engine changes its method. */
   suggest: (levelId: string, level: number) => number;
 }
 

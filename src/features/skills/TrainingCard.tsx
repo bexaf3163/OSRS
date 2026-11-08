@@ -16,7 +16,8 @@ import { actionForm } from '../../domain/player/pacing';
 import { levelOf } from '../../domain/player/playerState';
 import { trainingNav } from '../../domain/training/trainingNav';
 import { goalArrows } from '../../domain/combat/rangedAmmo';
-import { xpForLevel } from '../../domain/player/xp';
+import { MAX_LEVEL, xpForLevel } from '../../domain/player/xp';
+import { methodStop, type MethodStop } from '../../domain/training/skillFocus';
 import type { NavTargetPayload } from '../../services/runeliteBridge';
 import { NavigateButton } from '../../ui/NavigateButton';
 import { usePriceView } from '../../state/hooks/usePriceView';
@@ -28,7 +29,7 @@ import { SKILL_NAMES, type SkillName } from '../../domain/training/skillGuide';
 import { hrefTo } from '../../domain/pages/pages';
 
 /** Skill advice from the shared player state; recomputed when levels, items, mode or style change. */
-export function useTrainingAdvice(skill: string | null, target: number, followed: string | null = null): TrainingAdvice | null {
+export function useTrainingAdvice(skill: string | null, target: number, followed: string | null = null, untilChange = false): TrainingAdvice | null {
   const { mode } = useStore();
   const { state } = usePlayerState();
   const { xp, xpRate } = useBridge();
@@ -44,15 +45,38 @@ export function useTrainingAdvice(skill: string | null, target: number, followed
   const trade = useTradeRestriction();
   return useMemo(() => {
     if (!skill) return null;
-    const input = { skill, target, ...context, style, priority, xp: have, measuredXph: measured, prices, restriction: trade.state, followed };
+    const input = { skill, target, ...context, style, priority, xp: have, measuredXph: measured, prices, restriction: trade.state, followed, untilChange };
     const advice = adviseTraining(input);
-    if (advice.level === null || advice.level <= 1 || advice.level >= target) return advice;
+    if (advice.level === null || advice.level <= 1 || advice.level >= advice.target) return advice;
     // The guide from level 1: the same router at level 1, so passed stages read as the route that led here.
-    const ladder = adviseTraining({ ...input, state: atLevel(input.state, skill, 1), xp: null, measuredXph: null, followed: null }).path;
+    const ladder = adviseTraining({ ...input, target: advice.target, untilChange: false, state: atLevel(input.state, skill, 1), xp: null, measuredXph: null, followed: null }).path;
     return { ...advice, ladder };
   },
-    [skill, target, context, style, priority, have, measured, prices, trade.state, followed],
+    [skill, target, context, style, priority, have, measured, prices, trade.state, followed, untilChange],
   );
+}
+
+/** The training engine's next method change for any skill of this player, the Skills goal when the planner needs
+ * none; computed on first use and kept until levels, items, mode or style change. */
+export function useMethodStops(): (skill: string) => MethodStop | null {
+  const { mode } = useStore();
+  const { state } = usePlayerState();
+  const features = useFeatures();
+  const style = styleOf(features).style;
+  const base = priorityOf(features);
+  const tracked = useTracked();
+  const prices = usePriceView(true);
+  const trade = useTradeRestriction();
+  return useMemo(() => {
+    const stops = new Map<string, MethodStop | null>();
+    return (skill: string) => {
+      if (!stops.has(skill)) stops.set(skill, methodStop(adviseTraining({
+        skill, target: MAX_LEVEL, ...trackedTrainingContext(tracked, skill, state, mode), style,
+        priority: trackedPriority(tracked, skill, base), prices, restriction: trade.state, untilChange: true,
+      })));
+      return stops.get(skill) ?? null;
+    };
+  }, [mode, state, style, base, tracked, prices, trade.state]);
 }
 
 /** A map point for a method: only from the place dictionary by key — without guessing from the text. */
@@ -88,8 +112,9 @@ function GuideRow({ skill, level, fallback }: { skill: string; level: number; fa
   );
 }
 
-export function TrainingCard({ skill, target, followed = null, view = 'full' }: { skill: string; target: number; followed?: string | null; view?: 'full' | 'summary' | 'analysis' }) {
-  const advice = useTrainingAdvice(skill, target, followed);
+export function TrainingCard({ skill, target, followed = null, view = 'full', advice: given }: { skill: string; target: number; followed?: string | null; view?: 'full' | 'summary' | 'analysis'; /** Advice the page already computed for this skill and goal. */ advice?: TrainingAdvice }) {
+  const own = useTrainingAdvice(given ? null : skill, target, followed);
+  const advice = given ?? own;
   const features = useFeatures();
   const profile = styleOf(features);
   const { state } = usePlayerState();

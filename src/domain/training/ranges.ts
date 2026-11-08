@@ -35,7 +35,6 @@ export function skillRange(skill: Skill, p: Progress): RangeHit | null {
 export function focusRange(skill: Skill, p: Progress, goalOf: (id: string) => number | undefined): { skill: string; level: number; target: number; hit: RangeHit | null } {
   const focus = trainingFocus({
     levelSkills: skill.levelSkills, goalOf, levelOf: (id) => levelOf(p, id),
-    rowEnd: (_id, lv) => rangeForLevel(skill.plan.ranges, lv)?.range.to ?? null,
   });
   const level = levelOf(p, focus.skill);
   return { skill: focus.skill, level, target: focus.target, hit: rangeForLevel(skill.plan.ranges, level) };

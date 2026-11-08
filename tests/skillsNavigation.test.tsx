@@ -15,7 +15,7 @@ const bridge = vi.hoisted(() => ({ state: 'offline', stats: null as Record<strin
 vi.mock('../src/state/bridge', () => ({ useBridge: () => bridge }));
 vi.mock('../src/state/hooks/useTracked', () => ({ useTracked: () => null }));
 vi.mock('../src/features/skills/SkillRoadmap', () => ({ RoadmapPane: () => null, useTrackedStep: () => null }));
-vi.mock('../src/features/skills/TrainingCard', () => ({ TrainingCard: ({ skill, target, view }: { skill: string; target: number; view?: string }) =>
+vi.mock('../src/features/skills/TrainingCard', () => ({ useMethodStops: () => () => null, useTrainingAdvice: () => null, TrainingCard: ({ skill, target, view }: { skill: string; target: number; view?: string }) =>
   createElement('div', { 'data-training-skill': skill, 'data-target': target, 'data-view': view }) }));
 vi.mock('../src/ui/LevelInput', () => ({ LevelInput: () => null }));
 vi.mock('../src/ui/LiveXp', () => ({ LiveXp: () => null }));

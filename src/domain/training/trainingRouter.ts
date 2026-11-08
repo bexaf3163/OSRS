@@ -502,6 +502,8 @@ export interface TrainingAdvice {
   upgrade?: ToolUpgrade | null;
   /** The method the game follows (input followed), when it is open at this level and is not the pick itself. */
   followed?: MethodView | null;
+  /** untilChange: the method that takes over at the target; null when none does before it. */
+  next?: string | null;
 }
 
 export interface AdviceInput {
@@ -516,6 +518,9 @@ export interface AdviceInput {
   xp?: number | null;
   /** XP per hour from the player's measurements. */
   measuredXph?: number | null;
+  /** The goal is the first method change (the Skills goal without a planner need): the forecast stops there, and the
+   * advice's target, XP, time and supplies run to it; `next` names the method that takes over. */
+  untilChange?: boolean;
   methods?: readonly TrainingMethod[];
   /** The method the game follows now (a tracked leveling plan's step, methodOfGuideStep): shown with this player's figures beside the pick. */
   followed?: string | null;
@@ -702,7 +707,7 @@ function forecastEquipment(state: PlayerState, needs: readonly MethodNeed[], pri
   };
 }
 
-function buildPath(skill: string, level: number, target: number, input: AdviceInput, priority: MethodPriority, first: TrainingMethod | null, raw: readonly TrainingMethod[]): { legs: PathLeg[]; time: TimeEstimate | null } {
+function buildPath(skill: string, level: number, target: number, input: AdviceInput, priority: MethodPriority, first: TrainingMethod | null, raw: readonly TrainingMethod[]): { legs: PathLeg[]; time: TimeEstimate | null; handover?: string } {
   const legs: PathLeg[] = [];
   const milestones = trainingMilestones(skill, raw, input.mode, input.state);
   let ratedAt = level;
@@ -712,6 +717,7 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
   let maxHours = 0;
   let timed = true;
   const sources = new Set<TimeEstimate['source']>();
+  let handover: string | undefined;
   for (let lv = level; lv < target; lv++) {
     // The model's rates are for the level the leg starts at (every FORECAST_STEP levels), not today's carried forward: a method unlocked later is
     // then compared on its own model rate, not on the wiki's guide against today's model rates.
@@ -732,6 +738,8 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
       const next = practicalRate(pick);
       if (now !== null && next !== null && next < now * SWITCH_GAIN) pick = cands.find((c) => c.method.id === last.method.id)!.method;
     }
+    // By name: one method changes its spell, bar or fish by level ("Water Strike", "Make Iron bar").
+    if (input.untilChange && legs.length > 0 && pick.name !== legs[0].method.name) { handover = pick.name; break; }
     const measured = pick.id === first?.id && (!input.followed || input.followed === pick.id)
       && input.measuredXph !== null && input.measuredXph !== undefined && Number.isFinite(input.measuredXph) && input.measuredXph > 0;
     const rate = measured ? [input.measuredXph!, input.measuredXph!] : pick.xph;
@@ -754,7 +762,7 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
     if (plannedNeeds.some(n => n.type === 'item' && n.equip)) projectedState = forecastEquipment(projected, plannedNeeds, input.prices);
   }
   const source = sources.size === 1 ? [...sources][0] : 'forecast';
-  return { legs, time: timed && legs.length > 0 ? { source, minHours, maxHours } : null };
+  return { legs, time: timed && legs.length > 0 ? { source, minHours, maxHours } : null, handover };
 }
 
 /** Re-rate at real declared unlocks as well as the normal five-level sampling interval. */
@@ -810,7 +818,8 @@ export function trainingStockNeeds(path: readonly PathLeg[], skill: string, stat
 }
 
 export function adviseTraining(input0: AdviceInput): TrainingAdvice {
-  const { skill, target, state, mode, style } = input0;
+  const { skill, state, mode, style } = input0;
+  let target = input0.target;
   const objective: MethodPriority = input0.priority ?? (style === 'efficient' ? 'fastest' : 'relaxed');
   const methods = personalize(input0.methods ?? trainingMethods, skill, state, input0.prices, input0.restriction, objective);
   const input = { ...input0, methods };
@@ -838,6 +847,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const quests = methodsFor(skill, methods).filter((m) => m.kind === 'quest' && m.from <= level && (m.to === null || level < m.to) && (mode === 'members' || !m.members));
   const forecast = buildPath(skill, level, target, input, priority, best?.method ?? null, input0.methods ?? trainingMethods);
   const path = forecast.legs;
+  if (forecast.handover) target = path[path.length - 1].toLevel;
 
   const xpNow = input.xp ?? xpForLevel(level);
   const xpLeft = Math.max(0, xpForLevel(target) - xpNow);
@@ -871,7 +881,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   } : null;
   const reason = best ? reasonFor(best, priority, level, upgrade) + switched : 'There is no method in the list for this level and mode: see the skill training plan.';
   return {
-    ...empty, best: best ? { ...best, reason } : null, others, quests, path, xpLeft, actionsLeft, actionTarget, time, upgrade, reason,
+    ...empty, target, ...(input.untilChange ? { next: forecast.handover ?? null } : {}), best: best ? { ...best, reason } : null, others, quests, path, xpLeft, actionsLeft, actionTarget, time, upgrade, reason,
     goalNeeds: (processingGoalNeeds(path, level, target, xpNow) ?? (skill === 'ranged' ? rangedGoalNeeds(path, state, xpNow, target, input.prices) : null)) ?? undefined,
     stockNeeds: trainingStockNeeds(path, skill, state, xpNow, input.prices, priority),
     followed: followedV ? said(followedV) : null,
