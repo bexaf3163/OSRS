@@ -28,6 +28,18 @@ describe('one guided activity for cross-page consumers', () => {
     expect(resolveActiveActivity({ ...input(), training: { step: training, complete: true }, activeStepId: training.id }))
       .toEqual({ step: first, source: 'decision', href: '#/step/S1-01' });
   });
+  it('keeps the committed training detour ahead of its parent quest still shown in the game', () => {
+    const result = resolveActiveActivity({ ...input(), decided: training, activeStepId: first.id, objectiveSteps: new Set([first.id]) });
+    expect(result).toEqual({ step: training, source: 'decision', href: '#/' });
+    const old = input();
+    old.progress.steps[training.id] = 'done';
+    expect(resolveActiveActivity({ ...old, decided: training, activeStepId: first.id }).step).toBe(training);
+  });
+  it('uses the committed preparation kit when the game reports the same quest ID', () => {
+    const decided = { ...first, itemsRequired: [{ nameEn: 'Mithril scimitar', amount: 1, equip: true, howToGet: '' }] };
+    expect(resolveActiveActivity({ ...input(), decided, activeStepId: first.id }).step).toBe(decided);
+    expect(first.itemsRequired).toBeUndefined();
+  });
 
   it('falls back from stale, completed and skipped game targets to the Decision without changing saved progress', () => {
     for (const closed of ['done', 'skipped'] as const) {

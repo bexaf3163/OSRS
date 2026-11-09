@@ -85,5 +85,5 @@ export function plannerOrder(decision: CommittedDecision | null, progress: Progr
 
 export function decisionStep(decision: CommittedDecision | null, steps: readonly Step[]): Step | null {
   const id = decision?.activeAction.stepId;
-  return id ? steps.find(step => step.id === id) ?? null : null;
+  return id ? (decision?.activeAction.executionStep?.id === id ? decision.activeAction.executionStep : steps.find(step => step.id === id)) ?? null : null;
 }

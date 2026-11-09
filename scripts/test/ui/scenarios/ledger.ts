@@ -217,4 +217,36 @@ async function ledgerScenarios(browser: Browser) {
 
 export const scenarios = {
   'ledger': ledgerScenarios,
+  'combat-strategy': combatStrategy,
 };
+
+async function combatStrategy(browser: Browser) {
+  const stats = { attack: 40, strength: 40, defence: 40, hitpoints: 40, ranged: 1, magic: 20, prayer: 1 };
+  const gear = { equipment: [{ id: 1329, name: 'Mithril scimitar', slot: 'weapon', count: 1 }], inventory: [{ id: 333, name: 'Trout', count: 26 }], coins: 5000, bankCoins: 0 };
+  const observation = questStatesBefore('S2-11');
+  observation.states = Object.fromEntries(Object.keys(observation.states).map(id => [id, id === 'Ernest the Chicken' ? 'NOT_STARTED' : 'COMPLETED']));
+  const { page, errors } = await open(browser, 1440, {
+    progress: progressBefore('S2-11'), market: true,
+    localStorage: { 'osrs-put:active-step': 'S2-11', 'osrs-put:planning-intent': JSON.stringify({ version: 1, intent: { kind: 'quest', questId: 'Ernest the Chicken' } }) },
+    status: { protocol: 6, player: 'Fixture', inGame: true, activeStepId: 'S2-11', questStates: observation, stats, ...gear },
+    events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true,
+      items: [{ name: 'Mithril scimitar', carried: 1, bank: 0, noted: 0 }, { name: 'Trout', carried: 26, bank: 0, noted: 0 }] }],
+  }, '#/path');
+  await settle(page);
+  const chosen = await page.evaluate(() => {
+    const posts = (window as unknown as { __posts: { path: string; body?: { decision?: { title?: string } } }[] }).__posts;
+    return posts.filter(p => p.path === '/prep-plan').map(p => p.body?.decision?.title).filter(Boolean).pop() ?? '';
+  });
+  expect(chosen === 'Ernest the Chicken', `combat strategy: an adequately equipped and supplied player continues the quest (${chosen})`);
+  const pathText = await page.getByRole('region', { name: 'Combat strategy' }).innerText();
+  expect(pathText.includes(chosen), 'combat strategy: Ledger shows the same current action as the bridge');
+  await page.evaluate(() => { location.hash = '#/gear'; });
+  await settle(page);
+  expect((await page.locator('.gear-page').innerText()).includes(chosen), 'combat strategy: Gear shows the committed preparation instead of an independent purchase');
+  await page.evaluate(() => { location.hash = '#/shopping'; });
+  await settle(page);
+  const shopping = await page.locator('body').innerText();
+  expect(!/Get Mithril scimitar|Attack to 30|Train attack/.test(shopping), 'combat strategy: Shopping does not require a replacement weapon or an unnecessary training detour');
+  expect(!errors.length && await noOverflow(page), 'combat strategy: no console errors or horizontal overflow');
+  await page.context().close();
+}

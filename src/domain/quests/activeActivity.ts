@@ -14,9 +14,10 @@ export function resolveActiveActivity(input: { steps: readonly Step[]; progress:
   if (input.training && !input.training.complete) return { step: input.training.step, source: 'training', href: hrefTo.path() };
   const route = input.steps.filter(step => step.stage !== 0);
   const active = route.find(step => step.id === input.activeStepId && !isClosed(input.progress, step.id));
-  const decided = input.decided && !isClosed(input.progress, input.decided.id) ? input.decided : null;
+  const decided = input.decided && (input.decided.stage === 0 || !isClosed(input.progress, input.decided.id)) ? input.decided : null;
+  if (decided?.stage === 0) return { step: decided, source: 'decision', href: hrefTo.path() };
   // The game's step only refines the Decision inside the same objective: a leftover step of another quest never outranks the planner.
   const game = active && (!decided || active.id === decided.id || input.objectiveSteps?.has(active.id)) ? active : null;
-  const step = game ?? decided;
+  const step = game?.id === decided?.id ? decided : game ?? decided;
   return { step, source: game ? 'game' : step ? 'decision' : 'none', href: step ? hrefTo.step(step.id) : hrefTo.path() };
 }

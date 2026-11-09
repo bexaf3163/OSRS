@@ -10,6 +10,7 @@ import { estimateStepFights, fightLine, OTHER_METHOD, stepFightFoes, stepFightNa
 import { BAG_SLOTS } from '../prep/prepPlan';
 import { equippedBySlot, gearData } from '../combat/gearAdvisor';
 import { readinessVerdict } from './readinessVerdict';
+import { coherentSkillXp, levelForXp, xpForLevel } from '../player/xp';
 
 /** One composition of the existing kit, fight and readiness calculators for both UI and planning. */
 export function assessStepReadiness(input: {
@@ -39,22 +40,35 @@ export function assessStepReadiness(input: {
 
 const MELEE = ['attack', 'strength', 'defence'];
 
-/** The lowest equal Attack, Strength, Defence and Hitpoints at which even the high food estimate of every quest fight of
- * the step fits in the bag (the verdict blocks a whole bag on average), and the lowest of those melee skills to train
- * first. Null when the levels already do, are unread, or no level up to 99 does. */
-export function fightTrainingTarget(step: Step, stats: PlayerStats | null, gear: GearState | null): { skill: string; level: number } | null {
+/** Search-only ordinary melee XP: one trained skill, plus its conservative Hitpoints gain. Never observed state.
+ * OSRS Wiki /Hitpoints and /Strength: 1.33 HP XP and 4 selected-skill XP per damage; quest/non-combat XP must not use this. */
+export function trainedCombatStats(stats: PlayerStats, skill: string, level: number, xp: Readonly<Record<string, number>> = {}): PlayerStats {
+  const start = coherentSkillXp(xp[skill], stats[skill]) ? xp[skill] : xpForLevel(Math.min(99, stats[skill] + 1)) - 1;
+  const hpStart = coherentSkillXp(xp.hitpoints, stats.hitpoints) ? xp.hitpoints : xpForLevel(stats.hitpoints);
+  const hpXp = Math.floor(Math.max(0, xpForLevel(level) - start) * 1.33 / 4);
+  return { ...stats, [skill]: level, hitpoints: Math.max(stats.hitpoints, levelForXp(Math.min(200_000_000, hpStart + hpXp))) };
+}
+
+/** First safe target for ONE skill, with the other melee skills unchanged. Compare these targets using trainingRouter times.
+ * An unmodelled encounter never becomes safe by increasing its ordinary damage-roll inputs. */
+export function fightTrainingTarget(step: Step, stats: PlayerStats | null, gear: GearState | null,
+  skill = 'attack', xp: Readonly<Record<string, number>> = {}): { skill: string; level: number } | null {
   const count = stepFightFoes(step).length;
-  if (!count || !stats || ['hitpoints', ...MELEE].some((s) => typeof stats[s] !== 'number')) return null;
+  if (!count || count !== stepFightNames(step).length || !stats || !MELEE.includes(skill)
+    || ['hitpoints', ...MELEE].some(s => !Number.isInteger(stats[s]) || stats[s] < 1 || stats[s] > 99)) return null;
+  const otherSlots = (step.itemsRequired ?? []).filter(item => !item.heals && !item.equip).length;
   const fits = (levels: PlayerStats) => {
     const fights = estimateStepFights(step, levels, gear);
-    return fights.length === count && fights.every((f) => f.food.high < BAG_SLOTS);
+    return fights.length === count && fights.every(f => !f.unmodelled.length && f.foe.maxHit < levels.hitpoints)
+      && fights.reduce((sum, f) => sum + f.food.high, 0) <= Math.min(26, BAG_SLOTS - otherSlots);
   };
   if (fits(stats)) return null;
-  for (let level = 2; level <= 99; level++) {
-    const lifted = Object.fromEntries(['hitpoints', ...MELEE].map((s) => [s, Math.max(stats[s], level)]));
-    if (!fits({ ...stats, ...lifted })) continue;
-    const skill = [...MELEE].sort((a, b) => stats[a] - stats[b]).find((s) => stats[s] < level);
-    return skill ? { skill, level } : null;
+  if (!fits(trainedCombatStats(stats, skill, 99, xp))) return null;
+  let low = stats[skill] + 1, high = 99;
+  while (low < high) {
+    const mid = Math.floor((low + high) / 2);
+    if (fits(trainedCombatStats(stats, skill, mid, xp))) high = mid;
+    else low = mid + 1;
   }
-  return null;
+  return { skill, level: low };
 }

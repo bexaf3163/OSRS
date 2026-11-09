@@ -310,7 +310,7 @@ export const combatMargin = (basis: Basis, aggressive: boolean) => MARGIN[basis]
 const Z = 1.65;
 /** Finding and reaching the next target, seconds a kill. */
 const BETWEEN_KILLS: [number, number] = [2, 6];
-const EAT_SECONDS = 3 * TICK;
+export const EAT_SECONDS = 3 * TICK;
 /** Asking a monk for healing: walk to one, the talk and its options, seconds. */
 const HEAL_SECONDS: [number, number] = [8, 15];
 /** Natural regeneration: 1 hit point a minute. */

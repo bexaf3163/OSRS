@@ -39,7 +39,12 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
   const trade = useTradeRestriction();
   const training = useMemo(() => trackedTraining(tracked, state, mode, style, priority, { prices, restriction: trade.state }),
     [tracked, state, mode, style, priority, prices, trade.state]);
-  const engineSteps = useMemo(() => training ? [...steps, training.step] : steps, [steps, training]);
+  const engineSteps = useMemo(() => {
+    const all = training ? [...steps, training.step] : steps;
+    const current = planWindow[0];
+    if (!current || all.includes(current)) return all;
+    return all.some(s => s.id === current.id) ? all.map(s => s.id === current.id ? current : s) : [...all, current];
+  }, [steps, training, planWindow]);
   const cursor = useRef<{ player: string | null; step: string; instruction: QuestInstruction } | null>(null);
   if (bridge.state !== 'online' || !bridge.inGame || !bridge.activeStepId || !bridge.questInstruction || cursor.current?.player !== (bridge.player ?? null) || cursor.current?.step !== bridge.activeStepId) cursor.current = null;
   if (bridge.state === 'online' && bridge.inGame && bridge.questInstruction && !bridge.questInstruction.peeking && bridge.questInstruction.stepId === bridge.activeStepId) {

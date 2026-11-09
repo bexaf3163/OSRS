@@ -16,15 +16,16 @@ import type { CandidateAction, Minutes, PlanningSnapshot } from './contracts';
 import { resolvePreparation } from './preparation';
 import { prerequisiteTraining } from './training';
 import type { TrainingCandidate } from './training';
-import { assessStepReadiness, fightTrainingTarget } from '../readiness/stepAssessment';
+import { assessStepReadiness } from '../readiness/stepAssessment';
 import { combatPlanView } from '../combat/combatPlan';
-import { stepFightFoes } from '../combat/fightEstimate';
-import { gearMarketPrices } from '../combat/gearAdvice';
-import { actionNav, adviseGear, sourceText, type GearAction } from '../combat/gearAdvisor';
+import { stepFightNames } from '../combat/fightEstimate';
+import { chooseEncounter } from './encounter/strategy';
+import type { WorldPoint } from '../player/playerState';
 import { stepAtQuestCursor } from '../quests/questCursor';
 import { PLANNING_WINDOW_SIZE } from './window';
 
 export interface TacticalFrame {
+  encounter?: { work: Minutes; baseline: Minutes; reasons: readonly string[]; uncertain: boolean };
   step: Step;
   plan: PrepPlan;
   readiness: StepReadiness;
@@ -43,6 +44,8 @@ export interface TacticalInput {
   priority?: MethodPriority;
   restriction?: TradeRestriction['state'];
   ironman: boolean | null;
+  keepDefenceOne?: boolean;
+  walk?: (from: WorldPoint | null, to: WorldPoint) => Minutes | null;
   /** The runtime adds the shared training time, so a skill unlock can be weighed against earning now (S61). */
   earn(step: Step, requiredLiquidGp: number, budget: Budget, goalId: string, train?: (skill: string, level: number) => Minutes | null): CandidateAction | null;
   /** Minutes to gather pieces of an item yourself; absent or null keeps that gathering UNKNOWN. */
@@ -61,22 +64,16 @@ export function createTacticalResolver(input: TacticalInput) {
       prerequisites: [], completionEvidence: [{ source: 'Shared preparation', snapshotRevision: snapshot.scope.snapshotRevision, predicate: title }],
       expectedEffects: [], time: null, gpCost: null, sourceIds: ['readinessEngine', 'prepPlan'], reasons: [title] };
   }
-  function gearAction(step: Step, goalId: string, a: GearAction): CandidateAction {
-    const kind = a.how === 'buy' ? 'BUY' : a.source.kind === 'bank' ? 'WITHDRAW' : 'EQUIP';
-    const title = a.how === 'buy' ? `Buy ${a.item.name} for this fight: ${sourceText(a.source)}`
-      : `${a.source.kind === 'bank' ? 'Withdraw and wear' : 'Wear'} ${a.item.name} for this fight`;
-    const nav = actionNav(a, step.id);
-    return { ...check(step, goalId, title), id: `${goalId}:${kind}:${a.item.name}`, kind, feasibility: 'READY', sourceIds: ['gearAdvisor'],
-      gpCost: a.cost ? { amount: a.cost, confidence: 'MEDIUM', source: sourceText(a.source) } : null,
-      ...(nav ? { destination: { x: nav.x, y: nav.y, plane: nav.plane } } : {}) };
-  }
   function resolve(step: Step, goalId: string, ancestors: ReadonlySet<string> = new Set()): TacticalFrame {
     const cached = frames.get(step)?.get(goalId);
     if (cached) return cached;
     const execution = { ...stepAtQuestCursor(step, snapshot.instruction ?? null), requires: [] }; // Global DAG/stage evidence is validated first.
     // A virtual skill step may reuse an ID at another target. Give each candidate its own immutable engine context.
     const suppliedAt = input.window.indexOf(step);
-    const replaceAt = suppliedAt >= 0 ? suppliedAt : input.window[0]?.id === step.id ? 0 : -1;
+    // questExecutionSteps clones authored quest entries. Replace that one committed phase, or inserting it twice drops
+    // the third phase (and its reserved payment). Virtual same-ID training phases still keep their identity semantics.
+    const questAt = step.type === 'quest' ? input.window.findIndex(s => s.id === step.id && s.type === 'quest') : -1;
+    const replaceAt = suppliedAt >= 0 ? suppliedAt : questAt >= 0 ? questAt : input.window[0]?.id === step.id ? 0 : -1;
     const window = [execution, ...input.window.filter((_, index) => index !== replaceAt)].slice(0, PLANNING_WINDOW_SIZE);
     // Validated stage/DAG evidence chooses the current action. Saved route marks never prove its game prerequisites.
     const progress = { ...input.progress, steps: {} };
@@ -92,11 +89,17 @@ export function createTacticalResolver(input: TacticalInput) {
     const trace = `${goalId}:${step.id}`;
     chain.add(trace);
     let nested: TacticalFrame | null = null;
-    const train = (skill: string, target: number): CandidateAction | null => {
-      const key = `${goalId}:${skill}:${target}`;
+    const candidateFor = (skill: string, target: number): TrainingCandidate | null => {
+      const key = `${skill}:${target}`;
       if (!training.has(key)) training.set(key, prerequisiteTraining({ snapshot, goalId, skill, target, prices: input.prices,
         style: input.style, priority: input.priority, restriction: input.restriction }));
       const candidate = training.get(key);
+      if (!candidate) return null;
+      return candidate.action.goalId === goalId ? candidate : { ...candidate, action: { ...candidate.action, goalId,
+        id: goalId + candidate.action.id.slice(candidate.action.goalId.length) } };
+    };
+    const train = (skill: string, target: number): CandidateAction | null => {
+      const candidate = candidateFor(skill, target);
       if (!candidate) return null;
       if (!candidate.step) return candidate.action;
       if (chain.size >= 4 || chain.has(`${goalId}:${candidate.step.id}`)) return check(step, goalId, 'Review circular or unsupported training prerequisites');
@@ -107,6 +110,7 @@ export function createTacticalResolver(input: TacticalInput) {
     let action = resolvePreparation({ snapshot, goalId, step: execution, plan, readiness, budget, ironman: input.ironman, coinsRequired: need.fees.now,
       reservedPurchases: plan.lines.filter(line => (line.timing === 'NOW' || line.timing === 'SOON') && line.where === 'MISSING')
         .map(line => ({ fee: line.action?.purchase?.fee })),
+      minimum: execution.type === 'quest' && stepFightNames(execution).length ? new Map(plan.lines.filter(line => (execution.itemsRequired ?? []).some(item => item.heals && item.nameEn === line.name)).map(line => [line.key, 0])) : undefined,
       train,
       earn: required => input.earn(step, required, budget, goalId), gather: input.gather,
     });
@@ -117,17 +121,15 @@ export function createTacticalResolver(input: TacticalInput) {
       const view = combatPlanView(execution, { ...live, owned: snapshot.player.owned });
       const assessment = assessStepReadiness({ step: execution, plan, connected: snapshot.player.connected, owned: snapshot.player.owned, ...live, view });
       const ready = !assessment.unassessedFights.length && ['READY', 'READY_CAUTIONS'].includes(assessment.verdict.level);
-      // A quest fight the levels cannot take yet: wear or buy the better kit the coins cover, earn for kit that can be worn
-      // but not paid for, then train the lowest melee skill toward the level that takes the fight. All of it is read live.
-      const target = ready ? null : fightTrainingTarget(execution, live.stats, live.gear);
-      if (target) {
-        const kit = adviseGear({ levels: live.stats ?? {}, gear: live.gear, owned: snapshot.player.owned, mode: snapshot.scope.mode,
-          geQuotes: gearMarketPrices(input.prices), foes: stepFightFoes(execution), reserve: budget.reserve,
-          questsDone: new Set(Object.entries(snapshot.quests).filter(([, quest]) => quest.state === 'COMPLETED').map(([name]) => name)) });
-        const now = [...kit.actions, ...kit.armour][0];
-        const goal = kit.goals.find((g) => g.short && g.cost !== null);
-        action = now ? gearAction(step, goalId, now) : goal ? input.earn(step, goal.cost! + budget.reserve, budget, goalId) : null;
-        action ??= train(target.skill, target.level);
+      if (execution.type === 'quest' && !assessment.unassessedFights.length && stepFightNames(execution).length) {
+        const encounter = chooseEncounter(input, execution, goalId, trainingStep => resolve(trainingStep, goalId, chain), candidateFor, budget.reserve);
+        if (encounter) {
+          const byGoal = frames.get(step) ?? new Map<string, TacticalFrame>();
+          byGoal.set(goalId, encounter);
+          frames.set(step, byGoal);
+          return encounter;
+        }
+        action = check(step, goalId, 'Verify a safe, feasible combat preparation strategy');
       }
       if (!action && assessment.unassessedFights.length) action = check(step, goalId, `Review the combat strategy for ${assessment.unassessedFights.join(', ')}`);
       else if (!action && !ready) action = check(step, goalId, assessment.verdict.headline);

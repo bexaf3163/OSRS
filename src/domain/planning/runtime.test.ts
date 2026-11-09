@@ -185,9 +185,14 @@ describe('different characters through the integrated runtime (brief 39 counterf
     const done: string[] = [];
     let turns = 0, compared = 0;
     for (; turns < route.length + 5; turns++) {
-      // The game sends the levels and worn kit, so the route's quest fights (Ernest's skeleton included) are assessed.
-      const snap: PlanningSnapshot = { ...routeSnapshot(done), combat: { stats: { attack: 1, strength: 1, defence: 1, hitpoints: 10, magic: 1, ranged: 1, prayer: 1 },
-        gear: { equipment: [], inventory: [], coins: 0, bankCoins: 0 } } };
+      // This total-cost comparison needs a consistently observed, adequately supplied character. Weak-character preparation
+      // and single-skill effects are exercised in encounter/strategy.test.ts; never freeze a completed route at combat level 1.
+      const stats = { attack: 40, strength: 40, defence: 40, hitpoints: 40, magic: 40, ranged: 1, prayer: 1 };
+      const snap = routeSnapshot(done, lumbridge, { stats, carried: { Trout: 26 } });
+      const gear = { equipment: [], inventory: [{ id: 333, name: 'Trout', count: 26 }], coins: 0, bankCoins: 0 };
+      snap.player = buildPlayerState({ mode: 'f2p', connected: true, stats, gear, owned: snap.player.owned,
+        progress: emptyProgress(), questsDone: done, position: lumbridge });
+      snap.combat = { stats, gear };
       const earn: RuntimePlanInput['earn'] = (step, gp, _budget, goalId) => earnAction(snap, step, goalId, gp, rate);
       const plan = runtimeDecision(input(snap, { walk, prices, earn }));
       if (!plan) break;
@@ -205,6 +210,17 @@ describe('different characters through the integrated runtime (brief 39 counterf
       done.push(plan.objectiveId);
     }
     expect(turns).toBe(route.length);
+    // Guarantee a priced comparison independently of unsupported combat mechanics that may legitimately remain last.
+    const tail = routeSnapshot(route.filter(id => !["Cook's Assistant", 'Sheep Shearer'].includes(id)), lumbridge,
+      { coins: 5000, stats: { cooking: 30 }, carried: { 'Bucket of milk': 1, 'Pot of flour': 1, Egg: 1, 'Ball of wool': 20 } });
+    const tailPlan = runtimeDecision(input(tail, { walk, prices }));
+    const tailBase = runtimeDecision(input(tail, { walk, prices, intent: { kind: 'quest', questId: "Cook's Assistant" } }));
+    expect(tailPlan?.estimatedRemaining).not.toBeNull();
+    expect(tailBase?.estimatedRemaining).not.toBeNull();
+    if (tailPlan?.estimatedRemaining && tailBase?.estimatedRemaining) {
+      expect(tailPlan.estimatedRemaining.typical).toBeLessThanOrEqual(tailBase.estimatedRemaining.typical + 1e-6);
+      compared++;
+    }
     expect(compared).toBeGreaterThan(0);
   }, 60_000);
 

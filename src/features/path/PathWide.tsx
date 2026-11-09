@@ -39,18 +39,18 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   // for the planner, or shows a step a link opened.
   const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested?.id ?? null);
   const [switching, startSwitch] = useTransition();
-  const selected = steps.find((s) => s.id === selectedId) ?? suggested;
+  const execution = decision?.activeAction.executionStep;
+  const selected = execution && selectedId === execution.id ? execution : steps.find((s) => s.id === selectedId) ?? suggested;
   const center = useRef<HTMLDivElement>(null);
   const pending = pendingReview(steps, progress);
 
   const select = useCallback((id: string, focus = true) => {
-    const step = stepById.get(id);
-    if (!step) return;
+    if (!stepById.has(id) && execution?.id !== id) return;
     startSwitch(() => setSelectedId(id));
     // A new step — from the start: the central column scrolls by itself, the page stays still.
     center.current?.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
     if (focus) window.setTimeout(() => center.current?.querySelector<HTMLElement>('.step-view-title')?.focus({ preventScroll: true }), 0);
-  }, []);
+  }, [execution?.id]);
 
   // Navigation by the link #/step/S3-05.
   useEffect(() => {
@@ -144,6 +144,10 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
         busy={switching}
         scrollRef={center}
         notices={<>
+          {execution && selected.id === execution.id && decision && <section className="card" aria-label="Combat strategy">
+            <strong>{decision.activeAction.title}</strong>
+            <details><summary>Compare preparation strategies</summary><ul className="small">{decision.why.map((why, i) => <li key={i}>{why}</li>)}</ul></details>
+          </section>}
           {pending.length > 0 && (
             <div className="review-banner card">
               <h2 className="review-title">🔔 The guide updated to V2!</h2>

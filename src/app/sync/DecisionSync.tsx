@@ -8,12 +8,14 @@ import { useBridge } from '../../state/bridge';
 import { useStore } from '../../state/store';
 import { decisionStep, followedSteps, useDecision } from '../../state/decision';
 import { isClosed } from '../../domain/quests/next-step';
+import { stepResendKey } from '../../domain/combat/foodPlan';
 
 export function DecisionSync() {
   const { inGame, activeStepId, pointInGame, clear, setPrepPart, questStates, questInstruction } = useBridge();
   const { progress, steps } = useStore();
   const decision = useDecision();
   const step = decisionStep(decision, steps);
+  const executionKey = step ? JSON.stringify([step.id, stepResendKey(step), step.itemsRequired, step.pacing]) : null;
   const id = decision?.activeAction.id ?? null;
   const objectiveId = decision?.objectiveId ?? null;
   const watch = useMemo(() => decisionWatch(steps, progress), [steps, progress]);
@@ -25,15 +27,16 @@ export function DecisionSync() {
   useEffect(() => {
     if (!inGame) { sent.current = null; return; }
     // The game keeps a step of the objective, a started quest or a confirmed position; a leftover step is replaced.
-    if (activeStepId !== null && !isClosed(progress, activeStepId) && (activeStepId === step?.id || followedSteps(decision, activeStepId, questStates ?? null, questInstruction).has(activeStepId))) return;
-    if (!step || isClosed(progress, step.id)) {
+    const changedKit = !!decision?.activeAction.executionStep && (activeStepId !== step?.id || sent.current !== executionKey);
+    if (!changedKit && activeStepId !== null && !isClosed(progress, activeStepId) && (activeStepId === step?.id || followedSteps(decision, activeStepId, questStates ?? null, questInstruction).has(activeStepId))) return;
+    if (!step || (step.stage !== 0 && isClosed(progress, step.id))) {
       if (activeStepId !== null) void clear();
       return;
     }
     // Sent once per Decision step: a player who took the arrow down is not overridden by the same choice again.
-    if (sent.current === step.id) return;
-    sent.current = step.id;
+    if (sent.current === executionKey) return;
+    sent.current = executionKey;
     void pointInGame(step).then(result => { if (result === 'empty') void clear(); });
-  }, [inGame, activeStepId, progress, step, decision, questStates, questInstruction, pointInGame, clear]);
+  }, [inGame, activeStepId, progress, step, executionKey, decision, questStates, questInstruction, pointInGame, clear]);
   return null;
 }

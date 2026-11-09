@@ -1,10 +1,10 @@
 # OSRS Path — project handoff
 
-Updated 2026-11-07. **This file alone holds project rules, architecture, state, backlog and handoff.** Stable rules precede current state/verification. AGENTS.md/CLAUDE.md point here; README.md introduces the product.
+Updated 2026-11-09. **This file alone holds project rules, architecture, state, backlog and handoff.** Stable rules precede current state/verification. AGENTS.md/CLAUDE.md point here; README.md introduces the product.
 
 ## Documentation policy
 
-- **Binding on Claude Code, Codex and every contributor:** maintain current instructions, decisions, implemented work, backlog, verification and takeover state here. Never duplicate handoffs, next-session/acceptance/status diaries, copied instructions, repositories or Downloads variants. Update in place; reconcile conflicts; remove stale statements; keep uncertainty explicit.
+- **Binding on Claude Code, Codex and every contributor:** maintain instructions, decisions, work, backlog, verification and takeover state here. No duplicate handoffs, next-session/acceptance/status diaries, copied rules, repositories or Downloads variants. Reconcile conflicts and stale statements; label uncertainty.
 - Stay within **5,000 words** by removing repetition and narrative, never by dropping a fact or moving it elsewhere. Keep the current delivery receipt; Git history/immutable release notes retain previous receipts.
 - AGENTS.md and CLAUDE.md stay tiny pointers; a release copy of this file is a snapshot. Before handover, reconcile source, this file, version and test evidence.
 - docs/ holds references, not task lists: SKILLS_COVERAGE.md, AUDIT_LEDGER.md (reproduce a row before repairing) and the generated COMBAT_AUDIT.md and FUNDING_COVERAGE.md. Removed documents and old release-note links resolve in Git history (`f3112228e97be4a8058eec5e2f995956b575ff9c` and later). `.codex/work-state.md` is Codex's ignored checkpoint.
@@ -81,7 +81,7 @@ canonical current action / next phase → app + bridge payload → single Java H
 new observed levels / inventory / equipment / bank / quest state recompute the plan
 ```
 
-Cross-page activity selection is `resolveActiveActivity` in `src/domain/quests/activeActivity.ts` (`useActiveActivity` in `src/state/readinessContext.tsx`): incomplete followed training, else the admitted live route, else the next route step; completed or synthetic leftovers never become fallbacks. Path, Skills, Gear, Shopping and the plugin only project shared state, and a display fix never changes requirements or completion.
+Cross-page activity selection is `resolveActiveActivity` in `src/domain/quests/activeActivity.ts` (`useActiveActivity` in `src/state/readinessContext.tsx`): explicit followed training, then committed virtual training or the admitted quest stage. Same-ID game steps retain the committed execution kit; historical marks never complete virtual training. Path, Skills, Gear, Shopping and the plugin only project shared state, and a display fix never changes requirements or completion.
 
 ### Responsibility map
 
@@ -141,7 +141,7 @@ The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **
 - Training settings keep Balanced/Fastest/Money/Relaxed, automatic preparation and Defence-at-1. The five RuneLite helper flags stay (places, bank highlighting, pace, level import, upgrades); mocked tests do not prove their real-game behavior.
 - Journal: filters left; status, QP, current-part requirements and route action right; Review route for completed/skipped quests; saved-only completion labelled; one closed session history; browsing never marks progress.
 - Skills has no leveling guide or bracket table (2.83.0): the training engine sets method, goal and plan. A completed skill's Plan says its checkpoint is reached. Two-column icon index, XP table in Calculator.
-- Route (2.84.0): quests plus the Stronghold; other step kinds are `RETIRED_STEPS`, planned by the training, gear and Money engines; an unsafe quest fight (2.85.0) buys covered kit, earns for wearable kit, else trains melee.
+- Route (2.84.0): quests plus the Stronghold; other step kinds are `RETIRED_STEPS`, planned by the training, gear and Money engines; unsafe fights compare supported preparations by complete time; unsupported mechanics require verification.
 - Gear compares melee only for a supported current activity; other skills show current preparation and live equipment. Mandatory shopping and a quoted refill/fare reserve protect upgrade spending; unread prices never count as zero. Shopping: requirements left, Checkout right (cost, checked cash, optional bank stock, refill allowance, shortfall), one primary action through funding, copy-order or preparation.
 - One Where preview; the compact card omits the place list and the **full map keeps the place picker**. Preview-only CSS uses direct-child selectors so a nested dialog's picker stays visible.
 
@@ -161,19 +161,17 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ### V14 — adaptive rebuild
 
-Receiving AI continues v14. Brief: `.codex/v14-brief/01_MASTER_EXECUTION_PROMPT.md`; pack hashes in the receipt below.
+V14 brief: `.codex/v14-brief/01_MASTER_EXECUTION_PROMPT.md`; hashes: `.codex/transfer/receipt.json`.
 
-Target: deterministic quest-first F2P planning from observations; one profile/session/snapshot-bound Decision feeds Ledger/existing bridge/HUD. Supply estimates stay soft; prerequisites/protection hard. Optional Members preparation never gates F2P completion. No runtime LLM, gameplay automation or linear fallback.
+Target: observed F2P quest planning; scoped Decision → Ledger/bridge/HUD. Supply estimates soft, prerequisites/protection hard. Optional Members preparation never gates F2P completion; no runtime LLM, automation or linear fallback.
 
-Worktree `C:/Users/Mark/Desktop/Ors-x9`, baseline `f035305`, branch `codex/v14-adaptive-rebuild`. Rehearsed backup: external `work/backups/osrs-v14-20261106T145307Z` (5098 hashes; Git, WIP, app/plugin data). Never reset/clean WIP or alter real saves.
+Worktree `C:/Users/Mark/Desktop/Ors-x9`; delivery branch `codex/combat-strategy-2851`, clean recovery ref `codex/combat-strategy-baseline-2851` at released `4c7b4d1` (2.85.1). V14 is incorporated; never restore its obsolete checkpoints. Rehearsed backup: external `work/backups/osrs-v14-20261106T145307Z` (5098 hashes; Git, WIP, app/plugin data).
 
 Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent entry for explicit goals and phased training/preparation; costs precede rewards; only sourced, order-independent unknowns cancel. Cursors retire past stages; certificate proof stays physical. Procurement shares allocations/packages/fees; unknown flows weaken balances; start-only rewards never repeat; unknown hand-ins never buy; protection requires wearing; funding excludes stale/unsold cash. Shortest Path `375ce2c061df5c3961116dda6443f307df3223f1` (BSD, 64 regions, ESTIMATED); trip legs bounded, deduplicated, revision-guarded.
 
-2,595 units; quick/UI/E2E/structure/Java gates pass. Perf: 2.85.1 flat vs 2.84.1. Evidence: `work/osrs-v14-audit`. Released 2.85.1; live pending.
+Published 2.85.1 passed gates; performance flat versus 2.84.1 (`work/osrs-v14-audit`); live pending. Current checks below.
 
-Takeover inputs: `.codex/v14-brief/`; hashes: `.codex/transfer/receipt.json`.
-
-Resume from `.codex/work-state.md` and Git diff. Live: `DecisionProvider` (below Funding) → `runtimeDecision` drives pages, prep, maps and `DecisionSync` (game step, snapshot `decision{id,objectiveId,watch}`); linear selectors deleted. Costs: quest-length bands are provisional; worker legs plus castable teleports; EARN priced by the Money ranking; unknown-time objectives are listed, never dropped. GP/tool/position/Magic/restriction counterfactuals pass route-wide; Money methods time self-gathered items. Decisions list `candidates` (own minutes, unknowns, XP, rank, verdict); without full times: fewer unknowns, known minimum, own cost, never term text; confidence LOW. Doors/stairs/enclosed origins: labelled walking allowances (≤10 tiles). Path shows only the planner order; Previous/Next and Journal follow it; leftover non-quest game steps no longer outrank it. Look-ahead (prep, Shopping, plugin items, bank highlight, funding, Defence-later) follows the Decision window (`engine.road`), else the step alone; Skills goals: Decision skill-floors, else engine method changes. Guide retired (2026-11-08); 2.82.7: replan line, routed travel, step-less HUD. Next: live acceptance (checkpoint LIVE/PARTIAL rows, RUNBOOK), by Claude.
+Resume from `.codex/work-state.md` and Git diff. `DecisionProvider` below Funding → `runtimeDecision` drives pages/prep/maps and `DecisionSync` (step, snapshot `decision{id,objectiveId,watch}`); linear selectors deleted. Quest-length bands remain unmeasured heuristics; worker legs/castable teleports, Money-ranked EARN/gathering, GP/tool/position/Magic/restriction counterfactuals work. Unknown-time objectives remain visible. `candidates` expose minutes, unknowns, XP, rank/verdict; incomplete comparisons use unknown-count, known minimum and own cost, never term text; confidence LOW. Door/stair/enclosed-origin walking allowances ≤10 tiles are labelled. Path/Previous/Next/Journal follow planner order; retired steps cannot override it. Prep/Shopping/plugin/bank/funding/Defence-later use `engine.road`; Skills uses Decision floors then engine method changes. Guide retired; 2.82.7 added replan evidence, routed travel and step-less HUD. Live acceptance remains Claude's RUNBOOK/checkpoint LIVE/PARTIAL rows.
 
 ### P4 — Claude's real-client acceptance
 
@@ -220,13 +218,21 @@ Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3
 
 Known limits: fees are bounded allowances; gathering competition, Forestry and Musa Point boat banking are approximations; altar timing assumes the supported exit model; food estimates are no survival guarantee. Alchemy, enchanting and splashing keep target/setup/budget safeguards. No implied parity for unsupported Members or HDOS mechanics. Facts checked against the OSRS Wiki on 2026-10-31.
 
-## Current verification
+## Current verification — combat optimization (2.85.2)
 
-2.81.19 (batches 1–2; Windows PC, >=2 runs/build): per-update script 70.3 → 20.5 ms, start-up blocking −53…−74%, page switches within +0.7 ms, web build −26%, unit run 72 → 9 s, axe 0 on nine pages, screenshots identical apart from known noise. Real-game acceptance pending (P4).
+Baseline: clean local/GitHub main `4c7b4d1`; 2,595 units/build pass; two timing runs retained. As-built ZIP: architecture references only. Owner authorized main/Portable publication; 2.85.2 awaits release gates.
 
-2.81.20–30 (S1, S3–S8, S10, C1, S11, X2, X8, X9; no visible change): largest folder 139 → 19 files, 0 layer violations (from 29), files importing JSON directly 49 → 0; 874 browser checks in 131–158 s (from 319 s); splits: `OsrsPathBridgePlugin` 4,231 → 797 lines plus eight section classes, `HudModel` 1,175 → 468, `ActiveTarget` 1,078 → 298, `src/types` in seven topic files (bundle byte-identical), `runeliteBridge.ts` 627 → 522, `BridgeServer` 1,162 → 796, `bridge.tsx` 881 → 60 (state in `bridgeCore.ts`), `styles.css` in 14 files (byte-identical); files over 1,000 lines 5 → 0; knip fails on dead exports (15 removed). Local gates pass (2,519 unit, 874 browser, 95 Electron, 648 Java).
+Causes: fixed gear/earning/training priority; simultaneous skill/HP lifts for single-skill advice; omitted combat-upgrade requirements; game/refresh consumers restoring authored kits; funding timing total targets instead of shortfalls; dropped cloned-phase fee reserves.
 
-2.81.31–42: Ledger is the only HUD look (84–254 µs/frame), checked in game 2026-11-02; Classic/Glass/Sora deleted; 1.5 GB / 4 MB G1 launch, HUD image/font reuse, opt-in debug shots, zero-repaint idle Ledger/map layers; 644 Java tests.
+Implemented: `planning/encounter/{setups,strategy}.ts` compares bounded current/owned/banked/purchased/funded/trained/train-then-upgrade alternatives within tactical. Shared fight/food, gear eligibility/quotes, training, funding and routed trips determine costs. `fightTrainingTarget` changes one skill plus conservative damage-earned HP (Wiki [Hitpoints](https://oldschool.runescape.wiki/w/Hitpoints)/[Strength](https://oldschool.runescape.wiki/w/Strength): 1.33/4 XP ratio), never unrelated skills. Safe supplied players proceed; unsupported mechanics stay VERIFY. Complete trip ends at the encounter once; modeled combat replaces its allowance in the provisional quest band. Unmodeled post-combat balances stay unknown.
+
+`activeAction.executionStep` feeds window/readiness/activity, Path/Gear/Shopping and bridge refresh, preserving save/schema/wire versions. Ledger cards expose actions/comparisons; fonts/CSS unchanged. Training detours outrank parent quests without overwriting observations.
+
+Black Knight fixtures: stats20/5000gp → buy Mithril scimitar; stats20/0gp → train; banked weapon → withdraw; 100gp/fast funding → earn950gp, slow funding → train; Attack19 →20 then upgrade; supplied stats40 → QUEST.
+
+Verification: 2,613 units/238 files; 766 browser, 95 native Electron, 640 Java checks; typecheck/build, quick/structure, data/fixtures, knip/dead-css. Paired timing: mean non-XP updates 9.20→8.83ms (−4.0%); worst startup +3.9%, within10% budget. Evidence: external `work/combat-2851`.
+
+Limits: bounded melee shortlist; phased training/food and heuristic quest-duration estimates are not measured timings or survival guarantees. Unknown routes/prices remain explicit; Delrith/Draynor/unsupported mechanics require verification. Real-game acceptance, latency/FPS: Claude/owner, not performed here. Historical receipts: Git.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt

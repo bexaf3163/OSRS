@@ -19,9 +19,10 @@ export function preparationTime(
   frame: Omit<TacticalFrame, 'preparationMinutes'>, origin: WorldPoint | null,
   walk: (from: WorldPoint | null, to: WorldPoint) => Minutes | null,
   gather?: (name: string, count: number) => Minutes | null,
+  finish?: WorldPoint,
 ): Minutes | null {
   const kind = frame.action?.kind;
-  if (!origin || !kind || kind === 'VERIFY' || kind === 'MANUAL_WAIT') return null;
+  if (!origin || kind === 'VERIFY' || kind === 'MANUAL_WAIT') return null;
   // Earning the shortfall comes first and has its own time; without one the whole preparation stays UNKNOWN.
   const earning = kind === 'EARN' ? frame.action?.time ?? null : noTime();
   if (!earning) return null;
@@ -63,6 +64,7 @@ export function preparationTime(
     // shortcut: the bank comes first and purchases follow in line order, not the shortest order; replace with an ordered trip search.
     stops.unshift({ at: { x: near.x, y: near.y, plane: near.plane }, service: { component: 'banking', time: SERVICE } });
   }
+  if (finish) stops.push({ at: finish });
   if (!stops.length && !gathered.length) return kind === 'EARN' ? earning : { fast: 0, typical: 0, slow: 0, source: 'Everything needed is carried or worn' };
   return sumMinutes([earning, ...gathered, ...(stops.length ? Object.values(costTrip(origin, stops, walk).cost) : [])]);
 }

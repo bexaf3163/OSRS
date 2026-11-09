@@ -2,8 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { bestEarnRate, earnAction, gatherTime, levelledEarnRates } from './earn';
 import { ctxOf, fakePrices, fakeSnap } from '../../../tests/funding/helpers';
 import { METHODS } from '../economy/funding/methods';
+import { buildPlayerState } from '../player/playerState';
+import type { PlanningSnapshot } from './contracts';
 
-const snapshot = { scope: { characterId: 'c', mode: 'f2p', gameSessionId: 's', snapshotRevision: 4 } } as never;
+const snapshot: PlanningSnapshot = { scope: { characterId: 'c', mode: 'f2p', gameSessionId: 's', snapshotRevision: 4 },
+  player: buildPlayerState({ mode: 'f2p', connected: true, stats: {}, progress: { levels: {} }, questsDone: [],
+    gear: { equipment: [], inventory: [], coins: 0, bankCoins: 0 }, owned: { bankSeen: true, items: new Map() } }),
+  xp: {}, quests: {}, manual: {}, questPoints: { known: false } };
 const step = { id: 'S1-01', title: 'Buy a skirt' } as never;
 const rate = { methodId: 'cowhides', title: 'Collect cowhides', netPerHour: { fast: 60_000, typical: 30_000, slow: 15_000 } };
 

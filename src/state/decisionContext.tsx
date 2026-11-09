@@ -28,6 +28,7 @@ import { useEvalBaseFactory, useFunding, useSnapshotFactory } from './fundingCon
 import { levelForXp } from '../domain/player/xp';
 import type { Minutes } from '../domain/planning/contracts';
 import { travelInputOf } from '../domain/travel/travelInput';
+import { useFeatures } from './hooks/useFeatures';
 
 /** Holds the Decision's window above the providers that prepare for it (readiness, funding, the bridge). */
 export function PlanWindowProvider({ children }: { children: ReactNode }) {
@@ -37,6 +38,7 @@ export function PlanWindowProvider({ children }: { children: ReactNode }) {
 }
 
 export function DecisionProvider({ children }: { children: ReactNode }) {
+  const features = useFeatures();
   const { progress, steps } = useStore();
   const { state } = usePlayerState();
   const bridge = useBridge();
@@ -109,18 +111,20 @@ export function DecisionProvider({ children }: { children: ReactNode }) {
     const decision = runtimeDecision({
       snapshot, intent: readOnly ? null : intent, previous: previous.current, progress, prices, steps,
       detail: id => itemById.get(id), ironman: bridge.accountType === 'ironman', restriction: trade.state, walk, teleports, gather,
-      earn: (step, gp, _budget, goalId, train) => earnAction(snapshot, step, goalId, gp, rate(), train ? { levelled: levelled(), train } : undefined),
+      keepDefenceOne: features.keepDefenceOne,
+      earn: (step, gp, budget, goalId, train) => budget.liquid.amount === null || !budget.liquid.complete ? null
+        : earnAction(snapshot, step, goalId, Math.max(0, gp - budget.liquid.amount), rate(), train ? { levelled: levelled(), train } : undefined),
     });
     const current = decisionStep(decision, steps);
     return {
       decision, missed: [...missed.values()],
       window: decision && current ? planningWindow({ snapshot, decision, current, catalogue: questCatalogue, steps }) : [],
     };
-  }, [snapshot, routes, rate, levelled, teleports, gather, bridge.accountType, steps, progress, prices, trade.state, intent, readOnly]);
+  }, [snapshot, routes, rate, levelled, teleports, gather, bridge.accountType, steps, progress, prices, trade.state, intent, readOnly, features.keepDefenceOne]);
   useEffect(() => { if (value.decision) previous.current = value.decision; }, [value.decision]);
   // Published upward only when its steps change: a new array of the same steps must not recompute readiness.
   const { setWindow } = useContext(PlanWindowCtx);
-  const windowKey = value.window.map(s => `${s.id}:${s.type}`).join(',');
+  const windowKey = JSON.stringify(value.window.map(s => [s.id, s.type, s.itemsRequired, s.pacing]));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => setWindow(value.window), [windowKey, setWindow]);
   useLegRoutes(snapshot, value.missed, setRoutes);

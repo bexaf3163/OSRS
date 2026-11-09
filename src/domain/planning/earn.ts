@@ -9,6 +9,7 @@ import { sumMinutes } from './cost';
 import { rankMethods } from '../economy/funding/rank';
 import { BROWSE_TARGET } from '../economy/funding/browse';
 import type { CandidateAction, PlanningSnapshot } from './contracts';
+import { liquidOf } from '../economy/funding/snapshot';
 
 export interface EarnRate { methodId: string; title: string; netPerHour: Range3 }
 
@@ -48,10 +49,13 @@ function earnNow(snapshot: PlanningSnapshot, step: Step, goalId: string, require
   if (rates.some(perHour => !Number.isFinite(perHour) || perHour <= 0)) return null;
   const minutes = (perHour: number) => requiredGp / perHour * 60;
   const gp = Math.ceil(requiredGp);
+  const liquid = liquidOf(snapshot.player);
+  const predicate = liquid.complete && liquid.amount !== null ? `Liquid GP covers ${Math.ceil(liquid.amount + gp)}`
+    : `Earn ${gp} additional GP and verify the liquid balance before procurement`;
   return {
     id: `${goalId}:EARN:${step.id}:${rate.methodId}`, goalId, kind: 'EARN', title: `Earn ${gp} gp: ${rate.title}`, stepId: step.id,
     feasibility: 'READY', prerequisites: [],
-    completionEvidence: [{ source: 'Observed liquid GP', snapshotRevision: snapshot.scope.snapshotRevision, predicate: `Liquid GP covers ${gp}` }],
+    completionEvidence: [{ source: 'Observed liquid GP', snapshotRevision: snapshot.scope.snapshotRevision, predicate }],
     expectedEffects: [], gpCost: null, sourceIds: [`funding:${rate.methodId}`],
     time: { fast: minutes(Math.max(...rates)), typical: minutes(rate.netPerHour.typical), slow: minutes(Math.min(...rates)), source: `${rate.title}: net coins an hour from the Money ranking` },
     reasons: [`Short of ${gp} gp for ${step.title}`, 'Earning time from the best dependable method for this character'],

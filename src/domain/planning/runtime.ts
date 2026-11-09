@@ -21,6 +21,7 @@ import { preparationTime } from './preparationTime';
 import { withTeleports, type TeleportInput } from './teleportWalk';
 import type { Minutes } from './contracts';
 import type { WorldPoint } from '../player/playerState';
+import { stepFightNames } from '../combat/fightEstimate';
 
 export interface RuntimePlanInput {
   snapshot: PlanningSnapshot;
@@ -36,6 +37,7 @@ export interface RuntimePlanInput {
   style?: PlayStyle;
   priority?: MethodPriority;
   restriction?: TradeRestriction['state'];
+  keepDefenceOne?: boolean;
   catalogue?: readonly QuestFact[];
   /** Walking minutes from the trip worker's routes (createWalkingCosts); absent keeps quest travel UNKNOWN. */
   walk?: (from: WorldPoint | null, to: WorldPoint) => Minutes | null;
@@ -72,7 +74,7 @@ export function questWork(step: Step, goal: QuestFact): Minutes | null {
 export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | null {
   const { snapshot, prices, steps, ironman } = input;
   const catalogue = input.catalogue ?? questCatalogue;
-  const current = input.previous && steps.find(step => step.id === input.previous!.activeAction.stepId);
+  const current = input.previous?.activeAction.executionStep ?? (input.previous && steps.find(step => step.id === input.previous!.activeAction.stepId));
   const window = input.previous && current ? planningWindow({ snapshot, decision: input.previous, current, catalogue, steps }) : [];
   const walk = withTeleports(input.walk ?? (() => null), input.teleports ?? null);
   const origin = snapshot.player.position.known ? snapshot.player.position.value : null;
@@ -83,10 +85,16 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
   const train = (skill: string, level: number) => trainingCost(skill, level, observed);
   const tactical = createTacticalResolver({
     snapshot, progress: input.progress, prices, window, style: input.style, priority: input.priority,
-    restriction: input.restriction, ironman, earn: (step, gp, budget, goalId) => input.earn(step, gp, budget, goalId, train),
+    restriction: input.restriction, ironman, walk, keepDefenceOne: input.keepDefenceOne,
+    earn: (step, gp, budget, goalId) => input.earn(step, gp, budget, goalId, train),
     gather: input.gather,
     preparationTime: frame => preparationTime(frame, origin, walk, input.gather),
   });
+  // Unknown quests and steps without an encounter need only the original length/route estimate. Resolving their full
+  // preparation here would eagerly scan every unopened quest on each STATS event, before any candidate can use it.
+  const encounterOf = (step: Step, goal: QuestFact) => snapshot.quests[goal.id]?.state !== 'UNKNOWN'
+    && snapshot.quests[goal.id] && stepFightNames(step).length && snapshot.combat?.stats && snapshot.combat.gear?.equipment
+    ? tactical.resolve(step, goal.id).encounter : undefined;
   const preparationOf = (goal: QuestFact) => {
     const step = stepOf.get(snapshot.quests[goal.id]?.stepId ?? goal.stepIds[0]);
     return step ? tactical.resolve(step, goal.id).preparationMinutes : null;
@@ -106,19 +114,35 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
           });
           const remaining = new Set(remainingQuestSteps(goal, stepOf, snapshot.quests[goal.id]).map(step => step.id));
           // No encounter metadata is not proof of safe combat. A validated cursor may retire an earlier known encounter.
-          const met = fights.length > 0 && fights.filter(fight => remaining.has(fight.id)).every(fight => tactical.resolve(fight, goal.id).action === null);
+          const met = fights.length > 0 && fights.filter(fight => remaining.has(fight.id)).every(fight => {
+            const frame = tactical.resolve(fight, goal.id);
+            return frame.action === null || !!frame.encounter;
+          });
           const dangers = [...remaining].filter(id => DANGER.has(id));
           const escaped = dangers.length > 0 && dangers.every(id => RUN_PAST.has(id));
           const proven = (key: string) => (ASSESSED.has(key) && met) || (ESCAPABLE.has(key) && escaped);
           return {
             action: frame.action, minutes: frame.preparationMinutes,
+            ...(frame.encounter ? { executionStep: frame.step, reasons: frame.encounter.reasons, uncertain: frame.encounter.uncertain } : {}),
             capabilities: Object.fromEntries((goal.requirements.capabilities ?? []).map(key => [key, proven(key) ? 'met' : 'unknown'] as const)),
-            resources: forecast ? forecast.changes : null,
+            // The authored quest flow does not account for tactical kit acquisition, training or stochastic food use.
+            // Retire projected balances rather than granting later quests unspent cash or uneaten supplies.
+            resources: frame.encounter ? null : forecast ? forecast.changes : null,
           };
         },
-        work: questWork,
+        work: (step, goal) => {
+          const encounter = encounterOf(step, goal);
+          const band = questWork(step, goal);
+          if (!encounter || !band) return band;
+          if (encounter.baseline.typical >= band.typical) return null; // The coarse quest band cannot price a negative non-combat remainder.
+          // The length heuristic already includes fighting. Replace its baseline combat allowance, never add the fight twice.
+          const rest = { fast: Math.max(0, band.fast - encounter.baseline.typical), typical: Math.max(0, band.typical - encounter.baseline.typical),
+            slow: Math.max(0, band.slow - encounter.baseline.typical), source: `${band.source}; unmeasured non-combat remainder after baseline encounter allowance` };
+          return sumMinutes([rest, encounter.work]);
+        },
         // Walking comes only from the trip worker's routes; without an observed start or a route it stays UNKNOWN.
         travel: (step, _goal, projection) => {
+          if (encounterOf(step, _goal)) return noTime(); // Complete preparation trip already ends at the fight.
           const from = projection.resources?.position ?? origin;
           const to = step.mapLocation;
           return from && to ? walk(from, { x: to.x, y: to.y, plane: to.plane }) : null;

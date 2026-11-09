@@ -16,6 +16,9 @@ export interface QuestModelAdapters {
     capabilities: Readonly<Record<string, 'met' | 'missing' | 'unknown'>>;
     /** Full physical flow: null is unmodelled; [] explicitly proves no flow. Direct quest cash follows these costs; nothing is observed success. */
     resources: readonly ResourceChange[] | null;
+    executionStep?: Step;
+    reasons?: readonly string[];
+    uncertain?: boolean;
   };
   /** Remaining quest work and actual route cost are separate, each included once. Unknown remains null. */
   work(step: Step, goal: QuestFact, projection: Projection): Minutes | null;
@@ -138,9 +141,10 @@ export function createQuestModel(snapshot: PlanningSnapshot, catalogue: readonly
     const work = adapters.work(step, quest, projection), travel = adapters.travel(step, quest, projection), prepare = unchecked ? null : sumMinutes([prepared.minutes, ...training]);
     const action = prepared.action ?? {
       id: `${quest.id}:QUEST:${step.id}`, kind: 'QUEST' as const, goalId: quest.id, title: step.title, stepId: step.id,
+      ...(prepared.executionStep ? { executionStep: prepared.executionStep } : {}),
       feasibility: 'READY' as const, prerequisites: [], completionEvidence: [{ source: 'RuneLite quest state', snapshotRevision: snapshot.scope.snapshotRevision,
         predicate: `Quest ${quest.id} completed in game` }], expectedEffects: effectsOf(quest), time: work,
-      gpCost: null, sourceIds: [quest.source.url], reasons: [`Advance ${quest.id} toward the F2P quest objective`],
+      gpCost: null, sourceIds: [quest.source.url], reasons: [`Advance ${quest.id} toward the F2P quest objective`, ...prepared.reasons ?? []],
       ...(step.mapLocation ? { destination: { x: step.mapLocation.x, y: step.mapLocation.y, plane: step.mapLocation.plane } } : {}),
     };
     // Completing this macro also entails its prerequisite training. Later quests must not train that gap twice.
@@ -153,7 +157,7 @@ export function createQuestModel(snapshot: PlanningSnapshot, catalogue: readonly
       cost: { prepare, travel, work,
         banking: noTime(), exchange: noTime(), switching: noTime() }, effects,
       ...(comparisonCost ? { comparisonCost } : {}),
-      confidence: prepare && travel && work ? 'MEDIUM' : 'LOW', hardBlocked: false };
+      confidence: prepare && travel && work && !prepared.uncertain ? 'MEDIUM' : 'LOW', hardBlocked: false };
   }
 
   function remainingExpression(projection: Projection): CostExpression | null {

@@ -34,6 +34,15 @@ describe('the complete preparation trip', () => {
     expect(preparationTime(frame([]), null, () => minute)).toBeNull();
     expect(preparationTime(frame([line({ action: { kind: 'BUY', nav: origin } })]), origin, () => null)).toBeNull();
   });
+  it('continues from the purchase to the encounter once, without adding a second origin-to-encounter trip', () => {
+    const shop = { x: 3210, y: 3240, plane: 0 }, finish = { x: 3030, y: 3500, plane: 0 };
+    const legs: unknown[] = [];
+    const total = preparationTime(frame([line({ action: { kind: 'BUY', nav: shop } })]), origin,
+      (from, to) => { legs.push([from, to]); return minute; }, undefined, finish);
+    expect(legs).toEqual([[origin, shop], [shop, finish]]);
+    expect(total!.typical).toBeGreaterThan(2);
+    expect(preparationTime(frame([]), origin, () => null, undefined, finish)).toBeNull();
+  });
 });
 
 describe('S40: the bank is chosen by its walk, never by straight-line distance', () => {

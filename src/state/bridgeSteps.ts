@@ -83,9 +83,10 @@ export function useStepSending({ activeStepId, setAdvance, liveIdentity, session
 
 /** The next step after a mark, a step sent again when its method or plan changes, and the choices from the pages. */
 export function useStepFollow({ steps, activeStepId, setActiveStepId, setBranchChoice, sessionEpoch, stepIntent, latest, handled }: BridgeCore, { sendStep, clearStep }: ReturnType<typeof useStepSending>) {
+  const planWindow = usePlanWindow();
   // A step that follows a training method asks for different tools, and leads to another place, when the level (or what is carried) moves the player to
   // another method: the game gets the new list and place without a press. The first sight of a step is not a change: whoever activated it sent it.
-  const shown = activeStepId ? steps.find((s) => s.id === activeStepId) : undefined;
+  const shown = activeStepId ? planWindow.find(s => s.id === activeStepId) ?? steps.find((s) => s.id === activeStepId) : undefined;
   const followKey = shown?.followsMethod
     ? JSON.stringify([shown.itemsRequired?.map((i) => [i.nameEn, i.amount]), shown.mapLocation && [shown.mapLocation.x, shown.mapLocation.y, shown.mapLocation.plane]])
     : null;

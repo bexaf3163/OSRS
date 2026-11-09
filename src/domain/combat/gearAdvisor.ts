@@ -1,6 +1,5 @@
 // Gear analysis: what is worn, how hard it hits at your levels and what to do to get stronger —
-// wear the best from the bag or bank, buy from a trader or at the exchange. The order: the free first, then the weapon
-// (combat speed depends on it), the amulet, the armor. It buys and wears nothing — only advises and leads.
+// wear owned kit or buy from a trader/exchange; it buys and wears nothing.
 //
 // Items, bonuses, speed, requirements and shops are from the OSRS Wiki (gear.json, npm run build-gear).
 // Damage follows the wiki formulas ("Damage per second/Melee"): max hit, hit chance, average damage
@@ -296,6 +295,7 @@ export const LOCK_NEAR = 10;
 export interface Equipped { piece: GearPiece | null; id: number; name: string }
 
 export interface GearAdvice {
+  choices: GearAction[]; // Eligible improvements before the page's budget/slot priority; encounter preparation compares their complete costs.
   /** Whether there is data from the game (worn, bag). */
   live: boolean;
   levels: Levels;
@@ -683,7 +683,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   }
 
   return {
-    live,
+    live, choices: doable,
     levels: lv,
     equipped,
     coins: { bag, bank, total },
@@ -719,8 +719,6 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Texts and goals
 
 const gp = (n: number) => n.toLocaleString('en-US');
 const pct = (r: number) => `${Math.round((r - 1) * 100)}%`;

@@ -31,6 +31,7 @@ import { PlaceMapView, usePlaceMap } from '../map/PlaceMap';
 import { ActionNotes, ActionSource, ActionTitle, OwnershipNote } from './GearPrompt';
 import { Eyebrow, Page } from '../../ledger';
 import { hrefTo } from '../../domain/pages/pages';
+import { useDecision } from '../../state/decision';
 
 const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 function SlotGlyph({ slot }: { slot: GearSlot }) {
@@ -200,7 +201,9 @@ export function GearPage() {
     return { amount: required.amount + (stocked.refillReserve ?? 0), complete: required.complete && stocked.refillReserve !== null };
   }, [engine, progress, activity.step, player, prices]);
   const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice(activity.step, { reserve: reserve.amount, reserveUnknown: !reserve.complete, strictContext: true });
-  const meleeContext = !!fightStep && meleeHintApplies(fightStep);
+  const decision = useDecision();
+  const committedKit = decision?.activeAction.executionStep?.id === activity.step?.id && !!decision?.activeAction.executionStep;
+  const meleeContext = !committedKit && !!fightStep && meleeHintApplies(fightStep);
   const preparation = activity.step ? engine.plan(activity.step, { ahead: 0 }) : null;
   const kit = preparation?.lines.filter(line => line.usedIn.includes(activity.step!.id) && (line.priority === 'CRITICAL' || line.priority === 'IMPORTANT')) ?? [];
   const priceUnknown = !pricesReady && advice.goals.length > 0;
@@ -266,7 +269,7 @@ export function GearPage() {
     <div className="page la-scroll">
       <Eyebrow>{meleeContext ? 'GEAR ADVISOR' : 'CURRENT ACTIVITY KIT'}</Eyebrow>
       {!meleeContext && <section className="card" aria-label="Activity kit">
-        <h2 className="subhead">{activity.step?.title ?? 'Choose your next activity'}</h2>
+        <h2 className="subhead">{committedKit ? decision!.activeAction.title : activity.step?.title ?? 'Choose your next activity'}</h2>
         {preparation ? <>
           <p className="small">{preparation.score.verdict === 'UNKNOWN' ? 'Kit not fully checked. Open your bank in RuneLite.' : preparation.score.verdict === 'READY' ? 'Current kit is ready.' : 'Prepare the current kit before leaving.'}</p>
           {kit.length > 0 && <ul className="gear-worn-list">{kit.slice(0, 6).map(line => <li key={line.key} className="gear-worn-item is-filled"><ItemIcon src={ICON_BY_NAME.get(nameKey(line.name))} alt="" size={28} /><span className="gear-worn-text"><span>{line.name}{line.count > 1 ? ` ×${line.count}` : ''}</span><span className="muted small">{line.action?.label ?? ({ EQUIPPED: 'Worn', INVENTORY: 'With you', BANK: 'Take from bank', MISSING: 'Get before leaving', UNKNOWN: 'Not checked' }[line.where])}</span></span></li>)}</ul>}

@@ -1,4 +1,4 @@
-import type { GameMode, PlayerStats } from '../../types';
+import type { GameMode, PlayerStats, Step } from '../../types';
 import type { GearState } from '../../services/runeliteBridge';
 import type { QuestInstruction } from '../quests/questCursor';
 import type { Known, PlayerState, WorldPoint } from '../player/playerState';
@@ -75,6 +75,8 @@ export type ExpectedEffect =
   | { kind: 'resources-unknown'; source: string; afterSuccessOnly: true }
   | { kind: 'resources'; change: ResourceChange; afterSuccessOnly: true };
 export interface CandidateAction {
+  /** Transient execution kit from the chosen tactical strategy; never a saved step, future possession or observed level. */
+  executionStep?: Step;
   id: string;
   kind: ActionKind;
   goalId: string;
