@@ -1,3 +1,4 @@
+import type { Step } from '../../types';
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../../data';
 import { emptyProgress, withStep } from '../persistence/progress';
@@ -6,8 +7,9 @@ import { contextOf, readinessOf, fixChain, type ReadinessInput } from './readine
 import { createReadinessEngine } from './readinessEngine';
 import { buildPrepRoute } from '../prep/prepRoute';
 import { planOneTrip } from '../prep/oneTrip';
+import { stepOrRetired } from '../../../tests/fixtures/retiredSteps';
 
-const step = (id: string) => allSteps.find((s) => s.id === id)!;
+const step = (id: string): Step => stepOrRetired(id);
 const done = (ids: string[]) => ids.reduce((p, id) => withStep(p, id, 'done'), emptyProgress());
 const input = (s: string, over: Partial<ReadinessInput> = {}): ReadinessInput => ({
   step: step(s), steps: allSteps, progress: done(allSteps.slice(0, allSteps.findIndex((x) => x.id === s)).map((x) => x.id)), qp: 200, mode: 'members',
@@ -16,15 +18,15 @@ const input = (s: string, over: Partial<ReadinessInput> = {}): ReadinessInput =>
 
 describe('the single readiness engine', () => {
   it('looks ahead along the planner\'s window, never the guide\'s next steps', () => {
-    const ctx = contextOf({ ...input('S1-01'), progress: emptyProgress() });
+    const ctx = contextOf({ ...input('S1-03'), progress: emptyProgress() });
     const guided = createReadinessEngine(ctx);
-    expect(guided.road(step('S1-01')).map((s) => s.id)).toEqual(['S1-01']);
-    expect(guided.trip('S1-01').stepIds).toEqual(['S1-01']);
-    const planned = createReadinessEngine({ ...ctx, window: [step('S1-01'), step('S3-01'), step('S2-09')] });
-    expect(planned.road(step('S1-01')).map((s) => s.id)).toEqual(['S1-01', 'S3-01', 'S2-09']);
-    expect(planned.trip('S1-01').stepIds).toEqual(['S1-01', 'S3-01', 'S2-09']);
+    expect(guided.road(step('S1-03')).map((s) => s.id)).toEqual(['S1-03']);
+    expect(guided.trip('S1-03').stepIds).toEqual(['S1-03']);
+    const planned = createReadinessEngine({ ...ctx, window: [step('S1-03'), step('S3-01'), step('S2-09')] });
+    expect(planned.road(step('S1-03')).map((s) => s.id)).toEqual(['S1-03', 'S3-01', 'S2-09']);
+    expect(planned.trip('S1-03').stepIds).toEqual(['S1-03', 'S3-01', 'S2-09']);
     // A step the planner has not committed to is prepared for alone.
-    expect(planned.road(step('S1-02')).map((s) => s.id)).toEqual(['S1-02']);
+    expect(planned.road(step('S1-04')).map((s) => s.id)).toEqual(['S1-04']);
   });
 
   it('keeps candidate and phase caches separate even when their historical step IDs match', () => {
@@ -52,19 +54,6 @@ describe('the single readiness engine', () => {
     expect(engine.plan(step('S3-04')).lines.some(line => ['Beer', 'Bread', 'Cooked meat', 'Knife'].includes(line.name))).toBe(false);
     expect(engine.readiness(execution)).toBe(engine.readiness(step('S3-04')));
     expect(step('S3-04').threats).toContain('Ancient Guardian');
-  });
-  it.each<{ consumer: string; producer: string; stats: Record<string, number> }>([
-    { consumer: 'S7-05', producer: 'S7-04', stats: { agility: 25 } },
-    { consumer: 'S8-05', producer: 'S8-04', stats: { ranged: 30, slayer: 18, crafting: 31, woodcutting: 36, cooking: 10 } },
-    { consumer: 'S9-04', producer: 'S8-06', stats: { prayer: 43 } },
-  ])('known reached levels satisfy skipped pure training dependency $producer for $consumer', ({ consumer, producer, stats }) => {
-    const inp = input(consumer, { stats });
-    inp.progress = withStep(inp.progress, producer, 'skipped');
-    const engine = createReadinessEngine(contextOf(inp));
-    expect(engine.dependencies(producer)).toBe(true);
-    expect(engine.readiness(step(consumer)).problems.some(p => p.kind === 'step' && p.label.includes(producer))).toBe(false);
-    expect(inp.progress.steps[producer]).toBe('skipped');
-    expect(engine.chain(step(consumer)).some(link => link.step.id === producer)).toBe(false);
   });
 
   it('computes a step once and returns the same answer on repeated requests', () => {

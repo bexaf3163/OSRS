@@ -5,6 +5,7 @@ import {
   RETIRED_STEPS, V2_FROM_V1, V3_FROM_V2, withGameMode, withLevel, withNote, withReviewed, withStep,
 } from './progress';
 import { needsReview, pendingReview } from '../readiness/review';
+import { retiredStep } from '../../../tests/fixtures/retiredSteps';
 
 function memoryStorage() {
   const data = new Map<string, string>();
@@ -18,7 +19,7 @@ function memoryStorage() {
 describe('progress: export and import', () => {
   const sample = () => {
     let p = emptyProgress();
-    p = withStep(p, 'S1-01', 'done');
+    p = withStep(p, 'S1-03', 'done');
     p = withStep(p, 'S3-05', 'skipped');
     p = withLevel(p, 'fishing', 23);
     p = withNote(p, 'S2-05', 'key in the bank');
@@ -59,15 +60,15 @@ describe('progress: export and import', () => {
   it('valid retired history is kept while invalid records are dropped', () => {
     const r = importProgress(JSON.stringify({
       version: 3,
-      steps: { 'S1-01': 'done', 'S9-99': 'done', 'S1-02': 'maybe' },
+      steps: { 'S1-03': 'done', 'S9-99': 'done', 'S1-04': 'maybe' },
       levels: { fishing: 120, cooking: '15', sailing: 50, mining: 'a lot' },
-      notes: { 'S1-01': 'ok', 'S9-99': 'no', 'S1-02': 5 },
+      notes: { 'S1-03': 'ok', 'S9-99': 'no', 'S1-04': 5 },
     }), known);
     expect(r.ok).toBe(true);
     if (!r.ok) return;
-    expect(r.progress.steps).toEqual({ 'S1-01': 'done' });
+    expect(r.progress.steps).toEqual({ 'S1-03': 'done' });
     expect(r.progress.levels).toEqual({ fishing: 99, cooking: 15 });
-    expect(r.progress.notes).toEqual({ 'S1-01': 'ok' });
+    expect(r.progress.notes).toEqual({ 'S1-03': 'ok' });
     expect(r.progress.legacy).toEqual({ steps: { 'S9-99': 'done' }, notes: { 'S9-99': 'no' } });
     expect(r.stats.dropped).toBe(4);
   });
@@ -136,10 +137,10 @@ describe('progress: storage', () => {
 
   it('updates do not change the source object', () => {
     const p = emptyProgress();
-    const q = withStep(p, 'S1-01', 'done');
+    const q = withStep(p, 'S1-03', 'done');
     expect(p.steps).toEqual({});
-    expect(withStep(q, 'S1-01', null).steps).toEqual({});
-    expect(withNote(withNote(p, 'S1-01', 'x'), 'S1-01', '   ').notes).toEqual({});
+    expect(withStep(q, 'S1-03', null).steps).toEqual({});
+    expect(withNote(withNote(p, 'S1-03', 'x'), 'S1-03', '   ').notes).toEqual({});
   });
 });
 
@@ -155,9 +156,9 @@ describe('progress: moving from V1 to V2', () => {
     const n = normalizeProgress(v1, known)!;
     expect(n.migrated).toBe(true);
     expect(n.progress.version).toBe(3);
-    // V1 S1-06 (The Restless Ghost) is S1-06 now too; V1 S2-03 (exchange shopping) is S2-01;
-    // V2 S4-05 (shopping for the dragon) is assembled from two V1 steps and counted only when both are done.
-    expect(n.progress.steps).toEqual({ 'S1-03': 'done', 'S1-06': 'done', 'S2-01': 'done', 'S4-05': 'done', 'S3-05': 'skipped' });
+    // V1 S1-06 (The Restless Ghost) is S1-06 now too; V1 S2-03 (exchange shopping) was S2-01;
+    // V2 S4-05 (shopping for the dragon) is assembled from two V1 steps and counted only when both are done. Both are retired now; the V1 marks stay in the legacy copy.
+    expect(n.progress.steps).toEqual({ 'S1-03': 'done', 'S1-06': 'done', 'S3-05': 'skipped' });
     expect(n.progress.notes).toEqual({ 'S1-06': 'ghost at the graveyard' });
     // A step that does not exist in V2 is not lost: it is in the backup copy.
     expect(n.progress.legacy).toEqual({ steps: v1.steps, notes: v1.notes });
@@ -165,8 +166,8 @@ describe('progress: moving from V1 to V2', () => {
     expect(n.progress.updatedAt).toBe(v1.updatedAt);
   });
 
-  it('the transfer table leads only to existing V2 steps', () => {
-    for (const id of Object.keys(V2_FROM_V1)) expect(stepById.has(id), id).toBe(true);
+  it('the transfer table leads only to existing or retired V2 steps', () => {
+    for (const id of Object.keys(V2_FROM_V1)) expect(stepById.has(id) || RETIRED_STEPS.includes(id), id).toBe(true);
   });
 
   it('a part of a composite step does not count it as a whole', () => {
@@ -205,12 +206,14 @@ describe('progress: moving from V2 (2.0.0) to V2.1', () => {
     const n = normalizeProgress(v2, known)!;
     expect(n.migrated).toBe(false);
     expect(n.dropped).toBe(0);
-    expect(n.progress.steps).toEqual({ 'S1-10': 'done', 'S1-09': 'done', 'S9-02': 'done', 'S7-05': 'done', 'S2-01': 'done' });
-    expect(n.progress.notes).toEqual({ 'S1-10': 'book in the inventory' });
+    expect(n.progress.steps).toEqual({ 'S1-09': 'done', 'S9-02': 'done', 'S7-05': 'done' });
+    // S1-10 and S2-01 are retired, so their renamed marks and notes stay in the legacy history.
+    expect(n.progress.legacy).toEqual({ steps: { 'S1-10': 'done', 'S2-01': 'done' }, notes: { 'S1-10': 'book in the inventory' } });
     expect(n.progress.qpKept).toEqual(['S9-02']);
-    expect(n.progress.reviewedV2Steps).toEqual(['S2-01']);
+    // A review mark only applies to a live step, so the retired S2-01 drops it.
+    expect(n.progress.reviewedV2Steps).toBeUndefined();
     expect(n.progress.gameMode).toBe('members');
-    expect(stepById.get('S1-10')!.title).toContain('Chronicle');
+    expect(retiredStep('S1-10').title).toContain('Chronicle');
     expect(stepById.get('S9-02')!.title).toContain('Fairytale I');
   });
 
@@ -224,7 +227,7 @@ describe('progress: moving from V2 (2.0.0) to V2.1', () => {
     const reduced = { ...known, stepIds: new Set([...known.stepIds].filter(id => id !== 'S1-10')) };
     const input = { ...v2, doneAt: { 'S1-06': '2026-09-26T11:00:00Z', 'S1-10': '2026-09-26T11:30:00Z' } };
     const result = normalizeProgress(input, reduced)!.progress;
-    expect(result.legacy).toEqual({ steps: { 'S1-10': 'done' }, notes: { 'S1-10': 'book in the inventory' },
+    expect(result.legacy).toEqual({ steps: { 'S1-10': 'done', 'S2-01': 'done' }, notes: { 'S1-10': 'book in the inventory' },
       doneAt: { 'S1-10': '2026-09-26T11:00:00Z' } });
     expect(result.doneAt).toEqual({ 'S1-09': '2026-09-26T11:30:00Z' });
     expect(normalizeProgress(JSON.parse(exportProgress(result)), reduced)!.progress).toEqual(result);
@@ -244,13 +247,15 @@ describe('V2 Review', () => {
 
   it('every updated step has a description of the changes', () => {
     const updated = allSteps.filter((s) => s.updatedInV2);
-    expect(updated.map((s) => s.id)).toEqual(['S1-03', 'S1-04', 'S2-01']);
+    expect(updated.map((s) => s.id)).toEqual(['S1-03', 'S1-04']);
     for (const s of updated) expect(s.v2ChangesSummary?.length).toBeGreaterThan(20);
   });
 
   it('the review list after the V1 transfer', () => {
     const p = normalizeProgress({ steps: { 'S1-03': 'done', 'S1-04': 'done', 'S2-03': 'done' } }, known)!.progress;
-    expect(p.steps['S2-01']).toBe('done');
-    expect(pendingReview(allSteps, p).map((s) => s.id)).toEqual(['S1-03', 'S1-04', 'S2-01']);
+    // V1 S2-03 became the retired S2-01, so the mark stays in the legacy copy only.
+    expect(p.steps['S2-01']).toBeUndefined();
+    expect(p.legacy?.steps['S2-03']).toBe('done');
+    expect(pendingReview(allSteps, p).map((s) => s.id)).toEqual(['S1-03', 'S1-04']);
   });
 });

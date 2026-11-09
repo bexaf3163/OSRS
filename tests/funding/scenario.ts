@@ -1,7 +1,7 @@
 // A whole funding scenario built the way the app builds it: the player state, the one-trip plan, the preparation plan, the money need, the snapshot and the
 // assessment, for a real step of the route. Tests state only what the player has and what the market says; everything else is the production code.
 
-import legacyCollect from '../combatRoute/legacyCollectStep.json';
+import legacyCollect from '../fixtures/legacyCollectStep.json';
 import { stepsFor } from '../../src/data';
 import { gearById } from '../../src/domain/combat/gearAdvisor';
 import type { OwnedItem, OwnedState } from '../../src/domain/items/checklist';
@@ -69,7 +69,9 @@ export interface Scenario {
 }
 
 export function scenario(prices: PriceView, o: ScenarioOpts = {}): Scenario {
-  const steps = stepsFor('f2p').map(s => s.id === 'S4-03' ? legacyCollect as Step : s);
+  // The collection step of the retired route stands where it was, after The Ides of Milk's part of the road (S4-02).
+  const route = stepsFor('f2p'), at = route.findIndex(s => s.id === 'S4-02') + 1;
+  const steps = [...route.slice(0, at), legacyCollect as Step, ...route.slice(at)];
   const step = steps.find(s => s.id === (o.stepId ?? 'S4-03'))!;
   // The plugin reports every item the route asks about, zero included: a tracked item with nothing is a fact, an untracked one is unknown.
   const tracked = new Set(tripWindow(steps, emptyProgress(), step.id).flatMap((w) => (w.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])));

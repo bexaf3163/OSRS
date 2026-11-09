@@ -21,7 +21,7 @@ export function fightStepFor(steps: Step[], p: Progress, step?: Step | null): St
 /** Training outside melee must not borrow an unrelated upgrade from the future melee comparison. */
 export function meleeHintApplies(step: Step): boolean {
   const trigger = step.inGame?.completionTrigger;
-  const skills = [step.styleGear, step.magicPlan ? 'magic' : undefined, step.pacing?.skill, step.followsMethod,
+  const skills = [step.pacing?.skill, step.followsMethod,
     ...(trigger?.type === 'SKILL_LEVEL' ? trigger.levels?.map(g => g.skill) ?? [] : [])];
   return !skills.some(skill => skill && !['attack', 'strength', 'defence', 'hitpoints', 'slayer'].includes(skill));
 }

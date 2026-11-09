@@ -126,8 +126,10 @@ export function QuestsPage({ embedded = false, render }: { embedded?: boolean; r
   const detail = (<>
       {selected && <section className="card quest-preview" aria-label="Selected quest">
         <div className="quest-preview-heading"><TypeIcon type="quest" /><h2>{selected.quest.title}</h2></div>
-        <p className="muted">{selected.status}</p>
-        {selected.quest.qp > 0 && <p className="badge badge-qp">+{selected.quest.qp} quest points</p>}
+        <div className="la-chips">
+          <span className="la-chip">{selected.status[0].toUpperCase() + selected.status.slice(1)}</span>
+          {selected.quest.qp > 0 && <span className="la-chip">+{selected.quest.qp} quest {selected.quest.qp === 1 ? 'point' : 'points'}</span>}
+        </div>
         {notInGame(selected) && <p className="notice">Marked done here, but the game does not count it as finished: its quest points are not in your total.</p>}
         {selected.quest.parts.length > 0 && <p>{selected.partsDone} / {selected.quest.parts.length} route steps completed</p>}
         {planOf(selected) && <p className="muted small">Planner #{planOf(selected)!.rank}: {planOf(selected)!.verdict}</p>}

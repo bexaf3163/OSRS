@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById } from '../src/data';
+import { allSteps } from '../src/data';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { nameKey } from '../src/domain/items/itemKey';
-import { pickMethods } from '../src/domain/training/methodPick';
+import { pickTraining } from '../src/domain/training/methodPick';
 import { SKILLING } from '../src/domain/training/skillingRates';
 import { followedGoal, GOAL_REACHED, methodToolNames, UNKNOWN_GOAL_PREFIX, withTrainingMethod, pickedMethodId } from '../src/domain/training/methodStep';
 import { contextOf } from '../src/domain/readiness/readiness';
@@ -13,19 +13,20 @@ import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
 import { trainingNav } from '../src/domain/training/trainingNav';
 import type { Step } from '../src/types';
+import { retiredStep } from './fixtures/retiredSteps';
 
 // Keep longer-goal engine regressions; actual Optional checkpoints have their own acceptance tests.
 function extended(step: Step, target: number): Step {
   return { ...step, targets: step.targets?.filter(t => t.skill !== 'firemaking').map(t => ({ ...t, level: target })),
     inGame: { ...step.inGame!, completionTrigger: { ...step.inGame!.completionTrigger!, levels: step.inGame!.completionTrigger!.levels!.filter(t => t.skill !== 'firemaking').map(t => ({ ...t, level: target })) } } };
 }
-const base = extended(stepById.get('S6-01')!, 50);
-function scenario(stats: Record<string, number>, stock: Record<string, { carried?: number; bank?: number }> = {}, base: Step = extended(stepById.get('S6-01')!, 50)) {
+const base = extended(retiredStep('S6-01')!, 50);
+function scenario(stats: Record<string, number>, stock: Record<string, { carried?: number; bank?: number }> = {}, base: Step = extended(retiredStep('S6-01')!, 50)) {
   const names = [...new Set([...methodToolNames(base), ...Object.keys(stock)])];
   const owned = { bankSeen: true, items: new Map(names.map(name => [nameKey(name), { name, carried: stock[name]?.carried ?? 0, noted: 0, bank: stock[name]?.bank ?? 0 }])) };
   const progress = emptyProgress();
   const state = buildPlayerState({ mode: 'f2p', stats, progress, owned, gear: null, questsDone: ["Cook's Assistant"], connected: true });
-  const raw = pickMethods([base], state, 'f2p', 'chill', 'balanced')[base.id];
+  const raw = pickTraining(base, state, 'f2p', 'chill', 'balanced').pick;
   const pick = raw === undefined ? undefined : pickedMethodId(raw);
   const step = withTrainingMethod(base, raw);
   const steps = allSteps.map(s => s.id === step.id ? step : s);
@@ -120,7 +121,7 @@ describe('one coherent Fishing/Cooking handover', () => {
 });
 
 describe('one coherent Mining/Woodcutting handover', () => {
-  const mining = extended(stepById.get('S6-02')!, 60);
+  const mining = extended(retiredStep('S6-02')!, 60);
   it.each([1, 14, 15, 59])('Mining%s projects only the unlocked mining resource and usable tool family', level => {
     const s = scenario({ mining: level, woodcutting: 1 }, { 'Bronze pickaxe': { carried: 1 } }, mining);
     expect(s.pick).toBe(level < 15 ? 'mi-ore' : 'mi-iron');

@@ -11,7 +11,7 @@ import type { MaterialHolding } from '../player/materialStock';
 import { isReusable } from '../items/reusable';
 
 const COINS_ID = 995;
-/** "From step S2-01", "From S4-05: ...", "The ones saved from S1-04!", "The spare one from step S1-03". */
+/** "From step S2-11", "The ones saved from S1-04!", "The spare one from step S1-03". */
 const CARRY_OVER = /(?:^|[\s(])from\s+(?:step\s+)?(S\d-\d{2})/i;
 
 export function carryOverFrom(item: StepItemRequirement): string | null {

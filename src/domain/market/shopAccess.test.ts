@@ -90,7 +90,7 @@ describe('the router never sends the player where they cannot go', () => {
 });
 
 describe('the next trip: what the step needs now, apart from advance purchases', () => {
-  const ids = ['S4-03', 'S4-04', 'S4-05', 'S5-01'];
+  const ids = ['S5-01', 'S5-04', 'S5-06', 'S5-08'];
   const steps = allSteps.filter((s) => ids.includes(s.id));
   function owned(items: Record<string, [number, number]>): OwnedState {
     const map = new Map<string, OwnedItem>();
@@ -104,10 +104,10 @@ describe('the next trip: what the step needs now, apart from advance purchases',
   const s = buildPlayerState({ mode: 'f2p', stats: null, owned: o, questsDone: null, connected: true, progress: { levels: {} }, gear: { equipment: [], inventory: [], coins: 1827, bankCoins: 0 } as never });
   const { list, trip } = scopeList(steps);
   const rows = shopRows(list, { state: s, onGe: (l: ShoppingLine) => l.id !== undefined, detail: (id) => itemById.get(id), trip, gePrice: () => 100, qp: null });
-  const now = new Set(['S4-03']);
+  const now = new Set(['S5-01']);
   const isAhead = (r: ShopRow) => timingOf(r, now) === 'ahead';
 
-  it('S4-03 needs nothing to buy: the lobsters and the dragon materials are for S4-04 and S4-05', () => {
+  it('S5-01 needs nothing to buy: the lobsters and the ship materials are for the later Dragon Slayer I steps', () => {
     const nowRows = rows.filter((r) => !r.optional && !isAhead(r));
     expect(nowRows.filter((r) => r.channel === 'ge' || r.channel === 'shop')).toEqual([]);
     expect(rows.find((r) => r.name === 'Lobster')).toBeDefined();
@@ -115,10 +115,10 @@ describe('the next trip: what the step needs now, apart from advance purchases',
   });
 
   it('the coins the steps pay out are named with their step, and the sum reconciles', () => {
-    expect(list.coinLines).toEqual([{ stepId: 'S4-05', amount: 2000, why: 'For buying the ship Lady Lumbridge.' }]);
+    expect(list.coinLines).toEqual([{ stepId: 'S5-06', amount: 2000, why: 'Klarense takes exactly 2,000 coins.' }]);
     const total = budgetOf(rows, list.coins, { bag: 1827, bank: 0 });
     const text = budgetSum(total, list.coinLines)!;
-    expect(text).toContain('2,000 gp the steps pay out (S4-05: buying the ship Lady Lumbridge)');
+    expect(text).toContain('2,000 gp the steps pay out (S5-06: klarense takes exactly 2,000 coins)');
     expect(total.shortfall).toBe(total.required + 2000 - 1827);
     expect(text).toContain(`you have 1,827 gp, so ${total.shortfall!.toLocaleString('en-US')} gp short`);
   });

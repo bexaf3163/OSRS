@@ -63,7 +63,7 @@ export interface ShopRow {
   /** Sold at the exchange: only these go into the exchange list. */
   tradeable: boolean;
   own: Ownership;
-  /** The steps it is for: "S3-08 ×110, S4-01". */
+  /** The steps it is for: "S4-01 ×10, S5-08". */
   why: string;
   sources: ShoppingSource[];
   howToGet: string;
@@ -362,7 +362,7 @@ export interface Budget {
 }
 
 /**
- * The budget line in words that add up: "Purchases ≈ 5,409 gp + 2,000 gp kept for S4-05 (the ship) − 1,827 gp you have = short 5,582 gp". The coins
+ * The budget line in words that add up: "Purchases ≈ 5,409 gp + 2,000 gp kept for S5-06 (the ship) − 1,827 gp you have = short 5,582 gp". The coins
  * the steps spend are named with their step and reason, so the shortfall reconciles with the figures beside it.
  */
 const lowerFirst = (t: string) => t.charAt(0).toLowerCase() + t.slice(1);

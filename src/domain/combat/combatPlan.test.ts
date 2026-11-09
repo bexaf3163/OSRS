@@ -6,12 +6,13 @@ import type { OwnedItem, OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
 import { gearById } from './gearAdvisor';
 import type { GearState } from '../../services/runeliteBridge';
+import { retiredStep } from '../../../tests/fixtures/retiredSteps';
 
 // The minotaur example of the brief: S3-08 from Attack 22 / Strength 16, Defence 1, 22 health, Mithril scimitar and iron armour,
 // 13 Salmon and 3 Lobsters in the bank. Trip, whole goal, reserve, owned and deficit are separate numbers; the level 27 Minotaur is
 // its own estimate.
 
-const s = stepById.get('S3-08')!;
+const s = retiredStep('S3-08')!;
 const id = (n: string) => [...gearById.values()].find((p) => p.name === n)!.id;
 const gear: GearState = {
   equipment: ['Mithril scimitar', 'Iron full helm', 'Iron platebody', 'Iron plateskirt', 'Iron kiteshield'].map((n) => ({ id: id(n), name: n })),
@@ -73,7 +74,7 @@ describe('S3-08: the food plan', () => {
   });
 
   it('S4-03 surface frogs get a plan of their own', () => {
-    const a = combatPlanView(stepById.get('S4-03')!, {
+    const a = combatPlanView(retiredStep('S4-03')!, {
       stats: { attack: 30, strength: 20, defence: 1, hitpoints: 25 }, xp: { attack: 13363, strength: 4470, defence: 0 },
       gear: { ...gear, equipment: [{ id: id('Adamant scimitar'), name: 'Adamant scimitar' }, ...gear.equipment!.slice(1)] }, owned: owned({}),
     })!;

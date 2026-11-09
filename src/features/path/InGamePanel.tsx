@@ -6,7 +6,6 @@ import type { InGameTarget, Step } from '../../types';
 import { useBridge } from '../../state/bridge';
 import { toInGameTarget } from '../../domain/guide/inGameTarget';
 import { PreflightPanel } from './prep/PreflightPanel';
-import { PacingLine } from './step/PacingLine';
 import { PluginUpdateNote } from '../settings/PluginUpdateNote';
 import { triggerText } from '../../domain/quests/triggers';
 import { routeTrigger } from '../../domain/prep/carryover';
@@ -60,7 +59,6 @@ export function InGamePanel({ step }: { step: Step }) {
         </p>
       )}
       {active && <PluginUpdateNote />}
-      <PacingLine step={step} />
       {trigger && <p className="muted small">The step will be marked by itself when {triggerText(trigger)}.</p>}
       {active && !shortestPath && (
         <p className="muted small">

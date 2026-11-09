@@ -13,13 +13,13 @@ import { buildEnvelope, envelopeKey, MAX_PLAN_LINES, nextSeq, planPayload, EMPTY
 import { clipText } from '../text/format';
 import { postPrepPlan, snapshotAccepted, supportsSnapshot, APP_PROTOCOL, BRIDGE_PATHS, missingWithPlugin } from '../../services/runeliteBridge';
 import { toInGameTarget } from '../guide/inGameTarget';
-import type { Step } from '../../types';
 import { fundingHintPayload } from '../economy/fundingHint';
 import { startPlan, tick, viewOf } from '../economy/funding/plan';
 import { methodById } from '../economy/funding/methods';
 import { market } from '../../../tests/funding/market';
 import { scenario } from '../../../tests/funding/scenario';
 import { fakeSnap } from '../../../tests/funding/helpers';
+import { routeWith, stepOrRetired } from '../../../tests/fixtures/retiredSteps';
 
 const FILE = new URL('../../../runelite-bridge/src/test/resources/prep-snapshots.json', import.meta.url);
 
@@ -35,11 +35,11 @@ function planOf(stepId: string, have: Record<string, Partial<OwnedItem>>, extra:
     gear: { equipment: [], inventory: [], coins: 40, bankCoins: 100, ...(extra.slots !== undefined ? { inventorySlots: extra.slots } : {}) },
     questsDone: null, connected: true,
   });
-  const step = allSteps.find((s) => s.id === stepId)!;
+  const step = stepOrRetired(stepId), steps = routeWith(stepId);
   const progress = emptyProgress();
   return buildPrepPlan({
-    step, steps: allSteps, progress, state, trip: planOneTrip(allSteps, progress, step.id, state),
-    readiness: readinessOf(step, { steps: allSteps, progress, qp: 0, mode: 'f2p', state }), recovery: extra.recovery ?? null,
+    step, steps, progress, state, trip: planOneTrip(steps, progress, step.id, state),
+    readiness: readinessOf(step, { steps, progress, qp: 0, mode: 'f2p', state }), recovery: extra.recovery ?? null,
   });
 }
 
@@ -145,7 +145,7 @@ describe('the state snapshot for the game (protocol 6)', () => {
 
   it('the copy of the snapshots in runelite-bridge matches what the app sends (the plugin parses it in its own tests)', () => {
     const mkParts = (id: string, plan: PrepPlan, extra: Partial<SnapshotParts> = {}): SnapshotParts => ({
-      step: toInGameTarget(allSteps.find((s: Step) => s.id === id)!), shopping: null, bankTags: null, gearHint: null, plan: planPayload(plan), ...extra,
+      step: toInGameTarget(stepOrRetired(id)), shopping: null, bankTags: null, gearHint: null, plan: planPayload(plan), ...extra,
     });
     const cases: [string, SnapshotParts][] = [
       ['S1-03: some in the bag, some in the bank', mkParts('S1-03', planOf('S1-03', { Bucket: { carried: 1 }, Pot: { carried: 0, bank: 1 } }), {

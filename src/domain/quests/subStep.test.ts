@@ -38,7 +38,7 @@ describe('the active sub-step', () => {
     expect(findSubStep(ali, null)).toBeNull();
     expect(findSubStep(ali, nav('Lady Keli: use soft clay on the key for a print', { stepId: 'S2-09' }))).toBeNull();
     expect(findSubStep(ali, nav('Buy a Falador teleport tablet'))).toBeNull();
-    expect(findSubStep(stepById.get('S1-01')!, nav('anything', { stepId: 'S1-01' }))).toBeNull();
+    expect(findSubStep(stepById.get('S1-03')!, nav('anything', { stepId: 'S1-03' }))).toBeNull();
   });
 
   it('asks only for the items of that sub-step', () => {

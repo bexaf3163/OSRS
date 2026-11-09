@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById } from '../src/data';
+import { allSteps } from '../src/data';
 import { stepReadiness } from '../src/domain/readiness/readiness';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
@@ -9,13 +9,14 @@ import type { GearState, PacingState } from '../src/services/runeliteBridge';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { isOverworld, isSeparateArea } from '../src/domain/travel/instances';
 import { navigationTarget } from '../src/domain/guide/navigation';
+import { retiredStep } from './fixtures/retiredSteps';
 
 // S3-08 after the owner's report of 2026-10-15 ("nothing shows what to do", "nothing about food, just kill minotaurs") and the combat brief:
 // Strength first on Aggressive, the level 12 Minotaurs, food and Strength potions, what to do in the game. The numbers in the step's text are estimates
 // from the wiki stats (Minotaur level 12: Attack 12, Defence 10, all defences -21, 10 hit points, max hit 2; level 27: Attack 23, Defence 25,
 // defences -10, 22 hit points, max hit 3) and the melee formulas, with the live account's gear (iron armour, crush defence +39, Defence 1).
 
-const s = stepById.get('S3-08')!;
+const s = retiredStep('S3-08')!;
 const FOOD = ['Salmon', 'Trout', 'Tuna', 'Lobster', 'Swordfish'];
 
 /** The game's report: the named items, the alternatives watched with them (zero unless given). */

@@ -105,6 +105,7 @@ main {
 }
 .seg.is-active { background: var(--surface); color: var(--text); border-color: var(--border); }
 .seg-count { font-weight: 500; color: var(--muted); margin-left: 2px; white-space: nowrap; }
+[aria-pressed="true"] > .seg-count { color: inherit; opacity: .8; }
 
 /* ---------- Guide text ---------- */
 

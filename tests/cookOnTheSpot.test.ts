@@ -3,22 +3,22 @@
 
 import { describe, expect, it } from 'vitest';
 import { alongRate, gatherRate } from '../src/domain/training/skillingRates';
-import { pickMethods } from '../src/domain/training/methodPick';
+import { pickTraining } from '../src/domain/training/methodPick';
 import { withTrainingMethod } from '../src/domain/training/methodStep';
 import { trainingMethods, type TrainingMethod } from '../src/domain/training/trainingRouter';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { nameKey } from '../src/domain/items/itemKey';
-import { stepById } from '../src/data';
 import { market } from './funding/market';
+import { retiredStep } from './fixtures/retiredSteps';
 
 const fly = trainingMethods.find((m) => m.id === 'fi-fly') as TrainingMethod;
 const stateOf = (fishing: number, cooking: number) => buildPlayerState({
   mode: 'f2p', stats: { fishing, cooking } as never, progress: emptyProgress(), gear: null, questsDone: [], connected: true,
   owned: { bankSeen: true, items: new Map([['Fly fishing rod', 1], ['Feather', 1000]].map(([n, q]) => [nameKey(n as string), { name: n as string, carried: q as number, noted: 0, bank: 0 }])) } as never,
 });
-const s602 = stepById.get('S6-01')!;
-const pickFor = (fishing: number, cooking: number) => pickMethods([s602], stateOf(fishing, cooking), 'f2p', 'chill', 'balanced', { prices: market() })['S6-01'];
+const s602 = retiredStep('S6-01')!;
+const pickFor = (fishing: number, cooking: number) => pickTraining(s602, stateOf(fishing, cooking), 'f2p', 'chill', 'balanced', { prices: market() }).pick!;
 
 describe('fishing and cooking the same catches at the fire beside the spot', () => {
   it('the Barbarian Village fly spot has the fire beside it: both skills train, fishing a little slower than fishing alone', () => {

@@ -9,10 +9,10 @@ import { cascade, skillChance } from './skillChance';
 import { gatherPace, gatherRate, SKILLING, type SkillingRegistry } from './skillingRates';
 import { trainingNav } from './trainingNav';
 import { withTrainingMethod } from './methodStep';
-import { stepById } from '../../data';
 import { adviseTraining, toolUpgrade, trainingMethods, viewMethod, type TrainingMethod } from './trainingRouter';
 import type { PriceView } from '../market/quotes';
 import { market } from '../../../tests/funding/market';
+import { retiredStep } from '../../../tests/fixtures/retiredSteps';
 
 const method = (id: string) => trainingMethods.find((m) => m.id === id) as TrainingMethod;
 /** A state with these levels and these items (bank checked): name → [carried, bank]. */
@@ -260,7 +260,7 @@ describe('a spot under the ground (synthetic): the way in is walked, followed in
   it('the step follows the way in and the arrow points at it', () => {
     const r = gatherRate(TEST_METHOD, 'woodcutting', st, valuable, reg)!;
     expect(trainingNav({ spot: r.spot })).toMatchObject({ x: door.x, y: door.y, label: 'Test cave (way in)' });
-    const fishing = stepById.get('S6-01')!;
+    const fishing = retiredStep('S6-01')!;
     const step = withTrainingMethod(fishing, { methodId: 'fi-fly', needs: [], spot: { label: 'Test cave', x: below.x, y: below.y, plane: 0, waypoints: [door, below] } });
     expect(step.inGame?.pathWaypoints).toEqual([{ x: door.x, y: door.y, plane: 0 }, { x: below.x, y: below.y, plane: 0 }]);
   });

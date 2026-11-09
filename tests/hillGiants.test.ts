@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import legacyCollect from './combatRoute/legacyCollectStep.json';
+import legacyCollect from './fixtures/legacyCollectStep.json';
 import type { Step } from '../src/types';
 import { allSteps, stepById } from '../src/data';
 import { stepReadiness } from '../src/domain/readiness/readiness';

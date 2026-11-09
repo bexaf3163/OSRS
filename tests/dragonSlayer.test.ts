@@ -29,9 +29,10 @@ const planFor = (id: string, rows: Record<string, Partial<OwnedItem>>, opts: { q
 };
 
 describe('Dragon Slayer I: stage data', () => {
-  it('all nine route steps have a stage table on the quest variable 176, with a key on every line', () => {
-    for (let n = 1; n <= 9; n++) {
-      const id = `S5-0${n}`;
+  it('all eight route steps have a stage table on the quest variable 176, with a key on every line', () => {
+    const ids = allSteps.filter((s) => s.id.startsWith('S5-')).map((s) => s.id);
+    expect(ids).toHaveLength(8);
+    for (const id of ids) {
       expect(quests[id], id).toBeTruthy();
       expect(quests[id].var, id).toEqual(['varp', 176]);
       for (const l of linesOf(id)) expect(l.k, `${id}: a line without a key`).toMatch(/^[A-Za-z0-9_.]{1,80}$/);

@@ -3,9 +3,6 @@
 import type { PacingState } from '../../services/runeliteBridge';
 import type { StepPacing } from '../../types';
 
-export const PACING_ICON: Record<PacingState['skill'], string> = {
-  fishing: '🐟', woodcutting: '🪵', cooking: '🍖', mining: '⛏️', attack: '⚔️', strength: '💪', defence: '🛡️',
-};
 /** What the skill is called in the game's skills tab: the plugin writes it the same way. */
 export const PACING_SKILL: Record<PacingState['skill'], string> = {
   fishing: 'Fishing', woodcutting: 'Woodcutting', cooking: 'Cooking', mining: 'Mining', attack: 'Attack', strength: 'Strength', defence: 'Defence',
@@ -27,7 +24,7 @@ export function etaText(p: Pick<PacingState, 'etaSeconds' | 'estimated'>): strin
 /** The melee attack style whose XP goes to the skill, as the plugin names it; undefined for a skill that is not melee. */
 export const PACING_STYLE: Partial<Record<PacingState['skill'], string>> = { attack: 'Accurate', strength: 'Aggressive', defence: 'Defensive' };
 
-/** Each skill's goal on the step: its own (`goals`, S3-08's Attack 30) or the step's targetLevel. */
+/** Each skill's goal on the step: its own (`goals`, such as Attack 30 beside Strength 20) or the step's targetLevel. */
 export function pacingLevels(sp: Pick<StepPacing, 'skill' | 'also' | 'targetLevel' | 'goals'>): Partial<Record<PacingState['skill'], number>> {
   return Object.fromEntries([sp.skill, ...(sp.also ?? [])].map((k) => [k, sp.goals?.[k]?.level ?? sp.targetLevel]));
 }

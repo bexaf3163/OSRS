@@ -92,9 +92,3 @@ export interface QuestStages {
 export type StepRequirement =
   | { type: 'skill'; skill: string; min: number; when?: 'start' | 'during'; boostable?: boolean }
   | { type: 'quest'; quest: string };
-
-export interface Stage {
-  id: number;
-  title: string;
-  membersOnly?: boolean;
-}

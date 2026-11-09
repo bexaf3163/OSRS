@@ -1,13 +1,13 @@
 // The step workspace: scenarios of the browser suite (npm run test:ui -- --only step).
 import { readFileSync } from 'node:fs';
 import type { Browser, Page } from 'playwright';
-import { BASE, steps, progressBefore, questStatesBefore, open, settle, expect, noOverflow, reveal, waitFor, stepButton, text } from '../harness.ts';
+import { BASE, steps, progressBefore, open, settle, expect, noOverflow, reveal, waitFor, stepButton, text } from '../harness.ts';
 
 async function canonicalPlanScenario(browser: Browser, width = 1000) {
     // A catalogue-backed skill uses its canonical plan and priorities, never the old competing roadmap.
     {
       const { page, errors } = await open(browser, width, {
-        progress: progressBefore('S4-03', { gameMode: 'f2p' }),
+        progress: progressBefore('S5-01', { gameMode: 'f2p' }),
         status: { stats: { woodcutting: 21, attack: 40 } },
         events: [{ type: 'STATS', stats: { woodcutting: 21, attack: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Bronze axe', carried: 1, noted: 0, bank: 0 }, { name: 'Coins', carried: 10000, noted: 0, bank: 0 }] }],
       }, '#/skills/WC/woodcutting');
@@ -33,7 +33,7 @@ async function canonicalPlanScenario(browser: Browser, width = 1000) {
 async function workspaceScenarios(browser: Browser) {
   const saved = (page: Page) => page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}').steps ?? {});
   for (const width of [1000, 1440]) {
-    const { page, errors } = await open(browser, width, { progress: progressBefore('S4-03') }, '#/journal');
+    const { page, errors } = await open(browser, width, { progress: progressBefore('S5-01') }, '#/journal');
     const before = JSON.stringify(await saved(page));
     const quest = page.locator('.quest-select').nth(1);
     const title = (await quest.locator('.quest-title').innerText()).trim();
@@ -59,7 +59,7 @@ async function workspaceScenarios(browser: Browser) {
     await page.context().close();
   }
   const complete = Object.fromEntries(steps.map(step => [step.id, 'done']));
-  const { page, errors } = await open(browser, 1440, { progress: { ...progressBefore('S1-01'), steps: complete, gameMode: 'f2p' } }, '#/journal');
+  const { page, errors } = await open(browser, 1440, { progress: { ...progressBefore('S1-03'), steps: complete, gameMode: 'f2p' } }, '#/journal');
   const card = page.getByRole('region', { name: 'Quest route complete' });
   await card.waitFor();
   expect(await card.getByRole('link', { name: 'Choose training' }).getAttribute('href') === '#/skills', 'workspace: finished quest route leads to existing training');
@@ -67,40 +67,6 @@ async function workspaceScenarios(browser: Browser) {
   await page.screenshot({ path: 'audit-temp/workspace-quests-complete.png' });
   expect(!errors.length, 'workspace: completed journal has no browser errors');
   await page.context().close();
-}
-
-async function stepS308(browser: Browser) {
-  for (const width of [1280]) {
-    const equipment = [[1329, 'Mithril scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']]
-      .map(([id, name, slot]) => ({ id, name, slot }));
-    const stats = { attack: 22, strength: 16, defence: 1, hitpoints: 22 };
-    const gear = { equipment, inventory: [{ id: 330, name: 'Salmon', count: 40, noted: true }], coins: 500, bankCoins: 3000 };
-    const { page, errors } = await open(browser, width, {
-      // Noted Salmon is what is tested here, on a quest fight whose food this character's estimate requires (Ithoi, S4-01).
-      // Training food (S3-08) is only a recommendation since 2.82.1, so it never creates a required unnote action.
-      progress: progressBefore('S4-01'), localStorage: { 'osrs-put:active-step': 'S4-01', 'osrs-put:combat-plans:main:-': '{"S3-08":{"key":"route","at":1,"by":"player"}}' },
-      // The player is mid-quest at the Ithoi fight: a started quest keeps the game's step over the planner's choice.
-        status: { protocol: 6, ...gear, stats, activeStepId: 'S4-01', player: 'Fixture', questStates: (() => { const q = questStatesBefore('S4-01'); return { ...q, states: { ...q.states, 'The Corsair Curse': 'IN_PROGRESS' } }; })() },
-      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 40, bank: 0, exactCarried: 0, exactNoted: 40, exactBank: 0 }] }],
-    }, '#/step/S4-01');
-    await reveal(page, 'text=/Bank: unnote/i');
-    await page.getByText(/Bank: unnote/i).first().waitFor({ timeout: 8000 });
-    expect((await page.locator('main').innerText()).includes('Unnote at bank'), `notes (${width}): notes are an action, not ready-to-eat food`);
-    expect(await page.evaluate(() => (window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; unnote?: number }[] } } }[] }).__posts.some((p) => p.path === '/prep-plan' && p.body?.plan?.lines.some((l) => l.name === 'Salmon' && (l.unnote ?? 0) > 0))), `notes (${width}): the actual game snapshot carries the unnote action`);
-    expect(await noOverflow(page) && !errors.length, `notes (${width}): no overflow or console errors`);
-    await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 26, noted: 14, bank: 0, exactCarried: 26, exactNoted: 14, exactBank: 0 }] }));
-    await settle(page);
-    expect(!(await page.locator('main').innerText()).includes('Unnote at bank'), `notes (${width}): unnoting clears the action after the live ownership update`);
-    await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 0 }] }));
-    await settle(page);
-    const unreported = await page.evaluate(() => {
-      const posts = (window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; where: string; action?: string }[] } } }[] }).__posts;
-      return posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.lines.find(l => l.name === 'Salmon');
-    });
-    expect(unreported?.where === 'UNKNOWN' && !/^(Buy|Withdraw) /i.test(unreported.action ?? ''), `bank quantity (${width}): an unreported bank count stays unknown in the game payload`);
-    expect(await noOverflow(page) && !errors.length, `bank quantity (${width}): no overflow or console errors`);
-    await page.context().close();
-  }
 }
 
 async function stepS901(browser: Browser) {
@@ -158,30 +124,6 @@ async function stepS802(browser: Browser) {
   await page.keyboard.press('Escape');
   expect(await noOverflow(page) && !errors.length, 'prerequisites: no overflow or page errors');
   await page.context().close();
-}
-
-async function stepS705(browser: Browser) {
-  for (const width of [1280]) {
-    const progress = progressBefore('S7-05', { gameMode: 'members', levels: { agility: 24 } });
-    progress.steps['S7-04'] = 'skipped';
-    const { page, errors } = await open(browser, width, {
-      progress, status: { protocol: 6, stats: { agility: 24 } }, events: [{ type: 'STATS', stats: { agility: 24 } }],
-    }, '#/step/S7-05');
-    await page.getByRole('tab', { name: 'Preparation', exact: true }).click(); // the readiness verdict is on the Preparation ribbon
-    expect((await page.locator('main').innerText()).includes('First S7-04'), `skill dependency (${width}): skipping below the goal does not unlock the quest`);
-    await reveal(page, '.requires .step-ref[href="#/step/S7-04"]');
-    expect(await page.locator('.requires .step-ref.is-met[href="#/step/S7-04"]').count() === 0, `skill dependency (${width}): a skipped training step is not labelled met`);
-    await page.keyboard.press('Escape');
-    await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'STATS', stats: { agility: 25 } }));
-    await settle(page);
-    expect(!(await page.locator('main').innerText()).includes('First S7-04'), `skill dependency (${width}): reaching the actual level removes the redundant training blocker`);
-    await reveal(page, '.requires .step-ref[href="#/step/S7-04"]');
-    expect(await page.locator('.requires .step-ref.is-met[href="#/step/S7-04"]').count() === 1, `skill dependency (${width}): reached levels satisfy the displayed dependency without rewriting the skip`);
-    await page.keyboard.press('Escape');
-    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}').steps?.['S7-04']) === 'skipped', `skill dependency (${width}): the original skip mark is preserved`);
-    expect(await noOverflow(page) && !errors.length, `skill dependency (${width}): no overflow or console errors`);
-    await page.context().close();
-  }
 }
 
 async function questPhase(browser: Browser) {
@@ -388,10 +330,8 @@ async function dragonScimitarTasks(browser: Browser) {
 export const scenarios = {
   'canonical-plan': (browser: Browser) => canonicalPlanScenario(browser, 1100),
   'workspace': workspaceScenarios,
-  'step-s3-08': stepS308,
   'step-s9-01': stepS901,
   'step-s8-02': stepS802,
-  'step-s7-05': stepS705,
   'quest-phase': questPhase,
   'step-readiness': stepReadiness,
   'zen-status': zenStatus,

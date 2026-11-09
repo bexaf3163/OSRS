@@ -1,16 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById } from '../src/data';
+import { allSteps } from '../src/data';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { nameKey } from '../src/domain/items/itemKey';
 import { methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
-import { pickMethods } from '../src/domain/training/methodPick';
+import { pickTraining } from '../src/domain/training/methodPick';
 import { adviseTraining, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
 import { contextOf } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
+import { retiredStep } from './fixtures/retiredSteps';
 
-const base = stepById.get('S6-03')!;
+const base = retiredStep('S6-03')!;
 function scenario(magic: number | null, smithing: number | null = 15, stock: Record<string, { carried?: number; bank?: number }> = {}, fireStaff = false, unread = false) {
   const progress = emptyProgress();
   for (const s of allSteps) { if (s.id === base.id) break; progress.steps[s.id] = 'done'; }
@@ -19,7 +20,7 @@ function scenario(magic: number | null, smithing: number | null = 15, stock: Rec
   const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
   const owned = { bankSeen: !unread, items: new Map(methodToolNames(base).map(name => [nameKey(name), { name, carried: stock[name]?.carried ?? (name === 'Staff of fire' && fireStaff ? 1 : 0), noted: 0, ...(!unread ? { bank: stock[name]?.bank ?? 0 } : {}) }])) };
   const state = buildPlayerState({ mode: 'f2p', stats, progress, owned, gear, connected: true, questsDone: [] });
-  const pick = pickMethods([base], state, 'f2p', 'chill', 'balanced')[base.id];
+  const pick = pickTraining(base, state, 'f2p', 'chill', 'balanced').pick;
   const step = withTrainingMethod(base, pick);
   const engine = createReadinessEngine({ ...contextOf({ step, steps: allSteps.map(s => s.id === base.id ? step : s), progress, mode: 'f2p', qp: 44, stats, owned, gear }), state });
   return { state, pick, step, engine, payload: toInGameTarget(step)! };

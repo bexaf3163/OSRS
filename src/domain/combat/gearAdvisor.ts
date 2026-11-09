@@ -40,7 +40,7 @@ const foeByName = new Map<string, Foe>();
 for (const f of [...(combatFoesJson as { foes: Foe[] }).foes].sort((a, b) => Number(a.members) - Number(b.members) || a.combat - b.combat)) {
   if (!foeByName.has(f.name)) foeByName.set(f.name, f);
 }
-/** Without a step we compare with a cow — the first opponent of the route (S1-13). */
+/** Without a step we compare with a cow, the weakest common opponent. */
 export const DEFAULT_FOE: Foe = foeByName.get('Cow')!;
 
 /** The step's opponents from monsters.json; a step without them is not about melee. */

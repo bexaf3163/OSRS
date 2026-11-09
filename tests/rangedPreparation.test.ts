@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById, stepsFor } from '../src/data';
+import { allSteps, stepsFor } from '../src/data';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { nameKey } from '../src/domain/items/itemKey';
-import { pickMethods, samePicks } from '../src/domain/training/methodPick';
+import { pickTraining } from '../src/domain/training/methodPick';
 import { GOAL_REACHED, methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
 import { contextOf } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
@@ -13,8 +13,9 @@ import { methodNeeds, personalize, trainingMethods, viewMethod } from '../src/do
 import { market } from './funding/market';
 import type { Market } from '../src/domain/training/methodRates';
 import type { PriceView } from '../src/domain/market/quotes';
+import { retiredStep } from './fixtures/retiredSteps';
 
-const base = stepById.get('S6-04')!;
+const base = retiredStep('S6-04')!;
 function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}, chosenMethod?: string, dressed = true, hitpoints = Math.max(30, level)) {
   if (dressed) equipment = [
     ...[['Leather cowl', 'head'], ['Leather body', 'body'], ['Leather chaps', 'legs'], ['Leather vambraces', 'hands'], ['Leather boots', 'feet']]
@@ -29,7 +30,7 @@ function scenario(level: number, equipment: GearItem[] = [], stock: Record<strin
   const stats = { ranged: level, hitpoints, ...(defence === null ? {} : { defence }) };
   const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
   const state = buildPlayerState({ mode: 'f2p', stats, progress, owned, gear, questsDone: ['The Corsair Curse'], connected: true });
-  const picks = pickMethods([base], state, 'f2p', 'chill', 'balanced', trade);
+  const picks = { [base.id]: pickTraining(base, state, 'f2p', 'chill', 'balanced', trade).pick };
   const pick = chosenMethod ? { methodId: chosenMethod, needs: methodNeeds(personalize([trainingMethods.find(m => m.id === chosenMethod)!], 'ranged', state)[0], state) } : picks[base.id];
   const step = withTrainingMethod(base, pick);
   const engine = createReadinessEngine({ ...contextOf({ step, steps: allSteps.map(s => s.id === step.id ? step : s), progress, mode: 'f2p', qp: 44, gear, owned, stats }), state });
@@ -137,7 +138,6 @@ describe('S6-04 actual ranged preparation', () => {
   });
   it('kit picks are stable by content and watch every supported supply within the existing bound', () => {
     const s = scenario(1);
-    expect(samePicks(s.picks, JSON.parse(JSON.stringify(s.picks)))).toBe(true);
     expect(s.payload.watchItems!.length).toBeLessThanOrEqual(40);
     expect(s.payload.watchItems).toEqual(expect.arrayContaining(['Maple longbow', 'Adamant arrow', 'Salmon']));
   });

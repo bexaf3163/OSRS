@@ -4,13 +4,12 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-27 stages: 8 retained, 14 revised, 2 with a branch, 3 deferred.
+22 stages: 7 retained, 12 revised, 0 with a branch, 3 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
 | S1-06 The Restless Ghost | avoid | no | Skeleton (13) | run | - | - | Retain |
 | S1-07 Misthalin Mystery | not-combat | yes | - | none | - | - | Retain |
-| S1-13 Money for the shopping: cowhides | incidental | no | Cow (2) | melee | Cow | - | Retain |
 | S2-03 Witch's Potion | incidental | yes | Rat (1), Giant rat (3) | melee | - | - | Retain |
 | S2-07 The Knight's Sword | avoid | yes | Ice giant (53), Ice warrior (57) | run | - | Trout 10 | Deferred |
 | S2-08 Vampyre Slayer | quest-fight | yes | Count Draynor (34) | melee | Count Draynor | Trout 10 | Revised |
@@ -19,14 +18,10 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S3-03 Demon Slayer | quest-fight | yes | Delrith (27), Dark wizard (20) | melee | - | - | Deferred |
 | S3-04 Below Ice Mountain | quest-fight | yes | Ancient Guardian (25) | other | - | Trout 10 | Revised |
 | S3-05 Shield of Arrav | incidental | yes | Jonny the Beard (2), Weaponsmaster (23) | melee | - | - | Retain |
-| S3-08 Strength to 20 and Attack to 30 | training | yes | Minotaur (12) | melee | Minotaur | Salmon 20 | Branch |
 | S4-01 The Corsair Curse | quest-fight | yes | Ithoi the Navigator (35) | melee | Ithoi the Navigator | Salmon 10 | Revised |
 | S4-02 The Ides of Milk | quest-fight | yes | Brutus (30) | melee | Brutus | Trout 5 | Revised |
-| S4-03 Attack to 40 | training | yes | Giant frog (13) | melee | Giant frog | Salmon 25 | Branch |
 | S5-03 Map piece 1: Melzar's Maze | quest-fight | yes | Melzar the Mad (43), Lesser demon (82) | melee | Melzar the Mad | Salmon 10 | Retain |
 | S5-08 The battle with the dragon Elvarg | quest-fight | yes | Elvarg (83) | melee | Elvarg | Lobster 20+ | Retain |
-| S6-03 Magic to 55 (High Level Alchemy) | training | no | Cow, Chicken | other | - | Trout 5 | Revised |
-| S6-04 Ranged to 40: prepare your kit and follow the current trainer | training | no | Seagull (3), Monk, Giant frog | other | - | - | Revised |
 | S7-02 Fight Arena | quest-fight | yes | Khazard Ogre (63), Khazard scorpion (44), Bouncer (137) | safespot | - | Lobster 10 | Revised |
 | S7-03 Tree Gnome Village | quest-fight | yes | Khazard warlord (112) | safespot | - | Lobster 10 | Revised |
 | S7-05 The Grand Tree | quest-fight | yes | Black demon (172) | safespot | - | Lobster 10 | Revised |
@@ -64,27 +59,6 @@ Quest stage lines: 7.4.
 Evidence:
 
 - Quest stage line 7.4: "no actual combat occurs".
-
-## S1-13 Money for the shopping: cowhides
-
-**Retain.** Cows for cowhides to pay for the shopping; any combat XP is a side effect.
-
-Assumptions:
-
-- A cow cannot threaten a new character: no food is asked for.
-
-Problems:
-
-- Cowhides cannot be sold by a trade-restricted account; the funding system (2.64) counts them only when the restriction is lifted.
-
-Alternatives:
-
-- The funding system offers other ways to raise the coins when hides cannot be sold.
-
-Evidence:
-
-- combatFoes.json: Cow, max hit 1.
-- tests/funding: restricted items are never counted as realised coins.
 
 ## S2-03 Witch's Potion
 
@@ -263,26 +237,6 @@ Evidence:
 
 - Quest stage lines 2.2 and 3.2; OSRS Wiki infobox of the Weaponsmaster (20 hit points, max hit 3), read 2026-10-18.
 
-## S3-08 Strength to 20 and Attack to 30
-
-**Branch.** Strength 20 and Attack 30 on the level 12 Minotaurs.
-
-Assumptions:
-
-- Defence stays at 1 unless the player adopts a Defence plan.
-
-Alternatives:
-
-- Defence first on cows, compared by the combat plans (2.65).
-
-Changed:
-
-- 2.65.0: the step's plans are compared for the player's levels and gear; 2.65.1: a Defence plan must beat the route on the middle estimate while Dragon Slayer I's Defence XP is ahead.
-
-Evidence:
-
-- tests/combatRoute (plans, pick, later).
-
 ## S4-01 The Corsair Curse
 
 **Revised.** Kill Ithoi the Navigator (35, 55 hit points, hits up to 6 with magic).
@@ -332,32 +286,6 @@ Evidence:
 
 - Step field "Combat"; threats.json (melee 3, special 19).
 
-## S4-03 Attack to 40
-
-**Branch.** Attack 40; no mandatory loot quota.
-
-Assumptions:
-
-- Surface level 13 frogs only; current gear and levels drive estimates.
-
-Problems:
-
-- Slow and food-hungry for the reported character (Attack 30, Strength 21, Defence 1, HP 24, iron armour).
-
-Alternatives:
-
-- Compare cows and level 12 minotaurs; Defence-first includes its training cost.
-
-Changed:
-
-- 2.65.0: the plans are compared and one can be adopted: arrow, food, shopping and the game follow it.
-- 2.65.1: Dragon Slayer I's 18,650 Defence XP is counted before Defence training is recommended.
-- 2.74.2: replace mandatory Hill Giant funding detour with surface Giant frogs; training completes at Attack 40. Funding remains separate.
-
-Evidence:
-
-- tests/combatRoute/plans.test.ts, pick.test.ts, later.test.ts; UI smoke (combat).
-
 ## S5-03 Map piece 1: Melzar's Maze
 
 **Retain.** Melzar's Maze: the marked rat, ghost, skeleton and zombie, Melzar the Mad (43, hits up to 5) in melee, the lesser demon from the safespot.
@@ -394,65 +322,6 @@ Evidence:
 - Danger zones on the boat and in the lair.
 
 In-game danger zones: crandor-boarding, elvarg-lair.
-
-## S6-03 Magic to 55 (High Level Alchemy)
-
-**Revised.** Optional Magic55 using spell-dependent supplies: budget Strikes or an actually usable Superheat iron batch.
-
-Assumptions:
-
-- Select the named spell; equipped elemental staff substitution is explicit.
-- Remove metal armour and verify actual combat damage/XP; no full Magic attack/weakness simulation is claimed.
-
-Problems:
-
-- Full-goal costs, complete magic equipment/weakness modelling and measured combat rates remain open.
-- Alchemy targets and splash setup are not automatically verified; those methods remain manual alternatives.
-
-Alternatives:
-
-- Prepared Superheat iron needs Magic43 and Smithing15.
-- Known higher Strike ingredients can replace the Wind Strike fallback.
-
-Changed:
-
-- Unreleased2.74.3: canonical method projection replaces the Nature-only fallback and unverified automatic alchemy/splash selection.
-
-Evidence:
-
-- https://oldschool.runescape.wiki/w/Free-to-play_Magic_training
-- https://oldschool.runescape.wiki/w/Superheat_Item
-- tests/magicRouteSupplies.test.ts
-
-## S6-04 Ranged to 40: prepare your kit and follow the current trainer
-
-**Revised.** Optional Ranged to 50 using a level-appropriate F2P bow, one equipped arrow stack and the current trainer.
-
-Assumptions:
-
-- The starter seagull must be the level-3 variant; generic name highlights cannot distinguish it.
-- Rapid after Ranged 5; do not use Longrange when preserving Defence.
-
-Problems:
-
-- Ranged DPS, whole-goal ammunition consumption and food are not simulated; 100 arrows and the later food quantity are starter supplies, not a survival guarantee.
-- Crossbows, thrown weapons and Members loadouts are not covered by this F2P bow planner.
-
-Alternatives:
-
-- Monks provide healing between fights; Giant frogs require food.
-- Flesh crawlers retain their Defence 40 guard and written directions only.
-- Compare ogresses as a later income option, not the level-1 default.
-
-Changed:
-
-- Unreleased 2.74.3: canonical trainer, equipped bow/ammunition and supply projection replace the fixed ogress route.
-
-Evidence:
-
-- https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training
-- https://oldschool.runescape.wiki/w/Ranged_bows
-- tests/rangedPreparation.test.ts
 
 ## S7-02 Fight Arena
 

@@ -1,14 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById } from '../src/data';
+import { allSteps } from '../src/data';
 import { buildPriceView } from '../src/domain/market/quotes';
 import { itemPrice } from '../src/domain/market/itemPrice';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { contextOf } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { recommendUpgrade, upgradeNav } from '../src/domain/training/gearUpgradeRouter';
+import { retiredStep } from './fixtures/retiredSteps';
 
 const now = 1_800_000_000_000;
-const step = stepById.get('S1-08')!;
+const step = retiredStep('S1-08')!;
 const gear = { equipment: [{ id: 1351, name: 'Bronze axe', slot: 'weapon' }], inventory: [], coins: 1000, bankCoins: 0 };
 function recommendation(status: 'live' | 'stale' = 'live', available = true) {
   const board = buildPriceView({ now, mapping: null, baked: new Map([['steel axe', { buy: 1, sell: 1 }]]),

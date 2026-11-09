@@ -25,8 +25,8 @@ const inventory = [{ id: 1351, name: 'Bronze axe', count: 1 }, { id: 1265, name:
 const gear = { equipment, inventory, coins: 120000, bankCoins: 50000 };
 const owned = [['Bronze axe', 1, 0, 0], ['Bronze pickaxe', 1, 0, 0], ['Lobster', 10, 0, 40], ['Coins', 120000, 0, 50000], ['Iron ore', 0, 0, 100], ['Coal', 0, 0, 50], ['Air rune', 0, 0, 500], ['Mind rune', 0, 0, 300]].map(([name, carried, noted, bank]) => ({ name, carried, noted, bank }));
 const mock = {
-  progress: progressBefore('S6-04', { levels: stats }),
-  status: { status: 'ok', inGame: true, protocol: 6, player: 'Perf fixture', activeStepId: 'S6-04', shortestPath: true, stats, ...gear },
+  progress: progressBefore('S7-01', { levels: stats }),
+  status: { status: 'ok', inGame: true, protocol: 6, player: 'Perf fixture', activeStepId: 'S7-01', shortestPath: true, stats, ...gear },
   events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: owned }],
 };
 const market = JSON.parse(readFileSync(`${ROOT}/tests/funding/fixtures/market-2026-10-18.json`, 'utf8')).items;

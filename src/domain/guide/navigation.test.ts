@@ -1,8 +1,9 @@
+import type { Step } from '../../types';
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../../data';
 import { navigationTarget } from './navigation';
+import { stepOrRetired } from '../../../tests/fixtures/retiredSteps';
 
-const step = (id: string) => allSteps.find((s) => s.id === id)!;
+const step = (id: string): Step => stepOrRetired(id);
 
 describe('one navigation target: where the arrow leads — the same on the big map (§74)', () => {
   it('without a temporary target — the point the plugin will get (inGame.worldPoint or the step map)', () => {

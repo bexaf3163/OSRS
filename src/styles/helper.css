@@ -38,7 +38,6 @@
 }
 .shop-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
 .warn-text { color: var(--warn); }
-.ok-text { color: var(--done); }
 
 
 /* Places from the wiki dossier: "📍 place" opens the map, "🧭" leads the arrow in the game. */
@@ -67,9 +66,6 @@ th .place-link { font-weight: inherit; }
 
 /* The training pace from the game. */
 .pacing { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0; font-size: 0.92rem; }
-.pacing-main { font-weight: 600; font-variant-numeric: tabular-nums; }
-.pacing-eta { color: var(--accent-ink); font-variant-numeric: tabular-nums; }
-.pacing.is-good .pacing-main { color: var(--done); }
 
 /* ⚡ Speed upgrade: an in-game plate with an amber accent, without blinking. */
 .upgrade {
@@ -126,6 +122,4 @@ th .place-link { font-weight: inherit; }
 /* 💰 The goal of an earning step. */
 .money-goal { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; background: var(--surface-3); box-shadow: inset 3px 0 0 var(--gold); }
 .money-goal p { margin: 0; }
-.money-bar { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
-.money-bar > span { display: block; height: 100%; background: var(--gold); border-radius: inherit; }
 

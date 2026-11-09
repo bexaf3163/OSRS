@@ -9,17 +9,18 @@ import { nameKey } from '../src/domain/items/itemKey';
 import { stepReadiness } from '../src/domain/readiness/readiness';
 import { GOAL_REACHED, followedGoal, methodPoint, methodToolNames, pickedMethodId, withTrainingMethod } from '../src/domain/training/methodStep';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
-import { pickMethods, samePicks } from '../src/domain/training/methodPick';
+import { pickTraining } from '../src/domain/training/methodPick';
 import { SKILLING } from '../src/domain/training/skillingRates';
 import { trainingMethods } from '../src/domain/training/trainingRouter';
 import type { PlayStyle } from '../src/domain/persistence/playStyle';
+import { retiredStep } from './fixtures/retiredSteps';
 
 // Fishing 1-50 (S6-01). The first version put the climb on the map in level order and, in 2.54.2, let any later tool stand in for the net. A live
 // check showed the arrow still sending a level-1 account to buy a harpoon; the owner's rule: a harpoon or a lobster pot must not make net fishing
 // ready. The step now follows the training method the app recommends for the real level (Step.followsMethod), with the tools of that method only.
 
 const LOCATIONS = (locationsJson as { locations: Record<string, { x: number; y: number; plane: number }> }).locations;
-const routeStep = stepById.get('S6-01')!;
+const routeStep = retiredStep('S6-01')!;
 // Longer user-selected goals remain supported; the real Optional35 checkpoint is covered separately.
 const step: Step = { ...routeStep, title: 'Fishing to 50 and Cooking to 50', targets: routeStep.targets?.map(t => ({ ...t, level: 50 })),
   inGame: { ...routeStep.inGame!, completionTrigger: { ...routeStep.inGame!.completionTrigger!, levels: [{ skill: 'fishing', level: 50 }, { skill: 'cooking', level: 50 }] } } };
@@ -41,8 +42,7 @@ function stateAt(fishing: number | null, bag: Record<string, number> = {}, cooki
 /** The step as the store would give it for this level, bag and style. */
 function resolved(fishing: number | null, bag: Record<string, number> = {}, style: PlayStyle = 'chill', cooking = 30) {
   const state = stateAt(fishing, bag, cooking);
-  const picks = pickMethods([step], state, 'f2p', style);
-  const raw = picks[step.id];
+  const raw = pickTraining(step, state, 'f2p', style).pick;
   return { state, pick: raw === undefined ? undefined : pickedMethodId(raw), raw, step: withTrainingMethod(step, raw) };
 }
 
@@ -195,7 +195,7 @@ describe('S6-01 follows the training method of the real level', () => {
     for (let i = 0; i < 6; i++) {
       const owned = { bankSeen: true, items: new Map(tracked.map((n) => [nameKey(n), { name: n, carried: bag[n] ?? 0, noted: 0, bank: 0 } as OwnedItem])) };
       const state = buildPlayerState({ mode: 'f2p', stats: { fishing: level, cooking: 30 }, progress: emptyProgress(), gear: null, questsDone: null, owned, connected: true });
-      const pick = pickMethods([step], state, 'f2p', style)[step.id];
+      const pick = pickTraining(step, state, 'f2p', style).pick;
       // A fishing pick carries its spot (skillingRates.ts), never a ranged loadout's kit.
       if (pick !== undefined && typeof pick !== 'string' && pick.needs.some((n) => n.type === 'item' && /arrow|bow/i.test(n.name))) throw new Error('Fishing unexpectedly received a ranged loadout');
       picks.push(pick === undefined ? undefined : pickedMethodId(pick));
@@ -225,14 +225,9 @@ describe('S6-01 follows the training method of the real level', () => {
   }, 30_000);
 
   it('a step that does not follow a method is the same object whatever the pick says', () => {
-    const other = stepById.get('S1-01')!;
+    const other = stepById.get('S1-03')!;
     expect(other.followsMethod).toBeUndefined();
     expect(withTrainingMethod(other, 'fi-fly')).toBe(other);
   });
 
-  it('the picks are compared by content, so an unchanged answer keeps the store steady', () => {
-    expect(samePicks({ 'S6-01': 'fi-fly' }, { 'S6-01': 'fi-fly' })).toBe(true);
-    expect(samePicks({ 'S6-01': 'fi-fly' }, { 'S6-01': 'fi-lobster' })).toBe(false);
-    expect(samePicks({}, { 'S6-01': 'fi-fly' })).toBe(false);
-  });
 });

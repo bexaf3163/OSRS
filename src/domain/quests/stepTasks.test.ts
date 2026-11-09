@@ -65,7 +65,7 @@ describe('the tasks of the route', () => {
   const withTasks = allSteps.filter((s) => s.tasks?.length);
 
   it('are the audit’s follow-ups, each with a stable id and a distinct key', () => {
-    expect(withTasks.map((s) => s.id)).toEqual(['S2-08', 'S4-02', 'S8-04', 'S8-05', 'S9-04']);
+    expect(withTasks.map((s) => s.id)).toEqual(['S2-08', 'S4-02', 'S8-05', 'S9-04']);
     const keys = withTasks.flatMap((s) => s.tasks!.map((t) => taskKey(s.id, t.id)));
     expect(new Set(keys).size).toBe(keys.length);
     for (const s of withTasks) for (const t of s.tasks!) expect(t.id, `${s.id}:${t.id}`).toMatch(/^[a-z0-9-]{1,40}$/);
@@ -83,21 +83,15 @@ describe('the tasks of the route', () => {
     expect(s.tasks!.map((t) => t.id)).toEqual(['attack-60', 'wield-dragon']);
     expect(s.tasks![0].check).toEqual({ kind: 'level', skill: 'attack', level: 60 });
   });
-
-  it('A Porcine of Interest is a checked optional quest worth one quest point, and the goals range carries it', () => {
-    const t = stepById.get('S8-04')!.tasks!.find((x) => x.id === 'porcine')!;
-    expect(t.check).toEqual({ kind: 'quest', name: 'A Porcine of Interest' });
-    expect(t.qp).toBe(1);
-  });
 });
 
 describe('the tick is saved with the profile', () => {
   it('round-trips, drops keys of unknown steps and garbage, and an older save loads without it', () => {
-    const key = taskKey('S8-04', 'museum-quiz');
+    const key = taskKey('S2-08', 'wield-mithril');
     const p = withTaskDone(emptyProgress(), key, true);
     expect(p.tasksDone).toEqual({ [key]: true });
     expect(normalizeProgress(JSON.parse(JSON.stringify(p)), known)!.progress.tasksDone).toEqual({ [key]: true });
-    const dirty = { ...JSON.parse(JSON.stringify(p)), tasksDone: { [key]: true, 'S9-99:x': true, 'nope': true, [taskKey('S8-04', 'Bad Id')]: true, [taskKey('S8-05', 'wear-ava')]: 1 } };
+    const dirty = { ...JSON.parse(JSON.stringify(p)), tasksDone: { [key]: true, 'S9-99:x': true, 'nope': true, [taskKey('S2-08', 'Bad Id')]: true, [taskKey('S8-05', 'wear-ava')]: 1 } };
     expect(normalizeProgress(dirty, known)!.progress.tasksDone).toEqual({ [key]: true });
     expect(normalizeProgress({ version: 3, steps: {}, levels: {}, notes: {}, updatedAt: new Date().toISOString() }, known)!.progress.tasksDone).toBeUndefined();
     expect(withTaskDone(p, key, false).tasksDone).toBeUndefined();

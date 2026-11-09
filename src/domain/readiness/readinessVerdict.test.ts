@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { stepById } from '../../data';
 import { buildPrepPlan, type PrepPlan } from '../prep/prepPlan';
 import { buildPlayerState } from '../player/playerState';
 import { planOneTrip } from '../prep/oneTrip';
@@ -13,11 +12,12 @@ import { bankFreshness, readinessVerdict, PERCENT_NOTE } from './readinessVerdic
 import { gearById } from '../combat/gearAdvisor';
 import type { GearState } from '../../services/runeliteBridge';
 import type { Step } from '../../types';
+import { retiredStep } from '../../../tests/fixtures/retiredSteps';
 
 // The owner's example (spec 2026-10-17): S3-08 with iron armour and a Mithril scimitar, the level 12 and level 27 Minotaurs judged separately, then
 // the same verdict for any step: what is with you, what is in the bank, what to get, what is not known.
 
-const s308 = stepById.get('S3-08')!;
+const s308 = retiredStep('S3-08')!;
 const id = (n: string) => [...gearById.values()].find((p) => p.name === n)!.id;
 const IRON = ['Mithril scimitar', 'Iron full helm', 'Iron platebody', 'Iron plateskirt', 'Iron kiteshield'];
 const gearOf = (names: string[], inventory: { id: number; name: string; count?: number }[] = []): GearState =>

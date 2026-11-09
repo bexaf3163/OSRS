@@ -14,6 +14,7 @@ import { matchStrict } from '../src/domain/travel/locations';
 import type { GearState } from '../src/services/runeliteBridge';
 import type { OwnedState } from '../src/domain/items/checklist';
 import type { GearData, GearPiece } from '../src/types';
+import { retiredStep } from './fixtures/retiredSteps';
 
 const byName = (name: string): GearPiece => {
   const p = gearData.items.find((i) => i.name === name);
@@ -91,14 +92,14 @@ describe('damage formulas (OSRS Wiki, Damage per second/Melee)', () => {
 });
 
 describe('gear advice', () => {
-  it('S1-13: Bronze sword, 5 attack, 8,500 coins → the Steel scimitar from Zeke first', () => {
+  it('Bronze sword, 5 attack, 8,500 coins → the Steel scimitar from Zeke first', () => {
     const a = adviseGear(input({ routeNeeds: routeNeeds(allSteps, () => false) }));
     const first = a.actions[0];
     expect(first).toMatchObject({ slot: 'weapon', how: 'buy', item: { name: 'Steel scimitar' } });
     expect(first.source).toMatchObject({ kind: 'shop', shop: "Zeke's Superior Scimitars", npc: 'Zeke', price: 400, toll: 10 });
     expect(first.cost).toBe(410);
-    // On the route it is bought anyway in the big shopping.
-    expect(first.routeStep).toBe('S2-01');
+    // No route step buys gear, so the advice is not tied to one.
+    expect(first.routeStep).toBeUndefined();
     expect(first.current?.name).toBe('Bronze sword');
     // Accuracy is not speed: the interval is the same, so the text says "more accurate" and "expected damage", never "faster".
     expect(gainText(first)).toMatch(/expected damage \+\d+%/);
@@ -141,7 +142,7 @@ describe('gear advice', () => {
   });
 
   it('S3-08, Attack 20 and a Steel scimitar → the Mithril scimitar from Zeke', () => {
-    const foes = stepFoes(allSteps.find((s) => s.id === 'S3-08')!);
+    const foes = stepFoes(retiredStep('S3-08')!);
     const a = adviseGear(input({ foes, levels: { attack: 20, strength: 20, defence: 1 }, gear: gear({ equipment: [item('Steel scimitar', 'weapon')], coins: 10_000, bankCoins: 0 }) }));
     expect(a.actions[0]).toMatchObject({ slot: 'weapon', how: 'buy', item: { name: 'Mithril scimitar' }, source: { kind: 'shop', npc: 'Zeke', price: 1040 } });
     expect(a.foes.map((f) => f.name)).toEqual(['Minotaur']);
@@ -149,7 +150,7 @@ describe('gear advice', () => {
 
   it('the best weapon is in the bag and a weaker one in the hand — "wear it", no need to buy', () => {
     const a = adviseGear(input({
-      foes: stepFoes(allSteps.find((s) => s.id === 'S3-08')!),
+      foes: stepFoes(retiredStep('S3-08')!),
       levels: { attack: 20, strength: 20, defence: 1 },
       gear: gear({ equipment: [item('Steel scimitar', 'weapon')], inventory: [item('Mithril scimitar')], coins: 5000, bankCoins: 0 }),
     }));
@@ -200,12 +201,12 @@ describe('gear advice', () => {
 
   it('without game data — the goals carry the item properties, not a "+%" to the unknown; of the nearly equal — what the route buys', () => {
     const route = routeNeeds(allSteps, () => false);
-    const foes = stepFoes(allSteps.find((s) => s.id === 'S3-08')!);
+    const foes = stepFoes(retiredStep('S3-08')!);
     const a = adviseGear(input({ gear: null, foes, routeNeeds: route, levels: { attack: 1, strength: 1, defence: 1 } }));
     const w = a.goals.find((x) => x.slot === 'weapon')!;
-    // Against a minotaur the mace and the scimitar are close, and the route buys the scimitar anyway on S2-01.
+    // Against a minotaur the mace and the scimitar are close; no route step buys either.
     expect(w.item.name).toBe('Iron scimitar');
-    expect(w.routeStep).toBe('S2-01');
+    expect(w.routeStep).toBeUndefined();
     expect(statsText(w)).toMatch(/^max hit \d+, once every 2\.4 s$/);
     const neck = a.goals.find((x) => x.slot === 'neck');
     if (neck) expect(statsText(neck)).not.toMatch(/max hit/);
@@ -286,18 +287,16 @@ describe('gear advice', () => {
 describe('step opponents (monsters.json)', () => {
   it('every step opponent has a wiki card, the level matches the guide text', () => {
     const named = allSteps.filter((s) => s.foes?.length);
-    expect(named.map((s) => s.id)).toEqual(['S1-13', 'S2-08', 'S3-08', 'S4-01', 'S4-02', 'S4-03', 'S8-02']);
+    expect(named.map((s) => s.id)).toEqual(['S2-08', 'S4-01', 'S4-02', 'S8-02']);
     for (const s of named) {
       expect(stepFoes(s).map((f) => f.name), s.id).toEqual(s.foes);
       const text = [s.how, s.where, ...(s.fields ?? []).map((f) => f.text)].join(' ');
       for (const f of stepFoes(s)) {
         // "Count Draynor, level 34", "Moss giant, level 42", "cows (level 2)" — if the guide names a level, it is the same.
         const said = [...text.matchAll(/level\s*(\d+)/gi)].map((m) => Number(m[1]));
-        if (said.length && s.id !== 'S3-08' && s.id !== 'S4-03') expect(said, `${s.id} ${f.name}`).toContain(f.combat);
+        if (said.length) expect(said, `${s.id} ${f.name}`).toContain(f.combat);
       }
     }
-    // The S3-08 and S4-03 opponents are named in "where": the minotaur 12 and the giant 42 — their levels are in the text.
-    expect(stepFoes({ foes: ['Minotaur'] })[0].combat).toBe(12);
     expect(stepFoes({ foes: ['Moss giant'] })[0].combat).toBe(42);
   });
 
@@ -312,7 +311,7 @@ describe('step opponents (monsters.json)', () => {
 });
 
 describe('the first estimate of the combat pace', () => {
-  const s308 = allSteps.find((s) => s.id === 'S3-08')!;
+  const s308 = retiredStep('S3-08')!;
   const warrior = stepFoes({ foes: ['Minotaur'] })[0];
   const lv = { attack: 20, strength: 20, defence: 1 };
   const iron: GearState = { equipment: [{ id: 1323, name: 'Iron scimitar', slot: 'weapon' }], inventory: [], coins: 0, bankCoins: null };
@@ -337,7 +336,7 @@ describe('the first estimate of the combat pace', () => {
     expect(sent.pacing!.secondsPerAction).toBe(Math.round(killSeconds(s308, lv, iron)! * 10) / 10);
     expect(s308.pacing!.secondsPerAction).toBeUndefined();
     expect(withKillEstimate(s308, lv, null)).toBe(s308);
-    const fishing = allSteps.find((s) => s.id === 'S1-12')!;
+    const fishing = retiredStep('S1-12')!;
     expect(withKillEstimate(fishing, lv, iron)).toBe(fishing);
   });
 });
@@ -345,13 +344,13 @@ describe('the first estimate of the combat pace', () => {
 describe('the "Gear" page', () => {
   it('the comparison — with the opponent of the nearest unfinished combat step, and an open combat step — with its own', () => {
     const f2p = stepsFor('f2p');
-    expect(fightStepFor(f2p, emptyProgress())?.id).toBe('S1-13');
-    const cowsDone = withStep(emptyProgress(), 'S1-13', 'done');
-    expect(fightStepFor(f2p, cowsDone)?.id).toBe('S2-08');
-    const s308 = f2p.find((s) => s.id === 'S3-08')!;
-    expect(fightStepFor(f2p, emptyProgress(), s308)?.id).toBe('S3-08');
+    expect(fightStepFor(f2p, emptyProgress())?.id).toBe('S2-08');
+    const firstFightDone = withStep(emptyProgress(), 'S2-08', 'done');
+    expect(fightStepFor(f2p, firstFightDone)?.id).toBe('S4-01');
+    const s401 = f2p.find((s) => s.id === 'S4-01')!;
+    expect(fightStepFor(f2p, emptyProgress(), s401)?.id).toBe('S4-01');
     // A step without combat — the nearest one with combat is taken.
-    expect(fightStepFor(f2p, emptyProgress(), f2p.find((s) => s.id === 'S1-08'))?.id).toBe('S1-13');
+    expect(fightStepFor(f2p, emptyProgress(), f2p.find((s) => s.id === 'S1-07'))?.id).toBe('S2-08');
   });
 
   it('opens at #/gear and is found by search', () => {
@@ -390,8 +389,8 @@ describe('gear.json data', () => {
 });
 
 describe('amulets: Amulet of strength and Amulet of power do not argue (§69)', () => {
-  const s308 = allSteps.find((s) => s.id === 'S3-08')!;
-  const s403 = allSteps.find((s) => s.id === 'S4-03')!;
+  const s308 = retiredStep('S3-08')!;
+  const s403 = retiredStep('S4-03')!;
   const lv30 = { attack: 30, strength: 30, defence: 30 };
   // The levels a player really has at the end of each combat step now: Defence is not trained before Dragon Slayer I.
   const lvOf = (step: Step) => (step === s308 ? { attack: 30, strength: 20, defence: 1 } : { attack: 40, strength: 35, defence: 1 });
@@ -431,13 +430,12 @@ describe('amulets: Amulet of strength and Amulet of power do not argue (§69)', 
     expect(a.actions.some((x) => x.item.name === 'Amulet of power')).toBe(false);
   });
 
-  it('the route buys one amulet: the second goes neither into shopping nor into the auto-mark', () => {
+  it('the route buys no amulet: the gear engine advises it, so it goes neither into shopping nor into the auto-mark', () => {
     const buys = allSteps.flatMap((s) => (s.itemsRequired ?? []).filter((i) => /^Amulet of (strength|power)$/.test(i.nameEn)).map((i) => `${s.id}:${i.nameEn}`));
-    expect(buys).toEqual(['S2-01:Amulet of strength']);
+    expect(buys).toEqual([]);
     const needs = routeNeeds(allSteps, () => false);
     expect(needs.get('amulet of power')).toBeUndefined();
-    const s307 = allSteps.find((s) => s.id === 'S3-07')!;
-    const trig = s307.inGame?.completionTrigger;
-    expect(JSON.stringify(trig)).not.toContain('Amulet');
+    expect(needs.get('amulet of strength')).toBeUndefined();
+    for (const s of allSteps) expect(JSON.stringify(s.inGame?.completionTrigger ?? {}), s.id).not.toContain('Amulet');
   });
 });

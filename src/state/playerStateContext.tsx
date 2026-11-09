@@ -6,28 +6,13 @@ import { items } from '../data';
 import { useBridge } from './bridge';
 import { useStore } from './store';
 import { stepsFor } from '../data';
-import { useFeatures } from './hooks/useFeatures';
-import { priorityOf, styleOf } from '../domain/persistence/playStyle';
-import { pickMethods } from '../domain/training/methodPick';
 import { foodPicks } from '../domain/combat/foodPlan';
-import { adoptStorageKey } from '../domain/combat/route/adopt';
-import { adoptPlan, useAdopted } from './hooks/useAdopted';
-import { estimateContext } from '../domain/combat/route/context';
-import { evaluatePlans, planWhy, type PlanReport } from '../domain/combat/route/plans';
-import { resolvePick, withCombatPlan, type CombatPick } from '../domain/combat/route/pick';
-import { selectPlan, type PlanSelection } from '../domain/combat/route/selection';
-import { stepGoals } from '../domain/combat/combatEstimate';
 import { usePriceView } from './hooks/usePriceView';
-import type { PriceView } from '../domain/market/quotes';
-import { itemPrice } from '../domain/market/itemPrice';
-import { useTradeRestriction } from './hooks/useTradeRestriction';
-import type { Step } from '../types';
-import { isClosed } from '../domain/quests/next-step';
 import { gateAllows } from '../domain/persistence/profiles';
 import { useProfiles } from './profiles';
 import { ledgerKey, LEDGER_LIMIT, loadLedger, saveLedger, since } from '../domain/persistence/ledgerStore';
 import { nameKey } from '../domain/items/itemKey';
-import { buildPlayerState, diffPlayerState, heldOf, type PlayerState, type StateChange } from '../domain/player/playerState';
+import { buildPlayerState, diffPlayerState, type PlayerState, type StateChange } from '../domain/player/playerState';
 import { entriesFor, summarize, type LedgerEntry, type LedgerSummary } from '../domain/persistence/ledger';
 import { buildPriceBook, reprice, type PriceBook } from '../domain/market/priceBook';
 
@@ -45,33 +30,9 @@ interface PlayerStateValue {
   clearLedger: () => void;
   /** Where the prices come from: fresh from the exchange or from the project database. */
   prices: PriceBook;
-  /**
-   * The combat plan in effect for every open combat training step, with the comparison it was chosen from (2.69). One answer for the step page, the
-   * status line, preparation, shopping, the arrow and the game: nothing else evaluates plans.
-   */
-  combatPlans: Record<string, CombatPlanEntry>;
-  /** The player's own choice for a step; null goes back to the guide's recommendation. */
-  choosePlan: (stepId: string, key: string | null) => void;
 }
 
-export interface CombatPlanEntry {
-  report: PlanReport;
-  selection: PlanSelection;
-  /** The plans were worked out from the last known levels and gear (RuneLite is not connected). */
-  lastKnown: boolean;
-}
 
-/** A step the combat plans are for: an opponent and a melee XP goal. */
-const isCombatTraining = (step: Step) => (step.foes?.length ?? 0) > 0 && stepGoals(step).length > 0;
-
-function foodOf(step: Step) {
-  return (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
-}
-
-function foodPriceOf(step: Step, prices: PriceView): number | null {
-  const food = foodOf(step);
-  return food ? itemPrice(prices, food.nameEn, food.wikiItemId, 1).unit : null;
-}
 
 const Ctx = createContext<PlayerStateValue | null>(null);
 
@@ -94,9 +55,8 @@ function ls(): Storage | undefined {
 }
 
 export function PlayerStateProvider({ children }: { children: ReactNode }) {
-  const { progress, mode, setMethodPicks, setFoodPicks, setCombatPicks } = useStore();
-  const features = useFeatures();
-  const { stats, owned, gear, questsDone, player, state: link, xp, combatLog, inGame, activeStepId, pacing, lastGears, lastGear, gate, position } = useBridge();
+  const { progress, mode, setFoodPicks } = useStore();
+  const { stats, owned, gear, questsDone, player, state: link, xp, combatLog, inGame, gate, position } = useBridge();
   const profiles = useProfiles();
   const next = useMemo(
     () => buildPlayerState({ mode, stats, progress, owned, gear, questsDone, player, position, connected: link === 'online' && inGame && gateAllows(gate) }),
@@ -148,90 +108,14 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
     setBook({ key, entries: [] });
   }, [key]);
 
-  // The training method of the steps that follow one: the card's own answer, given to the store so the steps ask for that method's tools.
-  const style = styleOf(features).style;
-  const priority = priorityOf(features);
-  // The exchange and the trade restriction weigh a combat method's drops the way the fight plans do (2.76): one answer on the card and the step.
-  const methodPrices = usePriceView(true);
-  const methodTrade = useTradeRestriction();
-  const picks = useMemo(() => pickMethods(stepsFor(mode), state, mode, style, priority, { prices: methodPrices, restriction: methodTrade.state }),
-    [state, mode, style, priority, methodPrices, methodTrade.state]);
-  useEffect(() => { setMethodPicks(picks); }, [picks, setMethodPicks]);
 
-  // The combat plan in effect for every open combat training step (2.69): the guide's recommendation unless the player chose one (lib/combatRoute/
-  // selection.ts). It is worked out here once, for every screen and for the game; the step card and the status line only read it.
-  const adoptKey = adoptStorageKey(profiles.active, player);
-  const adopted = useAdopted(adoptKey);
-  const keepDefenceOne = features.keepDefenceOne;
-  const base = useMemo(() => stepsFor(mode), [mode]);
-  const combatSteps = useMemo(() => base.filter((s) => isCombatTraining(s) && !isClosed(progress, s.id)), [base, progress]);
-  const planPrices = usePriceView(combatSteps.length > 0);
-  const trade = useTradeRestriction();
-  const bound = profiles.list.find((p) => p.id === profiles.active)?.player ?? player ?? null;
-  const combatPlans = useMemo(() => {
-    const out: Record<string, CombatPlanEntry> = {};
-    // RuneLite closed: the last known levels (the profile's, written from the game) and the character's last known gear, so the plan does not fall back
-    // to the route's own while the game is away. Marked as such.
-    const levels = progress.levels as Partial<Record<string, number>>;
-    const lastStats = typeof levels.hitpoints === 'number' && typeof levels.attack === 'number' ? levels : null;
-    const knownStats = (stats as Partial<Record<string, number>> | null) ?? lastStats;
-    const knownGear = gear ?? (bound ? lastGears[bound.toLowerCase()]?.gear : lastGear?.gear) ?? null;
-    const lastKnown = !stats || !gear;
-    for (const s of combatSteps) {
-      const stored = adopted[s.id];
-      const live = { stats: knownStats, xp: xp as Partial<Record<string, number>> | null, gear: knownGear, combatLog };
-      const report = evaluatePlans({
-        step: s, steps: base, ctx: estimateContext(s, live, base, progress), owned, prices: planPrices, foodPrice: foodPriceOf(s, planPrices), state,
-        keepDefenceOne, adopted: stored?.key ?? null, restriction: trade.state, done: (id) => isClosed(progress, id), objective: priority,
-      });
-      if (!report) continue;
-      // In the middle of a trip on this step (fighting it in the game now, with its food in the bag) a better plan waits for the next bank trip.
-      const food = foodOf(s);
-      const bag = food ? [food.nameEn, ...(food.anyOf ?? [])].reduce((a, n) => a + (heldOf(state, n).bag ?? 0), 0) : 0;
-      const inProgress = link === 'online' && inGame && activeStepId === s.id && pacing?.stepId === s.id && pacing.actionsPerMinute !== null && bag > 0;
-      out[s.id] = { report, selection: selectPlan(report, stored, { inProgress }), lastKnown };
-    }
-    return out;
-  }, [combatSteps, adopted, base, progress, stats, xp, gear, combatLog, owned, planPrices, keepDefenceOne, trade.state, state, link, inGame, activeStepId, pacing, bound, lastGears, lastGear, priority]);
 
-  // The guide's own choice is remembered, so it stays put unless another plan becomes clearly better (and a change waits for a bank trip). The route's
-  // plan needs no entry: it is what a step without one has. The player's own choice is never written over.
-  useEffect(() => {
-    // Not before the exchange has answered (2.75): without prices the loot is worth nothing, and a choice remembered then would be held against the
-    // plans the prices make better. The recommendation applies meanwhile; it is only not remembered.
-    if (planPrices.status === 'offline') return;
-    for (const [id, e] of Object.entries(combatPlans)) {
-      const stored = adopted[id];
-      if (stored?.by === 'player' || e.selection.source !== 'auto') continue;
-      if (e.selection.key === 'route') { if (stored) adoptPlan(adoptKey, id, null); }
-      else if (stored?.key !== e.selection.key) adoptPlan(adoptKey, id, e.selection.key, 'auto');
-    }
-  }, [combatPlans, adopted, adoptKey, planPrices.status]);
-  const choosePlan = useCallback((stepId: string, key: string | null) => adoptPlan(adoptKey, stepId, key, 'player'), [adoptKey]);
-
-  const combat = useMemo(() => {
-    const out: Record<string, CombatPick> = {};
-    for (const [id, e] of Object.entries(combatPlans)) {
-      const { key, source } = e.selection;
-      const pick = resolvePick(e.report, key, {
-        xp: xp as Partial<Record<'attack' | 'strength' | 'defence', number>> | null,
-        held: (name) => { const h = heldOf(state, name); return h.total; },
-        state, prices: planPrices,
-      }, source, planWhy(e.report, key, source));
-      if (pick) out[id] = pick;
-    }
-    return out;
-    // state carries what the player holds.
-  }, [combatPlans, xp, state, planPrices]);
-  useEffect(() => { setCombatPicks(combat); }, [combat, setCombatPicks]);
-
-  // The food of the combat training steps from this player's estimate: readiness asks for one trip, the shopping list buys the whole goal.
-  // It is counted for the step as the adopted plan has it (the cows' food, not the giants').
+  // The food of the combat steps from this player's estimate: readiness asks for one trip, the shopping list buys the whole goal.
   const food = useMemo(() => {
-    return foodPicks(stepsFor(mode).map((s) => withCombatPlan(s, combat[s.id])), progress, {
+    return foodPicks(stepsFor(mode), progress, {
       stats: stats as Partial<Record<string, number>> | null, xp: xp as Partial<Record<string, number>> | null, gear, owned, combatLog,
     });
-  }, [mode, progress, stats, xp, gear, owned, combatLog, combat]);
+  }, [mode, progress, stats, xp, gear, owned, combatLog]);
   useEffect(() => { setFoodPicks(food); }, [food, setFoodPicks]);
 
   const priced = useMemo(() => reprice(ledger, prices), [ledger, prices]);
@@ -239,8 +123,8 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
   const session = useMemo(() => summarize(since(priced, SESSION_START)), [priced]);
   const first = ledger.length ? ledger[0].timestamp : null;
   const value = useMemo(
-    () => ({ state, changes, ledger, summary, session, since: first, clearLedger, prices, combatPlans, choosePlan }),
-    [state, changes, ledger, summary, session, first, clearLedger, prices, combatPlans, choosePlan],
+    () => ({ state, changes, ledger, summary, session, since: first, clearLedger, prices }),
+    [state, changes, ledger, summary, session, first, clearLedger, prices],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

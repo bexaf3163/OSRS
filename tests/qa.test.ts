@@ -48,10 +48,8 @@ describe('data consistency check', () => {
 
   it('two main amulets in "Required" are caught', () => {
     const base = real();
-    const at = base.steps.findIndex((s) => (s.itemsRequired ?? []).some((i) => i.nameEn === 'Amulet of strength'));
-    expect(at).toBeGreaterThanOrEqual(0);
-    const steps = base.steps.map((s, i) => (i === at + 1
-      ? { ...s, itemsRequired: [...(s.itemsRequired ?? []), { nameEn: 'Amulet of power', amount: 1, howToGet: '' }] } : s));
+    const add = (s: (typeof base.steps)[number], nameEn: string) => ({ ...s, itemsRequired: [...(s.itemsRequired ?? []), { nameEn, amount: 1, howToGet: '' }] });
+    const steps = base.steps.map((s, i) => (i === 0 ? add(s, 'Amulet of strength') : i === 1 ? add(s, 'Amulet of power') : s));
     expect(qa({ ...base, steps }).map((i) => i.rule)).toContain('amulet-consistency');
   });
 

@@ -1,29 +1,26 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
-  allQuests, allStages, allSteps, items, itemById, maxQpFor, membersSkills, stagesFor, stepsFor,
+  allQuests, allSteps, items, itemById, maxQpFor, membersSkills, stepsFor,
 } from '../src/data';
 import { deriveQuests } from '../src/data/quests';
-import { titleTargets } from '../src/data/targets';
 import { createPriceService, PRICE_TTL_MS } from '../src/services/pricesApi';
 import { cleanWikiText } from '../src/domain/text/md';
 import { stepText } from '../src/domain/quests/search';
 
 describe('game mode', () => {
-  it('F2P — stages 1–6 without members steps', () => {
-    expect(stagesFor('f2p').map((s) => s.id)).toEqual([1, 2, 3, 4, 5, 6]);
+  it('F2P — stages 1–5 without members steps', () => {
+    expect([...new Set(stepsFor('f2p').map((s) => s.stage))]).toEqual([1, 2, 3, 4, 5]);
     expect(stepsFor('f2p').some((s) => s.membersOnly)).toBe(false);
   });
 
-  it('Members adds stages 7–9 and drops the way to a Bond (stage 6), which an account with membership does not need', () => {
-    expect(stagesFor('f2p').map((s) => s.id)).toEqual([1, 2, 3, 4, 5, 6]);
-    expect(stagesFor('members').map((s) => s.id)).toEqual([1, 2, 3, 4, 5, 7, 8, 9]);
-    expect(allStages.filter((s) => s.membersOnly).map((s) => s.id)).toEqual([7, 8, 9]);
+  it('Members adds stages 7–9', () => {
+    expect([...new Set(stepsFor('f2p').map((s) => s.stage))]).toEqual([1, 2, 3, 4, 5]);
+    expect([...new Set(stepsFor('members').map((s) => s.stage))]).toEqual([1, 2, 3, 4, 5, 7, 8, 9]);
+    expect([...new Set(allSteps.filter((s) => s.membersOnly).map((s) => s.stage))]).toEqual([7, 8, 9]);
     const extra = stepsFor('members').filter((s) => !stepsFor('f2p').includes(s));
     expect(extra.every((s) => s.membersOnly && s.stage >= 7)).toBe(true);
-    // Nothing is lost from the free route except the bond branch itself.
-    const dropped = stepsFor('f2p').filter((s) => !stepsFor('members').includes(s));
-    expect(dropped.length).toBeGreaterThan(0);
-    expect(dropped.every((s) => s.bondBranch === true && s.stage === 6)).toBe(true);
+    // Nothing is lost from the free route.
+    expect(stepsFor('f2p').filter((s) => !stepsFor('members').includes(s))).toEqual([]);
   });
 
   it('members steps do not depend on anything outside Members, F2P steps — on members steps', () => {
@@ -73,19 +70,6 @@ describe('quest requirements come before the quests themselves', () => {
   const index = new Map(allSteps.map((s, i) => [s.id, i]));
   const before = (a: string, b: string) => expect(index.get(a)!, `${a} before ${b}`).toBeLessThan(index.get(b)!);
 
-  it('money — before purchases', () => {
-    before('S1-09', 'S1-10'); // Stronghold → Chronicle
-    before('S1-13', 'S2-01'); // hides → exchange shopping
-    before('S3-06', 'S3-07'); // ore → adamant
-  });
-
-  it('skills — before the quests that require them', () => {
-    before('S1-12', 'S2-07'); // Mining 10 → The Knight's Sword
-    before('S7-04', 'S7-05'); // Agility 25 → The Grand Tree
-    before('S8-04', 'S8-05'); // Ranged 30, Slayer 18, Crafting 19 → Animal Magnetism
-    before('S8-04', 'S9-01'); // Crafting 31 → Lost City
-  });
-
   it('members quests — after their requirement quests', () => {
     before('S8-01', 'S8-02'); // Priest in Peril → Nature Spirit
     before('S9-01', 'S9-02'); // Lost City → Fairytale I
@@ -95,26 +79,6 @@ describe('quest requirements come before the quests themselves', () => {
     expect(allSteps.find((s) => s.id === 'S9-02')!.requires).toEqual(expect.arrayContaining(['S9-01', 'S8-02']));
   });
 
-  it('skill requirements are given as targets in the step title', () => {
-    expect(titleTargets(allSteps.find((s) => s.id === 'S8-04')!.title)).toEqual([
-      { skill: 'ranged', level: 30 }, { skill: 'slayer', level: 18 }, { skill: 'crafting', level: 31 },
-      { skill: 'woodcutting', level: 36 }, { skill: 'cooking', level: 10 },
-    ]);
-  });
-});
-
-describe('targets from step titles', () => {
-  it('the number after "to" goes to all the skills before it', () => {
-    expect(titleTargets('Fishing and Cooking to 30')).toEqual([{ skill: 'fishing', level: 30 }, { skill: 'cooking', level: 30 }]);
-    expect(titleTargets('Combat to 40 / 40 / 40')).toEqual([
-      { skill: 'attack', level: 40 }, { skill: 'strength', level: 40 }, { skill: 'defence', level: 40 },
-    ]);
-    expect(titleTargets('Agility to 40')).toEqual([{ skill: 'agility', level: 40 }]);
-  });
-
-  it('every training step has a target', () => {
-    for (const s of allSteps.filter((x) => x.type === 'skill')) expect(s.targets?.length, s.id).toBeGreaterThan(0);
-  });
 });
 
 describe('exchange prices', () => {

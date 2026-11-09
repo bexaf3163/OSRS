@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, itemById, known, stepsFor, dangerZonesJson as dangerZones } from '../src/data';
+import { itemById, known, stepsFor, dangerZonesJson as dangerZones } from '../src/data';
 import type { Step } from '../src/types';
 import { emptyProgress, normalizeProgress, withUpgradeDismissed } from '../src/domain/persistence/progress';
 import { roadBankItemIds, stepBankItemIds, uniqueIds } from '../src/domain/prep/bankTags';
@@ -12,11 +12,11 @@ import {
 } from '../src/domain/training/gearUpgradeRouter';
 import { matchStrict } from '../src/domain/travel/locations';
 import { actionForm, etaText, pacingNext, pacingText } from '../src/domain/player/pacing';
-import { stepFoes } from '../src/domain/combat/gearAdvisor';
 import { mapTarget, navPayload, pageFromUrl, sourceBadge } from '../src/domain/travel/places';
+import { stepOrRetired } from './fixtures/retiredSteps';
 
 
-const step = (id: string) => allSteps.find((s) => s.id === id)!;
+const step = (id: string): Step => stepOrRetired(id);
 
 /** A transport stub with a configurable answer. */
 function transport(reply: { ok: boolean; status: number; data?: unknown }) {
@@ -40,8 +40,8 @@ describe('Stage items for the bank highlight', () => {
   const road = (stage: number, mode: 'f2p' | 'members') => stepsFor(mode).filter((s) => s.stage === stage);
   it('a road of F2P steps: items from the bank, without those handed out during the step', () => {
     const ids = roadBankItemIds(road(1, 'f2p'), 'f2p');
-    expect(ids).toContain(1351); // Bronze axe
-    expect(ids).toContain(1265); // Bronze pickaxe
+    expect(ids).toContain(952); // Spade
+    expect(ids).toContain(1933); // Pot of flour
     expect(new Set(ids).size).toBe(ids.length);
     const inStep = stepsFor('f2p').filter((s) => s.stage === 1)
       .flatMap((s) => (s.itemsRequired ?? []).filter((i) => i.inStep && i.wikiItemId).map((i) => i.wikiItemId!));
@@ -195,19 +195,19 @@ describe('Smart Tool & Gear Upgrade Router', () => {
 
 describe('Save compatibility', () => {
   it('10. old progress without the new fields loads as before', () => {
-    const old = { version: 3, steps: { 'S1-01': 'done' }, levels: { woodcutting: 10 }, notes: {}, updatedAt: '2026-01-01T00:00:00.000Z' };
+    const old = { version: 3, steps: { 'S1-03': 'done' }, levels: { woodcutting: 10 }, notes: {}, updatedAt: '2026-01-01T00:00:00.000Z' };
     const n = normalizeProgress(old, known)!;
     expect(n.dropped).toBe(0);
-    expect(n.progress.steps['S1-01']).toBe('done');
+    expect(n.progress.steps['S1-03']).toBe('done');
     expect(n.progress.upgradeDismissedForSteps).toBeUndefined();
   });
 
   it('"Skip" is saved, unknown steps are dropped', () => {
-    const n = normalizeProgress({ ...emptyProgress(), upgradeDismissedForSteps: ['S1-08', 'S9-99', 5] }, known)!;
-    expect(n.progress.upgradeDismissedForSteps).toEqual(['S1-08']);
-    let p = withUpgradeDismissed(emptyProgress(), 'S1-08');
-    expect(p.upgradeDismissedForSteps).toEqual(['S1-08']);
-    p = withUpgradeDismissed(p, 'S1-08', false);
+    const n = normalizeProgress({ ...emptyProgress(), upgradeDismissedForSteps: ['S1-07', 'S9-99', 5] }, known)!;
+    expect(n.progress.upgradeDismissedForSteps).toEqual(['S1-07']);
+    let p = withUpgradeDismissed(emptyProgress(), 'S1-07');
+    expect(p.upgradeDismissedForSteps).toEqual(['S1-07']);
+    p = withUpgradeDismissed(p, 'S1-07', false);
     expect(p.upgradeDismissedForSteps).toBeUndefined();
   });
 
@@ -372,27 +372,3 @@ describe('Danger radar: data', () => {
   });
 });
 
-describe('Steps with a pace', () => {
-  it('pace only on training steps', () => {
-    const paced: Step[] = allSteps.filter((s) => s.pacing);
-    expect(paced.map((s) => s.id)).toEqual(['S1-08', 'S1-12', 'S3-08', 'S4-03']);
-    for (const s of paced) expect(s.type).toBe('skill');
-  });
-
-  it('combat pace: the skills of the step, each to its goal, experience per opponent — 4 × its health', () => {
-    const hp = { get: (name: string) => stepFoes({ foes: [name] })[0]?.hitpoints };
-    for (const id of ['S3-08', 'S4-03']) {
-      const s = allSteps.find((x) => x.id === id)!;
-      expect(s.pacing!.expPerAction).toBe(4 * hp.get(s.foes![0])!);
-      expect(s.pacing!.secondsPerAction).toBeUndefined();
-    }
-    // S3-08: Strength to 20 first (Aggressive), then Attack to 30 with its own goal; Defence is not trained.
-    const s308 = allSteps.find((x) => x.id === 'S3-08')!.pacing!;
-    expect([s308.skill, ...(s308.also ?? [])]).toEqual(['strength', 'attack']);
-    expect(s308.goals?.attack?.level).toBe(30);
-    // S4-03: Attack alone.
-    const s403 = allSteps.find((x) => x.id === 'S4-03')!.pacing!;
-    expect(s403.skill).toBe('attack');
-    expect(s403.also).toBeUndefined();
-  });
-});

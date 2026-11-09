@@ -41,12 +41,6 @@ final class HudActivity
 		{
 			stageActivity(a, v, s);
 		}
-		else if (in.getPlanNow() != null)
-		{
-			// An explicit collection objective is not completed by its incidental XP projection.
-			// The app advances this phase from item evidence; XP alone must not show the next phase or collection progress.
-			stepActivity(a, in, null);
-		}
 		else if (p != null && !p.isDone())
 		{
 			trainingActivity(a, in, p);
@@ -162,10 +156,6 @@ final class HudActivity
 			a.now.add(Line.small(Icon.DOT, s.getFood(), Tone.TEXT));
 		}
 		placeLines(a.now, in.getView(), 1);
-		if (in.getPlanNext() != null)
-		{
-			a.next.add(new Line(Icon.NEXT, in.getPlanNext(), null, Tone.MUTED, true, GuideList.Action.NONE, in.getPlanNext()));
-		}
 	}
 
 	private static void stepActivity(Activity a, Input in, Pace p)
@@ -174,20 +164,15 @@ final class HudActivity
 		Hud.State s = in.getState();
 		if (p != null && p.isDone())
 		{
-			// The pace's goal is reached: the plan's next phase (or the step's last action) is what is left.
+			// The pace's goal is reached: the step's last action is what is left.
 			a.icon = Icon.CHECK;
-			String after = in.getPlanNext() != null ? in.getPlanNext() : in.getPlanNow() != null ? in.getPlanNow() : v.getNext();
+			String after = v.getNext();
 			a.headline = after != null ? after : p.getGoals() + " reached";
 			a.status = join(p.getGoals() + " reached", far(s) ? s.getDistance() : null);
 			placeLines(a.now, v, 2);
 			return;
 		}
-		if (in.getPlanNow() != null)
-		{
-			a.icon = Icon.TRAIN;
-			a.headline = in.getPlanNow();
-		}
-		else if (in.getUse() != null)
+		if (in.getUse() != null)
 		{
 			a.icon = Icon.QUEST;
 			a.headline = in.getUse();
@@ -214,10 +199,6 @@ final class HudActivity
 			a.now.add(Line.small(Icon.GO, s.getGoal(), Tone.TEXT));
 		}
 		placeLines(a.now, v, 3);
-		if (in.getPlanNext() != null)
-		{
-			a.next.add(new Line(Icon.NEXT, in.getPlanNext(), null, Tone.MUTED, true, GuideList.Action.NONE, in.getPlanNext()));
-		}
 	}
 
 	/** The activity, when something comes before it: its headline, and the lines that say how. */

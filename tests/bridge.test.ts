@@ -1,3 +1,4 @@
+import type { Step } from '../src/types';
 import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepsFor } from '../src/data';
@@ -7,8 +8,9 @@ import { APP_PROTOCOL, backoffMs, BRIDGE_PATHS, checkStatus, clearActiveStep, co
 import { parseEvent } from '../src/services/bridgeEvents';
 import { autoCompletes, toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { mapPlaces, stepPlaces } from '../src/domain/travel/stepPlaces';
+import { stepOrRetired } from './fixtures/retiredSteps';
 
-const step = (id: string) => allSteps.find((s) => s.id === id)!;
+const step = (id: string): Step => stepOrRetired(id);
 const f2p = stepsFor('f2p');
 
 describe('quest instruction status', () => {
@@ -152,15 +154,6 @@ describe('auto-mark triggers on the route', () => {
     expect(varbits[0].t).toEqual({ type: 'VARBIT_CHANGED', varbitId: 1837, targetValue: 1, atLeast: true });
     expect(varbits[1].t).toEqual({ type: 'VARBIT_CHANGED', varpId: 176, targetValue: 7, atLeast: true });
     expect(varbits[2].t).toMatchObject({ varbitId: 2326, targetValue: 40, atLeast: true });
-  });
-
-  it('levels are counted by the real levels, exactly the targets from the step title', () => {
-    const levels = triggers.filter(({ t }) => t.type === 'SKILL_LEVEL');
-    expect(levels.length).toBeGreaterThanOrEqual(12);
-    for (const { s, t } of levels) expect(t.levels).toEqual(s.targets);
-    // A new-level message does not come if the level was gained before the step was shown, so levels are checked directly.
-    expect(triggers.filter(({ t }) => t.type === 'CHAT_MESSAGE')).toEqual([]);
-    expect(step('S2-04').inGame!.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'magic', level: 25 }] });
   });
 
   it('"Done when" with items — the items are in the condition too', () => {

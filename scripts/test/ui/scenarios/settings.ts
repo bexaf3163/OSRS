@@ -4,7 +4,7 @@ import { progressBefore, open, settle, expect, noOverflow, waitFor, text } from 
 
 async function dateFreeSettingsScenarios(browser: Browser) {
   for (const width of [1280]) {
-    const progress = { version: 3, steps: { 'S1-01': 'done' }, levels: {}, notes: { 'S1-01': 'Keep this note' }, updatedAt: '2001-02-03T04:05:06.000Z', gameMode: 'f2p' };
+    const progress = { version: 3, steps: { 'S1-03': 'done' }, levels: {}, notes: { 'S1-03': 'Keep this note' }, updatedAt: '2001-02-03T04:05:06.000Z', gameMode: 'f2p' };
     const { page, errors } = await open(browser, width, { offline: true, progress, localStorage: { 'osrs-put-settings-tab': 'progress' } }, '#/settings');
     const transfer = page.locator('section').filter({ has: page.getByRole('button', { name: 'Export progress', exact: true }) });
     expect(!/2001|changed \d/.test(await transfer.innerText()), `dates (${width}): the normal progress view omits its saved date`);
@@ -14,7 +14,7 @@ async function dateFreeSettingsScenarios(browser: Browser) {
     expect((await preview.innerText()).includes('1 done') && !/2001|saved \d/.test(await preview.innerText()), `dates (${width}): import still previews contents without exposing its date`);
     await preview.getByRole('button', { name: 'Cancel', exact: true }).click();
     const saved = await page.evaluate(() => JSON.parse((window as unknown as { __saved: string }).__saved));
-    expect(saved.updatedAt === progress.updatedAt && saved.notes['S1-01'] === 'Keep this note', `dates (${width}): internal save ordering metadata and notes remain intact`);
+    expect(saved.updatedAt === progress.updatedAt && saved.notes['S1-03'] === 'Keep this note', `dates (${width}): internal save ordering metadata and notes remain intact`);
     expect(await noOverflow(page) && !errors.length, `dates (${width}): no overflow or console errors`);
     await page.context().close();
   }
@@ -23,7 +23,7 @@ async function dateFreeSettingsScenarios(browser: Browser) {
 async function accountSyncProofScenarios(browser: Browser) {
   for (const width of [1280]) {
     const { page, errors } = await open(browser, width, {
-      progress: { version: 3, steps: { 'S1-04': 'skipped' }, levels: {}, notes: { 'S1-01': 'Keep this note' }, gameMode: 'f2p' },
+      progress: { version: 3, steps: { 'S1-04': 'skipped' }, levels: {}, notes: { 'S1-03': 'Keep this note' }, gameMode: 'f2p' },
       localStorage: { 'osrs-put-settings-tab': 'progress' },
       status: { protocol: 6, inGame: true, player: 'Sync Proof', questsDone: ['Goblin Diplomacy'] },
       events: [{ type: 'QUESTS', done: ['Goblin Diplomacy'] }],
@@ -33,12 +33,12 @@ async function accountSyncProofScenarios(browser: Browser) {
     const automatic = await card.locator(':scope > ul > li code').allTextContents();
     expect(automatic.join(',') === 'S2-12', `sync proof (${width}): only the observed quest is game-confirmed`);
     const manual = await card.locator('details ul').textContent();
-    expect(!!manual?.includes('S2-01') && !manual?.includes('S2-10'), `sync proof (${width}): shopping stays unverified and the contradicted quest is excluded`);
+    expect(!manual?.includes('S2-10'), `sync proof (${width}): the contradicted quest is excluded`);
     await card.getByRole('button', { name: /^Mark \d+ steps$/ }).click();
     await settle(page);
     const saved = await page.evaluate(() => JSON.parse((window as unknown as { __saved: string }).__saved));
-    expect(saved.steps['S2-12'] === 'done' && !saved.steps['S2-10'] && !saved.steps['S2-01'], `sync proof (${width}): applying sync cannot mark inferred ancestors`);
-    expect(saved.steps['S1-04'] === 'skipped' && saved.notes['S1-01'] === 'Keep this note', `sync proof (${width}): existing skips and notes remain intact`);
+    expect(saved.steps['S2-12'] === 'done' && !saved.steps['S2-10'], `sync proof (${width}): applying sync cannot mark inferred ancestors`);
+    expect(saved.steps['S1-04'] === 'skipped' && saved.notes['S1-03'] === 'Keep this note', `sync proof (${width}): existing skips and notes remain intact`);
     expect(await noOverflow(page) && !errors.length, `sync proof (${width}): no overflow or console errors`);
     await page.context().close();
   }
@@ -61,12 +61,12 @@ async function recovery(browser: Browser) {
     expect(await page.evaluate(() => (window as unknown as { __saved?: string }).__saved === undefined), 'progress recovery: an unsupported save is not automatically overwritten');
     expect(!errors.length, 'progress recovery: unsupported format does not crash the page');
     await page.getByRole('tab', { name: 'Progress and copies', exact: true }).click();
-    const imported = progressBefore('S4-03', { notes: { 'S4-03': 'explicit compatible import' } });
+    const imported = progressBefore('S5-01', { notes: { 'S5-01': 'explicit compatible import' } });
     await page.locator('input[type="file"]').setInputFiles({ name: 'recovery.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(imported)) });
     await page.getByRole('button', { name: 'Replace', exact: true }).click();
     await settle(page);
     expect(await page.locator('.progress-storage-warning').count() === 0, 'progress recovery: explicit compatible import resumes saving');
-    expect(await page.evaluate(() => JSON.parse((window as unknown as { __saved: string }).__saved).notes['S4-03']) === 'explicit compatible import', 'progress recovery: the explicitly imported progress is saved');
+    expect(await page.evaluate(() => JSON.parse((window as unknown as { __saved: string }).__saved).notes['S5-01']) === 'explicit compatible import', 'progress recovery: the explicitly imported progress is saved');
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress:recovery:file')!).version) === 99, 'progress recovery: explicit import retains the unsupported original');
     await page.getByRole('button', { name: 'Reset progress', exact: true }).click();
     await page.getByRole('button', { name: 'Yes, reset everything', exact: true }).click();
@@ -134,7 +134,7 @@ async function recovery(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       profileFile: { version: 99, list: [] },
       localStorage: { 'osrs-put:profiles': JSON.stringify(profiles) },
-      progress: progressBefore('S3-08', { levels: { attack: 30 } }),
+      progress: progressBefore('S4-01', { levels: { attack: 30 } }),
       status: { protocol: 6, player: 'Profile test', stats: { attack: 99 } },
       events: [{ type: 'STATS', stats: { attack: 99 } }],
     }, '#/settings');
@@ -153,7 +153,7 @@ async function recovery(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       profileFile: nativeProfiles,
       localStorage: { 'osrs-put:profiles': JSON.stringify(browserProfiles) },
-      progress: progressBefore('S3-08', { levels: { attack: 30 } }),
+      progress: progressBefore('S4-01', { levels: { attack: 30 } }),
       status: { protocol: 6, player: 'Profile test', stats: { attack: 99 } },
       events: [{ type: 'STATS', stats: { attack: 99 } }],
     }, '#/settings');

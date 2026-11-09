@@ -8,8 +8,8 @@ import { adviseTraining, personalize, trainingMethods, type PathLeg, type Method
 import { mergeGoalNeeds } from '../src/domain/items/consumption';
 import { withTrainingMethod } from '../src/domain/training/methodStep';
 import { aggregateShopping } from '../src/domain/prep/shopping';
-import { stepById } from '../src/data';
 import type { PriceView } from '../src/domain/market/quotes';
+import { retiredStep } from './fixtures/retiredSteps';
 
 const quote = { price: 2, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] };
 const prices: PriceView = { status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, buy: () => quote, sell: () => quote };
@@ -62,7 +62,7 @@ describe('complete supported F2P Ranged demand', () => {
   });
   it('route and goal Shopping get conservative totals while the game still asks for one bag', () => {
     // 10 Hitpoints: a frog fight can reach the eating point, so the food is required, one bag a trip.
-    const st = state(26, 10), base = stepById.get('S6-04')!;
+    const st = state(26, 10), base = retiredStep('S6-04')!;
     const planned = leg(26, 40, st);
     const step = withTrainingMethod(base, { methodId: planned.method.id, needs: planned.needs!, goalNeeds: rangedGoalNeeds([planned], st, xpForLevel(26), 40, prices)!, untilLevel: 40 });
     const bag = items(planned.needs ?? null).find((n) => n.name === 'Salmon')!.count!;

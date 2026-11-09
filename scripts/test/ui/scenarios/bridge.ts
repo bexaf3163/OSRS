@@ -279,7 +279,7 @@ async function protectedGoalStorage(browser: Browser) {
   const future = '{"version":99,"intent":{"kind":"unknown-future-goal"}}';
   for (const external of [false, true]) {
     const { page, errors } = await open(browser, 1280, {
-      progress: progressBefore('S4-03', { gameMode: 'f2p' }),
+      progress: progressBefore('S5-01', { gameMode: 'f2p' }),
       localStorage: external ? {} : { 'osrs-put:planning-intent': future },
       status: { stats: { woodcutting: 21, attack: 40 } },
       events: [{ type: 'STATS', stats: { woodcutting: 21, attack: 40 } },

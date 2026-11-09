@@ -1,6 +1,7 @@
+import type { Step } from '../../types';
 import { describe, expect, it } from 'vitest';
-import { allSteps } from '../../data';
 import { floorLabel, initialPoint, isUnderground, mapSourceAt, parseMapSources, pxPerSquare, stepPoints, TILE, tilesAround, tileUrl } from './map';
+import { stepOrRetired } from '../../../tests/fixtures/retiredSteps';
 
 describe('wiki map tiles', () => {
   it('uses the documented atlas schema and shares the selected source across a viewport', () => {
@@ -66,7 +67,7 @@ describe('wiki map tiles', () => {
 });
 
 describe('step points', () => {
-  const step = (id: string) => allSteps.find((s) => s.id === id)!;
+  const step = (id: string): Step => stepOrRetired(id);
 
   it('S1-12: the mining spot is the start and is not duplicated', () => {
     const points = stepPoints(step('S1-12'));

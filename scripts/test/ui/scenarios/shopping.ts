@@ -87,8 +87,7 @@ async function shoppingScenarios(browser: Browser) {
   }
 }
 
-// Quote labels are checked on Ithoi's Salmon, which a weak character's fight estimate requires: S4-04's dragon food is only
-// a suggestion since 2.82.1 (no fight estimate yet).
+// Quote labels are checked on Ithoi's Salmon, which a weak character's fight estimate requires.
 async function shoppingQuoteScenarios(browser: Browser) {
   for (const width of [1280]) for (const state of ['current', 'cached', 'missing']) {
     const { page, errors } = await open(browser, width, {
@@ -128,41 +127,8 @@ async function shoppingPage(browser: Browser) {
   await page.context().close();
 }
 
-// Bulk shopping: "already have" changes "buy", is saved and goes into the exchange hint.
-async function bulkShopping(browser: Browser) {
-  const width = 1100;
-  // The step in the game (2.82.3: the old guide's stage ranges are gone): S2-01 asks for five Energy potion(4) and seven Clay.
-  const at = (step: string) => ({
-    progress: progressBefore(step, { gameMode: 'f2p' }), localStorage: { 'osrs-put:active-step': step },
-    status: { inGame: true, player: 'Bulk Test', activeStepId: step },
-    events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Clay', carried: 3, noted: 0, bank: 2 }] }],
-  });
-  const { page, errors } = await open(browser, width, at('S2-01'), '#/shopping');
-  await page.getByRole('button', { name: 'This step', exact: true }).click();
-  await settle(page);
-  const potion = page.locator('.shop-item-row', { hasText: 'Energy potion(4)' }).first();
-  await potion.locator('.shop-why > summary').click();
-  // Potions are marked in doses (2.73.0): 12 doses are three Energy potion(4) of the five, so 8 doses are left, bought as 2 potions.
-  const input = potion.getByLabel('Energy potion(4): how many doses you already have');
-  await input.fill('12');
-  await input.press('Enter');
-  await settle(page);
-  const row = await page.locator('.shop-item-row', { hasText: 'Energy potion(4)' }).first().innerText();
-  expect(/8 doses short/.test(row) && /Buy 2 × Energy potion\(4\)/.test(row), `shopping: 12 of 20 doses marked — 8 left, bought as 2 potions (${row.replace(/\s+/g, ' ').slice(0, 120)})`);
-  const saved = await page.evaluate(() => JSON.parse(String((window as unknown as Record<string, unknown>).__saved ?? '{}')));
-  expect(saved.ownedManual?.['dose:energy potion']?.count === 12, 'shopping: the mark "already have 12 doses" is saved in the progress');
-  const plan = await page.evaluate(() => ((window as unknown as { __posts: { path: string; body: { items: { name: string; count: number }[] } }[] }).__posts)
-    .filter((p) => p.path === '/shopping-plan').pop()?.body.items ?? []);
-  expect(plan.find((i) => i.name === 'Energy potion(4)')?.count === 2, 'shopping: "buy 2" goes to the game, not 5');
-  expect(plan.find((i) => i.name === 'Clay')?.count === 7, 'shopping: clay — by the game data, the plugin subtracts the 5 you own itself');
-  expect(await noOverflow(page), 'shopping: no horizontal scrolling');
-  expect(!errors.length, `shopping: no console errors ${errors.join('; ')}`);
-  await page.context().close();
-}
-
 export const scenarios = {
   'shopping': shoppingScenarios,
   'shopping-quotes': shoppingQuoteScenarios,
   'shopping-page': shoppingPage,
-  'bulk-shopping': bulkShopping,
 };

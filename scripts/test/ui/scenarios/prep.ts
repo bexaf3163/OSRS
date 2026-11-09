@@ -20,9 +20,9 @@ async function stockScenarios(browser: Browser) {
     const gear = { equipment, inventory: [], coins: cash, bankCoins: 0 };
     const items = RANGED_WATCH.map(name => ({ name, carried: 0, noted: 0, bank: 0 }));
     const { page, errors } = await open(browser, 1280, {
-      market: true, marketQuotes, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: stats }),
+      market: true, marketQuotes, progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
       localStorage: { 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'f2p', target: 40 }), 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
-      status: { inGame: true, protocol: 6, player: 'Stock fixture', activeStepId: 'S6-04', stats, ...gear },
+      status: { inGame: true, protocol: 6, player: 'Stock fixture', activeStepId: 'S5-01', stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/shopping');
     await settle(page);
@@ -49,7 +49,7 @@ async function stockScenarios(browser: Browser) {
 
 async function cleanupScenarios(browser: Browser) {
   const { page, errors } = await open(browser, 1280, {
-    progress: progressBefore('S6-04', { gameMode: 'f2p' }),
+    progress: progressBefore('S5-01', { gameMode: 'f2p' }),
     status: { stats: { ranged: 12, attack: 40, strength: 44, defence: 44, hitpoints: 40 } },
     events: [{ type: 'STATS', stats: { ranged: 12, attack: 40, strength: 44, defence: 44, hitpoints: 40 } }],
     localStorage: {
@@ -94,7 +94,7 @@ async function cleanupScenarios(browser: Browser) {
     if (url.includes('/data/dataloader.json')) return route.fulfill({ json: { baseMaps: [{ mapId: 0, cacheVersion: '2019-10-31_1', bounds: [[1000, 1000], [4300, 13000]] }] } });
     return route.fulfill({ status: failTiles ? 404 : 200, contentType: 'image/png', body: failTiles ? '' : png });
   });
-  await page.goto(`${BASE}#/step/S6-04`);
+  await page.goto(`${BASE}#/step/S5-01`);
   await page.getByRole('tab', { name: 'Route & game', exact: true }).click();
   await page.getByRole('button', { name: 'Retry map', exact: true }).waitFor();
   expect(await page.locator('.map-preview').count() === 1, 'cleanup: Route has one map preview');
@@ -125,8 +125,7 @@ async function marketPreparationScenarios(browser: Browser) {
       status: { protocol: 6, activeStepId: 'S3-01', coins: 10000, bankCoins: 0 },
       events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Clay', carried: 0, noted: 0, bank: 0 }] }],
     }, '#/step/S3-01');
-    // The quest's items are on the Preparation ribbon. The quote is checked on Doric's 6 Clay: S4-04's dragon food is only a
-    // suggestion since 2.82.1 (no fight estimate yet), so it is not a preparation line.
+    // The quest's items are on the Preparation ribbon. The quote is checked on Doric's 6 Clay.
     await reveal(page, '.quest-supply-list');
     const supplies = page.locator('.quest-supply-list');
     const quote = unavailable ? /^Price unavailable$/ : /^GE estimate: ≈ ([\d,]+) gp \((\d+) each\)$/;
@@ -152,11 +151,11 @@ async function toolProofScenarios(browser: Browser) {
   for (const width of [1280]) {
     const rows = PICKAXES.map(name => ({ name, carried: 0, noted: 0, bank: 0, exactCarried: 0, exactNoted: 0, exactBank: 0 }));
     const { page, errors } = await open(browser, width, {
-      progress: progressBefore('S1-12', { gameMode: 'f2p' }),
-      localStorage: { 'osrs-put:active-step': 'S1-12' },
-      status: { protocol: 6, stats: { mining: 6 }, activeStepId: 'S1-12' },
+      progress: progressBefore('S2-07', { gameMode: 'f2p' }),
+      localStorage: { 'osrs-put:active-step': 'S2-07' },
+      status: { protocol: 6, stats: { mining: 6 }, activeStepId: 'S2-07' },
       events: [{ type: 'STATS', stats: { mining: 6 } }, { type: 'OWNED', bankSeen: true, items: [rows[0]] }],
-    }, '#/step/S1-12');
+    }, '#/step/S2-07');
     const line = () => page.evaluate(() => {
       const posts = (window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; where: string; action?: string }[] } } }[] }).__posts;
       return posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.lines.find(l => l.name === 'Bronze pickaxe');
@@ -181,47 +180,6 @@ async function toolProofScenarios(browser: Browser) {
   }
 }
 
-async function armourPreparationScenarios(browser: Browser) {
-  const pieces = ([[1165, 'Black full helm', 'head'], [1125, 'Black platebody', 'body'], [1077, 'Black platelegs', 'legs'], [1195, 'Black kiteshield', 'shield']] as [number, string, string][])
-    .map(([id, name, slot]) => ({ id, name, slot }));
-  const weapon = { id: 1331, name: 'Adamant scimitar', slot: 'weapon' };
-  const stats = { attack: 30, strength: 21, defence: 10, hitpoints: 24 };
-  const xp = { attack: 13363, strength: 2000, defence: 1154, hitpoints: 3500 };
-  const items = [...pieces.map(p => ({ name: p.name, carried: 1, noted: 0, bank: 0 })), { name: 'Black plateskirt', carried: 0, noted: 0, bank: 0 }];
-  const gear = { equipment: [weapon], inventory: pieces, coins: 10000, bankCoins: 0 };
-  for (const width of [1280]) {
-    const { page, errors } = await open(browser, width, {
-      progress: progressBefore('S4-03', { gameMode: 'f2p', levels: stats }),
-      localStorage: { 'osrs-put:active-step': 'S4-03' }, market: true,
-      status: { protocol: 6, inGame: true, player: 'Armour Test', activeStepId: 'S4-03', stats, xp, ...gear },
-      events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
-    }, '#/step/S4-03');
-    const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
-    await settle(page);
-    const prep = await snapshot();
-    expect(prep?.step?.goal?.includes('10 Defence required') && prep.step.checklist?.length === 4 && prep.step.checklist.every((i: any) => i.equip),
-      `armour (${width}): the same four-piece equip requirement and Defence level reach the game`);
-    const currentArmour = prep?.plan?.lines?.filter((i: any) => i.equip && i.timing === 'NOW') ?? [];
-    expect(currentArmour.length === 4 && currentArmour.every((i: any) => i.where === 'INVENTORY' && /^Equip /.test(i.action))
-      && !prep.plan.bankWithdrawals?.some((i: any) => pieces.some(p => p.id === i.itemId)),
-      `armour (${width}): carried armour requires equipping, with no duplicate purchase or withdrawal`);
-    await reveal(page, '.quest-supply-state');
-    expect(await page.locator('.quest-supply-state').filter({ hasText: /^↗ Equip$/ }).count() === 4, `armour (${width}): each current supply says Equip`);
-    const worn = { ...gear, equipment: [weapon, ...pieces], inventory: [] };
-    await page.evaluate(g => {
-      const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void };
-      w.__status = { ...w.__status, ...g };
-      w.__emit({ type: 'GEAR', gear: g });
-    }, worn);
-    await settle(page);
-    const trained = await snapshot();
-    expect(trained?.step?.pacing?.targetExp > 0 && !trained.step.checklist?.some((i: any) => i.equip), `armour (${width}): confirmed worn gear advances to training`);
-    expect(trained?.step?.completionTrigger?.levels?.[0]?.level === 40 && !trained.step.completionTrigger?.items?.length, `armour (${width}): saved route completion remains Attack 40 only`);
-    expect(await noOverflow(page) && !errors.length, `armour (${width}): no overflow or console errors`);
-    await page.context().close();
-  }
-}
-
 async function rangedPreparationScenarios(browser: Browser) {
   for (const width of [1280]) {
     const stats = { ranged: 1, defence: 1, hitpoints: 30 };
@@ -232,12 +190,17 @@ async function rangedPreparationScenarios(browser: Browser) {
     const names = ['Maple shortbow', 'Maple longbow', 'Willow shortbow', 'Willow longbow', 'Oak shortbow', 'Oak longbow', 'Shortbow', 'Longbow', 'Adamant arrow', 'Mithril arrow', 'Steel arrow', 'Iron arrow', 'Bronze arrow', 'Salmon', 'Tuna', 'Lobster', 'Swordfish', ...clothes.map(c => c.name), 'Coif', 'Studded body', 'Studded chaps', "Green d'hide body", "Green d'hide chaps", "Green d'hide vambraces", 'Amulet of power', 'Amulet of accuracy'];
     const items = names.map(name => ({ name, carried: name === 'Shortbow' ? 1 : name === 'Bronze arrow' ? 100 : 0, noted: 0, bank: name === 'Salmon' ? 10 : clothes.some(c => c.name === name) ? 1 : 0 }));
     const { page, errors } = await open(browser, width, {
-      market: true, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: stats }),
-      localStorage: { 'osrs-put:active-step': 'S6-04' },
-      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S6-04', stats, ...gear },
+      market: true, progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S5-01' },
+      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S5-01', stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
-    }, '#/step/S6-04');
+    }, '#/skills/RA/ranged');
     const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    // The Train button starts the engine session for Ranged; the quest route waits on Dragon Slayer I.
+    await page.getByRole('tab', { name: 'Train', exact: true }).click();
+    await page.locator('.training-follow').click();
+    await waitFor(page, '.tracked-skill', 5000);
+    await settle(page);
     const initial = await snapshot();
     expect(/Train ranged to 5 at /.test(JSON.stringify(initial?.step?.guide?.steps)), `ranged (${width}): the actual game guide stops at the first bow milestone, not40`);
     expect(initial?.step?.npcNames?.includes('Seagull') && initial.step.worldPoint?.label?.includes('Port Sarim'), `ranged (${width}): a beginner gets the current surface trainer, not ogresses`);
@@ -260,6 +223,9 @@ async function rangedPreparationScenarios(browser: Browser) {
       // Training food is only a suggestion (owner report 2026-11-08: the HUD asked for "Salmon or similar 0/10" on Ranged training).
       if (level === 26) expect(!current?.step?.checklist?.some((r: any) => r.name === 'Salmon') && !current?.plan?.lines?.some((r: any) => r.name === 'Salmon'), `ranged (${width}): the later combat method does not require the guide's food`);
     }
+    // The desktop shows the session's method on the skill's Train tab.
+    await page.evaluate(() => { location.hash = '#/skills/RA/ranged'; });
+    await page.getByRole('tab', { name: 'Train', exact: true }).click();
     await reveal(page, '.training:visible');
     expect((await text(page, '.training:visible')).includes('Giant frogs'), `ranged (${width}): the visible desktop advice matches the game target`);
     await page.screenshot({ path: `audit-temp/ranged-kit-${width}.png` });
@@ -286,17 +252,22 @@ async function rangedPreparationScenarios(browser: Browser) {
     await page.screenshot({ path: `audit-temp/ranged-guided-session-${width}.png` });
     await page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
     await settle(page);
-    expect((await snapshot())?.step?.stepId === 'S6-04', `ranged (${width}): stopping restores the retained quest route`);
+    expect((await snapshot())?.step?.stepId === 'S5-01', `ranged (${width}): stopping restores the retained quest route`);
     expect(await page.evaluate(() => (window as any).__trainingMain === document.getElementById('main')), `ranged (${width}): stopping training preserves the app tree`);
     await page.context().close();
     const restarted = await open(browser, width, {
-      market: true, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: stats }),
-      localStorage: { 'osrs-put:active-step': 'S6-04', 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'fast', freeOnly: true }) },
-      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S6-04', stats, ...gear },
+      market: true, progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S5-01', 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'fast', freeOnly: true }) },
+      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S5-01', stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
-    }, '#/');
+    }, '#/skills/RA/ranged');
+    // The Train button starts the engine session for Ranged; the quest route waits on Dragon Slayer I.
+    await restarted.page.getByRole('tab', { name: 'Train', exact: true }).click();
+    await restarted.page.locator('.training-follow').click();
+    await waitFor(restarted.page, '.tracked-skill', 5000);
+    await settle(restarted.page);
     const last = () => restarted.page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
-    expect((await last())?.step?.stepId === 'S0-04' && !(await last())?.skillPath && /to 5/.test((await last())?.step?.goal), `ranged (${width}): an old saved Wiki-follow setting reloads into the current engine leg, never seagulls to40`);
+    expect((await last())?.step?.stepId === 'S0-04' && !(await last())?.skillPath && /to 5/.test((await last())?.step?.goal), `ranged (${width}): an old saved Wiki-follow setting opens the current engine leg on Train, never seagulls to40`);
     await restarted.page.evaluate(() => {
       const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void };
       const stats = { ranged: 20, defence: 1, hitpoints: 30 };
@@ -314,18 +285,18 @@ async function rangedPreparationScenarios(browser: Browser) {
     await settle(restarted.page);
     const reached = await last();
     expect((await text(restarted.page, '.tracked-skill')).includes('checkpoint reached'), `ranged (${width}): the actual level40 event stops at the F2P checkpoint`);
-    expect(!reached?.skillPath && reached?.step?.stepId !== 'S6-04' && !reached?.step?.worldPoint && !reached?.step?.npcNames?.length, `ranged (${width}): completion clears the trainer without silently restoring the quest`);
+    expect(!reached?.skillPath && reached?.step?.stepId !== 'S5-01' && !reached?.step?.worldPoint && !reached?.step?.npcNames?.length, `ranged (${width}): completion clears the trainer without silently restoring the quest`);
     await restarted.page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
     await settle(restarted.page);
-    expect((await last())?.step?.stepId === 'S6-04', `ranged (${width}): only the explicit return restores the quest after completion`);
+    expect((await last())?.step?.stepId === 'S5-01', `ranged (${width}): only the explicit return restores the quest after completion`);
     await restarted.page.context().close();
     const poorStats = { ...stats, ranged: 20, attack: 30, strength: 21, mining: 18, woodcutting: 15 };
     const poorGear = { ...gear, coins: 0, bankCoins: 0 };
     const poor = await open(browser, width, {
-      market: true, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: poorStats, sellRestrictions: 'lifted' }),
+      market: true, progress: progressBefore('S5-01', { gameMode: 'f2p', levels: poorStats, sellRestrictions: 'lifted' }),
       marketQuotes: { 'Willow shortbow': { id: 849, price: 100 } },
-      localStorage: { 'osrs-put:active-step': 'S6-04', 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'fast', freeOnly: true }) },
-      status: { protocol: 6, inGame: true, player: 'Range Fund', activeStepId: 'S6-04', stats: poorStats, questPoints: 40, totalLevel: 200, pos: { x: 3093, y: 3495, plane: 0 }, ...poorGear },
+      localStorage: { 'osrs-put:active-step': 'S5-01', 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'fast', freeOnly: true }) },
+      status: { protocol: 6, inGame: true, player: 'Range Fund', activeStepId: 'S5-01', stats: poorStats, questPoints: 40, totalLevel: 200, pos: { x: 3093, y: 3495, plane: 0 }, ...poorGear },
       events: [{ type: 'STATS', stats: poorStats }, { type: 'GEAR', gear: poorGear }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/');
     await waitFor(poor.page, '.funding-card.is-running', 12000).catch(async error => {
@@ -412,9 +383,9 @@ async function magicPreparationScenarios(browser: Browser) {
     { id: 556, name: 'Air rune', count: 1000 }, { id: 558, name: 'Mind rune', count: 1000 }, { id: 333, name: 'Trout', count: 5 },
   ], coins: 0, bankCoins: 0 };
   const { page, errors } = await open(browser, width, {
-    market: true, progress: progressBefore('S6-03', { gameMode: 'f2p', levels: stats }),
-    localStorage: { 'osrs-put:active-step': 'S6-03' },
-    status: { protocol: 6, inGame: true, player: 'Magic Prep', activeStepId: 'S6-03', stats, ...gear },
+    market: true, progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
+    localStorage: { 'osrs-put:active-step': 'S5-01' },
+    status: { protocol: 6, inGame: true, player: 'Magic Prep', activeStepId: 'S5-01', stats, ...gear },
     events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
   }, '#/skills/MA/magic');
   await page.getByRole('tab', { name: 'Calculator', exact: true }).click();
@@ -436,8 +407,8 @@ async function magicPreparationScenarios(browser: Browser) {
   expect(await noOverflow(page) && !errors.length, 'Magic: the staged guide fits the accepted Ledger without runtime errors');
   await page.screenshot({ path: 'audit-temp/magic-guided-session-1280.png' });
   await page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
-  await page.waitForFunction(() => (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.stepId === 'S6-03');
-  expect((await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'))).steps?.['S6-03'] !== 'done', 'Magic: stopping restores the quest without awarding the uncompleted Magic55 goal');
+  await page.waitForFunction(() => (window as any).__posts.filter((post: any) => post.path === '/prep-plan').at(-1)?.body?.step?.stepId === 'S5-01');
+  expect((await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'))).steps?.['S5-01'] !== 'done', 'Magic: stopping restores the quest without awarding the uncompleted Magic55 goal');
   await page.context().close();
 }
 
@@ -555,7 +526,6 @@ export const scenarios = {
   'cleanup': cleanupScenarios,
   'market-preparation': marketPreparationScenarios,
   'tool-proof': toolProofScenarios,
-  'armour': armourPreparationScenarios,
   'ranged-preparation': rangedPreparationScenarios,
   'peaceful-preparation': nonCombatPreparationScenarios,
   'magic-preparation': magicPreparationScenarios,

@@ -33,7 +33,11 @@ export const V2_FROM_V1: Record<string, string[]> = {
 };
 
 /** Historical step IDs: retained as history when absent from the current route, never treated as active completion facts. */
-export const RETIRED_STEPS = ['S1-11', 'S2-13', 'S3-09'];
+export const RETIRED_STEPS = ['S1-11', 'S2-13', 'S3-09',
+  // The old route's skill steps (2.84.0): the training engine plans skills now.
+  'S1-08', 'S1-12', 'S2-04', 'S3-08', 'S4-03', 'S6-01', 'S6-02', 'S6-03', 'S6-04', 'S7-04', 'S8-03', 'S8-04', 'S8-06',
+  // Its preparation, money and shopping steps: the preparation and funding engines plan them now.
+  'S1-01', 'S1-02', 'S1-10', 'S1-13', 'S2-01', 'S3-06', 'S3-07', 'S4-04', 'S4-05', 'S5-02', 'S6-05'];
 
 /**
  * The V2 route (2.0.0) to V2.1: steps with the same content got new numbers: money before purchases,

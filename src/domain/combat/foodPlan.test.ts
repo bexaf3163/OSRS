@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepById } from '../../data';
-import { assumptionsFor, foodPicks, stepWeapon, withFoodPlan } from './foodPlan';
+import { assumptionsFor, foodPicks, withFoodPlan } from './foodPlan';
 import { aggregateShopping } from '../prep/shopping';
 import { emptyProgress } from '../persistence/progress';
 import { stepReadiness } from '../readiness/readiness';
@@ -9,6 +9,7 @@ import { nameKey } from '../items/itemKey';
 import { gearById } from './gearAdvisor';
 import type { GearState } from '../../services/runeliteBridge';
 import type { Progress } from '../../types';
+import { retiredStep } from '../../../tests/fixtures/retiredSteps';
 
 // The plan into the route: readiness asks for one trip, the shopping list buys the whole goal; S4-03 is estimated from where S3-08 leaves you.
 
@@ -38,28 +39,11 @@ const live = { stats, xp, gear, owned: owned({ Salmon: 13 }) };
 
 describe('the assumptions of a later step', () => {
   it('S3-08, the first open combat step: the game as it is', () => {
-    expect(assumptionsFor(stepById.get('S3-08')!, allSteps, progress)).toBeNull();
-  });
-
-  it('S4-03 starts where S3-08 ends, with the Adamant scimitar it asks for', () => {
-    const a = assumptionsFor(stepById.get('S4-03')!, allSteps, progress)!;
-    expect(a.xp).toEqual({ strength: 4470, attack: 13363 });
-    expect(a.weapon?.name).toBe('Adamant scimitar');
-    expect(stepWeapon(stepById.get('S3-08')!)?.name).toBe('Mithril scimitar');
+    expect(assumptionsFor(retiredStep('S3-08')!, allSteps, progress)).toBeNull();
   });
 });
 
 describe('the picks', () => {
-  const picks = foodPicks(allSteps, progress, live);
-
-  it('S3-08 and S4-03 get one, the trip a bag and the total the plan', () => {
-    expect(Object.keys(picks).sort()).toEqual(['S3-08', 'S4-03']);
-    expect(picks['S3-08'].trip).toBe(26);
-    expect(picks['S3-08'].total).toBeGreaterThan(60);
-    expect(picks['S4-03'].trip).toBe(26);
-    // Food is still budgeted across the XP goal, not just the first bag.
-    expect(picks['S4-03'].total).toBeGreaterThan(picks['S4-03'].trip);
-  });
 
   it('no levels or no gear from the game: no picks, the route amounts stand', () => {
     expect(foodPicks(allSteps, progress, { ...live, stats: null })).toEqual({});
@@ -78,7 +62,7 @@ describe('the picks', () => {
 });
 
 describe('into readiness and shopping', () => {
-  const s = stepById.get('S3-08')!;
+  const s = retiredStep('S3-08')!;
   const picked = withFoodPlan(s, { trip: 26, total: 110, hpPerKill: 3.4, essential: true });
 
   it('the food asks for one trip and carries the whole goal; other items are untouched', () => {
@@ -121,7 +105,7 @@ describe('into readiness and shopping', () => {
 
 describe('one number to buy', () => {
   it('the food row is about the trip and names the whole-goal purchase', () => {
-    const picked = withFoodPlan(stepById.get('S3-08')!, { trip: 26, total: 110, hpPerKill: 3.4, essential: true });
+    const picked = withFoodPlan(retiredStep('S3-08')!, { trip: 26, total: 110, hpPerKill: 3.4, essential: true });
     const o: OwnedState = owned({ 'Mithril scimitar': 1, Salmon: 13, Trout: 0, Tuna: 0, Lobster: 0, Swordfish: 0 });
     const row = stepReadiness({ step: picked, steps: allSteps, progress, qp: 20, mode: 'f2p', stats, owned: o, gear })
       .requirements.find((q) => q.label.startsWith('Salmon'))!;
@@ -129,16 +113,6 @@ describe('one number to buy', () => {
   });
 });
 
-describe('the food line in the game', () => {
-  it('the pace carries the health a kill costs; the level 12 Minotaur about 3 to 4 at Defence 1 in iron', () => {
-    const pick = foodPicks(allSteps, progress, live)['S3-08'];
-    expect(pick.hpPerKill).toBeGreaterThan(2.5);
-    expect(pick.hpPerKill).toBeLessThan(4.5);
-    expect(withFoodPlan(stepById.get('S3-08')!, pick).pacing!.foodHpPerKill).toBe(pick.hpPerKill);
-    // Health that comes back faster than it goes: nothing to send.
-    expect(withFoodPlan(stepById.get('S3-08')!, { trip: 0, total: 0, hpPerKill: 0, essential: false }).pacing!.foodHpPerKill).toBeUndefined();
-  });
-});
 
 describe('the food of a quest fight (combat audit, 2.66.0)', () => {
   const at = before('S4-01');

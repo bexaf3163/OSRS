@@ -29,12 +29,6 @@ describe('members skills: data', () => {
     expect(skillById.size).toBe(20);
   });
 
-  it('route steps with agility and slayer link their skill sections', () => {
-    const sectionsOf = (id: string) => [...new Set((stepById.get(id)!.targets ?? []).map((t) => levelById.get(t.skill)!.skill))];
-    expect(sectionsOf('S7-04')).toEqual(['AG']);
-    expect(sectionsOf('S8-04').sort()).toEqual(['CO', 'CR', 'RA', 'SL', 'WC']);
-  });
-
   it('step codes in the plan texts exist', () => {
     const codes = [...new Set(JSON.stringify(membersGuide).match(/S\d-\d\d/g) ?? [])];
     expect(codes.length).toBeGreaterThan(5);

@@ -1,19 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { stepById } from '../src/data';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { adviseTraining, trainingMethods } from '../src/domain/training/trainingRouter';
 import { RANGED_WATCH } from '../src/domain/combat/rangedLoadout';
 import { methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
-import { pickMethods } from '../src/domain/training/methodPick';
+import { pickTraining } from '../src/domain/training/methodPick';
 import { goalArrows } from '../src/domain/combat/rangedAmmo';
 import { market } from './funding/market';
+import { retiredStep } from './fixtures/retiredSteps';
 
 const state = (levels: Record<string, number>, stock: Record<string, number> = {}) => buildPlayerState({
   mode: 'f2p', connected: true, stats: { hitpoints: 31, defence: 33, ...levels },
   progress: { ...emptyProgress(), levels }, questsDone: ['Dragon Slayer I'],
   gear: { equipment: [], inventory: [], coins: 10000, bankCoins: 0 },
-  owned: { bankSeen: true, items: new Map([...new Set([...RANGED_WATCH, ...methodToolNames(stepById.get('S6-02')!), ...Object.keys(stock)])].map(name => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: stock[name] ?? 0 }])) },
+  owned: { bankSeen: true, items: new Map([...new Set([...RANGED_WATCH, ...methodToolNames(retiredStep('S6-02')!), ...Object.keys(stock)])].map(name => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: stock[name] ?? 0 }])) },
 });
 
 describe('shared staged training, not a starter grind to the final goal', () => {
@@ -28,8 +28,8 @@ describe('shared staged training, not a starter grind to the final goal', () => 
     const arrows = goalArrows(advice.path, st, 0, market());
     expect(arrows).toMatchObject({ goalLevel: 40, changesKit: true });
     expect(arrows!.shots.mid).toBeGreaterThan(0);
-    const base = stepById.get('S6-04')!;
-    const pick = pickMethods([base], st, 'f2p', 'chill', 'balanced', { prices: market() })[base.id];
+    const base = retiredStep('S6-04')!;
+    const pick = pickTraining(base, st, 'f2p', 'chill', 'balanced', { prices: market() }).pick;
     const resolved = withTrainingMethod(base, pick);
     expect(resolved.how).toContain('to 5:');
     expect(resolved.how).not.toContain('to 40:');

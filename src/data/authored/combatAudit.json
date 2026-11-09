@@ -25,17 +25,6 @@
       "evidence": ["Quest stage line 7.4: \"no actual combat occurs\"."]
     },
     {
-      "stepId": "S1-13", "kind": "incidental", "mandatory": false, "method": "melee",
-      "objective": "Cows for cowhides to pay for the shopping; any combat XP is a side effect.",
-      "enemies": [{ "name": "Cow", "level": 2, "maxHit": 1, "table": true }],
-      "lines": [],
-      "assumptions": ["A cow cannot threaten a new character: no food is asked for."],
-      "problems": ["Cowhides cannot be sold by a trade-restricted account; the funding system (2.64) counts them only when the restriction is lifted."],
-      "alternatives": ["The funding system offers other ways to raise the coins when hides cannot be sold."],
-      "decision": "retain",
-      "evidence": ["combatFoes.json: Cow, max hit 1.", "tests/funding: restricted items are never counted as realised coins."]
-    },
-    {
       "stepId": "S2-03", "kind": "incidental", "mandatory": true, "method": "melee",
       "objective": "Kill a rat for its tail and a giant rat for meat to burn.",
       "enemies": [{ "name": "Rat", "level": 1 }, { "name": "Giant rat", "level": 3 }],
@@ -130,18 +119,6 @@
       "evidence": ["Quest stage lines 2.2 and 3.2; OSRS Wiki infobox of the Weaponsmaster (20 hit points, max hit 3), read 2026-10-18."]
     },
     {
-      "stepId": "S3-08", "kind": "training", "mandatory": true, "method": "melee",
-      "objective": "Strength 20 and Attack 30 on the level 12 Minotaurs.",
-      "enemies": [{ "name": "Minotaur", "level": 12, "maxHit": 2, "table": true }],
-      "lines": [],
-      "assumptions": ["Defence stays at 1 unless the player adopts a Defence plan."],
-      "problems": [],
-      "alternatives": ["Defence first on cows, compared by the combat plans (2.65)."],
-      "decision": "branch",
-      "changed": ["2.65.0: the step's plans are compared for the player's levels and gear; 2.65.1: a Defence plan must beat the route on the middle estimate while Dragon Slayer I's Defence XP is ahead."],
-      "evidence": ["tests/combatRoute (plans, pick, later)."]
-    },
-    {
       "stepId": "S4-01", "kind": "quest-fight", "mandatory": true, "method": "melee",
       "objective": "Kill Ithoi the Navigator (35, 55 hit points, hits up to 6 with magic).",
       "enemies": [{ "name": "Ithoi the Navigator", "level": 35, "maxHit": 6, "table": true }],
@@ -166,40 +143,6 @@
       "evidence": ["Step field \"Combat\"; threats.json (melee 3, special 19)."]
     },
     {
-      "stepId": "S4-03",
-      "kind": "training",
-      "mandatory": true,
-      "method": "melee",
-      "objective": "Attack 40; no mandatory loot quota.",
-      "enemies": [
-        {
-          "name": "Giant frog",
-          "level": 13,
-          "maxHit": 2,
-          "table": true
-        }
-      ],
-      "lines": [],
-      "assumptions": [
-        "Surface level 13 frogs only; current gear and levels drive estimates."
-      ],
-      "problems": [
-        "Slow and food-hungry for the reported character (Attack 30, Strength 21, Defence 1, HP 24, iron armour)."
-      ],
-      "alternatives": [
-        "Compare cows and level 12 minotaurs; Defence-first includes its training cost."
-      ],
-      "decision": "branch",
-      "changed": [
-        "2.65.0: the plans are compared and one can be adopted: arrow, food, shopping and the game follow it.",
-        "2.65.1: Dragon Slayer I's 18,650 Defence XP is counted before Defence training is recommended.",
-        "2.74.2: replace mandatory Hill Giant funding detour with surface Giant frogs; training completes at Attack 40. Funding remains separate."
-      ],
-      "evidence": [
-        "tests/combatRoute/plans.test.ts, pick.test.ts, later.test.ts; UI smoke (combat)."
-      ]
-    },
-    {
       "stepId": "S5-03", "kind": "quest-fight", "mandatory": true, "method": "melee",
       "objective": "Melzar's Maze: the marked rat, ghost, skeleton and zombie, Melzar the Mad (43, hits up to 5) in melee, the lesser demon from the safespot.",
       "enemies": [{ "name": "Melzar the Mad", "level": 43, "maxHit": 5, "table": true }, { "name": "Lesser demon", "level": 82, "table": true }],
@@ -222,30 +165,6 @@
       "decision": "retain",
       "evidence": ["Lobster 20+ required; the shield is a safety rule (readiness blocks without it, and a two-handed weapon is flagged).", "Danger zones on the boat and in the lair."],
       "zones": ["crandor-boarding", "elvarg-lair"]
-    },
-    {
-      "stepId": "S6-03", "kind": "training", "mandatory": false, "method": "other",
-      "objective": "Optional Magic55 using spell-dependent supplies: budget Strikes or an actually usable Superheat iron batch.",
-      "enemies": [{ "name": "Cow" }, { "name": "Chicken" }],
-      "lines": [],
-      "assumptions": ["Select the named spell; equipped elemental staff substitution is explicit.", "Remove metal armour and verify actual combat damage/XP; no full Magic attack/weakness simulation is claimed."],
-      "problems": ["Full-goal costs, complete magic equipment/weakness modelling and measured combat rates remain open.", "Alchemy targets and splash setup are not automatically verified; those methods remain manual alternatives."],
-      "alternatives": ["Prepared Superheat iron needs Magic43 and Smithing15.", "Known higher Strike ingredients can replace the Wind Strike fallback."],
-      "decision": "revise",
-      "changed": ["Unreleased2.74.3: canonical method projection replaces the Nature-only fallback and unverified automatic alchemy/splash selection."],
-      "evidence": ["https://oldschool.runescape.wiki/w/Free-to-play_Magic_training", "https://oldschool.runescape.wiki/w/Superheat_Item", "tests/magicRouteSupplies.test.ts"]
-    },
-    {
-      "stepId": "S6-04", "kind": "training", "mandatory": false, "method": "other",
-      "objective": "Optional Ranged to 50 using a level-appropriate F2P bow, one equipped arrow stack and the current trainer.",
-      "enemies": [{ "name": "Seagull", "level": 3 }, { "name": "Monk" }, { "name": "Giant frog" }],
-      "lines": [],
-      "assumptions": ["The starter seagull must be the level-3 variant; generic name highlights cannot distinguish it.", "Rapid after Ranged 5; do not use Longrange when preserving Defence."],
-      "problems": ["Ranged DPS, whole-goal ammunition consumption and food are not simulated; 100 arrows and the later food quantity are starter supplies, not a survival guarantee.", "Crossbows, thrown weapons and Members loadouts are not covered by this F2P bow planner."],
-      "alternatives": ["Monks provide healing between fights; Giant frogs require food.", "Flesh crawlers retain their Defence 40 guard and written directions only.", "Compare ogresses as a later income option, not the level-1 default."],
-      "decision": "revise",
-      "changed": ["Unreleased 2.74.3: canonical trainer, equipped bow/ammunition and supply projection replace the fixed ogress route."],
-      "evidence": ["https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training", "https://oldschool.runescape.wiki/w/Ranged_bows", "tests/rangedPreparation.test.ts"]
     },
     {
       "stepId": "S7-02", "kind": "quest-fight", "mandatory": true, "method": "safespot",

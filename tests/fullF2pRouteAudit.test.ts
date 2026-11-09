@@ -71,13 +71,13 @@ const ug = (a: number[]) => isUnderground({ y: a[1] });
 const pointOf = (l: Line): Pt | null => (l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : null);
 
 /** The point the arrow leads to for a whole step, with the exemptions the audit knows by name. */
-const NO_WORLD_POINT = new Set(['S1-01']);
+const NO_WORLD_POINT = new Set<string>();
 
 describe('F2P route audit: the route itself', () => {
-  it('runs from S1-01 to the finale in order, each step requiring only earlier ones', () => {
-    expect(route[0].id).toBe('S1-01');
+  it('runs from S1-03 to the finale in order, each step requiring only earlier ones', () => {
+    expect(route[0].id).toBe('S1-03');
     expect(route[route.length - 1].id).toBe(FINALE);
-    expect(route.length).toBeGreaterThanOrEqual(46);
+    expect(route.length).toBeGreaterThanOrEqual(31);
     const seen = new Set<string>();
     for (const s of route) {
       for (const r of s.requires) expect(seen.has(r), `${s.id} requires ${r} which comes later or is members only`).toBe(true);
@@ -126,7 +126,7 @@ describe('F2P route audit: waypoints and planes', () => {
       }
     }
     expect(bad).toEqual([]);
-    expect(stats.points).toBeGreaterThan(590);
+    expect(stats.points).toBeGreaterThan(570);
   });
 
   it('the arrow of a step does not start on top of the previous step place only by accident of a missing point: no step shares its place with a different region', () => {
@@ -206,7 +206,7 @@ describe('F2P route audit: continuity between places', () => {
 
 describe('F2P route audit: completion signals', () => {
   /** Steps with no automatic completion: the player ticks them, and the text says when. A new one must be added here on purpose. */
-  const MANUAL = ['S1-01', 'S1-02', 'S1-10'];
+  const MANUAL: string[] = [];
 
   it('every route step is finished by a signal the plugin can read, or is on the short list of manual steps', () => {
     const none = route.filter((s) => !s.inGame?.completionTrigger).map((s) => s.id);
@@ -334,11 +334,6 @@ describe('F2P route audit: the 28-slot bag', () => {
     expect(tight.slots.over).toBeGreaterThan(0);
     expect(slotsText(tight)).toMatch(/will not all fit/);
   });
-
-  it('a training step is not warned about gathered logs or ore: they are dropped or banked as they come', () => {
-    const plan = planWithBag('S1-08', {}, 20);
-    expect(plan.slots.over).toBe(0);
-  });
 });
 
 describe('F2P route audit: where things come from and when the plan says so', () => {
@@ -360,14 +355,9 @@ describe('F2P route audit: where things come from and when the plan says so', ()
     expect(bad).toEqual([]);
   });
 
-  it('the whole-route shopping list has an origin for every line, and the bulk quest materials are bought in one place (S4-05)', () => {
+  it('the whole-route shopping list has an origin for every line', () => {
     const list = aggregateShopping(route);
     for (const l of list.required) expect(l.howToGet.trim().length, l.nameEn).toBeGreaterThanOrEqual(5);
-    const bulk = stepById.get('S4-05')!;
-    for (const name of ['Steel nails', 'Plank', 'Hammer', 'Unfired bowl', "Wizard's mind bomb", 'Silk', 'Lobster pot']) {
-      expect(bulk.itemsRequired!.some((i) => i.nameEn === name), `S4-05 buys ${name}`).toBe(true);
-    }
-    expect(bulk.type).toBe('gear');
   });
 
   const owned = (rows: Record<string, Partial<OwnedItem>>, bankSeen = true): OwnedState => {
@@ -383,8 +373,8 @@ describe('F2P route audit: where things come from and when the plan says so', ()
   };
 
   const ORACLE = ['Silk', 'Lobster pot', 'Unfired bowl', "Wizard's mind bomb"];
-  it('the Oracle items are bought at S4-05 (now), and are on the plan as soon as the player is within the window of S5-04 (S5-03: soon, S5-04: now), never later than that', () => {
-    const want: Record<string, string[]> = { 'S4-05': ['NOW'], 'S5-03': ['NOW', 'SOON'], 'S5-04': ['NOW'] };
+  it('the Oracle items are on the plan as soon as the player is within the window of S5-04 (S5-03: soon, S5-04: now), never later than that', () => {
+    const want: Record<string, string[]> = { 'S5-03': ['NOW', 'SOON'], 'S5-04': ['NOW'] };
     for (const [id, timings] of Object.entries(want)) {
       const plan = planFor(id, {});
       stats.plans++;
@@ -568,9 +558,10 @@ describe('F2P route audit: a player walks S2-12 to the finale', () => {
     }
   });
 
-  it('the Dragon Slayer I tables cover the whole finish: nine steps, each with a first line that has a place', () => {
-    for (let n = 1; n <= 9; n++) {
-      const id = `S5-0${n}`;
+  it('the Dragon Slayer I tables cover the whole finish: eight steps, each with a first line that has a place', () => {
+    const ids = allSteps.filter((s) => s.id.startsWith('S5-')).map((s) => s.id);
+    expect(ids).toHaveLength(8);
+    for (const id of ids) {
       const lines = flat(quests[id]).map((e) => e.line);
       expect(lines.some((l) => l.at), id).toBe(true);
     }

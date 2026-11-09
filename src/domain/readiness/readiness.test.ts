@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, items, allStages } from '../../data';
+import { allSteps, items } from '../../data';
 import { emptyProgress, withOwnedManual, withStep } from '../persistence/progress';
 import { contextOf, readinessOf, stepReadiness, type ReadinessInput } from './readiness';
 import { nearestBank } from '../travel/stepPlaces';
@@ -7,8 +7,9 @@ import { buildPlayerState } from '../player/playerState';
 import { validate } from '../../../scripts/check/validate';
 import type { Progress, Step } from '../../types';
 import { alternativesOf } from '../items/toolTiers';
+import { stepOrRetired } from '../../../tests/fixtures/retiredSteps';
 
-const step = (id: string) => allSteps.find((s) => s.id === id)!;
+const step = (id: string): Step => stepOrRetired(id);
 const done = (ids: string[], p: Progress = emptyProgress()) => ids.reduce((acc, id) => withStep(acc, id, 'done'), p);
 /** Everything before the step is closed — only its own requirements remain. */
 const before = (id: string) => done(allSteps.slice(0, allSteps.findIndex((s) => s.id === id)).map((s) => s.id));
@@ -126,7 +127,7 @@ describe('step readiness', () => {
     expect(coins(need, 0).status).toBe('READY');
     expect(coins(0, need).problems[0]).toMatchObject({ kind: 'coins', state: 'BANK' });
     expect(coins(0, 0).status).toBe('MISSING_MONEY');
-    expect(coins(0, 0).problems[0].action).toMatchObject({ kind: 'link', href: expect.stringMatching(/^#\/step\/S(1-13|3-06)$/) });
+    expect(coins(0, 0).problems[0].action).toMatchObject({ kind: 'link', href: '#/money' });
     expect(coins(0, null).unknown[0]).toMatchObject({ kind: 'coins', state: 'UNKNOWN' });
   });
 
@@ -144,7 +145,7 @@ describe('step readiness', () => {
   });
 
   it('check-data catches a mismatch of the requirements with the "Requirements" field and a quest not from the route', () => {
-    const route = { steps: allSteps, stages: allStages, items };
+    const route = { steps: allSteps, items };
     expect(validate(null, route).lines.some((l) => l.includes('✓ Step requirements'))).toBe(true);
     const broken = allSteps.map((s) => (s.id === 'S9-01' ? { ...s, requirements: [{ type: 'skill' as const, skill: 'crafting', min: 30 }] } : s));
     const r = validate(null, { ...route, steps: broken });

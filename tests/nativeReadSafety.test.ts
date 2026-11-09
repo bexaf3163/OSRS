@@ -54,15 +54,15 @@ describe('native saved-file read failures', () => {
     expect(() => exposed(reply).api.loadProgressFile()).toThrow();
   });
   it.each([false, true])('an unreadable native source pauses writes with a browser fallback present: %s', localExists => {
-    const raw = localExists ? JSON.stringify({ ...emptyProgress(), steps: { 'S2-01': 'done' }, notes: { 'S2-01': 'Keep me' } }) : null;
+    const raw = localExists ? JSON.stringify({ ...emptyProgress(), steps: { 'S2-02': 'done' }, notes: { 'S2-02': 'Keep me' } }) : null;
     const storage = { getItem: vi.fn(() => raw), setItem: vi.fn() };
     const { api } = exposed({ ok: false, error: 'READ_FAILED' });
     const restored = restoreProgress(storage, known, STORAGE_KEY, () => api.loadProgressFile());
     expect(restored.writable).toBe(false);
     expect(restored.preserved).toBe(false);
     expect(restored.warning).toContain('Automatic saving is paused');
-    expect(restored.progress.steps['S2-01']).toBe(localExists ? 'done' : undefined);
-    if (localExists) expect(restored.progress.notes['S2-01']).toBe('Keep me');
+    expect(restored.progress.steps['S2-02']).toBe(localExists ? 'done' : undefined);
+    if (localExists) expect(restored.progress.notes['S2-02']).toBe('Keep me');
     expect(storage.setItem).not.toHaveBeenCalled();
   });
 });

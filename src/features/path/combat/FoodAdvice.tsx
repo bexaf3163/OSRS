@@ -8,7 +8,6 @@ import { effectiveHeal } from '../../../domain/player/foodStock';
 import { estimateStepFights, fightLine, OTHER_METHOD } from '../../../domain/combat/fightEstimate';
 import { foeLabel } from '../../../domain/combat/combatEstimate';
 import { CombatPlan, useCombatPlan } from './CombatPlan';
-import { CombatRoute } from './CombatRoute';
 import { usePriceView } from '../../../state/hooks/usePriceView';
 
 export function FoodAdvice({ step }: { step: Step }) {
@@ -17,7 +16,7 @@ export function FoodAdvice({ step }: { step: Step }) {
   const prices = usePriceView(true);
   // A combat training step with the game linked: the food is planned for this player (trip, whole goal, what to buy) instead.
   const plan = useCombatPlan(step);
-  if (plan) return <><CombatRoute step={step} /><CombatPlan v={plan} /></>;
+  if (plan) return <CombatPlan v={plan} />;
   const keys = threatKeys(step);
   if (!keys.length) return null;
   const hp = stats?.hitpoints ?? progress.levels.hitpoints;

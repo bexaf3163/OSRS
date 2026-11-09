@@ -4,6 +4,7 @@ import { estimateFight, estimateStepFights, fightLine, stepFightFoes } from './f
 import { COMBAT_FOES } from './combatEstimate';
 import { gearById } from './gearAdvisor';
 import type { GearState } from '../../services/runeliteBridge';
+import { retiredStep } from '../../../tests/fixtures/retiredSteps';
 
 // Combat estimate group 7: the quest fights of the route, one fight each, with the player's real kit.
 const id = (n: string) => [...gearById.values()].find((p) => p.name === n)!.id;
@@ -67,7 +68,7 @@ describe('one quest fight with your kit', () => {
   });
 
   it('a training step is left to the training estimate; no game data, no estimate', () => {
-    expect(stepFightFoes(stepById.get('S3-08')!)).toEqual([]);
+    expect(stepFightFoes(retiredStep('S3-08')!)).toEqual([]);
     expect(estimateStepFights(stepById.get('S2-08')!, null, gearOf(IRON))).toEqual([]);
     expect(estimateStepFights(stepById.get('S2-08')!, { attack: 20, strength: 20, defence: 1, hitpoints: 20 }, null)).toEqual([]);
   });
@@ -88,6 +89,6 @@ describe('the opponents of a step (combat audit, 2.66.0)', () => {
     // A free version wins where there is one; the demon fought from the safespot is not estimated in melee.
     expect(stepFightFoes(stepById.get('S5-03')!).map((f) => [f.name, f.members])).toEqual([['Melzar the Mad', false]]);
     expect(stepFightNames(stepById.get('S3-04')!)).toEqual([]);
-    expect(stepFightNames(stepById.get('S4-03')!)).toEqual([]);
+    expect(stepFightNames(retiredStep('S4-03')!)).toEqual([]);
   });
 });

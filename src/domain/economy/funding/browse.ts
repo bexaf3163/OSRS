@@ -49,7 +49,7 @@ const UNKNOWN: [RegExp, (m: RegExpExecArray) => string][] = [
   [/^Quest points are not known$/, () => 'quest points unknown'],
   [/^Whether you own a suitable tool is not known/, () => 'tool unknown, open the bank'],
   [/^Your coins are not known$/, () => 'coins unknown'],
-  [/^Not personalised/, () => 'combat stats unknown'],
+  [/^Not personalised/, () => 'no combat model for your gear yet'],
 ];
 
 /** The one badge of a row: can do now, not confirmed (and what could not be checked), or locked (and what is missing). The details say it in full. */

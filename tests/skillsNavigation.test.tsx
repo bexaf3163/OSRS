@@ -1,14 +1,14 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
-import { allStages, allSteps } from '../src/data';
+import { allSteps } from '../src/data';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { SkillsPage } from '../src/features/skills/Skills';
 import { SkillDetailPage } from '../src/features/skills/SkillDetail';
 import { parseHash } from '../src/app/router';
 
 vi.mock('../src/state/store', () => ({ useStore: () => ({
-  mode: 'f2p', stages: allStages.slice(0, 6), steps: allSteps,
+  mode: 'f2p', steps: allSteps,
   progress: { ...emptyProgress(), levels: { attack: 30, strength: 21, defence: 10 } },
 }) }));
 const bridge = vi.hoisted(() => ({ state: 'offline', stats: null as Record<string, number> | null, xp: null }));

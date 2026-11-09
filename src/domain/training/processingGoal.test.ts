@@ -4,14 +4,14 @@ import { adviseTraining, trainingMethods, type PathLeg } from './trainingRouter'
 import { xpForLevel } from '../player/xp';
 import { emptyProgress } from '../persistence/progress';
 import { buildPlayerState } from '../player/playerState';
-import { stepById } from '../../data';
 import { methodToolNames, withTrainingMethod } from './methodStep';
-import { pickMethods } from './methodPick';
+import { pickTraining } from './methodPick';
 import { aggregateShopping } from '../prep/shopping';
 import { contextOf } from '../readiness/readiness';
 import { createReadinessEngine } from '../readiness/readinessEngine';
 import { buildNeed } from '../economy/funding/need';
 import type { PriceView } from '../market/quotes';
+import { retiredStep } from '../../../tests/fixtures/retiredSteps';
 
 const leg = (fromLevel: number, toLevel: number, xpa = 10): PathLeg => ({ fromLevel, toLevel,
   method: { ...trainingMethods.find(m => m.id === 'ck-meat')!, id: 'new-processing-method', xpa,
@@ -21,7 +21,7 @@ const prices: PriceView = { status: 'live', at: 1, idOf: () => undefined, limitO
   buy: () => ({ price: 1, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] }),
   sell: () => ({ price: 1, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] }) };
 const state = (cooking = 1, fishing = 35) => {
-  const base = stepById.get('S6-01')!;
+  const base = retiredStep('S6-01')!;
   return buildPlayerState({ mode: 'f2p', connected: true, stats: { cooking, fishing, hitpoints: 31, defence: 33 }, progress: emptyProgress(), questsDone: [],
     gear: { equipment: [], inventory: [], coins: 10000, bankCoins: 0 },
     owned: { bankSeen: true, items: new Map(methodToolNames(base).map(name => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: 0 }])) } });
@@ -75,8 +75,8 @@ describe('conditional full-goal processing supplies through the shared path', ()
     expect(st).toEqual(before);
   });
   it('route shopping includes the remaining Cooking goal while current preparation stays one bag', () => {
-    const base = stepById.get('S6-01')!, st = state();
-    const step = withTrainingMethod(base, pickMethods([base], st, 'f2p', 'chill', 'balanced', { prices })[base.id]);
+    const base = retiredStep('S6-01')!, st = state();
+    const step = withTrainingMethod(base, pickTraining(base, st, 'f2p', 'chill', 'balanced', { prices }).pick);
     expect(step.itemsRequired?.reduce((sum, n) => sum + Number(n.amount ?? 1), 0)).toBeLessThanOrEqual(28);
     expect(step.goalItemsRequired?.reduce((sum, n) => sum + Number(n.amount ?? 1), 0)).toBeGreaterThan(28);
     const now = aggregateShopping([step]).required.reduce((sum, n) => sum + n.count, 0);
@@ -85,8 +85,8 @@ describe('conditional full-goal processing supplies through the shared path', ()
     expect(step.inGame?.completionTrigger).toEqual(base.inGame?.completionTrigger);
   });
   it('keeps first-trip funding separate from the complete materials budget and leaves unread stock unknown', () => {
-    const base = stepById.get('S6-01')!, st = state();
-    const step = withTrainingMethod(base, pickMethods([base], st, 'f2p', 'chill', 'balanced', { prices })[base.id]);
+    const base = retiredStep('S6-01')!, st = state();
+    const step = withTrainingMethod(base, pickTraining(base, st, 'f2p', 'chill', 'balanced', { prices }).pick);
     const needFor = (player: typeof st) => {
       const engine = createReadinessEngine({ ...contextOf({ step, steps: [step], progress: emptyProgress(), mode: 'f2p', qp: 100, owned: player.owned, gear: null, stats: { cooking: 1, fishing: 35 } }), state: player });
       return buildNeed({ step, prep: engine.plan(step), prices, owned: player.owned, manual: {} });
@@ -101,9 +101,9 @@ describe('conditional full-goal processing supplies through the shared path', ()
   });
 
   it('does not label one current skill as all unresolved goals of a multi-skill step', () => {
-    const base = stepById.get('S6-01')!, st = state(1, 1);
+    const base = retiredStep('S6-01')!, st = state(1, 1);
     const changed = { ...base, followsMethod: 'cooking', inGame: { ...base.inGame!, completionTrigger: { type: 'SKILL_LEVEL' as const, levels: [{ skill: 'cooking', level: 35 }, { skill: 'fishing', level: 35 }] } } };
-    const step = withTrainingMethod(changed, pickMethods([changed], st, 'f2p', 'chill', 'balanced', { prices })[base.id]);
+    const step = withTrainingMethod(changed, pickTraining(changed, st, 'f2p', 'chill', 'balanced', { prices }).pick);
     expect(step.goalItemsRequired).toBeUndefined();
   });
 });

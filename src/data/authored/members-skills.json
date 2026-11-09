@@ -22,7 +22,7 @@
               "t": "ul",
               "items": [
                 {
-                  "text": "**The route:** 25 for The Grand Tree (S7-04), 40 and the first Graceful pieces (S8-03)."
+                  "text": "**Quests:** The Grand Tree needs 25."
                 },
                 {
                   "text": "**Running:** the higher your Agility, the faster energy recovers. That speeds up everything else: quests, farming runs, trips to the bank."
@@ -151,7 +151,7 @@
               "t": "ul",
               "items": [
                 {
-                  "text": "**The route:** the Fight Arena (S7-02) gives 2,175 Thieving XP, level 16 at once. The route does not ask you to train Thieving separately."
+                  "text": "**Quests:** Fight Arena gives 2,175 Thieving XP, level 16 at once."
                 },
                 {
                   "text": "**Fairytale II** in full requires Thieving 40 (the route has only the start, S9-03)."
@@ -252,7 +252,7 @@
               "t": "ul",
               "items": [
                 {
-                  "text": "**The route:** 18 for Animal Magnetism (S8-04 to S8-05). The quest itself gives another 1,000 XP."
+                  "text": "**Quests:** Animal Magnetism needs 18 and gives another 1,000 XP."
                 },
                 {
                   "text": "**Combat along the way:** a kill also gives ordinary Attack, Strength or Ranged XP."
@@ -396,7 +396,7 @@
                   "text": "**Why Slayer, if you can just hit monsters?** Some monsters cannot be hit at all without a task or the level. Besides, tasks give double XP: combat and Slayer."
                 },
                 {
-                  "text": "**Who to take tasks from for S8-04?** From Mazchna in Canifis: there are more monsters in the task, and more XP too. Turael's tasks are short but give little XP: to get to 18 you will need many tasks."
+                  "text": "**Who to take tasks from first?** From Mazchna in Canifis: there are more monsters in the task, and more XP too. Turael's tasks are short but give little XP: to get to 18 you will need many tasks."
                 },
                 {
                   "text": "**Expensive?** No: the items for the first tasks are cheap, and the main expense is food."
@@ -431,7 +431,7 @@
               "t": "ul",
               "items": [
                 {
-                  "text": "**The route:** Fairytale I (S9-02) gives 3,500 XP, level 17 at once."
+                  "text": "**Quests:** Fairytale I gives 3,500 XP, level 17 at once."
                 },
                 {
                   "text": "**Fairytale II** in full requires Farming 49 (the route has only the start, S9-03)."
@@ -855,7 +855,7 @@
                   "text": "**\"On the go\":** darts (Dart) and bolts are made in two clicks while you run an Agility course, do a quest or a farming run: XP at almost no cost in time."
                 },
                 {
-                  "text": "**The route:** Animal Magnetism (S8-05) gives 1,000 XP, level 9 at once."
+                  "text": "**Quests:** Animal Magnetism gives 1,000 XP, level 9 at once."
                 }
               ]
             }

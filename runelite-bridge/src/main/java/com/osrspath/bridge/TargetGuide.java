@@ -25,11 +25,6 @@ final class TargetGuide
 		List<String> steps;
 		/** Quest stages by a game variable: what to do and where to go right now. null means the step has no stages. */
 		Stage stage;
-		/**
-		 * The selected plan's phase (app 2.74.0): what it has the player do now, in a few words, and what comes after it. null for the route as written: the
-		 * stage, the pace or the step's own lines say what to do. An older app sends none.
-		 */
-		private Plan plan;
 
 		String problem()
 		{
@@ -40,10 +35,6 @@ final class TargetGuide
 				{
 					return bad;
 				}
-			}
-			if (plan != null && (plan.now != null && plan.now.length() > MAX_WHERE || plan.next != null && plan.next.length() > MAX_WHERE))
-			{
-				return "invalid plan phase";
 			}
 			for (List<?> list : new List<?>[]{items, places, steps})
 			{
@@ -79,14 +70,6 @@ final class TargetGuide
 			}
 			return null;
 		}
-	}
-
-	/** The selected plan's current phase in a few words and the next one in a sentence (the cows plan: "Train Attack to 40", then the Hill Giants). */
-	@Data
-	public static class Plan
-	{
-		private String now;
-		private String next;
 	}
 
 	// The side panel, the selected plan's phase and the guide's items, places and checklist, as the app sends them.

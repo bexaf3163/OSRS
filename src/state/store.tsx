@@ -1,8 +1,8 @@
 // The progress state: one source for the whole app, saving (localStorage + a file in the desktop app), undo.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import type { GameMode, Progress, Stage, Step, StepStatus } from '../types';
-import { BASE_QP, known, maxQpFor, stagesFor, stepById, stepsFor } from '../data';
+import type { GameMode, Progress, Step, StepStatus } from '../types';
+import { BASE_QP, known, maxQpFor, stepById, stepsFor } from '../data';
 import {
   emptyProgress, gameModeOf, STORAGE_KEY,
   withGameMode, withLevel, withLevels, withNote, withReactivated, withReviewed, withStep, withUpgradeDismissed, withOwnedManual, withSellRestrictions, withTaskDone,
@@ -12,10 +12,7 @@ import { readProfiles } from './profiles';
 import { questPoints } from '../domain/quests/qp';
 import { desktop } from '../services/desktop';
 import { readProgressText, restoreProgress, type RestoredProgress } from '../domain/persistence/progressStorage';
-import { samePicks } from '../domain/training/methodPick';
-import { withTrainingMethod, type TrainingPick } from '../domain/training/methodStep';
 import { sameFoodPicks, withFoodPlan, type FoodPick } from '../domain/combat/foodPlan';
-import { samePicks as sameCombatPicks, withCombatPlan, type CombatPick } from '../domain/combat/route/pick';
 import { persistProgress } from '../domain/persistence/persistProgress';
 
 export interface Toast {
@@ -28,9 +25,8 @@ interface StoreValue {
   progress: Progress;
   persistenceWarning: string | null;
   mode: GameMode;
-  /** The steps and stages visible in the current mode. */
+  /** The steps visible in the current mode. */
   steps: Step[];
-  stages: Stage[];
   qp: number;
   maxQp: number;
   /** message — a custom caption in the message at the bottom (for example, "done in the game"). */
@@ -44,12 +40,8 @@ interface StoreValue {
   setSellRestrictions: (value: 'lifted' | 'active' | null) => void;
   /** Ticks or unticks a step's task that has no game check (key "<stepId>:<taskId>"). */
   setTaskDone: (key: string, done: boolean) => void;
-  /** The training method each skill step that follows one is on now (step id -> method id): set by the provider that owns the player state. */
-  setMethodPicks: (picks: Record<string, TrainingPick>) => void;
   /** The food of combat training steps from this player's estimate (lib/foodPlan.ts): one trip for readiness, the whole goal for shopping. */
   setFoodPicks: (picks: Record<string, FoodPick>) => void;
-  /** The combat plans the player adopted, in the phase they are in now (lib/combatRoute/pick.ts): the step is fought where and against what the plan says. */
-  setCombatPicks: (picks: Record<string, CombatPick>) => void;
   review: (ids: string[]) => void;
   reactivate: (ids: string[]) => void;
   /** "✕ Skip" the upgrade hint on a step (dismissed=false — bring it back). */
@@ -230,30 +222,23 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const notify = useCallback((message: string) => show(message), [show]);
 
   const mode = gameModeOf(progress);
-  const [methodPicks, setPicks] = useState<Record<string, TrainingPick>>({});
-  const setMethodPicks = useCallback((p: Record<string, TrainingPick>) => setPicks((prev) => (samePicks(prev, p) ? prev : p)), []);
   const [foodPicks, setFood] = useState<Record<string, FoodPick>>({});
   const setFoodPicks = useCallback((p: Record<string, FoodPick>) => setFood((prev) => (sameFoodPicks(prev, p) ? prev : p)), []);
-  const [combatPicks, setCombat] = useState<Record<string, CombatPick>>({});
-  const setCombatPicks = useCallback((p: Record<string, CombatPick>) => setCombat((prev) => (sameCombatPicks(prev, p) ? prev : p)), []);
   const baseSteps = useMemo(() => stepsFor(mode), [mode]);
-  // A step that follows a training method asks for that method's tools and place; a combat training step with an estimate asks for one trip of
-  // food and the shopping list buys its whole goal; every other step is the same object as in the data.
-  // An adopted combat plan first (it decides the opponent and the place), then the method and the food that follow from it.
+  // A combat step with an estimate asks for one trip of food, and the shopping list buys its whole goal.
   const steps = useMemo(
-    () => baseSteps.map((s) => withFoodPlan(withTrainingMethod(withCombatPlan(s, combatPicks[s.id]), methodPicks[s.id]), foodPicks[s.id])),
-    [baseSteps, combatPicks, methodPicks, foodPicks],
+    () => baseSteps.map((s) => withFoodPlan(s, foodPicks[s.id])),
+    [baseSteps, foodPicks],
   );
-  const stages = useMemo(() => stagesFor(mode), [mode]);
   const qp = useMemo(() => questPoints(steps, progress, BASE_QP), [steps, progress]);
   const maxQp = useMemo(() => maxQpFor(mode), [mode]);
 
   const value = useMemo<StoreValue>(
     () => ({
-      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, setCombatPicks, review, reactivate, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
+      progress, mode, steps, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setFoodPicks, review, reactivate, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
       toast, notify, undo, dismissToast, persistenceWarning,
     }),
-    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, setCombatPicks, review, reactivate, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
+    [progress, mode, steps, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setFoodPicks, review, reactivate, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
       toast, notify, undo, dismissToast, persistenceWarning],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

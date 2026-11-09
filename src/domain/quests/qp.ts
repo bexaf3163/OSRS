@@ -15,8 +15,3 @@ export function questPoints(steps: Step[], p: Progress, base: number): number {
 export function reachableQuestPoints(steps: Step[], p: Progress, base: number): number {
   return steps.reduce((sum, s) => sum + (p.steps[s.id] === 'skipped' ? 0 : s.qp ?? 0), base);
 }
-
-/** The points by the end of a stage per the plan, minus skipped steps up to and including it. */
-export function stageQuestPoints(steps: Step[], stage: number, base: number, p?: Progress): number {
-  return steps.reduce((sum, s) => sum + (s.stage <= stage && p?.steps[s.id] !== 'skipped' ? s.qp ?? 0 : 0), base);
-}

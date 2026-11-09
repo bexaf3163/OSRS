@@ -1,81 +1,5 @@
 [
   {
-    "id": "S1-01",
-    "stage": 1,
-    "type": "prep",
-    "title": "Set up the RuneLite client",
-    "requires": [],
-    "where": "The RuneLite client, launched through the Jagex Launcher.",
-    "how": "Enable the Quest Helper, Ground Items, Item Prices, Idle Notifier and GPU (or 117 HD) plugins. Turn on two-factor authentication (2FA) on your Jagex Account right away: without it Stronghold of Security (step S1-09) will not hand out the 10,000 coins.",
-    "fields": [
-      {
-        "label": "Starting money",
-        "text": "After Tutorial Island your starting coins are limited. Stronghold of Security offers 10,000 coins; use Money for other eligible methods. Check Preparation before spending, and do not count unsold cowhides as cash."
-      }
-    ],
-    "doneWhen": "The Quest Helper panel is visible in the right-hand tab of the client and two-factor authentication is on."
-  },
-  {
-    "id": "S1-02",
-    "stage": 1,
-    "type": "prep",
-    "title": "Sort out your inventory at the Lumbridge bank",
-    "requires": [],
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3208,3219,2",
-    "mapLocation": {
-      "x": 3208,
-      "y": 3219,
-      "plane": 2,
-      "label": "Lumbridge Castle bank (top floor)"
-    },
-    "floor": "2nd floor",
-    "where": "The Lumbridge Castle bank, on the top floor of the castle.",
-    "how": "Keep only an axe, a pickaxe, a net and a tinderbox in your inventory; put everything else in the bank.",
-    "itemsRequired": [
-      {
-        "nameEn": "Bronze axe",
-        "amount": 1,
-        "howToGet": "Given on Tutorial Island. If you lost it, buy one from Bob's Brilliant Axes in south Lumbridge for 16 gp or pick one up near Farmer Fred's house.",
-        "from": "Bob",
-        "wikiItemId": 1351,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
-      },
-      {
-        "nameEn": "Bronze pickaxe",
-        "amount": 1,
-        "howToGet": "Given on Tutorial Island. If you lost it, buy one from Bob's Brilliant Axes in Lumbridge for 1 gp.",
-        "from": "Bob",
-        "wikiItemId": 1265,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
-      },
-      {
-        "nameEn": "Small fishing net",
-        "amount": 1,
-        "howToGet": "Given on Tutorial Island. If you lost it, there is one beside the Fishing tutor in Lumbridge Swamp (it respawns), or buy one from Gerrant in Port Sarim for 5 gp.",
-        "from": "Fishing tutor",
-        "wikiItemId": 303,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
-      },
-      {
-        "nameEn": "Tinderbox",
-        "amount": 1,
-        "howToGet": "Given on Tutorial Island. If you lost it, buy one in the Lumbridge General Store (north-east of the castle) for 1 gp.",
-        "from": "Lumbridge General Store",
-        "wikiItemId": 590,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
-      }
-    ],
-    "doneWhen": "Your inventory is free for quests and gathering.",
-    "inGame": {
-      "highlightItems": [
-        "Bronze axe",
-        "Bronze pickaxe",
-        "Small fishing net",
-        "Tinderbox"
-      ]
-    }
-  },
-  {
     "id": "S1-03",
     "stage": 1,
     "type": "quest",
@@ -612,126 +536,6 @@
     ]
   },
   {
-    "id": "S1-08",
-    "stage": 1,
-    "type": "skill",
-    "title": "Woodcutting to 15 and Firemaking to 15",
-    "requires": [],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Canoe",
-    "mapLocation": {
-      "x": 3190,
-      "y": 3222,
-      "plane": 0,
-      "label": "The trees behind the castle's west wall"
-    },
-    "resourceSpots": [
-      {
-        "x": 3190,
-        "y": 3222,
-        "plane": 0,
-        "label": "The trees behind the castle's west wall",
-        "note": "Ordinary trees (Tree) 15-20 tiles west of the castle gate. Use only them up to Woodcutting 15; oaks (Oak) start at 15."
-      },
-      {
-        "x": 3241,
-        "y": 3235,
-        "plane": 0,
-        "label": "The canoe station on the River Lum",
-        "note": "The east bank of the River Lum, about 10 tiles north of the bridge by the castle. You need an axe: in the bag, in your hands or handed to Barfy Bill (Store-axe)."
-      }
-    ],
-    "pacing": {
-      "skill": "woodcutting",
-      "targetLevel": 15,
-      "targetExp": 2411,
-      "actionName": "log|logs",
-      "expPerAction": 25
-    },
-    "floor": "Ground floor",
-    "where": "Ordinary trees (Tree) right behind the west wall of Lumbridge Castle: leave the castle gate to the west and walk 15-20 tiles to the grove. Chop and burn the logs right away; no bank is needed.",
-    "itemsRequired": [
-      {
-        "nameEn": "Bronze axe",
-        "amount": 1,
-        "howToGet": "Given on Tutorial Island. If you lost it, buy one from Bob's Brilliant Axes in south Lumbridge for 16 gp.",
-        "from": "Bob",
-        "wikiItemId": 1351,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
-      },
-      {
-        "nameEn": "Tinderbox",
-        "amount": 1,
-        "howToGet": "Given on Tutorial Island. If you lost it, buy one in the Lumbridge General Store for 1 gp.",
-        "from": "Lumbridge General Store",
-        "wikiItemId": 590,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
-      }
-    ],
-    "fields": [
-      {
-        "label": "Canoe",
-        "text": "Your Woodcutting level decides how many stops you can paddle: 12 - one (Lumbridge to Champions' Guild), 27 - two (to Barbarian Village), 42 - three (to Edgeville). River stops: Lumbridge, Champions' Guild, Barbarian Village, Edgeville. A canoe disappears after the trip, so you chop a new one for every trip. How to travel step by step is in the reference [Teleports, canoes and boats](#/reference/transport)."
-      },
-      {
-        "label": "Faster",
-        "text": "Up to 15, chop ordinary trees (Tree) by the castle and burn the logs at once with the tinderbox. From level 15 move on to oaks (Oak)."
-      },
-      {
-        "label": "Keep",
-        "text": "1 Ashes in the bank for Prince Ali Rescue. Ashes stay on the ground when a fire burns out."
-      }
-    ],
-    "doneWhen": "Woodcutting 15, Firemaking 15 and 1 Ashes in the bank (for S2-10).",
-    "quickSteps": [
-      "Leave Lumbridge Castle by the west gate and chop ordinary trees (Tree) in the grove behind the wall.",
-      "Burn every log at once: use the tinderbox (Tinderbox) on the logs (Logs). Move along the row of trees: you cannot light a new fire on the spot of an old one.",
-      "Pick up 1 Ashes after a fire and put it in the bank: it is needed for the paste in Prince Ali Rescue (S2-10).",
-      "From Woodcutting 15 switch to oaks (Oak) in the same place, and from Firemaking 15 burn oak logs.",
-      "From Woodcutting 12 try the canoe: the station is on the east bank of the River Lum, about 10 tiles north of the bridge by the castle. \"Chop-down\" fells the tree, \"Shape-Canoe\" picks the Log canoe, \"Float Log\" launches it, \"Paddle Log\" chooses the stop."
-    ],
-    "inGame": {
-      "worldPoint": {
-        "x": 3190,
-        "y": 3222,
-        "plane": 0,
-        "label": "The trees behind the castle's west wall"
-      },
-      "objectNames": [
-        "Tree",
-        "Oak tree",
-        "Canoe Station"
-      ],
-      "highlightItems": [
-        "Bronze axe",
-        "Tinderbox",
-        "Logs",
-        "Ashes"
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "woodcutting",
-            "level": 15
-          },
-          {
-            "skill": "firemaking",
-            "level": 15
-          }
-        ]
-      }
-    },
-    "carryover": [
-      {
-        "item": "Ashes",
-        "count": 1,
-        "forStep": "S2-10",
-        "where": "bank",
-        "why": "Prince Ali Rescue needs ashes for the wig dye."
-      }
-    ]
-  },
-  {
     "id": "S1-09",
     "stage": 1,
     "type": "prep",
@@ -895,602 +699,12 @@
     ]
   },
   {
-    "id": "S1-10",
-    "stage": 1,
-    "type": "prep",
-    "title": "Buy the Chronicle book in Draynor Village",
-    "requires": [],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Chronicle",
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3082,3248,0",
-    "mapLocation": {
-      "x": 3082,
-      "y": 3248,
-      "plane": 0,
-      "label": "The Draynor Village market square (Diango)"
-    },
-    "npc": {
-      "nameEn": "Diango",
-      "location": "The Draynor Village market square",
-      "floor": "Ground floor",
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Diango"
-    },
-    "itemsRequired": [
-      {
-        "nameEn": "Chronicle",
-        "amount": 1,
-        "howToGet": "Buy one from Diango (the toy shop in the Draynor Village market) for 300 gp.",
-        "from": "Diango",
-        "wikiItemId": 13660,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Chronicle.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Teleport card",
-        "amount": 10,
-        "howToGet": "Buy from Diango from 150 gp each and use them on the book: it holds up to 1,000 charges.",
-        "from": "Diango",
-        "wikiItemId": 13658,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Teleport_card.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Coins",
-        "amount": 1800,
-        "howToGet": "The book 300 and ten cards from 150 each (Diango's price rises when you buy many at once). The money comes from Stronghold of Security (S1-09).",
-        "wikiItemId": 995,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
-      }
-    ],
-    "fields": [
-      {
-        "label": "Why",
-        "text": "The book takes you to Champions' Guild at the south edge of Varrock in a couple of seconds, from where the Grand Exchange is a couple of minutes' walk. The main fast F2P transport until Varrock Teleport (Magic 25)."
-      },
-      {
-        "label": "Budget",
-        "text": "The book costs 300 gp; cards start at 150 gp each, and Diango's price rises if you buy many at once. Buy only the charges you need and check the actual shop total. Stronghold of Security (S1-09) provides the initial funds."
-      }
-    ],
-    "doneWhen": "The Chronicle is charged with 10 cards and is in your inventory.",
-    "quickSteps": [
-      "Go to the Draynor Village market and find Diango: right-click him, Trade.",
-      "Buy the Chronicle book (300 gp) and 10 Teleport cards (from 150 gp).",
-      "Charge the book: pick a card (Use) and click the book. All the cards in your bag are used: 10 cards give 10 teleports.",
-      "To teleport, right-click the book, Teleport. A plain click does not teleport; it wields the book in the shield slot.",
-      "To see how many charges are left, right-click, Check charges. When the book is better and when a canoe or Varrock Teleport is, see the reference [Teleports, canoes and boats](#/reference/transport)."
-    ],
-    "inGame": {
-      "npcNames": [
-        "Diango"
-      ],
-      "highlightItems": [
-        "Chronicle",
-        "Teleport card"
-      ]
-    },
-    "useOn": [
-      {
-        "item": "Teleport card",
-        "target": "Chronicle",
-        "kind": "item"
-      }
-    ]
-  },
-  {
-    "id": "S1-12",
-    "stage": 1,
-    "type": "skill",
-    "title": "Mining to 10",
-    "requires": [],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Free-to-play_Mining_training",
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3286,3365,0",
-    "mapLocation": {
-      "x": 3286,
-      "y": 3365,
-      "plane": 0,
-      "label": "The mine south-east of Varrock"
-    },
-    "floor": "Ground floor",
-    "where": "The mine south-east of Varrock (South-east Varrock mine): copper, tin and iron in one place, the Varrock East bank is about 60 tiles north-west. From the Chronicle book (Champions' Guild) it is about 1 minute on foot to the east. On the way keep south of the stone circle with the dark wizards (Dark wizard): they attack on their own and hit beginners hard.",
-    "how": "Up to 10 mine copper (Copper) and tin (Tin) and drop the extra (Shift + click).",
-    "itemsRequired": [
-      {
-        "nameEn": "Bronze pickaxe",
-        "amount": 1,
-        "howToGet": "Given on Tutorial Island. A better pickaxe (Steel pickaxe) mines faster.",
-        "from": "Bob",
-        "wikiItemId": 1265,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
-      }
-    ],
-    "fields": [
-      {
-        "label": "Why",
-        "text": "The Knight's Sword (S2-07) requires Mining 10. The ore for Doric's Quest is bought in S2-01, so no iron is mined here."
-      },
-      {
-        "label": "Put in the bank",
-        "text": "1 copper and 1 tin ore to smelt a bronze bar for Prince Ali Rescue."
-      }
-    ],
-    "doneWhen": "Mining 10, with 1 copper ore and 1 tin ore in the bank (for S2-10).",
-    "pacing": {
-      "skill": "mining",
-      "targetLevel": 10,
-      "targetExp": 1154,
-      "actionName": "ore",
-      "expPerAction": 17.5
-    },
-    "inGame": {
-      "objectNames": [
-        "Copper rocks",
-        "Tin rocks",
-        "Iron rocks"
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "mining",
-            "level": 10
-          }
-        ]
-      }
-    },
-    "carryover": [
-      {
-        "item": "Copper ore",
-        "count": 1,
-        "forStep": "S2-10",
-        "where": "bank",
-        "why": "Smelted with a tin ore into the Bronze bar of Prince Ali Rescue."
-      },
-      {
-        "item": "Tin ore",
-        "count": 1,
-        "forStep": "S2-10",
-        "where": "bank",
-        "why": "Smelted with a copper ore into the Bronze bar of Prince Ali Rescue."
-      }
-    ]
-  },
-  {
-    "id": "S1-13",
-    "stage": 1,
-    "type": "prep",
-    "title": "Money for the shopping: cowhides",
-    "requires": [],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Cowhide",
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3257,3272,0",
-    "mapLocation": {
-      "x": 3257,
-      "y": 3272,
-      "plane": 0,
-      "label": "The cow field east of Lumbridge"
-    },
-    "floor": "Ground floor",
-    "foes": [
-      "Cow"
-    ],
-    "where": "The cow field north-east of Lumbridge Castle, across the river (Lumbridge cow field).",
-    "how": "Kill cows (level 2) and pick up the hides (Cowhide). A full inventory is 28 hides. The bank is in Lumbridge Castle (2nd floor), or sell straight on the Grand Exchange.",
-    "fields": [
-      {
-        "label": "How much you need",
-        "text": "Use Shopping to price the required S2-01 materials from current quotes and confirmed ownership. Keep quest essentials ahead of optional upgrades. If coins are short, use Money; do not assume cowhides or Magic training will cover purchases before an eligible sale completes."
-      },
-      {
-        "label": "Price",
-        "text": "Use Money for current hide and leather sale estimates. After Prince Ali Rescue, Ellis in Al Kharid tans cowhides for 1 gp each. Compare the net proceeds after tanning and travel before choosing."
-      },
-      {
-        "label": "Bonus",
-        "text": "Attack, Strength and Defence rise as well, and cows drop bones: bury them for Prayer."
-      },
-      {
-        "label": "New account",
-        "text": "A new free-to-play account cannot sell cowhides or leather on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100. Do not count unsold hides as coins. Check Shopping for the current required cost and Money for eligible funding; keep optional upgrades behind quest essentials."
-      }
-    ],
-    "doneWhen": "12,000+ coins in the bag or the bank (together with what is left from Stronghold). Unsold hides are not coins.",
-    "moneyGoal": 12000,
-    "inGame": {
-      "npcNames": [
-        "Cow"
-      ],
-      "highlightItems": [
-        "Cowhide"
-      ],
-      "completionTrigger": {
-        "type": "ITEM_OWNED",
-        "items": [
-          {
-            "names": [
-              "Coins"
-            ],
-            "count": 12000
-          }
-        ]
-      }
-    },
-    "sells": [
-      "Cowhide",
-      "Leather"
-    ],
-    "moneyGoalNoSale": 8000
-  },
-  {
-    "id": "S2-01",
-    "stage": 2,
-    "type": "gear",
-    "title": "Big shopping on the Grand Exchange",
-    "requires": [],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Grand_Exchange",
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3164,3487,0",
-    "mapLocation": {
-      "x": 3164,
-      "y": 3487,
-      "plane": 0,
-      "label": "The Grand Exchange"
-    },
-    "how": "Teleport with the Chronicle book (right-click the book, Teleport) to Champions' Guild and go north to the Grand Exchange, away from the stone circle of dark wizards to the north-east. Sell the hides first, then buy. Check the current GE estimates in Shopping before placing offers; execution prices can differ.",
-    "itemsRequired": [
-      {
-        "nameEn": "Red bead",
-        "amount": 1,
-        "howToGet": "For Imp Catcher.",
-        "wikiItemId": 1470,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Red_bead.png",
-        "inStep": true,
-        "gp": 2000,
-        "tier": 2
-      },
-      {
-        "nameEn": "Yellow bead",
-        "amount": 1,
-        "howToGet": "For Imp Catcher.",
-        "wikiItemId": 1472,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_bead.png",
-        "inStep": true,
-        "gp": 900,
-        "tier": 2
-      },
-      {
-        "nameEn": "Black bead",
-        "amount": 1,
-        "howToGet": "For Imp Catcher.",
-        "wikiItemId": 1474,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Black_bead.png",
-        "inStep": true,
-        "gp": 1200,
-        "tier": 2
-      },
-      {
-        "nameEn": "White bead",
-        "amount": 1,
-        "howToGet": "For Imp Catcher.",
-        "wikiItemId": 1476,
-        "iconUrl": "https://oldschool.runescape.wiki/images/White_bead.png",
-        "inStep": true,
-        "gp": 1150,
-        "tier": 2
-      },
-      {
-        "nameEn": "Amulet of strength",
-        "amount": 1,
-        "howToGet": "+10 Strength bonus; its value depends on your current max-hit breakpoint. Compare Gear for the current fight.",
-        "wikiItemId": 1725,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_strength.png",
-        "inStep": true,
-        "gp": 1350,
-        "tier": 3
-      },
-      {
-        "nameEn": "Iron scimitar",
-        "amount": 1,
-        "howToGet": "Can be worn at once.",
-        "wikiItemId": 1323,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_scimitar.png",
-        "inStep": true,
-        "gp": 60,
-        "tier": 2
-      },
-      {
-        "nameEn": "Steel scimitar",
-        "amount": 1,
-        "howToGet": "Wear it from Attack 5.",
-        "wikiItemId": 1325,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_scimitar.png",
-        "inStep": true,
-        "gp": 100,
-        "tier": 2
-      },
-      {
-        "nameEn": "Mithril scimitar",
-        "amount": 1,
-        "howToGet": "Wear it from Attack 20, after Vampyre Slayer.",
-        "wikiItemId": 1329,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_scimitar.png",
-        "inStep": true,
-        "gp": 400,
-        "tier": 3
-      },
-      {
-        "nameEn": "Energy potion(4)",
-        "amount": 5,
-        "howToGet": "Restores run energy during quests.",
-        "wikiItemId": 3008,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png",
-        "inStep": true,
-        "gp": 170,
-        "tier": 3
-      },
-      {
-        "nameEn": "Redberry pie",
-        "amount": 1,
-        "howToGet": "For The Knight's Sword.",
-        "wikiItemId": 2325,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Redberry_pie.png",
-        "inStep": true,
-        "gp": 70,
-        "tier": 1
-      },
-      {
-        "nameEn": "Iron bar",
-        "amount": 2,
-        "howToGet": "For The Knight's Sword.",
-        "wikiItemId": 2351,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_bar.png",
-        "inStep": true,
-        "gp": 200,
-        "tier": 1
-      },
-      {
-        "nameEn": "Clay",
-        "amount": 7,
-        "howToGet": "6 for Doric's Quest, 1 to soak in water for Prince Ali Rescue.",
-        "wikiItemId": 434,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Clay.png",
-        "inStep": true,
-        "gp": 80,
-        "tier": 1
-      },
-      {
-        "inStep": true,
-        "nameEn": "Copper ore",
-        "amount": 4,
-        "howToGet": "For Doric's Quest.",
-        "wikiItemId": 436,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Copper_ore.png",
-        "gp": 30,
-        "tier": 1
-      },
-      {
-        "inStep": true,
-        "nameEn": "Iron ore",
-        "amount": 2,
-        "howToGet": "For Doric's Quest.",
-        "wikiItemId": 440,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_ore.png",
-        "gp": 70,
-        "tier": 1
-      },
-      {
-        "nameEn": "Redberries",
-        "amount": 1,
-        "howToGet": "For the paste in Prince Ali Rescue.",
-        "wikiItemId": 1951,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Redberries.png",
-        "inStep": true,
-        "gp": 50,
-        "tier": 1
-      },
-      {
-        "nameEn": "Yellow dye",
-        "amount": 2,
-        "howToGet": "One for the wig in Prince Ali Rescue, the other for the orange dye in Goblin Diplomacy.",
-        "wikiItemId": 1765,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_dye.png",
-        "inStep": true,
-        "gp": 230,
-        "tier": 1
-      },
-      {
-        "nameEn": "Red dye",
-        "amount": 1,
-        "howToGet": "Mix with yellow to make orange for Goblin Diplomacy.",
-        "wikiItemId": 1763,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Red_dye.png",
-        "inStep": true,
-        "gp": 290,
-        "tier": 1
-      },
-      {
-        "nameEn": "Blue dye",
-        "amount": 1,
-        "howToGet": "For Goblin Diplomacy.",
-        "wikiItemId": 1767,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Blue_dye.png",
-        "inStep": true,
-        "gp": 290,
-        "tier": 1
-      },
-      {
-        "nameEn": "Pink skirt",
-        "amount": 1,
-        "howToGet": "For Prince Ali Rescue. Cheapest from Thessalia in Varrock for 2 gp.",
-        "from": "Thessalia",
-        "wikiItemId": 1013,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Pink_skirt.png",
-        "inStep": true,
-        "gp": 2,
-        "tier": 1
-      }
-    ],
-    "fields": [
-      {
-        "label": "Budget",
-        "text": "Use the current Shopping total for missing supplies; it changes with prices and confirmed stock. To save, the pink skirt is sold by Thessalia in Varrock for 2 gp. Compare making dyes at Aggie with buying them; preserve coins for quest essentials before optional gear or potions."
-      },
-      {
-        "label": "New account",
-        "text": "A new free-to-play account cannot sell cowhides (or leather, iron ore, clay, copper or tin ore, coal, steel bars, oak or yew logs, lobsters, ashes, feathers, the low runes and a few more) on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100; buying is not restricted. Without selling, buy in this order: the quest materials, then the Imp Catcher beads and the iron and steel scimitars, then, as coins allow, the mithril scimitar, the amulet of strength and the energy potions. Do not skip the first two groups for the third."
-      }
-    ],
-    "doneWhen": "All the items are bought and are in your Grand Exchange bank.",
-    "updatedInV2": true,
-    "v2ChangesSummary": "V2 expands the shopping list: Amulet of strength, Energy potion, Redberry pie, scimitars, iron bars, dyes and clay. Check your bank!",
-    "branches": [
-      {
-        "id": "chronicle",
-        "label": "Teleport with the Chronicle book",
-        "condition": {
-          "type": "ITEM_OWNED",
-          "itemName": "Chronicle"
-        },
-        "replacementText": "Right-click the Chronicle book, Teleport (uses 1 charge): you arrive at Champions' Guild, and from there walk north through Varrock to the Exchange. Avoid the stone circle with the dark wizards to the north-east.",
-        "replacementTarget": {
-          "x": 3201,
-          "y": 3355,
-          "plane": 0,
-          "label": "The Champions' Guild exit (Chronicle)"
-        }
-      }
-    ],
-    "inGame": {
-      "completionTrigger": {
-        "type": "ITEM_OWNED",
-        "items": [
-          {
-            "names": [
-              "Red bead"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Yellow bead"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Black bead"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "White bead"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Amulet of strength"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Iron scimitar"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Steel scimitar"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Mithril scimitar"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Energy potion(4)"
-            ],
-            "count": 5
-          },
-          {
-            "names": [
-              "Redberry pie"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Iron bar"
-            ],
-            "count": 2
-          },
-          {
-            "names": [
-              "Clay"
-            ],
-            "count": 7
-          },
-          {
-            "names": [
-              "Copper ore"
-            ],
-            "count": 4
-          },
-          {
-            "names": [
-              "Iron ore"
-            ],
-            "count": 2
-          },
-          {
-            "names": [
-              "Redberries"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Yellow dye"
-            ],
-            "count": 2
-          },
-          {
-            "names": [
-              "Red dye"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Blue dye"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Pink skirt"
-            ],
-            "count": 1
-          }
-        ]
-      }
-    },
-    "sells": [
-      "Cowhide"
-    ]
-  },
-  {
     "id": "S2-02",
     "stage": 2,
     "type": "quest",
     "title": "Imp Catcher",
     "qp": 1,
-    "requires": [
-      "S2-01"
-    ],
+    "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Imp_Catcher",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Imp_Catcher/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3103,3163,2",
@@ -1510,28 +724,28 @@
       {
         "nameEn": "Red bead",
         "amount": 1,
-        "howToGet": "From step S2-01.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 1470,
         "iconUrl": "https://oldschool.runescape.wiki/images/Red_bead.png"
       },
       {
         "nameEn": "Yellow bead",
         "amount": 1,
-        "howToGet": "From step S2-01.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 1472,
         "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_bead.png"
       },
       {
         "nameEn": "Black bead",
         "amount": 1,
-        "howToGet": "From step S2-01.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 1474,
         "iconUrl": "https://oldschool.runescape.wiki/images/Black_bead.png"
       },
       {
         "nameEn": "White bead",
         "amount": 1,
-        "howToGet": "From step S2-01.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 1476,
         "iconUrl": "https://oldschool.runescape.wiki/images/White_bead.png"
       }
@@ -1692,156 +906,6 @@
         "target": "Fireplace"
       }
     ]
-  },
-  {
-    "id": "S2-04",
-    "stage": 2,
-    "type": "skill",
-    "title": "Magic to 25 (Varrock Teleport)",
-    "requires": [],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Varrock_Teleport",
-    "how": "After Imp Catcher (875 XP) and Witch's Potion (325) you have Magic 10 without a single spell. After that, cast combat strike spells on the cows in Lumbridge: a cow has 8 health and every one drops a hide, so hides can be collected alongside the XP; selling them is a separate step that may be restricted. Spells of the same tier hit equally hard and equally accurately; they differ in XP and runes: Wind Strike (Magic 1) 5.5 XP, Water Strike (5) 7.5, Earth Strike (9) 9.5, Fire Strike (13) 11.5. The XP goes to both Magic and Hitpoints.",
-    "itemsRecommended": [
-      {
-        "nameEn": "Staff of fire",
-        "amount": 1,
-        "howToGet": "Instead of an ordinary Staff: it replaces the fire runes for Fire Strike (3 runes per cast). Compare Zaff's shop with the current GE estimate. Check the payback calculation for your planned casts; do not buy it again if you already own one.",
-        "wikiItemId": 1387,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
-      },
-      {
-        "nameEn": "Earth rune",
-        "amount": "100+",
-        "howToGet": "Earth Strike (Magic 9-12) uses 2 earth runes per cast. If you go straight to Fire Strike you do not need it.",
-        "wikiItemId": 557,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Earth_rune.png"
-      },
-      {
-        "nameEn": "Fire rune",
-        "amount": "300+",
-        "howToGet": "Fire Strike (from Magic 13) uses 3 fire runes per cast, unless you have a Staff of fire.",
-        "wikiItemId": 554,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Fire_rune.png"
-      },
-      {
-        "nameEn": "Law rune",
-        "amount": "10+",
-        "howToGet": "For the teleports once you have the level: one Law rune with 3 Air runes and 1 Fire rune per Varrock Teleport (Magic 25), and again for Lumbridge (31) and Falador (37). Buy them at the Grand Exchange on your next stop in Varrock; they are not needed for training.",
-        "wikiItemId": 563,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Law_rune.png"
-      }
-    ],
-    "fields": [
-      {
-        "label": "Why",
-        "text": "Varrock Teleport opens at level 25: Magic tab, Varrock Teleport, costing 1 Law, 3 Air and 1 Fire rune each, and a couple of seconds later you are on the square in the middle of Varrock. When it beats the book and the canoe, see the reference [Teleports, canoes and boats](#/reference/transport)."
-      },
-      {
-        "label": "Budget",
-        "text": "The exact calculation is in the \"How much it costs to reach Magic 25\" block below: it takes your XP from the game and the Grand Exchange prices. The most expensive is Fire Strike without a staff: 3 fire runes, 2 air and 1 mind per cast."
-      },
-      {
-        "label": "If you are short of money",
-        "text": "Start with an affordable batch of runes and a usable staff you already own. Cowhides are not available coins, and a new account may be unable to sell them. Check Money for methods that suit your levels, supplies and account selling limits before funding the next batch."
-      }
-    ],
-    "doneWhen": "Magic 25.",
-    "inGame": {
-      "npcNames": [
-        "Cow"
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "magic",
-            "level": 25
-          }
-        ]
-      },
-      "highlightItems": [
-        "Cowhide"
-      ]
-    },
-    "mapLocation": {
-      "x": 3257,
-      "y": 3272,
-      "plane": 0,
-      "label": "The cow field east of Lumbridge"
-    },
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3257,3272,0",
-    "resourceSpots": [
-      {
-        "x": 3257,
-        "y": 3272,
-        "plane": 0,
-        "label": "The cow field — hit cows, every one drops a hide",
-        "npc": "Cow"
-      },
-      {
-        "x": 3253,
-        "y": 3402,
-        "plane": 0,
-        "label": "Aubury's Rune Shop — Air and Mind runes",
-        "items": [
-          "Air rune",
-          "Mind rune"
-        ],
-        "npc": "Aubury"
-      },
-      {
-        "x": 3203,
-        "y": 3434,
-        "plane": 0,
-        "label": "Zaff's Superior Staffs — the staff",
-        "items": [
-          "Staff"
-        ],
-        "npc": "Zaff"
-      }
-    ],
-    "itemsRequired": [
-      {
-        "nameEn": "Staff",
-        "amount": 1,
-        "howToGet": "Buy from Zaff in Zaff's Superior Staffs (Varrock) for about 15 gp: with a staff the spell can be set to autocast. A Staff of fire (below) works instead.",
-        "wikiItemId": 1379,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Staff.png",
-        "anyOf": [
-          "Staff of air",
-          "Staff of water",
-          "Staff of earth",
-          "Staff of fire"
-        ]
-      },
-      {
-        "nameEn": "Air rune",
-        "amount": "300+",
-        "howToGet": "Needed for every cast unless a staff supplies air. Take an affordable batch to start; check your remaining runes and coins before buying more. Cowhide sales must actually be available before they can fund another batch.",
-        "wikiItemId": 556,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
-      },
-      {
-        "nameEn": "Mind rune",
-        "amount": "300+",
-        "howToGet": "Needed for every cast (1 each). In Aubury's Rune Shop it is 3 gp. Take 300 to start.",
-        "wikiItemId": 558,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
-      }
-    ],
-    "quickSteps": [
-      "Buy Air and Mind runes in Aubury's Rune Shop in Varrock (300 each to start): in the shop they are 4 and 3 gp. Compare the current GE estimates before buying.",
-      "Buy a staff from Zaff in Zaff's Superior Staffs (Varrock): an ordinary Staff is about 15 gp, which is enough to autocast a spell. A Staff of fire costs more but replaces the fire runes.",
-      "Wield the staff, open the combat tab (Combat Options), click the spell button and choose the autocast spell: Wind Strike first.",
-      "Go to the cow field near Lumbridge and hit the cows: each has 8 health, and a hide (Cowhide) always drops. Pick up the hides; a full inventory goes to the bank or the exchange.",
-      "Change the autocast spell with your level: Magic 5 Water Strike, 9 Earth Strike, 13 Fire Strike. Fire Strike gives the most XP per cast.",
-      "Continue to Magic 25: Varrock Teleport unlocks. Replenish runes from confirmed coins or an available earning method in Money; do not rely on unsold hides."
-    ],
-    "magicPlan": {
-      "target": 25,
-      "from": 10
-    },
-    "styleGear": "magic"
   },
   {
     "id": "S2-05",
@@ -2054,9 +1118,7 @@
     "type": "quest",
     "title": "The Knight's Sword",
     "qp": 1,
-    "requires": [
-      "S2-01"
-    ],
+    "requires": [],
     "requirements": [
       {
         "type": "skill",
@@ -2085,14 +1147,14 @@
       {
         "nameEn": "Redberry pie",
         "amount": 1,
-        "howToGet": "From step S2-01.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 2325,
         "iconUrl": "https://oldschool.runescape.wiki/images/Redberry_pie.png"
       },
       {
         "nameEn": "Iron bar",
         "amount": 2,
-        "howToGet": "From step S2-01.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 2351,
         "iconUrl": "https://oldschool.runescape.wiki/images/Iron_bar.png"
       },
@@ -2128,7 +1190,7 @@
     "fields": [
       {
         "label": "Requirement",
-        "text": "Mining 10: you have it after step S1-12."
+        "text": "Mining 10: the training plan on Path covers it when you are below."
       },
       {
         "label": "Dangerous",
@@ -2309,7 +1371,7 @@
     "tasks": [
       {
         "id": "wield-mithril",
-        "text": "Wield the Mithril scimitar bought in S2-01: Attack 20 is reached with this quest.",
+        "text": "Wield a Mithril scimitar: Attack 20 is reached with this quest.",
         "check": {
           "kind": "worn",
           "items": [
@@ -2418,8 +1480,7 @@
     "title": "Prince Ali Rescue",
     "qp": 3,
     "requires": [
-      "S1-04",
-      "S2-01"
+      "S1-04"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Prince_Ali_Rescue",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Prince_Ali_Rescue/Quick_guide",
@@ -2447,7 +1508,7 @@
       {
         "nameEn": "Yellow dye",
         "amount": 1,
-        "howToGet": "To dye the wig. From step S2-01.",
+        "howToGet": "To dye the wig. Buy it at the Grand Exchange.",
         "wikiItemId": 1765,
         "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_dye.png"
       },
@@ -2461,28 +1522,28 @@
       {
         "nameEn": "Bronze bar",
         "amount": 1,
-        "howToGet": "Smelt the copper and tin ore kept from step S1-12 in any furnace.",
+        "howToGet": "Smelt a copper ore and a tin ore in any furnace; mine them or buy them at the Grand Exchange.",
         "wikiItemId": 2349,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_bar.png"
       },
       {
         "nameEn": "Pink skirt",
         "amount": 1,
-        "howToGet": "From step S2-01.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 1013,
         "iconUrl": "https://oldschool.runescape.wiki/images/Pink_skirt.png"
       },
       {
         "nameEn": "Ashes",
         "amount": 1,
-        "howToGet": "The one kept from step S1-08: ashes stay on the spot of a burnt-out fire.",
+        "howToGet": "Ashes stay on the spot of a burnt-out fire, or buy them at the Grand Exchange.",
         "wikiItemId": 592,
         "iconUrl": "https://oldschool.runescape.wiki/images/Ashes.png"
       },
       {
         "nameEn": "Redberries",
         "amount": 1,
-        "howToGet": "From step S2-01.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 1951,
         "iconUrl": "https://oldschool.runescape.wiki/images/Redberries.png"
       },
@@ -2526,7 +1587,7 @@
     "fields": [
       {
         "label": "Bronze bar",
-        "text": "Smelt 1 copper and 1 tin ore from step S1-12 in any furnace (Furnace), for example in Lumbridge or Al Kharid."
+        "text": "Smelt 1 copper and 1 tin ore in any furnace (Furnace), for example in Lumbridge or Al Kharid."
       },
       {
         "label": "Rope",
@@ -2692,7 +1753,7 @@
       {
         "nameEn": "Blue dye",
         "amount": 1,
-        "howToGet": "From step S2-01 or from the witch Aggie: 2 Woad leaves (the gardener Wyson in Falador Park, 20 gp) + 5 gp.",
+        "howToGet": "Buy it at the Grand Exchange or from the witch Aggie: 2 Woad leaves (the gardener Wyson in Falador Park, 20 gp) + 5 gp.",
         "from": "Aggie",
         "wikiItemId": 1767,
         "iconUrl": "https://oldschool.runescape.wiki/images/Blue_dye.png"
@@ -2751,21 +1812,21 @@
       {
         "nameEn": "Clay",
         "amount": 6,
-        "howToGet": "From step S2-01.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 434,
         "iconUrl": "https://oldschool.runescape.wiki/images/Clay.png"
       },
       {
         "nameEn": "Copper ore",
         "amount": 4,
-        "howToGet": "From step S2-01.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 436,
         "iconUrl": "https://oldschool.runescape.wiki/images/Copper_ore.png"
       },
       {
         "nameEn": "Iron ore",
         "amount": 2,
-        "howToGet": "From step S2-01.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 440,
         "iconUrl": "https://oldschool.runescape.wiki/images/Iron_ore.png"
       }
@@ -3173,7 +2234,7 @@
       {
         "nameEn": "Bronze pickaxe",
         "amount": 1,
-        "howToGet": "Any pickaxe works: the Bronze pickaxe from step S1-12 is enough. It is for the Structural pillars in the last room, not for ore.",
+        "howToGet": "Any pickaxe works: a Bronze pickaxe is enough. It is for the Structural pillars in the last room, not for ore.",
         "wikiItemId": 1265,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
       },
@@ -3255,7 +2316,7 @@
       },
       {
         "label": "Bring",
-        "text": "A pickaxe (the Bronze pickaxe from S1-12 is enough) and 10-15 Trout or Salmon, or better food. You will not pass a bank before this fight."
+        "text": "A pickaxe (a Bronze pickaxe is enough) and the food the plan lists. You will not pass a bank before this fight."
       },
       {
         "label": "Can't mine it?",
@@ -3385,327 +2446,6 @@
       "Take your half of the shield to the curator Haig Halen in the Varrock Museum.",
       "Swap halves of the certificate with your partner and join both (Use them on each other).",
       "Hand the certificate to King Roald in the castle: the quest is complete."
-    ]
-  },
-  {
-    "id": "S3-06",
-    "stage": 3,
-    "type": "prep",
-    "title": "Money for the Adamant scimitar: iron ore",
-    "requires": [],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_iron_ore",
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3286,3365,0",
-    "mapLocation": {
-      "x": 3286,
-      "y": 3365,
-      "plane": 0,
-      "label": "The mine south-east of Varrock (iron)"
-    },
-    "floor": "Ground floor",
-    "where": "The mine south-east of Varrock (3 iron veins) or the Al Kharid mine (free passage after Prince Ali). The bank is Varrock East or Al Kharid.",
-    "how": "Reach the 2,500 gp coin target for the Adamant scimitar using an eligible method from Money. If iron mining is selected, Mining 15 is required; mine copper/tin first if needed. Use the current sale estimate to choose the batch, and stop when confirmed coins meet the target. Unsold ore is not cash; this target does not fund an entire armour set.",
-    "fields": [
-      {
-        "label": "How much you need",
-        "text": "This funds the Adamant scimitar (S3-07). The route uses a 2,500 gp savings target; check its current market estimate before buying. The stage 3 quests already give about 5,300 coins (Black Knights' Fortress 2,500, Below Ice Mountain 2,000, Shield of Arrav 600, Doric 180), so you may have it before you mine anything. Armour is skipped on purpose: see S3-08. Use Money to fund Wormbrain and later purchases if short."
-      },
-      {
-        "label": "Price",
-        "text": "Check Money for current iron-ore proceeds. Unsold ore is not cash. Keep the ore still required by your route."
-      },
-      {
-        "label": "Other ways",
-        "text": "Compare tanning eligible cowhides with other available methods in Money. Include purchase/tanning costs and the current net sale estimate; do not rely on a fixed leather price."
-      },
-      {
-        "label": "New account",
-        "text": "A new free-to-play account cannot sell iron ore (or leather) on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100. The stage 3 quests usually pay the 2,500 gp anyway; if they have not, mine only what the quests need and use Money to find an available alternative."
-      }
-    ],
-    "doneWhen": "2,500+ coins in the bag or the bank (unsold ore does not count).",
-    "moneyGoal": 2500,
-    "inGame": {
-      "objectNames": [
-        "Iron rocks"
-      ],
-      "completionTrigger": {
-        "type": "ITEM_OWNED",
-        "items": [
-          {
-            "names": [
-              "Coins"
-            ],
-            "count": 2500
-          }
-        ]
-      }
-    },
-    "softRequires": [
-      "S3-05"
-    ],
-    "sells": [
-      "Iron ore",
-      "Leather"
-    ]
-  },
-  {
-    "id": "S3-07",
-    "stage": 3,
-    "type": "gear",
-    "title": "Buy the Adamant scimitar on the Grand Exchange",
-    "requires": [],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Grand_Exchange",
-    "mapLocation": {
-      "x": 3164,
-      "y": 3487,
-      "plane": 0,
-      "label": "The Grand Exchange"
-    },
-    "itemsRequired": [
-      {
-        "nameEn": "Adamant scimitar",
-        "amount": 1,
-        "howToGet": "Needs 30 Attack.",
-        "wikiItemId": 1331,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png",
-        "inStep": true
-      }
-    ],
-    "fields": [
-      {
-        "label": "Requirement",
-        "text": "The Adamant scimitar can be wielded only with 30 Attack: buy it now, wield it after step S3-08."
-      },
-      {
-        "label": "Budget",
-        "text": "Use the current acquisition estimate in Preparation or Shopping."
-      },
-      {
-        "label": "Armour",
-        "text": "Use armour your current Defence allows; Adamant armour requires 30 Defence. Compare an upgrade's cost with the food and banking it could save. Training Defence earlier does not remove Dragon Slayer I's later XP reward."
-      },
-      {
-        "label": "Amulet",
-        "text": "Keep your current amulet unless Gear shows a worthwhile change for your levels and opponent. Strength can improve max hit; power adds accuracy and defence. Neither is always faster: max-hit breakpoints and the target's defence matter."
-      },
-      {
-        "label": "Food and potions",
-        "text": "Prepare food and Strength potions for the selected S3-08 combat plan in the same shopping trip. Shopping estimates the whole goal; the food you carry is one bank trip. Confirm your levels, kit and bank stock before relying on the quantity."
-      }
-    ],
-    "doneWhen": "The Adamant scimitar is bought and is in the bank.",
-    "branches": [
-      {
-        "id": "varrock-teleport",
-        "label": "Varrock Teleport",
-        "condition": {
-          "type": "SKILL_LEVEL",
-          "skill": "magic",
-          "minLevel": 25
-        },
-        "replacementText": "Magic tab, Varrock Teleport (1 **Law rune**, 3 **Air rune**, 1 **Fire rune**): you are on the square by the fountain. The Grand Exchange is north-west of the square.",
-        "replacementTarget": {
-          "x": 3213,
-          "y": 3424,
-          "plane": 0,
-          "label": "Varrock Teleport — the square by the fountain"
-        },
-        "needs": [
-          {
-            "label": "Law rune",
-            "count": 1,
-            "items": [
-              "Law rune"
-            ]
-          },
-          {
-            "label": "Air rune",
-            "count": 3,
-            "items": [
-              "Air rune"
-            ],
-            "unless": [
-              "Staff of air",
-              "Air battlestaff",
-              "Mystic air staff"
-            ]
-          },
-          {
-            "label": "Fire rune",
-            "count": 1,
-            "items": [
-              "Fire rune"
-            ],
-            "unless": [
-              "Staff of fire",
-              "Fire battlestaff",
-              "Mystic fire staff",
-              "Lava battlestaff",
-              "Mystic lava staff"
-            ]
-          }
-        ]
-      }
-    ],
-    "inGame": {
-      "completionTrigger": {
-        "type": "ITEM_OWNED",
-        "items": [
-          {
-            "names": [
-              "Adamant scimitar"
-            ],
-            "count": 1
-          }
-        ]
-      }
-    }
-  },
-  {
-    "id": "S3-08",
-    "stage": 3,
-    "type": "skill",
-    "title": "Strength to 20 and Attack to 30",
-    "requires": [],
-    "floor": "Ground floor",
-    "foes": [
-      "Minotaur"
-    ],
-    "pacing": {
-      "skill": "strength",
-      "also": [
-        "attack"
-      ],
-      "targetLevel": 20,
-      "targetExp": 4470,
-      "goals": {
-        "attack": {
-          "level": 30,
-          "exp": 13363
-        }
-      },
-      "actionName": "minotaur|minotaurs",
-      "expPerAction": 40
-    },
-    "mapLocation": {
-      "x": 3081,
-      "y": 3420,
-      "plane": 0,
-      "label": "The Stronghold of Security entrance, Barbarian Village mine"
-    },
-    "where": "The Stronghold of Security, floor 1 (the Vault of War): the level 12 Minotaurs (the level 27 ones are further in). The entrance is in the Barbarian Village mine, the same place as S1-09. There is no bank on the floor: bank in Edgeville first.",
-    "how": "Train Strength to 20 on Aggressive (Slash on a scimitar), then Attack to 30 on Accurate (Chop). Follow the selected combat plan if it uses a different order or opponent. Dragon Slayer I later gives 18,650 Defence XP; training Defence earlier does not remove that reward. Compare extra training time with the food and banking it could save before changing the plan. Food and time are an estimate until measured in game.",
-    "membersAlternative": "👑 With membership: do not fight mobs by hand: complete Waterfall Quest in 15 minutes and get 30 Attack and 30 Strength at once!",
-    "doneWhen": "Strength 20 and Attack 30. Defence is left alone.",
-    "itemsRequired": [
-      {
-        "nameEn": "Mithril scimitar",
-        "amount": 1,
-        "howToGet": "From S2-01: wield it.",
-        "wikiItemId": 1329,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_scimitar.png"
-      },
-      {
-        "nameEn": "Salmon",
-        "amount": 20,
-        "howToGet": "Buy on the Grand Exchange; check the current acquisition estimate; Trout (heals 7), Tuna, Lobster or Swordfish count too. Preparation estimates the food for your current levels and worn gear. Or catch and cook your own at Barbarian Village (fly fishing, Fishing 30 for salmon).",
-        "wikiItemId": 329,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
-        "heals": 9,
-        "anyOf": [
-          "Trout",
-          "Tuna",
-          "Lobster",
-          "Swordfish"
-        ]
-      }
-    ],
-    "itemsRecommended": [
-      {
-        "nameEn": "Strength potion(4)",
-        "amount": 3,
-        "howToGet": "Grand Exchange; check the current acquisition estimate. A dose about every 5 minutes; 3 potions (12 doses) are about an hour. Potions with fewer doses left count the same.",
-        "wikiItemId": 113,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
-      },
-      {
-        "nameEn": "Amulet of strength",
-        "amount": 1,
-        "howToGet": "From S2-01: wear it (+10 strength, one more max hit at these levels).",
-        "wikiItemId": 1725,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_strength.png"
-      },
-      {
-        "nameEn": "Adamant scimitar",
-        "amount": 1,
-        "howToGet": "From S3-07: Attack 30 ends this step, then wield it for S4-03.",
-        "wikiItemId": 1331,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png"
-      }
-    ],
-    "quickSteps": [
-      "Bank in Edgeville: fill the bag with Salmon (or other fish) and take the Strength potions; wear the Mithril scimitar and the Amulet of strength. Come back to the bank when the food runs out.",
-      "Enter the Stronghold of Security in the Barbarian Village mine and go to the Minotaurs on floor 1 (the Vault of War).",
-      "Fight the level 12 Minotaurs: Aggressive (Slash) to Strength 20, then Accurate (Chop) to Attack 30. Eat at 4 health; drink a Strength potion dose every 5 minutes."
-    ],
-    "inGame": {
-      "npcNames": [
-        "Minotaur"
-      ],
-      "goal": "Stronghold of Security floor 1: the level 12 Minotaurs",
-      "pathWaypoints": [
-        {
-          "x": 3081,
-          "y": 3420,
-          "plane": 0,
-          "label": "The Stronghold of Security entrance: climb down"
-        },
-        {
-          "x": 1876,
-          "y": 5216,
-          "plane": 0,
-          "label": "Floor 1 (Vault of War): the level 12 Minotaurs"
-        }
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "strength",
-            "level": 20
-          },
-          {
-            "skill": "attack",
-            "level": 30
-          }
-        ]
-      }
-    },
-    "fields": [
-      {
-        "label": "Which Minotaurs",
-        "text": "The level 12 ones. At Defence 1 a level 12 Minotaur hits about 2 times in 3 for up to 2; a level 27 one about 3 times in 4 for up to 3. For the same XP the level 27 ones take about twice the food (an estimate from the wiki stats and the combat formulas). Neither is aggressive, so you choose when to fight."
-      },
-      {
-        "label": "Food",
-        "text": "At Defence 1 a level 12 Minotaur takes about 3 hit points a kill, and you heal 1 a minute: plan about 1 Salmon for every 3 kills (an estimate). Eat when your health drops to 4, two of their hits. A full bag (about 26 Salmon) lasts about 70 kills; the whole step from Attack 22 and Strength 16 is about 80 Salmon. With the game linked, Food and time works it out from your own levels, gear and kills."
-      },
-      {
-        "label": "Strength potions",
-        "text": "A dose raises Strength by 3 plus 10% (+4 or +5 here). The higher max hit kills faster in both parts of the step, so the potion speeds up Attack training as well. The boost drops 1 level a minute: drink a dose about every 5 minutes."
-      },
-      {
-        "label": "Pace",
-        "text": "A level 12 Minotaur has 10 hit points: 40 XP per kill in the skill of your style. The pace line counts the kills left from your real XP, first to Strength 20 and then to Attack 30, and names the style. Its time is an estimate until a few kills are measured."
-      },
-      {
-        "label": "Weapon",
-        "text": "Wield the Mithril scimitar and wear the Amulet of strength. The Adamant scimitar needs Attack 30, which ends this step: take it along and wield it for S4-03."
-      },
-      {
-        "label": "Defence",
-        "text": "Leave it at 1. The Anti-dragon shield from S5-02 stops Elvarg's fire at any Defence level."
-      }
     ]
   },
   {
@@ -3914,361 +2654,6 @@
     ]
   },
   {
-    "id": "S4-03",
-    "stage": 4,
-    "type": "skill",
-    "title": "Attack to 40",
-    "combatArmour": [
-      1165,
-      1125,
-      1077,
-      1195
-    ],
-    "requires": [],
-    "foes": [
-      "Giant frog"
-    ],
-    "pacing": {
-      "skill": "attack",
-      "targetLevel": 40,
-      "targetExp": 37224,
-      "actionName": "giant frog|giant frogs",
-      "expPerAction": 92
-    },
-    "where": "Fight level 13 Giant frogs on the surface of Lumbridge Swamp, south of Lumbridge Castle. Do not enter the caves: those frogs are level 99. Refill food at Lumbridge Castle bank.",
-    "mapLocation": {
-      "x": 3197,
-      "y": 3166,
-      "plane": 0,
-      "label": "Lumbridge Swamp: level 13 Giant frogs"
-    },
-    "itemsRequired": [
-      {
-        "nameEn": "Adamant scimitar",
-        "amount": 1,
-        "wikiItemId": 1331,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png",
-        "howToGet": "From step S3-07. Wear it until Attack 40: the Rune scimitar needs 40 Attack."
-      },
-      {
-        "nameEn": "Salmon",
-        "amount": 25,
-        "howToGet": "Buy on the Grand Exchange if not already owned. Food for one trip; preparation estimates the amount from your equipment and levels. Refill at Lumbridge Castle bank. The full goal may need several trips.",
-        "wikiItemId": 329,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
-        "heals": 9,
-        "anyOf": [
-          "Trout",
-          "Tuna",
-          "Lobster",
-          "Swordfish"
-        ]
-      }
-    ],
-    "itemsRecommended": [
-      {
-        "nameEn": "Strength potion(4)",
-        "amount": 4,
-        "howToGet": "Grand Exchange; check the current acquisition estimate. A dose every 4-5 minutes: a higher max hit shortens every fight, so it saves food too.",
-        "wikiItemId": 113,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
-      },
-      {
-        "nameEn": "Amulet of strength",
-        "amount": 1,
-        "howToGet": "From S2-01: wear it (+10 strength).",
-        "wikiItemId": 1725,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_strength.png"
-      }
-    ],
-    "fields": [
-      {
-        "label": "Goals",
-        "text": "Train Attack to 40 on Accurate (Chop on a scimitar). Available opponents are compared for your current levels and gear. Big bones are optional loot, not a completion requirement."
-      },
-      {
-        "label": "Money",
-        "text": "Use Money if the next purchase is unaffordable. Funding is separate from training: no mandatory 50-bone quota or Hill Giant detour. Bones are not coins until sold."
-      },
-      {
-        "label": "Food",
-        "text": "Use the current preparation estimate. Refill before food runs out. Times and food are estimates: competition for spawns and actual combat results can change them."
-      },
-      {
-        "label": "Armour",
-        "text": "Before Attack training, reach Defence 10 on cows using Defensive (Block on a scimitar). Then equip a Black full helm, Black platebody, Black platelegs or plateskirt, and Black kiteshield, or usable equivalent/better pieces you already own. Black armour requires 10 Defence. Withdraw owned pieces first; buy only needed upgrades on the Grand Exchange, checking current preparation prices and keeping coins for food. Estimates use actual worn gear; purchase costs and the shopping detour are extra. An explicit Defence 1 build bypasses this preparation."
-      },
-      {
-        "label": "Weapon",
-        "text": "Use the Adamant scimitar until Attack 40, then check Gear for an affordable upgrade."
-      }
-    ],
-    "membersAlternative": "With membership, check quest-driven training before grinding: quest rewards may cover part of the goal.",
-    "doneWhen": "Attack 40. No bone quota or Defence requirement.",
-    "inGame": {
-      "npcNames": [
-        "Giant frog"
-      ],
-      "goal": "Lumbridge Swamp: level 13 Giant frogs",
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "attack",
-            "level": 40
-          }
-        ]
-      }
-    },
-    "quickSteps": [
-      "Take the food shown in preparation; wield your Adamant scimitar and available melee gear.",
-      "Go to the level 13 Giant frogs on the surface of Lumbridge Swamp. Stay above ground.",
-      "Train on Accurate (Chop on a scimitar) to Attack 40. Refill at Lumbridge Castle bank as needed. Big bones are optional."
-    ]
-  },
-  {
-    "id": "S4-04",
-    "stage": 4,
-    "type": "gear",
-    "title": "Food for the dragon: buy 20 Lobster",
-    "requires": [],
-    "mapLocation": {
-      "x": 3164,
-      "y": 3487,
-      "plane": 0,
-      "label": "The Grand Exchange"
-    },
-    "where": "The Grand Exchange: buy the cooked Lobster in one go. No trip to Karamja.",
-    "itemsRequired": [
-      {
-        "nameEn": "Lobster",
-        "amount": 20,
-        "howToGet": "Buy cooked Lobster on the Grand Exchange. Preparation shows the quantity cost. Heals 12.",
-        "wikiItemId": 379,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
-        "heals": 12
-      }
-    ],
-    "fields": [
-      {
-        "label": "Why not catch them",
-        "text": "Lobsters need Fishing 40 and Cooking 40 and a boat to Musa Point, hours of work that add nothing to the fight. Buying them is far faster."
-      }
-    ],
-    "doneWhen": "20+ cooked Lobster in the bag or the bank.",
-    "inGame": {
-      "highlightItems": [
-        "Lobster"
-      ],
-      "completionTrigger": {
-        "type": "ITEM_OWNED",
-        "items": [
-          {
-            "names": [
-              "Lobster"
-            ],
-            "count": 20
-          }
-        ]
-      }
-    },
-    "how": "Buy 20 cooked Lobster on the Grand Exchange. Preparation and Shopping show the current quantity cost; check the offer before buying. This replaces the old Karamja cage-fishing loop: lobsters need Fishing 40 and Cooking 40 and a boat each way, hours of work that add nothing to the fight. Any lobsters that drop on the way count towards the 20."
-  },
-  {
-    "id": "S4-05",
-    "stage": 4,
-    "type": "gear",
-    "title": "Buy all the materials for the dragon on the Grand Exchange",
-    "requires": [],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Dragon_Slayer_I",
-    "mapLocation": {
-      "x": 3164,
-      "y": 3487,
-      "plane": 0,
-      "label": "The Grand Exchange"
-    },
-    "how": "Forging steel nails needs Smithing 34. Compare the current Shopping cost of the required materials, and keep the separate 2,000 coins for the ship. Buy only what is still missing.",
-    "itemsRequired": [
-      {
-        "nameEn": "Steel nails",
-        "amount": 90,
-        "howToGet": "30 nails for each plank.",
-        "wikiItemId": 1539,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Plank",
-        "amount": 3,
-        "howToGet": "Only ordinary planks.",
-        "wikiItemId": 960,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Hammer",
-        "amount": 1,
-        "howToGet": "Buy in the Lumbridge General Store for 1 gp.",
-        "from": "Lumbridge General Store",
-        "wikiItemId": 2347,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Unfired bowl",
-        "amount": 1,
-        "howToGet": "Buy on the Grand Exchange or shape it from soft clay on the pottery wheel (Crafting 8) in Barbarian Village.",
-        "wikiItemId": 1791,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Unfired_bowl.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Wizard's mind bomb",
-        "amount": 1,
-        "howToGet": "Buy in the Rising Sun pub in Falador for 3 gp.",
-        "from": "Rising Sun Inn",
-        "wikiItemId": 1907,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Wizard's_mind_bomb.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Silk",
-        "amount": 1,
-        "howToGet": "Buy from the silk trader in Al Kharid for 3 gp.",
-        "from": "Silk trader",
-        "wikiItemId": 950,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Silk.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Lobster pot",
-        "amount": 1,
-        "howToGet": "Buy from Gerrant in Port Sarim for 20 gp (compare the current GE estimate). Needed for the Oracle (S5-04).",
-        "from": "Gerrant",
-        "wikiItemId": 301,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Coins",
-        "amount": 2000,
-        "howToGet": "For buying the ship Lady Lumbridge.",
-        "wikiItemId": 995,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png",
-        "inStep": true
-      }
-    ],
-    "doneWhen": "All the items are stacked in the bank.",
-    "branches": [
-      {
-        "id": "varrock-teleport",
-        "label": "Varrock Teleport",
-        "condition": {
-          "type": "SKILL_LEVEL",
-          "skill": "magic",
-          "minLevel": 25
-        },
-        "replacementText": "Magic tab, Varrock Teleport (1 **Law rune**, 3 **Air rune**, 1 **Fire rune**): you are on the square by the fountain. The Grand Exchange is north-west of the square.",
-        "replacementTarget": {
-          "x": 3213,
-          "y": 3424,
-          "plane": 0,
-          "label": "Varrock Teleport — the square by the fountain"
-        },
-        "needs": [
-          {
-            "label": "Law rune",
-            "count": 1,
-            "items": [
-              "Law rune"
-            ]
-          },
-          {
-            "label": "Air rune",
-            "count": 3,
-            "items": [
-              "Air rune"
-            ],
-            "unless": [
-              "Staff of air",
-              "Air battlestaff",
-              "Mystic air staff"
-            ]
-          },
-          {
-            "label": "Fire rune",
-            "count": 1,
-            "items": [
-              "Fire rune"
-            ],
-            "unless": [
-              "Staff of fire",
-              "Fire battlestaff",
-              "Mystic fire staff",
-              "Lava battlestaff",
-              "Mystic lava staff"
-            ]
-          }
-        ]
-      }
-    ],
-    "inGame": {
-      "completionTrigger": {
-        "type": "ITEM_OWNED",
-        "items": [
-          {
-            "names": [
-              "Steel nails"
-            ],
-            "count": 90
-          },
-          {
-            "names": [
-              "Plank"
-            ],
-            "count": 3
-          },
-          {
-            "names": [
-              "Hammer"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Unfired bowl"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Wizard's mind bomb"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Silk"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Lobster pot"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Coins"
-            ],
-            "count": 2000
-          }
-        ]
-      }
-    }
-  },
-  {
     "id": "S5-01",
     "stage": 5,
     "type": "quest",
@@ -4345,61 +2730,6 @@
       "Go to Oziach in Edgeville: \"Can you sell me a rune platebody?\", \"The Guildmaster of the Champions' Guild told me.\", \"I thought you were going to give me a quest.\", \"A dragon, that sounds like fun.\".",
       "Return to the Guildmaster and ask about everything in turn: \"How can I find the route to Crandor?\", \"Where is Melzar's map piece?\" (that gets you the Maze key), \"Where is Thalzar's map piece?\", \"Where is Lozar's map piece?\", \"Where can I find the right ship?\", \"How can I protect myself from the dragon's breath?\".",
       "You have the Maze key: the step is done; next collect the three map pieces and the shield."
-    ]
-  },
-  {
-    "id": "S5-02",
-    "stage": 5,
-    "type": "gear",
-    "title": "Get the Anti-dragon shield",
-    "requires": [
-      "S5-01"
-    ],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Anti-dragon_shield",
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3210,3221,1",
-    "mapLocation": {
-      "x": 3210,
-      "y": 3221,
-      "plane": 1,
-      "label": "Duke Horacio, Lumbridge Castle"
-    },
-    "npc": {
-      "nameEn": "Duke Horacio",
-      "location": "Lumbridge Castle",
-      "floor": "1st floor",
-      "dialogue": "Say that you are going to kill the dragon: he gives you the Anti-dragon shield for free.",
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Duke_Horacio"
-    },
-    "proTip": "Drop the shield on the floor, talk to the Duke again and take a second one: a spare shield comes in handy if you are killed on the island!",
-    "doneWhen": "The Anti-dragon shield is in the bank.",
-    "inGame": {
-      "npcNames": [
-        "Duke Horacio"
-      ],
-      "dialogChoices": [
-        "I seek a shield that will protect me from dragonbreath.",
-        "Elvarg, the dragon of Crandor island!",
-        "Yes",
-        "So, are you going to give me the shield or not?"
-      ],
-      "highlightItems": [
-        "Anti-dragon shield"
-      ],
-      "completionTrigger": {
-        "type": "ITEM_OWNED",
-        "items": [
-          {
-            "names": [
-              "Anti-dragon shield"
-            ],
-            "count": 1
-          }
-        ]
-      }
-    },
-    "quickSteps": [
-      "Go to Lumbridge Castle to Duke Horacio on the second floor (the 1st floor by the wiki's numbering): \"I seek a shield that will protect me from dragonbreath.\", \"Elvarg, the dragon of Crandor island!\", \"Yes\", \"So, are you going to give me the shield or not?\".",
-      "Take the Anti-dragon shield. If you lost it, Oziach in Edgeville sells the same one (after Dragon Slayer I has been started)."
     ]
   },
   {
@@ -4518,8 +2848,7 @@
     "type": "quest",
     "title": "Map piece 2: the Oracle's riddle on Ice Mountain",
     "requires": [
-      "S5-01",
-      "S4-05"
+      "S5-01"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Oracle",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3011,3501,0",
@@ -4539,7 +2868,7 @@
       {
         "nameEn": "Silk",
         "amount": 1,
-        "howToGet": "From S4-05: from the silk trader in Al Kharid for 3 gp.",
+        "howToGet": "The silk trader in Al Kharid sells it for 3 gp.",
         "from": "Silk trader",
         "wikiItemId": 950,
         "iconUrl": "https://oldschool.runescape.wiki/images/Silk.png"
@@ -4547,21 +2876,21 @@
       {
         "nameEn": "Wizard's mind bomb",
         "amount": 1,
-        "howToGet": "From S4-05: the Rising Sun Inn in Falador, 3 gp. Use it on the magic door; do not drink it!",
+        "howToGet": "The Rising Sun Inn in Falador sells it for 3 gp. Use it on the magic door; do not drink it!",
         "wikiItemId": 1907,
         "iconUrl": "https://oldschool.runescape.wiki/images/Wizard's_mind_bomb.png"
       },
       {
         "nameEn": "Unfired bowl",
         "amount": 1,
-        "howToGet": "From S4-05: on the Grand Exchange.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 1791,
         "iconUrl": "https://oldschool.runescape.wiki/images/Unfired_bowl.png"
       },
       {
         "nameEn": "Lobster pot",
         "amount": 1,
-        "howToGet": "From S4-05: from Gerrant in Port Sarim for 20 gp.",
+        "howToGet": "Gerrant in Port Sarim sells it for 20 gp.",
         "from": "Gerrant",
         "wikiItemId": 301,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
@@ -4695,9 +3024,7 @@
     "stage": 5,
     "type": "quest",
     "title": "Buy and repair the ship Lady Lumbridge",
-    "requires": [
-      "S4-05"
-    ],
+    "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Lady_Lumbridge",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3047,3204,0",
     "mapLocation": {
@@ -4717,21 +3044,21 @@
       {
         "nameEn": "Plank",
         "amount": 3,
-        "howToGet": "From S4-05: on the Grand Exchange.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 960,
         "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
       },
       {
         "nameEn": "Steel nails",
         "amount": 90,
-        "howToGet": "From S4-05: on the Grand Exchange.",
+        "howToGet": "Buy it at the Grand Exchange.",
         "wikiItemId": 1539,
         "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png"
       },
       {
         "nameEn": "Hammer",
         "amount": 1,
-        "howToGet": "From S4-05: Lumbridge General Store, 1 gp.",
+        "howToGet": "The Lumbridge General Store sells it for 1 gp.",
         "from": "Lumbridge General Store",
         "wikiItemId": 2347,
         "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
@@ -4827,8 +3154,7 @@
     "type": "quest",
     "title": "The battle with the dragon Elvarg",
     "requires": [
-      "S5-07",
-      "S5-02"
+      "S5-07"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Elvarg",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3047,3205,0",
@@ -4842,14 +3168,14 @@
       {
         "nameEn": "Anti-dragon shield",
         "amount": 1,
-        "howToGet": "Worn.",
+        "howToGet": "Duke Horacio on the second floor of Lumbridge Castle gives it for free once Dragon Slayer I has started: ask him for a shield against dragonbreath. If you lose it, Oziach in Edgeville sells another.",
         "wikiItemId": 1540,
         "iconUrl": "https://oldschool.runescape.wiki/images/Anti-dragon_shield.png"
       },
       {
         "nameEn": "Lobster",
         "amount": "20+",
-        "howToGet": "From step S4-04, or buy more on the Grand Exchange. The more lobsters, the lower the risk.",
+        "howToGet": "Buy them on the Grand Exchange. The more lobsters, the lower the risk.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
         "heals": 12
@@ -4858,7 +3184,7 @@
     "fields": [
       {
         "label": "Equipment",
-        "text": "The Anti-dragon shield is worn: without it the dragon's fire hits up to 70, with the shield up to 10. Optional: a Rune sword on the Stab style (Elvarg's weakest defence is against stab), an Amulet of strength (from S2-01; if you do not have one, an Amulet of power)."
+        "text": "The Anti-dragon shield is worn: without it the dragon's fire hits up to 70, with the shield up to 10. Optional: a Rune sword on the Stab style (Elvarg's weakest defence is against stab), an Amulet of strength (or an Amulet of power)."
       },
       {
         "label": "Inventory",
@@ -4915,7 +3241,7 @@
       {
         "nameEn": "Energy potion(4)",
         "amount": 1,
-        "howToGet": "Optional: restores run energy on the climb to the volcano. From S2-01 or on the Grand Exchange.",
+        "howToGet": "Optional: restores run energy on the climb to the volcano. Buy it on the Grand Exchange.",
         "wikiItemId": 3008,
         "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png"
       },
@@ -4979,346 +3305,6 @@
         "wikiItemId": 1127,
         "iconUrl": "https://oldschool.runescape.wiki/images/Rune_platebody.png"
       }
-    ]
-  },
-  {
-    "id": "S6-01",
-    "stage": 6,
-    "type": "skill",
-    "title": "Fishing to 35 and Cooking to 68",
-    "requires": [],
-    "floor": "Ground floor",
-    "mapLocation": {
-      "x": 3086,
-      "y": 3229,
-      "plane": 0,
-      "label": "Net fishing — Draynor Village (Fishing 1-20)"
-    },
-    "where": "Follow the current Fishing method to 35, then Cooking to 68: wine from Cooking 35 is the fastest Cooking in both modes. No Karamja trip or harpoon is required.",
-    "itemsRequired": [
-      {
-        "nameEn": "Small fishing net",
-        "amount": 1,
-        "howToGet": "The starter net is from Gerrant in Port Sarim. The live method selects the tool for your actual Fishing level; fly fishing uses a fly fishing rod and feathers from 20.",
-        "wikiItemId": 303,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
-      }
-    ],
-    "fields": [
-      {
-        "label": "Plan",
-        "text": "Follow the current trainer and its supplies. Net fish from 1; fly fishing opens at 20. The shared planner compares cooking your catch beside the spot with finishing Cooking separately."
-      },
-      {
-        "label": "Stop here",
-        "text": "Fishing 35 is the F2P checkpoint: members fish far faster from there. Cooking goes on to 68 because wine (from 35, up to 470,000–490,000 XP/h near 68, about 66 gp lost per jug) is the fastest Cooking for members too (OSRS Wiki)."
-      }
-    ],
-    "doneWhen": "Fishing 35 and Cooking 68. Skip any optional training you do not want before membership.",
-    "inGame": {
-      "npcNames": [
-        "Fishing spot"
-      ],
-      "objectNames": [
-        "Range"
-      ],
-      "highlightItems": [
-        "Small fishing net"
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "fishing",
-            "level": 35
-          },
-          {
-            "skill": "cooking",
-            "level": 68
-          }
-        ]
-      }
-    },
-    "bondBranch": true,
-    "optional": true,
-    "resourceSpots": [
-      {
-        "x": 3086,
-        "y": 3229,
-        "plane": 0,
-        "label": "Net fishing — Draynor Village (Fishing 1-20)",
-        "note": "Small fishing net: shrimps, then anchovies from 15."
-      },
-      {
-        "x": 3107,
-        "y": 3429,
-        "plane": 0,
-        "label": "Fly fishing — Barbarian Village (Fishing 20-35)",
-        "note": "Fly fishing rod and feathers: trout from 20, salmon from 30."
-      }
-    ],
-    "followsMethod": "fishing"
-  },
-  {
-    "id": "S6-02",
-    "stage": 6,
-    "type": "skill",
-    "title": "Mining to 45, Woodcutting to 36 and Firemaking to 50",
-    "requires": [],
-    "mapLocation": {
-      "x": 3229,
-      "y": 3146,
-      "plane": 0,
-      "label": "Copper and tin — East Lumbridge Swamp mine (Mining 1-15)"
-    },
-    "fields": [
-      {
-        "label": "Plan",
-        "text": "Follow Mining to 45, Woodcutting to 36, then Firemaking to 50. Each phase uses the current Skills method, usable owned tools and its actual supplies; bank the previous phase tools before starting the next."
-      },
-      {
-        "label": "Why these levels",
-        "text": "45 is a sensible iron-mining checkpoint. Woodcutting 36 prepares Lost City. Firemaking 50 unlocks members Wintertodt. Mining Guild 60 and yews 60 are not required before membership."
-      },
-      {
-        "label": "Supplies",
-        "text": "Keep logs you want to burn when the bank trip is practical. Firemaking selects logs your level allows; do not burn all logs before checking upcoming needs. No long grind or purchase is required to subscribe."
-      },
-      {
-        "label": "Requirements",
-        "text": "Mining 1. Each later phase checks its own level, tool and materials."
-      }
-    ],
-    "doneWhen": "Mining 45, Woodcutting 36 and Firemaking 50. These are optional checkpoints, not membership requirements.",
-    "inGame": {
-      "objectNames": [
-        "Copper rocks",
-        "Tin rocks"
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "mining",
-            "level": 45
-          },
-          {
-            "skill": "woodcutting",
-            "level": 36
-          },
-          {
-            "skill": "firemaking",
-            "level": 50
-          }
-        ]
-      }
-    },
-    "bondBranch": true,
-    "optional": true,
-    "followsMethod": "mining",
-    "requirements": [
-      {
-        "type": "skill",
-        "skill": "mining",
-        "min": 1
-      }
-    ],
-    "itemsRequired": [
-      {
-        "nameEn": "Bronze pickaxe",
-        "amount": 1,
-        "anyOf": [
-          "Iron pickaxe",
-          "Steel pickaxe",
-          "Mithril pickaxe",
-          "Adamant pickaxe",
-          "Rune pickaxe"
-        ],
-        "wikiItemId": 1265,
-        "howToGet": "Use an owned pickaxe that your Mining level allows; withdraw it first. Only buy a tool when no usable owned alternative is available.",
-        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
-      }
-    ]
-  },
-  {
-    "id": "S6-03",
-    "stage": 6,
-    "type": "skill",
-    "title": "Magic to 55 (High Level Alchemy)",
-    "requires": [],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/High_Level_Alchemy",
-    "how": "Follow the current spell and its listed supplies. Strike spells are the budget fallback; at Magic 43 and Smithing 15, compare a prepared Superheat Item batch. Alchemy requires chosen expendable targets and verified costs; it is not an automatic unfunded default. Magic 55 unlocks High Level Alchemy but does not guarantee profit.",
-    "itemsRequired": [
-      {
-        "nameEn": "Mind rune",
-        "amount": 100,
-        "howToGet": "Starter Wind Strike batch; the current method replaces this with its actual supplies.",
-        "wikiItemId": 558,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
-      },
-      {
-        "nameEn": "Air rune",
-        "amount": 100,
-        "howToGet": "Wind Strike uses one air per cast; an equipped owned Staff of air can replace it.",
-        "wikiItemId": 556,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
-      },
-      {
-        "nameEn": "Trout",
-        "amount": 5,
-        "anyOf": [
-          "Salmon",
-          "Tuna",
-          "Lobster",
-          "Swordfish"
-        ],
-        "heals": 7,
-        "howToGet": "Starter combat food, not the whole goal. Bank when supplies run out.",
-        "wikiItemId": 333,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
-      }
-    ],
-    "doneWhen": "Magic 55.",
-    "inGame": {
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "magic",
-            "level": 55
-          }
-        ]
-      }
-    },
-    "bondBranch": true,
-    "optional": true,
-    "fields": [
-      {
-        "label": "Optional checkpoint",
-        "text": "Magic 55 unlocks High Level Alchemy; it is not required before membership. Train only while the current spell and supplies fit your budget. High Alchemy is not guaranteed profit; use Money for a funding plan when needed."
-      },
-      {
-        "label": "Requirements",
-        "text": "Magic 1. The current method checks its actual spell and Smithing unlocks."
-      }
-    ],
-    "followsMethod": "magic",
-    "requirements": [
-      {
-        "type": "skill",
-        "skill": "magic",
-        "min": 1
-      }
-    ],
-    "where": "The current method supplies its location after your Magic level is checked."
-  },
-  {
-    "id": "S6-04",
-    "stage": 6,
-    "type": "skill",
-    "title": "Ranged to 40: prepare your kit and follow the current trainer",
-    "requires": [
-      "S4-01"
-    ],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
-    "mapLocation": {
-      "x": 3029,
-      "y": 3221,
-      "plane": 0,
-      "label": "Port Sarim docks — level 3 Seagulls (Ranged starter)"
-    },
-    "where": "Port Sarim docks: select level 3 Seagulls when starting Ranged.",
-    "itemsRecommended": [],
-    "fields": [
-      {
-        "label": "Optional branch",
-        "text": "Prepare for membership at your own pace. Ranged 40 is the default checkpoint; no Bond or full optional grind is required. No purchase or combat is automated."
-      },
-      {
-        "label": "Requirements",
-        "text": "Ranged 1. Higher Ranged, Defence and quest requirements are checked separately. Reuse suitable owned equipment; open the bank when quantities are unread. Expensive cosmetic variants are not required."
-      },
-      {
-        "label": "Training",
-        "text": "Follow the current Skills recommendation: it checks your level, worn gear, bank, coins and prices. Prepare the selected kit, then follow the arrow. Use Accurate to Ranged 5, then Rapid, matching the model. The trainer and kit refresh as your levels and supplies change."
-      },
-      {
-        "label": "Arrows",
-        "text": "One shot in five loses its arrow (OSRS Wiki, Arrows); the rest land under the target. Pick them up between kills and a stack lasts about five times longer; nothing collects them for you without an Ava's device, which needs membership."
-      },
-      {
-        "label": "Ogresses later",
-        "text": "Ogresses are a later income choice, not a Ranged 1-50 default. At 50 they are still slow; compare Money with your actual gear, supplies and current market before choosing them. The Corsair Curse opens their dungeon."
-      },
-      {
-        "label": "Equipment",
-        "text": "Shortbows unlock at Ranged 1, 5, 20 and 30. The live plan selects compatible owned or affordable equipment. Leather, studded and green dragonhide depend on levels and quests. Amulet of power or a budget Amulet of accuracy; no Amulet of strength upgrade. Cape and boots are secondary; no ring purchase is required."
-      }
-    ],
-    "doneWhen": "Ranged 40. A useful F2P checkpoint, not a requirement for membership. Continue to 50 only if you choose to stay F2P.",
-    "inGame": {
-      "npcNames": [
-        "Seagull"
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "ranged",
-            "level": 40
-          }
-        ]
-      }
-    },
-    "bondBranch": true,
-    "optional": true,
-    "followsMethod": "ranged",
-    "requirements": [
-      {
-        "type": "skill",
-        "skill": "ranged",
-        "min": 1
-      }
-    ],
-    "itemsRequired": [
-      {
-        "nameEn": "Shortbow",
-        "amount": 1,
-        "equip": true,
-        "wikiItemId": 841,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Shortbow.png",
-        "howToGet": "A compatible equipped bow and starter arrow stack. Withdraw owned usable supplies first; do not buy replacements for an adequate owned loadout."
-      },
-      {
-        "nameEn": "Bronze arrow",
-        "amount": 100,
-        "equip": true,
-        "wikiItemId": 882,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_arrow_1.png",
-        "howToGet": "A compatible equipped bow and starter arrow stack. Withdraw owned usable supplies first; do not buy replacements for an adequate owned loadout."
-      }
-    ]
-  },
-  {
-    "id": "S6-05",
-    "stage": 6,
-    "type": "prep",
-    "title": "Choose membership, or keep playing F2P",
-    "requires": [],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Old_school_bond",
-    "how": "Ready for membership? Activate it through your chosen payment method, then switch the app to Members mode. You do not need to finish Optional or earn a Bond first. Staying F2P? Continue a Skills plan or open Money for current earning methods.",
-    "doneWhen": "Membership is active and Members mode is selected, or mark this optional decision complete yourself.",
-    "inGame": {
-      "highlightItems": [
-        "Old school bond"
-      ]
-    },
-    "bondBranch": true,
-    "optional": true,
-    "quickSteps": [
-      "Ready for membership: activate it, then select Members mode in the app.",
-      "Staying F2P: choose a Skills plan or open Money; no fixed grind is required.",
-      "A Bond is optional. Check its current price and your budget before any manual purchase."
     ]
   },
   {
@@ -5730,60 +3716,12 @@
     ]
   },
   {
-    "id": "S7-04",
-    "stage": 7,
-    "type": "skill",
-    "title": "Agility to 25 (for The Grand Tree)",
-    "requires": [],
-    "membersOnly": true,
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Agility_training",
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2474,3438,0",
-    "mapLocation": {
-      "x": 2474,
-      "y": 3438,
-      "plane": 0,
-      "label": "The Gnome Stronghold agility course"
-    },
-    "floor": "Ground floor",
-    "where": "1-25: Gnome Stronghold Agility Course (Tree Gnome Stronghold, next to the start of The Grand Tree): no falls, no food needed. Or the Draynor Village Rooftop Course, which is also open from level 1. Both give about 10 thousand XP an hour.",
-    "fields": [
-      {
-        "label": "Why",
-        "text": "The Grand Tree requires 25 Agility. The quest itself gives another 7,900 Agility XP: from level 25 that is about 31 at once."
-      },
-      {
-        "label": "Mark of Grace",
-        "text": "Marks of Grace appear on the roofs of the courses: pick them up, since the Graceful set is later assembled from them (S8-03)."
-      }
-    ],
-    "doneWhen": "Agility 25.",
-    "inGame": {
-      "worldPoint": {
-        "x": 2474,
-        "y": 3438,
-        "plane": 0,
-        "label": "The Gnome Stronghold agility course"
-      },
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "agility",
-            "level": 25
-          }
-        ]
-      }
-    }
-  },
-  {
     "id": "S7-05",
     "stage": 7,
     "type": "quest",
     "title": "The Grand Tree",
     "qp": 5,
-    "requires": [
-      "S7-04"
-    ],
+    "requires": [],
     "requirements": [
       {
         "type": "skill",
@@ -5943,7 +3881,7 @@
           "Lobster",
           "Swordfish"
         ],
-        "howToGet": "Your own catch from S6-01, or the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. For the Temple Guardian (level 30, hits up to 3; immune to magic). Preparation sizes the amount for your levels and armour."
+        "howToGet": "Your own catch or the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. For the Temple Guardian (level 30, hits up to 3; immune to magic). Preparation sizes the amount for your levels and armour."
       }
     ],
     "reward": "1 QP, 1,406 Prayer XP, the Wolfbane dagger, access to the region of Morytania and the town of Canifis.",
@@ -6037,7 +3975,7 @@
           "Tuna",
           "Salmon"
         ],
-        "howToGet": "Your own catch from S6-01, or buy on the Grand Exchange. Ghasts turn food in your inventory into rot, so bring spares: three ghasts must be killed."
+        "howToGet": "Your own catch, or buy on the Grand Exchange. Ghasts turn food in your inventory into rot, so bring spares: three ghasts must be killed."
       }
     ],
     "itemsRecommended": [
@@ -6092,228 +4030,13 @@
     }
   },
   {
-    "id": "S8-03",
-    "stage": 8,
-    "type": "skill",
-    "title": "Agility to 40 (the Graceful outfit is optional)",
-    "requires": [],
-    "mapLocation": {
-      "x": 3273,
-      "y": 3195,
-      "plane": 0,
-      "label": "Al Kharid Rooftop Course (Agility 20-30)"
-    },
-    "resourceSpots": [
-      {
-        "x": 3273,
-        "y": 3195,
-        "plane": 0,
-        "label": "Al Kharid Rooftop Course (Agility 20-30)"
-      },
-      {
-        "x": 3220,
-        "y": 3414,
-        "plane": 0,
-        "label": "Varrock Rooftop Course (Agility 30-40)"
-      }
-    ],
-    "membersOnly": true,
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Rooftop_Agility",
-    "itemsRecommended": [
-      {
-        "nameEn": "Mark of Grace",
-        "amount": "As many as you find",
-        "howToGet": "Pick them up on the roofs of the courses.",
-        "wikiItemId": 11849,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Mark_of_Grace.png"
-      }
-    ],
-    "fields": [
-      {
-        "label": "Optional",
-        "text": "Nothing later in the route needs Agility above 25 (The Grand Tree, S7-04). Agility 40 and the Graceful outfit only make running cheaper: do it when you want it, not before the quests that follow."
-      },
-      {
-        "label": "Courses",
-        "text": "1-20: Gnome Stronghold Agility Course or Draynor Village Rooftop Course (both from level 1); 20-30: Al Kharid Rooftop Course; 30-40: Varrock Rooftop Course; from 40: Canifis Rooftop Course (needs Priest in Peril). The whole plan to 99 is on the Agility skill page."
-      },
-      {
-        "label": "Graceful",
-        "text": "The set is bought from Grace in the Rogues' Den under the pub in Burthorpe for Marks of Grace: the full set is 260 marks. It weighs almost nothing, and the full set speeds up run energy recovery by 30%. Most marks are on the Canifis course."
-      }
-    ],
-    "doneWhen": "Agility 40. Graceful pieces and Marks of Grace are a bonus, not a condition.",
-    "inGame": {
-      "npcNames": [
-        "Grace"
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "agility",
-            "level": 40
-          }
-        ]
-      }
-    },
-    "optional": true
-  },
-  {
-    "id": "S8-04",
-    "stage": 8,
-    "type": "skill",
-    "title": "Ranged to 30, Slayer to 18, Crafting to 31, Woodcutting to 36 and Cooking to 10",
-    "requires": [],
-    "mapLocation": {
-      "x": 3255,
-      "y": 3449,
-      "plane": 0,
-      "label": "Varrock Museum — Orlando Smith's quiz in the basement (Slayer)"
-    },
-    "resourceSpots": [
-      {
-        "x": 3255,
-        "y": 3449,
-        "plane": 0,
-        "label": "Varrock Museum — Orlando Smith's quiz in the basement (Slayer)"
-      },
-      {
-        "x": 3103,
-        "y": 3265,
-        "plane": 0,
-        "label": "Draynor Village — the Porcine of Interest notice board (Slayer), willows (Woodcutting)"
-      },
-      {
-        "x": 3257,
-        "y": 3272,
-        "plane": 0,
-        "label": "The cow field east of Lumbridge (Ranged)"
-      }
-    ],
-    "membersOnly": true,
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Quest_skill_requirements",
-    "fields": [
-      {
-        "label": "Why",
-        "text": "Animal Magnetism (S8-05) needs Ranged 30, Slayer 18, Crafting 19 and Woodcutting 35; Lost City (S9-01) needs Crafting 31 and Woodcutting 36; Recipe for Disaster (S9-05) needs Cooking 10. The route up to here leaves Woodcutting at 15 and Cooking at 4 (stage 6 is only the optional Bond branch), so this step trains all five. It unlocks Animal Magnetism (Ava's device), Lost City (Zanaris and the Dramen staff) and the Culinaromancer's Chest."
-      },
-      {
-        "label": "Ranged 30",
-        "text": "Shoot cows in the Lumbridge pasture from a distance with a bow and arrows set to the Accurate style. Use the best bow your level allows: Oak shortbow (level 5), Willow shortbow (level 20), Maple shortbow (level 30), with Iron or Steel arrows first, Mithril arrows from 20. Bring 200-300 arrows and the bow you will use, and pick the arrows up as you go. Faster, as this is a members world: darts on the Rapid style, a throw every 2 ticks against 3 for a shortbow on Rapid (wiki attack speeds: dart 3, shortbow 4, Rapid one less). Steel darts from Ranged 5, Mithril darts from 20, bought on the Grand Exchange at the current market price; bring about 500 and pick them up, they reach only 3 tiles. Stop at 30 for Animal Magnetism; train to 50 only if you want Ava's accumulator (the S8-05 tip)."
-      },
-      {
-        "label": "Slayer 18",
-        "text": "Take the cheap XP first: the Varrock Museum quiz (talk to Orlando Smith, basement) gives 1,000 XP and the short quest A Porcine of Interest (the notice board in Draynor Village) another 1,000, which is level 13. For the rest do one or two tasks from the master Mazchna in Canifis (after Priest in Peril); Turael in Burthorpe gives short tasks with little XP. Stop at 18."
-      },
-      {
-        "label": "Crafting 31",
-        "text": "Nature Spirit (S8-02) has already given 3,000 XP. From there make jewellery at a furnace with the mould in the bag: gold amulets from Crafting 8 (30 XP each), sapphire rings from 20 (40 XP each), emerald rings from 27 (55 XP each). Buy gold bars and cut gems on the Grand Exchange rather than mining them. Stop at 31."
-      },
-      {
-        "label": "Woodcutting 36",
-        "text": "Cut oaks (level 15) and then willows (level 30) beside the Draynor Village bank: about 38 XP per oak log and 68 per willow log, and the logs can be sold or burned for Firemaking. 36 needs about 22,000 XP above level 15, roughly 330 willow logs. Use the best axe your level allows."
-      },
-      {
-        "label": "Cooking 10",
-        "text": "Cook what you already hold on a range or a fire: level 10 is 1,154 XP and Cook's Assistant already gave 300, so 854 XP is left. Cook raw shrimps (30 XP each, about 29 successful cooks) or raw sardines (40 XP each, about 22; both from level 1), or herring from level 5 (50 XP). Trout needs Cooking 15 and cannot be cooked yet. Bring 10-15 more than that: some burn."
-      },
-      {
-        "label": "Order",
-        "text": "Do Slayer first (it needs no money), then Woodcutting and Cooking (they pay for themselves), then Crafting while you wait for arrows to restock, then Ranged. Check the levels with the Skills page: the goals above are the only targets of this step."
-      }
-    ],
-    "doneWhen": "Ranged 30, Slayer 18, Crafting 31, Woodcutting 36, Cooking 10.",
-    "inGame": {
-      "npcNames": [
-        "Orlando Smith",
-        "Mazchna",
-        "Turael"
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "ranged",
-            "level": 30
-          },
-          {
-            "skill": "slayer",
-            "level": 18
-          },
-          {
-            "skill": "crafting",
-            "level": 31
-          },
-          {
-            "skill": "woodcutting",
-            "level": 36
-          },
-          {
-            "skill": "cooking",
-            "level": 10
-          }
-        ]
-      }
-    },
-    "styleGear": "ranged",
-    "where": "Five places in turn: cows in the Lumbridge pasture for Ranged, the Varrock Museum and Draynor Village for the quick Slayer XP, any furnace (Edgeville, Al Kharid or Falador) for Crafting, the Draynor Village willows for Woodcutting and any range for Cooking.",
-    "itemsRecommended": [
-      {
-        "nameEn": "Oak shortbow",
-        "amount": 1,
-        "howToGet": "Buy on the Grand Exchange. Ranged 5. Replace it with a Willow shortbow at 20 and a Maple shortbow at 30.",
-        "wikiItemId": 843,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Oak_shortbow.png"
-      },
-      {
-        "nameEn": "Iron arrow",
-        "amount": 300,
-        "howToGet": "Buy on the Grand Exchange; pick them up again as you shoot. Mithril arrows from Ranged 20.",
-        "wikiItemId": 884,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_arrow_1.png"
-      },
-      {
-        "nameEn": "Gold bar",
-        "amount": 10,
-        "howToGet": "Buy on the Grand Exchange: for the gold amulets and rings of the Crafting part.",
-        "wikiItemId": 2357,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Gold_bar.png"
-      },
-      {
-        "nameEn": "Ring mould",
-        "amount": 1,
-        "howToGet": "General Store or the Grand Exchange.",
-        "wikiItemId": 1592,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Ring_mould.png"
-      }
-    ],
-    "tasks": [
-      {
-        "id": "museum-quiz",
-        "text": "Varrock Museum quiz: talk to Orlando Smith in the basement (1,000 Slayer XP)."
-      },
-      {
-        "id": "porcine",
-        "text": "A Porcine of Interest (optional quest): read the notice board in Draynor Village, talk to Sarah at the South Falador Farm, use a rope on the Strange Hole east of Draynor Manor, then kill Sourhog (level 37) and cut off its foot. Bring a rope, a knife or slash weapon, combat gear and food.",
-        "why": "Pays 1,000 Slayer XP and 5,000 coins.",
-        "check": {
-          "kind": "quest",
-          "name": "A Porcine of Interest"
-        },
-        "qp": 1
-      }
-    ]
-  },
-  {
     "id": "S8-05",
     "stage": 8,
     "type": "quest",
     "title": "Animal Magnetism",
     "qp": 1,
     "requires": [
-      "S8-01",
-      "S8-04"
+      "S8-01"
     ],
     "requirements": [
       {
@@ -6482,104 +4205,12 @@
     ]
   },
   {
-    "id": "S8-06",
-    "stage": 8,
-    "type": "skill",
-    "title": "Prayer to 43 (Protect from Melee)",
-    "requires": [],
-    "membersOnly": true,
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Ectofuntus",
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3660,3520,0",
-    "mapLocation": {
-      "x": 3660,
-      "y": 3520,
-      "plane": 0,
-      "label": "The Ectofuntus, Port Phasmatys"
-    },
-    "where": "The Ectofuntus in Port Phasmatys (Morytania). The bank is in Port Phasmatys, a few steps from the temple.",
-    "how": "Buy the bones, grind them, fill buckets with slime, and worship the Ectofuntus. Each offering gives four times the Prayer XP of burying the same bone.",
-    "itemsRequired": [
-      {
-        "nameEn": "Ghostspeak amulet",
-        "amount": 1,
-        "howToGet": "From The Restless Ghost (S1-06). Worn, it lets you talk to the ghost disciple who pays the ecto-tokens.",
-        "wikiItemId": 552,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png"
-      },
-      {
-        "nameEn": "Bones",
-        "amount": 9,
-        "howToGet": "Per trip. Use Big bones (60 XP each) or Dragon bones (288 XP each) instead: buy them on the Grand Exchange, the live price is in the app. Keep the Big bones from S4-03 if you still have them.",
-        "wikiItemId": 526,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Bones.png"
-      },
-      {
-        "nameEn": "Pot",
-        "amount": 9,
-        "howToGet": "Per trip: they hold the bonemeal. General Store, 1 gp.",
-        "wikiItemId": 1931,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Pot.png"
-      },
-      {
-        "nameEn": "Bucket",
-        "amount": 9,
-        "howToGet": "Per trip: they hold the slime. General Store, 2 gp.",
-        "wikiItemId": 1925,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket.png"
-      }
-    ],
-    "fields": [
-      {
-        "label": "Why",
-        "text": "Monkey Madness I (S9-04) asks for Protect from Melee all through the Ape Atoll dungeon and Protect from Magic against the Jungle Demon, which hits up to 32 with both magic and melee. Protect from Melee needs Prayer 43, so this level is a requirement of that quest, not a bonus."
-      },
-      {
-        "label": "Quest XP first",
-        "text": "The Restless Ghost, Priest in Peril, Recruitment Drive and Holy Grail give 14,531 Prayer XP together, which is level 30. Two of them are already on your route. Holy Grail alone gives 11,000 Prayer XP and 15,300 Defence XP (after Merlin's Crystal, with Attack 20 for Excalibur, and a level 120 Black Knight Titan to beat), so do it first if you want to save the bones. The two lamps (X Marks the Spot, The Ides of Milk) are already counted."
-      },
-      {
-        "label": "Default method",
-        "text": "Offer bones at the Ectofuntus: safe, no skill requirement and four times the XP of burying. A bone gives 18 XP, a Big bone 60 and a Dragon bone 288. About 180 offerings an hour: Big bones are about 10,800 XP an hour, Dragon bones about 52,000. Dragon bones are the fast way and cost more, Big bones the cheap and slow one."
-      },
-      {
-        "label": "How an offering goes",
-        "text": "Use a bucket on the pool of slime (it fills every bucket in the bag). Go upstairs and use the bones on the bone grinder loader, not bury them: it makes bonemeal. Click the Ectofuntus with bonemeal and a bucket of slime to worship. A ghost disciple pays 5 ecto-tokens for each offering while you wear the Ghostspeak amulet."
-      },
-      {
-        "label": "Alternative",
-        "text": "Offering plain bones at the Chaos altar in the Wilderness is cheaper per XP, but other players can attack you there: it is not part of this route."
-      }
-    ],
-    "doneWhen": "Prayer 43.",
-    "inGame": {
-      "npcNames": [
-        "Ghost disciple"
-      ],
-      "objectNames": [
-        "Ectofuntus",
-        "Pool of Slime",
-        "Loader"
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "prayer",
-            "level": 43
-          }
-        ]
-      }
-    }
-  },
-  {
     "id": "S9-01",
     "stage": 9,
     "type": "quest",
     "title": "Lost City",
     "qp": 3,
-    "requires": [
-      "S8-04"
-    ],
+    "requires": [],
     "requirements": [
       {
         "type": "skill",
@@ -6923,8 +4554,7 @@
     "qp": 3,
     "requires": [
       "S7-03",
-      "S7-05",
-      "S8-06"
+      "S7-05"
     ],
     "requirements": [
       {
@@ -7011,7 +4641,7 @@
     "fields": [
       {
         "label": "Requirements",
-        "text": "Tree Gnome Village and The Grand Tree (S7-03, S7-05), Prayer 43 for Protect from Melee (S8-06) and the ability to beat a level 195 Jungle Demon: it hits up to 32 with magic and melee, and only a protection prayer stops it."
+        "text": "Tree Gnome Village and The Grand Tree (S7-03, S7-05), Prayer 43 for Protect from Melee and the ability to beat a level 195 Jungle Demon: it hits up to 32 with magic and melee, and only a protection prayer stops it."
       },
       {
         "label": "Before you leave the bank",
@@ -7087,7 +4717,7 @@
         "nameEn": "Maple shortbow",
         "amount": 1,
         "equip": true,
-        "howToGet": "For the Jungle demon (level 195): it is finished with Ranged from three or more squares away. Its ranged defence is +0, against +50 for magic and slash. The bow you trained Ranged with in S8-04; a Maple shortbow needs Ranged 30. Grand Exchange.",
+        "howToGet": "For the Jungle demon (level 195): it is finished with Ranged from three or more squares away. Its ranged defence is +0, against +50 for magic and slash. Use your best bow; a Maple shortbow needs Ranged 30. Grand Exchange.",
         "wikiItemId": 853,
         "iconUrl": "https://oldschool.runescape.wiki/images/Maple_shortbow.png",
         "anyOf": [

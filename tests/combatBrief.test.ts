@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
+import { retiredStep } from './fixtures/retiredSteps';
 
 // The combat brief, section D (quest bosses) and A (stocking up), on the wiki numbers of 2026-10-15: Count Draynor 35 HP, max hit 3;
 // Delrith 7 HP, max hit 3, the dark wizards at the circle up to 6; Ithoi the Navigator 55 HP, max hit 6 (magic); Brutus 58 HP, max hit 3 and a
@@ -30,12 +31,6 @@ describe('quest bosses: food and a potion dose as advice, the numbers in the tex
     expect(combat('S3-03')).toMatch(/hit up to 6 with magic/);
   });
 
-  it('S3-07 stocks up for S3-08 in the same trip', () => {
-    const text = stepById.get('S3-07')!.fields!.find((f) => f.label === 'Food and potions')!.text;
-    expect(text).toMatch(/selected S3-08 combat plan/);
-    expect(text).toMatch(/Shopping estimates the whole goal/);
-    expect(text).toMatch(/one bank trip/);
-  });
 });
 
 describe('members bosses fought with Magic from the safespots the wiki names', () => {
@@ -49,7 +44,7 @@ describe('members bosses fought with Magic from the safespots the wiki names', (
 
 describe('S8-04 Ranged', () => {
   it('names darts on Rapid as the faster way, with the levels', () => {
-    const t = stepById.get('S8-04')!.fields!.find((f) => f.label === 'Ranged 30')!.text;
+    const t = retiredStep('S8-04')!.fields!.find((f) => f.label === 'Ranged 30')!.text;
     expect(t).toMatch(/darts on the Rapid style/);
     expect(t).toMatch(/Steel darts from Ranged 5, Mithril darts from 20/);
   });

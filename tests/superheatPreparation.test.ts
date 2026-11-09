@@ -5,7 +5,7 @@ import { nameKey } from '../src/domain/items/itemKey';
 import { SUPERHEAT_WATCH, superheatNeeds } from '../src/domain/combat/magicPlan';
 import { methodNeeds, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
 import { methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
-import { stepById } from '../src/data';
+import { retiredStep } from './fixtures/retiredSteps';
 
 const method = trainingMethods.find(m => m.id === 'ma-superheat')!;
 function state(stock: Record<string, { carried?: number; bank?: number; noted?: number }> = {}, worn = false, stats: Record<string, number> = { magic: 43, smithing: 15 }, unread = false) {
@@ -61,7 +61,7 @@ describe('Superheat iron starter preparation', () => {
     expect(view.unchecked).toEqual(expect.arrayContaining([expect.objectContaining({ label: 'Smithing 15' }), expect.objectContaining({ label: 'Iron ore ×25' })]));
   });
   it('projects resolved inputs and watches the optional staff through the existing method path', () => {
-    const step = { ...stepById.get('S6-03')!, followsMethod: 'magic' };
+    const step = { ...retiredStep('S6-03')!, followsMethod: 'magic' };
     const projected = withTrainingMethod(step, { methodId: method.id, needs: methodNeeds(method, state({ 'Staff of fire': { bank: 1 } })) });
     expect(projected.itemsRequired).toEqual(expect.arrayContaining([expect.objectContaining({ nameEn: 'Iron ore', amount: 25 }), expect.objectContaining({ nameEn: 'Staff of fire', equip: true })]));
     expect(projected.itemsRequired?.some(n => n.nameEn === 'Fire rune')).toBe(false);

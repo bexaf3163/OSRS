@@ -224,18 +224,16 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
       } else if (res.state === 'UNKNOWN') {
         reqs.push({ kind: 'coins', label, state: 'UNKNOWN', hard: true, detail: `${gp(c.bag!)} in the bag; the bank was not opened in this session` });
       } else {
-        // Where to earn: the nearest earning step on the route (cowhides, iron ore), no further than this step.
-        const at = steps.findIndex((x) => x.id === step.id);
-        const earn = steps.slice(0, at >= 0 ? at + 1 : steps.length).filter((x) => x.moneyGoal).pop() ?? steps.find((x) => x.moneyGoal);
+        // Where to earn: the Money page ranks the methods for this player (the funding engine), not a route step.
         reqs.push({
           kind: 'coins', label, state: 'MISSING', hard: true, detail: `${gp(c.total ?? c.bag ?? 0)} in all, ${gp(res.missing ?? it.count)} short`, source: 'game',
-          ...(earn ? { action: { kind: 'link' as const, label: `💰 Earn: ${earn.id}`, href: hrefTo.step(earn.id) } } : {}),
+          action: { kind: 'link' as const, label: '💰 Earn it: Money', href: hrefTo.money() },
         });
       }
       continue;
     }
     const key = it.id !== undefined ? `id:${it.id}` : `name:${nameKey(it.nameEn)}`;
-    // Any of several items does the job (S3-08's food: Salmon, or Trout, Tuna...): they count together, as the plugin's guide counts them. A tool
+    // Any of several items does the job (S4-01's food: Salmon, or Trout, Tuna...): they count together, as the plugin's guide counts them. A tool
     // family (every pickaxe tier) is counted by heldOf already.
     const alt = it.alt?.length && !toolFamilyOf(it.nameEn) ? it.alt : null;
     const food = typeof it.heals === 'number' && it.heals > 0 ? { heals: it.heals, anyOf: it.alt } : undefined;

@@ -1,51 +1,97 @@
 {
-  "source": "scripts/data/trainers.defs.json checked against the OSRS Wiki (LocLine spawns, drop tables) and the route (scripts/data/build-trainers.ts)",
-  "generatedAt": "2026-10-25",
+  "source": "scripts/data/trainers.defs.json checked against the OSRS Wiki (LocLine spawns, drop tables) and scripts/data/build-trainers.ts",
+  "generatedAt": "2026-11-08",
   "trainers": [
     {
       "foe": "Cow",
       "name": "cows",
-      "fromStep": "S1-13",
       "bank": "Lumbridge Bank",
       "sell": "Cowhide",
+      "place": {
+        "x": 3257,
+        "y": 3272,
+        "plane": 0,
+        "label": "The cow field east of Lumbridge"
+      },
+      "npcNames": [
+        "Cow"
+      ],
+      "goal": "The cow field east of Lumbridge",
+      "where": "The cow field north-east of Lumbridge Castle, across the river (Lumbridge cow field).",
       "always": [
         "Cowhide",
         "Raw beef",
         "Bones"
       ],
-      "members": false
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Cow"
     },
     {
       "foe": "Minotaur",
       "name": "Minotaurs",
-      "fromStep": "S3-08",
       "levels": [
         12
       ],
       "bank": "Edgeville Bank",
+      "place": {
+        "x": 3081,
+        "y": 3420,
+        "plane": 0,
+        "label": "The Stronghold of Security entrance, Barbarian Village mine"
+      },
+      "npcNames": [
+        "Minotaur"
+      ],
+      "goal": "Stronghold of Security floor 1: the level 12 Minotaurs",
+      "waypoints": [
+        {
+          "x": 3081,
+          "y": 3420,
+          "plane": 0,
+          "label": "The Stronghold of Security entrance: climb down"
+        },
+        {
+          "x": 1876,
+          "y": 5216,
+          "plane": 0,
+          "label": "Floor 1 (Vault of War): the level 12 Minotaurs"
+        }
+      ],
+      "where": "The Stronghold of Security, floor 1 (the Vault of War): the level 12 Minotaurs (the level 27 ones are further in). The entrance is in the Barbarian Village mine. There is no bank on the floor: bank in Edgeville first.",
       "always": [
         "Bones"
       ],
-      "members": false
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Minotaur"
     },
     {
       "foe": "Giant frog",
       "name": "Giant frogs",
-      "fromStep": "S4-03",
       "levels": [
         13
       ],
       "bank": "Lumbridge Bank",
       "sell": "Big bones",
+      "place": {
+        "x": 3197,
+        "y": 3166,
+        "plane": 0,
+        "label": "Lumbridge Swamp: level 13 Giant frogs"
+      },
+      "npcNames": [
+        "Giant frog"
+      ],
+      "goal": "Lumbridge Swamp: level 13 Giant frogs",
+      "where": "Fight level 13 Giant frogs on the surface of Lumbridge Swamp, south of Lumbridge Castle. Do not enter the caves: those frogs are level 99. Refill food at Lumbridge Castle bank.",
       "always": [
         "Big bones"
       ],
-      "members": false
+      "members": false,
+      "source": "https://oldschool.runescape.wiki/w/Giant_frog"
     },
     {
       "foe": "Hill Giant",
       "name": "Hill Giants",
-      "formerStep": "S4-03",
       "bank": "Edgeville Bank",
       "sell": "Big bones",
       "place": {
@@ -77,7 +123,6 @@
         "Big bones"
       ],
       "members": false,
-      "routeStep": "S4-03",
       "source": "https://oldschool.runescape.wiki/w/Hill_Giant"
     },
     {
@@ -104,8 +149,6 @@
       },
       "members": false,
       "spawns": 17,
-      "routeStep": "S1-09",
-      "routeTiles": 9,
       "source": "https://oldschool.runescape.wiki/w/Barbarian"
     },
     {
@@ -130,8 +173,6 @@
       },
       "members": false,
       "spawns": 9,
-      "routeStep": "S2-10",
-      "routeTiles": 6,
       "source": "https://oldschool.runescape.wiki/w/Al_Kharid_warrior"
     },
     {
@@ -159,8 +200,6 @@
       },
       "members": false,
       "spawns": 4,
-      "routeStep": "S5-09",
-      "routeTiles": 26,
       "source": "https://oldschool.runescape.wiki/w/Monk"
     },
     {
@@ -197,8 +236,6 @@
       },
       "members": false,
       "spawns": 1,
-      "routeStep": "S1-13",
-      "routeTiles": 25,
       "source": "https://oldschool.runescape.wiki/w/Brutus"
     }
   ]

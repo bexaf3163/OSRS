@@ -34,19 +34,13 @@ public class HudRenderTest
 		String s403 = "[S4-03] Attack to 40 and bank 50 Big bones";
 		StepGuide.ItemLine salmonBag = HudModelTest.salmon(StepGuide.Have.BAG, 21, 30);
 		StepGuide.ItemLine scimitar = HudModelTest.item("Adamant scimitar", StepGuide.Have.BAG, 1, 1, 0, 1, null, false);
-		HudModel.Input training = HudModelTest.with(HudModelTest.input(HudModelTest.view(s403, null, scimitar, salmonBag), HudModelTest.quiet(), HudModelTest.attack(30)),
-			"planNext", "Fight the Hill Giants until 50 Big bones are in the bank: Edgeville Dungeon.");
+		HudModel.Input training = HudModelTest.input(HudModelTest.view(s403, null, scimitar, salmonBag), HudModelTest.quiet(), HudModelTest.attack(30));
 		out.put("training", HudModel.build(training));
-		HudModel.Input collection = HudModelTest.with(training, "planNow", "Collect 50 Big bones from Hill Giants on Accurate");
-		collection = HudModelTest.with(collection, "view", new StepGuide.View(s403, null, Arrays.asList(scimitar, salmonBag),
-			Collections.singletonList(new StepGuide.PlaceLine("The trapdoor to the Edgeville Dungeon", 0, false, null, false)), null, null, null, null));
-		collection = HudModelTest.with(collection, "planNext", "Train Attack to 40 on cows");
-		out.put("collection", HudModel.build(collection));
 		PrepPlan food = HudModelTest.plan(HudModelTest.line("Salmon", 21, "BANK", "CRITICAL", "NOW", "CRITICAL", "Take from the bank ×21"),
 			HudModelTest.line("Iron chainbody", 1, "BANK", "OPTIMIZATION", "NOW", null, "Take from the bank"));
 		StepGuide.ItemLine chain = HudModelTest.item("Iron chainbody", StepGuide.Have.BANK, 0, 1, 1, 0, null, false);
-		out.put("food", HudModel.build(HudModelTest.with(HudModelTest.input(HudModelTest.view(s403, food, scimitar, HudModelTest.salmon(StepGuide.Have.BANK, 0, 30), chain),
-			HudModelTest.quiet(), HudModelTest.attack(30)), "planNext", "Fight the Hill Giants until 50 Big bones are in the bank: Edgeville Dungeon.")));
+		out.put("food", HudModel.build(HudModelTest.input(HudModelTest.view(s403, food, scimitar, HudModelTest.salmon(StepGuide.Have.BANK, 0, 30), chain),
+			HudModelTest.quiet(), HudModelTest.attack(30))));
 		out.put("unknown-bank", HudModel.build(HudModelTest.input(HudModelTest.view(s403, null, HudModelTest.salmon(StepGuide.Have.UNKNOWN, 0, -1)),
 			HudModelTest.state("~229 tiles ↘", 229), HudModelTest.attack(30))));
 		Hud.State danger = new Hud.State(null, null, "~12 tiles ↑", false, null, false, "Hill Giants (level 28) hit up to 8 here: keep food with you", true, null, false,

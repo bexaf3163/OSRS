@@ -4,8 +4,8 @@ import { emptyProgress } from '../src/domain/persistence/progress';
 import { adviseTraining, trainingMethods, viewMethod } from '../src/domain/training/trainingRouter';
 import { methodPoint, withTrainingMethod } from '../src/domain/training/methodStep';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
-import { stepById } from '../src/data';
 import { matchStrict } from '../src/domain/travel/locations';
+import { retiredStep } from './fixtures/retiredSteps';
 
 const method = trainingMethods.find(m => m.id === 'pr-camdozaal')!;
 function character(levels: Record<string, number> = { prayer: 1, fishing: 7, cooking: 7 }, knife = 1, quest = true) {
@@ -17,7 +17,7 @@ function character(levels: Record<string, number> = { prayer: 1, fishing: 7, coo
   });
 }
 function projected() {
-  const base = stepById.get('S6-04')!;
+  const base = retiredStep('S6-04')!;
   return withTrainingMethod({ ...base, requires: [], requirements: [], minQp: undefined, followsMethod: 'prayer',
     inGame: { ...base.inGame!, completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill: 'prayer', level: 2 }] } },
   }, { methodId: method.id, needs: method.needs, untilLevel: 2 });

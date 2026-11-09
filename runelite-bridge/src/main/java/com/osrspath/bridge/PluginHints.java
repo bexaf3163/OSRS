@@ -205,7 +205,7 @@ final class PluginHints
 				Item it = items[i];
 				if (it.getId() > 0 && it.getQuantity() > 0)
 				{
-					Map<String, Object> row = itemRow(it.getId(), null);
+					Map<String, Object> row = itemRow(it.getId(), it.getQuantity());
 					String slot = slotName(i);
 					if (slot != null)
 					{

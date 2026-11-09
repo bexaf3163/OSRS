@@ -240,7 +240,7 @@
         },
         {
           "t": "p",
-          "text": "He stands in the Lumbridge graveyard, south of the church. Talk-to, \"Where can I learn more about security?\", \"Yes\". It works once and only if you have never been to the Stronghold of Security. Save it for step S1-09."
+          "text": "He stands in the Lumbridge graveyard, south of the church. Talk-to, \"Where can I learn more about security?\", \"Yes\". It works once and only if you have never been to the Stronghold of Security. Save it for the Stronghold of Security."
         },
         {
           "t": "p",
@@ -426,7 +426,7 @@
               "text": "If you have no money left for the way back, talk to Luthas at the banana plantation and put 10 bananas in the crate: he pays 30 gp."
             },
             {
-              "text": "**When:** Pirate's Treasure, and lobsters and swordfish at Musa Point (step S6-01)."
+              "text": "**When:** Pirate's Treasure, and lobsters and swordfish at Musa Point."
             }
           ]
         },

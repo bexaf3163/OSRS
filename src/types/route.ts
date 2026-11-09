@@ -67,10 +67,6 @@ export interface StepItemRequirement {
   phase?: string;
   /** Other items that do the same job: any of them counts (every pickaxe tier for "Pickaxe"). */
   anyOf?: string[];
-  /** The route's planning price of one, in coins; only items that take part in a funding plan have it (lib/fundingPlan.ts). */
-  gp?: number;
-  /** Funding priority: 1 materials of the quests ahead, 2 what the next steps are built on, 3 comfort that can wait. */
-  tier?: 1 | 2 | 3;
 }
 
 /** One bank-to-bank stretch of a quest with its own inventory: what to take, what the game refuses at the door. */
@@ -210,11 +206,6 @@ export interface Step {
   minQp?: number;
   requires: string[];
   /**
-   * Steps that are better done first but never hold this one back: optional quests the route only suggests. A step that is optional
-   * is never listed in `requires` (the validator says so): a "requires" that the player may knowingly skip would block the route.
-   */
-  softRequires?: string[];
-  /**
    * Requirements checked against the player's state (levels, quests), from the quest article on the OSRS Wiki.
    * A step's readiness (lib/readiness.ts) checks them against the levels from the game or the profile and the quest marks.
    */
@@ -234,8 +225,6 @@ export interface Step {
   /** Optional future bank stock; excluded from readiness and completion. */
   stockItems?: StepItemRequirement[];
   itemsRecommended?: StepItemRequirement[];
-  /** Canonical baseline armour IDs for the route's combat preparation; usable owned equivalents are accepted. */
-  combatArmour?: number[];
   /** Inventories of the quest's phases, in order; the first is the one before the step starts. */
   loadouts?: Loadout[];
   /** What this step keeps for a later one (see CarryItem). */
@@ -277,18 +266,6 @@ export interface Step {
   followsMethod?: string;
   /** Runtime identity of the current training requirements; a later stage must not inherit an earlier preparation refusal/completion. */
   trainingPhase?: string;
-  /** Set at run time while a combat plan other than the route's own leads the step (lib/combatRoute/pick.ts): the plan's key, the phase in hand and who chose it. Never in the data. */
-  combatPlan?: {
-    key: string; phase: number; source: 'auto' | 'player';
-    /** The phase in hand in a few words for the in-game guide ("Collect 50 Big bones from Hill Giants"); absent for a phase the training pace says by itself. */
-    now?: string;
-    /** The instruction of the phase after it (without "Then: "); absent for the last. */
-    next?: string;
-    /** Internal food/time projection for an item-only combat phase; never a new skill completion goal. */
-    trainingSkill?: 'attack' | 'strength' | 'defence';
-  };
-  /** Set at run time with combatPlan: the route's own instructions the plan replaced, shown folded as "the route as written". Never in the data. */
-  routeAsWritten?: { where?: string; how?: string; quickSteps?: string[]; fields?: Field[] };
   /**
    * Who the step fights in melee: wiki article names (monsters.json). The gear advisor uses them to
    * compare weapons and show a hint on the step. Absent from steps where you fight with a special weapon or magic.
@@ -301,20 +278,10 @@ export interface Step {
   tips?: string[];
   reward?: string;
   doneWhen: string;
-  /** An earning step: how many coins you should have by the end of the step (in the bag and bank). Progress is in lib/wealth.ts. */
-  moneyGoal?: number;
-  /** The goal for an account that cannot sell restricted items on the Grand Exchange yet (lib/tradeRestriction.ts): coins that need no sale. */
-  moneyGoalNoSale?: number;
-  /** The items this step sells on the Grand Exchange: the step shows the new-account restrictions when one of them is restricted. */
-  sells?: string[];
   /** Opponents without a combat card in foes (a boss, a quest monster): threats.json keys, for the food advice. */
   threats?: string[];
-  /** Show what to wear for magic or ranged (wiki recommendations) for the player's levels and coins. */
-  styleGear?: 'magic' | 'ranged';
   /** "Use X on Y": in the game the HUD reminds you of the action and the item and the target are highlighted. kind is object (the default), npc or item. */
   useOn?: { item: string; target: string; kind?: 'object' | 'npc' | 'item' }[];
-  /** Show the calculation "what it costs to reach a Magic goal with combat spells" (S2-04). */
-  magicPlan?: { target: number; /** The level you start from on the route, if the game and the skill page say nothing. */ from: number };
   /** Quest stages by a game variable: what to do and where to go right now (src/data/authored/questStages.json). */
   questStages?: QuestStages;
   /** Other labelled lines: "Why", "Important", "Danger", "Combat", "Requirements". */

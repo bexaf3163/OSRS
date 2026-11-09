@@ -4,6 +4,8 @@ import { evaluate } from './evaluate';
 import { methodById } from './methods';
 import { gearById } from '../../combat/gearAdvisor';
 import { ctxOf, fakePrices, fakeSnap } from '../../../../tests/funding/helpers';
+import { buildPlayerState } from '../../player/playerState';
+import { emptyProgress } from '../../persistence/progress';
 
 const id = (n: string) => [...gearById.values()].find((p) => p.name === n)!.id;
 // The character of the Hill Giants report: Attack 30, Strength 21, Defence 1, 24 hitpoints, an Adamant scimitar and iron armour.
@@ -79,5 +81,31 @@ describe('Hill Giants for the reported character, from the shared combat model',
     expect(e.cautions.join(' ')).toMatch(/Food-intensive/);
     // The required 50 bones are filled first, so a small target is not met by selling them.
     expect(e.workingCapital!).toBeGreaterThan(1500);
+  });
+});
+
+describe('a worn weapon the melee estimate does not use', () => {
+  // Owner report 2026-11-09: wielding a bow, Kill Giant frogs read "combat stats unknown" while connected.
+  it('times the kill with the combat engine in the player\'s own style', () => {
+    const equipment = [['Shortbow', 'weapon', 1], ['Bronze arrow', 'ammo', 500]].map(([name, slot, count], i) => ({ id: 50_000 + i, name: name as string, slot: slot as string, count: count as number }));
+    const stats = { attack: 1, strength: 1, defence: 30, hitpoints: 30, ranged: 30 };
+    const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
+    const state = buildPlayerState({ mode: 'f2p', stats, progress: emptyProgress(), owned: { bankSeen: true, items: new Map() }, gear, questsDone: [], connected: true });
+    const frogs = methodById('giant-frogs')!;
+    const p = combatPersonaliser({ stats, xp: null, gear: gear as never, train: null, state }, prices)(frogs);
+    expect(p).not.toBeNull();
+    expect(p!.basis).toMatch(/ranged/);
+    expect(p!.secondsPerUnit.typical).toBeGreaterThan(0);
+  });
+});
+
+describe('an opponent without a method in the worn style', () => {
+  it('borrows the style\'s kit: a bow user gets a time for the cows too', () => {
+    const equipment = [['Shortbow', 'weapon', 1], ['Bronze arrow', 'ammo', 500]].map(([name, slot, count], i) => ({ id: 50_000 + i, name: name as string, slot: slot as string, count: count as number }));
+    const stats = { attack: 1, strength: 1, defence: 30, hitpoints: 30, ranged: 30 };
+    const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
+    const state = buildPlayerState({ mode: 'f2p', stats, progress: emptyProgress(), owned: { bankSeen: true, items: new Map() }, gear, questsDone: [], connected: true });
+    const p = combatPersonaliser({ stats, xp: null, gear: gear as never, train: null, state }, prices)(methodById('cows-cowhide')!);
+    expect(p?.basis).toMatch(/ranged/);
   });
 });

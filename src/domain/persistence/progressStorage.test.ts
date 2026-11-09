@@ -3,7 +3,7 @@ import { known } from '../../data';
 import { emptyProgress, normalizeProgress, STORAGE_KEY } from './progress';
 import { readProgressText, restoreProgress } from './progressStorage';
 
-const saved = (step = 'S2-01', at = '2026-10-01T00:00:00.000Z') => ({ ...emptyProgress(), steps: { [step]: 'done' as const }, updatedAt: at });
+const saved = (step = 'S2-02', at = '2026-10-01T00:00:00.000Z') => ({ ...emptyProgress(), steps: { [step]: 'done' as const }, updatedAt: at });
 function memory(raw: string | null = null) {
   const values = new Map<string, string>(raw === null ? [] : [[STORAGE_KEY, raw]]);
   return { getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => { values.set(key, value); }, values };
@@ -57,7 +57,7 @@ describe('safe progress recovery', () => {
     const storage = memory('new broken');
     storage.setItem(`${STORAGE_KEY}:recovery:local`, 'older broken');
     const restored = restoreProgress(storage, known, STORAGE_KEY, () => JSON.stringify(saved()));
-    expect(restored.progress.steps).toEqual({ 'S2-01': 'done' });
+    expect(restored.progress.steps).toEqual({ 'S2-02': 'done' });
     expect(restored.writable).toBe(false);
     expect(restored.preserved).toBe(false);
     expect(storage.getItem(`${STORAGE_KEY}:recovery:local`)).toBe('older broken');
@@ -86,9 +86,9 @@ describe('safe progress recovery', () => {
     expect(readProgressText(raw, known).kind).toBe('invalid');
   });
   it('retains legacy saves and migrates task prefixes with their V2 steps', () => {
-    expect(readProgressText(JSON.stringify({ steps: { 'S2-01': 'done' } }), known).kind).toBe('valid');
-    const result = normalizeProgress({ version: 2, steps: { 'S1-06': 'done' }, tasksDone: { 'S1-06:book': true } }, known)!;
-    expect(result.progress.steps).toEqual({ 'S1-10': 'done' });
-    expect(result.progress.tasksDone).toEqual({ 'S1-10:book': true });
+    expect(readProgressText(JSON.stringify({ steps: { 'S2-02': 'done' } }), known).kind).toBe('valid');
+    const result = normalizeProgress({ version: 2, steps: { 'S1-07': 'done' }, tasksDone: { 'S1-07:book': true } }, known)!;
+    expect(result.progress.steps).toEqual({ 'S1-06': 'done' });
+    expect(result.progress.tasksDone).toEqual({ 'S1-06:book': true });
   });
 });

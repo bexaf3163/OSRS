@@ -43,13 +43,6 @@ export function pickTraining(step: Step, state: PlayerState, mode: GameMode, sty
   return { pick, advice };
 }
 
-export function pickMethods(steps: readonly Step[], state: PlayerState, mode: GameMode, style: PlayStyle, priority?: MethodPriority, market: Market = {}): Record<string, TrainingPick> {
-  return Object.fromEntries(steps.flatMap(step => {
-    const { pick } = pickTraining(step, state, mode, style, priority, market);
-    return pick === undefined ? [] : [[step.id, pick]];
-  }));
-}
-
 /**
  * Whether the step's next goal is reached sooner by processing each catch beside the spot (cooking the fish on the fire by the fishing spots) while the
  * gathering goal is trained: the hours to both goals that way — the gathering at its slower pace, the processing XP it brings, then the processing
@@ -70,10 +63,4 @@ function alongPlan(step: Step, goal: { skill: string; target: number }, m: Train
   const hours = leftGather / mid(along.gather);
   const together = hours + Math.max(0, leftProcess - hours * mid(along.process)) / mid(later);
   return together <= apart ? { ...along, skill: next.skill } : null;
-}
-
-/** The same picks, same content: the store keeps its steps (and everything built on them) while nothing changed. */
-export function samePicks(a: Readonly<Record<string, TrainingPick>>, b: Readonly<Record<string, TrainingPick>>): boolean {
-  const ka = Object.keys(a);
-  return ka.length === Object.keys(b).length && ka.every((k) => a[k] === b[k] || JSON.stringify(a[k]) === JSON.stringify(b[k]));
 }

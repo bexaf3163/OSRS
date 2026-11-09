@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { stepById } from '../src/data';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { evaluatePreflight } from '../src/domain/readiness/preflight';
@@ -8,8 +7,9 @@ import { nameKey } from '../src/domain/items/itemKey';
 import { contextOf } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import type { GearItem } from '../src/services/runeliteBridge';
+import { retiredStep } from './fixtures/retiredSteps';
 
-const step = { ...stepById.get('S6-01')!, id: 'TEST-AMMO', requirements: [], itemsRecommended: [],
+const step = { ...retiredStep('S6-01')!, id: 'TEST-AMMO', requirements: [], itemsRecommended: [],
   itemsRequired: [{ nameEn: 'Bronze arrow', wikiItemId: 882, amount: 100, equip: true, howToGet: 'Equip a starter stack.' }] };
 function scenario(worn: GearItem[] | null, carried = 100, bank = 0) {
   const progress = emptyProgress();

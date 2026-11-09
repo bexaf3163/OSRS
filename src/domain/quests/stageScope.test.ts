@@ -41,7 +41,7 @@ describe('what a quest stage still asks for (Below Ice Mountain, real data)', ()
     expect(stageScope(mountain, { ...at(35), stepId: 'S2-10' })).toBeNull();
     expect(stageScope(mountain, at(999))).toBeNull();
     expect(stageScope(mountain, at(0))).toBeNull();
-    expect(stageScope(stepById.get('S1-01')!, { stepId: 'S1-01', stageAt: 0, lineIndex: 0, peeking: false })).toBeNull();
+    expect(stageScope(stepById.get('S1-03')!, { stepId: 'S1-03', stageAt: 0, lineIndex: 0, peeking: false })).toBeNull();
   });
 
   it('an item that an earlier stage listed and a later one still lists is not out', () => {

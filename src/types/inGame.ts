@@ -89,7 +89,7 @@ export interface StepPacing {
   /** Seconds per action: the first estimate before your own measurements. */
   secondsPerAction?: number;
   /**
-   * Combat skills with a goal of their own (S3-08: Strength 20 first, then Attack 30); a skill not named here has targetLevel. The plugin
+   * Combat skills with a goal of their own (Strength 20 first, then Attack 30); a skill not named here has targetLevel. The plugin
    * before 2.55.1 ignores it and counts every skill to targetLevel.
    */
   goals?: Partial<Record<PacingSkill, { level: number; exp: number }>>;

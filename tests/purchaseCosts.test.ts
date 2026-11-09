@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, itemById } from '../src/data';
+import { itemById } from '../src/data';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import type { OwnedState } from '../src/domain/items/checklist';
 import { nameKey } from '../src/domain/items/itemKey';
@@ -14,10 +14,11 @@ import { planSources } from '../src/domain/prep/sourceRouter';
 import { purchaseCost } from '../src/domain/items/purchaseCost';
 import { prepareFor, stopText, type TravelInput } from '../src/domain/travel/travel';
 import type { Step } from '../src/types';
+import { retiredStep } from './fixtures/retiredSteps';
 
 // Use S8-06 supplies, with a smaller batch within the recorded shop stock.
 // Exclude free spawns to exercise the shop branch rather than free acquisition.
-const original = allSteps.find(s => s.id === 'S8-06')!;
+const original = retiredStep('S8-06')!;
 const step: Step = { ...original, itemsRequired: original.itemsRequired!.filter(i => ['Pot', 'Bucket'].includes(i.nameEn)).map(i => ({ ...i, amount: i.nameEn === 'Pot' ? 5 : 3 })), itemsRecommended: [] };
 const shopDetail = (id: number) => { const d = itemById.get(id); return d ? { ...d, freeSpawns: [] } : undefined; };
 const position = { x: 3315, y: 3180, plane: 0 };

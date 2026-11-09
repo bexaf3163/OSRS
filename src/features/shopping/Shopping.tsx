@@ -126,8 +126,7 @@ export function ShoppingPage() {
   const empty: EmptyKind | null = emptyStateOf({ error, scope, current, rows, connected, hasSnapshot: Boolean(owned?.bankSavedAt), loaded });
   const sync = syncLine({ connected, loaded, bankSeen: owned?.bankSeen === true, ...(owned?.bankSavedAt ? { bankSavedAt: owned.bankSavedAt } : {}) });
   const coins = coinsOf(player);
-  // The next trip: what the step in progress needs, apart from advance purchases for the next steps of the window (S4-04 and S4-05 are purchase
-  // steps of their own; their list is not what S4-03 needs before going on).
+  // The next trip: what the step in progress needs, apart from advance purchases for the next steps of the window.
   const split = scope === 'trip' && current !== null;
   // A followed skill plan leads the game: its tools are needed now too.
   const nowIds = new Set([current, followed ? followed.id : null].filter((x): x is string => x !== null));

@@ -13,7 +13,7 @@ export const dataFile = (name: string) => `${DATA_DIR}/${name in generated ? 'ge
 export function readRoute(): Route {
   const read = (name: string) => JSON.parse(readFileSync(dataFile(name), 'utf8'));
   return {
-    steps: read('steps.json'), stages: read('stages.json'), items: read('f2p-items.json'), combatFoes: read('combatFoes.json'),
+    steps: read('steps.json'), items: read('f2p-items.json'), combatFoes: read('combatFoes.json'),
     npcs: read('npcLocations.json').npcs, places: read('majorLocations.json').locations, trainers: read('trainers.json').trainers,
   };
 }

@@ -7,7 +7,7 @@ interface TableProps {
   highlight?: number;
   highlightLabel?: string;
   caption?: string;
-  /** The first column is a monospaced code (WC-1, S1-01). */
+  /** The first column is a monospaced code (WC-1, S1-03). */
   codeColumn?: boolean;
 }
 

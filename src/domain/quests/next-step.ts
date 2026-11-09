@@ -91,17 +91,6 @@ export function dependencyFacts(
   };
 }
 
-/**
- * Where a step stands for the route: done, knowingly skipped by the player, or not decided. An optional step nobody has visited is "open",
- * never "skipped": only the player's own mark skips it.
- */
-export type StepState = 'done' | 'skipped' | 'open';
-
-export function stepState(p: Progress, id: string): StepState {
-  const s = p.steps[id];
-  return s === 'done' ? 'done' : s === 'skipped' ? 'skipped' : 'open';
-}
-
 export interface Blockers {
   steps: string[];
   qp?: { need: number; have: number };

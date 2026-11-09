@@ -17,7 +17,8 @@ import { tripWindow } from '../../domain/prep/oneTrip';
 import { stockShoppingContext, stockUpShopping } from '../../domain/economy/trainingStock';
 import { supplyReserve } from '../../domain/economy/shoppingView';
 import { usePriceView } from '../../state/hooks/usePriceView';
-import { itemById } from '../../data';
+import { itemById, items } from '../../data';
+import { nameKey } from '../../domain/items/itemKey';
 import { questStepOf } from '../../domain/quests/questSteps';
 import {
   actionNav, equippedBySlot, gainText, gearData, SLOT_LABEL, SLOTS, statsText, type Equipped, type GearAction, type GearAdvice,
@@ -63,6 +64,9 @@ function ActionRow({ a, stepId, live, onShow }: { a: GearAction; stepId?: string
 }
 
 /** The route step of a quest: the shared resolver (lib/questSteps.ts). */
+/** Item icons by name: a kit line names its item, the icon comes from the wiki item list. */
+const ICON_BY_NAME = new Map(items.map((item) => [nameKey(item.nameEn), item.iconUrl]));
+
 export const questStep = questStepOf;
 
 function Metric({ label, value, hint }: { label: string; value: string; hint?: string }) {
@@ -265,7 +269,7 @@ export function GearPage() {
         <h2 className="subhead">{activity.step?.title ?? 'Choose your next activity'}</h2>
         {preparation ? <>
           <p className="small">{preparation.score.verdict === 'UNKNOWN' ? 'Kit not fully checked. Open your bank in RuneLite.' : preparation.score.verdict === 'READY' ? 'Current kit is ready.' : 'Prepare the current kit before leaving.'}</p>
-          {kit.length > 0 && <ul className="small">{kit.slice(0, 6).map(line => <li key={line.key}><strong>{line.name}{line.count > 1 ? ` ×${line.count}` : ''}</strong> · {line.action?.label ?? ({ EQUIPPED: 'Worn', INVENTORY: 'With you', BANK: 'Take from bank', MISSING: 'Get before leaving', UNKNOWN: 'Not checked' }[line.where])}</li>)}</ul>}
+          {kit.length > 0 && <ul className="gear-worn-list">{kit.slice(0, 6).map(line => <li key={line.key} className="gear-worn-item is-filled"><ItemIcon src={ICON_BY_NAME.get(nameKey(line.name))} alt="" size={28} /><span className="gear-worn-text"><span>{line.name}{line.count > 1 ? ` ×${line.count}` : ''}</span><span className="muted small">{line.action?.label ?? ({ EQUIPPED: 'Worn', INVENTORY: 'With you', BANK: 'Take from bank', MISSING: 'Get before leaving', UNKNOWN: 'Not checked' }[line.where])}</span></span></li>)}</ul>}
           {kit.length > 6 && <p className="small muted">{kit.length - 6} more items in Preparation.</p>}
           <a className="btn btn-primary" href={activity.href}>Review current preparation</a>
         </> : <><p className="small muted">Recommendations need a real activity and readable character data. No sample opponent is used here.</p><a className="btn btn-primary" href={hrefTo.skills()}>Choose training</a></>}

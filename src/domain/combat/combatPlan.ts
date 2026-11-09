@@ -12,7 +12,7 @@ import { durationText } from './splits';
 import { heldUnits } from '../player/heldUnits';
 import { heldExact } from '../player/playerState';
 import { effectiveHeal, stepFood } from '../player/foodStock';
-import { currentXp, itemGoal, objectiveEstimates } from './combatObjectives';
+import { itemGoal, objectiveEstimates } from './combatObjectives';
 
 export const BASIS_LABEL: Record<Basis, string> = {
   formula: 'estimate from the combat formulas',
@@ -191,13 +191,12 @@ export function chooseVariant(list: CombatEstimate[], fights?: Fights[] | null):
 }
 
 export function combatPlanView(
-  step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired' | 'itemsRecommended' | 'inGame' | 'combatPlan'>,
+  step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired' | 'itemsRecommended' | 'inGame'>,
   ctx: StepEstimateContext & { owned: OwnedState | null; reserved?: FoodReservations },
 ): CombatPlanView | null {
   const doses = strengthDoses(ctx.owned);
-  const skill = step.combatPlan?.trainingSkill;
   const explicit = stepGoals(step);
-  const goals = explicit.length ? explicit : skill ? [{ skill, exp: currentXp(ctx, skill) }] : [];
+  const goals = explicit;
   const foe = step.foes?.[0];
   const remaining = itemGoal(step, ctx.owned)?.missing ?? 0;
   const project = (strengthDoses: number) => goals.length && foe ? objectiveEstimates(step, foe, goals, remaining, { ...ctx, strengthDoses }) : [];

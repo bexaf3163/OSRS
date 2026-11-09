@@ -1,6 +1,6 @@
 // A new free-to-play account cannot sell some items on the Grand Exchange until it has 20 hours of logged-in time, 10 quest points and 100 total
-// level (OSRS Wiki, "Account", new account restrictions: all three must hold). Buying is not restricted. The route sells cowhides and iron ore
-// (S1-13, S2-01, S3-06), so the guide has to know whether that works yet.
+// level (OSRS Wiki, "Account", new account restrictions: all three must hold). Buying is not restricted. The Money engine ranks
+// sales, so it has to know whether selling works yet.
 //
 // What the game lets us read: quest points and total level. The hours of play are not observable, so the answer is one of three:
 //   RESTRICTED - a condition the game told us is not met: selling those items surely fails;

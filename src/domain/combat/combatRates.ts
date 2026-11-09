@@ -14,9 +14,8 @@ import { matchStrict } from '../travel/locations';
 // unread worn items, a weapon or bow the data does not know, an opponent without data, or a fight that is not safe - no rate, and the wiki's stays.
 
 import { spellsJson } from '../../data';
-import { allSteps } from '../../data';
 import { attacksToKill, combatMargin, combatRecovery, counterDamage, estimateCombat, foeVariants, hitChance, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
-import { spotsOf, termsFor, TRAINER_LEVELS } from './route/spots';
+import { spotsOf, termsFor, TRAINER_LEVELS } from './spots';
 import { coinsPerMinute, dropValue, lootSecondsPerKill } from '../market/lootValue';
 import { ARROW_BREAK, goalArrows, methodFoe, rangedKitOf, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
 import { rangedEquipment, rangedNeeds } from './rangedLoadout';
@@ -126,7 +125,7 @@ function withLoot(r: (ModelRate & { secondsPerKill: number }) | null, foe: strin
   if (!r) return null;
   const { secondsPerKill, ...rate } = r;
   // The method's own catalogue entry decides who may train there (members flag); here only the spot's facts are read.
-  const spot = spotsOf(allSteps, true).get(foe);
+  const spot = spotsOf(true).get(foe);
   const each = spot?.sell ? dropValue(spot.sell, market.prices, market.restriction) : null;
   const trip = termsOf(foe).tripMinutes;
   const extra = each !== null && spot?.sell ? lootSecondsPerKill(each, trip ? (trip[0] + trip[1]) / 2 : 4.5, coinsPerMinute(market.prices), market.objective) : null;
@@ -153,10 +152,22 @@ function worn(state: PlayerState): { weapon: GearPiece | null; neck: GearPiece |
 }
 
 /** The spot's terms for an opponent, from the route's spots. */
-const termsOf = (foe: string) => termsFor(allSteps)[foe] ?? {};
+const termsOf = (foe: string) => termsFor()[foe] ?? {};
 const atLevels = (f: CombatFoe) => !TRAINER_LEVELS[f.name] || TRAINER_LEVELS[f.name].includes(f.combat);
 
-function meleeRate(npc: string, skill: 'attack' | 'strength' | 'defence', state: PlayerState, prices?: PriceView | null): (ModelRate & { secondsPerKill: number }) | null {
+/** A rate with the kill it is built from: seconds and pieces of food a kill, in the named food. */
+type KillRate = ModelRate & { secondsPerKill: number; foodPerKill?: number; food?: string };
+
+/** One kill of the method's opponent in this style for this player, from the model the Skills page uses (the Money engine times
+ * combat methods with it when its own melee estimate cannot use the worn weapon). Null when the model has no answer. */
+export function killPace(m: TrainingMethod, skill: string, state: PlayerState, prices?: PriceView | null): { secondsPerKill: number; foodPerKill: number; food: string | null } | null {
+  if (m.kind !== 'method' || !m.skills.includes(skill) || !m.npcNames?.length || state.equipmentKnown !== true) return null;
+  const r = MELEE.has(skill) ? meleeRate(m.npcNames[0], skill as 'attack' | 'strength' | 'defence', state, prices)
+    : skill === 'ranged' && m.kit === 'f2p-bow' ? rangedRate(m, state, prices) : null;
+  return r ? { secondsPerKill: r.secondsPerKill, foodPerKill: r.foodPerKill ?? 0, food: r.food ?? null } : null;
+}
+
+function meleeRate(npc: string, skill: 'attack' | 'strength' | 'defence', state: PlayerState, prices?: PriceView | null): KillRate | null {
   const lv = { attack: levelOf(state, 'attack'), strength: levelOf(state, 'strength'), defence: levelOf(state, 'defence'), hitpoints: levelOf(state, 'hitpoints') };
   if (Object.values(lv).some((v) => v === undefined)) return null;
   const levels = lv as { attack: number; strength: number; defence: number; hitpoints: number };
@@ -186,7 +197,7 @@ function meleeRate(npc: string, skill: 'attack' | 'strength' | 'defence', state:
       ...(best.nextTrip > 0 ? [{ type: 'item' as const, name: food.name, count: Math.ceil(best.nextTrip), refill: Math.ceil(best.nextTrip), anyOf: FOODS.filter(f => f.name !== food.name).map(f => f.name), ...(best.foodOptional ? { optional: true } : {}) }] : []),
     ],
     basis: gear.weapon?.name ?? 'unarmed',
-    secondsPerKill: (best.totalMinutes.mid * 60) / best.kills,
+    secondsPerKill: (best.totalMinutes.mid * 60) / best.kills, foodPerKill: best.food.mid / best.kills, food: food.name,
   };
 }
 
@@ -262,7 +273,7 @@ export function rangedGoalNeeds(legs: readonly { method: TrainingMethod; fromLev
   return end === target ? mergeGoalNeeds(materials, kit, buffers) : null;
 }
 
-function rangedRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): (ModelRate & { secondsPerKill: number }) | null {
+function rangedRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): KillRate | null {
   const level = levelOf(state, 'ranged');
   const foe = methodFoe(m);
   if (level === undefined || !foe || level >= 99) return null;
@@ -288,7 +299,7 @@ function rangedRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | 
     basis: `${bow}, ${arrow}`,
     exactNeeds: true,
     needs: [...m.needs.filter((n) => n.type === 'item' && !FOODS.some((f) => f.name === n.name)), ...modelFood(recovery, sustained.food)],
-    secondsPerKill: (recovery.totalMinutes.mid * 60) / kills,
+    secondsPerKill: (recovery.totalMinutes.mid * 60) / kills, foodPerKill: recovery.food.mid / kills, food: sustained.food,
     ...(sustained.warning ? { warning: sustained.warning } : {}),
   };
 }
@@ -299,7 +310,7 @@ function improvesCombatRate(rate: ModelRate | null, before: ModelRate): boolean 
       || rate.costPerHour !== null && before.costPerHour !== null && rate.costPerHour < before.costPerHour);
 }
 
-function magicRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): (ModelRate & { secondsPerKill: number }) | null {
+function magicRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): KillRate | null {
   const recipe = strikeRecipe(state);
   const clothing = recipe.needs.filter(need => {
     const piece = need.type === 'item' && need.equip ? gearPieceByName(need.name) : null;
@@ -323,7 +334,7 @@ function magicRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | n
   return best;
 }
 
-function magicKitRate(m: TrainingMethod, state: PlayerState, prices: PriceView | null | undefined, { spell, needs }: ReturnType<typeof strikeRecipe>): (ModelRate & { secondsPerKill: number }) | null {
+function magicKitRate(m: TrainingMethod, state: PlayerState, prices: PriceView | null | undefined, { spell, needs }: ReturnType<typeof strikeRecipe>): KillRate | null {
   const level = levelOf(state, 'magic');
   const foe = methodFoe(m);
   if (level === undefined || !foe || level >= 99) return null;
@@ -360,7 +371,7 @@ function magicKitRate(m: TrainingMethod, state: PlayerState, prices: PriceView |
       ...modelFood(recovery, sustained.food)],
     costName: recovery.food.mid > 0 ? `runes and ${sustained.food.toLowerCase()}` : 'runes',
     basis: spell.name,
-    secondsPerKill: (recovery.totalMinutes.mid * 60) / kills,
+    secondsPerKill: (recovery.totalMinutes.mid * 60) / kills, foodPerKill: recovery.food.mid / kills, food: sustained.food,
     ...(sustained.warning ? { warning: sustained.warning } : {}),
   };
 }

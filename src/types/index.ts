@@ -1,4 +1,4 @@
-// The app's data types. The V2 route is src/data/authored/steps.json and stages.json;
+// The app's data types. The V2 route is src/data/authored/steps.json;
 // the skills, goals and reference live in the other JSON files of src/data.
 // The types sit in one file per topic; this file only re-exports them, type-only, so nothing here exists at run time.
 export type * from './route';

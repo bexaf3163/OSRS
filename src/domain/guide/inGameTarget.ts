@@ -44,9 +44,7 @@ export function stepGuide(step: Step, branch?: StepBranch): StepGuidePayload {
   // a cut in the middle would lose instructions. Forty lines is the plugin's own limit for one stage; beyond it the first thirty-nine and the last.
   const steps = all.length > 40 ? [...all.slice(0, 39), all[all.length - 1]] : all;
   const stage = stagePayload(step, places);
-  const cp = step.combatPlan;
-  const plan = cp && (cp.now || cp.next) ? { ...(cp.now ? { now: cp.now.slice(0, 200) } : {}), ...(cp.next ? { next: cp.next.slice(0, 300) } : {}) } : undefined;
-  return { items: items.slice(0, 64), places: places.slice(0, 64), ...(steps.length ? { steps } : {}), ...(stage ? { stage } : {}), ...(plan ? { plan } : {}) };
+  return { items: items.slice(0, 64), places: places.slice(0, 64), ...(steps.length ? { steps } : {}), ...(stage ? { stage } : {}) };
 }
 const near = (a: { x: number; y: number; plane: number }, b: { x: number; y: number; plane: number }) =>
   a.plane === b.plane && Math.abs(a.x - b.x) <= 1 && Math.abs(a.y - b.y) <= 1;
@@ -124,7 +122,7 @@ export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: stri
   if (checklist.length) payload.checklist = checklist;
   // Also — the items of the nearest steps (one trip): the plugin reports how many of them there are, and they are visible in advance.
   // A tool named by its weakest tier is any tier: the game must report every tier, or a Rune pickaxe in the bag would read as "no pickaxe".
-  // The alternatives of a required item (S3-08's food: Trout, Tuna... besides Salmon) are counted too: unread, they would make "short" unknown.
+  // The alternatives of a required item (S4-01's food: Trout, Tuna... besides Salmon) are counted too: unread, they would make "short" unknown.
   const alternatives = (step.itemsRequired ?? []).flatMap((i) => (i.inStep ? [] : i.anyOf ?? []));
   // A potion is counted in doses of every size: the game must report all four, or a (3) in the bag would read as "no potion" (doses.ts).
   const potions = [...(step.itemsRequired ?? []), ...(step.itemsRecommended ?? [])].filter((i) => doseKind(i.nameEn)).map((i) => i.nameEn);

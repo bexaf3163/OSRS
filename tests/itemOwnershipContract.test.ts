@@ -6,9 +6,9 @@ import { buildPlayerState, heldOf } from '../src/domain/player/playerState';
 import { evaluate } from '../src/domain/player/requirements';
 import { ownedFood, combatPlanView } from '../src/domain/combat/combatPlan';
 import { combatReadiness } from '../src/domain/combat/combatReadiness';
-import { stepById } from '../src/data';
 import { gearById } from '../src/domain/combat/gearAdvisor';
 import { PICKAXES } from '../src/domain/items/toolTiers';
+import { retiredStep } from './fixtures/retiredSteps';
 
 const cases = JSON.parse(readFileSync(new URL('../runelite-bridge/src/test/resources/item-ownership.json', import.meta.url), 'utf8')) as {
   name: string; mining: number; bank: unknown[] | null; rows: Record<string, unknown>[];
@@ -68,7 +68,7 @@ describe('the shared Java to TS ownership contract', () => {
 describe('combat food ownership versus readiness', () => {
   it('the real combat readiness uses usable food and recommends unnoting instead of buying owned notes', () => {
     const s = state([{ name: 'Salmon', carried: 0, noted: 40, bank: 0 }]);
-    const step = stepById.get('S3-08')!;
+    const step = retiredStep('S3-08')!;
     const piece = [...gearById.values()].find((p) => p.name === 'Mithril scimitar')!;
     const gear = { equipment: [{ id: piece.id, name: piece.name, slot: 'weapon' }], inventory: [], coins: 0, bankCoins: 0 };
     const view = combatPlanView(step, { stats: { attack: 22, strength: 16, defence: 1, hitpoints: 22 }, gear, owned: s.owned })!;

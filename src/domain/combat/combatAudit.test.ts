@@ -4,17 +4,18 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { combatAuditJson as ledgerJson, questStagesJson as questStages, dangerZonesJson as dangerZones } from '../../data';
-import { allSteps, stepById } from '../../data';
+import { allSteps } from '../../data';
 import { auditMarkdown, detectCombatStages, preparedFor, type AuditLedger } from './combatAudit';
 import { COMBAT_FOES } from './combatEstimate';
 import { OTHER_METHOD, stepFightFoes } from './fightEstimate';
 import type { Step } from '../../types';
+import { stepOrRetired } from '../../../tests/fixtures/retiredSteps';
 
 const ledger = ledgerJson as unknown as AuditLedger;
 const quests = (questStages as { quests: Record<string, { route?: { steps?: string[] }[] }> }).quests;
 const detected = detectCombatStages(allSteps, quests);
 const zoneIds = new Set(((dangerZones as { zones?: { id: string }[] }).zones ?? (dangerZones as unknown as { id: string }[])).map((z) => z.id));
-const step = (id: string) => stepById.get(id) as Step;
+const step = (id: string): Step => stepOrRetired(id);
 const food = (s: Step) => (s.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
 
 describe('the ledger covers the route', () => {
@@ -32,7 +33,6 @@ describe('the ledger covers the route', () => {
 
   it('the detector finds the fights by their signals, not only by words', () => {
     const by = new Map(detected.map((d) => [d.stepId, d.signals.join('; ')]));
-    expect(by.get('S4-03')).toMatch(/foes: Giant frog.*pacing: attack/);
     expect(by.get('S3-04')).toMatch(/threats: Ancient Guardian/);
     expect(by.get('S5-03')).toMatch(/threats: Melzar the Mad, Lesser demon.*safespot.*quest lines/);
     expect(by.has('S1-03')).toBe(false);

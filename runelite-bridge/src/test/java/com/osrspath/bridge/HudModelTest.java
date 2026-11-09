@@ -94,7 +94,7 @@ public class HudModelTest
 
 	static HudModel.Input input(StepGuide.View v, Hud.State s, HudModel.Pace pace)
 	{
-		return new HudModel.Input(v, s, pace, null, null, null, false, null, null, null, false, false, false, false, null);
+		return new HudModel.Input(v, s, pace, null, false, null, null, null, false, false, false, false, null);
 	}
 
 	static HudModel.Input with(HudModel.Input in, String field, Object value)
@@ -103,8 +103,6 @@ public class HudModelTest
 			field.equals("view") ? (StepGuide.View) value : in.getView(),
 			field.equals("state") ? (Hud.State) value : in.getState(),
 			field.equals("pace") ? (HudModel.Pace) value : in.getPace(),
-			field.equals("planNow") ? (String) value : in.getPlanNow(),
-			field.equals("planNext") ? (String) value : in.getPlanNext(),
 			field.equals("detour") ? (String) value : in.getDetour(),
 			field.equals("detourBuys") ? (Boolean) value : in.isDetourBuys(),
 			field.equals("funding") ? (HudModel.Funding) value : in.getFunding(),
@@ -190,40 +188,12 @@ public class HudModelTest
 	}
 
 	@Test
-	public void collectionObjectiveLeadsInsteadOfItsIncidentalXpProjection()
-	{
-		HudModel.Pace projected = new HudModel.Pace("Attack", 30, 34, "Accurate", false, 50, "giants", "~37 min", false, 0.6, false, "Attack 34");
-		HudModel.Input in = with(input(view(S403, null), state("~229 tiles", 229), projected), "planNow", "Collect 50 Big bones from Hill Giants on Accurate");
-		in = with(in, "planNext", "Train Attack to 40 on cows");
-		HudModel.Card c = HudModel.build(in);
-		assertEquals("Collect 50 Big bones from Hill Giants on Accurate", c.getHeadline());
-		assertNull("XP percentage is not collection progress", c.getProgress());
-		assertTrue(c.getStatus(), c.getStatus().contains("~229 tiles"));
-		assertFalse(collapsed(c), collapsed(c).contains("Attack 34"));
-		assertTrue(expanded(c), expanded(c).contains("Next\nTrain Attack to 40 on cows"));
-	}
-
-	@Test
-	public void reachedProjectedXpCannotAdvanceAnUnconfirmedCollection()
-	{
-		HudModel.Pace done = new HudModel.Pace("Attack", 34, 34, "Accurate", false, 0, "giants", null, false, 1, true, "Attack 34");
-		HudModel.Input in = with(input(view(S403, null), quiet(), done), "planNow", "Collect 50 Big bones from Hill Giants on Accurate");
-		in = with(in, "planNext", "Train Attack to 40 on cows");
-		HudModel.Card c = HudModel.build(in);
-		assertEquals("Collect 50 Big bones from Hill Giants on Accurate", c.getHeadline());
-		assertEquals(HudModel.Icon.TRAIN, c.getIcon());
-		assertNull(c.getProgress());
-		assertFalse(collapsed(c), collapsed(c).contains("reached"));
-	}
-
-	@Test
 	public void collectionStillWaitsForRequiredFood()
 	{
 		PrepPlan p = plan(line("Salmon", 21, "BANK", "CRITICAL", "NOW", "CRITICAL", "Take from the bank ×21"));
-		HudModel.Input in = with(input(view(S403, p, salmon(StepGuide.Have.BANK, 0, 30)), quiet(), attack(30)), "planNow", "Collect 50 Big bones from Hill Giants");
+		HudModel.Input in = input(view(S403, p, salmon(StepGuide.Have.BANK, 0, 30)), quiet(), attack(30));
 		HudModel.Card c = HudModel.build(in);
 		assertEquals("Withdraw food", c.getHeadline());
-		assertEquals("Then: collect 50 Big bones from Hill Giants", c.getThen());
 		assertNull(c.getProgress());
 	}
 
@@ -243,25 +213,6 @@ public class HudModelTest
 		assertEquals("Attack 30 → 40 · ~229 tiles ↘", c.getStatus());
 		HudModel.Card near = HudModel.build(input(view(S403, null), state("✓ Nearby", 2), attack(30)));
 		assertEquals("Attack 30 → 40 · Accurate", near.getStatus());
-	}
-
-	@Test
-	public void theGoalReached_thePlansNextPhaseLeads()
-	{
-		HudModel.Pace done = new HudModel.Pace("Attack", 40, 40, "Accurate", false, 0, "cows", null, false, 1, true, "Attack 40");
-		HudModel.Input in = with(input(view(S403, null), quiet(), done), "planNext", "Fight the Hill Giants until 50 Big bones are in the bank: Edgeville Dungeon.");
-		HudModel.Card c = HudModel.build(in);
-		assertEquals("Fight the Hill Giants until 50 Big bones are in the bank: Edgeville Dungeon.", c.getHeadline());
-		assertEquals("Attack 40 reached", c.getStatus());
-		assertEquals(HudModel.Icon.CHECK, c.getIcon());
-	}
-
-	@Test
-	public void thePlansNextPhaseIsInTheDetails()
-	{
-		HudModel.Input in = with(input(view(S403, null), quiet(), attack(30)), "planNext", "Fight the Hill Giants until 50 Big bones are in the bank.");
-		String open = expanded(HudModel.build(in));
-		assertTrue(open, open.contains("Next\nFight the Hill Giants until 50 Big bones are in the bank."));
 	}
 
 	@Test

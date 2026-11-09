@@ -7,7 +7,7 @@ Updated 2026-11-07. **This file alone holds project rules, architecture, state, 
 - **Binding on Claude Code, Codex and every contributor:** maintain current instructions, decisions, implemented work, backlog, verification and takeover state here. Never duplicate handoffs, next-session/acceptance/status diaries, copied instructions, repositories or Downloads variants. Update in place; reconcile conflicts; remove stale statements; keep uncertainty explicit.
 - Stay within **5,000 words** by removing repetition and narrative, never by dropping a fact or moving it elsewhere. Keep the current delivery receipt; Git history/immutable release notes retain previous receipts.
 - AGENTS.md and CLAUDE.md stay tiny pointers; a release copy of this file is a snapshot. Before handover, reconcile source, this file, version and test evidence.
-- docs/ holds references, not task lists: SKILLS_COVERAGE.md, AUDIT_LEDGER.md (reproduce a row before repairing) and the generated COMBAT_AUDIT.md, DEFAULT_PLANS.md and FUNDING_COVERAGE.md. Removed documents and old release-note links resolve in Git history (`f3112228e97be4a8058eec5e2f995956b575ff9c` and later). `.codex/work-state.md` is Codex's ignored checkpoint.
+- docs/ holds references, not task lists: SKILLS_COVERAGE.md, AUDIT_LEDGER.md (reproduce a row before repairing) and the generated COMBAT_AUDIT.md and FUNDING_COVERAGE.md. Removed documents and old release-note links resolve in Git history (`f3112228e97be4a8058eec5e2f995956b575ff9c` and later). `.codex/work-state.md` is Codex's ignored checkpoint.
 
 ## Owner requirements that remain binding
 
@@ -137,11 +137,12 @@ The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **
 
 2.81.11 to 2.81.13 cleanup decisions that stay:
 
-- Removed: Appearance theme/density/view controls, custom font size, panel/look/solid settings, preview, Compact modes, the Inspector display mode, custom zoom, the Copy Report UI and the Journal stage-goal matrix. Kept: OS DPI/resizing, the header Pin (`getWindowPrefs`/`setAlwaysOnTop`), `ui.json` backup preferences and geometry, map/image magnification, the `splits.ts` duration formatter, `WikiDrawer`'s `DockedInspector` (pinned dossier), logs, telemetry/watchdogs, the analysis CLI and shared goal data. Trace consumers; never delete by name ("Inspector", "zoom", "goals").
+- Removed: appearance controls, font size, Compact modes, the Inspector display mode, custom zoom, the Copy Report UI and the Journal stage-goal matrix. Kept: OS DPI/resizing, the header Pin (`getWindowPrefs`/`setAlwaysOnTop`), `ui.json` backup preferences and geometry, map/image magnification, the `splits.ts` duration formatter, `WikiDrawer`'s `DockedInspector` (pinned dossier), logs, telemetry/watchdogs, the analysis CLI and shared goal data. Trace consumers; never delete by name ("Inspector", "zoom", "goals").
 - Training settings keep Balanced/Fastest/Money/Relaxed, automatic preparation and Defence-at-1. The five RuneLite helper flags stay (places, bank highlighting, pace, level import, upgrades); mocked tests do not prove their real-game behavior.
-- Journal: filters left; status, QP, current-part requirements and route action right; Review route for completed/skipped quests; saved-only completion labelled; one closed session history; browsing never marks progress; old goals hashes open it.
+- Journal: filters left; status, QP, current-part requirements and route action right; Review route for completed/skipped quests; saved-only completion labelled; one closed session history; browsing never marks progress.
 - Skills has no leveling guide or bracket table (2.83.0): the training engine sets method, goal and plan. A completed skill's Plan says its checkpoint is reached. Two-column icon index, XP table in Calculator.
-- Gear compares melee only for a supported current activity; other skills show current preparation and live equipment, never the old sample cow. Mandatory shopping and a quoted refill/fare reserve protect upgrade spending; unread prices never count as zero. Shopping: requirements left, Checkout right (cost, checked cash, optional bank stock, refill allowance, shortfall), one primary action through funding, copy-order or preparation.
+- Route (2.84.0): quests plus the Stronghold; other step kinds are `RETIRED_STEPS`, planned by the training, gear and Money engines.
+- Gear compares melee only for a supported current activity; other skills show current preparation and live equipment. Mandatory shopping and a quoted refill/fare reserve protect upgrade spending; unread prices never count as zero. Shopping: requirements left, Checkout right (cost, checked cash, optional bank stock, refill allowance, shortfall), one primary action through funding, copy-order or preparation.
 - One Where preview; the compact card omits the place list and the **full map keeps the place picker**. Preview-only CSS uses direct-child selectors so a nested dialog's picker stays visible.
 
 Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallback** (old imagery, disclosed in tooltips; the hard-coded 2026 URL returned 404). Newer imagery needs a verified projection and real tiles; never paste another atlas URL into the old coordinate scheme.
@@ -168,7 +169,7 @@ Worktree `C:/Users/Mark/Desktop/Ors-x9`, baseline `f035305`, branch `codex/v14-a
 
 Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent entry for explicit goals and phased training/preparation; costs precede rewards; only sourced, order-independent unknowns cancel. Cursors retire past stages; certificate proof stays physical. Procurement shares allocations/packages/fees; unknown flows weaken balances; start-only rewards never repeat; unknown hand-ins never buy; protection requires wearing; funding excludes stale/unsold cash. Shortest Path `375ce2c061df5c3961116dda6443f307df3223f1` (BSD, 64 regions, ESTIMATED); trip legs bounded, deduplicated, revision-guarded.
 
-2,775 units; quick/UI/E2E/structure/Java gates pass. Perf: 2.83.0 updates +7% (mean). Evidence: `work/osrs-v14-audit`. Released 2.83.0; live pending.
+2,590 units; quick/UI/E2E/structure/Java gates pass. Perf: 2.84.0 updates -63%, cold Path -47%. Evidence: `work/osrs-v14-audit`. Released 2.84.0; live pending.
 
 Takeover inputs: `.codex/v14-brief/`; hashes: `.codex/transfer/receipt.json`.
 

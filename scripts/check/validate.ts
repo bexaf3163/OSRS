@@ -1,11 +1,10 @@
-// Data checks: the V2 route (steps.json, stages.json, f2p-items.json) and the skills, goals, XP, plugins and reference data.
+// Data checks: the V2 route (steps.json, f2p-items.json) and the skills, goals, XP, plugins and reference data.
 // Used by check-data.ts and the tests. No network.
 
 import type {
-  LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
+  LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Step, WikiItemDetail, XpData,
 } from '../../src/types/index.ts';
 import { xpForLevel } from '../../src/domain/player/xp.ts';
-import { titleTargets } from '../../src/data/targets.ts';
 import { RETIRED_STEPS } from '../../src/domain/persistence/progress.ts';
 
 export interface GuideData {
@@ -22,7 +21,6 @@ export const EXPECTED = { skills: 12, members: 8, f2pQp: 46, baseQp: 1 };
 
 export interface Route {
   steps: Step[];
-  stages: Stage[];
   items: WikiItemDetail[];
   /** Every version of the training opponents with their attack (combatFoes.json): for the time and food estimate. */
   combatFoes?: { foes: { name: string; version?: string; combat: number; members: boolean; hitpoints: number; defenceLevel: number; defence: Record<string, number>; maxHit: number; speedTicks: number }[] };
@@ -122,7 +120,7 @@ export function validate(d: GuideData | null, route: Route): Report {
   const warn = (msg: string) => { warnings++; lines.push(`  ! ${msg}`); };
   const check = (cond: boolean, good: string, bad: string) => (cond ? ok(good) : fail(bad));
 
-  const { steps, stages, items } = route;
+  const { steps, items } = route;
   const ids = steps.map((s) => s.id);
   const idSet = new Set(ids);
   const f2p = steps.filter((s) => !s.membersOnly);
@@ -144,12 +142,6 @@ export function validate(d: GuideData | null, route: Route): Report {
   }).map((s) => s.id);
   check(!gaps.length, 'Within every stage the numbers run in order from 01 (a retired step leaves its number free)', `The numbers do not run in order: ${gaps.join(', ')}`);
 
-  const stageIds = new Set(stages.map((s) => s.id));
-  const noStage = steps.filter((s) => !stageIds.has(s.stage)).map((s) => s.id);
-  check(!noStage.length, `Stages ${stages.length}, every step has a stage`, `Steps without a stage in stages.json: ${noStage.join(', ')}`);
-  const membersStages = new Set(stages.filter((s) => s.membersOnly).map((s) => s.id));
-  const mixed = steps.filter((s) => Boolean(s.membersOnly) !== membersStages.has(s.stage)).map((s) => s.id);
-  check(!mixed.length, 'Members steps are only in Members stages, and vice versa', `The step mode does not match the stage: ${mixed.join(', ')}`);
 
   const noCore = steps.filter((s) => !['quest', 'skill', 'gear', 'prep'].includes(s.type) || !s.title || !s.doneWhen).map((s) => s.id);
   check(!noCore.length, 'Every step has a type, a title and "Done when"', `Without a type, title or "Done when": ${noCore.join(', ')}`);
@@ -216,11 +208,6 @@ export function validate(d: GuideData | null, route: Route): Report {
       }
     }
   });
-  // The goal of an earning step matches "Done when": "20,000+ coins in the bank" ↔ moneyGoal 20000.
-  for (const s of steps.filter((x) => x.moneyGoal !== undefined)) {
-    const n = Number((s.doneWhen.match(/(\d{1,3}(?:,\d{3})+|\d+)\+? coins/)?.[1] ?? '').replace(/,/g, ''));
-    if (!Number.isInteger(s.moneyGoal) || s.moneyGoal! <= 0 || n !== s.moneyGoal) badReq.push(`${s.id}: moneyGoal ${s.moneyGoal} does not match "Done when"`);
-  }
   const withReq = steps.filter((s) => s.requirements?.length).length;
   check(!badReq.length, `Step requirements (${withReq}): the skills and levels are right, the quests are from the route and earlier than the step, they match the "Requirements" field`, `Step requirements: ${badReq.join('; ')}`);
 
@@ -232,8 +219,8 @@ export function validate(d: GuideData | null, route: Route): Report {
   }
   check(!unreachable.length, 'The quest point thresholds are reachable by the steps above in the list', `Unreachable thresholds: ${unreachable.join('; ')}`);
 
-  const noTargets = steps.filter((s) => s.type === 'skill' && !titleTargets(s.title).length).map((s) => s.id);
-  check(!noTargets.length, 'Every skill step has level goals recognised in the title', `Goals not recognised in the title: ${noTargets.join(', ')}`);
+  const skillSteps = steps.filter((s) => s.type === 'skill').map((s) => s.id);
+  check(!skillSteps.length, 'No route step is a skill step: the training engine plans skills', `Skill steps: ${skillSteps.join(', ')}`);
   const review = steps.filter((s) => s.updatedInV2 && !s.v2ChangesSummary).map((s) => s.id);
   check(!review.length, `Steps marked "updated in V2": ${steps.filter((s) => s.updatedInV2).length}, all have an explanation`, `No explanation for the update: ${review.join(', ')}`);
 
@@ -339,12 +326,9 @@ export function validate(d: GuideData | null, route: Route): Report {
       if (twin) badGame.push(`${s.id}: the quest "${t.questName}" is already marked by ${twin} — both steps would close at once`);
       triggerQuests.set(t.questName ?? '', s.id);
     }
-    // The levels are exactly the goals from the step title: otherwise the step would close earlier or later than written.
-    if (t.type === 'SKILL_LEVEL') {
-      const want = titleTargets(s.title).map((x) => `${x.skill} ${x.level}`).sort().join(', ');
-      const got = (t.levels ?? []).map((x) => `${x.skill} ${x.level}`).sort().join(', ');
-      if (!t.levels?.length || want !== got) badGame.push(`${s.id}: the auto-mark levels "${got}" ≠ the goals from the title "${want}"`);
-    } else if (t.levels && t.type !== 'QUEST_COMPLETED') badGame.push(`${s.id}: levels exist only for SKILL_LEVEL and QUEST_COMPLETED`);
+    // Skill levels are the training engine's job; a route step closes on its quest, an item or a varbit.
+    if (t.type === 'SKILL_LEVEL') badGame.push(`${s.id}: a skill-level trigger on a route step`);
+    else if (t.levels && t.type !== 'QUEST_COMPLETED') badGame.push(`${s.id}: levels exist only for QUEST_COMPLETED`);
     // A quest with a level on top (the lamp used on Prayer) must name real skills and levels in range.
     if (t.type === 'QUEST_COMPLETED') {
       for (const l of t.levels ?? []) if (!(l.level >= 2 && l.level <= 99) || !/^[a-z]+$/.test(l.skill)) badGame.push(`${s.id}: invalid level on a quest trigger: ${l.skill} ${l.level}`);
@@ -408,78 +392,6 @@ export function validate(d: GuideData | null, route: Route): Report {
   check(!recInStep.length, `Items "along the step" are marked at ${steps.filter((s) => s.itemsRequired?.some((i) => i.inStep)).length} steps`,
     `inStep on recommended items: ${recInStep.join(', ')}`);
 
-  // The training pace: the skill and level are those in the step title; the XP to a level is by the game formula.
-  const COMBAT = new Set(['attack', 'strength', 'defence']);
-  const PACING_SKILLS = new Set(['fishing', 'woodcutting', 'cooking', 'mining', ...COMBAT]);
-  // One version per opponent, as the Gear advisor picks it: the free-world version, then the lowest combat level.
-  const foeHp = new Map([...(route.combatFoes?.foes ?? [])].sort((a, b) => Number(a.members) - Number(b.members) || a.combat - b.combat).reverse().map((f) => [f.name, f.hitpoints]));
-  const badPacing = steps.flatMap((s) => {
-    const p = s.pacing;
-    if (!p) return [];
-    const out: string[] = [];
-    if (!PACING_SKILLS.has(p.skill)) out.push(`${s.id}: the skill ${p.skill}`);
-    if (p.targetExp !== xpForLevel(p.targetLevel)) out.push(`${s.id}: XP ${p.targetExp} ≠ ${xpForLevel(p.targetLevel)} for ${p.targetLevel}`);
-    if (!(p.expPerAction > 0)) out.push(`${s.id}: XP per action ${p.expPerAction}`);
-    const forms = p.actionName.split('|');
-    if (!(forms.length === 1 || forms.length === 2) || forms.some((f) => !f.trim())) out.push(`${s.id}: the action forms "${p.actionName}"`);
-    // A skill's own goal (goals) replaces targetLevel for it; its XP is by the same formula.
-    for (const [skill, g] of Object.entries(p.goals ?? {})) {
-      if (![p.skill, ...(p.also ?? [])].includes(skill as typeof p.skill)) out.push(`${s.id}: a goal for ${skill}, which the pace does not train`);
-      else if (!g || g.exp !== xpForLevel(g.level)) out.push(`${s.id}: the ${skill} goal XP ${g?.exp} ≠ ${g ? xpForLevel(g.level) : '?'} for ${g?.level}`);
-    }
-    for (const skill of [p.skill, ...(p.also ?? [])]) {
-      const level = p.goals?.[skill]?.level ?? p.targetLevel;
-      if (!titleTargets(s.title).some((t) => t.skill === skill && t.level === level)) out.push(`${s.id}: the goal ${skill} ${level} is not in the title`);
-    }
-    // Several skills — only combat: they are trained in turn, changing the attack style.
-    if (p.also && (!COMBAT.has(p.skill) || p.also.some((a) => !COMBAT.has(a) || a === p.skill) || new Set(p.also).size !== p.also.length)) {
-      out.push(`${s.id}: also ${p.also.join(', ')}`);
-    }
-    // Combat: the action is an opponent, the XP of the style skill is 4 per point of damage, that is 4 × its health.
-    if (COMBAT.has(p.skill)) {
-      const hp = foeHp.get(s.foes?.[0] ?? '');
-      if (hp === undefined) out.push(`${s.id}: a combat pace without an opponent in combatFoes.json`);
-      else if (p.expPerAction !== 4 * hp) out.push(`${s.id}: the XP per opponent ${p.expPerAction} ≠ 4 × ${hp}`);
-    }
-    if (p.secondsPerAction !== undefined && !(p.secondsPerAction > 0)) out.push(`${s.id}: seconds per action ${p.secondsPerAction}`);
-    return out;
-  });
-  const paced = steps.filter((s) => s.pacing).length;
-  // The time and food estimate: every combat pace has its opponent's versions with an attack; the Gear advisor uses one of them.
-  if (route.combatFoes) {
-    const cf = route.combatFoes.foes;
-    const badFoes = steps.filter((s) => s.pacing && COMBAT.has(s.pacing.skill)).flatMap((s) => {
-      const name = s.foes?.[0] ?? '';
-      const versions = cf.filter((f) => f.name === name && !f.members);
-      if (!versions.length) return [`${s.id}: no ${name} in combatFoes.json`];
-      return [
-        ...versions.filter((f) => !(f.maxHit >= 0 && f.speedTicks > 0)).map((f) => `${name} ${f.version ?? ''}: max hit ${f.maxHit}, speed ${f.speedTicks}`),
-      ];
-    });
-    check(!badFoes.length, 'The combat estimate has every training opponent', `The combat opponents: ${badFoes.join('; ')}`);
-  }
-  // The training spots (2.75): every entry is usable as it is, and every combat training step's opponent has one, so a new step or spot needs data only.
-  if (route.trainers && route.combatFoes) {
-    const cf = route.combatFoes.foes;
-    const bad = route.trainers.flatMap((t) => {
-      const versions = cf.filter((f) => f.name === t.foe && !f.members);
-      const step = t.fromStep ? steps.find((s) => s.id === t.fromStep) : undefined;
-      return [
-        ...(!versions.length ? [`${t.foe}: no free version in combatFoes.json (npm run build-combat-foes)`] : []),
-        ...(t.levels ?? []).filter((l) => !versions.some((v) => v.combat === l)).map((l) => `${t.foe}: no level ${l} version`),
-        ...(t.bank && route.places?.[t.bank]?.kind !== 'bank' ? [`${t.foe}: ${t.bank} is not a bank`] : []),
-        ...(t.sell && !t.always.includes(t.sell) ? [`${t.foe}: ${t.sell} is not an always-drop`] : []),
-        ...(t.fromStep && step?.foes?.[0] !== t.foe ? [`${t.foe}: ${t.fromStep} does not send the player to it`] : []),
-        ...(!t.fromStep && !(t.place && t.npcNames?.length && t.goal && t.where) ? [`${t.foe}: a written spot needs place, npcNames, goal and where`] : []),
-        ...(!t.name ? [`${t.foe}: no name`] : []),
-      ];
-    });
-    const spotless = steps.filter((s) => s.pacing && COMBAT.has(s.pacing.skill) && s.foes?.[0] && !route.trainers!.some((t) => t.foe === s.foes![0]))
-      .map((s) => `${s.id}: ${s.foes![0]} has no training spot (scripts/data/trainers.defs.json, npm run build-trainers)`);
-    check(!bad.length && !spotless.length, `The ${route.trainers.length} training spots are complete, and every combat training step's opponent has one`, `Training spots: ${[...bad, ...spotless].join('; ')}`);
-  }
-  check(!badPacing.length, `The training pace at ${paced} steps: the skill, level and XP agree with the title and the formula`, `The training pace: ${badPacing.join('; ')}`);
-
   // Wiki markup in the item database: HTML entities and "[UK]/[US]" are a sign of the old text cleaning.
   const entities = items.flatMap((i) => [...(i.buyLocations ?? []).map((b) => b.location), ...(i.freeSpawns ?? [])]
     .filter((t) => /&(#\d+|[a-z]+);|\[(UK|US)\]/i.test(t)).map((t) => `${i.nameEn}: ${t}`));
@@ -512,11 +424,7 @@ export function validate(d: GuideData | null, route: Route): Report {
       if (!balanced(t)) unbalanced.push(`${s.id} "${where}"`);
     }
   }
-  for (const st of stages) {
-    const ch = firstLetter(st.title);
-    if (ch && ch !== ch.toUpperCase()) lower.push(`stage ${st.id}`);
-  }
-  check(!lower.length, 'All step and stage texts start with a capital letter', `Starts with a lowercase letter: ${lower.join(', ')}`);
+  check(!lower.length, 'All step texts start with a capital letter', `Starts with a lowercase letter: ${lower.join(', ')}`);
   check(!typos.length, 'There are no known typos or ASCII arrows', `Typos: ${typos.join('; ')}`);
   check(!unbalanced.length, 'Brackets and quotes are closed', `Unclosed brackets or quotes: ${unbalanced.join(', ')}`);
 

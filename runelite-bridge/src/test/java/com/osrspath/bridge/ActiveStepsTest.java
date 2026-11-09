@@ -52,7 +52,7 @@ public class ActiveStepsTest
 	public void pluginAcceptsEveryStepOfTheApp()
 	{
 		List<Sent> sent = all();
-		assertTrue("too few targets: " + sent.size(), sent.size() > 60);
+		assertTrue("too few targets: " + sent.size(), sent.size() > 40);
 		List<String> bad = new ArrayList<>();
 		for (Sent s : sent)
 		{
@@ -104,7 +104,7 @@ public class ActiveStepsTest
 			}
 		}
 		// Where items come from and quest NPCs: dozens of steps, not only S2-03.
-		assertTrue("buttons at items: " + itemButtons, itemButtons >= 10);
+		assertTrue("buttons at items: " + itemButtons, itemButtons >= 8);
 		assertTrue("places of the steps: " + placeButtons, placeButtons >= 40);
 	}
 }

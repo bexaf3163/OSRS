@@ -1,11 +1,12 @@
-// Builds src/data/generated/trainers.json from scripts/data/trainers.defs.json: the training spots the combat plans may send the player to (2.75, T10). One list,
-// checked against the OSRS Wiki and the route, so adding an opponent is an entry in the definitions and a run of this script, not a change of code:
-//   fromStep   - the route step must exist and name the opponent first; its place, way in and text stay the step's own (read at run time);
-//   formerStep - a place written out (a step used to give it): kept as written, a route step must stand within reach of it;
-//   location   - the {{LocLine}} of the opponent's article whose location matches: the spawn nearest the middle of its spawns is the place (a tile an
-//                opponent really stands on), and a route step must stand within reach.
-// For every spot: the bank must be a bank of majorLocations.json; the drops the opponent always drops come from the article's drop table, and the one
-// to sell must be among them. Members spots carry members: true (from the LocLine) and are offered only to members. It needs a network.
+// Builds src/data/generated/trainers.json from scripts/data/trainers.defs.json: the training spots the combat training engine
+// may send the player to (2.75, T10). One list, checked against the OSRS Wiki, so adding an opponent is an entry in the
+// definitions and a run of this script, not a change of code:
+//   written  - a place written out with its NPC names, goal and text;
+//   location - the {{LocLine}} of the opponent's article whose location matches: the spawn nearest the middle of its spawns is
+//              the place (a tile an opponent really stands on).
+// For every spot: the bank must be a bank of majorLocations.json; the drops the opponent always drops come from the article's
+// drop table, and the one to sell must be among them. Members spots carry members: true (from the LocLine) and are offered only
+// to members. It needs a network.
 // Run: npm run build-trainers (then npm run build-combat-foes, which takes its opponents from the same definitions).
 
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -21,8 +22,6 @@ interface Def {
   /** How the guide says them: "cows", "Giant frogs"; proper - one named opponent ("Brutus"). */
   name: string;
   proper?: boolean;
-  fromStep?: string;
-  formerStep?: string;
   location?: string;
   plane?: number;
   levels?: number[];
@@ -43,8 +42,7 @@ interface Def {
   groupAggro?: boolean;
 }
 
-const defs = JSON.parse(readFileSync(`${root}scripts/data/trainers.defs.json`, 'utf8')) as { reach: number; spots: Def[] };
-const steps = JSON.parse(readFileSync(`${root}src/data/authored/steps.json`, 'utf8')) as { id: string; foes?: string[]; mapLocation?: Pt; inGame?: { pathWaypoints?: Pt[] } }[];
+const defs = JSON.parse(readFileSync(`${root}scripts/data/trainers.defs.json`, 'utf8')) as { spots: Def[] };
 const banks = (JSON.parse(readFileSync(`${root}src/data/generated/majorLocations.json`, 'utf8')) as { locations: Record<string, { kind: string }> }).locations;
 
 
@@ -74,19 +72,6 @@ function alwaysDrops(text: string): string[] {
   return [...out];
 }
 
-/** The route step nearest a point, by its place or a stop of its way (on the same map: a dungeon is not near the surface above it). */
-function nearestStep(at: Pt): { id: string; tiles: number } | null {
-  let near: { id: string; tiles: number } | null = null;
-  for (const s of steps) {
-    for (const p of [s.mapLocation, ...(s.inGame?.pathWaypoints ?? [])]) {
-      if (!p || (p.plane ?? 0) !== at.plane || Math.abs(p.y - at.y) > 1000) continue;
-      const t = chebyshev(p, at);
-      if (!near || t < near.tiles) near = { id: s.id, tiles: t };
-    }
-  }
-  return near;
-}
-
 const out: unknown[] = [];
 const problems: string[] = [];
 for (const d of defs.spots) {
@@ -98,33 +83,24 @@ for (const d of defs.spots) {
   if (d.sell && !always.includes(d.sell)) { fail(`${d.sell} is not among its always-drops (${always.join(', ') || 'none'})`); continue; }
   const { location, plane: _p, label, bankWhy: _b, betweenWhy: _w, ...rest } = d;
   let spot: Record<string, unknown> = { ...rest, always };
-  if (d.fromStep) {
-    const s = steps.find((x) => x.id === d.fromStep);
-    if (!s || s.foes?.[0] !== d.foe || !s.mapLocation) { fail(`route step ${d.fromStep} does not send the player to it`); continue; }
-    spot = { ...spot, members: false };
-  } else {
-    let place: Pt & { label: string };
-    let members = false;
-    let spawns: number | undefined;
-    if (location) {
-      const line = locLine(text, new RegExp(location), d.plane ?? 0);
-      if (!line?.pts.length) { fail(`no LocLine at ${location}`); continue; }
-      const mid = { x: line.pts.reduce((a, p) => a + p.x, 0) / line.pts.length, y: line.pts.reduce((a, p) => a + p.y, 0) / line.pts.length };
-      const at = line.pts.reduce((a, p) => (chebyshev(p, mid) < chebyshev(a, mid) ? p : a));
-      place = { ...at, label: label ?? d.goal ?? d.foe };
-      members = line.members;
-      spawns = line.pts.length;
-    } else if (d.place) place = d.place;
-    else { fail('neither fromStep, location nor place'); continue; }
-    if (!d.npcNames?.length || !d.goal || !d.where) { fail('a written spot needs npcNames, goal and where'); continue; }
-    const near = nearestStep(place);
-    // A former step's place was the route's own when it was played; a found spawn must be near the route as it is.
-    if (!d.formerStep && (!near || near.tiles > defs.reach)) { fail(`no route step within ${defs.reach} tiles (nearest ${near?.id} at ${near?.tiles})`); continue; }
-    spot = {
-      ...spot, place, members, ...(spawns ? { spawns } : {}), routeStep: d.formerStep ?? near!.id, ...(d.formerStep ? {} : { routeTiles: near!.tiles }),
-      source: `https://oldschool.runescape.wiki/w/${encodeURIComponent(d.foe.replace(/ /g, '_'))}`,
-    };
-  }
+  let place: Pt & { label: string };
+  let members = false;
+  let spawns: number | undefined;
+  if (location) {
+    const line = locLine(text, new RegExp(location), d.plane ?? 0);
+    if (!line?.pts.length) { fail(`no LocLine at ${location}`); continue; }
+    const mid = { x: line.pts.reduce((a, p) => a + p.x, 0) / line.pts.length, y: line.pts.reduce((a, p) => a + p.y, 0) / line.pts.length };
+    const at = line.pts.reduce((a, p) => (chebyshev(p, mid) < chebyshev(a, mid) ? p : a));
+    place = { ...at, label: label ?? d.goal ?? d.foe };
+    members = line.members;
+    spawns = line.pts.length;
+  } else if (d.place) place = d.place;
+  else { fail('neither location nor place'); continue; }
+  if (!d.npcNames?.length || !d.goal || !d.where) { fail('a written spot needs npcNames, goal and where'); continue; }
+  spot = {
+    ...spot, place, members, ...(spawns ? { spawns } : {}),
+    source: `https://oldschool.runescape.wiki/w/${encodeURIComponent(d.foe.replace(/ /g, '_'))}`,
+  };
   out.push(spot);
 }
 if (problems.length) {
@@ -132,7 +108,7 @@ if (problems.length) {
   process.exit(1);
 }
 writeFileSync(OUT, JSON.stringify({
-  source: 'scripts/data/trainers.defs.json checked against the OSRS Wiki (LocLine spawns, drop tables) and the route (scripts/data/build-trainers.ts)',
+  source: 'scripts/data/trainers.defs.json checked against the OSRS Wiki (LocLine spawns, drop tables) and scripts/data/build-trainers.ts',
   generatedAt: new Date().toISOString().slice(0, 10),
   trainers: out,
 }, null, 2) + '\n');

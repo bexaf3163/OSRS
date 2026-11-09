@@ -20,7 +20,7 @@ const FIELDS = [
   'pacing', 'pacing.skill', 'pacing.also', 'pacing.foodHpPerKill', 'pacing.targetLevel', 'pacing.targetExp', 'pacing.actionName',
   'pacing.expPerAction', 'pacing.secondsPerAction', 'pacing.goals', 'pacing.goals{}.level', 'pacing.goals{}.exp',
   'useOn', 'useOn[].item', 'useOn[].target', 'useOn[].kind',
-  'guide', 'guide.steps', 'guide.plan', 'guide.plan.now', 'guide.plan.next',
+  'guide', 'guide.steps',
   'guide.items', 'guide.items[].name', 'guide.items[].id', 'guide.items[].count', 'guide.items[].where', 'guide.items[].inStep',
   'guide.items[].alt', 'guide.items[].doses',
   'guide.places', 'guide.places[].x', 'guide.places[].y', 'guide.places[].plane', 'guide.places[].label', 'guide.places[].npc', 'guide.places[].items',

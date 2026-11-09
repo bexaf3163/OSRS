@@ -17,7 +17,6 @@ import { StepMap } from '../../map/StepMap';
 import { InGamePanel } from '../InGamePanel';
 import { TravelPlan } from '../prep/TravelPlan';
 import { FoodAdvice } from '../combat/FoodAdvice';
-import { StyleGear } from '../combat/StyleGear';
 import { BranchSuggestions } from '../BranchSuggestions';
 import { UpgradePrompt } from '../combat/UpgradePrompt';
 import { GearPrompt } from '../../gear/GearPrompt';
@@ -25,13 +24,9 @@ import { ReadinessPanel } from '../prep/ReadinessPanel';
 import { ReadinessVerdictCard } from '../prep/ReadinessVerdict';
 import { OneTripCard } from '../prep/OneTripCard';
 import { useReadinessEngine } from '../../../state/readinessContext';
-import { MoneyGoal } from '../prep/MoneyGoal';
-import { TradeRestrictionNote } from '../prep/TradeRestrictionNote';
 import { StepTasks } from './StepTasks';
 import { StepTraining } from '../../skills/TrainingCard';
 import { StepStatus } from './StepStatus';
-import { MagicPlan } from '../combat/MagicPlan';
-import { MoneyPlan } from '../prep/MoneyPlan';
 import { ItemIcon, useWiki } from '../../reference/WikiDrawer';
 import { plural } from '../../../domain/text/format';
 import { LiveXp } from '../../../ui/LiveXp';
@@ -210,17 +205,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
     </Fold>
   );
 
-  // A plan in effect (a combat plan, 2.69) replaced the route's own instructions: they stay readable here, folded, never beside the plan's.
-  const asWritten = step.routeAsWritten;
-  const routeWritten = asWritten && (
-    <Fold title="The route as written" hint="replaced by the plan in effect">
-      {asWritten.where && <p><Inline text={asWritten.where} /></p>}
-      {asWritten.how && <p className="step-how"><Inline text={asWritten.how} /></p>}
-      {asWritten.quickSteps?.length ? <ol className="quick-steps">{asWritten.quickSteps.map((q, i) => <li key={i}><Inline text={q} /></li>)}</ol> : null}
-      {asWritten.fields?.length ? <dl className="fields">{asWritten.fields.map((fl, i) => <FieldRow key={i} field={fl} />)}</dl> : null}
-    </Fold>
-  );
-
   // The critical field warnings ("Dangerous", "Attention", "Combat") are always visible, the other fields — in the details.
   const fieldsAll = step.fields ?? [];
   const fieldsWarn = fieldsAll.filter((f) => WARN_LABELS.has(f.label));
@@ -356,14 +340,9 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
           <CarryNote step={step} />
           <StepTasks step={step} />
           <OneTripCard step={step} inStatus plain nowShown={verdictShown} />
-          <TradeRestrictionNote step={step} />
-          <MoneyGoal step={step} />
           <StepTraining step={step} />
-          <MagicPlan step={step} />
-          <MoneyPlan step={step} />
           <UpgradePrompt step={step} />
           <GearPrompt step={step} />
-          <StyleGear step={step} />
           <FoodAdvice step={step} />
           <BranchSuggestions step={step} />
           {bring}
@@ -397,7 +376,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
         </p>
         {metaRow}
         {notes}
-        {routeWritten}
         {requires}
         {targets}
         {(step.itemsRequired?.length || step.itemsRecommended?.length || image || fieldsRest.length > 0) && (
@@ -429,7 +407,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
         {actions}
         {future}
         {reference}
-        {routeWritten}
         <details className="zen-more">
           <summary className="small">More about the step</summary>
           {metaRow}

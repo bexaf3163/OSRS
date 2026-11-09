@@ -1,16 +1,14 @@
 // Typed access to the data.
-// The V2 route — steps.json and stages.json (the source of truth for the steps).
+// The V2 route — steps.json (the source of truth for the steps).
 // Skills, experience, plugins and the reference — the JSON files in authored/.
 // The item database — f2p-items.json from the OSRS Wiki (npm run build-items).
 
 import type {
-  GameMode, LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
+  GameMode, LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Step, WikiItemDetail, XpData,
 } from '../types';
-import { titleTargets } from './targets';
 import { deriveQuests } from './quests';
 import stepsJson from './authored/steps.json';
 import questStagesJson from './authored/questStages.json';
-import stagesJson from './authored/stages.json';
 import skillsJson from './authored/skills.json';
 import levelsJson from './authored/levels.json';
 import membersSkillsJson from './authored/members-skills.json';
@@ -35,11 +33,8 @@ export const allSteps: Step[] = (stepsJson as Step[]).map((s0) => {
   const q = stagesByStep[s0.id];
   // For a quest with a full "Walkthrough" route it is taken from there: the earlier points skipped moves (climb the stairs and so on).
   const s: Step = q ? { ...s0, questStages: q, ...(routeSteps(q) ? { quickSteps: routeSteps(q) } : {}) } : s0;
-  if (s.type !== 'skill' && s.type !== 'gear') return s;
-  const targets = titleTargets(s.title);
-  return targets.length ? { ...s, targets } : s;
+  return s;
 });
-export const allStages = stagesJson as Stage[];
 /** The free skills of the guide. */
 export const skills = skillsJson as Skill[];
 export const levelSkills = levelsJson as LevelSkill[];
@@ -81,11 +76,6 @@ export const BASE_QUEST = 'Learning the Ropes';
  */
 export function stepsFor(mode: GameMode): Step[] {
   return mode === 'members' ? allSteps.filter((s) => s.bondBranch !== true) : allSteps.filter((s) => s.membersOnly !== true);
-}
-
-export function stagesFor(mode: GameMode): Stage[] {
-  const inRoute = new Set(stepsFor(mode).map((s) => s.stage));
-  return allStages.filter((s) => (mode === 'members' || s.membersOnly !== true) && inRoute.has(s.id));
 }
 
 export function maxQpFor(mode: GameMode): number {

@@ -1,13 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById } from '../src/data';
+import { allSteps } from '../src/data';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { contextOf, readinessOf } from '../src/domain/readiness/readiness';
 import { STAFFS } from '../src/domain/combat/magicPlan';
 import { nameKey } from '../src/domain/items/itemKey';
+import { retiredStep } from './fixtures/retiredSteps';
 
 describe('Magic training uses an owned elemental staff', () => {
   it.each(Object.values(STAFFS))('$name satisfies the staff requirement from the bank', staff => {
-    const step = stepById.get('S2-04')!;
+    const step = retiredStep('S2-04')!;
     const names = ['Staff', ...Object.values(STAFFS).map(s => s.name)];
     const owned = { bankSeen: true, items: new Map(names.map(name => [nameKey(name), { name, carried: 0, noted: 0, bank: name === staff.name ? 1 : 0 }])) };
     const result = readinessOf(step, contextOf({ step, steps: allSteps, progress: emptyProgress(), qp: 100, mode: 'f2p', stats: { magic: 10 }, gear: null, owned }));
@@ -16,7 +17,7 @@ describe('Magic training uses an owned elemental staff', () => {
   });
 
   it.each([true, false])('staff absence needs complete per-alternative evidence: reported=%s', reported => {
-    const step = stepById.get('S2-04')!;
+    const step = retiredStep('S2-04')!;
     const names = ['Staff', ...Object.values(STAFFS).map(s => s.name)];
     const owned = { bankSeen: true, items: new Map(names.map(name => [nameKey(name), { name, carried: 0, noted: 0, bank: name === 'Staff of fire' && !reported ? undefined : 0 }])) };
     const result = readinessOf(step, contextOf({ step, steps: allSteps, progress: emptyProgress(), qp: 100, mode: 'f2p', stats: { magic: 10 }, gear: null, owned }));

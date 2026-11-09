@@ -90,15 +90,6 @@ describe('food follows the player, not the guide (full chain, owner report 2026-
     expect(food('Trout').buy).toBe(0);
   });
 
-  it('combat training: food is a recommendation sized by the plan; the step never waits for it', () => {
-    const { pick, food } = world('S3-08', { attack: 20, strength: 16, defence: 1, hitpoints: 22 }, ['Mithril scimitar', 'Iron full helm', 'Iron platebody']);
-    expect(pick).toMatchObject({ essential: false });
-    const salmon = food('Salmon');
-    expect([salmon.required, salmon.readiness, salmon.now]).toEqual([undefined, undefined, undefined]);
-    expect(salmon.recommended).toMatchObject({ amount: pick.trip, howToGet: expect.stringMatching(/^Optional: more kills per trip/) });
-    expect([salmon.buy, salmon.checklist]).toEqual([0, false]);
-  });
-
   it('the weaker the character, the more food the same fight needs (different states, different answers)', () => {
     const weak = world('S4-01', WEAK, ['Mithril scimitar']).pick.trip;
     const mid = world('S4-01', { attack: 40, strength: 40, defence: 30, hitpoints: 35, magic: 20 }, ['Mithril scimitar', 'Iron platebody']).pick.trip;

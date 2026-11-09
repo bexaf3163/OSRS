@@ -12,6 +12,7 @@ import { plural } from '../src/domain/text/format';
 import { parseStats } from '../src/services/bridgeEvents';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { stepsFor } from '../src/data';
+import { retiredStep } from './fixtures/retiredSteps';
 
 const item = (nameEn: string, amount: string | number, extra: Partial<StepItemRequirement> = {}): StepItemRequirement =>
   ({ nameEn, amount, howToGet: '', ...extra });
@@ -277,9 +278,9 @@ describe('what goes to the plugin', () => {
   });
 
   it('items from the conditions — to the plugin for counting', () => {
-    expect(watchedItems(byId('S2-01'))).toEqual(['Chronicle']);
+    expect(watchedItems(retiredStep('S2-01'))).toEqual(['Chronicle']);
     // The step's Energy potions are counted in doses of every size (2.73.0): the game is asked about all four sizes.
-    expect(toInGameTarget(byId('S2-01'))!.watchItems).toEqual(['Chronicle', 'Energy potion(4)', 'Energy potion(1)', 'Energy potion(2)', 'Energy potion(3)']);
+    expect(toInGameTarget(retiredStep('S2-01'))!.watchItems).toEqual(['Chronicle', 'Energy potion(4)', 'Energy potion(1)', 'Energy potion(2)', 'Energy potion(3)']);
   });
 
   it('a step with only items also goes to the game — for the departure check', () => {

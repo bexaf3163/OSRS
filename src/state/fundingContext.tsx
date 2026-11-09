@@ -146,7 +146,7 @@ export function useEvalBaseFactory() {
     const live = {
       stats: bridge.stats as Partial<Record<string, number>> | null,
       xp: bridge.xp as Partial<Record<string, number>> | null,
-      gear: bridge.gear,
+      gear: bridge.gear, state,
       fights: bridge.combatLog?.foes ?? null,
       train: trainingSkill(road, progress),
     };

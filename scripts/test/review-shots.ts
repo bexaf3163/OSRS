@@ -39,7 +39,7 @@ function hillGiants(opts: { coins?: number; bankSeen?: boolean; storage?: Record
     .map(([id, name, slot]) => ({ id, name, slot }));
   const inventory = opts.carriedFood ? [{ id: 329, name: 'Salmon', count: opts.carriedFood }] : [];
   const gear = { equipment, inventory, coins: opts.coins ?? 400, bankCoins: opts.bankSeen === false ? null : 0 };
-  const from = steps.findIndex((x) => x.id === 'S4-03');
+  const from = steps.findIndex((x) => x.id === 'S5-06');
   const worn = new Set(equipment.map((e) => e.name));
   const asked = [...new Set(steps.slice(from, from + 8).flatMap((x) => [...(x.itemsRequired ?? []), ...(x.itemsRecommended ?? [])])
     .flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])]).flatMap(sizesOf))];
@@ -49,9 +49,9 @@ function hillGiants(opts: { coins?: number; bankSeen?: boolean; storage?: Record
   });
   const stats = { attack: 30, strength: 21, defence: 1, hitpoints: 24 };
   return {
-    progress: progressBefore('S4-03'),
-    localStorage: { 'osrs-put:active-step': 'S4-03', ...(opts.storage ?? {}) },
-    status: { protocol: 6, inGame: true, player: 'Review Hero', activeStepId: 'S4-03', questPoints: 30, totalLevel: 150, stats, pos: { x: 3093, y: 3495, plane: 0 }, ...gear },
+    progress: progressBefore('S5-06'),
+    localStorage: { 'osrs-put:active-step': 'S5-06', ...(opts.storage ?? {}) },
+    status: { protocol: 6, inGame: true, player: 'Review Hero', activeStepId: 'S5-06', questPoints: 30, totalLevel: 150, stats, pos: { x: 3093, y: 3495, plane: 0 }, ...gear },
     events: [
       { type: 'OWNED', bankSeen: opts.bankSeen !== false, items: owned }, { type: 'GEAR', gear }, { type: 'QUESTS', done: [] },
       { type: 'STATS', stats }, { type: 'XP', xp: { attack: 13363, strength: 2000, defence: 0, hitpoints: 3500 } },
@@ -63,8 +63,8 @@ function hillGiants(opts: { coins?: number; bankSeen?: boolean; storage?: Record
 /** A skiller between quests: real levels for the gathering skills, a free account, the bank read. */
 function skiller(levels: Record<string, number>, storage: Record<string, string> = {}): Mock {
   return {
-    progress: progressBefore('S4-03', { levels }),
-    localStorage: { 'osrs-put:active-step': 'S4-03', ...storage },
+    progress: progressBefore('S5-06', { levels }),
+    localStorage: { 'osrs-put:active-step': 'S5-06', ...storage },
     status: { protocol: 6, inGame: true, player: 'Review Hero', stats: levels, coins: 2500, bankCoins: 12000, equipment: [], inventory: [] },
     events: [{ type: 'STATS', stats: levels }, { type: 'OWNED', bankSeen: true, items: [] }],
     market: true,
@@ -89,25 +89,13 @@ interface Shot {
 }
 
 
-/** "Why this plan?": from the status line when a plan other than the route is in effect, else the fold itself (the line is silent then). */
-const openWhy = async (p: Page) => {
-  const line = p.locator('.status-combat-route').getByRole('button', { name: 'Why this plan?' });
-  if (await line.count()) await line.first().click();
-  else {
-    const fold = p.locator('.combat-route-details:visible').first();
-    await fold.scrollIntoViewIfNeeded();
-    await fold.locator('summary').click();
-  }
-  await settle(p);
-};
-
 const SHOTS: Shot[] = [
-  { name: 'hill-giants-step', area: 'T4', caption: 'S4-03 step as the guide opens it for the reported character', width: 1440, hash: '#/step/S4-03', mock: hillGiants() },
+  { name: 'hill-giants-step', area: 'T4', caption: 'S5-06 step as the guide opens it for the reported character', width: 1440, hash: '#/step/S5-06', mock: hillGiants() },
   { name: 'quest-step-elvarg', area: 'T4', caption: 'S5-08, a quest step with stages, as the guide opens it', width: 1440, hash: '#/step/S5-08', mock: hillGiants() },
-  { name: 'hill-giants-step-390', area: 'T4', caption: 'S4-03 step at phone width', width: 390, hash: '#/step/S4-03', mock: hillGiants() },
+  { name: 'hill-giants-step-390', area: 'T4', caption: 'S5-06 step at phone width', width: 390, hash: '#/step/S5-06', mock: hillGiants() },
   { name: 'shopping', area: 'T7', caption: 'Shopping for the next trip', width: 1440, hash: '#/shopping', mock: hillGiants() },
   {
-    name: 'shopping-ahead', area: 'T7', caption: 'Shopping, next trip: S4-03 needs nothing; the purchases for S4-04 and S4-05 are folded apart, the sum adds up', width: 1440,
+    name: 'shopping-ahead', area: 'T7', caption: 'Shopping, next trip: what S5-06 needs now; later purchases are folded apart, the sum adds up', width: 1440,
     hash: '#/shopping', mock: hillGiants({ carriedFood: 25, coins: 1827 }),
     act: async (p) => { await p.locator('.shop-group-v2.is-ahead > summary').click(); await settle(p); },
   },
@@ -136,20 +124,12 @@ const SHOTS: Shot[] = [
   { name: 'skill-ranged', area: 'T11', caption: 'Ranged: the training card with the arrows for the whole goal', width: 1440, hash: '#/skills/RA', mock: skiller(SKILLER) },
   { name: 'skill-magic', area: 'T4', caption: 'Magic 33: the balanced default picks a method that is not the slowest AFK one', width: 1440, hash: '#/skills/MA', mock: skiller(SKILLER) },
   { name: 'settings', area: 'T8', caption: 'Settings', width: 1440, hash: '#/settings', mock: hillGiants() },
-  { name: 'funding-card', area: 'T1', caption: 'The coin card on S4-03 with no coins: the shortfall, one way to raise it, Start, and the link to the Money section', width: 1440, hash: '#/step/S4-03', mock: hillGiants({ coins: 0 }), act: (p) => reveal(p, '.funding-card'), sel: '.funding-card' },
+  { name: 'funding-card', area: 'T1', caption: 'The coin card on S5-06 with no coins: the shortfall, one way to raise it, Start, and the link to the Money section', width: 1440, hash: '#/step/S5-06', mock: hillGiants({ coins: 0 }), act: (p) => reveal(p, '.funding-card'), sel: '.funding-card' },
   {
-    name: 'funding-running', area: 'T1', caption: 'The coin plan running: the step in hand, its count, Pause and Cancel', width: 1440, hash: '#/step/S4-03', mock: hillGiants({ coins: 0 }),
+    name: 'funding-running', area: 'T1', caption: 'The coin plan running: the step in hand, its count, Pause and Cancel', width: 1440, hash: '#/step/S5-06', mock: hillGiants({ coins: 0 }),
     act: async (p) => { await reveal(p, '.funding-card'); await p.locator('.funding-card .btn-primary').click(); await settle(p); }, sel: '.funding-card',
   },
-  {
-    name: 'combat-why', area: 'T3', caption: 'S4-03: "Why this plan?" opens the comparison of plans', width: 1440, hash: '#/step/S4-03', mock: hillGiants(),
-    act: openWhy, sel: '.combat-route',
-  },
-  {
-    name: 'combat-why-390', area: 'T3', caption: 'S4-03: the comparison of plans at phone width', width: 390, hash: '#/step/S4-03', mock: hillGiants(),
-    act: openWhy, sel: '.combat-route',
-  },
-  { name: 'money', area: 'T2', caption: 'Money: the reported character, 400 gp, S4-03 short of coins: ranked for the shortfall', width: 1440, hash: '#/money', mock: hillGiants() },
+  { name: 'money', area: 'T2', caption: 'Money: the reported character, 400 gp, S5-06 short of coins: ranked for the shortfall', width: 1440, hash: '#/money', mock: hillGiants() },
   {
     name: 'money-details', area: 'T2', caption: 'Money: the recommendation\'s details (requirements, where and how, the money, sources folded)', width: 1440, hash: '#/money', mock: hillGiants(),
     act: async (p) => { await p.locator('.money-reco').getByRole('button', { name: 'Details' }).click(); await settle(p); },

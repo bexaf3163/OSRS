@@ -27,7 +27,7 @@ const step = (over: Partial<Step> & { id: string }): Step => ({
 describe('"What to do now"', () => {
   it('at the start — the first step', () => {
     const p = emptyProgress();
-    expect(blockersOf(f2p.find((s) => s.id === 'S1-01')!, p, questPoints(f2p, p, BASE_QP))).toBeNull();
+    expect(blockersOf(f2p.find((s) => s.id === 'S1-03')!, p, questPoints(f2p, p, BASE_QP))).toBeNull();
   });
 
   it('skips closed steps', () => {
@@ -36,13 +36,13 @@ describe('"What to do now"', () => {
   });
 
   it('does not pick a step with an unmet dependency', () => {
-    // Everything before S2-02 is done except S2-01 — and Imp Catcher waits for the Grand Exchange shopping.
-    const done = allBefore('S2-02');
-    delete done['S2-01'];
+    // Everything before S2-10 is done except S1-04, which Prince Ali Rescue needs.
+    const done = allBefore('S2-10');
+    delete done['S1-04'];
     const p = progressWith(done);
     const qp = questPoints(f2p, p, BASE_QP);
-    expect(blockersOf(f2p.find((s) => s.id === 'S2-01')!, p, qp)).toBeNull();
-    expect(blockersOf(f2p.find((s) => s.id === 'S2-02')!, p, qp)).toEqual({ steps: ['S2-01'] });
+    expect(blockersOf(f2p.find((s) => s.id === 'S1-04')!, p, qp)).toBeNull();
+    expect(blockersOf(f2p.find((s) => s.id === 'S2-10')!, p, qp)).toEqual({ steps: ['S1-04'] });
   });
 
   it('bypasses a blocked step and takes the next available one', () => {
@@ -73,7 +73,6 @@ describe('"What to do now"', () => {
     expect(list.some((s) => !isClosed(p, s.id) && !blockersOf(s, p, 0))).toBe(false);
     // A is already closed (skipped), so the old openAfter preview kept it skipped rather than marking it done.
     expect(list.some((s) => s.id !== 'A' && !isClosed(p, s.id) && !blockersOf(s, p, 0))).toBe(false);
-    expect(blockersOf(step({ id: 'C', softRequires: ['A'] }), p, 0)).toBeNull();
   });
 
   it('uses known quest completion ahead of manual marks, but keeps an offline done fallback', () => {

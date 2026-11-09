@@ -250,8 +250,6 @@ export interface StepGuidePayload {
   steps?: string[];
   /** Quest stages: the plugin reads the quest variable and shows only the current stage. */
   stage?: StagePayload;
-  /** The selected combat plan's phase in hand and the one after it, short: the in-game guide leads with them (HUD 2.74.0). */
-  plan?: { now?: string; next?: string };
 }
 
 export interface StagePayload {

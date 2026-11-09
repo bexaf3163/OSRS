@@ -205,7 +205,7 @@ try {
     await page.waitForTimeout(800);
     await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
   };
-  await page.evaluate(() => { location.hash = '#/step/S1-01'; });
+  await page.evaluate(() => { location.hash = '#/step/S1-03'; });
   await page.waitForTimeout(1000);
   // The cockpit has the manual-completion button next to the open walkthrough, without a tab to open first.
   await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
@@ -221,22 +221,22 @@ try {
   const priorText = readFileSync(file, 'utf8');
   mkdirSync(`${file}.tmp`);
   try {
-    await doneOn('S1-02');
+    await doneOn('S1-04');
     await page.waitForSelector('.progress-storage-warning');
     expect((await page.locator('.progress-storage-warning').innerText()).includes('desktop file could not be written'), 'progress write failure: the real IPC acknowledgement exposes a failed file write');
     expect(readFileSync(file, 'utf8') === priorText, 'progress write failure: the previous native save remains intact');
   } finally { rmdirSync(`${file}.tmp`); }
-  await doneOn('S1-03');
+  await doneOn('S1-06');
   await page.waitForFunction(() => !document.querySelector('.progress-storage-warning'));
   expect(readFileSync(file, 'utf8') !== priorText, 'progress write retry: a later successful write clears the warning and persists the latest state');
 
   // A live external replacement must be reviewed, not overwritten by the next ordinary UI edit.
   const externallyChanged = JSON.parse(readFileSync(file, 'utf8'));
-  externallyChanged.notes = { ...externallyChanged.notes, 'S1-01': 'External source retained' };
+  externallyChanged.notes = { ...externallyChanged.notes, 'S1-03': 'External source retained' };
   externallyChanged.updatedAt = new Date().toISOString();
   const externalBytes = JSON.stringify(externallyChanged);
   writeFileSync(file, externalBytes);
-  await doneOn('S1-04');
+  await doneOn('S1-07');
   await page.waitForSelector('.progress-storage-warning');
   expect((await page.locator('.progress-storage-warning').innerText()).includes('not overwritten'),
     'external save: the normal UI explains the protected external replacement');

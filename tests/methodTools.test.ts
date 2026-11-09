@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { stepById } from '../src/data';
 import { AXES, PICKAXES } from '../src/domain/items/toolTiers';
 import { methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
 import type { OwnedState } from '../src/domain/items/checklist';
@@ -10,9 +9,10 @@ import { contextOf, stepReadiness } from '../src/domain/readiness/readiness';
 import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import type { Step } from '../src/types';
+import { retiredStep } from './fixtures/retiredSteps';
 
 function training(skill: 'mining' | 'woodcutting'): Step {
-  return { ...stepById.get('S6-01')!, id: `TEST-${skill}`, followsMethod: skill, requires: [],
+  return { ...retiredStep('S6-01')!, id: `TEST-${skill}`, followsMethod: skill, requires: [],
     requirements: [], itemsRecommended: [],
     inGame: { completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill, level: 60 }] } },
   };

@@ -26,14 +26,8 @@ import { usePrepFix } from '../prep/PrepRoute';
 import { ReadinessPanel } from '../prep/ReadinessPanel';
 import { OneTripCard, RecoveryBanner } from '../prep/OneTripCard';
 import { FundingStatusLine } from '../../money/FundingCard';
-import { CombatRouteLine } from '../combat/CombatRoute';
-import { MoneyGoal } from '../prep/MoneyGoal';
-import { TradeRestrictionNote } from '../prep/TradeRestrictionNote';
-import { MoneyPlan } from '../prep/MoneyPlan';
-import { MagicPlan } from '../combat/MagicPlan';
 import { UpgradePrompt } from '../combat/UpgradePrompt';
 import { GearPrompt } from '../../gear/GearPrompt';
-import { StyleGear } from '../combat/StyleGear';
 import { FoodAdvice } from '../combat/FoodAdvice';
 import { StepMap } from '../../map/StepMap';
 import { InGamePanel } from '../InGamePanel';
@@ -171,7 +165,6 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
       </div>
       {recovering && <RecoveryBanner step={step} rec={recovering} />}
       <FundingStatusLine step={step} onOpen={openDetails} />
-      <CombatRouteLine step={step} onOpen={() => { if (headline) { onPrep?.(); return; } setTab('food'); setOpen(true); }} />
       {!recovering && !headline && <TravelTip step={step} />}
       {sent === 'offline' && <p className="small muted" role="status">{GUIDE_UNCONFIRMED}</p>}
       {detour ? (
@@ -194,8 +187,8 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
           ))}
         </div>
       )}
-      {!headline && panel('prep', <><ReadinessPanel step={step} /><OneTripCard step={step} inStatus /><TradeRestrictionNote step={step} /><MoneyGoal step={step} /><MoneyPlan step={step} /><MagicPlan step={step} /></>)}
-      {!headline && panel('gear', <><UpgradePrompt step={step} /><GearPrompt step={step} /><StyleGear step={step} /></>)}
+      {!headline && panel('prep', <><ReadinessPanel step={step} /><OneTripCard step={step} inStatus /></>)}
+      {!headline && panel('gear', <><UpgradePrompt step={step} /><GearPrompt step={step} /></>)}
       {!headline && panel('food', <FoodAdvice step={step} />)}
       {!headline && open && current === 'route' && (
         <div className="status-panel" role="tabpanel"><StepMap step={step} /><InGamePanel step={step} /><TravelPlan step={step} /></div>

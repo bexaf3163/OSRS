@@ -3,7 +3,7 @@ import type { Step } from '../../types';
 import type { OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
 import { estimateStep, foeVariants, stepGoals, xpPerKill, type CombatEstimate, type StepEstimateContext } from './combatEstimate';
-import { GUARANTEED_DROPS } from './route/spots';
+import { GUARANTEED_DROPS } from './spots';
 import { heldExact } from '../player/playerState';
 import { levelForXp, xpForLevel } from '../player/xp';
 
@@ -25,13 +25,6 @@ export function asked(step: EstimatedStep, foe: string, goals: readonly Goal[]):
 
 export function currentXp(ctx: StepEstimateContext, skill: Goal['skill']): number {
   return Math.max(ctx.xp?.[skill] ?? xpForLevel(ctx.stats?.[skill] ?? 1), ctx.assume?.xp?.[skill] ?? 0);
-}
-
-/** Collection needs a whole-fight estimate even when the route's XP target is already reached. */
-export function dropEstimates(step: EstimatedStep, foe: string, count: number, skill: Goal['skill'], ctx: StepEstimateContext): CombatEstimate[] {
-  if (count <= 0) return [];
-  return foeVariants(foe).flatMap(v => estimateStep(asked(step, foe, [{ skill, exp: currentXp(ctx, skill) + count * xpPerKill(v) }]), ctx)
-    .filter(e => e.foe.combat === v.combat && e.foe.version === v.version));
 }
 
 /** Preserve the full-fight health buffer; never multiply a one-kill estimate into fifty free kills. */

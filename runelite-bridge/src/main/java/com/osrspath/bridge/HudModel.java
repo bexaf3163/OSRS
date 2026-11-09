@@ -233,10 +233,6 @@ final class HudModel
 		Hud.State state;
 		/** The pace of a training step; null for a step without one. */
 		Pace pace;
-		/** The selected plan's explicit objective ("Collect 50 Big bones from Hill Giants"), ahead of incidental XP pacing; null otherwise. */
-		String planNow;
-		/** The plan's next phase; null when this is the last. */
-		String planNext;
 		/** The heading of a temporary target over the step ("Buy Iron scimitar from Zeke", "Go to: Varrock West Bank"); null when the arrow follows the step. */
 		String detour;
 		/** That target is a purchase: preparation in itself, so it leads the card. */

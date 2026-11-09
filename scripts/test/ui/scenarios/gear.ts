@@ -13,8 +13,8 @@ async function gearScenarios(browser: Browser) {
   const live = (equipment: { id: number; name: string; slot: string }[], stats: Record<string, number>, coins: number, bank: { name: string; bank: number }[] = []) => {
     const gear = { equipment, inventory: [], coins, bankCoins: 0 };
     return {
-      progress: progressBefore('S4-03'), localStorage: { 'osrs-put:active-step': 'S4-03' }, market: true,
-      status: { protocol: 6, inGame: true, player: 'Gear Test', activeStepId: 'S4-03', ...gear, stats },
+      progress: progressBefore('S4-02'), localStorage: { 'osrs-put:active-step': 'S4-02' }, market: true,
+      status: { protocol: 6, inGame: true, player: 'Gear Test', activeStepId: 'S4-02', ...gear, stats },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: bank.map((b) => ({ name: b.name, carried: 0, noted: 0, bank: b.bank })) }],
     };
   };
@@ -28,8 +28,8 @@ async function gearScenarios(browser: Browser) {
       await settle(page);
       const head = await text(page, '.gear-page .page-head');
       const reco = await text(page, '.gear-reco');
-      // The opponent of the plan in effect (2.69): for this character the guide selects the cows first, and Gear judges against them.
-      expect(/For S4-03: (Cow|Hill Giant|Giant frog), attacks with crush/.test(head), `gear (${width} px): the context names the fight in the plan in effect and the style that hits`);
+      // The opponent of the step in effect: Brutus, and Gear judges against him.
+      expect(/For S4-02: Brutus, attacks with \w+/.test(head), `gear (${width} px): the context names the fight in the plan in effect and the style that hits`);
       expect(await page.locator('.gear-reco').count() === 1 && /Mithril scimitar/.test(reco) && /bank/i.test(reco), `gear (${width} px): one recommendation, to wear the scimitar from the bank`);
       expect(!/faster/.test(reco), `gear (${width} px): accuracy is not called speed`);
       expect(/Bronze scimitar/.test(await text(page, '.gear-now')), `gear (${width} px): what is worn now is shown`);
@@ -67,7 +67,7 @@ async function gearScenarios(browser: Browser) {
     {
       const at = Date.now() - 3 * 3600_000;
       const snap = { byPlayer: { 'gear test': { at, player: 'Gear Test', gear: { equipment: [RUNE, STRENGTH], inventory: [], coins: 120, bankCoins: 4000 } } } };
-      const { page, errors } = await open(browser, width, { offline: true, progress: progressBefore('S4-03'), localStorage: { 'osrs-put:active-step': 'S4-03', 'osrs-put:last-gear': JSON.stringify(snap) } }, '#/gear');
+      const { page, errors } = await open(browser, width, { offline: true, progress: progressBefore('S4-02'), localStorage: { 'osrs-put:active-step': 'S4-02', 'osrs-put:last-gear': JSON.stringify(snap) } }, '#/gear');
       await settle(page);
       const now = await text(page, '.gear-now');
       expect(/Last known/.test(now) && /Gear Test/.test(now) && /Rune scimitar/.test(now) && /Amulet of strength/.test(now), `gear offline (${width} px): the last known gear is named`);
@@ -81,7 +81,7 @@ async function gearScenarios(browser: Browser) {
     }
     // Offline with nothing known: one short card, no empty slots or panels.
     {
-      const { page, errors } = await open(browser, width, { offline: true, progress: progressBefore('S4-03'), localStorage: { 'osrs-put:active-step': 'S4-03' } }, '#/gear');
+      const { page, errors } = await open(browser, width, { offline: true, progress: progressBefore('S4-02'), localStorage: { 'osrs-put:active-step': 'S4-02' } }, '#/gear');
       await settle(page);
       expect(/RuneLite is not connected/.test(await text(page, '.gear-connect')), `gear connect (${width} px): the connection card`);
       expect(await page.locator('.gear-now').count() === 0 && await page.locator('.gear-reco').count() === 0 && await page.locator('details.gear-more').count() === 0, `gear connect (${width} px): no empty panels around it`);
@@ -97,10 +97,10 @@ async function gearPage(browser: Browser) {
   const oldGear = { equipment: [{ id: 1329, name: 'Mithril scimitar', slot: 'weapon' }], inventory: [], coins: 100, bankCoins: 200 };
   const newGear = { ...oldGear, equipment: [{ id: 1331, name: 'Adamant scimitar', slot: 'weapon' }] };
   const { page, errors } = await open(browser, 1280, {
-    progress: progressBefore('S3-08'),
+    progress: progressBefore('S4-01'),
     status: { protocol: 6, player: 'Session Test', stats: { attack: 22, strength: 20, defence: 1 }, ...oldGear },
-    // The game shows the S3-08 fight: with no quest data the Decision waits, and no route order stands in for it (v14).
-    localStorage: { 'osrs-put:active-step': 'S3-08' },
+    // The game shows the S4-01 fight: with no quest data the Decision waits, and no route order stands in for it (v14).
+    localStorage: { 'osrs-put:active-step': 'S4-01' },
   }, '#/gear');
   await page.getByRole('region', { name: 'Worn now', exact: true }).waitFor();
   await page.evaluate((gear) => {
@@ -131,13 +131,13 @@ async function gearPage(browser: Browser) {
     w.__emit({ type: 'STATUS', inGame: true, player: 'Other Hero' });
     w.__emit({ type: 'STATS', stats: { attack: 99, strength: 99, defence: 99 } });
     w.__emit({ type: 'GEAR', gear });
-    w.__emit({ type: 'STEP_AUTO_COMPLETED', stepId: 'S3-08' });
+    w.__emit({ type: 'STEP_AUTO_COMPLETED', stepId: 'S4-01' });
   }, newGear);
   await settle(page);
   expect(await page.getByRole('region', { name: 'Worn now', exact: true }).count() === 0, 'session: another character is not presented as the active profile live loadout');
   expect(await page.evaluate(() => {
     const p = JSON.parse((window as unknown as { __saved: string }).__saved);
-    return p.levels.attack !== 99 && p.steps['S3-08'] !== 'done';
+    return p.levels.attack !== 99 && p.steps['S4-01'] !== 'done';
   }), 'session: same-batch stats and auto-completion from a different character cannot overwrite this profile');
   expect(await noOverflow(page) && !errors.length, 'session: async changes do not crash or overflow the interface');
   await page.context().close();
@@ -149,10 +149,10 @@ async function coifInBank(browser: Browser) {
   const gear = { equipment: [{ id: 1325, name: 'Steel scimitar', slot: 'weapon' }], inventory: [], coins: 500, bankCoins: 3000 };
   const stats = { attack: 20, strength: 20, defence: 1, ranged: 17 };
   const { page, errors } = await open(browser, width, {
-    progress: progressBefore('S4-03'),
-    status: { ...gear, stats, activeStepId: 'S4-03' },
+    progress: progressBefore('S4-02'),
+    status: { ...gear, stats, activeStepId: 'S4-02' },
     // The game shows the fight step: with no quest data the Decision waits, and no route order stands in for it (v14).
-    localStorage: { 'osrs-put:active-step': 'S4-03' },
+    localStorage: { 'osrs-put:active-step': 'S4-02' },
     events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Coif', carried: 0, noted: 0, bank: 1 }] }],
   }, '#/gear');
   // Future unlocks are folded since 2.68: opened, the lock is there.

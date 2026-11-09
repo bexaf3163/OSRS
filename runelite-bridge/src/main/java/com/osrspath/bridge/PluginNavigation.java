@@ -551,7 +551,6 @@ final class PluginNavigation
 		Hud.State s = plugin.hud;
 		NavTarget n = plugin.navTarget;
 		boolean loggedIn = plugin.client.getGameState() == GameState.LOGGED_IN;
-		TargetGuide.Plan plan = plugin.target == null || plugin.target.getGuide() == null ? null : plugin.target.getGuide().getPlan();
 		// A temporary target the step does not lead to by itself: a place the player chose, a purchase, a stop on the way. The funding plan's arrow is the
 		// funding plan's own line, and a stage's arrow is the stage's.
 		String detour = null;
@@ -568,7 +567,7 @@ final class PluginNavigation
 			: new HudModel.Funding(f.getBrief() != null && !f.getBrief().trim().isEmpty() ? f.getBrief() : f.getAction(), f.getProgress(), f.isEstimated());
 		boolean bankOpen = InventoryCheckOverlay.visible(plugin.client.getWidget(InterfaceID.Bankmain.ITEMS_CONTAINER));
 		PacingSet p = plugin.pacing;
-		HudModel.Input in = new HudModel.Input(v, s, hudPace(), plan == null ? null : plan.getNow(), plan == null ? null : plan.getNext(),
+		HudModel.Input in = new HudModel.Input(v, s, hudPace(),
 			detour, n != null && n.isPurchase(), fund, n == null ? useLine(plugin.target, ItemCounts.sum(plugin.carried, plugin.noted)) : null,
 			loggedIn && me != null ? plugin.quests.preBlock : null, bankOpen, p != null && p.started(), plugin.bankFromSave,
 			loggedIn && plugin.bank == null && plugin.bankLoadTicks < OsrsPathBridgePlugin.BANK_LOAD_TICKS, plugin.snapshot.decisionTitle);

@@ -364,20 +364,12 @@ describe('bridge payload: the transport and the detour reach the game together',
 });
 
 // ---------- Fast travel: acquired along the route, chosen over walking, and shown in the game ----------
-import { itemSource } from './stepPlaces';
 import { MIN_SAVING_TILES } from './travel';
+import { retiredStep } from '../../../tests/fixtures/retiredSteps';
 
 describe('fast travel in the route: Chronicle, runes and the unlock levels', () => {
   const draynor = at(3093, 3244);
   const varrockSquare = at(3213, 3428);
-  const planFor = (id: string, rows: Record<string, Partial<OwnedItem>>): PrepPlan => {
-    const items = new Map<string, OwnedItem>();
-    for (const [name, o] of Object.entries(rows)) items.set(nameKey(name), { name, carried: 0, noted: 0, ...o });
-    const state = buildPlayerState({
-      mode: 'f2p', stats: null, progress: { levels: {} }, owned: { bankSeen: true, items }, gear: { equipment: [], inventory: [], coins: 3000, bankCoins: 0 }, questsDone: null, connected: true,
-    });
-    return createReadinessEngine({ steps: routeSteps, progress: emptyProgress(), qp: 0, mode: 'f2p', state }).plan(stepById.get(id)!);
-  };
 
   it('Draynor to Varrock: a Chronicle in the bag is the recommended way, a tablet beats it, and a ready spell is used when there are runes', () => {
     const chronicle = recommendedTransport(travelOptions(input({ from: draynor, to: varrockSquare, carried: bag(['Chronicle', 1]), bankSeen: true })));
@@ -422,26 +414,8 @@ describe('fast travel in the route: Chronicle, runes and the unlock levels', () 
     expect(lum(31)!.availability).toBe('ready');
   });
 
-  it('the Chronicle and its cards are bought at Draynor (Diango) on S1-10, before the first step that uses the book', () => {
-    const s = stepById.get('S1-10')!;
-    expect(s.itemsRequired!.find((i) => i.nameEn === 'Chronicle')).toMatchObject({ amount: 1, from: 'Diango' });
-    expect(s.itemsRequired!.find((i) => i.nameEn === 'Teleport card')).toMatchObject({ from: 'Diango' });
-    expect(s.itemsRequired!.find((i) => i.nameEn === 'Chronicle')!.howToGet).toMatch(/300 gp/);
-    expect(s.itemsRequired!.find((i) => i.nameEn === 'Teleport card')!.howToGet).toMatch(/150 gp/);
-    const diango = itemSource('Diango', 'S1-10')!;
-    expect(diango, 'Diango is a place the plan can lead to').toBeDefined();
-    expect(Math.abs(diango.x - 3082)).toBeLessThan(30);
-    const order = routeSteps.map((x) => x.id);
-    const firstUse = routeSteps.find((x) => x.id !== 'S1-10' && (x.branches?.some((b) => b.id === 'chronicle') || /Chronicle/.test(JSON.stringify(x.how ?? ''))))!;
-    expect(order.indexOf('S1-10')).toBeLessThan(order.indexOf(firstUse.id));
-    // In a plan made at S1-10 with nothing owned, the book and the cards are on it (picked up at Diango during the step) and the 1,800 gp they cost is checked.
-    const plan = planFor('S1-10', {});
-    for (const name of ['Chronicle', 'Teleport card']) expect(plan.lines.some((l) => l.name === name), name).toBe(true);
-    expect(plan.coins.need).toBeGreaterThanOrEqual(1800);
-  });
-
   it('the Varrock Teleport runes are on the route: the Magic 25 step lists Law, Air and Fire runes, and the teleport branches ask for the same three', () => {
-    const magic = stepById.get('S2-04')!;
+    const magic = retiredStep('S2-04')!;
     const names = [...(magic.itemsRequired ?? []), ...(magic.itemsRecommended ?? [])].map((i) => i.nameEn);
     expect(names).toEqual(expect.arrayContaining(['Law rune', 'Air rune', 'Fire rune']));
     const needs = stepById.get('S2-05')!.branches!.find((b) => b.id === 'varrock-teleport')!.needs!.map((n) => n.items[0]);

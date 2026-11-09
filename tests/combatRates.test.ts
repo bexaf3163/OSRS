@@ -6,7 +6,7 @@ import { buildPlayerState, type PlayerState } from '../src/domain/player/playerS
 import { adviseTraining, trainingMethods, type TrainingMethod } from '../src/domain/training/trainingRouter';
 import { methodRate } from '../src/domain/training/methodRates';
 import { attacksToKill } from '../src/domain/combat/combatEstimate';
-import { TRAINER_SPOTS } from '../src/domain/combat/route/spots';
+import { TRAINER_SPOTS } from '../src/domain/combat/spots';
 import { market } from './funding/market';
 import type { PriceView } from '../src/domain/market/quotes';
 import { supplyPrice } from '../src/domain/market/itemPrice';

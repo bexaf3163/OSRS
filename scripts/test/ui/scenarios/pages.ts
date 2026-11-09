@@ -103,12 +103,12 @@ async function visualReview(browser: Browser) {
     const gear = { equipment, inventory: [{ id: 1759, name: 'Ball of wool', count: 23 }], coins: 500, bankCoins: 3000 };
     const stats = { attack: 22, strength: 16, defence: 1, hitpoints: 22 };
     const xp = { attack: 5624, strength: 2746, defence: 0, hitpoints: 2400 };
-    const pages: [string, string][] = [['home', '#/'], ['step', '#/step/S3-08'], ['shopping', '#/shopping'], ['skills', '#/skills'], ['gear', '#/gear'], ['money', '#/money'], ['journal', '#/journal'], ['settings', '#/settings']];
+    const pages: [string, string][] = [['home', '#/'], ['step', '#/step/S4-01'], ['shopping', '#/shopping'], ['skills', '#/skills'], ['gear', '#/gear'], ['money', '#/money'], ['journal', '#/journal'], ['settings', '#/settings']];
     for (const scale of [1, 1.25, 1.5]) {
       for (const [name, hash] of pages) {
         const { page, errors } = await open(browser, Math.round(1920 / scale), {
-          scale, progress: progressBefore('S3-08'), localStorage: { 'osrs-put:active-step': 'S3-08' },
-          status: { protocol: 6, ...gear, stats, xp, activeStepId: 'S3-08', player: 'Scale Test' },
+          scale, progress: progressBefore('S4-01'), localStorage: { 'osrs-put:active-step': 'S4-01' },
+          status: { protocol: 6, ...gear, stats, xp, activeStepId: 'S4-01', player: 'Scale Test' },
           events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 0, bank: 13 }] }],
         }, hash);
         await settle(page);

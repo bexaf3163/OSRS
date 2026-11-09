@@ -7,7 +7,7 @@ import { useStore } from '../../../state/store';
 import { assumptionsFor } from '../../../domain/combat/foodPlan';
 import { combatPlanView, foodReservations, type CombatPlanView } from '../../../domain/combat/combatPlan';
 import { isClosed } from '../../../domain/quests/next-step';
-import { termsFor } from '../../../domain/combat/route/spots';
+import { termsFor } from '../../../domain/combat/spots';
 import { foeLabel } from '../../../domain/combat/combatEstimate';
 
 export function useCombatPlan(step: Step): CombatPlanView | null {
@@ -19,7 +19,7 @@ export function useCombatPlan(step: Step): CombatPlanView | null {
   return combatPlanView(step, {
     reserved,
     stats: stats as Partial<Record<string, number>> | null, xp: xp as Partial<Record<string, number>> | null, gear, owned, fights,
-    assume: assumptionsFor(step, steps, progress), terms: termsFor(steps),
+    assume: assumptionsFor(step, steps, progress), terms: termsFor(),
   });
 }
 

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { StepStatus } from '../../types';
-import { BASE_QP, maxQpFor, stagesFor, stepById, stepsFor } from '../../data';
+import { BASE_QP, maxQpFor, stepById, stepsFor } from '../../data';
 import { emptyProgress, withReactivated, withStep } from '../persistence/progress';
-import { questPoints, reachableQuestPoints, stageQuestPoints } from './qp';
+import { questPoints, reachableQuestPoints } from './qp';
 
 const f2p = stepsFor('f2p');
 const withSteps = (s: Record<string, StepStatus>) => ({ ...emptyProgress(), steps: s });
@@ -30,17 +30,6 @@ describe('quest points', () => {
     const p = withSteps({ 'S3-05': 'skipped' });
     expect(questPoints(f2p, p, BASE_QP)).toBe(1);
     expect(reachableQuestPoints(f2p, p, BASE_QP)).toBe(45);
-  });
-
-  it('points by the end of the F2P stages', () => {
-    expect(stagesFor('f2p').map((st) => stageQuestPoints(f2p, st.id, BASE_QP))).toEqual([6, 32, 41, 44, 46, 46]);
-  });
-
-  it('skipping Shield of Arrav lowers the goal of stages 3–6 by 1', () => {
-    const p = withSteps({ 'S3-05': 'skipped' });
-    expect(stageQuestPoints(f2p, 2, BASE_QP, p)).toBe(32);
-    expect(stageQuestPoints(f2p, 3, BASE_QP, p)).toBe(40);
-    expect(stageQuestPoints(f2p, 6, BASE_QP, p)).toBe(45);
   });
 
   it('returning a step to active after V2 Review does not take points away', () => {

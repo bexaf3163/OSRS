@@ -12,7 +12,7 @@ import type { OwnedState } from '../items/checklist';
 import { parseAmount } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
 import { estimateStepFights } from './fightEstimate';
-import { termsFor } from './route/spots';
+import { termsFor } from './spots';
 
 export interface FoodPick {
   /** Pieces for the next trip: readiness asks for these. */
@@ -88,13 +88,13 @@ export function foodPicks(steps: Step[], progress: Progress, live: Live): Record
   const out: Record<string, FoodPick> = {};
   for (const s of steps) {
     if (isClosed(progress, s.id)) continue;
-    if (!stepGoals(s).length && !s.combatPlan?.trainingSkill) {
+    if (!stepGoals(s).length) {
       const p = fightPick(s, steps, progress, live);
       if (p) out[s.id] = p;
       continue;
     }
     const fights = live.combatLog?.stepId === s.id ? live.combatLog.foes : null;
-    const v = combatPlanView(s, { ...live, fights, assume: assumptionsFor(s, steps, progress), terms: termsFor(steps) });
+    const v = combatPlanView(s, { ...live, fights, assume: assumptionsFor(s, steps, progress), terms: termsFor() });
     if (v) out[s.id] = { trip: v.nextTrip, total: v.plan, hpPerKill: Math.round(v.primary.hpPerKill * 10) / 10, essential: false };
   }
   return out;
@@ -117,7 +117,7 @@ export function foodPlanApplied(step: Pick<Step, 'itemsRequired'>): boolean {
  * settles after the plan (it waits for prices and gear), and without it in the key the game kept the route's 25 Salmon while the app said 21 (2.72.2, live).
  */
 export function stepResendKey(step: Step): string {
-  return JSON.stringify([step.combatPlan ?? null, step.foes?.[0] ?? null, step.mapLocation && [step.mapLocation.x, step.mapLocation.y], foodPlanApplied(step)]);
+  return JSON.stringify([step.foes?.[0] ?? null, step.mapLocation && [step.mapLocation.x, step.mapLocation.y], foodPlanApplied(step)]);
 }
 
 /**

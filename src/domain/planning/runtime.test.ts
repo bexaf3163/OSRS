@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { appendFileSync } from 'node:fs';
 import { allSteps, itemById } from '../../data';
 import { buildPlayerState } from '../player/playerState';
+import { toolFamilyOf } from '../items/toolTiers';
 import { emptyProgress } from '../persistence/progress';
 import { ctxOf, fakePrices, fakeSnap } from '../../../tests/funding/helpers';
 import { METHODS } from '../economy/funding/methods';
@@ -113,7 +114,9 @@ describe('quest work and travel adapters', () => {
 
 describe('different characters through the integrated runtime (brief 39 counterfactuals)', () => {
   // Every quest item is counted (zero) after a full bank read, as the plugin reports them; walking is a test cost by distance.
-  const names = [...new Set(f2pSteps.flatMap(step => (step.itemsRequired ?? []).flatMap(item => [item.nameEn, ...(item.anyOf ?? [])])))].filter((name): name is string => !!name);
+  // The app asks the plugin about every tier of a tool it watches (inGameTarget), so a pickaxe of any tier is known here too.
+  const named = [...new Set(f2pSteps.flatMap(step => (step.itemsRequired ?? []).flatMap(item => [item.nameEn, ...(item.anyOf ?? [])])))].filter((name): name is string => !!name);
+  const names = [...new Set([...named, ...named.flatMap(name => toolFamilyOf(name) ?? [])])];
   interface Extra { coins?: number; bank?: Readonly<Record<string, number>>; carried?: Readonly<Record<string, number>>; stats?: Readonly<Record<string, number>> }
   const counted = (at: { x: number; y: number; plane: number }, completed: readonly string[] = [], extra: Extra = {}): PlanningSnapshot => {
     const base = snapshot(completed);
@@ -154,6 +157,7 @@ describe('different characters through the integrated runtime (brief 39 counterf
     expect(after.revision).toBe(first.revision + 1);
   });
 
+  // A walk through every F2P quest takes several seconds when the whole suite runs in parallel; the default 5 s limit is too tight.
   it('walks every F2P quest to completion with no repeat and no deadlock (S45 route-level harness)', () => {
     const f2p = questCatalogue.filter(q => !q.members).map(q => q.id);
     const done: string[] = [], actions: string[] = [];
@@ -173,7 +177,7 @@ describe('different characters through the integrated runtime (brief 39 counterf
     // S85: Doric's Quest gives the Mining XP The Knight's Sword needs (Mining 10), so it comes first and nothing is ground for it.
     expect(done.indexOf("Doric's Quest")).toBeLessThan(done.indexOf("The Knight's Sword"));
     expect(actions.filter(id => id.includes(':TRAIN:mining'))).toEqual([]);
-  });
+  }, 20_000);
 
   it('S45: at every turn the plan is no slower than the proven baseline (next quest in route order, same costs)', () => {
     const first = (id: string) => f2pSteps.findIndex(step => questCatalogue.find(q => q.id === id)!.stepIds.includes(step.id));
@@ -193,7 +197,8 @@ describe('different characters through the integrated runtime (brief 39 counterf
       } else if (!plan.estimatedRemaining) {
         // Unknown costs (drops, unmodelled fights) give one central unknown answer, never a silent route-order fallback.
         expect(plan.confidence, `turn ${turns}`).not.toBe('HIGH');
-        if (plan.alternatives.some(alt => alt.minutes === null)) expect(plan.why.join(' '), `turn ${turns}`).toMatch(/Not compared because their time is unknown/);
+        // A row without minutes because its time is unknown (not one waiting for a verification) is named in the central answer.
+        if (plan.alternatives.some(alt => alt.minutes === null && /^Time unknown/.test(alt.comparisonReason))) expect(plan.why.join(' '), `turn ${turns}`).toMatch(/Not compared because their time is unknown/);
       }
       done.push(plan.objectiveId);
     }
@@ -331,7 +336,12 @@ describe('different characters through the integrated runtime (brief 39 counterf
 
   it('unexpected levels: a character who already has the Mining a quest needs sees that quest cheaper', () => {
     const knightsSword = (snap: PlanningSnapshot) => ranked(snap).candidates!.find(row => row.id === "The Knight's Sword")!;
-    expect(knightsSword(counted(lumbridge, [], { stats: { mining: 30 } })).knownMinutes).toBeLessThan(knightsSword(counted(lumbridge)).knownMinutes);
+    // Coins to buy the bars and pie and a pickaxe for the blurite in the bag: the two plans differ by the Mining training alone,
+    // and neither leaves its preparation unknown (an unknown part would make the known minutes smaller by itself).
+    const kit = { coins: 10_000, carried: { 'Bronze pickaxe': 1 } };
+    const trained = knightsSword(counted(lumbridge, [], { ...kit, stats: { mining: 30 } })), fresh = knightsSword(counted(lumbridge, [], kit));
+    expect([trained.unknown, fresh.unknown]).toEqual([[], []]);
+    expect(trained.knownMinutes).toBeLessThan(fresh.knownMinutes);
   });
 
   it('extra GP gives a different plan', () => {

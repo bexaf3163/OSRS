@@ -1,16 +1,18 @@
+import type { Step } from '../src/types';
 import { describe, expect, it } from 'vitest';
-import { allSteps, stagesFor, stepById, stepsFor, questStagesJson as questStages } from '../src/data';
+import { allSteps, stepsFor, questStagesJson as questStages } from '../src/data';
 import { alchMargin } from '../src/domain/economy/alchemy';
 import { carryoverOf, routeTrigger } from '../src/domain/prep/carryover';
 import { DAERO_SMALL, daeroAdvice } from '../src/domain/training/daero';
-import { blockersOf, stepState } from '../src/domain/quests/next-step';
+import { blockersOf } from '../src/domain/quests/next-step';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { alternativesOf, PICKAXES, toolFamilyOf } from '../src/domain/items/toolTiers';
 import { xpForLevel } from '../src/domain/player/xp';
+import { stepOrRetired } from './fixtures/retiredSteps';
 
 // The route model of 2.49: dependencies, optional branches, carryover, loadouts, tool tiers, Daero, alchemy and the S3-04 rework.
 
-const step = (id: string) => stepById.get(id)!;
+const step = (id: string): Step => stepOrRetired(id);
 const quests = (questStages as unknown as { quests: Record<string, { stages: { at: number; items?: { name: string }[]; do: { k: string; t: string; s?: string; mh?: number; hl?: { on?: string[] }; pre?: { item: string }[] }[] }[] }> }).quests;
 
 describe('the step graph', () => {
@@ -18,7 +20,7 @@ describe('the step graph', () => {
 
   it('every dependency exists, the order is the array order, and nothing requires itself', () => {
     for (const s of allSteps) {
-      for (const r of [...s.requires, ...(s.softRequires ?? [])]) {
+      for (const r of s.requires) {
         expect(ids.has(r), `${s.id} -> ${r}`).toBe(true);
         expect(r, s.id).not.toBe(s.id);
       }
@@ -31,11 +33,11 @@ describe('the step graph', () => {
   it('a step only requires steps that come before it in the list, and there is no cycle', () => {
     const at = new Map(allSteps.map((s, i) => [s.id, i]));
     for (const s of allSteps) {
-      for (const r of [...s.requires, ...(s.softRequires ?? [])]) expect(at.get(r)!, `${s.id} -> ${r}`).toBeLessThan(at.get(s.id)!);
+      for (const r of s.requires) expect(at.get(r)!, `${s.id} -> ${r}`).toBeLessThan(at.get(s.id)!);
     }
   });
 
-  it('an optional step is never a hard requirement: a later step suggests it with softRequires', () => {
+  it('an optional step is never a hard requirement', () => {
     const optional = new Set(allSteps.filter((s) => s.optional).map((s) => s.id));
     for (const s of allSteps) {
       // A Bond branch step may require another optional step of the same branch (they are skipped together).
@@ -44,26 +46,9 @@ describe('the step graph', () => {
     }
   });
 
-  it('S3-06 is suggested after the optional Shield of Arrav but never blocked by it', () => {
-    const p = emptyProgress();
-    expect(step('S3-05').optional).toBe(true);
-    expect(step('S3-06').softRequires).toEqual(['S3-05']);
-    expect(step('S3-06').requires).not.toContain('S3-05');
-    for (const id of step('S3-06').requires) p.steps[id] = 'done';
-    expect(blockersOf(step('S3-06'), p, 99)).toBeNull();
-    p.steps['S3-05'] = 'skipped';
-    expect(stepState(p, 'S3-05')).toBe('skipped');
-    expect(stepState(p, 'S3-06')).toBe('open');
-  });
-
-  it('the Bond branch (stage 6) is only optional steps and the Bond, and Members mode drops all of it', () => {
-    const bond = allSteps.filter((s) => s.bondBranch);
-    expect(bond.length).toBeGreaterThan(0);
-    expect(bond.every((s) => s.stage === 6)).toBe(true);
-    expect(allSteps.filter((s) => s.stage === 6).every((s) => s.bondBranch)).toBe(true);
+  it('Members mode keeps every step a members step needs', () => {
     const members = stepsFor('members');
-    expect(members.some((s) => s.bondBranch)).toBe(false);
-    expect(stagesFor('members').map((s) => s.id)).toEqual([1, 2, 3, 4, 5, 7, 8, 9]);
+    expect([...new Set(members.map((s) => s.stage))]).toEqual([1, 2, 3, 4, 5, 7, 8, 9]);
     const memberIds = new Set(members.map((s) => s.id));
     for (const s of members) for (const r of s.requires) expect(memberIds.has(r), `${s.id} -> ${r}`).toBe(true);
   });
@@ -80,8 +65,8 @@ describe('the step graph', () => {
 describe('carryover: what a step keeps for a later step', () => {
   const withCarry = allSteps.filter((s) => s.carryover?.length);
 
-  it('the five early steps carry what Prince Ali Rescue and Black Knights\' Fortress need', () => {
-    expect(withCarry.map((s) => s.id).sort()).toEqual(['S1-03', 'S1-04', 'S1-08', 'S1-12', 'S2-11']);
+  it('the three early steps carry what Prince Ali Rescue and Black Knights\' Fortress need', () => {
+    expect(withCarry.map((s) => s.id).sort()).toEqual(['S1-03', 'S1-04', 'S2-11']);
   });
 
   it('the consuming step exists, comes later and mentions the item and points back', () => {
@@ -128,10 +113,8 @@ describe('loadouts: a quest that changes what you may carry', () => {
     const names = s.itemsRequired!.map((i) => i.nameEn);
     expect(names).toEqual(expect.arrayContaining(['Gold bar', 'Ball of wool', 'Lockpick']));
     expect(s.rewardChoice).toBe('daero');
-    expect(s.requires).toContain('S8-06');
     expect(s.requirements!.some((r) => r.type === 'skill' && r.skill === 'prayer' && r.min === 43)).toBe(true);
     expect(s.loadouts!.length).toBeGreaterThanOrEqual(3);
-    expect(step('S8-06').inGame!.completionTrigger!.levels).toEqual([{ skill: 'prayer', level: 43 }]);
   });
 });
 

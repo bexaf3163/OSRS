@@ -8,15 +8,15 @@ import { isInstancedPoint } from '../src/domain/travel/instances';
 import { navigationTarget } from '../src/domain/guide/navigation';
 import { travelOptions } from '../src/domain/travel/travel';
 import { fairyRingsUnlocked, travelInputOf } from '../src/domain/travel/travelInput';
-import { xpForLevel } from '../src/domain/player/xp';
 import type { GearState } from '../src/services/runeliteBridge';
 import type { OwnedState } from '../src/domain/items/checklist';
 import type { Step } from '../src/types';
+import { stepOrRetired } from './fixtures/retiredSteps';
 
 // The route audit fixes: weapon before Attack 40, the quest alone completes Dragon Slayer I, map pieces by identity, instances, fairy rings,
 // retired and trimmed grinds, and cash that is cash.
 
-const step = (id: string): Step => stepById.get(id)!;
+const step = (id: string): Step => stepOrRetired(id);
 const names = (list?: { nameEn: string }[]) => (list ?? []).map((i) => i.nameEn);
 const gearOf = (coins: number | null, bankCoins: number | null): GearState => ({ equipment: [], inventory: [], coins, bankCoins });
 const piece = (name: string) => gearData.items.find((i) => i.name === name)!;
@@ -189,40 +189,15 @@ describe('retired and trimmed grinds', () => {
     for (const s of allSteps) expect(s.requires, s.id).not.toContain('S1-11');
     const f2p = stepsFor('f2p');
     let p = emptyProgress();
-    for (const s of f2p) { if (s.id === 'S1-12') break; p = withStep(p, s.id, 'done'); }
-    expect(blockersOf(f2p.find((s) => s.id === 'S1-12')!, p, 0)).toBeNull();
+    for (const s of f2p) { if (s.id === 'S2-03') break; p = withStep(p, s.id, 'done'); }
+    expect(blockersOf(f2p.find((s) => s.id === 'S2-03')!, p, 0)).toBeNull();
     const known = { stepIds: new Set(allSteps.map((s) => s.id)), levelIds: new Set<string>() };
-    const n = normalizeProgress({ version: 3, steps: { 'S1-11': 'done', 'S1-12': 'done', 'S4-03': 'done' } }, known)!;
-    expect(Object.keys(n.progress.steps).sort()).toEqual(['S1-12', 'S4-03']);
+    const n = normalizeProgress({ version: 3, steps: { 'S1-11': 'done', 'S1-07': 'done', 'S2-03': 'done' } }, known)!;
+    expect(Object.keys(n.progress.steps).sort()).toEqual(['S1-07', 'S2-03']);
   });
 
-  it('S1-12 is Mining 10 and needs no ore: Doric\'s copper and iron come from S2-01', () => {
-    const s = step('S1-12');
-    expect(s.inGame!.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'mining', level: 10 }] });
-    expect(s.pacing).toMatchObject({ skill: 'mining', targetLevel: 10, targetExp: xpForLevel(10) });
-    expect(s.title).toBe('Mining to 10');
-    expect(JSON.stringify(s.fields)).not.toMatch(/4 copper|2 iron/);
-    const shop = step('S2-01').itemsRequired!;
-    expect(shop.find((i) => i.nameEn === 'Copper ore')).toMatchObject({ amount: 4 });
-    expect(shop.find((i) => i.nameEn === 'Iron ore')).toMatchObject({ amount: 2 });
-    expect(step('S2-01').inGame!.completionTrigger!.items).toEqual(expect.arrayContaining([{ names: ['Copper ore'], count: 4 }, { names: ['Iron ore'], count: 2 }]));
-    for (const i of step('S3-01').itemsRequired!.filter((x) => x.nameEn === 'Copper ore' || x.nameEn === 'Iron ore')) expect(i.howToGet).toMatch(/S2-01/);
-  });
-
-  it('S1-13 is 12,000 gp of coins; hides are not counted', () => {
-    const s = step('S1-13');
-    expect(s.moneyGoal).toBe(12_000);
-    expect(s.inGame!.completionTrigger).toEqual({ type: 'ITEM_OWNED', items: [{ names: ['Coins'], count: 12000 }] });
-    expect(JSON.stringify(s.inGame!.completionTrigger)).not.toMatch(/Cowhide/);
-  });
-
-  it('S3-06 is coins only: ore and the scimitar are other steps', () => {
-    expect(step('S3-06').inGame!.completionTrigger).toEqual({ type: 'ITEM_OWNED', items: [{ names: ['Coins'], count: 2500 }] });
-  });
-
-  it('S4-04 has no fishing leftovers', () => {
-    expect(JSON.stringify(step('S4-04'))).not.toMatch(/feather|fly fishing|fishing rod|Barbarian Village/i);
-    expect(names(step('S4-04').itemsRequired)).toEqual(['Lobster']);
+  it("Doric's copper and iron ore say where to get them, not an old shopping step", () => {
+    for (const i of step('S3-01').itemsRequired!.filter((x) => x.nameEn === 'Copper ore' || x.nameEn === 'Iron ore')) expect(i.howToGet).toMatch(/Grand Exchange/);
   });
 
   it('S5-08: the shield and the food are required, the upgrade and the potions are advice', () => {
@@ -243,8 +218,8 @@ describe('F2P and members filtering still hold', () => {
     const f2p = stepsFor('f2p').map((s) => s.id);
     const members = stepsFor('members').map((s) => s.id);
     expect(f2p.some((id) => step(id).membersOnly)).toBe(false);
-    expect(members).toContain('S8-03');
-    expect(f2p).toContain('S4-03');
+    expect(members).toContain('S8-05');
+    expect(f2p).toContain('S4-02');
     for (const id of RETIRED_STEPS) {
       expect(f2p).not.toContain(id);
       expect(members).not.toContain(id);

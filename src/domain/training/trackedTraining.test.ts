@@ -5,11 +5,11 @@ import { emptyProgress } from '../persistence/progress';
 import { RANGED_WATCH } from '../combat/rangedLoadout';
 import { buildEnvelope, EMPTY_PARTS, envelopeKey } from '../prep/prepEnvelope';
 import { toInGameTarget } from '../guide/inGameTarget';
-import { stepById } from '../../data';
 import { parseTracked, trackedTrainingContext } from './skillTrack';
 import { createReadinessEngine } from '../readiness/readinessEngine';
 import { emptyPrep, rearmReadyDetours, startDetour } from '../prep/prepRoute';
 import type { PriceView } from '../market/quotes';
+import { retiredStep } from '../../../tests/fixtures/retiredSteps';
 
 const state = (ranged?: number) => buildPlayerState({ mode: 'f2p', connected: true,
   stats: { ...(ranged === undefined ? {} : { ranged }), defence: 33, hitpoints: 31 }, progress: emptyProgress(), questsDone: [],
@@ -69,7 +69,7 @@ describe('followed skills use the shared staged route', () => {
     expect(parseTracked({ skill: 'ranged', mode: 'fast', target: 100 })).toBeNull();
   });
   it('overrides the wire step without overwriting the quest; unknown training can suppress the quest and stopping restores it', () => {
-    const quest = toInGameTarget(stepById.get('S6-04')!)!;
+    const quest = toInGameTarget(retiredStep('S6-04')!)!;
     const training = toInGameTarget(plan(20)!.step)!;
     expect(training.stepId).toMatch(/^S0-\d{2}$/);
     const original = { ...EMPTY_PARTS, step: quest };

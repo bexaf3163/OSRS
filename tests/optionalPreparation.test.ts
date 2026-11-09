@@ -1,30 +1,32 @@
 import { describe, expect, it } from 'vitest';
-import { stepById, stepsFor } from '../src/data';
+import { stepsFor } from '../src/data';
+import { stepOrRetired } from './fixtures/retiredSteps';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { F2P_SKILL_ADVICE } from '../src/domain/training/f2pSkillAdvice';
-import { pickMethods } from '../src/domain/training/methodPick';
+import { pickTraining } from '../src/domain/training/methodPick';
 import { followedGoals, GOAL_REACHED, methodToolNames, withTrainingMethod } from '../src/domain/training/methodStep';
 import { stepUpgradeCategories } from '../src/domain/training/gearUpgradeRouter';
 import { market } from './funding/market';
+import { retiredStep } from './fixtures/retiredSteps';
 
 const run = (id: string, levels: Record<string, number>) => {
-  const base = stepById.get(id)!;
+  const base = stepOrRetired(id);
   const state = buildPlayerState({ mode: 'f2p', connected: true, stats: { hitpoints: 30, defence: 33, ...levels },
     progress: { ...emptyProgress(), levels }, questsDone: ['Dragon Slayer I'],
     gear: { equipment: [], inventory: [], coins: 10000, bankCoins: 0 },
     owned: { bankSeen: true, items: new Map(methodToolNames(base).map(name => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: 0 }])) },
   });
-  const pick = pickMethods([base], state, 'f2p', 'chill', 'balanced', { prices: market() })[id];
+  const pick = pickTraining(base, state, 'f2p', 'chill', 'balanced', { prices: market() }).pick;
   return { base, pick, step: withTrainingMethod(base, pick) };
 };
 
 describe('practical optional F2P preparation', () => {
   it('uses the Skills F2P checkpoints and shared Skills guidance for every optional skill', () => {
-    expect(followedGoals(stepById.get('S6-01')!)).toEqual([{ skill: 'fishing', target: F2P_SKILL_ADVICE.fishing!.target }, { skill: 'cooking', target: F2P_SKILL_ADVICE.cooking!.target }]);
-    expect(followedGoals(stepById.get('S6-02')!)).toEqual(['mining', 'woodcutting', 'firemaking'].map(skill => ({ skill, target: F2P_SKILL_ADVICE[skill as 'mining']!.target })));
+    expect(followedGoals(retiredStep('S6-01')!)).toEqual([{ skill: 'fishing', target: F2P_SKILL_ADVICE.fishing!.target }, { skill: 'cooking', target: F2P_SKILL_ADVICE.cooking!.target }]);
+    expect(followedGoals(retiredStep('S6-02')!)).toEqual(['mining', 'woodcutting', 'firemaking'].map(skill => ({ skill, target: F2P_SKILL_ADVICE[skill as 'mining']!.target })));
     expect(stepsFor('members').some(s => s.stage === 6)).toBe(false);
-    expect(methodToolNames(stepById.get('S6-02')!)).toEqual(expect.arrayContaining(['Tinderbox', 'Logs', 'Oak logs', 'Willow logs', 'Maple logs', 'Yew logs']));
+    expect(methodToolNames(retiredStep('S6-02')!)).toEqual(expect.arrayContaining(['Tinderbox', 'Logs', 'Oak logs', 'Willow logs', 'Maple logs', 'Yew logs']));
   });
   it('hands Fishing35 over to Cooking without keeping the rod or old fishing destination', () => {
     const { step } = run('S6-01', { fishing: 35, cooking: 30 });
@@ -48,14 +50,6 @@ describe('practical optional F2P preparation', () => {
     const { pick, step } = run('S6-02', { mining: 45, woodcutting: 36, firemaking: 50 });
     expect(pick).toBe(GOAL_REACHED);
     expect(step.itemsRequired).toEqual([]);
-    expect(step.mapLocation).toBeUndefined();
-  });
-  it('keeps a Bond optional rather than creating a mandatory shopping shortfall', () => {
-    const step = stepById.get('S6-05')!;
-    expect(step.optional).toBe(true);
-    expect(step.itemsRequired ?? []).toEqual([]);
-    expect(step.itemsRecommended ?? []).toEqual([]);
-    expect(step.wikiUrl).toContain('Old_school_bond');
     expect(step.mapLocation).toBeUndefined();
   });
 });

@@ -1,3 +1,4 @@
+import type { Step } from '../../types';
 import { describe, expect, it } from 'vitest';
 import { allSteps } from '../../data';
 import { emptyProgress, withStep } from '../persistence/progress';
@@ -9,8 +10,9 @@ import type { RequirementStatus, StepReadiness } from '../readiness/readiness';
 import { buildPrepRoute, emptyPrep, navKeyOf, reconcile, staleArrows, startDetour, type PrepState } from './prepRoute';
 import type { OwnedState } from '../items/checklist';
 import { preflightItems } from './stepItems';
+import { stepOrRetired } from '../../../tests/fixtures/retiredSteps';
 
-const step = (id: string) => allSteps.find((s) => s.id === id)!;
+const step = (id: string): Step => stepOrRetired(id);
 const done = (ids: string[]) => ids.reduce((p, id) => withStep(p, id, 'done'), emptyProgress());
 const before = (id: string) => done(allSteps.slice(0, allSteps.findIndex((x) => x.id === id)).map((x) => x.id));
 

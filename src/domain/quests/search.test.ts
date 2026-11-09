@@ -20,7 +20,7 @@ describe('search', () => {
 
   it('an item from a step finds both the step and the dossier in the database', () => {
     const hits = search(index, 'Anti-dragon shield', 200);
-    expect(hits.some((h) => h.item.kind === 'step' && h.item.code === 'S5-02')).toBe(true);
+    expect(hits.some((h) => h.item.kind === 'step' && h.item.code === 'S5-08')).toBe(true);
     const item = hits.find((h) => h.item.kind === 'item');
     expect(item?.item.title).toBe('Anti-dragon shield');
     expect(item?.item.itemId).toBeTypeOf('number');

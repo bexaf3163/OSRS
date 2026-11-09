@@ -25,7 +25,6 @@ const itemsOf = (l: QuestStageLine) => [...(l.need ? [l.need] : []), ...(l.hl?.i
 
 /** Why a line that uses an item has no guard. */
 const EXEMPT: Record<string, string> = {
-  'S5-02:getShield': 'the line gives the item',
   'S5-05:repairMap': 'the map is made from three parts, not bought',
   'S5-07:repairMap': 'the map is made from three parts, not bought',
   'S5-07:talkToNed': 'the map is made from three parts, not bought',

@@ -4,8 +4,6 @@ import { parseGear, parsePacing, parsePlayer, parsePos, parseQuests, parseStats,
 import { parseOwned } from '../src/domain/items/checklist';
 import { normalizeProgress, ownedManualOf } from '../src/domain/persistence/progress';
 import { known as knownData, stepById } from '../src/data';
-import { wealthOf } from '../src/domain/economy/wealth';
-import { adviseStyle } from '../src/domain/combat/styleGear';
 import { travelOptions } from '../src/domain/travel/travel';
 
 // A deterministic generator: the test is reproducible, not "fails sometimes".
@@ -67,20 +65,14 @@ describe('garbage input does not crash the program', () => {
     }
   });
 
-  it('game-data advisors: feeding gear, levels and coins of the wrong shape', () => {
+  it('game-data advisers: feeding gear and levels of the wrong shape', () => {
     const r = rng(99);
     for (let i = 0; i < 1500; i++) {
       const gear = parseGear(junk(r));
       const stats = parseStats(junk(r));
-      const w = wealthOf(gear);
-      const cash = w ? (w.cash.total ?? w.cash.bag ?? null) : null;
-      expect(() => adviseStyle({
-        style: r() < 0.5 ? 'magic' : 'ranged', levels: stats ?? {}, quests: new Set(), worn: new Set((gear?.equipment ?? []).map((x) => x.name)),
-        bag: new Set((gear?.inventory ?? []).map((x) => x.name)), cash, price: () => (r() < 0.5 ? null : Math.floor(r() * 1e6)),
-      })).not.toThrow();
       const pos = parsePos({ x: Math.floor(r() * 5000), y: Math.floor(r() * 5000), plane: Math.floor(r() * 4) });
       if (pos) expect(() => travelOptions({ from: pos, to: { x: 3213, y: 3424, plane: 0 }, levels: stats ?? {}, carried: gear ? [...(gear.equipment ?? []), ...(gear.inventory ?? [])] : null, bankSeen: r() < 0.5 })).not.toThrow();
     }
-    // 1,500 rounds of two advisers take 4 to 6 s here when the whole suite runs in parallel: the default 5 s limit made the run flaky, not the code.
+    // 1,500 rounds of the travel adviser take seconds here when the whole suite runs in parallel: the default 5 s limit made the run flaky, not the code.
   }, 20_000);
 });

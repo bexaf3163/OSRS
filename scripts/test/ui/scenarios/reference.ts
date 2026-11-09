@@ -6,8 +6,8 @@ async function dossierQuoteScenarios(browser: Browser) {
   for (const width of [1280]) for (const quoteState of ['current', 'cached', 'missing']) {
     const unavailable = quoteState === 'missing';
     const { page, errors } = await open(browser, width, {
-      market: true, marketUnavailable: unavailable, marketAgeMinutes: quoteState === 'cached' ? 120 : undefined, progress: progressBefore('S4-04'),
-    }, '#/step/S4-04');
+      market: true, marketUnavailable: unavailable, marketAgeMinutes: quoteState === 'cached' ? 120 : undefined, progress: progressBefore('S5-01'),
+    }, '#/step/S5-01');
     await page.getByRole('button', { name: 'Search', exact: true }).click();
     await page.locator('.search-input').fill('Lobster');
     const row = page.locator('.search-hit.is-item').filter({ has: page.getByText('Lobster', { exact: true }) }).first();

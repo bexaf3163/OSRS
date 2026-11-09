@@ -91,8 +91,6 @@ export function superheatNeeds(state: PlayerState): MethodNeed[] {
 /** Prices by item ID (the exchange, instant buy). */
 export type PriceMap = ReadonlyMap<number, number>;
 
-/** All the IDs whose prices the plan needs. */
-export const PLAN_PRICE_IDS: number[] = [...Object.values(RUNE_IDS), ...Object.values(STAFFS).map((s) => s.id), COWHIDE_ID];
 
 export interface PlanOption {
   id: string;

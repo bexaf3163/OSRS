@@ -362,33 +362,6 @@ public class AutoCompletionManagerTest
 		}
 	}
 
-	@Test
-	public void theRealS306StepSkipsItselfOnTheStageThreeQuestCoinsAndNotWithoutThem()
-	{
-		// The data the app really sends: after Shield of Arrav the coins from the four stage 3 quests (5,280) pass the 2,500 threshold, so no ore is mined.
-		ActiveTarget real = null;
-		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
-		{
-			if ("S3-06".equals(s.target.getStepId()))
-			{
-				real = s.target;
-			}
-		}
-		assertTrue("S3-06 is in the fixtures", real != null);
-		assertFalse("money is coins only: ore and the scimitar are other steps", real.getCompletionTrigger().isAnyOf());
-		manager.setTarget(real);
-		byName.put("Coins", 2499);
-		byName.put("Iron ore", 30);
-		byName.put("Adamant scimitar", 1);
-		manager.onStateChanged();
-		manager.onGameTick();
-		assertTrue("one coin short: ore and the scimitar are not cash", completed.isEmpty());
-		byName.put("Coins", 5280 - 1400);
-		manager.onStateChanged();
-		manager.onGameTick();
-		assertEquals(List.of("S3-06"), completed);
-	}
-
 	/** The target exactly as the app sends it (the fixtures are regenerated from the route data). */
 	private static ActiveTarget real(String stepId)
 	{
@@ -441,25 +414,6 @@ public class AutoCompletionManagerTest
 		assertEquals(List.of("S1-09"), completedBy("S1-09", Map.of(), Map.of("Fighting boots", 1)));
 		assertEquals(List.of("S1-09"), completedBy("S1-09", Map.of(), Map.of("Fancy boots", 1)));
 		assertEquals("10,000 coins are not the proof", List.of(), completedBy("S1-09", Map.of(), Map.of("Coins", 10000)));
-	}
-
-	@Test
-	public void theCowMoneyIsLiquidTwelveThousand()
-	{
-		assertEquals(List.of(), completedBy("S1-13", Map.of(), Map.of("Coins", 11999, "Cowhide", 28)));
-		assertEquals(List.of("S1-13"), completedBy("S1-13", Map.of(), Map.of("Coins", 12000)));
-	}
-
-	@Test
-	public void attackFortyFinishesTrainingWithoutALootQuota()
-	{
-		levels.put("attack", 40);
-		assertEquals(List.of("S4-03"), completedBy("S4-03", Map.of(), Map.of()));
-		assertEquals(List.of("S4-03"), completedBy("S4-03", Map.of(), Map.of("Big bones", 50)));
-		levels.put("attack", 39);
-		assertEquals("Attack 39 is not enough with the bones", List.of(), completedBy("S4-03", Map.of(), Map.of("Big bones", 50)));
-		levels.clear();
-		assertEquals("an unknown level is not a pass", List.of(), completedBy("S4-03", Map.of(), Map.of("Big bones", 50)));
 	}
 
 	@Test

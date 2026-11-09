@@ -110,17 +110,8 @@ describe('data 2.13', () => {
     }
   });
 
-  it('S2-04: described in detail — items, a quick path with buying runes and the magic calculation', () => {
-    const s = allSteps.find((x) => x.id === 'S2-04')!;
-    expect(s.magicPlan).toEqual({ target: 25, from: 10 });
-    expect(s.itemsRequired?.map((i) => i.nameEn)).toEqual(['Staff', 'Air rune', 'Mind rune']);
-    expect(s.quickSteps!.length).toBeGreaterThanOrEqual(5);
-    expect(s.quickSteps!.join(' ')).toContain("Aubury's Rune Shop");
-    expect(s.quickSteps!.join(' ')).toContain("Zaff's Superior Staffs");
-    expect(s.resourceSpots!.map((p) => p.label).join(' ')).toContain('Aubury');
-  });
   it('steps with a description that did not have one before: each has a quick path, and the last point is how the step ends', () => {
-    for (const id of ['S1-07', 'S3-05', 'S4-02', 'S5-01', 'S5-02', 'S5-05', 'S5-07']) {
+    for (const id of ['S1-07', 'S3-05', 'S4-02', 'S5-01', 'S5-05', 'S5-07']) {
       const s = allSteps.find((x) => x.id === id)!;
       expect(s.quickSteps?.length, id).toBeGreaterThanOrEqual(2);
     }
@@ -186,6 +177,6 @@ describe('the chain to readiness (§12) and data to the game', () => {
   it('the maximum hit and "use X on Y" go to the game', () => {
     expect(toInGameTarget(allSteps.find((x) => x.id === 'S5-08')!)!.maxHit).toBe(10);
     expect(toInGameTarget(allSteps.find((x) => x.id === 'S2-03')!)!.useOn).toEqual([{ item: 'Raw rat meat', target: 'Fireplace' }]);
-    expect(toInGameTarget(allSteps.find((x) => x.id === 'S1-13')!)!.maxHit).toBeUndefined();
+    expect(toInGameTarget(allSteps.find((x) => x.id === 'S1-03')!)!.maxHit).toBeUndefined();
   });
 });
