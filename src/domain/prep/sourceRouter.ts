@@ -1,17 +1,17 @@
 // Where to get an item: one queue of sources for any thing (not only gear), in order:
-// in the bank, already in the bag, free nearby, a shop, the exchange, a drop from opponents. A shop slightly dearer than the exchange
-// (up to SAVE_GP) goes first: the price is exact, there is no waiting for a deal, and it is usually nearer. "The cheapest" is not always the best:
-// 150 gp at the exchange 400 tiles away against 200 gp in a shop 20 away: we take the shop. It buys nothing.
+// in the bank, already in the bag, free nearby, a shop or the exchange, a drop from opponents. A price gap under SAVE_GP does
+// not decide, the walk does (owner 2026-11-09): the nearer of the two goes first, the exchange when a distance is unknown. A
+// bigger saving goes to the cheaper one; a shop leads when the exchange has no usable price. It buys nothing.
 
 import type { WikiItemDetail } from '../../types';
 import { matchStrict } from '../travel/locations';
 import { nearestBankTo } from '../travel/stepPlaces';
-import { SAVE_GP } from '../market/shopConstants';
 import { heldOf, levelOf, type PlayerState, type WorldPoint } from '../player/playerState';
 import { SHOP_TOWN, accessSuffix, shopAccess, shopKey, spawnAccess, type AccessState } from '../market/shopAccess';
 import { nameKey } from '../items/itemKey';
 import { stepsJson } from '../../data';
 import { purchaseCost, type PurchaseFee } from '../items/purchaseCost';
+import { SAVE_GP } from '../market/shopConstants';
 import { NOT_SOLD_PRICE } from '../market/itemPrice';
 
 export type SourceKind = 'bag' | 'bank' | 'free' | 'shop' | 'ge' | 'drop';
@@ -162,10 +162,12 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   shops.sort((a, b) => Number(a.access !== 'open') - Number(b.access !== 'open') || (a.distance ?? Infinity) - (b.distance ?? Infinity) || (a.price ?? 0) - (b.price ?? 0));
   const shop = shops[0];
   const quantity = Math.max(1, input.need);
-  const cheapShopFirst = shop && shop.access === 'open' && (ge === undefined || (purchaseCost(shop, quantity) ?? Infinity) / quantity - ge < SAVE_GP);
-  if (shop && cheapShopFirst) out.push(shop);
+  const gap = shop && ge !== undefined ? (purchaseCost(shop, quantity) ?? Infinity) - ge * quantity : 0;
+  const nearer = shop?.distance !== undefined && geOption?.distance !== undefined && shop.distance < geOption.distance;
+  const shopFirst = shop && shop.access === 'open' && (ge === undefined || (Math.abs(gap) < SAVE_GP ? nearer : gap < 0));
+  if (shop && shopFirst) out.push(shop);
   if (geOption) out.push(geOption);
-  if (shop && !cheapShopFirst) out.push(shop);
+  if (shop && !shopFirst) out.push(shop);
   for (const sh of shops.slice(1, 2)) out.push(sh);
   if (d?.dropSources?.length) {
     const top = d.dropSources[0];

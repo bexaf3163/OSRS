@@ -434,13 +434,10 @@ function sourcesOf(p: GearPiece, input: AdvisorInput): Source[] {
     ...(quote ? { priceLabel: quote.label, priceDetail: quote.detail } : {}),
   }] : [];
   const priced = [...shops, ...ge].sort((a, b) => priceOf(a, Infinity) - priceOf(b, Infinity));
-  // A shop slightly dearer than the exchange — the shop first: the price is exact, there is no waiting for a deal, and at the start of the route
-  // it is usually near (Zeke — by the cow pen beyond the Al Kharid gate, the exchange — in Varrock). The exchange stays as "or …".
-  const cheapest = priced[0];
-  if (cheapest?.kind === 'ge' && cheapest.price !== undefined) {
-    const shop = priced.find((s) => s.kind === 'shop' && priceOf(s, Infinity) - cheapest.price! < SAVE_GP);
-    if (shop) priced.splice(0, priced.length, shop, ...priced.filter((s) => s !== shop));
-  }
+  // The exchange first whenever it has a price, unless a shop saves SAVE_GP or more: it is simpler, and early on a shop saves
+  // 100-200 coins, not worth the walk (owner 2026-11-09). The other stays as "or ...".
+  const exchange = priced.findIndex((s) => s.kind === 'ge' && s.price !== undefined);
+  if (exchange > 0 && priceOf(priced[exchange], Infinity) - priceOf(priced[0], Infinity) < SAVE_GP) priced.unshift(...priced.splice(exchange, 1));
   return [...out, ...priced];
 }
 

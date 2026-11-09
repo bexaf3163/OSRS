@@ -169,7 +169,7 @@ Worktree `C:/Users/Mark/Desktop/Ors-x9`, baseline `f035305`, branch `codex/v14-a
 
 Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent entry for explicit goals and phased training/preparation; costs precede rewards; only sourced, order-independent unknowns cancel. Cursors retire past stages; certificate proof stays physical. Procurement shares allocations/packages/fees; unknown flows weaken balances; start-only rewards never repeat; unknown hand-ins never buy; protection requires wearing; funding excludes stale/unsold cash. Shortest Path `375ce2c061df5c3961116dda6443f307df3223f1` (BSD, 64 regions, ESTIMATED); trip legs bounded, deduplicated, revision-guarded.
 
-2,595 units; quick/UI/E2E/structure/Java gates pass. Perf: 2.85.0 flat vs 2.84.1. Evidence: `work/osrs-v14-audit`. Released 2.85.0; live pending.
+2,595 units; quick/UI/E2E/structure/Java gates pass. Perf: 2.85.1 flat vs 2.84.1. Evidence: `work/osrs-v14-audit`. Released 2.85.1; live pending.
 
 Takeover inputs: `.codex/v14-brief/`; hashes: `.codex/transfer/receipt.json`.
 

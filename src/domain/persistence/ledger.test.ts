@@ -120,7 +120,8 @@ describe('where to get an item', () => {
     expect(p.alternatives[0]?.kind).toBe('ge');
   });
 
-  it('free nearby comes before the shop, a shop slightly pricier than the exchange comes before the exchange', () => {
+  // Owner 2026-11-09: a gap of 100-200 coins is not worth the walk, so under SAVE_GP the nearer source leads.
+  it('free nearby comes before the shop, a nearer shop slightly pricier than the exchange comes first, otherwise the exchange', () => {
     const d = detail({
       freeSpawns: ['Lumbridge'],
       // A real shop: a made-up name is a shop the access table does not know, never the primary source (2.73.0).
@@ -129,9 +130,12 @@ describe('where to get an item', () => {
     });
     const near = planSources({ name: 'Thing', need: 1, detail: d }, at({ owned: owned({ Thing: { carried: 0 } }, false) }, { x: 3222, y: 3218, plane: 0 }));
     expect(near.primary?.kind).toBe('free');
-    const noFree = planSources({ name: 'Thing', need: 1, detail: { ...d, freeSpawns: [] } }, at({ owned: owned({ Thing: { carried: 0 } }, false) }));
+    const noFree = planSources({ name: 'Thing', need: 1, detail: { ...d, freeSpawns: [] } }, at({ owned: owned({ Thing: { carried: 0 } }, false) }, { x: 3222, y: 3218, plane: 0 }));
     expect(noFree.primary?.kind).toBe('shop');
     expect(noFree.alternatives[0]?.kind).toBe('ge');
+    const unplaced = planSources({ name: 'Thing', need: 1, detail: { ...d, freeSpawns: [] } }, at({ owned: owned({ Thing: { carried: 0 } }, false) }));
+    expect(unplaced.primary?.kind).toBe('ge');
+    expect(unplaced.alternatives[0]?.kind).toBe('shop');
   });
 
   it('a shop much pricier than the exchange — the exchange first; an empty shop and a members one in F2P are skipped', () => {

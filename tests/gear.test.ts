@@ -123,13 +123,18 @@ describe('gear advice', () => {
     expect(first.alternatives.some((s) => s.kind === 'shop')).toBe(true);
   });
 
-  it('the shop is slightly pricier than the exchange — the shop first, the exchange as "or"', () => {
+  // Owner 2026-11-09: the exchange is simpler, and a shop saving under SAVE_GP (300) is not worth the walk.
+  it('the shop is slightly pricier than the exchange — the exchange first, the shop as "or"; a real saving keeps the shop', () => {
     const steel = byName('Steel scimitar').id;
-    // Zeke: 400 + 10 for the gate = 410; on the exchange 350 — a difference of 60 gp, less than 100.
+    // Zeke: 400 + 10 for the gate = 410; on the exchange 350.
     const first = adviseGear(input({ gePrices: new Map([[steel, 350]]) })).actions[0];
-    expect(first.source).toMatchObject({ kind: 'shop', npc: 'Zeke' });
-    expect(first.cost).toBe(410);
-    expect(first.alternatives).toContainEqual({ kind: 'ge', price: 350 });
+    expect(first.source).toEqual({ kind: 'ge', price: 350 });
+    expect(first.cost).toBe(350);
+    expect(first.alternatives).toContainEqual(expect.objectContaining({ kind: 'shop', npc: 'Zeke' }));
+    // On the exchange 800: Zeke saves 390, more than SAVE_GP.
+    const dear = adviseGear(input({ gePrices: new Map([[steel, 800]]) })).actions[0];
+    expect(dear.source).toMatchObject({ kind: 'shop', npc: 'Zeke' });
+    expect(dear.cost).toBe(410);
   });
 
   it('the best is already in the bank — "wear it", and that comes first, for free', () => {
