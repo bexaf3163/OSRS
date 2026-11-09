@@ -10,15 +10,16 @@ import { wikitext } from './wiki.ts';
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const OUT = `${root}src/data/generated/combatFoes.json`;
 
-/** The opponents whose fights are estimated: the route's, then the training spots' (scripts/data/trainers.defs.json, the one list to extend). */
+/** The opponents whose fights are estimated, read from the data that names them so new content inherits them: the route
+ * steps' foes and threats, the NPCs of the combat training methods, and the trainers' spots (scripts/data/trainers.defs.json). */
 const TRAINER_FOES = (JSON.parse(readFileSync(`${root}scripts/data/trainers.defs.json`, 'utf8')) as { spots: { foe: string }[] }).spots.map((s) => s.foe);
-const PAGES = [...new Set(['Minotaur', 'Hill Giant', 'Giant frog', 'Cow', 'Flesh Crawler', 'Moss giant',
-  // The quest fights of the route (2.63.0): one fight each, with the kit the player has (lib/fightEstimate.ts).
-  'Count Draynor', 'Ithoi the Navigator', 'Brutus', 'Delrith', 'Elvarg', 'Melzar the Mad', 'Lesser demon', 'Black Knight', 'Ancient Guardian',
-  // Members quest fights the route cannot avoid (2.66.0, combat audit): Priest in Peril's Temple Guardian, Nature Spirit's ghasts.
-  'Temple Guardian', 'Ghast',
-  // The Ranged trainers of stage 6 (2.74.18, the whole-goal arrow count): level 3 Seagulls at Port Sarim, the Edgeville monks.
-  'Seagull', 'Monk', ...TRAINER_FOES])];
+const STEPS = JSON.parse(readFileSync(`${root}src/data/authored/steps.json`, 'utf8')) as { foes?: string[]; threats?: string[] }[];
+const METHODS = (JSON.parse(readFileSync(`${root}src/data/authored/trainingMethods.json`, 'utf8')) as { methods: { skill: string | string[]; npcNames?: string[] }[] }).methods;
+const COMBAT = new Set(['attack', 'strength', 'defence', 'ranged', 'magic']);
+const PAGES = [...new Set([...STEPS.flatMap((s) => [...(s.foes ?? []), ...(s.threats ?? [])]),
+  ...METHODS.filter((m) => [m.skill].flat().some((s) => COMBAT.has(s))).flatMap((m) => m.npcNames ?? []), ...TRAINER_FOES,
+  // Fights the route walks past or defers (combat audit S3-02, S3-03), so no step names them as its foes.
+  'Black Knight', 'Delrith'])];
 
 
 /** The infobox fields as written: "|hitpoints1 = 10". */

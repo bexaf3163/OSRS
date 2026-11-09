@@ -1677,6 +1677,9 @@
         "text": "On the way out of the manor pick up the Bronze med helm from the floor: you need it for the Black Knights' Fortress quest!"
       }
     ],
+    "foes": [
+      "Skeleton"
+    ],
     "reward": "4 QP, 300 Coins.",
     "doneWhen": "The quest is green and the helm is in the bank.",
     "inGame": {

@@ -3,8 +3,9 @@ import type { Step } from '../../types';
 import { emptyProgress } from '../persistence/progress';
 import { buildPlayerState } from '../player/playerState';
 import { nameKey } from '../items/itemKey';
-import type { PlanningSnapshot } from './contracts';
+import type { CandidateAction, PlanningSnapshot } from './contracts';
 import { createTacticalResolver } from './tactical';
+import { fightTrainingTarget } from '../readiness/stepAssessment';
 import { fakePrices } from '../../../tests/funding/helpers';
 import { gearPieceByName } from '../combat/gearAdvisor';
 import { stepById } from '../../data';
@@ -114,6 +115,31 @@ describe('reused tactical preparation through observed state transitions', () =>
         title: name === 'Elvarg' ? 'Check how to equip Anti-dragon shield' : `Review the combat strategy for ${name}` });
     }
   });
+  // Owner 2026-11-09: a quest fight the levels cannot take yet switches the plan to kit, money or training, not to a check.
+  it('buys the kit the coins cover, earns for kit they do not, then trains toward the level that takes an unsafe fight', () => {
+    const stats = { attack: 1, strength: 1, defence: 1, hitpoints: 10, magic: 1 };
+    const fight = { ...step('S1-01', [{ ...item('Trout', 10), heals: 7 }]), foes: ['Black Knight'] };
+    const at = (coins: number, earned: CandidateAction | null) => {
+      const input = { ...fixture({ Trout: [20, 0] }, stats, coins), earn: vi.fn(() => earned) };
+      const gear = { equipment: [], inventory: [{ id: 333, name: 'Trout', count: 20 }], coins, bankCoins: 0 };
+      input.snapshot.player = buildPlayerState({ mode: 'f2p', connected: true, gear, stats, owned: input.snapshot.player.owned,
+        progress: input.progress, questsDone: [] });
+      input.snapshot.combat = { stats, gear };
+      return { input, gear, action: createTacticalResolver(input).resolve(fight, 'quest').action };
+    };
+    expect(at(5000, null).action).toMatchObject({ kind: 'BUY', title: expect.stringMatching(/^Buy .+ for this fight: /) });
+    const earn = { kind: 'EARN', title: 'Earn' } as CandidateAction;
+    const short = at(0, earn);
+    expect(short.action).toBe(earn);
+    expect(short.input.earn).toHaveBeenCalledWith(fight, expect.any(Number), expect.anything(), 'quest');
+    const { gear, action } = at(0, null);
+    const target = fightTrainingTarget(fight, stats, gear)!;
+    expect(target).toMatchObject({ skill: 'attack', level: expect.any(Number) });
+    expect(action).toMatchObject({ kind: 'TRAIN', id: expect.stringContaining(':TRAIN:attack:') });
+    const trained = { ...stats, attack: target.level, strength: target.level, defence: target.level, hitpoints: Math.max(10, target.level) };
+    expect(fightTrainingTarget(fight, trained, gear)).toBeNull();
+  });
+
   it('inherits the validated current-stage scope instead of asking to rebuy ingredients already used', () => {
     const input = fixture({}), quest = stepById.get('S3-04')!;
     input.snapshot.questPoints = { known: true, value: 16, source: 'game' };

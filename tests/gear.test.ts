@@ -287,7 +287,7 @@ describe('gear advice', () => {
 describe('step opponents (monsters.json)', () => {
   it('every step opponent has a wiki card, the level matches the guide text', () => {
     const named = allSteps.filter((s) => s.foes?.length);
-    expect(named.map((s) => s.id)).toEqual(['S2-08', 'S4-01', 'S4-02', 'S8-02']);
+    expect(named.map((s) => s.id)).toEqual(['S2-08', 'S2-11', 'S4-01', 'S4-02', 'S8-02']);
     for (const s of named) {
       expect(stepFoes(s).map((f) => f.name), s.id).toEqual(s.foes);
       const text = [s.how, s.where, ...(s.fields ?? []).map((f) => f.text)].join(' ');
@@ -346,7 +346,7 @@ describe('the "Gear" page', () => {
     const f2p = stepsFor('f2p');
     expect(fightStepFor(f2p, emptyProgress())?.id).toBe('S2-08');
     const firstFightDone = withStep(emptyProgress(), 'S2-08', 'done');
-    expect(fightStepFor(f2p, firstFightDone)?.id).toBe('S4-01');
+    expect(fightStepFor(f2p, firstFightDone)?.id).toBe('S2-11');
     const s401 = f2p.find((s) => s.id === 'S4-01')!;
     expect(fightStepFor(f2p, emptyProgress(), s401)?.id).toBe('S4-01');
     // A step without combat — the nearest one with combat is taken.

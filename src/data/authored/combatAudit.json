@@ -1,5 +1,5 @@
 {
-  "revision": "2026-10-28",
+  "revision": "2026-11-09",
   "note": "Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.",
   "stages": [
     {
@@ -70,6 +70,34 @@
       "alternatives": [],
       "decision": "retain",
       "evidence": ["Quest stage line 3.3."]
+    },
+    {
+      "stepId": "S2-11",
+      "kind": "incidental",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "A level 22 skeleton attacks in Draynor Manor: the quest asks for the ability to defend yourself from it. Kill it, or take what you came for and leave.",
+      "enemies": [
+        {
+          "name": "Skeleton",
+          "level": 22,
+          "maxHit": 3,
+          "table": true
+        }
+      ],
+      "lines": [],
+      "assumptions": [
+        "The free Skeleton in combatFoes.json is level 21 (24 hit points, hits up to 3). The wiki article lists no level 22 version, so the estimate uses it."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Run past it: the quest does not need it dead."
+      ],
+      "decision": "retain",
+      "evidence": [
+        "Quest requirement: the ability to defend from a level 22 Skeleton (OSRS Wiki, Ernest the Chicken).",
+        "Step field \"foes\" since 2.85.0, so the app estimates the fight with the player's kit."
+      ]
     },
     {
       "stepId": "S3-02", "kind": "avoid", "mandatory": true, "method": "run",

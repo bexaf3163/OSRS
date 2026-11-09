@@ -1,10 +1,10 @@
 # Combat audit
 
-Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json` (revision 2026-10-28) and the route data. Do not edit by hand: change the ledger or the route and run `UPDATE_FIXTURES=1 npx vitest run tests/combatAudit.test.ts`.
+Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json` (revision 2026-11-09) and the route data. Do not edit by hand: change the ledger or the route and run `UPDATE_FIXTURES=1 npx vitest run tests/combatAudit.test.ts`.
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-22 stages: 7 retained, 12 revised, 0 with a branch, 3 deferred.
+23 stages: 8 retained, 12 revised, 0 with a branch, 3 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -14,6 +14,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S2-07 The Knight's Sword | avoid | yes | Ice giant (53), Ice warrior (57) | run | - | Trout 10 | Deferred |
 | S2-08 Vampyre Slayer | quest-fight | yes | Count Draynor (34) | melee | Count Draynor | Trout 10 | Revised |
 | S2-09 Pirate's Treasure | incidental | yes | Gardener (4) | melee | - | - | Retain |
+| S2-11 Ernest the Chicken | incidental | yes | Skeleton (22) | melee | Skeleton | - | Retain |
 | S3-02 Black Knights' Fortress | avoid | yes | Black Knight (33) | run | - | Trout 5 | Revised |
 | S3-03 Demon Slayer | quest-fight | yes | Delrith (27), Dark wizard (20) | melee | - | - | Deferred |
 | S3-04 Below Ice Mountain | quest-fight | yes | Ancient Guardian (25) | other | - | Trout 10 | Revised |
@@ -148,6 +149,23 @@ Assumptions:
 Evidence:
 
 - Quest stage line 3.3.
+
+## S2-11 Ernest the Chicken
+
+**Retain.** A level 22 skeleton attacks in Draynor Manor: the quest asks for the ability to defend yourself from it. Kill it, or take what you came for and leave.
+
+Assumptions:
+
+- The free Skeleton in combatFoes.json is level 21 (24 hit points, hits up to 3). The wiki article lists no level 22 version, so the estimate uses it.
+
+Alternatives:
+
+- Run past it: the quest does not need it dead.
+
+Evidence:
+
+- Quest requirement: the ability to defend from a level 22 Skeleton (OSRS Wiki, Ernest the Chicken).
+- Step field "foes" since 2.85.0, so the app estimates the fight with the player's kit.
 
 ## S3-02 Black Knights' Fortress
 

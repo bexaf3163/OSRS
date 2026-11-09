@@ -141,11 +141,11 @@ The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **
 - Training settings keep Balanced/Fastest/Money/Relaxed, automatic preparation and Defence-at-1. The five RuneLite helper flags stay (places, bank highlighting, pace, level import, upgrades); mocked tests do not prove their real-game behavior.
 - Journal: filters left; status, QP, current-part requirements and route action right; Review route for completed/skipped quests; saved-only completion labelled; one closed session history; browsing never marks progress.
 - Skills has no leveling guide or bracket table (2.83.0): the training engine sets method, goal and plan. A completed skill's Plan says its checkpoint is reached. Two-column icon index, XP table in Calculator.
-- Route (2.84.0): quests plus the Stronghold; other step kinds are `RETIRED_STEPS`, planned by the training, gear and Money engines.
+- Route (2.84.0): quests plus the Stronghold; other step kinds are `RETIRED_STEPS`, planned by the training, gear and Money engines; an unsafe quest fight (2.85.0) buys covered kit, earns for wearable kit, else trains melee.
 - Gear compares melee only for a supported current activity; other skills show current preparation and live equipment. Mandatory shopping and a quoted refill/fare reserve protect upgrade spending; unread prices never count as zero. Shopping: requirements left, Checkout right (cost, checked cash, optional bank stock, refill allowance, shortfall), one primary action through funding, copy-order or preparation.
 - One Where preview; the compact card omits the place list and the **full map keeps the place picker**. Preview-only CSS uses direct-child selectors so a nested dialog's picker stays visible.
 
-Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallback** (old imagery, disclosed in tooltips; the hard-coded 2026 URL returned 404). Newer imagery needs a verified projection and real tiles; never paste another atlas URL into the old coordinate scheme.
+Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallback** (old imagery, disclosed in tooltips); never paste another atlas URL into the old coordinate scheme.
 
 ## Development and release procedure
 
@@ -169,7 +169,7 @@ Worktree `C:/Users/Mark/Desktop/Ors-x9`, baseline `f035305`, branch `codex/v14-a
 
 Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent entry for explicit goals and phased training/preparation; costs precede rewards; only sourced, order-independent unknowns cancel. Cursors retire past stages; certificate proof stays physical. Procurement shares allocations/packages/fees; unknown flows weaken balances; start-only rewards never repeat; unknown hand-ins never buy; protection requires wearing; funding excludes stale/unsold cash. Shortest Path `375ce2c061df5c3961116dda6443f307df3223f1` (BSD, 64 regions, ESTIMATED); trip legs bounded, deduplicated, revision-guarded.
 
-2,590 units; quick/UI/E2E/structure/Java gates pass. Perf: 2.84.0 updates -63%, cold Path -47%. Evidence: `work/osrs-v14-audit`. Released 2.84.1; live pending.
+2,595 units; quick/UI/E2E/structure/Java gates pass. Perf: 2.85.0 flat vs 2.84.1. Evidence: `work/osrs-v14-audit`. Released 2.85.0; live pending.
 
 Takeover inputs: `.codex/v14-brief/`; hashes: `.codex/transfer/receipt.json`.
 

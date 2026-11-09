@@ -185,7 +185,9 @@ describe('different characters through the integrated runtime (brief 39 counterf
     const done: string[] = [];
     let turns = 0, compared = 0;
     for (; turns < route.length + 5; turns++) {
-      const snap = routeSnapshot(done);
+      // The game sends the levels and worn kit, so the route's quest fights (Ernest's skeleton included) are assessed.
+      const snap: PlanningSnapshot = { ...routeSnapshot(done), combat: { stats: { attack: 1, strength: 1, defence: 1, hitpoints: 10, magic: 1, ranged: 1, prayer: 1 },
+        gear: { equipment: [], inventory: [], coins: 0, bankCoins: 0 } } };
       const earn: RuntimePlanInput['earn'] = (step, gp, _budget, goalId) => earnAction(snap, step, goalId, gp, rate);
       const plan = runtimeDecision(input(snap, { walk, prices, earn }));
       if (!plan) break;
