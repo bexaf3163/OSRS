@@ -23,6 +23,7 @@ import { Economics, FundingCard, PriceNote } from './FundingCard';
 import { Eyebrow, Page } from '../../ledger';
 import { hrefTo } from '../../domain/pages/pages';
 import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
+import { useDropAdvice } from '../../state/hooks/useDropAdvice';
 
 const gp = (n: number) => `${formatGp(Math.round(n))} gp`;
 
@@ -135,6 +136,10 @@ function Details({ e, m, whyShown = false }: { e: MethodEvaluation; m: MoneyScre
   const pu = e.perUnit;
   const guide = method.guide.filter((g) => g.kind !== 'restock');
   const why = whyShown ? '' : whyOf(e, m.ranking, m.rankedFor);
+  const dropAdvice = useDropAdvice();
+  // The economics sell every output; a drop that serves a goal (bones toward Prayer), pays more processed (tanned hides) or cannot be
+  // sold yet says so.
+  const drops = [...new Set(method.outputs.map((f) => f.item.name))].filter((name) => name !== 'Coins').map((name) => dropAdvice(name, m.evals)).filter((d) => d.action !== 'sell');
   return (
     <div className="money-details">
       <p className="small">{method.summary}</p>
@@ -148,6 +153,7 @@ function Details({ e, m, whyShown = false }: { e: MethodEvaluation; m: MoneyScre
       <ol className="small money-guide">{guide.map((g) => <li key={g.kind + g.text}>{g.text}</li>)}</ol>
       <p className="small subhead">Money</p>
       <Economics e={e} earn />
+      {drops.length > 0 && <ul className="small money-drops">{drops.map((d) => <li key={d.text}>{d.text}</li>)}</ul>}
       <p className="small">Risk: {method.risk} · Effort: {INTENSITY_LABEL[method.intensity].toLowerCase()} · Confidence: {e.confidence.toLowerCase()}</p>
       <PriceNote prices={m.prices} />
       <details className="money-calc">

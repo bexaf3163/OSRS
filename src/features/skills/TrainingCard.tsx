@@ -22,9 +22,7 @@ import { NavigateButton } from '../../ui/NavigateButton';
 import { usePriceView } from '../../state/hooks/usePriceView';
 import { F2P_SKILL_ADVICE, f2pAdviceFor } from '../../domain/training/f2pSkillAdvice';
 import { useTradeRestriction } from '../../state/hooks/useTradeRestriction';
-import { usePlannerSkillGoals } from '../../state/decision';
-import { dropUse } from '../../domain/market/dropUse';
-import { dropValue } from '../../domain/market/lootValue';
+import { useDropAdvice } from '../../state/hooks/useDropAdvice';
 import { trackedPriority, trackedTrainingContext } from '../../domain/training/skillTrack';
 import { setTracked, useTracked } from '../../state/hooks/useTracked';
 import { SKILL_NAMES, type SkillName } from '../../domain/training/skillTrack';
@@ -112,8 +110,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
   const tracked = useTracked();
   const selectedPriority = trackedPriority(tracked, skill, priorityOf(features));
   const prices = usePriceView(true);
-  const trade = useTradeRestriction();
-  const plannerGoals = usePlannerSkillGoals();
+  const dropAdvice = useDropAdvice();
   const equipmentHint = state.mode === 'f2p' ? f2pAdviceFor(skill)?.equipment : undefined;
   // T11: the arrows for the whole goal, leg by leg against each leg's opponent, with the bow and arrows the kit picks now.
   const arrows = useMemo(() => {
@@ -141,9 +138,8 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
   const { best } = advice;
   // The method the game follows (a tracked plan) leads the card with this player's figures; the pick, when it differs, is one line under it.
   const shown = advice.followed ?? best;
-  // The drop the loot figure counts: bury, sell or leave it, by the same rule as every card.
-  const prayerGoal = plannerGoals.get('prayer')?.level ?? (tracked?.skill === 'prayer' ? tracked.target ?? null : null);
-  const drop = shown?.method.lootName ? dropUse(shown.method.lootName, { prayer: levelOf(state, 'prayer') ?? null, prayerGoal, coinsEach: dropValue(shown.method.lootName, prices, trade.state) }) : null;
+  // The drop the loot figure counts: bury, cook, sell or leave it, by the same rule as Money.
+  const drop = shown?.method.lootName ? dropAdvice(shown.method.lootName) : null;
   const nav = shown ? methodNav(shown) : null;
   const legEnd = advice.actionTarget ?? target;
   const count = advice.actionsLeft;
