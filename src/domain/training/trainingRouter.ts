@@ -12,6 +12,7 @@ import { nameKey } from '../items/itemKey';
 import type { GameMode, Progress, Step } from '../../types';
 import { trainingMethodsJson as methodsJson, toolProgressionJson } from '../../data';
 import { withPlannedKit } from './stages';
+import { purchaseTripHours, toolUpgrade, upgradeXp, type ToolUpgrade } from './toolUpgrade';
 import { toolUse } from '../items/toolTiers';
 import { evaluate, itemRequirement, type ReqState, type Requirement } from '../player/requirements';
 import { coinsOf, heldExact, heldOf, levelOf, questOf, type PlayerState } from '../player/playerState';
@@ -598,43 +599,6 @@ export const rateText = (m: TrainingMethod) => {
 };
 
 
-export interface ToolUpgrade { tool: string; price: number; hours: number; /** Net consumable savings after the purchase when the benefit is coins instead of meaningful time. */ coinsSaved?: number; /** The player's coins when they are known and fall short of the price. */ short?: number;
-  /** Missing next-trip supplies, not the price of an entire future goal. null means stock/prices are unchecked. */ kitCost?: number | null;
-  /** Known coins after reserving the kit, when that leaves too little for this optional purchase. */ afterKit?: number;
-  /** Physical supplies resolved by the same model that evaluated the proposed equipment. */ needs?: MethodNeed[];
-}
-/** Hours a better tool must save to the goal to be worth a line. */
-const UPGRADE_MIN_HOURS = 1 / 6;
-/**
- * The better tool worth buying for the XP left, or null. Fastest: the one that saves the most time (its price is shown; coins do not trade against
- * time). Balanced: the one whose hours saved, valued at the coin baseline (lootValue.coinsPerMinute), beat its price by the most; without prices
- * nothing is weighed. Relaxed: none. Only pass XP assigned to this method; another method need not benefit from the same tool.
- */
-export function toolUpgrade(m: TrainingMethod, xpLeft: number, priority: MethodPriority, coinRate: number | null, acquisitionHours = 0): ToolUpgrade | null {
-  if (!m.upgrades?.length || !m.xph || xpLeft <= 0 || priority === 'relaxed' || priority === 'profit') return null;
-  // personalize rounds displayed rates; compare both sides at that same precision to avoid a false negative saving.
-  const mid = (x: readonly [number, number]) => (Math.round(x[0]) + Math.round(x[1])) / 2;
-  const now = xpLeft / mid(m.xph);
-  let best: ToolUpgrade | null = null;
-  let bestScore = -Infinity;
-  for (const u of m.upgrades) {
-    const trainingSaved = now - xpLeft / mid(u.xph);
-    const hours = trainingSaved - Math.max(0, acquisitionHours);
-    const baseCost = m.costPerHour === undefined ? (m.cost === 'cost' ? null : 0) : m.costPerHour;
-    const upgradeCost = u.costPerHour === undefined ? (baseCost === 0 ? 0 : null) : u.costPerHour;
-    const costsKnown = baseCost !== null && upgradeCost !== null;
-    const costSaved = (baseCost ?? 0) * now - (upgradeCost ?? 0) * (xpLeft / mid(u.xph));
-    const timeBenefit = hours >= UPGRADE_MIN_HOURS;
-    const netSaved = costsKnown ? costSaved - u.price : null;
-    if (trainingSaved < 0 || (!timeBenefit && !(priority === 'balanced' && netSaved !== null && netSaved > 0))) continue;
-    const score = priority === 'fastest' ? hours : costsKnown ? (coinRate ? hours * 60 * coinRate : 0) + costSaved - u.price : -Infinity;
-    if (score <= 0 || score <= bestScore) continue;
-    bestScore = score;
-    best = { tool: u.tool, price: u.price, hours, ...(u.needs ? { needs: u.needs } : {}), ...(!timeBenefit && netSaved !== null ? { coinsSaved: netSaved } : {}) };
-  }
-  return best;
-}
-
 const hoursText = (h: number) => (h < 1 ? `${Math.max(1, Math.round(h * 60))} min` : `${h < 10 ? Math.round(h * 10) / 10 : Math.round(h)} h`);
 
 function reasonFor(v: MethodView, priority: MethodPriority, level: number, upgrade: ToolUpgrade | null = null): string {
@@ -666,7 +630,7 @@ function reasonFor(v: MethodView, priority: MethodPriority, level: number, upgra
   if (v.status === 'PREP') parts.push(`first: ${v.missing.map((x) => x.label).join(', ')}`);
   if (v.status === 'LOCKED') parts.push(`locked: ${v.missing.map((x) => x.label).join(', ')}`);
   if (level < m.from) parts.push(`from level ${m.from}`);
-  if (upgrade) parts.push(`a ${upgrade.tool} (≈ ${fmtK(upgrade.price)} gp${upgrade.short !== undefined ? `; you have ${fmtK(upgrade.short)}` : upgrade.afterKit !== undefined ? `; only ${fmtK(upgrade.afterKit)} gp after the kit` : ''}) saves ≈ ${upgrade.coinsSaved !== undefined ? `${fmtK(Math.round(upgrade.coinsSaved))} gp after its price` : hoursText(upgrade.hours)} on this method${upgrade.kitCost === null ? '; check kit stock and prices before buying' : ''}`);
+  if (upgrade) parts.push(`${/^[aeiou]/i.test(upgrade.tool) ? 'an' : 'a'} ${upgrade.tool} (≈ ${fmtK(upgrade.price)} gp${upgrade.short !== undefined ? `; you have ${fmtK(upgrade.short)}` : upgrade.afterKit !== undefined ? `; only ${fmtK(upgrade.afterKit)} gp after the kit` : ''}) saves ≈ ${upgrade.coinsSaved !== undefined ? `${fmtK(Math.round(upgrade.coinsSaved))} gp after its price` : hoursText(upgrade.hours)} ${toolUse(upgrade.tool) ? 'until the next tier, the trip to buy it included' : 'on this method'}${upgrade.kitCost === null ? '; check kit stock and prices before buying' : ''}`);
   return parts.join('; ');
 }
 
@@ -788,7 +752,8 @@ export function trainingStockNeeds(path: readonly PathLeg[], skill: string, stat
   const reusable: Extract<MethodNeed, { type: 'item' }>[] = [];
   for (const leg of path) {
     const projected = atLevel(state, skill, leg.fromLevel);
-    const upgrade = toolUpgrade(leg.method, Math.max(0, xpForLevel(leg.toLevel) - Math.max(xp, xpForLevel(leg.fromLevel))), priority, coinsPerMinute(prices));
+    const legXp = Math.max(0, xpForLevel(leg.toLevel) - Math.max(xp, xpForLevel(leg.fromLevel)));
+    const upgrade = toolUpgrade(leg.method, (tool) => upgradeXp(tool, skill, state.mode, Math.max(xp, xpForLevel(leg.fromLevel)), legXp, path[path.length - 1].toLevel), priority, coinsPerMinute(prices));
     const best: MethodView = { method: leg.method, status: 'READY', missing: [], unchecked: [] };
     const kit = preparationNeeds({ best, upgrade }, projected, prices).filter((n): n is Extract<MethodNeed, { type: 'item' }> => n.type === 'item' && isReusable(n.name));
     const key = kit.length ? JSON.stringify(kit.map(n => [n.name, n.anyOf ?? []]).sort()) : leg.method.id;
@@ -852,8 +817,9 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
     ...best.method, upgrades: best.method.upgrades ?? combatUpgrades(best.method, skill, state, { prices: input.prices, restriction: input.restriction, objective }),
   } : best?.method;
   // Reuse the method's acquisition allowance; a trip already needed for its kit is not charged twice.
-  const purchaseTrip = best ? Math.max(0, SETUP_HOURS - setupHours(best)) : SETUP_HOURS;
-  const found = upgradeMethod ? toolUpgrade(upgradeMethod, methodXp, priority, coinRate, purchaseTrip) : null;
+  const allowance = best ? Math.max(0, SETUP_HOURS - setupHours(best)) : SETUP_HOURS;
+  const found = upgradeMethod ? toolUpgrade(upgradeMethod, (tool) => upgradeXp(tool, skill, mode, xpNow, methodXp, target), priority, coinRate,
+    (tool) => purchaseTripHours(best?.method.spot?.place, tool, input.prices, allowance)) : null;
   // Coins known (bag and bank) and short of the price: said, so the suggestion is not read as affordable. Unknown coins: nothing is said.
   const cash = coinsOf(state).total;
   const kitCost = found && best ? requirementCost(preparationNeeds({ best, upgrade: found }, state, input.prices)
