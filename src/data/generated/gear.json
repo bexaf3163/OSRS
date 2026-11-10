@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: item and bonus infoboxes (Bucket infobox_item, infobox_bonuses), shops (storeline, infobox_shop), requirements from the articles",
-  "updated": "2026-10-30",
+  "updated": "2026-11-10",
   "items": [
     {
       "id": 1205,
@@ -5044,6 +5044,70 @@
         }
       ],
       "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
+    },
+    {
+      "id": 2402,
+      "name": "Silverlight",
+      "slot": "weapon",
+      "kind": "quest",
+      "req": {
+        "quests": [
+          "Shadow of the Storm"
+        ]
+      },
+      "reqFrom": "Silverlight",
+      "members": false,
+      "tradeable": false,
+      "attack": {
+        "stab": 9,
+        "slash": 14,
+        "crush": -2,
+        "magic": 0,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 3,
+        "crush": 2,
+        "magic": 1,
+        "ranged": 0
+      },
+      "strength": 12,
+      "speed": 5,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Silverlight.png"
+    },
+    {
+      "id": 1540,
+      "name": "Anti-dragon shield",
+      "slot": "shield",
+      "kind": "quest",
+      "reqFrom": "Free-to-play PvP equipment",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 7,
+        "slash": 9,
+        "crush": 8,
+        "magic": 2,
+        "ranged": 8
+      },
+      "strength": 0,
+      "shops": [
+        {
+          "shop": "Oziach (shop)",
+          "location": "Edgeville",
+          "price": 26,
+          "owner": "Oziach"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Anti-dragon_shield.png"
     }
   ]
 }

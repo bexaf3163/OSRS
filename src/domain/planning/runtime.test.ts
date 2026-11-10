@@ -64,8 +64,10 @@ describe('the runtime planner over the real catalogue and steps', () => {
 });
 
 describe('quest work and travel adapters', () => {
-  it('does not prove Demon Slayer or a new combat quest ready merely because its encounter metadata is absent', () => {
+  it('does not prove a combat quest ready merely because its encounter metadata is absent', () => {
+    // Demon Slayer's own requirements with the fight left out of the step, as new content without encounter data would be.
     const real = questCatalogue.find(quest => quest.id === 'Demon Slayer')!;
+    const { threats: _threats, ...bare } = f2pSteps.find(step => step.id === real.stepIds[0])!;
     for (const goal of [real, { ...real, id: 'New unmodelled combat quest' }]) {
       const snap = snapshot(), gear = { equipment: [], inventory: [{ id: 526, name: 'Bones', count: 25 },
         { id: 1929, name: 'Bucket of water', count: 1 }], coins: 1000, bankCoins: 0 };
@@ -75,7 +77,7 @@ describe('quest work and travel adapters', () => {
           ['bucket of water', { name: 'Bucket of water', carried: 1, bank: 0, noted: 0 }],
         ]) } });
       snap.quests = { [goal.id]: { state: 'NOT_STARTED', source: 'game' } };
-      const decision = runtimeDecision(input(snap, { catalogue: [goal], intent: { kind: 'quest', questId: goal.id } }))!;
+      const decision = runtimeDecision(input(snap, { catalogue: [goal], steps: [bare], intent: { kind: 'quest', questId: goal.id } }))!;
       expect(decision.activeAction).toMatchObject({ kind: 'VERIFY', title: `Verify combat readiness for ${goal.id}` });
       expect(decision.expectedNext.effects).toEqual([]);
       expect(decision.estimatedRemaining).toBeNull();
@@ -85,8 +87,8 @@ describe('quest work and travel adapters', () => {
   it('does not reassess a past encounter after admitted stage evidence has advanced beyond it', () => {
     const original = questCatalogue.find(quest => quest.id === 'Demon Slayer')!;
     const base = f2pSteps.find(step => step.id === original.stepIds[0])!;
-    const fight = { ...base, id: 'synthetic-fight', itemsRequired: [], foes: ['Synthetic unmodelled foe'] };
-    const returning = { ...base, id: 'synthetic-return', itemsRequired: [], foes: [] };
+    const fight = { ...base, id: 'synthetic-fight', itemsRequired: [], foes: ['Synthetic unmodelled foe'], threats: [] };
+    const returning = { ...base, id: 'synthetic-return', itemsRequired: [], foes: [], threats: [] };
     const goal = { ...original, id: 'Synthetic completed encounter', stepIds: [fight.id, returning.id] };
     const snap = snapshot();
     snap.quests = { [goal.id]: { state: 'IN_PROGRESS', stepId: returning.id, source: 'Admitted stage evidence' } };

@@ -2004,6 +2004,21 @@
         "howToGet": "To the gypsy Aris.",
         "wikiItemId": 995,
         "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. Take it after Traiborn's bones, for Delrith and the dark wizards at the stone circle: they attack on sight and hit up to 6 with magic.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "phase": "fight"
       }
     ],
     "fields": [
@@ -2116,15 +2131,8 @@
         "npc": "Cow"
       }
     ],
-    "itemsRecommended": [
-      {
-        "nameEn": "Trout",
-        "amount": 5,
-        "howToGet": "Buy on the Grand Exchange. For the dark wizards at the stone circle: they attack on sight and hit up to 6 with magic.",
-        "wikiItemId": 333,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
-        "heals": 7
-      }
+    "threats": [
+      "Delrith"
     ],
     "loadouts": [
       {

@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
-  "generatedAt": "2026-11-09",
+  "generatedAt": "2026-11-10",
   "foes": [
     {
       "name": "Count Draynor",
@@ -47,6 +47,28 @@
       "maxHit": 3,
       "speedTicks": 4,
       "aggressive": true
+    },
+    {
+      "name": "Delrith",
+      "combat": 27,
+      "members": false,
+      "hitpoints": 7,
+      "attackLevel": 32,
+      "strengthLevel": 25,
+      "defenceLevel": 27,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 6,
+      "aggressive": false
     },
     {
       "name": "Ancient Guardian",
@@ -919,6 +941,121 @@
       "aggressive": true
     },
     {
+      "name": "Dark wizard",
+      "version": "Level 7",
+      "combat": 7,
+      "members": false,
+      "hitpoints": 12,
+      "attackLevel": 5,
+      "strengthLevel": 2,
+      "defenceLevel": 5,
+      "magicLevel": 6,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 3,
+        "ranged": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Dark wizard",
+      "version": "Level 11",
+      "combat": 11,
+      "members": true,
+      "hitpoints": 15,
+      "attackLevel": 5,
+      "strengthLevel": 5,
+      "defenceLevel": 10,
+      "magicLevel": 10,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 5,
+        "ranged": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 5,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Dark wizard",
+      "version": "Level 20",
+      "combat": 20,
+      "members": false,
+      "hitpoints": 24,
+      "attackLevel": 17,
+      "strengthLevel": 17,
+      "defenceLevel": 14,
+      "magicLevel": 22,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 3,
+        "ranged": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 6,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Dark wizard",
+      "version": "Level 22",
+      "combat": 22,
+      "members": true,
+      "hitpoints": 25,
+      "attackLevel": 20,
+      "strengthLevel": 10,
+      "defenceLevel": 15,
+      "magicLevel": 25,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 5,
+        "ranged": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 5,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Dark wizard",
+      "version": "Level 23",
+      "combat": 23,
+      "members": true,
+      "hitpoints": 25,
+      "attackLevel": 20,
+      "strengthLevel": 10,
+      "defenceLevel": 20,
+      "magicLevel": 25,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 5,
+        "ranged": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 5,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
       "name": "Black Knight",
       "version": "Hostile, male",
       "combat": 33,
@@ -940,28 +1077,6 @@
       "maxHit": 4,
       "speedTicks": 5,
       "aggressive": true
-    },
-    {
-      "name": "Delrith",
-      "combat": 27,
-      "members": false,
-      "hitpoints": 7,
-      "attackLevel": 32,
-      "strengthLevel": 25,
-      "defenceLevel": 27,
-      "magicLevel": 1,
-      "attackBonus": 0,
-      "defence": {
-        "stab": 0,
-        "slash": 0,
-        "crush": 0,
-        "magic": 0,
-        "ranged": 0
-      },
-      "attackStyle": "crush",
-      "maxHit": 3,
-      "speedTicks": 6,
-      "aggressive": false
     }
   ]
 }

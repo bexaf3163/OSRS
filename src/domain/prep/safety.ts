@@ -1,5 +1,6 @@
 import type { Step } from '../../types';
 import { THREATS } from '../../data/threats';
+import { PROTECTIONS } from '../../data/fightMechanics';
 import { stepFightNames } from '../combat/fightEstimate';
 import type { PrepLine } from './prepPlan';
 
@@ -11,7 +12,7 @@ interface SafetyRule { hazard: RegExp; names: string[]; worn?: boolean; label: s
 export const SAFETY_RULES: readonly SafetyRule[] = [{
   hazard: /dragonfire/i,
   worn: true,
-  names: ['Anti-dragon shield', 'Dragonfire shield', 'Dragonfire ward', 'Ancient wyvern shield'],
+  names: [...PROTECTIONS.Dragonfire],
   label: 'No Anti-dragon shield with you',
   detail: (foe, hit) => `Do not go without it: ${foe}'s dragonfire hits up to ${hit}. Duke Horacio in Lumbridge Castle gives it free.`,
 }];

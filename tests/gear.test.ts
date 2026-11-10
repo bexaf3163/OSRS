@@ -224,11 +224,11 @@ describe('gear advice', () => {
   });
 
   it('an unfamiliar weapon in hand: we advise, but do not invent how much better', () => {
-    const a = adviseGear(input({ gear: gear({ equipment: [{ id: 999999, name: 'Silverlight', slot: 'weapon' }] }) }));
-    expect(a.weaponUnknown).toBe('Silverlight');
+    const a = adviseGear(input({ gear: gear({ equipment: [{ id: 999999, name: 'Excalibur', slot: 'weapon' }] }) }));
+    expect(a.weaponUnknown).toBe('Excalibur');
     const w = a.actions.find((x) => x.slot === 'weapon')!;
-    expect(w.currentName).toBe('Silverlight');
-    expect(gainText(w)).toContain('compare with Silverlight');
+    expect(w.currentName).toBe('Excalibur');
+    expect(gainText(w)).toContain('compare with Excalibur');
   });
 
   it('warhammers need strength (from the wiki articles), not attack', () => {
@@ -307,6 +307,13 @@ describe('step opponents (monsters.json)', () => {
 
   it('quest opponents with a special weapon do not get into the advice: Delrith — Silverlight, Tanglefoot — secateurs', () => {
     for (const id of ['S3-03', 'S9-02']) expect(allSteps.find((s) => s.id === id)!.foes, id).toBeUndefined();
+    // Delrith is a threat of his step, so his fight is estimated (with Silverlight) while the weapon advice stays out of it.
+    expect(allSteps.find((s) => s.id === 'S3-03')!.threats).toEqual(['Delrith']);
+    // Kit a quest hands out is in the table for its fight and is never advised as a purchase.
+    const rich = adviseGear(input({ levels: { attack: 1, strength: 1, defence: 1 }, gear: gear({ equipment: [], coins: 100_000 }) }));
+    expect([...rich.choices, ...rich.goals, ...rich.locked].map((x) => x.item.kind)).not.toContain('quest');
+    expect(byName('Silverlight')).toMatchObject({ slot: 'weapon', kind: 'quest' });
+    expect(byName('Anti-dragon shield')).toMatchObject({ slot: 'shield', kind: 'quest' });
   });
 
   it('without a step the comparison is against a cow', () => {

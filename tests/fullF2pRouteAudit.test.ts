@@ -9,6 +9,7 @@ import { parseAmount, type OwnedItem, type OwnedState } from '../src/domain/item
 import { nameKey } from '../src/domain/items/itemKey';
 import { aggregateShopping } from '../src/domain/prep/shopping';
 import { REUSABLE } from '../src/domain/items/reusable';
+import { loadoutNeed } from '../src/domain/quests/loadoutPhase';
 import { BAG_SLOTS, stacks, type PrepPlan } from '../src/domain/prep/prepPlan';
 import { slotsText } from '../src/domain/prep/prepEnvelope';
 import { procurementDetour } from '../src/domain/travel/detours';
@@ -275,15 +276,20 @@ describe('F2P route audit: counting several items', () => {
 });
 
 /** How many bag slots a step's own items take: stacks one each, the rest by count; worn things and coins do not count. */
+/** The fullest bank-to-bank stretch: items of one loadout are carried together, a later loadout's on the next bank visit (loadoutNeed). */
 function slotsOf(step: Step): number {
-  let n = 0;
-  for (const i of step.itemsRequired ?? []) {
-    if (nameKey(i.nameEn) === 'coins') continue;
-    if (/^(worn|wield)/i.test(i.howToGet)) continue;
-    const c = parseAmount(i.amount) ?? 1;
-    n += stacks(i.nameEn) ? 1 : c;
-  }
-  return n;
+  const phases = step.loadouts?.length ? step.loadouts.map((l, index) => ({ id: l.id, index, confirmed: true })) : [null];
+  return Math.max(...phases.map((phase) => {
+    let n = 0;
+    for (const i of step.itemsRequired ?? []) {
+      if (nameKey(i.nameEn) === 'coins') continue;
+      if (/^(worn|wield)/i.test(i.howToGet)) continue;
+      if (loadoutNeed(step, i.nameEn, [i], phase) !== 'NOW') continue;
+      const c = parseAmount(i.amount) ?? 1;
+      n += stacks(i.nameEn) ? 1 : c;
+    }
+    return n;
+  }));
 }
 
 describe('F2P route audit: the 28-slot bag', () => {

@@ -184,7 +184,8 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
     const short = !unread && f.foodHigh > 0 && i.carriedFood! < f.foodHigh;
     if ((f.foodMid ?? 0) >= BAG_SLOTS) {
       overmatched.push(f.foe);
-      reasons.push({ group: 'safety', state: 'missing', text: `${f.foe}: with your levels and worn gear this fight takes about ${f.foodMid} ${f.foodName} on average, a whole bag of food (an estimate). Raise Attack, Strength and Defence or use the step's safer method before you go.` });
+      reasons.push({ group: 'safety', state: 'missing', text: Number.isFinite(f.foodMid) ? `${f.foe}: with your levels and worn gear this fight takes about ${f.foodMid} ${f.foodName} on average, a whole bag of food (an estimate). Raise Attack, Strength and Defence or use the step's safer method before you go.`
+        : `${f.line} Raise Attack and Strength or wield a better weapon before you go.` });
       continue;
     }
     if (unread) reasons.push({ group: 'unknown', state: 'unknown', text: `${f.line} The food in your bag has not been read.` });

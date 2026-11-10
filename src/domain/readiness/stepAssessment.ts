@@ -71,7 +71,7 @@ export function safeTrainingLevel(step: Step, stats: PlayerStats | null, gear: G
   const otherSlots = (step.itemsRequired ?? []).filter(item => !item.heals && !item.equip).length;
   const fits = (levels: PlayerStats) => {
     const fights = estimateStepFights(step, levels, gear);
-    return fights.length === count && fights.every(f => !f.unmodelled.length && f.foe.maxHit < levels.hitpoints)
+    return fights.length === count && fights.every(f => !f.unmodelled.length && !f.cannot && f.worstHit < levels.hitpoints)
       && fights.reduce((sum, f) => sum + f.food.high, 0) <= Math.min(26, BAG_SLOTS - otherSlots);
   };
   if (fits(stats)) return null;

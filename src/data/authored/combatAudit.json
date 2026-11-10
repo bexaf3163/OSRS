@@ -1,5 +1,5 @@
 {
-  "revision": "2026-11-09",
+  "revision": "2026-11-10",
   "note": "Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.",
   "stages": [
     {
@@ -52,12 +52,12 @@
       "objective": "Kill Count Draynor (34, 35 hit points, hits up to 3) with the stake and the hammer.",
       "enemies": [{ "name": "Count Draynor", "level": 34, "maxHit": 3, "table": true }],
       "lines": ["3.0", "3.2"],
-      "assumptions": ["Melee on Aggressive with a Strength potion dose; garlic weakens him; a Fire Strike safespot behind the chair is the other way."],
+      "assumptions": ["Melee with the stake, the hammer and the garlic in the inventory, as the step requires them. Estimated from the OSRS Wiki (fightMechanics.json): he restores 1 hit point and 1 drained level every 5 ticks; garlic at full health deals 10 damage, lowers his Attack and Strength by 10 and his Defence by 40, and adds 1 to your damage; hits that do not outpace the regeneration never finish the fight. A Fire Strike safespot behind the chair is the other way."],
       "problems": ["The Trout was only recommended, so readiness and the game's departure check never looked at it."],
       "alternatives": ["Safespot behind the chair with Fire Strike (route safespot text)."],
       "decision": "revise",
-      "changed": ["2.66.0: Trout (10, or Salmon, Tuna, Lobster, Swordfish) is a required item: checked before leaving and sized up by the fight estimate when the kit needs more."],
-      "evidence": ["Step field \"Combat\"; combatFoes.json (wiki infobox).", "Danger zones warn about the stake, the hammer and the garlic."],
+      "changed": ["2.66.0: Trout (10, or Salmon, Tuna, Lobster, Swordfish) is a required item: checked before leaving and sized up by the fight estimate when the kit needs more.", "2.86.0: regeneration, the garlic and the stake-and-hammer finish are modelled from the Wiki; a kit that cannot outpace his regeneration is trained or upgraded first instead of ending in a review."],
+      "evidence": ["Step field \"Combat\"; combatFoes.json (wiki infobox).", "Danger zones warn about the stake, the hammer and the garlic.", "OSRS Wiki Count Draynor (Strategy, Stat restoration), read 2026-11-10; src/data/authored/fightMechanics.json."],
       "zones": ["draynor-manor-stake", "draynor-manor-hammer", "draynor-manor-garlic"]
     },
     {
@@ -72,32 +72,15 @@
       "evidence": ["Quest stage line 3.3."]
     },
     {
-      "stepId": "S2-11",
-      "kind": "incidental",
-      "mandatory": true,
-      "method": "melee",
+      "stepId": "S2-11", "kind": "incidental", "mandatory": true, "method": "melee",
       "objective": "A level 22 skeleton attacks in Draynor Manor: the quest asks for the ability to defend yourself from it. Kill it, or take what you came for and leave.",
-      "enemies": [
-        {
-          "name": "Skeleton",
-          "level": 22,
-          "maxHit": 3,
-          "table": true
-        }
-      ],
+      "enemies": [{ "name": "Skeleton", "level": 22, "maxHit": 3, "table": true }],
       "lines": [],
-      "assumptions": [
-        "The free Skeleton in combatFoes.json is level 21 (24 hit points, hits up to 3). The wiki article lists no level 22 version, so the estimate uses it."
-      ],
+      "assumptions": ["The free Skeleton in combatFoes.json is level 21 (24 hit points, hits up to 3). The wiki article lists no level 22 version, so the estimate uses it."],
       "problems": [],
-      "alternatives": [
-        "Run past it: the quest does not need it dead."
-      ],
+      "alternatives": ["Run past it: the quest does not need it dead."],
       "decision": "retain",
-      "evidence": [
-        "Quest requirement: the ability to defend from a level 22 Skeleton (OSRS Wiki, Ernest the Chicken).",
-        "Step field \"foes\" since 2.85.0, so the app estimates the fight with the player's kit."
-      ]
+      "evidence": ["Quest requirement: the ability to defend from a level 22 Skeleton (OSRS Wiki, Ernest the Chicken).", "Step field \"foes\" since 2.85.0, so the app estimates the fight with the player's kit."]
     },
     {
       "stepId": "S3-02", "kind": "avoid", "mandatory": true, "method": "run",
@@ -114,14 +97,15 @@
     {
       "stepId": "S3-03", "kind": "quest-fight", "mandatory": true, "method": "melee",
       "objective": "Kill Delrith (27, 7 hit points, hits up to 3) with Silverlight while the dark wizards (7 and 20, magic up to 6) attack on sight.",
-      "enemies": [{ "name": "Delrith", "level": 27, "maxHit": 3, "table": true }, { "name": "Dark wizard", "level": 20, "maxHit": 6 }],
+      "enemies": [{ "name": "Delrith", "level": 27, "maxHit": 3, "table": true }, { "name": "Dark wizard", "level": 20, "maxHit": 6, "table": true }],
       "lines": ["0.0", "1.0", "4.1"],
-      "assumptions": ["Delrith dies in a few hits; the risk is the wizards' magic."],
-      "problems": ["The Trout (5) is only recommended: the 25 Bones for Traiborn and the food do not fit the bag together in the item list, and the step has no loadouts that would take the food on a later bank visit.", "The app had no numbers for Delrith (the generator read an empty infobox field as the next line, fixed in v14) and has none for the dark wizards; Silverlight's doubled damage is not modelled, so the fight is not estimated."],
+      "assumptions": ["Silverlight is the weapon: all damage dealt to Delrith is doubled while it is equipped (OSRS Wiki, Delrith). The circle is single-way combat, so the estimate fights the level 20 and the two level 7 dark wizards first with the same sword, then Delrith; the worst hit is the level 20 wizard's 6."],
+      "problems": ["The Trout (5) was only recommended: the 25 Bones for Traiborn and the food do not fit the bag together, and the food was not tied to the fight's loadout.", "The app had no numbers for Delrith (the generator read an empty infobox field as the next line, fixed in v14) or the dark wizards, and Silverlight's doubled damage was not modelled, so the fight was not estimated."],
       "alternatives": [],
-      "decision": "defer",
-      "evidence": ["Step field \"Combat\"; quest stage line 4.1 (lines 0.0 and 1.0 are dialogue).", "Danger zone dark-wizards-varrock warns on the way.", "combatFoes.json has Delrith since v14 (7 hit points, max hit 3), but the estimate does not model Silverlight's doubled damage, so he stays out of the step's foes (tests/gear.test.ts)."],
-      "zones": ["dark-wizards-varrock"]
+      "decision": "revise",
+      "evidence": ["Step field \"Combat\"; quest stage line 4.1 (lines 0.0 and 1.0 are dialogue).", "Danger zone dark-wizards-varrock warns on the way.", "OSRS Wiki Delrith (Silverlight doubles all damage dealt), Demon Slayer (two level 7 and one level 20 dark wizard, single-way combat), read 2026-11-10."],
+      "zones": ["dark-wizards-varrock"],
+      "changed": ["2.86.0: Delrith is a threat of the step, estimated with Silverlight's doubled damage after the three dark wizards (fightMechanics.json, combatFoes.json); the Trout is a required item of the fight loadout, taken after the bones."]
     },
     {
       "stepId": "S3-04", "kind": "quest-fight", "mandatory": true, "method": "other",
@@ -163,11 +147,11 @@
       "objective": "Beat Brutus (30, 58 hit points): plain hits up to 3 cannot kill in the quest, his specials (up to 19) can.",
       "enemies": [{ "name": "Brutus", "level": 30, "maxHit": 3, "table": true }],
       "lines": ["4.0"],
-      "assumptions": ["Dodging the specials is the real defence; food keeps health above a special that lands."],
-      "problems": ["The step had no food at all.", "The estimate counts only his plain hits: the food it gives is a lower bound (said in the fight line)."],
+      "assumptions": ["Dodging the specials is the real defence; the estimate still counts one hit of each special (every fifth attack, about 40% of your Hitpoints up to 19, OSRS Wiki Brutus/Strategies), so food and health cover a special that lands."],
+      "problems": ["The step had no food at all.", "The estimate counted only his plain hits, so the food it gave was a lower bound."],
       "alternatives": [],
       "decision": "revise",
-      "changed": ["2.66.0: Trout ×5 is a required item, with the special's 19 in its note."],
+      "changed": ["2.66.0: Trout ×5 is a required item, with the special's 19 in its note.", "2.86.0: the specials are part of the estimate (fightMechanics.json): food, the health kept above a special and the training or kit that makes the fight safe all include them."],
       "evidence": ["Step field \"Combat\"; threats.json (melee 3, special 19)."]
     },
     {
@@ -187,12 +171,13 @@
       "objective": "Kill Elvarg (83, 80 health) with the Anti-dragon shield worn.",
       "enemies": [{ "name": "Elvarg", "level": 83, "maxHit": 10, "table": true }],
       "lines": ["1.2"],
-      "assumptions": ["With the shield her fire hits up to 10; without it up to 70."],
-      "problems": [],
+      "assumptions": ["With the shield her fire hits up to 10; without it up to 70 (OSRS Wiki Dragonfire/Elvarg). The Wiki gives no share for her slash, magic and fire, so the estimate takes the worse attack for every swing; the shield's slot is never offered to another item."],
+      "problems": ["The estimate counted only her slash (up to 8), so the fight was named partial and never assessed."],
       "alternatives": ["A Rune sword on Stab if owned."],
-      "decision": "retain",
+      "decision": "revise",
       "evidence": ["Lobster 20+ required; the shield is a safety rule (readiness blocks without it, and a two-handed weapon is flagged).", "Danger zones on the boat and in the lair."],
-      "zones": ["crandor-boarding", "elvarg-lair"]
+      "zones": ["crandor-boarding", "elvarg-lair"],
+      "changed": ["2.86.0: dragonfire is counted for every attack, 10 behind the worn Anti-dragon shield and 70 without; encounter preparation keeps the shield on and compares training, weapons and armour around it."]
     },
     {
       "stepId": "S7-02", "kind": "quest-fight", "mandatory": true, "method": "safespot",
@@ -200,7 +185,7 @@
       "enemies": [{ "name": "Khazard Ogre", "level": 63, "maxHit": 8 }, { "name": "Khazard scorpion", "level": 44 }, { "name": "Bouncer", "level": 137 }],
       "lines": ["1.1", "1.2", "1.5", "1.6"],
       "assumptions": ["All of them fight only up close, so the safespot holds."],
-      "problems": ["No melee estimate applies.","The in-game line before the fight checks 10 lobsters, but the food was recommended only: readiness could say ready while the arrow stopped for food."],
+      "problems": ["No melee estimate applies.", "The in-game line before the fight checks 10 lobsters, but the food was recommended only: readiness could say ready while the arrow stopped for food."],
       "alternatives": ["A bow from the same cover."],
       "decision": "revise",
       "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded."],

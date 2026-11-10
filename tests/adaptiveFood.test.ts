@@ -63,14 +63,17 @@ describe('food follows the player, not the guide (full chain, owner report 2026-
   });
 
   it('safe fight: a kit that takes no damage worth healing needs no food, whatever the guide wrote', () => {
-    const { pick, step, food } = world('S4-02', STRONG, RUNE);
+    // Count Draynor with his Wiki mechanics (2.86.0): a strong rune-armoured character outpaces his regeneration and takes nothing to heal.
+    // Brutus is no longer such a fight: his specials are counted since 2.86.0, so they cost food at any level.
+    const { pick, step, food } = world('S2-08', STRONG, RUNE);
     expect(pick).toMatchObject({ essential: true, trip: 0 });
-    expect(stepById.get('S4-02')!.itemsRequired!.some((i) => i.nameEn === 'Trout')).toBe(true);
+    expect(stepById.get('S2-08')!.itemsRequired!.some((i) => i.nameEn === 'Trout')).toBe(true);
     const trout = food('Trout');
     expect([trout.required, trout.readiness, trout.now]).toEqual([undefined, undefined, undefined]);
     expect([trout.buy, trout.checklist]).toEqual([0, false]);
-    // Brutus's estimate leaves mechanics out, so the guide's surplus may stay as a labelled margin, never a requirement.
+    // A fully modelled fight keeps no guide surplus at all; a partial one could only keep it as a labelled margin, never a requirement.
     expect(step.itemsRecommended?.find((i) => i.nameEn === 'Trout')?.howToGet ?? 'none').toMatch(/^(none|Optional: a margin, because the estimate leaves out)/);
+    expect(world('S4-02', STRONG, RUNE).pick.trip).toBeGreaterThan(0);
   });
 
   it('unknown risk (no levels from the game): the guide amount is only a labelled suggestion', () => {

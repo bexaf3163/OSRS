@@ -16,10 +16,13 @@ const TRAINER_FOES = (JSON.parse(readFileSync(`${root}scripts/data/trainers.defs
 const STEPS = JSON.parse(readFileSync(`${root}src/data/authored/steps.json`, 'utf8')) as { foes?: string[]; threats?: string[] }[];
 const METHODS = (JSON.parse(readFileSync(`${root}src/data/authored/trainingMethods.json`, 'utf8')) as { methods: { skill: string | string[]; npcNames?: string[] }[] }).methods;
 const COMBAT = new Set(['attack', 'strength', 'defence', 'ranged', 'magic']);
+/** Opponents a fight's mechanics say come first (fightMechanics.json company): estimated with it, so their numbers are needed too. */
+const COMPANY = Object.values((JSON.parse(readFileSync(`${root}src/data/authored/fightMechanics.json`, 'utf8')) as { foes: Record<string, { company?: { foe: string }[] }> }).foes)
+  .flatMap((m) => (m.company ?? []).map((c) => c.foe));
 const PAGES = [...new Set([...STEPS.flatMap((s) => [...(s.foes ?? []), ...(s.threats ?? [])]),
-  ...METHODS.filter((m) => [m.skill].flat().some((s) => COMBAT.has(s))).flatMap((m) => m.npcNames ?? []), ...TRAINER_FOES,
-  // Fights the route walks past or defers (combat audit S3-02, S3-03), so no step names them as its foes.
-  'Black Knight', 'Delrith'])];
+  ...METHODS.filter((m) => [m.skill].flat().some((s) => COMBAT.has(s))).flatMap((m) => m.npcNames ?? []), ...TRAINER_FOES, ...COMPANY,
+  // A fight the route walks past (combat audit S3-02), so no step names it as its foe.
+  'Black Knight'])];
 
 
 /** The infobox fields as written: "|hitpoints1 = 10". */

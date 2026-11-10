@@ -1,12 +1,13 @@
-import type { PlayerStats, Step } from '../../../types';
+import type { GearPiece, PlayerStats, Step } from '../../../types';
 import type { GearState } from '../../../services/runeliteBridge';
 import { adviseGear, type GearAction } from '../../combat/gearAdvisor';
 import { gearMarketPrices } from '../../combat/gearAdvice';
 import { estimateStepFights, stepFightNames, stepFightFoes } from '../../combat/fightEstimate';
 import type { FightEstimate } from '../../combat/fightEstimate';
 import { EAT_SECONDS } from '../../combat/combatEstimate';
-import { gearById } from '../../items/gearRegistry';
+import { gearById, gearPieceByName } from '../../items/gearRegistry';
 import { safetyRulesOf } from '../../prep/safety';
+import { FIGHT_MECHANICS } from '../../../data/fightMechanics';
 import { stepFood } from '../../player/foodStock';
 import { evenlyTrainedStats, fightTrainingTarget, safeTrainingLevel, trainedCombatStats } from '../../readiness/stepAssessment';
 import type { PriceView } from '../../market/quotes';
@@ -32,9 +33,9 @@ export function encounterWork(fights: readonly FightEstimate[]): Minutes {
 }
 
 /** Conditional equipment for the calculator only. Never grants actual ownership or wearing. */
-function wearing(gear: GearState, kit: readonly GearAction[]): GearState {
+function wearing(gear: GearState, pieces: readonly GearPiece[]): GearState {
   let equipment = [...gear.equipment!];
-  for (const { item } of kit) {
+  for (const item of pieces) {
     const slot = item.slot === 'neck' ? 'amulet' : item.slot;
     equipment = equipment.filter(piece => piece.slot !== slot && !(item.twoHanded && piece.slot === 'shield'));
     equipment.push({ id: item.id, name: item.name, slot, count: 1 });
@@ -44,17 +45,19 @@ function wearing(gear: GearState, kit: readonly GearAction[]): GearState {
 
 /** Assemble the shared model's exact combat-food need and selected kit; quest hand-ins remain untouched. */
 function forecast(step: Step, stats: PlayerStats, gear: GearState, kit: readonly GearAction[], label: string,
-  targets: EncounterSetup['targets'] = [], assessed?: FightEstimate[]): EncounterSetup | null {
+  targets: EncounterSetup['targets'] = [], protection: readonly GearPiece[] = [], assessed?: FightEstimate[]): EncounterSetup | null {
   if (gear.equipment?.some(p => p.slot === 'shield') && gear.equipment.some(p => p.slot === 'weapon' && gearById.get(p.id)?.twoHanded)) return null;
   if (safetyRulesOf(step).some(rule => rule.worn && !gear.equipment?.some(p => rule.names.includes(p.name)))) return null;
   const fights = assessed ?? estimateStepFights(step, stats, gear);
-  if (!fights.length || fights.length !== stepFightNames(step).length || fights.some(f => f.unmodelled.length || f.foe.maxHit >= stats.hitpoints)) return null;
+  if (!fights.length || fights.length !== stepFightNames(step).length || fights.some(f => f.unmodelled.length || f.cannot || f.worstHit >= stats.hitpoints)) return null;
   const food = Math.ceil(fights.reduce((sum, f) => sum + f.food.high, 0));
   const authoredFood = stepFood(step) ?? { nameEn: 'Trout', heals: 7, amount: 0, howToGet: '' };
-  const items = (step.itemsRequired ?? []).filter(item => !item.heals && !kit.some(a => a.item.name === item.nameEn));
+  const worn = [...protection, ...kit.map(a => a.item)];
+  const items = (step.itemsRequired ?? []).filter(item => !item.heals && !worn.some(piece => piece.name === item.nameEn));
   const others = items.filter(item => !item.equip).length;
   if (food > Math.min(26, 28 - others)) return null;
-  const requirements = [ ...kit.map(a => ({ nameEn: a.item.name, wikiItemId: a.item.id, amount: 1, equip: true, howToGet: '' })),
+  const authored = (piece: GearPiece) => (step.itemsRequired ?? []).find(item => item.nameEn === piece.name)?.howToGet ?? '';
+  const requirements = [ ...worn.map(piece => ({ nameEn: piece.name, wikiItemId: piece.id, amount: 1, equip: true, howToGet: authored(piece) })),
     ...items, ...(food ? [{ ...authoredFood, amount: food, totalAmount: food, inStep: false }] : []) ];
   // Eating delay is the existing combatEstimate model's 3 ticks per piece. Do not count food as free fight time.
   return { label, stats, gear, kit, targets, fight: encounterWork(fights),
@@ -69,7 +72,15 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
   // Before proposing any spend/training, require a supported observed baseline model (unsafe food quantity is allowed here).
   const estimates = estimateStepFights(step, stats, gear);
   if (estimates.length !== stepFightNames(step).length || estimates.some(f => f.unmodelled.length)) return [];
-  const current = forecast(step, stats, gear, [], 'Current equipment', [], estimates);
+  // Protection the fight must be worn with (safety rules) is part of every setup: its slot is taken before any kit is compared.
+  const guards = safetyRulesOf(step).filter(rule => rule.worn).flatMap(rule => gearPieceByName(rule.names[0]) ?? []);
+  const protection = guards.filter(piece => !gear.equipment!.some(p => p.slot === piece.slot && safetyRulesOf(step).some(rule => rule.names.includes(p.name))));
+  const base = wearing(gear, protection);
+  // A fight done with its own weapon (fightMechanics.json) gains nothing from another one.
+  const taken = new Set([...guards.map(piece => piece.slot), ...(stepFightFoes(step).some(foe => FIGHT_MECHANICS[foe.name]?.weapon) ? ['weapon'] : [])]);
+  const free = (kit: GearAction[]) => kit.filter(a => !taken.has(a.item.slot) && !(a.item.twoHanded && taken.has('shield')));
+  const current = forecast(step, stats, base, [], protection.length ? protection.map(piece => piece.name).join(' + ') : 'Current equipment', [], protection,
+    protection.length ? undefined : estimates);
   if (options.currentOnly) return current ? [current] : [];
   const melee = ['attack', 'strength', 'defence'].filter(skill => !(options.keepDefenceOne && skill === 'defence'));
   const questsDone = new Set(Object.entries(snapshot.quests).filter(([, q]) => q.state === 'COMPLETED').map(([id]) => id));
@@ -81,7 +92,7 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
     const source = a.alternatives.find(s => s.kind === 'shop');
     return source?.kind === 'shop' ? { ...a, source, cost: source.price + (source.toll ?? 0) } : null;
   };
-  const choices = picked.choices.flatMap(a => { const c = eligible(a); return c && (c.how === 'wear' || c.cost !== null) ? [c] : []; });
+  const choices = free(picked.choices).flatMap(a => { const c = eligible(a); return c && (c.how === 'wear' || c.cost !== null) ? [c] : []; });
   // At most cheap/best/owned per slot, plus combined affordable and full kits. Preserve different safety/cost tradeoffs.
   const kits: GearAction[][] = [[]];
   for (const slot of ['weapon', 'neck', 'body', 'legs', 'head', 'shield']) {
@@ -93,7 +104,7 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
     const owned = rows.filter(a => a.how === 'wear').sort((a, b) => gain(b) - gain(a))[0];
     for (const a of new Set([cheap, best, ...(owned ? [owned] : [])])) kits.push([a]);
   }
-  const allowed = (rows: GearAction[]) => rows.flatMap(a => { const c = eligible(a); return c ? [c] : []; });
+  const allowed = (rows: GearAction[]) => free(rows).flatMap(a => { const c = eligible(a); return c ? [c] : []; });
   const fullKit = (a: typeof picked) => allowed([...a.actions, ...a.armour, ...a.goals].filter((row, i, all) => !all.slice(i + 1).some(b => b.slot === row.slot)));
   kits.push(allowed([...picked.actions, ...picked.armour]), fullKit(picked));
   const xp = Object.fromEntries(Object.entries(snapshot.xp).flatMap(([id, x]) => x.known ? [[id, x.value]] : []));
@@ -104,15 +115,15 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
     const key = kit.map(a => a.item.id).sort().join(',');
     if (seen.has(key)) continue;
     seen.add(key);
-    const worn = wearing(gear, kit), label = kit.length ? names(kit) : 'Current equipment';
-    if (kit.length) { const ready = forecast(step, stats, worn, kit, label); if (ready) result.push(ready); }
+    const worn = wearing(base, kit.map(a => a.item)), label = kit.length ? names(kit) : 'Current equipment';
+    if (kit.length) { const ready = forecast(step, stats, worn, kit, label, [], protection); if (ready) result.push(ready); }
     // Training on every individual armour permutation is redundant. Compare current kit and both advisor bundles.
     if (kit.length && !kits.slice(-2).includes(kit)) continue;
     for (const skill of melee) {
       const target = fightTrainingTarget(step, stats, worn, skill, xp);
       if (!target) continue;
       const trained = trainedCombatStats(stats, skill, target.level, xp);
-      const ready = forecast(step, trained, worn, kit, `Train ${skill} to ${target.level}${kit.length ? `, then ${label}` : ''}`, [target]);
+      const ready = forecast(step, trained, worn, kit, `Train ${skill} to ${target.level}${kit.length ? `, then ${label}` : ''}`, [target], protection);
       if (ready) result.push(ready);
     }
   }
@@ -122,19 +133,19 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
     const even = (level: number, worn: GearState, kit: readonly GearAction[]) => {
       const targets = melee.filter(skill => stats[skill] < level).sort((a, b) => stats[a] - stats[b]).map(skill => ({ skill, level }));
       return targets.length > 1 ? forecast(step, evenlyTrainedStats(stats, melee, level, xp), worn, kit,
-        `Train ${targets.map(t => t.skill).join(', ')} to ${level}${kit.length ? `, then ${names(kit)}` : ''}`, targets) : null;
+        `Train ${targets.map(t => t.skill).join(', ')} to ${level}${kit.length ? `, then ${names(kit)}` : ''}`, targets, protection) : null;
     };
-    const plain = safeTrainingLevel(step, stats, gear, melee, xp);
+    const plain = safeTrainingLevel(step, stats, base, melee, xp);
     const unlocked = (level: number) => {
       const kit = fullKit(advice(evenlyTrainedStats(stats, melee, level, xp)));
-      return kit.length && !kit.some(a => a.source.kind === 'ge' && ironman !== false) ? even(level, wearing(gear, kit), kit) : null;
+      return kit.length && !kit.some(a => a.source.kind === 'ge' && ironman !== false) ? even(level, wearing(base, kit.map(a => a.item)), kit) : null;
     };
     let low = Math.min(...melee.map(skill => stats[skill])) + 1, high = plain ?? 99, found = unlocked(high);
     while (found && low < high) {
       const mid = Math.floor((low + high) / 2), row = unlocked(mid);
       if (row) { high = mid; found = row; } else low = mid + 1;
     }
-    for (const row of [plain ? even(plain, gear, []) : null, found]) if (row) result.push(row);
+    for (const row of [plain ? even(plain, base, []) : null, found]) if (row) result.push(row);
   }
   // Relevant wearable unlocks: train only the skill the existing advisor says is missing, then re-evaluate that kit.
   for (const lock of picked.locked) {
@@ -146,7 +157,8 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
     const found = advice(raised).choices.find(a => a.item.id === lock.item.id);
     const upgraded = found && eligible(found);
     if (!upgraded || (ironman !== false && upgraded.source.kind === 'ge')) continue;
-    const ready = forecast(step, raised, wearing(gear, [upgraded]), [upgraded], `Train ${target.skill} to ${target.level}, then ${lock.item.name}`, [target]);
+    if (!free([upgraded]).length) continue;
+    const ready = forecast(step, raised, wearing(base, [upgraded.item]), [upgraded], `Train ${target.skill} to ${target.level}, then ${lock.item.name}`, [target], protection);
     if (ready) result.push(ready);
   }
   return result;

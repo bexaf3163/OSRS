@@ -26,7 +26,9 @@ describe('quest bosses: food and a potion dose as advice, the numbers in the tex
   });
 
   it('S3-03: food for the dark wizards, no potion for a 7 hit point demon', () => {
-    expect(rec('S3-03')).toEqual(['Trout x5']);
+    // Since 2.86.0 the food is a required item of the fight loadout, taken after Traiborn's bones; nothing is recommended on top.
+    expect((stepById.get('S3-03')!.itemsRequired ?? []).filter((i) => i.heals).map((i) => `${i.nameEn} x${i.amount} (${i.phase})`)).toEqual(['Trout x5 (fight)']);
+    expect(rec('S3-03')).toEqual([]);
     expect(combat('S3-03')).toMatch(/Delrith has 7 hit points/);
     expect(combat('S3-03')).toMatch(/hit up to 6 with magic/);
   });

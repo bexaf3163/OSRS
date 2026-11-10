@@ -99,11 +99,43 @@ describe('complete encounter strategy comparison', () => {
     expect(input.snapshot.player.owned?.items.get('mithril scimitar')?.carried).toBe(0);
   });
   it('does not claim safety or spend money for unknown or unsupported mechanics', () => {
-    for (const foe of ['Count Draynor', 'Delrith', 'Synthetic unknown foe']) {
+    // Count Draynor in a step without the stake and hammer is not his modelled fight; the unknown foe has no numbers at all.
+    for (const foe of ['Count Draynor', 'Synthetic unknown foe']) {
       const result = createTacticalResolver(fixture(40, 100000)).resolve({ ...fight, foes: [foe] }, 'test');
       expect(result.action?.kind).toBe('VERIFY');
       expect(result.encounter).toBeUndefined();
     }
+  });
+  it('plans a fight with special mechanics from the data instead of a check: levels, kit and food', () => {
+    const kit = (names: string[]) => names.map(nameEn => ({ nameEn, amount: 1, howToGet: '' }));
+    const carrying = (input: TacticalInput, names: string[]) => {
+      for (const name of names) {
+        input.snapshot.player.owned!.items.set(nameKey(name), { name, carried: 1, bank: 0, noted: 0 });
+        input.snapshot.combat!.gear!.inventory!.push({ name, id: gearPieceByName(name)?.id ?? 1, count: 1 });
+      }
+      return input;
+    };
+    const draynor: Step = { ...fight, foes: ['Count Draynor'], itemsRequired: [...fight.itemsRequired!, ...kit(['Garlic', 'Stake', 'Hammer'])] };
+    const strong = createTacticalResolver(carrying(fixture(40), ['Garlic', 'Stake', 'Hammer'])).resolve(draynor, 'test');
+    expect(strong.action).toBeNull();
+    expect(strong.encounter?.reasons[0]).toContain('Current equipment');
+    // Too weak to outpace his regeneration: trained first, never sent in and never left with a check.
+    const weak = createTacticalResolver(carrying(fixture(5, 0), ['Garlic', 'Stake', 'Hammer'])).resolve(draynor, 'test');
+    expect(weak.action?.kind).toBe('TRAIN');
+    expect(weak.encounter?.reasons[0]).toMatch(/Combat strategy: Train /);
+    // Delrith is fought with Silverlight: no other weapon is bought or trained for.
+    const delrith = createTacticalResolver(fixture(10)).resolve({ ...fight, foes: undefined, threats: ['Delrith'] }, 'test');
+    expect(delrith.encounter).toBeDefined();
+    expect(delrith.encounter!.reasons.join(' ')).not.toMatch(/scimitar|sword|mace|dagger|warhammer|battleaxe/);
+    expect(delrith.action?.kind).not.toBe('VERIFY');
+    // Elvarg: the Anti-dragon shield stays on in every option, so no kiteshield and no two-handed weapon is proposed.
+    const elvarg: Step = { ...fight, foes: undefined, threats: ['Elvarg'], itemsRequired: [{ nameEn: 'Lobster', amount: 20, heals: 12, howToGet: '' }, ...kit(['Anti-dragon shield'])] };
+    const dragon = createTacticalResolver(fixture(30, 200_000, ['Anti-dragon shield'])).resolve(elvarg, 'test');
+    expect(dragon.encounter?.reasons[0]).toMatch(/Combat strategy: Train attack, strength, defence to \d+, then /);
+    expect(dragon.encounter!.reasons.join(' ')).not.toMatch(/kiteshield|sq shield|2h sword|battleaxe|warhammer/);
+    expect(dragon.action?.kind).not.toBe('VERIFY');
+    const unshielded = createTacticalResolver(carrying(fixture(60, 200_000, ['Rune scimitar']), ['Anti-dragon shield'])).resolve(elvarg, 'test');
+    expect(unshielded.action).toMatchObject({ kind: 'EQUIP', title: expect.stringContaining('Anti-dragon shield') });
   });
   it('replans after actually acquiring and wearing the proposed item', () => {
     const before = createTacticalResolver(fixture(20)).resolve(fight, 'test');

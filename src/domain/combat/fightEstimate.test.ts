@@ -27,16 +27,52 @@ describe('one quest fight with your kit', () => {
     }
   });
 
-  it('keeps the ordinary Count Draynor damage estimate explicitly partial until regeneration and the finishing condition are modelled', () => {
-    const [e] = estimateStepFights(stepById.get('S2-08')!, { attack: 20, strength: 20, defence: 1, hitpoints: 20 }, gearOf(IRON));
+  it('Count Draynor is estimated with the Wiki\'s mechanics: regeneration, the garlic and the stake', () => {
+    const step = stepById.get('S2-08')!, lv = { attack: 20, strength: 20, defence: 1, hitpoints: 20 };
+    const [e] = estimateStepFights(step, lv, gearOf(IRON));
     expect(e.foe.name).toBe('Count Draynor');
     expect(e.seconds.mid).toBeGreaterThan(5);
     expect(e.seconds.mid).toBeLessThan(120);
     expect(e.damage.low).toBeLessThanOrEqual(e.damage.mid);
     expect(e.damage.mid).toBeLessThanOrEqual(e.damage.high);
     expect(fightLine(e)).toMatch(/^Count Draynor: about \d+ s on (Accurate|Aggressive|Defensive); you take about \d+ damage \(up to \d+\); /);
-    expect(e.unmodelled.join(' ')).toMatch(/regeneration.*hammer\/stake/);
-    expect(fightLine(e)).toContain('Partial estimate');
+    expect(e.unmodelled).toEqual([]);
+    expect(fightLine(e)).not.toContain('Partial estimate');
+    expect(e.assumed.join(' ')).toMatch(/restores 1 hit point.*every 5 ticks/);
+    // Without the garlic the step carries, he keeps his 35 hit points and his Defence: the same kit takes longer.
+    const without = (name: string) => ({ ...step, itemsRequired: step.itemsRequired!.filter((item) => item.nameEn !== name) });
+    const [plain] = estimateStepFights(without('Garlic'), lv, gearOf(IRON));
+    expect(plain.cannot ?? plain.seconds.mid).not.toBe(e.seconds.mid);
+    if (!plain.cannot) expect(plain.seconds.mid).toBeGreaterThan(e.seconds.mid);
+    // The killing blow needs the stake and the hammer: a step that does not carry them is not assessed.
+    expect(estimateStepFights(without('Stake'), lv, gearOf(IRON))[0].unmodelled.join(' ')).toMatch(/killing blow needs Stake/);
+    // Hits that do not outpace 1 hit point every 3 seconds never win: said, and more levels change it.
+    const weak = estimateStepFights(step, { attack: 5, strength: 5, defence: 1, hitpoints: 12 }, gearOf(['Bronze sword']))[0];
+    expect(weak.cannot).toMatch(/do not outpace Count Draynor's regeneration/);
+    expect(fightLine(weak)).toMatch(/regeneration/);
+    expect(weak.unmodelled).toEqual([]);
+  });
+
+  it('Delrith is fought with Silverlight after the dark wizards, whatever weapon is worn now', () => {
+    const step = stepById.get('S3-03')!, lv = { attack: 30, strength: 30, defence: 30, hitpoints: 30, magic: 20 };
+    const [bare] = estimateStepFights(step, lv, gearOf([])), [armed] = estimateStepFights(step, lv, gearOf(['Mithril scimitar']));
+    expect(bare.foe.name).toBe('Delrith');
+    expect(bare.unmodelled).toEqual([]);
+    expect(armed.seconds.mid).toBeCloseTo(bare.seconds.mid, 6); // Silverlight is the weapon; the scimitar changes nothing.
+    // The wizards that come first are part of it: Delrith alone, doubled damage against 7 hit points, is much shorter.
+    const alone = estimateFight({ foe: foe('Delrith'), levels: lv, weapon: null, neck: null, armour: [], food: { name: 'Trout', heals: 7 } })!;
+    expect(alone.seconds.mid).toBeLessThan(bare.seconds.mid / 2);
+    expect(bare.worstHit).toBe(6); // The level 20 wizard's magic.
+  });
+
+  it('Brutus\'s special is counted: one hit of each, a share of your Hitpoints up to 19', () => {
+    const fight = (hitpoints: number) => estimateStepFights(stepById.get('S4-02')!, { attack: 30, strength: 30, defence: 30, hitpoints }, gearOf(IRON))[0];
+    expect(fight(30)).toMatchObject({ worstHit: 12, unmodelled: [], extra: [] });
+    expect(fight(60).worstHit).toBe(19);
+    // The same fight without the special would take only his plain hits of up to 3.
+    const plain = estimateFight({ foe: { ...foe('Brutus'), name: 'Synthetic bull' }, levels: { attack: 30, strength: 30, defence: 30, hitpoints: 30 },
+      weapon: gearById.get(id('Mithril scimitar'))!, neck: null, armour: IRON.slice(1).map((n) => gearById.get(id(n))!), food: { name: 'Trout', heals: 7 } })!;
+    expect(fight(30).damage.mid).toBeGreaterThan(plain.damage.mid * 2);
   });
 
   it('better armour means less damage taken from the same fight', () => {
@@ -61,10 +97,17 @@ describe('one quest fight with your kit', () => {
     expect(high.food.high).toBeLessThan(low.food.high);
   });
 
-  it('Elvarg names its dragonfire beside the melee estimate', () => {
-    const e = estimateFight({ foe: foe('Elvarg'), levels: { attack: 40, strength: 40, defence: 30, hitpoints: 40 }, weapon: gearById.get(id('Mithril scimitar'))!, neck: null, armour: [], food: { name: 'Lobster', heals: 12 } })!;
-    expect(e.extra.join(' ')).toMatch(/Dragonfire/);
-    expect(e.unmodelled.join(' ')).toMatch(/Dragonfire/);
+  it('Elvarg\'s dragonfire is counted for every attack: up to 10 behind the Anti-dragon shield, up to 70 without it', () => {
+    const base = { foe: foe('Elvarg'), levels: { attack: 40, strength: 40, defence: 30, hitpoints: 40 }, weapon: gearById.get(id('Mithril scimitar'))!, neck: null, armour: [], food: { name: 'Lobster', heals: 12 } };
+    const bare = estimateFight(base)!, shielded = estimateFight({ ...base, worn: ['Anti-dragon shield'] })!;
+    expect(bare).toMatchObject({ worstHit: 70, unmodelled: [], extra: [] });
+    expect(shielded).toMatchObject({ worstHit: 10, unmodelled: [], extra: [] });
+    expect(shielded.damage.mid).toBeLessThan(bare.damage.mid / 5);
+    expect(shielded.assumed.join(' ')).toMatch(/takes the worse of them for every attack/);
+    // An attack the mechanics do not cover still keeps a fight out of the model.
+    const odd = estimateFight({ ...base, foe: { ...base.foe, name: 'Brutus', maxHit: 1 }, levels: { ...base.levels, hitpoints: 99 } })!;
+    expect(odd.extra).toEqual(['3 (melee)']);
+    expect(odd.unmodelled).toContain('additional attack: 3 (melee)');
   });
 
   it('a training step is left to the training estimate; no game data, no estimate', () => {

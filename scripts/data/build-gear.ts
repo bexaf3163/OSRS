@@ -67,6 +67,9 @@ const EXTRA: { name: string; kind: string; set?: string }[] = [
   { name: 'Staff of water', kind: 'staff' },
   { name: 'Staff of earth', kind: 'staff' },
   { name: 'Staff of fire', kind: 'staff' },
+  // Handed out in a quest and worn for its fight (fightMechanics.json): never advised as a purchase.
+  { name: 'Silverlight', kind: 'quest' },
+  { name: 'Anti-dragon shield', kind: 'quest' },
 ];
 
 const SLOT: Record<string, GearSlot> = { weapon: 'weapon', '2h': 'weapon', head: 'head', body: 'body', legs: 'legs', shield: 'shield', neck: 'neck' };

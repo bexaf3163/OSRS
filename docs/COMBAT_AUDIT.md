@@ -1,10 +1,10 @@
 # Combat audit
 
-Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json` (revision 2026-11-09) and the route data. Do not edit by hand: change the ledger or the route and run `UPDATE_FIXTURES=1 npx vitest run tests/combatAudit.test.ts`.
+Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json` (revision 2026-11-10) and the route data. Do not edit by hand: change the ledger or the route and run `UPDATE_FIXTURES=1 npx vitest run tests/combatAudit.test.ts`.
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-23 stages: 8 retained, 12 revised, 0 with a branch, 3 deferred.
+23 stages: 7 retained, 14 revised, 0 with a branch, 2 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -16,13 +16,13 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S2-09 Pirate's Treasure | incidental | yes | Gardener (4) | melee | - | - | Retain |
 | S2-11 Ernest the Chicken | incidental | yes | Skeleton (22) | melee | Skeleton | - | Retain |
 | S3-02 Black Knights' Fortress | avoid | yes | Black Knight (33) | run | - | Trout 5 | Revised |
-| S3-03 Demon Slayer | quest-fight | yes | Delrith (27), Dark wizard (20) | melee | - | - | Deferred |
+| S3-03 Demon Slayer | quest-fight | yes | Delrith (27), Dark wizard (20) | melee | Delrith | Trout 5 | Revised |
 | S3-04 Below Ice Mountain | quest-fight | yes | Ancient Guardian (25) | other | - | Trout 10 | Revised |
 | S3-05 Shield of Arrav | incidental | yes | Jonny the Beard (2), Weaponsmaster (23) | melee | - | - | Retain |
 | S4-01 The Corsair Curse | quest-fight | yes | Ithoi the Navigator (35) | melee | Ithoi the Navigator | Salmon 10 | Revised |
 | S4-02 The Ides of Milk | quest-fight | yes | Brutus (30) | melee | Brutus | Trout 5 | Revised |
 | S5-03 Map piece 1: Melzar's Maze | quest-fight | yes | Melzar the Mad (43), Lesser demon (82) | melee | Melzar the Mad | Salmon 10 | Retain |
-| S5-08 The battle with the dragon Elvarg | quest-fight | yes | Elvarg (83) | melee | Elvarg | Lobster 20+ | Retain |
+| S5-08 The battle with the dragon Elvarg | quest-fight | yes | Elvarg (83) | melee | Elvarg | Lobster 20+ | Revised |
 | S7-02 Fight Arena | quest-fight | yes | Khazard Ogre (63), Khazard scorpion (44), Bouncer (137) | safespot | - | Lobster 10 | Revised |
 | S7-03 Tree Gnome Village | quest-fight | yes | Khazard warlord (112) | safespot | - | Lobster 10 | Revised |
 | S7-05 The Grand Tree | quest-fight | yes | Black demon (172) | safespot | - | Lobster 10 | Revised |
@@ -115,7 +115,7 @@ Quest stage lines: 3.0, 3.2.
 
 Assumptions:
 
-- Melee on Aggressive with a Strength potion dose; garlic weakens him; a Fire Strike safespot behind the chair is the other way.
+- Melee with the stake, the hammer and the garlic in the inventory, as the step requires them. Estimated from the OSRS Wiki (fightMechanics.json): he restores 1 hit point and 1 drained level every 5 ticks; garlic at full health deals 10 damage, lowers his Attack and Strength by 10 and his Defence by 40, and adds 1 to your damage; hits that do not outpace the regeneration never finish the fight. A Fire Strike safespot behind the chair is the other way.
 
 Problems:
 
@@ -128,11 +128,13 @@ Alternatives:
 Changed:
 
 - 2.66.0: Trout (10, or Salmon, Tuna, Lobster, Swordfish) is a required item: checked before leaving and sized up by the fight estimate when the kit needs more.
+- 2.86.0: regeneration, the garlic and the stake-and-hammer finish are modelled from the Wiki; a kit that cannot outpace his regeneration is trained or upgraded first instead of ending in a review.
 
 Evidence:
 
 - Step field "Combat"; combatFoes.json (wiki infobox).
 - Danger zones warn about the stake, the hammer and the garlic.
+- OSRS Wiki Count Draynor (Strategy, Stat restoration), read 2026-11-10; src/data/authored/fightMechanics.json.
 
 In-game danger zones: draynor-manor-stake, draynor-manor-hammer, draynor-manor-garlic.
 
@@ -195,24 +197,28 @@ Evidence:
 
 ## S3-03 Demon Slayer
 
-**Deferred.** Kill Delrith (27, 7 hit points, hits up to 3) with Silverlight while the dark wizards (7 and 20, magic up to 6) attack on sight.
+**Revised.** Kill Delrith (27, 7 hit points, hits up to 3) with Silverlight while the dark wizards (7 and 20, magic up to 6) attack on sight.
 
 Quest stage lines: 0.0, 1.0, 4.1.
 
 Assumptions:
 
-- Delrith dies in a few hits; the risk is the wizards' magic.
+- Silverlight is the weapon: all damage dealt to Delrith is doubled while it is equipped (OSRS Wiki, Delrith). The circle is single-way combat, so the estimate fights the level 20 and the two level 7 dark wizards first with the same sword, then Delrith; the worst hit is the level 20 wizard's 6.
 
 Problems:
 
-- The Trout (5) is only recommended: the 25 Bones for Traiborn and the food do not fit the bag together in the item list, and the step has no loadouts that would take the food on a later bank visit.
-- The app had no numbers for Delrith (the generator read an empty infobox field as the next line, fixed in v14) and has none for the dark wizards; Silverlight's doubled damage is not modelled, so the fight is not estimated.
+- The Trout (5) was only recommended: the 25 Bones for Traiborn and the food do not fit the bag together, and the food was not tied to the fight's loadout.
+- The app had no numbers for Delrith (the generator read an empty infobox field as the next line, fixed in v14) or the dark wizards, and Silverlight's doubled damage was not modelled, so the fight was not estimated.
+
+Changed:
+
+- 2.86.0: Delrith is a threat of the step, estimated with Silverlight's doubled damage after the three dark wizards (fightMechanics.json, combatFoes.json); the Trout is a required item of the fight loadout, taken after the bones.
 
 Evidence:
 
 - Step field "Combat"; quest stage line 4.1 (lines 0.0 and 1.0 are dialogue).
 - Danger zone dark-wizards-varrock warns on the way.
-- combatFoes.json has Delrith since v14 (7 hit points, max hit 3), but the estimate does not model Silverlight's doubled damage, so he stays out of the step's foes (tests/gear.test.ts).
+- OSRS Wiki Delrith (Silverlight doubles all damage dealt), Demon Slayer (two level 7 and one level 20 dark wizard, single-way combat), read 2026-11-10.
 
 In-game danger zones: dark-wizards-varrock.
 
@@ -289,16 +295,17 @@ Quest stage lines: 4.0.
 
 Assumptions:
 
-- Dodging the specials is the real defence; food keeps health above a special that lands.
+- Dodging the specials is the real defence; the estimate still counts one hit of each special (every fifth attack, about 40% of your Hitpoints up to 19, OSRS Wiki Brutus/Strategies), so food and health cover a special that lands.
 
 Problems:
 
 - The step had no food at all.
-- The estimate counts only his plain hits: the food it gives is a lower bound (said in the fight line).
+- The estimate counted only his plain hits, so the food it gave was a lower bound.
 
 Changed:
 
 - 2.66.0: Trout ×5 is a required item, with the special's 19 in its note.
+- 2.86.0: the specials are part of the estimate (fightMechanics.json): food, the health kept above a special and the training or kit that makes the fight safe all include them.
 
 Evidence:
 
@@ -322,17 +329,25 @@ In-game danger zones: melzar-lesser-demon.
 
 ## S5-08 The battle with the dragon Elvarg
 
-**Retain.** Kill Elvarg (83, 80 health) with the Anti-dragon shield worn.
+**Revised.** Kill Elvarg (83, 80 health) with the Anti-dragon shield worn.
 
 Quest stage lines: 1.2.
 
 Assumptions:
 
-- With the shield her fire hits up to 10; without it up to 70.
+- With the shield her fire hits up to 10; without it up to 70 (OSRS Wiki Dragonfire/Elvarg). The Wiki gives no share for her slash, magic and fire, so the estimate takes the worse attack for every swing; the shield's slot is never offered to another item.
+
+Problems:
+
+- The estimate counted only her slash (up to 8), so the fight was named partial and never assessed.
 
 Alternatives:
 
 - A Rune sword on Stab if owned.
+
+Changed:
+
+- 2.86.0: dragonfire is counted for every attack, 10 behind the worn Anti-dragon shield and 70 without; encounter preparation keeps the shield on and compares training, weapons and armour around it.
 
 Evidence:
 

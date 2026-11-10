@@ -1,0 +1,45 @@
+{
+  "note": "What a plain damage roll does not cover in a fight, as the OSRS Wiki states it. One entry per opponent, every fact with its article; fightEstimate.ts applies them, and an opponent whose extra attacks have no entry here stays unmodelled. Checked against the Wiki on 2026-11-10.",
+  "protections": {
+    "Dragonfire": ["Anti-dragon shield", "Dragonfire shield", "Dragonfire ward", "Ancient wyvern shield"]
+  },
+  "foes": {
+    "Count Draynor": {
+      "url": "https://oldschool.runescape.wiki/w/Count_Draynor",
+      "regenTicks": 5,
+      "carried": [{ "item": "Garlic", "drain": { "hitpoints": 10, "attack": 10, "strength": 10, "defence": 40 }, "restoreTicks": 5, "maxHitBonus": 1 }],
+      "finisher": ["Stake", "Hammer"],
+      "facts": [
+        "He restores 1 hit point and 1 drained level every 5 ticks, about twenty times an ordinary monster's rate.",
+        "Garlic, when he is at full health, deals 10 damage, lowers his Attack and Strength by 10 and his Defence by 40, and adds 1 to the damage you deal.",
+        "A stake and a hammer in the inventory deal the killing blow; without them he heals to full health."
+      ]
+    },
+    "Delrith": {
+      "url": "https://oldschool.runescape.wiki/w/Delrith",
+      "weapon": { "item": "Silverlight", "damageMultiplier": 2 },
+      "company": [{ "foe": "Dark wizard", "version": "Level 20" }, { "foe": "Dark wizard", "version": "Level 7" }],
+      "facts": [
+        "Silverlight must be equipped to defeat him, and all damage dealt to him is doubled while it is.",
+        "The stone circle is single-way combat with two level 7 dark wizards and one level 20: a wizard already attacking must be killed or hidden from before Delrith can be attacked (Demon Slayer)."
+      ]
+    },
+    "Brutus": {
+      "url": "https://oldschool.runescape.wiki/w/Brutus/Strategies",
+      "specials": [{ "label": "charge or slam", "afterAttacks": 4, "hitpointsShare": 0.4, "maxHit": 19 }],
+      "facts": [
+        "After four to five basic attacks he uses a charge or a slam; they alternate.",
+        "Their damage scales with your Hitpoints level, about 30-40% of it for a low level, up to 19; protection prayers do not stop it.",
+        "Moving out of the way before he moves avoids all of it. The estimate counts one hit of every special."
+      ]
+    },
+    "Elvarg": {
+      "url": "https://oldschool.runescape.wiki/w/Elvarg",
+      "attacks": [{ "label": "Dragonfire", "maxHit": 10, "protection": "Dragonfire", "unprotected": 70 }],
+      "facts": [
+        "Her dragonfire hits up to 70, and up to 10 behind an anti-dragon shield; she can breathe it from a distance.",
+        "The Wiki gives no share for her slash, magic and dragonfire attacks: the estimate takes the worse of them for every attack."
+      ]
+    }
+  }
+}

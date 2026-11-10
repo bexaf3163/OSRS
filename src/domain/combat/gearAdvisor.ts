@@ -449,7 +449,7 @@ function priceOf(s: Source, fallback: number): number {
 }
 
 function allowed(p: GearPiece, lv: Levels, mode: GameMode, quests?: ReadonlySet<string>): boolean {
-  return (!p.members || mode === 'members') && !p.reqUnverified && canWear(p, lv, quests);
+  return (!p.members || mode === 'members') && !p.reqUnverified && p.kind !== 'quest' && canWear(p, lv, quests); // A quest hands its own kit out.
 }
 
 /** Verified melee weapons this account can use; shared by Gear and training upgrade comparisons. */
