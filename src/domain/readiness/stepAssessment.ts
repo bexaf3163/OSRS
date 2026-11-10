@@ -53,8 +53,20 @@ export function trainedCombatStats(stats: PlayerStats, skill: string, level: num
  * An unmodelled encounter never becomes safe by increasing its ordinary damage-roll inputs. */
 export function fightTrainingTarget(step: Step, stats: PlayerStats | null, gear: GearState | null,
   skill = 'attack', xp: Readonly<Record<string, number>> = {}): { skill: string; level: number } | null {
+  const level = safeTrainingLevel(step, stats, gear, [skill], xp);
+  return level === null ? null : { skill, level };
+}
+
+/** The same search-only forecast for several skills raised together; each adds only its own damage-earned Hitpoints. */
+export function evenlyTrainedStats(stats: PlayerStats, skills: readonly string[], level: number, xp: Readonly<Record<string, number>> = {}): PlayerStats {
+  return skills.reduce((raised, skill) => raised[skill] >= level ? raised : trainedCombatStats(raised, skill, level, xp), stats);
+}
+
+/** First level at which the fight is safe once every listed melee skill below it has reached it; null when it is safe now or never. */
+export function safeTrainingLevel(step: Step, stats: PlayerStats | null, gear: GearState | null,
+  skills: readonly string[], xp: Readonly<Record<string, number>> = {}): number | null {
   const count = stepFightFoes(step).length;
-  if (!count || count !== stepFightNames(step).length || !stats || !MELEE.includes(skill)
+  if (!count || count !== stepFightNames(step).length || !stats || !skills.length || skills.some(skill => !MELEE.includes(skill))
     || ['hitpoints', ...MELEE].some(s => !Number.isInteger(stats[s]) || stats[s] < 1 || stats[s] > 99)) return null;
   const otherSlots = (step.itemsRequired ?? []).filter(item => !item.heals && !item.equip).length;
   const fits = (levels: PlayerStats) => {
@@ -63,12 +75,12 @@ export function fightTrainingTarget(step: Step, stats: PlayerStats | null, gear:
       && fights.reduce((sum, f) => sum + f.food.high, 0) <= Math.min(26, BAG_SLOTS - otherSlots);
   };
   if (fits(stats)) return null;
-  if (!fits(trainedCombatStats(stats, skill, 99, xp))) return null;
-  let low = stats[skill] + 1, high = 99;
+  if (!fits(evenlyTrainedStats(stats, skills, 99, xp))) return null;
+  let low = Math.min(...skills.map(skill => stats[skill])) + 1, high = 99;
   while (low < high) {
     const mid = Math.floor((low + high) / 2);
-    if (fits(trainedCombatStats(stats, skill, mid, xp))) high = mid;
+    if (fits(evenlyTrainedStats(stats, skills, mid, xp))) high = mid;
     else low = mid + 1;
   }
-  return { skill, level: low };
+  return low;
 }

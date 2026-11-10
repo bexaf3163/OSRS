@@ -202,6 +202,56 @@ describe('complete encounter strategy comparison', () => {
     expect(protectedPlan.activeAction.title).not.toBe('Get Mithril scimitar'); // 3,000 - 1,050 violates the reserved 2,000 GP payment.
     expect(input.snapshot.player.coins.bag).toMatchObject({ value: 3000 });
   });
+  it('ranks an option with fewer unknown parts first: an unrouted purchase beats training whose two trips are unknown', () => {
+    const input = fixture(20);
+    input.walk = () => null; // No route at all: every option is incomplete, and none may win by what it leaves out.
+    const result = createTacticalResolver(input).resolve(fight, 'test');
+    expect(result.action).toMatchObject({ kind: 'BUY', title: 'Get Mithril scimitar' });
+    expect(result.preparationMinutes).toBeNull();
+    expect(result.encounter?.reasons[0]).toContain('Time comparison incomplete');
+  });
+  it('never counts unknown training time as zero: the unmeasured skill loses to measured ones and to less unmeasured XP', () => {
+    const input = fixture(20, 0);
+    const resolver = createTacticalResolver(input);
+    const candidates = (unknown: readonly string[]) => (skill: string, target: number) => {
+      const candidate = prerequisiteTraining({ snapshot: input.snapshot, goalId: 'test', skill, target, prices: input.prices });
+      return candidate && unknown.includes(skill) ? { ...candidate, remaining: null } : candidate;
+    };
+    const choose = (unknown: readonly string[]) => chooseEncounter(input, fight, 'test', step => resolver.resolve(step, 'test'), candidates(unknown), 0)!;
+    const measured = choose([]);
+    const skill = /Train (\w+) to/.exec(measured.encounter.reasons[0])![1];
+    // The fastest measured option loses its time: it must not stay first as a zero-minute detour.
+    const partly = choose([skill]);
+    expect(partly.encounter.reasons[0]).toContain('Lowest estimated complete time');
+    expect(partly.encounter.reasons[0]).not.toContain(`Train ${skill} to`);
+    // Nothing is measured: the least XP still to earn comes first, never the quickest kill behind the longest grind.
+    const none = choose(['attack', 'strength', 'defence']);
+    expect(none.encounter.reasons[0]).toContain('Time comparison incomplete');
+    const [, first, level] = /Train ([\w, ]+) to (\d+)/.exec(none.encounter.reasons[0])!;
+    const stats = input.snapshot.combat!.stats!;
+    const xp = (label: string, to: number) => label.split(', ').reduce((sum, name) => sum + xpForLevel(to) - xpForLevel(stats[name]), 0);
+    for (const line of none.encounter.reasons.slice(1)) {
+      const other = /^Train ([\w, ]+) to (\d+)/.exec(line);
+      if (other) expect(xp(other[1], Number(other[2])), line).toBeGreaterThanOrEqual(xp(first, Number(level)));
+    }
+  });
+  it('offers a weak character even training instead of one skill to an absurd level', () => {
+    const weak = fixture(5, 0);
+    const result = createTacticalResolver(weak).resolve(fight, 'test');
+    const [, skills, level] = /Combat strategy: Train ([\w, ]+) to (\d+)/.exec(result.encounter!.reasons[0])!;
+    expect(skills).toBe('attack, strength, defence');
+    expect(Number(level)).toBeLessThan(40);
+    // Lowest skill first; the single-skill alternatives stay visible but need far higher levels.
+    expect(result.action).toMatchObject({ kind: 'TRAIN', id: expect.stringContaining(':TRAIN:attack:') });
+    const single = result.encounter!.reasons.flatMap(line => { const m = /^Train (\w+) to (\d+)/.exec(line); return m ? [Number(m[2])] : []; });
+    expect(single.every(target => target > Number(level))).toBe(true);
+    expect(weak.snapshot.combat?.stats).toMatchObject({ attack: 5, strength: 5, defence: 5 });
+    const pure = fixture(5, 0);
+    pure.keepDefenceOne = true;
+    const kept = createTacticalResolver(pure).resolve(fight, 'test');
+    expect(kept.encounter?.reasons.join(' ')).not.toMatch(/defence/);
+    expect(kept.action?.id).not.toContain(':TRAIN:defence:');
+  });
   it('verifies an unread bank balance rather than silently dropping the otherwise feasible purchase strategies', () => {
     const input = fixture(20, 0);
     input.snapshot.player.coins.bank = { known: false };
