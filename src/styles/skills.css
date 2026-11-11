@@ -120,3 +120,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .stage-members ul { margin: 6px 0 0; padding-left: 18px; }
 .stage-list li.is-done { opacity: 0.55; }
 .stage-list li.is-current .stage-levels, .stage-now { color: var(--accent-ink); font-weight: 600; }
+
+/* Your build (2.93, moved from Settings): under the skill grid, separated by the Ledger rule. */
+.training-prefs { margin-top: 22px; padding-top: 14px; border-top: 1px solid var(--border-strong); display: flex; flex-direction: column; gap: 8px; }
+.training-prefs p { margin: 0; }

@@ -178,7 +178,7 @@ async function ledgerScenarios(browser: Browser) {
   // The other pages' own menus.
   await page.evaluate(() => { location.hash = '#/journal'; });
   await settle(page);
-  expect((await page.getByRole('region', { name: 'Selected quest' }).innerText()).length > 20 && await page.locator('.journal-session > summary').count() === 1, 'ledger Journal: session remains alongside the quest list');
+  expect((await page.getByRole('region', { name: 'Selected quest' }).innerText()).length > 20 && await page.locator('.journal-session').count() === 0, 'ledger Journal: the right page is the chosen quest alone');
   expect(await page.getByRole('link', { name: /^stage goals$/i }).count() === 0 && await page.locator('.goals-table').count() === 0, 'ledger Journal: retired stage matrix is absent');
   // The Journal lists quests in the planner's live rank, not the guide's order, and says why the selected one is placed there.
   const ranks = (await page.locator('.quest-list .quest-plan').allInnerTexts()).map((t) => Number(t.replace(/\D+/g, '')));
@@ -193,7 +193,7 @@ async function ledgerScenarios(browser: Browser) {
   expect((await page.locator('.reference-article h1').innerText()).trim() === topic, `ledger Reference: an index link opens its article (${topic})`);
   await page.evaluate(() => { location.hash = '#/settings'; });
   await settle(page);
-  for (const tab of ['RuneLite', 'Training', 'Progress and copies', 'App']) {
+  for (const tab of ['RuneLite', 'Progress and copies']) {
     await page.getByRole('tab', { name: tab, exact: true }).click();
     await settle(page);
     expect(await page.getByRole('tab', { name: tab, exact: true }).getAttribute('aria-selected') === 'true' && (await page.locator('.settings-content').innerText()).length > 20, `ledger Settings: ${tab} opens its section`);
@@ -265,8 +265,8 @@ async function f2pNext(browser: Browser) {
   await settle(page);
   const next = await page.getByRole('region', { name: 'Next action' }).innerText();
   expect(/Next in F2P/.test(next) && !/Waiting for the planner/.test(next), 'F2P complete: Path offers what to do next instead of waiting');
-  const rows = await page.locator('ol li', { hasText: '→' }).allInnerTexts();
-  expect(rows.length > 2 && rows[0].startsWith('★') && rows.every(r => /Follow/.test(r)), `F2P complete: ranked checkpoints, good value first, each can be followed (${rows[0]})`);
+  const rows = await page.locator('.f2p-next-row').allInnerTexts();
+  expect(rows.length > 2 && /Worth it/.test(rows[0]) && rows.every(r => /Follow/.test(r) && /→/.test(r)), `F2P complete: ranked checkpoints, worth-it first, each can be followed (${rows[0]})`);
   await page.getByRole('button', { name: 'Follow' }).first().click();
   await settle(page);
   expect(await page.getByRole('region', { name: 'Training plan' }).count() === 1, 'F2P complete: Follow opens the ordinary training plan');

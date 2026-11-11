@@ -1,6 +1,7 @@
 // The map in the step card: a preview from OSRS Wiki tiles, a point switch and the full-screen world map.
 // The chosen point is one state for the preview, the switch and the world map: they always show the same place.
 
+import { Icon } from '../../ledger';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import type { MapLocation, Step } from '../../types';
 import { DEFAULT_ZOOM, floorLabel, initialPoint, isUnderground, mapSourceAt, tilesAround } from '../../domain/travel/map';
@@ -61,7 +62,7 @@ export function StepMap({ step, shownTarget, mapRequest = false, onMapOpened }: 
           {points.map((p, i) => (
             <button key={`${p.x},${p.y},${p.plane}`} type="button" role="radio" aria-checked={i === active}
               className={`spot-chip ${i === active ? 'is-active' : ''}`} onClick={() => setChosen(spotKey(p))}>
-              {p.now ? '🧭 Now: ' : '📍 '}{p.label}
+              <Icon name={p.now ? 'compass' : 'target'} size={12} strokeWidth={1.8} /> {p.now ? 'Now: ' : ''}{p.label}
             </button>
           ))}
         </div>
@@ -78,10 +79,10 @@ export function StepMap({ step, shownTarget, mapRequest = false, onMapOpened }: 
       {point.note && <p className="spot-note small"><Inline text={point.note} /></p>}
 
       <div className="map-actions">
-        <button type="button" className="btn btn-ghost btn-sm" onClick={() => setOpen(true)}>🗺️ World map</button>
+        <button type="button" className="btn btn-ghost btn-sm" onClick={() => setOpen(true)}><Icon name="map" size={14} strokeWidth={1.6} /> World map</button>
         {/* The chosen point goes to the game: the arrow and Shortest Path lead there, the point's NPC is highlighted, on arrival
             the arrow returns to the step. "Go here" in the "OSRS Path" panel in RuneLite does the same. */}
-        {!repeatsShow && <NavigateButton label="🧭 Lead here in the game"
+        {!repeatsShow && <NavigateButton label="Lead here in the game"
           target={{ label: point.label, x: point.x, y: point.y, plane: point.plane, ...(point.npc ? { npcNames: [point.npc] } : {}), stepId: step.id }} />}
       </div>
 
@@ -101,7 +102,7 @@ export function StepMap({ step, shownTarget, mapRequest = false, onMapOpened }: 
 function MapCaption({ point }: { point: Spot }) {
   return (
     <span className="map-caption">
-      <span className="map-caption-label">{point.now ? '🧭 Now: ' : '📍 '}{point.label}</span>
+      <span className="map-caption-label"><Icon name={point.now ? 'compass' : 'target'} size={13} strokeWidth={1.8} /> {point.now ? 'Now: ' : ''}{point.label}</span>
       <span className="map-caption-floor">{isUnderground(point) ? 'Underground' : floorLabel(point.plane)}</span>
     </span>
   );

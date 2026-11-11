@@ -12,7 +12,7 @@ import type { ReadinessAction } from '../../../domain/readiness/readiness';
 import { navKeyOf, reconcile, rearmReadyDetours, staleArrows, startDetour, type PrepTask } from '../../../domain/prep/prepRoute';
 import { decideAuto, type QueueTask } from '../../../domain/prep/prepQueue';
 import { declined, usePrep } from '../../../state/hooks/usePrep';
-import { setFeatures, useFeatures } from '../../../state/hooks/useFeatures';
+import { useFeatures } from '../../../state/hooks/useFeatures';
 import { styleOf } from '../../../domain/persistence/playStyle';
 import { useActiveActivity, useReadinessEngine, useTrackedTraining } from '../../../state/readinessContext';
 import { NavigateButton } from '../../../ui/NavigateButton';
@@ -142,12 +142,8 @@ export function PrepRouteBlock({ step }: { step: Step }) {
       {next.length === 0 && hidden > 0 && <p className="small muted">…and {hidden} more — the rest after this.</p>}
       <p className="small muted">→ then we return to {step.id}{active.length > 1 ? ` (preparation trips: ${active.length})` : ''}.</p>
       <p className="small muted">
-        {features.autoPrep
-          ? <>Auto preparation is on: the queue runs by itself. {underway && !paused && <><button type="button" className="link-btn" onClick={cancel}>Cancel the trip</button> · </>}</>
-          : <>Auto preparation is off. </>}
-        <button type="button" className="link-btn" onClick={() => setFeatures({ autoPrep: !features.autoPrep })}>
-          {features.autoPrep ? 'Turn off' : 'Turn on'}
-        </button>
+        The queue runs by itself; clearing the arrow in the game pauses it.
+        {underway && !paused && <> <button type="button" className="link-btn" onClick={cancel}>Cancel the trip</button></>}
       </p>
     </div>
   );
@@ -223,7 +219,7 @@ export function PrepAuto() {
     const queue = engine.queue(focus, profile.style);
     const now = Date.now();
     const d = decideAuto({
-      queue, stepId: focus.id, prep, enabled: features.autoPrep, online: link === 'online' && engine.ctx.state.connected,
+      queue, stepId: focus.id, prep, online: link === 'online' && engine.ctx.state.connected,
       navActive: navTarget !== null, standing: navTarget, announce: profile.announce, now, recent: recent.current, declined,
       routeWaits: tracked !== null && !training || Boolean(training && (funding?.plan || funding?.assessment?.state !== 'COVERED') && queue.tasks[0]?.kind === 'buy'),
     });
@@ -255,6 +251,6 @@ export function PrepAuto() {
       announced.current.add(d.key);
       notify(`➡️ Next in the preparation for ${focus.id}: ${d.task.label}.`);
     }
-  }, [focus, engine, prep, set, navTarget, navigate, releaseNav, features.autoPrep, profile, link, userClearedAt, notify, tracked, training, funding]);
+  }, [focus, engine, prep, set, navTarget, navigate, releaseNav, profile, link, userClearedAt, notify, tracked, training, funding]);
   return null;
 }

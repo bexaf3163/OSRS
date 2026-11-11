@@ -72,9 +72,6 @@
 .welcome-actions { display:flex; flex-wrap:wrap; gap:10px; }
 
 /* ---------- Drawers and settings ---------- */
-.settings-advanced { margin-top:16px; }
-.settings-advanced > summary { cursor:pointer; padding:12px 16px; border:1px solid var(--border); border-radius:10px; background:var(--surface); color:var(--muted); font-weight:600; }
-.settings-advanced[open] > summary { margin-bottom:12px; }
 .prep-line.is-unknown > span:last-child { flex:1 1 0; min-width:0; }
 .welcome-card.is-compact { padding:14px 16px; gap:10px; }
 .welcome-card.is-compact h2 { font-size:1.05rem; }

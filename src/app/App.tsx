@@ -29,6 +29,7 @@ import { GearPage } from '../features/gear/Gear';
 import { MoneyPage } from '../features/money/Money';
 import { ProfileBanner } from './ProfileBanner';
 import { UpdateBanner } from './UpdateBanner';
+import { VersionControl } from './VersionControl';
 import { Book, Hud, LedgerStage, Spine, TitleBar, LEDGER_NAV } from '../ledger';
 import { usePlayerSummary } from '../ledger/adapters';
 import { hrefTo } from '../domain/pages/pages';
@@ -98,7 +99,7 @@ export function App() {
     case 'path': content = <PathPage focusStep={route.step} focusKey={route.key} />; break;
     case 'skills': content = <SkillsPage param={route.param} selectedSkill={route.skill} goal={route.goal} />; break;
     case 'quests':
-    case 'journal': content = <JournalPage session={route.param === 'session'} />; break;
+    case 'journal': content = <JournalPage />; break;
     case 'reference': content = <ReferencePage key={route.param ?? ''} section={route.param} />; break;
     case 'settings': content = <SettingsPage />; break;
     case 'shopping': content = <ShoppingPage />; break;
@@ -121,7 +122,7 @@ export function App() {
         settingsActive={route.page === 'settings'}
       />
       <div className="la-body">
-        <Spine section={section} />
+        <Spine section={section} footer={<VersionControl />} />
         <main id="main" tabIndex={-1} className="la-main">
           <UpdateBanner />
           <ProfileBanner />

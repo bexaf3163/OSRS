@@ -6,7 +6,6 @@
 import type { Step } from '../../types';
 import { useStore } from '../../state/store';
 import { useBridge } from '../../state/bridge';
-import { useFeatures } from '../../state/hooks/useFeatures';
 import { isClosed } from '../../domain/quests/next-step';
 import { formatGp } from '../../domain/prep/shopping';
 import { meleeHintApplies } from '../../domain/combat/gearAdvice';
@@ -90,10 +89,9 @@ export function LockedOwnedNote({ advice }: { advice: GearAdvice }) {
 }
 
 export function GearPrompt({ step }: { step: Step }) {
-  const { upgradeRouter } = useFeatures();
   const { progress } = useStore();
   // Cheap checks — before the analysis: it is needed only for an expanded unfinished combat step.
-  if (!upgradeRouter || !meleeHintApplies(step) || !step.foes?.length || isClosed(progress, step.id) || progress.upgradeDismissedForSteps?.includes(step.id)) return null;
+  if (!meleeHintApplies(step) || !step.foes?.length || isClosed(progress, step.id) || progress.upgradeDismissedForSteps?.includes(step.id)) return null;
   return <GearPromptBody step={step} />;
 }
 
@@ -186,9 +184,8 @@ const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
  * It hides together with the advice of the nearest combat step ("✕ Skip").
  */
 export function GearBanner({ step }: { step: Step }) {
-  const { upgradeRouter } = useFeatures();
   const { gear } = useBridge();
-  if (!upgradeRouter || !gear || !meleeHintApplies(step)) return null;
+  if (!gear || !meleeHintApplies(step)) return null;
   return <GearBannerBody />;
 }
 

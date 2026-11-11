@@ -10,7 +10,6 @@ import { nameKey } from '../../../domain/items/itemKey';
 import type { Step } from '../../../types';
 import { useStore } from '../../../state/store';
 import { useBridge } from '../../../state/bridge';
-import { useFeatures } from '../../../state/hooks/useFeatures';
 import { isClosed } from '../../../domain/quests/next-step';
 import { coinRewardAhead } from '../../../domain/quests/stepRewards';
 import { allSteps } from '../../../data';
@@ -26,11 +25,10 @@ const SKILL_LABEL = { woodcutting: 'Woodcutting', mining: 'Mining' } as const;
 
 /** The tool advice for a step (gearUpgradeRouter): shared by the hint and the preparation plan. */
 export function useUpgradeRecommendation(step: Step): UpgradeRecommendation | null {
-  const { upgradeRouter } = useFeatures();
   const { progress, mode } = useStore();
   const { gear, stats } = useBridge();
   const { state } = usePlayerState();
-  const relevant = upgradeRouter && stepUpgradeCategories(step).length > 0 && !isClosed(progress, step.id);
+  const relevant = stepUpgradeCategories(step).length > 0 && !isClosed(progress, step.id);
   const board = usePriceView(relevant);
   const prices = useMemo(() => new Map([...toolProgression.woodcutting, ...toolProgression.mining]
     .flatMap(t => t.itemId === undefined ? [] : [[t.itemId, itemPrice(board, t.tier, t.itemId, 1)] as const])), [board]);

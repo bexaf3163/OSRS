@@ -11,6 +11,7 @@ import { priorityOf, styleOf } from '../../domain/persistence/playStyle';
 import { f2pCheckpoints } from '../../domain/training/trackedTraining';
 import { formatHours } from '../../domain/training/trainingRouter';
 import { Eyebrow } from '../../ledger';
+import { SkillGlyph } from '../../ui/SectionShell';
 
 const title = (skill: string) => skill[0].toUpperCase() + skill.slice(1);
 
@@ -25,12 +26,17 @@ export function F2pNext({ waiting = null }: { waiting?: string | null }) {
     <Eyebrow>{waiting ? `F2P QUESTS COMPLETE · ${waiting.toUpperCase()} OPTIONAL` : 'F2P QUESTS COMPLETE'}</Eyebrow>
     <h1 className="la-t">Next in F2P</h1>
     {rows.length ? <>
-      <p className="small muted">★ Good-value checkpoints first, then the shortest for your levels and gear. Members content is not planned.</p>
-      <ol className="small">
-        {rows.map((row) => <li key={row.skill}>
-          <strong>{row.priority === 'good' ? '★' : '◇'} {title(row.skill)} {row.level} → {row.target}</strong>
-          <span className="muted"> · {row.method ?? 'no supported method yet'}{row.time ? ` · ${formatHours(row.time)}` : ''}</span>{' '}
-          <button type="button" className="link-btn" onClick={() => setTracked({ skill: row.skill, mode: 'fast', freeOnly: true, target: row.target })}>Follow</button>
+      <p className="muted f2p-next-lead">Skill checkpoints for your account: the worth-it ones first, then the quickest for your levels and gear. Follow one and the plan, the kit and the game lead you there. Members content is not planned.</p>
+      <ol className="f2p-next" aria-label="F2P checkpoints">
+        {rows.map((row) => <li key={row.skill} className={`f2p-next-row ${row.priority === 'good' ? 'is-good' : ''}`}>
+          <SkillGlyph skill={row.skill} size={30} />
+          <div className="f2p-next-text">
+            <b>{title(row.skill)} <span className="f2p-next-levels">{row.level} → {row.target}</span></b>
+            <span className="muted">{row.method ?? 'No supported method yet'}{row.time ? ` · ${formatHours(row.time)}` : ''}</span>
+          </div>
+          <span className={`la-chip ${row.priority === 'good' ? 'la-e' : ''}`}>{row.priority === 'good' ? 'Worth it' : 'Optional'}</span>
+          <button type="button" className="la-btn la-d" aria-label={`Follow ${title(row.skill)} to ${row.target}`}
+            onClick={() => setTracked({ skill: row.skill, mode: 'fast', freeOnly: true, target: row.target })}>Follow</button>
         </li>)}
       </ol>
     </> : <p className="muted">Every F2P quest and skill checkpoint is done. Members content is not planned yet.</p>}

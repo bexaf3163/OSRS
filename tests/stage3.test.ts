@@ -214,12 +214,14 @@ describe('Save compatibility', () => {
   it('feature settings: broken and unfamiliar — the defaults', () => {
     expect(parseFeatures(null)).toEqual(DEFAULT_FEATURES);
     expect(parseFeatures('garbage')).toEqual(DEFAULT_FEATURES);
-    expect(parseFeatures('{"pacing":false,"x":1,"bankTags":"no"}')).toEqual({ ...DEFAULT_FEATURES, pacing: false });
+    expect(parseFeatures('{"keepDefenceOne":true,"x":1,"efficient":"no"}')).toEqual({ ...DEFAULT_FEATURES, keepDefenceOne: true });
   });
-  it('ignores retired display modes while preserving active preparation and training preferences', () => {
-    const settings = parseFeatures(JSON.stringify({ compact: true, inspector: true, autoPrep: false, keepDefenceOne: true, profitTraining: true }));
-    expect(settings).toMatchObject({ autoPrep: false, keepDefenceOne: true, profitTraining: true, bankTags: true, pacing: true });
-    expect('compact' in settings || 'inspector' in settings).toBe(false);
+  it('ignores retired display modes and retired helper switches while preserving the training preferences', () => {
+    // The helpers are always on since 2.93: a saved "off" (autoPrep, bankTags, pacing, levelsFromGame, upgradeRouter, autoLocation) is ignored.
+    const settings = parseFeatures(JSON.stringify({ compact: true, inspector: true, autoPrep: false, bankTags: false, pacing: false, levelsFromGame: false,
+      upgradeRouter: false, autoLocation: false, keepDefenceOne: true, profitTraining: true }));
+    expect(settings).toEqual({ ...DEFAULT_FEATURES, keepDefenceOne: true, profitTraining: true });
+    expect(['compact', 'inspector', 'autoPrep', 'bankTags', 'pacing', 'levelsFromGame', 'upgradeRouter', 'autoLocation'].some(k => k in settings)).toBe(false);
   });
 });
 

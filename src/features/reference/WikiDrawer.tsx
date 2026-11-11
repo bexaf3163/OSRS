@@ -16,7 +16,6 @@ import { usePriceView } from '../../state/hooks/usePriceView';
 import { itemPrice, type ItemPrice } from '../../domain/market/itemPrice';
 import { IconClose, IconExternal } from '../../ui/Icons';
 import { iconAssetsJson as iconAssets } from '../../data';
-import { useFeatures } from '../../state/hooks/useFeatures';
 import { PlaceButton, PlaceMapView, PlaceNavButton, usePlaceMap, type PlaceQuery } from '../map/PlaceMap';
 import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
 
@@ -180,7 +179,6 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
   const [item, setItem] = useState<WikiItemDetail | null | undefined>(local);
   const [status, setStatus] = useState<'loading' | 'ready' | 'offline' | 'missing'>('loading');
   const places = usePlaceMap();
-  const { autoLocation } = useFeatures();
   const prices = usePriceView(true);
 
   useEffect(() => {
@@ -242,9 +240,8 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
       {item.freeSpawns && item.freeSpawns.length > 0 && (
         <section className="drawer-section">
           <h3>Where to get it for free</h3>
-          <ul className={`drawer-list ${autoLocation ? 'is-places' : ''}`}>
+          <ul className="drawer-list is-places">
             {item.freeSpawns.map((s) => {
-              if (!autoLocation) return <li key={s}>{s}</li>;
               const q: PlaceQuery = { kind: 'spawn', location: s, item };
               return (
                 <li key={s} className="place-row">
@@ -269,17 +266,17 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
                   return (
                     <tr key={b.shopName}>
                       <th scope="row">
-                        {autoLocation ? <PlaceButton query={shop} onShow={places.show}>{b.shopName}</PlaceButton> : b.shopName}
+                        <PlaceButton query={shop} onShow={places.show}>{b.shopName}</PlaceButton>
                         {b.members && <span className="badge badge-members badge-sm">M</span>}
-                        {autoLocation && <PlaceNavButton query={shop} />}
+                        <PlaceNavButton query={shop} />
                       </th>
                       <td>
-                        {b.owner && autoLocation
+                        {b.owner
                           ? <PlaceButton query={{ ...shop, kind: 'npc' }} onShow={places.show}>{b.owner}</PlaceButton>
                           : b.owner ?? '—'}
                       </td>
                       <td>
-                        {b.location && autoLocation
+                        {b.location
                           ? <PlaceButton query={{ kind: 'city', location: b.location }} onShow={places.show}>{b.location}</PlaceButton>
                           : b.location || '—'}
                       </td>
@@ -325,7 +322,6 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
 function NpcView({ npc }: { npc: StepNpcInfo }) {
   const [info, setInfo] = useState<NpcInfo | null | undefined>(undefined);
   const places = usePlaceMap();
-  const { autoLocation } = useFeatures();
   const here: PlaceQuery = { kind: 'npc', location: info?.location || npc.location, npc: npc.nameEn };
   useEffect(() => {
     let alive = true;
@@ -349,12 +345,10 @@ function NpcView({ npc }: { npc: StepNpcInfo }) {
         {npc.dialogue && <div className="field"><dt>Dialogue</dt><dd>{npc.dialogue}</dd></div>}
         {info?.location && <div className="field"><dt>Per the wiki</dt><dd>{info.location}</dd></div>}
       </dl>
-      {autoLocation && (
-        <p className="place-row">
-          <PlaceButton query={here} onShow={places.show}>{npc.nameEn} on the world map</PlaceButton>
-          <PlaceNavButton query={here} />
-        </p>
-      )}
+      <p className="place-row">
+        <PlaceButton query={here} onShow={places.show}>{npc.nameEn} on the world map</PlaceButton>
+        <PlaceNavButton query={here} />
+      </p>
       {info === undefined && <p className="muted drawer-state" aria-live="polite">Loading from the OSRS Wiki…</p>}
       <p className="muted small">Floors are numbered the British way: the Ground floor is ground level, the 1st floor is the one above it (the 2nd floor in US numbering).</p>
       <footer className="drawer-footer">

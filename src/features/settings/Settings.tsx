@@ -5,19 +5,17 @@ import { useStore } from '../../state/store';
 import { exportFileName, exportProgress, importProgress, type ImportResult } from '../../domain/persistence/progress';
 import { desktop, type RuneliteCheck } from '../../services/desktop';
 import { useBridge } from '../../state/bridge';
-import type { Features } from '../../domain/persistence/features';
-import { setFeatures, useFeatures } from '../../state/hooks/useFeatures';
-import { priorityOf } from '../../domain/persistence/playStyle';
 import { BRIDGE_ORIGIN } from '../../services/runeliteBridge';
 import { PluginUpdateNote } from './PluginUpdateNote';
 import { plural } from '../../domain/text/format';
 import { AccountSync } from '../../ui/AccountSync';
-import { BackupSection, UpdatesSection, ProfilesSection, SessionSection } from './SettingsExtra';
+import { BackupSection, ProfilesSection, SessionSection } from './SettingsExtra';
 import { Eyebrow, Page } from '../../ledger';
 import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
 
-type SettingsTab = 'training' | 'game' | 'progress' | 'app';
-const SETTINGS_TABS: [SettingsTab, string][] = [['game', 'RuneLite'], ['training', 'Training'], ['progress', 'Progress and copies'], ['app', 'App']];
+type SettingsTab = 'game' | 'progress';
+// Training preferences moved to Skills, the version and updates to the rail's foot, the helper switches retired (2.93).
+const SETTINGS_TABS: [SettingsTab, string][] = [['game', 'RuneLite'], ['progress', 'Progress and copies']];
 const TAB_KEY = STORAGE_KEYS.settingsTab;
 function loadTab(): SettingsTab {
   try {
@@ -77,21 +75,12 @@ export function SettingsPage() {
           <button key={k} type="button" role="tab" aria-selected={tab === k} className={`mode-btn ${tab === k ? 'is-active' : ''}`} onClick={() => chooseTab(k)}>{label}</button>
         ))}
       </div>
-      <p className="muted small">
-        OSRS Path {__APP_VERSION__}
-        {bridge?.isPortable() ? ' · portable version' : ''}
-        {' · '}<a href="https://github.com/bexaf3163/OSRS/releases/latest" target="_blank" rel="noopener noreferrer">New versions</a>
-      </p>
     </div>
     </Page>
     <Page side="r" className="settings" label={SETTINGS_TABS.find(([k]) => k === tab)?.[1]}>
       <div className="settings-content la-scroll">
-      {tab === 'training' && <PlayStyleSection />}
       {tab === 'game' && (
-        <>
-          <RuneLiteBridge />
-          <Helpers />
-        </>
+        <RuneLiteBridge />
       )}
       {tab === 'progress' && (
         <>
@@ -156,90 +145,9 @@ export function SettingsPage() {
         </section>
         </>
       )}
-      {tab === 'app' && (
-        <>
-          <UpdatesSection />
-        </>
-      )}
       </div>
     </Page>
     </>
-  );
-}
-
-const HELPERS: { key: keyof Features; title: string; text: string }[] = [
-  { key: 'autoLocation', title: '📍 Places on the map', text: 'The places in the wiki dossier (where it lies for free, shops, sellers, towns) open on the world map, and 🧭 leads the in-game arrow there.' },
-  { key: 'bankTags', title: '🏦 Stage items in the bank', text: 'While a step of the stage is shown in the game, the OSRS Path Bridge plugin softly highlights in the main bank window everything that will be needed at this stage. A separate tab and an import string are not needed.' },
-  { key: 'pacing', title: '⏱ Training pace', text: 'How many actions and minutes are left to the step goal — from the XP in the game. Without measurements the time is not invented.' },
-  { key: 'levelsFromGame', title: '📈 Levels from the game', text: 'The skill levels from the game go into the level fields on the skill and step pages by themselves (manual entry stays when the game is not nearby). They are written only into the profile of the character who is in the game.' },
-  { key: 'upgradeRouter', title: '⚡ Upgrades and gear', text: 'Before a long training — a better axe or pickaxe, if the level already allows. On combat steps — a better weapon, amulet and armor by the OSRS Wiki damage formulas, against the step\'s opponent; the advice is also a line in the game HUD. It buys and wears nothing by itself.' },
-];
-
-function PlayStyleSection() {
-  const features = useFeatures();
-  return (
-    <section className="card section-card" aria-label="Play style">
-      <h2 className="card-title">Play style and preparation</h2>
-      <div className="setting">
-        <div className="mode-toggle style-toggle" role="group" aria-label="Training choices">
-          {([['balanced', 'Balanced'], ['fastest', 'Fastest'], ['profit', 'Money'], ['relaxed', 'Relaxed']] as const).map(([k, label]) => {
-            const on = priorityOf(features) === k;
-            return (
-              <button key={k} type="button" className={`mode-btn ${on ? 'is-active' : ''}`} aria-pressed={on}
-                onClick={() => setFeatures({ efficient: k === 'fastest', relaxedTraining: k === 'relaxed', profitTraining: k === 'profit' })}>
-                <span className="style-label">{label}</span>
-              </button>
-            );
-          })}
-        </div>
-        <p className="muted small">
-          Balanced weighs time, supplies and earnings. Choose Fastest, Money or Relaxed to change the preference; requirements and safety checks remain active.
-        </p>
-      </div>
-      <div className="setting">
-        <label className="switch">
-          <input type="checkbox" checked={features.autoPrep} onChange={(e) => setFeatures({ autoPrep: e.target.checked })} />
-          <span>🧭 Auto preparation for a step</span>
-        </label>
-        <p className="muted small">
-          Guides you through banking, supplies and training, then returns to the step. Purchases and game actions stay manual.
-        </p>
-      </div>
-      <div className="setting">
-        <label className="switch">
-          <input type="checkbox" checked={features.keepDefenceOne} onChange={(e) => setFeatures({ keepDefenceOne: e.target.checked })} />
-          <span>⚔️ Keep Defence at 1</span>
-        </label>
-        <p className="muted small">
-          Excludes Defence training from suggested combat preparation.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function Helpers() {
-  const features = useFeatures();
-  return (
-    <details className="settings-advanced">
-      <summary>More helpers: places, bank, training pace, upgrades</summary>
-      <section className="card section-card">
-        <h2 className="card-title">The helper: places, bank, pace, upgrades</h2>
-        <p className="muted small">
-          A turned-off feature is not only hidden but does nothing. What is drawn in the game itself (the danger radar,
-          the highlight, the sound) is also configured in the OSRS Path Bridge plugin: RuneLite → plugin settings → "Places, radar, pace".
-        </p>
-        {HELPERS.map((h) => (
-          <div className="setting" key={h.key}>
-            <label className="switch">
-              <input type="checkbox" checked={features[h.key]} onChange={(e) => setFeatures({ [h.key]: e.target.checked })} />
-              <span>{h.title}</span>
-            </label>
-            <p className="muted small">{h.text}</p>
-          </div>
-        ))}
-      </section>
-    </details>
   );
 }
 

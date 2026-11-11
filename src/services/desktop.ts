@@ -43,8 +43,6 @@ export interface UpdateState {
   error: string | null;
   /** Whether the update can be installed: only the portable version (exe). Otherwise the app only reports a new one. */
   canInstall: boolean;
-  /** Check in the background at launch and every few hours. */
-  auto?: boolean;
 }
 
 export interface DesktopBridge {
@@ -79,7 +77,6 @@ export interface DesktopBridge {
     /** Stops a download in progress (2.74.14); an older shell does not have it. */
     cancel?(): Promise<UpdateState>;
     install(): Promise<boolean>;
-    setAuto(on: boolean): void;
     onState(callback: (state: UpdateState) => void): () => void;
   };
   /** Launching RuneLite with the OSRS Path Bridge plugin from the installed RuneLite. */

@@ -7,7 +7,6 @@
 import { useEffect, useRef } from 'react';
 import { useBridge } from '../../state/bridge';
 import { useStore } from '../../state/store';
-import { useFeatures } from '../../state/hooks/useFeatures';
 import { isClosed } from '../../domain/quests/next-step';
 import { useGearAdvice } from '../../state/hooks/useGearAdvice';
 import { hudHint, watchNames } from '../../domain/combat/gearAdvisor';
@@ -18,7 +17,6 @@ export function GearHintSync() {
   const { state, plugin, setPrepPart } = useBridge();
   const snapshot = supportsSnapshot(plugin?.protocol ?? null);
   const { progress } = useStore();
-  const { upgradeRouter } = useFeatures();
   const { step } = useActiveActivity();
   const { advice, input } = useGearAdvice(step);
   /** What is already in the plugin on this connection; null — nothing. */
@@ -28,13 +26,11 @@ export function GearHintSync() {
 
   const fighting = Boolean(step?.foes?.length) && !isClosed(progress, step!.id) && !(progress.upgradeDismissedForSteps ?? []).includes(step!.id);
   const top = advice.actions[0];
-  const payload: GearHintPayload | null = upgradeRouter
-    ? {
-      ...(fighting && top ? { text: hudHint(top) } : {}),
-      watchItems: watchNames(input),
-      highlightItems: fighting ? advice.actions.filter((a) => a.how === 'wear').map((a) => a.item.name) : [],
-    }
-    : null;
+  const payload: GearHintPayload = {
+    ...(fighting && top ? { text: hudHint(top) } : {}),
+    watchItems: watchNames(input),
+    highlightItems: fighting ? advice.actions.filter((a) => a.how === 'wear').map((a) => a.item.name) : [],
+  };
   const key = `${snapshot ? 'v6' : 'v5'}|${JSON.stringify(payload)}`;
 
   useEffect(() => {

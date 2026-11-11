@@ -1,21 +1,9 @@
 import { STORAGE_KEYS } from './storageKeys';
-// The stage 3 helpers in the app: they can be turned off in the settings, and then they not only hide
-// but also do nothing: they look up no coordinates, send no stage items to RuneLite, offer no upgrades.
-// What happens in the game itself is also turned off in the OSRS Path Bridge plugin's settings.
+// The player's preferences that the engines cannot know: how training methods are chosen and whether the build keeps Defence at 1.
+// The helpers that used to be switches (places on the map, bank highlighting, training pace, levels from the game, upgrades, auto
+// preparation) are always on since 2.93 (owner, 2026-11-11): one planner decides, and a saved old switch is ignored.
 
 export interface Features {
-  /** 📍 at places in the wiki dossier: the map and an arrow in the game. */
-  autoLocation: boolean;
-  /** Highlighting the stage's items in the bank (the OSRS Path Bridge plugin). The key is unchanged, so a saved choice is not lost. */
-  bankTags: boolean;
-  /** The training pace from the game in the step card. */
-  pacing: boolean;
-  /** A hint for a quick upgrade of a tool or weapon. */
-  upgradeRouter: boolean;
-  /** Skill levels from the game go into the level fields by themselves (plugin protocol 2+; 2.12). */
-  levelsFromGame: boolean;
-  /** Auto-prepare: the app itself leads the arrow to what is missing (a bank, a shop) and returns to the step. */
-  autoPrep: boolean;
   /** The "efficient" style (the default is "calm"): lib/playStyle.ts. Since 2.69 it is also the "Fastest" training preference. */
   efficient: boolean;
   /** The "Relaxed" training preference (2.69): fewer clicks and no risk before speed. With neither this nor "efficient" the guide picks "Balanced". */
@@ -27,7 +15,7 @@ export interface Features {
 }
 
 export const FEATURES_KEY = STORAGE_KEYS.features;
-export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true, levelsFromGame: true, autoPrep: true, efficient: false, relaxedTraining: false, profitTraining: false, keepDefenceOne: false };
+export const DEFAULT_FEATURES: Features = { efficient: false, relaxedTraining: false, profitTraining: false, keepDefenceOne: false };
 
 /** What is saved; the unfamiliar and the broken fall back to the default (a new feature is on). */
 export function parseFeatures(raw: string | null): Features {

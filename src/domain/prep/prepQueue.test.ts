@@ -37,7 +37,7 @@ function engineFor(over: Partial<ReadinessInput> & { item?: { carried: number; b
 }
 
 const base = (queue: PrepQueue | null, over: Partial<AutoInput> = {}): AutoInput => ({
-  queue, stepId: itemStep.id, prep: emptyPrep(), enabled: true, online: true, navActive: false, announce: 'full', now: 1_000_000,
+  queue, stepId: itemStep.id, prep: emptyPrep(), online: true, navActive: false, announce: 'full', now: 1_000_000,
   recent: new Map(), declined: new Set(), ...over,
 });
 
@@ -82,9 +82,8 @@ describe('the preparation auto-queue', () => {
     expect(d?.kind).toBe('start');
   });
 
-  it('turned off, no connection or the arrow is already set — it does not interfere', () => {
+  it('no connection or the arrow is already set — it does not interfere', () => {
     const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
-    expect(decideAuto(base(q, { enabled: false }))).toBeNull();
     expect(decideAuto(base(q, { online: false }))).toBeNull();
     expect(decideAuto(base(q, { navActive: true }))).toBeNull();
     expect(decideAuto(base(null))).toBeNull();

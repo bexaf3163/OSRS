@@ -10,7 +10,6 @@ export interface UpdatesApi {
   /** null: this shell cannot cancel a download. */
   cancel: (() => void) | null;
   install: () => void;
-  setAuto: (on: boolean) => void;
 }
 
 /** The update state and actions; null — there are no updates in the browser or in an old build. */
@@ -21,7 +20,7 @@ export function useUpdates(): UpdatesApi | null {
     if (!api) return undefined;
     let alive = true;
     void api.get().then((s) => { if (alive) setState(s); }).catch(() => undefined);
-    const off = api.onState((s) => setState((prev) => ({ ...s, auto: prev?.auto })));
+    const off = api.onState(setState);
     return () => { alive = false; off(); };
   }, [api]);
   const check = useCallback(() => { void api?.check().then(setState).catch(() => undefined); }, [api]);
@@ -29,11 +28,7 @@ export function useUpdates(): UpdatesApi | null {
   const cancelDownload = useCallback(() => { void api?.cancel?.().then(setState).catch(() => undefined); }, [api]);
   const cancel = api?.cancel ? cancelDownload : null;
   const install = useCallback(() => { void api?.install(); }, [api]);
-  const setAuto = useCallback((on: boolean) => {
-    api?.setAuto(on);
-    setState((s) => (s ? { ...s, auto: on } : s));
-  }, [api]);
-  return api && state ? { state, check, download, cancel, install, setAuto } : null;
+  return api && state ? { state, check, download, cancel, install } : null;
 }
 
 /** How many percent are downloaded — as a whole number. */

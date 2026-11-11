@@ -186,3 +186,14 @@ button.subtab { background: none; border-top: 0; border-left: 0; border-right: 0
 /* Another way to do a combat step: one line, one button; the comparison is folded. */
 @media (max-width: 560px) {
 }
+
+/* Next in F2P (2.93): one Ledger row per checkpoint — skill glyph, the skill and its levels, method and time, its class, Follow. */
+.f2p-next-lead { max-width: 62ch; }
+.f2p-next { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.f2p-next-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto auto; align-items: center; gap: 14px;
+  padding: 10px 14px; background: #f3ead28c; border: 1px solid #8a6d3a66; }
+.f2p-next-row.is-good { border-left: 3px solid var(--la-ember, #b04722); }
+.f2p-next-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.f2p-next-text b { font-family: var(--la-disp); font-weight: 600; font-size: 17px; letter-spacing: .02em; color: var(--la-ink, var(--text)); }
+.f2p-next-levels { font-family: var(--la-serif); font-weight: 400; color: var(--muted); margin-left: 6px; }
+.f2p-next-text .muted { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

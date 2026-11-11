@@ -74,7 +74,7 @@ async function sectionStrip(browser: Browser) {
     for (const width of [1000, 1440]) {
       const { page } = await open(browser, width, { progress: progressBefore('S3-03') }, hash);
       if (hash === '#/journal') {
-        expect(await page.locator('.la-pg.journal').count() === 2 && await page.locator('.la-pg.la-l .journal-pane').count() === 1 && await page.getByRole('region', { name: 'Selected quest' }).count() === 1 && await page.locator('.journal-session:not([open])').count() === 1 && await page.locator('.journal-views').count() === 0, `Journal ${width}: quests and session remain without the retired stage navigation`);
+        expect(await page.locator('.la-pg.journal').count() === 2 && await page.locator('.la-pg.la-l .journal-pane').count() === 1 && await page.getByRole('region', { name: 'Selected quest' }).count() === 1 && await page.locator('.journal-session').count() === 0 && await page.locator('.journal-views').count() === 0, `Journal ${width}: the quest list and the chosen quest, without the retired stage navigation or session block`);
         expect(await noOverflow(page), `Journal ${width}: no horizontal overflow`);
         await page.context().close();
         continue;

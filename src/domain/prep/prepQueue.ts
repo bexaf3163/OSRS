@@ -64,8 +64,6 @@ export interface AutoInput {
   queue: PrepQueue | null;
   stepId: string;
   prep: PrepState;
-  /** Auto-prepare is on in the settings. */
-  enabled: boolean;
   /** There is a live connection to the game: without it "lacking" may turn out to be "unknown". */
   online: boolean;
   /** Some arrow target is already set in the game. */
@@ -104,7 +102,7 @@ export function decideAuto(i: AutoInput): AutoDecision | null {
     const own = i.standing ? i.prep.stack.find((f) => f.nav !== undefined && f.nav === navKeyOf(i.standing!)) : undefined;
     return own ? { kind: 'release', frame: own } : null;
   }
-  if (!i.enabled || !i.online || !queue || queue.stepId !== stepId || queue.ready) return null;
+  if (!i.online || !queue || queue.stepId !== stepId || queue.ready) return null;
   const mine = i.prep.stack.filter((f) => f.sourceStepId === stepId);
   if (mine.some((f) => f.paused)) return null;
 

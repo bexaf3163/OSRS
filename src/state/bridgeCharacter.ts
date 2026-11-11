@@ -8,7 +8,7 @@ import { readProfiles, writeProfiles } from './profiles';
 import type { BridgeCore } from './bridgeCore';
 
 /** Levels and the profile binding from the game, and this session's summary and XP rate. */
-export function useCharacter({ progress, setLevels, state, inGame, stats, xp, player, tracker, gate, features, latest }: BridgeCore) {
+export function useCharacter({ progress, setLevels, state, inGame, stats, xp, player, tracker, gate, latest }: BridgeCore) {
   const [session, setSession] = useState<SessionBase>(() => ({
     startedAt: Date.now(), levels0: null, xp0: null,
     closed0: Object.entries(progress.steps).filter(([, v]) => v === 'done' || v === 'skipped').map(([k]) => k),
@@ -16,12 +16,12 @@ export function useCharacter({ progress, setLevels, state, inGame, stats, xp, pl
 
   // Levels from the game go into the level fields by themselves — only when the character is the same as in the profile.
   useEffect(() => {
-    if (!features.levelsFromGame || !stats || state !== 'online' || !inGame || !gateAllows(gate)) return;
+    if (!stats || state !== 'online' || !inGame || !gateAllows(gate)) return;
     const known: Record<string, number> = {};
     // Hitpoints too, though it has no level field: without it the last levels cannot work out a combat plan while the game is away (2.72.1).
     for (const [id, v] of Object.entries(stats)) if (levelById.has(id) || id === 'hitpoints') known[id] = v;
     setLevels(known);
-  }, [stats, features.levelsFromGame, gate, setLevels, state, inGame]);
+  }, [stats, gate, setLevels, state, inGame]);
 
   // The first character seen is bound to the profile without a name.
   useEffect(() => {

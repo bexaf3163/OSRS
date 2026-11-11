@@ -62,23 +62,26 @@ async function cleanupScenarios(browser: Browser) {
   expect(await page.getByRole('tab', { name: 'Appearance', exact: true }).count() === 0 && await page.getByRole('slider').count() === 0, 'cleanup: Appearance and font sliders are absent');
   expect(await page.getByRole('button', { name: /compact|full workspace|inspector/i }).count() === 0, 'cleanup: legacy saved modes cannot restore retired controls');
   expect(await page.evaluate(() => !document.documentElement.dataset.theme && !document.documentElement.dataset.look && !document.documentElement.style.getPropertyValue('--text-scale')), 'cleanup: retired saved appearance does not change the document');
-  await page.getByRole('tab', { name: 'Training', exact: true }).click();
-  const priorities = page.getByRole('group', { name: 'Training choices' });
-  expect(await priorities.getByRole('button', { name: 'Money', exact: true }).getAttribute('aria-pressed') === 'true', 'cleanup: active saved training priority survives');
-  expect(!await page.getByRole('checkbox', { name: /Auto preparation/ }).isChecked() && await page.getByRole('checkbox', { name: /Keep Defence/ }).isChecked(), 'cleanup: preparation and Defence preferences survive');
+  // 2.93: Training preferences live on Skills, the helper switches are retired (always on), the version and updates sit at the rail's foot.
+  expect(await page.getByRole('tab', { name: 'Training', exact: true }).count() === 0 && await page.getByRole('tab', { name: 'App', exact: true }).count() === 0
+    && await page.locator('.settings-advanced').filter({ hasText: 'More helpers' }).count() === 0, 'cleanup: Settings keeps only RuneLite and Progress');
+  const version = page.getByRole('group', { name: 'App version' });
+  await version.getByRole('button', { name: 'Check', exact: true }).click();
+  expect(await page.evaluate(() => Number((window as unknown as { __updateChecks?: number }).__updateChecks)) === 1 && await page.getByRole('button', { name: 'Copy the report', exact: true }).count() === 0, 'cleanup: updates remain functional from the rail and retired Copy Report is absent');
+  // The method priority is the skill card's own choice; the build preference sits under the skill grid.
+  await page.goto(`${BASE}#/skills/RA/ranged`);
+  await settle(page);
+  const priorities = page.getByRole('group', { name: 'Training priority' }).first();
+  await priorities.waitFor();
+  expect(await priorities.getByRole('button', { name: 'Money', exact: true }).getAttribute('aria-pressed') === 'true', 'cleanup: active saved training priority survives on the skill card');
+  expect(await page.getByRole('checkbox', { name: /Keep Defence/ }).isChecked(), 'cleanup: the Defence preference survives on Skills');
   await priorities.getByRole('button', { name: 'Balanced', exact: true }).click();
+  await settle(page);
   expect(await priorities.getByRole('button', { name: 'Balanced', exact: true }).getAttribute('aria-pressed') === 'true', 'cleanup: training priority remains editable');
   await page.screenshot({ path: 'audit-temp/cleanup-training-settings.png' });
-  await page.getByRole('tab', { name: 'RuneLite', exact: true }).click();
-  const helpers = page.locator('.settings-advanced').filter({ hasText: 'More helpers' });
-  await helpers.locator('summary').first().click();
-  expect(await helpers.getByRole('checkbox').count() === 5, 'cleanup: all five working RuneLite helper controls remain');
-  await page.getByRole('tab', { name: 'App', exact: true }).click();
-  await page.getByRole('button', { name: 'Check now', exact: true }).click();
-  expect(await page.evaluate(() => Number((window as unknown as { __updateChecks?: number }).__updateChecks)) === 1 && await page.getByRole('button', { name: 'Copy the report', exact: true }).count() === 0, 'cleanup: updates remain functional and retired Copy Report is absent');
   await page.goto(`${BASE}#/goals`);
   await settle(page);
-  expect(await page.locator('.goals-table').count() === 0 && await page.locator('.journal-session > summary').count() === 1, 'cleanup: old goals links open the surviving journal/session');
+  expect(await page.locator('.goals-table').count() === 0 && await page.getByRole('region', { name: 'Quest details' }).count() === 1, 'cleanup: old goals links open the Journal');
   await page.goto(`${BASE}#/skills/RA/ranged`);
   await page.getByRole('group', { name: 'Training priority' }).waitFor();
   expect(await page.locator('.skill-roadmap').count() === 0 && await page.locator('.training').count() === 1, 'cleanup: Ranged has one personalized plan, not a competing static roadmap');

@@ -1,8 +1,9 @@
-// "🧭 Point the arrow in the game": a temporary target in RuneLite — the arrow, the Shortest Path route and the HUD lead to the place,
+// "Point the arrow in the game" (the Ledger's compass icon): a temporary target in RuneLite — the arrow, the Shortest Path route and the HUD lead to the place,
 // and on arrival (or after buying the needed item) the player sees their step again. Coordinates come here only from place search.
 // Without RuneLite the button does not break the window: "RuneLite offline" appears next to it, the map works as before.
 
 import { useState } from 'react';
+import { Icon } from '../ledger';
 import { useBridge } from '../state/bridge';
 import type { NavTargetPayload } from '../services/runeliteBridge';
 
@@ -21,7 +22,7 @@ interface Props {
   className?: string;
 }
 
-export function NavigateButton({ target, label = '🧭 Point the arrow in the game', compact, className = '' }: Props) {
+export function NavigateButton({ target, label = 'Point the arrow in the game', compact, className = '' }: Props) {
   const { enabled, state, inGame, navigate, navTarget, clearNav } = useBridge();
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState('');
@@ -51,7 +52,7 @@ export function NavigateButton({ target, label = '🧭 Point the arrow in the ga
     <span className={`nav-state ${className}`}>
       <button type="button" className={compact ? 'icon-btn nav-btn' : 'btn btn-sm'} onClick={() => void go()} disabled={busy}
         title="Point in RuneLite: the arrow and the route to this place" aria-label={compact ? `Point in RuneLite: ${target.label}` : undefined}>
-        {compact ? '🧭' : busy ? '🧭 Sending…' : label}
+        <Icon name="compass" size={compact ? 16 : 14} strokeWidth={1.6} />{compact ? null : busy ? ' Sending…' : ` ${label}`}
       </button>
       {(problem || (!compact && state === 'offline')) && (
         <span className="nav-offline small" role="status">{problem || 'RuneLite offline'}</span>

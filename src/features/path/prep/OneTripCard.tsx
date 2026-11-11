@@ -35,7 +35,7 @@ function Action({ a }: { a: PrepAction }) {
   return (
     <span className="prep-action">
       {a.label}
-      {a.nav && <> <NavigateButton target={a.nav} label="🧭" compact /></>}
+      {a.nav && <> <NavigateButton target={a.nav} compact /></>}
       {!a.nav && a.href && <> <a href={a.href}>→</a></>}
     </span>
   );
@@ -93,7 +93,7 @@ export function RecoveryBanner({ step, rec }: { step: Step; rec: NonNullable<Pre
         {rec.steps.map((st) => <li key={st.label}><strong>{st.label}</strong>{st.detail && <span className="muted"> — {st.detail}</span>}</li>)}
       </ol>
       <p className="small prep-recovery-actions">
-        {back && <NavigateButton target={back} label="🧭 Return to the step" />}
+        {back && <NavigateButton target={back} label="Return to the step" />}
         <button type="button" className="btn btn-ghost btn-sm" onClick={dismiss}>This is not a derailment — continue</button>
       </p>
     </div>

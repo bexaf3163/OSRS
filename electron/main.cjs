@@ -69,6 +69,8 @@ function writeAtomic(name, text) {
 const ui = readJson('ui.json', { alwaysOnTop: false });
 delete ui.zoom;
 delete ui.autoZoom;
+// The update check is always automatic since 2.93 (owner, 2026-11-11); nothing is installed without the button.
+delete ui.autoUpdate;
 
 const saveUi = () => writeAtomic('ui.json', JSON.stringify(ui));
 
@@ -234,7 +236,7 @@ if (!app.requestSingleInstanceLock()) {
   ipcMain.handle('runelite:check', () => runelite.check());
   ipcMain.handle('runelite:launch', () => runelite.launch());
 
-  // Updating the portable version: the check is in the background (it can be turned off), the download and install — by a button in settings.
+  // Updating the portable version: the check is in the background, the download and install by a button at the foot of the rail.
   const updater = createUpdater({
     version: app.getVersion(),
     env: process.env,
@@ -242,18 +244,14 @@ if (!app.requestSingleInstanceLock()) {
     onState: (s) => win?.webContents.send('update:state', s),
     quit: () => app.quit(),
   });
-  ipcMain.handle('update:get', () => ({ ...updater.state, auto: ui.autoUpdate !== false }));
+  ipcMain.handle('update:get', () => updater.state);
   ipcMain.handle('update:check', () => updater.check());
   ipcMain.handle('update:download', () => updater.download());
   ipcMain.handle('update:cancel', () => updater.cancel());
   ipcMain.handle('update:install', () => updater.install());
-  ipcMain.on('update:auto', (_e, on) => {
-    ui.autoUpdate = Boolean(on);
-    saveUi();
-  });
   updater.cleanup();
   updater.sweepOld();
-  updater.schedule(() => ui.autoUpdate !== false);
+  updater.schedule(() => true);
 
   function createWindow() {
     const saved = windowState();

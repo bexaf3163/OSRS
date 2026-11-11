@@ -304,13 +304,11 @@ async function whatToTrainWith(browser: Browser) {
   const calm = await text(page, '.training');
   expect(calm.includes('Willow') && !calm.includes('by the wiki speed') && await page.locator('.training').getByRole('button', { name: /Calm|Efficient/ }).count() === 0, 'what to train with: at level 32 — willows, no time estimate and no mode switch on the card');
   expect(await noOverflow(page), 'what to train with: no horizontal scrolling');
-  await page.goto(`${BASE}#/settings`);
-  await settle(page);
-  await page.getByRole('tab', { name: 'Training', exact: true }).click();
-  await page.getByRole('group', { name: 'Training choices' }).getByRole('button', { name: 'Fastest' }).click();
+  // The method priority is the skill card's own choice (2.93: the Settings copy is retired).
+  await page.getByRole('group', { name: 'Training priority' }).getByRole('button', { name: 'XP', exact: true }).click();
   await settle(page);
   const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { efficient?: boolean; relaxedTraining?: boolean });
-  expect(feat.efficient === true && feat.relaxedTraining === false, 'training choices: "Fastest" was remembered in the settings');
+  expect(feat.efficient === true && feat.relaxedTraining === false, 'training choices: "XP" (fastest) on the skill card is remembered');
   await page.goto(`${BASE}#/skills/WC`);
   await waitFor(page, '.training', 5000);
   // No planner need: the goal is where the engine changes method, Willow trees until Teak trees take over at 41.

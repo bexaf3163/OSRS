@@ -130,12 +130,14 @@ export function QuestsPage({ embedded = false, render }: { embedded?: boolean; r
           <span className="la-chip">{selected.status[0].toUpperCase() + selected.status.slice(1)}</span>
           {selected.quest.qp > 0 && <span className="la-chip">+{selected.quest.qp} quest {selected.quest.qp === 1 ? 'point' : 'points'}</span>}
         </div>
-        {notInGame(selected) && <p className="notice">Marked done here, but the game does not count it as finished: its quest points are not in your total.</p>}
+        <p className="quest-preview-state">{notInGame(selected)
+          ? 'Marked done in your route, but the game does not count it as finished: its quest points are not in your total. Remove the mark on its route step to plan it again.'
+          : selected.status === 'done' ? 'Completed.' : selected.status === 'skipped' ? 'Skipped in your route; the planner leaves it aside while it stays skipped.'
+            : selected.blocked ? `Not open yet. First: ${selected.blocked}.` : selected.partsDone > 0 ? 'Under way.' : 'Ready to start.'}</p>
         {selected.quest.parts.length > 0 && <p>{selected.partsDone} / {selected.quest.parts.length} route steps completed</p>}
         {planOf(selected) && <p className="muted small">Planner #{planOf(selected)!.rank}: {planOf(selected)!.verdict}</p>}
-        {selected.blocked && <p className="notice">First: {selected.blocked}</p>}
-        <a className={`btn ${selected.status === 'done' || selected.status === 'skipped' ? 'btn-ghost' : 'btn-primary'}`} href={selected.href}>{selected.status === 'done' || selected.status === 'skipped' ? 'Review route' : selected.partsDone > 0 ? 'Continue quest' : 'View route'} <IconChevron /></a>
-        <details className="quest-preview-requirements"><summary>Requirements</summary>
+        <a className={`la-btn ${selected.status === 'done' || selected.status === 'skipped' ? 'la-d' : 'la-p'} quest-preview-go`} href={selected.href}>{selected.status === 'done' || selected.status === 'skipped' ? 'Review route' : selected.partsDone > 0 ? 'Continue quest' : 'View route'} <IconChevron /></a>
+        <details className="quest-preview-requirements" open={selected.status !== 'done' || undefined}><summary>What it needs</summary>
           {selectedStep?.itemsRequired?.length ? <ul>{selectedStep.itemsRequired.map((item,i) => <li key={`${item.nameEn}-${i}`}><ItemIcon src={item.iconUrl} alt="" size={28} /><span>{item.nameEn}{item.amount ? ` ×${item.amount}` : ''}</span></li>)}</ul> : <p className="muted small">No preparation items listed.</p>}
           {selectedStep?.doneWhen && <p className="muted small">Done when: {selectedStep.doneWhen}</p>}
         </details>
@@ -145,7 +147,7 @@ export function QuestsPage({ embedded = false, render }: { embedded?: boolean; r
     {rows.length > 0 && rows.every(row => row.status === 'done' && !notInGame(row)) && <section className="card" aria-label="Quest route complete">
       <h2 className="subhead">Quest route complete</h2>
       <p className="small muted">{gameDone ? 'These route quests are complete in the game.' : 'These route quests are marked complete in your saved progress.'} Choose a skill for your next activity.</p>
-      <a className="btn btn-primary" href={hrefTo.skills()}>Choose training</a>
+      <a className="la-btn la-p" href={hrefTo.skills()}>Choose training</a>
     </section>}
   </>);
   return render ? render(list, detail) : <div className="quest-workspace">{list}{detail}</div>;

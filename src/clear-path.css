@@ -62,6 +62,8 @@ main { max-width:1800px; }
 .quest-preview { position:sticky; top:calc(max(var(--topbar-h), 84px) + 26px); padding:24px; }
 .quest-preview h2 { font-size:1.5rem; margin-top:0; }
 .quest-preview .btn { margin-top:16px; }
+.quest-preview-state { margin:12px 0 0; }
+.quest-preview .quest-preview-go { margin:14px 0 4px; align-self:flex-start; }
 .quest-select { display:block; width:100%; background:none; color:inherit; border:0; padding:0; text-align:left; font:inherit; cursor:pointer; }
 .quest.is-selected { border-color:var(--accent); background:var(--accent-soft); }
 .shop-page .page-head { margin-bottom:22px; }
@@ -95,7 +97,6 @@ main { max-width:1800px; }
 }
 .settings-content .setting > .muted, .settings-content .setting > .switch { grid-column:1 / -1; }
 :root .settings-content .mode-toggle, :root .settings-content .segmented { display:flex; flex-wrap:wrap; gap:8px; height:auto; background:transparent; border:0; border-radius:0; }
-.settings-content .setting > .style-toggle { grid-column:1 / -1; }
 :root .settings-content .mode-toggle .mode-btn, :root .settings-content .seg { border:1px solid var(--border); border-radius:5px; padding:10px 16px; min-width:100px; background:var(--surface-3); }
 :root:root .settings-content .mode-toggle .mode-btn.is-active, :root .settings-content .seg.is-active { border-color:var(--accent); color:var(--accent-ink); background:var(--accent-soft); box-shadow:inset 0 -1px var(--accent); }
 .settings-content .setting .mode-toggle span[aria-hidden="true"] { display:none; }

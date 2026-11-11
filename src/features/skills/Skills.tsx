@@ -9,6 +9,7 @@ import { useBridge } from '../../state/bridge';
 import { useTracked } from '../../state/hooks/useTracked';
 import { SkillDetailPage } from './SkillDetail';
 import { Eyebrow, Page } from '../../ledger';
+import { TrainingPreferences } from './TrainingPreferences';
 import { f2pAdviceFor, f2pAdviceLabel, F2P_PRIORITY_LABEL } from '../../domain/training/f2pSkillAdvice';
 import { hrefTo } from '../../domain/pages/pages';
 
@@ -33,6 +34,8 @@ export function SkillsPage({ param, selectedSkill, goal }: { param?: string; sel
       <div className="skill-grid skill-grid-compact">
         {skills.flatMap((s) => [...s.levelSkills, ...(mode === 'f2p' && s.id === 'ME' ? ['hitpoints'] : [])].map((id) => <SkillCard key={id} skill={s} id={id} />))}
       </div>
+
+      <TrainingPreferences />
 
       {mode === 'members' && (
         <section className="section" aria-labelledby="members-skills">

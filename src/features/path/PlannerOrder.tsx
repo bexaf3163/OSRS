@@ -4,12 +4,14 @@
 import { Eyebrow } from '../../ledger';
 import type { PlannerRow } from '../../state/decision';
 
-export function PlannerOrder({ rows, confidence, selectedId, onSelect, updatesWhen = [] }: {
+export function PlannerOrder({ rows, confidence, selectedId, onSelect, updatesWhen = [], empty }: {
   rows: readonly PlannerRow[]; confidence: string | null; selectedId: string; onSelect: (stepId: string) => void;
   /** What ends the current action (the Decision's completion evidence). */
   updatesWhen?: readonly string[];
+  /** What to say when nothing is open (every F2P quest done or set aside). */
+  empty?: string;
 }) {
-  if (!rows.length) return null;
+  if (!rows.length) return empty ? <p className="muted planner-empty">{empty}</p> : null;
   return (
     <section className="planner-order" aria-label="Planner's order">
       <Eyebrow>PLANNER'S ORDER · LIVE</Eyebrow>

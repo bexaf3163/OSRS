@@ -70,6 +70,15 @@
 .la-rb.la-on::before{opacity:1;background:linear-gradient(#e2c274,#b08a3a);clip-path:polygon(0 0,100% 0,100% 100%,50% 86%,0 100%)}
 .la-rb>*{position:relative}
 .la-rb .la-ic{width:24px;height:24px}
+/* the rail's foot: the app's version and its update control */
+.la-spine-foot{margin-top:auto;padding:14px 8px 0;display:flex;justify-content:center}
+.la-ver{display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center}
+.la-ver-num{font-family:var(--la-disp);font-size:11px;letter-spacing:.14em;color:var(--la-mute)}
+.la-ver-btn,.la-ver-state{font-family:var(--la-disp);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;padding:5px 8px;border:1px solid #4a3822;color:var(--la-mute);background:#150e09;line-height:1.3;max-width:92px}
+.la-ver-btn{cursor:pointer}
+.la-ver-btn:hover{border-color:var(--la-gold);color:var(--la-gold2)}
+.la-ver-btn.la-ver-main{background:linear-gradient(#d8b560,#a98433);color:#2a1a08;border-color:#e6c878;font-weight:700}
+.la-ver-state{border-color:transparent;background:none}
 .la-main{flex:1;display:flex;flex-direction:column;padding:16px 56px 16px 12px;min-width:0}
 /* book */
 .la-book{flex:1;display:flex;position:relative;min-height:0;filter:drop-shadow(0 30px 40px #000c)}
@@ -98,6 +107,10 @@ h2.la-t{font-family:var(--la-disp);font-weight:600;font-size:22px;color:var(--la
 .la-btn.la-d{border-color:#8a6d3a;color:var(--la-ink);background:#d9c89f}
 .la-btn.la-d:hover{background:#cdb988}
 .la-btn.la-p{background:linear-gradient(#d8b560,#a98433);color:#2a1a08;border-color:#e6c878;font-weight:700}
+/* a Ledger button that is a link keeps the button's ink, never the page's link colour and underline */
+:root a.la-btn{text-decoration:none;color:var(--la-gold2)}
+:root a.la-btn.la-d{color:var(--la-ink)}
+:root a.la-btn.la-p{color:#2a1a08}
 .la-now{margin-top:12px;display:flex;gap:16px;padding:14px 18px;border:1.5px solid var(--la-ember);background:#c4512a14;position:relative}
 .la-now::before{content:"NOW";position:absolute;top:-9px;left:14px;background:#e4d6b4;padding:0 8px;font-family:var(--la-disp);font-size:10px;letter-spacing:.3em;color:var(--la-ember);font-weight:700}
 .la-now h3{font-size:22px;font-weight:600;line-height:1.15}
@@ -235,3 +248,9 @@ h2.la-t{font-family:var(--la-disp);font-weight:600;font-size:22px;color:var(--la
 .la-scroll{overflow:auto;flex:1;min-height:0;padding-right:6px}
 .la-scroll::-webkit-scrollbar{width:6px}
 .la-scroll::-webkit-scrollbar-thumb{background:#8a6d3a88}
+/* every inner scroll area (the Quest overview, tables, lists) has the Ledger's thin gold bar, never the system's grey one with arrows */
+.la-root *::-webkit-scrollbar{width:6px;height:6px;background:transparent}
+.la-root *::-webkit-scrollbar-thumb{background:#8a6d3a88}
+.la-root *::-webkit-scrollbar-thumb:hover{background:#8a6d3acc}
+.la-root *::-webkit-scrollbar-track,.la-root *::-webkit-scrollbar-corner{background:transparent}
+.la-root *::-webkit-scrollbar-button{display:none;width:0;height:0}

@@ -1,9 +1,9 @@
-// One selection drives both book pages; session data remains available without occupying a whole leaf.
+// One selection drives both book pages: the list on the left, the chosen quest on the right. Session statistics live in Settings →
+// Progress and copies (2.93: they said nothing about the chosen quest here).
 import { QuestsPage } from './Quests';
-import { SessionSection } from '../settings/SettingsExtra';
 import { Eyebrow, Page } from '../../ledger';
 
-export function JournalPage({ session = false }: { session?: boolean } = {}) {
+export function JournalPage() {
   return <QuestsPage embedded render={(list, detail) => <>
     <Page side="l" basis={560} className="journal" label="Quests">
       <div className="page la-scroll">
@@ -16,7 +16,6 @@ export function JournalPage({ session = false }: { session?: boolean } = {}) {
       <div className="page la-scroll">
         <Eyebrow>QUEST DETAILS</Eyebrow>
         {detail}
-        <details className="journal-session" open={session || undefined}><summary className="small">Session statistics</summary><SessionSection /></details>
       </div>
     </Page>
   </>} />;

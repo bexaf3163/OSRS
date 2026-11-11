@@ -88,7 +88,8 @@ export function Hud({ player, members, onMembers, status, onOpenSearch, settings
   );
 }
 
-export function Spine({ section }: { section: string }) {
+/** The section rail; `footer` sits at its foot (the app's version and update control). */
+export function Spine({ section, footer }: { section: string; footer?: ReactNode }) {
   return (
     <nav className="la-spine" aria-label="Sections">
       {LEDGER_NAV.map(({ section: id, href, label, icon }) => (
@@ -97,6 +98,7 @@ export function Spine({ section }: { section: string }) {
           <span>{label.toUpperCase()}</span>
         </a>
       ))}
+      {footer && <div className="la-spine-foot">{footer}</div>}
     </nav>
   );
 }

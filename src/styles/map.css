@@ -22,8 +22,9 @@
 
 .map-preview {
   position: relative; display: block; width: 100%; height: 132px; padding: 0; overflow: hidden; cursor: zoom-in;
-  border-radius: 8px; border: 1px solid #1b1d22; background: #0f1a24;
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.04);
+  /* A Ledger plate: square corners and the gold double rule of the book's frames (2.93). */
+  border-radius: 0; border: 1px solid #8a6d3a; background: #0f1a24;
+  box-shadow: 0 0 0 3px #e9dec2, 0 0 0 4px #8a6d3a88;
 }
 .map-preview:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .map-tiles { position: absolute; top: 0; left: 50%; transform: translateX(-50%); pointer-events: none; }
@@ -46,11 +47,13 @@
   display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 10px;
   color: #fff; text-align: left; text-shadow: 0 1px 2px rgb(0 0 0 / 0.8);
 }
+.map-caption-label .la-ic { vertical-align: -2px; }
 .map-caption-label { font-weight: 650; font-size: 0.86rem; min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .map-caption-floor { font-size: 0.74rem; opacity: 0.85; }
 .map-preview.is-offline { cursor: pointer; background: linear-gradient(135deg, #1d2a36, #122029); }
 .map-offline { position: absolute; inset: 10px 10px 34px; display: grid; place-items: center; color: #c9d3dc; text-align: center; }
-.map-actions { display: flex; justify-content: flex-end; margin-top: -4px; }
+.map-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+.map-actions .la-ic, .nav-state .la-ic { vertical-align: -2px; }
 
 .map-modal {
   width: min(1400px, 94vw); height: 90dvh; max-width: none; max-height: none; padding: 0;

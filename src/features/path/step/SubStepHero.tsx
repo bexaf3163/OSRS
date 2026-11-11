@@ -51,7 +51,7 @@ export function SubStepHero({ step, sub, bare = false }: { step: Step; sub: SubS
       )}
       {sub.target && (
         <div className="sub-hero-actions">
-          <NavigateButton target={{ ...sub.target, stepId: step.id }} label="🧭 Lead to Target in Game" className="sub-hero-nav" />
+          <NavigateButton target={{ ...sub.target, stepId: step.id }} label="Lead to the target in the game" className="sub-hero-nav" />
         </div>
       )}
     </section>

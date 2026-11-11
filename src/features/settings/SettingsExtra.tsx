@@ -11,7 +11,6 @@ import { useStore } from '../../state/store';
 import { usePlayerState } from '../../state/playerStateContext';
 import { formatGp } from '../../domain/prep/shopping';
 import { priceNote } from '../../domain/market/priceBook';
-import { percent, useUpdates } from '../../state/hooks/useUpdates';
 
 export function ProfilesSection() {
   const profiles = useProfiles();
@@ -155,35 +154,3 @@ function LedgerBlock() {
   );
 }
 
-export function UpdatesSection() {
-  const u = useUpdates();
-  if (!u) return null;
-  const { state: s } = u;
-  const text = s.state === 'checking' ? 'Checking…'
-    : s.state === 'current' ? 'The latest version is installed.'
-      : s.state === 'available' ? `Version ${s.latest} is out.`
-        : s.state === 'downloading' ? `Downloading version ${s.latest}… ${percent(s.progress)}%`
-          : s.state === 'ready' ? `Version ${s.latest} is downloaded — only a restart is left.`
-            : s.state === 'error' ? `Failed: ${s.error ?? 'no connection'}. Try later.` : '';
-  return (
-    <section className="card section-card">
-      <h2 className="card-title">Updates</h2>
-      <p className="muted">
-        The app checks the GitHub releases, downloads the new portable version next to the old one and restarts into it.
-        The progress and settings are next to the app — nothing needs to be moved; the previous exe is deleted after the switch.
-        Nothing is installed without your button.
-      </p>
-      <p className="small">Now: <strong>{s.current}</strong>{text ? ` · ${text}` : ''}</p>
-      <label className="switch">
-        <input type="checkbox" checked={s.auto !== false} onChange={(e) => u.setAuto(e.target.checked)} />
-        <span>Check at launch and every few hours</span>
-      </label>
-      <div className="actions">
-        <button type="button" className="btn" onClick={u.check} disabled={s.state === 'checking' || s.state === 'downloading'}>Check now</button>
-        {s.canInstall && s.state === 'available' && <button type="button" className="btn btn-primary" onClick={u.download}>Download</button>}
-        {s.state === 'ready' && <button type="button" className="btn btn-primary" onClick={u.install}>Restart into the new version</button>}
-      </div>
-      {!s.canInstall && <p className="muted small">This build was not started from the portable exe — it only reports a new version.</p>}
-    </section>
-  );
-}

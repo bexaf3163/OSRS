@@ -136,7 +136,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
         </div>
         <div className="la-scroll">
           <PlannerOrder rows={order} confidence={decision?.confidence ?? null} selectedId={selected?.id ?? ''} onSelect={(id) => select(id, false)}
-            updatesWhen={decision?.expectedNext.evidenceRequired.map((e) => e.predicate) ?? []} />
+            updatesWhen={decision?.expectedNext.evidenceRequired.map((e) => e.predicate) ?? []}
+            empty={!decision && f2pDone ? `Every F2P quest is done${optional ? `; ${optional} is optional and set aside` : ''}. Choose what to train next on the right.` : undefined} />
         </div>
       </Page>
       {training ? <Page side="r" label="Training plan"><div className="la-scroll"><TrackedSkillCard /></div></Page> : !selected ? (

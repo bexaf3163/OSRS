@@ -40,9 +40,8 @@ async function workspaceScenarios(browser: Browser) {
     await quest.click();
     expect((await page.getByRole('region', { name: 'Selected quest' }).innerText()).includes(title), 'workspace: selecting a quest changes the right page');
     expect(await page.getByRole('link', { name: 'Review route' }).count() === 1, 'workspace: completed quest offers review');
-    expect(await page.locator('.journal-session:not([open])').count() === 1, 'workspace: session statistics do not occupy the default quest page');
-    await page.locator('.journal-session > summary').click();
-    expect(await page.getByRole('heading', { name: /This session/i }).isVisible(), 'workspace: session statistics remain available');
+    // Session statistics are not about the chosen quest: they live in Settings → Progress and copies (2.93).
+    expect(await page.locator('.journal-session').count() === 0, 'workspace: the quest page shows only the chosen quest');
     expect(JSON.stringify(await saved(page)) === before, 'workspace: browsing quest details does not change progress');
     await page.getByRole('group', { name: 'Quest filter' }).getByRole('button', { name: /^Blocked/ }).click();
     if (await page.locator('.quest-select').count() === 0) expect((await page.locator('.la-r').innerText()).includes('Select a quest'), 'workspace: empty filter shows an honest prompt');
@@ -249,7 +248,7 @@ async function cockpit(browser: Browser) {
   const hero = await text(page, '.sub-hero');
   const action = (await text(page, '.current-action')).toLowerCase();
   expect(action.includes('navigation target') && action.includes('lady keli'), 'legacy cockpit: a navigation target is labelled as navigation, not confirmed quest progress');
-  expect(hero.includes('Lead to Target in Game'), 'cockpit: the sub-step has the lead button');
+  expect(hero.includes('Lead to the target in the game'), 'cockpit: the sub-step has the lead button');
   expect(hero.includes('Could I touch the key for a moment please?'), 'cockpit: the dialogue options are listed');
   expect((await text(page, '.sub-items')).includes('Soft clay'), 'cockpit: the strip holds the items of this sub-step');
   expect(await page.locator('details.step-fold:not([open])', { hasText: 'Full walkthrough and dialogue' }).count() === 1, 'cockpit: the full walkthrough is folded');

@@ -16,7 +16,7 @@ async function mapNavigationScenario(browser: Browser, width = 1000) {
     {
       const { page, errors } = await open(browser, width, { progress: progressBefore('S2-03') }, '#/step/S2-03');
       await pickStepMapPoint(page, /Eye of newt — Betty/);
-      await (await stepButton(page, '🧭 Lead here in the game')).click();
+      await (await stepButton(page, 'Lead here in the game')).click();
       await settle(page);
       type Post = { path: string; body: Record<string, unknown> };
       const posts = () => page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts);
@@ -44,7 +44,7 @@ async function bigMapArrow(browser: Browser) {
     progress: progressBefore('S2-05'),
     status: { activeStepId: 'S2-05' },
   }, '#/step/S2-05');
-  await (await stepButton(page, '🗺️ World map')).first().click();
+  await (await stepButton(page, 'World map')).first().click();
   await settle(page);
   const t = await text(page, '.map-source');
   expect(t.includes('The in-game arrow leads') && t.includes('Varrock Teleport'), 'map: the marker "The in-game arrow leads to Varrock Teleport"');
@@ -106,7 +106,7 @@ async function npcMapPoints(browser: Browser) {
   expect(chips.some((c) => c.includes('Ned')) && chips.some((c) => c.includes('Lady Keli')) && chips.some((c) => c.includes('Prince Ali')),
     `step map: the quest NPC as points (${chips.length})`);
   await pickStepMapPoint(page, /Ned — a house in Draynor Village/);
-  await (await stepButton(page, '🧭 Lead here in the game')).click();
+  await (await stepButton(page, 'Lead here in the game')).click();
   await settle(page);
   const nav = await page.evaluate(() => (window as unknown as { __posts: { path: string; body: Record<string, unknown> }[] }).__posts
     .filter((p) => p.path === '/nav-target').pop()?.body);

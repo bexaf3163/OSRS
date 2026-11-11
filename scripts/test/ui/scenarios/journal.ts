@@ -9,9 +9,9 @@ async function journalQuoteScenarios(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       market: true, marketUnavailable: state === 'missing', marketAgeMinutes: state === 'cached' ? 120 : undefined,
       localStorage: { 'osrs-put:profiles': JSON.stringify({ active: 'main', list: [{ id: 'main', name: 'Main', player: 'Alpha One' }] }),
-        'osrs-put:ledger:main:alpha one': JSON.stringify(rows) },
+        'osrs-put:ledger:main:alpha one': JSON.stringify(rows), 'osrs-put-settings-tab': 'progress' },
       status: { protocol: 6, inGame: true, player: 'Alpha One' },
-    }, '#/journal/session');
+    }, '#/settings');
     await page.locator('.ledger-block').waitFor();
     await settle(page);
     const body = await text(page, '.ledger-block');
