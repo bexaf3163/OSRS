@@ -27,7 +27,7 @@ describe('economics worked by hand: smelting steel bars', () => {
   it('keeps unknown initial travel out of total minutes without inventing a distance', () => {
     const e = evaluate(steel, ctxOf({ prices: steelPrices(), snap: fakeSnap({ ...smither, position: null }), cash: 5000 }));
     expect(e.minutes).toBeNull();
-    expect(e.minutesReason).toMatch(/travel is unknown/);
+    expect(e.minutesReason).toBe('Travel time unknown');
     expect(e.unitsPerHour).not.toBeNull(); // Steady-state bank/GE cycle is separately known.
     expect(e.workingCapital).not.toBeNull(); // Cash-only dry run is still meaningful.
   });

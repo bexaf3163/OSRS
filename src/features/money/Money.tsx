@@ -274,7 +274,8 @@ function MoneyBody({ step }: { step: Step }) {
             {m.evals.length === 0 ? ''
               : !live ? 'Your levels, tools and coins are needed to tell what suits you. The list below shows the published figures.'
                 : coins?.amount === null ? 'Your coins are not known, so the time to a goal cannot be worked out. Open your bank once.'
-                  : 'Nothing you can do now was found. Turn on "Show locked methods" to see what is missing.'}
+                  : m.ranking?.cannotReach.length ? `${m.ranking.cannotReach.length} methods suit you, but none has a total time yet: ${m.ranking.cannotReach[0].reason.toLowerCase()}.`
+                    : 'Nothing you can do now was found. Turn on "Show locked methods" to see what is missing.'}
           </p>
         </div>
       )}

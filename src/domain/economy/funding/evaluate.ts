@@ -528,7 +528,7 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   let minutesReason: string | undefined;
   let saves: number | null = null;
   if (firstLegSeconds === null || (ctx.mode === 'earn' && saleSeconds === null)) {
-    minutesReason = 'Full-trip travel is unknown; no total time is estimated';
+    minutesReason = 'Travel time unknown';
   } else if (ctx.mode === 'earn' && saleSeconds !== null) {
     if (blockers.length === 0 && spendable !== null) {
       const runs = [
