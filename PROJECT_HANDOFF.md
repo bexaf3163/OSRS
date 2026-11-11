@@ -218,19 +218,19 @@ Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3
 
 Known limits: fees are bounded allowances; gathering competition, Forestry and Musa Point boat banking are approximations; altar timing assumes the supported exit model; food estimates are no survival guarantee. Alchemy, enchanting and splashing keep target/setup/budget safeguards. No implied parity for unsupported Members or HDOS mechanics. Facts checked against the OSRS Wiki on 2026-10-31.
 
-## Current verification — encounters, tools, fresh-account planning (2.86.0–2.90.0)
+## Current verification — encounters, tools, fresh-account planning (2.86.0–2.90.1)
 
 Kept: `planning/encounter/{setups,strategy}.ts` compares bounded melee preparations; `executionStep` carries the kit; forecasts add damage-earned HP.
 
-- Ranking: total time; incomplete options executable-first, then least unmeasured XP, fewest unknowns, known minutes. Even melee training joins single-skill ones. Objectives stay unless another is proven faster.
+- Ranking: total time; incomplete options executable-first, then least unmeasured XP, fewest unknowns, known minutes. Even training joins single-skill ones. Objectives stay unless another is proven faster.
 - `authored/fightMechanics.json` (Wiki) feeds `fightEstimate.ts`: regeneration, drains, finishers, weapon multiplier, company, specials, protected attacks, safespot spell. `magicPlan.spellHit` (tier, magic bonus, elemental weakness) also rates training. `cannot` means train or upgrade; modelled regeneration proves that capability. Protection keeps its slot; quest kit is never advised; uncovered attacks stay UNKNOWN. Ancient Guardian: melee estimate; pillars are route text.
 - Fresh account: worn pieces count as owned; melee methods unsafe at the player's Hitpoints are LOCKED. Pirate's gardener is a threat; Prince Ali's jail guards a run-past.
 - `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`; trip spot→GE→spot. `trainingKit.equipmentLine` states the engine's tool/kit decision on Skills; F2P notes are one-line checkpoints, no Wiki rates. Weapons: one skill's XP.
 - Game line: engine's bank/drop choice; plaque shows the stamp alone. After all F2P quests, Path ranks F2P checkpoints (`f2pCheckpoints`) with Follow. Path rows name unknown parts; planner weighing is folded.
 
-Gear has bows/ranged armour; a worn bow fights via `rangedHit`. Drops weigh cooking by burns. Verification: 2,641 units; 769 browser checks; route gate; light gates. Perf versus 2.89.1: update +3%.
+Gear has bows/ranged armour; a worn bow fights via `rangedHit` and trains Ranged/Defence. Drops weigh cooking by burns. Verification: 2,642 units; 769 browser checks; route gate; light gates. Perf versus 2.90.0: update +1%.
 
-Limits: melee-only preparation; Wiki bands for quest work. `gate:f2p`: 23/23 quests, no checks; time unknown on 51/209 turns. Later quest fights are proven by `encounterSetups`, a current one with pending kit by its current setup; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece. Measured quest times need shared data.
+Limits: melee-kit preparation; Wiki bands for quest work. `gate:f2p`: 23/23 quests, no checks; time unknown on 51/209 turns. Later quest fights are proven by `encounterSetups`, a current one with pending kit by its current setup; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece. Measured quest times need shared data.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt
