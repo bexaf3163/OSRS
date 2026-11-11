@@ -12,6 +12,8 @@ export default mergeConfig(base, defineConfig({
     projects: [
       { extends: true, test: { name: 'shared', include: ['tests/**/*.test.{ts,tsx}', 'src/**/*.test.{ts,tsx}'], exclude: ISOLATED, isolate: false } },
       { extends: true, test: { name: 'isolated', include: ISOLATED, isolate: true } },
+      // Slow whole-route gates (npm run gate:f2p), not part of npm test.
+      { extends: true, test: { name: 'gate', include: ['tests/gates/*.gate.ts'] } },
     ],
   },
 }));

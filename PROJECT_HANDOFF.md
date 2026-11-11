@@ -150,7 +150,7 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 ## Development and release procedure
 
 - Read this file and `git status` first.
-- Gates: `npx tsc --noEmit`, `npm test`, `npm run check-data`, `npm run build`, `npm run test:ui`, `npm run test:e2e`, `runelite-bridge/gradlew -p runelite-bridge test jar` and the CI packaged-Portable gate; CI also runs `check-structure` (strict, with a shrinking known debt), `knip` and `dead-css`.
+- Gates: `npx tsc --noEmit`, `npm test`, `npm run check-data`, `npm run build`, `npm run test:ui`, `npm run gate:f2p` (planner change), `npm run test:e2e`, `runelite-bridge/gradlew -p runelite-bridge test jar` and the CI packaged-Portable gate; CI also runs `check-structure` (strict, with a shrinking known debt), `knip` and `dead-css`.
 - Browser tests use port 4179: one runner at a time, finish `dist` rebuilds first, never rebuild under a running suite. Electron e2e uses isolated data and a bridge stub. Screenshots go to the ignored `audit-temp/`.
 - Retiring a feature removes its exclusive UI, state, handlers, IPC, styles, imports and tests but keeps shared consumers, saves, backups and diagnostics; a selector can reach a nested dialog. Adapt obsolete assertions to surviving actions; never restore an obsolete screen for a test.
 - Release: `npm run bump -- X.Y.Z "summary"` (package, lock, `PLUGIN_VERSION`, notes stub), finish `release-notes/vX.Y.Z.md`, push to main. When every Checks job passes, its release job publishes vX.Y.Z from the exact EXE the portable job verified, with this file (receipt filled in) and SHA256SUMS.txt, then downloads the assets and fails unless they match; existing releases are never overwritten. A release counts only when that job succeeds; "asset exists" is not success.
@@ -218,7 +218,7 @@ Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3
 
 Known limits: fees are bounded allowances; gathering competition, Forestry and Musa Point boat banking are approximations; altar timing assumes the supported exit model; food estimates are no survival guarantee. Alchemy, enchanting and splashing keep target/setup/budget safeguards. No implied parity for unsupported Members or HDOS mechanics. Facts checked against the OSRS Wiki on 2026-10-31.
 
-## Current verification — encounters, tools, fresh-account planning (2.86.0–2.87.0)
+## Current verification — encounters, tools, fresh-account planning (2.86.0–2.87.1)
 
 Kept: `planning/encounter/{setups,strategy}.ts` compares bounded melee preparations; `executionStep` carries the kit; forecasts add damage-earned HP (1.33/4 XP).
 
@@ -228,9 +228,9 @@ Kept: `planning/encounter/{setups,strategy}.ts` compares bounded melee preparati
 - `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`; trip spot→GE→spot. `trainingKit.equipmentLine` states the engine's tool/kit decision on Skills (fixed notes retired). Weapons: one skill's XP.
 - Game line: engine's bank/drop choice; plaque shows the stamp alone (empty labels draw nothing). After all F2P quests, Path ranks F2P checkpoints (`f2pCheckpoints`: value, then engine time) with Follow.
 
-Verification: 2,633 units; 640 plugin tests (cached jars, javac/JUnit); 769 browser checks; light gates. Perf versus 2.86.0: update −3%. 2.86.1 failed CI (empty TextLayout).
+Verification: 2,634 units; 640 plugin tests (cached jars, javac/JUnit); 769 browser checks; light gates. Perf versus 2.87.0: update +1%. 2.86.1 failed CI (empty TextLayout).
 
-Limits: melee-only preparation; Wiki length bands for quest work. Simulation: 22 of 23 quests; Dragon Slayer stops at "Verify combat readiness": later fights must be ready now, yet the quest supplies their Maze key and shield. Remaining time mostly UNKNOWN. Next: later-fight proof, route gate, measured times.
+Limits: melee-only preparation; Wiki length bands for quest work. `gate:f2p`: 23 of 23 quests, no checks. A later quest fight is proven by `encounterSetups` (time unknown until reached); protection goes on after training. Remaining time mostly UNKNOWN. Next: route gate, measured times.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt

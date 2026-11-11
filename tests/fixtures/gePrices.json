@@ -1,0 +1,1157 @@
+{
+ "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10",
+ "prices": {
+  "Adamant 2h sword": {
+   "buy": 3670,
+   "sell": 3519
+  },
+  "Adamant arrow": {
+   "buy": 20,
+   "sell": 20
+  },
+  "Adamant axe": {
+   "buy": 517,
+   "sell": 510
+  },
+  "Adamant battleaxe": {
+   "buy": 2474,
+   "sell": 2417
+  },
+  "Adamant chainbody": {
+   "buy": 2623,
+   "sell": 2611
+  },
+  "Adamant dagger": {
+   "buy": 325,
+   "sell": 321
+  },
+  "Adamant full helm": {
+   "buy": 1876,
+   "sell": 1786
+  },
+  "Adamant kiteshield": {
+   "buy": 3060,
+   "sell": 2811
+  },
+  "Adamant longsword": {
+   "buy": 1800,
+   "sell": 1601
+  },
+  "Adamant mace": {
+   "buy": 528,
+   "sell": 512
+  },
+  "Adamant med helm": {
+   "buy": 1205,
+   "sell": 939
+  },
+  "Adamant pickaxe": {
+   "buy": 1508,
+   "sell": 1450
+  },
+  "Adamant platebody": {
+   "buy": 9314,
+   "sell": 9307
+  },
+  "Adamant platelegs": {
+   "buy": 3411,
+   "sell": 3364
+  },
+  "Adamant plateskirt": {
+   "buy": 3525,
+   "sell": 3521
+  },
+  "Adamant scimitar": {
+   "buy": 1533,
+   "sell": 1400
+  },
+  "Adamant sq shield": {
+   "buy": 2079,
+   "sell": 1900
+  },
+  "Adamant sword": {
+   "buy": 910,
+   "sell": 875
+  },
+  "Adamant warhammer": {
+   "buy": 2500,
+   "sell": 2403
+  },
+  "Adamantite bar": {
+   "buy": 1750,
+   "sell": 1748
+  },
+  "Adamantite ore": {
+   "buy": 528,
+   "sell": 504
+  },
+  "Air rune": {
+   "buy": 6,
+   "sell": 5
+  },
+  "Air talisman": {
+   "buy": 146,
+   "sell": 140
+  },
+  "Amulet of accuracy": {
+   "buy": 2639,
+   "sell": 2626
+  },
+  "Amulet of defence": {
+   "buy": 1256,
+   "sell": 1000
+  },
+  "Amulet of magic": {
+   "buy": 603,
+   "sell": 560
+  },
+  "Amulet of power": {
+   "buy": 2186,
+   "sell": 2100
+  },
+  "Amulet of strength": {
+   "buy": 1400,
+   "sell": 1350
+  },
+  "Anchovies": {
+   "buy": 31,
+   "sell": 30
+  },
+  "Anti-dragon shield": {
+   "buy": 120,
+   "sell": 49
+  },
+  "Antipoison(4)": {
+   "buy": 634,
+   "sell": 605
+  },
+  "Ashes": {
+   "buy": 38,
+   "sell": 37
+  },
+  "Attack potion(4)": {
+   "buy": 10,
+   "sell": 7
+  },
+  "Ball of wool": {
+   "buy": 57,
+   "sell": 53
+  },
+  "Beer": {
+   "buy": 73,
+   "sell": 60
+  },
+  "Big bones": {
+   "buy": 300,
+   "sell": 289
+  },
+  "Black 2h sword": {
+   "buy": 930,
+   "sell": 923
+  },
+  "Black axe": {
+   "buy": 1064,
+   "sell": 1000
+  },
+  "Black battleaxe": {
+   "buy": 340,
+   "sell": 357
+  },
+  "Black bead": {
+   "buy": 1195,
+   "sell": 1145
+  },
+  "Black chainbody": {
+   "buy": 3560,
+   "sell": 3203
+  },
+  "Black dagger": {
+   "buy": 376,
+   "sell": 362
+  },
+  "Black full helm": {
+   "buy": 362,
+   "sell": 334
+  },
+  "Black kiteshield": {
+   "buy": 1066,
+   "sell": 1021
+  },
+  "Black longsword": {
+   "buy": 305,
+   "sell": 297
+  },
+  "Black mace": {
+   "buy": 844,
+   "sell": 811
+  },
+  "Black med helm": {
+   "buy": 457,
+   "sell": 450
+  },
+  "Black pickaxe": {
+   "buy": 2547,
+   "sell": 2407
+  },
+  "Black platebody": {
+   "buy": 2886,
+   "sell": 2250
+  },
+  "Black platelegs": {
+   "buy": 968,
+   "sell": 900
+  },
+  "Black plateskirt": {
+   "buy": 4000,
+   "sell": 3035
+  },
+  "Black robe": {
+   "buy": 1140,
+   "sell": 501
+  },
+  "Black scimitar": {
+   "buy": 2218,
+   "sell": 2111
+  },
+  "Black sq shield": {
+   "buy": 429,
+   "sell": 428
+  },
+  "Black sword": {
+   "buy": 417,
+   "sell": 415
+  },
+  "Black warhammer": {
+   "buy": 477,
+   "sell": 401
+  },
+  "Blue dye": {
+   "buy": 540,
+   "sell": 369
+  },
+  "Blue wizard hat": {
+   "buy": 300,
+   "sell": 285
+  },
+  "Blue wizard robe": {
+   "buy": 1023,
+   "sell": 1015
+  },
+  "Body rune": {
+   "buy": 5,
+   "sell": 4
+  },
+  "Bones": {
+   "buy": 47,
+   "sell": 45
+  },
+  "Bread": {
+   "buy": 77,
+   "sell": 76
+  },
+  "Bronze 2h sword": {
+   "buy": 1202,
+   "sell": 250
+  },
+  "Bronze arrow": {
+   "buy": 4,
+   "sell": 3
+  },
+  "Bronze axe": {
+   "buy": 88,
+   "sell": 78
+  },
+  "Bronze bar": {
+   "buy": 58,
+   "sell": 54
+  },
+  "Bronze battleaxe": {
+   "buy": 84,
+   "sell": 82
+  },
+  "Bronze chainbody": {
+   "buy": 39,
+   "sell": 13
+  },
+  "Bronze dagger": {
+   "buy": 103,
+   "sell": 101
+  },
+  "Bronze full helm": {
+   "buy": 107,
+   "sell": 100
+  },
+  "Bronze kiteshield": {
+   "buy": 6208,
+   "sell": 274
+  },
+  "Bronze longsword": {
+   "buy": 106,
+   "sell": 90
+  },
+  "Bronze mace": {
+   "buy": 113,
+   "sell": 7
+  },
+  "Bronze med helm": {
+   "buy": 120,
+   "sell": 89
+  },
+  "Bronze pickaxe": {
+   "buy": 110,
+   "sell": 106
+  },
+  "Bronze platebody": {
+   "buy": 28,
+   "sell": 6
+  },
+  "Bronze platelegs": {
+   "buy": 134,
+   "sell": 65
+  },
+  "Bronze plateskirt": {
+   "buy": 173,
+   "sell": 153
+  },
+  "Bronze scimitar": {
+   "buy": 94,
+   "sell": 85
+  },
+  "Bronze sq shield": {
+   "buy": 911,
+   "sell": 76
+  },
+  "Bronze sword": {
+   "buy": 112,
+   "sell": 111
+  },
+  "Bronze warhammer": {
+   "buy": 67,
+   "sell": 58
+  },
+  "Bucket": {
+   "buy": 8,
+   "sell": 7
+  },
+  "Bucket of milk": {
+   "buy": 29,
+   "sell": 28
+  },
+  "Bucket of water": {
+   "buy": 32,
+   "sell": 30
+  },
+  "Cabbage": {
+   "buy": 33,
+   "sell": 32
+  },
+  "Cadava berries": {
+   "buy": 72,
+   "sell": 70
+  },
+  "Chaos rune": {
+   "buy": 91,
+   "sell": 89
+  },
+  "Chisel": {
+   "buy": 101,
+   "sell": 100
+  },
+  "Clay": {
+   "buy": 58,
+   "sell": 55
+  },
+  "Coal": {
+   "buy": 135,
+   "sell": 130
+  },
+  "Coif": {
+   "buy": 44,
+   "sell": 30
+  },
+  "Cooked chicken": {
+   "buy": 39,
+   "sell": 38
+  },
+  "Cooked meat": {
+   "buy": 49,
+   "sell": 45
+  },
+  "Copper ore": {
+   "buy": 22,
+   "sell": 21
+  },
+  "Cosmic rune": {
+   "buy": 122,
+   "sell": 119
+  },
+  "Cowhide": {
+   "buy": 120,
+   "sell": 107
+  },
+  "Death rune": {
+   "buy": 198,
+   "sell": 195
+  },
+  "Earth rune": {
+   "buy": 5,
+   "sell": 4
+  },
+  "Egg": {
+   "buy": 22,
+   "sell": 21
+  },
+  "Energy potion(4)": {
+   "buy": 131,
+   "sell": 116
+  },
+  "Eye of newt": {
+   "buy": 5,
+   "sell": 4
+  },
+  "Feather": {
+   "buy": 3,
+   "sell": 2
+  },
+  "Fire rune": {
+   "buy": 6,
+   "sell": 5
+  },
+  "Fishing bait": {
+   "buy": 6,
+   "sell": 4
+  },
+  "Fishing rod": {
+   "buy": 119,
+   "sell": 105
+  },
+  "Fly fishing rod": {
+   "buy": 325,
+   "sell": 137
+  },
+  "Fruit blast": {
+   "buy": 2500,
+   "sell": 1500
+  },
+  "Garlic": {
+   "buy": 19,
+   "sell": 16
+  },
+  "Goblin mail": {
+   "buy": 350,
+   "sell": 300
+  },
+  "Gold bar": {
+   "buy": 72,
+   "sell": 71
+  },
+  "Gold ore": {
+   "buy": 114,
+   "sell": 113
+  },
+  "Green d'hide body": {
+   "buy": 4206,
+   "sell": 4168
+  },
+  "Green d'hide vambraces": {
+   "buy": 1450,
+   "sell": 1296
+  },
+  "Greenman's ale": {
+   "buy": 225,
+   "sell": 251
+  },
+  "Hammer": {
+   "buy": 79,
+   "sell": 64
+  },
+  "Hard leather": {
+   "buy": 140,
+   "sell": 135
+  },
+  "Hardleather body": {
+   "buy": 16,
+   "sell": 11
+  },
+  "Harpoon": {
+   "buy": 495,
+   "sell": 328
+  },
+  "Holy symbol": {
+   "buy": 416,
+   "sell": 376
+  },
+  "Iron 2h sword": {
+   "buy": 62,
+   "sell": 50
+  },
+  "Iron arrow": {
+   "buy": 4,
+   "sell": 3
+  },
+  "Iron axe": {
+   "buy": 125,
+   "sell": 123
+  },
+  "Iron bar": {
+   "buy": 168,
+   "sell": 160
+  },
+  "Iron battleaxe": {
+   "buy": 133,
+   "sell": 55
+  },
+  "Iron chainbody": {
+   "buy": 115,
+   "sell": 60
+  },
+  "Iron dagger": {
+   "buy": 150,
+   "sell": 30
+  },
+  "Iron full helm": {
+   "buy": 73,
+   "sell": 70
+  },
+  "Iron kiteshield": {
+   "buy": 66,
+   "sell": 65
+  },
+  "Iron longsword": {
+   "buy": 121,
+   "sell": 115
+  },
+  "Iron mace": {
+   "buy": 115,
+   "sell": 117
+  },
+  "Iron med helm": {
+   "buy": 69,
+   "sell": 34
+  },
+  "Iron ore": {
+   "buy": 47,
+   "sell": 44
+  },
+  "Iron pickaxe": {
+   "buy": 219,
+   "sell": 210
+  },
+  "Iron platebody": {
+   "buy": 75,
+   "sell": 91
+  },
+  "Iron platelegs": {
+   "buy": 64,
+   "sell": 58
+  },
+  "Iron plateskirt": {
+   "buy": 120,
+   "sell": 68
+  },
+  "Iron scimitar": {
+   "buy": 145,
+   "sell": 185
+  },
+  "Iron sq shield": {
+   "buy": 145,
+   "sell": 115
+  },
+  "Iron sword": {
+   "buy": 145,
+   "sell": 80
+  },
+  "Iron warhammer": {
+   "buy": 42,
+   "sell": 40
+  },
+  "Jug": {
+   "buy": 4,
+   "sell": 3
+  },
+  "Knife": {
+   "buy": 101,
+   "sell": 38
+  },
+  "Law rune": {
+   "buy": 120,
+   "sell": 117
+  },
+  "Leather": {
+   "buy": 173,
+   "sell": 164
+  },
+  "Leather body": {
+   "buy": 20,
+   "sell": 17
+  },
+  "Leather chaps": {
+   "buy": 16,
+   "sell": 12
+  },
+  "Lobster": {
+   "buy": 86,
+   "sell": 82
+  },
+  "Lobster pot": {
+   "buy": 169,
+   "sell": 166
+  },
+  "Lockpick": {
+   "buy": 127,
+   "sell": 100
+  },
+  "Logs": {
+   "buy": 19,
+   "sell": 18
+  },
+  "Lumbridge teleport": {
+   "buy": 568,
+   "sell": 564
+  },
+  "Magic staff": {
+   "buy": 85,
+   "sell": 62
+  },
+  "Maple logs": {
+   "buy": 7,
+   "sell": 6
+  },
+  "Maple shortbow": {
+   "buy": 120,
+   "sell": 114
+  },
+  "Mind rune": {
+   "buy": 3,
+   "sell": 2
+  },
+  "Mithril 2h sword": {
+   "buy": 1380,
+   "sell": 1029
+  },
+  "Mithril arrow": {
+   "buy": 5,
+   "sell": 4
+  },
+  "Mithril axe": {
+   "buy": 200,
+   "sell": 173
+  },
+  "Mithril bar": {
+   "buy": 860,
+   "sell": 848
+  },
+  "Mithril battleaxe": {
+   "buy": 1007,
+   "sell": 900
+  },
+  "Mithril chainbody": {
+   "buy": 865,
+   "sell": 928
+  },
+  "Mithril dagger": {
+   "buy": 200,
+   "sell": 138
+  },
+  "Mithril full helm": {
+   "buy": 602,
+   "sell": 563
+  },
+  "Mithril kiteshield": {
+   "buy": 1130,
+   "sell": 1039
+  },
+  "Mithril longsword": {
+   "buy": 448,
+   "sell": 500
+  },
+  "Mithril mace": {
+   "buy": 95,
+   "sell": 84
+  },
+  "Mithril med helm": {
+   "buy": 146,
+   "sell": 149
+  },
+  "Mithril ore": {
+   "buy": 108,
+   "sell": 107
+  },
+  "Mithril pickaxe": {
+   "buy": 453,
+   "sell": 441
+  },
+  "Mithril platebody": {
+   "buy": 2472,
+   "sell": 2470
+  },
+  "Mithril platelegs": {
+   "buy": 1250,
+   "sell": 1241
+  },
+  "Mithril plateskirt": {
+   "buy": 1244,
+   "sell": 1241
+  },
+  "Mithril scimitar": {
+   "buy": 371,
+   "sell": 362
+  },
+  "Mithril sq shield": {
+   "buy": 604,
+   "sell": 665
+  },
+  "Mithril sword": {
+   "buy": 199,
+   "sell": 195
+  },
+  "Mithril warhammer": {
+   "buy": 856,
+   "sell": 809
+  },
+  "Nature rune": {
+   "buy": 169,
+   "sell": 164
+  },
+  "Needle": {
+   "buy": 91,
+   "sell": 90
+  },
+  "Oak logs": {
+   "buy": 29,
+   "sell": 28
+  },
+  "Oak shortbow": {
+   "buy": 26,
+   "sell": 24
+  },
+  "Old school bond": {
+   "buy": 10500000,
+   "sell": 10000000
+  },
+  "Onion": {
+   "buy": 29,
+   "sell": 28
+  },
+  "Orange dye": {
+   "buy": 840,
+   "sell": 1080
+  },
+  "Pink skirt": {
+   "buy": 151,
+   "sell": 1
+  },
+  "Plank": {
+   "buy": 94,
+   "sell": 92
+  },
+  "Polished buttons": {
+   "buy": 1020,
+   "sell": 779
+  },
+  "Pot": {
+   "buy": 15,
+   "sell": 14
+  },
+  "Pot of flour": {
+   "buy": 99,
+   "sell": 98
+  },
+  "Prayer potion(4)": {
+   "buy": 8153,
+   "sell": 8001
+  },
+  "Raw anchovies": {
+   "buy": 17,
+   "sell": 15
+  },
+  "Raw lobster": {
+   "buy": 124,
+   "sell": 117
+  },
+  "Raw salmon": {
+   "buy": 29,
+   "sell": 28
+  },
+  "Raw shrimps": {
+   "buy": 26,
+   "sell": 25
+  },
+  "Raw swordfish": {
+   "buy": 191,
+   "sell": 188
+  },
+  "Raw trout": {
+   "buy": 40,
+   "sell": 37
+  },
+  "Raw tuna": {
+   "buy": 32,
+   "sell": 31
+  },
+  "Red bead": {
+   "buy": 1426,
+   "sell": 1002
+  },
+  "Red dye": {
+   "buy": 603,
+   "sell": 568
+  },
+  "Redberries": {
+   "buy": 97,
+   "sell": 92
+  },
+  "Redberry pie": {
+   "buy": 120,
+   "sell": 120
+  },
+  "Ring mould": {
+   "buy": 281,
+   "sell": 250
+  },
+  "Rope": {
+   "buy": 77,
+   "sell": 75
+  },
+  "Rune 2h sword": {
+   "buy": 37750,
+   "sell": 37747
+  },
+  "Rune arrow": {
+   "buy": 38,
+   "sell": 35
+  },
+  "Rune axe": {
+   "buy": 7390,
+   "sell": 7132
+  },
+  "Rune battleaxe": {
+   "buy": 24874,
+   "sell": 24641
+  },
+  "Rune chainbody": {
+   "buy": 29804,
+   "sell": 29405
+  },
+  "Rune dagger": {
+   "buy": 4539,
+   "sell": 4403
+  },
+  "Rune essence": {
+   "buy": 12,
+   "sell": 11
+  },
+  "Rune full helm": {
+   "buy": 20466,
+   "sell": 20466
+  },
+  "Rune kiteshield": {
+   "buy": 32693,
+   "sell": 31650
+  },
+  "Rune longsword": {
+   "buy": 18680,
+   "sell": 18501
+  },
+  "Rune mace": {
+   "buy": 8157,
+   "sell": 7979
+  },
+  "Rune med helm": {
+   "buy": 10979,
+   "sell": 10979
+  },
+  "Rune pickaxe": {
+   "buy": 19009,
+   "sell": 18557
+  },
+  "Rune platebody": {
+   "buy": 38358,
+   "sell": 38358
+  },
+  "Rune platelegs": {
+   "buy": 37619,
+   "sell": 37603
+  },
+  "Rune plateskirt": {
+   "buy": 37779,
+   "sell": 37790
+  },
+  "Rune scimitar": {
+   "buy": 14907,
+   "sell": 14650
+  },
+  "Rune sq shield": {
+   "buy": 22524,
+   "sell": 22576
+  },
+  "Rune sword": {
+   "buy": 12200,
+   "sell": 12160
+  },
+  "Rune warhammer": {
+   "buy": 24348,
+   "sell": 23900
+  },
+  "Runite bar": {
+   "buy": 12040,
+   "sell": 12030
+  },
+  "Runite ore": {
+   "buy": 10260,
+   "sell": 10088
+  },
+  "Salmon": {
+   "buy": 28,
+   "sell": 24
+  },
+  "Secateurs": {
+   "buy": 120,
+   "sell": 1
+  },
+  "Shears": {
+   "buy": 104,
+   "sell": 97
+  },
+  "Shortbow": {
+   "buy": 53,
+   "sell": 50
+  },
+  "Shrimps": {
+   "buy": 13,
+   "sell": 7
+  },
+  "Silk": {
+   "buy": 14,
+   "sell": 12
+  },
+  "Silver bar": {
+   "buy": 94,
+   "sell": 86
+  },
+  "Silver ore": {
+   "buy": 46,
+   "sell": 45
+  },
+  "Silver sickle": {
+   "buy": 69,
+   "sell": 40
+  },
+  "Small fishing net": {
+   "buy": 300,
+   "sell": 102
+  },
+  "Soft clay": {
+   "buy": 86,
+   "sell": 84
+  },
+  "Spade": {
+   "buy": 177,
+   "sell": 173
+  },
+  "Staff": {
+   "buy": 82,
+   "sell": 81
+  },
+  "Staff of air": {
+   "buy": 865,
+   "sell": 757
+  },
+  "Staff of earth": {
+   "buy": 680,
+   "sell": 622
+  },
+  "Staff of fire": {
+   "buy": 775,
+   "sell": 680
+  },
+  "Staff of water": {
+   "buy": 567,
+   "sell": 524
+  },
+  "Steel 2h sword": {
+   "buy": 275,
+   "sell": 325
+  },
+  "Steel arrow": {
+   "buy": 9,
+   "sell": 7
+  },
+  "Steel axe": {
+   "buy": 180,
+   "sell": 176
+  },
+  "Steel bar": {
+   "buy": 507,
+   "sell": 500
+  },
+  "Steel battleaxe": {
+   "buy": 121,
+   "sell": 175
+  },
+  "Steel chainbody": {
+   "buy": 153,
+   "sell": 132
+  },
+  "Steel dagger": {
+   "buy": 34,
+   "sell": 32
+  },
+  "Steel full helm": {
+   "buy": 175,
+   "sell": 111
+  },
+  "Steel kiteshield": {
+   "buy": 201,
+   "sell": 122
+  },
+  "Steel longsword": {
+   "buy": 249,
+   "sell": 120
+  },
+  "Steel mace": {
+   "buy": 40,
+   "sell": 20
+  },
+  "Steel med helm": {
+   "buy": 25,
+   "sell": 10
+  },
+  "Steel nails": {
+   "buy": 26,
+   "sell": 25
+  },
+  "Steel pickaxe": {
+   "buy": 144,
+   "sell": 100
+  },
+  "Steel platebody": {
+   "buy": 875,
+   "sell": 725
+  },
+  "Steel platelegs": {
+   "buy": 269,
+   "sell": 281
+  },
+  "Steel plateskirt": {
+   "buy": 571,
+   "sell": 300
+  },
+  "Steel scimitar": {
+   "buy": 67,
+   "sell": 64
+  },
+  "Steel sq shield": {
+   "buy": 99,
+   "sell": 65
+  },
+  "Steel sword": {
+   "buy": 56,
+   "sell": 52
+  },
+  "Steel warhammer": {
+   "buy": 96,
+   "sell": 133
+  },
+  "Strength potion(4)": {
+   "buy": 123,
+   "sell": 98
+  },
+  "Swordfish": {
+   "buy": 200,
+   "sell": 188
+  },
+  "Teleport card": {
+   "buy": 222,
+   "sell": 212
+  },
+  "Thread": {
+   "buy": 7,
+   "sell": 6
+  },
+  "Tin ore": {
+   "buy": 15,
+   "sell": 14
+  },
+  "Tinderbox": {
+   "buy": 108,
+   "sell": 105
+  },
+  "Trout": {
+   "buy": 19,
+   "sell": 18
+  },
+  "Tuna": {
+   "buy": 33,
+   "sell": 27
+  },
+  "Uncut diamond": {
+   "buy": 2297,
+   "sell": 2297
+  },
+  "Uncut emerald": {
+   "buy": 270,
+   "sell": 264
+  },
+  "Uncut ruby": {
+   "buy": 824,
+   "sell": 803
+  },
+  "Uncut sapphire": {
+   "buy": 164,
+   "sell": 160
+  },
+  "Unfired bowl": {
+   "buy": 131,
+   "sell": 15
+  },
+  "Water rune": {
+   "buy": 5,
+   "sell": 4
+  },
+  "White apron": {
+   "buy": 500,
+   "sell": 111
+  },
+  "White bead": {
+   "buy": 1250,
+   "sell": 1165
+  },
+  "Willow logs": {
+   "buy": 22,
+   "sell": 20
+  },
+  "Willow shortbow": {
+   "buy": 110,
+   "sell": 90
+  },
+  "Wizard hat": {
+   "buy": 255,
+   "sell": 231
+  },
+  "Wizard's mind bomb": {
+   "buy": 99,
+   "sell": 50
+  },
+  "Wooden shield": {
+   "buy": 177,
+   "sell": 169
+  },
+  "Yellow bead": {
+   "buy": 1136,
+   "sell": 981
+  },
+  "Yellow dye": {
+   "buy": 375,
+   "sell": 362
+  },
+  "Yew logs": {
+   "buy": 89,
+   "sell": 91
+  },
+  "Yew shortbow": {
+   "buy": 321,
+   "sell": 303
+  }
+ }
+}

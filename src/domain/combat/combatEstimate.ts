@@ -47,8 +47,7 @@ export interface CombatFoe {
   aggressive: boolean;
   /** The wiki's experience bonus in percent: Brutus +100 (twice the XP for each point of damage). */
   xpBonus?: number;
-  /** Elemental weakness (OSRS Wiki): a spell of this element gets this many percent more accuracy and this share of its base max hit added. */
-  weakness?: { element: string; percent: number };
+  weakness?: { element: string; percent: number }; // OSRS Wiki elemental weakness: that % more accuracy and base max hit for its element's spells
 }
 
 /** Combat XP of one kill in the trained skill: 4 per point of damage, with the opponent's own bonus. */
@@ -321,7 +320,6 @@ const REGEN_PER_SECOND = 1 / 60;
 const USABLE: [number, number] = [0.85, 1];
 /** How fast the game measurements take over: at this many kills they weigh as much as the formulas. */
 const CALIBRATION_KILLS = 30;
-
 const strengthBoost = (level: number) => Math.floor(level / 10) + 3;
 
 export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
