@@ -15,7 +15,7 @@
 // data, no levels — no estimate.
 
 import { combatFoesJson } from '../../data';
-import { equippedBySlot, gearData, meleeAs, SLOTS, type TrainStyle } from './gearAdvisor';
+import { equippedBySlot, gearData, meleeAs, shootsOnly, SLOTS, type TrainStyle } from './gearAdvisor';
 import type { GearState } from '../../services/runeliteBridge';
 import type { GearData, GearPiece, PacingSkill, Step } from '../../types';
 import { effectiveHeal, stepFood } from '../player/foodStock';
@@ -568,7 +568,7 @@ export function estimateStep(step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired
   const food = foodItem ? { name: foodItem.nameEn, heals: foodItem.heals! } : null;
   if (!food) return [];
   const equipped = equippedBySlot(ctx.gear, ctx.data ?? gearData);
-  if (equipped.weapon && !equipped.weapon.piece) return [];
+  if (equipped.weapon && (!equipped.weapon.piece || shootsOnly(equipped.weapon.piece))) return []; // Unknown, or a bow: no melee hit.
   const armour = (['head', 'body', 'legs', 'shield'] as const).map((s) => equipped[s]?.piece).filter((p): p is GearPiece => Boolean(p));
   const unknownPieces = SLOTS.filter((s) => s !== 'weapon' && equipped[s] && !equipped[s]!.piece).length;
   const xp = ctx.xp ?? null;

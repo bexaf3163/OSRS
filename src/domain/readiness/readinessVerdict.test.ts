@@ -83,7 +83,7 @@ describe('S3-08 Minotaurs: the kit, the version and the food for the next trip',
     const none = combatReadiness(s308, v, gearOf(IRON.slice(1)), true)!;
     expect(none.weapon.ok).toBe(false);
     const bow: GearState = { ...gearOf(IRON.slice(1)), equipment: [{ id: 841, name: 'Shortbow', slot: 'weapon' }, ...gearOf(IRON.slice(1)).equipment!] };
-    expect(combatReadiness(s308, v, bow, true)!.weapon).toEqual({ ok: null, text: 'Shortbow: the app has no stats for it, so its fit is not checked.' });
+    expect(combatReadiness(s308, v, bow, true)!.weapon).toMatchObject({ ok: false, text: expect.stringMatching(/^Shortbow is not a melee weapon: this step trains .* with melee\.$/) });
   });
 
   it('a quest ingredient that is also food is kept for its quest and not counted', () => {

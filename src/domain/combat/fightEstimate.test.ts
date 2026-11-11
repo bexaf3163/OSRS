@@ -117,6 +117,12 @@ describe('one quest fight with your kit', () => {
     expect(estimateFight({ ...base, levels: lv })!.unmodelled).toContain('unread Magic level');
   });
 
+  it('a bow has no melee hit: no melee fight is estimated with one worn, as with a weapon the data does not know', () => {
+    const lv = { attack: 40, strength: 40, defence: 40, hitpoints: 40 };
+    expect(estimateStepFights(stepById.get('S2-08')!, lv, gearOf(['Mithril scimitar'])).length).toBeGreaterThan(0);
+    expect(estimateStepFights(stepById.get('S2-08')!, lv, gearOf(['Shortbow']))).toEqual([]);
+  });
+
   it('Melzar\'s Maze: Melzar the Mad in melee, the demon with the 50 casts of runes the step carries', () => {
     const fights = estimateStepFights(stepById.get('S5-03')!, { attack: 40, strength: 40, defence: 40, hitpoints: 40, magic: 20 }, gearOf(['Mithril scimitar']));
     expect(fights.map((f) => [f.foe.name, f.spell ?? 'melee'])).toEqual([['Melzar the Mad', 'melee'], ['Lesser demon', 'Water Strike']]);

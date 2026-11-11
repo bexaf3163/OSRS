@@ -5,7 +5,7 @@
 // estimate: the range holds about 9 outcomes in 10, and no kit guarantees survival.
 
 import { stepFood as foodOfStep } from '../player/foodStock';
-import { equippedBySlot, gearData, gearPieceByName, meleeAs, SLOTS, type TrainStyle } from './gearAdvisor';
+import { equippedBySlot, gearData, gearPieceByName, meleeAs, shootsOnly, SLOTS, type TrainStyle } from './gearAdvisor';
 import type { GearState } from '../../services/runeliteBridge';
 import type { GearPiece, Step } from '../../types';
 import { attackCounts, attacksToKill, COMBAT_FOES, foeLabel, hitChance, spread, swingDamage, swingsPerFight, type CombatFoe, type Range } from './combatEstimate';
@@ -273,7 +273,7 @@ export function estimateStepFights(
   const lv = { attack: need('attack'), strength: need('strength'), defence: need('defence'), hitpoints: need('hitpoints') };
   if (Object.values(lv).some((v) => v === null)) return [];
   const eq = equippedBySlot(gear, gearData);
-  if (eq.weapon && !eq.weapon.piece) return [];
+  if (eq.weapon && (!eq.weapon.piece || shootsOnly(eq.weapon.piece))) return []; // Unknown, or a bow: no melee hit.
   const armour = (['head', 'body', 'legs', 'shield'] as const).map((s) => eq[s]?.piece).filter((p): p is GearPiece => Boolean(p));
   const unknownPieces = SLOTS.filter((s) => s !== 'weapon' && eq[s] && !eq[s]!.piece).length;
   const stepFood = foodOfStep(step);

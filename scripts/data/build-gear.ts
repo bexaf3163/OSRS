@@ -61,6 +61,14 @@ const EXTRA: { name: string; kind: string; set?: string }[] = [
   { name: 'Leather chaps', kind: 'leather', set: 'Leather armour' },
   { name: 'Coif', kind: 'leather' },
   { name: 'Hardleather body', kind: 'leather' },
+  { name: 'Leather cowl', kind: 'leather' },
+  { name: 'Studded body', kind: 'leather' },
+  { name: 'Studded chaps', kind: 'leather' },
+  { name: "Green d'hide body", kind: 'leather' },
+  { name: "Green d'hide chaps", kind: 'leather' },
+  // The free bows (rangedGear.json keeps their arrows): with their full bonuses a fight can be estimated with them. The plain
+  // Longbow is left out: no article states its requirements.
+  ...['Shortbow', 'Oak shortbow', 'Oak longbow', 'Willow shortbow', 'Willow longbow', 'Maple shortbow', 'Maple longbow'].map((name) => ({ name, kind: 'bow' })),
   { name: 'Staff', kind: 'staff' },
   { name: 'Magic staff', kind: 'staff' },
   { name: 'Staff of air', kind: 'staff' },

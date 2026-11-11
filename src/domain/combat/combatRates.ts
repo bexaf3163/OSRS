@@ -23,7 +23,7 @@ import { FOODS } from '../../data/threats';
 import { mergeGoalNeeds } from '../items/consumption';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from '../player/playerState';
 import { STYLE_GEAR, usableStyleOption } from './styleGear';
-import { gearPieceByName, trainingWeapons, type Levels } from './gearAdvisor';
+import { gearPieceByName, shootsOnly, trainingWeapons, type Levels } from './gearAdvisor';
 import { nameKey } from '../items/itemKey';
 import { supplyPrice } from '../market/itemPrice';
 import { xpForLevel } from '../player/xp';
@@ -136,7 +136,7 @@ function withLoot(r: (ModelRate & { secondsPerKill: number }) | null, foe: strin
 function worn(state: PlayerState): { weapon: GearPiece | null; neck: GearPiece | null; armour: GearPiece[]; unknown: number } | null {
   const e = state.equipment;
   const weapon = e.weapon ? gearPieceByName(e.weapon) : null;
-  if (e.weapon && !weapon) return null;
+  if (e.weapon && (!weapon || shootsOnly(weapon))) return null; // Unknown, or a bow: no melee hit.
   const armour: GearPiece[] = [];
   let unknown = 0;
   for (const slot of ['head', 'body', 'legs', 'shield'] as const) {

@@ -64,7 +64,8 @@ describe('S6-04 actual ranged preparation', () => {
     expect(absentFood.engine.plan(absentFood.step).lines.find((r) => r.name === 'Salmon')?.where).not.toBe('BANK');
   });
   // With 30 Hitpoints no frog or barbarian fight reaches the eating point, so their food is optional and the faster spot wins (2.83.0).
-  it.each([[1, 'ra-lumb', 'Seagull'], [20, 'ra-barbarian', 'Barbarian'], [26, 'ra-frog', 'Giant frog'], [39, 'ra-frog', 'Giant frog']] as const)(
+  // At 20 the frogs win by a little once the Leather cowl's defence is known (2.89.0; before, it was an unknown piece).
+  it.each([[1, 'ra-lumb', 'Seagull'], [20, 'ra-frog', 'Giant frog'], [26, 'ra-frog', 'Giant frog'], [39, 'ra-frog', 'Giant frog']] as const)(
     'Ranged%s gets its current trainer, kit and unchanged goal', (level, id, npc) => {
       const s = scenario(level);
       expect(s.pick).toMatchObject({ methodId: id });

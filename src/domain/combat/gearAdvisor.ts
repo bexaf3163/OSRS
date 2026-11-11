@@ -16,10 +16,10 @@ import { matchStrict } from '../travel/locations';
 import { shopAccess } from '../market/shopAccess';
 import { SAVE_GP } from '../market/shopConstants';
 import type { GearState, NavTargetPayload } from '../../services/runeliteBridge';
-import { gearData, gearById, gearByName } from '../items/gearRegistry';
+import { gearData, gearById, gearByName, shootsOnly } from '../items/gearRegistry';
 import { canWear, missingRequirements, REQ_SKILLS } from '../items/gearRequirements';
 import type { MissingRequirement } from '../items/gearRequirements';
-export { gearData, gearById, gearPieceByName } from '../items/gearRegistry';
+export { gearData, gearById, gearPieceByName, shootsOnly } from '../items/gearRegistry';
 export { canWear, missingRequirements } from '../items/gearRequirements';
 export type { MissingRequirement } from '../items/gearRequirements';
 
@@ -203,7 +203,7 @@ export function killSeconds(step: Pick<Step, 'foes'>, levels: Partial<Record<str
   const foe = stepFoes(step)[0];
   if (!foe || !gear?.equipment) return null;
   const equipped = equippedBySlot(gear, data);
-  if (equipped.weapon && !equipped.weapon.piece) return null;
+  if (equipped.weapon && (!equipped.weapon.piece || shootsOnly(equipped.weapon.piece))) return null;
   const r = meleeWith(levelsOf(levels), equipped.weapon?.piece ?? null, equipped.neck?.piece ?? null, {}, foe);
   return r.dps > 0 ? foe.hitpoints / r.dps : null;
 }

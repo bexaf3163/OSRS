@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: item and bonus infoboxes (Bucket infobox_item, infobox_bonuses), shops (storeline, infobox_shop), requirements from the articles",
-  "updated": "2026-11-10",
+  "updated": "2026-11-11",
   "items": [
     {
       "id": 1205,
@@ -4840,6 +4840,479 @@
       },
       "strength": 0,
       "iconUrl": "https://oldschool.runescape.wiki/images/Hardleather_body.png"
+    },
+    {
+      "id": 1167,
+      "name": "Leather cowl",
+      "slot": "head",
+      "kind": "leather",
+      "reqFrom": "Free-to-play PvP equipment",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 1
+      },
+      "defence": {
+        "stab": 2,
+        "slash": 3,
+        "crush": 4,
+        "magic": 2,
+        "ranged": 3
+      },
+      "strength": 0,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Leather_cowl.png"
+    },
+    {
+      "id": 1133,
+      "name": "Studded body",
+      "slot": "body",
+      "kind": "leather",
+      "req": {
+        "ranged": 20,
+        "defence": 20
+      },
+      "reqFrom": "Studded body",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -4,
+        "ranged": 8
+      },
+      "defence": {
+        "stab": 18,
+        "slash": 25,
+        "crush": 22,
+        "magic": 8,
+        "ranged": 25
+      },
+      "strength": 0,
+      "shops": [
+        {
+          "shop": "Horvik's Armour Shop",
+          "location": "Varrock",
+          "price": 850,
+          "owner": "Horvik"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Studded_body.png"
+    },
+    {
+      "id": 1097,
+      "name": "Studded chaps",
+      "slot": "legs",
+      "kind": "leather",
+      "req": {
+        "ranged": 20
+      },
+      "reqFrom": "Studded chaps",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -5,
+        "ranged": 6
+      },
+      "defence": {
+        "stab": 15,
+        "slash": 16,
+        "crush": 17,
+        "magic": 6,
+        "ranged": 16
+      },
+      "strength": 0,
+      "shops": [
+        {
+          "shop": "Horvik's Armour Shop",
+          "location": "Varrock",
+          "price": 750,
+          "owner": "Horvik"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Studded_chaps.png"
+    },
+    {
+      "id": 1135,
+      "name": "Green d'hide body",
+      "slot": "body",
+      "kind": "leather",
+      "req": {
+        "ranged": 40,
+        "defence": 40,
+        "quests": [
+          "Dragon Slayer I"
+        ]
+      },
+      "reqFrom": "Green d'hide body",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -15,
+        "ranged": 15
+      },
+      "defence": {
+        "stab": 18,
+        "slash": 27,
+        "crush": 24,
+        "magic": 20,
+        "ranged": 35
+      },
+      "strength": 0,
+      "shops": [
+        {
+          "shop": "Oziach (shop)",
+          "location": "Edgeville",
+          "price": 10140,
+          "owner": "Oziach"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Green_d'hide_body.png"
+    },
+    {
+      "id": 1099,
+      "name": "Green d'hide chaps",
+      "slot": "legs",
+      "kind": "leather",
+      "req": {
+        "ranged": 40
+      },
+      "reqFrom": "Green d'hide chaps",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -10,
+        "ranged": 8
+      },
+      "defence": {
+        "stab": 12,
+        "slash": 15,
+        "crush": 18,
+        "magic": 8,
+        "ranged": 17
+      },
+      "strength": 0,
+      "shops": [
+        {
+          "shop": "Scavvo's Rune Store",
+          "location": "Champions' Guild",
+          "price": 3900,
+          "owner": "Scavvo"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Green_d'hide_chaps.png"
+    },
+    {
+      "id": 841,
+      "name": "Shortbow",
+      "slot": "weapon",
+      "kind": "bow",
+      "twoHanded": true,
+      "reqFrom": "Free-to-play Ranged training",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 8
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 0,
+      "speed": 4,
+      "shops": [
+        {
+          "shop": "Lowe's Archery Emporium",
+          "location": "Varrock",
+          "price": 50,
+          "owner": "Lowe"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Shortbow.png"
+    },
+    {
+      "id": 843,
+      "name": "Oak shortbow",
+      "slot": "weapon",
+      "kind": "bow",
+      "twoHanded": true,
+      "req": {
+        "ranged": 5
+      },
+      "reqFrom": "Oak shortbow",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 14
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 0,
+      "speed": 4,
+      "shops": [
+        {
+          "shop": "Lowe's Archery Emporium",
+          "location": "Varrock",
+          "price": 100,
+          "owner": "Lowe"
+        },
+        {
+          "shop": "Brian's Archery Supplies",
+          "location": "Rimmington",
+          "price": 100,
+          "owner": "Brian"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Oak_shortbow.png"
+    },
+    {
+      "id": 845,
+      "name": "Oak longbow",
+      "slot": "weapon",
+      "kind": "bow",
+      "twoHanded": true,
+      "req": {
+        "ranged": 5
+      },
+      "reqFrom": "Oak longbow",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 14
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 0,
+      "speed": 6,
+      "shops": [
+        {
+          "shop": "Lowe's Archery Emporium",
+          "location": "Varrock",
+          "price": 160,
+          "owner": "Lowe"
+        },
+        {
+          "shop": "Brian's Archery Supplies",
+          "location": "Rimmington",
+          "price": 160,
+          "owner": "Brian"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Oak_longbow.png"
+    },
+    {
+      "id": 849,
+      "name": "Willow shortbow",
+      "slot": "weapon",
+      "kind": "bow",
+      "twoHanded": true,
+      "req": {
+        "ranged": 20
+      },
+      "reqFrom": "Willow shortbow",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 20
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 0,
+      "speed": 4,
+      "shops": [
+        {
+          "shop": "Lowe's Archery Emporium",
+          "location": "Varrock",
+          "price": 200,
+          "owner": "Lowe"
+        },
+        {
+          "shop": "Brian's Archery Supplies",
+          "location": "Rimmington",
+          "price": 200,
+          "owner": "Brian"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Willow_shortbow.png"
+    },
+    {
+      "id": 847,
+      "name": "Willow longbow",
+      "slot": "weapon",
+      "kind": "bow",
+      "twoHanded": true,
+      "req": {
+        "ranged": 20
+      },
+      "reqFrom": "Willow longbow",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 20
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 0,
+      "speed": 6,
+      "shops": [
+        {
+          "shop": "Lowe's Archery Emporium",
+          "location": "Varrock",
+          "price": 320,
+          "owner": "Lowe"
+        },
+        {
+          "shop": "Brian's Archery Supplies",
+          "location": "Rimmington",
+          "price": 320,
+          "owner": "Brian"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Willow_longbow.png"
+    },
+    {
+      "id": 853,
+      "name": "Maple shortbow",
+      "slot": "weapon",
+      "kind": "bow",
+      "twoHanded": true,
+      "req": {
+        "ranged": 30
+      },
+      "reqFrom": "Maple shortbow",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 29
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 0,
+      "speed": 4,
+      "shops": [
+        {
+          "shop": "Lowe's Archery Emporium",
+          "location": "Varrock",
+          "price": 400,
+          "owner": "Lowe"
+        },
+        {
+          "shop": "Brian's Archery Supplies",
+          "location": "Rimmington",
+          "price": 400,
+          "owner": "Brian"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Maple_shortbow.png"
+    },
+    {
+      "id": 851,
+      "name": "Maple longbow",
+      "slot": "weapon",
+      "kind": "bow",
+      "twoHanded": true,
+      "req": {
+        "ranged": 30
+      },
+      "reqFrom": "Maple longbow",
+      "members": false,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 29
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 0,
+      "speed": 6,
+      "shops": [
+        {
+          "shop": "Lowe's Archery Emporium",
+          "location": "Varrock",
+          "price": 640,
+          "owner": "Lowe"
+        },
+        {
+          "shop": "Brian's Archery Supplies",
+          "location": "Rimmington",
+          "price": 640,
+          "owner": "Brian"
+        }
+      ],
+      "iconUrl": "https://oldschool.runescape.wiki/images/Maple_longbow.png"
     },
     {
       "id": 1379,
