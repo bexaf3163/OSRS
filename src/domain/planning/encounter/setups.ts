@@ -5,7 +5,7 @@ import { gearMarketPrices } from '../../combat/gearAdvice';
 import { estimateStepFights, stepFightNames, stepFightFoes } from '../../combat/fightEstimate';
 import type { FightEstimate } from '../../combat/fightEstimate';
 import { EAT_SECONDS } from '../../combat/combatEstimate';
-import { gearById, gearPieceByName } from '../../items/gearRegistry';
+import { gearById, gearPieceByName, shootsOnly } from '../../items/gearRegistry';
 import { safetyRulesOf } from '../../prep/safety';
 import { FIGHT_MECHANICS } from '../../../data/fightMechanics';
 import { stepFood } from '../../player/foodStock';
@@ -82,7 +82,9 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
   const current = forecast(step, stats, base, [], protection.length ? protection.map(piece => piece.name).join(' + ') : 'Current equipment', [], protection,
     protection.length ? undefined : estimates);
   if (options.currentOnly) return current ? [current] : [];
-  const melee = ['attack', 'strength', 'defence'].filter(skill => !(options.keepDefenceOne && skill === 'defence'));
+  // The skills that change the fight: melee ones, or Ranged and Defence for a bow user (a bow has no melee hit).
+  const bow = shootsOnly(gearPieceByName(base.equipment?.find(p => p.slot === 'weapon')?.name ?? ''));
+  const melee = (bow ? ['ranged', 'defence'] : ['attack', 'strength', 'defence']).filter(skill => !(options.keepDefenceOne && skill === 'defence'));
   const questsDone = new Set(Object.entries(snapshot.quests).filter(([, q]) => q.state === 'COMPLETED').map(([id]) => id));
   // One quote table and one advice per level set for the whole search: the even-training search asks again at each searched level.
   const geQuotes = gearMarketPrices(prices), foes = stepFightFoes(step), advised = new Map<string, ReturnType<typeof adviseGear>>();

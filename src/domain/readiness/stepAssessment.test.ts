@@ -4,7 +4,7 @@ import { buildPlayerState } from '../player/playerState';
 import { emptyProgress } from '../persistence/progress';
 import { gearPieceByName } from '../combat/gearAdvisor';
 import { createReadinessEngine } from './readinessEngine';
-import { assessStepReadiness } from './stepAssessment';
+import { assessStepReadiness, fightTrainingTarget } from './stepAssessment';
 import type { GearState } from '../../services/runeliteBridge';
 
 const stats = { attack: 99, strength: 99, defence: 99, hitpoints: 99, magic: 99 };
@@ -22,6 +22,20 @@ function assess(name: string, worn: GearState = gear, levels: Partial<typeof sta
   const engine = createReadinessEngine({ steps: [step], state, progress, mode: 'f2p', qp: 99 });
   return assessStepReadiness({ step, plan: engine.plan(step), connected: true, owned, stats: levels, gear: worn, view: null });
 }
+
+describe('a bow user trains Ranged for a fight, not melee', () => {
+  it('finds the Ranged level that makes the fight safe; Attack does not help a weapon that only shoots', () => {
+    const bow = gearPieceByName('Shortbow')!;
+    const archer = { equipment: [{ id: bow.id, name: bow.name, slot: 'weapon' }, { id: 882, name: 'Bronze arrow', slot: 'ammo', count: 500 }], inventory: [], coins: 0, bankCoins: 0 } as GearState;
+    const step: Step = { id: 'S99-02', title: 'Synthetic fight', type: 'quest', stage: 1, requires: [], doneWhen: 'Observed',
+      foes: ['Black Knight'], itemsRequired: [{ nameEn: 'Trout', amount: 5, heals: 7, howToGet: '' }] };
+    const weak = { attack: 1, strength: 1, defence: 1, hitpoints: 10, ranged: 1 };
+    const ranged = fightTrainingTarget(step, weak, archer, 'ranged');
+    expect(ranged).toMatchObject({ skill: 'ranged' });
+    expect(ranged!.level).toBeGreaterThan(1);
+    expect(fightTrainingTarget(step, weak, archer, 'attack')).toBeNull();
+  });
+});
 
 describe('shared combat capability boundaries', () => {
   it('does not certify regeneration, unmodelled attacks or an unknown foe from ordinary kit checks', () => {

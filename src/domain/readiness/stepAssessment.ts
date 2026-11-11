@@ -38,6 +38,8 @@ export function assessStepReadiness(input: {
 }
 
 const MELEE = ['attack', 'strength', 'defence'];
+/** The skills a fight's training forecast can raise: melee, and Ranged for a bow user's fight. */
+const FIGHT_SKILLS = [...MELEE, 'ranged'];
 
 /** Search-only ordinary melee XP: one trained skill, plus its conservative Hitpoints gain. Never observed state.
  * OSRS Wiki /Hitpoints and /Strength: 1.33 HP XP and 4 selected-skill XP per damage; quest/non-combat XP must not use this. */
@@ -65,8 +67,8 @@ export function evenlyTrainedStats(stats: PlayerStats, skills: readonly string[]
 export function safeTrainingLevel(step: Step, stats: PlayerStats | null, gear: GearState | null,
   skills: readonly string[], xp: Readonly<Record<string, number>> = {}): number | null {
   const count = stepFightFoes(step).length;
-  if (!count || count !== stepFightNames(step).length || !stats || !skills.length || skills.some(skill => !MELEE.includes(skill))
-    || ['hitpoints', ...MELEE].some(s => !Number.isInteger(stats[s]) || stats[s] < 1 || stats[s] > 99)) return null;
+  if (!count || count !== stepFightNames(step).length || !stats || !skills.length || skills.some(skill => !FIGHT_SKILLS.includes(skill))
+    || ['hitpoints', ...MELEE, ...skills].some(s => !Number.isInteger(stats[s]) || stats[s] < 1 || stats[s] > 99)) return null;
   const otherSlots = (step.itemsRequired ?? []).filter(item => !item.heals && !item.equip).length;
   const fits = (levels: PlayerStats) => {
     const fights = estimateStepFights(step, levels, gear);

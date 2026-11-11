@@ -17,7 +17,7 @@ import { acceptsDecision } from './scope';
 import { projectedTrainingState } from './resources';
 
 export interface TrainingCandidate {
-  /** Every forecast leg earns the selected melee skill through ordinary NPC combat, hence also Hitpoints XP. */
+  /** Every forecast leg earns the selected melee or Ranged skill through ordinary NPC combat, hence also Hitpoints XP. */
   combatXp?: boolean;
   step: Step | null;
   action: CandidateAction;
@@ -69,7 +69,7 @@ export function prerequisiteTraining(input: TrainingOptions & {
     ? { unknownItems: [...new Set(flows.materials.flatMap(m => [m.name, ...(m.anyOf ?? [])]))], items: [], gp: 0, source: `Shared processing forecast for ${skill} ${advice.target}` }
     : null;
   return { step: training.step, target: training.target, remaining, consumption,
-    combatXp: ['attack', 'strength', 'defence'].includes(skill) && advice.path.length > 0
+    combatXp: ['attack', 'strength', 'defence', 'ranged'].includes(skill) && advice.path.length > 0
       && advice.path.every(leg => leg.method.kind !== 'quest' && !!leg.method.npcNames?.length), action: {
     id: `${goalId}:TRAIN:${skill}:${phase}:${advice.best.method.id}`, goalId, kind: 'TRAIN',
     title: `${advice.best.method.name}: ${skill} to ${phase}`, stepId: training.step.id,
