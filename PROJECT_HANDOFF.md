@@ -218,7 +218,7 @@ Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3
 
 Known limits: fees are bounded allowances; gathering competition, Forestry and Musa Point boat banking are approximations; altar timing assumes the supported exit model; food estimates are no survival guarantee. Alchemy, enchanting and splashing keep target/setup/budget safeguards. No implied parity for unsupported Members or HDOS mechanics. Facts checked against the OSRS Wiki on 2026-10-31.
 
-## Current verification — encounters, tools, fresh-account planning (2.86.0–2.87.1)
+## Current verification — encounters, tools, fresh-account planning (2.86.0–2.87.2)
 
 Kept: `planning/encounter/{setups,strategy}.ts` compares bounded melee preparations; `executionStep` carries the kit; forecasts add damage-earned HP (1.33/4 XP).
 
@@ -226,11 +226,11 @@ Kept: `planning/encounter/{setups,strategy}.ts` compares bounded melee preparati
 - `authored/fightMechanics.json` (Wiki) feeds `fightEstimate.ts`: regeneration, drains, finishers, weapon multiplier, company, specials, protected attacks, safespot spell. `magicPlan.spellHit` (tier, magic bonus, elemental weakness) also rates training. `cannot` means train or upgrade; modelled regeneration proves that capability. Protection keeps its slot; quest kit is never advised; uncovered attacks stay UNKNOWN. Ancient Guardian: melee estimate; pillars are route text.
 - Fresh account: worn pieces count as owned; melee methods unsafe at the player's Hitpoints are LOCKED. Pirate's gardener is a threat; Prince Ali's jail guards a run-past.
 - `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`; trip spot→GE→spot. `trainingKit.equipmentLine` states the engine's tool/kit decision on Skills (fixed notes retired). Weapons: one skill's XP.
-- Game line: engine's bank/drop choice; plaque shows the stamp alone (empty labels draw nothing). After all F2P quests, Path ranks F2P checkpoints (`f2pCheckpoints`: value, then engine time) with Follow.
+- Game line: engine's bank/drop choice; plaque shows the stamp alone. After all F2P quests, Path ranks F2P checkpoints (`f2pCheckpoints`: value, then engine time) with Follow.
 
-Verification: 2,634 units; 640 plugin tests (cached jars, javac/JUnit); 769 browser checks; light gates. Perf versus 2.87.0: update +1%. 2.86.1 failed CI (empty TextLayout).
+Verification: 2,636 units; 769 browser checks; route gate; light gates; plugin unchanged since 2.87.0 (640 passed). Perf versus 2.87.1: update −1%.
 
-Limits: melee-only preparation; Wiki length bands for quest work. `gate:f2p`: 23 of 23 quests, no checks. A later quest fight is proven by `encounterSetups` (time unknown until reached); protection goes on after training. Remaining time mostly UNKNOWN. Next: route gate, measured times.
+Limits: melee-only preparation; Wiki bands for quest work. `gate:f2p`: 23/23 quests, no checks; time unknown on 76/202 turns. Later quest fights are proven by `encounterSetups`; protection goes on after training; QP/prerequisites are planner order, not preparation; spawns lead for one piece only. Next: price fights with pending kit.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt
