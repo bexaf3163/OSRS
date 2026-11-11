@@ -84,10 +84,12 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
   // Training time to a level from the shared training cost, measured from the observed state (train-then-earn, S61).
   const trainingCost = createTrainingCost(snapshot, options), observed = observedProjection(snapshot);
   const train = (skill: string, level: number) => trainingCost(skill, level, observed);
+  // A fight the encounter engine can win: now, with the current levels and gear, or after some training and kit.
   const winnings = new Map<string, boolean>();
-  const winnable = (step: Step): boolean => {
-    if (!winnings.has(step.id)) winnings.set(step.id, encounterSetups(step, snapshot, prices, ironman, { keepDefenceOne: input.keepDefenceOne }).length > 0);
-    return winnings.get(step.id)!;
+  const winnable = (step: Step, currentOnly = false): boolean => {
+    const key = `${step.id}:${currentOnly}`;
+    if (!winnings.has(key)) winnings.set(key, encounterSetups(step, snapshot, prices, ironman, { currentOnly, keepDefenceOne: input.keepDefenceOne }).length > 0);
+    return winnings.get(key)!;
   };
   const tactical = createTacticalResolver({
     snapshot, progress: input.progress, prices, window, style: input.style, priority: input.priority,
@@ -126,8 +128,9 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
           const met = fights.length > 0 && fights.filter(fight => remaining.has(fight.id)).every(fight => {
             const frame = tactical.resolve(fight, goal.id);
             // A later fight is prepared when it is reached, with kit the quest hands over on the way (a maze key, a shield):
-            // a modelled, safe way to win it is the proof now. Its preparation time stays unknown until then.
-            return frame.action === null || !!frame.encounter || (laterFight(fight, goal) && winnable(fight));
+            // a modelled, safe way to win it is the proof now. The current one, still buying its kit, is proven when the current
+            // levels and gear already win it: the purchases are then the whole preparation, and they are priced.
+            return frame.action === null || !!frame.encounter || (laterFight(fight, goal) ? winnable(fight) : winnable(fight, true));
           });
           const dangers = [...remaining].filter(id => DANGER.has(id));
           const escaped = dangers.length > 0 && dangers.every(id => RUN_PAST.has(id));
