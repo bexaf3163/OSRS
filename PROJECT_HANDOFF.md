@@ -218,7 +218,7 @@ Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3
 
 Known limits: fees are bounded allowances; gathering competition, Forestry and Musa Point boat banking are approximations; altar timing assumes the supported exit model; food estimates are no survival guarantee. Alchemy, enchanting and splashing keep target/setup/budget safeguards. No implied parity for unsupported Members or HDOS mechanics. Facts checked against the OSRS Wiki on 2026-10-31.
 
-## Current verification — encounters, tools, fresh-account planning (2.86.0–2.88.0)
+## Current verification — encounters, tools, fresh-account planning (2.86.0–2.88.1)
 
 Kept: `planning/encounter/{setups,strategy}.ts` compares bounded melee preparations; `executionStep` carries the kit; forecasts add damage-earned HP.
 
@@ -228,7 +228,7 @@ Kept: `planning/encounter/{setups,strategy}.ts` compares bounded melee preparati
 - `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`; trip spot→GE→spot. `trainingKit.equipmentLine` states the engine's tool/kit decision on Skills; F2P notes are one-line checkpoints, no Wiki rates. Weapons: one skill's XP.
 - Game line: engine's bank/drop choice; plaque shows the stamp alone. After all F2P quests, Path ranks F2P checkpoints (`f2pCheckpoints`: value, then engine time) with Follow.
 
-Verification: 2,637 units; 769 browser checks; route gate; light gates; screenshot diff at noise; plugin as 2.87.0. Perf versus 2.87.3: update +1%.
+Path rows name unknown parts; planner weighing is folded. Verification: 2,637 units; 769 browser checks; light gates; plugin as 2.87.0. Perf versus 2.88.0: update +7%.
 
 Limits: melee-only preparation; Wiki bands for quest work. `gate:f2p`: 23/23 quests, no checks; time unknown on 51/209 turns. Later quest fights are proven by `encounterSetups`, a current one with pending kit by its current setup; protection goes on after training; QP/prerequisites are planner order; spawns lead for one piece. Next: measured quest times.
 
