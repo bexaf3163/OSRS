@@ -126,7 +126,10 @@ export function createTacticalResolver(input: TacticalInput) {
       const live = snapshot.combat ?? { stats: null, gear: null };
       const view = combatPlanView(execution, { ...live, owned: snapshot.player.owned });
       const assessment = assessStepReadiness({ step: execution, plan, connected: snapshot.player.connected, owned: snapshot.player.owned, ...live, view });
-      const ready = !assessment.unassessedFights.length && ['READY', 'READY_CAUTIONS'].includes(assessment.verdict.level);
+      // Quest points and prerequisite quests are the planner's order (preparation.ts), not this step's readiness.
+      const order = new Set(readiness.requirements.filter(req => req.kind === 'qp' || req.kind === 'quest').map(req => req.label));
+      const ready = !assessment.unassessedFights.length && (['READY', 'READY_CAUTIONS'].includes(assessment.verdict.level)
+        || (assessment.verdict.level === 'NOT_MET' && plan.blockers.every(blocker => order.has(blocker.label))));
       if (fight && !assessment.unassessedFights.length) {
         const encounter = chooseEncounter(input, execution, goalId, trainingStep => resolve(trainingStep, goalId, chain), candidateFor, budget.reserve);
         if (encounter) {

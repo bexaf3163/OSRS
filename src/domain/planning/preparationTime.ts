@@ -31,6 +31,8 @@ export function preparationTime(
   const gathered: Minutes[] = [];
   for (const line of frame.plan.lines) {
     if (line.timing !== 'NOW' || (line.priority !== 'CRITICAL' && line.priority !== 'IMPORTANT')) continue;
+    // An ingredient (prepPlan recipeLines) is the other way to the item it makes, which is priced as its own line.
+    if (line.key.startsWith('recipe:')) continue;
     const { bag, equipped, bank } = line.have;
     if (bag !== null && bag + equipped >= line.count) continue;
     if (bank !== null && (bag ?? 0) + equipped + bank >= line.count) { banked = true; continue; }

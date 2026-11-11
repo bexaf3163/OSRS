@@ -43,7 +43,9 @@ export function resolvePreparation(input: PreparationInput): CandidateAction | n
       ...(destination ? { destination: { x: destination.x, y: destination.y, plane: destination.plane ?? 0 } } : {}) };
   }
   if (!snapshot.player.connected) return action('VERIFY', 'connection', 'Connect RuneLite to check the current preparation', 'Current character and usable possessions observed');
-  const structural = input.readiness.requirements.filter(req => req.hard && req.kind !== 'item' && req.kind !== 'coins' && req.state !== 'OK');
+  // Quest points and prerequisite quests are the planner's order (questModel, over its projection), not physical preparation: a later
+  // quest's kit is priced as when it is reached.
+  const structural = input.readiness.requirements.filter(req => req.hard && !['item', 'coins', 'qp', 'quest'].includes(req.kind) && req.state !== 'OK');
   const unknown = structural.find(req => req.state === 'UNKNOWN');
   if (unknown) return action('VERIFY', unknown.kind + unknown.label, `Check ${unknown.label}`, `${unknown.label} verified`);
   const skill = structural.find(req => req.kind === 'skill' && req.stat);

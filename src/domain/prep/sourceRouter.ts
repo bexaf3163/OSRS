@@ -176,11 +176,12 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   }
   // An unlocated acquisition is a reference, not a nearby free trip. Prefer a usable placed source before it.
   // Already owned stock stays first even when the current position/bank destination is unread.
-  // "Free nearby" is no farther than FREE_NEAR tiles; farther, the free one goes on a par with the shop and the exchange.
+  // "Free nearby" is no farther than FREE_NEAR tiles; farther, the free one goes on a par with the shop and the exchange. A spawn gives one
+  // piece per visit: for more, its respawn waits are unmeasured time, and a purchase (known time) goes first.
   const rank = (o: SourceOption): number =>
     o.kind === 'bag' || o.kind === 'bank' ? 0 : o.access !== undefined && o.access !== 'open' ? 2.6
       : o.kind === 'drop' ? 3 : !o.point ? 2.75
-        : o.kind === 'free' ? (o.giver || o.distance === undefined || o.distance <= FREE_NEAR ? 1 : 2.5) : 2;
+        : o.kind === 'free' ? (o.giver || (input.need <= 1 && (o.distance === undefined || o.distance <= FREE_NEAR)) ? 1 : 2.5) : 2;
   const ordered = out
     .filter((o) => !input.kinds || input.kinds.includes(o.kind))
     .map((o, i) => ({ o, i }))

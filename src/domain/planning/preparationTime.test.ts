@@ -34,6 +34,11 @@ describe('the complete preparation trip', () => {
     expect(preparationTime(frame([]), null, () => minute)).toBeNull();
     expect(preparationTime(frame([line({ action: { kind: 'BUY', nav: origin } })]), origin, () => null)).toBeNull();
   });
+  it('prices the bought item, not the ingredients that are the other way to make it', () => {
+    const buy = line({ key: 'dye', name: 'Orange dye', action: { kind: 'BUY', nav: { x: 3210, y: 3240, plane: 0 } } });
+    const ingredient = line({ key: 'recipe:dye:Red dye', name: 'Red dye', priority: 'IMPORTANT', action: { kind: 'GATHER' } });
+    expect(preparationTime(frame([buy, ingredient]), origin, () => minute)).toEqual(preparationTime(frame([buy]), origin, () => minute));
+  });
   it('continues from the purchase to the encounter once, without adding a second origin-to-encounter trip', () => {
     const shop = { x: 3210, y: 3240, plane: 0 }, finish = { x: 3030, y: 3500, plane: 0 };
     const legs: unknown[] = [];

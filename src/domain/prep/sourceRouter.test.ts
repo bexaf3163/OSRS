@@ -36,4 +36,14 @@ describe('usable acquisition sources before unlocated references', () => {
     expect(result.primary).toMatchObject({ kind: 'free', point: { x: point.x, y: point.y, plane: point.plane } });
     expect(state.owned?.items.size).toBe(0);
   });
+
+  it('buys several pieces rather than wait on one spawn: its respawn time is not measured, a purchase\'s is', () => {
+    const state = player();
+    const point = matchStrict('Draynor Manor')!;
+    state.position = { known: true, value: point, source: 'game' };
+    const detail = { ...itemById.get(1925)!, freeSpawns: ['Draynor Manor'] };
+    expect(planSources({ name: 'Bucket', need: 3, shortage: true, detail, gePrice: 20 }, state).primary?.kind).not.toBe('free');
+    // With no other source the spawn is still offered.
+    expect(planSources({ name: 'Bucket', need: 3, shortage: true, detail, kinds: ['free'] }, state).primary?.kind).toBe('free');
+  });
 });

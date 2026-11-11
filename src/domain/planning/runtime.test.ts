@@ -266,7 +266,7 @@ describe('different characters through the integrated runtime (brief 39 counterf
     expect(unknown.activeAction.title).toMatch(/Verify the current stage/);
   });
 
-  it('a quest\'s later fights are proven by a modelled way to win them: Dragon Slayer starts, their preparation stays unpriced', () => {
+  it('a quest\'s later fights are proven by a modelled way to win them: Dragon Slayer starts, its fights priced by the fight model', () => {
     // The quest hands over the Maze key (S5-01) and the Anti-dragon shield on the way: they cannot be ready before it starts.
     const quest = questCatalogue.find(q => q.id === 'Dragon Slayer I')!;
     const stats = { attack: 40, strength: 40, defence: 40, hitpoints: 40, magic: 20 };
@@ -280,7 +280,7 @@ describe('different characters through the integrated runtime (brief 39 counterf
     const proven = decide(armed);
     expect(proven.objectiveId).toBe(quest.id);
     expect(proven.activeAction.title).not.toBe(`Verify combat readiness for ${quest.id}`);
-    expect(proven.estimatedRemaining).toBeNull();
+    expect(proven.estimatedRemaining?.source).toMatch(/fightEstimate/);
     // Without observed levels and gear no fight is modelled: the quest still waits for the check.
     expect(decide(base).activeAction).toMatchObject({ kind: 'VERIFY', title: `Verify combat readiness for ${quest.id}` });
   }, 60_000);
