@@ -2,10 +2,11 @@
 // Used by check-data.ts and the tests. No network.
 
 import type {
-  LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Step, WikiItemDetail, XpData,
+  LevelSkill, MembersSkillsData, PluginsData, QuestStage, ReferenceData, Skill, Step, WikiItemDetail, XpData,
 } from '../../src/types/index.ts';
 import { xpForLevel } from '../../src/domain/player/xp.ts';
 import { RETIRED_STEPS } from '../../src/domain/persistence/progress.ts';
+import { stageNpcCandidates } from '../../src/domain/quests/npcMention.ts';
 
 export interface GuideData {
   skills: Skill[];
@@ -28,6 +29,9 @@ export interface Route {
   npcs?: Record<string, { x: number; y: number; plane: number; area: string; page: string; steps?: string[] }[]>;
   /** The place dictionary (majorLocations.json): shops and places where items come from. */
   places?: Record<string, { x: number; y: number; plane: number; label: string; kind?: string }>;
+  /** The quest stages (questStages.json) and the recipes (recipes.json): the other places the guide looks an NPC up from. */
+  stages?: Record<string, { stages?: QuestStage[] }>;
+  recipes?: Record<string, { from: { npc?: string }[] }>;
   /** The training spots of the combat plans (trainers.json, built from scripts/data/trainers.defs.json). */
   trainers?: {
     foe: string; name: string; fromStep?: string; formerStep?: string; levels?: number[]; bank?: string; sell?: string; always: string[];
@@ -282,9 +286,15 @@ export function validate(d: GuideData | null, route: Route): Report {
     });
     check(!badFrom.length && !badNpc.length, 'Where items come from and where the steps\' NPCs are — the places exist on the map',
       `Places: ${[...badFrom, ...badNpc].join('; ')}`);
-    const used = new Set(steps.flatMap((s) => [...(s.inGame?.npcNames ?? []), ...(s.itemsRequired ?? []).map((i) => i.from ?? '')]));
+    // Every place the guide looks an NPC up: the step's NPCs, where its items come from, the quest-stage lines and targets, the recipes.
+    const used = new Set([
+      ...steps.flatMap((s) => [...(s.inGame?.npcNames ?? []), ...(s.itemsRequired ?? []).map((i) => i.from ?? '')]),
+      ...Object.values(route.stages ?? {}).flatMap((q) => (q.stages ?? []).flatMap((st) => [
+        ...(typeof st.go === 'string' ? [st.go] : []), ...st.do.flatMap((line) => stageNpcCandidates(st, line))])),
+      ...Object.values(route.recipes ?? {}).flatMap((r) => r.from.map((f) => f.npc ?? '')),
+    ]);
     const unused = Object.keys(npcs).filter((n) => !used.has(n));
-    if (unused.length) warn(`NPCs from npcLocations.json are not needed by any step: ${unused.join(', ')}`);
+    if (unused.length) warn(`NPCs from npcLocations.json that the guide never looks up: ${unused.join(', ')}`);
   }
   // The wiki "Map" link and the preview point are the same place: a discrepancy means only one of them was fixed.
   const drift = steps.filter((s) => {

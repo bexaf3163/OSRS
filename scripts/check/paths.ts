@@ -15,5 +15,6 @@ export function readRoute(): Route {
   return {
     steps: read('steps.json'), items: read('f2p-items.json'), combatFoes: read('combatFoes.json'),
     npcs: read('npcLocations.json').npcs, places: read('majorLocations.json').locations, trainers: read('trainers.json').trainers,
+    stages: read('questStages.json').quests, recipes: read('recipes.json').recipes,
   };
 }

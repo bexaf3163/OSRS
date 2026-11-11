@@ -153,4 +153,12 @@ describe('step readiness', () => {
     const ghost = allSteps.map((s) => (s.id === 'S9-04' ? { ...s, requirements: [...s.requirements!, { type: 'quest' as const, quest: 'Recipe for Disaster' }] } : s));
     expect(validate(null, { ...route, steps: ghost }).lines.join('\n')).toContain('is not from the route');
   });
+
+  it('check-data counts an NPC the guide looks up from a quest-stage line, and warns only about one nothing looks up', () => {
+    const npcs = { 'Stage Only': [{ x: 2967, y: 3205, plane: 0, area: 'Rimmington', page: 'Hetty' }], Nobody: [{ x: 3222, y: 3218, plane: 0, area: 'Lumbridge', page: 'Nobody' }] };
+    const stages = { 'S9-90': { stages: [{ at: 0, do: [{ t: 'Talk to Stage Only in Rimmington.' }] }] } };
+    const warned = validate(null, { steps: allSteps, items, npcs, stages, places: {} }).lines.find((line) => line.includes('never looks up')) ?? '';
+    expect(warned).toContain('Nobody');
+    expect(warned).not.toContain('Stage Only');
+  });
 });

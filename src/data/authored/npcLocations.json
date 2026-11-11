@@ -75,15 +75,6 @@
         "page": "Count Check"
       }
     ],
-    "Fishing tutor": [
-      {
-        "x": 3244,
-        "y": 3157,
-        "plane": 0,
-        "area": "Lumbridge Swamp",
-        "page": "Fishing tutor"
-      }
-    ],
     "Duke Horacio": [
       {
         "x": 3211,
@@ -118,24 +109,6 @@
         "plane": 0,
         "area": "the cow barn east of Lumbridge",
         "page": "Gillie Groats"
-      }
-    ],
-    "Bob": [
-      {
-        "x": 3229,
-        "y": 3204,
-        "plane": 0,
-        "area": "the axe shop in south Lumbridge",
-        "page": "Bob"
-      }
-    ],
-    "Diango": [
-      {
-        "x": 3081,
-        "y": 3247,
-        "plane": 0,
-        "area": "the Draynor Village market",
-        "page": "Diango"
       }
     ],
     "Morgan": [
@@ -478,15 +451,6 @@
         "plane": 0,
         "area": "the Varrock Palace throne room",
         "page": "King Roald"
-      }
-    ],
-    "Thessalia": [
-      {
-        "x": 3206,
-        "y": 3416,
-        "plane": 0,
-        "area": "the clothes shop in Varrock",
-        "page": "Thessalia"
       }
     ],
     "Guildmaster": [
@@ -859,15 +823,6 @@
         "page": "Filliman Tarlock"
       }
     ],
-    "Mazchna": [
-      {
-        "x": 3511,
-        "y": 3509,
-        "plane": 0,
-        "area": "Canifis",
-        "page": "Mazchna"
-      }
-    ],
     "Alice": [
       {
         "x": 3628,
@@ -893,15 +848,6 @@
         "plane": 0,
         "area": "Burthorpe",
         "page": "Turael"
-      }
-    ],
-    "Grace": [
-      {
-        "x": 3050,
-        "y": 4961,
-        "plane": 0,
-        "area": "Rogues' Den",
-        "page": "Grace"
       }
     ],
     "Fairy Godfather": [

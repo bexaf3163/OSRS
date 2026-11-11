@@ -8,6 +8,7 @@ import type { NavTargetPayload, QuestInstruction } from '../../services/runelite
 import { nameKey } from '../items/itemKey';
 import { shortLine } from './shortText';
 import { npcSpot } from '../travel/stepPlaces';
+import { stageNpcCandidates } from './npcMention';
 import { heldOf, type PlayerState } from '../player/playerState';
 
 export interface SubStepItem {
@@ -107,20 +108,7 @@ function build(step: Step, stage: QuestStage, line: QuestStageLine, i: number): 
 
 /** The name of the NPC the sub-step is about, if the dictionary knows where it stands. */
 export function subStepNpc(step: Step, stage: QuestStage, line: QuestStageLine): string | null {
-  const known = (name: string) => (npcSpot(name, step.id) ? name : null);
-  if (typeof stage.go === 'string' && /talk|speak|ask|hassan|osman/i.test(line.t) && known(stage.go)) return stage.go;
-  const candidates: string[] = [];
-  const colon = /^([A-Z][\w'’. -]{2,28}):/.exec(line.s ?? '');
-  if (colon) candidates.push(colon[1].trim());
-  const talk = /\b(?:Talk to|Speak to|Ask|Return to|Give [^.]*? to)\s+((?:[A-Z][\w'’.-]*\s?){1,3})/.exec(line.t);
-  if (talk) candidates.push(talk[1].trim());
-  for (const c of candidates) {
-    const direct = known(c);
-    if (direct) return direct;
-    const noTitle = c.replace(/^(Lady|Lord|King|Queen|Captain|Dr\.?|Sir)\s+/i, '');
-    if (noTitle !== c && known(noTitle)) return noTitle;
-  }
-  return null;
+  return stageNpcCandidates(stage, line).find((name) => npcSpot(name, step.id)) ?? null;
 }
 
 const FLOORS = ['Ground floor', '1st floor', '2nd floor', '3rd floor'];
