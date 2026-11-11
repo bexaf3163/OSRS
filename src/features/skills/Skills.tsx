@@ -77,7 +77,7 @@ function SkillCard({ skill, id }: { skill: Skill; id: string }) {
     <SkillGlyph skill={id} size={28} />
     <span className="skill-name">{name}</span>
     <span className="muted">{levelOf(progress, id)}{isTracked && <span className="visually-hidden">, followed in the game</span>}</span>
-    {advice && <span className={`f2p-skill-badge is-${advice.priority}`} title={`${F2P_PRIORITY_LABEL[advice.priority]}. ${advice.reason} ${advice.comparison}`}>
+    {advice && <span className={`f2p-skill-badge is-${advice.priority}`} title={`${F2P_PRIORITY_LABEL[advice.priority]}. ${advice.reason}`}>
       {f2pAdviceLabel(advice, knownLevel)}
     </span>}
   </>;

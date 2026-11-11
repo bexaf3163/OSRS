@@ -12,8 +12,9 @@ describe('advisory F2P checkpoints', () => {
       const row = f2pAdviceFor(id)!;
       if (row.target !== null) expect(row.target).toBeGreaterThanOrEqual(1);
       if (row.target !== null) expect(row.target).toBeLessThanOrEqual(99);
-      expect(row.sources.every(url => url.startsWith('https://oldschool.runescape.wiki/w/'))).toBe(true);
-      expect(row.comparison.length).toBeGreaterThan(0);
+      // One reason why it stops there; the rate is the engine's, on the training card, never a copied figure here.
+      expect(row.reason.length).toBeGreaterThan(0);
+      expect(row.reason).not.toMatch(/XP\/h|\d{2},\d{3}/);
     }
   });
 

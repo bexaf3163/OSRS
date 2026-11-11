@@ -310,20 +310,22 @@ function OtherSkillHint({ skill, target }: { skill: string; target: number }) {
   );
 }
 
-/** On a free account: why the F2P checkpoint stops where it does and what membership opens by then, from the method catalogue. */
+/** Members methods near the F2P stop, by level, from the method catalogue: what membership opens next. */
+function membersNear(skill: string, stop: number | null) {
+  return methodsFor(skill).filter((m) => m.kind === 'method' && m.members && (stop === null || m.from <= stop + 20))
+    .sort((a, b) => a.from - b.from).slice(0, 3);
+}
+
+/** On a free account: what membership opens by the F2P checkpoint. */
 function MembersFromHere({ skill }: { skill: string }) {
   const f2p = f2pAdviceFor(skill);
   if (!f2p) return null;
   const stop = f2p.target;
-  // Members methods near the stop, by level: what membership opens next.
-  const members = methodsFor(skill)
-    .filter((m) => m.kind === 'method' && m.members && (stop === null || m.from <= stop + 20))
-    .sort((a, b) => a.from - b.from)
-    .slice(0, 3);
+  const members = membersNear(skill, stop);
+  if (!members.length) return null;
   return (
     <section className="section small stage-members" aria-label="With membership">
       <h3>{stop !== null ? `After ${stop}: with membership` : 'With membership'}</h3>
-      <p className="muted">{f2p.reason} {f2p.comparison}</p>
       {members.length > 0 && <ul>
         {members.map((m) => (
           <li key={m.id}><strong>{m.name}</strong> · from {m.from}{m.xph ? ` · ${rateText(m)}` : ''}{m.where ? ` · ${m.where}` : ''}</li>
@@ -339,9 +341,11 @@ export function F2pStops() {
     <section className="section small stage-members" aria-label="Where F2P stops">
       <h3>Where F2P stops and membership pays more</h3>
       <ul>
-        {Object.entries(F2P_SKILL_ADVICE).filter(([, a]) => a.priority !== 'passive').map(([id, a]) => (
-          <li key={id}><strong>{skillTitle(id)}{a.target !== null ? ` ${a.target}` : ''}</strong> · {a.comparison}</li>
-        ))}
+        {Object.entries(F2P_SKILL_ADVICE).filter(([, a]) => a.priority !== 'passive').map(([id, a]) => {
+          const next = membersNear(id, a.target)[0];
+          return <li key={id}><strong>{skillTitle(id)}{a.target !== null ? ` ${a.target}` : ''}</strong> · {next
+            ? `${next.name} from ${next.from}${next.xph ? `, ${rateText(next)}` : ''}` : a.reason}</li>;
+        })}
       </ul>
     </section>
   );
