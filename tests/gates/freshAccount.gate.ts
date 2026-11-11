@@ -4,7 +4,8 @@
 // quests. Run: npm run gate:f2p (about ten minutes; not part of npm test).
 // Fixed inputs keep it repeatable: the GE prices of tests/fixtures/gePrices.json, earning at a cowhide rate, straight-line walking. The
 // game is simplified: training reaches its target at once (melee adds its Hitpoints XP), purchases land in the bag, rewards come with
-// the last step, and an item a later step takes "from step X" is in the bag after X. Remaining-time UNKNOWN turns are reported, not failed.
+// the last step, and an item a later step takes "from step X" is in the bag after X. Turns whose remaining time is UNKNOWN are known debt:
+// the gate fails when they rise above UNKNOWN_TIME_DEBT; lower it as it shrinks, never raise it.
 import { expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { allSteps, itemById } from '../../src/data';
@@ -42,6 +43,7 @@ const SKILLS = ['attack', 'strength', 'defence', 'hitpoints', 'ranged', 'prayer'
   'firemaking', 'crafting', 'smithing', 'mining', 'runecraft'];
 const MELEE = new Set(['attack', 'strength', 'defence']);
 const MAX_TURNS = 300;
+const UNKNOWN_TIME_DEBT = 51;
 
 it('a fresh account finishes the 23 F2P quests through planned actions, without a check', () => {
   const xp: Record<string, number> = Object.fromEntries(SKILLS.map(s => [s, s === 'hitpoints' ? xpForLevel(10) : 0]));
@@ -133,4 +135,5 @@ it('a fresh account finishes the 23 F2P quests through planned actions, without 
   }
   console.log(`Route gate: ${turn} turns, ${Object.values(quests).filter(q => q.state === 'COMPLETED').length} of 23 quests, remaining time unknown on ${unknownTime} turns.`);
   expect(Object.entries(quests).filter(([, q]) => q.state !== 'COMPLETED').map(([id]) => id), log.slice(-8).join('\n')).toEqual([]);
+  expect(unknownTime, 'turns with an unknown remaining time (known debt)').toBeLessThanOrEqual(UNKNOWN_TIME_DEBT);
 }, 1_800_000);
