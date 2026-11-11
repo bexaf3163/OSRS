@@ -199,7 +199,7 @@ Record versions, account mode, facts, expected and actual result and evidence as
 
 ### P5 — project optimization (2026-11, verify-first)
 
-Each batch releases after all gates and its Go threshold, and live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. Alternate timing-pair order: identical builds timed up to +10% script and +36% blocking when second. Next is the full plugin live matrix, closing **S8**. Caches and context selectors (R3, R4, R8) wait until per-update script time passes 50 ms.
+Each batch releases after all gates and its Go threshold; live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. Alternate timing-pair order: identical builds timed up to +10% script and +36% blocking when second. Next is the full plugin live matrix, closing **S8**. Caches and context selectors (R3, R4, R8) wait until per-update script time passes 50 ms.
 
 Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3.8% page-only code), a V8 code cache (moves the `localStorage` origin), domain barrels, merged tiny modules, parallel Java render tests (shared font cache), an automatic CSS split per feature (S9: class merges and file order changed computed styles; merge design layers by hand, comparing computed styles). The React hooks lint (TypeScript 5) is an occasional review; its findings are deliberate. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (kept by owner decision 2026-11-01). Prune merged remote branches and `audit-test-*` pre-releases, but never delete normal `v*` releases.
 
@@ -218,19 +218,19 @@ Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3
 
 Known limits: fees are bounded allowances; gathering competition, Forestry and Musa Point boat banking are approximations; altar timing assumes the supported exit model; food estimates are no survival guarantee. Alchemy, enchanting and splashing keep target/setup/budget safeguards. No implied parity for unsupported Members or HDOS mechanics. Facts checked against the OSRS Wiki on 2026-10-31.
 
-## Current verification — encounters, tools, fresh-account planning (2.86.0–2.91.0)
+## Current verification — encounters, tools, fresh-account planning (2.86.0–2.92.0)
 
-Kept: `planning/encounter/{setups,strategy}.ts` compares bounded melee preparations; `executionStep` carries the kit; forecasts add damage-earned HP.
+Kept: `planning/encounter/{setups,strategy}.ts` compares bounded preparations; `executionStep` carries the kit; forecasts add damage-earned HP.
 
 - Ranking: total time; incomplete options executable-first, then least unmeasured XP, fewest unknowns, known minutes. Even training joins single-skill ones. Objectives stay unless another is proven faster.
 - `authored/fightMechanics.json` (Wiki) feeds `fightEstimate.ts`: regeneration, drains, finishers, weapon multiplier, company, specials, protected attacks, safespot spell. `magicPlan.spellHit` (tier, bonus, weakness) also rates training. `cannot` means train or upgrade; modelled regeneration proves that capability. Protection keeps its slot; quest kit is never advised; uncovered attacks stay UNKNOWN. Ancient Guardian: melee; pillars are route text.
-- Fresh account: worn pieces count as owned; melee methods unsafe at the player's Hitpoints are LOCKED. Pirate's gardener is a threat; Prince Ali's jail guards are run past.
-- `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`. `trainingKit.equipmentLine` states the engine's tool/kit decision on Skills; F2P notes are one-line checkpoints, no Wiki rates. Weapons: one skill's XP.
-- Game line: engine's bank/drop choice; plaque shows the stamp alone. After all F2P quests, Path ranks F2P checkpoints (`f2pCheckpoints`) with Follow. Path rows name unknown parts.
+- Fresh account: worn pieces count as owned; melee methods unsafe at their Hitpoints are LOCKED. Pirate's gardener is a threat; Prince Ali's jail guards a run-past.
+- `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`. `trainingKit.equipmentLine` states the tool/kit decision on Skills; F2P notes are one-line checkpoints, no Wiki rates. Weapons: one skill's XP.
+- Game line: engine's bank/drop choice; plaque shows the stamp alone. After all F2P quests, Path ranks `f2pCheckpoints` with Follow. Path rows name unknown parts.
 
-Gear has bows/ranged armour; a worn bow fights via `rangedHit`, trains Ranged/Defence, and its shots set the arrows needed. Drops weigh cooking by burns. Verified: 2,644 units, 769 browser checks, route and light gates; update +9%/0% versus 2.90.1.
+Gear has bows/ranged armour; a worn bow (fitting arrows only) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set the arrows needed. Drops weigh cooking by burns. Verified: 2,645 units, 769 browser checks, route/light gates; update +1%/−3% versus 2.91.0.
 
-Limits: melee-kit preparation; Wiki bands for quest work, minus the prepared fight. `gate:f2p`: 23/23 quests, no checks; time unknown on 1/211 turns. Later fights are proven by `encounterSetups`, a current one with pending kit by its current setup; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece. Measured quest times need shared data.
+Limits: armour by melee defence; Wiki bands for quest work, minus the prepared fight. `gate:f2p`: 23/23 quests, no checks; time unknown on 1/211 turns. Later fights are proven by `encounterSetups`, a current one with pending kit by its setup; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece. Measured quest times need shared data.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt
