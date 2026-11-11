@@ -21,7 +21,7 @@ import { preparationTime } from './preparationTime';
 import { withTeleports, type TeleportInput } from './teleportWalk';
 import type { Minutes } from './contracts';
 import type { WorldPoint } from '../player/playerState';
-import { stepFightNames } from '../combat/fightEstimate';
+import { modelsRegeneration, stepFightNames } from '../combat/fightEstimate';
 
 export interface RuntimePlanInput {
   snapshot: PlanningSnapshot;
@@ -47,8 +47,8 @@ export interface RuntimePlanInput {
   gather?: (name: string, count: number) => Minutes | null;
 }
 
-/** Capabilities the readiness engine proves: a step whose fights it assessed is combat-ready and survivable. Regeneration
- * has no shared model, so it stays unknown and the quest waits for verification. */
+/** Capabilities the readiness engine proves: a step whose fights it assessed is combat-ready and survivable. Regeneration is
+ * proven only where the assessed fight models it (fightMechanics.json); elsewhere it stays unknown and the quest waits for verification. */
 const ASSESSED = new Set(['combat', 'survival']);
 /** The combat audit's reviewed stages (danger on the route) and those whose plan is to run past the danger. When every
  * audited danger still ahead in a quest is a run-past, survival and evasion are proven by that reviewed escape. */
@@ -120,7 +120,8 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
           });
           const dangers = [...remaining].filter(id => DANGER.has(id));
           const escaped = dangers.length > 0 && dangers.every(id => RUN_PAST.has(id));
-          const proven = (key: string) => (ASSESSED.has(key) && met) || (ESCAPABLE.has(key) && escaped);
+          const regenerating = fights.some(fight => remaining.has(fight.id) && modelsRegeneration(fight));
+          const proven = (key: string) => (ASSESSED.has(key) && met) || (key === 'regeneration' && met && regenerating) || (ESCAPABLE.has(key) && escaped);
           return {
             action: frame.action, minutes: frame.preparationMinutes,
             ...(frame.encounter ? { executionStep: frame.step, reasons: frame.encounter.reasons, uncertain: frame.encounter.uncertain } : {}),

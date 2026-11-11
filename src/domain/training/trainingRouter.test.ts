@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { adviseTraining, formatHours, methodsFor, trainingMethods, viewMethod, type AdviceInput } from './trainingRouter';
 import { buildPlayerState } from '../player/playerState';
+import { preparationNeeds } from './trainingRouter';
 import { emptyProgress } from '../persistence/progress';
 import { xpForLevel } from '../player/xp';
 import { allLevelSkills } from '../../data';
@@ -194,3 +195,27 @@ describe('a level-up does not flip the running method for a marginal gain (S04)'
     expect(advice.best?.reason).toContain('Switched from');
   });
 });
+
+describe('melee training at level 1 (fresh-account simulation, 2.86.1)', () => {
+  const fresh = (worn: string, carried: string) => buildPlayerState({ mode: 'f2p', connected: true, player: 'Fresh', progress: emptyProgress(), questsDone: [],
+    stats: { attack: 1, strength: 1, defence: 1, hitpoints: 10 },
+    owned: { bankSeen: true, items: new Map([[carried.toLowerCase(), { name: carried, carried: 1, bank: 0, noted: 0 }], [worn.toLowerCase(), { name: worn, carried: 0, bank: 0, noted: 0 }]]) },
+    gear: { equipment: [{ id: worn === 'Iron scimitar' ? 1323 : 1265, name: worn, slot: 'weapon' }], inventory: [{ id: 1, name: carried, count: 1 }], coins: 0, bankCoins: 0 } });
+  it('keeps the better weapon whichever of the two is worn: a worn piece is owned, so no Equip loop between them', () => {
+    for (const [worn, carried] of [['Iron scimitar', 'Bronze pickaxe'], ['Bronze pickaxe', 'Iron scimitar']] as const) {
+      const state = fresh(worn, carried);
+      const advice = adviseTraining({ skill: 'attack', target: 12, state, mode: 'f2p', style: 'chill', priority: 'balanced' });
+      const weapons = preparationNeeds(advice, state).flatMap(n => n.type === 'item' && n.equip ? [n.name] : []);
+      expect(weapons, worn).toEqual(['Iron scimitar']);
+    }
+  });
+  it('locks an opponent that is unsafe at this Hitpoints level instead of ranking it as an unrated method', () => {
+    const state = fresh('Iron scimitar', 'Bronze pickaxe');
+    const moss = methodsFor('strength').find(m => m.id === 'me-moss')!;
+    const view = viewMethod(moss, state);
+    expect(view.status).toBe('LOCKED');
+    expect(view.missing.map(n => n.label).join(' ')).toMatch(/^More Hitpoints: Moss giant/);
+    expect(adviseTraining({ skill: 'strength', target: 7, state, mode: 'f2p', style: 'chill', priority: 'balanced' }).best?.method.id).not.toBe('me-moss');
+  });
+});
+

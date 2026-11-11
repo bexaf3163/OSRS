@@ -1406,6 +1406,9 @@
       "floor": "Ground floor",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Redbeard_Frank"
     },
+    "threats": [
+      "Gardener"
+    ],
     "itemsRequired": [
       {
         "nameEn": "Coins",

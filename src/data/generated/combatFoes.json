@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
-  "generatedAt": "2026-11-10",
+  "generatedAt": "2026-11-11",
   "foes": [
     {
       "name": "Count Draynor",
@@ -24,6 +24,52 @@
       "speedTicks": 4,
       "aggressive": true,
       "xpBonus": -97
+    },
+    {
+      "name": "Gardener",
+      "version": "Level 3",
+      "combat": 3,
+      "members": false,
+      "hitpoints": 7,
+      "attackLevel": 2,
+      "strengthLevel": 1,
+      "defenceLevel": 5,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 1,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Gardener",
+      "version": "Level 4",
+      "combat": 4,
+      "members": false,
+      "hitpoints": 7,
+      "attackLevel": 1,
+      "strengthLevel": 1,
+      "defenceLevel": 7,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 1,
+      "speedTicks": 4,
+      "aggressive": false
     },
     {
       "name": "Skeleton",

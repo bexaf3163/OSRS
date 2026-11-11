@@ -26,7 +26,7 @@ import { PROCESSING } from './processingRates';
 import { canWear, gearData, gearPieceByName, levelsOf, type Levels } from '../combat/gearAdvisor';
 import { pickKit } from '../combat/kitPick';
 import { methodRate, rateKeyOf, type RateSpot, type ModelRate } from './methodRates';
-import { combatUpgrades, rangedGoalNeeds } from '../combat/combatRates';
+import { combatUpgrades, meleeUnsafe, rangedGoalNeeds } from '../combat/combatRates';
 import type { PriceView } from '../market/quotes';
 import { coinsPerMinute, coinTimeShare, earningsOrder } from '../market/lootValue';
 import type { TradeRestriction } from '../market/tradeRestriction';
@@ -198,6 +198,8 @@ export function viewMethod(m: TrainingMethod, state: PlayerState, prices?: Price
     ? [{ key: `method:${index}`, nameEn: n.name, count: n.count ?? 1, anyOf: n.anyOf, equip: n.equip }] : []));
   const needs = declared.map((n, index) => needStatus(n, state, materials.get(`method:${index}`)));
   if (m.manualSetup) needs.push({ kind: 'item', label: m.manualSetup, state: 'UNKNOWN', detail: 'Manual setup has not been verified.' });
+  const unsafeFoe = meleeUnsafe(m, state);
+  if (unsafeFoe) needs.push({ kind: 'skill', label: `More Hitpoints: ${unsafeFoe}`, state: 'MISSING', detail: 'Not safe training at this level.' });
   if (m.kit === 'f2p-bow' && state.mode !== 'f2p') needs.push({ kind: 'item', label: 'Members ranged loadout', state: 'UNKNOWN', detail: 'This starter kit models ordinary F2P bows only; check your Members weapon and ammunition separately.' });
   const locked = needs.filter((n) => (n.kind === 'quest' || n.kind === 'skill') && n.state === 'MISSING');
   const prep = needs.filter((n) => (n.kind === 'item' || n.kind === 'tool') && (n.state === 'MISSING' || n.state === 'PARTIAL' || n.state === 'BANK'));
@@ -245,7 +247,8 @@ function meleeNeeds(m: TrainingMethod, state: PlayerState, prices?: PriceView | 
   const kit = pickKit({
     slots: slots.map(slot => ({ slot, names: usable(slot), wearOnly: slot === 'weapon' })),
     rank: name => { const p = gearPieceByName(name)!; return [p.strength, Math.max(p.attack.stab, p.attack.slash, p.attack.crush), p.defence.stab + p.defence.slash + p.defence.crush]; },
-    owned: name => (heldExact(state, name).total ?? heldExact(state, name).equipped) > 0,
+    // A worn piece is owned: total counts the bag and bank only, and is 0 rather than unknown once the bank was read.
+    owned: name => { const h = heldExact(state, name); return (h.total ?? 0) + h.equipped > 0; },
     // Once the bank was opened, a piece it did not report is not owned, as the Gear advisor reads it.
     price: name => (state.owned?.bankSeen && heldOf(state, name).presence !== 'PRESENT' ? prices?.buy(name)?.price ?? null : null),
     budget: cash === null || supplies === null || !prices ? null : Math.max(0, cash - supplies),
@@ -642,7 +645,7 @@ function forecastEquipment(state: PlayerState, needs: readonly MethodNeed[], pri
   // What is not already held is bought at its price; an untracked stock counts as none, so coins are never invented.
   const cost = equipmentNeeds.reduce<number | null>((sum, n) => {
     const held = heldExact(state, n.name);
-    const missing = Math.max(0, (n.count ?? 1) - (held.total ?? held.equipped));
+    const missing = Math.max(0, (n.count ?? 1) - ((held.total ?? 0) + held.equipped));
     const price = missing ? prices?.buy(n.name)?.price : 0;
     return sum === null || price == null ? null : sum + price * missing;
   }, 0);

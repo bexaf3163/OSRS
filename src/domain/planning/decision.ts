@@ -161,8 +161,10 @@ export function decide(snapshot: PlanningSnapshot, model: PlannerModel, options:
   const sharedUnknowns = incumbent && comparableKnown(incumbent.expression, chosen.expression);
   const incumbentMinutes = incumbent?.estimate ?? (sharedUnknowns ? incumbent.expression!.known : null);
   const chosenMinutes = chosen.estimate ?? (sharedUnknowns ? chosen.expression!.known : null);
-  if (!options.lockedObjectiveId && incumbent && priority(incumbent.value) <= priority(chosen.value)
-    && (begun || (incumbentMinutes && chosenMinutes && chosenMinutes.typical >= incumbentMinutes.typical * (1 - threshold)))) chosen = incumbent;
+  // Only a proven, material saving replaces the running objective: an unknown time proves nothing, so two objectives that cannot be
+  // compared never trade places on every observation (an equip, a bank read).
+  const provablyFaster = !!(incumbentMinutes && chosenMinutes && chosenMinutes.typical < incumbentMinutes.typical * (1 - threshold));
+  if (!options.lockedObjectiveId && incumbent && priority(incumbent.value) <= priority(chosen.value) && (begun || !provablyFaster)) chosen = incumbent;
   const { value, estimate } = chosen;
   const comparableUnmeasured = !estimate && scored.some(row => row !== chosen && comparableKnown(row.expression, chosen.expression));
   // A feasible objective whose time cannot be compared is never dropped silently: when even its known part is below the

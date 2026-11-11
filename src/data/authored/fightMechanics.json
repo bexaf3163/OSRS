@@ -18,10 +18,10 @@
     "Delrith": {
       "url": "https://oldschool.runescape.wiki/w/Delrith",
       "weapon": { "item": "Silverlight", "damageMultiplier": 2 },
-      "company": [{ "foe": "Dark wizard", "version": "Level 20" }, { "foe": "Dark wizard", "version": "Level 7" }],
+      "company": [{ "foe": "Dark wizard", "version": "Level 20" }, { "foe": "Dark wizard", "version": "Level 7" }, { "foe": "Dark wizard", "version": "Level 7" }],
       "facts": [
         "Silverlight must be equipped to defeat him, and all damage dealt to him is doubled while it is.",
-        "The stone circle is single-way combat with two level 7 dark wizards and one level 20: a wizard already attacking must be killed or hidden from before Delrith can be attacked (Demon Slayer)."
+        "The stone circle is single-way combat with two level 7 dark wizards and one level 20 (Demon Slayer walkthrough): a wizard already attacking must be killed or hidden from before Delrith can be attacked. The estimate fights all three first."
       ]
     },
     "Brutus": {

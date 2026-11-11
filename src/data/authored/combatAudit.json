@@ -63,13 +63,25 @@
     {
       "stepId": "S2-09", "kind": "incidental", "mandatory": true, "method": "melee",
       "objective": "The Gardener (level 4) appears when you dig in Falador Park; kill him and dig again.",
-      "enemies": [{ "name": "Gardener", "level": 4 }],
+      "enemies": [{ "name": "Gardener", "level": 4, "maxHit": 1, "table": true }],
       "lines": ["3.3"],
       "assumptions": ["Level 4 is no danger at this point of the route."],
       "problems": [],
       "alternatives": [],
       "decision": "retain",
-      "evidence": ["Quest stage line 3.3."]
+      "evidence": ["Quest stage line 3.3.", "Step field \"threats\" since 2.86.1: the app estimates the fight with the player's kit, which proves the quest's \"survival\" requirement (OSRS Wiki, Gardener: level 4, 7 hit points, hits up to 1)."]
+    },
+    {
+      "stepId": "S2-10", "kind": "avoid", "mandatory": true, "method": "run",
+      "objective": "Aggressive level 26 jail guards (hits up to 3) attack inside the Draynor jail while you give Joe the beer, tie up Lady Keli and free Prince Ali; the quest needs them only avoided.",
+      "enemies": [{ "name": "Jail guard", "level": 26, "maxHit": 3 }],
+      "lines": ["6.0"],
+      "assumptions": ["Walking past is the route's method (OSRS Wiki, Prince Ali Rescue: \"avoiding the aggressive level 26 jail guards\"); no kill estimate drives preparation."],
+      "problems": ["The route said nothing about the guards, so the quest's \"evasion\" requirement could never be shown met and the planner stopped at a check."],
+      "alternatives": ["Fight them: not needed and not suggested."],
+      "decision": "revise",
+      "changed": ["2.86.1: the walkthrough names the guards and says to walk past them; this run-past proves the evasion requirement."],
+      "evidence": ["Quest stage route line 6.0; OSRS Wiki Jail guard (level 26, 32 hit points, hits up to 3), Prince Ali Rescue requirements, read 2026-11-11."]
     },
     {
       "stepId": "S2-11", "kind": "incidental", "mandatory": true, "method": "melee",

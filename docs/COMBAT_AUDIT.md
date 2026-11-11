@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-23 stages: 7 retained, 14 revised, 0 with a branch, 2 deferred.
+24 stages: 7 retained, 15 revised, 0 with a branch, 2 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -13,7 +13,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S2-03 Witch's Potion | incidental | yes | Rat (1), Giant rat (3) | melee | - | - | Retain |
 | S2-07 The Knight's Sword | avoid | yes | Ice giant (53), Ice warrior (57) | run | - | Trout 10 | Deferred |
 | S2-08 Vampyre Slayer | quest-fight | yes | Count Draynor (34) | melee | Count Draynor | Trout 10 | Revised |
-| S2-09 Pirate's Treasure | incidental | yes | Gardener (4) | melee | - | - | Retain |
+| S2-09 Pirate's Treasure | incidental | yes | Gardener (4) | melee | Gardener | - | Retain |
+| S2-10 Prince Ali Rescue | avoid | yes | Jail guard (26) | run | - | - | Revised |
 | S2-11 Ernest the Chicken | incidental | yes | Skeleton (22) | melee | Skeleton | - | Retain |
 | S3-02 Black Knights' Fortress | avoid | yes | Black Knight (33) | run | - | Trout 5 | Revised |
 | S3-03 Demon Slayer | quest-fight | yes | Delrith (27), Dark wizard (20) | melee | Delrith | Trout 5 | Revised |
@@ -151,6 +152,33 @@ Assumptions:
 Evidence:
 
 - Quest stage line 3.3.
+- Step field "threats" since 2.86.1: the app estimates the fight with the player's kit, which proves the quest's "survival" requirement (OSRS Wiki, Gardener: level 4, 7 hit points, hits up to 1).
+
+## S2-10 Prince Ali Rescue
+
+**Revised.** Aggressive level 26 jail guards (hits up to 3) attack inside the Draynor jail while you give Joe the beer, tie up Lady Keli and free Prince Ali; the quest needs them only avoided.
+
+Quest stage lines: 6.0.
+
+Assumptions:
+
+- Walking past is the route's method (OSRS Wiki, Prince Ali Rescue: "avoiding the aggressive level 26 jail guards"); no kill estimate drives preparation.
+
+Problems:
+
+- The route said nothing about the guards, so the quest's "evasion" requirement could never be shown met and the planner stopped at a check.
+
+Alternatives:
+
+- Fight them: not needed and not suggested.
+
+Changed:
+
+- 2.86.1: the walkthrough names the guards and says to walk past them; this run-past proves the evasion requirement.
+
+Evidence:
+
+- Quest stage route line 6.0; OSRS Wiki Jail guard (level 26, 32 hit points, hits up to 3), Prince Ali Rescue requirements, read 2026-11-11.
 
 ## S2-11 Ernest the Chicken
 

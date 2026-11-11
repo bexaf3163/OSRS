@@ -203,4 +203,20 @@ describe('hard quest DAG', () => {
     expect(() => questGraph([{ id: 'a', requires: ['missing'] }])).toThrow(/Unknown/);
     expect(() => questGraph([{ id: 'a', requires: [] }, { id: 'a', requires: [] }])).toThrow(/Duplicate/);
   });
+
+  it('keeps the running objective when no other one is proven clearly faster: unknown times never trade places on each observation', () => {
+    // No total is known (remaining work unmeasured), so the order comes only from each objective's own unknown parts, which change
+    // with every equip or bank read. Before 2.86.1 the two swapped on each such observation (fresh-account simulation).
+    // Each has one unknown part of its own; the known parts change with each observation.
+    const own = (id: string, known: number): ObjectiveEvaluation => ({ ...evaluation(id, known),
+      cost: { ...evaluation(id, known).cost, ...(id === 'ides' ? { prepare: null } : { travel: null }) } });
+    const flips = (ides: number, corsair: number): PlannerModel => ({ objectiveIds: ['ides', 'corsair'], remaining: () => null,
+      evaluate: id => own(id, id === 'ides' ? ides : corsair) });
+    const before = decide(snapshot(), flips(5, 6))!;
+    expect(before.objectiveId).toBe('ides');
+    expect(decide(snapshot(), flips(7, 6))!.objectiveId).toBe('corsair');
+    const after = decide(snapshot(), flips(7, 6), { previous: before })!;
+    expect(after.objectiveId).toBe('ides');
+    expect(after.why).toContain('Keep the current objective unless a material improvement or hard blocker requires a change');
+  });
 });

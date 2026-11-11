@@ -155,6 +155,17 @@ function worn(state: PlayerState): { weapon: GearPiece | null; neck: GearPiece |
 const termsOf = (foe: string) => termsFor()[foe] ?? {};
 const atLevels = (f: CombatFoe) => !TRAINER_LEVELS[f.name] || TRAINER_LEVELS[f.name].includes(f.combat);
 
+/** Why a melee method's opponent is no safe training at this Hitpoints level (the same unsafe rule the melee rate filters with), or null:
+ * safe, not a melee method, or not known. An unsafe opponent has no rate, which must not read as an unrated but available method. */
+export function meleeUnsafe(m: TrainingMethod, state: PlayerState): string | null {
+  if (m.kind !== 'method' || !m.npcNames?.length || !m.skills.length || !m.skills.every(s => MELEE.has(s))) return null;
+  const hp = levelOf(state, 'hitpoints');
+  const variants = foeVariants(m.npcNames[0]).filter(atLevels);
+  if (hp === undefined || !variants.length) return null;
+  const reasons = variants.map(f => unsafe(f, termsOf(m.npcNames![0]), hp));
+  return reasons.every(Boolean) ? reasons[0] : null;
+}
+
 /** A rate with the kill it is built from: seconds and pieces of food a kill, in the named food. */
 type KillRate = ModelRate & { secondsPerKill: number; foodPerKill?: number; food?: string };
 

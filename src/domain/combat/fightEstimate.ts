@@ -224,6 +224,12 @@ export function stepFightNames(step: Pick<Step, 'foes' | 'threats' | 'pacing'>):
   return [...new Set([...(step.foes ?? []), ...(step.threats ?? [])])].filter((n) => !OTHER_METHOD[n]);
 }
 
+/** Whether a fight of the step models its opponent's regeneration (fightMechanics.json regenTicks): then a modelled, safe estimate of that
+ * fight is the proof a quest's "regeneration" capability asks for; without it regeneration stays unknown. */
+export function modelsRegeneration(step: Pick<Step, 'foes' | 'threats' | 'pacing'>): boolean {
+  return stepFightFoes(step).some((foe) => FIGHT_MECHANICS[foe.name]?.regenTicks !== undefined);
+}
+
 /** The quest fights of a step the table knows: the free version where there is one, else the members one (a members quest: Temple Guardian, Ghast). */
 export function stepFightFoes(step: Pick<Step, 'foes' | 'threats' | 'pacing'>): CombatFoe[] {
   return stepFightNames(step).flatMap((n) => {
