@@ -13,16 +13,19 @@ import { THREATS } from '../../data/threats';
 import { FIGHT_MECHANICS, PROTECTIONS, type FightMechanics } from '../../data/fightMechanics';
 import { nameKey } from '../items/itemKey';
 import { SPELLS, spellHit, STAFFS } from './magicPlan';
+import { rangedHit } from './rangedAmmo';
 
 const TICK = 0.6;
 const STYLES: TrainStyle[] = ['accurate', 'aggressive', 'defensive'];
-const STYLE_WORD: Record<TrainStyle, string> = { accurate: 'Accurate', aggressive: 'Aggressive', defensive: 'Defensive' };
+const STYLE_WORD: Record<FightStyle, string> = { accurate: 'Accurate', aggressive: 'Aggressive', defensive: 'Defensive', rapid: 'Rapid' };
+/** A melee style, or a bow's rapid shots. */
+type FightStyle = TrainStyle | 'rapid';
 /** Overheal and eating early waste part of each piece (as the training estimate). */
 const USABLE: [number, number] = [0.85, 1];
 
 export interface FightEstimate {
   foe: CombatFoe;
-  style: TrainStyle;
+  style: FightStyle;
   /** The fight alone, seconds. */
   seconds: Range;
   /** Damage taken over the fight, before eating. */
@@ -51,7 +54,7 @@ export interface FightEstimate {
 
 export interface FightInput {
   foe: CombatFoe;
-  levels: { attack: number; strength: number; defence: number; hitpoints: number; magic?: number };
+  levels: { attack: number; strength: number; defence: number; hitpoints: number; magic?: number; ranged?: number };
   weapon: GearPiece | null;
   neck: GearPiece | null;
   armour: GearPiece[];
@@ -66,6 +69,8 @@ export interface FightInput {
   company?: readonly CombatFoe[];
   /** Casts of a safespot fight's spell that the step's runes pay for. */
   casts?: number;
+  /** The worn arrows, for a bow (a weapon that only shoots). */
+  ammo?: string;
 }
 
 /** Its chance to hit the player: melee against the worn armour's bonus of its type; magic against the player's magic defence. */
@@ -88,7 +93,7 @@ const held = (names: readonly string[] | undefined, item: string) => Boolean(nam
 /** Regeneration is a rate against the player's own: past this many hit points of work the fight is not one to plan. */
 const REGEN_CAP = 600;
 
-interface Rolls { style: TrainStyle; secMean: number; secVar: number; dmgMean: number; dmgVar: number; chance: number; max: number; foeC: number; worst: number; keep: number }
+interface Rolls { style: FightStyle; secMean: number; secVar: number; dmgMean: number; dmgVar: number; chance: number; max: number; foeC: number; worst: number; keep: number }
 
 /**
  * One opponent with the safest style: the player's hits against its defence, its swings against the worn armour, and what the wiki says of
@@ -111,11 +116,12 @@ function rolls(foe: CombatFoe, inp: FightInput, mech: FightMechanics | null, mul
   for (const style of STYLES) {
     // Drained levels come back 1 every restoreTicks: the fight is rolled at their mean level over its length, to a fixed point. Only the
     // kill's length decides that point; the full hit distribution (attackCounts) is rolled once, at the settled levels.
-    let settled: { weakened: CombatFoe; hit: ReturnType<typeof meleeAs>; max: number; hp: number; a: { mean: number; variance: number } } | null = null;
+    let settled: { weakened: CombatFoe; hit: Hit; max: number; hp: number; a: { mean: number; variance: number } } | null = null;
     for (let pass = 0, restored = 0; pass < 6; pass++) {
       const level = (now: number, lost: number) => Math.min(now, Math.max(0, now - lost) + restored);
       const weakened = { ...foe, attackLevel: level(foe.attackLevel, drain('attack')), defenceLevel: level(foe.defenceLevel, drain('defence')) };
-      const hit = meleeAs({ attack: inp.levels.attack, strength: inp.levels.strength, defence: inp.levels.defence }, weapon, inp.neck, style, weakened);
+      const hit = playerHit(inp, weapon, style, weakened);
+      if (!hit) { settled = null; break; }
       const max = hit.maxHit + bonus;
       let hp = Math.ceil(Math.max(1, foe.hitpoints - drain('hitpoints')) / multiplier);
       if (mech?.regenTicks) {
@@ -142,7 +148,7 @@ function rolls(foe: CombatFoe, inp: FightInput, mech: FightMechanics | null, mul
     const perSwing = (1 - share) * swing.mean + share * specialHit;
     const rolled = Math.max(foe.maxHit, ...others);
     const row: Rolls = {
-      style, secMean: a.mean * hit.speed, secVar: a.variance * hit.speed ** 2, dmgMean: sw.mean * perSwing,
+      style: shootsOnly(weapon) ? 'rapid' : style, secMean: a.mean * hit.speed, secVar: a.variance * hit.speed ** 2, dmgMean: sw.mean * perSwing,
       dmgVar: sw.mean * (1 - share) * (swing.square - swing.mean ** 2) + sw.variance * perSwing ** 2,
       chance: hit.hitChance, max, foeC, worst: Math.max(rolled, specialHit), keep: Math.max(2 * rolled, specialHit + foe.maxHit),
     };
@@ -151,13 +157,22 @@ function rolls(foe: CombatFoe, inp: FightInput, mech: FightMechanics | null, mul
   return best ?? (outpaced ? 'cannot' : null);
 }
 
+interface Hit { hitChance: number; maxHit: number; speed: number }
+/** The player's hit: melee with the weapon in the style, or a bow's rapid shots with the worn arrows (rangedAmmo.rangedHit), one style only. */
+function playerHit(inp: FightInput, weapon: GearPiece | null, style: TrainStyle, foe: CombatFoe): Hit | null {
+  if (!shootsOnly(weapon)) return meleeAs({ attack: inp.levels.attack, strength: inp.levels.strength, defence: inp.levels.defence }, weapon, inp.neck, style, foe);
+  if (style !== 'accurate' || inp.levels.ranged === undefined || !inp.ammo) return null;
+  const r = rangedHit(inp.levels.ranged, weapon!.name, inp.ammo, inp.worn ?? [], foe, 'rapid');
+  return r ? { hitChance: r.chance, maxHit: r.maxHit, speed: r.speedTicks * TICK } : null;
+}
+
 /** The encounter search asks for the same fight many times (each kit, each trained level): identical inputs give the same estimate. */
 const estimates = new Map<string, FightEstimate | null>();
 const pieceKey = (p: GearPiece | null) => p?.id ?? '-';
 export function estimateFight(inp: FightInput): FightEstimate | null {
   const mech = FIGHT_MECHANICS[inp.foe.name];
   const key = JSON.stringify([inp.foe, inp.levels, pieceKey(inp.weapon), pieceKey(inp.neck), inp.armour.map(pieceKey), inp.unknownPieces ?? 0, inp.food, inp.currentHp ?? null,
-    mech ? [inp.carried ?? [], inp.worn ?? [], (inp.company ?? []).map(f => [f.name, f.version]), inp.casts ?? null] : null]);
+    mech ? [inp.carried ?? [], inp.worn ?? [], (inp.company ?? []).map(f => [f.name, f.version]), inp.casts ?? null] : null, inp.ammo ?? null, shootsOnly(inp.weapon) ? inp.worn ?? [] : null]);
   if (estimates.has(key)) return estimates.get(key)!;
   if (estimates.size > 2000) estimates.clear();
   const result = rollFight(inp);
@@ -273,7 +288,9 @@ export function estimateStepFights(
   const lv = { attack: need('attack'), strength: need('strength'), defence: need('defence'), hitpoints: need('hitpoints') };
   if (Object.values(lv).some((v) => v === null)) return [];
   const eq = equippedBySlot(gear, gearData);
-  if (eq.weapon && (!eq.weapon.piece || shootsOnly(eq.weapon.piece))) return []; // Unknown, or a bow: no melee hit.
+  const ranged = need('ranged'), ammo = gear.equipment.find((p) => p.slot === 'ammo')?.name;
+  // An unknown weapon has no estimate; a bow shoots with the worn arrows at the Ranged level, both read from the game.
+  if (eq.weapon && (!eq.weapon.piece || (shootsOnly(eq.weapon.piece) && (ranged === null || !ammo)))) return [];
   const armour = (['head', 'body', 'legs', 'shield'] as const).map((s) => eq[s]?.piece).filter((p): p is GearPiece => Boolean(p));
   const unknownPieces = SLOTS.filter((s) => s !== 'weapon' && eq[s] && !eq[s]!.piece).length;
   const stepFood = foodOfStep(step);
@@ -295,7 +312,8 @@ export function estimateStepFights(
     const company = listed.flatMap((c) => COMBAT_FOES.filter((x) => x.name === c.foe && (!c.version || x.version === c.version)).slice(0, 1));
     if (company.length !== listed.length) return []; // No numbers for one that comes first: no estimate, never a smaller fight.
     const e = estimateFight({
-      foe, levels: { ...(lv as FightInput['levels']), ...(magic !== null ? { magic } : {}) }, weapon: eq.weapon?.piece ?? null, neck: eq.neck?.piece ?? null,
+      foe, levels: { ...(lv as FightInput['levels']), ...(magic !== null ? { magic } : {}), ...(ranged !== null ? { ranged } : {}) },
+      weapon: eq.weapon?.piece ?? null, neck: eq.neck?.piece ?? null, ...(ammo ? { ammo } : {}),
       armour, unknownPieces, food: f, carried, worn, company,
       ...(FIGHT_MECHANICS[foe.name]?.safespot ? { casts: castsOf(FIGHT_MECHANICS[foe.name].safespot!.spell) } : {}),
     });

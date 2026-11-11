@@ -123,6 +123,19 @@ describe('one quest fight with your kit', () => {
     expect(estimateStepFights(stepById.get('S2-08')!, lv, gearOf(['Shortbow']))).toEqual([]);
   });
 
+  it('a bow user\'s fight is estimated with rapid shots from the worn arrows at the Ranged level', () => {
+    const step = stepById.get('S2-08')!, lv = { attack: 1, strength: 1, defence: 30, hitpoints: 40, ranged: 50 };
+    const archer = (arrows: boolean): GearState => ({ equipment: [{ id: id('Maple shortbow'), name: 'Maple shortbow', slot: 'weapon' },
+      ...(arrows ? [{ id: 884, name: 'Mithril arrow', slot: 'ammo', count: 500 }] : [])], inventory: [], coins: 0, bankCoins: 0 }) as GearState;
+    const [fight] = estimateStepFights(step, lv, archer(true));
+    expect(fight).toMatchObject({ style: 'rapid', unmodelled: [] });
+    expect(fight.hitChance).toBeGreaterThan(0.3);
+    expect(fightLine(fight)).toMatch(/ on Rapid; /);
+    // No arrows worn, or no Ranged level read: no estimate.
+    expect(estimateStepFights(step, lv, archer(false))).toEqual([]);
+    expect(estimateStepFights(step, { ...lv, ranged: undefined as unknown as number }, archer(true))).toEqual([]);
+  });
+
   it('Melzar\'s Maze: Melzar the Mad in melee, the demon with the 50 casts of runes the step carries', () => {
     const fights = estimateStepFights(stepById.get('S5-03')!, { attack: 40, strength: 40, defence: 40, hitpoints: 40, magic: 20 }, gearOf(['Mithril scimitar']));
     expect(fights.map((f) => [f.foe.name, f.spell ?? 'melee'])).toEqual([['Melzar the Mad', 'melee'], ['Lesser demon', 'Water Strike']]);
