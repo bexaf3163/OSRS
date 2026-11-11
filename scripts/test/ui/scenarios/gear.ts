@@ -10,12 +10,14 @@ async function gearScenarios(browser: Browser) {
   const BRONZE = item(1321, 'Bronze scimitar', 'weapon');
   const RUNE = item(1333, 'Rune scimitar', 'weapon');
   const STRENGTH = item(1725, 'Amulet of strength', 'amulet');
-  const live = (equipment: { id: number; name: string; slot: string }[], stats: Record<string, number>, coins: number, bank: { name: string; bank: number }[] = []) => {
-    const gear = { equipment, inventory: [], coins, bankCoins: 0 };
+  const live = (equipment: { id: number; name: string; slot: string }[], stats: Record<string, number>, coins: number, bank: { name: string; bank: number }[] = [],
+    inventory: { id: number; name: string; count: number }[] = []) => {
+    const gear = { equipment, inventory, coins, bankCoins: 0 };
     return {
       progress: progressBefore('S4-02'), localStorage: { 'osrs-put:active-step': 'S4-02' }, market: true,
       status: { protocol: 6, inGame: true, player: 'Gear Test', activeStepId: 'S4-02', ...gear, stats },
-      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: bank.map((b) => ({ name: b.name, carried: 0, noted: 0, bank: b.bank })) }],
+      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [...bank.map((b) => ({ name: b.name, carried: 0, noted: 0, bank: b.bank })),
+        ...inventory.map((i) => ({ name: i.name, carried: i.count, noted: 0, bank: 0 }))] }],
     };
   };
   const shot = async (page: Page, name: string) => {
@@ -42,12 +44,16 @@ async function gearScenarios(browser: Browser) {
     }
     // Best wearable weapon/amulet and nothing to reserve on the planner's road (2.82.2: the guide's next steps no longer
     // add supplies): no change, the next real step up with its shortfall, no purchase button, no invented budget warning.
-    // The warning for supplies that cannot be priced is checked in the case below.
+    // The warning for supplies that cannot be priced is checked in the case below. Since 2.86.0 Brutus's specials cost food at
+    // Defence 1, so the fight's Trout is carried: nothing has to be bought, and its refill is the only reserve.
     {
-      const { page, errors } = await open(browser, width, live([RUNE, STRENGTH], { attack: 40, strength: 40, defence: 1, hitpoints: 40 }, 0), '#/gear');
+      const { page, errors } = await open(browser, width, live([RUNE, STRENGTH], { attack: 40, strength: 40, defence: 1, hitpoints: 40 }, 0, [],
+        [{ id: 333, name: 'Trout', count: 20 }]), '#/gear');
       await settle(page);
       const reco = await text(page, '.gear-reco');
-      expect(/No worthwhile change for this fight/.test(reco) && /Iron chainbody: 210 gp short/.test(reco) && await page.locator('.gear-reco .btn').count() === 0, `gear none (${width} px): no change, the next step up, no purchase button`);
+      // The fight's food is a real supply now, so its refill is kept before the step up (Stock-up's reserve rule), and said with its amount.
+      expect(/No worthwhile change for this fight/.test(reco) && /Iron chainbody \(210 gp\), after the \d+ gp the next supplies need/.test(reco)
+        && await page.locator('.gear-reco .btn').count() === 0, `gear none (${width} px): no change, the next step up, no purchase button`);
       expect(!/not fully checked/.test(reco) && reco.split('No worthwhile change').length === 2, `gear none (${width} px): said once, no budget warning without a supply`);
       expect(await noOverflow(page), `gear none (${width} px): no horizontal scroll`);
       expect(!errors.length, `gear none (${width} px): no console errors ${errors.join('; ')}`);

@@ -103,8 +103,9 @@ function rolls(foe: CombatFoe, inp: FightInput, mech: FightMechanics | null, mul
   let best: Rolls | null = null;
   let outpaced = false;
   for (const style of STYLES) {
-    let row: Rolls | null = null;
-    // Drained levels come back 1 every restoreTicks: the fight is rolled at their mean level over its length, to a fixed point.
+    // Drained levels come back 1 every restoreTicks: the fight is rolled at their mean level over its length, to a fixed point. Only the
+    // kill's length decides that point; the full hit distribution (attackCounts) is rolled once, at the settled levels.
+    let settled: { weakened: CombatFoe; hit: ReturnType<typeof meleeAs>; max: number; hp: number; a: { mean: number; variance: number } } | null = null;
     for (let pass = 0, restored = 0; pass < 6; pass++) {
       const level = (now: number, lost: number) => Math.min(now, Math.max(0, now - lost) + restored);
       const weakened = { ...foe, attackLevel: level(foe.attackLevel, drain('attack')), defenceLevel: level(foe.defenceLevel, drain('defence')) };
@@ -115,33 +116,50 @@ function rolls(foe: CombatFoe, inp: FightInput, mech: FightMechanics | null, mul
         // The player's mean damage a tick (a successful 0 counted as 1, as the rolls below) against 1 hit point every regenTicks.
         const perTick = (hit.hitChance * (max * (max + 1) / 2 + 1)) / (max + 1) / (hit.speed / TICK);
         const scaled = perTick > 1 / mech.regenTicks ? Math.ceil((hp * perTick) / (perTick - 1 / mech.regenTicks)) : Infinity;
-        if (scaled > REGEN_CAP) { outpaced = true; row = null; break; }
+        if (scaled > REGEN_CAP) { outpaced = true; settled = null; break; }
         hp = scaled;
       }
       const a = attacksToKill(hp, max, hit.hitChance);
-      if (!Number.isFinite(a.mean)) { row = null; break; }
-      const foeC = foeChance(weakened, inp, style, weapon);
-      const plain = swingDamage(foeC, foe.maxHit);
-      const other = others.map((n) => swingDamage(1, n)).sort((x, y) => y.mean - x.mean)[0];
-      const swing = other && other.mean > plain.mean ? other : plain;
-      const sw = swingsPerFight(attackCounts(hp, max, hit.hitChance), hit.speed / TICK, foe.speedTicks);
-      const perSwing = (1 - share) * swing.mean + share * specialHit;
-      const rolled = Math.max(foe.maxHit, ...others);
-      row = {
-        style, secMean: a.mean * hit.speed, secVar: a.variance * hit.speed ** 2, dmgMean: sw.mean * perSwing,
-        dmgVar: sw.mean * (1 - share) * (swing.square - swing.mean ** 2) + sw.variance * perSwing ** 2,
-        chance: hit.hitChance, max, foeC, worst: Math.max(rolled, specialHit), keep: Math.max(2 * rolled, specialHit + foe.maxHit),
-      };
-      const next = Number.isFinite(restoreTicks) ? Math.floor(row.secMean / (2 * restoreTicks * TICK)) : 0;
+      if (!Number.isFinite(a.mean)) { settled = null; break; }
+      settled = { weakened, hit, max, hp, a };
+      const next = Number.isFinite(restoreTicks) ? Math.floor(a.mean * hit.speed / (2 * restoreTicks * TICK)) : 0;
       if (next <= restored) break;
       restored = next;
     }
-    if (row && (!best || row.dmgMean < best.dmgMean - 1e-9 || (Math.abs(row.dmgMean - best.dmgMean) <= 1e-9 && row.secMean < best.secMean))) best = row;
+    if (!settled) continue;
+    const { weakened, hit, max, hp, a } = settled;
+    const foeC = foeChance(weakened, inp, style, weapon);
+    const plain = swingDamage(foeC, foe.maxHit);
+    const other = others.map((n) => swingDamage(1, n)).sort((x, y) => y.mean - x.mean)[0];
+    const swing = other && other.mean > plain.mean ? other : plain;
+    const sw = swingsPerFight(attackCounts(hp, max, hit.hitChance), hit.speed / TICK, foe.speedTicks);
+    const perSwing = (1 - share) * swing.mean + share * specialHit;
+    const rolled = Math.max(foe.maxHit, ...others);
+    const row: Rolls = {
+      style, secMean: a.mean * hit.speed, secVar: a.variance * hit.speed ** 2, dmgMean: sw.mean * perSwing,
+      dmgVar: sw.mean * (1 - share) * (swing.square - swing.mean ** 2) + sw.variance * perSwing ** 2,
+      chance: hit.hitChance, max, foeC, worst: Math.max(rolled, specialHit), keep: Math.max(2 * rolled, specialHit + foe.maxHit),
+    };
+    if (!best || row.dmgMean < best.dmgMean - 1e-9 || (Math.abs(row.dmgMean - best.dmgMean) <= 1e-9 && row.secMean < best.secMean)) best = row;
   }
   return best ?? (outpaced ? 'cannot' : null);
 }
 
+/** The encounter search asks for the same fight many times (each kit, each trained level): identical inputs give the same estimate. */
+const estimates = new Map<string, FightEstimate | null>();
+const pieceKey = (p: GearPiece | null) => p?.id ?? '-';
 export function estimateFight(inp: FightInput): FightEstimate | null {
+  const mech = FIGHT_MECHANICS[inp.foe.name];
+  const key = JSON.stringify([inp.foe, inp.levels, pieceKey(inp.weapon), pieceKey(inp.neck), inp.armour.map(pieceKey), inp.unknownPieces ?? 0, inp.food, inp.currentHp ?? null,
+    mech ? [inp.carried ?? [], inp.worn ?? [], (inp.company ?? []).map(f => [f.name, f.version])] : null]);
+  if (estimates.has(key)) return estimates.get(key)!;
+  if (estimates.size > 2000) estimates.clear();
+  const result = rollFight(inp);
+  estimates.set(key, result);
+  return result;
+}
+
+function rollFight(inp: FightInput): FightEstimate | null {
   const { foe } = inp;
   if (foe.hitpoints <= 0) return null;
   const mech = FIGHT_MECHANICS[foe.name] ?? null;

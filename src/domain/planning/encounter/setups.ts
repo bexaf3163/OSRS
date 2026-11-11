@@ -84,8 +84,13 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
   if (options.currentOnly) return current ? [current] : [];
   const melee = ['attack', 'strength', 'defence'].filter(skill => !(options.keepDefenceOne && skill === 'defence'));
   const questsDone = new Set(Object.entries(snapshot.quests).filter(([, q]) => q.state === 'COMPLETED').map(([id]) => id));
-  const advice = (levels: PlayerStats) => adviseGear({ levels, gear, owned: snapshot.player.owned, mode: snapshot.scope.mode,
-    geQuotes: gearMarketPrices(prices), foes: stepFightFoes(step), questsDone });
+  // One quote table and one advice per level set for the whole search: the even-training search asks again at each searched level.
+  const geQuotes = gearMarketPrices(prices), foes = stepFightFoes(step), advised = new Map<string, ReturnType<typeof adviseGear>>();
+  const advice = (levels: PlayerStats) => {
+    const key = JSON.stringify(levels);
+    if (!advised.has(key)) advised.set(key, adviseGear({ levels, gear, owned: snapshot.player.owned, mode: snapshot.scope.mode, geQuotes, foes, questsDone }));
+    return advised.get(key)!;
+  };
   const picked = advice(stats);
   const eligible = (a: GearAction): GearAction | null => {
     if (a.source.kind !== 'ge' || ironman === false) return a;

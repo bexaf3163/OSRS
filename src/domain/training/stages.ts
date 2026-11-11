@@ -29,12 +29,18 @@ export function toolTierAt(skill: string, level: number, mode: GameMode): string
   return best;
 }
 
+const replacedAt = new Map<string, number | null>();
 /** The level at which the path plans a better tier than this axe or pickaxe (toolTierAt); null for the last tier of the mode or not a tool. */
 export function toolReplacedAt(tool: string, mode: GameMode): number | null {
+  const key = `${mode}|${nameKey(tool)}`;
+  if (replacedAt.has(key)) return replacedAt.get(key)!;
   const use = toolUse(tool);
-  if (!use) return null;
-  for (let level = use.level + 1; level <= 99; level++) if (toolUse(toolTierAt(use.skill, level, mode) ?? '')!.level > use.level) return level;
-  return null;
+  let found: number | null = null;
+  for (let level = (use?.level ?? 99) + 1; use && level <= 99 && found === null; level++) {
+    if (toolUse(toolTierAt(use.skill, level, mode) ?? '')!.level > use.level) found = level;
+  }
+  replacedAt.set(key, found); // A fixed table: tiers and their levels never change while the app runs.
+  return found;
 }
 
 /** The runes of the best combat spell of this level, by name: the spell a later Magic stage plans to buy for. */
