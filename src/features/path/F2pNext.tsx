@@ -14,7 +14,7 @@ import { Eyebrow } from '../../ledger';
 
 const title = (skill: string) => skill[0].toUpperCase() + skill.slice(1);
 
-export function F2pNext() {
+export function F2pNext({ waiting = null }: { waiting?: string | null }) {
   const { state } = usePlayerState();
   const features = useFeatures();
   const prices = usePriceView(true);
@@ -22,7 +22,7 @@ export function F2pNext() {
   const rows = useMemo(() => f2pCheckpoints(state, styleOf(features).style, priorityOf(features), { prices, restriction: trade.state }),
     [state, features, prices, trade.state]);
   return <>
-    <Eyebrow>F2P QUESTS COMPLETE</Eyebrow>
+    <Eyebrow>{waiting ? `F2P QUESTS COMPLETE · ${waiting.toUpperCase()} OPTIONAL` : 'F2P QUESTS COMPLETE'}</Eyebrow>
     <h1 className="la-t">Next in F2P</h1>
     {rows.length ? <>
       <p className="small muted">★ Good-value checkpoints first, then the shortest for your levels and gear. Members content is not planned.</p>

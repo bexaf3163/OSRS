@@ -1,5 +1,5 @@
 // The owner's word for a quest requirement the game cannot show (Shield of Arrav's partner). It appears only while the
-// committed Decision waits on it; the tick is kept with the quest's tasks and the planner decides again.
+// committed Decision waits on it (on the step, or above the F2P checkpoints for an optional quest); the tick is kept with the quest's tasks and the planner decides again.
 import { useDecision } from '../../state/decision';
 import { useStore } from '../../state/store';
 import { questCatalogue } from '../../domain/planning/catalogue';

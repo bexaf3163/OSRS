@@ -1,7 +1,7 @@
 import type { Step } from '../../types';
 import type { QuestFact } from './catalogue';
 import { canSupplyQuestDelivery, projectedQuestPoints, questSkillTargets, remainingQuestSteps } from './catalogue';
-import type { ActionCost, CandidateAction, CostExpression, ExpectedEffect, Minutes, ObjectiveEvaluation, PlannerModel, PlanningSnapshot, Projection, ResourceChange } from './contracts';
+import type { ActionCost, CandidateAction, CostExpression, ExpectedEffect, Minutes, ObjectiveEvaluation, PlannerModel, PlanningSnapshot, Projection, QuestEvidence, ResourceChange } from './contracts';
 import { noTime, sumExpressions, sumMinutes } from './cost';
 import { xpForLevel } from '../player/xp';
 import { levelOf } from '../player/playerState';
@@ -63,16 +63,20 @@ export function createQuestModel(snapshot: PlanningSnapshot, catalogue: readonly
   const level = (p: Projection, skill: string) => Math.max(p.levels?.[skill] ?? -1, levelOf(snapshot.player, skill) ?? -1);
   const points = (p: Projection) => projectedQuestPoints(snapshot, p, facts);
 
-  function checkAction(quest: QuestFact, kind: 'VERIFY' | 'MANUAL_WAIT', title: string, predicate: string): CandidateAction {
-    return { id: `${quest.id}:${kind}:${predicate}`, goalId: quest.id, kind, title, feasibility: kind === 'VERIFY' ? 'UNKNOWN' : 'PREP_REQUIRED',
+  function checkAction(quest: QuestFact, kind: 'VERIFY' | 'MANUAL_WAIT', title: string, predicate: string, stepId?: string): CandidateAction {
+    return { id: `${quest.id}:${kind}:${predicate}`, goalId: quest.id, kind, title, feasibility: kind === 'VERIFY' ? 'UNKNOWN' : 'PREP_REQUIRED', ...(stepId ? { stepId } : {}),
       prerequisites: [], completionEvidence: [{ source: quest.source.url, snapshotRevision: snapshot.scope.snapshotRevision, predicate }],
       expectedEffects: [], time: null, gpCost: null, sourceIds: [quest.source.url], reasons: [title] };
   }
   const emptyCost = (): ActionCost => ({ prepare: noTime(), travel: noTime(), work: noTime(), banking: noTime(), exchange: noTime(), switching: noTime() });
-  function check(quest: QuestFact, kind: 'VERIFY' | 'MANUAL_WAIT', title: string, predicate: string): ObjectiveEvaluation {
-    return { objectiveId: quest.id, activeAction: checkAction(quest, kind, title, predicate), cost: { ...emptyCost(), work: null },
+  function check(quest: QuestFact, kind: 'VERIFY' | 'MANUAL_WAIT', title: string, predicate: string, stepId?: string): ObjectiveEvaluation {
+    return { objectiveId: quest.id, activeAction: checkAction(quest, kind, title, predicate, stepId), cost: { ...emptyCost(), work: null },
       effects: [], confidence: 'UNKNOWN', hardBlocked: false };
   }
+  /** The quest's manual requirements (Shield of Arrav's partner) neither confirmed by the player nor proven by the current stage. */
+  const unconfirmed = (quest: QuestFact, evidence: QuestEvidence) => (quest.requirements.manual ?? []).filter(key => snapshot.manual[`${quest.id}:${key}`] !== true
+    && !(snapshot.player.connected && evidence.state === 'IN_PROGRESS' && evidence.stepId && byStep.has(evidence.stepId)
+      && questManualProof(byStep.get(evidence.stepId)!, key, snapshot.instruction ?? null, snapshot.combat?.gear?.inventory ?? null)));
   function evaluate(id: string, projection: Projection): ObjectiveEvaluation | null {
     if (!projection.scope || !acceptsDecision(snapshot.scope, projection.scope)) return null;
     const cached = cache.get(projection);
@@ -84,15 +88,15 @@ export function createQuestModel(snapshot: PlanningSnapshot, catalogue: readonly
     if (!evidence || evidence.state === 'UNKNOWN') {
       result = check(quest, 'VERIFY', `Read ${quest.id} in the quest journal`, `Quest state for ${quest.id} is verified`);
     } else if (evidence.state === 'IN_PROGRESS' && !evidence.stepId) {
-      result = check(quest, 'VERIFY', `Verify the current stage of ${quest.id}`, `Validated stage evidence for ${quest.id}`);
+      // A one-step quest's check points the game at that step: the plugin reads the stage there (questStages var) and the check resolves.
+      result = check(quest, 'VERIFY', `Verify the current stage of ${quest.id}`, `Validated stage evidence for ${quest.id}`,
+        quest.stepIds.length === 1 ? quest.stepIds[0] : undefined);
     } else if (evidence.state === 'IN_PROGRESS' && quest.resourceFlow?.partialDelivery && !canSupplyQuestDelivery(quest, snapshot.player)) {
       result = check(quest, 'VERIFY', `Verify the remaining deliveries for ${quest.id}`, 'Observed remaining hand-in quantity; never repurchase an unknown full delivery');
     } else if (quest.requirements.unparsed) {
       result = check(quest, 'VERIFY', `Review the source prerequisites of ${quest.id}`, 'Unmodelled source requirement verified');
-    } else if (quest.requirements.manual?.some(key => snapshot.manual[`${quest.id}:${key}`] !== true
-      && !(snapshot.player.connected && evidence.state === 'IN_PROGRESS' && evidence.stepId && byStep.has(evidence.stepId)
-        && questManualProof(byStep.get(evidence.stepId)!, key, snapshot.instruction ?? null, snapshot.combat?.gear?.inventory ?? null)))) {
-      result = check(quest, 'MANUAL_WAIT', `${quest.id} needs manual help or confirmation`, 'Manual quest requirement confirmed');
+    } else if (unconfirmed(quest, evidence).length) {
+      result = check(quest, 'MANUAL_WAIT', `Confirm the ${unconfirmed(quest, evidence).join(' and ')} for ${quest.id}`, 'Manual quest requirement confirmed');
     } else if (quest.requirements.quests.some(id => !projection.completed.has(id))) {
       // Predecessors are their own macro candidates. No route mark or skip proves a quest prerequisite.
       const frontier = prerequisiteFrontier(graph, id, projection.completed);

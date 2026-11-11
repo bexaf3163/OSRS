@@ -219,6 +219,7 @@ export const scenarios = {
   'ledger': ledgerScenarios,
   'combat-strategy': combatStrategy,
   'f2p-next': f2pNext,
+  'f2p-next-optional': f2pNextOptional,
 };
 
 async function combatStrategy(browser: Browser) {
@@ -269,5 +270,35 @@ async function f2pNext(browser: Browser) {
   await settle(page);
   expect(await page.getByRole('region', { name: 'Training plan' }).count() === 1, 'F2P complete: Follow opens the ordinary training plan');
   expect(!errors.length && await noOverflow(page), 'F2P complete: no console errors or horizontal overflow');
+  await page.context().close();
+}
+
+// Every quest but Shield of Arrav done, and it is started (a partner from the other gang is needed). Its stage check points the game at
+// its step, where the plugin reads the stage; once the player skips the step, the check no longer hides the F2P checkpoints.
+async function f2pNextOptional(browser: Browser) {
+  const stats = { attack: 40, strength: 44, defence: 44, hitpoints: 43, ranged: 40, prayer: 8, magic: 25, woodcutting: 31, firemaking: 30, fishing: 32,
+    cooking: 30, mining: 18, smithing: 29, crafting: 9, runecraft: 1 };
+  const gear = { equipment: [], inventory: [], coins: 30000, bankCoins: 0 };
+  const states = questStatesBefore('S7-01');
+  const at = async (mark: 'open' | 'skipped') => {
+    const progress = progressBefore('S7-01', { gameMode: 'f2p' }), marks = progress.steps as Record<string, string>;
+    if (mark === 'open') delete marks['S3-05']; else marks['S3-05'] = 'skipped';
+    return open(browser, 1440, { market: true, progress,
+      status: { protocol: 6, inGame: true, player: 'Fixture', ...gear, stats, questStates: { ...states, states: { ...states.states, 'Shield of Arrav': 'IN_PROGRESS' } } },
+      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [] }] }, '#/path');
+  };
+  let { page, errors } = await at('open');
+  await settle(page);
+  const pointed = await page.evaluate(() => (window as unknown as { __posts: { path: string; body?: unknown }[] }).__posts
+    .filter(p => p.path === '/prep-plan').map(p => (p.body as { step?: { stepId?: string } | null })?.step?.stepId ?? '-'));
+  expect(pointed.includes('S3-05'), `optional quest open: the stage check points the game at Shield of Arrav's step, where the plugin reads it (${pointed.join(', ')})`);
+  expect(!errors.length && await noOverflow(page), 'optional quest open: no console errors or horizontal overflow');
+  await page.context().close();
+  ({ page, errors } = await at('skipped'));
+  await settle(page);
+  const next = await page.getByRole('region', { name: 'Next action' }).innerText();
+  expect(/Next in F2P/.test(next) && /SHIELD OF ARRAV OPTIONAL/i.test(next), `optional quest skipped: Path offers the F2P checkpoints and names the optional quest (${next.slice(0, 80)})`);
+  expect(await page.locator('ol li', { hasText: '→' }).count() > 2, 'optional quest skipped: the ranked checkpoints are listed');
+  expect(!errors.length && await noOverflow(page), 'optional quest skipped: no console errors or horizontal overflow');
   await page.context().close();
 }

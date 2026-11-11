@@ -79,7 +79,9 @@ describe('source-aware quest model', () => {
     const evaluation = model.evaluate("Doric's Quest", observedProjection(observed))!;
     expect(evaluation.activeAction.kind).toBe('VERIFY');
     expect(evaluation.effects).toEqual([]);
-    expect(evaluation.activeAction).not.toHaveProperty('stepId');
+    // No stage is invented: the evidence stays stageless. The check points the game at the quest's only step, where the plugin reads the stage.
+    expect(observed.quests["Doric's Quest"]).not.toHaveProperty('stepId');
+    expect(evaluation.activeAction.stepId).toBe('S3-01');
   });
 
   it('maps only the active non-peeking validated cursor to an in-progress quest', () => {
@@ -210,7 +212,7 @@ describe('source-aware quest model', () => {
     const quests = [partner, independent];
     observed.quests = Object.fromEntries(quests.map(q => [q.id, { state: 'NOT_STARTED', source: 'game' }]));
     const model = createQuestModel(observed, quests, quests.map(q => ({ ...allSteps[0], id: q.id })), adapters());
-    expect(model.evaluate(partner.id, observedProjection(observed))?.activeAction.kind).toBe('MANUAL_WAIT');
+    expect(model.evaluate(partner.id, observedProjection(observed))?.activeAction).toMatchObject({ kind: 'MANUAL_WAIT', title: 'Confirm the partner for partner' });
     expect(decide(observed, model)?.objectiveId).toBe(independent.id);
     observed.manual = { 'partner:partner': true };
     expect(createQuestModel(observed, quests, quests.map(q => ({ ...allSteps[0], id: q.id })), adapters())
