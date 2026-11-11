@@ -6,7 +6,7 @@
 
 import { processingJson } from '../../data';
 import { bankTrip, tripMinutes } from '../travel/bankTrip';
-import { skillChance } from './skillChance';
+import { skillChance } from '../player/skillChance';
 import { coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from '../market/lootValue';
 import { coinsOf, heldOf, levelOf, type PlayerState } from '../player/playerState';
 import { itemRequirement } from '../player/requirements';

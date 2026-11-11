@@ -34,6 +34,19 @@ describe('what to do with a drop', () => {
     expect(dropUse('Feather', { ...player({}, {}, 2), keepFor: 'fly fishing' }).text).toBe('Feather: keep them for fly fishing.');
   });
 
+  // Cook or sell, by the burns: the cooked one's sale after tax times the Wiki success chance at this level, against the raw sale.
+  it('cooks a catch to sell only when the cooked sale, after the burns at this level, beats selling it raw', () => {
+    const sale = (prices: Record<string, number>) => (name: string) => prices[name] ?? null;
+    const cookOrSell = (level: number, raw: number, cooked: number) => dropUse('Raw lobster', { ...player({ cooking: level }, {}, raw), saleOf: sale({ Lobster: cooked }) });
+    // Cooking 40 burns lobsters often; at 74 they never burn (success low 38, high 332).
+    expect(cookOrSell(40, 100, 200)).toMatchObject({ action: 'cook' });
+    expect(cookOrSell(40, 100, 200).text).toMatch(/^Raw lobster: cook and sell them, about \d+ gp more each than raw after the burns at Cooking 40\.$/);
+    expect(cookOrSell(40, 117, 125)).toMatchObject({ action: 'sell' }); // A small margin is eaten by the burns.
+    expect(cookOrSell(74, 117, 125)).toMatchObject({ action: 'cook' });
+    expect(cookOrSell(39, 100, 200)).toMatchObject({ action: 'sell' }); // Below the level that cooks it.
+    expect(dropUse('Raw lobster', player({ cooking: 40 }, {}, 100))).toMatchObject({ action: 'sell' }); // No cooked price known.
+  });
+
   // The same rule for a raw catch: cook it toward a Cooking goal the player can cook it at, sell it otherwise.
   it('cooks a raw catch toward a Cooking goal only from the level that cooks it', () => {
     expect(dropUse('Raw lobster', player({ cooking: 40 }, { cooking: 50 }, 150)).text).toMatch(/cook them, 120 Cooking XP each toward Cooking 50/);

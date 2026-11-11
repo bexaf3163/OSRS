@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { buildPlayerState, type PlayerState } from '../player/playerState';
 import { emptyProgress } from '../persistence/progress';
 import { nameKey } from '../items/itemKey';
-import { cascade, skillChance } from './skillChance';
+import { cascade, skillChance } from '../player/skillChance';
 import { gatherPace, gatherRate, SKILLING, type SkillingRegistry } from './skillingRates';
 import { trainingNav } from './trainingNav';
 import { withTrainingMethod } from './methodStep';

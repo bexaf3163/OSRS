@@ -11,7 +11,7 @@
 
 import { skillingJson } from '../../data';
 import { bankTrip } from '../travel/bankTrip';
-import { cascade, skillChance } from './skillChance';
+import { cascade, skillChance } from '../player/skillChance';
 import { bankingPays, coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from '../market/lootValue';
 import { heldExact, levelOf, type PlayerState } from '../player/playerState';
 import { toolFamilyOf, toolUse } from '../items/toolTiers';

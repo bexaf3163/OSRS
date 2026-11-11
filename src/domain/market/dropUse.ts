@@ -3,8 +3,9 @@
 // training card and every Money method.
 import { processingJson } from '../../data';
 import { nameKey } from '../items/itemKey';
+import { skillChance } from '../player/skillChance';
 
-interface Recipe { skill: string; level: number; xp: number; inputs: readonly { name: string }[] }
+interface Recipe { skill: string; level: number; xp: number; inputs: readonly { name: string }[]; output: { name: string } | null; success?: { low: number; high: number } }
 
 /** Single-input processing recipes by input name: burying a bone, cooking a raw catch. */
 const USES = new Map<string, Recipe[]>();
@@ -18,11 +19,20 @@ const label = (skill: string) => skill[0].toUpperCase() + skill.slice(1);
 
 export interface DropUse { action: 'bury' | 'cook' | 'use' | 'sell' | 'keep' | 'leave'; text: string }
 
+/** Selling it cooked instead of raw: the cooked one's sale after tax times the chance it is not burnt at this Cooking level (the Wiki's
+ * success formula, processing.json), less the raw sale. Null when it cannot be cooked at this level or a sale is not known. */
+function cookedGain(uses: readonly Recipe[], level: number, rawEach: number | null, saleOf?: (item: string) => number | null): { level: number; extraEach: number } | null {
+  const r = uses.find((u) => u.skill === 'cooking' && u.output && u.success && level >= u.level);
+  const cooked = r && saleOf ? saleOf(r.output!.name) : null;
+  if (!r || cooked === null || cooked === undefined || rawEach === null) return null;
+  return { level, extraEach: cooked * skillChance(r.success!.low, r.success!.high, level) - rawEach };
+}
+
 /** The best use of one kind of drop for this player. goal is a level the player works towards in that skill (a quest's need or a
  * followed goal); coinsEach is the sale after tax, null when it cannot be sold or has no price, and noSale says which; processed is
  * the best Money processing method that takes it (tanning a cowhide) and the coins it adds per item over a raw sale; keepFor names the
  * followed training method that uses the item up (feathers for fly fishing). */
-export function dropUse(item: string, o: { level: (skill: string) => number | null; goal: (skill: string) => number | null; coinsEach: number | null; noSale?: 'restricted' | 'unpriced'; processed?: { title: string; extraEach: number }; keepFor?: string }): DropUse {
+export function dropUse(item: string, o: { level: (skill: string) => number | null; goal: (skill: string) => number | null; coinsEach: number | null; noSale?: 'restricted' | 'unpriced'; processed?: { title: string; extraEach: number }; keepFor?: string; saleOf?: (item: string) => number | null }): DropUse {
   const uses = USES.get(nameKey(item)) ?? [];
   for (const r of uses) {
     const level = o.level(r.skill) ?? 1;
@@ -33,6 +43,10 @@ export function dropUse(item: string, o: { level: (skill: string) => number | nu
     }
   }
   if (o.keepFor) return { action: 'keep', text: `${item}: keep them for ${o.keepFor}.` };
+  const cook = cookedGain(uses, o.level('cooking') ?? 1, o.coinsEach, o.saleOf);
+  if (cook && cook.extraEach >= 1 && cook.extraEach > (o.processed?.extraEach ?? 0)) {
+    return { action: 'cook', text: `${item}: cook and sell them, about ${Math.round(cook.extraEach).toLocaleString('en-US')} gp more each than raw after the burns at Cooking ${cook.level}.` };
+  }
   if (o.processed && o.processed.extraEach >= 1) {
     return { action: 'use', text: `${item}: ${o.processed.title} pays about ${Math.round(o.processed.extraEach).toLocaleString('en-US')} gp more each than selling them raw.` };
   }

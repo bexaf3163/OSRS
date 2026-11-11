@@ -39,6 +39,7 @@ export function useDropAdvice(): (item: string, processing?: readonly MethodEval
     noSale: trade.state === 'RESTRICTED' && isRestrictedItem(item) ? 'restricted' : prices?.sell(item)?.price ? undefined : 'unpriced',
     processed,
     keepFor: method && usedUp.has(key) ? method.name[0].toLowerCase() + method.name.slice(1) : undefined,
+    saleOf: (name) => dropValue(name, prices, trade.state),
     });
   }, [state, goals, tracked, trade.state, prices, method, usedUp]);
 }
