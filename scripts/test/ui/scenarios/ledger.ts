@@ -218,6 +218,7 @@ async function ledgerScenarios(browser: Browser) {
 export const scenarios = {
   'ledger': ledgerScenarios,
   'combat-strategy': combatStrategy,
+  'f2p-next': f2pNext,
 };
 
 async function combatStrategy(browser: Browser) {
@@ -248,5 +249,25 @@ async function combatStrategy(browser: Browser) {
   const shopping = await page.locator('body').innerText();
   expect(!/Get Mithril scimitar|Attack to 30|Train attack/.test(shopping), 'combat strategy: Shopping does not require a replacement weapon or an unnecessary training detour');
   expect(!errors.length && await noOverflow(page), 'combat strategy: no console errors or horizontal overflow');
+  await page.context().close();
+}
+
+// Every F2P quest done (2.86.1): Path offers the F2P checkpoints ranked by the training engine, and Follow starts the ordinary training plan.
+async function f2pNext(browser: Browser) {
+  const stats = { attack: 40, strength: 44, defence: 44, hitpoints: 43, ranged: 40, prayer: 8, magic: 25, woodcutting: 31, firemaking: 30, fishing: 32,
+    cooking: 30, mining: 18, smithing: 29, crafting: 9, runecraft: 1 };
+  const gear = { equipment: [], inventory: [{ id: 1353, name: 'Steel axe', count: 1 }], coins: 30000, bankCoins: 0 };
+  const { page, errors } = await open(browser, 1440, { market: true, progress: { ...progressBefore('S1-01'), gameMode: 'f2p' },
+    status: { protocol: 6, inGame: true, player: 'Fixture', ...gear, stats, questStates: questStatesBefore('S7-01') },
+    events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Steel axe', carried: 1, noted: 0, bank: 0 }] }] }, '#/path');
+  await settle(page);
+  const next = await page.getByRole('region', { name: 'Next action' }).innerText();
+  expect(/Next in F2P/.test(next) && !/Waiting for the planner/.test(next), 'F2P complete: Path offers what to do next instead of waiting');
+  const rows = await page.locator('ol li', { hasText: '→' }).allInnerTexts();
+  expect(rows.length > 2 && rows[0].startsWith('★') && rows.every(r => /Follow/.test(r)), `F2P complete: ranked checkpoints, good value first, each can be followed (${rows[0]})`);
+  await page.getByRole('button', { name: 'Follow' }).first().click();
+  await settle(page);
+  expect(await page.getByRole('region', { name: 'Training plan' }).count() === 1, 'F2P complete: Follow opens the ordinary training plan');
+  expect(!errors.length && await noOverflow(page), 'F2P complete: no console errors or horizontal overflow');
   await page.context().close();
 }

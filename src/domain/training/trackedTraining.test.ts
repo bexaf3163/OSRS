@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { trackedTraining } from './trackedTraining';
+import { f2pCheckpoints, trackedTraining } from './trackedTraining';
+import { F2P_SKILL_ADVICE } from './f2pSkillAdvice';
 import { buildPlayerState } from '../player/playerState';
 import { emptyProgress } from '../persistence/progress';
 import { RANGED_WATCH } from '../combat/rangedLoadout';
@@ -111,5 +112,28 @@ describe('followed skills use the shared staged route', () => {
     expect(upgrade.step.itemsRequired!.some(i => i.nameEn === 'Mithril axe' && !i.equip)).toBe(true);
     expect(upgrade.step.how).not.toContain('to 36:');
     expect(upgrade.step.requirements).not.toContainEqual(expect.objectContaining({ skill: 'attack' }));
+  });
+});
+
+describe('after the F2P quests: what to train next', () => {
+  const character = (levels: Record<string, number>) => buildPlayerState({ mode: 'f2p', connected: true, progress: emptyProgress(), questsDone: [],
+    stats: { attack: 40, strength: 44, defence: 44, hitpoints: 43, ranged: 40, prayer: 8, magic: 25, woodcutting: 31, firemaking: 30, fishing: 32, cooking: 30,
+      mining: 18, smithing: 29, crafting: 9, runecraft: 1, ...levels },
+    gear: { equipment: [], inventory: [{ id: 1353, name: 'Steel axe', count: 1 }], coins: 10000, bankCoins: 0 }, owned: { bankSeen: true, items: new Map() } });
+  it('lists only unfinished good or optional checkpoints, good value first, then the shortest by the engine; reached and members skills are left out', () => {
+    const rows = f2pCheckpoints(character({}), 'chill', 'balanced');
+    expect(rows.length).toBeGreaterThan(3);
+    for (const row of rows) {
+      expect(['good', 'optional']).toContain(F2P_SKILL_ADVICE[row.skill]!.priority);
+      expect(row.level).toBeLessThan(row.target);
+    }
+    expect(rows.map(r => r.skill)).not.toEqual(expect.arrayContaining(['smithing', 'prayer', 'runecraft', 'attack']));
+    const good = rows.filter(r => r.priority === 'good'), firstOptional = rows.findIndex(r => r.priority === 'optional');
+    expect(rows.slice(0, good.length)).toEqual(good);
+    const known = (list: typeof rows) => list.filter(r => r.time).map(r => r.time!.minHours + r.time!.maxHours);
+    expect(known(good)).toEqual([...known(good)].sort((a, b) => a - b));
+    expect(firstOptional).toBe(good.length);
+    // Reaching a checkpoint removes it.
+    expect(f2pCheckpoints(character({ fishing: 35 }), 'chill', 'balanced').some(r => r.skill === 'fishing')).toBe(false);
   });
 });

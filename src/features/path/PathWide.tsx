@@ -20,17 +20,24 @@ import { ManualConfirm } from './ManualConfirm';
 import { Eyebrow, Icon, Page } from '../../ledger';
 import { objectiveSteps, plannerOrder, useDecision } from '../../state/decision';
 import { PlannerOrder } from './PlannerOrder';
+import { F2pNext } from './F2pNext';
+import { usePlayerState } from '../../state/playerStateContext';
+import { questCatalogue, questEvidence } from '../../domain/planning/catalogue';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey: number }) {
   const { progress, maxQp, steps, setStep, review, reactivate } = useStore();
   const qp = useQuestPoints();
-  const { advance, navTarget, questInstruction, state, inGame, activeStepId } = useBridge();
+  const { advance, navTarget, questInstruction, state, inGame, activeStepId, questStates } = useBridge();
   const { setSuggested } = useWiki();
   const training = useTrackedTraining();
   const activity = useActiveActivity();
   const decision = useDecision();
+  const { state: player } = usePlayerState();
+  // Every F2P quest observed complete in the game: the Path offers the F2P checkpoints instead of waiting for a quest.
+  const f2pDone = useMemo(() => { const evidence = questEvidence(questCatalogue, questStates ?? null, player.quests.known ? player.quests.value : null, null);
+    return questCatalogue.filter(q => !q.members).every(q => evidence[q.id]?.state === 'COMPLETED'); }, [questStates, player.quests]);
   // The committed Decision's step; with none (offline, waiting for data) nothing is current.
   // A Decision whose current action has no step of its own (VERIFY a level) still has an objective: its quest's first open step.
   const objectiveStart = useMemo(() => { const own = objectiveSteps(decision); return steps.find((s) => own.has(s.id) && !isClosed(progress, s.id)) ?? null; }, [decision, steps, progress]);
@@ -126,10 +133,12 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
       </Page>
       {training ? <Page side="r" label="Training plan"><div className="la-scroll"><TrackedSkillCard /></div></Page> : !selected ? (
         <Page side="r" label="Next action"><div className="la-scroll">
+          {!decision && f2pDone ? <F2pNext /> : <>
           <Eyebrow>THE PLANNER'S NEXT ACTION</Eyebrow>
           <h1 className="la-t">{decision ? decision.activeAction.title : 'Waiting for the planner'}</h1>
           {decision ? <ul className="small">{decision.why.map((w) => <li key={w}>{w}</li>)}</ul>
             : <p className="muted">Connect RuneLite and log in, or open a quest from the Journal.</p>}
+          </>}
         </div></Page>
       ) : <CockpitWorkspace
         key={selected.id}

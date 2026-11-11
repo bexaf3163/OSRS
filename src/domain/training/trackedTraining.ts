@@ -2,13 +2,13 @@
 import type { GameMode, Step } from '../../types';
 import type { PlayerState } from '../player/playerState';
 import { levelOf } from '../player/playerState';
-import { SKILL_NAMES } from './skillTrack';
+import { SKILL_NAMES, type SkillName } from './skillTrack';
 import type { TrackedSkill } from './skillTrack';
 import { trackedTrainingContext } from './skillTrack';
 import { f2pAdviceFor } from './f2pSkillAdvice';
-import { methodsFor } from './trainingRouter';
+import { adviseTraining, methodsFor } from './trainingRouter';
 import { pickTraining } from './methodPick';
-import type { TrainingAdvice } from './trainingRouter';
+import type { TimeEstimate, TrainingAdvice } from './trainingRouter';
 import { withTrainingMethod } from './methodStep';
 import type { MethodPriority, PlayStyle } from '../persistence/playStyle';
 import type { Market } from './methodRates';
@@ -51,4 +51,20 @@ export function trackedTraining(tracked: TrackedSkill | null, observed: PlayerSt
     step.inGame = { ...step.inGame, goal: 'Check combat preparation before training', worldPoint: undefined, groundTiles: [], pathWaypoints: undefined, npcNames: [], npcIds: [], objectNames: [], objectIds: [] };
   }
   return { step, target, complete: (levelOf(state, skill) ?? -1) >= target, advice };
+}
+
+export interface F2pCheckpoint { skill: SkillName; level: number; target: number; priority: 'good' | 'optional'; method: string | null; time: TimeEstimate | null }
+
+/**
+ * What to train once the F2P quests are done: the unfinished F2P checkpoints, the better-value class first (★ before ◇), then the shortest by the
+ * training engine's own forecast for this character; an unknown time goes last, never first. A list to choose from, not a forced grind (S105).
+ */
+export function f2pCheckpoints(observed: PlayerState, style: PlayStyle, priority: MethodPriority, market: Market = {}): F2pCheckpoint[] {
+  const mid = (c: F2pCheckpoint) => c.time ? (c.time.minHours + c.time.maxHours) / 2 : Infinity;
+  return SKILL_NAMES.flatMap((skill): F2pCheckpoint[] => {
+    const advice = f2pAdviceFor(skill), level = levelOf(observed, skill);
+    if (!advice?.target || (advice.priority !== 'good' && advice.priority !== 'optional') || level === undefined || level >= advice.target) return [];
+    const plan = adviseTraining({ skill, target: advice.target, state: observed, mode: 'f2p', style, priority, ...market });
+    return [{ skill, level, target: advice.target, priority: advice.priority, method: plan.best?.method.name ?? null, time: plan.time }];
+  }).sort((a, b) => Number(a.priority !== 'good') - Number(b.priority !== 'good') || (mid(a) === mid(b) ? 0 : mid(a) < mid(b) ? -1 : 1));
 }
