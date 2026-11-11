@@ -69,3 +69,6 @@ export function purchaseTripHours(at: Point | undefined, tool: string, prices: P
   if (!allowance || !at || at.plane !== EXCHANGE.plane || isUnderground(at) || !prices?.buy(tool)) return allowance;
   return ((2 * dist(at, EXCHANGE) / TILES_PER_SECOND) * 1.5 + (BANK_SECONDS[0] + BANK_SECONDS[1]) / 2) / 3600;
 }
+
+/** "25 min", "1.5 h": the hours an upgrade saves, as the router and the training card say them. */
+export const hoursText = (h: number) => (h < 1 ? `${Math.max(1, Math.round(h * 60))} min` : `${h < 10 ? Math.round(h * 10) / 10 : Math.round(h)} h`);

@@ -25,7 +25,7 @@ import java.util.Random;
 
 /**
  * The Ledger look of the in-game HUD (2.81.31, the owner's pick of 2026-11-01), the app's design on the game screen: a leather plaque
- * with a progress ring, the step code and a NOW stamp; opened, a parchment page behind tabs (Now, Prepare, Next, Advice) shows one
+ * with a progress ring and a NOW stamp; opened, a parchment page behind tabs (Now, Prepare, Next, Advice) shows one
  * section at a time, with the next step as its footer. It lays the same {@link HudModel.Card} out into the classic card's rows, so the
  * clicks, the hints and the cut with a pointer to the side panel stay shared with {@link OsrsPathGuideOverlay}.
  */
@@ -96,9 +96,9 @@ final class LedgerGuide
 		List<Row> rows = new ArrayList<>();
 		int ring = ring(scale), x0 = PAD + ring + 12, y = TOP;
 
-		// The step code and the NOW stamp sit right of the headline, or stacked under the ring when the plaque is too narrow for both,
-		// so the headline keeps its width and the closed plaque gets no taller.
-		String code = code(c.getStep());
+		// The NOW stamp sits right of the headline, or under the ring when the plaque is too narrow, so the headline keeps its width and the
+		// closed plaque gets no taller. The route's internal step code (S0-22) means nothing in the game and is not drawn.
+		String code = "";
 		int codeW = LedgerFont.advance(g, code, label) + 8 + stamp(g, label), labelH = Math.round(14 * scale);
 		boolean under = width - x0 - codeW - 38 < Math.round(150 * scale);
 		int headW = width - x0 - (under ? 30 : codeW + 38);
@@ -255,12 +255,6 @@ final class LedgerGuide
 			if (l.getIcon() == HudModel.Icon.MISSING || l.getTone() == HudModel.Tone.DANGER || l.getTone() == HudModel.Tone.CAUTION) missing++;
 		}
 		return missing == 0 ? "ok" : String.valueOf(missing);
-	}
-
-	static String code(String step)
-	{
-		int i = step == null ? -1 : step.indexOf(" · ");
-		return i < 0 ? "NOW" : step.substring(0, i);
 	}
 
 	static String rest(String step)

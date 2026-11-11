@@ -12,7 +12,7 @@ import { nameKey } from '../items/itemKey';
 import type { GameMode, Progress, Step } from '../../types';
 import { trainingMethodsJson as methodsJson, toolProgressionJson } from '../../data';
 import { withPlannedKit } from './stages';
-import { purchaseTripHours, toolUpgrade, upgradeXp, type ToolUpgrade } from './toolUpgrade';
+import { hoursText, purchaseTripHours, toolUpgrade, upgradeXp, type ToolUpgrade } from './toolUpgrade';
 import { toolUse } from '../items/toolTiers';
 import { evaluate, itemRequirement, type ReqState, type Requirement } from '../player/requirements';
 import { coinsOf, heldExact, heldOf, levelOf, questOf, type PlayerState } from '../player/playerState';
@@ -598,8 +598,6 @@ export const rateText = (m: TrainingMethod) => {
   return `${fmtK(r[0]) === fmtK(r[1]) ? `≈ ${fmtK(r[0])}` : `≈ ${fmtK(r[0])}–${fmtK(r[1])}`} XP per hour${m.rateSource === 'model' ? ' for you' : ''}`;
 };
 
-
-const hoursText = (h: number) => (h < 1 ? `${Math.max(1, Math.round(h * 60))} min` : `${h < 10 ? Math.round(h * 10) / 10 : Math.round(h)} h`);
 
 function reasonFor(v: MethodView, priority: MethodPriority, level: number, upgrade: ToolUpgrade | null = null): string {
   const m = v.method;

@@ -47,11 +47,15 @@ async function f2pSkillsScenarios(browser: Browser) {
     await page.context().close();
   }
 
-  for (const [group, skill, tool] of [['WC', 'woodcutting', 'axe'], ['MI', 'mining', 'pickaxe'], ['FI', 'fishing', 'rod/net'], ['CO', 'cooking', 'ingredients'], ['FM', 'firemaking', 'tinderbox'], ['SM', 'smithing', 'ores'], ['CR', 'crafting', 'recipe'], ['RC', 'runecraft', 'tiara'], ['PR', 'prayer', 'bones']] as const) {
+  // The equipment line is the engine's own kit for the selected method (2.86.1): it names the real tool or materials; a skill saved for
+  // membership shows no fixed note.
+  for (const [group, skill, tool] of [['WC', 'woodcutting', /axe/], ['MI', 'mining', /pickaxe/], ['FI', 'fishing', /net|rod|harpoon/], ['CO', 'cooking', /raw /],
+    ['FM', 'firemaking', /tinderbox.*logs/], ['SM', 'smithing', /hammer|bar|ore/], ['CR', 'crafting', /needle|chisel|mould|leather/], ['RC', 'runecraft', null], ['PR', 'prayer', null]] as const) {
     const { page, errors } = await open(browser, 1000, { market: true,
       progress: progressBefore('S5-01', { gameMode: 'f2p', levels: { [skill]: 1 } }),
     }, `#/skills/${group}/${skill}`);
-    expect((await text(page, '.training-equipment:visible')).toLowerCase().includes(tool), `Skills equipment (${skill}): one practical hint accompanies the current method`);
+    const equipment = (await page.locator('.training-equipment:visible').count()) ? (await text(page, '.training-equipment:visible')).toLowerCase() : null;
+    expect(tool ? !!equipment && tool.test(equipment) : equipment === null, `Skills equipment (${skill}): the engine's kit for the current method, never a fixed note`);
     expect(await page.locator('.skill-detail details').count() === 0 && await noOverflow(page) && !errors.length, `Skills equipment (${skill}): compact without a disclosure stack or errors`);
     await page.context().close();
   }

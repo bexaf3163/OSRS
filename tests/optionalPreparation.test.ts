@@ -33,7 +33,8 @@ describe('practical optional F2P preparation', () => {
     expect(step.followsMethod).toBe('cooking');
     expect(step.itemsRequired?.some(n => /fishing|net|harpoon|feather/i.test(n.nameEn))).toBe(false);
     expect(step.inGame?.npcNames ?? []).not.toContain('Fishing spot');
-    expect(step.fields?.find(f => f.label === 'Equipment')?.text).toBe(F2P_SKILL_ADVICE.cooking!.equipment);
+    // Equipment is the engine's kit for the selected method (2.86.1), never a fixed note carried over from the previous phase.
+    expect(step.fields?.some(f => f.label === 'Equipment')).toBe(false);
   });
   it.each([
     [{ mining: 45, woodcutting: 35, firemaking: 1 }, 'woodcutting', /pickaxe/i],
@@ -42,7 +43,7 @@ describe('practical optional F2P preparation', () => {
     const { step } = run('S6-02', levels);
     expect(step.followsMethod).toBe(skill);
     expect(step.itemsRequired?.some(n => obsolete.test(n.nameEn))).toBe(false);
-    expect(step.fields?.filter(f => f.label === 'Equipment')).toEqual([{ label: 'Equipment', text: F2P_SKILL_ADVICE[skill]!.equipment }]);
+    expect(step.fields?.some(f => f.label === 'Equipment')).toBe(false);
     expect(stepUpgradeCategories(step)).toEqual(skill === 'woodcutting' ? ['woodcutting'] : []);
     if (skill === 'firemaking') expect(step.itemsRequired?.some(n => n.nameEn === 'Tinderbox')).toBe(true);
   });

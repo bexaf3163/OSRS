@@ -14,7 +14,6 @@ import { AXES, PICKAXES } from '../items/toolTiers';
 import type { MethodNeed } from './trainingRouter';
 import { RANGED_WATCH } from '../combat/rangedLoadout';
 import { STRIKE_WATCH, SUPERHEAT_WATCH } from '../combat/magicPlan';
-import { f2pAdviceFor } from './f2pSkillAdvice';
 import { healsOf } from '../combat/combatEstimate';
 
 /** The stored pick when the skill's goal is already reached: no tool of that skill is asked for. */
@@ -26,7 +25,8 @@ export type TrainingPick = string | {
   methodId: string; untilLevel?: number; goalNeeds?: MethodNeed[]; stockNeeds?: MethodNeed[]; needs: MethodNeed[]; name?: string; where?: string; warning?: string;
   modelled?: boolean;
   /** The spot the engine picked; waypoints - the way in of a spot under the ground, entrance first. */
-  spot?: { label: string; x: number; y: number; plane: number; objectNames?: string[]; waypoints?: { x: number; y: number; plane: number; label?: string }[] };
+  spot?: { label: string; x: number; y: number; plane: number; objectNames?: string[]; waypoints?: { x: number; y: number; plane: number; label?: string }[];
+    /** The engine's choice at the spot: bank the products (at this bank) or drop them. */ how?: 'bank' | 'drop'; bank?: string };
   /** The step's next skill trained on the same catches at a station beside the spot (fish cooked on the fire there), and what is done with them. */
   along?: { skill: string; station: { label: string; x: number; y: number; plane: number }; products: string[]; how: 'bank' | 'drop' };
 };
@@ -145,7 +145,6 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
   const goal = goals.find(g => m?.skills.includes(g.skill));
   if (!m || !goal) return step;
   const phaseTarget = typeof pick === 'object' && pick.untilLevel !== undefined ? Math.min(goal.target, pick.untilLevel) : goal.target;
-  const equipmentHint = step.bondBranch ? f2pAdviceFor(goal.skill)?.equipment : undefined;
   const needs = typeof pick === 'string' ? m.needs ?? [] : pick.needs;
   const trainingPhase = JSON.stringify([id, phaseTarget, needs.map(n => n.type === 'item' ? [n.name, !!n.equip, n.anyOf ?? []] : n)]);
   const gates = needs.filter((n): n is Extract<MethodNeed, { type: 'skill' | 'quest' }> => n.type === 'skill' || n.type === 'quest');
@@ -165,14 +164,17 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
     goalItemsRequired: typeof pick !== 'string' && pick.goalNeeds ? pick.goalNeeds.map(n => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null)
       .map(r => ({ ...r, howToGet: 'For the remaining staged training goal (estimate); future preparation may change.' })) : undefined,
     followsMethod: goal.skill,
-    ...(equipmentHint ? { fields: [...(step.fields ?? []).filter(f => f.label !== 'Equipment'), { label: 'Equipment', text: equipmentHint }] } : {}),
     itemsRequired,
     trainingPhase,
     requirements,
     ...(typeof pick === 'object' && pick.untilLevel !== undefined || goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' || goal.skill === 'ranged' || goal.skill === 'magic' ? {
       itemsRecommended, foes: undefined, threats: undefined, pacing: undefined,
       where: m.where, how: `Train ${goal.skill} to ${phaseTarget}: ${m.name}. ${m.note ?? ''}`.trim(),
-      quickSteps: ['Bank finished-skill tools and surplus supplies before withdrawing the current batch.', `Prepare the listed supplies for ${m.name}.`, `Train ${goal.skill} to ${phaseTarget} at ${m.where}. ${m.note ?? ''}`.trim()],
+      // Where the engine chose the spot, the game line states its decision in a few words and the method's note stays in the app's description;
+      // without a modelled spot the note is the procedure itself (Camdozaal) and stays in the line.
+      quickSteps: ['Bank finished-skill tools and surplus supplies before withdrawing the current batch.', `Prepare the listed supplies for ${m.name}.`,
+        chosen?.how ? `Train ${goal.skill} to ${phaseTarget}: ${m.name}, ${chosen.how === 'bank' ? `bank at ${chosen.bank ?? 'the nearest bank'}` : 'drop as you go'}.`
+          : `Train ${goal.skill} to ${phaseTarget} at ${m.where}. ${m.note ?? ''}`.trim()],
     } : {}),
     ...(alongLine ? { quickSteps: [...(goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' ? [] : step.quickSteps ?? []), alongLine] } : {}),
     // The engine's one safety line for its spot (aggressive NPCs that attack this player) joins the step's own warning.

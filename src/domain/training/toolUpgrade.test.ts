@@ -8,6 +8,7 @@ import { prerequisiteTraining } from '../planning/training';
 import { createTacticalResolver } from '../planning/tactical';
 import type { PlanningSnapshot } from '../planning/contracts';
 import { toInGameTarget } from '../guide/inGameTarget';
+import { equipmentLine } from './trainingKit';
 
 // Owner report 2026-11-10: at Woodcutting 31 the app did not advise the Adamant axe. A tool tier keeps serving the skill after the current
 // method and after the F2P checkpoint until the next tier unlocks, and the trip to buy it is a walk to the exchange, not a fixed quarter hour.
@@ -60,5 +61,16 @@ describe('a better tool tier is weighed over its whole use', () => {
     const frame = createTacticalResolver({ snapshot, progress: emptyProgress(), prices, window: [], ironman: false, earn: () => null }).resolve(candidate.step!, 'Woodcutting');
     expect(frame.action).toMatchObject({ kind: 'BUY', title: 'Get Adamant axe' });
     expect(toInGameTarget(frame.step)?.checklist?.map(item => item.name)).toContain('Adamant axe');
+  });
+
+  it('the Skills card states the engine\'s own equipment decision, never a fixed note', () => {
+    const line = (level: number, tool: string, priority: 'balanced' | 'profit' = 'balanced') => {
+      const { state } = character({ woodcutting: level }, tool);
+      return equipmentLine(adviseTraining({ skill: 'woodcutting', target: 60, state, mode: 'f2p', style: 'chill', priority, prices }), state, prices, priority);
+    };
+    expect(line(31, 'Steel axe')).toMatch(/^Buy an Adamant axe \(≈ 517 gp\): it saves about \d+ min before the next tier, the trip to buy it included\.$/);
+    expect(line(31, 'Mithril axe')).toBe('Keep your Mithril axe: an Adamant axe saves too little here to pay for the trip to buy it.');
+    expect(line(31, 'Adamant axe')).toBe('Your Adamant axe is the best tier your level allows.');
+    expect(line(31, 'Steel axe', 'profit')).toBe('Uses your Steel axe.');
   });
 });

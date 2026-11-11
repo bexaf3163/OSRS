@@ -20,6 +20,7 @@ import { methodStop, type MethodStop } from '../../domain/training/skillFocus';
 import type { NavTargetPayload } from '../../services/runeliteBridge';
 import { NavigateButton } from '../../ui/NavigateButton';
 import { usePriceView } from '../../state/hooks/usePriceView';
+import { equipmentLine } from '../../domain/training/trainingKit';
 import { F2P_SKILL_ADVICE, f2pAdviceFor } from '../../domain/training/f2pSkillAdvice';
 import { useTradeRestriction } from '../../state/hooks/useTradeRestriction';
 import { useDropAdvice } from '../../state/hooks/useDropAdvice';
@@ -111,7 +112,8 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
   const selectedPriority = trackedPriority(tracked, skill, priorityOf(features));
   const prices = usePriceView(true);
   const dropAdvice = useDropAdvice();
-  const equipmentHint = state.mode === 'f2p' ? f2pAdviceFor(skill)?.equipment : undefined;
+  // The engine's own tool/kit decision for the method on this card (upgrade, kept tool or the items used), not a fixed note.
+  const equipmentHint = useMemo(() => advice ? equipmentLine(advice, state, prices, selectedPriority) : null, [advice, state, prices, selectedPriority]);
   // T11: the arrows for the whole goal, leg by leg against each leg's opponent, with the bow and arrows the kit picks now.
   const arrows = useMemo(() => {
     if (skill !== 'ranged' || !advice?.best || advice.level === null) return null;
@@ -129,7 +131,6 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
   if (quest) return <section className="training training-summary" aria-label="What to train with">
     <p className="training-now"><strong>Quest checkpoint: {quest.title}</strong></p>
     <p className="small muted">Use the existing quest guide for this XP reward instead of grinding to {target}. Its preparation and prerequisites are checked there.</p>
-    {equipmentHint && <p className="small muted training-equipment"><strong>Equipment:</strong> {equipmentHint}</p>}
     <button type="button" className="btn btn-primary btn-sm training-follow" onClick={() => {
       void pointInGame(quest);
       window.location.hash = hrefTo.step(quest.id);

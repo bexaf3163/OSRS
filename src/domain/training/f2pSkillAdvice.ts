@@ -6,35 +6,28 @@ export interface F2pSkillAdvice {
   reason: string;
   comparison: string;
   sources: string[];
-  /** Short practical equipment advice; actual usable tools/supplies still come from preparation. */
-  equipment?: string;
 }
 
 const wiki = (page: string) => `https://oldschool.runescape.wiki/w/${page}`;
 /** Reviewed 2026-11-02. Authored pre-members checkpoints, not training requirements or XP forecasts. */
 export const F2P_SKILL_ADVICE: Partial<Record<SkillName, F2pSkillAdvice>> = {
   cooking: { priority: 'good', target: 68,
-    equipment: "Bring the listed ingredients. Armour and combat amulets do not improve cooking; keep room for the batch.",
     reason: 'Wine from 35 is the fastest Cooking in both modes (up to 470,000–490,000 XP/h at 68; about 66 gp lost per jug). Pizzas at Al Kharid give up to 180,000 XP/h from 35.',
     comparison: 'Members add 1-tick karambwans from 30 (about 464,000 XP/h, needs Tai Bwo Wannai Trio). Wine stays the cheap choice in both modes.',
     sources: [wiki('Free-to-play_Cooking_training'), wiki('Pay-to-play_Cooking_training')] },
   firemaking: { priority: 'good', target: 50,
-    equipment: "Bring a tinderbox and the listed logs. No special F2P outfit or amulet is needed.",
     reason: 'Burn logs next to a bank to 50: Wintertodt opens at 50 on members.',
     comparison: 'Members: Wintertodt from 50 gives about 161,000 Firemaking XP/h at 50 and 193,000 at 60, plus supply crates. F2P log burning past 50 is far slower.',
     sources: [wiki('Pay-to-play_Firemaking_training')] },
   mining: { priority: 'good', target: 45,
-    equipment: "Carry your best usable owned pickaxe; wielding needs Attack, carrying works. Bank heavy armour for travel.",
     reason: 'Iron with a rune pickaxe from 41 is the best F2P Mining, about 50,000 XP/h; after 45 F2P only repeats iron (or calm barronite in Camdozaal).',
     comparison: 'Members from 45: 3-tick granite (about 87,000 XP/h at 45), Mining Guild iron from 60 (70,000–80,000) and the calm Motherlode Mine from 30, whose nuggets buy the prospector kit. Six quests (The Dig Site alone gives 15,300 XP) reach level 37 with no grinding.',
     sources: [wiki('Free-to-play_Mining_training'), wiki('Pay-to-play_Mining_training')] },
   fishing: { priority: 'good', target: 35,
-    equipment: "Use the listed rod/net and bait. Armour and combat amulets do not improve fishing; leave room for catches.",
     reason: 'Fly fish trout from 20 and salmon from 30 (about 13,000 XP/h at 20, 25,000 at 30, dropping the catch). 35 opens harpoon tuna and is a sensible stop.',
     comparison: 'Members: Tempoross from 35 (about 30,000 XP/h), 3-tick fly fishing (68,000 at 60), barbarian fishing from 48 and drift nets from 47 (53,000–72,000).',
     sources: [wiki('Free-to-play_Fishing_training'), wiki('Pay-to-play_Fishing_training')] },
   woodcutting: { priority: 'optional', target: 36,
-    equipment: "Carry your best usable owned axe; wielding needs Attack, carrying works. No special F2P amulet is needed.",
     reason: 'Oaks are the best F2P Woodcutting XP until 60 when you drop the logs. 36 prepares the Lost City requirement; a long F2P grind is not worth it.',
     comparison: 'Members: teaks from 35 (about 34,000 XP/h, 78,000 with 2-tick), hollow trees at 45 (about 70,000) and maples from 45 (about 50,000).',
     sources: [wiki('Pay-to-play_Woodcutting_training'), wiki('Lost_City')] },
@@ -43,12 +36,10 @@ export const F2P_SKILL_ADVICE: Partial<Record<SkillName, F2pSkillAdvice>> = {
     comparison: 'Members: Camelot Teleport from 45 (about 80,000 XP/h), Lvl-3 Enchant from 49 (94,400) and alchemy at the same 78,000 XP/h. Quests give about 20,900 XP to 34.',
     sources: [wiki('Pay-to-play_Magic_training')] },
   smithing: { priority: 'good', target: 29,
-    equipment: "Bring the listed tools and ores or bars; leave room for the batch. No combat amulet is required.",
     reason: "Complete The Knight's Sword (12,725 XP): from level 1 it reaches 29. Do not grind those early levels instead.",
     comparison: "Members: the Blast Furnace (steel bars about 94,500 XP/h at 30, gold bars about 380,000 with goldsmith gauntlets from 40) and Giants' Foundry from 15.",
     sources: [wiki('Free-to-play_Smithing_training'), wiki('Pay-to-play_Smithing_training')] },
   crafting: { priority: 'optional', target: 31,
-    equipment: "Use the listed recipe tools and materials; keep room for the batch. No combat amulet is required.",
     reason: '31 prepares Crafting for Lost City. Treat it as a quest checkpoint rather than a reason to train far beyond your route.',
     comparison: 'Members: cutting gems from 20 (139,000–299,000 XP/h), glassblowing (30,000–92,000) and battlestaves from 54 (245,000–306,000).',
     sources: [wiki('Lost_City'), wiki('Optimal_quest_guide')] },
@@ -69,12 +60,10 @@ export const F2P_SKILL_ADVICE: Partial<Record<SkillName, F2pSkillAdvice>> = {
     comparison: 'Members: three quests give 16,662 Ranged XP (to 32), Temple of Ikov to 36, and chinchompas from 45 give about 290,000 XP/h.',
     sources: [wiki('Pay-to-play_Ranged_training')] },
   prayer: { priority: 'members', target: null,
-    equipment: "Bring the listed bones. Ordinary F2P burial requires no equipment.",
     reason: 'No dedicated F2P grind suggested. Use incidental bones if you want; save bulk training for members.',
     comparison: 'Members altar methods give much more XP per bone than burying. Costs, access and Wilderness risk differ; this marker does not choose a risky method for you.',
     sources: [wiki('Pay-to-play_Prayer_training')] },
   runecraft: { priority: 'members', target: null,
-    equipment: "Bring the listed talisman or equip its tiara; leave room for essence and use light gear for the route.",
     reason: 'No dedicated F2P grind suggested before subscribing.',
     comparison: 'Members quests give early Runecraft XP and unlock Guardians of the Rift. F2P altar runs are not comparable to that progression.',
     sources: [wiki('Pay-to-play_Runecraft_training')] },

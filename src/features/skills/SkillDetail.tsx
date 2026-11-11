@@ -105,7 +105,6 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
       {defer ? <section className="training training-summary" aria-label="What to train with">
         <p className="training-now"><strong>Save dedicated training for membership</strong></p>
         <p className="small muted">{f2p?.reason}</p>
-        {f2p?.equipment && <p className="small muted training-equipment">{f2p.equipment}</p>}
         <button type="button" className="link-btn" onClick={() => setTab('calculator')}>Choose a custom goal</button>
       </section> : <TrainingCard skill={card.skill} target={card.target} followed={card.followed} advice={shared} view="summary" />}
       </>

@@ -36,7 +36,8 @@ export function pickTraining(step: Step, state: PlayerState, mode: GameMode, sty
     goalNeeds: remaining.length === 1 ? advice.goalNeeds : undefined, stockNeeds: remaining.length === 1 ? advice.stockNeeds : undefined,
     needs: preparationNeeds(advice, state, market.prices), name: best.method.name,
     ...(spot ? { spot: { label: spot.label, x: spot.place.x, y: spot.place.y, plane: spot.place.plane,
-      ...(spot.objectNames ? { objectNames: [...spot.objectNames] } : {}), ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }, where: best.method.where } : {}),
+      ...(spot.objectNames ? { objectNames: [...spot.objectNames] } : {}), ...(spot.waypoints ? { waypoints: spot.waypoints } : {}),
+      how: spot.how, ...(spot.bank ? { bank: spot.bank } : {}) }, where: best.method.where } : {}),
     ...(best.method.rateWarning ? { warning: best.method.rateWarning } : {}),
     ...(along ? { along: { skill: along.skill, station: along.station, products: along.products, how: along.spot.how } } : {}),
   } : best.method.id;
