@@ -218,19 +218,19 @@ Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3
 
 Known limits: fees are bounded allowances; gathering competition, Forestry and Musa Point boat banking are approximations; altar timing assumes the supported exit model; food estimates are no survival guarantee. Alchemy, enchanting and splashing keep target/setup/budget safeguards. No implied parity for unsupported Members or HDOS mechanics. Facts checked against the OSRS Wiki on 2026-10-31.
 
-## Current verification — encounter mechanics and tool tiers (2.86.0)
+## Current verification — encounters, tools, fresh-account planning (2.86.0–2.86.1)
 
-Base `78933f6` (2.85.2). Kept: `planning/encounter/{setups,strategy}.ts` compares bounded melee preparations through shared costs; `activeAction.executionStep` carries the kit everywhere; forecasts raise only trained skills plus damage-earned HP (1.33/4 XP).
+Kept from 2.85.2: `planning/encounter/{setups,strategy}.ts` compares bounded melee preparations; `activeAction.executionStep` carries the kit; forecasts raise only trained skills plus damage-earned HP (1.33/4 XP).
 
-2.86.0:
-- Ranking: complete options by total time; incomplete ones by executable-before-VERIFY, least unmeasured XP, fewest unknowns, known minutes. Even melee training (lowest first, plus unlocked kit) joins single-skill targets.
-- `authored/fightMechanics.json` (Wiki, 2026-11-10) feeds `fightEstimate.ts`: regeneration, item drains, finisher items, weapon multiplier, opponents fought first, specials, protected attacks. Draynor, Delrith (Silverlight ×2 after three dark wizards), Brutus (special every fifth attack, ≤19), Elvarg (fire 10 shielded, 70 bare, worst attack each swing). `cannot` (regeneration outpaces hits) means train or upgrade. Worn protection keeps its slot; `kind: quest` kit is never advised; uncovered Wiki attacks stay UNKNOWN. Estimates are memoized.
-- Demon Slayer: Delrith is a threat; Trout is required in the fight loadout; bag audits count per loadout.
-- `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt` (last tier: the goal); the purchase trip is walked spot→GE→spot plus one visit (fallback SETUP_HOURS). WC 31 + Steel axe → BUY Adamant axe; Rune axe and pickaxes alike; Mithril→Adamant (≈2 min net) not advised. Weapons: one skill's XP.
+- Ranking: total time; incomplete options executable-first, then least unmeasured XP, fewest unknowns, known minutes. Even melee training joins single-skill targets. Objectives stay unless another is proven faster.
+- `authored/fightMechanics.json` (Wiki) feeds `fightEstimate.ts`: regeneration, item drains, finishers, weapon multiplier, opponents fought first, specials, protected attacks (Draynor, Delrith after two level-7 and one level-20 wizards, Brutus, Elvarg). `cannot` means train or upgrade; modelled regeneration proves that capability. Protection keeps its slot; quest kit is never advised; uncovered attacks stay UNKNOWN.
+- Fresh account: worn pieces count as owned in training kits; melee methods unsafe at the player's Hitpoints are LOCKED. Pirate's Treasure's gardener is a threat; Prince Ali's jail guards a reviewed run-past.
+- `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`; the trip is walked spot→GE→spot. `trainingKit.equipmentLine` states the engine's tool/kit decision on Skills; the fixed F2P equipment notes are retired. Weapons: one skill's XP.
+- Game line: engine's bank/drop choice; no plaque step code. After all F2P quests, Path ranks F2P checkpoints (`f2pCheckpoints`: value, then engine time) with Follow.
 
-Verification: 2,625 units; 765 browser checks; typecheck/build, structure, knip, dead-css, data/fixtures, links. Perf versus 2.85.2: mean non-XP update +9% (10.7→11.7 ms), cold script ≤+9%. Java/Electron/Portable: CI.
+Verification: 2,630 units; 769 browser checks; light gates. Perf versus 2.85.2: update +1%.
 
-Limits: melee-only preparation; Wiki length bands for quest work. A fresh-account walk still shows UNKNOWN time on most turns and VERIFY for Dragon Slayer (Melzar's safespot magic). Next: route gate, ranged/magic, measured quest times, gear/burn/Stronghold data.
+Limits: melee-only preparation; Wiki length bands for quest work. A fresh-account simulation completes 21 of 23 quests by decided actions; Below Ice Mountain (pillars) and Dragon Slayer (Melzar's safespot magic) end in checks; remaining time is mostly UNKNOWN. Next: those models, route gate, measured quest times.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt
