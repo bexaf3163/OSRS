@@ -49,6 +49,8 @@ describe('canonical decision and source isolation', () => {
     expect(decision.alternatives[0]).toMatchObject({ id: 'mystery', minutes: null, comparisonReason: expect.stringContaining('could be faster') });
     expect(decision.why).toContain('Not compared because their time is unknown: mystery');
     expect(decision.confidence).toBe('LOW');
+    // Its row says which part is unknown in the player's words, not the cost key.
+    expect(decision.candidates?.find(row => row.id === 'mystery')?.verdict).toBe('Time unknown: quest work');
   });
 
   it('never ranks by the text of unknown terms: a fully timed quest beats one whose own preparation is unknown, which is named as uncompared (2.82.0 regression)', () => {
@@ -67,7 +69,7 @@ describe('canonical decision and source isolation', () => {
     expect(decision.confidence).toBe('LOW');
     expect(decision.candidates).toMatchObject([
       { id: 'b-measured', rank: 1, minutes: 30, unknown: [], laterUnknown: ['prepare:a-unmeasured', 'preparation:Later quest'], verdict: expect.stringMatching(/^Chosen/) },
-      { id: 'a-unmeasured', rank: 2, minutes: null, unknown: ['prepare'], verdict: 'Same known total as the choice (about 35 min); ranked lower by its own time (unknown prepare)' },
+      { id: 'a-unmeasured', rank: 2, minutes: null, unknown: ['prepare'], verdict: 'Same known total as the choice (about 35 min); ranked lower by its own time (unknown preparation)' },
     ]);
   });
 

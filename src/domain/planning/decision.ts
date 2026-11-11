@@ -8,6 +8,9 @@ import { sameSession } from './scope';
 const BEAM = 4;
 const compareId = (a: string, b: string) => a < b ? -1 : a > b ? 1 : 0;
 
+/** The parts of an objective's time (Evaluation.cost) in the player's words. */
+const PART_WORDS: Readonly<Record<string, string>> = { prepare: 'preparation', work: 'quest work', travel: 'travel', banking: 'banking', exchange: 'Grand Exchange', switching: 'switching' };
+
 export function observedProjection(snapshot: PlanningSnapshot): Projection {
   const levels = Object.fromEntries(Object.entries(snapshot.player.levels).flatMap(([id, value]) => value.known
     && Number.isInteger(value.value) && value.value >= 1 && value.value <= 99 ? [[id, value.value]] : []));
@@ -177,6 +180,7 @@ export function decide(snapshot: PlanningSnapshot, model: PlannerModel, options:
   const candidates = ordered.map((row, index): CandidateRow => {
     const parts = Object.entries(row.value.cost) as [string, Minutes | null][];
     const unknown = parts.filter(([, m]) => !validMinutes(m)).map(([key]) => key);
+    const unknownWords = unknown.map(key => PART_WORDS[key] ?? key).join(', ');
     const knownMinutes = Math.round(parts.reduce((n, [, m]) => n + (validMinutes(m) ? m.typical : 0), 0));
     const xp = Object.fromEntries(row.value.effects.flatMap(e => e.kind === 'xp' ? [[e.skill, e.amount]] : []));
     const verdict = row === chosen
@@ -189,10 +193,10 @@ export function decide(snapshot: PlanningSnapshot, model: PlannerModel, options:
       : priority(row.value) > priority(chosen.value) ? `${row.value.activeAction.kind === 'MANUAL_WAIT' ? 'Blocked' : 'Needs a check first'}: ${row.value.activeAction.title}`
       : total(row) !== null && total(chosen) !== null ? `Slower: about ${total(row)} min in total, against ${total(chosen)} min`
       : comparableKnown(row.expression, chosen.expression) && Math.round(row.expression!.known.typical) === Math.round(chosen.expression!.known.typical)
-        ? `Same known total as the choice (about ${Math.round(row.expression!.known.typical)} min); ranked lower by its own time (${unknown.length ? `unknown ${unknown.join(', ')}` : `${knownMinutes} min`})`
+        ? `Same known total as the choice (about ${Math.round(row.expression!.known.typical)} min); ranked lower by its own time (${unknown.length ? `unknown ${unknownWords}` : `${knownMinutes} min`})`
       : comparableKnown(row.expression, chosen.expression) ? `Slower on the known part: about ${Math.round(row.expression!.known.typical)} min against ${Math.round(chosen.expression!.known.typical)} min (unmeasured parts assumed equal)`
-      : unranked.includes(row) ? `Not compared: its time is unknown (${unknown.join(', ') || 'later quests'}), so it could be faster`
-      : `Not compared on time: ${unknown.length ? `unknown ${unknown.join(', ')}` : 'later quests have unknown parts'}; ranked by fewer unknown parts, then its known minimum (about ${knownMinutes} min)`;
+      : unranked.includes(row) ? `Time unknown: ${unknownWords || 'later quests'}`
+      : `Time unknown: ${unknownWords || 'later quests'}; known part about ${knownMinutes} min`;
     const laterUnknown = [...new Set((row.expression?.unresolved ?? []).map(term => term.replace(/:branch\d+/g, '')))];
     return { id: row.value.objectiveId, action: row.value.activeAction.kind, minutes: unknown.length ? null : knownMinutes, knownMinutes, unknown, laterUnknown, xp, rank: index + 1, verdict };
   });

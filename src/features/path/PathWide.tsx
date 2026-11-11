@@ -23,6 +23,7 @@ import { PlannerOrder } from './PlannerOrder';
 import { F2pNext } from './F2pNext';
 import { usePlayerState } from '../../state/playerStateContext';
 import { questCatalogue, questEvidence } from '../../domain/planning/catalogue';
+import type { CommittedDecision } from '../../domain/planning/contracts';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -136,7 +137,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
           {!decision && f2pDone ? <F2pNext /> : <>
           <Eyebrow>THE PLANNER'S NEXT ACTION</Eyebrow>
           <h1 className="la-t">{decision ? decision.activeAction.title : 'Waiting for the planner'}</h1>
-          {decision ? <ul className="small">{decision.why.map((w) => <li key={w}>{w}</li>)}</ul>
+          {decision ? <DecisionReasons decision={decision} />
             : <p className="muted">Connect RuneLite and log in, or open a quest from the Journal.</p>}
           </>}
         </div></Page>
@@ -181,4 +182,14 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
       />}
     </div>
   );
+}
+
+/** Why this action, in the action's own words; how the planner weighed the other objectives stays folded away. */
+function DecisionReasons({ decision }: { decision: CommittedDecision }) {
+  const own = decision.activeAction.reasons.filter((reason) => reason !== decision.activeAction.title);
+  const weighed = decision.why.slice(decision.activeAction.reasons.length);
+  return <>
+    {own.length > 0 && <ul className="small">{own.map((reason) => <li key={reason}>{reason}</li>)}</ul>}
+    {weighed.length > 0 && <details className="small"><summary>How the planner chose</summary><ul>{weighed.map((reason) => <li key={reason}>{reason}</li>)}</ul></details>}
+  </>;
 }
