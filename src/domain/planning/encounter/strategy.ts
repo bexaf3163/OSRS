@@ -11,12 +11,11 @@ import { sumMinutes } from '../cost';
 import { levelOf } from '../../player/playerState';
 import { xpForLevel } from '../../player/xp';
 import type { TrainingCandidate } from '../training';
-import { encounterSetups, encounterWork, type EncounterSetup } from './setups';
-import { estimateStepFights } from '../../combat/fightEstimate';
+import { encounterSetups, type EncounterSetup } from './setups';
 import { safetyBlockers } from '../../prep/prepPlan';
 
 export interface EncounterFrame extends TacticalFrame {
-  encounter: { work: Minutes; baseline: Minutes; reasons: readonly string[]; uncertain: boolean };
+  encounter: { work: Minutes; reasons: readonly string[]; uncertain: boolean };
 }
 
 /** Cost alternative preparations of this encounter through the SAME engines used for ordinary requirements.
@@ -72,14 +71,14 @@ export function chooseEncounter(input: TacticalInput, step: Step, goalId: string
         active = resolveTraining(candidate.step);
         if (active.action?.kind === 'VERIFY' || active.action?.kind === 'MANUAL_WAIT') return null;
         action = active.action ?? { ...candidate.action, feasibility: 'READY' as const };
-        parts.push(spot ? preparationTime(active, origin, walk, input.gather, spot) : null);
+        parts.push(spot ? preparationTime(active, origin, walk, input.gather, spot, snapshot.quests) : null);
       } else parts.push(spot ? walk(from, spot) : null);
       parts.push(candidate.remaining);
       if (!candidate.remaining) unmeasuredXp += xpForLevel(target.level) - xpForLevel(levelOf(snapshot.player, target.skill) ?? 1);
       from = spot;
     }
     const pricedFrame = { ...supplies, action: earning ?? supplies.action };
-    parts.push(finish ? preparationTime(pricedFrame, from, walk, input.gather, finish) : null);
+    parts.push(finish ? preparationTime(pricedFrame, from, walk, input.gather, finish, snapshot.quests) : null);
     const preparation = sumMinutes(parts);
     const total = sumMinutes([preparation, setup.fight]);
     const actual = active ?? supplies;
@@ -113,5 +112,5 @@ export function chooseEncounter(input: TacticalInput, step: Step, goalId: string
   const action: CandidateAction | null = chosen.action ? { ...chosen.action, executionStep: chosen.actual.step,
     reasons: [...chosen.action.reasons, ...reasons] } : null;
   return { ...chosen.actual, action, preparationMinutes: chosen.preparation, encounter: { work: chosen.setup.fight, reasons,
-    baseline: encounterWork(estimateStepFights(step, snapshot.combat?.stats ?? null, snapshot.combat?.gear ?? null)), uncertain: unknown.length > 0 || chosen.setup.targets.length > 0 } };
+    uncertain: unknown.length > 0 || chosen.setup.targets.length > 0 } };
 }

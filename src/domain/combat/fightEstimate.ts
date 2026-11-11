@@ -50,6 +50,8 @@ export interface FightEstimate {
   /** Fought from a safespot with this spell (fightMechanics.json safespot): the casts it takes. */
   spell?: string;
   casts?: Range;
+  /** Shot with a bow: the shots it takes, each with an arrow from the quiver. */
+  shots?: Range;
 }
 
 export interface FightInput {
@@ -93,7 +95,7 @@ const held = (names: readonly string[] | undefined, item: string) => Boolean(nam
 /** Regeneration is a rate against the player's own: past this many hit points of work the fight is not one to plan. */
 const REGEN_CAP = 600;
 
-interface Rolls { style: FightStyle; secMean: number; secVar: number; dmgMean: number; dmgVar: number; chance: number; max: number; foeC: number; worst: number; keep: number }
+interface Rolls { style: FightStyle; atkMean: number; atkVar: number; secMean: number; secVar: number; dmgMean: number; dmgVar: number; chance: number; max: number; foeC: number; worst: number; keep: number }
 
 /**
  * One opponent with the safest style: the player's hits against its defence, its swings against the worn armour, and what the wiki says of
@@ -148,7 +150,7 @@ function rolls(foe: CombatFoe, inp: FightInput, mech: FightMechanics | null, mul
     const perSwing = (1 - share) * swing.mean + share * specialHit;
     const rolled = Math.max(foe.maxHit, ...others);
     const row: Rolls = {
-      style: shootsOnly(weapon) ? 'rapid' : style, secMean: a.mean * hit.speed, secVar: a.variance * hit.speed ** 2, dmgMean: sw.mean * perSwing,
+      style: shootsOnly(weapon) ? 'rapid' : style, atkMean: a.mean, atkVar: a.variance, secMean: a.mean * hit.speed, secVar: a.variance * hit.speed ** 2, dmgMean: sw.mean * perSwing,
       dmgVar: sw.mean * (1 - share) * (swing.square - swing.mean ** 2) + sw.variance * perSwing ** 2,
       chance: hit.hitChance, max, foeC, worst: Math.max(rolled, specialHit), keep: Math.max(2 * rolled, specialHit + foe.maxHit),
     };
@@ -196,7 +198,7 @@ function rollFight(inp: FightInput): FightEstimate | null {
   if (parts.some((part) => part === null)) return null;
   const won = parts.filter((part): part is Rolls => part !== 'cannot' && part !== null);
   const best = won[won.length - 1] as Rolls | undefined;
-  const sum = (key: 'secMean' | 'secVar' | 'dmgMean' | 'dmgVar') => won.reduce((n, part) => n + part[key], 0);
+  const sum = (key: 'atkMean' | 'atkVar' | 'secMean' | 'secVar' | 'dmgMean' | 'dmgVar', parts = won) => parts.reduce((n, part) => n + part[key], 0);
   const worstHit = Math.max(foe.maxHit, ...won.map((part) => part.worst));
   const margin = (inp.unknownPieces ? 0.35 : 0.15) + (foe.aggressive ? 0.1 : 0) + (foe.attackStyle === 'magic' ? 0.15 : 0);
   const seconds = spread(sum('secMean'), sum('secVar'), margin);
@@ -223,10 +225,12 @@ function rollFight(inp: FightInput): FightEstimate | null {
     ...(foe.attackStyle === 'magic' && inp.levels.magic === undefined ? ['unread Magic level for incoming magic defence'] : []),
     ...(foe.maxHit > 0 && !['stab', 'slash', 'crush', 'magic'].includes(foe.attackStyle) ? [`unsupported incoming ${foe.attackStyle} attack model`] : [])];
   const cannot = parts.includes('cannot') ? `your hits do not outpace ${foeLabel(foe)}'s regeneration with these levels and this weapon` : undefined;
+  const shot = won.filter((part) => part.style === 'rapid');
   return {
     foe, style: best?.style ?? 'accurate', seconds: cannot ? NEVER : seconds, damage: cannot ? NEVER : damage, food: cannot ? NEVER : food, foodName: inp.food.name,
     hitChance: best?.chance ?? 0, maxHit: best?.max ?? 0, foeHitChance: best?.foeC ?? 0, worstHit,
     assumed: [...new Set(assumed)], extra, unmodelled, ...(cannot ? { cannot } : {}),
+    ...(shot.length && !cannot ? { shots: spread(sum('atkMean', shot), sum('atkVar', shot), margin) } : {}),
   };
 }
 const NEVER: Range = { low: Infinity, mid: Infinity, high: Infinity };
@@ -329,5 +333,6 @@ export function fightLine(e: FightEstimate): string {
   if (e.spell && e.casts) return `${foeLabel(e.foe)}: about ${Math.round(e.casts.mid)} casts of ${e.spell} (up to ${Math.ceil(e.casts.high)}), about ${sec(e.seconds.mid)} from the safespot; it cannot reach you there.`;
   const dmg = `you take about ${Math.round(e.damage.mid)} damage (up to ${Math.ceil(e.damage.high)})`;
   const food = e.food.high <= 0 ? 'your health covers it; carry a few pieces anyway' : `bring ${e.food.high} ${e.foodName} or more`;
-  return `${foeLabel(e.foe)}: about ${sec(e.seconds.mid)} on ${STYLE_WORD[e.style]}; ${dmg}; ${food}.${e.unmodelled.length ? ' Partial estimate: some combat facts or mechanics are not included.' : ''}`;
+  const arrows = e.shots ? `; up to ${Math.ceil(e.shots.high)} arrows` : '';
+  return `${foeLabel(e.foe)}: about ${sec(e.seconds.mid)} on ${STYLE_WORD[e.style]}; ${dmg}; ${food}${arrows}.${e.unmodelled.length ? ' Partial estimate: some combat facts or mechanics are not included.' : ''}`;
 }

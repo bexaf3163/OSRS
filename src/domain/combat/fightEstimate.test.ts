@@ -130,7 +130,11 @@ describe('one quest fight with your kit', () => {
     const [fight] = estimateStepFights(step, lv, archer(true));
     expect(fight).toMatchObject({ style: 'rapid', unmodelled: [] });
     expect(fight.hitChance).toBeGreaterThan(0.3);
-    expect(fightLine(fight)).toMatch(/ on Rapid; /);
+    expect(fightLine(fight)).toMatch(/ on Rapid; .*; up to \d+ arrows\.$/);
+    // Each attack is a shot with an arrow; a melee fight shoots none.
+    expect(fight.shots!.mid).toBeGreaterThan(0);
+    expect(fight.shots!.high).toBeGreaterThanOrEqual(fight.shots!.mid);
+    expect(estimateStepFights(step, { ...lv, attack: 40, strength: 40 }, gearOf(['Mithril scimitar']))[0].shots).toBeUndefined();
     // No arrows worn, or no Ranged level read: no estimate.
     expect(estimateStepFights(step, lv, archer(false))).toEqual([]);
     expect(estimateStepFights(step, { ...lv, ranged: undefined as unknown as number }, archer(true))).toEqual([]);

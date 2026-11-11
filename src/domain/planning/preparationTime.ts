@@ -2,7 +2,8 @@
 // purchase or single free pickup, walked through the shared route costs. Other gathering, earning, checks and unplaced
 // purchases have no modelled time, so they keep the whole preparation UNKNOWN rather than zero.
 import type { TacticalFrame } from './tactical';
-import type { Minutes } from './contracts';
+import type { Minutes, PlanningSnapshot } from './contracts';
+import { freePickup } from './preparation';
 import type { WorldPoint } from '../player/playerState';
 import { costTrip, type TripStop } from './trip';
 import { noTime, sumMinutes } from './cost';
@@ -19,7 +20,7 @@ export function preparationTime(
   frame: Omit<TacticalFrame, 'preparationMinutes'>, origin: WorldPoint | null,
   walk: (from: WorldPoint | null, to: WorldPoint) => Minutes | null,
   gather?: (name: string, count: number) => Minutes | null,
-  finish?: WorldPoint,
+  finish?: WorldPoint, quests: PlanningSnapshot['quests'] = {},
 ): Minutes | null {
   const kind = frame.action?.kind;
   if (!origin || kind === 'VERIFY' || kind === 'MANUAL_WAIT') return null;
@@ -44,9 +45,9 @@ export function preparationTime(
       continue;
     }
     // A free spawn or giver hands over one piece per visit; more pieces mean respawn waits nobody has measured.
-    // A quest-gated or closed source is the preparation engine's call (preparation.ts), so it stays UNKNOWN here.
+    // A closed source, or one whose quest gate the observed quests do not meet (preparation.freePickup), stays UNKNOWN here.
     const source = line.action?.kind === 'GATHER' ? line.action.acquisition : undefined;
-    const free = source?.kind === 'free' && !source.questAccess && (source.access === undefined || source.access === 'open') ? source.point : undefined;
+    const free = freePickup(source, quests) ? source!.point : undefined;
     if (!free || line.count - (bag ?? 0) - equipped - (bank ?? 0) > 1) {
       // Gathering it yourself (the Money engine's supply mode) carries its own walk and banking.
       const own = line.action?.kind === 'GATHER' ? gather?.(line.name, Math.max(1, line.count - (bag ?? 0) - equipped)) ?? null : null;

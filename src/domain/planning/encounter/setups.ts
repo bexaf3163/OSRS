@@ -53,12 +53,16 @@ function forecast(step: Step, stats: PlayerStats, gear: GearState, kit: readonly
   const food = Math.ceil(fights.reduce((sum, f) => sum + f.food.high, 0));
   const authoredFood = stepFood(step) ?? { nameEn: 'Trout', heals: 7, amount: 0, howToGet: '' };
   const worn = [...protection, ...kit.map(a => a.item)];
-  const items = (step.itemsRequired ?? []).filter(item => !item.heals && !worn.some(piece => piece.name === item.nameEn));
+  // A bow fight shoots an arrow each attack: the quiver holds them all, like the food the fight eats.
+  const ammo = gear.equipment?.find(p => p.slot === 'ammo')?.name, shots = Math.ceil(fights.reduce((sum, f) => sum + (f.shots?.high ?? 0), 0));
+  const listed = Number((step.itemsRequired ?? []).find(item => item.nameEn === ammo)?.amount) || 0;
+  const quiver = ammo && shots ? [{ nameEn: ammo, amount: Math.max(shots, listed), equip: true, howToGet: '' }] : [];
+  const items = (step.itemsRequired ?? []).filter(item => !item.heals && !worn.some(piece => piece.name === item.nameEn) && !(quiver.length && item.nameEn === ammo));
   const others = items.filter(item => !item.equip).length;
   if (food > Math.min(26, 28 - others)) return null;
   const authored = (piece: GearPiece) => (step.itemsRequired ?? []).find(item => item.nameEn === piece.name)?.howToGet ?? '';
   const requirements = [ ...worn.map(piece => ({ nameEn: piece.name, wikiItemId: piece.id, amount: 1, equip: true, howToGet: authored(piece) })),
-    ...items, ...(food ? [{ ...authoredFood, amount: food, totalAmount: food, inStep: false }] : []) ];
+    ...quiver, ...items, ...(food ? [{ ...authoredFood, amount: food, totalAmount: food, inStep: false }] : []) ];
   // Eating delay is the existing combatEstimate model's 3 ticks per piece. Do not count food as free fight time.
   return { label, stats, gear, kit, targets, fight: encounterWork(fights),
     step: { ...step, itemsRequired: requirements, itemsRecommended: (step.itemsRecommended ?? []).filter(item => !item.heals) } };

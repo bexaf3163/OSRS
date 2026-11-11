@@ -85,6 +85,15 @@ describe('free pickups in the preparation trip', () => {
     expect(preparationTime(frame([free(2)], 'GATHER'), origin, () => minute)).toBeNull();
     expect(preparationTime(frame([free(1, 'closed')], 'GATHER'), origin, () => minute)).toBeNull();
   });
+  it('times a quest giver once the observed quest opens it (Duke Horacio\'s shield during Dragon Slayer), never before', () => {
+    const giver = line({ count: 1, action: { kind: 'GATHER', acquisition: { kind: 'free', label: 'Free', giver: true, point: { x: 3210, y: 3220, plane: 1, label: 'Lumbridge Castle' },
+      questAccess: { quest: 'Dragon Slayer I', state: 'started' } } } });
+    const time = (state?: string) => preparationTime(frame([giver], 'GATHER'), origin, () => minute, undefined, undefined,
+      state ? { 'Dragon Slayer I': { state, source: 'game' } } as never : {});
+    expect(time('IN_PROGRESS')!.typical).toBeGreaterThan(1);
+    expect(time('NOT_STARTED')).toBeNull();
+    expect(time()).toBeNull();
+  });
 });
 
 describe('earning before a purchase', () => {

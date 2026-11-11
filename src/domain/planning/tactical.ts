@@ -25,7 +25,7 @@ import { stepAtQuestCursor } from '../quests/questCursor';
 import { PLANNING_WINDOW_SIZE } from './window';
 
 export interface TacticalFrame {
-  encounter?: { work: Minutes; baseline: Minutes; reasons: readonly string[]; uncertain: boolean };
+  encounter?: { work: Minutes; reasons: readonly string[]; uncertain: boolean };
   step: Step;
   plan: PrepPlan;
   readiness: StepReadiness;

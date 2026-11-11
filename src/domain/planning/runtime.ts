@@ -96,7 +96,7 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
     restriction: input.restriction, ironman, walk, keepDefenceOne: input.keepDefenceOne,
     earn: (step, gp, budget, goalId) => input.earn(step, gp, budget, goalId, train),
     gather: input.gather,
-    preparationTime: frame => preparationTime(frame, origin, walk, input.gather),
+    preparationTime: frame => preparationTime(frame, origin, walk, input.gather, undefined, snapshot.quests),
   });
   // Unknown quests and steps without an encounter need only the original length/route estimate. Resolving their full
   // preparation here would eagerly scan every unopened quest on each STATS event, before any candidate can use it.
@@ -150,10 +150,11 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
           if (!encounter && laterFight(step, goal)) return null;
           const band = questWork(step, goal);
           if (!encounter || !band) return band;
-          if (encounter.baseline.typical >= band.typical) return null; // The coarse quest band cannot price a negative non-combat remainder.
-          // The length heuristic already includes fighting. Replace its baseline combat allowance, never add the fight twice.
-          const rest = { fast: Math.max(0, band.fast - encounter.baseline.typical), typical: Math.max(0, band.typical - encounter.baseline.typical),
-            slow: Math.max(0, band.slow - encounter.baseline.typical), source: `${band.source}; unmeasured non-combat remainder after baseline encounter allowance` };
+          // The length band is a prepared player's quest, fight included: its allowance is the fight as prepared (the chosen setup), not the
+          // current kit's longer one; the training and kit are preparation. Never add the fight twice, never price a negative remainder.
+          if (encounter.work.typical >= band.typical) return null;
+          const rest = { fast: Math.max(0, band.fast - encounter.work.typical), typical: band.typical - encounter.work.typical,
+            slow: Math.max(0, band.slow - encounter.work.typical), source: `${band.source}; unmeasured non-combat remainder after the prepared fight` };
           return sumMinutes([rest, encounter.work]);
         },
         // Walking comes only from the trip worker's routes; without an observed start or a route it stays UNKNOWN.

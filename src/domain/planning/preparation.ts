@@ -31,6 +31,14 @@ export interface PreparationInput {
 }
 
 /** Project existing physical allocations into one subaction. Never select another overall goal here. */
+/** A free source usable now: placed, open, and its quest gate (a giver's "during or after") met by the observed quest state. */
+export function freePickup(source: NonNullable<PrepLine['action']>['acquisition'], quests: PlanningSnapshot['quests']): boolean {
+  const requirement = source?.questAccess;
+  const quest = requirement && Object.entries(quests).find(([name]) => nameKey(name) === nameKey(requirement.quest))?.[1];
+  const questAccess = !requirement || quest?.state === 'COMPLETED' || (requirement.state === 'started' && quest?.state === 'IN_PROGRESS');
+  return source?.kind === 'free' && !!source.point && questAccess && (source.access === undefined || source.access === 'open');
+}
+
 export function resolvePreparation(input: PreparationInput): CandidateAction | null {
   const { snapshot, goalId, step, plan } = input;
   function action(kind: CandidateAction['kind'], key: string, title: string, predicate: string, line?: PrepLine): CandidateAction {
@@ -63,18 +71,15 @@ export function resolvePreparation(input: PreparationInput): CandidateAction | n
     const bag = line.have.bag, equipped = line.have.equipped;
     if (line.equip && equipped >= count) continue;
     if (!line.equip && bag !== null && bag + equipped >= count) continue;
-    if (line.equip && bag !== null && bag >= count) return action('EQUIP', line.key, `Equip ${line.name}`, `${line.name} worn`, line);
+    // A stack (arrows) joins the worn one: the bag tops the quiver up.
+    if (line.equip && bag !== null && bag > 0 && bag + equipped >= count) return action('EQUIP', line.key, `Equip ${line.name}`, `${line.name} worn`, line);
     // A noted item is not usable stock. A bank visit/withdrawal never means that it has already happened.
     if (line.where === 'BANK' || line.unnote || (line.have.bank !== null && line.have.bank > 0)) {
       return action('WITHDRAW', line.key, `Withdraw ${line.name}`, `${line.name} usable in inventory${line.equip ? ', then equip it' : ''}`, line);
     }
     if (line.where === 'UNKNOWN' || bag === null) return action('VERIFY', line.key, `Check your bank for ${line.name}`, `${line.name} ownership verified`, line);
     if (line.action?.kind === 'GATHER') {
-      const source = line.action.acquisition;
-      const requirement = source?.questAccess;
-      const quest = requirement && Object.entries(snapshot.quests).find(([name]) => nameKey(name) === nameKey(requirement.quest))?.[1];
-      const questAccess = !requirement || quest?.state === 'COMPLETED' || (requirement.state === 'started' && quest?.state === 'IN_PROGRESS');
-      if (source?.kind !== 'free' || !source.point || !questAccess || (source.access !== undefined && source.access !== 'open')) {
+      if (!freePickup(line.action.acquisition, snapshot.quests)) {
         // No usable free pickup: gathering it yourself is a real action when a method yields it, with its own time.
         const time = input.gather?.(line.name, Math.max(1, line.count - (bag ?? 0) - equipped)) ?? null;
         if (time) return { ...action('GATHER', line.key, `Gather ${line.name}`, `${line.name} acquired`, line), time };
