@@ -134,7 +134,8 @@ describe('complete encounter strategy comparison', () => {
     expect(dragon.encounter?.reasons[0]).toMatch(/Combat strategy: Train attack, strength, defence to \d+, then /);
     expect(dragon.encounter!.reasons.join(' ')).not.toMatch(/kiteshield|sq shield|2h sword|battleaxe|warhammer/);
     expect(dragon.action?.kind).not.toBe('VERIFY');
-    const unshielded = createTacticalResolver(carrying(fixture(60, 200_000, ['Rune scimitar']), ['Anti-dragon shield'])).resolve(elvarg, 'test');
+    // Carried, the shield goes on as the last preparation, after any training or kit: with no money for kit it is the next action.
+    const unshielded = createTacticalResolver(carrying(fixture(60, 0, ['Rune scimitar']), ['Anti-dragon shield'])).resolve(elvarg, 'test');
     expect(unshielded.action).toMatchObject({ kind: 'EQUIP', title: expect.stringContaining('Anti-dragon shield') });
   });
   it('replans after actually acquiring and wearing the proposed item', () => {

@@ -107,21 +107,27 @@ export function createTacticalResolver(input: TacticalInput) {
       nested = prepared;
       return prepared.action ?? { ...candidate.action, feasibility: 'READY' };
     };
-    let action = resolvePreparation({ snapshot, goalId, step: execution, plan, readiness, budget, ironman: input.ironman, coinsRequired: need.fees.now,
+    // A quest fight's protection is put on by the encounter strategy after any training (or here, when no strategy is found).
+    const fight = execution.type === 'quest' && stepFightNames(execution).length > 0;
+    const prepare = (encounter: boolean) => resolvePreparation({ snapshot, goalId, step: execution, plan, readiness, budget, ironman: input.ironman,
+      coinsRequired: need.fees.now, encounter,
       reservedPurchases: plan.lines.filter(line => (line.timing === 'NOW' || line.timing === 'SOON') && line.where === 'MISSING')
         .map(line => ({ fee: line.action?.purchase?.fee })),
-      minimum: execution.type === 'quest' && stepFightNames(execution).length ? new Map(plan.lines.filter(line => (execution.itemsRequired ?? []).some(item => item.heals && item.nameEn === line.name)).map(line => [line.key, 0])) : undefined,
+      minimum: fight ? new Map(plan.lines.filter(line => (execution.itemsRequired ?? []).some(item => item.heals && item.nameEn === line.name)).map(line => [line.key, 0])) : undefined,
       train,
       earn: required => input.earn(step, required, budget, goalId), gather: input.gather,
     });
-    if (!action && safetyBlockers(plan.safety ?? [], plan.lines).length) action = check(step, goalId, 'Verify the mandatory protection for this activity');
+    let action = prepare(fight);
+    if (!action && safetyBlockers(plan.safety ?? [], plan.lines, fight).length) {
+      action = (fight ? prepare(false) : null) ?? check(step, goalId, 'Verify the mandatory protection for this activity');
+    }
     if (!action && !snapshot.questPoints.known && (step.minQp ?? 0) > 0) action = check(step, goalId, 'Read your quest points before starting');
     if (!action) {
       const live = snapshot.combat ?? { stats: null, gear: null };
       const view = combatPlanView(execution, { ...live, owned: snapshot.player.owned });
       const assessment = assessStepReadiness({ step: execution, plan, connected: snapshot.player.connected, owned: snapshot.player.owned, ...live, view });
       const ready = !assessment.unassessedFights.length && ['READY', 'READY_CAUTIONS'].includes(assessment.verdict.level);
-      if (execution.type === 'quest' && !assessment.unassessedFights.length && stepFightNames(execution).length) {
+      if (fight && !assessment.unassessedFights.length) {
         const encounter = chooseEncounter(input, execution, goalId, trainingStep => resolve(trainingStep, goalId, chain), candidateFor, budget.reserve);
         if (encounter) {
           const byGoal = frames.get(step) ?? new Map<string, TacticalFrame>();
@@ -129,8 +135,9 @@ export function createTacticalResolver(input: TacticalInput) {
           frames.set(step, byGoal);
           return encounter;
         }
-        action = check(step, goalId, 'Verify a safe, feasible combat preparation strategy');
+        action = prepare(false) ?? check(step, goalId, 'Verify a safe, feasible combat preparation strategy');
       }
+      if (!action && fight) action = prepare(false);
       if (!action && assessment.unassessedFights.length) action = check(step, goalId, `Review the combat strategy for ${assessment.unassessedFights.join(', ')}`);
       else if (!action && !ready) action = check(step, goalId, assessment.verdict.headline);
     }

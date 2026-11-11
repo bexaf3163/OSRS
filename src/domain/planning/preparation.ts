@@ -26,6 +26,8 @@ export interface PreparationInput {
   earn: (requiredGp: number) => CandidateAction | null;
   /** Minutes to gather these pieces yourself (the Money engine's supply mode); null when no method yields them. */
   gather?: (name: string, count: number) => Minutes | null;
+  /** The step's fights are prepared by the encounter strategy, which puts the protection on after any training: not asked for here. */
+  encounter?: boolean;
 }
 
 /** Project existing physical allocations into one subaction. Never select another overall goal here. */
@@ -103,7 +105,7 @@ export function resolvePreparation(input: PreparationInput): CandidateAction | n
     buy.gpCost = price === null ? null : { amount: price, confidence: line.marketPrice?.state === 'current' ? 'MEDIUM' : 'LOW', source: line.action.purchase?.source ?? 'Shared acquisition quote' };
     return buy;
   }
-  for (const rule of plan.safety ?? []) if (rule.worn && rule.equipped !== true) {
+  for (const rule of input.encounter ? [] : plan.safety ?? []) if (rule.worn && rule.equipped !== true) {
     if (rule.equipped == null) return action('VERIFY', `protection:${rule.label}`, 'Check your worn protection', 'Required protective equipment observed worn');
     const carried = plan.lines.find(line => rule.names.some(name => nameKey(name) === nameKey(line.name)) && (line.have.bag ?? 0) > 0);
     if (carried) return action('EQUIP', carried.key, `Equip ${carried.name} before the fight`, `${carried.name} observed worn`, carried);

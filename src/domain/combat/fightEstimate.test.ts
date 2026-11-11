@@ -107,10 +107,11 @@ describe('one quest fight with your kit', () => {
     expect(e.seconds.mid).toBeCloseTo(e.casts!.mid * 3, 6);
     expect(e.casts!.high).toBeLessThan(50);
     expect(fightLine(e)).toMatch(/^Lesser demon[^:]*: about \d+ casts of Water Strike \(up to \d+\), about .* from the safespot; it cannot reach you there\.$/);
-    // Metal armour lowers the magic attack bonus: more casts, and none land in a full iron set.
+    // Nothing reaches you there: metal armour, which lowers the magic bonus, comes off before you cast (a full iron set would stop every cast).
     const piece = (n: string) => gearById.get(id(n))!;
-    expect(estimateFight({ ...base, armour: [piece('Iron full helm'), piece('Iron kiteshield')], levels: { ...lv, magic: 20 } })!.casts!.mid).toBeGreaterThan(e.casts!.mid);
-    expect(estimateFight({ ...base, armour: IRON.slice(1).map(piece), levels: { ...lv, magic: 20 } })!.cannot).toMatch(/^Water Strike cannot hit it with the magic attack bonus of what you wear \(-\d+\)$/);
+    const armoured = estimateFight({ ...base, armour: IRON.slice(1).map(piece), levels: { ...lv, magic: 20 } })!;
+    expect(armoured.cannot).toBeUndefined();
+    expect(armoured.casts).toEqual(e.casts);
     expect(estimateFight({ ...base, levels: { ...lv, magic: 4 } })!.cannot).toBe('Water Strike needs Magic 5');
     expect(estimateFight({ ...base, casts: 5, levels: { ...lv, magic: 20 } })!.cannot).toMatch(/runes pay for 5 casts of Water Strike; up to \d+ may be needed/);
     expect(estimateFight({ ...base, levels: lv })!.unmodelled).toContain('unread Magic level');

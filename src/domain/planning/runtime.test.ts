@@ -11,6 +11,7 @@ import { questCatalogue } from './catalogue';
 import type { PlanningSnapshot } from './contracts';
 import { questWork, runtimeDecision, type RuntimePlanInput } from './runtime';
 import { bestEarnRate, earnAction, type EarnRate } from './earn';
+import { gearPieceByName } from '../combat/gearAdvisor';
 
 const f2pSteps = allSteps.filter(step => !step.membersOnly);
 
@@ -264,6 +265,25 @@ describe('different characters through the integrated runtime (brief 39 counterf
     if (known.activeAction.stepId) expect(quest.stepIds.indexOf(known.activeAction.stepId)).toBeGreaterThanOrEqual(1);
     expect(unknown.activeAction.title).toMatch(/Verify the current stage/);
   });
+
+  it('a quest\'s later fights are proven by a modelled way to win them: Dragon Slayer starts, their preparation stays unpriced', () => {
+    // The quest hands over the Maze key (S5-01) and the Anti-dragon shield on the way: they cannot be ready before it starts.
+    const quest = questCatalogue.find(q => q.id === 'Dragon Slayer I')!;
+    const stats = { attack: 40, strength: 40, defence: 40, hitpoints: 40, magic: 20 };
+    const base = { ...counted(lumbridge, [], { stats, coins: 100_000 }), questPoints: { known: true, value: quest.requirements.questPoints ?? 0, source: 'game' } } as PlanningSnapshot;
+    const equipment = ['Mithril scimitar', 'Mithril full helm', 'Mithril platebody', 'Mithril platelegs'].map(name => {
+      const piece = gearPieceByName(name)!;
+      return { id: piece.id, name, slot: piece.slot };
+    });
+    const armed = { ...base, combat: { stats, gear: { equipment, inventory: [], coins: 100_000, bankCoins: 0 } } } as PlanningSnapshot;
+    const decide = (snap: PlanningSnapshot) => runtimeDecision(input(snap, { walk, prices, intent: { kind: 'quest', questId: quest.id } }))!;
+    const proven = decide(armed);
+    expect(proven.objectiveId).toBe(quest.id);
+    expect(proven.activeAction.title).not.toBe(`Verify combat readiness for ${quest.id}`);
+    expect(proven.estimatedRemaining).toBeNull();
+    // Without observed levels and gear no fight is modelled: the quest still waits for the check.
+    expect(decide(base).activeAction).toMatchObject({ kind: 'VERIFY', title: `Verify combat readiness for ${quest.id}` });
+  }, 60_000);
 
   it('S10: resuming at any stage never goes back a mandatory step, and rewards only come with the last step', () => {
     const quest = questCatalogue.find(q => q.id === 'Dragon Slayer I')!;

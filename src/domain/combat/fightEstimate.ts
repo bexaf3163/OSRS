@@ -219,16 +219,16 @@ const NONE: Range = { low: 0, mid: 0, high: 0 };
 const SPELL_TICKS = 5;
 
 /** From a spot it cannot reach: no damage and no food. The fight is the casts until it dies, at the Magic level and the worn magic attack
- * bonus; 'cannot' below the spell's level or when the step's runes pay for fewer casts than the estimate's high end. */
+ * bonus; nothing can hit you there, so a piece that lowers that bonus is taken off (the route says so). 'cannot' below the spell's level
+ * or when the step's runes pay for fewer casts than the estimate's high end. */
 function fromSafespot(inp: FightInput, name: string, assumed: string[]): FightEstimate {
   const spell = SPELLS.find((s) => s.name === name);
   const magic = inp.levels.magic;
-  const bonus = [inp.weapon, inp.neck, ...inp.armour].reduce((n, p) => n + (p?.attack.magic ?? 0), 0);
+  const bonus = [inp.weapon, inp.neck, ...inp.armour].reduce((n, p) => n + Math.max(0, p?.attack.magic ?? 0), 0);
   const hit = spell && magic !== undefined ? spellHit(spell, magic, bonus, inp.foe) : null;
   const a = hit ? attacksToKill(inp.foe.hitpoints, hit.maxHit, hit.chance, false) : null;
   const casts = a && Number.isFinite(a.mean) ? spread(a.mean, a.variance, inp.unknownPieces ? 0.35 : 0.15) : null;
   const cannot = spell && magic !== undefined && magic < spell.level ? `${spell.name} needs Magic ${spell.level}`
-    : hit && !casts ? `${name} cannot hit it with the magic attack bonus of what you wear (${bonus})`
     : casts && inp.casts !== undefined && casts.high > inp.casts ? `the step's runes pay for ${inp.casts} casts of ${name}; up to ${Math.ceil(casts.high)} may be needed`
       : undefined;
   const unmodelled = [...(!spell ? [`no spell data for ${name}`] : []), ...(magic === undefined ? ['unread Magic level'] : []),

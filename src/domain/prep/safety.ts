@@ -38,8 +38,9 @@ export function safetyRulesOf(step: Pick<Step, 'foes' | 'threats' | 'pacing'>): 
 /**
  * Ownership and protection are different facts. A known empty equipment slot proves absent worn protection even with an unread bank.
  * An unread equipment list remains unknown; it cannot establish that an owned item is already protecting the player.
+ * wearing: protection carried in the bag is put on as the last step of a fight's preparation, so it does not block that preparation.
  */
-export function safetyBlockers(rules: readonly StepSafety[], lines: readonly PrepLine[]): { label: string; detail?: string }[] {
+export function safetyBlockers(rules: readonly StepSafety[], lines: readonly PrepLine[], wearing = false): { label: string; detail?: string }[] {
   const out: { label: string; detail?: string }[] = [];
   for (const rule of rules) {
     const mine = lines.filter((l) => rule.names.includes(l.name));
@@ -52,7 +53,7 @@ export function safetyBlockers(rules: readonly StepSafety[], lines: readonly Pre
     if (!mine.length || mine.some((l) => l.where === 'UNKNOWN')) continue;
     if (!rule.worn && mine.some((l) => l.where === 'INVENTORY' || l.where === 'EQUIPPED')) continue;
     if (rule.worn && mine.some(l => l.where === 'INVENTORY')) {
-      out.push({ label: `Equip ${rule.names[0]} before the fight`, detail: rule.detail });
+      if (!wearing) out.push({ label: `Equip ${rule.names[0]} before the fight`, detail: rule.detail });
       continue;
     }
     out.push({ label: mine.some((l) => l.where === 'BANK') ? `${rule.names[0]} is in the bank, not with you` : rule.label, detail: rule.detail });

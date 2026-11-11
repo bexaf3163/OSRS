@@ -22,6 +22,7 @@ import { withTeleports, type TeleportInput } from './teleportWalk';
 import type { Minutes } from './contracts';
 import type { WorldPoint } from '../player/playerState';
 import { modelsRegeneration, stepFightNames } from '../combat/fightEstimate';
+import { encounterSetups } from './encounter/setups';
 
 export interface RuntimePlanInput {
   snapshot: PlanningSnapshot;
@@ -83,6 +84,11 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
   // Training time to a level from the shared training cost, measured from the observed state (train-then-earn, S61).
   const trainingCost = createTrainingCost(snapshot, options), observed = observedProjection(snapshot);
   const train = (skill: string, level: number) => trainingCost(skill, level, observed);
+  const winnings = new Map<string, boolean>();
+  const winnable = (step: Step): boolean => {
+    if (!winnings.has(step.id)) winnings.set(step.id, encounterSetups(step, snapshot, prices, ironman, { keepDefenceOne: input.keepDefenceOne }).length > 0);
+    return winnings.get(step.id)!;
+  };
   const tactical = createTacticalResolver({
     snapshot, progress: input.progress, prices, window, style: input.style, priority: input.priority,
     restriction: input.restriction, ironman, walk, keepDefenceOne: input.keepDefenceOne,
@@ -95,6 +101,9 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
   const encounterOf = (step: Step, goal: QuestFact) => snapshot.quests[goal.id]?.state !== 'UNKNOWN'
     && snapshot.quests[goal.id] && stepFightNames(step).length && snapshot.combat?.stats && snapshot.combat.gear?.equipment
     ? tactical.resolve(step, goal.id).encounter : undefined;
+  // A fight ahead of the quest's current step that is not ready now: proven by a modelled way to win it, its training and kit unpriced.
+  const laterFight = (step: Step, goal: QuestFact) => stepFightNames(step).length > 0
+    && remainingQuestSteps(goal, stepOf, snapshot.quests[goal.id])[0]?.id !== step.id && tactical.resolve(step, goal.id).action !== null;
   const preparationOf = (goal: QuestFact) => {
     const step = stepOf.get(snapshot.quests[goal.id]?.stepId ?? goal.stepIds[0]);
     return step ? tactical.resolve(step, goal.id).preparationMinutes : null;
@@ -116,7 +125,9 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
           // No encounter metadata is not proof of safe combat. A validated cursor may retire an earlier known encounter.
           const met = fights.length > 0 && fights.filter(fight => remaining.has(fight.id)).every(fight => {
             const frame = tactical.resolve(fight, goal.id);
-            return frame.action === null || !!frame.encounter;
+            // A later fight is prepared when it is reached, with kit the quest hands over on the way (a maze key, a shield):
+            // a modelled, safe way to win it is the proof now. Its preparation time stays unknown until then.
+            return frame.action === null || !!frame.encounter || (laterFight(fight, goal) && winnable(fight));
           });
           const dangers = [...remaining].filter(id => DANGER.has(id));
           const escaped = dangers.length > 0 && dangers.every(id => RUN_PAST.has(id));
@@ -133,6 +144,7 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
         },
         work: (step, goal) => {
           const encounter = encounterOf(step, goal);
+          if (!encounter && laterFight(step, goal)) return null;
           const band = questWork(step, goal);
           if (!encounter || !band) return band;
           if (encounter.baseline.typical >= band.typical) return null; // The coarse quest band cannot price a negative non-combat remainder.

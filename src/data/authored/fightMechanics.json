@@ -39,7 +39,7 @@
       "facts": [
         "In Melzar's Maze it cannot reach the spot one square east of the magenta door, and melee cannot reach it from there: the route casts Water Strike.",
         "It has a 40% weakness to water: a water spell gets 40% more accuracy and 40% of its base max hit added (OSRS Wiki Elemental weakness).",
-        "Metal armour lowers the magic attack bonus: the estimate counts what you wear."
+        "Nothing can hit you there, so armour that lowers the magic attack bonus comes off before you cast: the estimate counts the rest."
       ]
     },
     "Elvarg": {

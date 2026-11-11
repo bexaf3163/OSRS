@@ -52,7 +52,7 @@ export function chooseEncounter(input: TacticalInput, step: Step, goalId: string
     const future = setup.targets.length ? { ...snapshot, player: { ...snapshot.player, levels: { ...snapshot.player.levels,
       ...Object.fromEntries(setup.targets.map(t => [t.skill, { known: true as const, value: t.level, source: 'profile' as const }])) } } } : snapshot;
     const supplies = prepare(setup.step, future);
-    if (safetyBlockers(supplies.plan.safety ?? [], supplies.plan.lines).length || supplies.plan.slots.over > 0) return null;
+    if (safetyBlockers(supplies.plan.safety ?? [], supplies.plan.lines, true).length || supplies.plan.slots.over > 0) return null;
     const { need, budget } = supplies;
     const priced = need.minimum.unpriced === 0 && need.unknown === 0;
     // Price the whole kit, not just whichever missing line happened to be first. Never spend unsold loot or unread bank GP.
