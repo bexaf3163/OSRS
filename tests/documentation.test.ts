@@ -42,7 +42,8 @@ describe('single maintained project handoff', () => {
       const rest = workflow.slice(start + 1), end = rest.slice(1).search(/\n {2}[a-z-]+:/);
       return end < 0 ? rest : rest.slice(0, end + 1);
     };
-    expect(job('release')).toMatch(/needs: \[checks, runelite-bridge, portable\]/);
+    expect(job('release')).toMatch(/needs: \[checks, route-gate, runelite-bridge, portable\]/);
+    expect(job('route-gate')).toContain('npm run gate:f2p');
     for (const gate of ['check-data', 'check-structure', 'knip', 'dead-css', 'npm test', 'npm run build', 'test:ui']) expect(job('checks'), gate).toContain(gate);
     expect(job('runelite-bridge')).toMatch(/gradlew[^\n]* test/);
     for (const gate of ['dist:win', 'test:e2e', 'test-portable.ps1']) expect(job('portable'), gate).toContain(gate);

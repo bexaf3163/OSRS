@@ -33,6 +33,21 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run test:ui
 
+  # A fresh account played turn by turn through the planner over the 23 F2P quests (tests/gates): fails when the plan stops at a check.
+  route-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run gate:f2p
+
   runelite-bridge:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -127,7 +142,7 @@ jobs:
     # A new version in package.json on main publishes the exe that the portable job verified (no second build),
     # then downloads the published assets and fails unless they match. An existing release is never overwritten.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [checks, runelite-bridge, portable]
+    needs: [checks, route-gate, runelite-bridge, portable]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     concurrency:
