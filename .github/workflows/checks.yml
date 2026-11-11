@@ -7,7 +7,8 @@ on:
 
 jobs:
   checks:
-    runs-on: ubuntu-latest
+    # Playwright 1.56 cannot install Chromium on ubuntu-latest since it became Ubuntu 26.04 (2026-11); keep the verified LTS image.
+    runs-on: ubuntu-24.04
     # Chromium dependencies can consume ten minutes on a slow apt mirror.
     # Leave time for the full browser suite after installation; no gate is skipped.
     timeout-minutes: 25
