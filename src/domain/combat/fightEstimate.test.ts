@@ -135,8 +135,10 @@ describe('one quest fight with your kit', () => {
     expect(fight.shots!.mid).toBeGreaterThan(0);
     expect(fight.shots!.high).toBeGreaterThanOrEqual(fight.shots!.mid);
     expect(estimateStepFights(step, { ...lv, attack: 40, strength: 40 }, gearOf(['Mithril scimitar']))[0].shots).toBeUndefined();
-    // No arrows worn, or no Ranged level read: no estimate.
+    // No arrows worn, arrows this bow cannot fire (adamant from an oak shortbow), or no Ranged level read: no estimate.
     expect(estimateStepFights(step, lv, archer(false))).toEqual([]);
+    const oak = { equipment: [{ id: id('Oak shortbow'), name: 'Oak shortbow', slot: 'weapon' }, { id: 890, name: 'Adamant arrow', slot: 'ammo', count: 500 }], inventory: [], coins: 0, bankCoins: 0 } as GearState;
+    expect(estimateStepFights(step, lv, oak)).toEqual([]);
     expect(estimateStepFights(step, { ...lv, ranged: undefined as unknown as number }, archer(true))).toEqual([]);
   });
 

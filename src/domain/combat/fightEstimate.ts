@@ -14,6 +14,7 @@ import { FIGHT_MECHANICS, PROTECTIONS, type FightMechanics } from '../../data/fi
 import { nameKey } from '../items/itemKey';
 import { SPELLS, spellHit, STAFFS } from './magicPlan';
 import { rangedHit } from './rangedAmmo';
+import { arrowsFor } from './rangedLoadout';
 
 const TICK = 0.6;
 const STYLES: TrainStyle[] = ['accurate', 'aggressive', 'defensive'];
@@ -163,7 +164,8 @@ interface Hit { hitChance: number; maxHit: number; speed: number }
 /** The player's hit: melee with the weapon in the style, or a bow's rapid shots with the worn arrows (rangedAmmo.rangedHit), one style only. */
 function playerHit(inp: FightInput, weapon: GearPiece | null, style: TrainStyle, foe: CombatFoe): Hit | null {
   if (!shootsOnly(weapon)) return meleeAs({ attack: inp.levels.attack, strength: inp.levels.strength, defence: inp.levels.defence }, weapon, inp.neck, style, foe);
-  if (style !== 'accurate' || inp.levels.ranged === undefined || !inp.ammo) return null;
+  // A bow fires only the arrows its tier takes (rangedLoadout.arrowsFor): others cannot be shot, so there is no estimate.
+  if (style !== 'accurate' || inp.levels.ranged === undefined || !inp.ammo || !arrowsFor(weapon!.name).includes(inp.ammo)) return null;
   const r = rangedHit(inp.levels.ranged, weapon!.name, inp.ammo, inp.worn ?? [], foe, 'rapid');
   return r ? { hitChance: r.chance, maxHit: r.maxHit, speed: r.speedTicks * TICK } : null;
 }

@@ -7,6 +7,7 @@ import type { FightEstimate } from '../../combat/fightEstimate';
 import { EAT_SECONDS } from '../../combat/combatEstimate';
 import { gearById, gearPieceByName, shootsOnly } from '../../items/gearRegistry';
 import { safetyRulesOf } from '../../prep/safety';
+import { arrowsFor, rangedNeeds } from '../../combat/rangedLoadout';
 import { FIGHT_MECHANICS } from '../../../data/fightMechanics';
 import { stepFood } from '../../player/foodStock';
 import { evenlyTrainedStats, fightTrainingTarget, safeTrainingLevel, trainedCombatStats } from '../../readiness/stepAssessment';
@@ -22,6 +23,8 @@ export interface EncounterSetup {
   /** Skills to raise first, in training order; empty when the setup needs no training. */
   targets: readonly { skill: string; level: number }[];
   fight: Minutes;
+  /** The observed kit and levels as they are. */
+  current?: true;
 }
 
 /** The same fight/eating accounting for observed and hypothetical setups; no second DPS formula. */
@@ -83,8 +86,9 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
   // A fight done with its own weapon (fightMechanics.json) gains nothing from another one.
   const taken = new Set([...guards.map(piece => piece.slot), ...(stepFightFoes(step).some(foe => FIGHT_MECHANICS[foe.name]?.weapon) ? ['weapon'] : [])]);
   const free = (kit: GearAction[]) => kit.filter(a => !taken.has(a.item.slot) && !(a.item.twoHanded && taken.has('shield')));
-  const current = forecast(step, stats, base, [], protection.length ? protection.map(piece => piece.name).join(' + ') : 'Current equipment', [], protection,
+  const observed = forecast(step, stats, base, [], protection.length ? protection.map(piece => piece.name).join(' + ') : 'Current equipment', [], protection,
     protection.length ? undefined : estimates);
+  const current = observed && { ...observed, current: true as const };
   if (options.currentOnly) return current ? [current] : [];
   // The skills that change the fight: melee ones, or Ranged and Defence for a bow user (a bow has no melee hit).
   const bow = shootsOnly(gearPieceByName(base.equipment?.find(p => p.slot === 'weapon')?.name ?? ''));
@@ -135,6 +139,20 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
       if (!target) continue;
       const trained = trainedCombatStats(stats, skill, target.level, xp);
       const ready = forecast(step, trained, worn, kit, `Train ${skill} to ${target.level}${kit.length ? `, then ${label}` : ''}`, [target], protection);
+      if (ready) result.push(ready);
+    }
+  }
+  // A bow user's own upgrade, compared like a kit: the bow the Ranged level unlocks (rangedLoadout) and the strongest arrows each bow
+  // fires. Bounded: the current bow or that one, with the current arrows or the strongest; training is compared above.
+  if (bow && !taken.has('weapon')) {
+    const held = base.equipment!.find(p => p.slot === 'weapon')!.name, quiver = base.equipment!.find(p => p.slot === 'ammo')?.name;
+    const unlocked = rangedNeeds(snapshot.player, prices).flatMap(n => n.type === 'item' && shootsOnly(gearPieceByName(n.name)) ? [n.name] : [])[0] ?? held;
+    for (const name of new Set([held, unlocked])) for (const arrow of new Set([quiver, arrowsFor(name)[0]])) {
+      const piece = gearPieceByName(name);
+      if (!piece || !arrow || (name === held && arrow === quiver) || !arrowsFor(name).includes(arrow)) continue;
+      const worn = wearing(base, [piece]);
+      const shooting = { ...worn, equipment: [...worn.equipment!.filter(p => p.slot !== 'ammo'), { id: 0, name: arrow, slot: 'ammo', count: 0 }] };
+      const ready = forecast(step, stats, shooting, [], `${name} + ${arrow}`, [], name === held ? protection : [...protection, piece]);
       if (ready) result.push(ready);
     }
   }

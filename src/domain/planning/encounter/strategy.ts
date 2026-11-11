@@ -90,7 +90,7 @@ export function chooseEncounter(input: TacticalInput, step: Step, goalId: string
   const current = baseline[0];
   const ready = current && evaluate(current);
   const rows = ready && !ready.action ? [ready] : encounterSetups(step, snapshot, input.prices, input.ironman, { keepDefenceOne: input.keepDefenceOne }).flatMap(setup => {
-    const row = !setup.kit.length && !setup.targets.length ? ready : evaluate(setup);
+    const row = setup.current ? ready : evaluate(setup);
     return row ? [row] : [];
   });
   // Complete rows compare by total time. An incomplete row never wins by what it leaves out: an unknown part is not zero

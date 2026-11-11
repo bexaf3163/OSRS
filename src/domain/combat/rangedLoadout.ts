@@ -24,6 +24,12 @@ const starter = (options: readonly StyleOption[]) => options.filter(o => !o.reqs
   .filter(name => stats.some(g => g.name === name && g.rangedAttack >= 0))
   .sort((a, b) => (stats.find(g => g.name === b)?.rangedAttack ?? 0) - (stats.find(g => g.name === a)?.rangedAttack ?? 0))[0];
 
+/** The arrows a bow fires (styleGear notes), strongest first; none for a bow the table does not know. */
+export function arrowsFor(bowName: string): string[] {
+  const canonical = bows.find(o => o.names.includes(bowName))?.names[0];
+  return canonical ? ammo.filter(o => !ammoFits(o, canonical, STYLE_GEAR.ranged.weapon)).flatMap(o => o.names) : [];
+}
+
 /** Project exactly the equipped kit requested by preparation, rather than forecasting in the old melee armour. */
 export function rangedEquipment(worn: Readonly<Record<string, string>>, needs: readonly MethodNeed[]): Record<string, string> {
   const equipment = { ...worn };
@@ -55,11 +61,9 @@ export function rangedNeeds(state: PlayerState, prices?: PriceView | null): read
 
 function computeRangedNeeds(state: PlayerState, prices?: PriceView | null): MethodNeed[] {
   const usable = bows.filter(o => usableStyleOption(o, (s) => levelOf(state, s), (q) => questOf(state, q) === 'DONE'));
-  const options = usable.flatMap(o => o.names.map(name => ({ name, canonical: o.names[0] })));
+  const options = usable.flatMap(o => o.names);
   const worn = new Set(Object.values(state.equipment).map(nameKey));
-  let bow = options.find(o => worn.has(nameKey(o.name)))
-    ?? options.find(o => (heldOf(state, o.name).total ?? 0) > 0)
-    ?? options.find(o => o.name === 'Shortbow') ?? { name: 'Shortbow', canonical: 'Shortbow' };
+  let bow = options.find(name => worn.has(nameKey(name))) ?? options.find(name => (heldOf(state, name).total ?? 0) > 0) ?? 'Shortbow';
   const owned = (name: string) => { const h = heldOf(state, name); return worn.has(nameKey(name)) || h.presence === 'PRESENT' || h.equipped > 0; };
   const price = (name: string) => supplyPrice(name, prices, state.mode);
   const cash = coinsOf(state).total;
@@ -80,17 +84,16 @@ function computeRangedNeeds(state: PlayerState, prices?: PriceView | null): Meth
   };
   // The normal unlocked bow is a progression need; preparation/funding disclose a shortfall instead of hiding the upgrade.
   const unlocked = usable[0];
-  if (unlocked && !unlocked.names.includes(bow.name)) {
+  if (unlocked && !unlocked.names.includes(bow)) {
     const name = unlocked.names.find(owned) ?? unlocked.names[0];
     if (!owned(name) && budget !== null) budget = Math.max(0, budget - (price(name) ?? budget));
-    bow = { name, canonical: unlocked.names[0] };
+    bow = name;
   }
-  const compatible = ammo.filter(o => !ammoFits(o, bow.canonical, STYLE_GEAR.ranged.weapon));
-  const candidates = compatible.flatMap(o => o.names.map(name => {
+  const candidates = arrowsFor(bow).map(name => {
     const held = heldOf(state, name);
     const equipped = countWorn(wornItemsOf(state), n => nameKey(n) === nameKey(name)).count;
     return { name, held, equipped };
-  }));
+  });
   // Reuse an adequate worn/owned stack. Unread compatible stock must settle before an absent stack can justify a purchase.
   let arrow = candidates.find(o => o.equipped >= LOW_ARROWS || (o.held.total ?? 0) >= STARTER_ARROWS)
     ?? candidates.find(o => o.held.bank === null)
@@ -100,10 +103,10 @@ function computeRangedNeeds(state: PlayerState, prices?: PriceView | null): Meth
   const adequate = candidates.filter(o => o.equipped >= LOW_ARROWS || (o.held.total ?? 0) >= STARTER_ARROWS);
   const ammoBudget = cash !== null && budget !== null && arrowReserve !== null ? Math.min(cash, budget + STARTER_ARROWS * arrowReserve) : 0;
   // Review paid ammunition with a bow purchase or a needed refill, not an extra trip for every unlock.
-  const buy = bankKnown && (!adequate.length || !owned(bow.name)) ? candidates.filter(o =>
+  const buy = bankKnown && (!adequate.length || !owned(bow)) ? candidates.filter(o =>
     o.held.presence === 'MISSING' && price(o.name) !== null && STARTER_ARROWS * price(o.name)! <= ammoBudget) : [];
   const minute = coinsPerMinute(prices);
-  const speed = Math.max(1, (stats.find(g => g.name === bow.name)?.speed ?? 4) - 1);
+  const speed = Math.max(1, (stats.find(g => g.name === bow)?.speed ?? 4) - 1);
   const timeValue = minute === null ? 0 : minute * speed * 0.6 / 60;
   const efficiency = (name: string) => {
     const p = price(name), strength = stats.find(g => g.name === name)?.rangedStrength;
@@ -113,7 +116,7 @@ function computeRangedNeeds(state: PlayerState, prices?: PriceView | null): Meth
     .sort((a, b) => efficiency(b.name)! - efficiency(a.name)! || price(a.name)! - price(b.name)!);
   const currentStack = candidates.find(o => o.equipped >= LOW_ARROWS);
   const bestValue = optionsByValue[0];
-  const keepCurrent = currentStack && worn.has(nameKey(bow.name)) && (!bestValue || efficiency(currentStack.name) === null || efficiency(bestValue.name)! <= efficiency(currentStack.name)! * 1.1);
+  const keepCurrent = currentStack && worn.has(nameKey(bow)) && (!bestValue || efficiency(currentStack.name) === null || efficiency(bestValue.name)! <= efficiency(currentStack.name)! * 1.1);
   if (keepCurrent) arrow = currentStack;
   else if (optionsByValue.length) arrow = optionsByValue[0];
   if (buy.includes(arrow) && budget !== null && arrowReserve !== null) budget = Math.max(0, budget - STARTER_ARROWS * Math.max(0, price(arrow.name)! - arrowReserve));
@@ -134,7 +137,7 @@ function computeRangedNeeds(state: PlayerState, prices?: PriceView | null): Meth
   }).map(k => ({ type: 'item', name: k.name, count: 1, equip: true }));
   return [
     ...(levelOf(state, 'ranged') === undefined ? [{ type: 'skill' as const, skill: 'ranged', min: 1 }] : []),
-    { type: 'item', name: bow.name, equip: true },
+    { type: 'item', name: bow, equip: true },
     { type: 'item', name: arrow.name, count: arrow.equipped >= LOW_ARROWS ? LOW_ARROWS : STARTER_ARROWS, equip: true },
     ...armour,
   ];

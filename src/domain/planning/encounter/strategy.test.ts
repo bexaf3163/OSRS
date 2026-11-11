@@ -28,18 +28,19 @@ import { chooseEncounter } from './strategy';
 const fight: Step = { id: 'S99-01', title: 'A supported quest encounter', stage: 1, type: 'quest', requires: [],
   foes: ['Black Knight'], doneWhen: 'Observed quest stage', mapLocation: { x: 3030, y: 3500, plane: 0, label: 'Encounter' },
   itemsRequired: [{ nameEn: 'Trout', amount: 26, heals: 7, howToGet: '' }] };
-function fixture(level = 1, coins = 5000, worn: string[] = [], bank: string[] = [], archer?: { ranged: number; arrows: number; carried?: number }): TacticalInput {
+function fixture(level = 1, coins = 5000, worn: string[] = [], bank: string[] = [], archer?: { ranged: number; arrows: number; carried?: number; arrow?: string }): TacticalInput {
   const progress = emptyProgress();
   const stats = { attack: level, strength: level, defence: level, hitpoints: Math.max(10, level), magic: level, ranged: archer?.ranged ?? 1, prayer: 1 };
   const equipment = [...worn.map(name => { const p = gearPieceByName(name)!; return { name, id: p.id, slot: p.slot === 'neck' ? 'amulet' : p.slot, count: 1 }; }),
-    ...(archer ? [{ name: 'Mithril arrow', id: 888, slot: 'ammo', count: archer.arrows }] : [])];
+    ...(archer ? [{ name: archer.arrow ?? 'Mithril arrow', id: 888, slot: 'ammo', count: archer.arrows }] : [])];
   const gear = { equipment, inventory: [{ name: 'Trout', id: 333, count: 26 }, ...(archer?.carried ? [{ name: 'Mithril arrow', id: 888, count: archer.carried }] : [])], coins, bankCoins: 0 };
   const owned = { bankSeen: true, items: new Map<string, OwnedItem>([...gearData.items.map(p => [nameKey(p.name), { name: p.name, carried: 0, bank: bank.includes(p.name) ? 1 : 0, noted: 0 }] as const),
-    ['trout', { name: 'Trout', carried: 26, bank: 0, noted: 0 }] as const, ['mithril arrow', { name: 'Mithril arrow', carried: archer?.carried ?? 0, bank: 0, noted: 0 }] as const]) };
+    ['trout', { name: 'Trout', carried: 26, bank: 0, noted: 0 }] as const, ['mithril arrow', { name: 'Mithril arrow', carried: archer?.carried ?? 0, bank: 0, noted: 0 }] as const,
+    ['bronze arrow', { name: 'Bronze arrow', carried: 0, bank: 0, noted: 0 }] as const]) };
   const snapshot: PlanningSnapshot = { scope: { characterId: 'Combat', mode: 'f2p', gameSessionId: 'login', snapshotRevision: 1 },
     player: buildPlayerState({ progress, mode: 'f2p', stats, gear, owned, questsDone: [], connected: true, position: { x: 3164, y: 3486, plane: 0 } }),
     combat: { stats, gear }, xp: {}, quests: {}, questPoints: { known: true, value: 0, source: 'game' }, manual: {} };
-  return { snapshot, progress, prices: fakePrices({ Trout: { buy: 10 }, 'Mithril arrow': { buy: 20 } }), window: [], ironman: false, earn: () => null,
+  return { snapshot, progress, prices: fakePrices({ Trout: { buy: 10 }, 'Mithril arrow': { buy: 20 }, 'Bronze arrow': { buy: 2 }, 'Willow shortbow': { buy: 40 } }), window: [], ironman: false, earn: () => null,
     walk: () => ({ fast: 1, typical: 2, slow: 3, source: 'Fixture routed walking' }) };
 }
 
@@ -66,6 +67,12 @@ describe('complete encounter strategy comparison', () => {
     // Bought: the bag's arrows go into the quiver with the worn ones, nothing more is bought.
     const bought = createTacticalResolver(fixture(30, 5000, ['Maple shortbow'], [], { ranged: 50, arrows: 5, carried: Number(quiver?.amount) - 5 })).resolve(fight, 'test');
     expect(bought.action).toMatchObject({ kind: 'EQUIP', title: 'Equip Mithril arrow' });
+  });
+  it('offers a bow user the bow the Ranged level unlocks, with arrows it fires, when the worn bow is not safe', () => {
+    const result = createTacticalResolver(fixture(1, 5000, ['Shortbow'], [], { ranged: 20, arrows: 500, arrow: 'Bronze arrow' })).resolve(fight, 'test');
+    expect(result.action).toMatchObject({ kind: 'BUY', title: 'Get Willow shortbow' });
+    expect(result.encounter?.reasons[0]).toMatch(/^Combat strategy: Willow shortbow \+ (Bronze|Mithril) arrow\./);
+    expect(result.step.itemsRequired).toContainEqual(expect.objectContaining({ nameEn: 'Willow shortbow', equip: true }));
   });
   it('buys a justified affordable upgrade when its complete preparation is faster than training', () => {
     const result = createTacticalResolver(fixture(20)).resolve(fight, 'test');
