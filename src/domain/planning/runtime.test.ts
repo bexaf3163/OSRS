@@ -266,6 +266,19 @@ describe('different characters through the integrated runtime (brief 39 counterf
     expect(unknown.activeAction.title).toMatch(/Verify the current stage/);
   });
 
+  it('a closed optional quest started in the game is set aside: no endless stage check; removing the mark or naming it brings it back', () => {
+    // Seen live (2.92.1): every other F2P quest done, Shield of Arrav started in the game, its route step marked done; the HUD showed its stage check forever.
+    const others = questCatalogue.filter(q => !q.members && q.id !== 'Shield of Arrav').map(q => q.id);
+    const snap = { ...counted(lumbridge, others), questPoints: { known: true, value: 45, source: 'game' } } as PlanningSnapshot;
+    snap.quests = { ...snap.quests, 'Shield of Arrav': { state: 'IN_PROGRESS', source: 'game' } } as PlanningSnapshot['quests'];
+    for (const mark of ['done', 'skipped'] as const) {
+      expect(runtimeDecision(input(snap, { walk, prices, progress: { ...emptyProgress(), steps: { 'S3-05': mark } } })), mark).toBeNull();
+    }
+    expect(runtimeDecision(input(snap, { walk, prices }))?.activeAction).toMatchObject({ kind: 'VERIFY', stepId: 'S3-05' });
+    expect(runtimeDecision(input(snap, { walk, prices, progress: { ...emptyProgress(), steps: { 'S3-05': 'done' } },
+      intent: { kind: 'quest', questId: 'Shield of Arrav' } }))?.objectiveId).toBe('Shield of Arrav');
+  });
+
   it('a quest\'s later fights are proven by a modelled way to win them: Dragon Slayer starts, its fights priced by the fight model', () => {
     // The quest hands over the Maze key (S5-01) and the Anti-dragon shield on the way: they cannot be ready before it starts.
     const quest = questCatalogue.find(q => q.id === 'Dragon Slayer I')!;

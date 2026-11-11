@@ -7,6 +7,8 @@ import { nameKey } from '../items/itemKey';
 import { currentBankView } from '../player/playerState';
 import type { PlayerState } from '../player/playerState';
 import { consumeMaterialStock } from '../player/materialStock';
+import type { Progress } from '../../types';
+import { isClosed } from '../quests/next-step';
 
 export interface QuestFact {
   id: string;
@@ -50,6 +52,18 @@ export function projectedQuestPoints(snapshot: PlanningSnapshot, projection: Pro
 }
 
 /** Only validated game stage evidence removes earlier quest parts from future cost. */
+/**
+ * Optional quests the player closed in the route (its steps marked done or skipped: "the quest is green, or knowingly skipped"), that the
+ * game does not count complete and no other unfinished quest needs (Shield of Arrav without a partner). They are not objectives; removing
+ * the mark brings the quest back. Never a completion: quest points and prerequisites still come from the game.
+ */
+export function setAsideQuests(catalogue: readonly QuestFact[], steps: readonly Step[], progress: Progress, quests: Readonly<Record<string, Pick<QuestEvidence, 'state'>>>): Set<string> {
+  const byId = new Map(steps.map(step => [step.id, step]));
+  const open = catalogue.filter(quest => quests[quest.id]?.state !== 'COMPLETED');
+  return new Set(open.filter(quest => quest.stepIds.length > 0 && quest.stepIds.every(id => byId.get(id)?.optional && isClosed(progress, id))
+    && !open.some(other => other.requirements.quests.includes(quest.id))).map(quest => quest.id));
+}
+
 export function remainingQuestSteps(quest: QuestFact, steps: ReadonlyMap<string, Step>, evidence?: QuestEvidence): Step[] {
   const at = evidence?.state === 'IN_PROGRESS' && evidence.stepId ? quest.stepIds.indexOf(evidence.stepId) : 0;
   return quest.stepIds.slice(Math.max(0, at)).flatMap(id => { const step = steps.get(id); return step ? [step] : []; });

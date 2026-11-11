@@ -39,6 +39,21 @@ body{background:#050302}
 /* ---- notices above the book ---- */
 .la-main>:is(.update-banner,.profile-banner,.plaque,[role="alert"]):not(.la-book){margin:0 0 18px;background:linear-gradient(90deg,#2a1d12,#3a281a);color:var(--la-parch);border:1px solid #8a6d3a;border-radius:0;box-shadow:inset 0 0 0 3px #2a1d12,inset 0 0 0 4px #7b6030;padding:9px 14px;font-size:15.5px}
 .la-main>:is(.update-banner,.profile-banner,.plaque) a{color:var(--la-gold2)}
+/* a notice's buttons are the Ledger's own (dark with a gold edge, the main one gold), never the page's generic ones */
+.la-main>:is(.update-banner,.profile-banner,.plaque,[role="alert"]):not(.la-book) .btn{display:inline-flex;align-items:center;gap:7px;width:auto;min-height:0;padding:6px 14px;font-family:var(--la-disp);font-size:10.5px;letter-spacing:.14em;border:1px solid var(--la-gold);color:var(--la-gold2);background:#150e09;border-radius:0;box-shadow:none}
+.la-main>:is(.update-banner,.profile-banner,.plaque,[role="alert"]):not(.la-book) .btn:hover{background:#2a1d0e}
+.la-main>:is(.update-banner,.profile-banner,.plaque,[role="alert"]):not(.la-book) .btn-primary{background:linear-gradient(#d8b560,#a98433);color:#2a1a08;border-color:#e6c878;font-weight:700}
+/* a one-line notice: emblem, small-caps title, its text (one line, the rest on hover) and its buttons on the right */
+.la-main>.la-notice{display:flex;flex-direction:row;align-items:center;gap:14px;text-align:left}
+.la-notice .la-shield{width:30px;height:34px;display:grid;place-items:center;color:var(--la-gold2);flex:none}
+.la-notice b{font-family:var(--la-disp);font-size:12px;letter-spacing:.14em;color:var(--la-gold2);font-weight:600;display:block}
+.la-notice .la-notice-text{flex:1;min-width:0}
+.update-banner .update-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.update-banner .update-text b i{font-style:normal;font-weight:400;letter-spacing:.08em;color:#b9a27a}
+.update-banner .update-text span{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.update-banner .update-text small{font-size:12.5px;color:#cbb994}
+.update-banner .update-actions{display:flex;gap:8px;flex:none}
+.update-banner .update-actions .la-btn{margin-left:0}
 
 /* ---- parchment: the tokens of the existing components on a page, in the dialogs and toasts ---- */
 .la-pg, dialog{

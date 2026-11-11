@@ -253,6 +253,10 @@ async function questObservationFreshness(browser: Browser) {
   await page.evaluate(() => (window as unknown as { __emit: (event: unknown) => void }).__emit({ type: 'QUESTS', done: [] }));
   await settle(page);
   expect((await text(page, '.la-stat b')) === '4', 'quest observations: an unversioned event cannot downgrade the admitted observation or its QP');
+  // The reminder is a Ledger notice with the Ledger's dark button, not a white bar across the page.
+  const dismiss = await page.locator('.la-main > [aria-label="Bank reminder"]').evaluate((el) => { const b = el.querySelector('button')!;
+    return { bg: getComputedStyle(b).backgroundColor, share: b.getBoundingClientRect().width / el.getBoundingClientRect().width, notice: el.classList.contains('la-notice') }; });
+  expect(dismiss.notice && dismiss.bg === 'rgb(21, 14, 9)' && dismiss.share < 0.4, `bank reminder: a Ledger notice with a Ledger button (${JSON.stringify(dismiss)})`);
   await page.getByRole('button', { name: 'Dismiss bank reminder', exact: true }).click();
   await page.evaluate(() => {
     const w = window as unknown as { __holdStatus: boolean; __emit: (event: unknown) => void };

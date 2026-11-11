@@ -12,6 +12,7 @@ const { createUpdater } = require('./updater.cjs');
 const { backupProgress, dailyBackup, latestCopy, createProgressGuard, restoreFromCopies } = require('./progress-files.cjs');
 const { atomicWrite } = require('./atomic-write.cjs');
 const { createProgressWriter } = require('./progress-writer.cjs');
+const { zoomFor } = require('./window-zoom.cjs');
 
 // End-to-end checks use an empty home, never the player's profiles or backup folder: the source tree in development, and a packaged release
 // candidate (E2E_EXE=... npm run test:e2e). The variable only ever moves the data away from the player's, never toward it.
@@ -292,8 +293,11 @@ if (!app.requestSingleInstanceLock()) {
     });
     win.on('closed', () => { win = null; });
 
-    // Native DPI and responsive CSS handle window sizing; retired custom zoom is not restored.
-    win.webContents.once('did-finish-load', () => win?.webContents.setZoomFactor(1));
+    // The Ledger scales with the window (window-zoom.cjs): set on every load and after a resize settles. No saved or manual zoom.
+    const fitZoom = () => { if (win && !win.isDestroyed()) win.webContents.setZoomFactor(zoomFor(...win.getContentSize())); };
+    let zoomTimer = null;
+    win.webContents.on('did-finish-load', fitZoom);
+    win.on('resize', () => { clearTimeout(zoomTimer); zoomTimer = setTimeout(fitZoom, 120); });
 
     // Links to the wiki and other sites — to an ordinary browser, not inside the app.
     win.webContents.setWindowOpenHandler(({ url }) => {

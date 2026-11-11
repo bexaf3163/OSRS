@@ -220,6 +220,7 @@ export const scenarios = {
   'combat-strategy': combatStrategy,
   'f2p-next': f2pNext,
   'f2p-next-optional': f2pNextOptional,
+  'update-notice': updateNotice,
 };
 
 async function combatStrategy(browser: Browser) {
@@ -280,9 +281,9 @@ async function f2pNextOptional(browser: Browser) {
     cooking: 30, mining: 18, smithing: 29, crafting: 9, runecraft: 1 };
   const gear = { equipment: [], inventory: [], coins: 30000, bankCoins: 0 };
   const states = questStatesBefore('S7-01');
-  const at = async (mark: 'open' | 'skipped') => {
+  const at = async (mark: 'open' | 'skipped' | 'done') => {
     const progress = progressBefore('S7-01', { gameMode: 'f2p' }), marks = progress.steps as Record<string, string>;
-    if (mark === 'open') delete marks['S3-05']; else marks['S3-05'] = 'skipped';
+    if (mark === 'open') delete marks['S3-05']; else marks['S3-05'] = mark;
     return open(browser, 1440, { market: true, progress,
       status: { protocol: 6, inGame: true, player: 'Fixture', ...gear, stats, questStates: { ...states, states: { ...states.states, 'Shield of Arrav': 'IN_PROGRESS' } } },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [] }] }, '#/path');
@@ -294,11 +295,41 @@ async function f2pNextOptional(browser: Browser) {
   expect(pointed.includes('S3-05'), `optional quest open: the stage check points the game at Shield of Arrav's step, where the plugin reads it (${pointed.join(', ')})`);
   expect(!errors.length && await noOverflow(page), 'optional quest open: no console errors or horizontal overflow');
   await page.context().close();
-  ({ page, errors } = await at('skipped'));
-  await settle(page);
-  const next = await page.getByRole('region', { name: 'Next action' }).innerText();
-  expect(/Next in F2P/.test(next) && /SHIELD OF ARRAV OPTIONAL/i.test(next), `optional quest skipped: Path offers the F2P checkpoints and names the optional quest (${next.slice(0, 80)})`);
-  expect(await page.locator('ol li', { hasText: '→' }).count() > 2, 'optional quest skipped: the ranked checkpoints are listed');
-  expect(!errors.length && await noOverflow(page), 'optional quest skipped: no console errors or horizontal overflow');
-  await page.context().close();
+  // Closed in the route (skipped, or marked done as on the owner's account): set aside, so the game gets no check and the Path its checkpoints.
+  for (const mark of ['skipped', 'done'] as const) {
+    ({ page, errors } = await at(mark));
+    await settle(page);
+    const next = await page.getByRole('region', { name: 'Next action' }).innerText();
+    expect(/Next in F2P/.test(next) && /SHIELD OF ARRAV OPTIONAL/i.test(next), `optional quest ${mark}: Path offers the F2P checkpoints and names the optional quest (${next.slice(0, 80)})`);
+    expect(await page.locator('ol li', { hasText: '→' }).count() > 2, `optional quest ${mark}: the ranked checkpoints are listed`);
+    const sent = await page.evaluate(() => (window as unknown as { __posts: { path: string; body?: unknown }[] }).__posts
+      .filter(p => p.path === '/prep-plan').map(p => (p.body as { decision?: { title?: string } | null })?.decision?.title ?? '-').pop() ?? '-');
+    expect(!/Shield of Arrav/.test(sent), `optional quest ${mark}: the game gets no Shield of Arrav check (${sent})`);
+    expect(!errors.length && await noOverflow(page), `optional quest ${mark}: no console errors or horizontal overflow`);
+    await page.context().close();
+  }
+}
+
+// A downloaded update (2.92.1 feedback): the notice is a Ledger plaque with the Ledger's gold button, its release note one line, nothing overflows.
+async function updateNotice(browser: Browser) {
+  const notes = 'A quest started outside the guide no longer leaves you stuck at "Verify the current stage". For a quest that is a single route step, the check now points the game at that step, so the plugin reads the stage there and the plan continues by itself. Before, the game was never pointed at the step.';
+  for (const width of [1000, 1440]) {
+    const { page, errors } = await open(browser, width, { progress: progressBefore('S2-03'),
+      update: { state: 'ready', current: '2.92.0', latest: '2.92.1', notes, progress: 1, error: null, auto: true, canInstall: true } }, '#/path');
+    await settle(page);
+    const notice = page.locator('.update-banner');
+    expect(await notice.getAttribute('role') === 'status' && await notice.getAttribute('aria-label') === 'App update' && await notice.isVisible(),
+      `update notice at ${width}: shown as a status named App update (${JSON.stringify(await notice.boundingBox())})`);
+    const look = await notice.evaluate((el) => {
+      const line = el.querySelector('.update-text span') as HTMLElement | null, button = el.querySelector('button') as HTMLElement | null;
+      return { plaque: el.classList.contains('la-notice'), button: button?.className ?? '', text: button?.textContent ?? '', bg: button ? getComputedStyle(button).backgroundImage : '',
+        oneLine: !!line && line.getBoundingClientRect().height < 30 && line.scrollWidth > line.clientWidth, full: line?.title ?? '' };
+    });
+    expect(look.plaque && /\bla-btn\b/.test(look.button) && /\bla-p\b/.test(look.button) && !/btn-primary/.test(look.button) && /gradient/.test(look.bg),
+      `update notice at ${width}: a Ledger notice with the gold Ledger button (${look.button}: ${look.text})`);
+    expect(look.oneLine && look.full === notes, `update notice at ${width}: the release note is one line, the whole note on hover`);
+    expect(/Version 2\.92\.1 is ready/i.test(await notice.innerText()), `update notice at ${width}: says the new version is ready`);
+    expect(!errors.length && await noOverflow(page), `update notice at ${width}: no console errors or horizontal overflow`);
+    await page.context().close();
+  }
 }

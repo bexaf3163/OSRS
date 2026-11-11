@@ -10,7 +10,7 @@ import type { Progress } from '../../types';
 import type { CommittedDecision, PlanningSnapshot } from './contracts';
 import type { PlanningIntent } from './intent';
 import { planIntent } from './planner';
-import { questCatalogue, remainingQuestSteps, type QuestFact } from './catalogue';
+import { questCatalogue, remainingQuestSteps, setAsideQuests, type QuestFact } from './catalogue';
 import { createTacticalResolver, type TacticalInput } from './tactical';
 import { createTrainingCost } from './training';
 import { observedProjection } from './decision';
@@ -74,7 +74,9 @@ export function questWork(step: Step, goal: QuestFact): Minutes | null {
 
 export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | null {
   const { snapshot, prices, steps, ironman } = input;
-  const catalogue = input.catalogue ?? questCatalogue;
+  // A closed optional quest is set aside unless the player asks for it by name.
+  const aside = setAsideQuests(input.catalogue ?? questCatalogue, steps, input.progress, snapshot.quests);
+  const catalogue = (input.catalogue ?? questCatalogue).filter(quest => !aside.has(quest.id) || (input.intent?.kind === 'quest' && input.intent.questId === quest.id));
   const current = input.previous?.activeAction.executionStep ?? (input.previous && steps.find(step => step.id === input.previous!.activeAction.stepId));
   const window = input.previous && current ? planningWindow({ snapshot, decision: input.previous, current, catalogue, steps }) : [];
   const walk = withTeleports(input.walk ?? (() => null), input.teleports ?? null);

@@ -22,7 +22,7 @@ import { objectiveSteps, plannerOrder, useDecision } from '../../state/decision'
 import { PlannerOrder } from './PlannerOrder';
 import { F2pNext } from './F2pNext';
 import { usePlayerState } from '../../state/playerStateContext';
-import { questCatalogue, questEvidence } from '../../domain/planning/catalogue';
+import { questCatalogue, questEvidence, setAsideQuests } from '../../domain/planning/catalogue';
 import type { CommittedDecision } from '../../domain/planning/contracts';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -40,9 +40,12 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   const waiting = useMemo(() => { const kind = decision?.activeAction.kind;
     const quest = kind === 'MANUAL_WAIT' || kind === 'VERIFY' ? questCatalogue.find(q => q.id === decision!.objectiveId) : undefined;
     return quest && steps.find(s => s.id === quest.stepIds[0])?.optional ? quest.id : null; }, [decision, steps]);
-  // Every F2P quest observed complete in the game (or optional and waiting): the Path offers the F2P checkpoints instead of waiting for a quest.
-  const f2pDone = useMemo(() => { const evidence = questEvidence(questCatalogue, questStates ?? null, player.quests.known ? player.quests.value : null, null);
-    return questCatalogue.filter(q => !q.members).every(q => evidence[q.id]?.state === 'COMPLETED' || q.id === waiting); }, [questStates, player.quests, waiting]);
+  // Every F2P quest observed complete in the game, or optional and waiting or closed in the route (setAsideQuests): the Path offers the F2P
+  // checkpoints instead of waiting for a quest, naming the optional one left.
+  const { f2pDone, optional } = useMemo(() => { const evidence = questEvidence(questCatalogue, questStates ?? null, player.quests.known ? player.quests.value : null, null);
+    const aside = setAsideQuests(questCatalogue, steps, progress, evidence), free = questCatalogue.filter(q => !q.members);
+    return { f2pDone: free.every(q => evidence[q.id]?.state === 'COMPLETED' || q.id === waiting || aside.has(q.id)),
+      optional: waiting ?? free.find(q => aside.has(q.id))?.id ?? null }; }, [questStates, player.quests, waiting, steps, progress]);
   // The committed Decision's step; with none (offline, waiting for data) nothing is current.
   // A Decision whose current action has no step of its own (VERIFY a level) still has an objective: its quest's first open step.
   const objectiveStart = useMemo(() => { const own = objectiveSteps(decision); return steps.find((s) => own.has(s.id) && !isClosed(progress, s.id)) ?? null; }, [decision, steps, progress]);
@@ -138,7 +141,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
       </Page>
       {training ? <Page side="r" label="Training plan"><div className="la-scroll"><TrackedSkillCard /></div></Page> : !selected ? (
         <Page side="r" label="Next action"><div className="la-scroll">
-          {(!decision || waiting) && f2pDone ? <><ManualConfirm /><F2pNext waiting={waiting} /></> : <>
+          {(!decision || waiting) && f2pDone ? <><ManualConfirm /><F2pNext waiting={optional} /></> : <>
           <Eyebrow>THE PLANNER'S NEXT ACTION</Eyebrow>
           <h1 className="la-t">{decision ? decision.activeAction.title : 'Waiting for the planner'}</h1>
           {decision ? <DecisionReasons decision={decision} />

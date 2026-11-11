@@ -13,6 +13,8 @@ export interface Mock {
   /** The native profile list, independent of a damaged browser list. */
   profileFile?: unknown;
   status?: Record<string, unknown>;
+  /** The app updater's state (Settings → App and the update notice); default: up to date. */
+  update?: Record<string, unknown>;
   events?: unknown[];
   localStorage?: Record<string, string>;
   /** The exchange prices by item ID: they stand in for the prices.runescape.wiki reply (without them the network to the wiki is closed). */
@@ -94,7 +96,7 @@ export async function open(browser: Browser, width: number, mock: Mock, hash: st
       getWindowPrefs: async () => ({ alwaysOnTop: false }),
       setAlwaysOnTop() {},
       updates: {
-        get: async () => ({ state: 'current', current: 'test', latest: null, notes: '', progress: 0, error: null, auto: true }),
+        get: async () => m.update ?? ({ state: 'current', current: 'test', latest: null, notes: '', progress: 0, error: null, auto: true }),
         check: async () => { w.__updateChecks = Number(w.__updateChecks ?? 0) + 1; return { state: 'current', current: 'test', latest: null, notes: '', progress: 0, error: null, auto: true }; },
         download: async () => ({ state: 'current', current: 'test', latest: null, notes: '', progress: 0, error: null, auto: true }),
         install: async () => false, setAuto() {}, onState: () => () => {},
