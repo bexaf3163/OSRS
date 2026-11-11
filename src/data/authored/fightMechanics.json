@@ -33,6 +33,15 @@
         "Moving out of the way before he moves avoids all of it. The estimate counts one hit of every special."
       ]
     },
+    "Lesser demon": {
+      "url": "https://oldschool.runescape.wiki/w/Lesser_demon",
+      "safespot": { "spell": "Water Strike" },
+      "facts": [
+        "In Melzar's Maze it cannot reach the spot one square east of the magenta door, and melee cannot reach it from there: the route casts Water Strike.",
+        "It has a 40% weakness to water: a water spell gets 40% more accuracy and 40% of its base max hit added (OSRS Wiki Elemental weakness).",
+        "Metal armour lowers the magic attack bonus: the estimate counts what you wear."
+      ]
+    },
     "Elvarg": {
       "url": "https://oldschool.runescape.wiki/w/Elvarg",
       "attacks": [{ "label": "Dragonfire", "maxHit": 10, "protection": "Dragonfire", "unprotected": 70 }],

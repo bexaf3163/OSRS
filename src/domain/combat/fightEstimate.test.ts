@@ -91,10 +91,35 @@ describe('one quest fight with your kit', () => {
   });
 
   it('more health above two max hits means fewer pieces of food', () => {
-    const base = { foe: foe('Lesser demon'), weapon: gearById.get(id('Mithril scimitar'))!, neck: null, armour: [], food: { name: 'Swordfish', heals: 14 } };
+    // Its numbers without the route's safespot: a plain melee opponent.
+    const base = { foe: { ...foe('Lesser demon'), name: 'Synthetic demon' }, weapon: gearById.get(id('Mithril scimitar'))!, neck: null, armour: [], food: { name: 'Swordfish', heals: 14 } };
     const low = estimateFight({ ...base, levels: { attack: 40, strength: 40, defence: 30, hitpoints: 30 } })!;
     const high = estimateFight({ ...base, levels: { attack: 40, strength: 40, defence: 30, hitpoints: 60 } })!;
     expect(high.food.high).toBeLessThan(low.food.high);
+  });
+
+  it('the Lesser demon is fought from the safespot with Water Strike: its water weakness, no damage, the casts the runes pay for', () => {
+    const base = { foe: foe('Lesser demon'), weapon: null, neck: null, armour: [], food: { name: 'Salmon', heals: 9 }, casts: 50 };
+    const lv = { attack: 30, strength: 30, defence: 30, hitpoints: 30 };
+    const e = estimateFight({ ...base, levels: { ...lv, magic: 20 } })!;
+    expect(e).toMatchObject({ spell: 'Water Strike', maxHit: 11, worstHit: 0, food: { high: 0 }, damage: { high: 0 }, unmodelled: [] });
+    expect(e.cannot).toBeUndefined();
+    expect(e.seconds.mid).toBeCloseTo(e.casts!.mid * 3, 6);
+    expect(e.casts!.high).toBeLessThan(50);
+    expect(fightLine(e)).toMatch(/^Lesser demon[^:]*: about \d+ casts of Water Strike \(up to \d+\), about .* from the safespot; it cannot reach you there\.$/);
+    // Metal armour lowers the magic attack bonus: more casts, and none land in a full iron set.
+    const piece = (n: string) => gearById.get(id(n))!;
+    expect(estimateFight({ ...base, armour: [piece('Iron full helm'), piece('Iron kiteshield')], levels: { ...lv, magic: 20 } })!.casts!.mid).toBeGreaterThan(e.casts!.mid);
+    expect(estimateFight({ ...base, armour: IRON.slice(1).map(piece), levels: { ...lv, magic: 20 } })!.cannot).toMatch(/^Water Strike cannot hit it with the magic attack bonus of what you wear \(-\d+\)$/);
+    expect(estimateFight({ ...base, levels: { ...lv, magic: 4 } })!.cannot).toBe('Water Strike needs Magic 5');
+    expect(estimateFight({ ...base, casts: 5, levels: { ...lv, magic: 20 } })!.cannot).toMatch(/runes pay for 5 casts of Water Strike; up to \d+ may be needed/);
+    expect(estimateFight({ ...base, levels: lv })!.unmodelled).toContain('unread Magic level');
+  });
+
+  it('Melzar\'s Maze: Melzar the Mad in melee, the demon with the 50 casts of runes the step carries', () => {
+    const fights = estimateStepFights(stepById.get('S5-03')!, { attack: 40, strength: 40, defence: 40, hitpoints: 40, magic: 20 }, gearOf(['Mithril scimitar']));
+    expect(fights.map((f) => [f.foe.name, f.spell ?? 'melee'])).toEqual([['Melzar the Mad', 'melee'], ['Lesser demon', 'Water Strike']]);
+    expect(fights[1].cannot).toBeUndefined();
   });
 
   it('Elvarg\'s dragonfire is counted for every attack: up to 10 behind the Anti-dragon shield, up to 70 without it', () => {
@@ -129,9 +154,9 @@ describe('the opponents of a step (combat audit, 2.66.0)', () => {
     const { stepById } = await import('../../data');
     expect(stepFightFoes(stepById.get('S8-01')!).map((f) => [f.name, f.members])).toEqual([['Temple Guardian', true]]);
     expect(stepFightFoes(stepById.get('S8-02')!).map((f) => f.name)).toEqual(['Ghast']);
-    // A free version wins where there is one; the demon fought from the safespot is not estimated in melee.
-    expect(stepFightFoes(stepById.get('S5-03')!).map((f) => [f.name, f.members])).toEqual([['Melzar the Mad', false]]);
-    expect(stepFightNames(stepById.get('S3-04')!)).toEqual([]);
+    // A free version wins where there is one: the level 82 demon of Melzar's Maze, fought from the safespot.
+    expect(stepFightFoes(stepById.get('S5-03')!).map((f) => [f.name, f.members])).toEqual([['Melzar the Mad', false], ['Lesser demon', false]]);
+    expect(stepFightNames(stepById.get('S3-04')!)).toEqual(['Ancient Guardian']);
     expect(stepFightNames(retiredStep('S4-03')!)).toEqual([]);
   });
 });

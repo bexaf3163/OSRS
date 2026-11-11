@@ -120,16 +120,16 @@
       "changed": ["2.86.0: Delrith is a threat of the step, estimated with Silverlight's doubled damage after the three dark wizards (fightMechanics.json, combatFoes.json); the Trout is a required item of the fight loadout, taken after the bones."]
     },
     {
-      "stepId": "S3-04", "kind": "quest-fight", "mandatory": true, "method": "other",
+      "stepId": "S3-04", "kind": "quest-fight", "mandatory": true, "method": "melee",
       "objective": "Beat the Ancient Guardian (25, 40 hit points, hits up to 7) by mining the four Structural pillars while it keeps attacking.",
       "enemies": [{ "name": "Ancient Guardian", "level": 25, "maxHit": 7, "table": true }],
-      "lines": [],
-      "assumptions": ["Mining 10 and any pickaxe; eat before each pillar. A melee estimate would mislead, so none is shown."],
-      "problems": ["The 10 to 15 Trout or Salmon the step asks for were only recommended, and there is no bank before the fight.", "The step did not name the Guardian, so the method line never showed."],
-      "alternatives": ["Fallback in the route: lure it to the east side and safespot it from the entrance passage with Ranged or Magic."],
+      "lines": ["4.4"],
+      "assumptions": ["The Wiki says it can be defeated in standard combat or by mining the four pillars. The pillars' mining time is not on the Wiki, so only the melee fight is estimated; the pillars stay the route's other way."],
+      "problems": ["The 10 to 15 Trout or Salmon the step asks for were only recommended, and there is no bank before the fight.", "The step did not name the Guardian, so the method line never showed.", "With no estimate the planner stopped at \"Review the combat strategy\" for every account."],
+      "alternatives": ["Mine the four Structural pillars (Mining 10, any pickaxe) while it keeps attacking.", "Fallback in the route: lure it to the east side and safespot it from the entrance passage with Ranged or Magic."],
       "decision": "revise",
-      "changed": ["2.66.0: Trout ×10 (or better food) is a required item; the Guardian is the step's threat, which shows the pillar method in the food card."],
-      "evidence": ["Step fields \"Combat\", \"Recommended method\", \"Bring\", \"Fallback: safespot\"; combatFoes.json (Ancient Guardian, golem)."]
+      "changed": ["2.66.0: Trout ×10 (or better food) is a required item; the Guardian is the step's threat, which shows the pillar method in the food card.", "2.87.0: the melee fight is estimated and prepared like the other quest fights; the pillars are the other way in the route text."],
+      "evidence": ["Step fields \"Combat\", \"Two ways\", \"Bring\", \"Fallback: safespot\"; combatFoes.json (Ancient Guardian, golem); OSRS Wiki Ancient Guardian and Structural pillar (no mining time), read 2026-11-11."]
     },
     {
       "stepId": "S3-05", "kind": "incidental", "mandatory": true, "method": "melee",
@@ -171,12 +171,13 @@
       "objective": "Melzar's Maze: the marked rat, ghost, skeleton and zombie, Melzar the Mad (43, hits up to 5) in melee, the lesser demon from the safespot.",
       "enemies": [{ "name": "Melzar the Mad", "level": 43, "maxHit": 5, "table": true }, { "name": "Lesser demon", "level": 82, "table": true }],
       "lines": ["0.1", "1.0", "2.0", "3.0"],
-      "assumptions": ["The demon is fought with Water Strike from the safespot, where it cannot reach you: no melee estimate is shown for it."],
-      "problems": [],
+      "assumptions": ["The demon is fought with Water Strike from the safespot, where it cannot reach you: its estimate is the casts at your Magic level and worn magic bonus, with its 40% water weakness (Wiki), and the 50 casts of runes the step carries."],
+      "problems": ["The demon had no estimate, so the planner ended Dragon Slayer in \"Review the combat strategy\"."],
       "alternatives": [],
-      "decision": "retain",
-      "evidence": ["Step fields; Salmon ×10 required; combatFoes.json; danger zone for the demon."],
-      "zones": ["melzar-lesser-demon"]
+      "decision": "revise",
+      "evidence": ["Step fields; Salmon ×10 and 50 Water, Air and Mind runes required; combatFoes.json (elemental weakness from the infobox); danger zone for the demon."],
+      "zones": ["melzar-lesser-demon"],
+      "changed": ["2.87.0: the safespot fight is estimated (fightMechanics.json safespot); Magic 5 for Water Strike is a during-quest requirement."]
     },
     {
       "stepId": "S5-08", "kind": "quest-fight", "mandatory": true, "method": "melee",

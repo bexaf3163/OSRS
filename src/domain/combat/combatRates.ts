@@ -13,13 +13,12 @@ import { matchStrict } from '../travel/locations';
 // guesses: an unknown level,
 // unread worn items, a weapon or bow the data does not know, an opponent without data, or a fight that is not safe - no rate, and the wiki's stays.
 
-import { spellsJson } from '../../data';
-import { attacksToKill, combatMargin, combatRecovery, counterDamage, estimateCombat, foeVariants, hitChance, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
+import { attacksToKill, combatMargin, combatRecovery, counterDamage, estimateCombat, foeVariants, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
 import { spotsOf, termsFor, TRAINER_LEVELS } from './spots';
 import { coinsPerMinute, dropValue, lootSecondsPerKill } from '../market/lootValue';
 import { ARROW_BREAK, goalArrows, methodFoe, rangedKitOf, rangedHit, RANGED_GEAR, trainingRangedStyle } from './rangedAmmo';
 import { rangedEquipment, rangedNeeds } from './rangedLoadout';
-import { STAFFS, strikeRecipe } from './magicPlan';
+import { spellHit, STAFFS, strikeRecipe } from './magicPlan';
 import { FOODS } from '../../data/threats';
 import { mergeGoalNeeds } from '../items/consumption';
 import { heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from '../player/playerState';
@@ -42,8 +41,6 @@ const ARROW_PICKUP = 1.2;
 const SPELL_TICKS = 5;
 /** Levels ahead the melee estimate is made for: long enough to average the rolls, short enough to stay "now". */
 const MELEE_LEVELS = 3;
-
-const MAX_HIT = (spellsJson as unknown as { maxHit: Record<'strike' | 'bolt' | 'blast', [number, number][]> }).maxHit;
 
 const MELEE = new Set(['attack', 'strength', 'defence']);
 
@@ -356,12 +353,11 @@ function magicKitRate(m: TrainingMethod, state: PlayerState, prices: PriceView |
     if (piece) equipment[piece.slot] = piece.name;
   }
   if (equipment.weapon && !gearPieceByName(equipment.weapon)) return null;
-  const tier = spell.id.slice(spell.id.lastIndexOf('-') + 1) as keyof typeof MAX_HIT;
-  const maxHit = [...(MAX_HIT[tier] ?? [])].reverse().find(([from]) => from <= level)?.[1];
-  if (!maxHit) return null;
   // The magic attack bonus of what is worn; an item the gear data does not know counts as 0.
   const bonus = Object.values(equipment).reduce((a, n) => a + (gearPieceByName(n)?.attack.magic ?? 0), 0);
-  const chance = hitChance(Math.max(0, (level + 8) * (bonus + 64)), (foe.magicLevel + 9) * (foe.defence.magic + 64));
+  const hit = spellHit(spell, level, bonus, foe);
+  if (!hit) return null;
+  const { maxHit, chance } = hit;
   const casts = attacksToKill(foe.hitpoints, maxHit, chance, false).mean;
   if (!Number.isFinite(casts)) return null;
   // Base XP for every cast, a splash too, and 2 per point of damage: a kill is its hit points of damage.

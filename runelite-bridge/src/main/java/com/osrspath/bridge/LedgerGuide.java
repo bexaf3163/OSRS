@@ -97,13 +97,12 @@ final class LedgerGuide
 		int ring = ring(scale), x0 = PAD + ring + 12, y = TOP;
 
 		// The NOW stamp sits right of the headline, or under the ring when the plaque is too narrow, so the headline keeps its width and the
-		// closed plaque gets no taller. The route's internal step code (S0-22) means nothing in the game and is not drawn.
-		String code = "";
-		int codeW = LedgerFont.advance(g, code, label) + 8 + stamp(g, label), labelH = Math.round(14 * scale);
+		// closed plaque gets no taller. The route's internal step code (S0-22) means nothing in the game: the plaque carries the stamp alone.
+		int codeW = stamp(g, label), labelH = Math.round(14 * scale);
 		boolean under = width - x0 - codeW - 38 < Math.round(150 * scale);
 		int headW = width - x0 - (under ? 30 : codeW + 38);
-		Rectangle at = under ? new Rectangle(PAD, TOP + ring + 6, x0 - PAD - 6, 2 * labelH + 4) : new Rectangle(width - 34 - codeW, y + 1, codeW, labelH);
-		rows.add(new Row(Part.LABEL, at, at.x, Collections.singletonList(code), null, label, GOLD, HudModel.Icon.NONE, null, GuideList.Action.NONE, null));
+		Rectangle at = under ? new Rectangle(PAD, TOP + ring + 6, x0 - PAD - 6, labelH) : new Rectangle(width - 34 - codeW, y + 1, codeW, labelH);
+		rows.add(new Row(Part.LABEL, at, at.x, Collections.singletonList("NOW"), null, label, GOLD, HudModel.Icon.NONE, null, GuideList.Action.NONE, null));
 		List<String> wrapped = OverlayText.wrap(c.getHeadline(), tm, headW);
 		List<String> headline = OsrsPathGuideOverlay.clip(wrapped, OsrsPathGuideOverlay.HEAD_LINES, tm, headW);
 		rows.add(new Row(Part.TITLE, new Rectangle(x0, y, headW, headline.size() * tm.getHeight()), x0, headline, null, title, GOLD_LIGHT,
@@ -372,12 +371,9 @@ final class LedgerGuide
 			case LABEL:
 			{
 				Font f = r.getFont();
-				String code = r.getTexts().get(0);
-				int cw = LedgerFont.advance(g, code, f), sw = LedgerFont.advance(g, "NOW", f) + 12, sh = Math.round(14 * scale);
-				// Stacked under the ring when the row is too narrow for the code and the stamp side by side.
-				boolean stacked = b.width < cw + 8 + sw;
-				int cx = stacked ? b.x + (b.width - cw) / 2 : b.x, sx = stacked ? b.x + (b.width - sw) / 2 : b.x + cw + 8, sy = stacked ? b.y + sh + 4 : b.y;
-				LedgerFont.draw(g, code, f, GOLD, cx, b.y + Math.round(10 * scale));
+				int sw = LedgerFont.advance(g, "NOW", f) + 12, sh = Math.round(14 * scale);
+				// Under the ring the stamp is centred on it; beside the headline it starts at its row.
+				int sx = b.width > sw ? b.x + (b.width - sw) / 2 : b.x, sy = b.y;
 				g.setColor(EMBER);
 				g.fillRect(sx, sy, sw, sh);
 				g.setColor(new Color(255, 230, 200, 60));

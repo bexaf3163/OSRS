@@ -63,12 +63,17 @@ final class LedgerFont
 
 	static int advance(Graphics2D g, String s, Font f)
 	{
-		return (int) Math.ceil(new TextLayout(s, f, g.getFontRenderContext()).getAdvance());
+		// TextLayout rejects an empty string: an empty label takes no room.
+		return s.isEmpty() ? 0 : (int) Math.ceil(new TextLayout(s, f, g.getFontRenderContext()).getAdvance());
 	}
 
-	/** Draws a label (TextLayout keeps the letter spacing); returns its width. */
+	/** Draws a label (TextLayout keeps the letter spacing); returns its width. An empty label draws nothing. */
 	static int draw(Graphics2D g, String s, Font f, Color c, float x, float baseline)
 	{
+		if (s.isEmpty())
+		{
+			return 0;
+		}
 		TextLayout t = new TextLayout(s, f, g.getFontRenderContext());
 		g.setColor(c);
 		t.draw(g, x, baseline);

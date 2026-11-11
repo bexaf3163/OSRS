@@ -92,7 +92,11 @@
       "attackStyle": "crush",
       "maxHit": 3,
       "speedTicks": 4,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "earth",
+        "percent": 35
+      }
     },
     {
       "name": "Delrith",
@@ -184,7 +188,11 @@
       "maxHit": 3,
       "speedTicks": 5,
       "aggressive": true,
-      "xpBonus": 100
+      "xpBonus": 100,
+      "weakness": {
+        "element": "earth",
+        "percent": 25
+      }
     },
     {
       "name": "Brutus",
@@ -208,7 +216,11 @@
       "maxHit": 3,
       "speedTicks": 5,
       "aggressive": true,
-      "xpBonus": 100
+      "xpBonus": 100,
+      "weakness": {
+        "element": "earth",
+        "percent": 25
+      }
     },
     {
       "name": "Melzar the Mad",
@@ -253,7 +265,11 @@
       "attackStyle": "slash",
       "maxHit": 8,
       "speedTicks": 4,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "water",
+        "percent": 40
+      }
     },
     {
       "name": "Lesser demon",
@@ -276,7 +292,11 @@
       "attackStyle": "slash",
       "maxHit": 8,
       "speedTicks": 4,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "water",
+        "percent": 40
+      }
     },
     {
       "name": "Lesser demon",
@@ -299,7 +319,11 @@
       "attackStyle": "slash",
       "maxHit": 8,
       "speedTicks": 4,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "water",
+        "percent": 40
+      }
     },
     {
       "name": "Lesser demon",
@@ -322,7 +346,11 @@
       "attackStyle": "slash",
       "maxHit": 9,
       "speedTicks": 4,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "water",
+        "percent": 40
+      }
     },
     {
       "name": "Elvarg",
@@ -344,7 +372,11 @@
       "attackStyle": "slash",
       "maxHit": 8,
       "speedTicks": 4,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "water",
+        "percent": 30
+      }
     },
     {
       "name": "Temple Guardian",
@@ -388,7 +420,11 @@
       "attackStyle": "slash",
       "maxHit": 3,
       "speedTicks": 4,
-      "aggressive": false
+      "aggressive": false,
+      "weakness": {
+        "element": "air",
+        "percent": 25
+      }
     },
     {
       "name": "Cow",
@@ -503,7 +539,11 @@
       "attackStyle": "crush",
       "maxHit": 0,
       "speedTicks": 4,
-      "aggressive": false
+      "aggressive": false,
+      "weakness": {
+        "element": "air",
+        "percent": 20
+      }
     },
     {
       "name": "Seagull",
@@ -526,7 +566,11 @@
       "attackStyle": "crush",
       "maxHit": 0,
       "speedTicks": 4,
-      "aggressive": false
+      "aggressive": false,
+      "weakness": {
+        "element": "air",
+        "percent": 20
+      }
     },
     {
       "name": "Monk",
@@ -732,7 +776,11 @@
       "attackStyle": "crush",
       "maxHit": 2,
       "speedTicks": 4,
-      "aggressive": false
+      "aggressive": false,
+      "weakness": {
+        "element": "earth",
+        "percent": 25
+      }
     },
     {
       "name": "Giant frog",
@@ -755,7 +803,11 @@
       "attackStyle": "crush",
       "maxHit": 9,
       "speedTicks": 4,
-      "aggressive": false
+      "aggressive": false,
+      "weakness": {
+        "element": "earth",
+        "percent": 25
+      }
     },
     {
       "name": "Flesh Crawler",
@@ -778,7 +830,11 @@
       "attackStyle": "slash",
       "maxHit": 1,
       "speedTicks": 3,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 20
+      }
     },
     {
       "name": "Flesh Crawler",
@@ -801,7 +857,11 @@
       "attackStyle": "slash",
       "maxHit": 1,
       "speedTicks": 3,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 20
+      }
     },
     {
       "name": "Flesh Crawler",
@@ -824,7 +884,11 @@
       "attackStyle": "slash",
       "maxHit": 1,
       "speedTicks": 3,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 20
+      }
     },
     {
       "name": "Moss giant",
@@ -847,7 +911,11 @@
       "attackStyle": "crush",
       "maxHit": 6,
       "speedTicks": 6,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 50
+      }
     },
     {
       "name": "Moss giant",
@@ -870,7 +938,11 @@
       "attackStyle": "crush",
       "maxHit": 6,
       "speedTicks": 6,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 50
+      }
     },
     {
       "name": "Moss giant",
@@ -893,7 +965,11 @@
       "attackStyle": "crush",
       "maxHit": 6,
       "speedTicks": 6,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 50
+      }
     },
     {
       "name": "Al Kharid warrior",
@@ -984,7 +1060,11 @@
       "attackStyle": "crush",
       "maxHit": 4,
       "speedTicks": 6,
-      "aggressive": true
+      "aggressive": true,
+      "weakness": {
+        "element": "earth",
+        "percent": 25
+      }
     },
     {
       "name": "Dark wizard",

@@ -6,7 +6,7 @@ import type { CombatPlanView } from '../combat/combatPlan';
 import { ownedFood } from '../combat/combatPlan';
 import { combatReadiness } from '../combat/combatReadiness';
 import { COMBAT_FOES, foeLabel, healsOf } from '../combat/combatEstimate';
-import { estimateStepFights, fightLine, OTHER_METHOD, stepFightFoes, stepFightNames } from '../combat/fightEstimate';
+import { estimateStepFights, fightLine, stepFightFoes, stepFightNames } from '../combat/fightEstimate';
 import { BAG_SLOTS } from '../prep/prepPlan';
 import { equippedBySlot, gearData } from '../combat/gearAdvisor';
 import { readinessVerdict } from './readinessVerdict';
@@ -31,8 +31,7 @@ export function assessStepReadiness(input: {
   const carriedFood = ownedFood(step, owned)?.carriedEq ?? null;
   const assessed = new Set(fights.map(fight => fight.name));
   const allFoes = [...new Set([...(step.foes ?? []), ...(step.threats ?? [])])];
-  const gaps = [...estimates.filter(fight => fight.unmodelled.length).map(fight => ({ name: fight.foe.name, reason: fight.unmodelled.join('; ') })),
-    ...allFoes.filter(name => OTHER_METHOD[name]).map(name => ({ name, reason: OTHER_METHOD[name] }))];
+  const gaps = estimates.filter(fight => fight.unmodelled.length).map(fight => ({ name: fight.foe.name, reason: fight.unmodelled.join('; ') }));
   const unassessedFights = [...new Set([...fightNames.filter(foe => !assessed.has(foe.name)).map(foe => foe.name),
     ...gaps.map(gap => gap.name), ...(step.pacing && !view ? allFoes : [])])];
   return { verdict: readinessVerdict({ plan, connected, owned, isFood, combat, worn, fights, fightNames, carriedFood, fightGaps: gaps }), combat, unassessedFights };

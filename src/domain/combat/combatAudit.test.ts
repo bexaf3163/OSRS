@@ -7,7 +7,8 @@ import { combatAuditJson as ledgerJson, questStagesJson as questStages, dangerZo
 import { allSteps } from '../../data';
 import { auditMarkdown, detectCombatStages, preparedFor, type AuditLedger } from './combatAudit';
 import { COMBAT_FOES } from './combatEstimate';
-import { OTHER_METHOD, stepFightFoes } from './fightEstimate';
+import { estimateStepFights, stepFightFoes } from './fightEstimate';
+import { FIGHT_MECHANICS } from '../../data/fightMechanics';
 import type { Step } from '../../types';
 import { stepOrRetired } from '../../../tests/fixtures/retiredSteps';
 
@@ -65,10 +66,20 @@ describe('what the entries say about the app is true', () => {
     }
   });
 
-  it('a fight the route does another way (pillars, safespot spell) gets no melee estimate', () => {
+  it('a fight the route does from a safespot is estimated with its spell, never in melee, and takes no damage', () => {
+    const stats = { attack: 40, strength: 40, defence: 40, hitpoints: 40, magic: 30 };
+    const gear = { equipment: [], inventory: [], coins: 0, bankCoins: 0 };
+    let checked = 0;
     for (const e of ledger.stages) {
-      for (const f of stepFightFoes(step(e.stepId))) expect(OTHER_METHOD[f.name], `${e.stepId} ${f.name}`).toBeUndefined();
+      const fights = estimateStepFights(step(e.stepId), stats, gear);
+      for (const f of stepFightFoes(step(e.stepId)).filter((foe) => FIGHT_MECHANICS[foe.name]?.safespot)) {
+        const fight = fights.find((x) => x.foe.name === f.name);
+        expect(fight?.spell, `${e.stepId} ${f.name}`).toBe(FIGHT_MECHANICS[f.name].safespot!.spell);
+        expect(fight?.damage.high, `${e.stepId} ${f.name}`).toBe(0);
+        checked++;
+      }
     }
+    expect(checked).toBeGreaterThan(0);
   });
 });
 

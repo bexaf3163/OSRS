@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-24 stages: 7 retained, 15 revised, 0 with a branch, 2 deferred.
+24 stages: 6 retained, 16 revised, 0 with a branch, 2 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -18,11 +18,11 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S2-11 Ernest the Chicken | incidental | yes | Skeleton (22) | melee | Skeleton | - | Retain |
 | S3-02 Black Knights' Fortress | avoid | yes | Black Knight (33) | run | - | Trout 5 | Revised |
 | S3-03 Demon Slayer | quest-fight | yes | Delrith (27), Dark wizard (20) | melee | Delrith | Trout 5 | Revised |
-| S3-04 Below Ice Mountain | quest-fight | yes | Ancient Guardian (25) | other | - | Trout 10 | Revised |
+| S3-04 Below Ice Mountain | quest-fight | yes | Ancient Guardian (25) | melee | Ancient Guardian | Trout 10 | Revised |
 | S3-05 Shield of Arrav | incidental | yes | Jonny the Beard (2), Weaponsmaster (23) | melee | - | - | Retain |
 | S4-01 The Corsair Curse | quest-fight | yes | Ithoi the Navigator (35) | melee | Ithoi the Navigator | Salmon 10 | Revised |
 | S4-02 The Ides of Milk | quest-fight | yes | Brutus (30) | melee | Brutus | Trout 5 | Revised |
-| S5-03 Map piece 1: Melzar's Maze | quest-fight | yes | Melzar the Mad (43), Lesser demon (82) | melee | Melzar the Mad | Salmon 10 | Retain |
+| S5-03 Map piece 1: Melzar's Maze | quest-fight | yes | Melzar the Mad (43), Lesser demon (82) | melee | Melzar the Mad, Lesser demon | Salmon 10 | Revised |
 | S5-08 The battle with the dragon Elvarg | quest-fight | yes | Elvarg (83) | melee | Elvarg | Lobster 20+ | Revised |
 | S7-02 Fight Arena | quest-fight | yes | Khazard Ogre (63), Khazard scorpion (44), Bouncer (137) | safespot | - | Lobster 10 | Revised |
 | S7-03 Tree Gnome Village | quest-fight | yes | Khazard warlord (112) | safespot | - | Lobster 10 | Revised |
@@ -254,26 +254,31 @@ In-game danger zones: dark-wizards-varrock.
 
 **Revised.** Beat the Ancient Guardian (25, 40 hit points, hits up to 7) by mining the four Structural pillars while it keeps attacking.
 
+Quest stage lines: 4.4.
+
 Assumptions:
 
-- Mining 10 and any pickaxe; eat before each pillar. A melee estimate would mislead, so none is shown.
+- The Wiki says it can be defeated in standard combat or by mining the four pillars. The pillars' mining time is not on the Wiki, so only the melee fight is estimated; the pillars stay the route's other way.
 
 Problems:
 
 - The 10 to 15 Trout or Salmon the step asks for were only recommended, and there is no bank before the fight.
 - The step did not name the Guardian, so the method line never showed.
+- With no estimate the planner stopped at "Review the combat strategy" for every account.
 
 Alternatives:
 
+- Mine the four Structural pillars (Mining 10, any pickaxe) while it keeps attacking.
 - Fallback in the route: lure it to the east side and safespot it from the entrance passage with Ranged or Magic.
 
 Changed:
 
 - 2.66.0: Trout ×10 (or better food) is a required item; the Guardian is the step's threat, which shows the pillar method in the food card.
+- 2.87.0: the melee fight is estimated and prepared like the other quest fights; the pillars are the other way in the route text.
 
 Evidence:
 
-- Step fields "Combat", "Recommended method", "Bring", "Fallback: safespot"; combatFoes.json (Ancient Guardian, golem).
+- Step fields "Combat", "Two ways", "Bring", "Fallback: safespot"; combatFoes.json (Ancient Guardian, golem); OSRS Wiki Ancient Guardian and Structural pillar (no mining time), read 2026-11-11.
 
 ## S3-05 Shield of Arrav
 
@@ -341,17 +346,25 @@ Evidence:
 
 ## S5-03 Map piece 1: Melzar's Maze
 
-**Retain.** Melzar's Maze: the marked rat, ghost, skeleton and zombie, Melzar the Mad (43, hits up to 5) in melee, the lesser demon from the safespot.
+**Revised.** Melzar's Maze: the marked rat, ghost, skeleton and zombie, Melzar the Mad (43, hits up to 5) in melee, the lesser demon from the safespot.
 
 Quest stage lines: 0.1, 1.0, 2.0, 3.0.
 
 Assumptions:
 
-- The demon is fought with Water Strike from the safespot, where it cannot reach you: no melee estimate is shown for it.
+- The demon is fought with Water Strike from the safespot, where it cannot reach you: its estimate is the casts at your Magic level and worn magic bonus, with its 40% water weakness (Wiki), and the 50 casts of runes the step carries.
+
+Problems:
+
+- The demon had no estimate, so the planner ended Dragon Slayer in "Review the combat strategy".
+
+Changed:
+
+- 2.87.0: the safespot fight is estimated (fightMechanics.json safespot); Magic 5 for Water Strike is a during-quest requirement.
 
 Evidence:
 
-- Step fields; Salmon ×10 required; combatFoes.json; danger zone for the demon.
+- Step fields; Salmon ×10 and 50 Water, Air and Mind runes required; combatFoes.json (elemental weakness from the infobox); danger zone for the demon.
 
 In-game danger zones: melzar-lesser-demon.
 

@@ -17,6 +17,8 @@ export interface FightMechanics {
   specials?: { label: string; afterAttacks: number; hitpointsShare: number; maxHit: number }[];
   /** Other attacks with no known share: always lands, rolls 0..maxHit; unprotected applies without the named protection worn. */
   attacks?: { label: string; maxHit: number; protection?: string; unprotected?: number }[];
+  /** The route fights it from a spot it cannot reach, with this spell: no damage taken, the casts its runes pay for. */
+  safespot?: { spell: string };
   facts: string[];
 }
 

@@ -2305,7 +2305,7 @@
         "Structural pillar"
       ]
     },
-    "warning": "The last fight: the Ancient Guardian keeps attacking while you mine its pillars. Bring a pickaxe and 10-15 Trout or Salmon, check Mining 10, and eat before each pillar. The details are in the lines below.",
+    "warning": "The last fight: the Ancient Guardian (level 25, hits up to 7). Fight it in melee with the food the plan gives, or mine its four Structural pillars while it keeps attacking. The details are in the lines below.",
     "requirements": [
       {
         "type": "skill",
@@ -2325,8 +2325,8 @@
         "text": "The final room: the Ancient Guardian (level 25) has 40 hit points, hits up to 7 and attacks about every 3 seconds. It does not stop while you mine. Eat before you start the next pillar; do not wait until you are almost dead."
       },
       {
-        "label": "Recommended method",
-        "text": "Mine the four Structural pillars in the corners of the room with the Mine option. Each one breaks and hurts the Guardian. You need Mining 10 and any pickaxe, and these are objects of the room, not ore rocks."
+        "label": "Two ways",
+        "text": "Fight it in melee: the plan's estimate gives the time, the damage and the food for your levels and kit. Or mine the four Structural pillars in the corners of the room with the Mine option: each one breaks and hurts the Guardian, and all four defeat it. The pillars need Mining 10 and any pickaxe, and they are objects of the room, not ore rocks."
       },
       {
         "label": "Bring",
@@ -2338,7 +2338,7 @@
       },
       {
         "label": "Fallback: safespot",
-        "text": "If the Guardian hurts you faster than you can mine, lure it to the east side of the chamber and retreat into the entrance passage: it gets stuck on the corner. Then attack it with Ranged or Magic. Direct melee works at any level but is the riskiest choice for the account this route produces."
+        "text": "If the Guardian hurts you faster than you can mine, lure it to the east side of the chamber and retreat into the entrance passage: it gets stuck on the corner. Then attack it with Ranged or Magic."
       }
     ],
     "threats": [
@@ -2812,6 +2812,10 @@
     "imageCaption": "The map of the rooms and coloured doors of Melzar's Maze",
     "fields": [
       {
+        "label": "Requirements",
+        "text": "Magic 5 for Water Strike on the Lesser demon from the safespot; you can start the quest without it."
+      },
+      {
         "label": "Enemies by room",
         "text": "Zombie rat (red key), ghost (orange), skeleton (yellow), zombie (blue), Melzar the Mad, level 43 (purple), Lesser demon, level 82 (green key)."
       },
@@ -2825,6 +2829,14 @@
       }
     ],
     "safespot": "Cast at the Lesser demon from the spot one square east of the magenta (purple) door: it cannot reach you there, so melee does not work.",
+    "requirements": [
+      {
+        "type": "skill",
+        "skill": "magic",
+        "min": 5,
+        "when": "during"
+      }
+    ],
     "doneWhen": "Melzar's map piece (item 1535) is taken from the chest, or the pieces are already joined into the Crandor map.",
     "inGame": {
       "highlightItems": [

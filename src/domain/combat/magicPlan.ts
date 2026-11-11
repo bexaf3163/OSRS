@@ -9,6 +9,7 @@ import type { MethodNeed } from '../training/trainingRouter';
 import { STYLE_GEAR, usableStyleOption } from './styleGear';
 import { gearPieceByName } from './gearAdvisor';
 import type { GearPiece } from '../../types';
+import { hitChance, type CombatFoe } from './combatEstimate';
 
 export interface Spell { id: string; name: string; level: number; xp: number; runes: Record<string, number>; element: string }
 export interface Staff { name: string; id: number }
@@ -19,6 +20,18 @@ export const isCombatSpell = (s: Spell): boolean => /-(strike|bolt|blast)$/.test
 export const RUNE_IDS = spellsJson.runeIds as Record<string, number>;
 export const STAFFS = spellsJson.staffs as Record<string, Staff>;
 export const COWHIDE_ID = spellsJson.cowhideId;
+const TIERS = (spellsJson as unknown as { maxHit: Record<string, [number, number][]> }).maxHit;
+
+/** One cast against an opponent: the max hit of the spell's tier at this Magic level (every spell of a tier hits as hard as the highest one
+ * the level unlocks, spells.json), accuracy from the worn magic attack bonus against its magic level and defence, and its elemental
+ * weakness (OSRS Wiki Elemental weakness: that many percent more accuracy, and that share of the base max hit added). Null below the spell. */
+export function spellHit(spell: Spell, level: number, bonus: number, foe: CombatFoe): { maxHit: number; chance: number } | null {
+  const base = [...(TIERS[spell.id.slice(spell.id.lastIndexOf('-') + 1)] ?? [])].reverse().find(([from]) => from <= level)?.[1];
+  if (!base || level < spell.level) return null;
+  const weak = foe.weakness?.element === spell.element ? foe.weakness.percent : 0;
+  const roll = Math.floor(Math.max(0, (level + 8) * (bonus + 64)) * (100 + weak) / 100);
+  return { maxHit: base + Math.floor((base * weak) / 100), chance: hitChance(roll, (foe.magicLevel + 9) * (foe.defence.magic + 64)) };
+}
 
 export const SUPERHEAT_WATCH = ['Nature rune', 'Fire rune', 'Iron ore', STAFFS.fire.name];
 export const STRIKE_WATCH = [...new Set(['Mind rune', 'Air rune', 'Water rune', 'Earth rune', 'Fire rune', ...Object.values(STAFFS).map(s => s.name), 'Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish',

@@ -47,6 +47,8 @@ export interface CombatFoe {
   aggressive: boolean;
   /** The wiki's experience bonus in percent: Brutus +100 (twice the XP for each point of damage). */
   xpBonus?: number;
+  /** Elemental weakness (OSRS Wiki): a spell of this element gets this many percent more accuracy and this share of its base max hit added. */
+  weakness?: { element: string; percent: number };
 }
 
 /** Combat XP of one kill in the trained skill: 4 per point of damage, with the opponent's own bonus. */

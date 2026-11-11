@@ -6776,7 +6776,7 @@
       "Before you go in: take a pickaxe (any) and 10-15 Trout or Salmon, and check Mining is 10 or more. There is no bank inside.",
       "Enter the dungeon again to finish the quest.",
       "In the final room do not wait for the Ancient Guardian to leave you alone: it keeps attacking while you mine.",
-      "Mine a Structural pillar in one of the four corners (the Mine option). The pillar breaks and hurts the Guardian.",
+      "Fight it in melee, or mine a Structural pillar in one of the four corners (the Mine option): the pillar breaks and hurts the Guardian.",
       "Eat when you need to (not later than when your health is within two hits of 7), then move straight to the next Structural pillar.",
       "Repeat until the Ancient Guardian is defeated. If it hurts you faster than you mine, use the safespot: lure it to the east side and retreat into the entrance passage.",
       "Watch the cutscene at the entrance to finish the quest. Dialogue: “Yes”."
@@ -7143,8 +7143,8 @@
      "at": 35,
      "do": [
       {
-       "t": "Ancient Guardian (level 25, hits up to 7). Recommended: with Mining 10 and a pickaxe, mine the four Structural pillars (corners, not ore rocks); eat before each. Fallback: lure it to the east side, then Ranged or Magic.",
-       "s": "Defeat the Ancient Guardian: recommended, mine 4 Structural pillars",
+       "t": "Ancient Guardian (level 25, hits up to 7). Fight it in melee, or mine the four Structural pillars (corners, not ore rocks; Mining 10, a pickaxe). Fallback: lure it to the east side, then Ranged or Magic.",
+       "s": "Defeat the Ancient Guardian: melee, or mine 4 Structural pillars",
        "hl": {
         "npc": [
          10654

@@ -61,6 +61,9 @@ export interface CombatFoe {
   aggressive: boolean;
   /** The infobox's experience bonus in percent (Brutus: +100, each point of damage gives twice the combat XP); absent when there is none. */
   xpBonus?: number;
+  /** Elemental weakness (OSRS Wiki Elemental weakness): a strike, bolt or blast of this element gets this many percent more magic accuracy and
+   * this share of its base max hit added. Absent when the infobox has none. */
+  weakness?: { element: string; percent: number };
 }
 
 const foes: CombatFoe[] = [];
@@ -85,6 +88,7 @@ for (const page of PAGES) {
     // Since the 2024 split the infobox gives dlight/dstandard/dheavy; older articles still have one drange.
     const ranged = num(at('dstandard', i)) ?? num(at('drange', i));
     const xpBonus = num(at('xpbonus', i));
+    const element = plain(at('elementalweaknesstype', i)).toLowerCase(), percent = num(at('elementalweaknesspercent', i));
     const foe: CombatFoe = {
       name: page, ...(version ? { version } : {}), combat: row.combat!, members, hitpoints: row.hitpoints!,
       attackLevel: row.attackLevel!, strengthLevel: row.strengthLevel!, defenceLevel: row.defenceLevel!, magicLevel: row.magicLevel!, attackBonus: row.attackBonus!,
@@ -92,6 +96,7 @@ for (const page of PAGES) {
       attackStyle: plain(at('attack style', i)).toLowerCase().split(/[,\s]+/)[0], maxHit: row.maxHit!, speedTicks: row.speedTicks!,
       aggressive: /yes/i.test(at('aggressive', i) ?? ''),
       ...(xpBonus ? { xpBonus } : {}),
+      ...(element && percent ? { weakness: { element, percent } } : {}),
     };
     // Versions that differ only by where they stand ("1", "2"... of the Hill Giant) carry the same numbers: the first is kept.
     const same = (a: CombatFoe) => JSON.stringify({ ...a, version: undefined }) === JSON.stringify({ ...foe, version: undefined });

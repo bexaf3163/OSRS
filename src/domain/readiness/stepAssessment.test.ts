@@ -24,14 +24,24 @@ function assess(name: string, worn: GearState = gear, levels: Partial<typeof sta
 }
 
 describe('shared combat capability boundaries', () => {
-  it('does not certify regeneration, unmodelled attacks, alternate strategies or an unknown foe from ordinary kit checks', () => {
+  it('does not certify regeneration, unmodelled attacks or an unknown foe from ordinary kit checks', () => {
     // Count Draynor here is a step without the stake and hammer his killing blow needs: that is not his modelled fight.
-    for (const name of ['Count Draynor', 'Lesser demon', 'Ancient Guardian', 'Synthetic new monster']) {
+    for (const name of ['Count Draynor', 'Synthetic new monster']) {
       const result = assess(name);
       expect(result.unassessedFights, name).toContain(name);
       expect(result.verdict.level, name).toBe('UNKNOWN');
       expect(result.verdict.reasons.some(reason => reason.group === 'unknown' && reason.text.includes(name)), name).toBe(true);
     }
+  });
+  it('assesses the route\'s other ways from their data: the Lesser demon from the safespot, the Ancient Guardian in melee', () => {
+    for (const name of ['Lesser demon', 'Ancient Guardian']) {
+      const result = assess(name);
+      expect(result.unassessedFights, name).toEqual([]);
+      expect(result.verdict.level, name).not.toBe('UNKNOWN');
+    }
+    // The safespot fight is the spell's casts: with Magic unread it stays unknown.
+    const { magic: _magic, ...unreadMagic } = stats;
+    expect(assess('Lesser demon', gear, unreadMagic).unassessedFights).toEqual(['Lesser demon']);
   });
   it('assesses a fight whose mechanics are in the data: Elvarg behind the Anti-dragon shield, never without it', () => {
     const shielded = { ...gear, equipment: [...gear.equipment.filter(item => item.slot !== 'shield'), { id: 1540, name: 'Anti-dragon shield', slot: 'shield' }] };

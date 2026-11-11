@@ -5,7 +5,7 @@ import { useBridge } from '../../../state/bridge';
 import { useStore } from '../../../state/store';
 import { foodInBag, foodsCovering, threatKeys, viewThreat } from '../../../domain/combat/foodAdvice';
 import { effectiveHeal } from '../../../domain/player/foodStock';
-import { estimateStepFights, fightLine, OTHER_METHOD } from '../../../domain/combat/fightEstimate';
+import { estimateStepFights, fightLine } from '../../../domain/combat/fightEstimate';
 import { foeLabel } from '../../../domain/combat/combatEstimate';
 import { CombatPlan, useCombatPlan } from './CombatPlan';
 import { usePriceView } from '../../../state/hooks/usePriceView';
@@ -25,9 +25,8 @@ export function FoodAdvice({ step }: { step: Step }) {
   const bag = foodInBag(gear?.inventory ?? null, mode);
   const covering = foodsCovering(worst, mode, hp, prices);
   const best = bag[0];
-  // One fight with your kit (2.63.0): how long, how much damage, how much food; the fights the route does another way say so.
+  // One fight with your kit (2.63.0): how long, how much damage, how much food; a safespot fight, its casts.
   const fights = estimateStepFights(step, stats as Partial<Record<string, number>> | null, gear);
-  const other = keys.filter((k) => OTHER_METHOD[k]);
 
   return (
     <section className="step-section food-advice" aria-label="Food for combat">
@@ -53,7 +52,6 @@ export function FoodAdvice({ step }: { step: Step }) {
           </details>
         </div>
       )}
-      {other.map((k) => <p key={`o-${k}`} className="small">{k}: {OTHER_METHOD[k]}.</p>)}
       <ul className="small">
         {views.map((v) => (
           <li key={v.key}>

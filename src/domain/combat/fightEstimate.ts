@@ -1,8 +1,8 @@
 // One quest fight with the kit the player has now (combat estimate group 7, 2.63.0): Count Draynor, Ithoi, Brutus, Melzar, the Lesser demon, Elvarg,
 // the Black Knights, the Ancient Guardian. The same rolls as the training estimate (combatEstimate.ts): the player's hits against the opponent's
 // defence, its swings while the fight lasts against the worn armour, and the fight's own mechanics from data (fightMechanics.json). One fight,
-// at the current levels, with the safest melee style (the least damage taken). It is an estimate: the range holds about 9 outcomes in 10,
-// and no kit guarantees survival.
+// at the current levels, with the safest melee style (the least damage taken), or the route's spell from a spot it cannot reach. It is an
+// estimate: the range holds about 9 outcomes in 10, and no kit guarantees survival.
 
 import { stepFood as foodOfStep } from '../player/foodStock';
 import { equippedBySlot, gearData, gearPieceByName, meleeAs, SLOTS, type TrainStyle } from './gearAdvisor';
@@ -12,6 +12,7 @@ import { attackCounts, attacksToKill, COMBAT_FOES, foeLabel, hitChance, spread, 
 import { THREATS } from '../../data/threats';
 import { FIGHT_MECHANICS, PROTECTIONS, type FightMechanics } from '../../data/fightMechanics';
 import { nameKey } from '../items/itemKey';
+import { SPELLS, spellHit, STAFFS } from './magicPlan';
 
 const TICK = 0.6;
 const STYLES: TrainStyle[] = ['accurate', 'aggressive', 'defensive'];
@@ -43,6 +44,9 @@ export interface FightEstimate {
   unmodelled: readonly string[];
   /** Modelled, and these levels and kit cannot win it (his regeneration outpaces the hits): more levels or kit change it. */
   cannot?: string;
+  /** Fought from a safespot with this spell (fightMechanics.json safespot): the casts it takes. */
+  spell?: string;
+  casts?: Range;
 }
 
 export interface FightInput {
@@ -60,6 +64,8 @@ export interface FightInput {
   worn?: readonly string[];
   /** The opponents its mechanics say come first (fightMechanics.json company), from the same table. */
   company?: readonly CombatFoe[];
+  /** Casts of a safespot fight's spell that the step's runes pay for. */
+  casts?: number;
 }
 
 /** Its chance to hit the player: melee against the worn armour's bonus of its type; magic against the player's magic defence. */
@@ -151,7 +157,7 @@ const pieceKey = (p: GearPiece | null) => p?.id ?? '-';
 export function estimateFight(inp: FightInput): FightEstimate | null {
   const mech = FIGHT_MECHANICS[inp.foe.name];
   const key = JSON.stringify([inp.foe, inp.levels, pieceKey(inp.weapon), pieceKey(inp.neck), inp.armour.map(pieceKey), inp.unknownPieces ?? 0, inp.food, inp.currentHp ?? null,
-    mech ? [inp.carried ?? [], inp.worn ?? [], (inp.company ?? []).map(f => [f.name, f.version])] : null]);
+    mech ? [inp.carried ?? [], inp.worn ?? [], (inp.company ?? []).map(f => [f.name, f.version]), inp.casts ?? null] : null]);
   if (estimates.has(key)) return estimates.get(key)!;
   if (estimates.size > 2000) estimates.clear();
   const result = rollFight(inp);
@@ -168,6 +174,7 @@ function rollFight(inp: FightInput): FightEstimate | null {
   if (inp.unknownPieces) assumed.push(`${inp.unknownPieces} worn item${inp.unknownPieces > 1 ? 's' : ''} without data counted as no armour`);
   if (inp.currentHp == null) assumed.push('you start at full health');
   if (mech) assumed.push(...mech.facts);
+  if (mech?.safespot) return fromSafespot(inp, mech.safespot.spell, assumed);
   // Those that come first are fought with the same weapon, without its bonus against the main opponent.
   const first = mech?.weapon ? { ...mech, weapon: mech.weapon, carried: undefined, regenTicks: undefined, specials: undefined, attacks: undefined } : null;
   const parts = [...(inp.company ?? []).map((f) => rolls(f, inp, first, 1)), rolls(foe, inp, mech, mech?.weapon?.damageMultiplier ?? 1)];
@@ -208,20 +215,36 @@ function rollFight(inp: FightInput): FightEstimate | null {
   };
 }
 const NEVER: Range = { low: Infinity, mid: Infinity, high: Infinity };
+const NONE: Range = { low: 0, mid: 0, high: 0 };
+const SPELL_TICKS = 5;
 
-/**
- * Fights the route does not do in melee: a melee estimate would only mislead. The Lesser demon in Melzar's Maze is hit with Water Strike from the
- * safespot (S5-03); the Ancient Guardian is beaten by mining the four pillars (S3-04).
- */
-export const OTHER_METHOD: Readonly<Record<string, string>> = {
-  'Lesser demon': 'the route fights it from the safespot with Water Strike: it cannot reach you there',
-  'Ancient Guardian': 'the route beats it by mining the four Structural pillars; it keeps attacking while you mine, so eat before each one',
-};
+/** From a spot it cannot reach: no damage and no food. The fight is the casts until it dies, at the Magic level and the worn magic attack
+ * bonus; 'cannot' below the spell's level or when the step's runes pay for fewer casts than the estimate's high end. */
+function fromSafespot(inp: FightInput, name: string, assumed: string[]): FightEstimate {
+  const spell = SPELLS.find((s) => s.name === name);
+  const magic = inp.levels.magic;
+  const bonus = [inp.weapon, inp.neck, ...inp.armour].reduce((n, p) => n + (p?.attack.magic ?? 0), 0);
+  const hit = spell && magic !== undefined ? spellHit(spell, magic, bonus, inp.foe) : null;
+  const a = hit ? attacksToKill(inp.foe.hitpoints, hit.maxHit, hit.chance, false) : null;
+  const casts = a && Number.isFinite(a.mean) ? spread(a.mean, a.variance, inp.unknownPieces ? 0.35 : 0.15) : null;
+  const cannot = spell && magic !== undefined && magic < spell.level ? `${spell.name} needs Magic ${spell.level}`
+    : hit && !casts ? `${name} cannot hit it with the magic attack bonus of what you wear (${bonus})`
+    : casts && inp.casts !== undefined && casts.high > inp.casts ? `the step's runes pay for ${inp.casts} casts of ${name}; up to ${Math.ceil(casts.high)} may be needed`
+      : undefined;
+  const unmodelled = [...(!spell ? [`no spell data for ${name}`] : []), ...(magic === undefined ? ['unread Magic level'] : []),
+    ...(inp.unknownPieces ? ['worn equipment without verified combat bonuses'] : [])];
+  const seconds = casts && !cannot ? { low: casts.low * SPELL_TICKS * TICK, mid: casts.mid * SPELL_TICKS * TICK, high: casts.high * SPELL_TICKS * TICK } : NEVER;
+  return {
+    foe: inp.foe, style: 'accurate', seconds, damage: NONE, food: NONE, foodName: inp.food.name, hitChance: hit?.chance ?? 0, maxHit: hit?.maxHit ?? 0,
+    foeHitChance: 0, worstHit: 0, assumed: [...new Set(assumed)], extra: [], unmodelled, ...(cannot ? { cannot } : {}),
+    spell: name, ...(casts ? { casts } : {}),
+  };
+}
 
-/** The quest fights of a step: its foes and its threats, not the ones the route does another way. */
+/** The quest fights of a step: its foes and its threats. */
 export function stepFightNames(step: Pick<Step, 'foes' | 'threats' | 'pacing'>): string[] {
   if (step.pacing) return [];
-  return [...new Set([...(step.foes ?? []), ...(step.threats ?? [])])].filter((n) => !OTHER_METHOD[n]);
+  return [...new Set([...(step.foes ?? []), ...(step.threats ?? [])])];
 }
 
 /** Whether a fight of the step models its opponent's regeneration (fightMechanics.json regenTicks): then a modelled, safe estimate of that
@@ -259,6 +282,14 @@ export function estimateStepFights(
   // The step's own kit is what the fight is done with: an item it requires is carried there, whatever the bag holds now.
   const carried = (step.itemsRequired ?? []).flatMap((item) => [item.nameEn, ...(item.anyOf ?? [])]);
   const worn = gear.equipment.map((piece) => piece.name);
+  // A safespot spell's casts: the fewest its runes pay for, a rune the worn staff gives counted as endless.
+  const castsOf = (name: string) => {
+    const spell = SPELLS.find((s) => s.name === name);
+    const paid = Object.entries(spell?.runes ?? {}).filter(([element]) => !(STAFFS[element] && held(worn, STAFFS[element].name)))
+      .map(([element, qty]) => Math.floor((step.itemsRequired ?? []).filter((item) => nameKey(item.nameEn) === nameKey(`${element} rune`))
+        .reduce((n, item) => n + (typeof item.amount === 'number' ? item.amount : 0), 0) / qty));
+    return paid.length ? Math.min(...paid) : undefined;
+  };
   return foes.flatMap((foe) => {
     const listed = FIGHT_MECHANICS[foe.name]?.company ?? [];
     const company = listed.flatMap((c) => COMBAT_FOES.filter((x) => x.name === c.foe && (!c.version || x.version === c.version)).slice(0, 1));
@@ -266,6 +297,7 @@ export function estimateStepFights(
     const e = estimateFight({
       foe, levels: { ...(lv as FightInput['levels']), ...(magic !== null ? { magic } : {}) }, weapon: eq.weapon?.piece ?? null, neck: eq.neck?.piece ?? null,
       armour, unknownPieces, food: f, carried, worn, company,
+      ...(FIGHT_MECHANICS[foe.name]?.safespot ? { casts: castsOf(FIGHT_MECHANICS[foe.name].safespot!.spell) } : {}),
     });
     return e ? [e] : [];
   });
@@ -276,6 +308,7 @@ const sec = (s: number) => (s < 90 ? `${Math.round(s)} s` : `${Math.round(s / 60
 /** "Count Draynor: about 40 s on Aggressive; you take about 5 damage (up to 12); bring 2 Trout or more." */
 export function fightLine(e: FightEstimate): string {
   if (e.cannot) return `${foeLabel(e.foe)}: ${e.cannot}.`;
+  if (e.spell && e.casts) return `${foeLabel(e.foe)}: about ${Math.round(e.casts.mid)} casts of ${e.spell} (up to ${Math.ceil(e.casts.high)}), about ${sec(e.seconds.mid)} from the safespot; it cannot reach you there.`;
   const dmg = `you take about ${Math.round(e.damage.mid)} damage (up to ${Math.ceil(e.damage.high)})`;
   const food = e.food.high <= 0 ? 'your health covers it; carry a few pieces anyway' : `bring ${e.food.high} ${e.foodName} or more`;
   return `${foeLabel(e.foe)}: about ${sec(e.seconds.mid)} on ${STYLE_WORD[e.style]}; ${dmg}; ${food}.${e.unmodelled.length ? ' Partial estimate: some combat facts or mechanics are not included.' : ''}`;
