@@ -1,6 +1,6 @@
 {
   "title": "OSRS: a beginner's guide and RuneLite plugins",
-  "description": "The full path through Old School RuneScape for the free version: from the first step after Tutorial Island to rune armour after Dragon Slayer I. Follow the \"Step-by-step plan\", and open the skill sections when a step sends you there for details.",
+  "description": "Help for the free-to-play route: how to set up, what to do when unsure, travel, plugins and safety. The route itself is on Journey, one step at a time.",
   "sections": [
     {
       "id": "setup",
@@ -8,46 +8,56 @@
       "blocks": [
         {
           "t": "p",
-          "text": "You sign in to the game with a Jagex account only through the Jagex Launcher: a login and password typed straight into the client window do not work."
+          "text": "Three things, done once: a Jagex account, the game in RuneLite, and the link between RuneLite and OSRS Path. After that the app sees your levels, bag and bank, and the game shows an arrow to every step."
         },
         {
           "t": "ol",
           "items": [
             {
-              "text": "Download the Jagex Launcher from jagex.com and sign in with your Jagex account's email and password."
+              "text": "**Jagex account and launcher.** Download the Jagex Launcher from jagex.com and sign in with your Jagex account (you can create one there, it is free). New accounts sign in only through the launcher: a login and password typed into the game window do not work."
             },
             {
-              "text": "Choose Old School RuneScape and create a character if needed."
+              "text": "**The game in RuneLite.** In the launcher choose Old School RuneScape, pick **RuneLite** in the list of clients and press Play. The first start downloads RuneLite, and the launcher remembers your sign-in."
             },
             {
-              "text": "In the list of clients choose RuneLite and press Play. After that the launcher remembers your sign-in."
+              "text": "**Tutorial Island first.** A new character starts on Tutorial Island, the game's own tutorial. OSRS Path begins right after it."
+            },
+            {
+              "text": "**Link OSRS Path.** In OSRS Path open **Settings** (the sliders button at the top right) → **RuneLite** and press **Launch RuneLite with the bridge**. If it says the Jagex Account sign-in is not saved, follow \"How to sign in with a Jagex Account (once)\" right below it. When the header shows **Connected**, the link works."
+            },
+            {
+              "text": "**Without RuneLite** the app still works: read the big heading on Journey and press **Done** yourself when the step is finished."
             }
           ]
         },
         {
           "t": "p",
-          "text": "Graphics on a Dell Latitude 5420 (Intel Iris Xe):"
+          "text": "**Keep the account safe:** turn on two-step verification with an authenticator app in your Jagex account settings, and set a bank PIN in the game (ask any banker). Never type your password anywhere but the Jagex Launcher and jagex.com."
+        },
+        {
+          "t": "p",
+          "text": "**Graphics** on a laptop with built-in graphics (for example Intel Iris Xe):"
         },
         {
           "t": "ul",
           "items": [
             {
-              "text": "**GPU**: a stable 60+ fps and the original picture. You can raise the draw distance and turn on anti-aliasing."
+              "text": "**GPU** (a RuneLite plugin): a stable 60+ fps and the original picture. You can raise the draw distance and turn on anti-aliasing."
             },
             {
-              "text": "**117 HD**: nice lighting, shadows and water. On medium settings roughly 40-60 fps; for a stable 60 cut the draw distance (30-40 tiles), shadows and anti-aliasing."
+              "text": "**117 HD** (a RuneLite plugin): nicer lighting, shadows and water, but heavier. If it stutters, lower the draw distance, shadows and anti-aliasing."
             },
             {
-              "text": "**GPU and 117 HD cannot be on at the same time**: 117 HD replaces GPU. Only one of them should be enabled."
+              "text": "**Turn on only one of GPU and 117 HD**: 117 HD replaces GPU."
             },
             {
-              "text": "To play in the background set a limit of 10-20 frames for the inactive window in **FPS Control**."
+              "text": "To play in the background, set a limit of 10-20 frames for the inactive window in the **FPS Control** plugin."
             },
             {
-              "text": "Check that the laptop has two memory sticks (dual-channel mode) and play on mains power in the maximum performance mode."
+              "text": "On a laptop, play on mains power in the maximum performance mode."
             },
             {
-              "text": "The AFK logout timer in the client settings can be raised to 30 minutes."
+              "text": "The game logs you out after 5 idle minutes. In the game's Settings → Gameplay (search \"AFK\") you can raise it to 25 minutes."
             }
           ]
         }
@@ -117,32 +127,38 @@
       "title": "If you do not know what to do",
       "blocks": [
         {
+          "t": "p",
+          "text": "The app always knows the next thing to do. Start from the top of this list:"
+        },
+        {
           "t": "ol",
           "items": [
             {
-              "text": "**Is there a quest in the current stage?** Do it: quests give XP, money and Quest Points, without which Dragon Slayer I will not open."
+              "text": "**Open Journey** (the compass at the top of the left rail). The big heading on the right page is what to do right now. **Show in game** puts the arrow on it in RuneLite."
             },
             {
-              "text": "**Fewer than 20 pieces of food in the bank?** Buy more at the Grand Exchange: this route buys its food. Training Fishing and Cooking for it is optional."
+              "text": "**It says \"Preparation required\"?** Press **Fix**: the arrow leads to the bank, a shop or a training spot, and the step waits for you. **Return to the step** brings you back."
             },
             {
-              "text": "**Can you wear better metal?** Smith or buy it."
+              "text": "**A level is missing?** The step names the skill. **Skills** shows how to train it, where, and how long it takes."
             },
             {
-              "text": "**Is combat behind the peaceful skills?** Go and fight."
+              "text": "**Not enough coins?** **Money** ranks the earning methods your levels allow. The one at the top is the one to do; **Details** explains it step by step."
             },
             {
-              "text": "**Otherwise**: any peaceful skill you feel like right now."
+              "text": "**Need food for a fight?** The step's Preparation lists how much: this route buys its food at the Grand Exchange. Training Fishing and Cooking for it is optional."
+            },
+            {
+              "text": "**Lost in a quest's dialogue or puzzle?** Open **Full walkthrough and dialogue** under the step's Quest overview; the **Wiki** tab on the right edge opens the quest's wiki page. The **Quest Helper** plugin also shows it in the game (see [RuneLite plugins](#/reference/plugins))."
+            },
+            {
+              "text": "**Every free-to-play quest is done?** Journey shows **Next in F2P**: the skills worth training next, each with a **Follow** button."
             }
           ]
         },
         {
           "t": "p",
           "text": "A good rhythm: 30-40 minutes of combat, then 30-40 minutes of a peaceful skill. It does not get boring, and the resources pile up on their own."
-        },
-        {
-          "t": "p",
-          "text": "Before you start enable the **Quest Helper** plugin (see \"RuneLite plugins\"): it will walk you through every quest in the plan."
         }
       ]
     },
