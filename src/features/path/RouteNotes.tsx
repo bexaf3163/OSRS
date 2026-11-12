@@ -78,7 +78,7 @@ export function LoadoutsCard({ step }: { step: Step }) {
   if (!step.loadouts?.length) return null;
   return (
     <section className="step-section loadouts" aria-label="Inventory by phase">
-      <h4 className="subhead">🎒 Inventory by phase</h4>
+      <h4 className="subhead">Inventory by phase</h4>
       <p className="muted small">This quest has stretches with different bags. Visit the bank between them.</p>
       <ol className="loadout-list">
         {step.loadouts.map((l, i) => <LoadoutRow key={l.id} l={l} index={i} current={!!phase?.confirmed && i === phase.index} />)}

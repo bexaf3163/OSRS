@@ -73,7 +73,7 @@ export function ActionNotes({ a }: { a: GearAction }) {
   );
 }
 
-/** "⚠️ Coif is in the bank but cannot be worn yet: 20 Ranged (now 17)" — so that it is not taken for ready. */
+/** "⚠ Coif is in the bank but cannot be worn yet: 20 Ranged (now 17)" — so that it is not taken for ready. */
 export function LockedOwnedNote({ advice }: { advice: GearAdvice }) {
   const owned = advice.locked.filter((l) => l.owned);
   if (!owned.length) return null;
@@ -81,7 +81,7 @@ export function LockedOwnedNote({ advice }: { advice: GearAdvice }) {
     <>
       {owned.map((l) => (
         <p key={l.item.id} className="small lock-note">
-          ⚠️ <strong>{l.item.name}</strong> {l.owned === 'bank' ? 'is in the bank' : 'is in the bag'}, but cannot be worn yet: needs {missingText(l.missing)}.
+          ⚠ <strong>{l.item.name}</strong> {l.owned === 'bank' ? 'is in the bank' : 'is in the bag'}, but cannot be worn yet: needs {missingText(l.missing)}.
         </p>
       ))}
     </>
@@ -114,7 +114,7 @@ function GearPromptBody({ step }: { step: Step }) {
     if (!best) return null;
     return (
       <section className="upgrade" aria-label="Stronger in combat">
-        <p className="upgrade-kicker">⚔️ Stronger in combat</p>
+        <p className="upgrade-kicker">Stronger in combat</p>
         <p className="small">
           The best weapon for your Attack level ({advice.levels.attack}) — <strong>{best.item.name}</strong>
           {best.source.kind !== 'bag' && best.source.kind !== 'bank' ? <> ({sourceText(best.source)})</> : null}.
@@ -147,7 +147,7 @@ function GearPromptBody({ step }: { step: Step }) {
   const seller = top.source.kind === 'shop' ? top.source.npc ?? top.source.shop : 'Grand Exchange';
   return (
     <section className="upgrade" aria-label="Stronger in combat">
-      <p className="upgrade-kicker">⚔️ Stronger in combat</p>
+      <p className="upgrade-kicker">Stronger in combat</p>
       <p className="upgrade-title"><ActionTitle a={top} /></p>
       <p className="small">{capital(gainText(top))} {vs}.<ActionNotes a={top} /></p>
       {top.how === 'buy' && <p className="small upgrade-where"><span className="muted">Where to get it: </span><ActionSource a={top} onShow={places.show} /></p>}
@@ -162,13 +162,13 @@ function GearPromptBody({ step }: { step: Step }) {
       )}
       {goal && (
         <p className="small muted">
-          💰 Goal: {goal.item.name} — {gainText(goal)}
+          Goal: {goal.item.name} — {gainText(goal)}
           {goal.short !== undefined ? <>, {formatGp(goal.short)} gp missing</> : <>, the price is unknown</>}.
         </p>
       )}
       <LockedOwnedNote advice={advice} />
       <div className="upgrade-actions">
-        {nav && <NavigateButton target={nav} label={`🧭 Point ${seller === 'Grand Exchange' ? 'to the Grand Exchange' : `to ${seller}`}`} />}
+        {nav && <NavigateButton target={nav} label={`Point ${seller === 'Grand Exchange' ? 'to the Grand Exchange' : `to ${seller}`}`} />}
         <a className="btn btn-ghost btn-sm" href={hrefTo.gear()}>The full analysis</a>
         {skip}
       </div>
@@ -196,7 +196,7 @@ function GearBannerBody() {
   if (!advice.live || !top || (fightStep && progress.upgradeDismissedForSteps?.includes(fightStep.id))) return null;
   return (
     <section className="upgrade gear-banner" aria-label="Stronger in combat">
-      <p className="upgrade-kicker">⚔️ Suggested gear change</p>
+      <p className="upgrade-kicker">Suggested gear change</p>
       <p className="small"><ActionTitle a={top} /> — {gainText(top)} {foesText(advice.foes)}.</p>
       <div className="upgrade-actions">
         <a className="btn btn-sm" href={hrefTo.gear()}>Gear analysis</a>

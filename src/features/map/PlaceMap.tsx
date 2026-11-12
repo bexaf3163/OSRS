@@ -11,6 +11,7 @@ import { resolvePlace } from '../../services/locationResolver';
 import type { NavTargetPayload } from '../../services/runeliteBridge';
 import { mapTarget, navPayload, type MapTarget, type PlaceQuery } from '../../domain/travel/places';
 import type { MapStatus } from './WorldMapModal';
+import { Icon } from '../../ledger';
 
 export type { PlaceQuery } from '../../domain/travel/places';
 
@@ -65,7 +66,7 @@ export function PlaceMapView({ view, onClose }: { view: View | null; onClose: ()
 export function PlaceButton({ query, children, onShow }: { query: PlaceQuery; children: ReactNode; onShow: (q: PlaceQuery) => void }) {
   return (
     <button type="button" className="place-link" onClick={() => onShow(query)} title="Show on the world map">
-      <span aria-hidden="true">📍</span> {children}
+      <Icon name="target" size={13} strokeWidth={1.8} /> {children}
     </button>
   );
 }
@@ -81,17 +82,17 @@ export function PlaceNavButton({ query }: { query: PlaceQuery }) {
     const r = await resolvePlace(query).catch(() => null);
     if (!r || !isPoint(r)) {
       setBusy(false);
-      notify('Could not find the place point — open the 📍 map: it has an OSRS Wiki search');
+      notify('Could not find the place point — open the map: it has an OSRS Wiki search');
       return;
     }
     const res = await navigate(navPayload(query, r));
     setBusy(false);
-    notify(res.ok ? `🧭 The in-game arrow leads to: ${r.label}` : res.reason === 'refused' ? `RuneLite refused: ${res.message}` : 'RuneLite offline — nowhere to point the arrow');
+    notify(res.ok ? `The in-game arrow leads to: ${r.label}` : res.reason === 'refused' ? `RuneLite refused: ${res.message}` : 'RuneLite offline — nowhere to point the arrow');
   };
   return (
     <button type="button" className="icon-btn nav-btn" onClick={() => void go()} disabled={busy}
       title="Point in RuneLite" aria-label={`Point in RuneLite: ${query.shop ?? query.npc ?? query.location}`}>
-      🧭
+      <Icon name="compass" size={15} strokeWidth={1.6} />
     </button>
   );
 }

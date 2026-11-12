@@ -23,8 +23,8 @@ export interface StyleProfile {
 }
 
 export const STYLES: Record<PlayStyle, StyleProfile> = {
-  chill: { style: 'chill', label: '🌿 Calm', lookAhead: 2, showLater: false, showTime: false, alternatives: 0, announce: 'quiet' },
-  efficient: { style: 'efficient', label: '⚡ Efficient', lookAhead: 4, showLater: true, showTime: true, alternatives: 3, announce: 'full' },
+  chill: { style: 'chill', label: 'Calm', lookAhead: 2, showLater: false, showTime: false, alternatives: 0, announce: 'quiet' },
+  efficient: { style: 'efficient', label: 'Efficient', lookAhead: 4, showLater: true, showTime: true, alternatives: 3, announce: 'full' },
 };
 
 export const styleOf = (f: Pick<Features, 'efficient'>): StyleProfile => (f.efficient ? STYLES.efficient : STYLES.chill);

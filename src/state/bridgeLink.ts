@@ -30,7 +30,7 @@ function loadAutoLaunch(): boolean {
 }
 
 const LAUNCH_TEXT: Partial<Record<RuneliteLaunch['state'], string>> = {
-  started: '🎮 Starting RuneLite with the OSRS Path Bridge…',
+  started: 'Starting RuneLite with the OSRS Path Bridge…',
   starting: 'RuneLite is already starting…',
   running: 'RuneLite with the bridge is already running',
 };

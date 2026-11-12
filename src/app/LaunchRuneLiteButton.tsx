@@ -18,7 +18,7 @@ export function LaunchRuneLiteButton() {
   return (
     <button type="button" className="btn btn-sm btn-primary launch-runelite" onClick={launch} disabled={busy}
       title="Start RuneLite with the OSRS Path plugin" aria-label="Launch RuneLite with the OSRS Path plugin">
-      <span aria-hidden="true">🎮</span><span className="launch-label">{label}</span>
+      <span className="launch-label">{label}</span>
     </button>
   );
 }

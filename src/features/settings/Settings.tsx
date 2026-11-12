@@ -160,8 +160,8 @@ function RuneLiteBridge() {
   }, [canLaunch, state]);
 
   const status = state === 'off' ? 'off'
-    : state === 'online' ? `🟢 the plugin is connected${inGame ? ', the character is in the game' : ', the character is not in the game'}`
-      : state === 'connecting' ? 'connecting…' : '⚪ the plugin does not respond';
+    : state === 'online' ? `the plugin is connected${inGame ? ', the character is in the game' : ', the character is not in the game'}`
+      : state === 'connecting' ? 'connecting…' : 'the plugin does not respond';
   const launch = async () => {
     setLaunching(true);
     await launchRuneLite();
@@ -182,7 +182,7 @@ function RuneLiteBridge() {
           </label>
           <div className="actions">
             <button type="button" className="btn btn-primary" onClick={launch} disabled={launching || !check?.ok || state === 'online'}>
-              🎮 {state === 'online' ? 'RuneLite with the bridge is running' : 'Launch RuneLite with the bridge'}
+              {state === 'online' ? 'RuneLite with the bridge is running' : 'Launch RuneLite with the bridge'}
             </button>
           </div>
           {check && (

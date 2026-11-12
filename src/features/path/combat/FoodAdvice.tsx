@@ -30,7 +30,7 @@ export function FoodAdvice({ step }: { step: Step }) {
 
   return (
     <section className="step-section food-advice" aria-label="Food for combat">
-      <h4 className="subhead">🍖 Food for combat</h4>
+      <h4 className="subhead">Food for combat</h4>
       {fights.length > 0 && (
         <div className="fight-plan">
           <ul className="small">{fights.map((f) => <li key={foeLabel(f.foe)}><strong>{fightLine(f)}</strong></li>)}</ul>

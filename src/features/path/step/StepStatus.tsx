@@ -35,15 +35,17 @@ import { TravelPlan } from '../prep/TravelPlan';
 import { F2pStops, StepTraining } from '../../skills/TrainingCard';
 import { BranchSuggestions } from '../BranchSuggestions';
 import { TravelTip } from '../prep/TravelTip';
+import { Icon } from '../../../ledger';
+import { STATUS_ICON, type IconName } from '../prep/statusIcon';
 
 type TabKey = 'prep' | 'gear' | 'food' | 'route' | 'plan';
 
-const TABS: { key: TabKey; label: string; icon: string }[] = [
-  { key: 'prep', label: 'Preparation', icon: '🧭' },
-  { key: 'gear', label: 'Gear', icon: '⚔️' },
-  { key: 'food', label: 'Food', icon: '🍖' },
-  { key: 'route', label: 'Route and game', icon: '🗺️' },
-  { key: 'plan', label: 'Training and variants', icon: '🎯' },
+const TABS: { key: TabKey; label: string; icon: IconName }[] = [
+  { key: 'prep', label: 'Preparation', icon: 'compass' },
+  { key: 'gear', label: 'Gear', icon: 'sword' },
+  { key: 'food', label: 'Food', icon: 'bag' },
+  { key: 'route', label: 'Route and game', icon: 'map' },
+  { key: 'plan', label: 'Training and variants', icon: 'target' },
 ];
 
 /** Which tabs are not empty: counted from the DOM — a component without content draws nothing. */
@@ -115,7 +117,7 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
     : prep ? `Preparation required (${n} ${plural(n, 'item', 'items')})`
       : r.status === 'UNKNOWN' ? 'Not everything is checked' : s.text;
   const shown = recovering ? (recovering.recovery.reason === 'DEATH' ? 'You died — recovery mode' : 'Route derailment — recovery mode') : !ready && percent !== null && prep ? `${text} · ready ${percent}%` : text;
-  const icon = recovering ? '🔁' : ready ? '🟢' : prep ? '🟡' : s.icon;
+  const icon: IconName = recovering ? 'skip' : ready ? 'check' : prep ? 'wrench' : STATUS_ICON[r.status];
   // "Not everything is checked" has no share to show: unknown is not a percentage (a ring of 9% beside it read as a verdict).
   const ring = percent !== null && (ready || prep || recovering || r.status !== 'UNKNOWN');
   const tone = recovering ? 'is-prep' : ready ? 'is-ready' : prep ? 'is-prep' : r.status === 'UNKNOWN' ? 'is-unknown' : 'is-blocked';
@@ -142,13 +144,13 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
       <div className="status-line">
         <span className="status-text" role="status">
           {ring && <span className="ready-ring" aria-hidden="true" style={{ '--p': percent } as CSSProperties}><i>{percent}%</i></span>}
-          <span aria-hidden="true">{icon}</span> <strong>{shown}</strong>
+          <Icon name={icon} size={15} /> <strong>{shown}</strong>
         </span>
         <span className="status-actions">
           {prep && !recovering && canFix && (
             <button type="button" className="btn btn-primary btn-sm" onClick={() => void fix()} disabled={underway}>
               {/* The status beside it already says "Preparation required": the running state needs no second "Preparation". */}
-              {underway ? '⚡ Underway' : '▶ Fix'}
+              {underway ? 'Underway' : '▶ Fix'}
             </button>
           )}
           {!noStart && !prep && !recovering && hasTarget && (ready || r.status === 'UNKNOWN') && (
@@ -169,20 +171,20 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
       {sent === 'offline' && <p className="small muted" role="status">{GUIDE_UNCONFIRMED}</p>}
       {detour ? (
         live
-          ? <p className="small status-arrow">🧭 The arrow leads to: {detour.label}</p>
-          : <p className="small status-arrow muted">🧭 Target saved: {detour.label}. The arrow appears when RuneLite connects.</p>
+          ? <p className="small status-arrow">The arrow leads to: {detour.label}</p>
+          : <p className="small status-arrow muted">Target saved: {detour.label}. The arrow appears when RuneLite connects.</p>
       ) : active && !noStart ? (
         live
-          ? <p className="small status-arrow muted">🧭 The step is shown in the game — the arrow leads to it.</p>
+          ? <p className="small status-arrow muted">The step is shown in the game — the arrow leads to it.</p>
           // In the workspace the current action above already says the target is saved and guidance is inactive.
-          : !headline && <p className="small status-arrow muted">🧭 Target saved. Live guidance is inactive until RuneLite connects.</p>
+          : !headline && <p className="small status-arrow muted">Target saved. Live guidance is inactive until RuneLite connects.</p>
       ) : null}
       {!headline && open && visibleTabs.length > 1 && (
         <div className="status-tabs" role="tablist" aria-label="Step details">
           {visibleTabs.map((t) => (
             <button key={t.key} type="button" role="tab" className={`status-tab ${current === t.key ? 'is-active' : ''}`} aria-selected={current === t.key}
               onClick={() => setTab(t.key)}>
-              <span aria-hidden="true">{t.icon}</span> {t.label}
+              <Icon name={t.icon} size={14} /> {t.label}
             </button>
           ))}
         </div>

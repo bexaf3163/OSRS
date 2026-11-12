@@ -44,7 +44,7 @@ export function InGamePanel({ step }: { step: Step }) {
         <button type="button" className={`btn ${live ? 'btn-ingame-active' : ''}`} onClick={point} disabled={notice === 'sending'}
           title={live ? 'The step already guides you in the game. Click to send it again' : active ? 'The target is saved. Click to send it again' : undefined}
           aria-describedby={notice === 'offline' ? `ingame-${step.id}` : undefined}>
-          {live ? '✓ Shown in the game' : active ? TARGET_LABEL.saved : '🧭 Show in the game'}
+          {live ? '✓ Shown in the game' : active ? TARGET_LABEL.saved : 'Show in the game'}
         </button>
         {live && <span className="badge badge-ingame">● Active in RuneLite</span>}
         {active && !live && <span className="badge">○ Saved target. It returns to the game when {state === 'online' ? 'your character logs in' : 'RuneLite connects'}</span>}
@@ -54,7 +54,7 @@ export function InGamePanel({ step }: { step: Step }) {
         <p className="muted small" id={`ingame-${step.id}`} role="status">
           {GUIDE_UNCONFIRMED}
           {canLaunch && state !== 'online'
-            ? <> <button type="button" className="btn btn-sm" onClick={() => void launchRuneLite()}>🎮 Launch RuneLite</button> — in ~10 seconds press "Show in the game" again.</>
+            ? <> <button type="button" className="btn btn-sm" onClick={() => void launchRuneLite()}>Launch RuneLite</button> — in ~10 seconds press "Show in the game" again.</>
             : null}
         </p>
       )}
@@ -62,7 +62,7 @@ export function InGamePanel({ step }: { step: Step }) {
       {trigger && <p className="muted small">The step will be marked by itself when {triggerText(trigger)}.</p>}
       {active && !shortestPath && (
         <p className="muted small">
-          {waypoints.length ? `🗺 A route through ${waypoints.length} ${plural(waypoints.length, 'point', 'points')}.` : '🗺 The arrow shows the straight-line direction.'}
+          {waypoints.length ? `A route through ${waypoints.length} ${plural(waypoints.length, 'point', 'points')}.` : 'The arrow shows the straight-line direction.'}
           {' '}Install Shortest Path from the Plugin Hub for the path with walls.
         </p>
       )}

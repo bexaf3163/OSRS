@@ -35,14 +35,14 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
       p = withStep(p, c.step.id, 'done', { stamp: false });
       if (stepById.get(c.step.id)?.updatedInV2) p = withReviewed(p, [c.step.id]);
     }
-    markSteps(p, `🎮 Steps marked from the game: ${list.length}`);
+    markSteps(p, `Steps marked from the game: ${list.length}`);
   };
 
   if (compact) {
     if (state !== 'online' || hidden || !list.length) return null;
     return (
       <div className="plaque plaque-tip" role="note">
-        <p><strong>🎮 The game knows you have already completed {list.length} {list.length === 1 ? 'step' : 'steps'}</strong></p>
+        <p><strong>The game knows you have already completed {list.length} {list.length === 1 ? 'step' : 'steps'}</strong></p>
         <details>
           <summary className="small">Which ones</summary>
           <ul className="small">{list.map((c) => <li key={c.step.id}><code className="code">{c.step.id}</code> {c.step.title} — {c.why}</li>)}</ul>

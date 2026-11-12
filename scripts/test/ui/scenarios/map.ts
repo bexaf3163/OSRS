@@ -23,7 +23,7 @@ async function mapNavigationScenario(browser: Browser, width = 1000) {
       const nav = (await posts()).filter((p) => p.path === '/nav-target').pop()?.body;
       expect(nav?.x === 3014 && JSON.stringify(nav?.npcNames) === '["Betty"]' && nav?.stepId === 'S2-03',
         'step map: "Lead here in the game" — a target at Betty with the NPC highlighted');
-      await (await stepButton(page, '🧭 Show in the game')).first().click();
+      await (await stepButton(page, 'Show in the game')).first().click();
       await settle(page);
       const guide = (await posts()).filter((p) => p.path === '/active-step').pop()?.body.guide as
         { items: { name: string; where?: string }[]; places: { label: string; items?: string[] }[] } | undefined;
@@ -48,7 +48,7 @@ async function bigMapArrow(browser: Browser) {
   await settle(page);
   const t = await text(page, '.map-source');
   expect(t.includes('The in-game arrow leads') && t.includes('Varrock Teleport'), 'map: the marker "The in-game arrow leads to Varrock Teleport"');
-  expect(await page.locator('.map-arrow-pin').count() === 1, 'map: the 🧭 marker on the map');
+  expect(await page.locator('.map-arrow-pin').count() === 1, 'map: the arrow marker on the map');
   expect(!errors.length, `map: no console errors ${errors.join('; ')}`);
   await page.context().close();
 }

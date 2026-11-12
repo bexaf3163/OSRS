@@ -33,7 +33,7 @@ export function InventoryCleanup() {
   return (
     <details className="card cleanup-card" open={actionable.length > 0}>
       <summary className="subhead">
-        🧹 Inventory cleanup{live ? ` · ${actionable.length} ${actionable.length === 1 ? 'suggestion' : 'suggestions'}` : ''}
+        Inventory cleanup{live ? ` · ${actionable.length} ${actionable.length === 1 ? 'suggestion' : 'suggestions'}` : ''}
       </summary>
       {!live ? (
         <p className="muted small">Connect the game (plugin on, character logged in) and the bag will be checked against the route. Nothing is guessed without it.</p>

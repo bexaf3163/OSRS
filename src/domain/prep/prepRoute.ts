@@ -97,7 +97,7 @@ export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id' | 'traini
   if (buy.length) {
     tasks.push({
       id: 'buy', kind: 'buy', label: `Buy: ${buy.map((b) => b.label).join(', ')}`, priority: 3, need: 'REQUIRED', urgency: 'NOW',
-      action: { kind: 'link', label: '🛒 To shopping', href: hrefTo.shopping() }, items: buy.flatMap((b) => (b.item ? [b.item] : [])), from: buy,
+      action: { kind: 'link', label: 'To shopping', href: hrefTo.shopping() }, items: buy.flatMap((b) => (b.item ? [b.item] : [])), from: buy,
     });
   }
   tasks.sort((a, b) => a.priority - b.priority || (a.id < b.id ? -1 : 1));

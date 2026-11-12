@@ -153,7 +153,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
     <section className={`training training-${view}`} aria-label={view === 'analysis' ? 'Method analysis' : 'What to train with'}>
       {summary && <>
       <p className="readiness-head">
-        🎯 <strong>What to train with: {skillTitle(skill)}</strong> <span className="muted">— now {advice.level}, goal {target}</span>
+        <strong>What to train with: {skillTitle(skill)}</strong> <span className="muted">— now {advice.level}, goal {target}</span>
       </p>
       <div className="skill-seg" role="group" aria-label="Training priority">
         {([['fastest', 'XP'], ['balanced', 'Balanced'], ['profit', 'Money']] as const).map(([priority, label]) => (
@@ -201,7 +201,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
           )}
           {view === 'full' && arrows && arrows.shots.mid > 0 && (
             <p className="small ranged-arrows">
-              🏹 To level {arrows.goalLevel}{arrows.changesKit ? ' through the planned equipment stages' : ` with ${arrows.bow} and ${arrows.arrow}`}: about {arrows.shots.mid.toLocaleString('en-US')} shots
+              To level {arrows.goalLevel}{arrows.changesKit ? ' through the planned equipment stages' : ` with ${arrows.bow} and ${arrows.arrow}`}: about {arrows.shots.mid.toLocaleString('en-US')} shots
               ({arrows.shots.low.toLocaleString('en-US')}–{arrows.shots.high.toLocaleString('en-US')}). Picking arrows up, about {arrows.lostPickingUp.mid.toLocaleString('en-US')} break;
               left on the ground, every shot costs one.{arrows.notCounted.length > 0 && ` Accuracy leaves out ${arrows.notCounted.join(', ')} (no ranged data).`}
             </p>
@@ -252,7 +252,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
       )}
       {view === 'analysis' && advice.goalNeeds && <p className="small muted">Conditional goal supplies (estimate): {advice.goalNeeds.flatMap(n => n.type === 'item' ? [`${n.name} ×${(n.count ?? 1).toLocaleString('en-US')}${n.anyOf?.length ? ' or the listed equivalent' : ''}`] : []).join(', ')}.{skill === 'ranged' ? ' Includes preparation buffers; assumes safe arrow recovery.' : ''} Future funding and product sales are not assumed.</p>}
       {advice.quests.length > 0 && (
-        <p className="small muted">📜 Some levels are covered by quests: {advice.quests.map((q) => q.name).join('; ')}.</p>
+        <p className="small muted">Some levels are covered by quests: {advice.quests.map((q) => q.name).join('; ')}.</p>
       )}
       </DetailSection>}
       {state.mode === 'f2p' && <MembersFromHere skill={skill} />}

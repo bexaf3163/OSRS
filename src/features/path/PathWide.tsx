@@ -168,7 +168,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
           </section>}
           {pending.length > 0 && (
             <div className="review-banner card">
-              <h2 className="review-title">🔔 The guide updated to V2!</h2>
+              <h2 className="review-title">The guide updated to V2!</h2>
               <p>
                 In the {pending.length === 1 ? 'step' : 'steps'} {pending.map((s) => s.id).join(', ')}, which you already marked, important requirements appeared.
                 Quest points are not taken away on a reset.

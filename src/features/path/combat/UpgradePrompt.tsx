@@ -61,7 +61,7 @@ export function UpgradePrompt({ step }: { step: Step }) {
 
   return (
     <section className={`upgrade ${rec.status === 'UPGRADE_NOT_AFFORDABLE' ? 'is-poor' : ''}`} aria-label="Speed upgrade">
-      <p className="upgrade-kicker">⚡ Speed upgrade</p>
+      <p className="upgrade-kicker">Speed upgrade</p>
       <p className="upgrade-title">
         {rec.currentItem ? <>Replace {rec.currentItem} → </> : <>Get </>}<strong>{rec.recommendedItem}</strong>
       </p>
@@ -82,7 +82,7 @@ export function UpgradePrompt({ step }: { step: Step }) {
 
       {rec.status === 'UPGRADE_NOT_AFFORDABLE' ? (
         <div className="upgrade-cash">
-          <p className="small"><strong>💰 Not enough coins:</strong> ~{formatGp(rec.approxCost ?? 0)} gp needed ({rec.priceLabel ?? 'estimate'}), you have {formatGp(rec.coins ?? 0)} gp with the bank. It is too early to go to the shop.</p>
+          <p className="small"><strong>Not enough coins:</strong> ~{formatGp(rec.approxCost ?? 0)} gp needed ({rec.priceLabel ?? 'estimate'}), you have {formatGp(rec.coins ?? 0)} gp with the bank. It is too early to go to the shop.</p>
           <p className="small muted">How to make it up quickly — guidelines, not a promised income:</p>
           <ul className="small">
             {coinStep && <li>Complete <a href={hrefTo.step(coinStep.step.id)}>{coinStep.step.title}</a> — it gives {formatGp(coinStep.coins)} coins.</li>}
@@ -98,7 +98,7 @@ export function UpgradePrompt({ step }: { step: Step }) {
 
       <div className="upgrade-actions">
         {rec.status === 'UPGRADE_AVAILABLE' && nav && !going && (
-          <NavigateButton target={nav} label={`🧭 Point ${rec.npc ? `to ${rec.npc}` : 'to the Grand Exchange'}`} />
+          <NavigateButton target={nav} label={`Point ${rec.npc ? `to ${rec.npc}` : 'to the Grand Exchange'}`} />
         )}
         {going && <button type="button" className="btn btn-sm" onClick={() => void clearNav()}>Return the arrow to the step</button>}
         <button type="button" className="btn btn-ghost btn-sm" onClick={() => { if (going) void clearNav(); dismissUpgrade(step.id); }}>

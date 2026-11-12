@@ -56,7 +56,7 @@ function saveFilters(f: BrowseFilters) {
 }
 
 const SORT_LABEL: Record<BrowseSort, string> = { recommended: 'Best for you', profit: 'Profit an hour', capital: 'Coins to start', intensity: 'Least effort' };
-const CHECK_MARK: Record<RequirementCheck['status'], string> = { ok: '✓', missing: '✗', buy: '🛒', unknown: '?', info: 'ℹ' };
+const CHECK_MARK: Record<RequirementCheck['status'], string> = { ok: '✓', missing: '✗', buy: '+', unknown: '?', info: 'ℹ' };
 
 /** Why this method is where it is in the list: the recommendation, slower than it, held back, or what is missing. */
 /** "cover the 392 gp S5-06 is short", "make 10,000 more coins": what the order is for. */

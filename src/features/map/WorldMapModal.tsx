@@ -60,7 +60,8 @@ function pinIcon(active: boolean): L.DivIcon {
 }
 
 /** The arrow target marker: large, with a compass icon — visible at any zoom. */
-const arrowIcon = L.divIcon({ className: 'map-arrow-pin', html: '<span>🧭</span>', iconSize: [34, 34], iconAnchor: [17, 17] });
+const arrowIcon = L.divIcon({ className: 'map-arrow-pin', iconSize: [34, 34], iconAnchor: [17, 17],
+  html: '<span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg></span>' });
 const samePoint = (a: { x: number; y: number; plane: number }, b: { x: number; y: number; plane: number }) =>
   Math.abs(a.x - b.x) <= 1 && Math.abs(a.y - b.y) <= 1 && a.plane === b.plane;
 
@@ -175,7 +176,7 @@ export default function WorldMapModal({
     arrowMarker.current?.remove();
     arrowMarker.current = null;
     if (!m || !arrow || target) return;
-    const tip = `🧭 ${arrowLive ? 'The in-game arrow leads here' : 'The arrow will lead here'}: ${arrow.label}`;
+    const tip = `${arrowLive ? 'The in-game arrow leads here' : 'The arrow will lead here'}: ${arrow.label}`;
     const mk = L.marker(center(arrow), { icon: arrowIcon, keyboard: false, zIndexOffset: 2000, title: tip })
       .bindTooltip(tip, { direction: 'bottom', offset: [0, 14], permanent: arrowApart, className: 'map-tip map-tip-arrow' });
     if (arrow.plane === plane) mk.addTo(m);
@@ -215,7 +216,7 @@ export default function WorldMapModal({
       <div className="map-modal-panel">
         <header className="map-modal-head">
           <div className="map-modal-title">
-            <strong>🗺️ {title}</strong>
+            <strong>{title}</strong>
             {point
               ? <span className="muted small">{point.label} · {isUnderground(point) ? 'underground' : floorLabel(point.plane)} · tile {point.x}, {point.y}</span>
               : <span className="muted small">{status === 'loading' ? 'Searching for the place…' : 'A place without an exact point'}</span>}
@@ -232,7 +233,7 @@ export default function WorldMapModal({
         )}
         {arrow && !target && (
           <p className="map-source small">
-            🧭 {arrowLive ? 'The in-game arrow leads' : 'The arrow will lead'} to "{arrow.label}" <span className="muted">({SOURCE_TEXT[arrow.source]}, tile {arrow.x}, {arrow.y})</span>
+            {arrowLive ? 'The in-game arrow leads' : 'The arrow will lead'} to "{arrow.label}" <span className="muted">({SOURCE_TEXT[arrow.source]}, tile {arrow.x}, {arrow.y})</span>
             {arrowApart && <> {' '}<button type="button" className="link-btn" onClick={showArrow}>Show on the map</button></>}
           </p>
         )}
@@ -241,7 +242,7 @@ export default function WorldMapModal({
             {points.map((p, i) => (
               <button key={`${p.x},${p.y},${p.plane}`} type="button" role="radio" aria-checked={i === active}
                 className={`spot-chip ${i === active ? 'is-active' : ''}`} onClick={() => onActive(i)}>
-                📍 {p.label}
+                {p.label}
               </button>
             ))}
           </div>

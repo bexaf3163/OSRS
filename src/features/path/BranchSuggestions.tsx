@@ -23,7 +23,7 @@ export function BranchSuggestions({ step }: { step: Step }) {
     return (
       <li key={branch.id} className={`branch is-${kind} ${isChosen ? 'is-chosen' : ''}`}>
         <p className="branch-head">
-          <strong>⚡ {branch.label}</strong>
+          <strong>{branch.label}</strong>
           <span className="muted small">
             {kind === 'available'
               ? ` · ${reasonLabel(r)}`
@@ -44,7 +44,7 @@ export function BranchSuggestions({ step }: { step: Step }) {
         {kind === 'available' && enabled && branch.replacementTarget && !r.missing?.some((m) => m.certain) && (
           <button type="button" className={`btn btn-sm ${isChosen ? 'btn-ingame-active' : ''}`}
             onClick={() => chooseBranch(step, isChosen ? null : branch.id)} aria-pressed={isChosen}>
-            {isChosen ? '✓ This variant leads in the game — return the ordinary one' : '🧭 Lead in the game by this route'}
+            {isChosen ? '✓ This variant leads in the game — return the ordinary one' : 'Lead in the game by this route'}
           </button>
         )}
       </li>
@@ -53,7 +53,7 @@ export function BranchSuggestions({ step }: { step: Step }) {
 
   return (
     <section className="step-section branches" aria-label="Quick variants">
-      <h4 className="subhead">⚡ {available.length ? 'A quick variant for your stats' : 'Quick variants'}</h4>
+      <h4 className="subhead">{available.length ? 'A quick variant for your stats' : 'Quick variants'}</h4>
       {(available.length > 0 || unknown.length > 0) && (
         <ul className="branch-list">
           {available.map((r) => card(r, 'available'))}
@@ -67,7 +67,7 @@ export function BranchSuggestions({ step }: { step: Step }) {
         <ul className="branch-locked">
           {locked.map((r) => (
             <li key={r.branch.id} className="muted small">
-              🔒 {r.branch.label} — needs {conditionLabel(r.branch.condition)}
+              {r.branch.label} — needs {conditionLabel(r.branch.condition)}
               {typeof r.have === 'number' && r.branch.condition.type === 'SKILL_LEVEL' ? `, you have ${r.have}` : ''}
             </li>
           ))}

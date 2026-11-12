@@ -38,7 +38,7 @@ export function TravelTip({ step }: { step: Step }) {
   // The step is in the game: the same words as on the game card, so the two never disagree.
   if (shown) {
     const r = decision.recommended;
-    return r ? <p className="small status-tip" role="note">💡 {r.text}{r.check ? ` — ${r.check}` : ''}</p> : null;
+    return r ? <p className="small status-tip" role="note">{r.text}{r.check ? ` — ${r.check}` : ''}</p> : null;
   }
   if (!live || !places.length || !seen || seen.stepId !== step.id || !seen.pos || !isOverworld(seen.pos) || !isOverworld(places[0])) return null;
   const options = travelOptions(travelInputOf({
@@ -46,5 +46,5 @@ export function TravelTip({ step }: { step: Step }) {
     ...(seen.homeKnown !== null ? { homeCooldownKnown: seen.homeKnown } : {}), spellbook: seen.spellbook, chronicleCharges: seen.charges, sourceOf: transportSources(player, prices.priceOf),
   }));
   const tip = travelTip(options);
-  return tip ? <p className="small status-tip" role="note">💡 {tip}</p> : null;
+  return tip ? <p className="small status-tip" role="note">{tip}</p> : null;
 }

@@ -39,6 +39,7 @@ import { TravelTip } from '../prep/TravelTip';
 import { ItemMarketPrice } from '../prep/ItemMarketPrice';
 import { parseAmount } from '../../../domain/items/checklist';
 import { hrefTo } from '../../../domain/pages/pages';
+import { Icon } from '../../../ledger';
 
 const WARN_LABELS = new Set(['Dangerous', 'Attention', 'Combat']);
 
@@ -58,7 +59,7 @@ function ItemChip({ item }: { item: StepItemRequirement }) {
             <strong>{item.nameEn}</strong> <strong className="item-amount">{amountText(item.amount)}</strong>
             {item.heals ? <span className="badge badge-heal" title={`Restores ${item.heals} ${plural(item.heals, 'hitpoint', 'hitpoints')}`}>+{item.heals} HP</span> : null}
           </span>
-          <span className="item-chip-lens" aria-hidden="true">🔍</span>
+          <span className="item-chip-lens" aria-hidden="true"><Icon name="search" size={13} /></span>
         </span>
         {item.howToGet && <span className="item-chip-how"><Inline text={item.howToGet} /></span>}
         <ItemMarketPrice name={item.nameEn} id={item.wikiItemId} quantity={parseAmount(item.amount)} />
@@ -126,7 +127,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
 
   const reviewPlaque = reviewing && (
     <div className="plaque plaque-review" role="note">
-      <p><strong>⚠️ New in version V2:</strong> {step.v2ChangesSummary}</p>
+      <p><strong>⚠ New in version V2:</strong> {step.v2ChangesSummary}</p>
       <div className="actions">
         <button type="button" className="btn" onClick={() => reactivate([step.id])}>Reset to active</button>
         <button type="button" className="btn btn-primary" onClick={() => review([step.id])}>Confirm and close</button>
@@ -139,7 +140,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
       {step.npc ? (
         <section className="plaque plaque-npc" aria-label="NPC and start point">
           <button type="button" className="npc-name" onClick={() => openNpc(step.npc!)} title="Open in the OSRS Wiki inspector">
-            {step.npc.nameEn} <span aria-hidden="true">🔍</span>
+            {step.npc.nameEn} <Icon name="search" size={13} />
           </button>
           <p><Inline text={step.npc.location} /></p>
           <p className="npc-badges">
@@ -177,7 +178,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
         </section>
       )}
       {step.type === 'gear' && step.itemsRequired?.length ? (
-        <p className="muted small"><a href={hrefTo.shopping()}>🛒 Grand Exchange shopping list</a> — buying for the planner's next steps at once.</p>
+        <p className="muted small"><a href={hrefTo.shopping()}>Grand Exchange shopping list</a> — buying for the planner's next steps at once.</p>
       ) : null}
     </>
   );
@@ -214,7 +215,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
   const notes = (
     <>
       {step.proTip && <div className="plaque plaque-tip"><strong>Tip:</strong> <Inline text={step.proTip} /></div>}
-      {step.safespot && <div className="plaque plaque-safespot"><strong>🛡️ Safespot:</strong> <Inline text={step.safespot} /></div>}
+      {step.safespot && <div className="plaque plaque-safespot"><strong>Safespot:</strong> <Inline text={step.safespot} /></div>}
       {mode === 'members' && step.membersAlternative && (
         <div className="plaque plaque-members"><Inline text={step.membersAlternative} /></div>
       )}

@@ -20,7 +20,7 @@ export function useNavTarget({ enabled, liveIdentity, sessionEpoch, setNavTarget
     setNavFromPlugin(null);
     const say = latest.current.notify;
     if (reason === 'obtained') say(`✓ ${typeof itemName === 'string' ? itemName : 'The item'} obtained — the arrow leads to the step again`);
-    else if (reason === 'arrived') say(`📍 You are there${typeof label === 'string' ? `: ${label}` : ''} — the arrow leads to the step again`);
+    else if (reason === 'arrived') say(`You are there${typeof label === 'string' ? `: ${label}` : ''} — the arrow leads to the step again`);
     // The step anew — the HUD and the target in the game are exactly the same as before the detour.
     const { activeStepId: active, steps: list, branchChoice: choice } = latest.current;
     const step = active ? list.find((s) => s.id === active) : undefined;

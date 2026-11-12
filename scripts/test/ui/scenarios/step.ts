@@ -176,8 +176,8 @@ async function stepReadiness(browser: Browser) {
     localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
   }, '#/step/S9-01');
   const t = await text(page, '.readiness');
-  expect(t.includes('A short preparation is needed') && t.includes('Catch up Crafting'), 'readiness: Crafting 31 is missing — "⚡ Catch up Crafting"');
-  expect(t.includes('To the bank'), 'readiness: Knife is in the bank — "🧭 To the bank"');
+  expect(t.includes('A short preparation is needed') && t.includes('Catch up Crafting'), 'readiness: Crafting 31 is missing — "Catch up Crafting"');
+  expect(t.includes('To the bank'), 'readiness: Knife is in the bank — "To the bank"');
   // The preparation route: one main thing, the start button, the return to the step; the trip survives a page reload.
   const prep = await text(page, '.prep-route');
   expect(prep.includes('Preparing for S9-01') && prep.includes('Start the preparation') && prep.includes('then we return to S9-01'), 'preparation: the main thing, the button and the return to the step');

@@ -44,13 +44,13 @@ export function buildQueue(route: PrepRoute, ctx: QueueContext): PrepQueue {
       const best = advice.best;
       if (best) {
         const nav = trainingNav(best.method);
-        return { ...t, method: best.method.name, guide: nav ? { kind: 'nav', label: `🧭 Go to: ${nav.label}`, target: nav } : null };
+        return { ...t, method: best.method.name, guide: nav ? { kind: 'nav', label: `Go to: ${nav.label}`, target: nav } : null };
       }
       return { ...t, guide: null };
     }
     if (t.kind === 'buy' && t.items?.length) {
       const nav = exchangeNav(t.items[0]);
-      return { ...t, guide: nav ? { kind: 'nav', label: `🧭 To the exchange: ${t.items[0]}`, target: nav } : null };
+      return { ...t, guide: nav ? { kind: 'nav', label: `To the exchange: ${t.items[0]}`, target: nav } : null };
     }
     return { ...t, guide: null };
   });

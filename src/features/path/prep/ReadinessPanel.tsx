@@ -11,8 +11,10 @@ import { useScopedReadiness } from '../../../state/hooks/useStageScope';
 import { NavigateButton } from '../../../ui/NavigateButton';
 import { PrepRouteBlock } from './PrepRoute';
 import { hrefTo } from '../../../domain/pages/pages';
+import { Icon } from '../../../ledger';
+import { STATUS_ICON } from './statusIcon';
 
-const MARK: Record<RequirementStatus['state'], string> = { OK: '✓', BANK: '🏦', PARTIAL: '◐', MISSING: '✗', UNKNOWN: '?' };
+const MARK: Record<RequirementStatus['state'], string> = { OK: '✓', BANK: '▤', PARTIAL: '◐', MISSING: '✗', UNKNOWN: '?' };
 
 function Action({ a }: { a: ReadinessAction }) {
   if (a.kind === 'nav') return <NavigateButton target={a.target} label={a.label} />;
@@ -41,7 +43,7 @@ function GoalMet({ step, r }: { step: Step; r: StepReadiness }) {
   return (
     <section className="readiness is-ready" aria-label="Step goal">
       <p className="readiness-head" role="status">
-        🟢 <strong>The step goal is already met</strong>: {r.goalMet.map((g) => `${g.skill} ${g.have} (need ${g.level})`).join(', ')}
+        <strong>The step goal is already met</strong>: {r.goalMet.map((g) => `${g.skill} ${g.have} (need ${g.level})`).join(', ')}
         <span className="muted"> — {fromGame ? 'by the game data' : 'by the levels from the profile'}. No need to train again.</span>
       </p>
       <div className="actions">
@@ -59,7 +61,7 @@ function Chain({ step }: { step: Step }) {
   if (!chain.length) return null;
   return (
     <details className="ready-chain" open>
-      <summary className="small">🧩 The chain to readiness: {chain.length + 1} {chain.length === 1 ? 'step' : 'steps'}</summary>
+      <summary className="small">The chain to readiness: {chain.length + 1} {chain.length === 1 ? 'step' : 'steps'}</summary>
       <ol className="small">
         {chain.map((l) => (
           <li key={l.step.id}>
@@ -93,12 +95,12 @@ export function ReadinessPanel({ step, bare = false, itemsListed = false }: { st
   const ok = r.requirements.filter((x) => x.state === 'OK' && shown(x));
   return (
     <section className={`readiness is-${r.status.toLowerCase()}`} aria-label="Step readiness">
-      {!(bare && r.status === 'UNKNOWN') && <p className="readiness-head" role="status"><span aria-hidden="true">{s.icon}</span> <strong>{s.text}</strong></p>}
+      {!(bare && r.status === 'UNKNOWN') && <p className="readiness-head" role="status"><Icon name={STATUS_ICON[r.status]} size={15} /> <strong>{s.text}</strong></p>}
       {detour && (
         // A detour: the in-game arrow leads for the preparation; when the item is in the bag (or you reach the place),
         // the plugin clears the target by itself, and the arrow returns to this step.
         <p className="small readiness-detour">
-          ⚡ Preparation: {detour.label}. We return to {step.id} when {detour.itemName ? `${detour.itemName} is in the bag` : 'you reach the place'}.{' '}
+          Preparation: {detour.label}. We return to {step.id} when {detour.itemName ? `${detour.itemName} is in the bag` : 'you reach the place'}.{' '}
           <button type="button" className="link-btn" onClick={() => void clearNav()}>Return to the step now</button>
         </p>
       )}
@@ -107,7 +109,7 @@ export function ReadinessPanel({ step, bare = false, itemsListed = false }: { st
       <Chain step={step} />
       {r.unknown.some(shown) && (
         <details className="ready-unknown">
-          <summary className="small">⚪ Not checked: {r.unknown.filter(shown).length}</summary>
+          <summary className="small">Not checked: {r.unknown.filter(shown).length}</summary>
           <ul className="ready-list">{r.unknown.filter(shown).map((x) => <Row key={`${x.kind}-${x.label}`} r={x} />)}</ul>
         </details>
       )}

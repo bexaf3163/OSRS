@@ -32,6 +32,7 @@ import { ActionNotes, ActionSource, ActionTitle, OwnershipNote } from './GearPro
 import { Eyebrow, Page } from '../../ledger';
 import { hrefTo } from '../../domain/pages/pages';
 import { useDecision } from '../../state/decision';
+import { Icon } from '../../ledger';
 
 const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 function SlotGlyph({ slot }: { slot: GearSlot }) {
@@ -96,7 +97,7 @@ function RoadmapRowView({ row, steps }: { row: RoadmapRow; steps: Step[] }) {
           ))}
         </p>
         <p className="roadmap-lock">
-          <span className="lock-chip">🔒 {need ? `needs ${need}` : 'needs a quest'}</span>
+          <span className="lock-chip"><Icon name="lock" size={12} /> {need ? `needs ${need}` : 'needs a quest'}</span>
           {row.owned && <span className="lock-chip is-owned">In the {row.owned === 'bank' ? 'bank' : 'bag'} — cannot be worn yet</span>}
         </p>
         {row.skills.map((s) => {
@@ -106,14 +107,14 @@ function RoadmapRowView({ row, steps }: { row: RoadmapRow; steps: Step[] }) {
             <div key={s.skill} className="req-bar" role="img" aria-label={`${SKILL_EN[s.skill]} ${s.have} of ${s.need}, ${left} missing`}>
               <span className="req-bar-label">{SKILL_EN[s.skill]} {s.have}/{s.need}</span>
               <span className="req-bar-track"><span className="req-bar-fill" style={{ width: `${width}%` }} /></span>
-              <span className="req-bar-left muted small">{left} missing <a href={hrefTo.skills(SKILL_PAGE[s.skill])} title="How to make up">⚡</a></span>
+              <span className="req-bar-left muted small">{left} missing <a href={hrefTo.skills(SKILL_PAGE[s.skill])} title="How to make up" aria-label="How to make up"><Icon name="bolt" size={12} /></a></span>
             </div>
           );
         })}
         {row.quests.map((q) => {
           const step = questStep(steps, q);
           return (
-            <p key={q} className="small">✗ quest {q}{step ? <> <a href={hrefTo.step(step.id)}>🧭 to step {step.id}</a></> : <span className="muted"> — not on the route</span>}</p>
+            <p key={q} className="small">✗ quest {q}{step ? <> <a href={hrefTo.step(step.id)}>to step {step.id}</a></> : <span className="muted"> — not on the route</span>}</p>
           );
         })}
       </div>
@@ -317,7 +318,7 @@ export function GearPage() {
         {roadmap.length > 0 ? <ul className="gear-roadmap">{roadmap.map((r) => <RoadmapRowView key={r.key} row={r} steps={steps} />)}</ul> : <p className="small muted">Nothing better within reach of your levels.</p>}
         <p className="gear-chips gear-prayers" aria-label="Prayers">
           {prayers.map((p) => (
-            <span key={p.name} className={`chip ${p.ready ? 'is-ready' : ''}`} title={p.title}>🙏 {p.name}{p.ready ? '' : ' · 4 Prayer'}</span>
+            <span key={p.name} className={`chip ${p.ready ? 'is-ready' : ''}`} title={p.title}>{p.name}{p.ready ? '' : ' · 4 Prayer'}</span>
           ))}
         </p>
       </details>}

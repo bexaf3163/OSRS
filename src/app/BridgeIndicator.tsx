@@ -21,7 +21,7 @@ export function BridgeIndicator() {
           : 'The OSRS Path Bridge plugin does not respond on 127.0.0.1:38282 — start RuneLite with the plugin. A saved target waits there.';
   return (
     <a className={`bridge-indicator ${online ? 'is-online' : ''} ${stale ? 'is-stale' : ''}`} href={hrefTo.settings()} title={hint} aria-label={`${label}. ${hint}`}>
-      <span className="bridge-dot" aria-hidden="true">{stale ? '🟡' : online ? '🟢' : '⚪'}</span>
+      <span className="bridge-dot" aria-hidden="true" />
       <span className="bridge-label">{label}</span>
       {/* Between 1280 and 1719 px the full label does not fit: a one-word status keeps the dot from being a riddle. */}
       <span className="bridge-label-short">{stale ? 'Update' : LINK_SHORT[status]}</span>

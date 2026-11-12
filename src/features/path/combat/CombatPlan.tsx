@@ -47,7 +47,7 @@ export function CombatPlan({ v }: { v: CombatPlanView }) {
   const e = v.primary;
   return (
     <section className="step-section combat-plan" aria-label="Food and time">
-      <h4 className="subhead">🍖 Food and time <span className="muted small">· {foeLabel(e.foe)}</span></h4>
+      <h4 className="subhead">Food and time <span className="muted small">· {foeLabel(e.foe)}</span></h4>
       <p>
         <strong>Next trip: {v.nextTrip} {v.food}</strong>
         <span className="muted"> · whole goal {span(v.total.low, v.total.high)} {v.food}</span>

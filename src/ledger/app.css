@@ -33,7 +33,6 @@ body{background:#050302}
 .la-gem .bridge-label-short{display:none}
 :root .la-root .la-gem .bridge-label{max-width:none;overflow:visible;white-space:nowrap}
 :root .la-root .la-gem .launch-runelite{height:32px;padding:0 10px;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--la-gold);background:#150e09;color:var(--la-gold2);font-family:var(--la-disp);font-style:normal;font-weight:600;font-size:10px;letter-spacing:.14em;border-radius:0;box-shadow:none}
-:root .la-root .la-gem .launch-runelite [aria-hidden="true"]{display:none}
 :root .la-root .la-gem .launch-runelite:hover{background:#2a1d0e}
 
 /* ---- notices above the book ---- */

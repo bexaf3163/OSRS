@@ -20,7 +20,7 @@ import { transportSources } from '../../../domain/readiness/liveTransport';
 import { RoadSupplies } from '../../shopping/RoadSupplies';
 import { isClosed } from '../../../domain/quests/next-step';
 
-const BADGE: Record<Availability, string> = { ready: '✓ available now', maybe: '? check', locked: '🔒 not yet' };
+const BADGE: Record<Availability, string> = { ready: '✓ available now', maybe: '? check', locked: '✕ not yet' };
 /** A way that starts with a stop (runes, a tablet, coins, an axe to get first) is neither "now" nor "check": it says what to do first. */
 const badgeOf = (o: TravelOption) => (o.availability !== 'locked' && (o.prepare || o.acquire) ? '⇢ after a stop' : BADGE[o.availability]);
 
@@ -80,7 +80,7 @@ export function TravelPlan({ step }: { step: Step }) {
     <section className="step-section travel-plan" aria-label="How to get there">
       <div className="ingame-row">
         <button type="button" className="btn" onClick={() => void ask()} disabled={busy || state !== 'online' || !inGame}>
-          📍 Where am I? How to get there
+          Where am I? How to get there
         </button>
         {places.length > 1 && (
           <label className="small select-field">
@@ -117,10 +117,10 @@ export function TravelPlan({ step }: { step: Step }) {
                 )}
                 {o.note && <p className="muted small">{o.note}</p>}
                 {o.id === 'canoe' && o.availability !== 'locked' && (
-                  <button type="button" className="btn btn-sm" onClick={() => void navigateToStation(o, navigate)}>🧭 Lead to the station</button>
+                  <button type="button" className="btn btn-sm" onClick={() => void navigateToStation(o, navigate)}>Lead to the station</button>
                 )}
                 {o.go && o.availability !== 'locked' && (
-                  <button type="button" className="btn btn-sm" onClick={() => void navigate({ label: o.go!.label, x: o.go!.x, y: o.go!.y, plane: o.go!.plane })}>🧭 Lead to {o.go.label}</button>
+                  <button type="button" className="btn btn-sm" onClick={() => void navigate({ label: o.go!.label, x: o.go!.x, y: o.go!.y, plane: o.go!.plane })}>Lead to {o.go.label}</button>
                 )}
               </li>
             ))}

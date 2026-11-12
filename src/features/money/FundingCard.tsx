@@ -17,6 +17,7 @@ import type { PriceView } from '../../domain/market/quotes';
 import type { Realized } from '../../domain/economy/funding/session';
 import type { Tier } from '../../domain/market/needPrice';
 import { hrefTo } from '../../domain/pages/pages';
+import { Icon } from '../../ledger';
 
 const gp = (n: number) => `${formatGp(Math.round(n))} gp`;
 
@@ -198,7 +199,7 @@ export function FundingStatusLine({ step, onOpen }: { step: Step; onOpen: () => 
   const paused = plan.status === 'PAUSED';
   return (
     <p className="small status-funding" role="status">
-      <span aria-hidden="true">💰</span> {paused ? 'Raising coins: paused.' : view.action}
+      <Icon name="coin" size={14} /> {paused ? 'Raising coins: paused.' : view.action}
       {!paused && view.progress && <span className="muted"> · {view.progress}{view.estimated ? ' (estimated)' : ''}</span>}
       {' '}<button type="button" className="btn btn-ghost btn-sm" onClick={onOpen}>Open</button>
     </p>

@@ -21,9 +21,9 @@ import { useUpgradeRecommendation } from '../combat/UpgradePrompt';
 import { hrefTo } from '../../../domain/pages/pages';
 
 const WHERE: Record<PrepWhere, { icon: string; text: string }> = {
-  EQUIPPED: { icon: '🛡', text: 'worn' },
+  EQUIPPED: { icon: '◈', text: 'worn' },
   INVENTORY: { icon: '✓', text: 'in the bag' },
-  BANK: { icon: '🏦', text: 'in the bank' },
+  BANK: { icon: '▤', text: 'in the bank' },
   MISSING: { icon: '✗', text: 'missing' },
   UNKNOWN: { icon: '?', text: 'not checked' },
 };
@@ -48,7 +48,7 @@ function partOf(l: PrepLine): string | null {
 }
 
 function Row({ l, showWhy = true }: { l: PrepLine; showWhy?: boolean }) {
-  const w = l.equip && l.where === 'INVENTORY' ? { icon: '↗', text: 'in your bag: equip it' } : l.unnote ? { icon: '🏦', text: 'banknotes: unnote first' } : WHERE[l.where];
+  const w = l.equip && l.where === 'INVENTORY' ? { icon: '↗', text: 'in your bag: equip it' } : l.unnote ? { icon: '▤', text: 'banknotes: unnote first' } : WHERE[l.where];
   const part = partOf(l);
   return (
     <li className={`prep-line is-${l.where.toLowerCase()} p-${l.priority.toLowerCase()}`}>
@@ -82,8 +82,8 @@ export function RecoveryBanner({ step, rec }: { step: Step; rec: NonNullable<Pre
   const r = rec.recovery;
   const far = r.distance !== null ? ` (~${r.distance} tiles away)` : '';
   const head = r.reason === 'DEATH'
-    ? `💀 You died${r.landedAt ? ' and respawned in Lumbridge' : ''} — step ${step.id} is left far behind${far}`
-    : `🔁 You are in Lumbridge, and step ${step.id} is far${far}: it looks like a teleport in the middle of the step`;
+    ? `You died${r.landedAt ? ' and respawned in Lumbridge' : ''} — step ${step.id} is left far behind${far}`
+    : `You are in Lumbridge, and step ${step.id} is far${far}: it looks like a teleport in the middle of the step`;
   const back = r.target ? { label: `Step ${step.id}`, x: r.target.x, y: r.target.y, plane: r.target.plane, stepId: step.id } : null;
   return (
     <div className="prep-recovery" role="alert">
@@ -162,7 +162,7 @@ export function OneTripCard({ step, inStatus = false, plain = false, nowShown = 
   const unknownCoins = plan.coins.need > 0 && plan.coins.have === null;
   const coinLine = (coinsShort || unknownCoins) && (
     <p className="small">
-      💰 <strong>Coins for the steps:</strong>{' '}
+      <strong>Coins for the steps:</strong>{' '}
       {coinsShort
         ? <>{formatGp(plan.coins.missing!)} gp of {formatGp(plan.coins.need)} missing{plan.coins.action?.href && <> · <a href={plan.coins.action.href}>how to make up →</a></>}</>
         : <span className="muted">{formatGp(plan.coins.need)} gp needed — I do not know yet how much you have</span>}
@@ -171,42 +171,42 @@ export function OneTripCard({ step, inStatus = false, plain = false, nowShown = 
   return (
     <section className="one-trip" aria-label="What you need">
       <p className="readiness-head">
-        🧳 <strong>What you need</strong>
+        <strong>What you need</strong>
         <span className="muted"> — for {plan.stepIds.length} {plan.stepIds.length === 1 ? 'step' : 'steps'} ahead</span>
         {percent !== null && <span className={`prep-score is-${scope ? (percent === 100 ? 'ready' : 'not_ready') : score.verdict.toLowerCase()}`}> · ready {percent}%</span>}
       </p>
       {!scope && (score.critical > 0 || score.important > 0 || score.optimizations > 0 || score.unknown > 0) && (
         <p className="small prep-chips">
-          {score.critical > 0 && <span className="prep-chip is-critical">🔴 critical: {score.critical}</span>}
-          {score.important > 0 && <span className="prep-chip is-important">🟡 important: {score.important}</span>}
-          {score.optimizations > 0 && <span className="prep-chip is-opt">⚡ improvements: {score.optimizations}</span>}
+          {score.critical > 0 && <span className="prep-chip is-critical">critical: {score.critical}</span>}
+          {score.important > 0 && <span className="prep-chip is-important">important: {score.important}</span>}
+          {score.optimizations > 0 && <span className="prep-chip is-opt">improvements: {score.optimizations}</span>}
           {score.unknown > 0 && <span className="prep-chip is-unknown">? not checked: {score.unknown}</span>}
         </p>
       )}
       {!plain && <ChipStrip plan={plan} showLater={profile.showLater} />}
       {plan.recovery && !inStatus && <RecoveryBanner step={step} rec={plan.recovery} />}
-      {quiet && <p className="small">🟢 <strong>All ready</strong> — you can go.</p>}
+      {quiet && <p className="small"><strong>All ready</strong> — you can go.</p>}
       {plan.blockers.length > 0 && (
         <ul className="small">
-          {plan.blockers.map((b) => <li key={b.label} className="prep-line is-missing p-critical"><span className="prep-where" aria-hidden="true">🔒</span><strong>{b.label}</strong>{b.detail && <span className="muted"> — {b.detail}</span>}</li>)}
+          {plan.blockers.map((b) => <li key={b.label} className="prep-line is-missing p-critical"><span className="prep-where" aria-hidden="true"></span><strong>{b.label}</strong>{b.detail && <span className="muted"> — {b.detail}</span>}</li>)}
         </ul>
       )}
-      {!nowShown && <Section title="🔴 Needed now" lines={now} />}
-      <Section title="🟡 Meanwhile" hint="will be needed in the next steps" lines={soon} />
+      {!nowShown && <Section title="Needed now" lines={now} />}
+      <Section title="Meanwhile" hint="will be needed in the next steps" lines={soon} />
       {byTheWay.length > 0 && (
-        <p className="small prep-title"><strong>⚪ Along the way:</strong> <span className="muted">{byTheWay.map((l) => `${l.name}${countOf(l)}`).join(', ')} — no need to take them in advance</span></p>
+        <p className="small prep-title"><strong>Along the way:</strong> <span className="muted">{byTheWay.map((l) => `${l.name}${countOf(l)}`).join(', ')} — no need to take them in advance</span></p>
       )}
       {inStatus ? <FundingCard step={step}>{coinLine}</FundingCard> : coinLine}
       {slots.over > 0 && (
         <p className="notice small" role="note">
-          ⚠️ <strong>It will not all fit at once:</strong> {slots.used} of {BAG_SLOTS} bag slots used, {slots.adding} more to take or collect — {slots.over}{' '}
+          ⚠ <strong>It will not all fit at once:</strong> {slots.used} of {BAG_SLOTS} bag slots used, {slots.adding} more to take or collect — {slots.over}{' '}
           {slots.over === 1 ? 'slot' : 'slots'} too many. Take what this step needs now, the rest later.
         </p>
       )}
       {plan.weight.items.length > 0 && (
         <div className={`prep-weight is-${plan.weight.level.toLowerCase()}`} role="note">
           <p className="small">
-            ⚖️ <strong>{plan.weight.level === 'HEAVY' ? 'Leave the extra in the bank' : 'You can lighten the bag'}:</strong>{' '}
+            <strong>{plan.weight.level === 'HEAVY' ? 'Leave the extra in the bank' : 'You can lighten the bag'}:</strong>{' '}
             {plan.weight.items.map((i) => `${i.name}${i.count > 1 ? ` ×${i.count}` : ''} (${kgText(i.kg)})`).join(', ')}.
           </p>
           <p className="small muted">
@@ -214,20 +214,20 @@ export function OneTripCard({ step, inStatus = false, plain = false, nowShown = 
             {plan.weight.current !== null && plan.weight.after !== null && plan.weight.ratio !== null
               ? <>Weight {kgText(plan.weight.current)} → {kgText(Math.max(0, plan.weight.after))}{plan.weight.ratio >= 1.05 ? <>: running will last ~{(Math.round(plan.weight.ratio * 10) / 10).toLocaleString('en-US')}x longer.</> : '.'}</>
               : <>It would shed {kgText(plan.weight.saving)}; the total weight from the game has not arrived yet.</>}
-            {plan.weight.action && <> <span className="prep-action">{plan.weight.action.label}{plan.weight.action.nav && <> <NavigateButton target={plan.weight.action.nav} label="🧭" compact /></>}</span></>}
+            {plan.weight.action && <> <span className="prep-action">{plan.weight.action.label}{plan.weight.action.nav && <> <NavigateButton target={plan.weight.action.nav} label="" compact /></>}</span></>}
           </p>
         </div>
       )}
       {cleanup && (
         <details className="small prep-cleanup" open={cleanup.tight}>
-          <summary className="muted">🧹 Bag cleanup: {cleanup.items.length} {cleanup.items.length === 1 ? 'thing' : 'things'} could stay in the bank, freeing ~{cleanup.slotsFreed} {cleanup.slotsFreed === 1 ? 'slot' : 'slots'}{cleanup.tight ? ' (the bag is tight)' : ''}</summary>
+          <summary className="muted">Bag cleanup: {cleanup.items.length} {cleanup.items.length === 1 ? 'thing' : 'things'} could stay in the bank, freeing ~{cleanup.slotsFreed} {cleanup.slotsFreed === 1 ? 'slot' : 'slots'}{cleanup.tight ? ' (the bag is tight)' : ''}</summary>
           <ul>{cleanup.items.map((i) => <li key={i.name}>{cleanupLine(i)}</li>)}</ul>
           <p className="muted">Not asked for by this step or the nearest ones. Money, food, potions, runes, staffs, teleports and jewellery are never listed.</p>
         </details>
       )}
       {plan.have.length > 0 && (
         <details className="small">
-          <summary className="muted">🟢 Already have: {plan.have.length}</summary>
+          <summary className="muted">Already have: {plan.have.length}</summary>
           <ul>{plan.have.map((l) => <Row key={l.key} l={l} />)}</ul>
         </details>
       )}
@@ -239,11 +239,11 @@ export function OneTripCard({ step, inStatus = false, plain = false, nowShown = 
       )}
       {plan.optimizations.length > 0 && (
         <details className="small" open={plan.optimizations.some((l) => l.key.startsWith('upgrade:'))}>
-          <summary className="muted">⚡ Improvements: {plan.optimizations.length}</summary>
+          <summary className="muted">Improvements: {plan.optimizations.length}</summary>
           <ul>{plan.optimizations.map((l) => <Row key={l.key} l={l} />)}</ul>
         </details>
       )}
-      <p className="small"><a className="btn btn-ghost btn-sm" href={hrefTo.shopping()}>🛒 Open the shopping list</a></p>
+      <p className="small"><a className="btn btn-ghost btn-sm" href={hrefTo.shopping()}>Open the shopping list</a></p>
     </section>
   );
 }

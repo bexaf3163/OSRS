@@ -51,7 +51,7 @@ export function PreflightPanel({ step }: { step: Step }) {
         </ul>
         </details>
         <p className={`preflight-verdict ${r.ready ? 'is-ready' : ''}`} role="status">
-          {r.ready ? '🟢 All ready — you can go'
+          {r.ready ? 'All ready — you can go'
             : r.rows.some(x => x.state === 'UNKNOWN') ? 'Not checked: refresh RuneLite equipment before setting off.'
             : owned.bankSeen ? `Not ready to set off: ${r.missing} missing${owned.bankSavedAt ? '. The bank is from a record of an earlier session: open it to refresh.' : ''}`
               : `Not ready to set off: ${r.missing} missing. Open the bank — I will show what is there and highlight what is needed.`}
@@ -61,7 +61,7 @@ export function PreflightPanel({ step }: { step: Step }) {
   }
   return (
     <div className="preflight" aria-label="Departure check">
-      <h4 className="subhead">🧳 Departure check</h4>
+      <h4 className="subhead">Departure check</h4>
       {body}
     </div>
   );

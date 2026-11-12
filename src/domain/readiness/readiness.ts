@@ -166,7 +166,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
       const have = levelFrom(state, r.skill);
       const label = `${skillName(r.skill)} ${r.min}`;
       const page = skillPage(r.skill);
-      const action: ReadinessAction | undefined = page ? { kind: 'link', label: `⚡ Catch up ${skillName(r.skill)}`, href: hrefTo.skills(page, r.skill, r.min) } : undefined;
+      const action: ReadinessAction | undefined = page ? { kind: 'link', label: `Catch up ${skillName(r.skill)}`, href: hrefTo.skills(page, r.skill, r.min) } : undefined;
       const hard = r.when !== 'during';
       const note = r.when === 'during' ? ' Needed during the quest: you can start without it.' : '';
       const boost = r.boostable ? ' It can be raised temporarily (boost).' : '';
@@ -190,13 +190,13 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
       } else if (game === 'NOT_DONE') {
         reqs.push({
           kind: 'quest', label: r.quest, state: 'MISSING', hard: true, detail: 'not completed in the game', source: 'game',
-          ...(qs ? { action: { kind: 'link' as const, label: `🧭 To the quest: ${qs.id}`, href: hrefTo.step(qs.id) } } : {}),
+          ...(qs ? { action: { kind: 'link' as const, label: `To the quest: ${qs.id}`, href: hrefTo.step(qs.id) } } : {}),
         });
       } else if (qs && isCompleted(p, qs.id)) {
         reqs.push({ kind: 'quest', label: r.quest, state: 'OK', hard: true, detail: `step ${qs.id} is marked done; game completion has not been checked`, source: 'route' });
       } else {
         reqs.push({ kind: 'quest', label: r.quest, state: 'UNKNOWN', hard: true, detail: qs && p.steps[qs.id] === 'skipped' ? `step ${qs.id} was skipped; game completion has not been checked` : 'game quest completion has not been checked',
-          ...(qs ? { action: { kind: 'link' as const, label: `🧭 To the quest: ${qs.id}`, href: hrefTo.step(qs.id) } } : {}),
+          ...(qs ? { action: { kind: 'link' as const, label: `To the quest: ${qs.id}`, href: hrefTo.step(qs.id) } } : {}),
         });
       }
     }
@@ -227,7 +227,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
         // Where to earn: the Money page ranks the methods for this player (the funding engine), not a route step.
         reqs.push({
           kind: 'coins', label, state: 'MISSING', hard: true, detail: `${gp(c.total ?? c.bag ?? 0)} in all, ${gp(res.missing ?? it.count)} short`, source: 'game',
-          action: { kind: 'link' as const, label: '💰 Earn it: Money', href: hrefTo.money() },
+          action: { kind: 'link' as const, label: 'Earn it: Money', href: hrefTo.money() },
         });
       }
       continue;
@@ -254,7 +254,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     const doses = !alt && doseKind(it.nameEn) ? needUnits(it.nameEn, it.count) : null;
     const u = doses !== null ? ' doses' : '';
     const label = `${it.nameEn}${it.count > 1 ? ` ×${it.count}${it.exact ? '' : '+'}` : ''}${doses !== null ? ` (${doses} doses)` : ''}${alt ? ` (or ${alt.slice(0, 2).join(', ')}${alt.length > 2 ? '…' : ''})` : ''}`;
-    const shop: ReadinessAction = { kind: 'link', label: '🛒 To shopping', href: hrefTo.shopping() };
+    const shop: ReadinessAction = { kind: 'link', label: 'To shopping', href: hrefTo.shopping() };
     // Food with a personal plan: the row is about one trip, and says what the whole goal still needs bought, so one exchange visit does it.
     const whole = (have: number) => (it.total !== undefined && it.total > have ? `; buy about ${it.total - have} for the whole goal` : '');
     // A tool you own but cannot use yet is said, so "no pickaxe" next to a Rune pickaxe in the bag is not a riddle.
@@ -380,7 +380,7 @@ function heldAll(state: PlayerState, names: readonly string[], key: string): Pic
 
 function bankNav(bank: Place, step: Step, itemName: string): ReadinessAction {
   // The target clears itself when the item is in the bag: the arrow returns to the step.
-  return { kind: 'nav', label: `🧭 To the bank: ${bank.label}`, target: { label: `${bank.label}: take ${itemName}`, x: bank.x, y: bank.y, plane: bank.plane, itemName, stepId: step.id } };
+  return { kind: 'nav', label: `To the bank: ${bank.label}`, target: { label: `${bank.label}: take ${itemName}`, x: bank.x, y: bank.y, plane: bank.plane, itemName, stepId: step.id } };
 }
 
 /** The main reason by seniority: closed, quest, levels, items, coins, small things, unknown. */
@@ -397,13 +397,13 @@ function statusOf(reqs: RequirementStatus[]): ReadinessStatus {
   return 'READY';
 }
 
-export const STATUS_TEXT: Record<ReadinessStatus, { icon: string; text: string }> = {
-  READY: { icon: '🟢', text: 'Ready for the step' },
-  MINOR_PREP: { icon: '🟡', text: 'Almost ready: a small thing before leaving' },
-  MISSING_ITEM: { icon: '🟠', text: 'Items are missing' },
-  MISSING_MONEY: { icon: '🟠', text: 'Coins are missing' },
-  MISSING_STATS: { icon: '🟠', text: 'A short preparation is needed: levels' },
-  MISSING_QUEST: { icon: '🔴', text: 'The quest first' },
-  BLOCKED: { icon: '🔴', text: 'The step is closed for now' },
-  UNKNOWN: { icon: '⚪', text: 'No problems seen, but not everything was checked' },
+export const STATUS_TEXT: Record<ReadinessStatus, { text: string }> = {
+  READY: { text: 'Ready for the step' },
+  MINOR_PREP: { text: 'Almost ready: a small thing before leaving' },
+  MISSING_ITEM: { text: 'Items are missing' },
+  MISSING_MONEY: { text: 'Coins are missing' },
+  MISSING_STATS: { text: 'A short preparation is needed: levels' },
+  MISSING_QUEST: { text: 'The quest first' },
+  BLOCKED: { text: 'The step is closed for now' },
+  UNKNOWN: { text: 'No problems seen, but not everything was checked' },
 };

@@ -219,19 +219,19 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
 
       <div className="tiles">
         <div className="tile tile-ge">
-          <span className="tile-label">💰 Grand Exchange</span>
+          <span className="tile-label">Grand Exchange</span>
           <span className="tile-value">{buy.unit === null ? '—' : gp(buy.unit)}</span>
           <span className="tile-sub" title={buy.detail}>{buy.label}{buy.unit !== null ? ' (buy)' : ''}</span>
           <span className="tile-sub" title={sell.detail}>{sell.unit === null ? 'Sell price unavailable' : sell.text}</span>
         </div>
         <div className="tile">
-          <span className="tile-label">⚗️ High Alchemy</span>
+          <span className="tile-label">High Alchemy</span>
           <span className="tile-value">{item.highAlch !== undefined ? gp(item.highAlch) : '—'}</span>
           {item.lowAlch !== undefined && <span className="tile-sub">Low Alchemy {gp(item.lowAlch)}</span>}
           <AlchProfit highAlch={item.highAlch} price={buy} nature={nature} />
         </div>
         <div className="tile">
-          <span className="tile-label">🏪 Store value</span>
+          <span className="tile-label">Store value</span>
           <span className="tile-value">{gp(item.value)}</span>
           <span className="tile-sub">the base price at traders</span>
         </div>

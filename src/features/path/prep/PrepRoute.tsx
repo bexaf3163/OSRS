@@ -18,8 +18,10 @@ import { useActiveActivity, useReadinessEngine, useTrackedTraining } from '../..
 import { NavigateButton } from '../../../ui/NavigateButton';
 import { useTracked } from '../../../state/hooks/useTracked';
 import { useTrainingFunding } from '../../../state/trainingSessionContext';
+import { Icon } from '../../../ledger';
+type IconName = Parameters<typeof Icon>[0]['name'];
 
-const KIND_ICON: Record<PrepTask['kind'], string> = { block: '🔒', quest: '📜', stat: '⚡', buy: '🛒', money: '💰', bank: '🏦', equip: '🛡' };
+const KIND_ICON: Record<PrepTask['kind'], IconName> = { block: 'lock', quest: 'scroll', stat: 'bolt', buy: 'cart', money: 'coin', bank: 'bag', equip: 'shield' };
 
 function TaskAction({ a }: { a: ReadinessAction }) {
   if (a.kind === 'nav') return <NavigateButton target={a.target} label={a.label} />;
@@ -107,10 +109,10 @@ export function PrepRouteBlock({ step }: { step: Step }) {
   const go = primary.guide ?? primary.action;
   return (
     <div className="prep-route" role="group" aria-label="Preparation route">
-      <p className="small prep-head">🧭 <strong>Preparing for {step.id}</strong> <span className="muted">— the main thing first</span></p>
+      <p className="small prep-head"><strong>Preparing for {step.id}</strong> <span className="muted">— the main thing first</span></p>
       <div className="prep-primary">
         <p className="prep-now">
-          <span aria-hidden="true">{KIND_ICON[primary.kind]}</span> <strong>{primary.label}</strong>
+          <Icon name={KIND_ICON[primary.kind]} size={15} /> <strong>{primary.label}</strong>
           {primary.detail && <span className="muted"> — {primary.detail}</span>}
         </p>
         {primary.method && <p className="small muted">How: {primary.method}</p>}
@@ -120,7 +122,7 @@ export function PrepRouteBlock({ step }: { step: Step }) {
             <button type="button" className="btn btn-primary btn-sm" onClick={() => void resume()}>▶ Continue the preparation</button>
           ) : (
             <button type="button" className="btn btn-primary btn-sm" onClick={() => void begin()} disabled={underway}>
-              {underway ? '⚡ Preparation underway' : '▶ Start the preparation'}
+              {underway ? 'Preparation underway' : '▶ Start the preparation'}
             </button>
           )}
         </div>
@@ -132,7 +134,7 @@ export function PrepRouteBlock({ step }: { step: Step }) {
           <ol className="small prep-next" start={2}>
             {next.map((t) => (
               <li key={t.id}>
-                <span aria-hidden="true">{KIND_ICON[t.kind]}</span> {t.label}
+                <Icon name={KIND_ICON[t.kind]} size={14} /> {t.label}
                 {t.action && <> · <TaskAction a={t.action} /></>}
               </li>
             ))}
@@ -176,7 +178,7 @@ export function PrepWatcher() {
     if (staleArrows(prep, res.state, navTarget)) void releaseNav();
     if (res.returnTo) {
       const left = res.state.stack.length;
-      notify(left ? `🟢 One preparation trip is ready — next we return to ${res.returnTo}.` : `🟢 The preparation is ready — return to ${res.returnTo}.`);
+      notify(left ? `One preparation trip is ready — next we return to ${res.returnTo}.` : `The preparation is ready — return to ${res.returnTo}.`);
     }
   }, [prep, set, engine, notify, navTarget, releaseNav]);
   return null;
@@ -235,7 +237,7 @@ export function PrepAuto() {
         recent.current.set(`${focus.id}:${d.task.id}:${d.task.guide.target.x},${d.task.guide.target.y},${d.task.guide.target.itemName ?? ''}`, now);
         void navigate(d.task.guide.target);
       }
-      notify(`🧭 Preparing for ${focus.id}: ${d.task.label}. The arrow leads there; to return — "Return to the step".`);
+      notify(`Preparing for ${focus.id}: ${d.task.label}. The arrow leads there; to return — "Return to the step".`);
     } else if (d.kind === 'renav' || d.kind === 'retarget') {
       // No more than three times per target: if the plugin clears it at once (the player is already there), we do not loop.
       const n = (renavs.current.get(d.key) ?? 0) + 1;
@@ -249,7 +251,7 @@ export function PrepAuto() {
       }
     } else if (!announced.current.has(d.key)) {
       announced.current.add(d.key);
-      notify(`➡️ Next in the preparation for ${focus.id}: ${d.task.label}.`);
+      notify(`Next in the preparation for ${focus.id}: ${d.task.label}.`);
     }
   }, [focus, engine, prep, set, navTarget, navigate, releaseNav, profile, link, userClearedAt, notify, tracked, training, funding]);
   return null;

@@ -10,7 +10,7 @@ export function StepImage({ src, caption }: { src: string; caption?: string }) {
 
   return (
     <details className="step-image">
-      <summary>📷 Show the diagram / screenshot</summary>
+      <summary>Show the diagram / screenshot</summary>
       <figure className="step-figure">
         {failed ? (
           <div className="image-error" role="img" aria-label={alt}>

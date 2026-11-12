@@ -164,7 +164,7 @@ export function ShoppingPage() {
   const exchange = geListText(`Grand Exchange: ${scopeName}`, rows, list.coins, split ? isAhead : undefined);
   const copyList = async () => {
     if (!exchange) return;
-    notify(await copy(exchange) ? '📋 The exchange list is copied' : 'Could not copy: the clipboard is not available');
+    notify(await copy(exchange) ? 'The exchange list is copied' : 'Could not copy: the clipboard is not available');
   };
   const backHref = activity.href;
 
@@ -319,7 +319,7 @@ export function ShoppingPage() {
         </dl>
         <p className="small muted">{budget.unknownRows ? 'Check your bank before buying: unread items may already be yours.' : budget.unpriced ? `${budget.unpriced} without a price; the required total is not confirmed.` : empty === 'all-owned' ? 'Current requirements are covered. Follow Preparation for what to carry.' : 'Required items come first. Future bank stock stays optional.'}</p>
         <div className="shop-buttons">
-          {budget.shortfall !== null && budget.shortfall > 0 ? <a className="btn btn-primary" href={backHref}>Prepare funding</a> : exchange ? <button type="button" className="btn btn-primary" onClick={() => void copyList()}>📋 Copy the exchange list</button> : current ? <a className="btn btn-primary" href={backHref}>Review preparation</a> : <a className="btn btn-primary" href={hrefTo.path()}>Open Journey</a>}
+          {budget.shortfall !== null && budget.shortfall > 0 ? <a className="btn btn-primary" href={backHref}>Prepare funding</a> : exchange ? <button type="button" className="btn btn-primary" onClick={() => void copyList()}>Copy the exchange list</button> : current ? <a className="btn btn-primary" href={backHref}>Review preparation</a> : <a className="btn btn-primary" href={hrefTo.path()}>Open Journey</a>}
           {exchange && budget.shortfall !== null && budget.shortfall > 0 && <button type="button" className="link-btn" onClick={() => void copyList()}>Copy the exchange list</button>}
         </div>
       </section>}
