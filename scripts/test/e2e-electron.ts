@@ -194,9 +194,11 @@ try {
   await page.getByRole('tab', { name: 'Progress and copies', exact:true }).click();
   expect((await page.locator('main').innerText()).includes('Character profiles'), 'settings: character profiles are accessible');
   expect((await page.locator('main').innerText()).includes('E2E Tester'), 'bridge: the test character is shown in character profiles');
-  await page.getByRole('tab', { name:'App', exact:true }).click();
-  await page.getByRole('heading', { name: 'Updates', exact: true }).waitFor();
-  expect(!(await page.locator('main').innerText()).includes('Diagnostics') && await page.getByRole('heading', { name: 'Updates', exact: true }).count() === 1, 'settings: retired Diagnostics is absent and native updates remain');
+  // 2.93: Settings → App is retired; the version and the native update control sit at the foot of the rail.
+  const version = page.getByRole('group', { name: 'App version' });
+  await version.waitFor();
+  expect(!(await page.locator('main').innerText()).includes('Diagnostics') && await page.getByRole('tab', { name: 'App', exact: true }).count() === 0
+    && (await version.innerText()).toLowerCase().includes(`v${packageVersion}`), 'settings: retired Diagnostics and App tab are absent; the version and native updates sit on the rail');
 
   // The progress: a step mark goes into progress.json with an atomic write. Each mark opens its step by link: after a mark
   // Path stays on it (2.82.4: no jump along the old guide's order).
