@@ -18,8 +18,7 @@ import { useActiveActivity, useReadinessEngine, useTrackedTraining } from '../..
 import { NavigateButton } from '../../../ui/NavigateButton';
 import { useTracked } from '../../../state/hooks/useTracked';
 import { useTrainingFunding } from '../../../state/trainingSessionContext';
-import { Icon } from '../../../ledger';
-type IconName = Parameters<typeof Icon>[0]['name'];
+import { Icon, type IconName } from '../../../ledger';
 
 const KIND_ICON: Record<PrepTask['kind'], IconName> = { block: 'lock', quest: 'scroll', stat: 'bolt', buy: 'cart', money: 'coin', bank: 'bag', equip: 'shield' };
 

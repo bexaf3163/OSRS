@@ -1,6 +1,6 @@
 // The frame around the book: title strip, HUD, spine (navigation) and hotbar.
 import { useEffect, type ReactNode } from 'react';
-import { Icon } from './icons';
+import { Icon, type IconName } from './icons';
 import { LEDGER_NAV, type HotbarAction, type HotbarHandlers, type Player } from './model';
 import { hrefTo } from '../domain/pages/pages';
 
@@ -105,10 +105,8 @@ export function Spine({ section, footer }: { section: string; footer?: ReactNode
 
 const KEYS: Record<string, HotbarAction> = { q: 'prev', f: 'fix', s: 'start', g: 'game', m: 'map', u: 'remove', e: 'next' };
 
-type IconOf = Parameters<typeof Icon>[0]['name'];
-
 /** `titles` explain what each slot does for this step; `labels` and `icons` rename a slot whose action changes (Fix becomes Preparation). */
-export function Hotbar({ handlers, titles = {}, labels = {}, icons = {} }: { handlers: HotbarHandlers; titles?: Partial<Record<HotbarAction, string>>; labels?: Partial<Record<HotbarAction, string>>; icons?: Partial<Record<HotbarAction, IconOf>> }) {
+export function Hotbar({ handlers, titles = {}, labels = {}, icons = {} }: { handlers: HotbarHandlers; titles?: Partial<Record<HotbarAction, string>>; labels?: Partial<Record<HotbarAction, string>>; icons?: Partial<Record<HotbarAction, IconName>> }) {
   // The keys printed on the slots; never while typing, with a modifier or while a dialog is open.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -124,7 +122,7 @@ export function Hotbar({ handlers, titles = {}, labels = {}, icons = {} }: { han
     return () => window.removeEventListener('keydown', onKey);
   }, [handlers]);
 
-  const slot = (action: HotbarAction, key: string | null, icon: IconOf, label: string, extra = '') => (
+  const slot = (action: HotbarAction, key: string | null, icon: IconName, label: string, extra = '') => (
     <button type="button" className={`la-slot ${extra}`} disabled={!handlers[action]} title={titles[action]} aria-keyshortcuts={key ?? undefined} onClick={handlers[action]}>
       {key && <kbd>{key}</kbd>}
       <Icon name={icons[action] ?? icon} size={18} />

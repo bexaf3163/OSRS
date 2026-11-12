@@ -35,8 +35,8 @@ import { TravelPlan } from '../prep/TravelPlan';
 import { F2pStops, StepTraining } from '../../skills/TrainingCard';
 import { BranchSuggestions } from '../BranchSuggestions';
 import { TravelTip } from '../prep/TravelTip';
-import { Icon } from '../../../ledger';
-import { STATUS_ICON, type IconName } from '../prep/statusIcon';
+import { Icon, type IconName } from '../../../ledger';
+import { STATUS_ICON } from '../prep/statusIcon';
 
 type TabKey = 'prep' | 'gear' | 'food' | 'route' | 'plan';
 
