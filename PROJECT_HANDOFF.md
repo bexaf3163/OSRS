@@ -169,7 +169,7 @@ Worktree `C:/Users/Mark/Desktop/Ors-x9`; delivery branch `codex/combat-strategy-
 
 Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent entry for explicit goals and phased training/preparation; costs precede rewards; only sourced order-independent unknowns cancel. Cursors retire past stages; certificate proof stays physical. Procurement shares allocations/packages/fees; unknown flows weaken balances; start-only rewards never repeat; unknown hand-ins never buy; protection requires wearing; funding excludes stale/unsold cash. Shortest Path `375ce2c061df5c3961116dda6443f307df3223f1` (BSD, 64 regions, ESTIMATED); trip legs bounded, deduplicated, revision-guarded.
 
-Published 2.86.0 after CI gates; live pending. Current checks below.
+Live pending; current checks below.
 
 Resume from `.codex/work-state.md` and Git diff. `DecisionProvider` below Funding → `runtimeDecision` drives pages/prep/maps and `DecisionSync` (step, snapshot `decision{id,objectiveId,watch}`). Quest-length bands remain unmeasured heuristics; worker legs/castable teleports, Money-ranked EARN/gathering, GP/tool/position/Magic/restriction counterfactuals work. Unknown-time objectives remain visible. `candidates` expose minutes, unknowns, XP, rank/verdict; incomplete comparisons use unknown-count, known minimum and own cost, never term text; confidence LOW. Door/stair/enclosed-origin walking allowances ≤10 tiles are labelled. Path/Previous/Next/Journal follow planner order; retired steps cannot override it. Prep/Shopping/plugin/bank/funding/Defence-later use `engine.road`; Skills uses Decision floors then engine method changes. Guide retired. Live acceptance: Claude's RUNBOOK LIVE/PARTIAL rows.
 
@@ -218,7 +218,7 @@ Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3
 
 Known limits: fees are bounded allowances; gathering competition, Forestry and Musa Point boat banking are approximations; altar timing assumes the supported exit model; food estimates are no survival guarantee. Alchemy, enchanting and splashing keep target/setup/budget safeguards. No implied parity for unsupported Members or HDOS mechanics. Facts checked against the OSRS Wiki on 2026-10-31.
 
-## Current verification — encounters, tools, fresh-account planning (2.86.0–2.94.0)
+## Current verification — encounters, tools, fresh-account planning (2.86.0–2.94.1)
 
 Kept: `planning/encounter/{setups,strategy}.ts` compares bounded preparations; `executionStep` carries the kit; forecasts add damage-earned HP.
 
@@ -228,7 +228,7 @@ Kept: `planning/encounter/{setups,strategy}.ts` compares bounded preparations; `
 - `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`. `trainingKit.equipmentLine` states the tool/kit decision on Skills; F2P notes are one-line checkpoints, no Wiki rates. Weapons: one skill's XP.
 - Game line: engine's bank/drop choice; plaque shows the stamp alone. Closed optional quests are set aside (`setAsideQuests`); after all F2P quests, Path ranks `f2pCheckpoints` with Follow. One-step quests' stage checks point the game at the step. Path rows name unknown parts.
 
-Gear has bows/ranged armour; a worn bow (fitting arrows) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set arrows needed. Drops weigh cooking burns. Earning guides read the Wiki Details (`detailsOf`). Verified: 2,651 units, 787 browser checks, route/light gates; update −1% versus 2.93.0.
+Gear has bows/ranged armour; a worn bow (fitting arrows) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set arrows needed. Drops weigh cooking burns. Earning guides read the Wiki Details (`detailsOf`); Ledger icons replace colour emoji. Verified: 2,651 units, 787 browser checks, route/light gates; update +1% versus 2.94.0.
 
 Limits: armour by melee defence; Wiki bands for quest work, minus the prepared fight. `gate:f2p`: 23/23 quests, no checks; time unknown on 1/211 turns. Later fights are proven by `encounterSetups`, a current one with pending kit by its setup; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece. Measured quest times need shared data.
 
