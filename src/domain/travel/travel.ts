@@ -10,7 +10,6 @@ import { purchaseCost, purchaseFees, type PurchaseFee } from '../items/purchaseC
 import { type DetourRejection, type DetourDecision, emitDecision } from './decisionLog';
 import { selectCastingStaff } from './castingStaff';
 import type { RuneStaff } from './castingStaff';
-export { staffCover, stavesFor } from './castingStaff';
 export type { RuneStaff } from './castingStaff';
 
 export interface Point { x: number; y: number; plane: number }

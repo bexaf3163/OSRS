@@ -21,6 +21,7 @@ async function f2pSkillsScenarios(browser: Browser) {
     expect((await page.locator('.training').innerText()).includes('Defence checkpoint reached'), `Skills ${width}: a completed F2P checkpoint is explained instead of an empty Train pane`);
     expect((await text(page, 'h1')).includes('Defence'), `Skills ${width}: Defence opens directly`);
     expect((await text(page, '.f2p-skill-checkpoint')).includes('10 reached'), `F2P ${width}: the detail uses the same checkpoint as its tile`);
+    expect(!(await text(page, '.skill-level-goal')).includes('Goal'), `F2P ${width}: a reached checkpoint is not shown as a goal ahead ("Defence 10 → Goal 10")`);
     await page.locator('.skill-tile a[href="#/skills/ME/attack"]').click();
     await page.getByRole('group', { name: 'Training priority' }).waitFor();
     expect(await page.locator('[aria-label="Training priority"] button').count() === 3, `Skills ${width}: three priorities`);
@@ -44,6 +45,11 @@ async function f2pSkillsScenarios(browser: Browser) {
     expect((await text(page, '.f2p-skill-note')).includes('10 reached') && await page.locator('.skill-level-editor').count() === 1, `Skills ${width}: F2P evidence and level editing remain accessible`);
     await page.getByRole('tab', { name: 'Train', exact: true }).click();
     expect(await noOverflow(page) && !errors.length, `F2P ${width}: the direct skill guide stays usable`);
+    // The group without a chosen skill opens on the lagging skill whose checkpoint is still ahead: Strength 21 → 40, not Defence 10 (reached).
+    await page.evaluate(() => { location.hash = '#/skills/ME'; });
+    await page.locator('.skill-level-goal').filter({ hasText: 'Strength' }).waitFor({ timeout: 5000 }).catch(() => {});
+    const groupHead = await text(page, '.skill-level-goal');
+    expect(groupHead.includes('Strength 21') && groupHead.includes('Goal 40'), `F2P ${width}: Melee combat opens on Strength 21 → Goal 40, not on Defence past its checkpoint (got "${groupHead}")`);
     await page.context().close();
   }
 

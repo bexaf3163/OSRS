@@ -6,7 +6,6 @@ export const STORAGE_KEYS = {
   ledger: 'osrs-put:ledger',
   cleanup: 'osrs-put:cleanup',
   features: 'osrs-put:features',
-  combatPlans: 'osrs-put:combat-plans',
   fundingPlan: 'osrs-put:funding-plan',
   fundingRates: 'osrs-put:funding-rates',
   prep: 'osrs-put:prep',

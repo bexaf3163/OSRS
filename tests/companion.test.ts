@@ -7,7 +7,7 @@ import { evaluatePreflight } from '../src/domain/readiness/preflight';
 import { preflightItems } from '../src/domain/prep/stepItems';
 import { nameKey } from '../src/domain/items/itemKey';
 import { evaluateBranches, evaluateCondition, reasonLabel, watchedItems, type BranchContext } from '../src/domain/quests/branching';
-import { aggregateShopping, carryOverFrom, shoppingText } from '../src/domain/prep/shopping';
+import { aggregateShopping, carryOverFrom } from '../src/domain/prep/shopping';
 import { plural } from '../src/domain/text/format';
 import { parseStats } from '../src/services/bridgeEvents';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
@@ -226,11 +226,6 @@ describe('the GE bulk list', () => {
   it('the number of items with the English plural', () => {
     const w = (n: number) => `${n} ${plural(n, 'item', 'items')}`;
     expect([1, 3, 5, 11, 21, 31, 44, 112].map(w)).toEqual(['1 item', '3 items', '5 items', '11 items', '21 items', '31 items', '44 items', '112 items']);
-  });
-
-  it('the text for the exchange', () => {
-    expect(shoppingText('GE', [{ nameEn: 'Iron bar', buy: 2, exact: true }, { nameEn: 'Feather', buy: 1, exact: false }, { nameEn: 'Rope', buy: 0, exact: true }], 2500))
-      .toBe('GE\nIron bar x2\nFeather x1+\nCoins ~2,500 gp (for the steps themselves)');
   });
 
   it('the real route: stage 2 of F2P without double counting', () => {

@@ -5,7 +5,8 @@ import { createReadinessEngine } from '../src/domain/readiness/readinessEngine';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
 import { nameKey } from '../src/domain/items/itemKey';
-import { safetyBlockers, safetyRulesOf, SAFETY_RULES, type PrepPlan } from '../src/domain/prep/prepPlan';
+import { safetyBlockers, type PrepPlan } from '../src/domain/prep/prepPlan';
+import { safetyRulesOf, SAFETY_RULES } from '../src/domain/prep/safety';
 import { stepFightNames } from '../src/domain/combat/fightEstimate';
 import { THREATS } from '../src/data/threats';
 

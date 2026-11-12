@@ -28,7 +28,7 @@ import type { SourceOption } from './sourceRouter';
 import { sourceAction } from './acquisitionAction';
 import { safetyBlockers, safetyRulesOf } from './safety';
 import type { StepSafety } from './safety';
-export { SAFETY_RULES, safetyBlockers, safetyRulesOf } from './safety';
+export { safetyBlockers } from './safety';
 export type { StepSafety } from './safety';
 import { tripWindow, type OneTripPlan } from './oneTrip';
 import { preflightItems } from './stepItems';

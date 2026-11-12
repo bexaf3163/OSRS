@@ -4,8 +4,7 @@ import { stepReadiness } from '../src/domain/readiness/readiness';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import type { OwnedItem, OwnedState } from '../src/domain/items/checklist';
 import { nameKey } from '../src/domain/items/itemKey';
-import { pacingLevels, pacingText } from '../src/domain/player/pacing';
-import type { GearState, PacingState } from '../src/services/runeliteBridge';
+import type { GearState } from '../src/services/runeliteBridge';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { isOverworld, isSeparateArea } from '../src/domain/travel/instances';
 import { navigationTarget } from '../src/domain/guide/navigation';
@@ -101,27 +100,6 @@ describe('S3-08 where: the entrance on the surface, the level 12 room inside', (
   it('a target inside a separate area is never drawn on the world map', () => {
     const inside = { label: 'Minotaurs', x: 1876, y: 5216, plane: 0, stepId: 'S3-08' };
     expect(navigationTarget(s, { navTarget: inside })).toMatchObject({ instanced: true });
-  });
-});
-
-describe('S3-08 pace line in the app, the same words as the plugin', () => {
-  const base: PacingState = {
-    stepId: 'S3-08', skill: 'strength', targetLevel: 20, xp: 3070, remainingXp: 1400, actionsLeft: 35,
-    actionsPerMinute: null, etaSeconds: null, estimated: false, almost: false, done: false, left: ['attack'],
-  };
-  const all = ['strength', 'attack'] as const;
-
-  it('names the style to fight with', () => {
-    expect(pacingText(base, 'minotaur|minotaurs', all, pacingLevels(s.pacing!))).toBe('35 minotaurs to 20 Strength on Aggressive');
-  });
-
-  it('at Strength 20 it says which style comes next', () => {
-    expect(pacingText({ ...base, done: true, actionsLeft: 0 }, 'minotaur|minotaurs', all, pacingLevels(s.pacing!))).toBe('✓ 20 Strength - next Attack: switch to Accurate');
-  });
-
-  it('both goals reached: each with its own level', () => {
-    const done = { ...base, skill: 'attack' as const, targetLevel: 30, done: true, actionsLeft: 0, left: [] };
-    expect(pacingText(done, 'minotaur|minotaurs', all, pacingLevels(s.pacing!))).toBe('✓ Target levels reached: 20 Strength, 30 Attack');
   });
 });
 

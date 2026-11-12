@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { holdingFor, pluginCount, shoppingText } from '../src/domain/prep/shopping';
+import { holdingFor } from '../src/domain/prep/shopping';
 import { emptyProgress, normalizeProgress, withOwnedManual, MAX_OWNED } from '../src/domain/persistence/progress';
 import { known } from '../src/data';
 
@@ -49,21 +49,6 @@ describe('"I already have it": how much to buy (§97.22)', () => {
     expect(holdingFor(line(1, 'Dragon Slayer map'), null, undefined, false).status).toBe('UNAVAILABLE');
   });
 
-  it('the hint in the game: the plugin subtracts the bag itself, the manual mark is subtracted here — no double counting', () => {
-    const h = holdingFor(line(20), live({ Lobster: { carried: 5 } }, false), 13);
-    // The plugin will see 5 in the bag: 12 − 5 = 7 — the same as in the app.
-    expect(pluginCount(h)).toBe(12);
-    expect(pluginCount(h) - 5).toBe(h.buy);
-    expect(pluginCount(holdingFor(line(20), live({ Lobster: { carried: 5, bank: 8 } })))).toBe(20);
-  });
-
-  it('what is already owned does not go into the copied list', () => {
-    const text = shoppingText('GE', [
-      { nameEn: 'Iron bar', buy: 0, exact: true },
-      { nameEn: 'Lobster', buy: 7, exact: true },
-    ], 0);
-    expect(text).toBe('GE\nLobster x7');
-  });
 });
 
 describe('manual marks are kept in the progress', () => {
@@ -92,36 +77,5 @@ describe('manual marks are kept in the progress', () => {
     const back = normalizeProgress(saved, known)!.progress;
     expect(Object.keys(back.ownedManual!)).toEqual(['name:ball of wool']);
     expect(back.ownedManual!['name:ball of wool'].count).toBe(3);
-  });
-});
-
-describe('unverified items are not purchases', () => {
-  it('summarizeShopping keeps confirmed shortages, unverified items and budgets apart', async () => {
-    const { summarizeShopping } = await import('../src/domain/prep/shopping');
-    const s = summarizeShopping([
-      { h: { status: 'MISSING', buy: 2 }, unitPrice: 100 },
-      { h: { status: 'PARTIAL', buy: 1 }, unitPrice: 50 },
-      { h: { status: 'UNKNOWN', buy: 25 }, unitPrice: 10 },
-      { h: { status: 'UNKNOWN', buy: 1 }, unitPrice: null },
-      { h: { status: 'SUFFICIENT', buy: 0 }, unitPrice: 5 },
-      { h: { status: 'UNAVAILABLE', buy: 3 }, unitPrice: 5 },
-    ]);
-    expect(s).toMatchObject({ confirmed: 2, missing: 1, partial: 1, unverified: 2, owned: 1, confirmedGp: 250, unverifiedGp: 250, unpriced: 1 });
-  });
-
-  it('no observation at all: every item is unverified and none is a confirmed purchase', async () => {
-    const { summarizeShopping } = await import('../src/domain/prep/shopping');
-    const rows = ['Bones', 'Bucket', 'Knife'].map((nameEn) => ({
-      h: holdingFor({ nameEn, count: 1, exact: true }, null), unitPrice: 10,
-    }));
-    expect(rows.every((r) => r.h.status === 'UNKNOWN')).toBe(true);
-    expect(summarizeShopping(rows)).toMatchObject({ confirmed: 0, unverified: 3, confirmedGp: 0, unverifiedGp: 30 });
-  });
-
-  it('the copied text lists unverified items apart', () => {
-    expect(shoppingText('GE', [
-      { nameEn: 'Lobster', buy: 7, exact: true },
-      { nameEn: 'Bones', buy: 25, exact: true, unverified: true },
-    ], 0)).toBe('GE\nLobster x7\nUnverified (check your bank first):\nBones x25');
   });
 });

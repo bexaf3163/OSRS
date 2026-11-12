@@ -8,7 +8,7 @@ export function UpdateBanner() {
   const u = useUpdates();
   if (!u) return null;
   const { state: s } = u;
-  // A failed download of a known newer version stays here with its reason and a retry; a failed check alone is reported in Settings.
+  // A failed download of a known newer version stays here with its reason and a retry; a failed check alone shows as "Retry" beside the version on the rail.
   const failed = s.state === 'error' && s.canInstall && !!s.latest && s.latest !== s.current;
   if (s.state !== 'available' && s.state !== 'downloading' && s.state !== 'ready' && !failed) return null;
   const title = s.state === 'ready' ? `Version ${s.latest} is ready` : s.state === 'downloading' ? `Downloading ${s.latest} · ${percent(s.progress)}%` : `Version ${s.latest} is out`;

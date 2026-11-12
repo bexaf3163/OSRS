@@ -11,7 +11,7 @@ import {
   recommendFor, recommendUpgrade, showsPrompt, stepUpgradeCategories, toolProgression, upgradeNav, type RouterInput, type ToolProgression,
 } from '../src/domain/training/gearUpgradeRouter';
 import { matchStrict } from '../src/domain/travel/locations';
-import { actionForm, etaText, pacingNext, pacingText } from '../src/domain/player/pacing';
+import { actionForm } from '../src/domain/player/pacing';
 import { mapTarget, navPayload, pageFromUrl, sourceBadge } from '../src/domain/travel/places';
 import { stepOrRetired } from './fixtures/retiredSteps';
 
@@ -288,23 +288,18 @@ describe('The bridge: new requests and events', () => {
       .toEqual({ equipment: [{ id: 1351, name: 'Bronze axe' }], inventory: null, coins: 250, bankCoins: null });
   });
 
-  it('pace: from the event, without an invented time', () => {
+  it('pace: from the event, without an invented time (the HUD line itself is the plugin\'s, PacingSetTest.java)', () => {
     const e = { type: 'PACING', stepId: 'S1-11', pacing: { skill: 'fishing', targetLevel: 20, xp: 4130, remainingXp: 340, actionsLeft: 34, estimated: false, almost: false, done: false } };
     const p = parsePacing(e)!;
     expect(p).toMatchObject({ actionsLeft: 34, actionsPerMinute: null, etaSeconds: null });
-    expect(etaText(p)).toBe('calculating the time...');
-    expect(pacingText(p, 'shrimp|shrimps')).toBe('34 shrimps to 20 Fishing');
     expect(parsePacing({ type: 'PACING', stepId: 'S1-11', pacing: null })).toBeNull();
     expect(parsePacing({ type: 'PACING', stepId: 'S1-11', pacing: { skill: 'magic' } })).toBeNull();
-    const fast = parsePacing({ ...e, pacing: { ...e.pacing, actionsPerMinute: 10, etaSeconds: 204 } })!;
-    expect(etaText(fast)).toBe('≈ 3 min');
-    expect(pacingText({ ...p, almost: true, actionsLeft: 3 }, 'shrimp|shrimps')).toBe('✓ Almost done: 3 shrimps to 20 Fishing');
-    expect(pacingText({ ...p, done: true }, 'shrimp')).toBe('✓ Target level reached: 20 Fishing');
+    expect(parsePacing({ ...e, pacing: { ...e.pacing, actionsPerMinute: 10, etaSeconds: 204 } })).toMatchObject({ actionsPerMinute: 10, etaSeconds: 204 });
     expect(actionForm('log|logs', 1)).toBe('log');
     expect(actionForm('log|logs', 11)).toBe('logs');
   });
 
-  it('combat pace: the growing skill is shown, the others — "then", a finished skill suggests changing the style', () => {
+  it('combat pace: the skills still to train arrive in order, unknown ones dropped', () => {
     const e = { type: 'PACING', stepId: 'S3-08', pacing: {
       skill: 'strength', targetLevel: 30, xp: 5000, remainingXp: 8363, actionsLeft: 111, estimated: true, almost: false, done: false,
       actionsPerMinute: 3.2, etaSeconds: 2081, left: ['defence', 'magic', 'attack'],
@@ -312,15 +307,6 @@ describe('The bridge: new requests and events', () => {
     const p = parsePacing(e)!;
     // Unknown skills in left are dropped.
     expect(p.left).toEqual(['defence', 'attack']);
-    const all = ['attack', 'strength', 'defence'] as const;
-    expect(pacingText(p, 'warrior|warriors', all)).toBe('111 warriors to 30 Strength on Aggressive');
-    expect(etaText(p)).toBe('approx. 35 min');
-    expect(pacingNext(p)).toBe('then Defence and Attack');
-    expect(pacingNext({ ...p, left: ['defence'] })).toBe('then Defence');
-    const doneOne = { ...p, done: true, actionsLeft: 0, left: ['defence' as const] };
-    expect(pacingText(doneOne, 'warrior|warriors', all)).toBe('✓ 30 Strength - next Defence: switch to Defensive');
-    expect(pacingNext(doneOne)).toBe('');
-    expect(pacingText({ ...doneOne, left: [] }, 'warrior|warriors', all)).toBe('✓ Target level reached: 30 Attack, Strength, Defence');
     // An old plugin does not send left — that is just an empty list.
     expect(parsePacing({ ...e, pacing: { ...e.pacing, left: undefined } })!.left).toEqual([]);
   });

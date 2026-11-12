@@ -152,9 +152,10 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
   return (
     <section className={`training training-${view}`} aria-label={view === 'analysis' ? 'Method analysis' : 'What to train with'}>
       {summary && <>
-      <p className="readiness-head">
+      {/* The skill page's own header already names the skill, its level and goal. */}
+      {view === 'full' && <p className="readiness-head">
         <strong>What to train with: {skillTitle(skill)}</strong> <span className="muted">— now {advice.level}, goal {target}</span>
-      </p>
+      </p>}
       <div className="skill-seg" role="group" aria-label="Training priority">
         {([['fastest', 'XP'], ['balanced', 'Balanced'], ['profit', 'Money']] as const).map(([priority, label]) => (
           <button key={priority} type="button" className={`skill-seg-btn ${selectedPriority === priority ? 'is-on' : ''}`}
@@ -259,7 +260,7 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
       {showOthers && (
         <DetailSection className="small">
           <DetailHeading>Other methods{view === 'full' ? `: ${advice.others.length}` : ''}</DetailHeading>
-          <ul>{advice.others.slice(0, profile.alternatives || 3).map((v) => <Alternative key={v.method.id} v={v} />)}</ul>
+          <ul>{advice.others.slice(0, 3).map((v) => <Alternative key={v.method.id} v={v} />)}</ul>
         </DetailSection>
       )}
       </>}

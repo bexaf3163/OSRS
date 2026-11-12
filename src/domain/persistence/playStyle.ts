@@ -9,22 +9,19 @@ export type PlayStyle = 'chill' | 'efficient';
 
 export interface StyleProfile {
   style: PlayStyle;
-  label: string;
   /** Steps ahead after the current one in "one trip". */
   lookAhead: number;
   /** Show "Later" in one trip. */
   showLater: boolean;
   /** Show the time estimate and the comparison of methods. */
   showTime: boolean;
-  /** How many other methods to show at once (the rest are under "More"). */
-  alternatives: number;
   /** quiet means messages only about the main thing (done, time to go back); full means also "what is next in the queue". */
   announce: 'quiet' | 'full';
 }
 
 export const STYLES: Record<PlayStyle, StyleProfile> = {
-  chill: { style: 'chill', label: 'Calm', lookAhead: 2, showLater: false, showTime: false, alternatives: 0, announce: 'quiet' },
-  efficient: { style: 'efficient', label: 'Efficient', lookAhead: 4, showLater: true, showTime: true, alternatives: 3, announce: 'full' },
+  chill: { style: 'chill', lookAhead: 2, showLater: false, showTime: false, announce: 'quiet' },
+  efficient: { style: 'efficient', lookAhead: 4, showLater: true, showTime: true, announce: 'full' },
 };
 
 export const styleOf = (f: Pick<Features, 'efficient'>): StyleProfile => (f.efficient ? STYLES.efficient : STYLES.chill);

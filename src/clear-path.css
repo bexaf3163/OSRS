@@ -101,7 +101,6 @@ main { max-width:1800px; }
 :root:root .settings-content .mode-toggle .mode-btn.is-active, :root .settings-content .seg.is-active { border-color:var(--accent); color:var(--accent-ink); background:var(--accent-soft); box-shadow:inset 0 -1px var(--accent); }
 .settings-content .setting .mode-toggle span[aria-hidden="true"] { display:none; }
 :root:root .skill-detail .training { background:transparent; border:0; box-shadow:none; padding:0; }
-.skill-detail .training > .readiness-head { display:none; }
 .skill-detail .training-recommendation { margin-top:0; }
 .training-mode { padding:14px; background:var(--surface-3); border:1px solid var(--border); border-radius:6px; margin-top:8px; }
 .training-mode > span { display:block; font-size:.85rem; font-weight:600; margin-bottom:12px; }

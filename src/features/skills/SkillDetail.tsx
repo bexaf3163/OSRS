@@ -52,7 +52,15 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
   const goalOf = (id: string) => plannerGoals.get(id)?.level;
   const stops = useMethodStops();
   const focused = selectedSkill ? { ...skill, levelSkills: [selectedSkill] } : skill;
-  const planned = trainingFocus({ levelSkills: focused.levelSkills, goalOf, levelOf: (id) => levelOf(progress, id) });
+  const byPlanner = trainingFocus({ levelSkills: focused.levelSkills, goalOf, levelOf: (id) => levelOf(progress, id) });
+  // F2P without a planner need: a group (Melee combat) opens on the lagging skill whose checkpoint is still ahead, not on one already past it
+  // (Defence 20 with its checkpoint of 10 read "Goal 10" while Attack and Strength still had theirs to reach).
+  const ahead = mode === 'f2p' && byPlanner.source === 'generic' ? focused.levelSkills.filter((id) => {
+    const target = f2pAdviceFor(id)?.target;
+    return target != null && levelOf(progress, id) < target;
+  }) : [];
+  const planned = ahead.length && ahead.length < focused.levelSkills.length
+    ? trainingFocus({ levelSkills: ahead, goalOf, levelOf: (id) => levelOf(progress, id) }) : byPlanner;
   const checkpoint = mode === 'f2p' ? f2pAdviceFor(planned.skill)?.target : null;
   const training = useTrackedTraining();
   const ownTraining = training && focused.levelSkills.includes(training.step.followsMethod ?? '') ? training : null;
@@ -77,7 +85,7 @@ function SkillView({ skill, selectedSkill, requestedGoal }: { skill: Skill; sele
     <div className="page skill-detail">
       <header className="page-head">
         <SkillGlyph skill={focus.skill} size={48} />
-        <h1>{selectedSkill ? levelById.get(selectedSkill)?.name ?? skill.name : skill.name}<span className="skill-level-goal">{focusName ?? 'Level'} {level}{!defer && <> → Goal {focus.target}</>}</span>{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
+        <h1>{selectedSkill ? levelById.get(selectedSkill)?.name ?? skill.name : skill.name}<span className="skill-level-goal">{focusName ?? 'Level'} {level}{!defer && focus.target > level && <> → Goal {focus.target}</>}</span>{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
         <p className="muted">
           {(skill.nameEn ?? skill.subtitle) !== skill.name && <>{skill.nameEn ?? skill.subtitle} · </>}
           {skill.wiki && <a href={skill.wiki} target="_blank" rel="noopener noreferrer">Wiki <IconExternal /></a>}
