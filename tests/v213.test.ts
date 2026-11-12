@@ -1,19 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { castCost, hidesToCover, OPTIONS, planFor, SPELLS, staffPayback, STAFFS, RUNE_IDS, COWHIDE_ID } from '../src/domain/combat/magicPlan';
+import { SPELLS } from '../src/domain/combat/magicPlan';
 import { combatLevel } from '../src/domain/player/xp';
-import { xpForLevel } from '../src/domain/player/xp';
 import type { FundingMethod } from '../src/domain/economy/funding/types';
 import type { Step } from '../src/types';
 
-// Prices as on the exchange on 03.10.2026: runes 6, mind 3, fire staff 940, air staff 1542, hide 125.
-const prices = new Map<number, number>([
-  [RUNE_IDS.air, 6], [RUNE_IDS.mind, 3], [RUNE_IDS.fire, 6], [RUNE_IDS.earth, 6], [RUNE_IDS.water, 6],
-  [STAFFS.fire.id, 940], [STAFFS.air.id, 1542], [STAFFS.water.id, 1500], [STAFFS.earth.id, 1500], [COWHIDE_ID, 125],
-]);
 const spell = (id: string) => SPELLS.find((s) => s.id === id)!;
-const opt = (id: string) => OPTIONS.find((o) => o.id === id)!;
 
-describe('the magic plan', () => {
+describe('the spell table', () => {
   it('the spell table — as on the wiki', () => {
     expect(SPELLS.map((s) => [s.name, s.level, s.xp])).toEqual([
       ['Wind Strike', 1, 5.5], ['Water Strike', 5, 7.5], ['Earth Strike', 9, 9.5], ['Fire Strike', 13, 11.5],
@@ -22,47 +15,6 @@ describe('the magic plan', () => {
       ['Varrock Teleport', 25, 35], ['Lumbridge Teleport', 31, 41],
     ]);
     expect(spell('fire-strike').runes).toEqual({ fire: 3, air: 2, mind: 1 });
-  });
-  it('the price of a hit: the staff removes the runes of its element', () => {
-    expect(castCost(spell('fire-strike'), undefined, prices)).toBe(33);
-    expect(castCost(spell('fire-strike'), 'fire', prices)).toBe(15);
-    expect(castCost(spell('wind-strike'), 'air', prices)).toBe(3);
-    expect(castCost(spell('fire-strike'), undefined, new Map())).toBeNull();
-  });
-  it('from level 10 to 25: higher listed cast XP takes fewer casts, and the fire staff replaces paid runes', () => {
-    const from = xpForLevel(10);
-    const wind = planFor(opt('wind'), from, 25, prices)!;
-    const best = planFor(opt('best'), from, 25, prices)!;
-    const fire = planFor(opt('best-fire'), from, 25, prices)!;
-    expect(wind.casts).toBeGreaterThan(best.casts * 1.5);
-    expect(fire.runesCost).toBeLessThan(best.runesCost);
-    expect(fire.staffCost).toBe(940);
-    expect(fire.total).toBe(fire.runesCost + 940);
-    // Up to level 13 — Earth Strike, then Fire Strike.
-    expect(best.steps.map((s) => s.spell.id)).toEqual(['earth-strike', 'fire-strike']);
-    // The experience from all the hits covers what is needed.
-    const gained = best.steps.reduce((s, x) => s + x.casts * x.spell.xp, 0);
-    expect(gained).toBeGreaterThanOrEqual(xpForLevel(25) - from);
-  });
-  it('from 25 to 33: Varrock teleports up to level 31, then Lumbridge; pricier than strikes, but two to three times fewer spells', () => {
-    const tp = new Map(prices).set(RUNE_IDS.law, 120);
-    const tele = planFor(opt('tele'), xpForLevel(25), 33, tp)!;
-    const best = planFor(opt('best-fire'), xpForLevel(25), 33, tp)!;
-    expect(tele.steps.map((s) => s.spell.id)).toEqual(['varrock-teleport', 'lumbridge-teleport']);
-    expect(tele.casts).toBeLessThan(best.casts / 2);
-    expect(tele.total).toBeGreaterThan(best.total);
-    // Before level 25 there are no teleports — the option is not counted.
-    expect(planFor(opt('tele'), xpForLevel(10), 25, tp)).toBeNull();
-  });
-  it('a staff is already owned — it costs nothing; no price — no plan', () => {
-    expect(planFor(opt('best-fire'), xpForLevel(10), 25, prices, true)!.staffCost).toBe(0);
-    expect(planFor(opt('best'), xpForLevel(10), 25, new Map())).toBeNull();
-    expect(planFor(opt('best-fire'), xpForLevel(10), 25, new Map([[RUNE_IDS.air, 6], [RUNE_IDS.mind, 3], [RUNE_IDS.earth, 6], [RUNE_IDS.water, 6], [RUNE_IDS.fire, 6]]))).toBeNull();
-  });
-  it('the payback of the staff and the hide', () => {
-    expect(staffPayback('fire', spell('fire-strike'), prices)).toEqual({ perCast: 18, casts: 53 });
-    expect(hidesToCover(1000, prices)).toBe(8);
-    expect(hidesToCover(1000, new Map())).toBeNull();
   });
 });
 

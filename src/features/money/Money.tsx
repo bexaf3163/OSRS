@@ -20,6 +20,7 @@ import type { MethodEvaluation, RequirementCheck } from '../../domain/economy/fu
 import type { Ranking } from '../../domain/economy/funding/rank';
 import type { Step } from '../../types';
 import { Economics, FundingCard, PriceNote } from './FundingCard';
+import { TradeLimits } from './TradeLimits';
 import { Eyebrow, Page } from '../../ledger';
 import { hrefTo } from '../../domain/pages/pages';
 import { STORAGE_KEYS } from '../../domain/persistence/storageKeys';
@@ -245,6 +246,7 @@ function MoneyBody({ step }: { step: Step }) {
               : <>Your coins: {gp(coins.amount)}{coins.complete ? '' : ' (bag only: open your bank to count the rest)'}.</>}
           {live && m.ranking.best ? ` Ranked by the time to ${goalWords(m.rankedFor)}.` : ''}
         </p>
+        <TradeLimits />
       </header>
 
       {running && source && (

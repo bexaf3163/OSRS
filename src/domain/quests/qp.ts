@@ -10,8 +10,3 @@ export function questPoints(steps: Step[], p: Progress, base: number): number {
   const kept = new Set(p.qpKept ?? []);
   return steps.reduce((sum, s) => sum + (p.steps[s.id] === 'done' || kept.has(s.id) ? s.qp ?? 0 : 0), base);
 }
-
-/** How many points can be earned in all, taking skipped steps into account. */
-export function reachableQuestPoints(steps: Step[], p: Progress, base: number): number {
-  return steps.reduce((sum, s) => sum + (p.steps[s.id] === 'skipped' ? 0 : s.qp ?? 0), base);
-}

@@ -279,7 +279,36 @@ async function moneyScenarios(browser: Browser) {
   }
 }
 
+// New-account trade limits (2.94.3): with 10 quest points and total level 100 reached the game still cannot show the 20 hours of play. One
+// button says the limits are lifted, Undo takes it back; an account below the numbers has nothing to press.
+async function tradeLimitsScenario(browser: Browser) {
+  const mock = (questPoints: number): Mock => ({
+    progress: progressBefore('S5-01', { gameMode: 'f2p' }), market: true,
+    status: { protocol: 6, inGame: true, player: 'Trade Test', questPoints, totalLevel: 150, stats: { attack: 30, strength: 21, defence: 1, hitpoints: 24 } },
+  });
+  {
+    const { page, errors } = await open(browser, 1300, mock(30), '#/money');
+    const line = page.locator('.trade-limits');
+    await line.waitFor({ timeout: 5000 }).catch(() => {});
+    expect((await line.count()) === 1 && (await line.innerText()).includes('20 hours of play cannot be read'), 'trade limits: with the numbers reached the line names the hours the game cannot show');
+    await line.getByRole('button', { name: 'My trade limits are lifted' }).click();
+    await page.locator('.trade-limits').filter({ hasText: 'you marked them lifted' }).waitFor({ timeout: 5000 }).catch(() => {});
+    expect((await text(page, '.trade-limits')).includes('you marked them lifted'), 'trade limits: the button records the answer');
+    await page.locator('.trade-limits').getByRole('button', { name: 'Undo' }).click();
+    await page.locator('.trade-limits').getByRole('button', { name: 'My trade limits are lifted' }).waitFor({ timeout: 5000 }).catch(() => {});
+    expect(await page.locator('.trade-limits').getByRole('button', { name: 'My trade limits are lifted' }).count() === 1 && !errors.length, 'trade limits: Undo brings the question back, no console errors');
+    await page.context().close();
+  }
+  {
+    const { page } = await open(browser, 1300, mock(5), '#/money');
+    await settle(page);
+    expect(await page.locator('.trade-limits').count() === 0, 'trade limits: a new account below 10 quest points has nothing to press');
+    await page.context().close();
+  }
+}
+
 export const scenarios = {
   'funding': fundingScenarios,
   'money': moneyScenarios,
+  'trade-limits': tradeLimitsScenario,
 };

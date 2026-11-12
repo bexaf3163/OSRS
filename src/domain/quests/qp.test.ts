@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { StepStatus } from '../../types';
 import { BASE_QP, maxQpFor, stepById, stepsFor } from '../../data';
 import { emptyProgress, withReactivated, withStep } from '../persistence/progress';
-import { questPoints, reachableQuestPoints } from './qp';
+import { questPoints } from './qp';
 
 const f2p = stepsFor('f2p');
 const withSteps = (s: Record<string, StepStatus>) => ({ ...emptyProgress(), steps: s });
@@ -26,10 +26,9 @@ describe('quest points', () => {
     expect(questPoints(f2p, withSteps({ 'S2-05': 'done', 'S2-09': 'done', 'S1-09': 'done' }), BASE_QP)).toBe(8);
   });
 
-  it('a skipped quest gives no points and lowers the maximum', () => {
+  it('a skipped quest gives no points', () => {
     const p = withSteps({ 'S3-05': 'skipped' });
     expect(questPoints(f2p, p, BASE_QP)).toBe(1);
-    expect(reachableQuestPoints(f2p, p, BASE_QP)).toBe(45);
   });
 
   it('returning a step to active after V2 Review does not take points away', () => {

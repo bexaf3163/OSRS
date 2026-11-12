@@ -31,6 +31,8 @@ export function Welcome({ compact = false }: { compact?: boolean }) {
           <li><strong>Press Done</strong> when you have finished. The page moves to the next step.</li>
           <li><strong>Optional:</strong> connect RuneLite to see arrows and highlights in the game and to have steps tick themselves.</li>
         </ol>}
+        {/* The Reference has no place on the rail: its two beginner sections are named here, where a new player looks first (2.94.3). */}
+        <p className="small welcome-help">New to the game? <a href={hrefTo.reference('setup')}>Signing in and setup</a> · <a href={hrefTo.reference('stuck')}>If you do not know what to do</a></p>
       </div>
       <div className="welcome-actions">
         <button type="button" className="btn btn-primary" onClick={close}>Got it</button>

@@ -226,16 +226,6 @@
       "element": "teleport"
     }
   ],
-  "runeIds": {
-    "air": 556,
-    "mind": 558,
-    "water": 555,
-    "earth": 557,
-    "fire": 554,
-    "law": 563,
-    "chaos": 562,
-    "death": 560
-  },
   "staffs": {
     "air": {
       "name": "Staff of air",
@@ -253,6 +243,5 @@
       "name": "Staff of fire",
       "id": 1387
     }
-  },
-  "cowhideId": 1739
+  }
 }

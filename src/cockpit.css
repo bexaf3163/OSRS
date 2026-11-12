@@ -68,6 +68,7 @@
 .welcome-card { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; gap:18px 32px; padding:20px 24px; margin-bottom:22px; border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:12px; background:var(--surface); }
 .welcome-card h2 { font-size:1.25rem; margin:0 0 6px; }
 .welcome-card p { margin:0 0 10px; }
+.welcome-card .welcome-help { margin:4px 0 0; }
 .welcome-card ol { margin:0; padding-left:1.25rem; display:grid; gap:6px; max-width:46rem; }
 .welcome-actions { display:flex; flex-wrap:wrap; gap:10px; }
 
@@ -137,6 +138,8 @@
 /* 2.71: the Money section. One recommendation, a compact list, the details under a row. */
 .funding-browse { align-self: center; margin-left: 4px; }
 .money-page .money-context { margin: 0; }
+.money-page .trade-limits { margin: 8px 0 0; }
+.money-page .trade-limits .la-btn { margin-left: 6px; }
 .money-running { display: flex; flex-direction: column; gap: 2px; }
 .money-running .funding-card { margin: 0; }
 .money-running > p { margin: 0; }

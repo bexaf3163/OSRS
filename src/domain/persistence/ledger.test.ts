@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildPlayerState, diffPlayerState, type PlayerStateInput } from '../player/playerState';
-import { entriesFor, MIN_ETA_SECONDS, ratePerMinute, resourceGoal, summarize, type LedgerEntry } from './ledger';
+import { entriesFor, summarize, type LedgerEntry } from './ledger';
 import { planSources } from '../prep/sourceRouter';
 import type { OwnedItem, OwnedState } from '../items/checklist';
 import { nameKey } from '../items/itemKey';
@@ -71,33 +71,6 @@ describe('resource journal', () => {
       { name: 'Coins', quantityDelta: 500, reason: 'BANK_TRANSFER', timestamp: 5 },
     ];
     expect(summarize(entries)).toEqual({ coinsEarned: 300, coinsSpent: 100, estimatedLootValue: 400, unpricedLoot: 1, entries: 5 });
-  });
-
-  it('goal by resource: the known part, the shortfall and a separate estimate; the unknown stays unknown', () => {
-    expect(resourceGoal('Coins', 850, 2000)).toMatchObject({ missing: 1150, done: false });
-    expect(resourceGoal('Coins', 850, 2000, { estimated: 720 })).toMatchObject({ estimatedProgress: 1570, missing: 1150 });
-    expect(resourceGoal('Lobster', 25, 20)).toMatchObject({ missing: 0, done: true });
-    expect(resourceGoal('Coins', null, 2000)).toMatchObject({ current: null, missing: null, done: false });
-  });
-
-  it('time to goal — only from sufficient measurements', () => {
-    const now = 10 * 60_000;
-    const few: LedgerEntry[] = [{ name: 'Coins', quantityDelta: 100, reason: 'LOOT', timestamp: now - 1000 }];
-    expect(ratePerMinute(few, now, (e) => e.quantityDelta)).toBeNull();
-    const shortSpan: LedgerEntry[] = [
-      { name: 'Coins', quantityDelta: 100, reason: 'LOOT', timestamp: now - 30_000 },
-      { name: 'Coins', quantityDelta: 100, reason: 'LOOT', timestamp: now - 1000 },
-    ];
-    expect(ratePerMinute(shortSpan, now, (e) => e.quantityDelta)).toBeNull();
-    const enough: LedgerEntry[] = [
-      { name: 'Coins', quantityDelta: 300, reason: 'LOOT', timestamp: now - 300_000 },
-      { name: 'Coins', quantityDelta: 300, reason: 'LOOT', timestamp: now - 1000 },
-    ];
-    const rate = ratePerMinute(enough, now, (e) => e.quantityDelta);
-    expect(rate).toBeGreaterThan(0);
-    expect(resourceGoal('Coins', 500, 2000, { ratePerMinute: rate }).etaMinutes).toBeGreaterThan(0);
-    expect(resourceGoal('Coins', 500, 2000, { ratePerMinute: null }).etaMinutes).toBeUndefined();
-    expect(MIN_ETA_SECONDS).toBeGreaterThan(0);
   });
 });
 

@@ -127,7 +127,20 @@ async function visualReview(browser: Browser) {
   }
 }
 
+// A new player's welcome card names the two beginner sections of the Reference, which has no place on the rail (2.94.3).
+async function welcomeHelp(browser: Browser) {
+  const { page, errors } = await open(browser, 1300, { progress: { steps: {} } }, '#/');
+  await page.locator('.welcome-help').waitFor({ timeout: 5000 }).catch(() => {});
+  const hrefs = await page.locator('.welcome-help a').evaluateAll((as) => as.map((a) => a.getAttribute('href')));
+  expect(hrefs.join(' ') === '#/reference/setup #/reference/stuck', `welcome: the card links Signing in and setup, and If you do not know what to do (${hrefs.join(' ')})`);
+  await page.locator('.welcome-help a').first().click();
+  await page.locator('h1').filter({ hasText: 'Signing in and setup' }).waitFor({ timeout: 5000 }).catch(() => {});
+  expect(await page.locator('h1').filter({ hasText: 'Signing in and setup' }).count() === 1 && !errors.length, 'welcome: the link opens the Reference section');
+  await page.context().close();
+}
+
 export const scenarios = {
+  'welcome-help': welcomeHelp,
   'all-pages': allPages,
   'csp': csp,
   'header': header,
