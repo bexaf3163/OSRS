@@ -46,8 +46,6 @@
 .plaque-members { background: var(--members-soft); border-color: color-mix(in srgb, var(--members) 40%, transparent); }
 .plaque-done { background: var(--done-soft); border-color: color-mix(in srgb, var(--done) 40%, transparent); }
 .plaque-done strong { color: var(--done); }
-.plaque-review { background: var(--warn-soft); border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
-.plaque-review .btn { min-height: 40px; }
 
 .step-section { display: flex; flex-direction: column; }
 .item-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 6px; }
@@ -103,7 +101,6 @@
   display: flex; flex-direction: column; gap: 10px;
   border-color: color-mix(in srgb, var(--warn) 45%, var(--border)); box-shadow: inset 4px 0 0 var(--warn);
 }
-.review-title { font-size: 1.05rem; }
 
 .next.is-members { box-shadow: inset 4px 0 0 var(--members); }
 .skill-card.is-members { border-color: color-mix(in srgb, var(--members) 30%, var(--border)); }

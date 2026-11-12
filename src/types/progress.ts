@@ -12,9 +12,7 @@ export interface Progress {
   /** When a step was marked done (ISO), for the time splits; absent for steps marked in bulk from the game or before splits existed. */
   doneAt?: Record<string, string>;
   gameMode?: GameMode;
-  /** Steps marked updatedInV2 that the user has already checked. */
-  reviewedV2Steps?: string[];
-  /** Steps returned to active after V2: their quest points are already earned in the game and are not rolled back. */
+  /** Steps an older save returned to active after the V2 guide update (retired in 2.94.5): their quest points were earned in the game and stay. */
   qpKept?: string[];
   /** Historical route marks/notes retained across migrations or content retirement; never current quest facts. */
   legacy?: { steps: Record<string, StepStatus>; notes: Record<string, string>; doneAt?: Record<string, string> };

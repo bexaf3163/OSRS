@@ -8,7 +8,6 @@ import { useStore } from '../../../state/store';
 import { useQuestPoints } from '../../../state/hooks/useQuestPoints';
 import { blockerParts, blockersOf, isClosed } from '../../../domain/quests/next-step';
 import { levelOf } from '../../../domain/persistence/progress';
-import { needsReview } from '../../../domain/readiness/review';
 import { IconCheck, IconExternal, TYPE_LABEL } from '../../../ui/Icons';
 import { Inline } from '../../../ui/Inline';
 import { LevelInput } from '../../../ui/LevelInput';
@@ -93,7 +92,7 @@ export type StepTab = 'steps' | 'prep' | 'travel' | 'details';
 
 /** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. noAside — the workspace shows the preparation list in its own column, Steps does not repeat it. statusAbove — the verdict is on a status line above, so Preparation does not say it again. verdictShown — a panel above already shows the readiness verdict card (the compact Bag tab's QuestSupplies). */
 export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = false, noAside = false, statusAbove = false, noManual = false, verdictShown = false, mapShown = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab | 'safety'; onPrep?: () => void; safetyShown?: boolean; noAside?: boolean; statusAbove?: boolean; noManual?: boolean; verdictShown?: boolean; mapShown?: boolean }) {
-  const { progress, mode, setStep, review, reactivate } = useStore();
+  const { progress, mode, setStep } = useStore();
   const qp = useQuestPoints();
   const { openNpc } = useWiki();
   const engine = useReadinessEngine();
@@ -102,7 +101,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
   const status = progress.steps[step.id];
   const dependencyBlockers = blockersOf(step, progress, qp, engine.dependencies);
   const blockers = isClosed(progress, step.id) ? null : dependencyBlockers;
-  const reviewing = needsReview(step, progress);
   const links = [
     step.wikiUrl && { href: step.wikiUrl, label: 'Wiki' },
     step.quickGuideUrl && { href: step.quickGuideUrl, label: 'Quick Guide' },
@@ -125,15 +123,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
     </div>
   );
 
-  const reviewPlaque = reviewing && (
-    <div className="plaque plaque-review" role="note">
-      <p><strong>⚠ New in version V2:</strong> {step.v2ChangesSummary}</p>
-      <div className="actions">
-        <button type="button" className="btn" onClick={() => reactivate([step.id])}>Reset to active</button>
-        <button type="button" className="btn btn-primary" onClick={() => review([step.id])}>Confirm and close</button>
-      </div>
-    </div>
-  );
 
   const where = (
     <>
@@ -277,7 +266,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
   );
 
   if (tab) {
-    if (tab === 'safety') return <div className="workspace-safety">{reviewPlaque}{warning}{fieldList(fieldsWarn)}</div>;
+    if (tab === 'safety') return <div className="workspace-safety">{warning}{fieldList(fieldsWarn)}</div>;
     // Manual completion is a quiet, explicit action: the recommended action is the one at the top of the workspace.
     const manual = (
       <div className="manual-complete">
@@ -294,7 +283,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
       const walkthrough = !!sub || overviewOf(step).length > 0;
       return (
         <div className="step-details is-tab">
-          {!safetyShown && reviewPlaque}
           {!safetyShown && warning}
           {!safetyShown && fieldList(fieldsWarn)}
           {(walkthrough || !noAside) && <div className={walkthrough && !noAside ? "quest-workspace-grid" : "quest-workspace-grid is-single"}>
@@ -394,7 +382,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
     // Everything else is folded: the future preparation, the full walkthrough, and "More".
     return (
       <div className="step-details is-zen">
-        {reviewPlaque}
         {!sub && where}
         {warning}
         {fieldList(fieldsWarn)}

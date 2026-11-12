@@ -149,8 +149,6 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
     const ids = (v: unknown) => (Array.isArray(v)
       ? [...new Set(v.filter((x): x is string => typeof x === 'string').map((x) => (fromV2 ? V3_FROM_V2[x] ?? x : x)).filter((x) => known.stepIds.has(x)))]
       : []);
-    const reviewed = ids(raw.reviewedV2Steps);
-    if (reviewed.length) p.reviewedV2Steps = reviewed;
     const kept = ids(raw.qpKept);
     if (kept.length) p.qpKept = kept;
     const dismissed = ids(raw.upgradeDismissedForSteps);
@@ -372,28 +370,6 @@ export function withOwnedManual(p: Progress, key: string, count: number | null):
   if (Object.keys(next).length) out.ownedManual = next;
   else delete out.ownedManual;
   return touch(out);
-}
-
-/** V2 Review: the step is checked, the warning is hidden, the mark stays. */
-export function withReviewed(p: Progress, ids: string[]): Progress {
-  const reviewed = [...new Set([...(p.reviewedV2Steps ?? []), ...ids])];
-  return touch({ ...p, reviewedV2Steps: reviewed });
-}
-
-/**
- * V2 Review: return steps to active. The mark is removed, but quest points received in the game are not rolled back:
- * the step goes to qpKept until it is marked again.
- */
-export function withReactivated(p: Progress, ids: string[], qpOf: (id: string) => number): Progress {
-  const steps = { ...p.steps };
-  const kept = new Set(p.qpKept ?? []);
-  for (const id of ids) {
-    if (steps[id] === 'done' && qpOf(id) > 0) kept.add(id);
-    delete steps[id];
-  }
-  const next: Progress = { ...p, steps, reviewedV2Steps: [...new Set([...(p.reviewedV2Steps ?? []), ...ids])] };
-  if (kept.size) next.qpKept = [...kept];
-  return touch(next);
 }
 
 export function levelOf(p: Progress, id: string): number {

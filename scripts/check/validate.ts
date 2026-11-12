@@ -87,7 +87,7 @@ function userTexts(s: Step): [string, string][] {
   const add = (where: string, t?: string) => { if (t) out.push([where, t]); };
   add('Where', s.where); add('How', s.how); add('Bring', s.bring); add('Reward', s.reward); add('Done when', s.doneWhen);
   add('Pro-tip', s.proTip); add('Safespot', s.safespot); add('Image caption', s.imageCaption);
-  add('What changed in V2', s.v2ChangesSummary); add('With membership', s.membersAlternative);
+  add('With membership', s.membersAlternative);
   add('NPC: place', s.npc?.location); add('NPC: dialogue', s.npc?.dialogue); add('Warning', s.warning);
   add('Map point', s.mapLocation?.label);
   s.resourceSpots?.forEach((p, i) => { add(`Point ${i + 1}`, p.label); add(`Point ${i + 1}: note`, p.note); });
@@ -225,8 +225,6 @@ export function validate(d: GuideData | null, route: Route): Report {
 
   const skillSteps = steps.filter((s) => s.type === 'skill').map((s) => s.id);
   check(!skillSteps.length, 'No route step is a skill step: the training engine plans skills', `Skill steps: ${skillSteps.join(', ')}`);
-  const review = steps.filter((s) => s.updatedInV2 && !s.v2ChangesSummary).map((s) => s.id);
-  check(!review.length, `Steps marked "updated in V2": ${steps.filter((s) => s.updatedInV2).length}, all have an explanation`, `No explanation for the update: ${review.join(', ')}`);
 
   // --- Items ---
   lines.push('Items');

@@ -14,7 +14,7 @@ import type { GearState, NavTargetPayload, QuestInstruction } from '../../servic
 import { plural } from '../text/format';
 import { buildPlayerState, coinsOf, heldOf, levelOf, ownedCountOf, questOf, unusableTools, type Held, type PlayerState } from '../player/playerState';
 import { evaluate } from '../player/requirements';
-import { allocateFoodStock } from '../player/foodStock';
+import { allocateFoodStock, bankTakeText, foodCarry } from '../player/foodStock';
 import { allocateMaterialStock, materialTake } from '../player/materialStock';
 import { toolFamilyOf } from '../items/toolTiers';
 import { doseKind, needUnits } from '../items/doses';
@@ -61,6 +61,8 @@ export interface RequirementStatus {
   stat?: { skill: string; min: number };
   /** For an item row: the English name, by which it is searched in the bank, at the exchange and in a shop. */
   item?: string;
+  /** For an item in the bank: what to take physically when it is not the row's own name ("4 Lobster" for food listed as Salmon ×12). */
+  take?: string;
 }
 
 export interface StepReadiness {
@@ -248,8 +250,11 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
       : evaluate({ type: 'item', name: it.nameEn, count: it.count, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, state);
     const h = material ?? (food ? foodStock.get(`departure:${index}`)!
       : alt ? heldAll(state, [it.nameEn, ...alt], key) : heldUnits(state, it.nameEn, key));
-    const physical = material ? materialTake(material, it.count) : [];
-    const actual = physical.map(item => `${item.count} ${item.name}`).join(', ');
+    // What to take physically: the material allocator's pieces, or for food the owned foods that heal as much (2.94.5: "Take 4 Lobster", not
+    // "Salmon ×12" when the bank holds Lobster).
+    const physical = material ? materialTake(material, it.count) : food ? foodCarry(foodStock.get(`departure:${index}`)!, it.count).take : [];
+    const differs = physical.some(item => nameKey(item.name) !== nameKey(it.nameEn));
+    const actual = material || differs ? physical.map(item => `${item.count} ${item.name}`).join(', ') : '';
     // A potion is counted in doses (doses.ts): the label keeps the route's "×5" and says what that is in doses.
     const doses = !alt && doseKind(it.nameEn) ? needUnits(it.nameEn, it.count) : null;
     const u = doses !== null ? ' doses' : '';
@@ -272,8 +277,8 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     } else if (res.state === 'BANK') {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'BANK', hard: true, source: 'game',
-        ...(it.equip && (h.bag ?? 0) > 0 ? { equip: true } : {}),
-        detail: actual ? `${physical.some(item => item.noted) ? 'Withdraw or unnote' : 'Take'} ${actual} at the bank`
+        ...(it.equip && (h.bag ?? 0) > 0 ? { equip: true } : {}), ...(actual ? { take: actual } : {}),
+        detail: actual ? bankTakeText(physical, !material)
           : it.equip && (h.bag ?? 0) > 0 ? 'in your bag: equip it before training'
           : h.noted > 0 ? `${h.bag ?? 0}${u} usable, ${h.noted}${u} as banknotes: unnote at a bank before use`
           : `${h.bag ?? 0}${u} in the bag, ${h.bank ?? 0} in the bank: take it from the bank${whole((h.bag ?? 0) + (h.bank ?? 0))}`,

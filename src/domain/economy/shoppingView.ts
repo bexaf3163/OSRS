@@ -6,7 +6,7 @@
 import type { Progress, Step, WikiItemDetail } from '../../types';
 import { aggregateShopping, formatGp, type ShoppingLine, type ShoppingList, type ShoppingSource } from '../prep/shopping';
 import { heldEquipment, heldOf, levelOf, type PlayerState } from '../player/playerState';
-import { allocateFoodStock, foodCarry, heldFood, type FoodHolding } from '../player/foodStock';
+import { allocateFoodStock, bankTakeText, foodCarry, heldFood, type FoodHolding } from '../player/foodStock';
 import { purchaseFees, type PurchaseFee } from '../items/purchaseCost';
 import { allocateMaterialStock, materialTake, type MaterialHolding } from '../player/materialStock';
 import { carryOf, doseKind, dosePackage, takeFromBank, type Carry, type DosePackage, type DoseSize } from '../items/doses';
@@ -181,8 +181,8 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
     if (withYou < tripNeed && (own.bank ?? own.bankLower ?? 0) > 0) {
       const qty = Math.min(tripNeed - withYou, own.bank ?? own.bankLower ?? 0);
       const take = foodStock ? foodCarry(foodStock, tripNeed).take : materialStock ? materialTake(materialStock, tripNeed) : [];
-      const actual = take.some(item => nameKey(item.name) !== nameKey(line.nameEn)) ? take.map(item => `${item.count} ${item.name}`).join(', ') : null;
-      return { ...base, qty, channel: 'bank', action: actual ? `${take.some(item => item.noted) ? 'Withdraw or unnote' : 'Take'} ${actual} at the bank` : `Take ${qty} from the bank`, unitPrice: null, cost: null };
+      const differs = take.some(item => nameKey(item.name) !== nameKey(line.nameEn));
+      return { ...base, qty, channel: 'bank', action: differs ? bankTakeText(take, Boolean(foodStock)) : `Take ${qty} from the bank`, unitPrice: null, cost: null };
     }
     if (wearable.has(nameKey(line.nameEn)) && own.worn === 0 && withYou > 0 && /\b(wear|wield|equip)/i.test(line.howToGet)) {
       return { ...base, qty: 1, channel: 'equip', action: 'In your bag: put it on before the step', unitPrice: null, cost: null };

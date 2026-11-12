@@ -162,3 +162,27 @@ describe('step readiness', () => {
     expect(warned).not.toContain('Stage Only');
   });
 });
+
+describe('food named by what you own (2.94.5)', () => {
+  it('a step asking for Salmon with Lobster in the bank says to take the Lobster, and the bank trip names it too', async () => {
+    const { buildPrepRoute } = await import('../prep/prepRoute');
+    const s = step('S4-01');
+    const r = stepReadiness(input(s, { mode: 'f2p', stats: { hitpoints: 30 }, owned: owned({ Lobster: { carried: 0, bank: 20 }, Salmon: { carried: 0, bank: 0 } }) }));
+    const food = r.requirements.find((x) => x.item === 'Salmon')!;
+    expect(food.state).toBe('BANK');
+    expect(food.take).toMatch(/^\d+ Lobster$/);
+    expect(food.detail).toBe(`Take ${food.take} at the bank: they heal as much`);
+    const bank = buildPrepRoute(r, s).tasks.find((t) => t.kind === 'bank')!;
+    expect(bank.label).toContain(food.take!);
+    expect(bank.label).not.toContain('Salmon');
+  });
+
+  it('the step\'s own food in the bank keeps its own name, with no healing note', () => {
+    const s = step('S4-01');
+    const r = stepReadiness(input(s, { mode: 'f2p', stats: { hitpoints: 30 }, owned: owned({ Salmon: { carried: 0, bank: 20 } }) }));
+    const food = r.requirements.find((x) => x.item === 'Salmon')!;
+    expect(food.state).toBe('BANK');
+    expect(food.take).toBeUndefined();
+    expect(food.detail ?? '').not.toContain('heal as much');
+  });
+});

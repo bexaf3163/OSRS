@@ -92,8 +92,6 @@
     "proTip": "Cook your early food on the castle kitchen's range (Cook's range): food burns far less often there!",
     "reward": "1 QP, 300 Cooking XP, access to the castle range.",
     "doneWhen": "The quest is green in the quest list and a second pot of flour is in the bank (for S2-10).",
-    "updatedInV2": true,
-    "v2ChangesSummary": "V2 adds 1 extra pot of flour (Pot of flour) for the Prince Ali Rescue quest. Check your bank!",
     "inGame": {
       "worldPoint": {
         "x": 3208,
@@ -196,8 +194,6 @@
     "proTip": "Do not give Fred more than 20 balls! Put exactly 3 in the bank: it saves a lot of time in the Prince Ali Rescue quest.",
     "reward": "1 QP, 150 XP Crafting, 60 Coins.",
     "doneWhen": "The quest is green and 3 balls of wool are in the bank.",
-    "updatedInV2": true,
-    "v2ChangesSummary": "V2 adds a requirement: shear 23 wool and keep exactly 3 balls of wool in the bank for the Prince Ali Rescue quest. Check your bank!",
     "inGame": {
       "worldPoint": {
         "x": 3189,

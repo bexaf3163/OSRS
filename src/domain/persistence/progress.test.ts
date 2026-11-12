@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, known, stepById } from '../../data';
+import { known, stepById } from '../../data';
 import {
   emptyProgress, exportFileName, exportProgress, gameModeOf, importProgress, loadProgress, normalizeProgress, saveProgress, STORAGE_KEY,
-  RETIRED_STEPS, V2_FROM_V1, V3_FROM_V2, withGameMode, withLevel, withNote, withReviewed, withStep,
+  RETIRED_STEPS, V2_FROM_V1, V3_FROM_V2, withGameMode, withLevel, withNote, withStep,
 } from './progress';
-import { needsReview, pendingReview } from '../readiness/review';
 import { retiredStep } from '../../../tests/fixtures/retiredSteps';
 
 function memoryStorage() {
@@ -180,9 +179,8 @@ describe('progress: moving from V1 to V2', () => {
     expect(r.ok && r.stats.migrated).toBe(true);
   });
 
-  it('V2 is read without a repeated transfer and keeps the mode, the reviewed steps and the points', () => {
+  it('V2 is read without a repeated transfer and keeps the mode and the points', () => {
     let p = withGameMode(withStep(emptyProgress(), 'S7-01', 'done'), 'members');
-    p = withReviewed(p, ['S1-03']);
     p = { ...p, qpKept: ['S1-04'] };
     const n = normalizeProgress(JSON.parse(JSON.stringify(p)), known)!;
     expect(n.migrated).toBe(false);
@@ -202,7 +200,7 @@ describe('progress: moving from V2 (2.0.0) to V2.1', () => {
     gameMode: 'members',
   };
 
-  it('steps move to the new numbers together with notes, reviews and kept points', () => {
+  it('steps move to the new numbers together with notes and kept points', () => {
     const n = normalizeProgress(v2, known)!;
     expect(n.migrated).toBe(false);
     expect(n.dropped).toBe(0);
@@ -210,8 +208,8 @@ describe('progress: moving from V2 (2.0.0) to V2.1', () => {
     // S1-10 and S2-01 are retired, so their renamed marks and notes stay in the legacy history.
     expect(n.progress.legacy).toEqual({ steps: { 'S1-10': 'done', 'S2-01': 'done' }, notes: { 'S1-10': 'book in the inventory' } });
     expect(n.progress.qpKept).toEqual(['S9-02']);
-    // A review mark only applies to a live step, so the retired S2-01 drops it.
-    expect(n.progress.reviewedV2Steps).toBeUndefined();
+    // The retired V2 review marks (2.94.5) are not read back.
+    expect('reviewedV2Steps' in n.progress).toBe(false);
     expect(n.progress.gameMode).toBe('members');
     expect(retiredStep('S1-10').title).toContain('Chronicle');
     expect(stepById.get('S9-02')!.title).toContain('Fairytale I');
@@ -231,31 +229,5 @@ describe('progress: moving from V2 (2.0.0) to V2.1', () => {
       doneAt: { 'S1-10': '2026-09-26T11:00:00Z' } });
     expect(result.doneAt).toEqual({ 'S1-09': '2026-09-26T11:30:00Z' });
     expect(normalizeProgress(JSON.parse(exportProgress(result)), reduced)!.progress).toEqual(result);
-  });
-});
-
-describe('V2 Review', () => {
-  it('the warning — only for done steps updated in V2, and before the review', () => {
-    const s = stepById.get('S1-03')!;
-    expect(s.updatedInV2).toBe(true);
-    expect(needsReview(s, emptyProgress())).toBe(false);
-    const done = withStep(emptyProgress(), 'S1-03', 'done');
-    expect(needsReview(s, done)).toBe(true);
-    expect(needsReview(s, withReviewed(done, ['S1-03']))).toBe(false);
-    expect(needsReview(stepById.get('S1-05')!, withStep(emptyProgress(), 'S1-05', 'done'))).toBe(false);
-  });
-
-  it('every updated step has a description of the changes', () => {
-    const updated = allSteps.filter((s) => s.updatedInV2);
-    expect(updated.map((s) => s.id)).toEqual(['S1-03', 'S1-04']);
-    for (const s of updated) expect(s.v2ChangesSummary?.length).toBeGreaterThan(20);
-  });
-
-  it('the review list after the V1 transfer', () => {
-    const p = normalizeProgress({ steps: { 'S1-03': 'done', 'S1-04': 'done', 'S2-03': 'done' } }, known)!.progress;
-    // V1 S2-03 became the retired S2-01, so the mark stays in the legacy copy only.
-    expect(p.steps['S2-01']).toBeUndefined();
-    expect(p.legacy?.steps['S2-03']).toBe('done');
-    expect(pendingReview(allSteps, p).map((s) => s.id)).toEqual(['S1-03', 'S1-04']);
   });
 });

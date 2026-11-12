@@ -12,7 +12,7 @@
 
 import type { Progress, Step, WikiItemDetail } from '../../types';
 import { itemById, recipesJson } from '../../data';
-import { foodCarry, type FoodCarry, type FoodHolding } from '../player/foodStock';
+import { bankTakeText, foodCarry, type FoodCarry, type FoodHolding } from '../player/foodStock';
 import { npcSpot, nearestBank } from '../travel/stepPlaces';
 import type { NavTargetPayload, QuestInstruction } from '../../services/runeliteBridge';
 import { upgradeNav, type UpgradeRecommendation } from '../training/gearUpgradeRouter';
@@ -229,14 +229,13 @@ function whyOf(line: ShoppingLine, group: string[], all: string[], currentId: st
   return parts.join(' · ');
 }
 
-function bankAction(step: Step, name: string, n: number, doses = false, unnote = 0, food?: readonly MaterialTake[]): PrepAction {
+function bankAction(step: Step, name: string, n: number, doses = false, unnote = 0, food?: readonly MaterialTake[], isFood = false): PrepAction {
   const b = nearestBank(step);
   const actual = food?.length && food.some(item => nameKey(item.name) !== nameKey(name)) ? food : null;
-  const label = actual?.map(item => `${item.count} ${item.name}`).join(', ');
   const itemName = actual?.[0].name ?? name;
   return {
     kind: 'TAKE',
-    label: actual ? `${actual.some(item => item.noted) ? 'Withdraw or unnote' : 'Take'} ${label} at the bank`
+    label: actual ? bankTakeText(actual, isFood)
       : unnote > 0 ? `Unnote ${name}${unnote > 1 ? ` (${unnote}${doses ? ' doses' : ''})` : ''} at a bank${n > unnote ? '; withdraw the rest' : ''}`
       : doses ? `Take ${n} ${n === 1 ? 'dose' : 'doses'} from the bank` : `Take from the bank${n > 1 ? ` ×${n}` : ''}`,
     ...(b ? { nav: { label: `${b.label}: take ${itemName}`, x: b.x, y: b.y, plane: b.plane, itemName, stepId: step.id } } : {}),
@@ -358,7 +357,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       if (inStep && !satisfied) {
         action = { kind: 'GATHER', label: 'You get it during the step' };
       } else if (where === 'BANK') {
-        action = bankAction(step, t.line.nameEn, g.bank, dose, g.noted, itemTake.length ? itemTake : foodTake);
+        action = bankAction(step, t.line.nameEn, g.bank, dose, g.noted, itemTake.length ? itemTake : foodTake, !itemTake.length && foodTake.length > 0);
       } else if (where === 'MISSING' && acquired) {
         const spot = acquired.from ? npcSpot(acquired.from, step.id) : undefined;
         action = { kind: 'GATHER', label: acquired.howToGet, ...(spot ? { nav: { label: `${acquired.from}: ${acquired.nameEn}`, x: spot.x, y: spot.y, plane: spot.plane, itemName: acquired.nameEn, stepId: step.id } } : {}) };

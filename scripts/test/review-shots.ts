@@ -19,7 +19,7 @@ const sizesOf = (name: string) => {
 function progressBefore(id: string, extra: Record<string, unknown> = {}) {
   const p = before(id, { updatedAt: '2026-10-19T10:00:00.000Z', gameMode: 'f2p' });
   // The one-time "the guide updated" banner is not part of any work area: its steps count as checked.
-  return { ...p, reviewedV2Steps: Object.keys(p.steps), ...extra };
+  return { ...p, ...extra };
 }
 
 /** The suite's page with the review's look: no RuneLite start-up toast (the stub app has no RuneLite to start) and no

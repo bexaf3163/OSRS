@@ -135,3 +135,9 @@ export function effectiveHeal(food: Pick<Food, 'heals'>, hitpoints?: number): nu
   return hitpoints === undefined ? food.heals : Math.min(food.heals, Math.max(1, hitpoints - 1));
 }
 interface FoodPart { name: string; heals: number; held: Held; alternative: boolean }
+
+/** What to take from the bank, named by the pieces actually owned. Food that stands in for the step's own ("4 Lobster" for Salmon ×12) says it
+ * heals as much, so the different name and count read as one need, not two (2.94.5). */
+export function bankTakeText(take: readonly { name: string; count: number; noted?: boolean }[], food: boolean): string {
+  return `${take.some(item => item.noted) ? 'Withdraw or unnote' : 'Take'} ${take.map(item => `${item.count} ${item.name}`).join(', ')} at the bank${food ? ': they heal as much' : ''}`;
+}

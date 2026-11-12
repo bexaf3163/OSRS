@@ -52,7 +52,7 @@ describe('shared declared combat food stock', () => {
     expect(evaluatePreflight(preflightItems(r), s.owned!).rows[0]).toMatchObject({ have: 0, inBank: 1, state: 'MISSING_FROM_BAG' });
     expect(planOneTrip([r], emptyProgress(), r.id, s).lines[0]).toMatchObject({ status: 'BANK', toGet: 0 });
     expect(ownershipOf(s, line)).toMatchObject({ total: 1 });
-    expect(shopRows(aggregateShopping([r]), { state: s, onGe: () => true, detail: () => undefined, gePrice: () => 10 })[0]).toMatchObject({ channel: 'bank', action: 'Take 1 Cooked meat at the bank' });
+    expect(shopRows(aggregateShopping([r]), { state: s, onGe: () => true, detail: () => undefined, gePrice: () => 10 })[0]).toMatchObject({ channel: 'bank', action: 'Take 1 Cooked meat at the bank: they heal as much' });
   });
 
   it('caps both foods at the real Hitpoints level', () => {

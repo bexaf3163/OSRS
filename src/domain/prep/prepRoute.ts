@@ -89,7 +89,7 @@ export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id' | 'traini
   if (bank.length) {
     const nav = bank.find((b) => b.action?.kind === 'nav')?.action;
     tasks.push({
-      id: 'bank', kind: 'bank', label: `Take from the bank: ${bank.map((b) => b.label).join(', ')}`, priority: 3, need: 'REQUIRED', urgency: 'NOW',
+      id: 'bank', kind: 'bank', label: `Take from the bank: ${bank.map((b) => b.take ?? b.label).join(', ')}`, priority: 3, need: 'REQUIRED', urgency: 'NOW',
       ...(nav ? { action: nav } : {}), items: bank.flatMap((b) => (b.item ? [b.item] : [])), from: bank,
     });
   }

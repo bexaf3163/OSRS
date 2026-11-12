@@ -1717,8 +1717,6 @@
       }
     ],
     "doneWhen": "All the items are bought and are in your Grand Exchange bank.",
-    "updatedInV2": true,
-    "v2ChangesSummary": "V2 expands the shopping list: Amulet of strength, Energy potion, Redberry pie, scimitars, iron bars, dyes and clay. Check your bank!",
     "branches": [
       {
         "id": "chronicle",

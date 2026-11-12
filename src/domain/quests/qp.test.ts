@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { StepStatus } from '../../types';
-import { BASE_QP, maxQpFor, stepById, stepsFor } from '../../data';
-import { emptyProgress, withReactivated, withStep } from '../persistence/progress';
+import { BASE_QP, maxQpFor, stepsFor } from '../../data';
+import { emptyProgress, withStep } from '../persistence/progress';
 import { questPoints } from './qp';
 
 const f2p = stepsFor('f2p');
 const withSteps = (s: Record<string, StepStatus>) => ({ ...emptyProgress(), steps: s });
-const qpOf = (id: string) => stepById.get(id)?.qp ?? 0;
 
 describe('quest points', () => {
   it('at the start — only Learning the Ropes', () => {
@@ -31,10 +30,10 @@ describe('quest points', () => {
     expect(questPoints(f2p, p, BASE_QP)).toBe(1);
   });
 
-  it('returning a step to active after V2 Review does not take points away', () => {
+  it('an older save\'s steps returned to active after the V2 update keep their points (the review itself retired in 2.94.5)', () => {
     let p = withSteps({ 'S1-03': 'done', 'S1-04': 'done' });
     expect(questPoints(f2p, p, BASE_QP)).toBe(3);
-    p = withReactivated(p, ['S1-03', 'S1-04'], qpOf);
+    p = { ...withSteps({}), qpKept: ['S1-03', 'S1-04'] };
     expect(p.steps['S1-03']).toBeUndefined();
     expect(questPoints(f2p, p, BASE_QP)).toBe(3);
     // A repeated mark does not double the points.

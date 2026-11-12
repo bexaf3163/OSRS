@@ -2,10 +2,10 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { GameMode, Progress, Step, StepStatus } from '../types';
-import { BASE_QP, known, maxQpFor, stepById, stepsFor } from '../data';
+import { BASE_QP, known, maxQpFor, stepsFor } from '../data';
 import {
   emptyProgress, gameModeOf, STORAGE_KEY,
-  withGameMode, withLevel, withLevels, withNote, withReactivated, withReviewed, withStep, withUpgradeDismissed, withOwnedManual, withSellRestrictions, withTaskDone,
+  withGameMode, withLevel, withLevels, withNote, withStep, withUpgradeDismissed, withOwnedManual, withSellRestrictions, withTaskDone,
 } from '../domain/persistence/progress';
 import { profileStorageKey } from '../domain/persistence/profiles';
 import { readProfiles } from './profiles';
@@ -42,8 +42,6 @@ interface StoreValue {
   setTaskDone: (key: string, done: boolean) => void;
   /** The food of combat training steps from this player's estimate (lib/foodPlan.ts): one trip for readiness, the whole goal for shopping. */
   setFoodPicks: (picks: Record<string, FoodPick>) => void;
-  review: (ids: string[]) => void;
-  reactivate: (ids: string[]) => void;
   /** "✕ Skip" the upgrade hint on a step (dismissed=false — bring it back). */
   dismissUpgrade: (stepId: string, dismissed?: boolean) => void;
   /** "I already have it" in the bulk shopping: a quantity or null — remove the mark. */
@@ -79,8 +77,6 @@ function initialProgress(): RestoredProgress {
 function progressKey(): string {
   return profileStorageKey(STORAGE_KEY, readProfiles().active);
 }
-
-const qpOf = (id: string) => stepById.get(id)?.qp ?? 0;
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [restored] = useState(initialProgress);
@@ -135,10 +131,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const setStep = useCallback((id: string, status: StepStatus | null, message?: string) => {
     const before = current.current;
-    let next = withStep(before, id, status);
-    // A step already marked by the V2 text does not need to be checked again.
-    if (status === 'done' && stepById.get(id)?.updatedInV2) next = withReviewed(next, [id]);
-    setProgress(next);
+    setProgress(withStep(before, id, status));
     show(message ?? (status === 'done' ? `Marked ${id}` : status === 'skipped' ? `Skipped ${id}` : `Unmarked ${id}`), before);
   }, [show]);
 
@@ -165,18 +158,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const setTaskDone = useCallback((key: string, done: boolean) => {
     setProgress((p) => ((p.tasksDone?.[key] === true) === done ? p : withTaskDone(p, key, done)));
   }, []);
-
-  const review = useCallback((ids: string[]) => {
-    const before = current.current;
-    setProgress(withReviewed(before, ids));
-    show(ids.length > 1 ? 'V2 updates marked as checked' : `${ids[0]} checked`, before);
-  }, [show]);
-
-  const reactivate = useCallback((ids: string[]) => {
-    const before = current.current;
-    setProgress(withReactivated(before, ids, qpOf));
-    show(ids.length > 1 ? `Returned to active: ${ids.join(', ')}` : `${ids[0]} is back in the plan`, before);
-  }, [show]);
 
   const dismissUpgrade = useCallback((stepId: string, dismissed = true) => {
     setProgress((p) => ((p.upgradeDismissedForSteps ?? []).includes(stepId) === dismissed ? p : withUpgradeDismissed(p, stepId, dismissed)));
@@ -235,10 +216,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<StoreValue>(
     () => ({
-      progress, mode, steps, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setFoodPicks, review, reactivate, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
+      progress, mode, steps, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setFoodPicks, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
       toast, notify, undo, dismissToast, persistenceWarning,
     }),
-    [progress, mode, steps, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setFoodPicks, review, reactivate, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
+    [progress, mode, steps, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setFoodPicks, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
       toast, notify, undo, dismissToast, persistenceWarning],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

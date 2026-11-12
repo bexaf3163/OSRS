@@ -2,11 +2,10 @@
 // can be closed at once. It only marks (removes nothing) and has undo.
 
 import { useMemo, useState } from 'react';
-import { stepById } from '../data';
 import { useBridge } from '../state/bridge';
 import { earlierUnverified, syncCandidates } from '../domain/quests/accountSync';
 import { gateAllows } from '../domain/persistence/profiles';
-import { withReviewed, withStep } from '../domain/persistence/progress';
+import { withStep } from '../domain/persistence/progress';
 import { useStore } from '../state/store';
 
 /** compact — a plaque at the top of "Path" (hidden if there is nothing to mark); otherwise a card in settings. */
@@ -22,19 +21,13 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
 
   const markUnverified = () => {
     let p = progress;
-    for (const c of unverified) {
-      p = withStep(p, c.step.id, 'done', { stamp: false });
-      if (stepById.get(c.step.id)?.updatedInV2) p = withReviewed(p, [c.step.id]);
-    }
+    for (const c of unverified) p = withStep(p, c.step.id, 'done', { stamp: false });
     markSteps(p, `Earlier steps marked: ${unverified.length}`);
   };
 
   const apply = () => {
     let p = progress;
-    for (const c of list) {
-      p = withStep(p, c.step.id, 'done', { stamp: false });
-      if (stepById.get(c.step.id)?.updatedInV2) p = withReviewed(p, [c.step.id]);
-    }
+    for (const c of list) p = withStep(p, c.step.id, 'done', { stamp: false });
     markSteps(p, `Steps marked from the game: ${list.length}`);
   };
 

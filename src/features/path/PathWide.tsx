@@ -8,7 +8,6 @@ import { useQuestPoints } from '../../state/hooks/useQuestPoints';
 import { isClosed } from '../../domain/quests/next-step';
 import { useBridge } from '../../state/bridge';
 import { useActiveActivity, useTrackedTraining } from '../../state/readinessContext';
-import { pendingReview } from '../../domain/readiness/review';
 import { CockpitWorkspace } from './CockpitWorkspace';
 import { useWiki } from '../reference/WikiDrawer';
 import { findSubStep, instructionSubStep, subStepNpcInfo } from '../../domain/quests/subStep';
@@ -28,7 +27,7 @@ import type { CommittedDecision } from '../../domain/planning/contracts';
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey: number }) {
-  const { progress, maxQp, steps, setStep, review, reactivate } = useStore();
+  const { progress, maxQp, steps, setStep } = useStore();
   const qp = useQuestPoints();
   const { advance, navTarget, questInstruction, state, inGame, activeStepId, questStates } = useBridge();
   const { setSuggested } = useWiki();
@@ -57,7 +56,6 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   const execution = decision?.activeAction.executionStep;
   const selected = execution && selectedId === execution.id ? execution : steps.find((s) => s.id === selectedId) ?? suggested;
   const center = useRef<HTMLDivElement>(null);
-  const pending = pendingReview(steps, progress);
 
   const select = useCallback((id: string, focus = true) => {
     if (!stepById.has(id) && execution?.id !== id) return;
@@ -93,10 +91,6 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
     setFollow(false);
     select(suggested.id);
   }, [follow, progress, suggested, select]);
-
-  const showChanges = () => {
-    select(pending[0].id);
-  };
 
   // The dossier column is never an empty hint: with nothing chosen by hand it shows the NPC of the current sub-step (or the step's own NPC);
   // with neither, the column folds away and the step takes its width.
@@ -166,20 +160,6 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
             <strong>{decision.activeAction.title}</strong>
             <details><summary>Compare preparation strategies</summary><ul className="small">{decision.why.map((why, i) => <li key={i}>{why}</li>)}</ul></details>
           </section>}
-          {pending.length > 0 && (
-            <div className="review-banner card">
-              <h2 className="review-title">The guide updated to V2!</h2>
-              <p>
-                In the {pending.length === 1 ? 'step' : 'steps'} {pending.map((s) => s.id).join(', ')}, which you already marked, important requirements appeared.
-                Quest points are not taken away on a reset.
-              </p>
-              <div className="actions">
-                <button type="button" className="btn btn-primary" onClick={showChanges}>Show what changed</button>
-                <button type="button" className="btn" onClick={() => reactivate(pending.map((s) => s.id))}>Reset the updated steps to active</button>
-                <button type="button" className="btn btn-ghost" onClick={() => review(pending.map((s) => s.id))}>I checked everything, hide</button>
-              </div>
-            </div>
-          )}
           <Welcome />
           <ManualConfirm />
           <AccountSync compact />

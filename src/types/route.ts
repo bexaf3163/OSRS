@@ -288,8 +288,6 @@ export interface Step {
   fields?: Field[];
   targets?: Target[];
 
-  updatedInV2?: boolean;
-  v2ChangesSummary?: string;
   membersOnly?: boolean;
   membersAlternative?: string;
 }
