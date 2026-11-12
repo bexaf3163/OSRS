@@ -137,7 +137,7 @@ The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **
 
 2.81.11 to 2.81.13 cleanup decisions that stay:
 
-- Removed: appearance controls, font size, Compact modes, the Inspector display mode, manual zoom (window-size zoom: `window-zoom.cjs`), the Copy Report UI, the Journal stage-goal matrix, Settings Training/App and helper switches (always on). Kept: OS DPI/resizing, the header Pin (`getWindowPrefs`/`setAlwaysOnTop`), `ui.json` backup preferences and geometry, map/image magnification, the `splits.ts` duration formatter, `WikiDrawer`'s `DockedInspector` (pinned dossier), logs, telemetry/watchdogs, the analysis CLI and shared goal data. Trace consumers; never delete by name ("Inspector", "zoom", "goals").
+- Removed: appearance controls, font size, Compact modes, the Inspector display mode, manual zoom (now `window-zoom.cjs`), the Copy Report UI, the Journal stage-goal matrix, Settings Training/App and helper switches (always on). Kept: OS DPI/resizing, the header Pin (`getWindowPrefs`/`setAlwaysOnTop`), `ui.json` backup preferences and geometry, map/image magnification, the `splits.ts` duration formatter, `WikiDrawer`'s `DockedInspector` (pinned dossier), logs, telemetry/watchdogs, the analysis CLI and shared goal data. Trace consumers; never delete by name ("Inspector", "zoom", "goals").
 - Training settings keep Balanced/Fastest/Money/Relaxed, automatic preparation and Defence-at-1. The five RuneLite helper flags stay (places, bank highlighting, pace, level import, upgrades); mocked tests do not prove their real-game behavior.
 - Journal: filters left; status, QP, current-part requirements and route action right; Review route for completed/skipped quests; saved-only completion labelled; one closed session history; browsing never marks progress.
 - Skills has no leveling guide or bracket table (2.83.0): the training engine sets method, goal and plan. A completed skill's Plan says its checkpoint is reached. Two-column icon index, XP table in Calculator.
@@ -218,7 +218,7 @@ Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3
 
 Known limits: fees are bounded allowances; gathering competition, Forestry and Musa Point boat banking are approximations; altar timing assumes the supported exit model; food estimates are no survival guarantee. Alchemy, enchanting and splashing keep target/setup/budget safeguards. No implied parity for unsupported Members or HDOS mechanics. Facts checked against the OSRS Wiki on 2026-10-31.
 
-## Current verification — encounters, tools, fresh-account planning (2.86.0–2.93.0)
+## Current verification — encounters, tools, fresh-account planning (2.86.0–2.94.0)
 
 Kept: `planning/encounter/{setups,strategy}.ts` compares bounded preparations; `executionStep` carries the kit; forecasts add damage-earned HP.
 
@@ -228,7 +228,7 @@ Kept: `planning/encounter/{setups,strategy}.ts` compares bounded preparations; `
 - `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`. `trainingKit.equipmentLine` states the tool/kit decision on Skills; F2P notes are one-line checkpoints, no Wiki rates. Weapons: one skill's XP.
 - Game line: engine's bank/drop choice; plaque shows the stamp alone. Closed optional quests are set aside (`setAsideQuests`); after all F2P quests, Path ranks `f2pCheckpoints` with Follow. One-step quests' stage checks point the game at the step. Path rows name unknown parts.
 
-Gear has bows/ranged armour; a worn bow (fitting arrows) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set arrows needed. Drops weigh cooking by burns. Verified: 2,649 units, 786 browser checks, route/light gates; timing not run (owner asked to ship).
+Gear has bows/ranged armour; a worn bow (fitting arrows) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set arrows needed. Drops weigh cooking burns. Earning guides read the Wiki Details (`detailsOf`). Verified: 2,651 units, 787 browser checks, route/light gates; update −1% versus 2.93.0.
 
 Limits: armour by melee defence; Wiki bands for quest work, minus the prepared fight. `gate:f2p`: 23/23 quests, no checks; time unknown on 1/211 turns. Later fights are proven by `encounterSetups`, a current one with pending kit by its setup; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece. Measured quest times need shared data.
 
