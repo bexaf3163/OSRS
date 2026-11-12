@@ -115,7 +115,8 @@ describe('quantities across steps', () => {
   it('the next trip is the current step and the next open ones on the planner\'s road, the same window as the step\'s preparation', () => {
     const p = emptyProgress();
     const road = ['S1-03', 'S3-01', 'S2-09', 'S1-05'].map((id) => allSteps.find((s) => s.id === id)!);
-    expect(scopeSteps('trip', allSteps, p, 'S1-03', road).map((s) => s.id)).toEqual(['S1-03', 'S3-01', 'S2-09', 'S1-05']);
+    // Two steps ahead (LOOK_AHEAD, 2.94.3): before, the shopping list looked three ahead while the step's own preparation looked two.
+    expect(scopeSteps('trip', allSteps, p, 'S1-03', road).map((s) => s.id)).toEqual(['S1-03', 'S3-01', 'S2-09']);
     // No planner road: the step alone, never the guide's next steps.
     expect(scopeSteps('trip', allSteps, p, 'S1-03', [road[0]]).map((s) => s.id)).toEqual(['S1-03']);
     expect(scopeSteps('step', allSteps, p, 'S1-03').map((s) => s.id)).toEqual(['S1-03']);

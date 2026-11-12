@@ -12,7 +12,7 @@ import { FundingCard } from '../../money/FundingCard';
 import { usePrepFix } from '../prep/PrepRoute';
 import { NavigateButton } from '../../../ui/NavigateButton';
 import { useFeatures } from '../../../state/hooks/useFeatures';
-import { styleOf } from '../../../domain/persistence/playStyle';
+import { priorityOf } from '../../../domain/persistence/methodPriority';
 import { useTrainingFunding } from '../../../state/trainingSessionContext';
 import { levelById } from '../../../data';
 import { nearestBank } from '../../../domain/travel/stepPlaces';
@@ -49,8 +49,7 @@ function EngineTrackedCard() {
   const training = useTrackedTraining()!;
   const { step, complete, target } = training;
   const engine = useReadinessEngine();
-  const profile = styleOf(useFeatures());
-  const queue = engine.queue(step, profile.style);
+  const queue = engine.queue(step, priorityOf(useFeatures()));
   const funding = useTrainingFunding();
   const blocked = Boolean(funding?.plan || funding?.assessment?.state !== 'COVERED');
   const fix = usePrepFix(step, () => { window.location.hash = hrefTo.shopping(); });

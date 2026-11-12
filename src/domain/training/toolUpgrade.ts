@@ -1,7 +1,7 @@
 // Whether a better tool or weapon is worth buying for the training in hand: the hours it saves over the XP it will serve, less the trip to buy
 // it, against its price. The router (trainingRouter.adviseTraining) asks it for the selected method; the stock-up forecast asks it per leg.
 import type { GameMode } from '../../types';
-import type { MethodPriority } from '../persistence/playStyle';
+import type { MethodPriority } from '../persistence/methodPriority';
 import type { PriceView } from '../market/quotes';
 import { toolUse } from '../items/toolTiers';
 import { xpForLevel } from '../player/xp';
@@ -35,7 +35,7 @@ const UPGRADE_MIN_HOURS = 1 / 6;
  */
 export function toolUpgrade(m: TrainingMethod, xpFor: number | ((tool: string) => number), priority: MethodPriority, coinRate: number | null,
   acquisition: number | ((tool: string) => number) = 0): ToolUpgrade | null {
-  if (!m.upgrades?.length || !m.xph || priority === 'relaxed' || priority === 'profit') return null;
+  if (!m.upgrades?.length || !m.xph || priority === 'profit') return null;
   // personalize rounds displayed rates; compare both sides at that same precision to avoid a false negative saving.
   const mid = (x: readonly [number, number]) => (Math.round(x[0]) + Math.round(x[1])) / 2;
   let best: ToolUpgrade | null = null;

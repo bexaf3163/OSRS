@@ -22,11 +22,11 @@ describe('non-combat skills inherit the common staged lifecycle', () => {
     ['woodcutting', 'wc-oak', 'Black axe'], ['mining', 'mi-iron', 'Black pickaxe'],
   ])('%s preparation names the owned modelled tool, carried without its Attack requirement', (skill, id, tool) => {
     const state = stateFor(skill, 21, tool), before = structuredClone(state);
-    const advice = adviseTraining({ skill, target: 30, mode: 'f2p', state, style: 'chill', priority: 'balanced', methods: trainingMethods.filter(m => m.id === id) });
+    const advice = adviseTraining({ skill, target: 30, mode: 'f2p', state, priority: 'balanced', methods: trainingMethods.filter(m => m.id === id) });
     expect(advice.best?.method.selectedTool).toBe(tool);
     expect(advice.upgrade).toBeNull();
     expect(preparationNeeds(advice, state)).toContainEqual({ type: 'item', name: tool, count: 1 });
-    const plan = trackedTraining({ skill: skill as SkillName, mode: 'fast', target: 30 }, state, 'f2p', 'chill', 'balanced')!;
+    const plan = trackedTraining({ skill: skill as SkillName, mode: 'fast', target: 30 }, state, 'f2p', 'balanced')!;
     expect(plan.step.itemsRequired).toContainEqual(expect.objectContaining({ nameEn: tool, amount: 1 }));
     expect(plan.step.itemsRequired?.find(item => item.nameEn === tool)?.equip).not.toBe(true);
     expect(state).toEqual(before);
@@ -41,7 +41,7 @@ describe('non-combat skills inherit the common staged lifecycle', () => {
   for (const [skill, levels, target] of stages) it.each(levels)(`${skill} level %i keeps a real prepared step at each declared unlock`, level => {
     const state = stateFor(skill, level, skill === 'woodcutting' ? 'Mithril axe' : skill === 'mining' ? 'Mithril pickaxe' : undefined);
     const before = structuredClone(state);
-    const plan = trackedTraining({ skill, mode: 'fast', target }, state, 'f2p', 'chill', 'balanced')!;
+    const plan = trackedTraining({ skill, mode: 'fast', target }, state, 'f2p', 'balanced')!;
     expect(plan.target).toBe(target);
     expect(plan.complete).toBe(false);
     expect(plan.step.id).toMatch(/^S0-\d{2}$/);
@@ -57,7 +57,7 @@ describe('non-combat skills inherit the common staged lifecycle', () => {
     const state = stateFor('smithing', 1);
     state.quests = { known: true, value: [], source: 'game' };
     const progress = emptyProgress();
-    const advice = adviseTraining({ skill: 'smithing', target: 29, mode: 'f2p', state, style: 'chill', priority: 'balanced' });
+    const advice = adviseTraining({ skill: 'smithing', target: 29, mode: 'f2p', state, priority: 'balanced' });
     const before = structuredClone({ state, progress });
     expect(questTrainingStep(advice, state, allSteps, progress)?.id).toBe('S2-07');
     expect(questTrainingStep(advice, { ...state, quests: { known: false } }, allSteps, progress)?.id).toBe('S2-07');

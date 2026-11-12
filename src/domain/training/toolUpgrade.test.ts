@@ -27,7 +27,7 @@ const character = (levels: Record<string, number>, tool: string) => {
   return { stats, gear, state: buildPlayerState({ mode: 'f2p', connected: true, player: 'Owner', stats, progress: emptyProgress(), questsDone: [], owned, gear, position: { x: 3087, y: 3235, plane: 0 } }) };
 };
 const advise = (skill: string, level: number, target: number, tool: string) =>
-  adviseTraining({ skill, target, state: character({ [skill]: level }, tool).state, mode: 'f2p', style: 'chill', priority: 'balanced', prices });
+  adviseTraining({ skill, target, state: character({ [skill]: level }, tool).state, mode: 'f2p', priority: 'balanced', prices });
 
 describe('a better tool tier is weighed over its whole use', () => {
   it('a tier is replaced where the path plans the next one: the last F2P tier is never replaced on a free account', () => {
@@ -66,7 +66,7 @@ describe('a better tool tier is weighed over its whole use', () => {
   it('the Skills card states the engine\'s own equipment decision, never a fixed note', () => {
     const line = (level: number, tool: string, priority: 'balanced' | 'profit' = 'balanced') => {
       const { state } = character({ woodcutting: level }, tool);
-      return equipmentLine(adviseTraining({ skill: 'woodcutting', target: 60, state, mode: 'f2p', style: 'chill', priority, prices }), state, prices, priority);
+      return equipmentLine(adviseTraining({ skill: 'woodcutting', target: 60, state, mode: 'f2p', priority, prices }), state, prices, priority);
     };
     expect(line(31, 'Steel axe')).toMatch(/^Buy an Adamant axe \(≈ 517 gp\): it saves about \d+ min before the next tier, the trip to buy it included\.$/);
     expect(line(31, 'Mithril axe')).toBe('Keep your Mithril axe: an Adamant axe saves too little here to pay for the trip to buy it.');

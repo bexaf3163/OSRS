@@ -38,7 +38,8 @@ function planOf(stepId: string, have: Record<string, Partial<OwnedItem>>, extra:
   const step = stepOrRetired(stepId), steps = routeWith(stepId);
   const progress = emptyProgress();
   return buildPrepPlan({
-    step, steps, progress, state, trip: planOneTrip(steps, progress, step.id, state),
+    // The snapshot fixture keeps its three-step window (the plugin's parsing tests read it); the app itself looks two steps ahead (LOOK_AHEAD).
+    step, steps, progress, state, trip: planOneTrip(steps, progress, step.id, state, 3),
     readiness: readinessOf(step, { steps, progress, qp: 0, mode: 'f2p', state }), recovery: extra.recovery ?? null,
   });
 }

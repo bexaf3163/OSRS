@@ -7,10 +7,8 @@ import type { Step } from '../../../types';
 import { useStore } from '../../../state/store';
 import { isClosed } from '../../../domain/quests/next-step';
 import { useReadinessEngine, useRecovery } from '../../../state/readinessContext';
-import { useFeatures } from '../../../state/hooks/useFeatures';
 import { isOutOfStage, scopedPercent } from '../../../domain/quests/stageScope';
 import { useStageScope } from '../../../state/hooks/useStageScope';
-import { styleOf } from '../../../domain/persistence/playStyle';
 import { formatGp } from '../../../domain/prep/shopping';
 import { kgText } from '../../../domain/items/weight';
 import { prepChipGroups } from '../../../domain/prep/prepChips';
@@ -101,8 +99,8 @@ export function RecoveryBanner({ step, rec }: { step: Step; rec: NonNullable<Pre
 }
 
 /** The glass look: the same lines as chips by timing, at a glance; the full list with the actions stays below. Hidden in the classic look. */
-function ChipStrip({ plan, showLater }: { plan: PrepPlan; showLater: boolean }) {
-  const groups = prepChipGroups(plan, showLater);
+function ChipStrip({ plan }: { plan: PrepPlan }) {
+  const groups = prepChipGroups(plan);
   if (!groups.length) return null;
   return (
     <div className="prep-strip" aria-label="Summary by timing">
@@ -140,10 +138,9 @@ function Section({ title, hint, lines }: { title: string; hint?: string; lines: 
  */
 export function OneTripCard({ step, inStatus = false, plain = false, nowShown = false }: { step: Step; inStatus?: boolean; plain?: boolean; nowShown?: boolean }) {
   const { progress } = useStore();
-  const profile = styleOf(useFeatures());
   const upgrade = useUpgradeRecommendation(step);
   const engine = useReadinessEngine();
-  const plan = engine.plan(step, { ahead: profile.lookAhead, upgrade });
+  const plan = engine.plan(step, { upgrade });
   // The quest items the confirmed stage no longer asks for are not listed as needed (the list below is the stage's, as in the game).
   const scope = useStageScope(step);
   const inStage = (l: PrepLine) => !isOutOfStage(scope, l.name);
@@ -183,7 +180,7 @@ export function OneTripCard({ step, inStatus = false, plain = false, nowShown = 
           {score.unknown > 0 && <span className="prep-chip is-unknown">? not checked: {score.unknown}</span>}
         </p>
       )}
-      {!plain && <ChipStrip plan={plan} showLater={profile.showLater} />}
+      {!plain && <ChipStrip plan={plan} />}
       {plan.recovery && !inStatus && <RecoveryBanner step={step} rec={plan.recovery} />}
       {quiet && <p className="small"><strong>All ready</strong> — you can go.</p>}
       {plan.blockers.length > 0 && (
@@ -229,12 +226,6 @@ export function OneTripCard({ step, inStatus = false, plain = false, nowShown = 
         <details className="small">
           <summary className="muted">Already have: {plan.have.length}</summary>
           <ul>{plan.have.map((l) => <Row key={l.key} l={l} />)}</ul>
-        </details>
-      )}
-      {profile.showLater && plan.later.length > 0 && (
-        <details className="small">
-          <summary className="muted">⏳ Do not take now — needed later: {plan.later.length}</summary>
-          <ul>{plan.later.map((l) => <Row key={l.key} l={l} />)}</ul>
         </details>
       )}
       {plan.optimizations.length > 0 && (

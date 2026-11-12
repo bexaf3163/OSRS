@@ -7,7 +7,7 @@ import { useFeatures } from '../../state/hooks/useFeatures';
 import { usePriceView } from '../../state/hooks/usePriceView';
 import { useTradeRestriction } from '../../state/hooks/useTradeRestriction';
 import { setTracked } from '../../state/hooks/useTracked';
-import { priorityOf, styleOf } from '../../domain/persistence/playStyle';
+import { priorityOf } from '../../domain/persistence/methodPriority';
 import { f2pCheckpoints } from '../../domain/training/trackedTraining';
 import { formatHours } from '../../domain/training/trainingRouter';
 import { Eyebrow } from '../../ledger';
@@ -17,11 +17,11 @@ const title = (skill: string) => skill[0].toUpperCase() + skill.slice(1);
 
 export function F2pNext({ waiting = null }: { waiting?: string | null }) {
   const { state } = usePlayerState();
-  const features = useFeatures();
+  const priority = priorityOf(useFeatures());
   const prices = usePriceView(true);
   const trade = useTradeRestriction();
-  const rows = useMemo(() => f2pCheckpoints(state, styleOf(features).style, priorityOf(features), { prices, restriction: trade.state }),
-    [state, features, prices, trade.state]);
+  const rows = useMemo(() => f2pCheckpoints(state, priority, { prices, restriction: trade.state }),
+    [state, priority, prices, trade.state]);
   return <>
     <Eyebrow>{waiting ? `F2P QUESTS COMPLETE · ${waiting.toUpperCase()} OPTIONAL` : 'F2P QUESTS COMPLETE'}</Eyebrow>
     <h1 className="la-t">Next in F2P</h1>

@@ -25,7 +25,7 @@ describe('one prepared kit from the existing combat and Gear models', () => {
   it('a selected melee trainer carries modelled food and uses a better usable owned weapon before shopping', () => {
     const state = character(), before = structuredClone(state);
     const method = trainingMethods.find(m => m.id === 'me-cow')!;
-    const advice = adviseTraining({ skill: 'attack', target: 40, mode: 'f2p', state, style: 'efficient', priority: 'fastest', methods: [method], prices });
+    const advice = adviseTraining({ skill: 'attack', target: 40, mode: 'f2p', state, priority: 'fastest', methods: [method], prices });
     expect(advice.best?.method.rateSource).toBe('model');
     const needs = preparationNeeds(advice, state, prices);
     expect(needs).toContainEqual({ type: 'item', name: 'Mithril scimitar', count: 1, equip: true });
@@ -37,7 +37,7 @@ describe('one prepared kit from the existing combat and Gear models', () => {
     const state = character(true);
     const original = trainingMethods.find(m => m.kit === 'strike-spell')!;
     const method = { ...original, id: 'future-strike-trainer', npcNames: ['Hill Giant'] };
-    const advice = adviseTraining({ skill: 'magic', target: 19, mode: 'f2p', state, style: 'efficient', priority: 'fastest', methods: [method], prices });
+    const advice = adviseTraining({ skill: 'magic', target: 19, mode: 'f2p', state, priority: 'fastest', methods: [method], prices });
     expect(advice.best?.method.rateSource).toBe('model');
     const needs = methodNeeds(advice.best!.method, state, prices);
     expect(needs.some(n => n.type === 'item' && n.name === 'Fire rune')).toBe(false);
@@ -90,7 +90,7 @@ describe('one prepared kit from the existing combat and Gear models', () => {
     state.owned!.items.set('staff of fire', { name: 'Staff of fire', carried: 0, noted: 0, bank: 0 });
     const before = structuredClone(state);
     const method = trainingMethods.find(m => m.kit === 'strike-spell')!;
-    const advice = adviseTraining({ skill: 'magic', target: 40, mode: 'f2p', state, style: 'efficient', priority: 'balanced', methods: [method], prices });
+    const advice = adviseTraining({ skill: 'magic', target: 40, mode: 'f2p', state, priority: 'balanced', methods: [method], prices });
     expect(advice.upgrade?.tool).toMatch(/^Staff of (air|water|earth|fire)$/);
     expect(preparationNeeds(advice, state, prices)).toContainEqual({ type: 'item', name: advice.upgrade!.tool, count: 1, equip: true });
     // Price 1 each: the kit beside the staff costs the model-sized food and other supplies (no fixed catalogue amount since 2.83.0).
@@ -137,7 +137,7 @@ describe('one prepared kit from the existing combat and Gear models', () => {
     state.equipmentItems = [{ name: 'Staff of air', count: 1 }, { name: 'Iron full helm', count: 1 }, { name: 'Iron platebody', count: 1 }];
     state.owned!.items.set('staff of fire', { name: 'Staff of fire', carried: 0, noted: 0, bank: 0 });
     const before = structuredClone(state), method = { ...trainingMethods.find(m => m.kit === 'strike-spell')!, id: 'future-magic-trainer', npcNames: ['Hill Giant'] };
-    const advice = adviseTraining({ skill: 'magic', target: 40, mode: 'f2p', state, style: 'efficient', priority: 'balanced', methods: [method], prices });
+    const advice = adviseTraining({ skill: 'magic', target: 40, mode: 'f2p', state, priority: 'balanced', methods: [method], prices });
     expect(advice.upgrade?.tool).toMatch(/^(Black robe|Blue wizard robe)$/);
     expect(advice.upgrade?.needs?.some(n => n.type === 'item' && FOODS.some(food => food.name === n.name))).toBe(true);
     expect(preparationNeeds(advice, state, prices)).toContainEqual({ type: 'item', name: advice.upgrade!.tool, count: 1, equip: true });

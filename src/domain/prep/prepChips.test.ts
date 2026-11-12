@@ -24,10 +24,9 @@ describe('prepChips', () => {
     expect(chipOf(line('Redberries', 'MISSING', 2, false)).text).toBe('Redberries ×2+ · missing');
   });
 
-  it('groups by timing, drops empty groups and honours the "later" switch', () => {
-    const plan = { now: [line('A', 'MISSING')], soon: [], byTheWay: [line('B', 'UNKNOWN')], later: [line('C', 'BANK')] };
-    expect(prepChipGroups(plan, true).map((g) => g.key)).toEqual(['now', 'way', 'later']);
-    expect(prepChipGroups(plan, false).map((g) => g.key)).toEqual(['now', 'way']);
-    expect(prepChipGroups({ now: [], soon: [], byTheWay: [], later: [] }, true)).toEqual([]);
+  it('groups by timing and drops empty groups; what is needed only later is no chip (2.94.3)', () => {
+    const plan = { now: [line('A', 'MISSING')], soon: [], byTheWay: [line('B', 'UNKNOWN')] };
+    expect(prepChipGroups(plan).map((g) => g.key)).toEqual(['now', 'way']);
+    expect(prepChipGroups({ now: [], soon: [], byTheWay: [] })).toEqual([]);
   });
 });

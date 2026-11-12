@@ -8,7 +8,7 @@
 import type { GameMode, Step } from '../../types';
 import { followedGoals, GOAL_REACHED, UNKNOWN_GOAL_PREFIX, type TrainingPick } from './methodStep';
 import { levelOf, type PlayerState } from '../player/playerState';
-import type { MethodPriority, PlayStyle } from '../persistence/playStyle';
+import type { MethodPriority } from '../persistence/methodPriority';
 import { adviseTraining, preparationNeeds, type TrainingMethod } from './trainingRouter';
 import { alongRate, type AlongRate } from './skillingRates';
 import { xpForLevel } from '../player/xp';
@@ -16,7 +16,7 @@ import type { Market } from './methodRates';
 import type { TrainingAdvice } from './trainingRouter';
 
 /** The picked execution data and its estimate come from one advice calculation. */
-export function pickTraining(step: Step, state: PlayerState, mode: GameMode, style: PlayStyle, priority?: MethodPriority,
+export function pickTraining(step: Step, state: PlayerState, mode: GameMode, priority?: MethodPriority,
   market: Market = {}, xp?: Readonly<Record<string, number>>): { pick?: TrainingPick; advice: TrainingAdvice | null } {
   const goals = followedGoals(step);
   if (!goals.length) return { advice: null };
@@ -25,11 +25,11 @@ export function pickTraining(step: Step, state: PlayerState, mode: GameMode, sty
   if (!goal) return { pick: GOAL_REACHED, advice: null };
   if (levelOf(state, goal.skill) === undefined) return { advice: null,
     ...(goal.skill !== step.followsMethod ? { pick: `${UNKNOWN_GOAL_PREFIX}${goal.skill}` } : {}) };
-  const advice = adviseTraining({ skill: goal.skill, target: goal.target, state, mode, style, priority, ...market,
+  const advice = adviseTraining({ skill: goal.skill, target: goal.target, state, mode, priority, ...market,
     ...(xp?.[goal.skill] !== undefined ? { xp: xp[goal.skill] } : {}) });
   const best = advice.best;
   if (!best) return { advice };
-  const along = alongPlan(step, goal, best.method, state, mode, style, priority, market);
+  const along = alongPlan(step, goal, best.method, state, mode, priority, market);
   const spot = along?.spot ?? best.method.spot;
   const pick = best.method.kit || spot || best.method.needs.length || advice.actionTarget !== null ? {
     methodId: best.method.id, modelled: best.method.rateSource === 'model', untilLevel: advice.actionTarget ?? goal.target,
@@ -50,12 +50,12 @@ export function pickTraining(step: Step, state: PlayerState, mode: GameMode, sty
  * left at its own best method — against the two one after the other. Time only: the catches cooked on the spot also spare buying raw food later, so a
  * tie is not counted against it. The levels are today's (the forecast does not move them). null — no such station, or a level or rate is unknown.
  */
-function alongPlan(step: Step, goal: { skill: string; target: number }, m: TrainingMethod, state: PlayerState, mode: GameMode, style: PlayStyle,
+function alongPlan(step: Step, goal: { skill: string; target: number }, m: TrainingMethod, state: PlayerState, mode: GameMode,
   priority: MethodPriority | undefined, market: Market): (AlongRate & { skill: string }) | null {
   const next = followedGoals(step).find((g) => g.skill !== goal.skill && (levelOf(state, g.skill) ?? Infinity) < g.target);
   const now = (skill: string) => xpForLevel(levelOf(state, skill)!);
   const along = next ? alongRate(m, goal.skill, next.skill, state, market) : null;
-  const later = next ? adviseTraining({ skill: next.skill, target: next.target, state, mode, style, priority, ...market }).best?.method.xph : null;
+  const later = next ? adviseTraining({ skill: next.skill, target: next.target, state, mode, priority, ...market }).best?.method.xph : null;
   if (!next || !along || !later || !m.xph) return null;
   const mid = (x: readonly [number, number]) => (x[0] + x[1]) / 2;
   const leftGather = xpForLevel(goal.target) - now(goal.skill);

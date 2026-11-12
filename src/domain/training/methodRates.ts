@@ -7,7 +7,7 @@ import type { PriceView } from '../market/quotes';
 import type { TradeRestriction } from '../market/tradeRestriction';
 import type { TrainingMethod, MethodNeed } from './trainingRouter';
 import type { Point } from '../travel/travel';
-import type { MethodPriority } from '../persistence/playStyle';
+import type { MethodPriority } from '../persistence/methodPriority';
 import type { Consumption } from '../items/consumption';
 import { combatRate } from '../combat/combatRates';
 import { gatherRate } from './skillingRates';

@@ -107,7 +107,7 @@ describe('account mode removes what the account cannot use', () => {
     const skills = [...new Set(trainingMethods.filter((m) => !m.members).flatMap((m) => m.skills))];
     for (const skill of skills) for (const level of [1, 30, 60, 90]) {
       const state = buildPlayerState({ mode: 'f2p', stats: null, progress: { ...emptyProgress(), levels: { [skill]: level } }, owned: null, gear: null, questsDone: null, connected: false });
-      const best = adviseTraining({ skill, target: Math.min(99, level + 5), state, mode: 'f2p', style: 'chill', priority: 'balanced' }).best;
+      const best = adviseTraining({ skill, target: Math.min(99, level + 5), state, mode: 'f2p', priority: 'balanced' }).best;
       expect(best?.method.members ?? false, `${skill} ${level}: ${best?.method.id}`).toBe(false);
     }
   });

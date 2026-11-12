@@ -6,7 +6,7 @@ import { buildPlayerState } from '../player/playerState';
 import { emptyProgress } from '../persistence/progress';
 
 const engineAdvice = (skill: string, stats: Record<string, number>) => adviseTraining({
-  skill, target: 99, mode: 'f2p', style: 'chill', untilChange: true,
+  skill, target: 99, mode: 'f2p', untilChange: true,
   state: buildPlayerState({ mode: 'f2p', stats, progress: emptyProgress(), gear: null, questsDone: null, owned: null }),
 });
 const engineStop = (skill: string, stats: Record<string, number>) => methodStop(engineAdvice(skill, stats));
@@ -48,9 +48,9 @@ describe('planner-aware melee focus', () => {
 });
 
 describe('the training engine sets the goal without a planner need', () => {
-  it('Woodcutting 1 trains to 15, where Oak trees take over; Smithing 1 to 15, where iron bars do', () => {
+  it('Woodcutting 1 trains to 15, where Oak trees take over; Smithing 1 to 5, where the Bronze scimitar does (balanced, the skill card\'s default)', () => {
     expect(engineStop('woodcutting', { woodcutting: 1 })).toEqual({ level: 15, next: 'Oak trees' });
-    expect(engineStop('smithing', { smithing: 1 })).toEqual({ level: 15, next: 'Make Iron bar' });
+    expect(engineStop('smithing', { smithing: 1 })).toEqual({ level: 5, next: 'Make Bronze scimitar' });
     // The advice itself runs to that goal: its path and target stop where Oak trees take over.
     const wc = engineAdvice('woodcutting', { woodcutting: 1 });
     expect(wc.target).toBe(15);

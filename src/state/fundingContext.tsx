@@ -15,8 +15,6 @@ import { useStore } from './store';
 import { usePlayerState } from './playerStateContext';
 import { levelOf } from '../domain/player/playerState';
 import { useReadinessEngine } from './readinessContext';
-import { useFeatures } from './hooks/useFeatures';
-import { styleOf } from '../domain/persistence/playStyle';
 import { useCleanupAdvice } from './hooks/useCleanupAdvice';
 import { reachTiles } from '../domain/travel/travel';
 import { travelInputOf } from '../domain/travel/travelInput';
@@ -171,8 +169,6 @@ export function useFundingScreen(step: Step | null, wanted: boolean): FundingScr
   const prices = usePriceView(wanted && step !== null);
   const snap = useFundingSnapshot(wanted && step ? step.id : null);
   const cleanup = useCleanupAdvice(wanted && step !== null);
-  // The same window of steps ahead as the list the player is reading, so the two never disagree about what is needed.
-  const ahead = styleOf(useFeatures()).lookAhead;
   const plan = running && running.sourceStepId === step?.id ? running : null;
 
   // Without a running plan the walk to a place is part of the estimate: the game is asked now and then where the player is.
@@ -190,7 +186,8 @@ export function useFundingScreen(step: Step | null, wanted: boolean): FundingScr
   const hitpoints = levelOf(state, 'hitpoints');
   const assessment = useMemo(() => {
     if (!wanted || !step || !snap || plan || !base) return null;
-    const prep = engine.plan(step, { ahead });
+    // The same window of steps ahead as the list the player is reading (oneTrip LOOK_AHEAD), so the two never disagree about what is needed.
+    const prep = engine.plan(step);
     const manual = Object.fromEntries(Object.entries(progress.ownedManual ?? {}).map(([k, v]) => [k, v.count]));
     const need = buildNeed({ step, prep, prices, owned: state.owned, manual, hitpoints });
     const keep = shown.current?.stepId === step.id ? shown.current.id : null;
@@ -199,7 +196,7 @@ export function useFundingScreen(step: Step | null, wanted: boolean): FundingScr
     });
     shown.current = out.recommendation ? { stepId: step.id, id: out.recommendation.id } : null;
     return out;
-  }, [wanted, snap, plan, base, engine, step, progress, state.owned, hitpoints, prices, bridge.gear, cleanup.live, cleanup.result.recs, ahead]);
+  }, [wanted, snap, plan, base, engine, step, progress, state.owned, hitpoints, prices, bridge.gear, cleanup.live, cleanup.result.recs]);
 
   const { view } = useFundingView(step?.id ?? '');
   const realized = useMemo(() => (plan ? realizedSince(ledger, plan.startedAt) : null), [plan, ledger]);

@@ -10,13 +10,13 @@ import { adviseTraining, methodsFor } from './trainingRouter';
 import { pickTraining } from './methodPick';
 import type { TimeEstimate, TrainingAdvice } from './trainingRouter';
 import { withTrainingMethod } from './methodStep';
-import type { MethodPriority, PlayStyle } from '../persistence/playStyle';
+import type { MethodPriority } from '../persistence/methodPriority';
 import type { Market } from './methodRates';
 
 export interface TrackedTraining { step: Step; target: number; complete: boolean; advice?: TrainingAdvice | null }
 
 export function trackedTraining(tracked: TrackedSkill | null, observed: PlayerState, mode: GameMode,
-  style: PlayStyle, priority: MethodPriority, market: Market = {}, xp?: Readonly<Record<string, number>>): TrackedTraining | null {
+  priority: MethodPriority, market: Market = {}, xp?: Readonly<Record<string, number>>): TrackedTraining | null {
   if (!tracked || !methodsFor(tracked.skill).length) return null;
   const context = trackedTrainingContext(tracked, tracked.skill, observed, mode);
   const state = context.state, free = context.mode === 'f2p';
@@ -34,7 +34,7 @@ export function trackedTraining(tracked: TrackedSkill | null, observed: PlayerSt
     how: `Check your ${skill} level before choosing a training stage.`,
     inGame: { completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill, level: target }] } },
   };
-  const { pick, advice } = pickTraining(base, state, context.mode, style, priority, market, xp);
+  const { pick, advice } = pickTraining(base, state, context.mode, priority, market, xp);
   const step = withTrainingMethod(base, pick);
   if (typeof pick === 'object' && step.inGame) step.inGame = { ...step.inGame, goal: `${pick.name ?? name}: train ${skill} to ${pick.untilLevel ?? target}` };
   const method = typeof pick === 'object' ? methodsFor(skill).find(method => method.id === pick.methodId) : null;
@@ -59,12 +59,12 @@ export interface F2pCheckpoint { skill: SkillName; level: number; target: number
  * What to train once the F2P quests are done: the unfinished F2P checkpoints, the better-value class first (★ before ◇), then the shortest by the
  * training engine's own forecast for this character; an unknown time goes last, never first. A list to choose from, not a forced grind (S105).
  */
-export function f2pCheckpoints(observed: PlayerState, style: PlayStyle, priority: MethodPriority, market: Market = {}): F2pCheckpoint[] {
+export function f2pCheckpoints(observed: PlayerState, priority: MethodPriority, market: Market = {}): F2pCheckpoint[] {
   const mid = (c: F2pCheckpoint) => c.time ? (c.time.minHours + c.time.maxHours) / 2 : Infinity;
   return SKILL_NAMES.flatMap((skill): F2pCheckpoint[] => {
     const advice = f2pAdviceFor(skill), level = levelOf(observed, skill);
     if (!advice?.target || (advice.priority !== 'good' && advice.priority !== 'optional') || level === undefined || level >= advice.target) return [];
-    const plan = adviseTraining({ skill, target: advice.target, state: observed, mode: 'f2p', style, priority, ...market });
+    const plan = adviseTraining({ skill, target: advice.target, state: observed, mode: 'f2p', priority, ...market });
     return [{ skill, level, target: advice.target, priority: advice.priority, method: plan.best?.method.name ?? null, time: plan.time }];
   }).sort((a, b) => Number(a.priority !== 'good') - Number(b.priority !== 'good') || (mid(a) === mid(b) ? 0 : mid(a) < mid(b) ? -1 : 1));
 }

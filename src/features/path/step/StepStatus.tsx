@@ -20,8 +20,6 @@ import { scopedPercent, type StageScope } from '../../../domain/quests/stageScop
 
 /** No stage cut: the step's own items (the "now" lines) only. */
 const STEP_ONLY: StageScope = { stageAt: 0, out: new Set() };
-import { useFeatures } from '../../../state/hooks/useFeatures';
-import { styleOf } from '../../../domain/persistence/playStyle';
 import { usePrepFix } from '../prep/PrepRoute';
 import { ReadinessPanel } from '../prep/ReadinessPanel';
 import { OneTripCard, RecoveryBanner } from '../prep/OneTripCard';
@@ -82,7 +80,7 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
   // The quest items the current stage no longer asks for are not a problem: the verdict, the ring and the Fix button follow the stage the game confirms.
   const r = useScopedReadiness(step);
   const scope = useStageScope(step);
-  const planNow = useReadinessEngine().plan(step, { ahead: styleOf(useFeatures()).lookAhead });
+  const planNow = useReadinessEngine().plan(step);
   // The ring beside the step's verdict counts the step's own items, the same scope as "Preparation required (N items)": the whole trip's share (the
   // next steps' items too) is the trip card's. "1 item" next to "ready 9%" read as a contradiction.
   const percent = planNow.score.verdict === 'UNKNOWN' ? null : scopedPercent(planNow.lines, scope ?? STEP_ONLY, planNow.score.percent);

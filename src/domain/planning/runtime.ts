@@ -4,7 +4,7 @@
 import type { Step, WikiItemDetail } from '../../types';
 import { combatAuditJson } from '../../data';
 import type { PriceView } from '../market/quotes';
-import type { MethodPriority, PlayStyle } from '../persistence/playStyle';
+import type { MethodPriority } from '../persistence/methodPriority';
 import type { TradeRestriction } from '../market/tradeRestriction';
 import type { Progress } from '../../types';
 import type { CommittedDecision, PlanningSnapshot } from './contracts';
@@ -35,7 +35,6 @@ export interface RuntimePlanInput {
   detail: (id: number) => WikiItemDetail | undefined;
   ironman: boolean;
   earn: TacticalInput['earn'];
-  style?: PlayStyle;
   priority?: MethodPriority;
   restriction?: TradeRestriction['state'];
   keepDefenceOne?: boolean;
@@ -82,7 +81,7 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
   const walk = withTeleports(input.walk ?? (() => null), input.teleports ?? null);
   const origin = snapshot.player.position.known ? snapshot.player.position.value : null;
   const stepOf = new Map(steps.map(step => [step.id, step]));
-  const options = { prices, style: input.style, priority: input.priority, restriction: input.restriction };
+  const options = { prices, priority: input.priority, restriction: input.restriction };
   // Training time to a level from the shared training cost, measured from the observed state (train-then-earn, S61).
   const trainingCost = createTrainingCost(snapshot, options), observed = observedProjection(snapshot);
   const train = (skill: string, level: number) => trainingCost(skill, level, observed);
@@ -94,7 +93,7 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
     return winnings.get(key)!;
   };
   const tactical = createTacticalResolver({
-    snapshot, progress: input.progress, prices, window, style: input.style, priority: input.priority,
+    snapshot, progress: input.progress, prices, window, priority: input.priority,
     restriction: input.restriction, ironman, walk, keepDefenceOne: input.keepDefenceOne,
     earn: (step, gp, budget, goalId) => input.earn(step, gp, budget, goalId, train),
     gather: input.gather,

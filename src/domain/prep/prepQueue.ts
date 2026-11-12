@@ -14,7 +14,7 @@ import { navKeyOf, startDetour, type DetourFrame, type PrepRoute, type PrepState
 import type { PlayerState } from '../player/playerState';
 import { adviseTraining } from '../training/trainingRouter';
 import { exchangeNav, trainingNav } from '../training/trainingNav';
-import type { PlayStyle } from '../persistence/playStyle';
+import type { MethodPriority } from '../persistence/methodPriority';
 
 export interface QueueTask extends PrepTask {
   /** Where to lead the arrow; null means there is no place (a quest, a step, coins): only a hint. */
@@ -32,7 +32,8 @@ export interface PrepQueue {
 export interface QueueContext {
   state: PlayerState;
   mode: GameMode;
-  style: PlayStyle;
+  /** The player's training preference: a level to catch up names the same method as the skill card. */
+  priority: MethodPriority;
 }
 
 /** Adds "where to lead" to the preparation route: a bank as is, a level is the method's place, a purchase is the Grand Exchange. */
@@ -40,7 +41,7 @@ export function buildQueue(route: PrepRoute, ctx: QueueContext): PrepQueue {
   const tasks = route.tasks.map((t): QueueTask => {
     if (t.action?.kind === 'nav') return { ...t, guide: t.action };
     if (t.kind === 'stat' && t.stat) {
-      const advice = adviseTraining({ skill: t.stat.skill, target: t.stat.min, state: ctx.state, mode: ctx.mode, style: ctx.style });
+      const advice = adviseTraining({ skill: t.stat.skill, target: t.stat.min, state: ctx.state, mode: ctx.mode, priority: ctx.priority });
       const best = advice.best;
       if (best) {
         const nav = trainingNav(best.method);
@@ -70,7 +71,6 @@ export interface AutoInput {
   navActive: boolean;
   /** That arrow target, when there is one: a detour's own arrow whose task has changed is taken over, any other is left alone. */
   standing?: { x: number; y: number; itemName?: string | null } | null;
-  announce: 'quiet' | 'full';
   now: number;
   /** When this task was last retargeted: key to time. Not more than once a minute. */
   recent: ReadonlyMap<string, number>;
@@ -87,8 +87,6 @@ export type AutoDecision =
   | { kind: 'renav'; task: QueueTask; key: string; frame: DetourFrame }
   /** The arrow standing is this detour's own, but its task now points elsewhere (the step's requirement changed with the level): move the arrow. */
   | { kind: 'retarget'; task: QueueTask; key: string; frame: DetourFrame }
-  /** The next task without a place: just say what is next. */
-  | { kind: 'announce'; task: QueueTask; key: string }
   /** A skill plan took over the game while a detour's own arrow stands: take that arrow down (the player's own arrow is never touched). */
   | { kind: 'release'; frame: DetourFrame };
 
@@ -137,5 +135,5 @@ export function decideAuto(i: AutoInput): AutoDecision | null {
     const res = startDetour(i.prep, frame);
     return res.ok ? { kind: 'start', task, frame, state: res.state } : null;
   }
-  return i.announce === 'full' ? { kind: 'announce', task, key: `${stepId}:${task.id}` } : null;
+  return null;
 }

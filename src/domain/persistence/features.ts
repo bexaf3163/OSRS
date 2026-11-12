@@ -4,18 +4,16 @@ import { STORAGE_KEYS } from './storageKeys';
 // preparation) are always on since 2.93 (owner, 2026-11-11): one planner decides, and a saved old switch is ignored.
 
 export interface Features {
-  /** The "efficient" style (the default is "calm"): lib/playStyle.ts. Since 2.69 it is also the "Fastest" training preference. */
+  /** The XP training preference (methodPriority.ts). The saved name is the old "efficient" play style's; since 2.94.3 it changes the method only. */
   efficient: boolean;
-  /** The "Relaxed" training preference (2.69): fewer clicks and no risk before speed. With neither this nor "efficient" the guide picks "Balanced". */
-  relaxedTraining: boolean;
-  /** Prefer known net earnings among usable training methods. Balanced remains the default. */
+  /** Prefer known net earnings among usable training methods (the Money preference). With neither, the guide picks Balanced. */
   profitTraining?: boolean;
   /** The build keeps Defence at 1: combat plans never offer Defence training (lib/combatRoute/plans.ts). Off by default: with no preference Defence is a candidate. */
   keepDefenceOne: boolean;
 }
 
 export const FEATURES_KEY = STORAGE_KEYS.features;
-export const DEFAULT_FEATURES: Features = { efficient: false, relaxedTraining: false, profitTraining: false, keepDefenceOne: false };
+export const DEFAULT_FEATURES: Features = { efficient: false, profitTraining: false, keepDefenceOne: false };
 
 /** What is saved; the unfamiliar and the broken fall back to the default (a new feature is on). */
 export function parseFeatures(raw: string | null): Features {

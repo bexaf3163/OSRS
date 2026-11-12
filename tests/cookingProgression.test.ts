@@ -26,9 +26,9 @@ describe('Cooking uses the Fishing catch through the shared staged lifecycle', (
   it.each(fish)('Cooking %s prepares owned %s instead of buying another ingredient', (level, raw, family) => {
     const state = character(level, { [raw]: 7 });
     const before = structuredClone(state);
-    const advice = adviseTraining({ skill: 'cooking', target: level + 1, mode: 'f2p', style: 'chill', priority: 'balanced', state });
+    const advice = adviseTraining({ skill: 'cooking', target: level + 1, mode: 'f2p', priority: 'balanced', state });
     expect(advice.best?.method.id).toBe(family);
-    const followed = trackedTraining({ skill: 'cooking', mode: 'f2p', target: level + 1 }, state, 'f2p', 'chill', 'balanced')!;
+    const followed = trackedTraining({ skill: 'cooking', mode: 'f2p', target: level + 1 }, state, 'f2p', 'balanced')!;
     expect(followed.step.itemsRequired?.some(n => n.nameEn === raw || n.anyOf?.includes(raw))).toBe(true);
     expect(followed.step.inGame?.objectNames).toContain('Fire');
     expect(followed.step.inGame?.npcNames ?? []).toEqual([]);
@@ -40,7 +40,7 @@ describe('Cooking uses the Fishing catch through the shared staged lifecycle', (
   });
   it('finishes a compatible partial mixed catch without a bank or GE detour', () => {
     const state = character(1, { 'Raw shrimps': 4, 'Raw anchovies': 3 });
-    const followed = trackedTraining({ skill: 'cooking', mode: 'f2p', target: 5 }, state, 'f2p', 'chill', 'balanced')!;
+    const followed = trackedTraining({ skill: 'cooking', mode: 'f2p', target: 5 }, state, 'f2p', 'balanced')!;
     const food = followed.step.itemsRequired!.find(n => n.nameEn === 'Raw shrimps' || n.anyOf?.includes('Raw shrimps'))!;
     expect(food.amount).toBe(7);
     const engine = createReadinessEngine({ steps: [followed.step], state, progress: emptyProgress(), qp: 0, mode: 'f2p' });
@@ -53,7 +53,7 @@ describe('Cooking uses the Fishing catch through the shared staged lifecycle', (
     expect(rate.needs?.some(n => n.type === 'item' && (n.name === 'Raw salmon' || n.anyOf?.includes('Raw salmon')))).toBe(false);
   });
   it('includes every configured recipe in the shared inventory/bank watch automatically', () => {
-    const followed = trackedTraining({ skill: 'cooking', mode: 'f2p', target: 35 }, character(1, {}), 'f2p', 'chill', 'balanced')!;
+    const followed = trackedTraining({ skill: 'cooking', mode: 'f2p', target: 35 }, character(1, {}), 'f2p', 'balanced')!;
     expect(methodToolNames(followed.step)).toEqual(expect.arrayContaining(fish.map(([, raw]) => raw)));
   });
   it.each(['Make-All is 4 ticks', 'Increases to 4 when using the Make-X functionality.', '4 ticks for the rest', 'then 4 ticks'])('builds steady timing from the recipe note: %s', ticksnote => {

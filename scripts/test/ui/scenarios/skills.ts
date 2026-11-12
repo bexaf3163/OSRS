@@ -298,7 +298,7 @@ async function fishingStep(browser: Browser) {
   }
 }
 
-// "What to train with": the balanced choice by default (2.69), with no mode switch on the card; "Fastest" in Settings shows the time estimate.
+// "What to train with": the balanced choice by default (2.69), with no mode switch on the card; the time estimate shows for everyone (2.94.3).
 async function whatToTrainWith(browser: Browser) {
   const width = 1100;
   const { page, errors } = await open(browser, width, {
@@ -308,13 +308,13 @@ async function whatToTrainWith(browser: Browser) {
   }, '#/skills/WC');
   await waitFor(page, '.training', 5000);
   const calm = await text(page, '.training');
-  expect(calm.includes('Willow') && !calm.includes('by the wiki speed') && await page.locator('.training').getByRole('button', { name: /Calm|Efficient/ }).count() === 0, 'what to train with: at level 32 — willows, no time estimate and no mode switch on the card');
+  expect(calm.includes('Willow') && /⏱ .+ to \d+/.test(calm) && await page.locator('.training').getByRole('button', { name: /Calm|Efficient/ }).count() === 0, `what to train with: at level 32 — willows with a time estimate on Balanced, no mode switch on the card (${calm.slice(0, 160)})`);
   expect(await noOverflow(page), 'what to train with: no horizontal scrolling');
   // The method priority is the skill card's own choice (2.93: the Settings copy is retired).
   await page.getByRole('group', { name: 'Training priority' }).getByRole('button', { name: 'XP', exact: true }).click();
   await settle(page);
-  const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { efficient?: boolean; relaxedTraining?: boolean });
-  expect(feat.efficient === true && feat.relaxedTraining === false, 'training choices: "XP" (fastest) on the skill card is remembered');
+  const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { efficient?: boolean; profitTraining?: boolean });
+  expect(feat.efficient === true && feat.profitTraining === false, 'training choices: "XP" (fastest) on the skill card is remembered');
   await page.goto(`${BASE}#/skills/WC`);
   await waitFor(page, '.training', 5000);
   // No planner need: the goal is where the engine changes method, Willow trees until Teak trees take over at 41.

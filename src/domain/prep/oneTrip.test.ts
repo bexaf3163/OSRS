@@ -32,12 +32,13 @@ describe('one trip: the window and the reserve', () => {
     mk('A5', [item('Rope', 1)]),
   ];
 
-  it('the window — the current step and the next three unclosed ones', () => {
-    expect(tripWindow(steps, emptyProgress(), 'A1').map((s) => s.id)).toEqual(['A1', 'A2', 'A3', 'A4']);
+  it('the window — the current step and the next unclosed ones: two by default (2.94.3), as many as asked', () => {
+    expect(LOOK_AHEAD).toBe(2);
+    expect(tripWindow(steps, emptyProgress(), 'A1').map((s) => s.id)).toEqual(['A1', 'A2', 'A3']);
+    expect(tripWindow(steps, emptyProgress(), 'A1', 3).map((s) => s.id)).toEqual(['A1', 'A2', 'A3', 'A4']);
     const p = { ...emptyProgress(), steps: { A2: 'done' as const } };
-    expect(tripWindow(steps, p, 'A1').map((s) => s.id)).toEqual(['A1', 'A3', 'A4', 'A5']);
+    expect(tripWindow(steps, p, 'A1', 3).map((s) => s.id)).toEqual(['A1', 'A3', 'A4', 'A5']);
     expect(tripWindow(steps, emptyProgress(), 'none')).toEqual([]);
-    expect(LOOK_AHEAD).toBe(3);
   });
 
   it('food adds up, a tool is taken once, what is owned is assigned to the nearest steps', () => {
@@ -83,11 +84,11 @@ describe('one trip: the window and the reserve', () => {
     expect(none.unknown.length).toBe(none.lines.length);
   });
 
-  it('coins: bag and bank are known — we count the shortfall; not known — unknown', () => {
-    expect(planOneTrip(steps, emptyProgress(), 'A1', st(owned({}, true), { bag: 850, bank: 300 })).coins).toEqual({ need: 2000, have: 1150, missing: 850 });
-    expect(planOneTrip(steps, emptyProgress(), 'A1', st(owned({}, true), { bag: 850, bank: null })).coins).toEqual({ need: 2000, have: null, missing: null });
+  it('coins: bag and bank are known — we count the shortfall; not known — unknown (A4\'s coins, three steps ahead)', () => {
+    expect(planOneTrip(steps, emptyProgress(), 'A1', st(owned({}, true), { bag: 850, bank: 300 }), 3).coins).toEqual({ need: 2000, have: 1150, missing: 850 });
+    expect(planOneTrip(steps, emptyProgress(), 'A1', st(owned({}, true), { bag: 850, bank: null }), 3).coins).toEqual({ need: 2000, have: null, missing: null });
     // Coins in the bag that already cover the need settle it even with the bank not opened.
-    expect(planOneTrip(steps, emptyProgress(), 'A1', st(owned({}, true), { bag: 2500, bank: null })).coins).toEqual({ need: 2000, have: 2500, missing: 0 });
+    expect(planOneTrip(steps, emptyProgress(), 'A1', st(owned({}, true), { bag: 2500, bank: null }), 3).coins).toEqual({ need: 2000, have: 2500, missing: 0 });
   });
 
   it('on the real route the window is computed without crashes and without duplicate rows', () => {

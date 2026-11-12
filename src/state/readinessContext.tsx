@@ -12,11 +12,10 @@ import { useRecoveryTracker, type ActiveRecovery } from './hooks/useRecoveryTrac
 import { useBridge } from './bridge';
 import type { QuestInstruction } from '../services/runeliteBridge';
 import { usePriceView } from './hooks/usePriceView';
-import { trackedPriority } from '../domain/training/skillTrack';
 import { useTracked } from './hooks/useTracked';
 import { trackedTraining, type TrackedTraining } from '../domain/training/trackedTraining';
 import { useFeatures } from './hooks/useFeatures';
-import { priorityOf, styleOf } from '../domain/persistence/playStyle';
+import { priorityOf } from '../domain/persistence/methodPriority';
 import { useTradeRestriction } from './hooks/useTradeRestriction';
 import { resolveActiveActivity } from '../domain/quests/activeActivity';
 import { decisionStep, followedSteps, useDecision, usePlanWindow } from './decision';
@@ -34,11 +33,10 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
   const bridge = useBridge();
   const tracked = useTracked();
   const planWindow = usePlanWindow();
-  const features = useFeatures();
-  const style = styleOf(features).style, priority = trackedPriority(tracked, tracked?.skill ?? '', priorityOf(features));
+  const priority = priorityOf(useFeatures());
   const trade = useTradeRestriction();
-  const training = useMemo(() => trackedTraining(tracked, state, mode, style, priority, { prices, restriction: trade.state }),
-    [tracked, state, mode, style, priority, prices, trade.state]);
+  const training = useMemo(() => trackedTraining(tracked, state, mode, priority, { prices, restriction: trade.state }),
+    [tracked, state, mode, priority, prices, trade.state]);
   const engineSteps = useMemo(() => {
     const all = training ? [...steps, training.step] : steps;
     const current = planWindow[0];

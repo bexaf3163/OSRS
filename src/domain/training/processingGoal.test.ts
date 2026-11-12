@@ -70,13 +70,13 @@ describe('conditional full-goal processing supplies through the shared path', ()
   });
   it('does not grant projected inputs, levels or money to observed state', () => {
     const st = state(); const before = structuredClone(st);
-    const advice = adviseTraining({ skill: 'cooking', target: 35, mode: 'f2p', style: 'chill', priority: 'balanced', state: st, prices });
+    const advice = adviseTraining({ skill: 'cooking', target: 35, mode: 'f2p', priority: 'balanced', state: st, prices });
     expect(advice.goalNeeds?.length).toBeGreaterThan(0);
     expect(st).toEqual(before);
   });
   it('route shopping includes the remaining Cooking goal while current preparation stays one bag', () => {
     const base = retiredStep('S6-01')!, st = state();
-    const step = withTrainingMethod(base, pickTraining(base, st, 'f2p', 'chill', 'balanced', { prices }).pick);
+    const step = withTrainingMethod(base, pickTraining(base, st, 'f2p', 'balanced', { prices }).pick);
     expect(step.itemsRequired?.reduce((sum, n) => sum + Number(n.amount ?? 1), 0)).toBeLessThanOrEqual(28);
     expect(step.goalItemsRequired?.reduce((sum, n) => sum + Number(n.amount ?? 1), 0)).toBeGreaterThan(28);
     const now = aggregateShopping([step]).required.reduce((sum, n) => sum + n.count, 0);
@@ -86,7 +86,7 @@ describe('conditional full-goal processing supplies through the shared path', ()
   });
   it('keeps first-trip funding separate from the complete materials budget and leaves unread stock unknown', () => {
     const base = retiredStep('S6-01')!, st = state();
-    const step = withTrainingMethod(base, pickTraining(base, st, 'f2p', 'chill', 'balanced', { prices }).pick);
+    const step = withTrainingMethod(base, pickTraining(base, st, 'f2p', 'balanced', { prices }).pick);
     const needFor = (player: typeof st) => {
       const engine = createReadinessEngine({ ...contextOf({ step, steps: [step], progress: emptyProgress(), mode: 'f2p', qp: 100, owned: player.owned, gear: null, stats: { cooking: 1, fishing: 35 } }), state: player });
       return buildNeed({ step, prep: engine.plan(step), prices, owned: player.owned, manual: {} });
@@ -103,7 +103,7 @@ describe('conditional full-goal processing supplies through the shared path', ()
   it('does not label one current skill as all unresolved goals of a multi-skill step', () => {
     const base = retiredStep('S6-01')!, st = state(1, 1);
     const changed = { ...base, followsMethod: 'cooking', inGame: { ...base.inGame!, completionTrigger: { type: 'SKILL_LEVEL' as const, levels: [{ skill: 'cooking', level: 35 }, { skill: 'fishing', level: 35 }] } } };
-    const step = withTrainingMethod(changed, pickTraining(changed, st, 'f2p', 'chill', 'balanced', { prices }).pick);
+    const step = withTrainingMethod(changed, pickTraining(changed, st, 'f2p', 'balanced', { prices }).pick);
     expect(step.goalItemsRequired).toBeUndefined();
   });
 });

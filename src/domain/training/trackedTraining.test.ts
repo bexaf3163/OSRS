@@ -16,7 +16,7 @@ const state = (ranged?: number) => buildPlayerState({ mode: 'f2p', connected: tr
   stats: { ...(ranged === undefined ? {} : { ranged }), defence: 33, hitpoints: 31 }, progress: emptyProgress(), questsDone: [],
   gear: { equipment: [], inventory: [], coins: 10000, bankCoins: 0 },
   owned: { bankSeen: true, items: new Map([...RANGED_WATCH, 'Salmon', 'Tuna', 'Lobster', 'Swordfish'].map(name => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: 0 }])) } });
-const plan = (ranged?: number) => trackedTraining({ skill: 'ranged', mode: 'fast', freeOnly: true }, state(ranged), 'f2p', 'chill', 'balanced');
+const plan = (ranged?: number) => trackedTraining({ skill: 'ranged', mode: 'fast', freeOnly: true }, state(ranged), 'f2p', 'balanced');
 
 describe('followed account scope and usable tools', () => {
   const member = () => buildPlayerState({ mode: 'members', connected: true, stats: { woodcutting: 61, attack: 1 },
@@ -24,13 +24,13 @@ describe('followed account scope and usable tools', () => {
     owned: { bankSeen: true, items: new Map(['Rune axe', 'Dragon axe'].map(name => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: 1 }])) } });
   it('a free-only followed plan excludes Members tools even on a Members profile', () => {
     const observed = member(), before = structuredClone(observed);
-    const followed = trackedTraining({ skill: 'woodcutting', mode: 'fast', freeOnly: true, target: 65 }, observed, 'members', 'efficient', 'fastest')!;
+    const followed = trackedTraining({ skill: 'woodcutting', mode: 'fast', freeOnly: true, target: 65 }, observed, 'members', 'fastest')!;
     expect(followed.step.itemsRequired).toContainEqual(expect.objectContaining({ nameEn: 'Rune axe' }));
     expect(followed.step.itemsRequired).not.toContainEqual(expect.objectContaining({ nameEn: 'Dragon axe' }));
     expect(observed).toEqual(before);
   });
   it('a Members plan names the modelled Dragon tool and carries it without Attack60', () => {
-    const followed = trackedTraining({ skill: 'woodcutting', mode: 'fast', target: 65 }, member(), 'members', 'efficient', 'fastest')!;
+    const followed = trackedTraining({ skill: 'woodcutting', mode: 'fast', target: 65 }, member(), 'members', 'fastest')!;
     expect(followed.step.itemsRequired).toContainEqual(expect.objectContaining({ nameEn: 'Dragon axe' }));
     expect(followed.step.itemsRequired?.find(item => item.nameEn === 'Dragon axe')?.equip).not.toBe(true);
   });
@@ -64,7 +64,7 @@ describe('followed skills use the shared staged route', () => {
     expect(unread.step.requirements).toContainEqual({ type: 'skill', skill: 'ranged', min: 1 });
   });
   it('does not turn passive/prefer-members guidance into a forced99 grind; explicit targets survive reload', () => {
-    expect(trackedTraining({ skill: 'prayer', mode: 'fast' }, state(1), 'f2p', 'chill', 'balanced')).toBeNull();
+    expect(trackedTraining({ skill: 'prayer', mode: 'fast' }, state(1), 'f2p', 'balanced')).toBeNull();
     expect(parseTracked({ skill: 'ranged', mode: 'fast', target: 50 })?.target).toBe(50);
     expect(parseTracked({ skill: 'ranged', mode: 'fast', target: NaN })).toBeNull();
     expect(parseTracked({ skill: 'ranged', mode: 'fast', target: 100 })).toBeNull();
@@ -84,7 +84,7 @@ describe('followed skills use the shared staged route', () => {
   it('a new milestone cannot inherit the previous kit purchase completion', () => {
     const queue = (level: number) => {
       const st = state(level), step = plan(level)!.step;
-      return createReadinessEngine({ state: st, mode: 'f2p', steps: [step], progress: emptyProgress(), qp: 200 }).queue(step, 'chill');
+      return createReadinessEngine({ state: st, mode: 'f2p', steps: [step], progress: emptyProgress(), qp: 200 }).queue(step, 'balanced');
     };
     const old = queue(1), next = queue(20);
     const before = old.tasks.find(t => t.kind === 'buy')!, after = next.tasks.find(t => t.kind === 'buy')!;
@@ -107,7 +107,7 @@ describe('followed skills use the shared staged route', () => {
       owned: { bankSeen: true, items: new Map(['Bronze axe', 'Iron axe', 'Steel axe', 'Mithril axe', 'Adamant axe', 'Rune axe'].map(name => [name.toLowerCase(), { name, carried: name === 'Bronze axe' ? 1 : 0, noted: 0, bank: 0 }])) } });
     const quote = { price: 1, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] };
     const prices: PriceView = { status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, buy: () => quote, sell: () => quote };
-    const upgrade = trackedTraining({ skill: 'woodcutting', mode: 'fast' }, st, 'f2p', 'efficient', 'fastest', { prices })!;
+    const upgrade = trackedTraining({ skill: 'woodcutting', mode: 'fast' }, st, 'f2p', 'fastest', { prices })!;
     expect(upgrade.target).toBe(36);
     expect(upgrade.step.itemsRequired!.some(i => i.nameEn === 'Mithril axe' && !i.equip)).toBe(true);
     expect(upgrade.step.how).not.toContain('to 36:');
@@ -121,7 +121,7 @@ describe('after the F2P quests: what to train next', () => {
       mining: 18, smithing: 29, crafting: 9, runecraft: 1, ...levels },
     gear: { equipment: [], inventory: [{ id: 1353, name: 'Steel axe', count: 1 }], coins: 10000, bankCoins: 0 }, owned: { bankSeen: true, items: new Map() } });
   it('lists only unfinished good or optional checkpoints, good value first, then the shortest by the engine; reached and members skills are left out', () => {
-    const rows = f2pCheckpoints(character({}), 'chill', 'balanced');
+    const rows = f2pCheckpoints(character({}), 'balanced');
     expect(rows.length).toBeGreaterThan(3);
     for (const row of rows) {
       expect(['good', 'optional']).toContain(F2P_SKILL_ADVICE[row.skill]!.priority);
@@ -134,6 +134,6 @@ describe('after the F2P quests: what to train next', () => {
     expect(known(good)).toEqual([...known(good)].sort((a, b) => a - b));
     expect(firstOptional).toBe(good.length);
     // Reaching a checkpoint removes it.
-    expect(f2pCheckpoints(character({ fishing: 35 }), 'chill', 'balanced').some(r => r.skill === 'fishing')).toBe(false);
+    expect(f2pCheckpoints(character({ fishing: 35 }), 'balanced').some(r => r.skill === 'fishing')).toBe(false);
   });
 });

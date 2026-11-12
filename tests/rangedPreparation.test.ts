@@ -30,7 +30,7 @@ function scenario(level: number, equipment: GearItem[] = [], stock: Record<strin
   const stats = { ranged: level, hitpoints, ...(defence === null ? {} : { defence }) };
   const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
   const state = buildPlayerState({ mode: 'f2p', stats, progress, owned, gear, questsDone: ['The Corsair Curse'], connected: true });
-  const picks = { [base.id]: pickTraining(base, state, 'f2p', 'chill', 'balanced', trade).pick };
+  const picks = { [base.id]: pickTraining(base, state, 'f2p', 'balanced', trade).pick };
   const pick = chosenMethod ? { methodId: chosenMethod, needs: methodNeeds(personalize([trainingMethods.find(m => m.id === chosenMethod)!], 'ranged', state)[0], state) } : picks[base.id];
   const step = withTrainingMethod(base, pick);
   const engine = createReadinessEngine({ ...contextOf({ step, steps: allSteps.map(s => s.id === step.id ? step : s), progress, mode: 'f2p', qp: 44, gear, owned, stats }), state });

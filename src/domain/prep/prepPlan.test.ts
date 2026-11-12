@@ -45,7 +45,8 @@ function plan(s: ReturnType<typeof state>, opts: { upgrade?: UpgradeRecommendati
   const progress = emptyProgress();
   return buildPrepPlan({
     step, steps: list, progress, state: s,
-    trip: planOneTrip(list, progress, step.id, s),
+    // A three-step window, so one fixture shows every timing (now, meanwhile, along the way, later).
+    trip: planOneTrip(list, progress, step.id, s, 3),
     readiness: readinessOf(step, { steps: list, progress, qp: 0, mode: 'f2p', state: s }),
     upgrade: opts.upgrade, detail: opts.detail ?? (() => undefined),
   });

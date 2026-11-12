@@ -15,16 +15,16 @@ describe('the followed method is shown with this player\'s figures', () => {
   const state = buildPlayerState({ mode: 'f2p', stats: levels as never, progress: { ...emptyProgress(), levels }, owned: { bankSeen: true, items: new Map() },
     gear: { equipment: [{ id: 1323, name: 'Iron scimitar', slot: 'weapon' }], inventory: [], coins: 0, bankCoins: 0 } as never, questsDone: [], connected: true });
   it('a followed method that is not the pick leads with its own XP and coins an hour; the pick stays the recommendation', () => {
-    const plain = adviseTraining({ skill: 'strength', target: 40, state, mode: 'f2p', style: 'chill', priority: 'balanced', prices: market(), restriction: 'LIFTED' });
+    const plain = adviseTraining({ skill: 'strength', target: 40, state, mode: 'f2p', priority: 'balanced', prices: market(), restriction: 'LIFTED' });
     const other = plain.others[0].method.id;
-    const a = adviseTraining({ skill: 'strength', target: 40, state, mode: 'f2p', style: 'chill', priority: 'balanced', prices: market(), restriction: 'LIFTED', followed: other });
+    const a = adviseTraining({ skill: 'strength', target: 40, state, mode: 'f2p', priority: 'balanced', prices: market(), restriction: 'LIFTED', followed: other });
     expect(a.followed?.method.id).toBe(other);
     expect(a.followed?.reason).toMatch(/XP per hour for you/);
     expect(a.best?.method.id).toBe(plain.best?.method.id);
     expect(a.others.some((v) => v.method.id === other)).toBe(false);
   });
   it('every other method listed has the same kind of summary as the pick', () => {
-    const a = adviseTraining({ skill: 'strength', target: 40, state, mode: 'f2p', style: 'chill', priority: 'balanced', prices: market(), restriction: 'LIFTED' });
+    const a = adviseTraining({ skill: 'strength', target: 40, state, mode: 'f2p', priority: 'balanced', prices: market(), restriction: 'LIFTED' });
     expect(a.best?.reason).toBe(a.reason);
     for (const v of a.others) expect(v.reason, v.method.id).toBeTruthy();
     // The frogs' Big bones are named with their coins an hour wherever the frogs are listed (the pick or another method).
@@ -32,7 +32,7 @@ describe('the followed method is shown with this player\'s figures', () => {
     expect(frogs?.reason).toMatch(/Big bones ≈ \+[\d,k]+ gp per hour/);
   });
   it('a followed method that is the pick itself is not repeated', () => {
-    const pick = adviseTraining({ skill: 'strength', target: 40, state, mode: 'f2p', style: 'chill', priority: 'balanced' }).best!.method.id;
-    expect(adviseTraining({ skill: 'strength', target: 40, state, mode: 'f2p', style: 'chill', priority: 'balanced', followed: pick }).followed).toBeNull();
+    const pick = adviseTraining({ skill: 'strength', target: 40, state, mode: 'f2p', priority: 'balanced' }).best!.method.id;
+    expect(adviseTraining({ skill: 'strength', target: 40, state, mode: 'f2p', priority: 'balanced', followed: pick }).followed).toBeNull();
   });
 });

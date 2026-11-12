@@ -99,7 +99,7 @@ describe('one engine for every combat method', () => {
 describe('the Skills page reads the same numbers', () => {
   it('a combat method gets the model\'s rate "for you", and the time to the goal is the model\'s', () => {
     const s = state({ ranged: 30, defence: 1, hitpoints: 30 }, BOW);
-    const a = adviseTraining({ skill: 'ranged', target: 40, state: s, mode: 'f2p', style: 'chill', priority: 'balanced', prices });
+    const a = adviseTraining({ skill: 'ranged', target: 40, state: s, mode: 'f2p', priority: 'balanced', prices });
     expect(a.best?.method.rateSource).toBe('model');
     expect(a.reason).toMatch(/XP per hour for you/);
     expect(a.time?.source).toBe('model');
@@ -107,7 +107,7 @@ describe('the Skills page reads the same numbers', () => {
 
   it('without the game the wiki\'s guide stays, said as such', () => {
     const s = state({ ranged: 30 }, [], false);
-    const a = adviseTraining({ skill: 'ranged', target: 40, state: s, mode: 'f2p', style: 'chill', priority: 'balanced' });
+    const a = adviseTraining({ skill: 'ranged', target: 40, state: s, mode: 'f2p', priority: 'balanced' });
     expect(a.best?.method.rateSource).toBeUndefined();
     expect(a.reason).not.toMatch(/for you/);
   });
@@ -126,7 +126,7 @@ describe('drops weigh the same on the Skills page as in the fight plans', () => 
   });
 
   it('the Skills page picks the spot the fight plan picks for the same character: the frogs with their Big bones', () => {
-    const a = adviseTraining({ skill: 'attack', target: 40, state: hero, mode: 'f2p', style: 'chill', priority: 'balanced', prices, restriction: 'LIFTED' });
+    const a = adviseTraining({ skill: 'attack', target: 40, state: hero, mode: 'f2p', priority: 'balanced', prices, restriction: 'LIFTED' });
     expect(a.best?.method.id).toBe('me-frog');
     expect(a.reason).toMatch(/Big bones ≈ \+[\d.]+k gp per hour/);
     // The path under it weighs every later level the same way: no switch away from the frogs a level later.

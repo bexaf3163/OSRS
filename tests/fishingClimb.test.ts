@@ -12,7 +12,7 @@ import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { pickTraining } from '../src/domain/training/methodPick';
 import { SKILLING } from '../src/domain/training/skillingRates';
 import { trainingMethods } from '../src/domain/training/trainingRouter';
-import type { PlayStyle } from '../src/domain/persistence/playStyle';
+import type { MethodPriority } from '../src/domain/persistence/methodPriority';
 import { retiredStep } from './fixtures/retiredSteps';
 
 // Fishing 1-50 (S6-01). The first version put the climb on the map in level order and, in 2.54.2, let any later tool stand in for the net. A live
@@ -39,8 +39,8 @@ function stateAt(fishing: number | null, bag: Record<string, number> = {}, cooki
   });
 }
 
-/** The step as the store would give it for this level, bag and style. */
-function resolved(fishing: number | null, bag: Record<string, number> = {}, style: PlayStyle = 'chill', cooking = 30) {
+/** The step as the store would give it for this level, bag and training priority. */
+function resolved(fishing: number | null, bag: Record<string, number> = {}, style: MethodPriority = 'balanced', cooking = 30) {
   const state = stateAt(fishing, bag, cooking);
   const raw = pickTraining(step, state, 'f2p', style).pick;
   return { state, pick: raw === undefined ? undefined : pickedMethodId(raw), raw, step: withTrainingMethod(step, raw) };
@@ -48,7 +48,7 @@ function resolved(fishing: number | null, bag: Record<string, number> = {}, styl
 
 const needs = (s: typeof step) => (s.itemsRequired ?? []).map((i) => `${i.nameEn}${typeof i.amount === 'number' && i.amount > 1 ? ` x${i.amount}` : ''}`);
 
-function readyOf(fishing: number, bag: Record<string, number>, style: PlayStyle = 'chill') {
+function readyOf(fishing: number, bag: Record<string, number>, style: MethodPriority = 'balanced') {
   const r = resolved(fishing, bag, style);
   const rd = stepReadiness({ step: r.step, steps: [r.step], progress: emptyProgress(), qp: 100, mode: 'f2p', stats: { fishing, cooking: 30 }, owned: bagOf(bag), gear: null });
   return { ...r, status: rd.status, reqs: rd.requirements.map((x) => `${x.label}:${x.state}`) };
@@ -95,10 +95,10 @@ describe('S6-01 follows the training method of the real level', () => {
 
   it('the requirement follows the selected unlocked method, retaining useful fly fishing beyond 40', () => {
     expect(needs(resolved(4).step)).toEqual(['Small fishing net']);
-    // From 5 the router's own pick with nothing carried is the bait method; with a net in the bag the net method is ready and wins.
+    // From 5 the router's own pick is the bait method; on Balanced its rate outweighs the rod and bait it needs, even with a net in the bag.
     expect(resolved(10).pick).toBe('fi-bait');
     expect(needs(resolved(10).step)).toEqual(['Fishing rod', 'Fishing bait x100']);
-    expect(resolved(10, { 'Small fishing net': 1 }).pick).toBe('fi-shrimp');
+    expect(resolved(10, { 'Small fishing net': 1 }).pick).toBe('fi-bait');
     expect(needs(resolved(25).step)).toEqual(['Fly fishing rod', 'Feather x100']);
     expect(needs(resolved(40).step)).toEqual(['Fly fishing rod', 'Feather x100']);
     expect(needs(resolved(49).step)).toEqual(['Fly fishing rod', 'Feather x100']);
@@ -109,14 +109,15 @@ describe('S6-01 follows the training method of the real level', () => {
     expect(few.status).not.toBe('READY');
     expect(few.reqs.join(' ')).toMatch(/Feather[^:]*:(PARTIAL|MISSING)/);
     expect(readyOf(25, { 'Fly fishing rod': 1, Feather: 250 }).status).toBe('READY');
-    // At the lobster level a harpoon (the next method) is not the pot.
+    // At 42 Balanced keeps fly fishing: a harpoon or a lobster pot is not its kit, the rod and enough feathers are.
     expect(readyOf(42, { Harpoon: 1 }).status).not.toBe('READY');
-    expect(readyOf(42, { 'Lobster pot': 1 }).status).toBe('READY');
+    expect(readyOf(42, { 'Lobster pot': 1 }).status).not.toBe('READY');
+    expect(readyOf(42, { 'Fly fishing rod': 1, Feather: 250 }).status).toBe('READY');
   });
 
   it('the arrow advances through the training places as the level rises, never backwards', () => {
     const order = ['Draynor Village fishing spots', 'Barbarian Village fishing spots', 'Musa Point fishing spots'];
-    for (const style of ['chill', 'efficient'] as const) {
+    for (const style of ['balanced', 'fastest'] as const) {
       let at = -1;
       for (let level = 1; level < 50; level++) {
         const r = resolved(level, {}, style);
@@ -172,7 +173,7 @@ describe('S6-01 follows the training method of the real level', () => {
     const cooking = resolved(50, { 'Raw tuna': 26 });
     expect(cooking.pick).toBe('ck-tuna');
     expect(needs(cooking.step)).toEqual(['Raw tuna x26']);
-    const done = resolved(50, {}, 'chill', 50);
+    const done = resolved(50, {}, 'balanced', 50);
     expect(done.pick).toBe(GOAL_REACHED);
     expect(needs(done.step)).toEqual([]);
     expect(withTrainingMethod(step, 'no-such-method')).toBe(step);
@@ -189,7 +190,7 @@ describe('S6-01 follows the training method of the real level', () => {
   });
 
   /** The picks in turn when the game reports only the tracked names (an untracked item is unknown, not zero), each round tracking what the last pick asked for. */
-  function rounds(level: number, bag: Record<string, number>, style: PlayStyle, alsoTrackEveryMethod: boolean): (string | undefined)[] {
+  function rounds(level: number, bag: Record<string, number>, style: MethodPriority, alsoTrackEveryMethod: boolean): (string | undefined)[] {
     let tracked: string[] = (step.itemsRequired ?? []).map((i) => i.nameEn);
     const picks: (string | undefined)[] = [];
     for (let i = 0; i < 6; i++) {
@@ -208,7 +209,7 @@ describe('S6-01 follows the training method of the real level', () => {
   it('the pick settles with every tool tracked; unchecked stock no longer wins by pretending to be ready', () => {
     const bags: Record<string, number>[] = [{}, { 'Small fishing net': 1 }, { 'Fishing rod': 1, 'Fishing bait': 300 }, { 'Fly fishing rod': 1, Feather: 400 }, { 'Lobster pot': 1 }, { Harpoon: 1, 'Lobster pot': 1 }];
     let hazard = 0;
-    for (const style of ['chill', 'efficient'] as const) {
+    for (const style of ['balanced', 'fastest'] as const) {
       for (const level of [1, 5, 12, 19, 20, 33, 40, 49]) {
         for (const bag of bags) {
           const seq = rounds(level, bag, style, true);
@@ -221,7 +222,7 @@ describe('S6-01 follows the training method of the real level', () => {
     // The old regression counted positive hazards here. Unchecked supplies no longer gain READY priority.
     // Keep watching every method: the additional information is still required for correct preparation.
     expect(hazard).toBe(0);
-    // Exhaustive: 2 styles × 8 levels × 6 bags × 6 simulated bridge rounds. Allow the full-suite parallel CPU budget; retain every case/assertion.
+    // Exhaustive: 2 priorities × 8 levels × 6 bags × 6 simulated bridge rounds. Allow the full-suite parallel CPU budget; retain every case/assertion.
   }, 30_000);
 
   it('a step that does not follow a method is the same object whatever the pick says', () => {

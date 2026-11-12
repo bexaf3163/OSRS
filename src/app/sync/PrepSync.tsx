@@ -5,8 +5,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useBridge } from '../../state/bridge';
 import { useStore } from '../../state/store';
-import { useFeatures } from '../../state/hooks/useFeatures';
-import { styleOf } from '../../domain/persistence/playStyle';
 import { isClosed } from '../../domain/quests/next-step';
 import { useDecision, useDecisionWindow } from '../../state/decision';
 import { routedWalk } from '../../services/routedWalk';
@@ -49,10 +47,9 @@ function StepPlan({ step }: { step: Step }) {
   const { setPrepPart, stats, gear, owned, moves, questInstruction, chronicleCharges, questsDone } = useBridge();
   const { progress, mode } = useStore();
   const { prices } = usePlayerState();
-  const profile = styleOf(useFeatures());
   const upgrade = useUpgradeRecommendation(step);
   const engine = useReadinessEngine();
-  const plan = engine.plan(step, { ahead: profile.lookAhead, upgrade });
+  const plan = engine.plan(step, { upgrade });
   // A purchase or pick-up worth a stop on the way: judged by where the player is now, read every few seconds, not on every tick.
   const [detour, setDetour] = useState<Detour | null>(null);
   const [transport, setTransport] = useState<RecommendedTransport | null>(null);

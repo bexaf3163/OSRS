@@ -8,8 +8,6 @@ import type { ReactNode } from 'react';
 import type { Step } from '../../types';
 import { useFunding, useFundingScreen, useFundingView } from '../../state/fundingContext';
 import { useReadinessEngine } from '../../state/readinessContext';
-import { useFeatures } from '../../state/hooks/useFeatures';
-import { styleOf } from '../../domain/persistence/playStyle';
 import { formatGp } from '../../domain/prep/shopping';
 import type { FundingAssessment, FundingOption } from '../../domain/economy/funding/assess';
 import type { MethodEvaluation } from '../../domain/economy/funding/evaluate';
@@ -185,7 +183,7 @@ function Body({ step, fallback }: { step: Step; fallback: ReactNode }) {
  */
 export function FundingCard({ step, children }: { step: Step; children?: ReactNode }) {
   const { plan, ended } = useFunding();
-  const prep = useReadinessEngine().plan(step, { ahead: styleOf(useFeatures()).lookAhead });
+  const prep = useReadinessEngine().plan(step);
   const mine = plan !== null && plan.sourceStepId === step.id;
   const wanted = mine || prep.coins.need > 0 || prep.now.some(line => line.where === 'MISSING' && line.timing === 'NOW') || ended?.stepId === step.id;
   if (!wanted) return <>{children}</>;

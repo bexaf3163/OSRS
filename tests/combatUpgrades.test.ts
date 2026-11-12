@@ -46,7 +46,7 @@ describe('combat purchases use Gear eligibility and the same fight estimate', ()
     expect(combatUpgrades(method, 'attack', { ...state(), equipmentKnown: false }, { prices })).toEqual([]);
   });
   it('uses the existing compact suggestion and discloses a known cash shortfall', () => {
-    const a = adviseTraining({ skill: 'attack', target: 60, mode: 'f2p', style: 'efficient', priority: 'fastest', state: state(), prices, methods: [method] });
+    const a = adviseTraining({ skill: 'attack', target: 60, mode: 'f2p', priority: 'fastest', state: state(), prices, methods: [method] });
     expect(a.upgrade?.tool).toBeDefined();
     expect(a.upgrade?.short).toBe(100);
     expect(a.reason).toContain('you have 100');
@@ -116,7 +116,7 @@ describe('bow and elemental staff comparisons share the existing style models', 
     expect(pick?.hours).toBe(0);
     expect(pick?.coinsSaved).toBeGreaterThan(0);
     expect(toolUpgrade(withUpgrade, 100000, 'fastest', 100)).toBeNull();
-    const advice = adviseTraining({ skill: 'magic', target: 50, state: s, mode: 'f2p', style: 'efficient', priority: 'balanced', prices: market, methods: [m] });
+    const advice = adviseTraining({ skill: 'magic', target: 50, state: s, mode: 'f2p', priority: 'balanced', prices: market, methods: [m] });
     expect(advice.reason).toMatch(/gp after its price/);
     expect(advice.reason).not.toMatch(/saves ≈ (?:0|1) min/);
     expect(s.equipment.weapon).toBe('Magic staff');

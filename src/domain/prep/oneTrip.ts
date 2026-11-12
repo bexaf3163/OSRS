@@ -15,8 +15,9 @@ import { isClosed } from '../quests/next-step';
 import type { Progress } from '../../types';
 import type { Urgency } from './prepRoute';
 
-/** How many steps ahead after the current one are taken into one trip. */
-export const LOOK_AHEAD = 3;
+/** How many steps ahead after the current one are taken into one trip: the same two for every player since 2.94.3 (a short trip, no
+ * overloaded bag; before, an "efficient" play style that rode along with the XP training choice took four). */
+export const LOOK_AHEAD = 2;
 
 export type TripStatus = 'HAVE' | 'BANK' | 'GET' | 'UNKNOWN';
 

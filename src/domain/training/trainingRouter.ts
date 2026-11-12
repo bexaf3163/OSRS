@@ -18,7 +18,7 @@ import { evaluate, itemRequirement, type ReqState, type Requirement } from '../p
 import { coinsOf, heldExact, heldOf, levelOf, questOf, type PlayerState } from '../player/playerState';
 import { isClosed } from '../quests/next-step';
 import { xpForLevel } from '../player/xp';
-import type { MethodPriority, PlayStyle } from '../persistence/playStyle';
+import type { MethodPriority } from '../persistence/methodPriority';
 import { rangedEquipment, rangedNeeds, RANGED_WATCH } from '../combat/rangedLoadout';
 import { SPELLS, STAFFS, isCombatSpell, strikeRecipe, superheatNeeds } from '../combat/magicPlan';
 import { STYLE_GEAR } from '../combat/styleGear';
@@ -43,7 +43,6 @@ import { FOODS } from '../../data/threats';
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
 export type Risk = 'none' | 'low' | 'high';
-export type { PlayStyle };
 
 export type MethodNeed =
   | { type: 'item'; name: string; count?: number; anyOf?: string[]; equip?: boolean; refill?: number;
@@ -315,7 +314,6 @@ export function preparationNeeds(advice: Pick<TrainingAdvice, 'best' | 'upgrade'
 // The choice
 
 const EFFORT_RANK: Record<Effort, number> = { afk: 0, low: 1, medium: 2, high: 3 };
-const RISK_RANK: Record<Risk, number> = { none: 0, low: 1, high: 2 };
 const COST_RANK: Record<MethodCost, number> = { profit: 0, free: 0, cost: 1 };
 const STATUS_RANK: Record<MethodStatus, number> = { READY: 0, PREP: 1, LOCKED: 2 };
 
@@ -348,8 +346,7 @@ export function practicalRate(m: TrainingMethod): number | null {
 
 /**
  * The order of methods. Balanced (the default since 2.69): the practical hours to the goal, a method whose items are missing paying its setup; locked
- * ones last. Relaxed (the old "Calm"): first the ready ones, without risk, with fewer clicks, not at a loss — speed only on a tie. Fastest (the old
- * "Efficient"): first the ready ones, then by speed (for methods without a speed — by entry level).
+ * ones last. Fastest (XP): first the ready ones, then by speed (for methods without a speed — by entry level). Profit: known net earnings first.
  */
 function compare(priority: MethodPriority, xpLeft?: number, level?: number, coinRate: number | null = null) {
   return (a: MethodView, b: MethodView): number => {
@@ -367,7 +364,7 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number, coin
     // newer one's supplies are unread or it is riskier. Where speed ranks (balanced, fastest), known speeds still decide; an outgrown method with
     // its supplies at hand still beats a new one that needs buying first.
     const outgrown = (v: MethodView) => level !== undefined && v.method.to !== null && level >= v.method.to;
-    const bySpeed = priority !== 'relaxed' && rateLow(a.method) !== null && rateLow(b.method) !== null;
+    const bySpeed = rateLow(a.method) !== null && rateLow(b.method) !== null;
     if (outgrown(a) !== outgrown(b) && (outgrown(a) ? b : a).status === 'READY' && !bySpeed) {
       return Number(outgrown(a)) - Number(outgrown(b));
     }
@@ -424,12 +421,6 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number, coin
       return s || byBracket || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort] || COST_RANK[a.method.cost] - COST_RANK[b.method.cost] || byRate || byEntry;
     }
     if (s) return s;
-    if (priority === 'relaxed') {
-      return RISK_RANK[a.method.risk] - RISK_RANK[b.method.risk]
-        || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort]
-        || COST_RANK[a.method.cost] - COST_RANK[b.method.cost]
-        || byRate || byEntry;
-    }
     return byRate || byEntry || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort] || COST_RANK[a.method.cost] - COST_RANK[b.method.cost];
   };
 }
@@ -503,7 +494,6 @@ export interface TrainingAdvice {
   time: TimeEstimate | null;
   /** One phrase "why this method". */
   reason: string;
-  style: PlayStyle;
   /** The better tool worth buying for the XP left (toolUpgrade), when there is one. */
   upgrade?: ToolUpgrade | null;
   /** The method the game follows (input followed), when it is open at this level and is not the pick itself. */
@@ -517,8 +507,7 @@ export interface AdviceInput {
   target: number;
   state: PlayerState;
   mode: GameMode;
-  style: PlayStyle;
-  /** How methods are chosen; absent - from the style (calm: relaxed, efficient: fastest), as before 2.69. */
+  /** How methods are chosen; absent - balanced. */
   priority?: MethodPriority;
   /** The skill's current XP (if known): otherwise counted from the start of the level. */
   xp?: number | null;
@@ -609,9 +598,6 @@ function reasonFor(v: MethodView, priority: MethodPriority, level: number, upgra
     if (m.xph) parts.push(rateText(m));
     parts.push(m.effort === 'afk' ? 'almost no clicks' : m.effort === 'low' ? 'few clicks' : m.effort === 'medium' ? 'steady clicking' : 'needs full attention');
     if (m.risk !== 'none') parts.push(m.risk === 'high' ? 'risky' : 'small risk');
-  } else if (priority === 'relaxed') {
-    const quiet = m.effort === 'afk' ? 'almost no clicks' : m.effort === 'low' ? 'few clicks' : m.effort === 'medium' ? 'relaxed pace' : 'needs attention';
-    parts.push(m.risk === 'none' ? `no risk, ${quiet}` : `${quiet}, small risk`);
   } else if (m.xph) {
     parts.push(rateText(m));
   } else {
@@ -771,13 +757,13 @@ export function trainingStockNeeds(path: readonly PathLeg[], skill: string, stat
 }
 
 export function adviseTraining(input0: AdviceInput): TrainingAdvice {
-  const { skill, state, mode, style } = input0;
+  const { skill, state, mode } = input0;
   let target = input0.target;
-  const objective: MethodPriority = input0.priority ?? (style === 'efficient' ? 'fastest' : 'relaxed');
+  const objective: MethodPriority = input0.priority ?? 'balanced';
   const methods = personalize(input0.methods ?? trainingMethods, skill, state, input0.prices, input0.restriction, objective);
   const input = { ...input0, methods };
   const level = levelOf(state, skill) ?? null;
-  const empty: TrainingAdvice = { skill, level, target, best: null, others: [], quests: [], path: [], xpLeft: null, actionsLeft: null, actionTarget: null, time: null, reason: '', style };
+  const empty: TrainingAdvice = { skill, level, target, best: null, others: [], quests: [], path: [], xpLeft: null, actionsLeft: null, actionTarget: null, time: null, reason: '' };
   if (level === null) return { ...empty, reason: 'Level unknown: log in to the game with RuneLite or enter it on the skill page.' };
   if (level >= target) return { ...empty, reason: 'The goal is already reached.' };
 
@@ -814,7 +800,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   // Upgrade rates are for the current method only, not for later methods that may use another tool.
   const methodEnd = path.find(l => l.method.id !== best?.method.id)?.fromLevel ?? target;
   const methodXp = Math.max(0, xpForLevel(methodEnd) - xpNow);
-  const upgradeMethod = best && priority !== 'relaxed' && priority !== 'profit' ? {
+  const upgradeMethod = best && priority !== 'profit' ? {
     ...best.method, upgrades: best.method.upgrades ?? combatUpgrades(best.method, skill, state, { prices: input.prices, restriction: input.restriction, objective }),
   } : best?.method;
   // Reuse the method's acquisition allowance; a trip already needed for its kit is not charged twice.

@@ -37,7 +37,7 @@ function advice(): TrainingAdvice {
     reason: 'Long explanation with calculations' };
   return { skill: 'attack', level: 10, target: 20, best, others: [{ ...best, method: { ...method, id: 'alternative', name: 'Alternative method' } }],
     quests: [], path: [{ method, fromLevel: 10, toLevel: 15 }, { method, fromLevel: 15, toLevel: 20 }],
-    xpLeft: 1000, actionsLeft: 50, actionTarget: 15, time: null, reason: best.reason, style: 'chill' } as unknown as TrainingAdvice;
+    xpLeft: 1000, actionsLeft: 50, actionTarget: 15, time: null, reason: best.reason } as unknown as TrainingAdvice;
 }
 
 describe('compact skill recommendations without hiding required preparation', () => {

@@ -17,7 +17,7 @@ const run = (id: string, levels: Record<string, number>) => {
     gear: { equipment: [], inventory: [], coins: 10000, bankCoins: 0 },
     owned: { bankSeen: true, items: new Map(methodToolNames(base).map(name => [name.toLowerCase(), { name, carried: 0, noted: 0, bank: 0 }])) },
   });
-  const pick = pickTraining(base, state, 'f2p', 'chill', 'balanced', { prices: market() }).pick;
+  const pick = pickTraining(base, state, 'f2p', 'balanced', { prices: market() }).pick;
   return { base, pick, step: withTrainingMethod(base, pick) };
 };
 

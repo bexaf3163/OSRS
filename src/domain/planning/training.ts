@@ -1,11 +1,11 @@
 import type { Step } from '../../types';
 import type { PriceView } from '../market/quotes';
-import type { MethodPriority, PlayStyle } from '../persistence/playStyle';
+import type { MethodPriority } from '../persistence/methodPriority';
 import type { TradeRestriction } from '../market/tradeRestriction';
 import { SKILL_NAMES } from '../training/skillTrack';
 import type { SkillName } from '../training/skillTrack';
 import { trackedTraining } from '../training/trackedTraining';
-import { trackedPriority, trackedTrainingContext } from '../training/skillTrack';
+import { trackedTrainingContext } from '../training/skillTrack';
 import type { TrackedSkill } from '../training/skillTrack';
 import { levelOf } from '../player/playerState';
 import { coherentSkillXp, levelForXp, xpForLevel } from '../player/xp';
@@ -28,7 +28,7 @@ export interface TrainingCandidate {
 }
 
 export interface TrainingOptions {
-  prices?: PriceView | null; style?: PlayStyle; priority?: MethodPriority; restriction?: TradeRestriction['state'];
+  prices?: PriceView | null; priority?: MethodPriority; restriction?: TradeRestriction['state'];
   selection?: TrackedSkill;
 }
 
@@ -52,8 +52,8 @@ export function prerequisiteTraining(input: TrainingOptions & {
     ? { [skill]: observedXp.value } : undefined;
   const selection = input.selection ? { ...input.selection, ...(target !== undefined ? { target } : {}) }
     : { skill: skill as SkillName, mode: 'fast' as const, freeOnly: snapshot.scope.mode === 'f2p', target };
-  const training = trackedTraining(selection, snapshot.player, snapshot.scope.mode, input.style ?? 'chill',
-    trackedPriority(selection, skill, input.priority ?? 'balanced'), { prices: input.prices, restriction: input.restriction }, exactXp);
+  const training = trackedTraining(selection, snapshot.player, snapshot.scope.mode,
+    input.priority ?? 'balanced', { prices: input.prices, restriction: input.restriction }, exactXp);
   if (training?.complete) return null;
   const advice = training?.advice;
   if (!training || !advice?.best || !training.step.mapLocation) return verify('Verify a supported training method and its preparation');
@@ -104,8 +104,8 @@ export function createTrainingCost(snapshot: PlanningSnapshot, options: Training
           [skill]: { known: true as const, value: levelForXp(xp), source: 'profile' as const } },
         };
         const context = trackedTrainingContext(options.selection ?? null, skill, state, snapshot.scope.mode);
-        const advice = adviseTraining({ skill, target, state: context.state, mode: context.mode, xp, style: options.style ?? 'chill',
-          priority: trackedPriority(options.selection ?? null, skill, options.priority ?? 'balanced'), prices: options.prices, restriction: options.restriction });
+        const advice = adviseTraining({ skill, target, state: context.state, mode: context.mode, xp,
+          priority: options.priority ?? 'balanced', prices: options.prices, restriction: options.restriction });
         const time = advice.time;
         if (!time || !advice.path.length || advice.path[advice.path.length - 1].toLevel !== target) return null;
         const estimate = { fast: time.minHours * 60, typical: (time.minHours + time.maxHours) * 30, slow: time.maxHours * 60,

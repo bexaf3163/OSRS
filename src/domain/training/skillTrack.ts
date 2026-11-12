@@ -1,7 +1,6 @@
 // The skill the player tracks (Skills → "Track Skill Path"): remembered in this browser, shared by the roadmap, the card on the Path screen and the game sync.
 // While one is tracked, the plugin leads the arrow, the highlight and the HUD chip of that skill instead of the quest route; stopping gives the route back.
 
-import type { MethodPriority } from '../persistence/playStyle';
 import type { GameMode } from '../../types';
 import type { PlayerState } from '../player/playerState';
 
@@ -10,16 +9,15 @@ export const SKILL_NAMES = [
   'fletching', 'slayer', 'hunter', 'mining', 'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'farming',
 ] as const;
 export type SkillName = (typeof SKILL_NAMES)[number];
-/** fast: quest XP skips and the fastest methods; afk: low-effort methods; 'f2p' (before 2.70): the fast lane, free only. */
-export type TrackMode = 'fast' | 'afk' | 'f2p';
+/** fast: quest XP skips and the methods of the player's priority; 'f2p' (before 2.70): the fast lane, free only. An older save's 'afk' lane
+ * (low-effort methods, retired with the "Relaxed" priority in 2.94.3) reads as fast. */
+export type TrackMode = 'fast' | 'f2p';
 
 /** The followed skill plan: the skill, its priority and (2.70) whether members steps are left out. An older save's 'f2p' mode is the fast lane, free only. */
 export interface TrackedSkill { skill: SkillName; mode: TrackMode; freeOnly?: boolean; target?: number }
 
 /** Whether a followed plan leaves members steps out. */
 export const freeOnlyOf = (t: TrackedSkill): boolean => t.freeOnly ?? t.mode === 'f2p';
-export const trackedPriority = (t: TrackedSkill | null, skill: string, fallback: MethodPriority): MethodPriority =>
-  t?.skill === skill && t.mode === 'afk' ? 'relaxed' : fallback;
 
 /** Apply a followed plan's account restriction consistently without changing observed facts. */
 export function trackedTrainingContext(t: TrackedSkill | null, skill: string, state: PlayerState, mode: GameMode): { state: PlayerState; mode: GameMode } {
@@ -28,12 +26,13 @@ export function trackedTrainingContext(t: TrackedSkill | null, skill: string, st
   return { mode: available, state: state.mode === available ? state : { ...state, mode: available } };
 }
 
-const MODES: readonly TrackMode[] = ['fast', 'afk', 'f2p'];
+const MODES: readonly TrackMode[] = ['fast', 'f2p'];
 
 /** A stored value that is not exactly a known skill and filter is dropped: nothing a stale or edited save could break. */
 export function parseTracked(raw: unknown): TrackedSkill | null {
   if (!raw || typeof raw !== 'object') return null;
-  const { skill, mode, freeOnly, target } = raw as Record<string, unknown>;
+  const { skill, mode: saved, freeOnly, target } = raw as Record<string, unknown>;
+  const mode = saved === 'afk' ? 'fast' : saved;
   if (!SKILL_NAMES.includes(skill as SkillName) || !MODES.includes(mode as TrackMode)) return null;
   if (target !== undefined && (!Number.isInteger(target) || (target as number) < 2 || (target as number) > 99)) return null;
   return { skill: skill as SkillName, mode: mode as TrackMode, ...(typeof freeOnly === 'boolean' ? { freeOnly } : {}), ...(typeof target === 'number' ? { target } : {}) };

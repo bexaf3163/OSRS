@@ -12,7 +12,7 @@ const player = (skill: string, level: number) =>
   } as never);
 
 const stages = (skill: string, level: number, target: number) => {
-  const advice = adviseTraining({ skill, target, mode: 'f2p', style: 'chill', priority: 'balanced', state: player(skill, level) } as never);
+  const advice = adviseTraining({ skill, target, mode: 'f2p', priority: 'balanced', state: player(skill, level) } as never);
   return stagesOf(advice.path, skill, 'f2p');
 };
 

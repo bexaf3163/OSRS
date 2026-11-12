@@ -26,7 +26,7 @@ function scenario(stats: Record<string, number>, stock: Record<string, { carried
   const owned = { bankSeen: true, items: new Map(names.map(name => [nameKey(name), { name, carried: stock[name]?.carried ?? 0, noted: 0, bank: stock[name]?.bank ?? 0 }])) };
   const progress = emptyProgress();
   const state = buildPlayerState({ mode: 'f2p', stats, progress, owned, gear: null, questsDone: ["Cook's Assistant"], connected: true });
-  const raw = pickTraining(base, state, 'f2p', 'chill', 'balanced').pick;
+  const raw = pickTraining(base, state, 'f2p', 'balanced').pick;
   const pick = raw === undefined ? undefined : pickedMethodId(raw);
   const step = withTrainingMethod(base, raw);
   const steps = allSteps.map(s => s.id === step.id ? step : s);

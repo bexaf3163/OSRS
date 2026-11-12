@@ -38,7 +38,7 @@ describe('multi-use materials share safe physical quantities across the lifecycl
     const rate = processRate(method, 'crafting', state)!;
     expect(rate.batchActions).toBe(actions);
     expect(rate.consumables?.find(i => i.name === 'Thread')).toMatchObject(thread);
-    const followed = trackedTraining({ skill: 'crafting', mode: 'f2p', target: 2 }, state, 'f2p', 'chill', 'balanced')!;
+    const followed = trackedTraining({ skill: 'crafting', mode: 'f2p', target: 2 }, state, 'f2p', 'balanced')!;
     const engine = createReadinessEngine({ steps: [followed.step], state, progress: emptyProgress(), qp: 0, mode: 'f2p' });
     expect(engine.prep(followed.step).ready).toBe(true);
     expect(engine.prep(followed.step).tasks).toEqual([]);
@@ -57,7 +57,7 @@ describe('multi-use materials share safe physical quantities across the lifecycl
   it('uses owned silver and the correct mould at23 through the same preparation engine', () => {
     const materials = { 'Silver bar': 7, 'Tiara mould': 1 };
     const state = character(0, 0, 23, materials);
-    const followed = trackedTraining({ skill: 'crafting', mode: 'f2p', target: 24 }, state, 'f2p', 'chill', 'balanced')!;
+    const followed = trackedTraining({ skill: 'crafting', mode: 'f2p', target: 24 }, state, 'f2p', 'balanced')!;
     expect(followed.step.itemsRequired?.find(n => n.nameEn === 'Silver bar')?.amount).toBe(7);
     expect(followed.step.itemsRequired?.some(n => n.nameEn === 'Tiara mould')).toBe(true);
     expect(followed.step.itemsRequired?.some(n => n.nameEn === 'Ring mould')).toBe(false);

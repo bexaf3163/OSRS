@@ -69,7 +69,7 @@ describe('Members gathering through the shared resource model', () => {
   it('keeps an unread axe unknown instead of using authored maximum rates', () => {
     const unread = stateOf({ woodcutting: 55 }, {}, 'members', false);
     expect(gatherRate(method('wc-teak'), 'woodcutting', unread)).toBeNull();
-    const a = adviseTraining({ skill: 'woodcutting', target: 60, state: unread, mode: 'members', style: 'chill', priority: 'fastest', methods: [method('wc-teak')] });
+    const a = adviseTraining({ skill: 'woodcutting', target: 60, state: unread, mode: 'members', priority: 'fastest', methods: [method('wc-teak')] });
     expect(a.best?.method.xph).toBeNull();
     expect(a.best?.unchecked.length).toBeGreaterThan(0);
   });
@@ -79,7 +79,7 @@ describe('Members gathering through the shared resource model', () => {
     expect(gatherRate(method('wc-teak'), 'woodcutting', s)).toBeNull();
     const spot = SKILLING.spots.find(s => s.resource === 'teak')!;
     expect(gatherPace('Teak logs', spot.place, s)).toBeNull();
-    const advice = adviseTraining({ skill: 'woodcutting', target: 80, state: s, mode: 'members', style: 'chill', methods: [method('wc-teak')] });
+    const advice = adviseTraining({ skill: 'woodcutting', target: 80, state: s, mode: 'members', methods: [method('wc-teak')] });
     expect(advice.best?.status).toBe('READY'); // The tool works; only the personalized rate is unsupported.
     expect(advice.best?.method.xph).toBeNull();
     // Different, newly declared content must inherit the same unknown-tool protection.
@@ -154,7 +154,7 @@ describe('the gathering engine on the real registry', () => {
 
   it('the Skills page carries the engine\'s spot, the time and the reason', () => {
     const s = stateOf({ fishing: 30, cooking: 30 }, { 'Fly fishing rod': [1, 0], Feather: [500, 0] });
-    const a = adviseTraining({ skill: 'fishing', target: 40, state: s, mode: 'f2p', style: 'chill', priority: 'fastest' });
+    const a = adviseTraining({ skill: 'fishing', target: 40, state: s, mode: 'f2p', priority: 'fastest' });
     expect(a.best?.method.id).toBe('fi-fly');
     expect(a.best?.method.rateSource).toBe('model');
     expect(a.best?.method.spot).toBeDefined();
@@ -329,7 +329,7 @@ describe('the cowhide baseline is bounded', () => {
 describe('the path forecasts with the rates of the levels it reaches', () => {
   it('a later leg is rated by the model at its own level, not by the wiki next to today\'s model rates', () => {
     const s = stateOf({ woodcutting: 55, attack: 40 }, { 'Rune axe': [1, 0] });
-    const a = adviseTraining({ skill: 'woodcutting', target: 75, state: s, mode: 'f2p', style: 'chill', priority: 'fastest' });
+    const a = adviseTraining({ skill: 'woodcutting', target: 75, state: s, mode: 'f2p', priority: 'fastest' });
     expect(a.path.length).toBeGreaterThan(0);
     for (const leg of a.path) expect(leg.method.rateSource, `${leg.method.id} from ${leg.fromLevel}`).toBe('model');
   });
@@ -339,11 +339,11 @@ describe('a better tool is weighed against its price over the hours left', () =>
   it('the suggestion says when the known coins fall short of the price, and nothing when the coins are unknown', () => {
     const p: PriceView = { ...prices({}), buy: (n) => (n === 'Rune pickaxe' ? { price: 12000, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] } : null) };
     const poor = stateOf({ mining: 41, attack: 1 }, { 'Iron pickaxe': [1, 0] });
-    const a = adviseTraining({ skill: 'mining', target: 70, state: poor, mode: 'f2p', style: 'chill', priority: 'fastest', prices: p });
+    const a = adviseTraining({ skill: 'mining', target: 70, state: poor, mode: 'f2p', priority: 'fastest', prices: p });
     expect(a.upgrade).toMatchObject({ tool: 'Rune pickaxe', short: 0 });
     expect(a.reason).toMatch(/Rune pickaxe \(≈ 12k gp; you have 0\)/);
     const unknown = buildPlayerState({ mode: 'f2p', stats: { mining: 41 } as never, progress: { ...emptyProgress(), levels: { mining: 41 } }, owned: { bankSeen: true, items: new Map([['iron pickaxe', { name: 'Iron pickaxe', carried: 1, noted: 0, bank: 0 }]]) } as never, gear: null, questsDone: [], connected: true });
-    expect(adviseTraining({ skill: 'mining', target: 70, state: unknown, mode: 'f2p', style: 'chill', priority: 'fastest', prices: p }).upgrade?.short).toBeUndefined();
+    expect(adviseTraining({ skill: 'mining', target: 70, state: unknown, mode: 'f2p', priority: 'fastest', prices: p }).upgrade?.short).toBeUndefined();
   });
   const buying = (buy: Record<string, number>): PriceView => ({
     ...prices({}), buy: (name) => (buy[name] === undefined ? null : { price: buy[name], basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] }),
@@ -364,7 +364,6 @@ describe('a better tool is weighed against its price over the hours left', () =>
     // 30k XP saves half an hour: 3,000 coins of time, not worth 12,000.
     expect(toolUpgrade(m, 30_000, 'balanced', 100)).toBeNull();
     expect(toolUpgrade(m, 30_000, 'fastest', 100)).toMatchObject({ tool: 'Rune pickaxe' });
-    expect(toolUpgrade(m, 300_000, 'relaxed', 100)).toBeNull();
     // Without prices the coins cannot be weighed: nothing is bought on balanced.
     expect(toolUpgrade(m, 300_000, 'balanced', null)).toBeNull();
   });
@@ -380,20 +379,20 @@ describe('guide-only gathering methods use the shared manual-setup boundary', ()
     expect(m.manualSetup).toBeTruthy();
     // Confirm that missing ordinary kit or quest facts are not what makes the reference manual.
     expect(viewMethod({ ...m, manualSetup: undefined }, s).status).toBe('READY');
-    for (const priority of ['balanced', 'fastest', 'profit', 'relaxed'] as const) {
-      const advice = adviseTraining({ skill, target: 80, mode: 'members', state: s, style: 'chill', priority, methods: [m] });
+    for (const priority of ['balanced', 'fastest', 'profit'] as const) {
+      const advice = adviseTraining({ skill, target: 80, mode: 'members', state: s, priority, methods: [m] });
       expect(advice.best).toBeNull();
       expect(advice.path).toEqual([]);
       expect(advice.others[0]?.method.id).toBe(id);
       expect(advice.others[0]?.unchecked).toContainEqual(expect.objectContaining({ label: m.manualSetup }));
-      const mixed = adviseTraining({ skill, target: 80, mode: 'members', state: s, style: 'chill', priority });
+      const mixed = adviseTraining({ skill, target: 80, mode: 'members', state: s, priority });
       expect(mixed.best?.method.id).not.toBe(id);
       expect(mixed.path.every(leg => leg.method.id !== id)).toBe(true);
     }
   });
   it('a new manual activity inherits the same protection without an ID-specific selector', () => {
     const future = { ...method('fi-monk'), id: 'future-manual-fishing' };
-    const advice = adviseTraining({ skill: 'fishing', target: 80, mode: 'members', state: state(), style: 'chill', methods: [future] });
+    const advice = adviseTraining({ skill: 'fishing', target: 80, mode: 'members', state: state(), methods: [future] });
     expect(advice.best).toBeNull();
     expect(advice.others[0]?.method.id).toBe(future.id);
   });

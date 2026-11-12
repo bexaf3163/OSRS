@@ -18,7 +18,7 @@ const stateOf = (fishing: number, cooking: number) => buildPlayerState({
   owned: { bankSeen: true, items: new Map([['Fly fishing rod', 1], ['Feather', 1000]].map(([n, q]) => [nameKey(n as string), { name: n as string, carried: q as number, noted: 0, bank: 0 }])) } as never,
 });
 const s602 = retiredStep('S6-01')!;
-const pickFor = (fishing: number, cooking: number) => pickTraining(s602, stateOf(fishing, cooking), 'f2p', 'chill', 'balanced', { prices: market() }).pick!;
+const pickFor = (fishing: number, cooking: number) => pickTraining(s602, stateOf(fishing, cooking), 'f2p', 'balanced', { prices: market() }).pick!;
 
 describe('fishing and cooking the same catches at the fire beside the spot', () => {
   it('the Barbarian Village fly spot has the fire beside it: both skills train, fishing a little slower than fishing alone', () => {

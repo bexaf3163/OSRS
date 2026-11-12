@@ -2,7 +2,7 @@
 // upgrade says what it saves; a kept tool says why it stays; other methods name the items the selected method actually uses.
 import type { PlayerState } from '../player/playerState';
 import type { PriceView } from '../market/quotes';
-import type { MethodPriority } from '../persistence/playStyle';
+import type { MethodPriority } from '../persistence/methodPriority';
 import { toolUse } from '../items/toolTiers';
 import { preparationNeeds, type TrainingAdvice } from './trainingRouter';
 import { toolTierAt } from './stages';
@@ -19,7 +19,7 @@ export function equipmentLine(advice: Pick<TrainingAdvice, 'best' | 'upgrade' | 
   const tool = best.method.selectedTool, use = tool ? toolUse(tool) : null;
   if (tool && use) {
     // Relaxed and Money do not weigh time against a purchase (toolUpgrade): the tool in hand is simply the one used.
-    if (priority === 'relaxed' || priority === 'profit') return `Uses your ${tool}.`;
+    if (priority === 'profit') return `Uses your ${tool}.`;
     const top = advice.level === null ? null : toolTierAt(use.skill, advice.level, state.mode);
     if (top && toolUse(top)!.level <= use.level) return `Your ${tool} is the best tier your level allows.`;
     const next = best.method.upgrades?.[0]?.tool;

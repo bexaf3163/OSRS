@@ -12,7 +12,7 @@ const levels = (l: Record<string, number> | null, owned: Record<string, { carrie
     owned: owned ? { bankSeen, items: new Map(Object.entries(owned).map(([n, v]) => [n.toLowerCase(), { name: n, carried: v.carried ?? 0, noted: 0, ...(v.bank !== undefined ? { bank: v.bank } : {}) }])) } : null,
   });
 const advise = (over: Partial<AdviceInput> & Pick<AdviceInput, 'skill' | 'target'>) =>
-  adviseTraining({ state: levels({ [over.skill]: 1 }), mode: 'members', style: 'chill', ...over });
+  adviseTraining({ state: levels({ [over.skill]: 1 }), mode: 'members', ...over });
 
 describe('method data', () => {
   it('identifiers are unique, ranges and speeds are sensible, skills exist', () => {
@@ -55,7 +55,7 @@ describe('method choice', () => {
   });
 
   it('the level is unknown — we do not advise at random', () => {
-    const a = adviseTraining({ skill: 'fishing', target: 40, state: levels(null), mode: 'members', style: 'chill' });
+    const a = adviseTraining({ skill: 'fishing', target: 40, state: levels(null), mode: 'members' });
     expect(a.level).toBeNull();
     expect(a.best).toBeNull();
     expect(a.reason).toContain('Level unknown');
@@ -69,8 +69,8 @@ describe('method choice', () => {
 
   it('both styles retain manual alternatives without presenting unchecked Magic setups as the default', () => {
     const state = levels({ magic: 25 });
-    const chill = advise({ skill: 'magic', target: 40, state, mode: 'f2p', style: 'chill' });
-    const fast = advise({ skill: 'magic', target: 40, state, mode: 'f2p', style: 'efficient' });
+    const chill = advise({ skill: 'magic', target: 40, state, mode: 'f2p' });
+    const fast = advise({ skill: 'magic', target: 40, state, mode: 'f2p', priority: 'fastest' });
     expect(chill.best?.method.id).toBe('ma-strike');
     expect(fast.best?.method.id).toBe('ma-strike');
     expect(chill.others.some(v => v.method.id === 'ma-splash' && v.unchecked.length > 0)).toBe(true);
@@ -87,8 +87,8 @@ describe('method choice', () => {
       { ...base, id: 'synthetic-calm', from: 15, effort: 'afk' as const },
       { ...base, id: 'synthetic-later', from: 30, effort: 'high' as const },
     ];
-    expect(advise({ skill: 'mining', target: 45, state, methods, style: 'chill' }).best?.method.id).toBe('synthetic-calm');
-    expect(advise({ skill: 'mining', target: 45, state, methods, style: 'efficient' }).best?.method.id).toBe('synthetic-later');
+    expect(advise({ skill: 'mining', target: 45, state, methods }).best?.method.id).toBe('synthetic-calm');
+    expect(advise({ skill: 'mining', target: 45, state, methods, priority: 'fastest' }).best?.method.id).toBe('synthetic-later');
   });
 
   it('no item — the method stays, but names what to take; the item is present — ready', () => {
@@ -118,7 +118,7 @@ describe('method choice', () => {
     const state = buildPlayerState({ mode: 'members', stats: { fishing: 70 }, progress: emptyProgress(), gear: null, owned: null, questsDone: ['Cook\'s Assistant'] });
     const m = trainingMethods.find((x) => x.id === 'fi-monk')!;
     expect(viewMethod(m, state).status).toBe('LOCKED');
-    const a = adviseTraining({ skill: 'fishing', target: 80, state, mode: 'members', style: 'efficient' });
+    const a = adviseTraining({ skill: 'fishing', target: 80, state, mode: 'members', priority: 'fastest' });
     expect(a.best?.method.id).not.toBe('fi-monk');
     const done = buildPlayerState({ mode: 'members', stats: { fishing: 70 }, progress: emptyProgress(), gear: null, owned: null, questsDone: ['Swan Song'] });
     expect(viewMethod(m, done).status).not.toBe('LOCKED');
@@ -204,7 +204,7 @@ describe('melee training at level 1 (fresh-account simulation, 2.86.1)', () => {
   it('keeps the better weapon whichever of the two is worn: a worn piece is owned, so no Equip loop between them', () => {
     for (const [worn, carried] of [['Iron scimitar', 'Bronze pickaxe'], ['Bronze pickaxe', 'Iron scimitar']] as const) {
       const state = fresh(worn, carried);
-      const advice = adviseTraining({ skill: 'attack', target: 12, state, mode: 'f2p', style: 'chill', priority: 'balanced' });
+      const advice = adviseTraining({ skill: 'attack', target: 12, state, mode: 'f2p', priority: 'balanced' });
       const weapons = preparationNeeds(advice, state).flatMap(n => n.type === 'item' && n.equip ? [n.name] : []);
       expect(weapons, worn).toEqual(['Iron scimitar']);
     }
@@ -215,7 +215,7 @@ describe('melee training at level 1 (fresh-account simulation, 2.86.1)', () => {
     const view = viewMethod(moss, state);
     expect(view.status).toBe('LOCKED');
     expect(view.missing.map(n => n.label).join(' ')).toMatch(/^More Hitpoints: Moss giant/);
-    expect(adviseTraining({ skill: 'strength', target: 7, state, mode: 'f2p', style: 'chill', priority: 'balanced' }).best?.method.id).not.toBe('me-moss');
+    expect(adviseTraining({ skill: 'strength', target: 7, state, mode: 'f2p', priority: 'balanced' }).best?.method.id).not.toBe('me-moss');
   });
 });
 

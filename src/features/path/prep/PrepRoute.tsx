@@ -13,7 +13,7 @@ import { navKeyOf, reconcile, rearmReadyDetours, staleArrows, startDetour, type 
 import { decideAuto, type QueueTask } from '../../../domain/prep/prepQueue';
 import { declined, usePrep } from '../../../state/hooks/usePrep';
 import { useFeatures } from '../../../state/hooks/useFeatures';
-import { styleOf } from '../../../domain/persistence/playStyle';
+import { priorityOf } from '../../../domain/persistence/methodPriority';
 import { useActiveActivity, useReadinessEngine, useTrackedTraining } from '../../../state/readinessContext';
 import { NavigateButton } from '../../../ui/NavigateButton';
 import { useTracked } from '../../../state/hooks/useTracked';
@@ -32,8 +32,7 @@ function TaskAction({ a }: { a: ReadinessAction }) {
  * has no place (a quest, a level with no map point) — nothing leaves the window: onDetails expands the preparation details.
  */
 export function usePrepFix(step: Step, onDetails: () => void): { available: boolean; underway: boolean; fix: () => Promise<void> } {
-  const profile = styleOf(useFeatures());
-  const queue = useReadinessEngine().queue(step, profile.style);
+  const queue = useReadinessEngine().queue(step, priorityOf(useFeatures()));
   const { prep, set } = usePrep();
   const { navigate } = useBridge();
   const { notify } = useStore();
@@ -61,9 +60,7 @@ export function usePrepFix(step: Step, onDetails: () => void): { available: bool
 }
 
 export function PrepRouteBlock({ step }: { step: Step }) {
-  const features = useFeatures();
-  const profile = styleOf(features);
-  const queue = useReadinessEngine().queue(step, profile.style);
+  const queue = useReadinessEngine().queue(step, priorityOf(useFeatures()));
   const { prep, set } = usePrep();
   const { navigate } = useBridge();
   const { notify } = useStore();
@@ -127,8 +124,8 @@ export function PrepRouteBlock({ step }: { step: Step }) {
         </div>
       </div>
       {next.length > 0 && (
-        // Calm: one main thing, the rest folded; efficient: the next two tasks are visible at once.
-        <details className="prep-more" open={profile.style === 'efficient'}>
+        // One main thing; the rest folded.
+        <details className="prep-more">
           <summary className="small muted">What next: {next.length}{hidden > 0 ? ` and ${hidden} more` : ''}</summary>
           <ol className="small prep-next" start={2}>
             {next.map((t) => (
@@ -188,14 +185,12 @@ export function PrepWatcher() {
  * It does not take over the arrow if a target is already set in the game, and goes quiet when the player cleared the arrow by hand.
  */
 export function PrepAuto() {
-  const features = useFeatures();
-  const profile = styleOf(features);
+  const priority = priorityOf(useFeatures());
   const { notify } = useStore();
   const { navTarget, navigate, releaseNav, state: link, userClearedAt } = useBridge();
   const engine = useReadinessEngine();
   const { prep, set } = usePrep();
   const recent = useRef(new Map<string, number>());
-  const announced = useRef(new Set<string>());
   const seenClear = useRef(userClearedAt);
   const renavs = useRef(new Map<string, number>());
   // While a skill plan leads the game the quest route waits (TrackedSkillCard): its preparation does not take the arrow either.
@@ -217,11 +212,11 @@ export function PrepAuto() {
         return;
       }
     }
-    const queue = engine.queue(focus, profile.style);
+    const queue = engine.queue(focus, priority);
     const now = Date.now();
     const d = decideAuto({
       queue, stepId: focus.id, prep, online: link === 'online' && engine.ctx.state.connected,
-      navActive: navTarget !== null, standing: navTarget, announce: profile.announce, now, recent: recent.current, declined,
+      navActive: navTarget !== null, standing: navTarget, now, recent: recent.current, declined,
       routeWaits: tracked !== null && !training || Boolean(training && (funding?.plan || funding?.assessment?.state !== 'COVERED') && queue.tasks[0]?.kind === 'buy'),
     });
     if (!d) return;
@@ -248,10 +243,7 @@ export function PrepAuto() {
         // The frame remembers the arrow it set last, so a later change of the task is recognised as its own.
         set({ ...prep, stack: prep.stack.map((f) => (f === d.frame ? { ...f, nav: navKeyOf(target) } : f)) });
       }
-    } else if (!announced.current.has(d.key)) {
-      announced.current.add(d.key);
-      notify(`Next in the preparation for ${focus.id}: ${d.task.label}.`);
     }
-  }, [focus, engine, prep, set, navTarget, navigate, releaseNav, profile, link, userClearedAt, notify, tracked, training, funding]);
+  }, [focus, engine, prep, set, navTarget, navigate, releaseNav, priority, link, userClearedAt, notify, tracked, training, funding]);
   return null;
 }

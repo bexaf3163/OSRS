@@ -37,7 +37,7 @@ function engineFor(over: Partial<ReadinessInput> & { item?: { carried: number; b
 }
 
 const base = (queue: PrepQueue | null, over: Partial<AutoInput> = {}): AutoInput => ({
-  queue, stepId: itemStep.id, prep: emptyPrep(), online: true, navActive: false, announce: 'full', now: 1_000_000,
+  queue, stepId: itemStep.id, prep: emptyPrep(), online: true, navActive: false, now: 1_000_000,
   recent: new Map(), declined: new Set(), ...over,
 });
 
@@ -49,9 +49,9 @@ describe('unknown required facts never complete preparation or invent a detour',
     expect(route.ready).toBe(false);
     expect(route.tasks).toEqual([]);
     const e = engineFor({ item: { carried: 0, bank: 1 } });
-    const q = buildQueue(route, { state: e.ctx.state, mode: 'f2p', style: 'chill' });
+    const q = buildQueue(route, { state: e.ctx.state, mode: 'f2p', priority: 'balanced' });
     expect(decideAuto(base(q))).toBeNull();
-    const started = decideAuto(base(e.queue(itemStep, 'chill')));
+    const started = decideAuto(base(e.queue(itemStep, 'balanced')));
     if (started?.kind !== 'start') throw new Error('bank fixture did not start');
     expect(decideAuto(base(q, { prep: started.state }))).toBeNull();
     expect(started.state.stack).toHaveLength(1);
@@ -63,7 +63,7 @@ describe('unknown required facts never complete preparation or invent a detour',
 describe('the preparation auto-queue', () => {
   it('an item in the bank: the queue starts a detour by itself and sets the arrow to the bank', () => {
     const e = engineFor({ item: { carried: 0, bank: 5 } });
-    const q = e.queue(itemStep, 'chill');
+    const q = e.queue(itemStep, 'balanced');
     expect(q.ready).toBe(false);
     expect(q.tasks[0]).toMatchObject({ kind: 'bank', guide: { kind: 'nav' } });
     const d = decideAuto(base(q));
@@ -75,7 +75,7 @@ describe('the preparation auto-queue', () => {
 
   it('there is no item at all: the arrow to the Grand Exchange for this item', () => {
     const e = engineFor({ item: { carried: 0, bank: 0 } });
-    const q = e.queue(itemStep, 'chill');
+    const q = e.queue(itemStep, 'balanced');
     const buy = q.tasks.find((t) => t.kind === 'buy')!;
     expect(buy.guide).toMatchObject({ kind: 'nav', target: { itemName: needed.nameEn } });
     const d = decideAuto(base(q));
@@ -83,7 +83,7 @@ describe('the preparation auto-queue', () => {
   });
 
   it('no connection or the arrow is already set — it does not interfere', () => {
-    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
+    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'balanced');
     expect(decideAuto(base(q, { online: false }))).toBeNull();
     expect(decideAuto(base(q, { navActive: true }))).toBeNull();
     expect(decideAuto(base(null))).toBeNull();
@@ -91,26 +91,26 @@ describe('the preparation auto-queue', () => {
 
   it('the step is ready — no queue', () => {
     const e = engineFor({ item: { carried: 10, bank: 0 } });
-    const q = e.queue(itemStep, 'chill');
+    const q = e.queue(itemStep, 'balanced');
     expect(q.ready).toBe(true);
     expect(decideAuto(base(q))).toBeNull();
   });
 
   it('no data ("not checked") — silent: the unknown does not start detours', () => {
     const e = engineFor({ item: null, stats: null, gear: null });
-    const q = e.queue(itemStep, 'chill');
+    const q = e.queue(itemStep, 'balanced');
     expect(decideAuto(base(q, { online: false }))).toBeNull();
     // Even with "online" the unchecked is not "short": there are no tasks.
     expect(q.tasks.length).toBe(0);
   });
 
   it('the player\'s refusal: the same is not offered again in this session', () => {
-    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
+    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'balanced');
     expect(decideAuto(base(q, { declined: new Set([`${itemStep.id}:bank`]) }))).toBeNull();
   });
 
   it('the player removed the arrow (pause) — the queue is silent', () => {
-    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
+    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'balanced');
     const started = startDetour(emptyPrep(), { sourceStepId: itemStep.id, detourId: 'bank', reason: 'x', startedAt: 1, returnCondition: 'y' });
     if (!started.ok) throw new Error('did not start');
     const paused: PrepState = { ...started.state, stack: started.state.stack.map((f) => ({ ...f, paused: true })) };
@@ -119,7 +119,7 @@ describe('the preparation auto-queue', () => {
 
   it('while a skill plan leads the game the quest route waits: no purchase arrow, and an arrow a detour set itself is taken down', () => {
     // The live report (2.78.2): Defence tracked on the frogs, and the game said "Buy Anti-dragon shield" for the next quest step.
-    const q = engineFor({ item: { carried: 0, bank: 0 } }).queue(itemStep, 'chill');
+    const q = engineFor({ item: { carried: 0, bank: 0 } }).queue(itemStep, 'balanced');
     expect(decideAuto(base(q, { routeWaits: true }))).toBeNull();
     const started = startDetour(emptyPrep(), { sourceStepId: itemStep.id, detourId: 'buy', reason: 'x', startedAt: 1, returnCondition: 'y' });
     if (!started.ok) throw new Error('did not start');
@@ -131,7 +131,7 @@ describe('the preparation auto-queue', () => {
   });
 
   it('a detour is running, the plugin removed the arrow, the task is open — we set it again, but no more than once a minute', () => {
-    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
+    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'balanced');
     const started = startDetour(emptyPrep(), { sourceStepId: itemStep.id, detourId: 'bank', reason: 'x', startedAt: 1, returnCondition: 'y' });
     if (!started.ok) throw new Error('did not start');
     const first = decideAuto(base(q, { prep: started.state }));
@@ -147,38 +147,33 @@ describe('the preparation auto-queue', () => {
   it('the queue goes on by itself: took from the bank — the detour is removed, the next task starts', () => {
     // First the item is in the bank; after "took" the task is closed, the detour is removed, the queue is empty — the preparation is ready.
     const e1 = engineFor({ item: { carried: 0, bank: 5 } });
-    const q1 = e1.queue(itemStep, 'chill');
+    const q1 = e1.queue(itemStep, 'balanced');
     const d = decideAuto(base(q1));
     if (d?.kind !== 'start') throw new Error('no start');
     const e2 = engineFor({ item: { carried: 5, bank: 0 } });
     const res = reconcile(d.state, (id) => e2.openTasks(id));
     expect(res.state.stack).toEqual([]);
     expect(res.returnTo).toBe(itemStep.id);
-    expect(decideAuto(base(e2.queue(itemStep, 'chill'), { prep: res.state }))).toBeNull();
+    expect(decideAuto(base(e2.queue(itemStep, 'balanced'), { prep: res.state }))).toBeNull();
   });
 
-  it('the calm style is silent about tasks without a place, the efficient one reports "next"', () => {
+  it('a task without a place stays silent: the queue starts only what it can lead to (2.94.3: no "next" announcements)', () => {
     // A step blocked by a level: the task has no place if the method has no point in the dictionary.
     const s = step('S9-01');
     const input: ReadinessInput = { step: s, steps: allSteps, progress: before(s.id), qp: 200, mode: 'members', stats: { crafting: 5, woodcutting: 40 }, owned: null, gear: null };
     const ctx = contextOf(input);
     const e = createReadinessEngine({ ...ctx, state: buildPlayerState({ mode: 'members', stats: input.stats, progress: input.progress, owned: null, gear: null, questsDone: null, connected: true }) });
-    const q = e.queue(s, 'chill');
+    const q = e.queue(s, 'balanced');
     expect(q.tasks[0]).toMatchObject({ kind: 'stat' });
-    const quiet = decideAuto({ ...base(q, { stepId: s.id }), announce: 'quiet' });
-    const full = decideAuto({ ...base(q, { stepId: s.id }), announce: 'full' });
-    if (q.tasks[0].guide) {
-      expect(quiet?.kind).toBe('start');
-    } else {
-      expect(quiet).toBeNull();
-      expect(full?.kind).toBe('announce');
-    }
+    const decision = decideAuto(base(q, { stepId: s.id }));
+    if (q.tasks[0].guide) expect(decision?.kind).toBe('start');
+    else expect(decision).toBeNull();
   });
 
   it('the queue does not step on without data: buildQueue does not invent places', () => {
     const e = engineFor({ item: { carried: 0, bank: 0 } });
     const route = e.prep(itemStep);
-    const q = buildQueue(route, { state: e.ctx.state, mode: 'members', style: 'chill' });
+    const q = buildQueue(route, { state: e.ctx.state, mode: 'members', priority: 'balanced' });
     for (const t of q.tasks) if (t.guide) expect(t.guide.kind).toBe('nav');
   });
 });
@@ -196,14 +191,14 @@ describe('an arrow the queue set for a task that has since changed (the live che
   };
 
   it('a detour remembers the arrow it set', () => {
-    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
+    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'balanced');
     const d = decideAuto(base(q));
     if (d?.kind !== 'start') throw new Error('no start');
     expect(d.frame.nav).toBe(navKeyOf(guide(q)));
   });
 
   it('the task now leads elsewhere while its own arrow stands: the arrow is moved', () => {
-    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
+    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'balanced');
     const target = guide(q);
     const old = { x: target.x + 40, y: target.y, itemName: 'Lobster pot' };
     const prep = frameFor(q, { nav: navKeyOf(old) });
@@ -216,7 +211,7 @@ describe('an arrow the queue set for a task that has since changed (the live che
   });
 
   it('an arrow the player or another tool set is never taken over', () => {
-    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
+    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'balanced');
     const target = guide(q);
     const mine = { x: target.x + 40, y: target.y, itemName: 'Lobster pot' };
     const theirs = { x: 3100, y: 3100, itemName: null };
@@ -227,7 +222,7 @@ describe('an arrow the queue set for a task that has since changed (the live che
   });
 
   it('a detour that went away without its task being done leaves its arrow to be taken down; a done one does not', () => {
-    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
+    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'balanced');
     const target = guide(q);
     const before = frameFor(q, { nav: navKeyOf(target) });
     const gone: PrepState = { stack: [], done: [] };

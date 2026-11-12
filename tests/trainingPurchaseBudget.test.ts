@@ -46,7 +46,7 @@ describe('optional upgrades leave money for the known next-trip kit', () => {
     upgrades: [{ tool: 'Rune pickaxe', price: 1000, xph: [2000, 2000], costPerHour: 0 }],
   };
   const advice = (stock: Record<string, number>, market: PriceView) => adviseTraining({
-    skill: 'mining', target: 50, state: state(stock), mode: 'f2p', style: 'efficient', priority: 'fastest', methods: [method], prices: market,
+    skill: 'mining', target: 50, state: state(stock), mode: 'f2p', priority: 'fastest', methods: [method], prices: market,
   });
   it('discloses a shortage after the kit even when raw cash covers the upgrade', () => {
     const a = advice({ 'Iron pickaxe': 1, Salmon: 0 }, prices({ Salmon: 20 }));

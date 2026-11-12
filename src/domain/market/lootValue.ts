@@ -7,7 +7,7 @@ import { fundingMethodsJson as fundingJson } from '../../data';
 import { netEach } from './ge';
 import { isRestrictedItem, type TradeRestriction } from './tradeRestriction';
 import type { PriceView } from './quotes';
-import type { MethodPriority } from '../persistence/playStyle';
+import type { MethodPriority } from '../persistence/methodPriority';
 
 /** Seconds to pick one drop up: the click and a step or two, the fast and the slow end. */
 export const PICKUP_SECONDS: [number, number] = [1.2, 3];

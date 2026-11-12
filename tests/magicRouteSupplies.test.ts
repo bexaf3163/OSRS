@@ -20,7 +20,7 @@ function scenario(magic: number | null, smithing: number | null = 15, stock: Rec
   const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
   const owned = { bankSeen: !unread, items: new Map(methodToolNames(base).map(name => [nameKey(name), { name, carried: stock[name]?.carried ?? (name === 'Staff of fire' && fireStaff ? 1 : 0), noted: 0, ...(!unread ? { bank: stock[name]?.bank ?? 0 } : {}) }])) };
   const state = buildPlayerState({ mode: 'f2p', stats, progress, owned, gear, connected: true, questsDone: [] });
-  const pick = pickTraining(base, state, 'f2p', 'chill', 'balanced').pick;
+  const pick = pickTraining(base, state, 'f2p', 'balanced').pick;
   const step = withTrainingMethod(base, pick);
   const engine = createReadinessEngine({ ...contextOf({ step, steps: allSteps.map(s => s.id === base.id ? step : s), progress, mode: 'f2p', qp: 44, stats, owned, gear }), state });
   return { state, pick, step, engine, payload: toInGameTarget(step)! };
@@ -82,7 +82,7 @@ describe('S6-03 spell-dependent supplies', () => {
   });
   it('keeps alchemy/splashing visible and unchecked without putting them in the automatic path', () => {
     const s = scenario(30);
-    const advice = adviseTraining({ skill: 'magic', target: 55, state: s.state, mode: 'f2p', style: 'chill', priority: 'balanced' });
+    const advice = adviseTraining({ skill: 'magic', target: 55, state: s.state, mode: 'f2p', priority: 'balanced' });
     expect(advice.others.some(v => v.method.id === 'ma-alch')).toBe(true);
     expect(advice.path.every(l => !l.method.manualSetup)).toBe(true);
     for (const id of ['ma-splash', 'ma-alch', 'ma-halch']) {

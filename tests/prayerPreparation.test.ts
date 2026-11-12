@@ -58,7 +58,7 @@ describe('Camdozaal is eligible only with its actual cross-skill kit', () => {
     expect(viewMethod(method, character(undefined, 0)).missing).toContainEqual(expect.objectContaining({ label: 'Knife', state: 'MISSING' }));
   });
   it('recommends the eligible free activity instead of a passive option with no destination', () => {
-    const advice = adviseTraining({ skill: 'prayer', target: 2, mode: 'f2p', state: character(), style: 'chill', priority: 'balanced' });
+    const advice = adviseTraining({ skill: 'prayer', target: 2, mode: 'f2p', state: character(), priority: 'balanced' });
     expect(advice.best?.method.id).toBe('pr-camdozaal');
     expect(advice.best?.method.xph).toBeNull();
     expect(trainingMethods.find(m => m.id === 'pr-bury')?.manualSetup).toContain('no standalone training destination');

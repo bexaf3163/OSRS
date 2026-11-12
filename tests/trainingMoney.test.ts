@@ -3,7 +3,7 @@ import { adviseTraining, type TrainingMethod } from '../src/domain/training/trai
 import { buildPlayerState } from '../src/domain/player/playerState';
 import { emptyProgress } from '../src/domain/persistence/progress';
 import { DEFAULT_FEATURES, parseFeatures } from '../src/domain/persistence/features';
-import { priorityOf } from '../src/domain/persistence/playStyle';
+import { priorityOf } from '../src/domain/persistence/methodPriority';
 import { bankingPays, earningsOrder, netEarnings } from '../src/domain/market/lootValue';
 import { processRate, type ProcessingRegistry } from '../src/domain/training/processingRates';
 import { gatherRate, type SkillingRegistry } from '../src/domain/training/skillingRates';
@@ -24,14 +24,14 @@ const prices = (buy: Record<string, number>, sell: Record<string, number>): Pric
     buy: n => buy[n] === undefined ? null : q(buy[n]), sell: n => sell[n] === undefined ? null : q(sell[n]) };
 };
 const advice = (methods: TrainingMethod[], priority: 'balanced' | 'fastest' | 'profit', s = state(), market?: PriceView) =>
-  adviseTraining({ skill: 'fishing', target: 30, state: s, mode: 'f2p', style: 'chill', priority, methods, prices: market });
+  adviseTraining({ skill: 'fishing', target: 30, state: s, mode: 'f2p', priority, methods, prices: market });
 
 describe('one persisted training objective and direct skill access', () => {
-  it('defaults to balanced and preserves explicit objectives without changing older saves', () => {
+  it('defaults to balanced and preserves explicit objectives; an older "Relaxed" save reads as balanced (2.94.3)', () => {
     expect(priorityOf(DEFAULT_FEATURES)).toBe('balanced');
     expect(priorityOf(parseFeatures('{"profitTraining":true}'))).toBe('profit');
     expect(priorityOf(parseFeatures('{"efficient":true}'))).toBe('fastest');
-    expect(priorityOf(parseFeatures('{"relaxedTraining":true}'))).toBe('relaxed');
+    expect(priorityOf(parseFeatures('{"relaxedTraining":true}'))).toBe('balanced');
     expect(priorityOf(parseFeatures('{"profitTraining":"yes"}'))).toBe('balanced');
   });
   it('keeps existing skill routes and supports direct Defence selection', () => {

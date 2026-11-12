@@ -40,7 +40,7 @@ describe('the single readiness engine', () => {
     expect(engine.plan(first, { ahead: 0 }).lines.map(line => line.name)).toContain('Bucket');
     expect(engine.plan(second, { ahead: 0 }).lines.map(line => [line.name, line.count])).toEqual([['Pot', 2]]);
     expect(engine.trip(second, 0).lines.map(line => line.line.nameEn)).toEqual(['Pot']);
-    expect(engine.queue(second, 'chill')).not.toBe(engine.queue(first, 'chill'));
+    expect(engine.queue(second, 'balanced')).not.toBe(engine.queue(first, 'balanced'));
     const external = { ...second, itemsRequired: [{ nameEn: 'Rope', amount: 1, howToGet: '' }] };
     expect(engine.plan(external, { ahead: 0 }).lines.map(line => line.name)).toEqual(['Rope']);
     expect(engine.ctx.steps).toEqual([first, second]);

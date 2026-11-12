@@ -48,7 +48,7 @@ describe('complete supported F2P Ranged demand', () => {
   });
   it('never grants future equipment, food, XP or cash to the observed character', () => {
     const st = state(), before = structuredClone(st);
-    const advice = adviseTraining({ skill: 'ranged', target: 40, mode: 'f2p', state: st, prices, style: 'efficient', priority: 'fastest' });
+    const advice = adviseTraining({ skill: 'ranged', target: 40, mode: 'f2p', state: st, prices, priority: 'fastest' });
     expect(advice.goalNeeds).toBeTruthy();
     expect(st).toEqual(before);
   });

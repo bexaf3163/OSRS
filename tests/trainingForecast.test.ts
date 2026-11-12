@@ -9,7 +9,7 @@ const method = (id: string, from: number, xph: [number, number] | null, extra: P
   cost: 'free', risk: 'none', effort: 'low', npcNames: [], objectNames: [], kit: undefined, manualSetup: undefined, ...extra,
 });
 const advice = (methods: TrainingMethod[], level: number, target: number, extra = {}) => adviseTraining({
-  skill: 'mining', target, mode: 'f2p', style: 'efficient', priority: 'fastest', methods,
+  skill: 'mining', target, mode: 'f2p', priority: 'fastest', methods,
   state: buildPlayerState({ mode: 'f2p', stats: { mining: level }, progress: emptyProgress(), gear: null, owned: null, questsDone: [] }),
   ...extra,
 });
@@ -41,8 +41,9 @@ describe('time follows the complete training path', () => {
     expect(a.time?.maxHours).toBeCloseTo(hours);
   });
   it('does not claim a total when a later chosen method has no known rate', () => {
-    const ms = [method('early', 10, [1000, 1000], { risk: 'low' }), method('unknown', 15, null)];
-    const a = advice(ms, 12, 20, { priority: 'relaxed', style: 'chill' });
+    // The early method is outgrown at 15, so the path must hand over to the one without a known rate.
+    const ms = [method('early', 10, [1000, 1000], { risk: 'low', to: 15 }), method('unknown', 15, null)];
+    const a = advice(ms, 12, 20);
     expect(a.path.map((l) => l.method.id)).toEqual(['early', 'unknown']);
     expect(a.time).toBeNull();
   });
