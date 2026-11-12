@@ -1,6 +1,6 @@
 {
  "version": 1,
- "generatedAt": "2026-11-02",
+ "generatedAt": "2026-11-12",
  "source": "https://oldschool.runescape.wiki/w/Money_making_guide/Free-to-play",
  "methods": [
   {
@@ -9,7 +9,8 @@
    "family": "processing",
    "access": "f2p",
    "repeatable": true,
-   "summary": "Blessing unblessed symbols. ",
+   "summary": "Blessing unblessed symbols",
+   "about": "Wilderness: Players can run directly north and cross over the Wilderness barrier, run west a few tiles, then cross back over the Wilderness Barrier to the other side, placing them immediately north of the Monastery. With a small opening in the stone wall north of the Monastery cabbage patch, this is the fastest form of travel from the Edgeville Bank to the Monastery and back. Running: Players can run south through Barbarian Village and north up to the monastery, or they can run north above Oziach's house.",
    "requirements": [
     {
      "kind": "level",
@@ -76,7 +77,7 @@
     },
     {
      "kind": "travel",
-     "text": "Go to Grand Exchange.",
+     "text": "Travel Methods: There are three ways, players can travel between the Edgeville Monastery and the Edgeville bank.",
      "place": {
       "x": 3165,
       "y": 3490,
@@ -86,11 +87,7 @@
     },
     {
      "kind": "perform",
-     "text": "Blessing unblessed symbols until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
+     "text": "Talk to him using the dialogue option: 'What can you do to help a bold adventurer such as myself?' Then you can choose 'Bless star'."
     },
     {
      "kind": "sell",
@@ -106,11 +103,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Blessing_unblessed_symbols",
      "title": "Money making guide/Blessing unblessed symbols",
      "revision": 15104046,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -123,6 +120,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting wizard's mind bombs, Asgarnian ales, or dwarven stouts. Rising Sun Inn",
+   "about": "This method is entirely in Falador, where you run from the West Bank to the Rising Sun Inn, buying the most profitable ale and later selling it on the Grand Exchange. The input gold, quests, and skills needed are very minimal (this is doable straight from Lumbridge) and nets decent profit. You first grab coins from your bank, and run (as long as your weight is minimal, run energy will barely deplete) to the Inn. Talk to Kaylee, the waitress on the ground floor not behind the bar, and repeat this sequence:",
    "requirements": [
     {
      "kind": "check",
@@ -195,7 +193,19 @@
     },
     {
      "kind": "perform",
-     "text": "Collecting wizard's mind bombs, Asgarnian ales, or dwarven stouts until the bag is full."
+     "text": "Click on Kaylee."
+    },
+    {
+     "kind": "perform",
+     "text": "Hold down spacebar to go through the three dialogue windows."
+    },
+    {
+     "kind": "perform",
+     "text": "Tap/hold spacebar to get through the dialogue, though you don't have to finish the dialogue \"Thanks, Haylee\" before talking to Haylee again."
+    },
+    {
+     "kind": "perform",
+     "text": "Repeat steps 3-6 until you have filled your inventory with ale."
     },
     {
      "kind": "bank",
@@ -215,11 +225,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_ale_from_the_Rising_Sun_Inn",
      "title": "Money making guide/Buying ale from the Rising Sun Inn",
      "revision": 14381436,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -232,6 +242,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Buying team capes. Wilderness",
+   "about": "Team capes are items bought from several cape merchants. The merchants sell the capes starting for 50 coins each, however, on the Grand Exchange they can go for thousands of coins. The reason they are so sought after is because clans will buy them for clan battles and because players will die so much they need to stock up so they can re-gear. Players will buy the capes in bulk to stock up and this causes a price spike for certain capes, especially during the weekend, when clan battles tend to happen.",
    "requirements": [
     {
      "kind": "check",
@@ -339,11 +350,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_team_capes",
      "title": "Money making guide/Buying team capes",
      "revision": 14876465,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -356,6 +367,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Casting Bones to Bananas. Bank or bank chest",
+   "about": "One can cast Bones To Bananas on an inventory of bones to turn them into bananas. Members can use a mud battlestaff, which will remove the cost of earth and water runes and allow converting bones 27 at a time. The profit for F2P players (who can convert only 26 bones at a time using a Water staff) is per hour. Note that bones have a low buying limit of 3,000.",
    "requirements": [
     {
      "kind": "level",
@@ -460,11 +472,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Casting_Bones_to_Bananas",
      "title": "Money making guide/Casting Bones to Bananas",
      "revision": 15174068,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -477,6 +489,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Catching lobsters (free-to-play). Corsair Cove Resource Area",
+   "about": "Raw lobsters are frequently traded due to its use in training the Cooking skill. The Corsair Cove Resource Area is a more viable fishing spot for F2P players than Musa Point as they are charged 60 coins for every trip from Musa Point to the nearest deposit box (in Port Sarim) and back. To access the fishing spot, players must have completed the quest Dragon Slayer I. The Corsair Curse must be completed in order to unlock the bank at Corsair Cove.",
    "requirements": [
     {
      "kind": "level",
@@ -571,11 +584,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_lobsters_(free-to-play)",
      "title": "Money making guide/Catching lobsters (free-to-play)",
      "revision": 14378142,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -588,6 +601,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Catching sardines & herring. Draynor Village",
+   "about": "The profitability of this method varies by fishing level. This guide assumes you bank and sell both types. If there is an extremely large discrepancy in these prices, you may find it more profitable to simply drop the cheaper one rather than banking them. Just south-west of the Draynor Village bank, there are some spots to bait fish.",
    "requirements": [
     {
      "kind": "level",
@@ -696,11 +710,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_sardines_&_herring",
      "title": "Money making guide/Catching sardines & herring",
      "revision": 14957916,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -713,6 +727,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Catching shrimps & anchovies (free-to-play). Draynor Village",
+   "about": "The profitability of this method varies greatly depending on your current fishing level, as this determines both the rate at which you catch fish and the proportion of shrimps vs anchovies. For more details, see the chart below. Neither raw shrimps nor raw anchovies are worth much, but they have very low requirements to fish and provide decent low level Fishing experience. Draynor Village is the most viable fishing spot as it offers the closest bank.",
    "requirements": [
     {
      "kind": "level",
@@ -804,11 +819,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_shrimp_&_anchovies",
      "title": "Money making guide/Catching shrimp & anchovies",
      "revision": 14957332,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -821,6 +836,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Catching tuna & swordfish (free-to-play). Musa Point",
+   "about": "Without any requirements besides a harpoon, 50 Fishing, and 60 gold for the round trip, you can start fishing raw swordfish and raw tuna in Karamja for a great amount of exp and a decent amount of money, with little effort. A harpoon can be bought from Gerrant's Fishy Business in Port Sarim, where you will find a number of blue-clad seamen who will ferry you to Musa Point, Karamja.",
    "requirements": [
     {
      "kind": "level",
@@ -912,11 +928,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_tuna_&_swordfish_(free-to-play)",
      "title": "Money making guide/Catching tuna & swordfish (free-to-play)",
      "revision": 14483592,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -929,6 +945,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting Air talismans from Duke Horacio. Lumbridge Castle",
+   "about": "Use the drop trick on air talismans obtained during Rune Mysteries: Note: The only time another talisman can not be obtained, is if there is already an un-noted one in your inventory or any in the bank. Duke Horacio is not aware of group ironman storage however. Placing the talismans on the table makes the talismans despawn after 10 minutes instead of the 3 minutes when dropped, but taking the talismans from the table takes 1 extra tick compared to taking them from the ground.",
    "requirements": [
     {
      "kind": "quest",
@@ -989,11 +1006,31 @@
     },
     {
      "kind": "perform",
-     "text": "Collecting Air talismans from Duke Horacio until the bag is full."
+     "text": "Have every air talisman noted in your inventory. It is not possible to get another talisman with any amount in the bank."
     },
     {
-     "kind": "bank",
-     "text": "Bank at Lumbridge Bank."
+     "kind": "perform",
+     "text": "Talk to Duke Horacio to obtain air talismans as part of the Rune mysteries quest."
+    },
+    {
+     "kind": "perform",
+     "text": "Drop the un-noted talisman, or place it on the table in the south-west corner."
+    },
+    {
+     "kind": "perform",
+     "text": "Repeat these steps until there are enough talismans on the floor to fill your inventory."
+    },
+    {
+     "kind": "perform",
+     "text": "Pick up all talismans and bank them"
+    },
+    {
+     "kind": "perform",
+     "text": "Withdraw all talismans as a note, and return to the Duke."
+    },
+    {
+     "kind": "perform",
+     "text": "Repeat the above steps"
     },
     {
      "kind": "sell",
@@ -1009,11 +1046,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_air_talismans",
      "title": "Money making guide/Collecting air talismans",
      "revision": 15010937,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1026,6 +1063,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting and tanning cowhide. Lumbridge cow field",
+   "about": "Cowhides can be tanned at a tanner for a small fee and turned into soft leather for one coin or turned into hard leather for three coins each. Just go to the Lumbridge cow field, loot 27 cowhides, run to the Al Kharid tanner, Ellis, pay him gold, bank at the Al Kharid bank, and then repeat. A Cowbell amulet can be used to teleport directly to the Lumbridge cow field, reducing travel time.",
    "requirements": [
     {
      "kind": "check",
@@ -1118,11 +1156,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_and_tanning_cowhide",
      "title": "Money making guide/Collecting and tanning cowhide",
      "revision": 15265661,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1135,6 +1173,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting ashes. Any place that provides a long strip of land near a bank (e.g. Grand Exchange, Varrock west bank, Seers' Village, Falador east bank, the Emir's Arena, or Piscatoris Fishing Colony)",
+   "about": "Ashes are the result of a burned out fire, and they are used in Herblore to make Serum 207 potions. Since ashes are worth coins each, collecting them after Firemaking can be a good way to make money in free-to-play as well as gaining significant Firemaking experience. Maple logs ( each) yield more profit but willow logs ( each) may be used too if one has not reached level 45 Firemaking yet. The best location to make fires is somewhere near a bank with few other players nearby.",
    "requirements": [
     {
      "kind": "level",
@@ -1211,11 +1250,23 @@
     },
     {
      "kind": "perform",
-     "text": "Collecting ashes until the bag is full."
+     "text": "Withdraw 27 logs, start at the east end of the area, and make one long line of fires."
     },
     {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
+     "kind": "perform",
+     "text": "Withdraw another 27 logs and make a second line the same way."
+    },
+    {
+     "kind": "perform",
+     "text": "Click first to collect the ashes, and quickly light a fire."
+    },
+    {
+     "kind": "perform",
+     "text": "Continue this down the entire line, until you reach the end and you should have 27 ashes in your inventory."
+    },
+    {
+     "kind": "perform",
+     "text": "Bank the ashes and do the exact same thing with the second line of fires."
     },
     {
      "kind": "sell",
@@ -1231,11 +1282,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_ashes",
      "title": "Money making guide/Collecting ashes",
      "revision": 15386459,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1248,6 +1299,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting beer glasses. Al Kharid",
+   "about": "In the building where the Apprentice is, south-east of the Al Kharid Palace, there are shelves that can be searched for a beer glass every 4 ticks. It must be clicked again to get another beer glass. At 1 Agility, it is possible to get about 780 beer glasses per hour for coins.",
    "requirements": [],
    "inputs": [],
    "outputs": [
@@ -1322,11 +1374,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_beer_glasses",
      "title": "Money making guide/Collecting beer glasses",
      "revision": 15118236,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1339,6 +1391,12 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting big bones from the Bone Yard. Bone Yard, in circa level 26-30 Wilderness",
+   "about": "Big bones currently provide the second best Prayer experience for free-to-play players after vile ashes. For this reason, there is a demand for them, and players can profit from collecting them. Although killing hill giants is a popular method of obtaining them, venturing into the Bone Yard in the Wilderness can allow players to collect more big bones, but it comes at a risk. Players should be very careful because there are skeletons roaming the area, and there may be player killers lurking about.",
+   "tips": [
+    "Around 165 big bones can be collected in an hour if walking back and forth without any teleportation.",
+    "Around 210 big bones can be collected in an hour if using the Varrock Teleport (walking there and teleporting to Varrock and banking in Varrock east bank each trip).",
+    "Around 295 big bones can be collected in an hour if using the games necklace and amulet of glory (teleporting to Corporeal Beast, exiting, running north, and banking in Edgeville)."
+   ],
    "requirements": [
     {
      "kind": "level",
@@ -1460,11 +1518,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_big_bones_from_the_Bone_Yard",
      "title": "Money making guide/Collecting big bones from the Bone Yard",
      "revision": 14716893,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1477,15 +1535,17 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting bronze pickaxes from a barrel. Ruins of Camdozaal",
+   "about": "Stand in between the barrel in Camdozaal and the bank chest.",
+   "tips": [
+    "In your settings you can enable Shift+Click to drop items.",
+    "Use the \"Deposit all\" button on your bank interface.",
+    "It is possible to drop a pick and then take the next one in the same tick. When doing this perfectly, you can obtain up to 2,800 pickaxes per hour."
+   ],
    "requirements": [
     {
      "kind": "quest",
      "quest": "Below Ice Mountain",
      "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Bronze pickaxe"
     }
    ],
    "inputs": [],
@@ -1541,11 +1601,23 @@
     },
     {
      "kind": "perform",
-     "text": "Collecting bronze pickaxes from a barrel until the bag is full."
+     "text": "Take a bronze pickaxe from the barrel"
     },
     {
-     "kind": "bank",
-     "text": "Bank at Edgeville Bank."
+     "kind": "perform",
+     "text": "Drop the bronze pickaxe"
+    },
+    {
+     "kind": "perform",
+     "text": "Repeat steps 2-3 until there are 27 pickaxes on the floor + one in your inventory"
+    },
+    {
+     "kind": "perform",
+     "text": "Pick up all bronze pickaxes from the floor"
+    },
+    {
+     "kind": "perform",
+     "text": "Deposit all bronze pickaxes in the bank chest"
     },
     {
      "kind": "sell",
@@ -1561,11 +1633,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_bronze_pickaxes",
      "title": "Money making guide/Collecting bronze pickaxes",
      "revision": 14381020,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1578,6 +1650,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting chaos runes within the Dark Warrior's Fortress. Dark Warriors' Fortress",
+   "about": "Chaos rune spawns, along with a number of lesser runes, can be found in level 15 wilderness, located north of the Ice Mountain. The fortress is populated with level 8 dark warriors that will hit you almost anywhere on the bottom floor because it is multi-way combat. Remember, the dark warriors are only level 8 in free-to-play worlds, and level 145 in member worlds, so use only free-to-play worlds unless you feel suited to fight very high level enemies.",
    "requirements": [
     {
      "kind": "level",
@@ -1667,11 +1740,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_chaos_runes",
      "title": "Money making guide/Collecting chaos runes",
      "revision": 14435949,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1683,7 +1756,8 @@
    "family": "collecting",
    "access": "f2p",
    "repeatable": true,
-   "summary": "Collecting fish food in Draynor Manor. Draynor Manor",
+   "summary": "Collecting fish food in Draynor Manor",
+   "about": "Fish food is used in the Ernest the Chicken quest. It takes 60 seconds to respawn.",
    "requirements": [],
    "inputs": [],
    "outputs": [
@@ -1738,15 +1812,15 @@
     },
     {
      "kind": "perform",
-     "text": "Collecting fish food in Draynor Manor until the bag is full."
+     "text": "Pick up the fish food and hop to the next world."
     },
     {
-     "kind": "bank",
-     "text": "Bank at Varrock West Bank."
+     "kind": "perform",
+     "text": "Bank in Draynor Village and run back."
     },
     {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
+     "kind": "perform",
+     "text": "Sell it to the Grand Exchange."
     },
     {
      "kind": "restock",
@@ -1758,11 +1832,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_fish_food",
      "title": "Money making guide/Collecting fish food",
      "revision": 14385382,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1819,7 +1893,7 @@
    "guide": [
     {
      "kind": "travel",
-     "text": "Go to Draynor Village.",
+     "text": "Go upstairs in Morgan's house in Draynor Village, just north of Ned's house, and find the cupboard.",
      "place": {
       "x": 3099,
       "y": 3269,
@@ -1829,11 +1903,11 @@
     },
     {
      "kind": "perform",
-     "text": "Collecting Garlic from Morgan's house until the bag is full."
+     "text": "Open and search the cupboard repeatedly to get garlic."
     },
     {
-     "kind": "bank",
-     "text": "Bank at Draynor Bank."
+     "kind": "perform",
+     "text": "Bank a full inventory in Draynor village bank to the south."
     },
     {
      "kind": "sell",
@@ -1849,11 +1923,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_garlic",
      "title": "Money making guide/Collecting garlic",
      "revision": 14216376,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1866,6 +1940,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting monk's robes. Edgeville Monastery",
+   "about": "This guide assumes 13 full inventory runs every hour (each run should take about 4 minutes and 30 seconds). The Edgeville Monastery has one spawn of Monk's robe and one of Monk's robe top both spawning on a table south-east of the upstairs section of the monastery. The robe pieces will respawn after 60 seconds, but it is recommended to change worlds to circumvent this timer. You can also equip a set of robes to free up 2 extra inventory spaces.",
    "requirements": [
     {
      "kind": "level",
@@ -1953,11 +2028,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_monk's_robes",
      "title": "Money making guide/Collecting monk's robes",
      "revision": 14372233,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1970,6 +2045,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting Nature Runes from the Lava Island south-east of Demonic Ruins.. South-east of Demonic Ruins in level 42-43 Wilderness",
+   "about": "Nature runes are very common runes used within Gielinor. The most common uses of nature runes are the use of the High Level Alchemy spell. Players without the required Runecraft level to craft nature runes can opt to gather them in the deeper Wilderness. As these locations of nature rune spawns are located in the wilderness, one should always be aware of the risk of player killers along with the 2 lesser demon spawns within proximity of the Telekinetic Grab location.",
    "requirements": [
     {
      "kind": "level",
@@ -2081,11 +2157,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_nature_runes",
      "title": "Money making guide/Collecting nature runes",
      "revision": 14381445,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2098,6 +2174,17 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting Red spiders' eggs. Varrock Sewers",
+   "about": "There are 2 red spiders' eggs spawns in the swamp area of the Varrock Sewers where moss giants are found. This is the area north-west of the entrance of the Varrock Sewers, just south of Bryophyta's lair. For free-to-play players, this is the farthest area reached in the Varrock Sewers. As the sewer is a multi-combat area, and the deadly red spiders are aggressive, players with a combat level lower than 69 can get attacked by multiple spiders at a time, so having food is recommended.",
+   "tips": [
+    "Take out 2.5 energy potions, law and fire runes, food if low level, and a disposable slash item from the bank.",
+    "Head to the manhole at the eastern exit of Varrock Palace.",
+    "Navigate through the sewers until the web is reached.",
+    "Slash the web, and drop the slash item.",
+    "Pick up all the red spider eggs, then (if the player does not have a Combat level of 69+, find a safespot and) switch worlds.",
+    "Repeat until full, then teleport back to Varrock, and bank the yield.",
+    "Without the use of any teleports, a run starting and ending in the Varrock bank to the eggs in the sewers will take anywhere from 10-12 minutes.",
+    "Using the chronicle (obtained from Diango in Draynor Village) makes a single run take about 7-9 minutes."
+   ],
    "requirements": [
     {
      "kind": "level",
@@ -2217,12 +2304,12 @@
     {
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_red_spiders'_eggs_(free-to-play)",
      "title": "Money making guide/Collecting red spiders' eggs (free-to-play)",
-     "revision": 14659488,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "revision": 15392181,
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2234,12 +2321,14 @@
    "family": "collecting",
    "access": "f2p",
    "repeatable": true,
-   "summary": "Collecting Ruby rings from the basement of Varrock West Bank. Varrock West Bank",
+   "summary": "Collecting Ruby rings from the basement of Varrock West Bank",
+   "about": "Ruby rings have a consistent demand in the player market due to being used to create the Ring of Forging, and they are profitable when used as an item for the High Alchemy spell.",
+   "tips": [
+    "You must complete the first step in obtaining the robes of ruin to be able to enter the bank vault.",
+    "The emotes to enter the vault must be performed to enter and exit (teleporting away also works).",
+    "It does not matter what you have equipped or in your inventory to access the vault."
+   ],
    "requirements": [
-    {
-     "kind": "check",
-     "text": "Bring: Ruby Ring"
-    },
     {
      "kind": "check",
      "text": "Completed steps to obtain the Robes of Ruin."
@@ -2288,7 +2377,7 @@
    "guide": [
     {
      "kind": "travel",
-     "text": "Go to Varrock West Bank.",
+     "text": "Go to the Varrock West Bank basement and stand by the vault gates.",
      "place": {
       "x": 3185,
       "y": 3440,
@@ -2298,11 +2387,27 @@
     },
     {
      "kind": "perform",
-     "text": "Collecting Ruby rings from the basement of Varrock West Bank until the bag is full."
+     "text": "Perform the emotes in the following order: Panic, No, Beckon, Laugh, Shrug, Cry, Spin, Yes, Think, Dance, Blow Kiss, Wave, Bow, Panic, Headbang, Jump for Joy, Angry."
     },
     {
-     "kind": "bank",
-     "text": "Bank at Varrock West Bank."
+     "kind": "perform",
+     "text": "Grab the Ruby ring"
+    },
+    {
+     "kind": "perform",
+     "text": "Hop worlds"
+    },
+    {
+     "kind": "perform",
+     "text": "Repeat until inventory is full."
+    },
+    {
+     "kind": "perform",
+     "text": "Perform the aforementioned set of emotes again by the vault gates."
+    },
+    {
+     "kind": "perform",
+     "text": "Bank upstairs"
     },
     {
      "kind": "sell",
@@ -2318,11 +2423,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_ruby_rings",
      "title": "Money making guide/Collecting ruby rings",
      "revision": 15203464,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2335,6 +2440,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting spades in Falador. Estate agent house in Falador",
+   "about": "This guide assumes 12 full inventory runs every hour (each run should take about 5 minutes). The estate agent house in Falador has one spawn of spade, which will respawn after 60 seconds, but it is recommended to change worlds to circumvent this timer. Each spade is worth.",
    "requirements": [],
    "inputs": [],
    "outputs": [
@@ -2409,11 +2515,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_spades",
      "title": "Money making guide/Collecting spades",
      "revision": 14107401,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2426,6 +2532,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting and banking steel platebodies. Lava maze",
+   "about": "To arrive at the Lava Maze entrance: 5 minutes 30 seconds (330 seconds) Navigating through the Lava Maze: 2 minutes (120 seconds) Hopping worlds and collecting (25) steel platebodies: 4 minutes and 17 seconds (257 seconds) Allow the Lesser Demon to kill you (30-60 seconds)",
    "requirements": [
     {
      "kind": "level",
@@ -2548,11 +2655,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_steel_platebodies",
      "title": "Money making guide/Collecting steel platebodies",
      "revision": 14856630,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2565,6 +2672,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting and alching steel platebodies. Lava Maze",
+   "about": "The Lava Maze is a maze located deep in the Wilderness, around level 40-45. In the entrance and partway through the maze, there are spiderwebs that must be cut with a slash weapon or a knife. It is possible for players to get trapped inside the maze if they do not have a knife or slash weapon to cut the webs. This method is more efficient than the other method where the player collects and then banks each inventory, though riskier.",
    "requirements": [
     {
      "kind": "level",
@@ -2651,7 +2759,15 @@
     },
     {
      "kind": "perform",
-     "text": "Collecting and alching steel platebodies until the bag is full."
+     "text": "Hopping worlds and then using High Level Alchemy with level 55 Magic."
+    },
+    {
+     "kind": "perform",
+     "text": "Hop Worlds"
+    },
+    {
+     "kind": "perform",
+     "text": "High Level Alchemy"
     },
     {
      "kind": "bank",
@@ -2671,11 +2787,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_steel_platebodies_(High_Alchemy)",
      "title": "Money making guide/Collecting steel platebodies (High Alchemy)",
      "revision": 14708436,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2688,6 +2804,12 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collect tinderboxes from the old bookshelf in the Wise Old Man's house. Draynor Village",
+   "about": "Stand in next to the bookshelf with a tinderbox inside it, the one west of the landscape painting in the Wise Old Man's house. Furthermore you are thwarting the Wise Old Man's future pyromaniacal plans!",
+   "tips": [
+    "In your settings you can enable Shift+Click to drop items.",
+    "Use the \"Deposit all\" button on your bank interface.",
+    "It is possible to drop a tinderbox and then take the next one in the same tick. When doing this perfectly, you can obtain around 2,100 tinderboxes per hour."
+   ],
    "requirements": [],
    "inputs": [],
    "outputs": [
@@ -2742,11 +2864,23 @@
     },
     {
      "kind": "perform",
-     "text": "Collect tinderboxes from the old bookshelf in the Wise Old Man's house until the bag is full."
+     "text": "Search the bookshelf"
     },
     {
-     "kind": "bank",
-     "text": "Bank at Draynor Bank."
+     "kind": "perform",
+     "text": "Drop the tinderbox"
+    },
+    {
+     "kind": "perform",
+     "text": "Repeat steps 2-3 until there are 27 tinderboxes on the floor + one in your inventory"
+    },
+    {
+     "kind": "perform",
+     "text": "Pick up all tinderboxes from the floor"
+    },
+    {
+     "kind": "perform",
+     "text": "Deposit them in the bank nearby"
     },
     {
      "kind": "sell",
@@ -2762,11 +2896,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_tinderboxes",
      "title": "Money making guide/Collecting tinderboxes",
      "revision": 14912496,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2779,6 +2913,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Collecting Wine of Zamorak. Chaos Temple",
+   "about": "Wine of Zamorak is used by members to create ranging and bastion potions making it a valuable item. There are two that respawn every 30 seconds in the asgarnian Chaos Temple, north-west of Goblin Village, and are guarded by Monks of Zamorak. On the first floor, Telekinetic Grab will cause the Monks of Zamorak to attack you and will drain your stats.",
    "requirements": [
     {
      "kind": "level",
@@ -2892,11 +3027,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_wine_of_zamorak_(free-to-play)",
      "title": "Money making guide/Collecting wine of zamorak (free-to-play)",
      "revision": 15293976,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2908,7 +3043,8 @@
    "family": "production",
    "access": "f2p",
    "repeatable": true,
-   "summary": "Cooking plain pizzas. ",
+   "summary": "Cooking plain pizzas",
+   "about": "Plain pizza can be made by combining pizza base with tomato and then cheese last. Note: Make sure you click on the pizza base first or you might accidentally eat your ingredient Al Kharid and Edgeville are two places with the closest range to a bank in free-to-play worlds, with both having ranges next door. With the Grand Exchange being right next to Edgeville, it makes it a more convenient option. (In case you eat your ingredients and need a replacement)",
    "requirements": [
     {
      "kind": "level",
@@ -3019,11 +3155,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_plain_pizzas",
      "title": "Money making guide/Cooking plain pizzas",
      "revision": 14720686,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -3035,7 +3171,13 @@
    "family": "collecting",
    "access": "f2p",
    "repeatable": true,
-   "summary": "Picking up ashes from players Firemaking. ",
+   "summary": "Picking up ashes from players Firemaking",
+   "tips": [
+    "Go to the Grand Exchange (or other popular Firemaking areas) on any moderately populated world and see if there is anybody training Firemaking.",
+    "If there is at least 1 person there, start picking up the ashes from their expired fires.",
+    "For additional profit, this can be easily combined with high alchemy while waiting for fires to burn out, and while running between ashes as they spawn.",
+    "If there is a large enough amount of people Firemaking, or if they are spread farther apart, Energy potions may occasionally be required to be able to still collect most of the ashes spawned, although these are still cheap enough to be worth using."
+   ],
    "requirements": [],
    "inputs": [],
    "outputs": [
@@ -3110,11 +3252,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Firecycling",
      "title": "Money making guide/Firecycling",
      "revision": 15376181,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -3127,6 +3269,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Killing ankou. Stronghold of Security (Level 4)",
+   "about": "Ankou are monsters that are located on the fourth floor of the Stronghold of Security and deep in the Wilderness. Equipment It is highly recommended to have rune armour, such as a rune chainbody, when fighting ankou, otherwise they're going to be hitting you hard. To maximise the equipment slots for defensive stats, make sure you have boots equipped, as well as a cape as they give +1 to all melee defences.",
    "requirements": [
     {
      "kind": "level",
@@ -3340,11 +3483,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_ankou_(free-to-play)",
      "title": "Money making guide/Killing ankou (free-to-play)",
      "revision": 15266182,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -3357,6 +3500,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Killing Bears. South of Mind Altar",
+   "about": "Go south of Mind Altar where there are about 4–5 black bears and kill black bears until your inventory is full, then go to Falador and deposit the loot into the bank. Bones should not be picked up as they are very cheap, and give very little Prayer experience, though you can bury them if you want. You should get 13 kills per inventory, depending on your combat stats. Black bears don't have Magic defence, so Magic is a viable option against them.",
    "requirements": [
     {
      "kind": "level",
@@ -3452,11 +3596,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_bears",
      "title": "Money making guide/Killing bears",
      "revision": 14378144,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -3503,7 +3647,7 @@
     },
     {
      "kind": "check",
-     "text": "Bring: Bronze axe or better, Full rune (rune chainbody, rune platelegs, rune kiteshield), Cheap armour for in wilderness (leather chaps, leather cowl, black sq shield), Rune scimitar, Amulet of power, red cape, leather boots, leather gloves."
+     "text": "Bring: Bronze axe or better, Full rune (rune chainbody, rune kiteshield), Cheap armour for in wilderness (leather chaps, leather cowl, black sq shield), Rune scimitar, Amulet of power, red cape, leather boots, leather gloves."
     },
     {
      "kind": "check",
@@ -3794,12 +3938,12 @@
     {
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_Bryophyta_(free-to-play)",
      "title": "Money making guide/Killing Bryophyta (free-to-play)",
-     "revision": 15347393,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "revision": 15392180,
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -3812,6 +3956,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Killing chaos dwarves. East of The Forgotten Cemetery, north of Bone Yard",
+   "about": "Chaos dwarves are located in the Wilderness, therefore you should only bring items you are willing to lose. Be cautious of PKers and skull tricking. There are 5 chaos dwarf spawns to the east of The Forgotten Cemetery. Like all monsters in the Wilderness they are always aggressive regardless of combat level and the duration of your presence.",
    "requirements": [
     {
      "kind": "level",
@@ -4099,11 +4244,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_chaos_dwarves",
      "title": "Money making guide/Killing chaos dwarves",
      "revision": 15230438,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4116,6 +4261,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Killing fire wizards. South of Falador",
+   "about": "South of Falador, just west of Port Sarim, are Malignius Mortifer and non-aggressive elemental wizard spawns. The fire wizard will drop fire talismans and fire runes. To achieve maximum kills per hour at higher stats, hopping worlds will be necessary. Other wizards may be killed as well to hop worlds less, but their talismans are worth much less GP.",
    "requirements": [
     {
      "kind": "level",
@@ -4241,11 +4387,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_elemental_wizards",
      "title": "Money making guide/Killing elemental wizards",
      "revision": 14909026,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4258,6 +4404,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Killing imps. South of Falador",
+   "about": "There are 3 imp spawns to the south of Falador, allowing for 130–180 kills per hour depending on kill speed. Imps have 8 Hitpoints and have many drops. However, the only drops that should be picked up are black beads, red beads, white beads, yellow beads, and mind talismans. Beads are used in the Imp Catcher quest, selling easily on the Grand Exchange.",
    "requirements": [
     {
      "kind": "level",
@@ -4401,11 +4548,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_imps",
      "title": "Money making guide/Killing imps",
      "revision": 14457220,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4418,6 +4565,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Killing monkeys. Karamja",
+   "about": "In free-to-play, the only place that monkeys can be found is in Karamja, you can get there by talking to one of the Seamen by the Ship to Karamja and paying 30 coins (bring 30 coins to get back to Port Sarim). If you don't bring 30 coins, pick then sell bananas to the general store there until you have 30 coins. Monkeys can be profitable because they always drop monkey bones.",
    "requirements": [
     {
      "kind": "level",
@@ -4519,11 +4667,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_monkeys",
      "title": "Money making guide/Killing monkeys",
      "revision": 14990458,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4536,6 +4684,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Killing ogress shamans. Corsair Cove Dungeon",
+   "about": "Ogress Shamans are found in the Corsair Cove Dungeon. They drop high value rune equipment, runes, and uncut gems. The dungeon is accessible by starting the The Corsair Curse quest but it must be completed to access the nearby bank east of the dungeon entrance. When using melee, through the main entrance head south-east to the room with two shamans, a fire, and a raw tuna spawn.",
    "requirements": [
     {
      "kind": "level",
@@ -4888,11 +5037,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_ogress_shamans",
      "title": "Money making guide/Killing ogress shamans",
      "revision": 14516606,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4905,6 +5054,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Killing Ogress Warrior. South of Falador",
+   "about": "Ogress Warriors are found in the Corsair Cove Dungeon. The dungeon is accessible by starting The Corsair Curse quest but it must be completed to access the nearby bank east of the dungeon entrance. It is also accessible through the Corsair Cove Resource Area which requires the completion of Dragon Slayer I. They drop high value rune equipment, runes, and uncut gems.",
    "requirements": [
     {
      "kind": "level",
@@ -5244,11 +5394,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_ogress_warriors",
      "title": "Money making guide/Killing ogress warriors",
      "revision": 14868637,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5261,6 +5411,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Killing wizards. Wizard's tower",
+   "about": "Wizards have 10 Magic and lower Strength and Attack stats, so using melee against wizards is the best option. A high Magic level to have more defence against their magic attacks is also helpful. They have a low Hitpoints of 14, so they can be killed quickly at higher combat levels. Most of their drops are stackable, so you don't need to bank often, and the bank at Draynor is not far away.",
    "requirements": [
     {
      "kind": "level",
@@ -5474,11 +5625,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_wizards",
      "title": "Money making guide/Killing wizards",
      "revision": 15271238,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5491,6 +5642,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Making dough. Cooks' Guild",
+   "about": "Take 1 pot and jug from the top floor of the Cooks' Guild if required.",
    "requirements": [
     {
      "kind": "level",
@@ -5555,11 +5707,47 @@
     },
     {
      "kind": "perform",
-     "text": "Making dough until the bag is full."
+     "text": "Pick 26 wheat from behind the guild building"
     },
     {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange bank."
+     "kind": "perform",
+     "text": "Run to the top floor of the Cooks' Guild"
+    },
+    {
+     "kind": "perform",
+     "text": "Fill hopper with wheat then operate the hopper controls"
+    },
+    {
+     "kind": "perform",
+     "text": "Repeat with the remaining wheat in your inventory"
+    },
+    {
+     "kind": "perform",
+     "text": "Go to the bottom floor in between the sink and the flour bin"
+    },
+    {
+     "kind": "perform",
+     "text": "Use the jug on the sink"
+    },
+    {
+     "kind": "perform",
+     "text": "Fill the pot with flour from the mill. Note: Using the pot on the bin is not required"
+    },
+    {
+     "kind": "perform",
+     "text": "Use the jug of water on the pot of flour"
+    },
+    {
+     "kind": "perform",
+     "text": "Make Pizza base"
+    },
+    {
+     "kind": "perform",
+     "text": "Repeat steps 7-10 until the bin is empty"
+    },
+    {
+     "kind": "perform",
+     "text": "Deposit the Pizza base at Varrock west bank"
     },
     {
      "kind": "sell",
@@ -5575,11 +5763,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_dough_at_Cooks'_Guild",
      "title": "Money making guide/Making dough at Cooks' Guild",
      "revision": 14488874,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5592,6 +5780,12 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Making dyes. Draynor Village",
+   "about": "Making dyes involves getting the required ingredients: and taking them to Aggie in Draynor Village. Additionally each dye costs 5 coins to make. Dyes can be made faster by using the materials on Aggie, skipping some of the dialogue.",
+   "tips": [
+    "2 woad leaves for blue dye",
+    "2 onions for yellow dye",
+    "3 redberries for red dye"
+   ],
    "requirements": [
     {
      "kind": "check",
@@ -5691,11 +5885,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_dyes",
      "title": "Money making guide/Making dyes",
      "revision": 14390648,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5708,6 +5902,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Making flour. Cooks' Guild, Mill Lane Mill, Draynor Village",
+   "about": "It is recommended that you enter the Cooks' Guild to make flour, as it has a mill close to the West Varrock bank, and is among the easiest of guilds to enter. Other than the Cooks' Guild, the only windmill in free-to-play is the Mill Lane Mill north-east of Draynor Village. You should have 14 pots and 14 grain on you. Once you do, go to the, use the grain on the hopper, and then use the hopper control levers to drop the grain down the chute.",
    "requirements": [
     {
      "kind": "level",
@@ -5811,11 +6006,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_flour",
      "title": "Money making guide/Making flour",
      "revision": 14380730,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5828,6 +6023,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Making pastry dough. Grand Exchange",
+   "about": "Pastry dough is required to make pie shells, a basic ingredient for pies. It is usually quite profitable to add to pots of flour. Each inventory of 9 dough can be made in ~15 seconds, and up to 2,400 pastry dough can be made in a single hour.",
    "requirements": [
     {
      "kind": "check",
@@ -5906,11 +6102,11 @@
     },
     {
      "kind": "perform",
-     "text": "Making pastry dough until the bag is full."
+     "text": "Withdraw 9 and pots of flour from the bank."
     },
     {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
+     "kind": "perform",
+     "text": "Use one item on the other, and a menu will pop up to make all of the dough."
     },
     {
      "kind": "sell",
@@ -5926,11 +6122,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_pastry_dough",
      "title": "Money making guide/Making pastry dough",
      "revision": 15128189,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5943,6 +6139,10 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Mining adamantite ore. Mining Guild, Dwarven Mine",
+   "about": "Free-to-play players looking to gather adamantite ore as efficiently as possible should do so within the Mining Guild. There are two ore spawns within the free-to-play area of the Guild, and three more just outside of the Guild in the Dwarven Mine. The quickest way to gather a full inventory of ore is to world hop after you mine the ore on one world, and hopping between two to three worlds. Alternatively, you can mine mithril or coal ore while you wait for the adamantite rocks to respawn.",
+   "tips": [
+    "The respawn time for adamantite ore is 4 minutes."
+   ],
    "requirements": [
     {
      "kind": "level",
@@ -6037,11 +6237,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_adamantite_ore_(free-to-play)",
      "title": "Money making guide/Mining adamantite ore (free-to-play)",
      "revision": 14381448,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6054,6 +6254,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Mining clay. Wilderness Rune Mine, Heroes' Guild Mine, et. al.",
+   "about": "Clay is frequently traded due to its use in crafting magic tablets. The best clay mining location in free-to-play is the South-west Varrock mine, which is the closest to a bank. Finding an empty world is recommended to avoid bots and other players. A chronicle charged with teleport cards will speed up the return trip to the mine significantly.",
    "requirements": [
     {
      "kind": "check",
@@ -6197,11 +6398,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_clay",
      "title": "Money making guide/Mining clay",
      "revision": 14380736,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6213,7 +6414,8 @@
    "family": "production",
    "access": "f2p",
    "repeatable": true,
-   "summary": "Mining coal and superheating Adamantite bars. ",
+   "summary": "Mining coal and superheating Adamantite bars",
+   "about": "The Superheat Item spell allows faster mining of coal due to the reduced need for banking. Repeatedly mining six coal, casting Superheat Item on adamantite ore, and banking when needed yields decent profit and experience in Mining, as well as some Smithing and Magic experience. While mining coal is typically more profitable overall, it involves much more running to the bank. With this method, one can mine 120 coal and only bank about every 20 minutes, as opposed to every 5 minutes while mining Coal.",
    "requirements": [
     {
      "kind": "level",
@@ -6334,11 +6536,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_and_superheating_Adamantite_bars",
      "title": "Money making guide/Mining coal and superheating Adamantite bars",
      "revision": 14997912,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6350,7 +6552,8 @@
    "family": "production",
    "access": "f2p",
    "repeatable": true,
-   "summary": "Mining coal and superheating Mithril bars. ",
+   "summary": "Mining coal and superheating Mithril bars",
+   "about": "The Superheat Item spell allows faster mining of coal due to the reduced need for banking. Repeatedly mining four coal, casting Superheat Item on Mithril ore, and banking when needed yields decent profit and experience in Mining, as well as some Smithing and Magic experience. At level 60 Mining, it's possible to produce about 88 mithril bars per hour with this method at the Mining Guild.",
    "requirements": [
     {
      "kind": "level",
@@ -6471,11 +6674,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_and_superheating_Mithril_bars",
      "title": "Money making guide/Mining coal and superheating Mithril bars",
      "revision": 14997911,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6487,7 +6690,8 @@
    "family": "production",
    "access": "f2p",
    "repeatable": true,
-   "summary": "Mining coal and superheating Runite bars. ",
+   "summary": "Mining coal and superheating Runite bars",
+   "about": "The Superheat Item spell allows faster mining of coal due to the reduced need for banking. Repeatedly mining eight coal, casting Superheat Item on runite ore, and banking when needed yields decent profit and experience in Mining, as well as some Smithing and Magic experience. While mining coal is typically more profitable overall, it involves much more running to the bank. With this method, one can mine 144 coal and only bank about every 20 minutes, as opposed to every 5 minutes while mining Coal.",
    "requirements": [
     {
      "kind": "level",
@@ -6608,11 +6812,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_and_superheating_Runite_bars",
      "title": "Money making guide/Mining coal and superheating Runite bars",
      "revision": 14997906,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6625,6 +6829,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Mining runite ore. Lava Maze runite mine",
+   "about": "Mining runite ore, a high-level ore that frequently sells for a high price ( coins), is an achievement in itself. The runite rocks are highly competed over and are often depleted of their resources, so miners need to switch worlds in order to find fresh ones. There is only one place in Free-to-play where players can mine it: the Lava Maze runite mine, which contains two rocks. It is located north-west of the Lava Maze in level 46 Wilderness.",
    "requirements": [
     {
      "kind": "level",
@@ -6738,11 +6943,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_runite_ore_(free-to-play)",
      "title": "Money making guide/Mining runite ore (free-to-play)",
      "revision": 14863994,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6755,6 +6960,17 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Smelting adamantite bars with superheat item. Anywhere (typically grand exchange)",
+   "about": "Adamantite bars are frequently traded due to their use in smithing adamant equipment. Instead of visiting a furnace to smelt the bars, players with Magic 43 can cast superheat item to smelt ore into bars from anywhere. This costs the usual ore and coal, as well as a nature rune (and four fire runes, but this requirement can be ignored when a staff of fire is wielded).",
+   "tips": [
+    "nature rune (many)",
+    "9xadamantite ore",
+    "nature rune (many)",
+    "6xadamantite ore",
+    "3xadamantite bar",
+    "nature rune (many)",
+    "6xadamantite ore",
+    "3xadamantite bar"
+   ],
    "requirements": [
     {
      "kind": "level",
@@ -6855,11 +7071,19 @@
     },
     {
      "kind": "perform",
-     "text": "Smelting adamantite bars with superheat item until the bag is full."
+     "text": "Cast superheat item on the adamantite ore three times."
     },
     {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
+     "kind": "perform",
+     "text": "Open the bank and 'Withdraw ALL' coal."
+    },
+    {
+     "kind": "perform",
+     "text": "Open the bank and 'Withdraw ALL' coal again."
+    },
+    {
+     "kind": "perform",
+     "text": "Open the bank a third time. 'Withdraw ALL' coal again."
     },
     {
      "kind": "sell",
@@ -6875,11 +7099,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_adamantite_bars_(Superheat_Item)",
      "title": "Money making guide/Smelting adamantite bars (Superheat Item)",
      "revision": 15352277,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6892,6 +7116,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Smithing iron bars. Edgeville",
+   "about": "Players can produce between 900 and 1,000 iron bars in an hour. Edgeville furnace is the closest furnace to a bank, and it has no requirements.",
    "requirements": [
     {
      "kind": "level",
@@ -6999,11 +7224,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_iron_bars",
      "title": "Money making guide/Smelting iron bars",
      "revision": 15260339,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -7016,6 +7241,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Smelting runite bars. Edgeville Furnace",
+   "about": "Runite bars are frequently traded due to its use in smithing rune equipment. The best furnace for F2P players to smelt runite bars is at the furnace in Edgeville as it is the closest furnace to a bank in F2P. Players can smelt and bank up to 400 or more runite bars per hour.",
    "requirements": [
     {
      "kind": "level",
@@ -7119,11 +7345,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_runite_bars",
      "title": "Money making guide/Smelting runite bars",
      "revision": 14640352,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -7136,6 +7362,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Smelting runite bars with superheat item. Anywhere (typically grand exchange)",
+   "about": "Runite bars are frequently traded due to their use in smithing runite equipment. Instead of visiting a furnace to smelt the bars, players with Magic 43 can cast superheat item to smelt ore into bars from anywhere. This costs the usual ore and coal, as well as a nature rune (and four fire runes, but this requirement can be ignored when a staff of fire is wielded).",
    "requirements": [
     {
      "kind": "level",
@@ -7255,12 +7482,12 @@
     {
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_runite_bars_(Superheat_Item)",
      "title": "Money making guide/Smelting runite bars (Superheat Item)",
-     "revision": 14878439,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "revision": 15392172,
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -7272,7 +7499,8 @@
    "family": "production",
    "access": "f2p",
    "repeatable": true,
-   "summary": "Smithing rune items. ",
+   "summary": "Smithing rune items",
+   "about": "Runite bars can be smithed at 99 Smithing into rune 2h swords, rune platelegs, or rune plateskirts. Due to these items' use in high-level alchemy, they can be fairly profitable to make, while also being low-effort and giving a decent amount of Smithing experience. The most valuable item to smith currently is, with a value of (after tax). It is possible to increase profit by using high alchemy on the smithed rune items.",
    "requirements": [
     {
      "kind": "level",
@@ -7368,12 +7596,12 @@
     {
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smithing_rune_items",
      "title": "Money making guide/Smithing rune items",
-     "revision": 15352416,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "revision": 15394528,
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -7386,6 +7614,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Stealing from Wydin. Port Sarim",
+   "about": "Equip a white apron and enter the back room of Wydin's Food Store. Sell the bananas on the Grand Exchange for profit.",
    "requirements": [
     {
      "kind": "quest",
@@ -7450,7 +7679,19 @@
     },
     {
      "kind": "perform",
-     "text": "Stealing from Wydin until the bag is full."
+     "text": "Search the crate with a banana on top (this banana can be pilfered as well)."
+    },
+    {
+     "kind": "perform",
+     "text": "Wait 4 game ticks for the dialogue menu"
+    },
+    {
+     "kind": "perform",
+     "text": "Press 1 to take the banana and click the crate to search it again."
+    },
+    {
+     "kind": "perform",
+     "text": "Repeat steps 2-4 until your inventory is full, then walk to the deposit box near the monks of Entrana and deposit the bananas."
     },
     {
      "kind": "bank",
@@ -7470,11 +7711,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stealing_Wydin's_bananas",
      "title": "Money making guide/Stealing Wydin's bananas",
      "revision": 14379455,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -7486,7 +7727,8 @@
    "family": "collecting",
    "access": "f2p",
    "repeatable": true,
-   "summary": "Taking from the infinite money bag while picking up coin spawns in Varrock West bank (free-to-play). Varrock west bank",
+   "summary": "Taking from the infinite money bag while picking up coin spawns in Varrock West bank (free-to-play)",
+   "about": "The Infinite money bag can be used to obtain a single coin once per game tick. This means at most 6000 coins can be withdrawn from the bag per hour. The only advantage of this money making method is the fact that is by far the most stable money making method in the game, given that it rewards exactly the same amount of coins per hour, given perfect gameplay.",
    "requirements": [
     {
      "kind": "check",
@@ -7575,11 +7817,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Taking_from_the_infinite_money_bag_while_picking_up_coin_spawns_in_Varrock_West_bank",
      "title": "Money making guide/Taking from the infinite money bag while picking up coin spawns in Varrock West bank",
      "revision": 14824293,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -7592,6 +7834,7 @@
    "access": "f2p",
    "repeatable": true,
    "summary": "Tanning cowhide. Al Kharid",
+   "about": "Leather and hard leather are used to train Crafting, especially in free-to-play, and have a reasonable volume. Cowhide can be tanned at a tanner to turn it into one of those products. Compared to cowhide's price of, hard leather is worth, making tanning profitable activity by each. Leather is worth, making a profit of.",
    "requirements": [
     {
      "kind": "check",
@@ -7682,11 +7925,15 @@
     },
     {
      "kind": "perform",
-     "text": "Tanning cowhide until the bag is full."
+     "text": "Withdraw 27 cowhides from the bank south of the tanner along with a stack of coins."
     },
     {
-     "kind": "bank",
-     "text": "Bank at Al Kharid Bank."
+     "kind": "perform",
+     "text": "Run north into Ellis's building and use his Trade option."
+    },
+    {
+     "kind": "perform",
+     "text": "Tan them all, and run back to the bank."
     },
     {
      "kind": "sell",
@@ -7702,27 +7949,93 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Tanning_cowhide",
      "title": "Money making guide/Tanning cowhide",
      "revision": 15304759,
-     "retrievedAt": "2026-11-02",
-     "used": "pace, inputs, outputs, levels, quests and place"
+     "retrievedAt": "2026-11-12",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-02",
+   "verifiedAt": "2026-11-12",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
    ]
   }
  ],
+ "extras": {
+  "hill-giants": {
+   "about": "Hill giants are monsters that are most commonly killed in the Edgeville Dungeon, which requires a brass key to enter. The spot to kill them is very crowded throughout most of the day, so it is recommended to hop between a few worlds to find one that is rather empty. Hill giants are aggressive towards players lower than 57 combat level, so killing them at lower levels would allow for more downtime between having to check the screen."
+  },
+  "cows-cowhide": {
+   "about": "Level 2 cows in Lumbridge have 8 Hitpoints and always drop cowhide. Using any decent weapon, players are fairly likely to kill them in one hit. The recommended place to kill cows is at the Lumbridge cow field. It is most efficient to kill one cow, then another, and then loot the first cow's hide."
+  },
+  "mine-iron-dwarven": {
+   "about": "Iron ore is always in demand due to iron and steel bars use in Smithing. There are many locations to mine iron ore, but the best free-to-play location is in the Dwarven Mine or the Mining Guild if you have 60 Mining. The closest bank is Falador east bank for both locations. Using the Mining Guild yields approximately 700 ores per hour compared to the 560 of Dwarven Mine."
+  },
+  "mine-coal-dwarven": {
+   "about": "Coal ore is an ore always in demand, due to its importance in Smithing. There are many locations to mine coal ore, but the best non-members location to mine it is in the Dwarven Mine, which can be accessed from a building north-east of Falador. Players are recommended to have Combat level over 65 to prevent the King scorpions and normal scorpions from being aggresive. Players can also find uncut gems while mining, which can increase profit."
+  },
+  "chop-oak-draynor": {
+   "about": "Depending on Woodcutting levels and equipped axe, players can chop 500–1,100 oak logs ( – coins, respectively) per hour. The best place to chop oak trees in F2P is Draynor Village. There is an oak tree just east of the bank. Since oak trees regenerate very quickly, there is not much downtime."
+  },
+  "chop-yew-edgeville": {
+   "about": "Yew logs are the most valuable free to play logs. The best places for non-members to chop yew trees are Edgeville near the dungeon entrance, and east of the Grand Exchange. To maximize profit and obtain lots of anima-infused bark, you will want to chop with other players at these locations and do Forestry events. The F2P Forestry world tends to have the highest player counts and the lowest ratio of bots."
+  },
+  "fish-lobster-musa": {
+   "about": "Fishing lobsters at a fairly high level between level 40 and 62 will bring players, especially non-members, a good chunk of money. Non-members can catch raw lobsters on Musa Point by heading to Port Sarim with a lobster pot and gold for fare. Speaking to the Seamen, they will ferry you to Musa Point where you can head north-west to reach the fishing pier."
+  },
+  "collect-iron-al-kharid": {
+   "about": "Collected ores can be sold on the Grand Exchange. This method earns approximately per hour."
+  },
+  "oziach-shields": {
+   "about": "After completing the quest Dragon Slayer I, Oziach will sell anti-dragon shields at his shop. He has 35 shields in stock, of which 26 can be bought for. The amount of shields currently in stock does not matter, as Oziach restocks shields at an extremely fast rate and will be full 99% of the time. This method is on running shields from Oziach to the bank repeatedly and later selling them on the Grand Exchange for profit."
+  },
+  "smelt-steel-bars": {
+   "about": "Steel bars are frequently traded due to its use in smithing steel equipment. The best furnace for F2P players to smelt steel is at the furnace in Edgeville as it is the closest furnace to a bank in F2P. Players can smelt and bank up to 775 or more steel bars per hour."
+  },
+  "pie-shells": {
+   "about": "Processing pie shells can be a profitable free-to-play method of making money. After buying a large quantity of pastry dough and pie dishes, the procedure is as follows: Keep in mind that your rate will be limited by the buying limit of pie dishes being only 500, so you may want to stock up ahead of time."
+  },
+  "feather-packs": {
+   "about": "Gerrant's Fishy Business carries feather packs starting at coins each. Purchase 10 feather packs, open 1 and let the rest open automatically. Once they are done the stock will be 100 again to repeat. Purchasing 10 at a time saves money as the price increases coins per pack purchased, for an average price of coins per pack."
+  },
+  "jug-packs": {
+   "about": "Fortunato's Wine Shop carries jug packs starting at coins each. Purchase 5 jug packs, open all 5 and hop worlds, or wait until a full inventory to open. Purchasing 5 packs at a time costs coins. To maximise profit, the jugs must be sold on the Grand Exchange at a price of coins at the minimum, though they can be sold for 2 coins at a very small profit."
+  },
+  "kebabs-al-kharid": {
+   "about": "Go to the building just north of the Al Kharid bank where Karim is located: After filling your inventory, run to the nearby bank and deposit all of your kebabs. Done efficiently, each round trip will take roughly ~1m24s. Later, sell your kebabs on the Grand Exchange for profit."
+  },
+  "fill-jugs-falador": {
+   "about": "You only have to use one container then your character will automatically fill the rest, then go back and deposit the filled containers into the bank and take out more empty containers. After this, sell the filled containers on the Grand Exchange, then buy more empty containers and repeat. A teleport to Varrock (Chronicle) would be recommended to get to the Grand Exchange faster, and using the Falador Teleport spell to get back would also be recommended."
+  },
+  "pizza-bases": {
+   "about": "This guide uses jugs of water as they are the most traded source of water on the Grand Exchange. It is sometimes more profitable to use a bowl of water or a bucket of water, but fulfilling the buy orders and selling the empty containers can be difficult. Pizza bases, empty Jugs, and empty pots will almost never sell immediately for the shown Grand Exchange price, so profit may be lowered if you want instant money. The procedure is as follows:"
+  },
+  "berry-pies": {
+   "about": "Processing uncooked berry pies can be a profitable free-to-play method of making money. After buying a large quantity of pie shells and redberries, the procedure is as follows:"
+  },
+  "meat-pies": {
+   "about": "Processing uncooked meat pies can be a profitable free-to-play method of making money. After buying a large quantity of pie shells and cooked meat, the procedure is as follows:"
+  },
+  "apple-pies": {
+   "about": "Processing uncooked apple pies can be a profitable free-to-play method of making money. After buying a large quantity of pie shells and cooking apples, the procedure is as follows:"
+  },
+  "smelt-silver-bars": {
+   "about": "Smelting silver ore requires 20 Smithing. It is recommended to use the Edgeville furnace, as it is the closest one to a bank without requirements. The cost of one ore is and each silver bar costs, yielding a profit of. Each inventory will take approximately 80–90 seconds to complete, for up to 40–45 trips per hour."
+  },
+  "grind-chocolate": {
+   "about": "Chocolate dust is used to create energy potions. Because these are often used to train Herblore, and grinding chocolate bars gives no experience, many players avoid the tedium of making chocolate dust and buy it directly from the Grand Exchange. This opens up an opportunity to grind chocolate bars for profit."
+  },
+  "chocolate-cakes": {
+   "about": "Chocolate cakes are one of the highest-healing free-to-play foods. They are useful in skilling activities where the player takes moderate damage and wants to remain at low health, such as the Brimhaven Agility Arena. It is usually profitable to add chocolate bars to cakes, and it gives some Cooking experience. Before attempting this in bulk, make a small test batch to confirm the Grand Exchange prices are accurate."
+  },
+  "anchovy-pizzas": {
+   "about": "Anchovy pizzas are the highest-healing food in free-to-play, and they are commonly used in combat situations where healing is essential. It is usually quite profitable to add anchovies to plain pizza, and it also gives a substantial amount of Cooking experience. Each inventory of 14 pizzas can be made in ~20 seconds, and up to 2,500 pizzas can be made in a single hour."
+  }
+ },
  "notBuilt": [
   {
    "id": "high-alching-profitable-free-to-play-items",
    "title": "High alching profitable free-to-play items",
    "reason": "no pace"
-  },
-  {
-   "id": "crafting-diamond-jewellery",
-   "title": "Crafting diamond jewellery",
-   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "stringing-amulets",
@@ -7737,6 +8050,11 @@
   {
    "id": "crafting-ruby-jewellery",
    "title": "Crafting ruby jewellery",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "crafting-diamond-jewellery",
+   "title": "Crafting diamond jewellery",
    "reason": "nothing sellable is made every unit"
   },
   {

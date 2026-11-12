@@ -8,7 +8,10 @@ import { ALL_SKILLS } from '../../market/tradeRestriction';
 import type { Catalogue, Flow, FundingMethod, Place } from './types';
 
 const authored = catalogueJson as unknown as Catalogue;
-export const CATALOGUE: Catalogue = { ...authored, methods: [...authored.methods, ...(fundingWikiJson as unknown as Catalogue).methods] };
+const wiki = fundingWikiJson as unknown as Catalogue & { extras?: Record<string, Pick<FundingMethod, 'about' | 'tips'>> };
+// A hand-modelled method keeps its own steps; its wiki guide's own words (why it pays, its tips) come with the wiki build.
+const withExtras = (m: FundingMethod): FundingMethod => ({ ...wiki.extras?.[m.id], ...m });
+export const CATALOGUE: Catalogue = { ...authored, methods: [...authored.methods.map(withExtras), ...wiki.methods] };
 export const METHODS: readonly FundingMethod[] = CATALOGUE.methods;
 const BY_ID = new Map(METHODS.map((m) => [m.id, m]));
 

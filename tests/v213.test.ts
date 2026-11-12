@@ -74,7 +74,7 @@ describe('the combat level', () => {
   });
 });
 
-import { mmgFields, parseSkillsHtml } from '../scripts/data/money-parse';
+import { detailsOf, mmgFields, parseSkillsHtml } from '../scripts/data/money-parse';
 
 const scp = (skill: string, level: string, tail = '') =>
   `<span class="scp" data-skill="${skill}" data-level="${level}" style="position:relative"><span class="mw-default-size"><a href="/w/${skill}" title="${skill}"><img alt="${skill}" src="x.png" /></a></span> ${level} </span>${tail}`;
@@ -92,6 +92,28 @@ describe('wiki parsing for earning methods', () => {
     expect(f.activity).toBe('Tanning [[cowhide]]');
     expect(f.skill).toBe('{{SCP|Crafting|{{#var:skill}}}}');
     expect([f.input2, f.input3]).toEqual(['Cowhide', 'Energy potion(4)']);
+  });
+
+  it('the guide\'s own method from its Details: numbered steps and tips, images and computed figures dropped (2.93 owner: guides said nothing)', () => {
+    const ruby = detailsOf(`[[File:Crack the Clue III - emote order.png|thumb|The order of [[emotes]] performed.]]
+[[Ruby rings]] have a consistent demand ({{Coins|{{GEP|Ruby ring}}}}) in the player market.
+* You must complete the first step of the [[Robes_of_Ruin#1|robes of ruin]] to enter the vault.
+# Go to the [[Varrock West Bank]] basement and stand by the vault gates.
+# Perform the [[emotes]] in the following order: [[Panic]], [[No]].
+# Hop worlds
+==Tips==
+* Teleporting away also works.`);
+    expect(ruby.steps).toEqual(['Go to the Varrock West Bank basement and stand by the vault gates.', 'Perform the emotes in the following order: Panic, No.', 'Hop worlds']);
+    expect(ruby.tips).toEqual(['You must complete the first step of the robes of ruin to enter the vault.', 'Teleporting away also works.']);
+    expect(ruby.about).toBe('Ruby rings have a consistent demand in the player market.');
+  });
+
+  it('a method written as prose: its instructions become the steps, the rest stays as how it works; nothing is invented', () => {
+    const garlic = detailsOf(`Go upstairs in [[Morgan]]'s house in [[Draynor Village]] and find the cupboard. Open and search the cupboard repeatedly to get [[garlic]]. [[Bank]] a full inventory in Draynor bank to the south. It respawns at once.`);
+    expect(garlic.steps).toEqual(["Go upstairs in Morgan's house in Draynor Village and find the cupboard.", 'Open and search the cupboard repeatedly to get garlic.', 'Bank a full inventory in Draynor bank to the south.']);
+    expect(garlic.about).toBe('It respawns at once.');
+    expect(detailsOf("'''The profit rate assumes {{#var:kph}} kills per hour.''' Imps have 8 [[Hitpoints]].")).toEqual({ steps: [], tips: [], about: 'Imps have 8 Hitpoints.' });
+    expect(detailsOf('')).toEqual({ steps: [], tips: [], about: null });
   });
 });
 

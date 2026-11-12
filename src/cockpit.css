@@ -177,6 +177,7 @@
 .money-checks li.is-unknown .money-check-mark { color: var(--warn); }
 .money-checks li.is-info { color: var(--muted); }
 .money-guide { margin: 0; padding-left: 1.4rem; display: grid; gap: 2px; }
+.money-tips { margin: 0; padding-left: 1.2rem; display: grid; gap: 3px; }
 .money-calc > summary { cursor: pointer; width: fit-content; }
 .money-goal { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; margin: 6px 0 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .money-goal p { margin: 0; }

@@ -122,6 +122,10 @@ export interface FundingMethod {
   /** For a self-supply method: the items it provides for the preparation shortfall instead of selling. */
   supplies?: ItemRef[];
   guide: GuideAction[];
+  /** Why the method pays, in the source guide's words (its first paragraph). */
+  about?: string;
+  /** The source guide's own tips and warnings, in its words: what the steps do not say. */
+  tips?: string[];
   sources: Source[];
   verifiedAt: string;
   confidence: Confidence;

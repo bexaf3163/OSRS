@@ -156,6 +156,15 @@ async function moneyScenarios(browser: Browser) {
     const details = await page.locator('.money-row .money-details').first().innerText();
     expect(/What it needs/.test(details) && /Where and how/.test(details) && await page.locator('.money-row .money-checks li').count() >= 2, `money (${width} px): the details list the requirements and the way`);
     expect(await page.locator('.money-row .money-calc').first().evaluate((d) => !(d as HTMLDetailsElement).open), `money (${width} px): sources and calculations stay folded`);
+    // 2.94 (owner: the guides said a lot and explained nothing): every opened guide's steps are its own, never the bare outline alone,
+    // and no guide asks you to bring what it makes.
+    const guideCheck = await page.locator('.money-row .money-details').first().evaluate((el) => ({
+      steps: [...el.querySelectorAll('.money-guide li')].map((li) => li.textContent ?? ''),
+      bring: [...el.querySelectorAll('.money-checks li')].map((li) => li.textContent ?? '').filter((t) => t.includes('Bring:')),
+      title: el.closest('.money-row')?.querySelector('.money-row-title')?.textContent ?? '',
+    }));
+    expect(guideCheck.steps.length >= 3 && !guideCheck.bring.some((b) => b.toLowerCase().includes(guideCheck.title.toLowerCase().replace(/^(collecting|buying|making) /, '').slice(0, 6))),
+      `money (${width} px): the opened guide (${guideCheck.title}) lists its steps and never asks to bring its own product (${guideCheck.steps.slice(0, 3).join(' / ')})`);
     expect((await posts()).filter((p) => p.path === '/nav-target').length === navBefore && (await savedPlans()).length === 0, `money (${width} px): browsing sets no arrow and starts nothing`);
     await rows.first().locator('.money-row-head').click();
 

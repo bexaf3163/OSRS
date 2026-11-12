@@ -143,6 +143,7 @@ function Details({ e, m, whyShown = false }: { e: MethodEvaluation; m: MoneyScre
   return (
     <div className="money-details">
       <p className="small">{method.summary}</p>
+      {method.about && <p className="small">{method.about}</p>}
       {why && <p className="small"><strong>Why:</strong> {why}</p>}
       <p className="small subhead">What it needs</p>
       <ul className="money-checks small">
@@ -151,6 +152,10 @@ function Details({ e, m, whyShown = false }: { e: MethodEvaluation; m: MoneyScre
       <p className="small subhead">Where and how</p>
       <p className="small">{method.spot.label}; bank: {method.bank.label}.</p>
       <ol className="small money-guide">{guide.map((g) => <li key={g.kind + g.text}>{g.text}</li>)}</ol>
+      {method.tips?.length ? <>
+        <p className="small subhead">Tips</p>
+        <ul className="small money-tips">{method.tips.map((t) => <li key={t}>{t}</li>)}</ul>
+      </> : null}
       <p className="small subhead">Money</p>
       <Economics e={e} earn />
       {drops.length > 0 && <ul className="small money-drops">{drops.map((d) => <li key={d.text}>{d.text}</li>)}</ul>}

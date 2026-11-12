@@ -11,7 +11,7 @@ import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Flow, FundingMethod, GuideAction, Place, Requirement } from '../../src/domain/economy/funding/types.ts';
 import { articleMapPoint, mapTemplatePoints, representativePoint, templates, type WikiPoint } from '../../src/services/wikiApi.ts';
-import { mmgFields, parseSkillsHtml, plain, wikiPlain } from './money-parse.ts';
+import { detailsOf, mmgFields, parseSkillsHtml, plain, wikiPlain } from './money-parse.ts';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const OUT = `${root}src/data/generated/fundingWiki.json`;
@@ -88,11 +88,18 @@ function firstOption(s: string): string {
 }
 
 /** An expected amount per unit as a flow: at 1/16 or more it is counted on, below that it is a drop chance (upside). */
+// The app's own item database names an item the same everywhere: a rename on the price list (Rune sword → Rune shortsword) does not split it.
+const OWN = new Map(read<{ id: number; nameEn: string }[]>('src/data/generated/f2p-items.json').map((i) => [i.id, i.nameEn]));
+
+/** "steps 1-4" → "steps 2-5" when one step stands before the guide's own list. */
+const shiftSteps = (text: string, by: number) => (by ? text.replace(/\b(steps?)\s+(\d+)(?:\s*([-–]|to|and)\s*(\d+))?/gi,
+  (_, w: string, a: string, sep?: string, b?: string) => `${w} ${Number(a) + by}${b ? `${sep === '-' || sep === '–' ? '-' : ` ${sep} `}${Number(b) + by}` : ''}`) : text);
+
 function flowOf(name: string, perUnit: number): Flow | null {
   const item = name.toLowerCase() === 'coins' ? { id: 995, name: 'Coins' } : ITEMS.get(name.toLowerCase());
   if (!item || !(perUnit > 0)) return null;
   const stack = STACKS.test(item.name) ? { stack: true } : {};
-  const ref = { id: item.id, name: item.name };
+  const ref = { id: item.id, name: OWN.get(item.id) ?? item.name };
   return perUnit >= 1 / 16
     ? { item: ref, qty: Math.round(perUnit * 1e4) / 1e4, ...stack }
     : { item: ref, qty: 1, chance: [1, Math.round(1 / perUnit)], ...stack };
@@ -138,6 +145,17 @@ for (const [, row] of listHtml.matchAll(/<tr[^>]*>(.*?)<\/tr>/gs)) {
   entries.push({ title: plain(cells[0]), page: decodeURIComponent(href[1]).replace(/_/g, ' '), members: plain(cells[5]).length > 0, skillsHtml: cells[2] });
 }
 console.log(`In the list: ${entries.length}`);
+// The list shows a guide only while today's prices put it there, but the app ranks every method by live prices itself: a method built
+// before stays in the catalogue while its guide page exists, with its levels from the last list that showed it.
+const before = (() => { try { return read<{ methods: FundingMethod[] }>('src/data/generated/fundingWiki.json').methods; } catch { return []; } })();
+const kept = new Map<string, Requirement[]>();
+for (const m of before) {
+  const page = m.sources[0]?.title;
+  if (!page || entries.some((e) => e.page === page || slug(e.title) === m.id)) continue;
+  entries.push({ title: m.title, page, members: false, skillsHtml: '' });
+  kept.set(m.id, m.requirements.filter((r) => r.kind === 'level'));
+}
+if (kept.size) console.log(`Kept from the last build (not in today's list): ${[...kept.keys()].join(', ')}`);
 
 // --- 2. One method from each card the ledger leaves to the wiki
 const covered = new Set(coverage.entries.map((e) => e.id));
@@ -189,7 +207,7 @@ for (const e of entries) {
   const unsold = ins.filter((i) => !ITEMS.has(i.name.toLowerCase())).map((i) => i.name);
 
   const requirements: Requirement[] = [];
-  for (const r of parseSkillsHtml(e.skillsHtml)) {
+  for (const r of kept.get(id)?.flatMap((q) => (q.kind === 'level' ? [{ skill: q.skill, level: q.level }] : [])) ?? parseSkillsHtml(e.skillsHtml)) {
     if (!requirements.some((q) => q.kind === 'level' && q.skill === r.skill)) requirements.push({ kind: 'level', skill: r.skill, level: r.level });
   }
   // A combat card lists the levels of every style it suits: melee when it names melee levels (Ranged and Magic are then the
@@ -207,7 +225,9 @@ for (const e of entries) {
   const levels = new Set(requirements.flatMap((r) => (r.kind === 'level' ? [r.skill] : [])));
   if (levels.has('mining')) requirements.push({ kind: 'item', role: 'tool', any: [], family: 'pickaxe' });
   if (levels.has('woodcutting')) requirements.push({ kind: 'item', role: 'tool', any: [], family: 'axe' });
-  const bring = [field('item'), ...unsold].filter(Boolean).join(', ');
+  // What to bring: the card's item field and the unsellable inputs, never the product itself (some cards name the collected item there).
+  const made = new Set(outs.map((o) => o.name.toLowerCase()));
+  const bring = [...field('item').split(/,\s*/).filter((n) => n && !made.has(n.toLowerCase())), ...unsold].join(', ');
   if (bring) requirements.push({ kind: 'check', text: `Bring: ${bring}` });
   if (field('other')) requirements.push({ kind: 'check', text: field('other') });
   const location = f.location ?? '';
@@ -222,22 +242,33 @@ for (const e of entries) {
 
   const activity = wikiPlain(f.activity);
   const unit = combat ? 'kill' : !perKill || (main && !main.ph && main.n === 1) ? main!.name.toLowerCase() : 'action';
+  // The guide's own method (its Details field) when it gives one: its numbered steps in order, its first one the walk when it is one.
+  // Banking and selling are added only when its steps do not say them. Without a method, the plain outline.
+  const details = detailsOf(f.details ?? '');
+  const own = details.steps.length >= 2 ? details.steps : null;
+  const walks = own && /^(go|walk|run|head|travel|teleport|take the|enter)\b/i.test(own[0]);
+  const says = (re: RegExp) => Boolean(own?.some((s) => re.test(s)));
   const guide: GuideAction[] = [
     ...(combat ? [{ kind: 'prepare' as const, text: 'Take food and your best gear from the bank.' }] : []),
     ...(inputs.length ? [{ kind: 'prepare' as const, text: `Buy ${inputs.map((i) => i.item.name).join(', ')} at the Grand Exchange.` }] : []),
-    { kind: 'travel', text: `Go to ${label}.`, place: spot },
-    { kind: 'perform', text: `${activity} until the bag is full.` },
-    { kind: 'bank', text: `Bank at ${bank.label}.` },
-    { kind: 'sell', text: 'Sell what you made at the Grand Exchange.' },
+    { kind: 'travel', text: walks ? own![0] : `Go to ${label}.`, place: spot },
+    // "Repeat steps 1-4" counts the guide's own list: the steps placed before it shift its numbers.
+    ...(own ? own.slice(walks ? 1 : 0).map((text) => ({ kind: 'perform' as const, text: shiftSteps(text, (combat ? 1 : 0) + (inputs.length ? 1 : 0) + (walks ? 0 : 1)) }))
+      : [{ kind: 'perform' as const, text: `${activity} until the bag is full.` }]),
+    ...(!own || !says(/\bbank/i) ? [{ kind: 'bank' as const, text: `Bank at ${bank.label}.` }] : []),
+    ...(!says(/grand exchange|\bsell/i) ? [{ kind: 'sell' as const, text: 'Sell what you made at the Grand Exchange.' }] : []),
     { kind: 'restock', text: 'Buy the supplies you were short of, then go back to your step.' },
   ];
+  const place = wikiPlain(location);
   const intensity = (['low', 'moderate', 'high'] as const).find((k) => (f.intensity ?? '').toLowerCase().startsWith(k)) ?? 'moderate';
   const category = (f.category ?? '').toLowerCase();
   methods.push({
     id, title: e.title,
     family: combat ? 'combat' : category.startsWith('collect') ? 'collecting' : category.startsWith('process') ? 'processing' : inputs.length ? 'production' : 'gathering',
     access: 'f2p', repeatable: true,
-    summary: `${activity}. ${wikiPlain(location)}`.slice(0, 200),
+    summary: (!place || activity.toLowerCase().includes(place.toLowerCase()) ? activity : `${activity}. ${place}`).slice(0, 200),
+    ...(details.about ? { about: details.about } : {}),
+    ...(details.tips.length ? { tips: details.tips.slice(0, 8) } : {}),
     requirements, inputs, outputs,
     rate: {
       unit,
@@ -251,7 +282,7 @@ for (const e of entries) {
     risk: wild ? 'high' : combat ? 'moderate' : 'low',
     intensity,
     guide,
-    sources: [{ url: `https://oldschool.runescape.wiki/w/${e.page.replace(/ /g, '_')}`, title: e.page, ...(page.revid ? { revision: page.revid } : {}), retrievedAt: TODAY, used: 'pace, inputs, outputs, levels, quests and place' }],
+    sources: [{ url: `https://oldschool.runescape.wiki/w/${e.page.replace(/ /g, '_')}`, title: e.page, ...(page.revid ? { revision: page.revid } : {}), retrievedAt: TODAY, used: 'pace, inputs, outputs, levels, quests, place and the method' }],
     verifiedAt: TODAY,
     confidence: 'LOW',
     assumptions: [
@@ -261,7 +292,17 @@ for (const e of entries) {
 }
 
 methods.sort((a, b) => a.id.localeCompare(b.id));
+
+// --- 3. The hand-modelled methods keep their own steps; their wiki guides add why they pay and their tips.
+const extras: Record<string, { about?: string; tips?: string[] }> = {};
+for (const m of read<{ methods: FundingMethod[] }>('src/data/authored/fundingMethods.json').methods) {
+  const guide = m.sources.find((src) => /^Money making guide\//.test(src.title));
+  const page = guide && await wikitext(guide.title);
+  if (!page) continue;
+  const d = detailsOf(mmgFields(page.text).details ?? '');
+  if (d.about || d.tips.length) extras[m.id] = { ...(d.about ? { about: d.about } : {}), ...(d.tips.length ? { tips: d.tips.slice(0, 8) } : {}) };
+}
 mkdirSync(dirname(OUT), { recursive: true });
-writeFileSync(OUT, `${JSON.stringify({ version: 1, generatedAt: TODAY, source: 'https://oldschool.runescape.wiki/w/Money_making_guide/Free-to-play', methods, notBuilt: problems }, null, 1)}\n`);
+writeFileSync(OUT, `${JSON.stringify({ version: 1, generatedAt: TODAY, source: 'https://oldschool.runescape.wiki/w/Money_making_guide/Free-to-play', methods, extras, notBuilt: problems }, null, 1)}\n`);
 console.log(`Written ${methods.length} methods to ${OUT}`);
 if (problems.length) console.log(`Not built (${problems.length}):\n${problems.map((p) => `${p.title}: ${p.reason}`).join('\n')}`);
