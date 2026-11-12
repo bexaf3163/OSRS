@@ -220,7 +220,7 @@ Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3
 
 Known limits: fees are bounded allowances; gathering competition, Forestry and Musa Point boat banking are approximations; altar timing assumes the supported exit model; food estimates are no survival guarantee. Alchemy, enchanting and splashing keep target/setup/budget safeguards. No implied parity for unsupported Members or HDOS mechanics. Facts checked against the OSRS Wiki on 2026-10-31.
 
-## Current verification — encounters, tools, fresh-account planning (2.86.0–2.94.4)
+## Current verification — encounters, tools, fresh-account planning (2.86.0–2.94.5)
 
 Kept: `planning/encounter/{setups,strategy}.ts` compares bounded preparations; `executionStep` carries the kit; forecasts add damage-earned HP.
 
@@ -230,7 +230,7 @@ Kept: `planning/encounter/{setups,strategy}.ts` compares bounded preparations; `
 - `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`. `trainingKit.equipmentLine` states the tool/kit decision on Skills; F2P notes are one-line checkpoints, no Wiki rates. Weapons: one skill's XP.
 - Game line: engine's bank/drop choice; plaque shows the stamp alone. Closed optional quests are set aside (`setAsideQuests`); after all F2P quests, Path ranks `f2pCheckpoints` with Follow. One-step quests' stage checks point the game at the step. Path rows name unknown parts.
 
-Gear has bows/ranged armour; a worn bow (fitting arrows) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set arrows needed. Drops weigh cooking burns. Earning guides read the Wiki Details (`detailsOf`); Ledger icons replace colour emoji. F2P skill groups focus a checkpoint still ahead. Verified: 2,618 units, 797 browser checks, route/light gates; update −3% versus 2.94.2.
+Gear has bows/ranged armour; a worn bow (fitting arrows) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set arrows needed. Drops weigh cooking burns. Earning guides read the Wiki Details (`detailsOf`); Ledger icons replace colour emoji. F2P skill groups focus a checkpoint still ahead. Verified: 2,617 units, 797 browser checks, route/light gates; update +3% versus 2.94.4.
 
 Limits: armour by melee defence; Wiki bands for quest work, minus the prepared fight. `gate:f2p`: 23/23 quests, no checks; time unknown on 1/211 turns. Later fights are proven by `encounterSetups`, a current one with pending kit by its setup; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece. Measured quest times need shared data.
 
