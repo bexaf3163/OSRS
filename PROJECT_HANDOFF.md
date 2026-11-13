@@ -1,6 +1,6 @@
 # OSRS Path — project handoff
 
-Updated 2026-11-10. **This file alone holds project rules, architecture, state, backlog and handoff.** Stable rules precede current state/verification. AGENTS.md/CLAUDE.md point here; README.md introduces the product.
+Updated 2026-11-13. **This file alone holds project rules, architecture, state, backlog and handoff.** Stable rules precede current state/verification. AGENTS.md/CLAUDE.md point here; README.md introduces the product.
 
 ## Documentation policy
 
@@ -19,19 +19,19 @@ Updated 2026-11-10. **This file alone holds project rules, architecture, state, 
 6. Purchases and gameplay stay manual. The program recommends, detects, records and guides; it never buys, moves, fights or eats for the player.
 7. Windows desktop only. No mobile development or phone-only QA. Keep desktop resizing, OS DPI and accessibility.
 8. Do not modify RuneLite Optimizer, PC-Tune or experimental graphics repositories in this work.
-9. Prioritize correctness, speed and simplicity. Replace retired behavior and remove its exclusive code, assets, settings and tests.
+9. Prioritize correctness, speed and simplicity; replace retired behavior (hygiene rule 6).
 
 ## Engineering and operating contract
 
 - English only for UI, comments, docs and communication, with canonical OSRS names. Correctness, full implementation, compatibility, accurate state and verification outrank token savings.
 - Inspect code and references before editing. Make focused changes, reuse registries and engines, keep working behavior, update every consumer together. No duplicate item database, bridge transport, state store or per-skill acquisition engine.
 - Preserve saves, profile identity, notes, skips, selected plans, completion conditions, item/task/step/phase IDs and explicit goals. A route skip is not proof of a game prerequisite. V14 may reorder independent quest objectives; mandatory authored intra-quest order and historical IDs remain protected.
-- UNKNOWN is not zero, owned, connected or logged in. Distinguish bag, noted, bank, worn and usable quantities, doses and accepted alternatives; allocate physical stock once; never let simulated future stats or gear overwrite observed state.
+- UNKNOWN (requirement 5) is also not connected or logged in. Distinguish bag, noted, bank, worn and usable quantities, doses and accepted alternatives; allocate physical stock once; never let simulated future stats or gear overwrite observed state.
 - The app reads stats, equipment, cash, inventory and bank where supported and labels unread or stale facts. Recommendations check real skill, equipment, quest, spell, account-mode, source/access and budget constraints, not just a level or bonus.
 - Preparation carries item, count, state, provenance, source, location, cost, priority, reason and carry/equip rules through one pipeline: bank withdrawal before repurchase, usable owned equivalents accepted, current-trip needs separate from future reserves.
 - Shopping uses central allocations, sources, quotes, fees and optionality: no double spending, fictitious proceeds, automatic GP spending or repurchase of confirmed owned items. Manual ownership stays where game data is missing.
 - Navigation has one current target; coordinate, floor, entrance, map, arrow, HUD and phase agree. Verify real transport eligibility, supplies and full detour cost; never invent coordinates or transports.
-- Desktop UI tests use isolated data. Codex runs no real-game tests; Claude does reachable acceptance. Never automate movement, combat, skilling, looting, eating, dialogue or item-use loops, or GP spending; earlier limited UI inspection is not permission for bot-like control.
+- Desktop UI tests use isolated data. Codex runs no real-game tests; Claude does reachable acceptance and never automates movement, combat, skilling, looting, eating, dialogue, item use or GP spending; earlier limited UI inspection is no permission for bot-like control.
 - External failures never crash the app or corrupt state. Keep actionable unavailable/retry states, operational logs, watchdogs and save recovery.
 - Keep updater digest/size validation, atomic writes, damaged/future-schema quarantine, pre-write external-revision guards, profile protection and backup receipts. No watchers, automatic merges or locks without a reproduced requirement.
 - Mode changes never reset progress. F2P-only plans never leak Members prerequisites; explicit alternate strategies carry their own. Unsupported mechanics and rates stay explicit.
@@ -45,18 +45,17 @@ Every fix, feature, removal or redesign (app, plugin, data, tests, CSS, docs, CI
 1. **Put it where it belongs:** `src/app` shell, `src/state` providers, hooks and storage-backed stores, `src/ui` and `src/ledger` shared pieces, `src/features/<page>`, `src/domain/<area>` engines, `src/services` IO, `src/data` typed access over JSON in `authored/` (by hand) and `generated/`. A unit test named after one module sits beside it; scenario, audit and golden tests stay in `tests/`, browser scenarios in `scripts/test/ui/scenarios/<feature>.ts`, scripts in one purpose folder of `scripts/` (`data` for generators, `check`, `test`, `release`, `dev`). No catch-all folder and none above 25 files, tests not counted. [`npm run check-structure`]
 2. **Size budget.** Soft 600, hard 1,000 lines for TS, Java and CSS. A touched file above 600 lines must not grow; split it by concern. No merging modules into big files and no one-line files without a reason (breaking a cycle is one). [check-structure]
 3. **One source of truth.** Versions change only through `npm run bump -- X.Y.Z "summary"`. Generated data comes only from the command `src/data/manifest.json` names for it, and code outside `src/data` imports data only through `src/data/index.ts`. Bridge payload fields are listed once in `tests/bridgeContract.test.ts`: tsc checks the list against `ActiveStepPayload`, that test checks every field the app sends is on it, and the plugin's `BridgeContractTest` matches its DTO fields to the generated copy. Page links come only from `hrefTo` in `src/domain/pages/pages.ts` and window-storage keys only from `STORAGE_KEYS` in `src/domain/persistence/storageKeys.ts`. [check-structure]
-4. **One-way layers, no cycles.** `app → features → ui/ledger → state → services → domain → data/types`. Domain areas depend bottom up: persistence and text, items, player and travel, market and quests, combat, training, prep, economy, readiness, guide. A feature may reuse another feature's component, never back. `domain` has no React and no network or desktop IO. No import cycles between files or folders. Type-only imports use `import type` (under `verbatimModuleSyntax`, `import { type X }` still loads the module). Modules that Node loads from `scripts/` or `electron/` keep the extension on relative imports. [check-structure, strict in CI]
+4. **One-way layers, no cycles.** `app → features → ui/ledger → state → services → domain → data/types`. Domain areas depend bottom up: persistence and text, items, player and travel, market and quests, combat, training, prep, economy, readiness, guide. A feature may reuse another feature's component, never back. `domain` has no React and no network or desktop IO. Type-only imports use `import type` (under `verbatimModuleSyntax`, `import { type X }` still loads the module). Modules that Node loads from `scripts/` or `electron/` keep the extension on relative imports. [check-structure, strict in CI]
 5. **Reuse before adding.** Extend the existing engine, parser, normalizer, allocator or component. A second implementation of a concept is a defect.
 6. **Remove in the same change.** Retiring something deletes its exclusive code, CSS, tests, fixtures, assets, data and docs in the same commit. [`npm run knip`, `npm run dead-css`]
 7. **CSS.** Ledger CSS holds tokens, base and fonts only. No new `:root:root`, `:root .la-*` overrides or `!important`. A CSS or layout change needs a base-versus-head screenshot diff with no unexplained pixels (`npm run perf -- <repo> dist <port> shots`, then `npm run pixeldiff`). [dead-css]
 8. **Tests.** Wait for conditions, never fixed sleeps (except a commented product timer); browser scenarios use `settle(page)`, which waits until no short timer, request or React work is pending [check-structure]. Never weaken or delete an assertion to make a change pass; adapt an obsolete one to the surviving behavior. Unit test files that mock modules or replace globals run isolated automatically (`vitest.config.ts`). Generated fixtures and documents come only from `npm run fixtures`.
 9. **RuneLite plugin.** One HUD. No per-tick or per-frame scans, JSON parsing, API reads or allocations without a dirty flag; heavy planning stays in TypeScript and overlays show only when relevant. Plugin-only assets (the HUD fonts) live in `runelite-bridge/src/main/resources/`, not `public/`.
-10. **Performance does not regress.** For engines, providers or bridge handling, run `npm run perf -- <repo> dist <port> timing` twice on base and head and compare with `scripts/test/perf-compare.mjs`; over +10% per-update or start-up main-thread time needs an owner decision. Memoize by identity; no expensive work in render.
-11. **One contract document,** as the documentation policy says.
-12. **Verify before merge.** `npm run verify:quick` on every change; all gates before a release. Report skipped or unreachable gates; never claim them as passed.
-13. **Dependencies and assets.** No new dependency, font, image or data file without a consumer; remove it with its last consumer. [knip]
+10. **Performance does not regress.** For engines, providers or bridge handling, run `npm run perf -- <repo> dist <port> timing` on base and head in both orders (identical builds read up to +10% script and +36% blocking when second) and compare with `scripts/test/perf-compare.mjs`; if the orders disagree, CPU-profile unminified builds; over +10% per-update or start-up main-thread time needs an owner decision. Memoize by identity; no expensive work in render.
+11. **Verify before merge.** `npm run verify:quick` on every change; all gates before a release. Report skipped or unreachable gates; never claim them as passed.
+12. **Dependencies and assets.** No new dependency, font, image or data file without a consumer; remove it with its last consumer. [knip]
 
-Audit lessons: `runelite-bridge/build.gradle` copies `src/data/` files; `public/fonts/OFL.txt` licenses the Ledger fonts; adapt tests that assert on retired things; prove CSS removals with a pixel diff; time everything twice and page switches with `SWITCH_IDLE=2500`.
+Audit lessons: `runelite-bridge/build.gradle` copies `src/data/` files; `public/fonts/OFL.txt` licenses the Ledger fonts; time page switches with `SWITCH_IDLE=2500`.
 
 ## How the system is connected
 
@@ -108,11 +107,10 @@ Cross-page activity selection is `resolveActiveActivity` in `src/domain/quests/a
 
 ### Extending content without repeating old fixes
 
-1. Add factual data to the existing registry with real prerequisites, kit and mechanics; a name, level and Wiki rate are not a model.
-2. Reuse the owning adapter. For a new mechanic, extend the shared contract first, with a synthetic-content regression.
-3. trainingRouter selects phases and `preparationNeeds` resolves the current kit; methodStep projects it into the requirements, map target and goal demand of the normal lifecycle.
-4. Keep optional future-bank demand separate from current carrying and readiness. goalNeeds, goalItemsRequired and `aggregateShopping(wholeGoal)` are forecasts, not budget-safe stocking. prepRoute/prepQueue keep cancellation, ownership observation and restoration.
-5. Verify the same action, kit and goal through Skills, Path, preparation, Shopping/funding and the HUD; update coverage notes and the live matrix.
+1. Add factual data with real prerequisites, kit and mechanics to the existing registry (a name, level and Wiki rate are not a model) and reuse the owning adapter; a new mechanic first extends the shared contract, with a synthetic-content regression.
+2. trainingRouter selects phases and `preparationNeeds` resolves the current kit; methodStep projects it into the requirements, map target and goal demand of the normal lifecycle.
+3. Keep optional future-bank demand separate from current carrying and readiness. goalNeeds, goalItemsRequired and `aggregateShopping(wholeGoal)` are forecasts, not budget-safe stocking. prepRoute/prepQueue keep cancellation, ownership observation and restoration.
+4. Verify the same action, kit and goal through Skills, Path, preparation, Shopping/funding and the HUD; update coverage notes and the live matrix.
 
 ### Important shared contracts and fixes to preserve
 
@@ -123,7 +121,7 @@ Cross-page activity selection is `resolveActiveActivity` in `src/domain/quests/a
 - Magic and combat gear use the complete damage/recovery model; a bigger bonus proves nothing and Strength versus Power amulets are judged on the real setup. Preparation accepts equivalent-or-better gear, never forcing an exact item or full black set.
 - Model food, ammunition, potions, damage in and out, eating, banking and supply costs; killability is not efficiency. Never restore fixed claims like "20 fish always covers 60 kills". Food (2.82.1): required only at a personal quest-fight estimate; training, unestimated fights and partial-estimate surplus are labelled suggestions; the guide amount is never a floor.
 - Quest-XP alternatives use existing guides and prerequisites; no reward before observed or manual completion, and no completed or skipped quest back into training. Default F2P Prayer and Runecraft guidance is not a compulsory grind; explicit custom training stays distinct.
-- Stale async results never overwrite newer profile, selection, goal or live state. Changed requirements use the existing review/migration mechanisms, never erased marks or silent credit; old route-reorder proposals are not instructions.
+- Stale async results never overwrite newer profile, selection, goal or live state. Changed requirements use migrations, never erased marks or silent credit; old route-reorder proposals are not instructions.
 - A teleport stock-up suggestion needs the full recipe and a feasible acquisition trip, counts the source/bank detour, and checks spellbook, level, membership, cooldown/charges and the equipped capability.
 - Preparation UNKNOWN (2.81.17, `prepRoute`/`prepPlan`): required unread facts never mark READY, finish a detour or invent tasks; required non-item gates count toward UNKNOWN, item/coin uncertainty counts once, optional unknowns never block, and readiness views hide a misleading ready percentage.
 - Stock-up (2.81.12): trainingStockNeeds → TrainingPick.stockNeeds → Step.stockItems → stockUpShopping covers the current kit and the next two distinct kit/recipe configurations, at most two future reusable items and six optional rows. Extras need an already-needed GE purchase, live connection, bank read this session, known cash and usable quotes. Mandatory purchases/fares and a full refill are reserved first, gear before extra consumables, within GE limits. Future stock never blocks readiness, completion or funding, forces trips, changes targets or rebuys owned items. The plugin gets the same GE quantities; identical steps count once. Extra consumables are quantified only for supported processing and ordinary F2P Ranged (no invented Magic/melee/mixed quantities or optional potions; refills reserved in doses).
@@ -133,13 +131,13 @@ Cross-page activity selection is `resolveActiveActivity` in `src/domain/quests/a
 
 ## Accepted design and cleanup boundaries
 
-The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **Cinzel** headings and **EB Garamond** text (subsets in `src/ledger/fonts`). The HUD and every plugin plate use the Ledger look in Cinzel and EB Garamond. Design entry points: `src/ledger/{Chrome.tsx,parts.tsx,icons.tsx,ledger.css,app.css,extras.css,fonts.css}` and `src/app/App.tsx`. Older CSS (`styles.css`, `clear-path.css`, `modern-path.css`, `cockpit.css`) still styles shared components; check consumers and pixel-diff before removing more.
+The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **Cinzel** headings and **EB Garamond** text (subsets in `src/ledger/fonts`). The HUD and every plugin plate share that look and those fonts. Design entry points: `src/ledger/{Chrome.tsx,parts.tsx,icons.tsx,ledger.css,app.css,extras.css,fonts.css}` and `src/app/App.tsx`. Older CSS (`styles.css`, `clear-path.css`, `modern-path.css`, `cockpit.css`) still styles shared components; check consumers and pixel-diff before removing more.
 
 2.81.11 to 2.81.13 cleanup decisions that stay:
 
 - Removed: appearance controls, font size, Compact modes, the Inspector display mode, manual zoom (now `window-zoom.cjs`), the Copy Report UI, the Journal stage-goal matrix, Settings Training/App and helper switches (always on). Kept: OS DPI/resizing, the header Pin (`getWindowPrefs`/`setAlwaysOnTop`), `ui.json` backup preferences and geometry, map/image magnification, the `splits.ts` duration formatter, `WikiDrawer`'s `DockedInspector` (pinned dossier), logs, telemetry/watchdogs, the analysis CLI and shared goal data. Trace consumers; never delete by name ("Inspector", "zoom", "goals").
 - Training choice is on each skill card (XP/Balanced/Money); Defence-at-1 sits under Skills. RuneLite helpers (places, bank highlighting, pace, level import, upgrades, preparation) are always on; mocked tests do not prove real-game behavior.
-- Journal: filters left; status, QP, current-part requirements and route action right; Review route for completed/skipped quests; saved-only completion labelled; one closed session history; browsing never marks progress.
+- Journal: filters left; the chosen quest's state, QP, requirements and route action right; Review route for completed/skipped quests; saved-only completion labelled; session statistics in Settings → Progress; browsing never marks progress.
 - Skills has no leveling guide or bracket table (2.83.0): the training engine sets method, goal and plan. A completed skill's Plan says its checkpoint is reached. Two-column icon index, XP table in Calculator.
 - Route (2.84.0): quests plus the Stronghold; other step kinds are `RETIRED_STEPS`, planned by the training, gear and Money engines; unsafe fights compare supported preparations by complete time; unsupported mechanics require verification.
 - Gear compares melee only for a supported current activity; other skills show current preparation and live equipment. Mandatory shopping and a quoted refill/fare reserve protect upgrade spending; unread prices never count as zero. Shopping: requirements left, Checkout right (cost, checked cash, optional bank stock, refill allowance, shortfall), one primary action through funding, copy-order or preparation.
@@ -152,10 +150,17 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 - Read this file and `git status` first.
 - Gates: `npx tsc --noEmit`, `npm test`, `npm run check-data`, `npm run build`, `npm run test:ui`, `npm run gate:f2p` (CI job), `npm run test:e2e`, `runelite-bridge/gradlew -p runelite-bridge test jar` and the CI packaged-Portable gate; CI also runs `check-structure` (strict, with a shrinking known debt), `knip` and `dead-css`.
 - Browser tests use port 4179: one runner at a time, finish `dist` rebuilds first, never rebuild under a running suite. Electron e2e uses isolated data and a bridge stub. Screenshots go to the ignored `audit-temp/`.
-- Retiring a feature removes its exclusive UI, state, handlers, IPC, styles, imports and tests but keeps shared consumers, saves, backups and diagnostics; a selector can reach a nested dialog. Adapt obsolete assertions to surviving actions; never restore an obsolete screen for a test.
+- Retiring a feature (rule 6) keeps shared consumers, saves, backups and diagnostics; a selector can reach a nested dialog. Never restore an obsolete screen for a test.
 - Release: `npm run bump -- X.Y.Z "summary"` (package, lock, `PLUGIN_VERSION`, notes stub), finish `release-notes/vX.Y.Z.md`, push to main. When every Checks job passes, its release job publishes vX.Y.Z from the exact EXE the portable job verified, with this file (receipt filled in) and SHA256SUMS.txt, then downloads the assets and fails unless they match; existing releases are never overwritten. A release counts only when that job succeeds; "asset exists" is not success.
 - Structural work goes on a branch, rebased and merged after gates and live checks; large moves need a freeze window with the other agent idle. If interrupted, checkpoint the next action and separate local WIP from published code.
 - Never publish authentication material, real account or bank snapshots or private session logs; use isolated fixtures and redacted screenshots.
+
+## Handover — state on 2026-11-13
+
+- **State:** v2.94.5 published, `main` clean, all gates passed; nothing tested in the real game since 2.87.
+- **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, training times shown); XP/Balanced/Money change the method only; Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; V2 review retired; update Cancel stays.
+- **Next:** 1) P4. 2) Measured quest times from the player's own quest starts and finishes. 3) Members content later.
+- **Owner:** writes Russian; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 
 ## Remaining work in priority order
 
@@ -169,13 +174,11 @@ Worktree `C:/Users/Mark/Desktop/Ors-x9`; delivery branch `codex/combat-strategy-
 
 Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent entry for explicit goals and phased training/preparation; costs precede rewards; only sourced order-independent unknowns cancel. Cursors retire past stages; certificate proof stays physical. Procurement shares allocations/packages/fees; unknown flows weaken balances; start-only rewards never repeat; unknown hand-ins never buy; protection requires wearing; funding excludes stale/unsold cash. Shortest Path `375ce2c061df5c3961116dda6443f307df3223f1` (BSD, 64 regions, ESTIMATED); trip legs bounded, deduplicated, revision-guarded.
 
-Live pending; current checks below.
-
-Resume from `.codex/work-state.md` and Git diff. `DecisionProvider` below Funding → `runtimeDecision` drives pages/prep/maps and `DecisionSync` (step, snapshot `decision{id,objectiveId,watch}`). Quest-length bands remain unmeasured heuristics; worker legs/castable teleports, Money-ranked EARN/gathering, GP/tool/position/Magic/restriction counterfactuals work. Unknown-time objectives remain visible. `candidates` expose minutes, unknowns, XP, rank/verdict; incomplete comparisons use unknown-count, known minimum and own cost, never term text; confidence LOW. Door/stair/enclosed-origin walking allowances ≤10 tiles are labelled. Path/Previous/Next/Journal follow planner order; retired steps cannot override it. Prep/Shopping/plugin/bank/funding/Defence-later use `engine.road`; Skills uses Decision floors then engine method changes. Guide retired. Live acceptance: Claude's RUNBOOK LIVE/PARTIAL rows.
+Resume from `.codex/work-state.md` and Git diff. `DecisionProvider` below Funding → `runtimeDecision` drives pages/prep/maps and `DecisionSync` (step, snapshot `decision{id,objectiveId,watch}`). Worker legs/castable teleports, Money-ranked EARN/gathering, GP/tool/position/Magic/restriction counterfactuals work. Unknown-time objectives remain visible. `candidates` expose minutes, unknowns, XP, rank/verdict; incomplete comparisons use unknown-count, known minimum and own cost, never term text; confidence LOW. Door/stair/enclosed-origin walking allowances ≤10 tiles are labelled. Path/Previous/Next/Journal follow planner order; retired steps cannot override it. Prep/Shopping/plugin/bank/funding/Defence-later use `engine.road`; Skills uses Decision floors then engine method changes. Guide retired. Live acceptance: Claude's RUNBOOK LIVE/PARTIAL rows.
 
 ### P4 — Claude's real-client acceptance
 
-Use the published Portable and restart its client so the plugin version is known; verify real login and link, not a port; respect the owner's limited-input rules. Smoke first (version, link, Ledger HUD, provenance, one current action in app, arrow and HUD), then the matrix. Without the desktop, leave live evidence pending. For HDOS, verify only what its adapter supplies. Keep implemented, automated, native-shell, live and unverified evidence apart, and fix confirmed shared bugs at their layer.
+Use the published Portable and restart its client so the plugin version is known; verify real login and link, not a port; respect the owner's limited-input rules (Computer use: game screenshots; the owner clicks in the game). Smoke first (version, link, Ledger HUD, provenance, one current action in app, arrow and HUD), then the matrix. Without the desktop, leave live evidence pending. For HDOS, verify only what its adapter supplies. Keep implemented, automated, native-shell, live and unverified evidence apart, and fix confirmed shared bugs at their layer.
 
 ### Consolidated live regression matrix — Claude owns every row
 
@@ -199,9 +202,7 @@ Record versions, account mode, facts, expected and actual result and evidence as
 
 ### P5 — project optimization (2026-11, verify-first)
 
-Audit decisions (owner, 2.94.3): one preparation behaviour (two steps ahead, quiet, training times shown); XP/Balanced/Money change the method only; Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; update Cancel stays (banner).
-
-Each batch releases after all gates and its Go threshold; live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. Alternate timing-pair order: identical builds timed up to +10% script and +36% blocking when second. Next is the full plugin live matrix, closing **S8**. Caches and context selectors (R3, R4, R8) wait until per-update script time passes 50 ms.
+Each batch releases after all gates and its Go threshold; live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. Next is the full plugin live matrix, closing **S8**. Caches and context selectors (R3, R4, R8) wait until per-update script time passes 50 ms.
 
 Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3.8% page-only code), a V8 code cache (moves the `localStorage` origin), domain barrels, merged tiny modules, parallel Java render tests (shared font cache), an automatic CSS split per feature (S9: computed styles changed; merge by hand). The React hooks lint is an occasional review; findings are deliberate. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (kept by owner decision 2026-11-01). Prune merged remote branches and `audit-test-*` pre-releases; never delete normal `v*` releases.
 
@@ -216,7 +217,7 @@ Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3
 | 2.81.15 | Thread consumption and silver tiaras in cr-gold from 23 to 43 (Crafting 23, 52.5 XP, Silver bar and Tiara mould at a furnace). Jewellery advice promises no profit or diamonds before 43. |
 | 2.81.16 | sm-smelting connects bronze to runite furnace smelting (4/6/8 coal for mithril/adamantite/runite; iron 50% yield, no ring bonus). Metal families add daggers, warhammers and platebodies and use 1/3/5-bar leftovers; Blast Furnace, catalysts and Superheat stay separate. Firemaking's line-lighting families use partial batches and a reusable Tinderbox. |
 | 2.81.17 | `pr-camdozaal` admits Prayer 1 with Below Ice Mountain, Fishing 7, Cooking 7, Small fishing net and Knife. Catch, prepare, offer: cavefish need Fishing/Cooking 20, tetras 33. Raw offerings and unsupported 2400 XP/h removed; collect-and-bury uses manual setup. |
-| 2.81.18 | Manual-reference boundary for monkfish, karambwan and Motherlode; the priority test uses equal-rate synthetic methods; one duplicate F2P browser run removed. |
+| 2.81.18 | Manual references (see contracts); the priority test uses equal-rate synthetic methods; one duplicate F2P browser run removed. |
 
 Known limits: fees are bounded allowances; gathering competition, Forestry and Musa Point boat banking are approximations; altar timing assumes the supported exit model; food estimates are no survival guarantee. Alchemy, enchanting and splashing keep target/setup/budget safeguards. No implied parity for unsupported Members or HDOS mechanics. Facts checked against the OSRS Wiki on 2026-10-31.
 
@@ -232,10 +233,10 @@ Kept: `planning/encounter/{setups,strategy}.ts` compares bounded preparations; `
 
 Gear has bows/ranged armour; a worn bow (fitting arrows) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set arrows needed. Drops weigh cooking burns. Earning guides read the Wiki Details (`detailsOf`); Ledger icons replace colour emoji. F2P skill groups focus a checkpoint still ahead. Verified: 2,617 units, 797 browser checks, route/light gates; update +3% versus 2.94.4.
 
-Limits: armour by melee defence; Wiki bands for quest work, minus the prepared fight. `gate:f2p`: 23/23 quests, no checks; time unknown on 1/211 turns. Later fights are proven by `encounterSetups`, a current one with pending kit by its setup; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece. Measured quest times need shared data.
+Limits: armour by melee defence; Wiki bands for quest work, minus the prepared fight. `gate:f2p`: 23/23 quests, no checks; time unknown on 1/211 turns. Later fights are proven by `encounterSetups`, a current one with pending kit by its setup; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-The Checks release job writes version/source/EXE size/SHA-256 into the released copy, downloads published assets and fails on mismatch. Never enter receipts manually; real-game acceptance remains P4.
+The release job fills version, source, EXE size and SHA-256 into the released copy. Never enter receipts manually; real-game acceptance remains P4.
 <!-- DELIVERY_END -->
