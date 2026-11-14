@@ -21,8 +21,9 @@ import { scenarios as journal } from './scenarios/journal.ts';
 import { scenarios as reference } from './scenarios/reference.ts';
 import { scenarios as settings } from './scenarios/settings.ts';
 import { scenarios as pages } from './scenarios/pages.ts';
+import { scenarios as modes } from './scenarios/modes.ts';
 
-const FEATURES = { ledger, step, map, bridge, prep, combat, skills, shopping, gear, money, journal, reference, settings, pages };
+const FEATURES = { ledger, step, map, bridge, prep, combat, skills, shopping, gear, money, journal, reference, settings, pages, modes };
 if (process.argv.includes('--list')) {
   for (const [feature, s] of Object.entries(FEATURES)) console.log(`${feature}: ${Object.keys(s).join(', ')}`);
   process.exit(0);
