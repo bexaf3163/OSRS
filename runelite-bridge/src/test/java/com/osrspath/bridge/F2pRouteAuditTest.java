@@ -151,4 +151,23 @@ public class F2pRouteAuditTest
 		assertTrue("one of each colour is three", line.holds(b));
 		assertEquals(3, line.hasCount());
 	}
+
+	@Test
+	public void dwarfCannonStagesReadVarpZero()
+	{
+		// RuneLite QUEST_DWARF_CANNON is varp 0: a real variable, not a missing one.
+		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
+		{
+			if (!"S7-08".equals(s.target.getStepId()))
+			{
+				continue;
+			}
+			TargetStages.Stage st = s.target.getGuide().getStage();
+			assertTrue(st.isVarp());
+			assertEquals(0, st.getId());
+			assertEquals(null, st.problem(0));
+			return;
+		}
+		throw new AssertionError("S7-08 is not in active-steps.json");
+	}
 }

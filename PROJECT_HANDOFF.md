@@ -156,9 +156,9 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Handover — state on 2026-11-14
 
-- **State:** v2.101.0 published, all gates passed; nothing tested in the real game since 2.87.
+- **State:** v2.102.0 published, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, training times shown); XP/Balanced/Money change the method only; Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; V2 review retired; update Cancel stays.
-- **Next:** 1) P4. 2) Members: quest batches (Dwarf Cannon needs walking data), Hunter/Construction, modelled consumption for the unknown-time debt (87 turns). 3) Measured quest times from the player's own quest starts and finishes.
+- **Next:** 1) P4. 2) Members: quest batches, Hunter/Construction, modelled consumption for the unknown-time debt (87 turns). 3) Measured quest times from the player's own quest starts and finishes.
 - **Owner:** writes Russian; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 
 ## Remaining work in priority order
@@ -175,7 +175,7 @@ Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent e
 
 ### Quest content pipeline — pilot 2026-11-14
 
-Machine-drafted quests, checked before shipping. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/` (stages, tiles, ids, texts from Quest Helper, the rest from Wiki cards; only wording is edited, one short line per full text). `npm run check-drafts` fails source contradictions and off-ground tiles in a walking replay; unconfirmed facts stay `unknown`. `npm run quest-promote -- <Draft> <id>` writes the step, stages and QH row (next steps in its header). Shipped: Druidic Ritual (S7-06), Witch's House (S7-07); draft: Dwarf Cannon; Quest Helper `b9b9370`. Quest facts cover 36 quests; the Members gate finishes 36/36. Made-only items use `recipes.json` (`yield`). The `game-modes` UI scenario checks every page in both modes. Fights, unreviewed quest flows and training retire projected stock and cash (`runtime.ts` adapters, `trainingModel`); single worn pieces survive unless the objective names them (`decision.ts`). The remaining Members unknown time (87 of 301 turns) needs modelled consumption.
+Machine-drafted quests, checked before shipping. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/` (stages, tiles, ids, texts from Quest Helper, the rest from Wiki cards; only wording is edited, one short line per full text). `npm run check-drafts` fails source contradictions and off-ground tiles in a walking replay; unconfirmed facts stay `unknown`. `npm run quest-promote -- <Draft> <id>` writes the step, stages and QH row (next steps in its header). Shipped: Druidic Ritual (S7-06), Witch's House (S7-07), Dwarf Cannon (S7-08; id 0 is a real varp/object); Quest Helper `b9b9370`. Quest facts cover 37 quests; the Members gate finishes 37/37. Made-only items use `recipes.json` (`yield`). The `game-modes` UI scenario checks every page in both modes. Fights, unreviewed quest flows and training retire projected stock and cash (`runtime.ts` adapters, `trainingModel`); single worn pieces survive unless the objective names them (`decision.ts`). The remaining Members unknown time (87 of 302 turns) needs modelled consumption.
 
 ### P4 — Claude's real-client acceptance
 

@@ -108,7 +108,7 @@ export function qa(input: QaInput): QaIssue[] {
         add('stages-encounter', id, `Encounter ${encounter.foe} must name a declared foe and an existing throughLine`);
       }
     }
-    if (!['varp', 'varbit'].includes(q.var[0]) || !Number.isInteger(q.var[1]) || q.var[1] < 1) add('stages-var', id, `the variable ${q.var.join(' ')}`);
+    if (!['varp', 'varbit'].includes(q.var[0]) || !Number.isInteger(q.var[1]) || q.var[1] < 0) add('stages-var', id, `the variable ${q.var.join(' ')}`);
     let last = -1;
     for (const st of q.stages) {
       if (st.at <= last) add('stages-order', id, `stage ${st.at} is not ascending`);
@@ -148,7 +148,7 @@ export function qa(input: QaInput): QaIssue[] {
         if (l.hl) {
           const bad = (['npc', 'obj'] as const).some((k) => {
             const v = l.hl![k];
-            return v !== undefined && (!Array.isArray(v) || v.length === 0 || v.length > 8 || new Set(v).size !== v.length || v.some((n) => !Number.isInteger(n) || n < 1 || n > 200000));
+            return v !== undefined && (!Array.isArray(v) || v.length === 0 || v.length > 8 || new Set(v).size !== v.length || v.some((n) => !Number.isInteger(n) || n < 0 || n > 200000));
           }) || (['on', 'item'] as const).some((k) => {
             const v = l.hl![k];
             return v !== undefined && (!Array.isArray(v) || v.length === 0 || v.length > 8 || new Set(v).size !== v.length || v.some((n) => typeof n !== 'string' || !n.trim() || n.length > 80));

@@ -26,7 +26,7 @@ describe('the whole guide: every quest is followed by the game', () => {
     for (const s of quest) {
       const q = quests[s.id];
       expect(['varp', 'varbit'], s.id).toContain(q.var[0]);
-      expect(Number.isInteger(q.var[1]) && q.var[1] > 0, s.id).toBe(true);
+      expect(Number.isInteger(q.var[1]) && q.var[1] >= 0, s.id).toBe(true);
       const g = stepGuide(s);
       expect(g.stage, `${s.id}: the table reaches the game`).toMatchObject({ kind: q.var[0], id: q.var[1] });
     }

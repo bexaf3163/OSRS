@@ -44,7 +44,7 @@ public class LineHighlightTest
 	@Test
 	public void aBadHighlightIsRejectedWhole()
 	{
-		String[] bad = {"{\"npc\":[0]}", "{\"npc\":[300000]}", "{\"obj\":[-1]}", "{\"npc\":[1,2,3,4,5,6,7,8,9]}", "{\"on\":[\"\"]}", "{\"item\":[null]}",
+		String[] bad = {"{\"npc\":[-1]}", "{\"npc\":[300000]}", "{\"obj\":[-1]}", "{\"npc\":[1,2,3,4,5,6,7,8,9]}", "{\"on\":[\"\"]}", "{\"item\":[null]}",
 			"{\"on\":[\"" + "x".repeat(500) + "\"]}"};
 		for (String h : bad)
 		{
@@ -57,7 +57,7 @@ public class LineHighlightTest
 	public void aStageWithABadStepHighlightIsNotAccepted()
 	{
 		ActiveTarget t = GSON.fromJson("{\"stepId\":\"S2-09\",\"title\":\"x\",\"guide\":{\"items\":[],\"places\":[],\"stage\":{\"kind\":\"varp\",\"id\":71,\"stages\":["
-			+ "{\"at\":0,\"steps\":[{\"t\":\"Talk\",\"hl\":{\"npc\":[0]}}]}]}}}", ActiveTarget.class);
+			+ "{\"at\":0,\"steps\":[{\"t\":\"Talk\",\"hl\":{\"npc\":[-1]}}]}]}}}", ActiveTarget.class);
 		assertNotNull(t.prepare());
 		ActiveTarget ok = GSON.fromJson("{\"stepId\":\"S2-09\",\"title\":\"x\",\"guide\":{\"items\":[],\"places\":[],\"stage\":{\"kind\":\"varp\",\"id\":71,\"stages\":["
 			+ "{\"at\":0,\"steps\":[{\"t\":\"Talk\",\"hl\":{\"npc\":[3647]}}]}]}}}", ActiveTarget.class);

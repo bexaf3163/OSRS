@@ -4013,6 +4013,57 @@
     }
   },
   {
+    "id": "S7-08",
+    "stage": 7,
+    "type": "quest",
+    "title": "Dwarf Cannon",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Dwarf_Cannon",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Dwarf_Cannon/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2567,3461,0",
+    "mapLocation": {
+      "x": 2567,
+      "y": 3461,
+      "plane": 0,
+      "label": "Captain Lawgof"
+    },
+    "npc": {
+      "nameEn": "Captain Lawgof",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Captain_Lawgof"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      }
+    ],
+    "reward": "1 QP, 750 Crafting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Captain Lawgof"
+      ],
+      "dialogChoices": [
+        "Yes.",
+        "Okay, I'll see what I can do.",
+        "Okay then, just for you!"
+      ],
+      "highlightItems": [
+        "Hammer"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Dwarf Cannon"
+      }
+    }
+  },
+  {
     "id": "S8-01",
     "stage": 8,
     "type": "quest",

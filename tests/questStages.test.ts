@@ -11,7 +11,7 @@ describe('quest stages (Quest Helper)', () => {
     for (const [id, q] of Object.entries(quests)) {
       expect(allSteps.some((s) => s.id === id), id).toBe(true);
       expect(['varp', 'varbit']).toContain(q.var[0]);
-      expect(q.var[1]).toBeGreaterThan(0);
+      expect(q.var[1]).toBeGreaterThanOrEqual(0); // Dwarf Cannon is varp 0 (RuneLite QUEST_DWARF_CANNON).
       const ats = q.stages.map((s) => s.at);
       expect(ats, id).toEqual([...ats].sort((a, b) => a - b));
       expect(new Set(ats).size, id).toBe(ats.length);

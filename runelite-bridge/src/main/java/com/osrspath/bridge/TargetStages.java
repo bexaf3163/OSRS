@@ -100,7 +100,7 @@ final class TargetStages
 			{
 				return "unknown quest variable kind";
 			}
-			if (id < 1 || id > 100_000 || stages == null || stages.isEmpty() || stages.size() > MAX_STAGES)
+			if (id < 0 || id > 100_000 || stages == null || stages.isEmpty() || stages.size() > MAX_STAGES)
 			{
 				return "invalid quest stages";
 			}
@@ -232,9 +232,10 @@ final class TargetStages
 
 		String problem()
 		{
+			// Id 0 is a real object (Dwarf Cannon's dwarf remains) and NPC.
 			for (List<Integer> ids : List.of(nonNull(npc), nonNull(obj)))
 			{
-				if (ids.size() > MAX || ids.stream().anyMatch(i -> i == null || i < 1 || i > MAX_ID))
+				if (ids.size() > MAX || ids.stream().anyMatch(i -> i == null || i < 0 || i > MAX_ID))
 				{
 					return "invalid step highlight";
 				}

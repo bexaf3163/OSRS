@@ -158,7 +158,7 @@ public class QuestStageTest
 	public void stagesAreValidated()
 	{
 		assertNotNull(bad("\"stage\":{\"kind\":\"sql\",\"id\":63,\"stages\":[{\"at\":0,\"steps\":[{\"t\":\"x\"}]}]}"));
-		assertNotNull(bad("\"stage\":{\"kind\":\"varp\",\"id\":0,\"stages\":[{\"at\":0,\"steps\":[{\"t\":\"x\"}]}]}"));
+		assertNotNull(bad("\"stage\":{\"kind\":\"varp\",\"id\":-1,\"stages\":[{\"at\":0,\"steps\":[{\"t\":\"x\"}]}]}"));
 		assertNotNull(bad("\"stage\":{\"kind\":\"varp\",\"id\":63,\"stages\":[]}"));
 		assertNotNull("stage values grow", bad("\"stage\":{\"kind\":\"varp\",\"id\":63,\"stages\":[{\"at\":2,\"steps\":[{\"t\":\"x\"}]},{\"at\":1,\"steps\":[{\"t\":\"y\"}]}]}"));
 		assertNotNull("empty text", bad("\"stage\":{\"kind\":\"varp\",\"id\":63,\"stages\":[{\"at\":0,\"steps\":[{\"t\":\" \"}]}]}"));

@@ -90,7 +90,7 @@ describe('data consistency check', () => {
     });
     const bad = (hl: unknown) => qa({ ...base, questStages: stage(hl) }).filter((i) => i.rule === 'stages-hl').length;
     expect(bad({ npc: [3647], obj: [2072], on: ['Banana tree'], item: ['Karamjan rum'] })).toBe(0);
-    for (const hl of [{}, { npc: [] }, { npc: [0] }, { npc: [1.5] }, { npc: [3647, 3647] }, { npc: [300000] }, { obj: 'x' }, { on: [''] }, { item: [7] }, { foo: [1] },
+    for (const hl of [{}, { npc: [] }, { npc: [-1] }, { npc: [1.5] }, { npc: [3647, 3647] }, { npc: [300000] }, { obj: 'x' }, { on: [''] }, { item: [7] }, { foo: [1] },
       { npc: [1, 2, 3, 4, 5, 6, 7, 8, 9] }]) {
       expect(bad(hl), JSON.stringify(hl)).toBe(1);
     }
