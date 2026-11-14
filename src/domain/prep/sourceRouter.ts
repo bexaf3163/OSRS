@@ -9,12 +9,23 @@ import { nearestBankTo } from '../travel/stepPlaces';
 import { heldOf, levelOf, type PlayerState, type WorldPoint } from '../player/playerState';
 import { SHOP_TOWN, accessSuffix, shopAccess, shopKey, spawnAccess, type AccessState } from '../market/shopAccess';
 import { nameKey } from '../items/itemKey';
-import { stepsJson } from '../../data';
+import { recipesJson, stepsJson } from '../../data';
 import { purchaseCost, type PurchaseFee } from '../items/purchaseCost';
 import { SAVE_GP } from '../market/shopConstants';
 import { NOT_SOLD_PRICE } from '../market/itemPrice';
 
-export type SourceKind = 'bag' | 'bank' | 'free' | 'shop' | 'ge' | 'drop';
+export type SourceKind = 'bag' | 'bank' | 'free' | 'shop' | 'ge' | 'drop' | 'make';
+
+/** A made item (recipes.json); its ingredients are planned as their own lines (prepPlan). */
+export interface Recipe {
+  makeAt: string;
+  note?: string;
+  manualSeconds: number;
+  /** Items one make gives (5 Ecto-tokens a worship); 1 when absent. */
+  yield?: number;
+  from: { nameEn: string; count: number; how: string; npc?: string }[];
+}
+export const RECIPES = (recipesJson as { recipes: Record<string, Recipe> }).recipes;
 
 export interface SourceOption {
   kind: SourceKind;
@@ -32,6 +43,8 @@ export interface SourceOption {
   questAccess?: { quest: string; state: 'started' | 'completed' };
   /** An NPC who gives the item for free (FREE_GIVERS): first after what the player already has, whatever the distance. */
   giver?: boolean;
+  /** A made item: seconds of one make and the items it gives. */
+  make?: { seconds: number; yield: number };
 }
 
 export interface SourcePlan {
@@ -174,13 +187,21 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
     // The wiki names some drop tables with an anchor ("Scurrius#non-MVP"): the monster is the part before it.
     out.push({ kind: 'drop', label: `Dropped by ${top.monster.replace(/#.*/, '')}`, note: top.rate });
   }
+  // Made last of all: its ingredients are their own lines (prepPlan), its time is the recipe's.
+  const recipe = RECIPES[input.name];
+  if (recipe) {
+    const p = matchStrict(recipe.makeAt);
+    out.push({ kind: 'make', label: `Make at ${recipe.makeAt}: ${recipe.from.map((f) => `${f.count} ${f.nameEn}`).join(' + ')}`, price: 0,
+      make: { seconds: recipe.manualSeconds, yield: recipe.yield ?? 1 },
+      ...(p ? { point: { x: p.x, y: p.y, plane: p.plane, label: p.label }, distance: here ? dist(p, here) : undefined } : {}) });
+  }
   // An unlocated acquisition is a reference, not a nearby free trip. Prefer a usable placed source before it.
   // Already owned stock stays first even when the current position/bank destination is unread.
   // "Free nearby" is no farther than FREE_NEAR tiles; farther, the free one goes on a par with the shop and the exchange. A spawn gives one
   // piece per visit: for more, its respawn waits are unmeasured time, and a purchase (known time) goes first.
   const rank = (o: SourceOption): number =>
     o.kind === 'bag' || o.kind === 'bank' ? 0 : o.access !== undefined && o.access !== 'open' ? 2.6
-      : o.kind === 'drop' ? 3 : !o.point ? 2.75
+      : o.kind === 'drop' ? 3 : o.kind === 'make' ? 3.5 : !o.point ? 2.75
         : o.kind === 'free' ? (o.giver || (input.need <= 1 && (o.distance === undefined || o.distance <= FREE_NEAR)) ? 1 : 2.5) : 2;
   const ordered = out
     .filter((o) => !input.kinds || input.kinds.includes(o.kind))

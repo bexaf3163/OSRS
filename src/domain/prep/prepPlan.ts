@@ -11,7 +11,7 @@
 // It buys nothing: the player decides and confirms.
 
 import type { Progress, Step, WikiItemDetail } from '../../types';
-import { itemById, recipesJson } from '../../data';
+import { itemById } from '../../data';
 import { bankTakeText, foodCarry, type FoodCarry, type FoodHolding } from '../player/foodStock';
 import { npcSpot, nearestBank } from '../travel/stepPlaces';
 import type { NavTargetPayload, QuestInstruction } from '../../services/runeliteBridge';
@@ -23,7 +23,7 @@ import { countWorn } from '../items/equipmentCount';
 import { carryOf, displayName, doseKind, shortText, takeFromBank } from '../items/doses';
 import { heldUnits } from '../player/heldUnits';
 import type { StepReadiness } from '../readiness/readiness';
-import { planSources } from './sourceRouter';
+import { planSources, RECIPES } from './sourceRouter';
 import type { SourceOption } from './sourceRouter';
 import { sourceAction } from './acquisitionAction';
 import { safetyBlockers, safetyRulesOf } from './safety';
@@ -244,8 +244,6 @@ function bankAction(step: Step, name: string, n: number, doses = false, unnote =
 
 
 
-interface Recipe { makeAt: string; from: { nameEn: string; count: number; how: string; npc?: string }[] }
-const RECIPES = (recipesJson as { recipes: Record<string, Recipe> }).recipes;
 
 /**
  * An item that is missing but can be made from others (Orange dye from Red and Yellow dye): the ingredients are planned as well, so the player is warned
@@ -257,7 +255,7 @@ function recipeLines(parent: PrepLine, step: Step, state: PlayerState): PrepLine
   const out: PrepLine[] = [];
   for (const ing of recipe.from) {
     const held = heldOf(state, ing.nameEn);
-    const count = ing.count * Math.max(1, parent.count - ((parent.have.bag ?? 0) + parent.have.noted + (parent.have.bank ?? 0)));
+    const count = ing.count * Math.ceil(Math.max(1, parent.count - ((parent.have.bag ?? 0) + parent.have.noted + (parent.have.bank ?? 0))) / (recipe.yield ?? 1));
     const usable = held.bag ?? 0;
     if (usable >= count) continue;
     const total = held.total ?? usable;
@@ -430,8 +428,12 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
     }
   }
 
-  // Made items: if one is missing, its ingredients are planned too.
-  for (const l of [...lines]) lines.push(...recipeLines(l, step, state));
+  // Made items: if one is missing, its ingredients are planned too; an item that is only made gets them first.
+  for (const l of [...lines]) {
+    const made = recipeLines(l, step, state);
+    if (l.action?.kind === 'GATHER' && l.action.acquisition?.kind === 'make') lines.splice(lines.indexOf(l), 0, ...made);
+    else lines.push(...made);
+  }
 
   // Price physical quantities once for every consumer. Unknown/untradeable items get no fabricated GE value.
   if (i.prices !== undefined) for (const l of lines) {

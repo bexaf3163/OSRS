@@ -1,5 +1,5 @@
 {
-  "source": "OSRS Wiki: Orange dye, Red dye, Yellow dye (Aggie in Draynor Village).",
+  "source": "OSRS Wiki: Orange dye, Red dye, Yellow dye (Aggie in Draynor Village); Ecto-token, Ectofuntus.",
   "note": "Items that are made from other items. If the made item is missing, the ingredients are planned too, so the player is warned before leaving the place where they are made.",
   "recipes": {
     "Orange dye": {
@@ -8,6 +8,17 @@
       "from": [
         { "nameEn": "Red dye", "count": 1, "how": "Aggie in Draynor Village makes it: 3 redberries + 5 gp.", "npc": "Aggie" },
         { "nameEn": "Yellow dye", "count": 1, "how": "Aggie in Draynor Village makes it: 2 onions + 5 gp.", "npc": "Aggie" }
+      ]
+    },
+    "Ecto-token": {
+      "makeAt": "Ectofuntus",
+      "manualSeconds": 60,
+      "yield": 5,
+      "note": "5 tokens a worship (OSRS Wiki, Ecto-token). The 60 seconds a worship are an estimate: grinding the bone, filling the bucket in the basement and worshipping.",
+      "from": [
+        { "nameEn": "Bones", "count": 1, "how": "Any bones: crushed into bonemeal in the pot at the bone grinder upstairs in the Ectofuntus." },
+        { "nameEn": "Pot", "count": 1, "how": "Holds the bonemeal from the bone grinder." },
+        { "nameEn": "Bucket", "count": 1, "how": "Filled with slime at the pool in the Ectofuntus basement." }
       ]
     }
   }

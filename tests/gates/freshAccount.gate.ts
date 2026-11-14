@@ -49,7 +49,7 @@ const UNKNOWN_TIME_DEBT = 0;
 // The Members route is not fully planned yet: the quests a fresh Members account cannot finish are known debt. Lower it
 // as it shrinks, never raise it. While any Members quest is unplanned every Members turn has an unknown remaining time,
 // so that count is asserted only once this debt reaches 0.
-const MEMBERS_OPEN_DEBT = 9;
+const MEMBERS_OPEN_DEBT = 7;
 
 // One fresh account played through the route of a mode; it stops at the first check and returns what is left.
 function play(mode: GameMode) {
@@ -104,6 +104,9 @@ function play(mode: GameMode) {
           for (const [s, amount] of Object.entries(q.rewards.xp)) xp[s] = (xp[s] ?? 0) + amount;
           coins += q.rewards.coins ?? 0;
           for (const r of q.resourceFlow?.receives ?? []) add(r.name, r.count);
+          // An uncertain receipt (the Ghostspeak amulet) is uncertain for the app, which cannot see whether it was kept;
+          // the account played here keeps it.
+          for (const name of q.resourceFlow?.uncertainReceipts ?? []) add(name, 1);
         } else {
           quests[q.id] = { state: 'IN_PROGRESS', stepId: q.stepIds[at + 1] };
           for (const later of q.stepIds.slice(at + 1).map(id => stepOf.get(id))) {

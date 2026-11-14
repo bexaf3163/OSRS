@@ -47,4 +47,10 @@ describe('usable acquisition sources before unlocated references', () => {
     // With no other source the spawn is still offered.
     expect(planSources({ name: 'Bucket', need: 3, shortage: true, detail, kinds: ['free'] }, state).primary?.kind).toBe('free');
   });
+
+  it('makes an item nothing sells, from its recipe: 5 Ecto-tokens a worship', () => {
+    const detail = [...itemById.values()].find((i) => i.nameEn === 'Ecto-token')!;
+    const plan = planSources({ name: 'Ecto-token', need: 20, shortage: true, detail }, player());
+    expect(plan.primary).toMatchObject({ kind: 'make', price: 0, make: { seconds: 60, yield: 5 } });
+  });
 });

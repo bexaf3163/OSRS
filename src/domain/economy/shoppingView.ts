@@ -232,7 +232,7 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
   }
   // A monster's drop table is a way to get an item, not a checked one (the item data does not say where the monster lives or whether a free account
   // can reach it: Steel nails 'dropped by Zombie (Tarn's Lair)'): the route's own instruction comes first.
-  const how = src?.kind === 'free' ? src.label : line.howToGet ? firstSentence(line.howToGet) : src?.kind === 'drop' ? src.label : 'Not sold at the exchange';
+  const how = src?.kind === 'free' ? src.label : line.howToGet ? firstSentence(line.howToGet) : src?.kind === 'drop' || src?.kind === 'make' ? src.label : 'Not sold at the exchange';
   return { ...base, qty: missing, channel: 'along', action: `${how}${src?.kind === 'shop' ? '' : orMaybe}`, unitPrice: null, cost: null };
 }
 

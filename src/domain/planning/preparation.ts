@@ -39,6 +39,12 @@ export function freePickup(source: NonNullable<PrepLine['action']>['acquisition'
   return source?.kind === 'free' && !!source.point && questAccess && (source.access === undefined || source.access === 'open');
 }
 
+/** A made item's time: the recipe's seconds for every make it takes (5 Ecto-tokens a worship); no faster or slower bound is known. */
+const madeTime = (make: { seconds: number; yield: number }, count: number): Minutes => {
+  const typical = (make.seconds * Math.ceil(count / make.yield)) / 60;
+  return { fast: typical, typical, slow: typical, source: 'Recipe time per make' };
+};
+
 export function resolvePreparation(input: PreparationInput): CandidateAction | null {
   const { snapshot, goalId, step, plan } = input;
   function action(kind: CandidateAction['kind'], key: string, title: string, predicate: string, line?: PrepLine): CandidateAction {
@@ -81,7 +87,7 @@ export function resolvePreparation(input: PreparationInput): CandidateAction | n
     if (line.action?.kind === 'GATHER') {
       if (!freePickup(line.action.acquisition, snapshot.quests)) {
         // No usable free pickup: gathering it yourself is a real action when a method yields it, with its own time.
-        const time = input.gather?.(line.name, Math.max(1, line.count - (bag ?? 0) - equipped)) ?? null;
+        const time = line.action.acquisition?.make ? madeTime(line.action.acquisition.make, Math.max(1, line.count - (bag ?? 0) - equipped)) : input.gather?.(line.name, Math.max(1, line.count - (bag ?? 0) - equipped)) ?? null;
         if (time) return { ...action('GATHER', line.key, `Gather ${line.name}`, `${line.name} acquired`, line), time };
         return action('VERIFY', `source:${line.key}`, `Check how to gather ${line.name}`, 'Acquisition access, method, kit and protection verified', line);
       }

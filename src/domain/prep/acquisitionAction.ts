@@ -8,7 +8,7 @@ import { formatGp as gp } from './shopping';
 export function sourceAction(src: SourceOption | null, name: string, toGet: number, coinsTotal: number | null, stepId: string): PrepAction | undefined {
   if (!src) return { kind: 'BUY', label: 'Buy at the exchange or in a shop', href: hrefTo.shopping() };
   const nav = src.point ? { label: `${src.point.label}: ${name}`, x: src.point.x, y: src.point.y, plane: src.point.plane, itemName: name, stepId } : undefined;
-  if (src.kind === 'free') return { kind: 'GATHER', acquisition: src, label: src.label, ...(nav ? { nav } : {}) };
+  if (src.kind === 'free' || src.kind === 'make') return { kind: 'GATHER', acquisition: src, label: src.label, ...(nav ? { nav } : {}) };
   if (src.kind === 'drop') return { kind: 'GATHER', acquisition: src, label: src.label };
   if (src.kind === 'bag' || src.kind === 'bank') return undefined;
   const total = purchaseCost(src, toGet);
