@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki, the {{Map}} template in the article",
-  "updated": "2026-09-27",
+  "updated": "2026-11-14",
   "locations": {
     "Lumbridge": {
       "x": 3188,
@@ -22,8 +22,8 @@
       "page": "Lumbridge Castle"
     },
     "Lumbridge Swamp": {
-      "x": 3197,
-      "y": 3166,
+      "x": 3188,
+      "y": 3163,
       "plane": 0,
       "label": "Lumbridge Swamp",
       "kind": "landmark",
@@ -85,8 +85,8 @@
       "page": "Draynor Village"
     },
     "Draynor Manor": {
-      "x": 3108,
-      "y": 3358,
+      "x": 3104,
+      "y": 3355,
       "plane": 0,
       "label": "Draynor Manor",
       "kind": "landmark",
@@ -101,8 +101,8 @@
       "page": "Port Sarim"
     },
     "Rimmington": {
-      "x": 2956,
-      "y": 3232,
+      "x": 2952,
+      "y": 3221,
       "plane": 0,
       "label": "Rimmington",
       "kind": "city",
@@ -244,6 +244,60 @@
       "kind": "city",
       "page": "Rellekka"
     },
+    "Grand Exchange bank": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Grand Exchange bank",
+      "kind": "bank",
+      "aliases": [
+        "GE bank"
+      ],
+      "page": "Grand Exchange"
+    },
+    "Varrock Museum": {
+      "x": 3260,
+      "y": 3449,
+      "plane": 0,
+      "label": "Varrock Museum",
+      "kind": "landmark",
+      "aliases": [
+        "Museum"
+      ],
+      "page": "Varrock Museum"
+    },
+    "Feldip Hunter area": {
+      "x": 2558,
+      "y": 2911,
+      "plane": 0,
+      "label": "Feldip Hunter area",
+      "kind": "landmark",
+      "page": "Feldip Hunter area"
+    },
+    "Rellekka Hunter area": {
+      "x": 2721,
+      "y": 3791,
+      "plane": 0,
+      "label": "Rellekka Hunter area",
+      "kind": "landmark",
+      "page": "Rellekka Hunter area"
+    },
+    "Piscatoris Hunter area": {
+      "x": 2329,
+      "y": 3585,
+      "plane": 0,
+      "label": "Piscatoris Hunter area",
+      "kind": "landmark",
+      "page": "Piscatoris Hunter area"
+    },
+    "Piscatoris falconry area": {
+      "x": 2378,
+      "y": 3596,
+      "plane": 0,
+      "label": "Piscatoris falconry area",
+      "kind": "landmark",
+      "page": "Piscatoris falconry area"
+    },
     "Entrana": {
       "x": 2840,
       "y": 3358,
@@ -339,6 +393,17 @@
       "kind": "landmark",
       "page": "Ice Mountain"
     },
+    "Ruins of Camdozaal": {
+      "x": 2968,
+      "y": 5808,
+      "plane": 0,
+      "label": "Ruins of Camdozaal",
+      "kind": "dungeon",
+      "aliases": [
+        "Camdozaal"
+      ],
+      "page": "Ruins of Camdozaal"
+    },
     "Goblin Village": {
       "x": 2958,
       "y": 3510,
@@ -375,8 +440,8 @@
       "page": "Crandor"
     },
     "Draynor jail": {
-      "x": 3125,
-      "y": 3244,
+      "x": 3121,
+      "y": 3247,
       "plane": 0,
       "label": "Draynor jail",
       "kind": "landmark",
@@ -483,7 +548,7 @@
       "page": "Wizards' Guild"
     },
     "Woodcutting Guild": {
-      "x": 1565,
+      "x": 1614,
       "y": 3499,
       "plane": 0,
       "label": "Woodcutting Guild",
@@ -583,28 +648,6 @@
       "label": "Edgeville Bank",
       "kind": "bank",
       "page": "Edgeville bank"
-    },
-    "Grand Exchange bank": {
-      "x": 3164,
-      "y": 3489,
-      "plane": 0,
-      "label": "Grand Exchange bank",
-      "kind": "bank",
-      "aliases": [
-        "GE bank"
-      ],
-      "page": "Grand Exchange"
-    },
-    "Lumbridge Bank": {
-      "x": 3208,
-      "y": 3220,
-      "plane": 2,
-      "label": "Lumbridge Bank (castle top floor)",
-      "kind": "bank",
-      "aliases": [
-        "Lumbridge Castle bank"
-      ],
-      "page": "Lumbridge Castle"
     },
     "Bob's Brilliant Axes": {
       "x": 3229,
@@ -878,7 +921,7 @@
       "aliases": [
         "Fishing Tutor"
       ],
-      "page": "Fishing tutor"
+      "page": "Finlay"
     },
     "Father Aereck": {
       "x": 3243,
@@ -1203,16 +1246,16 @@
       ],
       "page": "Copper rocks"
     },
-    "Ruins of Camdozaal": {
-      "x": 2968,
-      "y": 5808,
-      "plane": 0,
-      "label": "Ruins of Camdozaal",
-      "kind": "dungeon",
+    "Lumbridge Bank": {
+      "x": 3208,
+      "y": 3220,
+      "plane": 2,
+      "label": "Lumbridge Bank (castle top floor)",
+      "kind": "bank",
       "aliases": [
-        "Camdozaal"
+        "Lumbridge Castle bank"
       ],
-      "page": "Ruins of Camdozaal"
+      "page": "Lumbridge"
     }
   }
 }

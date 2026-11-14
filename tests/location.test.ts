@@ -173,6 +173,10 @@ describe('parsing wiki maps', () => {
     expect(articleMapPoint('no map')).toBeNull();
   });
 
+  it('an area drawn as a polygon — its middle, not its first corner', () => {
+    expect(articleMapPoint('{{Map|mtype=polygon|3000,3000|3400,3000|3400,3400|3000,3400}}')).toEqual({ x: 3200, y: 3200, plane: 0 });
+  });
+
   it('fishing and ore places — from the ObjectLocLine rows', () => {
     const text = '{{ObjectLocLine|name=Fishing spot|location=[[Draynor Village]]|plane=0|x:3086,y:3227|x:3085,y:3230}}'
       + '{{ObjectLocLine|name=Fishing spot|location=[[Lumbridge Swamp]]|x:3246,y:3155|x:3240,y:3147}}';

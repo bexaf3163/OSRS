@@ -2581,6 +2581,151 @@
       "npcNames": [
         "Cow"
       ]
+    },
+    {
+      "id": "hu-quiz",
+      "skill": "hunter",
+      "from": 1,
+      "to": 9,
+      "name": "The Natural History Quiz",
+      "members": true,
+      "kind": "quest",
+      "xpTotal": 1000,
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Varrock Museum basement: speak to Orlando Smith",
+      "note": "Answering every display grants 1,000 Hunter and 1,000 Slayer XP once.",
+      "url": "https://oldschool.runescape.wiki/w/Hunter_training",
+      "place": "Varrock Museum"
+    },
+    {
+      "id": "hu-weasel",
+      "skill": "hunter",
+      "from": 9,
+      "to": 15,
+      "name": "Feldip weasels",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Noose wand",
+          "equip": true
+        }
+      ],
+      "xph": [
+        13000,
+        13000
+      ],
+      "effort": "medium",
+      "cost": "free",
+      "risk": "none",
+      "where": "Feldip Hunter area (Feldip hills teleport)",
+      "note": "Follow the trail between the burrows and attack the bush at its end; a ring of pursuit reveals the whole track.",
+      "url": "https://oldschool.runescape.wiki/w/Hunter_training",
+      "place": "Feldip Hunter area"
+    },
+    {
+      "id": "hu-ruby",
+      "skill": "hunter",
+      "from": 15,
+      "to": 25,
+      "name": "Ruby harvests with copper longtails",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Insect net",
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Bird snare",
+          "count": 2
+        }
+      ],
+      "xph": [
+        20000,
+        20000
+      ],
+      "effort": "medium",
+      "cost": "free",
+      "risk": "none",
+      "where": "North of Falador or the Piscatoris Hunter area",
+      "note": "The Wiki rate is with two bird snares on copper longtails beside the butterflies; it moves on at 21 to red crabs, which need Construction 10 and Pandemonium.",
+      "url": "https://oldschool.runescape.wiki/w/Hunter_training",
+      "place": "Falador"
+    },
+    {
+      "id": "hu-sapphire",
+      "skill": "hunter",
+      "from": 25,
+      "to": 43,
+      "name": "Sapphire glacialis",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Insect net",
+          "equip": true
+        }
+      ],
+      "xph": [
+        28500,
+        28500
+      ],
+      "effort": "medium",
+      "cost": "free",
+      "risk": "none",
+      "where": "Rellekka Hunter area (fairy ring DKS) or the Farming Guild",
+      "note": "The Wiki rate is at level 25 and rises with level; it moves on at 39 to embertailed jerboas, which need part of Eagles' Peak.",
+      "url": "https://oldschool.runescape.wiki/w/Hunter_training",
+      "place": "Rellekka Hunter area"
+    },
+    {
+      "id": "hu-falconry",
+      "skill": "hunter",
+      "from": 43,
+      "to": 49,
+      "name": "Falconry: spotted kebbits",
+      "members": true,
+      "xph": [
+        60000,
+        70000
+      ],
+      "effort": "high",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Piscatoris falconry area (Piscatoris teleport, fairy ring AKQ or Kathy Corkat's boat)",
+      "note": "Rent a gyr falcon from Matthias for 500 coins; the weapon, shield and hands slots must be empty.",
+      "url": "https://oldschool.runescape.wiki/w/Hunter_training",
+      "place": "Piscatoris falconry area"
+    },
+    {
+      "id": "hu-razor",
+      "skill": "hunter",
+      "from": 49,
+      "to": null,
+      "name": "Razor-backed kebbits",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Noose wand",
+          "equip": true
+        }
+      ],
+      "xph": [
+        100000,
+        130000
+      ],
+      "effort": "high",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Piscatoris Hunter area, east of fairy ring AKQ",
+      "note": "Track with a ring of pursuit; stamina potions lift the rate from 100,000 to 130,000. The Wiki moves on at 73 to black chinchompas (Wilderness, Eagles' Peak).",
+      "url": "https://oldschool.runescape.wiki/w/Hunter_training",
+      "place": "Piscatoris Hunter area"
     }
   ]
 }

@@ -379,7 +379,8 @@ export function representativePoint(points: WikiPoint[], spread = 40): WikiPoint
 /** An article point: the first {{Map}} template with points — the map in an NPC, shop or place card. */
 export function articleMapPoint(wikitext: string): WikiPoint | null {
   for (const body of templates(wikitext, 'Map')) {
-    const p = representativePoint(mapTemplatePoints(body));
+    // A polygon outlines the area: its middle is the place, never its first corner (Lumbridge Swamp, 2026-11).
+    const p = representativePoint(mapTemplatePoints(body), /\bmtype\s*=\s*polygon\b/i.test(body) ? Infinity : undefined);
     if (p) return p;
   }
   return null;

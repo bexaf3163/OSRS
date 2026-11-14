@@ -46,6 +46,12 @@ const PLACES: [string, Kind, string[], string?][] = [
   ['Yanille', 'city', []],
   ['Canifis', 'city', []],
   ['Rellekka', 'city', []],
+  ['Grand Exchange bank', 'bank', ['GE bank'], 'Grand Exchange'],
+  ['Varrock Museum', 'landmark', ['Museum']],
+  ['Feldip Hunter area', 'landmark', []],
+  ['Rellekka Hunter area', 'landmark', []],
+  ['Piscatoris Hunter area', 'landmark', []],
+  ['Piscatoris falconry area', 'landmark', []],
   ['Entrana', 'city', []],
   ['Tree Gnome Stronghold', 'city', ['Gnome Stronghold']],
   ['Tree Gnome Village', 'city', []],
@@ -203,6 +209,8 @@ try {
   // The first run.
 }
 for (const name of failed.map((f) => f.replace(/ \(.*\)$/, ''))) if (previous[name]) out[name] = previous[name];
+// The castle bank is on the top floor (plane 2), which no article map gives; placed in 2.53.0 from the game.
+out['Lumbridge Bank'] = { x: 3208, y: 3220, plane: 2, label: 'Lumbridge Bank (castle top floor)', kind: 'bank', aliases: ['Lumbridge Castle bank'], page: 'Lumbridge' };
 
 const date = new Date().toISOString().slice(0, 10);
 writeFileSync(OUT, JSON.stringify({ source: 'OSRS Wiki, the {{Map}} template in the article', updated: date, locations: out }, null, 2) + '\n');
