@@ -1,0 +1,1481 @@
+{
+ "title": "Murder Mystery",
+ "cls": "MurderMystery",
+ "var": [
+  "varp",
+  192
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToGuard"
+   },
+   "1": "n1"
+  },
+  "nodes": {
+   "n1": {
+    "n": "investigating",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r3",
+        {
+         "o": "?",
+         "d": "RuneliteRequirement"
+        }
+       ]
+      },
+      {
+       "s": "finishQuest"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r3",
+        {
+         "o": "?",
+         "d": "RuneliteRequirement"
+        }
+       ]
+      },
+      "n2"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r3",
+        "r11",
+        {
+         "o": "or",
+         "a": [
+          "r12",
+          {
+           "o": "nor",
+           "a": [
+            "r13"
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      "n4"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r3",
+        "r12",
+        {
+         "o": "nor",
+         "a": [
+          "r11"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "talkToPoisonSalesman"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r3",
+        "r11",
+        {
+         "o": "nor",
+         "a": [
+          "r12"
+         ]
+        },
+        "r13"
+       ]
+      },
+      {
+       "s": "talkToPoisonSalesman2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r3",
+        {
+         "o": "?",
+         "d": "RuneliteRequirement"
+        }
+       ]
+      },
+      {
+       "s": "talkToPoisonSalesman"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r3"
+       ]
+      },
+      {
+       "s": "talkToGossip"
+      }
+     ],
+     [
+      "r1",
+      "n7"
+     ],
+     [
+      "r2",
+      {
+       "s": "pickUpPungentPot"
+      }
+     ]
+    ],
+    "d": {
+     "s": "searchWindowForThread"
+    }
+   },
+   "n2": {
+    "n": "searchSuspectItem",
+    "c": [
+     [
+      "r4",
+      {
+       "s": "searchElizabeth"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "searchCarol"
+      }
+     ],
+     [
+      "r6",
+      "n3"
+     ],
+     [
+      "r8",
+      {
+       "s": "searchFrank"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "searchBob"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "searchAnna"
+      }
+     ]
+    ],
+    "d": {
+     "s": "searchSuspectItemFallback"
+    }
+   },
+   "n3": {
+    "n": "searchDavid",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "?"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpstairs"
+    }
+   },
+   "n4": {
+    "n": "talkToSuspect",
+    "c": [
+     [
+      "r4",
+      "n5"
+     ],
+     [
+      "r5",
+      "n6"
+     ],
+     [
+      "r6",
+      {
+       "s": "talkToDavid"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "talkToFrank"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "talkToBob"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "talkToAnna"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToSuspectFallback"
+    }
+   },
+   "n5": {
+    "n": "talkToElizabeth",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "?"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpstairs"
+    }
+   },
+   "n6": {
+    "n": "talkToCarol",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "?"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpstairs"
+    }
+   },
+   "n7": {
+    "n": "checkingPrintSteps",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r14",
+        {
+         "o": "or",
+         "a": [
+          {
+           "o": "and",
+           "a": [
+            "r10",
+            {
+             "o": "item",
+             "nm": "Anna's print",
+             "ids": [
+              1816
+             ]
+            }
+           ]
+          },
+          {
+           "o": "and",
+           "a": [
+            "r9",
+            {
+             "o": "item",
+             "nm": "Bob's print",
+             "ids": [
+              1817
+             ]
+            }
+           ]
+          },
+          {
+           "o": "and",
+           "a": [
+            "r5",
+            {
+             "o": "item",
+             "nm": "Carol's print",
+             "ids": [
+              1818
+             ]
+            }
+           ]
+          },
+          {
+           "o": "and",
+           "a": [
+            "r6",
+            {
+             "o": "item",
+             "nm": "David's print",
+             "ids": [
+              1819
+             ]
+            }
+           ]
+          },
+          {
+           "o": "and",
+           "a": [
+            "r4",
+            {
+             "o": "item",
+             "nm": "Elizabeth's print",
+             "ids": [
+              1820
+             ]
+            }
+           ]
+          },
+          {
+           "o": "and",
+           "a": [
+            "r8",
+            {
+             "o": "item",
+             "nm": "Frank's print",
+             "ids": [
+              1821
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      "n8"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r14",
+        {
+         "o": "or",
+         "a": [
+          {
+           "o": "and",
+           "a": [
+            "r10",
+            {
+             "o": "item",
+             "nm": "Silver necklace",
+             "ids": [
+              1797
+             ]
+            }
+           ]
+          },
+          {
+           "o": "and",
+           "a": [
+            "r9",
+            {
+             "o": "item",
+             "nm": "Silver cup",
+             "ids": [
+              1799
+             ]
+            }
+           ]
+          },
+          {
+           "o": "and",
+           "a": [
+            "r5",
+            {
+             "o": "item",
+             "nm": "Silver bottle",
+             "ids": [
+              1801
+             ]
+            }
+           ]
+          },
+          {
+           "o": "and",
+           "a": [
+            "r6",
+            {
+             "o": "item",
+             "nm": "Silver book",
+             "ids": [
+              1803
+             ]
+            }
+           ]
+          },
+          {
+           "o": "and",
+           "a": [
+            "r4",
+            {
+             "o": "item",
+             "nm": "Silver needle",
+             "ids": [
+              1805
+             ]
+            }
+           ]
+          },
+          {
+           "o": "and",
+           "a": [
+            "r8",
+            {
+             "o": "item",
+             "nm": "Silver needle",
+             "ids": [
+              1807
+             ]
+            }
+           ]
+          }
+         ]
+        },
+        "r15"
+       ]
+      },
+      "n9"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r14",
+        "r16",
+        "r15",
+        "r17"
+       ]
+      },
+      "n10"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r14",
+        "r16",
+        "r15"
+       ]
+      },
+      {
+       "s": "fillPotWithFlourForSilver"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r14",
+        "r16"
+       ]
+      },
+      {
+       "s": "collectFlypaper"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Criminal's dagger",
+         "ids": [
+          1814
+         ]
+        },
+        "r16"
+       ]
+      },
+      {
+       "s": "useFlypaperOnDagger"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r18",
+        "r16",
+        "r17"
+       ]
+      },
+      {
+       "s": "useFlourOnDagger"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r18",
+        "r19",
+        "r16"
+       ]
+      },
+      "n11"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r18",
+        "r19"
+       ]
+      },
+      "n12"
+     ],
+     [
+      "r18",
+      {
+       "s": "collectTwoFlypaper"
+      }
+     ]
+    ],
+    "d": {
+     "s": "pickUpDagger"
+    }
+   },
+   "n8": {
+    "n": "comparePrints",
+    "c": [
+     [
+      "r10",
+      {
+       "s": "compareAnna"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "compareBob"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "compareCarol"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "compareDavid"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "compareElizabeth"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "compareFrank"
+      }
+     ]
+    ],
+    "d": {
+     "s": "comparePrintsFallback"
+    }
+   },
+   "n9": {
+    "n": "useFlypaper",
+    "c": [
+     [
+      "r4",
+      {
+       "s": "useFlypaperOnNeedle"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "useFlypaperOnNecklace"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "useFlypaperOnBottle"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "useFlypaperOnBook"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "useFlypaperOnPot"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "useFlypaperOnCup"
+      }
+     ]
+    ],
+    "d": {
+     "s": "useFlypaperFallback"
+    }
+   },
+   "n10": {
+    "n": "useFlour",
+    "c": [
+     [
+      "r4",
+      {
+       "s": "useFlourOnNeedle"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "useFlourOnNecklace"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "useFlourOnBottle"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "useFlourOnBook"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "useFlourOnPot"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "useFlourOnCup"
+      }
+     ]
+    ],
+    "d": {
+     "s": "useFlourFallback"
+    }
+   },
+   "n11": {
+    "n": "fillPotWithFlour",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "goDownstairs"
+      }
+     ]
+    ],
+    "d": {
+     "s": "actuallyFillPotWithFlour"
+    }
+   },
+   "n12": {
+    "n": "searchBarrel",
+    "c": [
+     [
+      "r4",
+      "n13"
+     ],
+     [
+      "r10",
+      {
+       "s": "searchAnnasBarrel"
+      }
+     ],
+     [
+      "r5",
+      "n14"
+     ],
+     [
+      "r6",
+      "n15"
+     ],
+     [
+      "r8",
+      "n16"
+     ],
+     [
+      "r9",
+      {
+       "s": "searchBobsBarrel"
+      }
+     ]
+    ],
+    "d": {
+     "s": "searchBarrelFallback"
+    }
+   },
+   "n13": {
+    "n": "searchElizabethsBarrel",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "?"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpstairs"
+    }
+   },
+   "n14": {
+    "n": "searchCarolsBarrel",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "?"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpstairs"
+    }
+   },
+   "n15": {
+    "n": "searchDavidsBarrel",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "?"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpstairs"
+    }
+   },
+   "n16": {
+    "n": "searchFranksBarrel",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "?"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpstairs"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "and",
+    "a": [
+     "r2",
+     {
+      "o": "?",
+      "d": "RuneliteRequirement"
+     }
+    ]
+   },
+   "r2": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r3": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r4": {
+    "o": "vp",
+    "id": 195,
+    "v": 5
+   },
+   "r5": {
+    "o": "vp",
+    "id": 195,
+    "v": 3
+   },
+   "r6": {
+    "o": "vp",
+    "id": 195,
+    "v": 4
+   },
+   "r7": {
+    "o": "zone",
+    "z": [
+     [
+      2727,
+      3571,
+      2752,
+      3585,
+      1,
+      1
+     ]
+    ]
+   },
+   "r8": {
+    "o": "vp",
+    "id": 195,
+    "v": 6
+   },
+   "r9": {
+    "o": "vp",
+    "id": 195,
+    "v": 2
+   },
+   "r10": {
+    "o": "vp",
+    "id": 195,
+    "v": 1
+   },
+   "r11": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r12": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r13": {
+    "o": "item",
+    "nm": "Pungent pot",
+    "ids": [
+     1812
+    ]
+   },
+   "r14": {
+    "o": "item",
+    "nm": "Unknown print",
+    "ids": [
+     1822
+    ]
+   },
+   "r15": {
+    "o": "item",
+    "nm": "Flypaper",
+    "ids": [
+     1811
+    ]
+   },
+   "r16": {
+    "o": "or",
+    "a": [
+     {
+      "o": "and",
+      "a": [
+       "r10",
+       {
+        "o": "item",
+        "nm": "Silver necklace",
+        "ids": [
+         1796
+        ]
+       }
+      ]
+     },
+     {
+      "o": "and",
+      "a": [
+       "r9",
+       {
+        "o": "item",
+        "nm": "Silver cup",
+        "ids": [
+         1798
+        ]
+       }
+      ]
+     },
+     {
+      "o": "and",
+      "a": [
+       "r5",
+       {
+        "o": "item",
+        "nm": "Silver bottle",
+        "ids": [
+         1800
+        ]
+       }
+      ]
+     },
+     {
+      "o": "and",
+      "a": [
+       "r6",
+       {
+        "o": "item",
+        "nm": "Silver book",
+        "ids": [
+         1802
+        ]
+       }
+      ]
+     },
+     {
+      "o": "and",
+      "a": [
+       "r4",
+       {
+        "o": "item",
+        "nm": "Silver needle",
+        "ids": [
+         1804
+        ]
+       }
+      ]
+     },
+     {
+      "o": "and",
+      "a": [
+       "r8",
+       {
+        "o": "item",
+        "nm": "Silver needle",
+        "ids": [
+         1806
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   "r17": {
+    "o": "item",
+    "nm": "Pot of flour",
+    "ids": [
+     1933
+    ]
+   },
+   "r18": {
+    "o": "item",
+    "nm": "Criminal's dagger",
+    "ids": [
+     1813,
+     1814,
+     1815
+    ]
+   },
+   "r19": {
+    "o": "or",
+    "a": [
+     {
+      "o": "item",
+      "nm": "Flypaper",
+      "ids": [
+       1811
+      ],
+      "q": 2
+     },
+     {
+      "o": "and",
+      "a": [
+       "r15",
+       "r14"
+      ]
+     }
+    ]
+   }
+  },
+  "alias": {
+   "collectFlypaper": [
+    "fillPotWithFlourForSilver"
+   ]
+  }
+ },
+ "unknown": {
+  "RuneliteRequirement": 8
+ },
+ "steps": {
+  "talkToGuard": {
+   "typ": "NpcStep",
+   "wp": [
+    2741,
+    3561,
+    0
+   ],
+   "ids": [
+    4218
+   ],
+   "text": "Talk to the Guard in the Sinclair Manor north of Camelot."
+  },
+  "searchWindowForThread": {
+   "typ": "ObjectStep",
+   "wp": [
+    2748,
+    3577,
+    0
+   ],
+   "ids": [
+    26123
+   ],
+   "text": "Search the window for a clothing thread. The colour of the thread will match the killer's trousers."
+  },
+  "finishQuest": {
+   "typ": "NpcStep",
+   "wp": [
+    2741,
+    3561,
+    0
+   ],
+   "ids": [
+    4218
+   ],
+   "text": "Return to the guard outside the Sinclair Mansion and tell him your findings."
+  },
+  "searchSuspectItemFallback": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Disprove the suspect's alibi by checking the thing they claimed to clean."
+  },
+  "searchElizabeth": {
+   "typ": "ObjectStep",
+   "wp": [
+    2747,
+    3563,
+    0
+   ],
+   "ids": [
+    2654
+   ],
+   "text": "Search the fountain south east of the mansion. If a dialog box doesn't come up, go back to Elizabeth to ask about poison, and COMPLETE THE DIALOG."
+  },
+  "searchCarol": {
+   "typ": "ObjectStep",
+   "wp": [
+    2736,
+    3573,
+    0
+   ],
+   "ids": [
+    2652
+   ],
+   "text": "Search the drain south of the mansion. If a dialog box doesn't come up, go back to Carol to ask about poison, and COMPLETE THE DIALOG."
+  },
+  "goUpstairs": {
+   "typ": "ObjectStep",
+   "wp": [
+    2736,
+    3581,
+    0
+   ],
+   "ids": [
+    25682
+   ],
+   "text": "Climb up the mansion staircase."
+  },
+  "searchFrank": {
+   "typ": "ObjectStep",
+   "wp": [
+    2746,
+    3573,
+    0
+   ],
+   "ids": [
+    2655
+   ],
+   "text": "Search the family crest attached to the south side of the mansion to the east. If a dialog box doesn't come up, go back to Frank to ask about poison, and COMPLETE THE DIALOG."
+  },
+  "searchBob": {
+   "typ": "ObjectStep",
+   "wp": [
+    2730,
+    3559,
+    0
+   ],
+   "ids": [
+    26121
+   ],
+   "text": "Search the beehive south west of the mansion. If a dialog box doesn't come up, go back to Bob to ask about poison, and COMPLETE THE DIALOG."
+  },
+  "searchAnna": {
+   "typ": "ObjectStep",
+   "wp": [
+    2730,
+    3572,
+    0
+   ],
+   "ids": [
+    26120
+   ],
+   "text": "Search the compost heap south west of the mansion. If a dialog box doesn't come up, go back to Anna to ask about poison, and COMPLETE THE DIALOG."
+  },
+  "talkToSuspectFallback": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Talk to the suspect."
+  },
+  "talkToDavid": {
+   "typ": "NpcStep",
+   "wp": [
+    2739,
+    3581,
+    0
+   ],
+   "ids": [
+    4223
+   ],
+   "text": "Talk to David in the mansion about what he used the poison for. Make sure to finish the dialog."
+  },
+  "talkToFrank": {
+   "typ": "NpcStep",
+   "wp": [
+    2742,
+    3577,
+    0
+   ],
+   "ids": [
+    4225
+   ],
+   "text": "Talk to Frank in the mansion about what he used the poison for. Make sure to finish the dialog."
+  },
+  "talkToBob": {
+   "typ": "NpcStep",
+   "wp": [
+    2748,
+    3559,
+    0
+   ],
+   "ids": [
+    4221
+   ],
+   "text": "Talk to Bob south of the mansion about what he used the poison for. Make sure to finish the dialog."
+  },
+  "talkToAnna": {
+   "typ": "NpcStep",
+   "wp": [
+    2734,
+    3575,
+    0
+   ],
+   "ids": [
+    4220
+   ],
+   "text": "Talk to Anna in the mansion about what she used the poison for. Make sure to finish the dialog."
+  },
+  "talkToPoisonSalesman": {
+   "typ": "NpcStep",
+   "wp": [
+    2694,
+    3493,
+    0
+   ],
+   "ids": [
+    4227
+   ],
+   "text": "Talk to the Poison Salesman in the Seers' Village pub about his customers."
+  },
+  "talkToPoisonSalesman2": {
+   "typ": "NpcStep",
+   "wp": [
+    2694,
+    3493,
+    0
+   ],
+   "ids": [
+    4227
+   ],
+   "text": "Talk to the Poison Salesman in the Seers' Village pub about the pungent pot."
+  },
+  "talkToGossip": {
+   "typ": "NpcStep",
+   "wp": [
+    2741,
+    3557,
+    0
+   ],
+   "ids": [
+    4219
+   ],
+   "text": "Talk to Gossip, just south of the Sinclair Mansion."
+  },
+  "pickUpDagger": {
+   "typ": "ItemStep",
+   "wp": [
+    2746,
+    3578,
+    0
+   ],
+   "ids": [],
+   "text": "Pick up the criminal's dagger."
+  },
+  "comparePrintsFallback": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Compare prints with the suspect."
+  },
+  "compareAnna": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use Anna's prints on the killer's print to compare them."
+  },
+  "compareBob": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use Bob's prints on the killer's print to compare them."
+  },
+  "compareCarol": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use Carol's prints on the killer's print to compare them."
+  },
+  "compareDavid": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use David's prints on the killer's print to compare them."
+  },
+  "compareElizabeth": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use Elizabeth's prints on the killer's print to compare them."
+  },
+  "compareFrank": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use Frank's prints on the killer's print to compare them."
+  },
+  "useFlypaperFallback": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flypaper on the suspect's item."
+  },
+  "useFlypaperOnNeedle": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flypaper on the silver needle."
+  },
+  "useFlypaperOnNecklace": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flypaper on the silver necklace."
+  },
+  "useFlypaperOnBottle": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flypaper on the silver bottle."
+  },
+  "useFlypaperOnBook": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flypaper on the silver book."
+  },
+  "useFlypaperOnPot": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flypaper on the silver pot."
+  },
+  "useFlypaperOnCup": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flypaper on the silver cup."
+  },
+  "useFlourFallback": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flour on the suspect's item."
+  },
+  "useFlourOnNeedle": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flour on the silver needle."
+  },
+  "useFlourOnNecklace": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flour on the silver necklace."
+  },
+  "useFlourOnBottle": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flour on the silver bottle."
+  },
+  "useFlourOnBook": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flour on the silver book."
+  },
+  "useFlourOnPot": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flour on the silver pot."
+  },
+  "useFlourOnCup": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use flour on the silver cup."
+  },
+  "fillPotWithFlourForSilver": {
+   "typ": "ObjectStep",
+   "wp": [
+    2733,
+    3582,
+    0
+   ],
+   "ids": [
+    26122
+   ],
+   "text": "Fill your pot with flour from the barrel in the mansion's kitchen."
+  },
+  "collectFlypaper": {
+   "typ": "ObjectStep",
+   "wp": [
+    2731,
+    3582,
+    0
+   ],
+   "ids": [
+    2663
+   ],
+   "text": "Investigate the sacks in the shed for 1 flypaper."
+  },
+  "useFlypaperOnDagger": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use the flypaper on the dagger."
+  },
+  "useFlourOnDagger": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use the pot of flour on the Criminal's dagger."
+  },
+  "actuallyFillPotWithFlour": {
+   "typ": "ObjectStep",
+   "wp": [
+    2733,
+    3582,
+    0
+   ],
+   "ids": [
+    26122
+   ],
+   "text": ""
+  },
+  "goDownstairs": {
+   "typ": "ObjectStep",
+   "wp": [
+    2736,
+    3581,
+    1
+   ],
+   "ids": [
+    25683
+   ],
+   "text": "Head downstairs to the ground floor."
+  },
+  "searchBarrelFallback": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Search the suspect's barrel."
+  },
+  "searchAnnasBarrel": {
+   "typ": "ObjectStep",
+   "wp": [
+    2733,
+    3575,
+    0
+   ],
+   "ids": [
+    2656
+   ],
+   "text": "Search Anna's barrel on the ground floor."
+  },
+  "searchBobsBarrel": {
+   "typ": "ObjectStep",
+   "wp": [
+    2735,
+    3579,
+    0
+   ],
+   "ids": [
+    2657
+   ],
+   "text": "Search Bob's barrel on the ground floor."
+  },
+  "collectTwoFlypaper": {
+   "typ": "ObjectStep",
+   "wp": [
+    2731,
+    3582,
+    0
+   ],
+   "ids": [
+    2663
+   ],
+   "text": "Investigate the sacks in the shed for flypaper. Get 2 pieces."
+  },
+  "pickUpPungentPot": {
+   "typ": "ItemStep",
+   "wp": [
+    2747,
+    3579,
+    0
+   ],
+   "ids": [],
+   "text": "Enter the mansion and pick up the pungent pot inside the east room."
+  }
+ }
+}

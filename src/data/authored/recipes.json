@@ -1,5 +1,5 @@
 {
-  "source": "OSRS Wiki: Orange dye, Red dye, Yellow dye (Aggie in Draynor Village); Ecto-token, Ectofuntus.",
+  "source": "OSRS Wiki: Orange dye, Red dye, Yellow dye (Aggie in Draynor Village); Ecto-token, Ectofuntus; Chocolatey milk, Hangover cure.",
   "note": "Items that are made from other items. If the made item is missing, the ingredients are planned too, so the player is warned before leaving the place where they are made.",
   "recipes": {
     "Orange dye": {
@@ -19,6 +19,24 @@
         { "nameEn": "Bones", "count": 1, "how": "Any bones: crushed into bonemeal in the pot at the bone grinder upstairs in the Ectofuntus." },
         { "nameEn": "Pot", "count": 1, "how": "Holds the bonemeal from the bone grinder." },
         { "nameEn": "Bucket", "count": 1, "how": "Filled with slime at the pool in the Ectofuntus basement." }
+      ]
+    },
+    "Chocolatey milk": {
+      "makeAt": "Anywhere, in the bag",
+      "manualSeconds": 2,
+      "note": "Use chocolate dust on a bucket of milk (OSRS Wiki, Chocolatey milk). The 2 seconds are an estimate of one use action.",
+      "from": [
+        { "nameEn": "Bucket of milk", "count": 1, "how": "Milk a dairy cow with a bucket, or buy one." },
+        { "nameEn": "Chocolate dust", "count": 1, "how": "Grind a chocolate bar with a knife or a pestle and mortar, or buy it." }
+      ]
+    },
+    "Hangover cure": {
+      "makeAt": "Anywhere, in the bag",
+      "manualSeconds": 2,
+      "note": "Use snape grass on chocolatey milk (OSRS Wiki, Hangover cure). The 2 seconds are an estimate of one use action.",
+      "from": [
+        { "nameEn": "Chocolatey milk", "count": 1, "how": "Use chocolate dust on a bucket of milk." },
+        { "nameEn": "Snape grass", "count": 1, "how": "Spawns west of the Crafting Guild, or buy it." }
       ]
     }
   }

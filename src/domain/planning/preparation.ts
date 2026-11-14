@@ -40,7 +40,7 @@ export function freePickup(source: NonNullable<PrepLine['action']>['acquisition'
 }
 
 /** A made item's time: the recipe's seconds for every make it takes (5 Ecto-tokens a worship); no faster or slower bound is known. */
-const madeTime = (make: { seconds: number; yield: number }, count: number): Minutes => {
+export const madeTime = (make: { seconds: number; yield: number }, count: number): Minutes => {
   const typical = (make.seconds * Math.ceil(count / make.yield)) / 60;
   return { fast: typical, typical, slow: typical, source: 'Recipe time per make' };
 };

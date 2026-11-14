@@ -106,3 +106,10 @@ describe('earning before a purchase', () => {
     expect(preparationTime(earning(null), origin, () => minute)).toBeNull();
   });
 });
+
+describe('a made item in the preparation trip', () => {
+  it('takes its recipe time, where no gathering engine has one (the Hangover cure)', () => {
+    const made = line({ key: 'cure', name: 'Hangover cure', action: { kind: 'GATHER', acquisition: { kind: 'make', label: 'Make', make: { seconds: 120, yield: 1 } } } });
+    expect(preparationTime(frame([made], 'GATHER'), origin, () => minute)).toMatchObject({ typical: 2 });
+  });
+});

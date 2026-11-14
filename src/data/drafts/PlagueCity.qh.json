@@ -1,0 +1,1084 @@
+{
+ "title": "Plague City",
+ "cls": "PlagueCity",
+ "var": [
+  "varp",
+  165
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToEdmond"
+   },
+   "1": {
+    "s": "talkToAlrena"
+   },
+   "2": "n1",
+   "3": {
+    "s": "useWaterOnMudPatch1"
+   },
+   "4": {
+    "s": "useWaterOnMudPatch2"
+   },
+   "5": {
+    "s": "useWaterOnMudPatch3"
+   },
+   "6": {
+    "s": "useWaterOnMudPatch4"
+   },
+   "7": "n2",
+   "8": "n3",
+   "9": "n4",
+   "10": "n5",
+   "20": "n6",
+   "21": "n7",
+   "22": "n8",
+   "23": "n9",
+   "24": "n10",
+   "25": "n11",
+   "26": "n12",
+   "27": "n13",
+   "28": "n14"
+  },
+  "nodes": {
+   "n1": {
+    "n": "getPictureThenTalkEdmond",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToEdmondAgain"
+      }
+     ]
+    ],
+    "d": {
+     "s": "grabPictureOfElena"
+    }
+   },
+   "n2": {
+    "n": "getPictureThenDig",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "digHole"
+      }
+     ]
+    ],
+    "d": {
+     "s": "grabPictureOfElena"
+    }
+   },
+   "n3": {
+    "n": "attemptToOpenGrill",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "vb",
+         "id": 1786,
+         "v": 1
+        },
+        "r2",
+        "r1"
+       ]
+      },
+      {
+       "s": "useRopeOnGrill"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2",
+        "r1"
+       ]
+      },
+      {
+       "s": "attemptToPullGrill"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "climbMudPile"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "goDownHole"
+      }
+     ]
+    ],
+    "d": {
+     "s": "grabPictureOfElena"
+    }
+   },
+   "n4": {
+    "n": "pullOffGrill",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2",
+        "r1"
+       ]
+      },
+      {
+       "s": "talkToEdmondUnderground"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "climbMudPile"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "goDownHole"
+      }
+     ]
+    ],
+    "d": {
+     "s": "grabPictureOfElena"
+    }
+   },
+   "n5": {
+    "n": "enterWestArdougne",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r1"
+       ]
+      },
+      {
+       "s": "talkToJethick"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2",
+        "r1"
+       ]
+      },
+      {
+       "s": "climbThroughPipe"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "climbMudPile"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "goDownHole"
+      }
+     ]
+    ],
+    "d": {
+     "s": "grabPictureOfElena"
+    }
+   },
+   "n6": {
+    "n": "goToMarthasHouse",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        {
+         "o": "item",
+         "nm": "Book",
+         "ids": [
+          1509
+         ]
+        }
+       ]
+      },
+      {
+       "s": "enterMarthasHouse"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "talkToJethick"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "climbThroughPipe"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownHole"
+    }
+   },
+   "n7": {
+    "n": "talkToMarthaInHouse",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "talkToMartha"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "climbThroughPipe"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownHole"
+    }
+   },
+   "n8": {
+    "n": "talkToMilliInHouse",
+    "c": [
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2527,
+         3329,
+         2533,
+         3333,
+         1,
+         1
+        ]
+       ]
+      },
+      {
+       "s": "talkToMilli"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "goUpstairsInMarthasHouse"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "climbThroughPipe"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownHole"
+    }
+   },
+   "n9": {
+    "n": "goToPlagueHouse",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "tryToEnterPlagueHouse"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "climbThroughPipe"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownHole"
+    }
+   },
+   "n10": {
+    "n": "goSpeakToClerk",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "talkToClerk"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "climbThroughPipe"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownHole"
+    }
+   },
+   "n11": {
+    "n": "goTalkToBravek",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "talkToBravek"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "climbThroughPipe"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownHole"
+    }
+   },
+   "n12": {
+    "n": "createHangoverCureForBravek",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r4"
+       ]
+      },
+      {
+       "s": "giveHangoverCureToBravek"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        "r2"
+       ]
+      },
+      {
+       "s": "climbThroughPipe"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "goDownHole"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Chocolatey milk",
+       "ids": [
+        1977
+       ]
+      },
+      {
+       "s": "useSnapeGrassOnChocolateMilk"
+      }
+     ]
+    ],
+    "d": {
+     "s": "useDustOnMilk"
+    }
+   },
+   "n13": {
+    "n": "continueTalkingToBravek",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6"
+       ]
+      },
+      {
+       "s": "talkToElena"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r7",
+        "r6"
+       ]
+      },
+      {
+       "s": "goDownstairsInPlagueHouse"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "searchBarrel"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "goUpstairsInPlagueHouse"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Warrant",
+         "ids": [
+          1503
+         ]
+        },
+        "r3"
+       ]
+      },
+      {
+       "s": "tryToEnterPlagueHouseAgain"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "talkToBravekAgain"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "climbThroughPipe"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownHole"
+    }
+   },
+   "n14": {
+    "n": "finishQuest",
+    "c": [
+     [
+      "r5",
+      {
+       "s": "goUpstairsInPlagueHouseToFinish"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        {
+         "o": "obj",
+         "ids": [
+          2543
+         ]
+        }
+       ]
+      },
+      {
+       "s": "goDownManhole2"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "goDownManhole"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "climbMudPileToFinish"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToEdmondToFinish"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "item",
+    "nm": "Picture",
+    "ids": [
+     1510
+    ]
+   },
+   "r2": {
+    "o": "zone",
+    "z": [
+     [
+      2506,
+      9737,
+      2532,
+      9781,
+      0,
+      0
+     ]
+    ]
+   },
+   "r3": {
+    "o": "zone",
+    "z": [
+     [
+      2460,
+      3279,
+      2556,
+      3334,
+      0,
+      2
+     ],
+     [
+      2434,
+      3305,
+      2464,
+      3323,
+      0,
+      2
+     ],
+     [
+      2510,
+      3265,
+      2556,
+      3280,
+      0,
+      2
+     ]
+    ]
+   },
+   "r4": {
+    "o": "item",
+    "nm": "Hangover cure",
+    "ids": [
+     1504
+    ]
+   },
+   "r5": {
+    "o": "zone",
+    "z": [
+     [
+      2535,
+      9670,
+      2542,
+      9673,
+      0,
+      0
+     ]
+    ]
+   },
+   "r6": {
+    "o": "item",
+    "nm": "A small key",
+    "ids": [
+     1507
+    ]
+   },
+   "r7": {
+    "o": "zone",
+    "z": [
+     [
+      2532,
+      3268,
+      2541,
+      3271,
+      0,
+      0
+     ],
+     [
+      2535,
+      3272,
+      2541,
+      3272,
+      0,
+      0
+     ]
+    ]
+   }
+  },
+  "alias": {
+   "climbMudPile": [
+    "grabPictureOfElena"
+   ],
+   "useWaterOnMudPatch2": [
+    "useWaterOnMudPatch1"
+   ],
+   "useWaterOnMudPatch3": [
+    "useWaterOnMudPatch1"
+   ],
+   "useWaterOnMudPatch4": [
+    "useWaterOnMudPatch1"
+   ],
+   "talkToMilli": [
+    "goUpstairsInMarthasHouse"
+   ],
+   "goUpstairsInPlagueHouse": [
+    "searchBarrel"
+   ],
+   "goUpstairsInPlagueHouseToFinish": [
+    "talkToEdmondToFinish"
+   ],
+   "goDownManhole": [
+    "talkToEdmondToFinish"
+   ],
+   "goDownManhole2": [
+    "talkToEdmondToFinish"
+   ],
+   "climbMudPileToFinish": [
+    "talkToEdmondToFinish"
+   ]
+  }
+ },
+ "unknown": {},
+ "steps": {
+  "talkToEdmond": {
+   "typ": "NpcStep",
+   "wp": [
+    2568,
+    3333,
+    0
+   ],
+   "ids": [
+    4256
+   ],
+   "text": "Talk to Edmond in the north-west corner of East Ardougne."
+  },
+  "talkToAlrena": {
+   "typ": "NpcStep",
+   "wp": [
+    2573,
+    3333,
+    0
+   ],
+   "ids": [
+    4249
+   ],
+   "text": "Talk to Alrena and give her the dwellberries."
+  },
+  "grabPictureOfElena": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2576,
+    3334,
+    0
+   ],
+   "ids": [],
+   "text": "Grab the Picture from Edmond's house."
+  },
+  "climbMudPile": {
+   "typ": "ObjectStep",
+   "wp": [
+    2519,
+    9760,
+    0
+   ],
+   "ids": [
+    2533
+   ],
+   "text": "Climb the mud pile."
+  },
+  "talkToEdmondAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2568,
+    3332,
+    0
+   ],
+   "ids": [
+    4256
+   ],
+   "text": "Talk to Edmond again."
+  },
+  "useWaterOnMudPatch1": {
+   "typ": "ObjectStep",
+   "wp": [
+    2566,
+    3332,
+    0
+   ],
+   "ids": [
+    2532
+   ],
+   "text": "Use four buckets of water on the mud patch in Edmond's garden patch."
+  },
+  "useWaterOnMudPatch2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2566,
+    3332,
+    0
+   ],
+   "ids": [
+    2532
+   ],
+   "text": "Use three more buckets of water on the mud patch in Edmond's garden patch."
+  },
+  "useWaterOnMudPatch3": {
+   "typ": "ObjectStep",
+   "wp": [
+    2566,
+    3332,
+    0
+   ],
+   "ids": [
+    2532
+   ],
+   "text": "Use two more buckets of water on the mud patch in Edmond's garden patch."
+  },
+  "useWaterOnMudPatch4": {
+   "typ": "ObjectStep",
+   "wp": [
+    2566,
+    3332,
+    0
+   ],
+   "ids": [
+    2532
+   ],
+   "text": "Use one more bucket of water on the mud patch in Edmond's garden patch."
+  },
+  "digHole": {
+   "typ": "ObjectStep",
+   "wp": [
+    2566,
+    3332,
+    0
+   ],
+   "ids": [
+    2532
+   ],
+   "text": "Use a spade on the mud patch."
+  },
+  "useRopeOnGrill": {
+   "typ": "ObjectStep",
+   "wp": [
+    2514,
+    9739,
+    0
+   ],
+   "ids": [
+    11422
+   ],
+   "text": "Use a rope on the grill."
+  },
+  "attemptToPullGrill": {
+   "typ": "ObjectStep",
+   "wp": [
+    2514,
+    9739,
+    0
+   ],
+   "ids": [
+    11422
+   ],
+   "text": "Attempt to pull the grill in the south of the sewer."
+  },
+  "goDownHole": {
+   "typ": "ObjectStep",
+   "wp": [
+    2566,
+    3332,
+    0
+   ],
+   "ids": [
+    2532
+   ],
+   "text": "Go down the hole."
+  },
+  "talkToEdmondUnderground": {
+   "typ": "NpcStep",
+   "wp": [
+    2517,
+    9753,
+    0
+   ],
+   "ids": [
+    4256
+   ],
+   "text": "Talk to Edmond and ask him to help you pull off the grill."
+  },
+  "talkToJethick": {
+   "typ": "NpcStep",
+   "wp": [
+    2540,
+    3305,
+    0
+   ],
+   "ids": [
+    8974
+   ],
+   "text": "Talk to Jethick east of where you emerge."
+  },
+  "climbThroughPipe": {
+   "typ": "ObjectStep",
+   "wp": [
+    2514,
+    9738,
+    0
+   ],
+   "ids": [
+    2542
+   ],
+   "text": "Equip the gas mask and climb through the pipe."
+  },
+  "enterMarthasHouse": {
+   "typ": "ObjectStep",
+   "wp": [
+    2531,
+    3328,
+    0
+   ],
+   "ids": [
+    2537
+   ],
+   "text": "Enter the tall house in north West Ardougne."
+  },
+  "talkToMartha": {
+   "typ": "NpcStep",
+   "wp": [
+    2531,
+    3331,
+    0
+   ],
+   "ids": [
+    4264
+   ],
+   "text": "Talk to Martha or Ted Rehnison"
+  },
+  "talkToMilli": {
+   "typ": "NpcStep",
+   "wp": [
+    2531,
+    3331,
+    1
+   ],
+   "ids": [
+    4266
+   ],
+   "text": "Talk to Milli."
+  },
+  "goUpstairsInMarthasHouse": {
+   "typ": "ObjectStep",
+   "wp": [
+    2528,
+    3333,
+    0
+   ],
+   "ids": [
+    2539
+   ],
+   "text": "Talk to Milli upstairs."
+  },
+  "tryToEnterPlagueHouse": {
+   "typ": "ObjectStep",
+   "wp": [
+    2540,
+    3273,
+    0
+   ],
+   "ids": [],
+   "text": "Try to enter the house in the south-east corner of West Ardougne."
+  },
+  "talkToClerk": {
+   "typ": "NpcStep",
+   "wp": [
+    2528,
+    3317,
+    0
+   ],
+   "ids": [
+    4255
+   ],
+   "text": "Talk to the Clerk in the large building north of the manhole."
+  },
+  "talkToBravek": {
+   "typ": "NpcStep",
+   "wp": [
+    2534,
+    3314,
+    0
+   ],
+   "ids": [
+    4252
+   ],
+   "text": "Talk to Bravek in the room to the east."
+  },
+  "useDustOnMilk": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use your chocolate dust on the bucket of milk."
+  },
+  "giveHangoverCureToBravek": {
+   "typ": "NpcStep",
+   "wp": [
+    2534,
+    3314,
+    0
+   ],
+   "ids": [
+    4252
+   ],
+   "text": "Give the hangover cure to Bravek."
+  },
+  "useSnapeGrassOnChocolateMilk": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use the snape grass on the chocolatey milk"
+  },
+  "talkToElena": {
+   "typ": "NpcStep",
+   "wp": [
+    2541,
+    9671,
+    0
+   ],
+   "ids": [
+    4257
+   ],
+   "text": "Enter the jail and talk to Elena."
+  },
+  "goDownstairsInPlagueHouse": {
+   "typ": "ObjectStep",
+   "wp": [
+    2537,
+    3269,
+    0
+   ],
+   "ids": [
+    2522
+   ],
+   "text": "Go downstairs in the plague house."
+  },
+  "searchBarrel": {
+   "typ": "ObjectStep",
+   "wp": [
+    2534,
+    3268,
+    0
+   ],
+   "ids": [
+    2530
+   ],
+   "text": "Search the barrel in the room for a small key."
+  },
+  "goUpstairsInPlagueHouse": {
+   "typ": "ObjectStep",
+   "wp": [
+    2537,
+    9672,
+    0
+   ],
+   "ids": [
+    2523
+   ],
+   "text": "Go back upstairs to get the key for Elena's cell."
+  },
+  "tryToEnterPlagueHouseAgain": {
+   "typ": "ObjectStep",
+   "wp": [
+    2540,
+    3273,
+    0
+   ],
+   "ids": [],
+   "text": "Try to enter the plague house again."
+  },
+  "talkToBravekAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2534,
+    3314,
+    0
+   ],
+   "ids": [
+    4252
+   ],
+   "text": "Talk to Bravek to receive the warrant you need to enter the plague house."
+  },
+  "talkToEdmondToFinish": {
+   "typ": "NpcStep",
+   "wp": [
+    2568,
+    3333,
+    0
+   ],
+   "ids": [
+    4256
+   ],
+   "text": "Return to Edmond to finish the quest."
+  },
+  "goUpstairsInPlagueHouseToFinish": {
+   "typ": "ObjectStep",
+   "wp": [
+    2537,
+    9672,
+    0
+   ],
+   "ids": [
+    2523
+   ],
+   "text": "Go back upstairs and return to Edmond to finish the quest."
+  },
+  "goDownManhole": {
+   "typ": "ObjectStep",
+   "wp": [
+    2529,
+    3303,
+    0
+   ],
+   "ids": [
+    2544
+   ],
+   "text": "Go back down the manhole to return to Edmond."
+  },
+  "goDownManhole2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2529,
+    3303,
+    0
+   ],
+   "ids": [
+    2543
+   ],
+   "text": "Go back down the manhole to return to Edmond."
+  },
+  "climbMudPileToFinish": {
+   "typ": "ObjectStep",
+   "wp": [
+    2519,
+    9760,
+    0
+   ],
+   "ids": [
+    2533
+   ],
+   "text": "Climb the mud pile to return to Edmond."
+  }
+ }
+}

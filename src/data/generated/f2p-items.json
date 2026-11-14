@@ -3319,6 +3319,145 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Chisel"
   },
   {
+    "id": 1973,
+    "nameEn": "Chocolate bar",
+    "examine": "Mmmmmmm chocolate.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Chocolate_bar.png",
+    "value": 10,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "buyLocations": [
+      {
+        "shopName": "Food Store",
+        "location": "Port Sarim",
+        "owner": "Wydin",
+        "price": 10,
+        "stock": 1,
+        "members": false
+      },
+      {
+        "shopName": "Culinaromancer's Chest",
+        "location": "Lumbridge Castle basement",
+        "owner": "None",
+        "price": 10,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Rok's Chocs Box.",
+        "location": "Nardah",
+        "owner": "Rokuh",
+        "price": 10,
+        "stock": 25,
+        "members": true
+      },
+      {
+        "shopName": "Funch's Fine Groceries",
+        "location": "Grand Tree",
+        "owner": "Heckel Funch",
+        "price": 10,
+        "stock": 20,
+        "members": true
+      },
+      {
+        "shopName": "Ardougne Baker's Stall.",
+        "location": "East Ardougne",
+        "owner": "Baker",
+        "price": 10,
+        "stock": 9,
+        "members": true
+      },
+      {
+        "shopName": "Grand Tree Groceries",
+        "location": "Grand Tree",
+        "owner": "Hudo",
+        "price": 10,
+        "stock": 20,
+        "members": true
+      },
+      {
+        "shopName": "Miscellanian Food Shop",
+        "location": "Miscellania Expansion",
+        "owner": "Osvald",
+        "price": 10,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Frenita's Cookery Shop.",
+        "location": "Yanille",
+        "owner": "Frenita",
+        "price": 10,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Logava Gricoller's Cooking Supplies",
+        "location": "Hosidius",
+        "owner": "Logava",
+        "price": 10,
+        "stock": 1,
+        "members": true
+      },
+      {
+        "shopName": "Kenelme's Wares",
+        "location": "Port Piscarilius",
+        "owner": "Kenelme",
+        "price": 10,
+        "stock": 1,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Cooks' Guild",
+      "Zanaris - south of the bank (members only)",
+      "Kastori (1st floor) (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Chocolate_bar"
+  },
+  {
+    "id": 1975,
+    "nameEn": "Chocolate dust",
+    "examine": "It's ground up chocolate.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Chocolate_dust.png",
+    "value": 2,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Funch's Fine Groceries",
+        "location": "Grand Tree",
+        "owner": "Heckel Funch",
+        "price": 2,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Grand Tree Groceries",
+        "location": "Grand Tree",
+        "owner": "Hudo",
+        "price": 2,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Dessourt",
+        "combatLevel": 121,
+        "rate": "Always"
+      },
+      {
+        "monster": "Dessourt (Nightmare Zone)",
+        "combatLevel": 217,
+        "rate": "Always"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Chocolate_dust"
+  },
+  {
     "id": 13660,
     "nameEn": "Chronicle",
     "examine": "The legends of RuneScape.",
@@ -4125,6 +4264,45 @@
     "value": 15,
     "highAlch": 9,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Dramen_staff"
+  },
+  {
+    "id": 2126,
+    "nameEn": "Dwellberries",
+    "examine": "Some rather pretty blue berries.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Dwellberries.png",
+    "value": 4,
+    "highAlch": 2,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Funch's Fine Groceries",
+        "location": "Grand Tree",
+        "owner": "Heckel Funch",
+        "price": 4,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Grand Tree Groceries",
+        "location": "Grand Tree",
+        "owner": "Hudo",
+        "price": 4,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "McGrubor's Wood (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Zombie (Tarn's Lair)#High level",
+        "combatLevel": null,
+        "rate": "2/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Dwellberries"
   },
   {
     "id": 557,
@@ -5750,6 +5928,16 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Hammer"
+  },
+  {
+    "id": 1504,
+    "nameEn": "Hangover cure",
+    "examine": "It doesn't look very tasty.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Hangover_cure.png",
+    "value": 2,
+    "highAlch": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Hangover_cure"
   },
   {
     "id": 1743,
@@ -8997,6 +9185,18 @@
       "Shayzien Styles (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Orange_dye"
+  },
+  {
+    "id": 1510,
+    "nameEn": "Picture",
+    "examine": "A picture of a lady called Elena.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Picture.png",
+    "value": 1,
+    "freeSpawns": [
+      "East Ardougne - Edmond and Alrena's house (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Picture"
   },
   {
     "id": 1013,
@@ -12870,6 +13070,65 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Small_fishing_net"
+  },
+  {
+    "id": 231,
+    "nameEn": "Snape grass",
+    "examine": "Strange spiky grass.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Snape_grass.png",
+    "value": 10,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "freeSpawns": [
+      "Waterbirth Island (members only)",
+      "The Dibber by Hosidius (members only)",
+      "Hobgoblin Peninsula west of the Crafting Guild (members only)",
+      "Civitas illa Fortis (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Cave bug#Level 6",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Tribesman",
+        "combatLevel": 32,
+        "rate": "20/138"
+      },
+      {
+        "monster": "Tribeswoman",
+        "combatLevel": 32,
+        "rate": "20/138"
+      },
+      {
+        "monster": "Rock lobster",
+        "combatLevel": 127,
+        "rate": "10/128"
+      },
+      {
+        "monster": "Aquanite",
+        "combatLevel": 145,
+        "rate": "10/128"
+      },
+      {
+        "monster": "Elder aquanite",
+        "combatLevel": 305,
+        "rate": "1/13"
+      },
+      {
+        "monster": "Starlight",
+        "combatLevel": 149,
+        "rate": "7/127"
+      },
+      {
+        "monster": "Bree",
+        "combatLevel": 146,
+        "rate": "7/127"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Snape_grass"
   },
   {
     "id": 1761,

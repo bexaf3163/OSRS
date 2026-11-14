@@ -3,7 +3,7 @@
 // purchases have no modelled time, so they keep the whole preparation UNKNOWN rather than zero.
 import type { TacticalFrame } from './tactical';
 import type { Minutes, PlanningSnapshot } from './contracts';
-import { freePickup } from './preparation';
+import { freePickup, madeTime } from './preparation';
 import type { WorldPoint } from '../player/playerState';
 import { costTrip, type TripStop } from './trip';
 import { noTime, sumMinutes } from './cost';
@@ -49,8 +49,9 @@ export function preparationTime(
     const source = line.action?.kind === 'GATHER' ? line.action.acquisition : undefined;
     const free = freePickup(source, quests) ? source!.point : undefined;
     if (!free || line.count - (bag ?? 0) - equipped - (bank ?? 0) > 1) {
-      // Gathering it yourself (the Money engine's supply mode) carries its own walk and banking.
-      const own = line.action?.kind === 'GATHER' ? gather?.(line.name, Math.max(1, line.count - (bag ?? 0) - equipped)) ?? null : null;
+      // Gathering it yourself (the Money engine's supply mode) carries its own walk and banking; a made item takes its recipe time.
+      const missing = Math.max(1, line.count - (bag ?? 0) - equipped), make = source?.make;
+      const own = line.action?.kind === 'GATHER' ? (make ? madeTime(make, missing) : gather?.(line.name, missing)) ?? null : null;
       if (!own) return null;
       gathered.push(own);
       continue;

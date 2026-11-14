@@ -12569,6 +12569,1251 @@
     }
    ]
   },
+  "S7-09": {
+   "var": [
+    "varp",
+    165
+   ],
+   "route": [
+    {
+     "title": "Starting the quest",
+     "steps": [
+      "Speak to Edmond. Dialogue: \"What's happened to her?\", \"Yes.\"",
+      "Speak to Alrena inside or near the house.",
+      "Take the Picture of Elena off the table in the house.",
+      "Speak to Edmond.",
+      "Use 4 buckets of water on the mud patch behind the house (between the cabbages and potatoes).",
+      "Dig with a spade on the softened ground.",
+      "Go south to the farthest pipe.",
+      "Attempt to open the grill.",
+      "Use a rope on the grill.",
+      "Speak to Edmond.",
+      "Put on the gas mask and climb up the pipe."
+     ]
+    },
+    {
+     "title": "Finding Elena",
+     "steps": [
+      "Go east and speak to Jethick; he will give you a book. Dialogue: \"Yes, I'll return it for you.\"",
+      "Go north to the house against the wall (next to the rotten apple spawn).",
+      "Attempt to open the door.",
+      "Speak to Martha Rehnison or Ted Rehnison in the house.",
+      "Go upstairs and speak to Milli Rehnison.",
+      "Go south of the town square to the large building along the southern wall with an \"X\" on the doors and a staircase inside going down. Attempt to open the door. Dialogue: \"I fear not a mere plague.\""
+     ]
+    },
+    {
+     "title": "Getting inside",
+     "steps": [
+      "Go to the large main building on the north side of the town square, north of the manhole.",
+      "Talk to the Clerk in the main room. Dialogue: \"Who is through that door?\", \"This is urgent though! Someone's been kidnapped!\"",
+      "Speak to Bravek. Dialogue: \"This is really important though!\", \"Do you know what's in the cure?\"",
+      ":He will give you a scruffy note for a hangover cure.",
+      "Use the hangover cure on Bravek; he will give you a warrant. Dialogue: \"They won't listen to me!\""
+     ]
+    },
+    {
+     "title": "Finishing up",
+     "steps": [
+      "Return to the Mourner house, the one with \"X\" on the doors and the stairwell.",
+      "Search the barrel west of the staircase for a small key.",
+      "Go downstairs, enter the cell, and speak to Elena.",
+      "Return to the town square, go down the manhole, through the sewer, climb the mud pile, and speak to Edmond at his house.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Edmond in the north-west corner of East Ardougne.",
+       "s": "Talk to Edmond in the north-west corner of East Ardougne.",
+       "k": "talkToEdmond",
+       "at": [
+        2568,
+        3333,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4256
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Alrena and give her the dwellberries.",
+       "s": "Talk to Alrena and give her the dwellberries.",
+       "k": "talkToAlrena",
+       "at": [
+        2573,
+        3333,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4249
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Grab the Picture from Edmond's house.",
+       "s": "Grab the Picture from Edmond's house.",
+       "k": "grabPictureOfElena",
+       "at": [
+        2576,
+        3334,
+        0
+       ],
+       "has": "Picture"
+      },
+      {
+       "t": "Talk to Edmond again.",
+       "s": "Talk to Edmond again.",
+       "k": "talkToEdmondAgain",
+       "at": [
+        2568,
+        3332,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4256
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Use four buckets of water on the mud patch in Edmond's garden patch.",
+       "s": "Use four buckets of water on the mud patch in Edmond's garden patch.",
+       "k": "useWaterOnMudPatch1",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Use three more buckets of water on the mud patch in Edmond's garden patch.",
+       "s": "Use three more buckets of water on the mud patch",
+       "k": "useWaterOnMudPatch2",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Use two more buckets of water on the mud patch in Edmond's garden patch.",
+       "s": "Use two more buckets of water on the mud patch",
+       "k": "useWaterOnMudPatch3",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Use one more bucket of water on the mud patch in Edmond's garden patch.",
+       "s": "Use one more bucket of water on the mud patch",
+       "k": "useWaterOnMudPatch4",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Grab the Picture from Edmond's house.",
+       "s": "Grab the Picture from Edmond's house.",
+       "k": "grabPictureOfElena",
+       "at": [
+        2576,
+        3334,
+        0
+       ],
+       "has": "Picture"
+      },
+      {
+       "t": "Use a spade on the mud patch.",
+       "s": "Use a spade on the mud patch.",
+       "k": "digHole",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Grab the Picture from Edmond's house.",
+       "s": "Grab the Picture from Edmond's house.",
+       "k": "grabPictureOfElena",
+       "at": [
+        2576,
+        3334,
+        0
+       ],
+       "has": "Picture"
+      },
+      {
+       "t": "Go down the hole.",
+       "s": "Go down the hole.",
+       "k": "goDownHole",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      },
+      {
+       "t": "Climb the mud pile.",
+       "s": "Climb the mud pile.",
+       "k": "climbMudPile",
+       "at": [
+        2519,
+        9760,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2533
+        ]
+       }
+      },
+      {
+       "t": "Attempt to pull the grill in the south of the sewer.",
+       "s": "Attempt to pull the grill in the south of the sewer.",
+       "k": "attemptToPullGrill",
+       "at": [
+        2514,
+        9739,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11422
+        ]
+       }
+      },
+      {
+       "t": "Use a rope on the grill.",
+       "s": "Use a rope on the grill.",
+       "k": "useRopeOnGrill",
+       "at": [
+        2514,
+        9739,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11422
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Grab the Picture from Edmond's house.",
+       "s": "Grab the Picture from Edmond's house.",
+       "k": "grabPictureOfElena",
+       "at": [
+        2576,
+        3334,
+        0
+       ],
+       "has": "Picture"
+      },
+      {
+       "t": "Go down the hole.",
+       "s": "Go down the hole.",
+       "k": "goDownHole",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      },
+      {
+       "t": "Climb the mud pile.",
+       "s": "Climb the mud pile.",
+       "k": "climbMudPile",
+       "at": [
+        2519,
+        9760,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2533
+        ]
+       }
+      },
+      {
+       "t": "Talk to Edmond and ask him to help you pull off the grill.",
+       "s": "Talk to Edmond and ask him to help you pull off the grill.",
+       "k": "talkToEdmondUnderground",
+       "at": [
+        2517,
+        9753,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4256
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Grab the Picture from Edmond's house.",
+       "s": "Grab the Picture from Edmond's house.",
+       "k": "grabPictureOfElena",
+       "at": [
+        2576,
+        3334,
+        0
+       ],
+       "has": "Picture"
+      },
+      {
+       "t": "Go down the hole.",
+       "s": "Go down the hole.",
+       "k": "goDownHole",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      },
+      {
+       "t": "Climb the mud pile.",
+       "s": "Climb the mud pile.",
+       "k": "climbMudPile",
+       "at": [
+        2519,
+        9760,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2533
+        ]
+       }
+      },
+      {
+       "t": "Equip the gas mask and climb through the pipe.",
+       "s": "Equip the gas mask and climb through the pipe.",
+       "k": "climbThroughPipe",
+       "at": [
+        2514,
+        9738,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2542
+        ]
+       }
+      },
+      {
+       "t": "Talk to Jethick east of where you emerge.",
+       "s": "Talk to Jethick east of where you emerge.",
+       "k": "talkToJethick",
+       "at": [
+        2540,
+        3305,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8974
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Go down the hole.",
+       "s": "Go down the hole.",
+       "k": "goDownHole",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      },
+      {
+       "t": "Equip the gas mask and climb through the pipe.",
+       "s": "Equip the gas mask and climb through the pipe.",
+       "k": "climbThroughPipe",
+       "at": [
+        2514,
+        9738,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2542
+        ]
+       }
+      },
+      {
+       "t": "Talk to Jethick east of where you emerge.",
+       "s": "Talk to Jethick east of where you emerge.",
+       "k": "talkToJethick",
+       "at": [
+        2540,
+        3305,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8974
+        ]
+       }
+      },
+      {
+       "t": "Enter the tall house in north West Ardougne.",
+       "s": "Enter the tall house in north West Ardougne.",
+       "k": "enterMarthasHouse",
+       "at": [
+        2531,
+        3328,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2537
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 21,
+     "do": [
+      {
+       "t": "Go down the hole.",
+       "s": "Go down the hole.",
+       "k": "goDownHole",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      },
+      {
+       "t": "Equip the gas mask and climb through the pipe.",
+       "s": "Equip the gas mask and climb through the pipe.",
+       "k": "climbThroughPipe",
+       "at": [
+        2514,
+        9738,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2542
+        ]
+       }
+      },
+      {
+       "t": "Talk to Martha or Ted Rehnison",
+       "s": "Talk to Martha or Ted Rehnison",
+       "k": "talkToMartha",
+       "at": [
+        2531,
+        3331,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4264
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 22,
+     "do": [
+      {
+       "t": "Go down the hole.",
+       "s": "Go down the hole.",
+       "k": "goDownHole",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      },
+      {
+       "t": "Equip the gas mask and climb through the pipe.",
+       "s": "Equip the gas mask and climb through the pipe.",
+       "k": "climbThroughPipe",
+       "at": [
+        2514,
+        9738,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2542
+        ]
+       }
+      },
+      {
+       "t": "Talk to Milli upstairs.",
+       "s": "Talk to Milli upstairs.",
+       "k": "goUpstairsInMarthasHouse",
+       "at": [
+        2528,
+        3333,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2539
+        ]
+       }
+      },
+      {
+       "t": "Talk to Milli.",
+       "s": "Talk to Milli.",
+       "k": "talkToMilli",
+       "at": [
+        2531,
+        3331,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4266
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 23,
+     "do": [
+      {
+       "t": "Go down the hole.",
+       "s": "Go down the hole.",
+       "k": "goDownHole",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      },
+      {
+       "t": "Equip the gas mask and climb through the pipe.",
+       "s": "Equip the gas mask and climb through the pipe.",
+       "k": "climbThroughPipe",
+       "at": [
+        2514,
+        9738,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2542
+        ]
+       }
+      },
+      {
+       "t": "Try to enter the house in the south-east corner of West Ardougne.",
+       "s": "Try to enter the house in the south-east corner of West Ardougne.",
+       "k": "tryToEnterPlagueHouse",
+       "at": [
+        2540,
+        3273,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 24,
+     "do": [
+      {
+       "t": "Go down the hole.",
+       "s": "Go down the hole.",
+       "k": "goDownHole",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      },
+      {
+       "t": "Equip the gas mask and climb through the pipe.",
+       "s": "Equip the gas mask and climb through the pipe.",
+       "k": "climbThroughPipe",
+       "at": [
+        2514,
+        9738,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2542
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Clerk in the large building north of the manhole.",
+       "s": "Talk to the Clerk in the large building north of the manhole.",
+       "k": "talkToClerk",
+       "at": [
+        2528,
+        3317,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4255
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Go down the hole.",
+       "s": "Go down the hole.",
+       "k": "goDownHole",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      },
+      {
+       "t": "Equip the gas mask and climb through the pipe.",
+       "s": "Equip the gas mask and climb through the pipe.",
+       "k": "climbThroughPipe",
+       "at": [
+        2514,
+        9738,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2542
+        ]
+       }
+      },
+      {
+       "t": "Talk to Bravek in the room to the east.",
+       "s": "Talk to Bravek in the room to the east.",
+       "k": "talkToBravek",
+       "at": [
+        2534,
+        3314,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4252
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 26,
+     "do": [
+      {
+       "t": "Go down the hole.",
+       "s": "Go down the hole.",
+       "k": "goDownHole",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      },
+      {
+       "t": "Equip the gas mask and climb through the pipe.",
+       "s": "Equip the gas mask and climb through the pipe.",
+       "k": "climbThroughPipe",
+       "at": [
+        2514,
+        9738,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2542
+        ]
+       }
+      },
+      {
+       "t": "Use your chocolate dust on the bucket of milk.",
+       "s": "Use your chocolate dust on the bucket of milk.",
+       "k": "useDustOnMilk",
+       "has": "Chocolatey milk"
+      },
+      {
+       "t": "Use the snape grass on the chocolatey milk",
+       "s": "Use the snape grass on the chocolatey milk",
+       "k": "useSnapeGrassOnChocolateMilk",
+       "has": "Hangover cure"
+      },
+      {
+       "t": "Give the hangover cure to Bravek.",
+       "s": "Give the hangover cure to Bravek.",
+       "k": "giveHangoverCureToBravek",
+       "at": [
+        2534,
+        3314,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4252
+        ]
+       },
+       "need": "Hangover cure"
+      }
+     ]
+    },
+    {
+     "at": 27,
+     "do": [
+      {
+       "t": "Go down the hole.",
+       "s": "Go down the hole.",
+       "k": "goDownHole",
+       "at": [
+        2566,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2532
+        ]
+       }
+      },
+      {
+       "t": "Equip the gas mask and climb through the pipe.",
+       "s": "Equip the gas mask and climb through the pipe.",
+       "k": "climbThroughPipe",
+       "at": [
+        2514,
+        9738,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2542
+        ]
+       }
+      },
+      {
+       "t": "Talk to Bravek to receive the warrant you need to enter the plague house.",
+       "s": "Talk to Bravek for the warrant to the plague house",
+       "k": "talkToBravekAgain",
+       "at": [
+        2534,
+        3314,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4252
+        ]
+       }
+      },
+      {
+       "t": "Try to enter the plague house again.",
+       "s": "Try to enter the plague house again.",
+       "k": "tryToEnterPlagueHouseAgain",
+       "at": [
+        2540,
+        3273,
+        0
+       ]
+      },
+      {
+       "t": "Go back upstairs to get the key for Elena's cell.",
+       "s": "Go back upstairs to get the key for Elena's cell.",
+       "k": "goUpstairsInPlagueHouse",
+       "at": [
+        2537,
+        9672,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2523
+        ]
+       }
+      },
+      {
+       "t": "Search the barrel in the room for a small key.",
+       "s": "Search the barrel in the room for a small key.",
+       "k": "searchBarrel",
+       "at": [
+        2534,
+        3268,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2530
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs in the plague house.",
+       "s": "Go downstairs in the plague house.",
+       "k": "goDownstairsInPlagueHouse",
+       "at": [
+        2537,
+        3269,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2522
+        ]
+       }
+      },
+      {
+       "t": "Enter the jail and talk to Elena.",
+       "s": "Enter the jail and talk to Elena.",
+       "k": "talkToElena",
+       "at": [
+        2541,
+        9671,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4257
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 28,
+     "do": [
+      {
+       "t": "Return to Edmond to finish the quest.",
+       "s": "Return to Edmond to finish the quest.",
+       "k": "talkToEdmondToFinish",
+       "at": [
+        2568,
+        3333,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4256
+        ]
+       }
+      },
+      {
+       "t": "Climb the mud pile to return to Edmond.",
+       "s": "Climb the mud pile to return to Edmond.",
+       "k": "climbMudPileToFinish",
+       "at": [
+        2519,
+        9760,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2533
+        ]
+       }
+      },
+      {
+       "t": "Go back down the manhole to return to Edmond.",
+       "s": "Go back down the manhole to return to Edmond.",
+       "k": "goDownManhole",
+       "at": [
+        2529,
+        3303,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2544
+        ]
+       }
+      },
+      {
+       "t": "Go back down the manhole to return to Edmond.",
+       "s": "Go back down the manhole to return to Edmond.",
+       "k": "goDownManhole2",
+       "at": [
+        2529,
+        3303,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2543
+        ]
+       }
+      },
+      {
+       "t": "Go back upstairs and return to Edmond to finish the quest.",
+       "s": "Go back upstairs and return to Edmond to finish the quest.",
+       "k": "goUpstairsInPlagueHouseToFinish",
+       "at": [
+        2537,
+        9672,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2523
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S7-10": {
+   "var": [
+    "varp",
+    60
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Talk to Councillor Halgrive outside the East Ardougne church. Ensure that you have at least 1 empty inventory slot. Dialogue: \"What's wrong?\", \"I can do that for you.\"",
+      "Talk to Doctor Orbon in the church. Dialogue: \"Okay, I'll take it.\"",
+      "Put on the plague jacket and trousers and go to the enclosure north-west of the Ardougne north bank.",
+      "Pick up & wield the cattleprod next to the incinerator.",
+      "There are sheep to the north-west (blue), north (yellow), east (green), and south (red) of the incinerator.",
+      "Prod one sheep of each colour through the gate.",
+      "Feed your sheep sheep feed until they're all dead.",
+      "Pick up the bones and use them on the incinerator.",
+      "Return to Councillor Halgrive to complete the quest.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Councillor Halgrive outside the East Ardougne church.",
+       "s": "Talk to Councillor Halgrive outside the East Ardougne church.",
+       "k": "talkToHalgrive",
+       "at": [
+        2615,
+        3298,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8765
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Doctor Orbon in the East Ardougne Church.",
+       "s": "Talk to Doctor Orbon in the East Ardougne Church.",
+       "k": "talkToOrbon",
+       "at": [
+        2616,
+        3306,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3984
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Enter the enclosure north of Ardougne wearing the plague jacket and trousers.",
+       "s": "Enter the enclosure north of Ardougne in plague jacket and trousers",
+       "k": "enterEnclosure",
+       "at": [
+        2594,
+        3362,
+        0
+       ],
+       "hl": {
+        "obj": [
+         166
+        ]
+       }
+      },
+      {
+       "t": "Pick up the nearby cattleprod.",
+       "s": "Pick up the nearby cattleprod.",
+       "k": "pickupCattleprod",
+       "at": [
+        2604,
+        3357,
+        0
+       ]
+      },
+      {
+       "t": "Prod one of the blue sheep north west of the enclosure to the enclosure gate.",
+       "s": "Prod a blue sheep (north-west) to the enclosure gate",
+       "k": "prodBlueSheep",
+       "at": [
+        2562,
+        3389,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3988
+        ]
+       }
+      },
+      {
+       "t": "Prod one of the yellow sheep north of the enclosure to the enclosure gate.",
+       "s": "Prod a yellow sheep (north) to the enclosure gate",
+       "k": "prodYellowSheep",
+       "at": [
+        2610,
+        3389,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3989
+        ]
+       }
+      },
+      {
+       "t": "Prod one of the green sheep east of the enclosure to the enclosure gate.",
+       "s": "Prod a green sheep (east) to the enclosure gate",
+       "k": "prodGreenSheep",
+       "at": [
+        2621,
+        3367,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3987
+        ]
+       }
+      },
+      {
+       "t": "Prod one of the red sheep south east of the enclosure to the enclosure gate.",
+       "s": "Prod a red sheep (south-east) to the enclosure gate",
+       "k": "prodRedSheep",
+       "at": [
+        2609,
+        3347,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3986
+        ]
+       }
+      },
+      {
+       "t": "Feed the sheep the sheep feed.",
+       "s": "Feed the sheep the sheep feed.",
+       "k": "feedSheep",
+       "at": [
+        2597,
+        3361,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3988
+        ]
+       }
+      },
+      {
+       "t": "Pick up the bones.",
+       "s": "Pick up the bones.",
+       "k": "pickupBones"
+      },
+      {
+       "t": "Pick up the bones and incinerate them.",
+       "s": "Pick up the bones and incinerate them.",
+       "k": "useBonesOnIncinerator",
+       "at": [
+        2607,
+        3361,
+        0
+       ],
+       "hl": {
+        "obj": [
+         165
+        ]
+       }
+      },
+      {
+       "t": "Return to Councillor Halgrive.",
+       "s": "Return to Councillor Halgrive.",
+       "k": "talkToHalgriveToFinish",
+       "at": [
+        2615,
+        3298,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8765
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
   "S8-01": {
    "var": [
     "varp",

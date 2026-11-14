@@ -4064,6 +4064,196 @@
     }
   },
   {
+    "id": "S7-09",
+    "stage": 7,
+    "type": "quest",
+    "title": "Plague City",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Plague_City",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Plague_City/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2569,3333,0",
+    "mapLocation": {
+      "x": 2569,
+      "y": 3333,
+      "plane": 0,
+      "label": "The most north-western house of East Ardougne"
+    },
+    "npc": {
+      "nameEn": "Edmond",
+      "location": "The most north-western house of East Ardougne",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Edmond"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Dwellberries",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Funch's Fine Groceries in Grand Tree for 4 gp.",
+        "wikiItemId": 2126,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Dwellberries.png"
+      },
+      {
+        "nameEn": "Rope",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Ned's Handmade Rope (100% Wool) in Draynor Village for 16 gp.",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
+      },
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lumbridge General Store in Lumbridge for 3 gp.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
+      },
+      {
+        "nameEn": "Bucket of water",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 6 gp.",
+        "wikiItemId": 1929,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_water.png"
+      },
+      {
+        "nameEn": "Hangover cure",
+        "amount": 1,
+        "howToGet": "Make it: use chocolate dust on a bucket of milk, then snape grass on the chocolatey milk (the ingredients below).",
+        "wikiItemId": 1504,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hangover_cure.png"
+      },
+      {
+        "nameEn": "Chocolate dust",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Funch's Fine Groceries in Grand Tree for 2 gp.",
+        "wikiItemId": 1975,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chocolate_dust.png"
+      },
+      {
+        "nameEn": "Chocolate bar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Food Store in Port Sarim for 10 gp.",
+        "wikiItemId": 1973,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chocolate_bar.png"
+      },
+      {
+        "nameEn": "Knife",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Funch's Fine Groceries in Grand Tree for 6 gp.",
+        "wikiItemId": 946,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
+      },
+      {
+        "nameEn": "Bucket of milk",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Culinaromancer's Chest in Lumbridge Castle basement for 6 gp.",
+        "wikiItemId": 1927,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_milk.png"
+      },
+      {
+        "nameEn": "Snape grass",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 231,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Snape_grass.png"
+      },
+      {
+        "nameEn": "Picture",
+        "amount": 1,
+        "howToGet": "Free spawn: East Ardougne - Edmond and Alrena's house (members only).",
+        "wikiItemId": 1510,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Picture.png",
+        "inStep": true
+      }
+    ],
+    "reward": "1 QP, 2,425 Mining XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Edmond"
+      ],
+      "dialogChoices": [
+        "What's happened to her?",
+        "Yes.",
+        "Yes, I'll return it for you.",
+        "I fear not a mere plague.",
+        "Who is through that door?",
+        "This is urgent though! Someone's been kidnapped!",
+        "This is really important though!",
+        "Do you know what's in the cure?",
+        "They won't listen to me!"
+      ],
+      "highlightItems": [
+        "Dwellberries",
+        "Rope",
+        "Spade",
+        "Bucket of water",
+        "Hangover cure",
+        "Chocolate dust",
+        "Chocolate bar",
+        "Knife",
+        "Bucket of milk",
+        "Snape grass",
+        "Picture"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Plague City"
+      }
+    }
+  },
+  {
+    "id": "S7-10",
+    "stage": 7,
+    "type": "quest",
+    "title": "Sheep Herder",
+    "qp": 4,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Sheep_Herder",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Sheep_Herder/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2617,3299,0",
+    "mapLocation": {
+      "x": 2617,
+      "y": 3299,
+      "plane": 0,
+      "label": "Councillor Halgrive"
+    },
+    "npc": {
+      "nameEn": "Councillor Halgrive",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Councillor_Halgrive"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Coins",
+        "amount": 100,
+        "howToGet": "Free spawn: Asgarnian Ice Dungeon.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      }
+    ],
+    "reward": "4 QP, 1,000 Hunter XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Councillor Halgrive"
+      ],
+      "dialogChoices": [
+        "What's wrong?",
+        "I can do that for you.",
+        "Okay, I'll take it."
+      ],
+      "highlightItems": [
+        "coins"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Sheep Herder"
+      }
+    }
+  },
+  {
     "id": "S8-01",
     "stage": 8,
     "type": "quest",

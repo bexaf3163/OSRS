@@ -2726,6 +2726,122 @@
       "note": "Track with a ring of pursuit; stamina potions lift the rate from 100,000 to 130,000. The Wiki moves on at 73 to black chinchompas (Wilderness, Eagles' Peak).",
       "url": "https://oldschool.runescape.wiki/w/Hunter_training",
       "place": "Piscatoris Hunter area"
+    },
+    {
+      "id": "co-mh-beginner",
+      "skill": "construction",
+      "from": 1,
+      "to": 20,
+      "name": "Mahogany Homes: beginner contracts",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Hammer"
+        },
+        {
+          "type": "item",
+          "name": "Saw"
+        }
+      ],
+      "xph": [
+        35000,
+        50000
+      ],
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Amy in Falador gives the first contract; contracts are in Falador, Varrock, East Ardougne and Hosidius",
+      "note": "Needs a player-owned house (1,000 coins at an estate agent). Each hour uses about 375-575 planks and some steel bars; the Wiki rate is from the Mahogany Homes table.",
+      "url": "https://oldschool.runescape.wiki/w/Construction_training",
+      "place": "Falador"
+    },
+    {
+      "id": "co-mh-novice",
+      "skill": "construction",
+      "from": 20,
+      "to": 50,
+      "name": "Mahogany Homes: novice contracts",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Hammer"
+        },
+        {
+          "type": "item",
+          "name": "Saw"
+        }
+      ],
+      "xph": [
+        80000,
+        95000
+      ],
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Amy in Falador gives the first contract; contracts are in Falador, Varrock, East Ardougne and Hosidius",
+      "note": "Needs a player-owned house (1,000 coins at an estate agent). Each hour uses about 450-545 oak planks and some steel bars; the Wiki rate is from the Mahogany Homes table.",
+      "url": "https://oldschool.runescape.wiki/w/Construction_training",
+      "place": "Falador"
+    },
+    {
+      "id": "co-mh-adept",
+      "skill": "construction",
+      "from": 50,
+      "to": 70,
+      "name": "Mahogany Homes: adept contracts",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Hammer"
+        },
+        {
+          "type": "item",
+          "name": "Saw"
+        }
+      ],
+      "xph": [
+        130000,
+        150000
+      ],
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Amy in Falador gives the first contract; contracts are in Falador, Varrock, East Ardougne and Hosidius",
+      "note": "Needs a player-owned house (1,000 coins at an estate agent). Each hour uses about 475-520 teak planks and some steel bars; the Wiki rate is from the Mahogany Homes table.",
+      "url": "https://oldschool.runescape.wiki/w/Construction_training",
+      "place": "Falador"
+    },
+    {
+      "id": "co-mh-expert",
+      "skill": "construction",
+      "from": 70,
+      "to": null,
+      "name": "Mahogany Homes: expert contracts",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Hammer"
+        },
+        {
+          "type": "item",
+          "name": "Saw"
+        }
+      ],
+      "xph": [
+        185000,
+        210000
+      ],
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Amy in Falador gives the first contract; contracts are in Falador, Varrock, East Ardougne and Hosidius",
+      "note": "Needs a player-owned house (1,000 coins at an estate agent). Each hour uses about 475-555 mahogany planks and some steel bars; the Wiki rate is from the Mahogany Homes table.",
+      "url": "https://oldschool.runescape.wiki/w/Construction_training",
+      "place": "Falador"
     }
   ]
 }

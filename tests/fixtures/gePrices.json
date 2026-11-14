@@ -1,5 +1,5 @@
 {
- "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14",
+ "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15",
  "prices": {
   "Adamant 2h sword": {
    "buy": 3670,
@@ -1192,6 +1192,30 @@
   "Willow longbow": {
    "buy": 100,
    "sell": 95
+  },
+  "Cheese": {
+   "buy": 54,
+   "sell": 53
+  },
+  "Leather gloves": {
+   "buy": 10,
+   "sell": 8
+  },
+  "Dwellberries": {
+   "buy": 41,
+   "sell": 37
+  },
+  "Chocolate dust": {
+   "buy": 64,
+   "sell": 60
+  },
+  "Chocolate bar": {
+   "buy": 39,
+   "sell": 38
+  },
+  "Snape grass": {
+   "buy": 910,
+   "sell": 901
   }
  }
 }

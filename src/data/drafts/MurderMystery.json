@@ -1,0 +1,638 @@
+{
+ "quest": "Murder Mystery",
+ "status": "draft",
+ "sources": {
+  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+  "wiki": {
+   "title": "Murder Mystery",
+   "revision": 15365419
+  },
+  "quickGuide": {
+   "title": "Murder Mystery/Quick guide",
+   "revision": 15078493
+  }
+ },
+ "step": {
+  "title": "Murder Mystery",
+  "type": "quest",
+  "qp": 3,
+  "membersOnly": true,
+  "wikiUrl": "https://oldschool.runescape.wiki/w/Murder_Mystery",
+  "quickGuideUrl": "https://oldschool.runescape.wiki/w/Murder_Mystery/Quick_guide",
+  "mapLocation": {
+   "x": 2741,
+   "y": 3562,
+   "plane": 0,
+   "label": "Talk to any guard around the Sinclair Mansion, north of Seers' Village and Camelot."
+  },
+  "npc": {
+   "nameEn": "Guard (Sinclair Mansion)"
+  },
+  "itemsRequired": [
+   {
+    "nameEn": "Pot",
+    "amount": 1,
+    "wikiItemId": 1931,
+    "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+    "note": "Pot or Pot of flour"
+   }
+  ],
+  "foes": []
+ },
+ "stages": {
+  "var": [
+   "varp",
+   192
+  ],
+  "route": [
+   {
+    "title": "Walkthrough",
+    "steps": [
+     "Talk to the guard out front of Sinclair Mansion and agree to help. Dialogue: \"Sure, I'll help.\"",
+     "Go north-west and investigate the sacks in the shed, take 4 flypapers.",
+     "Go inside the mansion and take the pungent pot and criminal's dagger.",
+     "Investigate the smashed window on the eastern side for the criminal's thread.",
+     "Search the barrels in the bedroom owned by the following two suspects to get 2 silver items.",
+     "Go to the kitchen and fill your pot with flour from the barrel.",
+     "Use flour and flypaper to dust each silver item and the dagger.",
+     "Use the silver items' prints on the dagger's print until you get a match. Remember who it is.",
+     "Talk to Gossip outside the front gate of the mansion and ask who he thinks is responsible. Dialogue: \"Who do you think was responsible?\"",
+     "Talk to the poison salesman in the Seers' Village pub, ask who he sold poison to. (Select Murder Mystery quest) (Be sure to not select the Fremennik Trials option.) Dialogue: \"Who did you sell Poison to at the house?\"",
+     "Talk to the person whose prints matched, ask why they bought poison. Dialogue: \"Why'd you buy poison the other day?\"",
+     "Search the item they say they used the poison on.",
+     "Drop the silver necklace (if you took it from Anna's barrel) before talking to the guard if you want to keep it, you can't get it back afterward.",
+     "Talk to a guard. Dialogue: \"I know who did it!\"",
+     "Congratulations, quest complete!"
+    ]
+   }
+  ],
+  "stages": [
+   {
+    "at": 0,
+    "do": [
+     {
+      "t": "Talk to the Guard in the Sinclair Manor north of Camelot.",
+      "s": "Talk to the Guard in the Sinclair Manor north of Camelot.",
+      "k": "talkToGuard",
+      "at": [
+       2741,
+       3561,
+       0
+      ],
+      "hl": {
+       "npc": [
+        4218
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 1,
+    "do": [
+     {
+      "t": "Search the window for a clothing thread. The colour of the thread will match the killer's trousers.",
+      "s": "Search the window for a clothing thread. The colour of the thread will match the killer's trousers.",
+      "k": "searchWindowForThread",
+      "at": [
+       2748,
+       3577,
+       0
+      ],
+      "hl": {
+       "obj": [
+        26123
+       ]
+      }
+     },
+     {
+      "t": "Enter the mansion and pick up the pungent pot inside the east room.",
+      "s": "Enter the mansion and pick up the pungent pot inside the east room.",
+      "k": "pickUpPungentPot",
+      "at": [
+       2747,
+       3579,
+       0
+      ]
+     },
+     {
+      "t": "Pick up the criminal's dagger.",
+      "s": "Pick up the criminal's dagger.",
+      "k": "pickUpDagger",
+      "at": [
+       2746,
+       3578,
+       0
+      ]
+     },
+     {
+      "t": "Investigate the sacks in the shed for flypaper. Get 2 pieces.",
+      "s": "Investigate the sacks in the shed for flypaper. Get 2 pieces.",
+      "k": "collectTwoFlypaper",
+      "at": [
+       2731,
+       3582,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2663
+       ]
+      }
+     },
+     {
+      "t": "Search the suspect's barrel.",
+      "s": "Search the suspect's barrel.",
+      "k": "searchBarrelFallback"
+     },
+     {
+      "t": "Search Bob's barrel on the ground floor.",
+      "s": "Search Bob's barrel on the ground floor.",
+      "k": "searchBobsBarrel",
+      "at": [
+       2735,
+       3579,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2657
+       ]
+      }
+     },
+     {
+      "t": "Climb up the mansion staircase.",
+      "s": "Climb up the mansion staircase.",
+      "k": "goUpstairs",
+      "at": [
+       2736,
+       3581,
+       0
+      ],
+      "hl": {
+       "obj": [
+        25682
+       ]
+      }
+     },
+     {
+      "t": "Search Anna's barrel on the ground floor.",
+      "s": "Search Anna's barrel on the ground floor.",
+      "k": "searchAnnasBarrel",
+      "at": [
+       2733,
+       3575,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2656
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "actuallyFillPotWithFlour",
+      "at": [
+       2733,
+       3582,
+       0
+      ],
+      "hl": {
+       "obj": [
+        26122
+       ]
+      }
+     },
+     {
+      "t": "Head downstairs to the ground floor.",
+      "s": "Head downstairs to the ground floor.",
+      "k": "goDownstairs",
+      "at": [
+       2736,
+       3581,
+       1
+      ],
+      "hl": {
+       "obj": [
+        25683
+       ]
+      }
+     },
+     {
+      "t": "Use the pot of flour on the Criminal's dagger.",
+      "s": "Use the pot of flour on the Criminal's dagger.",
+      "k": "useFlourOnDagger"
+     },
+     {
+      "t": "Use the flypaper on the dagger.",
+      "s": "Use the flypaper on the dagger.",
+      "k": "useFlypaperOnDagger"
+     },
+     {
+      "t": "Investigate the sacks in the shed for 1 flypaper.",
+      "s": "Investigate the sacks in the shed for 1 flypaper.",
+      "k": "collectFlypaper",
+      "at": [
+       2731,
+       3582,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2663
+       ]
+      }
+     },
+     {
+      "t": "Fill your pot with flour from the barrel in the mansion's kitchen.",
+      "s": "Fill your pot with flour from the barrel in the mansion's kitchen.",
+      "k": "fillPotWithFlourForSilver",
+      "at": [
+       2733,
+       3582,
+       0
+      ],
+      "hl": {
+       "obj": [
+        26122
+       ]
+      }
+     },
+     {
+      "t": "Use flour on the suspect's item.",
+      "s": "Use flour on the suspect's item.",
+      "k": "useFlourFallback"
+     },
+     {
+      "t": "Use flour on the silver cup.",
+      "s": "Use flour on the silver cup.",
+      "k": "useFlourOnCup"
+     },
+     {
+      "t": "Use flour on the silver pot.",
+      "s": "Use flour on the silver pot.",
+      "k": "useFlourOnPot"
+     },
+     {
+      "t": "Use flour on the silver book.",
+      "s": "Use flour on the silver book.",
+      "k": "useFlourOnBook"
+     },
+     {
+      "t": "Use flour on the silver bottle.",
+      "s": "Use flour on the silver bottle.",
+      "k": "useFlourOnBottle"
+     },
+     {
+      "t": "Use flour on the silver necklace.",
+      "s": "Use flour on the silver necklace.",
+      "k": "useFlourOnNecklace"
+     },
+     {
+      "t": "Use flour on the silver needle.",
+      "s": "Use flour on the silver needle.",
+      "k": "useFlourOnNeedle"
+     },
+     {
+      "t": "Use flypaper on the suspect's item.",
+      "s": "Use flypaper on the suspect's item.",
+      "k": "useFlypaperFallback"
+     },
+     {
+      "t": "Use flypaper on the silver cup.",
+      "s": "Use flypaper on the silver cup.",
+      "k": "useFlypaperOnCup"
+     },
+     {
+      "t": "Use flypaper on the silver pot.",
+      "s": "Use flypaper on the silver pot.",
+      "k": "useFlypaperOnPot"
+     },
+     {
+      "t": "Use flypaper on the silver book.",
+      "s": "Use flypaper on the silver book.",
+      "k": "useFlypaperOnBook"
+     },
+     {
+      "t": "Use flypaper on the silver bottle.",
+      "s": "Use flypaper on the silver bottle.",
+      "k": "useFlypaperOnBottle"
+     },
+     {
+      "t": "Use flypaper on the silver necklace.",
+      "s": "Use flypaper on the silver necklace.",
+      "k": "useFlypaperOnNecklace"
+     },
+     {
+      "t": "Use flypaper on the silver needle.",
+      "s": "Use flypaper on the silver needle.",
+      "k": "useFlypaperOnNeedle"
+     },
+     {
+      "t": "Compare prints with the suspect.",
+      "s": "Compare prints with the suspect.",
+      "k": "comparePrintsFallback"
+     },
+     {
+      "t": "Use Frank's prints on the killer's print to compare them.",
+      "s": "Use Frank's prints on the killer's print to compare them.",
+      "k": "compareFrank"
+     },
+     {
+      "t": "Use Elizabeth's prints on the killer's print to compare them.",
+      "s": "Use Elizabeth's prints on the killer's print to compare them.",
+      "k": "compareElizabeth"
+     },
+     {
+      "t": "Use David's prints on the killer's print to compare them.",
+      "s": "Use David's prints on the killer's print to compare them.",
+      "k": "compareDavid"
+     },
+     {
+      "t": "Use Carol's prints on the killer's print to compare them.",
+      "s": "Use Carol's prints on the killer's print to compare them.",
+      "k": "compareCarol"
+     },
+     {
+      "t": "Use Bob's prints on the killer's print to compare them.",
+      "s": "Use Bob's prints on the killer's print to compare them.",
+      "k": "compareBob"
+     },
+     {
+      "t": "Use Anna's prints on the killer's print to compare them.",
+      "s": "Use Anna's prints on the killer's print to compare them.",
+      "k": "compareAnna"
+     },
+     {
+      "t": "Talk to Gossip, just south of the Sinclair Mansion.",
+      "s": "Talk to Gossip, just south of the Sinclair Mansion.",
+      "k": "talkToGossip",
+      "at": [
+       2741,
+       3557,
+       0
+      ],
+      "hl": {
+       "npc": [
+        4219
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Poison Salesman in the Seers' Village pub about his customers.",
+      "s": "Talk to the Poison Salesman in the Seers' Village pub about his customers.",
+      "k": "talkToPoisonSalesman",
+      "at": [
+       2694,
+       3493,
+       0
+      ],
+      "hl": {
+       "npc": [
+        4227
+       ]
+      }
+     },
+     {
+      "t": "Talk to the Poison Salesman in the Seers' Village pub about the pungent pot.",
+      "s": "Talk to the Poison Salesman in the Seers' Village pub about the pungent pot.",
+      "k": "talkToPoisonSalesman2",
+      "at": [
+       2694,
+       3493,
+       0
+      ],
+      "hl": {
+       "npc": [
+        4227
+       ]
+      }
+     },
+     {
+      "t": "Talk to the suspect.",
+      "s": "Talk to the suspect.",
+      "k": "talkToSuspectFallback"
+     },
+     {
+      "t": "Talk to Anna in the mansion about what she used the poison for. Make sure to finish the dialog.",
+      "s": "Talk to Anna in the mansion about what she used the poison for. Make sure to finish the dialog.",
+      "k": "talkToAnna",
+      "at": [
+       2734,
+       3575,
+       0
+      ],
+      "hl": {
+       "npc": [
+        4220
+       ]
+      }
+     },
+     {
+      "t": "Talk to Bob south of the mansion about what he used the poison for. Make sure to finish the dialog.",
+      "s": "Talk to Bob south of the mansion about what he used the poison for. Make sure to finish the dialog.",
+      "k": "talkToBob",
+      "at": [
+       2748,
+       3559,
+       0
+      ],
+      "hl": {
+       "npc": [
+        4221
+       ]
+      }
+     },
+     {
+      "t": "Talk to Frank in the mansion about what he used the poison for. Make sure to finish the dialog.",
+      "s": "Talk to Frank in the mansion about what he used the poison for. Make sure to finish the dialog.",
+      "k": "talkToFrank",
+      "at": [
+       2742,
+       3577,
+       0
+      ],
+      "hl": {
+       "npc": [
+        4225
+       ]
+      }
+     },
+     {
+      "t": "Talk to David in the mansion about what he used the poison for. Make sure to finish the dialog.",
+      "s": "Talk to David in the mansion about what he used the poison for. Make sure to finish the dialog.",
+      "k": "talkToDavid",
+      "at": [
+       2739,
+       3581,
+       0
+      ],
+      "hl": {
+       "npc": [
+        4223
+       ]
+      }
+     },
+     {
+      "t": "Disprove the suspect's alibi by checking the thing they claimed to clean.",
+      "s": "Disprove the suspect's alibi by checking the thing they claimed to clean.",
+      "k": "searchSuspectItemFallback"
+     },
+     {
+      "t": "Search the compost heap south west of the mansion. If a dialog box doesn't come up, go back to Anna to ask about poison, and COMPLETE THE DIALOG.",
+      "s": "Search the compost heap south west of the mansion. If a dialog box doesn't come up, go back to Anna to ask about poison, and COMPLETE THE DIALOG.",
+      "k": "searchAnna",
+      "at": [
+       2730,
+       3572,
+       0
+      ],
+      "hl": {
+       "obj": [
+        26120
+       ]
+      }
+     },
+     {
+      "t": "Search the beehive south west of the mansion. If a dialog box doesn't come up, go back to Bob to ask about poison, and COMPLETE THE DIALOG.",
+      "s": "Search the beehive south west of the mansion. If a dialog box doesn't come up, go back to Bob to ask about poison, and COMPLETE THE DIALOG.",
+      "k": "searchBob",
+      "at": [
+       2730,
+       3559,
+       0
+      ],
+      "hl": {
+       "obj": [
+        26121
+       ]
+      }
+     },
+     {
+      "t": "Search the family crest attached to the south side of the mansion to the east. If a dialog box doesn't come up, go back to Frank to ask about poison, and COMPLETE THE DIALOG.",
+      "s": "Search the family crest attached to the south side of the mansion to the east. If a dialog box doesn't come up, go back to Frank to ask about poison, and COMPLETE THE DIALOG.",
+      "k": "searchFrank",
+      "at": [
+       2746,
+       3573,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2655
+       ]
+      }
+     },
+     {
+      "t": "Search the drain south of the mansion. If a dialog box doesn't come up, go back to Carol to ask about poison, and COMPLETE THE DIALOG.",
+      "s": "Search the drain south of the mansion. If a dialog box doesn't come up, go back to Carol to ask about poison, and COMPLETE THE DIALOG.",
+      "k": "searchCarol",
+      "at": [
+       2736,
+       3573,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2652
+       ]
+      }
+     },
+     {
+      "t": "Search the fountain south east of the mansion. If a dialog box doesn't come up, go back to Elizabeth to ask about poison, and COMPLETE THE DIALOG.",
+      "s": "Search the fountain south east of the mansion. If a dialog box doesn't come up, go back to Elizabeth to ask about poison, and COMPLETE THE DIALOG.",
+      "k": "searchElizabeth",
+      "at": [
+       2747,
+       3563,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2654
+       ]
+      }
+     },
+     {
+      "t": "Return to the guard outside the Sinclair Mansion and tell him your findings.",
+      "s": "Return to the guard outside the Sinclair Mansion and tell him your findings.",
+      "k": "finishQuest",
+      "at": [
+       2741,
+       3561,
+       0
+      ],
+      "hl": {
+       "npc": [
+        4218
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "facts": {
+  "id": "Murder Mystery",
+  "stepIds": [
+   "DRAFT"
+  ],
+  "members": false,
+  "requirements": {
+   "skills": {},
+   "questPoints": 0,
+   "quests": [],
+   "manual": [],
+   "capabilities": [],
+   "unparsed": null,
+   "text": ""
+  },
+  "rewards": {
+   "questPoints": 3,
+   "xp": {
+    "crafting": 1406
+   },
+   "coins": 2000
+  },
+  "resourceFlow": null,
+  "length": "Short",
+  "source": {
+   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15365419",
+   "title": "Murder Mystery",
+   "revision": 15365419,
+   "retrievedAt": "2026-11-14T21:40:38.167Z"
+  }
+ },
+ "unknown": [
+  "step \"searchBarrelFallback\": Quest Helper gives no tile",
+  "step \"useFlourOnDagger\": Quest Helper gives no tile",
+  "step \"useFlypaperOnDagger\": Quest Helper gives no tile",
+  "step \"useFlourFallback\": Quest Helper gives no tile",
+  "step \"useFlourOnCup\": Quest Helper gives no tile",
+  "step \"useFlourOnPot\": Quest Helper gives no tile",
+  "step \"useFlourOnBook\": Quest Helper gives no tile",
+  "step \"useFlourOnBottle\": Quest Helper gives no tile",
+  "step \"useFlourOnNecklace\": Quest Helper gives no tile",
+  "step \"useFlourOnNeedle\": Quest Helper gives no tile",
+  "step \"useFlypaperFallback\": Quest Helper gives no tile",
+  "step \"useFlypaperOnCup\": Quest Helper gives no tile",
+  "step \"useFlypaperOnPot\": Quest Helper gives no tile",
+  "step \"useFlypaperOnBook\": Quest Helper gives no tile",
+  "step \"useFlypaperOnBottle\": Quest Helper gives no tile",
+  "step \"useFlypaperOnNecklace\": Quest Helper gives no tile",
+  "step \"useFlypaperOnNeedle\": Quest Helper gives no tile",
+  "step \"comparePrintsFallback\": Quest Helper gives no tile",
+  "step \"compareFrank\": Quest Helper gives no tile",
+  "step \"compareElizabeth\": Quest Helper gives no tile",
+  "step \"compareDavid\": Quest Helper gives no tile",
+  "step \"compareCarol\": Quest Helper gives no tile",
+  "step \"compareBob\": Quest Helper gives no tile",
+  "step \"compareAnna\": Quest Helper gives no tile",
+  "step \"talkToSuspectFallback\": Quest Helper gives no tile",
+  "step \"searchSuspectItemFallback\": Quest Helper gives no tile",
+  "Quest Helper condition \"RuneliteRequirement\" is not understood (8)",
+  "what the quest uses up and hands out is not reviewed"
+ ]
+}

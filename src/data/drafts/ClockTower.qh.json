@@ -1,0 +1,1121 @@
+{
+ "title": "Clock Tower",
+ "cls": "ClockTower",
+ "var": [
+  "varp",
+  10
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToKojo"
+   },
+   "1": "n1",
+   "2": "n1",
+   "3": "n1",
+   "4": "n1",
+   "5": "n2",
+   "6": "n2",
+   "7": "n2"
+  },
+  "nodes": {
+   "n1": {
+    "n": "doQuest",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r2",
+        "r3",
+        {
+         "o": "or",
+         "a": [
+          {
+           "o": "wt",
+           "g": 119,
+           "c": 6,
+           "m": [
+            "<str>I have successfully placed the White Cog on its spindle"
+           ],
+           "ch": 1
+          },
+          {
+           "o": "chat",
+           "m": [
+            "The cog fits perfectly."
+           ]
+          }
+         ],
+         "latch": true
+        },
+        "r4"
+       ]
+      },
+      "n2"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+       ]
+      },
+      "n3"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r2",
+        "r4"
+       ]
+      },
+      "n8"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r4"
+       ]
+      },
+      "n11"
+     ],
+     [
+      "r4",
+      "n16"
+     ]
+    ],
+    "d": {
+     "s": "syncStep"
+    }
+   },
+   "n2": {
+    "n": "goFinishQuest",
+    "c": [
+     [
+      "r5",
+      {
+       "s": "climbCellLadder"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "climbToGroundFloorFromBasement"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "climbFromSecondFloorToFirst"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "climbFromFirstFloorToGround"
+      }
+     ],
+     [
+      {
+       "o": "?",
+       "d": "cond"
+      },
+      {
+       "s": "finishQuest"
+      }
+     ]
+    ],
+    "d": {
+     "s": "?"
+    }
+   },
+   "n3": {
+    "n": "getWhiteCog",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r11",
+        "r8"
+       ]
+      },
+      {
+       "s": "climbWhiteLadder"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r11"
+       ]
+      },
+      "n4"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r12",
+        {
+         "o": "chat",
+         "m": [
+          "The rats swarm towards the poisoned food..."
+         ]
+        }
+       ]
+      },
+      {
+       "s": "pickUpWhiteCog"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r13",
+        "r12"
+       ]
+      },
+      {
+       "s": "ratPoisonFood"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r13"
+       ]
+      },
+      {
+       "s": "pullFirstLever"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "pickUpRatPoison"
+      }
+     ]
+    ],
+    "d": "n6"
+   },
+   "n4": {
+    "n": "goToSecondFloorWithWhiteCog",
+    "c": [
+     [
+      "r9",
+      {
+       "s": "whiteCogOnWhiteSpindle"
+      }
+     ]
+    ],
+    "d": "n5"
+   },
+   "n5": {
+    "n": "goToSecondFloor",
+    "c": [
+     [
+      {
+       "o": "or",
+       "a": [
+        "r6",
+        "r7"
+       ]
+      },
+      {
+       "s": "climbCellLadder"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "climbToGroundFloorFromBasement"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "climbToSecondFloor"
+      }
+     ]
+    ],
+    "d": {
+     "s": "climbToFirstFloor"
+    }
+   },
+   "n6": {
+    "n": "goToBasementForWhite",
+    "c": [],
+    "d": "n7"
+   },
+   "n7": {
+    "n": "goToBasementSteps",
+    "c": [
+     [
+      "r9",
+      {
+       "s": "climbFromSecondFloorToFirst"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "climbFromFirstFloorToGround"
+      }
+     ],
+     [
+      {
+       "o": "or",
+       "a": [
+        "r6",
+        "r7"
+       ]
+      },
+      {
+       "s": "climbCellLadder"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterBasement"
+    }
+   },
+   "n8": {
+    "n": "getBlackCog",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Black Cog",
+       "ids": [
+        21
+       ]
+      },
+      "n9"
+     ],
+     [
+      "r8",
+      {
+       "s": "pickupBlackCog"
+      }
+     ]
+    ],
+    "d": "n10"
+   },
+   "n9": {
+    "n": "goToBasementWithBlackCog",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        {
+         "o": "nor",
+         "a": [
+          "r6",
+          "r7"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "blackCogOnBlackSpindle"
+      }
+     ]
+    ],
+    "d": "n7"
+   },
+   "n10": {
+    "n": "goToBasementForBlack",
+    "c": [],
+    "d": "n7"
+   },
+   "n11": {
+    "n": "getBlueCog",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Blue Cog",
+       "ids": [
+        22
+       ]
+      },
+      "n12"
+     ],
+     [
+      "r7",
+      {
+       "s": "pickUpBlueCog"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "pushWall"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "nor",
+         "a": [
+          "r14"
+         ]
+        },
+        {
+         "o": "item",
+         "nm": "Bucket",
+         "ids": [
+          1925
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          "r3"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "fillBucket"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "nor",
+         "a": [
+          "r14"
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          "r3"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "getBucket"
+      }
+     ]
+    ],
+    "d": "n14"
+   },
+   "n12": {
+    "n": "goToFirstFloorWithBlueCog",
+    "c": [
+     [
+      "r10",
+      {
+       "s": "blueCogOnBlueSpindle"
+      }
+     ]
+    ],
+    "d": "n13"
+   },
+   "n13": {
+    "n": "goToFirstFloor",
+    "c": [
+     [
+      {
+       "o": "or",
+       "a": [
+        "r6",
+        "r7"
+       ]
+      },
+      {
+       "s": "climbCellLadder"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "climbToGroundFloorFromBasement"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "climbFromSecondFloorToFirst"
+      }
+     ]
+    ],
+    "d": {
+     "s": "climbToFirstFloor"
+    }
+   },
+   "n14": {
+    "n": "goToBasementForBlue",
+    "c": [],
+    "d": "n15"
+   },
+   "n15": {
+    "n": "goToCellSteps",
+    "c": [
+     [
+      "r8",
+      {
+       "s": "climbToGroundFloorFromBasement"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "climbFromSecondFloorToFirst"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "climbFromFirstFloorToGround"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goToLadderCedric"
+    }
+   },
+   "n16": {
+    "n": "getRedCog",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Red Cog",
+       "ids": [
+        23
+       ]
+      },
+      "n17"
+     ],
+     [
+      "r8",
+      {
+       "s": "pickUpRedCog"
+      }
+     ]
+    ],
+    "d": "n18"
+   },
+   "n17": {
+    "n": "goToGroundFloorWithRedCog",
+    "c": [
+     [
+      "r5",
+      {
+       "s": "climbCellLadder"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "climbToGroundFloorFromBasement"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "climbFromSecondFloorToFirst"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "climbFromFirstFloorToGround"
+      }
+     ],
+     [
+      {
+       "o": "?",
+       "d": "cond"
+      },
+      {
+       "s": "redCogOnRedSpindle"
+      }
+     ]
+    ],
+    "d": {
+     "s": "?"
+    }
+   },
+   "n18": {
+    "n": "goToBasementForRed",
+    "c": [],
+    "d": "n7"
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "or",
+    "a": [
+     {
+      "o": "wt",
+      "g": 119,
+      "c": 6,
+      "m": [
+       "<str>I have successfully placed the Red Cog on its spindle"
+      ],
+      "ch": 1
+     },
+     {
+      "o": "chat",
+      "m": [
+       "The cog fits perfectly."
+      ]
+     }
+    ],
+    "latch": true
+   },
+   "r2": {
+    "o": "or",
+    "a": [
+     {
+      "o": "wt",
+      "g": 119,
+      "c": 6,
+      "m": [
+       "<str>I have successfully placed the Blue Cog on its spindle"
+      ],
+      "ch": 1
+     },
+     {
+      "o": "chat",
+      "m": [
+       "The cog fits perfectly."
+      ]
+     }
+    ],
+    "latch": true
+   },
+   "r3": {
+    "o": "or",
+    "a": [
+     {
+      "o": "wt",
+      "g": 119,
+      "c": 6,
+      "m": [
+       "<str>I have successfully placed the Black Cog on its spindle"
+      ],
+      "ch": 1
+     },
+     {
+      "o": "chat",
+      "m": [
+       "The cog fits perfectly."
+      ]
+     }
+    ],
+    "latch": true
+   },
+   "r4": {
+    "o": "or",
+    "a": [
+     {
+      "o": "wt",
+      "g": 119,
+      "c": 5,
+      "m": [
+       "Clock Tower"
+      ]
+     },
+     {
+      "o": "and",
+      "a": [
+       {
+        "o": "vp",
+        "id": 10,
+        "v": 0
+       }
+      ],
+      "latch": true
+     }
+    ],
+    "latch": true
+   },
+   "r5": {
+    "o": "or",
+    "a": [
+     "r6",
+     "r7"
+    ]
+   },
+   "r6": {
+    "o": "zone",
+    "z": [
+     [
+      2614,
+      9625,
+      2622,
+      9662,
+      0,
+      0
+     ],
+     [
+      2611,
+      9647,
+      2613,
+      9661,
+      0,
+      0
+     ],
+     [
+      2596,
+      9600,
+      2613,
+      9631,
+      0,
+      0
+     ],
+     [
+      2580,
+      9600,
+      9595,
+      9603,
+      0,
+      0
+     ],
+     [
+      2580,
+      9600,
+      2580,
+      9628,
+      0,
+      0
+     ],
+     [
+      2576,
+      9629,
+      2580,
+      9631,
+      0,
+      0
+     ]
+    ]
+   },
+   "r7": {
+    "o": "zone",
+    "z": [
+     [
+      2571,
+      9630,
+      2575,
+      9633,
+      0,
+      0
+     ]
+    ]
+   },
+   "r8": {
+    "o": "zone",
+    "z": [
+     [
+      2000,
+      9573,
+      3000,
+      9700,
+      0,
+      0
+     ]
+    ]
+   },
+   "r9": {
+    "o": "zone",
+    "z": [
+     [
+      2563,
+      3239,
+      2573,
+      3245,
+      2,
+      2
+     ]
+    ]
+   },
+   "r10": {
+    "o": "zone",
+    "z": [
+     [
+      2563,
+      3239,
+      2573,
+      3245,
+      1,
+      1
+     ]
+    ]
+   },
+   "r11": {
+    "o": "item",
+    "nm": "White Cog",
+    "ids": [
+     20
+    ]
+   },
+   "r12": {
+    "o": "obj",
+    "ids": [
+     35
+    ],
+    "z": [
+     2591,
+     9661,
+     2591,
+     9661,
+     0,
+     0
+    ]
+   },
+   "r13": {
+    "o": "item",
+    "nm": "Rat Poison",
+    "ids": [
+     24
+    ]
+   },
+   "r14": {
+    "o": "item",
+    "nm": "Bucket of Water or a pair of ice gloves or smiths gloves(i)",
+    "ids": [
+     1929,
+     1580,
+     27031
+    ]
+   }
+  },
+  "alias": {
+   "climbWhiteLadder": [
+    "goToSecondFloorWithWhiteCog"
+   ],
+   "fillBucket": [
+    "getBucket"
+   ]
+  }
+ },
+ "unknown": {
+  "cond": 2
+ },
+ "steps": {
+  "talkToKojo": {
+   "typ": "NpcStep",
+   "wp": [
+    2570,
+    3245,
+    0
+   ],
+   "ids": [
+    3606
+   ],
+   "text": "Talk to Brother Kojo in the Clock Tower to start the quest."
+  },
+  "syncStep": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Open your Quest Journal to sync your current state."
+  },
+  "climbCellLadder": {
+   "typ": "ObjectStep",
+   "wp": [
+    2572,
+    9631,
+    0
+   ],
+   "ids": [
+    17385
+   ],
+   "text": ""
+  },
+  "climbToGroundFloorFromBasement": {
+   "typ": "ObjectStep",
+   "wp": [
+    2566,
+    9642,
+    0
+   ],
+   "ids": [
+    17385
+   ],
+   "text": ""
+  },
+  "climbFromSecondFloorToFirst": {
+   "typ": "ObjectStep",
+   "wp": [
+    2572,
+    3241,
+    2
+   ],
+   "ids": [
+    16673
+   ],
+   "text": ""
+  },
+  "climbFromFirstFloorToGround": {
+   "typ": "ObjectStep",
+   "wp": [
+    2573,
+    3241,
+    1
+   ],
+   "ids": [
+    16672
+   ],
+   "text": ""
+  },
+  "finishQuest": {
+   "typ": "NpcStep",
+   "wp": [
+    2570,
+    3245,
+    0
+   ],
+   "ids": [
+    3606
+   ],
+   "text": ""
+  },
+  "enterBasement": {
+   "typ": "ObjectStep",
+   "wp": [
+    2566,
+    3242,
+    0
+   ],
+   "ids": [
+    17384
+   ],
+   "text": ""
+  },
+  "climbWhiteLadder": {
+   "typ": "ObjectStep",
+   "wp": [
+    2575,
+    9655,
+    0
+   ],
+   "ids": [
+    17385
+   ],
+   "text": "Head up the ladder."
+  },
+  "climbToFirstFloor": {
+   "typ": "ObjectStep",
+   "wp": [
+    2573,
+    3241,
+    0
+   ],
+   "ids": [
+    16671
+   ],
+   "text": ""
+  },
+  "climbToSecondFloor": {
+   "typ": "ObjectStep",
+   "wp": [
+    2573,
+    3241,
+    1
+   ],
+   "ids": [
+    16672
+   ],
+   "text": ""
+  },
+  "whiteCogOnWhiteSpindle": {
+   "typ": "ObjectStep",
+   "wp": [
+    2567,
+    3241,
+    2
+   ],
+   "ids": [
+    31
+   ],
+   "text": ""
+  },
+  "pickUpWhiteCog": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2577,
+    9655,
+    0
+   ],
+   "ids": [],
+   "text": "Pick up the white cog."
+  },
+  "ratPoisonFood": {
+   "typ": "ObjectStep",
+   "wp": [
+    2587,
+    9654,
+    0
+   ],
+   "ids": [
+    40
+   ],
+   "text": "Use the rat poison on the food trough. Wait till the rats have died."
+  },
+  "pullFirstLever": {
+   "typ": "ObjectStep",
+   "wp": [
+    2591,
+    9661,
+    0
+   ],
+   "ids": [
+    33
+   ],
+   "text": "Pull the marked lever up."
+  },
+  "pickUpRatPoison": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2564,
+    9662,
+    0
+   ],
+   "ids": [],
+   "text": "Pick up the rat poison in the north west of the dungeon."
+  },
+  "blackCogOnBlackSpindle": {
+   "typ": "ObjectStep",
+   "wp": [
+    2570,
+    9642,
+    0
+   ],
+   "ids": [
+    30
+   ],
+   "text": ""
+  },
+  "pickupBlackCog": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2613,
+    9639,
+    0
+   ],
+   "ids": [],
+   "text": "Enter the north east door, and pick up the black cog with a bucket of water, alternatively you can equip ice gloves or smith gloves(i)."
+  },
+  "goToLadderCedric": {
+   "typ": "ObjectStep",
+   "wp": [
+    2621,
+    3261,
+    0
+   ],
+   "ids": [
+    17384
+   ],
+   "text": ""
+  },
+  "blueCogOnBlueSpindle": {
+   "typ": "ObjectStep",
+   "wp": [
+    2569,
+    3240,
+    1
+   ],
+   "ids": [
+    32
+   ],
+   "text": "Use the blue cog on the blue spindle."
+  },
+  "pickUpBlueCog": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2574,
+    9633,
+    0
+   ],
+   "ids": [],
+   "text": "Pick up the blue cog."
+  },
+  "pushWall": {
+   "typ": "ObjectStep",
+   "wp": [
+    2575,
+    9631,
+    0
+   ],
+   "ids": [
+    1597
+   ],
+   "text": "Follow the tunnel and push the wall at the end."
+  },
+  "fillBucket": {
+   "typ": "ObjectStep",
+   "wp": [
+    2612,
+    3254,
+    0
+   ],
+   "ids": [
+    884
+   ],
+   "text": "Get the bucket next to Brother Cedric, north of the monastery, and fill it up on the well next to it for the Black cog step. If you have other plans for the black cog, you can ignore this step by going down the nearby ladder."
+  },
+  "getBucket": {
+   "typ": "ItemStep",
+   "wp": [
+    2616,
+    3255,
+    0
+   ],
+   "ids": [],
+   "text": "Get the bucket next to Brother Cedric, north of the monastery, and fill it up on the well next to it for the Black cog step. If you have other plans for the black cog, you can ignore this step by going down the nearby ladder."
+  },
+  "redCogOnRedSpindle": {
+   "typ": "ObjectStep",
+   "wp": [
+    2568,
+    3243,
+    0
+   ],
+   "ids": [
+    29
+   ],
+   "text": "Use the red cog on the red spindle."
+  },
+  "pickUpRedCog": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2583,
+    9613,
+    0
+   ],
+   "ids": [],
+   "text": "Go through the south east door and pick up the red cog."
+  }
+ }
+}

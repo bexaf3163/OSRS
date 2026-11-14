@@ -1,0 +1,283 @@
+{
+ "quest": "Sheep Herder",
+ "status": "draft",
+ "sources": {
+  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+  "wiki": {
+   "title": "Sheep Herder",
+   "revision": 15395515
+  },
+  "quickGuide": {
+   "title": "Sheep Herder/Quick guide",
+   "revision": 14638805
+  }
+ },
+ "step": {
+  "title": "Sheep Herder",
+  "type": "quest",
+  "qp": 4,
+  "membersOnly": true,
+  "wikiUrl": "https://oldschool.runescape.wiki/w/Sheep_Herder",
+  "quickGuideUrl": "https://oldschool.runescape.wiki/w/Sheep_Herder/Quick_guide",
+  "mapLocation": {
+   "x": 2617,
+   "y": 3299,
+   "plane": 0,
+   "label": "Talk to Councillor Halgrive outside of the East Ardougne church."
+  },
+  "npc": {
+   "nameEn": "Councillor Halgrive"
+  },
+  "itemsRequired": [
+   {
+    "nameEn": "coins",
+    "amount": 100,
+    "wikiItemId": 995,
+    "howToGet": "Free spawn: Asgarnian Ice Dungeon.",
+    "note": "100 coins"
+   }
+  ],
+  "foes": []
+ },
+ "stages": {
+  "var": [
+   "varp",
+   60
+  ],
+  "route": [
+   {
+    "title": "Walkthrough",
+    "steps": [
+     "Talk to Councillor Halgrive outside the East Ardougne church. Ensure that you have at least 1 empty inventory slot. Dialogue: \"What's wrong?\", \"I can do that for you.\"",
+     "Talk to Doctor Orbon in the church. Dialogue: \"Okay, I'll take it.\"",
+     "Put on the plague jacket and trousers and go to the enclosure north-west of the Ardougne north bank.",
+     "Pick up & wield the cattleprod next to the incinerator.",
+     "There are sheep to the north-west (blue), north (yellow), east (green), and south (red) of the incinerator.",
+     "Prod one sheep of each colour through the gate.",
+     "Feed your sheep sheep feed until they're all dead.",
+     "Pick up the bones and use them on the incinerator.",
+     "Return to Councillor Halgrive to complete the quest.",
+     "Congratulations, quest complete!"
+    ]
+   }
+  ],
+  "stages": [
+   {
+    "at": 0,
+    "do": [
+     {
+      "t": "Talk to Councillor Halgrive outside the East Ardougne church.",
+      "s": "Talk to Councillor Halgrive outside the East Ardougne church.",
+      "k": "talkToHalgrive",
+      "at": [
+       2615,
+       3298,
+       0
+      ],
+      "hl": {
+       "npc": [
+        8765
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 1,
+    "do": [
+     {
+      "t": "Talk to Doctor Orbon in the East Ardougne Church.",
+      "s": "Talk to Doctor Orbon in the East Ardougne Church.",
+      "k": "talkToOrbon",
+      "at": [
+       2616,
+       3306,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3984
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 2,
+    "do": [
+     {
+      "t": "Enter the enclosure north of Ardougne wearing the plague jacket and trousers.",
+      "s": "Enter the enclosure north of Ardougne in plague jacket and trousers",
+      "k": "enterEnclosure",
+      "at": [
+       2594,
+       3362,
+       0
+      ],
+      "hl": {
+       "obj": [
+        166
+       ]
+      }
+     },
+     {
+      "t": "Pick up the nearby cattleprod.",
+      "s": "Pick up the nearby cattleprod.",
+      "k": "pickupCattleprod",
+      "at": [
+       2604,
+       3357,
+       0
+      ]
+     },
+     {
+      "t": "Prod one of the blue sheep north west of the enclosure to the enclosure gate.",
+      "s": "Prod a blue sheep (north-west) to the enclosure gate",
+      "k": "prodBlueSheep",
+      "at": [
+       2562,
+       3389,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3988
+       ]
+      }
+     },
+     {
+      "t": "Prod one of the yellow sheep north of the enclosure to the enclosure gate.",
+      "s": "Prod a yellow sheep (north) to the enclosure gate",
+      "k": "prodYellowSheep",
+      "at": [
+       2610,
+       3389,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3989
+       ]
+      }
+     },
+     {
+      "t": "Prod one of the green sheep east of the enclosure to the enclosure gate.",
+      "s": "Prod a green sheep (east) to the enclosure gate",
+      "k": "prodGreenSheep",
+      "at": [
+       2621,
+       3367,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3987
+       ]
+      }
+     },
+     {
+      "t": "Prod one of the red sheep south east of the enclosure to the enclosure gate.",
+      "s": "Prod a red sheep (south-east) to the enclosure gate",
+      "k": "prodRedSheep",
+      "at": [
+       2609,
+       3347,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3986
+       ]
+      }
+     },
+     {
+      "t": "Feed the sheep the sheep feed.",
+      "s": "Feed the sheep the sheep feed.",
+      "k": "feedSheep",
+      "at": [
+       2597,
+       3361,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3988
+       ]
+      }
+     },
+     {
+      "t": "Pick up the bones.",
+      "s": "Pick up the bones.",
+      "k": "pickupBones"
+     },
+     {
+      "t": "Pick up the bones and incinerate them.",
+      "s": "Pick up the bones and incinerate them.",
+      "k": "useBonesOnIncinerator",
+      "at": [
+       2607,
+       3361,
+       0
+      ],
+      "hl": {
+       "obj": [
+        165
+       ]
+      }
+     },
+     {
+      "t": "Return to Councillor Halgrive.",
+      "s": "Return to Councillor Halgrive.",
+      "k": "talkToHalgriveToFinish",
+      "at": [
+       2615,
+       3298,
+       0
+      ],
+      "hl": {
+       "npc": [
+        8765
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "facts": {
+  "id": "Sheep Herder",
+  "stepIds": [
+   "DRAFT"
+  ],
+  "members": false,
+  "requirements": {
+   "skills": {},
+   "questPoints": 0,
+   "quests": [],
+   "manual": [],
+   "capabilities": [],
+   "unparsed": null,
+   "text": ""
+  },
+  "rewards": {
+   "questPoints": 4,
+   "xp": {
+    "hunter": 1000
+   },
+   "coins": 3100
+  },
+  "resourceFlow": null,
+  "length": "Short",
+  "source": {
+   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15395515",
+   "title": "Sheep Herder",
+   "revision": 15395515,
+   "retrievedAt": "2026-11-14T21:40:36.640Z"
+  }
+ },
+ "unknown": [
+  "step \"pickupBones\": Quest Helper gives no tile",
+  "Quest Helper condition \"ground\" is not understood (4)",
+  "what the quest uses up and hands out is not reviewed"
+ ]
+}
