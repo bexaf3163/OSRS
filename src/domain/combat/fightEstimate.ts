@@ -305,10 +305,11 @@ export function estimateStepFights(
   // The step's own kit is what the fight is done with: an item it requires is carried there, whatever the bag holds now.
   const carried = (step.itemsRequired ?? []).flatMap((item) => [item.nameEn, ...(item.anyOf ?? [])]);
   const worn = gear.equipment.map((piece) => piece.name);
-  // A safespot spell's casts: the fewest its runes pay for, a rune the worn staff gives counted as endless.
+  // A safespot spell's casts: the fewest its runes pay for, a rune the staff gives counted as endless (worn, or in the step's
+  // kit: it is wielded to cast, and nothing reaches the player on the spot).
   const castsOf = (name: string) => {
     const spell = SPELLS.find((s) => s.name === name);
-    const paid = Object.entries(spell?.runes ?? {}).filter(([element]) => !(STAFFS[element] && held(worn, STAFFS[element].name)))
+    const paid = Object.entries(spell?.runes ?? {}).filter(([element]) => !(STAFFS[element] && (held(worn, STAFFS[element].name) || held(carried, STAFFS[element].name))))
       .map(([element, qty]) => Math.floor((step.itemsRequired ?? []).filter((item) => nameKey(item.nameEn) === nameKey(`${element} rune`))
         .reduce((n, item) => n + (typeof item.amount === 'number' ? item.amount : 0), 0) / qty));
     return paid.length ? Math.min(...paid) : undefined;

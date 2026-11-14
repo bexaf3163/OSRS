@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-24 stages: 6 retained, 16 revised, 0 with a branch, 2 deferred.
+25 stages: 6 retained, 18 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -24,13 +24,14 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S4-02 The Ides of Milk | quest-fight | yes | Brutus (30) | melee | Brutus | Trout 5 | Revised |
 | S5-03 Map piece 1: Melzar's Maze | quest-fight | yes | Melzar the Mad (43), Lesser demon (82) | melee | Melzar the Mad, Lesser demon | Salmon 10 | Revised |
 | S5-08 The battle with the dragon Elvarg | quest-fight | yes | Elvarg (83) | melee | Elvarg | Lobster 20+ | Revised |
-| S7-02 Fight Arena | quest-fight | yes | Khazard Ogre (63), Khazard scorpion (44), Bouncer (137) | safespot | - | Lobster 10 | Revised |
-| S7-03 Tree Gnome Village | quest-fight | yes | Khazard warlord (112) | safespot | - | Lobster 10 | Revised |
-| S7-05 The Grand Tree | quest-fight | yes | Black demon (172) | safespot | - | Lobster 10 | Revised |
+| S7-01 Waterfall Quest | avoid | yes | Fire giant (86), Moss Guardian (84) | run | - | - | Revised |
+| S7-02 Fight Arena | quest-fight | yes | Khazard Ogre (63), Khazard Scorpion (44), Bouncer (137) | safespot | Khazard Ogre, Khazard Scorpion, Bouncer | Lobster 10 | Revised |
+| S7-03 Tree Gnome Village | quest-fight | yes | Khazard warlord (112) | safespot | Khazard warlord | Lobster 10 | Revised |
+| S7-05 The Grand Tree | quest-fight | yes | Black demon (The Grand Tree) (172) | safespot | Black demon (The Grand Tree) | Lobster 10 | Revised |
 | S8-01 Priest in Peril | quest-fight | yes | Temple Guardian (30), Monk of Zamorak (30) | melee | Temple Guardian | Trout 5 | Revised |
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
-| S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (101) | safespot | - | - | Revised |
-| S9-02 Fairytale I - Growing Pains | quest-fight | yes | Tanglefoot (111) | other | - | Lobster 10 | Deferred |
+| S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (Lost City) (101) | safespot | Tree spirit (Lost City) | - | Revised |
+| S9-02 Fairytale I - Growing Pains | quest-fight | yes | Tanglefoot (111) | other | Tanglefoot | Lobster 10 | Revised |
 | S9-04 Monkey Madness I | quest-fight | yes | Jungle demon (195), Monkey zombie, Gorilla | safespot | - | - | Revised |
 
 ## S1-06 The Restless Ghost
@@ -397,6 +398,32 @@ Evidence:
 
 In-game danger zones: crandor-boarding, elvarg-lair.
 
+## S7-01 Waterfall Quest
+
+**Revised.** Walk past the fire giants (86) in the Waterfall dungeon to the west door; no weapons or armour are allowed in Glarial's tomb.
+
+Quest stage lines: 4.7.
+
+Assumptions:
+
+- Walking past is the route's method (OSRS Wiki, Waterfall Quest quick guide: "avoid the fire giants"); no kill estimate drives preparation.
+
+Problems:
+
+- The route did not name the fire giants, so the quest's "evasion" requirement could never be shown met and the planner stopped at a check.
+
+Alternatives:
+
+- Fight them: not needed and not suggested.
+
+Changed:
+
+- 2.99.0: the route line says to avoid the fire giants; this run-past proves the evasion requirement.
+
+Evidence:
+
+- Quest stage route 4.7; OSRS Wiki Waterfall Quest/Quick guide, revision 15126652.
+
 ## S7-02 Fight Arena
 
 **Revised.** Fight Arena: the Khazard Ogre (63), the scorpion (44) and Bouncer (137), each from behind a skeleton with Fire Bolt.
@@ -419,6 +446,7 @@ Alternatives:
 Changed:
 
 - 2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.
+- 2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Bolt: the fight is estimated.
 
 Evidence:
 
@@ -441,6 +469,7 @@ Problems:
 Changed:
 
 - 2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.
+- 2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Bolt: the fight is estimated.
 
 Evidence:
 
@@ -467,6 +496,7 @@ Alternatives:
 Changed:
 
 - 2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.
+- 2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Bolt, the spell of the step's kit: the fight is estimated.
 
 Evidence:
 
@@ -544,6 +574,7 @@ Changed:
 
 - 2.80.13: chosen-strategy Magic 13 checked; an explicitly labelled four-Tuna entry buffer shares readiness, Shopping and funding protection and returns to optional after the confirmed entry. Physical alternative bank withdrawals are named consistently in the app and plugin.
 - 2.74.6: Fire Strike runes for a guide allowance of 65 casts (195 Fire, 130 Air, 65 Mind) and a Lumbridge teleport are required items and are checked on the Entrana line; the lines name the south-west mushroom safespot, the greater demons to run past and the Wilderness door.
+- 2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Strike: the fight is estimated.
 
 Evidence:
 
@@ -551,7 +582,7 @@ Evidence:
 
 ## S9-02 Fairytale I - Growing Pains
 
-**Deferred.** Kill the large Tanglefoot (111) with the Magic secateurs, the only thing that damages it.
+**Revised.** Kill the large Tanglefoot (111) with the Magic secateurs, the only thing that damages it.
 
 Quest stage lines: 4.0, 4.2.
 
@@ -566,6 +597,7 @@ Problems:
 Changed:
 
 - 2.74.8: Lobster ×10 (or similar food) is a required item, as the line's bag check already demanded; the fight estimate stays open.
+- 2.99.0: the Magic secateurs are in the gear data as quest kit and fightMechanics.json says only they damage it; the step's threat names it: the fight is estimated.
 
 Evidence:
 

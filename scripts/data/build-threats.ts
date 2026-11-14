@@ -33,6 +33,7 @@ const THREATS: { key: string; page: string; version?: string; note?: string }[] 
   { key: 'Brutus', page: 'Brutus' },
   { key: 'Moss giant', page: 'Moss giant', version: 'Level 42' },
   { key: 'Ghast', page: 'Ghast', version: 'Level 30' },
+  { key: 'Tanglefoot', page: 'Tanglefoot' },
   { key: 'Melzar the Mad', page: 'Melzar the Mad' },
   { key: 'Lesser demon', page: 'Lesser demon', version: 'Level 82' },
   { key: 'Elvarg', page: 'Elvarg' },

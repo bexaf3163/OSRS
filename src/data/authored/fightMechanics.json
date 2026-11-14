@@ -49,6 +49,44 @@
         "Her dragonfire hits up to 70, and up to 10 behind an anti-dragon shield; she can breathe it from a distance.",
         "The Wiki gives no share for her slash, magic and dragonfire attacks: the estimate takes the worse of them for every attack."
       ]
+    },
+    "Tanglefoot": {
+      "url": "https://oldschool.runescape.wiki/w/Tanglefoot",
+      "weapon": { "item": "Magic secateurs", "damageMultiplier": 1 },
+      "facts": [
+        "Only the Magic secateurs damage it (OSRS Wiki Tanglefoot); the Nature Spirit enchants the secateurs on the way, at quest line 7.2.",
+        "Level 111, 102 hit points, max hit 11 every 5 ticks (OSRS Wiki infobox)."
+      ]
+    },
+    "Khazard Ogre": {
+      "url": "https://oldschool.runescape.wiki/w/Khazard_Ogre",
+      "safespot": { "spell": "Fire Bolt" },
+      "facts": ["The quest guide fights it from behind a skeleton in the arena, with Fire Bolt; it cannot reach the spot, so nothing hits you there (combat audit)."]
+    },
+    "Khazard Scorpion": {
+      "url": "https://oldschool.runescape.wiki/w/Khazard_Scorpion",
+      "safespot": { "spell": "Fire Bolt" },
+      "facts": ["The quest guide fights it from behind a skeleton in the arena, with Fire Bolt; it cannot reach the spot, so nothing hits you there (combat audit)."]
+    },
+    "Bouncer": {
+      "url": "https://oldschool.runescape.wiki/w/Bouncer",
+      "safespot": { "spell": "Fire Bolt" },
+      "facts": ["The quest guide fights it from behind a skeleton in the arena, with Fire Bolt; it cannot reach the spot, so nothing hits you there (combat audit)."]
+    },
+    "Khazard warlord": {
+      "url": "https://oldschool.runescape.wiki/w/Khazard_warlord",
+      "safespot": { "spell": "Fire Bolt" },
+      "facts": ["The quest guide fights it from the safespot by the dead tree, with Fire Bolt; it cannot reach the spot, so nothing hits you there (combat audit)."]
+    },
+    "Black demon (The Grand Tree)": {
+      "url": "https://oldschool.runescape.wiki/w/Black_demon_(The_Grand_Tree)",
+      "safespot": { "spell": "Fire Bolt" },
+      "facts": ["The quest guide fights it from the spot north of the entrance ladder, with Fire Bolt (the step's kit: a Staff of fire, Chaos and Air runes); it cannot reach the spot, so nothing hits you there (combat audit)."]
+    },
+    "Tree spirit (Lost City)": {
+      "url": "https://oldschool.runescape.wiki/w/Tree_spirit_(Lost_City)",
+      "safespot": { "spell": "Fire Strike" },
+      "facts": ["The quest guide fights it from between the mushrooms to the south-west; Entrana allows no weapons or armour, with Fire Strike; it cannot reach the spot, so nothing hits you there (combat audit)."]
     }
   }
 }

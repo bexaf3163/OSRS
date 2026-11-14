@@ -1,6 +1,6 @@
 {
  "source": "OSRS Wiki: monster infoboxes (Bucket infobox_monster) and the food articles",
- "generatedAt": "2026-10-26",
+ "generatedAt": "2026-11-14",
  "threats": {
   "Count Draynor": {
    "page": "Count Draynor",
@@ -92,6 +92,18 @@
    "speedTicks": 4,
    "hitpoints": 45,
    "combat": 30
+  },
+  "Tanglefoot": {
+   "page": "Tanglefoot",
+   "hits": [
+    {
+     "n": 11,
+     "label": ""
+    }
+   ],
+   "speedTicks": 4,
+   "hitpoints": 102,
+   "combat": 111
   },
   "Melzar the Mad": {
    "page": "Melzar the Mad",

@@ -49,7 +49,7 @@ const UNKNOWN_TIME_DEBT = 0;
 // The Members route is not fully planned yet: the quests a fresh Members account cannot finish are known debt. Lower it
 // as it shrinks, never raise it. While any Members quest is unplanned every Members turn has an unknown remaining time,
 // so that count is asserted only once this debt reaches 0.
-const MEMBERS_OPEN_DEBT = 7;
+const MEMBERS_OPEN_DEBT = 1;
 
 // One fresh account played through the route of a mode; it stops at the first check and returns what is left.
 function play(mode: GameMode) {

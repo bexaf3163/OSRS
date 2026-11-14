@@ -318,3 +318,19 @@ describe('complete encounter strategy comparison', () => {
     expect(frame.encounter.uncertain).toBe(true);
   });
 });
+
+describe('a safespot spell fight', () => {
+  it('trains Magic to the spell, with the staff and runes of the step counted (Tree Gnome Village, Fire Bolt)', async () => {
+    const { allSteps } = await import('../../../data');
+    const { encounterSetups } = await import('./setups');
+    const { readFileSync } = await import('node:fs');
+    const prices = fakePrices(JSON.parse(readFileSync('tests/fixtures/gePrices.json', 'utf8')).prices);
+    const stats = { attack: 50, strength: 47, defence: 45, hitpoints: 44, ranged: 1, magic: 20, prayer: 1 };
+    const gear = { equipment: [], inventory: [], coins: 5000, bankCoins: 0 };
+    const player = buildPlayerState({ mode: 'members', connected: true, player: 'Test', stats, progress: emptyProgress(), questsDone: [],
+      owned: { bankSeen: true, items: new Map() }, gear, position: { x: 3222, y: 3218, plane: 0 } } as never);
+    const snapshot = { scope: { characterId: 'Test', mode: 'members', gameSessionId: 't', snapshotRevision: 1 }, player, combat: { stats, gear }, quests: {}, xp: {} } as unknown as PlanningSnapshot;
+    const setups = encounterSetups(allSteps.find((s) => s.id === 'S7-03')!, snapshot, prices, false, {});
+    expect(setups[0]).toMatchObject({ label: 'Train magic to 35', targets: [{ skill: 'magic', level: 35 }] });
+  });
+});

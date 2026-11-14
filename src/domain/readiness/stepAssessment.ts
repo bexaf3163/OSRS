@@ -39,7 +39,7 @@ export function assessStepReadiness(input: {
 
 const MELEE = ['attack', 'strength', 'defence'];
 /** The skills a fight's training forecast can raise: melee, and Ranged for a bow user's fight. */
-const FIGHT_SKILLS = [...MELEE, 'ranged'];
+const FIGHT_SKILLS = [...MELEE, 'ranged', 'magic'];
 
 /** Search-only ordinary melee XP: one trained skill, plus its conservative Hitpoints gain. Never observed state.
  * OSRS Wiki /Hitpoints and /Strength: 1.33 HP XP and 4 selected-skill XP per damage; quest/non-combat XP must not use this. */

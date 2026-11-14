@@ -3581,9 +3581,7 @@
           "Monkfish",
           "Shark"
         ]
-      }
-    ],
-    "itemsRecommended": [
+      },
       {
         "nameEn": "Staff of fire",
         "amount": 1,
@@ -3606,7 +3604,13 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
       }
     ],
+    "itemsRecommended": [],
     "safespot": "All the opponents, the scorpion (44), the ogre (63) and the Bouncer (137), can be hit from cover with a bow or magic: they all fight only up close. General Khazard (142) is optional: you do not need to kill him for the quest.",
+    "threats": [
+      "Khazard Ogre",
+      "Khazard Scorpion",
+      "Bouncer"
+    ],
     "reward": "2 QP, 12,175 XP Attack, 2,175 XP Thieving, 1,000 Coins.",
     "doneWhen": "The quest is green.",
     "inGame": {
@@ -3681,9 +3685,33 @@
           "Monkfish",
           "Shark"
         ]
+      },
+      {
+        "nameEn": "Staff of fire",
+        "amount": 1,
+        "howToGet": "Grand Exchange; check the current acquisition estimate. Wield it and autocast Fire Bolt: the staff gives the Fire runes.",
+        "wikiItemId": 1387,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
+      },
+      {
+        "nameEn": "Chaos rune",
+        "amount": 50,
+        "howToGet": "Fire Bolt (Magic 35): 1 Chaos and 3 Air runes a cast with the Staff of fire. 50 casts with a margin for misses. Grand Exchange; check the current acquisition estimate.",
+        "wikiItemId": 562,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 150,
+        "howToGet": "Fire Bolt: 3 a cast. Grand Exchange; check the current acquisition estimate.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
       }
     ],
     "safespot": "The boss Khazard warlord (level 112) can be stuck behind the trees and shot with magic.",
+    "threats": [
+      "Khazard warlord"
+    ],
     "reward": "2 QP, 11,450 Attack XP, the Gnome amulet, access to the Spirit trees teleport network.",
     "doneWhen": "The quest is green.",
     "inGame": {
@@ -3707,29 +3735,7 @@
         "questName": "Tree Gnome Village"
       }
     },
-    "itemsRecommended": [
-      {
-        "nameEn": "Staff of fire",
-        "amount": 1,
-        "howToGet": "Grand Exchange; check the current acquisition estimate. Wield it and autocast Fire Bolt: the staff gives the Fire runes.",
-        "wikiItemId": 1387,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
-      },
-      {
-        "nameEn": "Chaos rune",
-        "amount": 50,
-        "howToGet": "Fire Bolt (Magic 35): 1 Chaos and 3 Air runes a cast with the Staff of fire. 50 casts with a margin for misses. Grand Exchange; check the current acquisition estimate.",
-        "wikiItemId": 562,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
-      },
-      {
-        "nameEn": "Air rune",
-        "amount": 150,
-        "howToGet": "Fire Bolt: 3 a cast. Grand Exchange; check the current acquisition estimate.",
-        "wikiItemId": 556,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
-      }
-    ],
+    "itemsRecommended": [],
     "fields": [
       {
         "label": "Magic from a safespot",
@@ -3780,6 +3786,9 @@
       }
     ],
     "safespot": "In the fight with the Black demon (level 172) use the safespot behind the rocks.",
+    "threats": [
+      "Black demon (The Grand Tree)"
+    ],
     "reward": "5 QP, 18,400 Attack XP, 7,900 Agility XP, 2,150 Magic XP. Opens access to the Gnome gliders.",
     "doneWhen": "The quest is green, Attack 40+.",
     "inGame": {
@@ -3809,7 +3818,24 @@
         "questName": "The Grand Tree"
       }
     },
-    "itemsRecommended": [
+    "itemsRecommended": [],
+    "itemsRequired": [
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "howToGet": "For the Black demon (level 172, hits up to 16) under the trap door: the guide checks 10 lobsters before you go down. Buy on the Grand Exchange. Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
+        "heals": 12,
+        "anyOf": [
+          "Trout",
+          "Salmon",
+          "Tuna",
+          "Swordfish",
+          "Monkfish",
+          "Shark"
+        ]
+      },
       {
         "nameEn": "Staff of fire",
         "amount": 1,
@@ -3830,24 +3856,6 @@
         "howToGet": "Fire Bolt: 3 a cast. Grand Exchange; check the current acquisition estimate.",
         "wikiItemId": 556,
         "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
-      }
-    ],
-    "itemsRequired": [
-      {
-        "nameEn": "Lobster",
-        "amount": 10,
-        "howToGet": "For the Black demon (level 172, hits up to 16) under the trap door: the guide checks 10 lobsters before you go down. Buy on the Grand Exchange. Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
-        "wikiItemId": 379,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
-        "heals": 12,
-        "anyOf": [
-          "Trout",
-          "Salmon",
-          "Tuna",
-          "Swordfish",
-          "Monkfish",
-          "Shark"
-        ]
       }
     ]
   },
@@ -4406,6 +4414,9 @@
       }
     ],
     "safespot": "Chop the Dramen tree from the south; when the Tree spirit (level 101, 85 hit points, hits up to 10) appears, step between the mushrooms to the south-west and cast Fire Strike: it cannot reach you there. The wiki says the bronze axe is too weak against it.",
+    "threats": [
+      "Tree spirit (Lost City)"
+    ],
     "reward": "3 QP, access to the hidden city of Zanaris (Dramen staff), the right to wear the Dragon dagger and Dragon longsword (with 60 Attack), Cosmic rune crafting.",
     "doneWhen": "The quest is green.",
     "inGame": {
@@ -4542,6 +4553,9 @@
         "label": "Combat",
         "text": "Tanglefoot (level 111): he can be damaged only with the Magic secateurs, which are given during the quest. Bring 10 lobsters."
       }
+    ],
+    "threats": [
+      "Tanglefoot"
     ],
     "reward": "2 QP, the Magic secateurs, 3,500 Farming XP, 2,000 Attack XP, 1,000 Magic XP.",
     "doneWhen": "The quest is green.",

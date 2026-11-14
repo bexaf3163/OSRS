@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
-  "generatedAt": "2026-11-11",
+  "generatedAt": "2026-11-14",
   "foes": [
     {
       "name": "Count Draynor",
@@ -379,6 +379,125 @@
       }
     },
     {
+      "name": "Khazard Ogre",
+      "combat": 63,
+      "members": true,
+      "hitpoints": 60,
+      "attackLevel": 54,
+      "strengthLevel": 53,
+      "defenceLevel": 53,
+      "magicLevel": 1,
+      "attackBonus": 22,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 8,
+      "speedTicks": 6,
+      "aggressive": true
+    },
+    {
+      "name": "Khazard Scorpion",
+      "combat": 44,
+      "members": true,
+      "hitpoints": 40,
+      "attackLevel": 40,
+      "strengthLevel": 39,
+      "defenceLevel": 34,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 5,
+        "slash": 15,
+        "crush": 15,
+        "magic": 0,
+        "ranged": 5
+      },
+      "attackStyle": "stab",
+      "maxHit": 5,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 25
+      }
+    },
+    {
+      "name": "Bouncer",
+      "combat": 137,
+      "members": true,
+      "hitpoints": 116,
+      "attackLevel": 120,
+      "strengthLevel": 120,
+      "defenceLevel": 120,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 13,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Khazard warlord",
+      "combat": 112,
+      "members": true,
+      "hitpoints": 170,
+      "attackLevel": 75,
+      "strengthLevel": 78,
+      "defenceLevel": 80,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 10,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": -75
+    },
+    {
+      "name": "Black demon (The Grand Tree)",
+      "combat": 172,
+      "members": true,
+      "hitpoints": 157,
+      "attackLevel": 145,
+      "strengthLevel": 148,
+      "defenceLevel": 152,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -10,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 16,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "water",
+        "percent": 40
+      }
+    },
+    {
       "name": "Temple Guardian",
       "combat": 30,
       "members": true,
@@ -425,6 +544,54 @@
         "element": "air",
         "percent": 25
       }
+    },
+    {
+      "name": "Tree spirit (Lost City)",
+      "combat": 101,
+      "members": true,
+      "hitpoints": 85,
+      "attackLevel": 90,
+      "strengthLevel": 95,
+      "defenceLevel": 80,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 10,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 35
+      }
+    },
+    {
+      "name": "Tanglefoot",
+      "combat": 111,
+      "members": true,
+      "hitpoints": 102,
+      "attackLevel": 97,
+      "strengthLevel": 97,
+      "defenceLevel": 91,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 11,
+      "speedTicks": 4,
+      "aggressive": false
     },
     {
       "name": "Cow",

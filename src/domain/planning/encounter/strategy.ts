@@ -64,7 +64,9 @@ export function chooseEncounter(input: TacticalInput, step: Step, goalId: string
     const parts: (Minutes | null)[] = [];
     for (const target of setup.targets) {
       const candidate = trainingCandidate(target.skill, target.level);
-      if (!candidate?.step || !candidate.combatXp) return null;
+      // Magic is only trained for a safespot spell fight (setups.ts): nothing reaches the player there, so the
+      // Hitpoints that combat training earns do not matter and any Magic method serves.
+      if (!candidate?.step || (!candidate.combatXp && target.skill !== 'magic')) return null;
       // XP work comes from trainingRouter; actual current-kit preparation and every walking leg are separate.
       const at = candidate.step.mapLocation, spot = at ? { x: at.x, y: at.y, plane: at.plane } : null;
       if (!active) {

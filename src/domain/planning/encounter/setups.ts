@@ -92,7 +92,9 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
   if (options.currentOnly) return current ? [current] : [];
   // The skills that change the fight: melee ones, or Ranged and Defence for a bow user (a bow has no melee hit).
   const bow = shootsOnly(gearPieceByName(base.equipment?.find(p => p.slot === 'weapon')?.name ?? ''));
-  const melee = (bow ? ['ranged', 'defence'] : ['attack', 'strength', 'defence']).filter(skill => !(options.keepDefenceOne && skill === 'defence'));
+  // A fight cast from a safespot (fightMechanics.json) changes with Magic alone: nothing reaches the player there.
+  const spell = stepFightFoes(step).some(foe => FIGHT_MECHANICS[foe.name]?.safespot);
+  const melee = (spell ? ['magic'] : bow ? ['ranged', 'defence'] : ['attack', 'strength', 'defence']).filter(skill => !(options.keepDefenceOne && skill === 'defence'));
   const questsDone = new Set(Object.entries(snapshot.quests).filter(([, q]) => q.state === 'COMPLETED').map(([id]) => id));
   // One quote table and one advice per level set for the whole search: the even-training search asks again at each searched level.
   const geQuotes = gearMarketPrices(prices), foes = stepFightFoes(step), advised = new Map<string, ReturnType<typeof adviseGear>>();

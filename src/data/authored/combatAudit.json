@@ -193,39 +193,51 @@
       "changed": ["2.86.0: dragonfire is counted for every attack, 10 behind the worn Anti-dragon shield and 70 without; encounter preparation keeps the shield on and compares training, weapons and armour around it."]
     },
     {
+      "stepId": "S7-01", "kind": "avoid", "mandatory": true, "method": "run",
+      "objective": "Walk past the fire giants (86) in the Waterfall dungeon to the west door; no weapons or armour are allowed in Glarial's tomb.",
+      "enemies": [{ "name": "Fire giant", "level": 86 }, { "name": "Moss Guardian", "level": 84 }],
+      "lines": ["4.7"],
+      "assumptions": ["Walking past is the route's method (OSRS Wiki, Waterfall Quest quick guide: \"avoid the fire giants\"); no kill estimate drives preparation."],
+      "problems": ["The route did not name the fire giants, so the quest's \"evasion\" requirement could never be shown met and the planner stopped at a check."],
+      "alternatives": ["Fight them: not needed and not suggested."],
+      "decision": "revise",
+      "changed": ["2.99.0: the route line says to avoid the fire giants; this run-past proves the evasion requirement."],
+      "evidence": ["Quest stage route 4.7; OSRS Wiki Waterfall Quest/Quick guide, revision 15126652."]
+    },
+    {
       "stepId": "S7-02", "kind": "quest-fight", "mandatory": true, "method": "safespot",
       "objective": "Fight Arena: the Khazard Ogre (63), the scorpion (44) and Bouncer (137), each from behind a skeleton with Fire Bolt.",
-      "enemies": [{ "name": "Khazard Ogre", "level": 63, "maxHit": 8 }, { "name": "Khazard scorpion", "level": 44 }, { "name": "Bouncer", "level": 137 }],
+      "enemies": [{ "name": "Khazard Ogre", "level": 63, "maxHit": 8, "table": true }, { "name": "Khazard Scorpion", "level": 44, "table": true }, { "name": "Bouncer", "level": 137, "table": true }],
       "lines": ["1.1", "1.2", "1.5", "1.6"],
       "assumptions": ["All of them fight only up close, so the safespot holds."],
       "problems": ["No melee estimate applies.", "The in-game line before the fight checks 10 lobsters, but the food was recommended only: readiness could say ready while the arrow stopped for food."],
       "alternatives": ["A bow from the same cover."],
       "decision": "revise",
-      "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded."],
+      "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.", "2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Bolt: the fight is estimated."],
       "evidence": ["Step field \"Magic from a safespot\" and the safespot text (wiki quick guide)."]
     },
     {
       "stepId": "S7-03", "kind": "quest-fight", "mandatory": true, "method": "safespot",
       "objective": "Defeat the Khazard warlord (112, 170 hit points, hits up to 10) from the safespot by the dead tree with Fire Bolt.",
-      "enemies": [{ "name": "Khazard warlord", "level": 112, "maxHit": 10 }],
+      "enemies": [{ "name": "Khazard warlord", "level": 112, "maxHit": 10, "table": true }],
       "lines": ["2.2", "2.3"],
       "assumptions": ["He gets caught between the wall and the tree; about 31 casts, 50 brought."],
       "problems": ["The in-game line before the fight checks 10 lobsters, but the food was not in the kit: readiness could say ready while the arrow stopped for food."],
       "alternatives": [],
       "decision": "revise",
-      "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded."],
+      "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.", "2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Bolt: the fight is estimated."],
       "evidence": ["Step field \"Magic from a safespot\" (wiki quick guide)."]
     },
     {
       "stepId": "S7-05", "kind": "quest-fight", "mandatory": true, "method": "safespot",
       "objective": "Kill the Black demon (172, 157 hit points, hits up to 16) from the spot north of the entrance ladder.",
-      "enemies": [{ "name": "Black demon", "level": 172, "maxHit": 16 }],
+      "enemies": [{ "name": "Black demon (The Grand Tree)", "level": 172, "maxHit": 16, "table": true }],
       "lines": ["2.0", "3.1", "5.0", "5.1"],
       "assumptions": ["The safespot holds for the whole fight; Water Bolt hits it harder."],
       "problems": ["The in-game line before the fight checks 10 lobsters, but the food was not in the kit: readiness could say ready while the arrow stopped for food."],
       "alternatives": ["Ranged or a halberd from the same spot."],
       "decision": "revise",
-      "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded."],
+      "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.", "2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Bolt, the spell of the step's kit: the fight is estimated."],
       "evidence": ["Step field \"Magic from a safespot\"; lines 2.0 and 3.1 are dialogue and an optional choice."]
     },
     {
@@ -255,25 +267,25 @@
     {
       "stepId": "S9-01", "kind": "quest-fight", "mandatory": true, "method": "safespot",
       "objective": "Kill zombies (25) with Fire Strike until one drops an axe, then the Tree Spirit (101, 85 hit points, hits up to 10) with Fire Strike from between the mushrooms to the south-west.",
-      "enemies": [{ "name": "Zombie", "level": 25 }, { "name": "Tree spirit", "level": 101, "maxHit": 10 }],
+      "enemies": [{ "name": "Zombie", "level": 25 }, { "name": "Tree spirit (Lost City)", "level": 101, "maxHit": 10, "table": true }],
       "lines": ["2.2", "2.4"],
       "assumptions": ["The safespot between the south-west mushrooms holds.", "Magic 13 is required by the selected Fire Strike strategy, not by the quest unlock. Four Tuna (40 nominal HP) are a guide setup buffer, not a verified full-fight damage budget; 65 Fire Strike casts are a guide allowance, not the Wiki Crumble Undead estimate."],
       "problems": ["The chosen magic strategy had no runes in the kit; the instant teleport the wiki asks for to leave the dungeon was missing; no food in the item list and no numbers for the Tree Spirit in the app."],
       "alternatives": ["Melee with a Ring of recoil and a Prayer potion (wiki quick guide); the bronze axe is too weak."],
       "decision": "revise",
-      "changed": ["2.80.13: chosen-strategy Magic 13 checked; an explicitly labelled four-Tuna entry buffer shares readiness, Shopping and funding protection and returns to optional after the confirmed entry. Physical alternative bank withdrawals are named consistently in the app and plugin.", "2.74.6: Fire Strike runes for a guide allowance of 65 casts (195 Fire, 130 Air, 65 Mind) and a Lumbridge teleport are required items and are checked on the Entrana line; the lines name the south-west mushroom safespot, the greater demons to run past and the Wilderness door."],
+      "changed": ["2.80.13: chosen-strategy Magic 13 checked; an explicitly labelled four-Tuna entry buffer shares readiness, Shopping and funding protection and returns to optional after the confirmed entry. Physical alternative bank withdrawals are named consistently in the app and plugin.", "2.74.6: Fire Strike runes for a guide allowance of 65 casts (195 Fire, 130 Air, 65 Mind) and a Lumbridge teleport are required items and are checked on the Entrana line; the lines name the south-west mushroom safespot, the greater demons to run past and the Wilderness door.", "2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Strike: the fight is estimated."],
       "evidence": ["https://oldschool.runescape.wiki/w/Lost_City and https://oldschool.runescape.wiki/w/Entrana_Dungeon checked 2026-10-28 for strategy, food recommendation, axe acquisition and exit; no food quantity is prescribed. Existing boss statistics were not reverified in this batch; quest stage lines 2.2 and 2.4."]
     },
     {
       "stepId": "S9-02", "kind": "quest-fight", "mandatory": true, "method": "other",
       "objective": "Kill the large Tanglefoot (111) with the Magic secateurs, the only thing that damages it.",
-      "enemies": [{ "name": "Tanglefoot", "level": 111 }],
+      "enemies": [{ "name": "Tanglefoot", "level": 111, "table": true }],
       "lines": ["4.0", "4.2"],
       "assumptions": ["It can be flinched on a corner."],
       "problems": ["The 10 lobsters the in-game line checks before Zanaris were recommended only; no estimate (the secateurs are not in the gear data as a weapon)."],
-      "changed": ["2.74.8: Lobster ×10 (or similar food) is a required item, as the line's bag check already demanded; the fight estimate stays open."],
+      "changed": ["2.74.8: Lobster ×10 (or similar food) is a required item, as the line's bag check already demanded; the fight estimate stays open.", "2.99.0: the Magic secateurs are in the gear data as quest kit and fightMechanics.json says only they damage it; the step's threat names it: the fight is estimated."],
       "alternatives": [],
-      "decision": "defer",
+      "decision": "revise",
       "evidence": ["Step field \"Combat\"; quest stage lines 4.0 and 4.2."]
     },
     {

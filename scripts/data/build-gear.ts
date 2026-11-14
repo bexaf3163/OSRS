@@ -78,6 +78,7 @@ const EXTRA: { name: string; kind: string; set?: string }[] = [
   // Handed out in a quest and worn for its fight (fightMechanics.json): never advised as a purchase.
   { name: 'Silverlight', kind: 'quest' },
   { name: 'Anti-dragon shield', kind: 'quest' },
+  { name: 'Magic secateurs', kind: 'quest' },
 ];
 
 const SLOT: Record<string, GearSlot> = { weapon: 'weapon', '2h': 'weapon', head: 'head', body: 'body', legs: 'legs', shield: 'shield', neck: 'neck' };
@@ -165,6 +166,9 @@ for (const w of wanted) {
     const overview = await pageText(OVERVIEW);
     if (overview && listedWithoutRequirements(overview, box.name)) { req = {}; reqFrom = OVERVIEW; }
   }
+  // Quest kit is handed out in its quest and never advised as a purchase: an article that states no wield
+  // requirement (Magic secateurs) is read as none.
+  if (!req && w.kind === 'quest') { req = {}; reqFrom = box.pageName; }
   if (!req) problems.push(`${w.name}: the requirements are found neither in the article nor in the set article — it will not go into the advice`);
   // A cross-check with the metal rule ("Players require 5 Attack to wield steel weapons"): a discrepancy goes for review.
   const top = Math.max(1, ...Object.entries(req ?? {}).filter(([k]) => k !== 'quests').map(([, v]) => v as number));

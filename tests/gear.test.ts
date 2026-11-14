@@ -380,7 +380,8 @@ describe('gear.json data', () => {
     expect(new Set(ids).size).toBe(ids.length);
     for (const i of gearData.items) {
       if (i.slot === 'weapon') expect(i.speed, i.name).toBeGreaterThan(0);
-      expect(i.members, i.name).toBe(false);
+      // Members quest kit (Magic secateurs) is only a fight's weapon, never advised.
+      if (i.kind !== 'quest') expect(i.members, i.name).toBe(false);
     }
     expect(gearData.items.length).toBeGreaterThanOrEqual(130);
   });

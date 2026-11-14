@@ -7,6 +7,8 @@ import { retiredStep } from './fixtures/retiredSteps';
 // 19 special. A Strength potion dose is advice for the bosses with real health; Delrith (7 HP) gets food for the wizards instead.
 
 const rec = (id: string) => (stepById.get(id)!.itemsRecommended ?? []).map((i) => `${i.nameEn} x${i.amount}`);
+// The fight cannot go on without its spell's kit, so a safespot boss's staff and runes are required items.
+const req = (id: string) => (stepById.get(id)!.itemsRequired ?? []).map((i) => `${i.nameEn} x${i.amount}`);
 const combat = (id: string) => stepById.get(id)!.fields!.find((f) => f.label === 'Combat')!.text;
 
 describe('quest bosses: food and a potion dose as advice, the numbers in the text', () => {
@@ -37,7 +39,7 @@ describe('quest bosses: food and a potion dose as advice, the numbers in the tex
 
 describe('members bosses fought with Magic from the safespots the wiki names', () => {
   it.each([['S7-02', 60], ['S7-03', 50], ['S7-05', 50]])('%s: Staff of fire, %i Chaos and three times as many Air runes, the safespot and the armour', (id, casts) => {
-    expect(rec(id)).toEqual(expect.arrayContaining(['Staff of fire x1', `Chaos rune x${casts}`, `Air rune x${casts * 3}`]));
+    expect(req(id)).toEqual(expect.arrayContaining(['Staff of fire x1', `Chaos rune x${casts}`, `Air rune x${casts * 3}`]));
     const t = stepById.get(id)!.fields!.find((f) => f.label === 'Magic from a safespot')!.text;
     expect(t).toMatch(/safespot/);
     expect(t).toMatch(/Take the metal armour off/);

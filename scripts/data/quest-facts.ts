@@ -112,6 +112,10 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     consumes: [], receives: [], unknownItems: ["Ghost's skull"], uncertainReceipts: ['Ghostspeak amulet'],
     partialDelivery: false, fromStartOnly: true,
   } },
+  'Lost City': { revision: 15398217, flow: {
+    // The Dramen branch is cut after the Tree spirit and carved into the staff that opens Zanaris; the staff is kept.
+    consumes: [], receives: [], unknownItems: ['Dramen branch'], uncertainReceipts: ['Dramen staff'], partialDelivery: false, fromStartOnly: true,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],
@@ -129,6 +133,12 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to get past [[aggressive]] [[combat level]] 26 [[jail guard]]s.',
   'The ability to defend from a level 22 [[Skeleton]].',
   'The ability to evade level 33 [[Black Knight]]s',
+  'The ability to defeat a level 111 [[Tanglefoot]] with limited weaponry',
+  'The ability to withstand and evade attacks from level 86 [[Fire Giant]]s and level 84 [[Moss Guardian]] without any equipment.',
+  'The ability to defeat level 44, 63 and 137 enemies (all can be [[safespot]]ted)',
+  'The ability to defeat a level 112 [[Khazard warlord]]',
+  'The ability to defeat a level 172 [[Black demon (The Grand Tree)|Black demon]] (safespottable for Ranged and Magic or melee using a [[halberd]]).',
+  'Ability to kill a level 101 [[Tree spirit (Lost City)|Tree spirit]] with limited [[armour]] and [[weapons]].',
   'The ability to defeat a level 27 [[Delrith|demon]] aided by three level 20 [[Dark wizard]]s and two level 7 Dark wizards using the [[Silverlight]] in melee.',
   'The ability to defeat a level 83 [[Elvarg|dragon]]',
   'A trustworthy friend or partner. Players can join the official [[chat-channel]] "OSRS SOA" to look for a partner.',

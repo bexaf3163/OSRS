@@ -55,7 +55,8 @@ export interface DetectedStage {
 
 type QuestStages = Record<string, { route?: { title?: string; steps?: string[] }[] }>;
 
-const FIGHT = /\b(kill|kills|killed|defeat|fight|fights|slay|attack|attacks)\b/i;
+// "avoid": a danger the route walks past (Waterfall's fire giants) is a combat stage too.
+const FIGHT = /\b(kill|kills|killed|defeat|fight|fights|slay|attack|attacks|avoid)\b/i;
 const COMBAT_SKILLS = new Set(['attack', 'strength', 'defence', 'ranged', 'magic', 'hitpoints', 'slayer']);
 
 /** The stage lines of a quest that talk about a fight, as "section.line". */
