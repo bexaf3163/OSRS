@@ -19,6 +19,8 @@ export interface FightMechanics {
   attacks?: { label: string; maxHit: number; protection?: string; unprotected?: number }[];
   /** The route fights it from a spot it cannot reach, with this spell: no damage taken, the casts its runes pay for. */
   safespot?: { spell: string };
+  /** At this distance every attack of the foe is one that this prayer blocks (the Jungle Demon's magic): no damage while it is on. */
+  prayer?: { name: string; level: number; distance: string };
   facts: string[];
 }
 

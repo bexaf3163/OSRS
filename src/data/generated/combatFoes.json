@@ -594,6 +594,33 @@
       "aggressive": false
     },
     {
+      "name": "Jungle Demon",
+      "combat": 195,
+      "members": true,
+      "hitpoints": 170,
+      "attackLevel": 170,
+      "strengthLevel": 170,
+      "defenceLevel": 170,
+      "magicLevel": 170,
+      "attackBonus": 50,
+      "defence": {
+        "stab": 0,
+        "slash": 50,
+        "crush": 0,
+        "magic": 50,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 32,
+      "speedTicks": 6,
+      "aggressive": true,
+      "xpBonus": 7,
+      "weakness": {
+        "element": "fire",
+        "percent": 25
+      }
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

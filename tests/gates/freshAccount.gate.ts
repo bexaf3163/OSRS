@@ -46,10 +46,9 @@ const F2P_SKILLS = ['attack', 'strength', 'defence', 'hitpoints', 'ranged', 'pra
 const MELEE = new Set(['attack', 'strength', 'defence']);
 const MAX_TURNS: Record<GameMode, number> = { f2p: 300, members: 700 };
 const UNKNOWN_TIME_DEBT = 0;
-// The Members route is not fully planned yet: the quests a fresh Members account cannot finish are known debt. Lower it
-// as it shrinks, never raise it. While any Members quest is unplanned every Members turn has an unknown remaining time,
-// so that count is asserted only once this debt reaches 0.
-const MEMBERS_OPEN_DEBT = 1;
+// A fresh Members account finishes every quest; the turns whose remaining time is unknown are known debt. Lower it as it
+// shrinks, never raise it.
+const MEMBERS_UNKNOWN_TIME_DEBT = 253;
 
 // One fresh account played through the route of a mode; it stops at the first check and returns what is left.
 function play(mode: GameMode) {
@@ -158,8 +157,9 @@ it('a fresh account finishes the 23 F2P quests through planned actions, without 
   expect(run.unknownTime, 'turns with an unknown remaining time (known debt)').toBeLessThanOrEqual(UNKNOWN_TIME_DEBT);
 }, 1_800_000);
 
-it('a fresh Members account keeps every Members quest it already finishes, and the known debt only shrinks', () => {
+it('a fresh Members account finishes the 35 quests through planned actions, without a check', () => {
   const run = play('members');
-  expect(run.open.length, `${run.open.join(', ')}\n${run.blocked ?? ''}`).toBeLessThanOrEqual(MEMBERS_OPEN_DEBT);
-  if (!MEMBERS_OPEN_DEBT) expect(run.unknownTime, 'Members turns with an unknown remaining time').toBe(0);
+  expect(run.blocked ?? null).toBeNull();
+  expect(run.open, run.log.slice(-8).join('\n')).toEqual([]);
+  expect(run.unknownTime, 'Members turns with an unknown remaining time (known debt)').toBeLessThanOrEqual(MEMBERS_UNKNOWN_TIME_DEBT);
 }, 1_800_000);

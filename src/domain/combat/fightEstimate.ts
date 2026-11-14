@@ -57,7 +57,7 @@ export interface FightEstimate {
 
 export interface FightInput {
   foe: CombatFoe;
-  levels: { attack: number; strength: number; defence: number; hitpoints: number; magic?: number; ranged?: number };
+  levels: { attack: number; strength: number; defence: number; hitpoints: number; magic?: number; ranged?: number; prayer?: number };
   weapon: GearPiece | null;
   neck: GearPiece | null;
   armour: GearPiece[];
@@ -227,11 +227,15 @@ function rollFight(inp: FightInput): FightEstimate | null {
     ...(foe.attackStyle === 'magic' && inp.levels.magic === undefined ? ['unread Magic level for incoming magic defence'] : []),
     ...(foe.maxHit > 0 && !['stab', 'slash', 'crush', 'magic'].includes(foe.attackStyle) ? [`unsupported incoming ${foe.attackStyle} attack model`] : [])];
   const cannot = parts.includes('cannot') ? `your hits do not outpace ${foeLabel(foe)}'s regeneration with these levels and this weapon` : undefined;
+  // A prayer that blocks every attack the foe can make at the player's distance: no damage while it is on.
+  const prayer = mech?.prayer;
+  const unprayed = prayer && (inp.levels.prayer ?? 0) < prayer.level ? `${prayer.name} needs Prayer ${prayer.level}` : undefined;
+  if (prayer) assumed.push(`${prayer.name} stays on for the whole fight (${prayer.distance}); it drains 1 prayer point every 3 seconds, which the kit's prayer potions cover`);
   const shot = won.filter((part) => part.style === 'rapid');
   return {
-    foe, style: best?.style ?? 'accurate', seconds: cannot ? NEVER : seconds, damage: cannot ? NEVER : damage, food: cannot ? NEVER : food, foodName: inp.food.name,
-    hitChance: best?.chance ?? 0, maxHit: best?.max ?? 0, foeHitChance: best?.foeC ?? 0, worstHit,
-    assumed: [...new Set(assumed)], extra, unmodelled, ...(cannot ? { cannot } : {}),
+    foe, style: best?.style ?? 'accurate', seconds: cannot ? NEVER : seconds, damage: cannot ? NEVER : prayer ? NONE : damage, food: cannot ? NEVER : prayer ? NONE : food, foodName: inp.food.name,
+    hitChance: best?.chance ?? 0, maxHit: best?.max ?? 0, foeHitChance: best?.foeC ?? 0, worstHit: prayer ? 0 : worstHit,
+    assumed: [...new Set(assumed)], extra, unmodelled, ...(cannot ?? unprayed ? { cannot: cannot ?? unprayed } : {}),
     ...(shot.length && !cannot ? { shots: spread(sum('atkMean', shot), sum('atkVar', shot), margin) } : {}),
   };
 }
@@ -301,7 +305,7 @@ export function estimateStepFights(
   const unknownPieces = SLOTS.filter((s) => s !== 'weapon' && eq[s] && !eq[s]!.piece).length;
   const stepFood = foodOfStep(step);
   const f = food ?? (stepFood ? { name: stepFood.nameEn, heals: stepFood.heals! } : { name: 'Trout', heals: 7 });
-  const magic = need('magic');
+  const magic = need('magic'), prayer = need('prayer');
   // The step's own kit is what the fight is done with: an item it requires is carried there, whatever the bag holds now.
   const carried = (step.itemsRequired ?? []).flatMap((item) => [item.nameEn, ...(item.anyOf ?? [])]);
   const worn = gear.equipment.map((piece) => piece.name);
@@ -319,7 +323,7 @@ export function estimateStepFights(
     const company = listed.flatMap((c) => COMBAT_FOES.filter((x) => x.name === c.foe && (!c.version || x.version === c.version)).slice(0, 1));
     if (company.length !== listed.length) return []; // No numbers for one that comes first: no estimate, never a smaller fight.
     const e = estimateFight({
-      foe, levels: { ...(lv as FightInput['levels']), ...(magic !== null ? { magic } : {}), ...(ranged !== null ? { ranged } : {}) },
+      foe, levels: { ...(lv as FightInput['levels']), ...(magic !== null ? { magic } : {}), ...(ranged !== null ? { ranged } : {}), ...(prayer !== null ? { prayer } : {}) },
       weapon: eq.weapon?.piece ?? null, neck: eq.neck?.piece ?? null, ...(ammo ? { ammo } : {}),
       armour, unknownPieces, food: f, carried, worn, company,
       ...(FIGHT_MECHANICS[foe.name]?.safespot ? { casts: castsOf(FIGHT_MECHANICS[foe.name].safespot!.spell) } : {}),

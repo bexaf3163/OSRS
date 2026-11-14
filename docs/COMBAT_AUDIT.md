@@ -32,7 +32,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
 | S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (Lost City) (101) | safespot | Tree spirit (Lost City) | - | Revised |
 | S9-02 Fairytale I - Growing Pains | quest-fight | yes | Tanglefoot (111) | other | Tanglefoot | Lobster 10 | Revised |
-| S9-04 Monkey Madness I | quest-fight | yes | Jungle demon (195), Monkey zombie, Gorilla | safespot | - | - | Revised |
+| S9-04 Monkey Madness I | quest-fight | yes | Jungle Demon (195), Monkey zombie, Gorilla | safespot | Jungle Demon | - | Revised |
 
 ## S1-06 The Restless Ghost
 
@@ -624,6 +624,7 @@ Alternatives:
 Changed:
 
 - 2.74.6: a bow (Maple shortbow or the best one the player can wield) and 100 arrows are required items, in the final loadout and checked before the fight; the fight line follows the wiki strategy (stand still, Protect from Magic, three squares away, last hit yourself).
+- 2.99.1: the step's threat names the Jungle Demon (combatFoes.json, Wiki infobox) and fightMechanics.json says Protect from Magic (Prayer 37) blocks all it does at three squares: the fight is estimated with the bow.
 
 Evidence:
 

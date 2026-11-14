@@ -291,13 +291,13 @@
     {
       "stepId": "S9-04", "kind": "quest-fight", "mandatory": true, "method": "safespot",
       "objective": "Monkey Madness I: monkeys for bones (optional), and the Jungle Demon (195, hits up to 32) with Protect from Magic from three squares away.",
-      "enemies": [{ "name": "Jungle demon", "level": 195, "maxHit": 32 }, { "name": "Monkey zombie", "maxHit": 7 }, { "name": "Gorilla" }],
+      "enemies": [{ "name": "Jungle Demon", "level": 195, "maxHit": 32, "table": true }, { "name": "Monkey zombie", "maxHit": 7 }, { "name": "Gorilla" }],
       "lines": ["7.0", "8.1", "8.2", "8.3", "8.4", "11.0", "11.1"],
       "assumptions": ["Prayer 43 and the loadouts' lobsters (15, 15, 10)."],
       "problems": ["The step said to hit the demon with Ranged, but no bow or arrows were in the kit or the final loadout."],
       "alternatives": ["The gnome method without Protect from Magic (wiki strategy); a Dwarf multicannon."],
       "decision": "revise",
-      "changed": ["2.74.6: a bow (Maple shortbow or the best one the player can wield) and 100 arrows are required items, in the final loadout and checked before the fight; the fight line follows the wiki strategy (stand still, Protect from Magic, three squares away, last hit yourself)."],
+      "changed": ["2.74.6: a bow (Maple shortbow or the best one the player can wield) and 100 arrows are required items, in the final loadout and checked before the fight; the fight line follows the wiki strategy (stand still, Protect from Magic, three squares away, last hit yourself).", "2.99.1: the step's threat names the Jungle Demon (combatFoes.json, Wiki infobox) and fightMechanics.json says Protect from Magic (Prayer 37) blocks all it does at three squares: the fight is estimated with the bow."],
       "evidence": ["Step fields \"Requirements\" and \"Dangers\"; safespot text; loadouts karamja, atoll, final; OSRS Wiki Jungle demon (ranged defence +0, magic +50, slash +50), read 2026-10-24."]
     }
   ]

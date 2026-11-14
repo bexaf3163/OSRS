@@ -4766,6 +4766,9 @@
       }
     ],
     "safespot": "The Jungle demon (level 195, 170 hit points, hits up to 32 with melee and magic) is a ranged fight. When the fight starts, stand still: it does not come closer until you move. Turn on Protect from Magic, stay three or more squares away (its melee reaches two), and let the gnomes wear it down; shoot it with your bow, and finish it yourself, because a killing blow from the gnomes heals it (wiki strategy). Melee is not recommended: it then hits you with both styles.",
+    "threats": [
+      "Jungle Demon"
+    ],
     "reward": "3 QP, 10,000 Coins, 3 diamonds, Daero's training (choose: 35,000 XP in Attack and Defence plus 20,000 in Strength and Hitpoints, or the other way round) and the right to wear the Dragon scimitar with 60 Attack.",
     "doneWhen": "The quest is green and a Dragon scimitar is bought.",
     "inGame": {

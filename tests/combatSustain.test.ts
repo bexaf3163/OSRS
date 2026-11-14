@@ -99,3 +99,15 @@ describe('Slayer', () => {
     expect(slayer.xph[1]).toBeCloseTo(Math.max(...melee) / 4, 0);
   });
 });
+
+describe('a prayer that blocks all a foe does at range', () => {
+  it('the Jungle Demon: no damage with Protect from Magic, and none of it below Prayer 37', async () => {
+    const { allSteps } = await import('../src/data');
+    const { estimateStepFights } = await import('../src/domain/combat/fightEstimate');
+    const step = allSteps.find((s) => s.id === 'S9-04')!;
+    const fight = (prayer: number) => estimateStepFights(step, { attack: 60, strength: 60, defence: 60, hitpoints: 60, ranged: 50, magic: 1, prayer } as never, { equipment: [], inventory: [] } as never)[0];
+    expect(fight(43)).toMatchObject({ worstHit: 0, damage: { low: 0, mid: 0, high: 0 } });
+    expect(fight(43).cannot).toBeUndefined();
+    expect(fight(30).cannot).toBe('Protect from Magic needs Prayer 37');
+  });
+});
