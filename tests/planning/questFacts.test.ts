@@ -6,7 +6,11 @@ import { questGraph } from '../../src/domain/planning/questGraph';
 describe('revision-backed quest facts', () => {
   it('preserves executable authored IDs and only actual quest prerequisites in an acyclic graph', () => {
     const items = questFactsJson.items;
-    expect(items.length).toBe(23);
+    expect(items.length).toBe(35);
+    expect(items.filter(q => !q.members).length).toBe(23);
+    // Members cards write prerequisites as "Completion of [[A]]" or a list under "Completion of the following quests".
+    expect(items.find(q => q.id === 'Nature Spirit')!.requirements.quests).toEqual(['Priest in Peril', 'The Restless Ghost']);
+    expect(items.find(q => q.id === 'Monkey Madness I')!.requirements.quests).toEqual(['The Grand Tree', 'Tree Gnome Village']);
     expect(() => questGraph(items.map(q => ({ id: q.id, requires: q.requirements.quests })))).not.toThrow();
     for (const q of items) {
       expect(q.source.revision).toBeGreaterThan(0);

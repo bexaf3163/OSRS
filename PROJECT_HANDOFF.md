@@ -149,7 +149,7 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 - Read this file and `git status` first.
 - Gates: `npx tsc --noEmit`, `npm test`, `npm run check-data`, `npm run build`, `npm run test:ui`, `npm run gate:f2p` (CI job), `npm run test:e2e`, `runelite-bridge/gradlew -p runelite-bridge test jar` and the CI packaged-Portable gate; CI also runs `check-structure` (strict, with a shrinking known debt), `knip` and `dead-css`.
-- Browser tests use port 4179: one runner at a time, finish `dist` rebuilds first, never rebuild under a running suite. Electron e2e uses isolated data and a bridge stub. Screenshots go to the ignored `audit-temp/`.
+- Browser tests use port 4179: one runner at a time, finish `dist` rebuilds first, never rebuild under a running suite. Electron e2e uses isolated data and a bridge stub. Screenshots: ignored `audit-temp/`.
 - Retiring a feature (rule 6) keeps shared consumers, saves, backups and diagnostics; a selector can reach a nested dialog.
 - Release: `npm run bump -- X.Y.Z "summary"` (package, lock, `PLUGIN_VERSION`, notes stub), finish `release-notes/vX.Y.Z.md`, push to main. When every Checks job passes, its release job publishes vX.Y.Z from the exact EXE the portable job verified, with this file (receipt filled in) and SHA256SUMS.txt, then downloads the assets and fails unless they match; existing releases are never overwritten. A release counts only when that job succeeds; "asset exists" is not success.
 - Structural work goes on a branch, rebased and merged after gates and live checks; large moves need a freeze window with the other agent idle. If interrupted, checkpoint the next action and separate local WIP from published code.
@@ -157,9 +157,9 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Handover — state on 2026-11-14
 
-- **State:** v2.95.0 published, `main` clean, all gates passed; nothing tested in the real game since 2.87.
+- **State:** v2.96.0 published, `main` clean, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, training times shown); XP/Balanced/Money change the method only; Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; V2 review retired; update Cancel stays.
-- **Next:** 1) P4. 2) Quest pipeline: promote Witch's House and Dwarf Cannon; prove more replay legs (doors, floors). 3) Measured quest times from the player's own quest starts and finishes.
+- **Next:** 1) P4. 2) Members: Slayer model (blocks Animal Magnetism), next Members-gate blockers, quest batches, skills audit. 3) Measured quest times from the player's own quest starts and finishes.
 - **Owner:** writes Russian; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 
 ## Remaining work in priority order
@@ -168,7 +168,7 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 Target: observed F2P quest planning; scoped Decision → Ledger/bridge/HUD. Supply estimates soft, prerequisites/protection hard. Optional Members preparation never gates F2P completion; no runtime LLM, automation or linear fallback.
 
-Work on `main` in a fresh clone (old worktrees and `.codex/` are gone; GitHub is the only copy).
+Work on `main` in a fresh clone (GitHub is the only copy).
 
 Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent entry for explicit goals and phased training/preparation; costs precede rewards; only sourced order-independent unknowns cancel. Cursors retire past stages; certificate proof stays physical. Procurement shares allocations/packages/fees; unknown flows weaken balances; start-only rewards never repeat; unknown hand-ins never buy; protection requires wearing; funding excludes stale/unsold cash. Shortest Path `375ce2c061df5c3961116dda6443f307df3223f1` (BSD, 64 regions, ESTIMATED); trip legs bounded, deduplicated, revision-guarded.
 
@@ -176,7 +176,7 @@ Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent e
 
 ### Quest content pipeline — pilot 2026-11-14
 
-Machine-drafted quests, checked before shipping. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/`: stages, tiles, ids and texts from Quest Helper, the rest from Wiki cards. Only wording is edited; one full text keeps one short line. `npm run check-drafts` fails contradictions with those sources and replays the stages on the walking data (off-ground tiles fail); unconfirmed facts stay `unknown`. `npm run quest-promote -- <Draft> <id>` writes the step, stages and QH row; then build-items, QH generators, fixtures, all gates. Shipped: Druidic Ritual (S7-06). Drafts: Witch's House, Dwarf Cannon. Quest Helper `b9b9370`.
+Machine-drafted quests, checked before shipping. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/`: stages, tiles, ids and texts from Quest Helper, the rest from Wiki cards. Only wording is edited (one short line per full text). `npm run check-drafts` fails contradictions with those sources and replays the stages on the walking data (off-ground tiles fail); unconfirmed facts stay `unknown`. `npm run quest-promote -- <Draft> <id>` writes the step, stages and QH row (next steps in its header). Shipped: Druidic Ritual (S7-06). Drafts: Witch's House, Dwarf Cannon. Quest Helper `b9b9370`. Quest facts include Members (35); the gate plays a Members account too: 26/35, debt 9.
 
 ### P4 — Claude's real-client acceptance
 
@@ -232,7 +232,7 @@ Kept: `planning/encounter/{setups,strategy}.ts` compares bounded preparations; `
 - `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`. `trainingKit.equipmentLine` states the tool/kit decision on Skills; F2P notes are one-line checkpoints, no Wiki rates. Weapons: one skill's XP.
 - Game line: engine's bank/drop choice; plaque shows the stamp alone. Closed optional quests are set aside (`setAsideQuests`); after all F2P quests, Path ranks `f2pCheckpoints` with Follow. One-step quests' stage checks point the game at the step. Path rows name unknown parts.
 
-Gear has bows/ranged armour; a worn bow (fitting arrows) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set arrows needed. Drops weigh cooking burns. Earning guides read the Wiki Details (`detailsOf`); Ledger icons replace colour emoji. F2P skill groups focus a checkpoint still ahead. Verified: 2,622 units, all gates.
+Gear has bows/ranged armour; a worn bow (fitting arrows) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set arrows needed. Drops weigh cooking burns. Earning guides read the Wiki Details (`detailsOf`); Ledger icons replace colour emoji. F2P skill groups focus a checkpoint still ahead.
 
 Limits: armour by melee defence; Wiki bands for quest work, minus the prepared fight. `gate:f2p`: 23/23 quests, no checks; time unknown on 0/211 turns. Later fights are proven by `encounterSetups`, a current one with pending kit by its setup, priced with the cheapest training to it; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece.
 

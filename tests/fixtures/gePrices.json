@@ -1,5 +1,5 @@
 {
- "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10",
+ "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14",
  "prices": {
   "Adamant 2h sword": {
    "buy": 3670,
@@ -1152,6 +1152,46 @@
   "Yew shortbow": {
    "buy": 321,
    "sell": 303
+  },
+  "Cake": {
+   "buy": 77,
+   "sell": 65
+  },
+  "Maple longbow": {
+   "buy": 273,
+   "sell": 265
+  },
+  "Monkfish": {
+   "buy": 129,
+   "sell": 126
+  },
+  "Oak longbow": {
+   "buy": 36,
+   "sell": 34
+  },
+  "Raw bear meat": {
+   "buy": 138,
+   "sell": 119
+  },
+  "Raw beef": {
+   "buy": 34,
+   "sell": 33
+  },
+  "Raw chicken": {
+   "buy": 33,
+   "sell": 30
+  },
+  "Raw rat meat": {
+   "buy": 48,
+   "sell": 43
+  },
+  "Shark": {
+   "buy": 739,
+   "sell": 727
+  },
+  "Willow longbow": {
+   "buy": 100,
+   "sell": 95
   }
  }
 }

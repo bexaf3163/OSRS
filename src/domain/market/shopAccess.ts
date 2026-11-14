@@ -51,6 +51,7 @@ const RULES: Record<string, Rule> = {
   'bandit duty free': { wilderness: true },
   'the old nite': { wilderness: true, members: true },
   'silk merchant': { members: true },
+  "pelters' veg stall": { members: true },
   anwen: { members: true },
   'bartender (the warrens)': { members: true },
   lunderwin: { members: true },
@@ -67,6 +68,8 @@ const OPEN = new Set([
   "wayne's chains! - chainmail specialist", 'falador general store', 'rising sun inn', "bob's brilliant axes", 'lumbridge general store', 'helmet shop',
   'edgeville general store', 'rimmington general store', "rommik's crafty supplies", "diango's toy store", "ned's handmade rope (100% wool)",
   "drogo's mining emporium", "nurmof's pickaxe shop", 'dwarven shopping store',
+  // Members shops without an entry requirement (RULES blocks them on a free account).
+  "pelters' veg stall",
 ]);
 
 /** Shops the item data lists without a town: where they stand, for the toll and the map. */

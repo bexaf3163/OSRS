@@ -7,7 +7,8 @@ export function questFacts(article: WikiArticle, stepIds: string[], retrievedAt:
   const details = templates(article.wikitext, 'Quest details')[0];
   const reward = templates(article.wikitext, 'Quest rewards')[0];
   if (!details || !reward || !Number.isInteger(num(reward.qp))) throw new Error(`${article.title}: missing quest facts`);
-  const requirements = details.requirements ?? '';
+  // Editor comments (<!-- ... -->) are notes to Wiki editors, not requirements.
+  const requirements = (details.requirements ?? '').replace(/<!--[\s\S]*?-->/g, '');
   const skills: Record<string, number> = {}, xp: Record<string, number> = {};
   let questPoints = 0;
   for (const t of templates(requirements, 'SCP')) {
@@ -32,7 +33,21 @@ export function questFacts(article: WikiArticle, stepIds: string[], retrievedAt:
     if (!Number.isSafeInteger(amount) || amount < 0 || !Number.isSafeInteger(coins + amount)) throw new Error(`${article.title}: unparsed cash reward`);
     coins += amount;
   }
-  const quests = templates(requirements, 'Questreq').map(t => t['1']).filter((v): v is string => !!v);
+  // Members cards write "Completion of [[A]]" or "Completion of the following quests:" with "** [[A]]" under it;
+  // deeper "***" lines are the prerequisites' own prerequisites.
+  const lines = requirements.split(/\r?\n/);
+  // Only exact forms are read (and left out of `unparsed`); a clause with anything more stays unparsed.
+  const firstLink = (line: string) => /\[\[([^\]|#]+)/.exec(line)?.[1] ?? [];
+  const consumed = new Set<number>();
+  const listed = lines.flatMap((line, i) => {
+    if (/^\*\s*Completion of \[\[[^\]]+\]\]\.?\s*$/i.test(line)) return consumed.add(i), firstLink(line);
+    if (/^\*\s*Completion of the following quests:?\s*$/i.test(line)) return consumed.add(i), [];
+    const head = lines.slice(0, i).reverse().find(l => /^\*(?!\*)/.test(l)) ?? '';
+    if (!/^\*\*+\s*\[\[[^\]]+\]\]\s*$/.test(line) || !/Completion of the following quests/i.test(head)) return [];
+    consumed.add(i);
+    return /^\*\*(?!\*)/.test(line) ? firstLink(line) : [];
+  });
+  const quests = [...new Set([...templates(requirements, 'Questreq').map(t => t['1']).filter((v): v is string => !!v), ...listed])];
   const manual = /\btrustworthy friend or partner\b/i.test(requirements) ? ['partner'] : [];
   const capabilities: string[] = [];
   const alternativeEscape = /\b(?:defeat|killing) or run(?:ning)? away\b/i.test(requirements);
@@ -41,7 +56,7 @@ export function questFacts(article: WikiArticle, stepIds: string[], retrievedAt:
   if (!alternativeEscape && /\b(?:running away|run from|get past|evade)\b/i.test(requirements)) capabilities.push('evasion');
   if (/\bhealth (?:recovery|regeneration)\b/i.test(requirements)) capabilities.push('regeneration');
   // Review each clause: recognising one skill must not hide another, unsupported prerequisite.
-  const unparsed = requirements.split(/\r?\n/).map(line => line.replace(/^\*+\s*/, '').trim()).filter(Boolean).filter(line => {
+  const unparsed = lines.filter((_, i) => !consumed.has(i)).map(line => line.replace(/^\*+\s*/, '').trim()).filter(Boolean).filter(line => {
     if (/^none\.?$/i.test(line)) return false;
     const structure = line.replace(/\{\{(?:SCP|Questreq|Boostable|Questreqstart)\|[^{}]*}}/gi, '')
       .replace(/\[\[(?:Quest points)(?:\|[^\]]*)?]]/gi, '').trim();
