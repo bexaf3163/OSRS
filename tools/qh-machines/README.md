@@ -22,6 +22,7 @@ The Quest Helper license (BSD 2-Clause) is in `THIRD_PARTY_NOTICES.md` in the re
 | `qhm/steps_info.py`, `qhm/export_fixture.py` | The tile, type and id of each Quest Helper step → `tests/fixtures/qh-steps.json` |
 | `qhm/reach.py`, `qhm/gaps.py`, `qhm/compare_pos.py`, `qhm/compare_hl.py` | Checking our data against Quest Helper: unreachable lines, steps without a line, tiles, highlights |
 | `qhm/pretty.py` | A quest machine as a readable tree: `python qhm/pretty.py S2-09 1` |
+| `qhm/draft.py` | The same facts for a quest that is not on the route yet (machine, variable, each step's tile, ids and text), for `npm run quest-draft` |
 
 ## How to update after a new Quest Helper version
 

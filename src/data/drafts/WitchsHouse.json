@@ -1,0 +1,938 @@
+{
+ "quest": "Witch's House",
+ "status": "draft",
+ "sources": {
+  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+  "wiki": {
+   "title": "Witch's House",
+   "revision": 15386155
+  },
+  "quickGuide": {
+   "title": "Witch's House/Quick guide",
+   "revision": 15291737
+  }
+ },
+ "step": {
+  "title": "Witch's House",
+  "type": "quest",
+  "qp": 4,
+  "membersOnly": false,
+  "wikiUrl": "https://oldschool.runescape.wiki/w/Witch's_House",
+  "quickGuideUrl": "https://oldschool.runescape.wiki/w/Witch's_House/Quick_guide",
+  "mapLocation": {
+   "x": 2928,
+   "y": 3456,
+   "plane": 0,
+   "label": "Talk to the boy near the gate entrance of Taverley."
+  },
+  "npc": {
+   "nameEn": "boy"
+  },
+  "itemsRequired": [
+   {
+    "nameEn": "Cheese",
+    "amount": 1,
+    "wikiItemId": 1985,
+    "howToGet": "Buy on the Grand Exchange, or from Food Store in Port Sarim for 4 gp.",
+    "note": "Cheese (You may wish to bring several in case you mess up. One source is in Draynor Village - Aggie's house)"
+   },
+   {
+    "nameEn": "Leather gloves",
+    "amount": 1,
+    "wikiItemId": 1059,
+    "howToGet": "Buy on the Grand Exchange, or from Thessalia's Fine Clothes in Varrock for 6 gp.",
+    "note": "Leather gloves or any of the gloves listed here (obtainable during the quest, may take some time)"
+   }
+  ],
+  "foes": [
+   "Witch's experiment"
+  ]
+ },
+ "stages": {
+  "var": [
+   "varp",
+   226
+  ],
+  "route": [
+   {
+    "title": "Entering the house",
+    "steps": [
+     "Talk to the Boy south-east of the long garden in Taverley, next to the members gate. Dialogue: \"What's the matter?\", \"Ok, I'll see what I can do.\"",
+     "Head west, then north to the front door of the house, across from the player-owned house portal.",
+     "Look-under the potted plant closest to the door for a door key and enter the door.",
+     "Read the Diary on the table",
+     "Climb down the ladder to the north, equip gloves, and enter the gate. (The boxes can be searched for a pair of leather gloves.)",
+     "Equip your leather gloves before opening the gate.",
+     "Search the cupboard for a magnet.",
+     "Climb up the ladder and go to the small southern room.",
+     "Drop cheese in the room and a mouse will come out.",
+     "Use the magnet on the mouse."
+    ]
+   },
+   {
+    "title": "Retrieving the ball",
+    "steps": [
+     "Go around the garden to the fountain without being caught by the Witch. (Full run energy or a stamina potion may be useful.)",
+     "Check the fountain.",
+     "Go to the shed on the east and use the key on the door.",
+     "Kill the Witch's experiment in all four forms."
+    ]
+   },
+   {
+    "title": "Finishing up",
+    "steps": [
+     "Take the ball.",
+     "Leave the Witch's house by teleporting out, or by exiting through the garden then the front door.",
+     "Go back to the boy and give him the ball.",
+     "Congratulations, quest complete!"
+    ]
+   }
+  ],
+  "stages": [
+   {
+    "at": 0,
+    "do": [
+     {
+      "t": "Talk to the Boy in Taverley to start the quest.",
+      "s": "Talk to the Boy in Taverley",
+      "k": "talkToBoy",
+      "at": [
+       2928,
+       3456,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3994
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 1,
+    "do": [
+     {
+      "t": "Look under the potted plant just outside the witch's house for the house key.",
+      "s": "Look under the potted plant by the door for the key",
+      "k": "getKey",
+      "at": [
+       2900,
+       3474,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2867
+       ]
+      }
+     },
+     {
+      "t": "Enter the witch's house.",
+      "s": "Enter the witch's house",
+      "k": "enterHouse",
+      "at": [
+       2900,
+       3473,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2861
+       ]
+      }
+     },
+     {
+      "t": "Go back downstairs.",
+      "s": "Go back downstairs",
+      "k": "goDownstairsFromTop",
+      "at": [
+       2907,
+       3471,
+       1
+      ],
+      "hl": {
+       "obj": [
+        24673
+       ]
+      }
+     },
+     {
+      "t": "Go down the ladder to the basement.",
+      "s": "Go down the ladder to the basement",
+      "k": "goDownstairs",
+      "at": [
+       2907,
+       3476,
+       0
+      ],
+      "hl": {
+       "obj": [
+        24718
+       ]
+      }
+     },
+     {
+      "t": "Go through the gate whilst wearing gloves. If you don't have gloves, search the nearby boxes until you get a pair.",
+      "s": "Go through the gate wearing gloves",
+      "k": "enterGate",
+      "at": [
+       2902,
+       9873,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2866
+       ]
+      }
+     },
+     {
+      "t": "Open the cupboard and get a magnet from it",
+      "s": "Open the cupboard and take the magnet",
+      "k": "openCupboardAndLoot",
+      "at": [
+       2898,
+       9874,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2868
+       ]
+      }
+     },
+     {
+      "t": "Open the cupboard and get a magnet from it",
+      "s": "Open the cupboard and take the magnet",
+      "k": "openCupboardAndLoot2",
+      "at": [
+       2898,
+       9874,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2869
+       ]
+      }
+     },
+     {
+      "t": "Climb back up the ladder.",
+      "s": "Climb back up the ladder",
+      "k": "goBackUpstairs",
+      "at": [
+       2907,
+       9876,
+       0
+      ],
+      "hl": {
+       "obj": [
+        24717
+       ]
+      }
+     },
+     {
+      "t": "Use the cheese on the mouse hole in the south room, then use the magnet on the mouse which emerges.",
+      "s": "Use cheese on the mouse hole, then the magnet on the mouse",
+      "k": "useCheeseOnHole",
+      "at": [
+       2903,
+       3466,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2870
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 2,
+    "do": [
+     {
+      "t": "Look under the potted plant just outside the witch's house for the house key.",
+      "s": "Look under the potted plant by the door for the key",
+      "k": "getKey",
+      "at": [
+       2900,
+       3474,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2867
+       ]
+      }
+     },
+     {
+      "t": "Enter the witch's house.",
+      "s": "Enter the witch's house",
+      "k": "enterHouse",
+      "at": [
+       2900,
+       3473,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2861
+       ]
+      }
+     },
+     {
+      "t": "Go back downstairs.",
+      "s": "Go back downstairs",
+      "k": "goDownstairsFromTop",
+      "at": [
+       2907,
+       3471,
+       1
+      ],
+      "hl": {
+       "obj": [
+        24673
+       ]
+      }
+     },
+     {
+      "t": "Go down the ladder to the basement.",
+      "s": "Go down the ladder to the basement",
+      "k": "goDownstairs",
+      "at": [
+       2907,
+       3476,
+       0
+      ],
+      "hl": {
+       "obj": [
+        24718
+       ]
+      }
+     },
+     {
+      "t": "Go through the gate whilst wearing gloves. If you don't have gloves, search the nearby boxes until you get a pair.",
+      "s": "Go through the gate wearing gloves",
+      "k": "enterGate",
+      "at": [
+       2902,
+       9873,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2866
+       ]
+      }
+     },
+     {
+      "t": "Open the cupboard and get a magnet from it",
+      "s": "Open the cupboard and take the magnet",
+      "k": "openCupboardAndLoot",
+      "at": [
+       2898,
+       9874,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2868
+       ]
+      }
+     },
+     {
+      "t": "Open the cupboard and get a magnet from it",
+      "s": "Open the cupboard and take the magnet",
+      "k": "openCupboardAndLoot2",
+      "at": [
+       2898,
+       9874,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2869
+       ]
+      }
+     },
+     {
+      "t": "Climb back up the ladder.",
+      "s": "Climb back up the ladder",
+      "k": "goBackUpstairs",
+      "at": [
+       2907,
+       9876,
+       0
+      ],
+      "hl": {
+       "obj": [
+        24717
+       ]
+      }
+     },
+     {
+      "t": "Use the cheese on the mouse hole in the south room, then use the magnet on the mouse which emerges.",
+      "s": "Use cheese on the mouse hole, then the magnet on the mouse",
+      "k": "useCheeseOnHole",
+      "at": [
+       2903,
+       3466,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2870
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 3,
+    "do": [
+     {
+      "t": "Look under the potted plant just outside the witch's house for the house key.",
+      "s": "Look under the potted plant by the door for the key",
+      "k": "getKey",
+      "at": [
+       2900,
+       3474,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2867
+       ]
+      }
+     },
+     {
+      "t": "Enter the witch's house.",
+      "s": "Enter the witch's house",
+      "k": "enterHouse",
+      "at": [
+       2900,
+       3473,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2861
+       ]
+      }
+     },
+     {
+      "t": "Go back downstairs.",
+      "s": "Go back downstairs",
+      "k": "goDownstairsFromTop",
+      "at": [
+       2907,
+       3471,
+       1
+      ],
+      "hl": {
+       "obj": [
+        24673
+       ]
+      }
+     },
+     {
+      "t": "Go down the ladder to the basement.",
+      "s": "Go down the ladder to the basement",
+      "k": "goDownstairs",
+      "at": [
+       2907,
+       3476,
+       0
+      ],
+      "hl": {
+       "obj": [
+        24718
+       ]
+      }
+     },
+     {
+      "t": "Go through the gate whilst wearing gloves. If you don't have gloves, search the nearby boxes until you get a pair.",
+      "s": "Go through the gate wearing gloves",
+      "k": "enterGate",
+      "at": [
+       2902,
+       9873,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2866
+       ]
+      }
+     },
+     {
+      "t": "Open the cupboard and get a magnet from it",
+      "s": "Open the cupboard and take the magnet",
+      "k": "openCupboardAndLoot",
+      "at": [
+       2898,
+       9874,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2868
+       ]
+      }
+     },
+     {
+      "t": "Open the cupboard and get a magnet from it",
+      "s": "Open the cupboard and take the magnet",
+      "k": "openCupboardAndLoot2",
+      "at": [
+       2898,
+       9874,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2869
+       ]
+      }
+     },
+     {
+      "t": "Climb back up the ladder.",
+      "s": "Climb back up the ladder",
+      "k": "goBackUpstairs",
+      "at": [
+       2907,
+       9876,
+       0
+      ],
+      "hl": {
+       "obj": [
+        24717
+       ]
+      }
+     },
+     {
+      "t": "Use the cheese on the mouse hole in the south room, then use the magnet on the mouse which emerges.",
+      "s": "Use cheese on the mouse hole, then the magnet on the mouse",
+      "k": "useCheeseOnHole",
+      "at": [
+       2903,
+       3466,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2870
+       ]
+      }
+     },
+     {
+      "t": "Enter the garden and sneak around the perimeter to search the fountain. If the witch spots you, you'll be teleported outside.",
+      "s": "Sneak round the garden edge and search the fountain",
+      "k": "searchFountain",
+      "at": [
+       2910,
+       3471,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2864
+       ]
+      }
+     },
+     {
+      "t": "Use the shed key on the shed door to enter.",
+      "s": "Use the shed key on the shed door",
+      "k": "enterShed",
+      "at": [
+       2934,
+       3463,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2863
+       ]
+      }
+     },
+     {
+      "t": "If an experiment hasn't spawned, attempt to pick up the ball once.",
+      "s": "Try to pick up the ball once",
+      "k": "grabBall",
+      "at": [
+       2936,
+       3470,
+       0
+      ]
+     },
+     {
+      "t": "Kill all four forms of the Witch's experiment (levels 19, 30, 42, and 53). You can safe spot the last two forms from the crate in the south of the room.",
+      "s": "Kill all four forms of the Witch's experiment",
+      "k": "killWitchsExperiment",
+      "at": [
+       2935,
+       3463,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3996
+       ]
+      }
+     },
+     {
+      "t": "Pick up the witch's diary from the table and read it to ensure the door stays unlocked. Check the \"Checkpoint\" section if you want to skip this step.",
+      "s": "Pick up the witch's diary from the table and read it",
+      "k": "readDiary"
+     }
+    ]
+   },
+   {
+    "at": 5,
+    "do": [
+     {
+      "t": "Look under the potted plant just outside the witch's house for the house key.",
+      "s": "Look under the potted plant by the door for the key",
+      "k": "getKey",
+      "at": [
+       2900,
+       3474,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2867
+       ]
+      }
+     },
+     {
+      "t": "Enter the witch's house.",
+      "s": "Enter the witch's house",
+      "k": "enterHouse",
+      "at": [
+       2900,
+       3473,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2861
+       ]
+      }
+     },
+     {
+      "t": "Go back downstairs.",
+      "s": "Go back downstairs",
+      "k": "goDownstairsFromTop",
+      "at": [
+       2907,
+       3471,
+       1
+      ],
+      "hl": {
+       "obj": [
+        24673
+       ]
+      }
+     },
+     {
+      "t": "Go down the ladder to the basement.",
+      "s": "Go down the ladder to the basement",
+      "k": "goDownstairs",
+      "at": [
+       2907,
+       3476,
+       0
+      ],
+      "hl": {
+       "obj": [
+        24718
+       ]
+      }
+     },
+     {
+      "t": "Go through the gate whilst wearing gloves. If you don't have gloves, search the nearby boxes until you get a pair.",
+      "s": "Go through the gate wearing gloves",
+      "k": "enterGate",
+      "at": [
+       2902,
+       9873,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2866
+       ]
+      }
+     },
+     {
+      "t": "Open the cupboard and get a magnet from it",
+      "s": "Open the cupboard and take the magnet",
+      "k": "openCupboardAndLoot",
+      "at": [
+       2898,
+       9874,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2868
+       ]
+      }
+     },
+     {
+      "t": "Open the cupboard and get a magnet from it",
+      "s": "Open the cupboard and take the magnet",
+      "k": "openCupboardAndLoot2",
+      "at": [
+       2898,
+       9874,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2869
+       ]
+      }
+     },
+     {
+      "t": "Climb back up the ladder.",
+      "s": "Climb back up the ladder",
+      "k": "goBackUpstairs",
+      "at": [
+       2907,
+       9876,
+       0
+      ],
+      "hl": {
+       "obj": [
+        24717
+       ]
+      }
+     },
+     {
+      "t": "Use the cheese on the mouse hole in the south room, then use the magnet on the mouse which emerges.",
+      "s": "Use cheese on the mouse hole, then the magnet on the mouse",
+      "k": "useCheeseOnHole",
+      "at": [
+       2903,
+       3466,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2870
+       ]
+      }
+     },
+     {
+      "t": "Enter the garden and sneak around the perimeter to search the fountain. If the witch spots you, you'll be teleported outside.",
+      "s": "Sneak round the garden edge and search the fountain",
+      "k": "searchFountain",
+      "at": [
+       2910,
+       3471,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2864
+       ]
+      }
+     },
+     {
+      "t": "Use the shed key on the shed door to enter.",
+      "s": "Use the shed key on the shed door",
+      "k": "enterShed",
+      "at": [
+       2934,
+       3463,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2863
+       ]
+      }
+     },
+     {
+      "t": "If an experiment hasn't spawned, attempt to pick up the ball once.",
+      "s": "Try to pick up the ball once",
+      "k": "grabBall",
+      "at": [
+       2936,
+       3470,
+       0
+      ]
+     },
+     {
+      "t": "Kill all four forms of the Witch's experiment (levels 19, 30, 42, and 53). You can safe spot the last two forms from the crate in the south of the room.",
+      "s": "Kill all four forms of the Witch's experiment",
+      "k": "killWitchsExperiment",
+      "at": [
+       2935,
+       3463,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3996
+       ]
+      }
+     },
+     {
+      "t": "Pick up the witch's diary from the table and read it to ensure the door stays unlocked. Check the \"Checkpoint\" section if you want to skip this step.",
+      "s": "Pick up the witch's diary from the table and read it",
+      "k": "readDiary"
+     }
+    ]
+   },
+   {
+    "at": 6,
+    "do": [
+     {
+      "t": "Look under the potted plant just outside the witch's house for the house key.",
+      "s": "Look under the potted plant by the door for the key",
+      "k": "getKey",
+      "at": [
+       2900,
+       3474,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2867
+       ]
+      }
+     },
+     {
+      "t": "Go back downstairs.",
+      "s": "Go back downstairs",
+      "k": "goDownstairsFromTop",
+      "at": [
+       2907,
+       3471,
+       1
+      ],
+      "hl": {
+       "obj": [
+        24673
+       ]
+      }
+     },
+     {
+      "t": "Climb back up the ladder.",
+      "s": "Climb back up the ladder",
+      "k": "goBackUpstairs",
+      "at": [
+       2907,
+       9876,
+       0
+      ],
+      "hl": {
+       "obj": [
+        24717
+       ]
+      }
+     },
+     {
+      "t": "Enter the witch's house.",
+      "s": "Enter the witch's house",
+      "k": "enterHouse",
+      "at": [
+       2900,
+       3473,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2861
+       ]
+      }
+     },
+     {
+      "t": "Enter the shed. If the door doesn't open, you need to get the shed key from the fountain again.",
+      "s": "Enter the shed",
+      "k": "enterShedWithoutKey",
+      "at": [
+       2934,
+       3463,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2863
+       ]
+      }
+     },
+     {
+      "t": "Pick up the ball.",
+      "s": "Pick up the ball",
+      "k": "pickupBall",
+      "at": [
+       2935,
+       3460,
+       0
+      ]
+     },
+     {
+      "t": "Return the ball to the boy. Make sure the witch doesn't spot you or you'll have to get the ball back again..",
+      "s": "Return the ball to the boy",
+      "k": "returnToBoy",
+      "at": [
+       2928,
+       3456,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3994
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "facts": {
+  "id": "Witch's House",
+  "stepIds": [
+   "DRAFT"
+  ],
+  "members": false,
+  "requirements": {
+   "skills": {},
+   "questPoints": 0,
+   "quests": [],
+   "manual": [],
+   "capabilities": [
+    "combat"
+   ],
+   "unparsed": "The ability to defeat 4 monsters from level 19 to 53 without a break.",
+   "text": "* The ability to defeat 4 monsters from level 19 to 53 without a break."
+  },
+  "rewards": {
+   "questPoints": 4,
+   "xp": {
+    "hitpoints": 6325
+   },
+   "coins": 0
+  },
+  "resourceFlow": null,
+  "length": "Very Short",
+  "source": {
+   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15386155",
+   "title": "Witch's House",
+   "revision": 15386155,
+   "retrievedAt": "2026-11-14T01:37:47.664Z"
+  }
+ },
+ "unknown": [
+  "fight \"Witch's experiment\": no combat data",
+  "step \"readDiary\": Quest Helper gives no tile",
+  "requirement not reviewed: The ability to defeat 4 monsters from level 19 to 53 without a break.",
+  "what the quest uses up and hands out is not reviewed"
+ ]
+}

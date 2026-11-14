@@ -1,0 +1,369 @@
+{
+ "title": "Druidic Ritual",
+ "cls": "DruidicRitual",
+ "var": [
+  "varp",
+  80
+ ],
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToKaqemeex"
+   },
+   "1": "n1",
+   "2": "n2",
+   "3": {
+    "s": "talkToKaqemeexToFinish"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "goTalkToSanfew",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToSanfew"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpToSanfew"
+    }
+   },
+   "n2": {
+    "n": "prepareMeats",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5"
+       ]
+      },
+      {
+       "s": "talkToSanfewWithMeat"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2",
+        "r3",
+        "r4",
+        "r5"
+       ]
+      },
+      {
+       "s": "goUpToSanfewWithMeat"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        "r2",
+        "r3",
+        "r4"
+       ]
+      },
+      {
+       "s": "useChickenOnCauldron"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        "r2",
+        "r3"
+       ]
+      },
+      {
+       "s": "useBeefOnCauldron"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        "r2"
+       ]
+      },
+      {
+       "s": "useBearOnCauldron"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "useRatOnCauldron"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2816,
+         9668,
+         2973,
+         9855,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "enterCauldronRoom"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "climbDownToEnterDungeon"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterDungeon"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      2893,
+      3423,
+      2903,
+      3433,
+      1,
+      1
+     ]
+    ]
+   },
+   "r2": {
+    "o": "item",
+    "nm": "Enchanted rat",
+    "ids": [
+     523
+    ]
+   },
+   "r3": {
+    "o": "item",
+    "nm": "Enchanted bear",
+    "ids": [
+     524
+    ]
+   },
+   "r4": {
+    "o": "item",
+    "nm": "Enchanted beef",
+    "ids": [
+     522
+    ]
+   },
+   "r5": {
+    "o": "item",
+    "nm": "Enchanted chicken",
+    "ids": [
+     525
+    ]
+   },
+   "r6": {
+    "o": "zone",
+    "z": [
+     [
+      2889,
+      9825,
+      2898,
+      9839,
+      0,
+      0
+     ]
+    ]
+   }
+  },
+  "alias": {
+   "goUpToSanfew": [
+    "talkToSanfew"
+   ],
+   "climbDownToEnterDungeon": [
+    "enterDungeon"
+   ],
+   "goUpToSanfewWithMeat": [
+    "talkToSanfewWithMeat"
+   ]
+  }
+ },
+ "unknown": {},
+ "steps": {
+  "talkToKaqemeex": {
+   "typ": "NpcStep",
+   "wp": [
+    2925,
+    3486,
+    0
+   ],
+   "ids": [
+    5045
+   ],
+   "text": "Talk to Kaqemeex in the Druids' Circle in Taverley."
+  },
+  "goUpToSanfew": {
+   "typ": "ObjectStep",
+   "wp": [
+    2899,
+    3429,
+    0
+   ],
+   "ids": [
+    16671
+   ],
+   "text": "Talk to Sanfew upstairs in the Taverley herblore store."
+  },
+  "talkToSanfew": {
+   "typ": "NpcStep",
+   "wp": [
+    2899,
+    3429,
+    1
+   ],
+   "ids": [
+    5044
+   ],
+   "text": "Talk to Sanfew upstairs in the Taverley herblore store."
+  },
+  "enterDungeon": {
+   "typ": "ObjectStep",
+   "wp": [
+    2884,
+    3397,
+    0
+   ],
+   "ids": [
+    16680
+   ],
+   "text": "Enter Taverley Dungeon south of Taverley."
+  },
+  "climbDownToEnterDungeon": {
+   "typ": "ObjectStep",
+   "wp": [
+    2898,
+    3428,
+    1
+   ],
+   "ids": [
+    16673
+   ],
+   "text": "Enter Taverley Dungeon south of Taverley."
+  },
+  "talkToSanfewWithMeat": {
+   "typ": "NpcStep",
+   "wp": [
+    2899,
+    3429,
+    1
+   ],
+   "ids": [
+    5044
+   ],
+   "text": "Bring the enchanted meats to Sanfew upstairs in the Taverley herblore store."
+  },
+  "goUpToSanfewWithMeat": {
+   "typ": "ObjectStep",
+   "wp": [
+    2899,
+    3429,
+    0
+   ],
+   "ids": [
+    16671
+   ],
+   "text": "Bring the enchanted meats to Sanfew upstairs in the Taverley herblore store."
+  },
+  "useChickenOnCauldron": {
+   "typ": "ObjectStep",
+   "wp": [
+    2893,
+    9831,
+    0
+   ],
+   "ids": [
+    2142
+   ],
+   "text": "Use the chicken meat on the cauldron in Taverley dungeon."
+  },
+  "useBeefOnCauldron": {
+   "typ": "ObjectStep",
+   "wp": [
+    2893,
+    9831,
+    0
+   ],
+   "ids": [
+    2142
+   ],
+   "text": "Use the beef meat on the cauldron in Taverley dungeon."
+  },
+  "useBearOnCauldron": {
+   "typ": "ObjectStep",
+   "wp": [
+    2893,
+    9831,
+    0
+   ],
+   "ids": [
+    2142
+   ],
+   "text": "Use the bear meat on the cauldron in Taverley dungeon."
+  },
+  "useRatOnCauldron": {
+   "typ": "ObjectStep",
+   "wp": [
+    2893,
+    9831,
+    0
+   ],
+   "ids": [
+    2142
+   ],
+   "text": "Use the rat meat on the cauldron in Taverley dungeon."
+  },
+  "enterCauldronRoom": {
+   "typ": "ObjectStep",
+   "wp": [
+    2889,
+    9830,
+    0
+   ],
+   "ids": [
+    2144
+   ],
+   "text": "Spam-click the Prison door to enter the room with the cauldron in Taverley dungeon. Spam-clicking lets you skip the fight with the suits of armour standing nearby."
+  },
+  "talkToKaqemeexToFinish": {
+   "typ": "NpcStep",
+   "wp": [
+    2925,
+    3486,
+    0
+   ],
+   "ids": [
+    5045
+   ],
+   "text": "Return to Kaqemeex in the Druids' Circle to finish the quest."
+  }
+ }
+}

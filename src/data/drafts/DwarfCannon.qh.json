@@ -1,0 +1,723 @@
+{
+ "title": "Dwarf Cannon",
+ "cls": "DwarfCannon",
+ "var": [
+  "varp",
+  0
+ ],
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToCaptainLawgof"
+   },
+   "1": "n1",
+   "2": "n3",
+   "3": "n3",
+   "4": "n4",
+   "5": "n4",
+   "6": "n5",
+   "7": {
+    "s": "pwFixMulticannon"
+   },
+   "8": {
+    "s": "talkToCaptainLawgof5"
+   },
+   "9": "n6",
+   "10": "n6"
+  },
+  "nodes": {
+   "n1": {
+    "n": "fixRailings",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6"
+       ]
+      },
+      {
+       "s": "talkToCaptainLawgof2"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r7"
+       ]
+      },
+      {
+       "s": "getRailings"
+      }
+     ]
+    ],
+    "d": "n2"
+   },
+   "n2": {
+    "n": "cInspectRailings",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r7",
+        {
+         "o": "nor",
+         "a": [
+          "r1"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "inspectRailings1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r7",
+        {
+         "o": "nor",
+         "a": [
+          "r2"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "inspectRailings2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r7",
+        {
+         "o": "nor",
+         "a": [
+          "r3"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "inspectRailings3"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r7",
+        {
+         "o": "nor",
+         "a": [
+          "r4"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "inspectRailings4"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r7",
+        {
+         "o": "nor",
+         "a": [
+          "r5"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "inspectRailings5"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r7",
+        {
+         "o": "nor",
+         "a": [
+          "r6"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "inspectRailings6"
+      }
+     ]
+    ],
+    "d": {
+     "s": "getRailings"
+    }
+   },
+   "n3": {
+    "n": "getRemains",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r9"
+       ]
+      },
+      {
+       "s": "downTower2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r10"
+       ]
+      },
+      {
+       "s": "downTower"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "talkToCaptainLawgof3"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "getRemainsStep"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "goToTower2"
+      }
+     ]
+    ],
+    "d": {
+     "s": "gotoTower"
+    }
+   },
+   "n4": {
+    "n": "findLollk",
+    "c": [
+     [
+      "r11",
+      {
+       "s": "searchCrates"
+      }
+     ]
+    ],
+    "d": {
+     "s": "gotoCave"
+    }
+   },
+   "n5": {
+    "n": "step6",
+    "c": [
+     [
+      "r11",
+      {
+       "s": "exitCave"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToCaptainLawgof4"
+    }
+   },
+   "n6": {
+    "n": "captainLawgofFinal",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Nulodion's notes",
+         "ids": [
+          3
+         ]
+        },
+        {
+         "o": "item",
+         "nm": "Ammo mould",
+         "ids": [
+          4
+         ]
+        }
+       ]
+      },
+      {
+       "s": "talkToCaptainLawgof6"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToNulodion"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "vb",
+    "id": 2240,
+    "v": 1
+   },
+   "r2": {
+    "o": "vb",
+    "id": 2241,
+    "v": 1
+   },
+   "r3": {
+    "o": "vb",
+    "id": 2242,
+    "v": 1
+   },
+   "r4": {
+    "o": "vb",
+    "id": 2243,
+    "v": 1
+   },
+   "r5": {
+    "o": "vb",
+    "id": 2244,
+    "v": 1
+   },
+   "r6": {
+    "o": "vb",
+    "id": 2245,
+    "v": 1
+   },
+   "r7": {
+    "o": "item",
+    "nm": "Railing",
+    "ids": [
+     14
+    ]
+   },
+   "r8": {
+    "o": "item",
+    "nm": "Dwarf Remains",
+    "ids": [
+     0
+    ]
+   },
+   "r9": {
+    "o": "zone",
+    "z": [
+     [
+      2568,
+      3439,
+      2572,
+      3445,
+      1,
+      1
+     ]
+    ]
+   },
+   "r10": {
+    "o": "zone",
+    "z": [
+     [
+      2566,
+      3441,
+      2572,
+      3445,
+      2,
+      2
+     ]
+    ]
+   },
+   "r11": {
+    "o": "zone",
+    "z": [
+     [
+      2557,
+      9790,
+      2624,
+      9859,
+      0,
+      0
+     ]
+    ]
+   }
+  },
+  "alias": {
+   "goToTower2": [
+    "gotoTower"
+   ],
+   "getRemainsStep": [
+    "gotoTower"
+   ],
+   "downTower": [
+    "talkToCaptainLawgof3"
+   ],
+   "downTower2": [
+    "talkToCaptainLawgof3"
+   ],
+   "exitCave": [
+    "talkToCaptainLawgof4"
+   ],
+   "fixCannon": [
+    "pwFixMulticannon"
+   ]
+  }
+ },
+ "unknown": {},
+ "steps": {
+  "talkToCaptainLawgof": {
+   "typ": "NpcStep",
+   "wp": [
+    2567,
+    3460,
+    0
+   ],
+   "ids": [
+    5191
+   ],
+   "text": "Talk to Captain Lawgof near the Coal Truck Mining Site (north of Fishing Guild, West of McGrubor's Wood)."
+  },
+  "getRailings": {
+   "typ": "NpcStep",
+   "wp": [
+    2567,
+    3460,
+    0
+   ],
+   "ids": [
+    5191
+   ],
+   "text": "Talk to Captain Lawgof to get more railings."
+  },
+  "inspectRailings1": {
+   "typ": "ObjectStep",
+   "wp": [
+    2555,
+    3479,
+    0
+   ],
+   "ids": [
+    15590
+   ],
+   "text": ""
+  },
+  "inspectRailings2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2557,
+    3468,
+    0
+   ],
+   "ids": [
+    15591
+   ],
+   "text": ""
+  },
+  "inspectRailings3": {
+   "typ": "ObjectStep",
+   "wp": [
+    2559,
+    3458,
+    0
+   ],
+   "ids": [
+    15592
+   ],
+   "text": ""
+  },
+  "inspectRailings4": {
+   "typ": "ObjectStep",
+   "wp": [
+    2563,
+    3457,
+    0
+   ],
+   "ids": [
+    15593
+   ],
+   "text": ""
+  },
+  "inspectRailings5": {
+   "typ": "ObjectStep",
+   "wp": [
+    2573,
+    3457,
+    0
+   ],
+   "ids": [
+    15594
+   ],
+   "text": ""
+  },
+  "inspectRailings6": {
+   "typ": "ObjectStep",
+   "wp": [
+    2577,
+    3457,
+    0
+   ],
+   "ids": [
+    15595
+   ],
+   "text": ""
+  },
+  "talkToCaptainLawgof2": {
+   "typ": "NpcStep",
+   "wp": [
+    2567,
+    3460,
+    0
+   ],
+   "ids": [
+    5191
+   ],
+   "text": "Talk to Captain Lawgof after repairing the damaged railings."
+  },
+  "gotoTower": {
+   "typ": "ObjectStep",
+   "wp": [
+    2570,
+    3441,
+    0
+   ],
+   "ids": [
+    16683
+   ],
+   "text": "Go to the top floor of the tower, south of Captain Lawgof, and get the remains there."
+  },
+  "goToTower2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2570,
+    3443,
+    1
+   ],
+   "ids": [
+    11
+   ],
+   "text": "Go up the second ladder."
+  },
+  "getRemainsStep": {
+   "typ": "ObjectStep",
+   "wp": [
+    2567,
+    3444,
+    2
+   ],
+   "ids": [
+    0
+   ],
+   "text": "Get the dwarf remains at the top of the tower."
+  },
+  "downTower2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2570,
+    3441,
+    1
+   ],
+   "ids": [
+    16679
+   ],
+   "text": "Go down the second ladder."
+  },
+  "downTower": {
+   "typ": "ObjectStep",
+   "wp": [
+    2570,
+    3443,
+    2
+   ],
+   "ids": [
+    16679
+   ],
+   "text": "Go down the first ladder."
+  },
+  "talkToCaptainLawgof3": {
+   "typ": "NpcStep",
+   "wp": [
+    2567,
+    3460,
+    0
+   ],
+   "ids": [
+    5191
+   ],
+   "text": "Return the remains to Captain Lawgof."
+  },
+  "gotoCave": {
+   "typ": "ObjectStep",
+   "wp": [
+    2622,
+    3392,
+    0
+   ],
+   "ids": [
+    2
+   ],
+   "text": "Enter the goblin cave, east of the Fishing Guild entrance."
+  },
+  "searchCrates": {
+   "typ": "ObjectStep",
+   "wp": [
+    2571,
+    9850,
+    0
+   ],
+   "ids": [
+    1
+   ],
+   "text": "Search the crates in the north west corner to find Lollk."
+  },
+  "talkToCaptainLawgof4": {
+   "typ": "NpcStep",
+   "wp": [
+    2567,
+    3460,
+    0
+   ],
+   "ids": [
+    5191
+   ],
+   "text": "Return to Captain Lawgof."
+  },
+  "exitCave": {
+   "typ": "ObjectStep",
+   "wp": [
+    2621,
+    9796,
+    0
+   ],
+   "ids": [
+    13
+   ],
+   "text": "Exit the goblin cave and return to Captain Lawgof."
+  },
+  "pwFixMulticannon": {
+   "typ": null,
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "actuallyUseToolkit": {
+   "typ": "ObjectStep",
+   "wp": [
+    2563,
+    3462,
+    0
+   ],
+   "ids": [
+    15597
+   ],
+   "text": ""
+  },
+  "clickGear": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    26804233
+   ],
+   "text": "Click the toothed tool and use it on the gear at the bottom."
+  },
+  "clickToothedTool": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    26804225
+   ],
+   "text": "Click the toothed tool and use it on the gear at the bottom."
+  },
+  "clickSafety": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    26804231
+   ],
+   "text": "Click the pliers and use it on the safety switch at the bottom."
+  },
+  "clickSpring": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    26804232
+   ],
+   "text": "Click the hook and use it on the spring."
+  },
+  "clickPliers": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    26804226
+   ],
+   "text": "Click the pliers and use it on the safety switch at the bottom."
+  },
+  "clickHook": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    26804227
+   ],
+   "text": "Click the hook and use it on the spring."
+  },
+  "talkToCaptainLawgof5": {
+   "typ": "NpcStep",
+   "wp": [
+    2567,
+    3460,
+    0
+   ],
+   "ids": [
+    5191
+   ],
+   "text": "Talk to Captain Lawgof after repairing the multicannon."
+  },
+  "talkToNulodion": {
+   "typ": "NpcStep",
+   "wp": [
+    3012,
+    3453,
+    0
+   ],
+   "ids": [
+    1400
+   ],
+   "text": "Talk to Nulodion at the Dwarven Black Guard camp, south of Ice Mountain."
+  },
+  "talkToCaptainLawgof6": {
+   "typ": "NpcStep",
+   "wp": [
+    2567,
+    3460,
+    0
+   ],
+   "ids": [
+    5191
+   ],
+   "text": "Return to Captain Lawgof with the ammo mould and Nulodion's Notes."
+  }
+ }
+}

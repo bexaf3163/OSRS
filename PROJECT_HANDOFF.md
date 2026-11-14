@@ -1,6 +1,6 @@
 # OSRS Path — project handoff
 
-Updated 2026-11-13. **This file alone holds project rules, architecture, state, backlog and handoff.** Stable rules precede current state/verification. AGENTS.md/CLAUDE.md point here; README.md introduces the product.
+Updated 2026-11-14. **This file alone holds project rules, architecture, state, backlog and handoff.** README.md introduces the product.
 
 ## Documentation policy
 
@@ -31,7 +31,7 @@ Updated 2026-11-13. **This file alone holds project rules, architecture, state, 
 - Preparation carries item, count, state, provenance, source, location, cost, priority, reason and carry/equip rules through one pipeline: bank withdrawal before repurchase, usable owned equivalents accepted, current-trip needs separate from future reserves.
 - Shopping uses central allocations, sources, quotes, fees and optionality: no double spending, fictitious proceeds, automatic GP spending or repurchase of confirmed owned items. Manual ownership stays where game data is missing.
 - Navigation has one current target; coordinate, floor, entrance, map, arrow, HUD and phase agree. Verify real transport eligibility, supplies and full detour cost; never invent coordinates or transports.
-- Desktop UI tests use isolated data. Codex runs no real-game tests; Claude does reachable acceptance and never automates movement, combat, skilling, looting, eating, dialogue, item use or GP spending; earlier limited UI inspection is no permission for bot-like control.
+- Codex runs no real-game tests; Claude does reachable acceptance and never automates movement, combat, skilling, looting, eating, dialogue, item use or GP spending; earlier limited UI inspection is no permission for bot-like control.
 - External failures never crash the app or corrupt state. Keep actionable unavailable/retry states, operational logs, watchdogs and save recovery.
 - Keep updater digest/size validation, atomic writes, damaged/future-schema quarantine, pre-write external-revision guards, profile protection and backup receipts. No watchers, automatic merges or locks without a reproduced requirement.
 - Mode changes never reset progress. F2P-only plans never leak Members prerequisites; explicit alternate strategies carry their own. Unsupported mechanics and rates stay explicit.
@@ -135,11 +135,11 @@ The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **
 
 2.81.11 to 2.81.13 cleanup decisions that stay:
 
-- Removed: appearance controls, font size, Compact modes, the Inspector display mode, manual zoom (now `window-zoom.cjs`), the Copy Report UI, the Journal stage-goal matrix, Settings Training/App and helper switches (always on). Kept: OS DPI/resizing, the header Pin (`getWindowPrefs`/`setAlwaysOnTop`), `ui.json` backup preferences and geometry, map/image magnification, the `splits.ts` duration formatter, `WikiDrawer`'s `DockedInspector` (pinned dossier), logs, telemetry/watchdogs, the analysis CLI and shared goal data. Trace consumers; never delete by name ("Inspector", "zoom", "goals").
-- Training choice is on each skill card (XP/Balanced/Money); Defence-at-1 sits under Skills. RuneLite helpers (places, bank highlighting, pace, level import, upgrades, preparation) are always on; mocked tests do not prove real-game behavior.
+- Removed: appearance controls, font size, Compact modes, the Inspector display mode, manual zoom (now `window-zoom.cjs`), the Copy Report UI, the Journal stage-goal matrix, Settings Training/App and helper switches. Kept: OS DPI/resizing, the header Pin (`getWindowPrefs`/`setAlwaysOnTop`), `ui.json` backup preferences and geometry, map/image magnification, the `splits.ts` duration formatter, `WikiDrawer`'s `DockedInspector` (pinned dossier), logs, telemetry/watchdogs, the analysis CLI and shared goal data. Trace consumers; never delete by name ("Inspector", "zoom", "goals").
+- Training choice is on each skill card (XP/Balanced/Money); Defence-at-1 sits under Skills. RuneLite helpers (places, bank highlighting, pace, level import, upgrades, preparation) are always on.
 - Journal: filters left; the chosen quest's state, QP, requirements and route action right; Review route for completed/skipped quests; saved-only completion labelled; session statistics in Settings → Progress; browsing never marks progress.
 - Skills has no leveling guide or bracket table (2.83.0): the training engine sets method, goal and plan. A completed skill's Plan says its checkpoint is reached. Two-column icon index, XP table in Calculator.
-- Route (2.84.0): quests plus the Stronghold; other step kinds are `RETIRED_STEPS`, planned by the training, gear and Money engines; unsafe fights compare supported preparations by complete time; unsupported mechanics require verification.
+- Route (2.84.0): quests plus the Stronghold; other step kinds are `RETIRED_STEPS`, planned by the training, gear and Money engines.
 - Gear compares melee only for a supported current activity; other skills show current preparation and live equipment. Mandatory shopping and a quoted refill/fare reserve protect upgrade spending; unread prices never count as zero. Shopping: requirements left, Checkout right (cost, checked cash, optional bank stock, refill allowance, shortfall), one primary action through funding, copy-order or preparation.
 - One Where preview; the compact card omits the place list and the **full map keeps the place picker**. Preview-only CSS uses direct-child selectors so a nested dialog's picker stays visible.
 
@@ -150,31 +150,33 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 - Read this file and `git status` first.
 - Gates: `npx tsc --noEmit`, `npm test`, `npm run check-data`, `npm run build`, `npm run test:ui`, `npm run gate:f2p` (CI job), `npm run test:e2e`, `runelite-bridge/gradlew -p runelite-bridge test jar` and the CI packaged-Portable gate; CI also runs `check-structure` (strict, with a shrinking known debt), `knip` and `dead-css`.
 - Browser tests use port 4179: one runner at a time, finish `dist` rebuilds first, never rebuild under a running suite. Electron e2e uses isolated data and a bridge stub. Screenshots go to the ignored `audit-temp/`.
-- Retiring a feature (rule 6) keeps shared consumers, saves, backups and diagnostics; a selector can reach a nested dialog. Never restore an obsolete screen for a test.
+- Retiring a feature (rule 6) keeps shared consumers, saves, backups and diagnostics; a selector can reach a nested dialog.
 - Release: `npm run bump -- X.Y.Z "summary"` (package, lock, `PLUGIN_VERSION`, notes stub), finish `release-notes/vX.Y.Z.md`, push to main. When every Checks job passes, its release job publishes vX.Y.Z from the exact EXE the portable job verified, with this file (receipt filled in) and SHA256SUMS.txt, then downloads the assets and fails unless they match; existing releases are never overwritten. A release counts only when that job succeeds; "asset exists" is not success.
 - Structural work goes on a branch, rebased and merged after gates and live checks; large moves need a freeze window with the other agent idle. If interrupted, checkpoint the next action and separate local WIP from published code.
 - Never publish authentication material, real account or bank snapshots or private session logs; use isolated fixtures and redacted screenshots.
 
-## Handover — state on 2026-11-13
+## Handover — state on 2026-11-14
 
 - **State:** v2.94.5 published, `main` clean, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, training times shown); XP/Balanced/Money change the method only; Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; V2 review retired; update Cancel stays.
-- **Next:** 1) P4. 2) Measured quest times from the player's own quest starts and finishes. 3) Members content later.
+- **Next:** 1) P4. 2) Quest pipeline: promotion, stage replay. 3) Measured quest times from the player's own quest starts and finishes.
 - **Owner:** writes Russian; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 
 ## Remaining work in priority order
 
 ### V14 — adaptive rebuild
 
-V14 brief: `.codex/v14-brief/01_MASTER_EXECUTION_PROMPT.md`; hashes: `.codex/transfer/receipt.json`.
-
 Target: observed F2P quest planning; scoped Decision → Ledger/bridge/HUD. Supply estimates soft, prerequisites/protection hard. Optional Members preparation never gates F2P completion; no runtime LLM, automation or linear fallback.
 
-Worktree `C:/Users/Mark/Desktop/Ors-x9`; delivery branch `codex/combat-strategy-2851`, clean recovery ref `codex/combat-strategy-baseline-2851` at released `4c7b4d1` (2.85.1). V14 is incorporated; never restore its obsolete checkpoints. Rehearsed backup: external `work/backups/osrs-v14-20261106T145307Z` (5098 hashes; Git, WIP, app/plugin data).
+Work on `main` in a fresh clone (old worktrees and `.codex/` are gone; GitHub is the only copy). V14 is incorporated.
 
 Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent entry for explicit goals and phased training/preparation; costs precede rewards; only sourced order-independent unknowns cancel. Cursors retire past stages; certificate proof stays physical. Procurement shares allocations/packages/fees; unknown flows weaken balances; start-only rewards never repeat; unknown hand-ins never buy; protection requires wearing; funding excludes stale/unsold cash. Shortest Path `375ce2c061df5c3961116dda6443f307df3223f1` (BSD, 64 regions, ESTIMATED); trip legs bounded, deduplicated, revision-guarded.
 
-Resume from `.codex/work-state.md` and Git diff. `DecisionProvider` below Funding → `runtimeDecision` drives pages/prep/maps and `DecisionSync` (step, snapshot `decision{id,objectiveId,watch}`). Worker legs/castable teleports, Money-ranked EARN/gathering, GP/tool/position/Magic/restriction counterfactuals work. Unknown-time objectives remain visible. `candidates` expose minutes, unknowns, XP, rank/verdict; incomplete comparisons use unknown-count, known minimum and own cost, never term text; confidence LOW. Door/stair/enclosed-origin walking allowances ≤10 tiles are labelled. Path/Previous/Next/Journal follow planner order; retired steps cannot override it. Prep/Shopping/plugin/bank/funding/Defence-later use `engine.road`; Skills uses Decision floors then engine method changes. Guide retired. Live acceptance: Claude's RUNBOOK LIVE/PARTIAL rows.
+`DecisionProvider` below Funding → `runtimeDecision` drives pages/prep/maps and `DecisionSync` (step, snapshot `decision{id,objectiveId,watch}`). Worker legs/castable teleports, Money-ranked EARN/gathering, GP/tool/position/Magic/restriction counterfactuals work. Unknown-time objectives remain visible. `candidates` expose minutes, unknowns, XP, rank/verdict; incomplete comparisons use unknown-count, known minimum and own cost, never term text; confidence LOW. Door/stair/enclosed-origin walking allowances ≤10 tiles are labelled. Path/Previous/Next/Journal follow planner order; retired steps cannot override it. Prep/Shopping/plugin/bank/funding/Defence-later use `engine.road`; Skills uses Decision floors then engine method changes. Guide retired.
+
+### Quest content pipeline — pilot 2026-11-14
+
+Machine-drafted Members quests, checked before shipping. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/`: stages, tiles, ids and texts from Quest Helper, the rest from Wiki cards. Only wording is edited; `npm run check-drafts` fails contradictions with those sources; unconfirmed facts stay `unknown`; drafts are not shipped. Pilot passes: Druidic Ritual, Witch's House, Dwarf Cannon. Not built: promotion into `authored/`, a stage replay, Members planner support. Quest Helper `b9b9370` changes shipped machines; regenerate deliberately.
 
 ### P4 — Claude's real-client acceptance
 
@@ -204,7 +206,7 @@ Record versions, account mode, facts, expected and actual result and evidence as
 
 Each batch releases after all gates and its Go threshold; live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. Next is the full plugin live matrix, closing **S8**. Caches and context selectors (R3, R4, R8) wait until per-update script time passes 50 ms.
 
-Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3.8% page-only code), a V8 code cache (moves the `localStorage` origin), domain barrels, merged tiny modules, parallel Java render tests (shared font cache), an automatic CSS split per feature (S9: computed styles changed; merge by hand). The React hooks lint is an occasional review; findings are deliberate. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (kept by owner decision 2026-11-01). Prune merged remote branches and `audit-test-*` pre-releases; never delete normal `v*` releases.
+Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3.8% page-only code), a V8 code cache (moves the `localStorage` origin), domain barrels, merged tiny modules, parallel Java render tests (shared font cache), an automatic CSS split per feature (S9: computed styles changed; merge by hand). The React hooks lint is an occasional review; findings are deliberate. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (kept by owner decision 2026-11-01). Never delete normal `v*` releases.
 
 ## Completed baseline — preserve, do not redo
 
@@ -238,5 +240,5 @@ Limits: armour by melee defence; Wiki bands for quest work, minus the prepared f
 <!-- DELIVERY_START -->
 ## Delivery receipt
 
-The release job fills version, source, EXE size and SHA-256 into the released copy. Never enter receipts manually; real-game acceptance remains P4.
+The release job fills version, source, EXE size and SHA-256 into the released copy. Never enter receipts manually.
 <!-- DELIVERY_END -->
