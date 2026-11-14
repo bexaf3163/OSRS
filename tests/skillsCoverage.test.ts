@@ -38,7 +38,7 @@ const rows: Row[] = SKILL_NAMES.map((skill) => {
 /** Which shared model rates a method for this player; null means the catalogue's Wiki rate. */
 const modelOwner = (m: TrainingMethod): string | null => PROCESSING.methods[m.id] ? 'processing'
   : SKILLING.methods[m.id] ? 'gathering'
-    : m.npcNames?.length && m.skills.some((s) => ['attack', 'strength', 'defence', 'ranged', 'magic'].includes(s)) ? 'combat' : null;
+    : m.npcNames?.length && m.skills.some((s) => ['attack', 'strength', 'defence', 'ranged', 'magic', 'slayer'].includes(s)) ? 'combat' : null;
 const modelRows = SKILL_NAMES.map((skill) => {
   const methods = methodsFor(skill).filter((m) => m.kind === 'method');
   const modelled = methods.filter((m) => modelOwner(m));

@@ -112,6 +112,13 @@ export function combatUpgrades(m: TrainingMethod, skill: string, state: PlayerSt
 export function combatRate(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): ModelRate | null {
   if (m.kind !== 'method' || !m.skills.includes(skill) || (m.members && state.mode !== 'members') || !m.npcNames?.length || state.equipmentKnown !== true) return null;
   if (MELEE.has(skill) && m.skills.includes(skill)) return withLoot(meleeRate(m.npcNames[0], skill as 'attack' | 'strength' | 'defence', state, market.prices), m.npcNames[0], market);
+  // Slayer XP is the HP of each monster killed on task: a quarter of the melee XP of the same kills, in the best style.
+  if (skill === 'slayer') {
+    const foe = m.npcNames[0];
+    const best = (['attack', 'strength', 'defence'] as const).map(style => meleeRate(foe, style, state, market.prices))
+      .filter(rate => rate !== null).sort((a, b) => b.xph[1] - a.xph[1])[0];
+    return best ? withLoot({ ...best, xph: [best.xph[0] / 4, best.xph[1] / 4] }, foe, market) : null;
+  }
   if (skill === 'ranged' && m.kit === 'f2p-bow') return withLoot(rangedRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market);
   if (skill === 'magic' && m.kit === 'strike-spell') return withLoot(magicRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market);
   return null;

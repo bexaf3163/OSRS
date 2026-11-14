@@ -2561,6 +2561,26 @@
       "note": "The model chooses a usable recipe from your ores, coal, level and current prices. Ordinary iron smelting assumes 50% success; ring of forging and Blast Furnace effects are not modelled. Profit is not guaranteed.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
       "place": "Edgeville"
+    },
+    {
+      "id": "sl-turael",
+      "skill": [
+        "slayer"
+      ],
+      "from": 1,
+      "to": null,
+      "name": "Turael's Slayer tasks",
+      "members": true,
+      "effort": "medium",
+      "cost": "free",
+      "risk": "none",
+      "where": "Turael in Burthorpe gives the task; cows in the Lumbridge cow field are one of his tasks",
+      "note": "Slayer XP is the HP of each monster killed on task, a quarter of the melee XP. The rate uses cows; other tasks and the walk to Burthorpe for each task make it slower.",
+      "url": "https://oldschool.runescape.wiki/w/Turael/Slayer_assignments",
+      "place": "Lumbridge",
+      "npcNames": [
+        "Cow"
+      ]
     }
   ]
 }

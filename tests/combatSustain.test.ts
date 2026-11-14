@@ -89,3 +89,13 @@ describe('one recovery model for every combat style', () => {
     expect(loot.costPerHour! / bare.costPerHour!).toBeCloseTo(loot.xph[1] / bare.xph[1]);
   });
 });
+
+describe('Slayer', () => {
+  it("Turael's tasks earn a quarter of the melee XP of the same kills, in the best style", () => {
+    const s = buildPlayerState({ mode: 'members', stats: { attack: 20, strength: 20, defence: 20, hitpoints: 20 }, progress: emptyProgress(), questsDone: [],
+      connected: true, gear: { inventory: [], coins: 100, bankCoins: 0, equipment: [{ id: 1329, name: 'Mithril scimitar', slot: 'weapon' }] }, owned: null });
+    const slayer = combatRate(method('sl-turael'), 'slayer', s, { prices: market })!;
+    const melee = (['attack', 'strength', 'defence'] as const).map(skill => combatRate(method('me-cow'), skill, s, { prices: market })!.xph[1]);
+    expect(slayer.xph[1]).toBeCloseTo(Math.max(...melee) / 4, 0);
+  });
+});
