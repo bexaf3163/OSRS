@@ -186,7 +186,7 @@
       "lines": ["1.2"],
       "assumptions": ["With the shield her fire hits up to 10; without it up to 70 (OSRS Wiki Dragonfire/Elvarg). The Wiki gives no share for her slash, magic and fire, so the estimate takes the worse attack for every swing; the shield's slot is never offered to another item."],
       "problems": ["The estimate counted only her slash (up to 8), so the fight was named partial and never assessed."],
-      "alternatives": ["A Rune sword on Stab if owned."],
+      "alternatives": ["A Rune shortsword on Stab if owned."],
       "decision": "revise",
       "evidence": ["Lobster 20+ required; the shield is a safety rule (readiness blocks without it, and a two-handed weapon is flagged).", "Danger zones on the boat and in the lair."],
       "zones": ["crandor-boarding", "elvarg-lair"],

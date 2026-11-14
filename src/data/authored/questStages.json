@@ -10894,6 +10894,242 @@
     }
    ]
   },
+  "S7-06": {
+   "var": [
+    "varp",
+    80
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Talk to Kaqemeex in the stone circle north of Taverley. Dialogue: \"I'm in search of a quest.\", \"Okay, I will try and help.\"",
+      "Talk to Sanfew, who is upstairs in the Herb shop in Taverley. Dialogue: \"I've been sent to help purify the Varrock stone circle.\", \"Ok, I'll do that then.\"",
+      "Bring the four meats to the Cauldron in Taverley Dungeon, and use them on the Cauldron to enchant them.",
+      "Talk to Sanfew.",
+      "Talk to Kaqemeex.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Kaqemeex in the Druids' Circle in Taverley.",
+       "s": "Talk to Kaqemeex in the Taverley stone circle",
+       "k": "talkToKaqemeex",
+       "at": [
+        2925,
+        3486,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5045
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Talk to Sanfew, upstairs in the Taverley herblore store",
+       "k": "goUpToSanfew",
+       "at": [
+        2899,
+        3429,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "Talk to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Talk to Sanfew, upstairs in the Taverley herblore store",
+       "k": "talkToSanfew",
+       "at": [
+        2899,
+        3429,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5044
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Enter Taverley Dungeon south of Taverley.",
+       "s": "Enter Taverley Dungeon, south of Taverley",
+       "k": "enterDungeon",
+       "at": [
+        2884,
+        3397,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16680
+        ]
+       }
+      },
+      {
+       "t": "Enter Taverley Dungeon south of Taverley.",
+       "s": "Enter Taverley Dungeon, south of Taverley",
+       "k": "climbDownToEnterDungeon",
+       "at": [
+        2898,
+        3428,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Spam-click the Prison door to enter the room with the cauldron in Taverley dungeon. Spam-clicking lets you skip the fight with the suits of armour standing nearby.",
+       "s": "Open the Prison door to the cauldron room",
+       "k": "enterCauldronRoom",
+       "at": [
+        2889,
+        9830,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2144
+        ]
+       }
+      },
+      {
+       "t": "Use the rat meat on the cauldron in Taverley dungeon.",
+       "s": "Use the Raw rat meat on the cauldron",
+       "k": "useRatOnCauldron",
+       "at": [
+        2893,
+        9831,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2142
+        ]
+       }
+      },
+      {
+       "t": "Use the bear meat on the cauldron in Taverley dungeon.",
+       "s": "Use the Raw bear meat on the cauldron",
+       "k": "useBearOnCauldron",
+       "at": [
+        2893,
+        9831,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2142
+        ]
+       }
+      },
+      {
+       "t": "Use the beef meat on the cauldron in Taverley dungeon.",
+       "s": "Use the Raw beef on the cauldron",
+       "k": "useBeefOnCauldron",
+       "at": [
+        2893,
+        9831,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2142
+        ]
+       }
+      },
+      {
+       "t": "Use the chicken meat on the cauldron in Taverley dungeon.",
+       "s": "Use the Raw chicken on the cauldron",
+       "k": "useChickenOnCauldron",
+       "at": [
+        2893,
+        9831,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2142
+        ]
+       }
+      },
+      {
+       "t": "Bring the enchanted meats to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Give the four enchanted meats to Sanfew",
+       "k": "goUpToSanfewWithMeat",
+       "at": [
+        2899,
+        3429,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "Bring the enchanted meats to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Give the four enchanted meats to Sanfew",
+       "k": "talkToSanfewWithMeat",
+       "at": [
+        2899,
+        3429,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5044
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Return to Kaqemeex in the Druids' Circle to finish the quest.",
+       "s": "Return to Kaqemeex in the stone circle",
+       "k": "talkToKaqemeexToFinish",
+       "at": [
+        2925,
+        3486,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5045
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
   "S8-01": {
    "var": [
     "varp",

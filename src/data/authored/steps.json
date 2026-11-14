@@ -3206,7 +3206,7 @@
     "fields": [
       {
         "label": "Equipment",
-        "text": "The Anti-dragon shield is worn: without it the dragon's fire hits up to 70, with the shield up to 10. Optional: a Rune sword on the Stab style (Elvarg's weakest defence is against stab), an Amulet of strength (or an Amulet of power)."
+        "text": "The Anti-dragon shield is worn: without it the dragon's fire hits up to 70, with the shield up to 10. Optional: a Rune shortsword on the Stab style (Elvarg's weakest defence is against stab), an Amulet of strength (or an Amulet of power)."
       },
       {
         "label": "Inventory",
@@ -3218,7 +3218,7 @@
       },
       {
         "label": "Combat tactics",
-        "text": "Elvarg is level 83 with 80 health. Use the Stab style if you have the Rune sword, otherwise your best scimitar. With the shield Elvarg hits up to 10: eat a lobster before your health falls to 20 (two hits), not after. Do not take the shield off for a second!"
+        "text": "Elvarg is level 83 with 80 health. Use the Stab style if you have the Rune shortsword, otherwise your best scimitar. With the shield Elvarg hits up to 10: eat a lobster before your health falls to 20 (two hits), not after. Do not take the shield off for a second!"
       }
     ],
     "doneWhen": "The dragon is beheaded and Elvarg's head is in your inventory.",
@@ -3232,7 +3232,7 @@
       ],
       "highlightItems": [
         "Anti-dragon shield",
-        "Rune sword",
+        "Rune shortsword",
         "Lobster",
         "Energy potion(4)",
         "Strength potion(4)"
@@ -3254,7 +3254,7 @@
     ],
     "itemsRecommended": [
       {
-        "nameEn": "Rune sword",
+        "nameEn": "Rune shortsword",
         "amount": 1,
         "howToGet": "Optional: a stab attack on the Stab style (Attack 40). Your Adamant scimitar works without it.",
         "wikiItemId": 1289,
@@ -3850,6 +3850,83 @@
         ]
       }
     ]
+  },
+  {
+    "id": "S7-06",
+    "stage": 7,
+    "type": "quest",
+    "title": "Druidic Ritual",
+    "qp": 4,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Druidic_Ritual",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Druidic_Ritual/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2926,3484,0",
+    "mapLocation": {
+      "x": 2926,
+      "y": 3484,
+      "plane": 0,
+      "label": "The stone circle north of Taverley"
+    },
+    "npc": {
+      "nameEn": "Kaqemeex",
+      "location": "The stone circle north of Taverley",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Kaqemeex"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Raw bear meat",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rufus' Meat Emporium in Canifis for 1 gp.",
+        "wikiItemId": 2136,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Raw_bear_meat.png"
+      },
+      {
+        "nameEn": "Raw rat meat",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rufus' Meat Emporium in Canifis for 1 gp.",
+        "wikiItemId": 2134,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Raw_rat_meat.png"
+      },
+      {
+        "nameEn": "Raw beef",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Food Store in Port Sarim for 1 gp.",
+        "wikiItemId": 2132,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Raw_beef.png"
+      },
+      {
+        "nameEn": "Raw chicken",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Food Store in Port Sarim for 1 gp.",
+        "wikiItemId": 2138,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Raw_chicken.png"
+      }
+    ],
+    "reward": "4 QP, 250 Herblore XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Kaqemeex"
+      ],
+      "dialogChoices": [
+        "I'm in search of a quest.",
+        "Okay, I will try and help.",
+        "I've been sent to help purify the Varrock stone circle.",
+        "Ok, I'll do that then."
+      ],
+      "highlightItems": [
+        "Raw bear meat",
+        "Raw rat meat",
+        "Raw beef",
+        "Raw chicken"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Druidic Ritual"
+      }
+    }
   },
   {
     "id": "S8-01",

@@ -16,7 +16,7 @@
   "title": "Druidic Ritual",
   "type": "quest",
   "qp": 4,
-  "membersOnly": false,
+  "membersOnly": true,
   "wikiUrl": "https://oldschool.runescape.wiki/w/Druidic_Ritual",
   "quickGuideUrl": "https://oldschool.runescape.wiki/w/Druidic_Ritual/Quick_guide",
   "mapLocation": {
@@ -102,7 +102,7 @@
     "do": [
      {
       "t": "Talk to Sanfew upstairs in the Taverley herblore store.",
-      "s": "Go upstairs in the Taverley herblore store",
+      "s": "Talk to Sanfew, upstairs in the Taverley herblore store",
       "k": "goUpToSanfew",
       "at": [
        2899,
@@ -117,7 +117,7 @@
      },
      {
       "t": "Talk to Sanfew upstairs in the Taverley herblore store.",
-      "s": "Talk to Sanfew, upstairs in the herblore store",
+      "s": "Talk to Sanfew, upstairs in the Taverley herblore store",
       "k": "talkToSanfew",
       "at": [
        2899,
@@ -152,7 +152,7 @@
      },
      {
       "t": "Enter Taverley Dungeon south of Taverley.",
-      "s": "Go downstairs and head for Taverley Dungeon",
+      "s": "Enter Taverley Dungeon, south of Taverley",
       "k": "climbDownToEnterDungeon",
       "at": [
        2898,
@@ -242,7 +242,7 @@
      },
      {
       "t": "Bring the enchanted meats to Sanfew upstairs in the Taverley herblore store.",
-      "s": "Go upstairs in the Taverley herblore store",
+      "s": "Give the four enchanted meats to Sanfew",
       "k": "goUpToSanfewWithMeat",
       "at": [
        2899,
@@ -322,7 +322,7 @@
    "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15322674",
    "title": "Druidic Ritual",
    "revision": 15322674,
-   "retrievedAt": "2026-11-14T01:37:45.768Z"
+   "retrievedAt": "2026-11-14T09:48:48.308Z"
   }
  },
  "unknown": [

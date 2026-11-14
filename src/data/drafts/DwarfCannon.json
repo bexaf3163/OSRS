@@ -1,658 +1,658 @@
 {
- "quest": "Dwarf Cannon",
- "status": "draft",
- "sources": {
-  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
-  "wiki": {
-   "title": "Dwarf Cannon",
-   "revision": 15390007
+  "quest": "Dwarf Cannon",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "Dwarf Cannon",
+      "revision": 15390007
+    },
+    "quickGuide": {
+      "title": "Dwarf Cannon/Quick guide",
+      "revision": 14957845
+    }
   },
-  "quickGuide": {
-   "title": "Dwarf Cannon/Quick guide",
-   "revision": 14957845
-  }
- },
- "step": {
-  "title": "Dwarf Cannon",
-  "type": "quest",
-  "qp": 1,
-  "membersOnly": false,
-  "wikiUrl": "https://oldschool.runescape.wiki/w/Dwarf_Cannon",
-  "quickGuideUrl": "https://oldschool.runescape.wiki/w/Dwarf_Cannon/Quick_guide",
-  "mapLocation": {
-   "x": 2567,
-   "y": 3461,
-   "plane": 0,
-   "label": "Talk to Captain Lawgof, south of the Coal Trucks, north-west of the Fishing Guild."
+  "step": {
+    "title": "Dwarf Cannon",
+    "type": "quest",
+    "qp": 1,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Dwarf_Cannon",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Dwarf_Cannon/Quick_guide",
+    "mapLocation": {
+      "x": 2567,
+      "y": 3461,
+      "plane": 0,
+      "label": "Talk to Captain Lawgof, south of the Coal Trucks, north-west of the Fishing Guild."
+    },
+    "npc": {
+      "nameEn": "Captain Lawgof"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "wikiItemId": 2347,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
+        "note": "Hammer (obtained during the quest)"
+      }
+    ],
+    "foes": []
   },
-  "npc": {
-   "nameEn": "Captain Lawgof"
+  "stages": {
+    "var": [
+      "varp",
+      0
+    ],
+    "route": [
+      {
+        "title": "Getting started",
+        "steps": [
+          "Talk to Captain Lawgof by the Coal truck mining site west of Seers' Village. Dialogue: \"Yes.\""
+        ]
+      },
+      {
+        "title": "Repair and retrieval",
+        "steps": [
+          "Pick up the hammer in the house to the east if you do not have one.",
+          "Fix the six bent railings of the west and south sides of the fence.",
+          "Talk to Captain Lawgof.",
+          "Go to the tower south of the gate.",
+          "Climb up two ladders and take the Dwarf remains.",
+          "Talk to Captain Lawgof.",
+          "Run south (or teleport to the Fishing Guild) and enter the cave at the south-east corner of the Fishing Guild.",
+          "In the cave, go as far north-west as possible. In the north-westernmost room, search the northernmost crate by the east wall to find Lollk. You don't need to finish the conversation.",
+          "Talk to Captain Lawgof. Dialogue: \"Okay, I'll see what I can do.\"",
+          "Use the toolkit you got from Captain Lawgof on the broken multicannon next to him. (In this order:)",
+          "Talk to Captain Lawgof. Dialogue: \"Okay then, just for you!\""
+        ]
+      },
+      {
+        "title": "Finishing up",
+        "steps": [
+          "Go to the Dwarven Black Guard camp north-east of Falador / south of Ice Mountain / west of Barbarian village.",
+          "In the outpost, talk to Nulodion. He is in the house on the west side of the mining camp.",
+          "Return to Captain Lawgof, bring Nulodion's notes and your cannonball mould with you.",
+          "Congratulations, quest complete!"
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Talk to Captain Lawgof near the Coal Truck Mining Site (north of Fishing Guild, West of McGrubor's Wood).",
+            "s": "Talk to Captain Lawgof at the Coal Truck Mining Site",
+            "k": "talkToCaptainLawgof",
+            "at": [
+              2567,
+              3460,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5191
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 1,
+        "do": [
+          {
+            "t": "Talk to Captain Lawgof to get more railings.",
+            "s": "Ask Captain Lawgof for more railings",
+            "k": "getRailings",
+            "at": [
+              2567,
+              3460,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5191
+              ]
+            }
+          },
+          {
+            "t": "Inspect damaged railing 6 of the six around the camp to fix it.",
+            "s": "Inspect damaged railing 6 of 6",
+            "k": "inspectRailings6",
+            "at": [
+              2577,
+              3457,
+              0
+            ],
+            "hl": {
+              "obj": [
+                15595
+              ]
+            }
+          },
+          {
+            "t": "Inspect damaged railing 5 of the six around the camp to fix it.",
+            "s": "Inspect damaged railing 5 of 6",
+            "k": "inspectRailings5",
+            "at": [
+              2573,
+              3457,
+              0
+            ],
+            "hl": {
+              "obj": [
+                15594
+              ]
+            }
+          },
+          {
+            "t": "Inspect damaged railing 4 of the six around the camp to fix it.",
+            "s": "Inspect damaged railing 4 of 6",
+            "k": "inspectRailings4",
+            "at": [
+              2563,
+              3457,
+              0
+            ],
+            "hl": {
+              "obj": [
+                15593
+              ]
+            }
+          },
+          {
+            "t": "Inspect damaged railing 3 of the six around the camp to fix it.",
+            "s": "Inspect damaged railing 3 of 6",
+            "k": "inspectRailings3",
+            "at": [
+              2559,
+              3458,
+              0
+            ],
+            "hl": {
+              "obj": [
+                15592
+              ]
+            }
+          },
+          {
+            "t": "Inspect damaged railing 2 of the six around the camp to fix it.",
+            "s": "Inspect damaged railing 2 of 6",
+            "k": "inspectRailings2",
+            "at": [
+              2557,
+              3468,
+              0
+            ],
+            "hl": {
+              "obj": [
+                15591
+              ]
+            }
+          },
+          {
+            "t": "Inspect damaged railing 1 of the six around the camp to fix it.",
+            "s": "Inspect damaged railing 1 of 6",
+            "k": "inspectRailings1",
+            "at": [
+              2555,
+              3479,
+              0
+            ],
+            "hl": {
+              "obj": [
+                15590
+              ]
+            }
+          },
+          {
+            "t": "Talk to Captain Lawgof after repairing the damaged railings.",
+            "s": "Tell Captain Lawgof the railings are repaired",
+            "k": "talkToCaptainLawgof2",
+            "at": [
+              2567,
+              3460,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5191
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 2,
+        "do": [
+          {
+            "t": "Go to the top floor of the tower, south of Captain Lawgof, and get the remains there.",
+            "s": "Go to the top of the tower south of Captain Lawgof",
+            "k": "gotoTower",
+            "at": [
+              2570,
+              3441,
+              0
+            ],
+            "hl": {
+              "obj": [
+                16683
+              ]
+            }
+          },
+          {
+            "t": "Go up the second ladder.",
+            "s": "Go up the second ladder",
+            "k": "goToTower2",
+            "at": [
+              2570,
+              3443,
+              1
+            ],
+            "hl": {
+              "obj": [
+                11
+              ]
+            }
+          },
+          {
+            "t": "Get the dwarf remains at the top of the tower.",
+            "s": "Take the dwarf remains at the top of the tower",
+            "k": "getRemainsStep",
+            "at": [
+              2567,
+              3444,
+              2
+            ],
+            "hl": {
+              "obj": [
+                0
+              ]
+            }
+          },
+          {
+            "t": "Return the remains to Captain Lawgof.",
+            "s": "Return the remains to Captain Lawgof",
+            "k": "talkToCaptainLawgof3",
+            "at": [
+              2567,
+              3460,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5191
+              ]
+            }
+          },
+          {
+            "t": "Go down the first ladder.",
+            "s": "Go down the first ladder",
+            "k": "downTower",
+            "at": [
+              2570,
+              3443,
+              2
+            ],
+            "hl": {
+              "obj": [
+                16679
+              ]
+            }
+          },
+          {
+            "t": "Go down the second ladder.",
+            "s": "Go down the second ladder",
+            "k": "downTower2",
+            "at": [
+              2570,
+              3441,
+              1
+            ],
+            "hl": {
+              "obj": [
+                16679
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 3,
+        "do": [
+          {
+            "t": "Go to the top floor of the tower, south of Captain Lawgof, and get the remains there.",
+            "s": "Go to the top of the tower south of Captain Lawgof",
+            "k": "gotoTower",
+            "at": [
+              2570,
+              3441,
+              0
+            ],
+            "hl": {
+              "obj": [
+                16683
+              ]
+            }
+          },
+          {
+            "t": "Go up the second ladder.",
+            "s": "Go up the second ladder",
+            "k": "goToTower2",
+            "at": [
+              2570,
+              3443,
+              1
+            ],
+            "hl": {
+              "obj": [
+                11
+              ]
+            }
+          },
+          {
+            "t": "Get the dwarf remains at the top of the tower.",
+            "s": "Take the dwarf remains at the top of the tower",
+            "k": "getRemainsStep",
+            "at": [
+              2567,
+              3444,
+              2
+            ],
+            "hl": {
+              "obj": [
+                0
+              ]
+            }
+          },
+          {
+            "t": "Return the remains to Captain Lawgof.",
+            "s": "Return the remains to Captain Lawgof",
+            "k": "talkToCaptainLawgof3",
+            "at": [
+              2567,
+              3460,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5191
+              ]
+            }
+          },
+          {
+            "t": "Go down the first ladder.",
+            "s": "Go down the first ladder",
+            "k": "downTower",
+            "at": [
+              2570,
+              3443,
+              2
+            ],
+            "hl": {
+              "obj": [
+                16679
+              ]
+            }
+          },
+          {
+            "t": "Go down the second ladder.",
+            "s": "Go down the second ladder",
+            "k": "downTower2",
+            "at": [
+              2570,
+              3441,
+              1
+            ],
+            "hl": {
+              "obj": [
+                16679
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 4,
+        "do": [
+          {
+            "t": "Enter the goblin cave, east of the Fishing Guild entrance.",
+            "s": "Enter the goblin cave east of the Fishing Guild entrance",
+            "k": "gotoCave",
+            "at": [
+              2622,
+              3392,
+              0
+            ],
+            "hl": {
+              "obj": [
+                2
+              ]
+            }
+          },
+          {
+            "t": "Search the crates in the north west corner to find Lollk.",
+            "s": "Search the north-west crates to find Lollk",
+            "k": "searchCrates",
+            "at": [
+              2571,
+              9850,
+              0
+            ],
+            "hl": {
+              "obj": [
+                1
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 5,
+        "do": [
+          {
+            "t": "Enter the goblin cave, east of the Fishing Guild entrance.",
+            "s": "Enter the goblin cave east of the Fishing Guild entrance",
+            "k": "gotoCave",
+            "at": [
+              2622,
+              3392,
+              0
+            ],
+            "hl": {
+              "obj": [
+                2
+              ]
+            }
+          },
+          {
+            "t": "Search the crates in the north west corner to find Lollk.",
+            "s": "Search the north-west crates to find Lollk",
+            "k": "searchCrates",
+            "at": [
+              2571,
+              9850,
+              0
+            ],
+            "hl": {
+              "obj": [
+                1
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 6,
+        "do": [
+          {
+            "t": "Return to Captain Lawgof.",
+            "s": "Return to Captain Lawgof",
+            "k": "talkToCaptainLawgof4",
+            "at": [
+              2567,
+              3460,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5191
+              ]
+            }
+          },
+          {
+            "t": "Exit the goblin cave and return to Captain Lawgof.",
+            "s": "Leave the goblin cave and return to Captain Lawgof",
+            "k": "exitCave",
+            "at": [
+              2621,
+              9796,
+              0
+            ],
+            "hl": {
+              "obj": [
+                13
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 7,
+        "do": [
+          {
+            "t": "Use the toolkit on the broken multicannon.",
+            "s": "Use the toolkit on the broken multicannon",
+            "k": "pwFixMulticannon"
+          }
+        ]
+      },
+      {
+        "at": 8,
+        "do": [
+          {
+            "t": "Talk to Captain Lawgof after repairing the multicannon.",
+            "s": "Tell Captain Lawgof the multicannon is repaired",
+            "k": "talkToCaptainLawgof5",
+            "at": [
+              2567,
+              3460,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5191
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 9,
+        "do": [
+          {
+            "t": "Talk to Nulodion at the Dwarven Black Guard camp, south of Ice Mountain.",
+            "s": "Talk to Nulodion at the Dwarven Black Guard camp",
+            "k": "talkToNulodion",
+            "at": [
+              3012,
+              3453,
+              0
+            ],
+            "hl": {
+              "npc": [
+                1400
+              ]
+            }
+          },
+          {
+            "t": "Return to Captain Lawgof with the ammo mould and Nulodion's Notes.",
+            "s": "Bring the ammo mould and Nulodion's notes to Lawgof",
+            "k": "talkToCaptainLawgof6",
+            "at": [
+              2567,
+              3460,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5191
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 10,
+        "do": [
+          {
+            "t": "Talk to Nulodion at the Dwarven Black Guard camp, south of Ice Mountain.",
+            "s": "Talk to Nulodion at the Dwarven Black Guard camp",
+            "k": "talkToNulodion",
+            "at": [
+              3012,
+              3453,
+              0
+            ],
+            "hl": {
+              "npc": [
+                1400
+              ]
+            }
+          },
+          {
+            "t": "Return to Captain Lawgof with the ammo mould and Nulodion's Notes.",
+            "s": "Bring the ammo mould and Nulodion's notes to Lawgof",
+            "k": "talkToCaptainLawgof6",
+            "at": [
+              2567,
+              3460,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5191
+              ]
+            }
+          }
+        ]
+      }
+    ]
   },
-  "itemsRequired": [
-   {
-    "nameEn": "Hammer",
-    "amount": 1,
-    "wikiItemId": 2347,
-    "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
-    "note": "Hammer (obtained during the quest)"
-   }
-  ],
-  "foes": []
- },
- "stages": {
-  "var": [
-   "varp",
-   0
-  ],
-  "route": [
-   {
-    "title": "Getting started",
-    "steps": [
-     "Talk to Captain Lawgof by the Coal truck mining site west of Seers' Village. Dialogue: \"Yes.\""
-    ]
-   },
-   {
-    "title": "Repair and retrieval",
-    "steps": [
-     "Pick up the hammer in the house to the east if you do not have one.",
-     "Fix the six bent railings of the west and south sides of the fence.",
-     "Talk to Captain Lawgof.",
-     "Go to the tower south of the gate.",
-     "Climb up two ladders and take the Dwarf remains.",
-     "Talk to Captain Lawgof.",
-     "Run south (or teleport to the Fishing Guild) and enter the cave at the south-east corner of the Fishing Guild.",
-     "In the cave, go as far north-west as possible. In the north-westernmost room, search the northernmost crate by the east wall to find Lollk. You don't need to finish the conversation.",
-     "Talk to Captain Lawgof. Dialogue: \"Okay, I'll see what I can do.\"",
-     "Use the toolkit you got from Captain Lawgof on the broken multicannon next to him. (In this order:)",
-     "Talk to Captain Lawgof. Dialogue: \"Okay then, just for you!\""
-    ]
-   },
-   {
-    "title": "Finishing up",
-    "steps": [
-     "Go to the Dwarven Black Guard camp north-east of Falador / south of Ice Mountain / west of Barbarian village.",
-     "In the outpost, talk to Nulodion. He is in the house on the west side of the mining camp.",
-     "Return to Captain Lawgof, bring Nulodion's notes and your cannonball mould with you.",
-     "Congratulations, quest complete!"
-    ]
-   }
-  ],
-  "stages": [
-   {
-    "at": 0,
-    "do": [
-     {
-      "t": "Talk to Captain Lawgof near the Coal Truck Mining Site (north of Fishing Guild, West of McGrubor's Wood).",
-      "s": "Talk to Captain Lawgof at the Coal Truck Mining Site",
-      "k": "talkToCaptainLawgof",
-      "at": [
-       2567,
-       3460,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5191
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 1,
-    "do": [
-     {
-      "t": "Talk to Captain Lawgof to get more railings.",
-      "s": "Ask Captain Lawgof for more railings",
-      "k": "getRailings",
-      "at": [
-       2567,
-       3460,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5191
-       ]
-      }
-     },
-     {
-      "t": "Inspect the six damaged railings around the camp to fix them.",
-      "s": "Inspect damaged railing 6 of 6",
-      "k": "inspectRailings6",
-      "at": [
-       2577,
-       3457,
-       0
-      ],
-      "hl": {
-       "obj": [
-        15595
-       ]
-      }
-     },
-     {
-      "t": "Inspect the six damaged railings around the camp to fix them.",
-      "s": "Inspect damaged railing 5 of 6",
-      "k": "inspectRailings5",
-      "at": [
-       2573,
-       3457,
-       0
-      ],
-      "hl": {
-       "obj": [
-        15594
-       ]
-      }
-     },
-     {
-      "t": "Inspect the six damaged railings around the camp to fix them.",
-      "s": "Inspect damaged railing 4 of 6",
-      "k": "inspectRailings4",
-      "at": [
-       2563,
-       3457,
-       0
-      ],
-      "hl": {
-       "obj": [
-        15593
-       ]
-      }
-     },
-     {
-      "t": "Inspect the six damaged railings around the camp to fix them.",
-      "s": "Inspect damaged railing 3 of 6",
-      "k": "inspectRailings3",
-      "at": [
-       2559,
-       3458,
-       0
-      ],
-      "hl": {
-       "obj": [
-        15592
-       ]
-      }
-     },
-     {
-      "t": "Inspect the six damaged railings around the camp to fix them.",
-      "s": "Inspect damaged railing 2 of 6",
-      "k": "inspectRailings2",
-      "at": [
-       2557,
-       3468,
-       0
-      ],
-      "hl": {
-       "obj": [
-        15591
-       ]
-      }
-     },
-     {
-      "t": "Inspect the six damaged railings around the camp to fix them.",
-      "s": "Inspect damaged railing 1 of 6",
-      "k": "inspectRailings1",
-      "at": [
-       2555,
-       3479,
-       0
-      ],
-      "hl": {
-       "obj": [
-        15590
-       ]
-      }
-     },
-     {
-      "t": "Talk to Captain Lawgof after repairing the damaged railings.",
-      "s": "Tell Captain Lawgof the railings are repaired",
-      "k": "talkToCaptainLawgof2",
-      "at": [
-       2567,
-       3460,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5191
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 2,
-    "do": [
-     {
-      "t": "Go to the top floor of the tower, south of Captain Lawgof, and get the remains there.",
-      "s": "Go to the top of the tower south of Captain Lawgof",
-      "k": "gotoTower",
-      "at": [
-       2570,
-       3441,
-       0
-      ],
-      "hl": {
-       "obj": [
-        16683
-       ]
-      }
-     },
-     {
-      "t": "Go up the second ladder.",
-      "s": "Go up the second ladder",
-      "k": "goToTower2",
-      "at": [
-       2570,
-       3443,
-       1
-      ],
-      "hl": {
-       "obj": [
-        11
-       ]
-      }
-     },
-     {
-      "t": "Get the dwarf remains at the top of the tower.",
-      "s": "Take the dwarf remains at the top of the tower",
-      "k": "getRemainsStep",
-      "at": [
-       2567,
-       3444,
-       2
-      ],
-      "hl": {
-       "obj": [
-        0
-       ]
-      }
-     },
-     {
-      "t": "Return the remains to Captain Lawgof.",
-      "s": "Return the remains to Captain Lawgof",
-      "k": "talkToCaptainLawgof3",
-      "at": [
-       2567,
-       3460,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5191
-       ]
-      }
-     },
-     {
-      "t": "Go down the first ladder.",
-      "s": "Go down the first ladder",
-      "k": "downTower",
-      "at": [
-       2570,
-       3443,
-       2
-      ],
-      "hl": {
-       "obj": [
-        16679
-       ]
-      }
-     },
-     {
-      "t": "Go down the second ladder.",
-      "s": "Go down the second ladder",
-      "k": "downTower2",
-      "at": [
-       2570,
-       3441,
-       1
-      ],
-      "hl": {
-       "obj": [
-        16679
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 3,
-    "do": [
-     {
-      "t": "Go to the top floor of the tower, south of Captain Lawgof, and get the remains there.",
-      "s": "Go to the top of the tower south of Captain Lawgof",
-      "k": "gotoTower",
-      "at": [
-       2570,
-       3441,
-       0
-      ],
-      "hl": {
-       "obj": [
-        16683
-       ]
-      }
-     },
-     {
-      "t": "Go up the second ladder.",
-      "s": "Go up the second ladder",
-      "k": "goToTower2",
-      "at": [
-       2570,
-       3443,
-       1
-      ],
-      "hl": {
-       "obj": [
-        11
-       ]
-      }
-     },
-     {
-      "t": "Get the dwarf remains at the top of the tower.",
-      "s": "Take the dwarf remains at the top of the tower",
-      "k": "getRemainsStep",
-      "at": [
-       2567,
-       3444,
-       2
-      ],
-      "hl": {
-       "obj": [
-        0
-       ]
-      }
-     },
-     {
-      "t": "Return the remains to Captain Lawgof.",
-      "s": "Return the remains to Captain Lawgof",
-      "k": "talkToCaptainLawgof3",
-      "at": [
-       2567,
-       3460,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5191
-       ]
-      }
-     },
-     {
-      "t": "Go down the first ladder.",
-      "s": "Go down the first ladder",
-      "k": "downTower",
-      "at": [
-       2570,
-       3443,
-       2
-      ],
-      "hl": {
-       "obj": [
-        16679
-       ]
-      }
-     },
-     {
-      "t": "Go down the second ladder.",
-      "s": "Go down the second ladder",
-      "k": "downTower2",
-      "at": [
-       2570,
-       3441,
-       1
-      ],
-      "hl": {
-       "obj": [
-        16679
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 4,
-    "do": [
-     {
-      "t": "Enter the goblin cave, east of the Fishing Guild entrance.",
-      "s": "Enter the goblin cave east of the Fishing Guild entrance",
-      "k": "gotoCave",
-      "at": [
-       2622,
-       3392,
-       0
-      ],
-      "hl": {
-       "obj": [
-        2
-       ]
-      }
-     },
-     {
-      "t": "Search the crates in the north west corner to find Lollk.",
-      "s": "Search the north-west crates to find Lollk",
-      "k": "searchCrates",
-      "at": [
-       2571,
-       9850,
-       0
-      ],
-      "hl": {
-       "obj": [
-        1
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 5,
-    "do": [
-     {
-      "t": "Enter the goblin cave, east of the Fishing Guild entrance.",
-      "s": "Enter the goblin cave east of the Fishing Guild entrance",
-      "k": "gotoCave",
-      "at": [
-       2622,
-       3392,
-       0
-      ],
-      "hl": {
-       "obj": [
-        2
-       ]
-      }
-     },
-     {
-      "t": "Search the crates in the north west corner to find Lollk.",
-      "s": "Search the north-west crates to find Lollk",
-      "k": "searchCrates",
-      "at": [
-       2571,
-       9850,
-       0
-      ],
-      "hl": {
-       "obj": [
-        1
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 6,
-    "do": [
-     {
-      "t": "Return to Captain Lawgof.",
-      "s": "Return to Captain Lawgof",
-      "k": "talkToCaptainLawgof4",
-      "at": [
-       2567,
-       3460,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5191
-       ]
-      }
-     },
-     {
-      "t": "Exit the goblin cave and return to Captain Lawgof.",
-      "s": "Leave the goblin cave and return to Captain Lawgof",
-      "k": "exitCave",
-      "at": [
-       2621,
-       9796,
-       0
-      ],
-      "hl": {
-       "obj": [
-        13
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 7,
-    "do": [
-     {
-      "t": "Use the toolkit on the broken multicannon.",
-      "s": "Use the toolkit on the broken multicannon",
-      "k": "pwFixMulticannon"
-     }
-    ]
-   },
-   {
-    "at": 8,
-    "do": [
-     {
-      "t": "Talk to Captain Lawgof after repairing the multicannon.",
-      "s": "Tell Captain Lawgof the multicannon is repaired",
-      "k": "talkToCaptainLawgof5",
-      "at": [
-       2567,
-       3460,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5191
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 9,
-    "do": [
-     {
-      "t": "Talk to Nulodion at the Dwarven Black Guard camp, south of Ice Mountain.",
-      "s": "Talk to Nulodion at the Dwarven Black Guard camp",
-      "k": "talkToNulodion",
-      "at": [
-       3012,
-       3453,
-       0
-      ],
-      "hl": {
-       "npc": [
-        1400
-       ]
-      }
-     },
-     {
-      "t": "Return to Captain Lawgof with the ammo mould and Nulodion's Notes.",
-      "s": "Bring the ammo mould and Nulodion's notes to Lawgof",
-      "k": "talkToCaptainLawgof6",
-      "at": [
-       2567,
-       3460,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5191
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 10,
-    "do": [
-     {
-      "t": "Talk to Nulodion at the Dwarven Black Guard camp, south of Ice Mountain.",
-      "s": "Talk to Nulodion at the Dwarven Black Guard camp",
-      "k": "talkToNulodion",
-      "at": [
-       3012,
-       3453,
-       0
-      ],
-      "hl": {
-       "npc": [
-        1400
-       ]
-      }
-     },
-     {
-      "t": "Return to Captain Lawgof with the ammo mould and Nulodion's Notes.",
-      "s": "Bring the ammo mould and Nulodion's notes to Lawgof",
-      "k": "talkToCaptainLawgof6",
-      "at": [
-       2567,
-       3460,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5191
-       ]
-      }
-     }
-    ]
-   }
+  "facts": {
+    "id": "Dwarf Cannon",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {},
+      "questPoints": 0,
+      "quests": [],
+      "manual": [],
+      "capabilities": [],
+      "unparsed": null,
+      "text": ""
+    },
+    "rewards": {
+      "questPoints": 1,
+      "xp": {
+        "crafting": 750
+      },
+      "coins": 0
+    },
+    "resourceFlow": null,
+    "length": "Short",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15390007",
+      "title": "Dwarf Cannon",
+      "revision": 15390007,
+      "retrievedAt": "2026-11-14T09:48:51.643Z"
+    }
+  },
+  "unknown": [
+    "step \"pwFixMulticannon\": Quest Helper gives no tile",
+    "what the quest uses up and hands out is not reviewed"
   ]
- },
- "facts": {
-  "id": "Dwarf Cannon",
-  "stepIds": [
-   "DRAFT"
-  ],
-  "members": false,
-  "requirements": {
-   "skills": {},
-   "questPoints": 0,
-   "quests": [],
-   "manual": [],
-   "capabilities": [],
-   "unparsed": null,
-   "text": ""
-  },
-  "rewards": {
-   "questPoints": 1,
-   "xp": {
-    "crafting": 750
-   },
-   "coins": 0
-  },
-  "resourceFlow": null,
-  "length": "Short",
-  "source": {
-   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15390007",
-   "title": "Dwarf Cannon",
-   "revision": 15390007,
-   "retrievedAt": "2026-11-14T01:37:49.059Z"
-  }
- },
- "unknown": [
-  "step \"pwFixMulticannon\": Quest Helper gives no tile",
-  "what the quest uses up and hands out is not reviewed"
- ]
 }

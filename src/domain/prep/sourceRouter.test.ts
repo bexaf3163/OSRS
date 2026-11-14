@@ -9,8 +9,9 @@ const player = () => buildPlayerState({ mode: 'f2p', connected: true, progress: 
   owned: { bankSeen: true, items: new Map() }, gear: { equipment: [], inventory: [], coins: 1000, bankCoins: 0 } });
 
 describe('usable acquisition sources before unlocated references', () => {
-  it('offers a located shop for the real pickaxe and hammer instead of stalling on an unlocated free spawn', () => {
-    for (const id of [1265, 2347]) {
+  // The hammer left this case in 2026-11: the wiki added a located free spawn in Lumbridge.
+  it('offers a located shop for the real pickaxe instead of stalling on an unlocated free spawn', () => {
+    for (const id of [1265]) {
       const detail = itemById.get(id)!;
       const plan = planSources({ name: detail.nameEn, need: 1, shortage: true, detail, gePrice: 20 }, player());
       expect(plan.primary).toMatchObject({ kind: 'shop', access: 'open', price: 1, point: { plane: 0 } });

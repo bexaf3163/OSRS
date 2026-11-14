@@ -298,8 +298,9 @@ describe('different characters through the integrated runtime (brief 39 counterf
     expect(decide(base).activeAction).toMatchObject({ kind: 'VERIFY', title: `Verify combat readiness for ${quest.id}` });
   }, 60_000);
 
-  it('a fight whose kit is still being bought is priced when the current levels and gear already win it', () => {
-    // Vampyre Slayer with no garlic, stake or hammer yet: the purchases are the whole preparation only if no training is needed.
+  it('a fight whose kit is still being bought is priced, with the training the current levels still need', () => {
+    // Vampyre Slayer with no garlic, stake or hammer yet: the purchases are the whole preparation only if no training is needed,
+    // otherwise the cheapest training to a winning setup is added.
     const decide = (level: number) => {
       const stats = { attack: level, strength: level, defence: level, hitpoints: Math.max(10, level), magic: 1 };
       const equipment = level > 1 ? [{ id: gearPieceByName('Mithril scimitar')!.id, name: 'Mithril scimitar', slot: 'weapon' }] : [];
@@ -310,7 +311,9 @@ describe('different characters through the integrated runtime (brief 39 counterf
     const strong = decide(50);
     expect(strong.objectiveId).toBe('Vampyre Slayer');
     expect(unpriced(strong)).toEqual([]);
-    expect(unpriced(decide(1))).not.toEqual([]);
+    const weak = decide(1);
+    expect(unpriced(weak)).toEqual([]);
+    expect(weak.candidates![0].knownMinutes).toBeGreaterThan(strong.candidates![0].knownMinutes);
   }, 60_000);
 
   it('S10: resuming at any stage never goes back a mandatory step, and rewards only come with the last step', () => {

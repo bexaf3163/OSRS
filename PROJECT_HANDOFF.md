@@ -157,9 +157,9 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Handover — state on 2026-11-14
 
-- **State:** v2.94.5 published, `main` clean, all gates passed; nothing tested in the real game since 2.87.
+- **State:** v2.95.0 published, `main` clean, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, training times shown); XP/Balanced/Money change the method only; Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; V2 review retired; update Cancel stays.
-- **Next:** 1) P4. 2) Quest pipeline: promotion, stage replay. 3) Measured quest times from the player's own quest starts and finishes.
+- **Next:** 1) P4. 2) Quest pipeline: promote Witch's House and Dwarf Cannon; prove more replay legs (doors, floors). 3) Measured quest times from the player's own quest starts and finishes.
 - **Owner:** writes Russian; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 
 ## Remaining work in priority order
@@ -168,15 +168,15 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 Target: observed F2P quest planning; scoped Decision → Ledger/bridge/HUD. Supply estimates soft, prerequisites/protection hard. Optional Members preparation never gates F2P completion; no runtime LLM, automation or linear fallback.
 
-Work on `main` in a fresh clone (old worktrees and `.codex/` are gone; GitHub is the only copy). V14 is incorporated.
+Work on `main` in a fresh clone (old worktrees and `.codex/` are gone; GitHub is the only copy).
 
 Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent entry for explicit goals and phased training/preparation; costs precede rewards; only sourced order-independent unknowns cancel. Cursors retire past stages; certificate proof stays physical. Procurement shares allocations/packages/fees; unknown flows weaken balances; start-only rewards never repeat; unknown hand-ins never buy; protection requires wearing; funding excludes stale/unsold cash. Shortest Path `375ce2c061df5c3961116dda6443f307df3223f1` (BSD, 64 regions, ESTIMATED); trip legs bounded, deduplicated, revision-guarded.
 
-`DecisionProvider` below Funding → `runtimeDecision` drives pages/prep/maps and `DecisionSync` (step, snapshot `decision{id,objectiveId,watch}`). Worker legs/castable teleports, Money-ranked EARN/gathering, GP/tool/position/Magic/restriction counterfactuals work. Unknown-time objectives remain visible. `candidates` expose minutes, unknowns, XP, rank/verdict; incomplete comparisons use unknown-count, known minimum and own cost, never term text; confidence LOW. Door/stair/enclosed-origin walking allowances ≤10 tiles are labelled. Path/Previous/Next/Journal follow planner order; retired steps cannot override it. Prep/Shopping/plugin/bank/funding/Defence-later use `engine.road`; Skills uses Decision floors then engine method changes. Guide retired.
+`DecisionProvider` below Funding → `runtimeDecision` drives pages/prep/maps and `DecisionSync` (step, snapshot `decision{id,objectiveId,watch}`). Worker legs/castable teleports, Money-ranked EARN/gathering, GP/tool/position/Magic/restriction counterfactuals work. Unknown-time objectives remain visible. `candidates` expose minutes, unknowns, XP, rank/verdict; incomplete comparisons use unknown-count, known minimum and own cost, never term text; confidence LOW. Door/stair/enclosed-origin walking allowances ≤10 tiles are labelled. Path/Previous/Next/Journal follow planner order; retired steps cannot override it. Prep/Shopping/plugin/bank/funding/Defence-later use `engine.road`; Skills uses Decision floors then engine method changes.
 
 ### Quest content pipeline — pilot 2026-11-14
 
-Machine-drafted Members quests, checked before shipping. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/`: stages, tiles, ids and texts from Quest Helper, the rest from Wiki cards. Only wording is edited; `npm run check-drafts` fails contradictions with those sources; unconfirmed facts stay `unknown`; drafts are not shipped. Pilot passes: Druidic Ritual, Witch's House, Dwarf Cannon. Not built: promotion into `authored/`, a stage replay, Members planner support. Quest Helper `b9b9370` changes shipped machines; regenerate deliberately.
+Machine-drafted quests, checked before shipping. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/`: stages, tiles, ids and texts from Quest Helper, the rest from Wiki cards. Only wording is edited; one full text keeps one short line. `npm run check-drafts` fails contradictions with those sources and replays the stages on the walking data (off-ground tiles fail); unconfirmed facts stay `unknown`. `npm run quest-promote -- <Draft> <id>` writes the step, stages and QH row; then build-items, QH generators, fixtures, all gates. Shipped: Druidic Ritual (S7-06). Drafts: Witch's House, Dwarf Cannon. Quest Helper `b9b9370`.
 
 ### P4 — Claude's real-client acceptance
 
@@ -219,7 +219,6 @@ Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3
 | 2.81.15 | Thread consumption and silver tiaras in cr-gold from 23 to 43 (Crafting 23, 52.5 XP, Silver bar and Tiara mould at a furnace). Jewellery advice promises no profit or diamonds before 43. |
 | 2.81.16 | sm-smelting connects bronze to runite furnace smelting (4/6/8 coal for mithril/adamantite/runite; iron 50% yield, no ring bonus). Metal families add daggers, warhammers and platebodies and use 1/3/5-bar leftovers; Blast Furnace, catalysts and Superheat stay separate. Firemaking's line-lighting families use partial batches and a reusable Tinderbox. |
 | 2.81.17 | `pr-camdozaal` admits Prayer 1 with Below Ice Mountain, Fishing 7, Cooking 7, Small fishing net and Knife. Catch, prepare, offer: cavefish need Fishing/Cooking 20, tetras 33. Raw offerings and unsupported 2400 XP/h removed; collect-and-bury uses manual setup. |
-| 2.81.18 | Manual references (see contracts); the priority test uses equal-rate synthetic methods; one duplicate F2P browser run removed. |
 
 Known limits: fees are bounded allowances; gathering competition, Forestry and Musa Point boat banking are approximations; altar timing assumes the supported exit model; food estimates are no survival guarantee. Alchemy, enchanting and splashing keep target/setup/budget safeguards. No implied parity for unsupported Members or HDOS mechanics. Facts checked against the OSRS Wiki on 2026-10-31.
 
@@ -233,9 +232,9 @@ Kept: `planning/encounter/{setups,strategy}.ts` compares bounded preparations; `
 - `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`. `trainingKit.equipmentLine` states the tool/kit decision on Skills; F2P notes are one-line checkpoints, no Wiki rates. Weapons: one skill's XP.
 - Game line: engine's bank/drop choice; plaque shows the stamp alone. Closed optional quests are set aside (`setAsideQuests`); after all F2P quests, Path ranks `f2pCheckpoints` with Follow. One-step quests' stage checks point the game at the step. Path rows name unknown parts.
 
-Gear has bows/ranged armour; a worn bow (fitting arrows) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set arrows needed. Drops weigh cooking burns. Earning guides read the Wiki Details (`detailsOf`); Ledger icons replace colour emoji. F2P skill groups focus a checkpoint still ahead. Verified: 2,617 units, 797 browser checks, route/light gates; update +3% versus 2.94.4.
+Gear has bows/ranged armour; a worn bow (fitting arrows) fights via `rangedHit`, trains Ranged/Defence or takes the unlocked bow/strongest arrows; shots set arrows needed. Drops weigh cooking burns. Earning guides read the Wiki Details (`detailsOf`); Ledger icons replace colour emoji. F2P skill groups focus a checkpoint still ahead. Verified: 2,622 units, all gates.
 
-Limits: armour by melee defence; Wiki bands for quest work, minus the prepared fight. `gate:f2p`: 23/23 quests, no checks; time unknown on 1/211 turns. Later fights are proven by `encounterSetups`, a current one with pending kit by its setup; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece.
+Limits: armour by melee defence; Wiki bands for quest work, minus the prepared fight. `gate:f2p`: 23/23 quests, no checks; time unknown on 0/211 turns. Later fights are proven by `encounterSetups`, a current one with pending kit by its setup, priced with the cheapest training to it; protection goes on after training; QP/prerequisites are planner order; spawns lead one piece.
 
 <!-- DELIVERY_START -->
 ## Delivery receipt

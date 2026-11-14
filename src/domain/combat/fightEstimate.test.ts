@@ -47,7 +47,7 @@ describe('one quest fight with your kit', () => {
     // The killing blow needs the stake and the hammer: a step that does not carry them is not assessed.
     expect(estimateStepFights(without('Stake'), lv, gearOf(IRON))[0].unmodelled.join(' ')).toMatch(/killing blow needs Stake/);
     // Hits that do not outpace 1 hit point every 3 seconds never win: said, and more levels change it.
-    const weak = estimateStepFights(step, { attack: 5, strength: 5, defence: 1, hitpoints: 12 }, gearOf(['Bronze sword']))[0];
+    const weak = estimateStepFights(step, { attack: 5, strength: 5, defence: 1, hitpoints: 12 }, gearOf(['Bronze shortsword']))[0];
     expect(weak.cannot).toMatch(/do not outpace Count Draynor's regeneration/);
     expect(fightLine(weak)).toMatch(/regeneration/);
     expect(weak.unmodelled).toEqual([]);

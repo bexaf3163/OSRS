@@ -69,7 +69,7 @@
    "buy": 2079,
    "sell": 1900
   },
-  "Adamant sword": {
+  "Adamant shortsword": {
    "buy": 910,
    "sell": 875
   },
@@ -217,7 +217,7 @@
    "buy": 429,
    "sell": 428
   },
-  "Black sword": {
+  "Black shortsword": {
    "buy": 417,
    "sell": 415
   },
@@ -321,7 +321,7 @@
    "buy": 911,
    "sell": 76
   },
-  "Bronze sword": {
+  "Bronze shortsword": {
    "buy": 112,
    "sell": 111
   },
@@ -557,7 +557,7 @@
    "buy": 145,
    "sell": 115
   },
-  "Iron sword": {
+  "Iron shortsword": {
    "buy": 145,
    "sell": 80
   },
@@ -701,7 +701,7 @@
    "buy": 604,
    "sell": 665
   },
-  "Mithril sword": {
+  "Mithril shortsword": {
    "buy": 199,
    "sell": 195
   },
@@ -885,7 +885,7 @@
    "buy": 22524,
    "sell": 22576
   },
-  "Rune sword": {
+  "Rune shortsword": {
    "buy": 12200,
    "sell": 12160
   },
@@ -1045,7 +1045,7 @@
    "buy": 99,
    "sell": 65
   },
-  "Steel sword": {
+  "Steel shortsword": {
    "buy": 56,
    "sell": 52
   },

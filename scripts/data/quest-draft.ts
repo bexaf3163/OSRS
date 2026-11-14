@@ -7,11 +7,14 @@ import type { WikiItemDetail } from '../../src/types/index.ts';
 import type { WikiArticle } from './wiki.ts';
 import { templates } from './wiki.ts';
 import { questFacts } from './quest-facts.ts';
+import { walkRoutes, type SurfaceTopology } from '../../src/domain/travel/worldRouting.ts';
 
 type Ref = string | { s: string };
 interface QhNode { n?: string; c: [unknown, Ref][]; d: Ref }
 export interface QhFacts {
   title: string; cls: string; var: [string, number]; revision: string;
+  /** Quest Helper's own quest table says P2P: the Wiki quest card does not always carry a members field. */
+  members: boolean;
   machine: { stages: Record<string, Ref>; nodes: Record<string, QhNode>; reqs: Record<string, unknown>; alias: Record<string, string[]> };
   unknown: Record<string, number>;
   steps: Record<string, { typ: string | null; wp: [number, number, number] | null; ids: number[]; text: string | null }>;
@@ -150,7 +153,7 @@ export function buildDraft({ qh, article, guide, retrievedAt, items, foes, trade
     quest: article.title, status: 'draft',
     sources: { questHelper: qh.revision, wiki: { title: article.title, revision: article.revision }, quickGuide: guide ? { title: guide.title, revision: guide.revision } : null },
     step: {
-      title: article.title, type: 'quest', qp: facts.rewards.questPoints, membersOnly: facts.members,
+      title: article.title, type: 'quest', qp: facts.rewards.questPoints, membersOnly: qh.members,
       wikiUrl: `https://oldschool.runescape.wiki/w/${page}`, quickGuideUrl: `https://oldschool.runescape.wiki/w/${page}/Quick_guide`,
       mapLocation: start ? { x: Number(start[1]), y: Number(start[2]), plane: 0, label: plain(details.start ?? '') } : null,
       npc: npc ? { nameEn: npc } : null, itemsRequired, foes: opponents,
@@ -168,6 +171,7 @@ export function checkDraft(draft: QuestDraft, qh: QhFacts): string[] {
   if (!same(draft.stages.var, qh.var)) fails.push(`variable ${draft.stages.var} is not Quest Helper's ${qh.var}`);
   const values = Object.keys(qh.machine.stages).map(Number).sort((a, b) => a - b);
   if (!same(draft.stages.stages.map((s) => s.at), values)) fails.push(`stage values ${draft.stages.stages.map((s) => s.at)} are not Quest Helper's ${values}`);
+  const names = new Map<string, string>();
   for (const stage of draft.stages.stages) {
     const allowed = new Set(stageOrder(qh.machine, qh.machine.stages[String(stage.at)] ?? { s: '?' }));
     for (const k of allowed) if (!stage.do.some((line) => line.k === k)) fails.push(`stage ${stage.at}: Quest Helper step "${k}" has no line`);
@@ -179,8 +183,13 @@ export function checkDraft(draft: QuestDraft, qh: QhFacts): string[] {
       for (const id of [...(line.hl?.npc ?? []), ...(line.hl?.obj ?? [])]) if (!step.ids.includes(id)) fails.push(`${where}: highlight ${id} is not a Quest Helper id`);
       if (!line.s.trim() || line.s.length > 70) fails.push(`${where}: the short line must be 1 to 70 characters, has ${line.s.length}`);
       if (!line.t.trim()) fails.push(`${where}: no full text`);
+      // The game shows one name for one instruction, so the same full text keeps the same short line.
+      const named = names.get(line.t);
+      if (named !== undefined && named !== line.s) fails.push(`${where}: the same full text is short "${named}" elsewhere`);
+      names.set(line.t, named ?? line.s);
     }
   }
+  if (draft.step.membersOnly !== qh.members) fails.push(`members ${draft.step.membersOnly} is not Quest Helper's ${qh.members}`);
   if (draft.step.qp !== draft.facts.rewards.questPoints) fails.push(`quest points ${draft.step.qp} are not the quest card's ${draft.facts.rewards.questPoints}`);
   if (draft.facts.source.revision !== draft.sources.wiki.revision) fails.push('facts and step come from different Wiki revisions');
   for (const item of draft.step.itemsRequired) {
@@ -189,4 +198,36 @@ export function checkDraft(draft: QuestDraft, qh: QhFacts): string[] {
     if (!item.howToGet && !known) fails.push(`item "${item.nameEn}": no source and not listed as unknown`);
   }
   return fails;
+}
+
+export interface Replay { located: number; proven: number; unproven: string[]; unchecked: number; fails: string[] }
+
+const CARDINAL = [[0, 1], [1, 0], [0, -1], [-1, 0]] as const;
+
+/** A player walking the quest's located lines in stage order, over the planner's own surface collision data. A tile
+ * with no walkable tile within 3 is a wrong coordinate (a fail). A covered surface leg with neither a route nor a reached
+ * tile near its end is not proven: a boat, an entrance or a locked door may be the way. Upper floors, dungeons and
+ * regions the data does not cover are counted as not checked, never as passed. */
+export function replayStages(stages: QuestDraft['stages']['stages'], start: { x: number; y: number; plane: number } | null, topology: SurfaceTopology, walk = true): Replay {
+  const out: Replay = { located: 0, proven: 0, unproven: [], unchecked: 0, fails: [] };
+  const walkable = (x: number, y: number) => CARDINAL.some(([dx, dy]) => topology.canStep(x, y, dx, dy));
+  let from = start;
+  for (const stage of stages) for (const line of stage.do) {
+    if (!line.at) continue;
+    out.located++;
+    const to = { x: line.at[0], y: line.at[1], plane: line.at[2] };
+    const where = `stage ${stage.at} "${line.k}" ${line.at}`;
+    // An object or a wall tile is fine (Quest Helper points at the thing), but it needs ground beside it.
+    let ground = !topology.covers(to);
+    for (let dx = -3; dx <= 3 && !ground; dx++) for (let dy = -3; dy <= 3 && !ground; dy++) ground = walkable(to.x + dx, to.y + dy);
+    if (!ground) out.fails.push(`${where}: no walkable tile within 3`);
+    else if (!walk || !from || !topology.covers(from) || !topology.covers(to)) out.unchecked++;
+    else {
+      const [route] = walkRoutes(topology, from, [to]);
+      if (route.status === 'ESTIMATED' || route.nearest) out.proven++;
+      else out.unproven.push(`${where}: no surface route from ${from.x},${from.y}`);
+    }
+    from = to;
+  }
+  return out;
 }

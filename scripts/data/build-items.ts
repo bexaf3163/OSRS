@@ -32,6 +32,8 @@ const KEY_ITEMS: string[] = [
   'Tinderbox', 'Hammer', 'Chisel', 'Needle', 'Thread', 'Knife',
   'Shears', 'Spade', 'Bucket', 'Pot', 'Jug', 'Ring mould',
   'Raw shrimps', 'Shrimps', 'Raw anchovies', 'Anchovies',
+  // Used by the travel and recipe engines since their route steps were retired in 2.84.0.
+  'Teleport card', 'Chronicle', 'Staff', 'Red dye',
   'Raw trout', 'Trout', 'Raw salmon', 'Salmon',
   'Raw tuna', 'Tuna', 'Raw lobster', 'Lobster',
   'Raw swordfish', 'Swordfish',
@@ -44,7 +46,7 @@ const KEY_ITEMS: string[] = [
   'Strength potion(4)', 'Attack potion(4)', 'Energy potion(4)',
   'Bronze scimitar', 'Iron scimitar', 'Steel scimitar',
   'Mithril scimitar', 'Adamant scimitar', 'Rune scimitar',
-  'Rune sword', 'Rune battleaxe', 'Rune 2h sword',
+  'Rune shortsword', 'Rune battleaxe', 'Rune 2h sword',
   'Iron platebody', 'Steel platebody', 'Mithril platebody',
   'Adamant platebody', 'Rune platebody',
   'Rune full helm', 'Rune med helm', 'Rune platelegs',

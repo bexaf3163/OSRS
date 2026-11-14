@@ -277,8 +277,8 @@ describe('The bridge: new requests and events', () => {
   });
 
   it('gear: the slot of what is worn from the game, an unknown slot — without it', () => {
-    expect(parseGear({ equipment: [{ id: 1291, name: 'Bronze sword', slot: 'weapon' }, { id: 1540, name: 'Anti-dragon shield', slot: 'Shield!' }] })!.equipment)
-      .toEqual([{ id: 1291, name: 'Bronze sword', slot: 'weapon' }, { id: 1540, name: 'Anti-dragon shield' }]);
+    expect(parseGear({ equipment: [{ id: 1291, name: 'Bronze shortsword', slot: 'weapon' }, { id: 1540, name: 'Anti-dragon shield', slot: 'Shield!' }] })!.equipment)
+      .toEqual([{ id: 1291, name: 'Bronze shortsword', slot: 'weapon' }, { id: 1540, name: 'Anti-dragon shield' }]);
   });
 
   it('gear: missing fields — unknown, garbage is dropped', () => {

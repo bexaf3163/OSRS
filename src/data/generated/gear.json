@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: item and bonus infoboxes (Bucket infobox_item, infobox_bonuses), shops (storeline, infobox_shop), requirements from the articles",
-  "updated": "2026-11-11",
+  "updated": "2026-11-14",
   "items": [
     {
       "id": 1205,
@@ -39,7 +39,7 @@
     },
     {
       "id": 1277,
-      "name": "Bronze sword",
+      "name": "Bronze shortsword",
       "slot": "weapon",
       "kind": "sword",
       "metal": "bronze",
@@ -70,7 +70,7 @@
           "owner": "Shop keeper"
         }
       ],
-      "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_sword.png"
+      "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_shortsword.png"
     },
     {
       "id": 1321,
@@ -305,6 +305,12 @@
           "location": "Lumbridge",
           "price": 16,
           "owner": "Bob"
+        },
+        {
+          "shop": "Lumbridge General Store",
+          "location": "Lumbridge",
+          "price": 20,
+          "owner": "Shop keeper, Shop assistant"
         }
       ],
       "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
@@ -352,6 +358,12 @@
           "location": "Dwarven Mines",
           "price": 1,
           "owner": "Drogo dwarf"
+        },
+        {
+          "shop": "Lumbridge General Store",
+          "location": "Lumbridge",
+          "price": 1,
+          "owner": "Shop keeper, Shop assistant"
         },
         {
           "shop": "Bandit Duty Free",
@@ -683,7 +695,7 @@
     },
     {
       "id": 1279,
-      "name": "Iron sword",
+      "name": "Iron shortsword",
       "slot": "weapon",
       "kind": "sword",
       "metal": "iron",
@@ -714,7 +726,7 @@
           "owner": "Shop keeper"
         }
       ],
-      "iconUrl": "https://oldschool.runescape.wiki/images/Iron_sword.png"
+      "iconUrl": "https://oldschool.runescape.wiki/images/Iron_shortsword.png"
     },
     {
       "id": 1323,
@@ -1318,14 +1330,14 @@
     },
     {
       "id": 1281,
-      "name": "Steel sword",
+      "name": "Steel shortsword",
       "slot": "weapon",
       "kind": "sword",
       "metal": "steel",
       "req": {
         "attack": 5
       },
-      "reqFrom": "Steel sword",
+      "reqFrom": "Steel shortsword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1352,7 +1364,7 @@
           "owner": "Shop keeper"
         }
       ],
-      "iconUrl": "https://oldschool.runescape.wiki/images/Steel_sword.png"
+      "iconUrl": "https://oldschool.runescape.wiki/images/Steel_shortsword.png"
     },
     {
       "id": 1325,
@@ -1998,14 +2010,14 @@
     },
     {
       "id": 1283,
-      "name": "Black sword",
+      "name": "Black shortsword",
       "slot": "weapon",
       "kind": "sword",
       "metal": "black",
       "req": {
         "attack": 10
       },
-      "reqFrom": "Black sword",
+      "reqFrom": "Black shortsword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2032,7 +2044,7 @@
           "owner": "Shop keeper"
         }
       ],
-      "iconUrl": "https://oldschool.runescape.wiki/images/Black_sword.png"
+      "iconUrl": "https://oldschool.runescape.wiki/images/Black_shortsword.png"
     },
     {
       "id": 1327,
@@ -2322,7 +2334,7 @@
       "shops": [
         {
           "shop": "Valaine's Shop of Champions",
-          "location": "1st floor[UK]2nd floor[US] of Champions' Guild",
+          "location": "1st floor of Champions' Guild",
           "price": 1372,
           "owner": "Valaine"
         }
@@ -2468,7 +2480,7 @@
         },
         {
           "shop": "Valaine's Shop of Champions",
-          "location": "1st floor[UK]2nd floor[US] of Champions' Guild",
+          "location": "1st floor of Champions' Guild",
           "price": 2496,
           "owner": "Valaine"
         }
@@ -2610,14 +2622,14 @@
     },
     {
       "id": 1285,
-      "name": "Mithril sword",
+      "name": "Mithril shortsword",
       "slot": "weapon",
       "kind": "sword",
       "metal": "mithril",
       "req": {
         "attack": 20
       },
-      "reqFrom": "Mithril sword",
+      "reqFrom": "Mithril shortsword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2644,7 +2656,7 @@
           "owner": "Shop keeper"
         }
       ],
-      "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_sword.png"
+      "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_shortsword.png"
     },
     {
       "id": 1329,
@@ -3274,14 +3286,14 @@
     },
     {
       "id": 1287,
-      "name": "Adamant sword",
+      "name": "Adamant shortsword",
       "slot": "weapon",
       "kind": "sword",
       "metal": "adamant",
       "req": {
         "attack": 30
       },
-      "reqFrom": "Adamant sword",
+      "reqFrom": "Adamant shortsword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3308,7 +3320,7 @@
           "owner": "Shop keeper"
         }
       ],
-      "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_sword.png"
+      "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_shortsword.png"
     },
     {
       "id": 1331,
@@ -3694,7 +3706,7 @@
       "shops": [
         {
           "shop": "Valaine's Shop of Champions",
-          "location": "1st floor[UK]2nd floor[US] of Champions' Guild",
+          "location": "1st floor of Champions' Guild",
           "price": 21632,
           "owner": "Valaine"
         }
@@ -3902,14 +3914,14 @@
     },
     {
       "id": 1289,
-      "name": "Rune sword",
+      "name": "Rune shortsword",
       "slot": "weapon",
       "kind": "sword",
       "metal": "rune",
       "req": {
         "attack": 40
       },
-      "reqFrom": "Rune sword",
+      "reqFrom": "Rune shortsword",
       "members": false,
       "tradeable": true,
       "attack": {

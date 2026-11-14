@@ -10,7 +10,7 @@ function snapshot(bankSeen = true): PlanningSnapshot {
     questPoints: { known: true, value: 0, source: 'game' },
     player: buildPlayerState({ mode: 'f2p', connected: true, player: 'Fixture', progress: { levels: {} }, stats: {}, questsDone: [],
       owned: { bankSeen, items: new Map([['bucket', { name: 'Bucket', carried: 1, noted: 1, bank: bankSeen ? 2 : undefined }]]) },
-      gear: { coins: 50, bankCoins: bankSeen ? 50 : null, equipment: [{ id: 1277, name: 'Bronze sword', slot: 'weapon', count: 1 }], inventory: [] } }) };
+      gear: { coins: 50, bankCoins: bankSeen ? 50 : null, equipment: [{ id: 1277, name: 'Bronze shortsword', slot: 'weapon', count: 1 }], inventory: [] } }) };
 }
 const change = (gp = 0, items: ResourceChange['items'] = []): ResourceChange => ({ gp, items, source: 'Synthetic resolved physical allocation' });
 const effect = (c: ResourceChange): ExpectedEffect => ({ kind: 'resources', change: c, afterSuccessOnly: true });
@@ -19,10 +19,10 @@ const minute = (typical: number): Minutes => ({ typical, fast: typical, slow: ty
 describe('conditional resource accounting', () => {
   it('retires only unmodelled item exchanges, without preserving worn proof or converting unknown stock into confirmed absence', () => {
     const observed = snapshot(), start = observedProjection(observed);
-    const after = projectSuccess(start, [effect({ ...change(0), unknownItems: ['Bucket', 'Bronze sword'] })]);
+    const after = projectSuccess(start, [effect({ ...change(0), unknownItems: ['Bucket', 'Bronze shortsword'] })]);
     expect(after.resources?.items.bucket).toEqual({ floor: 0, complete: false });
-    expect(after.resources?.items['bronze sword']).toEqual({ floor: 0, complete: false });
-    expect(after.resources?.worn?.['bronze sword']).toBe(0);
+    expect(after.resources?.items['bronze shortsword']).toEqual({ floor: 0, complete: false });
+    expect(after.resources?.worn?.['bronze shortsword']).toBe(0);
     expect(after.resources?.gp).toEqual(start.resources?.gp);
     expect(projectedTrainingState(observed, after)).toBeNull();
     const received = projectSuccess(after, [effect(change(0, [{ name: 'Bucket', delta: 1 }]))]);
@@ -37,7 +37,7 @@ describe('conditional resource accounting', () => {
     const partial = projectResources(start, [change(0, [{ name: 'Bucket', delta: 0, uncertain: true }])])!;
     expect(partial.items.bucket).toEqual({ floor: 4, complete: false });
     expect(partial.gp).toEqual(start.gp);
-    expect(partial.items['bronze sword']).toEqual(start.items['bronze sword']);
+    expect(partial.items['bronze shortsword']).toEqual(start.items['bronze shortsword']);
     expect(projectResources(partial, [change(0, [{ name: 'Bucket', delta: 1 }])])?.items.bucket).toEqual({ floor: 5, complete: false });
     expect(start.items.bucket).toEqual({ floor: 4, complete: true });
     expect(projectResources(start, [change(0, [{ name: 'Bucket', delta: -5, uncertain: true }])])).toBeNull();
@@ -48,31 +48,31 @@ describe('conditional resource accounting', () => {
     const acquired = projectSuccess(start, [effect(change(-40, [{ name: 'Amulet of accuracy', delta: 1 }]))]);
     const cost = projectedTrainingState(observed, acquired)!;
     expect(cost.coins.bag).toMatchObject({ value: 60 });
-    expect(cost.owned?.items.get('bronze sword')?.carried).toBe(0);
+    expect(cost.owned?.items.get('bronze shortsword')?.carried).toBe(0);
     expect(cost.equipment).toBe(observed.player.equipment);
     expect(cost.equipmentItems).toBe(observed.player.equipmentItems);
     expect(cost.owned?.items.get('amulet of accuracy')?.carried).toBe(1);
     expect(Object.values(cost.equipment)).not.toContain('Amulet of accuracy');
     expect(projectedTrainingState(observed, acquired)).toBe(cost);
-    const lostKit = projectSuccess(acquired, [effect(change(0, [{ name: 'Bronze sword', delta: -1 }]))]);
+    const lostKit = projectSuccess(acquired, [effect(change(0, [{ name: 'Bronze shortsword', delta: -1 }]))]);
     expect(projectedTrainingState(observed, lostKit)).toBeNull();
     expect(observed.player.coins.bag).toMatchObject({ value: 50 });
     expect(observed.player.owned?.items.get('amulet of accuracy')).toBeUndefined();
   });
   it('never treats a same-name replacement as the original worn item, even in an atomic exchange', () => {
     const observed = snapshot(), start = observedProjection(observed);
-    const replaced = projectSuccess(start, [effect(change(0, [{ name: 'Bronze sword', delta: -1 }])),
-      effect(change(0, [{ name: 'Bronze sword', delta: 1 }]))]);
-    expect(replaced.resources?.items['bronze sword'].floor).toBe(1);
-    expect(replaced.resources?.worn?.['bronze sword']).toBe(0);
+    const replaced = projectSuccess(start, [effect(change(0, [{ name: 'Bronze shortsword', delta: -1 }])),
+      effect(change(0, [{ name: 'Bronze shortsword', delta: 1 }]))]);
+    expect(replaced.resources?.items['bronze shortsword'].floor).toBe(1);
+    expect(replaced.resources?.worn?.['bronze shortsword']).toBe(0);
     expect(projectedTrainingState(observed, replaced)).toBeNull();
-    const exchanged = projectResources(start.resources!, [change(0, [{ name: 'Bronze sword', delta: -1 }, { name: 'Bronze sword', delta: 1 }])])!;
-    expect(exchanged.worn?.['bronze sword']).toBe(0);
-    const spare = projectSuccess(start, [effect(change(0, [{ name: 'Bronze sword', delta: 1 }])),
-      effect(change(0, [{ name: 'Bronze sword', delta: -1 }]))]);
-    expect(spare.resources?.worn?.['bronze sword']).toBe(1); // A known unworn spare is spent before the original worn unit.
+    const exchanged = projectResources(start.resources!, [change(0, [{ name: 'Bronze shortsword', delta: -1 }, { name: 'Bronze shortsword', delta: 1 }])])!;
+    expect(exchanged.worn?.['bronze shortsword']).toBe(0);
+    const spare = projectSuccess(start, [effect(change(0, [{ name: 'Bronze shortsword', delta: 1 }])),
+      effect(change(0, [{ name: 'Bronze shortsword', delta: -1 }]))]);
+    expect(spare.resources?.worn?.['bronze shortsword']).toBe(1); // A known unworn spare is spent before the original worn unit.
     expect(projectedTrainingState(observed, spare)).not.toBeNull();
-    expect(start.resources?.worn?.['bronze sword']).toBe(1);
+    expect(start.resources?.worn?.['bronze shortsword']).toBe(1);
   });
 
   it('does not carry unmodelled macro consumption into later spending, while retaining a subsequent direct cash reward as a lower bound', () => {
@@ -89,7 +89,7 @@ describe('conditional resource accounting', () => {
   it('keeps exact named stock, worn quantities and money separate from observed state', () => {
     const observed = snapshot(), start = observedProjection(observed);
     expect(start.resources?.items.bucket).toEqual({ floor: 4, complete: true });
-    expect(start.resources?.items['bronze sword']).toEqual({ floor: 1, complete: false });
+    expect(start.resources?.items['bronze shortsword']).toEqual({ floor: 1, complete: false });
     expect(start.resources?.gp).toEqual({ floor: 100, complete: true });
     const after = projectSuccess(start, [effect(change(-60, [{ name: 'Bucket', delta: -3 }]))]);
     expect(after.resources?.items.bucket.floor).toBe(1);

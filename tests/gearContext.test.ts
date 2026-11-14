@@ -32,7 +32,7 @@ const all = (a: ReturnType<typeof adviseGear>): GearAction[] => [...a.actions, .
 const spent = (a: ReturnType<typeof adviseGear>) => [...a.actions, ...a.armour].reduce((s, x) => s + (x.cost ?? 0), 0);
 
 it('holds purchases when supply costs are unknown but still recommends genuinely owned upgrades', () => {
-  const base = input({ levels: { attack: 5, strength: 5, defence: 1 }, gear: wearing(['Bronze sword'], 10000, 0), reserveUnknown: true });
+  const base = input({ levels: { attack: 5, strength: 5, defence: 1 }, gear: wearing(['Bronze shortsword'], 10000, 0), reserveUnknown: true });
   const result = adviseGear(base);
   expect(result.actions.filter(a => a.how === 'buy')).toEqual([]);
   expect(result.armour.filter(a => a.how === 'buy')).toEqual([]);
@@ -214,7 +214,7 @@ describe('what is worth doing now', () => {
   });
 
   it('coins kept for the next supplies are not spent: a 410 gp scimitar waits as a goal when only 50 gp are free', () => {
-    const base = input({ levels: { attack: 5, strength: 5, defence: 1 }, gear: wearing(['Bronze sword'], 100, 8400) });
+    const base = input({ levels: { attack: 5, strength: 5, defence: 1 }, gear: wearing(['Bronze shortsword'], 100, 8400) });
     const free = adviseGear(base);
     expect(free.actions.find((x) => x.slot === 'weapon')?.item.name).toBe('Steel scimitar');
     const kept = adviseGear({ ...base, reserve: 8450 });
@@ -276,16 +276,16 @@ describe('the last known gear, per character', () => {
   it('two characters keep their own snapshot: one never shows the other\'s gear, and the newest is known', () => {
     const all = parseLastGears({ byPlayer: {
       mark: { at: 1_700_000_000_000, player: 'Mark', gear: gear('Adamant scimitar') },
-      alt: { at: 1_700_000_500_000, player: 'Iron Alt', gear: gear('Bronze sword') },
+      alt: { at: 1_700_000_500_000, player: 'Iron Alt', gear: gear('Bronze shortsword') },
     } });
     expect(all.mark.gear.equipment?.[0].name).toBe('Adamant scimitar');
-    expect(all['iron alt'].gear.equipment?.[0].name).toBe('Bronze sword');
+    expect(all['iron alt'].gear.equipment?.[0].name).toBe('Bronze shortsword');
     expect(newestGear(all)?.player).toBe('Iron Alt');
     expect(newestGear({})).toBeNull();
   });
 
   it('damaged entries are dropped one by one; garbage is as if nothing was saved', () => {
-    const all = parseLastGears({ byPlayer: { a: { at: 1, player: 'A', gear: gear('Bronze sword') }, b: { at: 'x', player: 'B', gear: gear('Bronze sword') }, c: null } });
+    const all = parseLastGears({ byPlayer: { a: { at: 1, player: 'A', gear: gear('Bronze shortsword') }, b: { at: 'x', player: 'B', gear: gear('Bronze shortsword') }, c: null } });
     expect(Object.keys(all)).toEqual(['a']);
     for (const bad of [null, 'x', [], {}, { byPlayer: [] }, { byPlayer: 'x' }]) expect(parseLastGears(bad), JSON.stringify(bad)).toEqual({});
   });

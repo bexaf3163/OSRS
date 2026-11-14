@@ -16,7 +16,7 @@
   "title": "Witch's House",
   "type": "quest",
   "qp": 4,
-  "membersOnly": false,
+  "membersOnly": true,
   "wikiUrl": "https://oldschool.runescape.wiki/w/Witch's_House",
   "quickGuideUrl": "https://oldschool.runescape.wiki/w/Witch's_House/Quick_guide",
   "mapLocation": {
@@ -926,7 +926,7 @@
    "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15386155",
    "title": "Witch's House",
    "revision": 15386155,
-   "retrievedAt": "2026-11-14T01:37:47.664Z"
+   "retrievedAt": "2026-11-14T09:48:50.246Z"
   }
  },
  "unknown": [

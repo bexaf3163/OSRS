@@ -198,172 +198,6 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Adamant_axe"
   },
   {
-    "id": 1161,
-    "nameEn": "Adamant full helm",
-    "examine": "A full face helmet.",
-    "members": false,
-    "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_full_helm.png",
-    "value": 3520,
-    "highAlch": 2112,
-    "lowAlch": 1408,
-    "buyLocations": [
-      {
-        "shopName": "Helmet Shop.",
-        "location": "Barbarian Village",
-        "owner": "Peksa",
-        "price": 3520,
-        "stock": 1,
-        "members": false
-      },
-      {
-        "shopName": "Armour store.",
-        "location": "Blast Furnace in Keldagrim",
-        "owner": "Jorzik",
-        "price": 3520,
-        "stock": 0,
-        "members": true
-      },
-      {
-        "shopName": "Aneirin's Armour",
-        "location": "Prifddinas",
-        "owner": "Aneirin",
-        "price": 3520,
-        "stock": 3,
-        "members": true
-      },
-      {
-        "shopName": "Thurid's Brain Buckets",
-        "location": "Sunset Coast",
-        "owner": "Thurid",
-        "price": 4576,
-        "stock": 2,
-        "members": true
-      }
-    ],
-    "dropSources": [
-      {
-        "monster": "Ice troll female#Variant 1",
-        "combatLevel": null,
-        "rate": "10/128"
-      },
-      {
-        "monster": "Ice troll runt#Variant 1",
-        "combatLevel": null,
-        "rate": "10/128"
-      },
-      {
-        "monster": "Ice troll male#Variant 1",
-        "combatLevel": null,
-        "rate": "10/128"
-      },
-      {
-        "monster": "Green dragon#Regular",
-        "combatLevel": null,
-        "rate": "1/128"
-      },
-      {
-        "monster": "Green dragon#Wilderness Slayer Cave",
-        "combatLevel": null,
-        "rate": "1/128"
-      },
-      {
-        "monster": "Terror dog#Level 100",
-        "combatLevel": null,
-        "rate": "1/128"
-      },
-      {
-        "monster": "Terror dog#Level 110",
-        "combatLevel": null,
-        "rate": "1/128"
-      },
-      {
-        "monster": "Mourner#Level 108",
-        "combatLevel": null,
-        "rate": "1/128"
-      }
-    ],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Adamant_full_helm"
-  },
-  {
-    "id": 1199,
-    "nameEn": "Adamant kiteshield",
-    "examine": "A large metal shield.",
-    "members": false,
-    "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_kiteshield.png",
-    "value": 5440,
-    "highAlch": 3264,
-    "lowAlch": 2176,
-    "buyLocations": [
-      {
-        "shopName": "Armour store.",
-        "location": "Blast Furnace in Keldagrim",
-        "owner": "Jorzik",
-        "price": 5440,
-        "stock": 0,
-        "members": true
-      },
-      {
-        "shopName": "Shields of Mistrock",
-        "location": "Mistrock",
-        "owner": "Ichta",
-        "price": 5440,
-        "stock": 1,
-        "members": true
-      },
-      {
-        "shopName": "Elder Blunn's Spear and Shield Stall",
-        "location": "The Summer Shore",
-        "owner": "Elder Blunn",
-        "price": 5440,
-        "stock": 2,
-        "members": true
-      }
-    ],
-    "dropSources": [
-      {
-        "monster": "Greater Nechryael#Wilderness Slayer Cave",
-        "combatLevel": null,
-        "rate": "7/112"
-      },
-      {
-        "monster": "Greater Nechryael#Regular",
-        "combatLevel": null,
-        "rate": "7/128"
-      },
-      {
-        "monster": "Nechryarch#Greater",
-        "combatLevel": null,
-        "rate": "7/128"
-      },
-      {
-        "monster": "Greater demon#Wilderness Slayer Cave",
-        "combatLevel": null,
-        "rate": "1/41"
-      },
-      {
-        "monster": "Nechryarch#Normal",
-        "combatLevel": null,
-        "rate": "2/116"
-      },
-      {
-        "monster": "Ice giant#Wilderness Slayer Cave",
-        "combatLevel": null,
-        "rate": "1/62"
-      },
-      {
-        "monster": "Steel dragon#Standard",
-        "combatLevel": null,
-        "rate": "2/128"
-      },
-      {
-        "monster": "Green dragon#Wilderness Slayer Cave",
-        "combatLevel": null,
-        "rate": "1/128"
-      }
-    ],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Adamant_kiteshield"
-  },
-  {
     "id": 1271,
     "nameEn": "Adamant pickaxe",
     "examine": "Used for mining.",
@@ -530,93 +364,6 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Adamant_platebody"
-  },
-  {
-    "id": 1073,
-    "nameEn": "Adamant platelegs",
-    "examine": "These look pretty heavy.",
-    "members": false,
-    "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_platelegs.png",
-    "value": 6400,
-    "highAlch": 3840,
-    "lowAlch": 2560,
-    "buyLocations": [
-      {
-        "shopName": "Louie's Armoured Legs Bazaar.",
-        "location": "Al Kharid",
-        "owner": "Louie Legs",
-        "price": 6400,
-        "stock": 1,
-        "members": false
-      },
-      {
-        "shopName": "Armour store.",
-        "location": "Blast Furnace in Keldagrim",
-        "owner": "Jorzik",
-        "price": 6400,
-        "stock": 0,
-        "members": true
-      },
-      {
-        "shopName": "Aneirin's Armour",
-        "location": "Prifddinas",
-        "owner": "Aneirin",
-        "price": 6400,
-        "stock": 3,
-        "members": true
-      },
-      {
-        "shopName": "Fortis Blacksmith",
-        "location": "Civitas illa Fortis",
-        "owner": "Blacksmith",
-        "price": 6400,
-        "stock": 2,
-        "members": true
-      }
-    ],
-    "dropSources": [
-      {
-        "monster": "Nechryarch#Normal",
-        "combatLevel": null,
-        "rate": "4/116"
-      },
-      {
-        "monster": "Greater demon#Wilderness Slayer Cave",
-        "combatLevel": null,
-        "rate": "1/41"
-      },
-      {
-        "monster": "Ankou#Wilderness Slayer Cave",
-        "combatLevel": null,
-        "rate": "1/92"
-      },
-      {
-        "monster": "Greater demon#Regular",
-        "combatLevel": null,
-        "rate": "1/128"
-      },
-      {
-        "monster": "Animated Adamant Armour",
-        "combatLevel": 113,
-        "rate": "Always"
-      },
-      {
-        "monster": "Bull shark",
-        "combatLevel": 65,
-        "rate": "8/100"
-      },
-      {
-        "monster": "Tiger shark",
-        "combatLevel": 125,
-        "rate": "8/100"
-      },
-      {
-        "monster": "Vyrewatch Sentinel",
-        "combatLevel": 151,
-        "rate": "6/93"
-      }
-    ],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Adamant_platelegs"
   },
   {
     "id": 1331,
@@ -1512,7 +1259,7 @@
       "Wolf Den - after killing the Dire Wolf Alpha (members only)",
       "Trollweiss Mountain summit (members only)",
       "Colossal Wyrm Remains (one requires telegrab) (members only)",
-      "Here be minotaurs (members only)",
+      "Minotaurs' Rest Cave (members only)",
       "Isle of Bones (members only)"
     ],
     "dropSources": [
@@ -2145,6 +1892,14 @@
         "members": false
       },
       {
+        "shopName": "Lumbridge General Store",
+        "location": "Lumbridge",
+        "owner": "Shop keeper, Shop assistant",
+        "price": 20,
+        "stock": 5,
+        "members": false
+      },
+      {
         "shopName": "Neitiznot supplies.",
         "location": "Neitiznot",
         "owner": "Jofridr Mordstatter",
@@ -2198,14 +1953,6 @@
         "owner": "Jennifer",
         "price": 20,
         "stock": 10,
-        "members": true
-      },
-      {
-        "shopName": "Sunset Coast General Store",
-        "location": "Sunset Coast",
-        "owner": "Shopkeeper",
-        "price": 20,
-        "stock": 5,
         "members": true
       }
     ],
@@ -2481,6 +2228,14 @@
         "members": false
       },
       {
+        "shopName": "Lumbridge General Store",
+        "location": "Lumbridge",
+        "owner": "Shop keeper, Shop assistant",
+        "price": 1,
+        "stock": 5,
+        "members": false
+      },
+      {
         "shopName": "Bandit Duty Free",
         "location": "Wilderness Bandit Camp",
         "owner": "Noterazzo",
@@ -2524,14 +2279,6 @@
         "shopName": "Arhein's General Goods",
         "location": "Catherby",
         "owner": "Arhein",
-        "price": 1,
-        "stock": 2,
-        "members": true
-      },
-      {
-        "shopName": "West Ardougne General Store",
-        "location": "West Ardougne",
-        "owner": "Chadwell",
         "price": 1,
         "stock": 2,
         "members": true
@@ -2972,11 +2719,11 @@
       "Ferox Enclave - The Old Nite pub",
       "Cam Torum - 1st floor of The Lost Pickaxe (members only)",
       "Catherby - Caleb's house (members only)",
-      "Catherby - house north of Hickton's Archery Emporium (members only)",
+      "Catherby - Councillor Catherine's office (members only)",
       "Gwenith - inside Preswylwyr Dall's home (members only)",
       "Meiyerditch - all around the city (members only)",
       "Meiyerditch - upper floor of buildings (members only)",
-      "Brimhaven - south-west of the spirit tree patch (members only)"
+      "Southwest of the Digsite (members only)"
     ],
     "dropSources": [
       {
@@ -3375,7 +3122,7 @@
         "location": "Lumbridge",
         "owner": "Shop keeper, Shop assistant",
         "price": 1,
-        "stock": 2,
+        "stock": 5,
         "members": false
       },
       {
@@ -3685,6 +3432,11 @@
     ],
     "dropSources": [
       {
+        "monster": "Jelly#Regular",
+        "combatLevel": null,
+        "rate": "39/128"
+      },
+      {
         "monster": "Goblin#Drop table 2",
         "combatLevel": null,
         "rate": "34/128"
@@ -3715,14 +3467,9 @@
         "rate": "40/128"
       },
       {
-        "monster": "Thug",
-        "combatLevel": 10,
-        "rate": "23/128"
-      },
-      {
-        "monster": "Brine rat",
-        "combatLevel": 70,
-        "rate": "21/128"
+        "monster": "Crawling Hand",
+        "combatLevel": 8,
+        "rate": "24/128"
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Coins"
@@ -3751,6 +3498,14 @@
     "highAlch": 2,
     "lowAlch": 1,
     "buyLocations": [
+      {
+        "shopName": "The Sheared Ram",
+        "location": "Lumbridge",
+        "owner": "Bartender",
+        "price": 4,
+        "stock": "∞",
+        "members": false
+      },
       {
         "shopName": "West Ardougne General Store",
         "location": "West Ardougne",
@@ -4457,42 +4212,42 @@
       {
         "monster": "Goblin#Drop table 1",
         "combatLevel": null,
-        "rate": "Common"
+        "rate": "3/128"
       },
       {
         "monster": "Dark wizard#Low level",
         "combatLevel": null,
-        "rate": "Unknown"
+        "rate": "3/128"
       },
       {
         "monster": "Dark wizard#High level",
         "combatLevel": null,
-        "rate": "Unknown"
+        "rate": "3/128"
       },
       {
         "monster": "Killerwatt",
         "combatLevel": 55,
-        "rate": "1/16"
+        "rate": "29/139"
       },
       {
         "monster": "Banshee",
         "combatLevel": 23,
-        "rate": "Unknown"
+        "rate": "21/128"
+      },
+      {
+        "monster": "Screaming banshee",
+        "combatLevel": 70,
+        "rate": "21/128"
       },
       {
         "monster": "Crawling Hand",
         "combatLevel": 8,
-        "rate": "Unknown"
+        "rate": "13/128"
       },
       {
-        "monster": "Cockatrice",
-        "combatLevel": 37,
-        "rate": "Unknown"
-      },
-      {
-        "monster": "Cave crawler",
-        "combatLevel": 23,
-        "rate": "Unknown"
+        "monster": "Crushing hand",
+        "combatLevel": 45,
+        "rate": "13/128"
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Energy_potion"
@@ -5823,11 +5578,11 @@
       "Crafting Guild",
       "Giants' Plateau",
       "Falador - upstairs of the furnace building",
+      "Lumbridge",
       "Ruins of Camdozaal",
+      "Varrock – Anvil building",
       "Aldarin (members only)",
-      "Auburnvale (members only)",
-      "Buccaneers' Haven (1st floor) (members only)",
-      "Burgh de Rott - upstairs (members only)"
+      "Auburnvale (members only)"
     ],
     "dropSources": [
       {
@@ -6784,6 +6539,11 @@
     ],
     "dropSources": [
       {
+        "monster": "Outlaw (Mudfoot's Big Adventure)#Warrior",
+        "combatLevel": null,
+        "rate": "Always"
+      },
+      {
         "monster": "Bandit#Level 22",
         "combatLevel": null,
         "rate": "4/128"
@@ -6817,11 +6577,6 @@
         "monster": "Skeleton (mage)",
         "combatLevel": 94,
         "rate": "2/128"
-      },
-      {
-        "monster": "Skeletal miner",
-        "combatLevel": 42,
-        "rate": "1/128"
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Iron_scimitar"
@@ -7733,15 +7488,6 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Maple_shortbow"
   },
   {
-    "id": 11849,
-    "nameEn": "Mark of Grace",
-    "examine": "You can exchange these for rewards at the Rogues' Den.",
-    "members": true,
-    "iconUrl": "https://oldschool.runescape.wiki/images/Mark_of_Grace.png",
-    "value": 1,
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Mark_of_Grace"
-  },
-  {
     "id": 1542,
     "nameEn": "Maze key",
     "examine": "A key to Melzar's Maze (Used in the Dragon Slayer I quest).",
@@ -8318,6 +8064,9 @@
         "members": true
       }
     ],
+    "freeSpawns": [
+      "The Fractured Archive lobby (members only)"
+    ],
     "dropSources": [
       {
         "monster": "Zombie (Tarn's Lair)#High level",
@@ -8396,7 +8145,7 @@
         "members": true
       },
       {
-        "shopName": "Armour Shop (Jatizso)",
+        "shopName": "Armour Shop",
         "location": "Jatizso",
         "owner": "Raum Urda-Stein",
         "price": 5720,
@@ -8662,6 +8411,14 @@
         "members": false
       },
       {
+        "shopName": "Thessalia's Fine Clothes.",
+        "location": "Varrock",
+        "owner": "Thessalia",
+        "price": 1,
+        "stock": 3,
+        "members": false
+      },
+      {
         "shopName": "Rommik's Crafty Supplies.",
         "location": "Rimmington",
         "owner": "Rommik",
@@ -8723,14 +8480,6 @@
         "owner": "Rimae Sirsalis",
         "price": 1,
         "stock": 50,
-        "members": true
-      },
-      {
-        "shopName": "Arnold's Eclectic Supplies.",
-        "location": "Piscatoris Fishing Colony",
-        "owner": "Arnold Lydspor",
-        "price": 1,
-        "stock": 3,
         "members": true
       }
     ],
@@ -9573,6 +9322,283 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_anchovies"
   },
   {
+    "id": 2136,
+    "nameEn": "Raw bear meat",
+    "examine": "I need to cook this first.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Raw_bear_meat.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Rufus' Meat Emporium",
+        "location": "Canifis",
+        "owner": "Rufus",
+        "price": 1,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Darkmeyer Meat Shop",
+        "location": "Darkmeyer",
+        "owner": "Lenyig Karna",
+        "price": 1,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Black bear",
+        "combatLevel": 19,
+        "rate": "Always"
+      },
+      {
+        "monster": "Grizzly bear",
+        "combatLevel": 42,
+        "rate": "Always"
+      },
+      {
+        "monster": "Grizzly bear cub",
+        "combatLevel": 33,
+        "rate": "Always"
+      },
+      {
+        "monster": "Bear Cub",
+        "combatLevel": 15,
+        "rate": "Always"
+      },
+      {
+        "monster": "Lev",
+        "combatLevel": 24,
+        "rate": "10/512"
+      },
+      {
+        "monster": "Werewolf",
+        "combatLevel": 88,
+        "rate": "10/512"
+      },
+      {
+        "monster": "Yuri",
+        "combatLevel": 24,
+        "rate": "10/512"
+      },
+      {
+        "monster": "Joseph",
+        "combatLevel": 24,
+        "rate": "10/512"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_bear_meat"
+  },
+  {
+    "id": 2132,
+    "nameEn": "Raw beef",
+    "examine": "I need to cook this first.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Raw_beef.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Food Store",
+        "location": "Port Sarim",
+        "owner": "Wydin",
+        "price": 1,
+        "stock": 1,
+        "members": false
+      },
+      {
+        "shopName": "Rufus' Meat Emporium",
+        "location": "Canifis",
+        "owner": "Rufus",
+        "price": 1,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Kenelme's Wares",
+        "location": "Port Piscarilius",
+        "owner": "Kenelme",
+        "price": 1,
+        "stock": 1,
+        "members": true
+      },
+      {
+        "shopName": "Prifddinas Foodstuffs",
+        "location": "Prifddinas",
+        "owner": "Derwen",
+        "price": 1,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Darkmeyer Meat Shop",
+        "location": "Darkmeyer",
+        "owner": "Lenyig Karna",
+        "price": 1,
+        "stock": 15,
+        "members": true
+      },
+      {
+        "shopName": "Cobado's Groceries",
+        "location": "Civitas illa Fortis",
+        "owner": "Cobado",
+        "price": 1,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Cow",
+        "combatLevel": 2,
+        "rate": "Always"
+      },
+      {
+        "monster": "Cow calf",
+        "combatLevel": 2,
+        "rate": "Always"
+      },
+      {
+        "monster": "Buffalo",
+        "combatLevel": 9,
+        "rate": "Always"
+      },
+      {
+        "monster": "Mature custodian stalker",
+        "combatLevel": 117,
+        "rate": "4/107"
+      },
+      {
+        "monster": "Elder custodian stalker",
+        "combatLevel": 142,
+        "rate": "4/124"
+      },
+      {
+        "monster": "Ancient Custodian",
+        "combatLevel": 239,
+        "rate": "4/124"
+      },
+      {
+        "monster": "Juvenile custodian stalker",
+        "combatLevel": 93,
+        "rate": "4/160"
+      },
+      {
+        "monster": "Strange creature (Shadows of Custodia)",
+        "combatLevel": 93,
+        "rate": "4/160"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_beef"
+  },
+  {
+    "id": 2138,
+    "nameEn": "Raw chicken",
+    "examine": "I need to cook this first.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Raw_chicken.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Food Store",
+        "location": "Port Sarim",
+        "owner": "Wydin",
+        "price": 1,
+        "stock": 1,
+        "members": false
+      },
+      {
+        "shopName": "Ali's Discount Wares.",
+        "location": "Al Kharid",
+        "owner": "Ali Morrisane",
+        "price": 1,
+        "stock": 15,
+        "members": true
+      },
+      {
+        "shopName": "Rufus' Meat Emporium",
+        "location": "Canifis",
+        "owner": "Rufus",
+        "price": 1,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Prifddinas Foodstuffs",
+        "location": "Prifddinas",
+        "owner": "Derwen",
+        "price": 1,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Darkmeyer Meat Shop",
+        "location": "Darkmeyer",
+        "owner": "Lenyig Karna",
+        "price": 1,
+        "stock": 15,
+        "members": true
+      },
+      {
+        "shopName": "Cobado's Groceries",
+        "location": "Civitas illa Fortis",
+        "owner": "Cobado",
+        "price": 1,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Chicken",
+        "combatLevel": 1,
+        "rate": "Always"
+      },
+      {
+        "monster": "Evil Chicken",
+        "combatLevel": 159,
+        "rate": "Always"
+      },
+      {
+        "monster": "Imp",
+        "combatLevel": 2,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Rooster",
+        "combatLevel": 3,
+        "rate": "Always"
+      },
+      {
+        "monster": "Evil Chicken (Recipe for Disaster)",
+        "combatLevel": 159,
+        "rate": "Always"
+      },
+      {
+        "monster": "Lev",
+        "combatLevel": 24,
+        "rate": "10/512"
+      },
+      {
+        "monster": "Werewolf",
+        "combatLevel": 88,
+        "rate": "10/512"
+      },
+      {
+        "monster": "Yuri",
+        "combatLevel": 24,
+        "rate": "10/512"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_chicken"
+  },
+  {
     "id": 377,
     "nameEn": "Raw lobster",
     "examine": "I should try cooking this.",
@@ -9706,6 +9732,61 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_lobster"
+  },
+  {
+    "id": 2134,
+    "nameEn": "Raw rat meat",
+    "examine": "I need to cook this first.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Raw_rat_meat.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Rufus' Meat Emporium",
+        "location": "Canifis",
+        "owner": "Rufus",
+        "price": 1,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Darkmeyer Meat Shop",
+        "location": "Darkmeyer",
+        "owner": "Lenyig Karna",
+        "price": 1,
+        "stock": 20,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Slepe - Crombwick Manor (members only)",
+      "Darkmeyer Meat Shop (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Dungeon rat#Full tail",
+        "combatLevel": null,
+        "rate": "Always"
+      },
+      {
+        "monster": "Giant rat#Low level",
+        "combatLevel": null,
+        "rate": "Always"
+      },
+      {
+        "monster": "Scurrius#MVP",
+        "combatLevel": null,
+        "rate": "Always"
+      },
+      {
+        "monster": "Brine rat",
+        "combatLevel": 70,
+        "rate": "Always"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_rat_meat"
   },
   {
     "id": 331,
@@ -11544,8 +11625,8 @@
   },
   {
     "id": 1289,
-    "nameEn": "Rune sword",
-    "examine": "A razor sharp sword.",
+    "nameEn": "Rune shortsword",
+    "examine": "A razor sharp shortsword.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_shortsword.png",
     "value": 20800,
@@ -11603,7 +11684,7 @@
         "rate": "1/209"
       }
     ],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Rune_sword"
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Rune_shortsword"
   },
   {
     "id": 2363,
@@ -11917,7 +11998,7 @@
         "location": "Lumbridge",
         "owner": "Shop keeper, Shop assistant",
         "price": 1,
-        "stock": 2,
+        "stock": 5,
         "members": false
       },
       {
@@ -12065,6 +12146,11 @@
       "Taverley - building directly west of the tree patch (1st floor) (members only)"
     ],
     "dropSources": [
+      {
+        "monster": "Outlaw (Mudfoot's Big Adventure)#Ranger",
+        "combatLevel": null,
+        "rate": "Always"
+      },
       {
         "monster": "Skeleton (Tarn's Lair)#High level",
         "combatLevel": null,
@@ -12543,10 +12629,10 @@
       "Corsair Cove Dungeon",
       "Ruins of Camdozaal - near fishing spot",
       "Wilderness - western Ruins",
-      "Sunset Coast (members only)",
       "Shipwreck Cove (members only)",
       "Fishing Guild (members only)",
-      "Burgh de Rott - southernmost house (members only)"
+      "Burgh de Rott - southernmost house (members only)",
+      "Isle of Souls - near spinning wheel (members only)"
     ],
     "dropSources": [
       {
@@ -12762,6 +12848,11 @@
     ],
     "dropSources": [
       {
+        "monster": "Outlaw (Mudfoot's Big Adventure)#Mage",
+        "combatLevel": null,
+        "rate": "Always"
+      },
+      {
         "monster": "Dark wizard#Low level",
         "combatLevel": null,
         "rate": "8/128"
@@ -12794,11 +12885,6 @@
       {
         "monster": "Necromancer",
         "combatLevel": 26,
-        "rate": "8/128"
-      },
-      {
-        "monster": "Malevolent Mage",
-        "combatLevel": 162,
         "rate": "8/128"
       }
     ],
@@ -12877,7 +12963,7 @@
       {
         "monster": "Killerwatt",
         "combatLevel": 55,
-        "rate": "2/140"
+        "rate": "2/139"
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Staff_of_air"
@@ -12980,7 +13066,7 @@
       {
         "monster": "Killerwatt",
         "combatLevel": 55,
-        "rate": "2/140"
+        "rate": "2/139"
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Staff_of_fire"
@@ -13779,6 +13865,14 @@
         "members": false
       },
       {
+        "shopName": "Thessalia's Fine Clothes.",
+        "location": "Varrock",
+        "owner": "Thessalia",
+        "price": 1,
+        "stock": 100,
+        "members": false
+      },
+      {
         "shopName": "Rommik's Crafty Supplies.",
         "location": "Rimmington",
         "owner": "Rommik",
@@ -13840,14 +13934,6 @@
         "owner": "Rimae Sirsalis",
         "price": 1,
         "stock": 500,
-        "members": true
-      },
-      {
-        "shopName": "Arnold's Eclectic Supplies.",
-        "location": "Piscatoris Fishing Colony",
-        "owner": "Arnold Lydspor",
-        "price": 1,
-        "stock": 15,
         "members": true
       }
     ],
@@ -14047,7 +14133,7 @@
         "location": "Lumbridge",
         "owner": "Shop keeper, Shop assistant",
         "price": 1,
-        "stock": 2,
+        "stock": 5,
         "members": false
       },
       {
@@ -14091,11 +14177,10 @@
         "members": false
       },
       {
-        "shopName": "Bandit Duty Free",
-        "location": "Wilderness Bandit Camp",
-        "owner": "Noterazzo",
-        "price": 1,
-        "stock": 2,
+        "shopName": "Sophanem Guard",
+        "location": "",
+        "price": 50,
+        "stock": "∞",
         "members": false
       },
       {

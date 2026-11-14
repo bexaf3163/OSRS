@@ -132,7 +132,7 @@ describe('Dragon Slayer I: the checks before the quest and before the ship', () 
     const s = stepById.get('S5-08') as unknown as { itemsRequired: { nameEn: string }[]; itemsRecommended: { nameEn: string }[] };
     // Only the shield and the food are mandatory; the upgrade and the potions are advice.
     expect(s.itemsRequired.map((i) => i.nameEn)).toEqual(['Anti-dragon shield', 'Lobster']);
-    expect(s.itemsRecommended.map((i) => i.nameEn)).toEqual(expect.arrayContaining(['Rune sword', 'Energy potion(4)', 'Strength potion(4)']));
+    expect(s.itemsRecommended.map((i) => i.nameEn)).toEqual(expect.arrayContaining(['Rune shortsword', 'Energy potion(4)', 'Strength potion(4)']));
   });
 });
 

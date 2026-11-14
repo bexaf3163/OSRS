@@ -19,7 +19,7 @@ import { hrefTo } from '../../domain/pages/pages';
 /** "against Cow (level 2)", "against Al Kharid warrior (level 9) and Flesh Crawler (level 28)". */
 export const foesText = (foes: Foe[]) => `against ${foes.map((f) => `${f.name} (level ${f.combat})`).join(' and ')}`;
 
-/** What to do: "Wear Iron scimitar — it is in the bank", "Buy Steel scimitar instead of Bronze sword". */
+/** What to do: "Wear Iron scimitar — it is in the bank", "Buy Steel scimitar instead of Bronze shortsword". */
 export function ActionTitle({ a }: { a: GearAction }) {
   const { owned } = useBridge();
   const cur = a.current?.name ?? a.currentName;

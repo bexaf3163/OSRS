@@ -203,7 +203,7 @@ describe('retired and trimmed grinds', () => {
   it('S5-08: the shield and the food are required, the upgrade and the potions are advice', () => {
     const s = step('S5-08');
     expect(names(s.itemsRequired)).toEqual(['Anti-dragon shield', 'Lobster']);
-    expect(names(s.itemsRecommended)).toEqual(expect.arrayContaining(['Rune sword', 'Strength potion(4)', 'Energy potion(4)']));
+    expect(names(s.itemsRecommended)).toEqual(expect.arrayContaining(['Rune shortsword', 'Strength potion(4)', 'Energy potion(4)']));
   });
 
   it('S8-03 is Agility 40: Graceful is not a condition', () => {

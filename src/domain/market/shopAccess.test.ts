@@ -69,11 +69,11 @@ describe('the router never sends the player where they cannot go', () => {
     expect(far.primary?.label).toBe('Free: Duke Horacio, Lumbridge Castle');
     expect(far.alternatives.some((o) => o.kind === 'ge')).toBe(true);
     // Other items keep their own sources: the giver table names the shield only.
-    expect(planSources({ name: 'Rune sword', need: 1, detail: detail(1289), gePrice: 20_000 }, state()).primary?.kind).not.toBe('free');
+    expect(planSources({ name: 'Rune shortsword', need: 1, detail: detail(1289), gePrice: 20_000 }, state()).primary?.kind).not.toBe('free');
   });
 
   it("a guild shop with unknown quest points comes after the exchange, labelled with its condition", () => {
-    const plan = planSources({ name: 'Rune sword', need: 1, detail: detail(1289), gePrice: 20_000 }, state({ position: { x: 3190, y: 3360, plane: 0 } }));
+    const plan = planSources({ name: 'Rune shortsword', need: 1, detail: detail(1289), gePrice: 20_000 }, state({ position: { x: 3190, y: 3360, plane: 0 } }));
     expect(plan.primary?.kind).toBe('ge');
     const guild = plan.alternatives.find((o) => o.kind === 'shop');
     expect(guild?.label).toContain('(if you have 32 quest points)');

@@ -5,7 +5,7 @@ import { adviseGear, gearData, hudHint, sourceText } from '../src/domain/combat/
 
 const now = 1_800_000_000_000;
 const steel = gearData.items.find(i => i.name === 'Steel scimitar')!;
-const bronze = gearData.items.find(i => i.name === 'Bronze sword')!;
+const bronze = gearData.items.find(i => i.name === 'Bronze shortsword')!;
 function board(status: 'live' | 'stale' = 'live', available = true) {
   return buildPriceView({ now, mapping: null,
     baked: new Map([['steel scimitar', { buy: 1, sell: 1 }]]),

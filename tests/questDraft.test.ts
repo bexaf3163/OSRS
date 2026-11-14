@@ -3,7 +3,7 @@ import { buildDraft, checkDraft, plain, routeOf, sourceLine, stageOrder, type Qh
 
 // A two-stage quest as Quest Helper gives it: talk, then a conditional stage (default first, furthest progress last).
 const qh: QhFacts = {
-  title: 'Test Quest', cls: 'TestQuest', var: ['varp', 999], revision: 'abc',
+  title: 'Test Quest', cls: 'TestQuest', var: ['varp', 999], members: true, revision: 'abc',
   machine: {
     stages: { 0: { s: 'talk' }, 1: 'n1' },
     nodes: { n1: { n: 'fetch', c: [[{ o: 'item', nm: 'Rope', ids: [954] }, { s: 'useRope' }]], d: { s: 'getRope' } } },
@@ -55,11 +55,29 @@ describe('quest drafts hold only what a source gives', () => {
     draft.stages.stages[0].do[0].hl = { npc: [2] };
     draft.stages.stages[1].do.pop();
     draft.stages.stages[1].do[0].s = 'x'.repeat(71);
+    draft.stages.stages[1].do[0].t = draft.stages.stages[0].do[0].t;
     draft.step.qp = 3;
     expect(checkDraft(draft, qh)).toEqual([
       'stage 0 "talk": tile 3201,3200,0 is not Quest Helper\'s 3200,3200,0', 'stage 0 "talk": highlight 2 is not a Quest Helper id',
       'stage 1: Quest Helper step "useRope" has no line', 'stage 1 "getRope": the short line must be 1 to 70 characters, has 71',
+      `stage 1 "getRope": the same full text is short "${draft.stages.stages[0].do[0].s}" elsewhere`,
       'quest points 3 are not the quest card\'s 2',
     ]);
+  });
+});
+
+// Every shipped quest line stands on real ground: a tile with no walkable tile within 3 is a wrong coordinate.
+describe('shipped quest stages', () => {
+  it('put no line off the ground in the walking data', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { collisionSubset } = await import('../src/domain/travel/worldRouting');
+    const { replayStages } = await import('../scripts/data/quest-draft');
+    const read = (path: string) => JSON.parse(readFileSync(path, 'utf8'));
+    const topology = collisionSubset(read('src/data/generated/worldRouting.json'));
+    const steps = read('src/data/authored/steps.json') as { id: string; mapLocation?: { x: number; y: number; plane: number } }[];
+    const quests = read('src/data/authored/questStages.json').quests as Record<string, { stages: never }>;
+    const fails = Object.entries(quests).flatMap(([id, q]) =>
+      replayStages(q.stages, steps.find((s) => s.id === id)?.mapLocation ?? null, topology, false).fails.map((f) => `${id} ${f}`));
+    expect(fails).toEqual([]);
   });
 });

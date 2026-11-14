@@ -23,7 +23,7 @@ const byName = (name: string): GearPiece => {
 };
 const item = (name: string, slot?: string) => ({ id: byName(name).id, name, ...(slot ? { slot } : {}) });
 const gear = (over: Partial<GearState> = {}): GearState => ({
-  equipment: [item('Bronze sword', 'weapon')], inventory: [], coins: 100, bankCoins: 8400, ...over,
+  equipment: [item('Bronze shortsword', 'weapon')], inventory: [], coins: 100, bankCoins: 8400, ...over,
 });
 const input = (over: Partial<AdvisorInput> = {}): AdvisorInput => ({
   levels: { attack: 5, strength: 5, defence: 1, prayer: 1 }, gear: gear(), mode: 'f2p', ...over,
@@ -48,10 +48,10 @@ describe('damage formulas (OSRS Wiki, Damage per second/Melee)', () => {
     expect(r.dps).toBeCloseTo((r.hitChance * (0.5 + 1 / 2)) / 2.4, 10);
   });
 
-  it('without a weapon — a hit once every 2.4 s; a Bronze sword does not make it faster, but hits more accurately', () => {
+  it('without a weapon — a hit once every 2.4 s; a Bronze shortsword does not make it faster, but hits more accurately', () => {
     const lv = { attack: 5, strength: 5, defence: 1 };
     const fists = meleeWith(lv, null, null);
-    const sword = meleeWith(lv, byName('Bronze sword'), null);
+    const sword = meleeWith(lv, byName('Bronze shortsword'), null);
     expect(fists.speed).toBeCloseTo(2.4, 10);
     expect(sword.speed).toBeCloseTo(2.4, 10);
     expect(sword.dps).toBeGreaterThan(fists.dps);
@@ -92,7 +92,7 @@ describe('damage formulas (OSRS Wiki, Damage per second/Melee)', () => {
 });
 
 describe('gear advice', () => {
-  it('Bronze sword, 5 attack, 8,500 coins → the Steel scimitar from Zeke first', () => {
+  it('Bronze shortsword, 5 attack, 8,500 coins → the Steel scimitar from Zeke first', () => {
     const a = adviseGear(input({ routeNeeds: routeNeeds(allSteps, () => false) }));
     const first = a.actions[0];
     expect(first).toMatchObject({ slot: 'weapon', how: 'buy', item: { name: 'Steel scimitar' } });
@@ -100,7 +100,7 @@ describe('gear advice', () => {
     expect(first.cost).toBe(410);
     // No route step buys gear, so the advice is not tied to one.
     expect(first.routeStep).toBeUndefined();
-    expect(first.current?.name).toBe('Bronze sword');
+    expect(first.current?.name).toBe('Bronze shortsword');
     // Accuracy is not speed: the interval is the same, so the text says "more accurate" and "expected damage", never "faster".
     expect(gainText(first)).toMatch(/expected damage \+\d+%/);
     expect(gainText(first)).not.toMatch(/faster/);
@@ -219,8 +219,8 @@ describe('gear advice', () => {
   });
 
   it('an old plugin without slots: the slot is taken from the item database', () => {
-    const a = adviseGear(input({ gear: gear({ equipment: [item('Bronze sword')] }) }));
-    expect(a.equipped.weapon?.piece?.name).toBe('Bronze sword');
+    const a = adviseGear(input({ gear: gear({ equipment: [item('Bronze shortsword')] }) }));
+    expect(a.equipped.weapon?.piece?.name).toBe('Bronze shortsword');
   });
 
   it('an unfamiliar weapon in hand: we advise, but do not invent how much better', () => {

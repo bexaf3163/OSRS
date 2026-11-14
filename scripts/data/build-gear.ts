@@ -27,7 +27,7 @@ const METAL_LEVEL: Record<Metal, number> = { bronze: 1, iron: 1, steel: 5, black
 /** The item kind: the suffix in the name, the slot and the name itself. */
 const KINDS: { kind: string; en: string; slot: GearSlot }[] = [
   { kind: 'dagger', en: 'dagger', slot: 'weapon' },
-  { kind: 'sword', en: 'sword', slot: 'weapon' },
+  { kind: 'sword', en: 'shortsword', slot: 'weapon' },
   { kind: 'scimitar', en: 'scimitar', slot: 'weapon' },
   { kind: 'longsword', en: 'longsword', slot: 'weapon' },
   { kind: 'mace', en: 'mace', slot: 'weapon' },

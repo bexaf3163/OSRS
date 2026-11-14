@@ -43,7 +43,7 @@ const SKILLS = ['attack', 'strength', 'defence', 'hitpoints', 'ranged', 'prayer'
   'firemaking', 'crafting', 'smithing', 'mining', 'runecraft'];
 const MELEE = new Set(['attack', 'strength', 'defence']);
 const MAX_TURNS = 300;
-const UNKNOWN_TIME_DEBT = 1;
+const UNKNOWN_TIME_DEBT = 0;
 
 it('a fresh account finishes the 23 F2P quests through planned actions, without a check', () => {
   const xp: Record<string, number> = Object.fromEntries(SKILLS.map(s => [s, s === 'hitpoints' ? xpForLevel(10) : 0]));

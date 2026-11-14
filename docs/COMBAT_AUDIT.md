@@ -384,7 +384,7 @@ Problems:
 
 Alternatives:
 
-- A Rune sword on Stab if owned.
+- A Rune shortsword on Stab if owned.
 
 Changed:
 

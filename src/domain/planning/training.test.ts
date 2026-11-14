@@ -14,7 +14,7 @@ describe('existing training engine as a prerequisite estimator', () => {
     const observed = snapshot(1);
     observed.player = buildPlayerState({ mode: 'f2p', connected: true, progress: { levels: {} }, stats: { mining: 1 }, questsDone: [],
       owned: { bankSeen: true, items: new Map() },
-      gear: { equipment: [{ id: 1277, name: 'Bronze sword', slot: 'weapon', count: 1 }], inventory: [], coins: 100, bankCoins: 0 } });
+      gear: { equipment: [{ id: 1277, name: 'Bronze shortsword', slot: 'weapon', count: 1 }], inventory: [], coins: 100, bankCoins: 0 } });
     const after = projectSuccess(observedProjection(observed), [
       { kind: 'resources-unknown', source: 'A quest with unmodelled physical consumption', afterSuccessOnly: true },
       { kind: 'xp', skill: 'mining', amount: 1300, afterSuccessOnly: true },

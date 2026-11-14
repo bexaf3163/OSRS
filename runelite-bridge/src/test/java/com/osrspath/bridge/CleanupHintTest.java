@@ -35,7 +35,7 @@ public class CleanupHintTest
 		+ "{\"name\":\"Oak logs\",\"id\":1522,\"qty\":40,\"noted\":true,\"action\":\"sell\",\"why\":\"no use ahead\",\"proceeds\":3600},"
 		+ "{\"name\":\"Ball of wool\",\"id\":1759,\"qty\":20,\"action\":\"sell\",\"why\":\"keep 3, the rest has no use ahead\",\"proceeds\":1200},"
 		+ "{\"name\":\"Research package\",\"id\":290,\"qty\":1,\"action\":\"destroy\",\"why\":\"its quest is done, no other use\"},"
-		+ "{\"name\":\"Bronze sword\",\"id\":1277,\"qty\":1,\"action\":\"review\",\"why\":\"gear, maybe a backup\"}]}";
+		+ "{\"name\":\"Bronze shortsword\",\"id\":1277,\"qty\":1,\"action\":\"review\",\"why\":\"gear, maybe a backup\"}]}";
 
 	private static CleanupHint hint(String json)
 	{
@@ -95,7 +95,7 @@ public class CleanupHintTest
 		List<CleanupHint.Line> l = hint(JSON).visible("Bexqq", FULL, NOW, NOW);
 		assertEquals("Sell: Oak logs ×40 (noted) — no use ahead · ~3.6k gp", l.get(0).text());
 		assertEquals("Destroy: Research package — its quest is done, no other use", l.get(2).text());
-		assertEquals("Review: Bronze sword — gear, maybe a backup", l.get(3).text());
+		assertEquals("Review: Bronze shortsword — gear, maybe a backup", l.get(3).text());
 		assertEquals("950 gp", CleanupHint.gp(950));
 		assertEquals("12k gp", CleanupHint.gp(12_000));
 		assertEquals("1.2M gp", CleanupHint.gp(1_234_567));
@@ -191,7 +191,7 @@ public class CleanupHintTest
 		String adv = c.plain(true, true);
 		assertTrue(adv, adv.contains("Inventory cleanup (advice only):"));
 		assertTrue(adv, adv.contains("Sell: Oak logs ×40 (noted) — no use ahead · ~3.6k gp"));
-		assertTrue(adv, adv.contains("Review: Bronze sword"));
+		assertTrue(adv, adv.contains("Review: Bronze shortsword"));
 		assertTrue("nothing in it is a button: the plugin does nothing with the items",
 			c.getAdvice().stream().noneMatch(l -> l.getAction().isClickable()));
 		assertEquals("the view keeps its lines through the other withers", 4, v.withAdviceTab(true).withNote("n").withPrep(null).getCleanup().size());

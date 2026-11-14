@@ -219,5 +219,7 @@ describe('cleanWikiText: the wiki non-breaking space', () => {
   it('"1st floor[UK]2nd floor[US]" with U+00A0 is reduced to "1st floor"', () => {
     expect(cleanWikiText('1st floor[UK]2nd floor[US] of Champions\' Guild')).toBe("1st floor of Champions' Guild");
     expect(cleanWikiText('Grand Tree, 2nd&#160;floor&#91;UK&#93;3rd&#160;floor&#91;US&#93;')).toBe('Grand Tree, 2nd floor');
+    expect(cleanWikiText('[[Grand Tree]], <span class="floornumber-gb">2<sup class="x">nd</sup>&nbsp;floor<sup class="h">&#91;<span title="t">UK</span>&#93;</sup></span>'
+      + '<span class="floornumber-us">3<sup class="x">rd</sup>&nbsp;floor<sup class="h">&#91;<span title="t">US</span>&#93;</sup></span>')).toBe('Grand Tree, 2nd floor');
   });
 });

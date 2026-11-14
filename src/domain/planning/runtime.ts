@@ -92,6 +92,13 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
     if (!winnings.has(key)) winnings.set(key, encounterSetups(step, snapshot, prices, ironman, { currentOnly, keepDefenceOne: input.keepDefenceOne }).length > 0);
     return winnings.get(key)!;
   };
+  // The cheapest training after which a fight is won (none when the current levels win it, null when no setup does).
+  const trainingToWin = (step: Step): Minutes | null => {
+    const times = encounterSetups(step, snapshot, prices, ironman, { keepDefenceOne: input.keepDefenceOne })
+      .map(setup => sumMinutes(setup.targets.map(target => train(target.skill, target.level))))
+      .filter((time): time is Minutes => time !== null);
+    return times.length ? times.reduce((best, time) => (time.typical < best.typical ? time : best)) : null;
+  };
   const tactical = createTacticalResolver({
     snapshot, progress: input.progress, prices, window, priority: input.priority,
     restriction: input.restriction, ironman, walk, keepDefenceOne: input.keepDefenceOne,
@@ -126,19 +133,24 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
           });
           const remaining = new Set(remainingQuestSteps(goal, stepOf, snapshot.quests[goal.id]).map(step => step.id));
           // No encounter metadata is not proof of safe combat. A validated cursor may retire an earlier known encounter.
+          let trainFirst: Minutes | null = null;
           const met = fights.length > 0 && fights.filter(fight => remaining.has(fight.id)).every(fight => {
             const frame = tactical.resolve(fight, goal.id);
             // A later fight is prepared when it is reached, with kit the quest hands over on the way (a maze key, a shield):
             // a modelled, safe way to win it is the proof now. The current one, still buying its kit, is proven when the current
-            // levels and gear already win it: the purchases are then the whole preparation, and they are priced.
-            return frame.action === null || !!frame.encounter || (laterFight(fight, goal) ? winnable(fight) : winnable(fight, true));
+            // levels and gear already win it: the purchases are then the whole preparation, and they are priced. When they do
+            // not, the cheapest training to a winning setup joins the preparation and is priced with it.
+            if (frame.action === null || frame.encounter || laterFight(fight, goal)) return frame.action === null || !!frame.encounter || winnable(fight);
+            if (winnable(fight, true)) return true;
+            trainFirst = trainingToWin(fight);
+            return trainFirst !== null;
           });
           const dangers = [...remaining].filter(id => DANGER.has(id));
           const escaped = dangers.length > 0 && dangers.every(id => RUN_PAST.has(id));
           const regenerating = fights.some(fight => remaining.has(fight.id) && modelsRegeneration(fight));
           const proven = (key: string) => (ASSESSED.has(key) && met) || (key === 'regeneration' && met && regenerating) || (ESCAPABLE.has(key) && escaped);
           return {
-            action: frame.action, minutes: frame.preparationMinutes,
+            action: frame.action, minutes: trainFirst ? sumMinutes([frame.preparationMinutes, trainFirst]) : frame.preparationMinutes,
             ...(frame.encounter ? { executionStep: frame.step, reasons: frame.encounter.reasons, uncertain: frame.encounter.uncertain } : {}),
             capabilities: Object.fromEntries((goal.requirements.capabilities ?? []).map(key => [key, proven(key) ? 'met' : 'unknown'] as const)),
             // The authored quest flow does not account for tactical kit acquisition, training or stochastic food use.

@@ -90,7 +90,7 @@ export interface CleanupResult {
 const SUPPLY = /(^coins$|\brunes?$|\brunes? pack\b|\barrows?\b|\bbolts?\b|\bpotion\b|\(\d\)$|\bteleport\b|\bpouch\b|^chronicle$|^spade$)/i;
 const JEWELLERY = /\b(ring|amulet|necklace|bracelet|cape)\b/i;
 /** Gear: an older piece can be a deliberate backup, so it is looked at by the player, not sold by a rule. */
-const GEAR = /\b(sword|scimitar|longsword|dagger|axe|mace|warhammer|battleaxe|halberd|spear|helm|helmet|platebody|platelegs|plateskirt|chainbody|kiteshield|shield|boots|gloves|bow|crossbow|staff|coif|vambraces|chaps|body|hat|robe|top|bottom)\b/i;
+const GEAR = /\b(sword|shortsword|scimitar|longsword|dagger|axe|mace|warhammer|battleaxe|halberd|spear|helm|helmet|platebody|platelegs|plateskirt|chainbody|kiteshield|shield|boots|gloves|bow|crossbow|staff|coif|vambraces|chaps|body|hat|robe|top|bottom)\b/i;
 /** Charged, uncharged, stored contents, or a transformed form: it is not the plain item and its worth is not the plain item's. */
 const VARIANT = /(\(\d+ ?charges?\)|\(uncharged\)|\(charged\)|\(empty\)|\(full\)|\(i\)|\(\d+\)$|\bcharged\b|\buncharged\b|\(unstrung\)|\(broken\))/i;
 /** General tools that serve many quests; cheap to carry, annoying to buy back. */
