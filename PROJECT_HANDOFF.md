@@ -156,9 +156,9 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Handover — state on 2026-11-14
 
-- **State:** v2.100.0 published, all gates passed; nothing tested in the real game since 2.87.
+- **State:** v2.101.0 published, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, training times shown); XP/Balanced/Money change the method only; Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; V2 review retired; update Cancel stays.
-- **Next:** 1) P4. 2) Members: quest batches, Hunter/Construction, then modelled consumption for the unknown-time debt (253 turns). 3) Measured quest times from the player's own quest starts and finishes.
+- **Next:** 1) P4. 2) Members: quest batches (Dwarf Cannon needs walking data), Hunter/Construction, modelled consumption for the unknown-time debt (87 turns). 3) Measured quest times from the player's own quest starts and finishes.
 - **Owner:** writes Russian; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 
 ## Remaining work in priority order
@@ -175,7 +175,7 @@ Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent e
 
 ### Quest content pipeline — pilot 2026-11-14
 
-Machine-drafted quests, checked before shipping. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/` (stages, tiles, ids, texts from Quest Helper, the rest from Wiki cards; only wording is edited, one short line per full text). `npm run check-drafts` fails source contradictions and off-ground tiles in a walking replay; unconfirmed facts stay `unknown`. `npm run quest-promote -- <Draft> <id>` writes the step, stages and QH row (next steps in its header). Shipped: Druidic Ritual (S7-06); drafts: Witch's House, Dwarf Cannon; Quest Helper `b9b9370`. Quest facts cover 35 quests; the Members gate finishes 35/35. Made-only items use `recipes.json` (`yield`). The `game-modes` UI scenario checks every page in both modes. Members unknown time (253 of 312 turns) is the fail-closed stock wipe: fights, unreviewed quest flows and training retire projected stock (`runtime.ts` adapters, `trainingModel`), so later training cannot prove the worn kit. Lower it with modelled consumption, never a looser wipe (`resources.test.ts`).
+Machine-drafted quests, checked before shipping. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/` (stages, tiles, ids, texts from Quest Helper, the rest from Wiki cards; only wording is edited, one short line per full text). `npm run check-drafts` fails source contradictions and off-ground tiles in a walking replay; unconfirmed facts stay `unknown`. `npm run quest-promote -- <Draft> <id>` writes the step, stages and QH row (next steps in its header). Shipped: Druidic Ritual (S7-06), Witch's House (S7-07); draft: Dwarf Cannon; Quest Helper `b9b9370`. Quest facts cover 36 quests; the Members gate finishes 36/36. Made-only items use `recipes.json` (`yield`). The `game-modes` UI scenario checks every page in both modes. Fights, unreviewed quest flows and training retire projected stock and cash (`runtime.ts` adapters, `trainingModel`); single worn pieces survive unless the objective names them (`decision.ts`). The remaining Members unknown time (87 of 301 turns) needs modelled consumption.
 
 ### P4 — Claude's real-client acceptance
 
@@ -223,7 +223,7 @@ Known limits: fees are bounded allowances; gathering competition, Forestry and M
 Kept: `planning/encounter/{setups,strategy}.ts` compares bounded preparations; `executionStep` carries the kit; forecasts add damage-earned HP.
 
 - Ranking: total time; incomplete options executable-first, then least unmeasured XP, fewest unknowns, known minimum, own cost, never term text; confidence LOW. Even training joins single-skill ones. Objectives stay unless another is proven faster.
-- `authored/fightMechanics.json` (Wiki) feeds `fightEstimate.ts`: regeneration, drains, finishers, weapon multiplier, company, specials, protected attacks, safespot spell, protection prayer. `magicPlan.spellHit` (tier, bonus, weakness) also rates training. `cannot` means train or upgrade; modelled regeneration proves that capability. Protection keeps its slot; quest kit is never advised; uncovered attacks stay UNKNOWN. Ancient Guardian: melee; pillars are route text.
+- `authored/fightMechanics.json` (Wiki) feeds `fightEstimate.ts`: regeneration, drains, finishers, weapon multiplier, company, specials, protected attacks, safespot spell, protection prayer, consecutive forms. `magicPlan.spellHit` (tier, bonus, weakness) also rates training. `cannot` means train or upgrade; modelled regeneration proves that capability. Protection keeps its slot; quest kit is never advised; uncovered attacks stay UNKNOWN. Ancient Guardian: melee; pillars are route text.
 - Fresh account: worn pieces count as owned; melee methods unsafe at their Hitpoints are LOCKED.
 - `training/toolUpgrade.ts`: an axe/pickaxe saving counts until `toolReplacedAt`. `trainingKit.equipmentLine` states the tool/kit decision on Skills; F2P notes are one-line checkpoints, no Wiki rates. Weapons: one skill's XP.
 - Game line: engine's bank/drop choice; plaque shows the stamp alone. Closed optional quests are set aside (`setAsideQuests`); after all F2P quests, Path ranks `f2pCheckpoints` with Follow. One-step quests' stage checks point the game at the step. Path rows name unknown parts.

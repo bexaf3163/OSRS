@@ -21,6 +21,8 @@ export interface FightMechanics {
   safespot?: { spell: string };
   /** At this distance every attack of the foe is one that this prayer blocks (the Jungle Demon's magic): no damage while it is on. */
   prayer?: { name: string; level: number; distance: string };
+  /** Every version of the monster is fought in a row, without a break (one shapeshifting opponent). */
+  forms?: boolean;
   facts: string[];
 }
 

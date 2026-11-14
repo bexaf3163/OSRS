@@ -86,6 +86,16 @@ describe('conditional resource accounting', () => {
     expect(start.resources?.items.bucket).toEqual({ floor: 4, complete: true });
     expect(observed.player.coins.bag).toMatchObject({ value: 50 });
   });
+  it('keeps a single worn piece through unmodelled consumption unless the objective names it', () => {
+    const observed = snapshot(), start = observedProjection(observed);
+    const unknown = (items?: string[]): ExpectedEffect => ({ kind: 'resources-unknown', source: 'Synthetic unmodelled quest flow', afterSuccessOnly: true, ...(items ? { items } : {}) });
+    const after = projectSuccess(start, [unknown()]);
+    expect(after.resources?.items['bronze shortsword']).toEqual({ floor: 1, complete: false });
+    expect(projectedTrainingState(observed, after)).not.toBeNull();
+    const handedIn = projectSuccess(start, [unknown(['Bronze shortsword'])]);
+    expect(handedIn.resources?.worn?.['bronze shortsword']).toBeUndefined();
+    expect(projectedTrainingState(observed, handedIn)).toBeNull();
+  });
   it('keeps exact named stock, worn quantities and money separate from observed state', () => {
     const observed = snapshot(), start = observedProjection(observed);
     expect(start.resources?.items.bucket).toEqual({ floor: 4, complete: true });

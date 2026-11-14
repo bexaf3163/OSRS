@@ -76,7 +76,7 @@ describe('the whole guide: an item the player holds does not keep the "get it" l
     const known = new Set([
       'S1-07#100:pwSolveFireplacePuzzle', 'S2-08#2:openCoffin', 'S2-09#1:smuggleRum.talkToLuthas', 'S2-09#3:digUpTreasure', 'S9-01#2:goToEntrana',
       'S9-02#60:enterGrotto', 'S9-04#3:goDownFromDentures', 'S9-04#3:goUpToDaeroForAmuletRun', 'S9-04#3:goUpToDaeroForAmuletMake',
-      'S9-04#3:goUpToDaeroForTalismanRun', 'S7-05#100:findInvasionPlans', 'S5-03#0:openMelzarChest',
+      'S9-04#3:goUpToDaeroForTalismanRun', 'S7-05#100:findInvasionPlans', 'S5-03#0:openMelzarChest', 'S7-07#3:readDiary', 'S7-07#5:readDiary',
     ]);
     const found: string[] = [];
     for (const [id, q] of Object.entries(quests)) {

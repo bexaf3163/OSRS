@@ -119,7 +119,8 @@ export function createQuestModel(snapshot: PlanningSnapshot, catalogue: readonly
   }
 
   function evaluateStep(quest: QuestFact, step: Step, projection: Projection): ObjectiveEvaluation {
-    const targets = questSkillTargets(quest, remainingQuestSteps(quest, byStep, snapshot.quests[quest.id]));
+    const questSteps = remainingQuestSteps(quest, byStep, snapshot.quests[quest.id]);
+  const targets = questSkillTargets(quest, questSteps);
     const hardTargets = { ...quest.requirements.skills };
     for (const skill of Object.keys(hardTargets)) {
       const declarations = step.requirements?.filter(r => r.type === 'skill' && r.skill === skill) ?? [];
@@ -153,7 +154,8 @@ export function createQuestModel(snapshot: PlanningSnapshot, catalogue: readonly
     };
     // Completing this macro also entails its prerequisite training. Later quests must not train that gap twice.
     const effects: ExpectedEffect[] = [...Object.entries(targets).map(([skill, level]) => ({ kind: 'skill-floor' as const, skill, level, afterSuccessOnly: true as const })),
-      ...(prepared.resources == null ? [{ kind: 'resources-unknown' as const, source: quest.source.url, afterSuccessOnly: true as const }]
+      ...(prepared.resources == null ? [{ kind: 'resources-unknown' as const, source: quest.source.url, afterSuccessOnly: true as const,
+        items: questSteps.flatMap(s => (s.itemsRequired ?? []).flatMap(item => [item.nameEn, ...(item.anyOf ?? [])])) }]
         : prepared.resources.map(change => ({ kind: 'resources' as const, change, afterSuccessOnly: true as const }))), ...effectsOf(quest)];
     const comparisonCost = sumExpressions([term(prepare, `prepare:${quest.id}:branch${branch(projection)}`),
       term(travel, `travel:${quest.id}:branch${branch(projection)}`), term(work, workKey(quest, projection, step))]);

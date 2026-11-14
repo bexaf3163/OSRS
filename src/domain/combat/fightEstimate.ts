@@ -283,8 +283,15 @@ export function stepFightFoes(step: Pick<Step, 'foes' | 'threats' | 'pacing'>): 
   return stepFightNames(step).flatMap((n) => {
     const all = COMBAT_FOES.filter((f) => f.name === n);
     const free = all.filter((f) => !f.members);
-    return (free.length ? free : all).slice(0, 1);
+    // A monster fought in consecutive forms (Witch's experiment) is every version, in order.
+    return (free.length ? free : all).slice(0, FIGHT_MECHANICS[n]?.forms ? undefined : 1);
   });
+}
+
+/** How many fights the step has: one per opponent, or one per form; an opponent without numbers still counts one. */
+export function stepFightCount(step: Pick<Step, 'foes' | 'threats' | 'pacing'>): number {
+  const foes = stepFightFoes(step);
+  return stepFightNames(step).reduce((n, name) => n + Math.max(1, foes.filter((f) => f.name === name).length), 0);
 }
 
 /** The estimate for each quest fight of the step with the player's worn gear and levels; empty when the game has not given them. */

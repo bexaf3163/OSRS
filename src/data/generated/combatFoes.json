@@ -498,6 +498,98 @@
       }
     },
     {
+      "name": "Witch's experiment",
+      "version": "Skavid",
+      "combat": 19,
+      "members": true,
+      "hitpoints": 21,
+      "attackLevel": 18,
+      "strengthLevel": 10,
+      "defenceLevel": 19,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Witch's experiment",
+      "version": "Spider",
+      "combat": 30,
+      "members": true,
+      "hitpoints": 31,
+      "attackLevel": 28,
+      "strengthLevel": 20,
+      "defenceLevel": 29,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Witch's experiment",
+      "version": "Bear",
+      "combat": 42,
+      "members": true,
+      "hitpoints": 41,
+      "attackLevel": 38,
+      "strengthLevel": 30,
+      "defenceLevel": 39,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 4,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Witch's experiment",
+      "version": "Wolf",
+      "combat": 53,
+      "members": true,
+      "hitpoints": 51,
+      "attackLevel": 48,
+      "strengthLevel": 40,
+      "defenceLevel": 49,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 5,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
       "name": "Temple Guardian",
       "combat": 30,
       "members": true,

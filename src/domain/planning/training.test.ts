@@ -21,7 +21,7 @@ describe('existing training engine as a prerequisite estimator', () => {
     ]);
     const cost = createTrainingCost(observed);
     expect(cost('mining', 10, after)?.typical).toBe(0);
-    expect(cost('mining', 30, after)).toBeNull(); // More training still needs a proven costing kit.
+    expect(cost('mining', 30, after)).not.toBeNull(); // The worn sword survives unmodelled consumption, so more training is still costed.
     expect(observed.player.levels.mining).toMatchObject({ value: 1 });
   });
 

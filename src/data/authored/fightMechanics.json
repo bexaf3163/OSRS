@@ -92,6 +92,11 @@
       "url": "https://oldschool.runescape.wiki/w/Jungle_Demon",
       "prayer": { "name": "Protect from Magic", "level": 37, "distance": "three squares away, where it only casts magic" },
       "facts": ["The quest's wiki strategy: stand still three squares away with Protect from Magic on and shoot it; at that distance it only casts magic (combat audit S9-04).", "Protect from Magic needs Prayer 37 (OSRS Wiki)."]
+    },
+    "Witch's experiment": {
+      "url": "https://oldschool.runescape.wiki/w/Witch%27s_experiment",
+      "forms": true,
+      "facts": ["A shapeshifting monster with four forms fought consecutively: level 19 skavid, 30 spider, 42 bear and 53 wolf, all melee (OSRS Wiki).", "Witch's House needs the ability to defeat the four forms without a break (quest requirements)."]
     }
   }
 }

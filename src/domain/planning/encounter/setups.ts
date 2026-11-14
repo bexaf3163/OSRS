@@ -2,7 +2,7 @@ import type { GearPiece, PlayerStats, Step } from '../../../types';
 import type { GearState } from '../../../services/runeliteBridge';
 import { adviseGear, type GearAction } from '../../combat/gearAdvisor';
 import { gearMarketPrices } from '../../combat/gearAdvice';
-import { estimateStepFights, stepFightNames, stepFightFoes } from '../../combat/fightEstimate';
+import { estimateStepFights, stepFightCount, stepFightNames, stepFightFoes } from '../../combat/fightEstimate';
 import type { FightEstimate } from '../../combat/fightEstimate';
 import { EAT_SECONDS } from '../../combat/combatEstimate';
 import { gearById, gearPieceByName, shootsOnly } from '../../items/gearRegistry';
@@ -52,7 +52,7 @@ function forecast(step: Step, stats: PlayerStats, gear: GearState, kit: readonly
   if (gear.equipment?.some(p => p.slot === 'shield') && gear.equipment.some(p => p.slot === 'weapon' && gearById.get(p.id)?.twoHanded)) return null;
   if (safetyRulesOf(step).some(rule => rule.worn && !gear.equipment?.some(p => rule.names.includes(p.name)))) return null;
   const fights = assessed ?? estimateStepFights(step, stats, gear);
-  if (!fights.length || fights.length !== stepFightNames(step).length || fights.some(f => f.unmodelled.length || f.cannot || f.worstHit >= stats.hitpoints)) return null;
+  if (!fights.length || fights.length !== stepFightCount(step) || fights.some(f => f.unmodelled.length || f.cannot || f.worstHit >= stats.hitpoints)) return null;
   const food = Math.ceil(fights.reduce((sum, f) => sum + f.food.high, 0));
   const authoredFood = stepFood(step) ?? { nameEn: 'Trout', heals: 7, amount: 0, howToGet: '' };
   const worn = [...protection, ...kit.map(a => a.item)];
@@ -78,7 +78,7 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
   if (!snapshot.player.connected || !stats || !gear?.equipment || !stepFightNames(step).length) return [];
   // Before proposing any spend/training, require a supported observed baseline model (unsafe food quantity is allowed here).
   const estimates = estimateStepFights(step, stats, gear);
-  if (estimates.length !== stepFightNames(step).length || estimates.some(f => f.unmodelled.length)) return [];
+  if (estimates.length !== stepFightCount(step) || estimates.some(f => f.unmodelled.length)) return [];
   // Protection the fight must be worn with (safety rules) is part of every setup: its slot is taken before any kit is compared.
   const guards = safetyRulesOf(step).filter(rule => rule.worn).flatMap(rule => gearPieceByName(rule.names[0]) ?? []);
   const protection = guards.filter(piece => !gear.equipment!.some(p => p.slot === piece.slot && safetyRulesOf(step).some(rule => rule.names.includes(p.name))));

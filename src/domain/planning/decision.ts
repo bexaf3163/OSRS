@@ -2,6 +2,7 @@ import type { CandidateRow, CommittedDecision,CostExpression, ExpectedEffect, Mi
 import { comparableKnown, exactCost, noTime, sumExpressions, sumMinutes, totalCost, validActionCost, validExpression, validMinutes } from './cost';
 import { coherentSkillXp, levelForXp, xpForLevel } from '../player/xp';
 import { observedResources, projectResources } from './resources';
+import { nameKey } from '../items/itemKey';
 import { sameSession } from './scope';
 
 /** How many objectives look one quest further (beam width of the second horizon). */
@@ -56,10 +57,15 @@ export function projectSuccess(before: Projection, effects: readonly ExpectedEff
     if (effect.kind === 'resources') {
       const next = projectResources(resources, [effect.change]);
       resources = next ?? undefined;
-    } else {
-      resources = effect.source.trim() ? { items: Object.fromEntries(Object.keys(resources.items).map(name => [name, { floor: 0, complete: false }])),
-        gp: { floor: 0, complete: false }, position: null, worn: {} } : undefined;
-    }
+    } else if (effect.source.trim()) {
+      // An unmodelled fight, quest or training wears out no single worn piece, so it stays a lower bound unless the objective
+      // names it (it may be handed in). Worn stacks (arrows, darts) can be spent and retire with everything else.
+      // shortcut: a stack of exactly one counts as a piece; replace with stackability from the item data if one is ever planned.
+      const named = new Set((effect.items ?? []).map(nameKey));
+      const worn = Object.fromEntries(Object.entries(resources.worn ?? {}).filter(([key, count]) => count === 1 && !named.has(key)));
+      resources = { items: Object.fromEntries(Object.keys(resources.items).map(name => [name, { floor: worn[name] ?? 0, complete: false }])),
+        gp: { floor: 0, complete: false }, position: null, worn };
+    } else resources = undefined;
   }
   return { ...before, completed, xp, levels, xpBounds, unlocks, ...(resources ? { resources } : {}),
     ...(changes.length && !resources ? { invalidResources: true } : {}) };

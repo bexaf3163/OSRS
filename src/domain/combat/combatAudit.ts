@@ -85,7 +85,7 @@ export function detectCombatStages(steps: readonly Step[], quests: QuestStages):
 
 /** What the app prepares for the stage today, worked out from the route, not written by hand: the estimate, the food, the zones. */
 export function preparedFor(step: Step, entry: AuditEntry): { estimate: string[]; food: string | null; zones: string[] } {
-  const estimate = step.pacing ? (step.foes ?? []).filter((n) => COMBAT_FOES.some((f) => f.name === n)) : stepFightFoes(step).map((f) => f.name);
+  const estimate = step.pacing ? (step.foes ?? []).filter((n) => COMBAT_FOES.some((f) => f.name === n)) : [...new Set(stepFightFoes(step).map((f) => f.name))];
   const food = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
   return { estimate, food: food ? `${food.nameEn} ${food.amount}` : null, zones: entry.zones ?? [] };
 }

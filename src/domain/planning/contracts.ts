@@ -72,7 +72,7 @@ export type ExpectedEffect =
   | { kind: 'quest'; questId: string; afterSuccessOnly: true }
   | { kind: 'unlock'; id: string; afterSuccessOnly: true }
   /** A macro's unmodelled consumption cannot leave its starting balances available to later objectives. */
-  | { kind: 'resources-unknown'; source: string; afterSuccessOnly: true }
+  | { kind: 'resources-unknown'; source: string; afterSuccessOnly: true; /** Items the objective asks for: it may hand them in. */ items?: readonly string[] }
   | { kind: 'resources'; change: ResourceChange; afterSuccessOnly: true };
 export interface CandidateAction {
   /** Transient execution kit from the chosen tactical strategy; never a saved step, future possession or observed level. */

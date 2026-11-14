@@ -55,7 +55,7 @@ describe('source-aware quest model', () => {
     shared.prepare = () => ({ action: null, minutes: null, capabilities: {}, resources }) as ReturnType<QuestModelAdapters['prepare']>;
     const start = observedProjection(observed);
     const evaluation = createQuestModel(observed, [quest], [{ ...allSteps[0], id: quest.id }], shared).evaluate(quest.id, start)!;
-    expect(evaluation.effects).toContainEqual({ kind: 'resources-unknown', source: quest.source.url, afterSuccessOnly: true });
+    expect(evaluation.effects).toContainEqual(expect.objectContaining({ kind: 'resources-unknown', source: quest.source.url, afterSuccessOnly: true }));
     expect(projectSuccess(start, evaluation.effects).resources?.gp).toEqual({ floor: 100, complete: false });
     expect(observed.player.coins.bag.known).toBe(false);
   });

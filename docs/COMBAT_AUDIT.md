@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-25 stages: 6 retained, 18 revised, 0 with a branch, 1 deferred.
+26 stages: 6 retained, 19 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -28,6 +28,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S7-02 Fight Arena | quest-fight | yes | Khazard Ogre (63), Khazard Scorpion (44), Bouncer (137) | safespot | Khazard Ogre, Khazard Scorpion, Bouncer | Lobster 10 | Revised |
 | S7-03 Tree Gnome Village | quest-fight | yes | Khazard warlord (112) | safespot | Khazard warlord | Lobster 10 | Revised |
 | S7-05 The Grand Tree | quest-fight | yes | Black demon (The Grand Tree) (172) | safespot | Black demon (The Grand Tree) | Lobster 10 | Revised |
+| S7-07 Witch's House | quest-fight | yes | Witch's experiment (53) | melee | Witch's experiment | Trout 5 | Revised |
 | S8-01 Priest in Peril | quest-fight | yes | Temple Guardian (30), Monk of Zamorak (30) | melee | Temple Guardian | Trout 5 | Revised |
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
 | S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (Lost City) (101) | safespot | Tree spirit (Lost City) | - | Revised |
@@ -501,6 +502,32 @@ Changed:
 Evidence:
 
 - Step field "Magic from a safespot"; lines 2.0 and 3.1 are dialogue and an optional choice.
+
+## S7-07 Witch's House
+
+**Revised.** Witch's House: kill the Witch's experiment in all four forms without a break (levels 19, 30, 42 and 53, hits up to 5).
+
+Quest stage lines: 1.3.
+
+Assumptions:
+
+- All four forms attack with melee and come one after another; the estimate adds the four fights (combatFoes.json, Wiki infobox versions).
+
+Problems:
+
+- New quest: no stage of the route fought the experiment before.
+
+Alternatives:
+
+- Safespot the first two forms with Magic or Ranged (OSRS Wiki strategy).
+
+Changed:
+
+- 2.101.0: the step's threats name the Witch's experiment and fightMechanics.json marks its four forms as fought in a row, so each form is estimated and the food adds up; Trout x5 (or similar food) is a required item.
+
+Evidence:
+
+- Quest stage route 1.3; OSRS Wiki Witch's experiment infobox (four versions) and Witch's House requirements, revision 15386155.
 
 ## S8-01 Priest in Peril
 

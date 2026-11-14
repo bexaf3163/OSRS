@@ -6,7 +6,7 @@ import type { CombatPlanView } from '../combat/combatPlan';
 import { ownedFood } from '../combat/combatPlan';
 import { combatReadiness } from '../combat/combatReadiness';
 import { COMBAT_FOES, foeLabel, healsOf } from '../combat/combatEstimate';
-import { estimateStepFights, fightLine, stepFightFoes, stepFightNames } from '../combat/fightEstimate';
+import { estimateStepFights, fightLine, stepFightCount, stepFightFoes, stepFightNames } from '../combat/fightEstimate';
 import { BAG_SLOTS } from '../prep/prepPlan';
 import { equippedBySlot, gearData } from '../combat/gearAdvisor';
 import { readinessVerdict } from './readinessVerdict';
@@ -67,7 +67,7 @@ export function evenlyTrainedStats(stats: PlayerStats, skills: readonly string[]
 export function safeTrainingLevel(step: Step, stats: PlayerStats | null, gear: GearState | null,
   skills: readonly string[], xp: Readonly<Record<string, number>> = {}): number | null {
   const count = stepFightFoes(step).length;
-  if (!count || count !== stepFightNames(step).length || !stats || !skills.length || skills.some(skill => !FIGHT_SKILLS.includes(skill))
+  if (!count || count !== stepFightCount(step) || !stats || !skills.length || skills.some(skill => !FIGHT_SKILLS.includes(skill))
     || ['hitpoints', ...MELEE, ...skills].some(s => !Number.isInteger(stats[s]) || stats[s] < 1 || stats[s] > 99)) return null;
   const otherSlots = (step.itemsRequired ?? []).filter(item => !item.heals && !item.equip).length;
   const fits = (levels: PlayerStats) => {

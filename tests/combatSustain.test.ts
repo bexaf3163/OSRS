@@ -111,3 +111,15 @@ describe('a prayer that blocks all a foe does at range', () => {
     expect(fight(30).cannot).toBe('Protect from Magic needs Prayer 37');
   });
 });
+
+describe('a monster fought in consecutive forms', () => {
+  it("the Witch's experiment: every form is a fight of the step, in order", async () => {
+    const { allSteps } = await import('../src/data');
+    const { estimateStepFights, stepFightCount, stepFightFoes } = await import('../src/domain/combat/fightEstimate');
+    const step = allSteps.find((s) => s.id === 'S7-07')!;
+    expect(stepFightFoes(step).map((f) => f.combat)).toEqual([19, 30, 42, 53]);
+    expect(stepFightCount(step)).toBe(4);
+    const stats = { attack: 40, strength: 40, defence: 40, hitpoints: 40, ranged: 1, magic: 1, prayer: 1 } as never;
+    expect(estimateStepFights(step, stats, { equipment: [], inventory: [] } as never)).toHaveLength(4);
+  });
+});

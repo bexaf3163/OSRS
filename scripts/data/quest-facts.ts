@@ -135,6 +135,7 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to evade level 33 [[Black Knight]]s',
   'The ability to defeat a level 111 [[Tanglefoot]] with limited weaponry',
   'The ability to defeat a level 195 [[Jungle Demon]]',
+  'The ability to defeat 4 monsters from level 19 to 53 without a break.',
   'The ability to withstand and evade attacks from level 86 [[Fire Giant]]s and level 84 [[Moss Guardian]] without any equipment.',
   'The ability to defeat level 44, 63 and 137 enemies (all can be [[safespot]]ted)',
   'The ability to defeat a level 112 [[Khazard warlord]]',

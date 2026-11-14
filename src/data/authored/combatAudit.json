@@ -241,6 +241,21 @@
       "evidence": ["Step field \"Magic from a safespot\"; lines 2.0 and 3.1 are dialogue and an optional choice."]
     },
     {
+      "stepId": "S7-07",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Witch's House: kill the Witch's experiment in all four forms without a break (levels 19, 30, 42 and 53, hits up to 5).",
+      "enemies": [{ "name": "Witch's experiment", "level": 53, "maxHit": 5, "table": true }],
+      "lines": ["1.3"],
+      "assumptions": ["All four forms attack with melee and come one after another; the estimate adds the four fights (combatFoes.json, Wiki infobox versions)."],
+      "problems": ["New quest: no stage of the route fought the experiment before."],
+      "alternatives": ["Safespot the first two forms with Magic or Ranged (OSRS Wiki strategy)."],
+      "decision": "revise",
+      "changed": ["2.101.0: the step's threats name the Witch's experiment and fightMechanics.json marks its four forms as fought in a row, so each form is estimated and the food adds up; Trout x5 (or similar food) is a required item."],
+      "evidence": ["Quest stage route 1.3; OSRS Wiki Witch's experiment infobox (four versions) and Witch's House requirements, revision 15386155."]
+    },
+    {
       "stepId": "S8-01", "kind": "quest-fight", "mandatory": true, "method": "melee",
       "objective": "Kill the Temple Guardian (30, 45 hit points, hits up to 3; immune to magic) and a Monk of Zamorak (30) for the key.",
       "enemies": [{ "name": "Temple Guardian", "level": 30, "maxHit": 3, "table": true }, { "name": "Monk of Zamorak", "level": 30 }],

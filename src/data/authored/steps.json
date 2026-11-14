@@ -3937,6 +3937,82 @@
     }
   },
   {
+    "id": "S7-07",
+    "stage": 7,
+    "type": "quest",
+    "title": "Witch's House",
+    "qp": 4,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Witch's_House",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Witch's_House/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2928,3456,0",
+    "mapLocation": {
+      "x": 2928,
+      "y": 3456,
+      "plane": 0,
+      "label": "The gate entrance of Taverley"
+    },
+    "npc": {
+      "nameEn": "boy",
+      "location": "The gate entrance of Taverley",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/boy"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Cheese",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Food Store in Port Sarim for 4 gp.",
+        "wikiItemId": 1985,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cheese.png"
+      },
+      {
+        "nameEn": "Leather gloves",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Thessalia's Fine Clothes in Varrock for 6 gp.",
+        "wikiItemId": 1059,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Leather_gloves.png"
+      },
+      {
+        "nameEn": "Trout",
+        "heals": 7,
+        "amount": 5,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "howToGet": "Your own catch or the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. The experiment's four forms are fought without a break (levels 19 to 53, hits up to 5). Preparation sizes the amount for your levels and armour.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "threats": [
+      "Witch's experiment"
+    ],
+    "reward": "4 QP, 6,325 Hitpoints XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "boy"
+      ],
+      "dialogChoices": [
+        "What's the matter?",
+        "Ok, I'll see what I can do."
+      ],
+      "highlightItems": [
+        "Cheese",
+        "Leather gloves"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Witch's House"
+      }
+    }
+  },
+  {
     "id": "S8-01",
     "stage": 8,
     "type": "quest",

@@ -11,7 +11,7 @@ QUESTS = {
     'S5-01': ('DragonSlayer', 'varp', 176), 'S5-03': ('DragonSlayer', 'varp', 176), 'S5-04': ('DragonSlayer', 'varp', 176), 'S5-06': ('DragonSlayer', 'varp', 176),
     'S5-07': ('DragonSlayer', 'varp', 176), 'S5-08': ('DragonSlayer', 'varp', 176),
     'S7-01': ('WaterfallQuest', 'varp', 65), 'S7-02': ('FightArena', 'varp', 17), 'S7-03': ('TreeGnomeVillage', 'varp', 111),
-    'S7-05': ('TheGrandTree', 'varp', 150), 'S7-06': ('DruidicRitual', 'varp', 80), 'S8-01': ('PriestInPeril', 'varp', 302), 'S8-02': ('NatureSpirit', 'varp', 307),
+    'S7-05': ('TheGrandTree', 'varp', 150), 'S7-06': ('DruidicRitual', 'varp', 80), 'S7-07': ('WitchsHouse', 'varp', 226), 'S8-01': ('PriestInPeril', 'varp', 302), 'S8-02': ('NatureSpirit', 'varp', 307),
     'S8-05': ('AnimalMagnetism', 'varbit', 3185), 'S9-01': ('LostCity', 'varp', 147), 'S9-02': ('FairytaleI', 'varbit', 1803),
     'S9-03': ('FairytaleII', 'varbit', 2326), 'S9-04': ('MonkeyMadnessI', 'varp', 365),
 }
