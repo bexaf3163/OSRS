@@ -831,6 +831,33 @@
       "aggressive": false
     },
     {
+      "name": "Loar Shade",
+      "version": "Shade",
+      "combat": 40,
+      "members": true,
+      "hitpoints": 38,
+      "attackLevel": 45,
+      "strengthLevel": 30,
+      "defenceLevel": 26,
+      "magicLevel": 0,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 4,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "air",
+        "percent": 40
+      }
+    },
+    {
       "name": "Tree spirit (Lost City)",
       "combat": 101,
       "members": true,

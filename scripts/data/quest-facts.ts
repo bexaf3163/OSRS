@@ -156,6 +156,10 @@ const REVIEWED_CLAUSES = new Set([
   "You do not need to have an Attack level of 20 to free Merlin, you can 'Use' Excalibur on the crystal to free him.",
   'Must be able to defeat a level 120 [[Black Knight Titan]] (can be [[safespot]]ted or [[flinch]]ed)',
   'Able to defeat a level 51 monster and run past level 72 monsters',
+  'Must be able to defeat 5 level-40 [[Loar Shade]]s.',
+  // The onslaught is the temple's shade attacks, fought with the same kit and food; Mort'ton opens with Priest in Peril.
+  'Must be able to survive an onslaught when rebuilding the Temple (Being surrounded by many players makes this much easier).',
+  "Access to [[Mort'ton]]",
   'A trustworthy friend or partner. Players can join the official [[chat-channel]] "OSRS SOA" to look for a partner.',
   "to enter the Champions' Guild",
 ].map(clause => clause.toLowerCase()));

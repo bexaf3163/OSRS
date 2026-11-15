@@ -20574,6 +20574,713 @@
     }
    ]
   },
+  "S8-08": {
+   "var": [
+    "varp",
+    339
+   ],
+   "route": [
+    {
+     "title": "Start",
+     "steps": [
+      "Enter the ruined house in the south-west of Mort'ton. Search the shelf on the wall. Read the diary. After reading the diary, the quest is started and you are able to create Serum 207.",
+      "If you didn't bring Tarromin potion (unf): Pick up the empty vials (can be filled in the house north-east) and search the smashed table for 2 grimy tarromin and one grimy rogue's purse."
+     ]
+    },
+    {
+     "title": "Serum 207",
+     "steps": [
+      "Make two Serum 207 by adding clean tarromin to a vial of water and then adding ashes.",
+      "Use one dose on Razmire (afflicted) in the general store. Dialogue: \"What are all these shadowy creatures?\", \"Yes, I'll dispatch those dark and evil creatures.\" (Recommended to not use official Mort'ton temple World 377 yet to not get interrupted talking to the NPCs, until the step with repairing.)",
+      "Kill five loar shades and pick up their remains. Note: any shades that you killed before talking to Razmire will not count.",
+      "Return to Razmire and give him the remains. He may require more Serum 207.",
+      "Right click and open his General store, buy an Olive oil.",
+      "Open his builders' store, buy 5 timber beams, 5 limestone bricks, 25 swamp paste and optionally a Flamtaer hammer.",
+      "Use the serum on Ulsquire Shauncy, located in the house east of the general store. Talk to him with Loar Remains.",
+      "Talk to him again and ask about the remains and the temple. Dialogue: \"What did you find out about the remains?\", \"What can you tell me about that temple?\""
+     ]
+    },
+    {
+     "title": "Repairing the temple",
+     "steps": [
+      "Head north-east of Mort'ton and repair the temple until you reach 100% repair and at least 20 sanctity. (Recommended to use official world 377.)",
+      "Light the sacred altar in the centre of the temple (or wait until someone else lights it if you don't have level 5 Firemaking)",
+      "Use your olive oil on the flame to make sacred oil.",
+      "(Recommended) Use Serum 207 on the flame to make Serum 208, which permanently cures NPCs."
+     ]
+    },
+    {
+     "title": "Burning a shade",
+     "steps": [
+      "Use the sacred oil on a log to create a pyre log.",
+      "Head west of Mort'ton general store, to any grouping of 4 stone funeral pyres. Use the pyre log, then Loar remains on a funeral pyre.",
+      "Light the funeral pyre. Note: This will grant 25 Prayer XP.",
+      "Collect the reward.",
+      "(Recommended) Use the Serum 208 on Razmire.",
+      "Use the Serum 208 on Ulsquire and finish the dialogue.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Search the shelf in the south building of Mort'ton.",
+       "s": "Search the shelf in the south building of Mort'ton.",
+       "k": "searchShelf",
+       "at": [
+        3481,
+        3279,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4062
+        ]
+       }
+      },
+      {
+       "t": "Read the diary.",
+       "s": "Read the diary.",
+       "k": "readDiary"
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Add ashes to a tarromin potion (unf).",
+       "s": "Add ashes to a tarromin potion (unf).",
+       "k": "addAshes",
+       "at": [
+        3488,
+        3296,
+        0
+       ],
+       "need": "Ashes"
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Use the serum 207 on Razmire in the north of Mort'ton.",
+       "s": "Use the serum 207 on Razmire in the north of Mort'ton.",
+       "k": "use207OnRazmire",
+       "at": [
+        3488,
+        3296,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1289
+        ]
+       }
+      },
+      {
+       "t": "Talk to Razmire in the north of Mort'ton.",
+       "s": "Talk to Razmire in the north of Mort'ton.",
+       "k": "talkToRazmire",
+       "at": [
+        3488,
+        3296,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1289
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Kill 5 Loar Shades and pick up their remains.",
+       "s": "Kill 5 Loar Shades and pick up their remains.",
+       "k": "kill5Shades",
+       "at": [
+        3488,
+        3287,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1276
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Kill 4 Loar Shades and pick up their remains.",
+       "s": "Kill 4 Loar Shades and pick up their remains.",
+       "k": "kill4Shades",
+       "at": [
+        3488,
+        3287,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1276
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Kill 3 Loar Shades and pick up their remains.",
+       "s": "Kill 3 Loar Shades and pick up their remains.",
+       "k": "kill3Shades",
+       "at": [
+        3488,
+        3287,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1276
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Kill 2 Loar Shades and pick up their remains.",
+       "s": "Kill 2 Loar Shades and pick up their remains.",
+       "k": "kill2Shades",
+       "at": [
+        3488,
+        3287,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1276
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 35,
+     "do": [
+      {
+       "t": "Kill 1 Loar Shades and pick up their remains.",
+       "s": "Kill 1 Loar Shades and pick up their remains.",
+       "k": "kill1Shades",
+       "at": [
+        3488,
+        3287,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1276
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Use the serum 207 on Razmire in the north of Mort'ton.",
+       "s": "Use the serum 207 on Razmire in the north of Mort'ton.",
+       "k": "use207OnRazmireAgain",
+       "at": [
+        3488,
+        3296,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1289
+        ]
+       }
+      },
+      {
+       "t": "Talk to Razmire in the north of Mort'ton.",
+       "s": "Talk to Razmire in the north of Mort'ton.",
+       "k": "talkToRazmireAgain",
+       "at": [
+        3488,
+        3296,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1289
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 45,
+     "do": [
+      {
+       "t": "Buy some olive oil from Razmire's general store, and 5 timber beams, 5 limestone bricks, and 25 swamp paste from their builders' store. Afterwards, use some serum 207 on Ulsquire.",
+       "s": "Buy the temple supplies from Razmire, then use serum 207 on Ulsquire.",
+       "k": "use207OnUlsquire",
+       "at": [
+        3496,
+        3289,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1287
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ulsquire in the east of Mort'ton.",
+       "s": "Talk to Ulsquire in the east of Mort'ton.",
+       "k": "talkToUlsquire",
+       "at": [
+        3496,
+        3289,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1287
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 47,
+     "do": [
+      {
+       "t": "Buy some olive oil from Razmire's general store, and 5 timber beams, 5 limestone bricks, and 25 swamp paste from their builders' store. Afterwards, use some serum 207 on Ulsquire.",
+       "s": "Buy the temple supplies from Razmire, then use serum 207 on Ulsquire.",
+       "k": "use207OnUlsquire",
+       "at": [
+        3496,
+        3289,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1287
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ulsquire again.",
+       "s": "Talk to Ulsquire again.",
+       "k": "talkToUlsquireAgain",
+       "at": [
+        3496,
+        3289,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1287
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Repair the temple north east of Mort'ton. Do this on World 377 to make it faster and easier.",
+       "s": "Repair the temple north-east of Mort'ton; World 377 is faster.",
+       "k": "repairTemple",
+       "at": [
+        3506,
+        3316,
+        0
+       ]
+      },
+      {
+       "t": "Light the fire altar",
+       "s": "Light the fire altar",
+       "k": "lightAltar",
+       "at": [
+        3506,
+        3316,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4091
+        ]
+       }
+      },
+      {
+       "t": "Keep repairing the temple until 20 sanctity.",
+       "s": "Keep repairing the temple until 20 sanctity.",
+       "k": "repairTo20Sanctity",
+       "at": [
+        3506,
+        3316,
+        0
+       ]
+      },
+      {
+       "t": "Use the olive oil on the temple's fire.",
+       "s": "Use the olive oil on the temple's fire.",
+       "k": "useOilOnFlame",
+       "at": [
+        3506,
+        3316,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4090
+        ]
+       }
+      },
+      {
+       "t": "Use a serum 207 (with 2 or more doses) on the temple's fire.",
+       "s": "Use a serum 207 (with 2 or more doses) on the temple's fire.",
+       "k": "use207OnFlame",
+       "at": [
+        3506,
+        3316,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4090
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 55,
+     "do": [
+      {
+       "t": "Repair the temple north east of Mort'ton. Do this on World 377 to make it faster and easier.",
+       "s": "Repair the temple north-east of Mort'ton; World 377 is faster.",
+       "k": "repairTemple",
+       "at": [
+        3506,
+        3316,
+        0
+       ]
+      },
+      {
+       "t": "Light the fire altar",
+       "s": "Light the fire altar",
+       "k": "lightAltar",
+       "at": [
+        3506,
+        3316,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4091
+        ]
+       }
+      },
+      {
+       "t": "Keep repairing the temple until 20 sanctity.",
+       "s": "Keep repairing the temple until 20 sanctity.",
+       "k": "repairTo20Sanctity",
+       "at": [
+        3506,
+        3316,
+        0
+       ]
+      },
+      {
+       "t": "Use the olive oil on the temple's fire.",
+       "s": "Use the olive oil on the temple's fire.",
+       "k": "useOilOnFlame",
+       "at": [
+        3506,
+        3316,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4090
+        ]
+       }
+      },
+      {
+       "t": "Use a serum 207 (with 2 or more doses) on the temple's fire.",
+       "s": "Use a serum 207 (with 2 or more doses) on the temple's fire.",
+       "k": "use207OnFlame",
+       "at": [
+        3506,
+        3316,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4090
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Repair the temple north east of Mort'ton. Do this on World 377 to make it faster and easier.",
+       "s": "Repair the temple north-east of Mort'ton; World 377 is faster.",
+       "k": "repairTemple",
+       "at": [
+        3506,
+        3316,
+        0
+       ]
+      },
+      {
+       "t": "Light the fire altar",
+       "s": "Light the fire altar",
+       "k": "lightAltar",
+       "at": [
+        3506,
+        3316,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4091
+        ]
+       }
+      },
+      {
+       "t": "Keep repairing the temple until 20 sanctity.",
+       "s": "Keep repairing the temple until 20 sanctity.",
+       "k": "repairTo20Sanctity",
+       "at": [
+        3506,
+        3316,
+        0
+       ]
+      },
+      {
+       "t": "Use the olive oil on the temple's fire.",
+       "s": "Use the olive oil on the temple's fire.",
+       "k": "useOilOnFlame",
+       "at": [
+        3506,
+        3316,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4090
+        ]
+       }
+      },
+      {
+       "t": "Use a serum 207 (with 2 or more doses) on the temple's fire.",
+       "s": "Use a serum 207 (with 2 or more doses) on the temple's fire.",
+       "k": "use207OnFlame",
+       "at": [
+        3506,
+        3316,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4090
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 65,
+     "do": [
+      {
+       "t": "Repair the temple north east of Mort'ton. Do this on World 377 to make it faster and easier.",
+       "s": "Repair the temple north-east of Mort'ton; World 377 is faster.",
+       "k": "repairTemple",
+       "at": [
+        3506,
+        3316,
+        0
+       ]
+      },
+      {
+       "t": "Light the fire altar",
+       "s": "Light the fire altar",
+       "k": "lightAltar",
+       "at": [
+        3506,
+        3316,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4091
+        ]
+       }
+      },
+      {
+       "t": "Keep repairing the temple until 20 sanctity.",
+       "s": "Keep repairing the temple until 20 sanctity.",
+       "k": "repairTo20Sanctity",
+       "at": [
+        3506,
+        3316,
+        0
+       ]
+      },
+      {
+       "t": "Use the olive oil on the temple's fire.",
+       "s": "Use the olive oil on the temple's fire.",
+       "k": "useOilOnFlame",
+       "at": [
+        3506,
+        3316,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4090
+        ]
+       }
+      },
+      {
+       "t": "Use a serum 207 (with 2 or more doses) on the temple's fire.",
+       "s": "Use a serum 207 (with 2 or more doses) on the temple's fire.",
+       "k": "use207OnFlame",
+       "at": [
+        3506,
+        3316,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4090
+        ]
+       }
+      },
+      {
+       "t": "Use the sacred oil on a log.",
+       "s": "Use the sacred oil on a log.",
+       "k": "useOilOnLog"
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Use the pyre log in a funeral pyre, then a loar remain. Finally, burn it.",
+       "s": "Use the pyre log on a funeral pyre, then a loar remain, and light it.",
+       "k": "burnCorpse",
+       "at": [
+        3507,
+        3277,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4093
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 75,
+     "do": [
+      {
+       "t": "Use the pyre log in a funeral pyre, then a loar remain. Finally, burn it.",
+       "s": "Use the pyre log on a funeral pyre, then a loar remain, and light it.",
+       "k": "burnCorpse",
+       "at": [
+        3507,
+        3277,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4093
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 80,
+     "do": [
+      {
+       "t": "Use the serum 208 on Razmire in the north of Mort'ton.",
+       "s": "Use the serum 208 on Razmire in the north of Mort'ton.",
+       "k": "use208OnRazmire",
+       "at": [
+        3488,
+        3296,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1289
+        ]
+       }
+      },
+      {
+       "t": "Use some serum 208 on Ulsquire in the east of Mort'ton.",
+       "s": "Use some serum 208 on Ulsquire in the east of Mort'ton.",
+       "k": "use208OnUlsquire",
+       "at": [
+        3496,
+        3289,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1287
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ulsquire to finish the quest.",
+       "s": "Talk to Ulsquire to finish the quest.",
+       "k": "talkToUlsquireToFinish",
+       "at": [
+        3496,
+        3289,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1287
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
   "S9-01": {
    "var": [
     "varp",

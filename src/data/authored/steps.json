@@ -5468,6 +5468,118 @@
     }
   },
   {
+    "id": "S8-08",
+    "stage": 8,
+    "type": "quest",
+    "title": "Shades of Mort'ton",
+    "qp": 3,
+    "requires": [
+      "S8-01"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Shades_of_Mort'ton",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Shades_of_Mort'ton/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3481,3279,0",
+    "mapLocation": {
+      "x": 3481,
+      "y": 3279,
+      "plane": 0,
+      "label": "The southern-western house of Mort'ton"
+    },
+    "npc": {
+      "nameEn": "Mort'ton",
+      "location": "The southern-western house of Mort'ton",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Mort'ton"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Coins",
+        "amount": 1000,
+        "howToGet": "For the olive oil, timber beams, limestone bricks and swamp paste from Razmire in Mort'ton.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Tarromin potion (unf)",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 95,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tarromin_potion_(unf).png"
+      },
+      {
+        "nameEn": "Ashes",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 592,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ashes.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Logs",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1511,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Logs.png"
+      },
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "heals": 12,
+        "amount": 10,
+        "anyOf": [
+          "Trout",
+          "Salmon",
+          "Tuna",
+          "Swordfish"
+        ],
+        "howToGet": "Your own catch or the Grand Exchange. Five level 40 Loar Shades are killed for their remains, and shades attack while you repair the temple. Preparation sizes the amount for your levels and armour.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Loar Shade"
+    ],
+    "reward": "3 QP, 2,000 Herblore XP, 2,000 Crafting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Mort'ton"
+      ],
+      "dialogChoices": [
+        "What are all these shadowy creatures?",
+        "Yes, I'll dispatch those dark and evil creatures.",
+        "What did you find out about the remains?",
+        "What can you tell me about that temple?"
+      ],
+      "highlightItems": [
+        "Coins",
+        "Tarromin potion (unf)",
+        "Ashes",
+        "Tinderbox",
+        "Logs",
+        "Hammer"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Shades of Mort'ton"
+      }
+    }
+  },
+  {
     "id": "S9-01",
     "stage": 9,
     "type": "quest",

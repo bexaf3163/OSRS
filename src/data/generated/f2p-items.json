@@ -15009,6 +15009,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Swordfish"
   },
   {
+    "id": 95,
+    "nameEn": "Tarromin potion (unf)",
+    "examine": "I need another ingredient to finish this Tarromin potion.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Tarromin_potion_(unf).png",
+    "value": 11,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Tarromin_potion_(unf)"
+  },
+  {
     "id": 13658,
     "nameEn": "Teleport card",
     "examine": "A card which has magical properties.",
