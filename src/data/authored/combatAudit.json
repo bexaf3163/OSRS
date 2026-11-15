@@ -271,6 +271,21 @@
       "evidence": ["Quest stage route 0.2; OSRS Wiki Monk's Friend requirements, revision 15240952."]
     },
     {
+      "stepId": "S7-14",
+      "kind": "incidental",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Jungle Potion: aggressive level 53 Jogres and level 46 Harpie Bug Swarms roam the jungle around Tai Bwo Wannai; the quest asks for the ability to defend yourself against them.",
+      "enemies": [{ "name": "Jogre", "level": 53, "maxHit": 7, "table": true }, { "name": "Harpie Bug Swarm", "level": 46, "maxHit": 6, "table": true }],
+      "lines": [],
+      "assumptions": ["The Jogre is its normal version (level 53, 60 hit points); the GWD version is not in the jungle (combatFoes.json, Wiki infobox)."],
+      "problems": ["New quest: no stage of the route met these monsters before."],
+      "alternatives": ["Run past them: the herbs do not need them dead."],
+      "decision": "revise",
+      "changed": ["2.106.0: the step's foes name the Jogre and the Harpie Bug Swarm, so the defend requirement is estimated with the player's kit; Trout x5 (or similar food) is a required item."],
+      "evidence": ["OSRS Wiki Jungle Potion requirements, revision 15390159; Jogre and Harpie Bug Swarm infoboxes."]
+    },
+    {
       "stepId": "S8-01", "kind": "quest-fight", "mandatory": true, "method": "melee",
       "objective": "Kill the Temple Guardian (30, 45 hit points, hits up to 3; immune to magic) and a Monk of Zamorak (30) for the key.",
       "enemies": [{ "name": "Temple Guardian", "level": 30, "maxHit": 3, "table": true }, { "name": "Monk of Zamorak", "level": 30 }],

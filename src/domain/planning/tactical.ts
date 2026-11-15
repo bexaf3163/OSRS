@@ -138,7 +138,7 @@ export function createTacticalResolver(input: TacticalInput) {
       const ready = !assessment.unassessedFights.length && (['READY', 'READY_CAUTIONS'].includes(assessment.verdict.level)
         || (assessment.verdict.level === 'NOT_MET' && plan.blockers.every(blocker => order.has(blocker.label))));
       if (fight && !assessment.unassessedFights.length) {
-        const encounter = chooseEncounter(input, execution, goalId, trainingStep => resolve(trainingStep, goalId, chain), candidateFor, budget.reserve);
+        const encounter = chooseEncounter(player === snapshot.player ? input : { ...input, snapshot: { ...snapshot, player } }, execution, goalId, trainingStep => resolve(trainingStep, goalId, chain), candidateFor, budget.reserve);
         if (encounter) {
           const byGoal = frames.get(step) ?? new Map<string, TacticalFrame>();
           byGoal.set(goalId, encounter);

@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
-  "generatedAt": "2026-11-14",
+  "generatedAt": "2026-11-15",
   "foes": [
     {
       "name": "Count Draynor",
@@ -588,6 +588,86 @@
       "maxHit": 5,
       "speedTicks": 4,
       "aggressive": true
+    },
+    {
+      "name": "Jogre",
+      "version": "Normal",
+      "combat": 53,
+      "members": true,
+      "hitpoints": 60,
+      "attackLevel": 43,
+      "strengthLevel": 43,
+      "defenceLevel": 43,
+      "magicLevel": 1,
+      "attackBonus": 22,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 7,
+      "speedTicks": 6,
+      "aggressive": true,
+      "weakness": {
+        "element": "earth",
+        "percent": 25
+      }
+    },
+    {
+      "name": "Jogre",
+      "version": "GWD",
+      "combat": 58,
+      "members": true,
+      "hitpoints": 70,
+      "attackLevel": 46,
+      "strengthLevel": 48,
+      "defenceLevel": 43,
+      "magicLevel": 1,
+      "attackBonus": 22,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 8,
+      "speedTicks": 6,
+      "aggressive": true,
+      "weakness": {
+        "element": "earth",
+        "percent": 25
+      }
+    },
+    {
+      "name": "Harpie Bug Swarm",
+      "combat": 46,
+      "members": true,
+      "hitpoints": 25,
+      "attackLevel": 54,
+      "strengthLevel": 46,
+      "defenceLevel": 32,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 10,
+        "slash": 5,
+        "crush": 10,
+        "magic": 5,
+        "ranged": 10
+      },
+      "attackStyle": "crush",
+      "maxHit": 6,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 50
+      }
     },
     {
       "name": "Temple Guardian",

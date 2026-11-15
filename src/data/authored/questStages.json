@@ -14515,6 +14515,328 @@
     }
    ]
   },
+  "S7-14": {
+   "var": [
+    "varp",
+    175
+   ],
+   "route": [
+    {
+     "title": "Getting started",
+     "steps": [
+      "Talk to Trufitus in his house located north-east of Tai Bwo Wannai. Dialogue: \"It's a nice village, where is everyone?\", \"Me? How can I help?\", \"It sounds like just the challenge for me.\" Everytime you gather a new herb you need to go show it to Trufitus before being able to get a new kind of a herb."
+     ]
+    },
+    {
+     "title": "=Snake weed=",
+     "steps": [
+      "Go south-west of Tai Bwo Wannai until green and yellow vines labelled 'marshy jungle vine' are seen.",
+      "Search the vines and clean the herb. Your character may spend several minutes finding a herb.",
+      "Talk to Trufitus. Make sure you cleaned the herb. Dialogue: \"Of course!\""
+     ]
+    },
+    {
+     "title": "=Ardrigal=",
+     "steps": [
+      "Head north-east from Trufitus. There will be Harpie Bug Swarms and palm trees.",
+      "Search the palm trees and clean the herb.",
+      "Talk to Trufitus. Dialogue: \"Of course!\""
+     ]
+    },
+    {
+     "title": "=Sito foil=",
+     "steps": [
+      "To the direct south of Tai Bwo Wannai Village is a patch of scorched earth.",
+      "Search the scorched earth (the squares immediately next to the fire) for the herb and clean it.",
+      "Talk to Trufitus. Dialogue: \"Of course!\""
+     ]
+    },
+    {
+     "title": "=Volencia moss=",
+     "steps": [
+      "Go south-east from Trufitus until you reach the Karamja Jungle mine, marked with a File:Mining site icon.png pickaxe on minimap.",
+      "Search the rocks for the herb and clean it.",
+      "Talk to Trufitus. Dialogue: \"Of course!\""
+     ]
+    },
+    {
+     "title": "=Rogue's purse=",
+     "steps": [
+      "Go back by the Harpie Bug Swarms and head north-west until a cave is seen over the cavern. Search the rocks and enter the cave.",
+      "In the cave, head south, look for green spots on the wall labelled 'Fungus covered Cavern wall', then search them and clean the herb. This process may take up to a minute. Do not try to use a Rogue's purse dropped by a Jogre. It <u>must</u> be obtained via searching the wall.",
+      "Talk to Trufitus. Dialogue: \"Of course!\"",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Trufitus in Tai Bwo Wannai on Karamja. Dialogue: \"It's a nice village, where is everyone?\" → \"Me? How can I help?\" → \"It sounds like just the challenge for me.\" → \"Yes.\"",
+       "s": "Talk to Trufitus in Tai Bwo Wannai",
+       "k": "startQuest",
+       "at": [
+        2809,
+        3085,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4625
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Search a marshy jungle vine south of Tai Bwo Wannai for some snake weed.",
+       "s": "Search a marshy jungle vine south of Tai Bwo Wannai for snake weed",
+       "k": "getSnakeWeed",
+       "at": [
+        2763,
+        3044,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2575
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Clean the grimy snake weed and give it to Trufitus in Tai Bwo Wannai.",
+       "s": "Clean the snake weed and give it to Trufitus",
+       "k": "cleanAndReturnSnakeWeed",
+       "at": [
+        2809,
+        3085,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4625
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Search the palm trees north east of Tai Bwo Wannai for an Ardrigal herb.",
+       "s": "Search the palm trees north-east of Tai Bwo Wannai for Ardrigal",
+       "k": "getArdrigal",
+       "at": [
+        2871,
+        3116,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2577
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Clean the grimy ardrigal and give it to Trufitus in Tai Bwo Wannai.",
+       "s": "Clean the ardrigal and give it to Trufitus",
+       "k": "cleanAndReturnArdrigal",
+       "at": [
+        2809,
+        3085,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4625
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Search the scorched earth in the south of Tai Bwo Wannai for a Sito Foil herb.",
+       "s": "Search the scorched earth south of Tai Bwo Wannai for Sito Foil",
+       "k": "getSitoFoil",
+       "at": [
+        2791,
+        3047,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2579
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Clean the grimy sito foil and give it to Trufitus in Tai Bwo Wannai.",
+       "s": "Clean the sito foil and give it to Trufitus",
+       "k": "cleanAndReturnSitoFoil",
+       "at": [
+        2809,
+        3085,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4625
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Search the rock for a Volencia Moss herb at the mine south east of Tai Bwo Wannai.",
+       "s": "Search the rock at the mine south-east of Tai Bwo Wannai for moss",
+       "k": "getVolenciaMoss",
+       "at": [
+        2851,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2581
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Clean the grimy volencia moss and give it to Trufitus in Tai Bwo Wannai.",
+       "s": "Clean the volencia moss and give it to Trufitus",
+       "k": "cleanAndReturnVolenciaMoss",
+       "at": [
+        2809,
+        3085,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4625
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Enter the cave to the north by clicking on the rocks.",
+       "s": "Enter the cave to the north by clicking on the rocks.",
+       "k": "enterCave",
+       "at": [
+        2825,
+        3119,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2584
+        ]
+       }
+      },
+      {
+       "t": "Get the Rogues Purse from the fungus covered wall in the underground dungeon.",
+       "s": "Search the fungus covered cavern wall for Rogue's purse",
+       "k": "getRoguePurseHerb",
+       "hl": {
+        "obj": [
+         2583
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Climb out of the cave.",
+       "s": "Climb out of the cave",
+       "k": "climbOutOfCave",
+       "at": [
+        2830,
+        9522,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2585
+        ]
+       }
+      },
+      {
+       "t": "Clean the grimy rogue's purse and give it to Trufitus in Tai Bwo Wannai.",
+       "s": "Clean the rogue's purse and give it to Trufitus",
+       "k": "cleanAndReturnRoguesPurse",
+       "at": [
+        2809,
+        3085,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4625
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Talk to Trufitus to finish the quest.",
+       "s": "Talk to Trufitus to finish the quest",
+       "k": "finishQuest",
+       "at": [
+        2809,
+        3085,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4625
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
   "S8-01": {
    "var": [
     "varp",

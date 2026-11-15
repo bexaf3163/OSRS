@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-27 stages: 6 retained, 20 revised, 0 with a branch, 1 deferred.
+28 stages: 6 retained, 21 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -30,6 +30,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S7-05 The Grand Tree | quest-fight | yes | Black demon (The Grand Tree) (172) | safespot | Black demon (The Grand Tree) | Lobster 10 | Revised |
 | S7-07 Witch's House | quest-fight | yes | Witch's experiment (53) | melee | Witch's experiment | Trout 5 | Revised |
 | S7-11 Monk's Friend | avoid | yes | Thief (14), Thief (26) | run | - | - | Revised |
+| S7-14 Jungle Potion | incidental | yes | Jogre (53), Harpie Bug Swarm (46) | melee | Jogre, Harpie Bug Swarm | Trout 5 | Revised |
 | S8-01 Priest in Peril | quest-fight | yes | Temple Guardian (30), Monk of Zamorak (30) | melee | Temple Guardian | Trout 5 | Revised |
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
 | S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (Lost City) (101) | safespot | Tree spirit (Lost City) | - | Revised |
@@ -555,6 +556,30 @@ Changed:
 Evidence:
 
 - Quest stage route 0.2; OSRS Wiki Monk's Friend requirements, revision 15240952.
+
+## S7-14 Jungle Potion
+
+**Revised.** Jungle Potion: aggressive level 53 Jogres and level 46 Harpie Bug Swarms roam the jungle around Tai Bwo Wannai; the quest asks for the ability to defend yourself against them.
+
+Assumptions:
+
+- The Jogre is its normal version (level 53, 60 hit points); the GWD version is not in the jungle (combatFoes.json, Wiki infobox).
+
+Problems:
+
+- New quest: no stage of the route met these monsters before.
+
+Alternatives:
+
+- Run past them: the herbs do not need them dead.
+
+Changed:
+
+- 2.106.0: the step's foes name the Jogre and the Harpie Bug Swarm, so the defend requirement is estimated with the player's kit; Trout x5 (or similar food) is a required item.
+
+Evidence:
+
+- OSRS Wiki Jungle Potion requirements, revision 15390159; Jogre and Harpie Bug Swarm infoboxes.
 
 ## S8-01 Priest in Peril
 

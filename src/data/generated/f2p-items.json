@@ -3737,67 +3737,6 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Coins"
   },
   {
-    "id": 995,
-    "nameEn": "Coins",
-    "examine": "Lovely money!",
-    "members": false,
-    "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png",
-    "value": 1,
-    "freeSpawns": [
-      "Asgarnian Ice Dungeon",
-      "Bryophyta's lair",
-      "Corsair Cove Dungeon",
-      "Crandor and Karamja Dungeon",
-      "Dwarven Mine",
-      "Giants' Plateau",
-      "Edgeville Dungeon",
-      "Emir's Arena"
-    ],
-    "dropSources": [
-      {
-        "monster": "Jelly#Regular",
-        "combatLevel": null,
-        "rate": "39/128"
-      },
-      {
-        "monster": "Goblin#Drop table 2",
-        "combatLevel": null,
-        "rate": "34/128"
-      },
-      {
-        "monster": "Green dragon#Regular",
-        "combatLevel": null,
-        "rate": "29/128"
-      },
-      {
-        "monster": "Green dragon#Wilderness Slayer Cave",
-        "combatLevel": null,
-        "rate": "29/128"
-      },
-      {
-        "monster": "Goblin#Drop table 1",
-        "combatLevel": null,
-        "rate": "28/128"
-      },
-      {
-        "monster": "Catablepon",
-        "combatLevel": 68,
-        "rate": "4/101"
-      },
-      {
-        "monster": "Feral Vampyre",
-        "combatLevel": 61,
-        "rate": "40/128"
-      },
-      {
-        "monster": "Crawling Hand",
-        "combatLevel": 8,
-        "rate": "24/128"
-      }
-    ],
-    "wikiUrl": "https://oldschool.runescape.wiki/w/Coins"
-  },
-  {
     "id": 2140,
     "nameEn": "Cooked chicken",
     "examine": "Mmm this looks tasty.",

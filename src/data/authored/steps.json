@@ -4485,6 +4485,70 @@
     }
   },
   {
+    "id": "S7-14",
+    "stage": 7,
+    "type": "quest",
+    "title": "Jungle Potion",
+    "qp": 1,
+    "requires": [
+      "S7-06"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Jungle_Potion",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Jungle_Potion/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2810,3086,0",
+    "mapLocation": {
+      "x": 2810,
+      "y": 3086,
+      "plane": 0,
+      "label": "Tai Bwo Wannai"
+    },
+    "npc": {
+      "nameEn": "Trufitus",
+      "location": "Tai Bwo Wannai",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Trufitus"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Trout",
+        "heals": 7,
+        "amount": 5,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "howToGet": "Your own catch or the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. Aggressive level 53 Jogres and level 46 Harpie Bug Swarms roam the jungle around Tai Bwo Wannai. Preparation sizes the amount for your levels and armour.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Jogre",
+      "Harpie Bug Swarm"
+    ],
+    "reward": "1 QP, 775 Herblore XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Trufitus"
+      ],
+      "dialogChoices": [
+        "It's a nice village, where is everyone?",
+        "Me? How can I help?",
+        "It sounds like just the challenge for me.",
+        "Of course!"
+      ],
+      "highlightItems": [],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Jungle Potion"
+      }
+    }
+  },
+  {
     "id": "S8-01",
     "stage": 8,
     "type": "quest",

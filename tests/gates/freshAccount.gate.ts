@@ -48,7 +48,7 @@ const MAX_TURNS: Record<GameMode, number> = { f2p: 300, members: 700 };
 const UNKNOWN_TIME_DEBT = 0;
 // A fresh Members account finishes every quest; the turns whose remaining time is unknown are known debt. Lower it as it
 // shrinks, never raise it.
-const MEMBERS_UNKNOWN_TIME_DEBT = 42;
+const MEMBERS_UNKNOWN_TIME_DEBT = 7;
 
 // One fresh account played through the route of a mode; it stops at the first check and returns what is left.
 function play(mode: GameMode) {
@@ -57,6 +57,8 @@ function play(mode: GameMode) {
   const xp: Record<string, number> = Object.fromEntries(SKILLS.map(s => [s, s === 'hitpoints' ? xpForLevel(10) : 0]));
   const bag = new Map<string, number>(), bank = new Map<string, number>(), worn: string[] = [];
   const add = (name: string, n: number) => bag.set(name, Math.max(0, (bag.get(name) ?? 0) + n));
+  // A quest amulet the gear data lacks (the Ghostspeak amulet) is still worn on the neck, never in the weapon slot.
+  const slotOf = (name: string) => { const p = gearPieceByName(name); return p ? (p.slot === 'neck' ? 'amulet' : p.slot) : /amulet|necklace/i.test(name) ? 'amulet' : 'weapon'; };
   let coins = 0, position = { x: 3222, y: 3218, plane: 0 }, previous: CommittedDecision | undefined, unknownTime = 0, turn = 0;
   const quests: Record<string, { state: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED'; stepId?: string }> =
     Object.fromEntries(questCatalogue.filter(q => mode === 'members' || !q.members).map(q => [q.id, { state: 'NOT_STARTED' }]));
@@ -65,7 +67,7 @@ function play(mode: GameMode) {
     const stats = Object.fromEntries(SKILLS.map(s => [s, Math.max(1, levelForXp(xp[s]))]));
     const done = Object.entries(quests).filter(([, q]) => q.state === 'COMPLETED').map(([id]) => id);
     const owned = { bankSeen: true, items: new Map(NAMES.map(n => [n.toLowerCase(), { name: n, carried: bag.get(n) ?? 0, bank: bank.get(n) ?? 0, noted: 0 }])) };
-    const equipment = worn.map(n => { const p = gearPieceByName(n); return { id: p?.id ?? 1, name: n, slot: p ? (p.slot === 'neck' ? 'amulet' : p.slot) : 'weapon', count: 1 }; });
+    const equipment = worn.map(n => ({ id: gearPieceByName(n)?.id ?? 1, name: n, slot: slotOf(n), count: 1 }));
     const gear = { equipment, inventory: [...bag].filter(([, c]) => c > 0).map(([name, count]) => ({ id: 1, name, count })), coins, bankCoins: 0 };
     const player = buildPlayerState({ mode, connected: true, player: 'Gate', stats, progress: emptyProgress(), questsDone: done, owned, gear, position });
     const qp = questCatalogue.filter(q => done.includes(q.id)).reduce((s, q) => s + (q.rewards.questPoints ?? 0), 0);
@@ -123,9 +125,9 @@ function play(mode: GameMode) {
       }
       case 'WITHDRAW': { const name = subject ?? nameFrom(a.id.split(':').slice(2).join(':')); add(name, bank.get(name) ?? 0); bank.set(name, 0); break; }
       case 'EQUIP': {
-        const name = a.title.replace(/^Equip /, '').replace(/ before the fight$/, ''), slot = gearPieceByName(name)?.slot;
+        const name = a.title.replace(/^Equip /, '').replace(/ before the fight$/, ''), slot = slotOf(name);
         add(name, -1);
-        for (let i = worn.length - 1; i >= 0; i--) if (slot && gearPieceByName(worn[i])?.slot === slot) { add(worn[i], 1); worn.splice(i, 1); }
+        for (let i = worn.length - 1; i >= 0; i--) if (slotOf(worn[i]) === slot) { add(worn[i], 1); worn.splice(i, 1); }
         worn.push(name);
         break;
       }

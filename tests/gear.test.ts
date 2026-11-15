@@ -292,7 +292,7 @@ describe('gear advice', () => {
 describe('step opponents (monsters.json)', () => {
   it('every step opponent has a wiki card, the level matches the guide text', () => {
     const named = allSteps.filter((s) => s.foes?.length);
-    expect(named.map((s) => s.id)).toEqual(['S2-08', 'S2-11', 'S4-01', 'S4-02', 'S8-02']);
+    expect(named.map((s) => s.id)).toEqual(['S2-08', 'S2-11', 'S4-01', 'S4-02', 'S7-14', 'S8-02']);
     for (const s of named) {
       expect(stepFoes(s).map((f) => f.name), s.id).toEqual(s.foes);
       const text = [s.how, s.where, ...(s.fields ?? []).map((f) => f.text)].join(' ');
@@ -410,8 +410,8 @@ describe('amulets: Amulet of strength and Amulet of power do not argue (§69)', 
   const wearing = (...names: string[]) => gear({ equipment: names.map((n) => item(n, byName(n).slot === 'neck' ? 'amulet' : byName(n).slot)), coins: 50_000, bankCoins: 0 });
   const neckAdvice = (a: ReturnType<typeof adviseGear>) => [...a.actions, ...a.goals].filter((x) => x.slot === 'neck').map((x) => x.item.name);
 
-  it('on all combat steps the amulet of strength does more damage than the amulet of power', () => {
-    for (const step of allSteps.filter((s) => s.foes?.length)) {
+  it('on all free combat steps the amulet of strength does more damage than the amulet of power (Members foes such as the Jogre can favour accuracy)', () => {
+    for (const step of allSteps.filter((s) => s.foes?.length && !s.membersOnly)) {
       const foes = stepFoes(step);
       if (!foes.length) continue;
       const lv = { attack: 30, strength: 30, defence: 30 };
