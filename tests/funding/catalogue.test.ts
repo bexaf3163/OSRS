@@ -19,10 +19,21 @@ describe('the method catalogue', () => {
 
   it('has the methods the audit promised, with stable ids', () => {
     expect(authored.map((m) => m.id).sort()).toEqual([
-      'agility-pyramid-tops', 'anchovy-pizzas', 'apple-pies', 'berry-pies', 'buy-pies-cooks-guild', 'buy-steel-nails', 'chocolate-cakes', 'chop-oak-draynor', 'chop-yew-edgeville', 'clean-grimy-guam', 'collect-iron-al-kharid',
-      'collect-jangerberries', 'cows-cowhide', 'craft-emerald-bracelets', 'craft-gold-bracelets', 'craft-limestone-bricks', 'craft-sapphire-bracelets', 'enchant-jade-amulets', 'enchant-sapphire-rings', 'feather-packs', 'fill-bullseye-lanterns', 'fill-jugs-falador', 'fish-lobster-musa', 'giant-frogs', 'grind-chocolate', 'grind-goat-horns', 'hill-giants', 'jug-packs',
-      'kebabs-al-kharid', 'make-gloves-of-silence', 'make-guam-potions-unf', 'make-redwood-pyre-logs', 'meat-pies', 'mine-coal-dwarven', 'mine-iron-dwarven', 'oziach-shields', 'pick-bananas', 'pie-shells', 'pizza-bases', 'smelt-silver-bars',
-      'smelt-steel-bars', 'smith-steel-cannonballs', 'spin-flax-lumbridge', 'tan-black-dragonhide', 'tan-blue-dragonhide', 'tan-green-dragonhide', 'tan-red-dragonhide', 'telegrab-wine-of-zamorak',
+      'agility-pyramid-tops', 'anchovy-pizzas', 'apple-pies', 'berry-pies', 'buy-pies-cooks-guild', 'buy-steel-nails', 'chocolate-cakes',
+      'chop-oak-draynor', 'chop-yew-edgeville', 'clean-grimy-avantoe', 'clean-grimy-cadantine', 'clean-grimy-dwarf-weed', 'clean-grimy-guam',
+      'clean-grimy-harralander', 'clean-grimy-irit', 'clean-grimy-kwuarm', 'clean-grimy-lantadyme', 'clean-grimy-marrentill',
+      'clean-grimy-ranarr-weed', 'clean-grimy-snapdragon', 'clean-grimy-tarromin', 'clean-grimy-toadflax', 'clean-grimy-torstol',
+      'collect-iron-al-kharid', 'collect-jangerberries', 'collect-monks-robes', 'collect-spades-falador', 'cows-cowhide', 'craft-emerald-bracelets',
+      'craft-gold-bracelets', 'craft-limestone-bricks', 'craft-ruby-bracelets', 'craft-sapphire-bracelets', 'crush-bird-nests',
+      'enchant-jade-amulets', 'enchant-sapphire-rings', 'enchant-topaz-rings', 'exchange-mole-parts', 'feather-packs', 'fill-bullseye-lanterns',
+      'fill-jugs-falador', 'fish-lobster-musa', 'fletch-headless-arrows', 'giant-frogs', 'grind-chocolate', 'grind-goat-horns', 'grind-unicorn-horns',
+      'hill-giants', 'jug-packs', 'kebabs-al-kharid', 'mahogany-planks-varrock', 'make-avantoe-potions-unf', 'make-cadantine-potions-unf',
+      'make-crystal-keys', 'make-dwarf-weed-potions-unf', 'make-gloves-of-silence', 'make-guam-potions-unf', 'make-harralander-potions-unf',
+      'make-irit-potions-unf', 'make-kwuarm-potions-unf', 'make-lantadyme-potions-unf', 'make-ranarr-potions-unf', 'make-redwood-pyre-logs',
+      'make-snapdragon-potions-unf', 'make-tarromin-potions-unf', 'make-toadflax-potions-unf', 'make-ultracompost', 'meat-pies', 'mine-coal-dwarven',
+      'mine-iron-dwarven', 'oziach-shields', 'pick-bananas', 'pie-shells', 'pizza-bases', 'sell-silk-ardougne', 'smelt-silver-bars',
+      'smelt-steel-bars', 'smith-steel-cannonballs', 'spin-flax-lumbridge', 'string-maple-longbows', 'tan-black-dragonhide', 'tan-blue-dragonhide',
+      'tan-green-dragonhide', 'tan-red-dragonhide', 'telegrab-wine-of-zamorak',
     ]);
     expect(methodById('hill-giants')?.combat?.foe).toBe('Hill Giant');
     expect(methodById('nothing')).toBeUndefined();

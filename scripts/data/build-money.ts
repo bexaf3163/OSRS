@@ -64,6 +64,13 @@ const UNPLANNED: Record<string, string> = {
   'claiming-dynamite-from-thirus': 'needs the elite Kourend & Kebos Diary',
   'pickpocketing-paladins': 'the figures assume the medium Ardougne Diary',
   'pickpocketing-master-farmers': 'the figures assume the hard Ardougne Diary or the Thieving cape',
+  'picking-cactus-spines': 'a farming run: the patch grows for hours, which the route does not plan',
+  'farming-cotton-bolls': 'a farming run: the patch grows for hours, which the route does not plan',
+  'farming-hemp': 'a farming run: the patch grows for hours, which the route does not plan',
+  'farming-jute-fibre': 'a farming run: the patch grows for hours, which the route does not plan',
+  'farming-yanillian-hops': 'a farming run: the patch grows for hours, which the route does not plan',
+  'planting-celastrus-sapling': 'a farming run: the patch grows for hours, which the route does not plan',
+  'selling-hardleather-bodies':'the guide gives hourly totals (625 bodies for 10,625 coins), not a unit the build can read',
 };
 const coverage = read<{ entries: { id: string }[] }>('src/data/authored/fundingCoverage.json');
 const places = read<{ locations: Record<string, WikiPoint & { label: string; kind: string }> }>('src/data/generated/majorLocations.json').locations;

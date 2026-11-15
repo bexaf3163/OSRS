@@ -4067,6 +4067,4389 @@
         "Supplies are bought and products sold at the exchange at the instant prices.",
         "Item ids from the wiki infoboxes, retrieved 2026-11-15."
       ]
+    },
+    {
+      "id": "clean-grimy-avantoe",
+      "title": "Clean grimy avantoes",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning grimy avantoe. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 48
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 211,
+            "name": "Grimy avantoe"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 261,
+            "name": "Avantoe"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "avantoe",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 avantoe an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy avantoes at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the avantoes and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_avantoe",
+          "title": "Money making guide/Cleaning grimy avantoe",
+          "revision": 14355638,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy avantoe has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-cadantine",
+      "title": "Clean grimy cadantines",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning grimy cadantine. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 65
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 215,
+            "name": "Grimy cadantine"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 265,
+            "name": "Cadantine"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "cadantine",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 cadantine an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy cadantines at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the cadantines and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_cadantine",
+          "title": "Money making guide/Cleaning grimy cadantine",
+          "revision": 14355637,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy cadantine has a buy limit of 11,000 every four hours, so long sessions are capped near 2,750 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-dwarf-weed",
+      "title": "Clean grimy dwarf weeds",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning grimy dwarf weed. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 70
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 217,
+            "name": "Grimy dwarf weed"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 267,
+            "name": "Dwarf weed"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "dwarf weed",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 dwarf weed an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy dwarf weeds at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the dwarf weeds and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_dwarf_weed",
+          "title": "Money making guide/Cleaning grimy dwarf weed",
+          "revision": 12278440,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy dwarf weed has a buy limit of 11,000 every four hours, so long sessions are capped near 2,750 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-harralander",
+      "title": "Clean grimy harralanders",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning Grimy harralander. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 20
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 205,
+            "name": "Grimy harralander"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 255,
+            "name": "Harralander"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "harralander",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 harralander an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy harralanders at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the harralanders and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_harralander",
+          "title": "Money making guide/Cleaning grimy harralander",
+          "revision": 14381447,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy harralander has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-irit",
+      "title": "Clean grimy irit leafs",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning grimy irit leaves. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 40
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 209,
+            "name": "Grimy irit leaf"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 259,
+            "name": "Irit leaf"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "irit leaf",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 irit leaf an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy irit leafs at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the irit leafs and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_irit_leaves",
+          "title": "Money making guide/Cleaning grimy irit leaves",
+          "revision": 14355632,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy irit leaf has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-kwuarm",
+      "title": "Clean grimy kwuarms",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning grimy kwuarm. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 54
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 213,
+            "name": "Grimy kwuarm"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 263,
+            "name": "Kwuarm"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "kwuarm",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 kwuarm an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy kwuarms at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the kwuarms and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_kwuarm",
+          "title": "Money making guide/Cleaning grimy kwuarm",
+          "revision": 14355579,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy kwuarm has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-lantadyme",
+      "title": "Clean grimy lantadymes",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning grimy lantadyme. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 67
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2485,
+            "name": "Grimy lantadyme"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 2481,
+            "name": "Lantadyme"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "lantadyme",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 lantadyme an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy lantadymes at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the lantadymes and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_lantadyme",
+          "title": "Money making guide/Cleaning grimy lantadyme",
+          "revision": 14381446,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy lantadyme has a buy limit of 11,000 every four hours, so long sessions are capped near 2,750 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-marrentill",
+      "title": "Clean grimy marrentills",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning Grimy marrentill. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 5
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 201,
+            "name": "Grimy marrentill"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 251,
+            "name": "Marrentill"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "marrentill",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 marrentill an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy marrentills at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the marrentills and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_marrentill",
+          "title": "Money making guide/Cleaning grimy marrentill",
+          "revision": 12278447,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy marrentill has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-ranarr-weed",
+      "title": "Clean grimy ranarr weeds",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning grimy ranarr weed. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 25
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 207,
+            "name": "Grimy ranarr weed"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 257,
+            "name": "Ranarr weed"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "ranarr weed",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 ranarr weed an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy ranarr weeds at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the ranarr weeds and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_ranarr_weed",
+          "title": "Money making guide/Cleaning grimy ranarr weed",
+          "revision": 14373013,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy ranarr weed has a buy limit of 11,000 every four hours, so long sessions are capped near 2,750 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-snapdragon",
+      "title": "Clean grimy snapdragons",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning grimy snapdragon. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 59
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 3051,
+            "name": "Grimy snapdragon"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 3000,
+            "name": "Snapdragon"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "snapdragon",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 snapdragon an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy snapdragons at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the snapdragons and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_snapdragon",
+          "title": "Money making guide/Cleaning grimy snapdragon",
+          "revision": 14355577,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy snapdragon has a buy limit of 11,000 every four hours, so long sessions are capped near 2,750 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-tarromin",
+      "title": "Clean grimy tarromins",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning Grimy tarromin. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 11
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 203,
+            "name": "Grimy tarromin"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 253,
+            "name": "Tarromin"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "tarromin",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 tarromin an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy tarromins at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the tarromins and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_tarromin",
+          "title": "Money making guide/Cleaning grimy tarromin",
+          "revision": 14355633,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy tarromin has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-toadflax",
+      "title": "Clean grimy toadflaxs",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning grimy toadflax. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 30
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 3049,
+            "name": "Grimy toadflax"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 2998,
+            "name": "Toadflax"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "toadflax",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 toadflax an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy toadflaxs at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the toadflaxs and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_toadflax",
+          "title": "Money making guide/Cleaning grimy toadflax",
+          "revision": 14399247,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy toadflax has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-torstol",
+      "title": "Clean grimy torstols",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning grimy torstol. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 75
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 219,
+            "name": "Grimy torstol"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 269,
+            "name": "Torstol"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "torstol",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 torstol an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy torstols at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 herbs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the torstols and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_torstol",
+          "title": "Money making guide/Cleaning grimy torstol",
+          "revision": 15272641,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy torstol has a buy limit of 11,000 every four hours, so long sessions are capped near 2,750 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-avantoe-potions-unf",
+      "title": "Make avantoe unfinished potions",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making avantoe potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 50
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 261,
+            "name": "Avantoe"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 227,
+            "name": "Vial of water"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 103,
+            "name": "Avantoe potion (unf)"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "avantoe potion (unf)",
+        "perHour": {
+          "slow": 2200,
+          "typical": 3200,
+          "fast": 4000
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,000 avantoe potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 avantoes and 14 vials of water a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy avantoes and vials of water at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a herb on a vial and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the unfinished potions."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_avantoe_potions",
+          "title": "Money making guide/Making avantoe potions",
+          "revision": 15250771,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Avantoe has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-cadantine-potions-unf",
+      "title": "Make cadantine unfinished potions",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making cadantine potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 66
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 265,
+            "name": "Cadantine"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 227,
+            "name": "Vial of water"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 107,
+            "name": "Cadantine potion (unf)"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "cadantine potion (unf)",
+        "perHour": {
+          "slow": 2200,
+          "typical": 3200,
+          "fast": 4000
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,000 cadantine potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 cadantines and 14 vials of water a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy cadantines and vials of water at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a herb on a vial and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the unfinished potions."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_cadantine_potions",
+          "title": "Money making guide/Making cadantine potions",
+          "revision": 15250775,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Cadantine has a buy limit of 11,000 every four hours, so long sessions are capped near 2,750 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-dwarf-weed-potions-unf",
+      "title": "Make dwarf weed unfinished potions",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making dwarf weed potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 72
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 267,
+            "name": "Dwarf weed"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 227,
+            "name": "Vial of water"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 109,
+            "name": "Dwarf weed potion (unf)"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "dwarf weed potion (unf)",
+        "perHour": {
+          "slow": 2200,
+          "typical": 3200,
+          "fast": 4000
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,000 dwarf weed potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 dwarf weeds and 14 vials of water a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy dwarf weeds and vials of water at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a herb on a vial and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the unfinished potions."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_dwarf_weed_potions",
+          "title": "Money making guide/Making dwarf weed potions",
+          "revision": 15250759,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Dwarf weed has a buy limit of 11,000 every four hours, so long sessions are capped near 2,750 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-harralander-potions-unf",
+      "title": "Make harralander unfinished potions",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making harralander potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 22
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 255,
+            "name": "Harralander"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 227,
+            "name": "Vial of water"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 97,
+            "name": "Harralander potion (unf)"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "harralander potion (unf)",
+        "perHour": {
+          "slow": 2200,
+          "typical": 3200,
+          "fast": 4000
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,000 harralander potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 harralanders and 14 vials of water a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy harralanders and vials of water at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a herb on a vial and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the unfinished potions."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_harralander_potions",
+          "title": "Money making guide/Making harralander potions",
+          "revision": 15250777,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Harralander has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-irit-potions-unf",
+      "title": "Make irit unfinished potions",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making irit potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 45
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 259,
+            "name": "Irit leaf"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 227,
+            "name": "Vial of water"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 101,
+            "name": "Irit potion (unf)"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "irit potion (unf)",
+        "perHour": {
+          "slow": 2200,
+          "typical": 3200,
+          "fast": 4000
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,000 irit potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 irit leafs and 14 vials of water a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy irit leafs and vials of water at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a herb on a vial and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the unfinished potions."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_irit_potions",
+          "title": "Money making guide/Making irit potions",
+          "revision": 15250783,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Irit leaf has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-kwuarm-potions-unf",
+      "title": "Make kwuarm unfinished potions",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making kwuarm potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 55
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 263,
+            "name": "Kwuarm"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 227,
+            "name": "Vial of water"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 105,
+            "name": "Kwuarm potion (unf)"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "kwuarm potion (unf)",
+        "perHour": {
+          "slow": 2200,
+          "typical": 3200,
+          "fast": 4000
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,000 kwuarm potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 kwuarms and 14 vials of water a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy kwuarms and vials of water at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a herb on a vial and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the unfinished potions."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_kwuarm_potions",
+          "title": "Money making guide/Making kwuarm potions",
+          "revision": 15250766,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Kwuarm has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-lantadyme-potions-unf",
+      "title": "Make lantadyme unfinished potions",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making lantadyme potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 69
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2481,
+            "name": "Lantadyme"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 227,
+            "name": "Vial of water"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 2483,
+            "name": "Lantadyme potion (unf)"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "lantadyme potion (unf)",
+        "perHour": {
+          "slow": 2200,
+          "typical": 3200,
+          "fast": 4000
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,000 lantadyme potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 lantadymes and 14 vials of water a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy lantadymes and vials of water at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a herb on a vial and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the unfinished potions."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_lantadyme_potions",
+          "title": "Money making guide/Making lantadyme potions",
+          "revision": 15250763,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Lantadyme has a buy limit of 11,000 every four hours, so long sessions are capped near 2,750 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-ranarr-potions-unf",
+      "title": "Make ranarr unfinished potions",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making ranarr potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 30
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 257,
+            "name": "Ranarr weed"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 227,
+            "name": "Vial of water"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 99,
+            "name": "Ranarr potion (unf)"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "ranarr potion (unf)",
+        "perHour": {
+          "slow": 2200,
+          "typical": 3200,
+          "fast": 4000
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,000 ranarr potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 ranarr weeds and 14 vials of water a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy ranarr weeds and vials of water at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a herb on a vial and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the unfinished potions."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_ranarr_potions",
+          "title": "Money making guide/Making ranarr potions",
+          "revision": 15301402,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Ranarr weed has a buy limit of 11,000 every four hours, so long sessions are capped near 2,750 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-snapdragon-potions-unf",
+      "title": "Make snapdragon unfinished potions",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making snapdragon potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 63
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 3000,
+            "name": "Snapdragon"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 227,
+            "name": "Vial of water"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 3004,
+            "name": "Snapdragon potion (unf)"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "snapdragon potion (unf)",
+        "perHour": {
+          "slow": 2200,
+          "typical": 3200,
+          "fast": 4000
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,000 snapdragon potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 snapdragons and 14 vials of water a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy snapdragons and vials of water at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a herb on a vial and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the unfinished potions."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_snapdragon_potions",
+          "title": "Money making guide/Making snapdragon potions",
+          "revision": 15250762,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Snapdragon has a buy limit of 11,000 every four hours, so long sessions are capped near 2,750 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-tarromin-potions-unf",
+      "title": "Make tarromin unfinished potions",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making tarromin potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 12
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 253,
+            "name": "Tarromin"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 227,
+            "name": "Vial of water"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 95,
+            "name": "Tarromin potion (unf)"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "tarromin potion (unf)",
+        "perHour": {
+          "slow": 2200,
+          "typical": 3200,
+          "fast": 4000
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,000 tarromin potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 tarromins and 14 vials of water a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy tarromins and vials of water at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a herb on a vial and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the unfinished potions."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_tarromin_potions",
+          "title": "Money making guide/Making tarromin potions",
+          "revision": 15250778,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Tarromin has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-toadflax-potions-unf",
+      "title": "Make toadflax unfinished potions",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making toadflax potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 34
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2998,
+            "name": "Toadflax"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 227,
+            "name": "Vial of water"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 3002,
+            "name": "Toadflax potion (unf)"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "toadflax potion (unf)",
+        "perHour": {
+          "slow": 2200,
+          "typical": 3200,
+          "fast": 4000
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,000 toadflax potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 toadflaxs and 14 vials of water a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy toadflaxs and vials of water at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a herb on a vial and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the unfinished potions."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_toadflax_potions",
+          "title": "Money making guide/Making toadflax potions",
+          "revision": 15250769,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Toadflax has a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-ultracompost",
+      "title": "Make ultracompost",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making ultracompost. Grand Exchange",
+      "requirements": [],
+      "inputs": [
+        {
+          "item": {
+            "id": 6034,
+            "name": "Supercompost"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 21622,
+            "name": "Volcanic ash"
+          },
+          "qty": 2
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 21483,
+            "name": "Ultracompost"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "ultracompost",
+        "perHour": {
+          "slow": 1485,
+          "typical": 2370,
+          "fast": 2700
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,700 an hour is the guide's 36 seconds an inventory with no banking; a bank at the exchange adds about 5 seconds, which gives 2,370."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "27 supercompost and a stack of volcanic ash a bank."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy supercompost and volcanic ash (2 an ultracompost) at the Grand Exchange."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the ash on a supercompost and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the ultracompost and take 27 supercompost."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_ultracompost",
+          "title": "Money making guide/Making ultracompost",
+          "revision": 15125395,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide warns ultracompost often sells above its guide price and the profit varies a lot.",
+        "Supercompost has a buy limit of 2,000 every four hours, so long sessions are capped near 500 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "collect-spades-falador",
+      "title": "Collect spades in Falador",
+      "family": "collecting",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Take the spade that spawns in the Falador estate agent's house, hop worlds, and repeat.",
+      "requirements": [],
+      "inputs": [],
+      "outputs": [
+        {
+          "item": {
+            "id": 952,
+            "name": "Spade"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "spade",
+        "perHour": {
+          "slow": 185,
+          "typical": 269,
+          "fast": 336
+        },
+        "basis": "wiki-guide",
+        "assumes": "336 spade an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "12 full bags an hour, about 5 minutes each with the walk to Falador East Bank; the pace counts it."
+      },
+      "spot": {
+        "x": 2983,
+        "y": 3369,
+        "plane": 0,
+        "label": "Estate agent house in Falador"
+      },
+      "bank": {
+        "x": 3017,
+        "y": 3356,
+        "plane": 0,
+        "label": "Falador East Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "travel",
+          "text": "Go to the estate agent's house in Falador."
+        },
+        {
+          "kind": "perform",
+          "text": "Take the spade, hop worlds and take it again until the bag is full."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the spades at Falador East Bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_spades",
+          "title": "Money making guide/Collecting spades",
+          "revision": 14107401,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The spade respawns after 60 seconds; hopping worlds skips the wait.",
+        "Products are sold at the exchange at the instant prices."
+      ]
+    },
+    {
+      "id": "collect-monks-robes",
+      "title": "Collect monk's robes",
+      "family": "collecting",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Take the monk's robe and robe top that spawn upstairs in the Edgeville Monastery, hop worlds, and repeat.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "prayer",
+          "level": 31
+        }
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "item": {
+            "id": 542,
+            "name": "Monk's robe"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 544,
+            "name": "Monk's robe top"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "pair of robes",
+        "perHour": {
+          "slow": 100,
+          "typical": 146,
+          "fast": 182
+        },
+        "basis": "wiki-guide",
+        "assumes": "182 monk's robe an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 pairs a bag, about 4.5 minutes with the walk to Edgeville Bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3052,
+        "y": 3490,
+        "plane": 0,
+        "label": "Edgeville Monastery"
+      },
+      "bank": {
+        "x": 3093,
+        "y": 3495,
+        "plane": 0,
+        "label": "Edgeville Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "travel",
+          "text": "Go upstairs in the Edgeville Monastery; it needs 31 Prayer."
+        },
+        {
+          "kind": "perform",
+          "text": "Take the robe and the robe top from the table, hop worlds and take them again until the bag is full."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the robes at Edgeville Bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_monk's_robes",
+          "title": "Money making guide/Collecting monk's robes",
+          "revision": 14372233,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "182 an hour counts pairs: 13 bags of 28 pieces. The pieces respawn after 60 seconds; hopping worlds skips the wait.",
+        "If one piece is worth much more, the guide suggests taking only that one.",
+        "Products are sold at the exchange at the instant prices."
+      ]
+    },
+    {
+      "id": "crush-bird-nests",
+      "title": "Crush bird nests",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Crushing bird nests. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 233,
+              "name": "Pestle and mortar"
+            }
+          ],
+          "note": "The pestle and mortar stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 5075,
+            "name": "Bird nest (empty)"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 6693,
+            "name": "Crushed nest"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "crushed nest",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 crushed nest an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "The pestle and mortar takes one slot; the Grand Exchange bank booths are beside the counters; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy empty bird nests at the Grand Exchange; keep a pestle and mortar in the bag. Test one first."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the pestle and mortar on the nests; clicking is faster than letting it crush one every 3 ticks."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the crushed nests."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crushing_bird_nests",
+          "title": "Money making guide/Crushing bird nests",
+          "revision": 14828343,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Crushed nests are sold to Herblore trainers for Saradomin brews; the margin moves with them.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "grind-unicorn-horns",
+      "title": "Grind unicorn horns",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Grinding unicorn horns. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 233,
+              "name": "Pestle and mortar"
+            }
+          ],
+          "note": "The pestle and mortar stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 237,
+            "name": "Unicorn horn"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 235,
+            "name": "Unicorn horn dust"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "unicorn horn dust",
+        "perHour": {
+          "slow": 4950,
+          "typical": 7200,
+          "fast": 9000
+        },
+        "basis": "wiki-guide",
+        "assumes": "9,000 unicorn horn dust an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "The pestle and mortar takes one slot; the Grand Exchange bank booths are beside the counters; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy unicorn horns at the Grand Exchange; keep a pestle and mortar in the bag. Test one first."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the pestle and mortar on the horns; clicking is faster than letting it grind one every 3 ticks."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the dust."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Grinding_unicorn_horns",
+          "title": "Money making guide/Grinding unicorn horns",
+          "revision": 14148537,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Unicorn horn dust is sold to Herblore trainers for antipoison; the margin moves with them.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "fletch-headless-arrows",
+      "title": "Fletch headless arrows",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Fletching headless arrows. Grand Exchange",
+      "requirements": [],
+      "inputs": [
+        {
+          "item": {
+            "id": 52,
+            "name": "Arrow shaft"
+          },
+          "qty": 15
+        },
+        {
+          "item": {
+            "id": 314,
+            "name": "Feather"
+          },
+          "qty": 15
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 53,
+            "name": "Headless arrow"
+          },
+          "qty": 15,
+          "stack": true
+        }
+      ],
+      "rate": {
+        "unit": "set of 15 arrows",
+        "perHour": {
+          "slow": 1571,
+          "typical": 2286,
+          "fast": 2857
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,857 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "Shafts, feathers and arrows all stack, so there is no bank trip."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy arrow shafts and feathers at the Grand Exchange. Make one first: if it earns under 10 coins, pick another method."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the feathers on the shafts; each action makes 15 headless arrows."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Fletching_headless_arrows",
+          "title": "Money making guide/Fletching headless arrows",
+          "revision": 15014854,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Also trains Fletching from level 1.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "craft-ruby-bracelets",
+      "title": "Craft ruby bracelets",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Crafting ruby bracelets. Edgeville",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "crafting",
+          "level": 42
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 11065,
+              "name": "Bracelet mould"
+            }
+          ],
+          "note": "The bracelet mould stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2357,
+            "name": "Gold bar"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 1603,
+            "name": "Ruby"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 11085,
+            "name": "Ruby bracelet"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "ruby bracelet",
+        "perHour": {
+          "slow": 660,
+          "typical": 960,
+          "fast": 1200
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,200 ruby bracelet an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "13 gold bars and 13 rubies a trip; the furnace is a few steps from the bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3109,
+        "y": 3499,
+        "plane": 0,
+        "label": "Edgeville furnace"
+      },
+      "bank": {
+        "x": 3093,
+        "y": 3495,
+        "plane": 0,
+        "label": "Edgeville Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy gold bars and rubies at the Grand Exchange; keep the bracelet mould in the bag."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Edgeville furnace."
+        },
+        {
+          "kind": "perform",
+          "text": "Use a gold bar on the furnace and make ruby bracelets."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the bracelets."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_ruby_bracelets",
+          "title": "Money making guide/Crafting ruby bracelets",
+          "revision": 15356031,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The Prifddinas (Song of the Elves) and Shilo Village (elite Karamja Diary) furnaces are closer to a bank but not assumed.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "enchant-topaz-rings",
+      "title": "Enchant topaz rings",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cast Lvl-3 Enchant on topaz rings at a bank and sell the Efaritay's aid rings.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "magic",
+          "level": 49
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1387,
+              "name": "Staff of fire"
+            },
+            {
+              "id": 1393,
+              "name": "Fire battlestaff"
+            },
+            {
+              "id": 1401,
+              "name": "Mystic fire staff"
+            }
+          ],
+          "note": "The staff gives the fire runes; cosmic runes are bought."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 21087,
+            "name": "Topaz ring"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 564,
+            "name": "Cosmic rune"
+          },
+          "qty": 1,
+          "stack": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 21140,
+            "name": "Efaritay's aid"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "efaritay's aid",
+        "perHour": {
+          "slow": 880,
+          "typical": 1280,
+          "fast": 1600
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,600 efaritay's aid an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "Cosmic runes take one slot; the pace counts the banking."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy topaz rings and cosmic runes at the Grand Exchange; wield the staff. Test one first."
+        },
+        {
+          "kind": "perform",
+          "text": "Cast Lvl-3 Enchant on each ring."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank and withdraw the next 27."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Enchanting_topaz_jewellery",
+          "title": "Money making guide/Enchanting topaz jewellery",
+          "revision": 14979331,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide counts 1,600 casts an hour by hand; auto-casting is about 800.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "string-maple-longbows",
+      "title": "String maple longbows",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Stringing maple longbows. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fletching",
+          "level": 55
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 62,
+            "name": "Maple longbow (u)"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 1777,
+            "name": "Bow string"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 851,
+            "name": "Maple longbow"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "maple longbow",
+        "perHour": {
+          "slow": 1320,
+          "typical": 1920,
+          "fast": 2400
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,400 maple longbow an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 unstrung bows and 14 bow strings a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy maple longbows (u) and bow strings at the Grand Exchange."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a string on a bow and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the longbows."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stringing_maple_longbows",
+          "title": "Money making guide/Stringing maple longbows",
+          "revision": 14355713,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Also trains Fletching.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "mahogany-planks-varrock",
+      "title": "Make mahogany planks at the Varrock sawmill",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Carry mahogany logs to the Varrock sawmill operator, pay 1,500 coins a plank, and sell the planks.",
+      "requirements": [],
+      "inputs": [
+        {
+          "item": {
+            "id": 6332,
+            "name": "Mahogany logs"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 1500,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 12625,
+            "name": "Stamina potion(4)"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            300
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 8782,
+            "name": "Mahogany plank"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "mahogany plank",
+        "perHour": {
+          "slow": 800,
+          "typical": 1200,
+          "fast": 1400
+        },
+        "basis": "wiki-guide",
+        "assumes": "The guide's 6,900 an hour needs a plank sack and a ring of the elements. Without them, 27 logs a run from Varrock East Bank to the sawmill and back take about 80 seconds, about 1,200 an hour; 4 stamina potions an hour keep the run up."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "Coins take one slot; 27 logs a run, the walk is in the pace."
+      },
+      "spot": {
+        "x": 3302,
+        "y": 3491,
+        "plane": 0,
+        "label": "Varrock Lumber Yard"
+      },
+      "bank": {
+        "x": 3253,
+        "y": 3420,
+        "plane": 0,
+        "label": "Varrock East Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy mahogany logs and stamina potions at the Grand Exchange; bring 1,500 coins a log."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the sawmill operator at the Varrock Lumber Yard."
+        },
+        {
+          "kind": "perform",
+          "text": "Have the operator make all 27 logs into mahogany planks."
+        },
+        {
+          "kind": "bank",
+          "text": "Run back and bank the planks at Varrock East Bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_mahogany_planks_(max_efficiency)",
+          "title": "Money making guide/Making mahogany planks (max efficiency)",
+          "revision": 14968106,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "A plank sack (Mahogany Homes) and a ring of the elements would raise the pace; neither is assumed.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "sell-silk-ardougne",
+      "title": "Sell silk to the Ardougne silk merchant",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Selling silk to silk merchant. Ardougne",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "magic",
+          "level": 51
+        },
+        {
+          "kind": "quest",
+          "quest": "Plague City",
+          "state": "complete"
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1383,
+              "name": "Staff of water"
+            },
+            {
+              "id": 1395,
+              "name": "Water battlestaff"
+            },
+            {
+              "id": 1403,
+              "name": "Mystic water staff"
+            }
+          ],
+          "note": "The staff gives the water runes for Ardougne Teleport."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 950,
+            "name": "Silk"
+          },
+          "qty": 27
+        },
+        {
+          "item": {
+            "id": 563,
+            "name": "Law rune"
+          },
+          "qty": 2,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 2552,
+            "name": "Ring of dueling(8)"
+          },
+          "qty": 0.125
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 1620,
+          "stack": true
+        }
+      ],
+      "rate": {
+        "unit": "bag of 27 silk",
+        "perHour": {
+          "slow": 105,
+          "typical": 152,
+          "fast": 190
+        },
+        "basis": "wiki-guide",
+        "assumes": "190 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "Castle Wars bank by ring of dueling, back by Ardougne Teleport; the pace counts it."
+      },
+      "spot": {
+        "x": 2570,
+        "y": 3300,
+        "plane": 0,
+        "label": "Ardougne"
+      },
+      "bank": {
+        "x": 2655,
+        "y": 3280,
+        "plane": 0,
+        "label": "Ardougne bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy silk, law runes and rings of dueling at the Grand Exchange; wield the staff of water."
+        },
+        {
+          "kind": "travel",
+          "text": "Cast Ardougne Teleport and walk to the silk merchant in the market."
+        },
+        {
+          "kind": "perform",
+          "text": "Offer the silk for 120, then counter his 50 with 60 for the whole bag."
+        },
+        {
+          "kind": "bank",
+          "text": "Teleport to Castle Wars, bank the coins and take 27 silk."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Selling_silk_to_silk_merchant",
+          "title": "Money making guide/Selling silk to silk merchant",
+          "revision": 14373034,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The merchant pays 60 coins a silk however the Grand Exchange price moves; profit is 60 less the silk price and the runes.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-crystal-keys",
+      "title": "Make crystal keys",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Creating crystal keys. Grand Exchange",
+      "requirements": [],
+      "inputs": [
+        {
+          "item": {
+            "id": 985,
+            "name": "Tooth half of key"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 987,
+            "name": "Loop half of key"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 989,
+            "name": "Crystal key"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "crystal key",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 crystal key an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 tooth halves and 14 loop halves a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy tooth and loop halves of the key at the Grand Exchange. Test one first."
+        },
+        {
+          "kind": "perform",
+          "text": "Use each tooth half on a loop half."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the keys."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Creating_crystal_keys",
+          "title": "Money making guide/Creating crystal keys",
+          "revision": 15392906,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "exchange-mole-parts",
+      "title": "Exchange mole parts for bird nests",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Exchanging mole parts. Falador Park",
+      "requirements": [],
+      "inputs": [
+        {
+          "item": {
+            "id": 7416,
+            "name": "Mole claw"
+          },
+          "qty": 0.5
+        },
+        {
+          "item": {
+            "id": 7418,
+            "name": "Mole skin"
+          },
+          "qty": 0.5
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 5075,
+            "name": "Bird nest (empty)"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 5320,
+            "name": "Sweetcorn seed"
+          },
+          "qty": 0.6442,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5323,
+            "name": "Strawberry seed"
+          },
+          "qty": 0.6316,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5312,
+            "name": "Acorn"
+          },
+          "qty": 0.0842
+        },
+        {
+          "item": {
+            "id": 5100,
+            "name": "Limpwurt seed"
+          },
+          "qty": 0.1684,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5321,
+            "name": "Watermelon seed"
+          },
+          "qty": 0.1474,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 22879,
+            "name": "Snape grass seed"
+          },
+          "qty": 0.0842,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5302,
+            "name": "Lantadyme seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            32
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5303,
+            "name": "Dwarf weed seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            32
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5301,
+            "name": "Cadantine seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            40
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 21486,
+            "name": "Teak seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            48
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 21488,
+            "name": "Mahogany seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            48
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5313,
+            "name": "Willow seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            59
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5287,
+            "name": "Pineapple seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            59
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5290,
+            "name": "Calquat tree seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            79
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5288,
+            "name": "Papaya tree seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            95
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5314,
+            "name": "Maple seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            158
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5304,
+            "name": "Torstol seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            238
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5295,
+            "name": "Ranarr seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            238
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5300,
+            "name": "Snapdragon seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            238
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5315,
+            "name": "Yew seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            238
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5289,
+            "name": "Palm tree seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            475
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 22877,
+            "name": "Dragonfruit tree seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            475
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 5316,
+            "name": "Magic seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            475
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 22869,
+            "name": "Celastrus seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            950
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 22871,
+            "name": "Redwood tree seed"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            950
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 1637,
+            "name": "Sapphire ring"
+          },
+          "qty": 0.08
+        },
+        {
+          "item": {
+            "id": 1635,
+            "name": "Gold ring"
+          },
+          "qty": 0.07
+        },
+        {
+          "item": {
+            "id": 1639,
+            "name": "Emerald ring"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            33
+          ]
+        },
+        {
+          "item": {
+            "id": 1641,
+            "name": "Ruby ring"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            56
+          ]
+        },
+        {
+          "item": {
+            "id": 1643,
+            "name": "Diamond ring"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            500
+          ]
+        }
+      ],
+      "rate": {
+        "unit": "nest",
+        "perHour": {
+          "slow": 55,
+          "typical": 80,
+          "fast": 100
+        },
+        "basis": "wiki-guide",
+        "assumes": "100 bird nest (empty) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The mole parts are noted, so one trip carries them all."
+      },
+      "spot": {
+        "x": 3010,
+        "y": 3379,
+        "plane": 0,
+        "label": "Falador Park"
+      },
+      "bank": {
+        "x": 3017,
+        "y": 3356,
+        "plane": 0,
+        "label": "Falador East Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy noted mole claws and mole skins at the Grand Exchange."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to Wyson the gardener in Falador Park."
+        },
+        {
+          "kind": "perform",
+          "text": "Trade the mole parts for nest boxes and open them."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the seeds and jewellery at Falador East Bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Exchanging_mole_parts",
+          "title": "Money making guide/Exchanging mole parts",
+          "revision": 15167872,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "About 72% of nests hold seeds, 20% jewellery and 8% are empty; the outputs are the guide's expected values.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
     }
   ]
 }

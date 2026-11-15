@@ -2063,1549 +2063,6 @@
    ]
   },
   {
-   "id": "cleaning-grimy-avantoe",
-   "title": "Cleaning grimy avantoe",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning grimy avantoe. Grand Exchange",
-   "about": "Avantoe is in high demand to create Super energy potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning avantoe is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 48
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Grimy avantoe"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 211,
-      "name": "Grimy avantoe"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 261,
-      "name": "Avantoe"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "avantoe",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 avantoe an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy avantoe at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning grimy avantoe until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_avantoe",
-     "title": "Money making guide/Cleaning grimy avantoe",
-     "revision": 14355638,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cleaning-grimy-cadantine",
-   "title": "Cleaning grimy cadantine",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning grimy cadantine. Grand Exchange",
-   "about": "Cadantine are in demand to create super defence potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning cadantine is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 65
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Grimy cadantine"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 215,
-      "name": "Grimy cadantine"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 265,
-      "name": "Cadantine"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "cadantine",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 cadantine an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy cadantine at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning grimy cadantine until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_cadantine",
-     "title": "Money making guide/Cleaning grimy cadantine",
-     "revision": 14355637,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cleaning-grimy-dwarf-weed",
-   "title": "Cleaning grimy dwarf weed",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning grimy dwarf weed. Grand Exchange",
-   "about": "Dwarf weed is in high demand to create Ranging potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning dwarf weed is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 70
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Grimy dwarf weed"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 217,
-      "name": "Grimy dwarf weed"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 267,
-      "name": "Dwarf weed"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "dwarf weed",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 dwarf weed an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy dwarf weed at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning grimy dwarf weed until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_dwarf_weed",
-     "title": "Money making guide/Cleaning grimy dwarf weed",
-     "revision": 12278440,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cleaning-grimy-harralander",
-   "title": "Cleaning grimy harralander",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning Grimy harralander. Grand Exchange",
-   "about": "Harralander are in demand to create Guthix rests and energy potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning harralander is profitable. Each inventory takes 10 to 20 seconds to clean 28 herbs.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 20
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Grimy harralander"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 205,
-      "name": "Grimy harralander"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 255,
-      "name": "Harralander"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "harralander",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 harralander an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy harralander at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning Grimy harralander until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_harralander",
-     "title": "Money making guide/Cleaning grimy harralander",
-     "revision": 14381447,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cleaning-grimy-irit-leaves",
-   "title": "Cleaning grimy irit leaves",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning grimy irit leaves. Grand Exchange",
-   "about": "Irit leaves are in high demand to create Super attack and Superantipoisons. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning irit leaves is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 40
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Grimy irit leaves"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 209,
-      "name": "Grimy irit leaf"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 259,
-      "name": "Irit leaf"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "irit leaf",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 irit leaf an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy irit leaf at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning grimy irit leaves until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_irit_leaves",
-     "title": "Money making guide/Cleaning grimy irit leaves",
-     "revision": 14355632,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cleaning-grimy-kwuarm",
-   "title": "Cleaning grimy kwuarm",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning grimy kwuarm. Grand Exchange",
-   "about": "Kwuarm is in high demand to create Super strength potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning kwuarm is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 54
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: coins recommended, Grimy kwuarm"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 213,
-      "name": "Grimy kwuarm"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 263,
-      "name": "Kwuarm"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "kwuarm",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 kwuarm an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy kwuarm at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning grimy kwuarm until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_kwuarm",
-     "title": "Money making guide/Cleaning grimy kwuarm",
-     "revision": 14355579,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cleaning-grimy-lantadyme",
-   "title": "Cleaning grimy lantadyme",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning grimy lantadyme. Grand Exchange",
-   "about": "Lantadyme is in high demand to create antifire and magic potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning lantadyme is profitable. Each inventory takes 10 to 20 seconds to clean 28 herbs.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 67
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Grimy lantadyme"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 2485,
-      "name": "Grimy lantadyme"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 2481,
-      "name": "Lantadyme"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "lantadyme",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 lantadyme an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy lantadyme at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning grimy lantadyme until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_lantadyme",
-     "title": "Money making guide/Cleaning grimy lantadyme",
-     "revision": 14381446,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cleaning-grimy-marrentill",
-   "title": "Cleaning grimy marrentill",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning Grimy marrentill. Grand Exchange",
-   "about": "Marrentill are in demand to create Guthix rests and for Prayer training using incense burners. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning marrentill is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 5
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Grimy marrentill"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 201,
-      "name": "Grimy marrentill"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 251,
-      "name": "Marrentill"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "marrentill",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 marrentill an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy marrentill at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning Grimy marrentill until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_marrentill",
-     "title": "Money making guide/Cleaning grimy marrentill",
-     "revision": 12278447,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cleaning-grimy-ranarr-weed",
-   "title": "Cleaning grimy ranarr weed",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning grimy ranarr weed. Grand Exchange",
-   "about": "Ranarr weed is in high demand to create Prayer potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning ranarr weed is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 25
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 207,
-      "name": "Grimy ranarr weed"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 257,
-      "name": "Ranarr weed"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "ranarr weed",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 ranarr weed an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy ranarr weed at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning grimy ranarr weed until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_ranarr_weed",
-     "title": "Money making guide/Cleaning grimy ranarr weed",
-     "revision": 14373013,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cleaning-grimy-snapdragon",
-   "title": "Cleaning grimy snapdragon",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning grimy snapdragon. Grand Exchange",
-   "about": "Snapdragon is in high demand to create Super restore potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning snapdragon is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 59
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Grimy snapdragon"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 3051,
-      "name": "Grimy snapdragon"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 3000,
-      "name": "Snapdragon"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "snapdragon",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 snapdragon an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy snapdragon at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning grimy snapdragon until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_snapdragon",
-     "title": "Money making guide/Cleaning grimy snapdragon",
-     "revision": 14355577,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cleaning-grimy-tarromin",
-   "title": "Cleaning grimy tarromin",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning Grimy tarromin. Grand Exchange",
-   "about": "Tarromin are in demand to create strength potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning tarromin is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 11
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Grimy Tarromin"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 203,
-      "name": "Grimy tarromin"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 253,
-      "name": "Tarromin"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "tarromin",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 tarromin an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy tarromin at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning Grimy tarromin until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_tarromin",
-     "title": "Money making guide/Cleaning grimy tarromin",
-     "revision": 14355633,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cleaning-grimy-toadflax",
-   "title": "Cleaning grimy toadflax",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning grimy toadflax. Grand Exchange",
-   "about": "Toadflax is in high demand to create Saradomin brews. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning toadflax is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 30
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Grimy toadflax"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 3049,
-      "name": "Grimy toadflax"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 2998,
-      "name": "Toadflax"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "toadflax",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 toadflax an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy toadflax at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning grimy toadflax until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_toadflax",
-     "title": "Money making guide/Cleaning grimy toadflax",
-     "revision": 14399247,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cleaning-grimy-torstol",
-   "title": "Cleaning grimy torstol",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cleaning grimy torstol. Grand Exchange",
-   "about": "Torstol is in high demand to create Super combat potions and Anti-venom+. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning torstol is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 75
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Grimy torstol"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 219,
-      "name": "Grimy torstol"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 269,
-      "name": "Torstol"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "torstol",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 torstol an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Grimy torstol at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cleaning grimy torstol until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_torstol",
-     "title": "Money making guide/Cleaning grimy torstol",
-     "revision": 15272641,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "collecting-air-talismans",
    "title": "Collecting air talismans",
    "family": "collecting",
@@ -4728,111 +3185,6 @@
    ]
   },
   {
-   "id": "collecting-monk-s-robes",
-   "title": "Collecting monk's robes",
-   "family": "collecting",
-   "access": "f2p",
-   "repeatable": true,
-   "summary": "Collecting monk's robes. Edgeville Monastery",
-   "about": "This guide assumes 13 full inventory runs every hour (each run should take about 4 minutes and 30 seconds). The Edgeville Monastery has one spawn of Monk's robe and one of Monk's robe top both spawning on a table south-east of the upstairs section of the monastery. The robe pieces will respawn after 60 seconds, but it is recommended to change worlds to circumvent this timer. You can also equip a set of robes to free up 2 extra inventory spaces.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "prayer",
-     "level": 31
-    }
-   ],
-   "inputs": [],
-   "outputs": [
-    {
-     "item": {
-      "id": 542,
-      "name": "Monk's robe"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 544,
-      "name": "Monk's robe top"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "monk's robe",
-    "perHour": {
-     "slow": 100,
-     "typical": 146,
-     "fast": 182
-    },
-    "basis": "wiki-guide",
-    "assumes": "182 monk's robe an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3052,
-    "y": 3490,
-    "plane": 0,
-    "label": "Edgeville Monastery"
-   },
-   "bank": {
-    "x": 3093,
-    "y": 3495,
-    "plane": 0,
-    "label": "Edgeville Bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "travel",
-     "text": "Go to Edgeville Monastery.",
-     "place": {
-      "x": 3052,
-      "y": 3490,
-      "plane": 0,
-      "label": "Edgeville Monastery"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Collecting monk's robes until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Edgeville Bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_monk's_robes",
-     "title": "Money making guide/Collecting monk's robes",
-     "revision": 14372233,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "collecting-nature-runes",
    "title": "Collecting nature runes",
    "family": "production",
@@ -5226,98 +3578,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_snape_grass",
      "title": "Money making guide/Collecting snape grass",
      "revision": 15392914,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "collecting-spades",
-   "title": "Collecting spades",
-   "family": "collecting",
-   "access": "f2p",
-   "repeatable": true,
-   "summary": "Collecting spades in Falador. Estate agent house in Falador",
-   "about": "This guide assumes 12 full inventory runs every hour (each run should take about 5 minutes). The estate agent house in Falador has one spawn of spade, which will respawn after 60 seconds, but it is recommended to change worlds to circumvent this timer. Each spade is worth.",
-   "requirements": [],
-   "inputs": [],
-   "outputs": [
-    {
-     "item": {
-      "id": 952,
-      "name": "Spade"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "spade",
-    "perHour": {
-     "slow": 185,
-     "typical": 269,
-     "fast": 336
-    },
-    "basis": "wiki-guide",
-    "assumes": "336 spade an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2983,
-    "y": 3369,
-    "plane": 0,
-    "label": "Estate agent house in Falador"
-   },
-   "bank": {
-    "x": 3017,
-    "y": 3356,
-    "plane": 0,
-    "label": "Falador East Bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "travel",
-     "text": "Go to Estate agent house in Falador.",
-     "place": {
-      "x": 2983,
-      "y": 3369,
-      "plane": 0,
-      "label": "Estate agent house in Falador"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Collecting spades in Falador until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Falador East Bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_spades",
-     "title": "Money making guide/Collecting spades",
-     "revision": 14107401,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -8407,127 +6667,6 @@
    ]
   },
   {
-   "id": "crafting-ruby-bracelets",
-   "title": "Crafting ruby bracelets",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Crafting ruby bracelets. Edgeville",
-   "about": "Players can craft ruby bracelets at any furnace, though the Edgeville furnace is the closest one to the bank that does not require any quests to access. The closest furnace to a bank is the Shilo Village furnace, which should be used if you have completed the Elite Karamja Diary. Alternatively, players who have completed Song of the Elves, can use the Prifddinas furnace instead.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "crafting",
-     "level": 42
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Bracelet mould required, Weight-reducing clothing recommended"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 2357,
-      "name": "Gold bar"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 1603,
-      "name": "Ruby"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 11085,
-      "name": "Ruby bracelet"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "ruby bracelet",
-    "perHour": {
-     "slow": 660,
-     "typical": 960,
-     "fast": 1200
-    },
-    "basis": "wiki-guide",
-    "assumes": "1,200 ruby bracelet an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3080,
-    "y": 3492,
-    "plane": 0,
-    "label": "Edgeville"
-   },
-   "bank": {
-    "x": 3093,
-    "y": 3495,
-    "plane": 0,
-    "label": "Edgeville Bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Gold bar, Ruby at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Edgeville.",
-     "place": {
-      "x": 3080,
-      "y": 3492,
-      "plane": 0,
-      "label": "Edgeville"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Crafting ruby bracelets until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Edgeville Bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_ruby_bracelets",
-     "title": "Money making guide/Crafting ruby bracelets",
-     "revision": 15356031,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "crafting-runes-at-ourania-altar",
    "title": "Crafting runes at Ourania Altar",
    "family": "production",
@@ -8821,226 +6960,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_runes_at_Ourania_Altar",
      "title": "Money making guide/Crafting runes at Ourania Altar",
      "revision": 14997902,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "creating-crystal-keys",
-   "title": "Creating crystal keys",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Creating crystal keys. Grand Exchange",
-   "about": "Crystal keys, made by combining Tooth half of keys with Loop half of keys, are used to open the Crystal chest in Taverley. They can also be converted to Enhanced crystal keys after completion of Song of the Elves, where they are then used to open the Elven crystal chest; this chest features a similar but substantially upgraded drop table relative to the normal crystal chest, including the unique Dragonstone armour and a very rare chance to obtain an Uncut onyx.",
-   "requirements": [],
-   "inputs": [
-    {
-     "item": {
-      "id": 985,
-      "name": "Tooth half of key"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 987,
-      "name": "Loop half of key"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 989,
-      "name": "Crystal key"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "crystal key",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 crystal key an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Tooth half of key, Loop half of key at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Creating crystal keys until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Creating_crystal_keys",
-     "title": "Money making guide/Creating crystal keys",
-     "revision": 15392906,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "crushing-bird-nests",
-   "title": "Crushing bird nests",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Crushing bird nests. Grand Exchange",
-   "about": "Crushed nests are used to create Saradomin brews. Because these are often used to train Herblore and for combat, and crushing bird nests gives no experience, many players avoid the tedium of making crushed nests and buy them directly from the Grand Exchange. This opens up an opportunity to crush bird nests for profit.",
-   "requirements": [
-    {
-     "kind": "check",
-     "text": "Bring: Pestle and mortar, Bird nests"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 5075,
-      "name": "Bird nest (empty)"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 6693,
-      "name": "Crushed nest"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "crushed nest",
-    "perHour": {
-     "slow": 2750,
-     "typical": 4000,
-     "fast": 5000
-    },
-    "basis": "wiki-guide",
-    "assumes": "5,000 crushed nest an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Bird nest (empty) at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Crushing bird nests until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crushing_bird_nests",
-     "title": "Money making guide/Crushing bird nests",
-     "revision": 14828343,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -9985,6 +7904,122 @@
    ]
   },
   {
+   "id": "dying-blue-wizard-robes",
+   "title": "Dying blue wizard robes",
+   "family": "processing",
+   "access": "members",
+   "repeatable": true,
+   "summary": "Dying black robes into blue wizard robes",
+   "about": "The price of one black robe is and the price of a blue dye is. Dying the robe blue currently makes a profit of. However, with some decently timed clicks, 5,385 can be dyed per hour. The buy limit of black robes (which is the limiting factor) is 125 every 4 hours.",
+   "requirements": [
+    {
+     "kind": "check",
+     "text": "Bring: Coins, Black robes, Blue dye."
+    }
+   ],
+   "inputs": [
+    {
+     "item": {
+      "id": 581,
+      "name": "Black robe"
+     },
+     "qty": 1
+    },
+    {
+     "item": {
+      "id": 1767,
+      "name": "Blue dye"
+     },
+     "qty": 1
+    }
+   ],
+   "outputs": [
+    {
+     "item": {
+      "id": 577,
+      "name": "Blue wizard robe"
+     },
+     "qty": 1
+    }
+   ],
+   "rate": {
+    "unit": "blue wizard robe",
+    "perHour": {
+     "slow": 413,
+     "typical": 600,
+     "fast": 750
+    },
+    "basis": "wiki-guide",
+    "assumes": "750 blue wizard robe an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+   },
+   "trip": {
+    "bagSlots": 28,
+    "overheadSeconds": 0,
+    "note": "The wiki pace already counts banking."
+   },
+   "spot": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "bank": {
+    "x": 3165,
+    "y": 3490,
+    "plane": 0,
+    "label": "Grand Exchange"
+   },
+   "saleSeconds": 60,
+   "risk": "low",
+   "intensity": "high",
+   "guide": [
+    {
+     "kind": "prepare",
+     "text": "Buy Black robe, Blue dye at the Grand Exchange."
+    },
+    {
+     "kind": "travel",
+     "text": "Go to Grand Exchange.",
+     "place": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Grand Exchange"
+     }
+    },
+    {
+     "kind": "perform",
+     "text": "Dying black robes into blue wizard robes until the bag is full."
+    },
+    {
+     "kind": "bank",
+     "text": "Bank at Grand Exchange."
+    },
+    {
+     "kind": "sell",
+     "text": "Sell what you made at the Grand Exchange."
+    },
+    {
+     "kind": "restock",
+     "text": "Buy the supplies you were short of, then go back to your step."
+    }
+   ],
+   "sources": [
+    {
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Dying_blue_wizard_robes",
+     "title": "Money making guide/Dying blue wizard robes",
+     "revision": 14814304,
+     "retrievedAt": "2026-11-15",
+     "used": "pace, inputs, outputs, levels, quests, place and the method"
+    }
+   ],
+   "verifiedAt": "2026-11-15",
+   "confidence": "LOW",
+   "assumptions": [
+    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
+   ]
+  },
+  {
    "id": "enchanting-dragonstone-jewellery",
    "title": "Enchanting dragonstone jewellery",
    "family": "production",
@@ -10096,561 +8131,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Enchanting_dragonstone_jewellery",
      "title": "Money making guide/Enchanting dragonstone jewellery",
      "revision": 15029260,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "enchanting-topaz-jewellery",
-   "title": "Enchanting topaz jewellery",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Enchanting Topaz jewellery. Grand Exchange or bank",
-   "about": "Note: This method assumes you are manually casting the enchant spell, for a maximum of about 1900 casts per hour. Auto-casting will be approximately 800 casts per hour. If not using a Staff of fire, alternative elemental staves or Fire runes themselves are required to cast Lvl-3 Enchant, though using five Fire runes per cast will cost an additional which you would need to account for in your profit.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "magic",
-     "level": 49
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Staff of fire, Topaz rings, Cosmic runes"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 21087,
-      "name": "Topaz ring"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 564,
-      "name": "Cosmic rune"
-     },
-     "qty": 1,
-     "stack": true
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 21140,
-      "name": "Efaritay's aid"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "efaritay's aid",
-    "perHour": {
-     "slow": 880,
-     "typical": 1280,
-     "fast": 1600
-    },
-    "basis": "wiki-guide",
-    "assumes": "1,600 efaritay's aid an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange or bank"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Topaz ring, Cosmic rune at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange or bank.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange or bank"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Enchanting Topaz jewellery until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Enchanting_topaz_jewellery",
-     "title": "Money making guide/Enchanting topaz jewellery",
-     "revision": 14979331,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "exchanging-mole-parts",
-   "title": "Exchanging mole parts",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Exchanging mole parts. Falador Park",
-   "about": "Wyson the gardener in Falador park will exchange either noted mole claws or mole skins for boxes containing bird nests. These nests may contain various seeds and pieces of jewellery. Emptying the nests and selling these items can be profitable. Spirit seeds can be traded to Guildmaster Jane for additional seeds.",
-   "requirements": [],
-   "inputs": [
-    {
-     "item": {
-      "id": 7416,
-      "name": "Mole claw"
-     },
-     "qty": 0.5
-    },
-    {
-     "item": {
-      "id": 7418,
-      "name": "Mole skin"
-     },
-     "qty": 0.5
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 5075,
-      "name": "Bird nest (empty)"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 5320,
-      "name": "Sweetcorn seed"
-     },
-     "qty": 0.6442,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5323,
-      "name": "Strawberry seed"
-     },
-     "qty": 0.6316,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5312,
-      "name": "Acorn"
-     },
-     "qty": 0.0842
-    },
-    {
-     "item": {
-      "id": 5100,
-      "name": "Limpwurt seed"
-     },
-     "qty": 0.1684,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5321,
-      "name": "Watermelon seed"
-     },
-     "qty": 0.1474,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 22879,
-      "name": "Snape grass seed"
-     },
-     "qty": 0.0842,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5302,
-      "name": "Lantadyme seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      32
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5303,
-      "name": "Dwarf weed seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      32
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5301,
-      "name": "Cadantine seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      40
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 21486,
-      "name": "Teak seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      48
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 21488,
-      "name": "Mahogany seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      48
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5313,
-      "name": "Willow seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      59
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5287,
-      "name": "Pineapple seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      59
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5290,
-      "name": "Calquat tree seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      79
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5288,
-      "name": "Papaya tree seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      95
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5314,
-      "name": "Maple seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      158
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5304,
-      "name": "Torstol seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      238
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5295,
-      "name": "Ranarr seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      238
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5300,
-      "name": "Snapdragon seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      238
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5315,
-      "name": "Yew seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      238
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5289,
-      "name": "Palm tree seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      475
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 22877,
-      "name": "Dragonfruit tree seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      475
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5316,
-      "name": "Magic seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      475
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 22869,
-      "name": "Celastrus seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      950
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 22871,
-      "name": "Redwood tree seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      950
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 1637,
-      "name": "Sapphire ring"
-     },
-     "qty": 0.08
-    },
-    {
-     "item": {
-      "id": 1635,
-      "name": "Gold ring"
-     },
-     "qty": 0.07
-    },
-    {
-     "item": {
-      "id": 1639,
-      "name": "Emerald ring"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      33
-     ]
-    },
-    {
-     "item": {
-      "id": 1641,
-      "name": "Ruby ring"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      56
-     ]
-    },
-    {
-     "item": {
-      "id": 1643,
-      "name": "Diamond ring"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      500
-     ]
-    }
-   ],
-   "rate": {
-    "unit": "bird nest (empty)",
-    "perHour": {
-     "slow": 55,
-     "typical": 80,
-     "fast": 100
-    },
-    "basis": "wiki-guide",
-    "assumes": "100 bird nest (empty) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3010,
-    "y": 3379,
-    "plane": 0,
-    "label": "Falador Park"
-   },
-   "bank": {
-    "x": 3017,
-    "y": 3356,
-    "plane": 0,
-    "label": "Falador East Bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Mole claw, Mole skin at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Falador Park.",
-     "place": {
-      "x": 3010,
-      "y": 3379,
-      "plane": 0,
-      "label": "Falador Park"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Bring these items (in noted form) to Wyson the gardener who will exchange them for nest boxes."
-    },
-    {
-     "kind": "perform",
-     "text": "Take these boxes to a bank and in the bank deposit interface, right-click each box to deposit their contents directly into your bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Exchanging_mole_parts",
-     "title": "Money making guide/Exchanging mole parts",
-     "revision": 15167872,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -11663,123 +9143,6 @@
    ]
   },
   {
-   "id": "fletching-headless-arrows",
-   "title": "Fletching headless arrows",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Fletching headless arrows. Grand Exchange",
-   "about": "Headless arrows are made by using feathers on arrow shafts, and they are used in Fletching to create arrows for quick experience gains. Because most fletchers will not create the headless arrows on their own, there is an opportunity for low-level players to make a fair amount of profit (and decent experience) by fletching headless arrows. To start with, test the profit of making one headless arrow; buy one feather and one arrow shaft from the Grand Exchange, make a headless arrow, and sell it.",
-   "requirements": [
-    {
-     "kind": "check",
-     "text": "Bring: Arrow shafts, Feathers"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 52,
-      "name": "Arrow shaft"
-     },
-     "qty": 15
-    },
-    {
-     "item": {
-      "id": 314,
-      "name": "Feather"
-     },
-     "qty": 15
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 53,
-      "name": "Headless arrow"
-     },
-     "qty": 15,
-     "stack": true
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 1571,
-     "typical": 2286,
-     "fast": 2857
-    },
-    "basis": "wiki-guide",
-    "assumes": "2,857 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Arrow shaft, Feather at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Fletching headless arrows until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Fletching_headless_arrows",
-     "title": "Money making guide/Fletching headless arrows",
-     "revision": 15014854,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "fletching-sunlight-antler-bolts",
    "title": "Fletching sunlight antler bolts",
    "family": "production",
@@ -11884,115 +9247,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Fletching_sunlight_antler_bolts",
      "title": "Money making guide/Fletching sunlight antler bolts",
      "revision": 15017506,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "grinding-unicorn-horns",
-   "title": "Grinding unicorn horns",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Grinding unicorn horns. Grand Exchange",
-   "about": "Unicorn horn dust is used to create antipoison and superantipoisons. Because these are often used to train Herblore, and grinding unicorn horns gives no experience, many players avoid the tedium of making Unicorn horn dust and buy it directly from the Grand Exchange. This opens up an opportunity to grind horns for profit.",
-   "requirements": [
-    {
-     "kind": "check",
-     "text": "Bring: Pestle and mortar"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 237,
-      "name": "Unicorn horn"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 235,
-      "name": "Unicorn horn dust"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "unicorn horn dust",
-    "perHour": {
-     "slow": 4950,
-     "typical": 7200,
-     "fast": 9000
-    },
-    "basis": "wiki-guide",
-    "assumes": "9,000 unicorn horn dust an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Unicorn horn at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Grinding unicorn horns until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Grinding_unicorn_horns",
-     "title": "Money making guide/Grinding unicorn horns",
-     "revision": 14148537,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -14418,132 +11672,6 @@
    ]
   },
   {
-   "id": "making-avantoe-potions",
-   "title": "Making avantoe potions",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making avantoe potions. Grand Exchange",
-   "about": "Avantoe potions are used to create Super energy potions. Because these are often used to train Herblore, and adding clean avantoe to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished avantoe potions for profit.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 50
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 261,
-      "name": "Avantoe"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 227,
-      "name": "Vial of water"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 103,
-      "name": "Avantoe potion (unf)"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "avantoe potion (unf)",
-    "perHour": {
-     "slow": 2200,
-     "typical": 3200,
-     "fast": 4000
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,000 avantoe potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Avantoe, Vial of water at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 avantoe and 14 vials of water, and use one on the other."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory, withdraw 14 herbs and 14 vials of water, and repeat."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_avantoe_potions",
-     "title": "Money making guide/Making avantoe potions",
-     "revision": 15250771,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "making-birdhouse-traps",
    "title": "Making birdhouse traps",
    "family": "production",
@@ -14658,132 +11786,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_birdhouse_traps",
      "title": "Money making guide/Making birdhouse traps",
      "revision": 15387170,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-cadantine-potions",
-   "title": "Making cadantine potions",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making cadantine potions. Grand Exchange",
-   "about": "Cadantine potions are used to create Super defence potions. Because these are often used to train Herblore, and adding clean cadantine to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished cadantine potions for profit.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 66
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 265,
-      "name": "Cadantine"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 227,
-      "name": "Vial of water"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 107,
-      "name": "Cadantine potion (unf)"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "cadantine potion (unf)",
-    "perHour": {
-     "slow": 2200,
-     "typical": 3200,
-     "fast": 4000
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,000 cadantine potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Cadantine, Vial of water at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 cadantine and 14 vials of water, and use one on the other."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory, withdraw 14 herbs and 14 vials of water, and repeat."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_cadantine_potions",
-     "title": "Money making guide/Making cadantine potions",
-     "revision": 15250775,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -14922,132 +11924,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_dough_at_Cooks'_Guild",
      "title": "Money making guide/Making dough at Cooks' Guild",
      "revision": 14488874,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-dwarf-weed-potions",
-   "title": "Making dwarf weed potions",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making dwarf weed potions. Grand Exchange",
-   "about": "Dwarf weed potions are used to create Ranging potions. Because these are often used to train Herblore, and adding clean dwarf weed to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished dwarf weed potions for profit.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 72
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 267,
-      "name": "Dwarf weed"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 227,
-      "name": "Vial of water"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 109,
-      "name": "Dwarf weed potion (unf)"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "dwarf weed potion (unf)",
-    "perHour": {
-     "slow": 2200,
-     "typical": 3200,
-     "fast": 4000
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,000 dwarf weed potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Dwarf weed, Vial of water at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 dwarf weed and 14 vials of water, and use one on the other."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory, withdraw 14 herbs and 14 vials of water, and repeat."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_dwarf_weed_potions",
-     "title": "Money making guide/Making dwarf weed potions",
-     "revision": 15250759,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -15460,510 +12336,6 @@
    ]
   },
   {
-   "id": "making-harralander-potions",
-   "title": "Making harralander potions",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making harralander potions. Grand Exchange",
-   "about": "Harralander potions are used to create energy potions. Because these are often used to train Herblore, and adding clean harralander to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished harralander potions for profit.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 22
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 255,
-      "name": "Harralander"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 227,
-      "name": "Vial of water"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 97,
-      "name": "Harralander potion (unf)"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "harralander potion (unf)",
-    "perHour": {
-     "slow": 2200,
-     "typical": 3200,
-     "fast": 4000
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,000 harralander potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Harralander, Vial of water at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 harralander and 14 vials of water, and use one on the other."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory, withdraw 14 herbs and 14 vials of water, and repeat."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_harralander_potions",
-     "title": "Money making guide/Making harralander potions",
-     "revision": 15250777,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-irit-potions",
-   "title": "Making irit potions",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making irit potions. Grand Exchange",
-   "about": "Irit potions are used to create Super attack and Superantipoisons. Because these are often used to train Herblore, and adding clean irit leaves to vials of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished irit potions for profit.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 45
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 259,
-      "name": "Irit leaf"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 227,
-      "name": "Vial of water"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 101,
-      "name": "Irit potion (unf)"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "irit potion (unf)",
-    "perHour": {
-     "slow": 2200,
-     "typical": 3200,
-     "fast": 4000
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,000 irit potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Irit leaf, Vial of water at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 irit leaves and 14 vials of water, and use one on the other."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory, withdraw 14 herbs and 14 vials of water, and repeat."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_irit_potions",
-     "title": "Money making guide/Making irit potions",
-     "revision": 15250783,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-kwuarm-potions",
-   "title": "Making kwuarm potions",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making kwuarm potions. Grand Exchange",
-   "about": "Kwuarm potions are used to create Super strength potions. Because these are often used to train Herblore, and adding clean kwuarm to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished kwuarm potions for profit.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 55
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 263,
-      "name": "Kwuarm"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 227,
-      "name": "Vial of water"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 105,
-      "name": "Kwuarm potion (unf)"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "kwuarm potion (unf)",
-    "perHour": {
-     "slow": 2200,
-     "typical": 3200,
-     "fast": 4000
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,000 kwuarm potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Kwuarm, Vial of water at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 kwuarm and 14 vials of water, and use one on the other."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory, withdraw 14 herbs and 14 vials of water, and repeat."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_kwuarm_potions",
-     "title": "Money making guide/Making kwuarm potions",
-     "revision": 15250766,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-lantadyme-potions",
-   "title": "Making lantadyme potions",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making lantadyme potions. Grand Exchange",
-   "about": "Lantadyme potions are used to create Antifires and Magic potions. Because these are often used to train Herblore, and adding clean lantadyme to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished lantadyme potions for profit.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 69
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 2481,
-      "name": "Lantadyme"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 227,
-      "name": "Vial of water"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 2483,
-      "name": "Lantadyme potion (unf)"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "lantadyme potion (unf)",
-    "perHour": {
-     "slow": 2200,
-     "typical": 3200,
-     "fast": 4000
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,000 lantadyme potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Lantadyme, Vial of water at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 lantadyme and 14 vials of water, and use one on the other."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory, withdraw 14 herbs and 14 vials of water, and repeat."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_lantadyme_potions",
-     "title": "Money making guide/Making lantadyme potions",
-     "revision": 15250763,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "making-mahogany-planks-at-the-woodcutting-guild",
    "title": "Making mahogany planks at the Woodcutting Guild",
    "family": "processing",
@@ -16121,153 +12493,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_mahogany_planks_at_the_Woodcutting_Guild",
      "title": "Money making guide/Making mahogany planks at the Woodcutting Guild",
      "revision": 14765995,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-mahogany-planks-max-efficiency",
-   "title": "Making mahogany planks (max efficiency)",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making planks",
-   "about": "This guide assumes that each trip takes 25 seconds. Your profits may be higher or lower depending on your speed. The Ring of the elements combined with the use of the Plank sack and Log basket enables players to produce planks at maximum efficiency. Each plank requires one mahogany log and 1500 coins, with each trip taking approximately 25 seconds and creating 48 planks.",
-   "requirements": [
-    {
-     "kind": "check",
-     "text": "Bring: Weight-reducing clothing, Plank sack, Log basket, Ring of the elements, Coins"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 6332,
-      "name": "Mahogany logs"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 995,
-      "name": "Coins"
-     },
-     "qty": 1500,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 12625,
-      "name": "Stamina potion(4)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      1725
-     ]
-    },
-    {
-     "item": {
-      "id": 26815,
-      "name": "Ring of the elements"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      45
-     ]
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 8782,
-      "name": "Mahogany plank"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "mahogany plank",
-    "perHour": {
-     "slow": 3795,
-     "typical": 5520,
-     "fast": 6900
-    },
-    "basis": "wiki-guide",
-    "assumes": "6,900 mahogany plank an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Mahogany logs, Coins, Stamina potion(4), Ring of the elements at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 24 mahogany logs, deposit them in the basket, then withdraw another 24 mahogany logs from the bank."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport to the Earth Altar with the Ring of the elements, select \"Buy-Plank\" from the nearby sawmill operator, then \"Buy All\" underneath the mahogany logs."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit the planks in the plank sack, then withdraw logs from the log basket and convert them into planks using the sawmill operator."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport back to a bank, deposit the planks from both your plank sack and your inventory, then repeat the process."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_mahogany_planks_(max_efficiency)",
-     "title": "Money making guide/Making mahogany planks (max efficiency)",
-     "revision": 14968106,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -16500,132 +12725,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_pineapple_pizzas",
      "title": "Money making guide/Making pineapple pizzas",
      "revision": 15392907,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-ranarr-potions",
-   "title": "Making ranarr potions",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making ranarr potions. Grand Exchange",
-   "about": "Ranarr potions are used to create Prayer potions. These are often used to train Herblore and as adding clean ranarr weed to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished ranarr potions for profit.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 30
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 257,
-      "name": "Ranarr weed"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 227,
-      "name": "Vial of water"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 99,
-      "name": "Ranarr potion (unf)"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "ranarr potion (unf)",
-    "perHour": {
-     "slow": 2200,
-     "typical": 3200,
-     "fast": 4000
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,000 ranarr potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Ranarr weed, Vial of water at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 ranarr weed and 14 vials of water, and use one on the other."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory, withdraw 14 herbs and 14 vials of water, and repeat."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_ranarr_potions",
-     "title": "Money making guide/Making ranarr potions",
-     "revision": 15301402,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -17206,128 +13305,6 @@
    ]
   },
   {
-   "id": "making-snapdragon-potions",
-   "title": "Making snapdragon potions",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making snapdragon potions. Grand Exchange",
-   "about": "Snapdragon potions are used to create Super restore potions. Because these are often used to train Herblore, and adding clean snapdragon to a vial of water gives no experience, many players avoid the tedium of making Unfinished Potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished snapdragon potions for profit.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 63
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 3000,
-      "name": "Snapdragon"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 227,
-      "name": "Vial of water"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 3004,
-      "name": "Snapdragon potion (unf)"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "snapdragon potion (unf)",
-    "perHour": {
-     "slow": 2200,
-     "typical": 3200,
-     "fast": 4000
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,000 snapdragon potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Snapdragon, Vial of water at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 snapdragon and 14 vials of water, and use one on the other."
-    },
-    {
-     "kind": "perform",
-     "text": "Open bank, Withdraw \"All\" snapdragon (14 herbs), deposit unfinished potions, and withdraw \"All\" vials of water(14), and repeat."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_snapdragon_potions",
-     "title": "Money making guide/Making snapdragon potions",
-     "revision": 15250762,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "making-super-combat-potions",
    "title": "Making super combat potions",
    "family": "production",
@@ -17605,369 +13582,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_super_combat_potions_(with_prescription_goggles)",
      "title": "Money making guide/Making super combat potions (with prescription goggles)",
      "revision": 15019915,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-tarromin-potions",
-   "title": "Making tarromin potions",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making tarromin potions. Grand Exchange",
-   "about": "Tarromin potions are used to create strength potions. Because these are often used to train Herblore, and adding clean tarromin to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished tarromin potions for profit.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 12
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 253,
-      "name": "Tarromin"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 227,
-      "name": "Vial of water"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 95,
-      "name": "Tarromin potion (unf)"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "tarromin potion (unf)",
-    "perHour": {
-     "slow": 2200,
-     "typical": 3200,
-     "fast": 4000
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,000 tarromin potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Tarromin, Vial of water at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 tarromin and 14 vials of water, and use one on the other."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory, withdraw 14 herbs and 14 vials of water, and repeat."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_tarromin_potions",
-     "title": "Money making guide/Making tarromin potions",
-     "revision": 15250778,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-toadflax-potions",
-   "title": "Making toadflax potions",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making toadflax potions. Grand Exchange",
-   "about": "Toadflax potions are used to create Saradomin brews. Because these are often used to train Herblore, and adding clean toadflax to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished toadflax potions for profit.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 34
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 2998,
-      "name": "Toadflax"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 227,
-      "name": "Vial of water"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 3002,
-      "name": "Toadflax potion (unf)"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "toadflax potion (unf)",
-    "perHour": {
-     "slow": 2200,
-     "typical": 3200,
-     "fast": 4000
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,000 toadflax potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Toadflax, Vial of water at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 toadflax and 14 vials of water, and use one on the other."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory, withdraw 14 herbs and 14 vials of water, and repeat."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_toadflax_potions",
-     "title": "Money making guide/Making toadflax potions",
-     "revision": 15250769,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-ultracompost",
-   "title": "Making ultracompost",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making ultracompost. Grand Exchange",
-   "about": "Ultracompost is the highest-level of compost and is an essential component of high-level Farming. Due to its high demand, it often sells for more than the Grand Exchange guide price, so profit calculations may vary wildly. This method involves creating ultracompost by using volcanic ash on supercompost. Each ultracompost takes 2 volcanic ash and 1 supercompost to create.",
-   "requirements": [],
-   "inputs": [
-    {
-     "item": {
-      "id": 6034,
-      "name": "Supercompost"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 21622,
-      "name": "Volcanic ash"
-     },
-     "qty": 2
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 21483,
-      "name": "Ultracompost"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "ultracompost",
-    "perHour": {
-     "slow": 1485,
-     "typical": 2160,
-     "fast": 2700
-    },
-    "basis": "wiki-guide",
-    "assumes": "2,700 ultracompost an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Supercompost, Volcanic ash at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Making ultracompost until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_ultracompost",
-     "title": "Money making guide/Making ultracompost",
-     "revision": 15125395,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -21565,259 +17179,6 @@
    ]
   },
   {
-   "id": "selling-hardleather-bodies",
-   "title": "Selling hardleather bodies",
-   "family": "collecting",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Selling hardleather bodies to the Al Kharid General Stores",
-   "about": "The price of one hardleather body at Aaron's Archery Appendages. is. General stores pay a minimum of 10% of the item's value when you sell an item to it, meaning they pay at the least. The time it takes to withdraw a noted stack of items is effectively negligible when considering the potentially limitless amount you can sell to a store. The buy limit of hardleather bodies (which is the limiting factor) is 125 every 4 hours.",
-   "requirements": [
-    {
-     "kind": "check",
-     "text": "Bring: Hardleather bodies."
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 1131,
-      "name": "Hardleather body"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      17
-     ]
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 995,
-      "name": "Coins"
-     },
-     "qty": 1,
-     "stack": true
-    }
-   ],
-   "rate": {
-    "unit": "coins",
-    "perHour": {
-     "slow": 5844,
-     "typical": 8500,
-     "fast": 10625
-    },
-    "basis": "wiki-guide",
-    "assumes": "10,625 coins an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Hardleather body at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Selling hardleather bodies to the Al Kharid General Stores until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Selling_hardleather_bodies",
-     "title": "Money making guide/Selling hardleather bodies",
-     "revision": 14704828,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "selling-silk-to-silk-merchant",
-   "title": "Selling silk to silk merchant",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Selling silk to silk merchant. Ardougne",
-   "about": "The silk merchant will buy every silk in the inventory at once for the agreed upon price. Tablets cost more compared to just 2 law runes.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "magic",
-     "level": 51
-    },
-    {
-     "kind": "quest",
-     "quest": "Plague City",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Staff of water, Ring of dueling"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 950,
-      "name": "Silk"
-     },
-     "qty": 27
-    },
-    {
-     "item": {
-      "id": 563,
-      "name": "Law rune"
-     },
-     "qty": 2,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 2552,
-      "name": "Ring of dueling(8)"
-     },
-     "qty": 0.125
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 995,
-      "name": "Coins"
-     },
-     "qty": 1620,
-     "stack": true
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 105,
-     "typical": 152,
-     "fast": 190
-    },
-    "basis": "wiki-guide",
-    "assumes": "190 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2570,
-    "y": 3300,
-    "plane": 0,
-    "label": "Ardougne"
-   },
-   "bank": {
-    "x": 2655,
-    "y": 3280,
-    "plane": 0,
-    "label": "Ardougne bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Silk, Law rune, Ring of dueling(8) at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Ardougne.",
-     "place": {
-      "x": 2570,
-      "y": 3300,
-      "plane": 0,
-      "label": "Ardougne"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Sell the silk for 60 coins each by first offering them for 120 and then countering his offer of 50 with 60."
-    },
-    {
-     "kind": "perform",
-     "text": "Use a ring of dueling to teleport to Castle Wars, deposit the coins, and withdraw 27 silk."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport to Ardougne, which requires 51 Magic and Plague City completed, or use Ardougne teleport tablets and repeat."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Ardougne bank."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Selling_silk_to_silk_merchant",
-     "title": "Money making guide/Selling silk to silk merchant",
-     "revision": 14373034,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "smelting-adamantite-bars-superheat-item",
    "title": "Smelting adamantite bars (Superheat Item)",
    "family": "production",
@@ -23135,123 +18496,6 @@
    ]
   },
   {
-   "id": "stringing-maple-longbows",
-   "title": "Stringing maple longbows",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Stringing maple longbows. Grand Exchange",
-   "about": "At 55 Fletching, players can make money by stringing maple longbows. Unstrung maple longbows can be purchased off the Grand Exchange for coins each and bow string at. Depending on speed and consistency, up to 2,400 bows can be strung in an hour.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "fletching",
-     "level": 55
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 62,
-      "name": "Maple longbow (u)"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 1777,
-      "name": "Bow string"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 851,
-      "name": "Maple longbow"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "maple longbow",
-    "perHour": {
-     "slow": 1320,
-     "typical": 1920,
-     "fast": 2400
-    },
-    "basis": "wiki-guide",
-    "assumes": "2,400 maple longbow an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Maple longbow (u), Bow string at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Stringing maple longbows until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stringing_maple_longbows",
-     "title": "Money making guide/Stringing maple longbows",
-     "revision": 14355713,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "stringing-yew-longbows",
    "title": "Stringing yew longbows",
    "family": "production",
@@ -23953,6 +19197,117 @@
   },
   "clean-grimy-guam": {
    "about": "Guam leaves are in demand to create attack potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning guam leaves is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds."
+  },
+  "clean-grimy-avantoe": {
+   "about": "Avantoe is in high demand to create Super energy potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning avantoe is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds."
+  },
+  "clean-grimy-cadantine": {
+   "about": "Cadantine are in demand to create super defence potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning cadantine is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds."
+  },
+  "clean-grimy-dwarf-weed": {
+   "about": "Dwarf weed is in high demand to create Ranging potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning dwarf weed is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds."
+  },
+  "clean-grimy-harralander": {
+   "about": "Harralander are in demand to create Guthix rests and energy potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning harralander is profitable. Each inventory takes 10 to 20 seconds to clean 28 herbs."
+  },
+  "clean-grimy-irit": {
+   "about": "Irit leaves are in high demand to create Super attack and Superantipoisons. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning irit leaves is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds."
+  },
+  "clean-grimy-kwuarm": {
+   "about": "Kwuarm is in high demand to create Super strength potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning kwuarm is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds."
+  },
+  "clean-grimy-lantadyme": {
+   "about": "Lantadyme is in high demand to create antifire and magic potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning lantadyme is profitable. Each inventory takes 10 to 20 seconds to clean 28 herbs."
+  },
+  "clean-grimy-marrentill": {
+   "about": "Marrentill are in demand to create Guthix rests and for Prayer training using incense burners. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning marrentill is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds."
+  },
+  "clean-grimy-ranarr-weed": {
+   "about": "Ranarr weed is in high demand to create Prayer potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning ranarr weed is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds."
+  },
+  "clean-grimy-snapdragon": {
+   "about": "Snapdragon is in high demand to create Super restore potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning snapdragon is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds."
+  },
+  "clean-grimy-tarromin": {
+   "about": "Tarromin are in demand to create strength potions. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning tarromin is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds."
+  },
+  "clean-grimy-toadflax": {
+   "about": "Toadflax is in high demand to create Saradomin brews. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning toadflax is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds."
+  },
+  "clean-grimy-torstol": {
+   "about": "Torstol is in high demand to create Super combat potions and Anti-venom+. It is often profitable to clean the grimy herbs and sell them on the Grand Exchange. Like all methods involving large amounts of buying and selling, which require a relatively high capital to start, it is recommended to test the market first to make sure cleaning torstol is profitable. Twenty-eight herbs can be cleaned per inventory, and each inventory can take from 10 to 20 seconds."
+  },
+  "make-avantoe-potions-unf": {
+   "about": "Avantoe potions are used to create Super energy potions. Because these are often used to train Herblore, and adding clean avantoe to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished avantoe potions for profit."
+  },
+  "make-cadantine-potions-unf": {
+   "about": "Cadantine potions are used to create Super defence potions. Because these are often used to train Herblore, and adding clean cadantine to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished cadantine potions for profit."
+  },
+  "make-dwarf-weed-potions-unf": {
+   "about": "Dwarf weed potions are used to create Ranging potions. Because these are often used to train Herblore, and adding clean dwarf weed to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished dwarf weed potions for profit."
+  },
+  "make-harralander-potions-unf": {
+   "about": "Harralander potions are used to create energy potions. Because these are often used to train Herblore, and adding clean harralander to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished harralander potions for profit."
+  },
+  "make-irit-potions-unf": {
+   "about": "Irit potions are used to create Super attack and Superantipoisons. Because these are often used to train Herblore, and adding clean irit leaves to vials of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished irit potions for profit."
+  },
+  "make-kwuarm-potions-unf": {
+   "about": "Kwuarm potions are used to create Super strength potions. Because these are often used to train Herblore, and adding clean kwuarm to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished kwuarm potions for profit."
+  },
+  "make-lantadyme-potions-unf": {
+   "about": "Lantadyme potions are used to create Antifires and Magic potions. Because these are often used to train Herblore, and adding clean lantadyme to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished lantadyme potions for profit."
+  },
+  "make-ranarr-potions-unf": {
+   "about": "Ranarr potions are used to create Prayer potions. These are often used to train Herblore and as adding clean ranarr weed to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished ranarr potions for profit."
+  },
+  "make-snapdragon-potions-unf": {
+   "about": "Snapdragon potions are used to create Super restore potions. Because these are often used to train Herblore, and adding clean snapdragon to a vial of water gives no experience, many players avoid the tedium of making Unfinished Potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished snapdragon potions for profit."
+  },
+  "make-tarromin-potions-unf": {
+   "about": "Tarromin potions are used to create strength potions. Because these are often used to train Herblore, and adding clean tarromin to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished tarromin potions for profit."
+  },
+  "make-toadflax-potions-unf": {
+   "about": "Toadflax potions are used to create Saradomin brews. Because these are often used to train Herblore, and adding clean toadflax to a vial of water gives no experience, many players avoid the tedium of making unfinished potions and buy them directly from the Grand Exchange. This opens up an opportunity to make unfinished toadflax potions for profit."
+  },
+  "make-ultracompost": {
+   "about": "Ultracompost is the highest-level of compost and is an essential component of high-level Farming. Due to its high demand, it often sells for more than the Grand Exchange guide price, so profit calculations may vary wildly. This method involves creating ultracompost by using volcanic ash on supercompost. Each ultracompost takes 2 volcanic ash and 1 supercompost to create."
+  },
+  "collect-spades-falador": {
+   "about": "This guide assumes 12 full inventory runs every hour (each run should take about 5 minutes). The estate agent house in Falador has one spawn of spade, which will respawn after 60 seconds, but it is recommended to change worlds to circumvent this timer. Each spade is worth."
+  },
+  "collect-monks-robes": {
+   "about": "This guide assumes 13 full inventory runs every hour (each run should take about 4 minutes and 30 seconds). The Edgeville Monastery has one spawn of Monk's robe and one of Monk's robe top both spawning on a table south-east of the upstairs section of the monastery. The robe pieces will respawn after 60 seconds, but it is recommended to change worlds to circumvent this timer. You can also equip a set of robes to free up 2 extra inventory spaces."
+  },
+  "crush-bird-nests": {
+   "about": "Crushed nests are used to create Saradomin brews. Because these are often used to train Herblore and for combat, and crushing bird nests gives no experience, many players avoid the tedium of making crushed nests and buy them directly from the Grand Exchange. This opens up an opportunity to crush bird nests for profit."
+  },
+  "grind-unicorn-horns": {
+   "about": "Unicorn horn dust is used to create antipoison and superantipoisons. Because these are often used to train Herblore, and grinding unicorn horns gives no experience, many players avoid the tedium of making Unicorn horn dust and buy it directly from the Grand Exchange. This opens up an opportunity to grind horns for profit."
+  },
+  "fletch-headless-arrows": {
+   "about": "Headless arrows are made by using feathers on arrow shafts, and they are used in Fletching to create arrows for quick experience gains. Because most fletchers will not create the headless arrows on their own, there is an opportunity for low-level players to make a fair amount of profit (and decent experience) by fletching headless arrows. To start with, test the profit of making one headless arrow; buy one feather and one arrow shaft from the Grand Exchange, make a headless arrow, and sell it."
+  },
+  "craft-ruby-bracelets": {
+   "about": "Players can craft ruby bracelets at any furnace, though the Edgeville furnace is the closest one to the bank that does not require any quests to access. The closest furnace to a bank is the Shilo Village furnace, which should be used if you have completed the Elite Karamja Diary. Alternatively, players who have completed Song of the Elves, can use the Prifddinas furnace instead."
+  },
+  "enchant-topaz-rings": {
+   "about": "Note: This method assumes you are manually casting the enchant spell, for a maximum of about 1900 casts per hour. Auto-casting will be approximately 800 casts per hour. If not using a Staff of fire, alternative elemental staves or Fire runes themselves are required to cast Lvl-3 Enchant, though using five Fire runes per cast will cost an additional which you would need to account for in your profit."
+  },
+  "string-maple-longbows": {
+   "about": "At 55 Fletching, players can make money by stringing maple longbows. Unstrung maple longbows can be purchased off the Grand Exchange for coins each and bow string at. Depending on speed and consistency, up to 2,400 bows can be strung in an hour."
+  },
+  "mahogany-planks-varrock": {
+   "about": "This guide assumes that each trip takes 25 seconds. Your profits may be higher or lower depending on your speed. The Ring of the elements combined with the use of the Plank sack and Log basket enables players to produce planks at maximum efficiency. Each plank requires one mahogany log and 1500 coins, with each trip taking approximately 25 seconds and creating 48 planks."
+  },
+  "sell-silk-ardougne": {
+   "about": "The silk merchant will buy every silk in the inventory at once for the agreed upon price. Tablets cost more compared to just 2 law runes."
+  },
+  "make-crystal-keys": {
+   "about": "Crystal keys, made by combining Tooth half of keys with Loop half of keys, are used to open the Crystal chest in Taverley. They can also be converted to Enhanced crystal keys after completion of Song of the Elves, where they are then used to open the Elven crystal chest; this chest features a similar but substantially upgraded drop table relative to the normal crystal chest, including the unique Dragonstone armour and a very rare chance to obtain an Uncut onyx."
+  },
+  "exchange-mole-parts": {
+   "about": "Wyson the gardener in Falador park will exchange either noted mole claws or mole skins for boxes containing bird nests. These nests may contain various seeds and pieces of jewellery. Emptying the nests and selling these items can be profitable. Spirit seeds can be traded to Guildmaster Jane for additional seeds."
   }
  },
  "notBuilt": [
@@ -23967,14 +19322,14 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "collecting-ruby-rings",
-   "title": "Collecting ruby rings",
-   "reason": "needs the Robes of Ruin dig (28 items), which the route does not plan"
-  },
-  {
    "id": "crafting-ruby-jewellery",
    "title": "Crafting ruby jewellery",
    "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "collecting-ruby-rings",
+   "title": "Collecting ruby rings",
+   "reason": "needs the Robes of Ruin dig (28 items), which the route does not plan"
   },
   {
    "id": "crafting-diamond-jewellery",
@@ -23992,14 +19347,14 @@
    "reason": "no place for \"Far north-western corner of the free-to-play wilderness.\""
   },
   {
-   "id": "killing-ogress-shamans",
-   "title": "Killing ogress shamans",
-   "reason": "needs Dragon Slayer I, not on the route yet"
-  },
-  {
    "id": "crafting-sapphire-jewellery",
    "title": "Crafting sapphire jewellery",
    "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "killing-ogress-shamans",
+   "title": "Killing ogress shamans",
+   "reason": "needs Dragon Slayer I, not on the route yet"
   },
   {
    "id": "crafting-gold-jewellery",
@@ -24097,6 +19452,11 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "crafting-aether-runes-using-scarred-extract",
+   "title": "Crafting aether runes using scarred extract",
+   "reason": "needs Desert Treasure II - The Fallen Empire, not on the route yet"
+  },
+  {
    "id": "killing-vardorvis",
    "title": "Killing Vardorvis",
    "reason": "a Members fight needs a hand-made combat profile"
@@ -24105,11 +19465,6 @@
    "id": "killing-the-leviathan",
    "title": "Killing The Leviathan",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "crafting-aether-runes-using-scarred-extract",
-   "title": "Crafting aether runes using scarred extract",
-   "reason": "needs Desert Treasure II - The Fallen Empire, not on the route yet"
   },
   {
    "id": "killing-phantom-muspah-twisted-bow",
@@ -24187,14 +19542,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "pickpocketing-elves",
-   "title": "Pickpocketing elves",
-   "reason": "needs Song of the Elves, not on the route yet"
-  },
-  {
    "id": "killing-araxxor",
    "title": "Killing Araxxor",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "pickpocketing-elves",
+   "title": "Pickpocketing elves",
+   "reason": "needs Song of the Elves, not on the route yet"
   },
   {
    "id": "killing-the-alchemical-hydra",
@@ -24202,14 +19557,14 @@
    "reason": "no Mmgtable"
   },
   {
-   "id": "killing-the-nightmare",
-   "title": "Killing The Nightmare",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "crafting-sunfire-runes",
    "title": "Crafting sunfire runes",
    "reason": "needs Children of the Sun, not on the route yet"
+  },
+  {
+   "id": "killing-the-nightmare",
+   "title": "Killing The Nightmare",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "completing-the-corrupted-gauntlet",
@@ -24252,11 +19607,6 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "smelting-runite-bars-at-blast-furnace-player-to-player-trading",
-   "title": "Smelting runite bars at Blast Furnace (Player-to-player trading)",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
    "id": "pickpocketing-vyres",
    "title": "Pickpocketing vyres",
    "reason": "needs Sins of the Father, not on the route yet"
@@ -24267,9 +19617,19 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "smelting-runite-bars-at-blast-furnace-player-to-player-trading",
+   "title": "Smelting runite bars at Blast Furnace (Player-to-player trading)",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
    "id": "crafting-wrath-runes",
    "title": "Crafting wrath runes",
    "reason": "needs Dragon Slayer II, not on the route yet"
+  },
+  {
+   "id": "degriming-grimy-cadantine",
+   "title": "Degriming grimy cadantine",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "crafting-blood-runes-through-the-abyss",
@@ -24282,14 +19642,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "degriming-grimy-cadantine",
-   "title": "Degriming grimy cadantine",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
-   "id": "killing-zulrah-max-efficiency",
-   "title": "Killing Zulrah (max efficiency)",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "casting-tan-leather",
+   "title": "Casting Tan Leather",
+   "reason": "input3 is a wiki formula the build cannot read"
   },
   {
    "id": "killing-vorkath-toxic-blowpipe",
@@ -24297,19 +19652,19 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "casting-tan-leather",
-   "title": "Casting Tan Leather",
-   "reason": "input3 is a wiki formula the build cannot read"
-  },
-  {
-   "id": "smelting-runite-bars-at-blast-furnace",
-   "title": "Smelting runite bars at Blast Furnace",
-   "reason": "needs The Giant Dwarf, not on the route yet"
+   "id": "killing-zulrah-max-efficiency",
+   "title": "Killing Zulrah (max efficiency)",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "slaying-venators",
    "title": "Slaying Venators",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "smelting-runite-bars-at-blast-furnace",
+   "title": "Smelting runite bars at Blast Furnace",
+   "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
    "id": "crafting-astral-runes",
@@ -24327,6 +19682,11 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "deep-sea-trawling-for-marlin",
+   "title": "Deep sea trawling for marlin",
+   "reason": "level sailing 78 is not modelled"
+  },
+  {
    "id": "making-sanfew-serum-4",
    "title": "Making sanfew serum(4)",
    "reason": "needs Zogre Flesh Eaters, not on the route yet"
@@ -24340,16 +19700,6 @@
    "id": "smelting-adamantite-bars-at-blast-furnace",
    "title": "Smelting adamantite bars at Blast Furnace",
    "reason": "needs The Giant Dwarf, not on the route yet"
-  },
-  {
-   "id": "deep-sea-trawling-for-marlin",
-   "title": "Deep sea trawling for marlin",
-   "reason": "level sailing 78 is not modelled"
-  },
-  {
-   "id": "fletching-gem-tipped-dragon-bolts",
-   "title": "Fletching gem-tipped dragon bolts",
-   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "degriming-grimy-lantadyme",
@@ -24367,19 +19717,9 @@
    "reason": "no place for \"Wilderness_Agility_Course\""
   },
   {
-   "id": "degriming-grimy-ranarr-weed",
-   "title": "Degriming grimy ranarr weed",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
    "id": "killing-frost-dragons-on-task",
    "title": "Killing Frost dragons (on-task)",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "degriming-grimy-kwuarm",
-   "title": "Degriming grimy kwuarm",
-   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "killing-calvar-ion",
@@ -24392,13 +19732,13 @@
    "reason": "output1 is a wiki formula the build cannot read"
   },
   {
-   "id": "degriming-grimy-torstol",
-   "title": "Degriming grimy torstol",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
    "id": "looting-eldric-the-ice-king",
    "title": "Looting Eldric the Ice King",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "killing-scorpia",
+   "title": "Killing Scorpia",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -24407,13 +19747,8 @@
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
-   "id": "killing-zalcano",
-   "title": "Killing Zalcano",
-   "reason": "needs Song of the Elves, not on the route yet"
-  },
-  {
-   "id": "killing-scorpia",
-   "title": "Killing Scorpia",
+   "id": "killing-zombie-pirates-budget",
+   "title": "Killing zombie pirates (Budget)",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -24422,14 +19757,19 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-zombie-pirates-budget",
-   "title": "Killing zombie pirates (Budget)",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "degriming-grimy-torstol",
+   "title": "Degriming grimy torstol",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "killing-frost-dragons-off-task",
    "title": "Killing Frost dragons (off-task)",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "killing-zalcano",
+   "title": "Killing Zalcano",
+   "reason": "needs Song of the Elves, not on the route yet"
   },
   {
    "id": "killing-hueycoatl-solo",
@@ -24457,6 +19797,16 @@
    "reason": "needs the miniquest enter the abyss, which the route does not plan"
   },
   {
+   "id": "degriming-grimy-kwuarm",
+   "title": "Degriming grimy kwuarm",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "smelting-mithril-bars-at-blast-furnace",
+   "title": "Smelting mithril bars at Blast Furnace",
+   "reason": "needs The Giant Dwarf, not on the route yet"
+  },
+  {
    "id": "poisoning-ammunition",
    "title": "Poisoning ammunition",
    "reason": "nothing sellable is made every unit"
@@ -24467,9 +19817,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "smelting-mithril-bars-at-blast-furnace",
-   "title": "Smelting mithril bars at Blast Furnace",
-   "reason": "needs The Giant Dwarf, not on the route yet"
+   "id": "fletching-gem-tipped-dragon-bolts",
+   "title": "Fletching gem-tipped dragon bolts",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "smelting-steel-bars-at-blast-furnace",
@@ -24502,6 +19852,11 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "degriming-grimy-dwarf-weed",
+   "title": "Degriming grimy dwarf weed",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
    "id": "killing-araxytes-off-task",
    "title": "Killing araxytes (off-task)",
    "reason": "a Members fight needs a hand-made combat profile"
@@ -24512,19 +19867,14 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "killing-zulrah",
-   "title": "Killing Zulrah",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "delivering-food-in-gnome-restaurant",
    "title": "Delivering food in Gnome Restaurant",
    "reason": "needs Troll Romance, not on the route yet"
   },
   {
-   "id": "killing-zalcano-experience",
-   "title": "Killing Zalcano (Experience)",
-   "reason": "needs Song of the Elves, not on the route yet"
+   "id": "killing-zulrah",
+   "title": "Killing Zulrah",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "crafting-double-law-runes-through-the-abyss",
@@ -24537,6 +19887,11 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "killing-zalcano-experience",
+   "title": "Killing Zalcano (Experience)",
+   "reason": "needs Song of the Elves, not on the route yet"
+  },
+  {
    "id": "moons-of-peril",
    "title": "Moons of Peril",
    "reason": "a combat guide without kills an hour"
@@ -24547,24 +19902,24 @@
    "reason": "needs the miniquest enter the abyss, which the route does not plan"
   },
   {
-   "id": "crafting-mist-runes",
-   "title": "Crafting mist runes",
-   "reason": "needs the miniquest enter the abyss, which the route does not plan"
-  },
-  {
    "id": "degriming-grimy-tarromin",
    "title": "Degriming grimy tarromin",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
-   "id": "degriming-grimy-irit-leaf",
-   "title": "Degriming grimy irit leaf",
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "killing-artio",
    "title": "Killing Artio",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "crafting-mist-runes",
+   "title": "Crafting mist runes",
+   "reason": "needs the miniquest enter the abyss, which the route does not plan"
+  },
+  {
+   "id": "buying-relicym-s-balm",
+   "title": "Buying Relicym's balm",
+   "reason": "needs Zogre Flesh Eaters, not on the route yet"
   },
   {
    "id": "killing-skeletal-wyverns",
@@ -24582,8 +19937,8 @@
    "reason": "needs Fairytale II - Cure a Queen, not on the route yet"
   },
   {
-   "id": "degriming-grimy-snapdragon",
-   "title": "Degriming grimy snapdragon",
+   "id": "degriming-grimy-marrentill",
+   "title": "Degriming grimy marrentill",
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
@@ -24597,9 +19952,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "buying-relicym-s-balm",
-   "title": "Buying Relicym's balm",
-   "reason": "needs Zogre Flesh Eaters, not on the route yet"
+   "id": "degriming-grimy-ranarr-weed",
+   "title": "Degriming grimy ranarr weed",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "deep-sea-trawling-for-halibut",
@@ -24612,14 +19967,14 @@
    "reason": "needs Eagles' Peak, not on the route yet"
   },
   {
-   "id": "degriming-grimy-dwarf-weed",
-   "title": "Degriming grimy dwarf weed",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
    "id": "killing-spitting-wyvern",
    "title": "Killing Spitting Wyvern",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "crafting-blood-runes-at-arceuus-max",
+   "title": "Crafting blood runes at Arceuus (max)",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "killing-the-grotesque-guardians",
@@ -24632,13 +19987,8 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "crafting-blood-runes-at-arceuus-max",
-   "title": "Crafting blood runes at Arceuus (max)",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
-   "id": "degriming-grimy-marrentill",
-   "title": "Degriming grimy marrentill",
+   "id": "degriming-grimy-snapdragon",
+   "title": "Degriming grimy snapdragon",
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
@@ -24647,14 +19997,14 @@
    "reason": "needs Temple of the Eye, not on the route yet"
   },
   {
-   "id": "killing-kurasks",
-   "title": "Killing kurasks",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "crafting-blood-runes-at-arceuus-no-diary",
    "title": "Crafting blood runes at Arceuus (no diary)",
    "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "killing-kurasks",
+   "title": "Killing kurasks",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "killing-urium-shades",
@@ -24672,23 +20022,23 @@
    "reason": "needs Troll Stronghold, not on the route yet"
   },
   {
-   "id": "crafting-chaos-runes-through-the-abyss",
-   "title": "Crafting chaos runes through the Abyss",
-   "reason": "needs Heroes' Quest, not on the route yet"
-  },
-  {
    "id": "casting-superglass-make",
    "title": "Casting Superglass Make",
    "reason": "input2 is a wiki formula the build cannot read"
   },
   {
-   "id": "killing-the-giant-mole-twisted-bow",
-   "title": "Killing the Giant Mole (Twisted bow)",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "crafting-chaos-runes-through-the-abyss",
+   "title": "Crafting chaos runes through the Abyss",
+   "reason": "needs Heroes' Quest, not on the route yet"
   },
   {
    "id": "killing-lizardman-shamans-settlement-or-temple",
    "title": "Killing Lizardman Shamans (Settlement or Temple)",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "killing-the-giant-mole-twisted-bow",
+   "title": "Killing the Giant Mole (Twisted bow)",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -24702,23 +20052,18 @@
    "reason": "needs Temple of the Eye, not on the route yet"
   },
   {
-   "id": "killing-the-mad-angel",
-   "title": "Killing the Mad Angel",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "killing-fiyr-shades",
    "title": "Killing fiyr shades",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "looting-ogre-coffins",
-   "title": "Looting ogre coffins",
-   "reason": "needs Zogre Flesh Eaters, not on the route yet"
-  },
-  {
    "id": "killing-lizardman-shamans-canyon",
    "title": "Killing Lizardman Shamans (Canyon)",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "killing-the-mad-angel",
+   "title": "Killing the Mad Angel",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -24727,9 +20072,9 @@
    "reason": "level sailing 72 is not modelled"
   },
   {
-   "id": "making-guthix-rests",
-   "title": "Making Guthix rests",
-   "reason": "needs One Small Favour, not on the route yet"
+   "id": "killing-green-dragons-myths-guild",
+   "title": "Killing green dragons (Myths Guild)",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "buying-mixed-hide-bases",
@@ -24737,13 +20082,33 @@
    "reason": "needs Children of the Sun, not on the route yet"
   },
   {
+   "id": "creating-eternal-glories",
+   "title": "Creating eternal glories",
+   "reason": "needs Heroes' Quest, not on the route yet"
+  },
+  {
    "id": "killing-vyrewatch-sentinels",
    "title": "Killing Vyrewatch Sentinels",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-green-dragons-myths-guild",
-   "title": "Killing green dragons (Myths Guild)",
+   "id": "looting-ogre-coffins",
+   "title": "Looting ogre coffins",
+   "reason": "needs Zogre Flesh Eaters, not on the route yet"
+  },
+  {
+   "id": "making-guthix-rests",
+   "title": "Making Guthix rests",
+   "reason": "needs One Small Favour, not on the route yet"
+  },
+  {
+   "id": "degriming-grimy-avantoe",
+   "title": "Degriming grimy avantoe",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "killing-green-dragons",
+   "title": "Killing green dragons",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -24752,29 +20117,24 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-green-dragons",
-   "title": "Killing green dragons",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "creating-forester-s-rations",
-   "title": "Creating forester's rations",
-   "reason": "input1 is a wiki formula the build cannot read"
-  },
-  {
    "id": "killing-basilisk-knights-slayer",
    "title": "Killing basilisk knights (Slayer)",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "hallowed-sepulchre-floor-4",
-   "title": "Hallowed Sepulchre (Floor 4)",
-   "reason": "nothing sellable is made every unit"
+   "id": "degriming-grimy-guam-leaf",
+   "title": "Degriming grimy guam leaf",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "making-oak-planks-auburnvale",
    "title": "Making oak planks (Auburnvale)",
    "reason": "needs Children of the Sun, not on the route yet"
+  },
+  {
+   "id": "hallowed-sepulchre-floor-4",
+   "title": "Hallowed Sepulchre (Floor 4)",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "pickpocketing-master-farmers",
@@ -24792,6 +20152,11 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "creating-forester-s-rations",
+   "title": "Creating forester's rations",
+   "reason": "input1 is a wiki formula the build cannot read"
+  },
+  {
    "id": "killing-the-kraken",
    "title": "Killing the Kraken",
    "reason": "a Members fight needs a hand-made combat profile"
@@ -24802,14 +20167,19 @@
    "reason": "needs the miniquest enter the abyss, which the route does not plan"
   },
   {
+   "id": "degriming-grimy-harralander",
+   "title": "Degriming grimy harralander",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "degriming-grimy-irit-leaf",
+   "title": "Degriming grimy irit leaf",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
    "id": "crafting-nature-runes-through-the-abyss",
    "title": "Crafting nature runes through the Abyss",
    "reason": "needs the miniquest enter the abyss, which the route does not plan"
-  },
-  {
-   "id": "making-mahogany-planks",
-   "title": "Making mahogany planks",
-   "reason": "needs Children of the Sun, not on the route yet"
   },
   {
    "id": "buying-monkey-nuts",
@@ -24817,14 +20187,19 @@
    "reason": "needs Monkey Madness II, not on the route yet"
   },
   {
-   "id": "degriming-grimy-guam-leaf",
-   "title": "Degriming grimy guam leaf",
-   "reason": "needs A Kingdom Divided, not on the route yet"
+   "id": "making-mahogany-planks",
+   "title": "Making mahogany planks",
+   "reason": "needs Children of the Sun, not on the route yet"
   },
   {
    "id": "stealing-cave-goblin-wire",
    "title": "Stealing cave goblin wire",
    "reason": "needs Death to the Dorgeshuun, not on the route yet"
+  },
+  {
+   "id": "humidifying-clay",
+   "title": "Humidifying clay",
+   "reason": "needs Dream Mentor, not on the route yet"
   },
   {
    "id": "killing-drakes",
@@ -24842,24 +20217,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "making-adamant-brutal-arrows",
+   "title": "Making adamant brutal arrows",
+   "reason": "no place for \"Anywhere\""
+  },
+  {
    "id": "smithing-cannonballs-grimstone-dungeon",
    "title": "Smithing cannonballs (Grimstone Dungeon)",
    "reason": "level sailing 87 is not modelled"
-  },
-  {
-   "id": "degriming-grimy-avantoe",
-   "title": "Degriming grimy avantoe",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
-   "id": "degriming-grimy-harralander",
-   "title": "Degriming grimy harralander",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
-   "id": "killing-kourend-necromancers",
-   "title": "Killing Kourend necromancers",
-   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "crafting-blood-runes-at-arceuus-minimal-requirements",
@@ -24867,9 +20232,19 @@
    "reason": "nothing sellable is made every unit"
   },
   {
+   "id": "killing-kourend-necromancers",
+   "title": "Killing Kourend necromancers",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
    "id": "killing-the-giant-mole-dharok-s",
    "title": "Killing the Giant Mole (Dharok's)",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "crafting-jade-jewellery",
+   "title": "Crafting jade jewellery",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "chopping-the-engorged-bloodwood-tree",
@@ -24877,19 +20252,9 @@
    "reason": "input3 is a wiki formula the build cannot read"
   },
   {
-   "id": "making-adamant-brutal-arrows",
-   "title": "Making adamant brutal arrows",
-   "reason": "no place for \"Anywhere\""
-  },
-  {
-   "id": "crafting-topaz-jewellery",
-   "title": "Crafting topaz jewellery",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
-   "id": "crafting-jade-jewellery",
-   "title": "Crafting jade jewellery",
-   "reason": "nothing sellable is made every unit"
+   "id": "making-prayer-potions",
+   "title": "Making prayer potions",
+   "reason": "no Mmgtable"
   },
   {
    "id": "deep-sea-trawling-for-yellowfin",
@@ -24902,9 +20267,9 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "creating-eternal-glories",
-   "title": "Creating eternal glories",
-   "reason": "needs Heroes' Quest, not on the route yet"
+   "id": "barrows",
+   "title": "Barrows",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "hallowed-sepulchre-floor-3",
@@ -24912,13 +20277,23 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "barrows",
-   "title": "Barrows",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "fletching-flighted-ogre-arrows",
+   "title": "Fletching flighted ogre arrows",
+   "reason": "needs Big Chompy Bird Hunting, not on the route yet"
+  },
+  {
+   "id": "crafting-topaz-jewellery",
+   "title": "Crafting topaz jewellery",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "killing-mithril-dragons",
    "title": "Killing mithril dragons",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "killing-blue-dragons",
+   "title": "Killing blue dragons",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -24930,11 +20305,6 @@
    "id": "smelting-iron-bars-at-blast-furnace",
    "title": "Smelting iron bars at Blast Furnace",
    "reason": "needs The Giant Dwarf, not on the route yet"
-  },
-  {
-   "id": "killing-blue-dragons",
-   "title": "Killing blue dragons",
-   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "hunting-moonlight-antelopes",
@@ -24952,14 +20322,14 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "fletching-ogre-arrow-shafts",
-   "title": "Fletching ogre arrow shafts",
-   "reason": "needs Zogre Flesh Eaters, not on the route yet"
-  },
-  {
    "id": "mining-lead-ore-deepfin-mine",
    "title": "Mining lead ore (Deepfin mine)",
    "reason": "level sailing 67 is not modelled"
+  },
+  {
+   "id": "temple-trekking",
+   "title": "Temple Trekking",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "crafting-law-runes-through-the-abyss",
@@ -24977,18 +20347,8 @@
    "reason": "needs a house study lectern, which the route does not plan"
   },
   {
-   "id": "temple-trekking",
-   "title": "Temple Trekking",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "killing-amoxliatl",
    "title": "Killing Amoxliatl",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "killing-brine-rats",
-   "title": "Killing brine rats",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -24997,9 +20357,14 @@
    "reason": "needs Enlightened Journey, not on the route yet"
   },
   {
-   "id": "fletching-flighted-ogre-arrows",
-   "title": "Fletching flighted ogre arrows",
-   "reason": "needs Big Chompy Bird Hunting, not on the route yet"
+   "id": "killing-brine-rats",
+   "title": "Killing brine rats",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "fletching-ogre-arrow-shafts",
+   "title": "Fletching ogre arrow shafts",
+   "reason": "needs Zogre Flesh Eaters, not on the route yet"
   },
   {
    "id": "creating-teleport-tablets-at-lectern-lunar",
@@ -25012,14 +20377,14 @@
    "reason": "input1 is a wiki formula the build cannot read"
   },
   {
-   "id": "catching-rainbow-crabs",
-   "title": "Catching rainbow crabs",
-   "reason": "level sailing 64 is not modelled"
-  },
-  {
    "id": "killing-the-kalphite-queen",
    "title": "Killing the Kalphite Queen",
    "reason": "no Mmgtable"
+  },
+  {
+   "id": "catching-rainbow-crabs",
+   "title": "Catching rainbow crabs",
+   "reason": "level sailing 64 is not modelled"
   },
   {
    "id": "making-oak-planks",
@@ -25030,11 +20395,6 @@
    "id": "killing-sarachnis",
    "title": "Killing Sarachnis",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "making-prayer-potions",
-   "title": "Making prayer potions",
-   "reason": "no Mmgtable"
   },
   {
    "id": "killing-ice-troll-runts",
@@ -25062,14 +20422,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "buying-beer",
+   "title": "Buying beer",
+   "reason": "needs Children of the Sun, not on the route yet"
+  },
+  {
    "id": "recharging-rings-of-wealth",
    "title": "Recharging rings of wealth",
    "reason": "no place for \"Wilderness\""
-  },
-  {
-   "id": "humidifying-clay",
-   "title": "Humidifying clay",
-   "reason": "needs Dream Mentor, not on the route yet"
   },
   {
    "id": "killing-black-dragons",
@@ -25082,14 +20442,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "collecting-climbing-boots",
-   "title": "Collecting climbing boots",
-   "reason": "needs Death Plateau, not on the route yet"
-  },
-  {
    "id": "smithing-iron-dart-tips",
    "title": "Smithing iron dart tips",
    "reason": "needs The Tourist Trap, not on the route yet"
+  },
+  {
+   "id": "collecting-climbing-boots",
+   "title": "Collecting climbing boots",
+   "reason": "needs Death Plateau, not on the route yet"
   },
   {
    "id": "mining-rubium-splinters",
@@ -25102,19 +20462,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "buying-beer",
-   "title": "Buying beer",
-   "reason": "needs Children of the Sun, not on the route yet"
+   "id": "smithing-steel-dart-tips",
+   "title": "Smithing steel dart tips",
+   "reason": "needs The Tourist Trap, not on the route yet"
   },
   {
    "id": "vyrecycling",
    "title": "Vyrecycling",
    "reason": "needs Sins of the Father, not on the route yet"
-  },
-  {
-   "id": "smithing-steel-dart-tips",
-   "title": "Smithing steel dart tips",
-   "reason": "needs The Tourist Trap, not on the route yet"
   },
   {
    "id": "hunting-herbiboars",
@@ -25142,24 +20497,24 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "crafting-dragonstone-jewellery",
-   "title": "Crafting dragonstone jewellery",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
    "id": "killing-skogres-and-zogres",
    "title": "Killing skogres and zogres",
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "collecting-white-berries",
-   "title": "Collecting white berries",
-   "reason": "needs Regicide, not on the route yet"
+   "id": "crafting-dragonstone-jewellery",
+   "title": "Crafting dragonstone jewellery",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "crafting-clockwork-teleport-method",
    "title": "Crafting clockwork (teleport method)",
    "reason": "needs a house workshop crafting table"
+  },
+  {
+   "id": "collecting-white-berries",
+   "title": "Collecting white berries",
+   "reason": "needs Regicide, not on the route yet"
   },
   {
    "id": "killing-fever-spiders",
@@ -25172,9 +20527,9 @@
    "reason": "needs a house study lectern, which the route does not plan"
   },
   {
-   "id": "mining-volcanic-ash",
-   "title": "Mining volcanic ash",
-   "reason": "needs Bone Voyage, not on the route yet"
+   "id": "cooking-raw-sharks",
+   "title": "Cooking raw sharks",
+   "reason": "needs Family Crest, not on the route yet"
   },
   {
    "id": "creating-bones-to-peaches-tablets",
@@ -25182,9 +20537,9 @@
    "reason": "needs the Bones to Peaches unlock and a lectern"
   },
   {
-   "id": "cooking-raw-sharks",
-   "title": "Cooking raw sharks",
-   "reason": "needs Family Crest, not on the route yet"
+   "id": "mining-volcanic-ash",
+   "title": "Mining volcanic ash",
+   "reason": "needs Bone Voyage, not on the route yet"
   },
   {
    "id": "killing-aviansie",
@@ -25197,14 +20552,14 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "pickpocketing-knights-of-ardougne",
-   "title": "Pickpocketing Knights of Ardougne",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
    "id": "killing-disciples-of-iban",
    "title": "Killing disciples of Iban",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "pickpocketing-knights-of-ardougne",
+   "title": "Pickpocketing Knights of Ardougne",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "mining-lead-ore",
@@ -25222,14 +20577,14 @@
    "reason": "needs Dream Mentor, not on the route yet"
   },
   {
-   "id": "killing-feral-vampyres",
-   "title": "Killing Feral Vampyres",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "mining-gemstones",
    "title": "Mining gemstones",
    "reason": "needs Shilo Village, not on the route yet"
+  },
+  {
+   "id": "killing-red-dragons",
+   "title": "Killing red dragons",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "killing-unicows",
@@ -25237,8 +20592,8 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-red-dragons",
-   "title": "Killing red dragons",
+   "id": "killing-feral-vampyres",
+   "title": "Killing Feral Vampyres",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -25252,9 +20607,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-scurrius",
-   "title": "Killing Scurrius",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "casting-spin-flax",
+   "title": "Casting Spin Flax",
+   "reason": "needs Lunar Diplomacy, not on the route yet"
   },
   {
    "id": "salvaging-merchant-shipwrecks",
@@ -25267,14 +20622,14 @@
    "reason": "level sailing 64 is not modelled"
   },
   {
-   "id": "barbarian-assault-high-gambles",
-   "title": "Barbarian assault high gambles",
+   "id": "killing-scurrius",
+   "title": "Killing Scurrius",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "casting-spin-flax",
-   "title": "Casting Spin Flax",
-   "reason": "needs Lunar Diplomacy, not on the route yet"
+   "id": "barbarian-assault-high-gambles",
+   "title": "Barbarian assault high gambles",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "hunting-chinchompas",
@@ -25297,24 +20652,24 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "catching-sacred-eels",
-   "title": "Catching sacred eels",
-   "reason": "needs Regicide, not on the route yet"
-  },
-  {
    "id": "catching-infernal-eels",
    "title": "Catching infernal eels",
    "reason": "output3 is a wiki formula the build cannot read"
   },
   {
-   "id": "collecting-eclipse-red-bottles",
-   "title": "Collecting eclipse red bottles",
-   "reason": "needs Children of the Sun, not on the route yet"
+   "id": "catching-sacred-eels",
+   "title": "Catching sacred eels",
+   "reason": "needs Regicide, not on the route yet"
   },
   {
    "id": "forging-giant-swords",
    "title": "Forging Giant swords",
    "reason": "input1 is a wiki formula the build cannot read"
+  },
+  {
+   "id": "collecting-eclipse-red-bottles",
+   "title": "Collecting eclipse red bottles",
+   "reason": "needs Children of the Sun, not on the route yet"
   },
   {
    "id": "collecting-anti-dragon-shields",
@@ -25347,13 +20702,13 @@
    "reason": "needs The Fremennik Isles, not on the route yet"
   },
   {
-   "id": "creating-camelot-teleport-tablets",
-   "title": "Creating Camelot teleport tablets",
+   "id": "creating-ardougne-teleport-tablets",
+   "title": "Creating Ardougne teleport tablets",
    "reason": "needs a house study lectern, which the route does not plan"
   },
   {
-   "id": "creating-ardougne-teleport-tablets",
-   "title": "Creating Ardougne teleport tablets",
+   "id": "creating-camelot-teleport-tablets",
+   "title": "Creating Camelot teleport tablets",
    "reason": "needs a house study lectern, which the route does not plan"
   },
   {
@@ -25367,14 +20722,14 @@
    "reason": "needs The Fremennik Trials, not on the route yet"
   },
   {
-   "id": "cutting-camphor-logs",
-   "title": "Cutting camphor logs",
-   "reason": "needs Troubled Tortugans, not on the route yet"
-  },
-  {
    "id": "killing-ankou",
    "title": "Killing ankou",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "cutting-camphor-logs",
+   "title": "Cutting camphor logs",
+   "reason": "needs Troubled Tortugans, not on the route yet"
   },
   {
    "id": "buying-iron-ore-from-ordan",
@@ -25382,24 +20737,24 @@
    "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
-   "id": "fletching-unstrung-comp-bow",
-   "title": "Fletching unstrung comp bow",
-   "reason": "needs Zogre Flesh Eaters, not on the route yet"
-  },
-  {
    "id": "picking-up-chisels",
    "title": "Picking up chisels",
    "reason": "needs Temple of the Eye, not on the route yet"
   },
   {
-   "id": "mining-and-crushing-infernal-shale-infernal-shale-deposit",
-   "title": "Mining and crushing infernal shale (Infernal shale deposit)",
-   "reason": "needs A Kingdom Divided, not on the route yet"
+   "id": "fletching-unstrung-comp-bow",
+   "title": "Fletching unstrung comp bow",
+   "reason": "needs Zogre Flesh Eaters, not on the route yet"
   },
   {
    "id": "cooking-raw-karambwan",
    "title": "Cooking raw karambwan",
    "reason": "needs Tai Bwo Wannai Trio, not on the route yet"
+  },
+  {
+   "id": "mining-and-crushing-infernal-shale-infernal-shale-deposit",
+   "title": "Mining and crushing infernal shale (Infernal shale deposit)",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "cutting-magic-logs",
@@ -25437,13 +20792,13 @@
    "reason": "needs Dream Mentor, not on the route yet"
   },
   {
-   "id": "farming-ranarr-weed",
-   "title": "Farming ranarr weed",
+   "id": "farming-snapdragon",
+   "title": "Farming snapdragon",
    "reason": "needs Ghosts Ahoy, not on the route yet"
   },
   {
-   "id": "farming-snapdragon",
-   "title": "Farming snapdragon",
+   "id": "farming-ranarr-weed",
+   "title": "Farming ranarr weed",
    "reason": "needs Ghosts Ahoy, not on the route yet"
   },
   {
@@ -25482,24 +20837,24 @@
    "reason": "needs Troubled Tortugans, not on the route yet"
   },
   {
-   "id": "farming-irit-leaves",
-   "title": "Farming irit leaves",
-   "reason": "needs Ghosts Ahoy, not on the route yet"
-  },
-  {
    "id": "buying-battlestaves-from-zaff",
    "title": "Buying battlestaves from Zaff",
    "reason": "a daily purchase (15 staves without the Varrock Diary), not an hourly method"
   },
   {
-   "id": "farming-dwarf-weed",
-   "title": "Farming dwarf weed",
+   "id": "farming-irit-leaves",
+   "title": "Farming irit leaves",
    "reason": "needs Ghosts Ahoy, not on the route yet"
   },
   {
    "id": "opening-herb-boxes",
    "title": "Opening herb boxes",
    "reason": "needs 142,500 Nightmare Zone points"
+  },
+  {
+   "id": "farming-dwarf-weed",
+   "title": "Farming dwarf weed",
+   "reason": "needs Ghosts Ahoy, not on the route yet"
   },
   {
    "id": "farming-lantadyme",
@@ -25527,19 +20882,24 @@
    "reason": "needs Throne of Miscellania, not on the route yet"
   },
   {
-   "id": "planting-crystal-acorn",
-   "title": "Planting Crystal acorn",
-   "reason": "needs Song of the Elves, not on the route yet"
-  },
-  {
    "id": "claiming-runes-from-lundail",
    "title": "Claiming runes from Lundail",
    "reason": "needs Death Plateau, not on the route yet"
   },
   {
+   "id": "planting-crystal-acorn",
+   "title": "Planting Crystal acorn",
+   "reason": "needs Song of the Elves, not on the route yet"
+  },
+  {
    "id": "claiming-dynamite-from-thirus",
    "title": "Claiming Dynamite from Thirus",
    "reason": "needs the elite Kourend & Kebos Diary"
+  },
+  {
+   "id": "selling-hardleather-bodies",
+   "title": "Selling hardleather bodies",
+   "reason": "the guide gives hourly totals (625 bodies for 10,625 coins), not a unit the build can read"
   },
   {
    "id": "claiming-pure-essence-from-wizard-cromperty",
