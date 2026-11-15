@@ -1158,6 +1158,2915 @@
         "The margin is thin and moves with the market: the evaluator re-reads both sides of the trade every time and drops the method when it does not pay.",
         "Item ids from the wiki infoboxes, retrieved 2026-10-25."
       ]
+    },
+    {
+      "id": "grind-goat-horns",
+      "title": "Grind goat horns",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Grind goat horns into goat horn dust with a pestle and mortar and sell the dust.",
+      "requirements": [
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 233,
+              "name": "Pestle and mortar"
+            }
+          ],
+          "note": "The pestle and mortar stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 9735,
+            "name": "Goat horn"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 9736,
+            "name": "Goat horn dust"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "goat horn dust",
+        "perHour": {
+          "slow": 4950,
+          "typical": 7200,
+          "fast": 9000
+        },
+        "basis": "wiki-guide",
+        "assumes": "9,000 horns an hour is the guide's moderate pace (1,800 when left to grind by itself, 18,000 one horn a tick). Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 8,
+        "note": "The pestle and mortar takes one slot; the Grand Exchange bank booths are beside the counters."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy goat horns at the Grand Exchange; keep a pestle and mortar in the bag."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the pestle and mortar on the horns; grinding each horn by hand is faster than letting it run."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the dust."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the dust at the Grand Exchange; test one horn first, the dust can take a while to sell."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Grinding_goat_horns",
+          "title": "Money making guide/Grinding goat horns",
+          "revision": 15282719,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, input, output, tool and place"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Goat horns are bought at the exchange at the instant-buy price; the guide warns the dust can take time to sell.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "tan-green-dragonhide",
+      "title": "Tan green dragonhide",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Buy green dragonhide, have Ellis in Al Kharid tan it for 20 coins a hide and sell the leather.",
+      "requirements": [],
+      "inputs": [
+        {
+          "item": {
+            "id": 1753,
+            "name": "Green dragonhide"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 20,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 3008,
+            "name": "Energy potion(4)"
+          },
+          "qty": 0.0385
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 1745,
+            "name": "Green dragon leather"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "hide",
+        "perHour": {
+          "slow": 2000,
+          "typical": 2800,
+          "fast": 3500
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,800 hides an hour running, 2,000 walking without energy potions and 3,500 with one energy potion every 26 hides (the guide)."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 25,
+        "note": "Coins take one slot; a run from the Al Kharid bank to Ellis and back is about 25 seconds."
+      },
+      "spot": {
+        "x": 3274,
+        "y": 3192,
+        "plane": 0,
+        "label": "Ellis, Al Kharid tannery"
+      },
+      "bank": {
+        "x": 3269,
+        "y": 3167,
+        "plane": 0,
+        "label": "Al Kharid bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy green dragonhide and energy potions at the Grand Exchange; test one hide and one leather first, the margin is small."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Al Kharid bank."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 27 hides and the coins, run north to Ellis and use Trade on him to tan all the hides."
+        },
+        {
+          "kind": "bank",
+          "text": "Run back and bank the leather."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the leather at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Tanning_green_dragonhide",
+          "title": "Money making guide/Tanning green dragonhide",
+          "revision": 14719659,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, tanning fee, energy use, tanner and bank"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Hides are bought and leather sold at the instant prices; the guide warns half the profit can go if you are not patient.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "tan-blue-dragonhide",
+      "title": "Tan blue dragonhide",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Buy blue dragonhide, have Ellis in Al Kharid tan it for 20 coins a hide and sell the leather.",
+      "requirements": [],
+      "inputs": [
+        {
+          "item": {
+            "id": 1751,
+            "name": "Blue dragonhide"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 20,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 3008,
+            "name": "Energy potion(4)"
+          },
+          "qty": 0.0385
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 2505,
+            "name": "Blue dragon leather"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "hide",
+        "perHour": {
+          "slow": 2000,
+          "typical": 2800,
+          "fast": 3500
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,800 hides an hour running, 2,000 walking without energy potions and 3,500 with one energy potion every 26 hides (the guide)."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 25,
+        "note": "Coins take one slot; a run from the Al Kharid bank to Ellis and back is about 25 seconds."
+      },
+      "spot": {
+        "x": 3274,
+        "y": 3192,
+        "plane": 0,
+        "label": "Ellis, Al Kharid tannery"
+      },
+      "bank": {
+        "x": 3269,
+        "y": 3167,
+        "plane": 0,
+        "label": "Al Kharid bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy blue dragonhide and energy potions at the Grand Exchange; test one hide and one leather first, the margin is small."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Al Kharid bank."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 27 hides and the coins, run north to Ellis and use Trade on him to tan all the hides."
+        },
+        {
+          "kind": "bank",
+          "text": "Run back and bank the leather."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the leather at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Tanning_blue_dragonhide",
+          "title": "Money making guide/Tanning blue dragonhide",
+          "revision": 14719658,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, tanning fee, energy use, tanner and bank"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Hides are bought and leather sold at the instant prices; the guide warns half the profit can go if you are not patient.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "tan-red-dragonhide",
+      "title": "Tan red dragonhide",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Buy red dragonhide, have Ellis in Al Kharid tan it for 20 coins a hide and sell the leather.",
+      "requirements": [],
+      "inputs": [
+        {
+          "item": {
+            "id": 1749,
+            "name": "Red dragonhide"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 20,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 3008,
+            "name": "Energy potion(4)"
+          },
+          "qty": 0.0385
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 2507,
+            "name": "Red dragon leather"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "hide",
+        "perHour": {
+          "slow": 2000,
+          "typical": 2800,
+          "fast": 3500
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,800 hides an hour running, 2,000 walking without energy potions and 3,500 with one energy potion every 26 hides (the guide)."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 25,
+        "note": "Coins take one slot; a run from the Al Kharid bank to Ellis and back is about 25 seconds."
+      },
+      "spot": {
+        "x": 3274,
+        "y": 3192,
+        "plane": 0,
+        "label": "Ellis, Al Kharid tannery"
+      },
+      "bank": {
+        "x": 3269,
+        "y": 3167,
+        "plane": 0,
+        "label": "Al Kharid bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy red dragonhide and energy potions at the Grand Exchange; test one hide and one leather first, the margin is small."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Al Kharid bank."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 27 hides and the coins, run north to Ellis and use Trade on him to tan all the hides."
+        },
+        {
+          "kind": "bank",
+          "text": "Run back and bank the leather."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the leather at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Tanning_red_dragonhide",
+          "title": "Money making guide/Tanning red dragonhide",
+          "revision": 14719657,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, tanning fee, energy use, tanner and bank"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Hides are bought and leather sold at the instant prices; the guide warns half the profit can go if you are not patient.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "tan-black-dragonhide",
+      "title": "Tan black dragonhide",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Buy black dragonhide, have Ellis in Al Kharid tan it for 20 coins a hide and sell the leather.",
+      "requirements": [],
+      "inputs": [
+        {
+          "item": {
+            "id": 1747,
+            "name": "Black dragonhide"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 20,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 3008,
+            "name": "Energy potion(4)"
+          },
+          "qty": 0.0385
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 2509,
+            "name": "Black dragon leather"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "hide",
+        "perHour": {
+          "slow": 2000,
+          "typical": 2800,
+          "fast": 3500
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,800 hides an hour running, 2,000 walking without energy potions and 3,500 with one energy potion every 26 hides (the guide)."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 25,
+        "note": "Coins take one slot; a run from the Al Kharid bank to Ellis and back is about 25 seconds."
+      },
+      "spot": {
+        "x": 3274,
+        "y": 3192,
+        "plane": 0,
+        "label": "Ellis, Al Kharid tannery"
+      },
+      "bank": {
+        "x": 3269,
+        "y": 3167,
+        "plane": 0,
+        "label": "Al Kharid bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy black dragonhide and energy potions at the Grand Exchange; test one hide and one leather first, the margin is small."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Al Kharid bank."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 27 hides and the coins, run north to Ellis and use Trade on him to tan all the hides."
+        },
+        {
+          "kind": "bank",
+          "text": "Run back and bank the leather."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the leather at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Tanning_black_dragonhide",
+          "title": "Money making guide/Tanning black dragonhide",
+          "revision": 14719661,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, tanning fee, energy use, tanner and bank"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Hides are bought and leather sold at the instant prices; the guide warns half the profit can go if you are not patient.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "smith-steel-cannonballs",
+      "title": "Smith steel cannonballs",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Smelt steel bars into cannonballs at the Edgeville furnace with an ammo mould and sell them.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "smithing",
+          "level": 35
+        },
+        {
+          "kind": "quest",
+          "quest": "Dwarf Cannon",
+          "state": "complete"
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 4,
+              "name": "Ammo mould"
+            }
+          ],
+          "note": "Nulodion at the Dwarven Mine camp gives the ammo mould after Dwarf Cannon."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2353,
+            "name": "Steel bar"
+          },
+          "qty": 0.25
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 2,
+            "name": "Steel cannonball"
+          },
+          "qty": 1,
+          "stack": true
+        }
+      ],
+      "rate": {
+        "unit": "cannonball",
+        "perHour": {
+          "slow": 1320,
+          "typical": 2160,
+          "fast": 2400
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,160 to 2,400 cannonballs an hour at a regular furnace (the guide); slow is 55% of the fast pace. The double ammo mould and the Ancient Furnace are not assumed."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 10,
+        "note": "The ammo mould takes one slot; the Edgeville furnace is a few steps from the bank."
+      },
+      "spot": {
+        "x": 3109,
+        "y": 3499,
+        "plane": 0,
+        "label": "Edgeville furnace"
+      },
+      "bank": {
+        "x": 3093,
+        "y": 3495,
+        "plane": 0,
+        "label": "Edgeville Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy steel bars at the Grand Exchange, or take them from the bank; keep the ammo mould in the bag."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Edgeville furnace."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the steel bars on the furnace; each bar makes 4 cannonballs."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank for more bars when they run out."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the cannonballs at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smithing_steel_cannonballs",
+          "title": "Money making guide/Smithing steel cannonballs",
+          "revision": 15288929,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, levels, quest, mould and furnace"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Steel bars are bought at the exchange at the instant-buy price.",
+        "Sailing 87 (the Ancient Furnace) and the double ammo mould are optional and not assumed.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "enchant-sapphire-rings",
+      "title": "Enchant sapphire rings",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cast Lvl-1 Enchant on sapphire rings at a bank and sell the ring of recoils.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "magic",
+          "level": 7
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1383,
+              "name": "Staff of water"
+            },
+            {
+              "id": 1395,
+              "name": "Water battlestaff"
+            },
+            {
+              "id": 1403,
+              "name": "Mystic water staff"
+            }
+          ],
+          "note": "The staff gives the water runes; cosmic runes are bought."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 1637,
+            "name": "Sapphire ring"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 564,
+            "name": "Cosmic rune"
+          },
+          "qty": 1,
+          "stack": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 2550,
+            "name": "Ring of recoil"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "ring of recoil",
+        "perHour": {
+          "slow": 880,
+          "typical": 1280,
+          "fast": 1600
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,600 casts an hour is the guide's figure. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 5,
+        "note": "Cosmic runes take one slot; the guide counts up to 1,900 casts an hour at full attention."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy sapphire rings and cosmic runes at the Grand Exchange; wield the staff. Test one first, the jewellery market moves fast."
+        },
+        {
+          "kind": "perform",
+          "text": "Cast Lvl-1 Enchant on each sapphire ring."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank and withdraw the next 27."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Enchanting_sapphire_rings",
+          "title": "Money making guide/Enchanting sapphire rings",
+          "revision": 14722200,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, spell level, staff, inputs and output"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Jewellery is bought and sold at the instant prices; the guide warns the jewellery market can be very volatile.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "enchant-jade-amulets",
+      "title": "Enchant jade amulets",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cast Lvl-2 Enchant on jade amulets at a bank and sell the amulet of chemistrys.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "magic",
+          "level": 27
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1381,
+              "name": "Staff of air"
+            },
+            {
+              "id": 1397,
+              "name": "Air battlestaff"
+            },
+            {
+              "id": 1405,
+              "name": "Mystic air staff"
+            }
+          ],
+          "note": "The staff gives the air runes; cosmic runes are bought."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 21111,
+            "name": "Jade amulet"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 564,
+            "name": "Cosmic rune"
+          },
+          "qty": 1,
+          "stack": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 21163,
+            "name": "Amulet of chemistry"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "amulet of chemistry",
+        "perHour": {
+          "slow": 880,
+          "typical": 1280,
+          "fast": 1600
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,600 casts an hour is the guide's figure. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 5,
+        "note": "Cosmic runes take one slot; the guide counts 1,600 casts an hour."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy jade amulets and cosmic runes at the Grand Exchange; wield the staff. Test one first, the jewellery market moves fast."
+        },
+        {
+          "kind": "perform",
+          "text": "Cast Lvl-2 Enchant on each jade amulet."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank and withdraw the next 27."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Enchanting_jade_amulets",
+          "title": "Money making guide/Enchanting jade amulets",
+          "revision": 14501159,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, spell level, staff, inputs and output"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Jewellery is bought and sold at the instant prices; the guide warns the jewellery market can be very volatile.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "craft-gold-bracelets",
+      "title": "Craft gold bracelets",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Craft gold bracelets at the Edgeville furnace and sell them.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "crafting",
+          "level": 7
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 11065,
+              "name": "Bracelet mould"
+            }
+          ],
+          "note": "The bracelet mould stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2357,
+            "name": "Gold bar"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 11069,
+            "name": "Gold bracelet"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "bracelet",
+        "perHour": {
+          "slow": 770,
+          "typical": 1120,
+          "fast": 1400
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,400 bracelets an hour is the guide's figure. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 10,
+        "note": "The bracelet mould takes one slot; the Edgeville furnace is a few steps from the bank."
+      },
+      "spot": {
+        "x": 3109,
+        "y": 3499,
+        "plane": 0,
+        "label": "Edgeville furnace"
+      },
+      "bank": {
+        "x": 3093,
+        "y": 3495,
+        "plane": 0,
+        "label": "Edgeville Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy gold bars at the Grand Exchange; keep the bracelet mould in the bag."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Edgeville furnace."
+        },
+        {
+          "kind": "perform",
+          "text": "Use a gold bar on the furnace and make gold bracelets."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the bracelets."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_gold_bracelets",
+          "title": "Money making guide/Crafting gold bracelets",
+          "revision": 15260363,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, Crafting level, mould, inputs and furnace"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Gold bars and gems are bought at the exchange at the instant-buy price.",
+        "The Prifddinas furnace (Song of the Elves) is closer to a bank but not assumed.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "craft-sapphire-bracelets",
+      "title": "Craft sapphire bracelets",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Craft sapphire bracelets at the Edgeville furnace and sell them.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "crafting",
+          "level": 23
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 11065,
+              "name": "Bracelet mould"
+            }
+          ],
+          "note": "The bracelet mould stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2357,
+            "name": "Gold bar"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 1607,
+            "name": "Sapphire"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 11072,
+            "name": "Sapphire bracelet"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "bracelet",
+        "perHour": {
+          "slow": 660,
+          "typical": 960,
+          "fast": 1200
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,200 bracelets an hour is the guide's figure. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 10,
+        "note": "The bracelet mould takes one slot; the Edgeville furnace is a few steps from the bank."
+      },
+      "spot": {
+        "x": 3109,
+        "y": 3499,
+        "plane": 0,
+        "label": "Edgeville furnace"
+      },
+      "bank": {
+        "x": 3093,
+        "y": 3495,
+        "plane": 0,
+        "label": "Edgeville Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy gold bars and sapphires at the Grand Exchange; keep the bracelet mould in the bag."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Edgeville furnace."
+        },
+        {
+          "kind": "perform",
+          "text": "Use a gold bar on the furnace and make sapphire bracelets."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the bracelets."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_sapphire_bracelets",
+          "title": "Money making guide/Crafting sapphire bracelets",
+          "revision": 15356030,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, Crafting level, mould, inputs and furnace"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Gold bars and gems are bought at the exchange at the instant-buy price.",
+        "The Prifddinas furnace (Song of the Elves) is closer to a bank but not assumed.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "craft-emerald-bracelets",
+      "title": "Craft emerald bracelets",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Craft emerald bracelets at the Edgeville furnace and sell them.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "crafting",
+          "level": 30
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 11065,
+              "name": "Bracelet mould"
+            }
+          ],
+          "note": "The bracelet mould stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2357,
+            "name": "Gold bar"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 1605,
+            "name": "Emerald"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 11076,
+            "name": "Emerald bracelet"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "bracelet",
+        "perHour": {
+          "slow": 660,
+          "typical": 960,
+          "fast": 1200
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,200 bracelets an hour is the guide's figure. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 10,
+        "note": "The bracelet mould takes one slot; the Edgeville furnace is a few steps from the bank."
+      },
+      "spot": {
+        "x": 3109,
+        "y": 3499,
+        "plane": 0,
+        "label": "Edgeville furnace"
+      },
+      "bank": {
+        "x": 3093,
+        "y": 3495,
+        "plane": 0,
+        "label": "Edgeville Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy gold bars and emeralds at the Grand Exchange; keep the bracelet mould in the bag."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Edgeville furnace."
+        },
+        {
+          "kind": "perform",
+          "text": "Use a gold bar on the furnace and make emerald bracelets."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the bracelets."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_emerald_bracelets",
+          "title": "Money making guide/Crafting emerald bracelets",
+          "revision": 15356033,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, Crafting level, mould, inputs and furnace"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Gold bars and gems are bought at the exchange at the instant-buy price.",
+        "The Prifddinas furnace (Song of the Elves) is closer to a bank but not assumed.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-redwood-pyre-logs",
+      "title": "Make redwood pyre logs",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making redwood pyre logs. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "quest",
+          "quest": "Shades of Mort'ton",
+          "state": "complete"
+        },
+        {
+          "kind": "check",
+          "text": "Bring: + Coins"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 3430,
+            "name": "Sacred oil(4)"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 19669,
+            "name": "Redwood logs"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 19672,
+            "name": "Redwood pyre logs"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 229,
+            "name": "Vial"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "redwood pyre logs",
+        "perHour": {
+          "slow": 770,
+          "typical": 1300,
+          "fast": 1400
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,400 pyre logs an hour at most; 1,300 is the guide's realistic figure with banking. Slow is 55% of the fast pace."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 6,
+        "note": "14 redwood logs and 14 sacred oil a bank; the Grand Exchange bank booths are beside the counters."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy sacred oil(4) and redwood logs at the Grand Exchange."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use an oil on a log and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the pyre logs and the empty vials."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_redwood_pyre_logs",
+          "title": "Money making guide/Making redwood pyre logs",
+          "revision": 15143101,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Sacred oil has a Grand Exchange buy limit of 2,000 every four hours, so a long session is capped near 500 logs an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "fill-bullseye-lanterns",
+      "title": "Fill bullseye lanterns",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Filling bullseye lantern (empty). Rimmington",
+      "requirements": [
+        {
+          "kind": "check",
+          "text": "Bring: * + coins recommended * Graceful outfit * Teleports to a bank - Crafting cape, Ring of dueling * Teleports to player-owned house - Teleport to house (tablet), spirit tree, fairy ring"
+        },
+        {
+          "kind": "check",
+          "text": "Player-owned house in Rimmington"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 4546,
+            "name": "Bullseye lantern (empty)"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 1939,
+            "name": "Swamp tar"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 4548,
+            "name": "Bullseye lantern"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "bullseye lantern",
+        "perHour": {
+          "slow": 550,
+          "typical": 800,
+          "fast": 1000
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,000 bullseye lantern an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 45,
+        "note": "Half the bag is empty lanterns and half swamp tar; a house teleport to Rimmington and a bank teleport each trip."
+      },
+      "spot": {
+        "x": 2952,
+        "y": 3221,
+        "plane": 0,
+        "label": "Rimmington"
+      },
+      "bank": {
+        "x": 3017,
+        "y": 3356,
+        "plane": 0,
+        "label": "Falador East Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy empty bullseye lanterns and swamp tar at the Grand Exchange."
+        },
+        {
+          "kind": "travel",
+          "text": "Teleport to your house in Rimmington and walk to the Chemist's house."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the swamp tar on the lamp oil still, then each lantern on the still."
+        },
+        {
+          "kind": "bank",
+          "text": "Teleport to a bank and bank the lanterns."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Filling_bullseye_lantern_(empty)",
+          "title": "Money making guide/Filling bullseye lantern (empty)",
+          "revision": 14691258,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "A player-owned house in Rimmington is assumed for the trip time; without it the walk from Falador is longer.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "collect-jangerberries",
+      "title": "Collect jangerberries",
+      "family": "collecting",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Collecting jangerberries. Ogre Island, south-west of Yanille",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "agility",
+          "level": 10
+        },
+        {
+          "kind": "check",
+          "text": "Bring: Decent armour (recommended)"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 954,
+            "name": "Rope"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 2552,
+            "name": "Ring of dueling(8)"
+          },
+          "qty": 0.125
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 247,
+            "name": "Jangerberries"
+          },
+          "qty": 28
+        }
+      ],
+      "rate": {
+        "unit": "action",
+        "perHour": {
+          "slow": 11,
+          "typical": 16,
+          "fast": 20
+        },
+        "basis": "wiki-guide",
+        "assumes": "20 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "One trip: Castle Wars by ring of dueling, a rope over the branch to Ogre Island, a full bag of berries. The wiki pace counts it."
+      },
+      "spot": {
+        "x": 2577,
+        "y": 3090,
+        "plane": 0,
+        "label": "Ogre Island, south-west of Yanille"
+      },
+      "bank": {
+        "x": 2947,
+        "y": 3366,
+        "plane": 0,
+        "label": "Falador West Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "moderate",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Bring a ring of dueling, a rope and decent armour."
+        },
+        {
+          "kind": "travel",
+          "text": "Teleport to Castle Wars, bank and run to the tree south-west of Yanille."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the rope on the branch, swing to Ogre Island and pick the jangerberries until the bag is full."
+        },
+        {
+          "kind": "bank",
+          "text": "Teleport to Castle Wars and bank the berries."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_jangerberries",
+          "title": "Money making guide/Collecting jangerberries",
+          "revision": 14355789,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The ogres on the island are aggressive; armour keeps the damage low and nothing is planned for a fight.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "pick-bananas",
+      "title": "Pick bananas at Musa Point",
+      "family": "collecting",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Picking bananas. Musa Point",
+      "requirements": [
+        {
+          "kind": "check",
+          "text": "Bring: Charged amulet(s) of glory"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 5376,
+            "name": "Basket"
+          },
+          "qty": 23
+        },
+        {
+          "item": {
+            "id": 2552,
+            "name": "Ring of dueling(8)"
+          },
+          "qty": 0.125
+        },
+        {
+          "item": {
+            "id": 1712,
+            "name": "Amulet of glory(4)"
+          },
+          "qty": 0.25
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 5416,
+            "name": "Bananas(5)"
+          },
+          "qty": 23
+        },
+        {
+          "item": {
+            "id": 1704,
+            "name": "Amulet of glory"
+          },
+          "qty": 0.25
+        }
+      ],
+      "rate": {
+        "unit": "action",
+        "perHour": {
+          "slow": 8,
+          "typical": 12,
+          "fast": 15
+        },
+        "basis": "wiki-guide",
+        "assumes": "15 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "23 baskets of 5 bananas a trip, an amulet of glory there and a ring of dueling back; the wiki pace counts it."
+      },
+      "spot": {
+        "x": 2904,
+        "y": 3162,
+        "plane": 0,
+        "label": "Musa Point"
+      },
+      "bank": {
+        "x": 3093,
+        "y": 3243,
+        "plane": 0,
+        "label": "Draynor Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy baskets; wear a charged amulet of glory and a ring of dueling."
+        },
+        {
+          "kind": "travel",
+          "text": "Teleport to Karamja with the glory; the banana trees are a few steps away."
+        },
+        {
+          "kind": "perform",
+          "text": "Pick bananas into the baskets until all 23 are full."
+        },
+        {
+          "kind": "bank",
+          "text": "Teleport out with the ring and bank the baskets."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Picking_bananas",
+          "title": "Money making guide/Picking bananas",
+          "revision": 14384180,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "telegrab-wine-of-zamorak",
+      "title": "Telegrab wine of Zamorak",
+      "family": "collecting",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Collecting Wine of Zamorak. Chaos Temple (Free-to-play, above Goblin Village)",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "magic",
+          "level": 33
+        },
+        {
+          "kind": "level",
+          "skill": "hitpoints",
+          "level": 20
+        },
+        {
+          "kind": "check",
+          "text": "Bring: * Staff of air * Zamorak robes * Law runes * Cake * Restore potion * Looting bag (Recommended) * Games necklaces (Members) * Rings of dueling (Members)"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 563,
+            "name": "Law rune"
+          },
+          "qty": 1.0189,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 1891,
+            "name": "Cake"
+          },
+          "qty": 0.1509
+        },
+        {
+          "item": {
+            "id": 2430,
+            "name": "Restore potion(4)"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            53
+          ]
+        },
+        {
+          "item": {
+            "id": 555,
+            "name": "Water rune"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            53
+          ],
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 2552,
+            "name": "Ring of dueling(8)"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            424
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 245,
+            "name": "Wine of Zamorak"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "wine of zamorak",
+        "perHour": {
+          "slow": 117,
+          "typical": 170,
+          "fast": 212
+        },
+        "basis": "wiki-guide",
+        "assumes": "212 wine of zamorak an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The wiki pace already counts banking."
+      },
+      "spot": {
+        "x": 2934,
+        "y": 3516,
+        "plane": 0,
+        "label": "Chaos Temple (Free-to-play, above Goblin Village)"
+      },
+      "bank": {
+        "x": 2947,
+        "y": 3366,
+        "plane": 0,
+        "label": "Falador West Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "moderate",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Wield a staff of air; bring law runes, food and a restore potion."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Chaos Temple north-west of the Goblin Village."
+        },
+        {
+          "kind": "perform",
+          "text": "Cast Telekinetic Grab on the wine on the table whenever it appears; the monks attack when it is taken."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the wine at Falador West Bank when the bag is full."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_wine_of_Zamorak",
+          "title": "Money making guide/Collecting wine of Zamorak",
+          "revision": 15314792,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The Monks of Zamorak attack after each grab; the cake and restore potion in the inputs pay for that.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-gloves-of-silence",
+      "title": "Make gloves of silence",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Creating gloves of silence. Varrock",
+      "requirements": [
+        {
+          "kind": "check",
+          "text": "Bring: * Rings of dueling * Stamina potions * Coins * Rune pouch (recommended) * Elemental staff - Smoke battlestaff negates the need for rune pouch * Full graceful outfit (optional), Coins"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 10115,
+            "name": "Dark kebbit fur"
+          },
+          "qty": 26
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 7800,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 2552,
+            "name": "Ring of dueling(8)"
+          },
+          "qty": 0.125
+        },
+        {
+          "item": {
+            "id": 563,
+            "name": "Law rune"
+          },
+          "qty": 1,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 554,
+            "name": "Fire rune"
+          },
+          "qty": 1,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 556,
+            "name": "Air rune"
+          },
+          "qty": 3,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 12625,
+            "name": "Stamina potion(4)"
+          },
+          "qty": 0.1744
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 10075,
+            "name": "Gloves of silence"
+          },
+          "qty": 13
+        }
+      ],
+      "rate": {
+        "unit": "action",
+        "perHour": {
+          "slow": 24,
+          "typical": 34,
+          "fast": 43
+        },
+        "basis": "wiki-guide",
+        "assumes": "43 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The wiki pace already counts banking."
+      },
+      "spot": {
+        "x": 3210,
+        "y": 3448,
+        "plane": 0,
+        "label": "Varrock"
+      },
+      "bank": {
+        "x": 3185,
+        "y": 3440,
+        "plane": 0,
+        "label": "Varrock West Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy dark kebbit fur at the Grand Exchange; bring coins, a ring of dueling and a stamina potion."
+        },
+        {
+          "kind": "travel",
+          "text": "Teleport to Varrock and run to the Fancy Dress Shop."
+        },
+        {
+          "kind": "perform",
+          "text": "Have the shop owner make gloves of silence from 2 furs and 600 coins each."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the gloves at Varrock West Bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_gloves_of_silence",
+          "title": "Money making guide/Making gloves of silence",
+          "revision": 15128615,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide warns the furs and the gloves trade in low volume, so selling may take time.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "spin-flax-lumbridge",
+      "title": "Spin flax into bow strings",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Spin flax into bow strings at the Lumbridge Castle wheel, one floor below the castle bank.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "crafting",
+          "level": 10
+        },
+        {
+          "kind": "check",
+          "text": "Bring: + recommended Bow string spool recommended"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 1779,
+            "name": "Flax"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 1777,
+            "name": "Bow string"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "bow string",
+        "perHour": {
+          "slow": 770,
+          "typical": 1200,
+          "fast": 1400
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,400 bow strings an hour without the spool is the guide's figure; 28 flax take 50 seconds and a bank round trip about 20, which gives 1,440. Typical allows for misclicks."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 flax a trip: 50 seconds at the wheel and about 20 for the stairs and the bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3209,
+        "y": 3213,
+        "plane": 1,
+        "label": "Lumbridge Castle spinning wheel"
+      },
+      "bank": {
+        "x": 3208,
+        "y": 3220,
+        "plane": 2,
+        "label": "Lumbridge Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy flax at the Grand Exchange."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Lumbridge Castle bank on the top floor."
+        },
+        {
+          "kind": "perform",
+          "text": "Take 28 flax one floor down and spin them all at the wheel."
+        },
+        {
+          "kind": "bank",
+          "text": "Climb back up and bank the bow strings."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Spinning_flax_to_bow_strings",
+          "title": "Money making guide/Spinning flax to bow strings",
+          "revision": 14963290,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide's 2,000 an hour needs Children of the Sun and an upgraded bow string spool; without them it says closer to 1,400, which this method uses.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "buy-pies-cooks-guild",
+      "title": "Buy pies at the Cooks' Guild",
+      "family": "collecting",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Buy out Romily Weaklax's pie stock in the Cooks' Guild, hop worlds, and sell the pies.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "cooking",
+          "level": 32
+        },
+        {
+          "kind": "item",
+          "role": "gear",
+          "any": [
+            {
+              "id": 1949,
+              "name": "Chef's hat"
+            },
+            {
+              "id": 9801,
+              "name": "Cooking cape"
+            }
+          ],
+          "note": "Worn to enter the Cooks' Guild."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 60,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 60,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 90,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 48,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 100,
+          "stack": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 2325,
+            "name": "Redberry pie"
+          },
+          "qty": 5
+        },
+        {
+          "item": {
+            "id": 2327,
+            "name": "Meat pie"
+          },
+          "qty": 4
+        },
+        {
+          "item": {
+            "id": 2323,
+            "name": "Apple pie"
+          },
+          "qty": 3
+        },
+        {
+          "item": {
+            "id": 7178,
+            "name": "Garden pie"
+          },
+          "qty": 2
+        },
+        {
+          "item": {
+            "id": 7188,
+            "name": "Fish pie"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "stock bought",
+        "perHour": {
+          "slow": 55,
+          "typical": 80,
+          "fast": 240
+        },
+        "basis": "wiki-guide",
+        "assumes": "240 stocks an hour is the guide's pace with 99 Cooking and the guild bank. Without it, a bag of two stocks takes about 25 seconds to buy and 60 to bank at the Grand Exchange, about 80 stocks an hour."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "About two stocks of 15 pies fill the bag; the guild bank needs 99 Cooking, so the pace counts the run to the Grand Exchange bank."
+      },
+      "spot": {
+        "x": 3144,
+        "y": 3450,
+        "plane": 0,
+        "label": "Cooks' Guild"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Wear a chef's hat and bring coins."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Cooks' Guild west of Varrock."
+        },
+        {
+          "kind": "perform",
+          "text": "Buy every pie Romily Weaklax has, then hop worlds and buy again until the bag is full."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the pies at the Grand Exchange."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_pies",
+          "title": "Money making guide/Buying pies",
+          "revision": 14994160,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "One stock is 5 redberry, 4 meat, 3 apple, 2 garden and 1 fish pie for 358 coins.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "buy-steel-nails",
+      "title": "Buy steel nails at the sawmill",
+      "family": "collecting",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Buy steel nails from the Varrock sawmill operator, hop worlds, and sell the nails.",
+      "requirements": [
+        {
+          "kind": "check",
+          "text": "Bring: * recommended, Coins"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 3,
+          "stack": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 1539,
+            "name": "Steel nails"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "steel nails",
+        "perHour": {
+          "slow": 3000,
+          "typical": 6000,
+          "fast": 10000
+        },
+        "basis": "wiki-guide",
+        "assumes": "10,000 nails an hour is the guide's best case; it warns of high variance at busy times, so typical is 6,000 and slow 3,000."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "Nails stack in one slot, so there is no bank trip."
+      },
+      "spot": {
+        "x": 3302,
+        "y": 3491,
+        "plane": 0,
+        "label": "Varrock Lumber Yard"
+      },
+      "bank": {
+        "x": 3254,
+        "y": 3420,
+        "plane": 0,
+        "label": "Varrock East Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Bring coins; a ring of dueling or Varrock teleports help."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the sawmill operator at the Varrock Lumber Yard."
+        },
+        {
+          "kind": "perform",
+          "text": "Buy all his steel nails, then hop worlds and buy again."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_steel_nails",
+          "title": "Money making guide/Buying steel nails",
+          "revision": 15321554,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide warns the stock varies a lot with the time of day.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ],
+      "marketDependence": "The stock refills one nail a minute and other players buy it too; the guide sees 10 to 150 in stock."
+    },
+    {
+      "id": "agility-pyramid-tops",
+      "title": "Climb the Agility Pyramid",
+      "family": "gathering",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Climb the Agility Pyramid and sell each pyramid top to Simon Templeton for 10,000 coins.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "agility",
+          "level": 30
+        },
+        {
+          "kind": "level",
+          "skill": "hitpoints",
+          "level": 20
+        },
+        {
+          "kind": "item",
+          "role": "gear",
+          "any": [
+            {
+              "id": 1823,
+              "name": "Waterskin(4)"
+            }
+          ],
+          "note": "Several waterskins for the desert heat; refill them in Pollnivneach."
+        }
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 10000,
+          "stack": true
+        }
+      ],
+      "rate": {
+        "unit": "lap",
+        "perHour": {
+          "slow": 11,
+          "typical": 16,
+          "fast": 20
+        },
+        "basis": "wiki-guide",
+        "assumes": "20 laps an hour is the guide's pace; at 75 Agility nothing fails and 26 is the most. Below 75 the rate is scaled down to 40% at 30.",
+        "levelScale": {
+          "skill": "agility",
+          "fromLevel": 30,
+          "atLevel": 75,
+          "minFactor": 0.4
+        }
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The coins stack, so there is no bank trip; only the waterskins need refilling."
+      },
+      "spot": {
+        "x": 3365,
+        "y": 2842,
+        "plane": 0,
+        "label": "Agility Pyramid"
+      },
+      "bank": {
+        "x": 3427,
+        "y": 2889,
+        "plane": 0,
+        "label": "Nardah bank"
+      },
+      "saleSeconds": 60,
+      "risk": "moderate",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Bring several full waterskins and some food."
+        },
+        {
+          "kind": "travel",
+          "text": "Take the magic carpet from Shantay Pass to Pollnivneach and walk to the Agility Pyramid."
+        },
+        {
+          "kind": "perform",
+          "text": "Climb the pyramid, take the pyramid top and sell it to Simon Templeton."
+        },
+        {
+          "kind": "restock",
+          "text": "Refill the waterskins in Pollnivneach when they run low, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Climbing_the_Agility_Pyramid",
+          "title": "Money making guide/Climbing the Agility Pyramid",
+          "revision": 14871802,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Below 75 Agility the obstacles fail often, each fall up to 10 damage; the level scale cuts the pace to 40% at 30 Agility.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "craft-limestone-bricks",
+      "title": "Craft limestone bricks",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Crafting Limestone bricks. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "crafting",
+          "level": 40
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 3211,
+            "name": "Limestone"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 3420,
+            "name": "Limestone brick"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "limestone brick",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 limestone brick an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "The chisel takes one slot; the Grand Exchange bank booths are beside the counters."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy limestone at the Grand Exchange; bring a chisel."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the chisel on each limestone; several fit in one tick, there is no make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the bricks and take the next 27 limestone."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_limestone_bricks",
+          "title": "Money making guide/Crafting limestone bricks",
+          "revision": 14478583,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Crafting 40 is required here although 12 can start: below 40 some bricks fail into rock, which the guide's figures leave out.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-guam-potions-unf",
+      "title": "Make unfinished guam potions",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making guam potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 3
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        },
+        {
+          "kind": "check",
+          "text": "Bring: + recommended"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 249,
+            "name": "Guam leaf"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 227,
+            "name": "Vial of water"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 91,
+            "name": "Guam potion (unf)"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "guam potion (unf)",
+        "perHour": {
+          "slow": 2200,
+          "typical": 3200,
+          "fast": 4000
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,000 guam potion (unf) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 guam leaves and 14 vials of water a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy guam leaves and vials of water at the Grand Exchange. Test one first, the margin is thin."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a leaf on a vial and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the unfinished potions."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_guam_potions",
+          "title": "Money making guide/Making guam potions",
+          "revision": 15250776,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Guam leaves have a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "clean-grimy-guam",
+      "title": "Clean grimy guam leaves",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cleaning grimy guam leaves. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 3
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        },
+        {
+          "kind": "check",
+          "text": "Bring: + recommended, Grimy guam leaves"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 199,
+            "name": "Grimy guam leaf"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 249,
+            "name": "Guam leaf"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "guam leaf",
+        "perHour": {
+          "slow": 2750,
+          "typical": 4000,
+          "fast": 5000
+        },
+        "basis": "wiki-guide",
+        "assumes": "5,000 guam leaf an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "28 herbs a bank, 10 to 20 seconds to clean; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grimy guam leaves at the Grand Exchange."
+        },
+        {
+          "kind": "perform",
+          "text": "Clean all 28 leaves."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the clean leaves and take the next 28."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cleaning_grimy_guam_leaves",
+          "title": "Money making guide/Cleaning grimy guam leaves",
+          "revision": 14381281,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Grimy guam leaves have a buy limit of 13,000 every four hours, so long sessions are capped near 3,250 an hour.",
+        "The guide advises mouse keys against repetitive strain.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
     }
   ]
 }

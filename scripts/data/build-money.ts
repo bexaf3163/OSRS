@@ -48,10 +48,40 @@ const links = (s: string) => [...s.matchAll(/\[\[([^\]|#]+)/g)].map((m) => m[1].
 const ROUTE_QUESTS = new Set(read<{ title: string }[]>('src/data/authored/steps.json').map((s) => s.title));
 // The skills the planner models (tradeRestriction ALL_SKILLS) plus the combat level.
 const SKILLS = new Set(['attack', 'strength', 'defence', 'ranged', 'prayer', 'magic', 'runecraft', 'construction', 'hitpoints', 'agility', 'herblore', 'thieving', 'crafting', 'fletching', 'slayer', 'hunter', 'mining', 'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'farming', 'combat']);
+// Guides whose Other field is an unlock the route does not plan, or a diary the guide's figures assume (read by hand, 2026-11-15).
+const UNPLANNED: Record<string, string> = {
+  'collecting-ruby-rings': 'needs the Robes of Ruin dig (28 items), which the route does not plan',
+  'crafting-soul-runes': 'needs the Enter the Abyss miniquest and a redirected rift',
+  'creating-ardougne-teleport-tablets': 'needs a house study lectern, which the route does not plan',
+  'creating-camelot-teleport-tablets': 'needs a house study lectern, which the route does not plan',
+  'creating-teleport-to-house-tablets': 'needs a house study lectern, which the route does not plan',
+  'creating-varrock-teleport-tablets': 'needs a house study lectern, which the route does not plan',
+  'creating-bones-to-peaches-tablets': 'needs the Bones to Peaches unlock and a lectern',
+  'crafting-clockwork-teleport-method': 'needs a house workshop crafting table',
+  'making-toy-cats': 'needs a house workshop crafting table 4',
+  'opening-herb-boxes': 'needs 142,500 Nightmare Zone points',
+  'buying-battlestaves-from-zaff': 'a daily purchase (15 staves without the Varrock Diary), not an hourly method',
+  'claiming-dynamite-from-thirus': 'needs the elite Kourend & Kebos Diary',
+  'pickpocketing-paladins': 'the figures assume the medium Ardougne Diary',
+  'pickpocketing-master-farmers': 'the figures assume the hard Ardougne Diary or the Thieving cape',
+};
 const coverage = read<{ entries: { id: string }[] }>('src/data/authored/fundingCoverage.json');
 const places = read<{ locations: Record<string, WikiPoint & { label: string; kind: string }> }>('src/data/generated/majorLocations.json').locations;
 const BANKS = Object.entries(places).filter(([name, p]) => p.kind === 'bank' || name === 'Grand Exchange')
   .map(([name, p]) => ({ x: p.x, y: p.y, plane: p.plane, label: name }));
+// Members banks: Shortest Path's bank list at the commit build-portals pins (BSD), only banks with no skill or state gate and
+// whose quest is on the route; raids, minigames and Sailing islands are left out.
+const SP_COMMIT = '99735452c7c257d3fe5ae79970429cdce907d571';
+const SPECIAL = /Chambers of Xeric|Clan Hall|Culinaromancer|Tombs of Amascut|Hallowed Sepulchre|Soul Wars|Temple of the Eye|Emir's Arena|Bank Boat|Daimon's Crater|Deepfin|Pandemonium|Port Roberts|Mage Arena|Warriors' Guild|Ancient Prison/;
+const bankTsv = await (await fetch(`https://raw.githubusercontent.com/Skretzo/shortest-path/${SP_COMMIT}/src/main/resources/destinations/game_features/bank.tsv`, { headers: { 'User-Agent': UA } })).text();
+const MEMBER_BANKS = [...BANKS];
+for (const line of bankTsv.split('\n')) {
+  const [at, name, skills, quests, varbits, varps] = line.replace(/\r$/, '').split('\t');
+  if (!name || at.startsWith('#') || skills || varbits || varps || SPECIAL.test(name) || MEMBER_BANKS.some((b) => b.label.startsWith(name))) continue;
+  if (quests && !quests.split(';').every((q) => ROUTE_QUESTS.has(q.trim()))) continue;
+  const [x, y, plane] = at.split(' ').map(Number);
+  MEMBER_BANKS.push({ x, y, plane, label: `${name} bank` });
+}
 const mapping = await fetch('https://prices.runescape.wiki/api/v1/osrs/mapping', { headers: { 'User-Agent': UA } })
   .then((r) => r.json() as Promise<{ id: number; name: string }[]>);
 const ITEMS = new Map(mapping.map((m) => [m.name.toLowerCase(), m]));
@@ -242,13 +272,17 @@ for (const e of entries) {
   if (levels.has('woodcutting')) requirements.push({ kind: 'item', role: 'tool', any: [], family: 'axe' });
   // What to bring: the card's item field and the unsellable inputs, never the product itself (some cards name the collected item there).
   const made = new Set(outs.map((o) => o.name.toLowerCase()));
-  const bring = [...field('item').split(/,\s*/).filter((n) => n && !made.has(n.toLowerCase())), ...unsold].join(', ');
+  // A card's item field is often a coin template plus "+ recommended" or bullets; only real item names are kept.
+  const bring = [...field('item').split(/,\s*|\s*\*\s*/).map((n) => n.replace(/^[\s+~]+/, '').trim())
+    .filter((n) => n && !/^\(?recommended\)?$/i.test(n) && !made.has(n.toLowerCase())), ...unsold].join(', ');
   if (bring) requirements.push({ kind: 'check', text: `Bring: ${bring}` });
   if (field('other')) requirements.push({ kind: 'check', text: field('other') });
   // The planner judges only what it models: route quests, the known skills, and Members fights with a hand-made profile.
   const unmodelled = (e.members && combat ? 'a Members fight needs a hand-made combat profile' : null)
     ?? requirements.flatMap((r) => r.kind === 'level' && (!SKILLS.has(r.skill) || !(r.level >= 1 && r.level <= 99)) ? [`level ${r.skill} ${r.level} is not modelled`] : [])[0]
-    ?? requirements.flatMap((r) => r.kind === 'quest' && !ROUTE_QUESTS.has(r.quest) ? [`needs ${r.quest}, not on the route yet`] : [])[0] ?? null;
+    ?? requirements.flatMap((r) => r.kind === 'quest' && !ROUTE_QUESTS.has(r.quest) ? [`needs ${r.quest}, not on the route yet`] : [])[0]
+    ?? requirements.flatMap((r) => r.kind === 'check' && r.text.startsWith('Needs the miniquest') ? [`${r.text.toLowerCase()}, which the route does not plan`] : [])[0]
+    ?? UNPLANNED[id] ?? null;
   if (unmodelled) { problems.push({ id, title: e.title, reason: unmodelled }); continue; }
   const location = f.location ?? '';
   const point = await spotOf(location, foe, page.text, e.members);
@@ -258,7 +292,7 @@ for (const e of entries) {
   if (wild) requirements.push({ kind: 'check', text: 'In the Wilderness: other players can attack you, so bring only what you can lose' });
   const label = (wikiPlain(location).split(/\.\s/)[0] || 'Grand Exchange').slice(0, 80);
   const spot: Place = { x: point.x, y: point.y, plane: point.plane, label };
-  const bank = [...BANKS].sort((a, b) => distance(point, a) - distance(point, b))[0];
+  const bank = [...(e.members ? MEMBER_BANKS : BANKS)].sort((a, b) => distance(point, a) - distance(point, b))[0];
 
   const activity = wikiPlain(f.activity);
   const unit = combat ? 'kill' : !perKill || (main && !main.ph && main.n === 1) ? main!.name.toLowerCase() : 'action';

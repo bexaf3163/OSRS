@@ -195,7 +195,7 @@ export function processRate(m: TrainingMethod, skill: string, state: PlayerState
   if (!ids || m.kind !== 'method' || !m.skills.includes(skill) || (m.members && state.mode !== 'members')) return null;
   const level = levelOf(state, skill);
   if (level === undefined) return null;
-  const coinRate = coinsPerMinute(market.prices);
+  const coinRate = coinsPerMinute(market.prices, state.mode);
   const home = m.place ? matchStrict(m.place) : null;
   let best: Option | null = null;
   for (const id of ids) {

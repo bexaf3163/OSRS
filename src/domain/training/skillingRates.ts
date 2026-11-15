@@ -178,7 +178,7 @@ export function gatherRate(m: TrainingMethod, skill: string, state: PlayerState,
   if (!ids || m.kind !== 'method' || !m.skills.includes(skill) || (m.members && state.mode !== 'members')) return null;
   const level = levelOf(state, skill);
   if (level === undefined) return null;
-  const coinRate = coinsPerMinute(market.prices);
+  const coinRate = coinsPerMinute(market.prices, state.mode);
   const home = m.place ? matchStrict(m.place) : null;
   let best: { s: SpotRate; r: Resource; spot: SkillSpot } | null = null;
   for (const id of ids) {
@@ -286,7 +286,7 @@ export function alongRate(m: TrainingMethod, gatherSkill: string, processSkill: 
   const level = levelOf(state, gatherSkill);
   const plevel = levelOf(state, processSkill);
   if (level === undefined || plevel === undefined) return null;
-  const coinRate = coinsPerMinute(market.prices);
+  const coinRate = coinsPerMinute(market.prices, state.mode);
   const usable = <T extends { members?: boolean }>(x: T) => !(x.members && state.mode !== 'members');
   let best: AlongRate | null = null;
   for (const id of ids) {

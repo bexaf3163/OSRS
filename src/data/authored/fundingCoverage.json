@@ -199,6 +199,198 @@
       "methods": [
         "fish-lobster-musa"
       ]
+    },
+    {
+      "id": "grinding-goat-horns",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "grind-goat-horns"
+      ]
+    },
+    {
+      "id": "tanning-green-dragonhide",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "tan-green-dragonhide"
+      ]
+    },
+    {
+      "id": "tanning-blue-dragonhide",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "tan-blue-dragonhide"
+      ]
+    },
+    {
+      "id": "tanning-red-dragonhide",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "tan-red-dragonhide"
+      ]
+    },
+    {
+      "id": "tanning-black-dragonhide",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "tan-black-dragonhide"
+      ]
+    },
+    {
+      "id": "smithing-steel-cannonballs",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "smith-steel-cannonballs"
+      ]
+    },
+    {
+      "id": "enchanting-sapphire-rings",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "enchant-sapphire-rings"
+      ]
+    },
+    {
+      "id": "enchanting-jade-amulets",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "enchant-jade-amulets"
+      ]
+    },
+    {
+      "id": "crafting-gold-bracelets",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "craft-gold-bracelets"
+      ]
+    },
+    {
+      "id": "crafting-sapphire-bracelets",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "craft-sapphire-bracelets"
+      ]
+    },
+    {
+      "id": "crafting-emerald-bracelets",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "craft-emerald-bracelets"
+      ]
+    },
+    {
+      "id": "making-redwood-pyre-logs",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "make-redwood-pyre-logs"
+      ]
+    },
+    {
+      "id": "filling-bullseye-lantern-empty",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "fill-bullseye-lanterns"
+      ]
+    },
+    {
+      "id": "collecting-jangerberries",
+      "status": "supported",
+      "family": "collecting",
+      "methods": [
+        "collect-jangerberries"
+      ]
+    },
+    {
+      "id": "picking-bananas",
+      "status": "supported",
+      "family": "collecting",
+      "methods": [
+        "pick-bananas"
+      ]
+    },
+    {
+      "id": "collecting-wine-of-zamorak",
+      "status": "supported",
+      "family": "collecting",
+      "methods": [
+        "telegrab-wine-of-zamorak"
+      ]
+    },
+    {
+      "id": "making-gloves-of-silence",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "make-gloves-of-silence"
+      ]
+    },
+    {
+      "id": "spinning-flax-to-bow-strings",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "spin-flax-lumbridge"
+      ]
+    },
+    {
+      "id": "buying-pies",
+      "status": "supported",
+      "family": "collecting",
+      "methods": [
+        "buy-pies-cooks-guild"
+      ]
+    },
+    {
+      "id": "buying-steel-nails",
+      "status": "supported",
+      "family": "collecting",
+      "methods": [
+        "buy-steel-nails"
+      ]
+    },
+    {
+      "id": "climbing-the-agility-pyramid",
+      "status": "supported",
+      "family": "gathering",
+      "methods": [
+        "agility-pyramid-tops"
+      ]
+    },
+    {
+      "id": "crafting-limestone-bricks",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "craft-limestone-bricks"
+      ]
+    },
+    {
+      "id": "making-guam-potions",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "make-guam-potions-unf"
+      ]
+    },
+    {
+      "id": "cleaning-grimy-guam-leaves",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "clean-grimy-guam"
+      ]
     }
   ],
   "extras": [

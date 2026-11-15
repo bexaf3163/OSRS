@@ -19,10 +19,10 @@ describe('the method catalogue', () => {
 
   it('has the methods the audit promised, with stable ids', () => {
     expect(authored.map((m) => m.id).sort()).toEqual([
-      'anchovy-pizzas', 'apple-pies', 'berry-pies', 'chocolate-cakes', 'chop-oak-draynor', 'chop-yew-edgeville', 'collect-iron-al-kharid',
-      'cows-cowhide', 'feather-packs', 'fill-jugs-falador', 'fish-lobster-musa', 'giant-frogs', 'grind-chocolate', 'hill-giants', 'jug-packs',
-      'kebabs-al-kharid', 'meat-pies', 'mine-coal-dwarven', 'mine-iron-dwarven', 'oziach-shields', 'pie-shells', 'pizza-bases', 'smelt-silver-bars',
-      'smelt-steel-bars',
+      'agility-pyramid-tops', 'anchovy-pizzas', 'apple-pies', 'berry-pies', 'buy-pies-cooks-guild', 'buy-steel-nails', 'chocolate-cakes', 'chop-oak-draynor', 'chop-yew-edgeville', 'clean-grimy-guam', 'collect-iron-al-kharid',
+      'collect-jangerberries', 'cows-cowhide', 'craft-emerald-bracelets', 'craft-gold-bracelets', 'craft-limestone-bricks', 'craft-sapphire-bracelets', 'enchant-jade-amulets', 'enchant-sapphire-rings', 'feather-packs', 'fill-bullseye-lanterns', 'fill-jugs-falador', 'fish-lobster-musa', 'giant-frogs', 'grind-chocolate', 'grind-goat-horns', 'hill-giants', 'jug-packs',
+      'kebabs-al-kharid', 'make-gloves-of-silence', 'make-guam-potions-unf', 'make-redwood-pyre-logs', 'meat-pies', 'mine-coal-dwarven', 'mine-iron-dwarven', 'oziach-shields', 'pick-bananas', 'pie-shells', 'pizza-bases', 'smelt-silver-bars',
+      'smelt-steel-bars', 'smith-steel-cannonballs', 'spin-flax-lumbridge', 'tan-black-dragonhide', 'tan-blue-dragonhide', 'tan-green-dragonhide', 'tan-red-dragonhide', 'telegrab-wine-of-zamorak',
     ]);
     expect(methodById('hill-giants')?.combat?.foe).toBe('Hill Giant');
     expect(methodById('nothing')).toBeUndefined();

@@ -111,28 +111,28 @@ export function combatUpgrades(m: TrainingMethod, skill: string, state: PlayerSt
 /** The rate of one combat method for this player in this skill, or null when the model has nothing honest to say (methodRates.ts dispatches here). */
 export function combatRate(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): ModelRate | null {
   if (m.kind !== 'method' || !m.skills.includes(skill) || (m.members && state.mode !== 'members') || !m.npcNames?.length || state.equipmentKnown !== true) return null;
-  if (MELEE.has(skill) && m.skills.includes(skill)) return withLoot(meleeRate(m.npcNames[0], skill as 'attack' | 'strength' | 'defence', state, market.prices), m.npcNames[0], market);
+  if (MELEE.has(skill) && m.skills.includes(skill)) return withLoot(meleeRate(m.npcNames[0], skill as 'attack' | 'strength' | 'defence', state, market.prices), m.npcNames[0], market, state.mode);
   // Slayer XP is the HP of each monster killed on task: a quarter of the melee XP of the same kills, in the best style.
   if (skill === 'slayer') {
     const foe = m.npcNames[0];
     const best = (['attack', 'strength', 'defence'] as const).map(style => meleeRate(foe, style, state, market.prices))
       .filter(rate => rate !== null).sort((a, b) => b.xph[1] - a.xph[1])[0];
-    return best ? withLoot({ ...best, xph: [best.xph[0] / 4, best.xph[1] / 4] }, foe, market) : null;
+    return best ? withLoot({ ...best, xph: [best.xph[0] / 4, best.xph[1] / 4] }, foe, market, state.mode) : null;
   }
-  if (skill === 'ranged' && m.kit === 'f2p-bow') return withLoot(rangedRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market);
-  if (skill === 'magic' && m.kit === 'strike-spell') return withLoot(magicRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market);
+  if (skill === 'ranged' && m.kit === 'f2p-bow') return withLoot(rangedRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market, state.mode);
+  if (skill === 'magic' && m.kit === 'strike-spell') return withLoot(magicRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market, state.mode);
   return null;
 }
 
 /** A rate with the spot's drop banked, when that pays for its pickups and bank trips (lootValue.ts); the rate as it was otherwise. */
-function withLoot(r: (ModelRate & { secondsPerKill: number }) | null, foe: string, market: Market): ModelRate | null {
+function withLoot(r: (ModelRate & { secondsPerKill: number }) | null, foe: string, market: Market, mode: 'f2p' | 'members' = 'f2p'): ModelRate | null {
   if (!r) return null;
   const { secondsPerKill, ...rate } = r;
   // The method's own catalogue entry decides who may train there (members flag); here only the spot's facts are read.
   const spot = spotsOf(true).get(foe);
   const each = spot?.sell ? dropValue(spot.sell, market.prices, market.restriction) : null;
   const trip = termsOf(foe).tripMinutes;
-  const extra = each !== null && spot?.sell ? lootSecondsPerKill(each, trip ? (trip[0] + trip[1]) / 2 : 4.5, coinsPerMinute(market.prices), market.objective) : null;
+  const extra = each !== null && spot?.sell ? lootSecondsPerKill(each, trip ? (trip[0] + trip[1]) / 2 : 4.5, coinsPerMinute(market.prices, mode), market.objective) : null;
   if (extra === null || each === null) return rate;
   const slower = secondsPerKill / (secondsPerKill + extra);
   return { ...rate, xph: [rate.xph[0] * slower, rate.xph[1] * slower], costPerHour: rate.costPerHour === null ? null : rate.costPerHour * slower,

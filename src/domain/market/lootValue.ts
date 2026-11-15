@@ -14,13 +14,19 @@ export const PICKUP_SECONDS: [number, number] = [1.2, 3];
 /** Bag cells a loot trip fills: the weapon is worn, two cells for potions or a few pieces of food. */
 export const LOOT_SLOTS = 26;
 
-const COWHIDE_METHOD = (fundingJson as unknown as { methods: { id: string; rate: { perHour: { typical: number } } }[] }).methods.find((m) => m.id === 'cows-cowhide');
+const BASELINES = (fundingJson as unknown as { methods: { id: string; rate: { perHour: { typical: number } } }[] }).methods;
+const COWHIDE_METHOD = BASELINES.find((m) => m.id === 'cows-cowhide');
+const GOAT_METHOD = BASELINES.find((m) => m.id === 'grind-goat-horns');
 
 /** What a minute is worth in coins: cowhides at the exchange's price after the tax. Null without a price: then no loot is planned. */
-export function coinsPerMinute(prices: PriceView | null | undefined): number | null {
+export function coinsPerMinute(prices: PriceView | null | undefined, mode: 'f2p' | 'members' = 'f2p'): number | null {
   const hide = prices?.sell('Cowhide')?.price;
   if (!hide || !COWHIDE_METHOD) return null;
-  return (COWHIDE_METHOD.rate.perHour.typical * netEach(hide, 'Cowhide')) / 60;
+  const cows = (COWHIDE_METHOD.rate.perHour.typical * netEach(hide, 'Cowhide')) / 60;
+  // A Members minute is worth at least the simplest Members method: grinding goat horns needs no level (owner, 2026-11-15).
+  const dust = prices?.sell('Goat horn dust')?.price, horn = prices?.buy('Goat horn')?.price;
+  if (mode !== 'members' || !GOAT_METHOD || !dust || !horn) return cows;
+  return Math.max(cows, (GOAT_METHOD.rate.perHour.typical * (netEach(dust, 'Goat horn dust') - horn)) / 60);
 }
 
 /**

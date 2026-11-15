@@ -667,7 +667,7 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
     // Advance only this skill in a copy; other skill/quest entry proofs must still be satisfied.
     const cands = methodsFor(skill, methods).filter((m) => !m.manualSetup && recommendedAt(m, lv, input.mode)).map((m) => viewMethod(m, projected, input.prices)).filter((v) => v.status !== 'LOCKED');
     // Each level is weighed as the first one is (adviseTraining): the hours from here to the goal, less what the banked drops are worth.
-    cands.sort(compare(priority, Math.max(0, xpForLevel(target) - xpForLevel(lv)), lv, coinsPerMinute(input.prices)));
+    cands.sort(compare(priority, Math.max(0, xpForLevel(target) - xpForLevel(lv)), lv, coinsPerMinute(input.prices, input.mode)));
     let pick = (lv === level ? cands.find(c => c.method.id === first?.id)?.method : undefined) ?? cands[0]?.method;
     if (!pick) { timed = false; continue; }
     const last = legs[legs.length - 1];
@@ -740,7 +740,7 @@ export function trainingStockNeeds(path: readonly PathLeg[], skill: string, stat
   for (const leg of path) {
     const projected = atLevel(state, skill, leg.fromLevel);
     const legXp = Math.max(0, xpForLevel(leg.toLevel) - Math.max(xp, xpForLevel(leg.fromLevel)));
-    const upgrade = toolUpgrade(leg.method, (tool) => upgradeXp(tool, skill, state.mode, Math.max(xp, xpForLevel(leg.fromLevel)), legXp, path[path.length - 1].toLevel), priority, coinsPerMinute(prices));
+    const upgrade = toolUpgrade(leg.method, (tool) => upgradeXp(tool, skill, state.mode, Math.max(xp, xpForLevel(leg.fromLevel)), legXp, path[path.length - 1].toLevel), priority, coinsPerMinute(prices, state.mode));
     const best: MethodView = { method: leg.method, status: 'READY', missing: [], unchecked: [] };
     const kit = preparationNeeds({ best, upgrade }, projected, prices).filter((n): n is Extract<MethodNeed, { type: 'item' }> => n.type === 'item' && isReusable(n.name));
     const key = kit.length ? JSON.stringify(kit.map(n => [n.name, n.anyOf ?? []]).sort()) : leg.method.id;
@@ -769,7 +769,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
 
   const priority = objective;
   const xpNow0 = input.xp ?? xpForLevel(level);
-  const coinRate = coinsPerMinute(input.prices);
+  const coinRate = coinsPerMinute(input.prices, input.mode);
   const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level, coinRate);
   const views = methodsFor(skill, methods).filter((m) => recommendedAt(m, level, mode) || (m.id === input0.followed && availableAt(m, level, mode))).map((m) => viewMethod(m, state, input.prices)).sort(cmp);
   const top = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;

@@ -105,7 +105,7 @@ function computeRangedNeeds(state: PlayerState, prices?: PriceView | null): Meth
   // Review paid ammunition with a bow purchase or a needed refill, not an extra trip for every unlock.
   const buy = bankKnown && (!adequate.length || !owned(bow)) ? candidates.filter(o =>
     o.held.presence === 'MISSING' && price(o.name) !== null && STARTER_ARROWS * price(o.name)! <= ammoBudget) : [];
-  const minute = coinsPerMinute(prices);
+  const minute = coinsPerMinute(prices, state.mode);
   const speed = Math.max(1, (stats.find(g => g.name === bow)?.speed ?? 4) - 1);
   const timeValue = minute === null ? 0 : minute * speed * 0.6 / 60;
   const efficiency = (name: string) => {
