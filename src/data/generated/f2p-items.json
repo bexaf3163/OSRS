@@ -4770,6 +4770,16 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Energy_potion"
   },
   {
+    "id": 35,
+    "nameEn": "Excalibur",
+    "examine": "This used to belong to King Arthur.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Excalibur.png",
+    "value": 200,
+    "highAlch": 120,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Excalibur"
+  },
+  {
     "id": 221,
     "nameEn": "Eye of newt",
     "examine": "It seems to be looking at me.",

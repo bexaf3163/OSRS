@@ -714,6 +714,29 @@
       "aggressive": false
     },
     {
+      "name": "Black Knight Titan",
+      "combat": 120,
+      "members": true,
+      "hitpoints": 142,
+      "attackLevel": 91,
+      "strengthLevel": 100,
+      "defenceLevel": 91,
+      "magicLevel": 1,
+      "attackBonus": 27,
+      "defence": {
+        "stab": 18,
+        "slash": 27,
+        "crush": 18,
+        "magic": 1000,
+        "ranged": 1000
+      },
+      "attackStyle": "crush",
+      "maxHit": 15,
+      "speedTicks": 7,
+      "aggressive": false,
+      "xpBonus": -75
+    },
+    {
       "name": "Temple Guardian",
       "combat": 30,
       "members": true,

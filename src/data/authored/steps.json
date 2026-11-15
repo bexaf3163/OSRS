@@ -4894,6 +4894,83 @@
     }
   },
   {
+    "id": "S7-19",
+    "stage": 7,
+    "type": "quest",
+    "title": "Holy Grail",
+    "qp": 2,
+    "requires": [
+      "S7-17"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Holy_Grail",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Holy_Grail/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2764,3513,0",
+    "mapLocation": {
+      "x": 2764,
+      "y": 3513,
+      "plane": 0,
+      "label": "Camelot"
+    },
+    "npc": {
+      "nameEn": "King Arthur",
+      "location": "Camelot",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/King_Arthur"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Excalibur",
+        "amount": 1,
+        "howToGet": "Kept from Merlin's Crystal; if lost, the Lady of the Lake in Taverley returns it for 500 coins.",
+        "wikiItemId": 35,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Excalibur.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "heals": 12,
+        "amount": 10,
+        "anyOf": [
+          "Trout",
+          "Salmon",
+          "Tuna",
+          "Swordfish"
+        ],
+        "howToGet": "Your own catch or the Grand Exchange. The level 120 Black Knight Titan in the Fisher Realm must be finished with Excalibur. Preparation sizes the amount for your levels and armour.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "threats": [
+      "Black Knight Titan"
+    ],
+    "reward": "2 QP, 11,000 Prayer XP, 15,300 Defence XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "King Arthur"
+      ],
+      "dialogChoices": [
+        "Tell me of this quest.",
+        "I'd enjoy trying that.",
+        "Thank you for the advice.",
+        "Ok, I will go searching.",
+        "I seek an item from the realm of the Fisher King.",
+        "Any ideas how to get into the castle?",
+        "I seek the Holy Grail.",
+        "You don't look too well.",
+        "Come with me, I shall make you a king."
+      ],
+      "highlightItems": [
+        "Excalibur"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Holy Grail"
+      }
+    }
+  },
+  {
     "id": "S8-01",
     "stage": 8,
     "type": "quest",

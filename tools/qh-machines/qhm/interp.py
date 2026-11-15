@@ -170,6 +170,7 @@ class Interp:
         self.classes = classes            # the class name -> the parsed class
         self.main = classes[cls_name]
         self.env = {}
+        self.shadowed = {}                # fields hidden by a method local of the same name (Holy Grail's finishQuest)
         self.stages = {}
         self.unknown = []
         self.this_stack = []
@@ -219,6 +220,8 @@ class Interp:
         if k == 'decl':
             _, name, init = s
             val = self.ev(init) if init is not None else None
+            if self.depth > 0 and name in self.env:
+                self.shadowed.setdefault(name, self.env[name])
             self.bind(name, val)
         elif k == 'multi':
             for x in s[1]:
@@ -229,7 +232,10 @@ class Interp:
             if lhs[0] == 'name':
                 self.bind(lhs[1], val)
             elif lhs[0] == 'field' and lhs[1] == ('name', 'this'):
-                self.bind(lhs[2], val)
+                if lhs[2] in self.shadowed:
+                    self.shadowed[lhs[2]] = val
+                else:
+                    self.bind(lhs[2], val)
             elif lhs[0] == 'index':
                 pass
         elif k == 'expr':
@@ -291,7 +297,7 @@ class Interp:
         if obj[0] == 'name':
             cls = obj[1]
             if cls == 'this':
-                return self.env.get(name, Unk('this.' + name))
+                return self.shadowed[name] if name in self.shadowed else self.env.get(name, Unk('this.' + name))
             if cls in self.env and not cls[0].isupper():
                 v = self.env[cls]
                 return Unk('field')

@@ -310,6 +310,18 @@
       "evidence": ["OSRS Wiki Merlin's Crystal requirements and Sir Mordred infobox."]
     },
     {
+      "stepId": "S7-19", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "objective": "Holy Grail: defeat the Black Knight Titan (level 120, 142 hit points, hits up to 15) on the Fisher Realm bridge; the killing blow must be dealt with Excalibur.",
+      "enemies": [{ "name": "Black Knight Titan", "level": 120, "maxHit": 15, "table": true }],
+      "lines": ["2.0", "2.3", "2.5", "2.6", "3.4"],
+      "assumptions": ["Magic and Ranged cannot hurt it (defence 1,000 on the Wiki infobox), so only melee is estimated; the switch to Excalibur for the last hit is not timed."],
+      "problems": ["New quest: no stage of the route met this monster before."],
+      "alternatives": ["Safespot or flinch it (Wiki requirements)."],
+      "decision": "revise",
+      "changed": ["2.109.0: the step's threats name the Black Knight Titan, so the fight is estimated with the player's kit; Lobster x10 (or similar food) is a required item."],
+      "evidence": ["OSRS Wiki Holy Grail requirements and Black Knight Titan infobox."]
+    },
+    {
       "stepId": "S8-01", "kind": "quest-fight", "mandatory": true, "method": "melee",
       "objective": "Kill the Temple Guardian (30, 45 hit points, hits up to 3; immune to magic) and a Monk of Zamorak (30) for the key.",
       "enemies": [{ "name": "Temple Guardian", "level": 30, "maxHit": 3, "table": true }, { "name": "Monk of Zamorak", "level": 30 }],

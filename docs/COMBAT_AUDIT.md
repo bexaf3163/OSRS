@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-30 stages: 6 retained, 23 revised, 0 with a branch, 1 deferred.
+31 stages: 6 retained, 24 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -33,6 +33,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S7-14 Jungle Potion | incidental | yes | Jogre (53), Harpie Bug Swarm (46) | melee | Jogre, Harpie Bug Swarm | Trout 5 | Revised |
 | S7-16 Observatory Quest | incidental | yes | Goblin guard (42) | melee | Goblin guard | Trout 5 | Revised |
 | S7-17 Merlin's Crystal | quest-fight | yes | Sir Mordred (39) | melee | Sir Mordred | Trout 5 | Revised |
+| S7-19 Holy Grail | quest-fight | yes | Black Knight Titan (120) | melee | Black Knight Titan | Lobster 10 | Revised |
 | S8-01 Priest in Peril | quest-fight | yes | Temple Guardian (30), Monk of Zamorak (30) | melee | Temple Guardian | Trout 5 | Revised |
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
 | S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (Lost City) (101) | safespot | Tree spirit (Lost City) | - | Revised |
@@ -634,6 +635,32 @@ Changed:
 Evidence:
 
 - OSRS Wiki Merlin's Crystal requirements and Sir Mordred infobox.
+
+## S7-19 Holy Grail
+
+**Revised.** Holy Grail: defeat the Black Knight Titan (level 120, 142 hit points, hits up to 15) on the Fisher Realm bridge; the killing blow must be dealt with Excalibur.
+
+Quest stage lines: 2.0, 2.3, 2.5, 2.6, 3.4.
+
+Assumptions:
+
+- Magic and Ranged cannot hurt it (defence 1,000 on the Wiki infobox), so only melee is estimated; the switch to Excalibur for the last hit is not timed.
+
+Problems:
+
+- New quest: no stage of the route met this monster before.
+
+Alternatives:
+
+- Safespot or flinch it (Wiki requirements).
+
+Changed:
+
+- 2.109.0: the step's threats name the Black Knight Titan, so the fight is estimated with the player's kit; Lobster x10 (or similar food) is a required item.
+
+Evidence:
+
+- OSRS Wiki Holy Grail requirements and Black Knight Titan infobox.
 
 ## S8-01 Priest in Peril
 
