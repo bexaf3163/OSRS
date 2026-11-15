@@ -117,6 +117,11 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     // The Dramen branch is cut after the Tree spirit and carved into the staff that opens Zanaris; the quest ends wielding it.
     consumes: [], receives: [], unknownItems: ['Dramen branch'], ensures: ['Dramen staff'], partialDelivery: false, fromStartOnly: true,
   } },
+  "Merlin's Crystal": { revision: 15393586, flow: {
+    // The beggar takes the bread; the wax becomes the black candle, which burns with the bat bones in the star; Excalibur is kept.
+    consumes: [{ name: 'Bread', count: 1 }, { name: 'Bucket of wax', count: 1 }, { name: 'Bat bones', count: 1 }], receives: [], unknownItems: ['Black candle'],
+    ensures: ['Excalibur'], partialDelivery: false, fromStartOnly: true,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],
@@ -146,6 +151,9 @@ const REVIEWED_CLAUSES = new Set([
   'Ability to kill a level 101 [[Tree spirit (Lost City)|Tree spirit]] with limited [[armour]] and [[weapons]].',
   'The ability to defeat a level 27 [[Delrith|demon]] aided by three level 20 [[Dark wizard]]s and two level 7 Dark wizards using the [[Silverlight]] in melee.',
   'The ability to defeat a level 83 [[Elvarg|dragon]]',
+  'Must be able to defeat a level 39 enemy.',
+  "You do not need to have an Attack level of 20 to free Merlin, you can 'Use' Excalibur on the crystal to free him.",
+  'Must be able to defeat a level 120 [[Black Knight Titan]] (can be [[safespot]]ted or [[flinch]]ed)',
   'A trustworthy friend or partner. Players can join the official [[chat-channel]] "OSRS SOA" to look for a partner.',
   "to enter the Champions' Guild",
 ].map(clause => clause.toLowerCase()));

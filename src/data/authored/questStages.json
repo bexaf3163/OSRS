@@ -15955,6 +15955,1507 @@
     }
    ]
   },
+  "S7-17": {
+   "var": [
+    "varp",
+    14
+   ],
+   "route": [
+    {
+     "title": "Getting started",
+     "steps": [
+      "Talk to King Arthur. Dialogue: \"I want to become a knight of the round table!\"",
+      "Talk to Sir Gawain, who can be found in the courtyard to the south or nearby in the castle. Dialogue: \"Do you know how Merlin got trapped?\"",
+      "Talk to Sir Lancelot upstairs. Dialogue: \"Any ideas on how to get into Morgan Le Faye's stronghold?\"",
+      "Go to Catherby.",
+      "Prepare for combat against Sir Mordred.",
+      "Hide in the crate east of the candle maker's shop. Dialogue: \"Yes\" Wait and finish the cutscene. Climb out of the crate. Dialogue: \"Yes\""
+     ]
+    },
+    {
+     "title": "Inside the keep",
+     "steps": [
+      "Climb to the top floor. The Renegade Knights will attack you on your way up.",
+      "Attack Sir Mordred. He cannot be safespotted, but he can be flinched using the stairs (position him on the square left of the stairs whilst flinching from the square north-east of him). He can also be killed with rings of recoil or by another account poisoning and attacking right before his death.",
+      "When Sir Mordred reaches 0 hitpoints, Morgan Le Faye will appear and ask that you spare him. Spare his life to discover how to save Merlin. Dialogue: \"Tell me how to untrap Merlin and I might.\", \"OK I will do all that.\" Do not interrupt the dialogue or you will have to fight Sir Mordred again."
+     ]
+    },
+    {
+     "title": "Black candle",
+     "steps": [
+      "Talk to the candle-maker in Catherby. Dialogue: \"Have you got any black candles?\"",
+      "Talk to him again for a black candle."
+     ]
+    },
+    {
+     "title": "Excalibur",
+     "steps": [
+      "Talk to The Lady of the Lake south-east of Taverley on the peninsula. Dialogue: \"I seek the sword Excalibur.\"",
+      "Go to Port Sarim. (Make sure you have bread in your inventory.)",
+      "Enter the jewellery shop to the north.",
+      "Give the beggar your bread. Dialogue: \"Yes certainly.\" Finish the conversation."
+     ]
+    },
+    {
+     "title": "Ritual",
+     "steps": [
+      "Go to the Zamorakian temple in the south-east corner of Varrock.",
+      "Check the Chaos Altar's inscription.",
+      "Return to Camelot with a tinderbox and enter the castle gates.",
+      "Go to the ritual site at the north-east corner of the Camelot castle grounds (a red star in the middle of 8 columns).",
+      "Stand on the star and light the black candle.",
+      "Drop the bat bones on the star.",
+      "The magic words are \"Snarthon Candtrick Termanto\"."
+     ]
+    },
+    {
+     "title": "Finishing up",
+     "steps": [
+      "Enter the castle and climb to the top of the south-east tower.",
+      "Smash the giant crystal with Excalibur. (Does not require 20 Attack, just use Excalibur on the crystal instead of attempting to wield it)",
+      "Talk to King Arthur.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to King Arthur in Camelot Castle to start.",
+       "s": "Talk to King Arthur in Camelot Castle to start.",
+       "k": "startQuest",
+       "at": [
+        2763,
+        3513,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3531
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Sir Gawain about how Merlin got trapped.",
+       "s": "Talk to Sir Gawain about how Merlin got trapped.",
+       "k": "talkToGawain",
+       "at": [
+        2758,
+        3504,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3520
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Go upstairs to talk to Lancelot.",
+       "s": "Go upstairs to talk to Lancelot.",
+       "k": "goUpstairsInCamelot",
+       "at": [
+        2751,
+        3511,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26106
+        ]
+       }
+      },
+      {
+       "t": "Talk to Sir Lancelot about getting into Morgan Le Faye's stronghold.",
+       "s": "Talk to Sir Lancelot about getting into Morgan Le Faye's stronghold.",
+       "k": "talkToLancelot",
+       "at": [
+        2760,
+        3511,
+        1
+       ],
+       "hl": {
+        "npc": [
+         3519
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Hide in Arhein's crate behind the Candle Maker's shop in Catherby.",
+       "s": "Hide in Arhein's crate behind the Candle Maker's shop in Catherby.",
+       "k": "hideInArheinCrate",
+       "at": [
+        2801,
+        3442,
+        0
+       ],
+       "hl": {
+        "obj": [
+         63
+        ]
+       }
+      },
+      {
+       "t": "Hide in Arhein's crate behind the Candle Maker's shop in Catherby.",
+       "s": "Hide in Arhein's crate behind the Candle Maker's shop in Catherby.",
+       "k": "goBackDownStairsCamelot",
+       "at": [
+        2751,
+        3512,
+        1
+       ],
+       "hl": {
+        "obj": [
+         25604
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs in the fortress.",
+       "s": "Go up the stairs in the fortress.",
+       "k": "goToFirstFloor",
+       "at": [
+        2770,
+        3405,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       }
+      },
+      {
+       "t": "Go up another floor.",
+       "s": "Go up another floor.",
+       "k": "goToSecondFloor",
+       "at": [
+        2770,
+        3399,
+        1
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       }
+      },
+      {
+       "t": "Attack Sir Mordred down to 0hp to cause Morgan Le Faye to spawn.",
+       "s": "Attack Sir Mordred down to 0hp to cause Morgan Le Faye to spawn.",
+       "k": "attackMordred",
+       "at": [
+        2770,
+        3403,
+        2
+       ],
+       "hl": {
+        "npc": [
+         3527
+        ]
+       }
+      },
+      {
+       "t": "Go through Morgan le Faye's dialog. IF YOU EXIT FROM THIS DIALOG YOU WILL HAVE TO FIGHT MORDRED AGAIN.",
+       "s": "Listen to Morgan le Faye to the end, or fight Mordred again.",
+       "k": "talkToMorgan"
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Climb down from Keep Le Faye and step through the front door, then kill a Giant bat for some bat bones.",
+       "s": "Climb down from Keep Le Faye and leave by the front door.",
+       "k": "climbDownFaye2",
+       "at": [
+        2769,
+        3399,
+        2
+       ],
+       "hl": {
+        "obj": [
+         15648
+        ]
+       }
+      },
+      {
+       "t": "Climb down from Keep Le Faye and step through the front door, then kill a Giant bat for some bat bones.",
+       "s": "Climb down from Keep Le Faye and leave by the front door.",
+       "k": "climbDownFaye1",
+       "at": [
+        2769,
+        3405,
+        1
+       ],
+       "hl": {
+        "obj": [
+         15648
+        ]
+       }
+      },
+      {
+       "t": "Kill a Giant bat outside Keep Le Faye for some bat bones.",
+       "s": "Kill a Giant bat outside Keep Le Faye for some bat bones.",
+       "k": "getBatBones",
+       "has": "Bat bones",
+       "at": [
+        2757,
+        3401,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2834
+        ]
+       }
+      },
+      {
+       "t": "If you still need wax, go grab the insect repellent in a house in north Catherby. Otherwise, get your wax out.",
+       "s": "For wax, get the insect repellent from a house in north Catherby.",
+       "k": "optionalGetRepellent",
+       "at": [
+        2807,
+        3450,
+        0
+       ]
+      },
+      {
+       "t": "Go grab the bucket in the bee field west of Catherby.",
+       "s": "Go grab the bucket in the bee field west of Catherby.",
+       "k": "optionalGetBucket",
+       "at": [
+        2766,
+        3441,
+        0
+       ]
+      },
+      {
+       "t": "Use the insect repellent on a bee hive, then try to take some wax.",
+       "s": "Use the insect repellent on a bee hive, then try to take some wax.",
+       "k": "optionalUseRepellent",
+       "at": [
+        2762,
+        3443,
+        0
+       ],
+       "hl": {
+        "obj": [
+         68
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Candle Maker in Catherby twice until he gives you a black candle.",
+       "s": "Talk to the Candle Maker in Catherby twice for a black candle.",
+       "k": "talkToCandleMaker",
+       "at": [
+        2797,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3199
+        ]
+       }
+      },
+      {
+       "t": "Return to Catherby.",
+       "s": "Return to Catherby.",
+       "k": "goToCatherbyAfterFortress"
+      },
+      {
+       "t": "Talk to the Lady of the Lake in Taverley.",
+       "s": "Talk to the Lady of the Lake in Taverley.",
+       "k": "talkToLadyOfLake",
+       "at": [
+        2924,
+        3404,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3530
+        ]
+       }
+      },
+      {
+       "t": "Enter the jewellery store in Port Sarim, then give the beggar who appears some bread.",
+       "s": "Give the beggar at the Port Sarim jewellery store some bread.",
+       "k": "talkToBeggar",
+       "need": "Bread",
+       "at": [
+        3016,
+        3247,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3532
+        ]
+       }
+      },
+      {
+       "t": "Attempt to enter the jewelery store in Port Sarim.",
+       "s": "Attempt to enter the jewelery store in Port Sarim.",
+       "k": "enterSarimShopAndTalk",
+       "at": [
+        3016,
+        3246,
+        0
+       ],
+       "hl": {
+        "obj": [
+         59
+        ]
+       }
+      },
+      {
+       "t": "Check the altar in the Zamorak Temple in south east Varrock. If you've already learnt the spell, just mark this step complete in the Quest Helper sidebar.",
+       "s": "Read the altar in the Zamorak Temple in south-east Varrock.",
+       "k": "goReadMagicWords",
+       "at": [
+        3260,
+        3381,
+        0
+       ],
+       "hl": {
+        "obj": [
+         61
+        ]
+       }
+      },
+      {
+       "t": "Enter the gates towards Camelot Castle.",
+       "s": "Enter the gates towards Camelot Castle.",
+       "k": "returnToCamelot",
+       "at": [
+        2758,
+        3482,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26082
+        ]
+       }
+      },
+      {
+       "t": "Go stand in the star symbol north east of Camelot Castle.",
+       "s": "Go stand in the star symbol north east of Camelot Castle.",
+       "k": "goStandInStar",
+       "at": [
+        2780,
+        3515,
+        0
+       ]
+      },
+      {
+       "t": "Light the Black candle with your tinderbox.",
+       "s": "Light the Black candle with your tinderbox.",
+       "k": "lightCandle"
+      },
+      {
+       "t": "Right-click drop the bat bones in the star.",
+       "s": "Right-click drop the bat bones in the star.",
+       "k": "dropBatBones"
+      },
+      {
+       "t": "Say the spell 'Snarthon Candtrick Termanto'. Be careful not to click the wrong option or you'll have to get another Black Candle.",
+       "s": "Say Snarthon Candtrick Termanto; a wrong choice costs the candle.",
+       "k": "sayWords"
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Go up the ladder in the south east of Camelot castle.",
+       "s": "Go up the ladder in the south east of Camelot castle.",
+       "k": "goUpLadder1Camelot",
+       "at": [
+        2769,
+        3493,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26107
+        ]
+       }
+      },
+      {
+       "t": "Go up the next ladder.",
+       "s": "Go up the next ladder.",
+       "k": "goUpLadder2Camelot",
+       "at": [
+        2767,
+        3491,
+        1
+       ],
+       "hl": {
+        "obj": [
+         26107
+        ]
+       }
+      },
+      {
+       "t": "Smash the Giant Crystal with Excalibur equipped.",
+       "s": "Smash the Giant Crystal with Excalibur equipped.",
+       "k": "smashCrystal",
+       "at": [
+        2768,
+        3494,
+        2
+       ],
+       "hl": {
+        "obj": [
+         62
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Climb down the ladder.",
+       "s": "Climb down the ladder.",
+       "k": "goDownLadder2Camelot",
+       "at": [
+        2767,
+        3491,
+        2
+       ],
+       "hl": {
+        "obj": [
+         25606
+        ]
+       }
+      },
+      {
+       "t": "Climb down the next ladder.",
+       "s": "Climb down the next ladder",
+       "k": "goDownLadder1Camelot",
+       "at": [
+        2769,
+        3493,
+        1
+       ],
+       "hl": {
+        "obj": [
+         25606
+        ]
+       }
+      },
+      {
+       "t": "Tell King Arthur you've freed Merlin.",
+       "s": "Tell King Arthur you've freed Merlin.",
+       "k": "finishQuest",
+       "at": [
+        2763,
+        3513,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3531
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S7-18": {
+   "var": [
+    "varp",
+    131
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Go to the Exam Centre.",
+      "Ask an examiner about an exam. Dialogue: \"Can I take an exam?\"",
+      "Go to the Varrock museum and talk to Curator Haig Halen. He will give you a Sealed letter. Dialogue: \"Have you any interesting news?\"",
+      "Go back to the Exam Centre and talk to an examiner. The chat options do not matter; you will fail the exam regardless."
+     ]
+    },
+    {
+     "title": "Lost and found",
+     "steps": [
+      "North of the exam centre at the hilltop with the blue urn, search the second bush to the east of the blue urn to find a teddy bear.",
+      "Take the panning tray.",
+      "Use the cup of tea on the nearby panning guide.",
+      "Pan the water at the panning points until you find a Special cup (browse through dialogue if stopped – referred to as \"Shiny Cup\" in dialogue). If you need an opal continue panning until you get one.",
+      "Steal from the workman near the panning points until you get an animal skull and specimen brush.",
+      "Run north to the female student with blonde hair and pigtails on the north-west end of the dig and give her the \"teddy\" by talking to her twice.",
+      "Run east to the student with a beard and a reddish-orange shirt and give him the Special cup by talking to him twice.",
+      "Run south to the student in a green shirt and give him the Animal skull by talking to him twice."
+     ]
+    },
+    {
+     "title": "Exams",
+     "steps": [
+      "Return to an examiner. Dialogue: \"Yes, I certainly am.\", \"The study of the earth, its contents and history.\", \"All that have passed the appropriate Earth Sciences exam.\", \"Gloves and boots to be worn at all times; proper tools must be used.\" – You should receive 'Level 1 Certificate'",
+      "Talk to all 3 students again.",
+      "Return to an examiner to take the second exam. Dialogue: \"I am ready for the next exam.\", \"Samples taken in rough form; kept only in sealed containers.\", \"Finds must be carefully handled, and gloves worn.\", \"Always handle with care; strike cleanly on its cleaving point.\" – You should receive 'Level 2 Certificate'",
+      "Talk to all 3 students – the female student will demand an opal (can be obtained by panning). Talk to her two times.",
+      "Return to an examiner for the final exam. Dialogue: \"I am ready for the last exam...\", \"Samples cleaned, and carried only in specimen jars.\", \"Brush carefully and slowly using short strokes.\", \"Handle bones very carefully and keep them amay from other samples.\" – You should receive 'Level 3 Certificate'"
+     ]
+    },
+    {
+     "title": "Helping the expert",
+     "steps": [
+      "Back at the Exam Centre, go in the western room and search the cupboards on the north and south walls to get a rock pick and a specimen jar, respectively.",
+      "If you haven't already, steal a specimen brush from the Digsite workman.",
+      "Use the trowel on the soil in either level 3 digsite until you obtain an ancient talisman. Note: This step can take several minutes depending upon luck.",
+      "Talk to Terry Balando in the exam centre.",
+      "Use the invitation on any Digsite workman except the one by the western winch.",
+      "Use a rope on the western winch, then climb down.",
+      "Pick up one of the arcenia root in the room, search the bricks to the east, then climb back up.",
+      "Walk north-east to the northern winch, use the rope on the winch, and climb down.",
+      "Talk to Doug Deeping about the rocks. Dialogue: \"How could I move a large pile of rocks?\" Climb up the rope."
+     ]
+    },
+    {
+     "title": "Explosives expert",
+     "steps": [
+      "Walk to the tent to the south (marked with the orange vial), unlock the chest with the Chest Key and search to obtain chemical powder.",
+      "Use the trowel on the closed barrel to the west of the tent.",
+      "Use a vial on the barrel to get an unidentified liquid. If dropped, it will deal 25 non-fatal damage, and destroy the vial requiring you to re-open the barrel and collect more.",
+      "Grind the charcoal with your pestle and mortar.",
+      "Return to the exam centre and use the chemical powder and the unidentified liquid on Terry Balando (Note: make sure you right-click the liquid otherwise you'll empty it).",
+      "Mix the nitroglycerin and ammonium nitrate together to create mixed chemicals, then add ground charcoal and finally arcenia root to produce chemical compound.",
+      "Climb down the western winch.",
+      "Use the compound on the bricks (not the rocks).",
+      "Use your tinderbox on the bricks.",
+      "Enter the large chamber, take the stone tablet. Low-levels should be wary of Level 22 skeletons."
+     ]
+    },
+    {
+     "title": "Finishing up",
+     "steps": [
+      "Use the tablet on Terry Balando.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to an Examiner in the Exam Centre south east of Varrock.",
+       "s": "Talk to an Examiner in the Exam Centre south east of Varrock.",
+       "k": "talkToExaminer",
+       "at": [
+        3362,
+        3337,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3635
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Curator Haig in the Varrock Museum.",
+       "s": "Talk to Curator Haig in the Varrock Museum.",
+       "k": "talkToHaig",
+       "at": [
+        3257,
+        3448,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5214
+        ]
+       }
+      },
+      {
+       "t": "Return to an Examiner in the Exam Centre south east of Varrock.",
+       "s": "Return to an Examiner in the Exam Centre south east of Varrock.",
+       "k": "talkToExaminer2",
+       "at": [
+        3362,
+        3337,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3635
+        ]
+       }
+      },
+      {
+       "t": "Talk to an Examiner in the Exam Centre south east of Varrock.",
+       "s": "Talk to an Examiner in the Exam Centre south east of Varrock.",
+       "k": "talkToExaminer",
+       "at": [
+        3362,
+        3337,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3635
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to an Examiner in the Exam Centre to take the second test.",
+       "s": "Talk to an Examiner in the Exam Centre to take the second test.",
+       "k": "takeTest2",
+       "at": [
+        3362,
+        3337,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3635
+        ]
+       }
+      },
+      {
+       "t": "Search the bushes north of the Exam Centre for a teddy.",
+       "s": "Search the bushes north of the Exam Centre for a teddy.",
+       "k": "searchBush",
+       "at": [
+        3357,
+        3372,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2358
+        ]
+       }
+      },
+      {
+       "t": "Pick up the tray in the south east of the dig site.",
+       "s": "Pick up the tray in the south east of the dig site.",
+       "k": "takeTray",
+       "at": [
+        3369,
+        3378,
+        0
+       ]
+      },
+      {
+       "t": "Talk to the Panning Guide nearby.",
+       "s": "Talk to the Panning Guide nearby.",
+       "k": "talkToGuide",
+       "at": [
+        3385,
+        3386,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3640
+        ]
+       }
+      },
+      {
+       "t": "Pan in the river for a special cup.",
+       "s": "Pan in the river for a special cup.",
+       "k": "panWater",
+       "at": [
+        3384,
+        3381,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2363
+        ]
+       }
+      },
+      {
+       "t": "Search the panning tray.",
+       "s": "Search the panning tray.",
+       "k": "searchPanningTray"
+      },
+      {
+       "t": "Pickpocket workmen until you get an animal skull and a specimen brush.",
+       "s": "Pickpocket workmen until you get an animal skull and a specimen brush.",
+       "k": "pickpocketWorkmen",
+       "at": [
+        3372,
+        3390,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3628
+        ]
+       }
+      },
+      {
+       "t": "Talk to the female student in the north west of the Digsite twice.",
+       "s": "Talk to the female student in the north west of the Digsite twice.",
+       "k": "talkToFemaleStudent",
+       "at": [
+        3345,
+        3425,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3634
+        ]
+       }
+      },
+      {
+       "t": "Talk to the female student in the north west of the Digsite.",
+       "s": "Talk to the female student in the north west of the Digsite.",
+       "k": "talkToFemaleStudent2",
+       "at": [
+        3345,
+        3425,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3634
+        ]
+       }
+      },
+      {
+       "t": "Talk to the student in an orange shirt in the north east of the Digsite twice.",
+       "s": "Talk twice to the orange-shirted student in the north-east Digsite.",
+       "k": "talkToOrangeStudent",
+       "at": [
+        3369,
+        3419,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3633
+        ]
+       }
+      },
+      {
+       "t": "Talk to the student in an orange shirt in the north east of the Digsite.",
+       "s": "Talk to the orange-shirted student in the north-east of the Digsite.",
+       "k": "talkToOrangeStudent2",
+       "at": [
+        3369,
+        3419,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3633
+        ]
+       }
+      },
+      {
+       "t": "Talk to the student in a green shirt in the south of the Digsite twice.",
+       "s": "Talk twice to the green-shirted student in the south of the Digsite.",
+       "k": "talkToGreenStudent",
+       "at": [
+        3362,
+        3398,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3632
+        ]
+       }
+      },
+      {
+       "t": "Talk to the student in a green shirt in the south of the Digsite.",
+       "s": "Talk to the student in a green shirt in the south of the Digsite.",
+       "k": "talkToGreenStudent2",
+       "at": [
+        3362,
+        3398,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3632
+        ]
+       }
+      },
+      {
+       "t": "Talk to an Examiner in the Exam Centre to take the first test.",
+       "s": "Talk to an Examiner in the Exam Centre to take the first test.",
+       "k": "takeTest1",
+       "at": [
+        3362,
+        3337,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3635
+        ]
+       }
+      },
+      {
+       "t": "Open the quest's journal to sync your current quest state.",
+       "s": "Open the quest's journal to sync your current quest state.",
+       "k": "syncStep"
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Talk to the female student in the north west of the Digsite.",
+       "s": "Talk to the female student in the north west of the Digsite.",
+       "k": "talkToFemaleStudent3",
+       "at": [
+        3345,
+        3425,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3634
+        ]
+       }
+      },
+      {
+       "t": "Talk to the student in an orange shirt in the north east of the Digsite.",
+       "s": "Talk to the orange-shirted student in the north-east of the Digsite.",
+       "k": "talkToOrangeStudent3",
+       "at": [
+        3369,
+        3419,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3633
+        ]
+       }
+      },
+      {
+       "t": "Talk to the student in a green shirt in the south of the Digsite.",
+       "s": "Talk to the student in a green shirt in the south of the Digsite.",
+       "k": "talkToGreenStudent3",
+       "at": [
+        3362,
+        3398,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3632
+        ]
+       }
+      },
+      {
+       "t": "Talk to an Examiner in the Exam Centre to take the second test.",
+       "s": "Talk to an Examiner in the Exam Centre to take the second test.",
+       "k": "takeTest2",
+       "at": [
+        3362,
+        3337,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3635
+        ]
+       }
+      },
+      {
+       "t": "Open the quest's journal to sync your current quest state.",
+       "s": "Open the quest's journal to sync your current quest state.",
+       "k": "syncStep"
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Talk to the female student in the north west of the Digsite.",
+       "s": "Talk to the female student in the north west of the Digsite.",
+       "k": "talkToFemaleStudent4",
+       "at": [
+        3345,
+        3425,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3634
+        ]
+       }
+      },
+      {
+       "t": "Talk to the female student again.",
+       "s": "Talk to the female student again.",
+       "k": "talkToFemaleStudent5",
+       "at": [
+        3345,
+        3425,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3634
+        ]
+       }
+      },
+      {
+       "t": "Talk to the student in an orange shirt in the north east of the Digsite.",
+       "s": "Talk to the orange-shirted student in the north-east of the Digsite.",
+       "k": "talkToOrangeStudent4",
+       "at": [
+        3369,
+        3419,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3633
+        ]
+       }
+      },
+      {
+       "t": "Talk to the student in a green shirt in the south of the Digsite.",
+       "s": "Talk to the student in a green shirt in the south of the Digsite.",
+       "k": "talkToGreenStudent4",
+       "at": [
+        3362,
+        3398,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3632
+        ]
+       }
+      },
+      {
+       "t": "Talk to an Examiner in the Exam Centre to take the third test.",
+       "s": "Talk to an Examiner in the Exam Centre to take the third test.",
+       "k": "takeTest3",
+       "at": [
+        3362,
+        3337,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3635
+        ]
+       }
+      },
+      {
+       "t": "Open the quest's journal to sync your current quest state.",
+       "s": "Open the quest's journal to sync your current quest state.",
+       "k": "syncStep"
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Search the cupboard on the south wall of the west room of the Exam Centre for a specimen jar.",
+       "s": "Search the cupboard in the Exam Centre's west room for a specimen jar.",
+       "k": "getJar",
+       "at": [
+        3355,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17302
+        ]
+       }
+      },
+      {
+       "t": "Pickpocket workmen until you get a specimen brush.",
+       "s": "Pickpocket workmen until you get a specimen brush.",
+       "k": "getBrush",
+       "at": [
+        3372,
+        3390,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3628
+        ]
+       }
+      },
+      {
+       "t": "Dig in the north east dig spot in the Digsite until you get a talisman.",
+       "s": "Dig in the north-east Digsite spot until you get a talisman.",
+       "k": "digForTalisman",
+       "at": [
+        3374,
+        3438,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2377
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Archaeological expert in the Exam Centre.",
+       "s": "Talk to the Archaeological expert in the Exam Centre.",
+       "k": "talkToExpert",
+       "at": [
+        3357,
+        3334,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3639
+        ]
+       }
+      },
+      {
+       "t": "Use the invitation on any workman.",
+       "s": "Use the invitation on any workman.",
+       "k": "useInvitationOnWorkman",
+       "at": [
+        3360,
+        3415,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3628
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Use a rope on the west winch.",
+       "s": "Use a rope on the west winch.",
+       "k": "useRopeOnWinch",
+       "at": [
+        3353,
+        3417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2350
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west winch.",
+       "s": "Climb down the west winch.",
+       "k": "goDownWinch",
+       "at": [
+        3353,
+        3417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2350
+        ]
+       }
+      },
+      {
+       "t": "Pick up some arcenia root.",
+       "s": "Pick up some arcenia root.",
+       "k": "pickUpRoot"
+      },
+      {
+       "t": "Search the bricks to the south.",
+       "s": "Search the bricks to the south.",
+       "k": "searchBricks",
+       "at": [
+        3378,
+        9824,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2362
+        ]
+       }
+      },
+      {
+       "t": "Use a rope on the north east winch.",
+       "s": "Use a rope on the north east winch.",
+       "k": "useRopeOnWinch2",
+       "at": [
+        3370,
+        3429,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2351
+        ]
+       }
+      },
+      {
+       "t": "Climb down the north east winch.",
+       "s": "Climb down the north east winch.",
+       "k": "goDownToDoug",
+       "at": [
+        3370,
+        3429,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2351
+        ]
+       }
+      },
+      {
+       "t": "Climb back to the surface.",
+       "s": "Climb back to the surface.",
+       "k": "goUpRope",
+       "at": [
+        3369,
+        9826,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2353
+        ]
+       }
+      },
+      {
+       "t": "Talk to Doug Deeping.",
+       "s": "Talk to Doug Deeping.",
+       "k": "talkToDoug",
+       "at": [
+        3351,
+        9819,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3629
+        ]
+       }
+      },
+      {
+       "t": "Use the key on the chest in the tent in the south of the Digsite.",
+       "s": "Use the key on the chest in the tent in the south of the Digsite.",
+       "k": "unlockChest",
+       "at": [
+        3374,
+        3378,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2361
+        ]
+       }
+      },
+      {
+       "t": "Search the chest.",
+       "s": "Search the chest.",
+       "k": "searchChest",
+       "at": [
+        3374,
+        3378,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2360
+        ]
+       }
+      },
+      {
+       "t": "Use a trowel on the barrel west of the chest's tent.",
+       "s": "Use a trowel on the barrel west of the chest's tent.",
+       "k": "useTrowelOnBarrel",
+       "at": [
+        3364,
+        3378,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2359
+        ]
+       }
+      },
+      {
+       "t": "Use a vial on the barrel west of the chest's tent.",
+       "s": "Use a vial on the barrel west of the chest's tent.",
+       "k": "useVialOnBarrel",
+       "at": [
+        3364,
+        3378,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2359
+        ]
+       }
+      },
+      {
+       "t": "(DO NOT LEFT CLICK) Right-click use the liquid on the Archaeological expert in the Exam Centre.",
+       "s": "Use the liquid on the Archaeological expert; do not left-click.",
+       "k": "useLiquidOnExpert",
+       "at": [
+        3357,
+        3334,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3639
+        ]
+       }
+      },
+      {
+       "t": "Use the powder on the Archaeological expert in the Exam Centre.",
+       "s": "Use the powder on the Archaeological expert in the Exam Centre.",
+       "k": "usePowderOnExpert",
+       "at": [
+        3357,
+        3334,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3639
+        ]
+       }
+      },
+      {
+       "t": "Mix the nitroglycerin and ammonium nitrate together.",
+       "s": "Mix the nitroglycerin and ammonium nitrate together.",
+       "k": "mixNitroWithNitrate"
+      },
+      {
+       "t": "Grind charcoal with a pestle and mortar.",
+       "s": "Grind charcoal with a pestle and mortar.",
+       "k": "grindCharcoal"
+      },
+      {
+       "t": "Add the ground charcoal to the vial.",
+       "s": "Add the ground charcoal to the vial.",
+       "k": "addCharcoal"
+      },
+      {
+       "t": "Add arcenia root to the vial.",
+       "s": "Add arcenia root to the vial.",
+       "k": "addRoot"
+      },
+      {
+       "t": "Climb down the rope on the west winch.",
+       "s": "Climb down the rope on the west winch.",
+       "k": "goDownToExplode",
+       "at": [
+        3353,
+        3417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2350
+        ]
+       }
+      },
+      {
+       "t": "Leave Doug's cave.",
+       "s": "Leave Doug's cave.",
+       "k": "goUpFromDoug",
+       "at": [
+        3352,
+        9816,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2352
+        ]
+       }
+      },
+      {
+       "t": "Use the compound on the bricks to the south.",
+       "s": "Use the compound on the bricks to the south.",
+       "k": "useCompound",
+       "at": [
+        3378,
+        9824,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2362
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Climb down the rope on the west winch.",
+       "s": "Climb down the rope on the west winch.",
+       "k": "goDownToExplode2",
+       "at": [
+        3353,
+        3417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2350
+        ]
+       }
+      },
+      {
+       "t": "Use a tinderbox on the bricks to the south.",
+       "s": "Use a tinderbox on the bricks to the south.",
+       "k": "useTinderbox",
+       "at": [
+        3378,
+        9824,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2362
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Climb down the rope on the west winch.",
+       "s": "Climb down the rope on the west winch.",
+       "k": "goDownForTablet",
+       "at": [
+        3353,
+        3417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2350
+        ]
+       }
+      },
+      {
+       "t": "Use a tinderbox on the bricks to the south.",
+       "s": "Use a tinderbox on the bricks to the south.",
+       "k": "waitForBricksToBlowUp",
+       "at": [
+        3378,
+        9824,
+        0
+       ]
+      },
+      {
+       "t": "Take the stone tablet in the south room.",
+       "s": "Take the stone tablet in the south room.",
+       "k": "takeTablet",
+       "at": [
+        3373,
+        9746,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17369
+        ]
+       }
+      },
+      {
+       "t": "Use the tablet on the Archaeological expert in the Exam Centre to complete the quest.",
+       "s": "Use the tablet on the Archaeological expert in the Exam Centre.",
+       "k": "useTabletOnExpert",
+       "at": [
+        3357,
+        3334,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3639
+        ]
+       }
+      },
+      {
+       "t": "Use the tablet on the Archaeological expert in the Exam Centre to complete the quest.",
+       "s": "Use the tablet on the Archaeological expert in the Exam Centre.",
+       "k": "goUpWithTablet",
+       "at": [
+        3369,
+        9762,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2353
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
   "S8-01": {
    "var": [
     "varp",

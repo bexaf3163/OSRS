@@ -2107,6 +2107,13 @@
       "to": 5,
       "name": "Pickpocketing men and women",
       "members": true,
+      "xph": [
+        7700,
+        7950
+      ],
+      "xpa": 8,
+      "act": "pickpocket|pickpockets",
+      "note": "The rate is derived from the Wiki: 8 XP a pickpocket, success 180/256 at level 1 rising slowly, and 2 + 8(1 - p) ticks an attempt with the stun; walking and healing are not counted.",
       "effort": "medium",
       "cost": "free",
       "risk": "low",
@@ -2405,7 +2412,8 @@
       "risk": "none",
       "where": "By a bank",
       "note": "The speed grows with the potion tier; so does the cost.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Herblore_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Herblore_training",
+      "place": "Grand Exchange"
     },
     {
       "id": "he-high",
@@ -2430,7 +2438,8 @@
       "risk": "none",
       "where": "By a bank",
       "note": "Super restores from 63, Zamorak brews from 78, Saradomin brews from 81, Super combat potions from 90; the cheaper potion of a level band is often the better buy. Mastering Mixology (Children of the Sun) is the calm alternative from 60.",
-      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Herblore_training"
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Herblore_training",
+      "place": "Grand Exchange"
     },
     {
       "id": "fa-allot",

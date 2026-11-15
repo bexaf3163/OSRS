@@ -692,6 +692,28 @@
       "aggressive": false
     },
     {
+      "name": "Sir Mordred",
+      "combat": 39,
+      "members": true,
+      "hitpoints": 38,
+      "attackLevel": 33,
+      "strengthLevel": 33,
+      "defenceLevel": 33,
+      "magicLevel": 1,
+      "attackBonus": 20,
+      "defence": {
+        "stab": 99,
+        "slash": 82,
+        "crush": 45,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 5,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
       "name": "Temple Guardian",
       "combat": 30,
       "members": true,

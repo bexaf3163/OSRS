@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-29 stages: 6 retained, 22 revised, 0 with a branch, 1 deferred.
+30 stages: 6 retained, 23 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -32,6 +32,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S7-11 Monk's Friend | avoid | yes | Thief (14), Thief (26) | run | - | - | Revised |
 | S7-14 Jungle Potion | incidental | yes | Jogre (53), Harpie Bug Swarm (46) | melee | Jogre, Harpie Bug Swarm | Trout 5 | Revised |
 | S7-16 Observatory Quest | incidental | yes | Goblin guard (42) | melee | Goblin guard | Trout 5 | Revised |
+| S7-17 Merlin's Crystal | quest-fight | yes | Sir Mordred (39) | melee | Sir Mordred | Trout 5 | Revised |
 | S8-01 Priest in Peril | quest-fight | yes | Temple Guardian (30), Monk of Zamorak (30) | melee | Temple Guardian | Trout 5 | Revised |
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
 | S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (Lost City) (101) | safespot | Tree spirit (Lost City) | - | Revised |
@@ -607,6 +608,32 @@ Changed:
 Evidence:
 
 - OSRS Wiki Observatory Quest and Goblin guard infobox.
+
+## S7-17 Merlin's Crystal
+
+**Revised.** Merlin's Crystal: defeat Sir Mordred (level 39, 38 hit points, hits up to 5) on the top floor of Keep Le Faye so Morgan le Faye appears.
+
+Quest stage lines: 1.0, 1.1, 1.2, 5.1.
+
+Assumptions:
+
+- Sir Mordred is his only Wiki infobox version; the giant bat for bat bones is avoided by buying the bones.
+
+Problems:
+
+- New quest: no stage of the route met this monster before.
+
+Alternatives:
+
+- Flinch him with the stairs (Wiki strategy); he cannot be safespotted. The Renegade Knights on the way up can be run past.
+
+Changed:
+
+- 2.108.0: the step's threats name Sir Mordred, so the fight is estimated with the player's kit; Trout x5 (or similar food) is a required item and Bat bones are bought.
+
+Evidence:
+
+- OSRS Wiki Merlin's Crystal requirements and Sir Mordred infobox.
 
 ## S8-01 Priest in Peril
 

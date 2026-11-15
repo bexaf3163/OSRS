@@ -4683,6 +4683,217 @@
     }
   },
   {
+    "id": "S7-17",
+    "stage": 7,
+    "type": "quest",
+    "title": "Merlin's Crystal",
+    "qp": 6,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Merlin's_Crystal",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Merlin's_Crystal/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2764,3513,0",
+    "mapLocation": {
+      "x": 2764,
+      "y": 3513,
+      "plane": 0,
+      "label": "Camelot"
+    },
+    "npc": {
+      "nameEn": "King Arthur",
+      "location": "Camelot",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/King_Arthur"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bread",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Food Store in Port Sarim for 12 gp.",
+        "wikiItemId": 2309,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bread.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Bucket of wax",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 30,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_wax.png"
+      },
+      {
+        "nameEn": "Bat bones",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or kill a giant bat outside Keep Le Faye.",
+        "wikiItemId": 530,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bat_bones.png"
+      },
+      {
+        "nameEn": "Trout",
+        "heals": 7,
+        "amount": 5,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "howToGet": "Your own catch or the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. Sir Mordred (level 39) guards Morgan le Faye in Keep Le Faye. Preparation sizes the amount for your levels and armour.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "threats": [
+      "Sir Mordred"
+    ],
+    "reward": "6 QP, 1,000 Firemaking XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "King Arthur"
+      ],
+      "dialogChoices": [
+        "I want to become a knight of the round table!",
+        "Do you know how Merlin got trapped?",
+        "Any ideas on how to get into Morgan Le Faye's stronghold?",
+        "Yes",
+        "Tell me how to untrap Merlin and I might.",
+        "OK I will do all that.",
+        "Have you got any black candles?",
+        "I seek the sword Excalibur.",
+        "Yes certainly."
+      ],
+      "highlightItems": [
+        "Bread",
+        "Tinderbox",
+        "Bucket of wax",
+        "Bat bones"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Merlin's Crystal"
+      }
+    }
+  },
+  {
+    "id": "S7-18",
+    "stage": 7,
+    "type": "quest",
+    "title": "The Dig Site",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Dig_Site",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Dig_Site/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3361,3340,0",
+    "mapLocation": {
+      "x": 3361,
+      "y": 3340,
+      "plane": 0,
+      "label": "The Exam Centre south of the Digsite"
+    },
+    "npc": {
+      "nameEn": "examiner",
+      "location": "The Exam Centre south of the Digsite",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/examiner"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Pestle and mortar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 4 gp.",
+        "wikiItemId": 233,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pestle_and_mortar.png"
+      },
+      {
+        "nameEn": "Vial",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 2 gp.",
+        "wikiItemId": 229,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Vial.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Cup of tea",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Ye olde Tea Shoppe in Varrock for 10 gp.",
+        "wikiItemId": 1978,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cup_of_tea.png"
+      },
+      {
+        "nameEn": "Rope",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange, or from Ned's Handmade Rope (100% Wool) in Draynor Village for 16 gp.",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
+      },
+      {
+        "nameEn": "Opal",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1609,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Opal.png"
+      },
+      {
+        "nameEn": "Charcoal",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Obli's General Store in Shilo Village for 58 gp.",
+        "wikiItemId": 973,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Charcoal.png"
+      }
+    ],
+    "reward": "2 QP, 15,300 Mining XP, 2,000 Herblore XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "examiner"
+      ],
+      "dialogChoices": [
+        "Can I take an exam?",
+        "Have you any interesting news?",
+        "Yes, I certainly am.",
+        "The study of the earth, its contents and history.",
+        "All that have passed the appropriate Earth Sciences exam.",
+        "Gloves and boots to be worn at all times; proper tools must be used.",
+        "I am ready for the next exam.",
+        "Samples taken in rough form; kept only in sealed containers.",
+        "Finds must be carefully handled, and gloves worn.",
+        "Always handle with care; strike cleanly on its cleaving point.",
+        "I am ready for the last exam...",
+        "Samples cleaned, and carried only in specimen jars.",
+        "Brush carefully and slowly using short strokes.",
+        "Handle bones very carefully and keep them amay from other samples.",
+        "How could I move a large pile of rocks?"
+      ],
+      "highlightItems": [
+        "Pestle and mortar",
+        "Vial",
+        "Tinderbox",
+        "Cup of tea",
+        "Rope",
+        "Opal",
+        "Charcoal"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Dig Site"
+      }
+    }
+  },
+  {
     "id": "S8-01",
     "stage": 8,
     "type": "quest",

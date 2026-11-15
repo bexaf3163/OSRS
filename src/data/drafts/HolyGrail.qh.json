@@ -1,0 +1,947 @@
+{
+ "title": "Holy Grail",
+ "cls": "HolyGrail",
+ "var": [
+  "varp",
+  5
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "startQuest"
+   },
+   "2": "n1",
+   "3": "n2",
+   "4": "n3",
+   "7": "n3",
+   "8": "n4",
+   "9": "n5"
+  },
+  "nodes": {
+   "n1": {
+    "n": "findingMerlin",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "zone",
+         "z": [
+          [
+           2765,
+           3496,
+           2768,
+           3505,
+           1,
+           1
+          ]
+         ]
+        },
+        {
+         "o": "npc",
+         "id": 4059
+        }
+       ]
+      },
+      {
+       "s": "talkToMerlin"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2757,
+         3506,
+         2768,
+         3517,
+         1,
+         1
+        ],
+        [
+         2748,
+         3496,
+         2764,
+         3517,
+         1,
+         1
+        ]
+       ]
+      },
+      {
+       "s": "openMerlinDoor"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpStairsCamelot"
+    }
+   },
+   "n2": {
+    "n": "findHighPriest",
+    "c": [
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2823,
+         3328,
+         2841,
+         3332,
+         0,
+         2
+        ],
+        [
+         2800,
+         3329,
+         2871,
+         3393,
+         0,
+         2
+        ]
+       ]
+      },
+      {
+       "s": "talkToHighPriest"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goToEntrana"
+    }
+   },
+   "n3": {
+    "n": "findFisherKing",
+    "c": [
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2756,
+         4675,
+         2771,
+         4692,
+         1,
+         1
+        ]
+       ]
+      },
+      {
+       "s": "talkToFisherKing"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2756,
+         4675,
+         2780,
+         4692,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "goUpStairsBrokenCastle"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        {
+         "o": "zone",
+         "z": [
+          [
+           2761,
+           4694,
+           2762,
+           4694,
+           0,
+           0
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "s": "ringBellHighlighted"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r2"
+       ]
+      },
+      {
+       "s": "ringBell"
+      }
+     ],
+     [
+      {
+       "o": "or",
+       "a": [
+        {
+         "o": "and",
+         "a": [
+          {
+           "o": "dlg",
+           "m": [
+            "You must be blind then. There's ALWAYS bells there when I go to the castle."
+           ]
+          }
+         ],
+         "latch": true
+        },
+        {
+         "o": "?",
+         "d": "ground"
+        }
+       ]
+      },
+      {
+       "s": "pickupBell"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "talkToFisherman"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        {
+         "o": "npc",
+         "id": 4067
+        }
+       ]
+      },
+      {
+       "s": "attackTitan"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        "r5",
+        "r3"
+       ]
+      },
+      {
+       "s": "blowWhistle1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        "r3"
+       ]
+      },
+      {
+       "s": "goToTeleportLocation1"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "goGetExcalibur"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "zone",
+         "z": [
+          [
+           3104,
+           3357,
+           3112,
+           3361,
+           2,
+           2
+          ]
+         ]
+        },
+        "r6"
+       ]
+      },
+      {
+       "s": "takeWhistles"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        {
+         "o": "zone",
+         "z": [
+          [
+           3104,
+           3362,
+           3112,
+           3370,
+           2,
+           2
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "s": "openWhistleDoor"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        {
+         "o": "zone",
+         "z": [
+          [
+           3098,
+           3354,
+           3118,
+           3373,
+           1,
+           1
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "s": "goUpStairsDraynor2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        {
+         "o": "zone",
+         "z": [
+          [
+           3097,
+           3354,
+           3119,
+           3373,
+           0,
+           0
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "s": "goUpStairsDraynor1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        {
+         "o": "zone",
+         "z": [
+          [
+           3100,
+           3347,
+           3116,
+           3353,
+           0,
+           0
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "s": "enterDraynorManor"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "goToDraynorManor"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToGalahad"
+    },
+    "l": "r4"
+   },
+   "n4": {
+    "n": "findPercival",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Magic gold feather",
+       "ids": [
+        18
+       ]
+      },
+      {
+       "s": "openSack"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToKingArthur2"
+    }
+   },
+   "n5": {
+    "n": "finishQuest",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Holy Grail",
+       "ids": [
+        19
+       ]
+      },
+      "n5"
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2647,
+         4682,
+         2651,
+         4686,
+         2,
+         2
+        ]
+       ]
+      },
+      {
+       "s": "takeGrail"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2646,
+         4681,
+         2652,
+         4687,
+         1,
+         1
+        ]
+       ]
+      },
+      {
+       "s": "goUpNewCastleLadder"
+      }
+     ],
+     [
+      {
+       "o": "or",
+       "a": [
+        {
+         "o": "zone",
+         "z": [
+          [
+           2628,
+           4675,
+           2652,
+           4692,
+           0,
+           0
+          ]
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          {
+           "o": "obj",
+           "ids": [
+            1524
+           ],
+           "z": [
+            2634,
+            4693,
+            2634,
+            4693,
+            0,
+            0
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "s": "goUpNewCastleStairs"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2625,
+         4672,
+         2683,
+         4733,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "openFisherKingCastleDoor"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "blowWhistle2"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goToTeleportLocation2"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "item",
+    "nm": "Grail Bell",
+    "ids": [
+     17
+    ]
+   },
+   "r2": {
+    "o": "zone",
+    "z": [
+     [
+      2752,
+      4671,
+      2791,
+      4734,
+      0,
+      0
+     ],
+     [
+      2791,
+      4688,
+      2808,
+      4707,
+      0,
+      0
+     ],
+     [
+      2781,
+      4707,
+      2798,
+      4710,
+      0,
+      0
+     ]
+    ]
+   },
+   "r3": {
+    "o": "item",
+    "nm": "Excalibur",
+    "ids": [
+     35
+    ]
+   },
+   "r4": {
+    "o": "item",
+    "nm": "Magic Whistles",
+    "ids": [
+     16
+    ],
+    "q": 2
+   },
+   "r5": {
+    "o": "zone",
+    "z": [
+     [
+      2740,
+      3234,
+      2743,
+      3237,
+      0,
+      0
+     ]
+    ]
+   },
+   "r6": {
+    "o": "item",
+    "nm": "Holy Table Napkin",
+    "ids": [
+     15
+    ]
+   }
+  },
+  "alias": {
+   "goUpStairsCamelot": [
+    "talkToMerlin"
+   ],
+   "openMerlinDoor": [
+    "talkToMerlin"
+   ],
+   "ringBellHighlighted": [
+    "ringBell"
+   ],
+   "goGetExcalibur": [
+    "goToTeleportLocation1"
+   ]
+  }
+ },
+ "unknown": {
+  "ground": 1
+ },
+ "steps": {
+  "startQuest": {
+   "typ": "NpcStep",
+   "wp": [
+    2763,
+    3513,
+    0
+   ],
+   "ids": [
+    3531
+   ],
+   "text": "Talk to King Arthur in Camelot Castle to start the quest."
+  },
+  "goUpStairsCamelot": {
+   "typ": "ObjectStep",
+   "wp": [
+    2751,
+    3511,
+    0
+   ],
+   "ids": [
+    26106
+   ],
+   "text": "Go upstairs and talk to Merlin."
+  },
+  "talkToMerlin": {
+   "typ": "NpcStep",
+   "wp": [
+    2763,
+    3513,
+    1
+   ],
+   "ids": [
+    4059
+   ],
+   "text": "Go upstairs and talk to Merlin."
+  },
+  "openMerlinDoor": {
+   "typ": "ObjectStep",
+   "wp": null,
+   "ids": [
+    24
+   ],
+   "text": "Go upstairs and talk to Merlin."
+  },
+  "goToEntrana": {
+   "typ": "NpcStep",
+   "wp": [
+    3048,
+    3235,
+    0
+   ],
+   "ids": [
+    1167
+   ],
+   "text": "Head to Port Sarim and talk to a monk of Entrana for passage to Entrana. Bank all combat gear."
+  },
+  "talkToHighPriest": {
+   "typ": "NpcStep",
+   "wp": [
+    2851,
+    3348,
+    0
+   ],
+   "ids": [
+    4062
+   ],
+   "text": "Talk to the High Priest on Entrana."
+  },
+  "talkToGalahad": {
+   "typ": "NpcStep",
+   "wp": [
+    2612,
+    3475,
+    0
+   ],
+   "ids": [
+    4064
+   ],
+   "text": "Talk to Galahad in his house west of McGrubor's Woods."
+  },
+  "talkToFisherKing": {
+   "typ": "NpcStep",
+   "wp": null,
+   "ids": [
+    4066
+   ],
+   "text": "Talk to The Fisher King."
+  },
+  "goUpStairsBrokenCastle": {
+   "typ": "ObjectStep",
+   "wp": [
+    2762,
+    4681,
+    0
+   ],
+   "ids": [
+    16671
+   ],
+   "text": "Go up the stairs inside of the castle."
+  },
+  "ringBellHighlighted": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2762,
+    4694,
+    0
+   ],
+   "ids": [],
+   "text": "Ring the grail bell while standing directly north of the broken castle wall (Where you picked up the bell)"
+  },
+  "ringBell": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2762,
+    4694,
+    0
+   ],
+   "ids": [],
+   "text": "Ring the grail bell while standing directly north of the broken castle wall (Where you picked up the bell)"
+  },
+  "pickupBell": {
+   "typ": "ItemStep",
+   "wp": [
+    2762,
+    4694,
+    0
+   ],
+   "ids": [],
+   "text": "Pickup the grail bell outside of the castle. If it's not there, return to the fisherman and finish the conversation."
+  },
+  "talkToFisherman": {
+   "typ": "NpcStep",
+   "wp": [
+    2798,
+    4706,
+    0
+   ],
+   "ids": [
+    4065
+   ],
+   "text": "Talk to the fisherman by the river. After talking to him walk West to the castle."
+  },
+  "attackTitan": {
+   "typ": "NpcStep",
+   "wp": null,
+   "ids": [
+    4067
+   ],
+   "text": "Kill the Black Knight Titan with Excalibur. Melee is recommended as it has high Ranged and Magic defence. (You only need to deal the killing blow with excalibur!)"
+  },
+  "blowWhistle1": {
+   "typ": "ItemStep",
+   "wp": null,
+   "ids": [],
+   "text": "Blow the whistle once you are underneath of the tower."
+  },
+  "goToTeleportLocation1": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2742,
+    3236,
+    0
+   ],
+   "ids": [],
+   "text": "Go to the tower on Karamja near gold mine west of Brimhaven."
+  },
+  "goGetExcalibur": {
+   "typ": "ItemStep",
+   "wp": null,
+   "ids": [],
+   "text": "Go retrieve Excalibur from your bank. If you do not own Excalibur, you can retrieve it from the Lady of the Lake in Taverley for 500 coins."
+  },
+  "takeWhistles": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    3107,
+    3359,
+    2
+   ],
+   "ids": [],
+   "text": "Pickup 2 Magic Whistles."
+  },
+  "openWhistleDoor": {
+   "typ": "ObjectStep",
+   "wp": null,
+   "ids": [
+    22
+   ],
+   "text": "Open the door to the Magic Whistles."
+  },
+  "goUpStairsDraynor2": {
+   "typ": "ObjectStep",
+   "wp": [
+    3105,
+    3363,
+    1
+   ],
+   "ids": [
+    11511
+   ],
+   "text": "Go up the second set of stairs in Draynor Manor."
+  },
+  "goUpStairsDraynor1": {
+   "typ": "ObjectStep",
+   "wp": [
+    3109,
+    3364,
+    0
+   ],
+   "ids": [
+    11498
+   ],
+   "text": "Go up the stairs in Draynor Manor."
+  },
+  "enterDraynorManor": {
+   "typ": "ObjectStep",
+   "wp": null,
+   "ids": [
+    135
+   ],
+   "text": "Enter Draynor Manor."
+  },
+  "goToDraynorManor": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    3108,
+    3350,
+    0
+   ],
+   "ids": [],
+   "text": "Travel to Draynor Manor."
+  },
+  "talkToKingArthur2": {
+   "typ": "NpcStep",
+   "wp": [
+    2763,
+    3513,
+    0
+   ],
+   "ids": [
+    3531
+   ],
+   "text": "Return to Camelot and talk to King Arthur."
+  },
+  "openSack": {
+   "typ": "ObjectStep",
+   "wp": [
+    2962,
+    3506,
+    0
+   ],
+   "ids": [
+    23
+   ],
+   "text": "Travel to the Goblin Village, north of Falador. Right click and open the sacks."
+  },
+  "goToTeleportLocation2": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2742,
+    3236,
+    0
+   ],
+   "ids": [],
+   "text": "Go to the tower on Karamja near gold mine west of Brimhaven."
+  },
+  "takeGrail": {
+   "typ": "ItemStep",
+   "wp": [
+    2649,
+    4684,
+    2
+   ],
+   "ids": [],
+   "text": "Pickup the Holy grail."
+  },
+  "goUpNewCastleLadder": {
+   "typ": "ObjectStep",
+   "wp": null,
+   "ids": [
+    16683
+   ],
+   "text": "Climb the ladder on the second floor."
+  },
+  "goUpNewCastleStairs": {
+   "typ": "ObjectStep",
+   "wp": [
+    2649,
+    4684,
+    0
+   ],
+   "ids": [
+    16671
+   ],
+   "text": "Go up the stairs to the east."
+  },
+  "openFisherKingCastleDoor": {
+   "typ": "ObjectStep",
+   "wp": null,
+   "ids": [
+    1524
+   ],
+   "text": "Open the door to the castle and enter."
+  },
+  "blowWhistle2": {
+   "typ": "ItemStep",
+   "wp": null,
+   "ids": [],
+   "text": "Blow the whistle once you are underneath of the tower."
+  }
+ }
+}

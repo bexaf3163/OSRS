@@ -1,0 +1,730 @@
+{
+  "quest": "Holy Grail",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "Holy Grail",
+      "revision": 15359857
+    },
+    "quickGuide": {
+      "title": "Holy Grail/Quick guide",
+      "revision": 15292972
+    }
+  },
+  "step": {
+    "title": "Holy Grail",
+    "type": "quest",
+    "qp": 2,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Holy_Grail",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Holy_Grail/Quick_guide",
+    "mapLocation": {
+      "x": 2764,
+      "y": 3513,
+      "plane": 0,
+      "label": "Talk to King Arthur in Camelot."
+    },
+    "npc": {
+      "nameEn": "King Arthur"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Excalibur",
+        "amount": 1,
+        "wikiItemId": 35,
+        "howToGet": "Kept from Merlin's Crystal; if lost, the Lady of the Lake in Taverley returns it for 500 coins."
+      }
+    ],
+    "foes": [
+      "Black Knight Titan"
+    ]
+  },
+  "stages": {
+    "var": [
+      "varp",
+      5
+    ],
+    "route": [
+      {
+        "title": "King Arthur & Merlin",
+        "steps": [
+          "Talk to King Arthur. Dialogue: \"Tell me of this quest.\", \"I'd enjoy trying that.\"",
+          "Talk to Merlin. Dialogue: \"Thank you for the advice.\""
+        ]
+      },
+      {
+        "title": "Searching for the Holy Grail",
+        "steps": [
+          "Bank all weapons and armour. Travel to Entrana.",
+          "Talk to the High Priest in the chapel. Dialogue: \"Ok, I will go searching.\"",
+          "Travel to Galahad's house west of McGrubor's Wood (fairy ring code ) or combat bracelet to Ranging Guild.",
+          "Talk to Galahad and receive the holy table napkin. Dialogue: \"I seek an item from the realm of the Fisher King.\"",
+          "Travel to Draynor Manor's southern-most room with the holy table napkin in your inventory and pick up 2 magic whistles from the table. The whistles will not be visible until you enter the room."
+        ]
+      },
+      {
+        "title": "The Fisher Realm",
+        "steps": [
+          "Prepare for the fight against the Black Knight Titan.",
+          "Travel north-west of Brimhaven to the north-western peninsula (see the minimap image).",
+          "optional* mine gold ore south west of pillars for Easy Karamja Diary Task",
+          "Stand under the tower and blow a magic whistle to be teleported to the Fisher Realm.",
+          "Fight the Black Knight Titan nearby on the bridge and kill the titan with Excalibur. See the in-depth quest guide for details.",
+          "Head south along the river and talk to the fisherman. Dialogue: \"Any ideas how to get into the castle?\"",
+          "Head to the castle, south-west of the fisherman, pick up the Grail bell from the ground and ring it. (You must stand in front of the bricks to gain access to the castle. Make sure NOT to use the Magic Whistle or you will be teleported outside and you will have to fight the Black Knight Titan again.)",
+          "Take the stairs to the south, and talk to the Fisher King. Dialogue: \"I seek the Holy Grail.\", \"You don't look too well.\" (Make sure to talk to him about both options or you will have to kill the Black Knight Titan again if you leave.)"
+        ]
+      },
+      {
+        "title": "Finishing up",
+        "steps": [
+          "Travel to Camelot and talk to King Arthur. Make sure to have 1 empty slot in your inventory for Magic gold feather he gives you.",
+          "Travel to Goblin Village.",
+          "Use the Open option on the sacks in the house in the east side of Goblin Village.",
+          "Talk to Sir Percival, he will take your magic whistle. Make sure you have another to get to the Fisher Realm yourself. Dialogue: \"Come with me, I shall make you a king.\"",
+          "Travel back to the Fisher Realm (via Brimhaven or using the fairy ring code . You do not need to fight the Titan again either way)",
+          "Head to the top floor of the castle's eastern tower and take the Holy grail.",
+          "Return to King Arthur.",
+          "Congratulations, quest complete!"
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Talk to King Arthur in Camelot Castle to start the quest.",
+            "s": "Talk to King Arthur in Camelot Castle to start the quest.",
+            "k": "startQuest",
+            "at": [
+              2763,
+              3513,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3531
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 2,
+        "do": [
+          {
+            "t": "Go upstairs and talk to Merlin.",
+            "s": "Go upstairs and talk to Merlin.",
+            "k": "goUpStairsCamelot",
+            "at": [
+              2751,
+              3511,
+              0
+            ],
+            "hl": {
+              "obj": [
+                26106
+              ]
+            }
+          },
+          {
+            "t": "Go upstairs and talk to Merlin.",
+            "s": "Go upstairs and talk to Merlin.",
+            "k": "openMerlinDoor",
+            "hl": {
+              "obj": [
+                24
+              ]
+            }
+          },
+          {
+            "t": "Go upstairs and talk to Merlin.",
+            "s": "Go upstairs and talk to Merlin.",
+            "k": "talkToMerlin",
+            "at": [
+              2763,
+              3513,
+              1
+            ],
+            "hl": {
+              "npc": [
+                4059
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 3,
+        "do": [
+          {
+            "t": "Head to Port Sarim and talk to a monk of Entrana for passage to Entrana. Bank all combat gear.",
+            "s": "Bank all combat gear, then take the monks' boat from Port Sarim.",
+            "k": "goToEntrana",
+            "at": [
+              3048,
+              3235,
+              0
+            ],
+            "hl": {
+              "npc": [
+                1167
+              ]
+            }
+          },
+          {
+            "t": "Talk to the High Priest on Entrana.",
+            "s": "Talk to the High Priest on Entrana.",
+            "k": "talkToHighPriest",
+            "at": [
+              2851,
+              3348,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4062
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 4,
+        "do": [
+          {
+            "t": "Talk to Galahad in his house west of McGrubor's Woods.",
+            "s": "Talk to Galahad in his house west of McGrubor's Woods.",
+            "k": "talkToGalahad",
+            "at": [
+              2612,
+              3475,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4064
+              ]
+            }
+          },
+          {
+            "t": "Travel to Draynor Manor.",
+            "s": "Travel to Draynor Manor.",
+            "k": "goToDraynorManor",
+            "at": [
+              3108,
+              3350,
+              0
+            ]
+          },
+          {
+            "t": "Enter Draynor Manor.",
+            "s": "Enter Draynor Manor.",
+            "k": "enterDraynorManor",
+            "hl": {
+              "obj": [
+                135
+              ]
+            }
+          },
+          {
+            "t": "Go up the stairs in Draynor Manor.",
+            "s": "Go up the stairs in Draynor Manor.",
+            "k": "goUpStairsDraynor1",
+            "at": [
+              3109,
+              3364,
+              0
+            ],
+            "hl": {
+              "obj": [
+                11498
+              ]
+            }
+          },
+          {
+            "t": "Go up the second set of stairs in Draynor Manor.",
+            "s": "Go up the second set of stairs in Draynor Manor.",
+            "k": "goUpStairsDraynor2",
+            "at": [
+              3105,
+              3363,
+              1
+            ],
+            "hl": {
+              "obj": [
+                11511
+              ]
+            }
+          },
+          {
+            "t": "Open the door to the Magic Whistles.",
+            "s": "Open the door to the Magic Whistles.",
+            "k": "openWhistleDoor",
+            "hl": {
+              "obj": [
+                22
+              ]
+            }
+          },
+          {
+            "t": "Pickup 2 Magic Whistles.",
+            "s": "Pickup 2 Magic Whistles.",
+            "k": "takeWhistles",
+            "at": [
+              3107,
+              3359,
+              2
+            ]
+          },
+          {
+            "t": "Go retrieve Excalibur from your bank. If you do not own Excalibur, you can retrieve it from the Lady of the Lake in Taverley for 500 coins.",
+            "s": "Get Excalibur from your bank, or 500 coins at the Lady of the Lake.",
+            "k": "goGetExcalibur"
+          },
+          {
+            "t": "Go to the tower on Karamja near gold mine west of Brimhaven.",
+            "s": "Go to the tower on Karamja near gold mine west of Brimhaven.",
+            "k": "goToTeleportLocation1",
+            "at": [
+              2742,
+              3236,
+              0
+            ]
+          },
+          {
+            "t": "Blow the whistle once you are underneath of the tower.",
+            "s": "Blow the whistle once you are underneath of the tower.",
+            "k": "blowWhistle1"
+          },
+          {
+            "t": "Kill the Black Knight Titan with Excalibur. Melee is recommended as it has high Ranged and Magic defence. (You only need to deal the killing blow with excalibur!)",
+            "s": "Kill the Black Knight Titan; only the killing blow needs Excalibur.",
+            "k": "attackTitan",
+            "hl": {
+              "npc": [
+                4067
+              ]
+            }
+          },
+          {
+            "t": "Talk to the fisherman by the river. After talking to him walk West to the castle.",
+            "s": "Talk to the fisherman by the river, then walk west to the castle.",
+            "k": "talkToFisherman",
+            "at": [
+              2798,
+              4706,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4065
+              ]
+            }
+          },
+          {
+            "t": "Pickup the grail bell outside of the castle. If it's not there, return to the fisherman and finish the conversation.",
+            "s": "Pick up the grail bell outside the castle, or ask the fisherman again.",
+            "k": "pickupBell",
+            "at": [
+              2762,
+              4694,
+              0
+            ]
+          },
+          {
+            "t": "Ring the grail bell while standing directly north of the broken castle wall (Where you picked up the bell)",
+            "s": "Ring the grail bell north of the broken castle wall.",
+            "k": "ringBell",
+            "at": [
+              2762,
+              4694,
+              0
+            ]
+          },
+          {
+            "t": "Ring the grail bell while standing directly north of the broken castle wall (Where you picked up the bell)",
+            "s": "Ring the grail bell north of the broken castle wall.",
+            "k": "ringBellHighlighted",
+            "at": [
+              2762,
+              4694,
+              0
+            ]
+          },
+          {
+            "t": "Go up the stairs inside of the castle.",
+            "s": "Go up the stairs inside of the castle.",
+            "k": "goUpStairsBrokenCastle",
+            "at": [
+              2762,
+              4681,
+              0
+            ],
+            "hl": {
+              "obj": [
+                16671
+              ]
+            }
+          },
+          {
+            "t": "Talk to The Fisher King.",
+            "s": "Talk to The Fisher King.",
+            "k": "talkToFisherKing",
+            "hl": {
+              "npc": [
+                4066
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 7,
+        "do": [
+          {
+            "t": "Talk to Galahad in his house west of McGrubor's Woods.",
+            "s": "Talk to Galahad in his house west of McGrubor's Woods.",
+            "k": "talkToGalahad",
+            "at": [
+              2612,
+              3475,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4064
+              ]
+            }
+          },
+          {
+            "t": "Travel to Draynor Manor.",
+            "s": "Travel to Draynor Manor.",
+            "k": "goToDraynorManor",
+            "at": [
+              3108,
+              3350,
+              0
+            ]
+          },
+          {
+            "t": "Enter Draynor Manor.",
+            "s": "Enter Draynor Manor.",
+            "k": "enterDraynorManor",
+            "hl": {
+              "obj": [
+                135
+              ]
+            }
+          },
+          {
+            "t": "Go up the stairs in Draynor Manor.",
+            "s": "Go up the stairs in Draynor Manor.",
+            "k": "goUpStairsDraynor1",
+            "at": [
+              3109,
+              3364,
+              0
+            ],
+            "hl": {
+              "obj": [
+                11498
+              ]
+            }
+          },
+          {
+            "t": "Go up the second set of stairs in Draynor Manor.",
+            "s": "Go up the second set of stairs in Draynor Manor.",
+            "k": "goUpStairsDraynor2",
+            "at": [
+              3105,
+              3363,
+              1
+            ],
+            "hl": {
+              "obj": [
+                11511
+              ]
+            }
+          },
+          {
+            "t": "Open the door to the Magic Whistles.",
+            "s": "Open the door to the Magic Whistles.",
+            "k": "openWhistleDoor",
+            "hl": {
+              "obj": [
+                22
+              ]
+            }
+          },
+          {
+            "t": "Pickup 2 Magic Whistles.",
+            "s": "Pickup 2 Magic Whistles.",
+            "k": "takeWhistles",
+            "at": [
+              3107,
+              3359,
+              2
+            ]
+          },
+          {
+            "t": "Go retrieve Excalibur from your bank. If you do not own Excalibur, you can retrieve it from the Lady of the Lake in Taverley for 500 coins.",
+            "s": "Get Excalibur from your bank, or 500 coins at the Lady of the Lake.",
+            "k": "goGetExcalibur"
+          },
+          {
+            "t": "Go to the tower on Karamja near gold mine west of Brimhaven.",
+            "s": "Go to the tower on Karamja near gold mine west of Brimhaven.",
+            "k": "goToTeleportLocation1",
+            "at": [
+              2742,
+              3236,
+              0
+            ]
+          },
+          {
+            "t": "Blow the whistle once you are underneath of the tower.",
+            "s": "Blow the whistle once you are underneath of the tower.",
+            "k": "blowWhistle1"
+          },
+          {
+            "t": "Kill the Black Knight Titan with Excalibur. Melee is recommended as it has high Ranged and Magic defence. (You only need to deal the killing blow with excalibur!)",
+            "s": "Kill the Black Knight Titan; only the killing blow needs Excalibur.",
+            "k": "attackTitan",
+            "hl": {
+              "npc": [
+                4067
+              ]
+            }
+          },
+          {
+            "t": "Talk to the fisherman by the river. After talking to him walk West to the castle.",
+            "s": "Talk to the fisherman by the river, then walk west to the castle.",
+            "k": "talkToFisherman",
+            "at": [
+              2798,
+              4706,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4065
+              ]
+            }
+          },
+          {
+            "t": "Pickup the grail bell outside of the castle. If it's not there, return to the fisherman and finish the conversation.",
+            "s": "Pick up the grail bell outside the castle, or ask the fisherman again.",
+            "k": "pickupBell",
+            "at": [
+              2762,
+              4694,
+              0
+            ]
+          },
+          {
+            "t": "Ring the grail bell while standing directly north of the broken castle wall (Where you picked up the bell)",
+            "s": "Ring the grail bell north of the broken castle wall.",
+            "k": "ringBell",
+            "at": [
+              2762,
+              4694,
+              0
+            ]
+          },
+          {
+            "t": "Ring the grail bell while standing directly north of the broken castle wall (Where you picked up the bell)",
+            "s": "Ring the grail bell north of the broken castle wall.",
+            "k": "ringBellHighlighted",
+            "at": [
+              2762,
+              4694,
+              0
+            ]
+          },
+          {
+            "t": "Go up the stairs inside of the castle.",
+            "s": "Go up the stairs inside of the castle.",
+            "k": "goUpStairsBrokenCastle",
+            "at": [
+              2762,
+              4681,
+              0
+            ],
+            "hl": {
+              "obj": [
+                16671
+              ]
+            }
+          },
+          {
+            "t": "Talk to The Fisher King.",
+            "s": "Talk to The Fisher King.",
+            "k": "talkToFisherKing",
+            "hl": {
+              "npc": [
+                4066
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 8,
+        "do": [
+          {
+            "t": "Return to Camelot and talk to King Arthur.",
+            "s": "Return to Camelot and talk to King Arthur.",
+            "k": "talkToKingArthur2",
+            "at": [
+              2763,
+              3513,
+              0
+            ],
+            "hl": {
+              "npc": [
+                3531
+              ]
+            }
+          },
+          {
+            "t": "Travel to the Goblin Village, north of Falador. Right click and open the sacks.",
+            "s": "Open the sacks in the Goblin Village, north of Falador.",
+            "k": "openSack",
+            "at": [
+              2962,
+              3506,
+              0
+            ],
+            "hl": {
+              "obj": [
+                23
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 9,
+        "do": [
+          {
+            "t": "Go to the tower on Karamja near gold mine west of Brimhaven.",
+            "s": "Go to the tower on Karamja near gold mine west of Brimhaven.",
+            "k": "goToTeleportLocation2",
+            "at": [
+              2742,
+              3236,
+              0
+            ]
+          },
+          {
+            "t": "Blow the whistle once you are underneath of the tower.",
+            "s": "Blow the whistle once you are underneath of the tower.",
+            "k": "blowWhistle2"
+          },
+          {
+            "t": "Open the door to the castle and enter.",
+            "s": "Open the door to the castle and enter.",
+            "k": "openFisherKingCastleDoor",
+            "hl": {
+              "obj": [
+                1524
+              ]
+            }
+          },
+          {
+            "t": "Go up the stairs to the east.",
+            "s": "Go up the stairs to the east.",
+            "k": "goUpNewCastleStairs",
+            "at": [
+              2649,
+              4684,
+              0
+            ],
+            "hl": {
+              "obj": [
+                16671
+              ]
+            }
+          },
+          {
+            "t": "Climb the ladder on the second floor.",
+            "s": "Climb the ladder on the second floor.",
+            "k": "goUpNewCastleLadder",
+            "hl": {
+              "obj": [
+                16683
+              ]
+            }
+          },
+          {
+            "t": "Pickup the Holy grail.",
+            "s": "Pickup the Holy grail.",
+            "k": "takeGrail",
+            "at": [
+              2649,
+              4684,
+              2
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "facts": {
+    "id": "Holy Grail",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {
+        "attack": 20
+      },
+      "questPoints": 0,
+      "quests": [
+        "Merlin's Crystal"
+      ],
+      "manual": [],
+      "capabilities": [
+        "combat"
+      ],
+      "unparsed": "Must be able to defeat a level 120 [[Black Knight Titan]] (can be [[safespot]]ted or [[flinch]]ed)",
+      "text": "*Completion of the following quests:\n**[[Merlin's Crystal]]\n*{{SCP|Attack|20|link=yes}} {{Boostable|No}} {{Questreqstart|no}}\n*Must be able to defeat a level 120 [[Black Knight Titan]] (can be [[safespot]]ted or [[flinch]]ed)"
+    },
+    "rewards": {
+      "questPoints": 2,
+      "xp": {
+        "prayer": 11000,
+        "defence": 15300
+      },
+      "coins": 0
+    },
+    "resourceFlow": null,
+    "length": "Short",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15359857",
+      "title": "Holy Grail",
+      "revision": 15359857,
+      "retrievedAt": "2026-11-15T07:58:21.350Z"
+    }
+  },
+  "unknown": [
+    "fight \"Black Knight Titan\": no combat data",
+    "step \"openMerlinDoor\": Quest Helper gives no tile",
+    "step \"enterDraynorManor\": Quest Helper gives no tile",
+    "step \"openWhistleDoor\": Quest Helper gives no tile",
+    "step \"goGetExcalibur\": Quest Helper gives no tile",
+    "step \"blowWhistle1\": Quest Helper gives no tile",
+    "step \"attackTitan\": Quest Helper gives no tile",
+    "step \"talkToFisherKing\": Quest Helper gives no tile",
+    "step \"blowWhistle2\": Quest Helper gives no tile",
+    "step \"openFisherKingCastleDoor\": Quest Helper gives no tile",
+    "step \"goUpNewCastleLadder\": Quest Helper gives no tile",
+    "Quest Helper condition \"ground\" is not understood (1)",
+    "requirement not reviewed: Must be able to defeat a level 120 Black Knight Titan (can be safespotted or flinched)",
+    "what the quest uses up and hands out is not reviewed"
+  ]
+}

@@ -298,6 +298,18 @@
       "evidence": ["OSRS Wiki Observatory Quest and Goblin guard infobox."]
     },
     {
+      "stepId": "S7-17", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "objective": "Merlin's Crystal: defeat Sir Mordred (level 39, 38 hit points, hits up to 5) on the top floor of Keep Le Faye so Morgan le Faye appears.",
+      "enemies": [{ "name": "Sir Mordred", "level": 39, "maxHit": 5, "table": true }],
+      "lines": ["1.0", "1.1", "1.2", "5.1"],
+      "assumptions": ["Sir Mordred is his only Wiki infobox version; the giant bat for bat bones is avoided by buying the bones."],
+      "problems": ["New quest: no stage of the route met this monster before."],
+      "alternatives": ["Flinch him with the stairs (Wiki strategy); he cannot be safespotted. The Renegade Knights on the way up can be run past."],
+      "decision": "revise",
+      "changed": ["2.108.0: the step's threats name Sir Mordred, so the fight is estimated with the player's kit; Trout x5 (or similar food) is a required item and Bat bones are bought."],
+      "evidence": ["OSRS Wiki Merlin's Crystal requirements and Sir Mordred infobox."]
+    },
+    {
       "stepId": "S8-01", "kind": "quest-fight", "mandatory": true, "method": "melee",
       "objective": "Kill the Temple Guardian (30, 45 hit points, hits up to 3; immune to magic) and a Monk of Zamorak (30) for the key.",
       "enemies": [{ "name": "Temple Guardian", "level": 30, "maxHit": 3, "table": true }, { "name": "Monk of Zamorak", "level": 30 }],

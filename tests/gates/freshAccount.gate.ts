@@ -33,8 +33,11 @@ const prices = fakePrices(fixture.prices);
 const f2pItems = (JSON.parse(readFileSync('src/data/generated/f2p-items.json', 'utf8')) as { nameEn: string }[]).map(i => i.nameEn);
 const namesOf = (steps: Step[]) => {
   const named = steps.flatMap(s => [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])].flatMap(i => [i.nameEn, ...(i.anyOf ?? [])]));
-  return [...new Set([...named, ...named.flatMap(n => toolFamilyOf(n) ?? []), ...gearData.items.map(p => p.name), ...f2pItems, ...FOODS.map(f => f.name)])];
+  return [...new Set([...named, ...named.flatMap(n => toolFamilyOf(n) ?? []), ...gearData.items.map(p => p.name), ...f2pItems, ...FOODS.map(f => f.name), ...recipeItems])];
 };
+// Training recipes buy and make their own items (Herblore potions for The Dig Site).
+const recipeItems = (Object.values(JSON.parse(readFileSync('src/data/generated/processing.json', 'utf8')).recipes) as { inputs: { name: string }[]; output: { name: string } | null }[])
+  .flatMap(r => [...r.inputs.map(i => i.name), ...(r.output ? [r.output.name] : [])]);
 const rate = { methodId: 'cowhides', title: 'Collect cowhides', netPerHour: { fast: 25_000, typical: 18_000, slow: 12_000 } };
 const walk: RuntimePlanInput['walk'] = (from, to) => {
   if (!from) return null;

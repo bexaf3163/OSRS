@@ -1,5 +1,5 @@
 {
- "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15",
+ "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15",
  "prices": {
   "Adamant 2h sword": {
    "buy": 3670,
@@ -1244,6 +1244,142 @@
   "Molten glass": {
    "buy": 83,
    "sell": 82
+  },
+  "Bat bones": {
+   "buy": 330,
+   "sell": 267
+  },
+  "Bucket of wax": {
+   "buy": 1106,
+   "sell": 1000
+  },
+  "Charcoal": {
+   "buy": 169,
+   "sell": 152
+  },
+  "Cup of tea": {
+   "buy": 80,
+   "sell": 71
+  },
+  "Opal": {
+   "buy": 166,
+   "sell": 165
+  },
+  "Pestle and mortar": {
+   "buy": 2500,
+   "sell": 370
+  },
+  "Vial": {
+   "buy": 4,
+   "sell": 3
+  },
+  "Antipoison(3)": {
+   "buy": 488,
+   "sell": 481
+  },
+  "Attack potion(3)": {
+   "buy": 6,
+   "sell": 6
+  },
+  "Cadantine potion (unf)": {
+   "buy": 2192,
+   "sell": 2188
+  },
+  "Crushed nest": {
+   "buy": 3476,
+   "sell": 3389
+  },
+  "Defence potion(3)": {
+   "buy": 229,
+   "sell": 215
+  },
+  "Guam potion (unf)": {
+   "buy": 510,
+   "sell": 434
+  },
+  "Irit potion (unf)": {
+   "buy": 1499,
+   "sell": 1432
+  },
+  "Jangerberries": {
+   "buy": 510,
+   "sell": 477
+  },
+  "Kwuarm potion (unf)": {
+   "buy": 2339,
+   "sell": 2254
+  },
+  "Limpwurt root": {
+   "buy": 148,
+   "sell": 140
+  },
+  "Marrentill potion (unf)": {
+   "buy": 192,
+   "sell": 192
+  },
+  "Prayer potion(3)": {
+   "buy": 5828,
+   "sell": 5820
+  },
+  "Ranarr potion (unf)": {
+   "buy": 5221,
+   "sell": 5201
+  },
+  "Red spiders' eggs": {
+   "buy": 137,
+   "sell": 131
+  },
+  "Saradomin brew(3)": {
+   "buy": 4150,
+   "sell": 4134
+  },
+  "Snapdragon potion (unf)": {
+   "buy": 6769,
+   "sell": 6766
+  },
+  "Strength potion(3)": {
+   "buy": 80,
+   "sell": 79
+  },
+  "Super attack(3)": {
+   "buy": 1094,
+   "sell": 990
+  },
+  "Super defence(3)": {
+   "buy": 2219,
+   "sell": 2206
+  },
+  "Super restore(3)": {
+   "buy": 6370,
+   "sell": 6228
+  },
+  "Super strength(3)": {
+   "buy": 2040,
+   "sell": 2030
+  },
+  "Tarromin potion (unf)": {
+   "buy": 364,
+   "sell": 340
+  },
+  "Toadflax potion (unf)": {
+   "buy": 2042,
+   "sell": 2022
+  },
+  "Torstol potion (unf)": {
+   "buy": 3824,
+   "sell": 3800
+  },
+  "Unicorn horn dust": {
+   "buy": 2422,
+   "sell": 2202
+  },
+  "White berries": {
+   "buy": 792,
+   "sell": 792
+  },
+  "Zamorak brew(3)": {
+   "buy": 430,
+   "sell": 410
   }
  }
 }

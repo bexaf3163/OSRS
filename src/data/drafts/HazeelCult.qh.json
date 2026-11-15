@@ -1,0 +1,1155 @@
+{
+ "title": "Hazeel Cult",
+ "cls": "HazeelCult",
+ "var": [
+  "varp",
+  223
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToCeril"
+   },
+   "2": "n1",
+   "3": "n1",
+   "4": "n2",
+   "5": "n5",
+   "6": "n7",
+   "7": "n9"
+  },
+  "nodes": {
+   "n1": {
+    "n": "goTalkToClivet",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToClivet"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterCave"
+    }
+   },
+   "n2": {
+    "n": "step4",
+    "c": [
+     [
+      "r2",
+      "n3"
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Poison",
+       "ids": [
+        273
+       ]
+      },
+      "n4"
+     ],
+     [
+      "r1",
+      {
+       "s": "getPoison"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterCave"
+    }
+   },
+   "n3": {
+    "n": "cerilSteps",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        {
+         "o": "vb",
+         "id": 14773,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "talkToCerilToFinish"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r4"
+       ]
+      },
+      {
+       "s": "searchCupboardForEvidence"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "goUpToCupboard"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r5"
+       ]
+      },
+      {
+       "s": "leaveCaveAfterKilling"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        "r5"
+       ]
+      },
+      {
+       "s": "returnOnRaftAfterKilling"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "talkToCerilAfterKilling"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        {
+         "o": "vb",
+         "id": 14770,
+         "v": 2
+        }
+       ]
+      },
+      {
+       "s": "retrieveArmourFromChest"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        {
+         "o": "vb",
+         "id": 14770,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "killAlomone"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6"
+       ]
+      },
+      {
+       "s": "talkToAlomoneToKill"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        {
+         "o": "?",
+         "d": "arg"
+        }
+       ]
+      },
+      {
+       "s": "boardRaftToKill"
+      }
+     ],
+     [
+      {
+       "o": "?",
+       "d": "field"
+      },
+      {
+       "s": "enterCaveAfterValvesForCeril"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "leaveCaveForValves"
+      }
+     ]
+    ],
+    "d": {
+     "s": "valveStepsCeril"
+    }
+   },
+   "n4": {
+    "n": "hazeel4GoPoisonSteps",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "usePoisonOnRange"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "leaveCaveWithPoison"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterKitchen"
+    }
+   },
+   "n5": {
+    "n": "goTalkToClivetAfterPoison",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        {
+         "o": "item",
+         "nm": "Hazeel's mark",
+         "ids": [
+          2406
+         ],
+         "bank": 1
+        }
+       ]
+      },
+      {
+       "s": "talkToAlomone"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        {
+         "o": "?",
+         "d": "arg"
+        },
+        {
+         "o": "item",
+         "nm": "Hazeel's mark",
+         "ids": [
+          2406
+         ],
+         "bank": 1
+        }
+       ]
+      },
+      {
+       "s": "boardRaftAfterPoison"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        {
+         "o": "?",
+         "d": "arg"
+        }
+       ]
+      },
+      {
+       "s": "talkToClivetAfterPoison"
+      }
+     ],
+     [
+      {
+       "o": "?",
+       "d": "field"
+      },
+      {
+       "s": "enterCaveAfterPoison"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 14775,
+       "v": 1
+      },
+      {
+       "s": "valveStepsHazeel"
+      }
+     ]
+    ],
+    "d": "n6"
+   },
+   "n6": {
+    "n": "goTalkAfterPoison",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "leaveKitchen"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToCerilAfterPoison"
+    }
+   },
+   "n7": {
+    "n": "step6",
+    "c": [
+     [
+      "r2",
+      "n3"
+     ]
+    ],
+    "d": "n8"
+   },
+   "n8": {
+    "n": "hazeelSteps",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        "r8"
+       ]
+      },
+      {
+       "s": "giveAlomoneScroll"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r8"
+       ]
+      },
+      {
+       "s": "boardRaftWithScroll"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        "r8",
+        "r9"
+       ]
+      },
+      {
+       "s": "knockOnWallToExit"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        "r8"
+       ]
+      },
+      {
+       "s": "goF1ToF0WithScroll"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r8"
+       ]
+      },
+      {
+       "s": "goF2ToF1WithScroll"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "enterCaveWithScroll"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r11"
+       ]
+      },
+      {
+       "s": "searchChestForScroll"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        "r11",
+        "r9"
+       ]
+      },
+      {
+       "s": "climbLadderWithKey"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        "r11"
+       ]
+      },
+      {
+       "s": "knockOnWall"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r7",
+        "r11"
+       ]
+      },
+      {
+       "s": "leaveKitchenWithKey"
+      }
+     ],
+     [
+      "r11",
+      {
+       "s": "goToF1WithKey"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "searchCrateForKey"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "leaveCaveAfterAlomone"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "returnOnRaftAfterAlomone"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterKitchenAfterButler"
+    }
+   },
+   "n9": {
+    "n": "step7",
+    "c": [
+     [
+      "r2",
+      "n3"
+     ]
+    ],
+    "d": "n8"
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      2565,
+      9679,
+      2571,
+      9685,
+      0,
+      0
+     ]
+    ]
+   },
+   "r2": {
+    "o": "vb",
+    "id": 14769,
+    "v": 1
+   },
+   "r3": {
+    "o": "vp",
+    "id": 223,
+    "v": 7
+   },
+   "r4": {
+    "o": "zone",
+    "z": [
+     [
+      2564,
+      3267,
+      2576,
+      3275,
+      1,
+      1
+     ]
+    ]
+   },
+   "r5": {
+    "o": "or",
+    "a": [
+     {
+      "o": "vb",
+      "id": 14772,
+      "v": 1
+     },
+     {
+      "o": "item",
+      "nm": "Carnillean armour",
+      "ids": [
+       2405
+      ],
+      "bank": 1
+     }
+    ]
+   },
+   "r6": {
+    "o": "zone",
+    "z": [
+     [
+      2600,
+      9666,
+      2615,
+      9693,
+      0,
+      0
+     ]
+    ]
+   },
+   "r7": {
+    "o": "zone",
+    "z": [
+     [
+      2535,
+      9692,
+      2550,
+      9703,
+      0,
+      0
+     ]
+    ]
+   },
+   "r8": {
+    "o": "or",
+    "a": [
+     {
+      "o": "item",
+      "nm": "Hazeel scroll",
+      "ids": [
+       2403
+      ],
+      "bank": 1
+     },
+     {
+      "o": "vb",
+      "id": 14780,
+      "v": 1
+     }
+    ]
+   },
+   "r9": {
+    "o": "zone",
+    "z": [
+     [
+      2571,
+      3271,
+      2573,
+      3271,
+      1,
+      1
+     ]
+    ]
+   },
+   "r10": {
+    "o": "zone",
+    "z": [
+     [
+      2564,
+      3267,
+      2576,
+      3275,
+      2,
+      2
+     ]
+    ]
+   },
+   "r11": {
+    "o": "item",
+    "nm": "Chest key",
+    "ids": [
+     2404
+    ]
+   }
+  },
+  "alias": {
+   "leaveCaveForValves": [
+    "valveStepsCeril"
+   ],
+   "goUpToCupboard": [
+    "searchCupboardForEvidence"
+   ],
+   "returnOnRaftAfterKilling": [
+    "talkToCerilAfterKilling"
+   ],
+   "leaveCaveAfterKilling": [
+    "talkToCerilAfterKilling"
+   ],
+   "enterCaveAfterPoison": [
+    "talkToClivetAfterPoison"
+   ],
+   "goF2ToF1WithScroll": [
+    "giveAlomoneScroll"
+   ],
+   "knockOnWallToExit": [
+    "giveAlomoneScroll"
+   ],
+   "goF1ToF0WithScroll": [
+    "giveAlomoneScroll"
+   ],
+   "enterCaveWithScroll": [
+    "giveAlomoneScroll"
+   ],
+   "boardRaftWithScroll": [
+    "giveAlomoneScroll"
+   ],
+   "knockOnWall": [
+    "climbLadderWithKey"
+   ],
+   "returnOnRaftAfterAlomone": [
+    "searchCrateForKey"
+   ],
+   "leaveCaveAfterAlomone": [
+    "searchCrateForKey"
+   ],
+   "enterKitchenAfterButler": [
+    "searchCrateForKey"
+   ]
+  }
+ },
+ "unknown": {
+  "arg": 3,
+  "field": 2
+ },
+ "steps": {
+  "talkToCeril": {
+   "typ": "NpcStep",
+   "wp": [
+    2569,
+    3275,
+    0
+   ],
+   "ids": [
+    12085
+   ],
+   "text": "Talk to Ceril Carnillean in the south west of East Ardougne."
+  },
+  "enterCave": {
+   "typ": "ObjectStep",
+   "wp": [
+    2587,
+    3235,
+    0
+   ],
+   "ids": [
+    2852
+   ],
+   "text": "Enter the cave south east of the Clock Tower entrance."
+  },
+  "talkToClivet": {
+   "typ": "NpcStep",
+   "wp": [
+    2569,
+    9682,
+    0
+   ],
+   "ids": [
+    12095
+   ],
+   "text": "Talk to Clivet. You can choose to either side with him or with the Carnilleans."
+  },
+  "valveStepsCeril": {
+   "typ": null,
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "leaveCaveForValves": {
+   "typ": "ObjectStep",
+   "wp": [
+    2571,
+    9684,
+    0
+   ],
+   "ids": [
+    2853
+   ],
+   "text": "Go back to the surface."
+  },
+  "talkToCerilToFinish": {
+   "typ": "NpcStep",
+   "wp": [
+    2569,
+    3275,
+    0
+   ],
+   "ids": [
+    12085
+   ],
+   "text": "Talk to Ceril to finish the quest."
+  },
+  "searchCupboardForEvidence": {
+   "typ": "ObjectStep",
+   "wp": [
+    2574,
+    3267,
+    1
+   ],
+   "ids": [
+    2850
+   ],
+   "text": "Search the cupboard in the east room."
+  },
+  "goUpToCupboard": {
+   "typ": "ObjectStep",
+   "wp": [
+    2569,
+    3269,
+    0
+   ],
+   "ids": [
+    15645
+   ],
+   "text": "Go upstairs in the house."
+  },
+  "leaveCaveAfterKilling": {
+   "typ": "ObjectStep",
+   "wp": [
+    2571,
+    9684,
+    0
+   ],
+   "ids": [
+    2853
+   ],
+   "text": "Return to Ceril Carnillean."
+  },
+  "returnOnRaftAfterKilling": {
+   "typ": "ObjectStep",
+   "wp": [
+    2607,
+    9693,
+    0
+   ],
+   "ids": [
+    2849
+   ],
+   "text": "Return to Ceril Carnillean."
+  },
+  "talkToCerilAfterKilling": {
+   "typ": "NpcStep",
+   "wp": [
+    2569,
+    3275,
+    0
+   ],
+   "ids": [
+    12085
+   ],
+   "text": "Bring the armour to Ceril in house in the south west of East Ardougne."
+  },
+  "retrieveArmourFromChest": {
+   "typ": "ObjectStep",
+   "wp": [
+    2611,
+    9674,
+    0
+   ],
+   "ids": [],
+   "text": "Retrieve armour from the chest. If you'd like to keep a set of the armour for yourself, drop it and search the chest for more."
+  },
+  "killAlomone": {
+   "typ": "MultiNpcStep",
+   "wp": [
+    2607,
+    9673,
+    0
+   ],
+   "ids": [
+    12093,
+    14770,
+    11976
+   ],
+   "text": "Kill Alomone."
+  },
+  "talkToAlomoneToKill": {
+   "typ": "MultiNpcStep",
+   "wp": [
+    2607,
+    9673,
+    0
+   ],
+   "ids": [
+    12092,
+    14770,
+    11976
+   ],
+   "text": "Talk to Alomone. Be ready to fight him (level 13)."
+  },
+  "boardRaftToKill": {
+   "typ": "ObjectStep",
+   "wp": [
+    2568,
+    9679,
+    0
+   ],
+   "ids": [
+    2849
+   ],
+   "text": "Board the raft."
+  },
+  "enterCaveAfterValvesForCeril": {
+   "typ": "ObjectStep",
+   "wp": [
+    2587,
+    3235,
+    0
+   ],
+   "ids": [
+    2852
+   ],
+   "text": "Re-enter the cave."
+  },
+  "enterKitchen": {
+   "typ": "ObjectStep",
+   "wp": [
+    2570,
+    3267,
+    0
+   ],
+   "ids": [],
+   "text": "Climb down the ladder in the Carnillean house to the kitchen."
+  },
+  "usePoisonOnRange": {
+   "typ": "ObjectStep",
+   "wp": [
+    2538,
+    9699,
+    0
+   ],
+   "ids": [
+    2859
+   ],
+   "text": "Use the poison on the range."
+  },
+  "leaveCaveWithPoison": {
+   "typ": "ObjectStep",
+   "wp": [
+    2571,
+    9684,
+    0
+   ],
+   "ids": [
+    2853
+   ],
+   "text": "Go back to the surface."
+  },
+  "getPoison": {
+   "typ": "NpcStep",
+   "wp": [
+    2569,
+    9682,
+    0
+   ],
+   "ids": [
+    12095
+   ],
+   "text": "Talk to Clivet for some poison."
+  },
+  "talkToCerilAfterPoison": {
+   "typ": "NpcStep",
+   "wp": [
+    2569,
+    3275,
+    0
+   ],
+   "ids": [
+    12085
+   ],
+   "text": "Talk to Ceril Carnillean to confirm the results of the poison."
+  },
+  "leaveKitchen": {
+   "typ": "ObjectStep",
+   "wp": [
+    2544,
+    9694,
+    0
+   ],
+   "ids": [],
+   "text": "Leave the kitchen."
+  },
+  "talkToAlomone": {
+   "typ": "NpcStep",
+   "wp": [
+    2607,
+    9673,
+    0
+   ],
+   "ids": [
+    12092
+   ],
+   "text": "Talk to Alomone."
+  },
+  "boardRaftAfterPoison": {
+   "typ": "ObjectStep",
+   "wp": [
+    2568,
+    9679,
+    0
+   ],
+   "ids": [
+    2849
+   ],
+   "text": "Board the raft."
+  },
+  "talkToClivetAfterPoison": {
+   "typ": "NpcStep",
+   "wp": [
+    2569,
+    9682,
+    0
+   ],
+   "ids": [
+    12095
+   ],
+   "text": "Return to Clivet."
+  },
+  "enterCaveAfterPoison": {
+   "typ": "ObjectStep",
+   "wp": [
+    2587,
+    3235,
+    0
+   ],
+   "ids": [
+    2852
+   ],
+   "text": "Return to Clivet in the cave south of East Ardougne."
+  },
+  "valveStepsHazeel": {
+   "typ": null,
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "enterKitchenAfterButler": {
+   "typ": "ObjectStep",
+   "wp": [
+    2570,
+    3267,
+    0
+   ],
+   "ids": [],
+   "text": "Search a crate in the Carnillean's basement kitchen for a key."
+  },
+  "giveAlomoneScroll": {
+   "typ": "NpcStep",
+   "wp": [
+    2607,
+    9673,
+    0
+   ],
+   "ids": [
+    12092
+   ],
+   "text": "Return to Alomone with the scroll."
+  },
+  "goF2ToF1WithScroll": {
+   "typ": "ObjectStep",
+   "wp": [
+    2573,
+    3271,
+    2
+   ],
+   "ids": [
+    16679
+   ],
+   "text": "Return to Alomone with the scroll."
+  },
+  "knockOnWallToExit": {
+   "typ": "ObjectStep",
+   "wp": [
+    2572,
+    3270,
+    1
+   ],
+   "ids": [],
+   "text": "Return to Alomone with the scroll."
+  },
+  "goF1ToF0WithScroll": {
+   "typ": "ObjectStep",
+   "wp": [
+    2569,
+    3269,
+    1
+   ],
+   "ids": [],
+   "text": "Return to Alomone with the scroll."
+  },
+  "enterCaveWithScroll": {
+   "typ": "ObjectStep",
+   "wp": [
+    2587,
+    3235,
+    0
+   ],
+   "ids": [
+    2852
+   ],
+   "text": "Return to Alomone with the scroll."
+  },
+  "boardRaftWithScroll": {
+   "typ": "ObjectStep",
+   "wp": [
+    2568,
+    9679,
+    0
+   ],
+   "ids": [
+    2849
+   ],
+   "text": "Return to Alomone with the scroll. If the raft doesn't go to Alomone, repeat the prior valve steps first."
+  },
+  "searchChestForScroll": {
+   "typ": "ObjectStep",
+   "wp": [
+    2571,
+    3269,
+    2
+   ],
+   "ids": [],
+   "text": "Open the chest."
+  },
+  "climbLadderWithKey": {
+   "typ": "ObjectStep",
+   "wp": [
+    2573,
+    3271,
+    1
+   ],
+   "ids": [
+    16683
+   ],
+   "text": "Knock the wall to enter the hidden room, then climb up the ladder."
+  },
+  "knockOnWall": {
+   "typ": "ObjectStep",
+   "wp": [
+    2572,
+    3270,
+    1
+   ],
+   "ids": [],
+   "text": "Knock the wall to enter the hidden room."
+  },
+  "leaveKitchenWithKey": {
+   "typ": "ObjectStep",
+   "wp": [
+    2544,
+    9694,
+    0
+   ],
+   "ids": [],
+   "text": "Go back upstairs from the kitchen."
+  },
+  "goToF1WithKey": {
+   "typ": "ObjectStep",
+   "wp": [
+    2569,
+    3269,
+    0
+   ],
+   "ids": [],
+   "text": "Go upstairs in the house."
+  },
+  "searchCrateForKey": {
+   "typ": "ObjectStep",
+   "wp": [
+    2545,
+    9696,
+    0
+   ],
+   "ids": [
+    2858
+   ],
+   "text": "Search a crate in the Carnillean's basement kitchen for a key."
+  },
+  "returnOnRaftAfterAlomone": {
+   "typ": "ObjectStep",
+   "wp": [
+    2607,
+    9693,
+    0
+   ],
+   "ids": [
+    2849
+   ],
+   "text": "Search a crate in the Carnillean's kitchen for a key."
+  },
+  "leaveCaveAfterAlomone": {
+   "typ": "ObjectStep",
+   "wp": [
+    2571,
+    9684,
+    0
+   ],
+   "ids": [
+    2853
+   ],
+   "text": "Search a crate in the Carnillean's kitchen for a key."
+  }
+ }
+}

@@ -1,0 +1,1285 @@
+{
+ "quest": "Hazeel Cult",
+ "status": "draft",
+ "sources": {
+  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+  "wiki": {
+   "title": "Hazeel Cult",
+   "revision": 15328196
+  },
+  "quickGuide": {
+   "title": "Hazeel Cult/Quick guide",
+   "revision": 15401981
+  }
+ },
+ "step": {
+  "title": "Hazeel Cult",
+  "type": "quest",
+  "qp": 1,
+  "membersOnly": true,
+  "wikiUrl": "https://oldschool.runescape.wiki/w/Hazeel_Cult",
+  "quickGuideUrl": "https://oldschool.runescape.wiki/w/Hazeel_Cult/Quick_guide",
+  "mapLocation": {
+   "x": 2566,
+   "y": 3270,
+   "plane": 0,
+   "label": "Talk to Ceril Carnillean in East Ardougne, just north of the Clock Tower."
+  },
+  "npc": {
+   "nameEn": "Ceril Carnillean"
+  },
+  "itemsRequired": [],
+  "foes": [
+   "Alomone"
+  ]
+ },
+ "stages": {
+  "var": [
+   "varp",
+   223
+  ],
+  "route": [
+   {
+    "title": "Walkthrough",
+    "steps": [
+     "Speak with Ceril Carnillean ( of the house south-west of East Ardougne castle) Dialogue: \"What's wrong?\", \"Yes.\"",
+     "Siding with Ceril will reward 5 additional coins and gives you the option to obtain Carnillean armour, although this armour has lower defensive bonuses than an iron platebody.",
+     "Siding with Hazeel will reward the Hazeel's mark, which is a purely cosmetic reward.",
+     "Turn Valve 1 LEFT",
+     "Turn Valve 2 RIGHT",
+     "Turn Valve 3 RIGHT",
+     "Turn Valve 4 RIGHT",
+     "Turn Valve 5 RIGHT",
+     "Enter the Ardougne Sewers east of the clocktower (south of Valve 1) and talk to Clivet Dialogue: \"Alright, I've made my decision.\", \"I won't help you.\"",
+     "Board the raft, and talk to Alomone to the south.",
+     "Kill Alomone and loot the Carnillean armour from the chest.",
+     "Board the raft again and run back to the Carnilleans house.",
+     "Talk to Ceril Carnillean (quest incomplete!)",
+     "Search the cupboard in the room upstairs east of the staircase to find the evidence.",
+     "Enter the Ardougne Sewers east of the clocktower (south of Valve 1) and talk to Clivet to receive a bottle of poison Dialogue: \"Alright, I've made my decision.\", \"I'll help you.\", \"Alright, how do I do it?\"",
+     "Turn Valve 1 LEFT",
+     "Turn Valve 2 RIGHT",
+     "Turn Valve 3 RIGHT",
+     "Go to the basement of the Carnilleans house (ladder)",
+     "Use the bottle of poison on the cooking range.",
+     "Talk to Ceril on the .",
+     "Talk to Clivet.",
+     "Turn Valve 4 RIGHT",
+     "Turn Valve 5 RIGHT",
+     "Go back to the cave and board the raft.",
+     "Talk to Alomone.",
+     "Go back to the Carnilleans' house.",
+     "Talk to Butler Jones.",
+     "Go in the basement and search the crate for a Chest key.",
+     "Go up the ladder and stairs and knock on the wall in the east room, and go up the ladder.",
+     "Unlock and search the chest to find the scroll.",
+     "Return to Alomone."
+    ]
+   }
+  ],
+  "stages": [
+   {
+    "at": 0,
+    "do": [
+     {
+      "t": "Talk to Ceril Carnillean in the south west of East Ardougne.",
+      "s": "Talk to Ceril Carnillean in the south west of East Ardougne.",
+      "k": "talkToCeril",
+      "at": [
+       2569,
+       3275,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12085
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 2,
+    "do": [
+     {
+      "t": "Enter the cave south east of the Clock Tower entrance.",
+      "s": "Enter the cave south east of the Clock Tower entrance.",
+      "k": "enterCave",
+      "at": [
+       2587,
+       3235,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2852
+       ]
+      }
+     },
+     {
+      "t": "Talk to Clivet. You can choose to either side with him or with the Carnilleans.",
+      "s": "Talk to Clivet. You can choose to either side with him or with the Carnilleans.",
+      "k": "talkToClivet",
+      "at": [
+       2569,
+       9682,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12095
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 3,
+    "do": [
+     {
+      "t": "Enter the cave south east of the Clock Tower entrance.",
+      "s": "Enter the cave south east of the Clock Tower entrance.",
+      "k": "enterCave",
+      "at": [
+       2587,
+       3235,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2852
+       ]
+      }
+     },
+     {
+      "t": "Talk to Clivet. You can choose to either side with him or with the Carnilleans.",
+      "s": "Talk to Clivet. You can choose to either side with him or with the Carnilleans.",
+      "k": "talkToClivet",
+      "at": [
+       2569,
+       9682,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12095
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 4,
+    "do": [
+     {
+      "t": "Enter the cave south east of the Clock Tower entrance.",
+      "s": "Enter the cave south east of the Clock Tower entrance.",
+      "k": "enterCave",
+      "at": [
+       2587,
+       3235,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2852
+       ]
+      }
+     },
+     {
+      "t": "Talk to Clivet for some poison.",
+      "s": "Talk to Clivet for some poison.",
+      "k": "getPoison",
+      "at": [
+       2569,
+       9682,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12095
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder in the Carnillean house to the kitchen.",
+      "s": "Climb down the ladder in the Carnillean house to the kitchen.",
+      "k": "enterKitchen",
+      "at": [
+       2570,
+       3267,
+       0
+      ]
+     },
+     {
+      "t": "Go back to the surface.",
+      "s": "Go back to the surface.",
+      "k": "leaveCaveWithPoison",
+      "at": [
+       2571,
+       9684,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2853
+       ]
+      }
+     },
+     {
+      "t": "Use the poison on the range.",
+      "s": "Use the poison on the range.",
+      "k": "usePoisonOnRange",
+      "at": [
+       2538,
+       9699,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2859
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "valveStepsCeril"
+     },
+     {
+      "t": "Go back to the surface.",
+      "s": "Go back to the surface.",
+      "k": "leaveCaveForValves",
+      "at": [
+       2571,
+       9684,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2853
+       ]
+      }
+     },
+     {
+      "t": "Re-enter the cave.",
+      "s": "Re-enter the cave.",
+      "k": "enterCaveAfterValvesForCeril",
+      "at": [
+       2587,
+       3235,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2852
+       ]
+      }
+     },
+     {
+      "t": "Board the raft.",
+      "s": "Board the raft.",
+      "k": "boardRaftToKill",
+      "at": [
+       2568,
+       9679,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2849
+       ]
+      }
+     },
+     {
+      "t": "Talk to Alomone. Be ready to fight him (level 13).",
+      "s": "Talk to Alomone. Be ready to fight him (level 13).",
+      "k": "talkToAlomoneToKill",
+      "at": [
+       2607,
+       9673,
+       0
+      ]
+     },
+     {
+      "t": "Kill Alomone.",
+      "s": "Kill Alomone.",
+      "k": "killAlomone",
+      "at": [
+       2607,
+       9673,
+       0
+      ]
+     },
+     {
+      "t": "Retrieve armour from the chest. If you'd like to keep a set of the armour for yourself, drop it and search the chest for more.",
+      "s": "Retrieve armour from the chest. If you'd like to keep a set of the armour for yourself, drop it and search the chest for more.",
+      "k": "retrieveArmourFromChest",
+      "at": [
+       2611,
+       9674,
+       0
+      ]
+     },
+     {
+      "t": "Bring the armour to Ceril in house in the south west of East Ardougne.",
+      "s": "Bring the armour to Ceril in house in the south west of East Ardougne.",
+      "k": "talkToCerilAfterKilling",
+      "at": [
+       2569,
+       3275,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12085
+       ]
+      }
+     },
+     {
+      "t": "Return to Ceril Carnillean.",
+      "s": "Return to Ceril Carnillean.",
+      "k": "returnOnRaftAfterKilling",
+      "at": [
+       2607,
+       9693,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2849
+       ]
+      }
+     },
+     {
+      "t": "Return to Ceril Carnillean.",
+      "s": "Return to Ceril Carnillean.",
+      "k": "leaveCaveAfterKilling",
+      "at": [
+       2571,
+       9684,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2853
+       ]
+      }
+     },
+     {
+      "t": "Go upstairs in the house.",
+      "s": "Go upstairs in the house.",
+      "k": "goUpToCupboard",
+      "at": [
+       2569,
+       3269,
+       0
+      ],
+      "hl": {
+       "obj": [
+        15645
+       ]
+      }
+     },
+     {
+      "t": "Search the cupboard in the east room.",
+      "s": "Search the cupboard in the east room.",
+      "k": "searchCupboardForEvidence",
+      "at": [
+       2574,
+       3267,
+       1
+      ],
+      "hl": {
+       "obj": [
+        2850
+       ]
+      }
+     },
+     {
+      "t": "Talk to Ceril to finish the quest.",
+      "s": "Talk to Ceril to finish the quest.",
+      "k": "talkToCerilToFinish",
+      "at": [
+       2569,
+       3275,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12085
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 5,
+    "do": [
+     {
+      "t": "Talk to Ceril Carnillean to confirm the results of the poison.",
+      "s": "Talk to Ceril Carnillean to confirm the results of the poison.",
+      "k": "talkToCerilAfterPoison",
+      "at": [
+       2569,
+       3275,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12085
+       ]
+      }
+     },
+     {
+      "t": "Leave the kitchen.",
+      "s": "Leave the kitchen.",
+      "k": "leaveKitchen",
+      "at": [
+       2544,
+       9694,
+       0
+      ]
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "valveStepsHazeel"
+     },
+     {
+      "t": "Return to Clivet in the cave south of East Ardougne.",
+      "s": "Return to Clivet in the cave south of East Ardougne.",
+      "k": "enterCaveAfterPoison",
+      "at": [
+       2587,
+       3235,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2852
+       ]
+      }
+     },
+     {
+      "t": "Return to Clivet.",
+      "s": "Return to Clivet.",
+      "k": "talkToClivetAfterPoison",
+      "at": [
+       2569,
+       9682,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12095
+       ]
+      }
+     },
+     {
+      "t": "Board the raft.",
+      "s": "Board the raft.",
+      "k": "boardRaftAfterPoison",
+      "at": [
+       2568,
+       9679,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2849
+       ]
+      }
+     },
+     {
+      "t": "Talk to Alomone.",
+      "s": "Talk to Alomone.",
+      "k": "talkToAlomone",
+      "at": [
+       2607,
+       9673,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12092
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 6,
+    "do": [
+     {
+      "t": "Search a crate in the Carnillean's basement kitchen for a key.",
+      "s": "Search a crate in the Carnillean's basement kitchen for a key.",
+      "k": "enterKitchenAfterButler",
+      "at": [
+       2570,
+       3267,
+       0
+      ]
+     },
+     {
+      "t": "Search a crate in the Carnillean's kitchen for a key.",
+      "s": "Search a crate in the Carnillean's kitchen for a key.",
+      "k": "returnOnRaftAfterAlomone",
+      "at": [
+       2607,
+       9693,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2849
+       ]
+      }
+     },
+     {
+      "t": "Search a crate in the Carnillean's kitchen for a key.",
+      "s": "Search a crate in the Carnillean's kitchen for a key.",
+      "k": "leaveCaveAfterAlomone",
+      "at": [
+       2571,
+       9684,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2853
+       ]
+      }
+     },
+     {
+      "t": "Search a crate in the Carnillean's basement kitchen for a key.",
+      "s": "Search a crate in the Carnillean's basement kitchen for a key.",
+      "k": "searchCrateForKey",
+      "at": [
+       2545,
+       9696,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2858
+       ]
+      }
+     },
+     {
+      "t": "Go upstairs in the house.",
+      "s": "Go upstairs in the house.",
+      "k": "goToF1WithKey",
+      "at": [
+       2569,
+       3269,
+       0
+      ]
+     },
+     {
+      "t": "Go back upstairs from the kitchen.",
+      "s": "Go back upstairs from the kitchen.",
+      "k": "leaveKitchenWithKey",
+      "at": [
+       2544,
+       9694,
+       0
+      ]
+     },
+     {
+      "t": "Knock the wall to enter the hidden room.",
+      "s": "Knock the wall to enter the hidden room.",
+      "k": "knockOnWall",
+      "at": [
+       2572,
+       3270,
+       1
+      ]
+     },
+     {
+      "t": "Knock the wall to enter the hidden room, then climb up the ladder.",
+      "s": "Knock the wall to enter the hidden room, then climb up the ladder.",
+      "k": "climbLadderWithKey",
+      "at": [
+       2573,
+       3271,
+       1
+      ],
+      "hl": {
+       "obj": [
+        16683
+       ]
+      }
+     },
+     {
+      "t": "Open the chest.",
+      "s": "Open the chest.",
+      "k": "searchChestForScroll",
+      "at": [
+       2571,
+       3269,
+       2
+      ]
+     },
+     {
+      "t": "Return to Alomone with the scroll.",
+      "s": "Return to Alomone with the scroll.",
+      "k": "enterCaveWithScroll",
+      "at": [
+       2587,
+       3235,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2852
+       ]
+      }
+     },
+     {
+      "t": "Return to Alomone with the scroll.",
+      "s": "Return to Alomone with the scroll.",
+      "k": "goF2ToF1WithScroll",
+      "at": [
+       2573,
+       3271,
+       2
+      ],
+      "hl": {
+       "obj": [
+        16679
+       ]
+      }
+     },
+     {
+      "t": "Return to Alomone with the scroll.",
+      "s": "Return to Alomone with the scroll.",
+      "k": "goF1ToF0WithScroll",
+      "at": [
+       2569,
+       3269,
+       1
+      ]
+     },
+     {
+      "t": "Return to Alomone with the scroll.",
+      "s": "Return to Alomone with the scroll.",
+      "k": "knockOnWallToExit",
+      "at": [
+       2572,
+       3270,
+       1
+      ]
+     },
+     {
+      "t": "Return to Alomone with the scroll. If the raft doesn't go to Alomone, repeat the prior valve steps first.",
+      "s": "Return to Alomone with the scroll. If the raft doesn't go to Alomone, repeat the prior valve steps first.",
+      "k": "boardRaftWithScroll",
+      "at": [
+       2568,
+       9679,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2849
+       ]
+      }
+     },
+     {
+      "t": "Return to Alomone with the scroll.",
+      "s": "Return to Alomone with the scroll.",
+      "k": "giveAlomoneScroll",
+      "at": [
+       2607,
+       9673,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12092
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "valveStepsCeril"
+     },
+     {
+      "t": "Go back to the surface.",
+      "s": "Go back to the surface.",
+      "k": "leaveCaveForValves",
+      "at": [
+       2571,
+       9684,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2853
+       ]
+      }
+     },
+     {
+      "t": "Re-enter the cave.",
+      "s": "Re-enter the cave.",
+      "k": "enterCaveAfterValvesForCeril",
+      "at": [
+       2587,
+       3235,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2852
+       ]
+      }
+     },
+     {
+      "t": "Board the raft.",
+      "s": "Board the raft.",
+      "k": "boardRaftToKill",
+      "at": [
+       2568,
+       9679,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2849
+       ]
+      }
+     },
+     {
+      "t": "Talk to Alomone. Be ready to fight him (level 13).",
+      "s": "Talk to Alomone. Be ready to fight him (level 13).",
+      "k": "talkToAlomoneToKill",
+      "at": [
+       2607,
+       9673,
+       0
+      ]
+     },
+     {
+      "t": "Kill Alomone.",
+      "s": "Kill Alomone.",
+      "k": "killAlomone",
+      "at": [
+       2607,
+       9673,
+       0
+      ]
+     },
+     {
+      "t": "Retrieve armour from the chest. If you'd like to keep a set of the armour for yourself, drop it and search the chest for more.",
+      "s": "Retrieve armour from the chest. If you'd like to keep a set of the armour for yourself, drop it and search the chest for more.",
+      "k": "retrieveArmourFromChest",
+      "at": [
+       2611,
+       9674,
+       0
+      ]
+     },
+     {
+      "t": "Bring the armour to Ceril in house in the south west of East Ardougne.",
+      "s": "Bring the armour to Ceril in house in the south west of East Ardougne.",
+      "k": "talkToCerilAfterKilling",
+      "at": [
+       2569,
+       3275,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12085
+       ]
+      }
+     },
+     {
+      "t": "Return to Ceril Carnillean.",
+      "s": "Return to Ceril Carnillean.",
+      "k": "returnOnRaftAfterKilling",
+      "at": [
+       2607,
+       9693,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2849
+       ]
+      }
+     },
+     {
+      "t": "Return to Ceril Carnillean.",
+      "s": "Return to Ceril Carnillean.",
+      "k": "leaveCaveAfterKilling",
+      "at": [
+       2571,
+       9684,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2853
+       ]
+      }
+     },
+     {
+      "t": "Go upstairs in the house.",
+      "s": "Go upstairs in the house.",
+      "k": "goUpToCupboard",
+      "at": [
+       2569,
+       3269,
+       0
+      ],
+      "hl": {
+       "obj": [
+        15645
+       ]
+      }
+     },
+     {
+      "t": "Search the cupboard in the east room.",
+      "s": "Search the cupboard in the east room.",
+      "k": "searchCupboardForEvidence",
+      "at": [
+       2574,
+       3267,
+       1
+      ],
+      "hl": {
+       "obj": [
+        2850
+       ]
+      }
+     },
+     {
+      "t": "Talk to Ceril to finish the quest.",
+      "s": "Talk to Ceril to finish the quest.",
+      "k": "talkToCerilToFinish",
+      "at": [
+       2569,
+       3275,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12085
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 7,
+    "do": [
+     {
+      "t": "Search a crate in the Carnillean's basement kitchen for a key.",
+      "s": "Search a crate in the Carnillean's basement kitchen for a key.",
+      "k": "enterKitchenAfterButler",
+      "at": [
+       2570,
+       3267,
+       0
+      ]
+     },
+     {
+      "t": "Search a crate in the Carnillean's kitchen for a key.",
+      "s": "Search a crate in the Carnillean's kitchen for a key.",
+      "k": "returnOnRaftAfterAlomone",
+      "at": [
+       2607,
+       9693,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2849
+       ]
+      }
+     },
+     {
+      "t": "Search a crate in the Carnillean's kitchen for a key.",
+      "s": "Search a crate in the Carnillean's kitchen for a key.",
+      "k": "leaveCaveAfterAlomone",
+      "at": [
+       2571,
+       9684,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2853
+       ]
+      }
+     },
+     {
+      "t": "Search a crate in the Carnillean's basement kitchen for a key.",
+      "s": "Search a crate in the Carnillean's basement kitchen for a key.",
+      "k": "searchCrateForKey",
+      "at": [
+       2545,
+       9696,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2858
+       ]
+      }
+     },
+     {
+      "t": "Go upstairs in the house.",
+      "s": "Go upstairs in the house.",
+      "k": "goToF1WithKey",
+      "at": [
+       2569,
+       3269,
+       0
+      ]
+     },
+     {
+      "t": "Go back upstairs from the kitchen.",
+      "s": "Go back upstairs from the kitchen.",
+      "k": "leaveKitchenWithKey",
+      "at": [
+       2544,
+       9694,
+       0
+      ]
+     },
+     {
+      "t": "Knock the wall to enter the hidden room.",
+      "s": "Knock the wall to enter the hidden room.",
+      "k": "knockOnWall",
+      "at": [
+       2572,
+       3270,
+       1
+      ]
+     },
+     {
+      "t": "Knock the wall to enter the hidden room, then climb up the ladder.",
+      "s": "Knock the wall to enter the hidden room, then climb up the ladder.",
+      "k": "climbLadderWithKey",
+      "at": [
+       2573,
+       3271,
+       1
+      ],
+      "hl": {
+       "obj": [
+        16683
+       ]
+      }
+     },
+     {
+      "t": "Open the chest.",
+      "s": "Open the chest.",
+      "k": "searchChestForScroll",
+      "at": [
+       2571,
+       3269,
+       2
+      ]
+     },
+     {
+      "t": "Return to Alomone with the scroll.",
+      "s": "Return to Alomone with the scroll.",
+      "k": "enterCaveWithScroll",
+      "at": [
+       2587,
+       3235,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2852
+       ]
+      }
+     },
+     {
+      "t": "Return to Alomone with the scroll.",
+      "s": "Return to Alomone with the scroll.",
+      "k": "goF2ToF1WithScroll",
+      "at": [
+       2573,
+       3271,
+       2
+      ],
+      "hl": {
+       "obj": [
+        16679
+       ]
+      }
+     },
+     {
+      "t": "Return to Alomone with the scroll.",
+      "s": "Return to Alomone with the scroll.",
+      "k": "goF1ToF0WithScroll",
+      "at": [
+       2569,
+       3269,
+       1
+      ]
+     },
+     {
+      "t": "Return to Alomone with the scroll.",
+      "s": "Return to Alomone with the scroll.",
+      "k": "knockOnWallToExit",
+      "at": [
+       2572,
+       3270,
+       1
+      ]
+     },
+     {
+      "t": "Return to Alomone with the scroll. If the raft doesn't go to Alomone, repeat the prior valve steps first.",
+      "s": "Return to Alomone with the scroll. If the raft doesn't go to Alomone, repeat the prior valve steps first.",
+      "k": "boardRaftWithScroll",
+      "at": [
+       2568,
+       9679,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2849
+       ]
+      }
+     },
+     {
+      "t": "Return to Alomone with the scroll.",
+      "s": "Return to Alomone with the scroll.",
+      "k": "giveAlomoneScroll",
+      "at": [
+       2607,
+       9673,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12092
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "valveStepsCeril"
+     },
+     {
+      "t": "Go back to the surface.",
+      "s": "Go back to the surface.",
+      "k": "leaveCaveForValves",
+      "at": [
+       2571,
+       9684,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2853
+       ]
+      }
+     },
+     {
+      "t": "Re-enter the cave.",
+      "s": "Re-enter the cave.",
+      "k": "enterCaveAfterValvesForCeril",
+      "at": [
+       2587,
+       3235,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2852
+       ]
+      }
+     },
+     {
+      "t": "Board the raft.",
+      "s": "Board the raft.",
+      "k": "boardRaftToKill",
+      "at": [
+       2568,
+       9679,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2849
+       ]
+      }
+     },
+     {
+      "t": "Talk to Alomone. Be ready to fight him (level 13).",
+      "s": "Talk to Alomone. Be ready to fight him (level 13).",
+      "k": "talkToAlomoneToKill",
+      "at": [
+       2607,
+       9673,
+       0
+      ]
+     },
+     {
+      "t": "Kill Alomone.",
+      "s": "Kill Alomone.",
+      "k": "killAlomone",
+      "at": [
+       2607,
+       9673,
+       0
+      ]
+     },
+     {
+      "t": "Retrieve armour from the chest. If you'd like to keep a set of the armour for yourself, drop it and search the chest for more.",
+      "s": "Retrieve armour from the chest. If you'd like to keep a set of the armour for yourself, drop it and search the chest for more.",
+      "k": "retrieveArmourFromChest",
+      "at": [
+       2611,
+       9674,
+       0
+      ]
+     },
+     {
+      "t": "Bring the armour to Ceril in house in the south west of East Ardougne.",
+      "s": "Bring the armour to Ceril in house in the south west of East Ardougne.",
+      "k": "talkToCerilAfterKilling",
+      "at": [
+       2569,
+       3275,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12085
+       ]
+      }
+     },
+     {
+      "t": "Return to Ceril Carnillean.",
+      "s": "Return to Ceril Carnillean.",
+      "k": "returnOnRaftAfterKilling",
+      "at": [
+       2607,
+       9693,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2849
+       ]
+      }
+     },
+     {
+      "t": "Return to Ceril Carnillean.",
+      "s": "Return to Ceril Carnillean.",
+      "k": "leaveCaveAfterKilling",
+      "at": [
+       2571,
+       9684,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2853
+       ]
+      }
+     },
+     {
+      "t": "Go upstairs in the house.",
+      "s": "Go upstairs in the house.",
+      "k": "goUpToCupboard",
+      "at": [
+       2569,
+       3269,
+       0
+      ],
+      "hl": {
+       "obj": [
+        15645
+       ]
+      }
+     },
+     {
+      "t": "Search the cupboard in the east room.",
+      "s": "Search the cupboard in the east room.",
+      "k": "searchCupboardForEvidence",
+      "at": [
+       2574,
+       3267,
+       1
+      ],
+      "hl": {
+       "obj": [
+        2850
+       ]
+      }
+     },
+     {
+      "t": "Talk to Ceril to finish the quest.",
+      "s": "Talk to Ceril to finish the quest.",
+      "k": "talkToCerilToFinish",
+      "at": [
+       2569,
+       3275,
+       0
+      ],
+      "hl": {
+       "npc": [
+        12085
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "facts": {
+  "id": "Hazeel Cult",
+  "stepIds": [
+   "DRAFT"
+  ],
+  "members": false,
+  "requirements": {
+   "skills": {},
+   "questPoints": 0,
+   "quests": [],
+   "manual": [],
+   "capabilities": [
+    "combat"
+   ],
+   "unparsed": "Able to defeat a level 13 cultist (this applies only if you're taking Ceril's side)",
+   "text": "Able to defeat a level 13 cultist (this applies only if you're taking Ceril's side)"
+  },
+  "rewards": {
+   "questPoints": 1,
+   "xp": {
+    "thieving": 1500
+   },
+   "coins": null
+  },
+  "resourceFlow": null,
+  "length": "Very Short",
+  "source": {
+   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15328196",
+   "title": "Hazeel Cult",
+   "revision": 15328196,
+   "retrievedAt": "2026-11-15T05:05:43.346Z"
+  }
+ },
+ "unknown": [
+  "fight \"Alomone\": no combat data",
+  "step \"valveStepsCeril\": Quest Helper gives no tile",
+  "step \"valveStepsHazeel\": Quest Helper gives no tile",
+  "Quest Helper condition \"arg\" is not understood (3)",
+  "Quest Helper condition \"field\" is not understood (2)",
+  "requirement not reviewed: Able to defeat a level 13 cultist (this applies only if you're taking Ceril's side)",
+  "what the quest uses up and hands out is not reviewed"
+ ]
+}

@@ -1,0 +1,316 @@
+{
+ "title": "Rag and Bone Man I",
+ "cls": "RagAndBoneManI",
+ "var": [
+  "varp",
+  714
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToOddOldMan"
+   },
+   "1": {
+    "s": "talkToOddOldMan"
+   },
+   "2": "n1",
+   "3": {
+    "s": "talkToFinish"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "doQuest",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "giveBones"
+      }
+     ],
+     [
+      "r2",
+      "n2"
+     ],
+     [
+      "r3",
+      "n3"
+     ]
+    ],
+    "d": "n4"
+   },
+   "n2": {
+    "n": "cookingSteps",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 2046,
+       "v": 4
+      },
+      {
+       "s": "removePot"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 2046,
+       "op": ">=",
+       "v": 3
+      },
+      {
+       "s": "waitForCooking"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 2046,
+       "op": ">=",
+       "v": 2
+      },
+      {
+       "s": "lightLogs"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 2046,
+       "op": ">=",
+       "v": 1
+      },
+      {
+       "s": "useBoneOnBoiler"
+      }
+     ]
+    ],
+    "d": {
+     "s": "placeLogs"
+    },
+    "l": "r1"
+   },
+   "n3": {
+    "n": "preparingBonesSteps",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Pot of vinegar",
+       "ids": [
+        7811
+       ],
+       "q": 8,
+       "bank": 1
+      },
+      {
+       "s": "useBonesOnVinegar"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 2047,
+       "v": 1
+      },
+      {
+       "s": "makePotOfVinegar"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToFortunato"
+    },
+    "l": "r2"
+   },
+   "n4": {
+    "n": "collectBonesSteps",
+    "c": [
+     [
+      {
+       "o": "or",
+       "a": [
+        {
+         "o": "?",
+         "d": "call getBonesOnFloor"
+        }
+       ]
+      },
+      {
+       "s": "pickupBone"
+      }
+     ]
+    ],
+    "d": {
+     "s": "?"
+    },
+    "l": "r3"
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "and",
+    "a": [
+     {
+      "o": "?",
+      "d": "call allBonesPolished"
+     }
+    ]
+   },
+   "r2": {
+    "o": "and",
+    "a": [
+     {
+      "o": "?",
+      "d": "call allBonesAddedToVinegar"
+     }
+    ]
+   },
+   "r3": {
+    "o": "and",
+    "a": [
+     {
+      "o": "?",
+      "d": "call allBonesObtained"
+     }
+    ]
+   }
+  },
+  "alias": {
+   "talkToFinish": [
+    "giveBones"
+   ]
+  }
+ },
+ "unknown": {
+  "call allBonesPolished": 1,
+  "call allBonesAddedToVinegar": 1,
+  "call allBonesObtained": 1,
+  "call getBonesOnFloor": 1
+ },
+ "steps": {
+  "talkToOddOldMan": {
+   "typ": "NpcStep",
+   "wp": [
+    3362,
+    3502,
+    0
+   ],
+   "ids": [
+    1259
+   ],
+   "text": "Talk to the Odd Old Man east of Varrock."
+  },
+  "pickupBone": {
+   "typ": "ItemStep",
+   "wp": null,
+   "ids": [],
+   "text": "Pickup the bone."
+  },
+  "giveBones": {
+   "typ": "NpcStep",
+   "wp": [
+    3362,
+    3502,
+    0
+   ],
+   "ids": [
+    1259
+   ],
+   "text": "Give the Odd Old Man the bones."
+  },
+  "talkToFinish": {
+   "typ": "NpcStep",
+   "wp": [
+    3362,
+    3502,
+    0
+   ],
+   "ids": [
+    1259
+   ],
+   "text": "Talk to the Odd Old Man to finish."
+  },
+  "placeLogs": {
+   "typ": "ObjectStep",
+   "wp": [
+    3360,
+    3505,
+    0
+   ],
+   "ids": [
+    14004
+   ],
+   "text": "Place logs under the pot-boiler near the Odd Old Man. If you've already polished all the bones, hand them in to the Odd Old Man."
+  },
+  "removePot": {
+   "typ": "ObjectStep",
+   "wp": [
+    3360,
+    3505,
+    0
+   ],
+   "ids": [
+    14004
+   ],
+   "text": "Take the pot from the pot-boiler."
+  },
+  "waitForCooking": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Wait for the bones to be cleaned. You can hop worlds to make this happen instantly."
+  },
+  "lightLogs": {
+   "typ": "ObjectStep",
+   "wp": [
+    3360,
+    3505,
+    0
+   ],
+   "ids": [
+    14004
+   ],
+   "text": "Light the logs under the pot-boiler."
+  },
+  "useBoneOnBoiler": {
+   "typ": "ObjectStep",
+   "wp": [
+    3360,
+    3505,
+    0
+   ],
+   "ids": [
+    14004
+   ],
+   "text": "Add a bone to the pot boiler."
+  },
+  "talkToFortunato": {
+   "typ": "NpcStep",
+   "wp": [
+    3085,
+    3251,
+    0
+   ],
+   "ids": [
+    1260
+   ],
+   "text": "Talk to Fortunato in Draynor Village, and then buy 8 jugs of vinegar from him."
+  },
+  "useBonesOnVinegar": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use the bones on the pots of vinegar."
+  },
+  "makePotOfVinegar": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use the vinegar on pots for 8 pots of vinegar."
+  }
+ }
+}
