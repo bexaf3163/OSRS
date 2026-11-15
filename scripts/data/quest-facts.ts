@@ -53,7 +53,7 @@ export function questFacts(article: WikiArticle, stepIds: string[], retrievedAt:
   const alternativeEscape = /\b(?:defeat|killing) or run(?:ning)? away\b/i.test(requirements);
   if (alternativeEscape) capabilities.push('survival'); // Fighting OR escaping, never an invented requirement to do both.
   else if (/\b(?:defeat|killing|defend)\b/i.test(requirements)) capabilities.push('combat');
-  if (!alternativeEscape && /\b(?:running away|run from|get past|evade)\b/i.test(requirements)) capabilities.push('evasion');
+  if (!alternativeEscape && /\b(?:running away|run from|run past|get past|evade)\b/i.test(requirements)) capabilities.push('evasion');
   if (/\bhealth (?:recovery|regeneration)\b/i.test(requirements)) capabilities.push('regeneration');
   // Review each clause: recognising one skill must not hide another, unsupported prerequisite.
   const unparsed = lines.filter((_, i) => !consumed.has(i)).map(line => line.replace(/^\*+\s*/, '').trim()).filter(Boolean).filter(line => {
@@ -108,13 +108,14 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     uncertainReceipts: ['Antique lamp', 'Scroll box (beginner)'], partialDelivery: false, fromStartOnly: true,
   } },
   'The Restless Ghost': { revision: 15390078, flow: {
-    // Escape the skeleton; no bought ingredient or mandatory kill. The giver may reuse an existing amulet.
-    consumes: [], receives: [], unknownItems: ["Ghost's skull"], uncertainReceipts: ['Ghostspeak amulet'],
+    // Escape the skeleton; no bought ingredient or mandatory kill. The giver may reuse an existing amulet,
+    // but the ghost is only talked to while it is worn, so one is held at the end.
+    consumes: [], receives: [], unknownItems: ["Ghost's skull"], ensures: ['Ghostspeak amulet'],
     partialDelivery: false, fromStartOnly: true,
   } },
   'Lost City': { revision: 15398217, flow: {
-    // The Dramen branch is cut after the Tree spirit and carved into the staff that opens Zanaris; the staff is kept.
-    consumes: [], receives: [], unknownItems: ['Dramen branch'], uncertainReceipts: ['Dramen staff'], partialDelivery: false, fromStartOnly: true,
+    // The Dramen branch is cut after the Tree spirit and carved into the staff that opens Zanaris; the quest ends wielding it.
+    consumes: [], receives: [], unknownItems: ['Dramen branch'], ensures: ['Dramen staff'], partialDelivery: false, fromStartOnly: true,
   } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
@@ -136,6 +137,7 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to defeat a level 111 [[Tanglefoot]] with limited weaponry',
   'The ability to defeat a level 195 [[Jungle Demon]]',
   'The ability to defeat 4 monsters from level 19 to 53 without a break.',
+  'The ability to run past two level 14 thieves, and one level 26.',
   'The ability to withstand and evade attacks from level 86 [[Fire Giant]]s and level 84 [[Moss Guardian]] without any equipment.',
   'The ability to defeat level 44, 63 and 137 enemies (all can be [[safespot]]ted)',
   'The ability to defeat a level 112 [[Khazard warlord]]',

@@ -1216,6 +1216,22 @@
   "Snape grass": {
    "buy": 910,
    "sell": 901
+  },
+  "Jug of water": {
+   "buy": 19,
+   "sell": 18
+  },
+  "Seasoned sardine": {
+   "buy": 503,
+   "sell": 7
+  },
+  "Raw sardine": {
+   "buy": 22,
+   "sell": 21
+  },
+  "Doogle leaves": {
+   "buy": 158,
+   "sell": 143
   }
  }
 }

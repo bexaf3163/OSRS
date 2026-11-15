@@ -4254,6 +4254,237 @@
     }
   },
   {
+    "id": "S7-11",
+    "stage": 7,
+    "type": "quest",
+    "title": "Monk's Friend",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Monk's_Friend",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Monk's_Friend/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2606,3209,0",
+    "mapLocation": {
+      "x": 2606,
+      "y": 3209,
+      "plane": 0,
+      "label": "The Ardougne Monastery south of East Ardougne"
+    },
+    "npc": {
+      "nameEn": "Brother Omad",
+      "location": "The Ardougne Monastery south of East Ardougne",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Brother_Omad"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Jug of water",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 1 gp.",
+        "wikiItemId": 1937,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Jug_of_water.png"
+      },
+      {
+        "nameEn": "Logs",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1511,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Logs.png"
+      }
+    ],
+    "reward": "1 QP, 2,000 Woodcutting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Brother Omad"
+      ],
+      "dialogChoices": [
+        "Why can't you sleep, what's wrong?",
+        "Yes",
+        "Who's Brother Cedric?",
+        "Where should I look?",
+        "Yes, I'd be happy to!"
+      ],
+      "highlightItems": [
+        "Jug of water",
+        "logs"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Monk's Friend"
+      }
+    }
+  },
+  {
+    "id": "S7-12",
+    "stage": 7,
+    "type": "quest",
+    "title": "Gertrude's Cat",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Gertrude's_Cat",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Gertrude's_Cat/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3150,3412,0",
+    "mapLocation": {
+      "x": 3150,
+      "y": 3412,
+      "plane": 0,
+      "label": "Her house just west of Varrock"
+    },
+    "npc": {
+      "nameEn": "Gertrude",
+      "location": "Her house just west of Varrock",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Gertrude"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bucket of milk",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Culinaromancer's Chest in Lumbridge Castle basement for 6 gp.",
+        "wikiItemId": 1927,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_milk.png"
+      },
+      {
+        "nameEn": "Coins",
+        "amount": 100,
+        "howToGet": "Free spawn: Asgarnian Ice Dungeon.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Seasoned sardine",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1552,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Seasoned_sardine.png"
+      },
+      {
+        "nameEn": "Raw sardine",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Gerrant's Fishy Business in Port Sarim for 10 gp.",
+        "wikiItemId": 327,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Raw_sardine.png"
+      },
+      {
+        "nameEn": "Doogle leaves",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1573,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Doogle_leaves.png"
+      }
+    ],
+    "reward": "1 QP, 1,525 Cooking XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Gertrude"
+      ],
+      "dialogChoices": [
+        "What will make you tell me?",
+        "Okay then, I'll pay."
+      ],
+      "highlightItems": [
+        "Bucket of milk",
+        "coins",
+        "Seasoned sardine",
+        "Raw sardine",
+        "Doogle leaves"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Gertrude's Cat"
+      }
+    }
+  },
+  {
+    "id": "S7-13",
+    "stage": 7,
+    "type": "quest",
+    "title": "Fishing Contest",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Fishing_Contest",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Fishing_Contest/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2876,3481,0",
+    "mapLocation": {
+      "x": 2876,
+      "y": 3481,
+      "plane": 0,
+      "label": "Austri"
+    },
+    "npc": {
+      "nameEn": "Austri",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Austri"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lumbridge General Store in Lumbridge for 3 gp.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
+      },
+      {
+        "nameEn": "Coins",
+        "amount": 5,
+        "howToGet": "Free spawn: Asgarnian Ice Dungeon.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Garlic",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Ardougne Spice Stall in East Ardougne for 3 gp.",
+        "wikiItemId": 1550,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Garlic.png"
+      },
+      {
+        "nameEn": "Fishing rod",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Gerrant's Fishy Business in Port Sarim for 5 gp.",
+        "wikiItemId": 307,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fishing_rod.png"
+      },
+      {
+        "nameEn": "Red vine worm",
+        "amount": 1,
+        "howToGet": "Obtained during the quest: dig at the red vine in McGrubor's Wood with a spade (3 needed).",
+        "wikiItemId": 25,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Red_vine_worm.png"
+      }
+    ],
+    "reward": "1 QP, 2,437 Fishing XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Austri"
+      ],
+      "dialogChoices": [
+        "I was wondering what was down those stairs?",
+        "Why not?",
+        "If you were my friend I wouldn't mind it.",
+        "Well, let's be friends!",
+        "And how am I meant to do that?"
+      ],
+      "highlightItems": [
+        "Spade",
+        "coins",
+        "Garlic",
+        "Fishing rod",
+        "Red vine worm"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Fishing Contest"
+      }
+    }
+  },
+  {
     "id": "S8-01",
     "stage": 8,
     "type": "quest",

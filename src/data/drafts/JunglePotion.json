@@ -1,0 +1,243 @@
+{
+ "quest": "Jungle Potion",
+ "status": "draft",
+ "sources": {
+  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+  "wiki": {
+   "title": "Jungle Potion",
+   "revision": 15390159
+  },
+  "quickGuide": {
+   "title": "Jungle Potion/Quick guide",
+   "revision": 15029261
+  }
+ },
+ "step": {
+  "title": "Jungle Potion",
+  "type": "quest",
+  "qp": 1,
+  "membersOnly": true,
+  "wikiUrl": "https://oldschool.runescape.wiki/w/Jungle_Potion",
+  "quickGuideUrl": "https://oldschool.runescape.wiki/w/Jungle_Potion/Quick_guide",
+  "mapLocation": {
+   "x": 2810,
+   "y": 3086,
+   "plane": 0,
+   "label": "Talk to Trufitus in Tai Bwo Wannai."
+  },
+  "npc": {
+   "nameEn": "Trufitus"
+  },
+  "itemsRequired": [],
+  "foes": []
+ },
+ "stages": {
+  "var": [
+   "varp",
+   175
+  ],
+  "route": [
+   {
+    "title": "Getting started",
+    "steps": [
+     "Talk to Trufitus in his house located north-east of Tai Bwo Wannai. Dialogue: \"It's a nice village, where is everyone?\", \"Me? How can I help?\", \"It sounds like just the challenge for me.\" Everytime you gather a new herb you need to go show it to Trufitus before being able to get a new kind of a herb."
+    ]
+   },
+   {
+    "title": "=Snake weed=",
+    "steps": [
+     "Go south-west of Tai Bwo Wannai until green and yellow vines labelled 'marshy jungle vine' are seen.",
+     "Search the vines and clean the herb. Your character may spend several minutes finding a herb.",
+     "Talk to Trufitus. Make sure you cleaned the herb. Dialogue: \"Of course!\""
+    ]
+   },
+   {
+    "title": "=Ardrigal=",
+    "steps": [
+     "Head north-east from Trufitus. There will be Harpie Bug Swarms and palm trees.",
+     "Search the palm trees and clean the herb.",
+     "Talk to Trufitus. Dialogue: \"Of course!\""
+    ]
+   },
+   {
+    "title": "=Sito foil=",
+    "steps": [
+     "To the direct south of Tai Bwo Wannai Village is a patch of scorched earth.",
+     "Search the scorched earth (the squares immediately next to the fire) for the herb and clean it.",
+     "Talk to Trufitus. Dialogue: \"Of course!\""
+    ]
+   },
+   {
+    "title": "=Volencia moss=",
+    "steps": [
+     "Go south-east from Trufitus until you reach the Karamja Jungle mine, marked with a File:Mining site icon.png pickaxe on minimap.",
+     "Search the rocks for the herb and clean it.",
+     "Talk to Trufitus. Dialogue: \"Of course!\""
+    ]
+   },
+   {
+    "title": "=Rogue's purse=",
+    "steps": [
+     "Go back by the Harpie Bug Swarms and head north-west until a cave is seen over the cavern. Search the rocks and enter the cave.",
+     "In the cave, head south, look for green spots on the wall labelled 'Fungus covered Cavern wall', then search them and clean the herb. This process may take up to a minute. Do not try to use a Rogue's purse dropped by a Jogre. It <u>must</u> be obtained via searching the wall.",
+     "Talk to Trufitus. Dialogue: \"Of course!\"",
+     "Congratulations, quest complete!"
+    ]
+   }
+  ],
+  "stages": [
+   {
+    "at": 1,
+    "do": [
+     {
+      "t": "Search a marshy jungle vine south of Tai Bwo Wannai for some snake weed.",
+      "s": "Search a marshy jungle vine south of Tai Bwo Wannai for snake weed",
+      "k": "getSnakeWeed",
+      "at": [
+       2763,
+       3044,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2575
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 3,
+    "do": [
+     {
+      "t": "Search the palm trees north east of Tai Bwo Wannai for an Ardrigal herb.",
+      "s": "Search the palm trees north-east of Tai Bwo Wannai for Ardrigal",
+      "k": "getArdrigal",
+      "at": [
+       2871,
+       3116,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2577
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 5,
+    "do": [
+     {
+      "t": "Search the scorched earth in the south of Tai Bwo Wannai for a Sito Foil herb.",
+      "s": "Search the scorched earth south of Tai Bwo Wannai for Sito Foil",
+      "k": "getSitoFoil",
+      "at": [
+       2791,
+       3047,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2579
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 7,
+    "do": [
+     {
+      "t": "Search the rock for a Volencia Moss herb at the mine south east of Tai Bwo Wannai.",
+      "s": "Search the rock at the mine south-east of Tai Bwo Wannai for moss",
+      "k": "getVolenciaMoss",
+      "at": [
+       2851,
+       3036,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2581
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 9,
+    "do": [
+     {
+      "t": "Enter the cave to the north by clicking on the rocks.",
+      "s": "Enter the cave to the north by clicking on the rocks.",
+      "k": "enterCave",
+      "at": [
+       2825,
+       3119,
+       0
+      ],
+      "hl": {
+       "obj": [
+        2584
+       ]
+      }
+     },
+     {
+      "t": "Get the Rogues Purse from the fungus covered wall in the underground dungeon.",
+      "s": "Search the fungus covered cavern wall for Rogue's purse",
+      "k": "getRoguePurseHerb",
+      "hl": {
+       "obj": [
+        2583
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "facts": {
+  "id": "Jungle Potion",
+  "stepIds": [
+   "DRAFT"
+  ],
+  "members": false,
+  "requirements": {
+   "skills": {
+    "herblore": 3
+   },
+   "questPoints": 0,
+   "quests": [
+    "Druidic Ritual"
+   ],
+   "manual": [],
+   "capabilities": [
+    "combat"
+   ],
+   "unparsed": "The ability to defend against level 53 [[Jogre]]s and level 46 [[Harpie Bug Swarm]]s.",
+   "text": "* Completion of [[Druidic Ritual]]\n* {{SCP|Herblore|3|link=yes}} {{Boostable|yes}} {{Questreqstart|no}}\n* The ability to defend against level 53 [[Jogre]]s and level 46 [[Harpie Bug Swarm]]s."
+  },
+  "rewards": {
+   "questPoints": 1,
+   "xp": {
+    "herblore": 775
+   },
+   "coins": 0
+  },
+  "resourceFlow": null,
+  "length": "Short",
+  "source": {
+   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15390159",
+   "title": "Jungle Potion",
+   "revision": 15390159,
+   "retrievedAt": "2026-11-14T23:08:57.512Z"
+  }
+ },
+ "unknown": [
+  "step \"getRoguePurseHerb\": Quest Helper gives no tile",
+  "requirement not reviewed: The ability to defend against level 53 Jogres and level 46 Harpie Bug Swarms.",
+  "what the quest uses up and hands out is not reviewed"
+ ]
+}

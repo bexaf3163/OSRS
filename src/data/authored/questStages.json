@@ -13814,6 +13814,707 @@
     }
    ]
   },
+  "S7-11": {
+   "var": [
+    "varp",
+    30
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Talk to Brother Omad at the Monastery south of Ardougne. Dialogue: \"Why can't you sleep, what's wrong?\", \"Yes\"",
+      "Go west of the monastery, slightly south-west of the Clock Tower, to a perfect stone circle, enter it and go down the ladder in the middle.",
+      "Follow the first path south, avoid the thieves and pick up the Child's blanket.",
+      "Return to Brother Omad and talk to him twice. Dialogue: \"Who's Brother Cedric?\", \"Where should I look?\"",
+      "Go north and talk to Brother Cedric, who is directly south of the Ardougne Zoo, near the well.",
+      "Talk to him again to give him a jug of water. Dialogue: \"Yes, I'd be happy to!\"",
+      "Speak to him again and give him the logs or plank.",
+      "Return to Brother Omad.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Brother Omad in the monastery south of East Ardougne.",
+       "s": "Talk to Brother Omad in the monastery south of East Ardougne.",
+       "k": "talkToOmad",
+       "at": [
+        2607,
+        3211,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4244
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Go down the ladder in a circle of stones west of the monastery.",
+       "s": "Go down the ladder in a circle of stones west of the monastery.",
+       "k": "goDownLadder",
+       "at": [
+        2561,
+        3222,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16680
+        ]
+       }
+      },
+      {
+       "t": "Pick up the Child's blanket in the room to the south.",
+       "s": "Pick up the Child's blanket in the room to the south.",
+       "k": "grabBlanket",
+       "at": [
+        2570,
+        9604,
+        0
+       ]
+      },
+      {
+       "t": "Bring the blanket back to Brother Omad in the monastery.",
+       "s": "Bring the blanket back to Brother Omad in the monastery.",
+       "k": "returnToOmadWithBlanket",
+       "at": [
+        2607,
+        3211,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4244
+        ]
+       }
+      },
+      {
+       "t": "Go back up the ladder.",
+       "s": "Go back up the ladder.",
+       "k": "goUpLadder",
+       "at": [
+        2561,
+        9622,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Talk to Brother Omad again.",
+       "s": "Talk to Brother Omad again.",
+       "k": "talkToOmadAgain",
+       "at": [
+        2607,
+        3211,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4244
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Talk to Brother Cedric north of the monastery.",
+       "s": "Talk to Brother Cedric north of the monastery.",
+       "k": "talkToCedric",
+       "at": [
+        2614,
+        3258,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4245
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Talk to Brother Cedric again.",
+       "s": "Talk to Brother Cedric again.",
+       "k": "talkToCedricWithJug",
+       "at": [
+        2614,
+        3258,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4245
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Talk to Brother Cedric again.",
+       "s": "Talk to Brother Cedric again.",
+       "k": "continueTalkingToCedric",
+       "at": [
+        2614,
+        3258,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4245
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Talk to Brother Cedric once again with logs.",
+       "s": "Talk to Brother Cedric once again with logs.",
+       "k": "talkToCedricWithLog",
+       "at": [
+        2614,
+        3258,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4245
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Return to Brother Omad to finish the quest.",
+       "s": "Return to Brother Omad to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        2607,
+        3211,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4244
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S7-12": {
+   "var": [
+    "varp",
+    180
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Pick up doogle leaves from behind Gertrude's house and use them on your raw sardine to make seasoned sardine.",
+      "Go to Varrock Square's newsstand and talk to either Shilop or Wilough, you need 100 coins. Dialogue: \"What will make you tell me?\", \"Okay then, I'll pay.\"",
+      "Go to the Lumber Yard north-east of Varrock and climb-over the broken fence.",
+      "Go up the ladder in the middle of the Lumber Yard.",
+      "Use a bucket of milk and a Seasoned sardine on Gertrude's cat then go back down the ladder.",
+      "Search the crates with a yellow \"Search crate\" option and a yellow \"Mew!\" above them until you find Fluffs' kitten. (Searching the same crate repeatedly will not work.)",
+      "Go back up the ladder and use Fluffs' kitten on Gertrude's cat.",
+      "Return to Gertrude.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Gertrude west of Varrock to start the quest.",
+       "s": "Talk to Gertrude west of Varrock to start the quest.",
+       "k": "talkToGertrude",
+       "at": [
+        3148,
+        3413,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7284
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Pickup some Doogle Leaves south of Gertrude's house.",
+       "s": "Pickup some Doogle Leaves south of Gertrude's house.",
+       "k": "pickupDoogle",
+       "has": "Doogle leaves",
+       "at": [
+        3152,
+        3399,
+        0
+       ]
+      },
+      {
+       "t": "Use your doogle leaves on the raw sardine.",
+       "s": "Use the doogle leaves on the raw sardine",
+       "k": "makeSeasonedSardine",
+       "has": "Seasoned sardine"
+      },
+      {
+       "t": "Talk to Shilop or Wilough in the Varrock Square.",
+       "s": "Talk to Shilop or Wilough in the Varrock Square.",
+       "k": "talkToChildren",
+       "at": [
+        3222,
+        3435,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3501
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Climb up the ladder in the Lumberyard.",
+       "s": "Climb up the ladder in the Lumberyard.",
+       "k": "climbLadder",
+       "at": [
+        3310,
+        3509,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11794
+        ]
+       }
+      },
+      {
+       "t": "Use the bucket of milk on Gertrude's cat upstairs in the Lumber Yard.",
+       "s": "Use the bucket of milk on Gertrude's cat",
+       "k": "gertrudesCat",
+       "at": [
+        3308,
+        3511,
+        1
+       ],
+       "hl": {
+        "npc": [
+         3497
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Climb up the ladder in the Lumberyard.",
+       "s": "Climb up the ladder in the Lumberyard.",
+       "k": "climbLadder2",
+       "at": [
+        3310,
+        3509,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11794
+        ]
+       }
+      },
+      {
+       "t": "Use the seasoned sardine on Gertrude's cat.",
+       "s": "Use the seasoned sardine on Gertrude's cat",
+       "k": "gertrudesCat2",
+       "at": [
+        3308,
+        3511,
+        1
+       ],
+       "hl": {
+        "npc": [
+         3497
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Search different crates downstairs in the Lumberyard until you find the kitten.",
+       "s": "Search the downstairs crates until you find the kitten",
+       "k": "searchNearbyCrates",
+       "at": [
+        3306,
+        3505,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3499
+        ]
+       }
+      },
+      {
+       "t": "Climb down ladder in the Lumberyard.",
+       "s": "Climb down ladder in the Lumberyard.",
+       "k": "climbDownLadderStep",
+       "at": [
+        3310,
+        3509,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11795
+        ]
+       }
+      },
+      {
+       "t": "Climb up the ladder in the Lumberyard.",
+       "s": "Climb up the ladder in the Lumberyard.",
+       "k": "climbUpLadderStep",
+       "at": [
+        3310,
+        3509,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11794
+        ]
+       }
+      },
+      {
+       "t": "Go back up the ladder and use Fluffs' kitten on Gertrude's cat.",
+       "s": "Use Fluffs' kitten on Gertrude's cat",
+       "k": "giveKittenToFluffy",
+       "at": [
+        3308,
+        3511,
+        1
+       ],
+       "hl": {
+        "npc": [
+         3497
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Return to Gertrude west of Varrock to complete the quest.",
+       "s": "Return to Gertrude west of Varrock to complete the quest.",
+       "k": "finishQuest",
+       "at": [
+        3148,
+        3413,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7284
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S7-13": {
+   "var": [
+    "varp",
+    11
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Speak to either dwarves on either side of the White Wolf Mountain. Dialogue: \"I was wondering what was down those stairs?\", \"Why not?\", \"If you were my friend I wouldn't mind it.\", \"Well, let's be friends!\", \"And how am I meant to do that?\" Note: Starting on the west side makes travelling by foot easier.",
+      "If you need garlic, go to Seers' Village and take it from the house south-west of the bank (it spawns on the table).",
+      "Bring a spade and make your way to McGrubor's Wood (either enter through the back or teleport to fairy ring if you completed at least half of Fairytale II - Cure a Queen) to gather 3 red vine worm. You can collect them by checking the vine just west of the fairy ring .",
+      "Either walk south to Hemenster or teleport to the Ranging Guild via your combat bracelet and go north-west.",
+      "If you don't have a Fishing Rod, purchase one from Grandpa Jack for in the house outside Hemenster entrance.",
+      "Enter Hemenster with the Fishing pass in your inventory.",
+      "Put a Garlic in the pipes to the north. Make sure to finish the dialogue.",
+      "Pay Bonzo 5 coins. Wait for the Sinister Stranger to move away from the pipes. Start fishing and wait for the contest to end.",
+      "After winning the contest, make your way back to the dwarf and show him the trophy.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Vestri just north of Catherby.",
+       "s": "Talk to Vestri just north of Catherby.",
+       "k": "talkToVestriStep",
+       "at": [
+        2821,
+        3486,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4078
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Enter Hemenster with your fishing pass.",
+       "s": "Enter Hemenster with your fishing pass.",
+       "k": "goToHemenster",
+       "at": [
+        2642,
+        3441,
+        0
+       ],
+       "hl": {
+        "obj": [
+         48
+        ]
+       }
+      },
+      {
+       "t": "Talk to Grandpa Jack to get a fishing rod.",
+       "s": "Talk to Grandpa Jack to get a fishing rod.",
+       "k": "grandpaJack",
+       "at": [
+        2649,
+        3451,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4075
+        ]
+       }
+      },
+      {
+       "t": "Teleport to the Ranging Guild and buy a fishing rod from Grandpa Jack outside Hemenster.",
+       "s": "Buy a fishing rod from Grandpa Jack outside Hemenster",
+       "k": "teleToHemenster",
+       "hl": {
+        "npc": [
+         4075
+        ]
+       }
+      },
+      {
+       "t": "Walk to Grandpa Jack outside Hemenster and buy a fishing rod.",
+       "s": "Buy a fishing rod from Grandpa Jack",
+       "k": "runToJack",
+       "at": [
+        2649,
+        3451,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4075
+        ]
+       }
+      },
+      {
+       "t": "Check the red vine just west of the fairy ring with a spade to collect 3 red vine worms.",
+       "s": "Dig at the red vine for 3 red vine worms",
+       "k": "goToRedVine",
+       "at": [
+        2631,
+        3496,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2990
+        ]
+       }
+      },
+      {
+       "t": "Enter McGrubor's Wood through the loose railing to reach the red vine.",
+       "s": "Enter McGrubor's Wood through the loose railing",
+       "k": "goToMcGruborWood",
+       "at": [
+        2662,
+        3500,
+        0
+       ],
+       "hl": {
+        "obj": [
+         51
+        ]
+       }
+      },
+      {
+       "t": "Take the garlic from the table in the house south-west of the Seers' Village bank.",
+       "s": "Take garlic from the table south-west of Seers' bank",
+       "k": "getGarlic",
+       "has": "Garlic",
+       "at": [
+        2714,
+        3478,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25930
+        ]
+       }
+      },
+      {
+       "t": "Speak to Bonzo to start the competition.",
+       "s": "Speak to Bonzo to start the competition.",
+       "k": "speakToBonzo",
+       "at": [
+        2641,
+        3437,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4069
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Put garlic in the pipes.",
+       "s": "Put garlic in the pipes.",
+       "k": "putGarlicInPipe",
+       "at": [
+        2638,
+        3446,
+        0
+       ],
+       "hl": {
+        "obj": [
+         41
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Catch the winning fish at the fishing spot near the pipes.",
+       "s": "Catch the winning fish at the fishing spot near the pipes.",
+       "k": "fishForFish",
+       "at": [
+        2637,
+        3444,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4080
+        ]
+       }
+      },
+      {
+       "t": "Give the winning fish to Bonzo.",
+       "s": "Give the winning fish to Bonzo",
+       "k": "speakToBonzoWithFish",
+       "at": [
+        2641,
+        3437,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4069
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Bring Vestri just north of Catherby the trophy.",
+       "s": "Bring Vestri just north of Catherby the trophy.",
+       "k": "speaktoVestri",
+       "at": [
+        2821,
+        3486,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4078
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
   "S8-01": {
    "var": [
     "varp",

@@ -103,18 +103,19 @@ export function projectResources(before: ConditionalResources, changes: readonly
       if (worn) worn[key] = 0; // No original worn unit can be promised to have survived this exchange.
     }
     // Aggregate one transaction's repeated physical names before changing balances.
-    const deltas = new Map<string, { delta: number; spent: number; uncertain: boolean }>();
+    const deltas = new Map<string, { delta: number; spent: number; uncertain: boolean; atLeast: number }>();
     for (const item of change.items) {
       const key = nameKey(item.name);
-      if (!key || key === 'coins' || !Number.isSafeInteger(item.delta) || (item.uncertain !== undefined && item.uncertain !== true)) return null;
+      if (!key || key === 'coins' || !Number.isSafeInteger(item.delta) || (item.uncertain !== undefined && item.uncertain !== true)
+        || (item.atLeast !== undefined && !validCount(item.atLeast))) return null;
       const previous = deltas.get(key), delta = (previous?.delta ?? 0) + item.delta;
       if (!Number.isSafeInteger(delta)) return null;
       const spent = (previous?.spent ?? 0) + Math.max(0, -item.delta);
       if (!Number.isSafeInteger(spent)) return null;
-      deltas.set(key, { delta, spent, uncertain: Boolean(previous?.uncertain || item.uncertain) });
+      deltas.set(key, { delta, spent, uncertain: Boolean(previous?.uncertain || item.uncertain), atLeast: Math.max(previous?.atLeast ?? 0, item.atLeast ?? 0) });
     }
-    for (const [key, { delta, spent, uncertain }] of deltas) {
-      const prior = items[key] ?? unread(), floor = prior.floor + delta;
+    for (const [key, { delta, spent, uncertain, atLeast }] of deltas) {
+      const prior = items[key] ?? unread(), floor = Math.max(prior.floor + delta, atLeast);
       if (!validQuantity(prior) || !validCount(floor) || spent > prior.floor) return null;
       if (worn?.[key]) {
         // Unworn stock is used first. A consumed original cannot become worn again through a later purchase/reward of the same name.

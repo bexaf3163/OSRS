@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-26 stages: 6 retained, 19 revised, 0 with a branch, 1 deferred.
+27 stages: 6 retained, 20 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -29,6 +29,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S7-03 Tree Gnome Village | quest-fight | yes | Khazard warlord (112) | safespot | Khazard warlord | Lobster 10 | Revised |
 | S7-05 The Grand Tree | quest-fight | yes | Black demon (The Grand Tree) (172) | safespot | Black demon (The Grand Tree) | Lobster 10 | Revised |
 | S7-07 Witch's House | quest-fight | yes | Witch's experiment (53) | melee | Witch's experiment | Trout 5 | Revised |
+| S7-11 Monk's Friend | avoid | yes | Thief (14), Thief (26) | run | - | - | Revised |
 | S8-01 Priest in Peril | quest-fight | yes | Temple Guardian (30), Monk of Zamorak (30) | melee | Temple Guardian | Trout 5 | Revised |
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
 | S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (Lost City) (101) | safespot | Tree spirit (Lost City) | - | Revised |
@@ -528,6 +529,32 @@ Changed:
 Evidence:
 
 - Quest stage route 1.3; OSRS Wiki Witch's experiment infobox (four versions) and Witch's House requirements, revision 15386155.
+
+## S7-11 Monk's Friend
+
+**Revised.** Monk's Friend: run past the thieves in the hideout under the stone circle to pick up the Child's blanket.
+
+Quest stage lines: 0.2.
+
+Assumptions:
+
+- Running past is the requirement itself (OSRS Wiki: the ability to run past two level 14 thieves and one level 26); no kill estimate drives preparation.
+
+Problems:
+
+- New quest: the route did not name the thieves, so the evasion requirement could never be shown met.
+
+Alternatives:
+
+- Fight them: not needed and not suggested.
+
+Changed:
+
+- 2.105.0: the route line says to avoid the thieves; this run-past proves the evasion requirement.
+
+Evidence:
+
+- Quest stage route 0.2; OSRS Wiki Monk's Friend requirements, revision 15240952.
 
 ## S8-01 Priest in Peril
 

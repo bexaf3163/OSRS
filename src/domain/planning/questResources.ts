@@ -42,7 +42,8 @@ export function forecastQuestResources(input: Parameters<typeof forecastProcurem
   if (!use) return null;
   const consumption = change(use.map(item => ({ name: item.name, delta: -item.count, ...(partial ? { uncertain: true as const } : {}) })));
   const reward = { ...change([...flow.receives.filter(item => item.when === 'complete').map(item => ({ name: item.name, delta: item.count })),
-    ...(flow.uncertainReceipts ?? []).map(name => ({ name, delta: 0, uncertain: true as const }))]), destination: null };
+    ...(flow.uncertainReceipts ?? []).map(name => ({ name, delta: 0, uncertain: true as const })),
+    ...(flow.ensures ?? []).map(name => ({ name, delta: 0, uncertain: true as const, atLeast: 1 }))]), destination: null };
   if (flow.unknownItems) reward.unknownItems = flow.unknownItems;
   const changes = [gifts, procurement.purchase, consumption, reward];
   return projectResources(input.projection.resources!, changes) ? { changes, procurement } : null;

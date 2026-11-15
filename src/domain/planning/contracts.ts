@@ -60,6 +60,8 @@ export interface ResourceChange {
     name: string; delta: number;
     /** Preserve the lower bound but retire an exact total. Never strengthens certainty. */
     uncertain?: true;
+    /** The lower bound is at least this many afterwards (a quest that ends with the item held). */
+    atLeast?: number;
   }[];
   gp: number;
   /** null explicitly retires an unmodelled end position; omission preserves the previous position. */

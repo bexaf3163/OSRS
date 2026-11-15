@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, questFactsJson } from '../../src/data';
 import { questFacts } from '../../scripts/data/quest-facts';
+import { prerequisiteKeepsakes } from '../../src/domain/planning/catalogue';
 import { questGraph } from '../../src/domain/planning/questGraph';
 
 describe('revision-backed quest facts', () => {
   it('preserves executable authored IDs and only actual quest prerequisites in an acyclic graph', () => {
     const items = questFactsJson.items;
-    expect(items.length).toBe(39);
+    expect(items.length).toBe(42);
     expect(items.filter(q => !q.members).length).toBe(23);
     // Members cards write prerequisites as "Completion of [[A]]" or a list under "Completion of the following quests".
     expect(items.find(q => q.id === 'Nature Spirit')!.requirements.quests).toEqual(['Priest in Peril', 'The Restless Ghost']);
@@ -54,5 +55,13 @@ describe('revision-backed quest facts', () => {
     const escape = parse('Capable of killing or running away from a [[combat level]] 13 [[skeleton]].');
     expect(escape.requirements.capabilities).toEqual(['survival']);
     expect(escape.requirements.unparsed).toBeNull();
+  });
+});
+
+describe('what unfinished prerequisites leave held', () => {
+  it('Fairytale I starts with the Dramen staff and the Ghostspeak amulet its prerequisites leave held; done ones give nothing more', () => {
+    const quest = 'Fairytale I - Growing Pains';
+    expect(prerequisiteKeepsakes(quest, () => false)).toEqual(expect.arrayContaining(['Dramen staff', 'Ghostspeak amulet']));
+    expect(prerequisiteKeepsakes(quest, () => true)).toEqual([]);
   });
 });

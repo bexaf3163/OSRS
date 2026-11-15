@@ -256,6 +256,21 @@
       "evidence": ["Quest stage route 1.3; OSRS Wiki Witch's experiment infobox (four versions) and Witch's House requirements, revision 15386155."]
     },
     {
+      "stepId": "S7-11",
+      "kind": "avoid",
+      "mandatory": true,
+      "method": "run",
+      "objective": "Monk's Friend: run past the thieves in the hideout under the stone circle to pick up the Child's blanket.",
+      "enemies": [{ "name": "Thief", "level": 14 }, { "name": "Thief", "level": 26 }],
+      "lines": ["0.2"],
+      "assumptions": ["Running past is the requirement itself (OSRS Wiki: the ability to run past two level 14 thieves and one level 26); no kill estimate drives preparation."],
+      "problems": ["New quest: the route did not name the thieves, so the evasion requirement could never be shown met."],
+      "alternatives": ["Fight them: not needed and not suggested."],
+      "decision": "revise",
+      "changed": ["2.105.0: the route line says to avoid the thieves; this run-past proves the evasion requirement."],
+      "evidence": ["Quest stage route 0.2; OSRS Wiki Monk's Friend requirements, revision 15240952."]
+    },
+    {
       "stepId": "S8-01", "kind": "quest-fight", "mandatory": true, "method": "melee",
       "objective": "Kill the Temple Guardian (30, 45 hit points, hits up to 3; immune to magic) and a Monk of Zamorak (30) for the key.",
       "enemies": [{ "name": "Temple Guardian", "level": 30, "maxHit": 3, "table": true }, { "name": "Monk of Zamorak", "level": 30 }],

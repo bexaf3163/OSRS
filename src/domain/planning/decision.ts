@@ -3,7 +3,12 @@ import { comparableKnown, exactCost, noTime, sumExpressions, sumMinutes, totalCo
 import { coherentSkillXp, levelForXp, xpForLevel } from '../player/xp';
 import { observedResources, projectResources } from './resources';
 import { nameKey } from '../items/itemKey';
+import { isWornGear } from '../items/reusable';
 import { sameSession } from './scope';
+import { questCatalogue } from './catalogue';
+
+/** What a reviewed quest flow gives or leaves held (a Dramen staff, an amulet of accuracy): a fight or training never uses it up. */
+const QUEST_KEPT = new Set(questCatalogue.flatMap(q => [...(q.resourceFlow?.ensures ?? []), ...(q.resourceFlow?.receives ?? []).map(r => r.name)]).map(nameKey));
 
 /** How many objectives look one quest further (beam width of the second horizon). */
 const BEAM = 4;
@@ -58,12 +63,14 @@ export function projectSuccess(before: Projection, effects: readonly ExpectedEff
       const next = projectResources(resources, [effect.change]);
       resources = next ?? undefined;
     } else if (effect.source.trim()) {
-      // An unmodelled fight, quest or training wears out no single worn piece, so it stays a lower bound unless the objective
-      // names it (it may be handed in). Worn stacks (arrows, darts) can be spent and retire with everything else.
+      // An unmodelled fight, quest or training uses up supplies, never a single worn piece, wearable gear or a quest-given
+      // item: those stay a lower bound unless the objective names them (it may hand them in). Worn stacks (arrows, darts),
+      // tools and every other item can be spent and retire.
       // shortcut: a stack of exactly one counts as a piece; replace with stackability from the item data if one is ever planned.
       const named = new Set((effect.items ?? []).map(nameKey));
       const worn = Object.fromEntries(Object.entries(resources.worn ?? {}).filter(([key, count]) => count === 1 && !named.has(key)));
-      resources = { items: Object.fromEntries(Object.keys(resources.items).map(name => [name, { floor: worn[name] ?? 0, complete: false }])),
+      const kept = (name: string, floor: number) => Math.max(worn[name] ?? 0, !named.has(name) && (QUEST_KEPT.has(name) || isWornGear(name)) ? floor : 0);
+      resources = { items: Object.fromEntries(Object.entries(resources.items).map(([name, q]) => [name, { floor: kept(name, q.floor), complete: false }])),
         gp: { floor: 0, complete: false }, position: null, worn };
     } else resources = undefined;
   }

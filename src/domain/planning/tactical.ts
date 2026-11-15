@@ -23,6 +23,8 @@ import { chooseEncounter } from './encounter/strategy';
 import type { WorldPoint } from '../player/playerState';
 import { stepAtQuestCursor } from '../quests/questCursor';
 import { PLANNING_WINDOW_SIZE } from './window';
+import { prerequisiteKeepsakes } from './catalogue';
+import { nameKey } from '../items/itemKey';
 
 export interface TacticalFrame {
   encounter?: { work: Minutes; reasons: readonly string[]; uncertain: boolean };
@@ -76,12 +78,18 @@ export function createTacticalResolver(input: TacticalInput) {
     const window = [execution, ...input.window.filter((_, index) => index !== replaceAt)].slice(0, PLANNING_WINDOW_SIZE);
     // Validated stage/DAG evidence chooses the current action. Saved route marks never prove its game prerequisites.
     const progress = { ...input.progress, steps: {} };
+    // Unfinished prerequisites come first, so what they give or leave held (Lost City's Dramen staff) is planned as carried;
+    // once they are done the real inventory answers.
+    const kept = prerequisiteKeepsakes(goalId, id => snapshot.quests[id]?.state === 'COMPLETED');
+    const owned = snapshot.player.owned;
+    const player = !kept.length || !owned ? snapshot.player : { ...snapshot.player, owned: { ...owned, items: new Map([...owned.items,
+      ...kept.map(name => { const key = nameKey(name), have = owned.items.get(key); return [key, { name, noted: 0, ...have, carried: Math.max(1, have?.carried ?? 0) }] as const; })]) } };
     const engine = createReadinessEngine({ steps: window, window, progress, qp: snapshot.questPoints.known ? snapshot.questPoints.value : 0,
-      mode: snapshot.scope.mode, state: snapshot.player, prices: input.prices, questInstruction: snapshot.instruction });
+      mode: snapshot.scope.mode, state: player, prices: input.prices, questInstruction: snapshot.instruction });
     const plan = engine.plan(execution, { ahead: 2 }), readiness = engine.readiness(execution);
-    const need = buildNeed({ step: execution, prep: plan, prices: input.prices, owned: snapshot.player.owned, manual: snapshot.player.manual,
+    const need = buildNeed({ step: execution, prep: plan, prices: input.prices, owned: player.owned, manual: snapshot.player.manual,
       hitpoints: levelOf(snapshot.player, 'hitpoints') });
-    const snap = buildSnapshot({ state: snapshot.player, window, questPoints: snapshot.questPoints.known ? snapshot.questPoints.value : null,
+    const snap = buildSnapshot({ state: player, window, questPoints: snapshot.questPoints.known ? snapshot.questPoints.value : null,
       ironman: input.ironman, position: snapshot.player.position.known ? snapshot.player.position.value : null });
     const budget = buildBudget({ snap, need, prices: input.prices, recs: [], bankValue: null, committedWindow: true });
     const chain = new Set(ancestors);

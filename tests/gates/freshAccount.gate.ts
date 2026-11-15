@@ -48,7 +48,7 @@ const MAX_TURNS: Record<GameMode, number> = { f2p: 300, members: 700 };
 const UNKNOWN_TIME_DEBT = 0;
 // A fresh Members account finishes every quest; the turns whose remaining time is unknown are known debt. Lower it as it
 // shrinks, never raise it.
-const MEMBERS_UNKNOWN_TIME_DEBT = 82;
+const MEMBERS_UNKNOWN_TIME_DEBT = 42;
 
 // One fresh account played through the route of a mode; it stops at the first check and returns what is left.
 function play(mode: GameMode) {
@@ -105,7 +105,7 @@ function play(mode: GameMode) {
           for (const r of q.resourceFlow?.receives ?? []) add(r.name, r.count);
           // An uncertain receipt (the Ghostspeak amulet) is uncertain for the app, which cannot see whether it was kept;
           // the account played here keeps it.
-          for (const name of q.resourceFlow?.uncertainReceipts ?? []) add(name, 1);
+          for (const name of [...(q.resourceFlow?.uncertainReceipts ?? []), ...(q.resourceFlow?.ensures ?? [])]) add(name, 1);
         } else {
           quests[q.id] = { state: 'IN_PROGRESS', stepId: q.stepIds[at + 1] };
           for (const later of q.stepIds.slice(at + 1).map(id => stepOf.get(id))) {

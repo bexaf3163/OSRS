@@ -3737,6 +3737,67 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Coins"
   },
   {
+    "id": 995,
+    "nameEn": "Coins",
+    "examine": "Lovely money!",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png",
+    "value": 1,
+    "freeSpawns": [
+      "Asgarnian Ice Dungeon",
+      "Bryophyta's lair",
+      "Corsair Cove Dungeon",
+      "Crandor and Karamja Dungeon",
+      "Dwarven Mine",
+      "Giants' Plateau",
+      "Edgeville Dungeon",
+      "Emir's Arena"
+    ],
+    "dropSources": [
+      {
+        "monster": "Jelly#Regular",
+        "combatLevel": null,
+        "rate": "39/128"
+      },
+      {
+        "monster": "Goblin#Drop table 2",
+        "combatLevel": null,
+        "rate": "34/128"
+      },
+      {
+        "monster": "Green dragon#Regular",
+        "combatLevel": null,
+        "rate": "29/128"
+      },
+      {
+        "monster": "Green dragon#Wilderness Slayer Cave",
+        "combatLevel": null,
+        "rate": "29/128"
+      },
+      {
+        "monster": "Goblin#Drop table 1",
+        "combatLevel": null,
+        "rate": "28/128"
+      },
+      {
+        "monster": "Catablepon",
+        "combatLevel": 68,
+        "rate": "4/101"
+      },
+      {
+        "monster": "Feral Vampyre",
+        "combatLevel": 61,
+        "rate": "40/128"
+      },
+      {
+        "monster": "Crawling Hand",
+        "combatLevel": 8,
+        "rate": "24/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Coins"
+  },
+  {
     "id": 2140,
     "nameEn": "Cooked chicken",
     "examine": "Mmm this looks tasty.",
@@ -4254,6 +4315,22 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Death_rune"
+  },
+  {
+    "id": 1573,
+    "nameEn": "Doogle leaves",
+    "examine": "A tasty herb, good for seasoning.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Doogle_leaves.png",
+    "value": 2,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "freeSpawns": [
+      "Varrock - behind Gertrude's house (members only)",
+      "Fremennik Province - around the swaying tree (members only)",
+      "Feldip Hills - east of the gnome glider (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Doogle_leaves"
   },
   {
     "id": 772,
@@ -7006,6 +7083,85 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Jug"
+  },
+  {
+    "id": 1937,
+    "nameEn": "Jug of water",
+    "examine": "It's full of water.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Jug_of_water.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "The Lighthouse Store",
+        "location": "Lighthouse",
+        "owner": "Jossik",
+        "price": 1,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Pollnivneach general store.",
+        "location": "Pollnivneach",
+        "owner": "Market seller",
+        "price": 1,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Shantay Pass Shop",
+        "location": "Shantay Pass",
+        "owner": "Shantay",
+        "price": 1,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Bedabin Village Bartering",
+        "location": "Bedabin Camp",
+        "owner": "Bedabin Nomad",
+        "price": 1,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Bandit Bargains",
+        "location": "Bandit Camp",
+        "owner": "Bandit shopkeeper",
+        "price": 1,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Al Kharid Palace - eastern room",
+      "Yanille - Frenita's Cookery Shop (members only)",
+      "Hosidius - eastern house with Fruit Stalls (members only)",
+      "Uzer Oasis - Ali the Tea Seller's house (members only)",
+      "Colossal Wyrm Agility Course - advanced route (members only)",
+      "Aldarin - Aldarin General Store (1st floor) (members only)",
+      "Varlamore - near the Twilight Temple (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Imp",
+        "combatLevel": 2,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Frost Nagua",
+        "combatLevel": 104,
+        "rate": "1/34"
+      },
+      {
+        "monster": "Abyssal Sire",
+        "combatLevel": 350,
+        "rate": "2/139"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Jug_of_water"
   },
   {
     "id": 431,
@@ -10327,6 +10483,141 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_salmon"
   },
   {
+    "id": 327,
+    "nameEn": "Raw sardine",
+    "examine": "I should try cooking this.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Raw_sardine.png",
+    "value": 10,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "buyLocations": [
+      {
+        "shopName": "Gerrant's Fishy Business.",
+        "location": "Port Sarim",
+        "owner": "Gerrant",
+        "price": 10,
+        "stock": 200,
+        "members": false
+      },
+      {
+        "shopName": "Harry's Fishing Shop.",
+        "location": "Catherby",
+        "owner": "Harry",
+        "price": 10,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Lovecraft's Tackle",
+        "location": "Witchaven",
+        "owner": "Ezekial Lovecraft",
+        "price": 10,
+        "stock": 200,
+        "members": true
+      },
+      {
+        "shopName": "Two Feet Charley's Fish Shop.",
+        "location": "Mos Le'Harmless",
+        "owner": "Charley",
+        "price": 10,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Frankie's Fishing Emporium",
+        "location": "Port Piscarilius",
+        "owner": "Frankie",
+        "price": 10,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "Ishmael's Fish He Sells",
+        "location": "Ruins of Unkah",
+        "owner": "Ishmael",
+        "price": 10,
+        "stock": 200,
+        "members": true
+      },
+      {
+        "shopName": "Picaria's Fishing Shop",
+        "location": "Sunset Coast",
+        "owner": "Picaria",
+        "price": 10,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Henderson's Catch of the Day",
+        "location": "The Pandemonium",
+        "owner": "Henderson",
+        "price": 10,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Sulisal's Superb Fishing Store",
+        "location": "Kastori",
+        "owner": "Sulisal",
+        "price": 10,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Port Roberts Fish Stall",
+        "location": "Port Roberts",
+        "owner": "Gregory",
+        "price": 10,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Dagannoth spawn",
+        "combatLevel": 42,
+        "rate": "10/128"
+      },
+      {
+        "monster": "Hermit crab",
+        "combatLevel": 19,
+        "rate": "6/128"
+      },
+      {
+        "monster": "Dagannoth",
+        "combatLevel": 74,
+        "rate": "4/128"
+      },
+      {
+        "monster": "River troll",
+        "combatLevel": 79,
+        "rate": "4/128"
+      },
+      {
+        "monster": "Mogre",
+        "combatLevel": 60,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Mogre (sea)",
+        "combatLevel": 54,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Warrior (Rellekka)",
+        "combatLevel": 48,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Market Guard",
+        "combatLevel": 48,
+        "rate": "1/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_sardine"
+  },
+  {
     "id": 317,
     "nameEn": "Raw shrimps",
     "examine": "I should try cooking this.",
@@ -10854,6 +11145,15 @@
       "Sisterhood Sanctuary (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Red_dye"
+  },
+  {
+    "id": 25,
+    "nameEn": "Red vine worm",
+    "examine": "Wormy.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Red_vine_worm.png",
+    "value": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Red_vine_worm"
   },
   {
     "id": 1951,
@@ -12289,6 +12589,17 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Salmon"
+  },
+  {
+    "id": 1552,
+    "nameEn": "Seasoned sardine",
+    "examine": "Sardine flavoured with doogle leaves.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Seasoned_sardine.png",
+    "value": 10,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Seasoned_sardine"
   },
   {
     "id": 5329,

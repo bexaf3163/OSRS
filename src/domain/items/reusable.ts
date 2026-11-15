@@ -17,6 +17,11 @@ const WORN = new Set((gearJson as { items: { name: string; slot?: string }[] }).
 // Style-specific equipment uses its existing registry too; ammunition remains consumable.
 const STYLE_WORN = new Set([styleJson.magic, styleJson.ranged].flatMap(style => Object.entries(style)
   .flatMap(([slot, options]) => slot === 'ammo' ? [] : options.flatMap(option => option.names.map(nameKey)))));
+/** Wearable gear (weapons, armour, amulets; not ammunition): nothing but a hand-in uses it up. */
+export function isWornGear(nameEn: string): boolean {
+  const k = nameKey(nameEn);
+  return WORN.has(k) || STYLE_WORN.has(k);
+}
 /** One is enough for every step: a tool of any tier, or something worn. */
 export function isReusable(nameEn: string): boolean {
   const k = nameKey(nameEn);

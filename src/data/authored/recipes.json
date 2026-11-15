@@ -1,5 +1,5 @@
 {
-  "source": "OSRS Wiki: Orange dye, Red dye, Yellow dye (Aggie in Draynor Village); Ecto-token, Ectofuntus; Chocolatey milk, Hangover cure.",
+  "source": "OSRS Wiki: Orange dye, Red dye, Yellow dye (Aggie in Draynor Village); Ecto-token, Ectofuntus; Chocolatey milk, Hangover cure, Seasoned sardine.",
   "note": "Items that are made from other items. If the made item is missing, the ingredients are planned too, so the player is warned before leaving the place where they are made.",
   "recipes": {
     "Orange dye": {
@@ -37,6 +37,15 @@
       "from": [
         { "nameEn": "Chocolatey milk", "count": 1, "how": "Use chocolate dust on a bucket of milk." },
         { "nameEn": "Snape grass", "count": 1, "how": "Spawns west of the Crafting Guild, or buy it." }
+      ]
+    },
+    "Seasoned sardine": {
+      "makeAt": "Anywhere, in the bag",
+      "manualSeconds": 2,
+      "note": "Use doogle leaves on a raw sardine (OSRS Wiki, Seasoned sardine). The 2 seconds are an estimate of one use action.",
+      "from": [
+        { "nameEn": "Raw sardine", "count": 1, "how": "Buy it, or fish one with a fishing rod and bait." },
+        { "nameEn": "Doogle leaves", "count": 1, "how": "Spawns behind Gertrude's house west of Varrock." }
       ]
     }
   }

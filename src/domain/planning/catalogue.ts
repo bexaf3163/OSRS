@@ -27,6 +27,8 @@ export interface QuestFact {
     acquisitionTools?: readonly string[];
     /** Potential returns are not counted as stock; only these item totals lose certainty. */
     uncertainReceipts?: readonly string[];
+    /** Held at completion (the quest needs it held), so at least one is owned; a giver may reuse an existing one. */
+    ensures?: readonly string[];
     /** Quest-local exchanges whose exact internal timing/quantities are not a reusable stock guarantee. */
     unknownItems?: readonly string[];
     /** A whole-quest boundary flow does not describe an arbitrary resumed stage. */
@@ -38,6 +40,22 @@ export interface QuestFact {
   source: { url: string; revision: number; retrievedAt: string };
 }
 export const questCatalogue = questFactsJson.items as unknown as readonly QuestFact[];
+
+/** What every unfinished prerequisite of a quest, however deep, gives or leaves held (reviewed flows only). */
+export function prerequisiteKeepsakes(id: string, done: (id: string) => boolean): string[] {
+  const seen = new Set<string>(), out: string[] = [];
+  const visit = (quest: string) => {
+    for (const r of questCatalogue.find(q => q.id === quest)?.requirements.quests ?? []) {
+      if (done(r) || seen.has(r)) continue;
+      seen.add(r);
+      visit(r);
+      const flow = questCatalogue.find(q => q.id === r)?.resourceFlow;
+      out.push(...(flow?.ensures ?? []), ...(flow?.receives ?? []).map(item => item.name));
+    }
+  };
+  visit(id);
+  return out;
+}
 
 /** Sufficient physical stock for even the maximum remaining hand-in. Does not infer how much was already delivered. */
 export function canSupplyQuestDelivery(quest: QuestFact, state: PlayerState): boolean {

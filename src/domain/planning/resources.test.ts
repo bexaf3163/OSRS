@@ -3,6 +3,7 @@ import { buildPlayerState } from '../player/playerState';
 import { observedProjection, projectSuccess, decide } from './decision';
 import { projectedTrainingState, projectResources } from './resources';
 import type { ExpectedEffect, Minutes, ObjectiveEvaluation, PlannerModel, PlanningSnapshot, ResourceChange } from './contracts';
+import { nameKey } from '../items/itemKey';
 import { noTime } from './cost';
 
 function snapshot(bankSeen = true): PlanningSnapshot {
@@ -32,6 +33,13 @@ describe('conditional resource accounting', () => {
     for (const name of ['', 'Coins']) expect(projectResources(start.resources!, [{ ...change(0), unknownItems: [name] }])).toBeNull();
   });
 
+  it('raises an uncertain item to the count a quest ends holding, never lowering a larger proven stock', () => {
+    const start = observedProjection(snapshot()).resources!;
+    const held = (name: string) => projectResources(start, [change(0, [{ name, delta: 0, uncertain: true, atLeast: 1 }])])!.items[nameKey(name)];
+    expect(held('Dramen staff')).toEqual({ floor: 1, complete: false });
+    expect(held('Bucket')).toEqual({ floor: 4, complete: false });
+    expect(projectResources(start, [change(0, [{ name: 'Bucket', delta: 0, atLeast: -1 }])])).toBeNull();
+  });
   it('weakens only an uncertain item total, preserving its proven stock, other items and cash without later restoring certainty', () => {
     const start = observedProjection(snapshot()).resources!;
     const partial = projectResources(start, [change(0, [{ name: 'Bucket', delta: 0, uncertain: true }])])!;
@@ -85,6 +93,13 @@ describe('conditional resource accounting', () => {
     expect(projectSuccess(start, [effect(change(-101)), unknown, effect(change(200))]).invalidResources).toBe(true);
     expect(start.resources?.items.bucket).toEqual({ floor: 4, complete: true });
     expect(observed.player.coins.bag).toMatchObject({ value: 50 });
+  });
+  it('keeps a carried quest-given item (a Dramen staff) through unmodelled consumption, but never supplies', () => {
+    const start = observedProjection(snapshot());
+    const owned = { ...start, resources: projectResources(start.resources!, [change(0, [{ name: 'Dramen staff', delta: 1 }])])! };
+    const after = projectSuccess(owned, [{ kind: 'resources-unknown', source: 'Synthetic unmodelled fight', afterSuccessOnly: true }]);
+    expect(after.resources?.items['dramen staff']).toEqual({ floor: 1, complete: false });
+    expect(after.resources?.items.bucket).toEqual({ floor: 0, complete: false });
   });
   it('keeps a single worn piece through unmodelled consumption unless the objective names it', () => {
     const observed = snapshot(), start = observedProjection(observed);

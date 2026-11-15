@@ -1,0 +1,95 @@
+{
+ "title": "Biohazard",
+ "cls": "Biohazard",
+ "var": [
+  "varp",
+  68
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToElena"
+   },
+   "1": {
+    "s": "talkToJerico"
+   },
+   "4": {
+    "s": "talkToOmartToEnterWestArdougne"
+   },
+   "10": {
+    "s": "talkToTheChemist"
+   },
+   "14": {
+    "s": "returnToElenaAfterSampling"
+   }
+  },
+  "nodes": {},
+  "reqs": {},
+  "alias": {}
+ },
+ "unknown": {},
+ "steps": {
+  "talkToElena": {
+   "typ": "NpcStep",
+   "wp": [
+    2592,
+    3336,
+    0
+   ],
+   "ids": [
+    1102
+   ],
+   "text": "Talk to Elena in her house west of the northern Ardougne bank."
+  },
+  "talkToJerico": {
+   "typ": "NpcStep",
+   "wp": [
+    2612,
+    3324,
+    0
+   ],
+   "ids": [
+    1145
+   ],
+   "text": "Talk to Jerico in his house south of the northern Ardougne bank"
+  },
+  "talkToOmartToEnterWestArdougne": {
+   "typ": "NpcStep",
+   "wp": [
+    2559,
+    3266,
+    0
+   ],
+   "ids": [
+    9002
+   ],
+   "text": "Talk to Omart, south of the watchtower, to enter West Ardougne."
+  },
+  "talkToTheChemist": {
+   "typ": "NpcStep",
+   "wp": [
+    2933,
+    3210,
+    0
+   ],
+   "ids": [
+    1146
+   ],
+   "text": "Take the Plague Sample to the Chemist in Rimmington. You can take a boat from Ardougne Dock to Rimmington for 30gp."
+  },
+  "returnToElenaAfterSampling": {
+   "typ": "NpcStep",
+   "wp": [
+    2592,
+    3336,
+    0
+   ],
+   "ids": [
+    1102
+   ],
+   "text": "Return to Elena and inform her that the plague is a hoax."
+  }
+ }
+}
