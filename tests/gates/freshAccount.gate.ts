@@ -48,7 +48,7 @@ const MAX_TURNS: Record<GameMode, number> = { f2p: 300, members: 700 };
 const UNKNOWN_TIME_DEBT = 0;
 // A fresh Members account finishes every quest; the turns whose remaining time is unknown are known debt. Lower it as it
 // shrinks, never raise it.
-const MEMBERS_UNKNOWN_TIME_DEBT = 7;
+const MEMBERS_UNKNOWN_TIME_DEBT = 6;
 
 // One fresh account played through the route of a mode; it stops at the first check and returns what is left.
 function play(mode: GameMode) {

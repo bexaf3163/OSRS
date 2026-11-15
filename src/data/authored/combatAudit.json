@@ -286,6 +286,18 @@
       "evidence": ["OSRS Wiki Jungle Potion requirements, revision 15390159; Jogre and Harpie Bug Swarm infoboxes."]
     },
     {
+      "stepId": "S7-16", "kind": "incidental", "mandatory": true, "method": "melee",
+      "objective": "Observatory Quest: the level 42 goblin guard at the kitchen gate has to be killed or trapped for the kitchen key.",
+      "enemies": [{ "name": "Goblin guard", "level": 42, "maxHit": 5, "table": true }],
+      "lines": ["0.5"],
+      "assumptions": ["The Goblin guard is the level 42 version with 43 hit points (Wiki infobox)."],
+      "problems": ["New quest: no stage of the route met this monster before."],
+      "alternatives": ["Trap the guard by luring it onto the prison cell door."],
+      "decision": "revise",
+      "changed": ["2.107.0: the step's foes name the Goblin guard, so the fight is estimated with the player's kit; Trout x5 (or similar food) is a required item."],
+      "evidence": ["OSRS Wiki Observatory Quest and Goblin guard infobox."]
+    },
+    {
       "stepId": "S8-01", "kind": "quest-fight", "mandatory": true, "method": "melee",
       "objective": "Kill the Temple Guardian (30, 45 hit points, hits up to 3; immune to magic) and a Monk of Zamorak (30) for the key.",
       "enemies": [{ "name": "Temple Guardian", "level": 30, "maxHit": 3, "table": true }, { "name": "Monk of Zamorak", "level": 30 }],

@@ -670,6 +670,28 @@
       }
     },
     {
+      "name": "Goblin guard",
+      "combat": 42,
+      "members": true,
+      "hitpoints": 43,
+      "attackLevel": 32,
+      "strengthLevel": 37,
+      "defenceLevel": 37,
+      "magicLevel": 1,
+      "attackBonus": 8,
+      "defence": {
+        "stab": 4,
+        "slash": 6,
+        "crush": 6,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 5,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
       "name": "Temple Guardian",
       "combat": 30,
       "members": true,

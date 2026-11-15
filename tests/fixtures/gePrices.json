@@ -1232,6 +1232,18 @@
   "Doogle leaves": {
    "buy": 158,
    "sell": 143
+  },
+  "Swamp paste": {
+   "buy": 24,
+   "sell": 20
+  },
+  "plank": {
+   "buy": 94,
+   "sell": 91
+  },
+  "Molten glass": {
+   "buy": 83,
+   "sell": 82
   }
  }
 }

@@ -4549,6 +4549,140 @@
     }
   },
   {
+    "id": "S7-15",
+    "stage": 7,
+    "type": "quest",
+    "title": "Sea Slug",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Sea_Slug",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Sea_Slug/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2716,3302,0",
+    "mapLocation": {
+      "x": 2716,
+      "y": 3302,
+      "plane": 0,
+      "label": "Caroline"
+    },
+    "npc": {
+      "nameEn": "Caroline",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Caroline"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Swamp paste",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Razmire Builders Merchants in Mort'ton for 31 gp.",
+        "wikiItemId": 1941,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Swamp_paste.png"
+      }
+    ],
+    "reward": "1 QP, 7,175 Fishing XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Caroline"
+      ],
+      "dialogChoices": [
+        "I suppose so, how do I get there?"
+      ],
+      "highlightItems": [
+        "Swamp paste"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Sea Slug"
+      }
+    }
+  },
+  {
+    "id": "S7-16",
+    "stage": 7,
+    "type": "quest",
+    "title": "Observatory Quest",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Observatory_Quest",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Observatory_Quest/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2441,3187,0",
+    "mapLocation": {
+      "x": 2441,
+      "y": 3187,
+      "plane": 0,
+      "label": "The Observatory Reception Room north of Castle Wars"
+    },
+    "npc": {
+      "nameEn": "Observatory professor",
+      "location": "The Observatory Reception Room north of Castle Wars",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Observatory_professor"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Plank",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange, or from Razmire Builders Merchants in Mort'ton for 1 gp.",
+        "wikiItemId": 960,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
+      },
+      {
+        "nameEn": "Bronze bar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 8 gp.",
+        "wikiItemId": 2349,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_bar.png"
+      },
+      {
+        "nameEn": "Molten glass",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or make it from a bucket of sand and soda ash at a furnace.",
+        "wikiItemId": 1775,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Molten_glass.png"
+      },
+      {
+        "nameEn": "Trout",
+        "heals": 7,
+        "amount": 5,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "howToGet": "Your own catch or the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. The level 42 goblin guard in the observatory dungeon has to be killed or trapped. Preparation sizes the amount for your levels and armour.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Goblin guard"
+    ],
+    "reward": "2 QP, 2,250 Crafting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Observatory professor"
+      ],
+      "dialogChoices": [
+        "Talk about the Observatory quest.",
+        "An Observatory?",
+        "Sounds interesting. How can I help?"
+      ],
+      "highlightItems": [
+        "plank",
+        "Bronze bar",
+        "Molten glass"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Observatory Quest"
+      }
+    }
+  },
+  {
     "id": "S8-01",
     "stage": 8,
     "type": "quest",

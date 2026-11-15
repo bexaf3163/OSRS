@@ -14837,6 +14837,1124 @@
     }
    ]
   },
+  "S7-15": {
+   "var": [
+    "varp",
+    159
+   ],
+   "route": [
+    {
+     "title": "The platform",
+     "steps": [
+      "Speak with Caroline in Witchaven. Dialogue: \"I suppose so, how do I get there?\"",
+      "Talk to Holgart (right next to Caroline) and give him the Swamp paste.",
+      "Right-click Holgart and select the Travel option to travel to the fishing platform.",
+      "Pick up the Broken glass on the floor (hut to the west).",
+      "Go to the north-east corner of the platform and pick up some Damp sticks.",
+      "Climb the ladder right next to the sticks."
+     ]
+    },
+    {
+     "title": "Upper platform",
+     "steps": [
+      "Go inside the cabin on the west side of the platform and talk to Kennith.",
+      "Go back down the ladder to the sea level."
+     ]
+    },
+    {
+     "title": "Remote island",
+     "steps": [
+      "Travel or speak with Holgart for a trip to a remote island.",
+      "Talk to Kent.",
+      "Talk to Holgart again to go back to the Fishing Platform."
+     ]
+    },
+    {
+     "title": "Saving Kennith",
+     "steps": [
+      "Speak with Bailey in the south-west cabin for an Unlit torch.",
+      "Use the Broken glass on the Damp sticks to dry them.",
+      "Light the torch by rubbing the dry sticks together.",
+      "Go back up the ladder.",
+      "Go talk to Kennith again.",
+      "From outside of the cabin, kick the badly repaired wall to make an opening.",
+      "Talk to Kennith again.",
+      "Just outside of Kennith's cabin, activate the crane controls to rotate it (a cutscene will play if you've followed the steps correctly - make sure you've talked to Kennith after you've kicked in the wall).",
+      "Go back down the ladder to the sea level."
+     ]
+    },
+    {
+     "title": "Finishing up",
+     "steps": [
+      "Speak with Holgart again to return to the shore.",
+      "Report to Caroline.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Caroline just north of Witchaven, east of East Ardougne.",
+       "s": "Talk to Caroline just north of Witchaven, east of East Ardougne.",
+       "k": "talkToCaroline",
+       "at": [
+        2717,
+        3303,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5067
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Holgart nearby and give him some swamp paste.",
+       "s": "Talk to Holgart nearby and give him some swamp paste.",
+       "k": "talkToHolgart",
+       "at": [
+        2717,
+        3303,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7324
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Give Holgart some swamp paste.",
+       "s": "Give Holgart some swamp paste.",
+       "k": "talkToHolgartWithSwampPaste",
+       "at": [
+        2717,
+        3303,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7324
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Travel with Holgart to the fishing platform.",
+       "s": "Travel with Holgart to the fishing platform.",
+       "k": "travelWithHolgart",
+       "at": [
+        2717,
+        3303,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7789
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder in the north east corner of the platform.",
+       "s": "Climb the ladder in the north east corner of the platform.",
+       "k": "climbLadder",
+       "at": [
+        2784,
+        3286,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18324
+        ]
+       }
+      },
+      {
+       "t": "Talk to Kennith from inside the cabin on the west side of the first floor.",
+       "s": "Talk to Kennith in the cabin on the west side of the first floor",
+       "k": "talkToKennith",
+       "at": [
+        2765,
+        3289,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5063
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Travel with Holgart to the fishing platform.",
+       "s": "Travel with Holgart to the fishing platform.",
+       "k": "travelWithHolgart",
+       "at": [
+        2717,
+        3303,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7789
+        ]
+       }
+      },
+      {
+       "t": "Go back down the ladder.",
+       "s": "Go back down the ladder.",
+       "k": "goDownLadder",
+       "at": [
+        2784,
+        3286,
+        1
+       ],
+       "hl": {
+        "obj": [
+         18325
+        ]
+       }
+      },
+      {
+       "t": "Travel with Holgart to a nearby island.",
+       "s": "Travel with Holgart to a nearby island.",
+       "k": "goToIsland",
+       "at": [
+        2781,
+        3274,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5070
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Travel with Holgart north of Witchaven to find Kent.",
+       "s": "Travel with Holgart north of Witchaven to find Kent.",
+       "k": "goToIslandFromMainland",
+       "at": [
+        2717,
+        3303,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7789
+        ]
+       }
+      },
+      {
+       "t": "Talk to Kent on the island.",
+       "s": "Talk to Kent on the island.",
+       "k": "talkToKent",
+       "at": [
+        2794,
+        3322,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5074
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Travel with Holgart to the fishing platform.",
+       "s": "Travel with Holgart to the fishing platform.",
+       "k": "travelWithHolgartFreeingKennith",
+       "at": [
+        2717,
+        3303,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5069
+        ]
+       }
+      },
+      {
+       "t": "Talk to Bailey for an unlit torch.",
+       "s": "Talk to Bailey for an unlit torch.",
+       "k": "talkToBaileyForTorch",
+       "at": [
+        2764,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5066
+        ]
+       }
+      },
+      {
+       "t": "Pick up the broken glass in the room.",
+       "s": "Pick up the broken glass in the room.",
+       "k": "pickupGlass"
+      },
+      {
+       "t": "Pick up the damp sticks in the north east corner of the platform.",
+       "s": "Pick up the damp sticks in the north east corner of the platform.",
+       "k": "pickupDampSticks",
+       "at": [
+        2784,
+        3289,
+        0
+       ]
+      },
+      {
+       "t": "Use the broken glass on damp sticks to dry them.",
+       "s": "Use the broken glass on damp sticks to dry them.",
+       "k": "useGlassOnDampSticks"
+      },
+      {
+       "t": "Light the unlit torch with the dry sticks.",
+       "s": "Light the unlit torch with the dry sticks",
+       "k": "rubSticks"
+      },
+      {
+       "t": "Go up the ladder in the north east corner of the platform.",
+       "s": "Go up the ladder in the north east corner of the platform.",
+       "k": "goBackUpLadder",
+       "at": [
+        2784,
+        3286,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18324
+        ]
+       }
+      },
+      {
+       "t": "Return to the platform with Holgart.",
+       "s": "Return to the platform with Holgart.",
+       "k": "returnFromIsland",
+       "at": [
+        2801,
+        3320,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5069
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Travel with Holgart to the fishing platform.",
+       "s": "Travel with Holgart to the fishing platform.",
+       "k": "travelWithHolgartFreeingKennith",
+       "at": [
+        2717,
+        3303,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5069
+        ]
+       }
+      },
+      {
+       "t": "Talk to Bailey for an unlit torch.",
+       "s": "Talk to Bailey for an unlit torch.",
+       "k": "talkToBaileyForTorch",
+       "at": [
+        2764,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5066
+        ]
+       }
+      },
+      {
+       "t": "Pick up the broken glass in the room.",
+       "s": "Pick up the broken glass in the room.",
+       "k": "pickupGlass"
+      },
+      {
+       "t": "Pick up the damp sticks in the north east corner of the platform.",
+       "s": "Pick up the damp sticks in the north east corner of the platform.",
+       "k": "pickupDampSticks",
+       "at": [
+        2784,
+        3289,
+        0
+       ]
+      },
+      {
+       "t": "Use the broken glass on damp sticks to dry them.",
+       "s": "Use the broken glass on damp sticks to dry them.",
+       "k": "useGlassOnDampSticks"
+      },
+      {
+       "t": "Light the unlit torch with the dry sticks.",
+       "s": "Light the unlit torch with the dry sticks",
+       "k": "rubSticks"
+      },
+      {
+       "t": "Go up the ladder in the north east corner of the platform.",
+       "s": "Go up the ladder in the north east corner of the platform.",
+       "k": "goBackUpLadder",
+       "at": [
+        2784,
+        3286,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18324
+        ]
+       }
+      },
+      {
+       "t": "Talk to Kennith to the west.",
+       "s": "Talk to Kennith to the west.",
+       "k": "talkToKennithAgain",
+       "at": [
+        2765,
+        3289,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5063
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Travel with Holgart to the fishing platform.",
+       "s": "Travel with Holgart to the fishing platform.",
+       "k": "travelWithHolgartFreeingKennith",
+       "at": [
+        2717,
+        3303,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5069
+        ]
+       }
+      },
+      {
+       "t": "Talk to Bailey for an unlit torch.",
+       "s": "Talk to Bailey for an unlit torch.",
+       "k": "talkToBaileyForTorch",
+       "at": [
+        2764,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5066
+        ]
+       }
+      },
+      {
+       "t": "Pick up the broken glass in the room.",
+       "s": "Pick up the broken glass in the room.",
+       "k": "pickupGlass"
+      },
+      {
+       "t": "Pick up the damp sticks in the north east corner of the platform.",
+       "s": "Pick up the damp sticks in the north east corner of the platform.",
+       "k": "pickupDampSticks",
+       "at": [
+        2784,
+        3289,
+        0
+       ]
+      },
+      {
+       "t": "Use the broken glass on damp sticks to dry them.",
+       "s": "Use the broken glass on damp sticks to dry them.",
+       "k": "useGlassOnDampSticks"
+      },
+      {
+       "t": "Light the unlit torch with the dry sticks.",
+       "s": "Light the unlit torch with the dry sticks",
+       "k": "rubSticks"
+      },
+      {
+       "t": "Go up the ladder in the north east corner of the platform.",
+       "s": "Go up the ladder in the north east corner of the platform.",
+       "k": "goBackUpLadder",
+       "at": [
+        2784,
+        3286,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18324
+        ]
+       }
+      },
+      {
+       "t": "Kick in the badly repaired wall east of Kennith.",
+       "s": "Kick in the badly repaired wall east of Kennith.",
+       "k": "kickWall",
+       "at": [
+        2768,
+        3289,
+        1
+       ],
+       "hl": {
+        "obj": [
+         18251
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Travel with Holgart to the fishing platform.",
+       "s": "Travel with Holgart to the fishing platform.",
+       "k": "travelWithHolgartFreeingKennith",
+       "at": [
+        2717,
+        3303,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5069
+        ]
+       }
+      },
+      {
+       "t": "Talk to Bailey for an unlit torch.",
+       "s": "Talk to Bailey for an unlit torch.",
+       "k": "talkToBaileyForTorch",
+       "at": [
+        2764,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5066
+        ]
+       }
+      },
+      {
+       "t": "Pick up the broken glass in the room.",
+       "s": "Pick up the broken glass in the room.",
+       "k": "pickupGlass"
+      },
+      {
+       "t": "Pick up the damp sticks in the north east corner of the platform.",
+       "s": "Pick up the damp sticks in the north east corner of the platform.",
+       "k": "pickupDampSticks",
+       "at": [
+        2784,
+        3289,
+        0
+       ]
+      },
+      {
+       "t": "Use the broken glass on damp sticks to dry them.",
+       "s": "Use the broken glass on damp sticks to dry them.",
+       "k": "useGlassOnDampSticks"
+      },
+      {
+       "t": "Light the unlit torch with the dry sticks.",
+       "s": "Light the unlit torch with the dry sticks",
+       "k": "rubSticks"
+      },
+      {
+       "t": "Go up the ladder in the north east corner of the platform.",
+       "s": "Go up the ladder in the north east corner of the platform.",
+       "k": "goBackUpLadder",
+       "at": [
+        2784,
+        3286,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18324
+        ]
+       }
+      },
+      {
+       "t": "Talk to Kennith again.",
+       "s": "Talk to Kennith again.",
+       "k": "talkToKennithAfterKicking",
+       "at": [
+        2765,
+        3289,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5063
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Travel with Holgart to the fishing platform.",
+       "s": "Travel with Holgart to the fishing platform.",
+       "k": "travelWithHolgartFreeingKennith",
+       "at": [
+        2717,
+        3303,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5069
+        ]
+       }
+      },
+      {
+       "t": "Talk to Bailey for an unlit torch.",
+       "s": "Talk to Bailey for an unlit torch.",
+       "k": "talkToBaileyForTorch",
+       "at": [
+        2764,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5066
+        ]
+       }
+      },
+      {
+       "t": "Pick up the broken glass in the room.",
+       "s": "Pick up the broken glass in the room.",
+       "k": "pickupGlass"
+      },
+      {
+       "t": "Pick up the damp sticks in the north east corner of the platform.",
+       "s": "Pick up the damp sticks in the north east corner of the platform.",
+       "k": "pickupDampSticks",
+       "at": [
+        2784,
+        3289,
+        0
+       ]
+      },
+      {
+       "t": "Use the broken glass on damp sticks to dry them.",
+       "s": "Use the broken glass on damp sticks to dry them.",
+       "k": "useGlassOnDampSticks"
+      },
+      {
+       "t": "Light the unlit torch with the dry sticks.",
+       "s": "Light the unlit torch with the dry sticks",
+       "k": "rubSticks"
+      },
+      {
+       "t": "Go up the ladder in the north east corner of the platform.",
+       "s": "Go up the ladder in the north east corner of the platform.",
+       "k": "goBackUpLadder",
+       "at": [
+        2784,
+        3286,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18324
+        ]
+       }
+      },
+      {
+       "t": "Rotate the crane east of Kennith's cabin.",
+       "s": "Rotate the crane east of Kennith's cabin.",
+       "k": "activateCrane",
+       "at": [
+        2772,
+        3289,
+        1
+       ],
+       "hl": {
+        "obj": [
+         18327
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Talk to Caroline to complete the quest.",
+       "s": "Talk to Caroline to complete the quest.",
+       "k": "finishQuest",
+       "at": [
+        2717,
+        3303,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5067
+        ]
+       }
+      },
+      {
+       "t": "Go back down the ladder.",
+       "s": "Go back down the ladder.",
+       "k": "goDownLadderAgain",
+       "at": [
+        2784,
+        3286,
+        1
+       ],
+       "hl": {
+        "obj": [
+         18325
+        ]
+       }
+      },
+      {
+       "t": "Travel with Holgart back to the mainland.",
+       "s": "Travel with Holgart back to the mainland.",
+       "k": "returnWithHolgart",
+       "at": [
+        2781,
+        3274,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5070
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S7-16": {
+   "var": [
+    "varp",
+    112
+   ],
+   "route": [
+    {
+     "title": "Fixing the Observatory",
+     "steps": [
+      "Speak with the Observatory professor. Dialogue: \"Talk about the Observatory quest.\", \"An Observatory?\", \"Sounds interesting. How can I help?\"",
+      "Give the Observatory professor the three planks, bronze bar and molten glass (speak to him 3 separate times Dialogue: \"Talk about the Observatory quest.\" each time).",
+      "Speak to the assistant.",
+      "Go up the east hill and down the stairs.",
+      "Once downstairs, search all the chests until you find the goblin kitchen key (most commonly found in south-eastern part when you go down the stairs, don't skip the dialogue once you find the key or you will not pick it up. If not found in the two chests directly south-east from the stairs, it is guaranteed to be in the last chest in the dungeon. The other chests will contain poisonous spiders.).",
+      "Head north from the entrance in the dungeon, then go west to the kitchen gate and prod the sleeping guard, then kill or trap him.",
+      "Open the gate and inspect the goblin stove.",
+      "Go back and speak to the professor with the lens mould in your inventory. Dialogue: \"Talk about the Observatory quest.\" He will give back the needed molten glass for the next part.",
+      "Use the molten glass on the lens mould.",
+      "Speak to the professor to give him the lens mould and the observatory lens. Dialogue: \"Talk about the Observatory quest.\"",
+      "Head back into the goblin dungeon.",
+      "Run past the kitchen and climb up the stairs in the south end of the dungeon. (During the cutscene, DO NOT CLICK on anything in the observatory or you'll have to restart the cutscene)"
+     ]
+    },
+    {
+     "title": "Finishing up",
+     "steps": [
+      "After the cutscene, talk to the professor upstairs and view the telescope. Dialogue: \"Talk about the Observatory quest.\"",
+      "Talk to the professor again and identify the constellation you saw (see table below). Dialogue: \"Talk about the Observatory quest.\"",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to the Observatory professor north of Castle Wars.",
+       "s": "Talk to the Observatory professor north of Castle Wars.",
+       "k": "talkToProfessor",
+       "at": [
+        2442,
+        3186,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5366
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Give the professor 3 planks.",
+       "s": "Give the professor 3 planks.",
+       "k": "giveProfessorPlanks",
+       "at": [
+        2442,
+        3186,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5366
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Give the professor a bronze bar.",
+       "s": "Give the professor a bronze bar.",
+       "k": "giveProfessorBar",
+       "at": [
+        2442,
+        3186,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5366
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Give the professor some molten glass.",
+       "s": "Give the professor some molten glass.",
+       "k": "giveProfessorGlass",
+       "at": [
+        2442,
+        3186,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5366
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the dungeon east of the Professor.",
+       "s": "Enter the dungeon east of the Professor.",
+       "k": "enterDungeon",
+       "at": [
+        2458,
+        3186,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25432
+        ]
+       }
+      },
+      {
+       "t": "Search only the marked chests in the dungeon. Unmarked chests contain monsters and may poison you.",
+       "s": "Search only the marked chests; unmarked ones hold monsters or poison",
+       "k": "searchChests",
+       "hl": {
+        "obj": [
+         25385
+        ]
+       }
+      },
+      {
+       "t": "Either kill or trap the guard on the marked tile to the north, then search the goblin stove.",
+       "s": "Kill or trap the guard to the north, then search the goblin stove",
+       "k": "inspectStove",
+       "at": [
+        2327,
+        9389,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25442
+        ]
+       }
+      },
+      {
+       "t": "Prod the sleeping guard in the north of the dungeon. He'll attack you. You need to then either kill him, or get him in the marked spot to the north of the gate.",
+       "s": "Prod the sleeping guard north of the dungeon, then kill or trap it",
+       "k": "prodGuard",
+       "at": [
+        2327,
+        9394,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5368
+        ]
+       }
+      },
+      {
+       "t": "Give the professor the lens mould. If you don't have it, check your bank.",
+       "s": "Give the professor the lens mould",
+       "k": "giveProfessorMould",
+       "at": [
+        2442,
+        3186,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5366
+        ]
+       }
+      },
+      {
+       "t": "Climb the stairs back to the surface.",
+       "s": "Climb the stairs back to the surface.",
+       "k": "leaveDungeon",
+       "at": [
+        2355,
+        9396,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25429
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Enter the dungeon east of the Professor.",
+       "s": "Enter the dungeon east of the Professor.",
+       "k": "enterDungeon",
+       "at": [
+        2458,
+        3186,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25432
+        ]
+       }
+      },
+      {
+       "t": "Either kill or trap the guard on the marked tile to the north, then search the goblin stove.",
+       "s": "Kill or trap the guard to the north, then search the goblin stove",
+       "k": "inspectStove",
+       "at": [
+        2327,
+        9389,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25442
+        ]
+       }
+      },
+      {
+       "t": "Prod the sleeping guard in the north of the dungeon. He'll attack you. You need to then either kill him, or get him in the marked spot to the north of the gate.",
+       "s": "Prod the sleeping guard north of the dungeon, then kill or trap it",
+       "k": "prodGuard",
+       "at": [
+        2327,
+        9394,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5368
+        ]
+       }
+      },
+      {
+       "t": "Use the molten glass on the mould.",
+       "s": "Use the molten glass on the mould.",
+       "k": "useGlassOnMould"
+      },
+      {
+       "t": "Climb the stairs back to the surface.",
+       "s": "Climb the stairs back to the surface.",
+       "k": "leaveDungeon",
+       "at": [
+        2355,
+        9396,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25429
+        ]
+       }
+      },
+      {
+       "t": "Give the professor the lens mould and lens.",
+       "s": "Give the professor the lens mould and lens.",
+       "k": "giveProfessorLensAndMould",
+       "at": [
+        2442,
+        3186,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5366
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Enter the dungeon east of the Professor.",
+       "s": "Enter the dungeon east of the Professor.",
+       "k": "enterDungeonAgain",
+       "at": [
+        2458,
+        3186,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25432
+        ]
+       }
+      },
+      {
+       "t": "Follow the dungeon around anti-clockwise to a staircase, then climb it.",
+       "s": "Follow the dungeon anticlockwise to a staircase and climb it",
+       "k": "enterObservatory",
+       "at": [
+        2335,
+        9352,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25429
+        ]
+       }
+      },
+      {
+       "t": "Climb up the stairs in the observatory.",
+       "s": "Climb up the stairs in the observatory.",
+       "k": "goToF2Observatory",
+       "at": [
+        2444,
+        3160,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25431
+        ]
+       }
+      },
+      {
+       "t": "Use the telescope.",
+       "s": "Use the telescope.",
+       "k": "viewTelescope",
+       "at": [
+        2441,
+        3162,
+        1
+       ],
+       "hl": {
+        "obj": [
+         25591
+        ]
+       }
+      },
+      {
+       "t": "Watch the cutscene.",
+       "s": "Watch the cutscene.",
+       "k": "watchCutscene"
+      },
+      {
+       "t": "Tell the professor which constellation you saw through the telescope.",
+       "s": "Tell the professor the constellation you saw",
+       "k": "pwTellProfessorConstellation"
+      }
+     ]
+    }
+   ]
+  },
   "S8-01": {
    "var": [
     "varp",

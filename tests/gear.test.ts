@@ -292,7 +292,7 @@ describe('gear advice', () => {
 describe('step opponents (monsters.json)', () => {
   it('every step opponent has a wiki card, the level matches the guide text', () => {
     const named = allSteps.filter((s) => s.foes?.length);
-    expect(named.map((s) => s.id)).toEqual(['S2-08', 'S2-11', 'S4-01', 'S4-02', 'S7-14', 'S8-02']);
+    expect(named.map((s) => s.id)).toEqual(['S2-08', 'S2-11', 'S4-01', 'S4-02', 'S7-14', 'S7-16', 'S8-02']);
     for (const s of named) {
       expect(stepFoes(s).map((f) => f.name), s.id).toEqual(s.foes);
       const text = [s.how, s.where, ...(s.fields ?? []).map((f) => f.text)].join(' ');

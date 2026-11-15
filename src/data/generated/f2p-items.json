@@ -8784,6 +8784,38 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Mithril_scimitar"
   },
   {
+    "id": 1775,
+    "nameEn": "Molten glass",
+    "examine": "Hot glass ready to be blown into useful objects.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Molten_glass.png",
+    "value": 3,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Fritz the Glassblower",
+        "location": "",
+        "price": 10000000000,
+        "stock": "N/A",
+        "members": false
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Phantom Muspah",
+        "combatLevel": 741,
+        "rate": "15/235"
+      },
+      {
+        "monster": "Thermonuclear smoke devil",
+        "combatLevel": 301,
+        "rate": "2/107"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Molten_glass"
+  },
+  {
     "id": 561,
     "nameEn": "Nature rune",
     "examine": "Used for alchemy spells.",
@@ -9336,6 +9368,54 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Pink_skirt"
+  },
+  {
+    "id": 960,
+    "nameEn": "Plank",
+    "examine": "A plank of wood!",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Razmire Builders Merchants.",
+        "location": "Mort'ton",
+        "owner": "Razmire Keelgan",
+        "price": 1,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Wilderness - Graveyard of Shadows",
+      "Crandor - crashed ship at the south-eastern coast. 3 require Telekinetic Grab.",
+      "Wilderness - by Larran's small chest",
+      "Port Khazard (members only)",
+      "Barbarian Outpost - north of the agility course (members only)",
+      "Kebos Lowlands mine (members only)",
+      "Ape Atoll - hut in south-western coast (members only)",
+      "Fossil Island - Museum Camp (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Undead Lumberjack",
+        "combatLevel": 30,
+        "rate": "Always"
+      },
+      {
+        "monster": "Armoured zombie (Zemouregal's Base)",
+        "combatLevel": 82,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Armoured zombie (Zemouregal's Fort)",
+        "combatLevel": 105,
+        "rate": "5/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Plank"
   },
   {
     "id": 960,
@@ -14471,6 +14551,87 @@
     "highAlch": 8,
     "lowAlch": 5,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Strength_potion"
+  },
+  {
+    "id": 1941,
+    "nameEn": "Swamp paste",
+    "examine": "A tar-like substance mixed with flour and warmed.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Swamp_paste.png",
+    "value": 30,
+    "highAlch": 18,
+    "lowAlch": 12,
+    "buyLocations": [
+      {
+        "shopName": "Razmire Builders Merchants.",
+        "location": "Mort'ton",
+        "owner": "Razmire Keelgan",
+        "price": 31,
+        "stock": 1000,
+        "members": true
+      },
+      {
+        "shopName": "Salvager Overlook General Store",
+        "location": "Salvager Overlook",
+        "owner": "Shopkeeper (Salvager Overlook)",
+        "price": 39,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Seb's Shipyard Supplies",
+        "location": "Shipyard",
+        "owner": "Shipwright Seb",
+        "price": 39,
+        "stock": 2500,
+        "members": true
+      },
+      {
+        "shopName": "Port Roberts General Store",
+        "location": "Port Roberts",
+        "owner": "Shopkeeper (Port Roberts)",
+        "price": 39,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Khazard General Store",
+        "location": "Port Khazard",
+        "owner": "Shop keeper",
+        "price": 42,
+        "stock": 5000,
+        "members": true
+      },
+      {
+        "shopName": "Rasolo the Wandering Merchant",
+        "location": "South of Baxtorian Falls",
+        "owner": "Rasolo",
+        "price": 60,
+        "stock": 1,
+        "members": true
+      },
+      {
+        "shopName": "Trader Stan's Trading Post",
+        "location": "Port Piscarilius",
+        "owner": "Trader Crewmember",
+        "price": 75,
+        "stock": 30,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Narwhal",
+        "combatLevel": 111,
+        "rate": "8/60"
+      },
+      {
+        "monster": "Dolphin",
+        "combatLevel": 22,
+        "rate": "4/50"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Swamp_paste"
   },
   {
     "id": 373,

@@ -156,9 +156,9 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Handover — state on 2026-11-14
 
-- **State:** v2.106.0 published, all gates passed; nothing tested in the real game since 2.87.
+- **State:** v2.107.0 published, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, training times shown); XP/Balanced/Money change the method only; Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; V2 review retired; update Cancel stays.
-- **Next:** 1) P4. 2) Members: quest batches, modelled consumption for the unknown-time debt (7 turns). 3) Measured quest times from the player's own quest starts and finishes.
+- **Next:** 1) P4. 2) Members: quest batches, modelled consumption for the unknown-time debt (6 turns). 3) Measured quest times from the player's own quest starts and finishes.
 - **Owner:** writes Russian; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 
 ## Remaining work in priority order
@@ -175,7 +175,7 @@ Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent e
 
 ### Quest content pipeline — pilot 2026-11-14
 
-Machine-drafted quests, checked before shipping. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/` (Quest Helper stages, tiles, ids, texts; Wiki cards; wording only, one short line per text). `npm run check-drafts` fails source contradictions and off-ground tiles in a walking replay; unconfirmed facts stay `unknown`. `npm run quest-promote -- <Draft> <id>` writes the step, stages and QH row (next steps in its header). Shipped S7-06 to S7-14 (id 0 is a real varp/object; promoted drafts are deleted); drafts: Biohazard, Clock Tower, Murder Mystery, Tribal Totem; Quest Helper `b9b9370`. Quest facts cover 43; the Members gate finishes 43/43. Made items: `recipes.json`. `game-modes` UI scenario: every page, both modes. Fights, unreviewed quest flows and training retire projected stock and cash (`runtime.ts` adapters, `trainingModel`); single worn pieces, wearable gear and quest-given items survive unless the objective names them (`decision.ts`); prerequisites' keepsakes count as carried (`tactical.ts`). Members unknown time: 7 of 340 turns.
+Machine-drafted quests. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/` (Quest Helper stages, tiles, ids, texts; Wiki cards; one short line per text). `npm run check-drafts` fails source contradictions and off-ground tiles in a walking replay; unconfirmed facts stay `unknown`. `npm run quest-promote -- <Draft> <id>` writes the step, stages and QH row. Shipped S7-06 to S7-16 (id 0 is a real varp/object; promoted drafts are deleted); drafts: Biohazard, Clock Tower, Elemental Workshop I, Hazeel Cult, Murder Mystery, Rag and Bone Man I, Tribal Totem; Quest Helper `b9b9370`. The Members gate finishes 45/45. `game-modes` UI scenario: every page, both modes. Fights, unreviewed quest flows and training retire projected stock and cash (`runtime.ts` adapters, `trainingModel`); single worn pieces, wearable gear and quest-given items survive unless the objective names them (`decision.ts`); prerequisites' keepsakes count as carried (`tactical.ts`). Fights assume the quest's required levels (`runtime.ts`). Members unknown time: 6 of 330 turns.
 
 ### P4 — Claude's real-client acceptance
 
