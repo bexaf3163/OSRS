@@ -28,9 +28,9 @@ describe('the method catalogue', () => {
     expect(methodById('nothing')).toBeUndefined();
   });
 
-  it('every method is free to play and names where its figures came from and when', () => {
+  it('every method says whether it needs membership and names where its figures came from and when', () => {
     for (const m of METHODS) {
-      expect(m.access, m.id).toBe('f2p');
+      expect(['f2p', 'members'], m.id).toContain(m.access);
       expect(m.sources.every((s) => s.url.startsWith('https://oldschool.runescape.wiki/')), m.id).toBe(true);
       expect(m.sources.every((s) => s.retrievedAt <= m.verifiedAt), m.id).toBe(true);
       expect(m.sources.some((s) => s.revision !== undefined), m.id).toBe(true);

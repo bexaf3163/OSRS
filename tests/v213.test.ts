@@ -72,13 +72,13 @@ describe('wiki parsing for earning methods', () => {
 import { allSteps, fundingWikiJson } from '../src/data';
 
 describe('data 2.13', () => {
-  it('earning methods from the wiki: unique ids, wiki sources, free to play, a pace and a product sold every unit', () => {
+  it('earning methods from the wiki: unique ids, wiki sources, the free-to-play ones kept, a pace and a product sold every unit', () => {
     const methods = (fundingWikiJson as unknown as { methods: FundingMethod[] }).methods;
-    expect(methods.length).toBeGreaterThan(40);
+    expect(methods.filter((m) => m.access === 'f2p').length).toBeGreaterThan(40);
     expect(new Set(methods.map((m) => m.id)).size).toBe(methods.length);
     for (const m of methods) {
       expect(m.sources[0].url.startsWith('https://oldschool.runescape.wiki/w/')).toBe(true);
-      expect(m.access).toBe('f2p');
+      expect(['f2p', 'members']).toContain(m.access);
       expect(m.rate.perHour.typical).toBeGreaterThan(0);
       expect(m.outputs.some((o) => !o.chance)).toBe(true);
     }

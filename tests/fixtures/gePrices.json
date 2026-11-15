@@ -1,5 +1,5 @@
 {
- "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15",
+ "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15",
  "prices": {
   "Adamant 2h sword": {
    "buy": 3670,
@@ -1388,6 +1388,1386 @@
   "Mort myre fungus": {
    "buy": 125,
    "sell": 119
+  },
+  "Acorn": {
+   "buy": 92,
+   "sell": 83
+  },
+  "Adamant bolts": {
+   "buy": 129,
+   "sell": 121
+  },
+  "Adamant spear": {
+   "buy": 733,
+   "sell": 728
+  },
+  "Adamant spear(p)": {
+   "buy": 900,
+   "sell": 722
+  },
+  "Aether catalyst": {
+   "buy": 357,
+   "sell": 340
+  },
+  "Aether rune": {
+   "buy": 782,
+   "sell": 775
+  },
+  "Air battlestaff": {
+   "buy": 8770,
+   "sell": 8701
+  },
+  "Air orb": {
+   "buy": 1372,
+   "sell": 1371
+  },
+  "Amethyst": {
+   "buy": 2645,
+   "sell": 2632
+  },
+  "Amethyst arrowtips": {
+   "buy": 181,
+   "sell": 180
+  },
+  "Amulet of chemistry": {
+   "buy": 1411,
+   "sell": 1384
+  },
+  "Amulet of glory": {
+   "buy": 11381,
+   "sell": 11150
+  },
+  "Amulet of glory(4)": {
+   "buy": 11617,
+   "sell": 11125
+  },
+  "Amulet of glory(6)": {
+   "buy": 10025,
+   "sell": 9814
+  },
+  "Amulet of the Damned (full)": {
+   "buy": 35310,
+   "sell": 33500
+  },
+  "Anchovy pizza": {
+   "buy": 609,
+   "sell": 609
+  },
+  "Anglerfish": {
+   "buy": 1585,
+   "sell": 1550
+  },
+  "Apple pie": {
+   "buy": 80,
+   "sell": 72
+  },
+  "Araxyte venom sac": {
+   "buy": 995,
+   "sell": 980
+  },
+  "Ardougne teleport (tablet)": {
+   "buy": 476,
+   "sell": 472
+  },
+  "Arrow shaft": {
+   "buy": 1,
+   "sell": 1
+  },
+  "Ascension bolts": {
+   "buy": 59,
+   "sell": 57
+  },
+  "Ascension shards": {
+   "buy": 543,
+   "sell": 528
+  },
+  "Asgarnian seed": {
+   "buy": 8,
+   "sell": 6
+  },
+  "Assorted flowers": {
+   "buy": 678,
+   "sell": 369
+  },
+  "Astral rune": {
+   "buy": 136,
+   "sell": 135
+  },
+  "Avantoe": {
+   "buy": 1666,
+   "sell": 1651
+  },
+  "Avantoe potion (unf)": {
+   "buy": 1828,
+   "sell": 1808
+  },
+  "Avantoe seed": {
+   "buy": 230,
+   "sell": 210
+  },
+  "Bale of flax": {
+   "buy": 124,
+   "sell": 122
+  },
+  "Banana": {
+   "buy": 55,
+   "sell": 54
+  },
+  "Bananas(5)": {
+   "buy": 911,
+   "sell": 666
+  },
+  "Barley seed": {
+   "buy": 4,
+   "sell": 3
+  },
+  "Basalt": {
+   "buy": 733,
+   "sell": 725
+  },
+  "Basket": {
+   "buy": 4,
+   "sell": 3
+  },
+  "Battlestaff": {
+   "buy": 8008,
+   "sell": 8000
+  },
+  "Bear fur": {
+   "buy": 200,
+   "sell": 121
+  },
+  "Beer glass": {
+   "buy": 25,
+   "sell": 21
+  },
+  "Belladonna seed": {
+   "buy": 231,
+   "sell": 159
+  },
+  "Binding necklace": {
+   "buy": 541,
+   "sell": 527
+  },
+  "Bird nest (empty)": {
+   "buy": 3250,
+   "sell": 3242
+  },
+  "Black dragon leather": {
+   "buy": 3974,
+   "sell": 3940
+  },
+  "Black dragonhide": {
+   "buy": 3412,
+   "sell": 3326
+  },
+  "Black flowers": {
+   "buy": 40000,
+   "sell": 23994
+  },
+  "Blighted ancient ice sack": {
+   "buy": 463,
+   "sell": 448
+  },
+  "Blighted anglerfish": {
+   "buy": 58,
+   "sell": 57
+  },
+  "Blighted manta ray": {
+   "buy": 87,
+   "sell": 79
+  },
+  "Blighted super restore(4)": {
+   "buy": 3673,
+   "sell": 3572
+  },
+  "Blood rune": {
+   "buy": 339,
+   "sell": 338
+  },
+  "Blue dragon leather": {
+   "buy": 2140,
+   "sell": 2107
+  },
+  "Blue dragonhide": {
+   "buy": 1731,
+   "sell": 1683
+  },
+  "Blue flowers": {
+   "buy": 158,
+   "sell": 155
+  },
+  "Body talisman": {
+   "buy": 1401,
+   "sell": 1400
+  },
+  "Bolt of canvas": {
+   "buy": 1764,
+   "sell": 1578
+  },
+  "Bone fragments": {
+   "buy": 677,
+   "sell": 650
+  },
+  "Bones to peaches (tablet)": {
+   "buy": 891,
+   "sell": 836
+  },
+  "Bow string": {
+   "buy": 135,
+   "sell": 127
+  },
+  "Bracelet of ethereum (uncharged)": {
+   "buy": 43442,
+   "sell": 42405
+  },
+  "Bryophyta's essence": {
+   "buy": 4700000,
+   "sell": 4525001
+  },
+  "Bullseye lantern": {
+   "buy": 1586,
+   "sell": 1501
+  },
+  "Bullseye lantern (empty)": {
+   "buy": 480,
+   "sell": 600
+  },
+  "Cactus seed": {
+   "buy": 77,
+   "sell": 40
+  },
+  "Cactus spine": {
+   "buy": 1327,
+   "sell": 1301
+  },
+  "Cadantine": {
+   "buy": 1880,
+   "sell": 1866
+  },
+  "Cadantine seed": {
+   "buy": 1779,
+   "sell": 1613
+  },
+  "Calquat tree seed": {
+   "buy": 289,
+   "sell": 288
+  },
+  "Camelot teleport (tablet)": {
+   "buy": 430,
+   "sell": 421
+  },
+  "Casket": {
+   "buy": 727,
+   "sell": 900
+  },
+  "Celastrus bark": {
+   "buy": 7705,
+   "sell": 7700
+  },
+  "Celastrus sapling": {
+   "buy": 23047,
+   "sell": 22000
+  },
+  "Celastrus seed": {
+   "buy": 23530,
+   "sell": 20000
+  },
+  "Chocolate cake": {
+   "buy": 182,
+   "sell": 160
+  },
+  "Chromium ingot": {
+   "buy": 39030,
+   "sell": 38000
+  },
+  "Clockwork": {
+   "buy": 834,
+   "sell": 758
+  },
+  "Cooked moonlight antelope": {
+   "buy": 1865,
+   "sell": 1830
+  },
+  "Cooking apple": {
+   "buy": 38,
+   "sell": 37
+  },
+  "Cotton boll": {
+   "buy": 860,
+   "sell": 800
+  },
+  "Cotton seed": {
+   "buy": 1267,
+   "sell": 915
+  },
+  "Crystal key": {
+   "buy": 17905,
+   "sell": 17800
+  },
+  "Dark crab": {
+   "buy": 1054,
+   "sell": 1005
+  },
+  "Dark fishing bait": {
+   "buy": 5,
+   "sell": 4
+  },
+  "Dark kebbit fur": {
+   "buy": 126,
+   "sell": 61
+  },
+  "Diamond": {
+   "buy": 1587,
+   "sell": 1570
+  },
+  "Diamond ascension bolts": {
+   "buy": 265,
+   "sell": 265
+  },
+  "Diamond bolt tips": {
+   "buy": 173,
+   "sell": 168
+  },
+  "Diamond bolts": {
+   "buy": 307,
+   "sell": 301
+  },
+  "Diamond bracelet": {
+   "buy": 1849,
+   "sell": 1831
+  },
+  "Diamond ring": {
+   "buy": 1795,
+   "sell": 1751
+  },
+  "Dodgy necklace": {
+   "buy": 1422,
+   "sell": 1360
+  },
+  "Dragon arrowtips": {
+   "buy": 2691,
+   "sell": 2651
+  },
+  "Dragon bones": {
+   "buy": 3919,
+   "sell": 3886
+  },
+  "Dragon dagger": {
+   "buy": 17116,
+   "sell": 16900
+  },
+  "Dragon dart tip": {
+   "buy": 1342,
+   "sell": 1340
+  },
+  "Dragon harpoon": {
+   "buy": 1798244,
+   "sell": 1738354
+  },
+  "Dragon impling jar": {
+   "buy": 390000,
+   "sell": 380750
+  },
+  "Dragon longsword": {
+   "buy": 58944,
+   "sell": 58702
+  },
+  "Dragon mace": {
+   "buy": 29193,
+   "sell": 29150
+  },
+  "Dragonfruit tree seed": {
+   "buy": 123191,
+   "sell": 122524
+  },
+  "Dragonstone": {
+   "buy": 10700,
+   "sell": 10610
+  },
+  "Dragonstone ring": {
+   "buy": 11167,
+   "sell": 11091
+  },
+  "Drift net": {
+   "buy": 1950,
+   "sell": 1905
+  },
+  "Dwarf weed": {
+   "buy": 1245,
+   "sell": 1238
+  },
+  "Dwarf weed potion (unf)": {
+   "buy": 1533,
+   "sell": 1527
+  },
+  "Dwarf weed seed": {
+   "buy": 373,
+   "sell": 360
+  },
+  "Dynamite": {
+   "buy": 100,
+   "sell": 91
+  },
+  "Earth orb": {
+   "buy": 721,
+   "sell": 707
+  },
+  "Eclectic impling jar": {
+   "buy": 4841,
+   "sell": 4685
+  },
+  "Efaritay's aid": {
+   "buy": 1719,
+   "sell": 1654
+  },
+  "Efh salt": {
+   "buy": 100,
+   "sell": 88
+  },
+  "Emerald": {
+   "buy": 291,
+   "sell": 281
+  },
+  "Emerald bracelet": {
+   "buy": 630,
+   "sell": 595
+  },
+  "Emerald ring": {
+   "buy": 540,
+   "sell": 503
+  },
+  "Essence impling jar": {
+   "buy": 2213,
+   "sell": 2009
+  },
+  "Falador teleport (tablet)": {
+   "buy": 693,
+   "sell": 648
+  },
+  "Fiendish ashes": {
+   "buy": 42,
+   "sell": 40
+  },
+  "Fine cloth": {
+   "buy": 6800,
+   "sell": 6725
+  },
+  "Fine fish offcuts": {
+   "buy": 276,
+   "sell": 265
+  },
+  "Fire orb": {
+   "buy": 1177,
+   "sell": 1175
+  },
+  "Fire talisman": {
+   "buy": 1867,
+   "sell": 1781
+  },
+  "Fish food": {
+   "buy": 428,
+   "sell": 170
+  },
+  "Fish offcuts": {
+   "buy": 10,
+   "sell": 8
+  },
+  "Fish pie": {
+   "buy": 300,
+   "sell": 280
+  },
+  "Flamtaer bracelet": {
+   "buy": 1850,
+   "sell": 656
+  },
+  "Flamtaer hammer": {
+   "buy": 6200,
+   "sell": 5000
+  },
+  "Flax": {
+   "buy": 2,
+   "sell": 1
+  },
+  "Fox fur": {
+   "buy": 3550,
+   "sell": 3374
+  },
+  "Garden pie": {
+   "buy": 35,
+   "sell": 22
+  },
+  "Gloves of silence": {
+   "buy": 2000,
+   "sell": 1300
+  },
+  "Goat horn": {
+   "buy": 37,
+   "sell": 34
+  },
+  "Goat horn dust": {
+   "buy": 99,
+   "sell": 103
+  },
+  "Gold bracelet": {
+   "buy": 210,
+   "sell": 193
+  },
+  "Gold locks": {
+   "buy": 18500,
+   "sell": 18172
+  },
+  "Gold ring": {
+   "buy": 117,
+   "sell": 116
+  },
+  "Grain": {
+   "buy": 9,
+   "sell": 8
+  },
+  "Green dragon leather": {
+   "buy": 1714,
+   "sell": 1667
+  },
+  "Green dragonhide": {
+   "buy": 1399,
+   "sell": 1350
+  },
+  "Grimy avantoe": {
+   "buy": 1485,
+   "sell": 1485
+  },
+  "Grimy cadantine": {
+   "buy": 1689,
+   "sell": 1647
+  },
+  "Grimy dwarf weed": {
+   "buy": 1140,
+   "sell": 1080
+  },
+  "Grimy guam leaf": {
+   "buy": 280,
+   "sell": 256
+  },
+  "Grimy harralander": {
+   "buy": 158,
+   "sell": 155
+  },
+  "Grimy irit leaf": {
+   "buy": 1194,
+   "sell": 1121
+  },
+  "Grimy kwuarm": {
+   "buy": 1897,
+   "sell": 1897
+  },
+  "Grimy lantadyme": {
+   "buy": 950,
+   "sell": 920
+  },
+  "Grimy marrentill": {
+   "buy": 117,
+   "sell": 110
+  },
+  "Grimy ranarr weed": {
+   "buy": 4705,
+   "sell": 4629
+  },
+  "Grimy snapdragon": {
+   "buy": 6235,
+   "sell": 6175
+  },
+  "Grimy tarromin": {
+   "buy": 114,
+   "sell": 110
+  },
+  "Grimy toadflax": {
+   "buy": 1604,
+   "sell": 1580
+  },
+  "Grimy torstol": {
+   "buy": 3373,
+   "sell": 3315
+  },
+  "Grubby key": {
+   "buy": 35200,
+   "sell": 34702
+  },
+  "Guam leaf": {
+   "buy": 356,
+   "sell": 348
+  },
+  "Hammerstone seed": {
+   "buy": 11,
+   "sell": 7
+  },
+  "Harralander": {
+   "buy": 228,
+   "sell": 227
+  },
+  "Harralander potion (unf)": {
+   "buy": 460,
+   "sell": 458
+  },
+  "Headless arrow": {
+   "buy": 12,
+   "sell": 11
+  },
+  "Hemp": {
+   "buy": 910,
+   "sell": 831
+  },
+  "Hemp seed": {
+   "buy": 827,
+   "sell": 705
+  },
+  "Hemp yarn": {
+   "buy": 951,
+   "sell": 825
+  },
+  "Impling jar": {
+   "buy": 241,
+   "sell": 229
+  },
+  "Irit leaf": {
+   "buy": 1207,
+   "sell": 1187
+  },
+  "Irit seed": {
+   "buy": 110,
+   "sell": 95
+  },
+  "Jade amulet": {
+   "buy": 1015,
+   "sell": 970
+  },
+  "Jerboa tail": {
+   "buy": 128,
+   "sell": 126
+  },
+  "Jug of wine": {
+   "buy": 4,
+   "sell": 3
+  },
+  "Jute fibre": {
+   "buy": 783,
+   "sell": 747
+  },
+  "Jute seed": {
+   "buy": 4,
+   "sell": 3
+  },
+  "Kebab": {
+   "buy": 70,
+   "sell": 68
+  },
+  "Krandorian seed": {
+   "buy": 15,
+   "sell": 11
+  },
+  "Kwuarm": {
+   "buy": 2023,
+   "sell": 2004
+  },
+  "Kwuarm seed": {
+   "buy": 788,
+   "sell": 722
+  },
+  "Lantadyme": {
+   "buy": 1084,
+   "sell": 1036
+  },
+  "Lantadyme potion (unf)": {
+   "buy": 1273,
+   "sell": 1240
+  },
+  "Lantadyme seed": {
+   "buy": 100,
+   "sell": 92
+  },
+  "Lava scale shard": {
+   "buy": 100,
+   "sell": 93
+  },
+  "Limestone": {
+   "buy": 500,
+   "sell": 412
+  },
+  "Limestone brick": {
+   "buy": 520,
+   "sell": 500
+  },
+  "Limpwurt seed": {
+   "buy": 19,
+   "sell": 16
+  },
+  "Loop half of key": {
+   "buy": 7985,
+   "sell": 7694
+  },
+  "Magic longbow": {
+   "buy": 1088,
+   "sell": 1066
+  },
+  "Magic longbow (u)": {
+   "buy": 658,
+   "sell": 645
+  },
+  "Magic seed": {
+   "buy": 63500,
+   "sell": 61225
+  },
+  "Mahogany logs": {
+   "buy": 58,
+   "sell": 54
+  },
+  "Mahogany plank": {
+   "buy": 1870,
+   "sell": 1861
+  },
+  "Mahogany seed": {
+   "buy": 111,
+   "sell": 106
+  },
+  "Maple longbow (u)": {
+   "buy": 74,
+   "sell": 68
+  },
+  "Maple seed": {
+   "buy": 2400,
+   "sell": 2416
+  },
+  "Marlin": {
+   "buy": 3750,
+   "sell": 3655
+  },
+  "Marlin scales": {
+   "buy": 1170,
+   "sell": 1140
+  },
+  "Marrentill": {
+   "buy": 224,
+   "sell": 171
+  },
+  "Meat pie": {
+   "buy": 26,
+   "sell": 25
+  },
+  "Mind talisman": {
+   "buy": 1215,
+   "sell": 1001
+  },
+  "Mixed flowers": {
+   "buy": 150,
+   "sell": 125
+  },
+  "Mole claw": {
+   "buy": 4788,
+   "sell": 4200
+  },
+  "Mole skin": {
+   "buy": 3926,
+   "sell": 3575
+  },
+  "Monk's robe": {
+   "buy": 123,
+   "sell": 111
+  },
+  "Monk's robe top": {
+   "buy": 511,
+   "sell": 390
+  },
+  "Monkey bones": {
+   "buy": 260,
+   "sell": 186
+  },
+  "Muddy key": {
+   "buy": 8400,
+   "sell": 6912
+  },
+  "Oak plank": {
+   "buy": 520,
+   "sell": 507
+  },
+  "Olive oil(4)": {
+   "buy": 43,
+   "sell": 21
+  },
+  "Onyx bolt tips": {
+   "buy": 8445,
+   "sell": 8439
+  },
+  "Orange flowers": {
+   "buy": 310,
+   "sell": 498
+  },
+  "Palm tree seed": {
+   "buy": 12405,
+   "sell": 12325
+  },
+  "Papaya tree seed": {
+   "buy": 1033,
+   "sell": 1005
+  },
+  "Pastry dough": {
+   "buy": 131,
+   "sell": 130
+  },
+  "Pie dish": {
+   "buy": 22,
+   "sell": 20
+  },
+  "Pie shell": {
+   "buy": 257,
+   "sell": 227
+  },
+  "Pineapple pizza": {
+   "buy": 926,
+   "sell": 840
+  },
+  "Pineapple ring": {
+   "buy": 71,
+   "sell": 19
+  },
+  "Pineapple seed": {
+   "buy": 48,
+   "sell": 82
+  },
+  "Pizza base": {
+   "buy": 180,
+   "sell": 200
+  },
+  "Plain pizza": {
+   "buy": 495,
+   "sell": 416
+  },
+  "Potato": {
+   "buy": 18,
+   "sell": 16
+  },
+  "Potato cactus": {
+   "buy": 47,
+   "sell": 45
+  },
+  "Pure essence": {
+   "buy": 2,
+   "sell": 1
+  },
+  "Purple flowers": {
+   "buy": 100,
+   "sell": 50
+  },
+  "Ranarr seed": {
+   "buy": 22506,
+   "sell": 22136
+  },
+  "Ranarr weed": {
+   "buy": 4861,
+   "sell": 4828
+  },
+  "Ranging potion(2)": {
+   "buy": 1225,
+   "sell": 1039
+  },
+  "Raw admiral pie": {
+   "buy": 1410,
+   "sell": 1307
+  },
+  "Raw anglerfish": {
+   "buy": 1295,
+   "sell": 1268
+  },
+  "Raw bass": {
+   "buy": 9,
+   "sell": 8
+  },
+  "Raw chompy": {
+   "buy": 1048,
+   "sell": 1021
+  },
+  "Raw dark crab": {
+   "buy": 695,
+   "sell": 675
+  },
+  "Raw herring": {
+   "buy": 105,
+   "sell": 99
+  },
+  "Raw manta ray": {
+   "buy": 743,
+   "sell": 735
+  },
+  "Raw marlin": {
+   "buy": 3450,
+   "sell": 3450
+  },
+  "Raw moonlight antelope": {
+   "buy": 1211,
+   "sell": 1176
+  },
+  "Raw pike": {
+   "buy": 66,
+   "sell": 63
+  },
+  "Raw pyre fox": {
+   "buy": 851,
+   "sell": 815
+  },
+  "Raw rabbit": {
+   "buy": 619,
+   "sell": 69
+  },
+  "Raw sea turtle": {
+   "buy": 455,
+   "sell": 451
+  },
+  "Raw shark": {
+   "buy": 501,
+   "sell": 502
+  },
+  "Raw summer pie": {
+   "buy": 1940,
+   "sell": 1900
+  },
+  "Raw sunlight antelope": {
+   "buy": 1275,
+   "sell": 1240
+  },
+  "Raw wild pie": {
+   "buy": 4057,
+   "sell": 3526
+  },
+  "Raw yellowfin": {
+   "buy": 556,
+   "sell": 544
+  },
+  "Red dragon leather": {
+   "buy": 2687,
+   "sell": 2603
+  },
+  "Red dragonhide": {
+   "buy": 2116,
+   "sell": 2100
+  },
+  "Red flowers": {
+   "buy": 140,
+   "sell": 137
+  },
+  "Red topaz": {
+   "buy": 911,
+   "sell": 877
+  },
+  "Redwood logs": {
+   "buy": 718,
+   "sell": 691
+  },
+  "Redwood pyre logs": {
+   "buy": 4600,
+   "sell": 4418
+  },
+  "Redwood tree seed": {
+   "buy": 11128,
+   "sell": 10815
+  },
+  "Restore potion(4)": {
+   "buy": 58,
+   "sell": 57
+  },
+  "Revenant ether": {
+   "buy": 175,
+   "sell": 170
+  },
+  "Ring of dueling(8)": {
+   "buy": 811,
+   "sell": 785
+  },
+  "Ring of forging": {
+   "buy": 1000,
+   "sell": 994
+  },
+  "Ring of recoil": {
+   "buy": 709,
+   "sell": 700
+  },
+  "Ring of the elements": {
+   "buy": 776564,
+   "sell": 732166
+  },
+  "Ring of wealth": {
+   "buy": 11008,
+   "sell": 11000
+  },
+  "Ruby": {
+   "buy": 695,
+   "sell": 670
+  },
+  "Ruby bolt tips": {
+   "buy": 86,
+   "sell": 86
+  },
+  "Ruby bracelet": {
+   "buy": 1069,
+   "sell": 1024
+  },
+  "Ruby ring": {
+   "buy": 946,
+   "sell": 909
+  },
+  "Rune boots": {
+   "buy": 6816,
+   "sell": 6600
+  },
+  "Runescroll of bloodbark": {
+   "buy": 205,
+   "sell": 201
+  },
+  "Runescroll of swampbark": {
+   "buy": 4700,
+   "sell": 248
+  },
+  "Sacred oil(4)": {
+   "buy": 2950,
+   "sell": 2900
+  },
+  "Salve graveyard teleport (tablet)": {
+   "buy": 5699,
+   "sell": 5155
+  },
+  "Sandworms": {
+   "buy": 106,
+   "sell": 105
+  },
+  "Sapphire": {
+   "buy": 147,
+   "sell": 141
+  },
+  "Sapphire bracelet": {
+   "buy": 522,
+   "sell": 408
+  },
+  "Sapphire ring": {
+   "buy": 343,
+   "sell": 339
+  },
+  "Saradomin brew(2)": {
+   "buy": 2700,
+   "sell": 2650
+  },
+  "Seaweed": {
+   "buy": 7,
+   "sell": 6
+  },
+  "Secateurs attachment": {
+   "buy": 105,
+   "sell": 94
+  },
+  "Shaman mask": {
+   "buy": 38183,
+   "sell": 30001
+  },
+  "Shark lure": {
+   "buy": 170,
+   "sell": 174
+  },
+  "Sinister key": {
+   "buy": 20700,
+   "sell": 19417
+  },
+  "Skills necklace": {
+   "buy": 11611,
+   "sell": 11610
+  },
+  "Skills necklace(6)": {
+   "buy": 12260,
+   "sell": 12257
+  },
+  "Snapdragon": {
+   "buy": 6500,
+   "sell": 6498
+  },
+  "Snapdragon seed": {
+   "buy": 35660,
+   "sell": 35146
+  },
+  "Snape grass seed": {
+   "buy": 7665,
+   "sell": 7450
+  },
+  "Soaked page": {
+   "buy": 2426,
+   "sell": 2396
+  },
+  "Soul rune": {
+   "buy": 296,
+   "sell": 292
+  },
+  "Spinach roll": {
+   "buy": 227,
+   "sell": 221
+  },
+  "Stamina potion(1)": {
+   "buy": 693,
+   "sell": 660
+  },
+  "Stamina potion(4)": {
+   "buy": 2026,
+   "sell": 1989
+  },
+  "Steel cannonball": {
+   "buy": 238,
+   "sell": 235
+  },
+  "Strawberry": {
+   "buy": 49,
+   "sell": 36
+  },
+  "Strawberry seed": {
+   "buy": 14,
+   "sell": 3
+  },
+  "Sunfire splinters": {
+   "buy": 321,
+   "sell": 314
+  },
+  "Sunlight antelope antler": {
+   "buy": 1221,
+   "sell": 1091
+  },
+  "Sunlight antelope fur": {
+   "buy": 1999,
+   "sell": 1967
+  },
+  "Sunlight antler bolts": {
+   "buy": 130,
+   "sell": 132
+  },
+  "Super attack(2)": {
+   "buy": 524,
+   "sell": 506
+  },
+  "Super attack(4)": {
+   "buy": 1498,
+   "sell": 1486
+  },
+  "Super combat potion(4)": {
+   "buy": 11860,
+   "sell": 11860
+  },
+  "Super defence(2)": {
+   "buy": 1182,
+   "sell": 1133
+  },
+  "Super defence(4)": {
+   "buy": 3190,
+   "sell": 3180
+  },
+  "Super restore(2)": {
+   "buy": 4124,
+   "sell": 4005
+  },
+  "Super strength(2)": {
+   "buy": 1214,
+   "sell": 1214
+  },
+  "Super strength(4)": {
+   "buy": 2934,
+   "sell": 2900
+  },
+  "Supercompost": {
+   "buy": 15,
+   "sell": 7
+  },
+  "Swamp tar": {
+   "buy": 4,
+   "sell": 3
+  },
+  "Sweetcorn seed": {
+   "buy": 5,
+   "sell": 4
+  },
+  "Tarromin": {
+   "buy": 213,
+   "sell": 200
+  },
+  "Teak seed": {
+   "buy": 73,
+   "sell": 71
+  },
+  "Team-6 cape": {
+   "buy": 105,
+   "sell": 79
+  },
+  "Teleport to house (tablet)": {
+   "buy": 496,
+   "sell": 492
+  },
+  "Timber beam": {
+   "buy": 348,
+   "sell": 218
+  },
+  "Toadflax": {
+   "buy": 1700,
+   "sell": 1693
+  },
+  "Toadflax seed": {
+   "buy": 820,
+   "sell": 779
+  },
+  "Tomato": {
+   "buy": 23,
+   "sell": 22
+  },
+  "Tomatoes(5)": {
+   "buy": 495,
+   "sell": 410
+  },
+  "Tome of Water (empty)": {
+   "buy": 400000,
+   "sell": 380000
+  },
+  "Tooth half of key": {
+   "buy": 8594,
+   "sell": 8510
+  },
+  "Topaz ring": {
+   "buy": 1725,
+   "sell": 1349
+  },
+  "Torstol": {
+   "buy": 3479,
+   "sell": 3417
+  },
+  "Torstol seed": {
+   "buy": 13169,
+   "sell": 13000
+  },
+  "Toy cat": {
+   "buy": 2491,
+   "sell": 2469
+  },
+  "Ultracompost": {
+   "buy": 552,
+   "sell": 550
+  },
+  "Unblessed symbol": {
+   "buy": 57,
+   "sell": 7
+  },
+  "Uncooked apple pie": {
+   "buy": 346,
+   "sell": 304
+  },
+  "Uncooked berry pie": {
+   "buy": 421,
+   "sell": 421
+  },
+  "Uncooked meat pie": {
+   "buy": 415,
+   "sell": 213
+  },
+  "Uncut dragonstone": {
+   "buy": 13668,
+   "sell": 13650
+  },
+  "Unpowered orb": {
+   "buy": 67,
+   "sell": 59
+  },
+  "Urium remains": {
+   "buy": 8522,
+   "sell": 8421
+  },
+  "Varrock teleport (tablet)": {
+   "buy": 722,
+   "sell": 718
+  },
+  "Vial of water": {
+   "buy": 7,
+   "sell": 6
+  },
+  "Vile ashes": {
+   "buy": 110,
+   "sell": 90
+  },
+  "Volcanic ash": {
+   "buy": 147,
+   "sell": 150
+  },
+  "Watchtower teleport (tablet)": {
+   "buy": 484,
+   "sell": 378
+  },
+  "Water orb": {
+   "buy": 745,
+   "sell": 710
+  },
+  "Water talisman": {
+   "buy": 326,
+   "sell": 325
+  },
+  "Watermelon": {
+   "buy": 17,
+   "sell": 16
+  },
+  "Watermelon seed": {
+   "buy": 45,
+   "sell": 40
+  },
+  "White flowers": {
+   "buy": 159437,
+   "sell": 125720
+  },
+  "Wildblood seed": {
+   "buy": 71,
+   "sell": 53
+  },
+  "Willow bird house": {
+   "buy": 586,
+   "sell": 200
+  },
+  "Willow seed": {
+   "buy": 45,
+   "sell": 35
+  },
+  "Wine of Zamorak": {
+   "buy": 992,
+   "sell": 990
+  },
+  "Woad leaf": {
+   "buy": 120,
+   "sell": 100
+  },
+  "Yanillian hops": {
+   "buy": 604,
+   "sell": 587
+  },
+  "Yanillian seed": {
+   "buy": 10,
+   "sell": 5
+  },
+  "Yellow fin": {
+   "buy": 170,
+   "sell": 140
+  },
+  "Yellow flowers": {
+   "buy": 2000,
+   "sell": 189
+  },
+  "Yew leaves": {
+   "buy": 388,
+   "sell": 375
+  },
+  "Yew longbow": {
+   "buy": 548,
+   "sell": 543
+  },
+  "Yew longbow (u)": {
+   "buy": 120,
+   "sell": 114
+  },
+  "Yew seed": {
+   "buy": 9985,
+   "sell": 9810
   }
  }
 }

@@ -24,7 +24,9 @@ describe('the Money list is the coin card\'s judgement, not a second one', () =>
     expect(list.shortfall).toEqual({ stepId: 'S4-03', coins: s.assessment.gap });
     expect(s.assessment.recommendation?.kind).toBe('EARN');
     expect(list.ranking.best?.method.id).toBe(s.assessment.recommendation?.evaluation?.method.id);
-    expect(list.evals).toHaveLength(METHODS.length);
+    // A free-to-play character sees every free-to-play method and no Members one, not even as locked.
+    expect(list.evals).toHaveLength(METHODS.filter((m) => m.access === 'f2p').length);
+    expect(list.evals.some((e) => e.method.access === 'members')).toBe(false);
   });
 
   it('nothing short: ranked for 10,000 more coins out of the coins in hand, no shortfall offered', () => {
@@ -88,14 +90,12 @@ describe('unknown is never available', () => {
     expect(badgeOf(cows)).toEqual({ text: 'What it makes cannot be sold yet (new-account limits)', tone: 'locked' });
   });
 
-  it('members-only: locked for a free account, out of the default list, open to a members account', () => {
+  it('members-only (owner, 2026-11-15): never listed for a free account, not even as locked; open to a members account', () => {
     const s = scenario(market(), { bagCoins: 5000, bankCoins: 0 });
     const members = { ...methodById('cows-cowhide')!, id: 'members-test', title: 'Members test', access: 'members' as const };
     const list = moneyList(s.base, s.assessment, { methods: [...METHODS, members] });
-    const e = byId(list.evals, 'members-test');
-    expect(badgeOf(e)).toEqual({ text: 'Needs membership', tone: 'locked' });
-    expect(browse(list.evals, list.ranking, DEFAULT_FILTERS, 'recommended').rows.some((r) => r.evaluation.method.id === 'members-test')).toBe(false);
-    expect(browse(list.evals, list.ranking, only({ availableOnly: false }), 'recommended').rows.some((r) => r.evaluation.method.id === 'members-test')).toBe(true);
+    expect(list.evals.some((e) => e.method.id === 'members-test')).toBe(false);
+    expect(badgeOf(evaluate(members, { ...s.base, cash: 5000, mode: 'earn', target: BROWSE_TARGET }))).toEqual({ text: 'Needs membership', tone: 'locked' });
     const asMember = evaluate(members, { ...s.base, snap: { ...s.snap, members: true }, cash: 5000, mode: 'earn', target: BROWSE_TARGET });
     expect(asMember.blockers.some((b) => b.kind === 'membership')).toBe(false);
     expect(asMember.checks[0]).toEqual({ text: 'Membership', status: 'ok' });

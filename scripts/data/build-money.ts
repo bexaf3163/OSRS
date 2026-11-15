@@ -1,5 +1,5 @@
-// Builds src/data/generated/fundingWiki.json from the OSRS Wiki: every free-to-play money-making guide ("Money making guide/
-// Free-to-play") that the hand-modelled catalogue (authored/fundingMethods.json) does not cover and the coverage ledger does not
+// Builds src/data/generated/fundingWiki.json from the OSRS Wiki: every money-making guide ("Money making guide" and its
+// free-to-play list) that the hand-modelled catalogue (authored/fundingMethods.json) does not cover and the coverage ledger does not
 // // exclude, as a funding method the evaluator judges like any other. It needs a network. Run: npm run build-money (a few minutes).
 // The levels the card lists gate the method, because its pace is measured at them; so does a combat card's, which keeps the wiki pace.
 //
@@ -16,7 +16,7 @@ import { detailsOf, mmgFields, parseSkillsHtml, plain, wikiPlain } from './money
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const OUT = `${root}src/data/generated/fundingWiki.json`;
 const read = <T>(path: string): T => JSON.parse(readFileSync(`${root}${path}`, 'utf8')) as T;
-const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
+const UA = 'osrs-route-money-builder';
 const API = 'https://oldschool.runescape.wiki/api.php';
 const TODAY = new Date().toISOString().slice(0, 10);
 
@@ -45,6 +45,9 @@ const slug = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(
 const links = (s: string) => [...s.matchAll(/\[\[([^\]|#]+)/g)].map((m) => m[1].trim()).filter((l) => !/^(File|Category):/i.test(l));
 
 // --- What the build already knows: the ledger, the hand-modelled methods, items, places
+const ROUTE_QUESTS = new Set(read<{ title: string }[]>('src/data/authored/steps.json').map((s) => s.title));
+// The skills the planner models (tradeRestriction ALL_SKILLS) plus the combat level.
+const SKILLS = new Set(['attack', 'strength', 'defence', 'ranged', 'prayer', 'magic', 'runecraft', 'construction', 'hitpoints', 'agility', 'herblore', 'thieving', 'crafting', 'fletching', 'slayer', 'hunter', 'mining', 'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'farming', 'combat']);
 const coverage = read<{ entries: { id: string }[] }>('src/data/authored/fundingCoverage.json');
 const places = read<{ locations: Record<string, WikiPoint & { label: string; kind: string }> }>('src/data/generated/majorLocations.json').locations;
 const BANKS = Object.entries(places).filter(([name, p]) => p.kind === 'bank' || name === 'Grand Exchange')
@@ -54,7 +57,7 @@ const mapping = await fetch('https://prices.runescape.wiki/api/v1/osrs/mapping',
 const ITEMS = new Map(mapping.map((m) => [m.name.toLowerCase(), m]));
 const category = async (name: string) => new Set((await getJson(`${API}?${new URLSearchParams({ action: 'query', list: 'categorymembers', cmtitle: name, cmlimit: '500', format: 'json', formatversion: '2' })}`)
   .then((d) => (d.query as { categorymembers: { title: string }[] }).categorymembers)).map((m) => m.title));
-const QUESTS = await category('Category:Free-to-play quests');
+const QUESTS = new Set([...await category('Category:Free-to-play quests'), ...await category("Category:Members' quests")]);
 const MINIQUESTS = await category('Category:Miniquests');
 // shortcut: stackability by name (runes, ammunition, coins); replace with the item infobox if a noted product appears.
 const STACKS = /(^coins$| rune$|arrows?$|bolts$|darts?$|knives$|seeds?$)/i;
@@ -63,7 +66,8 @@ const STACKS = /(^coins$| rune$|arrows?$|bolts$|darts?$|knives$|seeds?$)/i;
 function quantity(s: string | undefined): number | null {
   const t = (s ?? '').replace(/<!--.*?-->/gs, '').replace(/\{\{#expr:([^{}]*)\}\}/gi, '($1)').replace(/,/g, '').replace(/\s/g, '');
   if (!t || !/^[\d.+\-*/()]+$/.test(t)) return null;
-  const n = Number(Function(`return (${t})`)());
+  let n: number;
+  try { n = Number(Function(`return (${t})`)()); } catch { return null; } // malformed wiki arithmetic ("+*")
   return Number.isFinite(n) && n > 0 ? n : null;
 }
 
@@ -112,12 +116,12 @@ const distance = (a: WikiPoint, b: WikiPoint) => {
 };
 
 /** Where the work is: the monster's spawn named by the guide, else the map of the guide or of the place it links. */
-async function spotOf(location: string, foe: string | null, guide: string): Promise<WikiPoint | null> {
+async function spotOf(location: string, foe: string | null, guide: string, members = false): Promise<WikiPoint | null> {
   const named = links(location);
   if (foe) {
     const page = await wikitext(foe);
     const lines = page ? templates(page.text, 'LocLine') : [];
-    const free = lines.filter((b) => !/\|\s*members\s*=\s*yes/i.test(b));
+    const free = members ? lines : lines.filter((b) => !/\|\s*members\s*=\s*yes/i.test(b));
     const body = free.find((b) => named.some((n) => b.toLowerCase().includes(n.toLowerCase()))) ?? free[0];
     const point = body ? representativePoint(mapTemplatePoints(body)) : null;
     if (point) return point;
@@ -136,13 +140,17 @@ async function spotOf(location: string, foe: string | null, guide: string): Prom
 }
 
 // --- 1. The list: the name, the members column and the rendered levels cell
-const listHtml = (await parse({ page: 'Money_making_guide/Free-to-play', prop: 'text' }))!.text!;
+// The main list holds the Members guides too (its members cell links /w/Members); the free-to-play list is read first.
+const listHtml = (await parse({ page: 'Money_making_guide/Free-to-play', prop: 'text' }))!.text! + (await parse({ page: 'Money_making_guide', prop: 'text' }))!.text!;
 const entries: { title: string; page: string; members: boolean; skillsHtml: string }[] = [];
 for (const [, row] of listHtml.matchAll(/<tr[^>]*>(.*?)<\/tr>/gs)) {
   const cells = [...row.matchAll(/<t[dh][^>]*>(.*?)<\/t[dh]>/gs)].map((m) => m[1]);
   const href = cells.length >= 6 && /href="\/w\/([^"#]+)"/.exec(cells[0]);
   if (!href || /Hourly profit/i.test(cells[1])) continue;
-  entries.push({ title: plain(cells[0]), page: decodeURIComponent(href[1]).replace(/_/g, ' '), members: plain(cells[5]).length > 0, skillsHtml: cells[2] });
+  const page = decodeURIComponent(href[1]).replace(/_/g, ' ');
+  if (entries.some((e) => e.page === page)) continue;
+  const members = /href="\/w\/Members"/.test(cells[5]) || (!/Free-to-play/.test(cells[5]) && plain(cells[5]).length > 0);
+  entries.push({ title: plain(cells[0]), page, members, skillsHtml: cells[2] });
 }
 console.log(`In the list: ${entries.length}`);
 // The list shows a guide only while today's prices put it there, but the app ranks every method by live prices itself: a method built
@@ -152,7 +160,7 @@ const kept = new Map<string, Requirement[]>();
 for (const m of before) {
   const page = m.sources[0]?.title;
   if (!page || entries.some((e) => e.page === page || slug(e.title) === m.id)) continue;
-  entries.push({ title: m.title, page, members: false, skillsHtml: '' });
+  entries.push({ title: m.title, page, members: m.access === 'members', skillsHtml: '' });
   kept.set(m.id, m.requirements.filter((r) => r.kind === 'level'));
 }
 if (kept.size) console.log(`Kept from the last build (not in today's list): ${[...kept.keys()].join(', ')}`);
@@ -163,7 +171,7 @@ const methods: FundingMethod[] = [];
 const problems: { id: string; title: string; reason: string }[] = [];
 for (const e of entries) {
   const id = slug(e.title);
-  if (e.members || covered.has(id)) continue;
+  if (covered.has(id)) continue;
   const page = await wikitext(e.page);
   // A guide with a recipe picker fills the card from variables; the first recipe it defines is the one built.
   const vars = new Map<string, string>();
@@ -191,6 +199,9 @@ for (const e of entries) {
     }
     return out;
   };
+  // A flow the build cannot read (a {{#switch}} picking the cheaper seed) would be dropped and make the method look free.
+  const unread = Object.entries(f).find(([k, v]) => /^(input|output)\d+$/.test(k) && /\{\{#|\{\{\{/.test(v));
+  if (unread) { problems.push({ id, title: e.title, reason: `${unread[0]} is a wiki formula the build cannot read` }); continue; }
   const ins = raw('input');
   const outs = raw('output');
   // The unit: a kill, or the main product (the most made tradeable item, coins only when nothing else is made). The wiki's
@@ -207,7 +218,11 @@ for (const e of entries) {
   const unsold = ins.filter((i) => !ITEMS.has(i.name.toLowerCase())).map((i) => i.name);
 
   const requirements: Requirement[] = [];
-  for (const r of kept.get(id)?.flatMap((q) => (q.kind === 'level' ? [{ skill: q.skill, level: q.level }] : [])) ?? parseSkillsHtml(e.skillsHtml)) {
+  // The guide's own Skill field without its optional lines ("Sailing 87 (optional)" for steel cannonballs); a recommended
+  // combat level still gates the card, as before.
+  const skillField = (f.skill ?? '').split(/\n|<br\s*\/?>/i).filter((l) => !/optional/i.test(l))
+    .flatMap((l) => [...l.matchAll(/\{\{SCP\|([^|}]+)\|(\d+)/gi)].map((m) => ({ skill: m[1].trim().toLowerCase().replace(/^combat level$/, 'combat'), level: Number(m[2]) })));
+  for (const r of kept.get(id)?.flatMap((q) => (q.kind === 'level' ? [{ skill: q.skill, level: q.level }] : [])) ?? (f.skill ? skillField : parseSkillsHtml(e.skillsHtml))) {
     if (!requirements.some((q) => q.kind === 'level' && q.skill === r.skill)) requirements.push({ kind: 'level', skill: r.skill, level: r.level });
   }
   // A combat card lists the levels of every style it suits: melee when it names melee levels (Ranged and Magic are then the
@@ -230,8 +245,13 @@ for (const e of entries) {
   const bring = [...field('item').split(/,\s*/).filter((n) => n && !made.has(n.toLowerCase())), ...unsold].join(', ');
   if (bring) requirements.push({ kind: 'check', text: `Bring: ${bring}` });
   if (field('other')) requirements.push({ kind: 'check', text: field('other') });
+  // The planner judges only what it models: route quests, the known skills, and Members fights with a hand-made profile.
+  const unmodelled = (e.members && combat ? 'a Members fight needs a hand-made combat profile' : null)
+    ?? requirements.flatMap((r) => r.kind === 'level' && (!SKILLS.has(r.skill) || !(r.level >= 1 && r.level <= 99)) ? [`level ${r.skill} ${r.level} is not modelled`] : [])[0]
+    ?? requirements.flatMap((r) => r.kind === 'quest' && !ROUTE_QUESTS.has(r.quest) ? [`needs ${r.quest}, not on the route yet`] : [])[0] ?? null;
+  if (unmodelled) { problems.push({ id, title: e.title, reason: unmodelled }); continue; }
   const location = f.location ?? '';
-  const point = await spotOf(location, foe, page.text);
+  const point = await spotOf(location, foe, page.text, e.members);
   if (!point) { problems.push({ id, title: e.title, reason: `no place for "${wikiPlain(location)}"` }); continue; }
   // The Wilderness by its name or its tiles (above the Edgeville ditch, on the surface): many cards name only a landmark there.
   const wild = /wilderness/i.test(`${location} ${f.other ?? ''}`) || (point.plane === 0 && point.y >= 3523 && point.y < 4000 && point.x >= 2944 && point.x < 3392);
@@ -265,7 +285,7 @@ for (const e of entries) {
   methods.push({
     id, title: e.title,
     family: combat ? 'combat' : category.startsWith('collect') ? 'collecting' : category.startsWith('process') ? 'processing' : inputs.length ? 'production' : 'gathering',
-    access: 'f2p', repeatable: true,
+    access: e.members ? 'members' : 'f2p', repeatable: true,
     summary: (!place || activity.toLowerCase().includes(place.toLowerCase()) ? activity : `${activity}. ${place}`).slice(0, 200),
     ...(details.about ? { about: details.about } : {}),
     ...(details.tips.length ? { tips: details.tips.slice(0, 8) } : {}),
@@ -303,6 +323,6 @@ for (const m of read<{ methods: FundingMethod[] }>('src/data/authored/fundingMet
   if (d.about || d.tips.length) extras[m.id] = { ...(d.about ? { about: d.about } : {}), ...(d.tips.length ? { tips: d.tips.slice(0, 8) } : {}) };
 }
 mkdirSync(dirname(OUT), { recursive: true });
-writeFileSync(OUT, `${JSON.stringify({ version: 1, generatedAt: TODAY, source: 'https://oldschool.runescape.wiki/w/Money_making_guide/Free-to-play', methods, extras, notBuilt: problems }, null, 1)}\n`);
+writeFileSync(OUT, `${JSON.stringify({ version: 1, generatedAt: TODAY, source: 'https://oldschool.runescape.wiki/w/Money_making_guide', methods, extras, notBuilt: problems }, null, 1)}\n`);
 console.log(`Written ${methods.length} methods to ${OUT}`);
 if (problems.length) console.log(`Not built (${problems.length}):\n${problems.map((p) => `${p.title}: ${p.reason}`).join('\n')}`);

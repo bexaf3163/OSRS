@@ -16,13 +16,13 @@ import { emptyProgress } from '../../src/domain/persistence/progress';
 import { questCatalogue } from '../../src/domain/planning/catalogue';
 import type { CommittedDecision, PlanningSnapshot } from '../../src/domain/planning/contracts';
 import { runtimeDecision, type RuntimePlanInput } from '../../src/domain/planning/runtime';
-import { earnAction } from '../../src/domain/planning/earn';
+import { bestEarnRate, earnAction, type EarnRate } from '../../src/domain/planning/earn';
 import { gearData, gearPieceByName } from '../../src/domain/combat/gearAdvisor';
 import { nameKey } from '../../src/domain/items/itemKey';
-import { levelForXp, xpForLevel } from '../../src/domain/player/xp';
+import { combatLevel, levelForXp, xpForLevel } from '../../src/domain/player/xp';
 import { isReusable } from '../../src/domain/items/reusable';
 import { carryOverFrom } from '../../src/domain/prep/shopping';
-import { fakePrices } from '../funding/helpers';
+import { ctxOf, fakePrices, fakeSnap } from '../funding/helpers';
 import type { GameMode, Step } from '../../src/types';
 import { SKILL_NAMES } from '../../src/domain/training/skillTrack';
 
@@ -66,6 +66,16 @@ function play(mode: GameMode) {
   const quests: Record<string, { state: 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED'; stepId?: string }> =
     Object.fromEntries(questCatalogue.filter(q => mode === 'members' || !q.members).map(q => [q.id, { state: 'NOT_STARTED' }]));
   const log: string[] = [];
+  // As in the app, a Members account earns with the best method the Money ranking allows at its levels and quests.
+  const rates = new Map<string, EarnRate | null>();
+  const ranked = (levels: Record<string, number>, done: string[], cash: number) => {
+    const key = `${JSON.stringify(levels)}|${done.join(',')}|${Math.floor(cash / 1000)}`;
+    if (!rates.has(key)) {
+      const { cash: _c, mode: _m, target: _t, needItems: _n, ...supply } = ctxOf({ prices, snap: fakeSnap({ levels: { ...levels, combat: combatLevel(levels) ?? 3 }, members: true, quests: Object.fromEntries(done.map(id => [id, 'DONE'])) }) });
+      rates.set(key, bestEarnRate(supply, cash));
+    }
+    return rates.get(key) ?? rate;
+  };
   for (; turn < MAX_TURNS[mode]; turn++) {
     const stats = Object.fromEntries(SKILLS.map(s => [s, Math.max(1, levelForXp(xp[s]))]));
     const done = Object.entries(quests).filter(([, q]) => q.state === 'COMPLETED').map(([id]) => id);
@@ -78,7 +88,7 @@ function play(mode: GameMode) {
       bankRead: { kind: 'current' }, xp: Object.fromEntries(SKILLS.map(s => [s, { known: true, value: xp[s], source: 'game' }])),
       manual: { 'Shield of Arrav:partner': true }, questPoints: { known: true, value: qp, source: 'game' },
       quests: Object.fromEntries(Object.entries(quests).map(([id, q]) => [id, { ...q, source: 'game' }])) } as unknown as PlanningSnapshot;
-    const earn: RuntimePlanInput['earn'] = (step, gp, _budget, goalId) => earnAction(snapshot, step, goalId, gp, rate);
+    const earn: RuntimePlanInput['earn'] = (step, gp, _budget, goalId) => earnAction(snapshot, step, goalId, gp, mode === 'members' ? ranked(stats, done, coins) : rate);
     const d = runtimeDecision({ snapshot, intent: { kind: 'auto' }, previous, progress: emptyProgress(), prices, steps,
       detail: id => itemById.get(id), ironman: false, earn, walk });
     if (!d) break;
@@ -152,6 +162,8 @@ function play(mode: GameMode) {
   const open = Object.entries(quests).filter(([, q]) => q.state !== 'COMPLETED').map(([id]) => id);
   const total = Object.keys(quests).length;
   console.log(`Route gate (${mode}): ${turn} turns, ${total - open.length} of ${total} quests, remaining time unknown on ${unknownTime} turns${blocked ? `, stopped at ${blocked.split('\n')[0]}` : ''}.`);
+  const earned = [...new Set(log.filter(l => l.includes(' | EARN | ')).map(l => l.split(' | ')[2].replace(/^Earn [\d,]+ gp: /, '')))];
+  console.log(`Route gate (${mode}) earned with: ${earned.join(', ') || 'nothing'}.`);
   return { open, blocked, unknownTime, log };
 }
 

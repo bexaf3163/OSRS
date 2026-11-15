@@ -183,7 +183,9 @@ export function moneyList(
   const short = a && a.state === 'SHORT' && a.gap !== null && a.gap > 0 ? a : null;
   const target = short ? Math.max(1, short.gap! - short.budget.surplus.net) : BROWSE_TARGET;
   const cash = a ? a.budget.spendable : base.snap.liquid.amount;
-  const evals = (opts.methods ?? METHODS).map((m) => evaluate(m, { ...base, cash, mode: 'earn', target }));
+  // Free-to-play shows only free-to-play content: Members methods are left out, not listed as locked.
+  const evals = (opts.methods ?? METHODS).filter((m) => m.access !== 'members' || base.snap.members)
+    .map((m) => evaluate(m, { ...base, cash, mode: 'earn', target }));
   return {
     evals, ranking: rankMethods(evals, { activeId: opts.activeId ?? null }),
     rankedFor: { coins: target, stepId: short ? short.stepId : null }, shortfall: short ? { stepId: short.stepId, coins: short.gap! } : null,
