@@ -5580,6 +5580,172 @@
     }
   },
   {
+    "id": "S8-09",
+    "stage": 8,
+    "type": "quest",
+    "title": "In Search of the Myreque",
+    "qp": 2,
+    "requires": [
+      "S8-02"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/In_Search_of_the_Myreque",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/In_Search_of_the_Myreque/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3503,3477,0",
+    "mapLocation": {
+      "x": 3503,
+      "y": 3477,
+      "plane": 0,
+      "label": "The Hair of the Dog tavern in Canifis"
+    },
+    "npc": {
+      "nameEn": "Vanstrom Klause",
+      "location": "The Hair of the Dog tavern in Canifis",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Vanstrom_Klause"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Steel longsword",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Varrock Swordshop in Varrock for 500 gp.",
+        "wikiItemId": 1295,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_longsword.png"
+      },
+      {
+        "nameEn": "Steel shortsword",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange, or from Varrock Swordshop in Varrock for 325 gp.",
+        "wikiItemId": 1281,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_shortsword.png"
+      },
+      {
+        "nameEn": "Steel mace",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Flynn's Mace Market in Falador for 225 gp.",
+        "wikiItemId": 1424,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_mace.png"
+      },
+      {
+        "nameEn": "Steel warhammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Mount Karuulm Weapon Shop in Mount Karuulm for 640 gp.",
+        "wikiItemId": 1339,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_warhammer.png"
+      },
+      {
+        "nameEn": "Steel dagger",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Varrock Swordshop in Varrock for 125 gp.",
+        "wikiItemId": 1207,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_dagger.png"
+      },
+      {
+        "nameEn": "Steel nails",
+        "amount": 225,
+        "howToGet": "Buy on the Grand Exchange, or from Construction supplies in Sawmill for 3 gp.",
+        "wikiItemId": 1539,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png"
+      },
+      {
+        "nameEn": "Druid pouch",
+        "amount": 1,
+        "howToGet": "Free spawn: Nature Grotto (members only).",
+        "wikiItemId": 2958,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Druid_pouch.png"
+      },
+      {
+        "nameEn": "Mort myre fungus",
+        "amount": 6,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 2970,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mort_myre_fungus.png"
+      },
+      {
+        "nameEn": "Silver sickle (b)",
+        "amount": 1,
+        "howToGet": "Blessed in Nature Spirit; a new silver sickle (Crafting 18) is blessed at the Nature Grotto.",
+        "wikiItemId": 2963,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Silver_sickle_(b).png"
+      },
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Plank",
+        "amount": 6,
+        "howToGet": "Buy on the Grand Exchange, or from Razmire Builders Merchants in Mort'ton for 1 gp.",
+        "wikiItemId": 960,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
+      },
+      {
+        "nameEn": "Coins",
+        "amount": 10,
+        "howToGet": "For the swamp boaty in Mort'ton.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "heals": 12,
+        "amount": 10,
+        "anyOf": [
+          "Trout",
+          "Salmon",
+          "Tuna",
+          "Swordfish"
+        ],
+        "howToGet": "Your own catch or the Grand Exchange. The level 97 Skeleton Hellhound is fought under Canifis, and ghasts in Mort Myre take a share. Preparation sizes the amount for your levels and armour.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "threats": [
+      "Skeleton Hellhound"
+    ],
+    "reward": "2 QP, 600 Attack XP, 600 Defence XP, 600 Strength XP, 600 Hitpoints XP, 600 Crafting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Vanstrom Klause"
+      ],
+      "dialogChoices": [
+        "Why do they need help? Are they in trouble?",
+        "Perhaps I could help you out here.",
+        "Well, I guess they'll just die without weapons.",
+        "Resourceful enough to get their own steel weapons?",
+        "If you don't tell me, their deaths are on your head!",
+        "What kind of man are you to say that you don't care?",
+        "Give wooden planks to Cyreg",
+        "I've come to help the Myreque, I've brought weapons.",
+        "How do I get out of here?",
+        "Ok, thanks."
+      ],
+      "highlightItems": [
+        "Steel longsword",
+        "Steel shortsword",
+        "Steel mace",
+        "Steel warhammer",
+        "Steel dagger",
+        "Steel nails",
+        "Druid pouch",
+        "Mort myre fungus",
+        "Silver sickle (b)",
+        "Hammer",
+        "Plank",
+        "Coins"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "In Search of the Myreque"
+      }
+    }
+  },
+  {
     "id": "S9-01",
     "stage": 9,
     "type": "quest",

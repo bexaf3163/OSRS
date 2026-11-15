@@ -858,6 +858,32 @@
       }
     },
     {
+      "name": "Skeleton Hellhound",
+      "combat": 97,
+      "members": true,
+      "hitpoints": 55,
+      "attackLevel": 70,
+      "strengthLevel": 110,
+      "defenceLevel": 100,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 12,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "earth",
+        "percent": 35
+      }
+    },
+    {
       "name": "Tree spirit (Lost City)",
       "combat": 101,
       "members": true,

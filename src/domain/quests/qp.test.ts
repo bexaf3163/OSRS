@@ -13,9 +13,9 @@ describe('quest points', () => {
     expect(questPoints(f2p, emptyProgress(), BASE_QP)).toBe(1);
   });
 
-  it('F2P — 46 points, with membership — 105', () => {
+  it('F2P — 46 points, with membership — 107', () => {
     expect(maxQpFor('f2p')).toBe(46);
-    expect(maxQpFor('members')).toBe(105);
+    expect(maxQpFor('members')).toBe(107);
     const all = Object.fromEntries(f2p.map((s) => [s.id, 'done' as const]));
     expect(questPoints(f2p, withSteps(all), BASE_QP)).toBe(46);
   });

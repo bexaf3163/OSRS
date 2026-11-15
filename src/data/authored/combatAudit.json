@@ -366,8 +366,20 @@
       "problems": ["New quest: no stage of the route met this monster before."],
       "alternatives": ["Repair the temple on a busy world so the shades spread out (Wiki requirements)."],
       "decision": "revise",
-      "changed": ["2.110.0: the step's foes name the Loar Shade, so the kills are estimated with the player's kit; Lobster x10 (or similar food) is a required item."],
+      "changed": ["2.111.0: the step's foes name the Loar Shade, so the kills are estimated with the player's kit; Lobster x10 (or similar food) is a required item."],
       "evidence": ["OSRS Wiki Shades of Mort'ton requirements and Loar Shade infobox."]
+    },
+    {
+      "stepId": "S8-09", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "objective": "In Search of the Myreque: defeat the level 97 Skeleton Hellhound (55 hit points, hits up to 12) in the hidden room under Canifis.",
+      "enemies": [{ "name": "Skeleton Hellhound", "level": 97, "maxHit": 12, "table": true }],
+      "lines": ["0.13"],
+      "assumptions": ["The Skeleton Hellhound is its only Wiki infobox version; a Magic safespot is not modelled, so the melee estimate is the cautious one."],
+      "problems": ["New quest: no stage of the route met this monster before."],
+      "alternatives": ["Safespot it with Magic by luring it beside the chair (Wiki strategy)."],
+      "decision": "revise",
+      "changed": ["2.112.0: the step's threats name the Skeleton Hellhound, so the fight is estimated with the player's kit; Lobster x10 (or similar food) is a required item."],
+      "evidence": ["OSRS Wiki In Search of the Myreque requirements and Skeleton Hellhound infobox."]
     },
     {
       "stepId": "S9-01", "kind": "quest-fight", "mandatory": true, "method": "safespot",

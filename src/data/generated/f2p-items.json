@@ -4493,6 +4493,19 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Dramen_staff"
   },
   {
+    "id": 2958,
+    "nameEn": "Druid pouch",
+    "examine": "A druid pouch.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Druid_pouch.png",
+    "value": 5,
+    "highAlch": 3,
+    "freeSpawns": [
+      "Nature Grotto (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Druid_pouch"
+  },
+  {
     "id": 2126,
     "nameEn": "Dwellberries",
     "examine": "Some rather pretty blue berries.",
@@ -9037,6 +9050,59 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Molten_glass"
   },
   {
+    "id": 2970,
+    "nameEn": "Mort myre fungus",
+    "examine": "A mushroom from the swamps of Mort Myre.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Mort_myre_fungus.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "dropSources": [
+      {
+        "monster": "Zygomite#Level 86",
+        "combatLevel": null,
+        "rate": "4/146"
+      },
+      {
+        "monster": "Zygomite#Level 74",
+        "combatLevel": null,
+        "rate": "8/429"
+      },
+      {
+        "monster": "Ancient Zygomite",
+        "combatLevel": 109,
+        "rate": "Always"
+      },
+      {
+        "monster": "Swamp Crab",
+        "combatLevel": 55,
+        "rate": "Always"
+      },
+      {
+        "monster": "Venator",
+        "combatLevel": 246,
+        "rate": "10/131"
+      },
+      {
+        "monster": "Blood-starved venator",
+        "combatLevel": 246,
+        "rate": "10/131"
+      },
+      {
+        "monster": "Maggot King",
+        "combatLevel": 741,
+        "rate": "10/159"
+      },
+      {
+        "monster": "Araxxor",
+        "combatLevel": 890,
+        "rate": "4/115"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Mort_myre_fungus"
+  },
+  {
     "id": 561,
     "nameEn": "Nature rune",
     "examine": "Used for alchemy spells.",
@@ -13575,6 +13641,42 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Silver_sickle"
   },
   {
+    "id": 2963,
+    "nameEn": "Silver sickle (b)",
+    "examine": "It's a blessed silver sickle.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Silver_sickle_(b).png",
+    "value": 250,
+    "highAlch": 150,
+    "buyLocations": [
+      {
+        "shopName": "Ivan's Supplies",
+        "location": "Meiyerditch",
+        "owner": "Ivan Strom",
+        "price": 250,
+        "stock": 20,
+        "members": true
+      },
+      {
+        "shopName": "Efaritay's Supplies",
+        "location": "Castle Drakan",
+        "owner": "Efaritay Hallow",
+        "price": 250,
+        "stock": "∞",
+        "members": true
+      },
+      {
+        "shopName": "Old Man Ral's Supplies",
+        "location": "Meiyerditch",
+        "owner": "Old Man Ral",
+        "price": 250,
+        "stock": "∞",
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Silver_sickle_(b)"
+  },
+  {
     "id": 303,
     "nameEn": "Small fishing net",
     "examine": "Useful for catching small fish.",
@@ -14463,6 +14565,290 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Steel_bar"
   },
   {
+    "id": 1207,
+    "nameEn": "Steel dagger",
+    "examine": "Short but pointy.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Steel_dagger.png",
+    "value": 125,
+    "highAlch": 75,
+    "lowAlch": 50,
+    "buyLocations": [
+      {
+        "shopName": "Varrock Swordshop",
+        "location": "Varrock",
+        "owner": "Shop keeper",
+        "price": 125,
+        "stock": 5,
+        "members": false
+      },
+      {
+        "shopName": "Briget's Weapons",
+        "location": "Shayzien",
+        "owner": "Briget",
+        "price": 125,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Fortis Blacksmith",
+        "location": "Civitas illa Fortis",
+        "owner": "Blacksmith",
+        "price": 125,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Cam Torum Blacksmith",
+        "location": "Cam Torum",
+        "owner": "Blacksmith",
+        "price": 125,
+        "stock": 4,
+        "members": true
+      },
+      {
+        "shopName": "Warrior Guild Armoury",
+        "location": "1st floor of Warriors' Guild",
+        "owner": "Anton",
+        "price": 150,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Blades by Urbi.",
+        "location": "Sophanem",
+        "owner": "Urbi",
+        "price": 187,
+        "stock": 1,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Wilderness - Graveyard of Shadows",
+      "Wilderness - north-east of the Bone Yard"
+    ],
+    "dropSources": [
+      {
+        "monster": "Skeleton (Tarn's Lair)#High level",
+        "combatLevel": null,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Hobgoblin#Unarmed",
+        "combatLevel": null,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Hobgoblin#Armed",
+        "combatLevel": null,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Cyclops#Warriors' Guild Rooftop",
+        "combatLevel": null,
+        "rate": "2/100"
+      },
+      {
+        "monster": "Zamorak warrior",
+        "combatLevel": 84,
+        "rate": "2/50"
+      },
+      {
+        "monster": "Cyclops (Catacombs of Kourend)",
+        "combatLevel": 56,
+        "rate": "4/100"
+      },
+      {
+        "monster": "Ork",
+        "combatLevel": 107,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Giant skeleton (Tarn's Lair)",
+        "combatLevel": 100,
+        "rate": "5/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Steel_dagger"
+  },
+  {
+    "id": 1295,
+    "nameEn": "Steel longsword",
+    "examine": "A razor sharp longsword.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Steel_longsword.png",
+    "value": 500,
+    "highAlch": 300,
+    "lowAlch": 200,
+    "buyLocations": [
+      {
+        "shopName": "Varrock Swordshop",
+        "location": "Varrock",
+        "owner": "Shop keeper",
+        "price": 500,
+        "stock": 3,
+        "members": false
+      },
+      {
+        "shopName": "Briget's Weapons",
+        "location": "Shayzien",
+        "owner": "Briget",
+        "price": 500,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Fortis Blacksmith",
+        "location": "Civitas illa Fortis",
+        "owner": "Blacksmith",
+        "price": 500,
+        "stock": 4,
+        "members": true
+      },
+      {
+        "shopName": "Warrior Guild Armoury",
+        "location": "1st floor of Warriors' Guild",
+        "owner": "Anton",
+        "price": 600,
+        "stock": 3,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Abandoned Mine - level 2 (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Cyclops#Warriors' Guild Rooftop",
+        "combatLevel": null,
+        "rate": "2/100"
+      },
+      {
+        "monster": "Hill Giant",
+        "combatLevel": 28,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Zombie (Tarn's Lair)#Medium level",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Obor#Members",
+        "combatLevel": null,
+        "rate": "2/135"
+      },
+      {
+        "monster": "Obor#Free-to-play",
+        "combatLevel": null,
+        "rate": "2/135"
+      },
+      {
+        "monster": "Hobgoblin#Unarmed",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Hobgoblin#Armed",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Donny the lad",
+        "combatLevel": 34,
+        "rate": "1/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Steel_longsword"
+  },
+  {
+    "id": 1424,
+    "nameEn": "Steel mace",
+    "examine": "A spiky mace.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Steel_mace.png",
+    "value": 225,
+    "highAlch": 135,
+    "lowAlch": 90,
+    "buyLocations": [
+      {
+        "shopName": "Flynn's Mace Market.",
+        "location": "Falador",
+        "owner": "Flynn",
+        "price": 225,
+        "stock": 4,
+        "members": false
+      },
+      {
+        "shopName": "Briget's Weapons",
+        "location": "Shayzien",
+        "owner": "Briget",
+        "price": 225,
+        "stock": 4,
+        "members": true
+      },
+      {
+        "shopName": "Warrior Guild Armoury",
+        "location": "1st floor of Warriors' Guild",
+        "owner": "Anton",
+        "price": 270,
+        "stock": 4,
+        "members": true
+      },
+      {
+        "shopName": "Spike's Spikes",
+        "location": "Outer Fortis",
+        "owner": "Spike",
+        "price": 292,
+        "stock": 4,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Skeleton (Tarn's Lair)#Low level",
+        "combatLevel": null,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Cyclops#Warriors' Guild Rooftop",
+        "combatLevel": null,
+        "rate": "2/100"
+      },
+      {
+        "monster": "Zombie (Tarn's Lair)#Low level",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Dark warrior#Great Kourend",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Black Knight",
+        "combatLevel": 33,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Ork",
+        "combatLevel": 107,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Cyclops (God Wars Dungeon)",
+        "combatLevel": 81,
+        "rate": "2/100"
+      },
+      {
+        "monster": "Cyclops (Catacombs of Kourend)",
+        "combatLevel": 56,
+        "rate": "2/100"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Steel_mace"
+  },
+  {
     "id": 1539,
     "nameEn": "Steel nails",
     "examine": "Keeps things in place fairly permanently.",
@@ -14828,6 +15214,184 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Steel_scimitar"
+  },
+  {
+    "id": 1281,
+    "nameEn": "Steel shortsword",
+    "examine": "A razor sharp shortsword.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Steel_shortsword.png",
+    "value": 325,
+    "highAlch": 195,
+    "lowAlch": 130,
+    "buyLocations": [
+      {
+        "shopName": "Varrock Swordshop",
+        "location": "Varrock",
+        "owner": "Shop keeper",
+        "price": 325,
+        "stock": 4,
+        "members": false
+      },
+      {
+        "shopName": "Briget's Weapons",
+        "location": "Shayzien",
+        "owner": "Briget",
+        "price": 325,
+        "stock": 4,
+        "members": true
+      },
+      {
+        "shopName": "Cam Torum Blacksmith",
+        "location": "Cam Torum",
+        "owner": "Blacksmith",
+        "price": 325,
+        "stock": 4,
+        "members": true
+      },
+      {
+        "shopName": "Warrior Guild Armoury",
+        "location": "1st floor of Warriors' Guild",
+        "owner": "Anton",
+        "price": 390,
+        "stock": 4,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Wilderness - north-east of the Chaos Temple",
+      "Civitas illa Fortis (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Ice giant#Regular",
+        "combatLevel": null,
+        "rate": "4/128"
+      },
+      {
+        "monster": "Cyclops#Warriors' Guild Rooftop",
+        "combatLevel": null,
+        "rate": "2/100"
+      },
+      {
+        "monster": "White Knight#Level 39",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "White Knight#Level 42",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "White Knight#Level 36",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "White Knight#Level 38",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Spiritual warrior",
+        "combatLevel": 158,
+        "rate": "7/127"
+      },
+      {
+        "monster": "Skeleton fremennik",
+        "combatLevel": 60,
+        "rate": "4/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Steel_shortsword"
+  },
+  {
+    "id": 1339,
+    "nameEn": "Steel warhammer",
+    "examine": "I don't think it's intended for joinery.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Steel_warhammer.png",
+    "value": 640,
+    "highAlch": 384,
+    "lowAlch": 256,
+    "buyLocations": [
+      {
+        "shopName": "Mount Karuulm Weapon Shop",
+        "location": "Mount Karuulm",
+        "owner": "Leke quo Keran",
+        "price": 640,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Cam Torum Blacksmith",
+        "location": "Cam Torum",
+        "owner": "Blacksmith",
+        "price": 640,
+        "stock": 4,
+        "members": true
+      },
+      {
+        "shopName": "Skulgrimen's Battle Gear",
+        "location": "Rellekka",
+        "owner": "Skulgrimen",
+        "price": 832,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Vigr's Warhammers",
+        "location": "Keldagrim",
+        "owner": "Vigr",
+        "price": 832,
+        "stock": 3,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Zombie (Tarn's Lair)#Medium level",
+        "combatLevel": null,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Zombie (Tarn's Lair)#High level",
+        "combatLevel": null,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Ice troll runt#Variant 2",
+        "combatLevel": null,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Ice troll male#Variant 2",
+        "combatLevel": null,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Skeleton (Tarn's Lair)#Medium level",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Black Guard#Level 48",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Guard (Burthorpe)",
+        "combatLevel": 37,
+        "rate": "8/128"
+      },
+      {
+        "monster": "Mountain troll",
+        "combatLevel": 71,
+        "rate": "3/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Steel_warhammer"
   },
   {
     "id": 113,

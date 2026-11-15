@@ -21281,6 +21281,1995 @@
     }
    ]
   },
+  "S8-09": {
+   "var": [
+    "varp",
+    387
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Talk to Vanstrom Klause in the Canifis pub (near the staircase). Dialogue: \"Why do they need help? Are they in trouble?\", \"Perhaps I could help you out here.\"",
+      "Grab the 6 wooden planks, 10 coins, a hammer, all the steel weapons and nails, and fill your Druid Pouch if you haven't done so already before teleporting!",
+      "Travel to Mort'ton (Mort'ton teleport, Minigame teleport to Shades of Mort'ton, Barrows teleport, with 50 Agility, and get Swamp Boaty, or run from Canifis)",
+      "Talk to Cyreg Paddlehorn (east, by the boat). Dialogue: \"Well, I guess they'll just die without weapons.\", \"Resourceful enough to get their own steel weapons?\", \"If you don't tell me, their deaths are on your head!\", \"What kind of man are you to say that you don't care?\", \"Give wooden planks to Cyreg\"",
+      "Board the boat. (Be sure to have filled your Druid Pouch before attempting to board the boat!)",
+      "Go north and climb the tree rope bridge.",
+      "Repair the bridge.",
+      "Continue north and talk to Curpile Fyod. Dialogue: \"I've come to help the Myreque, I've brought weapons.\"",
+      "Go north and enter the wooden doors set into the hill.",
+      "Head north-west following the eastern wall to the north west until you find an alcove. Enter the cave entrance in the southern wall of this alcove.",
+      "Talk to Veliaf (no chat options needed).",
+      "Talk to everyone else (no chat options needed).",
+      "Talk to Veliaf (talk to him and give him your steel weapons).",
+      "Kill the level 97 Skeleton Hellhound (you can safespot the hellhound by luring it to the north-east side of the room, to the right of the north barrel or below the north-east bed shown in the picture on the right).",
+      "Talk to Veliaf, ask how to get out. Dialogue: \"How do I get out of here?\", \"Ok, thanks.\"",
+      "Go back by entering the cave entrance and search the wall to the north.",
+      "Climb up the ladder in the north side of the room.",
+      "Talk to the Stranger in the Canifis pub (the one sitting in the chair where Vanstrom Klause was).",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Vanstrom Klause in the Canifis pub.",
+       "s": "Talk to Vanstrom Klause in the Canifis pub.",
+       "k": "talkToVanstrom",
+       "at": [
+        3503,
+        3477,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5056
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "At the Mort Myre gate, have a druid pouch with 5 or more Mort Myre items against ghasts.",
+       "s": "Carry a druid pouch with 5 or more Mort Myre items against ghasts.",
+       "k": "fillDruidPouch",
+       "at": [
+        3443,
+        3458,
+        0
+       ]
+      },
+      {
+       "t": "Talk to Cyreg in Mort'ton.",
+       "s": "Talk to Cyreg in Mort'ton.",
+       "k": "talkToCyreg",
+       "at": [
+        3522,
+        3284,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5046
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "At the Mort Myre gate, have a druid pouch with 5 or more Mort Myre items against ghasts.",
+       "s": "Carry a druid pouch with 5 or more Mort Myre items against ghasts.",
+       "k": "fillDruidPouch",
+       "at": [
+        3443,
+        3458,
+        0
+       ]
+      },
+      {
+       "t": "Talk to Cyreg in Mort'ton.",
+       "s": "Talk to Cyreg in Mort'ton.",
+       "k": "talkToCyreg",
+       "at": [
+        3522,
+        3284,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5046
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "At the Mort Myre gate, have a druid pouch with 5 or more Mort Myre items against ghasts.",
+       "s": "Carry a druid pouch with 5 or more Mort Myre items against ghasts.",
+       "k": "fillDruidPouch",
+       "at": [
+        3443,
+        3458,
+        0
+       ]
+      },
+      {
+       "t": "Talk to Cyreg in Mort'ton.",
+       "s": "Talk to Cyreg in Mort'ton.",
+       "k": "talkToCyreg",
+       "at": [
+        3522,
+        3284,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5046
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Board the swamp boaty in Mort'ton. If you forgot coins, you can obtain some by killing afflicted.",
+       "s": "Board the swamp boaty in Mort'ton.",
+       "k": "boardBoat",
+       "at": [
+        3524,
+        3285,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6969
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree2",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree3",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree4",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Repair the bridge.",
+       "s": "Repair the bridge.",
+       "k": "repairBridge1",
+       "at": [
+        3502,
+        3428,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26245
+        ]
+       }
+      },
+      {
+       "t": "Repair the bridge.",
+       "s": "Repair the bridge.",
+       "k": "repairBridge2",
+       "at": [
+        3502,
+        3429,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26246
+        ]
+       }
+      },
+      {
+       "t": "Repair the bridge.",
+       "s": "Repair the bridge.",
+       "k": "repairBridge3",
+       "at": [
+        3502,
+        3430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26247
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile1",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile2",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile3",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile4",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile5",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile6",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 52,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree2",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree3",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree4",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Repair the bridge.",
+       "s": "Repair the bridge.",
+       "k": "repairBridge1",
+       "at": [
+        3502,
+        3428,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26245
+        ]
+       }
+      },
+      {
+       "t": "Repair the bridge.",
+       "s": "Repair the bridge.",
+       "k": "repairBridge2",
+       "at": [
+        3502,
+        3429,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26246
+        ]
+       }
+      },
+      {
+       "t": "Repair the bridge.",
+       "s": "Repair the bridge.",
+       "k": "repairBridge3",
+       "at": [
+        3502,
+        3430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26247
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile1",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile2",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile3",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile4",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile5",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Curpile Fyod.",
+       "s": "Talk to Curpile Fyod.",
+       "k": "talkToCurpile6",
+       "at": [
+        3508,
+        3440,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9619
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 55,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree4",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoors",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCave",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Talk to Veliaf Hurtz.",
+       "s": "Talk to Veliaf Hurtz.",
+       "k": "talkToVeliaf",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5048
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree4",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoors",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCave",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Talk to Veliaf Hurtz.",
+       "s": "Talk to Veliaf Hurtz.",
+       "k": "talkToVeliaf",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5048
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 65,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree4",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoors",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCave",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Talk to Harold Evans.",
+       "s": "Talk to Harold Evans.",
+       "k": "talkToHarold",
+       "at": [
+        3504,
+        9833,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9624
+        ]
+       }
+      },
+      {
+       "t": "Talk to Radigad Ponfit.",
+       "s": "Talk to Radigad Ponfit.",
+       "k": "talkToRadigad",
+       "at": [
+        3510,
+        9833,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5051
+        ]
+       }
+      },
+      {
+       "t": "Talk to Sani Piliu.",
+       "s": "Talk to Sani Piliu.",
+       "k": "talkToSani",
+       "at": [
+        3511,
+        9838,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9622
+        ]
+       }
+      },
+      {
+       "t": "Talk to Polmafi Ferdygris.",
+       "s": "Talk to Polmafi Ferdygris.",
+       "k": "talkToPolmafi",
+       "at": [
+        3512,
+        9839,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5052
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ivan Strom.",
+       "s": "Talk to Ivan Strom.",
+       "k": "talkToIvan",
+       "at": [
+        3512,
+        9843,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5053
+        ]
+       }
+      },
+      {
+       "t": "Talk to Veliaf Hurtz again and give him the steel weapons. Be ready to fight the Skeleton Hellhound",
+       "s": "Give Veliaf Hurtz the steel weapons, ready to fight the Hellhound.",
+       "k": "talkToVeliafAgain",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5048
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 67,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree4",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoors",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCave",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Talk to Veliaf Hurtz.",
+       "s": "Talk to Veliaf Hurtz.",
+       "k": "talkToVeliafForCutscene",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5048
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTree4",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoors",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCave",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Talk to Veliaf Hurtz.",
+       "s": "Talk to Veliaf Hurtz.",
+       "k": "talkToVeliafForCutscene",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5048
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 71,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeHellhound",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsHellhound",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCaveHellhound",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Kill the Skeleton Hellhound. To safespot the hellhound using Magic, position it on the south side of the chair in the eastern part of the room.",
+       "s": "Kill the Skeleton Hellhound; for Magic, stand south of the chair.",
+       "k": "killHellhound",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5054
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 72,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeHellhound",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsHellhound",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCaveHellhound",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Kill the Skeleton Hellhound. To safespot the hellhound using Magic, position it on the south side of the chair in the eastern part of the room.",
+       "s": "Kill the Skeleton Hellhound; for Magic, stand south of the chair.",
+       "k": "killHellhound",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5054
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 73,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeHellhound",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsHellhound",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCaveHellhound",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Kill the Skeleton Hellhound. To safespot the hellhound using Magic, position it on the south side of the chair in the eastern part of the room.",
+       "s": "Kill the Skeleton Hellhound; for Magic, stand south of the chair.",
+       "k": "killHellhound",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5054
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 74,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeHellhound",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsHellhound",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCaveHellhound",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Kill the Skeleton Hellhound. To safespot the hellhound using Magic, position it on the south side of the chair in the eastern part of the room.",
+       "s": "Kill the Skeleton Hellhound; for Magic, stand south of the chair.",
+       "k": "killHellhound",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5054
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 75,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeHellhound",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsHellhound",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCaveHellhound",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Kill the Skeleton Hellhound. To safespot the hellhound using Magic, position it on the south side of the chair in the eastern part of the room.",
+       "s": "Kill the Skeleton Hellhound; for Magic, stand south of the chair.",
+       "k": "killHellhound",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5054
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 76,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeHellhound",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsHellhound",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCaveHellhound",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Kill the Skeleton Hellhound. To safespot the hellhound using Magic, position it on the south side of the chair in the eastern part of the room.",
+       "s": "Kill the Skeleton Hellhound; for Magic, stand south of the chair.",
+       "k": "killHellhound",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5054
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 77,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeHellhound",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsHellhound",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCaveHellhound",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Kill the Skeleton Hellhound. To safespot the hellhound using Magic, position it on the south side of the chair in the eastern part of the room.",
+       "s": "Kill the Skeleton Hellhound; for Magic, stand south of the chair.",
+       "k": "killHellhound",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5054
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 78,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeHellhound",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsHellhound",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCaveHellhound",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Kill the Skeleton Hellhound. To safespot the hellhound using Magic, position it on the south side of the chair in the eastern part of the room.",
+       "s": "Kill the Skeleton Hellhound; for Magic, stand south of the chair.",
+       "k": "killHellhound",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5054
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 79,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeHellhound",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsHellhound",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCaveHellhound",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Kill the Skeleton Hellhound. To safespot the hellhound using Magic, position it on the south side of the chair in the eastern part of the room.",
+       "s": "Kill the Skeleton Hellhound; for Magic, stand south of the chair.",
+       "k": "killHellhound",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5054
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 80,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeHellhound",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsHellhound",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCaveHellhound",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Kill the Skeleton Hellhound. To safespot the hellhound using Magic, position it on the south side of the chair in the eastern part of the room.",
+       "s": "Kill the Skeleton Hellhound; for Magic, stand south of the chair.",
+       "k": "killHellhound",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5054
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 85,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeLeave",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsLeave",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave to the north on the east side.",
+       "s": "Enter the cave to the north on the east side.",
+       "k": "enterCaveLeave",
+       "at": [
+        3492,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      },
+      {
+       "t": "Talk to Veliaf Hurtz to learn the way out.",
+       "s": "Talk to Veliaf Hurtz to learn the way out.",
+       "k": "talkToVeliafToLeave",
+       "at": [
+        3506,
+        9837,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5048
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 90,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeLeave",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsLeave",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Leave up the ladder in the north of the cave.",
+       "s": "Leave up the ladder in the north of the cave.",
+       "k": "goUpToCanifis",
+       "at": [
+        3477,
+        9846,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5054
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveCave",
+       "at": [
+        3505,
+        9831,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 95,
+     "do": [
+      {
+       "t": "Climb the tree to the north of the boat.",
+       "s": "Climb the tree to the north of the boat.",
+       "k": "climbTreeLeave",
+       "at": [
+        3502,
+        3426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5003
+        ]
+       }
+      },
+      {
+       "t": "Enter the wooden doors north of Curpile.",
+       "s": "Enter the wooden doors north of Curpile.",
+       "k": "enterDoorsLeave",
+       "at": [
+        3509,
+        3448,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5061
+        ]
+       }
+      },
+      {
+       "t": "Leave up the ladder in the north of the cave.",
+       "s": "Leave up the ladder in the north of the cave.",
+       "k": "goUpToCanifis",
+       "at": [
+        3477,
+        9846,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5054
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveCave",
+       "at": [
+        3505,
+        9831,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 97,
+     "do": [
+      {
+       "t": "Talk to the Stranger in the Canifis pub to finish the quest!",
+       "s": "Talk to the Stranger in the Canifis pub to finish the quest!",
+       "k": "talkToStranger",
+       "at": [
+        3503,
+        3477,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5055
+        ]
+       }
+      },
+      {
+       "t": "Leave up the ladder in the north of the cave.",
+       "s": "Leave up the ladder in the north of the cave.",
+       "k": "goUpToCanifis",
+       "at": [
+        3477,
+        9846,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5054
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveCave",
+       "at": [
+        3505,
+        9831,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 100,
+     "do": [
+      {
+       "t": "Talk to the Stranger in the Canifis pub to finish the quest!",
+       "s": "Talk to the Stranger in the Canifis pub to finish the quest!",
+       "k": "talkToStranger",
+       "at": [
+        3503,
+        3477,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5055
+        ]
+       }
+      },
+      {
+       "t": "Leave up the ladder in the north of the cave.",
+       "s": "Leave up the ladder in the north of the cave.",
+       "k": "goUpToCanifis",
+       "at": [
+        3477,
+        9846,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5054
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveCave",
+       "at": [
+        3505,
+        9831,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 105,
+     "do": [
+      {
+       "t": "Talk to the Stranger in the Canifis pub to finish the quest!",
+       "s": "Talk to the Stranger in the Canifis pub to finish the quest!",
+       "k": "talkToStranger",
+       "at": [
+        3503,
+        3477,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5055
+        ]
+       }
+      },
+      {
+       "t": "Leave up the ladder in the north of the cave.",
+       "s": "Leave up the ladder in the north of the cave.",
+       "k": "goUpToCanifis",
+       "at": [
+        3477,
+        9846,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5054
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveCave",
+       "at": [
+        3505,
+        9831,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5046
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
   "S9-01": {
    "var": [
     "varp",

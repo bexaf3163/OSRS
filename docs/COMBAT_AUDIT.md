@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-33 stages: 6 retained, 26 revised, 0 with a branch, 1 deferred.
+34 stages: 6 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -38,6 +38,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
 | S8-07 Creature of Fenkenstrain | quest-fight | yes | Experiment (51) | melee | Experiment | Lobster 5 | Revised |
 | S8-08 Shades of Mort'ton | quest-fight | yes | Loar Shade (40) | melee | Loar Shade | Lobster 10 | Revised |
+| S8-09 In Search of the Myreque | quest-fight | yes | Skeleton Hellhound (97) | melee | Skeleton Hellhound | Lobster 10 | Revised |
 | S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (Lost City) (101) | safespot | Tree spirit (Lost City) | - | Revised |
 | S9-02 Fairytale I - Growing Pains | quest-fight | yes | Tanglefoot (111) | other | Tanglefoot | Lobster 10 | Revised |
 | S9-04 Monkey Madness I | quest-fight | yes | Jungle Demon (195), Monkey zombie, Gorilla | safespot | Jungle Demon | - | Revised |
@@ -759,11 +760,37 @@ Alternatives:
 
 Changed:
 
-- 2.110.0: the step's foes name the Loar Shade, so the kills are estimated with the player's kit; Lobster x10 (or similar food) is a required item.
+- 2.111.0: the step's foes name the Loar Shade, so the kills are estimated with the player's kit; Lobster x10 (or similar food) is a required item.
 
 Evidence:
 
 - OSRS Wiki Shades of Mort'ton requirements and Loar Shade infobox.
+
+## S8-09 In Search of the Myreque
+
+**Revised.** In Search of the Myreque: defeat the level 97 Skeleton Hellhound (55 hit points, hits up to 12) in the hidden room under Canifis.
+
+Quest stage lines: 0.13.
+
+Assumptions:
+
+- The Skeleton Hellhound is its only Wiki infobox version; a Magic safespot is not modelled, so the melee estimate is the cautious one.
+
+Problems:
+
+- New quest: no stage of the route met this monster before.
+
+Alternatives:
+
+- Safespot it with Magic by luring it beside the chair (Wiki strategy).
+
+Changed:
+
+- 2.112.0: the step's threats name the Skeleton Hellhound, so the fight is estimated with the player's kit; Lobster x10 (or similar food) is a required item.
+
+Evidence:
+
+- OSRS Wiki In Search of the Myreque requirements and Skeleton Hellhound infobox.
 
 ## S9-01 Lost City
 

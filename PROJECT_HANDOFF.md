@@ -156,9 +156,9 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Handover — state on 2026-11-14
 
-- **State:** v2.111.0 published, all gates passed; nothing tested in the real game since 2.87.
+- **State:** v2.112.0 published, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, training times shown); XP/Balanced/Money change the method only; Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; V2 review retired; update Cancel stays.
-- **Next:** 1) P4. 2) Members: quest batches, modelled consumption for the unknown-time debt (6 turns). 3) Measured quest times from the player's own quest starts and finishes.
+- **Next:** 1) P4. 2) Members (owner, 2026-11-15): Members unlocks everything; hand-modelled Members money methods, the best method as time value (not cowhides), a gate ranking earnings; then quests and the 6-turn debt. 3) Measured quest times from the player's own quest starts and finishes.
 - **Owner:** writes Russian; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 
 ## Remaining work in priority order
@@ -175,7 +175,7 @@ Foundations: runtime cutover live (23-quest DAG, scoped decisions); one intent e
 
 ### Quest content pipeline — pilot 2026-11-14
 
-Machine-drafted quests. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/` (Quest Helper stages, tiles, ids, texts; Wiki cards; one short line per text). `npm run check-drafts` fails source contradictions and off-ground tiles in a walking replay; unconfirmed facts stay `unknown`. `npm run quest-promote -- <Draft> <id>` writes the step, stages and QH row. Shipped S7-06 to S7-19, S8-07 and S8-08 (promoted drafts are deleted); drafts: Big Chompy Bird Hunting, Biohazard, Clock Tower, Temple of Ikov, Elemental Workshop I, Hazeel Cult, Murder Mystery, Tribal Totem, Rag and Bone Man I (loop-built steps), Scorpion Catcher (needs Barcrawl); Quest Helper `b9b9370`. The Members gate finishes 50/50. Fights, unreviewed quest flows and training retire projected stock and cash (`runtime.ts` adapters, `trainingModel`); single worn pieces, wearable gear and quest-given items survive unless the objective names them (`decision.ts`); prerequisites' keepsakes count as carried (`tactical.ts`). Fights assume the quest's required levels (`runtime.ts`). Members unknown time: 6 of 369 turns.
+Machine-drafted quests. `npm run quest-draft -- "<Wiki title>"` writes `src/data/drafts/` (Quest Helper stages, tiles, ids, texts; Wiki cards; one short line per text). `npm run check-drafts` fails source contradictions and off-ground tiles in a walking replay; unconfirmed facts stay `unknown`. `npm run quest-promote -- <Draft> <id>` writes the step, stages and QH row. Shipped S7-06 to S7-19 and S8-07 to S8-09 (promoted drafts are deleted); drafts: Big Chompy Bird Hunting, Biohazard, Clock Tower, Temple of Ikov, Elemental Workshop I, Hazeel Cult, Murder Mystery, Tribal Totem, Rag and Bone Man I (loop-built steps), Scorpion Catcher (needs Barcrawl); Quest Helper `b9b9370`. The Members gate finishes 51/51. Fights, unreviewed quest flows and training retire projected stock and cash (`runtime.ts` adapters, `trainingModel`); single worn pieces, wearable gear and quest-given items survive unless the objective names them (`decision.ts`); prerequisites' keepsakes count as carried (`tactical.ts`). Fights assume the quest's required levels (`runtime.ts`). Members unknown time: 6 of 390 turns.
 
 ### P4 — Claude's real-client acceptance
 
@@ -205,7 +205,7 @@ Record versions, account mode, facts, expected and actual result and evidence as
 
 Each batch releases after all gates and its Go threshold; live acceptance follows on the published Portable (owner decision 2026-11-01); re-run `npm run perf` and `check-structure` after it. Next is the full plugin live matrix, closing **S8**. Caches and context selectors (R3, R4, R8) wait until per-update script time passes 50 ms.
 
-Rejected after measuring: deferred PathWide scroll (slower start), lazy pages (3.8% page-only code), a V8 code cache (moves the `localStorage` origin), domain barrels, merged tiny modules, parallel Java render tests (shared font cache), an automatic CSS split per feature (S9: computed styles changed; merge by hand). The React hooks lint is an occasional review; findings are deliberate. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (kept by owner decision 2026-11-01). Never delete normal `v*` releases.
+Rejected after measuring: deferred PathWide scroll, lazy pages, a V8 code cache, domain barrels, merged tiny modules, parallel Java render tests, an automatic CSS split per feature (S9: merge by hand). The React hooks lint findings are deliberate. Ask the owner before deleting `docs/OWNER_ARMOUR_PRICING_DATES_REQUEST.md`, `CODEX_ROUTE_CONTINUATION_REVIEW.md`, `route-reorder-proposal.md`, `readiness.md` or `inventory-cleanup.md` (kept by owner decision 2026-11-01). Never delete normal `v*` releases.
 
 ## Completed baseline — preserve, do not redo
 

@@ -123,6 +123,11 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     consumes: [{ name: 'Bread', count: 1 }, { name: 'Bucket of wax', count: 1 }, { name: 'Bat bones', count: 1 }], receives: [], unknownItems: ['Black candle'],
     ensures: ['Excalibur'], partialDelivery: false, fromStartOnly: true,
   } },
+  'Nature Spirit': { revision: 15372142, flow: {
+    // The silver sickle is blessed at the grotto; the druid pouch is first obtained here (Wiki Druid pouch). Both are kept.
+    consumes: [{ name: 'Silver sickle', count: 1 }], receives: [], unknownItems: [],
+    ensures: ['Silver sickle (b)', 'Druid pouch'], partialDelivery: false, fromStartOnly: true,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],
@@ -160,6 +165,7 @@ const REVIEWED_CLAUSES = new Set([
   // The onslaught is the temple's shade attacks, fought with the same kit and food; Mort'ton opens with Priest in Peril.
   'Must be able to survive an onslaught when rebuilding the Temple (Being surrounded by many players makes this much easier).',
   "Access to [[Mort'ton]]",
+  'The ability to defeat a level 97 foe ([[safespot]]table)',
   'A trustworthy friend or partner. Players can join the official [[chat-channel]] "OSRS SOA" to look for a partner.',
   "to enter the Champions' Guild",
 ].map(clause => clause.toLowerCase()));
