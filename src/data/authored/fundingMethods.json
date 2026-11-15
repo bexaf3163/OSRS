@@ -8450,6 +8450,671 @@
         "Supplies are bought and products sold at the exchange at the instant prices.",
         "Item ids from the wiki infoboxes, retrieved 2026-11-15."
       ]
+    },
+    {
+      "id": "weave-bolts-of-canvas",
+      "title": "Weave bolts of canvas",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Weave hemp yarn into bolt of canvass at the Falador farm loom and sell them.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "crafting",
+          "level": 39
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 31466,
+            "name": "Hemp yarn"
+          },
+          "qty": 2
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 31475,
+            "name": "Bolt of canvas"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "bolt of canvas",
+        "perHour": {
+          "slow": 300,
+          "typical": 450,
+          "fast": 500
+        },
+        "basis": "wiki-guide",
+        "assumes": "The guide's 1,100 an hour uses the Fossil Island loom (Bone Voyage and a built loom). At Falador, 14 bolt of canvass a bag take about 35 seconds and the run to Falador East Bank and back about 75, about 450 an hour."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 bolt of canvass a bag; the walk to the bank is in the pace."
+      },
+      "spot": {
+        "x": 3039,
+        "y": 3287,
+        "plane": 0,
+        "label": "Falador farm loom"
+      },
+      "bank": {
+        "x": 3013,
+        "y": 3355,
+        "plane": 0,
+        "label": "Falador East Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy hemp yarn at the Grand Exchange."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the loom at the farm south of Falador."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the loom and weave all the hemp yarn into bolt of canvass."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the products at Falador East Bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_bolts_of_canvas",
+          "title": "Money making guide/Crafting bolts of canvas",
+          "revision": 15291911,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The Fossil Island loom is closer to a bank but needs Bone Voyage and a loom built with Construction 29; it is not assumed.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "weave-drift-nets",
+      "title": "Weave drift nets",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Weave jute fibre into drift nets at the Falador farm loom and sell them.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "crafting",
+          "level": 26
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 5931,
+            "name": "Jute fibre"
+          },
+          "qty": 2
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 21652,
+            "name": "Drift net"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "drift net",
+        "perHour": {
+          "slow": 300,
+          "typical": 450,
+          "fast": 500
+        },
+        "basis": "wiki-guide",
+        "assumes": "The guide's 1,100 an hour uses the Fossil Island loom (Bone Voyage and a built loom). At Falador, 14 drift nets a bag take about 35 seconds and the run to Falador East Bank and back about 75, about 450 an hour."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 drift nets a bag; the walk to the bank is in the pace."
+      },
+      "spot": {
+        "x": 3039,
+        "y": 3287,
+        "plane": 0,
+        "label": "Falador farm loom"
+      },
+      "bank": {
+        "x": 3013,
+        "y": 3355,
+        "plane": 0,
+        "label": "Falador East Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy jute fibre at the Grand Exchange."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the loom at the farm south of Falador."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the loom and weave all the jute fibre into drift nets."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the products at Falador East Bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_drift_nets",
+          "title": "Money making guide/Crafting drift nets",
+          "revision": 15239351,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The Fossil Island loom is closer to a bank but needs Bone Voyage and a loom built with Construction 29; it is not assumed.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "make-willow-birdhouses",
+      "title": "Make willow bird houses",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Crafting Willow bird houses. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "crafting",
+          "level": 25
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 2347,
+              "name": "Hammer"
+            }
+          ],
+          "note": "Stays in the bag."
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1755,
+              "name": "Chisel"
+            }
+          ],
+          "note": "Stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 8792,
+            "name": "Clockwork"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 1519,
+            "name": "Willow logs"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 21518,
+            "name": "Willow bird house"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "willow bird house",
+        "perHour": {
+          "slow": 1100,
+          "typical": 1600,
+          "fast": 2000
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,000 willow bird house an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 26,
+        "overheadSeconds": 0,
+        "note": "The hammer and chisel take two slots; 13 clockworks and 13 willow logs a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy clockworks and willow logs at the Grand Exchange; keep a hammer and a chisel in the bag. Test one first."
+        },
+        {
+          "kind": "perform",
+          "text": "Use a clockwork on a willow log for each bird house."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the bird houses and take the next 13 of each."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_birdhouse_traps",
+          "title": "Money making guide/Making birdhouse traps",
+          "revision": 15387170,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "string-yew-longbows",
+      "title": "String yew longbows",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Stringing yew longbows. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fletching",
+          "level": 70
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 66,
+            "name": "Yew longbow (u)"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 1777,
+            "name": "Bow string"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 855,
+            "name": "Yew longbow"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "yew longbow",
+        "perHour": {
+          "slow": 1320,
+          "typical": 1920,
+          "fast": 2400
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,400 yew longbow an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 unstrung bows and 14 bow strings a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy yew longbows (u) and bow strings at the Grand Exchange."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a string on a bow and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the longbows."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stringing_yew_longbows",
+          "title": "Money making guide/Stringing yew longbows",
+          "revision": 14471294,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Also trains Fletching. The guide notes High Level Alchemy (768 coins each) as another way to sell them.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "dismantle-ethereum-bracelets",
+      "title": "Dismantle bracelets of ethereum",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Dismantling bracelets of ethereum. Grand Exchange",
+      "requirements": [],
+      "inputs": [
+        {
+          "item": {
+            "id": 21817,
+            "name": "Bracelet of ethereum (uncharged)"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 21820,
+            "name": "Revenant ether"
+          },
+          "qty": 250
+        }
+      ],
+      "rate": {
+        "unit": "action",
+        "perHour": {
+          "slow": 1925,
+          "typical": 2800,
+          "fast": 3500
+        },
+        "basis": "wiki-guide",
+        "assumes": "3,500 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "About 25 seconds an inventory of 27 bracelets, banking included."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy uncharged bracelets of ethereum at the Grand Exchange. Check the margin first, it is often negative."
+        },
+        {
+          "kind": "perform",
+          "text": "Dismantle each bracelet into 250 revenant ether; set one mouse button and confirm with the 1 key."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the ether and take 27 bracelets."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Dismantling_bracelets_of_ethereum",
+          "title": "Money making guide/Dismantling bracelets of ethereum",
+          "revision": 14918242,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide warns this is unprofitable much of the time; it ranks only when prices allow.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
+    },
+    {
+      "id": "craft-diamond-bracelets",
+      "title": "Craft diamond bracelets",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Crafting diamond bracelets. Edgeville",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "crafting",
+          "level": 58
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 11065,
+              "name": "Bracelet mould"
+            }
+          ],
+          "note": "The bracelet mould stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2357,
+            "name": "Gold bar"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 1601,
+            "name": "Diamond"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 11092,
+            "name": "Diamond bracelet"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "diamond bracelet",
+        "perHour": {
+          "slow": 660,
+          "typical": 960,
+          "fast": 1200
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,200 diamond bracelet an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "13 gold bars and 13 diamonds a trip; the furnace is a few steps from the bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3109,
+        "y": 3499,
+        "plane": 0,
+        "label": "Edgeville furnace"
+      },
+      "bank": {
+        "x": 3093,
+        "y": 3495,
+        "plane": 0,
+        "label": "Edgeville Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy gold bars and diamonds at the Grand Exchange; keep the bracelet mould in the bag."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Edgeville furnace."
+        },
+        {
+          "kind": "perform",
+          "text": "Use a gold bar on the furnace and make diamond bracelets."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the bracelets."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_diamond_bracelets",
+          "title": "Money making guide/Crafting diamond bracelets",
+          "revision": 15356032,
+          "retrievedAt": "2026-11-15",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-15",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The Prifddinas (Song of the Elves) and Shilo Village (elite Karamja Diary) furnaces are closer to a bank but not assumed.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-15."
+      ]
     }
   ]
 }

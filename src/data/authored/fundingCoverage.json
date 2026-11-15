@@ -687,6 +687,54 @@
       "methods": [
         "exchange-mole-parts"
       ]
+    },
+    {
+      "id": "crafting-bolts-of-canvas",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "weave-bolts-of-canvas"
+      ]
+    },
+    {
+      "id": "crafting-drift-nets",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "weave-drift-nets"
+      ]
+    },
+    {
+      "id": "making-birdhouse-traps",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "make-willow-birdhouses"
+      ]
+    },
+    {
+      "id": "stringing-yew-longbows",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "string-yew-longbows"
+      ]
+    },
+    {
+      "id": "dismantling-bracelets-of-ethereum",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "dismantle-ethereum-bracelets"
+      ]
+    },
+    {
+      "id": "crafting-diamond-bracelets",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "craft-diamond-bracelets"
+      ]
     }
   ],
   "extras": [

@@ -156,9 +156,9 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Handover — state on 2026-11-14
 
-- **State:** v2.115.0 published, all gates passed; nothing tested in the real game since 2.87.
+- **State:** v2.116.0 published, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, training times shown); XP/Balanced/Money change the method only; Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; V2 review retired; update Cancel stays.
-- **Next:** 1) P4. 2) Members (owner, 2026-11-15): Members unlocks everything; 59 Members money methods hand-reviewed, Members time value live; review the other 74 by the route's picks; then quests, the 4-turn debt. 3) Measured quest times from the player's own quest starts and finishes.
+- **Next:** 1) P4. 2) Members (owner, 2026-11-15): Members unlocks everything; 65 Members money methods hand-reviewed, Members time value live; review the other 57 by the route's picks; then quests, the 4-turn debt. 3) Measured quest times from the player's own quest starts and finishes.
 - **Owner:** writes Russian; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 
 ## Remaining work in priority order

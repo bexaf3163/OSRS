@@ -5829,133 +5829,6 @@
    ]
   },
   {
-   "id": "crafting-bolts-of-canvas",
-   "title": "Crafting bolts of canvas",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Crafting Bolt of canvass. Fossil Island, Falador, Prifddinas, Iorwerth Camp or Hosidius",
-   "about": "Bolt of canvass can be crafted by using two Hemp yarns on a loom, which currently profits per canvas. When paying attention, up to 1,100 bolts of canvas can be crafted per hour. The loom on Fossil Island is closest to a bank, therefore it is recommended to use this loom for this method, however it comes with a few additional requirements: This method is one of the few skilling methods which yield a decent profit and experience rate.",
-   "tips": [
-    "Access to Fossil Island requires completion of the Bone Voyage quest.",
-    "Crafting bolts of canvas on Fossil Island requires the player to first craft a loom and bank chest on the island, requiring: 4x Oak plank, 1x Rope, 1x Iron bar 10x Nails as well as a hammer (which is not consumed) and Construction 29."
-   ],
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "crafting",
-     "level": 39
-    },
-    {
-     "kind": "level",
-     "skill": "construction",
-     "level": 29
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Jute fibre at Loom (39 Crafting required)"
-    },
-    {
-     "kind": "check",
-     "text": "High Agility levels and weight-reducing clothing are recommended"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 31466,
-      "name": "Hemp yarn"
-     },
-     "qty": 2
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 31475,
-      "name": "Bolt of canvas"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "bolt of canvas",
-    "perHour": {
-     "slow": 605,
-     "typical": 880,
-     "fast": 1100
-    },
-    "basis": "wiki-guide",
-    "assumes": "1,100 bolt of canvas an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3733,
-    "y": 3812,
-    "plane": 0,
-    "label": "Fossil Island, Falador, Prifddinas, Iorwerth Camp or Hosidius"
-   },
-   "bank": {
-    "x": 3512,
-    "y": 3478,
-    "plane": 0,
-    "label": "Canifis bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Hemp yarn at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Fossil Island, Falador, Prifddinas, Iorwerth Camp or Hosidius.",
-     "place": {
-      "x": 3733,
-      "y": 3812,
-      "plane": 0,
-      "label": "Fossil Island, Falador, Prifddinas, Iorwerth Camp or Hosidius"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Crafting Bolt of canvass until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Canifis bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_bolts_of_canvas",
-     "title": "Money making guide/Crafting bolts of canvas",
-     "revision": 15291911,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "crafting-cosmic-runes",
    "title": "Crafting cosmic runes",
    "family": "production",
@@ -6268,127 +6141,6 @@
    ]
   },
   {
-   "id": "crafting-diamond-bracelets",
-   "title": "Crafting diamond bracelets",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Crafting diamond bracelets. Edgeville",
-   "about": "Players can craft diamond bracelets at any furnace, though the Edgeville furnace is the best to use as it is the closest to a bank and requires no quests to access. If you have completed Song of the Elves, use the Prifddinas furnace instead. If you have completed the Elite Karamja Diary, you can use the furnace in Shilo village without a cost.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "crafting",
-     "level": 58
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Bracelet mould required, Weight-reducing clothing recommended"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 2357,
-      "name": "Gold bar"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 1601,
-      "name": "Diamond"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 11092,
-      "name": "Diamond bracelet"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "diamond bracelet",
-    "perHour": {
-     "slow": 660,
-     "typical": 960,
-     "fast": 1200
-    },
-    "basis": "wiki-guide",
-    "assumes": "1,200 diamond bracelet an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3080,
-    "y": 3492,
-    "plane": 0,
-    "label": "Edgeville"
-   },
-   "bank": {
-    "x": 3093,
-    "y": 3495,
-    "plane": 0,
-    "label": "Edgeville Bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Gold bar, Diamond at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Edgeville.",
-     "place": {
-      "x": 3080,
-      "y": 3492,
-      "plane": 0,
-      "label": "Edgeville"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Crafting diamond bracelets until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Edgeville Bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_diamond_bracelets",
-     "title": "Money making guide/Crafting diamond bracelets",
-     "revision": 15356032,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "crafting-double-nature-runes-achievement-diary-cape-teleport",
    "title": "Crafting double nature runes (Achievement Diary Cape teleport)",
    "family": "production",
@@ -6529,133 +6281,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_double_nature_runes_(Achievement_Diary_Cape_teleport)",
      "title": "Money making guide/Crafting double nature runes (Achievement Diary Cape teleport)",
      "revision": 15402413,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "crafting-drift-nets",
-   "title": "Crafting drift nets",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Crafting Drift nets. Fossil Island, Falador, Prifddinas, Iorwerth Camp or Hosidius",
-   "about": "Drift nets can be crafted by using two jute fibres on a loom, which currently profits per net. When paying attention, up to 1,100 drift nets can be crafted per hour. The loom on Fossil Island is closest to a bank, therefore it is recommended to use this loom for this method, however it comes with a few additional requirements:",
-   "tips": [
-    "Access to Fossil Island requires completion of the Bone Voyage quest.",
-    "Crafting drift nets on Fossil Island requires the player to first craft a loom and bank chest on the island, requiring: 4x Oak plank, 1x Rope, 1x Iron bar 10x Nails as well as a hammer (which is not consumed) and Construction 29."
-   ],
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "crafting",
-     "level": 26
-    },
-    {
-     "kind": "level",
-     "skill": "construction",
-     "level": 29
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Jute fibre at Loom (26 Crafting required)"
-    },
-    {
-     "kind": "check",
-     "text": "High Agility levels and weight-reducing clothing are recommended"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 5931,
-      "name": "Jute fibre"
-     },
-     "qty": 2
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 21652,
-      "name": "Drift net"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "drift net",
-    "perHour": {
-     "slow": 605,
-     "typical": 880,
-     "fast": 1100
-    },
-    "basis": "wiki-guide",
-    "assumes": "1,100 drift net an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3733,
-    "y": 3812,
-    "plane": 0,
-    "label": "Fossil Island, Falador, Prifddinas, Iorwerth Camp or Hosidius"
-   },
-   "bank": {
-    "x": 3512,
-    "y": 3478,
-    "plane": 0,
-    "label": "Canifis bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Jute fibre at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Fossil Island, Falador, Prifddinas, Iorwerth Camp or Hosidius.",
-     "place": {
-      "x": 3733,
-      "y": 3812,
-      "plane": 0,
-      "label": "Fossil Island, Falador, Prifddinas, Iorwerth Camp or Hosidius"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Crafting Drift nets until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Canifis bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_drift_nets",
-     "title": "Money making guide/Crafting drift nets",
-     "revision": 15239351,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -7199,238 +6824,6 @@
    ]
   },
   {
-   "id": "cutting-raw-marlin",
-   "title": "Cutting raw marlin",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cutting raw marlin. Bank boat",
-   "about": "Marlin scales are used to create extended stamina potions. When using a chum spreader, 4 marlin can be cut in one game tick. This results in about 11,000 marlin cut per hour. A chum station can be used to cut 2 per tick and an advanced chum station can be used to cut 3 per tick which results in less marlin cut per hour but has lower Sailing and Construction requirements.",
-   "requirements": [
-    {
-     "kind": "check",
-     "text": "Chum spreader recommended"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 32349,
-      "name": "Raw marlin"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 32307,
-      "name": "Fine fish offcuts"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 32362,
-      "name": "Marlin scales"
-     },
-     "qty": 3
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 6050,
-     "typical": 8800,
-     "fast": 11000
-    },
-    "basis": "wiki-guide",
-    "assumes": "11,000 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2280,
-    "y": 2544,
-    "plane": 0,
-    "label": "Bank boat"
-   },
-   "bank": {
-    "x": 2569,
-    "y": 2864,
-    "plane": 0,
-    "label": "Corsair Cove bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Raw marlin at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Bank boat.",
-     "place": {
-      "x": 2280,
-      "y": 2544,
-      "plane": 0,
-      "label": "Bank boat"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cutting raw marlin until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Corsair Cove bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_raw_marlin",
-     "title": "Money making guide/Cutting raw marlin",
-     "revision": 15248580,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cutting-raw-yellowfin",
-   "title": "Cutting raw yellowfin",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cutting raw yellowfin. Bank boat",
-   "about": "Yellow fins are used to create extreme energy potions. When using a chum spreader, 4 yellowfin can be cut in one game tick. This results in about 11,000 yellowfins cut per hour. A chum station can be used to cut 2 per tick and an advanced chum station can be used to cut 3 per tick which results in less yellowfin cut per hour but has lower Sailing and Construction requirements.",
-   "requirements": [
-    {
-     "kind": "check",
-     "text": "Chum spreader recommended"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 32325,
-      "name": "Raw yellowfin"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 32307,
-      "name": "Fine fish offcuts"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 32360,
-      "name": "Yellow fin"
-     },
-     "qty": 3
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 6050,
-     "typical": 8800,
-     "fast": 11000
-    },
-    "basis": "wiki-guide",
-    "assumes": "11,000 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2280,
-    "y": 2544,
-    "plane": 0,
-    "label": "Bank boat"
-   },
-   "bank": {
-    "x": 2569,
-    "y": 2864,
-    "plane": 0,
-    "label": "Corsair Cove bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Raw yellowfin at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Bank boat.",
-     "place": {
-      "x": 2280,
-      "y": 2544,
-      "plane": 0,
-      "label": "Bank boat"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cutting raw yellowfin until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Corsair Cove bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_raw_yellowfin",
-     "title": "Money making guide/Cutting raw yellowfin",
-     "revision": 15132992,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "cutting-redwood-logs",
    "title": "Cutting redwood logs",
    "family": "gathering",
@@ -7795,231 +7188,6 @@
    ]
   },
   {
-   "id": "dismantling-bracelets-of-ethereum",
-   "title": "Dismantling bracelets of ethereum",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Dismantling bracelets of ethereum. Grand Exchange",
-   "about": "The bracelet of ethereum is a frequent drop from all types of Revenant. When dismantled, it will give 250 revenant ether. Begin by withdrawing 27 uncharged bracelets. Adjust your in-game controls under options to only allow 1 mouse button.",
-   "requirements": [
-    {
-     "kind": "check",
-     "text": "Please note that a large portion of the time, this method isn't profitable as bracelets of ether fluctuate between 43,000 coins and 44,000 coins, and the 250 revenant ether fluctuate between 150 and 180 coins each."
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 21817,
-      "name": "Bracelet of ethereum (uncharged)"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 21820,
-      "name": "Revenant ether"
-     },
-     "qty": 250
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 1925,
-     "typical": 2800,
-     "fast": 3500
-    },
-    "basis": "wiki-guide",
-    "assumes": "3,500 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Bracelet of ethereum (uncharged) at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Dismantling bracelets of ethereum until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Dismantling_bracelets_of_ethereum",
-     "title": "Money making guide/Dismantling bracelets of ethereum",
-     "revision": 14918242,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "dying-blue-wizard-robes",
-   "title": "Dying blue wizard robes",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Dying black robes into blue wizard robes",
-   "about": "The price of one black robe is and the price of a blue dye is. Dying the robe blue currently makes a profit of. However, with some decently timed clicks, 5,385 can be dyed per hour. The buy limit of black robes (which is the limiting factor) is 125 every 4 hours.",
-   "requirements": [
-    {
-     "kind": "check",
-     "text": "Bring: Coins, Black robes, Blue dye."
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 581,
-      "name": "Black robe"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 1767,
-      "name": "Blue dye"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 577,
-      "name": "Blue wizard robe"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "blue wizard robe",
-    "perHour": {
-     "slow": 413,
-     "typical": 600,
-     "fast": 750
-    },
-    "basis": "wiki-guide",
-    "assumes": "750 blue wizard robe an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Black robe, Blue dye at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Dying black robes into blue wizard robes until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Dying_blue_wizard_robes",
-     "title": "Money making guide/Dying blue wizard robes",
-     "revision": 14814304,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "enchanting-dragonstone-jewellery",
    "title": "Enchanting dragonstone jewellery",
    "family": "production",
@@ -8131,787 +7299,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Enchanting_dragonstone_jewellery",
      "title": "Money making guide/Enchanting dragonstone jewellery",
      "revision": 15029260,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "farming-cotton-bolls",
-   "title": "Farming cotton bolls",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Farming cotton bolls. Lumbridge, Seers' Village, Yanille, Aldarin, and Entrana hops patches",
-   "about": "This guide assumes an average of 15 cotton bolls from each patch, hence 75 bolls in total per run. Profit per hour may vary depending on your yield. Farming cotton bolls can be a very profitable way to spend a few minutes at a time. Magic secateurs help increase profits due to the 10% boost to crop yield.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "farming",
-     "level": 71
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Seed dibber, spade, and a rake, Magic secateurs (recommended), Bottomless compost bucket (recommended), Chronicle (recommended)"
-    },
-    {
-     "kind": "check",
-     "text": "* Hard Ardougne Diary to toggle Watchtower Teleport to the centre of Yanille (optional) * Hard Kandarin Diary to toggle Camelot Teleport to Seers' Village (optional)"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 31545,
-      "name": "Cotton seed"
-     },
-     "qty": 0.2,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 21483,
-      "name": "Ultracompost"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      30
-     ]
-    },
-    {
-     "item": {
-      "id": 13658,
-      "name": "Teleport card"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      75
-     ]
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 31460,
-      "name": "Cotton boll"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "cotton boll",
-    "perHour": {
-     "slow": 41,
-     "typical": 60,
-     "fast": 75
-    },
-    "basis": "wiki-guide",
-    "assumes": "75 cotton boll an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3227,
-    "y": 3314,
-    "plane": 0,
-    "label": "Lumbridge, Seers' Village, Yanille, Aldarin, and Entrana hops patches"
-   },
-   "bank": {
-    "x": 3208,
-    "y": 3220,
-    "plane": 2,
-    "label": "Lumbridge Bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Cotton seed, Ultracompost, Teleport card at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Lumbridge, Seers' Village, Yanille, Aldarin, and Entrana hops patches.",
-     "place": {
-      "x": 3227,
-      "y": 3314,
-      "plane": 0,
-      "label": "Lumbridge, Seers' Village, Yanille, Aldarin, and Entrana hops patches"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Use the Chronicle to teleport to the Champions' Guild, then run south to the Lumbridge farm patch (or use the cowbell amulet and run north out of the cow farm)."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport near to a Fairy ring and take the fairy ring to Aldarin."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport to Camelot (ideally Seers Village) and run north-west to the patch above McGrubor's Wood (or music cape and run south-west)."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport to Port Sarim and take a boat to Entrana, then run west to the patch."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport to Yanille and run north."
-    },
-    {
-     "kind": "perform",
-     "text": "Players who haven't completed the hard Ardougne diary yet will need level 16 Agility in order to cross the underwall tunnel into Yanille."
-    },
-    {
-     "kind": "perform",
-     "text": "A dramen staff is needed to get to the Aldarin hops patch via the fairy ring before completion of the elite Lumbridge & Draynor Diary, but Dramen staffs are not allowed on Entrana, so must be banked before heading there."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Farming_cotton_bolls",
-     "title": "Money making guide/Farming cotton bolls",
-     "revision": 15332871,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "farming-hemp",
-   "title": "Farming hemp",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Farming hemp. Lumbridge, Seers' Village, Yanille, Aldarin, and Entrana hops patches",
-   "about": "This guide assumes an average of 25 hemp from each patch, hence 125 hemp in total per run, and that every patch is paid for with 6 flax. Profit per hour may vary depending on your yield. Farming hemp can be a very profitable way to spend a few minutes at a time, as hemp is in constant demand for hemp yarn, which is used to make hemp trawling nets and bolts of canvas for Sailing. Magic secateurs help increase profits due to the 10% boost to crop yield.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "farming",
-     "level": 37
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Seed dibber, spade, and a rake, Magic secateurs (recommended), Bottomless compost bucket (recommended), Chronicle (recommended)"
-    },
-    {
-     "kind": "check",
-     "text": "* Hard Ardougne Diary to toggle Watchtower Teleport to the centre of Yanille (optional) * Hard Kandarin Diary to toggle Camelot Teleport to Seers' Village (optional)"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 31543,
-      "name": "Hemp seed"
-     },
-     "qty": 0.12,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 21483,
-      "name": "Ultracompost"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      50
-     ]
-    },
-    {
-     "item": {
-      "id": 1779,
-      "name": "Flax"
-     },
-     "qty": 0.24
-    },
-    {
-     "item": {
-      "id": 13658,
-      "name": "Teleport card"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      125
-     ]
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 31457,
-      "name": "Hemp"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "hemp",
-    "perHour": {
-     "slow": 69,
-     "typical": 100,
-     "fast": 125
-    },
-    "basis": "wiki-guide",
-    "assumes": "125 hemp an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3227,
-    "y": 3314,
-    "plane": 0,
-    "label": "Lumbridge, Seers' Village, Yanille, Aldarin, and Entrana hops patches"
-   },
-   "bank": {
-    "x": 3208,
-    "y": 3220,
-    "plane": 2,
-    "label": "Lumbridge Bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Hemp seed, Ultracompost, Flax, Teleport card at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Lumbridge, Seers' Village, Yanille, Aldarin, and Entrana hops patches.",
-     "place": {
-      "x": 3227,
-      "y": 3314,
-      "plane": 0,
-      "label": "Lumbridge, Seers' Village, Yanille, Aldarin, and Entrana hops patches"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Use the Chronicle to teleport to the Champions' Guild, then run south to the Lumbridge farm patch (or use the cowbell amulet and run north out of the cow farm)."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport near to a Fairy ring and take the fairy ring to Aldarin."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport to Camelot (ideally Seers Village) and run north-west to the patch above McGrubor's Wood (or music cape and run south-west)."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport to Port Sarim and take a boat to Entrana, then run west to the patch."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport to Yanille and run north."
-    },
-    {
-     "kind": "perform",
-     "text": "Hemp takes 80 minutes to grow (four stages of 20 minutes), so runs can be repeated slightly less often than cotton."
-    },
-    {
-     "kind": "perform",
-     "text": "Players who haven't completed the hard Ardougne diary yet will need level 16 Agility in order to cross the underwall tunnel into Yanille."
-    },
-    {
-     "kind": "perform",
-     "text": "A dramen staff is needed to get to the Aldarin hops patch via the fairy ring before completion of the elite Lumbridge & Draynor Diary, but Dramen staffs are not allowed on Entrana, so must be banked before heading there."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Farming_hemp",
-     "title": "Money making guide/Farming hemp",
-     "revision": 15295856,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "farming-jute-fibre",
-   "title": "Farming jute fibre",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Farming jute fibre. Lumbridge, Seers' Village, Yanille, Entrana, and Aldarin hops patches",
-   "about": "This guide assumes 27 bundles of fibre from each patch, hence an average of 135 jute fibres per crop run. Keep in mind that profit may vary depending on your yield, and this guide does account for losses resulting from dead crops. Farming jute fibres can be a very profitable way to spend a few minutes at a time. Magic secateurs help increase profits due to the 10% boost to crop yield.",
-   "tips": [
-    "Chronicle teleport",
-    "Combat bracelet to Champions' Guild",
-    "Canoe from Ferox Enclave",
-    "Lumbridge Teleport",
-    "Balloon transport system to Entrana",
-    "Through Port Sarim:",
-    "Minigame teleport to Rat Pits",
-    "Spirit tree (requires 83 Farming)"
-   ],
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "farming",
-     "level": 13
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Seed dibber, spade, and a rake, Magic secateurs (recommended), Chronicle (recommended)"
-    },
-    {
-     "kind": "check",
-     "text": "* Hard Ardougne Diary to toggle Watchtower Teleport to the centre of Yanille (optional) * Hard Kandarin Diary to toggle Camelot Teleport to Seers' Village (optional)"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 5306,
-      "name": "Jute seed"
-     },
-     "qty": 0.1111,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 21483,
-      "name": "Ultracompost"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      27
-     ]
-    },
-    {
-     "item": {
-      "id": 13658,
-      "name": "Teleport card"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      135
-     ]
-    },
-    {
-     "item": {
-      "id": 2552,
-      "name": "Ring of dueling(8)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      1080
-     ]
-    },
-    {
-     "item": {
-      "id": 1511,
-      "name": "Logs"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      135
-     ]
-    },
-    {
-     "item": {
-      "id": 8012,
-      "name": "Watchtower teleport (tablet)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      135
-     ]
-    },
-    {
-     "item": {
-      "id": 8010,
-      "name": "Camelot teleport (tablet)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      135
-     ]
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 5931,
-      "name": "Jute fibre"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "jute fibre",
-    "perHour": {
-     "slow": 74,
-     "typical": 108,
-     "fast": 135
-    },
-    "basis": "wiki-guide",
-    "assumes": "135 jute fibre an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3227,
-    "y": 3314,
-    "plane": 0,
-    "label": "Lumbridge, Seers' Village, Yanille, Entrana, and Aldarin hops patches"
-   },
-   "bank": {
-    "x": 3208,
-    "y": 3220,
-    "plane": 2,
-    "label": "Lumbridge Bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Jute seed, Ultracompost, Teleport card, Ring of dueling(8), Logs, Watchtower teleport (tablet), Camelot teleport (tablet) at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Lumbridge, Seers' Village, Yanille, Entrana, and Aldarin hops patches.",
-     "place": {
-      "x": 3227,
-      "y": 3314,
-      "plane": 0,
-      "label": "Lumbridge, Seers' Village, Yanille, Entrana, and Aldarin hops patches"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Use the chronicle to teleport to the Champions' Guild, then run south to the Lumbridge farm patch."
-    },
-    {
-     "kind": "perform",
-     "text": "Break a Camelot teleport tablet and run north-west to the patch above McGrubor's Wood."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport to Castle Wars using a ring of dueling, take the balloon outside to Entrana, then run south to the patch."
-    },
-    {
-     "kind": "perform",
-     "text": "Break a Watchtower teleport tablet to arrive near the centre of Yanille."
-    },
-    {
-     "kind": "perform",
-     "text": "Use fairy ring or the Quetzal Transport System to travel to Aldarin."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Lumbridge Bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Farming_jute_fibre",
-     "title": "Money making guide/Farming jute fibre",
-     "revision": 15114442,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "farming-yanillian-hops",
-   "title": "Farming Yanillian hops",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Farming Yanillian hops. Lumbridge, Seers' Village, Yanille, Aldarin, and Entrana hops patches",
-   "about": "This guide assumes an average of 27 hops from each patch, hence 135 hops in total per run. Profit per hour may vary depending on your yield. Farming Yanillian hops can be a very profitable way to spend a few minutes at a time. Magic secateurs help increase profits due to the 10% boost to crop yield.",
-   "tips": [
-    "Chronicle teleport",
-    "Combat bracelet to Champions' Guild",
-    "Canoe from Ferox Enclave",
-    "Lumbridge Teleport",
-    "Balloon transport system to Entrana",
-    "Through Port Sarim:",
-    "Minigame teleport to Rat Pits",
-    "Spirit Tree (requires 83 Farming)"
-   ],
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "farming",
-     "level": 16
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Seed dibber, spade, and a rake, Magic secateurs (recommended), Chronicle (recommended)"
-    },
-    {
-     "kind": "check",
-     "text": "* Hard Ardougne Diary to toggle Watchtower Teleport to the centre of Yanille (optional) * Hard Kandarin Diary to toggle Camelot Teleport to Seers' Village (optional)"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 5309,
-      "name": "Yanillian seed"
-     },
-     "qty": 0.1481,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 21483,
-      "name": "Ultracompost"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      27
-     ]
-    },
-    {
-     "item": {
-      "id": 5968,
-      "name": "Tomatoes(5)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      27
-     ]
-    },
-    {
-     "item": {
-      "id": 13658,
-      "name": "Teleport card"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      135
-     ]
-    },
-    {
-     "item": {
-      "id": 2552,
-      "name": "Ring of dueling(8)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      1080
-     ]
-    },
-    {
-     "item": {
-      "id": 1511,
-      "name": "Logs"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      135
-     ]
-    },
-    {
-     "item": {
-      "id": 8012,
-      "name": "Watchtower teleport (tablet)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      135
-     ]
-    },
-    {
-     "item": {
-      "id": 8010,
-      "name": "Camelot teleport (tablet)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      135
-     ]
-    },
-    {
-     "item": {
-      "id": 19619,
-      "name": "Salve graveyard teleport (tablet)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      135
-     ]
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 5998,
-      "name": "Yanillian hops"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "yanillian hops",
-    "perHour": {
-     "slow": 74,
-     "typical": 108,
-     "fast": 135
-    },
-    "basis": "wiki-guide",
-    "assumes": "135 yanillian hops an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3227,
-    "y": 3314,
-    "plane": 0,
-    "label": "Lumbridge, Seers' Village, Yanille, Aldarin, and Entrana hops patches"
-   },
-   "bank": {
-    "x": 3208,
-    "y": 3220,
-    "plane": 2,
-    "label": "Lumbridge Bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Yanillian seed, Ultracompost, Tomatoes(5), Teleport card, Ring of dueling(8), Logs, Watchtower teleport (tablet), Camelot teleport (tablet), Salve graveyard teleport (tablet) at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Lumbridge, Seers' Village, Yanille, Aldarin, and Entrana hops patches.",
-     "place": {
-      "x": 3227,
-      "y": 3314,
-      "plane": 0,
-      "label": "Lumbridge, Seers' Village, Yanille, Aldarin, and Entrana hops patches"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Use the chronicle to teleport to the Champions' Guild, then run south to the Lumbridge farm patch."
-    },
-    {
-     "kind": "perform",
-     "text": "Break a Salve graveyard teleport (tablet) and take the fairy ring to Aldarin."
-    },
-    {
-     "kind": "perform",
-     "text": "Break a Camelot teleport tablet and run north-west to the patch above McGrubor's Wood."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport to Castle Wars using a ring of dueling, bank your dramen/lunar staff, then take the balloon outside to Entrana, then run south to the patch."
-    },
-    {
-     "kind": "perform",
-     "text": "Break a Watchtower teleport tablet to arrive near the centre of Yanille."
-    },
-    {
-     "kind": "perform",
-     "text": "Players who haven't completed the hard Ardougne diary yet will need level 16 Agility in order to cross the underwall tunnel into Yanille."
-    },
-    {
-     "kind": "perform",
-     "text": "A dramen staff is needed to get to the Aldarin hops patch via the fairy ring before completion of the elite Lumbridge & Draynor Diary, but Dramen staffs are not allowed on Entrana, so must be banked before heading there."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Farming_Yanillian_hops",
-     "title": "Money making guide/Farming Yanillian hops",
-     "revision": 15100723,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -11661,131 +10048,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_wizards",
      "title": "Money making guide/Killing wizards",
      "revision": 15271238,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-birdhouse-traps",
-   "title": "Making birdhouse traps",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Crafting Willow bird houses. Grand Exchange",
-   "about": "A Hammer and a Chisel are required to create a bird house",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "crafting",
-     "level": 25
-    },
-    {
-     "kind": "check",
-     "text": "Bring: coins recommended"
-    },
-    {
-     "kind": "check",
-     "text": "Hammer and Chisel"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 8792,
-      "name": "Clockwork"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 1519,
-      "name": "Willow logs"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 21518,
-      "name": "Willow bird house"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "willow bird house",
-    "perHour": {
-     "slow": 1100,
-     "typical": 1600,
-     "fast": 2000
-    },
-    "basis": "wiki-guide",
-    "assumes": "2,000 willow bird house an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Clockwork, Willow logs at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Crafting Willow bird houses until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_birdhouse_traps",
-     "title": "Money making guide/Making birdhouse traps",
-     "revision": 15387170,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -14976,453 +13238,6 @@
    ]
   },
   {
-   "id": "nechrecycling",
-   "title": "Nechrecycling",
-   "family": "collecting",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Picking up drops from Greater Nechryael",
-   "about": "Collect loot from other players efficiently training Slayer by barraging the Greater Nechryaels in the Catacombs of Kourend. Most valuable drops have a high alch price close to the grand exchange price. It is recommended to bring runes for the high level alchemy spell in order to extend the time that can be spent before banking. Many other drops are seeds or herbs which can be stored in the seed box or herb sack, respectively.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "magic",
-     "level": 55
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Fire staff, Herb sack, and a Seed box"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 561,
-      "name": "Nature rune"
-     },
-     "qty": 0.2891,
-     "stack": true
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 1199,
-      "name": "Adamant kiteshield"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      18
-     ]
-    },
-    {
-     "item": {
-      "id": 1359,
-      "name": "Rune axe"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      18
-     ]
-    },
-    {
-     "item": {
-      "id": 1371,
-      "name": "Adamant battleaxe"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      26
-     ]
-    },
-    {
-     "item": {
-      "id": 1147,
-      "name": "Rune med helm"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      32
-     ]
-    },
-    {
-     "item": {
-      "id": 4131,
-      "name": "Rune boots"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      128
-     ]
-    },
-    {
-     "item": {
-      "id": 565,
-      "name": "Blood rune"
-     },
-     "qty": 1.5625,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 562,
-      "name": "Chaos rune"
-     },
-     "qty": 3.9063,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 556,
-      "name": "Air rune"
-     },
-     "qty": 7.0323,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 566,
-      "name": "Soul rune"
-     },
-     "qty": 0.9766,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 199,
-      "name": "Grimy guam leaf"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      73
-     ]
-    },
-    {
-     "item": {
-      "id": 201,
-      "name": "Grimy marrentill"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      98
-     ]
-    },
-    {
-     "item": {
-      "id": 203,
-      "name": "Grimy tarromin"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      130
-     ]
-    },
-    {
-     "item": {
-      "id": 205,
-      "name": "Grimy harralander"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      167
-     ]
-    },
-    {
-     "item": {
-      "id": 209,
-      "name": "Grimy irit leaf"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      293
-     ]
-    },
-    {
-     "item": {
-      "id": 211,
-      "name": "Grimy avantoe"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      390
-     ]
-    },
-    {
-     "item": {
-      "id": 213,
-      "name": "Grimy kwuarm"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      468
-     ]
-    },
-    {
-     "item": {
-      "id": 215,
-      "name": "Grimy cadantine"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      585
-     ]
-    },
-    {
-     "item": {
-      "id": 2485,
-      "name": "Grimy lantadyme"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      780
-     ]
-    },
-    {
-     "item": {
-      "id": 217,
-      "name": "Grimy dwarf weed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      780
-     ]
-    },
-    {
-     "item": {
-      "id": 5296,
-      "name": "Toadflax seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      86
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5297,
-      "name": "Irit seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      126
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5281,
-      "name": "Belladonna seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      130
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5298,
-      "name": "Avantoe seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      183
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5280,
-      "name": "Cactus seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      192
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5299,
-      "name": "Kwuarm seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      269
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5301,
-      "name": "Cadantine seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      575
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5302,
-      "name": "Lantadyme seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      805
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5303,
-      "name": "Dwarf weed seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      1343
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 995,
-      "name": "Coins"
-     },
-     "qty": 140.625,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 2357,
-      "name": "Gold bar"
-     },
-     "qty": 0.2734
-    },
-    {
-     "item": {
-      "id": 245,
-      "name": "Wine of Zamorak"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      21
-     ]
-    },
-    {
-     "item": {
-      "id": 560,
-      "name": "Death rune"
-     },
-     "qty": 2.1556,
-     "stack": true
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 79,
-     "typical": 114,
-     "fast": 143
-    },
-    "basis": "wiki-guide",
-    "assumes": "143 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Nature rune at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Picking up drops from Greater Nechryael until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Nechrecycling",
-     "title": "Money making guide/Nechrecycling",
-     "revision": 15325170,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "opening-crystal-chests",
    "title": "Opening crystal chests",
    "family": "processing",
@@ -16475,699 +14290,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Opening_sinister_chests",
      "title": "Money making guide/Opening sinister chests",
      "revision": 14841359,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "picking-cactus-spines",
-   "title": "Picking cactus spines",
-   "family": "gathering",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Picking cactus spines. Al Kharid, Farming Guild",
-   "about": "Plant a cactus seed in the cactus patch in Al Kharid, easiest travelled to using a ring of dueling, gnome glider or amulet of glory. The patch is found just north of the crafting shop. As well as the cactus patch in the farming guild, easiest travelled to using a skills necklace, spirit tree with Farming 85, fairy ring, or a Farming skillcape. The seed takes about 9.3 hours to grow and once fully grown, it can be harvested for cactus spines.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "farming",
-     "level": 55
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Ring of dueling/amulet of glory, and skills necklace/Farming cape"
-    },
-    {
-     "kind": "check",
-     "text": "Grown cactus in patch"
-    }
-   ],
-   "inputs": [],
-   "outputs": [
-    {
-     "item": {
-      "id": 6016,
-      "name": "Cactus spine"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "cactus spine",
-    "perHour": {
-     "slow": 11,
-     "typical": 16,
-     "fast": 20
-    },
-    "basis": "wiki-guide",
-    "assumes": "20 cactus spine an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3290,
-    "y": 3185,
-    "plane": 0,
-    "label": "Al Kharid, Farming Guild"
-   },
-   "bank": {
-    "x": 3269,
-    "y": 3167,
-    "plane": 0,
-    "label": "Al Kharid Bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "travel",
-     "text": "Go to Al Kharid, Farming Guild.",
-     "place": {
-      "x": 3290,
-      "y": 3185,
-      "plane": 0,
-      "label": "Al Kharid, Farming Guild"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Picking cactus spines until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Al Kharid Bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Picking_cactus_spines",
-     "title": "Money making guide/Picking cactus spines",
-     "revision": 14891671,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "planting-celastrus-sapling",
-   "title": "Planting Celastrus sapling",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Planting Celastrus sapling. Farming Guild Celastrus patch",
-   "about": "This guide assumes you receive 8.8 Celastrus bark per harvest; your profit per hour may vary depending on your Farming Level and luck. Ultracompost and Magic secateurs are used to increase profits. Generally, harvests yield 6-12 Celestrus bark, but players should expect an average of 8.8 per harvest at 99 Farming. Additionally, due to the cost of Celastrus saplings, it is highly recommended to protect the patch.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "farming",
-     "level": 85
-    },
-    {
-     "kind": "quest",
-     "quest": "Fairytale I - Growing Pains",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Bronze axe or better, Celastrus sapling, Magic secateurs (recommended) or Secateurs, Spade"
-    },
-    {
-     "kind": "check",
-     "text": "* Farmer's outfit (optional) * Bottomless compost bucket"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 22856,
-      "name": "Celastrus sapling"
-     },
-     "qty": 0.1136
-    },
-    {
-     "item": {
-      "id": 21483,
-      "name": "Ultracompost"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      18
-     ]
-    },
-    {
-     "item": {
-      "id": 3138,
-      "name": "Potato cactus"
-     },
-     "qty": 0.9091
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 22935,
-      "name": "Celastrus bark"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "celastrus bark",
-    "perHour": {
-     "slow": 5,
-     "typical": 7,
-     "fast": 9
-    },
-    "basis": "wiki-guide",
-    "assumes": "9 celastrus bark an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 1249,
-    "y": 3737,
-    "plane": 0,
-    "label": "Farming Guild Celastrus patch"
-   },
-   "bank": {
-    "x": 1253,
-    "y": 3741,
-    "plane": 0,
-    "label": "Farming Guild bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Celastrus sapling, Ultracompost, Potato cactus at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Farming Guild Celastrus patch.",
-     "place": {
-      "x": 1249,
-      "y": 3737,
-      "plane": 0,
-      "label": "Farming Guild Celastrus patch"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Planting Celastrus sapling until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Farming Guild bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Planting_Celastrus_sapling",
-     "title": "Money making guide/Planting Celastrus sapling",
-     "revision": 14972911,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "sac-jacking",
-   "title": "Sac jacking",
-   "family": "collecting",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Picking up drops from Araxytes",
-   "about": "Collect loot from other players efficiently training Slayer by killing the Araxytes in the Morytania Spider Cave using the Venator bow. This guide assumes the other player is in max gear with a venator bow, getting kills per hour, some players may have weaker equipment, not be using a cannon, or not be maximising their damage, which will lower the expected kph.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "magic",
-     "level": 55
-    },
-    {
-     "kind": "quest",
-     "quest": "Priest in Peril",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Fire staff, Herb sack, and a Seed box, Antipoison"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 561,
-      "name": "Nature rune"
-     },
-     "qty": 0.2031,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 2446,
-      "name": "Antipoison(4)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      14000
-     ]
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 29784,
-      "name": "Araxyte venom sac"
-     },
-     "qty": 1.157
-    },
-    {
-     "item": {
-      "id": 1301,
-      "name": "Adamant longsword"
-     },
-     "qty": 0.0787
-    },
-    {
-     "item": {
-      "id": 1371,
-      "name": "Adamant battleaxe"
-     },
-     "qty": 0.0787
-    },
-    {
-     "item": {
-      "id": 1213,
-      "name": "Rune dagger"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      21
-     ]
-    },
-    {
-     "item": {
-      "id": 556,
-      "name": "Air rune"
-     },
-     "qty": 20.4724,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 555,
-      "name": "Water rune"
-     },
-     "qty": 20.4724,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 557,
-      "name": "Earth rune"
-     },
-     "qty": 20.4724,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 554,
-      "name": "Fire rune"
-     },
-     "qty": 20.4724,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 564,
-      "name": "Cosmic rune"
-     },
-     "qty": 0.748,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 562,
-      "name": "Chaos rune"
-     },
-     "qty": 0.9843,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 561,
-      "name": "Nature rune"
-     },
-     "qty": 1.378,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 563,
-      "name": "Law rune"
-     },
-     "qty": 1.063,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 199,
-      "name": "Grimy guam leaf"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      25
-     ]
-    },
-    {
-     "item": {
-      "id": 201,
-      "name": "Grimy marrentill"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      34
-     ]
-    },
-    {
-     "item": {
-      "id": 203,
-      "name": "Grimy tarromin"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      45
-     ]
-    },
-    {
-     "item": {
-      "id": 205,
-      "name": "Grimy harralander"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      58
-     ]
-    },
-    {
-     "item": {
-      "id": 209,
-      "name": "Grimy irit leaf"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      102
-     ]
-    },
-    {
-     "item": {
-      "id": 211,
-      "name": "Grimy avantoe"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      135
-     ]
-    },
-    {
-     "item": {
-      "id": 213,
-      "name": "Grimy kwuarm"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      163
-     ]
-    },
-    {
-     "item": {
-      "id": 215,
-      "name": "Grimy cadantine"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      203
-     ]
-    },
-    {
-     "item": {
-      "id": 2485,
-      "name": "Grimy lantadyme"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      271
-     ]
-    },
-    {
-     "item": {
-      "id": 217,
-      "name": "Grimy dwarf weed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      271
-     ]
-    },
-    {
-     "item": {
-      "id": 5297,
-      "name": "Irit seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      370
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5281,
-      "name": "Belladonna seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      370
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5298,
-      "name": "Avantoe seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      555
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5280,
-      "name": "Cactus seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      555
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5299,
-      "name": "Kwuarm seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      740
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5301,
-      "name": "Cadantine seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      1664
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5302,
-      "name": "Lantadyme seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      2219
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5303,
-      "name": "Dwarf weed seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      3327
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 5296,
-      "name": "Toadflax seed"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      246
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 995,
-      "name": "Coins"
-     },
-     "qty": 157.4803,
-     "stack": true
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 385,
-     "typical": 560,
-     "fast": 700
-    },
-    "basis": "wiki-guide",
-    "assumes": "700 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Nature rune, Antipoison(4) at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Picking up drops from Araxytes until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Sac_jacking",
-     "title": "Money making guide/Sac jacking",
-     "revision": 15358615,
      "retrievedAt": "2026-11-15",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -18496,123 +15618,6 @@
    ]
   },
   {
-   "id": "stringing-yew-longbows",
-   "title": "Stringing yew longbows",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Stringing yew longbows. Grand Exchange",
-   "about": "At 70 Fletching, players can make money from stringing complete yew longbows. Unstrung yew longbows can be purchased off the Grand Exchange for gold each and bow string at. Depending on speed and consistency, up to 2,400 bows can be strung in an hour. Nonetheless, it could also provide the player with Magic experience per hour assuming 1,200 High Level Alchemy casts.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "fletching",
-     "level": 70
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 66,
-      "name": "Yew longbow (u)"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 1777,
-      "name": "Bow string"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 855,
-      "name": "Yew longbow"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "yew longbow",
-    "perHour": {
-     "slow": 1320,
-     "typical": 1920,
-     "fast": 2400
-    },
-    "basis": "wiki-guide",
-    "assumes": "2,400 yew longbow an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Yew longbow (u), Bow string at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Stringing yew longbows until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stringing_yew_longbows",
-     "title": "Money making guide/Stringing yew longbows",
-     "revision": 14471294,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "subduing-tempoross",
    "title": "Subduing Tempoross",
    "family": "gathering",
@@ -19308,6 +16313,32 @@
   },
   "exchange-mole-parts": {
    "about": "Wyson the gardener in Falador park will exchange either noted mole claws or mole skins for boxes containing bird nests. These nests may contain various seeds and pieces of jewellery. Emptying the nests and selling these items can be profitable. Spirit seeds can be traded to Guildmaster Jane for additional seeds."
+  },
+  "weave-bolts-of-canvas": {
+   "about": "Bolt of canvass can be crafted by using two Hemp yarns on a loom, which currently profits per canvas. When paying attention, up to 1,100 bolts of canvas can be crafted per hour. The loom on Fossil Island is closest to a bank, therefore it is recommended to use this loom for this method, however it comes with a few additional requirements: This method is one of the few skilling methods which yield a decent profit and experience rate.",
+   "tips": [
+    "Access to Fossil Island requires completion of the Bone Voyage quest.",
+    "Crafting bolts of canvas on Fossil Island requires the player to first craft a loom and bank chest on the island, requiring: 4x Oak plank, 1x Rope, 1x Iron bar 10x Nails as well as a hammer (which is not consumed) and Construction 29."
+   ]
+  },
+  "weave-drift-nets": {
+   "about": "Drift nets can be crafted by using two jute fibres on a loom, which currently profits per net. When paying attention, up to 1,100 drift nets can be crafted per hour. The loom on Fossil Island is closest to a bank, therefore it is recommended to use this loom for this method, however it comes with a few additional requirements:",
+   "tips": [
+    "Access to Fossil Island requires completion of the Bone Voyage quest.",
+    "Crafting drift nets on Fossil Island requires the player to first craft a loom and bank chest on the island, requiring: 4x Oak plank, 1x Rope, 1x Iron bar 10x Nails as well as a hammer (which is not consumed) and Construction 29."
+   ]
+  },
+  "make-willow-birdhouses": {
+   "about": "A Hammer and a Chisel are required to create a bird house"
+  },
+  "string-yew-longbows": {
+   "about": "At 70 Fletching, players can make money from stringing complete yew longbows. Unstrung yew longbows can be purchased off the Grand Exchange for gold each and bow string at. Depending on speed and consistency, up to 2,400 bows can be strung in an hour. Nonetheless, it could also provide the player with Magic experience per hour assuming 1,200 High Level Alchemy casts."
+  },
+  "dismantle-ethereum-bracelets": {
+   "about": "The bracelet of ethereum is a frequent drop from all types of Revenant. When dismantled, it will give 250 revenant ether. Begin by withdrawing 27 uncharged bracelets. Adjust your in-game controls under options to only allow 1 mouse button."
+  },
+  "craft-diamond-bracelets": {
+   "about": "Players can craft diamond bracelets at any furnace, though the Edgeville furnace is the best to use as it is the closest to a bank and requires no quests to access. If you have completed Song of the Elves, use the Prifddinas furnace instead. If you have completed the Elite Karamja Diary, you can use the furnace in Shilo village without a cost."
   }
  },
  "notBuilt": [
@@ -19492,13 +16523,13 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-yama-contract-of-catalyst-acquisition-duo",
-   "title": "Killing Yama (Contract of Catalyst Acquisition, duo)",
+   "id": "killing-the-whisperer",
+   "title": "Killing The Whisperer",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-the-whisperer",
-   "title": "Killing The Whisperer",
+   "id": "killing-yama-contract-of-catalyst-acquisition-duo",
+   "title": "Killing Yama (Contract of Catalyst Acquisition, duo)",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -19617,19 +16648,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "smelting-runite-bars-at-blast-furnace-player-to-player-trading",
-   "title": "Smelting runite bars at Blast Furnace (Player-to-player trading)",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
    "id": "crafting-wrath-runes",
    "title": "Crafting wrath runes",
    "reason": "needs Dragon Slayer II, not on the route yet"
   },
   {
-   "id": "degriming-grimy-cadantine",
-   "title": "Degriming grimy cadantine",
-   "reason": "needs A Kingdom Divided, not on the route yet"
+   "id": "smelting-runite-bars-at-blast-furnace-player-to-player-trading",
+   "title": "Smelting runite bars at Blast Furnace (Player-to-player trading)",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "crafting-blood-runes-through-the-abyss",
@@ -19642,9 +16668,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "casting-tan-leather",
-   "title": "Casting Tan Leather",
-   "reason": "input3 is a wiki formula the build cannot read"
+   "id": "cutting-raw-yellowfin",
+   "title": "Cutting raw yellowfin",
+   "reason": "needs Sailing (a bank boat and a chum spreader), which the route does not model"
   },
   {
    "id": "killing-vorkath-toxic-blowpipe",
@@ -19667,6 +16693,16 @@
    "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
+   "id": "degriming-grimy-cadantine",
+   "title": "Degriming grimy cadantine",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "casting-tan-leather",
+   "title": "Casting Tan Leather",
+   "reason": "input3 is a wiki formula the build cannot read"
+  },
+  {
    "id": "crafting-astral-runes",
    "title": "Crafting astral runes",
    "reason": "needs Lunar Diplomacy, not on the route yet"
@@ -19677,6 +16713,16 @@
    "reason": "needs Mourning's End Part II, not on the route yet"
   },
   {
+   "id": "cutting-raw-marlin",
+   "title": "Cutting raw marlin",
+   "reason": "needs Sailing (a bank boat and a chum spreader), which the route does not model"
+  },
+  {
+   "id": "making-sanfew-serum-4",
+   "title": "Making sanfew serum(4)",
+   "reason": "needs Zogre Flesh Eaters, not on the route yet"
+  },
+  {
    "id": "killing-the-abyssal-sire",
    "title": "Killing the Abyssal Sire",
    "reason": "a Members fight needs a hand-made combat profile"
@@ -19685,11 +16731,6 @@
    "id": "deep-sea-trawling-for-marlin",
    "title": "Deep sea trawling for marlin",
    "reason": "level sailing 78 is not modelled"
-  },
-  {
-   "id": "making-sanfew-serum-4",
-   "title": "Making sanfew serum(4)",
-   "reason": "needs Zogre Flesh Eaters, not on the route yet"
   },
   {
    "id": "killing-dagannoth-kings-solo-tribrid",
@@ -19722,9 +16763,19 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "sac-jacking",
+   "title": "Sac jacking",
+   "reason": "picks up other players' drops in the Kourend Catacombs, which no route can plan"
+  },
+  {
    "id": "killing-calvar-ion",
    "title": "Killing Calvar'ion",
    "reason": "no Mmgtable"
+  },
+  {
+   "id": "looting-eldric-the-ice-king",
+   "title": "Looting Eldric the Ice King",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "mastering-mixology",
@@ -19732,9 +16783,9 @@
    "reason": "output1 is a wiki formula the build cannot read"
   },
   {
-   "id": "looting-eldric-the-ice-king",
-   "title": "Looting Eldric the Ice King",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "degriming-grimy-torstol",
+   "title": "Degriming grimy torstol",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "killing-scorpia",
@@ -19757,11 +16808,6 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "degriming-grimy-torstol",
-   "title": "Degriming grimy torstol",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
    "id": "killing-frost-dragons-off-task",
    "title": "Killing Frost dragons (off-task)",
    "reason": "a Members fight needs a hand-made combat profile"
@@ -19777,6 +16823,11 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "degriming-grimy-dwarf-weed",
+   "title": "Degriming grimy dwarf weed",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
    "id": "killing-adamant-dragons",
    "title": "Killing adamant dragons",
    "reason": "a Members fight needs a hand-made combat profile"
@@ -19787,8 +16838,23 @@
    "reason": "needs Client of Kourend, not on the route yet"
   },
   {
+   "id": "fletching-gem-tipped-dragon-bolts",
+   "title": "Fletching gem-tipped dragon bolts",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
    "id": "killing-brutal-black-dragons",
    "title": "Killing brutal black dragons",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "last-man-standing",
+   "title": "Last Man Standing",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "killing-chaos-elemental",
+   "title": "Killing Chaos Elemental",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -19797,29 +16863,14 @@
    "reason": "needs the miniquest enter the abyss, which the route does not plan"
   },
   {
-   "id": "degriming-grimy-kwuarm",
-   "title": "Degriming grimy kwuarm",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
-   "id": "smelting-mithril-bars-at-blast-furnace",
-   "title": "Smelting mithril bars at Blast Furnace",
-   "reason": "needs The Giant Dwarf, not on the route yet"
-  },
-  {
    "id": "poisoning-ammunition",
    "title": "Poisoning ammunition",
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "killing-chaos-elemental",
-   "title": "Killing Chaos Elemental",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "fletching-gem-tipped-dragon-bolts",
-   "title": "Fletching gem-tipped dragon bolts",
-   "reason": "nothing sellable is made every unit"
+   "id": "smelting-mithril-bars-at-blast-furnace",
+   "title": "Smelting mithril bars at Blast Furnace",
+   "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
    "id": "smelting-steel-bars-at-blast-furnace",
@@ -19837,11 +16888,6 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "last-man-standing",
-   "title": "Last Man Standing",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "mining-and-crushing-infernal-shale-tick-manipulation",
    "title": "Mining and crushing infernal shale (Tick manipulation)",
    "reason": "needs A Kingdom Divided, not on the route yet"
@@ -19852,19 +16898,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "degriming-grimy-dwarf-weed",
-   "title": "Degriming grimy dwarf weed",
-   "reason": "needs A Kingdom Divided, not on the route yet"
+   "id": "hallowed-sepulchre-floor-5",
+   "title": "Hallowed Sepulchre (Floor 5)",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "killing-araxytes-off-task",
    "title": "Killing araxytes (off-task)",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "hallowed-sepulchre-floor-5",
-   "title": "Hallowed Sepulchre (Floor 5)",
-   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "delivering-food-in-gnome-restaurant",
@@ -19892,6 +16933,11 @@
    "reason": "needs Song of the Elves, not on the route yet"
   },
   {
+   "id": "degriming-grimy-tarromin",
+   "title": "Degriming grimy tarromin",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
    "id": "moons-of-peril",
    "title": "Moons of Peril",
    "reason": "a combat guide without kills an hour"
@@ -19902,24 +16948,14 @@
    "reason": "needs the miniquest enter the abyss, which the route does not plan"
   },
   {
-   "id": "degriming-grimy-tarromin",
-   "title": "Degriming grimy tarromin",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
    "id": "killing-artio",
    "title": "Killing Artio",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "crafting-mist-runes",
-   "title": "Crafting mist runes",
-   "reason": "needs the miniquest enter the abyss, which the route does not plan"
-  },
-  {
-   "id": "buying-relicym-s-balm",
-   "title": "Buying Relicym's balm",
-   "reason": "needs Zogre Flesh Eaters, not on the route yet"
+   "id": "degriming-grimy-kwuarm",
+   "title": "Degriming grimy kwuarm",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "killing-skeletal-wyverns",
@@ -19927,9 +16963,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "crafting-cosmic-runes-through-the-abyss",
-   "title": "Crafting cosmic runes through the Abyss",
-   "reason": "needs Heroes' Quest, not on the route yet"
+   "id": "buying-relicym-s-balm",
+   "title": "Buying Relicym's balm",
+   "reason": "needs Zogre Flesh Eaters, not on the route yet"
+  },
+  {
+   "id": "crafting-mist-runes",
+   "title": "Crafting mist runes",
+   "reason": "needs the miniquest enter the abyss, which the route does not plan"
   },
   {
    "id": "catching-snowy-knights",
@@ -19937,9 +16978,14 @@
    "reason": "needs Fairytale II - Cure a Queen, not on the route yet"
   },
   {
-   "id": "degriming-grimy-marrentill",
-   "title": "Degriming grimy marrentill",
+   "id": "degriming-grimy-ranarr-weed",
+   "title": "Degriming grimy ranarr weed",
    "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "crafting-cosmic-runes-through-the-abyss",
+   "title": "Crafting cosmic runes through the Abyss",
+   "reason": "needs Heroes' Quest, not on the route yet"
   },
   {
    "id": "killing-blood-moon",
@@ -19950,11 +16996,6 @@
    "id": "killing-k-ril-tsutsaroth",
    "title": "Killing K'ril Tsutsaroth",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "degriming-grimy-ranarr-weed",
-   "title": "Degriming grimy ranarr weed",
-   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "deep-sea-trawling-for-halibut",
@@ -19992,6 +17033,11 @@
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
+   "id": "casting-superglass-make",
+   "title": "Casting Superglass Make",
+   "reason": "input2 is a wiki formula the build cannot read"
+  },
+  {
    "id": "guardians-of-the-rift",
    "title": "Guardians of the Rift",
    "reason": "needs Temple of the Eye, not on the route yet"
@@ -20002,13 +17048,18 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "killing-kurasks",
-   "title": "Killing kurasks",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "degriming-grimy-marrentill",
+   "title": "Degriming grimy marrentill",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "killing-urium-shades",
    "title": "Killing urium shades",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "killing-kurasks",
+   "title": "Killing kurasks",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -20022,11 +17073,6 @@
    "reason": "needs Troll Stronghold, not on the route yet"
   },
   {
-   "id": "casting-superglass-make",
-   "title": "Casting Superglass Make",
-   "reason": "input2 is a wiki formula the build cannot read"
-  },
-  {
    "id": "crafting-chaos-runes-through-the-abyss",
    "title": "Crafting chaos runes through the Abyss",
    "reason": "needs Heroes' Quest, not on the route yet"
@@ -20037,19 +17083,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-the-giant-mole-twisted-bow",
-   "title": "Killing the Giant Mole (Twisted bow)",
+   "id": "killing-lizardman-shamans-canyon",
+   "title": "Killing Lizardman Shamans (Canyon)",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "casting-plank-make",
-   "title": "Casting plank make",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
-   "id": "crafting-air-runes-high-level",
-   "title": "Crafting air runes (high level)",
-   "reason": "needs Temple of the Eye, not on the route yet"
   },
   {
    "id": "killing-fiyr-shades",
@@ -20057,9 +17093,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-lizardman-shamans-canyon",
-   "title": "Killing Lizardman Shamans (Canyon)",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "crafting-air-runes-high-level",
+   "title": "Crafting air runes (high level)",
+   "reason": "needs Temple of the Eye, not on the route yet"
   },
   {
    "id": "killing-the-mad-angel",
@@ -20067,9 +17103,19 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "killing-the-giant-mole-twisted-bow",
+   "title": "Killing the Giant Mole (Twisted bow)",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
    "id": "deep-sea-trawling-for-bluefin",
    "title": "Deep sea trawling for bluefin",
    "reason": "level sailing 72 is not modelled"
+  },
+  {
+   "id": "making-guthix-rests",
+   "title": "Making Guthix rests",
+   "reason": "needs One Small Favour, not on the route yet"
   },
   {
    "id": "killing-green-dragons-myths-guild",
@@ -20082,11 +17128,6 @@
    "reason": "needs Children of the Sun, not on the route yet"
   },
   {
-   "id": "creating-eternal-glories",
-   "title": "Creating eternal glories",
-   "reason": "needs Heroes' Quest, not on the route yet"
-  },
-  {
    "id": "killing-vyrewatch-sentinels",
    "title": "Killing Vyrewatch Sentinels",
    "reason": "a Members fight needs a hand-made combat profile"
@@ -20097,13 +17138,13 @@
    "reason": "needs Zogre Flesh Eaters, not on the route yet"
   },
   {
-   "id": "making-guthix-rests",
-   "title": "Making Guthix rests",
-   "reason": "needs One Small Favour, not on the route yet"
+   "id": "casting-plank-make",
+   "title": "Casting plank make",
+   "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "degriming-grimy-avantoe",
-   "title": "Degriming grimy avantoe",
+   "id": "degriming-grimy-guam-leaf",
+   "title": "Degriming grimy guam leaf",
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
@@ -20112,19 +17153,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-dagannoth-kings-rex-only",
-   "title": "Killing Dagannoth Kings (Rex only)",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "killing-basilisk-knights-slayer",
    "title": "Killing basilisk knights (Slayer)",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "degriming-grimy-guam-leaf",
-   "title": "Degriming grimy guam leaf",
-   "reason": "needs A Kingdom Divided, not on the route yet"
+   "id": "killing-dagannoth-kings-rex-only",
+   "title": "Killing Dagannoth Kings (Rex only)",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "making-oak-planks-auburnvale",
@@ -20137,14 +17173,14 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "pickpocketing-master-farmers",
-   "title": "Pickpocketing master farmers",
-   "reason": "the figures assume the hard Ardougne Diary or the Thieving cape"
-  },
-  {
    "id": "killing-gargoyles",
    "title": "Killing gargoyles",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "pickpocketing-master-farmers",
+   "title": "Pickpocketing master farmers",
+   "reason": "the figures assume the hard Ardougne Diary or the Thieving cape"
   },
   {
    "id": "killing-the-chaos-fanatic",
@@ -20172,6 +17208,11 @@
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
+   "id": "humidifying-clay",
+   "title": "Humidifying clay",
+   "reason": "needs Dream Mentor, not on the route yet"
+  },
+  {
    "id": "degriming-grimy-irit-leaf",
    "title": "Degriming grimy irit leaf",
    "reason": "needs A Kingdom Divided, not on the route yet"
@@ -20197,11 +17238,6 @@
    "reason": "needs Death to the Dorgeshuun, not on the route yet"
   },
   {
-   "id": "humidifying-clay",
-   "title": "Humidifying clay",
-   "reason": "needs Dream Mentor, not on the route yet"
-  },
-  {
    "id": "killing-drakes",
    "title": "Killing Drakes",
    "reason": "a Members fight needs a hand-made combat profile"
@@ -20215,11 +17251,6 @@
    "id": "killing-wyrms-slayer",
    "title": "Killing Wyrms (Slayer)",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "making-adamant-brutal-arrows",
-   "title": "Making adamant brutal arrows",
-   "reason": "no place for \"Anywhere\""
   },
   {
    "id": "smithing-cannonballs-grimstone-dungeon",
@@ -20237,9 +17268,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-the-giant-mole-dharok-s",
-   "title": "Killing the Giant Mole (Dharok's)",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "making-adamant-brutal-arrows",
+   "title": "Making adamant brutal arrows",
+   "reason": "no place for \"Anywhere\""
   },
   {
    "id": "crafting-jade-jewellery",
@@ -20252,9 +17283,9 @@
    "reason": "input3 is a wiki formula the build cannot read"
   },
   {
-   "id": "making-prayer-potions",
-   "title": "Making prayer potions",
-   "reason": "no Mmgtable"
+   "id": "killing-the-giant-mole-dharok-s",
+   "title": "Killing the Giant Mole (Dharok's)",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "deep-sea-trawling-for-yellowfin",
@@ -20282,19 +17313,14 @@
    "reason": "needs Big Chompy Bird Hunting, not on the route yet"
   },
   {
-   "id": "crafting-topaz-jewellery",
-   "title": "Crafting topaz jewellery",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
    "id": "killing-mithril-dragons",
    "title": "Killing mithril dragons",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-blue-dragons",
-   "title": "Killing blue dragons",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "crafting-topaz-jewellery",
+   "title": "Crafting topaz jewellery",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "pickpocketing-paladins",
@@ -20302,9 +17328,9 @@
    "reason": "the figures assume the medium Ardougne Diary"
   },
   {
-   "id": "smelting-iron-bars-at-blast-furnace",
-   "title": "Smelting iron bars at Blast Furnace",
-   "reason": "needs The Giant Dwarf, not on the route yet"
+   "id": "killing-blue-dragons",
+   "title": "Killing blue dragons",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "hunting-moonlight-antelopes",
@@ -20312,9 +17338,19 @@
    "reason": "needs Children of the Sun, not on the route yet"
   },
   {
+   "id": "smelting-iron-bars-at-blast-furnace",
+   "title": "Smelting iron bars at Blast Furnace",
+   "reason": "needs The Giant Dwarf, not on the route yet"
+  },
+  {
    "id": "hunting-carnivorous-chinchompas",
    "title": "Hunting carnivorous chinchompas",
    "reason": "needs Eagles' Peak, not on the route yet"
+  },
+  {
+   "id": "temple-trekking",
+   "title": "Temple Trekking",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "crafting-opal-jewellery",
@@ -20325,11 +17361,6 @@
    "id": "mining-lead-ore-deepfin-mine",
    "title": "Mining lead ore (Deepfin mine)",
    "reason": "level sailing 67 is not modelled"
-  },
-  {
-   "id": "temple-trekking",
-   "title": "Temple Trekking",
-   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "crafting-law-runes-through-the-abyss",
@@ -20347,14 +17378,19 @@
    "reason": "needs a house study lectern, which the route does not plan"
   },
   {
-   "id": "killing-amoxliatl",
-   "title": "Killing Amoxliatl",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "killing-black-unicorns",
+   "title": "Killing black unicorns",
+   "reason": "a combat guide without kills an hour"
   },
   {
    "id": "making-teak-planks",
    "title": "Making teak planks",
    "reason": "needs Enlightened Journey, not on the route yet"
+  },
+  {
+   "id": "killing-amoxliatl",
+   "title": "Killing Amoxliatl",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "killing-brine-rats",
@@ -20367,24 +17403,9 @@
    "reason": "needs Zogre Flesh Eaters, not on the route yet"
   },
   {
-   "id": "creating-teleport-tablets-at-lectern-lunar",
-   "title": "Creating teleport tablets at Lectern (Lunar)",
-   "reason": "output1 is a wiki formula the build cannot read"
-  },
-  {
-   "id": "planting-flower-seeds",
-   "title": "Planting flower seeds",
-   "reason": "input1 is a wiki formula the build cannot read"
-  },
-  {
    "id": "killing-the-kalphite-queen",
    "title": "Killing the Kalphite Queen",
    "reason": "no Mmgtable"
-  },
-  {
-   "id": "catching-rainbow-crabs",
-   "title": "Catching rainbow crabs",
-   "reason": "level sailing 64 is not modelled"
   },
   {
    "id": "making-oak-planks",
@@ -20392,19 +17413,39 @@
    "reason": "needs Enlightened Journey, not on the route yet"
   },
   {
+   "id": "planting-flower-seeds",
+   "title": "Planting flower seeds",
+   "reason": "input1 is a wiki formula the build cannot read"
+  },
+  {
+   "id": "catching-rainbow-crabs",
+   "title": "Catching rainbow crabs",
+   "reason": "level sailing 64 is not modelled"
+  },
+  {
+   "id": "creating-teleport-tablets-at-lectern-lunar",
+   "title": "Creating teleport tablets at Lectern (Lunar)",
+   "reason": "output1 is a wiki formula the build cannot read"
+  },
+  {
    "id": "killing-sarachnis",
    "title": "Killing Sarachnis",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "degriming-grimy-avantoe",
+   "title": "Degriming grimy avantoe",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "making-prayer-potions",
+   "title": "Making prayer potions",
+   "reason": "no Mmgtable"
+  },
+  {
    "id": "killing-ice-troll-runts",
    "title": "Killing ice troll runts",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "killing-black-unicorns",
-   "title": "Killing black unicorns",
-   "reason": "a combat guide without kills an hour"
   },
   {
    "id": "mining-and-crushing-infernal-shale-infernal-shale-rocks",
@@ -20427,9 +17468,19 @@
    "reason": "needs Children of the Sun, not on the route yet"
   },
   {
+   "id": "nechrecycling",
+   "title": "Nechrecycling",
+   "reason": "picks up other players' drops in the Kourend Catacombs, which no route can plan"
+  },
+  {
    "id": "recharging-rings-of-wealth",
    "title": "Recharging rings of wealth",
    "reason": "no place for \"Wilderness\""
+  },
+  {
+   "id": "collecting-climbing-boots",
+   "title": "Collecting climbing boots",
+   "reason": "needs Death Plateau, not on the route yet"
   },
   {
    "id": "killing-black-dragons",
@@ -20445,11 +17496,6 @@
    "id": "smithing-iron-dart-tips",
    "title": "Smithing iron dart tips",
    "reason": "needs The Tourist Trap, not on the route yet"
-  },
-  {
-   "id": "collecting-climbing-boots",
-   "title": "Collecting climbing boots",
-   "reason": "needs Death Plateau, not on the route yet"
   },
   {
    "id": "mining-rubium-splinters",
@@ -20487,6 +17533,11 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "crafting-dragonstone-jewellery",
+   "title": "Crafting dragonstone jewellery",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
    "id": "killing-ents",
    "title": "Killing ents",
    "reason": "a Members fight needs a hand-made combat profile"
@@ -20499,11 +17550,6 @@
   {
    "id": "killing-skogres-and-zogres",
    "title": "Killing skogres and zogres",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
-   "id": "crafting-dragonstone-jewellery",
-   "title": "Crafting dragonstone jewellery",
    "reason": "nothing sellable is made every unit"
   },
   {
@@ -20527,11 +17573,6 @@
    "reason": "needs a house study lectern, which the route does not plan"
   },
   {
-   "id": "cooking-raw-sharks",
-   "title": "Cooking raw sharks",
-   "reason": "needs Family Crest, not on the route yet"
-  },
-  {
    "id": "creating-bones-to-peaches-tablets",
    "title": "Creating bones to peaches tablets",
    "reason": "needs the Bones to Peaches unlock and a lectern"
@@ -20542,8 +17583,18 @@
    "reason": "needs Bone Voyage, not on the route yet"
   },
   {
+   "id": "cooking-raw-sharks",
+   "title": "Cooking raw sharks",
+   "reason": "needs Family Crest, not on the route yet"
+  },
+  {
    "id": "killing-aviansie",
    "title": "Killing aviansie",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "killing-unicows",
+   "title": "Killing unicows",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -20562,6 +17613,11 @@
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
+   "id": "filling-buckets-with-water",
+   "title": "Filling buckets with water",
+   "reason": "needs Dream Mentor, not on the route yet"
+  },
+  {
    "id": "mining-lead-ore",
    "title": "Mining lead ore",
    "reason": "needs Pandemonium, not on the route yet"
@@ -20570,11 +17626,6 @@
    "id": "salvaging-fremennik-shipwrecks",
    "title": "Salvaging Fremennik shipwrecks",
    "reason": "level sailing 80 is not modelled"
-  },
-  {
-   "id": "filling-buckets-with-water",
-   "title": "Filling buckets with water",
-   "reason": "needs Dream Mentor, not on the route yet"
   },
   {
    "id": "mining-gemstones",
@@ -20587,9 +17638,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-unicows",
-   "title": "Killing unicows",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "creating-eternal-glories",
+   "title": "Creating eternal glories",
+   "reason": "needs Heroes' Quest, not on the route yet"
+  },
+  {
+   "id": "casting-spin-flax",
+   "title": "Casting Spin Flax",
+   "reason": "needs Lunar Diplomacy, not on the route yet"
   },
   {
    "id": "killing-feral-vampyres",
@@ -20607,9 +17663,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "casting-spin-flax",
-   "title": "Casting Spin Flax",
-   "reason": "needs Lunar Diplomacy, not on the route yet"
+   "id": "killing-scurrius",
+   "title": "Killing Scurrius",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "salvaging-merchant-shipwrecks",
@@ -20620,11 +17676,6 @@
    "id": "salvaging-pirate-shipwrecks",
    "title": "Salvaging pirate shipwrecks",
    "reason": "level sailing 64 is not modelled"
-  },
-  {
-   "id": "killing-scurrius",
-   "title": "Killing Scurrius",
-   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "barbarian-assault-high-gambles",
@@ -20687,24 +17738,24 @@
    "reason": "level sailing 53 is not modelled"
   },
   {
-   "id": "collecting-mort-myre-fungi",
-   "title": "Collecting mort myre fungi",
-   "reason": "needs Fairytale II - Cure a Queen, not on the route yet"
-  },
-  {
-   "id": "smithing-mithril-dart-tips",
-   "title": "Smithing mithril dart tips",
-   "reason": "needs The Tourist Trap, not on the route yet"
-  },
-  {
    "id": "catching-sharks-with-shark-lure",
    "title": "Catching sharks with shark lure",
    "reason": "needs The Fremennik Isles, not on the route yet"
   },
   {
+   "id": "collecting-mort-myre-fungi",
+   "title": "Collecting mort myre fungi",
+   "reason": "needs Fairytale II - Cure a Queen, not on the route yet"
+  },
+  {
    "id": "creating-ardougne-teleport-tablets",
    "title": "Creating Ardougne teleport tablets",
    "reason": "needs a house study lectern, which the route does not plan"
+  },
+  {
+   "id": "cooking-raw-karambwan",
+   "title": "Cooking raw karambwan",
+   "reason": "needs Tai Bwo Wannai Trio, not on the route yet"
   },
   {
    "id": "creating-camelot-teleport-tablets",
@@ -20717,9 +17768,9 @@
    "reason": "needs Children of the Sun, not on the route yet"
   },
   {
-   "id": "buying-kegs-of-beer",
-   "title": "Buying kegs of beer",
-   "reason": "needs The Fremennik Trials, not on the route yet"
+   "id": "smithing-mithril-dart-tips",
+   "title": "Smithing mithril dart tips",
+   "reason": "needs The Tourist Trap, not on the route yet"
   },
   {
    "id": "killing-ankou",
@@ -20747,11 +17798,6 @@
    "reason": "needs Zogre Flesh Eaters, not on the route yet"
   },
   {
-   "id": "cooking-raw-karambwan",
-   "title": "Cooking raw karambwan",
-   "reason": "needs Tai Bwo Wannai Trio, not on the route yet"
-  },
-  {
    "id": "mining-and-crushing-infernal-shale-infernal-shale-deposit",
    "title": "Mining and crushing infernal shale (Infernal shale deposit)",
    "reason": "needs A Kingdom Divided, not on the route yet"
@@ -20772,19 +17818,24 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "brewing-chef-s-delight-m",
-   "title": "Brewing chef's delight(m)",
-   "reason": "needs Ghosts Ahoy, not on the route yet"
+   "id": "buying-kegs-of-beer",
+   "title": "Buying kegs of beer",
+   "reason": "needs The Fremennik Trials, not on the route yet"
   },
   {
-   "id": "brewing-greenman-s-ale-m",
-   "title": "Brewing greenman's ale(m)",
+   "id": "brewing-chef-s-delight-m",
+   "title": "Brewing chef's delight(m)",
    "reason": "needs Ghosts Ahoy, not on the route yet"
   },
   {
    "id": "growing-magic-saplings",
    "title": "Growing magic saplings",
    "reason": "needs Dream Mentor, not on the route yet"
+  },
+  {
+   "id": "brewing-greenman-s-ale-m",
+   "title": "Brewing greenman's ale(m)",
+   "reason": "needs Ghosts Ahoy, not on the route yet"
   },
   {
    "id": "growing-palm-saplings",
@@ -20837,6 +17888,11 @@
    "reason": "needs Troubled Tortugans, not on the route yet"
   },
   {
+   "id": "farming-hemp",
+   "title": "Farming hemp",
+   "reason": "a farming run: the patch grows for hours, which the route does not plan"
+  },
+  {
    "id": "buying-battlestaves-from-zaff",
    "title": "Buying battlestaves from Zaff",
    "reason": "a daily purchase (15 staves without the Varrock Diary), not an hourly method"
@@ -20845,6 +17901,11 @@
    "id": "farming-irit-leaves",
    "title": "Farming irit leaves",
    "reason": "needs Ghosts Ahoy, not on the route yet"
+  },
+  {
+   "id": "farming-jute-fibre",
+   "title": "Farming jute fibre",
+   "reason": "a farming run: the patch grows for hours, which the route does not plan"
   },
   {
    "id": "opening-herb-boxes",
@@ -20862,6 +17923,11 @@
    "reason": "needs Ghosts Ahoy, not on the route yet"
   },
   {
+   "id": "farming-yanillian-hops",
+   "title": "Farming Yanillian hops",
+   "reason": "a farming run: the patch grows for hours, which the route does not plan"
+  },
+  {
    "id": "picking-papayas",
    "title": "Picking papayas",
    "reason": "needs Mourning's End Part I, not on the route yet"
@@ -20870,6 +17936,16 @@
    "id": "bird-house-trapping",
    "title": "Bird house trapping",
    "reason": "needs Bone Voyage, not on the route yet"
+  },
+  {
+   "id": "farming-cotton-bolls",
+   "title": "Farming cotton bolls",
+   "reason": "a farming run: the patch grows for hours, which the route does not plan"
+  },
+  {
+   "id": "planting-celastrus-sapling",
+   "title": "Planting Celastrus sapling",
+   "reason": "a farming run: the patch grows for hours, which the route does not plan"
   },
   {
    "id": "picking-coconuts",
@@ -20882,14 +17958,14 @@
    "reason": "needs Throne of Miscellania, not on the route yet"
   },
   {
+   "id": "picking-cactus-spines",
+   "title": "Picking cactus spines",
+   "reason": "a farming run: the patch grows for hours, which the route does not plan"
+  },
+  {
    "id": "claiming-runes-from-lundail",
    "title": "Claiming runes from Lundail",
    "reason": "needs Death Plateau, not on the route yet"
-  },
-  {
-   "id": "planting-crystal-acorn",
-   "title": "Planting Crystal acorn",
-   "reason": "needs Song of the Elves, not on the route yet"
   },
   {
    "id": "claiming-dynamite-from-thirus",
@@ -20945,6 +18021,11 @@
    "id": "making-divine-super-strength-potions",
    "title": "Making divine super strength potions",
    "reason": "needs Song of the Elves, not on the route yet"
+  },
+  {
+   "id": "dying-blue-wizard-robes",
+   "title": "Dying blue wizard robes",
+   "reason": "black robes have a buy limit of 125 every four hours, so it is a one-off, not an hourly method"
   }
  ]
 }
