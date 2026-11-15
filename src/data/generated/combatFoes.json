@@ -785,6 +785,52 @@
       }
     },
     {
+      "name": "Experiment",
+      "version": "Level 51",
+      "combat": 51,
+      "members": true,
+      "hitpoints": 40,
+      "attackLevel": 40,
+      "strengthLevel": 50,
+      "defenceLevel": 50,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 6,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Experiment",
+      "version": "Level 25 (spider)",
+      "combat": 25,
+      "members": true,
+      "hitpoints": 100,
+      "attackLevel": 1,
+      "strengthLevel": 1,
+      "defenceLevel": 30,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 1,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
       "name": "Tree spirit (Lost City)",
       "combat": 101,
       "members": true,

@@ -52,9 +52,10 @@ export interface RuntimePlanInput {
 const ASSESSED = new Set(['combat', 'survival']);
 /** The combat audit's reviewed stages (danger on the route) and those whose plan is to run past the danger. When every
  * audited danger still ahead in a quest is a run-past, survival and evasion are proven by that reviewed escape. */
-const AUDITED = (combatAuditJson as unknown as { stages: { stepId: string; method: string }[] }).stages.filter(stage => stage.method !== 'none');
+const AUDITED = (combatAuditJson as unknown as { stages: { stepId: string; method: string; runPast?: boolean }[] }).stages.filter(stage => stage.method !== 'none');
 const DANGER = new Set(AUDITED.map(stage => stage.stepId));
-const RUN_PAST = new Set(AUDITED.filter(stage => stage.method === 'run').map(stage => stage.stepId));
+// runPast: a fought stage whose other dangers are run past (Creature of Fenkenstrain's level 72 experiments).
+const RUN_PAST = new Set(AUDITED.filter(stage => stage.method === 'run' || stage.runPast).map(stage => stage.stepId));
 const ESCAPABLE = new Set(['survival', 'evasion']);
 
 // shortcut: the Wiki length category is a band, not a measurement; replace it with measured quest durations (brief 10) once sessions record them.

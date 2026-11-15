@@ -20026,6 +20026,554 @@
     }
    ]
   },
+  "S8-07": {
+   "var": [
+    "varp",
+    399
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Start the quest by reading the signpost in the centre of Canifis or by talking to Dr Fenkenstrain.",
+      "Take a pickled brain off the table in the tavern in Canifis for 50gp, or by using Telekinetic Grab.",
+      "Talk to Dr Fenkenstrain inside of Fenkenstrain's Castle. Dialogue: \"Yes.\", \"Braindead\", \"Grave-digging\"",
+      "Go upstairs by the eastern or western staircase to the bookcases and read:",
+      "Right-click dig at the cross-shaped grave marker in the Haunted Woods, south-east of Fenkenstrain's castle and immediately east of fairy ring .",
+      "Combine the decapicated head and the pickled brain.",
+      "Head north out of the Haunted Woods and use your star amulet on the easternmost memorial (south-east of Fenkenstrain's castle).",
+      "Push the memorial to enter the Experiment Cave.",
+      "Inside, kill a level 51 Experiment for the cavern key. If you have started Rag and Bone Man II, kill additional Experiments (level 25) for the Experiment bone.",
+      "Follow the north-western path to the end.",
+      "Search the chest and climb the ladder.",
+      "Right-click Dig at the three graves to get the torso, arms and legs.",
+      "Return to Dr Fenkenstrain (Fenkenstrain's castle teleport) and give him the body parts. Dialogue: \"I have some body parts for you.\"",
+      "Talk to him again to give him the needle and thread.",
+      "Talk to the Gardener Ghost for the shed key (ensure ghostspeak amulet is equipped). Dialogue: \"Do you know where the key to the shed is?\"",
+      "Search the cupboard inside the shed to get a garden brush.",
+      "Take 3 canes from the pile of canes next to the shed",
+      "Use all the canes (3) on the garden brush to get an extended brush (using a total of 3 bronze wires).",
+      "Go upstairs to the western fireplace and use the extended brush on the fireplace for a conductor mould.",
+      "Go to a furnace (closest is in Port Phasmatys, teleport to Falador, fairy ring to Zanaris, amulet of glory to Al Kharid) and smelt a silver bar into a conductor (lightning rod).",
+      "Return to the castle, go upstairs and then climb the southern ladder to reach the lightning conductor.",
+      "Repair the lightning conductor.",
+      "Return to Dr Fenkenstrain and talk to him.",
+      "Go upstairs, then through the metal door, then climb the northern ladder.",
+      "Talk to Fenkenstrain's monster.",
+      "Go downstairs, then pickpocket the doctor for the Ring of Charos.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Head to the Canifis bar and either buy the pickled brain for 50 coins, or telegrab it.",
+       "s": "Buy the pickled brain at the Canifis bar for 50 coins, or telegrab it.",
+       "k": "getPickledBrain",
+       "at": [
+        3492,
+        3474,
+        0
+       ]
+      },
+      {
+       "t": "Talk to Dr. Fenkenstrain to start the quest.",
+       "s": "Talk to Dr. Fenkenstrain to start the quest.",
+       "k": "talkToFrenkenstrain",
+       "at": [
+        3551,
+        3548,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1269
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Go up the staircase to grab the items you will need.",
+       "s": "Go up the staircase to grab the items you will need.",
+       "k": "goUpstairsForStar",
+       "at": [
+        3560,
+        3552,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5206
+        ]
+       }
+      },
+      {
+       "t": "Search the nearby bookcase for Handy Maggot Avoidance Techniques.",
+       "s": "Search the nearby bookcase for Handy Maggot Avoidance Techniques.",
+       "k": "getBook1",
+       "at": [
+        3555,
+        3558,
+        1
+       ],
+       "hl": {
+        "obj": [
+         5166
+        ]
+       }
+      },
+      {
+       "t": "Search the west bookcase for The Joy of Grave Digging.",
+       "s": "Search the west bookcase for The Joy of Grave Digging.",
+       "k": "getBook2",
+       "at": [
+        3542,
+        3558,
+        1
+       ],
+       "hl": {
+        "obj": [
+         5166
+        ]
+       }
+      },
+      {
+       "t": "Combine the two amulet by using one on the other.",
+       "s": "Combine the two amulet by using one on the other.",
+       "k": "combineAmulet"
+      },
+      {
+       "t": "Talk to the Gardener Ghost while wearing your Ghostspeak amulet.",
+       "s": "Talk to the Gardener Ghost while wearing your Ghostspeak amulet.",
+       "k": "talkToGardenerForHead",
+       "at": [
+        3548,
+        3562,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1272
+        ]
+       }
+      },
+      {
+       "t": "Go back to the ground floor.",
+       "s": "Go back to the ground floor.",
+       "k": "goDownstairsForStar",
+       "at": [
+        3537,
+        3553,
+        1
+       ],
+       "hl": {
+        "obj": [
+         5207
+        ]
+       }
+      },
+      {
+       "t": "Go to the grave of the gardener and dig for his head.",
+       "s": "Go to the grave of the gardener and dig for his head.",
+       "k": "goToHeadGrave",
+       "at": [
+        3608,
+        3490,
+        0
+       ]
+      },
+      {
+       "t": "Head to the Canifis bar and either buy the pickled brain for 50 coins, or telegrab it.",
+       "s": "Buy the pickled brain at the Canifis bar for 50 coins, or telegrab it.",
+       "k": "getPickledBrain",
+       "at": [
+        3492,
+        3474,
+        0
+       ]
+      },
+      {
+       "t": "Use the decapitated head on the pickled brain to create a decapitated head.",
+       "s": "Use the decapitated head on the pickled brain.",
+       "k": "combinedHead"
+      },
+      {
+       "t": "Use the Star Amulet on the memorial and push it to go in the caves.",
+       "s": "Use the Star Amulet on the memorial and push it to go in the caves.",
+       "k": "useStarOnGrave",
+       "at": [
+        3578,
+        3528,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5167
+        ]
+       }
+      },
+      {
+       "t": "Push the memorial south east of the castle.",
+       "s": "Push the memorial south east of the castle.",
+       "k": "enterExperimentCave",
+       "at": [
+        3578,
+        3528,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5167
+        ]
+       }
+      },
+      {
+       "t": "Kill the level 51 Experiment north-west of the ladder to get a key.",
+       "s": "Kill the level 51 Experiment north-west of the ladder to get a key.",
+       "k": "killExperiment",
+       "at": [
+        3557,
+        9946,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1273
+        ]
+       }
+      },
+      {
+       "t": "Pick up the key.",
+       "s": "Pick up the key.",
+       "k": "pickupKey"
+      },
+      {
+       "t": "Leave the caves by going north-west, be sure to pick up the key from the level 51 experiment.",
+       "s": "Leave the caves north-west with the key from the level 51 experiment.",
+       "k": "leaveExperimentCave",
+       "at": [
+        3504,
+        9970,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17387
+        ]
+       }
+      },
+      {
+       "t": "Use your spade on this tile to get the torso.",
+       "s": "Use your spade on this tile to get the torso.",
+       "k": "getTorso",
+       "at": [
+        3503,
+        3576,
+        0
+       ]
+      },
+      {
+       "t": "Use your spade on this tile to get arms.",
+       "s": "Use your spade on this tile to get arms.",
+       "k": "getArm",
+       "at": [
+        3504,
+        3576,
+        0
+       ]
+      },
+      {
+       "t": "Use your spade on this tile to get legs.",
+       "s": "Use your spade on this tile to get legs.",
+       "k": "getLeg",
+       "at": [
+        3505,
+        3576,
+        0
+       ]
+      },
+      {
+       "t": "Deliver the body parts to Dr. Fenkenstrain, use a teleport to Fenkenstrain's castle or run back through the caves.",
+       "s": "Bring the body parts to Dr. Fenkenstrain by teleport or the caves.",
+       "k": "deliverBodyParts",
+       "at": [
+        3551,
+        3548,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1269
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Give Dr. Fenkenstrain a needle and 5 threads.",
+       "s": "Give Dr. Fenkenstrain a needle and 5 threads.",
+       "k": "gatherNeedleAndThread",
+       "at": [
+        3551,
+        3548,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1269
+        ]
+       },
+       "need": "Thread"
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Talk to the Gardener Ghost and ask for the shed key.",
+       "s": "Talk to the Gardener Ghost and ask for the shed key.",
+       "k": "talkToGardenerForKey",
+       "at": [
+        3548,
+        3562,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1272
+        ]
+       }
+      },
+      {
+       "t": "Open the cupboard and search it for a brush.",
+       "s": "Open the cupboard and search it for a brush.",
+       "k": "searchForBrush",
+       "at": [
+        3546,
+        3564,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5156
+        ]
+       }
+      },
+      {
+       "t": "Grab 3 canes from the pile.",
+       "s": "Grab 3 canes from the pile.",
+       "k": "grabCanes",
+       "at": [
+        3551,
+        3564,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5158
+        ]
+       }
+      },
+      {
+       "t": "Use 3 canes on the brush one at a time.",
+       "s": "Use 3 canes on the brush one at a time.",
+       "k": "extendBrush"
+      },
+      {
+       "t": "Go up to the second floor of the castle.",
+       "s": "Go up to the second floor of the castle.",
+       "k": "goUpWestStairs",
+       "at": [
+        3538,
+        3552,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5206
+        ]
+       }
+      },
+      {
+       "t": "Use the extended brush on the fireplace to get the conductor mould.",
+       "s": "Use the extended brush on the fireplace to get the conductor mould.",
+       "k": "searchFirePlace",
+       "at": [
+        3544,
+        3555,
+        1
+       ],
+       "hl": {
+        "obj": [
+         5165
+        ]
+       }
+      },
+      {
+       "t": "Go to any furnace make a lightning rod.",
+       "s": "Go to any furnace make a lightning rod.",
+       "k": "makeLightningRod"
+      },
+      {
+       "t": "Go up to the third floor using the ladder in the middle of the castle.",
+       "s": "Go up to the third floor using the ladder in the middle of the castle.",
+       "k": "goUpTowerLadder",
+       "at": [
+        3548,
+        3539,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Repair the lightning Conductor.",
+       "s": "Repair the lightning Conductor.",
+       "k": "repairConductor",
+       "at": [
+        3549,
+        3537,
+        2
+       ],
+       "hl": {
+        "obj": [
+         5176
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Go back to the first floor of the castle and talk to Dr. Fenkenstrain.",
+       "s": "Go back to the first floor of the castle and talk to Dr. Fenkenstrain.",
+       "k": "goBackToFirstFloor",
+       "at": [
+        3551,
+        3548,
+        0
+       ]
+      },
+      {
+       "t": "Go back to the first floor of the castle and talk to Dr. Fenkenstrain.",
+       "s": "Go back to the first floor of the castle and talk to Dr. Fenkenstrain.",
+       "k": "talkToFenkenstrainAfterFixingRod",
+       "at": [
+        3551,
+        3548,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1269
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Go up to the second floor to confront Fenkenstrain's monster.",
+       "s": "Go up to the second floor to confront Fenkenstrain's monster.",
+       "k": "goToMonsterFloor1",
+       "at": [
+        3538,
+        3552,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5206
+        ]
+       }
+      },
+      {
+       "t": "Use the Tower Key on the door.",
+       "s": "Use the Tower Key on the door.",
+       "k": "openLockedDoor",
+       "at": [
+        3548,
+        3551,
+        1
+       ],
+       "hl": {
+        "obj": [
+         5172
+        ]
+       }
+      },
+      {
+       "t": "Go up the ladder.",
+       "s": "Go up the ladder.",
+       "k": "goToMonsterFloor2",
+       "at": [
+        3548,
+        3554,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Talk to Fenkenstrain's monster.",
+       "s": "Talk to Fenkenstrain's monster.",
+       "k": "talkToMonster",
+       "at": [
+        3548,
+        3555,
+        2
+       ],
+       "hl": {
+        "npc": [
+         1270
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Go back to Dr. Fenkenstrain, instead of talking to him right click and pickpocket him.",
+       "s": "Pickpocket Dr. Fenkenstrain instead of talking to him.",
+       "k": "pickPocketFenkenstrain",
+       "at": [
+        3551,
+        3548,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1269
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
   "S9-01": {
    "var": [
     "varp",

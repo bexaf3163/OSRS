@@ -27,6 +27,8 @@ export interface AuditEntry {
   objective: string;
   enemies: AuditEnemy[];
   method: Method;
+  /** The stage's other dangers are run past, so they prove evasion (Creature of Fenkenstrain). */
+  runPast?: boolean;
   /** The quest stage lines found by the detector ("3.2" = section 3, line 2), so a new fight line asks for a look. */
   lines: string[];
   assumptions: string[];

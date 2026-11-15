@@ -2488,6 +2488,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Bronze_scimitar"
   },
   {
+    "id": 1794,
+    "nameEn": "Bronze wire",
+    "examine": "Useful for Crafting items.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_wire.png",
+    "value": 20,
+    "highAlch": 12,
+    "lowAlch": 8,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bronze_wire"
+  },
+  {
     "id": 1925,
     "nameEn": "Bucket",
     "examine": "It's a wooden bucket.",

@@ -5346,6 +5346,128 @@
     ]
   },
   {
+    "id": "S8-07",
+    "stage": 8,
+    "type": "quest",
+    "title": "Creature of Fenkenstrain",
+    "qp": 2,
+    "requires": [
+      "S1-06",
+      "S8-01"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Creature_of_Fenkenstrain",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Creature_of_Fenkenstrain/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3488,3485,0",
+    "mapLocation": {
+      "x": 3488,
+      "y": 3485,
+      "plane": 0,
+      "label": "The middle of Canifis"
+    },
+    "npc": {
+      "nameEn": "signpost (Creature of Fenkenstrain)",
+      "location": "The middle of Canifis",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/signpost_(Creature_of_Fenkenstrain)"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Ghostspeak amulet",
+        "amount": 1,
+        "howToGet": "Kept from The Restless Ghost; if lost, Father Urhney in Lumbridge Swamp gives another.",
+        "wikiItemId": 552,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png"
+      },
+      {
+        "nameEn": "Silver bar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Ardougne Silver Stall in East Ardougne for 150 gp.",
+        "wikiItemId": 2355,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Silver_bar.png"
+      },
+      {
+        "nameEn": "Bronze wire",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1794,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_wire.png"
+      },
+      {
+        "nameEn": "Needle",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 1 gp.",
+        "wikiItemId": 1733,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Needle.png"
+      },
+      {
+        "nameEn": "Thread",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 1 gp.",
+        "wikiItemId": 1734,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Thread.png"
+      },
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lumbridge General Store in Lumbridge for 3 gp.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
+      },
+      {
+        "nameEn": "Coins",
+        "amount": 50,
+        "howToGet": "For the pickled brain at the Canifis bar.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "heals": 12,
+        "amount": 5,
+        "anyOf": [
+          "Trout",
+          "Salmon",
+          "Tuna",
+          "Swordfish"
+        ],
+        "howToGet": "Your own catch or the Grand Exchange. The level 51 experiment in the caves under Fenkenstrain's castle carries the key; the stronger ones can be run past. Preparation sizes the amount for your levels and armour.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Experiment"
+    ],
+    "reward": "2 QP, 1,000 Thieving XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "signpost (Creature of Fenkenstrain)"
+      ],
+      "dialogChoices": [
+        "Yes.",
+        "Braindead",
+        "Grave-digging",
+        "I have some body parts for you.",
+        "Do you know where the key to the shed is?"
+      ],
+      "highlightItems": [
+        "Ghostspeak amulet",
+        "Silver bar",
+        "Bronze wire",
+        "Needle",
+        "Thread",
+        "Spade",
+        "Coins"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Creature of Fenkenstrain"
+      }
+    }
+  },
+  {
     "id": "S9-01",
     "stage": 9,
     "type": "quest",

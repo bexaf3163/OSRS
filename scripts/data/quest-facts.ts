@@ -40,7 +40,8 @@ export function questFacts(article: WikiArticle, stepIds: string[], retrievedAt:
   const firstLink = (line: string) => /\[\[([^\]|#]+)/.exec(line)?.[1] ?? [];
   const consumed = new Set<number>();
   const listed = lines.flatMap((line, i) => {
-    if (/^\*\s*Completion of \[\[[^\]]+\]\]\.?\s*$/i.test(line)) return consumed.add(i), firstLink(line);
+    // A partial start (Creature of Fenkenstrain's Restless Ghost) is kept as the whole quest: stricter, and its keepsakes count.
+    if (/^\*\s*(?:Partial c|C)ompletion of \[\[[^\]]+\]\]\.?\s*$/i.test(line)) return consumed.add(i), firstLink(line);
     if (/^\*\s*Completion of the following quests:?\s*$/i.test(line)) return consumed.add(i), [];
     const head = lines.slice(0, i).reverse().find(l => /^\*(?!\*)/.test(l)) ?? '';
     if (!/^\*\*+\s*\[\[[^\]]+\]\]\s*$/.test(line) || !/Completion of the following quests/i.test(head)) return [];
@@ -154,6 +155,7 @@ const REVIEWED_CLAUSES = new Set([
   'Must be able to defeat a level 39 enemy.',
   "You do not need to have an Attack level of 20 to free Merlin, you can 'Use' Excalibur on the crystal to free him.",
   'Must be able to defeat a level 120 [[Black Knight Titan]] (can be [[safespot]]ted or [[flinch]]ed)',
+  'Able to defeat a level 51 monster and run past level 72 monsters',
   'A trustworthy friend or partner. Players can join the official [[chat-channel]] "OSRS SOA" to look for a partner.',
   "to enter the Champions' Guild",
 ].map(clause => clause.toLowerCase()));

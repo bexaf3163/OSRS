@@ -346,6 +346,18 @@
       "evidence": ["Step field \"Combat\"; OSRS Wiki infobox Ghast, read 2026-10-18."]
     },
     {
+      "stepId": "S8-07", "kind": "quest-fight", "mandatory": true, "method": "melee", "runPast": true,
+      "objective": "Creature of Fenkenstrain: kill the level 51 experiment (40 hit points, hits up to 6) in the caves under the castle for the key, and run past the level 72 monsters.",
+      "enemies": [{ "name": "Experiment", "level": 51, "maxHit": 6, "table": true }],
+      "lines": ["0.8"],
+      "assumptions": ["The Experiment is its level 51 Wiki infobox version; the level 72 monsters are run past, not fought."],
+      "problems": ["New quest: no stage of the route met these monsters before."],
+      "alternatives": ["None for the key: the level 51 experiment drops it."],
+      "decision": "revise",
+      "changed": ["2.110.0: the step's foes name the Experiment, so the kill is estimated with the player's kit and the run-past proves evasion; Lobster x5 (or similar food) is a required item."],
+      "evidence": ["OSRS Wiki Creature of Fenkenstrain requirements and Experiment infobox."]
+    },
+    {
       "stepId": "S9-01", "kind": "quest-fight", "mandatory": true, "method": "safespot",
       "objective": "Kill zombies (25) with Fire Strike until one drops an axe, then the Tree Spirit (101, 85 hit points, hits up to 10) with Fire Strike from between the mushrooms to the south-west.",
       "enemies": [{ "name": "Zombie", "level": 25 }, { "name": "Tree spirit (Lost City)", "level": 101, "maxHit": 10, "table": true }],

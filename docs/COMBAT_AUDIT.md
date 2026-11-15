@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-31 stages: 6 retained, 24 revised, 0 with a branch, 1 deferred.
+32 stages: 6 retained, 25 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -36,6 +36,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S7-19 Holy Grail | quest-fight | yes | Black Knight Titan (120) | melee | Black Knight Titan | Lobster 10 | Revised |
 | S8-01 Priest in Peril | quest-fight | yes | Temple Guardian (30), Monk of Zamorak (30) | melee | Temple Guardian | Trout 5 | Revised |
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
+| S8-07 Creature of Fenkenstrain | quest-fight | yes | Experiment (51) | melee | Experiment | Lobster 5 | Revised |
 | S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (Lost City) (101) | safespot | Tree spirit (Lost City) | - | Revised |
 | S9-02 Fairytale I - Growing Pains | quest-fight | yes | Tanglefoot (111) | other | Tanglefoot | Lobster 10 | Revised |
 | S9-04 Monkey Madness I | quest-fight | yes | Jungle Demon (195), Monkey zombie, Gorilla | safespot | Jungle Demon | - | Revised |
@@ -710,6 +711,32 @@ Changed:
 Evidence:
 
 - Step field "Combat"; OSRS Wiki infobox Ghast, read 2026-10-18.
+
+## S8-07 Creature of Fenkenstrain
+
+**Revised.** Creature of Fenkenstrain: kill the level 51 experiment (40 hit points, hits up to 6) in the caves under the castle for the key, and run past the level 72 monsters.
+
+Quest stage lines: 0.8.
+
+Assumptions:
+
+- The Experiment is its level 51 Wiki infobox version; the level 72 monsters are run past, not fought.
+
+Problems:
+
+- New quest: no stage of the route met these monsters before.
+
+Alternatives:
+
+- None for the key: the level 51 experiment drops it.
+
+Changed:
+
+- 2.110.0: the step's foes name the Experiment, so the kill is estimated with the player's kit and the run-past proves evasion; Lobster x5 (or similar food) is a required item.
+
+Evidence:
+
+- OSRS Wiki Creature of Fenkenstrain requirements and Experiment infobox.
 
 ## S9-01 Lost City
 
