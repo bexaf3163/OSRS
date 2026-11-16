@@ -133,6 +133,14 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     consumes: [{ name: 'Feather', count: 1 }], receives: [], unknownItems: ['Enchanted scroll', 'Enchanted quill', 'Mysterious orb'],
     uncertainReceipts: ['Antique lamp'], partialDelivery: false, fromStartOnly: true,
   } },
+  // Tenzing takes the food and the spiked boots (made from the bought climbing boots and the bar). The ale comes
+  // from the pub's bar during the quest; lost bets with Harold are not counted. Steel claws are the reward.
+  'Death Plateau': { revision: 15382205, flow: {
+    consumes: [{ name: 'Bread', count: 10 }, { name: 'Trout', count: 10 }, { name: 'Iron bar', count: 1 }, { name: 'Coins', count: 12 }],
+    receives: [{ name: 'Steel claws', count: 1, when: 'complete' }],
+    unknownItems: ['Asgarnian ale', 'IOU', 'Combination', 'Stone ball', 'Certificate', 'Climbing boots', 'Spiked boots', 'Secret way map'],
+    partialDelivery: false, fromStartOnly: true,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],

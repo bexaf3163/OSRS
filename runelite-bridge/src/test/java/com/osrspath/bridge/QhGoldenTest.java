@@ -128,7 +128,22 @@ public class QhGoldenTest
 		@Override
 		public Boolean object(int[] ids, int[] zone)
 		{
-			for (JsonElement e : f.getAsJsonArray("objs"))
+			return placed("objs", ids, zone);
+		}
+
+		@Override
+		public Boolean ground(int[] ids, int[] zone)
+		{
+			return placed("ground", ids, zone);
+		}
+
+		private Boolean placed(String key, int[] ids, int[] zone)
+		{
+			if (!f.has(key))
+			{
+				return Boolean.FALSE;
+			}
+			for (JsonElement e : f.getAsJsonArray(key))
 			{
 				JsonArray a = e.getAsJsonArray();
 				for (int id : ids)

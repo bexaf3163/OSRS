@@ -2,6 +2,7 @@ package com.osrspath.bridge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
@@ -11,6 +12,7 @@ import net.runelite.api.Quest;
 import net.runelite.api.QuestState;
 import net.runelite.api.Skill;
 import net.runelite.api.Tile;
+import net.runelite.api.TileItem;
 import net.runelite.api.TileObject;
 import net.runelite.api.WorldView;
 import net.runelite.api.coords.WorldPoint;
@@ -199,6 +201,17 @@ final class QhLiveFacts implements QhMachine.Facts
 	@Override
 	public Boolean object(int[] ids, int[] zone)
 	{
+		return scan(zone, t -> hasObject(t, ids));
+	}
+
+	@Override
+	public Boolean ground(int[] ids, int[] zone)
+	{
+		return scan(zone, t -> hasItem(t, ids));
+	}
+
+	private Boolean scan(int[] zone, Predicate<Tile> has)
+	{
 		WorldView wv = client.getTopLevelWorldView();
 		if (client.getGameState() != GameState.LOGGED_IN || wv == null || wv.getScene() == null)
 		{
@@ -226,13 +239,33 @@ final class QhLiveFacts implements QhMachine.Facts
 						continue;
 					}
 				}
-				if (hasObject(t, ids))
+				if (has.test(t))
 				{
 					return Boolean.TRUE;
 				}
 			}
 		}
 		return Boolean.FALSE;
+	}
+
+	private static boolean hasItem(Tile t, int[] ids)
+	{
+		List<TileItem> items = t.getGroundItems();
+		if (items == null)
+		{
+			return false;
+		}
+		for (TileItem item : items)
+		{
+			for (int id : ids)
+			{
+				if (item.getId() == id)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private static boolean hasObject(Tile t, int[] ids)

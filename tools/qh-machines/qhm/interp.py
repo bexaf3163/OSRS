@@ -251,6 +251,9 @@ class Interp:
         if e is None:
             return None
         k = e[0]
+        if k == 'assignx':
+            self.stmt(('assign', e[1], e[2]))
+            return self.ev(e[1])
         if k == 'lit':
             return e[1]
         if k == 'name':
@@ -587,7 +590,11 @@ class Interp:
         return req('obj', ids=ids, z=z)
 
     def make_ground(self, args):
-        return req('?', d='ground')
+        it = next((a for a in args if isinstance(a, Req) and a.get('ids')), None)
+        wp = next((a for a in args if isinstance(a, WP)), None)
+        if not it or not wp:
+            return req('?', d='ground')
+        return req('ground', ids=it['ids'], z=[wp.x, wp.y, wp.x, wp.y, wp.p, wp.p])
 
     def make_skill(self, args):
         sk = next((a for a in args if isinstance(a, Enum) and a.cls == 'Skill'), None)
@@ -629,6 +636,10 @@ class Interp:
             for a in args:
                 if isinstance(a, Step):
                     st.subs.append(a)
+            # The wrapped step holds the solution: its tile, ids and text, not the "work it out" hint.
+            sol = next((s for s in st.subs if s.kind == 'leaf' and getattr(s, 'wp', None)), None)
+            if sol:
+                st.wp, st.ids, st.text = sol.wp, sol.ids or st.ids, sol.text or st.text
         return st
 
     def make_helper_step(self, typ, args):

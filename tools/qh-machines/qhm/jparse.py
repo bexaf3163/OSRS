@@ -112,7 +112,10 @@ class Parser:
         out = []
         if not self.at(')'):
             while True:
-                out.append(self.expr())
+                e = self.expr()
+                if self.eat('='):  # an assignment used as an argument: x = new Req(...)
+                    e = ('assignx', e, self.expr())
+                out.append(e)
                 if self.eat(','):
                     continue
                 break

@@ -3,242 +3,707 @@
   "note": "Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.",
   "stages": [
     {
-      "stepId": "S1-06", "kind": "avoid", "mandatory": false, "method": "run",
+      "stepId": "S1-06",
+      "kind": "avoid",
+      "mandatory": false,
+      "method": "run",
       "objective": "A skeleton appears at the altar while you take the ghost's skull; the quest does not need it dead.",
-      "enemies": [{ "name": "Skeleton", "level": 13 }],
-      "lines": ["3.1"],
-      "assumptions": ["Running away is enough: the skull is already in the bag when it appears."],
+      "enemies": [
+        {
+          "name": "Skeleton",
+          "level": 13
+        }
+      ],
+      "lines": [
+        "3.1"
+      ],
+      "assumptions": [
+        "Running away is enough: the skull is already in the bag when it appears."
+      ],
       "problems": [],
-      "alternatives": ["Kill it for a little XP: not needed and not suggested."],
+      "alternatives": [
+        "Kill it for a little XP: not needed and not suggested."
+      ],
       "decision": "retain",
-      "evidence": ["Quest stage line 3.1 (Quest Helper): it can be run from.", "Food is recommended only (Cooked chicken, Shrimps)."]
+      "evidence": [
+        "Quest stage line 3.1 (Quest Helper): it can be run from.",
+        "Food is recommended only (Cooked chicken, Shrimps)."
+      ]
     },
     {
-      "stepId": "S1-07", "kind": "not-combat", "mandatory": true, "method": "none",
+      "stepId": "S1-07",
+      "kind": "not-combat",
+      "mandatory": true,
+      "method": "none",
       "objective": "\"Fight\" on Abigale is a menu option of the mystery; no combat happens.",
       "enemies": [],
-      "lines": ["7.4"],
+      "lines": [
+        "7.4"
+      ],
       "assumptions": [],
       "problems": [],
       "alternatives": [],
       "decision": "retain",
-      "evidence": ["Quest stage line 7.4: \"no actual combat occurs\"."]
+      "evidence": [
+        "Quest stage line 7.4: \"no actual combat occurs\"."
+      ]
     },
     {
-      "stepId": "S2-03", "kind": "incidental", "mandatory": true, "method": "melee",
+      "stepId": "S2-03",
+      "kind": "incidental",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Kill a rat for its tail and a giant rat for meat to burn.",
-      "enemies": [{ "name": "Rat", "level": 1 }, { "name": "Giant rat", "level": 3 }],
-      "lines": ["1.0", "1.2"],
-      "assumptions": ["Level 1 to 3 rats are no danger to a character past the tutorial."],
+      "enemies": [
+        {
+          "name": "Rat",
+          "level": 1
+        },
+        {
+          "name": "Giant rat",
+          "level": 3
+        }
+      ],
+      "lines": [
+        "1.0",
+        "1.2"
+      ],
+      "assumptions": [
+        "Level 1 to 3 rats are no danger to a character past the tutorial."
+      ],
       "problems": [],
-      "alternatives": ["Raw beef from a cow works instead of rat meat (route text)."],
+      "alternatives": [
+        "Raw beef from a cow works instead of rat meat (route text)."
+      ],
       "decision": "retain",
-      "evidence": ["Quest stage lines 1.0 and 1.2."]
+      "evidence": [
+        "Quest stage lines 1.0 and 1.2."
+      ]
     },
     {
-      "stepId": "S2-07", "kind": "avoid", "mandatory": true, "method": "run",
+      "stepId": "S2-07",
+      "kind": "avoid",
+      "mandatory": true,
+      "method": "run",
       "objective": "Mine blurite ore in the Asgarnian Ice Dungeon, where ice giants (53) and ice warriors (57) attack: run in, mine, leave.",
-      "enemies": [{ "name": "Ice giant", "level": 53 }, { "name": "Ice warrior", "level": 57 }],
-      "lines": ["3.0"],
-      "assumptions": ["The player does not fight them; the Trout (10, recommended) covers the hits taken on the way."],
-      "problems": ["No in-game danger zone for the dungeon: the route has no surveyed area for it, so the game does not warn on entry.", "The app has no numbers for ice giants or ice warriors, so the food is not sized to the kit."],
-      "alternatives": ["None in the route: blurite is only mined there."],
+      "enemies": [
+        {
+          "name": "Ice giant",
+          "level": 53
+        },
+        {
+          "name": "Ice warrior",
+          "level": 57
+        }
+      ],
+      "lines": [
+        "3.0"
+      ],
+      "assumptions": [
+        "The player does not fight them; the Trout (10, recommended) covers the hits taken on the way."
+      ],
+      "problems": [
+        "No in-game danger zone for the dungeon: the route has no surveyed area for it, so the game does not warn on entry.",
+        "The app has no numbers for ice giants or ice warriors, so the food is not sized to the kit."
+      ],
+      "alternatives": [
+        "None in the route: blurite is only mined there."
+      ],
       "decision": "defer",
-      "changed": ["2.74.8: Trout ×10 (or Salmon) is a required item: the dungeon entry line already checks it in the bag."],
-      "evidence": ["Step field \"Dangerous\" and quest stage line 3.0.", "dangerZones.json has no entry for the Asgarnian Ice Dungeon."]
+      "changed": [
+        "2.74.8: Trout ×10 (or Salmon) is a required item: the dungeon entry line already checks it in the bag."
+      ],
+      "evidence": [
+        "Step field \"Dangerous\" and quest stage line 3.0.",
+        "dangerZones.json has no entry for the Asgarnian Ice Dungeon."
+      ]
     },
     {
-      "stepId": "S2-08", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S2-08",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Kill Count Draynor (34, 35 hit points, hits up to 3) with the stake and the hammer.",
-      "enemies": [{ "name": "Count Draynor", "level": 34, "maxHit": 3, "table": true }],
-      "lines": ["3.0", "3.2"],
-      "assumptions": ["Melee with the stake, the hammer and the garlic in the inventory, as the step requires them. Estimated from the OSRS Wiki (fightMechanics.json): he restores 1 hit point and 1 drained level every 5 ticks; garlic at full health deals 10 damage, lowers his Attack and Strength by 10 and his Defence by 40, and adds 1 to your damage; hits that do not outpace the regeneration never finish the fight. A Fire Strike safespot behind the chair is the other way."],
-      "problems": ["The Trout was only recommended, so readiness and the game's departure check never looked at it."],
-      "alternatives": ["Safespot behind the chair with Fire Strike (route safespot text)."],
+      "enemies": [
+        {
+          "name": "Count Draynor",
+          "level": 34,
+          "maxHit": 3,
+          "table": true
+        }
+      ],
+      "lines": [
+        "3.0",
+        "3.2"
+      ],
+      "assumptions": [
+        "Melee with the stake, the hammer and the garlic in the inventory, as the step requires them. Estimated from the OSRS Wiki (fightMechanics.json): he restores 1 hit point and 1 drained level every 5 ticks; garlic at full health deals 10 damage, lowers his Attack and Strength by 10 and his Defence by 40, and adds 1 to your damage; hits that do not outpace the regeneration never finish the fight. A Fire Strike safespot behind the chair is the other way."
+      ],
+      "problems": [
+        "The Trout was only recommended, so readiness and the game's departure check never looked at it."
+      ],
+      "alternatives": [
+        "Safespot behind the chair with Fire Strike (route safespot text)."
+      ],
       "decision": "revise",
-      "changed": ["2.66.0: Trout (10, or Salmon, Tuna, Lobster, Swordfish) is a required item: checked before leaving and sized up by the fight estimate when the kit needs more.", "2.86.0: regeneration, the garlic and the stake-and-hammer finish are modelled from the Wiki; a kit that cannot outpace his regeneration is trained or upgraded first instead of ending in a review."],
-      "evidence": ["Step field \"Combat\"; combatFoes.json (wiki infobox).", "Danger zones warn about the stake, the hammer and the garlic.", "OSRS Wiki Count Draynor (Strategy, Stat restoration), read 2026-11-10; src/data/authored/fightMechanics.json."],
-      "zones": ["draynor-manor-stake", "draynor-manor-hammer", "draynor-manor-garlic"]
+      "changed": [
+        "2.66.0: Trout (10, or Salmon, Tuna, Lobster, Swordfish) is a required item: checked before leaving and sized up by the fight estimate when the kit needs more.",
+        "2.86.0: regeneration, the garlic and the stake-and-hammer finish are modelled from the Wiki; a kit that cannot outpace his regeneration is trained or upgraded first instead of ending in a review."
+      ],
+      "evidence": [
+        "Step field \"Combat\"; combatFoes.json (wiki infobox).",
+        "Danger zones warn about the stake, the hammer and the garlic.",
+        "OSRS Wiki Count Draynor (Strategy, Stat restoration), read 2026-11-10; src/data/authored/fightMechanics.json."
+      ],
+      "zones": [
+        "draynor-manor-stake",
+        "draynor-manor-hammer",
+        "draynor-manor-garlic"
+      ]
     },
     {
-      "stepId": "S2-09", "kind": "incidental", "mandatory": true, "method": "melee",
+      "stepId": "S2-09",
+      "kind": "incidental",
+      "mandatory": true,
+      "method": "melee",
       "objective": "The Gardener (level 4) appears when you dig in Falador Park; kill him and dig again.",
-      "enemies": [{ "name": "Gardener", "level": 4, "maxHit": 1, "table": true }],
-      "lines": ["3.3"],
-      "assumptions": ["Level 4 is no danger at this point of the route."],
+      "enemies": [
+        {
+          "name": "Gardener",
+          "level": 4,
+          "maxHit": 1,
+          "table": true
+        }
+      ],
+      "lines": [
+        "3.3"
+      ],
+      "assumptions": [
+        "Level 4 is no danger at this point of the route."
+      ],
       "problems": [],
       "alternatives": [],
       "decision": "retain",
-      "evidence": ["Quest stage line 3.3.", "Step field \"threats\" since 2.86.1: the app estimates the fight with the player's kit, which proves the quest's \"survival\" requirement (OSRS Wiki, Gardener: level 4, 7 hit points, hits up to 1)."]
+      "evidence": [
+        "Quest stage line 3.3.",
+        "Step field \"threats\" since 2.86.1: the app estimates the fight with the player's kit, which proves the quest's \"survival\" requirement (OSRS Wiki, Gardener: level 4, 7 hit points, hits up to 1)."
+      ]
     },
     {
-      "stepId": "S2-10", "kind": "avoid", "mandatory": true, "method": "run",
+      "stepId": "S2-10",
+      "kind": "avoid",
+      "mandatory": true,
+      "method": "run",
       "objective": "Aggressive level 26 jail guards (hits up to 3) attack inside the Draynor jail while you give Joe the beer, tie up Lady Keli and free Prince Ali; the quest needs them only avoided.",
-      "enemies": [{ "name": "Jail guard", "level": 26, "maxHit": 3 }],
-      "lines": ["6.0"],
-      "assumptions": ["Walking past is the route's method (OSRS Wiki, Prince Ali Rescue: \"avoiding the aggressive level 26 jail guards\"); no kill estimate drives preparation."],
-      "problems": ["The route said nothing about the guards, so the quest's \"evasion\" requirement could never be shown met and the planner stopped at a check."],
-      "alternatives": ["Fight them: not needed and not suggested."],
+      "enemies": [
+        {
+          "name": "Jail guard",
+          "level": 26,
+          "maxHit": 3
+        }
+      ],
+      "lines": [
+        "6.0"
+      ],
+      "assumptions": [
+        "Walking past is the route's method (OSRS Wiki, Prince Ali Rescue: \"avoiding the aggressive level 26 jail guards\"); no kill estimate drives preparation."
+      ],
+      "problems": [
+        "The route said nothing about the guards, so the quest's \"evasion\" requirement could never be shown met and the planner stopped at a check."
+      ],
+      "alternatives": [
+        "Fight them: not needed and not suggested."
+      ],
       "decision": "revise",
-      "changed": ["2.86.1: the walkthrough names the guards and says to walk past them; this run-past proves the evasion requirement."],
-      "evidence": ["Quest stage route line 6.0; OSRS Wiki Jail guard (level 26, 32 hit points, hits up to 3), Prince Ali Rescue requirements, read 2026-11-11."]
+      "changed": [
+        "2.86.1: the walkthrough names the guards and says to walk past them; this run-past proves the evasion requirement."
+      ],
+      "evidence": [
+        "Quest stage route line 6.0; OSRS Wiki Jail guard (level 26, 32 hit points, hits up to 3), Prince Ali Rescue requirements, read 2026-11-11."
+      ]
     },
     {
-      "stepId": "S2-11", "kind": "incidental", "mandatory": true, "method": "melee",
+      "stepId": "S2-11",
+      "kind": "incidental",
+      "mandatory": true,
+      "method": "melee",
       "objective": "A level 22 skeleton attacks in Draynor Manor: the quest asks for the ability to defend yourself from it. Kill it, or take what you came for and leave.",
-      "enemies": [{ "name": "Skeleton", "level": 22, "maxHit": 3, "table": true }],
+      "enemies": [
+        {
+          "name": "Skeleton",
+          "level": 22,
+          "maxHit": 3,
+          "table": true
+        }
+      ],
       "lines": [],
-      "assumptions": ["The free Skeleton in combatFoes.json is level 21 (24 hit points, hits up to 3). The wiki article lists no level 22 version, so the estimate uses it."],
+      "assumptions": [
+        "The free Skeleton in combatFoes.json is level 21 (24 hit points, hits up to 3). The wiki article lists no level 22 version, so the estimate uses it."
+      ],
       "problems": [],
-      "alternatives": ["Run past it: the quest does not need it dead."],
+      "alternatives": [
+        "Run past it: the quest does not need it dead."
+      ],
       "decision": "retain",
-      "evidence": ["Quest requirement: the ability to defend from a level 22 Skeleton (OSRS Wiki, Ernest the Chicken).", "Step field \"foes\" since 2.85.0, so the app estimates the fight with the player's kit."]
+      "evidence": [
+        "Quest requirement: the ability to defend from a level 22 Skeleton (OSRS Wiki, Ernest the Chicken).",
+        "Step field \"foes\" since 2.85.0, so the app estimates the fight with the player's kit."
+      ]
     },
     {
-      "stepId": "S3-02", "kind": "avoid", "mandatory": true, "method": "run",
+      "stepId": "S3-02",
+      "kind": "avoid",
+      "mandatory": true,
+      "method": "run",
       "objective": "Black Knights (33) attack inside the fortress while you listen at the grill and drop the cabbage.",
-      "enemies": [{ "name": "Black Knight", "level": 33 }],
-      "lines": ["1.0"],
-      "assumptions": ["The route does not need them dead: walk past, eat if they catch you. A full kill estimate (25 to 50 Trout for a character at this point) would overstate the need, so none drives the food."],
-      "problems": ["The 5 Trout the step text asks for were only recommended: nothing checked them before the fortress."],
-      "alternatives": ["Fight them or walk past quickly: the route does not need them dead."],
+      "enemies": [
+        {
+          "name": "Black Knight",
+          "level": 33
+        }
+      ],
+      "lines": [
+        "1.0"
+      ],
+      "assumptions": [
+        "The route does not need them dead: walk past, eat if they catch you. A full kill estimate (25 to 50 Trout for a character at this point) would overstate the need, so none drives the food."
+      ],
+      "problems": [
+        "The 5 Trout the step text asks for were only recommended: nothing checked them before the fortress."
+      ],
+      "alternatives": [
+        "Fight them or walk past quickly: the route does not need them dead."
+      ],
       "decision": "revise",
-      "changed": ["2.66.0: Trout ×5 (or better fish) is a required item."],
-      "evidence": ["Step field \"Disguise\"; quest stage line 1.0; combatFoes.json (Black Knight, hostile)."]
+      "changed": [
+        "2.66.0: Trout ×5 (or better fish) is a required item."
+      ],
+      "evidence": [
+        "Step field \"Disguise\"; quest stage line 1.0; combatFoes.json (Black Knight, hostile)."
+      ]
     },
     {
-      "stepId": "S3-03", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S3-03",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Kill Delrith (27, 7 hit points, hits up to 3) with Silverlight while the dark wizards (7 and 20, magic up to 6) attack on sight.",
-      "enemies": [{ "name": "Delrith", "level": 27, "maxHit": 3, "table": true }, { "name": "Dark wizard", "level": 20, "maxHit": 6, "table": true }],
-      "lines": ["0.0", "1.0", "4.1"],
-      "assumptions": ["Silverlight is the weapon: all damage dealt to Delrith is doubled while it is equipped (OSRS Wiki, Delrith). The circle is single-way combat, so the estimate fights the level 20 and the two level 7 dark wizards first with the same sword, then Delrith; the worst hit is the level 20 wizard's 6."],
-      "problems": ["The Trout (5) was only recommended: the 25 Bones for Traiborn and the food do not fit the bag together, and the food was not tied to the fight's loadout.", "The app had no numbers for Delrith (the generator read an empty infobox field as the next line, fixed in v14) or the dark wizards, and Silverlight's doubled damage was not modelled, so the fight was not estimated."],
+      "enemies": [
+        {
+          "name": "Delrith",
+          "level": 27,
+          "maxHit": 3,
+          "table": true
+        },
+        {
+          "name": "Dark wizard",
+          "level": 20,
+          "maxHit": 6,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.0",
+        "1.0",
+        "4.1"
+      ],
+      "assumptions": [
+        "Silverlight is the weapon: all damage dealt to Delrith is doubled while it is equipped (OSRS Wiki, Delrith). The circle is single-way combat, so the estimate fights the level 20 and the two level 7 dark wizards first with the same sword, then Delrith; the worst hit is the level 20 wizard's 6."
+      ],
+      "problems": [
+        "The Trout (5) was only recommended: the 25 Bones for Traiborn and the food do not fit the bag together, and the food was not tied to the fight's loadout.",
+        "The app had no numbers for Delrith (the generator read an empty infobox field as the next line, fixed in v14) or the dark wizards, and Silverlight's doubled damage was not modelled, so the fight was not estimated."
+      ],
       "alternatives": [],
       "decision": "revise",
-      "evidence": ["Step field \"Combat\"; quest stage line 4.1 (lines 0.0 and 1.0 are dialogue).", "Danger zone dark-wizards-varrock warns on the way.", "OSRS Wiki Delrith (Silverlight doubles all damage dealt), Demon Slayer (two level 7 and one level 20 dark wizard, single-way combat), read 2026-11-10."],
-      "zones": ["dark-wizards-varrock"],
-      "changed": ["2.86.0: Delrith is a threat of the step, estimated with Silverlight's doubled damage after the three dark wizards (fightMechanics.json, combatFoes.json); the Trout is a required item of the fight loadout, taken after the bones."]
+      "evidence": [
+        "Step field \"Combat\"; quest stage line 4.1 (lines 0.0 and 1.0 are dialogue).",
+        "Danger zone dark-wizards-varrock warns on the way.",
+        "OSRS Wiki Delrith (Silverlight doubles all damage dealt), Demon Slayer (two level 7 and one level 20 dark wizard, single-way combat), read 2026-11-10."
+      ],
+      "zones": [
+        "dark-wizards-varrock"
+      ],
+      "changed": [
+        "2.86.0: Delrith is a threat of the step, estimated with Silverlight's doubled damage after the three dark wizards (fightMechanics.json, combatFoes.json); the Trout is a required item of the fight loadout, taken after the bones."
+      ]
     },
     {
-      "stepId": "S3-04", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S3-04",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Beat the Ancient Guardian (25, 40 hit points, hits up to 7) by mining the four Structural pillars while it keeps attacking.",
-      "enemies": [{ "name": "Ancient Guardian", "level": 25, "maxHit": 7, "table": true }],
-      "lines": ["4.4"],
-      "assumptions": ["The Wiki says it can be defeated in standard combat or by mining the four pillars. The pillars' mining time is not on the Wiki, so only the melee fight is estimated; the pillars stay the route's other way."],
-      "problems": ["The 10 to 15 Trout or Salmon the step asks for were only recommended, and there is no bank before the fight.", "The step did not name the Guardian, so the method line never showed.", "With no estimate the planner stopped at \"Review the combat strategy\" for every account."],
-      "alternatives": ["Mine the four Structural pillars (Mining 10, any pickaxe) while it keeps attacking.", "Fallback in the route: lure it to the east side and safespot it from the entrance passage with Ranged or Magic."],
+      "enemies": [
+        {
+          "name": "Ancient Guardian",
+          "level": 25,
+          "maxHit": 7,
+          "table": true
+        }
+      ],
+      "lines": [
+        "4.4"
+      ],
+      "assumptions": [
+        "The Wiki says it can be defeated in standard combat or by mining the four pillars. The pillars' mining time is not on the Wiki, so only the melee fight is estimated; the pillars stay the route's other way."
+      ],
+      "problems": [
+        "The 10 to 15 Trout or Salmon the step asks for were only recommended, and there is no bank before the fight.",
+        "The step did not name the Guardian, so the method line never showed.",
+        "With no estimate the planner stopped at \"Review the combat strategy\" for every account."
+      ],
+      "alternatives": [
+        "Mine the four Structural pillars (Mining 10, any pickaxe) while it keeps attacking.",
+        "Fallback in the route: lure it to the east side and safespot it from the entrance passage with Ranged or Magic."
+      ],
       "decision": "revise",
-      "changed": ["2.66.0: Trout ×10 (or better food) is a required item; the Guardian is the step's threat, which shows the pillar method in the food card.", "2.87.0: the melee fight is estimated and prepared like the other quest fights; the pillars are the other way in the route text."],
-      "evidence": ["Step fields \"Combat\", \"Two ways\", \"Bring\", \"Fallback: safespot\"; combatFoes.json (Ancient Guardian, golem); OSRS Wiki Ancient Guardian and Structural pillar (no mining time), read 2026-11-11."]
+      "changed": [
+        "2.66.0: Trout ×10 (or better food) is a required item; the Guardian is the step's threat, which shows the pillar method in the food card.",
+        "2.87.0: the melee fight is estimated and prepared like the other quest fights; the pillars are the other way in the route text."
+      ],
+      "evidence": [
+        "Step fields \"Combat\", \"Two ways\", \"Bring\", \"Fallback: safespot\"; combatFoes.json (Ancient Guardian, golem); OSRS Wiki Ancient Guardian and Structural pillar (no mining time), read 2026-11-11."
+      ]
     },
     {
-      "stepId": "S3-05", "kind": "incidental", "mandatory": true, "method": "melee",
+      "stepId": "S3-05",
+      "kind": "incidental",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Kill Jonny the Beard (2) for the report and the Weaponsmaster (23, 20 hit points, hits up to 3) for the crossbows.",
-      "enemies": [{ "name": "Jonny the Beard", "level": 2 }, { "name": "Weaponsmaster", "level": 23, "maxHit": 3 }],
-      "lines": ["2.2", "3.2"],
-      "assumptions": ["A max hit of 3 against a character with Attack 30 or more is no real danger."],
+      "enemies": [
+        {
+          "name": "Jonny the Beard",
+          "level": 2
+        },
+        {
+          "name": "Weaponsmaster",
+          "level": 23,
+          "maxHit": 3
+        }
+      ],
+      "lines": [
+        "2.2",
+        "3.2"
+      ],
+      "assumptions": [
+        "A max hit of 3 against a character with Attack 30 or more is no real danger."
+      ],
       "problems": [],
       "alternatives": [],
       "decision": "retain",
-      "evidence": ["Quest stage lines 2.2 and 3.2; OSRS Wiki infobox of the Weaponsmaster (20 hit points, max hit 3), read 2026-10-18."]
+      "evidence": [
+        "Quest stage lines 2.2 and 3.2; OSRS Wiki infobox of the Weaponsmaster (20 hit points, max hit 3), read 2026-10-18."
+      ]
     },
     {
-      "stepId": "S4-01", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S4-01",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Kill Ithoi the Navigator (35, 55 hit points, hits up to 6 with magic).",
-      "enemies": [{ "name": "Ithoi the Navigator", "level": 35, "maxHit": 6, "table": true }],
-      "lines": ["3.0", "3.1"],
-      "assumptions": ["Melee with the Adamant scimitar and a Strength potion dose; eat before your health falls to 12."],
-      "problems": ["The step had no food at all: readiness said Ready with nothing to check."],
-      "alternatives": ["Magic (quest stage line 3.0)."],
+      "enemies": [
+        {
+          "name": "Ithoi the Navigator",
+          "level": 35,
+          "maxHit": 6,
+          "table": true
+        }
+      ],
+      "lines": [
+        "3.0",
+        "3.1"
+      ],
+      "assumptions": [
+        "Melee with the Adamant scimitar and a Strength potion dose; eat before your health falls to 12."
+      ],
+      "problems": [
+        "The step had no food at all: readiness said Ready with nothing to check."
+      ],
+      "alternatives": [
+        "Magic (quest stage line 3.0)."
+      ],
       "decision": "revise",
-      "changed": ["2.66.0: Salmon ×10 (or Trout, Tuna, Lobster, Swordfish) is a required item, sized up by the fight estimate when the kit needs more."],
-      "evidence": ["Step field \"Combat\"; combatFoes.json; threats.json (max hit 6)."]
+      "changed": [
+        "2.66.0: Salmon ×10 (or Trout, Tuna, Lobster, Swordfish) is a required item, sized up by the fight estimate when the kit needs more."
+      ],
+      "evidence": [
+        "Step field \"Combat\"; combatFoes.json; threats.json (max hit 6)."
+      ]
     },
     {
-      "stepId": "S4-02", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S4-02",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Beat Brutus (30, 58 hit points): plain hits up to 3 cannot kill in the quest, his specials (up to 19) can.",
-      "enemies": [{ "name": "Brutus", "level": 30, "maxHit": 3, "table": true }],
-      "lines": ["4.0"],
-      "assumptions": ["Dodging the specials is the real defence; the estimate still counts one hit of each special (every fifth attack, about 40% of your Hitpoints up to 19, OSRS Wiki Brutus/Strategies), so food and health cover a special that lands."],
-      "problems": ["The step had no food at all.", "The estimate counted only his plain hits, so the food it gave was a lower bound."],
+      "enemies": [
+        {
+          "name": "Brutus",
+          "level": 30,
+          "maxHit": 3,
+          "table": true
+        }
+      ],
+      "lines": [
+        "4.0"
+      ],
+      "assumptions": [
+        "Dodging the specials is the real defence; the estimate still counts one hit of each special (every fifth attack, about 40% of your Hitpoints up to 19, OSRS Wiki Brutus/Strategies), so food and health cover a special that lands."
+      ],
+      "problems": [
+        "The step had no food at all.",
+        "The estimate counted only his plain hits, so the food it gave was a lower bound."
+      ],
       "alternatives": [],
       "decision": "revise",
-      "changed": ["2.66.0: Trout ×5 is a required item, with the special's 19 in its note.", "2.86.0: the specials are part of the estimate (fightMechanics.json): food, the health kept above a special and the training or kit that makes the fight safe all include them."],
-      "evidence": ["Step field \"Combat\"; threats.json (melee 3, special 19)."]
+      "changed": [
+        "2.66.0: Trout ×5 is a required item, with the special's 19 in its note.",
+        "2.86.0: the specials are part of the estimate (fightMechanics.json): food, the health kept above a special and the training or kit that makes the fight safe all include them."
+      ],
+      "evidence": [
+        "Step field \"Combat\"; threats.json (melee 3, special 19)."
+      ]
     },
     {
-      "stepId": "S5-03", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S5-03",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Melzar's Maze: the marked rat, ghost, skeleton and zombie, Melzar the Mad (43, hits up to 5) in melee, the lesser demon from the safespot.",
-      "enemies": [{ "name": "Melzar the Mad", "level": 43, "maxHit": 5, "table": true }, { "name": "Lesser demon", "level": 82, "table": true }],
-      "lines": ["0.1", "1.0", "2.0", "3.0"],
-      "assumptions": ["The demon is fought with Water Strike from the safespot, where it cannot reach you: its estimate is the casts at your Magic level and worn magic bonus, with its 40% water weakness (Wiki), and the 50 casts of runes the step carries."],
-      "problems": ["The demon had no estimate, so the planner ended Dragon Slayer in \"Review the combat strategy\"."],
+      "enemies": [
+        {
+          "name": "Melzar the Mad",
+          "level": 43,
+          "maxHit": 5,
+          "table": true
+        },
+        {
+          "name": "Lesser demon",
+          "level": 82,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.1",
+        "1.0",
+        "2.0",
+        "3.0"
+      ],
+      "assumptions": [
+        "The demon is fought with Water Strike from the safespot, where it cannot reach you: its estimate is the casts at your Magic level and worn magic bonus, with its 40% water weakness (Wiki), and the 50 casts of runes the step carries."
+      ],
+      "problems": [
+        "The demon had no estimate, so the planner ended Dragon Slayer in \"Review the combat strategy\"."
+      ],
       "alternatives": [],
       "decision": "revise",
-      "evidence": ["Step fields; Salmon ×10 and 50 Water, Air and Mind runes required; combatFoes.json (elemental weakness from the infobox); danger zone for the demon."],
-      "zones": ["melzar-lesser-demon"],
-      "changed": ["2.87.0: the safespot fight is estimated (fightMechanics.json safespot); Magic 5 for Water Strike is a during-quest requirement."]
+      "evidence": [
+        "Step fields; Salmon ×10 and 50 Water, Air and Mind runes required; combatFoes.json (elemental weakness from the infobox); danger zone for the demon."
+      ],
+      "zones": [
+        "melzar-lesser-demon"
+      ],
+      "changed": [
+        "2.87.0: the safespot fight is estimated (fightMechanics.json safespot); Magic 5 for Water Strike is a during-quest requirement."
+      ]
     },
     {
-      "stepId": "S5-08", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S5-08",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Kill Elvarg (83, 80 health) with the Anti-dragon shield worn.",
-      "enemies": [{ "name": "Elvarg", "level": 83, "maxHit": 10, "table": true }],
-      "lines": ["1.2"],
-      "assumptions": ["With the shield her fire hits up to 10; without it up to 70 (OSRS Wiki Dragonfire/Elvarg). The Wiki gives no share for her slash, magic and fire, so the estimate takes the worse attack for every swing; the shield's slot is never offered to another item."],
-      "problems": ["The estimate counted only her slash (up to 8), so the fight was named partial and never assessed."],
-      "alternatives": ["A Rune shortsword on Stab if owned."],
+      "enemies": [
+        {
+          "name": "Elvarg",
+          "level": 83,
+          "maxHit": 10,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.2"
+      ],
+      "assumptions": [
+        "With the shield her fire hits up to 10; without it up to 70 (OSRS Wiki Dragonfire/Elvarg). The Wiki gives no share for her slash, magic and fire, so the estimate takes the worse attack for every swing; the shield's slot is never offered to another item."
+      ],
+      "problems": [
+        "The estimate counted only her slash (up to 8), so the fight was named partial and never assessed."
+      ],
+      "alternatives": [
+        "A Rune shortsword on Stab if owned."
+      ],
       "decision": "revise",
-      "evidence": ["Lobster 20+ required; the shield is a safety rule (readiness blocks without it, and a two-handed weapon is flagged).", "Danger zones on the boat and in the lair."],
-      "zones": ["crandor-boarding", "elvarg-lair"],
-      "changed": ["2.86.0: dragonfire is counted for every attack, 10 behind the worn Anti-dragon shield and 70 without; encounter preparation keeps the shield on and compares training, weapons and armour around it."]
+      "evidence": [
+        "Lobster 20+ required; the shield is a safety rule (readiness blocks without it, and a two-handed weapon is flagged).",
+        "Danger zones on the boat and in the lair."
+      ],
+      "zones": [
+        "crandor-boarding",
+        "elvarg-lair"
+      ],
+      "changed": [
+        "2.86.0: dragonfire is counted for every attack, 10 behind the worn Anti-dragon shield and 70 without; encounter preparation keeps the shield on and compares training, weapons and armour around it."
+      ]
     },
     {
-      "stepId": "S7-01", "kind": "avoid", "mandatory": true, "method": "run",
+      "stepId": "S7-01",
+      "kind": "avoid",
+      "mandatory": true,
+      "method": "run",
       "objective": "Walk past the fire giants (86) in the Waterfall dungeon to the west door; no weapons or armour are allowed in Glarial's tomb.",
-      "enemies": [{ "name": "Fire giant", "level": 86 }, { "name": "Moss Guardian", "level": 84 }],
-      "lines": ["4.7"],
-      "assumptions": ["Walking past is the route's method (OSRS Wiki, Waterfall Quest quick guide: \"avoid the fire giants\"); no kill estimate drives preparation."],
-      "problems": ["The route did not name the fire giants, so the quest's \"evasion\" requirement could never be shown met and the planner stopped at a check."],
-      "alternatives": ["Fight them: not needed and not suggested."],
+      "enemies": [
+        {
+          "name": "Fire giant",
+          "level": 86
+        },
+        {
+          "name": "Moss Guardian",
+          "level": 84
+        }
+      ],
+      "lines": [
+        "4.7"
+      ],
+      "assumptions": [
+        "Walking past is the route's method (OSRS Wiki, Waterfall Quest quick guide: \"avoid the fire giants\"); no kill estimate drives preparation."
+      ],
+      "problems": [
+        "The route did not name the fire giants, so the quest's \"evasion\" requirement could never be shown met and the planner stopped at a check."
+      ],
+      "alternatives": [
+        "Fight them: not needed and not suggested."
+      ],
       "decision": "revise",
-      "changed": ["2.99.0: the route line says to avoid the fire giants; this run-past proves the evasion requirement."],
-      "evidence": ["Quest stage route 4.7; OSRS Wiki Waterfall Quest/Quick guide, revision 15126652."]
+      "changed": [
+        "2.99.0: the route line says to avoid the fire giants; this run-past proves the evasion requirement."
+      ],
+      "evidence": [
+        "Quest stage route 4.7; OSRS Wiki Waterfall Quest/Quick guide, revision 15126652."
+      ]
     },
     {
-      "stepId": "S7-02", "kind": "quest-fight", "mandatory": true, "method": "safespot",
+      "stepId": "S7-02",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "safespot",
       "objective": "Fight Arena: the Khazard Ogre (63), the scorpion (44) and Bouncer (137), each from behind a skeleton with Fire Bolt.",
-      "enemies": [{ "name": "Khazard Ogre", "level": 63, "maxHit": 8, "table": true }, { "name": "Khazard Scorpion", "level": 44, "table": true }, { "name": "Bouncer", "level": 137, "table": true }],
-      "lines": ["1.1", "1.2", "1.5", "1.6"],
-      "assumptions": ["All of them fight only up close, so the safespot holds."],
-      "problems": ["No melee estimate applies.", "The in-game line before the fight checks 10 lobsters, but the food was recommended only: readiness could say ready while the arrow stopped for food."],
-      "alternatives": ["A bow from the same cover."],
+      "enemies": [
+        {
+          "name": "Khazard Ogre",
+          "level": 63,
+          "maxHit": 8,
+          "table": true
+        },
+        {
+          "name": "Khazard Scorpion",
+          "level": 44,
+          "table": true
+        },
+        {
+          "name": "Bouncer",
+          "level": 137,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.1",
+        "1.2",
+        "1.5",
+        "1.6"
+      ],
+      "assumptions": [
+        "All of them fight only up close, so the safespot holds."
+      ],
+      "problems": [
+        "No melee estimate applies.",
+        "The in-game line before the fight checks 10 lobsters, but the food was recommended only: readiness could say ready while the arrow stopped for food."
+      ],
+      "alternatives": [
+        "A bow from the same cover."
+      ],
       "decision": "revise",
-      "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.", "2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Bolt: the fight is estimated."],
-      "evidence": ["Step field \"Magic from a safespot\" and the safespot text (wiki quick guide)."]
+      "changed": [
+        "2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.",
+        "2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Bolt: the fight is estimated."
+      ],
+      "evidence": [
+        "Step field \"Magic from a safespot\" and the safespot text (wiki quick guide)."
+      ]
     },
     {
-      "stepId": "S7-03", "kind": "quest-fight", "mandatory": true, "method": "safespot",
+      "stepId": "S7-03",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "safespot",
       "objective": "Defeat the Khazard warlord (112, 170 hit points, hits up to 10) from the safespot by the dead tree with Fire Bolt.",
-      "enemies": [{ "name": "Khazard warlord", "level": 112, "maxHit": 10, "table": true }],
-      "lines": ["2.2", "2.3"],
-      "assumptions": ["He gets caught between the wall and the tree; about 31 casts, 50 brought."],
-      "problems": ["The in-game line before the fight checks 10 lobsters, but the food was not in the kit: readiness could say ready while the arrow stopped for food."],
+      "enemies": [
+        {
+          "name": "Khazard warlord",
+          "level": 112,
+          "maxHit": 10,
+          "table": true
+        }
+      ],
+      "lines": [
+        "2.2",
+        "2.3"
+      ],
+      "assumptions": [
+        "He gets caught between the wall and the tree; about 31 casts, 50 brought."
+      ],
+      "problems": [
+        "The in-game line before the fight checks 10 lobsters, but the food was not in the kit: readiness could say ready while the arrow stopped for food."
+      ],
       "alternatives": [],
       "decision": "revise",
-      "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.", "2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Bolt: the fight is estimated."],
-      "evidence": ["Step field \"Magic from a safespot\" (wiki quick guide)."]
+      "changed": [
+        "2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.",
+        "2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Bolt: the fight is estimated."
+      ],
+      "evidence": [
+        "Step field \"Magic from a safespot\" (wiki quick guide)."
+      ]
     },
     {
-      "stepId": "S7-05", "kind": "quest-fight", "mandatory": true, "method": "safespot",
+      "stepId": "S7-05",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "safespot",
       "objective": "Kill the Black demon (172, 157 hit points, hits up to 16) from the spot north of the entrance ladder.",
-      "enemies": [{ "name": "Black demon (The Grand Tree)", "level": 172, "maxHit": 16, "table": true }],
-      "lines": ["2.0", "3.1", "5.0", "5.1"],
-      "assumptions": ["The safespot holds for the whole fight; Water Bolt hits it harder."],
-      "problems": ["The in-game line before the fight checks 10 lobsters, but the food was not in the kit: readiness could say ready while the arrow stopped for food."],
-      "alternatives": ["Ranged or a halberd from the same spot."],
+      "enemies": [
+        {
+          "name": "Black demon (The Grand Tree)",
+          "level": 172,
+          "maxHit": 16,
+          "table": true
+        }
+      ],
+      "lines": [
+        "2.0",
+        "3.1",
+        "5.0",
+        "5.1"
+      ],
+      "assumptions": [
+        "The safespot holds for the whole fight; Water Bolt hits it harder."
+      ],
+      "problems": [
+        "The in-game line before the fight checks 10 lobsters, but the food was not in the kit: readiness could say ready while the arrow stopped for food."
+      ],
+      "alternatives": [
+        "Ranged or a halberd from the same spot."
+      ],
       "decision": "revise",
-      "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.", "2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Bolt, the spell of the step's kit: the fight is estimated."],
-      "evidence": ["Step field \"Magic from a safespot\"; lines 2.0 and 3.1 are dialogue and an optional choice."]
+      "changed": [
+        "2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.",
+        "2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Bolt, the spell of the step's kit: the fight is estimated."
+      ],
+      "evidence": [
+        "Step field \"Magic from a safespot\"; lines 2.0 and 3.1 are dialogue and an optional choice."
+      ]
     },
     {
       "stepId": "S7-07",
@@ -246,14 +711,33 @@
       "mandatory": true,
       "method": "melee",
       "objective": "Witch's House: kill the Witch's experiment in all four forms without a break (levels 19, 30, 42 and 53, hits up to 5).",
-      "enemies": [{ "name": "Witch's experiment", "level": 53, "maxHit": 5, "table": true }],
-      "lines": ["1.3"],
-      "assumptions": ["All four forms attack with melee and come one after another; the estimate adds the four fights (combatFoes.json, Wiki infobox versions)."],
-      "problems": ["New quest: no stage of the route fought the experiment before."],
-      "alternatives": ["Safespot the first two forms with Magic or Ranged (OSRS Wiki strategy)."],
+      "enemies": [
+        {
+          "name": "Witch's experiment",
+          "level": 53,
+          "maxHit": 5,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.3"
+      ],
+      "assumptions": [
+        "All four forms attack with melee and come one after another; the estimate adds the four fights (combatFoes.json, Wiki infobox versions)."
+      ],
+      "problems": [
+        "New quest: no stage of the route fought the experiment before."
+      ],
+      "alternatives": [
+        "Safespot the first two forms with Magic or Ranged (OSRS Wiki strategy)."
+      ],
       "decision": "revise",
-      "changed": ["2.101.0: the step's threats name the Witch's experiment and fightMechanics.json marks its four forms as fought in a row, so each form is estimated and the food adds up; Trout x5 (or similar food) is a required item."],
-      "evidence": ["Quest stage route 1.3; OSRS Wiki Witch's experiment infobox (four versions) and Witch's House requirements, revision 15386155."]
+      "changed": [
+        "2.101.0: the step's threats name the Witch's experiment and fightMechanics.json marks its four forms as fought in a row, so each form is estimated and the food adds up; Trout x5 (or similar food) is a required item."
+      ],
+      "evidence": [
+        "Quest stage route 1.3; OSRS Wiki Witch's experiment infobox (four versions) and Witch's House requirements, revision 15386155."
+      ]
     },
     {
       "stepId": "S7-11",
@@ -261,14 +745,35 @@
       "mandatory": true,
       "method": "run",
       "objective": "Monk's Friend: run past the thieves in the hideout under the stone circle to pick up the Child's blanket.",
-      "enemies": [{ "name": "Thief", "level": 14 }, { "name": "Thief", "level": 26 }],
-      "lines": ["0.2"],
-      "assumptions": ["Running past is the requirement itself (OSRS Wiki: the ability to run past two level 14 thieves and one level 26); no kill estimate drives preparation."],
-      "problems": ["New quest: the route did not name the thieves, so the evasion requirement could never be shown met."],
-      "alternatives": ["Fight them: not needed and not suggested."],
+      "enemies": [
+        {
+          "name": "Thief",
+          "level": 14
+        },
+        {
+          "name": "Thief",
+          "level": 26
+        }
+      ],
+      "lines": [
+        "0.2"
+      ],
+      "assumptions": [
+        "Running past is the requirement itself (OSRS Wiki: the ability to run past two level 14 thieves and one level 26); no kill estimate drives preparation."
+      ],
+      "problems": [
+        "New quest: the route did not name the thieves, so the evasion requirement could never be shown met."
+      ],
+      "alternatives": [
+        "Fight them: not needed and not suggested."
+      ],
       "decision": "revise",
-      "changed": ["2.105.0: the route line says to avoid the thieves; this run-past proves the evasion requirement."],
-      "evidence": ["Quest stage route 0.2; OSRS Wiki Monk's Friend requirements, revision 15240952."]
+      "changed": [
+        "2.105.0: the route line says to avoid the thieves; this run-past proves the evasion requirement."
+      ],
+      "evidence": [
+        "Quest stage route 0.2; OSRS Wiki Monk's Friend requirements, revision 15240952."
+      ]
     },
     {
       "stepId": "S7-14",
@@ -276,146 +781,444 @@
       "mandatory": true,
       "method": "melee",
       "objective": "Jungle Potion: aggressive level 53 Jogres and level 46 Harpie Bug Swarms roam the jungle around Tai Bwo Wannai; the quest asks for the ability to defend yourself against them.",
-      "enemies": [{ "name": "Jogre", "level": 53, "maxHit": 7, "table": true }, { "name": "Harpie Bug Swarm", "level": 46, "maxHit": 6, "table": true }],
+      "enemies": [
+        {
+          "name": "Jogre",
+          "level": 53,
+          "maxHit": 7,
+          "table": true
+        },
+        {
+          "name": "Harpie Bug Swarm",
+          "level": 46,
+          "maxHit": 6,
+          "table": true
+        }
+      ],
       "lines": [],
-      "assumptions": ["The Jogre is its normal version (level 53, 60 hit points); the GWD version is not in the jungle (combatFoes.json, Wiki infobox)."],
-      "problems": ["New quest: no stage of the route met these monsters before."],
-      "alternatives": ["Run past them: the herbs do not need them dead."],
+      "assumptions": [
+        "The Jogre is its normal version (level 53, 60 hit points); the GWD version is not in the jungle (combatFoes.json, Wiki infobox)."
+      ],
+      "problems": [
+        "New quest: no stage of the route met these monsters before."
+      ],
+      "alternatives": [
+        "Run past them: the herbs do not need them dead."
+      ],
       "decision": "revise",
-      "changed": ["2.106.0: the step's foes name the Jogre and the Harpie Bug Swarm, so the defend requirement is estimated with the player's kit; Trout x5 (or similar food) is a required item."],
-      "evidence": ["OSRS Wiki Jungle Potion requirements, revision 15390159; Jogre and Harpie Bug Swarm infoboxes."]
+      "changed": [
+        "2.106.0: the step's foes name the Jogre and the Harpie Bug Swarm, so the defend requirement is estimated with the player's kit; Trout x5 (or similar food) is a required item."
+      ],
+      "evidence": [
+        "OSRS Wiki Jungle Potion requirements, revision 15390159; Jogre and Harpie Bug Swarm infoboxes."
+      ]
     },
     {
-      "stepId": "S7-16", "kind": "incidental", "mandatory": true, "method": "melee",
+      "stepId": "S7-16",
+      "kind": "incidental",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Observatory Quest: the level 42 goblin guard at the kitchen gate has to be killed or trapped for the kitchen key.",
-      "enemies": [{ "name": "Goblin guard", "level": 42, "maxHit": 5, "table": true }],
-      "lines": ["0.5"],
-      "assumptions": ["The Goblin guard is the level 42 version with 43 hit points (Wiki infobox)."],
-      "problems": ["New quest: no stage of the route met this monster before."],
-      "alternatives": ["Trap the guard by luring it onto the prison cell door."],
+      "enemies": [
+        {
+          "name": "Goblin guard",
+          "level": 42,
+          "maxHit": 5,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.5"
+      ],
+      "assumptions": [
+        "The Goblin guard is the level 42 version with 43 hit points (Wiki infobox)."
+      ],
+      "problems": [
+        "New quest: no stage of the route met this monster before."
+      ],
+      "alternatives": [
+        "Trap the guard by luring it onto the prison cell door."
+      ],
       "decision": "revise",
-      "changed": ["2.107.0: the step's foes name the Goblin guard, so the fight is estimated with the player's kit; Trout x5 (or similar food) is a required item."],
-      "evidence": ["OSRS Wiki Observatory Quest and Goblin guard infobox."]
+      "changed": [
+        "2.107.0: the step's foes name the Goblin guard, so the fight is estimated with the player's kit; Trout x5 (or similar food) is a required item."
+      ],
+      "evidence": [
+        "OSRS Wiki Observatory Quest and Goblin guard infobox."
+      ]
     },
     {
-      "stepId": "S7-17", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S7-17",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Merlin's Crystal: defeat Sir Mordred (level 39, 38 hit points, hits up to 5) on the top floor of Keep Le Faye so Morgan le Faye appears.",
-      "enemies": [{ "name": "Sir Mordred", "level": 39, "maxHit": 5, "table": true }],
-      "lines": ["1.0", "1.1", "1.2", "5.1"],
-      "assumptions": ["Sir Mordred is his only Wiki infobox version; the giant bat for bat bones is avoided by buying the bones."],
-      "problems": ["New quest: no stage of the route met this monster before."],
-      "alternatives": ["Flinch him with the stairs (Wiki strategy); he cannot be safespotted. The Renegade Knights on the way up can be run past."],
+      "enemies": [
+        {
+          "name": "Sir Mordred",
+          "level": 39,
+          "maxHit": 5,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.0",
+        "1.1",
+        "1.2",
+        "5.1"
+      ],
+      "assumptions": [
+        "Sir Mordred is his only Wiki infobox version; the giant bat for bat bones is avoided by buying the bones."
+      ],
+      "problems": [
+        "New quest: no stage of the route met this monster before."
+      ],
+      "alternatives": [
+        "Flinch him with the stairs (Wiki strategy); he cannot be safespotted. The Renegade Knights on the way up can be run past."
+      ],
       "decision": "revise",
-      "changed": ["2.108.0: the step's threats name Sir Mordred, so the fight is estimated with the player's kit; Trout x5 (or similar food) is a required item and Bat bones are bought."],
-      "evidence": ["OSRS Wiki Merlin's Crystal requirements and Sir Mordred infobox."]
+      "changed": [
+        "2.108.0: the step's threats name Sir Mordred, so the fight is estimated with the player's kit; Trout x5 (or similar food) is a required item and Bat bones are bought."
+      ],
+      "evidence": [
+        "OSRS Wiki Merlin's Crystal requirements and Sir Mordred infobox."
+      ]
     },
     {
-      "stepId": "S7-19", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S7-19",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Holy Grail: defeat the Black Knight Titan (level 120, 142 hit points, hits up to 15) on the Fisher Realm bridge; the killing blow must be dealt with Excalibur.",
-      "enemies": [{ "name": "Black Knight Titan", "level": 120, "maxHit": 15, "table": true }],
-      "lines": ["2.0", "2.3", "2.5", "2.6", "3.4"],
-      "assumptions": ["Magic and Ranged cannot hurt it (defence 1,000 on the Wiki infobox), so only melee is estimated; the switch to Excalibur for the last hit is not timed."],
-      "problems": ["New quest: no stage of the route met this monster before."],
-      "alternatives": ["Safespot or flinch it (Wiki requirements)."],
+      "enemies": [
+        {
+          "name": "Black Knight Titan",
+          "level": 120,
+          "maxHit": 15,
+          "table": true
+        }
+      ],
+      "lines": [
+        "2.0",
+        "2.3",
+        "2.5",
+        "2.6",
+        "3.4"
+      ],
+      "assumptions": [
+        "Magic and Ranged cannot hurt it (defence 1,000 on the Wiki infobox), so only melee is estimated; the switch to Excalibur for the last hit is not timed."
+      ],
+      "problems": [
+        "New quest: no stage of the route met this monster before."
+      ],
+      "alternatives": [
+        "Safespot or flinch it (Wiki requirements)."
+      ],
       "decision": "revise",
-      "changed": ["2.109.0: the step's threats name the Black Knight Titan, so the fight is estimated with the player's kit; Lobster x10 (or similar food) is a required item."],
-      "evidence": ["OSRS Wiki Holy Grail requirements and Black Knight Titan infobox."]
+      "changed": [
+        "2.109.0: the step's threats name the Black Knight Titan, so the fight is estimated with the player's kit; Lobster x10 (or similar food) is a required item."
+      ],
+      "evidence": [
+        "OSRS Wiki Holy Grail requirements and Black Knight Titan infobox."
+      ]
     },
     {
-      "stepId": "S8-01", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S8-01",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Kill the Temple Guardian (30, 45 hit points, hits up to 3; immune to magic) and a Monk of Zamorak (30) for the key.",
-      "enemies": [{ "name": "Temple Guardian", "level": 30, "maxHit": 3, "table": true }, { "name": "Monk of Zamorak", "level": 30 }],
-      "lines": ["1.1", "2.1"],
-      "assumptions": ["Melee or Ranged; the monk can be safespotted with the pews."],
-      "problems": ["The step named no threat and no food: readiness said Ready with nothing to check, and the app had no numbers for the Guardian."],
-      "alternatives": ["Ranged."],
+      "enemies": [
+        {
+          "name": "Temple Guardian",
+          "level": 30,
+          "maxHit": 3,
+          "table": true
+        },
+        {
+          "name": "Monk of Zamorak",
+          "level": 30
+        }
+      ],
+      "lines": [
+        "1.1",
+        "2.1"
+      ],
+      "assumptions": [
+        "Melee or Ranged; the monk can be safespotted with the pews."
+      ],
+      "problems": [
+        "The step named no threat and no food: readiness said Ready with nothing to check, and the app had no numbers for the Guardian."
+      ],
+      "alternatives": [
+        "Ranged."
+      ],
       "decision": "revise",
-      "changed": ["2.66.0: the Temple Guardian is in combatFoes.json (wiki infobox) and is the step's threat; Trout ×5 is a required item."],
-      "evidence": ["Quest stage lines 1.1 and 2.1; OSRS Wiki infobox Temple Guardian, read 2026-10-18."]
+      "changed": [
+        "2.66.0: the Temple Guardian is in combatFoes.json (wiki infobox) and is the step's threat; Trout ×5 is a required item."
+      ],
+      "evidence": [
+        "Quest stage lines 1.1 and 2.1; OSRS Wiki infobox Temple Guardian, read 2026-10-18."
+      ]
     },
     {
-      "stepId": "S8-02", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S8-02",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Kill three ghasts (30, 45 hit points, hits up to 3) in Mort Myre; they rot food in the bag.",
-      "enemies": [{ "name": "Ghast", "level": 30, "maxHit": 3, "table": true }],
-      "lines": ["2.1"],
-      "assumptions": ["Spare food covers what the ghasts rot."],
-      "problems": ["The 15 lobsters the step text asks for were not in the item list.", "The app had no numbers for the Ghast, a members-only opponent."],
+      "enemies": [
+        {
+          "name": "Ghast",
+          "level": 30,
+          "maxHit": 3,
+          "table": true
+        }
+      ],
+      "lines": [
+        "2.1"
+      ],
+      "assumptions": [
+        "Spare food covers what the ghasts rot."
+      ],
+      "problems": [
+        "The 15 lobsters the step text asks for were not in the item list.",
+        "The app had no numbers for the Ghast, a members-only opponent."
+      ],
       "alternatives": [],
       "decision": "revise",
-      "changed": ["2.66.0: the Ghast is in combatFoes.json (members versions are used when there is no free one) and Lobster ×15 is a required item."],
-      "evidence": ["Step field \"Combat\"; OSRS Wiki infobox Ghast, read 2026-10-18."]
+      "changed": [
+        "2.66.0: the Ghast is in combatFoes.json (members versions are used when there is no free one) and Lobster ×15 is a required item."
+      ],
+      "evidence": [
+        "Step field \"Combat\"; OSRS Wiki infobox Ghast, read 2026-10-18."
+      ]
     },
     {
-      "stepId": "S8-07", "kind": "quest-fight", "mandatory": true, "method": "melee", "runPast": true,
+      "stepId": "S8-07",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "runPast": true,
       "objective": "Creature of Fenkenstrain: kill the level 51 experiment (40 hit points, hits up to 6) in the caves under the castle for the key, and run past the level 72 monsters.",
-      "enemies": [{ "name": "Experiment", "level": 51, "maxHit": 6, "table": true }],
-      "lines": ["0.8"],
-      "assumptions": ["The Experiment is its level 51 Wiki infobox version; the level 72 monsters are run past, not fought."],
-      "problems": ["New quest: no stage of the route met these monsters before."],
-      "alternatives": ["None for the key: the level 51 experiment drops it."],
+      "enemies": [
+        {
+          "name": "Experiment",
+          "level": 51,
+          "maxHit": 6,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.8"
+      ],
+      "assumptions": [
+        "The Experiment is its level 51 Wiki infobox version; the level 72 monsters are run past, not fought."
+      ],
+      "problems": [
+        "New quest: no stage of the route met these monsters before."
+      ],
+      "alternatives": [
+        "None for the key: the level 51 experiment drops it."
+      ],
       "decision": "revise",
-      "changed": ["2.110.0: the step's foes name the Experiment, so the kill is estimated with the player's kit and the run-past proves evasion; Lobster x5 (or similar food) is a required item."],
-      "evidence": ["OSRS Wiki Creature of Fenkenstrain requirements and Experiment infobox."]
+      "changed": [
+        "2.110.0: the step's foes name the Experiment, so the kill is estimated with the player's kit and the run-past proves evasion; Lobster x5 (or similar food) is a required item."
+      ],
+      "evidence": [
+        "OSRS Wiki Creature of Fenkenstrain requirements and Experiment infobox."
+      ]
     },
     {
-      "stepId": "S8-08", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S8-08",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "Shades of Mort'ton: kill five level 40 Loar Shades (38 hit points, hit up to 4) for their remains, and survive the shades while repairing the temple.",
-      "enemies": [{ "name": "Loar Shade", "level": 40, "maxHit": 4, "table": true }],
-      "lines": ["1.2"],
-      "assumptions": ["The Loar Shade is its level 40 Wiki infobox version; the temple onslaught is the same shades and uses the same food."],
-      "problems": ["New quest: no stage of the route met this monster before."],
-      "alternatives": ["Repair the temple on a busy world so the shades spread out (Wiki requirements)."],
+      "enemies": [
+        {
+          "name": "Loar Shade",
+          "level": 40,
+          "maxHit": 4,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.2"
+      ],
+      "assumptions": [
+        "The Loar Shade is its level 40 Wiki infobox version; the temple onslaught is the same shades and uses the same food."
+      ],
+      "problems": [
+        "New quest: no stage of the route met this monster before."
+      ],
+      "alternatives": [
+        "Repair the temple on a busy world so the shades spread out (Wiki requirements)."
+      ],
       "decision": "revise",
-      "changed": ["2.111.0: the step's foes name the Loar Shade, so the kills are estimated with the player's kit; Lobster x10 (or similar food) is a required item."],
-      "evidence": ["OSRS Wiki Shades of Mort'ton requirements and Loar Shade infobox."]
+      "changed": [
+        "2.111.0: the step's foes name the Loar Shade, so the kills are estimated with the player's kit; Lobster x10 (or similar food) is a required item."
+      ],
+      "evidence": [
+        "OSRS Wiki Shades of Mort'ton requirements and Loar Shade infobox."
+      ]
     },
     {
-      "stepId": "S8-09", "kind": "quest-fight", "mandatory": true, "method": "melee",
+      "stepId": "S8-09",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
       "objective": "In Search of the Myreque: defeat the level 97 Skeleton Hellhound (55 hit points, hits up to 12) in the hidden room under Canifis.",
-      "enemies": [{ "name": "Skeleton Hellhound", "level": 97, "maxHit": 12, "table": true }],
-      "lines": ["0.13"],
-      "assumptions": ["The Skeleton Hellhound is its only Wiki infobox version; a Magic safespot is not modelled, so the melee estimate is the cautious one."],
-      "problems": ["New quest: no stage of the route met this monster before."],
-      "alternatives": ["Safespot it with Magic by luring it beside the chair (Wiki strategy)."],
+      "enemies": [
+        {
+          "name": "Skeleton Hellhound",
+          "level": 97,
+          "maxHit": 12,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.13"
+      ],
+      "assumptions": [
+        "The Skeleton Hellhound is its only Wiki infobox version; a Magic safespot is not modelled, so the melee estimate is the cautious one."
+      ],
+      "problems": [
+        "New quest: no stage of the route met this monster before."
+      ],
+      "alternatives": [
+        "Safespot it with Magic by luring it beside the chair (Wiki strategy)."
+      ],
       "decision": "revise",
-      "changed": ["2.112.0: the step's threats name the Skeleton Hellhound, so the fight is estimated with the player's kit; Lobster x10 (or similar food) is a required item."],
-      "evidence": ["OSRS Wiki In Search of the Myreque requirements and Skeleton Hellhound infobox."]
+      "changed": [
+        "2.112.0: the step's threats name the Skeleton Hellhound, so the fight is estimated with the player's kit; Lobster x10 (or similar food) is a required item."
+      ],
+      "evidence": [
+        "OSRS Wiki In Search of the Myreque requirements and Skeleton Hellhound infobox."
+      ]
     },
     {
-      "stepId": "S9-01", "kind": "quest-fight", "mandatory": true, "method": "safespot",
+      "stepId": "S9-01",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "safespot",
       "objective": "Kill zombies (25) with Fire Strike until one drops an axe, then the Tree Spirit (101, 85 hit points, hits up to 10) with Fire Strike from between the mushrooms to the south-west.",
-      "enemies": [{ "name": "Zombie", "level": 25 }, { "name": "Tree spirit (Lost City)", "level": 101, "maxHit": 10, "table": true }],
-      "lines": ["2.2", "2.4"],
-      "assumptions": ["The safespot between the south-west mushrooms holds.", "Magic 13 is required by the selected Fire Strike strategy, not by the quest unlock. Four Tuna (40 nominal HP) are a guide setup buffer, not a verified full-fight damage budget; 65 Fire Strike casts are a guide allowance, not the Wiki Crumble Undead estimate."],
-      "problems": ["The chosen magic strategy had no runes in the kit; the instant teleport the wiki asks for to leave the dungeon was missing; no food in the item list and no numbers for the Tree Spirit in the app."],
-      "alternatives": ["Melee with a Ring of recoil and a Prayer potion (wiki quick guide); the bronze axe is too weak."],
+      "enemies": [
+        {
+          "name": "Zombie",
+          "level": 25
+        },
+        {
+          "name": "Tree spirit (Lost City)",
+          "level": 101,
+          "maxHit": 10,
+          "table": true
+        }
+      ],
+      "lines": [
+        "2.2",
+        "2.4"
+      ],
+      "assumptions": [
+        "The safespot between the south-west mushrooms holds.",
+        "Magic 13 is required by the selected Fire Strike strategy, not by the quest unlock. Four Tuna (40 nominal HP) are a guide setup buffer, not a verified full-fight damage budget; 65 Fire Strike casts are a guide allowance, not the Wiki Crumble Undead estimate."
+      ],
+      "problems": [
+        "The chosen magic strategy had no runes in the kit; the instant teleport the wiki asks for to leave the dungeon was missing; no food in the item list and no numbers for the Tree Spirit in the app."
+      ],
+      "alternatives": [
+        "Melee with a Ring of recoil and a Prayer potion (wiki quick guide); the bronze axe is too weak."
+      ],
       "decision": "revise",
-      "changed": ["2.80.13: chosen-strategy Magic 13 checked; an explicitly labelled four-Tuna entry buffer shares readiness, Shopping and funding protection and returns to optional after the confirmed entry. Physical alternative bank withdrawals are named consistently in the app and plugin.", "2.74.6: Fire Strike runes for a guide allowance of 65 casts (195 Fire, 130 Air, 65 Mind) and a Lumbridge teleport are required items and are checked on the Entrana line; the lines name the south-west mushroom safespot, the greater demons to run past and the Wilderness door.", "2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Strike: the fight is estimated."],
-      "evidence": ["https://oldschool.runescape.wiki/w/Lost_City and https://oldschool.runescape.wiki/w/Entrana_Dungeon checked 2026-10-28 for strategy, food recommendation, axe acquisition and exit; no food quantity is prescribed. Existing boss statistics were not reverified in this batch; quest stage lines 2.2 and 2.4."]
+      "changed": [
+        "2.80.13: chosen-strategy Magic 13 checked; an explicitly labelled four-Tuna entry buffer shares readiness, Shopping and funding protection and returns to optional after the confirmed entry. Physical alternative bank withdrawals are named consistently in the app and plugin.",
+        "2.74.6: Fire Strike runes for a guide allowance of 65 casts (195 Fire, 130 Air, 65 Mind) and a Lumbridge teleport are required items and are checked on the Entrana line; the lines name the south-west mushroom safespot, the greater demons to run past and the Wilderness door.",
+        "2.99.0: the step's threats name the opponent (combatFoes.json, Wiki infobox) and fightMechanics.json has the safespot with Fire Strike: the fight is estimated."
+      ],
+      "evidence": [
+        "https://oldschool.runescape.wiki/w/Lost_City and https://oldschool.runescape.wiki/w/Entrana_Dungeon checked 2026-10-28 for strategy, food recommendation, axe acquisition and exit; no food quantity is prescribed. Existing boss statistics were not reverified in this batch; quest stage lines 2.2 and 2.4."
+      ]
     },
     {
-      "stepId": "S9-02", "kind": "quest-fight", "mandatory": true, "method": "other",
+      "stepId": "S9-02",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "other",
       "objective": "Kill the large Tanglefoot (111) with the Magic secateurs, the only thing that damages it.",
-      "enemies": [{ "name": "Tanglefoot", "level": 111, "table": true }],
-      "lines": ["4.0", "4.2"],
-      "assumptions": ["It can be flinched on a corner."],
-      "problems": ["The 10 lobsters the in-game line checks before Zanaris were recommended only; no estimate (the secateurs are not in the gear data as a weapon)."],
-      "changed": ["2.74.8: Lobster ×10 (or similar food) is a required item, as the line's bag check already demanded; the fight estimate stays open.", "2.99.0: the Magic secateurs are in the gear data as quest kit and fightMechanics.json says only they damage it; the step's threat names it: the fight is estimated."],
+      "enemies": [
+        {
+          "name": "Tanglefoot",
+          "level": 111,
+          "table": true
+        }
+      ],
+      "lines": [
+        "4.0",
+        "4.2"
+      ],
+      "assumptions": [
+        "It can be flinched on a corner."
+      ],
+      "problems": [
+        "The 10 lobsters the in-game line checks before Zanaris were recommended only; no estimate (the secateurs are not in the gear data as a weapon)."
+      ],
+      "changed": [
+        "2.74.8: Lobster ×10 (or similar food) is a required item, as the line's bag check already demanded; the fight estimate stays open.",
+        "2.99.0: the Magic secateurs are in the gear data as quest kit and fightMechanics.json says only they damage it; the step's threat names it: the fight is estimated."
+      ],
       "alternatives": [],
       "decision": "revise",
-      "evidence": ["Step field \"Combat\"; quest stage lines 4.0 and 4.2."]
+      "evidence": [
+        "Step field \"Combat\"; quest stage lines 4.0 and 4.2."
+      ]
     },
     {
-      "stepId": "S9-04", "kind": "quest-fight", "mandatory": true, "method": "safespot",
+      "stepId": "S9-04",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "safespot",
       "objective": "Monkey Madness I: monkeys for bones (optional), and the Jungle Demon (195, hits up to 32) with Protect from Magic from three squares away.",
-      "enemies": [{ "name": "Jungle Demon", "level": 195, "maxHit": 32, "table": true }, { "name": "Monkey zombie", "maxHit": 7 }, { "name": "Gorilla" }],
-      "lines": ["7.0", "8.1", "8.2", "8.3", "8.4", "11.0", "11.1"],
-      "assumptions": ["Prayer 43 and the loadouts' lobsters (15, 15, 10)."],
-      "problems": ["The step said to hit the demon with Ranged, but no bow or arrows were in the kit or the final loadout."],
-      "alternatives": ["The gnome method without Protect from Magic (wiki strategy); a Dwarf multicannon."],
+      "enemies": [
+        {
+          "name": "Jungle Demon",
+          "level": 195,
+          "maxHit": 32,
+          "table": true
+        },
+        {
+          "name": "Monkey zombie",
+          "maxHit": 7
+        },
+        {
+          "name": "Gorilla"
+        }
+      ],
+      "lines": [
+        "7.0",
+        "8.1",
+        "8.2",
+        "8.3",
+        "8.4",
+        "11.0",
+        "11.1"
+      ],
+      "assumptions": [
+        "Prayer 43 and the loadouts' lobsters (15, 15, 10)."
+      ],
+      "problems": [
+        "The step said to hit the demon with Ranged, but no bow or arrows were in the kit or the final loadout."
+      ],
+      "alternatives": [
+        "The gnome method without Protect from Magic (wiki strategy); a Dwarf multicannon."
+      ],
       "decision": "revise",
-      "changed": ["2.74.6: a bow (Maple shortbow or the best one the player can wield) and 100 arrows are required items, in the final loadout and checked before the fight; the fight line follows the wiki strategy (stand still, Protect from Magic, three squares away, last hit yourself).", "2.99.1: the step's threat names the Jungle Demon (combatFoes.json, Wiki infobox) and fightMechanics.json says Protect from Magic (Prayer 37) blocks all it does at three squares: the fight is estimated with the bow."],
-      "evidence": ["Step fields \"Requirements\" and \"Dangers\"; safespot text; loadouts karamja, atoll, final; OSRS Wiki Jungle demon (ranged defence +0, magic +50, slash +50), read 2026-10-24."]
+      "changed": [
+        "2.74.6: a bow (Maple shortbow or the best one the player can wield) and 100 arrows are required items, in the final loadout and checked before the fight; the fight line follows the wiki strategy (stand still, Protect from Magic, three squares away, last hit yourself).",
+        "2.99.1: the step's threat names the Jungle Demon (combatFoes.json, Wiki infobox) and fightMechanics.json says Protect from Magic (Prayer 37) blocks all it does at three squares: the fight is estimated with the bow."
+      ],
+      "evidence": [
+        "Step fields \"Requirements\" and \"Dangers\"; safespot text; loadouts karamja, atoll, final; OSRS Wiki Jungle demon (ranged defence +0, magic +50, slash +50), read 2026-10-24."
+      ]
     },
     {
       "stepId": "S9-06",
@@ -446,6 +1249,24 @@
       ],
       "evidence": [
         "OSRS Wiki Clock Tower requirements: The ability to run past level 53 Ogres."
+      ]
+    },
+    {
+      "stepId": "S9-08",
+      "kind": "not-combat",
+      "mandatory": true,
+      "method": "none",
+      "objective": "Death Plateau: the quest goes up by Tenzing's secret path; the trolls that attack on the main path are never met.",
+      "enemies": [],
+      "lines": [
+        "1.8"
+      ],
+      "assumptions": [],
+      "problems": [],
+      "alternatives": [],
+      "decision": "retain",
+      "evidence": [
+        "Quest stage line 1.8: the trolls \"only attack you on the main path\"."
       ]
     }
   ]

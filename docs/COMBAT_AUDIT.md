@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-35 stages: 7 retained, 27 revised, 0 with a branch, 1 deferred.
+36 stages: 8 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -43,6 +43,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-02 Fairytale I - Growing Pains | quest-fight | yes | Tanglefoot (111) | other | Tanglefoot | Lobster 10 | Revised |
 | S9-04 Monkey Madness I | quest-fight | yes | Jungle Demon (195), Monkey zombie, Gorilla | safespot | Jungle Demon | - | Revised |
 | S9-06 Clock Tower | avoid | yes | Ogre (53) | run | Ogre | - | Retain |
+| S9-08 Death Plateau | not-combat | yes | - | none | - | Trout 10 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -895,4 +896,14 @@ Changed:
 Evidence:
 
 - OSRS Wiki Clock Tower requirements: The ability to run past level 53 Ogres.
+
+## S9-08 Death Plateau
+
+**Retain.** Death Plateau: the quest goes up by Tenzing's secret path; the trolls that attack on the main path are never met.
+
+Quest stage lines: 1.8.
+
+Evidence:
+
+- Quest stage line 1.8: the trolls "only attack you on the main path".
 

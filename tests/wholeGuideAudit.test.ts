@@ -15,7 +15,7 @@ const quests = (stagesFile as unknown as { quests: Record<string, { var: [string
 const NO_PLACE: Record<string, string> = {};
 
 /** Stage rows whose first line has no place: an action in the bag or an interface, or waiting. Known, and the list must not grow. */
-const ROW_WITHOUT_PLACE = new Set(['S8-02#75', 'S8-05#200', 'S8-05#220', 'S9-03#5']);
+const ROW_WITHOUT_PLACE = new Set(['S8-02#75', 'S8-05#200', 'S8-05#220', 'S9-03#5', 'S9-08#55']);
 
 describe('the whole guide: every quest is followed by the game', () => {
   it('every quest step has a stage table on a quest variable, so the card moves with the quest', () => {

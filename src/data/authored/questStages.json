@@ -28723,6 +28723,517 @@
      ]
     }
    ]
+  },
+  "S9-08": {
+   "var": [
+    "varp",
+    314
+   ],
+   "route": [
+    {
+     "title": "The Equipment Room",
+     "steps": [
+      "Speak to Denulth in the Burthorpe camp. Dialogue: \"Do you have any quests for me?\", \"No, but perhaps I could try and find one?\"",
+      "Ask Eohric on the of the castle about the guard that was on duty last night. Dialogue: \"I'm looking for the guard that was on last night.\"",
+      "Speak to Harold upstairs in the bar in Burthorpe. Dialogue: \"You're the guard that was on duty last night?\"",
+      "Speak to Eohric again.",
+      "Go back to Harold.",
+      "Give him an Asgarnian ale.",
+      "Bet with Harold, you must bet over 60 gold (101 to immediately bankrupt him). Dialogue: \"Would you like to gamble?\"",
+      "Gamble until he gives you an \"IOU\". Read it to receive the combination.",
+      "Go to the castle and place the 5 coloured balls as shown in the image. The door will unlock (you have to read the note for this to work). Keep the note as you will need it to finish the quest, though if lost it can be reclaimed from Harold for free."
+     ]
+    },
+    {
+     "title": "The Secret Path",
+     "steps": [
+      "Go north-west of Burthorpe, enter the cave.",
+      "Ask Saba about another way up Death Plateau. Dialogue: \"Do you know of another way up Death Plateau?\"",
+      "Leave the cave, continue north-west then go south at the fork.",
+      "Talk to Tenzing. Dialogue: \"OK, I'll get those for you.\"",
+      "Talk to Dunstan by the anvil in north-east Burthorpe.",
+      "Talk to Denulth where you started the quest, who will give you a certificate.",
+      "Talk to Dunstan to exchange your climbing boots, certificate and iron bar for spiked boots. (If you already own a pair of spiked boots, Dunstan will take the certificate, and then continue to the next step)",
+      "Return to Tenzing; give him 10 bread, 10 trout and the spiked boots to get the map. The bread and trout must be un-noted, and the items must be given all in one go.",
+      "Exit Tenzing's house through the north door and then climb over the stile. Take the path north and around to the east (past the second mountain goat) until the message \"I think this is far enough\" appears in the chat box (NOT the Death Plateau warning, this is another message; you can ignore the warning, since the trolls only attack you on the main path).",
+      "Talk to Denulth (make sure you have the combination with you when you do).",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Denulth in Burthorpe. The Burthorpe minigame teleport or a games necklace gets you there.",
+       "s": "Talk to Denulth in Burthorpe.",
+       "k": "talkToDenulth1",
+       "at": [
+        2896,
+        3529,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4083
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Climb to the first floor of Burthorpe castle and ask Eohric about last night's guard.",
+       "s": "Ask Eohric upstairs in the castle about the guard.",
+       "k": "goToEohric1",
+       "at": [
+        2898,
+        3567,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4626
+        ]
+       }
+      },
+      {
+       "t": "Climb to the first floor of Burthorpe castle and ask Eohric about last night's guard.",
+       "s": "Ask Eohric upstairs in the castle about the guard.",
+       "k": "talkToEohric1",
+       "at": [
+        2900,
+        3566,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4103
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Talk to Harold, upstairs in the bar in Burthorpe.",
+       "s": "Talk to Harold upstairs in the Burthorpe pub.",
+       "k": "goToHaroldStairs1",
+       "at": [
+        2915,
+        3540,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       }
+      },
+      {
+       "t": "Talk to Harold, upstairs in the bar in Burthorpe.",
+       "s": "Talk to Harold upstairs in the Burthorpe pub.",
+       "k": "goToHaroldDoor1",
+       "at": [
+        2906,
+        3543,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3747
+        ]
+       }
+      },
+      {
+       "t": "Talk to Harold, upstairs in the bar in Burthorpe.",
+       "s": "Talk to Harold upstairs in the Burthorpe pub.",
+       "k": "talkToHarold1",
+       "at": [
+        2906,
+        3540,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4101
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Talk to Eohric upstairs in Burthorpe castle again.",
+       "s": "Talk to Eohric upstairs in Burthorpe castle.",
+       "k": "goToEohric2",
+       "at": [
+        2898,
+        3567,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4626
+        ]
+       }
+      },
+      {
+       "t": "Talk to Eohric upstairs in Burthorpe castle again.",
+       "s": "Talk to Eohric upstairs in Burthorpe castle.",
+       "k": "talkToEohric2",
+       "at": [
+        2900,
+        3566,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4103
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Take an Asgarnian ale from the bar.",
+       "s": "Take an Asgarnian ale from the pub's bar.",
+       "k": "takeAsgarnianAle",
+       "at": [
+        2906,
+        3538,
+        0
+       ],
+       "has": "Asgarnian ale"
+      },
+      {
+       "t": "Give Harold the Asgarnian ale upstairs in the Burthorpe pub.",
+       "s": "Give Harold the ale upstairs in the pub.",
+       "k": "goToHaroldStairs2",
+       "at": [
+        2915,
+        3540,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       },
+       "need": "Asgarnian ale"
+      },
+      {
+       "t": "Give Harold the Asgarnian ale upstairs in the Burthorpe pub.",
+       "s": "Give Harold the ale upstairs in the pub.",
+       "k": "goToHaroldDoor2",
+       "at": [
+        2906,
+        3543,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3747
+        ]
+       },
+       "need": "Asgarnian ale"
+      },
+      {
+       "t": "Give Harold the Asgarnian ale upstairs in the Burthorpe pub.",
+       "s": "Give Harold the ale upstairs in the pub.",
+       "k": "talkToHarold2",
+       "at": [
+        2906,
+        3540,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4101
+        ]
+       },
+       "need": "Asgarnian ale"
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Give Harold a Blurberry Special upstairs in the Burthorpe pub.",
+       "s": "Give Harold the Blurberry Special.",
+       "k": "giveHaroldBlurberry",
+       "at": [
+        2906,
+        3540,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4101
+        ]
+       }
+      },
+      {
+       "t": "Gamble with Harold until he is broke. Bets must be over 60 coins, and one won bet of 101 coins breaks him.",
+       "s": "Gamble with Harold until he is broke.",
+       "k": "gambleWithHarold",
+       "at": [
+        2906,
+        3540,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4101
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 55,
+     "do": [
+      {
+       "t": "Read Harold's IOU to get the combination, and keep the combination until the end.",
+       "s": "Read the IOU; keep the combination.",
+       "k": "readIou"
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Go back to Burthorpe castle and put the coloured stone balls on the mechanism.",
+       "s": "Put the stone balls on the castle mechanism.",
+       "k": "placeStones",
+       "at": [
+        2896,
+        3563,
+        0
+       ]
+      },
+      {
+       "t": "Use the red stone ball on its highlighted spot on the mechanism.",
+       "s": "Use the red stone ball on the mechanism.",
+       "k": "placeRedStone",
+       "at": [
+        2894,
+        3563,
+        0
+       ]
+      },
+      {
+       "t": "Use the blue stone ball on its highlighted spot on the mechanism.",
+       "s": "Use the blue stone ball on the mechanism.",
+       "k": "placeBlueStone",
+       "at": [
+        2894,
+        3562,
+        0
+       ]
+      },
+      {
+       "t": "Use the yellow stone ball on its highlighted spot on the mechanism.",
+       "s": "Use the yellow stone ball on the mechanism.",
+       "k": "placeYellowStone",
+       "at": [
+        2895,
+        3562,
+        0
+       ]
+      },
+      {
+       "t": "Use the pink stone ball on its highlighted spot on the mechanism.",
+       "s": "Use the pink stone ball on the mechanism.",
+       "k": "placePinkStone",
+       "at": [
+        2895,
+        3563,
+        0
+       ]
+      },
+      {
+       "t": "Use the green stone ball on its highlighted spot on the mechanism.",
+       "s": "Use the green stone ball on the mechanism.",
+       "k": "placeGreenStone",
+       "at": [
+        2895,
+        3564,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Enter the cave north west of Burthorpe.",
+       "s": "Enter the cave north-west of Burthorpe.",
+       "k": "enterSabaCave",
+       "at": [
+        2858,
+        3579,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3735
+        ]
+       }
+      },
+      {
+       "t": "Talk to Saba in the cave.",
+       "s": "Talk to Saba in the cave.",
+       "k": "talkToSaba",
+       "at": [
+        2270,
+        4757,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4093
+        ]
+       }
+      },
+      {
+       "t": "Go north-west of Burthorpe, then south at the fork. Talk to Tenzing and buy climbing boots for 12 coins.",
+       "s": "Talk to Tenzing; buy climbing boots.",
+       "k": "talkToTenzing1",
+       "at": [
+        2820,
+        3555,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4094
+        ]
+       }
+      },
+      {
+       "t": "Leave Saba's cave.",
+       "s": "Leave Saba's cave.",
+       "k": "leaveSabaCave",
+       "at": [
+        2269,
+        4751,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3736
+        ]
+       }
+      },
+      {
+       "t": "Talk to Dunstan at the anvil in north Burthorpe, then talk to Denulth.",
+       "s": "Talk to Dunstan at the anvil, then Denulth.",
+       "k": "talkToDunstan1",
+       "at": [
+        2920,
+        3573,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4105
+        ]
+       }
+      },
+      {
+       "t": "Ask Denulth about Dunstan's son.",
+       "s": "Ask Denulth about Dunstan's son.",
+       "k": "talkToDenulthForDunstan",
+       "at": [
+        2896,
+        3529,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4083
+        ]
+       }
+      },
+      {
+       "t": "Give Dunstan the climbing boots, the certificate and an iron bar for spiked boots.",
+       "s": "Trade Dunstan climbing boots for spiked boots.",
+       "k": "talkToDunstan2",
+       "at": [
+        2920,
+        3573,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4105
+        ]
+       },
+       "need": "Iron bar"
+      },
+      {
+       "t": "Bring Tenzing the spiked boots, 10 unnoted bread and 10 unnoted trout.",
+       "s": "Give Tenzing spiked boots, 10 bread, 10 trout.",
+       "k": "talkToTenzing2",
+       "need": "Bread",
+       "at": [
+        2820,
+        3555,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4094
+        ]
+       }
+      },
+      {
+       "t": "Leave Tenzing's house by the north door, cross the stile, and follow the path north then east until it is far enough.",
+       "s": "Go north over the stile until it is far enough.",
+       "k": "goNorth",
+       "at": [
+        2865,
+        3609,
+        0
+       ]
+      },
+      {
+       "t": "Give Denulth the secret map and the combination to finish the quest.",
+       "s": "Give Denulth the map and combination.",
+       "k": "talkToDenulth3",
+       "at": [
+        2896,
+        3529,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4083
+        ]
+       }
+      },
+      {
+       "t": "Open the quest's journal to sync your current quest state.",
+       "s": "Open the quest's journal to sync your current quest state.",
+       "k": "syncStep"
+      }
+     ]
+    }
+   ]
   }
  }
 }

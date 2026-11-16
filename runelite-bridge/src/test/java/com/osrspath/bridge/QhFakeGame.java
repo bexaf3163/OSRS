@@ -150,6 +150,12 @@ final class QhFakeGame implements QhMachine.Facts
 	}
 
 	@Override
+	public Boolean ground(int[] ids, int[] zone)
+	{
+		return Boolean.FALSE;
+	}
+
+	@Override
 	public int skill(String name)
 	{
 		return skills.getOrDefault(name, 1);

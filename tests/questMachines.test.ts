@@ -15,7 +15,7 @@ interface Machine { stages: Record<string, unknown>; nodes: Record<string, Node>
 const file = machinesRaw as unknown as { v: number; quests: Record<string, Machine> };
 const machines = file.quests;
 const quests = (stagesRaw as unknown as { quests: Record<string, QuestStages> }).quests;
-const KNOWN_OPS = new Set(['and', 'or', 'nor', 'nand', 'count', 'true', 'item', 'zone', 'vb', 'vp', 'chat', 'mes', 'dlg', 'wt', 'npc', 'obj', 'skill', 'quest', '?']);
+const KNOWN_OPS = new Set(['and', 'or', 'nor', 'nand', 'count', 'true', 'item', 'zone', 'vb', 'vp', 'chat', 'mes', 'dlg', 'wt', 'npc', 'obj', 'ground', 'skill', 'quest', '?']);
 
 const nodeOf = (m: Machine, ref: unknown): Node => (typeof ref === 'string' ? m.nodes[ref] : (ref as Node));
 const reqOf = (m: Machine, ref: unknown): Req => (typeof ref === 'string' ? m.reqs[ref] : (ref as Req));
