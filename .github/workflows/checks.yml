@@ -36,7 +36,8 @@ jobs:
   # A fresh account played turn by turn through the planner over the 23 F2P quests (tests/gates): fails when the plan stops at a check.
   route-gate:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    # The Members replay grows with every quest (438 turns at 2.128.0, about 26 minutes on the runner).
+    timeout-minutes: 50
     env:
       ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
     steps:
