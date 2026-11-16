@@ -10010,6 +10010,10 @@
             }
           ],
           "note": "Gives the earth runes for the spell."
+        },
+        {
+          "kind": "check",
+          "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
         }
       ],
       "inputs": [
@@ -10163,6 +10167,10 @@
             }
           ],
           "note": "Gives the air runes for the spell."
+        },
+        {
+          "kind": "check",
+          "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
         }
       ],
       "inputs": [
@@ -11609,6 +11617,692 @@
       "confidence": "MEDIUM",
       "assumptions": [
         "Molch pearls buy shark lure packs from Alry the Angler; 20 pearls unlock eating fish instead of cutting it.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "open-grubby-chests",
+      "title": "Open grubby chests in the Forthos Dungeon",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Opening grubby chests. Forthos Dungeon",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "thieving",
+          "level": 57
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 946,
+              "name": "Knife"
+            }
+          ],
+          "note": "Cuts the webs in the dungeon; a slash weapon works too."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 23499,
+            "name": "Grubby key"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 800,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 6689,
+            "name": "Saradomin brew(2)"
+          },
+          "qty": 0.3
+        },
+        {
+          "item": {
+            "id": 3028,
+            "name": "Super restore(2)"
+          },
+          "qty": 0.1
+        },
+        {
+          "item": {
+            "id": 147,
+            "name": "Super attack(2)"
+          },
+          "qty": 0.4
+        },
+        {
+          "item": {
+            "id": 159,
+            "name": "Super strength(2)"
+          },
+          "qty": 0.4
+        },
+        {
+          "item": {
+            "id": 165,
+            "name": "Super defence(2)"
+          },
+          "qty": 0.8
+        },
+        {
+          "item": {
+            "id": 171,
+            "name": "Ranging potion(2)"
+          },
+          "qty": 0.4
+        },
+        {
+          "item": {
+            "id": 3026,
+            "name": "Super restore(3)"
+          },
+          "qty": 0.1
+        },
+        {
+          "item": {
+            "id": 139,
+            "name": "Prayer potion(3)"
+          },
+          "qty": 0.3
+        },
+        {
+          "item": {
+            "id": 563,
+            "name": "Law rune"
+          },
+          "qty": 20,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 560,
+            "name": "Death rune"
+          },
+          "qty": 20,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 9075,
+            "name": "Astral rune"
+          },
+          "qty": 20,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 565,
+            "name": "Blood rune"
+          },
+          "qty": 20,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 11232,
+            "name": "Dragon dart tip"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 11237,
+            "name": "Dragon arrowtips"
+          },
+          "qty": 2
+        },
+        {
+          "item": {
+            "id": 989,
+            "name": "Crystal key"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            17
+          ]
+        },
+        {
+          "item": {
+            "id": 536,
+            "name": "Dragon bones"
+          },
+          "qty": 0.6
+        },
+        {
+          "item": {
+            "id": 1749,
+            "name": "Red dragonhide"
+          },
+          "qty": 0.6
+        },
+        {
+          "item": {
+            "id": 3049,
+            "name": "Grimy toadflax"
+          },
+          "qty": 0.8
+        },
+        {
+          "item": {
+            "id": 207,
+            "name": "Grimy ranarr weed"
+          },
+          "qty": 0.8
+        },
+        {
+          "item": {
+            "id": 3051,
+            "name": "Grimy snapdragon"
+          },
+          "qty": 0.7
+        },
+        {
+          "item": {
+            "id": 219,
+            "name": "Grimy torstol"
+          },
+          "qty": 0.35
+        }
+      ],
+      "rate": {
+        "unit": "chest",
+        "perHour": {
+          "slow": 66,
+          "typical": 96,
+          "fast": 120
+        },
+        "basis": "wiki-guide",
+        "assumes": "120 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "3 to 5 keys a trip; the loot fills the bag; the pace counts the walk to Hosidius."
+      },
+      "spot": {
+        "x": 1690,
+        "y": 3570,
+        "plane": 0,
+        "label": "Forthos Dungeon"
+      },
+      "bank": {
+        "x": 1674,
+        "y": 3615,
+        "plane": 0,
+        "label": "Hosidius Kitchen bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy grubby keys at the Grand Exchange; bring a knife."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Forthos Dungeon south of Hosidius."
+        },
+        {
+          "kind": "perform",
+          "text": "Open the grubby chest with each key; drop the low-value food."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the loot in Hosidius."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Opening_grubby_chests",
+          "title": "Money making guide/Opening grubby chests",
+          "revision": 15381027,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "A Xeric's talisman shortens the trip; it is not assumed. The key price moves; check it against the loot first.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "open-sinister-chests",
+      "title": "Open sinister chests in the Yanille Agility Dungeon",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Opening sinister chest. Yanille Agility dungeon",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "agility",
+          "level": 49
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 993,
+            "name": "Sinister key"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 563,
+            "name": "Law rune"
+          },
+          "qty": 0.0769,
+          "stack": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 219,
+            "name": "Grimy torstol"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 211,
+            "name": "Grimy avantoe"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 213,
+            "name": "Grimy kwuarm"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 209,
+            "name": "Grimy irit leaf"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 205,
+            "name": "Grimy harralander"
+          },
+          "qty": 2
+        },
+        {
+          "item": {
+            "id": 207,
+            "name": "Grimy ranarr weed"
+          },
+          "qty": 3
+        }
+      ],
+      "rate": {
+        "unit": "chest",
+        "perHour": {
+          "slow": 275,
+          "typical": 400,
+          "fast": 500
+        },
+        "basis": "wiki-guide",
+        "assumes": "500 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "Up to 27 keys a trip; the herbs fill the bag; the pace counts it."
+      },
+      "spot": {
+        "x": 2584,
+        "y": 9481,
+        "plane": 0,
+        "label": "Yanille Agility dungeon"
+      },
+      "bank": {
+        "x": 2613,
+        "y": 3091,
+        "plane": 0,
+        "label": "Yanille bank"
+      },
+      "saleSeconds": 60,
+      "risk": "moderate",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy sinister keys, law runes and superantipoison at the Grand Exchange; bring a slashing weapon."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Yanille Agility Dungeon; the entrance needs 49 Agility."
+        },
+        {
+          "kind": "perform",
+          "text": "Open the sinister chest with each key; each opening poisons you."
+        },
+        {
+          "kind": "bank",
+          "text": "Teleport out and bank the herbs."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Opening_sinister_chests",
+          "title": "Money making guide/Opening sinister chests",
+          "revision": 14841359,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The skeletons on the way are aggressive; armour keeps the damage low. 58 Magic for the Watchtower teleport is optional.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "alch-ethereum-bracelets",
+      "title": "Charge and alch bracelets of ethereum",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Charging and alchemising bracelets of ethereum. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "magic",
+          "level": 55
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1387,
+              "name": "Staff of fire"
+            },
+            {
+              "id": 1393,
+              "name": "Fire battlestaff"
+            },
+            {
+              "id": 1401,
+              "name": "Mystic fire staff"
+            }
+          ],
+          "note": "Gives the fire runes for High Level Alchemy."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 21817,
+            "name": "Bracelet of ethereum (uncharged)"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 21820,
+            "name": "Revenant ether"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 561,
+            "name": "Nature rune"
+          },
+          "qty": 1,
+          "stack": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 45000,
+          "stack": true
+        }
+      ],
+      "rate": {
+        "unit": "bracelet",
+        "perHour": {
+          "slow": 252,
+          "typical": 367,
+          "fast": 459
+        },
+        "basis": "wiki-guide",
+        "assumes": "459 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 26,
+        "overheadSeconds": 0,
+        "note": "Ether and nature runes stack; 26 bracelets a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy uncharged bracelets of ethereum, revenant ether and nature runes at the Grand Exchange; wield the fire staff."
+        },
+        {
+          "kind": "perform",
+          "text": "Charge each bracelet with one ether, then cast High Level Alchemy on it for 45,000 coins."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank and take the next 26 bracelets."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Charging_and_alchemising_bracelets_of_ethereum",
+          "title": "Money making guide/Charging and alchemising bracelets of ethereum",
+          "revision": 14830679,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Profit is 45,000 less the bracelet, one ether and a nature rune; check it first.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "telegrab-wine-deep-wilderness",
+      "title": "Telegrab wine of Zamorak in the Deep Wilderness Dungeon",
+      "family": "collecting",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Collecting Wine of Zamorak at the Deep Wilderness Dungeon",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "magic",
+          "level": 33
+        },
+        {
+          "kind": "level",
+          "skill": "agility",
+          "level": 46
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1381,
+              "name": "Staff of air"
+            },
+            {
+              "id": 1397,
+              "name": "Air battlestaff"
+            },
+            {
+              "id": 1405,
+              "name": "Mystic air staff"
+            }
+          ],
+          "note": "Gives the air runes for Telekinetic Grab."
+        },
+        {
+          "kind": "check",
+          "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 563,
+            "name": "Law rune"
+          },
+          "qty": 1,
+          "stack": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 245,
+            "name": "Wine of Zamorak"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "wine of zamorak",
+        "perHour": {
+          "slow": 440,
+          "typical": 640,
+          "fast": 800
+        },
+        "basis": "wiki-guide",
+        "assumes": "800 wine of zamorak an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "Law runes take one slot; bank at Ferox Enclave; the pace counts it."
+      },
+      "spot": {
+        "x": 3045,
+        "y": 3925,
+        "plane": 0,
+        "label": "Deep Wilderness Dungeon"
+      },
+      "bank": {
+        "x": 3130,
+        "y": 3631,
+        "plane": 0,
+        "label": "Ferox Enclave bank"
+      },
+      "saleSeconds": 60,
+      "risk": "high",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Bring law runes and only what you can lose; wield a staff of air."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Deep Wilderness Dungeon."
+        },
+        {
+          "kind": "perform",
+          "text": "Cast Telekinetic Grab on the wine whenever it appears."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the wine at Ferox Enclave."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_wine_of_zamorak_(Deep_Wilderness_Dungeon)",
+          "title": "Money making guide/Collecting wine of zamorak (Deep Wilderness Dungeon)",
+          "revision": 15294036,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The dungeon is in the Wilderness: other players can attack you. The hard Wilderness Diary helps; it is not assumed.",
         "Supplies are bought and products sold at the exchange at the instant prices.",
         "Item ids from the wiki infoboxes, retrieved 2026-11-16."
       ]

@@ -871,6 +871,38 @@
       "methods": [
         "aerial-fishing-molch"
       ]
+    },
+    {
+      "id": "opening-grubby-chests",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "open-grubby-chests"
+      ]
+    },
+    {
+      "id": "opening-sinister-chests",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "open-sinister-chests"
+      ]
+    },
+    {
+      "id": "charging-and-alchemising-bracelets-of-ethereum",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "alch-ethereum-bracelets"
+      ]
+    },
+    {
+      "id": "collecting-wine-of-zamorak-deep-wilderness-dungeon",
+      "status": "supported",
+      "family": "collecting",
+      "methods": [
+        "telegrab-wine-deep-wilderness"
+      ]
     }
   ],
   "extras": [
