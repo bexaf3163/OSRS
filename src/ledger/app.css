@@ -278,7 +278,7 @@ dialog::backdrop{background:#050302cc;backdrop-filter:blur(3px)}
 :root .la-root .skills-index .skill-card{padding:6px 8px;gap:0}
 :root .la-root .skills-index .skill-glyph{width:20px;height:20px;margin:0 2px}
 :root .la-root .skills-index .skill-card-link>.muted{flex:none;margin-left:auto;font-family:var(--la-disp);font-size:19px;line-height:1;font-weight:600;color:var(--la-ink)}
-:root .la-root .skills-index .f2p-skill-badge{position:static;grid-column:2 / -1;font-size:12.5px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+:root .la-root .skills-index .f2p-skill-badge,:root .la-root .skills-index .skill-badge{position:static;grid-column:2 / -1;font-size:12.5px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* Settings: the sections as the satchel's index */
 :root .la-root .settings-index .settings-tabs{display:flex;flex-direction:column;width:100%;border:0;margin:6px 0 10px}

@@ -103,7 +103,6 @@
 }
 
 .next.is-members { box-shadow: inset 4px 0 0 var(--members); }
-.skill-card.is-members { border-color: color-mix(in srgb, var(--members) 30%, var(--border)); }
 
 /* ---------- Wiki inspector ---------- */
 

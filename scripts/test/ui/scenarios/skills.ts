@@ -75,6 +75,7 @@ async function f2pSkillsScenarios(browser: Browser) {
     const { page, errors } = await open(browser, 1280, { theme: 'light', scale: 1.5,
       progress: progressBefore('S9-01', { gameMode: 'members', levels: Object.fromEntries(SKILL_NAMES.map((skill) => [skill, 30])) }) }, '#/skills');
     expect(await page.locator('.f2p-skill-badge').count() === 0, 'Members: F2P preparation markers do not clutter the overview');
+  expect(await page.locator('.skill-tile').count() === 23 && await page.locator('.skill-badge').count() === 23, 'Members: one grid of all 23 skills, each with its quest level line');
     const links = await page.locator('.skill-tile a').evaluateAll(els => els.map(el => ({ href: el.getAttribute('href')!, name: el.querySelector('.skill-name')!.textContent! })));
     for (const { href, name } of links) {
       await page.evaluate(hash => { location.hash = hash; }, href);

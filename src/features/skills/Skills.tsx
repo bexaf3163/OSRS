@@ -1,4 +1,5 @@
 // The list of skills: what to train now in each, and the way into each skill's training guide (its method, place and leveling roadmap).
+import { useMemo } from 'react';
 import { levelById, membersSkills, skills } from '../../data';
 import { useStore } from '../../state/store';
 import { usePlannerSkillGoals } from '../../state/decision';
@@ -11,10 +12,17 @@ import { SkillDetailPage } from './SkillDetail';
 import { Eyebrow, Page } from '../../ledger';
 import { f2pAdviceFor, f2pAdviceLabel, F2P_PRIORITY_LABEL } from '../../domain/training/f2pSkillAdvice';
 import { hrefTo } from '../../domain/pages/pages';
+import { questLevelNeeds, questNeedLabel, SKILL_TAB_ORDER } from '../../domain/planning/questLevelNeeds';
+
+/** Free-to-play: the guide's order, Hitpoints with Melee. Members: every skill, in the in-game skill tab's order. */
+const f2pGrid = skills.flatMap((s) => [...s.levelSkills, ...(s.id === 'ME' ? ['hitpoints'] : [])].map((id) => [id, s] as [string, Skill]));
+const membersGrid = [...f2pGrid, ...membersSkills.flatMap((m) => m.levelSkills.map((id) => [id, m] as [string, Skill]))]
+  .sort(([a], [b]) => SKILL_TAB_ORDER.indexOf(a) - SKILL_TAB_ORDER.indexOf(b));
 
 /** The Skills spread: the character sheet on the left, the chosen skill (or the followed one) on the right. */
 export function SkillsPage({ param, selectedSkill, goal }: { param?: string; selectedSkill?: string; goal?: number }) {
-  const { mode } = useStore();
+  const { mode, progress } = useStore();
+  const needs = useMemo(() => (mode === 'members' ? questLevelNeeds(progress, true) : null), [mode, progress]);
   const plannerGoals = usePlannerSkillGoals();
   const tracked = useTracked();
   const trackedHome = tracked ? [...skills, ...membersSkills].find((s) => s.levelSkills.includes(tracked.skill)) : undefined;
@@ -31,18 +39,8 @@ export function SkillsPage({ param, selectedSkill, goal }: { param?: string; sel
       {mode === 'f2p' && <p className="small muted f2p-priority-key">★ Good F2P value · ◇ Optional · ↓ Prefer members. Suggested checkpoints, not caps.</p>}
 
       <div className="skill-grid skill-grid-compact">
-        {skills.flatMap((s) => [...s.levelSkills, ...(mode === 'f2p' && s.id === 'ME' ? ['hitpoints'] : [])].map((id) => <SkillCard key={id} skill={s} id={id} />))}
+        {(mode === 'members' ? membersGrid : f2pGrid).map(([id, s]) => <SkillCard key={id} skill={s} id={id} need={needs?.get(id)} />)}
       </div>
-
-
-      {mode === 'members' && (
-        <section className="section" aria-labelledby="members-skills">
-          <h2 id="members-skills">Members skills <span className="badge badge-members">Members</span></h2>
-          <div className="skill-grid skill-grid-compact">
-            {membersSkills.flatMap((m) => m.levelSkills.map((id) => <SkillCard key={id} skill={m} id={id} />))}
-          </div>
-        </section>
-      )}
     </div>
     </Page>
     <Page side="r" className="skills-detail" label="Skill">
@@ -64,7 +62,7 @@ export function SkillsPage({ param, selectedSkill, goal }: { param?: string; sel
 }
 
 /** One skill per tile; recommendations and manual level editing live on its detail page. */
-function SkillCard({ skill, id }: { skill: Skill; id: string }) {
+function SkillCard({ skill, id, need }: { skill: Skill; id: string; need?: number }) {
   const { progress, mode } = useStore();
   const { state, stats } = useBridge();
   const tracked = useTracked();
@@ -74,6 +72,9 @@ function SkillCard({ skill, id }: { skill: Skill; id: string }) {
   // Use the same admitted profile level as the tile; raw stats may belong to an unresolved character.
   const knownLevel = progress.levels?.[id];
   const isTracked = tracked?.skill === id;
+  // Members: every tile names the level the open quests still need, in the free-to-play tile's place.
+  const level = levelOf(progress, id);
+  const questLine = mode === 'members' ? questNeedLabel(need, level) : null;
   const content = <>
     <SkillGlyph skill={id} size={28} />
     <span className="skill-name">{name}</span>
@@ -81,11 +82,12 @@ function SkillCard({ skill, id }: { skill: Skill; id: string }) {
     {advice && <span className={`f2p-skill-badge is-${advice.priority}`} title={`${F2P_PRIORITY_LABEL[advice.priority]}. ${advice.reason}`}>
       {f2pAdviceLabel(advice, knownLevel)}
     </span>}
+    {questLine && <span className={`skill-badge${need !== undefined && level < need ? ' is-good' : ''}`}>{questLine}</span>}
   </>;
   return (
-    <article className={`skill-card card skill-tile ${skill.membersOnly ? 'is-members' : ''} ${isTracked ? 'is-tracked' : ''}`}>
+    <article className={`skill-card card skill-tile ${isTracked ? 'is-tracked' : ''}`}>
       {id === 'hitpoints' ? <div className="skill-card-link">{content}<span className="visually-hidden">Gained in combat; no separate F2P target.</span></div>
-        : <a className="skill-card-link" href={hrefTo.skills(skill.id, id)} aria-label={`${name}, level ${levelOf(progress, id)}${live ? ', live' : ', saved'}${advice ? `, ${F2P_PRIORITY_LABEL[advice.priority]}, ${f2pAdviceLabel(advice, knownLevel)}` : ''}`}>
+        : <a className="skill-card-link" href={hrefTo.skills(skill.id, id)} aria-label={`${name}, level ${levelOf(progress, id)}${live ? ', live' : ', saved'}${advice ? `, ${F2P_PRIORITY_LABEL[advice.priority]}, ${f2pAdviceLabel(advice, knownLevel)}` : ''}${questLine ? `, ${questLine}` : ''}`}>
           {content}
         </a>}
     </article>
