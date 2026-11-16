@@ -14112,6 +14112,648 @@
         "Products are sold at the exchange at the instant prices.",
         "Item ids from the wiki infoboxes, retrieved 2026-11-16."
       ]
+    },
+    {
+      "id": "craft-cosmic-runes",
+      "title": "Craft cosmic runes in Zanaris",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Crafting cosmic runes. Zanaris",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "runecraft",
+          "level": 27
+        },
+        {
+          "kind": "quest",
+          "quest": "Lost City",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 7936,
+            "name": "Pure essence"
+          },
+          "qty": 27
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 564,
+            "name": "Cosmic rune"
+          },
+          "qty": 27,
+          "stack": true
+        }
+      ],
+      "rate": {
+        "unit": "trip",
+        "perHour": {
+          "slow": 22,
+          "typical": 30,
+          "fast": 40
+        },
+        "basis": "wiki-guide",
+        "assumes": "The guide counts 40 trips an hour with essence pouches and double runes from 59. At 27 Runecraft without pouches a trip is 27 essence for 27 runes; typical allows for the walk from the Zanaris bank."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "27 pure essence a trip; the Zanaris bank is a short walk; the pace counts it."
+      },
+      "spot": {
+        "x": 2407,
+        "y": 4417,
+        "plane": 0,
+        "label": "Zanaris"
+      },
+      "bank": {
+        "x": 2381,
+        "y": 4456,
+        "plane": 0,
+        "label": "Zanaris bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy pure essence at the Grand Exchange."
+        },
+        {
+          "kind": "travel",
+          "text": "Enter Zanaris through the Lumbridge Swamp shed and go to the cosmic altar."
+        },
+        {
+          "kind": "perform",
+          "text": "Craft the essence into cosmic runes at the altar."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the runes in Zanaris and take more essence."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_cosmic_runes",
+          "title": "Money making guide/Crafting cosmic runes",
+          "revision": 15312593,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "From 59 Runecraft each essence makes two cosmic runes, and pouches carry more; both are upside, not assumed.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "craft-aether-runes",
+      "title": "Craft aether runes",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Crafting Aether runes. Zanaris",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "runecraft",
+          "level": 90
+        },
+        {
+          "kind": "quest",
+          "quest": "Lost City",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 566,
+            "name": "Soul rune"
+          },
+          "qty": 62,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 7936,
+            "name": "Pure essence"
+          },
+          "qty": 62
+        },
+        {
+          "item": {
+            "id": 30771,
+            "name": "Aether catalyst"
+          },
+          "qty": 99.2
+        },
+        {
+          "item": {
+            "id": 5521,
+            "name": "Binding necklace"
+          },
+          "qty": 0.1875
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 30843,
+            "name": "Aether rune"
+          },
+          "qty": 62,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 30843,
+            "name": "Aether rune"
+          },
+          "qty": 37.2,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 30843,
+            "name": "Aether rune"
+          },
+          "qty": 6.2,
+          "stack": true
+        }
+      ],
+      "rate": {
+        "unit": "action",
+        "perHour": {
+          "slow": 41,
+          "typical": 60,
+          "fast": 75
+        },
+        "basis": "wiki-guide",
+        "assumes": "75 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 26,
+        "overheadSeconds": 0,
+        "note": "Essence and soul runes a trip; the pace counts it."
+      },
+      "spot": {
+        "x": 2407,
+        "y": 4417,
+        "plane": 0,
+        "label": "Zanaris"
+      },
+      "bank": {
+        "x": 2381,
+        "y": 4456,
+        "plane": 0,
+        "label": "Zanaris bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy pure essence, soul runes, aether catalysts and binding necklaces at the Grand Exchange."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the aether altar."
+        },
+        {
+          "kind": "perform",
+          "text": "Bind the essence with the soul runes into aether runes."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the runes and take the next load."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_aether_runes",
+          "title": "Money making guide/Crafting aether runes",
+          "revision": 15317779,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide recommends 99 Runecraft; Magic Imbue and Astral Contact are optional speed-ups.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "hunt-dragon-implings",
+      "title": "Hunt implings in Puro-Puro",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Hunting implings. Puro-Puro",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "hunter",
+          "level": 83
+        },
+        {
+          "kind": "quest",
+          "quest": "Lost City",
+          "state": "complete"
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 10010,
+              "name": "Butterfly net"
+            }
+          ],
+          "note": "Stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 11260,
+            "name": "Impling jar"
+          },
+          "qty": 4.5
+        },
+        {
+          "item": {
+            "id": 12625,
+            "name": "Stamina potion(4)"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 11256,
+            "name": "Dragon impling jar"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "dragon impling jar",
+        "perHour": {
+          "slow": 1,
+          "typical": 2,
+          "fast": 2
+        },
+        "basis": "wiki-guide",
+        "assumes": "2 dragon impling jar an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 26,
+        "overheadSeconds": 0,
+        "note": "The net and the jars take the bag; one long trip; the pace counts it."
+      },
+      "spot": {
+        "x": 2592,
+        "y": 4320,
+        "plane": 0,
+        "label": "Puro-Puro"
+      },
+      "bank": {
+        "x": 2381,
+        "y": 4456,
+        "plane": 0,
+        "label": "Zanaris bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy impling jars and stamina potions; bring a butterfly net."
+        },
+        {
+          "kind": "travel",
+          "text": "Enter Puro-Puro through the wheat field in Zanaris."
+        },
+        {
+          "kind": "perform",
+          "text": "Catch the dragon implings that appear; the rest are skipped."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the jars in Zanaris."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Hunting_implings",
+          "title": "Money making guide/Hunting implings",
+          "revision": 15399237,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Dragon implings are rare: the pace is about 2 an hour and varies a lot.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "steal-rogues-castle-chests",
+      "title": "Steal from the Rogues' Castle chests",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Stealing from Rogues' Castle chests. Rogues' Castle, Deep Wilderness",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "thieving",
+          "level": 84
+        },
+        {
+          "kind": "level",
+          "skill": "prayer",
+          "level": 43
+        },
+        {
+          "kind": "check",
+          "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 24598,
+            "name": "Blighted super restore(4)"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            385
+          ]
+        },
+        {
+          "item": {
+            "id": 29784,
+            "name": "Araxyte venom sac"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            96
+          ]
+        },
+        {
+          "item": {
+            "id": 8013,
+            "name": "Teleport to house (tablet)"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            96
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 561,
+            "name": "Nature rune"
+          },
+          "qty": 8.3333,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 223,
+            "name": "Red spiders' eggs"
+          },
+          "qty": 1.0606
+        },
+        {
+          "item": {
+            "id": 563,
+            "name": "Law rune"
+          },
+          "qty": 7.5758,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 453,
+            "name": "Coal"
+          },
+          "qty": 3.0303
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 511.3636,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 25769,
+            "name": "Vile ashes"
+          },
+          "qty": 0.8182
+        },
+        {
+          "item": {
+            "id": 1617,
+            "name": "Uncut diamond"
+          },
+          "qty": 0.3182
+        },
+        {
+          "item": {
+            "id": 1621,
+            "name": "Uncut emerald"
+          },
+          "qty": 0.3636
+        },
+        {
+          "item": {
+            "id": 24607,
+            "name": "Blighted ancient ice sack"
+          },
+          "qty": 0.4848
+        },
+        {
+          "item": {
+            "id": 440,
+            "name": "Iron ore"
+          },
+          "qty": 0.7576
+        },
+        {
+          "item": {
+            "id": 562,
+            "name": "Chaos rune"
+          },
+          "qty": 1.1364,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 560,
+            "name": "Death rune"
+          },
+          "qty": 0.9394,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 24589,
+            "name": "Blighted manta ray"
+          },
+          "qty": 0.3788
+        },
+        {
+          "item": {
+            "id": 24592,
+            "name": "Blighted anglerfish"
+          },
+          "qty": 0.2727
+        },
+        {
+          "item": {
+            "id": 1623,
+            "name": "Uncut sapphire"
+          },
+          "qty": 0.2727
+        },
+        {
+          "item": {
+            "id": 1615,
+            "name": "Dragonstone"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            33
+          ]
+        }
+      ],
+      "rate": {
+        "unit": "action",
+        "perHour": {
+          "slow": 212,
+          "typical": 308,
+          "fast": 385
+        },
+        "basis": "wiki-guide",
+        "assumes": "385 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 26,
+        "overheadSeconds": 0,
+        "note": "A house teleport tablet out; the pace counts the trip back from Ferox Enclave."
+      },
+      "spot": {
+        "x": 3286,
+        "y": 3933,
+        "plane": 0,
+        "label": "Rogues' Castle, Deep Wilderness"
+      },
+      "bank": {
+        "x": 3130,
+        "y": 3631,
+        "plane": 0,
+        "label": "Ferox Enclave bank"
+      },
+      "saleSeconds": 60,
+      "risk": "high",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Bring blighted super restores, araxyte venom sacs, a house teleport and only what you can lose."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Rogues' Castle in the deep Wilderness."
+        },
+        {
+          "kind": "perform",
+          "text": "Pick the chests with Protect from Melee on, restoring prayer as needed."
+        },
+        {
+          "kind": "bank",
+          "text": "Teleport out and bank the loot."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stealing_from_Rogues'_Castle_chests",
+          "title": "Money making guide/Stealing from Rogues' Castle chests",
+          "revision": 15392813,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The hard Wilderness Diary gives the full loot; it is not assumed.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
     }
   ]
 }

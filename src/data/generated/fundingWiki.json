@@ -2095,133 +2095,6 @@
    ]
   },
   {
-   "id": "collecting-snape-grass",
-   "title": "Collecting snape grass",
-   "family": "collecting",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Collecting snape grass. Waterbirth Island",
-   "about": "Snape grass is used as a Herblore secondary ingredient for Prayer potions, and is always in high demand. One can collect them at Waterbirth Island, where there are six spawns. Each snape grass respawns in approximately 16 seconds. After a full inventory, players can use the Moonclan teleport to go to the Lunar Isle and deposit the grass into their bank.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "magic",
-     "level": 72
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Weight-reducing clothing, Water staff, Astral runes, Law runes, and Seal of Passage if using teleports, Reagent pouch recommended for longer trips"
-    },
-    {
-     "kind": "check",
-     "text": "If you do not have the Lunar Diplomacy quest completed and 72 Magic, finishing the easy Fremennik diary tasks is another option for banking."
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 9075,
-      "name": "Astral rune"
-     },
-     "qty": 2,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 563,
-      "name": "Law rune"
-     },
-     "qty": 4,
-     "stack": true
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 231,
-      "name": "Snape grass"
-     },
-     "qty": 25
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 21,
-     "typical": 30,
-     "fast": 38
-    },
-    "basis": "wiki-guide",
-    "assumes": "38 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2525,
-    "y": 3743,
-    "plane": 0,
-    "label": "Waterbirth Island"
-   },
-   "bank": {
-    "x": 2536,
-    "y": 3573,
-    "plane": 0,
-    "label": "Barbarian Outpost bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Astral rune, Law rune at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Waterbirth Island.",
-     "place": {
-      "x": 2525,
-      "y": 3743,
-      "plane": 0,
-      "label": "Waterbirth Island"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Collecting snape grass until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Barbarian Outpost bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_snape_grass",
-     "title": "Money making guide/Collecting snape grass",
-     "revision": 15392914,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "collecting-steel-platebodies",
    "title": "Collecting steel platebodies",
    "family": "collecting",
@@ -2734,496 +2607,6 @@
    ]
   },
   {
-   "id": "completing-elite-clues-urium-remains",
-   "title": "Completing elite clues (urium remains)",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Completing elite clues from urium remains. Mort'ton",
-   "about": "The profit also assumes Mimics are activated and defeated on the first attempt. Cremating urium remains, collecting the keys and opening the Gold Chests in the Shade Catacombs gives on average one elite clue every 35 minutes, in addition to other standard loot (mostly coins and alchables). It also gives a decent amount of Firemaking and Prayer experience, and chances at the Zealot's robes, which are useful for training Prayer.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "firemaking",
-     "level": 95
-    },
-    {
-     "kind": "quest",
-     "quest": "Shades of Mort'ton",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Morytania legs 3 recommended for teleport to Burgh de Rott, Gold coffin or Silver coffin recommended to store more remains"
-    },
-    {
-     "kind": "check",
-     "text": "* Hard Morytania Diary recommended for 50% more Prayer experience * Elite Morytania Diary recommended for 50% more Firemaking experience"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 25419,
-      "name": "Urium remains"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 19672,
-      "name": "Redwood pyre logs"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 1391,
-      "name": "Battlestaff"
-     },
-     "qty": 0.181
-    },
-    {
-     "item": {
-      "id": 12851,
-      "name": "Amulet of the Damned (full)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      30
-     ]
-    },
-    {
-     "item": {
-      "id": 3470,
-      "name": "Fine cloth"
-     },
-     "qty": 0.1241
-    },
-    {
-     "item": {
-      "id": 995,
-      "name": "Coins"
-     },
-     "qty": 1837.4976,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 1303,
-      "name": "Rune longsword"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      36
-     ]
-    },
-    {
-     "item": {
-      "id": 1941,
-      "name": "Swamp paste"
-     },
-     "qty": 43.45
-    },
-    {
-     "item": {
-      "id": 1127,
-      "name": "Rune platebody"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      91
-     ]
-    },
-    {
-     "item": {
-      "id": 1093,
-      "name": "Rune plateskirt"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      91
-     ]
-    },
-    {
-     "item": {
-      "id": 1079,
-      "name": "Rune platelegs"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      91
-     ]
-    },
-    {
-     "item": {
-      "id": 1305,
-      "name": "Dragon longsword"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      182
-     ]
-    },
-    {
-     "item": {
-      "id": 1113,
-      "name": "Rune chainbody"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      91
-     ]
-    },
-    {
-     "item": {
-      "id": 560,
-      "name": "Death rune"
-     },
-     "qty": 0.9625,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 25481,
-      "name": "Runescroll of bloodbark"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      135
-     ]
-    },
-    {
-     "item": {
-      "id": 1333,
-      "name": "Rune scimitar"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      61
-     ]
-    },
-    {
-     "item": {
-      "id": 25454,
-      "name": "Gold locks"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      78
-     ]
-    },
-    {
-     "item": {
-      "id": 1289,
-      "name": "Rune shortsword"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      61
-     ]
-    },
-    {
-     "item": {
-      "id": 1645,
-      "name": "Dragonstone ring"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      61
-     ]
-    },
-    {
-     "item": {
-      "id": 1215,
-      "name": "Dragon dagger"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      91
-     ]
-    },
-    {
-     "item": {
-      "id": 1147,
-      "name": "Rune med helm"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      61
-     ]
-    },
-    {
-     "item": {
-      "id": 25478,
-      "name": "Runescroll of swampbark"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      135
-     ]
-    },
-    {
-     "item": {
-      "id": 1434,
-      "name": "Dragon mace"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      182
-     ]
-    },
-    {
-     "item": {
-      "id": 1123,
-      "name": "Adamant platebody"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      61
-     ]
-    },
-    {
-     "item": {
-      "id": 1615,
-      "name": "Dragonstone"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      91
-     ]
-    },
-    {
-     "item": {
-      "id": 566,
-      "name": "Soul rune"
-     },
-     "qty": 0.6416,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 3678,
-      "name": "Flamtaer hammer"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      46
-     ]
-    },
-    {
-     "item": {
-      "id": 1161,
-      "name": "Adamant full helm"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      23
-     ]
-    },
-    {
-     "item": {
-      "id": 1091,
-      "name": "Adamant plateskirt"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      61
-     ]
-    },
-    {
-     "item": {
-      "id": 1073,
-      "name": "Adamant platelegs"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      61
-     ]
-    },
-    {
-     "item": {
-      "id": 1111,
-      "name": "Adamant chainbody"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      46
-     ]
-    },
-    {
-     "item": {
-      "id": 1245,
-      "name": "Adamant spear"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      26
-     ]
-    },
-    {
-     "item": {
-      "id": 1085,
-      "name": "Mithril plateskirt"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      36
-     ]
-    },
-    {
-     "item": {
-      "id": 1199,
-      "name": "Adamant kiteshield"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      91
-     ]
-    },
-    {
-     "item": {
-      "id": 1259,
-      "name": "Adamant spear(p)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      30
-     ]
-    },
-    {
-     "item": {
-      "id": 1301,
-      "name": "Adamant longsword"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      61
-     ]
-    },
-    {
-     "item": {
-      "id": 1515,
-      "name": "Yew logs"
-     },
-     "qty": 0.1368
-    },
-    {
-     "item": {
-      "id": 19669,
-      "name": "Redwood logs"
-     },
-     "qty": 0.0912
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 113,
-     "typical": 164,
-     "fast": 205
-    },
-    "basis": "wiki-guide",
-    "assumes": "205 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3487,
-    "y": 3288,
-    "plane": 0,
-    "label": "Mort'ton"
-   },
-   "bank": {
-    "x": 3365,
-    "y": 3318,
-    "plane": 1,
-    "label": "Mage Training Arena bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Urium remains, Redwood pyre logs at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Mort'ton.",
-     "place": {
-      "x": 3487,
-      "y": 3288,
-      "plane": 0,
-      "label": "Mort'ton"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Completing elite clues from urium remains until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Mage Training Arena bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Completing_elite_clues_(urium_remains)",
-     "title": "Money making guide/Completing elite clues (urium remains)",
-     "revision": 15392179,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "cooking-plain-pizzas",
    "title": "Cooking plain pizzas",
    "family": "production",
@@ -3678,686 +3061,6 @@
    ]
   },
   {
-   "id": "crafting-aether-runes",
-   "title": "Crafting aether runes",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Crafting Aether runes. Zanaris",
-   "about": "{{Map||mapID=-1|zoom=2|x=2407|y=4417|align=right|width=300|height=500|caption=The on-foot route to and from the Zanaris bank. 2411:4433,2411:4431,2419:4423,2419:4414,2412:4407,2388:4407,2385:4410, 2378:4410,2378:4404,2386:4396,2393:4396,2396:4393,2400:4393, 2404:4389,2404:4381,2406:4379",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "runecraft",
-     "level": 90
-    },
-    {
-     "kind": "level",
-     "skill": "firemaking",
-     "level": 75
-    },
-    {
-     "kind": "level",
-     "skill": "magic",
-     "level": 82
-    },
-    {
-     "kind": "level",
-     "skill": "agility",
-     "level": 66
-    },
-    {
-     "kind": "level",
-     "skill": "crafting",
-     "level": 99
-    },
-    {
-     "kind": "level",
-     "skill": "construction",
-     "level": 80
-    },
-    {
-     "kind": "quest",
-     "quest": "Lost City",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Weight-reducing clothing, Cosmic talisman or tiara, Essence pouches, Rune pouch or Divine rune pouch, Quest point cape, or Teleport to house (tablet), or Construct. cape (for fairy ring teleports), Ring of dueling, or Eternal glory, or Crafting cape (for bank teleports), Dramen or Lunar staff (unless elite Lumbridge & Draynor Diary is completed), Colossal pouch, Mist staff and tome of fire (optional, but recommended to allow aether runes to enter non-divine rune pouches), Raiments of the Eye set for additional runes and to replace a tiara, Abyssal lantern (magic logs) for additional runes, Magic Imbue, Astral Contact"
-    },
-    {
-     "kind": "check",
-     "text": "* Astral Contact spell (optional) * Magic Imbue Spell * Construction 80 to unlock fairy ring and Lunar altar in POH (optional)"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 566,
-      "name": "Soul rune"
-     },
-     "qty": 62,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 7936,
-      "name": "Pure essence"
-     },
-     "qty": 62
-    },
-    {
-     "item": {
-      "id": 30771,
-      "name": "Aether catalyst"
-     },
-     "qty": 99.2
-    },
-    {
-     "item": {
-      "id": 5521,
-      "name": "Binding necklace"
-     },
-     "qty": 0.1875
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 30843,
-      "name": "Aether rune"
-     },
-     "qty": 62,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 30843,
-      "name": "Aether rune"
-     },
-     "qty": 37.2,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 30843,
-      "name": "Aether rune"
-     },
-     "qty": 6.2,
-     "stack": true
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 41,
-     "typical": 60,
-     "fast": 75
-    },
-    "basis": "wiki-guide",
-    "assumes": "75 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2407,
-    "y": 4417,
-    "plane": 0,
-    "label": "Zanaris"
-   },
-   "bank": {
-    "x": 2381,
-    "y": 4456,
-    "plane": 0,
-    "label": "Zanaris bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Soul rune, Pure essence, Aether catalyst, Binding necklace at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Zanaris.",
-     "place": {
-      "x": 2407,
-      "y": 4417,
-      "plane": 0,
-      "label": "Zanaris"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Crafting Aether runes until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Zanaris bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_aether_runes",
-     "title": "Money making guide/Crafting aether runes",
-     "revision": 15317779,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "crafting-cosmic-runes",
-   "title": "Crafting cosmic runes",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Crafting cosmic runes. Zanaris",
-   "about": "{{Map||mapID=-1|zoom=2|x=2407|y=4417|align=right|width=300|height=500|caption=The on-foot route to and from the Zanaris bank. 2411:4433,2411:4431,2419:4423,2419:4414,2412:4407,2388:4407,2385:4410, 2378:4410,2378:4404,2386:4396,2393:4396,2396:4393,2400:4393, 2404:4389,2404:4381,2406:4379",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "runecraft",
-     "level": 27
-    },
-    {
-     "kind": "level",
-     "skill": "firemaking",
-     "level": 75
-    },
-    {
-     "kind": "level",
-     "skill": "agility",
-     "level": 66
-    },
-    {
-     "kind": "level",
-     "skill": "magic",
-     "level": 67
-    },
-    {
-     "kind": "level",
-     "skill": "crafting",
-     "level": 75
-    },
-    {
-     "kind": "level",
-     "skill": "construction",
-     "level": 80
-    },
-    {
-     "kind": "quest",
-     "quest": "Lost City",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Weight-reducing clothing, Cosmic talisman or tiara, Essence pouches, Slayer ring, quest point cape, or necklace of passage (for fairy ring teleports) and amulet of glory (optional), Dramen or lunar staff (unless elite Lumbridge & Draynor Diary is completed) (optional), Colossal pouch, Raiments of the Eye set for additional runes and to replace a tiara, Abyssal lantern (magic logs) for additional runes"
-    },
-    {
-     "kind": "check",
-     "text": "* Astral Contact spell (optional) * 300 Slayer reward points to unlock the ability to craft Slayer rings (optional) or * Construction 80 to unlock fairy ring and Lunar altar in POH (optional)"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 7936,
-      "name": "Pure essence"
-     },
-     "qty": 66
-    },
-    {
-     "item": {
-      "id": 9075,
-      "name": "Astral rune"
-     },
-     "qty": 0.125,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 564,
-      "name": "Cosmic rune"
-     },
-     "qty": 0.125,
-     "stack": true
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 564,
-      "name": "Cosmic rune"
-     },
-     "qty": 132,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 564,
-      "name": "Cosmic rune"
-     },
-     "qty": 79.2,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 564,
-      "name": "Cosmic rune"
-     },
-     "qty": 13.2,
-     "stack": true
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 22,
-     "typical": 32,
-     "fast": 40
-    },
-    "basis": "wiki-guide",
-    "assumes": "40 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2407,
-    "y": 4417,
-    "plane": 0,
-    "label": "Zanaris"
-   },
-   "bank": {
-    "x": 2381,
-    "y": 4456,
-    "plane": 0,
-    "label": "Zanaris bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Pure essence, Astral rune, Cosmic rune at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Zanaris.",
-     "place": {
-      "x": 2407,
-      "y": 4417,
-      "plane": 0,
-      "label": "Zanaris"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Start out at the Edgeville bank."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport via the slayer ring to Rellekka Slayer Caves, exit, and use the fairy ring to the west to teleport to Zanaris."
-    },
-    {
-     "kind": "perform",
-     "text": "Run further south and enter the mysterious ruins, and then go directly to the altar."
-    },
-    {
-     "kind": "perform",
-     "text": "Craft your essence in your inventory and pouches, and then teleport back to Edgeville with your amulet of glory."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_cosmic_runes",
-     "title": "Money making guide/Crafting cosmic runes",
-     "revision": 15312593,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "crafting-runes-at-ourania-altar",
-   "title": "Crafting runes at Ourania Altar",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Crafting runes at the Ourania altar",
-   "about": "Money making at the Ourania altar varies greatly depending on the player's Runecraft levels, as the altar's rune distribution changes based on Runecraft levels, as shown below. This guide assumes that the player has 70 runecraft and has completed the medium Ardougne diary. To roughly calculate the gold per hour for a given Runecraft level, follow this equation: EPP (essence processed per hour) x GPE (gold value per essence). Multiply by 1.6 with a full Raiments set.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "runecraft",
-     "level": 70
-    },
-    {
-     "kind": "level",
-     "skill": "magic",
-     "level": 71
-    },
-    {
-     "kind": "level",
-     "skill": "agility",
-     "level": 75
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Highest available Runecraft pouches, Raiments of the Eye with protective gear mixed with weight-reducing clothing, Dust battlestaff, Rune pouch (Fill with law, astral, and mind runes), Some food if low level, Stamina potions"
-    },
-    {
-     "kind": "check",
-     "text": "Completed Medium Ardougne diary recommended (10-25% more runes created depending on rune)"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 7936,
-      "name": "Pure essence"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 12625,
-      "name": "Stamina potion(4)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      325
-     ]
-    },
-    {
-     "item": {
-      "id": 558,
-      "name": "Mind rune"
-     },
-     "qty": 0.923,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 9075,
-      "name": "Astral rune"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      22
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 563,
-      "name": "Law rune"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      43
-     ],
-     "stack": true
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 556,
-      "name": "Air rune"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      27
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 558,
-      "name": "Mind rune"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      27
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 555,
-      "name": "Water rune"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      27
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 557,
-      "name": "Earth rune"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      20
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 554,
-      "name": "Fire rune"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      20
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 559,
-      "name": "Body rune"
-     },
-     "qty": 0.0625,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 564,
-      "name": "Cosmic rune"
-     },
-     "qty": 0.0875,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 562,
-      "name": "Chaos rune"
-     },
-     "qty": 0.1125,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 9075,
-      "name": "Astral rune"
-     },
-     "qty": 0.15,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 561,
-      "name": "Nature rune"
-     },
-     "qty": 0.1838,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 563,
-      "name": "Law rune"
-     },
-     "qty": 0.216,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 560,
-      "name": "Death rune"
-     },
-     "qty": 0.1175,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 565,
-      "name": "Blood rune"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      17
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 566,
-      "name": "Soul rune"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      45
-     ],
-     "stack": true
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 2200,
-     "typical": 3200,
-     "fast": 4000
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,000 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2452,
-    "y": 3231,
-    "plane": 0,
-    "label": "Ourania Altar"
-   },
-   "bank": {
-    "x": 2443,
-    "y": 3083,
-    "plane": 0,
-    "label": "Castle Wars bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Pure essence, Stamina potion(4), Mind rune, Astral rune, Law rune at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Ourania Altar.",
-     "place": {
-      "x": 2452,
-      "y": 3231,
-      "plane": 0,
-      "label": "Ourania Altar"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Crafting runes at the Ourania altar until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Castle Wars bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_runes_at_Ourania_Altar",
-     "title": "Money making guide/Crafting runes at Ourania Altar",
-     "revision": 14997902,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "firecycling",
    "title": "Firecycling",
    "family": "collecting",
@@ -4444,132 +3147,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Firecycling",
      "title": "Money making guide/Firecycling",
      "revision": 15376181,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "hunting-implings",
-   "title": "Hunting implings",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Hunting implings. Puro-Puro",
-   "about": "On a good day, hunting down implings can yield quite a bit of money for willing players. The elusive Dragon impling at Impetuous Impulses or throughout Gielinor is exceedingly rare, but it is valuable and worth. Players can reach Puro-Puro by travelling to Lumbridge Swamp and entering the Lost City shed with a Dramen or Lunar staff equipped. Alternatively, they can use a Fairy ring if sufficient progress in Fairytale II - Cure a Queen has been made.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "hunter",
-     "level": 83
-    },
-    {
-     "kind": "quest",
-     "quest": "Lost City",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Either Guild hunter outfit for improved catch rates or Weight-reducing clothing for reduced run energy usage, (Magic) Insect net, Dramen or Lunar staff (unless elite Lumbridge & Draynor Diary is completed), 9 Impling jars, 1-2 Stamina potions, Runes to cast Snare or Dark Lure on rare implings (optional)"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 11260,
-      "name": "Impling jar"
-     },
-     "qty": 4.5
-    },
-    {
-     "item": {
-      "id": 12625,
-      "name": "Stamina potion(4)"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 11256,
-      "name": "Dragon impling jar"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "dragon impling jar",
-    "perHour": {
-     "slow": 1,
-     "typical": 2,
-     "fast": 2
-    },
-    "basis": "wiki-guide",
-    "assumes": "2 dragon impling jar an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2592,
-    "y": 4320,
-    "plane": 0,
-    "label": "Puro-Puro"
-   },
-   "bank": {
-    "x": 2381,
-    "y": 4456,
-    "plane": 0,
-    "label": "Zanaris bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Impling jar, Stamina potion(4) at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Puro-Puro.",
-     "place": {
-      "x": 2592,
-      "y": 4320,
-      "plane": 0,
-      "label": "Puro-Puro"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Hunting implings until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Zanaris bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Hunting_implings",
-     "title": "Money making guide/Hunting implings",
-     "revision": 15399237,
      "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -7076,182 +5653,6 @@
    ]
   },
   {
-   "id": "making-sacred-oil",
-   "title": "Making sacred oil",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making sacred oil. Mort'ton",
-   "about": "{{Inventory|align=right Sacred oil is a vial of blessed olive oil that is used to make pyre logs. It is obtained from the Shades of Mort'ton minigame by using vials of olive oil on the fire altar once the temple has been fully repaired and the altar lit. Converting olive oil to sacred oil costs sanctity points, which are gained by repairing the temple walls.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "crafting",
-     "level": 20
-    },
-    {
-     "kind": "level",
-     "skill": "combat",
-     "level": 81
-    },
-    {
-     "kind": "quest",
-     "quest": "Shades of Mort'ton",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Flamtaer hammer, Flamtaer bag (recommended), Morytania legs 3 (recommended), Tinderbox (optional), Mort'ton teleport (optional), Weight-reducing clothing"
-    },
-    {
-     "kind": "check",
-     "text": "Hard Morytania Diary (for Morytania legs 3)"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 3422,
-      "name": "Olive oil(4)"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 21180,
-      "name": "Flamtaer bracelet"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      50
-     ]
-    },
-    {
-     "item": {
-      "id": 8837,
-      "name": "Timber beam"
-     },
-     "qty": 0.0875
-    },
-    {
-     "item": {
-      "id": 3420,
-      "name": "Limestone brick"
-     },
-     "qty": 0.0875
-    },
-    {
-     "item": {
-      "id": 1941,
-      "name": "Swamp paste"
-     },
-     "qty": 0.4375
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 3430,
-      "name": "Sacred oil(4)"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "sacred oil(4)",
-    "perHour": {
-     "slow": 220,
-     "typical": 320,
-     "fast": 400
-    },
-    "basis": "wiki-guide",
-    "assumes": "400 sacred oil(4) an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3487,
-    "y": 3288,
-    "plane": 0,
-    "label": "Mort'ton"
-   },
-   "bank": {
-    "x": 3365,
-    "y": 3318,
-    "plane": 1,
-    "label": "Mage Training Arena bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Olive oil(4), Flamtaer bracelet, Timber beam, Limestone brick, Swamp paste at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Mort'ton.",
-     "place": {
-      "x": 3487,
-      "y": 3288,
-      "plane": 0,
-      "label": "Mort'ton"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Bring the Flamtaer hammer and Flamtaer bag."
-    },
-    {
-     "kind": "perform",
-     "text": "Wear the Morytania legs 3 and a Flamtaer bracelet."
-    },
-    {
-     "kind": "perform",
-     "text": "Fill the rest of your inventory with olive oil."
-    },
-    {
-     "kind": "perform",
-     "text": "Go to the temple and start repairing the walls until you have 95%+ sanctity."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport to Burgh de Rott using Morytania legs 3 and bank all sacred oil."
-    },
-    {
-     "kind": "perform",
-     "text": "Grab a new bracelet if needed and refill your inventory with olive oil and run back to the temple."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_sacred_oil",
-     "title": "Money making guide/Making sacred oil",
-     "revision": 14963542,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "mining-adamantite-ore-free-to-play",
    "title": "Mining adamantite ore (free-to-play)",
    "family": "gathering",
@@ -8047,304 +6448,6 @@
    ]
   },
   {
-   "id": "opening-eclectic-impling-jars",
-   "title": "Opening eclectic impling jars",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Opening eclectic impling jars. All over Gielinor except the Wilderness",
-   "about": "Speedrunners have completed 24 clues per hour, with 25 or more being completed as a possibility, given enough practice and luck. Eclectic impling jars can be opened to obtain various items. One of these items is a medium clue scroll. Completing medium clue scrolls is the only way to obtain certain cosmetic items as well as the very valuable ranger boots (worth ).",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "construction",
-     "level": 42
-    },
-    {
-     "kind": "level",
-     "skill": "magic",
-     "level": 96
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Spade, A light source, Graceful outfit, Stamina potions, Teleportation items, Medium STASH units built and filled, Coins"
-    },
-    {
-     "kind": "check",
-     "text": "* Tree Gnome Village to use Spirit trees * Partial completion of Fairytale II - Cure a Queen to use Fairy rings * Ardougne Easy Diary for the Ardougne cloak * Kandarin Easy Diary for the Kandarin headgear"
-    },
-    {
-     "kind": "check",
-     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 11248,
-      "name": "Eclectic impling jar"
-     },
-     "qty": 25
-    },
-    {
-     "item": {
-      "id": 12625,
-      "name": "Stamina potion(4)"
-     },
-     "qty": 0.4
-    },
-    {
-     "item": {
-      "id": 995,
-      "name": "Coins"
-     },
-     "qty": 4000,
-     "stack": true
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 11260,
-      "name": "Impling jar"
-     },
-     "qty": 22.5
-    },
-    {
-     "item": {
-      "id": 11248,
-      "name": "Eclectic impling jar"
-     },
-     "qty": 25
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 11,
-     "typical": 16,
-     "fast": 20
-    },
-    "basis": "wiki-guide",
-    "assumes": "20 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2500,
-    "y": 3150,
-    "plane": 0,
-    "label": "All over Gielinor except the Wilderness"
-   },
-   "bank": {
-    "x": 2443,
-    "y": 3083,
-    "plane": 0,
-    "label": "Castle Wars bank"
-   },
-   "saleSeconds": 60,
-   "risk": "high",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Eclectic impling jar, Stamina potion(4), Coins at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to All over Gielinor except the Wilderness.",
-     "place": {
-      "x": 2500,
-      "y": 3150,
-      "plane": 0,
-      "label": "All over Gielinor except the Wilderness"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Opening eclectic impling jars until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Castle Wars bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Opening_eclectic_impling_jars",
-     "title": "Money making guide/Opening eclectic impling jars",
-     "revision": 14831217,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "opening-essence-impling-jars",
-   "title": "Opening essence impling jars",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Opening essence impling jars. All over Gielinor except the Wilderness",
-   "about": "Completing medium clue scrolls is the only way to obtain certain cosmetic items as well as the very valuable ranger boots (worth ). This makes completing medium clues rather profitable, with the average clue reward valued at. While Eclectic impling jars are more commonly known for their 1/25 chance to contain a medium clue scroll, Essence impling jars can also be opened to obtain medium clue scrolls at a 1/50 rate. This makes them less popular but more cost effective and profitable.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "construction",
-     "level": 42
-    },
-    {
-     "kind": "level",
-     "skill": "magic",
-     "level": 96
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Spade, A light source, Graceful outfit, Stamina potions, Teleportation items, Medium STASH units built and filled, Coins"
-    },
-    {
-     "kind": "check",
-     "text": "* Tree Gnome Village to use Spirit trees * Partial completion of Fairytale II - Cure a Queen to use Fairy rings * Ardougne Easy Diary for the Ardougne cloak * Kandarin Easy Diary for the Kandarin headgear"
-    },
-    {
-     "kind": "check",
-     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 11246,
-      "name": "Essence impling jar"
-     },
-     "qty": 50
-    },
-    {
-     "item": {
-      "id": 12625,
-      "name": "Stamina potion(4)"
-     },
-     "qty": 0.4
-    },
-    {
-     "item": {
-      "id": 995,
-      "name": "Coins"
-     },
-     "qty": 4000,
-     "stack": true
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 11260,
-      "name": "Impling jar"
-     },
-     "qty": 45
-    },
-    {
-     "item": {
-      "id": 11246,
-      "name": "Essence impling jar"
-     },
-     "qty": 50
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 11,
-     "typical": 16,
-     "fast": 20
-    },
-    "basis": "wiki-guide",
-    "assumes": "20 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2500,
-    "y": 3150,
-    "plane": 0,
-    "label": "All over Gielinor except the Wilderness"
-   },
-   "bank": {
-    "x": 2443,
-    "y": 3083,
-    "plane": 0,
-    "label": "Castle Wars bank"
-   },
-   "saleSeconds": 60,
-   "risk": "high",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Essence impling jar, Stamina potion(4), Coins at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to All over Gielinor except the Wilderness.",
-     "place": {
-      "x": 2500,
-      "y": 3150,
-      "plane": 0,
-      "label": "All over Gielinor except the Wilderness"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Start at a convenient bank such as the Grand Exchange or the Crafting Guild."
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 15 Essence impling jars, and spam click on the last jar in your inventory."
-    },
-    {
-     "kind": "perform",
-     "text": "Open your bank, click on the Deposit Inventory button, withdraw 15 more jars and repeat until you have 10+ clues on the ground."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Opening_essence_impling_jars",
-     "title": "Money making guide/Opening essence impling jars",
-     "revision": 14831213,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "smelting-adamantite-bars-superheat-item",
    "title": "Smelting adamantite bars (Superheat Item)",
    "family": "production",
@@ -8988,273 +7091,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smithing_rune_items",
      "title": "Money making guide/Smithing rune items",
      "revision": 15394528,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "stealing-from-rogues-castle-chests",
-   "title": "Stealing from Rogues' Castle chests",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Stealing from Rogues' Castle chests. Rogues' Castle, Deep Wilderness",
-   "about": "Chests are located inside the Rogues' Castle in Deep Wilderness. Requiring 84 Thieving, looting them can be one of the most lucrative thieving activities if player-killers can be managed. As always, players should not take anything they are not prepared to lose when it comes to the Wilderness. For specific information on equipment and procedure, along with calculations on rates, see Chest (Rogues' Castle)/Strategies.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "thieving",
-     "level": 84
-    },
-    {
-     "kind": "level",
-     "skill": "prayer",
-     "level": 43
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Untradeable prayer bonus gear, Single dose blighted super restore, Araxyte venom sacs, Method to teleport to house or Ferox Enclave, Supplies and equipment (higher risk) to escape player killers if not suiciding"
-    },
-    {
-     "kind": "check",
-     "text": "* Completion of the hard Wilderness Diary for full profit * Completion of the medium Wilderness Diary for any loot at all"
-    },
-    {
-     "kind": "check",
-     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 24598,
-      "name": "Blighted super restore(4)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      385
-     ]
-    },
-    {
-     "item": {
-      "id": 29784,
-      "name": "Araxyte venom sac"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      96
-     ]
-    },
-    {
-     "item": {
-      "id": 8013,
-      "name": "Teleport to house (tablet)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      96
-     ]
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 561,
-      "name": "Nature rune"
-     },
-     "qty": 8.3333,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 223,
-      "name": "Red spiders' eggs"
-     },
-     "qty": 1.0606
-    },
-    {
-     "item": {
-      "id": 563,
-      "name": "Law rune"
-     },
-     "qty": 7.5758,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 453,
-      "name": "Coal"
-     },
-     "qty": 3.0303
-    },
-    {
-     "item": {
-      "id": 995,
-      "name": "Coins"
-     },
-     "qty": 511.3636,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 25769,
-      "name": "Vile ashes"
-     },
-     "qty": 0.8182
-    },
-    {
-     "item": {
-      "id": 1617,
-      "name": "Uncut diamond"
-     },
-     "qty": 0.3182
-    },
-    {
-     "item": {
-      "id": 1621,
-      "name": "Uncut emerald"
-     },
-     "qty": 0.3636
-    },
-    {
-     "item": {
-      "id": 24607,
-      "name": "Blighted ancient ice sack"
-     },
-     "qty": 0.4848
-    },
-    {
-     "item": {
-      "id": 440,
-      "name": "Iron ore"
-     },
-     "qty": 0.7576
-    },
-    {
-     "item": {
-      "id": 562,
-      "name": "Chaos rune"
-     },
-     "qty": 1.1364,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 560,
-      "name": "Death rune"
-     },
-     "qty": 0.9394,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 24589,
-      "name": "Blighted manta ray"
-     },
-     "qty": 0.3788
-    },
-    {
-     "item": {
-      "id": 24592,
-      "name": "Blighted anglerfish"
-     },
-     "qty": 0.2727
-    },
-    {
-     "item": {
-      "id": 1623,
-      "name": "Uncut sapphire"
-     },
-     "qty": 0.2727
-    },
-    {
-     "item": {
-      "id": 1615,
-      "name": "Dragonstone"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      33
-     ]
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 212,
-     "typical": 308,
-     "fast": 385
-    },
-    "basis": "wiki-guide",
-    "assumes": "385 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3286,
-    "y": 3933,
-    "plane": 0,
-    "label": "Rogues' Castle, Deep Wilderness"
-   },
-   "bank": {
-    "x": 3130,
-    "y": 3631,
-    "plane": 0,
-    "label": "Ferox Enclave bank"
-   },
-   "saleSeconds": 60,
-   "risk": "high",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Blighted super restore(4), Araxyte venom sac, Teleport to house (tablet) at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Rogues' Castle, Deep Wilderness.",
-     "place": {
-      "x": 3286,
-      "y": 3933,
-      "plane": 0,
-      "label": "Rogues' Castle, Deep Wilderness"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Stealing from Rogues' Castle chests until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Ferox Enclave bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stealing_from_Rogues'_Castle_chests",
-     "title": "Money making guide/Stealing from Rogues' Castle chests",
-     "revision": 15392813,
      "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -10019,6 +7855,18 @@
   },
   "cut-redwood-logs": {
    "about": "Redwood logs are used to train Firemaking and make redwood birdhouses. Although less in demand than some other logs, they are still profitable. The only locations where redwood trees can be cut are the Woodcutting Guild and the Farming Guild. The redwood tree in the Farming Guild requires the player to first grow a redwood tree (requiring level 90 Farming) and has a bank deposit box very close to the tree."
+  },
+  "craft-cosmic-runes": {
+   "about": "{{Map||mapID=-1|zoom=2|x=2407|y=4417|align=right|width=300|height=500|caption=The on-foot route to and from the Zanaris bank. 2411:4433,2411:4431,2419:4423,2419:4414,2412:4407,2388:4407,2385:4410, 2378:4410,2378:4404,2386:4396,2393:4396,2396:4393,2400:4393, 2404:4389,2404:4381,2406:4379"
+  },
+  "craft-aether-runes": {
+   "about": "{{Map||mapID=-1|zoom=2|x=2407|y=4417|align=right|width=300|height=500|caption=The on-foot route to and from the Zanaris bank. 2411:4433,2411:4431,2419:4423,2419:4414,2412:4407,2388:4407,2385:4410, 2378:4410,2378:4404,2386:4396,2393:4396,2396:4393,2400:4393, 2404:4389,2404:4381,2406:4379"
+  },
+  "hunt-dragon-implings": {
+   "about": "On a good day, hunting down implings can yield quite a bit of money for willing players. The elusive Dragon impling at Impetuous Impulses or throughout Gielinor is exceedingly rare, but it is valuable and worth. Players can reach Puro-Puro by travelling to Lumbridge Swamp and entering the Lost City shed with a Dramen or Lunar staff equipped. Alternatively, they can use a Fairy ring if sufficient progress in Fairytale II - Cure a Queen has been made."
+  },
+  "steal-rogues-castle-chests": {
+   "about": "Chests are located inside the Rogues' Castle in Deep Wilderness. Requiring 84 Thieving, looting them can be one of the most lucrative thieving activities if player-killers can be managed. As always, players should not take anything they are not prepared to lose when it comes to the Wilderness. For specific information on equipment and procedure, along with calculations on rates, see Chest (Rogues' Castle)/Strategies."
   }
  },
  "notBuilt": [
@@ -10323,6 +8171,11 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "smelting-runite-bars-at-blast-furnace-player-to-player-trading",
+   "title": "Smelting runite bars at Blast Furnace (Player-to-player trading)",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
    "id": "pickpocketing-vyres",
    "title": "Pickpocketing vyres",
    "reason": "needs Sins of the Father, not on the route yet"
@@ -10331,11 +8184,6 @@
    "id": "killing-cerberus",
    "title": "Killing Cerberus",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "smelting-runite-bars-at-blast-furnace-player-to-player-trading",
-   "title": "Smelting runite bars at Blast Furnace (Player-to-player trading)",
-   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "crafting-wrath-runes",
@@ -10353,14 +8201,24 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "killing-zulrah-max-efficiency",
+   "title": "Killing Zulrah (max efficiency)",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
    "id": "killing-vorkath-toxic-blowpipe",
    "title": "Killing Vorkath (Toxic blowpipe)",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-zulrah-max-efficiency",
-   "title": "Killing Zulrah (max efficiency)",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "casting-tan-leather",
+   "title": "Casting Tan Leather",
+   "reason": "input3 is a wiki formula the build cannot read"
+  },
+  {
+   "id": "smelting-runite-bars-at-blast-furnace",
+   "title": "Smelting runite bars at Blast Furnace",
+   "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
    "id": "slaying-venators",
@@ -10373,19 +8231,9 @@
    "reason": "needs Sailing (a bank boat and a chum spreader), which the route does not model"
   },
   {
-   "id": "smelting-runite-bars-at-blast-furnace",
-   "title": "Smelting runite bars at Blast Furnace",
-   "reason": "needs The Giant Dwarf, not on the route yet"
-  },
-  {
-   "id": "casting-tan-leather",
-   "title": "Casting Tan Leather",
-   "reason": "input3 is a wiki formula the build cannot read"
-  },
-  {
-   "id": "crafting-astral-runes",
-   "title": "Crafting astral runes",
-   "reason": "needs Lunar Diplomacy, not on the route yet"
+   "id": "fletching-gem-tipped-dragon-bolts",
+   "title": "Fletching gem-tipped dragon bolts",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "crafting-death-runes-through-the-abyss",
@@ -10393,14 +8241,19 @@
    "reason": "needs Mourning's End Part II, not on the route yet"
   },
   {
-   "id": "making-sanfew-serum-4",
-   "title": "Making sanfew serum(4)",
-   "reason": "needs Zogre Flesh Eaters, not on the route yet"
+   "id": "crafting-astral-runes",
+   "title": "Crafting astral runes",
+   "reason": "needs Lunar Diplomacy, not on the route yet"
   },
   {
    "id": "cutting-raw-marlin",
    "title": "Cutting raw marlin",
    "reason": "needs Sailing (a bank boat and a chum spreader), which the route does not model"
+  },
+  {
+   "id": "making-sanfew-serum-4",
+   "title": "Making sanfew serum(4)",
+   "reason": "needs Zogre Flesh Eaters, not on the route yet"
   },
   {
    "id": "killing-the-abyssal-sire",
@@ -10413,19 +8266,14 @@
    "reason": "level sailing 78 is not modelled"
   },
   {
-   "id": "killing-dagannoth-kings-solo-tribrid",
-   "title": "Killing Dagannoth Kings (Solo tribrid)",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "smelting-adamantite-bars-at-blast-furnace",
    "title": "Smelting adamantite bars at Blast Furnace",
    "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
-   "id": "fletching-gem-tipped-dragon-bolts",
-   "title": "Fletching gem-tipped dragon bolts",
-   "reason": "nothing sellable is made every unit"
+   "id": "killing-dagannoth-kings-solo-tribrid",
+   "title": "Killing Dagannoth Kings (Solo tribrid)",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "looting-branda-the-fire-queen",
@@ -10513,11 +8361,6 @@
    "reason": "needs prescription goggles, which the route does not plan"
   },
   {
-   "id": "degriming-grimy-dwarf-weed",
-   "title": "Degriming grimy dwarf weed",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
    "id": "last-man-standing",
    "title": "Last Man Standing",
    "reason": "a Members fight needs a hand-made combat profile"
@@ -10538,13 +8381,18 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "smelting-steel-bars-at-blast-furnace",
+   "title": "Smelting steel bars at Blast Furnace",
+   "reason": "needs The Giant Dwarf, not on the route yet"
+  },
+  {
    "id": "crafting-mud-runes",
    "title": "Crafting mud runes",
    "reason": "needs Lunar Diplomacy, not on the route yet"
   },
   {
-   "id": "smelting-steel-bars-at-blast-furnace",
-   "title": "Smelting steel bars at Blast Furnace",
+   "id": "smelting-mithril-bars-at-blast-furnace",
+   "title": "Smelting mithril bars at Blast Furnace",
    "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
@@ -10556,11 +8404,6 @@
    "id": "killing-lava-dragons",
    "title": "Killing lava dragons",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "smelting-mithril-bars-at-blast-furnace",
-   "title": "Smelting mithril bars at Blast Furnace",
-   "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
    "id": "mining-and-crushing-infernal-shale-tick-manipulation",
@@ -10583,14 +8426,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "delivering-food-in-gnome-restaurant",
-   "title": "Delivering food in Gnome Restaurant",
-   "reason": "needs Troll Romance, not on the route yet"
-  },
-  {
    "id": "killing-zulrah",
    "title": "Killing Zulrah",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "delivering-food-in-gnome-restaurant",
+   "title": "Delivering food in Gnome Restaurant",
+   "reason": "needs Troll Romance, not on the route yet"
   },
   {
    "id": "degriming-grimy-lantadyme",
@@ -10608,14 +8451,24 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "killing-zalcano-experience",
+   "title": "Killing Zalcano (Experience)",
+   "reason": "needs Song of the Elves, not on the route yet"
+  },
+  {
    "id": "degriming-grimy-tarromin",
    "title": "Degriming grimy tarromin",
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
-   "id": "killing-zalcano-experience",
-   "title": "Killing Zalcano (Experience)",
-   "reason": "needs Song of the Elves, not on the route yet"
+   "id": "degriming-grimy-toadflax",
+   "title": "Degriming grimy toadflax",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "degriming-grimy-dwarf-weed",
+   "title": "Degriming grimy dwarf weed",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "hunting-pyre-foxes",
@@ -10643,14 +8496,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "crafting-mist-runes",
-   "title": "Crafting mist runes",
-   "reason": "needs Lunar Diplomacy, not on the route yet"
-  },
-  {
    "id": "hunting-sunlight-antelopes",
    "title": "Hunting sunlight antelopes",
    "reason": "needs Children of the Sun, not on the route yet"
+  },
+  {
+   "id": "crafting-mist-runes",
+   "title": "Crafting mist runes",
+   "reason": "needs Lunar Diplomacy, not on the route yet"
   },
   {
    "id": "killing-skeletal-wyverns",
@@ -10671,6 +8524,11 @@
    "id": "buying-relicym-s-balm",
    "title": "Buying Relicym's balm",
    "reason": "needs Zogre Flesh Eaters, not on the route yet"
+  },
+  {
+   "id": "making-sacred-oil",
+   "title": "Making sacred oil",
+   "reason": "the figures assume the hard Morytania Diary (Morytania legs 3)"
   },
   {
    "id": "killing-k-ril-tsutsaroth",
@@ -10748,29 +8606,19 @@
    "reason": "needs Troll Stronghold, not on the route yet"
   },
   {
-   "id": "casting-superglass-make",
-   "title": "Casting Superglass Make",
-   "reason": "input2 is a wiki formula the build cannot read"
-  },
-  {
    "id": "killing-kurasks",
    "title": "Killing kurasks",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "degriming-grimy-kwuarm",
-   "title": "Degriming grimy kwuarm",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
-   "id": "degriming-grimy-toadflax",
-   "title": "Degriming grimy toadflax",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
    "id": "crafting-chaos-runes-through-the-abyss",
    "title": "Crafting chaos runes through the Abyss",
    "reason": "needs Heroes' Quest, not on the route yet"
+  },
+  {
+   "id": "degriming-grimy-kwuarm",
+   "title": "Degriming grimy kwuarm",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "killing-lizardman-shamans-settlement-or-temple",
@@ -10783,19 +8631,14 @@
    "reason": "an ironman method; the route plans a trading account"
   },
   {
+   "id": "casting-superglass-make",
+   "title": "Casting Superglass Make",
+   "reason": "input2 is a wiki formula the build cannot read"
+  },
+  {
    "id": "killing-lizardman-shamans-canyon",
    "title": "Killing Lizardman Shamans (Canyon)",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "killing-the-mad-angel",
-   "title": "Killing the Mad Angel",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "degriming-grimy-ranarr-weed",
-   "title": "Degriming grimy ranarr weed",
-   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "deep-sea-trawling-for-bluefin",
@@ -10803,8 +8646,8 @@
    "reason": "level sailing 72 is not modelled"
   },
   {
-   "id": "killing-green-dragons-myths-guild",
-   "title": "Killing green dragons (Myths Guild)",
+   "id": "killing-the-mad-angel",
+   "title": "Killing the Mad Angel",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -10818,6 +8661,11 @@
    "reason": "needs One Small Favour, not on the route yet"
   },
   {
+   "id": "killing-green-dragons-myths-guild",
+   "title": "Killing green dragons (Myths Guild)",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
    "id": "buying-mixed-hide-bases",
    "title": "Buying mixed hide bases",
    "reason": "needs Children of the Sun, not on the route yet"
@@ -10828,19 +8676,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-the-giant-mole-twisted-bow",
-   "title": "Killing the Giant Mole (Twisted bow)",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "looting-ogre-coffins",
    "title": "Looting ogre coffins",
    "reason": "needs Zogre Flesh Eaters, not on the route yet"
   },
   {
-   "id": "creating-forester-s-rations",
-   "title": "Creating forester's rations",
-   "reason": "input1 is a wiki formula the build cannot read"
+   "id": "killing-basilisk-knights-slayer",
+   "title": "Killing basilisk knights (Slayer)",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "casting-plank-make",
@@ -10848,13 +8691,23 @@
    "reason": "nothing sellable is made every unit"
   },
   {
+   "id": "creating-forester-s-rations",
+   "title": "Creating forester's rations",
+   "reason": "input1 is a wiki formula the build cannot read"
+  },
+  {
    "id": "degriming-grimy-guam-leaf",
    "title": "Degriming grimy guam leaf",
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
-   "id": "killing-basilisk-knights-slayer",
-   "title": "Killing basilisk knights (Slayer)",
+   "id": "opening-eclectic-impling-jars",
+   "title": "Opening eclectic impling jars",
+   "reason": "solves the clue scrolls from the jars all over the world, which the route cannot plan"
+  },
+  {
+   "id": "killing-dagannoth-kings-rex-only",
+   "title": "Killing Dagannoth Kings (Rex only)",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -10863,9 +8716,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-dagannoth-kings-rex-only",
-   "title": "Killing Dagannoth Kings (Rex only)",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "opening-essence-impling-jars",
+   "title": "Opening essence impling jars",
+   "reason": "solves the clue scrolls from the jars all over the world, which the route cannot plan"
   },
   {
    "id": "killing-fiyr-shades",
@@ -10873,19 +8726,34 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "killing-the-giant-mole-twisted-bow",
+   "title": "Killing the Giant Mole (Twisted bow)",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "degriming-grimy-snapdragon",
+   "title": "Degriming grimy snapdragon",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "degriming-grimy-ranarr-weed",
+   "title": "Degriming grimy ranarr weed",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
    "id": "making-oak-planks-auburnvale",
    "title": "Making oak planks (Auburnvale)",
    "reason": "needs Children of the Sun, not on the route yet"
   },
   {
-   "id": "hallowed-sepulchre-floor-4",
-   "title": "Hallowed Sepulchre (Floor 4)",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
    "id": "creating-eternal-glories",
    "title": "Creating eternal glories",
    "reason": "needs Heroes' Quest, not on the route yet"
+  },
+  {
+   "id": "hallowed-sepulchre-floor-4",
+   "title": "Hallowed Sepulchre (Floor 4)",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "pickpocketing-master-farmers",
@@ -10923,6 +8791,16 @@
    "reason": "needs the miniquest enter the abyss, which the route does not plan"
   },
   {
+   "id": "collecting-snape-grass",
+   "title": "Collecting snape grass",
+   "reason": "the guide's Waterbirth teleports need Lunar Diplomacy, not on the route yet"
+  },
+  {
+   "id": "making-mahogany-planks",
+   "title": "Making mahogany planks",
+   "reason": "needs Children of the Sun, not on the route yet"
+  },
+  {
    "id": "buying-monkey-nuts",
    "title": "Buying monkey nuts",
    "reason": "needs Monkey Madness II, not on the route yet"
@@ -10933,19 +8811,9 @@
    "reason": "needs the miniquest enter the abyss, which the route does not plan"
   },
   {
-   "id": "making-mahogany-planks",
-   "title": "Making mahogany planks",
-   "reason": "needs Children of the Sun, not on the route yet"
-  },
-  {
    "id": "stealing-cave-goblin-wire",
    "title": "Stealing cave goblin wire",
    "reason": "needs Death to the Dorgeshuun, not on the route yet"
-  },
-  {
-   "id": "killing-drakes",
-   "title": "Killing Drakes",
-   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "killing-cave-horrors",
@@ -10953,8 +8821,8 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-wyrms-slayer",
-   "title": "Killing Wyrms (Slayer)",
+   "id": "killing-drakes",
+   "title": "Killing Drakes",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -10963,9 +8831,9 @@
    "reason": "needs Dream Mentor, not on the route yet"
   },
   {
-   "id": "smithing-cannonballs-grimstone-dungeon",
-   "title": "Smithing cannonballs (Grimstone Dungeon)",
-   "reason": "level sailing 87 is not modelled"
+   "id": "killing-wyrms-slayer",
+   "title": "Killing Wyrms (Slayer)",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "crafting-blood-runes-at-arceuus-minimal-requirements",
@@ -10983,9 +8851,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "degriming-grimy-snapdragon",
-   "title": "Degriming grimy snapdragon",
-   "reason": "needs A Kingdom Divided, not on the route yet"
+   "id": "smithing-cannonballs-grimstone-dungeon",
+   "title": "Smithing cannonballs (Grimstone Dungeon)",
+   "reason": "level sailing 87 is not modelled"
   },
   {
    "id": "chopping-the-engorged-bloodwood-tree",
@@ -11003,24 +8871,24 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "killing-the-giant-mole-dharok-s",
-   "title": "Killing the Giant Mole (Dharok's)",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "making-prayer-potions",
-   "title": "Making prayer potions",
-   "reason": "no Mmgtable"
-  },
-  {
    "id": "crafting-topaz-jewellery",
    "title": "Crafting topaz jewellery",
    "reason": "nothing sellable is made every unit"
   },
   {
+   "id": "hunting-moonlight-antelopes",
+   "title": "Hunting moonlight antelopes",
+   "reason": "needs Children of the Sun, not on the route yet"
+  },
+  {
    "id": "pickpocketing-h-a-m-members",
    "title": "Pickpocketing H.A.M. members",
    "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "barrows",
+   "title": "Barrows",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "hallowed-sepulchre-floor-3",
@@ -11033,14 +8901,9 @@
    "reason": "needs Big Chompy Bird Hunting, not on the route yet"
   },
   {
-   "id": "barrows",
-   "title": "Barrows",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "hunting-moonlight-antelopes",
-   "title": "Hunting moonlight antelopes",
-   "reason": "needs Children of the Sun, not on the route yet"
+   "id": "making-prayer-potions",
+   "title": "Making prayer potions",
+   "reason": "no Mmgtable"
   },
   {
    "id": "pickpocketing-paladins",
@@ -11053,14 +8916,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-blue-dragons",
-   "title": "Killing blue dragons",
+   "id": "killing-the-giant-mole-dharok-s",
+   "title": "Killing the Giant Mole (Dharok's)",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "smelting-iron-bars-at-blast-furnace",
-   "title": "Smelting iron bars at Blast Furnace",
-   "reason": "needs The Giant Dwarf, not on the route yet"
+   "id": "killing-blue-dragons",
+   "title": "Killing blue dragons",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "hunting-carnivorous-chinchompas",
@@ -11068,14 +8931,19 @@
    "reason": "needs Eagles' Peak, not on the route yet"
   },
   {
-   "id": "temple-trekking",
-   "title": "Temple Trekking",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "smelting-iron-bars-at-blast-furnace",
+   "title": "Smelting iron bars at Blast Furnace",
+   "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
    "id": "crafting-opal-jewellery",
    "title": "Crafting opal jewellery",
    "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "temple-trekking",
+   "title": "Temple Trekking",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "mining-lead-ore-deepfin-mine",
@@ -11091,11 +8959,6 @@
    "id": "underwater-agility-and-thieving",
    "title": "Underwater Agility and Thieving",
    "reason": "nothing sellable is made every unit"
-  },
-  {
-   "id": "creating-varrock-teleport-tablets",
-   "title": "Creating Varrock teleport tablets",
-   "reason": "needs a house study lectern, which the route does not plan"
   },
   {
    "id": "killing-black-unicorns",
@@ -11118,9 +8981,19 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "creating-varrock-teleport-tablets",
+   "title": "Creating Varrock teleport tablets",
+   "reason": "needs a house study lectern, which the route does not plan"
+  },
+  {
    "id": "killing-brine-rats",
    "title": "Killing brine rats",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "planting-flower-seeds",
+   "title": "Planting flower seeds",
+   "reason": "input1 is a wiki formula the build cannot read"
   },
   {
    "id": "fletching-ogre-arrow-shafts",
@@ -11133,14 +9006,14 @@
    "reason": "needs Making Friends with My Arm, not on the route yet"
   },
   {
-   "id": "planting-flower-seeds",
-   "title": "Planting flower seeds",
-   "reason": "input1 is a wiki formula the build cannot read"
+   "id": "crafting-runes-at-ourania-altar",
+   "title": "Crafting runes at Ourania Altar",
+   "reason": "the guide's Ourania Teleport needs Lunar Diplomacy, not on the route yet"
   },
   {
-   "id": "killing-the-kalphite-queen",
-   "title": "Killing the Kalphite Queen",
-   "reason": "no Mmgtable"
+   "id": "making-oak-planks",
+   "title": "Making oak planks",
+   "reason": "needs Enlightened Journey, not on the route yet"
   },
   {
    "id": "creating-teleport-tablets-at-lectern-lunar",
@@ -11148,9 +9021,9 @@
    "reason": "output1 is a wiki formula the build cannot read"
   },
   {
-   "id": "making-oak-planks",
-   "title": "Making oak planks",
-   "reason": "needs Enlightened Journey, not on the route yet"
+   "id": "killing-the-kalphite-queen",
+   "title": "Killing the Kalphite Queen",
+   "reason": "no Mmgtable"
   },
   {
    "id": "killing-sarachnis",
@@ -11183,19 +9056,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "buying-beer",
-   "title": "Buying beer",
-   "reason": "needs Children of the Sun, not on the route yet"
+   "id": "nechrecycling",
+   "title": "Nechrecycling",
+   "reason": "picks up other players' drops in the Kourend Catacombs, which no route can plan"
   },
   {
    "id": "recharging-rings-of-wealth",
    "title": "Recharging rings of wealth",
    "reason": "no place for \"Wilderness\""
-  },
-  {
-   "id": "nechrecycling",
-   "title": "Nechrecycling",
-   "reason": "picks up other players' drops in the Kourend Catacombs, which no route can plan"
   },
   {
    "id": "collecting-climbing-boots",
@@ -11218,9 +9086,19 @@
    "reason": "needs The Tourist Trap, not on the route yet"
   },
   {
+   "id": "opening-larran-s-big-chests",
+   "title": "Opening larran's big chests",
+   "reason": "no place for \"The crashed ship west of Pirate's Hideout\""
+  },
+  {
    "id": "mining-rubium-splinters",
    "title": "Mining rubium splinters",
    "reason": "level sailing 60 is not modelled"
+  },
+  {
+   "id": "buying-beer",
+   "title": "Buying beer",
+   "reason": "needs Children of the Sun, not on the route yet"
   },
   {
    "id": "killing-frost-naguas",
@@ -11228,9 +9106,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "opening-larran-s-big-chests",
-   "title": "Opening larran's big chests",
-   "reason": "no place for \"The crashed ship west of Pirate's Hideout\""
+   "id": "mining-salts",
+   "title": "Mining salts",
+   "reason": "needs Making Friends with My Arm, not on the route yet"
   },
   {
    "id": "smithing-steel-dart-tips",
@@ -11246,11 +9124,6 @@
    "id": "hunting-herbiboars",
    "title": "Hunting herbiboars",
    "reason": "needs Bone Voyage, not on the route yet"
-  },
-  {
-   "id": "mining-salts",
-   "title": "Mining salts",
-   "reason": "needs Making Friends with My Arm, not on the route yet"
   },
   {
    "id": "salvaging-mercenary-shipwrecks",
@@ -11323,19 +9196,14 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "killing-unicows",
-   "title": "Killing unicows",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "crafting-dragonstone-jewellery",
-   "title": "Crafting dragonstone jewellery",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
    "id": "cooking-raw-sharks",
    "title": "Cooking raw sharks",
    "reason": "needs Family Crest, not on the route yet"
+  },
+  {
+   "id": "killing-unicows",
+   "title": "Killing unicows",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "mining-volcanic-ash",
@@ -11363,6 +9231,16 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "completing-elite-clues-urium-remains",
+   "title": "Completing elite clues (urium remains)",
+   "reason": "solves elite clue scrolls, which the route cannot plan"
+  },
+  {
+   "id": "crafting-dragonstone-jewellery",
+   "title": "Crafting dragonstone jewellery",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
    "id": "salvaging-fremennik-shipwrecks",
    "title": "Salvaging Fremennik shipwrecks",
    "reason": "level sailing 80 is not modelled"
@@ -11371,6 +9249,11 @@
    "id": "killing-red-dragons",
    "title": "Killing red dragons",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "fletching-unstrung-comp-bow",
+   "title": "Fletching unstrung comp bow",
+   "reason": "needs Zogre Flesh Eaters, not on the route yet"
   },
   {
    "id": "mining-gemstones",
@@ -11383,14 +9266,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-brutal-green-dragons",
-   "title": "Killing brutal green dragons",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "casting-spin-flax",
    "title": "Casting Spin Flax",
    "reason": "needs Lunar Diplomacy, not on the route yet"
+  },
+  {
+   "id": "killing-brutal-green-dragons",
+   "title": "Killing brutal green dragons",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "killing-the-crazy-archaeologist",
@@ -11433,19 +9316,24 @@
    "reason": "nothing sellable is made every unit"
   },
   {
+   "id": "collecting-anti-dragon-shields",
+   "title": "Collecting anti-dragon shields",
+   "reason": "needs Dragon Slayer I, not on the route yet"
+  },
+  {
    "id": "killing-sulphur-naguas",
    "title": "Killing sulphur naguas",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "catching-infernal-eels",
-   "title": "Catching infernal eels",
-   "reason": "output3 is a wiki formula the build cannot read"
-  },
-  {
    "id": "catching-sacred-eels",
    "title": "Catching sacred eels",
    "reason": "needs Regicide, not on the route yet"
+  },
+  {
+   "id": "catching-infernal-eels",
+   "title": "Catching infernal eels",
+   "reason": "output3 is a wiki formula the build cannot read"
   },
   {
    "id": "forging-giant-swords",
@@ -11458,14 +9346,14 @@
    "reason": "needs Children of the Sun, not on the route yet"
   },
   {
-   "id": "collecting-anti-dragon-shields",
-   "title": "Collecting anti-dragon shields",
-   "reason": "needs Dragon Slayer I, not on the route yet"
-  },
-  {
    "id": "making-weapon-poison",
    "title": "Making weapon poison(++)",
    "reason": "needs Watchtower, not on the route yet"
+  },
+  {
+   "id": "smithing-mithril-dart-tips",
+   "title": "Smithing mithril dart tips",
+   "reason": "needs The Tourist Trap, not on the route yet"
   },
   {
    "id": "salvaging-large-shipwrecks",
@@ -11483,9 +9371,9 @@
    "reason": "needs Fairytale II - Cure a Queen, not on the route yet"
   },
   {
-   "id": "smithing-mithril-dart-tips",
-   "title": "Smithing mithril dart tips",
-   "reason": "needs The Tourist Trap, not on the route yet"
+   "id": "creating-camelot-teleport-tablets",
+   "title": "Creating Camelot teleport tablets",
+   "reason": "needs a house study lectern, which the route does not plan"
   },
   {
    "id": "creating-ardougne-teleport-tablets",
@@ -11493,9 +9381,9 @@
    "reason": "needs a house study lectern, which the route does not plan"
   },
   {
-   "id": "creating-camelot-teleport-tablets",
-   "title": "Creating Camelot teleport tablets",
-   "reason": "needs a house study lectern, which the route does not plan"
+   "id": "stealing-valuables",
+   "title": "Stealing valuables",
+   "reason": "needs Children of the Sun, not on the route yet"
   },
   {
    "id": "cooking-raw-karambwan",
@@ -11503,29 +9391,19 @@
    "reason": "needs Tai Bwo Wannai Trio, not on the route yet"
   },
   {
-   "id": "stealing-valuables",
-   "title": "Stealing valuables",
-   "reason": "needs Children of the Sun, not on the route yet"
-  },
-  {
    "id": "killing-ankou",
    "title": "Killing ankou",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "cutting-camphor-logs",
-   "title": "Cutting camphor logs",
-   "reason": "needs Troubled Tortugans, not on the route yet"
-  },
-  {
-   "id": "fletching-unstrung-comp-bow",
-   "title": "Fletching unstrung comp bow",
-   "reason": "needs Zogre Flesh Eaters, not on the route yet"
-  },
-  {
    "id": "picking-up-chisels",
    "title": "Picking up chisels",
    "reason": "needs Temple of the Eye, not on the route yet"
+  },
+  {
+   "id": "cutting-camphor-logs",
+   "title": "Cutting camphor logs",
+   "reason": "needs Troubled Tortugans, not on the route yet"
   },
   {
    "id": "mining-and-crushing-infernal-shale-infernal-shale-deposit",
@@ -11598,13 +9476,13 @@
    "reason": "needs Ghosts Ahoy, not on the route yet"
   },
   {
-   "id": "farming-toadflax",
-   "title": "Farming toadflax",
+   "id": "farming-cadantine",
+   "title": "Farming cadantine",
    "reason": "needs Ghosts Ahoy, not on the route yet"
   },
   {
-   "id": "farming-cadantine",
-   "title": "Farming cadantine",
+   "id": "farming-toadflax",
+   "title": "Farming toadflax",
    "reason": "needs Ghosts Ahoy, not on the route yet"
   },
   {

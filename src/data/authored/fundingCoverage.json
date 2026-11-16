@@ -1031,6 +1031,38 @@
       "methods": [
         "cut-redwood-logs"
       ]
+    },
+    {
+      "id": "crafting-cosmic-runes",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "craft-cosmic-runes"
+      ]
+    },
+    {
+      "id": "crafting-aether-runes",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "craft-aether-runes"
+      ]
+    },
+    {
+      "id": "hunting-implings",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "hunt-dragon-implings"
+      ]
+    },
+    {
+      "id": "stealing-from-rogues-castle-chests",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "steal-rogues-castle-chests"
+      ]
     }
   ],
   "extras": [
