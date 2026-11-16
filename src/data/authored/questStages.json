@@ -23933,6 +23933,17 @@
        },
        "has": "Queen's secateurs",
        "k": "killTanglefoot"
+      },
+      {
+       "t": "Pick up the queen's secateurs the Tanglefoot dropped.",
+       "s": "Pick up the queen's secateurs.",
+       "at": [
+        2375,
+        4385,
+        0
+       ],
+       "has": "Queen's secateurs",
+       "k": "pickUpSecateurs"
       }
      ],
      "go": {
@@ -29230,6 +29241,498 @@
        "t": "Open the quest's journal to sync your current quest state.",
        "s": "Open the quest's journal to sync your current quest state.",
        "k": "syncStep"
+      }
+     ]
+    }
+   ]
+  },
+  "S9-09": {
+   "var": [
+    "varbit",
+    6027
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Speak to Lord Kandur in the house west of the Vinery (Xeric's Glade teleport on talisman). Dialogue: \"Anything I can help you with?\", \"Yes.\"",
+      "Speak to Chef Olivia in Lord Kandur's kitchen.",
+      "Head to the Arceuus Library (fairy ring code , or games necklace to Wintertodt Camp, or Lovakengj Minecart Network to Arceuus) and speak to Galana. (north-east wing, )",
+      "Speak to Galana again. She will tell you where to find the Varlamore Envoy book. This is random for everyone.",
+      "Read the Varlamore Envoy book.",
+      "Enter the Crabclaw Caves, marked by the File:Dungeon map link icon.png icon, south outside of the Woodcutting Guild near the water. Kill a sandcrab for easy diary while here. (Rada's blessing, Skills necklace teleport, Xeric's Talisman to Xeric's Look-Out, or Veos ship/charter ship to Land's End)",
+      "Navigate to the end of the caves and climb down the tunnel at the end.",
+      "Speak to Artur Hosidius.",
+      "Kill the Sand Snake (level 36).",
+      "Search the chest.",
+      "Return to Lord Kandur Hosidius and talk to him.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Lord Kandur Hosidius in his house west of the Hosidius vinery.",
+       "s": "Talk to Lord Kandur Hosidius west of the vinery.",
+       "k": "talkToLordKandur",
+       "at": [
+        1782,
+        3572,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11033
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Chef Olivia in Lord Kandur's kitchen.",
+       "s": "Talk to Chef Olivia in Lord Kandur's kitchen.",
+       "k": "talkToChefOlivia",
+       "at": [
+        1776,
+        3567,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7901
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to Galana in the Arceuus Library.",
+       "s": "Talk to Galana in the Arceuus Library.",
+       "k": "talkToGalana",
+       "at": [
+        1649,
+        3824,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7902
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Find the Varlamore Envoy book in the Arceuus Library. Galana tells you roughly where it is if you ask.",
+       "s": "Find the Varlamore Envoy in the Arceuus Library.",
+       "k": "findTheVarlamoreEnvoy"
+      },
+      {
+       "t": "Read the Varlamore Envoy.",
+       "s": "Read the Varlamore Envoy.",
+       "k": "readTheVarlamoreEnvoy"
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the Crabclaw Caves south-west of Hosidius.",
+       "s": "Enter the Crabclaw Caves.",
+       "k": "enterCrabclawCaves",
+       "at": [
+        1645,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31690
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Enter the Crabclaw Caves south-west of Hosidius.",
+       "s": "Enter the Crabclaw Caves.",
+       "k": "enterCrabclawCaves",
+       "at": [
+        1645,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31690
+        ]
+       }
+      },
+      {
+       "t": "Climb down the tunnel at the end of the cave.",
+       "s": "Climb down the tunnel at the end of the cave.",
+       "k": "enterTunnelEntrance",
+       "at": [
+        1672,
+        9800,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31692
+        ]
+       }
+      },
+      {
+       "t": "Climb over the rocks.",
+       "s": "Climb over the rocks.",
+       "k": "climbPastRocks",
+       "at": [
+        1688,
+        9801,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31697
+        ]
+       }
+      },
+      {
+       "t": "Cross the stepping stones.",
+       "s": "Cross the stepping stones.",
+       "k": "stepOverSteppingStones",
+       "at": [
+        1706,
+        9800,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31699
+        ]
+       }
+      },
+      {
+       "t": "Squeeze through the crevice.",
+       "s": "Squeeze through the crevice.",
+       "k": "goThroughCrevice",
+       "at": [
+        1711,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31695
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Enter the Crabclaw Caves south-west of Hosidius.",
+       "s": "Enter the Crabclaw Caves.",
+       "k": "enterCrabclawCaves",
+       "at": [
+        1645,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31690
+        ]
+       }
+      },
+      {
+       "t": "Climb down the tunnel at the end of the cave.",
+       "s": "Climb down the tunnel at the end of the cave.",
+       "k": "enterTunnelEntrance",
+       "at": [
+        1672,
+        9800,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31692
+        ]
+       }
+      },
+      {
+       "t": "Climb over the rocks.",
+       "s": "Climb over the rocks.",
+       "k": "climbPastRocks",
+       "at": [
+        1688,
+        9801,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31697
+        ]
+       }
+      },
+      {
+       "t": "Cross the stepping stones.",
+       "s": "Cross the stepping stones.",
+       "k": "stepOverSteppingStones",
+       "at": [
+        1706,
+        9800,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31699
+        ]
+       }
+      },
+      {
+       "t": "Squeeze through the crevice.",
+       "s": "Squeeze through the crevice.",
+       "k": "goThroughCrevice",
+       "at": [
+        1711,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31695
+        ]
+       }
+      },
+      {
+       "t": "Talk to Artur Hosidius in the cave.",
+       "s": "Talk to Artur Hosidius in the cave.",
+       "k": "talkToArturHosidius",
+       "hl": {
+        "npc": [
+         7899
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Enter the Crabclaw Caves south-west of Hosidius.",
+       "s": "Enter the Crabclaw Caves.",
+       "k": "enterCrabclawCaves",
+       "at": [
+        1645,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31690
+        ]
+       }
+      },
+      {
+       "t": "Climb down the tunnel at the end of the cave.",
+       "s": "Climb down the tunnel at the end of the cave.",
+       "k": "enterTunnelEntrance",
+       "at": [
+        1672,
+        9800,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31692
+        ]
+       }
+      },
+      {
+       "t": "Climb over the rocks.",
+       "s": "Climb over the rocks.",
+       "k": "climbPastRocks",
+       "at": [
+        1688,
+        9801,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31697
+        ]
+       }
+      },
+      {
+       "t": "Cross the stepping stones.",
+       "s": "Cross the stepping stones.",
+       "k": "stepOverSteppingStones",
+       "at": [
+        1706,
+        9800,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31699
+        ]
+       }
+      },
+      {
+       "t": "Squeeze through the crevice.",
+       "s": "Squeeze through the crevice.",
+       "k": "goThroughCrevice",
+       "at": [
+        1711,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31695
+        ]
+       }
+      },
+      {
+       "t": "Kill the Sand Snake (level 36).",
+       "s": "Kill the Sand Snake (level 36).",
+       "k": "killSandSnake",
+       "hl": {
+        "npc": [
+         7903
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Enter the Crabclaw Caves south-west of Hosidius.",
+       "s": "Enter the Crabclaw Caves.",
+       "k": "enterCrabclawCaves",
+       "at": [
+        1645,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31690
+        ]
+       }
+      },
+      {
+       "t": "Climb down the tunnel at the end of the cave.",
+       "s": "Climb down the tunnel at the end of the cave.",
+       "k": "enterTunnelEntrance",
+       "at": [
+        1672,
+        9800,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31692
+        ]
+       }
+      },
+      {
+       "t": "Climb over the rocks.",
+       "s": "Climb over the rocks.",
+       "k": "climbPastRocks",
+       "at": [
+        1688,
+        9801,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31697
+        ]
+       }
+      },
+      {
+       "t": "Cross the stepping stones.",
+       "s": "Cross the stepping stones.",
+       "k": "stepOverSteppingStones",
+       "at": [
+        1706,
+        9800,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31699
+        ]
+       }
+      },
+      {
+       "t": "Squeeze through the crevice.",
+       "s": "Squeeze through the crevice.",
+       "k": "goThroughCrevice",
+       "at": [
+        1711,
+        9823,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31695
+        ]
+       }
+      },
+      {
+       "t": "Search the chest.",
+       "s": "Search the chest.",
+       "k": "searchChest",
+       "hl": {
+        "obj": [
+         31703
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Return to Lord Kandur Hosidius and talk to him to finish the quest.",
+       "s": "Return to Lord Kandur Hosidius to finish.",
+       "k": "talkToLordKandurAgain",
+       "at": [
+        1782,
+        3572,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11033
+        ]
+       }
       }
      ]
     }

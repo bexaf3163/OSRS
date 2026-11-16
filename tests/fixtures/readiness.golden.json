@@ -62,6 +62,7 @@
 ["everything present","S9-06","READY",["item:Bucket of water:OK","item:Jug of water:OK"]],
 ["everything present","S9-07","READY",["item:Feather:OK"]],
 ["everything present","S9-08","READY",["item:Bread ×10:OK","item:Trout ×10:OK","item:Iron bar:OK","item:Asgarnian ale:OK","coins:1,000 gp:OK"]],
+["everything present","S9-09","READY",["item:Trout ×3 (or Salmon, Tuna…):OK"]],
 ["in the bank","S1-03","READY",[]],
 ["in the bank","S1-04","READY",[]],
 ["in the bank","S1-05","MINOR_PREP",["item:Spade:BANK"]],
@@ -125,6 +126,7 @@
 ["in the bank","S9-06","MINOR_PREP",["item:Bucket of water:BANK","item:Jug of water:BANK"]],
 ["in the bank","S9-07","MINOR_PREP",["item:Feather:BANK"]],
 ["in the bank","S9-08","MINOR_PREP",["item:Bread ×10:BANK","item:Trout ×10:BANK","item:Iron bar:BANK","item:Asgarnian ale:BANK","coins:1,000 gp:BANK"]],
+["in the bank","S9-09","MINOR_PREP",["item:Trout ×3 (or Salmon, Tuna…):BANK"]],
 ["part","S1-03","READY",[]],
 ["part","S1-04","READY",[]],
 ["part","S1-05","MISSING_ITEM",["item:Spade:MISSING"]],
@@ -188,6 +190,7 @@
 ["part","S9-06","MISSING_ITEM",["item:Bucket of water:MISSING","item:Jug of water:MISSING"]],
 ["part","S9-07","MISSING_ITEM",["item:Feather:MISSING"]],
 ["part","S9-08","MISSING_ITEM",["item:Iron bar:MISSING","item:Asgarnian ale:MISSING","coins:1,000 gp:MISSING","item:Bread ×10:PARTIAL","item:Trout ×10:PARTIAL"]],
+["part","S9-09","UNKNOWN",["item:Trout ×3 (or Salmon, Tuna…):UNKNOWN"]],
 ["nothing","S1-03","READY",[]],
 ["nothing","S1-04","READY",[]],
 ["nothing","S1-05","MISSING_ITEM",["item:Spade:MISSING"]],
@@ -251,6 +254,7 @@
 ["nothing","S9-06","MISSING_ITEM",["item:Bucket of water:MISSING","item:Jug of water:MISSING"]],
 ["nothing","S9-07","MISSING_ITEM",["item:Feather:MISSING"]],
 ["nothing","S9-08","MISSING_ITEM",["item:Bread ×10:MISSING","item:Trout ×10:MISSING","item:Iron bar:MISSING","item:Asgarnian ale:MISSING","coins:1,000 gp:MISSING"]],
+["nothing","S9-09","UNKNOWN",["item:Trout ×3 (or Salmon, Tuna…):UNKNOWN"]],
 ["bank not open","S1-03","READY",[]],
 ["bank not open","S1-04","READY",[]],
 ["bank not open","S1-05","UNKNOWN",["item:Spade:UNKNOWN"]],
@@ -314,6 +318,7 @@
 ["bank not open","S9-06","UNKNOWN",["item:Bucket of water:UNKNOWN","item:Jug of water:UNKNOWN"]],
 ["bank not open","S9-07","UNKNOWN",["item:Feather:UNKNOWN"]],
 ["bank not open","S9-08","UNKNOWN",["item:Bread ×10:UNKNOWN","item:Trout ×10:UNKNOWN","item:Iron bar:UNKNOWN","item:Asgarnian ale:UNKNOWN","coins:1,000 gp:UNKNOWN"]],
+["bank not open","S9-09","UNKNOWN",["item:Trout ×3 (or Salmon, Tuna…):UNKNOWN"]],
 ["no connection","S1-03","READY",[]],
 ["no connection","S1-04","READY",[]],
 ["no connection","S1-05","UNKNOWN",["item:Spade:UNKNOWN"]],
@@ -376,5 +381,6 @@
 ["no connection","S9-05","UNKNOWN",["skill:Cooking 10:UNKNOWN","item:Eye of newt:UNKNOWN","item:Greenman's ale:UNKNOWN","item:Rotten tomato:UNKNOWN","item:Fruit blast:UNKNOWN","item:Ashes:UNKNOWN","quest:Cook's Assistant:OK"]],
 ["no connection","S9-06","UNKNOWN",["item:Bucket of water:UNKNOWN","item:Jug of water:UNKNOWN"]],
 ["no connection","S9-07","UNKNOWN",["item:Feather:UNKNOWN"]],
-["no connection","S9-08","UNKNOWN",["item:Bread ×10:UNKNOWN","item:Trout ×10:UNKNOWN","item:Iron bar:UNKNOWN","item:Asgarnian ale:UNKNOWN","coins:1,000 gp:UNKNOWN"]]
+["no connection","S9-08","UNKNOWN",["item:Bread ×10:UNKNOWN","item:Trout ×10:UNKNOWN","item:Iron bar:UNKNOWN","item:Asgarnian ale:UNKNOWN","coins:1,000 gp:UNKNOWN"]],
+["no connection","S9-09","UNKNOWN",["item:Trout ×3 (or Salmon, Tuna…):UNKNOWN"]]
 ]

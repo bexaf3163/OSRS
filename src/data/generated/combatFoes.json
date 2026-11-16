@@ -1040,6 +1040,32 @@
       }
     },
     {
+      "name": "Sand Snake",
+      "combat": 36,
+      "members": true,
+      "hitpoints": 60,
+      "attackLevel": 30,
+      "strengthLevel": 20,
+      "defenceLevel": 20,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "earth",
+        "percent": 40
+      }
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

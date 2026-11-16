@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-36 stages: 8 retained, 27 revised, 0 with a branch, 1 deferred.
+37 stages: 9 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -44,6 +44,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-04 Monkey Madness I | quest-fight | yes | Jungle Demon (195), Monkey zombie, Gorilla | safespot | Jungle Demon | - | Revised |
 | S9-06 Clock Tower | avoid | yes | Ogre (53) | run | Ogre | - | Retain |
 | S9-08 Death Plateau | not-combat | yes | - | none | - | Trout 10 | Retain |
+| S9-09 The Depths of Despair | quest-fight | yes | Sand Snake (36) | melee | Sand Snake | Trout 3 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -906,4 +907,26 @@ Quest stage lines: 1.8.
 Evidence:
 
 - Quest stage line 1.8: the trolls "only attack you on the main path".
+
+## S9-09 The Depths of Despair
+
+**Retain.** The Depths of Despair: kill the Sand Snake (level 36, 60 hitpoints, hits up to 3) in the Crabclaw Caves; the sandcrab on the way is only an optional diary task.
+
+Quest stage lines: 0.5, 0.8.
+
+Assumptions:
+
+- A max hit of 3 needs no food at the route's Members combat levels.
+
+Alternatives:
+
+- The wiki safespot along the west wall.
+
+Changed:
+
+- 2.126.0: new quest; the Sand Snake is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Sand Snake infobox: level 36, 60 hitpoints, max hit 3, crush, read 2026-11-16.
 

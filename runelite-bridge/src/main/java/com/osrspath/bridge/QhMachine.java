@@ -564,7 +564,7 @@ final class QhMachine
 			case "obj":
 				return f.object(ints(n.getAsJsonArray("ids")), n.has("z") ? ints(n.getAsJsonArray("z")) : null);
 			case "ground":
-				return f.ground(ints(n.getAsJsonArray("ids")), ints(n.getAsJsonArray("z")));
+				return f.ground(ints(n.getAsJsonArray("ids")), n.has("z") ? ints(n.getAsJsonArray("z")) : null);
 			case "skill":
 				return f.skill(n.get("s").getAsString()) >= n.get("l").getAsInt();
 			case "quest":

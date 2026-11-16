@@ -374,6 +374,9 @@ class Interp:
             return self.make_npc(args)
         if typ == 'ObjectCondition':
             return self.make_obj(args)
+        if typ == 'InInstanceRequirement':
+            # shortcut: true; the zone beside it already places the player (plugin positions are instance-mapped). Replace if a quest uses it alone.
+            return req('true')
         if typ == 'ItemOnTileRequirement':
             return self.make_ground(args)
         if typ == 'SkillRequirement':
@@ -592,9 +595,10 @@ class Interp:
     def make_ground(self, args):
         it = next((a for a in args if isinstance(a, Req) and a.get('ids')), None)
         wp = next((a for a in args if isinstance(a, WP)), None)
-        if not it or not wp:
+        if not it:
             return req('?', d='ground')
-        return req('ground', ids=it['ids'], z=[wp.x, wp.y, wp.x, wp.y, wp.p, wp.p])
+        # without a tile: the item lies anywhere in the scene
+        return req('ground', ids=it['ids'], z=[wp.x, wp.y, wp.x, wp.y, wp.p, wp.p] if wp else None)
 
     def make_skill(self, args):
         sk = next((a for a in args if isinstance(a, Enum) and a.cls == 'Skill'), None)

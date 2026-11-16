@@ -1268,6 +1268,39 @@
       "evidence": [
         "Quest stage line 1.8: the trolls \"only attack you on the main path\"."
       ]
+    },
+    {
+      "stepId": "S9-09",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "The Depths of Despair: kill the Sand Snake (level 36, 60 hitpoints, hits up to 3) in the Crabclaw Caves; the sandcrab on the way is only an optional diary task.",
+      "enemies": [
+        {
+          "name": "Sand Snake",
+          "level": 36,
+          "maxHit": 3,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.5",
+        "0.8"
+      ],
+      "assumptions": [
+        "A max hit of 3 needs no food at the route's Members combat levels."
+      ],
+      "problems": [],
+      "alternatives": [
+        "The wiki safespot along the west wall."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.126.0: new quest; the Sand Snake is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Sand Snake infobox: level 36, 60 hitpoints, max hit 3, crush, read 2026-11-16."
+      ]
     }
   ]
 }

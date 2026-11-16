@@ -6729,5 +6729,65 @@
         "questName": "Death Plateau"
       }
     }
+  },
+  {
+    "id": "S9-09",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Depths of Despair",
+    "qp": 1,
+    "requires": [
+      "S9-07"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Depths_of_Despair",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Depths_of_Despair/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=1782,3570,0",
+    "mapLocation": {
+      "x": 1782,
+      "y": 3570,
+      "plane": 0,
+      "label": "His home in Hosidius, north-west of the Vinery"
+    },
+    "npc": {
+      "nameEn": "Lord Kandur Hosidius",
+      "location": "His home in Hosidius, north-west of the Vinery",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Lord_Kandur_Hosidius"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Trout",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "amount": 3,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster"
+        ],
+        "howToGet": "Your own catch, or buy on the Grand Exchange. The Sand Snake hits at most 3, so a few are only a margin."
+      }
+    ],
+    "foes": [
+      "Sand Snake"
+    ],
+    "reward": "1 QP, 1,500 Agility XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Lord Kandur Hosidius"
+      ],
+      "dialogChoices": [
+        "Anything I can help you with?",
+        "Yes."
+      ],
+      "highlightItems": [],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Depths of Despair"
+      }
+    }
   }
 ]

@@ -141,6 +141,10 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     unknownItems: ['Asgarnian ale', 'IOU', 'Combination', 'Stone ball', 'Certificate', 'Climbing boots', 'Spiked boots', 'Secret way map'],
     partialDelivery: false, fromStartOnly: true,
   } },
+  // Nothing is used up; the Varlamore Envoy is a quest book. The reward coins are paid at the end.
+  'The Depths of Despair': { revision: 15365598, flow: {
+    consumes: [], receives: [], unknownItems: ['The Varlamore Envoy'], partialDelivery: false, fromStartOnly: true,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],
@@ -161,6 +165,7 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to defeat a level 111 [[Tanglefoot]] with limited weaponry',
   'The ability to defeat a level 195 [[Jungle Demon]]',
   'The ability to defeat 4 monsters from level 19 to 53 without a break.',
+  'Ability to kill a level 36 [[Sand Snake]]',
   'The ability to run past two level 14 thieves, and one level 26.',
   'The ability to defend against level 53 [[Jogre]]s and level 46 [[Harpie Bug Swarm]]s.',
   'The ability to run past level 53 [[Ogre]]s',
