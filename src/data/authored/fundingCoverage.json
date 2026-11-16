@@ -823,6 +823,54 @@
       "methods": [
         "fletch-diamond-bolts"
       ]
+    },
+    {
+      "id": "making-super-combat-potions",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "make-super-combat-potions"
+      ]
+    },
+    {
+      "id": "opening-crystal-chests",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "open-crystal-chests"
+      ]
+    },
+    {
+      "id": "blast-mining",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "blast-mine-lovakengj"
+      ]
+    },
+    {
+      "id": "making-mahogany-planks-at-the-woodcutting-guild",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "mahogany-planks-woodcutting-guild"
+      ]
+    },
+    {
+      "id": "subduing-tempoross",
+      "status": "supported",
+      "family": "gathering",
+      "methods": [
+        "subdue-tempoross"
+      ]
+    },
+    {
+      "id": "aerial-fishing",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "aerial-fishing-molch"
+      ]
     }
   ],
   "extras": [

@@ -1,285 +1,8 @@
 {
  "version": 1,
- "generatedAt": "2026-11-15",
+ "generatedAt": "2026-11-16",
  "source": "https://oldschool.runescape.wiki/w/Money_making_guide",
  "methods": [
-  {
-   "id": "aerial-fishing",
-   "title": "Aerial fishing",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Aerial fishing for Shark lures. Molch lake",
-   "about": "Aerial fishing is an activity in Lake Molch that rewards the player with Molch pearls in addition to a high amount of fishing and hunter experience. Each Molch pearl can be used to purchase a shark lure pack from Alry the Angler's Angling Accessories, which contains 100 shark lures. To reach the island in the centre of Lake Molch, the player must take a boat at one of the three docks located on the northern, western, and eastern shores of the lake.",
-   "tips": [
-    "To reach the northern or eastern dock the player can use fairy ring to the Chasm of Fire and either run south-west for the eastern dock or west for the northern dock.",
-    "To reach the eastern dock, the player can teleport to Shayzien using Kharedst's memoirs or the Book of the Dead and run west.",
-    "To reach the western dock, the player can use a skills necklace to teleport to the Farming Guild and run south-east through Molch.",
-    "To reach the eastern dock, the player can use any Rada's blessing to teleport to the Kourend Woodland, then travel to C: Shayzien West using the nearby Lovakengj Minecart Network."
-   ],
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "fishing",
-     "level": 43
-    },
-    {
-     "kind": "level",
-     "skill": "hunter",
-     "level": 35
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Fish offcuts, or ability to consume fish unlocked for 20 Molch pearls, Knife (optional)"
-    },
-    {
-     "kind": "check",
-     "text": "* None"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 11334,
-      "name": "Fish offcuts"
-     },
-     "qty": 0.286
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 30900,
-      "name": "Shark lure"
-     },
-     "qty": 2.38
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 1265,
-     "typical": 1840,
-     "fast": 2300
-    },
-    "basis": "wiki-guide",
-    "assumes": "2,300 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 1370,
-    "y": 3633,
-    "plane": 0,
-    "label": "Molch lake"
-   },
-   "bank": {
-    "x": 1483,
-    "y": 3646,
-    "plane": 0,
-    "label": "Shayzien Encampment bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Fish offcuts at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Molch lake.",
-     "place": {
-      "x": 1370,
-      "y": 3633,
-      "plane": 0,
-      "label": "Molch lake"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Aerial fishing for Shark lures until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Shayzien Encampment bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Aerial_fishing",
-     "title": "Money making guide/Aerial fishing",
-     "revision": 15374251,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "blast-mining",
-   "title": "Blast mining",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Blast mine",
-   "about": "The blast mine is located in the northern section of Lovakengj, requiring level 43 Mining to access. At level 75 mining the player can receive ores up to Runite. Players should expect to be able to use around 330 dynamite an hour, and up to 385 at maximum effeciency. See the blast mine strategies page for effective strategies.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "mining",
-     "level": 43
-    },
-    {
-     "kind": "item",
-     "role": "tool",
-     "any": [],
-     "family": "pickaxe"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Dynamite, Chisel, Tinderbox, Dragon pickaxe (optional, for mining boost), Prospector kit or Weight-reducing clothing, Stamina potion (optional), Regen bracelet (heal from accidental damage, optional), Mining cape(for mining boost) or Hitpoints cape(for hp regeneration)"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 13573,
-      "name": "Dynamite"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 451,
-      "name": "Runite ore"
-     },
-     "qty": 0.1337
-    },
-    {
-     "item": {
-      "id": 449,
-      "name": "Adamantite ore"
-     },
-     "qty": 0.4093
-    },
-    {
-     "item": {
-      "id": 447,
-      "name": "Mithril ore"
-     },
-     "qty": 0.4744
-    },
-    {
-     "item": {
-      "id": 444,
-      "name": "Gold ore"
-     },
-     "qty": 0.2949
-    },
-    {
-     "item": {
-      "id": 453,
-      "name": "Coal"
-     },
-     "qty": 0.1874
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 182,
-     "typical": 264,
-     "fast": 330
-    },
-    "basis": "wiki-guide",
-    "assumes": "330 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 1489,
-    "y": 3864,
-    "plane": 0,
-    "label": "Blast mine"
-   },
-   "bank": {
-    "x": 1479,
-    "y": 3857,
-    "plane": 0,
-    "label": "Blast Mine bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Dynamite at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Blast mine.",
-     "place": {
-      "x": 1489,
-      "y": 3864,
-      "plane": 0,
-      "label": "Blast mine"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Blast mine until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Blast Mine bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Blast_mining",
-     "title": "Money making guide/Blast mining",
-     "revision": 14931967,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
   {
    "id": "blessing-unblessed-symbols",
    "title": "Blessing unblessed symbols",
@@ -376,11 +99,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Blessing_unblessed_symbols",
      "title": "Money making guide/Blessing unblessed symbols",
      "revision": 15104046,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -498,11 +221,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_ale_from_the_Rising_Sun_Inn",
      "title": "Money making guide/Buying ale from the Rising Sun Inn",
      "revision": 14381436,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -623,11 +346,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_team_capes",
      "title": "Money making guide/Buying team capes",
      "revision": 14876465,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -745,11 +468,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Casting_Bones_to_Bananas",
      "title": "Money making guide/Casting Bones to Bananas",
      "revision": 15174068,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -865,11 +588,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_anglerfish",
      "title": "Money making guide/Catching anglerfish",
      "revision": 15395613,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -995,11 +718,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_dark_crabs",
      "title": "Money making guide/Catching dark crabs",
      "revision": 15373683,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1121,11 +844,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_sardines_&_herring",
      "title": "Money making guide/Catching sardines & herring",
      "revision": 14957916,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1230,11 +953,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_shrimp_&_anchovies",
      "title": "Money making guide/Catching shrimp & anchovies",
      "revision": 14957332,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1339,11 +1062,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_tuna_&_swordfish_(free-to-play)",
      "title": "Money making guide/Catching tuna & swordfish (free-to-play)",
      "revision": 14483592,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1477,11 +1200,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Charging_and_alchemising_bracelets_of_ethereum",
      "title": "Money making guide/Charging and alchemising bracelets of ethereum",
      "revision": 14830679,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1595,11 +1318,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_air_talismans",
      "title": "Money making guide/Collecting air talismans",
      "revision": 15010937,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1705,11 +1428,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_and_tanning_cowhide",
      "title": "Money making guide/Collecting and tanning cowhide",
      "revision": 15265661,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1831,11 +1554,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_ashes",
      "title": "Money making guide/Collecting ashes",
      "revision": 15386459,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -1923,11 +1646,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_beer_glasses",
      "title": "Money making guide/Collecting beer glasses",
      "revision": 15118236,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2067,11 +1790,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_big_bones_from_the_Bone_Yard",
      "title": "Money making guide/Collecting big bones from the Bone Yard",
      "revision": 14716893,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2182,11 +1905,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_bronze_pickaxes",
      "title": "Money making guide/Collecting bronze pickaxes",
      "revision": 14381020,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2289,11 +2012,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_chaos_runes",
      "title": "Money making guide/Collecting chaos runes",
      "revision": 14435949,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2381,11 +2104,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_fish_food",
      "title": "Money making guide/Collecting fish food",
      "revision": 14385382,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2472,11 +2195,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_garlic",
      "title": "Money making guide/Collecting garlic",
      "revision": 14216376,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2601,11 +2324,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_nature_runes",
      "title": "Money making guide/Collecting nature runes",
      "revision": 14381445,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2749,11 +2472,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_red_spiders'_eggs_(free-to-play)",
      "title": "Money making guide/Collecting red spiders' eggs (free-to-play)",
      "revision": 15392181,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -2876,11 +2599,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_snape_grass",
      "title": "Money making guide/Collecting snape grass",
      "revision": 15392914,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -3016,11 +2739,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_steel_platebodies",
      "title": "Money making guide/Collecting steel platebodies",
      "revision": 14856630,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -3148,11 +2871,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_steel_platebodies_(High_Alchemy)",
      "title": "Money making guide/Collecting steel platebodies (High Alchemy)",
      "revision": 14708436,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -3257,11 +2980,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_tinderboxes",
      "title": "Money making guide/Collecting tinderboxes",
      "revision": 14912496,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -3385,11 +3108,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_wine_of_zamorak_(Deep_Wilderness_Dungeon)",
      "title": "Money making guide/Collecting wine of zamorak (Deep Wilderness Dungeon)",
      "revision": 15294036,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -3516,11 +3239,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_wine_of_zamorak_(free-to-play)",
      "title": "Money making guide/Collecting wine of zamorak (free-to-play)",
      "revision": 15293976,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4006,11 +3729,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Completing_elite_clues_(urium_remains)",
      "title": "Money making guide/Completing elite clues (urium remains)",
      "revision": 15392179,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4130,11 +3853,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_plain_pizzas",
      "title": "Money making guide/Cooking plain pizzas",
      "revision": 14720686,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4240,11 +3963,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_anchovies",
      "title": "Money making guide/Cooking raw anchovies",
      "revision": 14246137,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4354,11 +4077,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_anglerfish",
      "title": "Money making guide/Cooking raw anglerfish",
      "revision": 15317773,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4472,11 +4195,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_dark_crabs",
      "title": "Money making guide/Cooking raw dark crabs",
      "revision": 14246140,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4586,11 +4309,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_marlin",
      "title": "Money making guide/Cooking raw marlin",
      "revision": 15132344,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4704,11 +4427,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_moonlight_antelope",
      "title": "Money making guide/Cooking raw moonlight antelope",
      "revision": 15009321,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -4814,11 +4537,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_swordfish",
      "title": "Money making guide/Cooking raw swordfish",
      "revision": 14380688,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5001,11 +4724,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_aether_runes",
      "title": "Money making guide/Crafting aether runes",
      "revision": 15317779,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5116,11 +4839,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_ascension_bolts",
      "title": "Money making guide/Crafting ascension bolts",
      "revision": 15382401,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5305,11 +5028,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_cosmic_runes",
      "title": "Money making guide/Crafting cosmic runes",
      "revision": 15312593,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5428,11 +5151,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_diamond_ascension_bolts",
      "title": "Money making guide/Crafting diamond ascension bolts",
      "revision": 15386085,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5579,11 +5302,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_double_nature_runes_(Achievement_Diary_Cape_teleport)",
      "title": "Money making guide/Crafting double nature runes (Achievement Diary Cape teleport)",
      "revision": 15402413,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5883,11 +5606,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_runes_at_Ourania_Altar",
      "title": "Money making guide/Crafting runes at Ourania Altar",
      "revision": 14997902,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -5997,11 +5720,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_amethyst_arrowtips",
      "title": "Money making guide/Cutting amethyst arrowtips",
      "revision": 14925398,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6116,142 +5839,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_redwood_logs",
      "title": "Money making guide/Cutting redwood logs",
      "revision": 15152854,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cutting-yew-logs",
-   "title": "Cutting yew logs",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cutting yew logs. Woodcutting Guild, Catherby, Seers' Village, Varrock Palace, and Edgeville",
-   "about": "For a money making guide geared towards free-to-play players, see Cutting yew logs (free-to-play). This guide uses rough calculations based on the following: You have level Woodcutting 61 and are using a Dragon axe, are participating in Forestry events (at an average of 5 events per hour when on Forestry worlds), and are using Secateurs attachments to increase the amount of Yew leaves you passively collect while chopping.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "woodcutting",
-     "level": 60
-    },
-    {
-     "kind": "item",
-     "role": "tool",
-     "any": [],
-     "family": "axe"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Dragon axe or Crystal axe (requires Woodcutting 71 and Song of the elves)"
-    },
-    {
-     "kind": "check",
-     "text": "Forestry kit Log basket (optional)"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 28161,
-      "name": "Secateurs attachment"
-     },
-     "qty": 0.25
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 1515,
-      "name": "Yew logs"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 6026,
-      "name": "Yew leaves"
-     },
-     "qty": 0.5
-    }
-   ],
-   "rate": {
-    "unit": "yew logs",
-    "perHour": {
-     "slow": 116,
-     "typical": 168,
-     "fast": 210
-    },
-    "basis": "wiki-guide",
-    "assumes": "210 yew logs an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 1614,
-    "y": 3499,
-    "plane": 0,
-    "label": "Woodcutting Guild, Catherby, Seers' Village, Varrock Palace, and Edgeville"
-   },
-   "bank": {
-    "x": 1592,
-    "y": 3476,
-    "plane": 0,
-    "label": "Woodcutting Guild bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Secateurs attachment at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Woodcutting Guild, Catherby, Seers' Village, Varrock Palace, and Edgeville.",
-     "place": {
-      "x": 1614,
-      "y": 3499,
-      "plane": 0,
-      "label": "Woodcutting Guild, Catherby, Seers' Village, Varrock Palace, and Edgeville"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cutting yew logs until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Woodcutting Guild bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_yew_logs",
-     "title": "Money making guide/Cutting yew logs",
-     "revision": 15222360,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6344,11 +5936,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Firecycling",
      "title": "Money making guide/Firecycling",
      "revision": 15376181,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6459,11 +6051,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Fletching_sunlight_antler_bolts",
      "title": "Money making guide/Fletching sunlight antler bolts",
      "revision": 15017506,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6585,11 +6177,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Hunting_implings",
      "title": "Money making guide/Hunting implings",
      "revision": 15399237,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6721,11 +6313,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Hunting_pyre_foxes",
      "title": "Money making guide/Hunting pyre foxes",
      "revision": 15358591,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -6870,11 +6462,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Hunting_sunlight_antelopes",
      "title": "Money making guide/Hunting sunlight antelopes",
      "revision": 15159979,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -7101,11 +6693,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_ankou_(free-to-play)",
      "title": "Money making guide/Killing ankou (free-to-play)",
      "revision": 15266182,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -7214,11 +6806,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_bears",
      "title": "Money making guide/Killing bears",
      "revision": 14378144,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -7557,11 +7149,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_Bryophyta_(free-to-play)",
      "title": "Money making guide/Killing Bryophyta (free-to-play)",
      "revision": 15392180,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -7862,11 +7454,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_chaos_dwarves",
      "title": "Money making guide/Killing chaos dwarves",
      "revision": 15230438,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -8005,11 +7597,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_elemental_wizards",
      "title": "Money making guide/Killing elemental wizards",
      "revision": 14909026,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -8166,11 +7758,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_imps",
      "title": "Money making guide/Killing imps",
      "revision": 14457220,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -8285,11 +7877,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_monkeys",
      "title": "Money making guide/Killing monkeys",
      "revision": 14990458,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -8642,11 +8234,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_ogress_warriors",
      "title": "Money making guide/Killing ogress warriors",
      "revision": 14868637,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -8873,11 +8465,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_wizards",
      "title": "Money making guide/Killing wizards",
      "revision": 15271238,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -9011,11 +8603,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_dough_at_Cooks'_Guild",
      "title": "Money making guide/Making dough at Cooks' Guild",
      "revision": 14488874,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -9133,11 +8725,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_dyes",
      "title": "Money making guide/Making dyes",
      "revision": 14390648,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -9291,11 +8883,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_elemental_battlestaves_(Ironman)",
      "title": "Money making guide/Making elemental battlestaves (Ironman)",
      "revision": 15114598,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -9412,179 +9004,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_flour",
      "title": "Money making guide/Making flour",
      "revision": 14380730,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-mahogany-planks-at-the-woodcutting-guild",
-   "title": "Making mahogany planks at the Woodcutting Guild",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making planks at the Woodcutting Guild",
-   "about": "This guide assumes that each trip takes 22 seconds. Your profits may be lower depending on your speed. The Woodcutting Guild in Hosidius contains a sawmill which is located significantly close to the Skills necklace teleport destination. This allows the player to make large profits by creating planks and selling them on the Grand Exchange.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "woodcutting",
-     "level": 60
-    },
-    {
-     "kind": "item",
-     "role": "tool",
-     "any": [],
-     "family": "axe"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Weight-reducing clothing recommended, Coins"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 6332,
-      "name": "Mahogany logs"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 995,
-      "name": "Coins"
-     },
-     "qty": 1500,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 12625,
-      "name": "Stamina potion(4)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      471
-     ]
-    },
-    {
-     "item": {
-      "id": 11968,
-      "name": "Skills necklace(6)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      151
-     ]
-    },
-    {
-     "item": {
-      "id": 2552,
-      "name": "Ring of dueling(8)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      202
-     ]
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 8782,
-      "name": "Mahogany plank"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 11113,
-      "name": "Skills necklace"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      151
-     ]
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 2331,
-     "typical": 3390,
-     "fast": 4238
-    },
-    "basis": "wiki-guide",
-    "assumes": "4,238 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 1614,
-    "y": 3499,
-    "plane": 0,
-    "label": "Woodcutting Guild"
-   },
-   "bank": {
-    "x": 1592,
-    "y": 3476,
-    "plane": 0,
-    "label": "Woodcutting Guild bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Mahogany logs, Coins, Stamina potion(4), Skills necklace(6), Ring of dueling(8) at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Teleport to the Woodcutting Guild with a Skills necklace (option 5), right click on the sawmill operator, select \"Buy-Plank\", then \"Buy All\" underneath the mahogany logs.",
-     "place": {
-      "x": 1614,
-      "y": 3499,
-      "plane": 0,
-      "label": "Woodcutting Guild"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport back to a bank, deposit the planks, then withdraw another inventory of mahogany logs."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_mahogany_planks_at_the_Woodcutting_Guild",
-     "title": "Money making guide/Making mahogany planks at the Woodcutting Guild",
-     "revision": 14765995,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -9691,11 +9115,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_pastry_dough",
      "title": "Money making guide/Making pastry dough",
      "revision": 15128189,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -9822,11 +9246,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_raw_summer_pies",
      "title": "Money making guide/Making raw summer pies",
      "revision": 14792507,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -9953,11 +9377,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_raw_wild_pies",
      "title": "Money making guide/Making raw wild pies",
      "revision": 14272533,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -10129,299 +9553,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_sacred_oil",
      "title": "Money making guide/Making sacred oil",
      "revision": 14963542,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-super-combat-potions",
-   "title": "Making super combat potions",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making Super combat potions. Grand Exchange",
-   "about": "Super combat potions are crafted by combining Super attack, Super defence, Super strength, and Torstol together after obtaining the necessary Herblore level of 90. A menu will open, and click to Make-all. Be cautious to not drink any of the potions, either use the torstol on a potion or change the click option from drink to use on the potions. After the inventory is complete, you should be left with 7 super combat potions and possibly torstols.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 90
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 2436,
-      "name": "Super attack(4)"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 2442,
-      "name": "Super defence(4)"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 2440,
-      "name": "Super strength(4)"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 12695,
-      "name": "Super combat potion(4)"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 229,
-      "name": "Vial"
-     },
-     "qty": 2
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 1155,
-     "typical": 1680,
-     "fast": 2100
-    },
-    "basis": "wiki-guide",
-    "assumes": "2,100 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Super attack(4), Super defence(4), Super strength(4) at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 7 super attack potions, 7 super defence potions, 7 super strength potions, and 7 torstols and use any item on another."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory and repeat the process."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_super_combat_potions",
-     "title": "Money making guide/Making super combat potions",
-     "revision": 15080310,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-super-combat-potions-with-prescription-goggles",
-   "title": "Making super combat potions (with prescription goggles)",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making Super combat potions. Grand Exchange",
-   "about": "Super combat potions are crafted by combining Super attack, Super defence, Super strength, and Torstol together after obtaining the necessary Herblore level of 90. The prescription goggles are a reward from Mastering Mixology which provides a 10% chance to not use the torstol secondary ingredient. A menu will open, and click to Make-all. Be cautious to not drink any of the potions, either use the torstol on a potion or change the click option from drink to use on the potions.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "herblore",
-     "level": 90
-    },
-    {
-     "kind": "quest",
-     "quest": "Druidic Ritual",
-     "state": "complete"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Prescription goggles"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 2436,
-      "name": "Super attack(4)"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 2442,
-      "name": "Super defence(4)"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 2440,
-      "name": "Super strength(4)"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 12695,
-      "name": "Super combat potion(4)"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 229,
-      "name": "Vial"
-     },
-     "qty": 2
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 1155,
-     "typical": 1680,
-     "fast": 2100
-    },
-    "basis": "wiki-guide",
-    "assumes": "2,100 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Super attack(4), Super defence(4), Super strength(4) at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Equip the prescription goggles."
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 7 super attack potions, 7 super defence potions, 7 super strength potions, and 7 torstols and use any item on another."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory and repeat the process."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_super_combat_potions_(with_prescription_goggles)",
-     "title": "Money making guide/Making super combat potions (with prescription goggles)",
-     "revision": 15019915,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -10532,11 +9668,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_adamantite_ore_(free-to-play)",
      "title": "Money making guide/Mining adamantite ore (free-to-play)",
      "revision": 14381448,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -10644,11 +9780,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_amethyst",
      "title": "Money making guide/Mining amethyst",
      "revision": 15398214,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -10752,11 +9888,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_basalt",
      "title": "Money making guide/Mining basalt",
      "revision": 14520261,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -10913,11 +10049,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_clay",
      "title": "Money making guide/Mining clay",
      "revision": 14380736,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -11051,11 +10187,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_and_superheating_Adamantite_bars",
      "title": "Money making guide/Mining coal and superheating Adamantite bars",
      "revision": 14997912,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -11189,11 +10325,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_and_superheating_Mithril_bars",
      "title": "Money making guide/Mining coal and superheating Mithril bars",
      "revision": 14997911,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -11327,11 +10463,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_and_superheating_Runite_bars",
      "title": "Money making guide/Mining coal and superheating Runite bars",
      "revision": 14997906,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -11443,11 +10579,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_runite_ore",
      "title": "Money making guide/Mining runite ore",
      "revision": 15232967,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -11548,11 +10684,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_runite_ore_(free-to-play)",
      "title": "Money making guide/Mining runite ore (free-to-play)",
      "revision": 14863994,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -11656,11 +10792,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_salts",
      "title": "Money making guide/Mining salts",
      "revision": 14363626,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -11800,336 +10936,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Motherlode_Mine",
      "title": "Money making guide/Motherlode Mine",
      "revision": 15195514,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "opening-crystal-chests",
-   "title": "Opening crystal chests",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Opening crystal chests. Taverley",
-   "about": "The crystal chest, located in Taverley, always rewards an uncut dragonstone when opened, as well as a variety of other items. Opening the chest requires a crystal key, and the key is used up when the chest is opened. Depending on the price difference between the keys and the loot, it can be very profitable to buy crystal keys, open the chest, and sell the resulting contents. The price of crystal keys jumps around a lot, so be aware of market prices.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "construction",
-     "level": 10
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Ring of dueling/Crafting cape, Teleport to house, Scroll of redirection if the player's player-owned house is not located in Taverley, alternatively players can relocate their house to a different place by talking to an Estate agent."
-    },
-    {
-     "kind": "check",
-     "text": "Construction 10 to teleport to the player-owned house in Taverley"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 989,
-      "name": "Crystal key"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 8013,
-      "name": "Teleport to house (tablet)"
-     },
-     "qty": 0.1429
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 1631,
-      "name": "Uncut dragonstone"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 995,
-      "name": "Coins"
-     },
-     "qty": 652.3438,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 1969,
-      "name": "Spinach roll"
-     },
-     "qty": 0.2656
-    },
-    {
-     "item": {
-      "id": 556,
-      "name": "Air rune"
-     },
-     "qty": 4.6875,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 555,
-      "name": "Water rune"
-     },
-     "qty": 4.6875,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 557,
-      "name": "Earth rune"
-     },
-     "qty": 4.6875,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 554,
-      "name": "Fire rune"
-     },
-     "qty": 4.6875,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 559,
-      "name": "Body rune"
-     },
-     "qty": 4.6875,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 558,
-      "name": "Mind rune"
-     },
-     "qty": 4.6875,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 562,
-      "name": "Chaos rune"
-     },
-     "qty": 0.9375,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 560,
-      "name": "Death rune"
-     },
-     "qty": 0.9375,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 564,
-      "name": "Cosmic rune"
-     },
-     "qty": 0.9375,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 561,
-      "name": "Nature rune"
-     },
-     "qty": 0.9375,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 563,
-      "name": "Law rune"
-     },
-     "qty": 0.9375,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 1603,
-      "name": "Ruby"
-     },
-     "qty": 0.1875
-    },
-    {
-     "item": {
-      "id": 1601,
-      "name": "Diamond"
-     },
-     "qty": 0.1875
-    },
-    {
-     "item": {
-      "id": 2363,
-      "name": "Runite bar"
-     },
-     "qty": 0.2813
-    },
-    {
-     "item": {
-      "id": 440,
-      "name": "Iron ore"
-     },
-     "qty": 11.7188
-    },
-    {
-     "item": {
-      "id": 453,
-      "name": "Coal"
-     },
-     "qty": 7.8125
-    },
-    {
-     "item": {
-      "id": 371,
-      "name": "Raw swordfish"
-     },
-     "qty": 0.3125
-    },
-    {
-     "item": {
-      "id": 987,
-      "name": "Loop half of key"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      26
-     ]
-    },
-    {
-     "item": {
-      "id": 985,
-      "name": "Tooth half of key"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      26
-     ]
-    },
-    {
-     "item": {
-      "id": 1183,
-      "name": "Adamant sq shield"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      64
-     ]
-    },
-    {
-     "item": {
-      "id": 1079,
-      "name": "Rune platelegs"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      256
-     ]
-    },
-    {
-     "item": {
-      "id": 1093,
-      "name": "Rune plateskirt"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      256
-     ]
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 231,
-     "typical": 336,
-     "fast": 420
-    },
-    "basis": "wiki-guide",
-    "assumes": "420 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2910,
-    "y": 3451,
-    "plane": 0,
-    "label": "Taverley"
-   },
-   "bank": {
-    "x": 2947,
-    "y": 3366,
-    "plane": 0,
-    "label": "Falador West Bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Crystal key, Teleport to house (tablet) at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Taverley.",
-     "place": {
-      "x": 2910,
-      "y": 3451,
-      "plane": 0,
-      "label": "Taverley"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Opening crystal chests until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Falador West Bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Opening_crystal_chests",
-     "title": "Money making guide/Opening crystal chests",
-     "revision": 15381275,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -12274,11 +11085,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Opening_eclectic_impling_jars",
      "title": "Money making guide/Opening eclectic impling jars",
      "revision": 14831217,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -12423,11 +11234,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Opening_essence_impling_jars",
      "title": "Money making guide/Opening essence impling jars",
      "revision": 14831213,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -12693,11 +11504,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Opening_grubby_chests",
      "title": "Money making guide/Opening grubby chests",
      "revision": 15381027,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -12863,11 +11674,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Opening_sinister_chests",
      "title": "Money making guide/Opening sinister chests",
      "revision": 14841359,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -13019,11 +11830,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_adamantite_bars_(Superheat_Item)",
      "title": "Money making guide/Smelting adamantite bars (Superheat Item)",
      "revision": 15352277,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -13144,11 +11955,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_iron_bars",
      "title": "Money making guide/Smelting iron bars",
      "revision": 15260339,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -13265,11 +12076,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_runite_bars",
      "title": "Money making guide/Smelting runite bars",
      "revision": 14640352,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -13403,11 +12214,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_runite_bars_(Superheat_Item)",
      "title": "Money making guide/Smelting runite bars (Superheat Item)",
      "revision": 15392172,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -13517,11 +12328,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smithing_rune_items",
      "title": "Money making guide/Smithing rune items",
      "revision": 15394528,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -13784,11 +12595,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stealing_from_Rogues'_Castle_chests",
      "title": "Money making guide/Stealing from Rogues' Castle chests",
      "revision": 15392813,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -13898,11 +12709,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stealing_Wydin's_bananas",
      "title": "Money making guide/Stealing Wydin's bananas",
      "revision": 14379455,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -14063,11 +12874,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stranglewood_fishing",
      "title": "Money making guide/Stranglewood fishing",
      "revision": 15325314,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -14180,216 +12991,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stringing_magic_longbows",
      "title": "Money making guide/Stringing magic longbows",
      "revision": 14355611,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "subduing-tempoross",
-   "title": "Subduing Tempoross",
-   "family": "gathering",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Subduing Tempoross. Ruins of Unkah",
-   "about": "Lower fishing levels will see less high-tier fish and lower permits per hour. Roughly 50 permits per hour can be gained from normal mass-world cooking. But upwards of 100 permits per hour can be earned from the solo-firefighting methods. See Tempoross/Strategies for more details.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "fishing",
-     "level": 35
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Harpoon, Rope, Hammer, Humidify"
-    },
-    {
-     "kind": "check",
-     "text": "* Dragon / Infernal / Crystal harpoon for better rates and experience * Spirit angler's outfit grants additional XP and functions as a rope. * Optionally Magic 68 and Lunar Diplomacy for Humidify"
-    }
-   ],
-   "inputs": [],
-   "outputs": [
-    {
-     "item": {
-      "id": 25578,
-      "name": "Soaked page"
-     },
-     "qty": 0.1304
-    },
-    {
-     "item": {
-      "id": 25576,
-      "name": "Tome of Water (empty)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      1600
-     ]
-    },
-    {
-     "item": {
-      "id": 21028,
-      "name": "Dragon harpoon"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      8000
-     ]
-    },
-    {
-     "item": {
-      "id": 363,
-      "name": "Raw bass"
-     },
-     "qty": 4.9219
-    },
-    {
-     "item": {
-      "id": 371,
-      "name": "Raw swordfish"
-     },
-     "qty": 3.1641
-    },
-    {
-     "item": {
-      "id": 383,
-      "name": "Raw shark"
-     },
-     "qty": 1.6875
-    },
-    {
-     "item": {
-      "id": 395,
-      "name": "Raw sea turtle"
-     },
-     "qty": 0.9352
-    },
-    {
-     "item": {
-      "id": 389,
-      "name": "Raw manta ray"
-     },
-     "qty": 0.6328
-    },
-    {
-     "item": {
-      "id": 960,
-      "name": "Plank"
-     },
-     "qty": 1.0938
-    },
-    {
-     "item": {
-      "id": 8778,
-      "name": "Oak plank"
-     },
-     "qty": 0.625
-    },
-    {
-     "item": {
-      "id": 401,
-      "name": "Seaweed"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 1539,
-      "name": "Steel nails"
-     },
-     "qty": 5
-    },
-    {
-     "item": {
-      "id": 314,
-      "name": "Feather"
-     },
-     "qty": 15
-    },
-    {
-     "item": {
-      "id": 313,
-      "name": "Fishing bait"
-     },
-     "qty": 15
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 33,
-     "typical": 48,
-     "fast": 60
-    },
-    "basis": "wiki-guide",
-    "assumes": "60 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 2845,
-    "plane": 0,
-    "label": "Ruins of Unkah"
-   },
-   "bank": {
-    "x": 3156,
-    "y": 2835,
-    "plane": 0,
-    "label": "Ruins of Unkah bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "travel",
-     "text": "Go to Ruins of Unkah.",
-     "place": {
-      "x": 3165,
-      "y": 2845,
-      "plane": 0,
-      "label": "Ruins of Unkah"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Subduing Tempoross until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Ruins of Unkah bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Subduing_Tempoross",
-     "title": "Money making guide/Subduing Tempoross",
-     "revision": 15312504,
-     "retrievedAt": "2026-11-15",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -14491,11 +13097,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Taking_from_the_infinite_money_bag_while_picking_up_coin_spawns_in_Varrock_West_bank",
      "title": "Money making guide/Taking from the infinite money bag while picking up coin spawns in Varrock West bank",
      "revision": 14824293,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -14623,11 +13229,11 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Tanning_cowhide",
      "title": "Money making guide/Tanning cowhide",
      "revision": 15304759,
-     "retrievedAt": "2026-11-15",
+     "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
    ],
-   "verifiedAt": "2026-11-15",
+   "verifiedAt": "2026-11-16",
    "confidence": "LOW",
    "assumptions": [
     "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
@@ -14945,6 +13551,30 @@
   },
   "fletch-diamond-bolts": {
    "about": "Diamond bolts are used to create Diamond bolts (e), some of the most powerful ammunition in the game. It can be very profitable to fletch diamond bolts with diamond bolt tips and adamant bolts. However, there could be a fairly small profit margin, and the prices of the involved items can vary greatly. It is important to test the profit of this method beforehand, by buying the materials, making a bolt, and seeing how much it sells for."
+  },
+  "make-super-combat-potions": {
+   "about": "Super combat potions are crafted by combining Super attack, Super defence, Super strength, and Torstol together after obtaining the necessary Herblore level of 90. A menu will open, and click to Make-all. Be cautious to not drink any of the potions, either use the torstol on a potion or change the click option from drink to use on the potions. After the inventory is complete, you should be left with 7 super combat potions and possibly torstols."
+  },
+  "open-crystal-chests": {
+   "about": "The crystal chest, located in Taverley, always rewards an uncut dragonstone when opened, as well as a variety of other items. Opening the chest requires a crystal key, and the key is used up when the chest is opened. Depending on the price difference between the keys and the loot, it can be very profitable to buy crystal keys, open the chest, and sell the resulting contents. The price of crystal keys jumps around a lot, so be aware of market prices."
+  },
+  "blast-mine-lovakengj": {
+   "about": "The blast mine is located in the northern section of Lovakengj, requiring level 43 Mining to access. At level 75 mining the player can receive ores up to Runite. Players should expect to be able to use around 330 dynamite an hour, and up to 385 at maximum effeciency. See the blast mine strategies page for effective strategies."
+  },
+  "mahogany-planks-woodcutting-guild": {
+   "about": "This guide assumes that each trip takes 22 seconds. Your profits may be lower depending on your speed. The Woodcutting Guild in Hosidius contains a sawmill which is located significantly close to the Skills necklace teleport destination. This allows the player to make large profits by creating planks and selling them on the Grand Exchange."
+  },
+  "subdue-tempoross": {
+   "about": "Lower fishing levels will see less high-tier fish and lower permits per hour. Roughly 50 permits per hour can be gained from normal mass-world cooking. But upwards of 100 permits per hour can be earned from the solo-firefighting methods. See Tempoross/Strategies for more details."
+  },
+  "aerial-fishing-molch": {
+   "about": "Aerial fishing is an activity in Lake Molch that rewards the player with Molch pearls in addition to a high amount of fishing and hunter experience. Each Molch pearl can be used to purchase a shark lure pack from Alry the Angler's Angling Accessories, which contains 100 shark lures. To reach the island in the centre of Lake Molch, the player must take a boat at one of the three docks located on the northern, western, and eastern shores of the lake.",
+   "tips": [
+    "To reach the northern or eastern dock the player can use fairy ring to the Chasm of Fire and either run south-west for the eastern dock or west for the northern dock.",
+    "To reach the eastern dock, the player can teleport to Shayzien using Kharedst's memoirs or the Book of the Dead and run west.",
+    "To reach the western dock, the player can use a skills necklace to teleport to the Farming Guild and run south-east through Molch.",
+    "To reach the eastern dock, the player can use any Rada's blessing to teleport to the Kourend Woodland, then travel to C: Shayzien West using the nearby Lovakengj Minecart Network."
+   ]
   }
  },
  "notBuilt": [
@@ -15402,6 +14032,11 @@
    "id": "degriming-grimy-toadflax",
    "title": "Degriming grimy toadflax",
    "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "making-super-combat-potions-with-prescription-goggles",
+   "title": "Making super combat potions (with prescription goggles)",
+   "reason": "needs prescription goggles, which the route does not plan"
   },
   {
    "id": "killing-zombie-pirates-budget",
@@ -16157,6 +14792,11 @@
    "id": "killing-skogres-and-zogres",
    "title": "Killing skogres and zogres",
    "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "cutting-yew-logs",
+   "title": "Cutting yew logs",
+   "reason": "the hand-built Edgeville yews cover it; the guide's Forestry fields cannot be read"
   },
   {
    "id": "crafting-clockwork-teleport-method",

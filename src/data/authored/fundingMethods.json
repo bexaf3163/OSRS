@@ -10500,6 +10500,1118 @@
         "Supplies are bought and products sold at the exchange at the instant prices.",
         "Item ids from the wiki infoboxes, retrieved 2026-11-16."
       ]
+    },
+    {
+      "id": "make-super-combat-potions",
+      "title": "Make super combat potions",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making Super combat potions. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "herblore",
+          "level": 90
+        },
+        {
+          "kind": "quest",
+          "quest": "Druidic Ritual",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 269,
+            "name": "Torstol"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 2436,
+            "name": "Super attack(4)"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 2442,
+            "name": "Super defence(4)"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 2440,
+            "name": "Super strength(4)"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 12695,
+            "name": "Super combat potion(4)"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 229,
+            "name": "Vial"
+          },
+          "qty": 2
+        }
+      ],
+      "rate": {
+        "unit": "action",
+        "perHour": {
+          "slow": 1155,
+          "typical": 1680,
+          "fast": 2100
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,100 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "7 of each super potion and 7 torstols a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy torstols and super attack, strength and defence (4) at the Grand Exchange. Test one first."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 7 of each and use a torstol on the potions."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the super combat potions and the empty vials."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_super_combat_potions",
+          "title": "Money making guide/Making super combat potions",
+          "revision": 15080310,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide lists only the three super potions; a super combat potion also uses a torstol, added here.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "open-crystal-chests",
+      "title": "Open crystal chests in Taverley",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Opening crystal chests. Taverley",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "construction",
+          "level": 10
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 989,
+            "name": "Crystal key"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 8013,
+            "name": "Teleport to house (tablet)"
+          },
+          "qty": 0.1429
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 1631,
+            "name": "Uncut dragonstone"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 652.3438,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 1969,
+            "name": "Spinach roll"
+          },
+          "qty": 0.2656
+        },
+        {
+          "item": {
+            "id": 556,
+            "name": "Air rune"
+          },
+          "qty": 4.6875,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 555,
+            "name": "Water rune"
+          },
+          "qty": 4.6875,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 557,
+            "name": "Earth rune"
+          },
+          "qty": 4.6875,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 554,
+            "name": "Fire rune"
+          },
+          "qty": 4.6875,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 559,
+            "name": "Body rune"
+          },
+          "qty": 4.6875,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 558,
+            "name": "Mind rune"
+          },
+          "qty": 4.6875,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 562,
+            "name": "Chaos rune"
+          },
+          "qty": 0.9375,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 560,
+            "name": "Death rune"
+          },
+          "qty": 0.9375,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 564,
+            "name": "Cosmic rune"
+          },
+          "qty": 0.9375,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 561,
+            "name": "Nature rune"
+          },
+          "qty": 0.9375,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 563,
+            "name": "Law rune"
+          },
+          "qty": 0.9375,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 1603,
+            "name": "Ruby"
+          },
+          "qty": 0.1875
+        },
+        {
+          "item": {
+            "id": 1601,
+            "name": "Diamond"
+          },
+          "qty": 0.1875
+        },
+        {
+          "item": {
+            "id": 2363,
+            "name": "Runite bar"
+          },
+          "qty": 0.2813
+        },
+        {
+          "item": {
+            "id": 440,
+            "name": "Iron ore"
+          },
+          "qty": 11.7188
+        },
+        {
+          "item": {
+            "id": 453,
+            "name": "Coal"
+          },
+          "qty": 7.8125
+        },
+        {
+          "item": {
+            "id": 371,
+            "name": "Raw swordfish"
+          },
+          "qty": 0.3125
+        },
+        {
+          "item": {
+            "id": 987,
+            "name": "Loop half of key"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            26
+          ]
+        },
+        {
+          "item": {
+            "id": 985,
+            "name": "Tooth half of key"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            26
+          ]
+        },
+        {
+          "item": {
+            "id": 1183,
+            "name": "Adamant sq shield"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            64
+          ]
+        },
+        {
+          "item": {
+            "id": 1079,
+            "name": "Rune platelegs"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            256
+          ]
+        },
+        {
+          "item": {
+            "id": 1093,
+            "name": "Rune plateskirt"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            256
+          ]
+        }
+      ],
+      "rate": {
+        "unit": "action",
+        "perHour": {
+          "slow": 231,
+          "typical": 336,
+          "fast": 420
+        },
+        "basis": "wiki-guide",
+        "assumes": "420 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "5 to 7 keys a trip: each chest gives a dragonstone and loot that fills the bag; the pace counts the house teleport."
+      },
+      "spot": {
+        "x": 2910,
+        "y": 3451,
+        "plane": 0,
+        "label": "Taverley"
+      },
+      "bank": {
+        "x": 2947,
+        "y": 3366,
+        "plane": 0,
+        "label": "Falador West Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy crystal keys at the Grand Exchange; bring house teleport tablets."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the crystal chest in Taverley."
+        },
+        {
+          "kind": "perform",
+          "text": "Open the chest with each key."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the loot."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Opening_crystal_chests",
+          "title": "Money making guide/Opening crystal chests",
+          "revision": 15381275,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The house teleport assumes a player-owned house in Taverley; otherwise the walk from Falador takes longer.",
+        "The key price jumps a lot; check it against the loot first.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "blast-mine-lovakengj",
+      "title": "Blast mine in Lovakengj",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Blast mine",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "mining",
+          "level": 43
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1755,
+              "name": "Chisel"
+            }
+          ],
+          "note": "Stays in the bag."
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 590,
+              "name": "Tinderbox"
+            }
+          ],
+          "note": "Stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 13573,
+            "name": "Dynamite"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 451,
+            "name": "Runite ore"
+          },
+          "qty": 0.1337
+        },
+        {
+          "item": {
+            "id": 449,
+            "name": "Adamantite ore"
+          },
+          "qty": 0.4093
+        },
+        {
+          "item": {
+            "id": 447,
+            "name": "Mithril ore"
+          },
+          "qty": 0.4744
+        },
+        {
+          "item": {
+            "id": 444,
+            "name": "Gold ore"
+          },
+          "qty": 0.2949
+        },
+        {
+          "item": {
+            "id": 453,
+            "name": "Coal"
+          },
+          "qty": 0.1874
+        }
+      ],
+      "rate": {
+        "unit": "dynamite",
+        "perHour": {
+          "slow": 182,
+          "typical": 264,
+          "fast": 330
+        },
+        "basis": "wiki-guide",
+        "assumes": "330 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it.",
+        "levelScale": {
+          "skill": "mining",
+          "fromLevel": 43,
+          "atLevel": 75,
+          "minFactor": 0.5
+        }
+      },
+      "trip": {
+        "bagSlots": 26,
+        "overheadSeconds": 0,
+        "note": "The ore goes to the operator, not the bag; collect it at the end. The pace counts it."
+      },
+      "spot": {
+        "x": 1489,
+        "y": 3864,
+        "plane": 0,
+        "label": "Blast mine"
+      },
+      "bank": {
+        "x": 1479,
+        "y": 3857,
+        "plane": 0,
+        "label": "Blast Mine bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy dynamite at the Grand Exchange; bring a chisel and a tinderbox."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the blast mine in northern Lovakengj; it needs 43 Mining."
+        },
+        {
+          "kind": "perform",
+          "text": "Chisel a rock, place dynamite, light it, and step clear; repeat around the mine."
+        },
+        {
+          "kind": "bank",
+          "text": "Collect the ores from the operator and bank them at the Blast Mine bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Blast_mining",
+          "title": "Money making guide/Blast mining",
+          "revision": 14931967,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide's ores and pace are for 75 Mining (runite is possible from 75); the level scale cuts the pace to half at 43.",
+        "Standing too close to the blast deals damage.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "mahogany-planks-woodcutting-guild",
+      "title": "Make mahogany planks at the Woodcutting Guild",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making planks at the Woodcutting Guild",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "woodcutting",
+          "level": 60
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 6332,
+            "name": "Mahogany logs"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 1500,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 12625,
+            "name": "Stamina potion(4)"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            471
+          ]
+        },
+        {
+          "item": {
+            "id": 11968,
+            "name": "Skills necklace(6)"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            151
+          ]
+        },
+        {
+          "item": {
+            "id": 2552,
+            "name": "Ring of dueling(8)"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            202
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 8782,
+            "name": "Mahogany plank"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 11113,
+            "name": "Skills necklace"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            151
+          ]
+        }
+      ],
+      "rate": {
+        "unit": "mahogany plank",
+        "perHour": {
+          "slow": 2331,
+          "typical": 3390,
+          "fast": 4238
+        },
+        "basis": "wiki-guide",
+        "assumes": "4,238 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "Coins take one slot; the sawmill is close to the guild bank; the pace counts it."
+      },
+      "spot": {
+        "x": 1614,
+        "y": 3499,
+        "plane": 0,
+        "label": "Woodcutting Guild"
+      },
+      "bank": {
+        "x": 1592,
+        "y": 3476,
+        "plane": 0,
+        "label": "Woodcutting Guild bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy mahogany logs, stamina potions and skills necklaces at the Grand Exchange; bring 1,500 coins a log."
+        },
+        {
+          "kind": "travel",
+          "text": "Teleport to the Woodcutting Guild with a skills necklace; it needs 60 Woodcutting."
+        },
+        {
+          "kind": "perform",
+          "text": "Have the sawmill operator make all 27 logs into mahogany planks."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the planks in the guild."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_mahogany_planks_at_the_Woodcutting_Guild",
+          "title": "Money making guide/Making mahogany planks at the Woodcutting Guild",
+          "revision": 14765995,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The +7 invisible Woodcutting boost and the guild bank make this the fastest sawmill trip.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "subdue-tempoross",
+      "title": "Subdue Tempoross",
+      "family": "gathering",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Subduing Tempoross. Ruins of Unkah",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fishing",
+          "level": 35
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 311,
+              "name": "Harpoon"
+            }
+          ],
+          "note": "Stays in the bag."
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 954,
+              "name": "Rope"
+            }
+          ],
+          "note": "Stays in the bag."
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 2347,
+              "name": "Hammer"
+            }
+          ],
+          "note": "Stays in the bag."
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1925,
+              "name": "Bucket"
+            }
+          ],
+          "note": "Stays in the bag."
+        }
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "item": {
+            "id": 25578,
+            "name": "Soaked page"
+          },
+          "qty": 0.1304
+        },
+        {
+          "item": {
+            "id": 25576,
+            "name": "Tome of Water (empty)"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            1600
+          ]
+        },
+        {
+          "item": {
+            "id": 21028,
+            "name": "Dragon harpoon"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            8000
+          ]
+        },
+        {
+          "item": {
+            "id": 363,
+            "name": "Raw bass"
+          },
+          "qty": 4.9219
+        },
+        {
+          "item": {
+            "id": 371,
+            "name": "Raw swordfish"
+          },
+          "qty": 3.1641
+        },
+        {
+          "item": {
+            "id": 383,
+            "name": "Raw shark"
+          },
+          "qty": 1.6875
+        },
+        {
+          "item": {
+            "id": 395,
+            "name": "Raw sea turtle"
+          },
+          "qty": 0.9352
+        },
+        {
+          "item": {
+            "id": 389,
+            "name": "Raw manta ray"
+          },
+          "qty": 0.6328
+        },
+        {
+          "item": {
+            "id": 960,
+            "name": "Plank"
+          },
+          "qty": 1.0938
+        },
+        {
+          "item": {
+            "id": 8778,
+            "name": "Oak plank"
+          },
+          "qty": 0.625
+        },
+        {
+          "item": {
+            "id": 401,
+            "name": "Seaweed"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 1539,
+            "name": "Steel nails"
+          },
+          "qty": 5
+        },
+        {
+          "item": {
+            "id": 314,
+            "name": "Feather"
+          },
+          "qty": 15
+        },
+        {
+          "item": {
+            "id": 313,
+            "name": "Fishing bait"
+          },
+          "qty": 15
+        }
+      ],
+      "rate": {
+        "unit": "reward permit",
+        "perHour": {
+          "slow": 33,
+          "typical": 48,
+          "fast": 60
+        },
+        "basis": "wiki-guide",
+        "assumes": "60 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 24,
+        "overheadSeconds": 0,
+        "note": "The tools take four slots; the rewards are claimed from the reward pool; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 2845,
+        "plane": 0,
+        "label": "Ruins of Unkah"
+      },
+      "bank": {
+        "x": 3156,
+        "y": 2835,
+        "plane": 0,
+        "label": "Ruins of Unkah bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Bring a harpoon, a rope, a hammer and a bucket."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Ruins of Unkah and board the boat to Tempoross Cove."
+        },
+        {
+          "kind": "perform",
+          "text": "Catch and cook harpoonfish, load the cannons and douse the fires until Tempoross is subdued."
+        },
+        {
+          "kind": "bank",
+          "text": "Claim the reward pool and bank the loot at the Ruins of Unkah bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Subduing_Tempoross",
+          "title": "Money making guide/Subduing Tempoross",
+          "revision": 15312504,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide counts permits an hour; about 50 come from mass worlds, over 100 solo. The rewards above 81 Fishing are worth more.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "aerial-fishing-molch",
+      "title": "Aerial fishing at Lake Molch",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Aerial fishing for Shark lures. Molch lake",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fishing",
+          "level": 43
+        },
+        {
+          "kind": "level",
+          "skill": "hunter",
+          "level": 35
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 11334,
+            "name": "Fish offcuts"
+          },
+          "qty": 0.286
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 30900,
+            "name": "Shark lure"
+          },
+          "qty": 2.38
+        }
+      ],
+      "rate": {
+        "unit": "catch",
+        "perHour": {
+          "slow": 1265,
+          "typical": 1840,
+          "fast": 2300
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,300 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The shark lures and pearls stack; cut the catch into bait with a knife, so there is no bank trip."
+      },
+      "spot": {
+        "x": 1370,
+        "y": 3633,
+        "plane": 0,
+        "label": "Molch lake"
+      },
+      "bank": {
+        "x": 1483,
+        "y": 3646,
+        "plane": 0,
+        "label": "Shayzien Encampment bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Bring a knife."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to Lake Molch and take the boat to the island."
+        },
+        {
+          "kind": "perform",
+          "text": "Send the cormorant at the fishing spots; cut the catch into bait and keep fishing."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Aerial_fishing",
+          "title": "Money making guide/Aerial fishing",
+          "revision": 15374251,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Molch pearls buy shark lure packs from Alry the Angler; 20 pearls unlock eating fish instead of cutting it.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
     }
   ]
 }

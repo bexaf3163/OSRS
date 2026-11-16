@@ -276,7 +276,9 @@ for (const e of entries) {
   if (combat) requirements.splice(0, requirements.length, ...requirements.filter((r) => r.kind !== 'level' || !other.includes(r.skill)));
   for (const part of (f.quest ?? '').split(/,|<br\s*\/?>|\n|\*/)) {
     if (/recommend|optional/i.test(part)) continue;
-    for (const quest of links(part)) {
+    for (const link of links(part)) {
+      // Guides write titles in their own case ("Making Friends With My Arm"); the category's spelling is kept.
+      const quest = [...QUESTS, ...MINIQUESTS].find((q) => q.toLowerCase() === link.toLowerCase()) ?? link;
       if (QUESTS.has(quest)) requirements.push({ kind: 'quest', quest, state: /partial|start/i.test(part) ? 'started' : 'complete' });
       else if (MINIQUESTS.has(quest)) requirements.push({ kind: 'check', text: `Needs the miniquest ${quest}` });
     }
