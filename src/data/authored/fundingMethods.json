@@ -9115,6 +9115,1391 @@
         "Supplies are bought and products sold at the exchange at the instant prices.",
         "Item ids from the wiki infoboxes, retrieved 2026-11-15."
       ]
+    },
+    {
+      "id": "cut-ruby-bolt-tips",
+      "title": "Cut ruby bolt tips",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cutting ruby bolt tips. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fletching",
+          "level": 63
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1755,
+              "name": "Chisel"
+            }
+          ],
+          "note": "The chisel stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 1603,
+            "name": "Ruby"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 9191,
+            "name": "Ruby bolt tips"
+          },
+          "qty": 12
+        }
+      ],
+      "rate": {
+        "unit": "ruby cut",
+        "perHour": {
+          "slow": 630,
+          "typical": 1000,
+          "fast": 1150
+        },
+        "basis": "wiki-guide",
+        "assumes": "The guide's 2,800 an hour needs a jeweller's chisel. A regular chisel takes 3 seconds a ruby, about 1,150 an hour, which this method uses."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "The chisel takes one slot; the tips stack; 27 rubies a bank."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy rubies at the Grand Exchange; keep a chisel in the bag. Cut one and sell the 12 tips first: the price moves 20% either way."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the chisel on each ruby; each makes 12 bolt tips."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank and take the next 27."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_ruby_bolt_tips",
+          "title": "Money making guide/Cutting ruby bolt tips",
+          "revision": 15399589,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "A jeweller's chisel would more than double the pace; it is not assumed.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "cut-diamond-bolt-tips",
+      "title": "Cut diamond bolt tips",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cutting diamond bolt tips. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fletching",
+          "level": 65
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1755,
+              "name": "Chisel"
+            }
+          ],
+          "note": "The chisel stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 1601,
+            "name": "Diamond"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 9192,
+            "name": "Diamond bolt tips"
+          },
+          "qty": 12
+        }
+      ],
+      "rate": {
+        "unit": "diamond cut",
+        "perHour": {
+          "slow": 630,
+          "typical": 1000,
+          "fast": 1150
+        },
+        "basis": "wiki-guide",
+        "assumes": "The guide's 2,800 an hour needs a jeweller's chisel. A regular chisel takes 3 seconds a diamond, about 1,150 an hour, which this method uses."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "The chisel takes one slot; the tips stack; 27 diamonds a bank."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy diamonds at the Grand Exchange; keep a chisel in the bag. Cut one and sell the 12 tips first: the price moves 20% either way."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the chisel on each diamond; each makes 12 bolt tips."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank and take the next 27."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_diamond_bolt_tips",
+          "title": "Money making guide/Cutting diamond bolt tips",
+          "revision": 15399556,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "A jeweller's chisel would more than double the pace; it is not assumed.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "make-pineapple-pizzas",
+      "title": "Make pineapple pizzas",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making pineapple pizzas. Bank",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "cooking",
+          "level": 65
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2289,
+            "name": "Plain pizza"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 2118,
+            "name": "Pineapple ring"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 2301,
+            "name": "Pineapple pizza"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "pineapple pizza",
+        "perHour": {
+          "slow": 1375,
+          "typical": 2000,
+          "fast": 2500
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,500 pineapple pizza an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 plain pizzas and 14 pineapple rings a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy plain pizzas and pineapple rings at the Grand Exchange."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each and use a ring on each pizza."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the pineapple pizzas."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_pineapple_pizzas",
+          "title": "Money making guide/Making pineapple pizzas",
+          "revision": 15392907,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "make-raw-admiral-pies",
+      "title": "Make raw admiral pies",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making Raw admiral pies. Bank",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "cooking",
+          "level": 70
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2315,
+            "name": "Pie shell"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 329,
+            "name": "Salmon"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 361,
+            "name": "Tuna"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 1942,
+            "name": "Potato"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 7196,
+            "name": "Raw admiral pie"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "raw admiral pie",
+        "perHour": {
+          "slow": 462,
+          "typical": 672,
+          "fast": 840
+        },
+        "basis": "wiki-guide",
+        "assumes": "840 raw admiral pie an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "Three bank trips a bag of 14 pies: pie shells and salmon, then tuna, then potatoes; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy pie shells, cooked salmon, cooked tuna and raw potatoes at the Grand Exchange."
+        },
+        {
+          "kind": "perform",
+          "text": "Put salmon in 14 shells, then tuna, then potatoes, banking between each."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the raw admiral pies."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_raw_admiral_pies",
+          "title": "Money making guide/Making raw admiral pies",
+          "revision": 14026997,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The pies sell to Magic trainers casting Bake Pie; the guide warns the market is much smaller than for other pies.",
+        "Take care not to eat the salmon or tuna while combining.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "enchant-dragonstone-rings",
+      "title": "Enchant dragonstone rings",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cast Lvl-5 Enchant on dragonstone rings at a bank and sell the rings of wealth.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "magic",
+          "level": 68
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 6562,
+              "name": "Mud battlestaff"
+            },
+            {
+              "id": 6563,
+              "name": "Mystic mud staff"
+            }
+          ],
+          "note": "The staff gives the earth and water runes; cosmic runes are bought."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 1645,
+            "name": "Dragonstone ring"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 564,
+            "name": "Cosmic rune"
+          },
+          "qty": 1,
+          "stack": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 2572,
+            "name": "Ring of wealth"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "ring of wealth",
+        "perHour": {
+          "slow": 880,
+          "typical": 1280,
+          "fast": 1600
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,600 ring of wealth an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "Cosmic runes take one slot; the pace counts the banking."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy dragonstone rings and cosmic runes at the Grand Exchange; wield the mud battlestaff. Test one first."
+        },
+        {
+          "kind": "perform",
+          "text": "Cast Lvl-5 Enchant on each ring."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank and withdraw the next 27."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Enchanting_dragonstone_jewellery",
+          "title": "Money making guide/Enchanting dragonstone jewellery",
+          "revision": 15029260,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide counts 1,600 casts an hour by hand; auto-casting is about 800.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "charge-water-orbs",
+      "title": "Charge water orbs",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cast Charge Water Orb on unpowered orbs at the Water Obelisk and sell the water orbs.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "magic",
+          "level": 56
+        },
+        {
+          "kind": "level",
+          "skill": "agility",
+          "level": 70
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 20730,
+              "name": "Mist battlestaff"
+            },
+            {
+              "id": 20733,
+              "name": "Mystic mist staff"
+            }
+          ],
+          "note": "Gives the water runes for the spell and the air and water runes for Falador Teleport."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 567,
+            "name": "Unpowered orb"
+          },
+          "qty": 26
+        },
+        {
+          "item": {
+            "id": 564,
+            "name": "Cosmic rune"
+          },
+          "qty": 78,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 563,
+            "name": "Law rune"
+          },
+          "qty": 1,
+          "stack": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 571,
+            "name": "Water orb"
+          },
+          "qty": 26
+        }
+      ],
+      "rate": {
+        "unit": "trip",
+        "perHour": {
+          "slow": 10,
+          "typical": 14,
+          "fast": 18
+        },
+        "basis": "wiki-guide",
+        "assumes": "18 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The wiki pace already counts banking."
+      },
+      "spot": {
+        "x": 2844,
+        "y": 3422,
+        "plane": 0,
+        "label": "Water Obelisk"
+      },
+      "bank": {
+        "x": 2807,
+        "y": 3441,
+        "plane": 0,
+        "label": "Catherby bank"
+      },
+      "saleSeconds": 60,
+      "risk": "moderate",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy unpowered orbs and cosmic runes at the Grand Exchange; wield the staff."
+        },
+        {
+          "kind": "travel",
+          "text": "Go through Taverley Dungeon to the Water Obelisk; the pipe needs 70 Agility."
+        },
+        {
+          "kind": "perform",
+          "text": "Cast Charge Water Orb on the obelisk until every orb is charged."
+        },
+        {
+          "kind": "bank",
+          "text": "Teleport to Falador and bank at Falador West Bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Charging_water_orbs",
+          "title": "Money making guide/Charging water orbs",
+          "revision": 14550764,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Blue dragons and poisonous spiders are on the way; bring antipoison. A dusty key opens the gate instead of the pipe, but it is not assumed.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "charge-fire-orbs",
+      "title": "Charge fire orbs",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cast Charge Fire Orb on unpowered orbs at the Fire Obelisk and sell the fire orbs.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "magic",
+          "level": 63
+        },
+        {
+          "kind": "level",
+          "skill": "agility",
+          "level": 70
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1387,
+              "name": "Staff of fire"
+            },
+            {
+              "id": 1393,
+              "name": "Fire battlestaff"
+            },
+            {
+              "id": 1401,
+              "name": "Mystic fire staff"
+            }
+          ],
+          "note": "Gives the fire runes for the spell."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 567,
+            "name": "Unpowered orb"
+          },
+          "qty": 26
+        },
+        {
+          "item": {
+            "id": 564,
+            "name": "Cosmic rune"
+          },
+          "qty": 78,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 8009,
+            "name": "Falador teleport (tablet)"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 569,
+            "name": "Fire orb"
+          },
+          "qty": 26
+        }
+      ],
+      "rate": {
+        "unit": "trip",
+        "perHour": {
+          "slow": 10,
+          "typical": 14,
+          "fast": 18
+        },
+        "basis": "wiki-guide",
+        "assumes": "18 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The wiki pace already counts banking."
+      },
+      "spot": {
+        "x": 2819,
+        "y": 9828,
+        "plane": 0,
+        "label": "Fire Obelisk"
+      },
+      "bank": {
+        "x": 2807,
+        "y": 3441,
+        "plane": 0,
+        "label": "Catherby bank"
+      },
+      "saleSeconds": 60,
+      "risk": "moderate",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy unpowered orbs and cosmic runes at the Grand Exchange; wield the staff."
+        },
+        {
+          "kind": "travel",
+          "text": "Go through Taverley Dungeon to the Fire Obelisk; the pipe needs 70 Agility."
+        },
+        {
+          "kind": "perform",
+          "text": "Cast Charge Fire Orb on the obelisk until every orb is charged."
+        },
+        {
+          "kind": "bank",
+          "text": "Break a Falador teleport tablet and bank at Falador West Bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Charging_fire_orbs",
+          "title": "Money making guide/Charging fire orbs",
+          "revision": 14881533,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Blue dragons and poisonous spiders are on the way; bring antipoison. A dusty key opens the gate instead of the pipe, but it is not assumed.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "charge-earth-orbs",
+      "title": "Charge earth orbs",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cast Charge Earth Orb on unpowered orbs at the Earth Obelisk and sell the earth orbs.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "magic",
+          "level": 60
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1385,
+              "name": "Staff of earth"
+            },
+            {
+              "id": 1399,
+              "name": "Earth battlestaff"
+            },
+            {
+              "id": 1407,
+              "name": "Mystic earth staff"
+            }
+          ],
+          "note": "Gives the earth runes for the spell."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 567,
+            "name": "Unpowered orb"
+          },
+          "qty": 27
+        },
+        {
+          "item": {
+            "id": 564,
+            "name": "Cosmic rune"
+          },
+          "qty": 81,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 1712,
+            "name": "Amulet of glory(4)"
+          },
+          "qty": 0.25
+        },
+        {
+          "item": {
+            "id": 12631,
+            "name": "Stamina potion(1)"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 575,
+            "name": "Earth orb"
+          },
+          "qty": 27
+        },
+        {
+          "item": {
+            "id": 1704,
+            "name": "Amulet of glory"
+          },
+          "qty": 0.25
+        }
+      ],
+      "rate": {
+        "unit": "trip",
+        "perHour": {
+          "slow": 10,
+          "typical": 15,
+          "fast": 19
+        },
+        "basis": "wiki-guide",
+        "assumes": "19 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The wiki pace already counts banking."
+      },
+      "spot": {
+        "x": 3086,
+        "y": 9932,
+        "plane": 0,
+        "label": "Earth Obelisk"
+      },
+      "bank": {
+        "x": 3093,
+        "y": 3495,
+        "plane": 0,
+        "label": "Edgeville Bank"
+      },
+      "saleSeconds": 60,
+      "risk": "high",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy unpowered orbs and cosmic runes at the Grand Exchange; wield the staff."
+        },
+        {
+          "kind": "travel",
+          "text": "Go down the Edgeville Dungeon trapdoor and through the Wilderness gate to the Earth Obelisk."
+        },
+        {
+          "kind": "perform",
+          "text": "Cast Charge Earth Orb on the obelisk until every orb is charged."
+        },
+        {
+          "kind": "bank",
+          "text": "Teleport with an amulet of glory to Edgeville and bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Charging_earth_orbs",
+          "title": "Money making guide/Charging earth orbs",
+          "revision": 15276204,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The Earth Obelisk is in the Wilderness: other players can attack you, so bring only what you can lose.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "charge-air-orbs",
+      "title": "Charge air orbs",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cast Charge Air Orb on unpowered orbs at the Air Obelisk and sell the air orbs.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "magic",
+          "level": 66
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1381,
+              "name": "Staff of air"
+            },
+            {
+              "id": 1397,
+              "name": "Air battlestaff"
+            },
+            {
+              "id": 1405,
+              "name": "Mystic air staff"
+            }
+          ],
+          "note": "Gives the air runes for the spell."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 567,
+            "name": "Unpowered orb"
+          },
+          "qty": 25
+        },
+        {
+          "item": {
+            "id": 564,
+            "name": "Cosmic rune"
+          },
+          "qty": 75,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 3008,
+            "name": "Energy potion(4)"
+          },
+          "qty": 1.5
+        },
+        {
+          "item": {
+            "id": 11978,
+            "name": "Amulet of glory(6)"
+          },
+          "qty": 0.1667
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 573,
+            "name": "Air orb"
+          },
+          "qty": 25
+        },
+        {
+          "item": {
+            "id": 1704,
+            "name": "Amulet of glory"
+          },
+          "qty": 0.1667
+        }
+      ],
+      "rate": {
+        "unit": "trip",
+        "perHour": {
+          "slow": 12,
+          "typical": 17,
+          "fast": 21
+        },
+        "basis": "wiki-guide",
+        "assumes": "21 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The wiki pace already counts banking."
+      },
+      "spot": {
+        "x": 3088,
+        "y": 3568,
+        "plane": 0,
+        "label": "Air Obelisk"
+      },
+      "bank": {
+        "x": 3130,
+        "y": 3631,
+        "plane": 0,
+        "label": "Ferox Enclave bank"
+      },
+      "saleSeconds": 60,
+      "risk": "high",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy unpowered orbs and cosmic runes at the Grand Exchange; wield the staff."
+        },
+        {
+          "kind": "travel",
+          "text": "Teleport to Edgeville with an amulet of glory and run north to the Air Obelisk."
+        },
+        {
+          "kind": "perform",
+          "text": "Cast Charge Air Orb on the obelisk until every orb is charged."
+        },
+        {
+          "kind": "bank",
+          "text": "Run to Ferox Enclave and bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Charging_air_orbs",
+          "title": "Money making guide/Charging air orbs",
+          "revision": 15358452,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The Air Obelisk is in the Wilderness: other players can attack you, so bring only what you can lose.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "collect-black-scimitars",
+      "title": "Collect black scimitars in Ardougne Castle",
+      "family": "collecting",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Collecting black scimitars from Ardougne Castle",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "thieving",
+          "level": 61
+        },
+        {
+          "kind": "quest",
+          "quest": "Plague City",
+          "state": "complete"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 8011,
+            "name": "Ardougne teleport (tablet)"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            27
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 1327,
+            "name": "Black scimitar"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "black scimitar",
+        "perHour": {
+          "slow": 74,
+          "typical": 108,
+          "fast": 135
+        },
+        "basis": "wiki-guide",
+        "assumes": "135 black scimitar an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "A full bag of scimitars a trip; East Ardougne bank is close; the pace counts it."
+      },
+      "spot": {
+        "x": 2577,
+        "y": 3298,
+        "plane": 0,
+        "label": "Ardougne Castle"
+      },
+      "bank": {
+        "x": 2655,
+        "y": 3280,
+        "plane": 0,
+        "label": "Ardougne bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "travel",
+          "text": "Go to the first floor of Ardougne Castle."
+        },
+        {
+          "kind": "perform",
+          "text": "Pick the lock of the southernmost door, take the black scimitar, hop worlds and repeat until the bag is full."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the scimitars at East Ardougne bank."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_black_scimitars_from_Ardougne_Castle",
+          "title": "Money making guide/Collecting black scimitars from Ardougne Castle",
+          "revision": 14724495,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Black scimitars cannot be smithed, so supply is small and the price holds.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "fletch-diamond-bolts",
+      "title": "Fletch diamond bolts",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Fletching diamond bolts. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fletching",
+          "level": 65
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 9143,
+            "name": "Adamant bolts"
+          },
+          "qty": 1,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 9192,
+            "name": "Diamond bolt tips"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 9340,
+            "name": "Diamond bolts"
+          },
+          "qty": 1,
+          "stack": true
+        }
+      ],
+      "rate": {
+        "unit": "diamond bolt",
+        "perHour": {
+          "slow": 14850,
+          "typical": 21600,
+          "fast": 27000
+        },
+        "basis": "wiki-guide",
+        "assumes": "27,000 diamond bolts an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "Bolts and tips stack, so there is no bank trip."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy adamant bolts and diamond bolt tips at the Grand Exchange. Make one first: the margin is small."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the tips on the bolts and make 10 at a time."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Fletching_diamond_bolts",
+          "title": "Money making guide/Fletching diamond bolts",
+          "revision": 14246199,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Also trains Fletching.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
     }
   ]
 }

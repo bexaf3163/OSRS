@@ -735,6 +735,94 @@
       "methods": [
         "craft-diamond-bracelets"
       ]
+    },
+    {
+      "id": "cutting-ruby-bolt-tips",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "cut-ruby-bolt-tips"
+      ]
+    },
+    {
+      "id": "cutting-diamond-bolt-tips",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "cut-diamond-bolt-tips"
+      ]
+    },
+    {
+      "id": "making-pineapple-pizzas",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "make-pineapple-pizzas"
+      ]
+    },
+    {
+      "id": "making-raw-admiral-pies",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "make-raw-admiral-pies"
+      ]
+    },
+    {
+      "id": "enchanting-dragonstone-jewellery",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "enchant-dragonstone-rings"
+      ]
+    },
+    {
+      "id": "charging-water-orbs",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "charge-water-orbs"
+      ]
+    },
+    {
+      "id": "charging-fire-orbs",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "charge-fire-orbs"
+      ]
+    },
+    {
+      "id": "charging-earth-orbs",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "charge-earth-orbs"
+      ]
+    },
+    {
+      "id": "charging-air-orbs",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "charge-air-orbs"
+      ]
+    },
+    {
+      "id": "collecting-black-scimitars-from-ardougne-castle",
+      "status": "supported",
+      "family": "collecting",
+      "methods": [
+        "collect-black-scimitars"
+      ]
+    },
+    {
+      "id": "fletching-diamond-bolts",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "fletch-diamond-bolts"
+      ]
     }
   ],
   "extras": [
