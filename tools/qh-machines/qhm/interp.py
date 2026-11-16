@@ -346,7 +346,7 @@ class Interp:
             return self.make_zone(args)
         if typ in ('ArrayList', 'LinkedList', 'HashSet'):
             return list(flat(args[:1])) if args and isinstance(args[0], list) else []
-        if typ in ('HashMap', 'LinkedHashMap', 'TreeMap'):
+        if typ in ('HashMap', 'LinkedHashMap', 'TreeMap', 'Builder'):
             return {}
         if typ == 'VarbitBuilder':
             return ('vbuilder', args[0]) if args and isinstance(args[0], int) else Unk('VarbitBuilder')
@@ -775,7 +775,8 @@ class Interp:
                 target[args[0]] = args[1]
                 if target is self.env.get('steps') or True:
                     self.stages[args[0]] = args[1]
-            return None
+            # ImmutableMap.Builder chains put(...) and ends with build()
+            return target if name in ('put', 'build') else None
         if isinstance(target, list):
             if name == 'add' and args:
                 target.append(args[-1])

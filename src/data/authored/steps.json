@@ -6789,5 +6789,60 @@
         "questName": "The Depths of Despair"
       }
     }
+  },
+  {
+    "id": "S9-10",
+    "stage": 9,
+    "type": "quest",
+    "title": "Tribal Totem",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Tribal_Totem",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Tribal_Totem/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2791,3182,0",
+    "mapLocation": {
+      "x": 2791,
+      "y": 3182,
+      "plane": 0,
+      "label": "The Shrimp and Parrot restaurant in Brimhaven"
+    },
+    "npc": {
+      "nameEn": "Kangai Mau",
+      "location": "The Shrimp and Parrot restaurant in Brimhaven",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Kangai_Mau"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Coins",
+        "amount": 60,
+        "howToGet": "Boat fares between Ardougne and Brimhaven, 30 coins each way.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      }
+    ],
+    "reward": "1 QP, 1,775 Thieving XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Kangai Mau"
+      ],
+      "dialogChoices": [
+        "I'm in search of adventure!",
+        "Ok, I will get it back.",
+        "So, when are you going to deliver this crate?",
+        "So what have you invented?",
+        "Can I be teleported please?",
+        "Yes, that sounds good. Teleport me!"
+      ],
+      "highlightItems": [
+        "Coins"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Tribal Totem"
+      }
+    }
   }
 ]

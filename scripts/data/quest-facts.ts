@@ -145,6 +145,10 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
   'The Depths of Despair': { revision: 15365598, flow: {
     consumes: [], receives: [], unknownItems: ['The Varlamore Envoy'], partialDelivery: false, fromStartOnly: true,
   } },
+  // The address label and the totem are quest items; only boat fares are paid.
+  'Tribal Totem': { revision: 15240951, flow: {
+    consumes: [], receives: [], unknownItems: ['Address label', 'Totem'], partialDelivery: false, fromStartOnly: true,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],

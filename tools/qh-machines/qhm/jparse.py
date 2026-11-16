@@ -294,6 +294,12 @@ class Parser:
         if tok[0] == 'id' and tok[1] in ('if', 'for', 'while', 'switch', 'try', 'do', 'synchronized'):
             self.skip_statement()
             return ('skip', tok[1])
+        if tok == ('id', 'return') and self.peek(1)[0] == 'id' and self.peek(1)[1] == 'new':
+            # return new X.Builder()...put(...).build(): run it, the puts fill the stage table
+            self.next()
+            e = self.expr()
+            self.eat(';')
+            return ('expr', e)
         if tok[0] == 'id' and tok[1] in ('return', 'break', 'continue', 'throw'):
             self.skip_to_semicolon()
             return None
