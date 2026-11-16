@@ -51,16 +51,23 @@ export function projectedTrainingState(snapshot: PlanningSnapshot, projection: P
   if (!stock) return null;
   const worn = wornItemsOf(snapshot.player);
   const items = new Map(stock.owned?.items);
+  const lost = new Set<string>();
   for (const key of new Set(worn?.map(item => nameKey(item.name)) ?? [])) {
     const amount = countWorn(worn, name => nameKey(name) === key).count;
     const row = items.get(key);
+    // The branch no longer proves this worn kit survived (a quest may hand it in): train without it, never resurrect it
+    // or equip a future purchase.
     if (!row || row.carried < amount || (projection.resources?.worn?.[key] ?? 0) < amount) {
-      trainingCache.set(projection, { snapshot, state: null });
-      return null; // The branch no longer proves this kit survived. Do not resurrect it or equip a future purchase.
+      lost.add(key);
+      if (row) items.set(key, { ...row, carried: Math.max(0, row.carried - amount) });
+      continue;
     }
     items.set(key, { ...row, carried: row.carried - amount });
   }
-  const state: PlayerState = { ...stock, equipment: snapshot.player.equipment, equipmentItems: snapshot.player.equipmentItems,
+  const keep = (name: string) => !lost.has(nameKey(name));
+  const state: PlayerState = { ...stock,
+    equipment: lost.size ? Object.fromEntries(Object.entries(snapshot.player.equipment).filter(([, name]) => keep(name))) : snapshot.player.equipment,
+    equipmentItems: lost.size ? snapshot.player.equipmentItems?.filter(item => keep(item.name)) : snapshot.player.equipmentItems,
     equipmentKnown: snapshot.player.equipmentKnown, owned: { bankSeen: true, items } };
   trainingCache.set(projection, { snapshot, state });
   return state;

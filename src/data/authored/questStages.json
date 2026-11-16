@@ -26771,6 +26771,1698 @@
      "items": []
     }
    ]
+  },
+  "S9-06": {
+   "var": [
+    "varp",
+    10
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "To start, talk to Brother Kojo at the Clock Tower. Dialogue: \"OK old monk, what can I do?\" Note: if he gives you a Watch speak to him again",
+      "Go down the ladder in the middle room.",
+      "Follow the path to a hub with four doors."
+     ]
+    },
+    {
+     "title": "Obtaining the red cog",
+     "steps": [
+      "Head through the south-eastern door.",
+      "Walk down the passageway until you see some Ogres.",
+      "Pick up the red cog.",
+      "Head back to the ladder.",
+      "Climb up to the and use the red cog on the red spindle (located on the column beside the ladder, facing north)."
+     ]
+    },
+    {
+     "title": "Obtaining the blue cog",
+     "steps": [
+      "Go outside of the Clock Tower and head east to where Brother Cedric is (South of Ardougne zoo).",
+      "Go down the ladder east of Brother Cedric.",
+      "Follow the tunnel to the end.",
+      "Push the wall to get inside and pick up the blue cog.",
+      "Climb up the ladder.",
+      "Head to the centre room of the Clocktower and climb the staircase to the .",
+      "Use the blue cog with the blue spindle (the spindle on the south side of the column)."
+     ]
+    },
+    {
+     "title": "Obtaining the black cog",
+     "steps": [
+      "Head back to the basement and go through the north-eastern door",
+      "Use the bucket of water with the cog or simply wear your ice gloves to pick up the cog. Make sure to finish the dialogue or you will not pick up the cog.",
+      "Head back to the ladder. (Do not climb up the ladder)",
+      "Use the black cog with the black spindle. (In the basement of the Clock Tower on the east side of the column)."
+     ]
+    },
+    {
+     "title": "Obtaining the white cog",
+     "steps": [
+      "Head through the north-western door.",
+      "Pick up the rat poison to the north-west.",
+      "Head to the end of the tunnel",
+      "Pull the levers up to open the rat cage.",
+      "Use the rat poison with the food trough.",
+      "Wait until all the rats have died.",
+      "Head through the western gate.",
+      "Pick up the white cog.",
+      "Climb-up the ladder.",
+      "Head inside to the top floor.",
+      "Use the white cog with the white spindle at the top of the clocktower (the spindle on the west side of the column)."
+     ]
+    },
+    {
+     "title": "Finishing off",
+     "steps": [
+      "Head back down and talk to Brother Kojo for your reward.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Brother Kojo in the Clock Tower to start the quest.",
+       "s": "Talk to Brother Kojo in the Clock Tower.",
+       "k": "talkToKojo",
+       "at": [
+        2570,
+        3245,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3606
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Go down the ladder in the Clock Tower to the basement.",
+       "s": "Go down the Clock Tower ladder to the basement.",
+       "k": "enterBasement",
+       "at": [
+        2566,
+        3242,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder in the dungeon cell back up to the Clock Tower.",
+       "s": "Climb the cell ladder up to the Clock Tower.",
+       "k": "climbCellLadder",
+       "at": [
+        2572,
+        9631,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the first floor of the Clock Tower.",
+       "s": "Climb down from the first floor of the Clock Tower.",
+       "k": "climbFromFirstFloorToGround",
+       "at": [
+        2573,
+        3241,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the second floor of the Clock Tower.",
+       "s": "Climb down from the second floor of the Clock Tower.",
+       "k": "climbFromSecondFloorToFirst",
+       "at": [
+        2572,
+        3241,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Go through the south east door and pick up the red cog.",
+       "s": "Go through the south-east door and pick up the red cog.",
+       "k": "pickUpRedCog",
+       "at": [
+        2583,
+        9613,
+        0
+       ]
+      },
+      {
+       "t": "Use the red cog on the red spindle.",
+       "s": "Use the red cog on the red spindle.",
+       "k": "redCogOnRedSpindle",
+       "at": [
+        2568,
+        3243,
+        0
+       ],
+       "hl": {
+        "obj": [
+         29
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder from the basement up to the Clock Tower ground floor.",
+       "s": "Climb up from the basement to the Clock Tower.",
+       "k": "climbToGroundFloorFromBasement",
+       "at": [
+        2566,
+        9642,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Go down the ladder north of the Clock Tower, near Brother Cedric.",
+       "s": "Go down the ladder near Brother Cedric.",
+       "k": "goToLadderCedric",
+       "at": [
+        2621,
+        3261,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Get the bucket next to Brother Cedric, north of the monastery, and fill it up on the well next to it for the Black cog step. If you have other plans for the black cog, you can ignore this step by going down the nearby ladder.",
+       "s": "Take the bucket next to Brother Cedric, north of the tower.",
+       "k": "getBucket",
+       "at": [
+        2616,
+        3255,
+        0
+       ]
+      },
+      {
+       "t": "Fill the bucket with water near Brother Cedric, north of the tower.",
+       "s": "Fill the bucket with water near Brother Cedric.",
+       "k": "fillBucket",
+       "at": [
+        2612,
+        3254,
+        0
+       ],
+       "hl": {
+        "obj": [
+         884
+        ]
+       }
+      },
+      {
+       "t": "Follow the tunnel and push the wall at the end.",
+       "s": "Follow the tunnel and push the wall at the end.",
+       "k": "pushWall",
+       "at": [
+        2575,
+        9631,
+        0
+       ],
+       "hl": {
+        "obj": [
+         1597
+        ]
+       }
+      },
+      {
+       "t": "Pick up the blue cog.",
+       "s": "Pick up the blue cog.",
+       "k": "pickUpBlueCog",
+       "at": [
+        2574,
+        9633,
+        0
+       ]
+      },
+      {
+       "t": "Climb the stairs to the first floor of the Clock Tower.",
+       "s": "Climb to the first floor of the Clock Tower.",
+       "k": "climbToFirstFloor",
+       "at": [
+        2573,
+        3241,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "Use the blue cog on the blue spindle.",
+       "s": "Use the blue cog on the blue spindle.",
+       "k": "blueCogOnBlueSpindle",
+       "at": [
+        2569,
+        3240,
+        1
+       ],
+       "hl": {
+        "obj": [
+         32
+        ]
+       }
+      },
+      {
+       "t": "Enter the north east door, and pick up the black cog with a bucket of water, alternatively you can equip ice gloves or smith gloves(i).",
+       "s": "Through the north-east door, cool the black cog with water, take it.",
+       "k": "pickupBlackCog",
+       "at": [
+        2613,
+        9639,
+        0
+       ]
+      },
+      {
+       "t": "Use the black cog on the black spindle.",
+       "s": "Use the black cog on the black spindle.",
+       "k": "blackCogOnBlackSpindle",
+       "at": [
+        2570,
+        9642,
+        0
+       ],
+       "hl": {
+        "obj": [
+         30
+        ]
+       }
+      },
+      {
+       "t": "Pick up the rat poison in the north west of the dungeon.",
+       "s": "Pick up the rat poison in the north-west of the dungeon.",
+       "k": "pickUpRatPoison",
+       "at": [
+        2564,
+        9662,
+        0
+       ]
+      },
+      {
+       "t": "Pull the marked lever up.",
+       "s": "Pull the marked lever up.",
+       "k": "pullFirstLever",
+       "at": [
+        2591,
+        9661,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33
+        ]
+       }
+      },
+      {
+       "t": "Use the rat poison on the food trough. Wait till the rats have died.",
+       "s": "Poison the rats' food trough and wait until they die.",
+       "k": "ratPoisonFood",
+       "at": [
+        2587,
+        9654,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40
+        ]
+       }
+      },
+      {
+       "t": "Pick up the white cog.",
+       "s": "Pick up the white cog.",
+       "k": "pickUpWhiteCog",
+       "at": [
+        2577,
+        9655,
+        0
+       ]
+      },
+      {
+       "t": "Climb the stairs to the second floor of the Clock Tower.",
+       "s": "Climb to the second floor of the Clock Tower.",
+       "k": "climbToSecondFloor",
+       "at": [
+        2573,
+        3241,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Use the white cog on the white spindle.",
+       "s": "Use the white cog on the white spindle.",
+       "k": "whiteCogOnWhiteSpindle",
+       "at": [
+        2567,
+        3241,
+        2
+       ],
+       "hl": {
+        "obj": [
+         31
+        ]
+       }
+      },
+      {
+       "t": "Head up the ladder.",
+       "s": "Climb the ladder back up.",
+       "k": "climbWhiteLadder",
+       "at": [
+        2575,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Talk to Brother Kojo to finish the quest.",
+       "s": "Talk to Brother Kojo to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        2570,
+        3245,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3606
+        ]
+       }
+      },
+      {
+       "t": "Open your Quest Journal to sync your current state.",
+       "s": "Open the Quest Journal to sync the quest.",
+       "k": "syncStep"
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Go down the ladder in the Clock Tower to the basement.",
+       "s": "Go down the Clock Tower ladder to the basement.",
+       "k": "enterBasement",
+       "at": [
+        2566,
+        3242,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder in the dungeon cell back up to the Clock Tower.",
+       "s": "Climb the cell ladder up to the Clock Tower.",
+       "k": "climbCellLadder",
+       "at": [
+        2572,
+        9631,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the first floor of the Clock Tower.",
+       "s": "Climb down from the first floor of the Clock Tower.",
+       "k": "climbFromFirstFloorToGround",
+       "at": [
+        2573,
+        3241,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the second floor of the Clock Tower.",
+       "s": "Climb down from the second floor of the Clock Tower.",
+       "k": "climbFromSecondFloorToFirst",
+       "at": [
+        2572,
+        3241,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Go through the south east door and pick up the red cog.",
+       "s": "Go through the south-east door and pick up the red cog.",
+       "k": "pickUpRedCog",
+       "at": [
+        2583,
+        9613,
+        0
+       ]
+      },
+      {
+       "t": "Use the red cog on the red spindle.",
+       "s": "Use the red cog on the red spindle.",
+       "k": "redCogOnRedSpindle",
+       "at": [
+        2568,
+        3243,
+        0
+       ],
+       "hl": {
+        "obj": [
+         29
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder from the basement up to the Clock Tower ground floor.",
+       "s": "Climb up from the basement to the Clock Tower.",
+       "k": "climbToGroundFloorFromBasement",
+       "at": [
+        2566,
+        9642,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Go down the ladder north of the Clock Tower, near Brother Cedric.",
+       "s": "Go down the ladder near Brother Cedric.",
+       "k": "goToLadderCedric",
+       "at": [
+        2621,
+        3261,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Get the bucket next to Brother Cedric, north of the monastery, and fill it up on the well next to it for the Black cog step. If you have other plans for the black cog, you can ignore this step by going down the nearby ladder.",
+       "s": "Take the bucket next to Brother Cedric, north of the tower.",
+       "k": "getBucket",
+       "at": [
+        2616,
+        3255,
+        0
+       ]
+      },
+      {
+       "t": "Fill the bucket with water near Brother Cedric, north of the tower.",
+       "s": "Fill the bucket with water near Brother Cedric.",
+       "k": "fillBucket",
+       "at": [
+        2612,
+        3254,
+        0
+       ],
+       "hl": {
+        "obj": [
+         884
+        ]
+       }
+      },
+      {
+       "t": "Follow the tunnel and push the wall at the end.",
+       "s": "Follow the tunnel and push the wall at the end.",
+       "k": "pushWall",
+       "at": [
+        2575,
+        9631,
+        0
+       ],
+       "hl": {
+        "obj": [
+         1597
+        ]
+       }
+      },
+      {
+       "t": "Pick up the blue cog.",
+       "s": "Pick up the blue cog.",
+       "k": "pickUpBlueCog",
+       "at": [
+        2574,
+        9633,
+        0
+       ]
+      },
+      {
+       "t": "Climb the stairs to the first floor of the Clock Tower.",
+       "s": "Climb to the first floor of the Clock Tower.",
+       "k": "climbToFirstFloor",
+       "at": [
+        2573,
+        3241,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "Use the blue cog on the blue spindle.",
+       "s": "Use the blue cog on the blue spindle.",
+       "k": "blueCogOnBlueSpindle",
+       "at": [
+        2569,
+        3240,
+        1
+       ],
+       "hl": {
+        "obj": [
+         32
+        ]
+       }
+      },
+      {
+       "t": "Enter the north east door, and pick up the black cog with a bucket of water, alternatively you can equip ice gloves or smith gloves(i).",
+       "s": "Through the north-east door, cool the black cog with water, take it.",
+       "k": "pickupBlackCog",
+       "at": [
+        2613,
+        9639,
+        0
+       ]
+      },
+      {
+       "t": "Use the black cog on the black spindle.",
+       "s": "Use the black cog on the black spindle.",
+       "k": "blackCogOnBlackSpindle",
+       "at": [
+        2570,
+        9642,
+        0
+       ],
+       "hl": {
+        "obj": [
+         30
+        ]
+       }
+      },
+      {
+       "t": "Pick up the rat poison in the north west of the dungeon.",
+       "s": "Pick up the rat poison in the north-west of the dungeon.",
+       "k": "pickUpRatPoison",
+       "at": [
+        2564,
+        9662,
+        0
+       ]
+      },
+      {
+       "t": "Pull the marked lever up.",
+       "s": "Pull the marked lever up.",
+       "k": "pullFirstLever",
+       "at": [
+        2591,
+        9661,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33
+        ]
+       }
+      },
+      {
+       "t": "Use the rat poison on the food trough. Wait till the rats have died.",
+       "s": "Poison the rats' food trough and wait until they die.",
+       "k": "ratPoisonFood",
+       "at": [
+        2587,
+        9654,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40
+        ]
+       }
+      },
+      {
+       "t": "Pick up the white cog.",
+       "s": "Pick up the white cog.",
+       "k": "pickUpWhiteCog",
+       "at": [
+        2577,
+        9655,
+        0
+       ]
+      },
+      {
+       "t": "Climb the stairs to the second floor of the Clock Tower.",
+       "s": "Climb to the second floor of the Clock Tower.",
+       "k": "climbToSecondFloor",
+       "at": [
+        2573,
+        3241,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Use the white cog on the white spindle.",
+       "s": "Use the white cog on the white spindle.",
+       "k": "whiteCogOnWhiteSpindle",
+       "at": [
+        2567,
+        3241,
+        2
+       ],
+       "hl": {
+        "obj": [
+         31
+        ]
+       }
+      },
+      {
+       "t": "Head up the ladder.",
+       "s": "Climb the ladder back up.",
+       "k": "climbWhiteLadder",
+       "at": [
+        2575,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Talk to Brother Kojo to finish the quest.",
+       "s": "Talk to Brother Kojo to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        2570,
+        3245,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3606
+        ]
+       }
+      },
+      {
+       "t": "Open your Quest Journal to sync your current state.",
+       "s": "Open the Quest Journal to sync the quest.",
+       "k": "syncStep"
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Go down the ladder in the Clock Tower to the basement.",
+       "s": "Go down the Clock Tower ladder to the basement.",
+       "k": "enterBasement",
+       "at": [
+        2566,
+        3242,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder in the dungeon cell back up to the Clock Tower.",
+       "s": "Climb the cell ladder up to the Clock Tower.",
+       "k": "climbCellLadder",
+       "at": [
+        2572,
+        9631,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the first floor of the Clock Tower.",
+       "s": "Climb down from the first floor of the Clock Tower.",
+       "k": "climbFromFirstFloorToGround",
+       "at": [
+        2573,
+        3241,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the second floor of the Clock Tower.",
+       "s": "Climb down from the second floor of the Clock Tower.",
+       "k": "climbFromSecondFloorToFirst",
+       "at": [
+        2572,
+        3241,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Go through the south east door and pick up the red cog.",
+       "s": "Go through the south-east door and pick up the red cog.",
+       "k": "pickUpRedCog",
+       "at": [
+        2583,
+        9613,
+        0
+       ]
+      },
+      {
+       "t": "Use the red cog on the red spindle.",
+       "s": "Use the red cog on the red spindle.",
+       "k": "redCogOnRedSpindle",
+       "at": [
+        2568,
+        3243,
+        0
+       ],
+       "hl": {
+        "obj": [
+         29
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder from the basement up to the Clock Tower ground floor.",
+       "s": "Climb up from the basement to the Clock Tower.",
+       "k": "climbToGroundFloorFromBasement",
+       "at": [
+        2566,
+        9642,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Go down the ladder north of the Clock Tower, near Brother Cedric.",
+       "s": "Go down the ladder near Brother Cedric.",
+       "k": "goToLadderCedric",
+       "at": [
+        2621,
+        3261,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Get the bucket next to Brother Cedric, north of the monastery, and fill it up on the well next to it for the Black cog step. If you have other plans for the black cog, you can ignore this step by going down the nearby ladder.",
+       "s": "Take the bucket next to Brother Cedric, north of the tower.",
+       "k": "getBucket",
+       "at": [
+        2616,
+        3255,
+        0
+       ]
+      },
+      {
+       "t": "Fill the bucket with water near Brother Cedric, north of the tower.",
+       "s": "Fill the bucket with water near Brother Cedric.",
+       "k": "fillBucket",
+       "at": [
+        2612,
+        3254,
+        0
+       ],
+       "hl": {
+        "obj": [
+         884
+        ]
+       }
+      },
+      {
+       "t": "Follow the tunnel and push the wall at the end.",
+       "s": "Follow the tunnel and push the wall at the end.",
+       "k": "pushWall",
+       "at": [
+        2575,
+        9631,
+        0
+       ],
+       "hl": {
+        "obj": [
+         1597
+        ]
+       }
+      },
+      {
+       "t": "Pick up the blue cog.",
+       "s": "Pick up the blue cog.",
+       "k": "pickUpBlueCog",
+       "at": [
+        2574,
+        9633,
+        0
+       ]
+      },
+      {
+       "t": "Climb the stairs to the first floor of the Clock Tower.",
+       "s": "Climb to the first floor of the Clock Tower.",
+       "k": "climbToFirstFloor",
+       "at": [
+        2573,
+        3241,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "Use the blue cog on the blue spindle.",
+       "s": "Use the blue cog on the blue spindle.",
+       "k": "blueCogOnBlueSpindle",
+       "at": [
+        2569,
+        3240,
+        1
+       ],
+       "hl": {
+        "obj": [
+         32
+        ]
+       }
+      },
+      {
+       "t": "Enter the north east door, and pick up the black cog with a bucket of water, alternatively you can equip ice gloves or smith gloves(i).",
+       "s": "Through the north-east door, cool the black cog with water, take it.",
+       "k": "pickupBlackCog",
+       "at": [
+        2613,
+        9639,
+        0
+       ]
+      },
+      {
+       "t": "Use the black cog on the black spindle.",
+       "s": "Use the black cog on the black spindle.",
+       "k": "blackCogOnBlackSpindle",
+       "at": [
+        2570,
+        9642,
+        0
+       ],
+       "hl": {
+        "obj": [
+         30
+        ]
+       }
+      },
+      {
+       "t": "Pick up the rat poison in the north west of the dungeon.",
+       "s": "Pick up the rat poison in the north-west of the dungeon.",
+       "k": "pickUpRatPoison",
+       "at": [
+        2564,
+        9662,
+        0
+       ]
+      },
+      {
+       "t": "Pull the marked lever up.",
+       "s": "Pull the marked lever up.",
+       "k": "pullFirstLever",
+       "at": [
+        2591,
+        9661,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33
+        ]
+       }
+      },
+      {
+       "t": "Use the rat poison on the food trough. Wait till the rats have died.",
+       "s": "Poison the rats' food trough and wait until they die.",
+       "k": "ratPoisonFood",
+       "at": [
+        2587,
+        9654,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40
+        ]
+       }
+      },
+      {
+       "t": "Pick up the white cog.",
+       "s": "Pick up the white cog.",
+       "k": "pickUpWhiteCog",
+       "at": [
+        2577,
+        9655,
+        0
+       ]
+      },
+      {
+       "t": "Climb the stairs to the second floor of the Clock Tower.",
+       "s": "Climb to the second floor of the Clock Tower.",
+       "k": "climbToSecondFloor",
+       "at": [
+        2573,
+        3241,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Use the white cog on the white spindle.",
+       "s": "Use the white cog on the white spindle.",
+       "k": "whiteCogOnWhiteSpindle",
+       "at": [
+        2567,
+        3241,
+        2
+       ],
+       "hl": {
+        "obj": [
+         31
+        ]
+       }
+      },
+      {
+       "t": "Head up the ladder.",
+       "s": "Climb the ladder back up.",
+       "k": "climbWhiteLadder",
+       "at": [
+        2575,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Talk to Brother Kojo to finish the quest.",
+       "s": "Talk to Brother Kojo to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        2570,
+        3245,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3606
+        ]
+       }
+      },
+      {
+       "t": "Open your Quest Journal to sync your current state.",
+       "s": "Open the Quest Journal to sync the quest.",
+       "k": "syncStep"
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Go down the ladder in the Clock Tower to the basement.",
+       "s": "Go down the Clock Tower ladder to the basement.",
+       "k": "enterBasement",
+       "at": [
+        2566,
+        3242,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder in the dungeon cell back up to the Clock Tower.",
+       "s": "Climb the cell ladder up to the Clock Tower.",
+       "k": "climbCellLadder",
+       "at": [
+        2572,
+        9631,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the first floor of the Clock Tower.",
+       "s": "Climb down from the first floor of the Clock Tower.",
+       "k": "climbFromFirstFloorToGround",
+       "at": [
+        2573,
+        3241,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the second floor of the Clock Tower.",
+       "s": "Climb down from the second floor of the Clock Tower.",
+       "k": "climbFromSecondFloorToFirst",
+       "at": [
+        2572,
+        3241,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Go through the south east door and pick up the red cog.",
+       "s": "Go through the south-east door and pick up the red cog.",
+       "k": "pickUpRedCog",
+       "at": [
+        2583,
+        9613,
+        0
+       ]
+      },
+      {
+       "t": "Use the red cog on the red spindle.",
+       "s": "Use the red cog on the red spindle.",
+       "k": "redCogOnRedSpindle",
+       "at": [
+        2568,
+        3243,
+        0
+       ],
+       "hl": {
+        "obj": [
+         29
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder from the basement up to the Clock Tower ground floor.",
+       "s": "Climb up from the basement to the Clock Tower.",
+       "k": "climbToGroundFloorFromBasement",
+       "at": [
+        2566,
+        9642,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Go down the ladder north of the Clock Tower, near Brother Cedric.",
+       "s": "Go down the ladder near Brother Cedric.",
+       "k": "goToLadderCedric",
+       "at": [
+        2621,
+        3261,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17384
+        ]
+       }
+      },
+      {
+       "t": "Get the bucket next to Brother Cedric, north of the monastery, and fill it up on the well next to it for the Black cog step. If you have other plans for the black cog, you can ignore this step by going down the nearby ladder.",
+       "s": "Take the bucket next to Brother Cedric, north of the tower.",
+       "k": "getBucket",
+       "at": [
+        2616,
+        3255,
+        0
+       ]
+      },
+      {
+       "t": "Fill the bucket with water near Brother Cedric, north of the tower.",
+       "s": "Fill the bucket with water near Brother Cedric.",
+       "k": "fillBucket",
+       "at": [
+        2612,
+        3254,
+        0
+       ],
+       "hl": {
+        "obj": [
+         884
+        ]
+       }
+      },
+      {
+       "t": "Follow the tunnel and push the wall at the end.",
+       "s": "Follow the tunnel and push the wall at the end.",
+       "k": "pushWall",
+       "at": [
+        2575,
+        9631,
+        0
+       ],
+       "hl": {
+        "obj": [
+         1597
+        ]
+       }
+      },
+      {
+       "t": "Pick up the blue cog.",
+       "s": "Pick up the blue cog.",
+       "k": "pickUpBlueCog",
+       "at": [
+        2574,
+        9633,
+        0
+       ]
+      },
+      {
+       "t": "Climb the stairs to the first floor of the Clock Tower.",
+       "s": "Climb to the first floor of the Clock Tower.",
+       "k": "climbToFirstFloor",
+       "at": [
+        2573,
+        3241,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "Use the blue cog on the blue spindle.",
+       "s": "Use the blue cog on the blue spindle.",
+       "k": "blueCogOnBlueSpindle",
+       "at": [
+        2569,
+        3240,
+        1
+       ],
+       "hl": {
+        "obj": [
+         32
+        ]
+       }
+      },
+      {
+       "t": "Enter the north east door, and pick up the black cog with a bucket of water, alternatively you can equip ice gloves or smith gloves(i).",
+       "s": "Through the north-east door, cool the black cog with water, take it.",
+       "k": "pickupBlackCog",
+       "at": [
+        2613,
+        9639,
+        0
+       ]
+      },
+      {
+       "t": "Use the black cog on the black spindle.",
+       "s": "Use the black cog on the black spindle.",
+       "k": "blackCogOnBlackSpindle",
+       "at": [
+        2570,
+        9642,
+        0
+       ],
+       "hl": {
+        "obj": [
+         30
+        ]
+       }
+      },
+      {
+       "t": "Pick up the rat poison in the north west of the dungeon.",
+       "s": "Pick up the rat poison in the north-west of the dungeon.",
+       "k": "pickUpRatPoison",
+       "at": [
+        2564,
+        9662,
+        0
+       ]
+      },
+      {
+       "t": "Pull the marked lever up.",
+       "s": "Pull the marked lever up.",
+       "k": "pullFirstLever",
+       "at": [
+        2591,
+        9661,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33
+        ]
+       }
+      },
+      {
+       "t": "Use the rat poison on the food trough. Wait till the rats have died.",
+       "s": "Poison the rats' food trough and wait until they die.",
+       "k": "ratPoisonFood",
+       "at": [
+        2587,
+        9654,
+        0
+       ],
+       "hl": {
+        "obj": [
+         40
+        ]
+       }
+      },
+      {
+       "t": "Pick up the white cog.",
+       "s": "Pick up the white cog.",
+       "k": "pickUpWhiteCog",
+       "at": [
+        2577,
+        9655,
+        0
+       ]
+      },
+      {
+       "t": "Climb the stairs to the second floor of the Clock Tower.",
+       "s": "Climb to the second floor of the Clock Tower.",
+       "k": "climbToSecondFloor",
+       "at": [
+        2573,
+        3241,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Use the white cog on the white spindle.",
+       "s": "Use the white cog on the white spindle.",
+       "k": "whiteCogOnWhiteSpindle",
+       "at": [
+        2567,
+        3241,
+        2
+       ],
+       "hl": {
+        "obj": [
+         31
+        ]
+       }
+      },
+      {
+       "t": "Head up the ladder.",
+       "s": "Climb the ladder back up.",
+       "k": "climbWhiteLadder",
+       "at": [
+        2575,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Talk to Brother Kojo to finish the quest.",
+       "s": "Talk to Brother Kojo to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        2570,
+        3245,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3606
+        ]
+       }
+      },
+      {
+       "t": "Open your Quest Journal to sync your current state.",
+       "s": "Open the Quest Journal to sync the quest.",
+       "k": "syncStep"
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Talk to Brother Kojo to finish the quest.",
+       "s": "Talk to Brother Kojo to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        2570,
+        3245,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3606
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the first floor of the Clock Tower.",
+       "s": "Climb down from the first floor of the Clock Tower.",
+       "k": "climbFromFirstFloorToGround",
+       "at": [
+        2573,
+        3241,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the second floor of the Clock Tower.",
+       "s": "Climb down from the second floor of the Clock Tower.",
+       "k": "climbFromSecondFloorToFirst",
+       "at": [
+        2572,
+        3241,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder from the basement up to the Clock Tower ground floor.",
+       "s": "Climb up from the basement to the Clock Tower.",
+       "k": "climbToGroundFloorFromBasement",
+       "at": [
+        2566,
+        9642,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder in the dungeon cell back up to the Clock Tower.",
+       "s": "Climb the cell ladder up to the Clock Tower.",
+       "k": "climbCellLadder",
+       "at": [
+        2572,
+        9631,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Talk to Brother Kojo to finish the quest.",
+       "s": "Talk to Brother Kojo to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        2570,
+        3245,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3606
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the first floor of the Clock Tower.",
+       "s": "Climb down from the first floor of the Clock Tower.",
+       "k": "climbFromFirstFloorToGround",
+       "at": [
+        2573,
+        3241,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the second floor of the Clock Tower.",
+       "s": "Climb down from the second floor of the Clock Tower.",
+       "k": "climbFromSecondFloorToFirst",
+       "at": [
+        2572,
+        3241,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder from the basement up to the Clock Tower ground floor.",
+       "s": "Climb up from the basement to the Clock Tower.",
+       "k": "climbToGroundFloorFromBasement",
+       "at": [
+        2566,
+        9642,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder in the dungeon cell back up to the Clock Tower.",
+       "s": "Climb the cell ladder up to the Clock Tower.",
+       "k": "climbCellLadder",
+       "at": [
+        2572,
+        9631,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Talk to Brother Kojo to finish the quest.",
+       "s": "Talk to Brother Kojo to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        2570,
+        3245,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3606
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the first floor of the Clock Tower.",
+       "s": "Climb down from the first floor of the Clock Tower.",
+       "k": "climbFromFirstFloorToGround",
+       "at": [
+        2573,
+        3241,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs from the second floor of the Clock Tower.",
+       "s": "Climb down from the second floor of the Clock Tower.",
+       "k": "climbFromSecondFloorToFirst",
+       "at": [
+        2572,
+        3241,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder from the basement up to the Clock Tower ground floor.",
+       "s": "Climb up from the basement to the Clock Tower.",
+       "k": "climbToGroundFloorFromBasement",
+       "at": [
+        2566,
+        9642,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Climb the ladder in the dungeon cell back up to the Clock Tower.",
+       "s": "Climb the cell ladder up to the Clock Tower.",
+       "k": "climbCellLadder",
+       "at": [
+        2572,
+        9631,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

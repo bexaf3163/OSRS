@@ -150,6 +150,7 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to defeat 4 monsters from level 19 to 53 without a break.',
   'The ability to run past two level 14 thieves, and one level 26.',
   'The ability to defend against level 53 [[Jogre]]s and level 46 [[Harpie Bug Swarm]]s.',
+  'The ability to run past level 53 [[Ogre]]s',
   'The ability to withstand and evade attacks from level 86 [[Fire Giant]]s and level 84 [[Moss Guardian]] without any equipment.',
   'The ability to defeat level 44, 63 and 137 enemies (all can be [[safespot]]ted)',
   'The ability to defeat a level 112 [[Khazard warlord]]',

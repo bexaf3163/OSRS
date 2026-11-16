@@ -195,13 +195,11 @@ describe('complete encounter strategy comparison', () => {
     expect(estimateStepFights(fight, short, gear).reduce((n, f) => n + f.food.high, 0)).toBeGreaterThan(26);
     expect(stats.attack).toBe(20);
   });
-  it('preserves Defence-at-1, account trading restrictions and unknown-route evidence', () => {
+  it('preserves account trading restrictions and unknown-route evidence', () => {
     const input = fixture(20, 0);
-    input.keepDefenceOne = true;
     input.ironman = true;
     input.walk = () => null;
     const result = createTacticalResolver(input).resolve(fight, 'test');
-    expect(result.action?.id).not.toContain(':TRAIN:defence:');
     expect(result.action?.kind).not.toBe('BUY');
     expect(result.preparationMinutes).toBeNull();
     expect(result.encounter?.reasons[0]).toContain('Time comparison incomplete');
@@ -301,11 +299,6 @@ describe('complete encounter strategy comparison', () => {
     const single = result.encounter!.reasons.flatMap(line => { const m = /^Train (\w+) to (\d+)/.exec(line); return m ? [Number(m[2])] : []; });
     expect(single.every(target => target > Number(level))).toBe(true);
     expect(weak.snapshot.combat?.stats).toMatchObject({ attack: 5, strength: 5, defence: 5 });
-    const pure = fixture(5, 0);
-    pure.keepDefenceOne = true;
-    const kept = createTacticalResolver(pure).resolve(fight, 'test');
-    expect(kept.encounter?.reasons.join(' ')).not.toMatch(/defence/);
-    expect(kept.action?.id).not.toContain(':TRAIN:defence:');
   });
   it('verifies an unread bank balance rather than silently dropping the otherwise feasible purchase strategies', () => {
     const input = fixture(20, 0);

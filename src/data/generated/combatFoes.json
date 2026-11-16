@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
-  "generatedAt": "2026-11-15",
+  "generatedAt": "2026-11-16",
   "foes": [
     {
       "name": "Count Draynor",
@@ -956,6 +956,87 @@
       "weakness": {
         "element": "fire",
         "percent": 25
+      }
+    },
+    {
+      "name": "Ogre",
+      "version": "Level 53",
+      "combat": 53,
+      "members": true,
+      "hitpoints": 60,
+      "attackLevel": 43,
+      "strengthLevel": 43,
+      "defenceLevel": 43,
+      "magicLevel": 1,
+      "attackBonus": 22,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 7,
+      "speedTicks": 6,
+      "aggressive": true,
+      "weakness": {
+        "element": "earth",
+        "percent": 20
+      }
+    },
+    {
+      "name": "Ogre",
+      "version": "GWD",
+      "combat": 58,
+      "members": true,
+      "hitpoints": 70,
+      "attackLevel": 46,
+      "strengthLevel": 48,
+      "defenceLevel": 43,
+      "magicLevel": 1,
+      "attackBonus": 22,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 8,
+      "speedTicks": 6,
+      "aggressive": true,
+      "weakness": {
+        "element": "earth",
+        "percent": 20
+      }
+    },
+    {
+      "name": "Ogre",
+      "version": "Level 63",
+      "combat": 63,
+      "members": true,
+      "hitpoints": 60,
+      "attackLevel": 54,
+      "strengthLevel": 54,
+      "defenceLevel": 54,
+      "magicLevel": 1,
+      "attackBonus": 8,
+      "defence": {
+        "stab": 19,
+        "slash": 23,
+        "crush": 24,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 7,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "earth",
+        "percent": 20
       }
     },
     {

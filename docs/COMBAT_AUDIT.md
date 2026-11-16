@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-34 stages: 6 retained, 27 revised, 0 with a branch, 1 deferred.
+35 stages: 7 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -42,6 +42,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (Lost City) (101) | safespot | Tree spirit (Lost City) | - | Revised |
 | S9-02 Fairytale I - Growing Pains | quest-fight | yes | Tanglefoot (111) | other | Tanglefoot | Lobster 10 | Revised |
 | S9-04 Monkey Madness I | quest-fight | yes | Jungle Demon (195), Monkey zombie, Gorilla | safespot | Jungle Demon | - | Revised |
+| S9-06 Clock Tower | avoid | yes | Ogre (53) | run | Ogre | - | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -870,4 +871,28 @@ Changed:
 Evidence:
 
 - Step fields "Requirements" and "Dangers"; safespot text; loadouts karamja, atoll, final; OSRS Wiki Jungle demon (ranged defence +0, magic +50, slash +50), read 2026-10-24.
+
+## S9-06 Clock Tower
+
+**Retain.** Clock Tower: collect the four cogs in the tower and its dungeon; the level 53 ogres in the dungeon are run past, not fought.
+
+Assumptions:
+
+- The quest needs only the ability to run past the level 53 ogres; no cog step asks for a kill.
+
+Problems:
+
+- Running past is planned, so no food is sized to the ogres.
+
+Alternatives:
+
+- None: every cog can be reached without a fight.
+
+Changed:
+
+- 2.122.0: new quest; the source prerequisite is run past.
+
+Evidence:
+
+- OSRS Wiki Clock Tower requirements: The ability to run past level 53 Ogres.
 

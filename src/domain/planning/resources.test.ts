@@ -6,6 +6,14 @@ import type { ExpectedEffect, Minutes, ObjectiveEvaluation, PlannerModel, Planni
 import { nameKey } from '../items/itemKey';
 import { noTime } from './cost';
 
+/** A branch that lost the worn sword trains without it: not worn, not carried, never resurrected. */
+function trainsWithoutSword(state: ReturnType<typeof projectedTrainingState>) {
+  expect(state).not.toBeNull();
+  expect(Object.values(state!.equipment)).not.toContain('Bronze shortsword');
+  expect(state!.equipmentItems?.some((item) => nameKey(item.name) === 'bronze shortsword') ?? false).toBe(false);
+  expect(state!.owned?.items.get('bronze shortsword')?.carried ?? 0).toBe(0);
+}
+
 function snapshot(bankSeen = true): PlanningSnapshot {
   return { scope: { characterId: 'fixture', mode: 'f2p', gameSessionId: 'login', snapshotRevision: 1 }, quests: {}, xp: {}, manual: {},
     questPoints: { known: true, value: 0, source: 'game' },
@@ -25,7 +33,7 @@ describe('conditional resource accounting', () => {
     expect(after.resources?.items['bronze shortsword']).toEqual({ floor: 0, complete: false });
     expect(after.resources?.worn?.['bronze shortsword']).toBe(0);
     expect(after.resources?.gp).toEqual(start.resources?.gp);
-    expect(projectedTrainingState(observed, after)).toBeNull();
+    trainsWithoutSword(projectedTrainingState(observed, after));
     const received = projectSuccess(after, [effect(change(0, [{ name: 'Bucket', delta: 1 }]))]);
     expect(received.resources?.items.bucket).toEqual({ floor: 1, complete: false });
     expect(projectSuccess(after, [effect(change(0, [{ name: 'Bucket', delta: -1 }]))]).invalidResources).toBe(true);
@@ -63,7 +71,7 @@ describe('conditional resource accounting', () => {
     expect(Object.values(cost.equipment)).not.toContain('Amulet of accuracy');
     expect(projectedTrainingState(observed, acquired)).toBe(cost);
     const lostKit = projectSuccess(acquired, [effect(change(0, [{ name: 'Bronze shortsword', delta: -1 }]))]);
-    expect(projectedTrainingState(observed, lostKit)).toBeNull();
+    trainsWithoutSword(projectedTrainingState(observed, lostKit));
     expect(observed.player.coins.bag).toMatchObject({ value: 50 });
     expect(observed.player.owned?.items.get('amulet of accuracy')).toBeUndefined();
   });
@@ -73,7 +81,7 @@ describe('conditional resource accounting', () => {
       effect(change(0, [{ name: 'Bronze shortsword', delta: 1 }]))]);
     expect(replaced.resources?.items['bronze shortsword'].floor).toBe(1);
     expect(replaced.resources?.worn?.['bronze shortsword']).toBe(0);
-    expect(projectedTrainingState(observed, replaced)).toBeNull();
+    trainsWithoutSword(projectedTrainingState(observed, replaced));
     const exchanged = projectResources(start.resources!, [change(0, [{ name: 'Bronze shortsword', delta: -1 }, { name: 'Bronze shortsword', delta: 1 }])])!;
     expect(exchanged.worn?.['bronze shortsword']).toBe(0);
     const spare = projectSuccess(start, [effect(change(0, [{ name: 'Bronze shortsword', delta: 1 }])),
@@ -109,7 +117,7 @@ describe('conditional resource accounting', () => {
     expect(projectedTrainingState(observed, after)).not.toBeNull();
     const handedIn = projectSuccess(start, [unknown(['Bronze shortsword'])]);
     expect(handedIn.resources?.worn?.['bronze shortsword']).toBeUndefined();
-    expect(projectedTrainingState(observed, handedIn)).toBeNull();
+    trainsWithoutSword(projectedTrainingState(observed, handedIn));
   });
   it('keeps exact named stock, worn quantities and money separate from observed state', () => {
     const observed = snapshot(), start = observedProjection(observed);

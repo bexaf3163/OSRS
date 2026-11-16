@@ -838,6 +838,10 @@ class Interp:
             cond, step = args[0], args[1]
             if not isinstance(step, Step):
                 return None
+            # Quest Helper keys a ConditionalStep's default step by null: addStep(null, x) replaces the default.
+            if cond is None:
+                st.default = step
+                return None
             if not isinstance(cond, Req):
                 cond = req('?', d=getattr(cond, 'what', 'cond'))
             st.entries.append((cond, step))

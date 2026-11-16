@@ -68,13 +68,13 @@ async function cleanupScenarios(browser: Browser) {
   const version = page.getByRole('group', { name: 'App version' });
   await version.getByRole('button', { name: 'Check', exact: true }).click();
   expect(await page.evaluate(() => Number((window as unknown as { __updateChecks?: number }).__updateChecks)) === 1 && await page.getByRole('button', { name: 'Copy the report', exact: true }).count() === 0, 'cleanup: updates remain functional from the rail and retired Copy Report is absent');
-  // The method priority is the skill card's own choice; the build preference sits under the skill grid.
+  // The method priority is the skill card's own choice; the Defence-at-1 build preference is retired (2.122).
   await page.goto(`${BASE}#/skills/RA/ranged`);
   await settle(page);
   const priorities = page.getByRole('group', { name: 'Training priority' }).first();
   await priorities.waitFor();
   expect(await priorities.getByRole('button', { name: 'Money', exact: true }).getAttribute('aria-pressed') === 'true', 'cleanup: active saved training priority survives on the skill card');
-  expect(await page.getByRole('checkbox', { name: /Keep Defence/ }).isChecked(), 'cleanup: the Defence preference survives on Skills');
+  expect(await page.getByRole('checkbox', { name: /Keep Defence/ }).count() === 0, 'cleanup: the retired Defence preference is gone from Skills');
   await priorities.getByRole('button', { name: 'Balanced', exact: true }).click();
   await settle(page);
   expect(await priorities.getByRole('button', { name: 'Balanced', exact: true }).getAttribute('aria-pressed') === 'true', 'cleanup: training priority remains editable');

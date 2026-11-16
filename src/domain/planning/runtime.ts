@@ -37,7 +37,6 @@ export interface RuntimePlanInput {
   earn: TacticalInput['earn'];
   priority?: MethodPriority;
   restriction?: TradeRestriction['state'];
-  keepDefenceOne?: boolean;
   catalogue?: readonly QuestFact[];
   /** Walking minutes from the trip worker's routes (createWalkingCosts); absent keeps quest travel UNKNOWN. */
   walk?: (from: WorldPoint | null, to: WorldPoint) => Minutes | null;
@@ -90,7 +89,7 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
   const winnings = new Map<string, boolean>();
   const winnable = (step: Step, currentOnly = false): boolean => {
     const key = `${step.id}:${currentOnly}`;
-    if (!winnings.has(key)) winnings.set(key, encounterSetups(step, snapshot, prices, ironman, { currentOnly, keepDefenceOne: input.keepDefenceOne }).length > 0);
+    if (!winnings.has(key)) winnings.set(key, encounterSetups(step, snapshot, prices, ironman, { currentOnly }).length > 0);
     return winnings.get(key)!;
   };
   // The cheapest training after which a fight is won (none when the current levels win it, null when no setup does).
@@ -99,14 +98,14 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
     const stats = snapshot.combat?.stats;
     const required = (step.requirements ?? []).flatMap(r => (r.type === 'skill' && stats && (stats[r.skill] ?? 0) < r.min ? [[r.skill, r.min] as const] : []));
     const after = required.length && stats ? { ...snapshot, combat: { ...snapshot.combat!, stats: { ...stats, ...Object.fromEntries(required) } } } : snapshot;
-    const times = encounterSetups(step, after, prices, ironman, { keepDefenceOne: input.keepDefenceOne })
+    const times = encounterSetups(step, after, prices, ironman)
       .map(setup => sumMinutes(setup.targets.map(target => train(target.skill, target.level))))
       .filter((time): time is Minutes => time !== null);
     return times.length ? times.reduce((best, time) => (time.typical < best.typical ? time : best)) : null;
   };
   const tactical = createTacticalResolver({
     snapshot, progress: input.progress, prices, window, priority: input.priority,
-    restriction: input.restriction, ironman, walk, keepDefenceOne: input.keepDefenceOne,
+    restriction: input.restriction, ironman, walk,
     earn: (step, gp, budget, goalId) => input.earn(step, gp, budget, goalId, train),
     gather: input.gather,
     preparationTime: frame => preparationTime(frame, origin, walk, input.gather, undefined, snapshot.quests),

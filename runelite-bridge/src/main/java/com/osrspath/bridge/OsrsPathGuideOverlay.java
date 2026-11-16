@@ -42,6 +42,10 @@ class OsrsPathGuideOverlay extends Overlay
 {
 	/** The card width in logical pixels at the normal text size; stretched with Alt, it keeps the player's width within the limits. */
 	static final int MAX_WIDTH = 420;
+	/** The card's default zoom: its text a little larger than the game's own (owner, 2026-11-16). */
+	static final float ZOOM = 1.15f;
+	/** Stretched with Alt, the whole card zooms with its width: text, icons and margins together, within these limits. */
+	static final float MIN_ZOOM = LedgerGuide.MIN_WIDTH / (float) LedgerGuide.WIDTH, MAX_ZOOM = 2f;
 	/** The open card takes at most this share of the window height; the rest is in the side panel. */
 	static final double MAX_HEIGHT_SHARE = 0.6;
 	static final int PAD_BOTTOM = 9;
@@ -183,8 +187,10 @@ class OsrsPathGuideOverlay extends Overlay
 			own.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 			own.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			boolean expanded = expanded(config.hudExpanded());
-			float scale = config.hudLarge() ? Hud.LARGE : 1f;
-			int width = LedgerGuide.width(Hud.panelWidth(this, Math.round(LedgerGuide.WIDTH * scale)), scale);
+			float base = (config.hudLarge() ? Hud.LARGE : 1f) * ZOOM;
+			int wanted = Hud.panelWidth(this, Math.round(LedgerGuide.WIDTH * base));
+			float scale = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, wanted / (float) LedgerGuide.WIDTH));
+			int width = Math.round(LedgerGuide.WIDTH * scale);
 			int maxHeight = Math.max(160, (int) (client.getCanvasHeight() * MAX_HEIGHT_SHARE));
 			int tab = plugin.getHudTab();
 			Object key = Arrays.asList(card, expanded, scale, width, maxHeight, tab);

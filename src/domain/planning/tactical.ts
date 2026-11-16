@@ -45,7 +45,6 @@ export interface TacticalInput {
   priority?: MethodPriority;
   restriction?: TradeRestriction['state'];
   ironman: boolean | null;
-  keepDefenceOne?: boolean;
   walk?: (from: WorldPoint | null, to: WorldPoint) => Minutes | null;
   /** The runtime adds the shared training time, so a skill unlock can be weighed against earning now (S61). */
   earn(step: Step, requiredLiquidGp: number, budget: Budget, goalId: string, train?: (skill: string, level: number) => Minutes | null): CandidateAction | null;

@@ -1,5 +1,5 @@
 import { STORAGE_KEYS } from './storageKeys';
-// The player's preferences that the engines cannot know: how training methods are chosen and whether the build keeps Defence at 1.
+// The player's preference that the engines cannot know: how training methods are chosen.
 // The helpers that used to be switches (places on the map, bank highlighting, training pace, levels from the game, upgrades, auto
 // preparation) are always on since 2.93 (owner, 2026-11-11): one planner decides, and a saved old switch is ignored.
 
@@ -8,12 +8,10 @@ export interface Features {
   efficient: boolean;
   /** Prefer known net earnings among usable training methods (the Money preference). With neither, the guide picks Balanced. */
   profitTraining?: boolean;
-  /** The build keeps Defence at 1: combat plans never offer Defence training (lib/combatRoute/plans.ts). Off by default: with no preference Defence is a candidate. */
-  keepDefenceOne: boolean;
 }
 
 export const FEATURES_KEY = STORAGE_KEYS.features;
-export const DEFAULT_FEATURES: Features = { efficient: false, profitTraining: false, keepDefenceOne: false };
+export const DEFAULT_FEATURES: Features = { efficient: false, profitTraining: false };
 
 /** What is saved; the unfamiliar and the broken fall back to the default (a new feature is on). */
 export function parseFeatures(raw: string | null): Features {

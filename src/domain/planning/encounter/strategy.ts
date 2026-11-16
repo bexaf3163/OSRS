@@ -91,7 +91,7 @@ export function chooseEncounter(input: TacticalInput, step: Step, goalId: string
   // Already safe and supplied: do not spend money or start training just for a marginal faster kill.
   const current = baseline[0];
   const ready = current && evaluate(current);
-  const rows = ready && !ready.action ? [ready] : encounterSetups(step, snapshot, input.prices, input.ironman, { keepDefenceOne: input.keepDefenceOne }).flatMap(setup => {
+  const rows = ready && !ready.action ? [ready] : encounterSetups(step, snapshot, input.prices, input.ironman).flatMap(setup => {
     const row = setup.current ? ready : evaluate(setup);
     return row ? [row] : [];
   });

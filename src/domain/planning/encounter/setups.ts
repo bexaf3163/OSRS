@@ -73,7 +73,7 @@ function forecast(step: Step, stats: PlayerStats, gear: GearState, kit: readonly
 
 /** Bounded alternatives INSIDE tactical preparation, not another objective planner. No fabricated kit, prices or monster stats. */
 export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: PriceView, ironman: boolean | null,
-  options: { currentOnly?: boolean; keepDefenceOne?: boolean } = {}): EncounterSetup[] {
+  options: { currentOnly?: boolean } = {}): EncounterSetup[] {
   const { stats, gear } = snapshot.combat ?? {};
   if (!snapshot.player.connected || !stats || !gear?.equipment || !stepFightNames(step).length) return [];
   // Before proposing any spend/training, require a supported observed baseline model (unsafe food quantity is allowed here).
@@ -94,7 +94,7 @@ export function encounterSetups(step: Step, snapshot: PlanningSnapshot, prices: 
   const bow = shootsOnly(gearPieceByName(base.equipment?.find(p => p.slot === 'weapon')?.name ?? ''));
   // A fight cast from a safespot (fightMechanics.json) changes with Magic alone: nothing reaches the player there.
   const spell = stepFightFoes(step).some(foe => FIGHT_MECHANICS[foe.name]?.safespot);
-  const melee = (spell ? ['magic'] : bow ? ['ranged', 'defence'] : ['attack', 'strength', 'defence']).filter(skill => !(options.keepDefenceOne && skill === 'defence'));
+  const melee = (spell ? ['magic'] : bow ? ['ranged', 'defence'] : ['attack', 'strength', 'defence']);
   const questsDone = new Set(Object.entries(snapshot.quests).filter(([, q]) => q.state === 'COMPLETED').map(([id]) => id));
   // One quote table and one advice per level set for the whole search: the even-training search asks again at each searched level.
   const geQuotes = gearMarketPrices(prices), foes = stepFightFoes(step), advised = new Map<string, ReturnType<typeof adviseGear>>();
