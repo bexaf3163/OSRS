@@ -479,256 +479,6 @@
    ]
   },
   {
-   "id": "catching-anglerfish",
-   "title": "Catching anglerfish",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Catching anglerfish. Port Piscarilius",
-   "about": "Players can fish anglerfish off the beach shore north of the main docks of Port Piscarilius. Sandworms can be purchased from Tynan's Fishing Supplies nearby or the Grand Exchange, but the former is more expensive and might take longer. Since sandworms have a floor price of 90 coins and can be sold as much as 135 each or higher by Tynan, it is recommended to buy one Sandworms pack at a time. Doing so will allow his stock to replenish just in time and keep the price at 90 each.",
-   "tips": [
-    "Rada's blessing 1: to",
-    "Rada's blessing 2: to",
-    "Rada's blessing 3: to",
-    "Rada's blessing 4: to"
-   ],
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "fishing",
-     "level": 82
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Sandworms, Fishing rod, Rada's blessing (Recommended) for increased yield, Fish barrel (Recommended), Spirit flakes (Recommended) for 50% increased yield"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 13431,
-      "name": "Sandworms"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 13439,
-      "name": "Raw anglerfish"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "raw anglerfish",
-    "perHour": {
-     "slow": 83,
-     "typical": 120,
-     "fast": 150
-    },
-    "basis": "wiki-guide",
-    "assumes": "150 raw anglerfish an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 1803,
-    "y": 3752,
-    "plane": 0,
-    "label": "Port Piscarilius"
-   },
-   "bank": {
-    "x": 1796,
-    "y": 3790,
-    "plane": 0,
-    "label": "Port Piscarilius bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Sandworms at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Port Piscarilius.",
-     "place": {
-      "x": 1803,
-      "y": 3752,
-      "plane": 0,
-      "label": "Port Piscarilius"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Catching anglerfish until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Port Piscarilius bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_anglerfish",
-     "title": "Money making guide/Catching anglerfish",
-     "revision": 15395613,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "catching-dark-crabs",
-   "title": "Catching dark crabs",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Fishing raw dark crabs. Resource Area",
-   "about": "Dark crabs are located in the Resource Area and are most easily accessed by using the Edgeville lever. Dark crab fishing spots never move. Fishing dark crabs is very low intensity, but fishers must remain aware of player killers. The elite Wilderness diary greatly improves the catch rate (at level 99, the chance to catch a dark crab increases from 12% to 34% with the diary completed).",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "fishing",
-     "level": 85
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Lobster pot, Dark fishing bait, to note dark crabs, Defensive gear, Lockpick and Assorted flowers or other fun weapon to escape PKers, Slash weapon to cut web on the way from the Edgeville lever, 3-4 healing items such as Saradomin brews, Coins"
-    },
-    {
-     "kind": "check",
-     "text": "* Wilderness Elite Diary completed (strongly recommended for increased catch rate) * Rada's blessing"
-    },
-    {
-     "kind": "check",
-     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 11940,
-      "name": "Dark fishing bait"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 995,
-      "name": "Coins"
-     },
-     "qty": 50,
-     "stack": true
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 11934,
-      "name": "Raw dark crab"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "raw dark crab",
-    "perHour": {
-     "slow": 169,
-     "typical": 246,
-     "fast": 308
-    },
-    "basis": "wiki-guide",
-    "assumes": "308 raw dark crab an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3186,
-    "y": 3935,
-    "plane": 0,
-    "label": "Resource Area"
-   },
-   "bank": {
-    "x": 3130,
-    "y": 3631,
-    "plane": 0,
-    "label": "Ferox Enclave bank"
-   },
-   "saleSeconds": 60,
-   "risk": "high",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Dark fishing bait, Coins at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Resource Area.",
-     "place": {
-      "x": 3186,
-      "y": 3935,
-      "plane": 0,
-      "label": "Resource Area"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Fishing raw dark crabs until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Ferox Enclave bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_dark_crabs",
-     "title": "Money making guide/Catching dark crabs",
-     "revision": 15373683,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "catching-sardines-herring",
    "title": "Catching sardines & herring",
    "family": "production",
@@ -3708,29 +3458,25 @@
    ]
   },
   {
-   "id": "cooking-raw-anglerfish",
-   "title": "Cooking raw anglerfish",
+   "id": "cooking-raw-chicken",
+   "title": "Cooking raw chicken",
    "family": "production",
-   "access": "members",
+   "access": "f2p",
    "repeatable": true,
-   "summary": "Cooking anglerfish. Cooks' Guild or Rogues' Den or Hosidius Kitchen",
-   "about": "Anglerfish heal up to 22 Hitpoints each for players above 93 Hitpoints, the highest amount available, and they also allow players to heal over their maximum Hitpoints. It is strongly recommended to have 99 Cooking for the Cooking cape's perk of 100% Cooking success rate. Roughly 1,300 can be cooked in an hour. If not at 99 Cooking, using the Hosidius Kitchen will provide an extra 5% chance not to burn each fish, which is increased to 10% after completing the elite Kourend & Kebos Diary.",
+   "summary": "Cooking raw chicken. Fires at the Grand Exchange",
+   "about": "Cooked chicken heals 3 Hitpoints each. Players can cook roughly 1300 per hour if using fires lit by other players at the Grand Exchange.",
    "requirements": [
     {
      "kind": "level",
      "skill": "cooking",
-     "level": 84
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Cooking cape, Raw anglerfish, Cooking gauntlets"
+     "level": 1
     }
    ],
    "inputs": [
     {
      "item": {
-      "id": 13439,
-      "name": "Raw anglerfish"
+      "id": 2138,
+      "name": "Raw chicken"
      },
      "qty": 1
     }
@@ -3738,21 +3484,21 @@
    "outputs": [
     {
      "item": {
-      "id": 13441,
-      "name": "Anglerfish"
+      "id": 2140,
+      "name": "Cooked chicken"
      },
      "qty": 1
     }
    ],
    "rate": {
-    "unit": "anglerfish",
+    "unit": "cooked chicken",
     "perHour": {
      "slow": 715,
      "typical": 1040,
      "fast": 1300
     },
     "basis": "wiki-guide",
-    "assumes": "1,300 anglerfish an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+    "assumes": "1,300 cooked chicken an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
    },
    "trip": {
     "bagSlots": 28,
@@ -3760,16 +3506,16 @@
     "note": "The wiki pace already counts banking."
    },
    "spot": {
-    "x": 3144,
-    "y": 3450,
+    "x": 2976,
+    "y": 3478,
     "plane": 0,
-    "label": "Cooks' Guild or Rogues' Den or Hosidius Kitchen"
+    "label": "Fires at the Grand Exchange"
    },
    "bank": {
-    "x": 3165,
-    "y": 3490,
+    "x": 2947,
+    "y": 3366,
     "plane": 0,
-    "label": "Grand Exchange"
+    "label": "Falador West Bank"
    },
    "saleSeconds": 60,
    "risk": "low",
@@ -3777,25 +3523,25 @@
    "guide": [
     {
      "kind": "prepare",
-     "text": "Buy Raw anglerfish at the Grand Exchange."
+     "text": "Buy Raw chicken at the Grand Exchange."
     },
     {
      "kind": "travel",
-     "text": "Go to Cooks' Guild or Rogues' Den or Hosidius Kitchen.",
+     "text": "Go to Fires at the Grand Exchange.",
      "place": {
-      "x": 3144,
-      "y": 3450,
+      "x": 2976,
+      "y": 3478,
       "plane": 0,
-      "label": "Cooks' Guild or Rogues' Den or Hosidius Kitchen"
+      "label": "Fires at the Grand Exchange"
      }
     },
     {
      "kind": "perform",
-     "text": "Cooking anglerfish until the bag is full."
+     "text": "Cooking raw chicken until the bag is full."
     },
     {
      "kind": "bank",
-     "text": "Bank at Grand Exchange."
+     "text": "Bank at Falador West Bank."
     },
     {
      "kind": "sell",
@@ -3808,359 +3554,9 @@
    ],
    "sources": [
     {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_anglerfish",
-     "title": "Money making guide/Cooking raw anglerfish",
-     "revision": 15317773,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cooking-raw-dark-crabs",
-   "title": "Cooking raw dark crabs",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cooking raw dark crabs. Cooks' Guild or Rogues' Den",
-   "about": "Dark crabs heal up to 22 Hitpoints each, making them one of the highest-healing foods in the game. It is strongly recommended to achieve 99 Cooking so that the Cooking cape may be worn to have a 100% success rate of cooking them. Players can cook roughly 1,300 crabs an hour.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "cooking",
-     "level": 90
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Cooking cape, Raw dark crabs"
-    },
-    {
-     "kind": "check",
-     "text": "Varrock armour 3 if not 99 Cooking to enter the bank in the Cooks' Guild (optional)"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 11934,
-      "name": "Raw dark crab"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 11936,
-      "name": "Dark crab"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "dark crab",
-    "perHour": {
-     "slow": 715,
-     "typical": 1040,
-     "fast": 1300
-    },
-    "basis": "wiki-guide",
-    "assumes": "1,300 dark crab an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3144,
-    "y": 3450,
-    "plane": 0,
-    "label": "Cooks' Guild or Rogues' Den"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Raw dark crab at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Cooks' Guild or Rogues' Den.",
-     "place": {
-      "x": 3144,
-      "y": 3450,
-      "plane": 0,
-      "label": "Cooks' Guild or Rogues' Den"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cooking raw dark crabs until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_dark_crabs",
-     "title": "Money making guide/Cooking raw dark crabs",
-     "revision": 14246140,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cooking-raw-marlin",
-   "title": "Cooking raw marlin",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cooking raw marlin. Cooks' Guild or Rogues' Den or Hosidius Kitchen",
-   "about": "Marlin heal 24 Hitpoints making them the highest immediate-healing single-bite food. Although they can be cooked starting from 91, it is strongly recommended to have 99 Cooking for the Cooking cape's perk of 100% Cooking success rate. Roughly 1,300 can be cooked in an hour. If not at 99 Cooking, using the Hosidius Kitchen will provide an extra 5% chance to successfully cook each piece of meat, which is increased to 10% after completing the elite Kourend & Kebos Diary.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "cooking",
-     "level": 99
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Cooking cape, Raw marlin"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 32349,
-      "name": "Raw marlin"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 32352,
-      "name": "Marlin"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "marlin",
-    "perHour": {
-     "slow": 715,
-     "typical": 1040,
-     "fast": 1300
-    },
-    "basis": "wiki-guide",
-    "assumes": "1,300 marlin an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3144,
-    "y": 3450,
-    "plane": 0,
-    "label": "Cooks' Guild or Rogues' Den or Hosidius Kitchen"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Raw marlin at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Cooks' Guild or Rogues' Den or Hosidius Kitchen.",
-     "place": {
-      "x": 3144,
-      "y": 3450,
-      "plane": 0,
-      "label": "Cooks' Guild or Rogues' Den or Hosidius Kitchen"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cooking raw marlin until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_marlin",
-     "title": "Money making guide/Cooking raw marlin",
-     "revision": 15132344,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cooking-raw-moonlight-antelope",
-   "title": "Cooking raw moonlight antelope",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cooking raw moonlight antelope. Cooks' Guild or Rogues' Den or Hosidius Kitchen",
-   "about": "Cooked moonlight antelope heal 26 Hitpoints each for players with 14 initially and 12 over time. It is strongly recommended to have 99 Cooking for the Cooking cape's perk of 100% Cooking success rate. Roughly 1,300 can be cooked in an hour. If not at 99 Cooking, using the Hosidius Kitchen will provide an extra 5% chance to successfully cook each piece of meat, which is increased to 10% after completing the elite Kourend & Kebos Diary.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "cooking",
-     "level": 92
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Cooking cape, Raw moonlight antelope"
-    },
-    {
-     "kind": "check",
-     "text": "* 50 Hunters' rumour"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 29113,
-      "name": "Raw moonlight antelope"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 29143,
-      "name": "Cooked moonlight antelope"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "cooked moonlight antelope",
-    "perHour": {
-     "slow": 715,
-     "typical": 1040,
-     "fast": 1300
-    },
-    "basis": "wiki-guide",
-    "assumes": "1,300 cooked moonlight antelope an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3144,
-    "y": 3450,
-    "plane": 0,
-    "label": "Cooks' Guild or Rogues' Den or Hosidius Kitchen"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Raw moonlight antelope at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Cooks' Guild or Rogues' Den or Hosidius Kitchen.",
-     "place": {
-      "x": 3144,
-      "y": 3450,
-      "plane": 0,
-      "label": "Cooks' Guild or Rogues' Den or Hosidius Kitchen"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cooking raw moonlight antelope until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_moonlight_antelope",
-     "title": "Money making guide/Cooking raw moonlight antelope",
-     "revision": 15009321,
+     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_chicken",
+     "title": "Money making guide/Cooking raw chicken",
+     "revision": 14246139,
      "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -4469,121 +3865,6 @@
    ]
   },
   {
-   "id": "crafting-ascension-bolts",
-   "title": "Crafting ascension bolts",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Crafting Ascension bolts from Ascension shards. Grand exchange",
-   "about": "Ascension bolts are used as ammunition for the Ascension crossbows, and due to their popularity and rapid speed, are always in high demand. The bolts are crafted from Ascension shards by using a chisel on them. As of writing, the Grand Exchange limit on Ascension shards is very low (100 every 4 hours). It would be wise to set overnight buy orders ahead of time.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "fletching",
-     "level": 86
-    },
-    {
-     "kind": "check",
-     "text": "Bring: starting capital (recommended), Chisel"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 34669,
-      "name": "Ascension shards"
-     },
-     "qty": 0.1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 34684,
-      "name": "Ascension bolts"
-     },
-     "qty": 1,
-     "stack": true
-    }
-   ],
-   "rate": {
-    "unit": "ascension bolts",
-    "perHour": {
-     "slow": 14850,
-     "typical": 21600,
-     "fast": 27000
-    },
-    "basis": "wiki-guide",
-    "assumes": "27,000 ascension bolts an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Ascension shards at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Crafting Ascension bolts from Ascension shards until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_ascension_bolts",
-     "title": "Money making guide/Crafting ascension bolts",
-     "revision": 15382401,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "crafting-cosmic-runes",
    "title": "Crafting cosmic runes",
    "family": "production",
@@ -4762,280 +4043,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_cosmic_runes",
      "title": "Money making guide/Crafting cosmic runes",
      "revision": 15312593,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "crafting-diamond-ascension-bolts",
-   "title": "Crafting diamond ascension bolts",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Crafting diamond ascension bolts from ascension shards. Grand exchange",
-   "about": "Diamond ascension bolts are used as ammunition for the Ascension crossbows, and due to their popularity and rapid speed, are always in high demand. You can go a step further by enchanting the bolts yourself; the profit/hr for doing so is generally less than what is listed above, but may help sell the final product faster.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "fletching",
-     "level": 86
-    },
-    {
-     "kind": "check",
-     "text": "Bring: starting capital (recommended), Chisel"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 34684,
-      "name": "Ascension bolts"
-     },
-     "qty": 1,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 9192,
-      "name": "Diamond bolt tips"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 34690,
-      "name": "Diamond ascension bolts"
-     },
-     "qty": 1,
-     "stack": true
-    }
-   ],
-   "rate": {
-    "unit": "diamond ascension bolts",
-    "perHour": {
-     "slow": 14850,
-     "typical": 21600,
-     "fast": 27000
-    },
-    "basis": "wiki-guide",
-    "assumes": "27,000 diamond ascension bolts an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Ascension bolts, Diamond bolt tips at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Crafting diamond ascension bolts from ascension shards until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_diamond_ascension_bolts",
-     "title": "Money making guide/Crafting diamond ascension bolts",
-     "revision": 15386085,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "crafting-double-nature-runes-achievement-diary-cape-teleport",
-   "title": "Crafting double nature runes (Achievement Diary Cape teleport)",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Crafting double nature runes with the achievement diary cape teleport<ref>This guide only covers the achievement diary cape teleport method. Players interested in other methods may refer to the traini",
-   "about": "{{Equipment {{Inventory This method uses the achievement diary cape to teleport to Kaleb Paramaya, who is by far the closest teleport to the nature altar; this crafts almost double the nature runes of the next best method. A trip goes as follows:",
-   "tips": [
-    "The Nature Runecraft Utilities plugin contextualises the cape's left-click teleport at the nature rune altar, i.e sets the cape's left click to Jarr (or Sir Rebral) while at the altar.",
-    "The Runecrafting Utilities plugin sets the pouch's left-click to \"Fill\" inside the bank interface (It also prevents a mistake; the colossal pouch's default left-click is based off your inventory, which means a double click can uselessly empty and fill the pouc…",
-    "The Screen Markers plugin can be used to mark the location of your banked essence, which allows mouse pre-moves as the bank is clicked.",
-    "The Object Markers or Ground Markers plugins can mark the agility shortcut rocks, whose clickboxes can be finnicky.",
-    "The Camera plugin's \"expand pitch limit\" option can make larger camera adjustments more convenient."
-   ],
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "runecraft",
-     "level": 91
-    },
-    {
-     "kind": "level",
-     "skill": "firemaking",
-     "level": 90
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Achievement diary cape, Colossal pouch, A full set of the Raiments of the Eye (with the hat attuned to a nature or catalytic tiara), Abyssal lantern with Redwood logs (or Magic logs at Runecraft 99), Ring of endurance (with 700+ charges) and Weight-reducing clothing"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 7936,
-      "name": "Pure essence"
-     },
-     "qty": 66
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 561,
-      "name": "Nature rune"
-     },
-     "qty": 132,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 561,
-      "name": "Nature rune"
-     },
-     "qty": 79.2,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 561,
-      "name": "Nature rune"
-     },
-     "qty": 6.6,
-     "stack": true
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 66,
-     "typical": 96,
-     "fast": 120
-    },
-    "basis": "wiki-guide",
-    "assumes": "120 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2399,
-    "y": 4840,
-    "plane": 0,
-    "label": "Nature Altar"
-   },
-   "bank": {
-    "x": 2543,
-    "y": 5141,
-    "plane": 0,
-    "label": "Mor Ul Rek bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Pure essence at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Nature Altar.",
-     "place": {
-      "x": 2399,
-      "y": 4840,
-      "plane": 0,
-      "label": "Nature Altar"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Bank with the Jarr teleport or the Sir Rebral teleport (on a PvP world) with the achievement diary cape."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport to Kaleb Paramaya with the cape."
-    },
-    {
-     "kind": "perform",
-     "text": "Climb down the ladder, run north-east to the agility shortcut, then run north to the Nature Altar. Craft runes at the altar."
-    },
-    {
-     "kind": "perform",
-     "text": "Teleport back to the bank and repeat."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_double_nature_runes_(Achievement_Diary_Cape_teleport)",
-     "title": "Money making guide/Crafting double nature runes (Achievement Diary Cape teleport)",
-     "revision": 15402413,
      "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -5351,239 +4358,6 @@
    ]
   },
   {
-   "id": "cutting-amethyst-arrowtips",
-   "title": "Cutting amethyst arrowtips",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cutting amethyst arrowtips. Grand Exchange",
-   "about": "Amethyst arrowtips are attached to headless arrow to make amethyst arrows, which have +6 higher Ranged strength bonus than Rune arrows, making them a good alternative in PvP and PvM. It can be unbelievably profitable to cut amethysts into arrowtips, however, it is a possibility to lose gold too. Therefore, before buying amethysts in bulk, test the conceivable profit in the Grand Exchange. With a chisel in the inventory, you can withdraw 27 amethysts at a time.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "crafting",
-     "level": 85
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Chisel, Amethysts"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 21347,
-      "name": "Amethyst"
-     },
-     "qty": 0.0667
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 21350,
-      "name": "Amethyst arrowtips"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "amethyst arrowtips",
-    "perHour": {
-     "slow": 22688,
-     "typical": 33000,
-     "fast": 41250
-    },
-    "basis": "wiki-guide",
-    "assumes": "41,250 amethyst arrowtips an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Amethyst at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cutting amethyst arrowtips until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_amethyst_arrowtips",
-     "title": "Money making guide/Cutting amethyst arrowtips",
-     "revision": 14925398,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "cutting-redwood-logs",
-   "title": "Cutting redwood logs",
-   "family": "gathering",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Cutting redwood logs. Woodcutting Guild (provides invisible +7 Woodcutting boost), Farming Guild (requires 90 Farming, which can be boosted and is closer to bank)",
-   "about": "Redwood logs are used to train Firemaking and make redwood birdhouses. Although less in demand than some other logs, they are still profitable. The only locations where redwood trees can be cut are the Woodcutting Guild and the Farming Guild. The redwood tree in the Farming Guild requires the player to first grow a redwood tree (requiring level 90 Farming) and has a bank deposit box very close to the tree.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "woodcutting",
-     "level": 90
-    },
-    {
-     "kind": "item",
-     "role": "tool",
-     "any": [],
-     "family": "axe"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Dragon axe, Twitcher's gloves"
-    }
-   ],
-   "inputs": [],
-   "outputs": [
-    {
-     "item": {
-      "id": 19669,
-      "name": "Redwood logs"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 5075,
-      "name": "Bird nest (empty)"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      50
-     ]
-    }
-   ],
-   "rate": {
-    "unit": "redwood logs",
-    "perHour": {
-     "slow": 99,
-     "typical": 144,
-     "fast": 180
-    },
-    "basis": "wiki-guide",
-    "assumes": "180 redwood logs an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 1614,
-    "y": 3499,
-    "plane": 0,
-    "label": "Woodcutting Guild (provides invisible +7 Woodcutting boost), Farming Guild (requ"
-   },
-   "bank": {
-    "x": 1592,
-    "y": 3476,
-    "plane": 0,
-    "label": "Woodcutting Guild bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "travel",
-     "text": "Go to Woodcutting Guild (provides invisible +7 Woodcutting boost), Farming Guild (requ.",
-     "place": {
-      "x": 1614,
-      "y": 3499,
-      "plane": 0,
-      "label": "Woodcutting Guild (provides invisible +7 Woodcutting boost), Farming Guild (requ"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Cutting redwood logs until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Woodcutting Guild bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_redwood_logs",
-     "title": "Money making guide/Cutting redwood logs",
-     "revision": 15152854,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "firecycling",
    "title": "Firecycling",
    "family": "collecting",
@@ -5670,121 +4444,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Firecycling",
      "title": "Money making guide/Firecycling",
      "revision": 15376181,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "fletching-sunlight-antler-bolts",
-   "title": "Fletching sunlight antler bolts",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Fletching sunlight antler bolts. Grand Exchange",
-   "about": "Sunlight antelope antlers are used to create sunlight antler bolts, with each one creating 12 bolts. The antlers can be obtained from the Grand Exchange or by hunting sunlight antelopes with Hunter 72. A menu will open, and click to Make-all. After the inventory is complete, you should be left with 324 bolts.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "fletching",
-     "level": 62
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 29168,
-      "name": "Sunlight antelope antler"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 28872,
-      "name": "Sunlight antler bolts"
-     },
-     "qty": 12,
-     "stack": true
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 990,
-     "typical": 1440,
-     "fast": 1800
-    },
-    "basis": "wiki-guide",
-    "assumes": "1,800 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Sunlight antelope antler at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 27 antlers and a chisel, and use one on the other."
-    },
-    {
-     "kind": "perform",
-     "text": "Deposit your inventory, withdraw 27 antlers, and repeat."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Fletching_sunlight_antler_bolts",
-     "title": "Money making guide/Fletching sunlight antler bolts",
-     "revision": 15017506,
      "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -8185,164 +6844,6 @@
    ]
   },
   {
-   "id": "making-elemental-battlestaves-ironman",
-   "title": "Making elemental battlestaves (Ironman)",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making elemental battlestaves (Ironman)",
-   "about": "The profit listed here assumes you are crafting 525 air battlestaves at the Obelisk of air per hour. Unpowered orbs are considered already supplied from glassblowing crafting training. Crafting and alching the battlestaves and orbs together is considered 0-time. However, you can normally craft 2,450 staves per hour and alch 1,200 times per hour.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "crafting",
-     "level": 58
-    },
-    {
-     "kind": "level",
-     "skill": "magic",
-     "level": 60
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Enough Coins to purchase a decent supply of battlestaves, or available staves from other sources, Unpowered orbs, Cosmic runes, Air staff / Air runes for Air battlestaves Or Earth staff / Earth runes for Earth battlestaves, Amulet of glory or an amulet of glory (mounted)"
-    },
-    {
-     "kind": "check",
-     "text": "*Paddewwa teleport (tablet) and looting bag for closer teleports and longer trips. *Ring of dueling to restore run energy and Games necklaces for resetting at Corporeal beast"
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 1391,
-      "name": "Battlestaff"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 564,
-      "name": "Cosmic rune"
-     },
-     "qty": 3,
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 567,
-      "name": "Unpowered orb"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 563,
-      "name": "Law rune"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      25
-     ],
-     "stack": true
-    },
-    {
-     "item": {
-      "id": 561,
-      "name": "Nature rune"
-     },
-     "qty": 1,
-     "stack": true
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 1397,
-      "name": "Air battlestaff"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "air battlestaff",
-    "perHour": {
-     "slow": 289,
-     "typical": 420,
-     "fast": 525
-    },
-    "basis": "wiki-guide",
-    "assumes": "525 air battlestaff an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Battlestaff, Cosmic rune, Unpowered orb, Law rune, Nature rune at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Making elemental battlestaves (Ironman) until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_elemental_battlestaves_(Ironman)",
-     "title": "Money making guide/Making elemental battlestaves (Ironman)",
-     "revision": 15114598,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "making-flour",
    "title": "Making flour",
    "family": "processing",
@@ -8564,268 +7065,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_pastry_dough",
      "title": "Money making guide/Making pastry dough",
      "revision": 15128189,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-raw-summer-pies",
-   "title": "Making raw summer pies",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making raw summer pies. Grand Exchange or bank chest recommended",
-   "about": "Raw summer pies are used to quickly train Cooking and Magic by using the Bake Pie spell. They are made by using the ingredients (strawberry, watermelon, cooking apple) on a pie shell, in that order. To avoid losing money, test out the profit of making one pie before you do them in bulk. This will bring up a menu to make part summer pies, so click to make-all.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "cooking",
-     "level": 95
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 2315,
-      "name": "Pie shell"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 5504,
-      "name": "Strawberry"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 5982,
-      "name": "Watermelon"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 1955,
-      "name": "Cooking apple"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 7216,
-      "name": "Raw summer pie"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "raw summer pie",
-    "perHour": {
-     "slow": 369,
-     "typical": 536,
-     "fast": 670
-    },
-    "basis": "wiki-guide",
-    "assumes": "670 raw summer pie an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange or bank chest recommended"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Pie shell, Strawberry, Watermelon, Cooking apple at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange or bank chest recommended.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange or bank chest recommended"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Buy an equal number of pie shells, strawberries, watermelons and cooking apples from the Grand Exchange (each has a buying limit of 11,000 per four hours)."
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 pie shells and 14 strawberries, and use one on the other."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_raw_summer_pies",
-     "title": "Money making guide/Making raw summer pies",
-     "revision": 14792507,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "making-raw-wild-pies",
-   "title": "Making raw wild pies",
-   "family": "processing",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Making raw wild pies. Grand Exchange or bank chest recommended",
-   "about": "Raw wild pies are used to quickly train Cooking and Magic by using the Bake Pie spell. They are made by using the ingredients (raw bear meat, raw chompy, raw rabbit) on a pie shell, in that order. To avoid losing money, test out the profit of making one pie before you do them in bulk. This will bring up a menu to make part wild pies, so click to make-all.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "cooking",
-     "level": 85
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 2315,
-      "name": "Pie shell"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 2136,
-      "name": "Raw bear meat"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 3226,
-      "name": "Raw rabbit"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 2876,
-      "name": "Raw chompy"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 7206,
-      "name": "Raw wild pie"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "raw wild pie",
-    "perHour": {
-     "slow": 407,
-     "typical": 592,
-     "fast": 740
-    },
-    "basis": "wiki-guide",
-    "assumes": "740 raw wild pie an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange or bank chest recommended"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "high",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Pie shell, Raw bear meat, Raw rabbit, Raw chompy at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange or bank chest recommended.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange or bank chest recommended"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Buy an equal number of pie shells, raw bear meat, rabbit, and chompy from the Grand Exchange (each has a buying limit of 13,000 per four hours)."
-    },
-    {
-     "kind": "perform",
-     "text": "Withdraw 14 pie shells and 14 raw bear meat, and use one on the other."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_raw_wild_pies",
-     "title": "Money making guide/Making raw wild pies",
-     "revision": 14272533,
      "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -9117,118 +7356,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_adamantite_ore_(free-to-play)",
      "title": "Money making guide/Mining adamantite ore (free-to-play)",
      "revision": 14381448,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "mining-amethyst",
-   "title": "Mining amethyst",
-   "family": "gathering",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Mining amethyst. Mining Guild",
-   "about": "Amethyst is currently the highest level ore players can mine. It is used in the creation of high-level ranging ammunition: amethyst bolts, amethyst arrows, amethyst javelins and amethyst darts. Amethyst darts are commonly used with the Toxic blowpipe, especially among Ironmen. Players can expect to mine anywhere from 80 to 100 amethyst per hour, depending on efficiency, for profits of - coins.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "mining",
-     "level": 92
-    },
-    {
-     "kind": "item",
-     "role": "tool",
-     "any": [],
-     "family": "pickaxe"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Rune, Dragon or Crystal pickaxe"
-    },
-    {
-     "kind": "check",
-     "text": "Varrock armour 4, Expert mining gloves, Celestial signet or Elven signet (if using crystal pickaxe; optional)"
-    }
-   ],
-   "inputs": [],
-   "outputs": [
-    {
-     "item": {
-      "id": 21347,
-      "name": "Amethyst"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "amethyst",
-    "perHour": {
-     "slow": 50,
-     "typical": 72,
-     "fast": 90
-    },
-    "basis": "wiki-guide",
-    "assumes": "90 amethyst an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3032,
-    "y": 9728,
-    "plane": 0,
-    "label": "Mining Guild"
-   },
-   "bank": {
-    "x": 3013,
-    "y": 9718,
-    "plane": 0,
-    "label": "Mining Guild bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "travel",
-     "text": "Go to Mining Guild.",
-     "place": {
-      "x": 3032,
-      "y": 9728,
-      "plane": 0,
-      "label": "Mining Guild"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Mining amethyst until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Mining Guild bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_amethyst",
-     "title": "Money making guide/Mining amethyst",
-     "revision": 15398214,
      "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -9815,122 +7942,6 @@
    ]
   },
   {
-   "id": "mining-runite-ore",
-   "title": "Mining runite ore",
-   "family": "gathering",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Mining runite ore. Wilderness Rune Mine, Heroes' Guild Mine, et. al.",
-   "about": "Mining runite ore, which is a high-level ore that frequently sells for a high price ( coins) due to its use in producing runite bars via Smithing, is an achievement in itself. They are highly popular and often are depleted of their resources, so players need to switch worlds in order to find fresh runite rocks. By doing quests and unlocks, more locations to mine runite will become available to you. Non-members can only mine runite at one location - the Wilderness Rune Mine, which contains two rocks.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "mining",
-     "level": 85
-    },
-    {
-     "kind": "item",
-     "role": "tool",
-     "any": [],
-     "family": "pickaxe"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Rune or Dragon pickaxe, Looting bag if in Wilderness"
-    },
-    {
-     "kind": "check",
-     "text": "Varrock armour 4 (optional) and depends on what mining site the player chooses, Celestial ring, Expert mining gloves"
-    },
-    {
-     "kind": "check",
-     "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
-    }
-   ],
-   "inputs": [],
-   "outputs": [
-    {
-     "item": {
-      "id": 451,
-      "name": "Runite ore"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "runite ore",
-    "perHour": {
-     "slow": 36,
-     "typical": 52,
-     "fast": 65
-    },
-    "basis": "wiki-guide",
-    "assumes": "65 runite ore an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 2917,
-    "y": 9907,
-    "plane": 0,
-    "label": "Wilderness Rune Mine, Heroes' Guild Mine, et"
-   },
-   "bank": {
-    "x": 2807,
-    "y": 3441,
-    "plane": 0,
-    "label": "Catherby bank"
-   },
-   "saleSeconds": 60,
-   "risk": "high",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "travel",
-     "text": "Go to Wilderness Rune Mine, Heroes' Guild Mine, et.",
-     "place": {
-      "x": 2917,
-      "y": 9907,
-      "plane": 0,
-      "label": "Wilderness Rune Mine, Heroes' Guild Mine, et"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Mining runite ore until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Catherby bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_runite_ore",
-     "title": "Money making guide/Mining runite ore",
-     "revision": 15232967,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "mining-runite-ore-free-to-play",
    "title": "Mining runite ore (free-to-play)",
    "family": "gathering",
@@ -10025,150 +8036,6 @@
      "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_runite_ore_(free-to-play)",
      "title": "Money making guide/Mining runite ore (free-to-play)",
      "revision": 14863994,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "motherlode-mine",
-   "title": "Motherlode Mine",
-   "family": "gathering",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Motherlode Mine",
-   "about": "Other assumptions include that the player has 99 Mining and is wearing the prospector's outfit and has all upgrades to the mine purchased. For the expected profit rates at lower levels, see the table at the bottom of the guide. Motherlode Mine, located in the Falador Dwarven Mines, is a somewhat popular Mining training method as it is low effort, can yield good profit and 30,000-60,000 Mining experience per hour.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "mining",
-     "level": 85
-    },
-    {
-     "kind": "item",
-     "role": "tool",
-     "any": [],
-     "family": "pickaxe"
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Dragon or crystal pickaxe, Gem bag (optional), Coal bag (optional), Celestial ring (optional)"
-    },
-    {
-     "kind": "check",
-     "text": "100 golden nuggets and Mining 57 for upper level"
-    }
-   ],
-   "inputs": [],
-   "outputs": [
-    {
-     "item": {
-      "id": 453,
-      "name": "Coal"
-     },
-     "qty": 0.246
-    },
-    {
-     "item": {
-      "id": 444,
-      "name": "Gold ore"
-     },
-     "qty": 0.2422
-    },
-    {
-     "item": {
-      "id": 447,
-      "name": "Mithril ore"
-     },
-     "qty": 0.2693
-    },
-    {
-     "item": {
-      "id": 449,
-      "name": "Adamantite ore"
-     },
-     "qty": 0.1885
-    },
-    {
-     "item": {
-      "id": 451,
-      "name": "Runite ore"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      44
-     ]
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 303,
-     "typical": 440,
-     "fast": 550
-    },
-    "basis": "wiki-guide",
-    "assumes": "550 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3744,
-    "y": 5664,
-    "plane": 0,
-    "label": "Motherlode Mine"
-   },
-   "bank": {
-    "x": 3760,
-    "y": 5666,
-    "plane": 0,
-    "label": "Motherlode Mine bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "travel",
-     "text": "Go to Motherlode Mine.",
-     "place": {
-      "x": 3744,
-      "y": 5664,
-      "plane": 0,
-      "label": "Motherlode Mine"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Motherlode Mine until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Motherlode Mine bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Motherlode_Mine",
-     "title": "Money making guide/Motherlode Mine",
-     "revision": 15195514,
      "retrievedAt": "2026-11-16",
      "used": "pace, inputs, outputs, levels, quests, place and the method"
     }
@@ -11513,288 +9380,6 @@
    ]
   },
   {
-   "id": "stranglewood-fishing",
-   "title": "Stranglewood fishing",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Fishing at the Fishing spot (Stranglewood). The Stranglewood",
-   "about": "This fishing spot can be fished for a variety of items, albeit very slowly. It can sometimes yield Chromium ingots, which are worth a decent amount of coins. The output assumes the loop half of moon key is worth half of a Moon key when used to open the Chest (moon key).",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "fishing",
-     "level": 63
-    },
-    {
-     "kind": "check",
-     "text": "Bring: Fishing rod"
-    },
-    {
-     "kind": "check",
-     "text": "Fish barrel for increased AFK time, Fishing 99 for faster catching, Rada's blessing 4 for chance to double loot (but less afk). Elite Combat Achievements for increased clue scrolls. Strangled tablet teleport unlocked on a Ring of shadows and a Crafting cape for efficient banking."
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 313,
-      "name": "Fishing bait"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 349,
-      "name": "Raw pike"
-     },
-     "qty": 0.2
-    },
-    {
-     "item": {
-      "id": 301,
-      "name": "Lobster pot"
-     },
-     "qty": 0.2
-    },
-    {
-     "item": {
-      "id": 405,
-      "name": "Casket"
-     },
-     "qty": 0.1
-    },
-    {
-     "item": {
-      "id": 5312,
-      "name": "Acorn"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      500
-     ]
-    },
-    {
-     "item": {
-      "id": 1613,
-      "name": "Red topaz"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      5000
-     ]
-    },
-    {
-     "item": {
-      "id": 28276,
-      "name": "Chromium ingot"
-     },
-     "qty": 1,
-     "chance": [
-      1,
-      500000
-     ]
-    }
-   ],
-   "rate": {
-    "unit": "action",
-    "perHour": {
-     "slow": 55,
-     "typical": 80,
-     "fast": 100
-    },
-    "basis": "wiki-guide",
-    "assumes": "100 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 1162,
-    "y": 3379,
-    "plane": 0,
-    "label": "The Stranglewood"
-   },
-   "bank": {
-    "x": 1254,
-    "y": 3571,
-    "plane": 0,
-    "label": "Mount Quidamortem bank"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "low",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Fishing bait at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to The Stranglewood.",
-     "place": {
-      "x": 1162,
-      "y": 3379,
-      "plane": 0,
-      "label": "The Stranglewood"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Fishing at the Fishing spot (Stranglewood) until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Mount Quidamortem bank."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stranglewood_fishing",
-     "title": "Money making guide/Stranglewood fishing",
-     "revision": 15325314,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
-   "id": "stringing-magic-longbows",
-   "title": "Stringing magic longbows",
-   "family": "production",
-   "access": "members",
-   "repeatable": true,
-   "summary": "Stringing magic longbows. Grand Exchange",
-   "about": "At 85 Fletching, players can make money off of stringing magic longbows. Unstrung magic longbows can be purchased off the Grand Exchange for coins each and bow string at. Depending on speed and consistency, up to 2,400 bows can be strung in an hour. Nonetheless, it could also provide the player with Magic experience per hour assuming 1,200 High Level Alchemy casts.",
-   "requirements": [
-    {
-     "kind": "level",
-     "skill": "fletching",
-     "level": 85
-    }
-   ],
-   "inputs": [
-    {
-     "item": {
-      "id": 70,
-      "name": "Magic longbow (u)"
-     },
-     "qty": 1
-    },
-    {
-     "item": {
-      "id": 1777,
-      "name": "Bow string"
-     },
-     "qty": 1
-    }
-   ],
-   "outputs": [
-    {
-     "item": {
-      "id": 859,
-      "name": "Magic longbow"
-     },
-     "qty": 1
-    }
-   ],
-   "rate": {
-    "unit": "magic longbow",
-    "perHour": {
-     "slow": 1320,
-     "typical": 1920,
-     "fast": 2400
-    },
-    "basis": "wiki-guide",
-    "assumes": "2,400 magic longbow an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
-   },
-   "trip": {
-    "bagSlots": 28,
-    "overheadSeconds": 0,
-    "note": "The wiki pace already counts banking."
-   },
-   "spot": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "bank": {
-    "x": 3165,
-    "y": 3490,
-    "plane": 0,
-    "label": "Grand Exchange"
-   },
-   "saleSeconds": 60,
-   "risk": "low",
-   "intensity": "moderate",
-   "guide": [
-    {
-     "kind": "prepare",
-     "text": "Buy Magic longbow (u), Bow string at the Grand Exchange."
-    },
-    {
-     "kind": "travel",
-     "text": "Go to Grand Exchange.",
-     "place": {
-      "x": 3165,
-      "y": 3490,
-      "plane": 0,
-      "label": "Grand Exchange"
-     }
-    },
-    {
-     "kind": "perform",
-     "text": "Stringing magic longbows until the bag is full."
-    },
-    {
-     "kind": "bank",
-     "text": "Bank at Grand Exchange."
-    },
-    {
-     "kind": "sell",
-     "text": "Sell what you made at the Grand Exchange."
-    },
-    {
-     "kind": "restock",
-     "text": "Buy the supplies you were short of, then go back to your step."
-    }
-   ],
-   "sources": [
-    {
-     "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stringing_magic_longbows",
-     "title": "Money making guide/Stringing magic longbows",
-     "revision": 14355611,
-     "retrievedAt": "2026-11-16",
-     "used": "pace, inputs, outputs, levels, quests, place and the method"
-    }
-   ],
-   "verifiedAt": "2026-11-16",
-   "confidence": "LOW",
-   "assumptions": [
-    "The pace and drops are the wiki guide's; rare drops (below 1 in 16) are shown as upside and never planned on."
-   ]
-  },
-  {
    "id": "taking-from-the-infinite-money-bag-while-picking-up-coin-spawns-in-varrock-west-bank",
    "title": "Taking from the infinite money bag while picking up coin spawns in Varrock West bank",
    "family": "collecting",
@@ -12380,6 +9965,60 @@
   },
   "telegrab-wine-deep-wilderness": {
    "about": "Wines of Zamorak are used to create ranging and bastion potions. They spawn in the monk of Zamorak's camp, which is located at the end of the Deep Wilderness Dungeon. The Wine of Zamorak can be taken from the table, which will cause the monk to attack you. When using the Telekinetic Grab spell the monk will not become agressive."
+  },
+  "cook-anglerfish": {
+   "about": "Anglerfish heal up to 22 Hitpoints each for players above 93 Hitpoints, the highest amount available, and they also allow players to heal over their maximum Hitpoints. It is strongly recommended to have 99 Cooking for the Cooking cape's perk of 100% Cooking success rate. Roughly 1,300 can be cooked in an hour. If not at 99 Cooking, using the Hosidius Kitchen will provide an extra 5% chance not to burn each fish, which is increased to 10% after completing the elite Kourend & Kebos Diary."
+  },
+  "cook-dark-crabs": {
+   "about": "Dark crabs heal up to 22 Hitpoints each, making them one of the highest-healing foods in the game. It is strongly recommended to achieve 99 Cooking so that the Cooking cape may be worn to have a 100% success rate of cooking them. Players can cook roughly 1,300 crabs an hour."
+  },
+  "cook-marlin": {
+   "about": "Marlin heal 24 Hitpoints making them the highest immediate-healing single-bite food. Although they can be cooked starting from 91, it is strongly recommended to have 99 Cooking for the Cooking cape's perk of 100% Cooking success rate. Roughly 1,300 can be cooked in an hour. If not at 99 Cooking, using the Hosidius Kitchen will provide an extra 5% chance to successfully cook each piece of meat, which is increased to 10% after completing the elite Kourend & Kebos Diary."
+  },
+  "string-magic-longbows": {
+   "about": "At 85 Fletching, players can make money off of stringing magic longbows. Unstrung magic longbows can be purchased off the Grand Exchange for coins each and bow string at. Depending on speed and consistency, up to 2,400 bows can be strung in an hour. Nonetheless, it could also provide the player with Magic experience per hour assuming 1,200 High Level Alchemy casts."
+  },
+  "make-raw-wild-pies": {
+   "about": "Raw wild pies are used to quickly train Cooking and Magic by using the Bake Pie spell. They are made by using the ingredients (raw bear meat, raw chompy, raw rabbit) on a pie shell, in that order. To avoid losing money, test out the profit of making one pie before you do them in bulk. This will bring up a menu to make part wild pies, so click to make-all."
+  },
+  "make-raw-summer-pies": {
+   "about": "Raw summer pies are used to quickly train Cooking and Magic by using the Bake Pie spell. They are made by using the ingredients (strawberry, watermelon, cooking apple) on a pie shell, in that order. To avoid losing money, test out the profit of making one pie before you do them in bulk. This will bring up a menu to make part summer pies, so click to make-all."
+  },
+  "cut-amethyst-arrowtips": {
+   "about": "Amethyst arrowtips are attached to headless arrow to make amethyst arrows, which have +6 higher Ranged strength bonus than Rune arrows, making them a good alternative in PvP and PvM. It can be unbelievably profitable to cut amethysts into arrowtips, however, it is a possibility to lose gold too. Therefore, before buying amethysts in bulk, test the conceivable profit in the Grand Exchange. With a chisel in the inventory, you can withdraw 27 amethysts at a time."
+  },
+  "make-ascension-bolts": {
+   "about": "Ascension bolts are used as ammunition for the Ascension crossbows, and due to their popularity and rapid speed, are always in high demand. The bolts are crafted from Ascension shards by using a chisel on them. As of writing, the Grand Exchange limit on Ascension shards is very low (100 every 4 hours). It would be wise to set overnight buy orders ahead of time."
+  },
+  "make-diamond-ascension-bolts": {
+   "about": "Diamond ascension bolts are used as ammunition for the Ascension crossbows, and due to their popularity and rapid speed, are always in high demand. You can go a step further by enchanting the bolts yourself; the profit/hr for doing so is generally less than what is listed above, but may help sell the final product faster."
+  },
+  "fletch-sunlight-antler-bolts": {
+   "about": "Sunlight antelope antlers are used to create sunlight antler bolts, with each one creating 12 bolts. The antlers can be obtained from the Grand Exchange or by hunting sunlight antelopes with Hunter 72. A menu will open, and click to Make-all. After the inventory is complete, you should be left with 324 bolts."
+  },
+  "fish-anglerfish": {
+   "about": "Players can fish anglerfish off the beach shore north of the main docks of Port Piscarilius. Sandworms can be purchased from Tynan's Fishing Supplies nearby or the Grand Exchange, but the former is more expensive and might take longer. Since sandworms have a floor price of 90 coins and can be sold as much as 135 each or higher by Tynan, it is recommended to buy one Sandworms pack at a time. Doing so will allow his stock to replenish just in time and keep the price at 90 each.",
+   "tips": [
+    "Rada's blessing 1: to",
+    "Rada's blessing 2: to",
+    "Rada's blessing 3: to",
+    "Rada's blessing 4: to"
+   ]
+  },
+  "fish-dark-crabs": {
+   "about": "Dark crabs are located in the Resource Area and are most easily accessed by using the Edgeville lever. Dark crab fishing spots never move. Fishing dark crabs is very low intensity, but fishers must remain aware of player killers. The elite Wilderness diary greatly improves the catch rate (at level 99, the chance to catch a dark crab increases from 12% to 34% with the diary completed)."
+  },
+  "mine-runite-wilderness": {
+   "about": "Mining runite ore, which is a high-level ore that frequently sells for a high price ( coins) due to its use in producing runite bars via Smithing, is an achievement in itself. They are highly popular and often are depleted of their resources, so players need to switch worlds in order to find fresh runite rocks. By doing quests and unlocks, more locations to mine runite will become available to you. Non-members can only mine runite at one location - the Wilderness Rune Mine, which contains two rocks."
+  },
+  "motherlode-mine": {
+   "about": "Other assumptions include that the player has 99 Mining and is wearing the prospector's outfit and has all upgrades to the mine purchased. For the expected profit rates at lower levels, see the table at the bottom of the guide. Motherlode Mine, located in the Falador Dwarven Mines, is a somewhat popular Mining training method as it is low effort, can yield good profit and 30,000-60,000 Mining experience per hour."
+  },
+  "mine-amethyst": {
+   "about": "Amethyst is currently the highest level ore players can mine. It is used in the creation of high-level ranging ammunition: amethyst bolts, amethyst arrows, amethyst javelins and amethyst darts. Amethyst darts are commonly used with the Toxic blowpipe, especially among Ironmen. Players can expect to mine anywhere from 80 to 100 amethyst per hour, depending on efficiency, for profits of - coins."
+  },
+  "cut-redwood-logs": {
+   "about": "Redwood logs are used to train Firemaking and make redwood birdhouses. Although less in demand than some other logs, they are still profitable. The only locations where redwood trees can be cut are the Woodcutting Guild and the Farming Guild. The redwood tree in the Farming Guild requires the player to first grow a redwood tree (requiring level 90 Farming) and has a bank deposit box very close to the tree."
   }
  },
  "notBuilt": [
@@ -12504,14 +10143,14 @@
    "reason": "a combat guide without kills an hour"
   },
   {
-   "id": "tombs-of-amascut-solo-545-raid-level",
-   "title": "Tombs of Amascut (solo 545 raid level)",
-   "reason": "a combat guide without kills an hour"
-  },
-  {
    "id": "chambers-of-xeric-normal-mode",
    "title": "Chambers of Xeric (Normal Mode)",
    "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "tombs-of-amascut-solo-545-raid-level",
+   "title": "Tombs of Amascut (solo 545 raid level)",
+   "reason": "a combat guide without kills an hour"
   },
   {
    "id": "killing-the-maggot-king-ranged",
@@ -12524,14 +10163,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "crafting-aether-runes-using-scarred-extract",
-   "title": "Crafting aether runes using scarred extract",
-   "reason": "needs Desert Treasure II - The Fallen Empire, not on the route yet"
-  },
-  {
    "id": "killing-vardorvis",
    "title": "Killing Vardorvis",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "crafting-aether-runes-using-scarred-extract",
+   "title": "Crafting aether runes using scarred extract",
+   "reason": "needs Desert Treasure II - The Fallen Empire, not on the route yet"
   },
   {
    "id": "killing-phantom-muspah-twisted-bow",
@@ -12564,13 +10203,13 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-the-whisperer",
-   "title": "Killing The Whisperer",
+   "id": "killing-yama-contract-of-catalyst-acquisition-duo",
+   "title": "Killing Yama (Contract of Catalyst Acquisition, duo)",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-yama-contract-of-catalyst-acquisition-duo",
-   "title": "Killing Yama (Contract of Catalyst Acquisition, duo)",
+   "id": "killing-the-whisperer",
+   "title": "Killing The Whisperer",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -12587,6 +10226,11 @@
    "id": "killing-vet-ion",
    "title": "Killing Vet'ion",
    "reason": "no Mmgtable"
+  },
+  {
+   "id": "crafting-double-nature-runes-achievement-diary-cape-teleport",
+   "title": "Crafting double nature runes (Achievement Diary Cape teleport)",
+   "reason": "needs the Achievement Diary cape"
   },
   {
    "id": "killing-vorkath-dragon-hunter-lance",
@@ -12689,14 +10333,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "crafting-wrath-runes",
-   "title": "Crafting wrath runes",
-   "reason": "needs Dragon Slayer II, not on the route yet"
-  },
-  {
    "id": "smelting-runite-bars-at-blast-furnace-player-to-player-trading",
    "title": "Smelting runite bars at Blast Furnace (Player-to-player trading)",
    "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "crafting-wrath-runes",
+   "title": "Crafting wrath runes",
+   "reason": "needs Dragon Slayer II, not on the route yet"
   },
   {
    "id": "crafting-blood-runes-through-the-abyss",
@@ -12707,11 +10351,6 @@
    "id": "killing-callisto",
    "title": "Killing Callisto",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "cutting-raw-yellowfin",
-   "title": "Cutting raw yellowfin",
-   "reason": "needs Sailing (a bank boat and a chum spreader), which the route does not model"
   },
   {
    "id": "killing-vorkath-toxic-blowpipe",
@@ -12729,14 +10368,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "cutting-raw-yellowfin",
+   "title": "Cutting raw yellowfin",
+   "reason": "needs Sailing (a bank boat and a chum spreader), which the route does not model"
+  },
+  {
    "id": "smelting-runite-bars-at-blast-furnace",
    "title": "Smelting runite bars at Blast Furnace",
    "reason": "needs The Giant Dwarf, not on the route yet"
-  },
-  {
-   "id": "degriming-grimy-cadantine",
-   "title": "Degriming grimy cadantine",
-   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "casting-tan-leather",
@@ -12754,14 +10393,14 @@
    "reason": "needs Mourning's End Part II, not on the route yet"
   },
   {
-   "id": "cutting-raw-marlin",
-   "title": "Cutting raw marlin",
-   "reason": "needs Sailing (a bank boat and a chum spreader), which the route does not model"
-  },
-  {
    "id": "making-sanfew-serum-4",
    "title": "Making sanfew serum(4)",
    "reason": "needs Zogre Flesh Eaters, not on the route yet"
+  },
+  {
+   "id": "cutting-raw-marlin",
+   "title": "Cutting raw marlin",
+   "reason": "needs Sailing (a bank boat and a chum spreader), which the route does not model"
   },
   {
    "id": "killing-the-abyssal-sire",
@@ -12784,9 +10423,9 @@
    "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
-   "id": "degriming-grimy-lantadyme",
-   "title": "Degriming grimy lantadyme",
-   "reason": "needs A Kingdom Divided, not on the route yet"
+   "id": "fletching-gem-tipped-dragon-bolts",
+   "title": "Fletching gem-tipped dragon bolts",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "looting-branda-the-fire-queen",
@@ -12824,24 +10463,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "degriming-grimy-torstol",
-   "title": "Degriming grimy torstol",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
    "id": "killing-scorpia",
    "title": "Killing Scorpia",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "degriming-grimy-toadflax",
-   "title": "Degriming grimy toadflax",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
-   "id": "making-super-combat-potions-with-prescription-goggles",
-   "title": "Making super combat potions (with prescription goggles)",
-   "reason": "needs prescription goggles, which the route does not plan"
   },
   {
    "id": "killing-zombie-pirates-budget",
@@ -12859,9 +10483,34 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "killing-zalcano",
+   "title": "Killing Zalcano",
+   "reason": "needs Song of the Elves, not on the route yet"
+  },
+  {
+   "id": "degriming-grimy-cadantine",
+   "title": "Degriming grimy cadantine",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
    "id": "killing-hueycoatl-solo",
    "title": "Killing Hueycoatl (Solo)",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "degriming-grimy-torstol",
+   "title": "Degriming grimy torstol",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "killing-adamant-dragons",
+   "title": "Killing adamant dragons",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "making-super-combat-potions-with-prescription-goggles",
+   "title": "Making super combat potions (with prescription goggles)",
+   "reason": "needs prescription goggles, which the route does not plan"
   },
   {
    "id": "degriming-grimy-dwarf-weed",
@@ -12869,13 +10518,8 @@
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
-   "id": "killing-zalcano",
-   "title": "Killing Zalcano",
-   "reason": "needs Song of the Elves, not on the route yet"
-  },
-  {
-   "id": "killing-adamant-dragons",
-   "title": "Killing adamant dragons",
+   "id": "last-man-standing",
+   "title": "Last Man Standing",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -12884,18 +10528,8 @@
    "reason": "needs Client of Kourend, not on the route yet"
   },
   {
-   "id": "fletching-gem-tipped-dragon-bolts",
-   "title": "Fletching gem-tipped dragon bolts",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
    "id": "killing-brutal-black-dragons",
    "title": "Killing brutal black dragons",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "last-man-standing",
-   "title": "Last Man Standing",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -12907,16 +10541,6 @@
    "id": "crafting-mud-runes",
    "title": "Crafting mud runes",
    "reason": "needs Lunar Diplomacy, not on the route yet"
-  },
-  {
-   "id": "poisoning-ammunition",
-   "title": "Poisoning ammunition",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
-   "id": "smelting-mithril-bars-at-blast-furnace",
-   "title": "Smelting mithril bars at Blast Furnace",
-   "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
    "id": "smelting-steel-bars-at-blast-furnace",
@@ -12932,6 +10556,11 @@
    "id": "killing-lava-dragons",
    "title": "Killing lava dragons",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "smelting-mithril-bars-at-blast-furnace",
+   "title": "Smelting mithril bars at Blast Furnace",
+   "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
    "id": "mining-and-crushing-infernal-shale-tick-manipulation",
@@ -12964,6 +10593,11 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "degriming-grimy-lantadyme",
+   "title": "Degriming grimy lantadyme",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
    "id": "crafting-double-law-runes-through-the-abyss",
    "title": "Crafting double law runes through the Abyss",
    "reason": "needs Heroes' Quest, not on the route yet"
@@ -12989,6 +10623,11 @@
    "reason": "needs Children of the Sun, not on the route yet"
   },
   {
+   "id": "degriming-grimy-avantoe",
+   "title": "Degriming grimy avantoe",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
    "id": "moons-of-peril",
    "title": "Moons of Peril",
    "reason": "a combat guide without kills an hour"
@@ -13004,21 +10643,6 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "degriming-grimy-kwuarm",
-   "title": "Degriming grimy kwuarm",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
-   "id": "killing-skeletal-wyverns",
-   "title": "Killing skeletal wyverns",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "buying-relicym-s-balm",
-   "title": "Buying Relicym's balm",
-   "reason": "needs Zogre Flesh Eaters, not on the route yet"
-  },
-  {
    "id": "crafting-mist-runes",
    "title": "Crafting mist runes",
    "reason": "needs Lunar Diplomacy, not on the route yet"
@@ -13029,14 +10653,14 @@
    "reason": "needs Children of the Sun, not on the route yet"
   },
   {
+   "id": "killing-skeletal-wyverns",
+   "title": "Killing skeletal wyverns",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
    "id": "catching-snowy-knights",
    "title": "Catching snowy knights",
    "reason": "needs Fairytale II - Cure a Queen, not on the route yet"
-  },
-  {
-   "id": "degriming-grimy-ranarr-weed",
-   "title": "Degriming grimy ranarr weed",
-   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "crafting-cosmic-runes-through-the-abyss",
@@ -13044,14 +10668,24 @@
    "reason": "needs Heroes' Quest, not on the route yet"
   },
   {
-   "id": "killing-blood-moon",
-   "title": "Killing Blood Moon",
-   "reason": "a combat guide without kills an hour"
+   "id": "buying-relicym-s-balm",
+   "title": "Buying Relicym's balm",
+   "reason": "needs Zogre Flesh Eaters, not on the route yet"
   },
   {
    "id": "killing-k-ril-tsutsaroth",
    "title": "Killing K'ril Tsutsaroth",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "killing-blood-moon",
+   "title": "Killing Blood Moon",
+   "reason": "a combat guide without kills an hour"
+  },
+  {
+   "id": "poisoning-ammunition",
+   "title": "Poisoning ammunition",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "deep-sea-trawling-for-halibut",
@@ -13084,16 +10718,6 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "degriming-grimy-snapdragon",
-   "title": "Degriming grimy snapdragon",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
-   "id": "casting-superglass-make",
-   "title": "Casting Superglass Make",
-   "reason": "input2 is a wiki formula the build cannot read"
-  },
-  {
    "id": "guardians-of-the-rift",
    "title": "Guardians of the Rift",
    "reason": "needs Temple of the Eye, not on the route yet"
@@ -13124,9 +10748,24 @@
    "reason": "needs Troll Stronghold, not on the route yet"
   },
   {
+   "id": "casting-superglass-make",
+   "title": "Casting Superglass Make",
+   "reason": "input2 is a wiki formula the build cannot read"
+  },
+  {
    "id": "killing-kurasks",
    "title": "Killing kurasks",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "degriming-grimy-kwuarm",
+   "title": "Degriming grimy kwuarm",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "degriming-grimy-toadflax",
+   "title": "Degriming grimy toadflax",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "crafting-chaos-runes-through-the-abyss",
@@ -13139,19 +10778,14 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "making-elemental-battlestaves-ironman",
+   "title": "Making elemental battlestaves (Ironman)",
+   "reason": "an ironman method; the route plans a trading account"
+  },
+  {
    "id": "killing-lizardman-shamans-canyon",
    "title": "Killing Lizardman Shamans (Canyon)",
    "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "killing-fiyr-shades",
-   "title": "Killing fiyr shades",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "crafting-air-runes-high-level",
-   "title": "Crafting air runes (high level)",
-   "reason": "needs Temple of the Eye, not on the route yet"
   },
   {
    "id": "killing-the-mad-angel",
@@ -13159,9 +10793,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-the-giant-mole-twisted-bow",
-   "title": "Killing the Giant Mole (Twisted bow)",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "degriming-grimy-ranarr-weed",
+   "title": "Degriming grimy ranarr weed",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "deep-sea-trawling-for-bluefin",
@@ -13169,14 +10803,19 @@
    "reason": "level sailing 72 is not modelled"
   },
   {
-   "id": "making-guthix-rests",
-   "title": "Making Guthix rests",
-   "reason": "needs One Small Favour, not on the route yet"
-  },
-  {
    "id": "killing-green-dragons-myths-guild",
    "title": "Killing green dragons (Myths Guild)",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "degriming-grimy-irit-leaf",
+   "title": "Degriming grimy irit leaf",
+   "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "making-guthix-rests",
+   "title": "Making Guthix rests",
+   "reason": "needs One Small Favour, not on the route yet"
   },
   {
    "id": "buying-mixed-hide-bases",
@@ -13189,9 +10828,19 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "killing-the-giant-mole-twisted-bow",
+   "title": "Killing the Giant Mole (Twisted bow)",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
    "id": "looting-ogre-coffins",
    "title": "Looting ogre coffins",
    "reason": "needs Zogre Flesh Eaters, not on the route yet"
+  },
+  {
+   "id": "creating-forester-s-rations",
+   "title": "Creating forester's rations",
+   "reason": "input1 is a wiki formula the build cannot read"
   },
   {
    "id": "casting-plank-make",
@@ -13204,13 +10853,13 @@
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
-   "id": "killing-green-dragons",
-   "title": "Killing green dragons",
+   "id": "killing-basilisk-knights-slayer",
+   "title": "Killing basilisk knights (Slayer)",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "killing-basilisk-knights-slayer",
-   "title": "Killing basilisk knights (Slayer)",
+   "id": "killing-green-dragons",
+   "title": "Killing green dragons",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -13219,9 +10868,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "creating-forester-s-rations",
-   "title": "Creating forester's rations",
-   "reason": "input1 is a wiki formula the build cannot read"
+   "id": "killing-fiyr-shades",
+   "title": "Killing fiyr shades",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "making-oak-planks-auburnvale",
@@ -13234,14 +10883,19 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "killing-gargoyles",
-   "title": "Killing gargoyles",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "creating-eternal-glories",
+   "title": "Creating eternal glories",
+   "reason": "needs Heroes' Quest, not on the route yet"
   },
   {
    "id": "pickpocketing-master-farmers",
    "title": "Pickpocketing master farmers",
    "reason": "the figures assume the hard Ardougne Diary or the Thieving cape"
+  },
+  {
+   "id": "killing-gargoyles",
+   "title": "Killing gargoyles",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "killing-the-chaos-fanatic",
@@ -13254,9 +10908,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "crafting-soul-runes",
-   "title": "Crafting soul runes",
-   "reason": "needs the miniquest enter the abyss, which the route does not plan"
+   "id": "crafting-air-runes-high-level",
+   "title": "Crafting air runes (high level)",
+   "reason": "needs Temple of the Eye, not on the route yet"
   },
   {
    "id": "degriming-grimy-harralander",
@@ -13264,24 +10918,19 @@
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
-   "id": "humidifying-clay",
-   "title": "Humidifying clay",
-   "reason": "needs Dream Mentor, not on the route yet"
-  },
-  {
-   "id": "degriming-grimy-irit-leaf",
-   "title": "Degriming grimy irit leaf",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
-   "id": "crafting-nature-runes-through-the-abyss",
-   "title": "Crafting nature runes through the Abyss",
+   "id": "crafting-soul-runes",
+   "title": "Crafting soul runes",
    "reason": "needs the miniquest enter the abyss, which the route does not plan"
   },
   {
    "id": "buying-monkey-nuts",
    "title": "Buying monkey nuts",
    "reason": "needs Monkey Madness II, not on the route yet"
+  },
+  {
+   "id": "crafting-nature-runes-through-the-abyss",
+   "title": "Crafting nature runes through the Abyss",
+   "reason": "needs the miniquest enter the abyss, which the route does not plan"
   },
   {
    "id": "making-mahogany-planks",
@@ -13309,6 +10958,11 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "humidifying-clay",
+   "title": "Humidifying clay",
+   "reason": "needs Dream Mentor, not on the route yet"
+  },
+  {
    "id": "smithing-cannonballs-grimstone-dungeon",
    "title": "Smithing cannonballs (Grimstone Dungeon)",
    "reason": "level sailing 87 is not modelled"
@@ -13319,19 +10973,19 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "killing-kourend-necromancers",
-   "title": "Killing Kourend necromancers",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "making-adamant-brutal-arrows",
    "title": "Making adamant brutal arrows",
    "reason": "no place for \"Anywhere\""
   },
   {
-   "id": "crafting-jade-jewellery",
-   "title": "Crafting jade jewellery",
-   "reason": "nothing sellable is made every unit"
+   "id": "killing-kourend-necromancers",
+   "title": "Killing Kourend necromancers",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "degriming-grimy-snapdragon",
+   "title": "Degriming grimy snapdragon",
+   "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
    "id": "chopping-the-engorged-bloodwood-tree",
@@ -13339,19 +10993,29 @@
    "reason": "input3 is a wiki formula the build cannot read"
   },
   {
-   "id": "killing-the-giant-mole-dharok-s",
-   "title": "Killing the Giant Mole (Dharok's)",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "deep-sea-trawling-for-yellowfin",
    "title": "Deep sea trawling for yellowfin",
    "reason": "needs Pandemonium, not on the route yet"
   },
   {
-   "id": "barrows",
-   "title": "Barrows",
+   "id": "crafting-jade-jewellery",
+   "title": "Crafting jade jewellery",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "killing-the-giant-mole-dharok-s",
+   "title": "Killing the Giant Mole (Dharok's)",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "making-prayer-potions",
+   "title": "Making prayer potions",
+   "reason": "no Mmgtable"
+  },
+  {
+   "id": "crafting-topaz-jewellery",
+   "title": "Crafting topaz jewellery",
+   "reason": "nothing sellable is made every unit"
   },
   {
    "id": "pickpocketing-h-a-m-members",
@@ -13369,14 +11033,14 @@
    "reason": "needs Big Chompy Bird Hunting, not on the route yet"
   },
   {
-   "id": "killing-mithril-dragons",
-   "title": "Killing mithril dragons",
+   "id": "barrows",
+   "title": "Barrows",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "crafting-topaz-jewellery",
-   "title": "Crafting topaz jewellery",
-   "reason": "nothing sellable is made every unit"
+   "id": "hunting-moonlight-antelopes",
+   "title": "Hunting moonlight antelopes",
+   "reason": "needs Children of the Sun, not on the route yet"
   },
   {
    "id": "pickpocketing-paladins",
@@ -13384,14 +11048,14 @@
    "reason": "the figures assume the medium Ardougne Diary"
   },
   {
-   "id": "killing-blue-dragons",
-   "title": "Killing blue dragons",
+   "id": "killing-mithril-dragons",
+   "title": "Killing mithril dragons",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "hunting-moonlight-antelopes",
-   "title": "Hunting moonlight antelopes",
-   "reason": "needs Children of the Sun, not on the route yet"
+   "id": "killing-blue-dragons",
+   "title": "Killing blue dragons",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "smelting-iron-bars-at-blast-furnace",
@@ -13444,6 +11108,11 @@
    "reason": "needs Enlightened Journey, not on the route yet"
   },
   {
+   "id": "catching-rainbow-crabs",
+   "title": "Catching rainbow crabs",
+   "reason": "level sailing 64 is not modelled"
+  },
+  {
    "id": "killing-amoxliatl",
    "title": "Killing Amoxliatl",
    "reason": "a Members fight needs a hand-made combat profile"
@@ -13464,24 +11133,14 @@
    "reason": "needs Making Friends with My Arm, not on the route yet"
   },
   {
-   "id": "killing-the-kalphite-queen",
-   "title": "Killing the Kalphite Queen",
-   "reason": "no Mmgtable"
-  },
-  {
-   "id": "making-oak-planks",
-   "title": "Making oak planks",
-   "reason": "needs Enlightened Journey, not on the route yet"
-  },
-  {
    "id": "planting-flower-seeds",
    "title": "Planting flower seeds",
    "reason": "input1 is a wiki formula the build cannot read"
   },
   {
-   "id": "catching-rainbow-crabs",
-   "title": "Catching rainbow crabs",
-   "reason": "level sailing 64 is not modelled"
+   "id": "killing-the-kalphite-queen",
+   "title": "Killing the Kalphite Queen",
+   "reason": "no Mmgtable"
   },
   {
    "id": "creating-teleport-tablets-at-lectern-lunar",
@@ -13489,19 +11148,19 @@
    "reason": "output1 is a wiki formula the build cannot read"
   },
   {
+   "id": "making-oak-planks",
+   "title": "Making oak planks",
+   "reason": "needs Enlightened Journey, not on the route yet"
+  },
+  {
    "id": "killing-sarachnis",
    "title": "Killing Sarachnis",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "degriming-grimy-avantoe",
-   "title": "Degriming grimy avantoe",
-   "reason": "needs A Kingdom Divided, not on the route yet"
-  },
-  {
-   "id": "making-prayer-potions",
-   "title": "Making prayer potions",
-   "reason": "no Mmgtable"
+   "id": "cooking-raw-moonlight-antelope",
+   "title": "Cooking raw moonlight antelope",
+   "reason": "needs 50 Hunters' rumours, which the route does not plan"
   },
   {
    "id": "killing-ice-troll-runts",
@@ -13529,14 +11188,14 @@
    "reason": "needs Children of the Sun, not on the route yet"
   },
   {
-   "id": "nechrecycling",
-   "title": "Nechrecycling",
-   "reason": "picks up other players' drops in the Kourend Catacombs, which no route can plan"
-  },
-  {
    "id": "recharging-rings-of-wealth",
    "title": "Recharging rings of wealth",
    "reason": "no place for \"Wilderness\""
+  },
+  {
+   "id": "nechrecycling",
+   "title": "Nechrecycling",
+   "reason": "picks up other players' drops in the Kourend Catacombs, which no route can plan"
   },
   {
    "id": "collecting-climbing-boots",
@@ -13569,6 +11228,11 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
+   "id": "opening-larran-s-big-chests",
+   "title": "Opening larran's big chests",
+   "reason": "no place for \"The crashed ship west of Pirate's Hideout\""
+  },
+  {
    "id": "smithing-steel-dart-tips",
    "title": "Smithing steel dart tips",
    "reason": "needs The Tourist Trap, not on the route yet"
@@ -13599,11 +11263,6 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "crafting-dragonstone-jewellery",
-   "title": "Crafting dragonstone jewellery",
-   "reason": "nothing sellable is made every unit"
-  },
-  {
    "id": "killing-ents",
    "title": "Killing ents",
    "reason": "a Members fight needs a hand-made combat profile"
@@ -13629,14 +11288,19 @@
    "reason": "needs a house workshop crafting table"
   },
   {
+   "id": "killing-fever-spiders",
+   "title": "Killing fever spiders",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
    "id": "collecting-white-berries",
    "title": "Collecting white berries",
    "reason": "needs Regicide, not on the route yet"
   },
   {
-   "id": "killing-fever-spiders",
-   "title": "Killing fever spiders",
-   "reason": "a Members fight needs a hand-made combat profile"
+   "id": "filling-buckets-with-water",
+   "title": "Filling buckets with water",
+   "reason": "needs Dream Mentor, not on the route yet"
   },
   {
    "id": "creating-teleport-to-house-tablets",
@@ -13649,23 +11313,8 @@
    "reason": "needs the Bones to Peaches unlock and a lectern"
   },
   {
-   "id": "mining-volcanic-ash",
-   "title": "Mining volcanic ash",
-   "reason": "needs Bone Voyage, not on the route yet"
-  },
-  {
-   "id": "cooking-raw-sharks",
-   "title": "Cooking raw sharks",
-   "reason": "needs Family Crest, not on the route yet"
-  },
-  {
    "id": "killing-aviansie",
    "title": "Killing aviansie",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
-   "id": "killing-unicows",
-   "title": "Killing unicows",
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
@@ -13674,9 +11323,24 @@
    "reason": "nothing sellable is made every unit"
   },
   {
-   "id": "killing-disciples-of-iban",
-   "title": "Killing disciples of Iban",
+   "id": "killing-unicows",
+   "title": "Killing unicows",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "crafting-dragonstone-jewellery",
+   "title": "Crafting dragonstone jewellery",
+   "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "cooking-raw-sharks",
+   "title": "Cooking raw sharks",
+   "reason": "needs Family Crest, not on the route yet"
+  },
+  {
+   "id": "mining-volcanic-ash",
+   "title": "Mining volcanic ash",
+   "reason": "needs Bone Voyage, not on the route yet"
   },
   {
    "id": "pickpocketing-knights-of-ardougne",
@@ -13684,9 +11348,9 @@
    "reason": "needs A Kingdom Divided, not on the route yet"
   },
   {
-   "id": "filling-buckets-with-water",
-   "title": "Filling buckets with water",
-   "reason": "needs Dream Mentor, not on the route yet"
+   "id": "stranglewood-fishing",
+   "title": "Stranglewood fishing",
+   "reason": "needs Desert Treasure II, not on the route yet"
   },
   {
    "id": "mining-lead-ore",
@@ -13694,14 +11358,14 @@
    "reason": "needs Pandemonium, not on the route yet"
   },
   {
+   "id": "killing-disciples-of-iban",
+   "title": "Killing disciples of Iban",
+   "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
    "id": "salvaging-fremennik-shipwrecks",
    "title": "Salvaging Fremennik shipwrecks",
    "reason": "level sailing 80 is not modelled"
-  },
-  {
-   "id": "mining-gemstones",
-   "title": "Mining gemstones",
-   "reason": "needs Shilo Village, not on the route yet"
   },
   {
    "id": "killing-red-dragons",
@@ -13709,19 +11373,9 @@
    "reason": "a Members fight needs a hand-made combat profile"
   },
   {
-   "id": "creating-eternal-glories",
-   "title": "Creating eternal glories",
-   "reason": "needs Heroes' Quest, not on the route yet"
-  },
-  {
-   "id": "opening-larran-s-big-chests",
-   "title": "Opening larran's big chests",
-   "reason": "no place for \"The crashed ship west of Pirate's Hideout\""
-  },
-  {
-   "id": "casting-spin-flax",
-   "title": "Casting Spin Flax",
-   "reason": "needs Lunar Diplomacy, not on the route yet"
+   "id": "mining-gemstones",
+   "title": "Mining gemstones",
+   "reason": "needs Shilo Village, not on the route yet"
   },
   {
    "id": "killing-feral-vampyres",
@@ -13732,6 +11386,11 @@
    "id": "killing-brutal-green-dragons",
    "title": "Killing brutal green dragons",
    "reason": "a Members fight needs a hand-made combat profile"
+  },
+  {
+   "id": "casting-spin-flax",
+   "title": "Casting Spin Flax",
+   "reason": "needs Lunar Diplomacy, not on the route yet"
   },
   {
    "id": "killing-the-crazy-archaeologist",
@@ -13769,14 +11428,14 @@
    "reason": "needs The Final Dawn, not on the route yet"
   },
   {
-   "id": "killing-sulphur-naguas",
-   "title": "Killing sulphur naguas",
-   "reason": "a Members fight needs a hand-made combat profile"
-  },
-  {
    "id": "catching-minnows",
    "title": "Catching minnows",
    "reason": "nothing sellable is made every unit"
+  },
+  {
+   "id": "killing-sulphur-naguas",
+   "title": "Killing sulphur naguas",
+   "reason": "a Members fight needs a hand-made combat profile"
   },
   {
    "id": "catching-infernal-eels",
@@ -13824,8 +11483,18 @@
    "reason": "needs Fairytale II - Cure a Queen, not on the route yet"
   },
   {
+   "id": "smithing-mithril-dart-tips",
+   "title": "Smithing mithril dart tips",
+   "reason": "needs The Tourist Trap, not on the route yet"
+  },
+  {
    "id": "creating-ardougne-teleport-tablets",
    "title": "Creating Ardougne teleport tablets",
+   "reason": "needs a house study lectern, which the route does not plan"
+  },
+  {
+   "id": "creating-camelot-teleport-tablets",
+   "title": "Creating Camelot teleport tablets",
    "reason": "needs a house study lectern, which the route does not plan"
   },
   {
@@ -13834,19 +11503,9 @@
    "reason": "needs Tai Bwo Wannai Trio, not on the route yet"
   },
   {
-   "id": "creating-camelot-teleport-tablets",
-   "title": "Creating Camelot teleport tablets",
-   "reason": "needs a house study lectern, which the route does not plan"
-  },
-  {
    "id": "stealing-valuables",
    "title": "Stealing valuables",
    "reason": "needs Children of the Sun, not on the route yet"
-  },
-  {
-   "id": "smithing-mithril-dart-tips",
-   "title": "Smithing mithril dart tips",
-   "reason": "needs The Tourist Trap, not on the route yet"
   },
   {
    "id": "killing-ankou",
@@ -13859,9 +11518,9 @@
    "reason": "needs Troubled Tortugans, not on the route yet"
   },
   {
-   "id": "buying-iron-ore-from-ordan",
-   "title": "Buying iron ore from Ordan",
-   "reason": "needs The Giant Dwarf, not on the route yet"
+   "id": "fletching-unstrung-comp-bow",
+   "title": "Fletching unstrung comp bow",
+   "reason": "needs Zogre Flesh Eaters, not on the route yet"
   },
   {
    "id": "picking-up-chisels",
@@ -13869,14 +11528,14 @@
    "reason": "needs Temple of the Eye, not on the route yet"
   },
   {
-   "id": "fletching-unstrung-comp-bow",
-   "title": "Fletching unstrung comp bow",
-   "reason": "needs Zogre Flesh Eaters, not on the route yet"
-  },
-  {
    "id": "mining-and-crushing-infernal-shale-infernal-shale-deposit",
    "title": "Mining and crushing infernal shale (Infernal shale deposit)",
    "reason": "needs A Kingdom Divided, not on the route yet"
+  },
+  {
+   "id": "buying-iron-ore-from-ordan",
+   "title": "Buying iron ore from Ordan",
+   "reason": "needs The Giant Dwarf, not on the route yet"
   },
   {
    "id": "cutting-magic-logs",
@@ -13899,14 +11558,14 @@
    "reason": "needs Ghosts Ahoy, not on the route yet"
   },
   {
-   "id": "growing-magic-saplings",
-   "title": "Growing magic saplings",
-   "reason": "needs Dream Mentor, not on the route yet"
-  },
-  {
    "id": "brewing-greenman-s-ale-m",
    "title": "Brewing greenman's ale(m)",
    "reason": "needs Ghosts Ahoy, not on the route yet"
+  },
+  {
+   "id": "growing-magic-saplings",
+   "title": "Growing magic saplings",
+   "reason": "needs Dream Mentor, not on the route yet"
   },
   {
    "id": "growing-palm-saplings",
@@ -13969,14 +11628,14 @@
    "reason": "a daily purchase (15 staves without the Varrock Diary), not an hourly method"
   },
   {
-   "id": "farming-irit-leaves",
-   "title": "Farming irit leaves",
-   "reason": "needs Ghosts Ahoy, not on the route yet"
-  },
-  {
    "id": "farming-jute-fibre",
    "title": "Farming jute fibre",
    "reason": "a farming run: the patch grows for hours, which the route does not plan"
+  },
+  {
+   "id": "farming-irit-leaves",
+   "title": "Farming irit leaves",
+   "reason": "needs Ghosts Ahoy, not on the route yet"
   },
   {
    "id": "opening-herb-boxes",
@@ -14039,9 +11698,19 @@
    "reason": "needs Death Plateau, not on the route yet"
   },
   {
+   "id": "dying-blue-wizard-robes",
+   "title": "Dying blue wizard robes",
+   "reason": "black robes have a buy limit of 125 every four hours, so it is a one-off, not an hourly method"
+  },
+  {
    "id": "claiming-dynamite-from-thirus",
    "title": "Claiming Dynamite from Thirus",
    "reason": "needs the elite Kourend & Kebos Diary"
+  },
+  {
+   "id": "planting-crystal-acorn",
+   "title": "Planting Crystal acorn",
+   "reason": "needs Song of the Elves, not on the route yet"
   },
   {
    "id": "selling-hardleather-bodies",

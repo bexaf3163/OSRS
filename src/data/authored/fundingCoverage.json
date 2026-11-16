@@ -903,6 +903,134 @@
       "methods": [
         "telegrab-wine-deep-wilderness"
       ]
+    },
+    {
+      "id": "cooking-raw-anglerfish",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "cook-anglerfish"
+      ]
+    },
+    {
+      "id": "cooking-raw-dark-crabs",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "cook-dark-crabs"
+      ]
+    },
+    {
+      "id": "cooking-raw-marlin",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "cook-marlin"
+      ]
+    },
+    {
+      "id": "stringing-magic-longbows",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "string-magic-longbows"
+      ]
+    },
+    {
+      "id": "making-raw-wild-pies",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "make-raw-wild-pies"
+      ]
+    },
+    {
+      "id": "making-raw-summer-pies",
+      "status": "supported",
+      "family": "processing",
+      "methods": [
+        "make-raw-summer-pies"
+      ]
+    },
+    {
+      "id": "cutting-amethyst-arrowtips",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "cut-amethyst-arrowtips"
+      ]
+    },
+    {
+      "id": "crafting-ascension-bolts",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "make-ascension-bolts"
+      ]
+    },
+    {
+      "id": "crafting-diamond-ascension-bolts",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "make-diamond-ascension-bolts"
+      ]
+    },
+    {
+      "id": "fletching-sunlight-antler-bolts",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "fletch-sunlight-antler-bolts"
+      ]
+    },
+    {
+      "id": "catching-anglerfish",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "fish-anglerfish"
+      ]
+    },
+    {
+      "id": "catching-dark-crabs",
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "fish-dark-crabs"
+      ]
+    },
+    {
+      "id": "mining-runite-ore",
+      "status": "supported",
+      "family": "gathering",
+      "methods": [
+        "mine-runite-wilderness"
+      ]
+    },
+    {
+      "id": "motherlode-mine",
+      "status": "supported",
+      "family": "gathering",
+      "methods": [
+        "motherlode-mine"
+      ]
+    },
+    {
+      "id": "mining-amethyst",
+      "status": "supported",
+      "family": "gathering",
+      "methods": [
+        "mine-amethyst"
+      ]
+    },
+    {
+      "id": "cutting-redwood-logs",
+      "status": "supported",
+      "family": "gathering",
+      "methods": [
+        "cut-redwood-logs"
+      ]
     }
   ],
   "extras": [

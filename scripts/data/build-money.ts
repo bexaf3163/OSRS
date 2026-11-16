@@ -64,7 +64,14 @@ const UNPLANNED: Record<string, string> = {
   'claiming-dynamite-from-thirus': 'needs the elite Kourend & Kebos Diary',
   'pickpocketing-paladins': 'the figures assume the medium Ardougne Diary',
   'pickpocketing-master-farmers': 'the figures assume the hard Ardougne Diary or the Thieving cape',
-  'cooking-raw-moonlight-antelope': 'needs 50 Hunters\' rumours, which the route does not plan',
+  'opening-eclectic-impling-jars': 'solves the clue scrolls from the jars all over the world, which the route cannot plan',
+  'opening-essence-impling-jars': 'solves the clue scrolls from the jars all over the world, which the route cannot plan',
+  'completing-elite-clues-urium-remains': 'solves elite clue scrolls, which the route cannot plan',
+  'collecting-snape-grass':'the guide\'s Waterbirth teleports need Lunar Diplomacy, not on the route yet',
+  'making-sacred-oil': 'the figures assume the hard Morytania Diary (Morytania legs 3)',
+  'crafting-runes-at-ourania-altar': 'the guide\'s Ourania Teleport needs Lunar Diplomacy, not on the route yet',
+  'stranglewood-fishing':'needs Desert Treasure II, not on the route yet',
+  'cooking-raw-moonlight-antelope':'needs 50 Hunters\' rumours, which the route does not plan',
   'making-elemental-battlestaves-ironman': 'an ironman method; the route plans a trading account',
   'crafting-double-nature-runes-achievement-diary-cape-teleport': 'needs the Achievement Diary cape',
   'making-super-combat-potions-with-prescription-goggles':'needs prescription goggles, which the route does not plan',
@@ -269,7 +276,8 @@ for (const e of entries) {
   // combat level still gates the card, as before.
   const skillField = (f.skill ?? '').split(/\n|<br\s*\/?>/i).filter((l) => !/optional/i.test(l))
     .flatMap((l) => [...l.matchAll(/\{\{SCP\|([^|}]+)\|(\d+)/gi)].map((m) => ({ skill: m[1].trim().toLowerCase().replace(/^combat level$/, 'combat'), level: Number(m[2]) })));
-  for (const r of kept.get(id)?.flatMap((q) => (q.kind === 'level' ? [{ skill: q.skill, level: q.level }] : [])) ?? (f.skill ? skillField : parseSkillsHtml(e.skillsHtml))) {
+  // The guide's own field first: the list's skill column (and levels kept from it) also names recommended skills.
+  for (const r of f.skill ? skillField : kept.get(id)?.flatMap((q) => (q.kind === 'level' ? [{ skill: q.skill, level: q.level }] : [])) ?? parseSkillsHtml(e.skillsHtml)) {
     if (!requirements.some((q) => q.kind === 'level' && q.skill === r.skill)) requirements.push({ kind: 'level', skill: r.skill, level: r.level });
   }
   // A combat card lists the levels of every style it suits: melee when it names melee levels (Ranged and Magic are then the

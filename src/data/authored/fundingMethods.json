@@ -12306,6 +12306,1812 @@
         "Supplies are bought and products sold at the exchange at the instant prices.",
         "Item ids from the wiki infoboxes, retrieved 2026-11-16."
       ]
+    },
+    {
+      "id": "cook-anglerfish",
+      "title": "Cook anglerfish",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cooking anglerfish. Cooks' Guild or Rogues' Den or Hosidius Kitchen",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "cooking",
+          "level": 84
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 13439,
+            "name": "Raw anglerfish"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 13441,
+            "name": "Anglerfish"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "anglerfish",
+        "perHour": {
+          "slow": 715,
+          "typical": 1040,
+          "fast": 1300
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,300 anglerfish an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The fire is a few steps from the bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3043,
+        "y": 4973,
+        "plane": 1,
+        "label": "Rogues' Den fire"
+      },
+      "bank": {
+        "x": 3040,
+        "y": 4969,
+        "plane": 1,
+        "label": "Rogues' Den bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy raw anglerfish at the Grand Exchange; cooking gauntlets or a cooking cape burn fewer."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Rogues' Den under the Burthorpe inn."
+        },
+        {
+          "kind": "perform",
+          "text": "Cook the raw anglerfish on the fire with Cook-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the anglerfish with Emerald Benedict."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_anglerfish",
+          "title": "Money making guide/Cooking raw anglerfish",
+          "revision": 15317773,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide's figures count no burnt food; burns below the stop-burn level lower the profit.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "cook-dark-crabs",
+      "title": "Cook dark crabs",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cooking raw dark crabs. Cooks' Guild or Rogues' Den",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "cooking",
+          "level": 90
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 11934,
+            "name": "Raw dark crab"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 11936,
+            "name": "Dark crab"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "dark crab",
+        "perHour": {
+          "slow": 715,
+          "typical": 1040,
+          "fast": 1300
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,300 dark crab an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The fire is a few steps from the bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3043,
+        "y": 4973,
+        "plane": 1,
+        "label": "Rogues' Den fire"
+      },
+      "bank": {
+        "x": 3040,
+        "y": 4969,
+        "plane": 1,
+        "label": "Rogues' Den bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy raw dark crabs at the Grand Exchange; cooking gauntlets or a cooking cape burn fewer."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Rogues' Den under the Burthorpe inn."
+        },
+        {
+          "kind": "perform",
+          "text": "Cook the raw dark crabs on the fire with Cook-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the dark crabs with Emerald Benedict."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_dark_crabs",
+          "title": "Money making guide/Cooking raw dark crabs",
+          "revision": 14246140,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide's figures count no burnt food; burns below the stop-burn level lower the profit.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "cook-marlin",
+      "title": "Cook marlin",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cooking raw marlin. Cooks' Guild or Rogues' Den or Hosidius Kitchen",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "cooking",
+          "level": 99
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 32349,
+            "name": "Raw marlin"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 32352,
+            "name": "Marlin"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "marlin",
+        "perHour": {
+          "slow": 715,
+          "typical": 1040,
+          "fast": 1300
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,300 marlin an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The fire is a few steps from the bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3043,
+        "y": 4973,
+        "plane": 1,
+        "label": "Rogues' Den fire"
+      },
+      "bank": {
+        "x": 3040,
+        "y": 4969,
+        "plane": 1,
+        "label": "Rogues' Den bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy raw marlin at the Grand Exchange; cooking gauntlets or a cooking cape burn fewer."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Rogues' Den under the Burthorpe inn."
+        },
+        {
+          "kind": "perform",
+          "text": "Cook the raw marlin on the fire with Cook-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the marlin with Emerald Benedict."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_marlin",
+          "title": "Money making guide/Cooking raw marlin",
+          "revision": 15132344,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide's figures count no burnt food; burns below the stop-burn level lower the profit.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "string-magic-longbows",
+      "title": "String magic longbows",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Stringing magic longbows. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fletching",
+          "level": 85
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 70,
+            "name": "Magic longbow (u)"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 1777,
+            "name": "Bow string"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 859,
+            "name": "Magic longbow"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "magic longbow",
+        "perHour": {
+          "slow": 1320,
+          "typical": 1920,
+          "fast": 2400
+        },
+        "basis": "wiki-guide",
+        "assumes": "2,400 magic longbow an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "14 unstrung bows and 14 strings a bank; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy magic longbows (u) and bow strings at the Grand Exchange."
+        },
+        {
+          "kind": "perform",
+          "text": "Withdraw 14 of each, use a string on a bow and choose Make-all."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the products and take the next load."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stringing_magic_longbows",
+          "title": "Money making guide/Stringing magic longbows",
+          "revision": 14355611,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Also trains Fletching.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "make-raw-wild-pies",
+      "title": "Make raw wild pies",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making raw wild pies. Grand Exchange or bank chest recommended",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "cooking",
+          "level": 85
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2315,
+            "name": "Pie shell"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 2136,
+            "name": "Raw bear meat"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 3226,
+            "name": "Raw rabbit"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 2876,
+            "name": "Raw chompy"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 7206,
+            "name": "Raw wild pie"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "raw wild pie",
+        "perHour": {
+          "slow": 407,
+          "typical": 592,
+          "fast": 740
+        },
+        "basis": "wiki-guide",
+        "assumes": "740 raw wild pie an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "Three bank trips a bag of pies; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy pie shells, raw bear meat, raw rabbit and raw chompy at the Grand Exchange."
+        },
+        {
+          "kind": "perform",
+          "text": "Add the bear meat, then the chompy, then the rabbit to each shell, banking between."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the products and take the next load."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_raw_wild_pies",
+          "title": "Money making guide/Making raw wild pies",
+          "revision": 14272533,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The pies sell to Cooking trainers; check the margin first.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "make-raw-summer-pies",
+      "title": "Make raw summer pies",
+      "family": "processing",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Making raw summer pies. Grand Exchange or bank chest recommended",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "cooking",
+          "level": 95
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 2315,
+            "name": "Pie shell"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 5504,
+            "name": "Strawberry"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 5982,
+            "name": "Watermelon"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 1955,
+            "name": "Cooking apple"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 7216,
+            "name": "Raw summer pie"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "raw summer pie",
+        "perHour": {
+          "slow": 369,
+          "typical": 536,
+          "fast": 670
+        },
+        "basis": "wiki-guide",
+        "assumes": "670 raw summer pie an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "Three bank trips a bag of pies; the pace counts it."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy pie shells, strawberries, watermelons and cooking apples at the Grand Exchange."
+        },
+        {
+          "kind": "perform",
+          "text": "Add the strawberry, then the watermelon, then the apple to each shell, banking between."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the products and take the next load."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_raw_summer_pies",
+          "title": "Money making guide/Making raw summer pies",
+          "revision": 14792507,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The pies sell to Cooking trainers; check the margin first.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "cut-amethyst-arrowtips",
+      "title": "Cut amethyst arrowtips",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cutting amethyst arrowtips. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "crafting",
+          "level": 85
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1755,
+              "name": "Chisel"
+            }
+          ],
+          "note": "Stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 21347,
+            "name": "Amethyst"
+          },
+          "qty": 0.0667
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 21350,
+            "name": "Amethyst arrowtips"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "amethyst arrowtips",
+        "perHour": {
+          "slow": 22688,
+          "typical": 33000,
+          "fast": 41250
+        },
+        "basis": "wiki-guide",
+        "assumes": "41,250 amethyst arrowtips an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "The chisel takes one slot; the tips stack."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy amethyst at the Grand Exchange; keep a chisel in the bag."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the chisel on each amethyst; each makes 15 arrowtips."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the products and take the next load."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_amethyst_arrowtips",
+          "title": "Money making guide/Cutting amethyst arrowtips",
+          "revision": 14925398,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "make-ascension-bolts",
+      "title": "Make ascension bolts",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Crafting Ascension bolts from Ascension shards. Grand exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fletching",
+          "level": 86
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 1755,
+              "name": "Chisel"
+            }
+          ],
+          "note": "Stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 34669,
+            "name": "Ascension shards"
+          },
+          "qty": 0.1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 34684,
+            "name": "Ascension bolts"
+          },
+          "qty": 1,
+          "stack": true
+        }
+      ],
+      "rate": {
+        "unit": "ascension bolts",
+        "perHour": {
+          "slow": 14850,
+          "typical": 21600,
+          "fast": 27000
+        },
+        "basis": "wiki-guide",
+        "assumes": "27,000 ascension bolts an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "The chisel takes one slot; shards and bolts stack."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy ascension shards at the Grand Exchange; keep a chisel in the bag."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the chisel on the shards to make ascension bolts."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the products and take the next load."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_ascension_bolts",
+          "title": "Money making guide/Crafting ascension bolts",
+          "revision": 15382401,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "make-diamond-ascension-bolts",
+      "title": "Make diamond ascension bolts",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Crafting diamond ascension bolts from ascension shards. Grand exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fletching",
+          "level": 86
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 34684,
+            "name": "Ascension bolts"
+          },
+          "qty": 1,
+          "stack": true
+        },
+        {
+          "item": {
+            "id": 9192,
+            "name": "Diamond bolt tips"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 34690,
+            "name": "Diamond ascension bolts"
+          },
+          "qty": 1,
+          "stack": true
+        }
+      ],
+      "rate": {
+        "unit": "diamond ascension bolts",
+        "perHour": {
+          "slow": 14850,
+          "typical": 21600,
+          "fast": 27000
+        },
+        "basis": "wiki-guide",
+        "assumes": "27,000 diamond ascension bolts an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "Bolts and tips stack, so there is no bank trip."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy ascension bolts and diamond bolt tips at the Grand Exchange."
+        },
+        {
+          "kind": "perform",
+          "text": "Use the tips on the bolts, 10 at a time."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the products and take the next load."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_diamond_ascension_bolts",
+          "title": "Money making guide/Crafting diamond ascension bolts",
+          "revision": 15386085,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Also trains Fletching.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "fletch-sunlight-antler-bolts",
+      "title": "Fletch sunlight antler bolts",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Fletching sunlight antler bolts. Grand Exchange",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fletching",
+          "level": 62
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 29168,
+            "name": "Sunlight antelope antler"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 28872,
+            "name": "Sunlight antler bolts"
+          },
+          "qty": 12,
+          "stack": true
+        }
+      ],
+      "rate": {
+        "unit": "action",
+        "perHour": {
+          "slow": 990,
+          "typical": 1440,
+          "fast": 1800
+        },
+        "basis": "wiki-guide",
+        "assumes": "1,800 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 0,
+        "note": "The bolts stack; antlers come 27 a bank."
+      },
+      "spot": {
+        "x": 3165,
+        "y": 3490,
+        "plane": 0,
+        "label": "Grand Exchange"
+      },
+      "bank": {
+        "x": 3164,
+        "y": 3489,
+        "plane": 0,
+        "label": "Grand Exchange bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy sunlight antelope antlers at the Grand Exchange."
+        },
+        {
+          "kind": "perform",
+          "text": "Fletch each antler into 12 sunlight antler bolts."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the products and take the next load."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Fletching_sunlight_antler_bolts",
+          "title": "Money making guide/Fletching sunlight antler bolts",
+          "revision": 15017506,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Also trains Fletching.",
+        "Supplies are bought and products sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "fish-anglerfish",
+      "title": "Fish anglerfish at Port Piscarilius",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Catching anglerfish. Port Piscarilius",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fishing",
+          "level": 82
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 307,
+              "name": "Fishing rod"
+            }
+          ],
+          "note": "Stays in the bag."
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 13431,
+            "name": "Sandworms"
+          },
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 13439,
+            "name": "Raw anglerfish"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "raw anglerfish",
+        "perHour": {
+          "slow": 83,
+          "typical": 120,
+          "fast": 150
+        },
+        "basis": "wiki-guide",
+        "assumes": "150 raw anglerfish an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 26,
+        "overheadSeconds": 0,
+        "note": "The rod and the sandworms take two slots; the bank is a short walk; the pace counts it."
+      },
+      "spot": {
+        "x": 1803,
+        "y": 3752,
+        "plane": 0,
+        "label": "Port Piscarilius"
+      },
+      "bank": {
+        "x": 1796,
+        "y": 3790,
+        "plane": 0,
+        "label": "Port Piscarilius bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy sandworms at the Grand Exchange; bring a fishing rod."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the anglerfish spots at Port Piscarilius."
+        },
+        {
+          "kind": "perform",
+          "text": "Fish anglerfish until the bag is full."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the fish at Port Piscarilius."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_anglerfish",
+          "title": "Money making guide/Catching anglerfish",
+          "revision": 15395613,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide recommends 94 Fishing; at 82 the catch is slower.",
+        "Products are sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "fish-dark-crabs",
+      "title": "Fish dark crabs in the Wilderness Resource Area",
+      "family": "production",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Fishing raw dark crabs. Resource Area",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "fishing",
+          "level": 85
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [
+            {
+              "id": 301,
+              "name": "Lobster pot"
+            }
+          ],
+          "note": "Stays in the bag."
+        },
+        {
+          "kind": "check",
+          "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+        }
+      ],
+      "inputs": [
+        {
+          "item": {
+            "id": 11940,
+            "name": "Dark fishing bait"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 995,
+            "name": "Coins"
+          },
+          "qty": 50,
+          "stack": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "id": 11934,
+            "name": "Raw dark crab"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "raw dark crab",
+        "perHour": {
+          "slow": 169,
+          "typical": 246,
+          "fast": 308
+        },
+        "basis": "wiki-guide",
+        "assumes": "308 raw dark crab an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 26,
+        "overheadSeconds": 0,
+        "note": "The pot and the bait take two slots; bank at Ferox Enclave; the pace counts it."
+      },
+      "spot": {
+        "x": 3186,
+        "y": 3935,
+        "plane": 0,
+        "label": "Resource Area"
+      },
+      "bank": {
+        "x": 3130,
+        "y": 3631,
+        "plane": 0,
+        "label": "Ferox Enclave bank"
+      },
+      "saleSeconds": 60,
+      "risk": "high",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Buy dark fishing bait; bring a lobster pot, the entry fee and only what you can lose."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Resource Area in the deep Wilderness and pay the entry fee."
+        },
+        {
+          "kind": "perform",
+          "text": "Fish dark crabs until the bag is full."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the crabs at Ferox Enclave."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_dark_crabs",
+          "title": "Money making guide/Catching dark crabs",
+          "revision": 15373683,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The entry fee is counted per crab. The elite Wilderness Diary raises the catch rate; it is not assumed.",
+        "Products are sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "mine-runite-wilderness",
+      "title": "Mine runite ore in the Wilderness",
+      "family": "gathering",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Mining runite ore. Wilderness Rune Mine, Heroes' Guild Mine, et. al.",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "mining",
+          "level": 85
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [],
+          "family": "pickaxe"
+        },
+        {
+          "kind": "check",
+          "text": "In the Wilderness: other players can attack you, so bring only what you can lose"
+        }
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "item": {
+            "id": 451,
+            "name": "Runite ore"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "runite ore",
+        "perHour": {
+          "slow": 36,
+          "typical": 52,
+          "fast": 65
+        },
+        "basis": "wiki-guide",
+        "assumes": "65 runite ore an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "A few ores a trip; the pace counts hopping between rocks."
+      },
+      "spot": {
+        "x": 3059,
+        "y": 3884,
+        "plane": 0,
+        "label": "Wilderness Rune Mine"
+      },
+      "bank": {
+        "x": 3130,
+        "y": 3631,
+        "plane": 0,
+        "label": "Ferox Enclave bank"
+      },
+      "saleSeconds": 60,
+      "risk": "high",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Bring a rune or dragon pickaxe and only what you can lose."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the runite rocks in the Wilderness north of the Lava Maze."
+        },
+        {
+          "kind": "perform",
+          "text": "Mine the runite rocks, then hop worlds to find more."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the ore at Ferox Enclave."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_runite_ore",
+          "title": "Money making guide/Mining runite ore",
+          "revision": 15232967,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The Heroes' Guild rocks are safer but need Heroes' Quest, which the route does not plan yet.",
+        "Products are sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ],
+      "marketDependence": "Rune rocks respawn after about 12 minutes and other players hop for them too."
+    },
+    {
+      "id": "motherlode-mine",
+      "title": "Mine pay-dirt in the Motherlode Mine",
+      "family": "gathering",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Motherlode Mine",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "mining",
+          "level": 85
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [],
+          "family": "pickaxe"
+        }
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "item": {
+            "id": 453,
+            "name": "Coal"
+          },
+          "qty": 0.246
+        },
+        {
+          "item": {
+            "id": 444,
+            "name": "Gold ore"
+          },
+          "qty": 0.2422
+        },
+        {
+          "item": {
+            "id": 447,
+            "name": "Mithril ore"
+          },
+          "qty": 0.2693
+        },
+        {
+          "item": {
+            "id": 449,
+            "name": "Adamantite ore"
+          },
+          "qty": 0.1885
+        },
+        {
+          "item": {
+            "id": 451,
+            "name": "Runite ore"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            44
+          ]
+        }
+      ],
+      "rate": {
+        "unit": "action",
+        "perHour": {
+          "slow": 303,
+          "typical": 440,
+          "fast": 550
+        },
+        "basis": "wiki-guide",
+        "assumes": "550 action an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "Pay-dirt goes in the hopper and the ores are collected from the sack; the pace counts it."
+      },
+      "spot": {
+        "x": 3744,
+        "y": 5664,
+        "plane": 0,
+        "label": "Motherlode Mine"
+      },
+      "bank": {
+        "x": 3760,
+        "y": 5666,
+        "plane": 0,
+        "label": "Motherlode Mine bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Bring a dragon or crystal pickaxe and a hammer for the broken struts."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the Motherlode Mine under Falador."
+        },
+        {
+          "kind": "perform",
+          "text": "Mine the ore veins, deposit the pay-dirt in the hopper and collect the ores from the sack."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the ores in the mine."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Motherlode_Mine",
+          "title": "Money making guide/Motherlode Mine",
+          "revision": 15195514,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The upper level needs 72 Mining and 100 golden nuggets; the guide's pace assumes it.",
+        "Products are sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "mine-amethyst",
+      "title": "Mine amethyst in the Mining Guild",
+      "family": "gathering",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Mining amethyst. Mining Guild",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "mining",
+          "level": 92
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [],
+          "family": "pickaxe"
+        }
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "item": {
+            "id": 21347,
+            "name": "Amethyst"
+          },
+          "qty": 1
+        }
+      ],
+      "rate": {
+        "unit": "amethyst",
+        "perHour": {
+          "slow": 50,
+          "typical": 72,
+          "fast": 90
+        },
+        "basis": "wiki-guide",
+        "assumes": "90 amethyst an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "The guild bank is close; the pace counts it."
+      },
+      "spot": {
+        "x": 3032,
+        "y": 9728,
+        "plane": 0,
+        "label": "Mining Guild"
+      },
+      "bank": {
+        "x": 3013,
+        "y": 9718,
+        "plane": 0,
+        "label": "Mining Guild bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Bring a rune, dragon or crystal pickaxe."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the amethyst crystals in the Mining Guild."
+        },
+        {
+          "kind": "perform",
+          "text": "Mine amethyst until the bag is full."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the amethyst in the Mining Guild."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_amethyst",
+          "title": "Money making guide/Mining amethyst",
+          "revision": 15398214,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Unidentified minerals from the mine can be traded for rewards; they are upside.",
+        "Products are sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
+    },
+    {
+      "id": "cut-redwood-logs",
+      "title": "Cut redwood logs in the Woodcutting Guild",
+      "family": "gathering",
+      "access": "members",
+      "repeatable": true,
+      "summary": "Cutting redwood logs. Woodcutting Guild (provides invisible +7 Woodcutting boost), Farming Guild (requires 90 Farming, which can be boosted and is closer to bank)",
+      "requirements": [
+        {
+          "kind": "level",
+          "skill": "woodcutting",
+          "level": 90
+        },
+        {
+          "kind": "item",
+          "role": "tool",
+          "any": [],
+          "family": "axe"
+        }
+      ],
+      "inputs": [],
+      "outputs": [
+        {
+          "item": {
+            "id": 19669,
+            "name": "Redwood logs"
+          },
+          "qty": 1
+        },
+        {
+          "item": {
+            "id": 5075,
+            "name": "Bird nest (empty)"
+          },
+          "qty": 1,
+          "chance": [
+            1,
+            50
+          ]
+        }
+      ],
+      "rate": {
+        "unit": "redwood logs",
+        "perHour": {
+          "slow": 99,
+          "typical": 144,
+          "fast": 180
+        },
+        "basis": "wiki-guide",
+        "assumes": "180 redwood logs an hour is the wiki guide's pace at its recommended levels and gear, banking included. Slow is 55% and typical 80% of it."
+      },
+      "trip": {
+        "bagSlots": 27,
+        "overheadSeconds": 0,
+        "note": "The guild bank is close; the pace counts it."
+      },
+      "spot": {
+        "x": 1614,
+        "y": 3499,
+        "plane": 0,
+        "label": "Woodcutting Guild"
+      },
+      "bank": {
+        "x": 1592,
+        "y": 3476,
+        "plane": 0,
+        "label": "Woodcutting Guild bank"
+      },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        {
+          "kind": "prepare",
+          "text": "Bring a dragon or better axe."
+        },
+        {
+          "kind": "travel",
+          "text": "Go to the redwood trees in the Woodcutting Guild."
+        },
+        {
+          "kind": "perform",
+          "text": "Cut redwood logs until the bag is full."
+        },
+        {
+          "kind": "bank",
+          "text": "Bank the logs in the guild."
+        },
+        {
+          "kind": "sell",
+          "text": "Sell the products at the Grand Exchange."
+        },
+        {
+          "kind": "restock",
+          "text": "Buy the supplies you were short of, then go back to your step."
+        }
+      ],
+      "sources": [
+        {
+          "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_redwood_logs",
+          "title": "Money making guide/Cutting redwood logs",
+          "revision": 15152854,
+          "retrievedAt": "2026-11-16",
+          "used": "pace, inputs, outputs, levels, quests, place and the method"
+        }
+      ],
+      "verifiedAt": "2026-11-16",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guild gives an invisible +7 Woodcutting boost.",
+        "Products are sold at the exchange at the instant prices.",
+        "Item ids from the wiki infoboxes, retrieved 2026-11-16."
+      ]
     }
   ]
 }
