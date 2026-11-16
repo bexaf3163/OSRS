@@ -149,6 +149,12 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
   'Tribal Totem': { revision: 15240951, flow: {
     consumes: [], receives: [], unknownItems: ['Address label', 'Totem'], partialDelivery: false, fromStartOnly: true,
   } },
+  // The bellows take the leather and thread; four coal smelt the elemental ore. The knife and needle are kept.
+  'Elemental Workshop I': { revision: 15360762, flow: {
+    consumes: [{ name: 'Coal', count: 4 }, { name: 'Leather', count: 1 }, { name: 'Thread', count: 1 }],
+    receives: [{ name: 'Elemental shield', count: 1, when: 'complete' }],
+    unknownItems: ['Battered book', 'Battered key', 'Stone bowl', 'Elemental ore', 'Elemental metal'], partialDelivery: false, fromStartOnly: true,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],
@@ -170,6 +176,8 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to defeat a level 195 [[Jungle Demon]]',
   'The ability to defeat 4 monsters from level 19 to 53 without a break.',
   'Ability to kill a level 36 [[Sand Snake]]',
+  // The note only says another player may mine the rock; Mining 20 stays required.
+  '{{Refn|This requirement can be bypassed if another player mines the rock.|group=t}}',
   'The ability to run past two level 14 thieves, and one level 26.',
   'The ability to defend against level 53 [[Jogre]]s and level 46 [[Harpie Bug Swarm]]s.',
   'The ability to run past level 53 [[Ogre]]s',

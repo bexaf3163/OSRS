@@ -1301,6 +1301,39 @@
       "evidence": [
         "OSRS Wiki Sand Snake infobox: level 36, 60 hitpoints, max hit 3, crush, read 2026-11-16."
       ]
+    },
+    {
+      "stepId": "S9-11",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Elemental Workshop I: mining an elemental rock in the west room wakes an earth elemental (level 35, 35 hitpoints, hits up to 4); it must be killed for the ore.",
+      "enemies": [
+        {
+          "name": "Earth elemental",
+          "level": 35,
+          "maxHit": 4,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.4",
+        "2.1"
+      ],
+      "assumptions": [
+        "A max hit of 4 needs only a few fish at the route's Members combat levels."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Another player mining the rock (wiki note); not planned."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.128.0: new quest; the Earth elemental is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Earth elemental infobox: level 35, 35 hitpoints, max hit 4, crush, read 2026-11-16."
+      ]
     }
   ]
 }

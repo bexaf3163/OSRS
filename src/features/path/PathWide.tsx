@@ -21,7 +21,7 @@ import { objectiveSteps, plannerOrder, useDecision } from '../../state/decision'
 import { PlannerOrder } from './PlannerOrder';
 import { F2pNext } from './F2pNext';
 import { usePlayerState } from '../../state/playerStateContext';
-import { questCatalogue, questEvidence, setAsideQuests } from '../../domain/planning/catalogue';
+import { f2pQuestsDone, questCatalogue, questEvidence } from '../../domain/planning/catalogue';
 import type { CommittedDecision } from '../../domain/planning/contracts';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -41,10 +41,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
     return quest && steps.find(s => s.id === quest.stepIds[0])?.optional ? quest.id : null; }, [decision, steps]);
   // Every F2P quest observed complete in the game, or optional and waiting or closed in the route (setAsideQuests): the Path offers the F2P
   // checkpoints instead of waiting for a quest, naming the optional one left.
-  const { f2pDone, optional } = useMemo(() => { const evidence = questEvidence(questCatalogue, questStates ?? null, player.quests.known ? player.quests.value : null, null);
-    const aside = setAsideQuests(questCatalogue, steps, progress, evidence), free = questCatalogue.filter(q => !q.members);
-    return { f2pDone: free.every(q => evidence[q.id]?.state === 'COMPLETED' || q.id === waiting || aside.has(q.id)),
-      optional: waiting ?? free.find(q => aside.has(q.id))?.id ?? null }; }, [questStates, player.quests, waiting, steps, progress]);
+  const { done: f2pDone, optional } = useMemo(() => f2pQuestsDone(steps, progress,
+    questEvidence(questCatalogue, questStates ?? null, player.quests.known ? player.quests.value : null, null), waiting), [questStates, player.quests, waiting, steps, progress]);
   // The committed Decision's step; with none (offline, waiting for data) nothing is current.
   // A Decision whose current action has no step of its own (VERIFY a level) still has an objective: its quest's first open step.
   const objectiveStart = useMemo(() => { const own = objectiveSteps(decision); return steps.find((s) => own.has(s.id) && !isClosed(progress, s.id)) ?? null; }, [decision, steps, progress]);

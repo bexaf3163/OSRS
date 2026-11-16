@@ -29938,6 +29938,330 @@
      ]
     }
    ]
+  },
+  "S9-11": {
+   "var": [
+    "varp",
+    299
+   ],
+   "route": [
+    {
+     "title": "Getting Started",
+     "steps": [
+      "In Seers' Village, go to the house immediately south of the anvil.",
+      "Search the bookcase on the eastern wall to find a battered book.",
+      "Read the book, then use a knife on it to get a Battered key.",
+      "Go to the building with anvil and open the Odd looking wall in the north (with the key in inventory).",
+      "Go down the stairs."
+     ]
+    },
+    {
+     "title": "Repairing the Workshop",
+     "steps": [
+      "Go into the room to the north.",
+      "Turn the water controls east of the water wheel.",
+      "Turn the water controls west of the water wheel.",
+      "Pull the lever by the water wheel.",
+      "(Optional) Kill one of each of the Elemental to complete Kandarin Easy Task. For the Earth Elemental, you must defeat one of the actual Elementals walking around; the rock that turns into the Elemental won't count towards the requirement.",
+      "(Optional) To obtain leather, search a crate north of the staircase in the middle room.",
+      "(Optional) To obtain a needle, search the two stacked crates on the left as you enter the west room.",
+      "Go to the eastern room.",
+      "With a needle, thread, and leather, fix the bellows.",
+      "Pull the lever by the bellows.",
+      "Go to the middle room and search the boxes in the north-east to get a stone bowl.",
+      "Go to the south room.",
+      "Use a stone bowl on the lava trough to the south.",
+      "Use the bowl of lava on the Furnace in the room."
+     ]
+    },
+    {
+     "title": "Finishing up",
+     "steps": [
+      "Go to the western room and mine an elemental rock.",
+      "Kill the Earth elemental and pick up the elemental ore it drops (get 2 more ores if you are planning to do Elemental Workshop II).",
+      "Use the elemental ore and four coal on the furnace in the southern room. You will get an Elemental metal.",
+      "With the slashed book, go to the middle room and smith an elemental shield by using the elemental metal on the workbench.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Search the marked bookcase in Seers' Village.",
+       "s": "Search the marked bookcase in Seers' Village.",
+       "k": "searchBookcase",
+       "at": [
+        2716,
+        3482,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26113
+        ]
+       }
+      },
+      {
+       "t": "Read the battered book.",
+       "s": "Read the battered book.",
+       "k": "readBook"
+      },
+      {
+       "t": "Use a knife on the battered book.",
+       "s": "Use a knife on the battered book.",
+       "k": "useKnifeOnBook"
+      },
+      {
+       "t": "Open the odd wall to the north of the bookcase.",
+       "s": "Open the odd wall to the north of the bookcase.",
+       "k": "openOddWall",
+       "at": [
+        2709,
+        3495,
+        0
+       ],
+       "hl": {
+        "obj": [
+         26115
+        ]
+       }
+      },
+      {
+       "t": "Climb down the staircase.",
+       "s": "Climb down the staircase.",
+       "k": "goDownStairs",
+       "at": [
+        2711,
+        3498,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3415
+        ]
+       }
+      },
+      {
+       "t": "Turn the marked water control in the north room.",
+       "s": "Turn the marked water control in the north room.",
+       "k": "turnEastControl",
+       "at": [
+        2726,
+        9908,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3403
+        ]
+       }
+      },
+      {
+       "t": "Turn the other marked water control in the north room.",
+       "s": "Turn the other marked water control in the north room.",
+       "k": "turnWestControl",
+       "at": [
+        2713,
+        9908,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3404
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever in the north room.",
+       "s": "Pull the lever in the north room.",
+       "k": "pullLever",
+       "at": [
+        2722,
+        9906,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3406
+        ]
+       }
+      },
+      {
+       "t": "Search the stacked crates in the west room for a needle.",
+       "s": "Search the stacked crates in the west room for a needle.",
+       "k": "searchNeedleCrate",
+       "at": [
+        2700,
+        9887,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3395
+        ]
+       }
+      },
+      {
+       "t": "Search the marked crate for some leather.",
+       "s": "Search the marked crate for some leather.",
+       "k": "searchLeatherCrate",
+       "at": [
+        2717,
+        9894,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3394
+        ]
+       }
+      },
+      {
+       "t": "Repair the bellows in the east room.",
+       "s": "Repair the bellows in the east room.",
+       "k": "fixBellows",
+       "at": [
+        2735,
+        9884,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3407
+        ]
+       }
+      },
+      {
+       "t": "Pull the lever next to the bellows.",
+       "s": "Pull the lever next to the bellows.",
+       "k": "pullBellowsLever",
+       "at": [
+        2734,
+        9887,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3409
+        ]
+       }
+      },
+      {
+       "t": "Search the boxes in the north east of the central room.",
+       "s": "Search the boxes in the north east of the central room.",
+       "k": "getStoneBowl",
+       "at": [
+        2724,
+        9894,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3397
+        ]
+       }
+      },
+      {
+       "t": "Use the stone bowl on the lava trough in the south room.",
+       "s": "Use the stone bowl on the lava trough in the south room.",
+       "k": "useBowlOnLava",
+       "at": [
+        2717,
+        9871,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18520
+        ]
+       }
+      },
+      {
+       "t": "Use the lava-filled bowl on the furnace.",
+       "s": "Use the lava-filled bowl on the furnace.",
+       "k": "useLavaOnFurnace",
+       "at": [
+        2726,
+        9875,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3410
+        ]
+       }
+      },
+      {
+       "t": "Mine one of the elemental rocks in the west room; a level 35 earth elemental appears.",
+       "s": "Mine an elemental rock in the west room.",
+       "k": "mineRock",
+       "at": [
+        2703,
+        9894,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1368
+        ]
+       }
+      },
+      {
+       "t": "Kill the earth elemental (level 35) that appeared.",
+       "s": "Kill the earth elemental (level 35).",
+       "k": "killRock",
+       "at": [
+        2703,
+        9897,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1367
+        ]
+       }
+      },
+      {
+       "t": "Pick up the elemental ore.",
+       "s": "Pick up the elemental ore.",
+       "k": "pickUpOre"
+      },
+      {
+       "t": "Use the elemental ore on the furnace in the south room.",
+       "s": "Use the elemental ore on the furnace in the south room.",
+       "k": "forgeBar",
+       "at": [
+        2726,
+        9875,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3410
+        ]
+       }
+      },
+      {
+       "t": "Use the elemental bar on a workbench in the central room to make the shield and finish the quest.",
+       "s": "Use the bar on a central workbench to finish.",
+       "k": "smithShield",
+       "at": [
+        2717,
+        9888,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3402
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

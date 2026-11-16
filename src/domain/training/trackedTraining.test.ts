@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { f2pCheckpoints, trackedTraining } from './trackedTraining';
+import { f2pCheckpoints, nextAfterReached, trackedTraining } from './trackedTraining';
 import { F2P_SKILL_ADVICE } from './f2pSkillAdvice';
 import { buildPlayerState } from '../player/playerState';
 import { emptyProgress } from '../persistence/progress';
@@ -135,5 +135,17 @@ describe('after the F2P quests: what to train next', () => {
     expect(firstOptional).toBe(good.length);
     // Reaching a checkpoint removes it.
     expect(f2pCheckpoints(character({ fishing: 35 }), 'balanced').some(r => r.skill === 'fishing')).toBe(false);
+  });
+});
+
+describe('a reached followed goal hands over', () => {
+  const rows = [{ skill: 'fishing', level: 35, target: 35, priority: 'good', method: null, time: null },
+    { skill: 'cooking', level: 20, target: 40, priority: 'good', method: null, time: null }] as const;
+  it('after the route a free-only checkpoint goes on to the next one; otherwise the route takes over', () => {
+    const fishing = { skill: 'fishing', mode: 'fast', freeOnly: true, target: 35 } as const;
+    expect(nextAfterReached(fishing, rows, false)).toEqual({ skill: 'cooking', mode: 'fast', freeOnly: true, target: 40 });
+    expect(nextAfterReached(fishing, rows, true)).toBeNull();
+    expect(nextAfterReached({ ...fishing, freeOnly: false }, rows, false)).toBeNull();
+    expect(nextAfterReached(fishing, rows.slice(0, 1), false)).toBeNull();
   });
 });

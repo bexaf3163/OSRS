@@ -1,7 +1,7 @@
 // The single readiness engine for the screens: one for the whole app, recreated only when what affects
 // the calculations changes (player state, step marks, quest points, mode, route). The calculations and answers are in lib/readinessEngine.ts.
 
-import { createContext, useContext, useMemo, useRef, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import type { Step } from '../types';
 import { useStore } from './store';
 import { useQuestPoints } from './hooks/useQuestPoints';
@@ -12,12 +12,13 @@ import { useRecoveryTracker, type ActiveRecovery } from './hooks/useRecoveryTrac
 import { useBridge } from './bridge';
 import type { QuestInstruction } from '../services/runeliteBridge';
 import { usePriceView } from './hooks/usePriceView';
-import { useTracked } from './hooks/useTracked';
-import { trackedTraining, type TrackedTraining } from '../domain/training/trackedTraining';
+import { setTracked, useTracked } from './hooks/useTracked';
+import { f2pCheckpoints, nextAfterReached, trackedTraining, type TrackedTraining } from '../domain/training/trackedTraining';
 import { useFeatures } from './hooks/useFeatures';
 import { priorityOf } from '../domain/persistence/methodPriority';
 import { useTradeRestriction } from './hooks/useTradeRestriction';
 import { resolveActiveActivity } from '../domain/quests/activeActivity';
+import { f2pQuestsDone, questCatalogue, questEvidence } from '../domain/planning/catalogue';
 import { decisionStep, followedSteps, useDecision, usePlanWindow } from './decision';
 
 const Ctx = createContext<ReadinessEngine | null>(null);
@@ -37,6 +38,14 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
   const trade = useTradeRestriction();
   const training = useMemo(() => trackedTraining(tracked, state, mode, priority, { prices, restriction: trade.state }),
     [tracked, state, mode, priority, prices, trade.state]);
+  // A reached goal does not leave the game card on a finished skill: the next checkpoint or the route takes over.
+  const reached = Boolean(tracked && training?.complete);
+  useEffect(() => {
+    if (!reached || !tracked) return;
+    const evidence = questEvidence(questCatalogue, bridge.questStates ?? null, state.quests.known ? state.quests.value : null, null);
+    const questsLeft = !f2pQuestsDone(steps, progress, evidence).done;
+    setTracked(nextAfterReached(tracked, f2pCheckpoints(state, priority, { prices, restriction: trade.state }), questsLeft));
+  }, [reached, tracked, state, priority, prices, trade.state, steps, progress, bridge.questStates]);
   const engineSteps = useMemo(() => {
     const all = training ? [...steps, training.step] : steps;
     const current = planWindow[0];

@@ -82,6 +82,15 @@ export function setAsideQuests(catalogue: readonly QuestFact[], steps: readonly 
     && !open.some(other => other.requirements.quests.includes(quest.id))).map(quest => quest.id));
 }
 
+/** Every F2P quest complete in the game, waiting on a check (`waiting`) or set aside in the route: the F2P checkpoints come
+ *  next, naming the optional quest left. */
+export function f2pQuestsDone(steps: readonly Step[], progress: Progress, evidence: Readonly<Record<string, Pick<QuestEvidence, 'state'>>>,
+  waiting: string | null = null): { done: boolean; optional: string | null } {
+  const aside = setAsideQuests(questCatalogue, steps, progress, evidence), free = questCatalogue.filter(q => !q.members);
+  return { done: free.every(q => evidence[q.id]?.state === 'COMPLETED' || q.id === waiting || aside.has(q.id)),
+    optional: waiting ?? free.find(q => aside.has(q.id))?.id ?? null };
+}
+
 export function remainingQuestSteps(quest: QuestFact, steps: ReadonlyMap<string, Step>, evidence?: QuestEvidence): Step[] {
   const at = evidence?.state === 'IN_PROGRESS' && evidence.stepId ? quest.stepIds.indexOf(evidence.stepId) : 0;
   return quest.stepIds.slice(Math.max(0, at)).flatMap(id => { const step = steps.get(id); return step ? [step] : []; });

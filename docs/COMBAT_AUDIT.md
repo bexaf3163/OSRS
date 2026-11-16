@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-37 stages: 9 retained, 27 revised, 0 with a branch, 1 deferred.
+38 stages: 10 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -45,6 +45,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-06 Clock Tower | avoid | yes | Ogre (53) | run | Ogre | - | Retain |
 | S9-08 Death Plateau | not-combat | yes | - | none | - | Trout 10 | Retain |
 | S9-09 The Depths of Despair | quest-fight | yes | Sand Snake (36) | melee | Sand Snake | Trout 3 | Retain |
+| S9-11 Elemental Workshop I | quest-fight | yes | Earth elemental (35) | melee | Earth elemental | Trout 3 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -929,4 +930,26 @@ Changed:
 Evidence:
 
 - OSRS Wiki Sand Snake infobox: level 36, 60 hitpoints, max hit 3, crush, read 2026-11-16.
+
+## S9-11 Elemental Workshop I
+
+**Retain.** Elemental Workshop I: mining an elemental rock in the west room wakes an earth elemental (level 35, 35 hitpoints, hits up to 4); it must be killed for the ore.
+
+Quest stage lines: 1.4, 2.1.
+
+Assumptions:
+
+- A max hit of 4 needs only a few fish at the route's Members combat levels.
+
+Alternatives:
+
+- Another player mining the rock (wiki note); not planned.
+
+Changed:
+
+- 2.128.0: new quest; the Earth elemental is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Earth elemental infobox: level 35, 35 hitpoints, max hit 4, crush, read 2026-11-16.
 

@@ -300,6 +300,12 @@ class Parser:
             e = self.expr()
             self.eat(';')
             return ('expr', e)
+        if tok == ('id', 'return') and self.peek(1)[0] == 'id' and self.peek(2) == ('op', ';'):
+            # return quest;  (ComplexStateQuestHelper.loadStep hands back its root step)
+            self.next()
+            name = self.next()[1]
+            self.next()
+            return ('ret', ('name', name))
         if tok[0] == 'id' and tok[1] in ('return', 'break', 'continue', 'throw'):
             self.skip_to_semicolon()
             return None

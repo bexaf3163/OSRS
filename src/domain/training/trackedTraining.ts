@@ -4,7 +4,7 @@ import type { PlayerState } from '../player/playerState';
 import { levelOf } from '../player/playerState';
 import { SKILL_NAMES, type SkillName } from './skillTrack';
 import type { TrackedSkill } from './skillTrack';
-import { trackedTrainingContext } from './skillTrack';
+import { freeOnlyOf, trackedTrainingContext } from './skillTrack';
 import { f2pAdviceFor } from './f2pSkillAdvice';
 import { adviseTraining, methodsFor } from './trainingRouter';
 import { pickTraining } from './methodPick';
@@ -67,4 +67,11 @@ export function f2pCheckpoints(observed: PlayerState, priority: MethodPriority, 
     const plan = adviseTraining({ skill, target: advice.target, state: observed, mode: 'f2p', priority, ...market });
     return [{ skill, level, target: advice.target, priority: advice.priority, method: plan.best?.method.name ?? null, time: plan.time }];
   }).sort((a, b) => Number(a.priority !== 'good') - Number(b.priority !== 'good') || (mid(a) === mid(b) ? 0 : mid(a) < mid(b) ? -1 : 1));
+}
+
+/** A followed goal that is reached hands over by itself. While the route still has open steps it goes back to the
+ *  route (null); after it, a free-only goal goes on to the next unfinished F2P checkpoint (the list's own order). */
+export function nextAfterReached(tracked: TrackedSkill, rows: readonly F2pCheckpoint[], routeOpen: boolean): TrackedSkill | null {
+  const next = !routeOpen && freeOnlyOf(tracked) ? rows.find((row) => row.skill !== tracked.skill) : undefined;
+  return next ? { skill: next.skill, mode: 'fast', freeOnly: true, target: next.target } : null;
 }

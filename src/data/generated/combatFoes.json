@@ -1066,6 +1066,33 @@
       }
     },
     {
+      "name": "Earth elemental",
+      "version": "Normal",
+      "combat": 35,
+      "members": true,
+      "hitpoints": 35,
+      "attackLevel": 20,
+      "strengthLevel": 35,
+      "defenceLevel": 35,
+      "magicLevel": 10,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 4,
+      "speedTicks": 6,
+      "aggressive": false,
+      "weakness": {
+        "element": "earth",
+        "percent": 50
+      }
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

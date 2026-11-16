@@ -172,6 +172,7 @@ class Interp:
         self.env = {}
         self.shadowed = {}                # fields hidden by a method local of the same name (Holy Grail's finishQuest)
         self.stages = {}
+        self.ret = None  # the value of the last plain 'return name;'
         self.unknown = []
         self.this_stack = []
         self.depth = 0
@@ -199,7 +200,13 @@ class Interp:
     def run(self):
         for f in self.main['fields']:
             self.stmt(f)
-        self.call_method(self.main, 'loadSteps')
+        if 'loadSteps' in self.main['methods'] or 'loadStep' not in self.main['methods']:
+            self.call_method(self.main, 'loadSteps')
+        else:
+            # ComplexStateQuestHelper: one root step for every value of the quest variable
+            self.call_method(self.main, 'loadStep')
+            if isinstance(self.ret, Step):
+                self.stages[0] = self.ret
         return self.stages
 
     def call_method(self, cls, name, args=None):
@@ -240,6 +247,8 @@ class Interp:
                 pass
         elif k == 'expr':
             self.ev(s[1])
+        elif k == 'ret':
+            self.ret = self.ev(s[1])
 
     def bind(self, name, val):
         self.env[name] = val
@@ -352,6 +361,8 @@ class Interp:
             return ('vbuilder', args[0]) if args and isinstance(args[0], int) else Unk('VarbitBuilder')
         if typ == 'ItemRequirement':
             return self.make_item(args)
+        if typ == 'KeyringRequirement':
+            return self.make_keyring(args, e[2])
         if typ == 'ItemRequirements':
             return self.make_items(args)
         if typ == 'Conditions':
@@ -416,6 +427,16 @@ class Interp:
             plane = a[1] if len(a) > 1 and isinstance(a[1], int) else None
             return Zone(x1, x1 + 64, y1, y1 + 64, plane if plane is not None else 0, plane if plane is not None else 2)
         return Unk('Zone')
+
+    def make_keyring(self, args, raw):
+        """A key that may also sit on the keyring: the key item itself (KeyringCollection.X -> ItemID.Y)."""
+        key = next((a[2] for a in raw if a[0] == 'field' and a[1] == ('name', 'KeyringCollection')), None)
+        src = open(os.path.join(SP, 'quest-helper', 'src', 'main', 'java', 'com', 'questhelper', 'collections', 'KeyringCollection.java'), encoding='utf-8').read()
+        m = key and re.search(r'\b%s\(ItemID\.(\w+)\)' % key, src)
+        iid = m and (CONSTS.get('gv_ItemID') or {}).get(m.group(1))
+        if not iid:
+            return req('?', d='keyring')
+        return req('item', nm=next((a for a in args if isinstance(a, str)), None), ids=[iid])
 
     def make_item(self, args):
         name = next((a for a in args if isinstance(a, str)), None)

@@ -6844,5 +6844,117 @@
         "questName": "Tribal Totem"
       }
     }
+  },
+  {
+    "id": "S9-11",
+    "stage": 9,
+    "type": "quest",
+    "title": "Elemental Workshop I",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Elemental_Workshop_I",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Elemental_Workshop_I/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2716,3481,0",
+    "mapLocation": {
+      "x": 2716,
+      "y": 3481,
+      "plane": 0,
+      "label": "The house immediately south-west of the Seers' Village bank"
+    },
+    "npc": {
+      "nameEn": "bookcase (Elemental Workshop I)",
+      "location": "The house immediately south-west of the Seers' Village bank",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/bookcase_(Elemental_Workshop_I)"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Knife",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Funch's Fine Groceries in Grand Tree for 6 gp.",
+        "wikiItemId": 946,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe works: the bronze one from Tutorial Island will do.",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Needle",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 1 gp.",
+        "wikiItemId": 1733,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Needle.png"
+      },
+      {
+        "nameEn": "Thread",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 1 gp.",
+        "wikiItemId": 1734,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Thread.png"
+      },
+      {
+        "nameEn": "Leather",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1741,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Leather.png"
+      },
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Coal",
+        "amount": 4,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 45 gp.",
+        "wikiItemId": 453,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coal.png"
+      },
+      {
+        "nameEn": "Trout",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "amount": 3,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster"
+        ],
+        "howToGet": "Your own catch, or buy on the Grand Exchange. The earth elemental hits at most 4, so a few are only a margin."
+      }
+    ],
+    "foes": [
+      "Earth elemental"
+    ],
+    "reward": "1 QP, 5,000 Crafting XP, 5,000 Smithing XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "bookcase (Elemental Workshop I)"
+      ],
+      "dialogChoices": [],
+      "highlightItems": [
+        "Knife",
+        "Bronze pickaxe",
+        "Needle",
+        "Thread",
+        "Leather",
+        "Hammer",
+        "Coal"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Elemental Workshop I"
+      }
+    }
   }
 ]

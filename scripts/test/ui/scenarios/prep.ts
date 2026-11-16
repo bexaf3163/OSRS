@@ -286,12 +286,9 @@ async function rangedPreparationScenarios(browser: Browser) {
       w.__status = { ...w.__status, stats }; w.__emit({ type: 'STATS', stats });
     });
     await settle(restarted.page);
-    const reached = await last();
-    expect((await text(restarted.page, '.tracked-skill')).includes('checkpoint reached'), `ranged (${width}): the actual level40 event stops at the F2P checkpoint`);
-    expect(!reached?.skillPath && reached?.step?.stepId !== 'S5-01' && !reached?.step?.worldPoint && !reached?.step?.npcNames?.length, `ranged (${width}): completion clears the trainer without silently restoring the quest`);
-    await restarted.page.getByRole('button', { name: 'Back to the quest route', exact: true }).click();
-    await settle(restarted.page);
-    expect((await last())?.step?.stepId === 'S5-01', `ranged (${width}): only the explicit return restores the quest after completion`);
+    // While F2P quests remain, a reached goal hands back to the quest route by itself: no second click.
+    expect((await last())?.step?.stepId === 'S5-01' && !(await restarted.page.locator('.tracked-skill').count()),
+      `ranged (${width}): the actual level 40 event returns to the quest route without a click`);
     await restarted.page.context().close();
     const poorStats = { ...stats, ranged: 20, attack: 30, strength: 21, mining: 18, woodcutting: 15 };
     const poorGear = { ...gear, coins: 0, bankCoins: 0 };
