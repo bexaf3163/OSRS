@@ -60,6 +60,7 @@
 ["everything present","S9-04","READY",["quest:The Grand Tree:OK","quest:Tree Gnome Village:OK","skill:Prayer 43:OK","item:Gold bar:OK","item:Ball of wool:OK","item:Lockpick:OK"]],
 ["everything present","S9-05","READY",["quest:Cook's Assistant:OK","skill:Cooking 10:OK","item:Eye of newt:OK","item:Greenman's ale:OK","item:Rotten tomato:OK","item:Fruit blast:OK","item:Ashes:OK"]],
 ["everything present","S9-06","READY",["item:Bucket of water:OK","item:Jug of water:OK"]],
+["everything present","S9-07","READY",["item:Feather:OK"]],
 ["in the bank","S1-03","READY",[]],
 ["in the bank","S1-04","READY",[]],
 ["in the bank","S1-05","MINOR_PREP",["item:Spade:BANK"]],
@@ -121,6 +122,7 @@
 ["in the bank","S9-04","MINOR_PREP",["item:Gold bar:BANK","item:Ball of wool:BANK","item:Lockpick:BANK","skill:Prayer 43:UNKNOWN","quest:The Grand Tree:OK","quest:Tree Gnome Village:OK"]],
 ["in the bank","S9-05","MINOR_PREP",["item:Eye of newt:BANK","item:Greenman's ale:BANK","item:Rotten tomato:BANK","item:Fruit blast:BANK","item:Ashes:BANK","skill:Cooking 10:UNKNOWN","quest:Cook's Assistant:OK"]],
 ["in the bank","S9-06","MINOR_PREP",["item:Bucket of water:BANK","item:Jug of water:BANK"]],
+["in the bank","S9-07","MINOR_PREP",["item:Feather:BANK"]],
 ["part","S1-03","READY",[]],
 ["part","S1-04","READY",[]],
 ["part","S1-05","MISSING_ITEM",["item:Spade:MISSING"]],
@@ -182,6 +184,7 @@
 ["part","S9-04","MISSING_ITEM",["item:Gold bar:MISSING","item:Ball of wool:MISSING","item:Lockpick:MISSING","skill:Prayer 43:UNKNOWN","quest:The Grand Tree:OK","quest:Tree Gnome Village:OK"]],
 ["part","S9-05","MISSING_ITEM",["item:Eye of newt:MISSING","item:Greenman's ale:MISSING","item:Rotten tomato:MISSING","item:Fruit blast:MISSING","item:Ashes:MISSING","skill:Cooking 10:UNKNOWN","quest:Cook's Assistant:OK"]],
 ["part","S9-06","MISSING_ITEM",["item:Bucket of water:MISSING","item:Jug of water:MISSING"]],
+["part","S9-07","MISSING_ITEM",["item:Feather:MISSING"]],
 ["nothing","S1-03","READY",[]],
 ["nothing","S1-04","READY",[]],
 ["nothing","S1-05","MISSING_ITEM",["item:Spade:MISSING"]],
@@ -243,6 +246,7 @@
 ["nothing","S9-04","MISSING_ITEM",["item:Gold bar:MISSING","item:Ball of wool:MISSING","item:Lockpick:MISSING","skill:Prayer 43:UNKNOWN","quest:The Grand Tree:OK","quest:Tree Gnome Village:OK"]],
 ["nothing","S9-05","MISSING_ITEM",["item:Eye of newt:MISSING","item:Greenman's ale:MISSING","item:Rotten tomato:MISSING","item:Fruit blast:MISSING","item:Ashes:MISSING","skill:Cooking 10:UNKNOWN","quest:Cook's Assistant:OK"]],
 ["nothing","S9-06","MISSING_ITEM",["item:Bucket of water:MISSING","item:Jug of water:MISSING"]],
+["nothing","S9-07","MISSING_ITEM",["item:Feather:MISSING"]],
 ["bank not open","S1-03","READY",[]],
 ["bank not open","S1-04","READY",[]],
 ["bank not open","S1-05","UNKNOWN",["item:Spade:UNKNOWN"]],
@@ -304,6 +308,7 @@
 ["bank not open","S9-04","UNKNOWN",["skill:Prayer 43:UNKNOWN","item:Gold bar:UNKNOWN","item:Ball of wool:UNKNOWN","item:Lockpick:UNKNOWN","quest:The Grand Tree:OK","quest:Tree Gnome Village:OK"]],
 ["bank not open","S9-05","UNKNOWN",["skill:Cooking 10:UNKNOWN","item:Eye of newt:UNKNOWN","item:Greenman's ale:UNKNOWN","item:Rotten tomato:UNKNOWN","item:Fruit blast:UNKNOWN","item:Ashes:UNKNOWN","quest:Cook's Assistant:OK"]],
 ["bank not open","S9-06","UNKNOWN",["item:Bucket of water:UNKNOWN","item:Jug of water:UNKNOWN"]],
+["bank not open","S9-07","UNKNOWN",["item:Feather:UNKNOWN"]],
 ["no connection","S1-03","READY",[]],
 ["no connection","S1-04","READY",[]],
 ["no connection","S1-05","UNKNOWN",["item:Spade:UNKNOWN"]],
@@ -364,5 +369,6 @@
 ["no connection","S9-03","UNKNOWN",["item:Dramen staff:UNKNOWN"]],
 ["no connection","S9-04","UNKNOWN",["skill:Prayer 43:UNKNOWN","item:Gold bar:UNKNOWN","item:Ball of wool:UNKNOWN","item:Lockpick:UNKNOWN","quest:The Grand Tree:OK","quest:Tree Gnome Village:OK"]],
 ["no connection","S9-05","UNKNOWN",["skill:Cooking 10:UNKNOWN","item:Eye of newt:UNKNOWN","item:Greenman's ale:UNKNOWN","item:Rotten tomato:UNKNOWN","item:Fruit blast:UNKNOWN","item:Ashes:UNKNOWN","quest:Cook's Assistant:OK"]],
-["no connection","S9-06","UNKNOWN",["item:Bucket of water:UNKNOWN","item:Jug of water:UNKNOWN"]]
+["no connection","S9-06","UNKNOWN",["item:Bucket of water:UNKNOWN","item:Jug of water:UNKNOWN"]],
+["no connection","S9-07","UNKNOWN",["item:Feather:UNKNOWN"]]
 ]

@@ -31,7 +31,9 @@ def registered(title):
     if not line:
         sys.exit('%s: no %s in QuestHelperQuest.java' % (title, name))
     cls, table, var, kind = line.groups()
-    vid = re.search(r'\b%s\((\d+)\)' % var, open(os.path.join(WORK, table + '.java'), encoding='utf-8').read())
+    vid = re.search(r'\b%s\((?:(\d+)|(VarbitID|VarPlayerID)\.(\w+))\)' % var, open(os.path.join(WORK, table + '.java'), encoding='utf-8').read())
+    if vid and not vid.group(1):  # newer tables name the id; the game-value dump gives its number
+        vid = re.search(r'^%s (\d+)$' % vid.group(3), open(os.path.join(WORK, 'consts', 'gv_%s.txt' % vid.group(2)), encoding='utf-8').read(), re.M)
     if not vid:
         sys.exit('%s: no id for %s.%s' % (title, table, var))
     return cls, 'varp' if table == 'QuestVarPlayer' else 'varbit', int(vid.group(1)), kind == 'P2P'

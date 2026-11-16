@@ -13,7 +13,7 @@ QUESTS = {
     'S7-01': ('WaterfallQuest', 'varp', 65), 'S7-02': ('FightArena', 'varp', 17), 'S7-03': ('TreeGnomeVillage', 'varp', 111),
     'S7-05': ('TheGrandTree', 'varp', 150), 'S7-06': ('DruidicRitual', 'varp', 80), 'S7-07': ('WitchsHouse', 'varp', 226), 'S7-08': ('DwarfCannon', 'varp', 0), 'S7-09': ('PlagueCity', 'varp', 165), 'S7-10': ('SheepHerder', 'varp', 60), 'S7-11': ('MonksFriend', 'varp', 30), 'S7-12': ('GertrudesCat', 'varp', 180), 'S7-13': ('FishingContest', 'varp', 11), 'S7-14': ('JunglePotion', 'varp', 175), 'S7-15': ('SeaSlug', 'varp', 159), 'S7-16': ('ObservatoryQuest', 'varp', 112), 'S7-17': ('MerlinsCrystal', 'varp', 14), 'S7-18': ('TheDigSite', 'varp', 131), 'S7-19': ('HolyGrail', 'varp', 5), 'S8-01': ('PriestInPeril', 'varp', 302), 'S8-02': ('NatureSpirit', 'varp', 307),
     'S8-05': ('AnimalMagnetism', 'varbit', 3185), 'S8-07': ('CreatureOfFenkenstrain', 'varp', 399), 'S8-08': ('ShadesOfMortton', 'varp', 339), 'S8-09': ('InSearchOfTheMyreque', 'varp', 387), 'S9-01': ('LostCity', 'varp', 147), 'S9-02': ('FairytaleI', 'varbit', 1803),
-    'S9-03': ('FairytaleII', 'varbit', 2326), 'S9-04': ('MonkeyMadnessI', 'varp', 365), 'S9-06': ('ClockTower', 'varp', 10),
+    'S9-03': ('FairytaleII', 'varbit', 2326), 'S9-04': ('MonkeyMadnessI', 'varp', 365), 'S9-06': ('ClockTower', 'varp', 10), 'S9-07': ('ClientOfKourend', 'varbit', 5619),
 }
 
 # Route steps that cover only part of a quest (build.take_part): the variable values the step's lines cover, or the Quest Helper step that is

@@ -28463,6 +28463,266 @@
      ]
     }
    ]
+  },
+  "S9-07": {
+   "var": [
+    "varbit",
+    5619
+   ],
+   "route": [
+    {
+     "title": "Getting started",
+     "steps": [
+      "Travel to Port Piscarilius by talking to Veos at the northernmost dock of Port Sarim just south of the pub. (Use amulet of glory to travel to Draynor Village then run around the wall to the west of the village to the docks)",
+      "Once there, talk to Veos again to start. Dialogue: \"Have you got any quests for me?\", \"Sounds interesting! How can I help?\"",
+      "He will give you an enchanted scroll.",
+      "Use your feather on the enchanted scroll to get an enchanted quill."
+     ]
+    },
+    {
+     "title": "Speaking to the store owners",
+     "steps": [
+      "Visit the following districts and speak to their respective store owners about their city:",
+      "Return to Veos in Port Piscarilius after speaking with all store owners. Dialogue: \"Let's talk about your client...\"",
+      "Use your Games necklace Wintertodt Camp teleport and run south until you reach the dark terrain with purple crystals, then east. Alternatively, if you have access to fairy rings, use code .",
+      "Activate the mysterious orb in your inventory while near the Dark Altar, east of Trossa and north of the fairy ring.",
+      "Return to Veos. Dialogue: \"Let's talk about your client...\"",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Veos on the Port Piscarilius docks. From the mainland, Veos sails there from Port Sarim's northern dock.",
+       "s": "Talk to Veos on the Port Piscarilius docks.",
+       "k": "talkToVeos",
+       "at": [
+        1824,
+        3690,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10727
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Veos on the Port Piscarilius docks. From the mainland, Veos sails there from Port Sarim's northern dock.",
+       "s": "Talk to Veos on the Port Piscarilius docks.",
+       "k": "talkToVeos",
+       "at": [
+        1824,
+        3690,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10727
+        ]
+       }
+      },
+      {
+       "t": "Use a feather on the Enchanted Scroll.",
+       "s": "Use a feather on the enchanted scroll.",
+       "k": "useFeatherOnScroll"
+      },
+      {
+       "t": "Talk to Leenz in the Port Piscarilius general store.",
+       "s": "Talk to Leenz in the Port Piscarilius general store.",
+       "k": "talkToLeenz",
+       "at": [
+        1807,
+        3726,
+        0
+       ],
+       "hl": {
+        "npc": [
+         6986
+        ]
+       }
+      },
+      {
+       "t": "Talk to Regath in the Arceuus general store.",
+       "s": "Talk to Regath in the Arceuus general store.",
+       "k": "talkToRegath",
+       "at": [
+        1720,
+        3724,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7056
+        ]
+       }
+      },
+      {
+       "t": "Talk to Munty in the Lovakengj general store. Run south past Kingstown or take the Lovakengj minecart.",
+       "s": "Talk to Munty in the Lovakengj general store.",
+       "k": "talkToMunty",
+       "at": [
+        1551,
+        3752,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7088
+        ]
+       }
+      },
+      {
+       "t": "Talk to Jennifer in the Shayzien general store. Take the minecart to Shayzien East or run west past the bank.",
+       "s": "Talk to Jennifer in the Shayzien general store.",
+       "k": "talkToJennifer",
+       "at": [
+        1518,
+        3586,
+        0
+       ],
+       "hl": {
+        "npc": [
+         305
+        ]
+       }
+      },
+      {
+       "t": "Talk to Horace in the Hosidius general store. The minecart stops at Hosidius South.",
+       "s": "Talk to Horace in the Hosidius general store.",
+       "k": "talkToHorace",
+       "at": [
+        1774,
+        3589,
+        0
+       ],
+       "hl": {
+        "npc": [
+         6943
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Return to Veos on the Port Piscarilius docks.",
+       "s": "Return to Veos on the Port Piscarilius docks.",
+       "k": "returnToVeos",
+       "at": [
+        1824,
+        3690,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10727
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Return to Veos on the Port Piscarilius docks.",
+       "s": "Return to Veos on the Port Piscarilius docks.",
+       "k": "returnToVeos",
+       "at": [
+        1824,
+        3690,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10727
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Return to Veos on the Port Piscarilius docks.",
+       "s": "Return to Veos on the Port Piscarilius docks.",
+       "k": "returnToVeos",
+       "at": [
+        1824,
+        3690,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10727
+        ]
+       }
+      },
+      {
+       "t": "Activate the mysterious orb at the Dark Altar, north-east of Arceuus. The minecart stops at Arceuus.",
+       "s": "Activate the mysterious orb at the Dark Altar.",
+       "k": "goToAltar",
+       "at": [
+        1712,
+        3883,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Return to Veos on the Port Piscarilius docks to finish the quest.",
+       "s": "Return to Veos at Port Piscarilius to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        1824,
+        3690,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10727
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Return to Veos on the Port Piscarilius docks to finish the quest.",
+       "s": "Return to Veos at Port Piscarilius to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        1824,
+        3690,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10727
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

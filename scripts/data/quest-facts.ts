@@ -42,9 +42,9 @@ export function questFacts(article: WikiArticle, stepIds: string[], retrievedAt:
   const listed = lines.flatMap((line, i) => {
     // A partial start (Creature of Fenkenstrain's Restless Ghost) is kept as the whole quest: stricter, and its keepsakes count.
     if (/^\*\s*(?:Partial c|C)ompletion of \[\[[^\]]+\]\]\.?\s*$/i.test(line)) return consumed.add(i), firstLink(line);
-    if (/^\*\s*Completion of the following quests:?\s*$/i.test(line)) return consumed.add(i), [];
+    if (/^\*\s*Completion of the following quests?:?\s*$/i.test(line)) return consumed.add(i), [];
     const head = lines.slice(0, i).reverse().find(l => /^\*(?!\*)/.test(l)) ?? '';
-    if (!/^\*\*+\s*\[\[[^\]]+\]\]\s*$/.test(line) || !/Completion of the following quests/i.test(head)) return [];
+    if (!/^\*\*+\s*\[\[[^\]]+\]\]\s*$/.test(line) || !/Completion of the following quests?/i.test(head)) return [];
     consumed.add(i);
     return /^\*\*(?!\*)/.test(line) ? firstLink(line) : [];
   });
@@ -127,6 +127,11 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     // The silver sickle is blessed at the grotto; the druid pouch is first obtained here (Wiki Druid pouch). Both are kept.
     consumes: [{ name: 'Silver sickle', count: 1 }], receives: [], unknownItems: [],
     ensures: ['Silver sickle (b)', 'Druid pouch'], partialDelivery: false, fromStartOnly: true,
+  } },
+  // The feather becomes the quill; the scroll, quill and orb are quest items. The two lamps are spent at once.
+  'Client of Kourend': { revision: 15384473, flow: {
+    consumes: [{ name: 'Feather', count: 1 }], receives: [], unknownItems: ['Enchanted scroll', 'Enchanted quill', 'Mysterious orb'],
+    uncertainReceipts: ['Antique lamp'], partialDelivery: false, fromStartOnly: true,
   } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
