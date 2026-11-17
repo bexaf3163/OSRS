@@ -56,7 +56,7 @@ def main():
         shutil.rmtree(os.path.join(WORK, d), ignore_errors=True)
         os.makedirs(os.path.join(WORK, d))
     for sid, (cls, _kind, _vid) in C.QUESTS.items():
-        hits = [h for h in index.get(cls + '.java', []) if '/helpers/quests/' in h.replace('\\', '/')]
+        hits = [h for h in index.get(cls + '.java', []) if any(d in h.replace('\\', '/') for d in ('/helpers/quests/', '/helpers/miniquests/'))]
         if len(hits) != 1:
             sys.exit('%s: class %s found %d time(s): %s' % (sid, cls, len(hits), hits))
         pkg = os.path.dirname(hits[0])

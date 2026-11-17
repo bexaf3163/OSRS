@@ -1537,6 +1537,89 @@
       "evidence": [
         "OSRS Wiki Headless Beast infobox: level 82, 100 hitpoints, max hit 10, slash, read 2026-11-17."
       ]
+    },
+    {
+      "stepId": "S9-24",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "runPast": true,
+      "objective": "Scorpion Catcher: kill the Jailer (level 47, 47 hitpoints, hits up to 5) in the Black Knights' Base for the jail key; the black demons (level 172) and poison spiders (level 64) of Taverley Dungeon are walked past.",
+      "enemies": [
+        {
+          "name": "Jailer",
+          "level": 47,
+          "maxHit": 5,
+          "table": true
+        },
+        {
+          "name": "Black demon",
+          "level": 172,
+          "maxHit": 16,
+          "table": false
+        },
+        {
+          "name": "Poison spider",
+          "level": 64,
+          "maxHit": 7,
+          "table": false
+        }
+      ],
+      "lines": [],
+      "assumptions": [
+        "10 lobsters cover the Jailer at the route's Members combat levels. The black demons and poison spiders are walked past, not step threats: threats are planned as fights, and a level 172 demon is not one to plan."
+      ],
+      "problems": [],
+      "alternatives": [
+        "The Legends Guild sells the dusty key, which skips the Jailer."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.132.0: new quest; the Jailer, black demon and poison spider are in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Scorpion Catcher requirements and Jailer infobox (level 47, max hit 5), read 2026-11-17."
+      ]
+    },
+    {
+      "stepId": "S9-25",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Icthlarin's Little Helper: kill the Possessed Priest (level 91, 90 hitpoints, hits up to 6 with magic) and one Apparition guardian (level 75 to 81, hits up to 9).",
+      "enemies": [
+        {
+          "name": "Possessed Priest",
+          "level": 91,
+          "maxHit": 6,
+          "table": true
+        },
+        {
+          "name": "Apparition",
+          "level": 81,
+          "maxHit": 9,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.0",
+        "3.2",
+        "5.4"
+      ],
+      "assumptions": [
+        "10 lobsters cover a hit of 9 at most; the guardian is chosen by the player's stats, so the strongest (Het, level 81) is planned."
+      ],
+      "problems": [],
+      "alternatives": [
+        "The guardians can be safespotted on the central table."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.132.0: new quest; the Possessed Priest and the Apparitions are in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Icthlarin's Little Helper kills: Possessed Priest level 91, Apparitions 75 to 81, read 2026-11-17."
+      ]
     }
   ]
 }

@@ -41300,6 +41300,2962 @@
      ]
     }
    ]
+  },
+  "S9-23": {
+   "var": [
+    "varp",
+    77
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Talk to a Barbarian Guard outside of the Barbarian Outpost. Dialogue: \"I want to come through this gate\", \"Looks can be deceiving, I am in face a barbarian\"",
+      "Talk to the Bartender at Blue Moon Inn in Varrock. Dialogue: \"I'm doing Alfred Grimhand's Barcrawl.\"",
+      "Talk to the Bartender at Jolly Boar Inn in Varrock, near the Lumber Yard. Dialogue: \"I'm doing Alfred Grimhand's Barcrawl.\"",
+      "Talk to Kaylee or Emily at Rising Sun Inn in Falador. Dialogue: \"I'm doing Alfred Grimhand's Barcrawl.\"",
+      "Talk to the Bartender at Rusty Anchor Inn in Port Sarim. Dialogue: \"I'm doing Alfred Grimhand's Barcrawl.\"",
+      "Talk to Zembo at Karamja Spirits Bar in Musa Point. Dialogue: \"I'm doing Alfred Grimhand's Barcrawl.\"",
+      "Talk to the Bartender at Dead Man's Chest in Brimhaven. Dialogue: \"I'm doing Alfred Grimhand's Barcrawl.\"",
+      "Talk to the Bartender at Flying Horse Inn in Ardougne. Dialogue: \"I'm doing Alfred Grimhand's Barcrawl.\"",
+      "Talk to the Bartender at Forester's Arms in Seers' Village. Dialogue: \"I'm doing Alfred Grimhand's Barcrawl.\"",
+      "Talk to Blurberry at Blurberry Bar in Tree Gnome Stronghold(Grand Tree). Dialogue: \"I'm doing Alfred Grimhand's Barcrawl.\"",
+      "Talk to the Bartender at Dragon Inn in Yanille. Dialogue: \"I'm doing Alfred Grimhand's Barcrawl.\"",
+      "Talk to a Barbarian Guard outside of the Barbarian Outpost. Dialogue: \"I want to come through this gate\", \"Looks can be deceiving, I am in fact a barbarian.\"",
+      "Congratulations, miniquest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Return to the barbarian guards outside the Barbarian Agility Course.",
+       "s": "Return to the barbarian guards outside the Barbarian Agility Course.",
+       "k": "talkToGuardAgain",
+       "at": [
+        2544,
+        3568,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7285
+        ]
+       }
+      },
+      {
+       "t": "Talk to the bartender in Dragon Inn in Yanille.",
+       "s": "Talk to the bartender in Dragon Inn in Yanille.",
+       "k": "talkToDragonInn",
+       "at": [
+        2556,
+        3079,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1320
+        ]
+       }
+      },
+      {
+       "t": "Talk to Blurberry in the Grand Tree.",
+       "s": "Talk to Blurberry in the Grand Tree.",
+       "k": "goUpToBlurberry",
+       "at": [
+        2466,
+        3495,
+        0
+       ]
+      },
+      {
+       "t": "Talk to Blurberry in the Grand Tree.",
+       "s": "Talk to Blurberry in the Grand Tree.",
+       "k": "talkToBlurberry",
+       "at": [
+        2482,
+        3491,
+        1
+       ],
+       "hl": {
+        "npc": [
+         6531
+        ]
+       }
+      },
+      {
+       "t": "Talk to the bartender in the Forester's Arms in Seers' Village.",
+       "s": "Talk to the bartender in the Forester's Arms in Seers' Village.",
+       "k": "talkToForestersArms",
+       "at": [
+        2690,
+        3494,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1318
+        ]
+       }
+      },
+      {
+       "t": "Talk to the bartender in the Flying Horse Inn in Ardougne.",
+       "s": "Talk to the bartender in the Flying Horse Inn in Ardougne.",
+       "k": "talkToFlyingHorseInn",
+       "at": [
+        2574,
+        3323,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1319
+        ]
+       }
+      },
+      {
+       "t": "Talk to the bartender in the Dead Man's Chest in Brimhaven.",
+       "s": "Talk to the bartender in the Dead Man's Chest in Brimhaven.",
+       "k": "talkToDeadMansChest",
+       "at": [
+        2796,
+        3156,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1314
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zembo in the Karamja Spirits Bar on Musa Point.",
+       "s": "Talk to Zembo in the Karamja Spirits Bar on Musa Point.",
+       "k": "talkToZambo",
+       "at": [
+        2927,
+        3144,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13655
+        ]
+       }
+      },
+      {
+       "t": "Talk to the bartender in the Rusty Anchor in Port Sarim.",
+       "s": "Talk to the bartender in the Rusty Anchor in Port Sarim.",
+       "k": "talkToRustyAnchor",
+       "at": [
+        3046,
+        3257,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1313
+        ]
+       }
+      },
+      {
+       "t": "Talk to a bartender in the Rising Sun Inn in Falador.",
+       "s": "Talk to a bartender in the Rising Sun Inn in Falador.",
+       "k": "talkToRisingSun",
+       "at": [
+        2956,
+        3370,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1316
+        ]
+       }
+      },
+      {
+       "t": "Talk to the bartender in the Jolly Boar Inn north east of Varrock.",
+       "s": "Talk to the bartender in the Jolly Boar Inn north east of Varrock.",
+       "k": "talkToJollyBoar",
+       "at": [
+        3279,
+        3488,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1310
+        ]
+       }
+      },
+      {
+       "t": "Talk to the bartender in the Blue Moon Inn in Varrock.",
+       "s": "Talk to the bartender in the Blue Moon Inn in Varrock.",
+       "k": "talkToBlueMoon",
+       "at": [
+        3226,
+        3399,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1312
+        ]
+       }
+      },
+      {
+       "t": "Talk to a barbarian guard outside the Barbarian Agility Course at the Barbarian Outpost to learn about Alfred Grimhand's Barcrawl.",
+       "s": "Ask a barbarian guard at the Barbarian Outpost about the Barcrawl",
+       "k": "talkToGuardToGetCard",
+       "at": [
+        2544,
+        3568,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7285
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-24": {
+   "var": [
+    "varp",
+    76
+   ],
+   "route": [
+    {
+     "title": "Getting started",
+     "steps": [
+      "Talk to Thormac on the top floor of the Sorcerer's Tower south of Seers' Village. Dialogue: \"What do you need assistance with?\", \"So how would I go about catching them then?\", \"Ok, I will do it then\" ()",
+      "Go to Seers Village and speak to a Seer. (Wait until the seer is done checking himself in the mirror.) Dialogue: \"Your friend Thormac sent me to speak to you.\" Be sure not to skip this step, as the scorpion in Taverley Dungeon is not accessible without first speaking to the seer.",
+      "Scorpions can be caught in any order and there is no need to return between each catch."
+     ]
+    },
+    {
+     "title": "First scorpion",
+     "steps": [
+      "Note: You will need a dusty key if you don't have 70 Agility, make sure to grab it before entering the dungeon.",
+      "Go into Taverley Dungeon, (South Taverley) and go to the poison spider area.",
+      "Directly south of the level 80 Agility shortcut, search the old wall to enter a small room.",
+      "Use the scorpion cage on the Kharid Scorpion. If you try to pick it up, it will sting you instead."
+     ]
+    },
+    {
+     "title": "Second scorpion",
+     "steps": [
+      "Go to the Barbarian Outpost (a games necklace is helpful).",
+      "Go inside the fenced in area near the entrance to the agility course.",
+      "Go inside the building in the north-east corner of the area.",
+      "Use the scorpion cage on the Kharid Scorpion. If you try to pick it up, it will sting you instead."
+     ]
+    },
+    {
+     "title": "Third scorpion",
+     "steps": [
+      "Go to the Monastery between Edgeville and Ice Mountain (a combat bracelet will take you right there).",
+      "Climb the eastern ladder and go to the east side of the floor.",
+      "Use the scorpion cage on the Kharid Scorpion. If you try to pick it up, it will sting you instead."
+     ]
+    },
+    {
+     "title": "Finishing Up",
+     "steps": [
+      "Return the full scorpion cage to Thormac.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "s": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "k": "sorcerersTowerLadder0",
+       "at": [
+        2701,
+        3408,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "s": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "k": "sorcerersTowerLadder2",
+       "at": [
+        2699,
+        3405,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "s": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "k": "sorcerersTowerLadder1",
+       "at": [
+        2704,
+        3403,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Speak to Thormac at the top of the Sorcerer's Tower south of Seers' Village.",
+       "s": "Speak to Thormac at the top of the Sorcerer's Tower",
+       "k": "speakToThormac",
+       "at": [
+        2702,
+        3405,
+        3
+       ],
+       "hl": {
+        "npc": [
+         5232
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Speak to a seer in Seer's Village.",
+       "s": "Speak to a seer in Seer's Village.",
+       "k": "speakToSeer1",
+       "at": [
+        2710,
+        3484,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5231
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "s": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "k": "sorcerersTowerLadder0",
+       "at": [
+        2701,
+        3408,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "s": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "k": "sorcerersTowerLadder2",
+       "at": [
+        2699,
+        3405,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "s": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "k": "sorcerersTowerLadder1",
+       "at": [
+        2704,
+        3403,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Return to Thormac with the scorpions.",
+       "s": "Return to Thormac with the scorpions",
+       "k": "returnToThormac",
+       "hl": {
+        "npc": [
+         5232
+        ]
+       }
+      },
+      {
+       "t": "Enter the Barbarian Outpost.",
+       "s": "Enter the Barbarian Outpost.",
+       "k": "enterOutpost",
+       "at": [
+        2545,
+        3570,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2115
+        ]
+       }
+      },
+      {
+       "t": "Use the scorpion cage on the scorpion.",
+       "s": "Use the scorpion cage on the scorpion.",
+       "k": "catchOutpostScorpion",
+       "at": [
+        2553,
+        3570,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5229
+        ]
+       }
+      },
+      {
+       "t": "Enter the Edgeville Monastery.",
+       "s": "Enter the Edgeville Monastery.",
+       "k": "enterMonastery",
+       "at": [
+        3057,
+        3483,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2641
+        ]
+       }
+      },
+      {
+       "t": "Use the scorpion cage on the scorpion.",
+       "s": "Use the scorpion cage on the scorpion.",
+       "k": "catchMonasteryScorpion",
+       "hl": {
+        "npc": [
+         5230
+        ]
+       }
+      },
+      {
+       "t": "Go to Taverley Dungeon.",
+       "s": "Go to Taverley Dungeon.",
+       "k": "enterTaverleyDungeon",
+       "at": [
+        2884,
+        3397,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16680
+        ]
+       }
+      },
+      {
+       "t": "Travel through Taverley Dungeon until you reach the Black Knights' Base. Kill the Jailer in the east side of the base for a jail key.",
+       "s": "Kill the Jailer in the Black Knights' Base for a jail key",
+       "k": "killJailerForKey",
+       "at": [
+        2930,
+        9692,
+        0
+       ],
+       "hl": {
+        "npc": [
+         300
+        ]
+       }
+      },
+      {
+       "t": "Pick up the jail key.",
+       "s": "Pick up the jail key.",
+       "k": "pickUpJailKey"
+      },
+      {
+       "t": "Use the jail key on the south door and talk to Velrak for a dusty key.",
+       "s": "Use the jail key on the south door and talk to Velrak for a dusty key.",
+       "k": "getDustyFromAdventurer",
+       "at": [
+        2930,
+        9685,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4925
+        ]
+       }
+      },
+      {
+       "t": "Enter the gate to the deeper Taverley dungeon.",
+       "s": "Enter the gate to the deeper Taverley dungeon.",
+       "k": "enterDeeperTaverley",
+       "at": [
+        2924,
+        9803,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2623
+        ]
+       }
+      },
+      {
+       "t": "Squeeze through the obstacle pipe.",
+       "s": "Squeeze through the obstacle pipe.",
+       "k": "goThroughPipe",
+       "at": [
+        2888,
+        9799,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16509
+        ]
+       }
+      },
+      {
+       "t": "Go over the strange floor.",
+       "s": "Go over the strange floor.",
+       "k": "goOverStrangeFloor",
+       "at": [
+        2879,
+        9813,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16510
+        ]
+       }
+      },
+      {
+       "t": "Search the Old wall.",
+       "s": "Search the Old wall.",
+       "k": "searchOldWall",
+       "at": [
+        2875,
+        9799,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2117
+        ]
+       }
+      },
+      {
+       "t": "Use the scorpion cage on the scorpion.",
+       "s": "Use the scorpion cage on the scorpion.",
+       "k": "catchTaverleyScorpion",
+       "hl": {
+        "npc": [
+         5228
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "s": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "k": "sorcerersTowerLadder0",
+       "at": [
+        2701,
+        3408,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "s": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "k": "sorcerersTowerLadder2",
+       "at": [
+        2699,
+        3405,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "s": "Climb to the top of the Sorcerer's Tower south of Seers' Village.",
+       "k": "sorcerersTowerLadder1",
+       "at": [
+        2704,
+        3403,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Return to Thormac with the scorpions.",
+       "s": "Return to Thormac with the scorpions",
+       "k": "returnToThormac",
+       "hl": {
+        "npc": [
+         5232
+        ]
+       }
+      },
+      {
+       "t": "Enter the Barbarian Outpost.",
+       "s": "Enter the Barbarian Outpost.",
+       "k": "enterOutpost",
+       "at": [
+        2545,
+        3570,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2115
+        ]
+       }
+      },
+      {
+       "t": "Use the scorpion cage on the scorpion.",
+       "s": "Use the scorpion cage on the scorpion.",
+       "k": "catchOutpostScorpion",
+       "at": [
+        2553,
+        3570,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5229
+        ]
+       }
+      },
+      {
+       "t": "Enter the Edgeville Monastery.",
+       "s": "Enter the Edgeville Monastery.",
+       "k": "enterMonastery",
+       "at": [
+        3057,
+        3483,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2641
+        ]
+       }
+      },
+      {
+       "t": "Use the scorpion cage on the scorpion.",
+       "s": "Use the scorpion cage on the scorpion.",
+       "k": "catchMonasteryScorpion",
+       "hl": {
+        "npc": [
+         5230
+        ]
+       }
+      },
+      {
+       "t": "Go to Taverley Dungeon.",
+       "s": "Go to Taverley Dungeon.",
+       "k": "enterTaverleyDungeon",
+       "at": [
+        2884,
+        3397,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16680
+        ]
+       }
+      },
+      {
+       "t": "Travel through Taverley Dungeon until you reach the Black Knights' Base. Kill the Jailer in the east side of the base for a jail key.",
+       "s": "Kill the Jailer in the Black Knights' Base for a jail key",
+       "k": "killJailerForKey",
+       "at": [
+        2930,
+        9692,
+        0
+       ],
+       "hl": {
+        "npc": [
+         300
+        ]
+       }
+      },
+      {
+       "t": "Pick up the jail key.",
+       "s": "Pick up the jail key.",
+       "k": "pickUpJailKey"
+      },
+      {
+       "t": "Use the jail key on the south door and talk to Velrak for a dusty key.",
+       "s": "Use the jail key on the south door and talk to Velrak for a dusty key.",
+       "k": "getDustyFromAdventurer",
+       "at": [
+        2930,
+        9685,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4925
+        ]
+       }
+      },
+      {
+       "t": "Enter the gate to the deeper Taverley dungeon.",
+       "s": "Enter the gate to the deeper Taverley dungeon.",
+       "k": "enterDeeperTaverley",
+       "at": [
+        2924,
+        9803,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2623
+        ]
+       }
+      },
+      {
+       "t": "Squeeze through the obstacle pipe.",
+       "s": "Squeeze through the obstacle pipe.",
+       "k": "goThroughPipe",
+       "at": [
+        2888,
+        9799,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16509
+        ]
+       }
+      },
+      {
+       "t": "Go over the strange floor.",
+       "s": "Go over the strange floor.",
+       "k": "goOverStrangeFloor",
+       "at": [
+        2879,
+        9813,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16510
+        ]
+       }
+      },
+      {
+       "t": "Search the Old wall.",
+       "s": "Search the Old wall.",
+       "k": "searchOldWall",
+       "at": [
+        2875,
+        9799,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2117
+        ]
+       }
+      },
+      {
+       "t": "Use the scorpion cage on the scorpion.",
+       "s": "Use the scorpion cage on the scorpion.",
+       "k": "catchTaverleyScorpion",
+       "hl": {
+        "npc": [
+         5228
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-25": {
+   "var": [
+    "varbit",
+    418
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Talk to the Wanderer north-east of Sophanem (see picture) and ask why she has a problem with your cat. Dialogue: \"Why? What's your problem with it?\", \"Ok I'll get your supplies.\"",
+      "Talk to the Wanderer again to give her a tinderbox and waterskin(4). Dialogue: \"Yes. I have them all here.\"",
+      "Touch the door of the pyramid where you wake up."
+     ]
+    },
+    {
+     "title": "The first flashback",
+     "steps": [
+      "Navigate by clicking the minimap to automatically avoid the traps.",
+      "Jump the pit (20% minimum energy required, higher Agility increases your chances).",
+      "Go west and open the door.",
+      "Click on the large golden bird to reset the puzzle until it lands on the solution shown in the image on this page. Then click the tiles indicated on the picture."
+     ]
+    },
+    {
+     "title": "The sphinx",
+     "steps": [
+      "Drop your cat and talk to the Sphinx, ask for help. Dialogue: \"I need help.\", \"Okay, that sounds fair.\"",
+      "Riddle answer: 9. Dialogue: \".\", \"Totally positive.\"(if you give the wrong answer your cat will disappear)",
+      "Talk to the High Priest to the south-west."
+     ]
+    },
+    {
+     "title": "The second flashback",
+     "steps": [
+      "Return to the pyramid (right-click door and open) and jump the pit again to trigger the next flashback.",
+      "Open the western door (directly south of you) and take the canopic jar back (you can only pick up the correct one).",
+      "A level 75 or 81 enemy (see the guardians in the info box above) will appear, kill it and take the jar.",
+      "Leave the room and jump across the pit.",
+      "Jump back across the pit.",
+      "Solve the western door puzzle and drop the jar where you found it.",
+      "Leave the room again and jump across the pit once more.",
+      "Exit the pyramid via the entrance ladder."
+     ]
+    },
+    {
+     "title": "Preparing for the ceremony",
+     "steps": [
+      "Talk to the High Priest. Dialogue: \"Sure, no problem.\"",
+      "Go to the house south of the church and talk to the Embalmer to give him the linen, salt, and sap.",
+      "Go east and talk to the Carpenter. He will take your willow logs and give you a holy symbol."
+     ]
+    },
+    {
+     "title": "The third flashback",
+     "steps": [
+      "Enter the pyramid (right click, open door).",
+      "Jump the gap again to trigger the 3rd flashback.",
+      "Enter the east door and use the holy/unholy symbol on any sarcophagus. Exit the room.",
+      "Jump back across the pit and enter the eastern room again.",
+      "Kill the level 91 Possessed Priest.",
+      "Talk to the High Priest."
+     ]
+    },
+    {
+     "title": "The fourth flashback",
+     "steps": [
+      "Exit the pyramid.",
+      "Talk to the High Priest in the temple.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to the Wanderer west of the Agility Pyramid.",
+       "s": "Talk to the Wanderer west of the Agility Pyramid.",
+       "k": "talkToWanderer",
+       "at": [
+        3316,
+        2849,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4194
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to the Wanderer again with the required items.",
+       "s": "Talk to the Wanderer again with the required items.",
+       "k": "talkToWandererAgain",
+       "at": [
+        3316,
+        2849,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4194
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "touchPyramidDoor",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit and jump it; dodge traps via the minimap",
+       "k": "jumpPit",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Attempt to open the western door.",
+       "s": "Attempt to open the western door.",
+       "k": "openWestDoor",
+       "at": [
+        3280,
+        9199,
+        0
+       ]
+      },
+      {
+       "t": "Solve the door puzzle.",
+       "s": "Solve the door puzzle.",
+       "k": "solveDoorPuzzle"
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "touchPyramidDoor",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit and jump it; dodge traps via the minimap",
+       "k": "jumpPit",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Attempt to open the western door.",
+       "s": "Attempt to open the western door.",
+       "k": "openWestDoor",
+       "at": [
+        3280,
+        9199,
+        0
+       ]
+      },
+      {
+       "t": "Solve the door puzzle.",
+       "s": "Solve the door puzzle.",
+       "k": "solveDoorPuzzle"
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Sphinx in Sophanem with your cat, and answer its riddle with '9.'.",
+       "s": "Talk to the Sphinx in Sophanem with your cat; answer the riddle '9'",
+       "k": "talkToSphinx",
+       "at": [
+        3301,
+        2785,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4209
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Talk to the High Priest in the south west of Sophanem.",
+       "s": "Talk to the High Priest in the south west of Sophanem.",
+       "k": "talkToHighPriest",
+       "at": [
+        3281,
+        2772,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4206
+        ]
+       }
+      },
+      {
+       "t": "Talk to the High Priest in the south west of Sophanem.",
+       "s": "Talk to the High Priest in the south west of Sophanem.",
+       "k": "talkToHighPriestWithoutToken",
+       "at": [
+        3281,
+        2772,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4206
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoor",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path again until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit again and jump it; dodge the traps",
+       "k": "jumpPitAgain",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Try picking up the canopic jars in the north west room until a level 75-81 enemy spawns. Kill them. You can safespot them on the central table.",
+       "s": "Pick up a canopic jar in the north-west room; kill the spawn (75-81)",
+       "k": "pickUpAnyJar",
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Attempt to pick up the Crondis Canopic Jar, and kill Apparition (level 75) when they appear. They will attack with magic.",
+       "s": "Take the Crondis jar; kill the Apparition (level 75, magic)",
+       "k": "pickUpCrondisJar",
+       "at": [
+        3286,
+        9195,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6636
+        ]
+       }
+      },
+      {
+       "t": "Attempt to pick up the Het Canopic Jar, and kill Apparition (level 81) when they appear. They will attack with melee.",
+       "s": "Take the Het jar; kill the Apparition (level 81, melee)",
+       "k": "pickUpHetJar",
+       "at": [
+        3286,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Try picking up the canopic jars in the north west room again.",
+       "s": "Try picking up the canopic jars in the north west room again.",
+       "k": "pickUpAnyJarAgain",
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Pick up the Crondis Canopic Jar.",
+       "s": "Pick up the Crondis Canopic Jar.",
+       "k": "pickUpCrondisJarAgain",
+       "at": [
+        3286,
+        9195,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6636
+        ]
+       }
+      },
+      {
+       "t": "Pick up the Het Canopic Jar.",
+       "s": "Pick up the Het Canopic Jar.",
+       "k": "pickUpHetJarAgain",
+       "at": [
+        3286,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Jump back over the pit with the jar.",
+       "s": "Jump back over the pit with the jar.",
+       "k": "returnOverPit",
+       "at": [
+        3292,
+        9196,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6633
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoor",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path again until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit again and jump it; dodge the traps",
+       "k": "jumpPitAgain",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Try picking up the canopic jars in the north west room until a level 75-81 enemy spawns. Kill them. You can safespot them on the central table.",
+       "s": "Pick up a canopic jar in the north-west room; kill the spawn (75-81)",
+       "k": "pickUpAnyJar",
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Attempt to pick up the Crondis Canopic Jar, and kill Apparition (level 75) when they appear. They will attack with magic.",
+       "s": "Take the Crondis jar; kill the Apparition (level 75, magic)",
+       "k": "pickUpCrondisJar",
+       "at": [
+        3286,
+        9195,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6636
+        ]
+       }
+      },
+      {
+       "t": "Attempt to pick up the Het Canopic Jar, and kill Apparition (level 81) when they appear. They will attack with melee.",
+       "s": "Take the Het jar; kill the Apparition (level 81, melee)",
+       "k": "pickUpHetJar",
+       "at": [
+        3286,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Try picking up the canopic jars in the north west room again.",
+       "s": "Try picking up the canopic jars in the north west room again.",
+       "k": "pickUpAnyJarAgain",
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Pick up the Crondis Canopic Jar.",
+       "s": "Pick up the Crondis Canopic Jar.",
+       "k": "pickUpCrondisJarAgain",
+       "at": [
+        3286,
+        9195,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6636
+        ]
+       }
+      },
+      {
+       "t": "Pick up the Het Canopic Jar.",
+       "s": "Pick up the Het Canopic Jar.",
+       "k": "pickUpHetJarAgain",
+       "at": [
+        3286,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Jump back over the pit with the jar.",
+       "s": "Jump back over the pit with the jar.",
+       "k": "returnOverPit",
+       "at": [
+        3292,
+        9196,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6633
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoor",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path again until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit again and jump it; dodge the traps",
+       "k": "jumpPitAgain",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Try picking up the canopic jars in the north west room until a level 75-81 enemy spawns. Kill them. You can safespot them on the central table.",
+       "s": "Pick up a canopic jar in the north-west room; kill the spawn (75-81)",
+       "k": "pickUpAnyJar",
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Attempt to pick up the Crondis Canopic Jar, and kill Apparition (level 75) when they appear. They will attack with magic.",
+       "s": "Take the Crondis jar; kill the Apparition (level 75, magic)",
+       "k": "pickUpCrondisJar",
+       "at": [
+        3286,
+        9195,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6636
+        ]
+       }
+      },
+      {
+       "t": "Attempt to pick up the Het Canopic Jar, and kill Apparition (level 81) when they appear. They will attack with melee.",
+       "s": "Take the Het jar; kill the Apparition (level 81, melee)",
+       "k": "pickUpHetJar",
+       "at": [
+        3286,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Try picking up the canopic jars in the north west room again.",
+       "s": "Try picking up the canopic jars in the north west room again.",
+       "k": "pickUpAnyJarAgain",
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Pick up the Crondis Canopic Jar.",
+       "s": "Pick up the Crondis Canopic Jar.",
+       "k": "pickUpCrondisJarAgain",
+       "at": [
+        3286,
+        9195,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6636
+        ]
+       }
+      },
+      {
+       "t": "Pick up the Het Canopic Jar.",
+       "s": "Pick up the Het Canopic Jar.",
+       "k": "pickUpHetJarAgain",
+       "at": [
+        3286,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Jump back over the pit with the jar.",
+       "s": "Jump back over the pit with the jar.",
+       "k": "returnOverPit",
+       "at": [
+        3292,
+        9196,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6633
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoor",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path again until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit again and jump it; dodge the traps",
+       "k": "jumpPitAgain",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Try picking up the canopic jars in the north west room until a level 75-81 enemy spawns. Kill them. You can safespot them on the central table.",
+       "s": "Pick up a canopic jar in the north-west room; kill the spawn (75-81)",
+       "k": "pickUpAnyJar",
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Attempt to pick up the Crondis Canopic Jar, and kill Apparition (level 75) when they appear. They will attack with magic.",
+       "s": "Take the Crondis jar; kill the Apparition (level 75, magic)",
+       "k": "pickUpCrondisJar",
+       "at": [
+        3286,
+        9195,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6636
+        ]
+       }
+      },
+      {
+       "t": "Attempt to pick up the Het Canopic Jar, and kill Apparition (level 81) when they appear. They will attack with melee.",
+       "s": "Take the Het jar; kill the Apparition (level 81, melee)",
+       "k": "pickUpHetJar",
+       "at": [
+        3286,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Try picking up the canopic jars in the north west room again.",
+       "s": "Try picking up the canopic jars in the north west room again.",
+       "k": "pickUpAnyJarAgain",
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Pick up the Crondis Canopic Jar.",
+       "s": "Pick up the Crondis Canopic Jar.",
+       "k": "pickUpCrondisJarAgain",
+       "at": [
+        3286,
+        9195,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6636
+        ]
+       }
+      },
+      {
+       "t": "Pick up the Het Canopic Jar.",
+       "s": "Pick up the Het Canopic Jar.",
+       "k": "pickUpHetJarAgain",
+       "at": [
+        3286,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Jump back over the pit with the jar.",
+       "s": "Jump back over the pit with the jar.",
+       "k": "returnOverPit",
+       "at": [
+        3292,
+        9196,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6633
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoor",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path again until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit again and jump it; dodge the traps",
+       "k": "jumpPitAgain",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Try picking up the canopic jars in the north west room until a level 75-81 enemy spawns. Kill them. You can safespot them on the central table.",
+       "s": "Pick up a canopic jar in the north-west room; kill the spawn (75-81)",
+       "k": "pickUpAnyJar",
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Attempt to pick up the Crondis Canopic Jar, and kill Apparition (level 75) when they appear. They will attack with magic.",
+       "s": "Take the Crondis jar; kill the Apparition (level 75, magic)",
+       "k": "pickUpCrondisJar",
+       "at": [
+        3286,
+        9195,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6636
+        ]
+       }
+      },
+      {
+       "t": "Attempt to pick up the Het Canopic Jar, and kill Apparition (level 81) when they appear. They will attack with melee.",
+       "s": "Take the Het jar; kill the Apparition (level 81, melee)",
+       "k": "pickUpHetJar",
+       "at": [
+        3286,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Try picking up the canopic jars in the north west room again.",
+       "s": "Try picking up the canopic jars in the north west room again.",
+       "k": "pickUpAnyJarAgain",
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Pick up the Crondis Canopic Jar.",
+       "s": "Pick up the Crondis Canopic Jar.",
+       "k": "pickUpCrondisJarAgain",
+       "at": [
+        3286,
+        9195,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6636
+        ]
+       }
+      },
+      {
+       "t": "Pick up the Het Canopic Jar.",
+       "s": "Pick up the Het Canopic Jar.",
+       "k": "pickUpHetJarAgain",
+       "at": [
+        3286,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6634
+        ]
+       }
+      },
+      {
+       "t": "Jump back over the pit with the jar.",
+       "s": "Jump back over the pit with the jar.",
+       "k": "returnOverPit",
+       "at": [
+        3292,
+        9196,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6633
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoor",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Jump back over to the north side of the pit. Move using the minimap to avoid all the traps inside the pyramid.",
+       "s": "Jump back over the pit to the north side; dodge the traps",
+       "k": "jumpOverPitAgain",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Drop the canopic jar in the spot you took it from.",
+       "s": "Drop the canopic jar in the spot you took it from.",
+       "k": "dropJar"
+      },
+      {
+       "t": "Drop the canopic jar in the spot you took it from.",
+       "s": "Drop the canopic jar in the spot you took it from.",
+       "k": "dropCrondisJar",
+       "at": [
+        3286,
+        9195,
+        0
+       ]
+      },
+      {
+       "t": "Drop the canopic jar in the spot you took it from.",
+       "s": "Drop the canopic jar in the spot you took it from.",
+       "k": "dropHetJar",
+       "at": [
+        3286,
+        9194,
+        0
+       ]
+      },
+      {
+       "t": "Solve the door puzzle again.",
+       "s": "Solve the door puzzle again.",
+       "k": "solvePuzzleAgain"
+      }
+     ]
+    },
+    {
+     "at": 13,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoor",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Jump back over to the north side of the pit. Move using the minimap to avoid all the traps inside the pyramid.",
+       "s": "Jump back over the pit to the north side; dodge the traps",
+       "k": "jumpOverPitAgain",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Drop the canopic jar in the spot you took it from.",
+       "s": "Drop the canopic jar in the spot you took it from.",
+       "k": "dropJar"
+      },
+      {
+       "t": "Drop the canopic jar in the spot you took it from.",
+       "s": "Drop the canopic jar in the spot you took it from.",
+       "k": "dropCrondisJar",
+       "at": [
+        3286,
+        9195,
+        0
+       ]
+      },
+      {
+       "t": "Drop the canopic jar in the spot you took it from.",
+       "s": "Drop the canopic jar in the spot you took it from.",
+       "k": "dropHetJar",
+       "at": [
+        3286,
+        9194,
+        0
+       ]
+      },
+      {
+       "t": "Solve the door puzzle again.",
+       "s": "Solve the door puzzle again.",
+       "k": "solvePuzzleAgain"
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Leave the pyramid and return to the High Priest.",
+       "s": "Leave the pyramid and return to the High Priest.",
+       "k": "leavePyramid",
+       "at": [
+        3277,
+        9172,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6645
+        ]
+       }
+      },
+      {
+       "t": "Return to the High Priest in the south west of Sophanem.",
+       "s": "Return to the High Priest in the south west of Sophanem.",
+       "k": "returnToHighPriest",
+       "at": [
+        3281,
+        2772,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4206
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem. Make sure to bring the items you need.",
+       "s": "Enter the rock west of the Agility Pyramid with your items",
+       "k": "enterRockWithItems",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Embalmer just south of the High Priest.",
+       "s": "Talk to the Embalmer just south of the High Priest.",
+       "k": "talkToEmbalmer",
+       "at": [
+        3287,
+        2755,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4202
+        ]
+       }
+      },
+      {
+       "t": "Get some linen. You can buy some from Raetul in east Sophanem for 30 coins.",
+       "s": "Get linen: buy it from Raetul in east Sophanem for 30 coins",
+       "has": "Linen",
+       "k": "buyLinen",
+       "at": [
+        3311,
+        2787,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11598
+        ]
+       }
+      },
+      {
+       "t": "Fill up a bucket with salt water from the lake north of Sophanem, or buy a bag of salt from a Slayer Master.",
+       "s": "Fill a bucket with salt water at the lake north of Sophanem",
+       "has": "Bag of salt",
+       "k": "fillBucketWithWater",
+       "at": [
+        3286,
+        2840,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6605
+        ]
+       }
+      },
+      {
+       "t": "Use the bucket of saltwater on the suntrap in the south east of Sophenam.",
+       "s": "Use the bucket of salt water on the suntrap in south-east Sophanem",
+       "k": "makeSalt",
+       "at": [
+        3305,
+        2756,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6606
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Embalmer again just south of the High Priest.",
+       "s": "Talk to the Embalmer again just south of the High Priest.",
+       "k": "talkToEmbalmerAgain",
+       "at": [
+        3287,
+        2755,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4202
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Carpenter in the east of Sophanem until he gives you the holy symbol.",
+       "s": "Talk to the Carpenter in east Sophanem for the holy symbol",
+       "k": "talkToCarpenter",
+       "at": [
+        3313,
+        2770,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4203
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Carpenter again in the east of Sophanem.",
+       "s": "Talk to the Carpenter again in the east of Sophanem.",
+       "k": "talkToCarpenterAgain",
+       "at": [
+        3313,
+        2770,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4203
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Carpenter again in the east of Sophanem once more.",
+       "s": "Talk to the Carpenter again in the east of Sophanem once more.",
+       "k": "talkToCarpenterOnceMore",
+       "at": [
+        3313,
+        2770,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4203
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 16,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoorWithSymbol",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path again until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit again and jump it; dodge the traps",
+       "k": "jumpPitWithSymbol",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Enter the east room again.",
+       "s": "Enter the east room again.",
+       "k": "enterEastRoomAgain",
+       "at": [
+        3306,
+        9199,
+        0
+       ]
+      },
+      {
+       "t": "Talk to the High Priest in the north east room of the pyramid.",
+       "s": "Talk to the High Priest in the north east room of the pyramid.",
+       "k": "talkToHighPriestInPyramid",
+       "at": [
+        3306,
+        9196,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11603
+        ]
+       }
+      },
+      {
+       "t": "Kill the possessed priest. Pray protect from magic against the priest.",
+       "s": "Kill the possessed priest. Pray protect from magic against the priest.",
+       "k": "killPriest",
+       "at": [
+        3306,
+        9196,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4210
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 17,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoorWithSymbol",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Enter the east room.",
+       "s": "Enter the east room.",
+       "k": "enterEastRoom",
+       "at": [
+        3306,
+        9199,
+        0
+       ]
+      },
+      {
+       "t": "Use the unholy symbol on a sarcophagus.",
+       "s": "Use the unholy symbol on a sarcophagus.",
+       "k": "useSymbolOnSarcopagus",
+       "at": [
+        3312,
+        9197,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6505
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 18,
+     "do": [
+      {
+       "t": "Leave the east room.",
+       "s": "Leave the east room.",
+       "k": "leaveEastRoom",
+       "at": [
+        3306,
+        9199,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 19,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoorWithSymbol",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path again until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit again and jump it; dodge the traps",
+       "k": "jumpPitWithSymbol",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Enter the east room again.",
+       "s": "Enter the east room again.",
+       "k": "enterEastRoomAgain",
+       "at": [
+        3306,
+        9199,
+        0
+       ]
+      },
+      {
+       "t": "Talk to the High Priest in the north east room of the pyramid.",
+       "s": "Talk to the High Priest in the north east room of the pyramid.",
+       "k": "talkToHighPriestInPyramid",
+       "at": [
+        3306,
+        9196,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11603
+        ]
+       }
+      },
+      {
+       "t": "Kill the possessed priest. Pray protect from magic against the priest.",
+       "s": "Kill the possessed priest. Pray protect from magic against the priest.",
+       "k": "killPriest",
+       "at": [
+        3306,
+        9196,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4210
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoorWithSymbol",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path again until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit again and jump it; dodge the traps",
+       "k": "jumpPitWithSymbol",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Enter the east room again.",
+       "s": "Enter the east room again.",
+       "k": "enterEastRoomAgain",
+       "at": [
+        3306,
+        9199,
+        0
+       ]
+      },
+      {
+       "t": "Talk to the High Priest in the north east room of the pyramid.",
+       "s": "Talk to the High Priest in the north east room of the pyramid.",
+       "k": "talkToHighPriestInPyramid",
+       "at": [
+        3306,
+        9196,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11603
+        ]
+       }
+      },
+      {
+       "t": "Kill the possessed priest. Pray protect from magic against the priest.",
+       "s": "Kill the possessed priest. Pray protect from magic against the priest.",
+       "k": "killPriest",
+       "at": [
+        3306,
+        9196,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4210
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 21,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoorWithSymbol",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path again until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit again and jump it; dodge the traps",
+       "k": "jumpPitWithSymbol",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Enter the east room again.",
+       "s": "Enter the east room again.",
+       "k": "enterEastRoomAgain",
+       "at": [
+        3306,
+        9199,
+        0
+       ]
+      },
+      {
+       "t": "Talk to the High Priest in the north east room of the pyramid.",
+       "s": "Talk to the High Priest in the north east room of the pyramid.",
+       "k": "talkToHighPriestInPyramid",
+       "at": [
+        3306,
+        9196,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11603
+        ]
+       }
+      },
+      {
+       "t": "Kill the possessed priest. Pray protect from magic against the priest.",
+       "s": "Kill the possessed priest. Pray protect from magic against the priest.",
+       "k": "killPriest",
+       "at": [
+        3306,
+        9196,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4210
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 22,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoorWithSymbol",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path again until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit again and jump it; dodge the traps",
+       "k": "jumpPitWithSymbol",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Enter the east room again.",
+       "s": "Enter the east room again.",
+       "k": "enterEastRoomAgain",
+       "at": [
+        3306,
+        9199,
+        0
+       ]
+      },
+      {
+       "t": "Talk to the High Priest in the north east room of the pyramid.",
+       "s": "Talk to the High Priest in the north east room of the pyramid.",
+       "k": "talkToHighPriestInPyramid",
+       "at": [
+        3306,
+        9196,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11603
+        ]
+       }
+      },
+      {
+       "t": "Kill the possessed priest. Pray protect from magic against the priest.",
+       "s": "Kill the possessed priest. Pray protect from magic against the priest.",
+       "k": "killPriest",
+       "at": [
+        3306,
+        9196,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4210
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 23,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Enter the pyramid in the south of Sophanem.",
+       "s": "Enter the pyramid in the south of Sophanem.",
+       "k": "openPyramidDoorWithSymbol",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Follow the path again until you reach a pit, and jump it. Move using the minimap to avoid all the traps.",
+       "s": "Follow the path to the pit again and jump it; dodge the traps",
+       "k": "jumpPitWithSymbol",
+       "at": [
+        3292,
+        9194,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6632
+        ]
+       }
+      },
+      {
+       "t": "Enter the east room again.",
+       "s": "Enter the east room again.",
+       "k": "enterEastRoomAgain",
+       "at": [
+        3306,
+        9199,
+        0
+       ]
+      },
+      {
+       "t": "Talk to the High Priest in the north east room of the pyramid.",
+       "s": "Talk to the High Priest in the north east room of the pyramid.",
+       "k": "talkToHighPriestInPyramid",
+       "at": [
+        3306,
+        9196,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11603
+        ]
+       }
+      },
+      {
+       "t": "Kill the possessed priest. Pray protect from magic against the priest.",
+       "s": "Kill the possessed priest. Pray protect from magic against the priest.",
+       "k": "killPriest",
+       "at": [
+        3306,
+        9196,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4210
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 24,
+     "do": [
+      {
+       "t": "Open the door of the pyramid in the south of Sophanem to watch a cutscene.",
+       "s": "Open the pyramid door in south Sophanem; watch the cutscene",
+       "k": "enterPyramidAtEnd",
+       "at": [
+        3295,
+        2779,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6614
+        ]
+       }
+      },
+      {
+       "t": "Leave the pyramid and witness a cutscene at the exit.",
+       "s": "Leave the pyramid and witness a cutscene at the exit.",
+       "k": "leavePyramidToFinish",
+       "at": [
+        3277,
+        9172,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6645
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "s": "Enter the rock west of the Agility Pyramid to re-enter Sophanem.",
+       "k": "enterRock",
+       "at": [
+        3324,
+        2858,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6621
+        ]
+       }
+      },
+      {
+       "t": "Return to the High Priest in the south west of Sophanem to finish the quest.",
+       "s": "Return to the High Priest in south-west Sophanem to finish",
+       "k": "talkToHighPriestToFinish",
+       "at": [
+        3281,
+        2772,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4206
+        ]
+       }
+      },
+      {
+       "t": "Leave the pyramid and witness a cutscene at the exit.",
+       "s": "Leave the pyramid and witness a cutscene at the exit.",
+       "k": "leavePyramidToFinish",
+       "at": [
+        3277,
+        9172,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6645
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

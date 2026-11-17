@@ -8144,5 +8144,263 @@
         "questName": "Getting Ahead"
       }
     }
+  },
+  {
+    "id": "S9-23",
+    "stage": 9,
+    "type": "quest",
+    "title": "Alfred Grimhand's Barcrawl",
+    "qp": 0,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Alfred_Grimhand's_Barcrawl",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Alfred_Grimhand's_Barcrawl/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2544,3569,0",
+    "mapLocation": {
+      "x": 2544,
+      "y": 3569,
+      "plane": 0,
+      "label": "The entrance of the Barbarian Agility Training Course"
+    },
+    "npc": {
+      "nameEn": "barbarian guard",
+      "location": "The entrance of the Barbarian Agility Training Course",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/barbarian_guard"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Coins",
+        "amount": 208,
+        "howToGet": "Carried coins: 208 gp buys every drink on the card.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      }
+    ],
+    "reward": "0 QP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "barbarian guard"
+      ],
+      "dialogChoices": [
+        "I want to come through this gate",
+        "Looks can be deceiving, I am in face a barbarian",
+        "I'm doing Alfred Grimhand's Barcrawl.",
+        "Looks can be deceiving, I am in fact a barbarian."
+      ],
+      "highlightItems": [
+        "Coins"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Alfred Grimhand's Barcrawl"
+      }
+    }
+  },
+  {
+    "id": "S9-24",
+    "stage": 9,
+    "type": "quest",
+    "title": "Scorpion Catcher",
+    "qp": 1,
+    "requires": [
+      "S9-23"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Scorpion_Catcher",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Scorpion_Catcher/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2701,3405,0",
+    "mapLocation": {
+      "x": 2701,
+      "y": 3405,
+      "plane": 0,
+      "label": "The top floor of the Sorcerer's Tower, south-east of the Ranging Guild"
+    },
+    "npc": {
+      "nameEn": "Thormac",
+      "location": "The top floor of the Sorcerer's Tower, south-east of the Ranging Guild",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Thormac"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Dusty key",
+        "amount": 1,
+        "howToGet": "Velrak the explorer gives it after you free him with the jail key.",
+        "wikiItemId": 1590,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Dusty_key.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "wikiItemId": 379,
+        "heals": 12,
+        "anyOf": [
+          "Swordfish",
+          "Tuna",
+          "Salmon"
+        ],
+        "howToGet": "Your own catch, or buy on the Grand Exchange. For the Jailer (level 47).",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Jailer"
+    ],
+    "reward": "1 QP, 6,625 Strength XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Thormac"
+      ],
+      "dialogChoices": [
+        "What do you need assistance with?",
+        "So how would I go about catching them then?",
+        "Ok, I will do it then",
+        "Your friend Thormac sent me to speak to you."
+      ],
+      "highlightItems": [
+        "Dusty key"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Scorpion Catcher"
+      }
+    }
+  },
+  {
+    "id": "S9-25",
+    "stage": 9,
+    "type": "quest",
+    "title": "Icthlarin's Little Helper",
+    "qp": 2,
+    "requires": [
+      "S7-12"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Icthlarin's_Little_Helper",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Icthlarin's_Little_Helper/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3315,2849,0",
+    "mapLocation": {
+      "x": 3315,
+      "y": 2849,
+      "plane": 0,
+      "label": "The camp west of the Agility Pyramid"
+    },
+    "npc": {
+      "nameEn": "wanderer",
+      "location": "The camp west of the Agility Pyramid",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/wanderer"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Pet kitten",
+        "amount": 1,
+        "howToGet": "The kitten from Gertrude's Cat; a grown cat works too.",
+        "wikiItemId": 1558,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pet_kitten_(black).png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from any general store.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Willow logs",
+        "amount": 1,
+        "howToGet": "Cut a willow tree, or buy on the Grand Exchange.",
+        "wikiItemId": 1519,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Willow_logs.png"
+      },
+      {
+        "nameEn": "Bag of salt",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or make it in the quest from a bucket of salt water on the suntrap.",
+        "wikiItemId": 4161,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bag_of_salt.png"
+      },
+      {
+        "nameEn": "Bucket of sap",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or use a knife on an evergreen tree with a bucket.",
+        "wikiItemId": 4687,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_sap.png"
+      },
+      {
+        "nameEn": "Waterskin(4)",
+        "amount": 1,
+        "howToGet": "Buy from the Shantay Pass shop, or on the Grand Exchange.",
+        "wikiItemId": 1823,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Waterskin(4).png"
+      },
+      {
+        "nameEn": "Linen",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Raetul in Sophanem for 30 coins.",
+        "wikiItemId": 4684,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Linen_(Icthlarin's_Little_Helper).png"
+      },
+      {
+        "nameEn": "Shantay pass",
+        "amount": 1,
+        "howToGet": "Buy from Shantay at the Shantay Pass for 5 gp, or on the Grand Exchange.",
+        "wikiItemId": 1854,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shantay_pass_(item).png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "wikiItemId": 379,
+        "heals": 12,
+        "anyOf": [
+          "Swordfish",
+          "Tuna",
+          "Salmon"
+        ],
+        "howToGet": "Your own catch, or buy on the Grand Exchange. For the Possessed Priest (level 91) and the Apparition.",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Possessed Priest",
+      "Apparition"
+    ],
+    "reward": "2 QP, 4,500 Thieving XP, 4,000 Agility XP, 4,000 Woodcutting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "wanderer"
+      ],
+      "dialogChoices": [
+        "Why? What's your problem with it?",
+        "Ok I'll get your supplies.",
+        "Yes. I have them all here.",
+        "I need help.",
+        "Okay, that sounds fair.",
+        ".",
+        "Totally positive.",
+        "Sure, no problem."
+      ],
+      "highlightItems": [
+        "Pet kitten",
+        "Tinderbox",
+        "Willow logs",
+        "Bag of salt",
+        "Bucket of sap",
+        "Waterskin(4)",
+        "Linen",
+        "Shantay pass"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Icthlarin's Little Helper"
+      }
+    }
   }
 ]

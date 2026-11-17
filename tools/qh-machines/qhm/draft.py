@@ -42,7 +42,7 @@ def registered(title):
 def lay_out(cls):
     """The quest's main class and package, where the generators read them (as fetch_qh.py does for the route)."""
     hits = [os.path.join(root, f) for root, _, files in os.walk(os.path.join(REPO, 'src', 'main', 'java'))
-            for f in files if f == cls + '.java' and '/helpers/quests/' in root.replace('\\', '/')]
+            for f in files if f == cls + '.java' and any(d in root.replace('\\', '/') for d in ('/helpers/quests/', '/helpers/miniquests/'))]
     if len(hits) != 1:
         sys.exit('class %s found %d time(s)' % (cls, len(hits)))
     pkg = os.path.dirname(hits[0])

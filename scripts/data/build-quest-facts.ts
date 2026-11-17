@@ -6,7 +6,8 @@ import { deriveQuests } from '../../src/data/quests.ts';
 import type { Step } from '../../src/types/index.ts';
 
 const steps = JSON.parse(readFileSync(new URL('../../src/data/authored/steps.json', import.meta.url), 'utf8')) as Step[];
-const quests = deriveQuests(steps).filter(q => q.qp > 0);
+// A step with an explicit "qp": 0 is a miniquest (Alfred Grimhand's Barcrawl); parts without qp belong to their quest.
+const quests = deriveQuests(steps).filter(q => q.qp > 0 || steps.find(s => s.id === q.stepId)?.qp === 0);
 const items = [];
 const retrievedAt = new Date().toISOString();
 for (const quest of quests) {

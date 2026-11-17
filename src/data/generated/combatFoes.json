@@ -1289,6 +1289,158 @@
       "aggressive": true
     },
     {
+      "name": "Jailer",
+      "combat": 47,
+      "members": true,
+      "hitpoints": 47,
+      "attackLevel": 40,
+      "strengthLevel": 40,
+      "defenceLevel": 40,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 79,
+        "slash": 63,
+        "crush": 47,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 5,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Possessed Priest",
+      "combat": 91,
+      "members": true,
+      "hitpoints": 90,
+      "attackLevel": 90,
+      "strengthLevel": 90,
+      "defenceLevel": 40,
+      "magicLevel": 60,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 90,
+        "slash": 0,
+        "crush": 90,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 6,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Apparition",
+      "version": "Het",
+      "combat": 81,
+      "members": true,
+      "hitpoints": 75,
+      "attackLevel": 80,
+      "strengthLevel": 83,
+      "defenceLevel": 40,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 9,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "air",
+        "percent": 40
+      }
+    },
+    {
+      "name": "Apparition",
+      "version": "Apmeken",
+      "combat": 75,
+      "members": true,
+      "hitpoints": 70,
+      "attackLevel": 30,
+      "strengthLevel": 40,
+      "defenceLevel": 40,
+      "magicLevel": 85,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 65,
+        "slash": 65,
+        "crush": 65,
+        "magic": 50,
+        "ranged": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 6,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "air",
+        "percent": 40
+      }
+    },
+    {
+      "name": "Apparition",
+      "version": "Scabaras",
+      "combat": 75,
+      "members": true,
+      "hitpoints": 50,
+      "attackLevel": 70,
+      "strengthLevel": 70,
+      "defenceLevel": 40,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 30,
+        "slash": 30,
+        "crush": 30,
+        "magic": 0,
+        "ranged": 70
+      },
+      "attackStyle": "slash",
+      "maxHit": 8,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "air",
+        "percent": 40
+      }
+    },
+    {
+      "name": "Apparition",
+      "version": "Crondis",
+      "combat": 75,
+      "members": true,
+      "hitpoints": 60,
+      "attackLevel": 80,
+      "strengthLevel": 70,
+      "defenceLevel": 40,
+      "magicLevel": 40,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 15,
+        "slash": 15,
+        "crush": 15,
+        "magic": 70,
+        "ranged": 70
+      },
+      "attackStyle": "magic",
+      "maxHit": 6,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "air",
+        "percent": 40
+      }
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

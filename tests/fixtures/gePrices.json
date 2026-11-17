@@ -2868,6 +2868,18 @@
   "Iron nails": {
    "buy": 6,
    "sell": 2
+  },
+  "Bag of salt": {
+   "buy": 34,
+   "sell": 33
+  },
+  "Bucket of sap": {
+   "buy": 149,
+   "sell": 129
+  },
+  "Linen": {
+   "buy": 12,
+   "sell": 10
   }
  }
 }

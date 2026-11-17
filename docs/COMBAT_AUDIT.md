@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-44 stages: 16 retained, 27 revised, 0 with a branch, 1 deferred.
+46 stages: 18 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -52,6 +52,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-20 The Lost Tribe | not-combat | no | - | none | - | - | Retain |
 | S9-21 Mountain Daughter | quest-fight | yes | The Kendal (70) | melee | The Kendal | Lobster 10 | Retain |
 | S9-22 Getting Ahead | quest-fight | yes | Headless Beast (82) | melee | Headless Beast | Lobster 10 | Retain |
+| S9-24 Scorpion Catcher | quest-fight | yes | Jailer (47), Black demon (172), Poison spider (64) | melee | Jailer | Lobster 10 | Retain |
+| S9-25 Icthlarin's Little Helper | quest-fight | yes | Possessed Priest (91), Apparition (81) | melee | Possessed Priest, Apparition | Lobster 10 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1087,4 +1089,46 @@ Changed:
 Evidence:
 
 - OSRS Wiki Headless Beast infobox: level 82, 100 hitpoints, max hit 10, slash, read 2026-11-17.
+
+## S9-24 Scorpion Catcher
+
+**Retain.** Scorpion Catcher: kill the Jailer (level 47, 47 hitpoints, hits up to 5) in the Black Knights' Base for the jail key; the black demons (level 172) and poison spiders (level 64) of Taverley Dungeon are walked past.
+
+Assumptions:
+
+- 10 lobsters cover the Jailer at the route's Members combat levels. The black demons and poison spiders are walked past, not step threats: threats are planned as fights, and a level 172 demon is not one to plan.
+
+Alternatives:
+
+- The Legends Guild sells the dusty key, which skips the Jailer.
+
+Changed:
+
+- 2.132.0: new quest; the Jailer, black demon and poison spider are in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Scorpion Catcher requirements and Jailer infobox (level 47, max hit 5), read 2026-11-17.
+
+## S9-25 Icthlarin's Little Helper
+
+**Retain.** Icthlarin's Little Helper: kill the Possessed Priest (level 91, 90 hitpoints, hits up to 6 with magic) and one Apparition guardian (level 75 to 81, hits up to 9).
+
+Quest stage lines: 1.0, 3.2, 5.4.
+
+Assumptions:
+
+- 10 lobsters cover a hit of 9 at most; the guardian is chosen by the player's stats, so the strongest (Het, level 81) is planned.
+
+Alternatives:
+
+- The guardians can be safespotted on the central table.
+
+Changed:
+
+- 2.132.0: new quest; the Possessed Priest and the Apparitions are in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Icthlarin's Little Helper kills: Possessed Priest level 91, Apparitions 75 to 81, read 2026-11-17.
 

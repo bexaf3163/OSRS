@@ -1018,6 +1018,27 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Attack_potion"
   },
   {
+    "id": 4161,
+    "nameEn": "Bag of salt",
+    "examine": "A bag of salt.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bag_of_salt.png",
+    "value": 10,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "buyLocations": [
+      {
+        "shopName": "Slayer Equipment (shop)",
+        "location": "Mount Karuulm",
+        "owner": "Konar quo Maten",
+        "price": 10,
+        "stock": 5000,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bag_of_salt"
+  },
+  {
     "id": 1759,
     "nameEn": "Ball of wool",
     "examine": "Spun from wool.",
@@ -3057,6 +3078,27 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Bucket_of_sand"
+  },
+  {
+    "id": 4687,
+    "nameEn": "Bucket of sap",
+    "examine": "It's a bucket of sap.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_sap.png",
+    "value": 30,
+    "highAlch": 18,
+    "lowAlch": 12,
+    "buyLocations": [
+      {
+        "shopName": "The Spice Is Right.",
+        "location": "Sophanem",
+        "owner": "Embalmer",
+        "price": 45,
+        "stock": 0,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bucket_of_sap"
   },
   {
     "id": 1929,
@@ -5110,6 +5152,35 @@
       "Nature Grotto (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Druid_pouch"
+  },
+  {
+    "id": 1590,
+    "nameEn": "Dusty key",
+    "examine": "Never let your home get like this (Provides access to the deeper parts of Taverley Dungeon).",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Dusty_key.png",
+    "value": 1,
+    "buyLocations": [
+      {
+        "shopName": "Velrak the explorer",
+        "location": "",
+        "price": 0,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Legends Guild Shop of Useful Items.",
+        "location": "2nd floor of Legends' Guild (west side)",
+        "owner": "Siegfried Erkle",
+        "price": 1,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Taverley Dungeon - Lava eel fishing spot (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Dusty_key"
   },
   {
     "id": 2126,
@@ -8616,6 +8687,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Leather_gloves"
   },
   {
+    "id": 4684,
+    "nameEn": "Linen",
+    "examine": "One sheet of mummy wrap.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Linen_(Icthlarin's_Little_Helper).png",
+    "value": 30,
+    "highAlch": 18,
+    "lowAlch": 12,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Linen_(Icthlarin's_Little_Helper)"
+  },
+  {
     "id": 379,
     "nameEn": "Lobster",
     "examine": "This looks tricky to eat.",
@@ -10585,6 +10667,15 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Pestle_and_mortar"
+  },
+  {
+    "id": 1558,
+    "nameEn": "Pet kitten",
+    "examine": "This kitten seems to like you.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Pet_kitten_(black).png",
+    "value": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Kitten"
   },
   {
     "id": 4621,

@@ -5,7 +5,9 @@ import type { QuestFact } from '../../src/domain/planning/catalogue.ts';
 /** Factual fields only. Guide length is not a measured duration; lamps never become assigned XP. */
 export function questFacts(article: WikiArticle, stepIds: string[], retrievedAt: string) {
   const details = templates(article.wikitext, 'Quest details')[0];
-  const reward = templates(article.wikitext, 'Quest rewards')[0];
+  // Miniquests (Alfred Grimhand's Barcrawl) have no rewards box and give no quest points.
+  const reward = templates(article.wikitext, 'Quest rewards')[0]
+    ?? (templates(article.wikitext, 'Infobox Miniquest').length ? { qp: '0' } : undefined);
   if (!details || !reward || !Number.isInteger(num(reward.qp))) throw new Error(`${article.title}: missing quest facts`);
   // Editor comments (<!-- ... -->) are notes to Wiki editors, not requirements.
   const requirements = (details.requirements ?? '').replace(/<!--[\s\S]*?-->/g, '');
@@ -13,6 +15,8 @@ export function questFacts(article: WikiArticle, stepIds: string[], retrievedAt:
   let questPoints = 0;
   for (const t of templates(requirements, 'SCP')) {
     const skill = t['1']?.toLowerCase(), min = num(t['2']);
+    // "{{SCP|Quest}} [[Gertrude's Cat]]" is only the quest icon before a quest name.
+    if (skill === 'quest' && t['2'] === undefined) continue;
     if (!skill || !Number.isInteger(min) || min < 1) throw new Error(`${article.title}: unparsed skill requirement`);
     if (skill === 'quest') questPoints = Math.max(questPoints, min);
     else skills[skill] = Math.max(skills[skill] ?? 0, min);
@@ -41,7 +45,9 @@ export function questFacts(article: WikiArticle, stepIds: string[], retrievedAt:
   const consumed = new Set<number>();
   const listed = lines.flatMap((line, i) => {
     // A partial start (Creature of Fenkenstrain's Restless Ghost) is kept as the whole quest: stricter, and its keepsakes count.
-    if (/^\*\s*(?:Partial c|C)ompletion of \[\[[^\]]+\]\]\.?\s*$/i.test(line)) return consumed.add(i), firstLink(line);
+    // The quest icon ({{SCP|Quest}}) and the start marker ({{Questreqstart|..}}) around the link add nothing.
+    const bare = line.replace(/\{\{(?:SCP\|Quest|Questreqstart\|[^{}]*)\}\}/gi, '').replace(/ +/g, ' ');
+    if (/^\*\s*(?:Partial c|C)ompletion of \[\[[^\]]+\]\]\.?\s*$/i.test(bare)) return consumed.add(i), firstLink(bare);
     if (/^\*\s*Completion of the following quests?:?\s*$/i.test(line)) return consumed.add(i), [];
     const head = lines.slice(0, i).reverse().find(l => /^\*(?!\*)/.test(l)) ?? '';
     if (!/^\*\*+\s*\[\[[^\]]+\]\]\s*$/.test(line) || !/Completion of the following quests?/i.test(head)) return [];
@@ -207,6 +213,20 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
   'Getting Ahead': { revision: 15367125, flow: {
     consumes: [{ name: 'Bear fur', count: 1 }], receives: [], unknownItems: ['Soft clay', 'Clay head', 'Fur head', 'Bloody head'], partialDelivery: true, fromStartOnly: true,
   } },
+  // Each of the ten drinks is paid for at the bar; the card stays a quest item.
+  "Alfred Grimhand's Barcrawl": { revision: 15366023, flow: {
+    consumes: [{ name: 'Coins', count: 208 }], receives: [], unknownItems: ['Barcrawl card'], partialDelivery: true, fromStartOnly: true,
+  } },
+  // Thormac lends the cage; the jail key opens Velrak's cell and Velrak's dusty key is kept.
+  'Scorpion Catcher': { revision: 15363122, flow: {
+    consumes: [], receives: [], unknownItems: ['Scorpion cage', 'Jail key'], partialDelivery: false, fromStartOnly: true,
+  } },
+  // The logs, salt, sap, linen and a waterskin go into the embalming and the guardian; the gate keeps the pass; the kitten stays yours.
+  "Icthlarin's Little Helper": { revision: 15401645, flow: {
+    consumes: [{ name: 'Willow logs', count: 1 }, { name: 'Bag of salt', count: 1 }, { name: 'Bucket of sap', count: 1 }, { name: 'Linen', count: 1 },
+      { name: 'Waterskin(4)', count: 1 }, { name: 'Shantay pass', count: 1 }], receives: [],
+    unknownItems: ['Holy symbol', 'Canopic jar', 'Crondis canopic jar', 'Het canopic jar', 'Apmeken canopic jar', 'Scabaras canopic jar'], partialDelivery: true, fromStartOnly: true,
+  } },
   // The runes are cast at the Strange Device and the rope tied on the way; darts and food are spent in fights.
   'Tale of the Righteous': { revision: 15402882, flow: {
     consumes: [{ name: 'Air rune', count: 6 }, { name: 'Mind rune', count: 3 }, { name: 'Rope', count: 1 }], receives: [],
@@ -248,6 +268,10 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to defeat level 44, 63 and 137 enemies (all can be [[safespot]]ted)',
   // The Tourist Trap: the level 47 Mercenary Captain (step foes, combat ledger).
   'The ability to defeat a level 47 enemy',
+  // Scorpion Catcher: the demons and spiders of Taverley Dungeon are walked past (step threats).
+  'The ability to run past level 172 [[black demon]]s and level 64 [[poison spider]]s',
+  // Icthlarin's Little Helper: the Possessed Priest (step foes, combat ledger).
+  'The ability to defeat a level 91 monster.',
   // Mountain Daughter: the note sits under Agility 20, which covers it; the Kendal is in the step foes and combat ledger.
   '<ref>Entering the Mountain Camp initially requires 10 Agility.</ref>',
   'The ability to defeat a level 70 [[The Kendal|monster]] (can be [[safespot|safespotted]])',
