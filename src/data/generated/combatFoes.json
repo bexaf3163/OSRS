@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/data/build-combat-foes.ts)",
-  "generatedAt": "2026-11-16",
+  "generatedAt": "2026-11-17",
   "foes": [
     {
       "name": "Count Draynor",
@@ -1090,6 +1090,114 @@
       "weakness": {
         "element": "earth",
         "percent": 50
+      }
+    },
+    {
+      "name": "Wolf",
+      "version": "Level 11",
+      "combat": 11,
+      "members": false,
+      "hitpoints": 10,
+      "attackLevel": 10,
+      "strengthLevel": 10,
+      "defenceLevel": 10,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": false,
+      "weakness": {
+        "element": "fire",
+        "percent": 25
+      }
+    },
+    {
+      "name": "Wolf",
+      "version": "Level 14",
+      "combat": 14,
+      "members": false,
+      "hitpoints": 15,
+      "attackLevel": 10,
+      "strengthLevel": 15,
+      "defenceLevel": 10,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": false,
+      "weakness": {
+        "element": "fire",
+        "percent": 25
+      }
+    },
+    {
+      "name": "Wolf",
+      "version": "Level 25",
+      "combat": 25,
+      "members": true,
+      "hitpoints": 34,
+      "attackLevel": 20,
+      "strengthLevel": 16,
+      "defenceLevel": 22,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 25
+      }
+    },
+    {
+      "name": "Wolf",
+      "version": "Level 64",
+      "combat": 64,
+      "members": true,
+      "hitpoints": 69,
+      "attackLevel": 50,
+      "strengthLevel": 55,
+      "defenceLevel": 52,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 6,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 25
       }
     },
     {

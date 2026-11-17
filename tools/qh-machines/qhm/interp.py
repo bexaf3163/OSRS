@@ -385,6 +385,10 @@ class Interp:
             return self.make_npc(args)
         if typ == 'ObjectCondition':
             return self.make_obj(args)
+        if typ == 'NpcHintArrowRequirement':
+            # shortcut: the place argument (a tile or zone) is dropped; the game shows one hint arrow at a time.
+            ids = [a for a in flat(args) if isinstance(a, int) and not isinstance(a, bool)]
+            return req('hint', ids=ids) if ids else req('?', d=typ)
         if typ == 'InInstanceRequirement':
             # shortcut: true; the zone beside it already places the player (plugin positions are instance-mapped). Replace if a quest uses it alone.
             return req('true')
@@ -840,7 +844,9 @@ class Interp:
 
     def step_call(self, st, name, args):
         if name == 'addStep':
-            return self.add_step(st, args)
+            # fluent: new ConditionalStep(...).addStep(a, x).addStep(b, y)
+            self.add_step(st, args)
+            return st
         if name == 'setLockingCondition' and args and isinstance(args[0], Req):
             st.lock = args[0]
             return None

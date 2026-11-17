@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-38 stages: 10 retained, 27 revised, 0 with a branch, 1 deferred.
+39 stages: 11 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -46,6 +46,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-08 Death Plateau | not-combat | yes | - | none | - | Trout 10 | Retain |
 | S9-09 The Depths of Despair | quest-fight | yes | Sand Snake (36) | melee | Sand Snake | Trout 3 | Retain |
 | S9-11 Elemental Workshop I | quest-fight | yes | Earth elemental (35) | melee | Earth elemental | Trout 3 | Retain |
+| S9-12 Big Chompy Bird Hunting | quest-fight | yes | Chompy bird (6), Wolf (64), Ogre (53) | other | Wolf, Ogre | Trout 5 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -952,4 +953,27 @@ Changed:
 Evidence:
 
 - OSRS Wiki Earth elemental infobox: level 35, 35 hitpoints, max hit 4, crush, read 2026-11-16.
+
+## S9-12 Big Chompy Bird Hunting
+
+**Retain.** Big Chompy Bird Hunting: the chompy bird (level 6) is shot with the ogre bow and ogre arrows made in the quest; it does not fight back. The level 64 wolves and level 53 ogres of Feldip Hills are walked past, not fought; the wolf bones are bought.
+
+Quest stage lines: 3.4.
+
+Assumptions:
+
+- Only the ogre bow and ogre arrows hurt a chompy, so no other kit or food is planned for it.
+- Wolves and ogres are threats on the way, not objectives.
+
+Alternatives:
+
+- Killing the wolves for the 4 wolf bones (wiki: optional).
+
+Changed:
+
+- 2.129.0: new quest; Wolf level 64 and Ogre level 53 are in combatFoes.json; the chompy has no attack data.
+
+Evidence:
+
+- OSRS Wiki Big Chompy Bird Hunting requirements: the ability to defend against level 64 wolves and level 53 ogres, read 2026-11-16.
 

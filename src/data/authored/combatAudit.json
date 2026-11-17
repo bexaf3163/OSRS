@@ -1334,6 +1334,51 @@
       "evidence": [
         "OSRS Wiki Earth elemental infobox: level 35, 35 hitpoints, max hit 4, crush, read 2026-11-16."
       ]
+    },
+    {
+      "stepId": "S9-12",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "other",
+      "objective": "Big Chompy Bird Hunting: the chompy bird (level 6) is shot with the ogre bow and ogre arrows made in the quest; it does not fight back. The level 64 wolves and level 53 ogres of Feldip Hills are walked past, not fought; the wolf bones are bought.",
+      "enemies": [
+        {
+          "name": "Chompy bird",
+          "level": 6,
+          "maxHit": 0,
+          "table": false
+        },
+        {
+          "name": "Wolf",
+          "level": 64,
+          "maxHit": 6,
+          "table": true
+        },
+        {
+          "name": "Ogre",
+          "level": 53,
+          "maxHit": 7,
+          "table": true
+        }
+      ],
+      "lines": [
+        "3.4"
+      ],
+      "assumptions": [
+        "Only the ogre bow and ogre arrows hurt a chompy, so no other kit or food is planned for it.",
+        "Wolves and ogres are threats on the way, not objectives."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Killing the wolves for the 4 wolf bones (wiki: optional)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.129.0: new quest; Wolf level 64 and Ogre level 53 are in combatFoes.json; the chompy has no attack data."
+      ],
+      "evidence": [
+        "OSRS Wiki Big Chompy Bird Hunting requirements: the ability to defend against level 64 wolves and level 53 ogres, read 2026-11-16."
+      ]
     }
   ]
 }

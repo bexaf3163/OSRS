@@ -94,12 +94,12 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
   'Sheep Shearer': { revision: 15367050, flow: {
     consumes: [{ name: 'Ball of wool', count: 20 }], receives: [], acquisitionTools: ['Shears'], partialDelivery: true,
   } },
-  'Rune Mysteries': { revision: 15390926, flow: {
+  'Rune Mysteries': { revision: 15403897, flow: {
     // The newly given talisman is handed over and returned: one net new talisman, never a purchase of the player's old one.
     consumes: [], receives: [{ name: 'Air talisman', count: 1, when: 'complete' }],
     unknownItems: ['Research package', 'Notes'], partialDelivery: false, fromStartOnly: true,
   } },
-  'Romeo & Juliet': { revision: 15390733, flow: {
+  'Romeo & Juliet': { revision: 15403888, flow: {
     consumes: [{ name: 'Cadava berries', count: 1 }], receives: [],
     unknownItems: ['Message', 'Cadava potion'], partialDelivery: false, fromStartOnly: true,
   } },
@@ -155,6 +155,34 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     receives: [{ name: 'Elemental shield', count: 1, when: 'complete' }],
     unknownItems: ['Battered book', 'Battered key', 'Stone bowl', 'Elemental ore', 'Elemental metal'], partialDelivery: false, fromStartOnly: true,
   } },
+  // Feathers and wolf bones become the ogre arrows Rantz keeps; the bow, bellows, toads and chompy are quest items.
+  'Big Chompy Bird Hunting': { revision: 15367289, flow: {
+    consumes: [{ name: 'Feather', count: 100 }, { name: 'Wolf bones', count: 4 }], receives: [],
+    unknownItems: ['Achey tree logs', 'Ogre arrow shaft', 'Ogre arrow', 'Ogre bellows', 'Bloated toad', 'Ogre bow', 'Raw chompy', 'Seasoned chompy'],
+    partialDelivery: true, fromStartOnly: true,
+  } },
+  // The beer, the berries and vial (the dye), the lens, the earth runes and the sand are all handed over or used up.
+  'The Hand in the Sand': { revision: 15355846, flow: {
+    consumes: [{ name: 'Beer', count: 1 }, { name: 'Vial', count: 1 }, { name: 'Redberries', count: 1 }, { name: 'White berries', count: 1 },
+      { name: 'Lantern lens', count: 1 }, { name: 'Earth rune', count: 5 }, { name: 'Bucket of sand', count: 1 }],
+    receives: [], unknownItems: ['Rota', 'Sand', "Wizard's head", 'Truth serum', 'Magical orb', 'Pink dye', 'Rose-tinted lens', "Sandy's rota"],
+    partialDelivery: true, fromStartOnly: true,
+  } },
+  // Everything but the tinderbox goes into the balloon, its sandbags and the flight (logs burn on the way).
+  'Enlightened Journey': { revision: 15375125, flow: {
+    consumes: [{ name: 'Papyrus', count: 3 }, { name: 'Ball of wool', count: 1 }, { name: 'Potatoes(10)', count: 1 }, { name: 'Empty sack', count: 8 },
+      { name: 'Candle', count: 1 }, { name: 'Yellow dye', count: 1 }, { name: 'Red dye', count: 1 }, { name: 'Silk', count: 10 },
+      { name: 'Bowl', count: 1 }, { name: 'Logs', count: 10 }, { name: 'Willow branch', count: 12 }],
+    receives: [], unknownItems: ['Balloon structure', 'Origami balloon', 'Sandbag'], partialDelivery: true, fromStartOnly: true,
+  } },
+  // Robert O'Reilly takes the stew; the poison, letter and chest contents stay quest items. The 2,000 coins come at the end.
+  'The Queen of Thieves': { revision: 15380705, flow: {
+    consumes: [{ name: 'Stew', count: 1 }], receives: [], unknownItems: ['Poison', 'Letter', "Hughes' letter"], partialDelivery: false, fromStartOnly: true,
+  } },
+  // Nothing is brought or used up; the 2,000 coins are paid at the end.
+  'The Ascent of Arceuus': { revision: 15366179, flow: {
+    consumes: [], receives: [], unknownItems: ['Device'], partialDelivery: false, fromStartOnly: true,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],
@@ -176,6 +204,8 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to defeat a level 195 [[Jungle Demon]]',
   'The ability to defeat 4 monsters from level 19 to 53 without a break.',
   'Ability to kill a level 36 [[Sand Snake]]',
+  // Feldip Hills: the route passes the wolves and ogres without fighting them (step threats, combat ledger S9-12).
+  'The ability to defend against level 64 [[wolves]] and level 53 [[ogre]]s',
   // The note only says another player may mine the rock; Mining 20 stays required.
   '{{Refn|This requirement can be bypassed if another player mines the rock.|group=t}}',
   'The ability to run past two level 14 thieves, and one level 26.',

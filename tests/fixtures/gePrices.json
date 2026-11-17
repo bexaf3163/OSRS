@@ -1,5 +1,5 @@
 {
- "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16",
+ "source": "OSRS Wiki real-time prices API /latest (high = buy, low = sell), F2P route items and gear, read 2026-11-10; Members route items added 2026-11-14 and 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-15; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16; Members route items added 2026-11-16",
  "prices": {
   "Adamant 2h sword": {
    "buy": 3670,
@@ -2768,6 +2768,82 @@
   "Yew seed": {
    "buy": 9985,
    "sell": 9810
+  },
+  "Bowl": {
+   "buy": 16,
+   "sell": 15
+  },
+  "Bucket of sand": {
+   "buy": 8,
+   "sell": 7
+  },
+  "Candle": {
+   "buy": 267,
+   "sell": 232
+  },
+  "Empty sack": {
+   "buy": 2,
+   "sell": 2
+  },
+  "Lantern lens": {
+   "buy": 15,
+   "sell": 6
+  },
+  "Papyrus": {
+   "buy": 61,
+   "sell": 32
+  },
+  "Potatoes(10)": {
+   "buy": 1500,
+   "sell": 1108
+  },
+  "Stew": {
+   "buy": 237,
+   "sell": 196
+  },
+  "Willow branch": {
+   "buy": 1114,
+   "sell": 738
+  },
+  "Wolf bones": {
+   "buy": 499,
+   "sell": 16
+  },
+  "Karambwan vessel": {
+   "buy": 300,
+   "sell": 1
+  },
+  "Noose wand": {
+   "buy": 60,
+   "sell": 40
+  },
+  "Insect net": {
+   "buy": 20,
+   "sell": 4
+  },
+  "Bird snare": {
+   "buy": 14,
+   "sell": 4
+  },
+  "Saw": {
+   "buy": 223,
+   "sell": 100
+  },
+  "Bronze dart": {
+   "buy": 30,
+   "sell": 28
+  },
+  "Grapes": {
+   "buy": 57,
+   "sell": 56
+  },
+  "Sapphire amulet": {
+   "buy": 524,
+   "sell": 489
+  },
+  "Earth talisman": {
+   "buy": 623,
+   "sell": 615
   }
  }
 }

@@ -205,6 +205,24 @@ final class QhLiveFacts implements QhMachine.Facts
 	}
 
 	@Override
+	public Boolean hintNpc(int[] ids)
+	{
+		NPC n = client.getHintArrowNpc();
+		if (n == null)
+		{
+			return Boolean.FALSE;
+		}
+		for (int id : ids)
+		{
+			if (n.getId() == id)
+			{
+				return Boolean.TRUE;
+			}
+		}
+		return Boolean.FALSE;
+	}
+
+	@Override
 	public Boolean ground(int[] ids, int[] zone)
 	{
 		return scan(zone, t -> hasItem(t, ids));

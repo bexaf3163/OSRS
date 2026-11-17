@@ -116,6 +116,8 @@ def apply_atom(f, a, truth, rng):
         f.npcs = [n for n in f.npcs if n[0] != a['id']]
         if truth:
             f.npcs.append((a['id'], z[0] if z else 3000, z[1] if z else 3000, z[4] if z else 0))
+    elif o == 'hint':
+        f.hint = a['ids'][0] if truth else None
     elif o in ('obj', 'ground'):
         z = a.get('z')
         key = 'objs' if o == 'obj' else 'ground'
@@ -170,12 +172,12 @@ def facts_json(f):
             'bank': {str(k): v for k, v in f.bank.items()}, 'pos': list(f.pos) if f.pos else None,
             'vb': {str(k): v for k, v in f.vb.items()}, 'vp': {str(k): v for k, v in f.vp.items()},
             'events': [list(e) for e in f.events], 'widgets': {'%d:%d' % k: v for k, v in f.widgets.items()},
-            'npcs': [list(n) for n in f.npcs], 'objs': [list(n) for n in f.objs], 'ground': [list(n) for n in f.ground], 'quests': f.quests, 'skills': f.skills}
+            'npcs': [list(n) for n in f.npcs], 'objs': [list(n) for n in f.objs], 'ground': [list(n) for n in f.ground], 'hint': f.hint, 'quests': f.quests, 'skills': f.skills}
 
 
 def copy_facts(f):
     return Facts(dict(f.items), dict(f.equip), dict(f.bank), f.pos, dict(f.vb), dict(f.vp), list(f.events), dict(f.widgets), list(f.npcs),
-                 list(f.objs), dict(f.quests), dict(f.skills), list(f.ground))
+                 list(f.objs), dict(f.quests), dict(f.skills), list(f.ground), f.hint)
 
 
 def expect(m, var, f):

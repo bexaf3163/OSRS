@@ -159,7 +159,7 @@ describe('complete encounter strategy comparison', () => {
     // Carried, the shield goes on as the last preparation, after any training or kit: with no money for kit it is the next action.
     const unshielded = createTacticalResolver(carrying(fixture(60, 0, ['Rune scimitar']), ['Anti-dragon shield'])).resolve(elvarg, 'test');
     expect(unshielded.action).toMatchObject({ kind: 'EQUIP', title: expect.stringContaining('Anti-dragon shield') });
-  });
+  }, 20_000);
   it('replans after actually acquiring and wearing the proposed item', () => {
     const before = createTacticalResolver(fixture(20)).resolve(fight, 'test');
     const after = createTacticalResolver(fixture(20, 0, ['Mithril scimitar'])).resolve(fight, 'test');

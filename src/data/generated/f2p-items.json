@@ -1681,6 +1681,109 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Bones"
   },
   {
+    "id": 1923,
+    "nameEn": "Bowl",
+    "examine": "Useful for mixing things.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bowl.png",
+    "value": 4,
+    "highAlch": 2,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Karamja General Store",
+        "location": "Musa Point (Karamja)",
+        "owner": "Shop keeper",
+        "price": 4,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Rimmington General Store",
+        "location": "Rimmington",
+        "owner": "Shop keeper (Rimmington)",
+        "price": 5,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Falador General Store",
+        "location": "Falador",
+        "owner": "Shop keeper",
+        "price": 5,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Lumbridge General Store",
+        "location": "Lumbridge",
+        "owner": "Shop keeper, Shop assistant",
+        "price": 5,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Varrock General Store",
+        "location": "Varrock",
+        "owner": "Shop keeper",
+        "price": 5,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Al Kharid General Store",
+        "location": "Al Kharid",
+        "owner": "Shop keeper",
+        "price": 5,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Edgeville General Store",
+        "location": "Edgeville",
+        "owner": "Shop keeper",
+        "price": 5,
+        "stock": 2,
+        "members": false
+      },
+      {
+        "shopName": "Culinaromancer's Chest",
+        "location": "Lumbridge Castle basement",
+        "owner": "None",
+        "price": 4,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Moon Clan General Store.",
+        "location": "Lunar Isle",
+        "owner": "Melana Moonlander",
+        "price": 4,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Shantay Pass Shop",
+        "location": "Shantay Pass",
+        "owner": "Shantay",
+        "price": 4,
+        "stock": 0,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Lumbridge Castle kitchen",
+      "Cooks' Guild - 1st floor",
+      "Entrana - house west of furnace (1st floor) (members only)",
+      "Kandarin - north of the East Ardougne allotment patch (members only)",
+      "Hosidius - Little Shop of Horace (members only)",
+      "Cam Torum (members only)",
+      "Civitas illa Fortis (members only)",
+      "Civitas illa Fortis 1st floor (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bowl"
+  },
+  {
     "id": 2309,
     "nameEn": "Bread",
     "examine": "Nice crispy bread.",
@@ -2753,6 +2856,70 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Bucket_of_milk"
   },
   {
+    "id": 1783,
+    "nameEn": "Bucket of sand",
+    "examine": "One of the ingredients for making glass.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_sand.png",
+    "value": 2,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Trader Stan's Trading Post",
+        "location": "Port Piscarilius",
+        "owner": "Trader Crewmember",
+        "price": 5,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Durrik's Goods",
+        "location": "Deepfin Mine",
+        "owner": "Durrik",
+        "price": 5,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Hosidius - north-eastern coast (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Eagle ray",
+        "combatLevel": 44,
+        "rate": "14/150"
+      },
+      {
+        "monster": "Manta ray (monster)",
+        "combatLevel": 133,
+        "rate": "5/99"
+      },
+      {
+        "monster": "Sand Crab",
+        "combatLevel": 15,
+        "rate": "6/128"
+      },
+      {
+        "monster": "Butterfly ray",
+        "combatLevel": 68,
+        "rate": "6/149"
+      },
+      {
+        "monster": "Kalphite Queen",
+        "combatLevel": 333,
+        "rate": "4/126"
+      },
+      {
+        "monster": "Stingray",
+        "combatLevel": 92,
+        "rate": "3/100"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bucket_of_sand"
+  },
+  {
     "id": 1929,
     "nameEn": "Bucket of water",
     "examine": "It's a bucket of water.",
@@ -3041,6 +3208,111 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Cadava_berries"
+  },
+  {
+    "id": 36,
+    "nameEn": "Candle",
+    "examine": "A candle.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Candle.png",
+    "value": 3,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Candle seller",
+        "location": "",
+        "price": 1000,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "The Lighthouse Store",
+        "location": "Lighthouse",
+        "owner": "Jossik",
+        "price": 3,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Candle Shop",
+        "location": "Catherby",
+        "owner": "Candle maker",
+        "price": 3,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Obli's General Store.",
+        "location": "Shilo Village",
+        "owner": "Obli",
+        "price": 3,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Jiminua's Jungle Store.",
+        "location": "Karamja",
+        "owner": "Jiminua",
+        "price": 3,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Sigmund the Merchant (shop)",
+        "location": "Rellekka",
+        "owner": "Sigmund the Merchant",
+        "price": 3,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Gunslik's Assorted Items",
+        "location": "Keldagrim",
+        "owner": "Gunslik",
+        "price": 3,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Darkmeyer Lantern Shop",
+        "location": "Darkmeyer",
+        "owner": "Grinka Krast",
+        "price": 3,
+        "stock": 20,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Hosidius - eastern house with Fruit Stalls (telekinetic grab) (members only)",
+      "Hosidius - Mess hall (1st floor) (members only)",
+      "Salvager Overlook (1st floor) (members only)",
+      "South of Twilight Temple (members only)",
+      "Wyrmscraig (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Cave bug#Level 6",
+        "combatLevel": null,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Skeleton (Tarn's Lair)#High level",
+        "combatLevel": null,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Giant skeleton (Tarn's Lair)",
+        "combatLevel": 100,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Skeleton (mage)",
+        "combatLevel": 94,
+        "rate": "5/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Candle"
   },
   {
     "id": 562,
@@ -4783,6 +5055,114 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Egg"
+  },
+  {
+    "id": 5418,
+    "nameEn": "Empty sack",
+    "examine": "An empty vegetable sack.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Empty_sack.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Vanessa's Farming shop.",
+        "location": "Catherby",
+        "owner": "Vanessa",
+        "price": 1,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "Richard's Farming shop.",
+        "location": "North of East Ardougne",
+        "owner": "Richard",
+        "price": 1,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "Sarah's Farming shop.",
+        "location": "South Falador Farm",
+        "owner": "Sarah",
+        "price": 1,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "Alice's Farming shop.",
+        "location": "Alice's farm",
+        "owner": "Alice",
+        "price": 1,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "Vannah's Farming Stall",
+        "location": "Hosidius",
+        "owner": "Vannah",
+        "price": 1,
+        "stock": 100,
+        "members": true
+      },
+      {
+        "shopName": "Allanna's Farming Shop",
+        "location": "Farming Guild",
+        "owner": "Allanna",
+        "price": 1,
+        "stock": 100,
+        "members": true
+      },
+      {
+        "shopName": "Branwen's Farming Shop",
+        "location": "Prifddinas",
+        "owner": "Branwen",
+        "price": 1,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "Agelus' Farm Shop",
+        "location": "Ortus Farm",
+        "owner": "Agelus",
+        "price": 1,
+        "stock": 30,
+        "members": true
+      },
+      {
+        "shopName": "Kastori Farming Supplies",
+        "location": "Kastori",
+        "owner": "Ameyalli",
+        "price": 1,
+        "stock": 30,
+        "members": true
+      },
+      {
+        "shopName": "Elder Reggle's Farming Shop",
+        "location": "The Great Conch",
+        "owner": "Elder Reggle",
+        "price": 1,
+        "stock": 30,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Civitas illa Fortis (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Gryphon",
+        "combatLevel": 95,
+        "rate": "4/128"
+      },
+      {
+        "monster": "Dire gryphon",
+        "combatLevel": 209,
+        "rate": "4/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Empty_sack"
   },
   {
     "id": 3008,
@@ -7574,6 +7954,24 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Knife"
   },
   {
+    "id": 4542,
+    "nameEn": "Lantern lens",
+    "examine": "A roughly circular disc of glass.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Lantern_lens.png",
+    "value": 70,
+    "highAlch": 42,
+    "lowAlch": 28,
+    "dropSources": [
+      {
+        "monster": "Wall beast",
+        "combatLevel": 49,
+        "rate": "12/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Lantern_lens"
+  },
+  {
     "id": 563,
     "nameEn": "Law rune",
     "examine": "Used for teleport spells.",
@@ -9656,6 +10054,105 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Orange_dye"
   },
   {
+    "id": 970,
+    "nameEn": "Papyrus",
+    "examine": "Used for making notes.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Papyrus.png",
+    "value": 10,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "buyLocations": [
+      {
+        "shopName": "Ali's Discount Wares.",
+        "location": "Al Kharid",
+        "owner": "Ali Morrisane",
+        "price": 10,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Aemad's Adventuring Supplies.",
+        "location": "East Ardougne",
+        "owner": "Aemad",
+        "price": 13,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Obli's General Store.",
+        "location": "Shilo Village",
+        "owner": "Obli",
+        "price": 13,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Jiminua's Jungle Store.",
+        "location": "Karamja",
+        "owner": "Jiminua",
+        "price": 13,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Prifddinas General Store",
+        "location": "Prifddinas",
+        "owner": "Gwallter",
+        "price": 13,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Sunset Coast General Store",
+        "location": "Sunset Coast",
+        "owner": "Shopkeeper",
+        "price": 13,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Quetzacalli Gorge General Store",
+        "location": "Quetzacalli Gorge",
+        "owner": "Shopkeeper",
+        "price": 13,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Rasolo the Wandering Merchant",
+        "location": "South of Baxtorian Falls",
+        "owner": "Rasolo",
+        "price": 20,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Civitas illa Fortis - Sunrise Palace (1st floor) (members only)",
+      "Hosidius - eastern house with Fruit Stalls (Telekinetic Grab) (members only)",
+      "Hosidius - Jonathan's house (1st floor) (members only)",
+      "Legends' Guild - building outside guild entrance (members only)",
+      "Kebos Lowlands - General Vir's tent in the Battlefront (members only)",
+      "Desert Mining Camp - Captain Siad's office (1st floor) (members only)",
+      "Shayzien - Amelia's house (Unobtainable) (members only)",
+      "Slepe - eastern and western houses (1st floor) (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Mummy (Ancient Pyramid)",
+        "combatLevel": 103,
+        "rate": "44/513"
+      },
+      {
+        "monster": "Mad Angel",
+        "combatLevel": 270,
+        "rate": "1/150"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Papyrus"
+  },
+  {
     "id": 233,
     "nameEn": "Pestle and mortar",
     "examine": "I can grind things for potions in this.",
@@ -10126,6 +10623,17 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Pot_of_flour"
+  },
+  {
+    "id": 5438,
+    "nameEn": "Potatoes(10)",
+    "examine": "There are 10 potatoes in this sack.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Potatoes(10).png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Potatoes"
   },
   {
     "id": 2434,
@@ -15438,6 +15946,97 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Steel_warhammer"
   },
   {
+    "id": 2003,
+    "nameEn": "Stew",
+    "examine": "It's a meat and potato stew.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Stew.png",
+    "value": 20,
+    "highAlch": 12,
+    "lowAlch": 8,
+    "buyLocations": [
+      {
+        "shopName": "Barmaid",
+        "location": "",
+        "price": 20,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Tree (Draynor guard)",
+        "location": "",
+        "price": 10000000000,
+        "stock": "N/A",
+        "members": false
+      },
+      {
+        "shopName": "The Other Inn.",
+        "location": "Mos Le'Harmless",
+        "owner": "Mama",
+        "price": 20,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Harpoon Joe's House of 'Rum'.",
+        "location": "Mos Le'Harmless",
+        "owner": "Joe",
+        "price": 20,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Ratpit bar (Keldagrim)",
+        "location": "Under Keldagrim",
+        "owner": "Rauborn",
+        "price": 20,
+        "stock": "∞",
+        "members": true
+      },
+      {
+        "shopName": "Forester's Arms",
+        "location": "Seers' Village",
+        "owner": "Bartender",
+        "price": 20,
+        "stock": "∞",
+        "members": true
+      },
+      {
+        "shopName": "Ratpit bar (Port Sarim)",
+        "location": "Under Port Sarim",
+        "owner": "Barman",
+        "price": 20,
+        "stock": "∞",
+        "members": true
+      },
+      {
+        "shopName": "Ratpit bar (Varrock)",
+        "location": "Under Varrock",
+        "owner": "Barman",
+        "price": 20,
+        "stock": "∞",
+        "members": true
+      },
+      {
+        "shopName": "Prifddinas Foodstuffs",
+        "location": "Prifddinas",
+        "owner": "Derwen",
+        "price": 20,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Hefin Inn",
+        "location": "Prifddinas",
+        "owner": "Eira",
+        "price": 20,
+        "stock": "∞",
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Stew"
+  },
+  {
     "id": 113,
     "nameEn": "Strength potion(4)",
     "examine": "4 doses of Strength potion.",
@@ -16850,6 +17449,74 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/White_bead"
   },
   {
+    "id": 239,
+    "nameEn": "White berries",
+    "examine": "Sour berries, used in potions.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/White_berries.png",
+    "value": 10,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "freeSpawns": [
+      "Isafdar - north of the Elf Tracker, beyond the tripwire (members only)",
+      "Wilderness - Lava Dragon Isle (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Zombie (Tarn's Lair)#High level",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Deranged archaeologist",
+        "combatLevel": 276,
+        "rate": "7/131"
+      },
+      {
+        "monster": "Kurask",
+        "combatLevel": 106,
+        "rate": "6/124"
+      },
+      {
+        "monster": "King kurask",
+        "combatLevel": 295,
+        "rate": "6/124"
+      },
+      {
+        "monster": "Crazy archaeologist",
+        "combatLevel": 204,
+        "rate": "6/128"
+      },
+      {
+        "monster": "Cave crawler",
+        "combatLevel": 23,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Salarin the twisted",
+        "combatLevel": 70,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Chaos druid warrior",
+        "combatLevel": 37,
+        "rate": "5/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/White_berries"
+  },
+  {
+    "id": 5933,
+    "nameEn": "Willow branch",
+    "examine": "A branch from a willow tree.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Willow_branch.png",
+    "value": 2,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Willow_branch"
+  },
+  {
     "id": 1519,
     "nameEn": "Willow logs",
     "examine": "Logs cut from a willow tree.",
@@ -17058,6 +17725,63 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Wizard's_mind_bomb"
+  },
+  {
+    "id": 2859,
+    "nameEn": "Wolf bones",
+    "examine": "Bones of a recently slain wolf.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Wolf_bones.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "freeSpawns": [
+      "Sisterhood Sanctuary (members only)",
+      "Weiss (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Lev",
+        "combatLevel": 24,
+        "rate": "Always"
+      },
+      {
+        "monster": "Werewolf",
+        "combatLevel": 88,
+        "rate": "Always"
+      },
+      {
+        "monster": "Big Wolf",
+        "combatLevel": 73,
+        "rate": "Always"
+      },
+      {
+        "monster": "Wolf",
+        "combatLevel": 64,
+        "rate": "Always"
+      },
+      {
+        "monster": "White wolf",
+        "combatLevel": 25,
+        "rate": "Always"
+      },
+      {
+        "monster": "Ice wolf",
+        "combatLevel": 132,
+        "rate": "Always"
+      },
+      {
+        "monster": "Dire Wolf",
+        "combatLevel": 72,
+        "rate": "Always"
+      },
+      {
+        "monster": "Yuri",
+        "combatLevel": 24,
+        "rate": "Always"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Wolf_bones"
   },
   {
     "id": 1472,

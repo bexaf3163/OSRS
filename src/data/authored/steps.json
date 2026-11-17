@@ -6956,5 +6956,422 @@
         "questName": "Elemental Workshop I"
       }
     }
+  },
+  {
+    "id": "S9-12",
+    "stage": 9,
+    "type": "quest",
+    "title": "Big Chompy Bird Hunting",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Big_Chompy_Bird_Hunting",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Big_Chompy_Bird_Hunting/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2630,2981,0",
+    "mapLocation": {
+      "x": 2630,
+      "y": 2981,
+      "plane": 0,
+      "label": "Rantz"
+    },
+    "npc": {
+      "nameEn": "Rantz",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Rantz"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bronze axe",
+        "amount": 1,
+        "howToGet": "Any axe you can use; a blessed axe does not work.",
+        "wikiItemId": 1351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
+      },
+      {
+        "nameEn": "Feather",
+        "amount": 100,
+        "howToGet": "Buy on the Grand Exchange, or from Gerrant's Fishy Business in Port Sarim. The ogre arrows take most of them.",
+        "wikiItemId": 314,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Feather.png"
+      },
+      {
+        "nameEn": "Knife",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Funch's Fine Groceries in Grand Tree for 6 gp.",
+        "wikiItemId": 946,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
+      },
+      {
+        "nameEn": "Chisel",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 1 gp.",
+        "wikiItemId": 1755,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chisel.png"
+      },
+      {
+        "nameEn": "Wolf bones",
+        "amount": 4,
+        "howToGet": "Buy on the Grand Exchange; the level 64 wolves nearby are not fought.",
+        "wikiItemId": 2859,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Wolf_bones.png"
+      },
+      {
+        "nameEn": "Trout",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "amount": 5,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster"
+        ],
+        "howToGet": "Your own catch, or buy on the Grand Exchange. A margin for the wolves (hit up to 6) and ogres (up to 7) on the way; the chompy does not fight back."
+      }
+    ],
+    "threats": [
+      "Wolf",
+      "Ogre"
+    ],
+    "reward": "2 QP, 262 Fletching XP, 1,470 Cooking XP, 735 Ranged XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Rantz"
+      ],
+      "dialogChoices": [
+        "Yes.",
+        "How do we make the chompies come?",
+        "What are 'fatsy toadies'?",
+        "Where do we put the fatsy toadies?",
+        "What do you mean 'sneaky..sneaky, stick da chompy?'",
+        "Ok, thanks.",
+        "Come on, let me have a go...",
+        "I'm actually quite strong...please let me try."
+      ],
+      "highlightItems": [
+        "Bronze axe",
+        "Feather",
+        "Knife",
+        "Chisel",
+        "Wolf bones"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Big Chompy Bird Hunting"
+      }
+    }
+  },
+  {
+    "id": "S9-13",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Hand in the Sand",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Hand_in_the_Sand",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Hand_in_the_Sand/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2550,3100,0",
+    "mapLocation": {
+      "x": 2550,
+      "y": 3100,
+      "plane": 0,
+      "label": "Yanille, near the sand pit"
+    },
+    "npc": {
+      "nameEn": "Bert",
+      "location": "Yanille, near the sand pit",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Bert"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Beer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Blue Moon Inn in Varrock for 2 gp.",
+        "wikiItemId": 1917,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Beer.png"
+      },
+      {
+        "nameEn": "Coins",
+        "amount": 150,
+        "howToGet": "Beer for the Guard Captain, earth runes or the boat trips: about 150 coins in all.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Vial",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 2 gp.",
+        "wikiItemId": 229,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Vial.png"
+      },
+      {
+        "nameEn": "Redberries",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Food Store in Port Sarim for 3 gp.",
+        "wikiItemId": 1951,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Redberries.png"
+      },
+      {
+        "nameEn": "White berries",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 239,
+        "iconUrl": "https://oldschool.runescape.wiki/images/White_berries.png"
+      },
+      {
+        "nameEn": "Lantern lens",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 4542,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lantern_lens.png"
+      },
+      {
+        "nameEn": "Earth rune",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange, or from Aubury's Rune Shop in Varrock for 4 gp.",
+        "wikiItemId": 557,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Earth_rune.png"
+      },
+      {
+        "nameEn": "Bucket of sand",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Trader Stan's Trading Post in Port Piscarilius for 5 gp.",
+        "wikiItemId": 1783,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_sand.png"
+      }
+    ],
+    "reward": "1 QP, 1,000 Thieving XP, 9,000 Crafting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Bert"
+      ],
+      "dialogChoices": [
+        "Eww a hand, in the sand! Why haven't you told the authorities?",
+        "Yes.",
+        "I have a rather sandy problem that I'd like to palm off on you.",
+        "Can you help me more?",
+        "Yes, that would be great!",
+        "Talk to Betty about the Hand in the Sand.",
+        "Why is Bert's rota different from the original?",
+        "Why doesn't Bert remember the change in his hours?",
+        "What happened to the wizard?"
+      ],
+      "highlightItems": [
+        "Beer",
+        "Coins",
+        "Vial",
+        "Redberries",
+        "White berries",
+        "Lantern lens",
+        "Earth rune",
+        "Bucket of sand"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Hand in the Sand"
+      }
+    }
+  },
+  {
+    "id": "S9-14",
+    "stage": 9,
+    "type": "quest",
+    "title": "Enlightened Journey",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Enlightened_Journey",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Enlightened_Journey/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2810,3356,0",
+    "mapLocation": {
+      "x": 2810,
+      "y": 3356,
+      "plane": 0,
+      "label": "Entrana"
+    },
+    "npc": {
+      "nameEn": "Auguste",
+      "location": "Entrana",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Auguste"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Papyrus",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange, or from Ali's Discount Wares in Al Kharid for 10 gp.",
+        "wikiItemId": 970,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Papyrus.png"
+      },
+      {
+        "nameEn": "Ball of wool",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Aemad's Adventuring Supplies in East Ardougne for 2 gp.",
+        "wikiItemId": 1759,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ball_of_wool.png"
+      },
+      {
+        "nameEn": "Potatoes(10)",
+        "amount": 1,
+        "howToGet": "Buy a full sack of potatoes on the Grand Exchange.",
+        "wikiItemId": 5438,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Potatoes(10).png"
+      },
+      {
+        "nameEn": "Empty sack",
+        "amount": 8,
+        "howToGet": "Buy on the Grand Exchange, or from Vanessa's Farming shop in Catherby for 1 gp.",
+        "wikiItemId": 5418,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Empty_sack.png"
+      },
+      {
+        "nameEn": "Candle",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 3 gp.",
+        "wikiItemId": 36,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Candle.png"
+      },
+      {
+        "nameEn": "Yellow dye",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lletya Seamstress in Lletya for 6 gp.",
+        "wikiItemId": 1765,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_dye.png"
+      },
+      {
+        "nameEn": "Red dye",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lletya Seamstress in Lletya for 6 gp.",
+        "wikiItemId": 1763,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Red_dye.png"
+      },
+      {
+        "nameEn": "Silk",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange, or from Silk trader for 2 gp.",
+        "wikiItemId": 950,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Silk.png"
+      },
+      {
+        "nameEn": "Bowl",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Karamja General Store in Musa Point (Karamja) for 4 gp.",
+        "wikiItemId": 1923,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bowl.png"
+      },
+      {
+        "nameEn": "Logs",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1511,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Logs.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Willow branch",
+        "amount": 12,
+        "howToGet": "Buy on the Grand Exchange (growing a willow takes several hours).",
+        "wikiItemId": 5933,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Willow_branch.png"
+      }
+    ],
+    "reward": "1 QP, 2,000 Crafting XP, 3,000 Farming XP, 1,500 Woodcutting XP, 4,000 Firemaking XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Auguste"
+      ],
+      "dialogChoices": [
+        "Yes! Sign me up.",
+        "Umm, yes. What's your point?",
+        "Yes.",
+        "Yes, I have them here.",
+        "Okay."
+      ],
+      "highlightItems": [
+        "Papyrus",
+        "Ball of wool",
+        "Potatoes(10)",
+        "Empty sack",
+        "Candle",
+        "Yellow dye",
+        "Red dye",
+        "Silk",
+        "Bowl",
+        "Logs",
+        "Tinderbox",
+        "Willow branch"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Enlightened Journey"
+      }
+    }
+  },
+  {
+    "id": "S9-15",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Queen of Thieves",
+    "qp": 1,
+    "requires": [
+      "S9-07"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Queen_of_Thieves",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Queen_of_Thieves/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=1796,3782,0",
+    "mapLocation": {
+      "x": 1796,
+      "y": 3782,
+      "plane": 0,
+      "label": "Tomas Lawry"
+    },
+    "npc": {
+      "nameEn": "Tomas Lawry",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Tomas_Lawry"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Stew",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the barmaid for 20 coins.",
+        "wikiItemId": 2003,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Stew.png"
+      }
+    ],
+    "reward": "1 QP, 2,000 Thieving XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Tomas Lawry"
+      ],
+      "dialogChoices": [
+        "I'm looking for a quest.",
+        "Absolutely.",
+        "Yes.",
+        "Okay.",
+        "Nope, sounds good to me.",
+        "Let's talk about my quest."
+      ],
+      "highlightItems": [
+        "Stew"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Queen of Thieves"
+      }
+    }
   }
 ]

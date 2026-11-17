@@ -2474,6 +2474,10 @@
           "min": 15
         }
       ],
+      "xph": [
+        8000,
+        20000
+      ],
       "effort": "low",
       "cost": "cost",
       "risk": "none",

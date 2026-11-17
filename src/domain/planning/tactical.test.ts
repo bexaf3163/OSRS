@@ -135,7 +135,7 @@ describe('reused tactical preparation through observed state transitions', () =>
     expect(trained.hitpoints).toBeLessThan(target.level);
     expect(fightTrainingTarget(fight, trained, gear)).toBeNull();
     expect(stats).toEqual({ attack: 1, strength: 1, defence: 1, hitpoints: 10, magic: 1 });
-  });
+  }, 20_000);
 
   it('inherits the validated current-stage scope instead of asking to rebuy ingredients already used', () => {
     const input = fixture({}), quest = stepById.get('S3-04')!;

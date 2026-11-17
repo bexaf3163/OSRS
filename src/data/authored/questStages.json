@@ -30262,6 +30262,1945 @@
      ]
     }
    ]
+  },
+  "S9-12": {
+   "var": [
+    "varp",
+    293
+   ],
+   "route": [
+    {
+     "title": "Getting started",
+     "steps": [
+      "Talk to Rantz East-north-east of Feldip Hills (fairy ring ). Dialogue: \"Yes.\""
+     ]
+    },
+    {
+     "title": "Fletching some arrows",
+     "steps": [
+      "Note: You must make the arrows yourself to progress.",
+      "Chop down at least 3 achey trees immediately south-west of Rantz.",
+      "Use a knife on the logs to make ogre arrow shafts.",
+      "Use 100 feathers on the ogre arrow shafts.",
+      "Obtain 4 wolf bones (south-west from Rantz).",
+      "Use a chisel on the bones.",
+      "Use the wolfbone arrowtips on the flighted ogre arrows.",
+      "Use the ogre arrows on Rantz."
+     ]
+    },
+    {
+     "title": "Bloated toads",
+     "steps": [
+      "Ask Rantz all possible questions. Dialogue: \"How do we make the chompies come?\", \"What are 'fatsy toadies'?\", \"Where do we put the fatsy toadies?\", \"What do you mean 'sneaky..sneaky, stick da chompy?'\", \"Ok, thanks.\"",
+      "Enter the cave north of Rantz.",
+      "Attempt to unlock the chest until it opens and search it to obtain ogre bellows.",
+      "At the nearby swamp (south-west), look for swamp bubbles and click on them to fill up the ogre bellow.",
+      "Use the ogre bellows on a swamp toad to obtain a \"bloated toad\"."
+     ]
+    },
+    {
+     "title": "Hunting",
+     "steps": [
+      "Talk to Rantz.",
+      "Drop a bloated toad where the arrow points.",
+      "Talk to Rantz again and wait for the chompy bird to appear.",
+      "After Rantz fires his bow, talk to him to receive an ogre bow. Dialogue: \"Come on, let me have a go...\", \"I'm actually quite strong...please let me try.\"",
+      "If you are fast enough, you can attempt to kill the chompy bird that Rantz tried to hunt. Otherwise, place another toad in the clearing.",
+      "Pluck the carcass and take the raw chompy.",
+      "Talk to Rantz."
+     ]
+    },
+    {
+     "title": "Cooking the bird",
+     "steps": [
+      "Go back into the cave and talk to Fycie and Bugs.",
+      "Obtain the ingredients that they've asked for. The image on this page shows their location.",
+      "Use the raw chompy on the spit-roast north of Rantz (the fire outside of the cave).",
+      "Talk to Rantz.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Rantz in the east of Feldip Hills.",
+       "s": "Talk to Rantz in the east of Feldip Hills.",
+       "k": "talkToRantz",
+       "at": [
+        2631,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1470
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Chop achey tree logs near Rantz.",
+       "s": "Chop achey tree logs near Rantz.",
+       "k": "getLogs",
+       "at": [
+        2627,
+        2975,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2023
+        ]
+       }
+      },
+      {
+       "t": "Use your knife on the achey logs to make arrow shafts.",
+       "s": "Use your knife on the achey logs to make arrow shafts.",
+       "hl": {
+        "item": [
+         "Knife",
+         "Achey tree logs"
+        ]
+       },
+       "k": "makeShafts"
+      },
+      {
+       "t": "Use the feathers on the arrow shafts.",
+       "s": "Use the feathers on the arrow shafts.",
+       "hl": {
+        "item": [
+         "Feather",
+         "Ogre arrow shaft"
+        ]
+       },
+       "k": "useFeathersOnShafts"
+      },
+      {
+       "t": "Use a chisel on some wolf bones.",
+       "s": "Use a chisel on some wolf bones.",
+       "hl": {
+        "item": [
+         "Chisel",
+         "Wolf bones"
+        ]
+       },
+       "k": "useChiselOnBones"
+      },
+      {
+       "t": "Add the bone arrow tips to the flighted ogre arrows.",
+       "s": "Add the bone arrow tips to the flighted ogre arrows.",
+       "hl": {
+        "item": [
+         "Wolfbone arrowtips",
+         "Flighted ogre arrow"
+        ]
+       },
+       "k": "useTipsOnShafts"
+      },
+      {
+       "t": "Use at least 6 ogre arrows on Rantz.",
+       "s": "Use at least 6 ogre arrows on Rantz.",
+       "k": "useArrowsOnRantz",
+       "at": [
+        2631,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1470
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Ask Rantz all the available questions.",
+       "s": "Ask Rantz all the available questions.",
+       "k": "askRantzQuestions",
+       "at": [
+        2631,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1470
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Enter Rantz's cave.",
+       "s": "Enter Rantz's cave.",
+       "k": "enterCave",
+       "at": [
+        2630,
+        2999,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3379
+        ]
+       }
+      },
+      {
+       "t": "Open the chest in the cave for some ogre bellows.",
+       "s": "Open the chest in the cave for some ogre bellows.",
+       "k": "getBellow",
+       "at": [
+        2638,
+        9398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3377
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Fill the bellows on swamp bubbles.",
+       "s": "Fill the bellows on swamp bubbles.",
+       "k": "fillBellows",
+       "at": [
+        2601,
+        2967,
+        0
+       ],
+       "hl": {
+        "obj": [
+         684
+        ]
+       }
+      },
+      {
+       "t": "Inflate 3 toads near the swamp.",
+       "s": "Inflate 3 toads near the swamp.",
+       "k": "inflateToad",
+       "at": [
+        2602,
+        2967,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1473
+        ]
+       }
+      },
+      {
+       "t": "Bring the toads to Rantz.",
+       "s": "Bring the toads to Rantz.",
+       "k": "talkToRantzWithToad",
+       "at": [
+        2631,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1470
+        ]
+       }
+      },
+      {
+       "t": "Open the chest in the cave for some ogre bellows.",
+       "s": "Open the chest in the cave for some ogre bellows.",
+       "k": "getBellow",
+       "at": [
+        2638,
+        9398,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3377
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveCave",
+       "at": [
+        2647,
+        9377,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3381
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Drop the bloated toad in the clearing south of Rantz.",
+       "s": "Drop the bloated toad in the clearing south of Rantz.",
+       "hl": {
+        "item": [
+         "Bloated toad"
+        ]
+       },
+       "k": "dropToad",
+       "at": [
+        2635,
+        2967,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Wait in the clearing south of Rantz for a chompy to come to the toad. If the toad goes away, drop another bloated toad there.",
+       "s": "Wait south of Rantz for a chompy to come to the toad.",
+       "k": "waitForChompy",
+       "at": [
+        2635,
+        2967,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 35,
+     "do": [
+      {
+       "t": "Wait in the clearing south of Rantz for a chompy to come to the toad. If the toad goes away, drop another bloated toad there.",
+       "s": "Wait south of Rantz for a chompy to come to the toad.",
+       "k": "waitForChompy",
+       "at": [
+        2635,
+        2967,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Talk to Rantz again for an ogre bow.",
+       "s": "Talk to Rantz again for an ogre bow.",
+       "k": "talkToRantzForBow",
+       "at": [
+        2631,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1470
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 45,
+     "do": [
+      {
+       "t": "Drop another bloated toad in the clearing south of Rantz and wait for a chompy to come.",
+       "s": "Drop a bloated toad south of Rantz and wait for a chompy.",
+       "k": "placeAnotherToad",
+       "at": [
+        2635,
+        2967,
+        0
+       ]
+      },
+      {
+       "t": "Kill the chompy bird with the ogre bow and ogre arrows; nothing else can hurt it.",
+       "s": "Kill the chompy with the ogre bow and arrows.",
+       "k": "killChompy",
+       "at": [
+        2635,
+        2966,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1475
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Bring the plucked chompy to Rantz in the east of Feldip Hills.",
+       "s": "Bring the plucked chompy to Rantz.",
+       "k": "talkToRantzWithChompy",
+       "at": [
+        2631,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1470
+        ]
+       }
+      },
+      {
+       "t": "Pluck the chompy.",
+       "s": "Pluck the chompy.",
+       "k": "pluckCarcass",
+       "at": [
+        2635,
+        2966,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1476
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 55,
+     "do": [
+      {
+       "t": "Bring the plucked chompy to Rantz in the east of Feldip Hills.",
+       "s": "Bring the plucked chompy to Rantz.",
+       "k": "talkToRantzWithChompy",
+       "at": [
+        2631,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1470
+        ]
+       }
+      },
+      {
+       "t": "Enter Rantz's cave.",
+       "s": "Enter Rantz's cave.",
+       "k": "enterCaveAgain",
+       "at": [
+        2630,
+        2999,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3379
+        ]
+       }
+      },
+      {
+       "t": "Ask Bugs in the cave which ingredient to add.",
+       "s": "Ask Bugs in the cave which ingredient to add.",
+       "k": "talkToBugs",
+       "at": [
+        2640,
+        9391,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1472
+        ]
+       }
+      },
+      {
+       "t": "Ask Fycie in the cave which ingredient to add.",
+       "s": "Ask Fycie in the cave which ingredient to add.",
+       "k": "talkToFycie",
+       "at": [
+        2649,
+        9391,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1471
+        ]
+       }
+      },
+      {
+       "t": "Pick a potato south east of Rantz.",
+       "s": "Pick a potato south east of Rantz.",
+       "k": "getPotato",
+       "at": [
+        2642,
+        2959,
+        0
+       ],
+       "hl": {
+        "obj": [
+         312
+        ]
+       }
+      },
+      {
+       "t": "Pick an onion from west of Rantz.",
+       "s": "Pick an onion from west of Rantz.",
+       "k": "getOnion",
+       "at": [
+        2583,
+        2965,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3366
+        ]
+       }
+      },
+      {
+       "t": "Get some equa leaves from south east of Rantz.",
+       "s": "Get some equa leaves from south east of Rantz.",
+       "k": "getEqua",
+       "at": [
+        2648,
+        2963,
+        0
+       ]
+      },
+      {
+       "t": "Get some cabbage from west of Rantz.",
+       "s": "Get some cabbage from west of Rantz.",
+       "k": "getCabbage",
+       "at": [
+        2572,
+        2967,
+        0
+       ],
+       "hl": {
+        "obj": [
+         1161
+        ]
+       }
+      },
+      {
+       "t": "Get some doogle leaves from west of Rantz.",
+       "s": "Get some doogle leaves from west of Rantz.",
+       "k": "getDoogle",
+       "at": [
+        2565,
+        2972,
+        0
+       ]
+      },
+      {
+       "t": "Get a tomato from west of Rantz.",
+       "s": "Get a tomato from west of Rantz.",
+       "k": "getTomato",
+       "at": [
+        2584,
+        2966,
+        0
+       ]
+      },
+      {
+       "t": "Cook the chompy on Rantz's spit-roast with the three ingredients the family asked for.",
+       "s": "Cook the chompy on Rantz's spit-roast.",
+       "k": "cookChompy",
+       "at": [
+        2631,
+        2990,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6895
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveCave",
+       "at": [
+        2647,
+        9377,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3381
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Bring Rantz the seasoned chompy to finish the quest.",
+       "s": "Bring Rantz the seasoned chompy to finish the quest.",
+       "k": "giveRantzSeasonedChompy",
+       "at": [
+        2631,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1470
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-13": {
+   "var": [
+    "varbit",
+    1527
+   ],
+   "route": [
+    {
+     "title": "Sandy Hand",
+     "steps": [
+      "Talk to Bert in Yanille, in the house next to the POH Portal to get a Sandy hand. Dialogue: \"Eww a hand, in the sand! Why haven't you told the authorities?\", \"Yes.\"",
+      "Go to the Dragon Inn pub south of Bert's house. Buy a beer from the bartender (if you don't have one) and give the beer to the Guard Captain.",
+      "Ring the bell at the Wizards' Guild (outside near eastern doors), or enter the guild with 66 Magic, then talk to Zavistic Rarve, who will take the Hand. If started Zogre Flesh Eaters: Dialogue: \"I have a rather sandy problem that I'd like to palm off on you.\""
+     ]
+    },
+    {
+     "title": "Sandy the Slavedriver",
+     "steps": [
+      "Talk to Bert to get Bert's rota.",
+      "Travel to Brimhaven and find Sandy in a small house south of The Shrimp and Parrot restaurant and north-west of the pub.",
+      "Search Sandy's desk to get Sandy's rota.",
+      "Pickpocket Sandy until you get sand."
+     ]
+    },
+    {
+     "title": "Truth Serum",
+     "steps": [
+      "Travel back to Yanille and talk to Bert to receive a magic scroll.",
+      "Ring the bell just outside the Wizards' Guild and talk to Zavistic Rarve again to receive a magical orb.",
+      "Talk to Zavistic Rarve again. He will offer to teleport you to Port Sarim. Dialogue: \"Can you help me more?\", \"Yes, that would be great!\" (Dialogue: if started Zogre Flesh Eaters)",
+      "Talk to Betty in Port Sarim Magic shop for a bottled water. Dialogue: \"Talk to Betty about the Hand in the Sand.\"",
+      "First add redberries, then white berries to the bottled water in order to get a pink dye.",
+      "Dye the lantern lens to get a rose-tinted lens.",
+      "Talk to Betty again so she puts the vial on the counter. Dialogue: \"Talk to Betty about the Hand in the Sand.\"",
+      "Go stand in the doorway and \"use\" the lens on the counter to get a truth serum.",
+      "Talk to Betty one last time with sand in your inventory. Dialogue: \"Talk to Betty about the Hand in the Sand.\""
+     ]
+    },
+    {
+     "title": "Sandy Truth-Be-Told",
+     "steps": [
+      "Travel to Brimhaven and talk to Sandy.",
+      "Activate the magical orb and talk to Sandy again. Be sure to click every option. Dialogue: \"Why is Bert's rota different from the original?\", \"Why doesn't Bert remember the change in his hours?\", \"What happened to the wizard?\""
+     ]
+    },
+    {
+     "title": "And Sandy said, \"Drat-foiled again!\"",
+     "steps": [
+      "Travel to Yanille and Ring the Bell at the Wizards' Guild to talk to Zavistic Rarve.",
+      "Talk to Zavistic Rarve again to get a cut scene.",
+      "Travel to Entrana and talk to Mazion at the sandpit to get a Wizard's head.",
+      "Return to Yanille, ring the bell and talk to Zavistic Rarve."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Bert in west Yanille.",
+       "s": "Talk to Bert in west Yanille.",
+       "k": "talkToBert",
+       "at": [
+        2551,
+        3099,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5815
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Give the Guard Captain in the pub south of Bert a beer. The pub sells one for 2 coins.",
+       "s": "Give the Guard Captain in the Yanille pub a beer.",
+       "k": "giveCaptainABeer",
+       "at": [
+        2552,
+        3080,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5383
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Ring the bell outside the Wizards' Guild in Yanille and talk to Zavistic Rarve when he appears.",
+       "s": "Ring the Wizards' Guild bell; talk to Zavistic Rarve.",
+       "k": "ringBell",
+       "at": [
+        2598,
+        3085,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6847
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Return to Bert in west Yanille.",
+       "s": "Return to Bert in west Yanille.",
+       "k": "talkToBertAboutRota",
+       "at": [
+        2551,
+        3099,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5815
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Travel to Brimhaven, enter Sandy's building south of the restaurant and search Sandy's desk for the rota.",
+       "s": "Search Sandy's desk in Brimhaven for the rota.",
+       "k": "searchSandysDesk",
+       "at": [
+        2789,
+        3174,
+        0
+       ],
+       "hl": {
+        "obj": [
+         10805
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Pickpocket Sandy for some sand.",
+       "s": "Pickpocket Sandy for some sand.",
+       "k": "pickpocketSandy",
+       "at": [
+        2790,
+        3175,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5384
+        ]
+       }
+      },
+      {
+       "t": "Return to Bert in west Yanille with the rota and sand.",
+       "s": "Return to Bert in west Yanille with the rota and sand.",
+       "k": "talkToBertAboutScroll",
+       "at": [
+        2551,
+        3099,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5815
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Ring the bell outside the Wizards' Guild in Yanille and talk to Zavistic Rarve when he appears.",
+       "s": "Ring the Wizards' Guild bell; talk to Zavistic Rarve.",
+       "k": "ringBellAgain",
+       "at": [
+        2598,
+        3085,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6847
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Travel to Port Sarim, and talk to Betty in the magic shop.",
+       "s": "Travel to Port Sarim, and talk to Betty in the magic shop.",
+       "k": "talkToBetty",
+       "at": [
+        3014,
+        3258,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5905
+        ]
+       }
+      },
+      {
+       "t": "Talk to Zavistic Rarve again to get teleported to Port Sarim.",
+       "s": "Talk to Zavistic Rarve again to get teleported to Port Sarim.",
+       "k": "talkToRarveAgain",
+       "at": [
+        2598,
+        3085,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6847
+        ]
+       }
+      },
+      {
+       "t": "Use redberries on the bottled water.",
+       "s": "Use redberries on the bottled water.",
+       "hl": {
+        "item": [
+         "Redberries",
+         "Vial of water"
+        ]
+       },
+       "k": "addRedberries"
+      },
+      {
+       "t": "Use whiteberries on the red bottled water",
+       "s": "Use whiteberries on the red bottled water",
+       "hl": {
+        "item": [
+         "White berries"
+        ]
+       },
+       "k": "addWhiteberries"
+      },
+      {
+       "t": "Use the pink dye on a lantern lens.",
+       "s": "Use the pink dye on a lantern lens.",
+       "hl": {
+        "item": [
+         "Pink dye",
+         "Lantern lens"
+        ]
+       },
+       "k": "useDyeOnLanternLens"
+      },
+      {
+       "t": "Talk to Betty with the pink lens.",
+       "s": "Talk to Betty with the pink lens.",
+       "k": "talkToBettyAgain",
+       "at": [
+        3014,
+        3258,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5905
+        ]
+       }
+      },
+      {
+       "t": "Stand in Betty's doorway and use the rose-tinted lens on the counter.",
+       "s": "Stand in Betty's doorway and use the rose-tinted lens on the counter.",
+       "k": "standInDoorway",
+       "at": [
+        3016,
+        3259,
+        0
+       ]
+      },
+      {
+       "t": "Stand in Betty's doorway and use the rose-tinted lens on the counter.",
+       "s": "Stand in Betty's doorway and use the rose-tinted lens on the counter.",
+       "k": "useLensOnCounter",
+       "at": [
+        3013,
+        3258,
+        0
+       ],
+       "hl": {
+        "obj": [
+         10812
+        ]
+       }
+      },
+      {
+       "t": "Talk to Betty again.",
+       "s": "Talk to Betty again.",
+       "k": "talkToBettyOnceMore",
+       "at": [
+        3014,
+        3258,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5905
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 80,
+     "do": [
+      {
+       "t": "Talk to Sandy in Brimhaven again with the truth serum, choosing distractions until one works.",
+       "s": "Distract Sandy in Brimhaven while holding the truth serum.",
+       "k": "talkToSandyWithPotion",
+       "at": [
+        2790,
+        3175,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5384
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 90,
+     "do": [
+      {
+       "t": "Use the truth serum on Sandy's coffee mug.",
+       "s": "Use the truth serum on Sandy's coffee mug.",
+       "k": "useSerumOnCoffee",
+       "at": [
+        2789,
+        3176,
+        0
+       ],
+       "hl": {
+        "obj": [
+         10806
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 100,
+     "do": [
+      {
+       "t": "Activate the magical orb next to Sandy.",
+       "s": "Activate the magical orb next to Sandy.",
+       "hl": {
+        "item": [
+         "Magical orb"
+        ]
+       },
+       "k": "activateMagicalOrb",
+       "at": [
+        2789,
+        3175,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 110,
+     "do": [
+      {
+       "t": "Ask Sandy every question with the magical orb in your inventory.",
+       "s": "Ask Sandy every question with the magical orb.",
+       "k": "interrogateSandy",
+       "at": [
+        2790,
+        3175,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5384
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 120,
+     "do": [
+      {
+       "t": "Return to the Wizards' Guild in Yanille, ring the bell and talk to Zavistic Rarve when he appears.",
+       "s": "Ring the Wizards' Guild bell; talk to Zavistic Rarve.",
+       "k": "ringBellAfterInterrogation",
+       "at": [
+        2598,
+        3085,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6847
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 130,
+     "do": [
+      {
+       "t": "Give Zavistic Rarve 5 earth runes and a bucket of sand.",
+       "s": "Give Zavistic Rarve 5 earth runes and a bucket of sand.",
+       "k": "ringBellWithItems",
+       "at": [
+        2598,
+        3085,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6847
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 140,
+     "do": [
+      {
+       "t": "Travel to Entrana (bank all combat gear first) and talk to Mazion at the sand pit.",
+       "s": "Talk to Mazion at the Entrana sand pit.",
+       "k": "talkToMazion",
+       "at": [
+        2815,
+        3340,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5386
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 150,
+     "do": [
+      {
+       "t": "Return to the Wizards' Guild in Yanille, ring the bell and talk to Zavistic Rarve to finish the quest.",
+       "s": "Ring the guild bell; Zavistic Rarve finishes the quest.",
+       "k": "ringBellEnd",
+       "at": [
+        2598,
+        3085,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6847
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-14": {
+   "var": [
+    "varbit",
+    2866
+   ],
+   "route": [
+    {
+     "title": "Getting started",
+     "steps": [
+      "Travel to Entrana (speak to monks on second most northern dock in Port Sarim)",
+      "Talk to Auguste on Entrana north of the Herblore shop (3 times) Dialogue: \"Yes! Sign me up.\", \"Umm, yes. What's your point?\", \"Yes.\"",
+      "Use the papyrus with the ball of wool.",
+      "Use the unlit candle on the balloon structure.",
+      "Talk to Auguste again.",
+      "Talk to Auguste again with the two papyrus and a sack of potatoes in your inventory. Dialogue: \"Yes, I have them here.\"",
+      "Go slightly south of Auguste and fill up the sacks with sand.",
+      "Give Auguste a yellow dye, a red dye, ten silk, a bowl, and eight sandbags."
+     ]
+    },
+    {
+     "title": "The big balloon",
+     "steps": [
+      "Leave Entrana to retrieve the remaining items. You may consider banking in Pest Control, either using Minigame Teleport or returning to Port Sarim and travelling there and back via the ships.",
+      "Back on Entrana, use the branches on the balloon frame on the nearby platform.",
+      "(Optional) Store any additional logs in the log storage.",
+      "Talk to Auguste Dialogue: \"Okay.\"}}."
+     ]
+    },
+    {
+     "title": "=Screen one=",
+     "steps": [
+      "Drop a sandbag.",
+      "Burn a log.",
+      "Relax 9 times.",
+      "Pull the rope.",
+      "Relax 2 times.",
+      "Pull the rope.",
+      "Relax 5 times."
+     ]
+    },
+    {
+     "title": "=Screen two=",
+     "steps": [
+      "Burn a log.",
+      "Relax.",
+      "Burn a log.",
+      "Relax 10 times.",
+      "Burn a log.",
+      "Relax 5 times."
+     ]
+    },
+    {
+     "title": "=Screen three=",
+     "steps": [
+      "Relax 7 times.",
+      "Pull the rope.",
+      "Pull the rope.",
+      "Relax 3 times.",
+      "Burn a log.",
+      "Relax 4 times.",
+      "Pull the rope."
+     ]
+    },
+    {
+     "title": "Finishing up",
+     "steps": [
+      "Talk to Auguste.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Bank all weapons and armour, then take a boat from Port Sarim to Entrana.",
+       "s": "Bank weapons and armour; boat from Port Sarim to Entrana.",
+       "k": "travelToEntrana",
+       "at": [
+        3047,
+        3236,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1167
+        ]
+       }
+      },
+      {
+       "t": "Talk to Auguste on Entrana 3 times.",
+       "s": "Talk to Auguste on Entrana 3 times.",
+       "k": "talkToAuguste",
+       "at": [
+        2809,
+        3354,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4715
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Bank all weapons and armour, then take a boat from Port Sarim to Entrana.",
+       "s": "Bank weapons and armour; boat from Port Sarim to Entrana.",
+       "k": "travelToEntrana",
+       "at": [
+        3047,
+        3236,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1167
+        ]
+       }
+      },
+      {
+       "t": "Talk to Auguste on Entrana 3 times.",
+       "s": "Talk to Auguste on Entrana 3 times.",
+       "k": "talkToAuguste",
+       "at": [
+        2809,
+        3354,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4715
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Bank all weapons and armour, then take a boat from Port Sarim to Entrana.",
+       "s": "Bank weapons and armour; boat from Port Sarim to Entrana.",
+       "k": "travelToEntrana",
+       "at": [
+        3047,
+        3236,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1167
+        ]
+       }
+      },
+      {
+       "t": "Talk to Auguste on Entrana 3 times.",
+       "s": "Talk to Auguste on Entrana 3 times.",
+       "k": "talkToAuguste",
+       "at": [
+        2809,
+        3354,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4715
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Bank all weapons and armour, then take a boat from Port Sarim to Entrana.",
+       "s": "Bank weapons and armour; boat from Port Sarim to Entrana.",
+       "k": "travelToEntrana",
+       "at": [
+        3047,
+        3236,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1167
+        ]
+       }
+      },
+      {
+       "t": "Talk to Auguste on Entrana 3 times.",
+       "s": "Talk to Auguste on Entrana 3 times.",
+       "k": "talkToAuguste",
+       "at": [
+        2809,
+        3354,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4715
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Use papyrus on a ball of wool.",
+       "s": "Use papyrus on a ball of wool.",
+       "hl": {
+        "item": [
+         "Papyrus",
+         "Ball of wool"
+        ]
+       },
+       "k": "usePapyrusOnWool"
+      },
+      {
+       "t": "Use a candle on the balloon.",
+       "s": "Use a candle on the balloon.",
+       "hl": {
+        "item": [
+         "Candle",
+         "Origami balloon"
+        ]
+       },
+       "k": "useCandleOnBalloon"
+      },
+      {
+       "t": "Talk to Auguste again.",
+       "s": "Talk to Auguste again.",
+       "k": "talkToAugusteAgain",
+       "at": [
+        2809,
+        3354,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4715
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Talk to Auguste with 2 papyrus and a sack of potatoes.",
+       "s": "Talk to Auguste with 2 papyrus and a sack of potatoes.",
+       "k": "talkToAugusteWithPapyrus",
+       "at": [
+        2809,
+        3354,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4715
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Talk to Auguste after the flash mob.",
+       "s": "Talk to Auguste after the flash mob.",
+       "k": "talkToAugusteAfterMob",
+       "at": [
+        2809,
+        3354,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4715
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Fill your empty sacks on the sand pit south of Auguste.",
+       "s": "Fill your empty sacks on the sand pit south of Auguste.",
+       "has": "Sandbag",
+       "k": "fillSacks",
+       "at": [
+        2817,
+        3342,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14890
+        ]
+       }
+      },
+      {
+       "t": "Bring Auguste the 8 sandbags, 10 silk, a bowl and the red and yellow dye.",
+       "s": "Bring Auguste sandbags, silk, a bowl and both dyes.",
+       "k": "talkToAugusteWithDye"
+      }
+     ]
+    },
+    {
+     "at": 80,
+     "do": [
+      {
+       "t": "Bring 12 willow branches and use them on the platform next to Auguste to make the basket.",
+       "s": "Use 12 willow branches on the platform by Auguste.",
+       "k": "talkToAugusteWithBranches",
+       "at": [
+        2807,
+        3356,
+        0
+       ],
+       "hl": {
+        "obj": [
+         19133
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 90,
+     "do": [
+      {
+       "t": "Talk to Auguste to fly.",
+       "s": "Talk to Auguste to fly.",
+       "k": "talkToAugusteWithLogsAndTinderbox",
+       "at": [
+        2809,
+        3354,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4715
+        ]
+       }
+      },
+      {
+       "t": "Fly the balloon to Taverley: burn logs to climb and drop sandbags to clear the obstacles.",
+       "s": "Fly the balloon to Taverley with logs and sandbags.",
+       "k": "doPuzzle"
+      }
+     ]
+    },
+    {
+     "at": 100,
+     "do": [
+      {
+       "t": "Talk to Auguste in Taverley to finish the quest.",
+       "s": "Talk to Auguste in Taverley to finish the quest.",
+       "k": "talkToAugusteToFinish",
+       "at": [
+        2937,
+        3421,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4715
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-15": {
+   "var": [
+    "varbit",
+    6037
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Speak to Tomas Lawry outside the Port Piscarilius bank.Dialogue: \"I'm looking for a quest.\", \"Absolutely.\", \"Yes.\" (Grab a bowl from the general store on your way to the bank if you plan on making the stew yourself.)",
+      "Head south and speak to Robert O'Reilly in the house directly west of the bridge. He will ask for a stew. Dialogue: \"Okay.\" A stew can be made with raw beef and a potato purchased from Kenelme directly west along with a bowl from the general store south-east.",
+      "Enter the manhole to the east marked by the File:Dungeon map link icon.png icon, cross the bridge a bit to the south, continue west.",
+      "Speak to Devan Rutter, near the fish stall. Dialogue: \"Nope, sounds good to me.\"",
+      "Optional: Trade the General Store Shop Keeper in The Warrens for an easy Kourend & Kebos Diary task.",
+      "Return to the surface from the way you entered and murder Conrad King (non-combat) on the dock on the southern side of the Piscarilius Foodhall (the largest building). Pick either option.",
+      "Go back down the manhole and enter the tent.",
+      "Speak to the Queen of Thieves.",
+      "Exit the sewers and travel south-west to Kingstown and enter the house immediately north from the entrance (south of the File:Rare trees icon.png icon), and climb the stairs to the .",
+      "Picklock the chest in the east side of the room to find a letter. (You may have to click the lock multiple times)",
+      "Return to Tomas Lawry. Dialogue: \"Let's talk about my quest.\"",
+      "Return to The Queen of Thieves (now called Lady Shauna Piscarilius).",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Speak to Tomas Lawry in Port Piscarilius.",
+       "s": "Speak to Tomas Lawry in Port Piscarilius.",
+       "k": "talkToLawry",
+       "at": [
+        1796,
+        3781,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7904
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Speak to the poor looking woman.",
+       "s": "Speak to the poor looking woman.",
+       "k": "talkToPoorLookingPerson",
+       "at": [
+        1803,
+        3738,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7923
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Speak to Robert O'Reilly, and give him the bowl of stew.",
+       "s": "Speak to Robert O'Reilly, and give him the bowl of stew.",
+       "k": "talkToOReilly",
+       "at": [
+        1794,
+        3757,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7905
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Speak to Robert O'Reilly, and give him the bowl of stew.",
+       "s": "Speak to Robert O'Reilly, and give him the bowl of stew.",
+       "k": "talkToOReilly",
+       "at": [
+        1794,
+        3757,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7905
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the Warrens.",
+       "s": "Enter the Warrens.",
+       "k": "enterWarrens",
+       "at": [
+        1813,
+        3745,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31706
+        ]
+       }
+      },
+      {
+       "t": "Speak to Devan Rutter.",
+       "s": "Speak to Devan Rutter.",
+       "k": "talkToDevan",
+       "at": [
+        1767,
+        10146,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7906
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Enter the Warrens.",
+       "s": "Enter the Warrens.",
+       "k": "enterWarrens",
+       "at": [
+        1813,
+        3745,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31706
+        ]
+       }
+      },
+      {
+       "t": "Speak to Devan Rutter.",
+       "s": "Speak to Devan Rutter.",
+       "k": "talkToDevan",
+       "at": [
+        1767,
+        10146,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7906
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Murder Conrad King.",
+       "s": "Murder Conrad King.",
+       "k": "killConrad",
+       "at": [
+        1847,
+        3734,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7907
+        ]
+       }
+      },
+      {
+       "t": "Exit the Warrens.",
+       "s": "Exit the Warrens.",
+       "k": "exitWarrens",
+       "at": [
+        1813,
+        10145,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31708
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Enter the Warrens.",
+       "s": "Enter the Warrens.",
+       "k": "enterWarrens2",
+       "at": [
+        1813,
+        3745,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31706
+        ]
+       }
+      },
+      {
+       "t": "Tell Devan Rutter about the murder.",
+       "s": "Tell Devan Rutter about the murder.",
+       "k": "tellDevanAboutConrad",
+       "at": [
+        1767,
+        10146,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7906
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Enter the Warrens.",
+       "s": "Enter the Warrens.",
+       "k": "enterWarrens3",
+       "at": [
+        1813,
+        3745,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31706
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Queen of Thieves.",
+       "s": "Talk to the Queen of Thieves.",
+       "k": "talkToQueenOfThieves",
+       "at": [
+        1764,
+        10158,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7908
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Enter the Warrens.",
+       "s": "Enter the Warrens.",
+       "k": "enterWarrens3",
+       "at": [
+        1813,
+        3745,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31706
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Queen of Thieves.",
+       "s": "Talk to the Queen of Thieves.",
+       "k": "talkToQueenOfThieves",
+       "at": [
+        1764,
+        10158,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7908
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Go up the stairs in Councillor Hughes' home in Kingstown.",
+       "s": "Go up the stairs in Councillor Hughes' home in Kingstown.",
+       "k": "goToKingstown",
+       "at": [
+        1672,
+        3681,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11796
+        ]
+       }
+      },
+      {
+       "t": "Pick the locked chest.",
+       "s": "Pick the locked chest.",
+       "k": "openChest",
+       "at": [
+        1681,
+        3677,
+        1
+       ],
+       "hl": {
+        "obj": [
+         10084
+        ]
+       }
+      },
+      {
+       "t": "Exit the Warrens.",
+       "s": "Exit the Warrens.",
+       "k": "exitWarrens2",
+       "at": [
+        1813,
+        10145,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31708
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Speak to Tomas Lawry in Port Piscarilius.",
+       "s": "Speak to Tomas Lawry in Port Piscarilius.",
+       "k": "talkToLawry2",
+       "at": [
+        1796,
+        3781,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7904
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "leaveKingstown",
+       "at": [
+        1672,
+        3682,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11799
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Enter the Warrens.",
+       "s": "Enter the Warrens.",
+       "k": "enterWarrens4",
+       "at": [
+        1813,
+        3745,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31706
+        ]
+       }
+      },
+      {
+       "t": "Talk to Lady Shauna Piscarilius.",
+       "s": "Talk to Lady Shauna Piscarilius.",
+       "k": "talkToShauna",
+       "at": [
+        1764,
+        10158,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7909
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

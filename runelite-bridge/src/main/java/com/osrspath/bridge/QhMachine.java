@@ -55,6 +55,9 @@ final class QhMachine
 		/** Whether an item with one of these IDs lies on the floor in the zone. */
 		Boolean ground(int[] ids, int[] zone);
 
+		/** Whether the game's hint arrow points at an NPC with one of these IDs. */
+		Boolean hintNpc(int[] ids);
+
 		int skill(String name);
 
 		/** The quest state by the Quest Helper name (PIRATES_TREASURE): "FINISHED", "IN_PROGRESS", "NOT_STARTED"; null means unknown. */
@@ -563,6 +566,8 @@ final class QhMachine
 				return f.npc(n.get("id").getAsInt(), n.has("z") ? ints(n.getAsJsonArray("z")) : null);
 			case "obj":
 				return f.object(ints(n.getAsJsonArray("ids")), n.has("z") ? ints(n.getAsJsonArray("z")) : null);
+			case "hint":
+				return f.hintNpc(ints(n.getAsJsonArray("ids")));
 			case "ground":
 				return f.ground(ints(n.getAsJsonArray("ids")), n.has("z") ? ints(n.getAsJsonArray("z")) : null);
 			case "skill":

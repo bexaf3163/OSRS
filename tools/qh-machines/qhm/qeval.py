@@ -14,7 +14,7 @@ def sanitize(s):
 
 class Facts:
     def __init__(self, items=None, equip=None, bank=None, pos=None, vb=None, vp=None, events=None, widgets=None, npcs=None, objs=None,
-                 quests=None, skills=None, ground=None):
+                 quests=None, skills=None, ground=None, hint=None):
         self.items = items or {}
         self.equip = equip or {}
         self.bank = bank or {}
@@ -26,6 +26,7 @@ class Facts:
         self.npcs = npcs or []          # (id, x, y, plane)
         self.objs = objs or []
         self.ground = ground or []  # (item id, x, y, plane) lying on the floor
+        self.hint = hint  # the NPC id under the game's hint arrow, or None
         self.quests = quests or {}
         self.skills = skills or {}
 
@@ -142,6 +143,8 @@ class Machine:
                 if nid == n['id'] and (not z or (z[0] <= x <= z[2] and z[1] <= y <= z[3] and z[4] <= p <= z[5])):
                     return T
             return F
+        if o == 'hint':
+            return T if facts.hint in n['ids'] else F
         if o in ('obj', 'ground'):
             z = n.get('z')
             for oid, x, y, p in (facts.objs if o == 'obj' else facts.ground):

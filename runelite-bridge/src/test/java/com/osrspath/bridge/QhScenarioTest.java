@@ -161,11 +161,12 @@ public class QhScenarioTest
 	}
 
 	@Test
-	public void unknownCondition_theMachineDoesNotDecide()
+	public void hintArrowCondition_noArrowMeansDigging()
 	{
-		// var 3: the first condition is the arrow on an NPC (Quest Helper reads it from the client), the plugin has none: "don't know" is not "no".
+		// var 3: the first condition is the hint arrow on the gardener; with no arrow in the game the machine goes on to digging.
 		QhMachine.Verdict v = machine().resolve(3, new QhFakeGame(), new QhMachine.Session());
-		assertTrue("the 'NpcHintArrow' condition cannot be checked by the plugin", v.isUndecided());
+		assertFalse("a hint arrow the plugin can read decides", v.isUndecided());
+		assertEquals("digUpTreasure", v.getLeaf());
 	}
 
 	/** Any quest, any variable value, an empty game, a player "nowhere", memory stuffed with messages: the machine does not crash and answers. */

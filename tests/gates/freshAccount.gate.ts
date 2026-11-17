@@ -7,7 +7,7 @@
 // the last step, and an item a later step takes "from step X" is in the bag after X. Turns whose remaining time is UNKNOWN are known debt:
 // the gate fails when they rise above UNKNOWN_TIME_DEBT; lower it as it shrinks, never raise it.
 import { expect, it } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { allSteps, itemById, stepsFor } from '../../src/data';
 import { FOODS } from '../../src/data/threats';
 import { buildPlayerState } from '../../src/domain/player/playerState';
@@ -95,7 +95,7 @@ function play(mode: GameMode) {
     previous = d;
     const a = d.activeAction;
     if (!d.estimatedRemaining) unknownTime++;
-    log.push(`${turn}: ${d.objectiveId} | ${a.kind} | ${a.title} | cb ${stats.attack}/${stats.strength}/${stats.defence}/${stats.hitpoints} | ${coins} gp`);
+    log.push(`${turn}: ${d.objectiveId} | ${a.kind} | ${a.title} | cb ${stats.attack}/${stats.strength}/${stats.defence}/${stats.hitpoints} | ${coins} gp${d.estimatedRemaining ? '' : ' | time unknown'}`);
     if (a.kind === 'VERIFY' || a.kind === 'MANUAL_WAIT') { blocked = `turn ${turn}: ${a.kind} ${a.title}\n${log.slice(-8).join('\n')}`; break; }
     const execution: Step | undefined = a.executionStep ?? (a.stepId ? stepOf.get(a.stepId) : undefined);
     const countOf = (name: string) => {
@@ -164,6 +164,8 @@ function play(mode: GameMode) {
   console.log(`Route gate (${mode}): ${turn} turns, ${total - open.length} of ${total} quests, remaining time unknown on ${unknownTime} turns${blocked ? `, stopped at ${blocked.split('\n')[0]}` : ''}.`);
   const earned = [...new Set(log.filter(l => l.includes(' | EARN | ')).map(l => l.split(' | ')[2].replace(/^Earn [\d,]+ gp: /, '')))];
   console.log(`Route gate (${mode}) earned with: ${earned.join(', ') || 'nothing'}.`);
+  // GATE_LOG=<file> keeps the whole turn log for diagnosis.
+  if (process.env.GATE_LOG) writeFileSync(`${process.env.GATE_LOG}.${mode}.txt`, log.join('\n'));
   return { open, blocked, unknownTime, log };
 }
 

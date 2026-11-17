@@ -150,6 +150,12 @@ final class QhFakeGame implements QhMachine.Facts
 	}
 
 	@Override
+	public Boolean hintNpc(int[] ids)
+	{
+		return Boolean.FALSE;
+	}
+
+	@Override
 	public Boolean ground(int[] ids, int[] zone)
 	{
 		return Boolean.FALSE;

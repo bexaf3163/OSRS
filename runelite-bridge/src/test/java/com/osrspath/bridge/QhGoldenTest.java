@@ -132,6 +132,24 @@ public class QhGoldenTest
 		}
 
 		@Override
+		public Boolean hintNpc(int[] ids)
+		{
+			if (!f.has("hint") || f.get("hint").isJsonNull())
+			{
+				return Boolean.FALSE;
+			}
+			int hint = f.get("hint").getAsInt();
+			for (int id : ids)
+			{
+				if (id == hint)
+				{
+					return Boolean.TRUE;
+				}
+			}
+			return Boolean.FALSE;
+		}
+
+		@Override
 		public Boolean ground(int[] ids, int[] zone)
 		{
 			return placed("ground", ids, zone);
