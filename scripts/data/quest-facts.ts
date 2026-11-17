@@ -47,7 +47,7 @@ export function questFacts(article: WikiArticle, stepIds: string[], retrievedAt:
     // A partial start (Creature of Fenkenstrain's Restless Ghost) is kept as the whole quest: stricter, and its keepsakes count.
     // The quest icon ({{SCP|Quest}}) and the start marker ({{Questreqstart|..}}) around the link add nothing.
     const bare = line.replace(/\{\{(?:SCP\|Quest|Questreqstart\|[^{}]*)\}\}/gi, '').replace(/ +/g, ' ');
-    if (/^\*\s*(?:Partial c|C)ompletion of \[\[[^\]]+\]\]\.?\s*$/i.test(bare)) return consumed.add(i), firstLink(bare);
+    if (/^\*\s*(?:Partial c|C)omplet(?:ion of|ed) \[\[[^\]]+\]\]\.?\s*$/i.test(bare)) return consumed.add(i), firstLink(bare);
     if (/^\*\s*Completion of the following quests?:?\s*$/i.test(line)) return consumed.add(i), [];
     const head = lines.slice(0, i).reverse().find(l => /^\*(?!\*)/.test(l)) ?? '';
     if (!/^\*\*+\s*\[\[[^\]]+\]\]\s*$/.test(line) || !/Completion of the following quests?/i.test(head)) return [];
@@ -263,6 +263,28 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
   // Nothing is brought or used up; the 2,000 coins are paid at the end.
   'The Ascent of Arceuus': { revision: 15366179, flow: {
     consumes: [], receives: [], unknownItems: ['Device'], partialDelivery: false, fromStartOnly: true,
+  } },
+  // The yellow dye, swamp tar and 50 coins pay for the eagle disguise in Varrock; the feathers and seed are quest items.
+  "Eagles' Peak": { revision: 15389796, flow: {
+    consumes: [{ name: 'Yellow dye', count: 1 }, { name: 'Swamp tar', count: 1 }, { name: 'Coins', count: 50 }], receives: [],
+    unknownItems: ['Bird book', 'Metal feather', 'Bronze feather', 'Silver feather', 'Golden feather', 'Odd bird seed', 'Eagle feather', 'Eagle cape', 'Fake beak'],
+    partialDelivery: false, fromStartOnly: true,
+  } },
+  // The milky nettle tea goes to the Old Crone, silk and thread repair the model ship, the slime dyes the bedsheet and the oak longbow
+  // is signed for Ak-Haranu; the dyes left over and the tools are kept, the ecto-tokens pay the boat to Dragontooth Island.
+  'Ghosts Ahoy': { revision: 15360836, flow: {
+    consumes: [{ name: 'Bucket of milk', count: 1 }, { name: 'Nettle tea', count: 1 }, { name: 'Silk', count: 1 }, { name: 'Thread', count: 1 },
+      { name: 'Bucket of slime', count: 1 }, { name: 'Oak longbow', count: 1 }],
+    receives: [],
+    unknownItems: ['Ecto-token', 'Model ship', 'Map scrap', 'Treasure map', 'Book of haricanto', 'Translation manual', 'Bedsheet', 'Petition form', 'Bone key', 'Chest key', 'Robes'],
+    uncertainReceipts: ['Red dye', 'Yellow dye', 'Blue dye'],
+    partialDelivery: true, fromStartOnly: true,
+  } },
+  // Nothing is brought or used up; the tinderbox is found in the tower and the puzzle parts are quest items.
+  'The Forsaken Tower': { revision: 15316647, flow: {
+    consumes: [], receives: [],
+    unknownItems: ['Generator crank', '5-gallon jug', '8-gallon jug', 'Old notes', 'Unknown fluid', 'Energy disk', "Dinh's hammer"],
+    partialDelivery: false, fromStartOnly: true,
   } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.

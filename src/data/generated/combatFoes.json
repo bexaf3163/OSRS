@@ -1546,6 +1546,28 @@
       }
     },
     {
+      "name": "Giant lobster (Ghosts Ahoy)",
+      "combat": 32,
+      "members": true,
+      "hitpoints": 32,
+      "attackLevel": 18,
+      "strengthLevel": 26,
+      "defenceLevel": 40,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 5,
+        "slash": 15,
+        "crush": 5,
+        "magic": 0,
+        "ranged": 5
+      },
+      "attackStyle": "stab",
+      "maxHit": 4,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

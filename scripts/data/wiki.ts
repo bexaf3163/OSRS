@@ -1,7 +1,7 @@
 // The OSRS Wiki for the data builders: one fetch (throttled, retried, redirects followed) and one parser for each template the builders read, so
 // every builder reads the wiki the same way and a fix to a parser reaches all of them. Needs a network; the app itself never calls it.
 
-const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
+const UA = 'osrs-route-money-builder';
 const API = 'https://oldschool.runescape.wiki/api.php';
 /** Pause between requests: the wiki asks bots to stay slow. */
 const GAP_MS = 400;

@@ -1718,6 +1718,36 @@
       "evidence": [
         "OSRS Wiki Eadgar's Ruse: no kills, read 2026-11-17."
       ]
+    },
+    {
+      "stepId": "S9-33",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Ghosts Ahoy: kill the level 32 giant lobster (32 hitpoints, hits up to 4) that comes out of the chest in the wrecked ship west of Port Phasmatys.",
+      "enemies": [
+        {
+          "name": "Giant lobster (Ghosts Ahoy)",
+          "level": 32,
+          "maxHit": 4,
+          "table": true
+        }
+      ],
+      "lines": [
+        "2.7"
+      ],
+      "assumptions": [
+        "It can despawn mid-fight; searching the chest again restarts it."
+      ],
+      "problems": [],
+      "alternatives": [],
+      "decision": "retain",
+      "changed": [
+        "2.137.0: new quest; the lobster is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Giant lobster (Ghosts Ahoy): level 32, 32 hitpoints, max hit 4, read 2026-11-17."
+      ]
     }
   ]
 }

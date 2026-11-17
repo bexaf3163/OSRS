@@ -70,10 +70,11 @@ def main():
         print('%-28s %6d' % (fname, len(rows)))
 
     for prefix, pkg, wanted in (('api', 'net.runelite.api.', API), ('gv', 'net.runelite.api.gameval.', GAMEVAL)):
-        have = [pkg + n for n in wanted if pkg + n in classes]
+        # The jar splits a class past the constant-pool limit: ObjectID1 holds the object ids from 32000 up.
+        have = [pkg + n for n in wanted + [n + '1' for n in wanted] if pkg + n in classes]
         table = constants(jar, have)
         for n in wanted:
-            write('%s_%s.txt' % (prefix, n), table.get(pkg + n, []))
+            write('%s_%s.txt' % (prefix, n), table.get(pkg + n, []) + table.get(pkg + n + '1', []))
     # nested InterfaceID classes: "Questjournal.TITLE value"
     nested = sorted(c for c in classes if c.startswith('net.runelite.api.gameval.InterfaceID$') and c.count('$') == 1)
     table = constants(jar, nested)

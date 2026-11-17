@@ -8921,5 +8921,319 @@
         "questName": "Tears of Guthix"
       }
     }
+  },
+  {
+    "id": "S9-32",
+    "stage": 9,
+    "type": "quest",
+    "title": "Eagles' Peak",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Eagles'_Peak",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Eagles'_Peak/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2606,3264,0",
+    "mapLocation": {
+      "x": 2606,
+      "y": 3264,
+      "plane": 0,
+      "label": "The Ardougne Zoo"
+    },
+    "npc": {
+      "nameEn": "Charlie",
+      "location": "The Ardougne Zoo",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Charlie"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Yellow dye",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lletya Seamstress in Lletya for 6 gp.",
+        "wikiItemId": 1765,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_dye.png"
+      },
+      {
+        "nameEn": "Swamp tar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1939,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Swamp_tar.png"
+      },
+      {
+        "nameEn": "Coins",
+        "amount": 50,
+        "howToGet": "The fancy dress shop owner in Varrock takes 50 coins for the disguise.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      }
+    ],
+    "reward": "2 QP, 2,500 Hunter XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Charlie"
+      ],
+      "dialogChoices": [
+        "Ah, you sound like someone who needs a quest doing!",
+        "Sure. Any idea where I should start looking?",
+        "The Ardougne zookeeper sent me to find you.",
+        "Well if you gave me a ferret I could take it back for you.",
+        "Could I help at all?",
+        "Well, specifically I'm after a couple of bird costumes.",
+        "I've got the feathers and materials you requested.",
+        "Okay, here are the materials. Eagle me up.",
+        "Taunt the kebbit.",
+        "Well I was originally sent to find you because of a ferret.",
+        "That sounds good to me."
+      ],
+      "highlightItems": [
+        "Yellow dye",
+        "Swamp tar",
+        "Coins"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Eagles' Peak"
+      }
+    }
+  },
+  {
+    "id": "S9-33",
+    "stage": 9,
+    "type": "quest",
+    "title": "Ghosts Ahoy",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ghosts_Ahoy",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Ghosts_Ahoy/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3677,3510,0",
+    "mapLocation": {
+      "x": 3677,
+      "y": 3510,
+      "plane": 0,
+      "label": "Port Phasmatys"
+    },
+    "npc": {
+      "nameEn": "Velorina",
+      "location": "Port Phasmatys",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Velorina"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Trout",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. The level 32 giant lobster in the wrecked ship hits up to 4.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "phase": "fight"
+      },
+      {
+        "nameEn": "Ecto-token",
+        "amount": 31,
+        "howToGet": "Get them at the Ectofuntus in Port Phasmatys (5 a worship: bones, a bucket and a pot each). 25 pay the boat to Dragontooth Island.",
+        "wikiItemId": 4278,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ecto-token_1.png"
+      },
+      {
+        "nameEn": "Ghostspeak amulet",
+        "amount": 1,
+        "howToGet": "The Restless Ghost reward; Father Urhney in Lumbridge Swamp gives a new one.",
+        "wikiItemId": 552,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png"
+      },
+      {
+        "nameEn": "Bucket of milk",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Culinaromancer's Chest in Lumbridge Castle basement for 6 gp.",
+        "wikiItemId": 1927,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_milk.png"
+      },
+      {
+        "nameEn": "Silk",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Silk trader for 2 gp.",
+        "wikiItemId": 950,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Silk.png"
+      },
+      {
+        "nameEn": "Red dye",
+        "amount": 3,
+        "howToGet": "The flag colours are random: 3 red, 3 yellow and 3 blue cover any mix. Buy on the Grand Exchange.",
+        "wikiItemId": 1763,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Red_dye.png"
+      },
+      {
+        "nameEn": "Yellow dye",
+        "amount": 3,
+        "howToGet": "The flag colours are random: 3 red, 3 yellow and 3 blue cover any mix. Buy on the Grand Exchange.",
+        "wikiItemId": 1765,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_dye.png"
+      },
+      {
+        "nameEn": "Blue dye",
+        "amount": 3,
+        "howToGet": "The flag colours are random: 3 red, 3 yellow and 3 blue cover any mix. Buy on the Grand Exchange.",
+        "wikiItemId": 1767,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Blue_dye.png"
+      },
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lumbridge General Store in Lumbridge for 3 gp.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
+      },
+      {
+        "nameEn": "Oak longbow",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Lowe's Archery Emporium in Varrock for 160 gp.",
+        "wikiItemId": 845,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Oak_longbow.png"
+      },
+      {
+        "nameEn": "Knife",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Funch's Fine Groceries in Grand Tree for 6 gp.",
+        "wikiItemId": 946,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
+      },
+      {
+        "nameEn": "Needle",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 1 gp.",
+        "wikiItemId": 1733,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Needle.png"
+      },
+      {
+        "nameEn": "Thread",
+        "amount": 1,
+        "howToGet": "Repairs the model ship with the silk. Buy on the Grand Exchange or at a crafting shop.",
+        "wikiItemId": 1734,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Thread.png"
+      },
+      {
+        "nameEn": "Bucket of slime",
+        "amount": 1,
+        "howToGet": "Fill a bucket at the slime pool in the Ectofuntus basement.",
+        "wikiItemId": 4286,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_slime.png"
+      },
+      {
+        "nameEn": "Nettle tea",
+        "amount": 1,
+        "howToGet": "Use nettles (picked in gloves) on a bowl of water and cook it on a range.",
+        "wikiItemId": 4239,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Nettle_tea.png"
+      }
+    ],
+    "foes": [
+      "Giant lobster (Ghosts Ahoy)"
+    ],
+    "reward": "2 QP, 2,400 Prayer XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Velorina"
+      ],
+      "dialogChoices": [
+        "Why, what is the matter?",
+        "Yes, I do. It is a very sad story.",
+        "Yes.",
+        "Do you know where this woman can be found?",
+        "I'm here about Necrovarus.",
+        "You are doing so much for me - is there anything I can do for you?",
+        "Is this your toy boat?",
+        "Okay, wait here - I'll get you your bow.",
+        "Do you have any job I can do?",
+        "Yes, I'd be delighted.",
+        "After hearing Velorina's story I will be happy to help out.",
+        "Let any ghost who so wishes pass on into the next world."
+      ],
+      "highlightItems": [
+        "Ecto-token",
+        "Ghostspeak amulet",
+        "Bucket of milk",
+        "Silk",
+        "Red dye",
+        "Yellow dye",
+        "Blue dye",
+        "Spade",
+        "Oak longbow",
+        "Knife",
+        "Needle",
+        "Thread",
+        "Bucket of slime",
+        "Nettle tea"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Ghosts Ahoy"
+      }
+    }
+  },
+  {
+    "id": "S9-34",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Forsaken Tower",
+    "qp": 1,
+    "requires": [
+      "S9-07"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Forsaken_Tower",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Forsaken_Tower/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=1483,3748,0",
+    "mapLocation": {
+      "x": 1483,
+      "y": 3748,
+      "plane": 0,
+      "label": "Lovakengj"
+    },
+    "npc": {
+      "nameEn": "Lady Vulcana Lovakengj",
+      "location": "Lovakengj",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Lady_Vulcana_Lovakengj"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Found in a cupboard upstairs in the tower, or bring your own.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      }
+    ],
+    "reward": "1 QP, 500 Mining XP, 500 Smithing XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Lady Vulcana Lovakengj"
+      ],
+      "dialogChoices": [
+        "Yes.",
+        "I'll get going.",
+        "I've been sent to help you.",
+        "Start the generator."
+      ],
+      "highlightItems": [
+        "Tinderbox"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Forsaken Tower"
+      }
+    }
   }
 ]

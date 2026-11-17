@@ -47,6 +47,35 @@
         { "nameEn": "Raw sardine", "count": 1, "how": "Buy it, or fish one with a fishing rod and bait." },
         { "nameEn": "Doogle leaves", "count": 1, "how": "Spawns behind Gertrude's house west of Varrock." }
       ]
+    },
+    "Bucket of slime": {
+      "makeAt": "Ectofuntus basement",
+      "manualSeconds": 30,
+      "note": "Use a bucket on the slime pool in the Ectofuntus basement (OSRS Wiki, Bucket of slime). The 30 seconds are an estimate of the climb down and back.",
+      "from": [
+        {
+          "nameEn": "Bucket",
+          "count": 1,
+          "how": "Buy one at a general store."
+        }
+      ]
+    },
+    "Nettle tea": {
+      "makeAt": "A range or fire",
+      "manualSeconds": 30,
+      "note": "Use nettles on a bowl of water, then cook the nettle-water (OSRS Wiki, Nettle tea). The 30 seconds are an estimate.",
+      "from": [
+        {
+          "nameEn": "Bowl of water",
+          "count": 1,
+          "how": "Fill a bowl at a sink or fountain."
+        },
+        {
+          "nameEn": "Nettles",
+          "count": 1,
+          "how": "Pick them wearing gloves, for example north of Draynor Manor."
+        }
+      ]
     }
   }
 }

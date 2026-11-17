@@ -24,7 +24,7 @@ const article = await wikiArticle(title);
 const guide = await wikiArticle(`${title}/Quick guide`).catch(() => null);
 // Item facts: the item database first, the item's own Wiki card for the rest (as npm run build-items reads it).
 const items = new Map((json('src/data/generated/f2p-items.json') as WikiItemDetail[]).map((i) => [i.nameEn.toLowerCase(), i]));
-const fetchFn = (url: string) => fetch(url, { headers: { 'User-Agent': 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)' } });
+const fetchFn = (url: string) => fetch(url, { headers: { 'User-Agent': 'osrs-route-money-builder' } });
 const mapping = new Map(((await (await fetchFn('https://prices.runescape.wiki/api/v1/osrs/mapping')).json()) as MappingEntry[]).map((m) => [m.id, m]));
 for (const name of cardItems(article)) {
   if (items.has(name.toLowerCase())) continue;

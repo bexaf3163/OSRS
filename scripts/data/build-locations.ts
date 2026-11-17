@@ -13,7 +13,7 @@ import { articleMapPoint, fetchWikitext, locLinePoint, type WikiPoint } from '..
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const OUT = `${root}src/data/generated/majorLocations.json`;
-const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
+const UA = 'osrs-route-money-builder';
 
 type Kind = 'city' | 'bank' | 'shop' | 'npc' | 'guild' | 'landmark' | 'dungeon' | 'transport' | 'fishing' | 'mine';
 

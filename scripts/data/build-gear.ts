@@ -17,7 +17,7 @@ import { listedWithoutRequirements, requirementsFromText, setRule } from './gear
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const OUT = `${root}src/data/generated/gear.json`;
 const styles = JSON.parse(readFileSync(`${root}src/data/generated/styleGear.json`, 'utf8')) as Record<'magic' | 'ranged', { weapon: { names: string[]; reqs: { skill: string; level: number }[]; quests: string[] }[] }>;
-const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
+const UA = 'osrs-route-money-builder';
 
 const METALS = ['bronze', 'iron', 'steel', 'black', 'mithril', 'adamant', 'rune'] as const;
 type Metal = typeof METALS[number];
@@ -79,6 +79,9 @@ const EXTRA: { name: string; kind: string; set?: string }[] = [
   { name: 'Silverlight', kind: 'quest' },
   { name: 'Anti-dragon shield', kind: 'quest' },
   { name: 'Magic secateurs', kind: 'quest' },
+  // Hunter tools wielded in the weapon slot: with their bonuses a fight after training can still be estimated. Never advised for combat.
+  { name: 'Noose wand', kind: 'tool' },
+  { name: 'Insect net', kind: 'tool' },
 ];
 
 const SLOT: Record<string, GearSlot> = { weapon: 'weapon', '2h': 'weapon', head: 'head', body: 'body', legs: 'legs', shield: 'shield', neck: 'neck' };
@@ -144,7 +147,8 @@ for (const w of wanted) {
   // The requirements: the item article → the set article → the free equipment overview. None anywhere — "not verified".
   const page = await fetchWikitext(fetchFn, box.pageName);
   const own = page ? requirementsFromText(page.text) : null;
-  let req: GearRequirements | null = own === 'none' ? {} : own;
+  // Hunter tools have no wield requirement; their articles list unrelated levels (Insect net read as Magic 71).
+  let req: GearRequirements | null = w.kind === 'tool' || own === 'none' ? {} : own;
   let reqFrom = req ? box.pageName : undefined;
   if (!req && w.set) {
     const set = await pageText(w.set);

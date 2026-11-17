@@ -156,7 +156,7 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 
 ## Handover — state on 2026-11-14
 
-- **State:** v2.134.0 published, all gates passed; nothing tested in the real game since 2.87.
+- **State:** v2.137.0 published, all gates passed; nothing tested in the real game since 2.87.
 - **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, training times shown); training is always Balanced (2.135.0); Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; V2 review retired; update Cancel stays.
 - **Next:** 1) P4. 2) Members (owner): Members unlocks everything; money guides hand-reviewed (106) or held back; once subscribed, the run is one logical path, quests and training together; a reached followed goal hands back to the route or the next F2P checkpoint (`nextAfterReached`). Next: Members quests in batches of 3 to 5 (one gate and push each), the 2-turn debt, fight profiles. 3) Measured quest times from the player's own quest starts and finishes.
 - **Owner:** writes Russian; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.

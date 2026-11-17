@@ -1531,6 +1531,62 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Big_bones"
   },
   {
+    "id": 10006,
+    "nameEn": "Bird snare",
+    "examine": "A simple bird catcher.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bird_snare.png",
+    "value": 5,
+    "highAlch": 3,
+    "lowAlch": 2,
+    "buyLocations": [
+      {
+        "shopName": "Nardah Hunter Shop.",
+        "location": "Nardah",
+        "owner": "Artimeus",
+        "price": 6,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Aleck's Hunter Emporium.",
+        "location": "Yanille",
+        "owner": "Aleck",
+        "price": 6,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Imia's Supplies",
+        "location": "Hunter Guild",
+        "owner": "Imia",
+        "price": 6,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Elder Strom's Hunting Stall",
+        "location": "The Summer Shore",
+        "owner": "Elder Strom",
+        "price": 6,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Bea's Hunting Gear",
+        "location": "Bea's farm",
+        "owner": "Farmer Bea",
+        "price": 6,
+        "stock": 50,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Necropolis camps - south-east of Sophanem (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bird_snare"
+  },
+  {
     "id": 1474,
     "nameEn": "Black bead",
     "examine": "A small round black bead.",
@@ -1755,6 +1811,59 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Body_rune"
+  },
+  {
+    "id": 1446,
+    "nameEn": "Body talisman",
+    "examine": "A mysterious power emanates from the talisman...",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Body_talisman.png",
+    "value": 4,
+    "highAlch": 2,
+    "lowAlch": 1,
+    "dropSources": [
+      {
+        "monster": "Guard",
+        "combatLevel": 21,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Guard (Port Sarim jail)",
+        "combatLevel": 21,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Guard (Doric's hut)",
+        "combatLevel": 19,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Hill Giant",
+        "combatLevel": 28,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Obor#Members",
+        "combatLevel": null,
+        "rate": "2/135"
+      },
+      {
+        "monster": "Obor#Free-to-play",
+        "combatLevel": null,
+        "rate": "2/135"
+      },
+      {
+        "monster": "Dagannoth (Waterbirth Island)#Level 88",
+        "combatLevel": null,
+        "rate": "1/179.2"
+      },
+      {
+        "monster": "Dagannoth (Waterbirth Island)#Level 90",
+        "combatLevel": null,
+        "rate": "1/224"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Body_talisman"
   },
   {
     "id": 526,
@@ -3099,6 +3208,25 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Bucket_of_sap"
+  },
+  {
+    "id": 4286,
+    "nameEn": "Bucket of slime",
+    "examine": "It's a bucket of ectoplasm.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_slime.png",
+    "value": 1,
+    "buyLocations": [
+      {
+        "shopName": "Trader Stan's Trading Post",
+        "location": "Port Piscarilius",
+        "owner": "Trader Crewmember",
+        "price": 2,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bucket_of_slime"
   },
   {
     "id": 1929,
@@ -5407,6 +5535,59 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Earth_rune"
   },
   {
+    "id": 1440,
+    "nameEn": "Earth talisman",
+    "examine": "A mysterious power emanates from the talisman...",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Earth_talisman.png",
+    "value": 4,
+    "highAlch": 2,
+    "lowAlch": 1,
+    "dropSources": [
+      {
+        "monster": "Earth wizard",
+        "combatLevel": 13,
+        "rate": "1/20"
+      },
+      {
+        "monster": "Farmer#Free-to-play",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Farmer#Members",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Man",
+        "combatLevel": 2,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Al Kharid warrior",
+        "combatLevel": 9,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Narf",
+        "combatLevel": 2,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Woman",
+        "combatLevel": 2,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Drunken man",
+        "combatLevel": 3,
+        "rate": "2/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Earth_talisman"
+  },
+  {
     "id": 4278,
     "nameEn": "Ecto-token",
     "examine": "A token with ectoplasm on it.",
@@ -6041,6 +6222,59 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Fire_rune"
+  },
+  {
+    "id": 1442,
+    "nameEn": "Fire talisman",
+    "examine": "A mysterious power emanates from the talisman...",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Fire_talisman.png",
+    "value": 4,
+    "highAlch": 2,
+    "lowAlch": 1,
+    "dropSources": [
+      {
+        "monster": "Fire wizard",
+        "combatLevel": 13,
+        "rate": "1/20"
+      },
+      {
+        "monster": "Dark wizard#High level",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Skeleton#Unarmed",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Dark wizard#Low level",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Dagannoth (Waterbirth Island)#Level 88",
+        "combatLevel": null,
+        "rate": "1/179.2"
+      },
+      {
+        "monster": "Dagannoth (Waterbirth Island)#Level 90",
+        "combatLevel": null,
+        "rate": "1/224"
+      },
+      {
+        "monster": "Lava Strykewyrm",
+        "combatLevel": 116,
+        "rate": "4/128"
+      },
+      {
+        "monster": "Magma strykewyrm",
+        "combatLevel": 249,
+        "rate": "4/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Fire_talisman"
   },
   {
     "id": 313,
@@ -6789,6 +7023,81 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Grain"
   },
   {
+    "id": 1987,
+    "nameEn": "Grapes",
+    "examine": "Good grapes for wine making.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Grapes.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Culinaromancer's Chest",
+        "location": "Lumbridge Castle basement",
+        "owner": "None",
+        "price": 1,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Faustus' Fruit and Veg",
+        "location": "Aldarin",
+        "owner": "Faustus",
+        "price": 1,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Cooks' Guild (2nd floor)",
+      "Varrock - Phoenix Gang Hideout"
+    ],
+    "dropSources": [
+      {
+        "monster": "Vorkath#Post-quest",
+        "combatLevel": null,
+        "rate": "5/150"
+      },
+      {
+        "monster": "Goblin#Drop table 2",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Goblin (Goblin Village)",
+        "combatLevel": 5,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Goblin (Vault of War)",
+        "combatLevel": 5,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Kalphite Queen",
+        "combatLevel": 333,
+        "rate": "5/126"
+      },
+      {
+        "monster": "Zulrah",
+        "combatLevel": 725,
+        "rate": "6/249"
+      },
+      {
+        "monster": "Thermonuclear smoke devil",
+        "combatLevel": 301,
+        "rate": "1/107"
+      },
+      {
+        "monster": "Goblin (God Wars Dungeon)",
+        "combatLevel": 12,
+        "rate": "1/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Grapes"
+  },
+  {
     "id": 1135,
     "nameEn": "Green d'hide body",
     "examine": "Made from 100% real dragonhide.",
@@ -7246,6 +7555,58 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Holy_symbol"
+  },
+  {
+    "id": 10010,
+    "nameEn": "Insect net",
+    "examine": "For catching insects...",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Insect_net.png",
+    "value": 20,
+    "highAlch": 12,
+    "lowAlch": 8,
+    "buyLocations": [
+      {
+        "shopName": "Nardah Hunter Shop.",
+        "location": "Nardah",
+        "owner": "Artimeus",
+        "price": 24,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Aleck's Hunter Emporium.",
+        "location": "Yanille",
+        "owner": "Aleck",
+        "price": 24,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Elder Strom's Hunting Stall",
+        "location": "The Summer Shore",
+        "owner": "Elder Strom",
+        "price": 24,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Imia's Supplies",
+        "location": "Hunter Guild",
+        "owner": "Imia",
+        "price": 26,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Scavenger beast",
+        "combatLevel": null,
+        "rate": "1/18"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Insect_net"
   },
   {
     "id": 884,
@@ -8274,6 +8635,27 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Jug_of_water"
+  },
+  {
+    "id": 3159,
+    "nameEn": "Karambwan vessel",
+    "examine": "This Karambwan Vessel is loaded with Karambwanji.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Karambwan_vessel_(baited).png",
+    "value": 40,
+    "highAlch": 24,
+    "lowAlch": 16,
+    "buyLocations": [
+      {
+        "shopName": "Tiadeche's Karambwan Stall",
+        "location": "Tai Bwo Wannai",
+        "owner": "Tiadeche",
+        "price": 2,
+        "stock": 2,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Karambwan_vessel"
   },
   {
     "id": 431,
@@ -10296,6 +10678,72 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Needle"
   },
   {
+    "id": 4239,
+    "nameEn": "Nettle tea",
+    "examine": "It's a bowl of nettle tea.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Nettle_tea.png",
+    "value": 4,
+    "highAlch": 2,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Nettle_tea"
+  },
+  {
+    "id": 10150,
+    "nameEn": "Noose wand",
+    "examine": "A noose on a stick.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Noose_wand.png",
+    "value": 4,
+    "highAlch": 2,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Nardah Hunter Shop.",
+        "location": "Nardah",
+        "owner": "Artimeus",
+        "price": 4,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Aleck's Hunter Emporium.",
+        "location": "Yanille",
+        "owner": "Aleck",
+        "price": 4,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Elder Strom's Hunting Stall",
+        "location": "The Summer Shore",
+        "owner": "Elder Strom",
+        "price": 4,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Imia's Supplies",
+        "location": "Hunter Guild",
+        "owner": "Imia",
+        "price": 5,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Bea's Hunting Gear",
+        "location": "Bea's farm",
+        "owner": "Farmer Bea",
+        "price": 5,
+        "stock": 50,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Stalker Den (1st floor) (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Noose_wand"
+  },
+  {
     "id": 1521,
     "nameEn": "Oak logs",
     "examine": "Logs cut from an oak tree.",
@@ -10322,6 +10770,82 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Oak_logs"
+  },
+  {
+    "id": 845,
+    "nameEn": "Oak longbow",
+    "examine": "A nice sturdy bow made out of oak.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Oak_longbow.png",
+    "value": 160,
+    "highAlch": 96,
+    "lowAlch": 64,
+    "buyLocations": [
+      {
+        "shopName": "Lowe's Archery Emporium",
+        "location": "Varrock",
+        "owner": "Lowe",
+        "price": 160,
+        "stock": 3,
+        "members": false
+      },
+      {
+        "shopName": "Brian's Archery Supplies.",
+        "location": "Rimmington",
+        "owner": "Brian",
+        "price": 160,
+        "stock": 4,
+        "members": false
+      },
+      {
+        "shopName": "Hickton's Archery Emporium.",
+        "location": "Catherby",
+        "owner": "Hickton",
+        "price": 160,
+        "stock": 4,
+        "members": true
+      },
+      {
+        "shopName": "Dargaud's Bow and Arrows.",
+        "location": "Ranging Guild",
+        "owner": "Bow and Arrow salesman",
+        "price": 160,
+        "stock": 20,
+        "members": true
+      },
+      {
+        "shopName": "Daryl's Ranging Surplus",
+        "location": "Shayzien",
+        "owner": "Daryl",
+        "price": 160,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Arcuani's Archery Supplies",
+        "location": "Tal Teklan",
+        "owner": "Arcuani",
+        "price": 160,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Lletya Archery Shop",
+        "location": "Lletya",
+        "owner": "Dalldav",
+        "price": 208,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Skeleton (Tarn's Lair)#Low level",
+        "combatLevel": null,
+        "rate": "3/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Oak_longbow"
   },
   {
     "id": 843,
@@ -11244,6 +11768,69 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Prayer_potion"
   },
   {
+    "id": 7936,
+    "nameEn": "Pure essence",
+    "examine": "An unimbued rune of extra capability.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Pure_essence.png",
+    "value": 4,
+    "highAlch": 2,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Jiminua's Jungle Store.",
+        "location": "Karamja",
+        "owner": "Jiminua",
+        "price": 5,
+        "stock": 0,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Abyssal demon#Wilderness Slayer Cave",
+        "combatLevel": null,
+        "rate": "5/68"
+      },
+      {
+        "monster": "Spiritual mage#Zaros",
+        "combatLevel": null,
+        "rate": "8/128"
+      },
+      {
+        "monster": "Spiritual ranger#Zaros",
+        "combatLevel": null,
+        "rate": "8/128"
+      },
+      {
+        "monster": "Spiritual warrior#Zaros",
+        "combatLevel": null,
+        "rate": "8/128"
+      },
+      {
+        "monster": "Ankou#Regular",
+        "combatLevel": null,
+        "rate": "5/100"
+      },
+      {
+        "monster": "Catablepon",
+        "combatLevel": 68,
+        "rate": "5/101"
+      },
+      {
+        "monster": "Minotaur",
+        "combatLevel": 19,
+        "rate": "5/101"
+      },
+      {
+        "monster": "Abyssal demon#Standard",
+        "combatLevel": null,
+        "rate": "5/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Pure_essence"
+  },
+  {
     "id": 99,
     "nameEn": "Ranarr potion (unf)",
     "examine": "I need another ingredient to finish this Ranarr potion.",
@@ -11667,6 +12254,26 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_chicken"
+  },
+  {
+    "id": 3150,
+    "nameEn": "Raw karambwanji",
+    "examine": "Small brightly coloured tropical fish.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Raw_karambwanji.png",
+    "value": 19,
+    "highAlch": 11,
+    "buyLocations": [
+      {
+        "shopName": "Tiadeche's Karambwan Stall",
+        "location": "Tai Bwo Wannai",
+        "owner": "Tiadeche",
+        "price": 10,
+        "stock": 50,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_karambwanji"
   },
   {
     "id": 377,
@@ -14214,6 +14821,35 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Sapphire"
+  },
+  {
+    "id": 1694,
+    "nameEn": "Sapphire amulet",
+    "examine": "I wonder if I can get this enchanted.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Sapphire_amulet.png",
+    "value": 900,
+    "highAlch": 540,
+    "lowAlch": 360,
+    "buyLocations": [
+      {
+        "shopName": "Grum's Gold Exchange.",
+        "location": "Port Sarim",
+        "owner": "Grum",
+        "price": 900,
+        "stock": 0,
+        "members": false
+      },
+      {
+        "shopName": "Conara's Jewels",
+        "location": "Cam Torum",
+        "owner": "Conara",
+        "price": 900,
+        "stock": 0,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Sapphire_amulet"
   },
   {
     "id": 8794,
@@ -16869,6 +17505,63 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Swamp_paste"
+  },
+  {
+    "id": 1939,
+    "nameEn": "Swamp tar",
+    "examine": "A foul smelling thick tar-like substance.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Swamp_tar.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "freeSpawns": [
+      "Lumbridge Swamp (members only)",
+      "Mort Myre Swamp (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Cave slime",
+        "combatLevel": 23,
+        "rate": "Always"
+      },
+      {
+        "monster": "Tar Monster",
+        "combatLevel": 132,
+        "rate": "1/3"
+      },
+      {
+        "monster": "Mutated Tortoise",
+        "combatLevel": 247,
+        "rate": "6/64"
+      },
+      {
+        "monster": "Warped Tortoise",
+        "combatLevel": 121,
+        "rate": "6/64"
+      },
+      {
+        "monster": "Mutated Terrorbird",
+        "combatLevel": 178,
+        "rate": "5/64"
+      },
+      {
+        "monster": "Warped Terrorbird",
+        "combatLevel": 138,
+        "rate": "5/64"
+      },
+      {
+        "monster": "Mummy (Ancient Pyramid)",
+        "combatLevel": 103,
+        "rate": "30/513"
+      },
+      {
+        "monster": "Pygmy kraken",
+        "combatLevel": 93,
+        "rate": "6/108"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Swamp_tar"
   },
   {
     "id": 373,

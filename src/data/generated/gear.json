@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: item and bonus infoboxes (Bucket infobox_item, infobox_bonuses), shops (storeline, infobox_shop), requirements from the articles",
-  "updated": "2026-11-14",
+  "updated": "2026-11-17",
   "items": [
     {
       "id": 1205,
@@ -5626,6 +5626,58 @@
         }
       ],
       "iconUrl": "https://oldschool.runescape.wiki/images/Magic_secateurs.png"
+    },
+    {
+      "id": 10150,
+      "name": "Noose wand",
+      "slot": "weapon",
+      "kind": "tool",
+      "reqFrom": "Noose wand",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 0,
+      "speed": 4,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Noose_wand.png"
+    },
+    {
+      "id": 10010,
+      "name": "Insect net",
+      "slot": "weapon",
+      "kind": "tool",
+      "reqFrom": "Insect net",
+      "members": true,
+      "tradeable": true,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "strength": 0,
+      "speed": 4,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Insect_net.png"
     }
   ]
 }

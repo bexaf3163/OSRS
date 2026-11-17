@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-49 stages: 21 retained, 27 revised, 0 with a branch, 1 deferred.
+50 stages: 22 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -57,6 +57,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-27 Hazeel Cult | quest-fight | yes | Alomone (13) | melee | Alomone | Trout 5 | Retain |
 | S9-28 Troll Stronghold | quest-fight | yes | Dad (101), Troll General (113) | safespot | Dad, Troll General | - | Retain |
 | S9-30 Eadgar's Ruse | not-combat | no | - | none | - | - | Retain |
+| S9-33 Ghosts Ahoy | quest-fight | yes | Giant lobster (Ghosts Ahoy) (32) | melee | Giant lobster (Ghosts Ahoy) | Trout 5 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1196,4 +1197,22 @@ Changed:
 Evidence:
 
 - OSRS Wiki Eadgar's Ruse: no kills, read 2026-11-17.
+
+## S9-33 Ghosts Ahoy
+
+**Retain.** Ghosts Ahoy: kill the level 32 giant lobster (32 hitpoints, hits up to 4) that comes out of the chest in the wrecked ship west of Port Phasmatys.
+
+Quest stage lines: 2.7.
+
+Assumptions:
+
+- It can despawn mid-fight; searching the chest again restarts it.
+
+Changed:
+
+- 2.137.0: new quest; the lobster is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Giant lobster (Ghosts Ahoy): level 32, 32 hitpoints, max hit 4, read 2026-11-17.
 

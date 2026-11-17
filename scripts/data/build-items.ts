@@ -13,7 +13,7 @@ import { fetchItemDetail, type MappingEntry } from '../../src/services/wikiApi.t
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const STEPS = `${root}src/data/authored/steps.json`;
 const OUT = `${root}src/data/generated/f2p-items.json`;
-const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
+const UA = 'osrs-route-money-builder';
 
 /** The key F2P items outside the route: ores, bars, tools, fish, runes, equipment. */
 const KEY_ITEMS: string[] = [
@@ -90,6 +90,9 @@ const steps = JSON.parse(readFileSync(STEPS, 'utf8')) as Step[];
 const stepItems = steps.flatMap((s) => [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])]);
 
 const wanted = new Set<string>(KEY_ITEMS);
+// Training tools and supplies too, or the planner cannot read whether the player holds them (Noose wand for Hunter).
+const methods = JSON.parse(readFileSync(`${root}src/data/authored/trainingMethods.json`, 'utf8')) as { methods: { needs?: { type: string; name: string }[] }[] };
+for (const m of methods.methods) for (const n of m.needs ?? []) if (n.type === 'item') wanted.add(n.name);
 for (const it of stepItems) wanted.add(it.nameEn);
 
 const mappingRes = await fetchFn('https://prices.runescape.wiki/api/v1/osrs/mapping');

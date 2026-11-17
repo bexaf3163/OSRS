@@ -8,7 +8,7 @@ import { templates } from './wiki.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const OUT = `${root}src/data/generated/threats.json`;
-const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
+const UA = 'osrs-route-money-builder';
 const API = 'https://oldschool.runescape.wiki/api.php';
 
 let last = 0;

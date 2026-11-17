@@ -13,7 +13,7 @@ const URL_TSV = `https://raw.githubusercontent.com/Skretzo/shortest-path/${COMMI
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const OUT = `${root}src/data/generated/portals.json`;
 
-const res = await fetch(URL_TSV, { headers: { 'User-Agent': 'OSRS-Path (https://github.com/bexaf3163/OSRS)' }, signal: AbortSignal.timeout(30_000) });
+const res = await fetch(URL_TSV, { headers: { 'User-Agent': 'osrs-route-money-builder' }, signal: AbortSignal.timeout(30_000) });
 if (!res.ok) throw new Error(`transports.tsv: HTTP ${res.status}`);
 const { portals, floors, skipped } = parseTransports(await res.text());
 const rows = dedupePortals(portals).map(toRow);

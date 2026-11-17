@@ -12,7 +12,7 @@ import { fetchWikitext } from '../../src/services/wikiApi.ts';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const OUT = `${root}src/data/generated/transportNet.json`;
-const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
+const UA = 'osrs-route-money-builder';
 const fetchFn = (url: string) => fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(20_000) });
 
 /** [[Link|Shown]] -> Shown, [[Link]] -> Link, '''bold''' and templates removed. */
