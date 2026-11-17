@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-46 stages: 18 retained, 27 revised, 0 with a branch, 1 deferred.
+48 stages: 20 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -54,6 +54,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-22 Getting Ahead | quest-fight | yes | Headless Beast (82) | melee | Headless Beast | Lobster 10 | Retain |
 | S9-24 Scorpion Catcher | quest-fight | yes | Jailer (47), Black demon (172), Poison spider (64) | melee | Jailer | Lobster 10 | Retain |
 | S9-25 Icthlarin's Little Helper | quest-fight | yes | Possessed Priest (91), Apparition (81) | melee | Possessed Priest, Apparition | Lobster 10 | Retain |
+| S9-27 Hazeel Cult | quest-fight | yes | Alomone (13) | melee | Alomone | Trout 5 | Retain |
+| S9-28 Troll Stronghold | quest-fight | yes | Dad (101), Troll General (113) | safespot | Dad, Troll General | - | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1131,4 +1133,48 @@ Changed:
 Evidence:
 
 - OSRS Wiki Icthlarin's Little Helper kills: Possessed Priest level 91, Apparitions 75 to 81, read 2026-11-17.
+
+## S9-27 Hazeel Cult
+
+**Retain.** Hazeel Cult: on Ceril's side, kill Alomone (level 13, 25 hitpoints, hits up to 2) in the cult's hideout.
+
+Quest stage lines: 0.10.
+
+Assumptions:
+
+- 5 trout are a margin; Alomone hits 2 at most.
+
+Alternatives:
+
+- Hazeel's side has no fight.
+
+Changed:
+
+- 2.133.0: new quest; Alomone is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Alomone infobox: level 13, 25 hitpoints, max hit 2, read 2026-11-17.
+
+## S9-28 Troll Stronghold
+
+**Retain.** Troll Stronghold: beat Dad (level 101, 120 hitpoints, hits up to 27) and kill a Troll General (level 113, 140 hitpoints, hits up to 38), both with Fire Bolt from a safespot.
+
+Quest stage lines: 0.0, 0.1, 0.2, 1.0, 1.2.
+
+Assumptions:
+
+- Both fight only up close, so the safespot holds; the staff of fire pays the fire runes.
+
+Alternatives:
+
+- Ranged from the same spots.
+
+Changed:
+
+- 2.133.0: new quest; Dad and the Troll General are in combatFoes.json and fightMechanics.json.
+
+Evidence:
+
+- OSRS Wiki Troll Stronghold kills: Dad and the Troll General can be safespotted; infoboxes read 2026-11-17.
 

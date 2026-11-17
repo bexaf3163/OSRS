@@ -1620,6 +1620,80 @@
       "evidence": [
         "OSRS Wiki Icthlarin's Little Helper kills: Possessed Priest level 91, Apparitions 75 to 81, read 2026-11-17."
       ]
+    },
+    {
+      "stepId": "S9-27",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Hazeel Cult: on Ceril's side, kill Alomone (level 13, 25 hitpoints, hits up to 2) in the cult's hideout.",
+      "enemies": [
+        {
+          "name": "Alomone",
+          "level": 13,
+          "maxHit": 2,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.10"
+      ],
+      "assumptions": [
+        "5 trout are a margin; Alomone hits 2 at most."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Hazeel's side has no fight."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.133.0: new quest; Alomone is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Alomone infobox: level 13, 25 hitpoints, max hit 2, read 2026-11-17."
+      ]
+    },
+    {
+      "stepId": "S9-28",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "safespot",
+      "objective": "Troll Stronghold: beat Dad (level 101, 120 hitpoints, hits up to 27) and kill a Troll General (level 113, 140 hitpoints, hits up to 38), both with Fire Bolt from a safespot.",
+      "enemies": [
+        {
+          "name": "Dad",
+          "level": 101,
+          "maxHit": 27,
+          "table": true
+        },
+        {
+          "name": "Troll General",
+          "level": 113,
+          "maxHit": 38,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.0",
+        "0.1",
+        "0.2",
+        "1.0",
+        "1.2"
+      ],
+      "assumptions": [
+        "Both fight only up close, so the safespot holds; the staff of fire pays the fire runes."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Ranged from the same spots."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.133.0: new quest; Dad and the Troll General are in combatFoes.json and fightMechanics.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Troll Stronghold kills: Dad and the Troll General can be safespotted; infoboxes read 2026-11-17."
+      ]
     }
   ]
 }

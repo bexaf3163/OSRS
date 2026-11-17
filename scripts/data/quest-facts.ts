@@ -227,6 +227,20 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
       { name: 'Waterskin(4)', count: 1 }, { name: 'Shantay pass', count: 1 }], receives: [],
     unknownItems: ['Holy symbol', 'Canopic jar', 'Crondis canopic jar', 'Het canopic jar', 'Apmeken canopic jar', 'Scabaras canopic jar'], partialDelivery: true, fromStartOnly: true,
   } },
+  // The coins buy the clothes; the runes cast Telekinetic Grab; logs, coal and the bar feed the spinning machine and the axe; the pie and sapphires are handed in.
+  'The Giant Dwarf': { revision: 15375425, flow: {
+    consumes: [{ name: 'Coins', count: 200 }, { name: 'Air rune', count: 1 }, { name: 'Law rune', count: 1 }, { name: 'Logs', count: 1 }, { name: 'Coal', count: 1 },
+      { name: 'Iron bar', count: 1 }, { name: 'Sapphire', count: 3 }, { name: 'Redberry pie', count: 1 }], receives: [],
+    unknownItems: ['Book on costumes', 'Exquisite clothes', 'Exquisite boots', 'Dwarven battleaxe', 'Left boot', 'Right boot'], partialDelivery: true, fromStartOnly: true,
+  } },
+  // Nothing is brought; the poison, scrolls, key and armour are quest items.
+  'Hazeel Cult': { revision: 15328196, flow: {
+    consumes: [], receives: [], unknownItems: ['Poison', 'Hazeel scroll', 'Chest key', 'Carnillean armour'], partialDelivery: false, fromStartOnly: true,
+  } },
+  // The climbing boots are kept; the prison and cell keys are quest items.
+  'Troll Stronghold': { revision: 15395347, flow: {
+    consumes: [], receives: [], unknownItems: ['Prison key', 'Cell key 1', 'Cell key 2'], partialDelivery: false, fromStartOnly: true,
+  } },
   // The runes are cast at the Strange Device and the rope tied on the way; darts and food are spent in fights.
   'Tale of the Righteous': { revision: 15402882, flow: {
     consumes: [{ name: 'Air rune', count: 6 }, { name: 'Mind rune', count: 3 }, { name: 'Rope', count: 1 }], receives: [],
@@ -272,6 +286,11 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to run past level 172 [[black demon]]s and level 64 [[poison spider]]s',
   // Icthlarin's Little Helper: the Possessed Priest (step foes, combat ledger).
   'The ability to defeat a level 91 monster.',
+  // Hazeel Cult: the route sides with Ceril and kills Alomone (step foes, combat ledger).
+  "Able to defeat a level 13 cultist (this applies only if you're taking Ceril's side)",
+  // Troll Stronghold: Agility 15 is the requirement; the Troll General is in the step foes and combat ledger.
+  '(47 is recommended)',
+  'The ability to defeat a level 113 [[Troll General]] (can be [[safespot]]ted)',
   // Mountain Daughter: the note sits under Agility 20, which covers it; the Kendal is in the step foes and combat ledger.
   '<ref>Entering the Mountain Camp initially requires 10 Agility.</ref>',
   'The ability to defeat a level 70 [[The Kendal|monster]] (can be [[safespot|safespotted]])',

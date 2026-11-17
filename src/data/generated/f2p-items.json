@@ -4160,6 +4160,26 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Clay"
   },
   {
+    "id": 3105,
+    "nameEn": "Climbing boots",
+    "examine": "Boots made for climbing.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Climbing_boots.png",
+    "value": 12,
+    "highAlch": 7,
+    "lowAlch": 4,
+    "buyLocations": [
+      {
+        "shopName": "Tenzing",
+        "location": "",
+        "price": 12,
+        "stock": "∞",
+        "members": false
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Climbing_boots"
+  },
+  {
     "id": 453,
     "nameEn": "Coal",
     "examine": "Hmm a non-renewable energy source!",
@@ -13944,6 +13964,140 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Salmon"
+  },
+  {
+    "id": 1607,
+    "nameEn": "Sapphire",
+    "examine": "This looks valuable.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Sapphire.png",
+    "value": 250,
+    "highAlch": 150,
+    "lowAlch": 100,
+    "buyLocations": [
+      {
+        "shopName": "Herquin's Gems.",
+        "location": "Falador",
+        "owner": "Herquin",
+        "price": 250,
+        "stock": 1,
+        "members": false
+      },
+      {
+        "shopName": "Gem Trader.",
+        "location": "Al Kharid",
+        "owner": "Gem trader",
+        "price": 250,
+        "stock": 1,
+        "members": false
+      },
+      {
+        "shopName": "Kourend Castle Gem Stall.",
+        "location": "Kourend Castle",
+        "owner": "Gem merchant",
+        "price": 250,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Prifddinas Gem Stall",
+        "location": "Prifddinas",
+        "owner": "Glenda",
+        "price": 250,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Conara's Jewels",
+        "location": "Cam Torum",
+        "owner": "Conara",
+        "price": 250,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Toci's Gem Store",
+        "location": "Aldarin",
+        "owner": "Toci",
+        "price": 250,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Elder Coco's Crafting Stall",
+        "location": "The Summer Shore",
+        "owner": "Elder Coco",
+        "price": 250,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Ardougne Gem Stall.",
+        "location": "East Ardougne",
+        "owner": "Gem merchant",
+        "price": 375,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Green Gemstone Gems",
+        "location": "Keldagrim",
+        "owner": "Hervi",
+        "price": 375,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Fortis Gem Stall",
+        "location": "Civitas illa Fortis",
+        "owner": "Gem Merchant",
+        "price": 375,
+        "stock": 2,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Wilderness - hill of spiders north-west of Lava Dragon Isle",
+      "Rellekka - on a small island near the rock crabs (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Tern",
+        "combatLevel": 20,
+        "rate": "4/50"
+      },
+      {
+        "monster": "Mad Angel",
+        "combatLevel": 270,
+        "rate": "6/150"
+      },
+      {
+        "monster": "Elite Black Knight",
+        "combatLevel": 138,
+        "rate": "3/122"
+      },
+      {
+        "monster": "Vardorvis",
+        "combatLevel": 572,
+        "rate": "1/100"
+      },
+      {
+        "monster": "Duke Sucellus",
+        "combatLevel": 758,
+        "rate": "1/100"
+      },
+      {
+        "monster": "The Whisperer",
+        "combatLevel": 587,
+        "rate": "1/100"
+      },
+      {
+        "monster": "The Leviathan",
+        "combatLevel": 593,
+        "rate": "1/100"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Sapphire"
   },
   {
     "id": 8794,

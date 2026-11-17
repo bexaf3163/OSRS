@@ -44256,6 +44256,2980 @@
      ]
     }
    ]
+  },
+  "S9-26": {
+   "var": [
+    "varbit",
+    571
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Speak to the Dwarven Boatman. ( then go through the tunnel to the south west. Once inside proceed through the Cave Entrance directly ahead between the two statues. ) Dialogue: \"That's a deal!\", \"Yes, I'm ready and don't mind it taking a few minutes.\"",
+      "Finish the conversation with Commander Veldaban. Dialogue: \"Yes, I will do this.\"",
+      "Talk to Blasidar the sculptor on the east side of Keldagrim, south of the kebab shop. Dialogue: \"Yes, I will do this.\""
+     ]
+    },
+    {
+     "title": "Fit for a King",
+     "steps": [
+      "Talk to Vermundi, the silk trader in the eastern market. (Big building east side of river, silk icon) Dialogue: \"Yes, I'm looking for some special clothes.\"",
+      "Talk to the Librarian in the library, located at the north-east corner of West Keldagrim. Dialogue: \"Do you know anything about King Alvis' clothes?\"",
+      "Climb any bookcase to find a book on costumes known as the 'Scholars Guide to Dwarven Costumes'.",
+      "If you didn't bring coal, mine in the north-east corner of East Keldagrim or purchase from Ordan in the Blast Furnace.",
+      "Talk to Vermundi again. Dialogue: \"Yes, about those special clothes again...\"",
+      "Use your coal and logs on the spinning machine next to Vermundi then light it with a tinderbox.",
+      "Talk to Vermundi again and pay 200gp for exquisite clothes. Dialogue: \"Yes, about those special clothes again...\", \"I'll pay.\"",
+      "If you didn't bring the 3 Sapphires, they can be purchased from Hervi at the Gem stall just to the north of Vermundi.",
+      "While here, steal from the baker's or crafting stall for completion of a task in the Easy Fremennik Diary (optional)",
+      "Talk to Saro at the anvil south-west of the bank in West Keldagrim. Dialogue: \"Yes, I'm looking for a pair of special boots.\"",
+      "Speak to Dromund in the house just north of the bank.",
+      "Take the left boot when he isn't looking.",
+      "Go outside behind his house and telegrab the right boot through the window when he isn't looking.",
+      "Talk to Santiri at the weapon shop in north-western West Keldagrim. Dialogue: \"Yes, I'm looking for a particular battleaxe.\", \"Blasidar the sculptor needs it for his statue.\", \"Perhaps I can repair the axe?\"",
+      "Use your 3 sapphires on the axe (now in your inventory) and talk to him again. Dialogue: \"Yes, I'm looking for a particular battleaxe.\"",
+      "If you have not completed The Knight's Sword Quest then you must speak to the librarian and then to Reldo in Varrock Library.",
+      "Talk to Thurgo at Mudskipper Point (), and give him an iron bar to repair the axe. Dialogue: \"Something else.\", \"Can you help me with this ancient axe?\", \"Return to Keldagrim immediately.\" (Dialogue: \"Can you help me with this ancient axe?\", \"Would you like a redberry pie?\", \"Can you help me with this ancient axe?\", \"Return to Keldagrim immediately.\" May need a redberry pie if Thurgo has not received one recently).",
+      "You will be given the option to immediately return to Keldagrim; do so. Dialogue: \"Return to Keldagrim immediately.\""
+     ]
+    },
+    {
+     "title": "Halfway there",
+     "steps": [
+      "Once in Blasidar's house, talk to Riki the sculptor's model to give him the clothes, axe and boots.",
+      "Talk to Blasidar. Watch the cutscene."
+     ]
+    },
+    {
+     "title": "Joining the consortium",
+     "steps": [
+      "Go to the upper floor of the market and talk to the secretary of any company except the Red Axe. Dialogue: \"Is there anything I can help you with?\". Ensure you perform tasks only for the company you choose, as the progress for each is separate. Buy the ores from Ordan in the Blast Furnace to save time.",
+      "Offer to help them. The secretaries require you to retrieve ores (cannot be noted). Be sure to read the dialogue to know what ores you need or fill your inventory with about 5 of each.",
+      "A hidden scoring system determines your progress with a company; each ore delivery completed gives 20 points, while failing or refusing a task subtracts 2 points. Once you reach 75 points, you can deliver metal bars for the director for 12 points each; 100 points is required to progress through this section.",
+      "Talk to the director after making enough progress and complete a few tasks for them. Dialogue: \"Do you have any more tasks for me?\"",
+      "After enough tasks, the director asks whether you've considered joining their company or states that you don't need to be doing running errands for them anymore. Join the company. Dialogue: \"I'd like to officially join your company.\"",
+      "Tell the director that Blasidar sent you, offer your support. Dialogue: \"Blasidar the sculptor has sent me.\", \"I would support you.\", \"Yes! Long live the <company name>!\"",
+      "Go back and talk to Commander Veldaban west of the bank, he will ask if you want to attend the meeting. You may choose not to.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Speak to the Dwarven Boatman.",
+       "s": "Speak to the Dwarven Boatman.",
+       "k": "enterDwarfCave",
+       "at": [
+        2732,
+        3713,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5008
+        ]
+       }
+      },
+      {
+       "t": "Speak to the Dwarven Boatman.",
+       "s": "Speak to the Dwarven Boatman.",
+       "k": "talkToBoatman",
+       "at": [
+        2829,
+        10129,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7725
+        ]
+       }
+      },
+      {
+       "t": "Speak to the Dwarven Boatman.",
+       "s": "Speak to the Dwarven Boatman.",
+       "k": "enterDwarfCave2",
+       "at": [
+        2781,
+        10161,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5973
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Finish speaking to Commander Veldaban.",
+       "s": "Finish speaking to Commander Veldaban.",
+       "k": "talkToVeldaban",
+       "at": [
+        2827,
+        10214,
+        0
+       ],
+       "hl": {
+        "npc": [
+         6045
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Blasidar the sculptor in the east of Keldagrim.",
+       "s": "Talk to Blasidar the sculptor in the east of Keldagrim.",
+       "k": "talkToBlasidar",
+       "at": [
+        2907,
+        10205,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2347
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Talk to Vermundi west of Blasidar. If you already have, open the Quest Journal to re-sync.",
+       "s": "Talk to Vermundi west of Blasidar (or re-sync with the Quest Journal)",
+       "k": "talkToVermundi",
+       "at": [
+        2887,
+        10188,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2367
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Librarian.",
+       "s": "Talk to the Librarian.",
+       "k": "talkToLibrarian",
+       "at": [
+        2861,
+        10226,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2370
+        ]
+       }
+      },
+      {
+       "t": "Climb any bookcase to find a book on costumes.",
+       "s": "Climb any bookcase to find a book on costumes.",
+       "k": "climbBookcase",
+       "at": [
+        2859,
+        10228,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6092
+        ]
+       }
+      },
+      {
+       "t": "Talk to Vermundi with the book on costumes.",
+       "s": "Talk to Vermundi with the book on costumes.",
+       "k": "talkToVermundiWithBook",
+       "at": [
+        2887,
+        10188,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2367
+        ]
+       }
+      },
+      {
+       "t": "Talk to Vermundi again.",
+       "s": "Talk to Vermundi again.",
+       "k": "talkToVermundiAfterBook",
+       "at": [
+        2887,
+        10188,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2367
+        ]
+       }
+      },
+      {
+       "t": "Use your coal on the spinning machine light it with a tinderbox.",
+       "s": "Use your coal on the spinning machine light it with a tinderbox.",
+       "k": "useCoalOnMachine",
+       "at": [
+        2885,
+        10189,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6080
+        ]
+       }
+      },
+      {
+       "t": "Start the spinning machine with a tinderbox.",
+       "s": "Start the spinning machine with a tinderbox.",
+       "k": "startMachine",
+       "at": [
+        2885,
+        10189,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6080
+        ]
+       }
+      },
+      {
+       "t": "Talk to Vermundi again and pay 200gp.",
+       "s": "Talk to Vermundi again and pay 200gp.",
+       "k": "talkToVermundiWithMachine",
+       "at": [
+        2887,
+        10188,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2367
+        ]
+       }
+      },
+      {
+       "t": "Talk to Saro in West Keldagrim.",
+       "s": "Talk to Saro in West Keldagrim.",
+       "k": "talkToSaro",
+       "at": [
+        2827,
+        10198,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2358
+        ]
+       }
+      },
+      {
+       "t": "Talk to Dromund.",
+       "s": "Talk to Dromund.",
+       "k": "talkToDromund",
+       "at": [
+        2838,
+        10224,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2374
+        ]
+       }
+      },
+      {
+       "t": "Take the Left boot when Dromund isn't looking.",
+       "s": "Take the Left boot when Dromund isn't looking.",
+       "k": "takeLeftBoot",
+       "at": [
+        2838,
+        10220,
+        0
+       ]
+      },
+      {
+       "t": "Take the Right boot from outside his window when he isn't looking using Telekinetic Grab.",
+       "s": "Take the right boot outside Dromund's window with Telekinetic Grab",
+       "k": "takeRightBoot",
+       "at": [
+        2836,
+        10226,
+        0
+       ]
+      },
+      {
+       "t": "Talk to Santiri.",
+       "s": "Talk to Santiri.",
+       "k": "talkToSantiri",
+       "at": [
+        2828,
+        10231,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2357
+        ]
+       }
+      },
+      {
+       "t": "Use the 3 sapphires on the axe.",
+       "s": "Use the 3 sapphires on the axe.",
+       "k": "useSapphires"
+      },
+      {
+       "t": "Talk to the Librarian about Imcando Dwarves. If you already have and no option appears for this, go talk to Reldo in Varrock Castle.",
+       "s": "Ask the Librarian about Imcando dwarves, or Reldo in Varrock",
+       "k": "talkToLibrarianAboutImcando",
+       "at": [
+        2861,
+        10226,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2370
+        ]
+       }
+      },
+      {
+       "t": "Talk to Reldo in Varrock Castle's library.",
+       "s": "Talk to Reldo in Varrock Castle's library.",
+       "k": "talkToReldo",
+       "at": [
+        3211,
+        3494,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4243
+        ]
+       }
+      },
+      {
+       "t": "Talk to Thurgo at Mudskipper Point.",
+       "s": "Talk to Thurgo at Mudskipper Point.",
+       "k": "talkToThurgo",
+       "at": [
+        3001,
+        3144,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4733
+        ]
+       }
+      },
+      {
+       "t": "Talk to Thurgo at Mudskipper Point.",
+       "s": "Talk to Thurgo at Mudskipper Point.",
+       "k": "talkToThurgoAfterPie",
+       "at": [
+        3001,
+        3144,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4733
+        ]
+       }
+      },
+      {
+       "t": "Talk to Riki the sculptor's model to give him the clothes, axe and boots.",
+       "s": "Give the clothes, axe and boots to Riki the sculptor's model",
+       "k": "giveItemsToRiki",
+       "at": [
+        2904,
+        10207,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2348
+        ]
+       }
+      },
+      {
+       "t": "Talk to Blasidar the sculptor.",
+       "s": "Talk to Blasidar the sculptor.",
+       "k": "talkToBlasidarAfterItems",
+       "at": [
+        2907,
+        10205,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2347
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Go to the upper floor of the market.",
+       "s": "Go to the upper floor of the market.",
+       "k": "enterConsortium",
+       "at": [
+        2895,
+        10210,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6087
+        ]
+       }
+      },
+      {
+       "t": "Keep talking to the same secretary and complete the tasks given. If you don't want to do one of the tasks, just talk to them again for a different one.",
+       "s": "Do a secretary's task; ask again for another if you don't want it",
+       "k": "talkToSecretary",
+       "at": [
+        2869,
+        10205,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5992
+        ]
+       }
+      },
+      {
+       "t": "Keep talking to the director of the same secretary and complete the tasks given. If you don't want to do one of the task, just talk to them again for a different one.",
+       "s": "Do the director's task; ask again for another if you don't want it",
+       "k": "talkToDirector",
+       "at": [
+        2879,
+        10199,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5999
+        ]
+       }
+      },
+      {
+       "t": "Talk to the director to join the company.",
+       "s": "Talk to the director to join the company.",
+       "k": "joinCompany",
+       "at": [
+        2879,
+        10199,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5999
+        ]
+       }
+      },
+      {
+       "t": "Talk to the director after joining the company.",
+       "s": "Talk to the director after joining the company.",
+       "k": "talkToDirectorAfterJoining",
+       "at": [
+        2879,
+        10199,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5999
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Talk to Commander Veldaban.",
+       "s": "Talk to Commander Veldaban.",
+       "k": "talkToVeldabanAfterJoining",
+       "at": [
+        2827,
+        10214,
+        0
+       ],
+       "hl": {
+        "npc": [
+         6045
+        ]
+       }
+      },
+      {
+       "t": "Go down the stairs.",
+       "s": "Go down the stairs.",
+       "k": "leaveConsortium",
+       "at": [
+        2863,
+        10210,
+        1
+       ],
+       "hl": {
+        "obj": [
+         6088
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-27": {
+   "var": [
+    "varp",
+    223
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Speak with Ceril Carnillean ( of the house south-west of East Ardougne castle) Dialogue: \"What's wrong?\", \"Yes.\"",
+      "Siding with Ceril will reward 5 additional coins and gives you the option to obtain Carnillean armour, although this armour has lower defensive bonuses than an iron platebody.",
+      "Siding with Hazeel will reward the Hazeel's mark, which is a purely cosmetic reward.",
+      "Turn Valve 1 LEFT",
+      "Turn Valve 2 RIGHT",
+      "Turn Valve 3 RIGHT",
+      "Turn Valve 4 RIGHT",
+      "Turn Valve 5 RIGHT",
+      "Enter the Ardougne Sewers east of the clocktower (south of Valve 1) and talk to Clivet Dialogue: \"Alright, I've made my decision.\", \"I won't help you.\"",
+      "Board the raft, and talk to Alomone to the south.",
+      "Kill Alomone and loot the Carnillean armour from the chest.",
+      "Board the raft again and run back to the Carnilleans house.",
+      "Talk to Ceril Carnillean (quest incomplete!)",
+      "Search the cupboard in the room upstairs east of the staircase to find the evidence.",
+      "Enter the Ardougne Sewers east of the clocktower (south of Valve 1) and talk to Clivet to receive a bottle of poison Dialogue: \"Alright, I've made my decision.\", \"I'll help you.\", \"Alright, how do I do it?\"",
+      "Turn Valve 1 LEFT",
+      "Turn Valve 2 RIGHT",
+      "Turn Valve 3 RIGHT",
+      "Go to the basement of the Carnilleans house (ladder)",
+      "Use the bottle of poison on the cooking range.",
+      "Talk to Ceril on the .",
+      "Talk to Clivet.",
+      "Turn Valve 4 RIGHT",
+      "Turn Valve 5 RIGHT",
+      "Go back to the cave and board the raft.",
+      "Talk to Alomone.",
+      "Go back to the Carnilleans' house.",
+      "Talk to Butler Jones.",
+      "Go in the basement and search the crate for a Chest key.",
+      "Go up the ladder and stairs and knock on the wall in the east room, and go up the ladder.",
+      "Unlock and search the chest to find the scroll.",
+      "Return to Alomone."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Ceril Carnillean in the south west of East Ardougne.",
+       "s": "Talk to Ceril Carnillean in the south west of East Ardougne.",
+       "k": "talkToCeril",
+       "at": [
+        2569,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12085
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Enter the cave south east of the Clock Tower entrance.",
+       "s": "Enter the cave south east of the Clock Tower entrance.",
+       "k": "enterCave",
+       "at": [
+        2587,
+        3235,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2852
+        ]
+       }
+      },
+      {
+       "t": "Talk to Clivet. You can choose to either side with him or with the Carnilleans.",
+       "s": "Talk to Clivet; you can side with him or with the Carnilleans",
+       "k": "talkToClivet",
+       "at": [
+        2569,
+        9682,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12095
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Enter the cave south east of the Clock Tower entrance.",
+       "s": "Enter the cave south east of the Clock Tower entrance.",
+       "k": "enterCave",
+       "at": [
+        2587,
+        3235,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2852
+        ]
+       }
+      },
+      {
+       "t": "Talk to Clivet. You can choose to either side with him or with the Carnilleans.",
+       "s": "Talk to Clivet; you can side with him or with the Carnilleans",
+       "k": "talkToClivet",
+       "at": [
+        2569,
+        9682,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12095
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the cave south east of the Clock Tower entrance.",
+       "s": "Enter the cave south east of the Clock Tower entrance.",
+       "k": "enterCave",
+       "at": [
+        2587,
+        3235,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2852
+        ]
+       }
+      },
+      {
+       "t": "Talk to Clivet for some poison.",
+       "s": "Talk to Clivet for some poison.",
+       "k": "getPoison",
+       "at": [
+        2569,
+        9682,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12095
+        ]
+       }
+      },
+      {
+       "t": "Climb down the ladder in the Carnillean house to the kitchen.",
+       "s": "Climb down the ladder in the Carnillean house to the kitchen.",
+       "k": "enterKitchen",
+       "at": [
+        2570,
+        3267,
+        0
+       ]
+      },
+      {
+       "t": "Go back to the surface.",
+       "s": "Go back to the surface.",
+       "k": "leaveCaveWithPoison",
+       "at": [
+        2571,
+        9684,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2853
+        ]
+       }
+      },
+      {
+       "t": "Use the poison on the range.",
+       "s": "Use the poison on the range.",
+       "k": "usePoisonOnRange",
+       "at": [
+        2538,
+        9699,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2859
+        ]
+       }
+      },
+      {
+       "t": "Turn the sewer valves: valve 1 left, then valves 2, 3, 4 and 5 right.",
+       "s": "Turn valve 1 left, then valves 2 to 5 right",
+       "k": "valveStepsCeril"
+      },
+      {
+       "t": "Go back to the surface.",
+       "s": "Go back to the surface.",
+       "k": "leaveCaveForValves",
+       "at": [
+        2571,
+        9684,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2853
+        ]
+       }
+      },
+      {
+       "t": "Re-enter the cave.",
+       "s": "Re-enter the cave.",
+       "k": "enterCaveAfterValvesForCeril",
+       "at": [
+        2587,
+        3235,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2852
+        ]
+       }
+      },
+      {
+       "t": "Board the raft.",
+       "s": "Board the raft.",
+       "k": "boardRaftToKill",
+       "at": [
+        2568,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2849
+        ]
+       }
+      },
+      {
+       "t": "Talk to Alomone. Be ready to fight him (level 13).",
+       "s": "Talk to Alomone. Be ready to fight him (level 13).",
+       "k": "talkToAlomoneToKill",
+       "at": [
+        2607,
+        9673,
+        0
+       ]
+      },
+      {
+       "t": "Kill Alomone.",
+       "s": "Kill Alomone.",
+       "k": "killAlomone",
+       "at": [
+        2607,
+        9673,
+        0
+       ]
+      },
+      {
+       "t": "Retrieve armour from the chest. If you'd like to keep a set of the armour for yourself, drop it and search the chest for more.",
+       "s": "Take the armour from the chest; drop it and search again for more",
+       "k": "retrieveArmourFromChest",
+       "at": [
+        2611,
+        9674,
+        0
+       ]
+      },
+      {
+       "t": "Bring the armour to Ceril in house in the south west of East Ardougne.",
+       "s": "Bring the armour to Ceril in house in the south west of East Ardougne.",
+       "k": "talkToCerilAfterKilling",
+       "at": [
+        2569,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12085
+        ]
+       }
+      },
+      {
+       "t": "Return to Ceril Carnillean.",
+       "s": "Return to Ceril Carnillean.",
+       "k": "returnOnRaftAfterKilling",
+       "at": [
+        2607,
+        9693,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2849
+        ]
+       }
+      },
+      {
+       "t": "Return to Ceril Carnillean.",
+       "s": "Return to Ceril Carnillean.",
+       "k": "leaveCaveAfterKilling",
+       "at": [
+        2571,
+        9684,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2853
+        ]
+       }
+      },
+      {
+       "t": "Go upstairs in the house.",
+       "s": "Go upstairs in the house.",
+       "k": "goUpToCupboard",
+       "at": [
+        2569,
+        3269,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       }
+      },
+      {
+       "t": "Search the cupboard in the east room.",
+       "s": "Search the cupboard in the east room.",
+       "k": "searchCupboardForEvidence",
+       "at": [
+        2574,
+        3267,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2850
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ceril to finish the quest.",
+       "s": "Talk to Ceril to finish the quest.",
+       "k": "talkToCerilToFinish",
+       "at": [
+        2569,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12085
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Talk to Ceril Carnillean to confirm the results of the poison.",
+       "s": "Talk to Ceril Carnillean to confirm the results of the poison.",
+       "k": "talkToCerilAfterPoison",
+       "at": [
+        2569,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12085
+        ]
+       }
+      },
+      {
+       "t": "Leave the kitchen.",
+       "s": "Leave the kitchen.",
+       "k": "leaveKitchen",
+       "at": [
+        2544,
+        9694,
+        0
+       ]
+      },
+      {
+       "t": "Turn the sewer valves: valve 1 left, then valves 2, 3, 4 and 5 right.",
+       "s": "Turn valve 1 left, then valves 2 to 5 right",
+       "k": "valveStepsHazeel"
+      },
+      {
+       "t": "Return to Clivet in the cave south of East Ardougne.",
+       "s": "Return to Clivet in the cave south of East Ardougne.",
+       "k": "enterCaveAfterPoison",
+       "at": [
+        2587,
+        3235,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2852
+        ]
+       }
+      },
+      {
+       "t": "Return to Clivet.",
+       "s": "Return to Clivet.",
+       "k": "talkToClivetAfterPoison",
+       "at": [
+        2569,
+        9682,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12095
+        ]
+       }
+      },
+      {
+       "t": "Board the raft.",
+       "s": "Board the raft.",
+       "k": "boardRaftAfterPoison",
+       "at": [
+        2568,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2849
+        ]
+       }
+      },
+      {
+       "t": "Talk to Alomone.",
+       "s": "Talk to Alomone.",
+       "k": "talkToAlomone",
+       "at": [
+        2607,
+        9673,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12092
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Search a crate in the Carnillean's basement kitchen for a key.",
+       "s": "Search a crate in the Carnillean's basement kitchen for a key.",
+       "k": "enterKitchenAfterButler",
+       "at": [
+        2570,
+        3267,
+        0
+       ]
+      },
+      {
+       "t": "Search a crate in the Carnillean's kitchen for a key.",
+       "s": "Search a crate in the Carnillean's kitchen for a key.",
+       "k": "returnOnRaftAfterAlomone",
+       "at": [
+        2607,
+        9693,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2849
+        ]
+       }
+      },
+      {
+       "t": "Search a crate in the Carnillean's kitchen for a key.",
+       "s": "Search a crate in the Carnillean's kitchen for a key.",
+       "k": "leaveCaveAfterAlomone",
+       "at": [
+        2571,
+        9684,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2853
+        ]
+       }
+      },
+      {
+       "t": "Search a crate in the Carnillean's basement kitchen for a key.",
+       "s": "Search a crate in the Carnillean's basement kitchen for a key.",
+       "k": "searchCrateForKey",
+       "at": [
+        2545,
+        9696,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2858
+        ]
+       }
+      },
+      {
+       "t": "Go upstairs in the house.",
+       "s": "Go upstairs in the house.",
+       "k": "goToF1WithKey",
+       "at": [
+        2569,
+        3269,
+        0
+       ]
+      },
+      {
+       "t": "Go back upstairs from the kitchen.",
+       "s": "Go back upstairs from the kitchen.",
+       "k": "leaveKitchenWithKey",
+       "at": [
+        2544,
+        9694,
+        0
+       ]
+      },
+      {
+       "t": "Knock the wall to enter the hidden room.",
+       "s": "Knock the wall to enter the hidden room.",
+       "k": "knockOnWall",
+       "at": [
+        2572,
+        3270,
+        1
+       ]
+      },
+      {
+       "t": "Knock the wall to enter the hidden room, then climb up the ladder.",
+       "s": "Knock the wall to enter the hidden room, then climb up the ladder.",
+       "k": "climbLadderWithKey",
+       "at": [
+        2573,
+        3271,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Open the chest.",
+       "s": "Open the chest.",
+       "k": "searchChestForScroll",
+       "at": [
+        2571,
+        3269,
+        2
+       ]
+      },
+      {
+       "t": "Return to Alomone with the scroll.",
+       "s": "Return to Alomone with the scroll.",
+       "k": "enterCaveWithScroll",
+       "at": [
+        2587,
+        3235,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2852
+        ]
+       }
+      },
+      {
+       "t": "Return to Alomone with the scroll.",
+       "s": "Return to Alomone with the scroll.",
+       "k": "goF2ToF1WithScroll",
+       "at": [
+        2573,
+        3271,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16679
+        ]
+       }
+      },
+      {
+       "t": "Return to Alomone with the scroll.",
+       "s": "Return to Alomone with the scroll.",
+       "k": "goF1ToF0WithScroll",
+       "at": [
+        2569,
+        3269,
+        1
+       ]
+      },
+      {
+       "t": "Return to Alomone with the scroll.",
+       "s": "Return to Alomone with the scroll.",
+       "k": "knockOnWallToExit",
+       "at": [
+        2572,
+        3270,
+        1
+       ]
+      },
+      {
+       "t": "Return to Alomone with the scroll. If the raft doesn't go to Alomone, repeat the prior valve steps first.",
+       "s": "Take the scroll to Alomone; redo the valves if the raft misses",
+       "k": "boardRaftWithScroll",
+       "at": [
+        2568,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2849
+        ]
+       }
+      },
+      {
+       "t": "Return to Alomone with the scroll.",
+       "s": "Return to Alomone with the scroll.",
+       "k": "giveAlomoneScroll",
+       "at": [
+        2607,
+        9673,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12092
+        ]
+       }
+      },
+      {
+       "t": "Turn the sewer valves: valve 1 left, then valves 2, 3, 4 and 5 right.",
+       "s": "Turn valve 1 left, then valves 2 to 5 right",
+       "k": "valveStepsCeril"
+      },
+      {
+       "t": "Go back to the surface.",
+       "s": "Go back to the surface.",
+       "k": "leaveCaveForValves",
+       "at": [
+        2571,
+        9684,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2853
+        ]
+       }
+      },
+      {
+       "t": "Re-enter the cave.",
+       "s": "Re-enter the cave.",
+       "k": "enterCaveAfterValvesForCeril",
+       "at": [
+        2587,
+        3235,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2852
+        ]
+       }
+      },
+      {
+       "t": "Board the raft.",
+       "s": "Board the raft.",
+       "k": "boardRaftToKill",
+       "at": [
+        2568,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2849
+        ]
+       }
+      },
+      {
+       "t": "Talk to Alomone. Be ready to fight him (level 13).",
+       "s": "Talk to Alomone. Be ready to fight him (level 13).",
+       "k": "talkToAlomoneToKill",
+       "at": [
+        2607,
+        9673,
+        0
+       ]
+      },
+      {
+       "t": "Kill Alomone.",
+       "s": "Kill Alomone.",
+       "k": "killAlomone",
+       "at": [
+        2607,
+        9673,
+        0
+       ]
+      },
+      {
+       "t": "Retrieve armour from the chest. If you'd like to keep a set of the armour for yourself, drop it and search the chest for more.",
+       "s": "Take the armour from the chest; drop it and search again for more",
+       "k": "retrieveArmourFromChest",
+       "at": [
+        2611,
+        9674,
+        0
+       ]
+      },
+      {
+       "t": "Bring the armour to Ceril in house in the south west of East Ardougne.",
+       "s": "Bring the armour to Ceril in house in the south west of East Ardougne.",
+       "k": "talkToCerilAfterKilling",
+       "at": [
+        2569,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12085
+        ]
+       }
+      },
+      {
+       "t": "Return to Ceril Carnillean.",
+       "s": "Return to Ceril Carnillean.",
+       "k": "returnOnRaftAfterKilling",
+       "at": [
+        2607,
+        9693,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2849
+        ]
+       }
+      },
+      {
+       "t": "Return to Ceril Carnillean.",
+       "s": "Return to Ceril Carnillean.",
+       "k": "leaveCaveAfterKilling",
+       "at": [
+        2571,
+        9684,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2853
+        ]
+       }
+      },
+      {
+       "t": "Go upstairs in the house.",
+       "s": "Go upstairs in the house.",
+       "k": "goUpToCupboard",
+       "at": [
+        2569,
+        3269,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       }
+      },
+      {
+       "t": "Search the cupboard in the east room.",
+       "s": "Search the cupboard in the east room.",
+       "k": "searchCupboardForEvidence",
+       "at": [
+        2574,
+        3267,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2850
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ceril to finish the quest.",
+       "s": "Talk to Ceril to finish the quest.",
+       "k": "talkToCerilToFinish",
+       "at": [
+        2569,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12085
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Search a crate in the Carnillean's basement kitchen for a key.",
+       "s": "Search a crate in the Carnillean's basement kitchen for a key.",
+       "k": "enterKitchenAfterButler",
+       "at": [
+        2570,
+        3267,
+        0
+       ]
+      },
+      {
+       "t": "Search a crate in the Carnillean's kitchen for a key.",
+       "s": "Search a crate in the Carnillean's kitchen for a key.",
+       "k": "returnOnRaftAfterAlomone",
+       "at": [
+        2607,
+        9693,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2849
+        ]
+       }
+      },
+      {
+       "t": "Search a crate in the Carnillean's kitchen for a key.",
+       "s": "Search a crate in the Carnillean's kitchen for a key.",
+       "k": "leaveCaveAfterAlomone",
+       "at": [
+        2571,
+        9684,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2853
+        ]
+       }
+      },
+      {
+       "t": "Search a crate in the Carnillean's basement kitchen for a key.",
+       "s": "Search a crate in the Carnillean's basement kitchen for a key.",
+       "k": "searchCrateForKey",
+       "at": [
+        2545,
+        9696,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2858
+        ]
+       }
+      },
+      {
+       "t": "Go upstairs in the house.",
+       "s": "Go upstairs in the house.",
+       "k": "goToF1WithKey",
+       "at": [
+        2569,
+        3269,
+        0
+       ]
+      },
+      {
+       "t": "Go back upstairs from the kitchen.",
+       "s": "Go back upstairs from the kitchen.",
+       "k": "leaveKitchenWithKey",
+       "at": [
+        2544,
+        9694,
+        0
+       ]
+      },
+      {
+       "t": "Knock the wall to enter the hidden room.",
+       "s": "Knock the wall to enter the hidden room.",
+       "k": "knockOnWall",
+       "at": [
+        2572,
+        3270,
+        1
+       ]
+      },
+      {
+       "t": "Knock the wall to enter the hidden room, then climb up the ladder.",
+       "s": "Knock the wall to enter the hidden room, then climb up the ladder.",
+       "k": "climbLadderWithKey",
+       "at": [
+        2573,
+        3271,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Open the chest.",
+       "s": "Open the chest.",
+       "k": "searchChestForScroll",
+       "at": [
+        2571,
+        3269,
+        2
+       ]
+      },
+      {
+       "t": "Return to Alomone with the scroll.",
+       "s": "Return to Alomone with the scroll.",
+       "k": "enterCaveWithScroll",
+       "at": [
+        2587,
+        3235,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2852
+        ]
+       }
+      },
+      {
+       "t": "Return to Alomone with the scroll.",
+       "s": "Return to Alomone with the scroll.",
+       "k": "goF2ToF1WithScroll",
+       "at": [
+        2573,
+        3271,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16679
+        ]
+       }
+      },
+      {
+       "t": "Return to Alomone with the scroll.",
+       "s": "Return to Alomone with the scroll.",
+       "k": "goF1ToF0WithScroll",
+       "at": [
+        2569,
+        3269,
+        1
+       ]
+      },
+      {
+       "t": "Return to Alomone with the scroll.",
+       "s": "Return to Alomone with the scroll.",
+       "k": "knockOnWallToExit",
+       "at": [
+        2572,
+        3270,
+        1
+       ]
+      },
+      {
+       "t": "Return to Alomone with the scroll. If the raft doesn't go to Alomone, repeat the prior valve steps first.",
+       "s": "Take the scroll to Alomone; redo the valves if the raft misses",
+       "k": "boardRaftWithScroll",
+       "at": [
+        2568,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2849
+        ]
+       }
+      },
+      {
+       "t": "Return to Alomone with the scroll.",
+       "s": "Return to Alomone with the scroll.",
+       "k": "giveAlomoneScroll",
+       "at": [
+        2607,
+        9673,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12092
+        ]
+       }
+      },
+      {
+       "t": "Turn the sewer valves: valve 1 left, then valves 2, 3, 4 and 5 right.",
+       "s": "Turn valve 1 left, then valves 2 to 5 right",
+       "k": "valveStepsCeril"
+      },
+      {
+       "t": "Go back to the surface.",
+       "s": "Go back to the surface.",
+       "k": "leaveCaveForValves",
+       "at": [
+        2571,
+        9684,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2853
+        ]
+       }
+      },
+      {
+       "t": "Re-enter the cave.",
+       "s": "Re-enter the cave.",
+       "k": "enterCaveAfterValvesForCeril",
+       "at": [
+        2587,
+        3235,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2852
+        ]
+       }
+      },
+      {
+       "t": "Board the raft.",
+       "s": "Board the raft.",
+       "k": "boardRaftToKill",
+       "at": [
+        2568,
+        9679,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2849
+        ]
+       }
+      },
+      {
+       "t": "Talk to Alomone. Be ready to fight him (level 13).",
+       "s": "Talk to Alomone. Be ready to fight him (level 13).",
+       "k": "talkToAlomoneToKill",
+       "at": [
+        2607,
+        9673,
+        0
+       ]
+      },
+      {
+       "t": "Kill Alomone.",
+       "s": "Kill Alomone.",
+       "k": "killAlomone",
+       "at": [
+        2607,
+        9673,
+        0
+       ]
+      },
+      {
+       "t": "Retrieve armour from the chest. If you'd like to keep a set of the armour for yourself, drop it and search the chest for more.",
+       "s": "Take the armour from the chest; drop it and search again for more",
+       "k": "retrieveArmourFromChest",
+       "at": [
+        2611,
+        9674,
+        0
+       ]
+      },
+      {
+       "t": "Bring the armour to Ceril in house in the south west of East Ardougne.",
+       "s": "Bring the armour to Ceril in house in the south west of East Ardougne.",
+       "k": "talkToCerilAfterKilling",
+       "at": [
+        2569,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12085
+        ]
+       }
+      },
+      {
+       "t": "Return to Ceril Carnillean.",
+       "s": "Return to Ceril Carnillean.",
+       "k": "returnOnRaftAfterKilling",
+       "at": [
+        2607,
+        9693,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2849
+        ]
+       }
+      },
+      {
+       "t": "Return to Ceril Carnillean.",
+       "s": "Return to Ceril Carnillean.",
+       "k": "leaveCaveAfterKilling",
+       "at": [
+        2571,
+        9684,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2853
+        ]
+       }
+      },
+      {
+       "t": "Go upstairs in the house.",
+       "s": "Go upstairs in the house.",
+       "k": "goUpToCupboard",
+       "at": [
+        2569,
+        3269,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       }
+      },
+      {
+       "t": "Search the cupboard in the east room.",
+       "s": "Search the cupboard in the east room.",
+       "k": "searchCupboardForEvidence",
+       "at": [
+        2574,
+        3267,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2850
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ceril to finish the quest.",
+       "s": "Talk to Ceril to finish the quest.",
+       "k": "talkToCerilToFinish",
+       "at": [
+        2569,
+        3275,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12085
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-28": {
+   "var": [
+    "varp",
+    317
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Speak to Denulth directly South of the Burthorpe Teleport. Dialogue: \"How goes your fight with the trolls?\", \"Is there anything I can do to help?\", \"I'll get Godric back!\"",
+      "Follow the path to the stronghold. You can buy the climbing boots along the way from Tenzing. (Note: If you have completed The Easy Combat Achievements you can skip this section, including the fight with Dad, by teleporting with Ghommal's hilt 1)",
+      "Enter the arena and attempt to kill Dad. The fight will end before Dad is killed (can be safespotted from the gate; magic or a halberd are good choices due to his high range defence).",
+      "After nearly killing Dad exit the arena through the north gate.",
+      "Go through the cave and continue the path to the stronghold; Thrower trolls can be dealt with by:",
+      "Enter the stronghold through the cave entrance."
+     ]
+    },
+    {
+     "title": "Stronghold Dungeon",
+     "steps": [
+      "Follow the red path to Troll General. Kill one and loot the prison key. (Can be safespotted with a halberd, magic, or a ranged weapon behind the counter) (Hardcore Ironmen beware! The general is aggressive and his max hit is 38)",
+      "Follow the green path to jail.",
+      "Pickpocket (30+ ) or kill the sleeping Twig and Berry (this can be safespotted through the open cell doors either side of them), free both of the prisoners.",
+      "Teleport to Burthorpe with the games necklace OR follow them out the secret exit and once outside climb over the south-east rocks.",
+      "Talk to Dunstan.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Denulth in Burthorpe.",
+       "s": "Talk to Denulth in Burthorpe.",
+       "k": "talkToDenulth",
+       "at": [
+        2895,
+        3528,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4083
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Get some climbing boots or 12 coins, and prepare for fighting Dad and the Troll General. Both can be safe spotted by ranged/mage.",
+       "s": "Get climbing boots or 12 coins; get ready to fight Dad and a General",
+       "has": "Climbing boots",
+       "k": "getCoinsOrBoots"
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south. Buy some climbing boots from Tenzing in his hut here.",
+       "s": "Go west of Burthorpe, then south; buy climbing boots from Tenzing",
+       "k": "buyClimbingBoots",
+       "at": [
+        2820,
+        3555,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4094
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south.",
+       "s": "Follow the path west of Burthorpe, then go along the path going south.",
+       "k": "travelToTenzing",
+       "at": [
+        2820,
+        3555,
+        0
+       ]
+      },
+      {
+       "t": "Climb over the stile north of Tenzing.",
+       "s": "Climb over the stile north of Tenzing.",
+       "k": "climbOverStile",
+       "at": [
+        2817,
+        3563,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3730
+        ]
+       }
+      },
+      {
+       "t": "Follow the path until you reach some rocks. Climb over them.",
+       "s": "Follow the path until you reach some rocks. Climb over them.",
+       "k": "climbOverRocks",
+       "at": [
+        2856,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3748
+        ]
+       }
+      },
+      {
+       "t": "Follow the path from here east until you enter the arena.",
+       "s": "Follow the path from here east until you enter the arena.",
+       "k": "enterArena",
+       "at": [
+        2897,
+        3619,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3783
+        ]
+       }
+      },
+      {
+       "t": "Fight Dad until he gives up. You can safe spot him from the gate you entered through.",
+       "s": "Fight Dad until he gives up; you can safespot him from the gate",
+       "k": "fightDad",
+       "at": [
+        2913,
+        3617,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4130
+        ]
+       }
+      },
+      {
+       "t": "Leave the arena and continue through the cave to the north.",
+       "s": "Leave the arena and continue through the cave to the north.",
+       "k": "leaveArena",
+       "at": [
+        2916,
+        3629,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3785
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave entrance.",
+       "s": "Enter the cave entrance.",
+       "k": "enterArenaCavern",
+       "at": [
+        2904,
+        3645,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3757
+        ]
+       }
+      },
+      {
+       "t": "Leave through cave's north exit.",
+       "s": "Leave through cave's north exit.",
+       "k": "leaveArenaCavern",
+       "at": [
+        2907,
+        10037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3758
+        ]
+       }
+      },
+      {
+       "t": "Follow the path around Trollheim until you reach the Stronghold's entrance. Be wary of thrower trolls on the path, you'll want to use Protect from Ranged.",
+       "s": "Follow the path around Trollheim to the Stronghold; pray vs ranged",
+       "k": "enterStronghold",
+       "at": [
+        2839,
+        3690,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3771
+        ]
+       }
+      },
+      {
+       "t": "Go back up the stairs.",
+       "s": "Go back up the stairs.",
+       "k": "goUpTo2ndFloor",
+       "at": [
+        2843,
+        10109,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Enter the west rooms and kill any of the Troll Generals for a prison key.",
+       "s": "In the west rooms, kill a Troll General for a prison key",
+       "k": "killGeneral",
+       "at": [
+        2830,
+        10086,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4120
+        ]
+       }
+      },
+      {
+       "t": "Pick up the prison key.",
+       "s": "Pick up the prison key.",
+       "k": "pickupPrisonKey"
+      },
+      {
+       "t": "Climb down the north staircase.",
+       "s": "Climb down the north staircase.",
+       "k": "goDownInStronghold",
+       "at": [
+        2844,
+        10109,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Enter the prison door.",
+       "s": "Enter the prison door.",
+       "k": "goThroughPrisonDoor",
+       "at": [
+        2848,
+        10107,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3780
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs to the prison.",
+       "s": "Climb down the stairs to the prison.",
+       "k": "goDownToPrison",
+       "at": [
+        2853,
+        10108,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Pickup the key.",
+       "s": "Pickup the key.",
+       "k": "pickupKey2"
+      },
+      {
+       "t": "Unlock Eadgar's cell.",
+       "s": "Unlock Eadgar's cell.",
+       "k": "freeEadgar",
+       "at": [
+        2832,
+        10082,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3765
+        ]
+       }
+      },
+      {
+       "t": "Pickup the key.",
+       "s": "Pickup the key.",
+       "k": "pickupKey1"
+      },
+      {
+       "t": "Unlock Godric's cell.",
+       "s": "Unlock Godric's cell.",
+       "k": "freeGodric",
+       "at": [
+        2832,
+        10078,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3767
+        ]
+       }
+      },
+      {
+       "t": "Talk to Dunstan in north east Burthorpe to finish the quest.",
+       "s": "Talk to Dunstan in north east Burthorpe to finish the quest.",
+       "k": "goToDunstan",
+       "at": [
+        2919,
+        3574,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4105
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Get some climbing boots or 12 coins, and prepare for fighting Dad and the Troll General. Both can be safe spotted by ranged/mage.",
+       "s": "Get climbing boots or 12 coins; get ready to fight Dad and a General",
+       "has": "Climbing boots",
+       "k": "getCoinsOrBoots"
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south. Buy some climbing boots from Tenzing in his hut here.",
+       "s": "Go west of Burthorpe, then south; buy climbing boots from Tenzing",
+       "k": "buyClimbingBoots",
+       "at": [
+        2820,
+        3555,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4094
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south.",
+       "s": "Follow the path west of Burthorpe, then go along the path going south.",
+       "k": "travelToTenzing",
+       "at": [
+        2820,
+        3555,
+        0
+       ]
+      },
+      {
+       "t": "Climb over the stile north of Tenzing.",
+       "s": "Climb over the stile north of Tenzing.",
+       "k": "climbOverStile",
+       "at": [
+        2817,
+        3563,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3730
+        ]
+       }
+      },
+      {
+       "t": "Follow the path until you reach some rocks. Climb over them.",
+       "s": "Follow the path until you reach some rocks. Climb over them.",
+       "k": "climbOverRocks",
+       "at": [
+        2856,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3748
+        ]
+       }
+      },
+      {
+       "t": "Follow the path from here east until you enter the arena.",
+       "s": "Follow the path from here east until you enter the arena.",
+       "k": "enterArena",
+       "at": [
+        2897,
+        3619,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3783
+        ]
+       }
+      },
+      {
+       "t": "Fight Dad until he gives up. You can safe spot him from the gate you entered through.",
+       "s": "Fight Dad until he gives up; you can safespot him from the gate",
+       "k": "fightDad",
+       "at": [
+        2913,
+        3617,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4130
+        ]
+       }
+      },
+      {
+       "t": "Leave the arena and continue through the cave to the north.",
+       "s": "Leave the arena and continue through the cave to the north.",
+       "k": "leaveArena",
+       "at": [
+        2916,
+        3629,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3785
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave entrance.",
+       "s": "Enter the cave entrance.",
+       "k": "enterArenaCavern",
+       "at": [
+        2904,
+        3645,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3757
+        ]
+       }
+      },
+      {
+       "t": "Leave through cave's north exit.",
+       "s": "Leave through cave's north exit.",
+       "k": "leaveArenaCavern",
+       "at": [
+        2907,
+        10037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3758
+        ]
+       }
+      },
+      {
+       "t": "Follow the path around Trollheim until you reach the Stronghold's entrance. Be wary of thrower trolls on the path, you'll want to use Protect from Ranged.",
+       "s": "Follow the path around Trollheim to the Stronghold; pray vs ranged",
+       "k": "enterStronghold",
+       "at": [
+        2839,
+        3690,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3771
+        ]
+       }
+      },
+      {
+       "t": "Go back up the stairs.",
+       "s": "Go back up the stairs.",
+       "k": "goUpTo2ndFloor",
+       "at": [
+        2843,
+        10109,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Enter the west rooms and kill any of the Troll Generals for a prison key.",
+       "s": "In the west rooms, kill a Troll General for a prison key",
+       "k": "killGeneral",
+       "at": [
+        2830,
+        10086,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4120
+        ]
+       }
+      },
+      {
+       "t": "Pick up the prison key.",
+       "s": "Pick up the prison key.",
+       "k": "pickupPrisonKey"
+      },
+      {
+       "t": "Climb down the north staircase.",
+       "s": "Climb down the north staircase.",
+       "k": "goDownInStronghold",
+       "at": [
+        2844,
+        10109,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Enter the prison door.",
+       "s": "Enter the prison door.",
+       "k": "goThroughPrisonDoor",
+       "at": [
+        2848,
+        10107,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3780
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs to the prison.",
+       "s": "Climb down the stairs to the prison.",
+       "k": "goDownToPrison",
+       "at": [
+        2853,
+        10108,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Pickup the key.",
+       "s": "Pickup the key.",
+       "k": "pickupKey2"
+      },
+      {
+       "t": "Unlock Eadgar's cell.",
+       "s": "Unlock Eadgar's cell.",
+       "k": "freeEadgar",
+       "at": [
+        2832,
+        10082,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3765
+        ]
+       }
+      },
+      {
+       "t": "Pickup the key.",
+       "s": "Pickup the key.",
+       "k": "pickupKey1"
+      },
+      {
+       "t": "Unlock Godric's cell.",
+       "s": "Unlock Godric's cell.",
+       "k": "freeGodric",
+       "at": [
+        2832,
+        10078,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3767
+        ]
+       }
+      },
+      {
+       "t": "Talk to Dunstan in north east Burthorpe to finish the quest.",
+       "s": "Talk to Dunstan in north east Burthorpe to finish the quest.",
+       "k": "goToDunstan",
+       "at": [
+        2919,
+        3574,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4105
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Get some climbing boots or 12 coins, and prepare for fighting Dad and the Troll General. Both can be safe spotted by ranged/mage.",
+       "s": "Get climbing boots or 12 coins; get ready to fight Dad and a General",
+       "has": "Climbing boots",
+       "k": "getCoinsOrBoots"
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south. Buy some climbing boots from Tenzing in his hut here.",
+       "s": "Go west of Burthorpe, then south; buy climbing boots from Tenzing",
+       "k": "buyClimbingBoots",
+       "at": [
+        2820,
+        3555,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4094
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south.",
+       "s": "Follow the path west of Burthorpe, then go along the path going south.",
+       "k": "travelToTenzing",
+       "at": [
+        2820,
+        3555,
+        0
+       ]
+      },
+      {
+       "t": "Climb over the stile north of Tenzing.",
+       "s": "Climb over the stile north of Tenzing.",
+       "k": "climbOverStile",
+       "at": [
+        2817,
+        3563,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3730
+        ]
+       }
+      },
+      {
+       "t": "Follow the path until you reach some rocks. Climb over them.",
+       "s": "Follow the path until you reach some rocks. Climb over them.",
+       "k": "climbOverRocks",
+       "at": [
+        2856,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3748
+        ]
+       }
+      },
+      {
+       "t": "Follow the path from here east until you enter the arena.",
+       "s": "Follow the path from here east until you enter the arena.",
+       "k": "enterArena",
+       "at": [
+        2897,
+        3619,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3783
+        ]
+       }
+      },
+      {
+       "t": "Fight Dad until he gives up. You can safe spot him from the gate you entered through.",
+       "s": "Fight Dad until he gives up; you can safespot him from the gate",
+       "k": "fightDad",
+       "at": [
+        2913,
+        3617,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4130
+        ]
+       }
+      },
+      {
+       "t": "Leave the arena and continue through the cave to the north.",
+       "s": "Leave the arena and continue through the cave to the north.",
+       "k": "leaveArena",
+       "at": [
+        2916,
+        3629,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3785
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave entrance.",
+       "s": "Enter the cave entrance.",
+       "k": "enterArenaCavern",
+       "at": [
+        2904,
+        3645,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3757
+        ]
+       }
+      },
+      {
+       "t": "Leave through cave's north exit.",
+       "s": "Leave through cave's north exit.",
+       "k": "leaveArenaCavern",
+       "at": [
+        2907,
+        10037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3758
+        ]
+       }
+      },
+      {
+       "t": "Follow the path around Trollheim until you reach the Stronghold's entrance. Be wary of thrower trolls on the path, you'll want to use Protect from Ranged.",
+       "s": "Follow the path around Trollheim to the Stronghold; pray vs ranged",
+       "k": "enterStronghold",
+       "at": [
+        2839,
+        3690,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3771
+        ]
+       }
+      },
+      {
+       "t": "Go back up the stairs.",
+       "s": "Go back up the stairs.",
+       "k": "goUpTo2ndFloor",
+       "at": [
+        2843,
+        10109,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Enter the west rooms and kill any of the Troll Generals for a prison key.",
+       "s": "In the west rooms, kill a Troll General for a prison key",
+       "k": "killGeneral",
+       "at": [
+        2830,
+        10086,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4120
+        ]
+       }
+      },
+      {
+       "t": "Pick up the prison key.",
+       "s": "Pick up the prison key.",
+       "k": "pickupPrisonKey"
+      },
+      {
+       "t": "Climb down the north staircase.",
+       "s": "Climb down the north staircase.",
+       "k": "goDownInStronghold",
+       "at": [
+        2844,
+        10109,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Enter the prison door.",
+       "s": "Enter the prison door.",
+       "k": "goThroughPrisonDoor",
+       "at": [
+        2848,
+        10107,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3780
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs to the prison.",
+       "s": "Climb down the stairs to the prison.",
+       "k": "goDownToPrison",
+       "at": [
+        2853,
+        10108,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Pickup the key.",
+       "s": "Pickup the key.",
+       "k": "pickupKey2"
+      },
+      {
+       "t": "Unlock Eadgar's cell.",
+       "s": "Unlock Eadgar's cell.",
+       "k": "freeEadgar",
+       "at": [
+        2832,
+        10082,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3765
+        ]
+       }
+      },
+      {
+       "t": "Pickup the key.",
+       "s": "Pickup the key.",
+       "k": "pickupKey1"
+      },
+      {
+       "t": "Unlock Godric's cell.",
+       "s": "Unlock Godric's cell.",
+       "k": "freeGodric",
+       "at": [
+        2832,
+        10078,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3767
+        ]
+       }
+      },
+      {
+       "t": "Talk to Dunstan in north east Burthorpe to finish the quest.",
+       "s": "Talk to Dunstan in north east Burthorpe to finish the quest.",
+       "k": "goToDunstan",
+       "at": [
+        2919,
+        3574,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4105
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Get some climbing boots or 12 coins, and prepare for fighting Dad and the Troll General. Both can be safe spotted by ranged/mage.",
+       "s": "Get climbing boots or 12 coins; get ready to fight Dad and a General",
+       "has": "Climbing boots",
+       "k": "getCoinsOrBoots"
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south. Buy some climbing boots from Tenzing in his hut here.",
+       "s": "Go west of Burthorpe, then south; buy climbing boots from Tenzing",
+       "k": "buyClimbingBoots",
+       "at": [
+        2820,
+        3555,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4094
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south.",
+       "s": "Follow the path west of Burthorpe, then go along the path going south.",
+       "k": "travelToTenzing",
+       "at": [
+        2820,
+        3555,
+        0
+       ]
+      },
+      {
+       "t": "Climb over the stile north of Tenzing.",
+       "s": "Climb over the stile north of Tenzing.",
+       "k": "climbOverStile",
+       "at": [
+        2817,
+        3563,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3730
+        ]
+       }
+      },
+      {
+       "t": "Follow the path until you reach some rocks. Climb over them.",
+       "s": "Follow the path until you reach some rocks. Climb over them.",
+       "k": "climbOverRocks",
+       "at": [
+        2856,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3748
+        ]
+       }
+      },
+      {
+       "t": "Follow the path from here east until you enter the arena.",
+       "s": "Follow the path from here east until you enter the arena.",
+       "k": "enterArena",
+       "at": [
+        2897,
+        3619,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3783
+        ]
+       }
+      },
+      {
+       "t": "Fight Dad until he gives up. You can safe spot him from the gate you entered through.",
+       "s": "Fight Dad until he gives up; you can safespot him from the gate",
+       "k": "fightDad",
+       "at": [
+        2913,
+        3617,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4130
+        ]
+       }
+      },
+      {
+       "t": "Leave the arena and continue through the cave to the north.",
+       "s": "Leave the arena and continue through the cave to the north.",
+       "k": "leaveArena",
+       "at": [
+        2916,
+        3629,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3785
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave entrance.",
+       "s": "Enter the cave entrance.",
+       "k": "enterArenaCavern",
+       "at": [
+        2904,
+        3645,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3757
+        ]
+       }
+      },
+      {
+       "t": "Leave through cave's north exit.",
+       "s": "Leave through cave's north exit.",
+       "k": "leaveArenaCavern",
+       "at": [
+        2907,
+        10037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3758
+        ]
+       }
+      },
+      {
+       "t": "Follow the path around Trollheim until you reach the Stronghold's entrance. Be wary of thrower trolls on the path, you'll want to use Protect from Ranged.",
+       "s": "Follow the path around Trollheim to the Stronghold; pray vs ranged",
+       "k": "enterStronghold",
+       "at": [
+        2839,
+        3690,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3771
+        ]
+       }
+      },
+      {
+       "t": "Go back up the stairs.",
+       "s": "Go back up the stairs.",
+       "k": "goUpTo2ndFloor",
+       "at": [
+        2843,
+        10109,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Enter the west rooms and kill any of the Troll Generals for a prison key.",
+       "s": "In the west rooms, kill a Troll General for a prison key",
+       "k": "killGeneral",
+       "at": [
+        2830,
+        10086,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4120
+        ]
+       }
+      },
+      {
+       "t": "Pick up the prison key.",
+       "s": "Pick up the prison key.",
+       "k": "pickupPrisonKey"
+      },
+      {
+       "t": "Climb down the north staircase.",
+       "s": "Climb down the north staircase.",
+       "k": "goDownInStronghold",
+       "at": [
+        2844,
+        10109,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Enter the prison door.",
+       "s": "Enter the prison door.",
+       "k": "goThroughPrisonDoor",
+       "at": [
+        2848,
+        10107,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3780
+        ]
+       }
+      },
+      {
+       "t": "Climb down the stairs to the prison.",
+       "s": "Climb down the stairs to the prison.",
+       "k": "goDownToPrison",
+       "at": [
+        2853,
+        10108,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Pickup the key.",
+       "s": "Pickup the key.",
+       "k": "pickupKey2"
+      },
+      {
+       "t": "Unlock Eadgar's cell.",
+       "s": "Unlock Eadgar's cell.",
+       "k": "freeEadgar",
+       "at": [
+        2832,
+        10082,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3765
+        ]
+       }
+      },
+      {
+       "t": "Pickup the key.",
+       "s": "Pickup the key.",
+       "k": "pickupKey1"
+      },
+      {
+       "t": "Unlock Godric's cell.",
+       "s": "Unlock Godric's cell.",
+       "k": "freeGodric",
+       "at": [
+        2832,
+        10078,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3767
+        ]
+       }
+      },
+      {
+       "t": "Talk to Dunstan in north east Burthorpe to finish the quest.",
+       "s": "Talk to Dunstan in north east Burthorpe to finish the quest.",
+       "k": "goToDunstan",
+       "at": [
+        2919,
+        3574,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4105
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

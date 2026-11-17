@@ -97,6 +97,16 @@
       "url": "https://oldschool.runescape.wiki/w/Witch%27s_experiment",
       "forms": true,
       "facts": ["A shapeshifting monster with four forms fought consecutively: level 19 skavid, 30 spider, 42 bear and 53 wolf, all melee (OSRS Wiki).", "Witch's House needs the ability to defeat the four forms without a break (quest requirements)."]
+    },
+    "Dad": {
+      "url": "https://oldschool.runescape.wiki/w/Dad",
+      "safespot": { "spell": "Fire Bolt" },
+      "facts": ["The wiki says Dad can be safespotted from the gate you entered through; Troll Stronghold fights him with Fire Bolt from there (combat audit S9-28)."]
+    },
+    "Troll General": {
+      "url": "https://oldschool.runescape.wiki/w/Troll_General",
+      "safespot": { "spell": "Fire Bolt" },
+      "facts": ["The wiki says the Troll General can be safespotted; Troll Stronghold kills one with Fire Bolt for the prison key (combat audit S9-28)."]
     }
   }
 }

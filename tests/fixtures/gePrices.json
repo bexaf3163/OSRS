@@ -2880,6 +2880,10 @@
   "Linen": {
    "buy": 12,
    "sell": 10
+  },
+  "Climbing boots": {
+   "buy": 629,
+   "sell": 575
   }
  }
 }

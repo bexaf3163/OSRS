@@ -1441,6 +1441,111 @@
       }
     },
     {
+      "name": "Alomone",
+      "combat": 13,
+      "members": true,
+      "hitpoints": 25,
+      "attackLevel": 10,
+      "strengthLevel": 10,
+      "defenceLevel": 4,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 5,
+        "slash": 6,
+        "crush": 8,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Dad",
+      "combat": 101,
+      "members": true,
+      "hitpoints": 120,
+      "attackLevel": 60,
+      "strengthLevel": 120,
+      "defenceLevel": 50,
+      "magicLevel": 0,
+      "attackBonus": 40,
+      "defence": {
+        "stab": 25,
+        "slash": 25,
+        "crush": 40,
+        "magic": 200,
+        "ranged": 200
+      },
+      "attackStyle": "crush",
+      "maxHit": 27,
+      "speedTicks": 8,
+      "aggressive": false,
+      "xpBonus": -97,
+      "weakness": {
+        "element": "earth",
+        "percent": 40
+      }
+    },
+    {
+      "name": "Troll General",
+      "version": "Sword",
+      "combat": 113,
+      "members": true,
+      "hitpoints": 140,
+      "attackLevel": 70,
+      "strengthLevel": 140,
+      "defenceLevel": 40,
+      "magicLevel": 0,
+      "attackBonus": 60,
+      "defence": {
+        "stab": 35,
+        "slash": 60,
+        "crush": 35,
+        "magic": 200,
+        "ranged": 120
+      },
+      "attackStyle": "slash",
+      "maxHit": 38,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": 7,
+      "weakness": {
+        "element": "earth",
+        "percent": 20
+      }
+    },
+    {
+      "name": "Troll General",
+      "version": "Hammer (grey)",
+      "combat": 113,
+      "members": true,
+      "hitpoints": 140,
+      "attackLevel": 70,
+      "strengthLevel": 140,
+      "defenceLevel": 40,
+      "magicLevel": 0,
+      "attackBonus": 60,
+      "defence": {
+        "stab": 35,
+        "slash": 60,
+        "crush": 35,
+        "magic": 200,
+        "ranged": 120
+      },
+      "attackStyle": "crush",
+      "maxHit": 38,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": 7,
+      "weakness": {
+        "element": "earth",
+        "percent": 20
+      }
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

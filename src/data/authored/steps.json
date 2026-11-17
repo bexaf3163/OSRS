@@ -8402,5 +8402,280 @@
         "questName": "Icthlarin's Little Helper"
       }
     }
+  },
+  {
+    "id": "S9-26",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Giant Dwarf",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Giant_Dwarf",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Giant_Dwarf/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2732,3713,0",
+    "mapLocation": {
+      "x": 2732,
+      "y": 3713,
+      "plane": 0,
+      "label": "The dwarven cave entrance near Rellekka"
+    },
+    "npc": {
+      "nameEn": "Dwarven Boatman",
+      "location": "The cave beyond the statues",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Dwarven_Boatman"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Coins",
+        "amount": 200,
+        "howToGet": "Carried coins: 200 gp for the clothes from Vermundi.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a rune shop.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Law rune",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a rune shop.",
+        "wikiItemId": 563,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Law_rune.png"
+      },
+      {
+        "nameEn": "Logs",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1511,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Logs.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Coal",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 45 gp.",
+        "wikiItemId": 453,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coal.png"
+      },
+      {
+        "nameEn": "Iron bar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 28 gp.",
+        "wikiItemId": 2351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_bar.png"
+      },
+      {
+        "nameEn": "Sapphire",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange, or from Herquin's Gems in Falador for 250 gp.",
+        "wikiItemId": 1607,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Sapphire.png"
+      },
+      {
+        "nameEn": "Redberry pie",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Pie Shop in Cooks' Guild for 12 gp.",
+        "wikiItemId": 2325,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Redberry_pie.png"
+      }
+    ],
+    "reward": "2 QP, 2,500 Mining XP, 2,500 Smithing XP, 2,500 Crafting XP, 1,500 Magic XP, 1,500 Thieving XP, 1,500 Firemaking XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Dwarven Boatman"
+      ],
+      "dialogChoices": [
+        "That's a deal!",
+        "Yes, I'm ready and don't mind it taking a few minutes.",
+        "Yes, I will do this.",
+        "Yes, I'm looking for some special clothes.",
+        "Do you know anything about King Alvis' clothes?",
+        "Yes, about those special clothes again...",
+        "I'll pay.",
+        "Yes, I'm looking for a pair of special boots.",
+        "Yes, I'm looking for a particular battleaxe.",
+        "Blasidar the sculptor needs it for his statue.",
+        "Perhaps I can repair the axe?",
+        "Something else.",
+        "Can you help me with this ancient axe?",
+        "Return to Keldagrim immediately.",
+        "Is there anything I can help you with?",
+        "Do you have any more tasks for me?",
+        "I'd like to officially join your company.",
+        "Blasidar the sculptor has sent me.",
+        "I would support you.",
+        "Yes! Long live the <company name>!"
+      ],
+      "highlightItems": [
+        "Coins",
+        "Air rune",
+        "Law rune",
+        "Logs",
+        "Tinderbox",
+        "Coal",
+        "Iron bar",
+        "Sapphire",
+        "Redberry pie"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Giant Dwarf"
+      }
+    }
+  },
+  {
+    "id": "S9-27",
+    "stage": 9,
+    "type": "quest",
+    "title": "Hazeel Cult",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Hazeel_Cult",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Hazeel_Cult/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2566,3270,0",
+    "mapLocation": {
+      "x": 2566,
+      "y": 3270,
+      "plane": 0,
+      "label": "East Ardougne, just north of the Clock Tower"
+    },
+    "npc": {
+      "nameEn": "Ceril Carnillean",
+      "location": "East Ardougne, just north of the Clock Tower",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Ceril_Carnillean"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Trout",
+        "amount": 5,
+        "wikiItemId": 333,
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster"
+        ],
+        "howToGet": "Your own catch, or buy on the Grand Exchange. For Alomone (level 13).",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Alomone"
+    ],
+    "reward": "1 QP, 1,500 Thieving XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Ceril Carnillean"
+      ],
+      "dialogChoices": [
+        "What's wrong?",
+        "Yes.",
+        "Alright, I've made my decision.",
+        "I won't help you.",
+        "I'll help you.",
+        "Alright, how do I do it?"
+      ],
+      "highlightItems": [],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Hazeel Cult"
+      }
+    }
+  },
+  {
+    "id": "S9-28",
+    "stage": 9,
+    "type": "quest",
+    "title": "Troll Stronghold",
+    "qp": 1,
+    "requires": [
+      "S9-08"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Troll_Stronghold",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Troll_Stronghold/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2896,3528,0",
+    "mapLocation": {
+      "x": 2896,
+      "y": 3528,
+      "plane": 0,
+      "label": "Burthorpe"
+    },
+    "npc": {
+      "nameEn": "Denulth",
+      "location": "Burthorpe",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Denulth"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Climbing boots",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Tenzing for 12 gp.",
+        "wikiItemId": 3105,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Climbing_boots.png"
+      },
+      {
+        "nameEn": "Staff of fire",
+        "amount": 1,
+        "wikiItemId": 1387,
+        "howToGet": "Buy on the Grand Exchange, or from Zaff in Varrock.",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
+      },
+      {
+        "nameEn": "Chaos rune",
+        "amount": 80,
+        "wikiItemId": 562,
+        "howToGet": "Buy on the Grand Exchange, or from a rune shop.",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 240,
+        "wikiItemId": 556,
+        "howToGet": "Buy on the Grand Exchange, or from a rune shop.",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      }
+    ],
+    "safespot": "Dad (101) and the Troll General (113) hit far too hard to meet up close: both are safespotted with Fire Bolt, Dad from the gate you entered through.",
+    "foes": [
+      "Dad",
+      "Troll General"
+    ],
+    "reward": "1 QP, 2,000 Agility XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Denulth"
+      ],
+      "dialogChoices": [
+        "How goes your fight with the trolls?",
+        "Is there anything I can do to help?",
+        "I'll get Godric back!"
+      ],
+      "highlightItems": [
+        "Climbing boots"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Troll Stronghold"
+      }
+    }
   }
 ]
