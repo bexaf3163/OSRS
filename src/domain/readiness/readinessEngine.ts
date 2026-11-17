@@ -10,7 +10,6 @@ import { fixChainOf, readinessOf, type ChainLink, type ReadinessContext, type St
 import { buildPrepRoute, openTaskIds, type PrepRoute } from '../prep/prepRoute';
 import { planOneTrip, roadFrom, tripWindow, type OneTripPlan } from '../prep/oneTrip';
 import { buildQueue, type PrepQueue } from '../prep/prepQueue';
-import type { MethodPriority } from '../persistence/methodPriority';
 import { buildPrepPlan, type PrepPlan } from '../prep/prepPlan';
 import type { UpgradeRecommendation } from '../training/gearUpgradeRouter';
 import { dependencyFacts, type DependencyFact } from '../quests/next-step';
@@ -29,7 +28,7 @@ export interface ReadinessEngine {
   /** A step's open preparation tasks; null means there is no such step. */
   openTasks(stepId: string): Set<string> | null;
   /** The preparation queue: the route with "where to lead" for each task. */
-  queue(step: Step, priority: MethodPriority): PrepQueue;
+  queue(step: Step): PrepQueue;
   /** "One trip" for this step and the nearest ones. */
   trip(current: string | Step, ahead?: number): OneTripPlan;
   /** The planner's road from a step (its committed window after it); the step alone when the planner has none. */
@@ -61,7 +60,7 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
   const prepMemo = new WeakMap<Step, PrepRoute>();
   const chainMemo = new WeakMap<Step, ChainLink[]>();
   const tripMemo = new WeakMap<Step, Map<string, OneTripPlan>>();
-  const queueMemo = new WeakMap<Step, Map<MethodPriority, PrepQueue>>();
+  const queueMemo = new WeakMap<Step, PrepQueue>();
   const planMemo = new WeakMap<Step, Map<string, PrepPlan>>();
   const computed = { readiness: 0, trip: 0, plan: 0 };
   const stepOf = (id: string) => ctx.steps.find((s) => s.id === id);
@@ -123,15 +122,12 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
       chainMemo.set(step, c);
       return c;
     },
-    queue(step, priority) {
+    queue(step) {
       step = entry(step);
-      const memo = queueMemo.get(step);
-      const hit = memo?.get(priority);
+      const hit = queueMemo.get(step);
       if (hit) return hit;
-      const q = buildQueue(prep(step), { state: ctx.state, mode: ctx.mode, priority });
-      const rows = memo ?? new Map<MethodPriority, PrepQueue>();
-      rows.set(priority, q);
-      queueMemo.set(step, rows);
+      const q = buildQueue(prep(step), { state: ctx.state, mode: ctx.mode });
+      queueMemo.set(step, q);
       return q;
     },
     openTasks(stepId) {

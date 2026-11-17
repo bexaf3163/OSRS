@@ -73,7 +73,7 @@ describe('explicit skill objective through the shared planner', () => {
     observed.scope = { ...observed.scope, mode: 'members' };
     observed.player = { ...observed.player, mode: 'members' };
     const selection = { skill: 'mining' as const, mode: 'fast' as const, freeOnly: true, target: 10 };
-    const expected = trackedTraining(selection, observed.player, 'members', 'balanced')!;
+    const expected = trackedTraining(selection, observed.player, 'members')!;
     const candidate = prerequisiteTraining({ snapshot: observed, goalId: 'owner', skill: 'mining', selection })!;
     expect(candidate.target).toBe(expected.target);
     expect(candidate.step?.bondBranch).toBe(true);

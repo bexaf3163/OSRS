@@ -18,7 +18,6 @@ import { evaluate, itemRequirement, type ReqState, type Requirement } from '../p
 import { coinsOf, heldExact, heldOf, levelOf, questOf, type PlayerState } from '../player/playerState';
 import { isClosed } from '../quests/next-step';
 import { xpForLevel } from '../player/xp';
-import type { MethodPriority } from '../persistence/methodPriority';
 import { rangedEquipment, rangedNeeds, RANGED_WATCH } from '../combat/rangedLoadout';
 import { SPELLS, STAFFS, isCombatSpell, strikeRecipe, superheatNeeds } from '../combat/magicPlan';
 import { STYLE_GEAR } from '../combat/styleGear';
@@ -28,7 +27,7 @@ import { pickKit } from '../combat/kitPick';
 import { methodRate, rateKeyOf, type RateSpot, type ModelRate } from './methodRates';
 import { combatUpgrades, meleeUnsafe, rangedGoalNeeds } from '../combat/combatRates';
 import type { PriceView } from '../market/quotes';
-import { coinsPerMinute, coinTimeShare, earningsOrder } from '../market/lootValue';
+import { coinsPerMinute, coinTimeShare } from '../market/lootValue';
 import type { TradeRestriction } from '../market/tradeRestriction';
 import { requirementCost } from '../market/needPrice';
 import { allocateMaterialStock } from '../player/materialStock';
@@ -345,23 +344,21 @@ export function practicalRate(m: TrainingMethod): number | null {
 }
 
 /**
- * The order of methods. Balanced (the default since 2.69): the practical hours to the goal, a method whose items are missing paying its setup; locked
- * ones last. Fastest (XP): first the ready ones, then by speed (for methods without a speed — by entry level). Profit: known net earnings first.
+ * The order of methods: the practical hours to the goal, a method whose items are missing paying its setup; locked
+ * ones last.
  */
-function compare(priority: MethodPriority, xpLeft?: number, level?: number, coinRate: number | null = null) {
+function compare(xpLeft?: number, level?: number, coinRate: number | null = null) {
   return (a: MethodView, b: MethodView): number => {
     if (Boolean(a.fundingShortfall) !== Boolean(b.fundingShortfall)) return Number(Boolean(a.fundingShortfall)) - Number(Boolean(b.fundingShortfall));
     if (Boolean(a.method.manualSetup) !== Boolean(b.method.manualSetup)) return Number(Boolean(a.method.manualSetup)) - Number(Boolean(b.method.manualSetup));
     const uncheckedEntry = (v: MethodView) => v.unchecked.some(n => n.kind === 'skill' || n.kind === 'quest');
     if (uncheckedEntry(a) !== uncheckedEntry(b)) return Number(uncheckedEntry(a)) - Number(uncheckedEntry(b));
     // A player with no cash can finish a usable batch instead of assuming an unpriced processing recipe is funded.
-    // A funded purchase still competes by time/profit; ordinary tool/spot investment keeps its existing setup comparison.
-    if (priority === 'balanced' || priority === 'profit') {
-      if (a.fundingReady && b.needsFundingCheck) return -1;
-      if (b.fundingReady && a.needsFundingCheck) return 1;
-    }
+    // A funded purchase still competes by time; ordinary tool/spot investment keeps its existing setup comparison.
+    if (a.fundingReady && b.needsFundingCheck) return -1;
+    if (b.fundingReady && a.needsFundingCheck) return 1;
     // A method the level has outgrown (cows at Attack 45, seagulls at Ranged 60) does not beat a ready method made for this level just because the
-    // newer one's supplies are unread or it is riskier. Where speed ranks (balanced, fastest), known speeds still decide; an outgrown method with
+    // newer one's supplies are unread or it is riskier. Where speed ranks, known speeds still decide; an outgrown method with
     // its supplies at hand still beats a new one that needs buying first.
     const outgrown = (v: MethodView) => level !== undefined && v.method.to !== null && level >= v.method.to;
     const bySpeed = rateLow(a.method) !== null && rateLow(b.method) !== null;
@@ -385,43 +382,33 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number, coin
     const byRate = ((ra === null || rb === null) ? byBracket : 0) || (rb ?? -1) - (ra ?? -1);
     const preferredEntry = (m: TrainingMethod) => m.suggestedFrom !== undefined && level !== undefined && m.suggestedFrom <= level ? m.suggestedFrom : m.from;
     const byEntry = preferredEntry(b.method) - preferredEntry(a.method);
-    if (priority === 'profit') {
+    if (a.status === 'LOCKED' || b.status === 'LOCKED') { if (s) return s; }
+    const pa = practicalRate(a.method);
+    const pb = practicalRate(b.method);
+    if (pa && pb && xpLeft && xpLeft > 0) {
+      // The hours to the goal, less what the banked drops are worth in hours (lootValue.ts: the same rule as the fight plans).
+      const hours = (v: MethodView, p: number) => xpLeft / p + setupHours(v);
+      const coinsA = netCoinsPerHour(a.method);
+      const coinsB = netCoinsPerHour(b.method);
+      // Coins on both sides or on neither: a method whose cost is not known is never compared as free.
+      const worth = (v: MethodView, h: number) => (coinsA === null || coinsB === null ? 0 : h * coinTimeShare(v === a ? coinsA : coinsB, coinRate));
+      const ra0 = hours(a, pa);
+      const rb0 = hours(b, pb);
+      const ha = ra0 - worth(a, ra0);
+      const hb = rb0 - worth(b, rb0);
+      if (Math.abs(ha - hb) > Math.min(ra0, rb0) * 0.05) return ha - hb;
+    } else {
       if (s) return s;
-      if ((a.method.risk === 'high') !== (b.method.risk === 'high')) return Number(a.method.risk === 'high') - Number(b.method.risk === 'high');
-      const earnings = earningsOrder(netCoinsPerHour(a.method), netCoinsPerHour(b.method));
-      if (earnings) return earnings;
+      // Without comparable pace evidence, do not buy a new recipe merely because its suggested bracket is newer.
+      const supplied = (v: MethodView) => ![...v.missing, ...v.unchecked].some(n =>
+        (n.kind === 'item' || n.kind === 'tool') && n.state !== 'BANK' && n.state !== 'OK');
+      if ((pa === null || pb === null) && supplied(a) !== supplied(b)) return Number(supplied(b)) - Number(supplied(a));
+      if ((pa === null || pb === null) && byBracket) return byBracket;
+      if (pa === null && pb === null && a.method.kit === 'f2p-bow' && b.method.kit === 'f2p-bow' && byEntry) return byEntry;
+      if ((pa ?? -1) !== (pb ?? -1)) return (pb ?? -1) - (pa ?? -1);
     }
-    if (priority === 'balanced' || priority === 'profit') {
-      if (a.status === 'LOCKED' || b.status === 'LOCKED') { if (s) return s; }
-      const pa = practicalRate(a.method);
-      const pb = practicalRate(b.method);
-      if (pa && pb && xpLeft && xpLeft > 0) {
-        // The hours to the goal, less what the banked drops are worth in hours (lootValue.ts: the same rule as the fight plans).
-        const hours = (v: MethodView, p: number) => xpLeft / p + setupHours(v);
-        const coinsA = netCoinsPerHour(a.method);
-        const coinsB = netCoinsPerHour(b.method);
-        // Coins on both sides or on neither: a method whose cost is not known is never compared as free.
-        const worth = (v: MethodView, h: number) => (coinsA === null || coinsB === null ? 0 : h * coinTimeShare(v === a ? coinsA : coinsB, coinRate));
-        const ra0 = hours(a, pa);
-        const rb0 = hours(b, pb);
-        const ha = ra0 - worth(a, ra0);
-        const hb = rb0 - worth(b, rb0);
-        if (Math.abs(ha - hb) > Math.min(ra0, rb0) * 0.05) return ha - hb;
-      } else {
-        if (s) return s;
-        // Without comparable pace evidence, do not buy a new recipe merely because its suggested bracket is newer.
-        const supplied = (v: MethodView) => ![...v.missing, ...v.unchecked].some(n =>
-          (n.kind === 'item' || n.kind === 'tool') && n.state !== 'BANK' && n.state !== 'OK');
-        if ((pa === null || pb === null) && supplied(a) !== supplied(b)) return Number(supplied(b)) - Number(supplied(a));
-        if ((pa === null || pb === null) && byBracket) return byBracket;
-        if (pa === null && pb === null && a.method.kit === 'f2p-bow' && b.method.kit === 'f2p-bow' && byEntry) return byEntry;
-        if ((pa ?? -1) !== (pb ?? -1)) return (pb ?? -1) - (pa ?? -1);
-      }
-      // Within a few percent the method made for this level wins (the wiki's bracket), then the easier and cheaper one.
-      return s || byBracket || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort] || COST_RANK[a.method.cost] - COST_RANK[b.method.cost] || byRate || byEntry;
-    }
-    if (s) return s;
-    return byRate || byEntry || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort] || COST_RANK[a.method.cost] - COST_RANK[b.method.cost];
+    // Within a few percent the method made for this level wins (the wiki's bracket), then the easier and cheaper one.
+    return s || byBracket || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort] || COST_RANK[a.method.cost] - COST_RANK[b.method.cost] || byRate || byEntry;
   };
 }
 
@@ -507,8 +494,6 @@ export interface AdviceInput {
   target: number;
   state: PlayerState;
   mode: GameMode;
-  /** How methods are chosen; absent - balanced. */
-  priority?: MethodPriority;
   /** The skill's current XP (if known): otherwise counted from the start of the level. */
   xp?: number | null;
   /** XP per hour from the player's measurements. */
@@ -540,16 +525,16 @@ function priceKeyOf(prices: PriceView | null | undefined): string {
  * The methods of a skill with the combat model's own rate for this player where it has one (combatRates.ts): melee, Ranged and Magic training is then
  * ranked by what it gives this character, not by the wiki's guide for everyone. Other methods stay as they are.
  */
-export function personalize(methods: readonly TrainingMethod[], skill: string, state: PlayerState, prices?: PriceView | null, restriction?: TradeRestriction['state'], objective?: MethodPriority): TrainingMethod[] {
+export function personalize(methods: readonly TrainingMethod[], skill: string, state: PlayerState, prices?: PriceView | null, restriction?: TradeRestriction['state']): TrainingMethod[] {
   const stateKey = rateKeyOf(state);
   return methods.map((m) => {
     if (!m.skills.includes(skill) || m.kind !== 'method') return m;
-    const key = `${m.id}|${skill}|${stateKey}|${priceKeyOf(prices)}|${restriction ?? '-'}|${objective ?? '-'}`;
+    const key = `${m.id}|${skill}|${stateKey}|${priceKeyOf(prices)}|${restriction ?? '-'}`;
     const cache = rateCache.get(m) ?? new Map<string, TrainingMethod>();
     if (!rateCache.has(m)) rateCache.set(m, cache);
     const hit = cache.get(key);
     if (hit) return hit;
-    const r = methodRate(m, skill, state, { prices, restriction, objective });
+    const r = methodRate(m, skill, state, { prices, restriction });
     const out: TrainingMethod = r ? {
       ...m, xph: [Math.round(r.xph[0]), Math.round(r.xph[1])], rateSource: 'model', rateBasis: r.basis, ...(r.batchActions !== undefined ? { batchActions: r.batchActions } : {}), ...(r.consumables ? { consumables: r.consumables } : {}), costPerHour: r.costPerHour,
       ...(r.methodName ? { name: r.methodName } : {}),
@@ -591,23 +576,13 @@ export const rateText = (m: TrainingMethod) => {
 };
 
 
-function reasonFor(v: MethodView, priority: MethodPriority, level: number, upgrade: ToolUpgrade | null = null): string {
+function reasonFor(v: MethodView, level: number, upgrade: ToolUpgrade | null = null): string {
   const m = v.method;
   const parts: string[] = [];
-  if (priority === 'balanced' || priority === 'profit') {
-    if (m.xph) parts.push(rateText(m));
-    parts.push(m.effort === 'afk' ? 'almost no clicks' : m.effort === 'low' ? 'few clicks' : m.effort === 'medium' ? 'steady clicking' : 'needs full attention');
-    if (m.risk !== 'none') parts.push(m.risk === 'high' ? 'risky' : 'small risk');
-  } else if (m.xph) {
-    parts.push(rateText(m));
-  } else {
-    parts.push('the best method for this level');
-  }
+  if (m.xph) parts.push(rateText(m));
+  parts.push(m.effort === 'afk' ? 'almost no clicks' : m.effort === 'low' ? 'few clicks' : m.effort === 'medium' ? 'steady clicking' : 'needs full attention');
+  if (m.risk !== 'none') parts.push(m.risk === 'high' ? 'risky' : 'small risk');
   if (m.lootPerHour && m.lootName) parts.push(`${m.lootName} ≈ +${fmtK(Math.round(m.lootPerHour / 100) * 100)} gp per hour`);
-  if (priority === 'profit') {
-    const net = netCoinsPerHour(m);
-    parts.push(net !== null && net > 0 ? `net ≈ ${fmtK(Math.round(net))} gp per hour` : 'no confirmed positive net earnings; balanced fallback');
-  }
   if (m.spot?.how === 'drop') parts.push('drop when full');
   if (m.rateWarning) parts.push(m.rateWarning);
   if (m.costPerHour) parts.push(`${m.costName ?? (m.skills.includes('magic') ? 'runes' : 'arrows')} ≈ ${fmtK(Math.round(m.costPerHour / 100) * 100)} gp per hour`);
@@ -622,7 +597,7 @@ function reasonFor(v: MethodView, priority: MethodPriority, level: number, upgra
 }
 
 /**
- * The best method on each leg of the path to the goal; useful gear/recipe milestones remain separate review stages. Except for "fastest", a new unlock replaces the method in hand
+ * The best method on each leg of the path to the goal; useful gear/recipe milestones remain separate review stages. A new unlock replaces the method in hand
  * only when it is clearly better in practice (SWITCH_GAIN): changing method for a sliver costs a trip and a new setup.
  */
 /** Conditional future preparation in a copy: never grant this kit/coins to the live player. */
@@ -645,7 +620,7 @@ function forecastEquipment(state: PlayerState, needs: readonly MethodNeed[], pri
   };
 }
 
-function buildPath(skill: string, level: number, target: number, input: AdviceInput, priority: MethodPriority, first: TrainingMethod | null, raw: readonly TrainingMethod[]): { legs: PathLeg[]; time: TimeEstimate | null; handover?: string } {
+function buildPath(skill: string, level: number, target: number, input: AdviceInput, first: TrainingMethod | null, raw: readonly TrainingMethod[]): { legs: PathLeg[]; time: TimeEstimate | null; handover?: string } {
   const legs: PathLeg[] = [];
   const milestones = trainingMilestones(skill, raw, input.mode, input.state);
   let ratedAt = level;
@@ -663,15 +638,15 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
     const at = ratedAt;
     // Later legs carry the kit their stage recommends, so the rate matches the advice.
     const projected = lv === level ? atLevel(projectedState, skill, lv) : withPlannedKit(atLevel(projectedState, skill, lv), skill, lv, level);
-    const methods = at === level ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(projected, skill, at), input.prices, input.restriction, priority);
+    const methods = at === level ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(projected, skill, at), input.prices, input.restriction);
     // Advance only this skill in a copy; other skill/quest entry proofs must still be satisfied.
     const cands = methodsFor(skill, methods).filter((m) => !m.manualSetup && recommendedAt(m, lv, input.mode)).map((m) => viewMethod(m, projected, input.prices)).filter((v) => v.status !== 'LOCKED');
     // Each level is weighed as the first one is (adviseTraining): the hours from here to the goal, less what the banked drops are worth.
-    cands.sort(compare(priority, Math.max(0, xpForLevel(target) - xpForLevel(lv)), lv, coinsPerMinute(input.prices, input.mode)));
+    cands.sort(compare(Math.max(0, xpForLevel(target) - xpForLevel(lv)), lv, coinsPerMinute(input.prices, input.mode)));
     let pick = (lv === level ? cands.find(c => c.method.id === first?.id)?.method : undefined) ?? cands[0]?.method;
     if (!pick) { timed = false; continue; }
     const last = legs[legs.length - 1];
-    if (priority !== 'fastest' && priority !== 'profit' && last && last.method.id !== pick.id && cands.some((c) => c.method.id === last.method.id)) {
+    if (last && last.method.id !== pick.id && cands.some((c) => c.method.id === last.method.id)) {
       const now = practicalRate(cands.find((c) => c.method.id === last.method.id)!.method);
       const next = practicalRate(pick);
       if (now !== null && next !== null && next < now * SWITCH_GAIN) pick = cands.find((c) => c.method.id === last.method.id)!.method;
@@ -733,14 +708,14 @@ export const atLevel = (state: PlayerState, skill: string, value: number): Playe
   ({ ...state, levels: { ...state.levels, [skill]: { ...(state.levels[skill] ?? { source: 'profile' }), known: true, value } } }) as PlayerState;
 
 /** Reuse the selected phases and model quantities; unsupported consumable forecasts stay absent. */
-export function trainingStockNeeds(path: readonly PathLeg[], skill: string, state: PlayerState, xp: number, prices?: PriceView | null, priority: MethodPriority = 'balanced'): MethodNeed[] | undefined {
+export function trainingStockNeeds(path: readonly PathLeg[], skill: string, state: PlayerState, xp: number, prices?: PriceView | null): MethodNeed[] | undefined {
   const window: PathLeg[] = [];
   const stages = new Set<string>();
   const reusable: Extract<MethodNeed, { type: 'item' }>[] = [];
   for (const leg of path) {
     const projected = atLevel(state, skill, leg.fromLevel);
     const legXp = Math.max(0, xpForLevel(leg.toLevel) - Math.max(xp, xpForLevel(leg.fromLevel)));
-    const upgrade = toolUpgrade(leg.method, (tool) => upgradeXp(tool, skill, state.mode, Math.max(xp, xpForLevel(leg.fromLevel)), legXp, path[path.length - 1].toLevel), priority, coinsPerMinute(prices, state.mode));
+    const upgrade = toolUpgrade(leg.method, (tool) => upgradeXp(tool, skill, state.mode, Math.max(xp, xpForLevel(leg.fromLevel)), legXp, path[path.length - 1].toLevel), coinsPerMinute(prices, state.mode));
     const best: MethodView = { method: leg.method, status: 'READY', missing: [], unchecked: [] };
     const kit = preparationNeeds({ best, upgrade }, projected, prices).filter((n): n is Extract<MethodNeed, { type: 'item' }> => n.type === 'item' && isReusable(n.name));
     const key = kit.length ? JSON.stringify(kit.map(n => [n.name, n.anyOf ?? []]).sort()) : leg.method.id;
@@ -759,18 +734,16 @@ export function trainingStockNeeds(path: readonly PathLeg[], skill: string, stat
 export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const { skill, state, mode } = input0;
   let target = input0.target;
-  const objective: MethodPriority = input0.priority ?? 'balanced';
-  const methods = personalize(input0.methods ?? trainingMethods, skill, state, input0.prices, input0.restriction, objective);
+  const methods = personalize(input0.methods ?? trainingMethods, skill, state, input0.prices, input0.restriction);
   const input = { ...input0, methods };
   const level = levelOf(state, skill) ?? null;
   const empty: TrainingAdvice = { skill, level, target, best: null, others: [], quests: [], path: [], xpLeft: null, actionsLeft: null, actionTarget: null, time: null, reason: '' };
   if (level === null) return { ...empty, reason: 'Level unknown: log in to the game with RuneLite or enter it on the skill page.' };
   if (level >= target) return { ...empty, reason: 'The goal is already reached.' };
 
-  const priority = objective;
   const xpNow0 = input.xp ?? xpForLevel(level);
   const coinRate = coinsPerMinute(input.prices, input.mode);
-  const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level, coinRate);
+  const cmp = compare(Math.max(0, xpForLevel(target) - xpNow0), level, coinRate);
   const views = methodsFor(skill, methods).filter((m) => recommendedAt(m, level, mode) || (m.id === input0.followed && availableAt(m, level, mode))).map((m) => viewMethod(m, state, input.prices)).sort(cmp);
   const top = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
   // S04: the method the game already follows stays the pick while it is ready and the new top is not materially faster
@@ -779,12 +752,12 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const keep = running && top && running !== top && (rateLow(running.method) ?? 0) >= (rateLow(top.method) ?? Infinity) * (1 - SWITCH_MARGIN);
   const pickV = keep ? running : top;
   const switched = running && top && !keep && running !== top ? ` Switched from ${running.method.name}: it is materially slower now.` : '';
-  const said = (v: MethodView): MethodView => ({ ...v, reason: reasonFor(v, priority, level) });
+  const said = (v: MethodView): MethodView => ({ ...v, reason: reasonFor(v, level) });
   const followedV = input0.followed ? views.find((v) => v.method.id === input0.followed && v !== pickV) ?? null : null;
   const others = views.filter((v) => v !== pickV && v !== followedV).slice(0, 3).map(said);
   const best = pickV;
   const quests = methodsFor(skill, methods).filter((m) => m.kind === 'quest' && m.from <= level && (m.to === null || level < m.to) && (mode === 'members' || !m.members));
-  const forecast = buildPath(skill, level, target, input, priority, best?.method ?? null, input0.methods ?? trainingMethods);
+  const forecast = buildPath(skill, level, target, input, best?.method ?? null, input0.methods ?? trainingMethods);
   const path = forecast.legs;
   if (forecast.handover) target = path[path.length - 1].toLevel;
 
@@ -800,12 +773,12 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   // Upgrade rates are for the current method only, not for later methods that may use another tool.
   const methodEnd = path.find(l => l.method.id !== best?.method.id)?.fromLevel ?? target;
   const methodXp = Math.max(0, xpForLevel(methodEnd) - xpNow);
-  const upgradeMethod = best && priority !== 'profit' ? {
-    ...best.method, upgrades: best.method.upgrades ?? combatUpgrades(best.method, skill, state, { prices: input.prices, restriction: input.restriction, objective }),
-  } : best?.method;
+  const upgradeMethod = best ? {
+    ...best.method, upgrades: best.method.upgrades ?? combatUpgrades(best.method, skill, state, { prices: input.prices, restriction: input.restriction }),
+  } : undefined;
   // Reuse the method's acquisition allowance; a trip already needed for its kit is not charged twice.
   const allowance = best ? Math.max(0, SETUP_HOURS - setupHours(best)) : SETUP_HOURS;
-  const found = upgradeMethod ? toolUpgrade(upgradeMethod, (tool) => upgradeXp(tool, skill, mode, xpNow, methodXp, target), priority, coinRate,
+  const found = upgradeMethod ? toolUpgrade(upgradeMethod, (tool) => upgradeXp(tool, skill, mode, xpNow, methodXp, target), coinRate,
     (tool) => purchaseTripHours(best?.method.spot?.place, tool, input.prices, allowance)) : null;
   // Coins known (bag and bank) and short of the price: said, so the suggestion is not read as affordable. Unknown coins: nothing is said.
   const cash = coinsOf(state).total;
@@ -819,11 +792,11 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
     ...(cash !== null && cash < found.price ? { short: Math.round(cash) }
       : afterKit !== null && afterKit < found.price ? { afterKit: Math.floor(afterKit) } : {}),
   } : null;
-  const reason = best ? reasonFor(best, priority, level, upgrade) + switched : 'The training engine has no method for this skill at this level and mode yet.';
+  const reason = best ? reasonFor(best, level, upgrade) + switched : 'The training engine has no method for this skill at this level and mode yet.';
   return {
     ...empty, target, ...(input.untilChange ? { next: forecast.handover ?? null } : {}), best: best ? { ...best, reason } : null, others, quests, path, xpLeft, actionsLeft, actionTarget, time, upgrade, reason,
     goalNeeds: (processingGoalNeeds(path, level, target, xpNow) ?? (skill === 'ranged' ? rangedGoalNeeds(path, state, xpNow, target, input.prices) : null)) ?? undefined,
-    stockNeeds: trainingStockNeeds(path, skill, state, xpNow, input.prices, priority),
+    stockNeeds: trainingStockNeeds(path, skill, state, xpNow, input.prices),
     followed: followedV ? said(followedV) : null,
   };
 }

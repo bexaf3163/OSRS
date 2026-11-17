@@ -3,7 +3,6 @@ import { itemById, known, stepsFor, dangerZonesJson as dangerZones } from '../sr
 import type { Step } from '../src/types';
 import { emptyProgress, normalizeProgress, withUpgradeDismissed } from '../src/domain/persistence/progress';
 import { roadBankItemIds, stepBankItemIds, uniqueIds } from '../src/domain/prep/bankTags';
-import { DEFAULT_FEATURES, parseFeatures } from '../src/domain/persistence/features';
 import { checkStatus, clearNavTarget, setGearHint, setNavTarget, syncBankTags, type BridgeTransport, type GearState } from '../src/services/runeliteBridge';
 import { parseGear, parsePacing } from '../src/services/bridgeEvents';
 import { toInGameTarget } from '../src/domain/guide/inGameTarget';
@@ -209,20 +208,6 @@ describe('Save compatibility', () => {
     expect(p.upgradeDismissedForSteps).toEqual(['S1-07']);
     p = withUpgradeDismissed(p, 'S1-07', false);
     expect(p.upgradeDismissedForSteps).toBeUndefined();
-  });
-
-  it('feature settings: broken and unfamiliar — the defaults', () => {
-    expect(parseFeatures(null)).toEqual(DEFAULT_FEATURES);
-    expect(parseFeatures('garbage')).toEqual(DEFAULT_FEATURES);
-    // The retired Defence-at-1 preference (2.122) is ignored like any unknown key.
-    expect(parseFeatures('{"keepDefenceOne":true,"x":1,"efficient":"no"}')).toEqual(DEFAULT_FEATURES);
-  });
-  it('ignores retired display modes and retired helper switches while preserving the training preferences', () => {
-    // The helpers are always on since 2.93: a saved "off" (autoPrep, bankTags, pacing, levelsFromGame, upgradeRouter, autoLocation) is ignored.
-    const settings = parseFeatures(JSON.stringify({ compact: true, inspector: true, autoPrep: false, bankTags: false, pacing: false, levelsFromGame: false,
-      upgradeRouter: false, autoLocation: false, keepDefenceOne: true, profitTraining: true }));
-    expect(settings).toEqual({ ...DEFAULT_FEATURES, profitTraining: true });
-    expect(['compact', 'inspector', 'autoPrep', 'bankTags', 'pacing', 'levelsFromGame', 'upgradeRouter', 'autoLocation'].some(k => k in settings)).toBe(false);
   });
 });
 

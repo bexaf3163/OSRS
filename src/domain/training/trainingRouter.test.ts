@@ -70,7 +70,7 @@ describe('method choice', () => {
   it('both styles retain manual alternatives without presenting unchecked Magic setups as the default', () => {
     const state = levels({ magic: 25 });
     const chill = advise({ skill: 'magic', target: 40, state, mode: 'f2p' });
-    const fast = advise({ skill: 'magic', target: 40, state, mode: 'f2p', priority: 'fastest' });
+    const fast = advise({ skill: 'magic', target: 40, state, mode: 'f2p' });
     expect(chill.best?.method.id).toBe('ma-strike');
     expect(fast.best?.method.id).toBe('ma-strike');
     expect(chill.others.some(v => v.method.id === 'ma-splash' && v.unchecked.length > 0)).toBe(true);
@@ -79,7 +79,7 @@ describe('method choice', () => {
     expect(fast.time).toBeNull();
   });
 
-  it('at equal speed the calm one takes the quiet method, the efficient one — the later entry', () => {
+  it('at equal speed the quiet method wins', () => {
     const state = levels({ mining: 35 });
     const base = { ...trainingMethods.find(m => m.id === 'mi-iron')!, to: null, needs: [], manualSetup: undefined,
       xph: [20000, 20000] as [number, number], cost: 'free' as const, risk: 'none' as const };
@@ -88,7 +88,6 @@ describe('method choice', () => {
       { ...base, id: 'synthetic-later', from: 30, effort: 'high' as const },
     ];
     expect(advise({ skill: 'mining', target: 45, state, methods }).best?.method.id).toBe('synthetic-calm');
-    expect(advise({ skill: 'mining', target: 45, state, methods, priority: 'fastest' }).best?.method.id).toBe('synthetic-later');
   });
 
   it('no item — the method stays, but names what to take; the item is present — ready', () => {
@@ -118,7 +117,7 @@ describe('method choice', () => {
     const state = buildPlayerState({ mode: 'members', stats: { fishing: 70 }, progress: emptyProgress(), gear: null, owned: null, questsDone: ['Cook\'s Assistant'] });
     const m = trainingMethods.find((x) => x.id === 'fi-monk')!;
     expect(viewMethod(m, state).status).toBe('LOCKED');
-    const a = adviseTraining({ skill: 'fishing', target: 80, state, mode: 'members', priority: 'fastest' });
+    const a = adviseTraining({ skill: 'fishing', target: 80, state, mode: 'members' });
     expect(a.best?.method.id).not.toBe('fi-monk');
     const done = buildPlayerState({ mode: 'members', stats: { fishing: 70 }, progress: emptyProgress(), gear: null, owned: null, questsDone: ['Swan Song'] });
     expect(viewMethod(m, done).status).not.toBe('LOCKED');
@@ -180,13 +179,13 @@ describe('a level-up does not flip the running method for a marginal gain (S04)'
   // Fresh ids keep the synthetic speeds: the live rate model only re-rates catalogue methods it knows.
   const oak = { ...base('wc-oak'), id: 'test-slow', xph: [20_000, 25_000] as [number, number] };
   const willow = (low: number) => ({ ...base('wc-willow'), id: 'test-fast', xph: [low, low + 5_000] as [number, number] });
-  const run = (next: ReturnType<typeof willow>) => advise({ skill: 'woodcutting', target: 45, followed: 'test-slow', methods: [oak, next], priority: 'balanced',
+  const run = (next: ReturnType<typeof willow>) => advise({ skill: 'woodcutting', target: 45, followed: 'test-slow', methods: [oak, next],
     state: levels({ woodcutting: 30 }, { 'Steel axe': { carried: 1 } }, true) });
 
   it('keeps the running method when the new one is only slightly faster', () => {
     expect(run(willow(22_000)).best?.method.id).toBe('test-slow');
     // Without a running method the same 10% gain does win, so the margin is what keeps it.
-    expect(advise({ skill: 'woodcutting', target: 45, methods: [oak, willow(22_000)], priority: 'balanced', state: levels({ woodcutting: 30 }, { 'Steel axe': { carried: 1 } }, true) }).best?.method.id).toBe('test-fast');
+    expect(advise({ skill: 'woodcutting', target: 45, methods: [oak, willow(22_000)], state: levels({ woodcutting: 30 }, { 'Steel axe': { carried: 1 } }, true) }).best?.method.id).toBe('test-fast');
   });
 
   it('switches with an explanation when the new one is materially faster', () => {
@@ -204,7 +203,7 @@ describe('melee training at level 1 (fresh-account simulation, 2.86.1)', () => {
   it('keeps the better weapon whichever of the two is worn: a worn piece is owned, so no Equip loop between them', () => {
     for (const [worn, carried] of [['Iron scimitar', 'Bronze pickaxe'], ['Bronze pickaxe', 'Iron scimitar']] as const) {
       const state = fresh(worn, carried);
-      const advice = adviseTraining({ skill: 'attack', target: 12, state, mode: 'f2p', priority: 'balanced' });
+      const advice = adviseTraining({ skill: 'attack', target: 12, state, mode: 'f2p' });
       const weapons = preparationNeeds(advice, state).flatMap(n => n.type === 'item' && n.equip ? [n.name] : []);
       expect(weapons, worn).toEqual(['Iron scimitar']);
     }
@@ -215,7 +214,7 @@ describe('melee training at level 1 (fresh-account simulation, 2.86.1)', () => {
     const view = viewMethod(moss, state);
     expect(view.status).toBe('LOCKED');
     expect(view.missing.map(n => n.label).join(' ')).toMatch(/^More Hitpoints: Moss giant/);
-    expect(adviseTraining({ skill: 'strength', target: 7, state, mode: 'f2p', priority: 'balanced' }).best?.method.id).not.toBe('me-moss');
+    expect(adviseTraining({ skill: 'strength', target: 7, state, mode: 'f2p' }).best?.method.id).not.toBe('me-moss');
   });
 });
 

@@ -9,7 +9,7 @@ const method = (id: string, from: number, xph: [number, number] | null, extra: P
   cost: 'free', risk: 'none', effort: 'low', npcNames: [], objectNames: [], kit: undefined, manualSetup: undefined, ...extra,
 });
 const advice = (methods: TrainingMethod[], level: number, target: number, extra = {}) => adviseTraining({
-  skill: 'mining', target, mode: 'f2p', priority: 'fastest', methods,
+  skill: 'mining', target, mode: 'f2p', methods,
   state: buildPlayerState({ mode: 'f2p', stats: { mining: level }, progress: emptyProgress(), gear: null, owned: null, questsDone: [] }),
   ...extra,
 });

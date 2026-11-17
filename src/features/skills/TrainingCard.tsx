@@ -1,4 +1,4 @@
-// "What to train with": a skill training method up to the goal — by level, mode, items and the training priority (XP, Balanced, Money).
+// "What to train with": a skill training method up to the goal — by level, mode and items.
 // The calculation is lib/trainingRouter.ts; here only the display. It starts and buys nothing: the arrow is by the player's button.
 
 import { useMemo } from 'react';
@@ -7,8 +7,6 @@ import { levelById } from '../../data';
 import { useStore } from '../../state/store';
 import { useBridge } from '../../state/bridge';
 import { usePlayerState } from '../../state/playerStateContext';
-import { setFeatures, useFeatures } from '../../state/hooks/useFeatures';
-import { priorityOf } from '../../domain/persistence/methodPriority';
 import { adviseTraining, atLevel, formatHours, methodsFor, questTrainingStep, rateText, type MethodView, type TrainingAdvice } from '../../domain/training/trainingRouter';
 import { stagesOf } from '../../domain/training/stages';
 import { actionForm } from '../../domain/player/pacing';
@@ -34,7 +32,6 @@ export function useTrainingAdvice(skill: string | null, target: number, followed
   const { mode } = useStore();
   const { state } = usePlayerState();
   const { xp, xpRate } = useBridge();
-  const priority = priorityOf(useFeatures());
   const tracked = useTracked();
   const context = useMemo(() => trackedTrainingContext(tracked, skill ?? '', state, mode), [tracked, skill, state, mode]);
   const have = skill ? xp?.[skill] ?? null : null;
@@ -44,14 +41,14 @@ export function useTrainingAdvice(skill: string | null, target: number, followed
   const trade = useTradeRestriction();
   return useMemo(() => {
     if (!skill) return null;
-    const input = { skill, target, ...context, priority, xp: have, measuredXph: measured, prices, restriction: trade.state, followed, untilChange };
+    const input = { skill, target, ...context, xp: have, measuredXph: measured, prices, restriction: trade.state, followed, untilChange };
     const advice = adviseTraining(input);
     if (advice.level === null || advice.level <= 1 || advice.level >= advice.target) return advice;
     // The guide from level 1: the same router at level 1, so passed stages read as the route that led here.
     const ladder = adviseTraining({ ...input, target: advice.target, untilChange: false, state: atLevel(input.state, skill, 1), xp: null, measuredXph: null, followed: null }).path;
     return { ...advice, ladder };
   },
-    [skill, target, context, priority, have, measured, prices, trade.state, followed, untilChange],
+    [skill, target, context, have, measured, prices, trade.state, followed, untilChange],
   );
 }
 
@@ -60,7 +57,6 @@ export function useTrainingAdvice(skill: string | null, target: number, followed
 export function useMethodStops(): (skill: string) => MethodStop | null {
   const { mode } = useStore();
   const { state } = usePlayerState();
-  const priority = priorityOf(useFeatures());
   const tracked = useTracked();
   const prices = usePriceView(true);
   const trade = useTradeRestriction();
@@ -69,11 +65,11 @@ export function useMethodStops(): (skill: string) => MethodStop | null {
     return (skill: string) => {
       if (!stops.has(skill)) stops.set(skill, methodStop(adviseTraining({
         skill, target: MAX_LEVEL, ...trackedTrainingContext(tracked, skill, state, mode),
-        priority, prices, restriction: trade.state, untilChange: true,
+        prices, restriction: trade.state, untilChange: true,
       })));
       return stops.get(skill) ?? null;
     };
-  }, [mode, state, priority, tracked, prices, trade.state]);
+  }, [mode, state, tracked, prices, trade.state]);
 }
 
 /** A map point for a method: only from the place dictionary by key — without guessing from the text. */
@@ -99,16 +95,14 @@ function Alternative({ v }: { v: MethodView }) {
 export function TrainingCard({ skill, target, followed = null, view = 'full', advice: given }: { skill: string; target: number; followed?: string | null; view?: 'full' | 'summary' | 'analysis'; /** Advice the page already computed for this skill and goal. */ advice?: TrainingAdvice }) {
   const own = useTrainingAdvice(given ? null : skill, target, followed);
   const advice = given ?? own;
-  const features = useFeatures();
   const { state } = usePlayerState();
   const { xp, pointInGame } = useBridge();
   const { steps, progress } = useStore();
   const tracked = useTracked();
-  const selectedPriority = priorityOf(features);
   const prices = usePriceView(true);
   const dropAdvice = useDropAdvice();
   // The engine's own tool/kit decision for the method on this card (upgrade, kept tool or the items used), not a fixed note.
-  const equipmentHint = useMemo(() => advice ? equipmentLine(advice, state, prices, selectedPriority) : null, [advice, state, prices, selectedPriority]);
+  const equipmentHint = useMemo(() => advice ? equipmentLine(advice, state, prices) : null, [advice, state, prices]);
   // T11: the arrows for the whole goal, leg by leg against each leg's opponent, with the bow and arrows the kit picks now.
   const arrows = useMemo(() => {
     if (skill !== 'ranged' || !advice?.best || advice.level === null) return null;
@@ -151,15 +145,6 @@ export function TrainingCard({ skill, target, followed = null, view = 'full', ad
       {view === 'full' && <p className="readiness-head">
         <strong>What to train with: {skillTitle(skill)}</strong> <span className="muted">— now {advice.level}, goal {target}</span>
       </p>}
-      <div className="skill-seg" role="group" aria-label="Training priority">
-        {([['fastest', 'XP'], ['balanced', 'Balanced'], ['profit', 'Money']] as const).map(([priority, label]) => (
-          <button key={priority} type="button" className={`skill-seg-btn ${selectedPriority === priority ? 'is-on' : ''}`}
-            aria-pressed={selectedPriority === priority}
-            onClick={() => setFeatures({ efficient: priority === 'fastest', profitTraining: priority === 'profit' })}>
-            {label}
-          </button>
-        ))}
-      </div>
       {best ? (
         <>
           <div className="training-recommendation">

@@ -5,7 +5,6 @@ export const STORAGE_KEYS = {
   profiles: 'osrs-put:profiles',
   ledger: 'osrs-put:ledger',
   cleanup: 'osrs-put:cleanup',
-  features: 'osrs-put:features',
   fundingPlan: 'osrs-put:funding-plan',
   fundingRates: 'osrs-put:funding-rates',
   prep: 'osrs-put:prep',
@@ -29,3 +28,6 @@ export const STORAGE_KEYS = {
   debugTransport: 'osrs-put:debug-transport',
   debugFetch: 'osrs-put:debug-fetch',
 } as const;
+
+/** Keys older versions saved and the app clears at start: the XP/Balanced/Money switch (gone in 2.135.0, always Balanced). */
+export const RETIRED_STORAGE_KEYS = ['osrs-put:features'] as const;

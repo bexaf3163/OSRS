@@ -132,7 +132,7 @@ function withLoot(r: (ModelRate & { secondsPerKill: number }) | null, foe: strin
   const spot = spotsOf(true).get(foe);
   const each = spot?.sell ? dropValue(spot.sell, market.prices, market.restriction) : null;
   const trip = termsOf(foe).tripMinutes;
-  const extra = each !== null && spot?.sell ? lootSecondsPerKill(each, trip ? (trip[0] + trip[1]) / 2 : 4.5, coinsPerMinute(market.prices, mode), market.objective) : null;
+  const extra = each !== null && spot?.sell ? lootSecondsPerKill(each, trip ? (trip[0] + trip[1]) / 2 : 4.5, coinsPerMinute(market.prices, mode)) : null;
   if (extra === null || each === null) return rate;
   const slower = secondsPerKill / (secondsPerKill + extra);
   return { ...rate, xph: [rate.xph[0] * slower, rate.xph[1] * slower], costPerHour: rate.costPerHour === null ? null : rate.costPerHour * slower,

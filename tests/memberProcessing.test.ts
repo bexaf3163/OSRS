@@ -32,7 +32,7 @@ describe('Members recipes inherit the shared processing rules', () => {
     ['fl-yew', 65, 'Yew shortbow (u)'], ['fl-yew', 70, 'Yew longbow (u)'],
     ['fl-magic', 80, 'Magic shortbow (u)'], ['fl-magic', 85, 'Magic longbow (u)'],
   ])('selects the actual unlocked recipe for %s at %i', (id, level, product) => {
-    const r = processRate(method(id), 'fletching', state('fletching', level), { objective: 'fastest' })!;
+    const r = processRate(method(id), 'fletching', state('fletching', level), {})!;
     expect(r.basis).toBe(product);
     expect(r.methodName).toBe(`Make ${product}`);
     expect(r.costPerHour).toBeNull();

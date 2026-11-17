@@ -7,7 +7,6 @@ import { fundingMethodsJson as fundingJson } from '../../data';
 import { netEach } from './ge';
 import { isRestrictedItem, type TradeRestriction } from './tradeRestriction';
 import type { PriceView } from './quotes';
-import type { MethodPriority } from '../persistence/methodPriority';
 
 /** Seconds to pick one drop up: the click and a step or two, the fast and the slow end. */
 export const PICKUP_SECONDS: [number, number] = [1.2, 3];
@@ -35,16 +34,6 @@ export function coinsPerMinute(prices: PriceView | null | undefined, mode: 'f2p'
  */
 export const COIN_SHARE_CAP = 0.5;
 
-/** Known net proceeds per hour. Unknown costs are never a free input. */
-export function netEarnings(rate: { costPerHour: number | null; lootPerHour?: number }): number | null {
-  return rate.costPerHour === null ? null : (rate.lootPerHour ?? 0) - rate.costPerHour;
-}
-
-/** A money-first choice needs positive evidence; non-positive/unknown figures do not invent a profitable preference. */
-export function earningsOrder(a: number | null, b: number | null): number {
-  const positive = (n: number | null) => n !== null && Number.isFinite(n) && n > 0;
-  return positive(a) || positive(b) ? (positive(b) ? b! : 0) - (positive(a) ? a! : 0) : 0;
-}
 /** netPerHour: coins banked less coins used up (arrows, runes, bait, food), an hour. A gain is capped; a cost counts in full (it is real money). */
 export function coinTimeShare(netPerHour: number | undefined, rate: number | null): number {
   if (!rate || !netPerHour) return 0;
@@ -64,17 +53,14 @@ export function dropValue(name: string, prices: PriceView | null | undefined, re
  * Whether banking one drop a kill pays: its coins per second of extra work (the pickup and its share of a bank trip, `tripMinutes` for LOOT_SLOTS
  * drops) against the rate. Returns the extra seconds a kill when it does, else null.
  */
-export function lootSecondsPerKill(each: number, tripMinutes: number, rate: number | null, objective?: MethodPriority): number | null {
+export function lootSecondsPerKill(each: number, tripMinutes: number, rate: number | null): number | null {
   const extra = (PICKUP_SECONDS[0] + PICKUP_SECONDS[1]) / 2 + (tripMinutes * 60) / LOOT_SLOTS;
-  return bankingPays(each, extra, rate, objective) ? extra : null;
+  return bankingPays(each, extra, rate) ? extra : null;
 }
 
 /**
- * The one rule for keeping anything: coins per extra second of keeping it (a pickup, a share of a bank trip) at least what a second earns. On the
- * fastest objective nothing that costs time is kept: the player asked for the level first, and the coins are not traded for it.
+ * The one rule for keeping anything: coins per extra second of keeping it (a pickup, a share of a bank trip) at least what a second earns.
  */
-export function bankingPays(each: number, extraSeconds: number, rate: number | null, objective?: MethodPriority): boolean {
-  if (objective === 'fastest' && extraSeconds > 0) return false;
-  if (objective === 'profit') return each > 0 && Number.isFinite(extraSeconds) && extraSeconds >= 0;
+export function bankingPays(each: number, extraSeconds: number, rate: number | null): boolean {
   return rate !== null && rate > 0 && each > 0 && (extraSeconds <= 0 || each / extraSeconds >= rate / 60);
 }

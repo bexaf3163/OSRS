@@ -4,7 +4,6 @@
 import type { Step, WikiItemDetail } from '../../types';
 import { combatAuditJson } from '../../data';
 import type { PriceView } from '../market/quotes';
-import type { MethodPriority } from '../persistence/methodPriority';
 import type { TradeRestriction } from '../market/tradeRestriction';
 import type { Progress } from '../../types';
 import type { CommittedDecision, PlanningSnapshot } from './contracts';
@@ -35,7 +34,6 @@ export interface RuntimePlanInput {
   detail: (id: number) => WikiItemDetail | undefined;
   ironman: boolean;
   earn: TacticalInput['earn'];
-  priority?: MethodPriority;
   restriction?: TradeRestriction['state'];
   catalogue?: readonly QuestFact[];
   /** Walking minutes from the trip worker's routes (createWalkingCosts); absent keeps quest travel UNKNOWN. */
@@ -81,7 +79,7 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
   const walk = withTeleports(input.walk ?? (() => null), input.teleports ?? null);
   const origin = snapshot.player.position.known ? snapshot.player.position.value : null;
   const stepOf = new Map(steps.map(step => [step.id, step]));
-  const options = { prices, priority: input.priority, restriction: input.restriction };
+  const options = { prices, restriction: input.restriction };
   // Training time to a level from the shared training cost, measured from the observed state (train-then-earn, S61).
   const trainingCost = createTrainingCost(snapshot, options), observed = observedProjection(snapshot);
   const train = (skill: string, level: number) => trainingCost(skill, level, observed);
@@ -104,7 +102,7 @@ export function runtimeDecision(input: RuntimePlanInput): CommittedDecision | nu
     return times.length ? times.reduce((best, time) => (time.typical < best.typical ? time : best)) : null;
   };
   const tactical = createTacticalResolver({
-    snapshot, progress: input.progress, prices, window, priority: input.priority,
+    snapshot, progress: input.progress, prices, window,
     restriction: input.restriction, ironman, walk,
     earn: (step, gp, budget, goalId) => input.earn(step, gp, budget, goalId, train),
     gather: input.gather,

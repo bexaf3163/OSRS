@@ -12,7 +12,7 @@
 import { skillingJson } from '../../data';
 import { bankTrip } from '../travel/bankTrip';
 import { cascade, skillChance } from '../player/skillChance';
-import { bankingPays, coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from '../market/lootValue';
+import { bankingPays, coinsPerMinute, coinTimeShare, dropValue } from '../market/lootValue';
 import { heldExact, levelOf, type PlayerState } from '../player/playerState';
 import { toolFamilyOf, toolUse } from '../items/toolTiers';
 import type { Market, ModelRate, RateSpot } from './methodRates';
@@ -87,10 +87,8 @@ const TIE = 0.02;
  * Whether spot a beats spot b: a spot whose NPCs would attack this player loses to any spot where none do (when every spot has them, the best is kept
  * and says so); then the better score; in a tie the spot nearer the method's own place (the guide's), so the advice does not hop between equal spots.
  */
-function better(a: SpotRate, b: SpotRate, home: Point | null, objective?: Market['objective']): boolean {
+function better(a: SpotRate, b: SpotRate, home: Point | null): boolean {
   if (Boolean(a.danger) !== Boolean(b.danger)) return !a.danger;
-  const earnings = objective === 'profit' ? earningsOrder(netEarnings(a.rate), netEarnings(b.rate)) : 0;
-  if (earnings) return earnings < 0;
   if (Math.abs(a.score - b.score) > TIE * Math.min(a.score, b.score)) return a.score < b.score;
   const far = (x: SpotRate) => (home && x.rate.spot ? Math.max(Math.abs(x.rate.spot.place.x - home.x), Math.abs(x.rate.spot.place.y - home.y)) : 0);
   return far(a) < far(b);
@@ -148,7 +146,7 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
   const trip = spot.bank ? bankTrip({ place: spot.place, bank: spot.bank, ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }) : null;
   const bankPer = (i: 0 | 1) => (trip ? (trip.minutes[i] * 60) / slots : Infinity);
   const mid = (f: (i: 0 | 1) => number) => (f(0) + f(1)) / 2;
-  const banks = trip !== null && bankingPays(valueEach, mid(bankPer) - mid((i) => DROP[i]), coinRate, market.objective);
+  const banks = trip !== null && bankingPays(valueEach, mid(bankPer) - mid((i) => DROP[i]), coinRate);
   const perItem = (i: 0 | 1) => atSpot(i) + (banks ? bankPer(i) : DROP[i]);
   const perHour = (i: 0 | 1) => 3600 / perItem(i);
   const xph: [number, number] = [(xpEach * perHour(1)) / (1 + MARGIN), xpEach * perHour(0)];
@@ -187,7 +185,7 @@ export function gatherRate(m: TrainingMethod, skill: string, state: PlayerState,
     for (const spot of reg.spots) {
       if (spot.resource !== id || (spot.members && state.mode !== 'members')) continue;
       const s = spotRate(r, spot, level, state, market, coinRate, reg);
-      if (s && (!best || better(s, best.s, home, market.objective))) best = { s, r, spot };
+      if (s && (!best || better(s, best.s, home))) best = { s, r, spot };
     }
   }
   if (!best) return null;
@@ -316,7 +314,7 @@ export function alongRate(m: TrainingMethod, gatherSkill: string, processSkill: 
       const walk = (2 * near.far) / TILES_PER_SECOND / slots;
       const trip = spot.bank ? bankTrip({ place: spot.place, bank: spot.bank, ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }) : null;
       const bankPer = (i: 0 | 1) => (trip ? (trip.minutes[i] * 60) / slots : Infinity);
-      const banks = trip !== null && bankingPays(valueEach, (bankPer(0) + bankPer(1)) / 2 - (DROP[0] + DROP[1]) / 2, coinRate, market.objective);
+      const banks = trip !== null && bankingPays(valueEach, (bankPer(0) + bankPer(1)) / 2 - (DROP[0] + DROP[1]) / 2, coinRate);
       const perItem = (i: 0 | 1) => pace.atSpot(i) + work + walk + (banks ? bankPer(i) : DROP[i]);
       const rate = (xp: number): [number, number] => [(xp * 3600) / perItem(1) / (1 + MARGIN), (xp * 3600) / perItem(0)];
       const option: AlongRate = {

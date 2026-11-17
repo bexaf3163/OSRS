@@ -80,8 +80,8 @@ describe('one recovery model for every combat style', () => {
   });
   it('Magic earns banked loot under the same rule, and pickup time slows both XP and rune spending', () => {
     const s = state(); s.equipment = {}; s.equipmentItems = [];
-    const bare = combatRate(method('ma-strike'), 'magic', s, { prices: market, objective: 'fastest' })!;
-    const loot = combatRate(method('ma-strike'), 'magic', s, { prices: market, objective: 'balanced', restriction: 'LIFTED' })!;
+    const bare = combatRate(method('ma-strike'), 'magic', s, { prices: market, restriction: 'RESTRICTED' })!;
+    const loot = combatRate(method('ma-strike'), 'magic', s, { prices: market, restriction: 'LIFTED' })!;
     expect(loot.loot).toBe('Cowhide');
     expect(loot.lootPerHour).toBeGreaterThan(0);
     expect(loot.xph[1]).toBeLessThan(bare.xph[1]);

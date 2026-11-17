@@ -7,7 +7,7 @@
 import { processingJson } from '../../data';
 import { bankTrip, tripMinutes } from '../travel/bankTrip';
 import { skillChance } from '../player/skillChance';
-import { coinsPerMinute, coinTimeShare, dropValue, earningsOrder, netEarnings } from '../market/lootValue';
+import { coinsPerMinute, coinTimeShare, dropValue } from '../market/lootValue';
 import { coinsOf, heldOf, levelOf, type PlayerState } from '../player/playerState';
 import { itemRequirement } from '../player/requirements';
 import { requirementCost } from '../market/needPrice';
@@ -181,7 +181,7 @@ function option(r: Recipe, at: { spot: RateSpot | null; trip: [number, number] }
     ].join(' ') } : {}),
   };
   // Time per XP less what the coins are worth in time (lootValue): a loss counts in full, a gain at most half; unknown coins are left out.
-  const saved = costPerHour === null || market.objective === 'fastest' ? 0 : coinTimeShare(lootPerHour - costPerHour, coinRate);
+  const saved = costPerHour === null ? 0 : coinTimeShare(lootPerHour - costPerHour, coinRate);
   const fundingRank = batchFunding(needs, state, market.prices);
   return { rate, score: (1 - saved) / ((xph[0] + xph[1]) / 2), fundingRank };
 }
@@ -202,7 +202,7 @@ export function processRate(m: TrainingMethod, skill: string, state: PlayerState
     const r = reg.recipes.find((x) => x.id === id);
     if (!r || r.skill !== skill || level < r.level || (r.members && state.mode !== 'members')) continue;
     if (r.requires?.some((q) => (levelOf(state, q.skill) ?? 0) < q.level)) continue;
-    const mixed = market.objective !== 'profit' ? mixableRecipe(r, m, ids, reg) : null;
+    const mixed = mixableRecipe(r, m, ids, reg);
     for (const at of placesFor(r, state, reg)) {
       const o = option(mixed ?? r, at, level, state, market, coinRate, m);
       if (!o) continue;
@@ -218,11 +218,10 @@ export function processRate(m: TrainingMethod, skill: string, state: PlayerState
       } else if (ids.length > 1 && r.output) o.rate.methodName = `${r.skill === 'cooking' && r.facility === 'fire' ? 'Cook' : 'Make'} ${r.skill === 'cooking' ? r.output.name.replace(/^Cooked\s+/, '') : r.output.name}`;
       // A tie (within 2%) goes to the station nearer the method's own place, so the advice does not hop between equal stations.
       const far = (x: Option) => (home && x.rate.spot ? Math.max(Math.abs(x.rate.spot.place.x - home.x), Math.abs(x.rate.spot.place.y - home.y)) : 0);
-      const earnings = best && market.objective === 'profit' ? earningsOrder(netEarnings(o.rate), netEarnings(best.rate)) : 0;
-      // Kit feasibility precedes XP/profit; an uncertain wallet is neither zero cash nor confirmed buying power.
+      // Kit feasibility precedes XP; an uncertain wallet is neither zero cash nor confirmed buying power.
       const funding = best ? o.fundingRank - best.fundingRank : 0;
       const byRate = best !== null && (o.score < best.score * 0.98 || (o.score <= best.score * 1.02 && far(o) < far(best)));
-      if (!best || funding < 0 || (!funding && (earnings < 0 || (!earnings && byRate)))) best = o;
+      if (!best || funding < 0 || (!funding && byRate)) best = o;
     }
   }
   return best?.rate ?? null;

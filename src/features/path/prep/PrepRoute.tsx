@@ -12,8 +12,6 @@ import type { ReadinessAction } from '../../../domain/readiness/readiness';
 import { navKeyOf, reconcile, rearmReadyDetours, staleArrows, startDetour, type PrepTask } from '../../../domain/prep/prepRoute';
 import { decideAuto, type QueueTask } from '../../../domain/prep/prepQueue';
 import { declined, usePrep } from '../../../state/hooks/usePrep';
-import { useFeatures } from '../../../state/hooks/useFeatures';
-import { priorityOf } from '../../../domain/persistence/methodPriority';
 import { useActiveActivity, useReadinessEngine, useTrackedTraining } from '../../../state/readinessContext';
 import { NavigateButton } from '../../../ui/NavigateButton';
 import { useTracked } from '../../../state/hooks/useTracked';
@@ -32,7 +30,7 @@ function TaskAction({ a }: { a: ReadinessAction }) {
  * has no place (a quest, a level with no map point) — nothing leaves the window: onDetails expands the preparation details.
  */
 export function usePrepFix(step: Step, onDetails: () => void): { available: boolean; underway: boolean; fix: () => Promise<void> } {
-  const queue = useReadinessEngine().queue(step, priorityOf(useFeatures()));
+  const queue = useReadinessEngine().queue(step);
   const { prep, set } = usePrep();
   const { navigate } = useBridge();
   const { notify } = useStore();
@@ -60,7 +58,7 @@ export function usePrepFix(step: Step, onDetails: () => void): { available: bool
 }
 
 export function PrepRouteBlock({ step }: { step: Step }) {
-  const queue = useReadinessEngine().queue(step, priorityOf(useFeatures()));
+  const queue = useReadinessEngine().queue(step);
   const { prep, set } = usePrep();
   const { navigate } = useBridge();
   const { notify } = useStore();
@@ -185,7 +183,6 @@ export function PrepWatcher() {
  * It does not take over the arrow if a target is already set in the game, and goes quiet when the player cleared the arrow by hand.
  */
 export function PrepAuto() {
-  const priority = priorityOf(useFeatures());
   const { notify } = useStore();
   const { navTarget, navigate, releaseNav, state: link, userClearedAt } = useBridge();
   const engine = useReadinessEngine();
@@ -212,7 +209,7 @@ export function PrepAuto() {
         return;
       }
     }
-    const queue = engine.queue(focus, priority);
+    const queue = engine.queue(focus);
     const now = Date.now();
     const d = decideAuto({
       queue, stepId: focus.id, prep, online: link === 'online' && engine.ctx.state.connected,
@@ -244,6 +241,6 @@ export function PrepAuto() {
         set({ ...prep, stack: prep.stack.map((f) => (f === d.frame ? { ...f, nav: navKeyOf(target) } : f)) });
       }
     }
-  }, [focus, engine, prep, set, navTarget, navigate, releaseNav, priority, link, userClearedAt, notify, tracked, training, funding]);
+  }, [focus, engine, prep, set, navTarget, navigate, releaseNav, link, userClearedAt, notify, tracked, training, funding]);
   return null;
 }

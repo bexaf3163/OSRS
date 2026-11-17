@@ -21,7 +21,7 @@ async function stockScenarios(browser: Browser) {
     const items = RANGED_WATCH.map(name => ({ name, carried: 0, noted: 0, bank: 0 }));
     const { page, errors } = await open(browser, 1280, {
       market: true, marketQuotes, progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
-      localStorage: { 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'f2p', target: 40 }), 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
+      localStorage: { 'osrs-put:skill-track': JSON.stringify({ skill: 'ranged', mode: 'f2p', target: 40 }) },
       status: { inGame: true, protocol: 6, player: 'Stock fixture', activeStepId: 'S5-01', stats, ...gear },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
     }, '#/shopping');
@@ -68,22 +68,19 @@ async function cleanupScenarios(browser: Browser) {
   const version = page.getByRole('group', { name: 'App version' });
   await version.getByRole('button', { name: 'Check', exact: true }).click();
   expect(await page.evaluate(() => Number((window as unknown as { __updateChecks?: number }).__updateChecks)) === 1 && await page.getByRole('button', { name: 'Copy the report', exact: true }).count() === 0, 'cleanup: updates remain functional from the rail and retired Copy Report is absent');
-  // The method priority is the skill card's own choice; the Defence-at-1 build preference is retired (2.122).
+  // The XP/Balanced/Money switch is gone (2.135.0, always Balanced) and its saved value is cleared; the Defence-at-1 preference is retired (2.122).
   await page.goto(`${BASE}#/skills/RA/ranged`);
   await settle(page);
-  const priorities = page.getByRole('group', { name: 'Training priority' }).first();
-  await priorities.waitFor();
-  expect(await priorities.getByRole('button', { name: 'Money', exact: true }).getAttribute('aria-pressed') === 'true', 'cleanup: active saved training priority survives on the skill card');
+  await page.locator('.training').first().waitFor();
+  expect(await page.getByRole('group', { name: 'Training priority' }).count() === 0, 'cleanup: the training priority switch is gone');
+  expect(await page.evaluate(() => localStorage.getItem('osrs-put:features')) === null, 'cleanup: the retired training switch is cleared from storage');
   expect(await page.getByRole('checkbox', { name: /Keep Defence/ }).count() === 0, 'cleanup: the retired Defence preference is gone from Skills');
-  await priorities.getByRole('button', { name: 'Balanced', exact: true }).click();
-  await settle(page);
-  expect(await priorities.getByRole('button', { name: 'Balanced', exact: true }).getAttribute('aria-pressed') === 'true', 'cleanup: training priority remains editable');
   await page.screenshot({ path: 'audit-temp/cleanup-training-settings.png' });
   await page.goto(`${BASE}#/goals`);
   await settle(page);
   expect(await page.locator('.goals-table').count() === 0 && await page.getByRole('region', { name: 'Quest details' }).count() === 1, 'cleanup: old goals links open the Journal');
   await page.goto(`${BASE}#/skills/RA/ranged`);
-  await page.getByRole('group', { name: 'Training priority' }).waitFor();
+  await page.locator('.training').first().waitFor();
   expect(await page.locator('.skill-roadmap').count() === 0 && await page.locator('.training').count() === 1, 'cleanup: Ranged has one personalized plan, not a competing static roadmap');
   await page.screenshot({ path: 'audit-temp/cleanup-ranged-plan.png' });
 

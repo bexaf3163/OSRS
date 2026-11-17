@@ -12,7 +12,6 @@ import { toInGameTarget } from '../src/domain/guide/inGameTarget';
 import { pickTraining } from '../src/domain/training/methodPick';
 import { SKILLING } from '../src/domain/training/skillingRates';
 import { trainingMethods } from '../src/domain/training/trainingRouter';
-import type { MethodPriority } from '../src/domain/persistence/methodPriority';
 import { retiredStep } from './fixtures/retiredSteps';
 
 // Fishing 1-50 (S6-01). The first version put the climb on the map in level order and, in 2.54.2, let any later tool stand in for the net. A live
@@ -39,17 +38,17 @@ function stateAt(fishing: number | null, bag: Record<string, number> = {}, cooki
   });
 }
 
-/** The step as the store would give it for this level, bag and training priority. */
-function resolved(fishing: number | null, bag: Record<string, number> = {}, style: MethodPriority = 'balanced', cooking = 30) {
+/** The step as the store would give it for this level and bag. */
+function resolved(fishing: number | null, bag: Record<string, number> = {}, cooking = 30) {
   const state = stateAt(fishing, bag, cooking);
-  const raw = pickTraining(step, state, 'f2p', style).pick;
+  const raw = pickTraining(step, state, 'f2p').pick;
   return { state, pick: raw === undefined ? undefined : pickedMethodId(raw), raw, step: withTrainingMethod(step, raw) };
 }
 
 const needs = (s: typeof step) => (s.itemsRequired ?? []).map((i) => `${i.nameEn}${typeof i.amount === 'number' && i.amount > 1 ? ` x${i.amount}` : ''}`);
 
-function readyOf(fishing: number, bag: Record<string, number>, style: MethodPriority = 'balanced') {
-  const r = resolved(fishing, bag, style);
+function readyOf(fishing: number, bag: Record<string, number>) {
+  const r = resolved(fishing, bag);
   const rd = stepReadiness({ step: r.step, steps: [r.step], progress: emptyProgress(), qp: 100, mode: 'f2p', stats: { fishing, cooking: 30 }, owned: bagOf(bag), gear: null });
   return { ...r, status: rd.status, reqs: rd.requirements.map((x) => `${x.label}:${x.state}`) };
 }
@@ -117,10 +116,10 @@ describe('S6-01 follows the training method of the real level', () => {
 
   it('the arrow advances through the training places as the level rises, never backwards', () => {
     const order = ['Draynor Village fishing spots', 'Barbarian Village fishing spots', 'Musa Point fishing spots'];
-    for (const style of ['balanced', 'fastest'] as const) {
+    for (const style of ['balanced'] as const) {
       let at = -1;
       for (let level = 1; level < 50; level++) {
-        const r = resolved(level, {}, style);
+        const r = resolved(level, {});
         const m = trainingMethods.find((x) => x.id === r.pick)!;
         expect(m, `level ${level}`).toBeDefined();
         expect(m.from <= level, `${style} ${level}: ${m.id} is unlocked`).toBe(true);
@@ -173,7 +172,7 @@ describe('S6-01 follows the training method of the real level', () => {
     const cooking = resolved(50, { 'Raw tuna': 26 });
     expect(cooking.pick).toBe('ck-tuna');
     expect(needs(cooking.step)).toEqual(['Raw tuna x26']);
-    const done = resolved(50, {}, 'balanced', 50);
+    const done = resolved(50, {}, 50);
     expect(done.pick).toBe(GOAL_REACHED);
     expect(needs(done.step)).toEqual([]);
     expect(withTrainingMethod(step, 'no-such-method')).toBe(step);
@@ -190,13 +189,13 @@ describe('S6-01 follows the training method of the real level', () => {
   });
 
   /** The picks in turn when the game reports only the tracked names (an untracked item is unknown, not zero), each round tracking what the last pick asked for. */
-  function rounds(level: number, bag: Record<string, number>, style: MethodPriority, alsoTrackEveryMethod: boolean): (string | undefined)[] {
+  function rounds(level: number, bag: Record<string, number>, alsoTrackEveryMethod: boolean): (string | undefined)[] {
     let tracked: string[] = (step.itemsRequired ?? []).map((i) => i.nameEn);
     const picks: (string | undefined)[] = [];
     for (let i = 0; i < 6; i++) {
       const owned = { bankSeen: true, items: new Map(tracked.map((n) => [nameKey(n), { name: n, carried: bag[n] ?? 0, noted: 0, bank: 0 } as OwnedItem])) };
       const state = buildPlayerState({ mode: 'f2p', stats: { fishing: level, cooking: 30 }, progress: emptyProgress(), gear: null, questsDone: null, owned, connected: true });
-      const pick = pickTraining(step, state, 'f2p', style).pick;
+      const pick = pickTraining(step, state, 'f2p').pick;
       // A fishing pick carries its spot (skillingRates.ts), never a ranged loadout's kit.
       if (pick !== undefined && typeof pick !== 'string' && pick.needs.some((n) => n.type === 'item' && /arrow|bow/i.test(n.name))) throw new Error('Fishing unexpectedly received a ranged loadout');
       picks.push(pick === undefined ? undefined : pickedMethodId(pick));
@@ -209,13 +208,13 @@ describe('S6-01 follows the training method of the real level', () => {
   it('the pick settles with every tool tracked; unchecked stock no longer wins by pretending to be ready', () => {
     const bags: Record<string, number>[] = [{}, { 'Small fishing net': 1 }, { 'Fishing rod': 1, 'Fishing bait': 300 }, { 'Fly fishing rod': 1, Feather: 400 }, { 'Lobster pot': 1 }, { Harpoon: 1, 'Lobster pot': 1 }];
     let hazard = 0;
-    for (const style of ['balanced', 'fastest'] as const) {
+    for (const style of ['balanced'] as const) {
       for (const level of [1, 5, 12, 19, 20, 33, 40, 49]) {
         for (const bag of bags) {
-          const seq = rounds(level, bag, style, true);
+          const seq = rounds(level, bag, true);
           // After the first answer (made with the route's own list only) every round gives the same one.
           expect(new Set(seq.slice(1)).size, `${style} ${level} ${JSON.stringify(bag)}: ${seq.join(' > ')}`).toBe(1);
-          if (new Set(rounds(level, bag, style, false).slice(1)).size > 1) hazard++;
+          if (new Set(rounds(level, bag, false).slice(1)).size > 1) hazard++;
         }
       }
     }

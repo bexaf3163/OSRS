@@ -9,11 +9,11 @@ export const SKILL_NAMES = [
   'fletching', 'slayer', 'hunter', 'mining', 'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'farming',
 ] as const;
 export type SkillName = (typeof SKILL_NAMES)[number];
-/** fast: quest XP skips and the methods of the player's priority; 'f2p' (before 2.70): the fast lane, free only. An older save's 'afk' lane
- * (low-effort methods, retired with the "Relaxed" priority in 2.94.3) reads as fast. */
+/** fast: quest XP skips and the guide's methods; 'f2p' (before 2.70): the fast lane, free only. An older save's 'afk' lane (low-effort methods, retired in 2.94.3) reads as
+ * fast. */
 export type TrackMode = 'fast' | 'f2p';
 
-/** The followed skill plan: the skill, its priority and (2.70) whether members steps are left out. An older save's 'f2p' mode is the fast lane, free only. */
+/** The followed skill plan: the skill and (2.70) whether members steps are left out. An older save's 'f2p' mode is the fast lane, free only. */
 export interface TrackedSkill { skill: SkillName; mode: TrackMode; freeOnly?: boolean; target?: number }
 
 /** Whether a followed plan leaves members steps out. */

@@ -15,7 +15,6 @@ vi.mock('../src/state/playerStateContext', () => ({ usePlayerState: () => ({ sta
 vi.mock('../src/state/hooks/useTracked', async importOriginal => ({
   ...await importOriginal<typeof import('../src/state/hooks/useTracked')>(), useTracked: () => fixture.tracked,
 }));
-vi.mock('../src/state/hooks/useFeatures', () => ({ useFeatures: () => ({}), setFeatures: vi.fn() }));
 vi.mock('../src/state/hooks/usePriceView', () => ({ usePriceView: () => null }));
 vi.mock('../src/state/hooks/useTradeRestriction', () => ({ useTradeRestriction: () => ({ state: 'unknown' }) }));
 vi.mock('../src/domain/training/trainingNav', () => ({ trainingNav: () => null }));
@@ -58,8 +57,7 @@ describe('compact skill recommendations without hiding required preparation', ()
     for (const text of ['New method', '1,000–2,000 XP/h', 'Loot ≈ 500 gp/h', 'Supplies ≈ 100 gp/h',
       'Aggressive enemies nearby', 'Food', 'Not checked: Bank supplies', '250 gp']) expect(html).toContain(text);
     for (const text of ['<details', 'Alternative method', 'Extended method explanation', 'Long explanation with calculations']) expect(html).not.toContain(text);
-    expect(html.match(/aria-pressed=/g)).toHaveLength(3);
-    expect(html).toContain('aria-pressed="true">Balanced');
+    expect(html).not.toContain('aria-label="Training priority"');
   });
 
   it('keeps analysis accessible without duplicating recommendation controls', () => {

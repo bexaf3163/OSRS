@@ -14,7 +14,6 @@ import { navKeyOf, startDetour, type DetourFrame, type PrepRoute, type PrepState
 import type { PlayerState } from '../player/playerState';
 import { adviseTraining } from '../training/trainingRouter';
 import { exchangeNav, trainingNav } from '../training/trainingNav';
-import type { MethodPriority } from '../persistence/methodPriority';
 
 export interface QueueTask extends PrepTask {
   /** Where to lead the arrow; null means there is no place (a quest, a step, coins): only a hint. */
@@ -32,8 +31,6 @@ export interface PrepQueue {
 export interface QueueContext {
   state: PlayerState;
   mode: GameMode;
-  /** The player's training preference: a level to catch up names the same method as the skill card. */
-  priority: MethodPriority;
 }
 
 /** Adds "where to lead" to the preparation route: a bank as is, a level is the method's place, a purchase is the Grand Exchange. */
@@ -41,7 +38,7 @@ export function buildQueue(route: PrepRoute, ctx: QueueContext): PrepQueue {
   const tasks = route.tasks.map((t): QueueTask => {
     if (t.action?.kind === 'nav') return { ...t, guide: t.action };
     if (t.kind === 'stat' && t.stat) {
-      const advice = adviseTraining({ skill: t.stat.skill, target: t.stat.min, state: ctx.state, mode: ctx.mode, priority: ctx.priority });
+      const advice = adviseTraining({ skill: t.stat.skill, target: t.stat.min, state: ctx.state, mode: ctx.mode });
       const best = advice.best;
       if (best) {
         const nav = trainingNav(best.method);

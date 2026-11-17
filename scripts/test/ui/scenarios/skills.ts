@@ -23,15 +23,10 @@ async function f2pSkillsScenarios(browser: Browser) {
     expect((await text(page, '.f2p-skill-checkpoint')).includes('10 reached'), `F2P ${width}: the detail uses the same checkpoint as its tile`);
     expect(!(await text(page, '.skill-level-goal')).includes('Goal'), `F2P ${width}: a reached checkpoint is not shown as a goal ahead ("Defence 10 → Goal 10")`);
     await page.locator('.skill-tile a[href="#/skills/ME/attack"]').click();
-    await page.getByRole('group', { name: 'Training priority' }).waitFor();
-    expect(await page.locator('[aria-label="Training priority"] button').count() === 3, `Skills ${width}: three priorities`);
-    expect(await page.locator('[aria-label="Training priority"] button[aria-pressed="true"]').innerText() === 'Balanced', `Skills ${width}: Balanced is default`);
+    await page.locator('.training').first().waitFor();
+    expect(await page.getByRole('group', { name: 'Training priority' }).count() === 0, `Skills ${width}: no training priority switch (always Balanced)`);
     expect(await page.locator('.skill-detail details').count() === 0, `Skills ${width}: default view contains no disclosure stack`);
     expect(await page.locator('.training-analysis, .skill-level-editor, .skill-guide-roadmap').count() === 0, `Skills ${width}: supporting tools are absent from the default view`);
-    for (const label of ['Money', 'XP', 'Balanced']) {
-      await page.getByRole('group', { name: 'Training priority' }).getByRole('button', { name: label, exact: true }).click();
-      expect(await page.locator('[aria-label="Training priority"] button[aria-pressed="true"]').innerText() === label, `Skills ${width}: ${label} priority remains directly available`);
-    }
     await page.screenshot({ path: `audit-temp/skills-compact-${width}.png` });
     await page.locator('.skill-tile a[href="#/skills/ME/defence"]').click();
     await page.locator('h1').filter({ hasText: 'Defence' }).waitFor();
@@ -96,7 +91,7 @@ async function membersGatheringScenarios(browser: Browser) {
     const levels = { woodcutting: 55, attack: 40 };
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S9-01', { gameMode: 'members', levels }),
-      localStorage: { 'osrs-put:features': JSON.stringify({ efficient: true }) },
+      localStorage: {},
       status: { protocol: 6, inGame: true, stats: levels, equipment: [], inventory: [{ id: 1359, name: 'Rune axe', count: 1 }], coins: 5000, bankCoins: 0 },
       events: [{ type: 'STATS', stats: levels }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Rune axe', carried: 1, noted: 0, bank: 0 }] }],
     }, '#/skills/WC/woodcutting');
@@ -157,7 +152,7 @@ async function processingKitScenarios(browser: Browser) {
     const { page, errors } = await open(browser, 1280, {
       market: true, marketUnavailable: true,
       progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
-      localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
+      localStorage: {},
       status: { protocol: 6, inGame: true, player: 'Processing kit', activeStepId: 'S5-01', stats, ...gear, ...(sample.quests ? { questsDone: sample.quests } : {}) },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true,
         items: [...new Set([...watched, ...Object.keys(sample.items)])].map(name => ({ name, carried: sample.items[name] ?? 0, noted: 0, bank: 0 })) }, ...(sample.quests ? [{ type: 'QUESTS', done: sample.quests }] : [])],
@@ -198,7 +193,7 @@ async function cookingCatchScenarios(browser: Browser) {
   const { page, errors } = await open(browser, 1280, {
     market: true, marketUnavailable: true,
     progress: progressBefore('S5-01', { gameMode: 'f2p', levels: stats }),
-    localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
+    localStorage: {},
     status: { protocol: 6, inGame: true, player: 'Cooking catch', activeStepId: 'S5-01', stats, ...gear },
     events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true,
       items: watched.map(name => ({ name, carried: name === 'Raw swordfish' ? 7 : 0, noted: 0, bank: 0 })) }],
@@ -228,7 +223,7 @@ async function processingBudgetScenarios(browser: Browser) {
     const gear = { equipment: [], inventory: [{ id: 946, name: 'Knife', count: 1 }], coins: 0, bankCoins: 0 };
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S9-01', { gameMode: 'members', levels }),
-      localStorage: { 'osrs-put:features': JSON.stringify({ efficient: true }) },
+      localStorage: {},
       status: { protocol: 6, inGame: true, stats: levels, ...gear },
       events: [{ type: 'STATS', stats: levels }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [
         { name: 'Knife', carried: 1, noted: 0, bank: 0 },
@@ -279,7 +274,7 @@ async function fishingStep(browser: Browser) {
   for (const width of [1280]) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S5-01', { gameMode: 'f2p', levels: { fishing: 45 } }),
-      localStorage: { 'osrs-put:features': JSON.stringify({ efficient: true }) },
+      localStorage: {},
       status: { protocol: 6, stats: { fishing: 45 } }, events: [{ type: 'STATS', stats: { fishing: 45 } }],
     }, '#/skills/FI');
     await waitFor(page, '.training', 5000);
@@ -311,11 +306,6 @@ async function whatToTrainWith(browser: Browser) {
   const calm = await text(page, '.training');
   expect(calm.includes('Willow') && /⏱ .+ to \d+/.test(calm) && await page.locator('.training').getByRole('button', { name: /Calm|Efficient/ }).count() === 0, `what to train with: at level 32 — willows with a time estimate on Balanced, no mode switch on the card (${calm.slice(0, 160)})`);
   expect(await noOverflow(page), 'what to train with: no horizontal scrolling');
-  // The method priority is the skill card's own choice (2.93: the Settings copy is retired).
-  await page.getByRole('group', { name: 'Training priority' }).getByRole('button', { name: 'XP', exact: true }).click();
-  await settle(page);
-  const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { efficient?: boolean; profitTraining?: boolean });
-  expect(feat.efficient === true && feat.profitTraining === false, 'training choices: "XP" (fastest) on the skill card is remembered');
   await page.goto(`${BASE}#/skills/WC`);
   await waitFor(page, '.training', 5000);
   // No planner need: the goal is where the engine changes method, Willow trees until Teak trees take over at 41.

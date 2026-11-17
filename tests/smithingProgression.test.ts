@@ -55,7 +55,7 @@ describe('Smithing recipes use the shared owned-material lifecycle', () => {
   it.each([[15, 'dagger'], [24, 'warhammer'], [33, 'platebody']] as const)('iron progresses at%s to%s rather than freezing on one product', (level, product) => {
     const state = buildPlayerState({ mode: 'f2p', connected: false, stats: null, progress: { ...emptyProgress(), levels: { smithing: level } },
       owned: null, gear: null, questsDone: [] });
-    expect(processRate(method('sm-iron'), 'smithing', state, { objective: 'fastest' })?.basis.toLowerCase()).toContain(product);
+    expect(processRate(method('sm-iron'), 'smithing', state, {})?.basis.toLowerCase()).toContain(product);
   });
   it('does not unlock higher bars or anvil products early', () => {
     expect(processRate(method('sm-smelting'), 'smithing', character(49, { 'Mithril ore': 5, Coal: 20 }))?.basis).not.toBe('Mithril bar');
@@ -63,7 +63,7 @@ describe('Smithing recipes use the shared owned-material lifecycle', () => {
   });
   it('follows owned steel materials to the furnace instead of buying bars for the anvil', () => {
     const state = character(30, { 'Iron ore': 3, Coal: 6 });
-    const followed = trackedTraining({ skill: 'smithing', mode: 'f2p', target: 31 }, state, 'f2p', 'balanced')!;
+    const followed = trackedTraining({ skill: 'smithing', mode: 'f2p', target: 31 }, state, 'f2p')!;
     expect(followed.step.itemsRequired?.find(n => n.nameEn === 'Coal')?.amount).toBe(6);
     expect(followed.step.itemsRequired?.some(n => n.nameEn === 'Hammer')).toBe(false);
     expect(followed.step.inGame?.objectNames).toContain('Furnace');
@@ -78,7 +78,7 @@ describe('Smithing recipes use the shared owned-material lifecycle', () => {
       const rate = processRate(method(id), 'firemaking', state)!;
       expect(rate.needs).toContainEqual({ type: 'item', name: 'Tinderbox', count: 1 });
       expect(rate.needs).toContainEqual({ type: 'item', name: logs, count: 7 });
-      const followed = trackedTraining({ skill: 'firemaking', mode: 'f2p', target: level + 1 }, state, 'f2p', 'balanced')!;
+      const followed = trackedTraining({ skill: 'firemaking', mode: 'f2p', target: level + 1 }, state, 'f2p')!;
       const engine = createReadinessEngine({ steps: [followed.step], state, progress: emptyProgress(), qp: 0, mode: 'f2p' });
       expect(engine.prep(followed.step).ready).toBe(true);
       expect(engine.prep(followed.step).tasks).toEqual([]);

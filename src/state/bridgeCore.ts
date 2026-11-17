@@ -9,7 +9,6 @@ import { desktop } from '../services/desktop';
 import type { GearState, NavTargetPayload, PacingState, CombatLogState, QuestInstruction } from '../services/runeliteBridge';
 import type { OwnedState } from '../domain/items/checklist';
 import type { MoveEvent } from '../domain/travel/recovery';
-import { useFeatures } from './hooks/useFeatures';
 import { isClosed } from '../domain/quests/next-step';
 import { EMPTY_PARTS, type SnapshotParts } from '../domain/prep/prepEnvelope';
 import { STORAGE_KEYS } from '../domain/persistence/storageKeys';
@@ -113,7 +112,6 @@ export function useBridgeCore() {
   const [totalLevel, setTotalLevel] = useState<number | null>(null);
   const [accountType, setAccountType] = useState<'normal' | 'ironman' | null>(null);
   const [plugin, setPlugin] = useState<BridgeValue['plugin']>(null);
-  const features = useFeatures();
   /** Which stage items are already in the plugin — so as not to send the same on every render. */
   const bankSent = useRef('');
   /**
@@ -137,7 +135,7 @@ export function useBridgeCore() {
   /** Already handled auto-marks: one event does not mark a step twice and does not move the route twice. */
   const handled = useRef(new Set<string>());
   return {
-    progress, steps, setLevels, notify, mode, enabled, setEnabledState, state, setState, inGame, setInGame, activeStepId, setActiveStepId, advance, setAdvance, stats, setStats, owned, setOwned, shortestPath, setShortestPath, branchChoice, setBranchChoice, gear, setGear, pacing, setPacing, xp, setXp, questsDone, setQuestsDone, questStates, setQuestStates, moves, setMoves, player, setPlayer, position, setPosition, liveIdentity, sessionEpoch, stepIntent, tracker, gate, navTarget, setNavTargetState, questInstruction, setQuestInstruction, chronicleCharges, setChronicleCharges, spellbook, setSpellbook, questPoints, setQuestPoints, combatLog, setCombatLog, totalLevel, setTotalLevel, accountType, setAccountType, plugin, setPlugin, features, bankSent, navSeq, pluginProtocol, snapshot, qp, latest, handled,
+    progress, steps, setLevels, notify, mode, enabled, setEnabledState, state, setState, inGame, setInGame, activeStepId, setActiveStepId, advance, setAdvance, stats, setStats, owned, setOwned, shortestPath, setShortestPath, branchChoice, setBranchChoice, gear, setGear, pacing, setPacing, xp, setXp, questsDone, setQuestsDone, questStates, setQuestStates, moves, setMoves, player, setPlayer, position, setPosition, liveIdentity, sessionEpoch, stepIntent, tracker, gate, navTarget, setNavTargetState, questInstruction, setQuestInstruction, chronicleCharges, setChronicleCharges, spellbook, setSpellbook, questPoints, setQuestPoints, combatLog, setCombatLog, totalLevel, setTotalLevel, accountType, setAccountType, plugin, setPlugin, bankSent, navSeq, pluginProtocol, snapshot, qp, latest, handled,
   };
 }
 

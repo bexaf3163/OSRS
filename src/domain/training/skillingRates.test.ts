@@ -69,7 +69,7 @@ describe('Members gathering through the shared resource model', () => {
   it('keeps an unread axe unknown instead of using authored maximum rates', () => {
     const unread = stateOf({ woodcutting: 55 }, {}, 'members', false);
     expect(gatherRate(method('wc-teak'), 'woodcutting', unread)).toBeNull();
-    const a = adviseTraining({ skill: 'woodcutting', target: 60, state: unread, mode: 'members', priority: 'fastest', methods: [method('wc-teak')] });
+    const a = adviseTraining({ skill: 'woodcutting', target: 60, state: unread, mode: 'members', methods: [method('wc-teak')] });
     expect(a.best?.method.xph).toBeNull();
     expect(a.best?.unchecked.length).toBeGreaterThan(0);
   });
@@ -114,7 +114,7 @@ describe('the skilling success function', () => {
 
 describe('the gathering engine on the real registry', () => {
   it('iron at 61 with a rune pickaxe, dropping: the wiki\'s "three ores every 12 ticks", about 50,000 XP an hour', () => {
-    const r = gatherRate(method('mi-iron'), 'mining', stateOf({ mining: 61, attack: 40 }, { 'Rune pickaxe': [1, 0] }), { objective: 'fastest' })!;
+    const r = gatherRate(method('mi-iron'), 'mining', stateOf({ mining: 61, attack: 40 }, { 'Rune pickaxe': [1, 0] }), {})!;
     expect(r.basis).toBe('Rune pickaxe');
     expect(r.spot?.how).toBe('drop');
     expect(r.xph[1]).toBeGreaterThan(45_000);
@@ -134,16 +134,13 @@ describe('the gathering engine on the real registry', () => {
     expect(gatherRate(method('wc-yew'), 'woodcutting', stateOf({ woodcutting: 70 }, { 'Dragon axe': [1, 0], 'Rune axe': [0, 1] }, 'members'))!.basis).toBe('Dragon axe');
   });
 
-  it('yews pay for the bank on balance, never on the fastest objective; a restricted account cannot sell them', () => {
+  it('yews pay for the bank; a restricted account cannot sell them', () => {
     const s = stateOf({ woodcutting: 70, attack: 40 }, { 'Rune axe': [1, 0] });
-    const balanced = gatherRate(method('wc-yew'), 'woodcutting', s, { prices: market(), restriction: 'LIFTED', objective: 'balanced' })!;
+    const balanced = gatherRate(method('wc-yew'), 'woodcutting', s, { prices: market(), restriction: 'LIFTED' })!;
     expect(balanced.spot?.how).toBe('bank');
     expect(balanced.loot).toBe('Yew logs');
     expect(balanced.lootPerHour!).toBeGreaterThan(1000);
-    const fastest = gatherRate(method('wc-yew'), 'woodcutting', s, { prices: market(), restriction: 'LIFTED', objective: 'fastest' })!;
-    expect(fastest.spot?.how).toBe('drop');
-    expect(mid(fastest)).toBeGreaterThan(mid(balanced));
-    const restricted = gatherRate(method('wc-yew'), 'woodcutting', s, { prices: market(), restriction: 'RESTRICTED', objective: 'balanced' })!;
+    const restricted = gatherRate(method('wc-yew'), 'woodcutting', s, { prices: market(), restriction: 'RESTRICTED' })!;
     expect(restricted.lootPerHour).toBeUndefined();
   });
 
@@ -154,7 +151,7 @@ describe('the gathering engine on the real registry', () => {
 
   it('the Skills page carries the engine\'s spot, the time and the reason', () => {
     const s = stateOf({ fishing: 30, cooking: 30 }, { 'Fly fishing rod': [1, 0], Feather: [500, 0] });
-    const a = adviseTraining({ skill: 'fishing', target: 40, state: s, mode: 'f2p', priority: 'fastest' });
+    const a = adviseTraining({ skill: 'fishing', target: 40, state: s, mode: 'f2p' });
     expect(a.best?.method.id).toBe('fi-fly');
     expect(a.best?.method.rateSource).toBe('model');
     expect(a.best?.method.spot).toBeDefined();
@@ -182,7 +179,7 @@ describe('a new gathering spot inherits the rules (synthetic registry)', () => {
   it('an axe consumes a bag slot until actually worn, even if the player can wield it', () => {
     const carried = s(), before = structuredClone(carried);
     const worn = { ...carried, equipment: { weapon: 'Bronze axe' }, equipmentItems: [{ name: 'Bronze axe', count: 1 }] };
-    const market = { prices: prices({ 'Test logs': 400 }), objective: 'balanced' as const };
+    const market = { prices: prices({ 'Test logs': 400 }) };
     const a = gatherRate(TEST_METHOD, 'woodcutting', carried, market, SYNTHETIC)!;
     const b = gatherRate(TEST_METHOD, 'woodcutting', worn, market, SYNTHETIC)!;
     expect(a.spot?.how).toBe('bank');
@@ -194,18 +191,18 @@ describe('a new gathering spot inherits the rules (synthetic registry)', () => {
       ...SYNTHETIC.tools.axe.tiers, { item: 'Steel axe', level: 6, wield: 5 },
     ] } }, resources: SYNTHETIC.resources.map(r => ({ ...r, byTool: { ...r.byTool, 'Steel axe': { low: 192, high: 256 } } })) };
     const quote = { price: 1, basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] };
-    const market = { prices: { ...prices({ 'Test logs': 400 }), buy: () => quote }, objective: 'balanced' as const };
+    const market = { prices: { ...prices({ 'Test logs': 400 }), buy: () => quote } as const };
     const before = gatherRate(TEST_METHOD, 'woodcutting', s(), market, reg)!;
     const purchased = stateOf({ woodcutting: 40, attack: 40 }, { 'Steel axe': [1, 0] });
     const after = gatherRate(TEST_METHOD, 'woodcutting', purchased, market, reg)!;
     expect(before.upgrades?.find(u => u.tool === 'Steel axe')?.xph).toEqual(after.xph);
   });
   it('a valuable product: the spot by its bank wins, and banks', () => {
-    const r = gatherRate(TEST_METHOD, 'woodcutting', s(), { prices: prices({ 'Test logs': 400 }), objective: 'balanced' }, SYNTHETIC)!;
+    const r = gatherRate(TEST_METHOD, 'woodcutting', s(), { prices: prices({ 'Test logs': 400 }) }, SYNTHETIC)!;
     expect(r.spot).toMatchObject({ label: 'Bank grove', how: 'bank' });
   });
   it('a cheap product: dropped, and then the bank distance does not decide', () => {
-    const r = gatherRate(TEST_METHOD, 'woodcutting', s(), { prices: prices({ 'Test logs': 1 }), objective: 'balanced' }, SYNTHETIC)!;
+    const r = gatherRate(TEST_METHOD, 'woodcutting', s(), { prices: prices({ 'Test logs': 1 }) }, SYNTHETIC)!;
     expect(r.spot?.how).toBe('drop');
     expect(r.lootPerHour).toBeUndefined();
   });
@@ -229,7 +226,7 @@ describe('S94: two methods with the same XP, one far from its bank (synthetic re
     methods: { 'wc-far': ['far-tree'], 'wc-near': ['near-tree'] },
   };
   const s = () => stateOf({ woodcutting: 40, attack: 40 }, { 'Bronze axe': [1, 0] }, 'f2p');
-  const rate = (id: string, sell: number) => gatherRate({ ...TEST_METHOD, id }, 'woodcutting', s(), { prices: prices({ 'Test logs': sell }), objective: 'balanced' }, reg)!;
+  const rate = (id: string, sell: number) => gatherRate({ ...TEST_METHOD, id }, 'woodcutting', s(), { prices: prices({ 'Test logs': sell }) }, reg)!;
 
   it('the recurring bank walk of a banked product ranks the near method first', () => {
     const [n, f] = [rate('wc-near', 400), rate('wc-far', 400)];
@@ -251,7 +248,7 @@ describe('a spot under the ground (synthetic): the way in is walked, followed in
     { resource: 'test-tree', label: 'Test cave', place: below, waypoints: [door, below], count: 6, members: false, bank: 'Draynor Bank' },
   ] };
   const st = stateOf({ woodcutting: 40, attack: 40 }, { 'Bronze axe': [1, 0] });
-  const valuable = { prices: prices({ 'Test logs': 400 }), objective: 'balanced' as const };
+  const valuable = { prices: prices({ 'Test logs': 400 }) };
   it('the bank trip goes through the way in: the rate carries it, and it is slower than the same grove by the bank', () => {
     const cave = gatherRate(TEST_METHOD, 'woodcutting', st, valuable, reg)!;
     expect(cave.spot?.waypoints?.[0]).toMatchObject({ x: door.x, y: door.y });
@@ -275,7 +272,7 @@ describe('aggressive NPCs at a spot (the wiki aggression rule, one rule for ever
   it('a better spot with monsters that attack the player loses to a safe one; a player they ignore may use it (synthetic)', () => {
     // The bank grove is better (by the bank) but has level 10 brutes: they attack combat 20 or lower.
     const reg: SkillingRegistry = { ...SYNTHETIC, spots: SYNTHETIC.spots.filter((x) => !x.members).map((x) => (x.label === 'Bank grove' ? { ...x, hostiles: [{ npc: 'Test brute', levels: [10], count: 3 }] } : x)) };
-    const at = (lv: number) => gatherRate(TEST_METHOD, 'woodcutting', stateOf({ woodcutting: 40, attack: lv, strength: lv, defence: lv, hitpoints: lv }, { 'Bronze axe': [1, 0] }), { prices: prices({ 'Test logs': 400 }), objective: 'balanced' }, reg)!;
+    const at = (lv: number) => gatherRate(TEST_METHOD, 'woodcutting', stateOf({ woodcutting: 40, attack: lv, strength: lv, defence: lv, hitpoints: lv }, { 'Bronze axe': [1, 0] }), { prices: prices({ 'Test logs': 400 }) }, reg)!;
     expect(at(5).spot?.label).toBe('Far grove');
     expect(at(5).warning).toBeUndefined();
     expect(at(40).spot?.label).toBe('Bank grove');
@@ -283,13 +280,13 @@ describe('aggressive NPCs at a spot (the wiki aggression rule, one rule for ever
   it('on the real registry a weak player is never sent among the Al Kharid scorpions, at any Mining level', () => {
     for (let mining = 1; mining < 99; mining += 7) {
       for (const id of ['mi-ore', 'mi-iron']) {
-        const r = gatherRate(method(id), 'mining', stateOf({ mining, attack: 3, strength: 3, defence: 3, hitpoints: 10 }, pick), { objective: 'fastest' });
+        const r = gatherRate(method(id), 'mining', stateOf({ mining, attack: 3, strength: 3, defence: 3, hitpoints: 10 }, pick), {});
         if (r) expect(r.spot?.label, `${id} at ${mining}`).not.toBe('Al Kharid mine');
       }
     }
   });
   it('an unknown combat level is never taken as safe', () => {
-    const r = gatherRate(method('mi-iron'), 'mining', stateOf({ mining: 45 }, pick), { objective: 'fastest' })!;
+    const r = gatherRate(method('mi-iron'), 'mining', stateOf({ mining: 45 }, pick), {})!;
     expect(r.spot?.label).not.toBe('Al Kharid mine');
   });
   it('when every spot has them, the best one is kept and says so once', () => {
@@ -329,7 +326,7 @@ describe('the cowhide baseline is bounded', () => {
 describe('the path forecasts with the rates of the levels it reaches', () => {
   it('a later leg is rated by the model at its own level, not by the wiki next to today\'s model rates', () => {
     const s = stateOf({ woodcutting: 55, attack: 40 }, { 'Rune axe': [1, 0] });
-    const a = adviseTraining({ skill: 'woodcutting', target: 75, state: s, mode: 'f2p', priority: 'fastest' });
+    const a = adviseTraining({ skill: 'woodcutting', target: 75, state: s, mode: 'f2p' });
     expect(a.path.length).toBeGreaterThan(0);
     for (const leg of a.path) expect(leg.method.rateSource, `${leg.method.id} from ${leg.fromLevel}`).toBe('model');
   });
@@ -339,11 +336,11 @@ describe('a better tool is weighed against its price over the hours left', () =>
   it('the suggestion says when the known coins fall short of the price, and nothing when the coins are unknown', () => {
     const p: PriceView = { ...prices({}), buy: (n) => (n === 'Rune pickaxe' ? { price: 12000, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] } : null) };
     const poor = stateOf({ mining: 41, attack: 1 }, { 'Iron pickaxe': [1, 0] });
-    const a = adviseTraining({ skill: 'mining', target: 70, state: poor, mode: 'f2p', priority: 'fastest', prices: p });
+    const a = adviseTraining({ skill: 'mining', target: 70, state: poor, mode: 'f2p', prices: p });
     expect(a.upgrade).toMatchObject({ tool: 'Rune pickaxe', short: 0 });
     expect(a.reason).toMatch(/Rune pickaxe \(≈ 12k gp; you have 0\)/);
     const unknown = buildPlayerState({ mode: 'f2p', stats: { mining: 41 } as never, progress: { ...emptyProgress(), levels: { mining: 41 } }, owned: { bankSeen: true, items: new Map([['iron pickaxe', { name: 'Iron pickaxe', carried: 1, noted: 0, bank: 0 }]]) } as never, gear: null, questsDone: [], connected: true });
-    expect(adviseTraining({ skill: 'mining', target: 70, state: unknown, mode: 'f2p', priority: 'fastest', prices: p }).upgrade?.short).toBeUndefined();
+    expect(adviseTraining({ skill: 'mining', target: 70, state: unknown, mode: 'f2p', prices: p }).upgrade?.short).toBeUndefined();
   });
   const buying = (buy: Record<string, number>): PriceView => ({
     ...prices({}), buy: (name) => (buy[name] === undefined ? null : { price: buy[name], basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] }),
@@ -357,15 +354,14 @@ describe('a better tool is weighed against its price over the hours left', () =>
     expect(mid({ xph: r.upgrades![1].xph })).toBeGreaterThan(mid({ xph: r.upgrades![0].xph }));
     expect(mid({ xph: r.upgrades![0].xph })).toBeGreaterThan(mid(r));
   });
-  it('balanced buys it when the hours saved are worth more than it costs; fastest when it saves time; relaxed never', () => {
+  it('buys it when the hours saved are worth more than it costs', () => {
     const m = { ...method('mi-iron'), xph: [20_000, 20_000], upgrades: [{ tool: 'Rune pickaxe', price: 12_000, xph: [30_000, 30_000] }] } as TrainingMethod;
     // 300k XP: 15 h now, 10 h with it: 5 h saved. At 100 coins a minute that is 30,000 coins of time, more than the 12,000 it costs.
-    expect(toolUpgrade(m, 300_000, 'balanced', 100)).toMatchObject({ tool: 'Rune pickaxe', hours: 5 });
+    expect(toolUpgrade(m, 300_000, 100)).toMatchObject({ tool: 'Rune pickaxe', hours: 5 });
     // 30k XP saves half an hour: 3,000 coins of time, not worth 12,000.
-    expect(toolUpgrade(m, 30_000, 'balanced', 100)).toBeNull();
-    expect(toolUpgrade(m, 30_000, 'fastest', 100)).toMatchObject({ tool: 'Rune pickaxe' });
-    // Without prices the coins cannot be weighed: nothing is bought on balanced.
-    expect(toolUpgrade(m, 300_000, 'balanced', null)).toBeNull();
+    expect(toolUpgrade(m, 30_000, 100)).toBeNull();
+    // Without prices the coins cannot be weighed: nothing is bought.
+    expect(toolUpgrade(m, 300_000, null)).toBeNull();
   });
 });
 
@@ -379,13 +375,13 @@ describe('guide-only gathering methods use the shared manual-setup boundary', ()
     expect(m.manualSetup).toBeTruthy();
     // Confirm that missing ordinary kit or quest facts are not what makes the reference manual.
     expect(viewMethod({ ...m, manualSetup: undefined }, s).status).toBe('READY');
-    for (const priority of ['balanced', 'fastest', 'profit'] as const) {
-      const advice = adviseTraining({ skill, target: 80, mode: 'members', state: s, priority, methods: [m] });
+    {
+      const advice = adviseTraining({ skill, target: 80, mode: 'members', state: s, methods: [m] });
       expect(advice.best).toBeNull();
       expect(advice.path).toEqual([]);
       expect(advice.others[0]?.method.id).toBe(id);
       expect(advice.others[0]?.unchecked).toContainEqual(expect.objectContaining({ label: m.manualSetup }));
-      const mixed = adviseTraining({ skill, target: 80, mode: 'members', state: s, priority });
+      const mixed = adviseTraining({ skill, target: 80, mode: 'members', state: s });
       expect(mixed.best?.method.id).not.toBe(id);
       expect(mixed.path.every(leg => leg.method.id !== id)).toBe(true);
     }

@@ -1,7 +1,6 @@
 // Whether a better tool or weapon is worth buying for the training in hand: the hours it saves over the XP it will serve, less the trip to buy
 // it, against its price. The router (trainingRouter.adviseTraining) asks it for the selected method; the stock-up forecast asks it per leg.
 import type { GameMode } from '../../types';
-import type { MethodPriority } from '../persistence/methodPriority';
 import type { PriceView } from '../market/quotes';
 import { toolUse } from '../items/toolTiers';
 import { xpForLevel } from '../player/xp';
@@ -29,13 +28,13 @@ export function upgradeXp(tool: string, skill: string, mode: GameMode, xpNow: nu
 /** Hours a better tool must save to the goal to be worth a line. */
 const UPGRADE_MIN_HOURS = 1 / 6;
 /**
- * The better tool worth buying for the XP left, or null. Fastest: the one that saves the most time (its price is shown; coins do not trade against
- * time). Balanced: the one whose hours saved, valued at the coin baseline (lootValue.coinsPerMinute), beat its price by the most; without prices
- * nothing is weighed. Relaxed: none. Only pass XP assigned to this method; another method need not benefit from the same tool.
+ * The better tool worth buying for the XP left, or null: the one whose hours saved, valued at the coin baseline (lootValue.coinsPerMinute),
+ * beat its price by the most; without prices nothing is weighed. Only pass XP assigned to this method; another method need not benefit from
+ * the same tool.
  */
-export function toolUpgrade(m: TrainingMethod, xpFor: number | ((tool: string) => number), priority: MethodPriority, coinRate: number | null,
+export function toolUpgrade(m: TrainingMethod, xpFor: number | ((tool: string) => number), coinRate: number | null,
   acquisition: number | ((tool: string) => number) = 0): ToolUpgrade | null {
-  if (!m.upgrades?.length || !m.xph || priority === 'profit') return null;
+  if (!m.upgrades?.length || !m.xph) return null;
   // personalize rounds displayed rates; compare both sides at that same precision to avoid a false negative saving.
   const mid = (x: readonly [number, number]) => (Math.round(x[0]) + Math.round(x[1])) / 2;
   let best: ToolUpgrade | null = null;
@@ -52,8 +51,8 @@ export function toolUpgrade(m: TrainingMethod, xpFor: number | ((tool: string) =
     const costSaved = (baseCost ?? 0) * now - (upgradeCost ?? 0) * (xpLeft / mid(u.xph));
     const timeBenefit = hours >= UPGRADE_MIN_HOURS;
     const netSaved = costsKnown ? costSaved - u.price : null;
-    if (trainingSaved < 0 || (!timeBenefit && !(priority === 'balanced' && netSaved !== null && netSaved > 0))) continue;
-    const score = priority === 'fastest' ? hours : costsKnown ? (coinRate ? hours * 60 * coinRate : 0) + costSaved - u.price : -Infinity;
+    if (trainingSaved < 0 || (!timeBenefit && !(netSaved !== null && netSaved > 0))) continue;
+    const score = costsKnown ? (coinRate ? hours * 60 * coinRate : 0) + costSaved - u.price : -Infinity;
     if (score <= 0 || score <= bestScore) continue;
     bestScore = score;
     best = { tool: u.tool, price: u.price, hours, ...(u.needs ? { needs: u.needs } : {}), ...(!timeBenefit && netSaved !== null ? { coinsSaved: netSaved } : {}) };

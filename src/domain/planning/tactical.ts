@@ -1,7 +1,6 @@
 import type { Progress, Step } from '../../types';
 import type { PriceView } from '../market/quotes';
 import type { TradeRestriction } from '../market/tradeRestriction';
-import type { MethodPriority } from '../persistence/methodPriority';
 import { createReadinessEngine } from '../readiness/readinessEngine';
 import type { StepReadiness } from '../readiness/readiness';
 import { safetyBlockers } from '../prep/prepPlan';
@@ -42,7 +41,6 @@ export interface TacticalInput {
   prices: PriceView;
   /** Current committed action and at most two successors. Never an authored global route slice. */
   window: readonly Step[];
-  priority?: MethodPriority;
   restriction?: TradeRestriction['state'];
   ironman: boolean | null;
   walk?: (from: WorldPoint | null, to: WorldPoint) => Minutes | null;
@@ -98,7 +96,7 @@ export function createTacticalResolver(input: TacticalInput) {
     const candidateFor = (skill: string, target: number): TrainingCandidate | null => {
       const key = `${skill}:${target}`;
       if (!training.has(key)) training.set(key, prerequisiteTraining({ snapshot, goalId, skill, target, prices: input.prices,
-        priority: input.priority, restriction: input.restriction }));
+        restriction: input.restriction }));
       const candidate = training.get(key);
       if (!candidate) return null;
       return candidate.action.goalId === goalId ? candidate : { ...candidate, action: { ...candidate.action, goalId,

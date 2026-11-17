@@ -7,7 +7,6 @@ import type { PriceView } from '../market/quotes';
 import type { TradeRestriction } from '../market/tradeRestriction';
 import type { TrainingMethod, MethodNeed } from './trainingRouter';
 import type { Point } from '../travel/travel';
-import type { MethodPriority } from '../persistence/methodPriority';
 import type { Consumption } from '../items/consumption';
 import { combatRate } from '../combat/combatRates';
 import { gatherRate } from './skillingRates';
@@ -61,8 +60,8 @@ export interface ModelRate {
   upgrades?: { tool: string; price: number; xph: [number, number]; costPerHour?: number | null; needs?: MethodNeed[] }[];
 }
 
-/** What the trade allows (the exchange and the account) and what the player wants: on the fastest objective nothing is kept that costs time. */
-export interface Market { prices?: PriceView | null; restriction?: TradeRestriction['state']; objective?: MethodPriority }
+/** What the trade allows: the exchange prices and the account's trade restriction. */
+export interface Market { prices?: PriceView | null; restriction?: TradeRestriction['state'] }
 
 /** The rate of one method for this player in this skill, or null when no engine has anything honest to say. */
 export function methodRate(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): ModelRate | null {

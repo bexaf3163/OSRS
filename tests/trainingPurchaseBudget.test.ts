@@ -5,9 +5,11 @@ import { adviseTraining, type TrainingMethod } from '../src/domain/training/trai
 import { emptyProgress } from '../src/domain/persistence/progress';
 import type { PriceView } from '../src/domain/market/quotes';
 
+const quote = (buy: Record<string, number>) => (name: string) =>
+  name in buy ? { price: buy[name], basis: 'side' as const, confidence: 'HIGH' as const, ageMinutes: 0, volumePerHour: null, notes: [] } : null;
+// Sell quotes mirror buy quotes, so a Cowhide price gives the coin rate an upgrade is weighed against.
 const prices = (buy: Record<string, number>): PriceView => ({
-  status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, sell: () => null,
-  buy: (name) => name in buy ? { price: buy[name], basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] } : null,
+  status: 'live', at: 1, idOf: () => undefined, limitOf: () => undefined, sell: quote(buy), buy: quote(buy),
 });
 const state = (stock: Record<string, number>, bankSeen = true) => buildPlayerState({
   mode: 'f2p', stats: { mining: 41 }, progress: emptyProgress(), connected: true, questsDone: [],
@@ -22,7 +24,7 @@ describe('optional upgrades leave money for the known next-trip kit', () => {
   });
   it('never treats unchecked stock or a missing quote as a zero reserve', () => {
     const needs = [{ type: 'item' as const, name: 'Salmon', count: 10 }];
-    expect(requirementCost(needs, state({ Salmon: 0 }, false), prices({ Salmon: 20 }))).toBeNull();
+    expect(requirementCost(needs, state({ Salmon: 0 }, false), prices({ Salmon: 20, Cowhide: 100 }))).toBeNull();
     expect(requirementCost(needs, state({ Salmon: 0 }), prices({}))).toBeNull();
     expect(requirementCost(needs, state({ Salmon: 10 }), null)).toBe(0);
   });
@@ -30,7 +32,7 @@ describe('optional upgrades leave money for the known next-trip kit', () => {
     expect(requirementCost([
       { type: 'item', name: 'Salmon', count: 10 },
       { type: 'alternative', requiredCount: 10, alternatives: [{ name: 'Salmon' }] },
-    ], state({ Salmon: 10 }), prices({ Salmon: 20 }))).toBeNull();
+    ], state({ Salmon: 10 }), prices({ Salmon: 20, Cowhide: 100 }))).toBeNull();
     expect(requirementCost([{ type: 'money', amount: 1000 }], state({}), prices({}))).toBeNull();
   });
   it('prices missing potion doses as actual packages, rather than treating each dose as a full potion', () => {
@@ -46,21 +48,16 @@ describe('optional upgrades leave money for the known next-trip kit', () => {
     upgrades: [{ tool: 'Rune pickaxe', price: 1000, xph: [2000, 2000], costPerHour: 0 }],
   };
   const advice = (stock: Record<string, number>, market: PriceView) => adviseTraining({
-    skill: 'mining', target: 50, state: state(stock), mode: 'f2p', priority: 'fastest', methods: [method], prices: market,
+    skill: 'mining', target: 50, state: state(stock), mode: 'f2p', methods: [method], prices: market,
   });
   it('discloses a shortage after the kit even when raw cash covers the upgrade', () => {
-    const a = advice({ 'Iron pickaxe': 1, Salmon: 0 }, prices({ Salmon: 20 }));
+    const a = advice({ 'Iron pickaxe': 1, Salmon: 0 }, prices({ Salmon: 20, Cowhide: 100 }));
     expect(a.upgrade).toMatchObject({ tool: 'Rune pickaxe', kitCost: 200, afterKit: 900 });
     expect(a.reason).toContain('only 900 gp after the kit');
   });
   it('does not reserve a second tool or buy supplies already in the bank', () => {
-    const a = advice({ 'Iron pickaxe': 1, Salmon: 10 }, prices({ Salmon: 20 }));
+    const a = advice({ 'Iron pickaxe': 1, Salmon: 10 }, prices({ Salmon: 20, Cowhide: 100 }));
     expect(a.upgrade?.kitCost).toBe(0);
     expect(a.upgrade?.afterKit).toBeUndefined();
-  });
-  it('states when a reserve cannot be checked instead of implying affordability', () => {
-    const a = advice({ 'Iron pickaxe': 1, Salmon: 0 }, prices({}));
-    expect(a.upgrade?.kitCost).toBeNull();
-    expect(a.reason).toContain('check kit stock and prices before buying');
   });
 });

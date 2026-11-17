@@ -135,7 +135,7 @@ The app is Claude's **Ledger**: dark shell, parchment pages, gold navigation, **
 2.81.11 to 2.81.13 cleanup decisions that stay:
 
 - Removed: appearance controls, font size, Compact modes, Inspector display mode, manual zoom (now `window-zoom.cjs`), Copy Report UI, Journal stage-goal matrix, Settings Training/App and helper switches. Kept: OS DPI/resizing, header Pin (`getWindowPrefs`/`setAlwaysOnTop`), `ui.json` backup preferences and geometry, map/image magnification, `splits.ts` duration formatter, `WikiDrawer`'s `DockedInspector` (pinned dossier), logs, telemetry/watchdogs, analysis CLI, shared goal data. Trace consumers; never delete by name ("Inspector", "zoom", "goals").
-- Training choice is on each skill card (XP/Balanced/Money); Defence-at-1 sits under Skills. RuneLite helpers (places, bank highlighting, pace, level import, upgrades, preparation) are always on.
+- Training is always Balanced (owner, 2026-11-17: the XP/Money switch is gone); Defence-at-1 sits under Skills. RuneLite helpers (places, bank highlighting, pace, level import, upgrades, preparation) are always on.
 - Journal: filters left; the chosen quest's state, QP, requirements and route action right; Review route for completed/skipped quests; saved-only completion labelled; session statistics in Settings → Progress; browsing never marks progress.
 - Skills has no leveling guide or bracket table (2.83.0): the training engine sets method, goal and plan. A completed skill's Plan says its checkpoint is reached. Two-column icon index, XP table in Calculator.
 - Route (2.84.0): quests plus the Stronghold; other step kinds are `RETIRED_STEPS`, planned by the training, gear and Money engines.
@@ -157,7 +157,7 @@ Maps read the Wiki's atlas metadata with a verified **2019-10-31_1 archive fallb
 ## Handover — state on 2026-11-14
 
 - **State:** v2.134.0 published, all gates passed; nothing tested in the real game since 2.87.
-- **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, training times shown); XP/Balanced/Money change the method only; Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; V2 review retired; update Cancel stays.
+- **Owner decisions (2.93–2.94.5):** version/update on the rail; one preparation behaviour (two steps ahead, quiet, training times shown); training is always Balanced (2.135.0); Relaxed retired; Money asks once whether trade limits are lifted; the welcome card links the Reference; V2 review retired; update Cancel stays.
 - **Next:** 1) P4. 2) Members (owner): Members unlocks everything; money guides hand-reviewed (106) or held back; once subscribed, the run is one logical path, quests and training together; a reached followed goal hands back to the route or the next F2P checkpoint (`nextAfterReached`). Next: Members quests in batches of 3 to 5 (one gate and push each), the 2-turn debt, fight profiles. 3) Measured quest times from the player's own quest starts and finishes.
 - **Owner:** writes Russian; short answers, result first, at most one question; push/release once all gates pass; ask before deleting authored documents.
 

@@ -24,10 +24,10 @@ describe('combat purchases use Gear eligibility and the same fight estimate', ()
   it('estimates a usable weapon against the selected trainer and preserves the original state', () => {
     const s = state();
     const before = structuredClone(s.equipment);
-    const upgrades = combatUpgrades(method, 'attack', s, { prices, objective: 'fastest' });
+    const upgrades = combatUpgrades(method, 'attack', s, { prices });
     const rune = upgrades.find((u) => u.tool === 'Rune scimitar');
     expect(rune).toBeDefined();
-    expect(rune?.xph[0]).toBeGreaterThan(combatRate(method, 'attack', s, { prices, objective: 'fastest' })!.xph[0]);
+    expect(rune?.xph[0]).toBeGreaterThan(combatRate(method, 'attack', s, { prices })!.xph[0]);
     expect(rune?.costPerHour).not.toBeNull();
     expect(s.equipment).toEqual(before);
   });
@@ -45,37 +45,30 @@ describe('combat purchases use Gear eligibility and the same fight estimate', ()
     expect(combatUpgrades(method, 'attack', owned, { prices }).some((u) => u.tool === 'Rune scimitar')).toBe(false);
     expect(combatUpgrades(method, 'attack', { ...state(), equipmentKnown: false }, { prices })).toEqual([]);
   });
-  it('uses the existing compact suggestion and discloses a known cash shortfall', () => {
-    const a = adviseTraining({ skill: 'attack', target: 60, mode: 'f2p', priority: 'fastest', state: state(), prices, methods: [method] });
-    expect(a.upgrade?.tool).toBeDefined();
-    expect(a.upgrade?.short).toBe(100);
-    expect(a.reason).toContain('you have 100');
-  });
 });
 
 describe('upgrade value includes consumable costs', () => {
   it('counts getting the upgrade before recommending a short training detour', () => {
     const m = { ...method, xph: [1000, 1000] as [number, number], costPerHour: 0,
       upgrades: [{ tool: 'Test weapon', price: 1, xph: [2000, 2000] as [number, number], costPerHour: 0 }] };
-    expect(toolUpgrade(m, 600, 'fastest', null)?.hours).toBeCloseTo(0.3);
-    expect(toolUpgrade(m, 600, 'fastest', null, 0.25)).toBeNull();
-    expect(toolUpgrade(m, 2000, 'fastest', null, 0.25)?.hours).toBeCloseTo(0.75);
+    expect(toolUpgrade(m, 600, 100)?.hours).toBeCloseTo(0.3);
+    expect(toolUpgrade(m, 600, 100, 0.25)).toBeNull();
+    expect(toolUpgrade(m, 2000, 100, 0.25)?.hours).toBeCloseTo(0.75);
   });
   it('cost-only savings must also pay for acquisition time when coins have a known time value', () => {
     const m = { ...method, xph: [1000, 1000] as [number, number], costPerHour: 100,
       upgrades: [{ tool: 'Rune-saving staff', price: 10, xph: [1000, 1000] as [number, number], costPerHour: 0 }] };
-    expect(toolUpgrade(m, 1000, 'balanced', 100)?.coinsSaved).toBe(90);
-    expect(toolUpgrade(m, 1000, 'balanced', 100, 0.25)).toBeNull();
+    expect(toolUpgrade(m, 1000, 100)?.coinsSaved).toBe(90);
+    expect(toolUpgrade(m, 1000, 100, 0.25)).toBeNull();
   });
   const m = { ...method, xph: [1000, 1000] as [number, number], costPerHour: 1000,
     upgrades: [{ tool: 'Synthetic slower-cost upgrade', price: 1, xph: [2000, 2000] as [number, number], costPerHour: 100000 }] };
   it('does not sell a time improvement as economical when supplies erase its benefit', () => {
-    expect(toolUpgrade(m, 10000, 'balanced', 100)).toBeNull();
-    expect(toolUpgrade(m, 10000, 'fastest', 100)?.tool).toBeDefined();
+    expect(toolUpgrade(m, 10000, 100)).toBeNull();
   });
   it('does not treat an unknown consumable cost as free', () => {
-    expect(toolUpgrade({ ...m, costPerHour: null }, 10000, 'balanced', 100)).toBeNull();
-    expect(toolUpgrade({ ...m, upgrades: [{ ...m.upgrades[0], costPerHour: null }] }, 10000, 'balanced', 100)).toBeNull();
+    expect(toolUpgrade({ ...m, costPerHour: null }, 10000, 100)).toBeNull();
+    expect(toolUpgrade({ ...m, upgrades: [{ ...m.upgrades[0], costPerHour: null }] }, 10000, 100)).toBeNull();
   });
 });
 
@@ -112,11 +105,10 @@ describe('bow and elemental staff comparisons share the existing style models', 
     expect(air?.xph).toEqual(before.xph);
     expect(air?.costPerHour).toBeCloseTo(before.costPerHour! / 2);
     const withUpgrade = { ...m, xph: before.xph, costPerHour: before.costPerHour, upgrades: [air!] };
-    const pick = toolUpgrade(withUpgrade, 100000, 'balanced', null);
+    const pick = toolUpgrade(withUpgrade, 100000, null);
     expect(pick?.hours).toBe(0);
     expect(pick?.coinsSaved).toBeGreaterThan(0);
-    expect(toolUpgrade(withUpgrade, 100000, 'fastest', 100)).toBeNull();
-    const advice = adviseTraining({ skill: 'magic', target: 50, state: s, mode: 'f2p', priority: 'balanced', prices: market, methods: [m] });
+    const advice = adviseTraining({ skill: 'magic', target: 50, state: s, mode: 'f2p', prices: market, methods: [m] });
     expect(advice.reason).toMatch(/gp after its price/);
     expect(advice.reason).not.toMatch(/saves ≈ (?:0|1) min/);
     expect(s.equipment.weapon).toBe('Magic staff');

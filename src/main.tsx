@@ -17,6 +17,9 @@ import './ledger/fonts.css';
 import './ledger/ledger.css';
 import './ledger/extras.css';
 import './ledger/app.css';
+import { RETIRED_STORAGE_KEYS } from './domain/persistence/storageKeys';
+
+for (const key of RETIRED_STORAGE_KEYS) try { localStorage.removeItem(key); } catch { /* no storage */ }
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

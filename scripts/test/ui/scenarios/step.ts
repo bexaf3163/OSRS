@@ -11,10 +11,8 @@ async function canonicalPlanScenario(browser: Browser, width = 1000) {
         status: { stats: { woodcutting: 21, attack: 40 } },
         events: [{ type: 'STATS', stats: { woodcutting: 21, attack: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Bronze axe', carried: 1, noted: 0, bank: 0 }, { name: 'Coins', carried: 10000, noted: 0, bank: 0 }] }],
       }, '#/skills/WC/woodcutting');
-      await page.getByRole('group', { name: 'Training priority' }).waitFor();
+      await page.locator('.training').first().waitFor();
       expect(await page.getByRole('tab', { name: 'Train', exact: true }).getAttribute('aria-selected') === 'true', 'skill plan: opens on the compact recommendation');
-      await page.getByRole('group', { name: 'Training priority' }).getByRole('button', { name: 'XP', exact: true }).click();
-      expect(await page.getByRole('button', { name: 'XP', exact: true }).getAttribute('aria-pressed') === 'true', 'skill plan: the canonical priority remains editable');
       await page.getByRole('tab', { name: 'Plan', exact: true }).click();
       expect(await page.locator('.skill-guide-roadmap').count() === 0 && await page.locator('.training').count() === 1, 'skill plan: one canonical plan, no static duplicate');
       await page.getByRole('tab', { name: 'Train', exact: true }).click();
@@ -173,7 +171,7 @@ async function stepReadiness(browser: Browser) {
     progress: progressBefore('S9-01'),
     status: { stats: { crafting: 28, woodcutting: 40 } },
     events: [{ type: 'STATS', stats: { crafting: 28, woodcutting: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Knife', carried: 0, noted: 0, bank: 1 }] }],
-    localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
+    localStorage: {},
   }, '#/step/S9-01');
   const t = await text(page, '.readiness');
   expect(t.includes('A short preparation is needed') && t.includes('Catch up Crafting'), 'readiness: Crafting 31 is missing — "Catch up Crafting"');
@@ -201,7 +199,7 @@ async function zenStatus(browser: Browser) {
     progress: progressBefore('S9-01'),
     status: { stats: { crafting: 28, woodcutting: 40 } },
     events: [{ type: 'STATS', stats: { crafting: 28, woodcutting: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Knife', carried: 0, noted: 0, bank: 1 }] }],
-    localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
+    localStorage: {},
   }, '#/step/S9-01');
   await waitFor(page, '.step-status', 8000);
   const line = await text(page, '.status-line');
@@ -287,7 +285,7 @@ async function compactPreference(browser: Browser) {
   const lineIndex = stage.do.findIndex((l: { k?: string }) => l.k === 'defeatGuardian');
   const { page, errors } = await open(browser, 1440, {
     progress: progressBefore('S3-04'),
-    localStorage: { 'osrs-put:active-step': 'S3-04', 'osrs-put:features': JSON.stringify({ compact: true }) },
+    localStorage: { 'osrs-put:active-step': 'S3-04', },
     status: { protocol: 6, inGame: true, activeStepId: 'S3-04', questInstruction: { stepId: 'S3-04', stageAt: stage.at, lineIndex, peeking: false } },
   }, '#/step/S3-04');
   await waitFor(page, '.cockpit', 5000);
