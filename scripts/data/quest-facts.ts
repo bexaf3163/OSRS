@@ -194,6 +194,19 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
   'Children of the Sun': { revision: 15391674, flow: {
     consumes: [], receives: [], unknownItems: [], partialDelivery: false, fromStartOnly: true,
   } },
+  // The pickaxe and lit candle are kept; the brooch, book, key and silverware stay quest items.
+  'The Lost Tribe': { revision: 15392360, flow: {
+    consumes: [], receives: [], unknownItems: ['Brooch', 'Goblin symbol book', 'Key', 'Silverware', 'Peace treaty'], partialDelivery: false, fromStartOnly: true,
+  } },
+  // The rope stays on the boulder and the plank may stay at the flat stone; mud, fruit and rocks are quest items.
+  'Mountain Daughter': { revision: 15389202, flow: {
+    consumes: [{ name: 'Rope', count: 1 }, { name: 'Plank', count: 1 }], receives: [],
+    unknownItems: ['Mud', 'Thorny bushes fruit', 'Necklace', 'Corpse of woman', 'Muddy rocks', 'Bearhead'], uncertainReceipts: ['Plank'], partialDelivery: true, fromStartOnly: true,
+  } },
+  // The bear fur goes into the fake head; the farm supplies the rest of the kit (inStep items).
+  'Getting Ahead': { revision: 15367125, flow: {
+    consumes: [{ name: 'Bear fur', count: 1 }], receives: [], unknownItems: ['Soft clay', 'Clay head', 'Fur head', 'Bloody head'], partialDelivery: true, fromStartOnly: true,
+  } },
   // The runes are cast at the Strange Device and the rope tied on the way; darts and food are spent in fights.
   'Tale of the Righteous': { revision: 15402882, flow: {
     consumes: [{ name: 'Air rune', count: 6 }, { name: 'Mind rune', count: 3 }, { name: 'Rope', count: 1 }], receives: [],
@@ -235,6 +248,9 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to defeat level 44, 63 and 137 enemies (all can be [[safespot]]ted)',
   // The Tourist Trap: the level 47 Mercenary Captain (step foes, combat ledger).
   'The ability to defeat a level 47 enemy',
+  // Mountain Daughter: the note sits under Agility 20, which covers it; the Kendal is in the step foes and combat ledger.
+  '<ref>Entering the Mountain Camp initially requires 10 Agility.</ref>',
+  'The ability to defeat a level 70 [[The Kendal|monster]] (can be [[safespot|safespotted]])',
   'The ability to defeat a level 112 [[Khazard warlord]]',
   'The ability to defeat a level 172 [[Black demon (The Grand Tree)|Black demon]] (safespottable for Ranged and Magic or melee using a [[halberd]]).',
   'Ability to kill a level 101 [[Tree spirit (Lost City)|Tree spirit]] with limited [[armour]] and [[weapons]].',

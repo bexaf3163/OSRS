@@ -20,7 +20,7 @@ export interface QhFacts {
   steps: Record<string, { typ: string | null; wp: [number, number, number] | null; ids: number[]; text: string | null }>;
 }
 export interface DraftLine { t: string; s: string; k: string; at?: [number, number, number]; hl?: { npc?: number[]; obj?: number[] } }
-export interface DraftItem { nameEn: string; amount: number; wikiItemId: number | null; howToGet: string | null; note?: string }
+export interface DraftItem { nameEn: string; amount: number; wikiItemId: number | null; howToGet: string | null; note?: string; heals?: number; anyOf?: string[]; inStep?: boolean }
 export interface QuestDraft {
   quest: string; status: 'draft';
   sources: { questHelper: string; wiki: { title: string; revision: number }; quickGuide: { title: string; revision: number } | null };

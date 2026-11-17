@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-41 stages: 13 retained, 27 revised, 0 with a branch, 1 deferred.
+44 stages: 16 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -49,6 +49,9 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-12 Big Chompy Bird Hunting | quest-fight | yes | Chompy bird (6), Wolf (64), Ogre (53) | other | Wolf, Ogre | Trout 5 | Retain |
 | S9-17 The Tourist Trap | quest-fight | yes | Mercenary Captain (47) | melee | Mercenary Captain | Trout 5 | Retain |
 | S9-19 Tale of the Righteous | quest-fight | yes | Corrupt Lizardman (46) | melee | Corrupt Lizardman | Trout 5 | Retain |
+| S9-20 The Lost Tribe | not-combat | no | - | none | - | - | Retain |
+| S9-21 Mountain Daughter | quest-fight | yes | The Kendal (70) | melee | The Kendal | Lobster 10 | Retain |
+| S9-22 Getting Ahead | quest-fight | yes | Headless Beast (82) | melee | Headless Beast | Lobster 10 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1022,4 +1025,66 @@ Changed:
 Evidence:
 
 - OSRS Wiki Corrupt Lizardman infobox: level 46, 50 hitpoints, max hit 6, crush, read 2026-11-17.
+
+## S9-20 The Lost Tribe
+
+**Retain.** The Lost Tribe: the goblin generals refused to fight in the dialogue; nothing in the quest is fought.
+
+Quest stage lines: 0.11.
+
+Assumptions:
+
+- The fight word is in a dialogue option, not an action.
+
+Changed:
+
+- 2.131.0: new quest; no fight.
+
+Evidence:
+
+- OSRS Wiki The Lost Tribe: no kills, read 2026-11-17.
+
+## S9-21 Mountain Daughter
+
+**Retain.** Mountain Daughter: kill the Kendal (level 70, 50 hitpoints, hits up to 9) in its cave north-east of the Mountain Camp lake.
+
+Quest stage lines: 4.5, 4.6.
+
+Assumptions:
+
+- 10 lobsters cover a hit of 9 at most at the route's Members combat levels.
+
+Alternatives:
+
+- The wiki safespot in the cave.
+
+Changed:
+
+- 2.131.0: new quest; the Kendal is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki The Kendal infobox: level 70, 50 hitpoints, max hit 9, crush, read 2026-11-17.
+
+## S9-22 Getting Ahead
+
+**Retain.** Getting Ahead: kill the Headless Beast (level 82, 100 hitpoints, hits up to 10) in the Kebos Lowlands mine cave.
+
+Quest stage lines: 1.2.
+
+Assumptions:
+
+- 10 lobsters cover a hit of 10 at most at the route's Members combat levels.
+
+Alternatives:
+
+- The safespot from the south-west corner of the pond.
+
+Changed:
+
+- 2.131.0: new quest; the Headless Beast is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Headless Beast infobox: level 82, 100 hitpoints, max hit 10, slash, read 2026-11-17.
 

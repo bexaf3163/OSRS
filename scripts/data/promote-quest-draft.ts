@@ -45,7 +45,9 @@ const shipped = {
   ...(start ? { mapUrl: `https://oldschool.runescape.wiki/w/World_map#/m=${start.x},${start.y},${start.plane}`, mapLocation: { ...start, label: where ?? step.npc?.nameEn ?? step.title } } : {}),
   ...(step.npc ? { npc: { nameEn: step.npc.nameEn, ...(where ? { location: where } : {}),
     ...(start ? { floor: start.plane ? `${start.plane}${['st', 'nd', 'rd'][start.plane - 1]} floor` : 'Ground floor' } : {}), wikiUrl: `https://oldschool.runescape.wiki/w/${step.npc.nameEn.replaceAll(' ', '_')}` } } : {}),
-  itemsRequired: step.itemsRequired.map(({ nameEn, amount, howToGet, wikiItemId }) => ({ nameEn, amount, howToGet, wikiItemId })),
+  itemsRequired: step.itemsRequired.map(({ nameEn, amount, howToGet, wikiItemId, heals, anyOf, inStep }) =>
+    ({ nameEn, amount, howToGet, wikiItemId, ...(heals ? { heals } : {}), ...(anyOf ? { anyOf } : {}), ...(inStep ? { inStep } : {}) })),
+  ...(step.foes.length ? { foes: step.foes } : {}),
   reward: [`${step.qp} QP`, ...xp].join(', '),
   doneWhen: 'The quest is green.',
   inGame: {

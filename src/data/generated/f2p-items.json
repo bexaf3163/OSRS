@@ -1187,6 +1187,124 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Bat_bones"
   },
   {
+    "id": 948,
+    "nameEn": "Bear fur",
+    "examine": "This would make warm clothing.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bear_fur.png",
+    "value": 10,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "buyLocations": [
+      {
+        "shopName": "Baraek",
+        "location": "",
+        "price": 20,
+        "stock": "N/A",
+        "members": false
+      },
+      {
+        "shopName": "Ardougne Fur Stall.",
+        "location": "East Ardougne",
+        "owner": "Fur Trader",
+        "price": 12,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Fremennik Fur Trader",
+        "location": "Rellekka",
+        "owner": "Fur trader",
+        "price": 12,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Fortis Fur Stall",
+        "location": "Civitas illa Fortis",
+        "owner": "Fur Merchant",
+        "price": 12,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Port Roberts Fur Stall",
+        "location": "Port Roberts",
+        "owner": "Perdie",
+        "price": 12,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Fancy Clothes Store",
+        "location": "Varrock",
+        "owner": "Asyff",
+        "price": 13,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Prifddinas' Seamstress",
+        "location": "Prifddinas",
+        "owner": "Nia",
+        "price": 13,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Pellem's Fur Store",
+        "location": "Hunter Guild",
+        "owner": "Pellem",
+        "price": 13,
+        "stock": 3,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Black bear",
+        "combatLevel": 19,
+        "rate": "Always"
+      },
+      {
+        "monster": "Barbarian#Low level",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Barbarian#High level",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Gunthor the brave",
+        "combatLevel": 29,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Barbarian (Barbarian Camp)#Low level",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Barbarian (Barbarian Camp)#High level",
+        "combatLevel": null,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Grizzly bear",
+        "combatLevel": 42,
+        "rate": "Always"
+      },
+      {
+        "monster": "Grizzly bear cub",
+        "combatLevel": 33,
+        "rate": "Always"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bear_fur"
+  },
+  {
     "id": 1917,
     "nameEn": "Beer",
     "examine": "A glass of frothy ale.",
@@ -7328,6 +7446,46 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Iron_chainbody"
+  },
+  {
+    "id": 4820,
+    "nameEn": "Iron nails",
+    "examine": "Keeps things in place fairly permanently.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Iron_nails.png",
+    "value": 4,
+    "highAlch": 2,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Leenz's General Supplies",
+        "location": "Port Piscarilius",
+        "owner": "Leenz",
+        "price": 4,
+        "stock": 500,
+        "members": true
+      },
+      {
+        "shopName": "Construction supplies",
+        "location": "Sawmill",
+        "owner": "Sawmill operator",
+        "price": 5,
+        "stock": 1000,
+        "members": true
+      },
+      {
+        "shopName": "Seb's Shipyard Supplies",
+        "location": "Shipyard",
+        "owner": "Shipwright Seb",
+        "price": 5,
+        "stock": 1000,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Shayzien - Secluded Chapel (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Iron_nails"
   },
   {
     "id": 440,
@@ -13695,6 +13853,37 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Salmon"
+  },
+  {
+    "id": 8794,
+    "nameEn": "Saw",
+    "examine": "Good for cutting wood.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Saw.png",
+    "value": 10,
+    "highAlch": 6,
+    "lowAlch": 4,
+    "buyLocations": [
+      {
+        "shopName": "Construction supplies",
+        "location": "Sawmill",
+        "owner": "Sawmill operator",
+        "price": 13,
+        "stock": 1000,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Kebos Lowlands - Mary and Gordon's farm (members only)",
+      "Last Light - on a crate in the lighthouse (members only)",
+      "The Pandemonium - on a crate on the dock (members only)",
+      "Red Rock - on a crate (members only)",
+      "Shayzien Encampment (members only)",
+      "Tal Teklan (members only)",
+      "Varrock estate agent (members only)",
+      "The Summer Shore (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Saw"
   },
   {
     "id": 1552,

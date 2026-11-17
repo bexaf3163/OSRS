@@ -7778,5 +7778,371 @@
         "questName": "Tale of the Righteous"
       }
     }
+  },
+  {
+    "id": "S9-20",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Lost Tribe",
+    "qp": 1,
+    "requires": [
+      "S2-12",
+      "S2-06"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Lost_Tribe",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Lost_Tribe/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3210,3222,0",
+    "mapLocation": {
+      "x": 3210,
+      "y": 3222,
+      "plane": 0,
+      "label": "Lumbridge Castle"
+    },
+    "npc": {
+      "nameEn": "Sigmund",
+      "location": "Lumbridge Castle",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Sigmund"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe works: the bronze one from Tutorial Island will do.",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Candle",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 36,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Candle.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from any general store.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      }
+    ],
+    "reward": "1 QP, 3,000 Mining XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Sigmund"
+      ],
+      "dialogChoices": [
+        "Do you have any quests for me?",
+        "Yes",
+        "The cook says he saw something in the cellar",
+        "Talk about something else.",
+        "I dug through the rubble...",
+        "...",
+        "Have you ever heard of the Dorgeshuun?",
+        "It doesn't really matter",
+        "Well either way they refused to fight",
+        "Well I found a brooch underground...",
+        "Well why not show me both greetings?",
+        "Can you show me the way out of the mines?",
+        "I've made contact with the cave goblins...",
+        "I found the missing silverware in the HAM cave!"
+      ],
+      "highlightItems": [
+        "Bronze pickaxe",
+        "Candle",
+        "Tinderbox"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Lost Tribe"
+      }
+    }
+  },
+  {
+    "id": "S9-21",
+    "stage": 9,
+    "type": "quest",
+    "title": "Mountain Daughter",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Mountain_Daughter",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Mountain_Daughter/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2808,3672,0",
+    "mapLocation": {
+      "x": 2808,
+      "y": 3672,
+      "plane": 0,
+      "label": "The Mountain Camp east of Rellekka (to access the camp, see below)"
+    },
+    "npc": {
+      "nameEn": "Hamal the Chieftain",
+      "location": "The Mountain Camp east of Rellekka (to access the camp, see below)",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Hamal_the_Chieftain"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Rope",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Ned's Handmade Rope (100% Wool) in Draynor Village for 16 gp.",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe works: the bronze one from Tutorial Island will do.",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Bronze axe",
+        "amount": 1,
+        "howToGet": "Any axe works: the bronze one from Tutorial Island will do.",
+        "wikiItemId": 1351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
+      },
+      {
+        "nameEn": "Plank",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Razmire Builders Merchants in Mort'ton for 1 gp.",
+        "wikiItemId": 960,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
+      },
+      {
+        "nameEn": "Staff",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Zaff's Superior Staffs! in Varrock for 15 gp.",
+        "wikiItemId": 1379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff.png"
+      },
+      {
+        "nameEn": "Leather gloves",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or craft them from leather.",
+        "wikiItemId": 1059,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Leather_gloves.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "wikiItemId": 379,
+        "heals": 12,
+        "anyOf": [
+          "Swordfish",
+          "Tuna",
+          "Salmon"
+        ],
+        "howToGet": "Your own catch, or buy on the Grand Exchange. For the Kendal (level 70).",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "The Kendal"
+    ],
+    "reward": "2 QP, 2,000 Prayer XP, 1,000 Attack XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Hamal the Chieftain"
+      ],
+      "dialogChoices": [
+        "Why is everyone so hostile?",
+        "So what are you doing up here?",
+        "I will search for her!",
+        "Hello! Who are you?",
+        "So what exactly do you want from me?",
+        "That sounds like something I can do.",
+        "I'll get right on it.",
+        "About the people of Rellekka...",
+        "Why do you hate them so much?",
+        "Can't I persuade you to go in there somehow?",
+        "Ask about the mountain camp.",
+        "Did it contain vast magical powers?",
+        "About your food supplies...",
+        "Never mind.",
+        "It's just me, no one special.",
+        "You mean a sacrifice?",
+        "You look like a man in a bearsuit!",
+        "Can I see that corpse?",
+        "I humbly request to be given the remains.",
+        "I will kill you myself!",
+        "But he's not a god!",
+        "I will."
+      ],
+      "highlightItems": [
+        "Rope",
+        "Bronze pickaxe",
+        "Bronze axe",
+        "Plank",
+        "Staff",
+        "Leather gloves"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Mountain Daughter"
+      }
+    }
+  },
+  {
+    "id": "S9-22",
+    "stage": 9,
+    "type": "quest",
+    "title": "Getting Ahead",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Getting_Ahead",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Getting_Ahead/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=1248,3686,0",
+    "mapLocation": {
+      "x": 1248,
+      "y": 3686,
+      "plane": 0,
+      "label": "His farm south of the Farming Guild"
+    },
+    "npc": {
+      "nameEn": "Gordon",
+      "location": "His farm south of the Farming Guild",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Gordon"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bear fur",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Ardougne Fur Stall in East Ardougne for 12 gp.",
+        "wikiItemId": 948,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bear_fur.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "A bronze pickaxe lies in the mine.",
+        "wikiItemId": 1265,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Take it east of the farmhouse.",
+        "wikiItemId": 2347,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Saw",
+        "amount": 1,
+        "howToGet": "Take it from the building north of the farmhouse.",
+        "wikiItemId": 8794,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Saw.png"
+      },
+      {
+        "nameEn": "Plank",
+        "amount": 2,
+        "howToGet": "Two planks lie outside the cave by the mine.",
+        "wikiItemId": 960,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
+      },
+      {
+        "nameEn": "Iron nails",
+        "amount": 6,
+        "howToGet": "Take them from the workbench in the building north of the farmhouse.",
+        "wikiItemId": 4820,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_nails.png"
+      },
+      {
+        "nameEn": "Knife",
+        "amount": 1,
+        "howToGet": "Take it from the kitchen table near Mary.",
+        "wikiItemId": 946,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
+      },
+      {
+        "nameEn": "Red dye",
+        "amount": 1,
+        "howToGet": "Take it from the shelves in the farmhouse.",
+        "wikiItemId": 1763,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Red_dye.png"
+      },
+      {
+        "nameEn": "Pot of flour",
+        "amount": 1,
+        "howToGet": "Take it upstairs in the farmhouse, or fill a pot at the flour barrel.",
+        "wikiItemId": 1933,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pot_of_flour.png"
+      },
+      {
+        "nameEn": "Needle",
+        "amount": 1,
+        "howToGet": "Take it upstairs in the farmhouse.",
+        "wikiItemId": 1733,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Needle.png"
+      },
+      {
+        "nameEn": "Thread",
+        "amount": 1,
+        "howToGet": "Take it upstairs in the farmhouse.",
+        "wikiItemId": 1734,
+        "inStep": true,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Thread.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "wikiItemId": 379,
+        "heals": 12,
+        "anyOf": [
+          "Swordfish",
+          "Tuna",
+          "Salmon"
+        ],
+        "howToGet": "Your own catch, or buy on the Grand Exchange. For the Headless Beast (level 82).",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Headless Beast"
+    ],
+    "reward": "1 QP, 4,000 Crafting XP, 3,200 Construction XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Gordon"
+      ],
+      "dialogChoices": [
+        "Need a hand with anything?",
+        "Yes."
+      ],
+      "highlightItems": [
+        "Bear fur",
+        "Bronze pickaxe",
+        "Hammer",
+        "Saw",
+        "Plank",
+        "Iron nails",
+        "Knife",
+        "Red dye",
+        "Pot of flour",
+        "Needle",
+        "Thread"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Getting Ahead"
+      }
+    }
   }
 ]

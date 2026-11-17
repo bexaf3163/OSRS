@@ -1245,6 +1245,50 @@
       "aggressive": true
     },
     {
+      "name": "The Kendal",
+      "combat": 70,
+      "members": true,
+      "hitpoints": 50,
+      "attackLevel": 65,
+      "strengthLevel": 65,
+      "defenceLevel": 60,
+      "magicLevel": 0,
+      "attackBonus": 5,
+      "defence": {
+        "stab": 10,
+        "slash": 10,
+        "crush": 10,
+        "magic": -10,
+        "ranged": 20
+      },
+      "attackStyle": "crush",
+      "maxHit": 9,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Headless Beast",
+      "combat": 82,
+      "members": true,
+      "hitpoints": 100,
+      "attackLevel": 60,
+      "strengthLevel": 86,
+      "defenceLevel": 42,
+      "magicLevel": 42,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 18,
+        "slash": 18,
+        "crush": 18,
+        "magic": 6,
+        "ranged": 52
+      },
+      "attackStyle": "slash",
+      "maxHit": 10,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

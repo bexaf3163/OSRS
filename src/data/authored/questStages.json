@@ -32350,6 +32350,7 @@
       {
        "t": "Pick up the letter on the floor in Uzer.",
        "s": "Pick up the letter on the floor in Uzer.",
+       "hl": {"item":["Letter"]},
        "k": "pickUpLetter",
        "at": [
         3479,
@@ -32360,6 +32361,7 @@
       {
        "t": "Read the letter.",
        "s": "Read the letter.",
+       "hl": {"item":["Letter"]},
        "k": "readLetter"
       },
       {
@@ -32395,6 +32397,7 @@
       {
        "t": "Pick up the strange implement in the north west corner of the ruin.",
        "s": "Pick up the strange implement in the north west corner of the ruin.",
+       "hl": {"item":["Strange implement"]},
        "k": "pickUpImplement",
        "at": [
         2713,
@@ -32420,6 +32423,7 @@
       {
        "t": "Read Varmen's notes.",
        "s": "Read Varmen's notes.",
+       "hl": {"item":["Varmen's notes"]},
        "k": "readBook"
       },
       {
@@ -32635,6 +32639,7 @@
       {
        "t": "Pick up the strange implement in the north west corner of the ruin.",
        "s": "Pick up the strange implement in the north west corner of the ruin.",
+       "hl": {"item":["Strange implement"]},
        "k": "pickUpImplement",
        "at": [
         2713,
@@ -32695,6 +32700,7 @@
       {
        "t": "Pick up the strange implement in the north west corner of the ruin.",
        "s": "Pick up the strange implement in the north west corner of the ruin.",
+       "hl": {"item":["Strange implement"]},
        "k": "pickUpImplement",
        "at": [
         2713,
@@ -32770,6 +32776,7 @@
       {
        "t": "Pick up the strange implement in the north west corner of the ruin.",
        "s": "Pick up the strange implement in the north west corner of the ruin.",
+       "hl": {"item":["Strange implement"]},
        "k": "pickUpImplement",
        "at": [
         2713,
@@ -32795,6 +32802,7 @@
       {
        "t": "Grind the mushrooms into a vial.",
        "s": "Grind the mushrooms into a vial.",
+       "hl": {"item":["Black mushroom","Pestle and mortar"]},
        "k": "grindMushroom"
       },
       {
@@ -32815,11 +32823,13 @@
       {
        "t": "Use the phoenix feather on the ink.",
        "s": "Use the phoenix feather on the ink.",
+       "hl": {"item":["Phoenix feather"]},
        "k": "useFeatherOnInk"
       },
       {
        "t": "Use the phoenix quill on the papyrus.",
        "s": "Use the phoenix quill on the papyrus.",
+       "hl": {"item":["Phoenix quill","Papyrus"]},
        "k": "useQuillOnPapyrus"
       },
       {
@@ -34080,6 +34090,7 @@
       {
        "t": "Add 10 feathers to the prototype dart tip.",
        "s": "Add 10 feathers to the prototype dart tip.",
+       "hl": {"item":["Feather","Prototype dart tip"]},
        "k": "useFeatherOnTip"
       },
       {
@@ -34180,6 +34191,7 @@
       {
        "t": "Add 10 feathers to the prototype dart tip.",
        "s": "Add 10 feathers to the prototype dart tip.",
+       "hl": {"item":["Feather","Prototype dart tip"]},
        "k": "useFeatherOnTip"
       },
       {
@@ -34280,6 +34292,7 @@
       {
        "t": "Add 10 feathers to the prototype dart tip.",
        "s": "Add 10 feathers to the prototype dart tip.",
+       "hl": {"item":["Feather","Prototype dart tip"]},
        "k": "useFeatherOnTip"
       },
       {
@@ -38516,6 +38529,7 @@
       {
        "t": "Attack the Strange Device with magic from the north side.",
        "s": "Attack the Strange Device with magic from the north side.",
+       "hl": {"item":["Air rune","Mind rune"]},
        "k": "attackWithMagic",
        "at": [
         1580,
@@ -38526,6 +38540,7 @@
       {
        "t": "Attack the Strange Device with melee from the south side.",
        "s": "Attack the Strange Device with melee from the south side.",
+       "hl": {"item":["Bronze pickaxe"]},
        "k": "attackWithMelee",
        "at": [
         1580,
@@ -38546,6 +38561,7 @@
       {
        "t": "Attack the Strange Device with ranged from the south side.",
        "s": "Attack the Strange Device with ranged from the south side.",
+       "hl": {"item":["Bronze dart"]},
        "k": "attackWithRanged",
        "at": [
         1580,
@@ -38601,6 +38617,7 @@
       {
        "t": "Attack the Strange Device with magic from the north side.",
        "s": "Attack the Strange Device with magic from the north side.",
+       "hl": {"item":["Air rune","Mind rune"]},
        "k": "attackWithMagic",
        "at": [
         1580,
@@ -38611,6 +38628,7 @@
       {
        "t": "Attack the Strange Device with melee from the south side.",
        "s": "Attack the Strange Device with melee from the south side.",
+       "hl": {"item":["Bronze pickaxe"]},
        "k": "attackWithMelee",
        "at": [
         1580,
@@ -38631,6 +38649,7 @@
       {
        "t": "Attack the Strange Device with ranged from the south side.",
        "s": "Attack the Strange Device with ranged from the south side.",
+       "hl": {"item":["Bronze dart"]},
        "k": "attackWithRanged",
        "at": [
         1580,
@@ -38686,6 +38705,7 @@
       {
        "t": "Attack the Strange Device with magic from the north side.",
        "s": "Attack the Strange Device with magic from the north side.",
+       "hl": {"item":["Air rune","Mind rune"]},
        "k": "attackWithMagic",
        "at": [
         1580,
@@ -38696,6 +38716,7 @@
       {
        "t": "Attack the Strange Device with melee from the south side.",
        "s": "Attack the Strange Device with melee from the south side.",
+       "hl": {"item":["Bronze pickaxe"]},
        "k": "attackWithMelee",
        "at": [
         1580,
@@ -38716,6 +38737,7 @@
       {
        "t": "Attack the Strange Device with ranged from the south side.",
        "s": "Attack the Strange Device with ranged from the south side.",
+       "hl": {"item":["Bronze dart"]},
        "k": "attackWithRanged",
        "at": [
         1580,
@@ -39110,6 +39132,2168 @@
        "hl": {
         "npc": [
          11038
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-20": {
+   "var": [
+    "varbit",
+    532
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Talk to Sigmund on the of the Lumbridge Castle. Dialogue: \"Do you have any quests for me?\", \"Yes\"",
+      "Ask the following people about what happened in the cellar. You can stop when one mentions a goblin in the basement.",
+      "Talk to Duke Horacio again. Dialogue: \"The cook says he saw something in the cellar\" (Dialogue: \"The cook says he saw something in the cellar\" if started Dragon Slayer)",
+      "Climb-down the trapdoor in the kitchen on the .",
+      "Use your pickaxe on the rubble in the basement and climb through the hole.",
+      "Light your light source and grab the brooch which sits on the floor about 10 steps into cave.",
+      "Show the brooch to the duke. Dialogue: \"Talk about something else.\", \"I dug through the rubble...\" or Dialogue: \"I dug through the rubble...\" or Dialogue: \"I dug through the rubble...\"",
+      "Go to the Varrock Palace library in Varrock.",
+      "Talk to Reldo. Dialogue: \"...\" or Dialogue: if not started shield of Arrav",
+      "Search the northern bookcase on the west wall for goblin symbol book.",
+      "Read through the book.",
+      "Go to Goblin Village and talk to the generals, and mediate for them until you learn goblin emotes. Dialogue: \"Have you ever heard of the Dorgeshuun?\", \"It doesn't really matter\", \"Well either way they refused to fight\", \"Well I found a brooch underground...\", \"Well why not show me both greetings?\"",
+      "Go back to the Lumbridge Castle cellar and follow the map in the image on this page through the caves. Don't stray from it! (Clicking on the minimap also auto-paths the correct path)",
+      "At the end of the cave talk to Mistag, and do your Goblin Bow in front of him.",
+      "Talk to Mistag then let him take you back to Lumbridge. Dialogue: \"Can you show me the way out of the mines?\"",
+      "Talk to the duke. He won't believe you. Dialogue: \"I've made contact with the cave goblins...\" or Dialogue: \"I've made contact with the cave goblins...\"",
+      "Pickpocket Sigmund and unlock his chest in the other room to find some HAM robes. Keep them for Death to the Dorgeshuun.",
+      "Go to the HAM lair west of Lumbridge Castle.",
+      "Pick the lock on the trapdoor and enter the lair.",
+      "Search the crate south of the ladder to find the stolen silverware.",
+      "Bring the silverware to the Duke. He will fire Sigmund and give you a signed peace treaty. Dialogue: \"I found the missing silverware in the HAM cave!\"",
+      "Go into the basement again. Follow Kazgar to travel to Mistag. Dialogue:",
+      "Talk to Mistag, with the peace treaty in your inventory, and a cutscene will play."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Go up to the first floor of Lumbridge Castle.",
+       "s": "Go up to the first floor of Lumbridge Castle.",
+       "k": "goUpToF1",
+       "at": [
+        3205,
+        3208,
+        0
+       ]
+      },
+      {
+       "t": "Climb back out through the hole.",
+       "s": "Climb back out through the hole",
+       "k": "climbOutThroughHole",
+       "at": [
+        3221,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6905
+        ]
+       }
+      },
+      {
+       "t": "Go up to the surface.",
+       "s": "Go up to the surface.",
+       "k": "goUpFromBasement",
+       "at": [
+        3209,
+        9616,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ]
+      },
+      {
+       "t": "Talk to Sigmund on the first floor of Lumbridge Castle.",
+       "s": "Talk to Sigmund on the castle's first floor",
+       "k": "talkToSigmund",
+       "at": [
+        3210,
+        3222,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5322
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Ask Bob, Hans and the Cook what they saw in the castle cellar.",
+       "s": "Ask Bob, Hans and the Cook about the cellar",
+       "k": "talkToAllAboutCellar",
+       "hl": {
+        "npc": [
+         4626
+        ]
+       }
+      },
+      {
+       "t": "Talk to Bob in the south of Lumbridge.",
+       "s": "Talk to Bob in the south of Lumbridge.",
+       "k": "talkToBob",
+       "at": [
+        3231,
+        3203,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10619
+        ]
+       }
+      },
+      {
+       "t": "Talk to Hans who is roaming around the castle.",
+       "s": "Talk to Hans who is roaming around the castle.",
+       "k": "talkToHans",
+       "at": [
+        3222,
+        3218,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3105
+        ]
+       }
+      },
+      {
+       "t": "Go up to the surface.",
+       "s": "Go up to the surface.",
+       "k": "goUpFromBasement",
+       "at": [
+        3209,
+        9616,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ]
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Go up to the first floor of Lumbridge Castle.",
+       "s": "Go up to the first floor of Lumbridge Castle.",
+       "k": "goUpToF1",
+       "at": [
+        3205,
+        3208,
+        0
+       ]
+      },
+      {
+       "t": "Climb back out through the hole.",
+       "s": "Climb back out through the hole",
+       "k": "climbOutThroughHole",
+       "at": [
+        3221,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6905
+        ]
+       }
+      },
+      {
+       "t": "Go up to the surface.",
+       "s": "Go up to the surface.",
+       "k": "goUpFromBasement",
+       "at": [
+        3209,
+        9616,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ]
+      },
+      {
+       "t": "Talk to Duke Horacio on the first floor of Lumbridge Castle.",
+       "s": "Talk to Duke Horacio on the castle's first floor",
+       "k": "talkToDuke",
+       "at": [
+        3210,
+        3222,
+        1
+       ],
+       "hl": {
+        "npc": [
+         815
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ]
+      },
+      {
+       "t": "Use your pickaxe on the rubble in the castle cellar.",
+       "s": "Use your pickaxe on the rubble in the cellar",
+       "k": "usePickaxeOnRubble",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ]
+      },
+      {
+       "t": "Climb through the hole in the cellar wall.",
+       "s": "Climb through the hole in the cellar wall",
+       "k": "climbThroughHole",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      },
+      {
+       "t": "Pick up the brooch on the floor.",
+       "s": "Pick up the brooch on the floor.",
+       "k": "grabBrooch",
+       "at": [
+        3230,
+        9610,
+        0
+       ]
+      },
+      {
+       "t": "Go up to the first floor of Lumbridge Castle.",
+       "s": "Go up to the first floor of Lumbridge Castle.",
+       "k": "goUpToF1",
+       "at": [
+        3205,
+        3208,
+        0
+       ]
+      },
+      {
+       "t": "Climb back out through the hole.",
+       "s": "Climb back out through the hole",
+       "k": "climbOutThroughHole",
+       "at": [
+        3221,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6905
+        ]
+       }
+      },
+      {
+       "t": "Go up to the surface.",
+       "s": "Go up to the surface.",
+       "k": "goUpFromBasement",
+       "at": [
+        3209,
+        9616,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Show the brooch to Duke Horacio.",
+       "s": "Show the brooch to Duke Horacio",
+       "k": "showBroochToDuke",
+       "at": [
+        3210,
+        3222,
+        1
+       ],
+       "hl": {
+        "npc": [
+         815
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Search the north west bookcase in the Varrock Castle Library.",
+       "s": "Search the north west bookcase in the Varrock Castle Library.",
+       "k": "searchBookcase",
+       "at": [
+        3207,
+        3496,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6916
+        ]
+       }
+      },
+      {
+       "t": "Read the entire goblin symbol book.",
+       "s": "Read the entire goblin symbol book.",
+       "k": "readBook"
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Talk to the Goblin Generals in the Goblin Village.",
+       "s": "Talk to the Goblin Generals in the Goblin Village.",
+       "k": "talkToGenerals",
+       "at": [
+        2957,
+        3512,
+        0
+       ],
+       "hl": {
+        "npc": [
+         670
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ]
+      },
+      {
+       "t": "Climb through the hole in the cellar wall.",
+       "s": "Climb through the hole in the cellar wall",
+       "k": "climbThroughHole",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      },
+      {
+       "t": "Travel through the tunnels. Make sure you follow the marked path, or you'll be dropped into a hole and your light source extinguished!",
+       "s": "Follow the marked path through the tunnels to Mistag",
+       "k": "walkToMistag",
+       "at": [
+        3319,
+        9615,
+        0
+       ]
+      },
+      {
+       "t": "Perform the Goblin Bow emote next to Mistag and talk to him.",
+       "s": "Perform the Goblin Bow emote next to Mistag and talk to him.",
+       "k": "emoteAtMistag",
+       "at": [
+        3319,
+        9615,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Go up to the first floor of Lumbridge Castle.",
+       "s": "Go up to the first floor of Lumbridge Castle.",
+       "k": "goUpToF1",
+       "at": [
+        3205,
+        3208,
+        0
+       ]
+      },
+      {
+       "t": "Climb back out through the hole.",
+       "s": "Climb back out through the hole",
+       "k": "climbOutThroughHole",
+       "at": [
+        3221,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6905
+        ]
+       }
+      },
+      {
+       "t": "Go up to the surface.",
+       "s": "Go up to the surface.",
+       "k": "goUpFromBasement",
+       "at": [
+        3209,
+        9616,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ]
+      },
+      {
+       "t": "Talk to Duke Horacio on the first floor of Lumbridge Castle.",
+       "s": "Talk to Duke Horacio on the castle's first floor",
+       "k": "talkToDuke",
+       "at": [
+        3210,
+        3222,
+        1
+       ],
+       "hl": {
+        "npc": [
+         815
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Go up to the first floor of Lumbridge Castle.",
+       "s": "Go up to the first floor of Lumbridge Castle.",
+       "k": "goUpToF1",
+       "at": [
+        3205,
+        3208,
+        0
+       ]
+      },
+      {
+       "t": "Climb back out through the hole.",
+       "s": "Climb back out through the hole",
+       "k": "climbOutThroughHole",
+       "at": [
+        3221,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6905
+        ]
+       }
+      },
+      {
+       "t": "Go up to the surface.",
+       "s": "Go up to the surface.",
+       "k": "goUpFromBasement",
+       "at": [
+        3209,
+        9616,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17385
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ]
+      },
+      {
+       "t": "Pickpocket Sigmund for his key.",
+       "s": "Pickpocket Sigmund for his key",
+       "k": "pickpocketSigmund",
+       "at": [
+        3210,
+        3222,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5322
+        ]
+       }
+      },
+      {
+       "t": "Open the chest on the castle's first floor with Sigmund's key and take what is inside.",
+       "s": "Open the chest with Sigmund's key",
+       "k": "unlockChest",
+       "at": [
+        3209,
+        3217,
+        1
+       ],
+       "hl": {
+        "obj": [
+         6910
+        ]
+       }
+      },
+      {
+       "t": "Enter the H.A.M. Hideout through the trapdoor north-west of Lumbridge.",
+       "s": "Enter the H.A.M. Hideout trapdoor",
+       "k": "enterHamLair",
+       "at": [
+        3166,
+        3252,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5492
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Search the crates in the H.A.M. Hideout for the stolen silverware.",
+       "s": "Search the H.A.M. crates for the silverware",
+       "k": "searchHamCrates",
+       "at": [
+        3152,
+        9645,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6911
+        ]
+       }
+      },
+      {
+       "t": "Talk to Duke Horacio on the first floor of Lumbridge Castle.",
+       "s": "Talk to Duke Horacio on the castle's first floor",
+       "k": "talkToDuke",
+       "at": [
+        3210,
+        3222,
+        1
+       ],
+       "hl": {
+        "npc": [
+         815
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Enter the Lumbridge Castle basement.",
+       "s": "Enter the Lumbridge Castle basement.",
+       "k": "goDownIntoBasement",
+       "at": [
+        3209,
+        3216,
+        0
+       ],
+       "hl": {
+        "obj": [
+         14880
+        ]
+       }
+      },
+      {
+       "t": "Go down the staircase.",
+       "s": "Go down the staircase.",
+       "k": "goDownFromF1",
+       "at": [
+        3205,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16672
+        ]
+       }
+      },
+      {
+       "t": "Go downstairs.",
+       "s": "Go downstairs.",
+       "k": "goDownFromF2",
+       "at": [
+        3205,
+        3208,
+        2
+       ]
+      },
+      {
+       "t": "Climb through the hole in the cellar wall.",
+       "s": "Climb through the hole in the cellar wall",
+       "k": "climbThroughHole",
+       "at": [
+        3219,
+        9618,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6898
+        ]
+       }
+      },
+      {
+       "t": "Travel with Kazgar to shortcut to Mistag.",
+       "s": "Travel with Kazgar to shortcut to Mistag.",
+       "k": "talkToKazgar",
+       "at": [
+        3230,
+        9610,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7300
+        ]
+       }
+      },
+      {
+       "t": "Talk to Mistag to finish the quest.",
+       "s": "Talk to Mistag to finish the quest",
+       "k": "talkToMistagForEnd",
+       "at": [
+        3319,
+        9615,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7298
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-21": {
+   "var": [
+    "varbit",
+    260
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Head to the entrance of the mountain camp east of Rellekka or north of the fairy ring.",
+      "Take the path north, past the guard, and use your rope on a boulder you can push to get around.",
+      "Head into the camp and talk to Hamal the Chieftain. Dialogue: \"Why is everyone so hostile?\", \"So what are you doing up here?\", \"I will search for her!\" (or Dialogue: \"Why is everyone so hostile?\", \"So what are you doing up here?\", \"I will search for her!\" with The Fremennik Trials completed)"
+     ]
+    },
+    {
+     "title": "Crisis",
+     "steps": [
+      "Dig some mud from the mud pond south of Hamal's house.",
+      "Go north, following the path along the lake westward.",
+      "Use the mud on the tall tree then climb it. You do *not* need to do this again for subsequent climbs.",
+      "Use your pole or staff on the clump of rocks to pole vault over.",
+      "Use your plank on the flat stones. Keep this throughout the quest.",
+      "Listen to the shining pool. Dialogue: \"Hello! Who are you?\", \"So what exactly do you want from me?\", \"That sounds like something I can do.\", \"I'll get right on it.\"",
+      "Use your plank on the flat stone to return to shore."
+     ]
+    },
+    {
+     "title": "Making Peace",
+     "steps": [
+      "Talk to Hamal the Chieftain about the people of Rellekka. Dialogue: \"About the people of Rellekka...\", \"Why do you hate them so much?\"",
+      "Speak to Jokul north of the Cheiftains tent before leaving the camp to speak to Svidi.",
+      "Search for Svidi between Rellekka and the entrance to Keldagrim. Dialogue: \"Can't I persuade you to go in there somehow?\"",
+      "Go to Rellekka and talk to Brundt the Chieftain in the longhall. Dialogue: \"Ask about the mountain camp.\", \"Did it contain vast magical powers?\" or Dialogue: \"Ask about the mountain camp.\", \"Did it contain vast magical powers?\" if Lunar Diplomacy started/completed.",
+      "Return to the Mountain Camp, and enter the large tent south-west of Hamal the Chieftain.",
+      "Use your pickaxe on the Ancient Rock located in the southern tent to get half a rock.",
+      "Take this back to Rellekka, and talk to Brundt the Chieftain Dialogue: \"Ask about the mountain camp.\" or Dialogue: \"Ask about the mountain camp.\" if Lunar Diplomacy started/completed, who will give you the guarantee of safe passage.",
+      "Take the guarantee to Svidi. You do not need to check on Svidi afterward.",
+      "Return to Hamal the Chieftain. Dialogue: \"About the people of Rellekka...\""
+     ]
+    },
+    {
+     "title": "The White Pearl",
+     "steps": [
+      "Talk to Hamal the Chieftan again, this time about food supplies. Dialogue: \"About your food supplies...\", \"Never mind.\"",
+      "Talk to Jokul just north of Hamal. If you spoke to him earlier you do not need to do this. He will tell you of a White Pearl plant that is very hardy.",
+      "Travel to White Wolf Mountain (Gnome glider if The Grand Tree completed, or Keldagrim minecart system if The Giant Dwarf is completed.)",
+      "Equip gloves and pick-from the thorny bushes by the gnome glider.",
+      "Eat the white pearl you picked to get the white pearl seed.",
+      "Speak to Hamal the Chieftain to give him the white pearl seed. Dialogue: \"About your food supplies...\""
+     ]
+    },
+    {
+     "title": "The Kendal",
+     "steps": [
+      "Speak to the shining pool again (remember to use the pole/staff and plank).",
+      "Cross the gap back to shore",
+      "Follow the northern path east to a cave.",
+      "Chop down the trees blocking your path (make sure you are facing east)",
+      "Enter the cave",
+      "Talk to The Kendal. Dialogue: \"It's just me, no one special.\", \"You mean a sacrifice?\", \"You look like a man in a bearsuit!\", \"Can I see that corpse?\", \"I humbly request to be given the remains.\", \"I will kill you myself!\"",
+      "Kill The Kendal. He can be safespotted utilising skeletons around the room.",
+      "Take the corpse of woman",
+      "Return to Hamal the Chieftain. Dialogue: \"But he's not a god!\", \"I will.\"",
+      "Gather 5 muddy rocks from around the camp.",
+      "Talk to Ragnar near the tall tree by the lake to get Asleif's necklace.",
+      "Return to the shining pool and bury the corpse on the island.",
+      "Use the muddy rocks on the burial mound. (You make the mound by burying the corpse on the island.)",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Use your rope on the boulder outside the Mountain Camp east of Rellekka.",
+       "s": "Use your rope on the boulder outside the Mountain Camp",
+       "k": "enterCamp",
+       "at": [
+        2766,
+        3667,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5842
+        ]
+       }
+      },
+      {
+       "t": "Speak to Hamal the Chieftain in the Mountain Camp.",
+       "s": "Speak to Hamal the Chieftain in the Mountain Camp.",
+       "k": "talkToHamal",
+       "at": [
+        2810,
+        3672,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1373
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Return to the Mountain Camp.",
+       "s": "Return to the Mountain Camp.",
+       "k": "enterCampOverRocks",
+       "at": [
+        2760,
+        3658,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5847
+        ]
+       }
+      },
+      {
+       "t": "Head south of Hamal's tent and dig some mud from the mud pond.",
+       "s": "Head south of Hamal's tent and dig some mud from the mud pond.",
+       "k": "digUpMud",
+       "at": [
+        2805,
+        3661,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5885
+        ]
+       }
+      },
+      {
+       "t": "Pick up the pole north of Hamal's tent.",
+       "s": "Pick up the pole north of Hamal's tent.",
+       "k": "pickupPole",
+       "at": [
+        2813,
+        3685,
+        0
+       ]
+      },
+      {
+       "t": "Use mud on the Tall Tree on the lake north of the camp, and then climb it.",
+       "s": "Use mud on the Tall Tree north of the camp, then climb it",
+       "k": "rubMudIntoTree",
+       "at": [
+        2772,
+        3681,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5848
+        ]
+       }
+      },
+      {
+       "t": "Climb the Tall Tree on the lake north of the camp.",
+       "s": "Climb the Tall Tree on the lake north of the camp.",
+       "k": "climbTree",
+       "at": [
+        2772,
+        3681,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5848
+        ]
+       }
+      },
+      {
+       "t": "Use your pole or a staff on the clump of rocks.",
+       "s": "Use your pole or a staff on the clump of rocks.",
+       "k": "poleVaultRocks",
+       "at": [
+        2773,
+        3688,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5849
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat stone.",
+       "s": "Use a plank on the flat stone.",
+       "k": "plankRocks",
+       "at": [
+        2775,
+        3691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5850
+        ]
+       }
+      },
+      {
+       "t": "Listen to the Shining Pool.",
+       "s": "Listen to the Shining Pool.",
+       "k": "listenToSpirit",
+       "at": [
+        2781,
+        3689,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5897
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Return to the Mountain Camp.",
+       "s": "Return to the Mountain Camp.",
+       "k": "enterCampOverRocks",
+       "at": [
+        2760,
+        3658,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5847
+        ]
+       }
+      },
+      {
+       "t": "Speak to Hamal the Chieftain in the Mountain Camp.",
+       "s": "Speak to Hamal the Chieftain in the Mountain Camp.",
+       "k": "talkToHamalAfterSpirit",
+       "at": [
+        2810,
+        3672,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1373
+        ]
+       }
+      },
+      {
+       "t": "Use a plank on the flat stone to return to shore.",
+       "s": "Use a plank on the flat stone to return to shore.",
+       "need": "Plank",
+       "k": "plankRocksReturn",
+       "at": [
+        2777,
+        3691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5851
+        ]
+       }
+      },
+      {
+       "t": "Speak to Jokul north of Hamal's tent.",
+       "s": "Speak to Jokul north of Hamal's tent.",
+       "k": "talkToJokul",
+       "at": [
+        2812,
+        3680,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1376
+        ]
+       }
+      },
+      {
+       "t": "Speak to Svidi who roams in the forest east of Rellekka.",
+       "s": "Speak to Svidi who roams in the forest east of Rellekka.",
+       "k": "talkToSvidi",
+       "at": [
+        2717,
+        3666,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1375
+        ]
+       }
+      },
+      {
+       "t": "Speak to Brundt the Chieftain in the Rellekka's longhall.",
+       "s": "Speak to Brundt the Chieftain in the Rellekka's longhall.",
+       "k": "speakToBrundt",
+       "at": [
+        2658,
+        3669,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9263
+        ]
+       }
+      },
+      {
+       "t": "Use a pickaxe on the Ancient Rock in the Mountain Camp.",
+       "s": "Use a pickaxe on the Ancient Rock in the Mountain Camp.",
+       "k": "getRockFragment",
+       "at": [
+        2799,
+        3660,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5895
+        ]
+       }
+      },
+      {
+       "t": "Return to Brundt the Chieftain in the Rellekka's longhall.",
+       "s": "Return to Brundt the Chieftain in the Rellekka's longhall.",
+       "k": "returnToBrundt",
+       "at": [
+        2658,
+        3669,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9263
+        ]
+       }
+      },
+      {
+       "t": "Return to Svidi who roams in the forest east of Rellekka.",
+       "s": "Return to Svidi who roams in the forest east of Rellekka.",
+       "k": "returnToSvidi",
+       "at": [
+        2717,
+        3666,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1375
+        ]
+       }
+      },
+      {
+       "t": "Go to the top of White Wolf Mountain and pick the Thorny Bushes whilst wearing gloves.",
+       "s": "Wear gloves; pick the Thorny Bushes atop White Wolf Mountain",
+       "k": "getFruit",
+       "at": [
+        2849,
+        3497,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5856
+        ]
+       }
+      },
+      {
+       "t": "Eat the White Pearl.",
+       "s": "Eat the White Pearl.",
+       "k": "eatFruit"
+      },
+      {
+       "t": "Return to Hamal the Chieftain in the Mountain Camp.",
+       "s": "Return to Hamal the Chieftain in the Mountain Camp.",
+       "k": "returnToHamalAboutFood",
+       "at": [
+        2810,
+        3672,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1373
+        ]
+       }
+      },
+      {
+       "t": "Return to Hamal the Chieftain in the Mountain Camp.",
+       "s": "Return to Hamal the Chieftain in the Mountain Camp.",
+       "k": "returnToHamalAboutDiplomacy",
+       "at": [
+        2810,
+        3672,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1373
+        ]
+       }
+      },
+      {
+       "t": "Return to the centre of the pool north of the Mountain Camp and listen to it.",
+       "s": "Return to the middle of the camp's pool and listen to it",
+       "k": "returnToSpirit",
+       "at": [
+        2781,
+        3689,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5897
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Cut through the trees north east of the lake and enter the cave there. Bring combat gear.",
+       "s": "Cut through the trees north-east of the lake; enter the cave",
+       "k": "enterCave",
+       "at": [
+        2809,
+        3703,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5857
+        ]
+       }
+      },
+      {
+       "t": "Speak to the Kendal, then kill him.",
+       "s": "Speak to the Kendal, then kill him.",
+       "k": "talkToKendal",
+       "at": [
+        2788,
+        10081,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1377
+        ]
+       }
+      },
+      {
+       "t": "Jump across the flat stone to return to the north shore.",
+       "s": "Jump across the flat stone to return to the north shore.",
+       "k": "noPlankRocksReturn",
+       "at": [
+        2777,
+        3691,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5851
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Cut through the trees north east of the lake and enter the cave there. Bring combat gear.",
+       "s": "Cut through the trees north-east of the lake; enter the cave",
+       "k": "enterCave",
+       "at": [
+        2809,
+        3703,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5857
+        ]
+       }
+      },
+      {
+       "t": "Speak to the Kendal, then kill him.",
+       "s": "Speak to the Kendal, then kill him.",
+       "k": "talkToKendal",
+       "at": [
+        2788,
+        10081,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1377
+        ]
+       }
+      },
+      {
+       "t": "Kill the kendal.",
+       "s": "Kill the kendal.",
+       "k": "killKendal",
+       "at": [
+        2788,
+        10081,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1377
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Cut through the trees north east of the lake and enter the cave there. Bring combat gear.",
+       "s": "Cut through the trees north-east of the lake; enter the cave",
+       "k": "enterCave",
+       "at": [
+        2809,
+        3703,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5857
+        ]
+       }
+      },
+      {
+       "t": "Pick up the Corpse of Woman.",
+       "s": "Pick up the Corpse of Woman.",
+       "k": "grabCorpse",
+       "at": [
+        2784,
+        10078,
+        0
+       ]
+      },
+      {
+       "t": "Bring the corpse to Hamal.",
+       "s": "Bring the corpse to Hamal.",
+       "k": "bringCorpseToHamal",
+       "at": [
+        2810,
+        3672,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1373
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Return to the Mountain Camp.",
+       "s": "Return to the Mountain Camp.",
+       "k": "enterCampOverRocks",
+       "at": [
+        2760,
+        3658,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5847
+        ]
+       }
+      },
+      {
+       "t": "Collect 5 Muddy Rocks from around the camp.",
+       "s": "Collect 5 Muddy Rocks from around the camp.",
+       "k": "collectRocks"
+      },
+      {
+       "t": "Speak to Ragnar.",
+       "s": "Speak to Ragnar.",
+       "k": "speakRagnar",
+       "at": [
+        2766,
+        3676,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1374
+        ]
+       }
+      },
+      {
+       "t": "Return to the centre of the lake and bury the corpse.",
+       "s": "Return to the centre of the lake and bury the corpse.",
+       "k": "buryCorpseOnIsland",
+       "at": [
+        2782,
+        3694,
+        0
+       ]
+      },
+      {
+       "t": "Use the Muddy rocks on the Burial Mound at the centre of the Mountain Camp's lake.",
+       "s": "Use the muddy rocks on the Burial Mound in the camp's lake",
+       "k": "createCairn",
+       "at": [
+        2783,
+        3694,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5862
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-22": {
+   "var": [
+    "varbit",
+    693
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Speak to Gordon south of the Farming Guild. Dialogue: \"Need a hand with anything?\", \"Yes.\"",
+      "Speak to Mary inside the main building west of Gordon."
+     ]
+    },
+    {
+     "title": "Tracking down the beast",
+     "steps": [
+      "Use a pot of flour on the southern gate next to the cow pen east of Gordon.",
+      "Follow the trail of flour south past the bridge then west to the cave at the Kebos Lowlands mine.",
+      "Kill the Headless Beast.",
+      "Go back and speak to Gordon."
+     ]
+    },
+    {
+     "title": "Making the fake head",
+     "steps": [
+      "Speak to Mary.",
+      "Make a clay head by using a knife on the soft clay. Dialogue: \"Yes.\"",
+      "Speak to Gordon.",
+      "Make a fur head by using bear fur or grey wolf fur on the head while having a needle and thread. Dialogue: \"Yes.\"",
+      "Speak to Gordon again.",
+      "Make a bloody head by using red dye on the head. Dialogue: \"Yes.\"",
+      "Speak to Gordon again.",
+      "Mount the bloody head in the Mounted Head Space on the wall south of the stairs using two planks and six nails.",
+      "Speak to Gordon one more time.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Gordon south of the Farming Guild.",
+       "s": "Talk to Gordon south of the Farming Guild.",
+       "k": "talkToGordon1",
+       "at": [
+        1248,
+        3686,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10500
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to Mary inside the main building, west of Gordon.",
+       "s": "Talk to Mary inside the main building, west of Gordon.",
+       "k": "talkToMary",
+       "at": [
+        1237,
+        3678,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10502
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Climb up the nearby house's staircase.",
+       "s": "Climb up the nearby house's staircase.",
+       "k": "goUpstairsHouse",
+       "at": [
+        1240,
+        3686,
+        0
+       ]
+      },
+      {
+       "t": "Take the nearby pot of flour, or fill a pot with the barrel of flour in the south west room.",
+       "s": "Take the pot of flour, or fill a pot at the flour barrel upstairs",
+       "has": "Pot of flour",
+       "k": "takePot"
+      },
+      {
+       "t": "Use the pot of flour on the southern gate next to the cow pen east of Gordon.",
+       "s": "Use the flour on the gate by the cow pen east of Gordon",
+       "k": "usePotOfFlour",
+       "at": [
+        1257,
+        3686,
+        0
+       ]
+      },
+      {
+       "t": "Go back downstairs.",
+       "s": "Go back downstairs",
+       "k": "goDownstairsHouse",
+       "at": [
+        1240,
+        3686,
+        1
+       ]
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Enter the Kebos Lowlands mine just west of the bridge and kill the Headless Beast (level 82).",
+       "s": "Follow the flour trail to the Kebos Lowlands mine (Headless Beast)",
+       "k": "goToMine",
+       "at": [
+        1212,
+        3647,
+        0
+       ],
+       "hl": {
+        "obj": [
+         20852
+        ]
+       }
+      },
+      {
+       "t": "Kill the headless beast. You can safespot it from the south west corner of the pond in the cave.",
+       "s": "Kill the Headless Beast; safespot it from the pond's south-west",
+       "k": "killBeast",
+       "at": [
+        1191,
+        10021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10506
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Enter the Kebos Lowlands mine just west of the bridge and kill the Headless Beast (level 82).",
+       "s": "Follow the flour trail to the Kebos Lowlands mine (Headless Beast)",
+       "k": "goToMine",
+       "at": [
+        1212,
+        3647,
+        0
+       ],
+       "hl": {
+        "obj": [
+         20852
+        ]
+       }
+      },
+      {
+       "t": "Kill the headless beast. You can safespot it from the south west corner of the pond in the cave.",
+       "s": "Kill the Headless Beast; safespot it from the pond's south-west",
+       "k": "killBeast",
+       "at": [
+        1191,
+        10021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10506
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Enter the Kebos Lowlands mine just west of the bridge and kill the Headless Beast (level 82).",
+       "s": "Follow the flour trail to the Kebos Lowlands mine (Headless Beast)",
+       "k": "goToMine",
+       "at": [
+        1212,
+        3647,
+        0
+       ],
+       "hl": {
+        "obj": [
+         20852
+        ]
+       }
+      },
+      {
+       "t": "Kill the headless beast. You can safespot it from the south west corner of the pond in the cave.",
+       "s": "Kill the Headless Beast; safespot it from the pond's south-west",
+       "k": "killBeast",
+       "at": [
+        1191,
+        10021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10506
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Enter the Kebos Lowlands mine just west of the bridge and kill the Headless Beast (level 82).",
+       "s": "Follow the flour trail to the Kebos Lowlands mine (Headless Beast)",
+       "k": "goToMine",
+       "at": [
+        1212,
+        3647,
+        0
+       ],
+       "hl": {
+        "obj": [
+         20852
+        ]
+       }
+      },
+      {
+       "t": "Kill the headless beast. You can safespot it from the south west corner of the pond in the cave.",
+       "s": "Kill the Headless Beast; safespot it from the pond's south-west",
+       "k": "killBeast",
+       "at": [
+        1191,
+        10021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10506
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "Take the pickaxe in the mine.",
+       "s": "Take the pickaxe in the mine.",
+       "hl": {"item":["Bronze pickaxe"]},
+       "k": "takePickaxe",
+       "at": [
+        1222,
+        3653,
+        0
+       ]
+      },
+      {
+       "t": "Mine some clay.",
+       "s": "Mine some clay.",
+       "k": "mineClay",
+       "at": [
+        1217,
+        3657,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11362
+        ]
+       }
+      },
+      {
+       "t": "Take the planks outside the monster's cave.",
+       "s": "Take the planks outside the monster's cave.",
+       "has": "Plank x2",
+       "hl": {"item":["Plank"]},
+       "k": "takePlanks",
+       "at": [
+        1202,
+        3649,
+        0
+       ]
+      },
+      {
+       "t": "Go back and talk to Gordon.",
+       "s": "Go back and talk to Gordon",
+       "k": "talkToGordon2",
+       "at": [
+        1248,
+        3686,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10500
+        ]
+       }
+      },
+      {
+       "t": "Leave the cave.",
+       "s": "Leave the cave.",
+       "k": "leaveCave",
+       "at": [
+        1190,
+        10029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         20853
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 16,
+     "do": [
+      {
+       "t": "Talk to Mary inside the house.",
+       "s": "Talk to Mary inside the house.",
+       "k": "talkToMary2",
+       "at": [
+        1237,
+        3678,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10502
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 18,
+     "do": [
+      {
+       "t": "Take the pickaxe in the mine.",
+       "s": "Take the pickaxe in the mine.",
+       "hl": {"item":["Bronze pickaxe"]},
+       "k": "takePickaxe",
+       "at": [
+        1222,
+        3653,
+        0
+       ]
+      },
+      {
+       "t": "Mine some clay.",
+       "s": "Mine some clay.",
+       "k": "mineClay",
+       "at": [
+        1217,
+        3657,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11362
+        ]
+       }
+      },
+      {
+       "t": "Take the bucket in the house.",
+       "s": "Take the bucket in the house.",
+       "k": "takeBucket",
+       "at": [
+        1244,
+        3682,
+        0
+       ]
+      },
+      {
+       "t": "Fill the bucket on the sink.",
+       "s": "Fill the bucket on the sink.",
+       "k": "fillBucket",
+       "at": [
+        1240,
+        3677,
+        0
+       ],
+       "hl": {
+        "obj": [
+         1763
+        ]
+       }
+      },
+      {
+       "t": "Use the bucket of water on the clay.",
+       "s": "Use the bucket of water on the clay.",
+       "k": "wetClay"
+      },
+      {
+       "t": "Take the knife near Mary.",
+       "s": "Take the knife near Mary.",
+       "has": "Knife",
+       "k": "takeKnife",
+       "at": [
+        1241,
+        3679,
+        0
+       ]
+      },
+      {
+       "t": "Make a clay head by using a knife on the soft clay.",
+       "s": "Use a knife on the soft clay to make a clay head",
+       "k": "useKnifeOnClay"
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Talk with Gordon.",
+       "s": "Talk with Gordon.",
+       "k": "talkToGordonGen",
+       "at": [
+        1248,
+        3686,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10500
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 22,
+     "do": [
+      {
+       "t": "Climb up the nearby house's staircase.",
+       "s": "Climb up the nearby house's staircase.",
+       "k": "goUpstairsHouse",
+       "at": [
+        1240,
+        3686,
+        0
+       ]
+      },
+      {
+       "t": "Take the needle.",
+       "s": "Take the needle.",
+       "has": "Needle",
+       "k": "getNeedle",
+       "at": [
+        1244,
+        3685,
+        1
+       ]
+      },
+      {
+       "t": "Take the thread.",
+       "s": "Take the thread.",
+       "has": "Thread",
+       "k": "getThread",
+       "at": [
+        1244,
+        3684,
+        1
+       ]
+      },
+      {
+       "t": "Use the bear fur on the clay head then talk to Gordon.",
+       "s": "Use the bear fur on the clay head then talk to Gordon.",
+       "k": "useFurOnHead"
+      }
+     ]
+    },
+    {
+     "at": 24,
+     "do": [
+      {
+       "t": "Talk with Gordon.",
+       "s": "Talk with Gordon.",
+       "k": "talkToGordonGen2",
+       "at": [
+        1248,
+        3686,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10500
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 26,
+     "do": [
+      {
+       "t": "Get some red dye from the shelves in the farm house.",
+       "s": "Get some red dye from the shelves in the farm house.",
+       "has": "Red dye",
+       "k": "takeDye",
+       "at": [
+        1240,
+        3688,
+        0
+       ]
+      },
+      {
+       "t": "Make a bloody head by using red dye on the fur head.",
+       "s": "Use red dye on the head",
+       "k": "useDyeOnHead"
+      }
+     ]
+    },
+    {
+     "at": 28,
+     "do": [
+      {
+       "t": "Talk with Gordon.",
+       "s": "Talk with Gordon.",
+       "k": "talkToGordonGen3",
+       "at": [
+        1248,
+        3686,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10500
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Take the planks outside the monster's cave.",
+       "s": "Take the planks outside the monster's cave.",
+       "has": "Plank x2",
+       "hl": {"item":["Plank"]},
+       "k": "takePlanks",
+       "at": [
+        1202,
+        3649,
+        0
+       ]
+      },
+      {
+       "t": "Take the hammer east of the farmhouse.",
+       "s": "Take the hammer east of the farmhouse.",
+       "has": "Hammer",
+       "k": "takeHammer",
+       "at": [
+        1259,
+        3686,
+        0
+       ]
+      },
+      {
+       "t": "Take the saw in the building north of the farmhouse.",
+       "s": "Take the saw in the building north of the farmhouse.",
+       "has": "Saw",
+       "k": "takeSaw",
+       "at": [
+        1239,
+        3696,
+        0
+       ]
+      },
+      {
+       "t": "Take some nails from the farm's workbench.",
+       "s": "Take some nails from the farm's workbench.",
+       "k": "takeNails",
+       "at": [
+        1239,
+        3699,
+        0
+       ]
+      },
+      {
+       "t": "Mount the head in the Mounted Head Space on the wall south of the stairs, with 2 planks and 6 nails.",
+       "s": "Mount the head on the wall south of the stairs",
+       "k": "buildBearHead",
+       "at": [
+        1240,
+        3683,
+        0
+       ],
+       "hl": {
+        "obj": [
+         20858
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 32,
+     "do": [
+      {
+       "t": "Return to Gordon to finish the quest.",
+       "s": "Return to Gordon to finish the quest.",
+       "k": "talkToGordonFinal",
+       "at": [
+        1248,
+        3686,
+        0
+       ],
+       "hl": {
+        "npc": [
+         10500
         ]
        }
       }

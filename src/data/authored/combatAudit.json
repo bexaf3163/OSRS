@@ -1449,6 +1449,94 @@
       "evidence": [
         "OSRS Wiki Corrupt Lizardman infobox: level 46, 50 hitpoints, max hit 6, crush, read 2026-11-17."
       ]
+    },
+    {
+      "stepId": "S9-20",
+      "kind": "not-combat",
+      "mandatory": false,
+      "method": "none",
+      "objective": "The Lost Tribe: the goblin generals refused to fight in the dialogue; nothing in the quest is fought.",
+      "enemies": [],
+      "lines": [
+        "0.11"
+      ],
+      "assumptions": [
+        "The fight word is in a dialogue option, not an action."
+      ],
+      "problems": [],
+      "alternatives": [],
+      "decision": "retain",
+      "changed": [
+        "2.131.0: new quest; no fight."
+      ],
+      "evidence": [
+        "OSRS Wiki The Lost Tribe: no kills, read 2026-11-17."
+      ]
+    },
+    {
+      "stepId": "S9-21",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Mountain Daughter: kill the Kendal (level 70, 50 hitpoints, hits up to 9) in its cave north-east of the Mountain Camp lake.",
+      "enemies": [
+        {
+          "name": "The Kendal",
+          "level": 70,
+          "maxHit": 9,
+          "table": true
+        }
+      ],
+      "lines": [
+        "4.5",
+        "4.6"
+      ],
+      "assumptions": [
+        "10 lobsters cover a hit of 9 at most at the route's Members combat levels."
+      ],
+      "problems": [],
+      "alternatives": [
+        "The wiki safespot in the cave."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.131.0: new quest; the Kendal is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki The Kendal infobox: level 70, 50 hitpoints, max hit 9, crush, read 2026-11-17."
+      ]
+    },
+    {
+      "stepId": "S9-22",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Getting Ahead: kill the Headless Beast (level 82, 100 hitpoints, hits up to 10) in the Kebos Lowlands mine cave.",
+      "enemies": [
+        {
+          "name": "Headless Beast",
+          "level": 82,
+          "maxHit": 10,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.2"
+      ],
+      "assumptions": [
+        "10 lobsters cover a hit of 10 at most at the route's Members combat levels."
+      ],
+      "problems": [],
+      "alternatives": [
+        "The safespot from the south-west corner of the pond."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.131.0: new quest; the Headless Beast is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Headless Beast infobox: level 82, 100 hitpoints, max hit 10, slash, read 2026-11-17."
+      ]
     }
   ]
 }

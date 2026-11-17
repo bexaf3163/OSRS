@@ -2864,6 +2864,10 @@
   "Desert boots": {
    "buy": 343,
    "sell": 350
+  },
+  "Iron nails": {
+   "buy": 6,
+   "sell": 2
   }
  }
 }
