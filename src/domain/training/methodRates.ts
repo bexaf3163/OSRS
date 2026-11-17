@@ -68,14 +68,38 @@ export function methodRate(m: TrainingMethod, skill: string, state: PlayerState,
   return combatRate(m, skill, state, market) ?? gatherRate(m, skill, state, market) ?? processRate(m, skill, state, market);
 }
 
+// Planning copies a state per level (atLevel) but shares its items, gear and quests, so each part's text is kept per object, and the
+// whole key becomes a short number: method caches then compare a few characters instead of the bank's contents (route gate profile).
+// shortcut: a state part must not be changed in place after it was keyed; replace with explicit versions if the store ever mutates parts.
+const partIds = new WeakMap<object, string>();
+const textIds = new Map<string, string>();
+const part = <T extends object>(o: T, text: (o: T) => string): string => {
+  let id = partIds.get(o);
+  if (id === undefined) {
+    const t = text(o);
+    id = textIds.get(t);
+    if (id === undefined) textIds.set(t, id = `p${textIds.size}`);
+    partIds.set(o, id);
+  }
+  return id;
+};
+const stateIds = new Map<string, string>();
+const stateKeys = new WeakMap<PlayerState, string>();
+
 /** What the rates depend on, without the position (a step on the map must not recompute every method): levels, mode, items, worn quantities, coins and unlock proofs. */
 export function rateKeyOf(s: PlayerState): string {
-  const lv = Object.entries(s.levels).map(([k, v]) => `${k}${v.known ? v.value : '?'}`).sort().join(',');
-  const items = s.owned ? [...s.owned.items.entries()].map(([k, o]) => `${k}:${o.carried}/${o.noted}/${o.bank ?? '?'}/${o.legacyToolCount ? 'legacy' : 'exact'}`).sort().join(';') : '-';
-  const eq = Object.entries(s.equipment).map(([k, v]) => `${k}=${v}`).sort().join(',');
+  const kept = stateKeys.get(s);
+  if (kept !== undefined) return kept;
+  const lv = part(s.levels, l => Object.entries(l).map(([k, v]) => `${k}${v.known ? v.value : '?'}`).sort().join(','));
+  const items = s.owned ? part(s.owned.items, m => [...m.entries()].map(([k, o]) => `${k}:${o.carried}/${o.noted}/${o.bank ?? '?'}/${o.legacyToolCount ? 'legacy' : 'exact'}`).sort().join(';')) : '-';
+  const eq = part(s.equipment, e => Object.entries(e).map(([k, v]) => `${k}=${v}`).sort().join(','));
   const cash = coinsOf(s);
-  const quests = s.quests?.known ? JSON.stringify([...s.quests.value].sort()) : '?';
-  const counts = s.equipmentItems?.map(i => `${i.name}:${i.count ?? '?'}`).sort().join(',') ?? '?';
-  const manual = Object.entries(s.manual ?? {}).sort(([a], [b]) => a.localeCompare(b));
-  return [s.mode, s.equipmentKnown ? 1 : 0, s.bankSeen ? 1 : 0, lv, eq, items, cash.bag ?? '?', cash.bank ?? '?', quests, counts, JSON.stringify(manual)].join('|');
+  const quests = s.quests?.known ? part(s.quests.value, q => JSON.stringify([...q].sort())) : '?';
+  const counts = s.equipmentItems ? part(s.equipmentItems, l => l.map(i => `${i.name}:${i.count ?? '?'}`).sort().join(',')) : '?';
+  const manual = s.manual ? part(s.manual, m => JSON.stringify(Object.entries(m).sort(([a], [b]) => a.localeCompare(b)))) : '[]';
+  const full = [s.mode, s.equipmentKnown ? 1 : 0, s.bankSeen ? 1 : 0, lv, eq, items, cash.bag ?? '?', cash.bank ?? '?', quests, counts, manual].join('|');
+  let id = stateIds.get(full);
+  if (id === undefined) stateIds.set(full, id = `s${stateIds.size}`);
+  stateKeys.set(s, id);
+  return id;
 }

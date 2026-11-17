@@ -36,7 +36,10 @@ jobs:
   # A fresh account played turn by turn through the planner over the 23 F2P quests (tests/gates): fails when the plan stops at a check.
   route-gate:
     runs-on: ubuntu-24.04
-    # The Members replay grows with every quest (438 turns at 2.128.0, about 26 minutes on the runner).
+    # One runner per mode, because the Members replay grows with every quest (609 turns at 2.135.0).
+    strategy:
+      matrix:
+        mode: [F2P, Members]
     timeout-minutes: 65
     env:
       ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
@@ -47,7 +50,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run gate:f2p
+      - run: npm run gate:f2p -- -t "${{ matrix.mode }}"
 
   runelite-bridge:
     runs-on: ubuntu-latest

@@ -54,6 +54,8 @@ function strikeRunesAt(level: number): string[] {
  * runes of the best combat spell) once it differs from the kit of the current level, unless they already carry it, so the
  * rate matches the advice. Until then the player's own kit stands.
  */
+// One item list per bank and kit, so rate caches keyed on it (rateKeyOf) are not rebuilt for every level copy of the state.
+const plannedItems = new WeakMap<object, Map<string, NonNullable<PlayerState['owned']>['items']>>();
 export function withPlannedKit(state: PlayerState, skill: string, level: number, currentLevel: number): PlayerState {
   const kitAt = (lv: number): [string, number][] => {
     const tier = toolTierAt(skill, lv, state.mode);
@@ -64,8 +66,15 @@ export function withPlannedKit(state: PlayerState, skill: string, level: number,
   const owned = state.owned ?? { bankSeen: false, items: new Map() };
   const missing = kit.filter(([name]) => (owned.items.get(nameKey(name))?.carried ?? 0) <= 0);
   if (!missing.length) return state;
-  const items = new Map(owned.items);
-  for (const [name, count] of missing) items.set(nameKey(name), { name, carried: count, noted: 0 });
+  let kept = plannedItems.get(owned.items);
+  if (!kept) plannedItems.set(owned.items, kept = new Map());
+  const key = JSON.stringify(missing);
+  let items = kept.get(key);
+  if (!items) {
+    items = new Map(owned.items);
+    for (const [name, count] of missing) items.set(nameKey(name), { name, carried: count, noted: 0 });
+    kept.set(key, items);
+  }
   return { ...state, owned: { ...owned, items } };
 }
 

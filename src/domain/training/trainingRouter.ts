@@ -189,7 +189,21 @@ export interface MethodView {
   needsFundingCheck?: boolean;
 }
 
+// The path re-views the same methods for every level copy of one state; the view reads only what rateKeyOf keys, plus the connection.
+const viewCache = new WeakMap<TrainingMethod, Map<string, MethodView>>();
 export function viewMethod(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodView {
+  const cache = viewCache.get(m) ?? new Map<string, MethodView>();
+  if (!viewCache.has(m)) viewCache.set(m, cache);
+  const key = `${rateKeyOf(state)}|${state.connected ? 1 : 0}|${priceKeyOf(prices)}`;
+  let out = cache.get(key);
+  if (!out) {
+    if (cache.size > 50) cache.clear();
+    cache.set(key, out = viewFresh(m, state, prices));
+  }
+  return out;
+}
+
+function viewFresh(m: TrainingMethod, state: PlayerState, prices?: PriceView | null): MethodView {
   if (m.kit === 'strike-spell' && m.npcNames?.length) m = { ...m, name: `${strikeRecipe(state).spell.name} on ${m.npcNames.join(' / ')}` };
   const declared = methodNeeds(m, state, prices);
   const materials = allocateMaterialStock(state, declared.flatMap((n, index) => n.type === 'item'
@@ -620,7 +634,23 @@ function forecastEquipment(state: PlayerState, needs: readonly MethodNeed[], pri
   };
 }
 
-function buildPath(skill: string, level: number, target: number, input: AdviceInput, first: TrainingMethod | null, raw: readonly TrainingMethod[]): { legs: PathLeg[]; time: TimeEstimate | null; handover?: string } {
+// Quest forecasts ask for the same path from many equal states each turn; rateKeyOf gives equal states one key.
+// shortcut: callers must not change a returned path in place; copy legs before editing them if that is ever needed.
+const pathCache = new WeakMap<readonly TrainingMethod[], Map<string, ReturnType<typeof pathFresh>>>();
+function buildPath(skill: string, level: number, target: number, input: AdviceInput, first: TrainingMethod | null, raw: readonly TrainingMethod[]): ReturnType<typeof pathFresh> {
+  const cache = pathCache.get(raw) ?? new Map<string, ReturnType<typeof pathFresh>>();
+  if (!pathCache.has(raw)) pathCache.set(raw, cache);
+  const key = [skill, level, target, rateKeyOf(input.state), input.state.connected ? 1 : 0, input.mode, input.xp ?? '-', input.measuredXph ?? '-',
+    input.untilChange ? 1 : 0, input.followed ?? '-', priceKeyOf(input.prices), input.restriction ?? '-', first?.id ?? '-'].join('|');
+  let out = cache.get(key);
+  if (!out) {
+    if (cache.size > 2000) cache.clear();
+    cache.set(key, out = pathFresh(skill, level, target, input, first, raw));
+  }
+  return out;
+}
+
+function pathFresh(skill: string, level: number, target: number, input: AdviceInput, first: TrainingMethod | null, raw: readonly TrainingMethod[]): { legs: PathLeg[]; time: TimeEstimate | null; handover?: string } {
   const legs: PathLeg[] = [];
   const milestones = trainingMilestones(skill, raw, input.mode, input.state);
   let ratedAt = level;
@@ -704,8 +734,16 @@ function trainingMilestones(skill: string, methods: readonly TrainingMethod[], m
 /** Future legs of the path are re-rated every this many levels. */
 const FORECAST_STEP = 5;
 /** The same player at another level of one skill: what the path forecasts with. */
-export const atLevel = (state: PlayerState, skill: string, value: number): PlayerState =>
-  ({ ...state, levels: { ...state.levels, [skill]: { ...(state.levels[skill] ?? { source: 'profile' }), known: true, value } } }) as PlayerState;
+// One copy per state, skill and level, so caches keyed on the state object (withPlannedKit, rateKeyOf) hit across methods and turns.
+const levelCopies = new WeakMap<PlayerState, Map<string, PlayerState>>();
+export function atLevel(state: PlayerState, skill: string, value: number): PlayerState {
+  let kept = levelCopies.get(state);
+  if (!kept) levelCopies.set(state, kept = new Map());
+  const key = `${skill}|${value}`;
+  let out = kept.get(key);
+  if (!out) kept.set(key, out = { ...state, levels: { ...state.levels, [skill]: { ...(state.levels[skill] ?? { source: 'profile' }), known: true, value } } } as PlayerState);
+  return out;
+}
 
 /** Reuse the selected phases and model quantities; unsupported consumable forecasts stay absent. */
 export function trainingStockNeeds(path: readonly PathLeg[], skill: string, state: PlayerState, xp: number, prices?: PriceView | null): MethodNeed[] | undefined {
