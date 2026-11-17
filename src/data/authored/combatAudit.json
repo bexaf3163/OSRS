@@ -1379,6 +1379,76 @@
       "evidence": [
         "OSRS Wiki Big Chompy Bird Hunting requirements: the ability to defend against level 64 wolves and level 53 ogres, read 2026-11-16."
       ]
+    },
+    {
+      "stepId": "S9-17",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "The Tourist Trap: kill the Mercenary Captain (level 47, 80 hitpoints, hits up to 5) outside the Desert Mining Camp for the gate key.",
+      "enemies": [
+        {
+          "name": "Mercenary Captain",
+          "level": 47,
+          "maxHit": 5,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.1",
+        "1.2",
+        "5.7"
+      ],
+      "assumptions": [
+        "Fletching 10 and Smithing 20 come with the route's Members combat levels; 5 trout cover a hit of 5 at most."
+      ],
+      "problems": [],
+      "alternatives": [
+        "The wiki safespot near the camp."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.130.0: new quest; the Mercenary Captain is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Mercenary Captain infobox: level 47, 80 hitpoints, max hit 5, slash, read 2026-11-17."
+      ]
+    },
+    {
+      "stepId": "S9-19",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Tale of the Righteous: kill the Corrupt Lizardman (level 46, 50 hitpoints, hits up to 6) past the magic gate.",
+      "enemies": [
+        {
+          "name": "Corrupt Lizardman",
+          "level": 46,
+          "maxHit": 6,
+          "table": true
+        }
+      ],
+      "lines": [
+        "0.2",
+        "0.5",
+        "0.6",
+        "0.7",
+        "0.16"
+      ],
+      "assumptions": [
+        "5 trout cover a hit of 6 at most at the route's Members combat levels."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Ranged with the bronze darts the quest already asks for."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.130.0: new quest; the Corrupt Lizardman is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Corrupt Lizardman infobox: level 46, 50 hitpoints, max hit 6, crush, read 2026-11-17."
+      ]
     }
   ]
 }

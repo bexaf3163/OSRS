@@ -2291,6 +2291,27 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Bronze_bar"
   },
   {
+    "id": 806,
+    "nameEn": "Bronze dart",
+    "examine": "A deadly throwing dart with a bronze tip.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_dart.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "freeSpawns": [
+      "The Onyx Crest (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Ork",
+        "combatLevel": 107,
+        "rate": "5/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Bronze_dart"
+  },
+  {
     "id": 1139,
     "nameEn": "Bronze med helm",
     "examine": "A medium sized helmet.",
@@ -4781,6 +4802,157 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Death_rune"
+  },
+  {
+    "id": 1837,
+    "nameEn": "Desert boots",
+    "examine": "Comfortable desert shoes.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Desert_boots.png",
+    "value": 20,
+    "highAlch": 12,
+    "lowAlch": 8,
+    "buyLocations": [
+      {
+        "shopName": "Pollnivneach general store.",
+        "location": "Pollnivneach",
+        "owner": "Market seller",
+        "price": 20,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Ali's Discount Wares.",
+        "location": "Al Kharid",
+        "owner": "Ali Morrisane",
+        "price": 20,
+        "stock": 2,
+        "members": true
+      },
+      {
+        "shopName": "Shantay Pass Shop",
+        "location": "Shantay Pass",
+        "owner": "Shantay",
+        "price": 20,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Raetul and Co's Cloth Store.",
+        "location": "Sophanem",
+        "owner": "Raetul",
+        "price": 20,
+        "stock": 20,
+        "members": true
+      },
+      {
+        "shopName": "Bandit Bargains",
+        "location": "Bandit Camp",
+        "owner": "Bandit shopkeeper",
+        "price": 20,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Rasolo the Wandering Merchant",
+        "location": "South of Baxtorian Falls",
+        "owner": "Rasolo",
+        "price": 40,
+        "stock": 1,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Desert_boots"
+  },
+  {
+    "id": 1835,
+    "nameEn": "Desert robe",
+    "examine": "A cool, light desert robe.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Desert_robe.png",
+    "value": 40,
+    "highAlch": 24,
+    "lowAlch": 16,
+    "buyLocations": [
+      {
+        "shopName": "Shantay Pass Shop",
+        "location": "Shantay Pass",
+        "owner": "Shantay",
+        "price": 40,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Raetul and Co's Cloth Store.",
+        "location": "Sophanem",
+        "owner": "Raetul",
+        "price": 40,
+        "stock": 9,
+        "members": true
+      },
+      {
+        "shopName": "Bandit Bargains",
+        "location": "Bandit Camp",
+        "owner": "Bandit shopkeeper",
+        "price": 40,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Desert_robe"
+  },
+  {
+    "id": 1833,
+    "nameEn": "Desert shirt",
+    "examine": "A cool, light desert shirt.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Desert_shirt.png",
+    "value": 40,
+    "highAlch": 24,
+    "lowAlch": 16,
+    "buyLocations": [
+      {
+        "shopName": "Pollnivneach general store.",
+        "location": "Pollnivneach",
+        "owner": "Market seller",
+        "price": 40,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Ali's Discount Wares.",
+        "location": "Al Kharid",
+        "owner": "Ali Morrisane",
+        "price": 40,
+        "stock": 3,
+        "members": true
+      },
+      {
+        "shopName": "Shantay Pass Shop",
+        "location": "Shantay Pass",
+        "owner": "Shantay",
+        "price": 40,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Raetul and Co's Cloth Store.",
+        "location": "Sophanem",
+        "owner": "Raetul",
+        "price": 40,
+        "stock": 12,
+        "members": true
+      },
+      {
+        "shopName": "Bandit Bargains",
+        "location": "Bandit Camp",
+        "owner": "Bandit shopkeeper",
+        "price": 40,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Desert_shirt"
   },
   {
     "id": 1573,
@@ -10257,6 +10429,15 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Pestle_and_mortar"
   },
   {
+    "id": 4621,
+    "nameEn": "Phoenix feather",
+    "examine": "A long feather patterned like a flame.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Phoenix_feather.png",
+    "value": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Phoenix_feather"
+  },
+  {
     "id": 1510,
     "nameEn": "Picture",
     "examine": "A picture of a lady called Elena.",
@@ -13625,6 +13806,17 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Secateurs"
+  },
+  {
+    "id": 1854,
+    "nameEn": "Shantay pass",
+    "examine": "Allows you to pass through the Shantay pass into the Kharid Desert.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Shantay_pass_(item).png",
+    "value": 5,
+    "highAlch": 3,
+    "lowAlch": 2,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Shantay_pass_(item)"
   },
   {
     "id": 1735,
@@ -17388,6 +17580,91 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Water_rune"
+  },
+  {
+    "id": 1823,
+    "nameEn": "Waterskin(4)",
+    "examine": "A full waterskin with four portions of water.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Waterskin(4).png",
+    "value": 30,
+    "highAlch": 18,
+    "lowAlch": 12,
+    "buyLocations": [
+      {
+        "shopName": "Ali the Carter",
+        "location": "",
+        "price": 1000,
+        "stock": "∞",
+        "members": false
+      },
+      {
+        "shopName": "Shantay Pass Shop",
+        "location": "Shantay Pass",
+        "owner": "Shantay",
+        "price": 30,
+        "stock": 100,
+        "members": true
+      },
+      {
+        "shopName": "Bandit Bargains",
+        "location": "Bandit Camp",
+        "owner": "Bandit shopkeeper",
+        "price": 30,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Nathifa's Bake Stall.",
+        "location": "Sophanem",
+        "owner": "Nathifa",
+        "price": 30,
+        "stock": 50,
+        "members": true
+      },
+      {
+        "shopName": "Bedabin Village Bartering",
+        "location": "Bedabin Camp",
+        "owner": "Bedabin Nomad",
+        "price": 36,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Rasolo the Wandering Merchant",
+        "location": "South of Baxtorian Falls",
+        "owner": "Rasolo",
+        "price": 60,
+        "stock": 1,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Necropolis (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Kalphite Worker",
+        "combatLevel": 28,
+        "rate": "21/128"
+      },
+      {
+        "monster": "Kalphite Soldier",
+        "combatLevel": 85,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Locust rider",
+        "combatLevel": 106,
+        "rate": "1/128"
+      },
+      {
+        "monster": "Scarab Mage",
+        "combatLevel": 66,
+        "rate": "1/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Waterskin"
   },
   {
     "id": 1005,

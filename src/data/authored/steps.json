@@ -7373,5 +7373,410 @@
         "questName": "The Queen of Thieves"
       }
     }
+  },
+  {
+    "id": "S9-16",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Golem",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Golem",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Golem/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3488,3089,0",
+    "mapLocation": {
+      "x": 3488,
+      "y": 3089,
+      "plane": 0,
+      "label": "The ruins of Uzer, east of the Shantay Pass in the Kharidian Desert"
+    },
+    "npc": {
+      "nameEn": "clay golem",
+      "location": "The ruins of Uzer, east of the Shantay Pass in the Kharidian Desert",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/clay_golem"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Vial",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 2 gp.",
+        "wikiItemId": 229,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Vial.png"
+      },
+      {
+        "nameEn": "Pestle and mortar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 4 gp.",
+        "wikiItemId": 233,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pestle_and_mortar.png"
+      },
+      {
+        "nameEn": "Papyrus",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Ali's Discount Wares in Al Kharid for 10 gp.",
+        "wikiItemId": 970,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Papyrus.png"
+      },
+      {
+        "nameEn": "Soft clay",
+        "amount": 4,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1761,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Soft_clay.png"
+      },
+      {
+        "nameEn": "Phoenix feather",
+        "amount": 1,
+        "howToGet": "Grab a feather from the Desert Phoenix north-west of Uzer during the quest (Thieving 25).",
+        "wikiItemId": 4621,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Phoenix_feather.png",
+        "inStep": true
+      },
+      {
+        "nameEn": "Shantay pass",
+        "amount": 1,
+        "howToGet": "Buy from Shantay at the Shantay Pass for 5 gp, or on the Grand Exchange.",
+        "wikiItemId": 1854,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shantay_pass_(item).png"
+      },
+      {
+        "nameEn": "Waterskin(4)",
+        "amount": 2,
+        "howToGet": "Buy from the Shantay Pass shop, or on the Grand Exchange.",
+        "wikiItemId": 1823,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Waterskin(4).png"
+      }
+    ],
+    "reward": "1 QP, 1,000 Thieving XP, 1,000 Crafting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "clay golem"
+      ],
+      "dialogChoices": [
+        "Shall I try to repair you?",
+        "How do I open the portal?",
+        "I found a letter in the desert with your name on.",
+        "I'm looking for a statuette recovered from the city of Uzer.",
+        "I want to open a portal to the lair of an elder-demon."
+      ],
+      "highlightItems": [
+        "Vial",
+        "Pestle and mortar",
+        "Papyrus",
+        "Soft clay",
+        "Phoenix feather",
+        "Shantay pass",
+        "Waterskin(4)"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Golem"
+      }
+    }
+  },
+  {
+    "id": "S9-17",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Tourist Trap",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Tourist_Trap",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Tourist_Trap/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3303,3113,0",
+    "mapLocation": {
+      "x": 3303,
+      "y": 3113,
+      "plane": 0,
+      "label": "Irena"
+    },
+    "npc": {
+      "nameEn": "Irena",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Irena"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Desert shirt",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Pollnivneach general store in Pollnivneach for 40 gp.",
+        "wikiItemId": 1833,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Desert_shirt.png"
+      },
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Bronze bar",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 8 gp.",
+        "wikiItemId": 2349,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_bar.png"
+      },
+      {
+        "nameEn": "Feather",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange, or from Gerrant's Fishy Business in Port Sarim for 2 gp.",
+        "wikiItemId": 314,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Feather.png"
+      },
+      {
+        "nameEn": "Desert robe",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the Pollnivneach general store.",
+        "wikiItemId": 1835,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Desert_robe.png"
+      },
+      {
+        "nameEn": "Desert boots",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from the Pollnivneach general store.",
+        "wikiItemId": 1837,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Desert_boots.png"
+      },
+      {
+        "nameEn": "Shantay pass",
+        "amount": 1,
+        "howToGet": "Buy from Shantay at the Shantay Pass for 5 gp, or on the Grand Exchange.",
+        "wikiItemId": 1854,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shantay_pass_(item).png"
+      },
+      {
+        "nameEn": "Waterskin(4)",
+        "amount": 2,
+        "howToGet": "Buy from the Shantay Pass shop, or on the Grand Exchange.",
+        "wikiItemId": 1823,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Waterskin(4).png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 5,
+        "wikiItemId": 333,
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster"
+        ],
+        "howToGet": "Your own catch, or buy on the Grand Exchange. For the Mercenary Captain (level 47).",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Mercenary Captain"
+    ],
+    "reward": "2 QP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Irena"
+      ],
+      "dialogChoices": [
+        "What's the matter?",
+        "Wow! A real captain!",
+        "I'd love to work for a tough guy like you!",
+        "Can't I do something for a strong Captain like you?",
+        "Sorry Sir, I don't think I can do that.",
+        "It's a funny captain who can't fight his own battles!",
+        "I've just arrived.",
+        "Oh yes, that sounds interesting.",
+        "What's that then?",
+        "I can try to undo them for you.",
+        "It's funny you should say that...",
+        "Yeah, okay, let's give it a go.",
+        "I'd like to mine in a different area.",
+        "Yes sir, you're quite right sir.",
+        "Yes sir, we understand each other perfectly.",
+        "I am looking for a pineapple.",
+        "Yes, I'm interested.",
+        "I wanted to have a chat?",
+        "You seem to have a lot of books!",
+        "So, you're interested in sailing?",
+        "I could tell by the cut of your jib.",
+        "Yes, I'm very interested.",
+        "Yes, I'm kind of curious.",
+        "Yeah, cool!",
+        "Yes, of course.",
+        "Yes please.",
+        "I said you were very gregarious!",
+        "Nice cart.",
+        "One wagon wheel says to the other, 'I'll see you around'.",
+        "'One good turn deserves another.'",
+        "Fired... no, shot perhaps!",
+        "In for a penny in for a pound.",
+        "Well, you see, it's like this...",
+        "Prison riot in ten minutes, get your cart out of here!",
+        "You can't leave me here, I'll get killed!",
+        "Yes, I'll get on."
+      ],
+      "highlightItems": [
+        "Desert shirt",
+        "Hammer",
+        "Bronze bar",
+        "Feather",
+        "Desert robe",
+        "Desert boots",
+        "Shantay pass",
+        "Waterskin(4)"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Tourist Trap"
+      }
+    }
+  },
+  {
+    "id": "S9-18",
+    "stage": 9,
+    "type": "quest",
+    "title": "Children of the Sun",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Children_of_the_Sun",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Children_of_the_Sun/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3225,3428,0",
+    "mapLocation": {
+      "x": 3225,
+      "y": 3428,
+      "plane": 0,
+      "label": "Varrock square"
+    },
+    "npc": {
+      "nameEn": "Noah",
+      "location": "Varrock square",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Noah"
+    },
+    "itemsRequired": [],
+    "reward": "1 QP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Noah"
+      ],
+      "dialogChoices": [
+        "Yes.",
+        "When will this delegation arrive?"
+      ],
+      "highlightItems": [],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Children of the Sun"
+      }
+    }
+  },
+  {
+    "id": "S9-19",
+    "stage": 9,
+    "type": "quest",
+    "title": "Tale of the Righteous",
+    "qp": 1,
+    "requires": [
+      "S1-05",
+      "S9-07"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Tale_of_the_Righteous",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Tale_of_the_Righteous/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=1542,3570,0",
+    "mapLocation": {
+      "x": 1542,
+      "y": 3570,
+      "plane": 0,
+      "label": "His house west of The Cloak and Stagger tavern in Shayzien"
+    },
+    "npc": {
+      "nameEn": "Phileas Rimor",
+      "location": "His house west of The Cloak and Stagger tavern in Shayzien",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Phileas_Rimor"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe; it is also the melee weapon for the Strange Device.",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Bronze dart",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange. The ranged attack on the Strange Device; throwing knives also work.",
+        "wikiItemId": 806,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_dart.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 6,
+        "howToGet": "Buy on the Grand Exchange, or from a rune shop. Wind Strike for the magic attack.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Mind rune",
+        "amount": 3,
+        "howToGet": "Buy on the Grand Exchange, or from a rune shop.",
+        "wikiItemId": 558,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
+      },
+      {
+        "nameEn": "Rope",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Ned's Handmade Rope (100% Wool) in Draynor Village for 16 gp.",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 5,
+        "howToGet": "Your own catch, or buy on the Grand Exchange. For the corrupt lizardman (level 46).",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster"
+        ]
+      }
+    ],
+    "foes": [
+      "Corrupt Lizardman"
+    ],
+    "reward": "1 QP, 1,500 Mining XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Phileas Rimor"
+      ],
+      "dialogChoices": [
+        "Do you need help with anything?",
+        "Yes.",
+        "I have a question about King Shayzien VII.",
+        "Yes please."
+      ],
+      "highlightItems": [
+        "Bronze pickaxe",
+        "Bronze dart",
+        "Air rune",
+        "Mind rune",
+        "Rope",
+        "Trout"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Tale of the Righteous"
+      }
+    }
   }
 ]

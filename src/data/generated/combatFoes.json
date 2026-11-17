@@ -1201,6 +1201,50 @@
       }
     },
     {
+      "name": "Mercenary Captain",
+      "combat": 47,
+      "members": true,
+      "hitpoints": 80,
+      "attackLevel": 32,
+      "strengthLevel": 29,
+      "defenceLevel": 32,
+      "magicLevel": 0,
+      "attackBonus": 9,
+      "defence": {
+        "stab": 17,
+        "slash": 15,
+        "crush": 19,
+        "magic": -3,
+        "ranged": 19
+      },
+      "attackStyle": "slash",
+      "maxHit": 5,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Corrupt Lizardman",
+      "combat": 46,
+      "members": true,
+      "hitpoints": 50,
+      "attackLevel": 38,
+      "strengthLevel": 38,
+      "defenceLevel": 38,
+      "magicLevel": 1,
+      "attackBonus": 22,
+      "defence": {
+        "stab": -10,
+        "slash": 25,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 6,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

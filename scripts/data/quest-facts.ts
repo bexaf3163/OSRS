@@ -179,6 +179,26 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
   'The Queen of Thieves': { revision: 15380705, flow: {
     consumes: [{ name: 'Stew', count: 1 }], receives: [], unknownItems: ['Poison', 'Letter', "Hughes' letter"], partialDelivery: false, fromStartOnly: true,
   } },
+  // The clay mends the golem; the vial becomes ink and the papyrus the program. The phoenix feather is grabbed in the quest; the gate keeps the pass.
+  'The Golem': { revision: 15321144, flow: {
+    consumes: [{ name: 'Soft clay', count: 4 }, { name: 'Vial', count: 1 }, { name: 'Papyrus', count: 1 }, { name: 'Shantay pass', count: 1 }], receives: [],
+    unknownItems: ['Letter', 'Statuette', 'Black mushroom', 'Black mushroom ink', 'Phoenix quill', 'Golem program', 'Display cabinet key', 'Strange implement'], partialDelivery: true, fromStartOnly: true,
+  } },
+  // The Male Slave keeps the desert shirt and robe; one bar and the feathers become the prototype dart. Spare bars cover failed attempts.
+  'The Tourist Trap': { revision: 15396485, flow: {
+    consumes: [{ name: 'Desert shirt', count: 1 }, { name: 'Desert robe', count: 1 }, { name: 'Bronze bar', count: 1 }, { name: 'Feather', count: 10 }, { name: 'Shantay pass', count: 1 }], receives: [],
+    unknownItems: ['Metal key', 'Slave shirt', 'Slave robe', 'Slave boots', 'Technical plans', 'Prototype dart tip', 'Prototype dart', 'Barrel', 'Ana in a barrel', 'Wrought iron key', 'Bedabin key'],
+    uncertainReceipts: ['Bronze bar'], partialDelivery: true, fromStartOnly: true,
+  } },
+  // A short Varlamore tale: nothing is brought or used up.
+  'Children of the Sun': { revision: 15391674, flow: {
+    consumes: [], receives: [], unknownItems: [], partialDelivery: false, fromStartOnly: true,
+  } },
+  // The runes are cast at the Strange Device and the rope tied on the way; darts and food are spent in fights.
+  'Tale of the Righteous': { revision: 15402882, flow: {
+    consumes: [{ name: 'Air rune', count: 6 }, { name: 'Mind rune', count: 3 }, { name: 'Rope', count: 1 }], receives: [],
+    unknownItems: [], uncertainReceipts: ['Bronze dart', 'Trout'], partialDelivery: true, fromStartOnly: true,
+  } },
   // Nothing is brought or used up; the 2,000 coins are paid at the end.
   'The Ascent of Arceuus': { revision: 15366179, flow: {
     consumes: [], receives: [], unknownItems: ['Device'], partialDelivery: false, fromStartOnly: true,
@@ -213,6 +233,8 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to run past level 53 [[Ogre]]s',
   'The ability to withstand and evade attacks from level 86 [[Fire Giant]]s and level 84 [[Moss Guardian]] without any equipment.',
   'The ability to defeat level 44, 63 and 137 enemies (all can be [[safespot]]ted)',
+  // The Tourist Trap: the level 47 Mercenary Captain (step foes, combat ledger).
+  'The ability to defeat a level 47 enemy',
   'The ability to defeat a level 112 [[Khazard warlord]]',
   'The ability to defeat a level 172 [[Black demon (The Grand Tree)|Black demon]] (safespottable for Ranged and Magic or melee using a [[halberd]]).',
   'Ability to kill a level 101 [[Tree spirit (Lost City)|Tree spirit]] with limited [[armour]] and [[weapons]].',

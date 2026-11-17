@@ -181,4 +181,4 @@ it('a fresh Members account finishes every quest through planned actions, withou
   expect(run.blocked ?? null).toBeNull();
   expect(run.open, run.log.slice(-8).join('\n')).toEqual([]);
   expect(run.unknownTime, 'Members turns with an unknown remaining time (known debt)').toBeLessThanOrEqual(MEMBERS_UNKNOWN_TIME_DEBT);
-}, 2_700_000);
+}, 3_600_000);

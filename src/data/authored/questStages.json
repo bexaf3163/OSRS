@@ -32201,6 +32201,6921 @@
      ]
     }
    ]
+  },
+  "S9-16": {
+   "var": [
+    "varbit",
+    346
+   ],
+   "route": [
+    {
+     "title": "Starting the quest",
+     "steps": [
+      "Travel to the Ruins of Uzer via the necklace of passage teleport to Eagle's Eyrie and run south-east. You can alternatively use a fairy ring () and go north-east.",
+      "Pick up and read the Letter west of the broken clay golem",
+      "Talk to the golem. Dialogue: \"Shall I try to repair you?\"",
+      "Use four soft clay on the golem. If you chose to bring a pickaxe and a bracelet of clay, clay rocks can be found to the north-west, near the shore. The phoenix can be found there as well.",
+      "Talk to the golem again. Dialogue: \"How do I open the portal?\""
+     ]
+    },
+    {
+     "title": "The statuette",
+     "steps": [
+      "Pick a black mushroom near the stairs east of the golem before heading down (or downstairs at your right).",
+      "Climb down the stairs in the ruins.",
+      "Take the strange implement from the north-western room.",
+      "Speak to the Golem again Dialogue: \"How do I open the portal?\"",
+      "Head to the most north-eastern part of the Digsite, near the large buried skeleton, and talk to Elissa. Dialogue: \"I found a letter in the desert with your name on.\" (make sure to read the letter if no 3rd option is seen)",
+      "Head to the Exam Centre just south of the Digsite.",
+      "Search the bookcase in the south-east corner and read Varmen's notes.",
+      "Talk to Curator Haig Halen in the Varrock Museum about the statuette. Dialogue: \"I'm looking for a statuette recovered from the city of Uzer.\", \"I want to open a portal to the lair of an elder-demon.\" (Dialogue: if Bone Voyage is started)",
+      "Pickpocket him for the display cabinet key.",
+      "Head upstairs, and open the second-most western case in the northern-most row. You will get a statuette."
+     ]
+    },
+    {
+     "title": "The portal",
+     "steps": [
+      "Return to the Kharidian Desert (fairy ring ), or teleport to Eagle's Eyrie with Necklace of passage.",
+      "Return to the ruins of Uzer where you started the quest and again go down the stairs.",
+      "In the centre of the room will be four alcoves. Place the statuette in the empty one.",
+      "Turn the statues until they all point north.",
+      "Go north, through the double doors.",
+      "Optional: Use your chisel and hammer on the throne for 2 sapphires, emeralds, and rubies.",
+      "Otherwise, immediately go back through the south portal."
+     ]
+    },
+    {
+     "title": "The golem",
+     "steps": [
+      "Go back upstairs and talk to the golem.",
+      "With an empty vial in your inventory, grind the black mushroom using a Pestle and mortar.",
+      "Use the phoenix feather on the black dye to make a phoenix quill pen.",
+      "Talk to the golem",
+      "Use the phoenix quill pen on a piece of papyrus to get the golem program.",
+      "Use the strange implement on the golem then quickly use the newly acquired golem program on the golem.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to the Golem in Uzer to start the quest.",
+       "s": "Talk to the Golem in Uzer to start the quest.",
+       "k": "talkToGolem",
+       "at": [
+        3485,
+        3088,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5134
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Use 4 soft clay on the Golem in Uzer.",
+       "s": "Use 4 soft clay on the Golem in Uzer.",
+       "k": "useClay",
+       "at": [
+        3485,
+        3088,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5134
+        ]
+       }
+      },
+      {
+       "t": "Use 3 soft clay on the Golem in Uzer.",
+       "s": "Use 3 soft clay on the Golem in Uzer.",
+       "k": "useClay2",
+       "at": [
+        3485,
+        3088,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5134
+        ]
+       }
+      },
+      {
+       "t": "Use 2 soft clay on the Golem in Uzer.",
+       "s": "Use 2 soft clay on the Golem in Uzer.",
+       "k": "useClay3",
+       "at": [
+        3485,
+        3088,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5135
+        ]
+       }
+      },
+      {
+       "t": "Use 1 soft clay on the Golem in Uzer.",
+       "s": "Use 1 soft clay on the Golem in Uzer.",
+       "k": "useClay4",
+       "at": [
+        3485,
+        3088,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5135
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Pick up the letter on the floor in Uzer.",
+       "s": "Pick up the letter on the floor in Uzer.",
+       "k": "pickUpLetter",
+       "at": [
+        3479,
+        3092,
+        0
+       ]
+      },
+      {
+       "t": "Read the letter.",
+       "s": "Read the letter.",
+       "k": "readLetter"
+      },
+      {
+       "t": "Enter the Uzer ruins. You can drop the Letter you just read.",
+       "s": "Enter the Uzer ruins. You can drop the Letter you just read.",
+       "k": "enterRuinForFirstTime",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Talk to Elissa in the north east of the Digsite.",
+       "s": "Talk to Elissa in the north east of the Digsite.",
+       "k": "talkToElissa",
+       "at": [
+        3378,
+        3428,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5138
+        ]
+       }
+      },
+      {
+       "t": "Pick up the strange implement in the north west corner of the ruin.",
+       "s": "Pick up the strange implement in the north west corner of the ruin.",
+       "k": "pickUpImplement",
+       "at": [
+        2713,
+        4913,
+        0
+       ]
+      },
+      {
+       "t": "Search the bookcase in the south east corner of the Digsite Exam Centre.",
+       "s": "Search the bookcase in the Digsite Exam Centre (south-east corner)",
+       "k": "searchBookcase",
+       "at": [
+        3367,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6292
+        ]
+       }
+      },
+      {
+       "t": "Read Varmen's notes.",
+       "s": "Read Varmen's notes.",
+       "k": "readBook"
+      },
+      {
+       "t": "Talk to Curator Haig in the Varrock Museum. You can drop Varmen's notes.",
+       "s": "Talk to Curator Haig in the Varrock Museum",
+       "k": "talkToCurator",
+       "at": [
+        3256,
+        3449,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5214
+        ]
+       }
+      },
+      {
+       "t": "Pickpocket Curator Haig for the Display cabinet key.",
+       "s": "Pickpocket Curator Haig for the Display cabinet key.",
+       "k": "pickpocketCurator",
+       "at": [
+        3256,
+        3449,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5214
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Pickpocket Curator Haig for the Display cabinet key.",
+       "s": "Pickpocket Curator Haig for the Display cabinet key.",
+       "k": "pickpocketCurator",
+       "at": [
+        3256,
+        3449,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5214
+        ]
+       }
+      },
+      {
+       "t": "Go to the first floor of the Varrock Museum and right-click open the golem statue's display case.",
+       "s": "Go upstairs in the museum, open the golem statue's display case",
+       "k": "goUpInMuseum",
+       "at": [
+        3266,
+        3452,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11798
+        ]
+       }
+      },
+      {
+       "t": "Right-click open the golem statue's display case.",
+       "s": "Right-click open the golem statue's display case.",
+       "k": "openCabinet",
+       "at": [
+        3257,
+        3453,
+        1
+       ],
+       "hl": {
+        "obj": [
+         24626
+        ]
+       }
+      },
+      {
+       "t": "Enter the Uzer ruins.",
+       "s": "Enter the Uzer ruins.",
+       "k": "enterRuin",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Use the statue on the empty alcove.",
+       "s": "Use the statue on the empty alcove.",
+       "k": "useStatuette",
+       "at": [
+        2725,
+        4896,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6306
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the Uzer ruins.",
+       "s": "Enter the Uzer ruins.",
+       "k": "enterRuin",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Turn each of the statuettes to face the door.",
+       "s": "Turn each of the statuettes to face the door.",
+       "k": "turnStatue4",
+       "at": [
+        2725,
+        4896,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6306
+        ]
+       }
+      },
+      {
+       "t": "Turn each of the statuettes to face the door.",
+       "s": "Turn each of the statuettes to face the door.",
+       "k": "turnStatue3",
+       "at": [
+        2725,
+        4899,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6305
+        ]
+       }
+      },
+      {
+       "t": "Turn each of the statuettes to face the door.",
+       "s": "Turn each of the statuettes to face the door.",
+       "k": "turnStatue2",
+       "at": [
+        2718,
+        4896,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6304
+        ]
+       }
+      },
+      {
+       "t": "Turn each of the statuettes to face the door.",
+       "s": "Turn each of the statuettes to face the door.",
+       "k": "turnStatue1",
+       "at": [
+        2718,
+        4899,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6303
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Enter the Uzer ruins.",
+       "s": "Enter the Uzer ruins.",
+       "k": "enterRuinWithoutStatuette",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Pick up the strange implement in the north west corner of the ruin.",
+       "s": "Pick up the strange implement in the north west corner of the ruin.",
+       "k": "pickUpImplement",
+       "at": [
+        2713,
+        4913,
+        0
+       ]
+      },
+      {
+       "t": "Enter the portal.",
+       "s": "Enter the portal.",
+       "k": "enterThroneRoom",
+       "at": [
+        2720,
+        4912,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6310
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Talk to the Golem in Uzer.",
+       "s": "Talk to the Golem in Uzer.",
+       "k": "talkToGolemAfterPortal",
+       "at": [
+        3485,
+        3088,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5136
+        ]
+       }
+      },
+      {
+       "t": "Leave the throne room and return to the Golem.",
+       "s": "Leave the throne room and return to the Golem.",
+       "k": "leaveThroneRoom",
+       "at": [
+        2720,
+        4883,
+        2
+       ],
+       "hl": {
+        "obj": [
+         6282
+        ]
+       }
+      },
+      {
+       "t": "Pick up the strange implement in the north west corner of the ruin.",
+       "s": "Pick up the strange implement in the north west corner of the ruin.",
+       "k": "pickUpImplement",
+       "at": [
+        2713,
+        4913,
+        0
+       ]
+      },
+      {
+       "t": "Leave the ruins.",
+       "s": "Leave the ruins.",
+       "k": "leaveRuin",
+       "at": [
+        2722,
+        4885,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6372
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Enter the Uzer ruins.",
+       "s": "Enter the Uzer ruins.",
+       "k": "enterRuinWithoutStatuette",
+       "at": [
+        3493,
+        3090,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6373
+        ]
+       }
+      },
+      {
+       "t": "Leave the throne room and return to the Golem.",
+       "s": "Leave the throne room and return to the Golem.",
+       "k": "leaveThroneRoom",
+       "at": [
+        2720,
+        4883,
+        2
+       ],
+       "hl": {
+        "obj": [
+         6282
+        ]
+       }
+      },
+      {
+       "t": "Pick up some black mushrooms.",
+       "s": "Pick up some black mushrooms.",
+       "k": "pickBlackMushroom",
+       "at": [
+        3495,
+        3088,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6311
+        ]
+       }
+      },
+      {
+       "t": "Pick up the strange implement in the north west corner of the ruin.",
+       "s": "Pick up the strange implement in the north west corner of the ruin.",
+       "k": "pickUpImplement",
+       "at": [
+        2713,
+        4913,
+        0
+       ]
+      },
+      {
+       "t": "Leave the ruins.",
+       "s": "Leave the ruins.",
+       "k": "leaveRuin",
+       "at": [
+        2722,
+        4885,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6372
+        ]
+       }
+      },
+      {
+       "t": "Grind the mushrooms into a vial.",
+       "s": "Grind the mushrooms into a vial.",
+       "k": "grindMushroom"
+      },
+      {
+       "t": "Steal a feather from the desert phoenix north of Uzer.",
+       "s": "Steal a feather from the desert phoenix north of Uzer.",
+       "k": "stealFeather",
+       "at": [
+        3414,
+        3154,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5137
+        ]
+       }
+      },
+      {
+       "t": "Use the phoenix feather on the ink.",
+       "s": "Use the phoenix feather on the ink.",
+       "k": "useFeatherOnInk"
+      },
+      {
+       "t": "Use the phoenix quill on the papyrus.",
+       "s": "Use the phoenix quill on the papyrus.",
+       "k": "useQuillOnPapyrus"
+      },
+      {
+       "t": "Use the strange implement on the Golem in Uzer.",
+       "s": "Use the strange implement on the Golem in Uzer.",
+       "k": "useImplementOnGolem",
+       "at": [
+        3485,
+        3088,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5136
+        ]
+       }
+      },
+      {
+       "t": "Use the golem program on the Golem in Uzer.",
+       "s": "Use the golem program on the Golem in Uzer.",
+       "k": "useProgramOnGolem",
+       "at": [
+        3485,
+        3088,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5136
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-17": {
+   "var": [
+    "varp",
+    197
+   ],
+   "route": [
+    {
+     "title": "Getting started",
+     "steps": [
+      "Begin the quest by talking to Irena, located just south of Shantay Pass (fairy ring , then run north-east). Dialogue: \"What's the matter?\""
+     ]
+    },
+    {
+     "title": "Getting into the camp",
+     "steps": [
+      "Go to the Desert Mining Camp entrance (south of Irena).",
+      "Talk to the Mercenary Captain. Dialogue: \"Wow! A real captain!\", \"I'd love to work for a tough guy like you!\", \"Can't I do something for a strong Captain like you?\", \"Sorry Sir, I don't think I can do that.\", \"It's a funny captain who can't fight his own battles!\"",
+      "He will attack you. Kill him and get the key of the gate. (All damage can be dealt via recoil)",
+      "Unequip any weapons AND armour and enter the gate."
+     ]
+    },
+    {
+     "title": "Getting into the mine",
+     "steps": [
+      "Talk to the Male slave on the east wall (not the south-east wall) when no guard is nearby. Dialogue: \"I've just arrived.\", \"Oh yes, that sounds interesting.\", \"What's that then?\", \"I can try to undo them for you.\", \"It's funny you should say that...\", \"Yeah, okay, let's give it a go.\", \"Yes, I'll trade.\" If a guard sees you, you are jailed: bend the window bars, climb out, climb the rock wall and cliff, and enter through the gate again.",
+      "Equip the slave's clothes",
+      "Enter the mine to the north",
+      "Follow the path until you reach a guarded cave entrance.",
+      "Talk to one of the guards until he mentions a Tenti pineapple. Dialogue: \"I'd like to mine in a different area.\", \"Yes sir, you're quite right sir.\", \"Yes sir, we understand each other perfectly.\"",
+      "Run back to the surface, unequip ALL pieces of your slave robes and leave the desert camp through the front gate, or return to fairy ring ."
+     ]
+    },
+    {
+     "title": "The plans",
+     "steps": [
+      "Talk to Al Shabim in the south tent in the Bedabin Camp (directly west of the Desert Mining Camp). You will be given a Bedabin key. Dialogue: \"I am looking for a pineapple.\", \"Yes, I'm interested.\"",
+      "Go back to the Desert Mining Camp. (Make sure to put on your slave outfit (and unequip anything else) before entering the gate. If you inadvertently dropped your slave outfit, you can get another one from a slave by repeating the earlier trade with the desert clothing.)",
+      "Go up the ladder in the jail building and search the southernmost bookcase on the western wall. A message should pop up stating \"You notice several books on the subject of sailing.\"",
+      "In the same room, talk to Captain Siad. Dialogue: \"I wanted to have a chat?\", \"You seem to have a lot of books!\", \"So, you're interested in sailing?\", \"I could tell by the cut of your jib.\"",
+      "Open the chest to obtain the technical plans. (Make sure you click continue, so the plans go to your inventory)",
+      "Go back to the Bedabin Camp and show Al Shabim the plans. Dialogue: \"Yes, I'm very interested.\", \"Yes, I'm kind of curious.\"",
+      "Use the anvil in the northern tent. Following the plans, create a prototype dart.",
+      "Take the dart to Al Shabim, who will in return give you the Tenti pineapple."
+     ]
+    },
+    {
+     "title": "Finding Ana",
+     "steps": [
+      "Equip your Slave outfit and head back to the guards in the mine with your pineapple and give it to one of them.",
+      "Go through the cave entrance and head east until you're beside the mine cart.",
+      "Right-click search the nearby barrels to get a barrel. Dialogue: \"Yeah, cool!\"",
+      "Get into the mine cart by right-click searching it. Dialogue: \"Yes, of course.\" (If you fail to start the cutscene redo this step)",
+      "Take the west-north-west path and use a barrel on Ana (blonde hair at the end of the second north-western path)."
+     ]
+    },
+    {
+     "title": "Saving Ana",
+     "steps": [
+      "Head back to the mine cart. Put Ana in the mine cart, then take the cart yourself. Dialogue: \"Yes, of course.\"",
+      "Search nearby barrels to find Ana.",
+      "Put Ana on the winch bucket (north-west area of room).",
+      "Don't raise the guard's suspicions when he offers help. Dialogue: \"Yes please.\", \"I said you were very gregarious!\"",
+      "Head back to the surface.",
+      "Operate the winch (south-west in the camp), then search the barrel west of the winch to find Ana. (Do not go through the gate)",
+      "Put Ana on the wooden cart at the centre of the Camp.",
+      "Talk to the mine cart driver. Dialogue: \"Nice cart.\", \"One wagon wheel says to the other, 'I'll see you around'.\", \"'One good turn deserves another.'\", \"Fired... no, shot perhaps!\", \"In for a penny in for a pound.\", \"Well, you see, it's like this...\", \"Prison riot in ten minutes, get your cart out of here!\", \"You can't leave me here, I'll get killed!\"",
+      "Get on the cart by searching it. Dialogue: \"Yes, I'll get on.\"",
+      "Head back to Irena for your reward.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Irena south of the Shantay Pass.",
+       "s": "Talk to Irena south of the Shantay Pass.",
+       "k": "talkToIrena",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4640
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to the Mercenary Captain, then kill him for a key",
+       "s": "Talk to the Mercenary Captain, then kill him for a key",
+       "k": "talkToCaptain",
+       "at": [
+        3271,
+        3029,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4635
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to the Mercenary Captain, then kill him for a key",
+       "s": "Talk to the Mercenary Captain, then kill him for a key",
+       "k": "talkToCaptain",
+       "at": [
+        3271,
+        3029,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4635
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Talk to the Mercenary Captain, then kill him for a key",
+       "s": "Talk to the Mercenary Captain, then kill him for a key",
+       "k": "talkToCaptain",
+       "at": [
+        3271,
+        3029,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4635
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCamp",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Trade your desert robes to the Male Slave for slave robes",
+       "s": "Trade your desert robes to the Male Slave for slave robes",
+       "k": "talkToSlave",
+       "at": [
+        3302,
+        3027,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4632
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCamp",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Trade your desert robes to the Male Slave for slave robes",
+       "s": "Trade your desert robes to the Male Slave for slave robes",
+       "k": "talkToSlave",
+       "at": [
+        3302,
+        3027,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4632
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCamp",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Trade your desert robes to the Male Slave for slave robes",
+       "s": "Trade your desert robes to the Male Slave for slave robes",
+       "k": "talkToSlave",
+       "at": [
+        3302,
+        3027,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4632
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCamp",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Trade your desert robes to the Male Slave for slave robes",
+       "s": "Trade your desert robes to the Male Slave for slave robes",
+       "k": "talkToSlave",
+       "at": [
+        3302,
+        3027,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4632
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCamp",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMine",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Follow the cave around and talk to a guard guarding the deeper cave.",
+       "s": "Follow the cave around and talk to a guard guarding the deeper cave.",
+       "k": "talkToGuard",
+       "at": [
+        3278,
+        9415,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4667
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCamp",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMine",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Follow the cave around and talk to a guard guarding the deeper cave.",
+       "s": "Follow the cave around and talk to a guard guarding the deeper cave.",
+       "k": "talkToGuard",
+       "at": [
+        3278,
+        9415,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4667
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Al Shabim in the Bedabin Camp.",
+       "s": "Talk to Al Shabim in the Bedabin Camp.",
+       "k": "talkToShabim",
+       "at": [
+        3171,
+        3028,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4637
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMine",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "UNEQUIP THE SLAVE CLOTHES and leave the camp.",
+       "s": "UNEQUIP THE SLAVE CLOTHES and leave the camp.",
+       "k": "leaveCamp",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampForTask",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMine",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "Climb up the ladder in the building in the camp.",
+       "s": "Climb up the ladder in the building in the camp.",
+       "k": "goUpToSiad",
+       "at": [
+        3290,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18903
+        ]
+       }
+      },
+      {
+       "t": "Search the south west bookcase.",
+       "s": "Search the south west bookcase.",
+       "k": "searchBookcase",
+       "at": [
+        3284,
+        3033,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2678
+        ]
+       }
+      },
+      {
+       "t": "Talk to Captain Siad about sailing to distract him.",
+       "s": "Talk to Captain Siad about sailing to distract him.",
+       "k": "talkToSiad",
+       "at": [
+        3292,
+        3032,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4636
+        ]
+       }
+      },
+      {
+       "t": "Search the chest.",
+       "s": "Search the chest.",
+       "k": "searchChest",
+       "at": [
+        3292,
+        3033,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2677
+        ]
+       }
+      },
+      {
+       "t": "Return to Al Shabim in the Bedabin Camp with the plans.",
+       "s": "Return to Al Shabim in the Bedabin Camp with the plans.",
+       "k": "returnToShabim",
+       "at": [
+        3171,
+        3028,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4637
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampForTask",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMine",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "Climb up the ladder in the building in the camp.",
+       "s": "Climb up the ladder in the building in the camp.",
+       "k": "goUpToSiad",
+       "at": [
+        3290,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18903
+        ]
+       }
+      },
+      {
+       "t": "Search the south west bookcase.",
+       "s": "Search the south west bookcase.",
+       "k": "searchBookcase",
+       "at": [
+        3284,
+        3033,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2678
+        ]
+       }
+      },
+      {
+       "t": "Talk to Captain Siad about sailing to distract him.",
+       "s": "Talk to Captain Siad about sailing to distract him.",
+       "k": "talkToSiad",
+       "at": [
+        3292,
+        3032,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4636
+        ]
+       }
+      },
+      {
+       "t": "Search the chest.",
+       "s": "Search the chest.",
+       "k": "searchChest",
+       "at": [
+        3292,
+        3033,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2677
+        ]
+       }
+      },
+      {
+       "t": "Return to Al Shabim in the Bedabin Camp with the plans.",
+       "s": "Return to Al Shabim in the Bedabin Camp with the plans.",
+       "k": "returnToShabim",
+       "at": [
+        3171,
+        3028,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4637
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 13,
+     "do": [
+      {
+       "t": "In the north tent, make a prototype dart tip with all 3 bars",
+       "s": "In the north tent, make a prototype dart tip with all 3 bars",
+       "k": "useAnvil",
+       "at": [
+        3171,
+        3048,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2672
+        ]
+       }
+      },
+      {
+       "t": "Add 10 feathers to the prototype dart tip.",
+       "s": "Add 10 feathers to the prototype dart tip.",
+       "k": "useFeatherOnTip"
+      },
+      {
+       "t": "Bring the prototype dart to Al Shabim.",
+       "s": "Bring the prototype dart to Al Shabim.",
+       "k": "bringPrototypeToShabim",
+       "at": [
+        3171,
+        3028,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4637
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "In the north tent, make a prototype dart tip with all 3 bars",
+       "s": "In the north tent, make a prototype dart tip with all 3 bars",
+       "k": "useAnvil",
+       "at": [
+        3171,
+        3048,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2672
+        ]
+       }
+      },
+      {
+       "t": "Add 10 feathers to the prototype dart tip.",
+       "s": "Add 10 feathers to the prototype dart tip.",
+       "k": "useFeatherOnTip"
+      },
+      {
+       "t": "Bring the prototype dart to Al Shabim.",
+       "s": "Bring the prototype dart to Al Shabim.",
+       "k": "bringPrototypeToShabim",
+       "at": [
+        3171,
+        3028,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4637
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "In the north tent, make a prototype dart tip with all 3 bars",
+       "s": "In the north tent, make a prototype dart tip with all 3 bars",
+       "k": "useAnvil",
+       "at": [
+        3171,
+        3048,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2672
+        ]
+       }
+      },
+      {
+       "t": "Add 10 feathers to the prototype dart tip.",
+       "s": "Add 10 feathers to the prototype dart tip.",
+       "k": "useFeatherOnTip"
+      },
+      {
+       "t": "Bring the prototype dart to Al Shabim.",
+       "s": "Bring the prototype dart to Al Shabim.",
+       "k": "bringPrototypeToShabim",
+       "at": [
+        3171,
+        3028,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4637
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 16,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampWithPineapple",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMineWithPineapple",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Follow the cave around and talk to a guard guarding the deeper cave.",
+       "s": "Follow the cave around and talk to a guard guarding the deeper cave.",
+       "k": "talkToGuardWithPineapple",
+       "at": [
+        3278,
+        9415,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4667
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 17,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampAfterPineapple",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMineAfterPineapple",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Enter the deeper mines.",
+       "s": "Enter the deeper mines.",
+       "k": "enterDeepMine",
+       "at": [
+        3281,
+        9414,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for a barrel.",
+       "s": "Right-click search the barrel next to the mine cart for a barrel.",
+       "k": "getBarrel",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Bring Ana back to Irena, south of the pass gate.",
+       "s": "Bring Ana back to Irena, south of the pass gate.",
+       "k": "returnToIrena",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4640
+        ]
+       }
+      },
+      {
+       "t": "Mine 15 rocks to be able to leave.",
+       "s": "Mine 15 rocks to be able to leave.",
+       "k": "mineRocks"
+      },
+      {
+       "t": "Right-click search the mine cart to ride it to the next room.",
+       "s": "Right-click search the mine cart to ride it to the next room.",
+       "k": "enterMineCart",
+       "at": [
+        3303,
+        9417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Go west, then north to Ana, and use the barrel on her",
+       "s": "Go west, then north to Ana, and use the barrel on her",
+       "k": "useBarrelOnAna",
+       "at": [
+        3297,
+        9464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Return in the mine cart you came in on.",
+       "s": "Return in the mine cart you came in on.",
+       "k": "returnInMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the mine cart you came in on.",
+       "s": "Use Ana on the mine cart you came in on.",
+       "k": "useBarrelOnMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for Ana.",
+       "s": "Right-click search the barrel next to the mine cart for Ana.",
+       "k": "searchBarrelsForAna",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "s": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "k": "leaveDeepMine",
+       "at": [
+        3283,
+        9415,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click use the winch bucket to send Ana to the surface.",
+       "s": "Right-click use the winch bucket to send Ana to the surface.",
+       "k": "sendAnaUp",
+       "at": [
+        3292,
+        9423,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18951
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMineForAna",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "Right-click operate the winch in the south west of the camp.",
+       "s": "Right-click operate the winch in the south west of the camp.",
+       "k": "operateWinch",
+       "at": [
+        3279,
+        3018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18888
+        ]
+       }
+      },
+      {
+       "t": "Search the barrel west of the winch; if empty, use the winch",
+       "s": "Search the barrel west of the winch; if empty, use the winch",
+       "k": "searchWinchBarrel",
+       "at": [
+        3278,
+        3017,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18963
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the cart in the middle of the camp.",
+       "s": "Use Ana on the cart in the middle of the camp.",
+       "k": "useBarrelOnCart",
+       "at": [
+        3288,
+        3024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2682
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "s": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "k": "talkToDriver",
+       "at": [
+        3287,
+        3021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4653
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ana outside the Shantay Pass.",
+       "s": "Talk to Ana outside the Shantay Pass.",
+       "k": "talkToAna",
+       "at": [
+        3302,
+        3110,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 18,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampAfterPineapple",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMineAfterPineapple",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Enter the deeper mines.",
+       "s": "Enter the deeper mines.",
+       "k": "enterDeepMine",
+       "at": [
+        3281,
+        9414,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for a barrel.",
+       "s": "Right-click search the barrel next to the mine cart for a barrel.",
+       "k": "getBarrel",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Bring Ana back to Irena, south of the pass gate.",
+       "s": "Bring Ana back to Irena, south of the pass gate.",
+       "k": "returnToIrena",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4640
+        ]
+       }
+      },
+      {
+       "t": "Mine 15 rocks to be able to leave.",
+       "s": "Mine 15 rocks to be able to leave.",
+       "k": "mineRocks"
+      },
+      {
+       "t": "Right-click search the mine cart to ride it to the next room.",
+       "s": "Right-click search the mine cart to ride it to the next room.",
+       "k": "enterMineCart",
+       "at": [
+        3303,
+        9417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Go west, then north to Ana, and use the barrel on her",
+       "s": "Go west, then north to Ana, and use the barrel on her",
+       "k": "useBarrelOnAna",
+       "at": [
+        3297,
+        9464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Return in the mine cart you came in on.",
+       "s": "Return in the mine cart you came in on.",
+       "k": "returnInMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the mine cart you came in on.",
+       "s": "Use Ana on the mine cart you came in on.",
+       "k": "useBarrelOnMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for Ana.",
+       "s": "Right-click search the barrel next to the mine cart for Ana.",
+       "k": "searchBarrelsForAna",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "s": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "k": "leaveDeepMine",
+       "at": [
+        3283,
+        9415,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click use the winch bucket to send Ana to the surface.",
+       "s": "Right-click use the winch bucket to send Ana to the surface.",
+       "k": "sendAnaUp",
+       "at": [
+        3292,
+        9423,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18951
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMineForAna",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "Right-click operate the winch in the south west of the camp.",
+       "s": "Right-click operate the winch in the south west of the camp.",
+       "k": "operateWinch",
+       "at": [
+        3279,
+        3018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18888
+        ]
+       }
+      },
+      {
+       "t": "Search the barrel west of the winch; if empty, use the winch",
+       "s": "Search the barrel west of the winch; if empty, use the winch",
+       "k": "searchWinchBarrel",
+       "at": [
+        3278,
+        3017,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18963
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the cart in the middle of the camp.",
+       "s": "Use Ana on the cart in the middle of the camp.",
+       "k": "useBarrelOnCart",
+       "at": [
+        3288,
+        3024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2682
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "s": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "k": "talkToDriver",
+       "at": [
+        3287,
+        3021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4653
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ana outside the Shantay Pass.",
+       "s": "Talk to Ana outside the Shantay Pass.",
+       "k": "talkToAna",
+       "at": [
+        3302,
+        3110,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 19,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampAfterPineapple",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMineAfterPineapple",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Enter the deeper mines.",
+       "s": "Enter the deeper mines.",
+       "k": "enterDeepMine",
+       "at": [
+        3281,
+        9414,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for a barrel.",
+       "s": "Right-click search the barrel next to the mine cart for a barrel.",
+       "k": "getBarrel",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Bring Ana back to Irena, south of the pass gate.",
+       "s": "Bring Ana back to Irena, south of the pass gate.",
+       "k": "returnToIrena",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4640
+        ]
+       }
+      },
+      {
+       "t": "Mine 15 rocks to be able to leave.",
+       "s": "Mine 15 rocks to be able to leave.",
+       "k": "mineRocks"
+      },
+      {
+       "t": "Right-click search the mine cart to ride it to the next room.",
+       "s": "Right-click search the mine cart to ride it to the next room.",
+       "k": "enterMineCart",
+       "at": [
+        3303,
+        9417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Go west, then north to Ana, and use the barrel on her",
+       "s": "Go west, then north to Ana, and use the barrel on her",
+       "k": "useBarrelOnAna",
+       "at": [
+        3297,
+        9464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Return in the mine cart you came in on.",
+       "s": "Return in the mine cart you came in on.",
+       "k": "returnInMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the mine cart you came in on.",
+       "s": "Use Ana on the mine cart you came in on.",
+       "k": "useBarrelOnMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for Ana.",
+       "s": "Right-click search the barrel next to the mine cart for Ana.",
+       "k": "searchBarrelsForAna",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "s": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "k": "leaveDeepMine",
+       "at": [
+        3283,
+        9415,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click use the winch bucket to send Ana to the surface.",
+       "s": "Right-click use the winch bucket to send Ana to the surface.",
+       "k": "sendAnaUp",
+       "at": [
+        3292,
+        9423,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18951
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMineForAna",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "Right-click operate the winch in the south west of the camp.",
+       "s": "Right-click operate the winch in the south west of the camp.",
+       "k": "operateWinch",
+       "at": [
+        3279,
+        3018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18888
+        ]
+       }
+      },
+      {
+       "t": "Search the barrel west of the winch; if empty, use the winch",
+       "s": "Search the barrel west of the winch; if empty, use the winch",
+       "k": "searchWinchBarrel",
+       "at": [
+        3278,
+        3017,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18963
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the cart in the middle of the camp.",
+       "s": "Use Ana on the cart in the middle of the camp.",
+       "k": "useBarrelOnCart",
+       "at": [
+        3288,
+        3024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2682
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "s": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "k": "talkToDriver",
+       "at": [
+        3287,
+        3021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4653
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ana outside the Shantay Pass.",
+       "s": "Talk to Ana outside the Shantay Pass.",
+       "k": "talkToAna",
+       "at": [
+        3302,
+        3110,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampAfterPineapple",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMineAfterPineapple",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Enter the deeper mines.",
+       "s": "Enter the deeper mines.",
+       "k": "enterDeepMine",
+       "at": [
+        3281,
+        9414,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for a barrel.",
+       "s": "Right-click search the barrel next to the mine cart for a barrel.",
+       "k": "getBarrel",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Bring Ana back to Irena, south of the pass gate.",
+       "s": "Bring Ana back to Irena, south of the pass gate.",
+       "k": "returnToIrena",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4640
+        ]
+       }
+      },
+      {
+       "t": "Mine 15 rocks to be able to leave.",
+       "s": "Mine 15 rocks to be able to leave.",
+       "k": "mineRocks"
+      },
+      {
+       "t": "Right-click search the mine cart to ride it to the next room.",
+       "s": "Right-click search the mine cart to ride it to the next room.",
+       "k": "enterMineCart",
+       "at": [
+        3303,
+        9417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Go west, then north to Ana, and use the barrel on her",
+       "s": "Go west, then north to Ana, and use the barrel on her",
+       "k": "useBarrelOnAna",
+       "at": [
+        3297,
+        9464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Return in the mine cart you came in on.",
+       "s": "Return in the mine cart you came in on.",
+       "k": "returnInMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the mine cart you came in on.",
+       "s": "Use Ana on the mine cart you came in on.",
+       "k": "useBarrelOnMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for Ana.",
+       "s": "Right-click search the barrel next to the mine cart for Ana.",
+       "k": "searchBarrelsForAna",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "s": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "k": "leaveDeepMine",
+       "at": [
+        3283,
+        9415,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click use the winch bucket to send Ana to the surface.",
+       "s": "Right-click use the winch bucket to send Ana to the surface.",
+       "k": "sendAnaUp",
+       "at": [
+        3292,
+        9423,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18951
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMineForAna",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "Right-click operate the winch in the south west of the camp.",
+       "s": "Right-click operate the winch in the south west of the camp.",
+       "k": "operateWinch",
+       "at": [
+        3279,
+        3018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18888
+        ]
+       }
+      },
+      {
+       "t": "Search the barrel west of the winch; if empty, use the winch",
+       "s": "Search the barrel west of the winch; if empty, use the winch",
+       "k": "searchWinchBarrel",
+       "at": [
+        3278,
+        3017,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18963
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the cart in the middle of the camp.",
+       "s": "Use Ana on the cart in the middle of the camp.",
+       "k": "useBarrelOnCart",
+       "at": [
+        3288,
+        3024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2682
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "s": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "k": "talkToDriver",
+       "at": [
+        3287,
+        3021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4653
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ana outside the Shantay Pass.",
+       "s": "Talk to Ana outside the Shantay Pass.",
+       "k": "talkToAna",
+       "at": [
+        3302,
+        3110,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 21,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampAfterPineapple",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMineAfterPineapple",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Enter the deeper mines.",
+       "s": "Enter the deeper mines.",
+       "k": "enterDeepMine",
+       "at": [
+        3281,
+        9414,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for a barrel.",
+       "s": "Right-click search the barrel next to the mine cart for a barrel.",
+       "k": "getBarrel",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Bring Ana back to Irena, south of the pass gate.",
+       "s": "Bring Ana back to Irena, south of the pass gate.",
+       "k": "returnToIrena",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4640
+        ]
+       }
+      },
+      {
+       "t": "Mine 15 rocks to be able to leave.",
+       "s": "Mine 15 rocks to be able to leave.",
+       "k": "mineRocks"
+      },
+      {
+       "t": "Right-click search the mine cart to ride it to the next room.",
+       "s": "Right-click search the mine cart to ride it to the next room.",
+       "k": "enterMineCart",
+       "at": [
+        3303,
+        9417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Go west, then north to Ana, and use the barrel on her",
+       "s": "Go west, then north to Ana, and use the barrel on her",
+       "k": "useBarrelOnAna",
+       "at": [
+        3297,
+        9464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Return in the mine cart you came in on.",
+       "s": "Return in the mine cart you came in on.",
+       "k": "returnInMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the mine cart you came in on.",
+       "s": "Use Ana on the mine cart you came in on.",
+       "k": "useBarrelOnMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for Ana.",
+       "s": "Right-click search the barrel next to the mine cart for Ana.",
+       "k": "searchBarrelsForAna",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "s": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "k": "leaveDeepMine",
+       "at": [
+        3283,
+        9415,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click use the winch bucket to send Ana to the surface.",
+       "s": "Right-click use the winch bucket to send Ana to the surface.",
+       "k": "sendAnaUp",
+       "at": [
+        3292,
+        9423,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18951
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMineForAna",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "Right-click operate the winch in the south west of the camp.",
+       "s": "Right-click operate the winch in the south west of the camp.",
+       "k": "operateWinch",
+       "at": [
+        3279,
+        3018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18888
+        ]
+       }
+      },
+      {
+       "t": "Search the barrel west of the winch; if empty, use the winch",
+       "s": "Search the barrel west of the winch; if empty, use the winch",
+       "k": "searchWinchBarrel",
+       "at": [
+        3278,
+        3017,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18963
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the cart in the middle of the camp.",
+       "s": "Use Ana on the cart in the middle of the camp.",
+       "k": "useBarrelOnCart",
+       "at": [
+        3288,
+        3024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2682
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "s": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "k": "talkToDriver",
+       "at": [
+        3287,
+        3021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4653
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ana outside the Shantay Pass.",
+       "s": "Talk to Ana outside the Shantay Pass.",
+       "k": "talkToAna",
+       "at": [
+        3302,
+        3110,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 22,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampAfterPineapple",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMineAfterPineapple",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Enter the deeper mines.",
+       "s": "Enter the deeper mines.",
+       "k": "enterDeepMine",
+       "at": [
+        3281,
+        9414,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for a barrel.",
+       "s": "Right-click search the barrel next to the mine cart for a barrel.",
+       "k": "getBarrel",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Bring Ana back to Irena, south of the pass gate.",
+       "s": "Bring Ana back to Irena, south of the pass gate.",
+       "k": "returnToIrena",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4640
+        ]
+       }
+      },
+      {
+       "t": "Mine 15 rocks to be able to leave.",
+       "s": "Mine 15 rocks to be able to leave.",
+       "k": "mineRocks"
+      },
+      {
+       "t": "Right-click search the mine cart to ride it to the next room.",
+       "s": "Right-click search the mine cart to ride it to the next room.",
+       "k": "enterMineCart",
+       "at": [
+        3303,
+        9417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Go west, then north to Ana, and use the barrel on her",
+       "s": "Go west, then north to Ana, and use the barrel on her",
+       "k": "useBarrelOnAna",
+       "at": [
+        3297,
+        9464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Return in the mine cart you came in on.",
+       "s": "Return in the mine cart you came in on.",
+       "k": "returnInMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the mine cart you came in on.",
+       "s": "Use Ana on the mine cart you came in on.",
+       "k": "useBarrelOnMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for Ana.",
+       "s": "Right-click search the barrel next to the mine cart for Ana.",
+       "k": "searchBarrelsForAna",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "s": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "k": "leaveDeepMine",
+       "at": [
+        3283,
+        9415,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click use the winch bucket to send Ana to the surface.",
+       "s": "Right-click use the winch bucket to send Ana to the surface.",
+       "k": "sendAnaUp",
+       "at": [
+        3292,
+        9423,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18951
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMineForAna",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "Right-click operate the winch in the south west of the camp.",
+       "s": "Right-click operate the winch in the south west of the camp.",
+       "k": "operateWinch",
+       "at": [
+        3279,
+        3018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18888
+        ]
+       }
+      },
+      {
+       "t": "Search the barrel west of the winch; if empty, use the winch",
+       "s": "Search the barrel west of the winch; if empty, use the winch",
+       "k": "searchWinchBarrel",
+       "at": [
+        3278,
+        3017,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18963
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the cart in the middle of the camp.",
+       "s": "Use Ana on the cart in the middle of the camp.",
+       "k": "useBarrelOnCart",
+       "at": [
+        3288,
+        3024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2682
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "s": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "k": "talkToDriver",
+       "at": [
+        3287,
+        3021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4653
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ana outside the Shantay Pass.",
+       "s": "Talk to Ana outside the Shantay Pass.",
+       "k": "talkToAna",
+       "at": [
+        3302,
+        3110,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 23,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampAfterPineapple",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMineAfterPineapple",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Enter the deeper mines.",
+       "s": "Enter the deeper mines.",
+       "k": "enterDeepMine",
+       "at": [
+        3281,
+        9414,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for a barrel.",
+       "s": "Right-click search the barrel next to the mine cart for a barrel.",
+       "k": "getBarrel",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Bring Ana back to Irena, south of the pass gate.",
+       "s": "Bring Ana back to Irena, south of the pass gate.",
+       "k": "returnToIrena",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4640
+        ]
+       }
+      },
+      {
+       "t": "Mine 15 rocks to be able to leave.",
+       "s": "Mine 15 rocks to be able to leave.",
+       "k": "mineRocks"
+      },
+      {
+       "t": "Right-click search the mine cart to ride it to the next room.",
+       "s": "Right-click search the mine cart to ride it to the next room.",
+       "k": "enterMineCart",
+       "at": [
+        3303,
+        9417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Go west, then north to Ana, and use the barrel on her",
+       "s": "Go west, then north to Ana, and use the barrel on her",
+       "k": "useBarrelOnAna",
+       "at": [
+        3297,
+        9464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Return in the mine cart you came in on.",
+       "s": "Return in the mine cart you came in on.",
+       "k": "returnInMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the mine cart you came in on.",
+       "s": "Use Ana on the mine cart you came in on.",
+       "k": "useBarrelOnMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for Ana.",
+       "s": "Right-click search the barrel next to the mine cart for Ana.",
+       "k": "searchBarrelsForAna",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "s": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "k": "leaveDeepMine",
+       "at": [
+        3283,
+        9415,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click use the winch bucket to send Ana to the surface.",
+       "s": "Right-click use the winch bucket to send Ana to the surface.",
+       "k": "sendAnaUp",
+       "at": [
+        3292,
+        9423,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18951
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMineForAna",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "Right-click operate the winch in the south west of the camp.",
+       "s": "Right-click operate the winch in the south west of the camp.",
+       "k": "operateWinch",
+       "at": [
+        3279,
+        3018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18888
+        ]
+       }
+      },
+      {
+       "t": "Search the barrel west of the winch; if empty, use the winch",
+       "s": "Search the barrel west of the winch; if empty, use the winch",
+       "k": "searchWinchBarrel",
+       "at": [
+        3278,
+        3017,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18963
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the cart in the middle of the camp.",
+       "s": "Use Ana on the cart in the middle of the camp.",
+       "k": "useBarrelOnCart",
+       "at": [
+        3288,
+        3024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2682
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "s": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "k": "talkToDriver",
+       "at": [
+        3287,
+        3021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4653
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ana outside the Shantay Pass.",
+       "s": "Talk to Ana outside the Shantay Pass.",
+       "k": "talkToAna",
+       "at": [
+        3302,
+        3110,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 24,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampAfterPineapple",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMineAfterPineapple",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Enter the deeper mines.",
+       "s": "Enter the deeper mines.",
+       "k": "enterDeepMine",
+       "at": [
+        3281,
+        9414,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for a barrel.",
+       "s": "Right-click search the barrel next to the mine cart for a barrel.",
+       "k": "getBarrel",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Bring Ana back to Irena, south of the pass gate.",
+       "s": "Bring Ana back to Irena, south of the pass gate.",
+       "k": "returnToIrena",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4640
+        ]
+       }
+      },
+      {
+       "t": "Mine 15 rocks to be able to leave.",
+       "s": "Mine 15 rocks to be able to leave.",
+       "k": "mineRocks"
+      },
+      {
+       "t": "Right-click search the mine cart to ride it to the next room.",
+       "s": "Right-click search the mine cart to ride it to the next room.",
+       "k": "enterMineCart",
+       "at": [
+        3303,
+        9417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Go west, then north to Ana, and use the barrel on her",
+       "s": "Go west, then north to Ana, and use the barrel on her",
+       "k": "useBarrelOnAna",
+       "at": [
+        3297,
+        9464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Return in the mine cart you came in on.",
+       "s": "Return in the mine cart you came in on.",
+       "k": "returnInMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the mine cart you came in on.",
+       "s": "Use Ana on the mine cart you came in on.",
+       "k": "useBarrelOnMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for Ana.",
+       "s": "Right-click search the barrel next to the mine cart for Ana.",
+       "k": "searchBarrelsForAna",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "s": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "k": "leaveDeepMine",
+       "at": [
+        3283,
+        9415,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click use the winch bucket to send Ana to the surface.",
+       "s": "Right-click use the winch bucket to send Ana to the surface.",
+       "k": "sendAnaUp",
+       "at": [
+        3292,
+        9423,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18951
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMineForAna",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "Right-click operate the winch in the south west of the camp.",
+       "s": "Right-click operate the winch in the south west of the camp.",
+       "k": "operateWinch",
+       "at": [
+        3279,
+        3018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18888
+        ]
+       }
+      },
+      {
+       "t": "Search the barrel west of the winch; if empty, use the winch",
+       "s": "Search the barrel west of the winch; if empty, use the winch",
+       "k": "searchWinchBarrel",
+       "at": [
+        3278,
+        3017,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18963
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the cart in the middle of the camp.",
+       "s": "Use Ana on the cart in the middle of the camp.",
+       "k": "useBarrelOnCart",
+       "at": [
+        3288,
+        3024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2682
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "s": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "k": "talkToDriver",
+       "at": [
+        3287,
+        3021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4653
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ana outside the Shantay Pass.",
+       "s": "Talk to Ana outside the Shantay Pass.",
+       "k": "talkToAna",
+       "at": [
+        3302,
+        3110,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampAfterPineapple",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMineAfterPineapple",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Enter the deeper mines.",
+       "s": "Enter the deeper mines.",
+       "k": "enterDeepMine",
+       "at": [
+        3281,
+        9414,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for a barrel.",
+       "s": "Right-click search the barrel next to the mine cart for a barrel.",
+       "k": "getBarrel",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Bring Ana back to Irena, south of the pass gate.",
+       "s": "Bring Ana back to Irena, south of the pass gate.",
+       "k": "returnToIrena",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4640
+        ]
+       }
+      },
+      {
+       "t": "Mine 15 rocks to be able to leave.",
+       "s": "Mine 15 rocks to be able to leave.",
+       "k": "mineRocks"
+      },
+      {
+       "t": "Right-click search the mine cart to ride it to the next room.",
+       "s": "Right-click search the mine cart to ride it to the next room.",
+       "k": "enterMineCart",
+       "at": [
+        3303,
+        9417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Go west, then north to Ana, and use the barrel on her",
+       "s": "Go west, then north to Ana, and use the barrel on her",
+       "k": "useBarrelOnAna",
+       "at": [
+        3297,
+        9464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Return in the mine cart you came in on.",
+       "s": "Return in the mine cart you came in on.",
+       "k": "returnInMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the mine cart you came in on.",
+       "s": "Use Ana on the mine cart you came in on.",
+       "k": "useBarrelOnMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for Ana.",
+       "s": "Right-click search the barrel next to the mine cart for Ana.",
+       "k": "searchBarrelsForAna",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "s": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "k": "leaveDeepMine",
+       "at": [
+        3283,
+        9415,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click use the winch bucket to send Ana to the surface.",
+       "s": "Right-click use the winch bucket to send Ana to the surface.",
+       "k": "sendAnaUp",
+       "at": [
+        3292,
+        9423,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18951
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMineForAna",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "Right-click operate the winch in the south west of the camp.",
+       "s": "Right-click operate the winch in the south west of the camp.",
+       "k": "operateWinch",
+       "at": [
+        3279,
+        3018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18888
+        ]
+       }
+      },
+      {
+       "t": "Search the barrel west of the winch; if empty, use the winch",
+       "s": "Search the barrel west of the winch; if empty, use the winch",
+       "k": "searchWinchBarrel",
+       "at": [
+        3278,
+        3017,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18963
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the cart in the middle of the camp.",
+       "s": "Use Ana on the cart in the middle of the camp.",
+       "k": "useBarrelOnCart",
+       "at": [
+        3288,
+        3024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2682
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "s": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "k": "talkToDriver",
+       "at": [
+        3287,
+        3021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4653
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ana outside the Shantay Pass.",
+       "s": "Talk to Ana outside the Shantay Pass.",
+       "k": "talkToAna",
+       "at": [
+        3302,
+        3110,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 26,
+     "do": [
+      {
+       "t": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "s": "UNEQUIP ALL COMBAT GEAR and enter the camp.",
+       "k": "enterCampAfterPineapple",
+       "at": [
+        3273,
+        3029,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2673
+        ]
+       }
+      },
+      {
+       "t": "Wear the slave clothes, enter the mine door in the north-east",
+       "s": "Wear the slave clothes, enter the mine door in the north-east",
+       "k": "enterMineAfterPineapple",
+       "at": [
+        3301,
+        3036,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2675
+        ]
+       }
+      },
+      {
+       "t": "Enter the deeper mines.",
+       "s": "Enter the deeper mines.",
+       "k": "enterDeepMine",
+       "at": [
+        3281,
+        9414,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for a barrel.",
+       "s": "Right-click search the barrel next to the mine cart for a barrel.",
+       "k": "getBarrel",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Bring Ana back to Irena, south of the pass gate.",
+       "s": "Bring Ana back to Irena, south of the pass gate.",
+       "k": "returnToIrena",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4640
+        ]
+       }
+      },
+      {
+       "t": "Mine 15 rocks to be able to leave.",
+       "s": "Mine 15 rocks to be able to leave.",
+       "k": "mineRocks"
+      },
+      {
+       "t": "Right-click search the mine cart to ride it to the next room.",
+       "s": "Right-click search the mine cart to ride it to the next room.",
+       "k": "enterMineCart",
+       "at": [
+        3303,
+        9417,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Go west, then north to Ana, and use the barrel on her",
+       "s": "Go west, then north to Ana, and use the barrel on her",
+       "k": "useBarrelOnAna",
+       "at": [
+        3297,
+        9464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Return in the mine cart you came in on.",
+       "s": "Return in the mine cart you came in on.",
+       "k": "returnInMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the mine cart you came in on.",
+       "s": "Use Ana on the mine cart you came in on.",
+       "k": "useBarrelOnMineCart",
+       "at": [
+        3318,
+        9430,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2684
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the barrel next to the mine cart for Ana.",
+       "s": "Right-click search the barrel next to the mine cart for Ana.",
+       "k": "searchBarrelsForAna",
+       "at": [
+        3303,
+        9418,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2681
+        ]
+       }
+      },
+      {
+       "t": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "s": "Go up; if Ana was caught, search the barrel by the mine cart",
+       "k": "leaveDeepMine",
+       "at": [
+        3283,
+        9415,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2698
+        ]
+       }
+      },
+      {
+       "t": "Right-click use the winch bucket to send Ana to the surface.",
+       "s": "Right-click use the winch bucket to send Ana to the surface.",
+       "k": "sendAnaUp",
+       "at": [
+        3292,
+        9423,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18951
+        ]
+       }
+      },
+      {
+       "t": "Return to the surface.",
+       "s": "Return to the surface.",
+       "k": "leaveMineForAna",
+       "at": [
+        3278,
+        9426,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2690
+        ]
+       }
+      },
+      {
+       "t": "Right-click operate the winch in the south west of the camp.",
+       "s": "Right-click operate the winch in the south west of the camp.",
+       "k": "operateWinch",
+       "at": [
+        3279,
+        3018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18888
+        ]
+       }
+      },
+      {
+       "t": "Search the barrel west of the winch; if empty, use the winch",
+       "s": "Search the barrel west of the winch; if empty, use the winch",
+       "k": "searchWinchBarrel",
+       "at": [
+        3278,
+        3017,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18963
+        ]
+       }
+      },
+      {
+       "t": "Use Ana on the cart in the middle of the camp.",
+       "s": "Use Ana on the cart in the middle of the camp.",
+       "k": "useBarrelOnCart",
+       "at": [
+        3288,
+        3024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2682
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "s": "Talk to the Mine Cart Driver, then search the wooden cart",
+       "k": "talkToDriver",
+       "at": [
+        3287,
+        3021,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4653
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ana outside the Shantay Pass.",
+       "s": "Talk to Ana outside the Shantay Pass.",
+       "k": "talkToAna",
+       "at": [
+        3302,
+        3110,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4629
+        ]
+       }
+      },
+      {
+       "t": "Bend the cell window and escape through it.",
+       "s": "Bend the cell window and escape through it.",
+       "k": "escapeJail",
+       "at": [
+        3283,
+        3034,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2679
+        ]
+       }
+      },
+      {
+       "t": "Climb the rocks to escape.",
+       "s": "Climb the rocks to escape.",
+       "k": "climbSlope",
+       "at": [
+        3281,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18871
+        ]
+       }
+      },
+      {
+       "t": "Climb the cliff.",
+       "s": "Climb the cliff.",
+       "k": "climbCliff",
+       "at": [
+        3278,
+        3037,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18923
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west of the cliff.",
+       "s": "Climb down the west of the cliff.",
+       "k": "climbDownCliff",
+       "at": [
+        3273,
+        3039,
+        0
+       ],
+       "hl": {
+        "obj": [
+         18924
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 27,
+     "do": [
+      {
+       "t": "Talk to Irena south of the Shantay Pass to finish the quest!",
+       "s": "Talk to Irena south of the Shantay Pass to finish the quest!",
+       "k": "talkToIrenaToFinish",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4641
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 28,
+     "do": [
+      {
+       "t": "Talk to Irena south of the Shantay Pass to finish the quest!",
+       "s": "Talk to Irena south of the Shantay Pass to finish the quest!",
+       "k": "talkToIrenaToFinish",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4641
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 29,
+     "do": [
+      {
+       "t": "Talk to Irena south of the Shantay Pass to finish the quest!",
+       "s": "Talk to Irena south of the Shantay Pass to finish the quest!",
+       "k": "talkToIrenaToFinish",
+       "at": [
+        3304,
+        3112,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4641
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-18": {
+   "var": [
+    "varbit",
+    9632
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Talk to either Noah or Alina east of Varrock Square. Ask when the delegation will arrive.Dialogue: \"Yes.\", \"When will this delegation arrive?\"",
+      "Follow the guard without being seen by him:",
+      "Return to Varrock Square and talk to the Sergeant Tobyn by the castle wall.",
+      "Identify the bandits posing as guards. Click on these guards to 'mark' them. They are in the following locations:",
+      "Talk to the sergeant again."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Alina east of Varrock Square.",
+       "s": "Talk to Alina east of Varrock Square.",
+       "k": "talkToAlina",
+       "at": [
+        3225,
+        3426,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12644
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to Alina east of Varrock Square.",
+       "s": "Talk to Alina east of Varrock Square.",
+       "k": "talkToAlina",
+       "at": [
+        3225,
+        3426,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12644
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Talk to Alina east of Varrock Square.",
+       "s": "Talk to Alina east of Varrock Square.",
+       "k": "talkToAlina",
+       "at": [
+        3225,
+        3426,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12644
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Talk to Alina east of Varrock Square.",
+       "s": "Talk to Alina east of Varrock Square.",
+       "k": "talkToAlina",
+       "at": [
+        3225,
+        3426,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12644
+        ]
+       }
+      },
+      {
+       "t": "Follow the guard, keeping out of sight but never letting the guard get too far away.",
+       "s": "Follow the guard out of sight, without losing them.",
+       "k": "followGuardPuzzleWrapper"
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Try to enter the house in south-east Varrock, north of the Zamorak Temple, and watch the cutscene.",
+       "s": "Try the house north of the Zamorak Temple; watch the scene.",
+       "k": "attemptToEnterHouse",
+       "at": [
+        3259,
+        3400,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Sergeant Tobyn in Varrock Square.",
+       "s": "Talk to Sergeant Tobyn in Varrock Square.",
+       "k": "talkToTobyn",
+       "at": [
+        3211,
+        3437,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12648
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Mark the guard outside Aris's tent.",
+       "s": "Mark the guard outside Aris's tent.",
+       "k": "markGuard1",
+       "at": [
+        3208,
+        3422,
+        0
+       ]
+      },
+      {
+       "t": "Mark the guard south-east of Benny's news stand who has no helmet and long hair.",
+       "s": "Mark the helmetless long-haired guard by Benny's stand.",
+       "k": "markGuard2",
+       "at": [
+        3221,
+        3430,
+        0
+       ]
+      },
+      {
+       "t": "Mark the guard leaning on the north wall of Lowe's Archery Emporium, east of the square.",
+       "s": "Mark the guard leaning on Lowe's Archery Emporium.",
+       "k": "markGuard4",
+       "at": [
+        3237,
+        3427,
+        0
+       ]
+      },
+      {
+       "t": "Mark the guard with a mace north-west of the Varrock East Bank.",
+       "s": "Mark the guard with a mace north-west of the Varrock East Bank.",
+       "k": "markGuard3",
+       "at": [
+        3246,
+        3429,
+        0
+       ]
+      },
+      {
+       "t": "Report back to Sergeant Tobyn.",
+       "s": "Report back to Sergeant Tobyn.",
+       "k": "reportBackToTobyn",
+       "at": [
+        3211,
+        3437,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12648
+        ]
+       }
+      },
+      {
+       "t": "Unmark the guard next to Baraek.",
+       "s": "Unmark the guard next to Baraek.",
+       "k": "unmarkWrongGuard6",
+       "at": [
+        3218,
+        3433,
+        0
+       ]
+      },
+      {
+       "t": "Unmark the guard next to the small fountain east of Horvik.",
+       "s": "Unmark the guard next to the small fountain east of Horvik.",
+       "k": "unmarkWrongGuard5",
+       "at": [
+        3239,
+        3433,
+        0
+       ]
+      },
+      {
+       "t": "Unmark the guard outside Zaff's Superior Staffs.",
+       "s": "Unmark the guard outside Zaff's Superior Staffs.",
+       "k": "unmarkWrongGuard4",
+       "at": [
+        3206,
+        3431,
+        0
+       ]
+      },
+      {
+       "t": "Unmark the guard roaming south of Horvik.",
+       "s": "Unmark the guard roaming south of Horvik.",
+       "k": "unmarkWrongGuard3",
+       "at": [
+        3230,
+        3430,
+        0
+       ]
+      },
+      {
+       "t": "Unmark the guard next to Eliza.",
+       "s": "Unmark the guard next to Eliza.",
+       "k": "unmarkWrongGuard2",
+       "at": [
+        3218,
+        3424,
+        0
+       ]
+      },
+      {
+       "t": "Unmark the guard east of Eliza.",
+       "s": "Unmark the guard east of Eliza.",
+       "k": "unmarkWrongGuard1",
+       "at": [
+        3227,
+        3424,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "Report back to Sergeant Tobyn.",
+       "s": "Report back to Sergeant Tobyn.",
+       "k": "reportBackToTobyn",
+       "at": [
+        3211,
+        3437,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12648
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 16,
+     "do": [
+      {
+       "t": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "s": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "k": "goUpVarrockF0ToF1",
+       "at": [
+        3212,
+        3474,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11807
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "s": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "k": "goUpVarrockF1toF2",
+       "at": [
+        3224,
+        3472,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11801
+        ]
+       }
+      },
+      {
+       "t": "Talk to Tobyn on the Varrock Castle's roof to finish the quest.",
+       "s": "Talk to Tobyn on the Varrock Castle's roof to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        3202,
+        3473,
+        2
+       ],
+       "hl": {
+        "npc": [
+         12648
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 18,
+     "do": [
+      {
+       "t": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "s": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "k": "goUpVarrockF0ToF1",
+       "at": [
+        3212,
+        3474,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11807
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "s": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "k": "goUpVarrockF1toF2",
+       "at": [
+        3224,
+        3472,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11801
+        ]
+       }
+      },
+      {
+       "t": "Talk to Tobyn on the Varrock Castle's roof to finish the quest.",
+       "s": "Talk to Tobyn on the Varrock Castle's roof to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        3202,
+        3473,
+        2
+       ],
+       "hl": {
+        "npc": [
+         12648
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "s": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "k": "goUpVarrockF0ToF1",
+       "at": [
+        3212,
+        3474,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11807
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "s": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "k": "goUpVarrockF1toF2",
+       "at": [
+        3224,
+        3472,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11801
+        ]
+       }
+      },
+      {
+       "t": "Talk to Tobyn on the Varrock Castle's roof to finish the quest.",
+       "s": "Talk to Tobyn on the Varrock Castle's roof to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        3202,
+        3473,
+        2
+       ],
+       "hl": {
+        "npc": [
+         12648
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 22,
+     "do": [
+      {
+       "t": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "s": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "k": "goUpVarrockF0ToF1",
+       "at": [
+        3212,
+        3474,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11807
+        ]
+       }
+      },
+      {
+       "t": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "s": "Climb up to the roof of Varrock Castle and talk to Tobyn there.",
+       "k": "goUpVarrockF1toF2",
+       "at": [
+        3224,
+        3472,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11801
+        ]
+       }
+      },
+      {
+       "t": "Talk to Tobyn on the Varrock Castle's roof to finish the quest.",
+       "s": "Talk to Tobyn on the Varrock Castle's roof to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        3202,
+        3473,
+        2
+       ],
+       "hl": {
+        "npc": [
+         12648
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-19": {
+   "var": [
+    "varbit",
+    6358
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Go to the house west of the The Cloak and Stagger tavern in Shayzien. (Xeric's Talisman - 1. Xeric's Lookout and run north-west, or Fairy Ring )",
+      "Speak to Phileas Rimor, and agree to help him. Dialogue: \"Do you need help with anything?\", \"Yes.\"",
+      "Gather a ranged weapon, a melee weapon (a pickaxe counts as a valid melee weapon), and runes to perform any magic attack if you have not already.",
+      "Go to the Arceuus Library (Fairy ring or Lovakengj Minecart Network) and speak to Archeio to teleport to the Library Historical Archive.",
+      "Speak to Pagida, and agree to be teleported into the Tower of Magic prison. Dialogue: \"I have a question about King Shayzien VII.\", \"Yes please.\"",
+      "Push the strange device all the way west. From the north side, attack the device using magic.",
+      "From the south side, attack using melee. (Note: Make sure your NPC attack options are not set to hidden, or the Attack option will not appear!)",
+      "Push the strange device all the way east. From the south side, attack using ranged.",
+      "Investigate the skeleton in the northern cell.",
+      "Return to the quest start and talk to Phileas Rimor (Xeric's Talisman - 1. Xeric's Lookout and run north-west).",
+      "Go north-west to the War Tent in the south-west corner of the Shayzien Encampment. Go upstairs and speak to Lord Shiro Shayzien.",
+      "Travel to the summit of Mount Quidamortem. (Lovakengj Minecart Network or Xeric's Talisman - 5. Xeric's Honour if it is unlocked) or Fairy ring (if unlocked)",
+      "Speak to Historian Duffy. (near the water symbol on the minimap)",
+      "Use a rope on the crevice on the western side of the mountain, and enter the crevice. Go around to the south, not through the middle. (near the ! symbol on minimap)",
+      "Mine the Boulder.",
+      "Push the Boulder.",
+      "Attempt to pass the magic gate, and kill the Corrupt Lizardman.",
+      "Pass through the magic gate and inspect the Unstable Altar.",
+      "Hop worlds after you finish the dialogue to quickly leave the cave.",
+      "Speak to Historian Duffy again.",
+      "Go back to the unstable altar in the cave.",
+      "Speak to Duffy and then Gnosi near the unstable altar. Make sure to speak to them BOTH.",
+      "Speak to Lord Shiro Shayzien back at the war tent (Fairy ring , Lovakengj Minecart Network, or Speak to the Mountain Guide).",
+      "Return to Phileas's house and walk inside to get dialogue. He will not be there.",
+      "Return to Lord Shiro Shayzien once more.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Phileas Rimor in Shayzien.",
+       "s": "Talk to Phileas Rimor in Shayzien.",
+       "k": "talkToPhileas",
+       "at": [
+        1542,
+        3570,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7999
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Bring a melee weapon, a ranged weapon and runes for a combat spell, and talk to Archeio in the Arceuus Library.",
+       "s": "Talk to Archeio in the Arceuus Library.",
+       "k": "teleportToArchive",
+       "at": [
+        1625,
+        3808,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7614
+        ]
+       }
+      },
+      {
+       "t": "Talk to Pagida in the Library Historical Archive.",
+       "s": "Talk to Pagida in the Library Historical Archive.",
+       "k": "talkToPagida",
+       "at": [
+        1553,
+        10223,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7608
+        ]
+       }
+      },
+      {
+       "t": "Push the Strange Device all the way to the west.",
+       "s": "Push the Strange Device all the way to the west.",
+       "k": "pushStrangeDeviceWest",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      },
+      {
+       "t": "Attack the Strange Device with magic from the north side.",
+       "s": "Attack the Strange Device with magic from the north side.",
+       "k": "attackWithMagic",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      },
+      {
+       "t": "Attack the Strange Device with melee from the south side.",
+       "s": "Attack the Strange Device with melee from the south side.",
+       "k": "attackWithMelee",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      },
+      {
+       "t": "Push the Strange Device all the way to the east.",
+       "s": "Push the Strange Device all the way to the east.",
+       "k": "pushStrangeDeviceEast",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      },
+      {
+       "t": "Attack the Strange Device with ranged from the south side.",
+       "s": "Attack the Strange Device with ranged from the south side.",
+       "k": "attackWithRanged",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Bring a melee weapon, a ranged weapon and runes for a combat spell, and talk to Archeio in the Arceuus Library.",
+       "s": "Talk to Archeio in the Arceuus Library.",
+       "k": "teleportToArchive",
+       "at": [
+        1625,
+        3808,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7614
+        ]
+       }
+      },
+      {
+       "t": "Talk to Pagida in the Library Historical Archive.",
+       "s": "Talk to Pagida in the Library Historical Archive.",
+       "k": "talkToPagida",
+       "at": [
+        1553,
+        10223,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7608
+        ]
+       }
+      },
+      {
+       "t": "Push the Strange Device all the way to the west.",
+       "s": "Push the Strange Device all the way to the west.",
+       "k": "pushStrangeDeviceWest",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      },
+      {
+       "t": "Attack the Strange Device with magic from the north side.",
+       "s": "Attack the Strange Device with magic from the north side.",
+       "k": "attackWithMagic",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      },
+      {
+       "t": "Attack the Strange Device with melee from the south side.",
+       "s": "Attack the Strange Device with melee from the south side.",
+       "k": "attackWithMelee",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      },
+      {
+       "t": "Push the Strange Device all the way to the east.",
+       "s": "Push the Strange Device all the way to the east.",
+       "k": "pushStrangeDeviceEast",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      },
+      {
+       "t": "Attack the Strange Device with ranged from the south side.",
+       "s": "Attack the Strange Device with ranged from the south side.",
+       "k": "attackWithRanged",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Bring a melee weapon, a ranged weapon and runes for a combat spell, and talk to Archeio in the Arceuus Library.",
+       "s": "Talk to Archeio in the Arceuus Library.",
+       "k": "teleportToArchive",
+       "at": [
+        1625,
+        3808,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7614
+        ]
+       }
+      },
+      {
+       "t": "Talk to Pagida in the Library Historical Archive.",
+       "s": "Talk to Pagida in the Library Historical Archive.",
+       "k": "talkToPagida",
+       "at": [
+        1553,
+        10223,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7608
+        ]
+       }
+      },
+      {
+       "t": "Push the Strange Device all the way to the west.",
+       "s": "Push the Strange Device all the way to the west.",
+       "k": "pushStrangeDeviceWest",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      },
+      {
+       "t": "Attack the Strange Device with magic from the north side.",
+       "s": "Attack the Strange Device with magic from the north side.",
+       "k": "attackWithMagic",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      },
+      {
+       "t": "Attack the Strange Device with melee from the south side.",
+       "s": "Attack the Strange Device with melee from the south side.",
+       "k": "attackWithMelee",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      },
+      {
+       "t": "Push the Strange Device all the way to the east.",
+       "s": "Push the Strange Device all the way to the east.",
+       "k": "pushStrangeDeviceEast",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      },
+      {
+       "t": "Attack the Strange Device with ranged from the south side.",
+       "s": "Attack the Strange Device with ranged from the south side.",
+       "k": "attackWithRanged",
+       "at": [
+        1580,
+        10199,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Bring a melee weapon, a ranged weapon and runes for a combat spell, and talk to Archeio in the Arceuus Library.",
+       "s": "Talk to Archeio in the Arceuus Library.",
+       "k": "teleportToArchive",
+       "at": [
+        1625,
+        3808,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7614
+        ]
+       }
+      },
+      {
+       "t": "Talk to Pagida in the Library Historical Archive.",
+       "s": "Talk to Pagida in the Library Historical Archive.",
+       "k": "talkToPagida",
+       "at": [
+        1553,
+        10223,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7608
+        ]
+       }
+      },
+      {
+       "t": "Investigate the skeleton in the north cell.",
+       "s": "Investigate the skeleton in the north cell.",
+       "k": "investigateSkeleton",
+       "at": [
+        1577,
+        10213,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31962
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Report back to Phileas Rimor in Shayzien.",
+       "s": "Report back to Phileas Rimor in Shayzien.",
+       "k": "talkToPhileasAgain",
+       "at": [
+        1542,
+        3570,
+        0
+       ],
+       "hl": {
+        "npc": [
+         7999
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Talk to Shiro upstairs in the War Tent on the west side of the Shayzien Encampment.",
+       "s": "Talk to Shiro upstairs in the Shayzien War Tent.",
+       "k": "goUpToShiro",
+       "at": [
+        1481,
+        3633,
+        0
+       ]
+      },
+      {
+       "t": "Talk to Shiro upstairs in the War Tent on the west side of the Shayzien Encampment.",
+       "s": "Talk to Shiro upstairs in the Shayzien War Tent.",
+       "k": "talkToShiro",
+       "at": [
+        1484,
+        3634,
+        1
+       ],
+       "hl": {
+        "npc": [
+         11038
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Travel to Mount Quidamortem and talk to Historian Duffy.",
+       "s": "Travel to Mount Quidamortem and talk to Historian Duffy.",
+       "k": "talkToDuffy",
+       "at": [
+        1278,
+        3561,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8163
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Use a rope on the crevice west side of Quidamortem.",
+       "s": "Use a rope on the crevice west side of Quidamortem.",
+       "k": "useRopeOnCrevice",
+       "at": [
+        1215,
+        3559,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Enter the crevice west of Quidamortem, ready to fight a corrupt lizardman (level 46).",
+       "s": "Enter the crevice west of Quidamortem (lizardman 46).",
+       "k": "enterCrevice",
+       "at": [
+        1215,
+        3559,
+        0
+       ]
+      },
+      {
+       "t": "Try to enter the magic gate to the south room, then kill the corrupt lizardman (level 46) who appears.",
+       "s": "Try the magic gate; kill the corrupt lizardman (level 46).",
+       "k": "tryToEnterBarrier",
+       "at": [
+        1172,
+        9947,
+        0
+       ]
+      },
+      {
+       "t": "Push the boulder further along the path.",
+       "s": "Push the boulder further along the path.",
+       "k": "pushBoulder",
+       "at": [
+        1201,
+        9960,
+        0
+       ]
+      },
+      {
+       "t": "Mine the rockfall.",
+       "s": "Mine the rockfall.",
+       "k": "mineRockfall",
+       "at": [
+        1182,
+        9974,
+        0
+       ]
+      },
+      {
+       "t": "Kill the corrupt lizardman (level 46).",
+       "s": "Kill the corrupt lizardman (level 46).",
+       "k": "killLizardman",
+       "at": [
+        1172,
+        9947,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8000
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Enter the crevice west of Quidamortem, ready to fight a corrupt lizardman (level 46).",
+       "s": "Enter the crevice west of Quidamortem (lizardman 46).",
+       "k": "enterCrevice",
+       "at": [
+        1215,
+        3559,
+        0
+       ]
+      },
+      {
+       "t": "Inspect the Unstable Altar in the south room.",
+       "s": "Inspect the Unstable Altar in the south room.",
+       "k": "inspectUnstableAltar",
+       "at": [
+        1172,
+        9929,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Return to Historian Duffy.",
+       "s": "Return to Historian Duffy.",
+       "k": "returnToDuffy",
+       "at": [
+        1278,
+        3561,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8163
+        ]
+       }
+      },
+      {
+       "t": "Leave the cavern. You can hop worlds to appear back at the entrance.",
+       "s": "Leave the cavern. You can hop worlds to appear back at the entrance.",
+       "k": "leaveCave",
+       "at": [
+        1168,
+        9973,
+        0
+       ],
+       "hl": {
+        "obj": [
+         31967
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Enter the crevice west side of Quidamortem again.",
+       "s": "Enter the crevice west side of Quidamortem again.",
+       "k": "enterCreviceAgain",
+       "at": [
+        1215,
+        3559,
+        0
+       ]
+      },
+      {
+       "t": "Talk to Historian Duffy near the Unstable Altar.",
+       "s": "Talk to Historian Duffy near the Unstable Altar.",
+       "k": "talkToDuffyInCrevice",
+       "at": [
+        1172,
+        9929,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8007
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 13,
+     "do": [
+      {
+       "t": "Enter the crevice west side of Quidamortem again.",
+       "s": "Enter the crevice west side of Quidamortem again.",
+       "k": "enterCreviceAgain",
+       "at": [
+        1215,
+        3559,
+        0
+       ]
+      },
+      {
+       "t": "Talk to Gnosi near the Unstable Altar.",
+       "s": "Talk to Gnosi near the Unstable Altar.",
+       "k": "talkToGnosi",
+       "at": [
+        1172,
+        9929,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8006
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "Return to Shiro upstairs in the War Tent on the west side of the Shayzien Encampment.",
+       "s": "Return to Shiro upstairs in the Shayzien War Tent.",
+       "k": "returnUpToShiro",
+       "at": [
+        1481,
+        3633,
+        0
+       ]
+      },
+      {
+       "t": "Return to Shiro upstairs in the War Tent on the west side of the Shayzien Encampment.",
+       "s": "Return to Shiro upstairs in the Shayzien War Tent.",
+       "k": "returnToShiro",
+       "at": [
+        1484,
+        3634,
+        1
+       ],
+       "hl": {
+        "npc": [
+         11038
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Return to Phileas Rimor's house in Shayzien.",
+       "s": "Return to Phileas Rimor's house in Shayzien.",
+       "k": "returnToPhileasTent",
+       "at": [
+        1542,
+        3570,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 16,
+     "do": [
+      {
+       "t": "Return to Shiro upstairs in the Shayzien War Tent to complete the quest.",
+       "s": "Return to Shiro in the War Tent to finish the quest.",
+       "k": "goUpToShrioToFinish",
+       "at": [
+        1481,
+        3633,
+        0
+       ]
+      },
+      {
+       "t": "Return to Shiro upstairs in the Shayzien War Tent to complete the quest.",
+       "s": "Return to Shiro in the War Tent to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        1484,
+        3634,
+        1
+       ],
+       "hl": {
+        "npc": [
+         11038
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

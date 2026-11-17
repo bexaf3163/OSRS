@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-39 stages: 11 retained, 27 revised, 0 with a branch, 1 deferred.
+41 stages: 13 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -47,6 +47,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-09 The Depths of Despair | quest-fight | yes | Sand Snake (36) | melee | Sand Snake | Trout 3 | Retain |
 | S9-11 Elemental Workshop I | quest-fight | yes | Earth elemental (35) | melee | Earth elemental | Trout 3 | Retain |
 | S9-12 Big Chompy Bird Hunting | quest-fight | yes | Chompy bird (6), Wolf (64), Ogre (53) | other | Wolf, Ogre | Trout 5 | Retain |
+| S9-17 The Tourist Trap | quest-fight | yes | Mercenary Captain (47) | melee | Mercenary Captain | Trout 5 | Retain |
+| S9-19 Tale of the Righteous | quest-fight | yes | Corrupt Lizardman (46) | melee | Corrupt Lizardman | Trout 5 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -976,4 +978,48 @@ Changed:
 Evidence:
 
 - OSRS Wiki Big Chompy Bird Hunting requirements: the ability to defend against level 64 wolves and level 53 ogres, read 2026-11-16.
+
+## S9-17 The Tourist Trap
+
+**Retain.** The Tourist Trap: kill the Mercenary Captain (level 47, 80 hitpoints, hits up to 5) outside the Desert Mining Camp for the gate key.
+
+Quest stage lines: 1.1, 1.2, 5.7.
+
+Assumptions:
+
+- Fletching 10 and Smithing 20 come with the route's Members combat levels; 5 trout cover a hit of 5 at most.
+
+Alternatives:
+
+- The wiki safespot near the camp.
+
+Changed:
+
+- 2.130.0: new quest; the Mercenary Captain is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Mercenary Captain infobox: level 47, 80 hitpoints, max hit 5, slash, read 2026-11-17.
+
+## S9-19 Tale of the Righteous
+
+**Retain.** Tale of the Righteous: kill the Corrupt Lizardman (level 46, 50 hitpoints, hits up to 6) past the magic gate.
+
+Quest stage lines: 0.2, 0.5, 0.6, 0.7, 0.16.
+
+Assumptions:
+
+- 5 trout cover a hit of 6 at most at the route's Members combat levels.
+
+Alternatives:
+
+- Ranged with the bronze darts the quest already asks for.
+
+Changed:
+
+- 2.130.0: new quest; the Corrupt Lizardman is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Corrupt Lizardman infobox: level 46, 50 hitpoints, max hit 6, crush, read 2026-11-17.
 
