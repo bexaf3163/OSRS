@@ -8677,5 +8677,249 @@
         "questName": "Troll Stronghold"
       }
     }
+  },
+  {
+    "id": "S9-29",
+    "stage": 9,
+    "type": "quest",
+    "title": "Enter the Abyss",
+    "qp": 0,
+    "requires": [
+      "S2-06"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Enter_the_Abyss",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Enter_the_Abyss/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3104,3561,0",
+    "mapLocation": {
+      "x": 3104,
+      "y": 3561,
+      "plane": 0,
+      "label": "The end of the River Lum in the Wilderness (Roams levels 4-7)"
+    },
+    "npc": {
+      "nameEn": "Mage of Zamorak",
+      "location": "The end of the River Lum in the Wilderness (Roams levels 4-7)",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Mage_of_Zamorak"
+    },
+    "itemsRequired": [],
+    "reward": "0 QP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Mage of Zamorak"
+      ],
+      "dialogChoices": [
+        "Where do you get your runes from?",
+        "Yes",
+        "So what is this 'abyss' stuff?"
+      ],
+      "highlightItems": [],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Enter the Abyss"
+      }
+    }
+  },
+  {
+    "id": "S9-30",
+    "stage": 9,
+    "type": "quest",
+    "title": "Eadgar's Ruse",
+    "qp": 1,
+    "requires": [
+      "S7-06",
+      "S9-28"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Eadgar's_Ruse",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Eadgar's_Ruse/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2897,3427,0",
+    "mapLocation": {
+      "x": 2897,
+      "y": 3427,
+      "plane": 0,
+      "label": "The of the herbalist shop in Taverley"
+    },
+    "npc": {
+      "nameEn": "Sanfew",
+      "location": "The of the herbalist shop in Taverley",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Sanfew"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Climbing boots",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Tenzing for 12 gp.",
+        "wikiItemId": 3105,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Climbing_boots.png"
+      },
+      {
+        "nameEn": "Vodka",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Asp & Snake Bar in Pollnivneach for 5 gp.",
+        "wikiItemId": 2015,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Vodka.png"
+      },
+      {
+        "nameEn": "Pineapple chunks",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 2116,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pineapple_chunks.png"
+      },
+      {
+        "nameEn": "Logs",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1511,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Logs.png"
+      },
+      {
+        "nameEn": "Grain",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange, or from Agelus' Farm Shop in Ortus Farm for 2 gp.",
+        "wikiItemId": 1947,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Grain.png"
+      },
+      {
+        "nameEn": "Raw chicken",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange, or from Food Store in Port Sarim for 1 gp.",
+        "wikiItemId": 2138,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Raw_chicken.png"
+      },
+      {
+        "nameEn": "Pestle and mortar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 4 gp.",
+        "wikiItemId": 233,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pestle_and_mortar.png"
+      },
+      {
+        "nameEn": "Ranarr potion (unf)",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 99,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ranarr_potion_(unf).png"
+      }
+    ],
+    "reward": "1 QP, 11,000 Herblore XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Sanfew"
+      ],
+      "dialogChoices": [
+        "Have you any more work for me, to help reclaim the circle?",
+        "I'll do it.",
+        "I need to find some goutweed.",
+        "Sanfew won't be happy..."
+      ],
+      "highlightItems": [
+        "Climbing boots",
+        "Vodka",
+        "Pineapple chunks",
+        "Logs",
+        "Grain",
+        "Raw chicken",
+        "Pestle and mortar",
+        "Ranarr potion (unf)"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Eadgar's Ruse"
+      }
+    }
+  },
+  {
+    "id": "S9-31",
+    "stage": 9,
+    "type": "quest",
+    "title": "Tears of Guthix",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Tears_of_Guthix",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Tears_of_Guthix/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3169,3172,0",
+    "mapLocation": {
+      "x": 3169,
+      "y": 3172,
+      "plane": 0,
+      "label": "The hole into the Lumbridge Swamp Caves"
+    },
+    "npc": {
+      "nameEn": "Juna",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Juna"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bullseye lantern",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Miltog in Dorgesh-Kaan for 630 gp. Use the sapphire on it to make the sapphire lantern, then light it.",
+        "wikiItemId": 4548,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bullseye_lantern.png"
+      },
+      {
+        "nameEn": "Sapphire",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Herquin in Falador.",
+        "wikiItemId": 1607,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Sapphire.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from any general store.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Chisel",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a crafting shop.",
+        "wikiItemId": 1755,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chisel.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe works: the bronze one from Tutorial Island will do.",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Rope",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Ned in Draynor Village for 16 gp.",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
+      }
+    ],
+    "reward": "1 QP, 1,000 Crafting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Juna"
+      ],
+      "dialogChoices": [
+        "Okay..."
+      ],
+      "highlightItems": [
+        "Sapphire lantern",
+        "Tinderbox",
+        "Chisel",
+        "Bronze pickaxe",
+        "Rope"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Tears of Guthix"
+      }
+    }
   }
 ]

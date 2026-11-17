@@ -1694,6 +1694,30 @@
       "evidence": [
         "OSRS Wiki Troll Stronghold kills: Dad and the Troll General can be safespotted; infoboxes read 2026-11-17."
       ]
+    },
+    {
+      "stepId": "S9-30",
+      "kind": "not-combat",
+      "mandatory": false,
+      "method": "none",
+      "objective": "Eadgar's Ruse: killing Berry is only the way to free Eadgar if Troll Stronghold has not; the route finishes Troll Stronghold first, and the other line warns against drinking the vodka.",
+      "enemies": [],
+      "lines": [
+        "0.2",
+        "1.0"
+      ],
+      "assumptions": [
+        "Troll Stronghold (S9-28) is a prerequisite, so Eadgar is already free."
+      ],
+      "problems": [],
+      "alternatives": [],
+      "decision": "retain",
+      "changed": [
+        "2.134.0: new quest; no fight on the route."
+      ],
+      "evidence": [
+        "OSRS Wiki Eadgar's Ruse: no kills, read 2026-11-17."
+      ]
     }
   ]
 }

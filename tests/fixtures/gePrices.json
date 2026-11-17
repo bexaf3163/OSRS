@@ -2884,6 +2884,14 @@
   "Climbing boots": {
    "buy": 629,
    "sell": 575
+  },
+  "Vodka": {
+   "buy": 150,
+   "sell": 148
+  },
+  "Pineapple chunks": {
+   "buy": 285,
+   "sell": 310
   }
  }
 }

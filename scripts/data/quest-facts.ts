@@ -241,6 +241,20 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
   'Troll Stronghold': { revision: 15395347, flow: {
     consumes: [], receives: [], unknownItems: ['Prison key', 'Cell key 1', 'Cell key 2'], partialDelivery: false, fromStartOnly: true,
   } },
+  // Nothing is brought (the Wilderness visit carries nothing to lose); the scrying orb is a quest item.
+  'Enter the Abyss': { revision: 15292255, flow: {
+    consumes: [], receives: [], unknownItems: ['Scrying orb'], partialDelivery: false, fromStartOnly: true,
+  } },
+  // The vodka and pineapple make the drunk parrot; the logs, grain, chickens and ranarr potion go to Eadgar and Sanfew. The boots and pestle are kept.
+  "Eadgar's Ruse": { revision: 15376618, flow: {
+    consumes: [{ name: 'Vodka', count: 1 }, { name: 'Pineapple chunks', count: 1 }, { name: 'Logs', count: 1 }, { name: 'Grain', count: 10 },
+      { name: 'Raw chicken', count: 5 }, { name: 'Ranarr potion (unf)', count: 1 }], receives: [],
+    unknownItems: ['Parrot', 'Drunk parrot', 'Dirty robe', 'Fake man', 'Goutweed', 'Troll thistle', 'Dried thistle', 'Ground thistle', 'Troll potion'], partialDelivery: true, fromStartOnly: true,
+  } },
+  // The lantern, tools and rope are kept; the magic stone and stone bowl are quest items.
+  'Tears of Guthix': { revision: 15292296, flow: {
+    consumes: [], receives: [], unknownItems: ['Magic stone', 'Stone bowl'], partialDelivery: false, fromStartOnly: true,
+  } },
   // The runes are cast at the Strange Device and the rope tied on the way; darts and food are spent in fights.
   'Tale of the Righteous': { revision: 15402882, flow: {
     consumes: [{ name: 'Air rune', count: 6 }, { name: 'Mind rune', count: 3 }, { name: 'Rope', count: 1 }], receives: [],
@@ -291,6 +305,8 @@ const REVIEWED_CLAUSES = new Set([
   // Troll Stronghold: Agility 15 is the requirement; the Troll General is in the step foes and combat ledger.
   '(47 is recommended)',
   'The ability to defeat a level 113 [[Troll General]] (can be [[safespot]]ted)',
+  // Tears of Guthix: the route buys a finished sapphire lantern, so the boost note does not apply.
+  '<ref>Adding the sapphire lens to a [[Bullseye lantern (unf)]] is boostable. Adding it to a [[Bullseye lantern (empty)]] or [[Bullseye lantern]] is not boostable.</ref>',
   // Mountain Daughter: the note sits under Agility 20, which covers it; the Kendal is in the step foes and combat ledger.
   '<ref>Entering the Mountain Camp initially requires 10 Agility.</ref>',
   'The ability to defeat a level 70 [[The Kendal|monster]] (can be [[safespot|safespotted]])',

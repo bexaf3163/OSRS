@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-48 stages: 20 retained, 27 revised, 0 with a branch, 1 deferred.
+49 stages: 21 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -56,6 +56,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-25 Icthlarin's Little Helper | quest-fight | yes | Possessed Priest (91), Apparition (81) | melee | Possessed Priest, Apparition | Lobster 10 | Retain |
 | S9-27 Hazeel Cult | quest-fight | yes | Alomone (13) | melee | Alomone | Trout 5 | Retain |
 | S9-28 Troll Stronghold | quest-fight | yes | Dad (101), Troll General (113) | safespot | Dad, Troll General | - | Retain |
+| S9-30 Eadgar's Ruse | not-combat | no | - | none | - | - | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1177,4 +1178,22 @@ Changed:
 Evidence:
 
 - OSRS Wiki Troll Stronghold kills: Dad and the Troll General can be safespotted; infoboxes read 2026-11-17.
+
+## S9-30 Eadgar's Ruse
+
+**Retain.** Eadgar's Ruse: killing Berry is only the way to free Eadgar if Troll Stronghold has not; the route finishes Troll Stronghold first, and the other line warns against drinking the vodka.
+
+Quest stage lines: 0.2, 1.0.
+
+Assumptions:
+
+- Troll Stronghold (S9-28) is a prerequisite, so Eadgar is already free.
+
+Changed:
+
+- 2.134.0: new quest; no fight on the route.
+
+Evidence:
+
+- OSRS Wiki Eadgar's Ruse: no kills, read 2026-11-17.
 

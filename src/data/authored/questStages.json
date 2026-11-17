@@ -47230,6 +47230,1909 @@
      ]
     }
    ]
+  },
+  "S9-29": {
+   "var": [
+    "varp",
+    492
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Talk to the Mage of Zamorak in level 4-7 Wilderness near the river (Cannot be wearing a non-Zamorak God item).",
+      "Talk to the Mage of Zamorak in the Altar of Zamorak in south-eastern Varrock. Dialogue: \"Where do you get your runes from?\", \"Yes\" (Note: If you have started (but not completed) the quest Wanted!, you'll be given an additional dialogue option at the beginning where you will have to select what to discuss with the Mage. Dialogue: \"Runecrafting\") Be sure to have a free inventory space for the scrying orb!",
+      "Go to the nearby runeshop and teleport to rune essence mine. (Aubury)",
+      "Go to the bottom floor of Wizards' Tower (fairy ring ) and teleport to rune essence mine. (Archmage Sedridor)",
+      "Go to north-eastern Ardougne and teleport to rune essence mine. (Wizard Cromperty)",
+      "Talk to the Mage of Zamorak in the Chaos Temple in south-eastern Varrock.",
+      "Talk to him again to complete the miniquest.",
+      "Talk to him again about the dangers of the Abyss. Dialogue: \"So what is this 'abyss' stuff?\"",
+      "Congratulations, miniquest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to the Mage of Zamorak in the Wilderness north of Edgeville. BRING NOTHING AS YOU CAN BE KILLED BY OTHER PLAYERS HERE.",
+       "s": "Talk to the Mage of Zamorak in the Wilderness; bring nothing to lose",
+       "k": "talkToMageInWildy",
+       "at": [
+        3102,
+        3557,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2580
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to the Mage of Zamorak in south east Varrock.",
+       "s": "Talk to the Mage of Zamorak in south east Varrock.",
+       "k": "talkToMageInVarrock",
+       "at": [
+        3259,
+        3383,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2582
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Teleport to the essence mine with Aubury in south east Varrock.",
+       "s": "Teleport to the essence mine with Aubury in south east Varrock.",
+       "k": "talkToAubury",
+       "at": [
+        3253,
+        3401,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11435
+        ]
+       }
+      },
+      {
+       "t": "Teleport to the essence mine with Sedridor in the Wizard Tower's basement.",
+       "s": "Teleport to the essence mine with Sedridor in the Wizards' Tower",
+       "k": "goDownInWizardsTower",
+       "at": [
+        3104,
+        3162,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2147
+        ]
+       }
+      },
+      {
+       "t": "Teleport to the essence mine with Sedridor in the Wizard Tower's basement.",
+       "s": "Teleport to the essence mine with Sedridor in the Wizards' Tower",
+       "k": "talkToSedridor",
+       "at": [
+        3104,
+        9571,
+        0
+       ],
+       "hl": {
+        "npc": [
+         11432
+        ]
+       }
+      },
+      {
+       "t": "Teleport to the essence mine with Wizard Cromperty in East Ardougne.",
+       "s": "Teleport to the essence mine with Wizard Cromperty in East Ardougne.",
+       "k": "talkToCromperty",
+       "at": [
+        2684,
+        3323,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8480
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Mage of Zamorak in south east Varrock.",
+       "s": "Talk to the Mage of Zamorak in south east Varrock.",
+       "k": "talkToMageAfterTeleports",
+       "at": [
+        3259,
+        3383,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2582
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Talk to the Mage of Zamorak in south east Varrock.",
+       "s": "Talk to the Mage of Zamorak in south east Varrock.",
+       "k": "talkToMageToFinish",
+       "at": [
+        3259,
+        3383,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2582
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-30": {
+   "var": [
+    "varp",
+    335
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Talk to Sanfew (top floor of the Taverley herblore store) Dialogue: \"Have you any more work for me, to help reclaim the circle?\", \"I'll do it.\", or Dialogue: \"Ask general questions.\", \"Have you any more work for me, to help reclaim the circle?\", \"I'll do it.\" if you have completed Zogre Flesh Eaters).",
+      "Climb to the top of Trollheim, using the agility shortcuts if you can to save time, and enter Eadgar's Cave (see map for path alternatives).",
+      "If you have not yet freed Eadgar in the troll stronghold's prison, pickpocket (30+ ) or kill Berry the northern sleeping troll guard and use the cell key 2 on Eadgar's cell. Check your Troll Stronghold quest log and there will be a line that will either say \"I've rescued Godric\" or \"I've rescued Godric and Mad Eadgar\" to make sure.",
+      "Speak with Eadgar in his cave. Dialogue: \"I need to find some goutweed.\"",
+      "Go to Burntmeat's Kitchen, which is at the south end of the middle floor of the stronghold.",
+      "Talk to Burntmeat.",
+      "Return to Eadgar and speak with him.}}Secret Door through Rellekka Route{{Checklist|*For the secret door path, Slayer ring teleport to the Fremennik Slayer Dungeon or use the Fairy ring with (code ) to teleport outside the Dungeon entrance.",
+      "Head north-east to a narrow passage, climb over the rocks, and go through the secret entrance to the north.",
+      "Head to Burntmeat's Kitchen, which is at the south end of the middle floor of the stronghold.",
+      "Talk to Burntmeat.",
+      "Go speak with Eadgar, whose cave is at the top of Trollheim."
+     ]
+    },
+    {
+     "title": "The parrot",
+     "steps": [
+      "Use vodka (right click it to avoid accidentally drinking it) on the pineapple chunks.",
+      "Use alco-chunks on the aviary hatch (west side of parrot cage).",
+      "Do not drop the parrot or it will fly away and you will need to retrieve it from Eadgar.",
+      "Talk to Eadgar in his cave at Trollheim about making the fake human.",
+      "Go back to the Troll Stronghold. You may skip this and use the parrot on your way back to Eadgar in the next section if using the agility way.",
+      "Run north and go down both flights of stairs.",
+      "Use the parrot on the rack north of the cells."
+     ]
+    },
+    {
+     "title": "Making the \"human\"",
+     "steps": [
+      "Talk to Tegid in Taverley south-east of the Herblore store for a dirty robe. Dialogue: \"Sanfew won't be happy...\"",
+      "Pick a thistle in one of the grass patches near Eadgar's cave entrance. It is very small and coloured the same as the grass. Zoom in close on each patch to find a green flower around the patch of grass. It can be hard to see. Note that it only spawns in one of the patches of grass at a time.",
+      "Enter Eadgar's cave and talk to Eadgar.",
+      "Light a fire with your other log and cook the thistle on it to make a dried thistle. (You may also use one of the fires near the trolls to the west.)",
+      "Use the pestle and mortar on the dried thistle and add it to a ranarr potion (unf).",
+      "Talk to Eadgar.",
+      "Retrieve your parrot from the rack in the troll stronghold.",
+      "Talk to Eadgar.",
+      "Give the fake man to Burntmeat.",
+      "Search the kitchen drawers by the south wall to obtain a storeroom key."
+     ]
+    },
+    {
+     "title": "Getting the goutweed",
+     "steps": [
+      "Go down the nearby stairs inside the kitchen to the storeroom.",
+      "Sneak to the back and take goutweed. Note:",
+      "Return the goutweed to Sanfew. Dialogue:",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Talk to Sanfew, upstairs in the Taverley herblore store",
+       "k": "goUpToSanfew",
+       "at": [
+        2899,
+        3429,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "Talk to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Talk to Sanfew, upstairs in the Taverley herblore store",
+       "k": "talkToSanfew",
+       "at": [
+        2899,
+        3429,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5044
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Get some climbing boots or 12 coins.",
+       "s": "Get some climbing boots or 12 coins.",
+       "has": "Climbing boots",
+       "k": "getCoinsOrBoots"
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south. Buy some climbing boots from Tenzing in his hut here.",
+       "s": "Go west of Burthorpe, then south; buy climbing boots from Tenzing",
+       "k": "buyClimbingBoots",
+       "at": [
+        2820,
+        3555,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4094
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south.",
+       "s": "Follow the path west of Burthorpe, then go along the path going south.",
+       "k": "travelToTenzing",
+       "at": [
+        2820,
+        3555,
+        0
+       ]
+      },
+      {
+       "t": "Climb over the stile north of Tenzing.",
+       "s": "Climb over the stile north of Tenzing.",
+       "k": "climbOverStile",
+       "at": [
+        2817,
+        3563,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3730
+        ]
+       }
+      },
+      {
+       "t": "Follow the path until you reach some rocks. Climb over them.",
+       "s": "Follow the path until you reach some rocks. Climb over them.",
+       "k": "climbOverRocks",
+       "at": [
+        2856,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3748
+        ]
+       }
+      },
+      {
+       "t": "Enter the Secret Door to the Troll Stronghold.",
+       "s": "Enter the Secret Door to the Troll Stronghold.",
+       "k": "enterSecretEntrance",
+       "at": [
+        2828,
+        3647,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3762
+        ]
+       }
+      },
+      {
+       "t": "Unlock Eadgar's cell.",
+       "s": "Unlock Eadgar's cell.",
+       "k": "freeEadgar",
+       "at": [
+        2832,
+        10082,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3765
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs from the prison.",
+       "s": "Go up the stairs from the prison.",
+       "k": "goUpStairsPrison",
+       "at": [
+        2853,
+        10107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Go up to the next floor of the Stronghold.",
+       "s": "Go up to the next floor of the Stronghold.",
+       "k": "goUpToTopFloorStronghold",
+       "at": [
+        2843,
+        10109,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Leave the Stronghold.",
+       "s": "Leave the Stronghold.",
+       "k": "exitStronghold",
+       "at": [
+        2838,
+        10091,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3772
+        ]
+       }
+      },
+      {
+       "t": "Climb to the top of Trollheim and enter Eadgar's cave.",
+       "s": "Climb to the top of Trollheim and enter Eadgar's cave.",
+       "k": "enterEadgarsCave",
+       "at": [
+        2893,
+        3673,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3759
+        ]
+       }
+      },
+      {
+       "t": "Talk to Eadgar.",
+       "s": "Talk to Eadgar.",
+       "k": "talkToEadgar",
+       "at": [
+        2891,
+        10086,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4118
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Get some climbing boots or 12 coins.",
+       "s": "Get some climbing boots or 12 coins.",
+       "has": "Climbing boots",
+       "k": "getCoinsOrBoots"
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south. Buy some climbing boots from Tenzing in his hut here.",
+       "s": "Go west of Burthorpe, then south; buy climbing boots from Tenzing",
+       "k": "buyClimbingBoots",
+       "at": [
+        2820,
+        3555,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4094
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south.",
+       "s": "Follow the path west of Burthorpe, then go along the path going south.",
+       "k": "travelToTenzing",
+       "at": [
+        2820,
+        3555,
+        0
+       ]
+      },
+      {
+       "t": "Climb over the stile north of Tenzing.",
+       "s": "Climb over the stile north of Tenzing.",
+       "k": "climbOverStile",
+       "at": [
+        2817,
+        3563,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3730
+        ]
+       }
+      },
+      {
+       "t": "Follow the path until you reach some rocks. Climb over them.",
+       "s": "Follow the path until you reach some rocks. Climb over them.",
+       "k": "climbOverRocks",
+       "at": [
+        2856,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3748
+        ]
+       }
+      },
+      {
+       "t": "Enter the Secret Door to the Troll Stronghold.",
+       "s": "Enter the Secret Door to the Troll Stronghold.",
+       "k": "enterSecretEntrance",
+       "at": [
+        2828,
+        3647,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3762
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs from the prison.",
+       "s": "Go up the stairs from the prison.",
+       "k": "goUpStairsPrison",
+       "at": [
+        2853,
+        10107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Talk to Burntmeat.",
+       "s": "Talk to Burntmeat.",
+       "k": "talkToCook",
+       "at": [
+        2845,
+        10057,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4157
+        ]
+       }
+      },
+      {
+       "t": "Go down the south staircase.",
+       "s": "Go down the south staircase.",
+       "k": "goDownSouthStairs",
+       "at": [
+        2844,
+        10052,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Enter the Troll Stronghold.",
+       "s": "Enter the Troll Stronghold.",
+       "k": "enterStronghold",
+       "at": [
+        2839,
+        3690,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3771
+        ]
+       }
+      },
+      {
+       "t": "Leave Eadgar's cave.",
+       "s": "Leave Eadgar's cave.",
+       "k": "leaveEadgarsCave",
+       "at": [
+        2893,
+        10073,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3760
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Get some climbing boots or 12 coins.",
+       "s": "Get some climbing boots or 12 coins.",
+       "has": "Climbing boots",
+       "k": "getCoinsOrBoots"
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south. Buy some climbing boots from Tenzing in his hut here.",
+       "s": "Go west of Burthorpe, then south; buy climbing boots from Tenzing",
+       "k": "buyClimbingBoots",
+       "at": [
+        2820,
+        3555,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4094
+        ]
+       }
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south.",
+       "s": "Follow the path west of Burthorpe, then go along the path going south.",
+       "k": "travelToTenzing",
+       "at": [
+        2820,
+        3555,
+        0
+       ]
+      },
+      {
+       "t": "Climb over the stile north of Tenzing.",
+       "s": "Climb over the stile north of Tenzing.",
+       "k": "climbOverStile",
+       "at": [
+        2817,
+        3563,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3730
+        ]
+       }
+      },
+      {
+       "t": "Follow the path until you reach some rocks. Climb over them.",
+       "s": "Follow the path until you reach some rocks. Climb over them.",
+       "k": "climbOverRocks",
+       "at": [
+        2856,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3748
+        ]
+       }
+      },
+      {
+       "t": "Enter the Secret Door to the Troll Stronghold.",
+       "s": "Enter the Secret Door to the Troll Stronghold.",
+       "k": "enterSecretEntrance",
+       "at": [
+        2828,
+        3647,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3762
+        ]
+       }
+      },
+      {
+       "t": "Unlock Eadgar's cell.",
+       "s": "Unlock Eadgar's cell.",
+       "k": "freeEadgar",
+       "at": [
+        2832,
+        10082,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3765
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs from the prison.",
+       "s": "Go up the stairs from the prison.",
+       "k": "goUpStairsPrison",
+       "at": [
+        2853,
+        10107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Go up to the next floor of the Stronghold.",
+       "s": "Go up to the next floor of the Stronghold.",
+       "k": "goUpToTopFloorStronghold",
+       "at": [
+        2843,
+        10109,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Leave the Stronghold.",
+       "s": "Leave the Stronghold.",
+       "k": "exitStronghold",
+       "at": [
+        2838,
+        10091,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3772
+        ]
+       }
+      },
+      {
+       "t": "Climb to the top of Trollheim and enter Eadgar's cave.",
+       "s": "Climb to the top of Trollheim and enter Eadgar's cave.",
+       "k": "enterEadgarsCave",
+       "at": [
+        2893,
+        3673,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3759
+        ]
+       }
+      },
+      {
+       "t": "Talk to Eadgar.",
+       "s": "Talk to Eadgar.",
+       "k": "talkToEadgar",
+       "at": [
+        2891,
+        10086,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4118
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Get some climbing boots or 12 coins.",
+       "s": "Get some climbing boots or 12 coins.",
+       "has": "Climbing boots",
+       "k": "getCoinsOrBoots"
+      },
+      {
+       "t": "Follow the path west of Burthorpe, then go along the path going south.",
+       "s": "Follow the path west of Burthorpe, then go along the path going south.",
+       "k": "travelToTenzing",
+       "at": [
+        2820,
+        3555,
+        0
+       ]
+      },
+      {
+       "t": "Climb over the stile north of Tenzing.",
+       "s": "Climb over the stile north of Tenzing.",
+       "k": "climbOverStile",
+       "at": [
+        2817,
+        3563,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3730
+        ]
+       }
+      },
+      {
+       "t": "Follow the path until you reach some rocks. Climb over them.",
+       "s": "Follow the path until you reach some rocks. Climb over them.",
+       "k": "climbOverRocks",
+       "at": [
+        2856,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3748
+        ]
+       }
+      },
+      {
+       "t": "Enter the Secret Door to the Troll Stronghold.",
+       "s": "Enter the Secret Door to the Troll Stronghold.",
+       "k": "enterSecretEntrance",
+       "at": [
+        2828,
+        3647,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3762
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs from the prison.",
+       "s": "Go up the stairs from the prison.",
+       "k": "goUpStairsPrison",
+       "at": [
+        2853,
+        10107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Go up to the next floor of the Stronghold.",
+       "s": "Go up to the next floor of the Stronghold.",
+       "k": "goUpToTopFloorStrongholdFromCook",
+       "at": [
+        2843,
+        10052,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Leave the Stronghold.",
+       "s": "Leave the Stronghold.",
+       "k": "exitStrongholdFromCook",
+       "at": [
+        2838,
+        10091,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3772
+        ]
+       }
+      },
+      {
+       "t": "Climb to the top of Trollheim and enter Eadgar's cave.",
+       "s": "Climb to the top of Trollheim and enter Eadgar's cave.",
+       "k": "enterEadgarsCaveFromCook",
+       "at": [
+        2893,
+        3673,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3759
+        ]
+       }
+      },
+      {
+       "t": "Talk to Eadgar in his cave on top of Trollheim.",
+       "s": "Talk to Eadgar in his cave on top of Trollheim.",
+       "k": "talkToEadgarFromCook",
+       "at": [
+        2891,
+        10086,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4118
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Travel to Ardougne Zoo and talk to Parroty Pete. Ask him both question 2 and 3, then use the vodka on the pineapple chunks.",
+       "s": "At Ardougne Zoo ask Parroty Pete questions 2 and 3; vodka on pineapple",
+       "k": "talkToPete",
+       "at": [
+        2612,
+        3285,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4769
+        ]
+       }
+      },
+      {
+       "t": "Travel to Ardougne Zoo and talk to Parroty Pete. Ask him question 3 then use the vodka on the pineapple chunks.",
+       "s": "At Ardougne Zoo ask Parroty Pete question 3; vodka on pineapple",
+       "k": "talkToPeteAboutPineapple",
+       "at": [
+        2612,
+        3285,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4769
+        ]
+       }
+      },
+      {
+       "t": "Travel to Ardougne Zoo and talk to Parroty Pete. Ask him question 2 then use the vodka on the pineapple chunks.",
+       "s": "At Ardougne Zoo ask Parroty Pete question 2; vodka on pineapple",
+       "k": "talkToPeteAboutAlcohol",
+       "at": [
+        2612,
+        3285,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4769
+        ]
+       }
+      },
+      {
+       "t": "Use vodka on your pineapple chunks",
+       "s": "Use vodka on your pineapple chunks",
+       "k": "useVodkaOnChunks"
+      },
+      {
+       "t": "Use the alco-chunks on the aviary hatch of the parrot cage.",
+       "s": "Use the alco-chunks on the aviary hatch of the parrot cage.",
+       "k": "useChunksOnParrot",
+       "at": [
+        2611,
+        3287,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4043
+        ]
+       }
+      },
+      {
+       "t": "Return the parrot to Eadgar on top of Trollheim.",
+       "s": "Return the parrot to Eadgar on top of Trollheim.",
+       "k": "enterEadgarsCaveWithParrot",
+       "at": [
+        2893,
+        3673,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3759
+        ]
+       }
+      },
+      {
+       "t": "Return the parrot to Eadgar on top of Trollheim.",
+       "s": "Return the parrot to Eadgar on top of Trollheim.",
+       "k": "talkToEadgarWithParrot",
+       "at": [
+        2891,
+        10086,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4118
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Take the parrot to the Troll Stronghold prison, and hide it in the rack there.",
+       "s": "Take the parrot to the Troll Stronghold prison; hide it in the rack",
+       "k": "enterPrisonWithParrot",
+       "at": [
+        2828,
+        3647,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3762
+        ]
+       }
+      },
+      {
+       "t": "Take the parrot to the Troll Stronghold prison.",
+       "s": "Take the parrot to the Troll Stronghold prison.",
+       "k": "leaveEadgarsCaveWithParrot",
+       "at": [
+        2893,
+        10073,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3760
+        ]
+       }
+      },
+      {
+       "t": "Use the parrot on a rack in the prison.",
+       "s": "Use the parrot on a rack in the prison.",
+       "k": "parrotOnRack",
+       "at": [
+        2829,
+        10097,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3821
+        ]
+       }
+      },
+      {
+       "t": "Take the parrot to the Troll Stronghold prison, and hide it in the rack there.",
+       "s": "Take the parrot to the Troll Stronghold prison; hide it in the rack",
+       "k": "goDownToPrisonWithParrot",
+       "at": [
+        2853,
+        10108,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Take the parrot to the Troll Stronghold prison, and hide it in the rack there.",
+       "s": "Take the parrot to the Troll Stronghold prison; hide it in the rack",
+       "k": "goDownNorthStairsWithParrot",
+       "at": [
+        2844,
+        10109,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Take the parrot to the Troll Stronghold prison, and hide it in the rack there.",
+       "s": "Take the parrot to the Troll Stronghold prison; hide it in the rack",
+       "k": "enterStrongholdWithParrot",
+       "at": [
+        2839,
+        3690,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3771
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 60,
+     "do": [
+      {
+       "t": "Talk to Tegid in the south of Taverley for a dirty robe. Once you have it, return to Eadgar with all the items he needs.",
+       "s": "Get a dirty robe from Tegid in south Taverley; bring Eadgar his items",
+       "k": "talkToTegid",
+       "at": [
+        2910,
+        3417,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4766
+        ]
+       }
+      },
+      {
+       "t": "Bring Eadgar all the listed items. Check the quest log if you're not sure what items you've already handed in.",
+       "s": "Bring Eadgar the listed items (the quest log shows what's left)",
+       "k": "enterEadgarsCaveWithItems",
+       "at": [
+        2893,
+        3673,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3759
+        ]
+       }
+      },
+      {
+       "t": "Bring Eadgar all the listed items. Check the quest log if you're not sure what items you've already handed in.",
+       "s": "Bring Eadgar the listed items (the quest log shows what's left)",
+       "k": "talkToEadgarWithItems",
+       "at": [
+        2891,
+        10086,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4118
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 70,
+     "do": [
+      {
+       "t": "Talk to Tegid in the south of Taverley for a dirty robe. Once you have it, return to Eadgar with all the items he needs.",
+       "s": "Get a dirty robe from Tegid in south Taverley; bring Eadgar his items",
+       "k": "talkToTegid",
+       "at": [
+        2910,
+        3417,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4766
+        ]
+       }
+      },
+      {
+       "t": "Bring Eadgar all the listed items. Check the quest log if you're not sure what items you've already handed in.",
+       "s": "Bring Eadgar the listed items (the quest log shows what's left)",
+       "k": "enterEadgarsCaveWithItems",
+       "at": [
+        2893,
+        3673,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3759
+        ]
+       }
+      },
+      {
+       "t": "Bring Eadgar all the listed items. Check the quest log if you're not sure what items you've already handed in.",
+       "s": "Bring Eadgar the listed items (the quest log shows what's left)",
+       "k": "talkToEadgarWithItems",
+       "at": [
+        2891,
+        10086,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4118
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 80,
+     "do": [
+      {
+       "t": "Go pick a troll thistle from outside Eadgar's cave.",
+       "s": "Go pick a troll thistle from outside Eadgar's cave.",
+       "k": "pickThistle",
+       "at": [
+        2887,
+        3675,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4767
+        ]
+       }
+      },
+      {
+       "t": "Go pick a troll thistle from outside Eadgar's cave.",
+       "s": "Go pick a troll thistle from outside Eadgar's cave.",
+       "k": "leaveEadgarsCaveForThistle",
+       "at": [
+        2893,
+        10073,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3760
+        ]
+       }
+      },
+      {
+       "t": "Use the troll thistle on one of the fire outside the Troll Stronghold.",
+       "s": "Use the troll thistle on one of the fire outside the Troll Stronghold.",
+       "k": "useThistleOnTrollFire",
+       "at": [
+        2849,
+        3678,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3769
+        ]
+       }
+      },
+      {
+       "t": "Light a fire then use the troll thistle on it.",
+       "s": "Light a fire then use the troll thistle on it.",
+       "k": "lightFire"
+      },
+      {
+       "t": "Use the troll thistle on the fire.",
+       "s": "Use the troll thistle on the fire.",
+       "k": "useThistleOnFire",
+       "hl": {
+        "obj": [
+         26185
+        ]
+       }
+      },
+      {
+       "t": "Use the pestle and mortar on the dried thistle",
+       "s": "Use the pestle and mortar on the dried thistle",
+       "k": "grindThistle"
+      },
+      {
+       "t": "Use the ground thistle on a ranarr potion (unf)",
+       "s": "Use the ground thistle on a ranarr potion (unf)",
+       "k": "useGroundThistleOnRanarr"
+      },
+      {
+       "t": "Bring Eadgar the troll potion.",
+       "s": "Bring Eadgar the troll potion.",
+       "k": "enterEadgarsCaveWithTrollPotion",
+       "at": [
+        2893,
+        3673,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3759
+        ]
+       }
+      },
+      {
+       "t": "Bring Eadgar the troll potion.",
+       "s": "Bring Eadgar the troll potion.",
+       "k": "giveTrollPotionToEadgar",
+       "at": [
+        2891,
+        10086,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4118
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 85,
+     "do": [
+      {
+       "t": "Get the parrot from the Troll Stronghold prison.",
+       "s": "Get the parrot from the Troll Stronghold prison.",
+       "k": "enterPrisonForParrot",
+       "at": [
+        2828,
+        3647,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3762
+        ]
+       }
+      },
+      {
+       "t": "Get the parrot from the Troll Stronghold prison.",
+       "s": "Get the parrot from the Troll Stronghold prison.",
+       "k": "leaveEadgarsCaveForParrot",
+       "at": [
+        2893,
+        10073,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3760
+        ]
+       }
+      },
+      {
+       "t": "Get the parrot from the rack in the prison.",
+       "s": "Get the parrot from the rack in the prison.",
+       "k": "getParrotFromRack",
+       "at": [
+        2829,
+        10097,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3821
+        ]
+       }
+      },
+      {
+       "t": "Get the parrot from the Troll Stronghold prison.",
+       "s": "Get the parrot from the Troll Stronghold prison.",
+       "k": "goDownToPrisonForParrot",
+       "at": [
+        2853,
+        10108,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Get the parrot from the Troll Stronghold prison.",
+       "s": "Get the parrot from the Troll Stronghold prison.",
+       "k": "goDownNorthStairsForParrot",
+       "at": [
+        2844,
+        10109,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Get the parrot from the Troll Stronghold prison.",
+       "s": "Get the parrot from the Troll Stronghold prison.",
+       "k": "enterStrongholdForParrot",
+       "at": [
+        2839,
+        3690,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3771
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 86,
+     "do": [
+      {
+       "t": "Return to Eadgar with the parrot.",
+       "s": "Return to Eadgar with the parrot.",
+       "k": "enterEadgarCaveWithTrainedParrot",
+       "at": [
+        2893,
+        3673,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3759
+        ]
+       }
+      },
+      {
+       "t": "Return to Eadgar with the parrot.",
+       "s": "Return to Eadgar with the parrot.",
+       "k": "leavePrisonWithParrot",
+       "at": [
+        2853,
+        10107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Return to Eadgar with the parrot.",
+       "s": "Return to Eadgar with the parrot.",
+       "k": "goUpToTopFloorWithParrot",
+       "at": [
+        2843,
+        10109,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Return to Eadgar with the parrot.",
+       "s": "Return to Eadgar with the parrot.",
+       "k": "leaveStrongholdWithParrot",
+       "at": [
+        2838,
+        10091,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3772
+        ]
+       }
+      },
+      {
+       "t": "Return to Eadgar with the parrot.",
+       "s": "Return to Eadgar with the parrot.",
+       "k": "talkToEadgarWithTrainedParrot",
+       "at": [
+        2891,
+        10086,
+        2
+       ],
+       "hl": {
+        "npc": [
+         4118
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 87,
+     "do": [
+      {
+       "t": "Take the fake man to Burntmeat.",
+       "s": "Take the fake man to Burntmeat.",
+       "k": "enterStrongholdWithScarecrow",
+       "at": [
+        2839,
+        3690,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3771
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs from the prison.",
+       "s": "Go up the stairs from the prison.",
+       "k": "goUpStairsPrison",
+       "at": [
+        2853,
+        10107,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3788
+        ]
+       }
+      },
+      {
+       "t": "Take the fake man to Burntmeat.",
+       "s": "Take the fake man to Burntmeat.",
+       "k": "talkToCookWithScarecrow",
+       "at": [
+        2845,
+        10057,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4157
+        ]
+       }
+      },
+      {
+       "t": "Take the fake man to Burntmeat.",
+       "s": "Take the fake man to Burntmeat.",
+       "k": "goDownSouthStairsWithScarecrow",
+       "at": [
+        2844,
+        10052,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Take the fake man to Burntmeat.",
+       "s": "Take the fake man to Burntmeat.",
+       "k": "leaveEadgarsCaveWithScarecrow",
+       "at": [
+        2893,
+        10073,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3760
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 90,
+     "do": [
+      {
+       "t": "Talk to Burntmeat in the Troll Stronghold kitchen.",
+       "s": "Talk to Burntmeat in the Troll Stronghold kitchen.",
+       "k": "talkToBurntmeat",
+       "at": [
+        2845,
+        10057,
+        1
+       ],
+       "hl": {
+        "npc": [
+         4157
+        ]
+       }
+      },
+      {
+       "t": "Search the kitchen drawers south east of Burntmeat.",
+       "s": "Search the kitchen drawers south east of Burntmeat.",
+       "k": "searchDrawers",
+       "at": [
+        2853,
+        10050,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3816
+        ]
+       }
+      },
+      {
+       "t": "Go down to the storeroom from the Troll Stronghold kitchen.",
+       "s": "Go down to the storeroom from the Troll Stronghold kitchen.",
+       "k": "goDownToStoreroom",
+       "at": [
+        2852,
+        10061,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Search the goutweed crates for goutweed. You'll need to avoid the troll guards or you'll be kicked out and take damage.",
+       "s": "Search the goutweed crates; dodge the troll guards or be thrown out",
+       "k": "getGoutweed",
+       "at": [
+        2857,
+        10074,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3822
+        ]
+       }
+      },
+      {
+       "t": "If you wish to do Dream Mentor or Dragon Slayer II, grab two more goutweed. Afterwards, return to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Return to Sanfew upstairs in Taverley's herblore store",
+       "k": "returnUpToSanfew",
+       "at": [
+        2899,
+        3429,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "If you wish to do Dream Mentor or Dragon Slayer II, grab two more goutweed. Afterwards, return to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Return to Sanfew upstairs in Taverley's herblore store",
+       "k": "returnToSanfew",
+       "at": [
+        2899,
+        3429,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5044
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 100,
+     "do": [
+      {
+       "t": "Go down to the storeroom from the Troll Stronghold kitchen.",
+       "s": "Go down to the storeroom from the Troll Stronghold kitchen.",
+       "k": "goDownToStoreroom",
+       "at": [
+        2852,
+        10061,
+        1
+       ],
+       "hl": {
+        "obj": [
+         3789
+        ]
+       }
+      },
+      {
+       "t": "Search the goutweed crates for goutweed. You'll need to avoid the troll guards or you'll be kicked out and take damage.",
+       "s": "Search the goutweed crates; dodge the troll guards or be thrown out",
+       "k": "getGoutweed",
+       "at": [
+        2857,
+        10074,
+        0
+       ],
+       "hl": {
+        "obj": [
+         3822
+        ]
+       }
+      },
+      {
+       "t": "If you wish to do Dream Mentor or Dragon Slayer II, grab two more goutweed. Afterwards, return to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Return to Sanfew upstairs in Taverley's herblore store",
+       "k": "returnUpToSanfew",
+       "at": [
+        2899,
+        3429,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "If you wish to do Dream Mentor or Dragon Slayer II, grab two more goutweed. Afterwards, return to Sanfew upstairs in the Taverley herblore store.",
+       "s": "Return to Sanfew upstairs in Taverley's herblore store",
+       "k": "returnToSanfew",
+       "at": [
+        2899,
+        3429,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5044
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-31": {
+   "var": [
+    "varbit",
+    451
+   ],
+   "route": [
+    {
+     "title": "Getting started",
+     "steps": [
+      "Note: If you've already completed The Lost Tribe, you can get to Juna via the Lumbridge Castle cave. This negates the need for the Spiny helmet or Slayer helmet. Having a lit Sapphire lantern with oil saves time as well.",
+      "Talk to Juna in the Lumbridge Swamp Caves. Dialogue: \"Okay...\""
+     ]
+    },
+    {
+     "title": "The Bowl of Stone",
+     "steps": [
+      "Use a cut Sapphire on a Bullseye lantern frame.",
+      "Light the Sapphire lantern with a tinderbox.",
+      "Climb back up the rock to the north and then use the lantern on one of the Light creatures above the chasm.",
+      "Mine a rock, use a chisel on it and climb down the rocks to the east.",
+      "Talk to Juna.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Enter the hole to Lumbridge swamp.",
+       "s": "Enter the hole to Lumbridge swamp.",
+       "k": "addRope",
+       "at": [
+        3169,
+        3172,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5947
+        ]
+       }
+      },
+      {
+       "t": "Enter the hole to Lumbridge swamp.",
+       "s": "Enter the hole to Lumbridge swamp.",
+       "k": "enterSwamp",
+       "at": [
+        3169,
+        3172,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5947
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave in the south east corner of the swamp.",
+       "s": "Enter the cave in the south east corner of the swamp.",
+       "k": "enterJunaRoom",
+       "at": [
+        3226,
+        9540,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6659
+        ]
+       }
+      },
+      {
+       "t": "Talk to Juna.",
+       "s": "Talk to Juna.",
+       "k": "talkToJuna",
+       "at": [
+        3252,
+        9517,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3193
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Enter the hole to Lumbridge swamp.",
+       "s": "Enter the hole to Lumbridge swamp.",
+       "k": "addRope",
+       "at": [
+        3169,
+        3172,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5947
+        ]
+       }
+      },
+      {
+       "t": "Enter the hole to Lumbridge swamp.",
+       "s": "Enter the hole to Lumbridge swamp.",
+       "k": "enterSwamp",
+       "at": [
+        3169,
+        3172,
+        0
+       ],
+       "hl": {
+        "obj": [
+         5947
+        ]
+       }
+      },
+      {
+       "t": "Enter the cave in the south east corner of the swamp.",
+       "s": "Enter the cave in the south east corner of the swamp.",
+       "k": "enterJunaRoom",
+       "at": [
+        3226,
+        9540,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6659
+        ]
+       }
+      },
+      {
+       "t": "Go back up the rocks and use the lit sapphire lantern on one of the light creatures nearby.",
+       "s": "Go back up the rocks; use the lit sapphire lantern on a light creature",
+       "k": "useLanternOnLightCreature",
+       "at": [
+        3228,
+        9518,
+        2
+       ]
+      },
+      {
+       "t": "Mine one of the rocks.",
+       "s": "Mine one of the rocks.",
+       "k": "mineRock",
+       "at": [
+        3229,
+        9497,
+        2
+       ],
+       "hl": {
+        "obj": [
+         6670
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the magic stone.",
+       "s": "Use a chisel on the magic stone.",
+       "k": "useChiselOnRock"
+      },
+      {
+       "t": "Talk to Juna to complete the quest.",
+       "s": "Talk to Juna to complete the quest.",
+       "k": "talkToJunaToFinish",
+       "at": [
+        3252,
+        9517,
+        2
+       ],
+       "hl": {
+        "obj": [
+         3193
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }
