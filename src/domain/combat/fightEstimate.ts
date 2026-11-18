@@ -225,7 +225,7 @@ function rollFight(inp: FightInput): FightEstimate | null {
     ...(mech?.weapon && !gearPieceByName(mech.weapon.item) ? [`no combat data for ${mech.weapon.item}`] : []),
     ...(inp.unknownPieces ? ['worn equipment without verified combat bonuses'] : []),
     ...(foe.attackStyle === 'magic' && inp.levels.magic === undefined ? ['unread Magic level for incoming magic defence'] : []),
-    ...(foe.maxHit > 0 && !['stab', 'slash', 'crush', 'magic'].includes(foe.attackStyle) ? [`unsupported incoming ${foe.attackStyle} attack model`] : [])];
+    ...(foe.maxHit > 0 && !['stab', 'slash', 'crush', 'magic', 'ranged'].includes(foe.attackStyle) ? [`unsupported incoming ${foe.attackStyle} attack model`] : [])];
   const cannot = parts.includes('cannot') ? `your hits do not outpace ${foeLabel(foe)}'s regeneration with these levels and this weapon` : undefined;
   // A prayer that blocks every attack the foe can make at the player's distance: no damage while it is on.
   const prayer = mech?.prayer;

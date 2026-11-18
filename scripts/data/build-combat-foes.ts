@@ -76,9 +76,11 @@ for (const page of PAGES) {
   for (let i = 0; i < Math.max(1, versions.length); i++) {
     const version = versions[i];
     if (version && /unused|beta/i.test(version)) continue;
+    // A ranged attacker rolls with its Ranged level and ranged bonus, not its melee ones.
+    const shoots = plain(at('attack style', i)).toLowerCase().startsWith('ranged');
     const row = {
-      combat: num(at('combat', i)), hitpoints: num(at('hitpoints', i)), attackLevel: num(at('att', i)), strengthLevel: num(at('str', i)),
-      defenceLevel: num(at('def', i)), magicLevel: num(at('mage', i)), attackBonus: num(at('attbns', i)),
+      combat: num(at('combat', i)), hitpoints: num(at('hitpoints', i)), attackLevel: num(at(shoots ? 'range' : 'att', i)), strengthLevel: num(at('str', i)),
+      defenceLevel: num(at('def', i)), magicLevel: num(at('mage', i)), attackBonus: num(at(shoots ? 'rngbns' : 'attbns', i)),
       stab: num(at('dstab', i)), slash: num(at('dslash', i)), crush: num(at('dcrush', i)), magic: num(at('dmagic', i)),
       maxHit: num(at('max hit', i)), speedTicks: num(at('attack speed', i)),
     };

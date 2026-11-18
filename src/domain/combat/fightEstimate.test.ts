@@ -19,7 +19,7 @@ describe('one quest fight with your kit', () => {
     expect(estimateFight({ ...base, unknownPieces: 1 })?.unmodelled).toContain('worn equipment without verified combat bonuses');
     expect(estimateFight({ ...base, foe: foe('Ithoi the Navigator') })?.unmodelled).toContain('unread Magic level for incoming magic defence');
     expect(estimateFight({ ...base, foe: { ...base.foe, name: 'Synthetic ranged foe', attackStyle: 'ranged' } })?.unmodelled)
-      .toContain('unsupported incoming ranged attack model');
+      .not.toContain('unsupported incoming ranged attack model');
   });
   it('every route quest fight the table knows has a free version', () => {
     for (const n of ['Count Draynor', 'Ithoi the Navigator', 'Brutus', 'Melzar the Mad', 'Lesser demon', 'Elvarg', 'Black Knight', 'Ancient Guardian']) {

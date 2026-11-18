@@ -1979,6 +1979,72 @@
       "evidence": [
         "OSRS Wiki Nazastarool: three forms, safespot around the dolmen, read 2026-11-18."
       ]
+    },
+    {
+      "stepId": "S9-45",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Biohazard: kill the mourner (level 13, 19 hitpoints, hits up to 2) upstairs in the Mourners' Headquarters for the key to the caged area.",
+      "enemies": [
+        {
+          "name": "Mourner (boss)",
+          "level": 13,
+          "maxHit": 2,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.8"
+      ],
+      "assumptions": [
+        "Two fish are a margin at the route's combat levels."
+      ],
+      "problems": [],
+      "alternatives": [],
+      "decision": "retain",
+      "changed": [
+        "2.141.0: new quest; the mourner is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Mourner (boss): level 13, 19 hitpoints, max hit 2, read 2026-11-18."
+      ]
+    },
+    {
+      "stepId": "S9-46",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Haunted Mine: kill Treus Dayth (level 95, 100 hitpoints, hits up to 15 with ranged and 8 with crush) in the north of the mine; he has no safespot.",
+      "enemies": [
+        {
+          "name": "Treus Dayth",
+          "level": 95,
+          "maxHit": 15,
+          "table": true
+        }
+      ],
+      "lines": [
+        "3.0",
+        "6.7",
+        "6.8"
+      ],
+      "assumptions": [
+        "Fifteen lobsters cover the fight; his cranes and carts are avoided by not standing next to them."
+      ],
+      "problems": [
+        "The crane and cart hits are not modelled."
+      ],
+      "alternatives": [
+        "Crumble Undead or air spells hit his weakness (wiki)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.141.0: new quest; Treus Dayth is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Treus Dayth: level 95, 100 hitpoints, max hit 15, read 2026-11-18."
+      ]
     }
   ]
 }

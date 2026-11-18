@@ -10449,5 +10449,156 @@
         "questName": "Shilo Village"
       }
     }
+  },
+  {
+    "id": "S9-45",
+    "stage": 9,
+    "type": "quest",
+    "title": "Biohazard",
+    "qp": 3,
+    "requires": [
+      "S7-09"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Biohazard",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Biohazard/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2592,3336,0",
+    "mapLocation": {
+      "x": 2592,
+      "y": 3336,
+      "plane": 0,
+      "label": "Her house in East Ardougne"
+    },
+    "npc": {
+      "nameEn": "Elena",
+      "location": "Her house in East Ardougne",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Elena"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Coins",
+        "amount": 30,
+        "howToGet": "Captain Barnaby's ship from Ardougne Dock to Rimmington. The gas mask and the priest gown are free during the quest.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange. The mourner upstairs in the headquarters is level 13.",
+        "wikiItemId": 333,
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Mourner (boss)"
+    ],
+    "reward": "3 QP, 1,250 Thieving XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Elena"
+      ],
+      "dialogChoices": [
+        "I'll try to retrieve it for you.",
+        "Ok, lets do it.",
+        "Your quest.",
+        "You give him the vial of liquid honey...",
+        "You give him the vial of ethenea...",
+        "You give him the vial of sulphuric broline...",
+        "I've come to ask your assistance in stopping a plague.",
+        "I don't understand..."
+      ],
+      "highlightItems": [
+        "Coins",
+        "Trout"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Biohazard"
+      }
+    }
+  },
+  {
+    "id": "S9-46",
+    "stage": 9,
+    "type": "quest",
+    "title": "Haunted Mine",
+    "qp": 2,
+    "requires": [
+      "S8-01"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Haunted_Mine",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Haunted_Mine/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3444,3257,0",
+    "mapLocation": {
+      "x": 3444,
+      "y": 3257,
+      "plane": 0,
+      "label": "The south-western corner of Morytania"
+    },
+    "npc": {
+      "nameEn": "Zealot",
+      "location": "The south-western corner of Morytania",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Zealot"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Chisel",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange or at a crafting shop.",
+        "wikiItemId": 1755,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chisel.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 15,
+        "howToGet": "Buy on the Grand Exchange; Swordfish or Monkfish count too. Treus Dayth (level 95, 100 hitpoints) hits up to 15 and has no safespot; his cranes and carts hit too.",
+        "wikiItemId": 379,
+        "heals": 12,
+        "anyOf": [
+          "Swordfish",
+          "Monkfish"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Treus Dayth"
+    ],
+    "reward": "2 QP, 22,000 Strength XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Zealot"
+      ],
+      "dialogChoices": [
+        "I follow the path of Saradomin.",
+        "I come seeking challenges and quests.",
+        "What quest is that then?",
+        "Why was everyone in the mines slaughtered?",
+        "Is there any other way into the mine?",
+        "Where is the second entrance to the mines?",
+        "Can I borrow your key?"
+      ],
+      "highlightItems": [
+        "Chisel",
+        "Lobster"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Haunted Mine"
+      }
+    }
   }
 ]

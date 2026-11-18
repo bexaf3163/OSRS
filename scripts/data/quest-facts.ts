@@ -364,6 +364,20 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     uncertainReceipts: ['Chaos rune', 'Air rune', 'Trout'],
     partialDelivery: true, fromStartOnly: true,
   } },
+  // Only the boat fare is spent; the gas mask, gowns, pigeon cage, apple, distillator and chemicals are free quest items.
+  Biohazard: { revision: 15395681, flow: {
+    consumes: [{ name: 'Coins', count: 30 }], receives: [],
+    unknownItems: ['Gas mask', 'Medical gown', 'Priest gown', 'Pigeon cage', 'Bird feed', 'Rotten apple', 'Key', 'Distillator', 'Plague sample', 'Touch paper', 'Liquid honey', 'Ethenea', 'Sulphuric broline'],
+    uncertainReceipts: ['Trout'],
+    partialDelivery: true, fromStartOnly: true,
+  } },
+  // The chisel is kept; the Zealot's key, glowing fungus and crystal are quest items, the lobsters are eaten against Treus Dayth.
+  'Haunted Mine': { revision: 15366272, flow: {
+    consumes: [], receives: [],
+    unknownItems: ["Zealot's key", 'Glowing fungus', 'Innocent-looking key', 'Crystal'],
+    uncertainReceipts: ['Lobster'],
+    partialDelivery: false, fromStartOnly: true,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],
@@ -422,6 +436,9 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to kill a level 70 [[Bandit champion|bandit]] and a level 75 [[Tough Guy|Menaphite]] (both can be safespotted).',
   // Shilo Village: Nazastarool is safespotted with Magic (step foes, fight mechanics, ledger); the undead ones are walked past with food.
   'Must be able to defend from many [[Undead one]]s (level 61-73) and able to defeat three monsters that are about level 90.',
+  // Haunted Mine: Treus Dayth is in the step foes and the combat ledger; Priest in Peril (a prerequisite) opens Morytania and the mine.
+  'The ability to defeat a level 95 enemy',
+  'Access to [[Abandoned Mine]]',
   // Death to the Dorgeshuun: Sigmund is in the step foes and the combat ledger, fought in melee.
   'The ability to defeat a level 50 enemy with [[Melee]] or [[Magic]]',
   'The ability to defeat a level 172 [[Black demon (The Grand Tree)|Black demon]] (safespottable for Ranged and Magic or melee using a [[halberd]]).',

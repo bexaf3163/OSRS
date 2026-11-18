@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-56 stages: 28 retained, 27 revised, 0 with a branch, 1 deferred.
+58 stages: 30 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -64,6 +64,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-42 The Feud | quest-fight | yes | Tough Guy (75), Bandit champion (70) | melee | Bandit champion, Tough Guy | Trout 10 | Retain |
 | S9-43 The Eyes of Glouphrie | quest-fight | yes | Evil creature (1) | melee | Evil creature | Trout 2 | Retain |
 | S9-44 Shilo Village | quest-fight | yes | Nazastarool (91), Nazastarool (68), Nazastarool (93), Undead one (73) | safespot | Nazastarool | Trout 10 | Retain |
+| S9-45 Biohazard | quest-fight | yes | Mourner (boss) (13) | melee | Mourner (boss) | Trout 2 | Retain |
+| S9-46 Haunted Mine | quest-fight | yes | Treus Dayth (95) | melee | Treus Dayth | Lobster 15 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1349,4 +1351,48 @@ Changed:
 Evidence:
 
 - OSRS Wiki Nazastarool: three forms, safespot around the dolmen, read 2026-11-18.
+
+## S9-45 Biohazard
+
+**Retain.** Biohazard: kill the mourner (level 13, 19 hitpoints, hits up to 2) upstairs in the Mourners' Headquarters for the key to the caged area.
+
+Quest stage lines: 1.8.
+
+Assumptions:
+
+- Two fish are a margin at the route's combat levels.
+
+Changed:
+
+- 2.141.0: new quest; the mourner is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Mourner (boss): level 13, 19 hitpoints, max hit 2, read 2026-11-18.
+
+## S9-46 Haunted Mine
+
+**Retain.** Haunted Mine: kill Treus Dayth (level 95, 100 hitpoints, hits up to 15 with ranged and 8 with crush) in the north of the mine; he has no safespot.
+
+Quest stage lines: 3.0, 6.7, 6.8.
+
+Assumptions:
+
+- Fifteen lobsters cover the fight; his cranes and carts are avoided by not standing next to them.
+
+Problems:
+
+- The crane and cart hits are not modelled.
+
+Alternatives:
+
+- Crumble Undead or air spells hit his weakness (wiki).
+
+Changed:
+
+- 2.141.0: new quest; Treus Dayth is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Treus Dayth: level 95, 100 hitpoints, max hit 15, read 2026-11-18.
 

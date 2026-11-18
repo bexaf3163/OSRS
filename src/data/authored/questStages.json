@@ -65501,6 +65501,1474 @@
      ]
     }
    ]
+  },
+  "S9-45": {
+   "var": [
+    "varp",
+    68
+   ],
+   "route": [
+    {
+     "title": "Sneaking back",
+     "steps": [
+      "To begin speak to Elena in East Ardougne (directly west of shortcut log). Dialogue: \"I'll try to retrieve it for you.\"",
+      "Speak to Jerico in the house just south of the northern Ardougne bank (The house with pigeon cages in the backyard).",
+      "Search the cupboard to obtain bird feed (click continue or the bird feed won't be added to your inventory).",
+      "Grab a pigeon cage from the backyard (note: if you are planning on doing One Small Favour, grab an extra 5 pigeon cages).",
+      "Go south-west of Ardougne Castle and speak to Omart.",
+      "Go north to the small watchtower along the wall, in front of the gates to West Ardougne.",
+      "Stand in the corner where the two spiked fences meet.",
+      "Use bird feed on the watchtower fence.",
+      "Click open on the pigeon cage in your inventory.",
+      "Equip your gas mask.",
+      "Run south from the watchtower and speak to Omart. Dialogue: \"Ok, lets do it.\" After a slight delay, you will arrive in West Ardougne."
+     ]
+    },
+    {
+     "title": "Infiltrating the Mourner Headquarters",
+     "steps": [
+      "Head around the headquarters to the north-eastern area with the vat and mangle.",
+      "Squeeze through the fence into the backyard.",
+      "Pick up the rotten apple.",
+      "Use the rotten apple on the cauldron.",
+      "Go back through the fence.",
+      "Go to Nurse Sarah's house, south-west of the West Ardougne church.",
+      "Search cupboard in northern part of the house for a medical gown.",
+      "Equip the medical gown, go back to the headquarters and open the door.",
+      "Go upstairs and kill a mourner. A key will automatically be placed in your inventory.",
+      "Use the key on the gate to get into the caged room.",
+      "Search the crate third from the left on the northern wall to find Elena's distillator.",
+      "With 3 empty inventory spaces, return to Elena and give her the distillator (via Ardougne Teleport, Skills necklace teleport to the Fishing Guild, over the wall by Kilron, or via the sewers from the Plague City quest)."
+     ]
+    },
+    {
+     "title": "Getting the touch paper",
+     "steps": [
+      "Go to the Chemist in south-western Rimmington (you can take a ship from Captain Barnaby at the Ardougne Dock directly to Rimmington for 30gp or use a teleport as the vials won't break upon teleportation anymore)",
+      "Speak to the Chemist. Dialogue: \"Your quest.\" He will give you the touch paper."
+     ]
+    },
+    {
+     "title": "Foresight",
+     "steps": [
+      "You will find Chancy, Da Vinci and Hops around a fire outside the Chemist's house.",
+      "Give Chancy the . Dialogue: \"You give him the vial of liquid honey...\"",
+      "Give Da Vinci the . Dialogue: \"You give him the vial of ethenea...\"",
+      "Give Hops the . Dialogue: \"You give him the vial of sulphuric broline...\""
+     ]
+    },
+    {
+     "title": "So far, so good",
+     "steps": [
+      "Teleport or travel to Varrock.",
+      "Travel to the fenced area to the south-east of the bank (south-eastern Varrock). The guard will search you, but you will be able to pass freely with the plague sample and touch paper in your inventory.",
+      "(Optional) Speak to Asyff, the Fancy dress shop owner, in the building south-east, to get a free priest gown (top and bottom) and equip it. Alternatively, purchase a priest gown (top and bottom) from him and equip it.",
+      "Go to the Dancing Donkey Inn.",
+      "Talk to Hops, Da Vinci and Chancy to get the vials back. Make sure you have the free inventory space."
+     ]
+    },
+    {
+     "title": "Secrets",
+     "steps": [
+      "With your Priest gown equipped head to Guidor's house in the south-east of the fenced area.",
+      "Speak to Guidor, tell him Elena has sent a sample that needs to be processed. Dialogue: \"I've come to ask your assistance in stopping a plague.\"",
+      "Return to Ardougne and speak to Elena.",
+      "Go to the of Ardougne Castle and speak to King Lathas. Dialogue: \"I don't understand...\"",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Elena in her house west of the northern Ardougne bank.",
+       "s": "Talk to Elena in her house west of the northern Ardougne bank.",
+       "k": "talkToElena",
+       "at": [
+        2592,
+        3336,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1102
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Jerico in his house south of the northern Ardougne bank",
+       "s": "Talk to Jerico in his house south of the northern Ardougne bank",
+       "k": "talkToJerico",
+       "at": [
+        2612,
+        3324,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1145
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Investigate the watchtower near the entrance to West Ardougne.",
+       "s": "Investigate the watchtower near the entrance to West Ardougne.",
+       "k": "investigateWatchtower",
+       "at": [
+        2562,
+        3301,
+        0
+       ],
+       "hl": {
+        "obj": [
+         35947
+        ]
+       }
+      },
+      {
+       "t": "Get a pigeon cage from behind Jerico's house.",
+       "s": "Get a pigeon cage from behind Jerico's house.",
+       "k": "getPigeonCage",
+       "at": [
+        2618,
+        3325,
+        0
+       ]
+      },
+      {
+       "t": "Get bird feed from the cupboard in Jerico's house.",
+       "s": "Get bird feed from the cupboard in Jerico's house.",
+       "k": "getBirdFeed",
+       "at": [
+        2612,
+        3326,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2056
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Get a pigeon cage from behind Jerico's house.",
+       "s": "Get a pigeon cage from behind Jerico's house.",
+       "k": "getPigeonCage",
+       "at": [
+        2618,
+        3325,
+        0
+       ]
+      },
+      {
+       "t": "Open the Pigeon cage next to the watchtower.",
+       "s": "Open the Pigeon cage next to the watchtower.",
+       "k": "clickPigeonCage",
+       "at": [
+        2562,
+        3300,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Talk to Omart, south of the watchtower, to enter West Ardougne.",
+       "s": "Talk to Omart, south of the watchtower, to enter West Ardougne.",
+       "k": "talkToOmartToEnterWestArdougne",
+       "at": [
+        2559,
+        3266,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9002
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Talk to Omart, south of the watchtower, to enter West Ardougne.",
+       "s": "Talk to Omart, south of the watchtower, to enter West Ardougne.",
+       "k": "talkToOmartToEnterWestArdougne",
+       "at": [
+        2559,
+        3266,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9002
+        ]
+       }
+      },
+      {
+       "t": "Squeeze through the fence to enter the Mourner's Headquarters yard in the north east of West Ardougne.",
+       "s": "Squeeze through the fence into the Mourners' Headquarters yard.",
+       "k": "enterBackyardOfHeadquarters",
+       "at": [
+        2541,
+        3331,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2068
+        ]
+       }
+      },
+      {
+       "t": "Pick up the rotten apple in the yard.",
+       "s": "Pick up the rotten apple in the yard.",
+       "k": "pickupRottenApple",
+       "at": [
+        2549,
+        3332,
+        0
+       ]
+      },
+      {
+       "t": "Use the rotten apple on the cauldron.",
+       "s": "Use the rotten apple on the cauldron.",
+       "k": "useRottenAppleOnCauldron",
+       "at": [
+        2543,
+        3332,
+        0
+       ],
+       "hl": {
+        "obj": [
+         37327
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Talk to Omart, south of the watchtower, to enter West Ardougne.",
+       "s": "Talk to Omart, south of the watchtower, to enter West Ardougne.",
+       "k": "talkToOmartToEnterWestArdougne",
+       "at": [
+        2559,
+        3266,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9002
+        ]
+       }
+      },
+      {
+       "t": "Search the cupboard in Sarah's house south-west of the West Ardougne church for a disguise.",
+       "s": "Search the cupboard in Sarah's house for a medical gown disguise.",
+       "k": "searchSarahsCupboard",
+       "at": [
+        2518,
+        3276,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2062
+        ]
+       }
+      },
+      {
+       "t": "Enter the Mourners' Headquarters whilst wearing the medical gown.",
+       "s": "Enter the Mourners' Headquarters whilst wearing the medical gown.",
+       "k": "enterMournerHeadquarters",
+       "at": [
+        2551,
+        3320,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2036
+        ]
+       }
+      },
+      {
+       "t": "Go upstairs and kill the mourner.",
+       "s": "Go upstairs and kill the mourner.",
+       "k": "goUpstairsInMournerBuilding",
+       "at": [
+        2543,
+        3325,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "Kill the mourner here for a key to the caged area.",
+       "s": "Kill the mourner here for a key to the caged area.",
+       "k": "killMourner",
+       "at": [
+        2549,
+        3325,
+        1
+       ],
+       "hl": {
+        "npc": [
+         9008
+        ]
+       }
+      },
+      {
+       "t": "Search the crate in the caged area for Elena's Distillator.",
+       "s": "Search the crate in the caged area for Elena's Distillator.",
+       "k": "searchCrateForDistillator",
+       "at": [
+        2554,
+        3327,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2064
+        ]
+       }
+      },
+      {
+       "t": "Search the cupboard in Sarah's house south-west of the West Ardougne church for a disguise.",
+       "s": "Search the cupboard in Sarah's house for a medical gown disguise.",
+       "k": "exitBackyardOfHeadquarters",
+       "at": [
+        2541,
+        3331,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2068
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Talk to Omart, south of the watchtower, to enter West Ardougne.",
+       "s": "Talk to Omart, south of the watchtower, to enter West Ardougne.",
+       "k": "talkToOmartToEnterWestArdougne",
+       "at": [
+        2559,
+        3266,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9002
+        ]
+       }
+      },
+      {
+       "t": "Search the cupboard in Sarah's house south-west of the West Ardougne church for a disguise.",
+       "s": "Search the cupboard in Sarah's house for a medical gown disguise.",
+       "k": "searchSarahsCupboard",
+       "at": [
+        2518,
+        3276,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2062
+        ]
+       }
+      },
+      {
+       "t": "Enter the Mourners' Headquarters whilst wearing the medical gown.",
+       "s": "Enter the Mourners' Headquarters whilst wearing the medical gown.",
+       "k": "enterMournerHeadquarters",
+       "at": [
+        2551,
+        3320,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2036
+        ]
+       }
+      },
+      {
+       "t": "Go upstairs and kill the mourner.",
+       "s": "Go upstairs and kill the mourner.",
+       "k": "goUpstairsInMournerBuilding",
+       "at": [
+        2543,
+        3325,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       }
+      },
+      {
+       "t": "Kill the mourner here for a key to the caged area.",
+       "s": "Kill the mourner here for a key to the caged area.",
+       "k": "killMourner",
+       "at": [
+        2549,
+        3325,
+        1
+       ],
+       "hl": {
+        "npc": [
+         9008
+        ]
+       }
+      },
+      {
+       "t": "Search the crate in the caged area for Elena's Distillator.",
+       "s": "Search the crate in the caged area for Elena's Distillator.",
+       "k": "searchCrateForDistillator",
+       "at": [
+        2554,
+        3327,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2064
+        ]
+       }
+      },
+      {
+       "t": "Return to Elena.",
+       "s": "Return to Elena.",
+       "k": "talkToElenaWithDistillator",
+       "at": [
+        2592,
+        3336,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1102
+        ]
+       }
+      },
+      {
+       "t": "Return to Elena. Talk to Kilron south-east of the West Ardougne church to return back to East Ardougne.",
+       "s": "Return to Elena, then ask Kilron south-east of the church to go back.",
+       "k": "talkToKilron",
+       "at": [
+        2556,
+        3266,
+        0
+       ],
+       "hl": {
+        "npc": [
+         9001
+        ]
+       }
+      },
+      {
+       "t": "Return to Elena. Go back downstairs or teleport out.",
+       "s": "Return to Elena. Go back downstairs or teleport out.",
+       "k": "goBackDownstairsInMournersHeadquarters",
+       "at": [
+        2543,
+        3325,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16673
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Take the Plague Sample to the Chemist in Rimmington. You can take a boat from Ardougne Dock to Rimmington for 30gp.",
+       "s": "Take the plague sample to the Chemist in Rimmington (boat, 30 coins).",
+       "k": "talkToTheChemist",
+       "at": [
+        2933,
+        3210,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1146
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Go speak to Hops, Da Vinci and Chancy in the pub in the south east of Varrock. If you lost any of the chemicals, return to Elena to get more.",
+       "s": "Ask Hops, Da Vinci and Chancy in the south-east Varrock pub.",
+       "k": "goToVarrock",
+       "at": [
+        3270,
+        3390,
+        0
+       ]
+      },
+      {
+       "t": "Give Hops, Da Vinci and Chancy one chemical each to carry past the guards to Varrock.",
+       "s": "Give Hops, Da Vinci and Chancy one chemical each.",
+       "k": "giveChemicals"
+      },
+      {
+       "t": "Talk to Chancy for the Liquid honey.",
+       "s": "Talk to Chancy for the Liquid honey.",
+       "k": "chancyVarrock",
+       "at": [
+        3270,
+        3390,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1106
+        ]
+       }
+      },
+      {
+       "t": "Talk to Da Vinci for the Ethenea.",
+       "s": "Talk to Da Vinci for the Ethenea.",
+       "k": "vinciVarrock",
+       "at": [
+        3270,
+        3390,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1104
+        ]
+       }
+      },
+      {
+       "t": "Talk to Hops for the Sulphuric Broline.",
+       "s": "Talk to Hops for the Sulphuric Broline.",
+       "k": "hopsVarrock",
+       "at": [
+        3270,
+        3390,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1108
+        ]
+       }
+      },
+      {
+       "t": "Talk to Asyff and buy a priest gown set.",
+       "s": "Talk to Asyff and buy a priest gown set.",
+       "k": "talkToAsyffBuy",
+       "at": [
+        3277,
+        3397,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2887
+        ]
+       }
+      },
+      {
+       "t": "Talk to Asyff to get a free priest gown. You can only get the free set once.",
+       "s": "Talk to Asyff for a free priest gown; only one free set.",
+       "k": "talkToAsyff",
+       "at": [
+        3277,
+        3397,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2887
+        ]
+       }
+      },
+      {
+       "t": "Talk to Guidor in his house to the south.",
+       "s": "Talk to Guidor in his house to the south.",
+       "k": "talkToGuidor",
+       "at": [
+        3284,
+        3382,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1110
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "Return to Elena and inform her that the plague is a hoax.",
+       "s": "Return to Elena and inform her that the plague is a hoax.",
+       "k": "returnToElenaAfterSampling",
+       "at": [
+        2592,
+        3336,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1102
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Tell King Lathas that the Plague is a hoax.",
+       "s": "Tell King Lathas that the Plague is a hoax.",
+       "k": "informTheKingGoUpstairs",
+       "at": [
+        2572,
+        3296,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15645
+        ]
+       }
+      },
+      {
+       "t": "Tell King Lathas that the Plague is a hoax.",
+       "s": "Tell King Lathas that the Plague is a hoax.",
+       "k": "informTheKing",
+       "at": [
+        2578,
+        3293,
+        1
+       ],
+       "hl": {
+        "npc": [
+         9005
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-46": {
+   "var": [
+    "varp",
+    382
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "Talk to the Zealot outside the mine. Dialogue: \"I follow the path of Saradomin.\", \"I come seeking challenges and quests.\", \"What quest is that then?\", \"Why was everyone in the mines slaughtered?\", \"Is there any other way into the mine?\", \"Where is the second entrance to the mines?\", \"Can I borrow your key?\"",
+      "Pickpocket him for the zealot's key.",
+      "Climb over the cart to the south and crawl-down the cart tunnel."
+     ]
+    },
+    {
+     "title": "Cave level 1",
+     "steps": [
+      "Run directly west through the cave and crawl-through the cart tunnel.",
+      "Re-enter the cave via the southern entrance.",
+      "Descend the nearby ladder."
+     ]
+    },
+    {
+     "title": "Cave level 2",
+     "steps": [
+      "Go down the ladder directly east."
+     ]
+    },
+    {
+     "title": "Cave level 3",
+     "steps": [
+      "Avoid touching mine carts.",
+      "Go south along the moving cart's tracks using the alcove for cover, then slightly west.",
+      "Climb down the ladder."
+     ]
+    },
+    {
+     "title": "Cave level 4",
+     "steps": [
+      "Pick a glowing fungus. Don't take any random events that teleport you out of the mine from now on or your fungus will turn to ash.",
+      "Go NW and place the fungus in the searchable cart.",
+      "Go NW to check the points settings. (Board on a wall)",
+      "Write down which levers need to change to match the correct setting to get to the ladder in the top-right corner.",
+      "Go south-east and pull the needed levers (between A-E).",
+      "Go north-west and pull the needed levers (between F-K).",
+      "Return to the point settings and click start."
+     ]
+    },
+    {
+     "title": "Finding the cart again",
+     "steps": [
+      "Leave the cave by going back the way you came",
+      "Crawl-down the Cart tunnel to the north",
+      "Climb down the nearby ladder.",
+      "Go NE and climb down the ladder by the door.",
+      "Go west then north and climb down the ladder.",
+      "Search the cart for the fungus and take it. Do not drop until you have completed the quest!"
+     ]
+    },
+    {
+     "title": "Water valve",
+     "steps": [
+      "Climb up the ladder and start saving your run energy after you turn the water valve in the next step.",
+      "Go all the way east then south past the moving cart.",
+      "Climb down the ladder.",
+      "Head south and use the Zealot's key on the water valve.",
+      "Quickly run to the lift and take it down.",
+      "Go south then East and down the stairs.",
+      "Go through the door.",
+      "Pick up the innocent-looking key to start the boss fight.",
+      "Kill Treus Dayth. It is recommended to pray Protect from Missiles throughout the fight. A good way to fight this boss is to run near him after attacking; the goal is to force him into the north-eastern corner. Once this occurs, run west to the end of the detached northern shaft and attack him from a distance. This prevents him from teleporting around the mine while also negating crane damage, which should make the fight easier.",
+      "Pick up the key",
+      "Go back up the eastern stairs.",
+      "Go west and down those stairs. You will need the Glowing fungus to act as a light source.",
+      "Open the door and cut the crystal outcrop to the south-east with your chisel.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to the Zealot outside the Abandoned Mine in south west Morytania.",
+       "s": "Talk to the Zealot outside the Abandoned Mine in south west Morytania.",
+       "k": "talkToZealot",
+       "at": [
+        3443,
+        3258,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3611
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to the Zealot outside the Abandoned Mine in south west Morytania.",
+       "s": "Talk to the Zealot outside the Abandoned Mine in south west Morytania.",
+       "k": "talkToZealot",
+       "at": [
+        3443,
+        3258,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3611
+        ]
+       }
+      },
+      {
+       "t": "Pickpocket the Zealot outside the Abandoned Mine in south west Morytania.",
+       "s": "Pickpocket the Zealot outside the Abandoned Mine in Morytania.",
+       "k": "pickpocketZealot",
+       "at": [
+        3443,
+        3258,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3611
+        ]
+       }
+      },
+      {
+       "t": "Enter the south cart tunnel around the back of the mine.",
+       "s": "Enter the south cart tunnel around the back of the mine.",
+       "k": "enterMine",
+       "at": [
+        3429,
+        3225,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4915
+        ]
+       }
+      },
+      {
+       "t": "Climb down the ladder to the east.",
+       "s": "Climb down the ladder to the east.",
+       "k": "goDownFromLevel1South",
+       "at": [
+        3422,
+        9625,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4965
+        ]
+       }
+      },
+      {
+       "t": "Climb down another ladder to the east.",
+       "s": "Climb down another ladder to the east.",
+       "k": "goDownFromLevel2South",
+       "at": [
+        2798,
+        4567,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4969
+        ]
+       }
+      },
+      {
+       "t": "Go down the ladder to the south, making sure to avoid the moving mine cart.",
+       "s": "Go down the ladder to the south, avoiding the moving mine cart.",
+       "k": "goDownToFungusRoom",
+       "at": [
+        2725,
+        4486,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4967
+        ]
+       }
+      },
+      {
+       "t": "Pick a glowing fungus.",
+       "s": "Pick a glowing fungus.",
+       "k": "pickFungus",
+       "at": [
+        2793,
+        4493,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4933
+        ]
+       }
+      },
+      {
+       "t": "Put the glowing fungus into the mine cart north west of the ladder.",
+       "s": "Put the glowing fungus into the mine cart north west of the ladder.",
+       "k": "putFungusInCart",
+       "at": [
+        2778,
+        4506,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4974
+        ]
+       }
+      },
+      {
+       "t": "Check the Points Settings panel in the centre of the room. Click the 'Start' button in the interface.",
+       "s": "Click Start on the Points Settings panel in the room's centre.",
+       "k": "readPanel",
+       "at": [
+        2770,
+        4522,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4949
+        ]
+       }
+      },
+      {
+       "t": "Pull the marked lever.",
+       "s": "Pull the marked lever.",
+       "k": "pullLeverH",
+       "at": [
+        2770,
+        4533,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4957
+        ]
+       }
+      },
+      {
+       "t": "Pull the marked lever.",
+       "s": "Pull the marked lever.",
+       "k": "pullLeverG",
+       "at": [
+        2769,
+        4533,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4956
+        ]
+       }
+      },
+      {
+       "t": "Pull the marked lever.",
+       "s": "Pull the marked lever.",
+       "k": "pullLeverF",
+       "at": [
+        2768,
+        4533,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4955
+        ]
+       }
+      },
+      {
+       "t": "Pull the marked lever.",
+       "s": "Pull the marked lever.",
+       "k": "pullLeverE",
+       "at": [
+        2785,
+        4515,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4954
+        ]
+       }
+      },
+      {
+       "t": "Pull the marked lever.",
+       "s": "Pull the marked lever.",
+       "k": "pullLeverD",
+       "at": [
+        2786,
+        4515,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4953
+        ]
+       }
+      },
+      {
+       "t": "Pull the marked lever.",
+       "s": "Pull the marked lever.",
+       "k": "pullLeverC",
+       "at": [
+        2786,
+        4517,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4952
+        ]
+       }
+      },
+      {
+       "t": "Pull the marked lever.",
+       "s": "Pull the marked lever.",
+       "k": "pullLeverB",
+       "at": [
+        2784,
+        4517,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4951
+        ]
+       }
+      },
+      {
+       "t": "Pull the marked lever.",
+       "s": "Pull the marked lever.",
+       "k": "pullLeverA",
+       "at": [
+        2785,
+        4517,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4950
+        ]
+       }
+      },
+      {
+       "t": "Make sure you're prepared to fight Treus Dayth (level 95), then enter the north area of the Haunted Mine.",
+       "s": "Enter the north of the Haunted Mine, ready for Treus Dayth (level 95).",
+       "k": "enterMineNorth",
+       "at": [
+        3430,
+        3233,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4914
+        ]
+       }
+      },
+      {
+       "t": "Climb back up to the surface.",
+       "s": "Climb back up to the surface.",
+       "k": "goUpFromFungusRoom",
+       "at": [
+        2789,
+        4486,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4968
+        ]
+       }
+      },
+      {
+       "t": "Climb back up to the surface.",
+       "s": "Climb back up to the surface.",
+       "k": "goUpFromLevel3South",
+       "at": [
+        2734,
+        4503,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4970
+        ]
+       }
+      },
+      {
+       "t": "Climb back up to the surface.",
+       "s": "Climb back up to the surface.",
+       "k": "goUpFromLevel2South",
+       "at": [
+        2782,
+        4569,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4966
+        ]
+       }
+      },
+      {
+       "t": "Leave through the cart tunnel.",
+       "s": "Leave through the cart tunnel.",
+       "k": "leaveLevel1South",
+       "at": [
+        3408,
+        9623,
+        0
+       ],
+       "hl": {
+        "obj": [
+         15830
+        ]
+       }
+      },
+      {
+       "t": "Climb down the west ladder.",
+       "s": "Climb down the west ladder.",
+       "k": "goDownLevel1North",
+       "at": [
+        3413,
+        9633,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4965
+        ]
+       }
+      },
+      {
+       "t": "Climb down the north east ladder.",
+       "s": "Climb down the north east ladder.",
+       "k": "goDownLevel2North",
+       "at": [
+        2797,
+        4599,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4969
+        ]
+       }
+      },
+      {
+       "t": "Go back up the ladder.",
+       "s": "Go back up the ladder.",
+       "k": "goUpFromLiftRoom",
+       "at": [
+        2796,
+        4529,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4968
+        ]
+       }
+      },
+      {
+       "t": "Go down the north west ladder to collect the glowing fungus.",
+       "s": "Go down the north west ladder to collect the glowing fungus.",
+       "k": "goDownToCollectFungus",
+       "at": [
+        2710,
+        4540,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4967
+        ]
+       }
+      },
+      {
+       "t": "Search the mine cart for the glowing fungus.",
+       "s": "Search the mine cart for the glowing fungus.",
+       "k": "collectFungus",
+       "at": [
+        2774,
+        4537,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4974
+        ]
+       }
+      },
+      {
+       "t": "Climb down the ladder in the room in the north east.",
+       "s": "Climb down the ladder in the room in the north east.",
+       "k": "goDownFromLevel3NorthEast",
+       "at": [
+        2732,
+        4529,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4967
+        ]
+       }
+      },
+      {
+       "t": "Take the fungus back upstairs.",
+       "s": "Take the fungus back upstairs.",
+       "k": "goUpFromCollectRoom",
+       "at": [
+        2774,
+        4540,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4968
+        ]
+       }
+      },
+      {
+       "t": "Pick up the chisel nearby.",
+       "s": "Pick up the chisel nearby.",
+       "k": "pickUpChisel",
+       "has": "Chisel",
+       "at": [
+        2800,
+        4500,
+        0
+       ]
+      },
+      {
+       "t": "Use the Zealot's key on the water valve. Make sure you have some energy as you'll need to race to the lift afterwards.",
+       "s": "Use the Zealot's key on the water valve; save energy for the lift.",
+       "k": "useKeyOnValve",
+       "at": [
+        2808,
+        4496,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4924
+        ]
+       }
+      },
+      {
+       "t": "Turn the valve. Make sure you have some energy as you'll need to race to the lift afterwards.",
+       "s": "Turn the valve; keep energy for the race to the lift.",
+       "k": "openValve",
+       "at": [
+        2808,
+        4496,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4924
+        ]
+       }
+      },
+      {
+       "t": "Race to the lift before the ghost turns off the valve.",
+       "s": "Race to the lift before the ghost turns off the valve.",
+       "k": "goDownLift",
+       "at": [
+        2807,
+        4492,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4938
+        ]
+       }
+      },
+      {
+       "t": "Go back up to the flooded area.",
+       "s": "Go back up to the flooded area.",
+       "k": "leaveCrystalRoom",
+       "at": [
+        2756,
+        4454,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4973
+        ]
+       }
+      },
+      {
+       "t": "Go down the east stairs.",
+       "s": "Go down the east stairs.",
+       "k": "goDownToDayth",
+       "at": [
+        2748,
+        4437,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4971
+        ]
+       }
+      },
+      {
+       "t": "Attempt to pick up the innocent-looking key. Treus Dayth (level 95) will spawn. Kill him.",
+       "s": "Pick up the innocent-looking key; kill Treus Dayth (level 95).",
+       "k": "tryToPickUpKey",
+       "at": [
+        2788,
+        4455,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3619
+        ]
+       }
+      },
+      {
+       "t": "Kill Treus Dayth.",
+       "s": "Kill Treus Dayth.",
+       "k": "killDayth",
+       "at": [
+        2788,
+        4450,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3616
+        ]
+       }
+      },
+      {
+       "t": "Pick up the innocent-looking key.",
+       "s": "Pick up the innocent-looking key.",
+       "k": "pickUpKey",
+       "at": [
+        2788,
+        4455,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3619
+        ]
+       }
+      },
+      {
+       "t": "Go back up to the flooded area.",
+       "s": "Go back up to the flooded area.",
+       "k": "goUpFromDayth",
+       "at": [
+        2813,
+        4454,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4973
+        ]
+       }
+      },
+      {
+       "t": "Go back up the lift to get a chisel.",
+       "s": "Go back up the lift to get a chisel.",
+       "k": "goBackUpLift",
+       "has": "Chisel",
+       "at": [
+        2726,
+        4456,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4942
+        ]
+       }
+      },
+      {
+       "t": "Go down the west stairs.",
+       "s": "Go down the west stairs.",
+       "k": "goDownToCrystals",
+       "at": [
+        2694,
+        4437,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4971
+        ]
+       }
+      },
+      {
+       "t": "Cut a crystal from an outcrop in the south room to finish the quest.",
+       "s": "Cut a crystal from an outcrop in the south room.",
+       "k": "cutCrystal",
+       "at": [
+        2787,
+        4428,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4926
+        ]
+       }
+      },
+      {
+       "t": "You need a glowing fungus. Go back up to the flooded area.",
+       "s": "You need a glowing fungus. Go back up to the flooded area.",
+       "k": "leaveDarkDaythRoom",
+       "at": [
+        2732,
+        4563,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4972
+        ]
+       }
+      },
+      {
+       "t": "You need a glowing fungus. Go back up to the flooded area.",
+       "s": "You need a glowing fungus. Go back up to the flooded area.",
+       "k": "leaveDarkCrystalRoom",
+       "at": [
+        2710,
+        4593,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4972
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }
