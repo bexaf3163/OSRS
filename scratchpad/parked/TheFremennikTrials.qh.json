@@ -1,0 +1,3499 @@
+{
+ "title": "The Fremennik Trials",
+ "cls": "TheFremennikTrials",
+ "var": [
+  "varp",
+  347
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToBrundt"
+   },
+   "1": "n1",
+   "2": "n1",
+   "3": "n1",
+   "4": "n1",
+   "5": "n1",
+   "6": "n1",
+   "7": "n1",
+   "8": {
+    "s": "finishQuest"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "trials",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "and",
+         "a": [
+          "r1"
+         ]
+        },
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6",
+        "r7"
+       ]
+      },
+      "n2"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "and",
+         "a": [
+          "r27"
+         ]
+        },
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6"
+       ]
+      },
+      "n3"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r28",
+        "r2",
+        "r3",
+        "r4",
+        "r5"
+       ]
+      },
+      "n4"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r30",
+        "r2",
+        "r3",
+        "r4"
+       ]
+      },
+      "n5"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2",
+        "r3"
+       ]
+      },
+      "n6"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r44",
+        "r2"
+       ]
+      },
+      "n7"
+     ],
+     [
+      "r50",
+      "n8"
+     ]
+    ],
+    "d": "n9"
+   },
+   "n2": {
+    "n": "peerTask",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r9"
+       ]
+      },
+      {
+       "s": "leaveSeersHouse"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r9",
+        "r11"
+       ]
+      },
+      {
+       "s": "goDownstairsWithKey2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r9"
+       ]
+      },
+      {
+       "s": "goDownstairsWithKey"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        {
+         "o": "item",
+         "nm": "Frozen key",
+         "ids": [
+          3741
+         ],
+         "eq": true
+        }
+       ]
+      },
+      {
+       "s": "useFrozenKeyOnRange"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        {
+         "o": "item",
+         "nm": "Sealed vase",
+         "ids": [
+          3740
+         ],
+         "eq": true
+        }
+       ]
+      },
+      {
+       "s": "useVaseOnTable"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        {
+         "o": "item",
+         "nm": "Vase of water",
+         "ids": [
+          3735
+         ],
+         "eq": true
+        }
+       ]
+      },
+      {
+       "s": "useLidOnVase"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        {
+         "o": "item",
+         "nm": "Vase",
+         "ids": [
+          3734
+         ],
+         "eq": true
+        }
+       ]
+      },
+      {
+       "s": "fillVase"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        {
+         "o": "item",
+         "nm": "Sealed vase",
+         "ids": [
+          3738
+         ],
+         "eq": true
+        }
+       ]
+      },
+      {
+       "s": "takeLidOff"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        "r13"
+       ]
+      },
+      {
+       "s": "useBucketOnScale"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        "r14",
+        "r15"
+       ]
+      },
+      {
+       "s": "useBucketOnJug3"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        "r16",
+        "r15"
+       ]
+      },
+      {
+       "s": "useBucketOnTap2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        "r17",
+        "r18"
+       ]
+      },
+      {
+       "s": "useBucketOnJug2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        "r17",
+        "r19"
+       ]
+      },
+      {
+       "s": "useJugOnDrain1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        "r14",
+        "r18"
+       ]
+      },
+      {
+       "s": "useBucketOnJug1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        "r16",
+        "r18"
+       ]
+      },
+      {
+       "s": "useBucketOnTap1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        "r20",
+        {
+         "o": "or",
+         "a": [
+          {
+           "o": "item",
+           "nm": "1/3rds full jug",
+           "ids": [
+            3731
+           ],
+           "eq": true
+          },
+          "r15",
+          "r18",
+          "r19"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "emptyJugAndBucket"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        "r20",
+        {
+         "o": "obj",
+         "ids": [
+          4168
+         ],
+         "z": [
+          2635,
+          3660,
+          2635,
+          3660,
+          2,
+          2
+         ]
+        }
+       ]
+      },
+      {
+       "s": "searchChest2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        "r20"
+       ]
+      },
+      {
+       "s": "searchChest1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12",
+        {
+         "o": "obj",
+         "ids": [
+          4178
+         ]
+        }
+       ]
+      },
+      {
+       "s": "searchCupboard2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r12"
+       ]
+      },
+      {
+       "s": "searchCupboard1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r12"
+       ]
+      },
+      {
+       "s": "goUpstairsWithVaseLid"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r21",
+        "r22"
+       ]
+      },
+      {
+       "s": "useDiskNewOnMural"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r23",
+        "r22"
+       ]
+      },
+      {
+       "s": "useDiskOldOnMural"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r23",
+        "r21"
+       ]
+      },
+      {
+       "s": "useDiskAnyOnMural"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r23",
+        "r21",
+        "r11"
+       ]
+      },
+      {
+       "s": "goDown1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r23",
+        "r21"
+       ]
+      },
+      {
+       "s": "openTrapDoorAndGoDown1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r24",
+        "r25",
+        "r23"
+       ]
+      },
+      {
+       "s": "useGoopOnDisk"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r26",
+        "r25",
+        "r23"
+       ]
+      },
+      {
+       "s": "cookHerring"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        {
+         "o": "or",
+         "a": [
+          "r21",
+          {
+           "o": "and",
+           "a": [
+            "r26",
+            "r25"
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "s": "searchUnicorn"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        {
+         "o": "or",
+         "a": [
+          "r24",
+          "r26"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "searchBull"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "searchBookcase"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "goBackUpstairs"
+      }
+     ],
+     [
+      {
+       "o": "or",
+       "a": [
+        {
+         "o": "zone",
+         "z": [
+          [
+           2629,
+           3659,
+           2633,
+           3666,
+           0,
+           0
+          ]
+         ]
+        },
+        {
+         "o": "chat",
+         "m": [
+          "You have solved the riddle!"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "goUpEntranceLadderPeer"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "wt",
+         "g": 229,
+         "c": 1,
+         "m": [
+          "My first is in wizard"
+         ]
+        }
+       ],
+       "latch": true
+      },
+      {
+       "s": "inputWind"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "wt",
+         "g": 229,
+         "c": 1,
+         "m": [
+          "My first is in water"
+         ]
+        }
+       ],
+       "latch": true
+      },
+      {
+       "s": "inputTime"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "wt",
+         "g": 229,
+         "c": 1,
+         "m": [
+          "My first is in fish"
+         ]
+        }
+       ],
+       "latch": true
+      },
+      {
+       "s": "inputFire"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "wt",
+         "g": 229,
+         "c": 1,
+         "m": [
+          "My first is in well"
+         ]
+        }
+       ],
+       "latch": true
+      },
+      {
+       "s": "inputLife"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "wt",
+         "g": 229,
+         "c": 1,
+         "m": [
+          "My first is in tar"
+         ]
+        }
+       ],
+       "latch": true
+      },
+      {
+       "s": "inputTree"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "wt",
+         "g": 229,
+         "c": 1,
+         "m": [
+          "My first is in mage"
+         ]
+        }
+       ],
+       "latch": true
+      },
+      {
+       "s": "inputMind"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "enterPeerHouse"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToPeer"
+    },
+    "l": {
+     "o": "or",
+     "a": [
+      {
+       "o": "dlg",
+       "m": [
+        "To have solved my puzzle"
+       ]
+      },
+      {
+       "o": "wt",
+       "g": 119,
+       "c": 6,
+       "m": [
+        "I now have the Seer's vote"
+       ],
+       "ch": 1
+      }
+     ],
+     "latch": true
+    }
+   },
+   "n3": {
+    "n": "swensenTask",
+    "c": [
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2661,
+         10034,
+         2670,
+         10043,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "swensenUpLadder"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2662,
+         10022,
+         2670,
+         10030,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "swensen7North"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2650,
+         10034,
+         2656,
+         10040,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "swensen6East"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2627,
+         10023,
+         2633,
+         10029,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "swensen5South"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2662,
+         10012,
+         2668,
+         10018,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "swensen4North"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2650,
+         10001,
+         2656,
+         10007,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "swensen3East"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2639,
+         10012,
+         2645,
+         10018,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "swensen2West"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2626,
+         10001,
+         2634,
+         10008,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "swensen1South"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2626,
+         10001,
+         2674,
+         10044,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "resetSwensen"
+      }
+     ],
+     [
+      "r27",
+      {
+       "s": "goDownLadderSwensen"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToSwensen"
+    },
+    "l": "r7"
+   },
+   "n4": {
+    "n": "thorvaldTask",
+    "c": [
+     [
+      {
+       "o": "npc",
+       "id": 3900
+      },
+      {
+       "s": "killKoschei4"
+      }
+     ],
+     [
+      {
+       "o": "npc",
+       "id": 3899
+      },
+      {
+       "s": "killKoschei3"
+      }
+     ],
+     [
+      {
+       "o": "npc",
+       "id": 3898
+      },
+      {
+       "s": "killKoschei2"
+      }
+     ],
+     [
+      {
+       "o": "npc",
+       "id": 3897
+      },
+      {
+       "s": "killKoschei1"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2641,
+         10064,
+         2672,
+         10099,
+         2,
+         2
+        ]
+       ]
+      },
+      {
+       "s": "waitForKoschei"
+      }
+     ],
+     [
+      "r29",
+      {
+       "s": "goDownLadderToKoschei"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToThorvald"
+    },
+    "l": "r6"
+   },
+   "n5": {
+    "n": "sigmundTask",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Exotic flower",
+       "ids": [
+        3698
+       ]
+      },
+      {
+       "s": "bringExoticFlowerToSigmund"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Fremennik ballad",
+       "ids": [
+        3699
+       ]
+      },
+      {
+       "s": "bringBalladToSailor"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Sturdy boots",
+       "ids": [
+        3700
+       ]
+      },
+      {
+       "s": "bringSturdyBootsToOlaf"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Fiscal statement",
+       "ids": [
+        3708
+       ]
+      },
+      {
+       "s": "bringFiscalStatementToYsra"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Tracking map",
+       "ids": [
+        3701
+       ]
+      },
+      {
+       "s": "bringTrackingMapToBrundt"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Custom bow string",
+       "ids": [
+        3702
+       ]
+      },
+      {
+       "s": "bringCustomBowStringToSigli"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Unusual fish",
+       "ids": [
+        3703
+       ]
+      },
+      {
+       "s": "bringUnusualFishToSkulgrimen"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Sea fishing map",
+       "ids": [
+        3704
+       ]
+      },
+      {
+       "s": "bringSeaFishingMapToFisherman"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Weather forecast",
+       "ids": [
+        3705
+       ]
+      },
+      {
+       "s": "bringWeatherForecastToSwensen"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Warriors' contract",
+       "ids": [
+        3710
+       ]
+      },
+      {
+       "s": "bringWarriorsContractToPeer"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Champions token",
+       "ids": [
+        3706
+       ]
+      },
+      {
+       "s": "bringChampionsTokenToThorvald"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Legendary cocktail",
+       "ids": [
+        3707
+       ]
+      },
+      {
+       "s": "bringCocktailToManni"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Promissory note",
+       "ids": [
+        3709
+       ]
+      },
+      {
+       "s": "bringNoteToThora"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r43",
+        {
+         "o": "npc",
+         "id": 8402
+        }
+       ]
+      },
+      {
+       "s": "talkToAskeladdenForSigmund2"
+      }
+     ],
+     [
+      "r43",
+      {
+       "s": "talkToAskeladdenForSigmund"
+      }
+     ],
+     [
+      "r42",
+      {
+       "s": "talkToThoraForSigmund"
+      }
+     ],
+     [
+      "r41",
+      {
+       "s": "talkToManniForSigmund"
+      }
+     ],
+     [
+      "r40",
+      {
+       "s": "talkToThorvaldForSigmund"
+      }
+     ],
+     [
+      "r39",
+      {
+       "s": "talkToPeerForSigmund"
+      }
+     ],
+     [
+      "r38",
+      {
+       "s": "talkToSwenesenForSigmund"
+      }
+     ],
+     [
+      "r37",
+      {
+       "s": "talkToFishermanForSigmund"
+      }
+     ],
+     [
+      "r36",
+      {
+       "s": "talkToSkulgrimenForSigmund"
+      }
+     ],
+     [
+      "r35",
+      {
+       "s": "talkToSigliForSigmund"
+      }
+     ],
+     [
+      "r34",
+      {
+       "s": "talkToBrundtForSigmund"
+      }
+     ],
+     [
+      "r33",
+      {
+       "s": "talkToYsra"
+      }
+     ],
+     [
+      "r32",
+      {
+       "s": "talkToOlafForSigmund"
+      }
+     ],
+     [
+      "r31",
+      {
+       "s": "talkToSailor"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToSigmund"
+    },
+    "l": "r5"
+   },
+   "n6": {
+    "n": "sigliTask",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Hunters' talisman",
+       "ids": [
+        3696
+       ]
+      },
+      {
+       "s": "returnToSigli"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Hunters' talisman",
+       "ids": [
+        3697
+       ]
+      },
+      {
+       "s": "huntDraugen"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToSigli"
+    },
+    "l": "r4"
+   },
+   "n7": {
+    "n": "manniTask",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r45",
+        "r46"
+       ]
+      },
+      {
+       "s": "cheatInBeerDrinking"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r45"
+       ]
+      },
+      {
+       "s": "getKegOfBeer"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r47",
+        "r48",
+        "r46"
+       ]
+      },
+      {
+       "s": "useAlcoholFreeOnKeg"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r47",
+        "r48"
+       ]
+      },
+      {
+       "s": "getKegOfBeer"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r47"
+       ]
+      },
+      {
+       "s": "getAlcoholFreeBeer"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r44",
+        {
+         "o": "item",
+         "nm": "Lit strange object",
+         "ids": [
+          3714
+         ]
+        },
+        "r48",
+        "r49"
+       ]
+      },
+      {
+       "s": "useStrangeObjectOnPipe"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r44",
+        {
+         "o": "item",
+         "nm": "Strange object",
+         "ids": [
+          3713,
+          3714
+         ],
+         "bank": 1
+        },
+        "r48",
+        "r49"
+       ]
+      },
+      {
+       "s": "useStrangeObject"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r44",
+        {
+         "o": "item",
+         "nm": "Strange object",
+         "ids": [
+          3713,
+          3714
+         ],
+         "bank": 1
+        },
+        "r48"
+       ]
+      },
+      {
+       "s": "prepareToUseStrangeObject"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r44",
+        {
+         "o": "item",
+         "nm": "Strange object",
+         "ids": [
+          3713,
+          3714
+         ],
+         "bank": 1
+        }
+       ]
+      },
+      {
+       "s": "getAlcoholFreeBeer"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r44",
+        {
+         "o": "item",
+         "nm": "Beer",
+         "ids": [
+          1917,
+          3803
+         ],
+         "eq": true
+        }
+       ]
+      },
+      {
+       "s": "getStrangeObject"
+      }
+     ],
+     [
+      "r44",
+      {
+       "s": "pickUpBeer"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToManni"
+    },
+    "l": "r3"
+   },
+   "n8": {
+    "n": "olafTask",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Enchanted lyre",
+       "ids": [
+        3690
+       ],
+       "bank": 1
+      },
+      {
+       "s": "performMusic"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r52",
+        {
+         "o": "item",
+         "nm": "Lyre",
+         "ids": [
+          3689
+         ],
+         "bank": 1
+        }
+       ]
+      },
+      {
+       "s": "enchantLyre"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Golden wool",
+         "ids": [
+          3694
+         ]
+        },
+        "r53"
+       ]
+      },
+      {
+       "s": "makeLyre"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r54",
+        "r53"
+       ]
+      },
+      {
+       "s": "spinWool"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r54",
+        {
+         "o": "item",
+         "nm": "Branch",
+         "ids": [
+          3692
+         ]
+        }
+       ]
+      },
+      {
+       "s": "fletchLyre"
+      }
+     ],
+     [
+      "r54",
+      {
+       "s": "chopSwayingTree"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r55",
+        {
+         "o": "?",
+         "d": "RuneliteRequirement"
+        }
+       ]
+      },
+      {
+       "s": "talkToLaliAfterStew"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r55",
+        "r56",
+        "r57",
+        {
+         "o": "?",
+         "d": "RuneliteRequirement"
+        }
+       ]
+      },
+      {
+       "s": "useRock"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r55",
+        "r56",
+        "r57"
+       ]
+      },
+      {
+       "s": "usePotato"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r55",
+        "r56"
+       ]
+      },
+      {
+       "s": "useCabbage"
+      }
+     ],
+     [
+      "r55",
+      {
+       "s": "useOnion"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r52",
+        {
+         "o": "?",
+         "d": "RuneliteRequirement"
+        }
+       ]
+      },
+      {
+       "s": "talkToAskeladdenForRock"
+      }
+     ],
+     [
+      "r52",
+      {
+       "s": "talkToLalli"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToOlaf"
+    },
+    "l": "r2"
+   },
+   "n9": {
+    "n": "resyncCondition",
+    "c": [],
+    "d": {
+     "s": "resyncStep"
+    },
+    "l": {
+     "o": "or",
+     "a": [
+      "r51",
+      {
+       "o": "and",
+       "a": [
+        "r50",
+        "r44",
+        "r30",
+        "r28"
+       ]
+      }
+     ],
+     "latch": true
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r2": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r3": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r4": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r5": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r6": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r7": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r8": {
+    "o": "zone",
+    "z": [
+     [
+      2634,
+      3659,
+      2638,
+      3666,
+      0,
+      0
+     ]
+    ]
+   },
+   "r9": {
+    "o": "item",
+    "nm": "Seer's key",
+    "ids": [
+     3745
+    ]
+   },
+   "r10": {
+    "o": "zone",
+    "z": [
+     [
+      2629,
+      3659,
+      2638,
+      3666,
+      2,
+      2
+     ]
+    ]
+   },
+   "r11": {
+    "o": "obj",
+    "ids": [
+     4173
+    ],
+    "z": [
+     2636,
+     3663,
+     2636,
+     3663,
+     2,
+     2
+    ]
+   },
+   "r12": {
+    "o": "item",
+    "nm": "Vase lid",
+    "ids": [
+     3737
+    ],
+    "eq": true
+   },
+   "r13": {
+    "o": "item",
+    "nm": "4/5ths full bucket",
+    "ids": [
+     3723
+    ],
+    "eq": true
+   },
+   "r14": {
+    "o": "item",
+    "nm": "Full bucket",
+    "ids": [
+     3722
+    ],
+    "eq": true
+   },
+   "r15": {
+    "o": "item",
+    "nm": "2/3rds full jug",
+    "ids": [
+     3730
+    ],
+    "eq": true
+   },
+   "r16": {
+    "o": "item",
+    "nm": "Empty bucket",
+    "ids": [
+     3727
+    ],
+    "eq": true
+   },
+   "r17": {
+    "o": "item",
+    "nm": "2/5ths full bucket",
+    "ids": [
+     3725
+    ],
+    "eq": true
+   },
+   "r18": {
+    "o": "item",
+    "nm": "Empty jug",
+    "ids": [
+     3732
+    ],
+    "eq": true
+   },
+   "r19": {
+    "o": "item",
+    "nm": "Full jug",
+    "ids": [
+     3729
+    ],
+    "eq": true
+   },
+   "r20": {
+    "o": "or",
+    "a": [
+     {
+      "o": "item",
+      "nm": "1/5ths full bucket",
+      "ids": [
+       3726
+      ],
+      "eq": true
+     },
+     "r17",
+     {
+      "o": "item",
+      "nm": "3/5ths full bucket",
+      "ids": [
+       3724
+      ],
+      "eq": true
+     },
+     "r13",
+     "r14",
+     "r16"
+    ]
+   },
+   "r21": {
+    "o": "item",
+    "nm": "Red disk",
+    "ids": [
+     3743
+    ],
+    "eq": true
+   },
+   "r22": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r23": {
+    "o": "item",
+    "nm": "Old red disk",
+    "ids": [
+     9947
+    ],
+    "eq": true
+   },
+   "r24": {
+    "o": "item",
+    "nm": "Sticky red goop",
+    "ids": [
+     3746
+    ],
+    "eq": true
+   },
+   "r25": {
+    "o": "item",
+    "nm": "Wooden disk",
+    "ids": [
+     3744
+    ],
+    "eq": true
+   },
+   "r26": {
+    "o": "item",
+    "nm": "Red herring",
+    "ids": [
+     3742
+    ],
+    "eq": true
+   },
+   "r27": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r28": {
+    "o": "and",
+    "a": [
+     "r29"
+    ]
+   },
+   "r29": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r30": {
+    "o": "or",
+    "a": [
+     "r31",
+     "r32",
+     "r33",
+     "r34",
+     "r35",
+     "r36",
+     "r37",
+     "r38",
+     "r39",
+     "r40",
+     "r41",
+     "r42",
+     "r43"
+    ]
+   },
+   "r31": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r32": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r33": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r34": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r35": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r36": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r37": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r38": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r39": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r40": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r41": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r42": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r43": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r44": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r45": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r46": {
+    "o": "item",
+    "nm": "Keg of beer",
+    "ids": [
+     3711
+    ]
+   },
+   "r47": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r48": {
+    "o": "item",
+    "nm": "Low alcohol keg",
+    "ids": [
+     3712
+    ]
+   },
+   "r49": {
+    "o": "zone",
+    "z": [
+     [
+      2663,
+      3671,
+      2667,
+      3676,
+      0,
+      0
+     ]
+    ]
+   },
+   "r50": {
+    "o": "and",
+    "a": [
+     "r51",
+     "r52"
+    ],
+    "latch": true
+   },
+   "r51": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r52": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r53": {
+    "o": "item",
+    "nm": "Unstrung lyre",
+    "ids": [
+     3688
+    ]
+   },
+   "r54": {
+    "o": "item",
+    "nm": "Golden fleece",
+    "ids": [
+     3693,
+     3694
+    ]
+   },
+   "r55": {
+    "o": "vb",
+    "id": 6486,
+    "v": 1
+   },
+   "r56": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   },
+   "r57": {
+    "o": "?",
+    "d": "RuneliteRequirement"
+   }
+  },
+  "alias": {
+   "goDownstairsWithKey2": [
+    "goDownstairsWithKey"
+   ],
+   "useJugOnDrain1RealStep": [
+    "useJugOnDrain1"
+   ],
+   "useBucketOnTap1RealStep": [
+    "useBucketOnTap1"
+   ],
+   "searchChest2": [
+    "searchChest1"
+   ],
+   "searchCupboard2": [
+    "searchCupboard1"
+   ],
+   "useDiskNewOnMuralRealStep": [
+    "useDiskNewOnMural"
+   ],
+   "useDiskOldOnMuralRealStep": [
+    "useDiskOldOnMural"
+   ],
+   "useDiskAnyOnMuralRealStep": [
+    "useDiskAnyOnMural"
+   ],
+   "useDiskOldOnMural": [
+    "useDiskAnyOnMural"
+   ],
+   "useDiskNewOnMural": [
+    "useDiskAnyOnMural"
+   ],
+   "goDown1": [
+    "openTrapDoorAndGoDown1"
+   ],
+   "cookHerringRealStep": [
+    "cookHerring"
+   ],
+   "killKoschei2": [
+    "killKoschei1"
+   ],
+   "killKoschei3": [
+    "killKoschei1"
+   ],
+   "killKoschei4": [
+    "killKoschei1"
+   ],
+   "talkToAskeladdenForSigmund2": [
+    "talkToAskeladdenForSigmund"
+   ],
+   "useStrangeObjectOnPipe": [
+    "useStrangeObject"
+   ],
+   "useCabbage": [
+    "useOnion"
+   ],
+   "usePotato": [
+    "useOnion"
+   ],
+   "useRock": [
+    "useOnion"
+   ]
+  }
+ },
+ "unknown": {
+  "RuneliteRequirement": 33
+ },
+ "steps": {
+  "resyncStep": {
+   "typ": "QuestSyncStep",
+   "wp": null,
+   "ids": [],
+   "text": "Please open the quest's Quest Journal to sync your state."
+  },
+  "talkToPeer": {
+   "typ": "NpcStep",
+   "wp": [
+    2633,
+    3667,
+    0
+   ],
+   "ids": [
+    3895
+   ],
+   "text": "Talk to Peer the Seer south west of the Rellekka market. You will need to bank all your items. Peer will offer to do this for you."
+  },
+  "leaveSeersHouse": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2636,
+    3667,
+    0
+   ],
+   "ids": [
+    4166
+   ],
+   "text": "Leave the Seer's house."
+  },
+  "goDownstairsWithKey2": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2636,
+    3663,
+    2
+   ],
+   "ids": [
+    4173
+   ],
+   "text": "Go down the trapdoor."
+  },
+  "goDownstairsWithKey": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2636,
+    3663,
+    2
+   ],
+   "ids": [
+    4174
+   ],
+   "text": "Open and go down the trapdoor."
+  },
+  "useFrozenKeyOnRange": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2629,
+    3664,
+    2
+   ],
+   "ids": [
+    4172
+   ],
+   "text": "Use the frozen key on the cooking range."
+  },
+  "useVaseOnTable": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2638,
+    3665,
+    2
+   ],
+   "ids": [
+    4169
+   ],
+   "text": "Use the filled, sealed vase on the frozen table."
+  },
+  "useLidOnVase": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "fillVase": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2629,
+    3661,
+    2
+   ],
+   "ids": [
+    4176
+   ],
+   "text": "Use the empty vase on the tap."
+  },
+  "takeLidOff": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "useBucketOnScale": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2632,
+    3665,
+    2
+   ],
+   "ids": [
+    4170
+   ],
+   "text": "Use the 4/5ths full bucket on the chest with a scale on it."
+  },
+  "useBucketOnJug3": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "useBucketOnTap2": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2629,
+    3661,
+    2
+   ],
+   "ids": [
+    4176
+   ],
+   "text": "Use the empty bucket on the tap."
+  },
+  "useBucketOnJug2": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "useJugOnDrain1": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2629,
+    3662,
+    2
+   ],
+   "ids": [
+    4175
+   ],
+   "text": "Empty the full jug into the drain."
+  },
+  "useJugOnDrain1RealStep": {
+   "typ": "ObjectStep",
+   "wp": [
+    2629,
+    3662,
+    2
+   ],
+   "ids": [
+    4175
+   ],
+   "text": "Empty the full jug into the drain."
+  },
+  "useBucketOnJug1": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "useBucketOnTap1": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2629,
+    3661,
+    2
+   ],
+   "ids": [
+    4176
+   ],
+   "text": "Use the empty bucket on the tap."
+  },
+  "useBucketOnTap1RealStep": {
+   "typ": "ObjectStep",
+   "wp": [
+    2629,
+    3661,
+    2
+   ],
+   "ids": [
+    4176
+   ],
+   "text": "Use the empty bucket on the tap."
+  },
+  "emptyJugAndBucket": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "searchChest2": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2635,
+    3660,
+    2
+   ],
+   "ids": [
+    4168
+   ],
+   "text": "Search the chest in the south of the room."
+  },
+  "searchChest1": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2635,
+    3660,
+    2
+   ],
+   "ids": [
+    4167
+   ],
+   "text": "Search the chest in the south of the room."
+  },
+  "searchCupboard2": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2630,
+    3660,
+    2
+   ],
+   "ids": [
+    4178
+   ],
+   "text": "Search the cupboard in the south west of the room."
+  },
+  "searchCupboard1": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2630,
+    3660,
+    2
+   ],
+   "ids": [
+    4177
+   ],
+   "text": "Search the cupboard in the south west of the room."
+  },
+  "goUpstairsWithVaseLid": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2636,
+    3663,
+    0
+   ],
+   "ids": [
+    4164
+   ],
+   "text": "Go back upstairs."
+  },
+  "useDiskNewOnMural": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2634,
+    3663,
+    0
+   ],
+   "ids": [
+    4179
+   ],
+   "text": "Use the other red disk on the abstract mural."
+  },
+  "useDiskNewOnMuralRealStep": {
+   "typ": "ObjectStep",
+   "wp": [
+    2634,
+    3663,
+    0
+   ],
+   "ids": [
+    4179
+   ],
+   "text": "Use the other red disk on the abstract mural."
+  },
+  "useDiskOldOnMural": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2634,
+    3663,
+    0
+   ],
+   "ids": [
+    4179
+   ],
+   "text": "Use the old red disk on the abstract mural."
+  },
+  "useDiskOldOnMuralRealStep": {
+   "typ": "ObjectStep",
+   "wp": [
+    2634,
+    3663,
+    0
+   ],
+   "ids": [
+    4179
+   ],
+   "text": "Use the old red disk on the abstract mural."
+  },
+  "useDiskAnyOnMural": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2634,
+    3663,
+    0
+   ],
+   "ids": [
+    4179
+   ],
+   "text": "Use the red disks on the abstract mural."
+  },
+  "useDiskAnyOnMuralRealStep": {
+   "typ": "ObjectStep",
+   "wp": [
+    2634,
+    3663,
+    0
+   ],
+   "ids": [
+    4179
+   ],
+   "text": "Use the red disks on the abstract mural."
+  },
+  "goDown1": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2636,
+    3663,
+    2
+   ],
+   "ids": [
+    4173
+   ],
+   "text": "Go down the trapdoor."
+  },
+  "openTrapDoorAndGoDown1": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2636,
+    3663,
+    2
+   ],
+   "ids": [
+    4174
+   ],
+   "text": "Open and go down the trapdoor."
+  },
+  "useGoopOnDisk": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "cookHerring": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2629,
+    3664,
+    2
+   ],
+   "ids": [
+    4172
+   ],
+   "text": "Use the red herring on the cooking range."
+  },
+  "cookHerringRealStep": {
+   "typ": "ObjectStep",
+   "wp": [
+    2629,
+    3664,
+    2
+   ],
+   "ids": [
+    4172
+   ],
+   "text": "Use the red herring on the cooking range."
+  },
+  "searchUnicorn": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2632,
+    3660,
+    2
+   ],
+   "ids": [
+    4181
+   ],
+   "text": "Study the unicorn's head."
+  },
+  "searchBull": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2634,
+    3660,
+    2
+   ],
+   "ids": [
+    4182
+   ],
+   "text": "Study the bull's head."
+  },
+  "searchBookcase": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2634,
+    3665,
+    2
+   ],
+   "ids": [
+    4171
+   ],
+   "text": "Search the bookcase for a red herring. If you've already unlocked the mural, go search it instead."
+  },
+  "goBackUpstairs": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2636,
+    3663,
+    0
+   ],
+   "ids": [
+    4164
+   ],
+   "text": "Go back upstairs."
+  },
+  "goUpEntranceLadderPeer": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2631,
+    3663,
+    0
+   ],
+   "ids": [
+    4163
+   ],
+   "text": "Go up the ladder."
+  },
+  "inputWind": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "inputTime": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "inputFire": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "inputLife": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "inputTree": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "inputMind": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Peer's challenge."
+  },
+  "enterPeerHouse": {
+   "typ": "ObjectStep",
+   "wp": [
+    2631,
+    3667,
+    0
+   ],
+   "ids": [
+    4165
+   ],
+   "text": "Try to enter Peer the Seer's house after banking all your items. Peer the Seer will offer to bank everything for you."
+  },
+  "talkToSwensen": {
+   "typ": "NpcStep",
+   "wp": [
+    2646,
+    3660,
+    0
+   ],
+   "ids": [
+    3925
+   ],
+   "text": "Talk to Swensen the Navigator in his hut south west of the longhall."
+  },
+  "swensenUpLadder": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2665,
+    10037,
+    0
+   ],
+   "ids": [
+    4160
+   ],
+   "text": "Climb up the ladder."
+  },
+  "swensen7North": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2666,
+    10029,
+    0
+   ],
+   "ids": [
+    4156
+   ],
+   "text": "Go through the north portal."
+  },
+  "swensen6East": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2656,
+    10037,
+    0
+   ],
+   "ids": [
+    4155
+   ],
+   "text": "Go through the east portal."
+  },
+  "swensen5South": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2630,
+    10023,
+    0
+   ],
+   "ids": [
+    4154
+   ],
+   "text": "Go through the south portal."
+  },
+  "swensen4North": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2665,
+    10018,
+    0
+   ],
+   "ids": [
+    4153
+   ],
+   "text": "Go through the north portal."
+  },
+  "swensen3East": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2656,
+    10004,
+    0
+   ],
+   "ids": [
+    4152
+   ],
+   "text": "Go through the east portal."
+  },
+  "swensen2West": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2639,
+    10015,
+    0
+   ],
+   "ids": [
+    4151
+   ],
+   "text": "Go through the west portal."
+  },
+  "swensen1South": {
+   "typ": "PuzzleWrapperStep",
+   "wp": [
+    2631,
+    10002,
+    0
+   ],
+   "ids": [
+    4150
+   ],
+   "text": "Go through the south portal."
+  },
+  "resetSwensen": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Solve Swensen's challenge."
+  },
+  "goDownLadderSwensen": {
+   "typ": "ObjectStep",
+   "wp": [
+    2644,
+    3657,
+    0
+   ],
+   "ids": [
+    4158
+   ],
+   "text": "Climb down Swensen's ladder."
+  },
+  "talkToThorvald": {
+   "typ": "NpcStep",
+   "wp": [
+    2666,
+    3693,
+    0
+   ],
+   "ids": [
+    3896
+   ],
+   "text": "Talk to Thorvald north of the longhall."
+  },
+  "killKoschei4": {
+   "typ": "NpcStep",
+   "wp": [
+    2660,
+    10080,
+    2
+   ],
+   "ids": [
+    3897
+   ],
+   "text": "You must now either die (SAFE DEATH), or defeat Koschei once more. Do not leave or you'll have to fight him again."
+  },
+  "killKoschei3": {
+   "typ": "NpcStep",
+   "wp": [
+    2660,
+    10080,
+    2
+   ],
+   "ids": [
+    3897
+   ],
+   "text": "Fight Koschei the Deathless and 'kill' him at least 3 times. Dying to his fourth phase is a SAFE death."
+  },
+  "killKoschei2": {
+   "typ": "NpcStep",
+   "wp": [
+    2660,
+    10080,
+    2
+   ],
+   "ids": [
+    3897
+   ],
+   "text": "Fight Koschei the Deathless and 'kill' him at least 3 times. Dying to his fourth phase is a SAFE death."
+  },
+  "killKoschei1": {
+   "typ": "NpcStep",
+   "wp": [
+    2660,
+    10080,
+    2
+   ],
+   "ids": [
+    3897
+   ],
+   "text": "Fight Koschei the Deathless and 'kill' him at least 3 times. Dying to his fourth phase is a SAFE death."
+  },
+  "waitForKoschei": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Wait for Koschei the Deathless to spawn. If you brought a dramen branch you should now fletch it and equip the staff."
+  },
+  "goDownLadderToKoschei": {
+   "typ": "ObjectStep",
+   "wp": [
+    2667,
+    3694,
+    0
+   ],
+   "ids": [
+    4187
+   ],
+   "text": "When you're ready to fight Koschei, go down the ladder."
+  },
+  "talkToSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2642,
+    3680,
+    0
+   ],
+   "ids": [
+    3894
+   ],
+   "text": "Talk to Sigmund the Merchant in the Rellekka market."
+  },
+  "bringExoticFlowerToSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2642,
+    3680,
+    0
+   ],
+   "ids": [
+    3894
+   ],
+   "text": "Finally, bring the exotic flower to Sigmund the Merchant in the Rellekka market."
+  },
+  "bringBalladToSailor": {
+   "typ": "NpcStep",
+   "wp": [
+    2629,
+    3693,
+    0
+   ],
+   "ids": [
+    3936
+   ],
+   "text": "Bring the ballad to the Sailor on the docks."
+  },
+  "bringSturdyBootsToOlaf": {
+   "typ": "NpcStep",
+   "wp": [
+    2673,
+    3683,
+    0
+   ],
+   "ids": [
+    802
+   ],
+   "text": "Bring the sturdy boots to Olaf the Bard east of the longhall."
+  },
+  "bringFiscalStatementToYsra": {
+   "typ": "NpcStep",
+   "wp": [
+    2624,
+    3675,
+    0
+   ],
+   "ids": [
+    3933
+   ],
+   "text": "Bring the fiscal statement to Ysra in her shop west of the market."
+  },
+  "bringTrackingMapToBrundt": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3669,
+    0
+   ],
+   "ids": [
+    9263
+   ],
+   "text": "Bring the tracking map to Brundt in the longhall."
+  },
+  "bringCustomBowStringToSigli": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3650,
+    0
+   ],
+   "ids": [
+    3924
+   ],
+   "text": "Bring the custom bow string to Sigli south of the longhall."
+  },
+  "bringUnusualFishToSkulgrimen": {
+   "typ": "NpcStep",
+   "wp": [
+    2663,
+    3692,
+    0
+   ],
+   "ids": [
+    3935
+   ],
+   "text": "Bring the unusual fish to Skulgrimen north of the longhall."
+  },
+  "bringSeaFishingMapToFisherman": {
+   "typ": "NpcStep",
+   "wp": [
+    2641,
+    3699,
+    0
+   ],
+   "ids": [
+    3934
+   ],
+   "text": "Bring the sea fishing map to the Fisherman on the pier north of the market."
+  },
+  "bringWeatherForecastToSwensen": {
+   "typ": "NpcStep",
+   "wp": [
+    2646,
+    3660,
+    0
+   ],
+   "ids": [
+    3925
+   ],
+   "text": "Bring the weather forecast to Swensen the Navigator in his hut south west of the longhall."
+  },
+  "bringWarriorsContractToPeer": {
+   "typ": "NpcStep",
+   "wp": [
+    2633,
+    3667,
+    0
+   ],
+   "ids": [
+    3895
+   ],
+   "text": "Bring the warriors' contract to Peer the Seer south west of the market."
+  },
+  "bringChampionsTokenToThorvald": {
+   "typ": "NpcStep",
+   "wp": [
+    2666,
+    3693,
+    0
+   ],
+   "ids": [
+    3896
+   ],
+   "text": "Bring the champions token to Thorvald north of the longhall."
+  },
+  "bringCocktailToManni": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3675,
+    0
+   ],
+   "ids": [
+    3920
+   ],
+   "text": "Bring the cocktail to Manni the Reveller in the longhall."
+  },
+  "bringNoteToThora": {
+   "typ": "NpcStep",
+   "wp": [
+    2662,
+    3673,
+    0
+   ],
+   "ids": [
+    3932
+   ],
+   "text": "Bring the promissory note to Thora the Barkeep in the longhall."
+  },
+  "talkToAskeladdenForSigmund2": {
+   "typ": "NpcStep",
+   "wp": [
+    2659,
+    3660,
+    0
+   ],
+   "ids": [
+    8402
+   ],
+   "text": "Talk to Askeladden south of the longhall."
+  },
+  "talkToAskeladdenForSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2659,
+    3660,
+    0
+   ],
+   "ids": [
+    8403
+   ],
+   "text": "Talk to Askeladden south of the longhall."
+  },
+  "talkToThoraForSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2662,
+    3673,
+    0
+   ],
+   "ids": [
+    3932
+   ],
+   "text": "Talk to Thora the Barkeep in the longhall."
+  },
+  "talkToManniForSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3675,
+    0
+   ],
+   "ids": [
+    3920
+   ],
+   "text": "Talk to Manni the Reveller in the longhall."
+  },
+  "talkToThorvaldForSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2666,
+    3693,
+    0
+   ],
+   "ids": [
+    3896
+   ],
+   "text": "Talk to Thorvald north of the longhall."
+  },
+  "talkToPeerForSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2633,
+    3667,
+    0
+   ],
+   "ids": [
+    3895
+   ],
+   "text": "Talk to Peer the Seer south west of the market."
+  },
+  "talkToSwenesenForSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2646,
+    3660,
+    0
+   ],
+   "ids": [
+    3925
+   ],
+   "text": "Talk to Swensen the Navigator in his hut south west of the longhall."
+  },
+  "talkToFishermanForSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2641,
+    3699,
+    0
+   ],
+   "ids": [
+    3934
+   ],
+   "text": "Talk to the Fisherman on the pier north of the market."
+  },
+  "talkToSkulgrimenForSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2663,
+    3692,
+    0
+   ],
+   "ids": [
+    3935
+   ],
+   "text": "Talk to Skulgrimen north of the longhall."
+  },
+  "talkToSigliForSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3650,
+    0
+   ],
+   "ids": [
+    3924
+   ],
+   "text": "Talk to Sigli south of the longhall."
+  },
+  "talkToBrundtForSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3669,
+    0
+   ],
+   "ids": [
+    9263
+   ],
+   "text": "Talk to Brundt in the longhall."
+  },
+  "talkToYsra": {
+   "typ": "NpcStep",
+   "wp": [
+    2624,
+    3675,
+    0
+   ],
+   "ids": [
+    3933
+   ],
+   "text": "Talk to Ysra in her shop west of the market."
+  },
+  "talkToOlafForSigmund": {
+   "typ": "NpcStep",
+   "wp": [
+    2673,
+    3683,
+    0
+   ],
+   "ids": [
+    802
+   ],
+   "text": "Talk to Olaf the Bard east of the longhall."
+  },
+  "talkToSailor": {
+   "typ": "NpcStep",
+   "wp": [
+    2629,
+    3693,
+    0
+   ],
+   "ids": [
+    3936
+   ],
+   "text": "Talk to the Sailor on the docks."
+  },
+  "talkToSigli": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3650,
+    0
+   ],
+   "ids": [
+    3924
+   ],
+   "text": "Talk to Sigli south of the longhall for a hunters' talisman."
+  },
+  "returnToSigli": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3650,
+    0
+   ],
+   "ids": [
+    3924
+   ],
+   "text": "Return the charged hunters' talisman to Sigli."
+  },
+  "huntDraugen": {
+   "typ": "NpcStep",
+   "wp": null,
+   "ids": [
+    3923
+   ],
+   "text": "Use the hunter's talisman to hunt down the Draugen. It'll appear near one of the butterflies in the area."
+  },
+  "talkToManni": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3675,
+    0
+   ],
+   "ids": [
+    3920
+   ],
+   "text": "Talk to Manni the Reveller in the Rellekka longhall."
+  },
+  "cheatInBeerDrinking": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3675,
+    0
+   ],
+   "ids": [
+    3920
+   ],
+   "text": "Talk to Manni the Reveller to cheat in the competition."
+  },
+  "getKegOfBeer": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2660,
+    3676,
+    0
+   ],
+   "ids": [],
+   "text": "Pick up a keg of beer in the longhall."
+  },
+  "useAlcoholFreeOnKeg": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2658,
+    3673,
+    0
+   ],
+   "ids": [],
+   "text": "Use the low alcohol beer on the keg of beer whilst in the longhall."
+  },
+  "getAlcoholFreeBeer": {
+   "typ": "NpcStep",
+   "wp": [
+    2695,
+    3491,
+    0
+   ],
+   "ids": [
+    4227
+   ],
+   "text": "Buy some alcohol free beer from the Poison Salesman in the Seer's Village pub."
+  },
+  "useStrangeObjectOnPipe": {
+   "typ": "ObjectStep",
+   "wp": [
+    2663,
+    3674,
+    0
+   ],
+   "ids": [
+    4162
+   ],
+   "text": "Use the lit strange object on the nearby pipe!"
+  },
+  "useStrangeObject": {
+   "typ": "ObjectStep",
+   "wp": [
+    2663,
+    3674,
+    0
+   ],
+   "ids": [
+    4162
+   ],
+   "text": "Use a tinderbox on the strange object then use it on the nearby pipe."
+  },
+  "prepareToUseStrangeObject": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2664,
+    3674,
+    0
+   ],
+   "ids": [],
+   "text": "Return to Rellekka with the strange object, a tinderbox, and low alcohol beer."
+  },
+  "getStrangeObject": {
+   "typ": "NpcStep",
+   "wp": [
+    2654,
+    3593,
+    0
+   ],
+   "ids": [
+    3921
+   ],
+   "text": "Give the Council workman on the bridge south of Rellekka going to Seer's Village a beer."
+  },
+  "pickUpBeer": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2658,
+    3676,
+    0
+   ],
+   "ids": [],
+   "text": "Get some beer. There is beer tankard in the Rellekka longhall."
+  },
+  "talkToOlaf": {
+   "typ": "NpcStep",
+   "wp": [
+    2673,
+    3683,
+    0
+   ],
+   "ids": [
+    802
+   ],
+   "text": "Talk to Olaf the Bard north east of the longhall."
+  },
+  "performMusic": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2658,
+    3683,
+    0
+   ],
+   "ids": [],
+   "text": "Return to Rellekka and enter the longhall's stage to perform. Once on stage, play the enchanted lyre."
+  },
+  "enchantLyre": {
+   "typ": "ObjectStep",
+   "wp": [
+    2626,
+    3598,
+    0
+   ],
+   "ids": [
+    4141
+   ],
+   "text": "Bring your lyre to the Strange Altar south west of Rellekka, and use either a raw shark, raw sea turtle or raw manta ray on it."
+  },
+  "makeLyre": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use the golden wool on your unstrung lyre."
+  },
+  "spinWool": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Spin the golden fleece into wool using a spinning wheel. The closest wheel is in Seers' Village."
+  },
+  "fletchLyre": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use a knife on the branch to make an unstrung lyre"
+  },
+  "chopSwayingTree": {
+   "typ": "ObjectStep",
+   "wp": [
+    2739,
+    3639,
+    0
+   ],
+   "ids": [
+    4142
+   ],
+   "text": "Go south east of Rellekka and cut a branch from the swaying tree"
+  },
+  "talkToLaliAfterStew": {
+   "typ": "NpcStep",
+   "wp": [
+    2771,
+    3621,
+    0
+   ],
+   "ids": [
+    803
+   ],
+   "text": "Talk to Lalli for golden wool."
+  },
+  "useRock": {
+   "typ": "ObjectStep",
+   "wp": [
+    2773,
+    3624,
+    0
+   ],
+   "ids": [
+    4149
+   ],
+   "text": "Use your pet rock on the stew."
+  },
+  "usePotato": {
+   "typ": "ObjectStep",
+   "wp": [
+    2773,
+    3624,
+    0
+   ],
+   "ids": [
+    4149
+   ],
+   "text": "Use a potato on the stew."
+  },
+  "useCabbage": {
+   "typ": "ObjectStep",
+   "wp": [
+    2773,
+    3624,
+    0
+   ],
+   "ids": [
+    4149
+   ],
+   "text": "Use a cabbage on the stew."
+  },
+  "useOnion": {
+   "typ": "ObjectStep",
+   "wp": [
+    2773,
+    3624,
+    0
+   ],
+   "ids": [
+    4149
+   ],
+   "text": "Return to Lalli and use a onion, cabbage, potato, and pet rock on their stew. You can find the vegetables growing in the south east of Rellekka."
+  },
+  "talkToAskeladdenForRock": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3660,
+    0
+   ],
+   "ids": [
+    8402
+   ],
+   "text": "Return to Rellekka and talk to Askeladden for a pet rock."
+  },
+  "talkToLalli": {
+   "typ": "NpcStep",
+   "wp": [
+    2771,
+    3621,
+    0
+   ],
+   "ids": [
+    803
+   ],
+   "text": "Talk to Lalli to the south east of Rellekka."
+  },
+  "talkToBrundt": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3669,
+    0
+   ],
+   "ids": [
+    9263
+   ],
+   "text": "Talk to Brundt in Rellekka's longhall."
+  },
+  "finishQuest": {
+   "typ": "NpcStep",
+   "wp": [
+    2658,
+    3669,
+    0
+   ],
+   "ids": [
+    9263
+   ],
+   "text": "Talk to Brundt in Rellekka's longhall to finish the quest."
+  }
+ }
+}

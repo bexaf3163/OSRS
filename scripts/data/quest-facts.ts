@@ -382,7 +382,7 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
   "Daddy's Home": { revision: 15401680, flow: {
     consumes: [{ name: 'Plank', count: 10 }, { name: 'Bolt of cloth', count: 5 }, { name: 'Steel nails', count: 100 }], receives: [],
     unknownItems: ['Hammer', 'Saw', 'Waxwood log', 'Waxwood plank'],
-    uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
+    uncertainReceipts: ['Lobster'], partialDelivery: false, fromStartOnly: false,
   } },
   // The axe lies next to Marcellus and the plushy is a quest item; nothing is bought or kept.
   'The Ribbiting Tale of a Lily Pad Labour Dispute': { revision: 15270097, flow: {
@@ -414,6 +414,17 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
   'Scrambled!': { revision: 15373706, flow: {
     consumes: [], receives: [], unknownItems: ['Planks', 'Nails', 'Saw', 'Hammer', 'Bowl of water', 'Damiana leaves', 'Large egg', 'Jaguar egg', 'Dragon egg'],
     uncertainReceipts: ['Trout', 'Chaos rune', 'Air rune'], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The coins pay the merchants and the shark enchants the lyre; the lyre drops from Lanzig and the tinderbox is kept.
+  'The Fremennik Trials': { revision: 15396092, flow: {
+    consumes: [{ name: 'Coins', count: 5252 }, { name: 'Raw shark', count: 1 }], receives: [],
+    unknownItems: ['Golden fleece', 'Golden wool', 'Branch', 'Unstrung lyre', 'Lyre', 'Enchanted lyre', 'Strange object', 'Lit strange object', 'Low alcohol keg', 'Hunters talisman', 'Charged hunters talisman', 'Fremennik ballad', 'Exotic flower', 'Warriors contract', 'Weather forecast', 'Sea fishing map', 'Promissory note', 'Legendary cocktail', 'Champions token', 'Unusual fish', 'Custom bow string', 'Tracking map', 'Fiscal statement', 'Fremennik blade', 'Pet rock', 'Lalli stew'],
+    uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The logs, damp planks, barrels, ropes and keys are found in the caverns; the axe, tinderbox and spade are kept.
+  "Olaf's Quest": { revision: 15396084, flow: {
+    consumes: [], receives: [], unknownItems: ['Windswept logs', 'Damp planks', 'Unusual fish', 'Rotten barrel', 'Rope', 'Key'],
+    uncertainReceipts: ['Lobster', 'Chaos rune', 'Air rune'], partialDelivery: false, fromStartOnly: false,
   } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
@@ -493,4 +504,7 @@ const REVIEWED_CLAUSES = new Set([
   'The ability to defeat a level 97 foe ([[safespot]]table)',
   'A trustworthy friend or partner. Players can join the official [[chat-channel]] "OSRS SOA" to look for a partner.',
   "to enter the Champions' Guild",
+  'Ability to defeat a level-69 [[Draugen]]',
+  'The ability to defeat a level 100 monster',
+  'Ability to defeat a [[Koschei|fairly strong warrior]] without [[armour]], [[weapons]], or [[spells]]',
 ].map(clause => clause.toLowerCase()));

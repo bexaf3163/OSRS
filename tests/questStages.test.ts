@@ -19,12 +19,12 @@ describe('quest stages (Quest Helper)', () => {
     }
   });
 
-  it('plugin limits: stages <= 40, steps per stage <= 60, text <= 500 characters, coordinates within the map', () => {
+  it('plugin limits: stages <= 40, steps per stage <= 120, text <= 500 characters, coordinates within the map', () => {
     for (const [id, q] of Object.entries(quests)) {
       expect(q.stages.length, id).toBeLessThanOrEqual(40);
       for (const st of q.stages) {
         expect(st.do.length, `${id}#${st.at}`).toBeGreaterThan(0);
-        expect(st.do.length, `${id}#${st.at}`).toBeLessThanOrEqual(60);
+        expect(st.do.length, `${id}#${st.at}`).toBeLessThanOrEqual(120);
         for (const l of st.do) {
           expect(l.t.trim().length, `${id}#${st.at}`).toBeGreaterThan(0);
           expect(l.t.length, `${id}#${st.at}: ${l.t.slice(0, 40)}`).toBeLessThanOrEqual(500);

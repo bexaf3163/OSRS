@@ -2240,6 +2240,7 @@
       "cost": "cost",
       "risk": "none",
       "where": "By a bank",
+      "place": "Grand Exchange",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
     },
     {
@@ -2263,6 +2264,7 @@
       "cost": "cost",
       "risk": "none",
       "where": "By a bank",
+      "place": "Grand Exchange",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
     },
     {
@@ -2286,6 +2288,7 @@
       "cost": "cost",
       "risk": "none",
       "where": "By a bank",
+      "place": "Grand Exchange",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
     },
     {
@@ -2314,6 +2317,7 @@
       "cost": "profit",
       "risk": "none",
       "where": "By a bank",
+      "place": "Grand Exchange",
       "note": "Cut maple logs into unstrung longbows (shortbows first where the longbow is not open yet); stringing them is faster XP for more clicks.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
     },
@@ -2343,6 +2347,7 @@
       "cost": "profit",
       "risk": "none",
       "where": "By a bank",
+      "place": "Grand Exchange",
       "note": "Cut yew logs into unstrung longbows (shortbows first where the longbow is not open yet); stringing them is faster XP for more clicks.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
     },
@@ -2372,6 +2377,7 @@
       "cost": "profit",
       "risk": "none",
       "where": "By a bank",
+      "place": "Grand Exchange",
       "note": "Cut magic logs into unstrung longbows (shortbows first where the longbow is not open yet); stringing them is faster XP for more clicks. Magic shortbows (80) lose a little; magic longbows (85) pay.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
     },

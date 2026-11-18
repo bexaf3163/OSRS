@@ -83,7 +83,7 @@ export function stagePayload(step: Step, places: StepGuidePayload['places']): St
       }
     }
     stages.push({
-      at: st.at, steps: st.do.slice(0, 60).map((l) => ({ t: l.t, ...shortOf(l), ...(l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : {}), ...(l.has ? { has: l.has } : {}), ...(l.need ? { need: l.need } : {}), ...(l.hl ? { hl: l.hl } : {}), ...(l.k ? { k: l.k } : {}), ...(l.pre?.length ? { pre: l.pre.slice(0, 8) } : {}), ...(l.mh ? { mh: l.mh } : {}) })), ...(go !== undefined ? { go } : {}),
+      at: st.at, steps: st.do.slice(0, 120).map((l) => ({ t: l.t, ...shortOf(l), ...(l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : {}), ...(l.has ? { has: l.has } : {}), ...(l.need ? { need: l.need } : {}), ...(l.hl ? { hl: l.hl } : {}), ...(l.k ? { k: l.k } : {}), ...(l.pre?.length ? { pre: l.pre.slice(0, 8) } : {}), ...(l.mh ? { mh: l.mh } : {}) })), ...(go !== undefined ? { go } : {}),
       ...(st.items ? { items: st.items.slice(0, 12).map((i) => ({ ...i })) } : {}),
     });
   }

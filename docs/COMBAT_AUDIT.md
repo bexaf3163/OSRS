@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-63 stages: 35 retained, 27 revised, 0 with a branch, 1 deferred.
+64 stages: 36 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -71,6 +71,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-50 Death on the Isle | incidental | yes | - | melee | - | - | Retain |
 | S9-53 What Lies Below | quest-fight | yes | Outlaw (32), King Roald (47) | melee | Outlaw, King Roald | Trout 2 | Retain |
 | S9-54 Scrambled! | quest-fight | yes | Large chicken (16), Black jaguar (Scrambled!) (88), Red dragon (Scrambled!) (106) | safespot | Large chicken, Black jaguar (Scrambled!), Red dragon (Scrambled!) | Trout 3 | Retain |
+| S9-55 The Fremennik Trials | quest-fight | yes | Draugen (69), Lanzig (48) | melee | Draugen, Lanzig | Lobster 20 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1492,4 +1493,27 @@ Changed:
 Evidence:
 
 - OSRS Wiki Scrambled!: kills field with safespots, read 2026-11-18.
+
+## S9-55 The Fremennik Trials
+
+**Retain.** The Fremennik Trials: kill Lanzig (level 48, 50 hitpoints, hits up to 6) until a lyre drops (about 1 in 17), kill the Draugen (level 69, 60 hitpoints, hits up to 7) found with the hunter's talisman, and fight Koschei the Deathless without weapons, armour or runes; dying to Koschei is safe.
+
+Quest stage lines: 1.6, 3.0, 3.4, 5.1, 5.4, 5.5.
+
+Assumptions:
+
+- Twenty lobsters cover the Draugen and the Lanzig kills; Koschei cannot kill the player, so he needs no food.
+- The lyre comes from Lanzig, Borrokar, Lensa or Freidir; crafting one needs Woodcutting 40, Fletching 25 and Crafting 40.
+
+Alternatives:
+
+- Craft the lyre instead (Woodcutting 40, Fletching 25, Crafting 40).
+
+Changed:
+
+- 2.145.0: new quest; Draugen and Lanzig are in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Draugen: level 69, 60 hitpoints, max hit 7; Lanzig: level 48, 50 hitpoints, lyre 30/512; read 2026-11-18.
 

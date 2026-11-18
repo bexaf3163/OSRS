@@ -1,0 +1,672 @@
+{
+  "quest": "Olaf's Quest",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "Olaf's Quest",
+      "revision": 15396084
+    },
+    "quickGuide": {
+      "title": "Olaf's Quest/Quick guide",
+      "revision": 15402504
+    }
+  },
+  "step": {
+    "title": "Olaf's Quest",
+    "type": "quest",
+    "qp": 1,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Olaf's_Quest",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Olaf's_Quest/Quick_guide",
+    "mapLocation": {
+      "x": 2724,
+      "y": 3729,
+      "plane": 0,
+      "label": "Talk to Olaf Hradson east of Rellekka, just south of the Rellekka Hunter area."
+    },
+    "npc": {
+      "nameEn": "Olaf Hradson"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bronze axe",
+        "amount": 1,
+        "wikiItemId": 1351,
+        "howToGet": "Any axe chops the Windswept Tree (Woodcutting 50). Buy on the Grand Exchange.",
+        "note": "Any woodcutting axe",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "wikiItemId": 590,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp."
+      },
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "wikiItemId": 952,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 3 gp."
+      }
+    ],
+    "foes": [
+      "Skeleton fremennik",
+      "Ulfric"
+    ]
+  },
+  "stages": {
+    "var": [
+      "varbit",
+      3534
+    ],
+    "route": [
+      {
+        "title": "Starting out",
+        "steps": [
+          "Talk to Olaf Hradson west of fairy ring . Dialogue:",
+          "Chop the windswept tree up the mountain to the east and just north of the fairy ring and obtain Windswept Logs.",
+          "Take the logs back to Olaf."
+        ]
+      },
+      {
+        "title": "Helping Olaf",
+        "steps": [
+          "Travel to Rellekka and talk to Ingrid Hradson who is near the well (water drop on map) (Enchanted Lyre or Fremennik sea boots 1).",
+          "Talk to Volf Olafson who is outside the helmet shop to the north.",
+          "Return to, and talk to Olaf (Teleport to a Fairy Ring, or use the agility shortcut to the East)",
+          "Use the damp planks on the fire pit (embers) next to Olaf.",
+          "Talk to Olaf again. Dialogue:"
+        ]
+      },
+      {
+        "title": "Treasure trail",
+        "steps": [
+          "Return to the tree and dig next to it.",
+          "Go all the way east in the tunnel and then north.",
+          "(Optional): Kill a brine rat here to complete a Fremennik Medium Diary achievement (requires 47 Slayer).",
+          "Kill a skeleton fremennik and pick up the key it drops.",
+          "Search the picture wall to the far west.",
+          "Search the wall again to walk through.",
+          "Pick up two rotten barrels and six ropes in the next room if you do not have them.",
+          "Go to the bridge to the north-east and use the barrels on the missing portions; a higher level Agility helps (If you fall, you will need to go through the cave again.) (Recommended: stamina potions.)",
+          "Open the gate."
+        ]
+      },
+      {
+        "title": "Finishing up",
+        "steps": [
+          "Search the chest located in the old ship and kill Ulfric (level 100, uses melee).",
+          "Search the chest again.",
+          "Congratulations, quest complete!"
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Talk to Olaf Hradson north east of Rellekka.",
+            "s": "Talk to Olaf Hradson north east of Rellekka.",
+            "k": "talkToOlaf",
+            "at": [
+              2722,
+              3727,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4488
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 10,
+        "do": [
+          {
+            "t": "Chop a log from the Windswept Tree east of Olaf.",
+            "s": "Chop a log from the Windswept Tree east of Olaf.",
+            "k": "chopTree",
+            "at": [
+              2749,
+              3735,
+              0
+            ],
+            "hl": {
+              "obj": [
+                18137
+              ]
+            }
+          },
+          {
+            "t": "Bring the logs to Olaf Hradson north east of Rellekka.",
+            "s": "Bring the logs to Olaf Hradson north east of Rellekka.",
+            "k": "giveLogToOlaf",
+            "at": [
+              2722,
+              3727,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4488
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 20,
+        "do": [
+          {
+            "t": "Talk to Ingrid Hradson near the well in southeast Rellekka.",
+            "s": "Talk to Ingrid Hradson near the well in southeast Rellekka.",
+            "k": "talkToIngrid",
+            "at": [
+              2670,
+              3670,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4490
+              ]
+            }
+          },
+          {
+            "t": "Talk to Volf Olafson north of the longhall in Rellekka.",
+            "s": "Talk to Volf Olafson north of the longhall in Rellekka.",
+            "k": "talkToVolf",
+            "at": [
+              2662,
+              3700,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4489
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 30,
+        "do": [
+          {
+            "t": "Return to Olaf Hradson north east of Rellekka.",
+            "s": "Return to Olaf Hradson north east of Rellekka.",
+            "k": "returnToOlaf",
+            "at": [
+              2722,
+              3727,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4488
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 40,
+        "do": [
+          {
+            "t": "Use the damp planks on Olaf's embers.",
+            "s": "Use the damp planks on Olaf's embers.",
+            "k": "useDampPlanks",
+            "at": [
+              2724,
+              3728,
+              0
+            ],
+            "hl": {
+              "obj": [
+                14172
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 50,
+        "do": [
+          {
+            "t": "Talk to Olaf again, and give him some food.",
+            "s": "Talk to Olaf again, and give him some food.",
+            "k": "talkToOlafAfterPlanks",
+            "at": [
+              2722,
+              3727,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4488
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 60,
+        "do": [
+          {
+            "t": "Dig next to the Windswept Tree.",
+            "s": "Dig next to the Windswept Tree.",
+            "k": "digHole",
+            "at": [
+              2748,
+              3732,
+              0
+            ]
+          },
+          {
+            "t": "Go deeper into the caverns and kill a Skeleton Fremennik for a key.",
+            "s": "Go deeper into the caverns and kill a Skeleton Fremennik for a key.",
+            "k": "killSkeleton",
+            "at": [
+              2727,
+              10141,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4491
+              ]
+            }
+          },
+          {
+            "t": "Pick up the dropped key.",
+            "s": "Pick up the dropped key.",
+            "k": "pickUpKey"
+          },
+          {
+            "t": "Search the picture wall in the north room.",
+            "s": "Search the picture wall in the north room.",
+            "k": "searchPainting",
+            "at": [
+              2707,
+              10147,
+              0
+            ],
+            "hl": {
+              "obj": [
+                23156
+              ]
+            }
+          },
+          {
+            "t": "Search the picture wall in the north room to learn the order of the key hole shapes.",
+            "s": "Search the picture wall for the order of the key hole shapes.",
+            "k": "doPuzzle"
+          },
+          {
+            "t": "Pick up 2 rotten barrels and 6 ropes from around the room.",
+            "s": "Pick up 2 rotten barrels and 6 ropes from around the room.",
+            "k": "pickUpItems"
+          },
+          {
+            "t": "WALK onto the walkway to the east, and use a barrel on it to repair it.",
+            "s": "Walk onto the walkway to the east and repair it with a barrel.",
+            "k": "useBarrel",
+            "at": [
+              2722,
+              10168,
+              0
+            ],
+            "hl": {
+              "obj": [
+                23213
+              ]
+            }
+          },
+          {
+            "t": "Pick up 1 rotten barrels and 3 ropes from around the room.",
+            "s": "Pick up 1 rotten barrels and 3 ropes from around the room.",
+            "k": "pickUpItems2"
+          },
+          {
+            "t": "WALK on the walkway and repair the next hole in it.",
+            "s": "WALK on the walkway and repair the next hole in it.",
+            "k": "useBarrel2",
+            "at": [
+              2724,
+              10168,
+              0
+            ],
+            "hl": {
+              "obj": [
+                23214
+              ]
+            }
+          },
+          {
+            "t": "Open the gate on the walkway, clicking the key hole which matches your key.",
+            "s": "Open the walkway gate with the key hole that matches your key.",
+            "k": "openGate",
+            "at": [
+              2725,
+              10168,
+              0
+            ],
+            "hl": {
+              "obj": [
+                23216
+              ]
+            }
+          },
+          {
+            "t": "Click the cross key hole.",
+            "s": "Click the cross key hole.",
+            "k": "chooseCross"
+          },
+          {
+            "t": "Click the square key hole.",
+            "s": "Click the square key hole.",
+            "k": "chooseSquare"
+          },
+          {
+            "t": "Click the triangle key hole.",
+            "s": "Click the triangle key hole.",
+            "k": "chooseTriangle"
+          },
+          {
+            "t": "Click the circle key hole.",
+            "s": "Click the circle key hole.",
+            "k": "chooseCircle"
+          },
+          {
+            "t": "Click the star key hole.",
+            "s": "Click the star key hole.",
+            "k": "chooseStar"
+          },
+          {
+            "t": "WALK off the remaining walkway, and search the chest in the wreck. Be prepared to fight Ulfric.",
+            "s": "Search the chest in the wreck; be ready to fight Ulfric.",
+            "k": "searchChest",
+            "at": [
+              2740,
+              10164,
+              0
+            ],
+            "hl": {
+              "obj": [
+                14197
+              ]
+            }
+          },
+          {
+            "t": "Kill Ulfric.",
+            "s": "Kill Ulfric.",
+            "k": "killUlfric",
+            "at": [
+              2740,
+              10164,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4500
+              ]
+            }
+          },
+          {
+            "t": "Search the chest again to finish the quest.",
+            "s": "Search the chest again to finish the quest.",
+            "k": "searchChestAgain",
+            "at": [
+              2740,
+              10164,
+              0
+            ],
+            "hl": {
+              "obj": [
+                14197
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 70,
+        "do": [
+          {
+            "t": "Dig next to the Windswept Tree.",
+            "s": "Dig next to the Windswept Tree.",
+            "k": "digHole",
+            "at": [
+              2748,
+              3732,
+              0
+            ]
+          },
+          {
+            "t": "Go deeper into the caverns and kill a Skeleton Fremennik for a key.",
+            "s": "Go deeper into the caverns and kill a Skeleton Fremennik for a key.",
+            "k": "killSkeleton",
+            "at": [
+              2727,
+              10141,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4491
+              ]
+            }
+          },
+          {
+            "t": "Pick up the dropped key.",
+            "s": "Pick up the dropped key.",
+            "k": "pickUpKey"
+          },
+          {
+            "t": "Search the picture wall in the north room.",
+            "s": "Search the picture wall in the north room.",
+            "k": "searchPainting",
+            "at": [
+              2707,
+              10147,
+              0
+            ],
+            "hl": {
+              "obj": [
+                23156
+              ]
+            }
+          },
+          {
+            "t": "Search the picture wall in the north room to learn the order of the key hole shapes.",
+            "s": "Search the picture wall for the order of the key hole shapes.",
+            "k": "doPuzzle"
+          },
+          {
+            "t": "Pick up 2 rotten barrels and 6 ropes from around the room.",
+            "s": "Pick up 2 rotten barrels and 6 ropes from around the room.",
+            "k": "pickUpItems"
+          },
+          {
+            "t": "WALK onto the walkway to the east, and use a barrel on it to repair it.",
+            "s": "Walk onto the walkway to the east and repair it with a barrel.",
+            "k": "useBarrel",
+            "at": [
+              2722,
+              10168,
+              0
+            ],
+            "hl": {
+              "obj": [
+                23213
+              ]
+            }
+          },
+          {
+            "t": "Pick up 1 rotten barrels and 3 ropes from around the room.",
+            "s": "Pick up 1 rotten barrels and 3 ropes from around the room.",
+            "k": "pickUpItems2"
+          },
+          {
+            "t": "WALK on the walkway and repair the next hole in it.",
+            "s": "WALK on the walkway and repair the next hole in it.",
+            "k": "useBarrel2",
+            "at": [
+              2724,
+              10168,
+              0
+            ],
+            "hl": {
+              "obj": [
+                23214
+              ]
+            }
+          },
+          {
+            "t": "Open the gate on the walkway, clicking the key hole which matches your key.",
+            "s": "Open the walkway gate with the key hole that matches your key.",
+            "k": "openGate",
+            "at": [
+              2725,
+              10168,
+              0
+            ],
+            "hl": {
+              "obj": [
+                23216
+              ]
+            }
+          },
+          {
+            "t": "Click the cross key hole.",
+            "s": "Click the cross key hole.",
+            "k": "chooseCross"
+          },
+          {
+            "t": "Click the square key hole.",
+            "s": "Click the square key hole.",
+            "k": "chooseSquare"
+          },
+          {
+            "t": "Click the triangle key hole.",
+            "s": "Click the triangle key hole.",
+            "k": "chooseTriangle"
+          },
+          {
+            "t": "Click the circle key hole.",
+            "s": "Click the circle key hole.",
+            "k": "chooseCircle"
+          },
+          {
+            "t": "Click the star key hole.",
+            "s": "Click the star key hole.",
+            "k": "chooseStar"
+          },
+          {
+            "t": "WALK off the remaining walkway, and search the chest in the wreck. Be prepared to fight Ulfric.",
+            "s": "Search the chest in the wreck; be ready to fight Ulfric.",
+            "k": "searchChest",
+            "at": [
+              2740,
+              10164,
+              0
+            ],
+            "hl": {
+              "obj": [
+                14197
+              ]
+            }
+          },
+          {
+            "t": "Kill Ulfric.",
+            "s": "Kill Ulfric.",
+            "k": "killUlfric",
+            "at": [
+              2740,
+              10164,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4500
+              ]
+            }
+          },
+          {
+            "t": "Search the chest again to finish the quest.",
+            "s": "Search the chest again to finish the quest.",
+            "k": "searchChestAgain",
+            "at": [
+              2740,
+              10164,
+              0
+            ],
+            "hl": {
+              "obj": [
+                14197
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "facts": {
+    "id": "Olaf's Quest",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {
+        "firemaking": 40,
+        "woodcutting": 50
+      },
+      "questPoints": 0,
+      "quests": [
+        "The Fremennik Trials"
+      ],
+      "manual": [],
+      "capabilities": [
+        "combat"
+      ],
+      "unparsed": "The ability to defeat a level 100 monster",
+      "text": "*Completion of [[The Fremennik Trials]]\n*{{SCP|Firemaking|40|link=yes}} {{Boostable|yes}} {{Questreqstart|no}}\n*{{SCP|Woodcutting|50|link=yes}} {{Boostable|yes}} {{Questreqstart|no}}\n*The ability to defeat a level 100 monster"
+    },
+    "rewards": {
+      "questPoints": 1,
+      "xp": {
+        "defence": 12000
+      },
+      "coins": 20000
+    },
+    "resourceFlow": null,
+    "length": "Short",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15396084",
+      "title": "Olaf's Quest",
+      "revision": 15396084,
+      "retrievedAt": "2026-11-18T09:32:24.753Z"
+    }
+  },
+  "unknown": [
+    "fight \"Skeleton fremennik\": no combat data",
+    "fight \"Ulfric\": no combat data",
+    "step \"pickUpKey\": Quest Helper gives no tile",
+    "step \"doPuzzle\": Quest Helper gives no tile",
+    "step \"pickUpItems\": Quest Helper gives no tile",
+    "step \"pickUpItems2\": Quest Helper gives no tile",
+    "step \"chooseCross\": Quest Helper gives no tile",
+    "step \"chooseSquare\": Quest Helper gives no tile",
+    "step \"chooseTriangle\": Quest Helper gives no tile",
+    "step \"chooseCircle\": Quest Helper gives no tile",
+    "step \"chooseStar\": Quest Helper gives no tile",
+    "Quest Helper condition \"WidgetModelRequirement\" is not understood (2)",
+    "requirement not reviewed: The ability to defeat a level 100 monster",
+    "what the quest uses up and hands out is not reviewed"
+  ]
+}

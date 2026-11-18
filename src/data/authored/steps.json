@@ -11105,5 +11105,102 @@
         "questName": "Scrambled!"
       }
     }
+  },
+  {
+    "id": "S9-55",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Fremennik Trials",
+    "qp": 3,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Fremennik_Trials",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Fremennik_Trials/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2658,3668,0",
+    "mapLocation": {
+      "x": 2658,
+      "y": 3668,
+      "plane": 0,
+      "label": "The Rellekka longhall"
+    },
+    "npc": {
+      "nameEn": "Brundt the Chieftain",
+      "location": "The Rellekka longhall",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Brundt_the_Chieftain"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Coins",
+        "amount": 5252,
+        "howToGet": "Payments to Rellekka's merchants during the trials.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Raw shark",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange. One enchants the lyre at the Strange Altar.",
+        "wikiItemId": 383,
+        "anyOf": [
+          "Raw manta ray",
+          "Raw sea turtle"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Raw_shark.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 20,
+        "howToGet": "Buy on the Grand Exchange. The Draugen (level 69) and Lanzig (level 48, killed until a lyre drops, about 1 in 17) are fought up close; Koschei is fought without items.",
+        "wikiItemId": 379,
+        "heals": 12,
+        "anyOf": [
+          "Swordfish",
+          "Monkfish"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      }
+    ],
+    "foes": [
+      "Draugen",
+      "Lanzig"
+    ],
+    "reward": "3 QP, 2,812.4 Agility XP, 2,812.4 Attack XP, 2,812.4 Crafting XP, 2,812.4 Defence XP, 2,812.4 Fishing XP, 2,812.4 Fletching XP, 2,812.4 Hitpoints XP, 2,812.4 Strength XP, 2,812.4 Thieving XP, 2,812.4 Woodcutting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Brundt the Chieftain"
+      ],
+      "dialogChoices": [
+        "Do you have any quests?",
+        "Yes, I am interested.",
+        "I want to become a Fremennik!",
+        "Yes",
+        "What's a Draugen?",
+        "I don't need a reminder",
+        "Talk about the Fremennik Trials",
+        "Beer please.",
+        "Ask about the Merchant's trial",
+        "Ask about becoming a Fremennik"
+      ],
+      "highlightItems": [
+        "Coins",
+        "Tinderbox",
+        "Raw shark",
+        "Bronze axe",
+        "Knife"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Fremennik Trials"
+      }
+    }
   }
 ]

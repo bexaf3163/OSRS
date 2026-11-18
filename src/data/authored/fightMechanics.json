@@ -122,6 +122,11 @@
       "url": "https://oldschool.runescape.wiki/w/Scrambled!",
       "safespot": { "spell": "Fire Bolt" },
       "facts": ["The wiki says the red dragon can be safespotted south-east of the eggs; Scrambled! fights it with Fire Bolt from there (combat audit S9-54)."]
+    },
+    "Ulfric": {
+      "url": "https://oldschool.runescape.wiki/w/Ulfric",
+      "safespot": { "spell": "Fire Bolt" },
+      "facts": ["The wiki says Ulfric can be safespotted (Olaf's Quest kills field); Olaf's Quest fights him with Fire Bolt from there (combat audit S9-56)."]
     }
   }
 }

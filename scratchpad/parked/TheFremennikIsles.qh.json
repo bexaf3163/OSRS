@@ -1,0 +1,1788 @@
+{
+ "title": "The Fremennik Isles",
+ "cls": "TheFremennikIsles",
+ "var": [
+  "varbit",
+  3311
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToMord"
+   },
+   "5": "n1",
+   "10": "n1",
+   "20": "n2",
+   "30": "n3",
+   "40": "n4",
+   "50": "n5",
+   "55": "n6",
+   "60": "n7",
+   "70": "n7",
+   "80": "n7",
+   "90": "n8",
+   "100": "n9",
+   "110": "n9",
+   "120": "n9",
+   "130": "n10",
+   "140": "n11",
+   "150": "n12",
+   "160": "n13",
+   "170": "n13",
+   "180": "n13",
+   "190": "n13",
+   "200": "n14",
+   "210": "n15",
+   "230": "n16",
+   "235": "n17",
+   "240": "n18",
+   "250": "n18",
+   "260": "n19",
+   "270": "n20",
+   "275": "n21",
+   "280": "n22",
+   "290": "n23",
+   "300": "n24",
+   "310": "n24",
+   "320": "n25",
+   "325": {
+    "s": "finishQuest"
+   },
+   "330": {
+    "s": "finishQuestGivenHead"
+   },
+   "331": {
+    "s": "finishQuestGivenHead"
+   },
+   "332": {
+    "s": "finishQuestGivenHead"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "goTalkToGjuki",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToGjuki"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToJatizso"
+    }
+   },
+   "n2": {
+    "n": "finishGjukiDialog",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "continueTalkingToGjuki"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToJatizso"
+    }
+   },
+   "n3": {
+    "n": "getMithrilOre",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "bringOreToGjuki"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToJatizso"
+    }
+   },
+   "n4": {
+    "n": "continueTalkingToGjukiAfterOre",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToGjukiAfterOre"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToJatizso"
+    }
+   },
+   "n5": {
+    "n": "spyOnMawnis",
+    "c": [
+     [
+      "r2",
+      {
+       "s": "performForMawnis"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r4"
+       ]
+      },
+      {
+       "s": "talkToSlug"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "or",
+         "a": [
+          "r5",
+          "r6"
+         ]
+        },
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToRellekkaFromJatizso"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "travelToNeitiznot"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "getJesterOutfit"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToJatizso"
+    }
+   },
+   "n6": {
+    "n": "spyOnMawnisP2",
+    "c": [
+     [
+      "r2",
+      {
+       "s": "performForMawnis"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r4"
+       ]
+      },
+      {
+       "s": "goSpyOnMawnis"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "or",
+         "a": [
+          "r5",
+          "r6"
+         ]
+        },
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToRellekkaFromJatizso"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "travelToNeitiznot"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "getJesterOutfit"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToJatizso"
+    }
+   },
+   "n7": {
+    "n": "reportToSlug",
+    "c": [
+     [
+      "r4",
+      {
+       "s": "tellSlugReport1"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznot"
+    }
+   },
+   "n8": {
+    "n": "talkToMawnisToHelp",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4"
+       ]
+      },
+      {
+       "s": "talkToMawnis"
+      }
+     ],
+     [
+      {
+       "o": "or",
+       "a": [
+        "r5",
+        "r6"
+       ]
+      },
+      {
+       "s": "returnToRellekkaFromJatizso"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznot"
+    }
+   },
+   "n9": {
+    "n": "bringMawnisItems",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4"
+       ]
+      },
+      {
+       "s": "talkToMawnisWithLogs"
+      }
+     ],
+     [
+      {
+       "o": "or",
+       "a": [
+        "r5",
+        "r6"
+       ]
+      },
+      {
+       "s": "returnToRellekkaFromJatizso"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznot"
+    }
+   },
+   "n10": {
+    "n": "talkToMawnisAfterItemsSteps",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4"
+       ]
+      },
+      {
+       "s": "talkToMawnisAfterItems"
+      }
+     ],
+     [
+      {
+       "o": "or",
+       "a": [
+        "r5",
+        "r6"
+       ]
+      },
+      {
+       "s": "returnToRellekkaFromJatizso"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznot"
+    }
+   },
+   "n11": {
+    "n": "repairBridges",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r7",
+        "r8",
+        {
+         "o": "vb",
+         "id": 3314,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "talkToMawnisAfterRepair"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r7",
+        "r8"
+       ]
+      },
+      {
+       "s": "repairBridge2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r7"
+       ]
+      },
+      {
+       "s": "repairBridge1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5"
+       ]
+      },
+      {
+       "s": "returnToRellekkaFromJatizso"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznot"
+    }
+   },
+   "n12": {
+    "n": "reportAfterBridgeRepair",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "talkToMawnisAfterRepair"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "returnToRellekkaFromJatizso"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznot"
+    }
+   },
+   "n13": {
+    "n": "reportBackToGjuki",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "leaveNeitiznotToReport"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "talkToGjukiToReport"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToJatizsoToReport"
+    }
+   },
+   "n14": {
+    "n": "collectTax",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r9",
+        "r10",
+        "r11",
+        "r12"
+       ]
+      },
+      {
+       "s": "talkToGjukiAfterCollection1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r9",
+        "r10",
+        "r11"
+       ]
+      },
+      {
+       "s": "collectFromHring"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r9",
+        "r10"
+       ]
+      },
+      {
+       "s": "collectFromSkuli"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r10"
+       ]
+      },
+      {
+       "s": "collectFromVanligga"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "collectFromKeepa"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToJatizsoToReport"
+    }
+   },
+   "n15": {
+    "n": "collectTaxOnBeards",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r12",
+        "r13",
+        "r11",
+        "r10",
+        {
+         "o": "vb",
+         "id": 3322,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "talkToGjukiAfterCollection2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r12",
+        "r13",
+        "r11",
+        "r10"
+       ]
+      },
+      {
+       "s": "collectFromFlosi"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r12",
+        "r13",
+        "r11"
+       ]
+      },
+      {
+       "s": "collectFromKeepaAgain"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r12",
+        "r13"
+       ]
+      },
+      {
+       "s": "collectFromSkuliAgain"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r12"
+       ]
+      },
+      {
+       "s": "collectFromRaum"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "collectFromHringAgain"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToJatizsoToReport"
+    }
+   },
+   "n16": {
+    "n": "returnToSpyAgain",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "talkToSlugToSpyAgain"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "returnToRellekkaFromJatizsoToSpyAgain"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznotToSpyAgain"
+    }
+   },
+   "n17": {
+    "n": "spyOnMawnisAgain",
+    "c": [
+     [
+      "r2",
+      {
+       "s": "performForMawnisAgain"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "goSpyOnMawnisAgain"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "returnToRellekkaFromJatizsoToSpyAgain"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznotToSpyAgain"
+    }
+   },
+   "n18": {
+    "n": "reportBackToSlug",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "reportBackToSlugAgain"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "returnToRellekkaFromJatizsoToSpyAgain"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznotToSpyAgain"
+    }
+   },
+   "n19": {
+    "n": "reportBackToGjukiAgain",
+    "c": [
+     [
+      "r5",
+      {
+       "s": "talkToGjukiAfterSpy2"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "returnToRellekkaFromNeitiznotAfterSpy2"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToJatizsoAfterSpy2"
+    }
+   },
+   "n20": {
+    "n": "reportBackToMawnisWithDecree",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "talkToMawnisWithDecree"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "returnToRellekkaFromJatizsoWithDecree"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznotWithDecree"
+    }
+   },
+   "n21": {
+    "n": "reportBackToMawnisAfterDecree",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "talkToMawnisAfterDecree"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "returnToRellekkaFromJatizsoAfterDecree"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznotAfterDecree"
+    }
+   },
+   "n22": {
+    "n": "makeArmour",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "getYakArmour"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "returnToRellekkaFromJatizsoAfterDecree"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznotAfterDecree"
+    }
+   },
+   "n23": {
+    "n": "makeShieldSteps",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "makeShield"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "returnToRellekkaFromJatizsoAfterDecree"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznotAfterDecree"
+    }
+   },
+   "n24": {
+    "n": "goToKillKing",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r14"
+       ]
+      },
+      {
+       "s": "killKing"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r15",
+        "r16"
+       ]
+      },
+      {
+       "s": "enterKingRoom"
+      }
+     ],
+     [
+      "r15",
+      {
+       "s": "killTrolls"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "enterCave"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznotAfterDecree"
+    }
+   },
+   "n25": {
+    "n": "removeHead",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r14"
+       ]
+      },
+      {
+       "s": "decapitateKing"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r15",
+        "r16"
+       ]
+      },
+      {
+       "s": "enterKingRoom"
+      }
+     ],
+     [
+      "r15",
+      {
+       "s": "killTrolls"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "enterCave"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToNeitiznotAfterDecree"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      2298,
+      3771,
+      2432,
+      3913,
+      0,
+      3
+     ]
+    ]
+   },
+   "r2": {
+    "o": "vb",
+    "id": 6719,
+    "v": 2
+   },
+   "r3": {
+    "o": "and",
+    "a": [
+     {
+      "o": "item",
+      "nm": "Silly jester boots",
+      "ids": [
+       10839
+      ]
+     },
+     {
+      "o": "item",
+      "nm": "Silly jester hat",
+      "ids": [
+       10836
+      ]
+     },
+     {
+      "o": "item",
+      "nm": "Silly jester tights",
+      "ids": [
+       10838
+      ]
+     },
+     {
+      "o": "item",
+      "nm": "Silly jester body",
+      "ids": [
+       10837
+      ]
+     }
+    ]
+   },
+   "r4": {
+    "o": "zone",
+    "z": [
+     [
+      2304,
+      3775,
+      2368,
+      3842,
+      0,
+      3
+     ],
+     [
+      2368,
+      3823,
+      2383,
+      3842,
+      0,
+      0
+     ]
+    ]
+   },
+   "r5": {
+    "o": "zone",
+    "z": [
+     [
+      2369,
+      3777,
+      2432,
+      3825,
+      0,
+      3
+     ],
+     [
+      2402,
+      2825,
+      2434,
+      3842,
+      0,
+      0
+     ]
+    ]
+   },
+   "r6": {
+    "o": "zone",
+    "z": [
+     [
+      2306,
+      3843,
+      2431,
+      3907,
+      0,
+      0
+     ]
+    ]
+   },
+   "r7": {
+    "o": "zone",
+    "z": [
+     [
+      2304,
+      3775,
+      2368,
+      3842,
+      0,
+      3
+     ],
+     [
+      2304,
+      3775,
+      2368,
+      3842,
+      0,
+      3
+     ],
+     [
+      2306,
+      3843,
+      2431,
+      3907,
+      0,
+      0
+     ]
+    ]
+   },
+   "r8": {
+    "o": "vb",
+    "id": 3313,
+    "v": 1
+   },
+   "r9": {
+    "o": "vb",
+    "id": 3324,
+    "v": 1
+   },
+   "r10": {
+    "o": "vb",
+    "id": 3325,
+    "v": 1
+   },
+   "r11": {
+    "o": "vb",
+    "id": 3320,
+    "v": 1
+   },
+   "r12": {
+    "o": "vb",
+    "id": 3321,
+    "v": 1
+   },
+   "r13": {
+    "o": "vb",
+    "id": 3323,
+    "v": 1
+   },
+   "r14": {
+    "o": "zone",
+    "z": [
+     [
+      2374,
+      10242,
+      2396,
+      10261,
+      1,
+      1
+     ]
+    ]
+   },
+   "r15": {
+    "o": "zone",
+    "z": [
+     [
+      2373,
+      10263,
+      2412,
+      10300,
+      1,
+      1
+     ]
+    ]
+   },
+   "r16": {
+    "o": "vb",
+    "id": 3312,
+    "v": 0
+   }
+  },
+  "alias": {
+   "continueTalkingToGjuki": [
+    "talkToGjuki"
+   ],
+   "talkToGjukiAfterOre": [
+    "bringOreToGjuki"
+   ],
+   "returnToRellekkaFromJatizso": [
+    "talkToSlug"
+   ],
+   "travelToNeitiznot": [
+    "talkToSlug"
+   ],
+   "performForMawnis": [
+    "goSpyOnMawnis"
+   ],
+   "talkToMawnisAfterItems": [
+    "talkToMawnisWithLogs"
+   ],
+   "repairBridge1Second": [
+    "repairBridge1"
+   ],
+   "repairBridge2": [
+    "repairBridge1"
+   ],
+   "travelToJatizsoToReport": [
+    "talkToGjukiToReport"
+   ],
+   "leaveNeitiznotToReport": [
+    "talkToGjukiToReport"
+   ],
+   "travelToNeitiznotToSpyAgain": [
+    "talkToSlugToSpyAgain"
+   ],
+   "returnToRellekkaFromJatizsoToSpyAgain": [
+    "talkToSlugToSpyAgain"
+   ],
+   "performForMawnisAgain": [
+    "goSpyOnMawnisAgain"
+   ],
+   "returnToRellekkaFromNeitiznotAfterSpy2": [
+    "talkToGjukiAfterSpy2"
+   ],
+   "travelToJatizsoAfterSpy2": [
+    "talkToGjukiAfterSpy2"
+   ],
+   "talkToMawnisAfterDecree": [
+    "talkToMawnisWithDecree"
+   ],
+   "returnToRellekkaFromJatizsoAfterDecree": [
+    "talkToMawnisWithDecree"
+   ],
+   "returnToRellekkaFromJatizsoWithDecree": [
+    "talkToMawnisWithDecree"
+   ],
+   "travelToNeitiznotWithDecree": [
+    "talkToMawnisWithDecree"
+   ],
+   "travelToNeitiznotAfterDecree": [
+    "talkToMawnisWithDecree"
+   ],
+   "finishQuestGivenHead": [
+    "finishQuest"
+   ]
+  }
+ },
+ "unknown": {},
+ "steps": {
+  "talkToMord": {
+   "typ": "NpcStep",
+   "wp": [
+    2644,
+    3709,
+    0
+   ],
+   "ids": [
+    1900
+   ],
+   "text": "Talk to Mord Gunnars on a pier in north Rellekka."
+  },
+  "travelToJatizso": {
+   "typ": "NpcStep",
+   "wp": [
+    2644,
+    3709,
+    0
+   ],
+   "ids": [
+    1900
+   ],
+   "text": "Travel to Jatizso with Mord."
+  },
+  "talkToGjuki": {
+   "typ": "NpcStep",
+   "wp": [
+    2407,
+    3804,
+    0
+   ],
+   "ids": [
+    1897
+   ],
+   "text": "Talk to King Gjuki Sorvott IV on Jatizso."
+  },
+  "continueTalkingToGjuki": {
+   "typ": "NpcStep",
+   "wp": [
+    2407,
+    3804,
+    0
+   ],
+   "ids": [
+    1897
+   ],
+   "text": "Talk to King Gjuki Sorvott IV on Jatizso."
+  },
+  "bringOreToGjuki": {
+   "typ": "NpcStep",
+   "wp": [
+    2407,
+    3804,
+    0
+   ],
+   "ids": [
+    1897
+   ],
+   "text": "Talk to King Gjuki Sorvott IV on Jatizso."
+  },
+  "talkToGjukiAfterOre": {
+   "typ": "NpcStep",
+   "wp": [
+    2407,
+    3804,
+    0
+   ],
+   "ids": [
+    1897
+   ],
+   "text": "Talk to King Gjuki Sorvott IV on Jatizso."
+  },
+  "performForMawnis": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Perform the actions that Mawnis requests of you."
+  },
+  "talkToSlug": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3811,
+    0
+   ],
+   "ids": [
+    1895
+   ],
+   "text": "Talk to Slug Hemligssen wearing nothing but your Silly Jester outfit."
+  },
+  "returnToRellekkaFromJatizso": {
+   "typ": "NpcStep",
+   "wp": [
+    2420,
+    3781,
+    0
+   ],
+   "ids": [
+    1940
+   ],
+   "text": "Return to Rellekka with Mord."
+  },
+  "travelToNeitiznot": {
+   "typ": "NpcStep",
+   "wp": [
+    2644,
+    3710,
+    0
+   ],
+   "ids": [
+    1883
+   ],
+   "text": "Travel to Neitiznot with Maria Gunnars."
+  },
+  "getJesterOutfit": {
+   "typ": "ObjectStep",
+   "wp": [
+    2407,
+    3800,
+    0
+   ],
+   "ids": [
+    21299
+   ],
+   "text": "Search the chest behind Gjuki's throne for a silly jester outfit."
+  },
+  "goSpyOnMawnis": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3800,
+    0
+   ],
+   "ids": [
+    1878
+   ],
+   "text": "Talk to Mawnis in Neitiznot to start spying on him."
+  },
+  "tellSlugReport1": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3811,
+    0
+   ],
+   "ids": [
+    1895
+   ],
+   "text": "Report back to Slug Hemligssen."
+  },
+  "talkToMawnis": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3800,
+    0
+   ],
+   "ids": [
+    1878
+   ],
+   "text": "Take off the jester outfit, and talk to Mawnis."
+  },
+  "talkToMawnisWithLogs": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3800,
+    0
+   ],
+   "ids": [
+    1878
+   ],
+   "text": "Bring Mawnis the 8 split logs, 8 rope, and a knife."
+  },
+  "talkToMawnisAfterItems": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3800,
+    0
+   ],
+   "ids": [
+    1878
+   ],
+   "text": "Talk to Mawnis."
+  },
+  "talkToMawnisAfterRepair": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3800,
+    0
+   ],
+   "ids": [
+    1878
+   ],
+   "text": "Report back to Mawnis."
+  },
+  "repairBridge2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2355,
+    3840,
+    0
+   ],
+   "ids": [
+    21312
+   ],
+   "text": "Right-click repair the bridges to the north of Neitiznot."
+  },
+  "repairBridge1": {
+   "typ": "ObjectStep",
+   "wp": [
+    2314,
+    3840,
+    0
+   ],
+   "ids": [
+    21310
+   ],
+   "text": "Right-click repair the bridges to the north of Neitiznot. Protect from Missiles before doing this as you'll automatically cross the aggressive trolls."
+  },
+  "repairBridge1Second": {
+   "typ": "ObjectStep",
+   "wp": [
+    2314,
+    3840,
+    0
+   ],
+   "ids": [
+    21310
+   ],
+   "text": "Right-click repair the bridges to the north of Neitiznot. Protect from Missiles before doing this as you'll automatically cross the aggressive trolls. Protect from Missiles before doing this as you'll automatically cross the aggressive trolls."
+  },
+  "travelToJatizsoToReport": {
+   "typ": "NpcStep",
+   "wp": [
+    2644,
+    3709,
+    0
+   ],
+   "ids": [
+    1900
+   ],
+   "text": "Travel to Jatizso with Mord."
+  },
+  "leaveNeitiznotToReport": {
+   "typ": "NpcStep",
+   "wp": [
+    2311,
+    3781,
+    0
+   ],
+   "ids": [
+    1882
+   ],
+   "text": "Travel back to Rellekka with Maria."
+  },
+  "talkToGjukiToReport": {
+   "typ": "NpcStep",
+   "wp": [
+    2407,
+    3804,
+    0
+   ],
+   "ids": [
+    1897
+   ],
+   "text": "Report back to King Gjuki Sorvott IV on Jatizso."
+  },
+  "talkToGjukiAfterCollection1": {
+   "typ": "NpcStep",
+   "wp": [
+    2407,
+    3804,
+    0
+   ],
+   "ids": [
+    1897
+   ],
+   "text": "Report back to King Gjuki Sorvott IV on Jatizso."
+  },
+  "collectFromHring": {
+   "typ": "NpcStep",
+   "wp": [
+    2397,
+    3797,
+    0
+   ],
+   "ids": [
+    1941
+   ],
+   "text": "Collect 8000 coins from Hring Hring in south west Jatizso."
+  },
+  "collectFromSkuli": {
+   "typ": "NpcStep",
+   "wp": [
+    2395,
+    3804,
+    0
+   ],
+   "ids": [
+    1944
+   ],
+   "text": "Collect 6000 coins from Skuli in north west Jatizso."
+  },
+  "collectFromVanligga": {
+   "typ": "NpcStep",
+   "wp": [
+    2405,
+    3813,
+    0
+   ],
+   "ids": [
+    1990
+   ],
+   "text": "Collect 5000 coins from Vanligga north of Gjuki's building."
+  },
+  "collectFromKeepa": {
+   "typ": "NpcStep",
+   "wp": [
+    2417,
+    3816,
+    0
+   ],
+   "ids": [
+    1945
+   ],
+   "text": "Collect 5000 coins from Keepa in north east Jatizso."
+  },
+  "talkToGjukiAfterCollection2": {
+   "typ": "NpcStep",
+   "wp": [
+    2407,
+    3804,
+    0
+   ],
+   "ids": [
+    1897
+   ],
+   "text": "Report back to King Gjuki Sorvott IV on Jatizso."
+  },
+  "collectFromFlosi": {
+   "typ": "NpcStep",
+   "wp": [
+    2418,
+    3813,
+    0
+   ],
+   "ids": [
+    1942
+   ],
+   "text": "Collect tax from Flossi in north east Jatizso."
+  },
+  "collectFromKeepaAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2417,
+    3816,
+    0
+   ],
+   "ids": [
+    1945
+   ],
+   "text": "Collect tax from Keepa in north east Jatizso."
+  },
+  "collectFromSkuliAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2395,
+    3804,
+    0
+   ],
+   "ids": [
+    1944
+   ],
+   "text": "Collect tax from Skuli in north west Jatizso."
+  },
+  "collectFromRaum": {
+   "typ": "NpcStep",
+   "wp": [
+    2395,
+    3797,
+    0
+   ],
+   "ids": [
+    1943
+   ],
+   "text": "Collect tax from Raum in south west Jatizso."
+  },
+  "collectFromHringAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2397,
+    3797,
+    0
+   ],
+   "ids": [
+    1941
+   ],
+   "text": "Collect tax from Hring Hring in south west Jatizso."
+  },
+  "travelToNeitiznotToSpyAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2644,
+    3710,
+    0
+   ],
+   "ids": [
+    1883
+   ],
+   "text": "Travel to Neitiznot with Maria Gunnars."
+  },
+  "talkToSlugToSpyAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3811,
+    0
+   ],
+   "ids": [
+    1895
+   ],
+   "text": "Talk to Slug Hemligssen wearing nothing but your Silly Jester outfit."
+  },
+  "returnToRellekkaFromJatizsoToSpyAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2420,
+    3781,
+    0
+   ],
+   "ids": [
+    1940
+   ],
+   "text": "Return to Rellekka with Mord."
+  },
+  "performForMawnisAgain": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Perform the actions that Mawnis requests of you."
+  },
+  "goSpyOnMawnisAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3800,
+    0
+   ],
+   "ids": [
+    1878
+   ],
+   "text": "Talk to Mawnis to start spying on him."
+  },
+  "reportBackToSlugAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3811,
+    0
+   ],
+   "ids": [
+    1895
+   ],
+   "text": "Report to Slug Hemligssen."
+  },
+  "travelToJatizsoAfterSpy2": {
+   "typ": "NpcStep",
+   "wp": [
+    2644,
+    3709,
+    0
+   ],
+   "ids": [
+    1900
+   ],
+   "text": "Travel to Jatizso with Mord."
+  },
+  "talkToGjukiAfterSpy2": {
+   "typ": "NpcStep",
+   "wp": [
+    2407,
+    3804,
+    0
+   ],
+   "ids": [
+    1897
+   ],
+   "text": "Report back to King Gjuki Sorvott IV on Jatizso."
+  },
+  "returnToRellekkaFromNeitiznotAfterSpy2": {
+   "typ": "NpcStep",
+   "wp": [
+    2311,
+    3781,
+    0
+   ],
+   "ids": [
+    1882
+   ],
+   "text": "Travel back to Rellekka with Maria."
+  },
+  "travelToNeitiznotWithDecree": {
+   "typ": "NpcStep",
+   "wp": [
+    2644,
+    3710,
+    0
+   ],
+   "ids": [
+    1883
+   ],
+   "text": "Travel to Neitiznot with Maria Gunnars."
+  },
+  "talkToMawnisWithDecree": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3800,
+    0
+   ],
+   "ids": [
+    1878
+   ],
+   "text": "Take off your jester outfit, and talk to Mawnis."
+  },
+  "talkToMawnisAfterDecree": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3800,
+    0
+   ],
+   "ids": [
+    1878
+   ],
+   "text": "Take off your jester outfit, and talk to Mawnis."
+  },
+  "returnToRellekkaFromJatizsoAfterDecree": {
+   "typ": "NpcStep",
+   "wp": [
+    2420,
+    3781,
+    0
+   ],
+   "ids": [
+    1940
+   ],
+   "text": "Return to Rellekka with Mord."
+  },
+  "returnToRellekkaFromJatizsoWithDecree": {
+   "typ": "NpcStep",
+   "wp": [
+    2420,
+    3781,
+    0
+   ],
+   "ids": [
+    1940
+   ],
+   "text": "Return to Rellekka with Mord."
+  },
+  "travelToNeitiznotAfterDecree": {
+   "typ": "NpcStep",
+   "wp": [
+    2644,
+    3710,
+    0
+   ],
+   "ids": [
+    1883
+   ],
+   "text": "Travel to Neitiznot with Maria Gunnars."
+  },
+  "getYakArmour": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3800,
+    0
+   ],
+   "ids": [
+    1878
+   ],
+   "text": "Talk to Mawnis with full yak-hide armour."
+  },
+  "makeShield": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3800,
+    0
+   ],
+   "ids": [
+    1878
+   ],
+   "text": "Talk to Mawnis with a Neitiznot Shield."
+  },
+  "killKing": {
+   "typ": "NpcStep",
+   "wp": [
+    2386,
+    10249,
+    1
+   ],
+   "ids": [
+    5822
+   ],
+   "text": "Kill the king. Use the Protect from Magic prayer for the fight."
+  },
+  "enterKingRoom": {
+   "typ": "ObjectStep",
+   "wp": [
+    2385,
+    10263,
+    1
+   ],
+   "ids": [
+    21316
+   ],
+   "text": "Cross the rope bridge. Be prepared to fight the Ice Troll King. Use the Protect from Magic prayer for the fight."
+  },
+  "killTrolls": {
+   "typ": null,
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "enterCave": {
+   "typ": "ObjectStep",
+   "wp": [
+    2402,
+    3890,
+    0
+   ],
+   "ids": [
+    21584
+   ],
+   "text": "Enter the cave in the north east of the islands. Be prepared in your yak armour, Neitiznot shield, and a melee weapon."
+  },
+  "decapitateKing": {
+   "typ": "ObjectStep",
+   "wp": null,
+   "ids": [
+    21622
+   ],
+   "text": "Decapitate the king's head."
+  },
+  "finishQuest": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3800,
+    0
+   ],
+   "ids": [
+    1878
+   ],
+   "text": "Talk to Mawnis with the Ice Troll King's head to complete the quest."
+  },
+  "finishQuestGivenHead": {
+   "typ": "NpcStep",
+   "wp": [
+    2335,
+    3800,
+    0
+   ],
+   "ids": [
+    1878
+   ],
+   "text": "Talk to Mawnis to complete the quest."
+  }
+ }
+}

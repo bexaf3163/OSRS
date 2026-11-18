@@ -13259,6 +13259,133 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_sardine"
   },
   {
+    "id": 383,
+    "nameEn": "Raw shark",
+    "examine": "I should try cooking this.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Raw_shark.png",
+    "value": 170,
+    "highAlch": 102,
+    "lowAlch": 68,
+    "buyLocations": [
+      {
+        "shopName": "Harry's Fishing Shop.",
+        "location": "Catherby",
+        "owner": "Harry",
+        "price": 170,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Frankie's Fishing Emporium",
+        "location": "Port Piscarilius",
+        "owner": "Frankie",
+        "price": 170,
+        "stock": 25,
+        "members": true
+      },
+      {
+        "shopName": "Port Roberts Fish Stall",
+        "location": "Port Roberts",
+        "owner": "Gregory",
+        "price": 170,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Flosi's Fishmongers",
+        "location": "Jatizso",
+        "owner": "Flosi Dalksson",
+        "price": 187,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Fremennik Fish Monger",
+        "location": "Rellekka",
+        "owner": "Fish monger",
+        "price": 221,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Island Fishmonger",
+        "location": "Miscellania",
+        "owner": "Fishmonger",
+        "price": 221,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Etceteria Fish",
+        "location": "Etceteria",
+        "owner": "Fishmonger",
+        "price": 221,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Rufus' Meat Emporium",
+        "location": "Canifis",
+        "owner": "Rufus",
+        "price": 221,
+        "stock": 1,
+        "members": true
+      },
+      {
+        "shopName": "Warrens Fish Monger",
+        "location": "The Warrens",
+        "owner": "Fish monger",
+        "price": 221,
+        "stock": 0,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Ice troll female#Variant 1",
+        "combatLevel": null,
+        "rate": "10/128"
+      },
+      {
+        "monster": "Ice troll runt#Variant 1",
+        "combatLevel": null,
+        "rate": "10/128"
+      },
+      {
+        "monster": "Ice troll male#Variant 1",
+        "combatLevel": null,
+        "rate": "10/128"
+      },
+      {
+        "monster": "Grotesque Guardians",
+        "combatLevel": null,
+        "rate": "1.5/142"
+      },
+      {
+        "monster": "Vorkath#Post-quest",
+        "combatLevel": null,
+        "rate": "3/300"
+      },
+      {
+        "monster": "Great white shark",
+        "combatLevel": 175,
+        "rate": "17/100"
+      },
+      {
+        "monster": "Spined kraken",
+        "combatLevel": 128,
+        "rate": "14/109"
+      },
+      {
+        "monster": "River troll",
+        "combatLevel": 79,
+        "rate": "12/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_shark"
+  },
+  {
     "id": 317,
     "nameEn": "Raw shrimps",
     "examine": "I should try cooking this.",

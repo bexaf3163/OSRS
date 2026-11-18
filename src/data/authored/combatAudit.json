@@ -2203,6 +2203,50 @@
       "evidence": [
         "OSRS Wiki Scrambled!: kills field with safespots, read 2026-11-18."
       ]
+    },
+    {
+      "stepId": "S9-55",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "The Fremennik Trials: kill Lanzig (level 48, 50 hitpoints, hits up to 6) until a lyre drops (about 1 in 17), kill the Draugen (level 69, 60 hitpoints, hits up to 7) found with the hunter's talisman, and fight Koschei the Deathless without weapons, armour or runes; dying to Koschei is safe.",
+      "enemies": [
+        {
+          "name": "Draugen",
+          "level": 69,
+          "maxHit": 7,
+          "table": true
+        },
+        {
+          "name": "Lanzig",
+          "level": 48,
+          "maxHit": 6,
+          "table": true
+        }
+      ],
+      "lines": [
+        "1.6",
+        "3.0",
+        "3.4",
+        "5.1",
+        "5.4",
+        "5.5"
+      ],
+      "assumptions": [
+        "Twenty lobsters cover the Draugen and the Lanzig kills; Koschei cannot kill the player, so he needs no food.",
+        "The lyre comes from Lanzig, Borrokar, Lensa or Freidir; crafting one needs Woodcutting 40, Fletching 25 and Crafting 40."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Craft the lyre instead (Woodcutting 40, Fletching 25, Crafting 40)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.145.0: new quest; Draugen and Lanzig are in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Draugen: level 69, 60 hitpoints, max hit 7; Lanzig: level 48, 50 hitpoints, lyre 30/512; read 2026-11-18."
+      ]
     }
   ]
 }

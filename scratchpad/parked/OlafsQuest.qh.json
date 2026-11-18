@@ -1,0 +1,747 @@
+{
+ "title": "Olaf's Quest",
+ "cls": "OlafsQuest",
+ "var": [
+  "varbit",
+  3534
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToOlaf"
+   },
+   "10": "n1",
+   "20": "n2",
+   "30": {
+    "s": "returnToOlaf"
+   },
+   "40": {
+    "s": "useDampPlanks"
+   },
+   "50": {
+    "s": "talkToOlafAfterPlanks"
+   },
+   "60": "n3",
+   "70": "n3"
+  },
+  "nodes": {
+   "n1": {
+    "n": "getLogs",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Windswept logs",
+       "ids": [
+        11035
+       ]
+      },
+      {
+       "s": "giveLogToOlaf"
+      }
+     ]
+    ],
+    "d": {
+     "s": "chopTree"
+    }
+   },
+   "n2": {
+    "n": "bringCarvings",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 3536,
+       "op": ">=",
+       "v": 1
+      },
+      {
+       "s": "talkToVolf"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToIngrid"
+    }
+   },
+   "n3": {
+    "n": "solvePuzzleSteps",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        {
+         "o": "vb",
+         "id": 3539,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "searchChestAgain"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "npc",
+         "id": 4500
+        },
+        "r1"
+       ]
+      },
+      {
+       "s": "killUlfric"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "searchChest"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Key",
+         "ids": [
+          11043
+         ]
+        },
+        "r2"
+       ]
+      },
+      {
+       "s": "chooseStar"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Key",
+         "ids": [
+          11042
+         ]
+        },
+        "r2"
+       ]
+      },
+      {
+       "s": "chooseCircle"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Key",
+         "ids": [
+          11041
+         ]
+        },
+        "r2"
+       ]
+      },
+      {
+       "s": "chooseTriangle"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Key",
+         "ids": [
+          11040
+         ]
+        },
+        "r2"
+       ]
+      },
+      {
+       "s": "chooseSquare"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Key",
+         "ids": [
+          11039
+         ]
+        },
+        "r2"
+       ]
+      },
+      {
+       "s": "chooseCross"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r4",
+        {
+         "o": "vb",
+         "id": 3548,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "openGate"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r5",
+        "r4",
+        {
+         "o": "and",
+         "a": [
+          {
+           "o": "item",
+           "nm": "Rotten barrel",
+           "ids": [
+            11044,
+            11045
+           ]
+          },
+          {
+           "o": "item",
+           "nm": "Rope",
+           "ids": [
+            954,
+            11046
+           ],
+           "q": 3
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "s": "useBarrel2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r4",
+        "r3"
+       ]
+      },
+      {
+       "s": "pickUpItems2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "and",
+         "a": [
+          {
+           "o": "item",
+           "nm": "Rotten barrel",
+           "ids": [
+            11044,
+            11045
+           ],
+           "q": 2
+          },
+          {
+           "o": "item",
+           "nm": "Rope",
+           "ids": [
+            954,
+            11046
+           ],
+           "q": 6
+          }
+         ]
+        },
+        "r4",
+        "r3"
+       ]
+      },
+      {
+       "s": "useBarrel"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        "r3"
+       ]
+      },
+      {
+       "s": "pickUpItems"
+      }
+     ],
+     [
+      {
+       "o": "?",
+       "d": "WidgetModelRequirement"
+      },
+      {
+       "s": "doPuzzle"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        "r3"
+       ]
+      },
+      {
+       "s": "searchPainting"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        {
+         "o": "ground",
+         "ids": [
+          11039,
+          11040,
+          11041,
+          11042,
+          11043
+         ]
+        }
+       ]
+      },
+      {
+       "s": "pickUpKey"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6"
+       ]
+      },
+      {
+       "s": "killSkeleton"
+      }
+     ]
+    ],
+    "d": {
+     "s": "digHole"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      2726,
+      10154,
+      2749,
+      10170,
+      0,
+      0
+     ]
+    ]
+   },
+   "r2": {
+    "o": "?",
+    "d": "WidgetModelRequirement"
+   },
+   "r3": {
+    "o": "item",
+    "nm": "Key",
+    "ids": [
+     11039,
+     11040,
+     11041,
+     11042,
+     11043
+    ]
+   },
+   "r4": {
+    "o": "zone",
+    "z": [
+     [
+      2691,
+      10143,
+      2706,
+      10170,
+      0,
+      0
+     ],
+     [
+      2707,
+      10149,
+      2735,
+      10170,
+      0,
+      0
+     ]
+    ]
+   },
+   "r5": {
+    "o": "vb",
+    "id": 3547,
+    "v": 1
+   },
+   "r6": {
+    "o": "zone",
+    "z": [
+     [
+      2689,
+      10116,
+      2707,
+      10141,
+      0,
+      0
+     ],
+     [
+      2707,
+      10118,
+      2739,
+      10148,
+      0,
+      0
+     ]
+    ]
+   }
+  },
+  "alias": {
+   "chooseCircle": [
+    "openGate"
+   ],
+   "chooseCross": [
+    "openGate"
+   ],
+   "chooseSquare": [
+    "openGate"
+   ],
+   "chooseStar": [
+    "openGate"
+   ],
+   "chooseTriangle": [
+    "openGate"
+   ],
+   "pickUpItems2": [
+    "pickUpItems"
+   ],
+   "pickUpKey": [
+    "killSkeleton"
+   ]
+  }
+ },
+ "unknown": {
+  "WidgetModelRequirement": 2
+ },
+ "steps": {
+  "talkToOlaf": {
+   "typ": "NpcStep",
+   "wp": [
+    2722,
+    3727,
+    0
+   ],
+   "ids": [
+    4488
+   ],
+   "text": "Talk to Olaf Hradson north east of Rellekka."
+  },
+  "chopTree": {
+   "typ": "ObjectStep",
+   "wp": [
+    2749,
+    3735,
+    0
+   ],
+   "ids": [
+    18137
+   ],
+   "text": "Chop a log from the Windswept Tree east of Olaf."
+  },
+  "giveLogToOlaf": {
+   "typ": "NpcStep",
+   "wp": [
+    2722,
+    3727,
+    0
+   ],
+   "ids": [
+    4488
+   ],
+   "text": "Bring the logs to Olaf Hradson north east of Rellekka."
+  },
+  "talkToIngrid": {
+   "typ": "NpcStep",
+   "wp": [
+    2670,
+    3670,
+    0
+   ],
+   "ids": [
+    4490
+   ],
+   "text": "Talk to Ingrid Hradson near the well in southeast Rellekka."
+  },
+  "talkToVolf": {
+   "typ": "NpcStep",
+   "wp": [
+    2662,
+    3700,
+    0
+   ],
+   "ids": [
+    4489
+   ],
+   "text": "Talk to Volf Olafson north of the longhall in Rellekka."
+  },
+  "returnToOlaf": {
+   "typ": "NpcStep",
+   "wp": [
+    2722,
+    3727,
+    0
+   ],
+   "ids": [
+    4488
+   ],
+   "text": "Return to Olaf Hradson north east of Rellekka."
+  },
+  "useDampPlanks": {
+   "typ": "ObjectStep",
+   "wp": [
+    2724,
+    3728,
+    0
+   ],
+   "ids": [
+    14172
+   ],
+   "text": "Use the damp planks on Olaf's embers."
+  },
+  "talkToOlafAfterPlanks": {
+   "typ": "NpcStep",
+   "wp": [
+    2722,
+    3727,
+    0
+   ],
+   "ids": [
+    4488
+   ],
+   "text": "Talk to Olaf again, and give him some food."
+  },
+  "digHole": {
+   "typ": "DigStep",
+   "wp": [
+    2748,
+    3732,
+    0
+   ],
+   "ids": [],
+   "text": "Dig next to the Windswept Tree."
+  },
+  "searchChestAgain": {
+   "typ": "ObjectStep",
+   "wp": [
+    2740,
+    10164,
+    0
+   ],
+   "ids": [
+    14197
+   ],
+   "text": "Search the chest again to finish the quest."
+  },
+  "killUlfric": {
+   "typ": "NpcStep",
+   "wp": [
+    2740,
+    10164,
+    0
+   ],
+   "ids": [
+    4500
+   ],
+   "text": "Kill Ulfric."
+  },
+  "searchChest": {
+   "typ": "ObjectStep",
+   "wp": [
+    2740,
+    10164,
+    0
+   ],
+   "ids": [
+    14197
+   ],
+   "text": "WALK off the remaining walkway, and search the chest in the wreck. Be prepared to fight Ulfric."
+  },
+  "chooseStar": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    252,
+    7
+   ],
+   "text": "Click the star key hole."
+  },
+  "chooseCircle": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    252,
+    6
+   ],
+   "text": "Click the circle key hole."
+  },
+  "chooseTriangle": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    252,
+    5
+   ],
+   "text": "Click the triangle key hole."
+  },
+  "chooseSquare": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    252,
+    3
+   ],
+   "text": "Click the square key hole."
+  },
+  "chooseCross": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    252,
+    4
+   ],
+   "text": "Click the cross key hole."
+  },
+  "openGate": {
+   "typ": "ObjectStep",
+   "wp": [
+    2725,
+    10168,
+    0
+   ],
+   "ids": [
+    23216
+   ],
+   "text": "Open the gate on the walkway, clicking the key hole which matches your key."
+  },
+  "useBarrel2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2724,
+    10168,
+    0
+   ],
+   "ids": [
+    23214
+   ],
+   "text": "WALK on the walkway and repair the next hole in it."
+  },
+  "pickUpItems2": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Pick up 1 rotten barrels and 3 ropes from around the room."
+  },
+  "useBarrel": {
+   "typ": "ObjectStep",
+   "wp": [
+    2722,
+    10168,
+    0
+   ],
+   "ids": [
+    23213
+   ],
+   "text": "WALK onto the walkway to the east, and use a barrel on it to repair it."
+  },
+  "pickUpItems": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Pick up 2 rotten barrels and 6 ropes from around the room."
+  },
+  "doPuzzle": {
+   "typ": null,
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "searchPainting": {
+   "typ": "ObjectStep",
+   "wp": [
+    2707,
+    10147,
+    0
+   ],
+   "ids": [
+    23156
+   ],
+   "text": "Search the picture wall in the north room."
+  },
+  "pickUpKey": {
+   "typ": "ItemStep",
+   "wp": null,
+   "ids": [],
+   "text": "Pick up the dropped key."
+  },
+  "killSkeleton": {
+   "typ": "NpcStep",
+   "wp": [
+    2727,
+    10141,
+    0
+   ],
+   "ids": [
+    4491
+   ],
+   "text": "Go deeper into the caverns and kill a Skeleton Fremennik for a key."
+  }
+ }
+}

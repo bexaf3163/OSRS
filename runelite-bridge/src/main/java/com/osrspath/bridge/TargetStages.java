@@ -26,7 +26,7 @@ final class TargetStages
 	{
 		static final int MAX_STAGES = 40;
 		// Eagles' Peak keeps 47 Quest Helper steps under one quest value.
-		static final int MAX_STAGE_STEPS = 60;
+		static final int MAX_STAGE_STEPS = 120;
 		static final int MAX_BANKS = 40;
 
 		/**

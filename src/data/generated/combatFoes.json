@@ -2019,6 +2019,55 @@
       }
     },
     {
+      "name": "Draugen",
+      "combat": 69,
+      "members": true,
+      "hitpoints": 60,
+      "attackLevel": 60,
+      "strengthLevel": 60,
+      "defenceLevel": 60,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 100,
+        "slash": 100,
+        "crush": 100,
+        "magic": 500,
+        "ranged": 500
+      },
+      "attackStyle": "crush",
+      "maxHit": 7,
+      "speedTicks": 4,
+      "aggressive": true,
+      "xpBonus": 2,
+      "weakness": {
+        "element": "air",
+        "percent": 50
+      }
+    },
+    {
+      "name": "Lanzig",
+      "combat": 48,
+      "members": true,
+      "hitpoints": 50,
+      "attackLevel": 40,
+      "strengthLevel": 40,
+      "defenceLevel": 40,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 6,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

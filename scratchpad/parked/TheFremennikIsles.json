@@ -1,0 +1,2240 @@
+{
+ "quest": "The Fremennik Isles",
+ "status": "draft",
+ "sources": {
+  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+  "wiki": {
+   "title": "The Fremennik Isles",
+   "revision": 15402837
+  },
+  "quickGuide": {
+   "title": "The Fremennik Isles/Quick guide",
+   "revision": 15303698
+  }
+ },
+ "step": {
+  "title": "The Fremennik Isles",
+  "type": "quest",
+  "qp": 1,
+  "membersOnly": true,
+  "wikiUrl": "https://oldschool.runescape.wiki/w/The_Fremennik_Isles",
+  "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Fremennik_Isles/Quick_guide",
+  "mapLocation": {
+   "x": 2646,
+   "y": 3710,
+   "plane": 0,
+   "label": "Talk to Mord Gunnars at the northernmost dock of Rellekka."
+  },
+  "npc": {
+   "nameEn": "Mord Gunnars"
+  },
+  "itemsRequired": [
+   {
+    "nameEn": "raw tuna",
+    "amount": 1,
+    "wikiItemId": 359,
+    "howToGet": "Buy on the Grand Exchange, or from Gerrant's Fishy Business in Port Sarim for 40 gp.",
+    "note": "A raw tuna (obtainable during quest, with 35 fishing or bought from the shop)"
+   },
+   {
+    "nameEn": "tin ore",
+    "amount": 1,
+    "wikiItemId": 438,
+    "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 3 gp.",
+    "note": "Either 8 tin ores, 7 pieces of coal, or 6 mithril ores (depends on your Mining level; level 1 will require tin ore, 2-54 will require coal, and 55-99 require mithril ore). Note: The ores can be noted."
+   },
+   {
+    "nameEn": "rope",
+    "amount": 9,
+    "wikiItemId": 954,
+    "howToGet": "Buy on the Grand Exchange, or from Ned's Handmade Rope (100% Wool) in Draynor Village for 16 gp.",
+    "note": "9 ropes (obtainable during quest with )"
+   },
+   {
+    "nameEn": "Neitiznot shield",
+    "amount": 1,
+    "wikiItemId": 10826,
+    "howToGet": "Buy on the Grand Exchange.",
+    "note": "If the Neitiznot shield is already purchased, only 8 ropes are required."
+   },
+   {
+    "nameEn": "knife",
+    "amount": 1,
+    "wikiItemId": 946,
+    "howToGet": "Buy on the Grand Exchange, or from Funch's Fine Groceries in Grand Tree for 6 gp.",
+    "note": "A knife"
+   },
+   {
+    "nameEn": "split log",
+    "amount": 8,
+    "wikiItemId": 10812,
+    "howToGet": "Buy on the Grand Exchange.",
+    "note": "8 split logs (obtainable during the quest with 56 Woodcutting and an axe)"
+   },
+   {
+    "nameEn": "Neitiznot shield",
+    "amount": 1,
+    "wikiItemId": 10826,
+    "howToGet": "Buy on the Grand Exchange.",
+    "note": "a Neitiznot shield (or 56 Woodcutting, a hammer and a bronze nail)"
+   },
+   {
+    "nameEn": "Yak-hide armour (top)",
+    "amount": 1,
+    "wikiItemId": null,
+    "howToGet": null,
+    "note": "Yak-hide armour top and legs (or 46 Crafting, a needle and two thread, or a costume needle)"
+   },
+   {
+    "nameEn": "coins",
+    "amount": 5000,
+    "wikiItemId": 995,
+    "howToGet": "Free spawn: Asgarnian Ice Dungeon.",
+    "note": "5000 coins (optional)"
+   },
+   {
+    "nameEn": "Silly jester costume",
+    "amount": 1,
+    "wikiItemId": null,
+    "howToGet": null,
+    "note": "Silly jester costume (obtained during quest)"
+   }
+  ],
+  "foes": [
+   "Ice troll (disambiguation)",
+   "Ice Troll King"
+  ]
+ },
+ "stages": {
+  "var": [
+   "varbit",
+   3311
+  ],
+  "route": [
+   {
+    "title": "The jester outfit",
+    "steps": [
+     "Talk to Mord Gunnars at the most northern dock in Rellekka to be taken to Jatizso. Dialogue: \"Can you ferry me to Jatizso?\"",
+     "Talk to King Gjuki Sorvott IV in the checkered floor room. His cat will intervene.",
+     "Use the raw tuna on the King's cat.",
+     "Speak to the King.",
+     "Give him the required ores.",
+     "Take all four pieces of the jester outfit from the chest behind the king's throne.",
+     "Quick travel back to Rellekka via Mord Gunnars at the docks to the south."
+    ]
+   },
+   {
+    "title": "The spymaster's first task",
+    "steps": [
+     "Quick travel to Neitiznot via Maria Gunnars on the docks next to Mord.",
+     "Remove anything from your weapon and shield slots and put on the Jester outfit (hat, boots, tights, top)",
+     "Speak with Slug Hemligssen north of the bank. Dialogue: \"Free stuff please.\", \"I am ready.\"",
+     "Talk to Mawnis Burowgar in the building south of the bank.",
+     "During the cutscene, follow the commands Mawnis gives using the right-side panel.",
+     "Return to Slug Hemligssen. He will give you 2500 coins. Dialogue: \"Yes I have.\", \"They will be ready in two days.\", \"Seventeen militia have been trained.\", \"There are two bridges to repair.\","
+    ]
+   },
+   {
+    "title": "Bridge repairs",
+    "steps": [
+     "Speak to Mawnis Burowgar again without the Jester Outfit",
+     "Speak to Mawnis Burowgar with the ropes, split logs, and knife in your inventory with at least one empty inventory slot.",
+     "Speak to Thakkrad to learn how to repair the bridges. Dialogue: \"How do I repair these bridges again?\"",
+     "Travel north, across the rope bridge and repair the broken bridges on the east and west sides of the island (right-click option to repair).",
+     "Talk to Mawnis Burowgar.",
+     "Quick travel back to Rellekka via Maria Gunnars at the dock to the south-west."
+    ]
+   },
+   {
+    "title": "The king's tax collector",
+    "steps": [
+     "Quick travel to Jatizso via Mord.",
+     "Speak with King Gjuki Sorvott IV in the building west of the bank.",
+     "Tax the shop keepers of Jatizso:",
+     "Talk to King Gjuki Sorvott IV.",
+     "Collect taxes from the following people for 1,000:",
+     "Speak with King Gjuki Sorvott IV.",
+     "Quick travel back to Rellekka via Mord."
+    ]
+   },
+   {
+    "title": "The spymaster's second task",
+    "steps": [
+     "Quick travel to Neitiznot via Maria.",
+     "Speak with Spymaster Slug Hemligssen again.",
+     "Equip only the jester outfit again.",
+     "Speak with Mawnis to induce another Jester cutscene.",
+     "Speak with Slug once again. Dialogue: \"Yes, I am.\", \"They are in a secluded bay, near Etceteria.\", \"They will be given some potions.\", \"I have been helping Neitiznot.\"",
+     "Ferry back to Rellekka and then to Jatizso.",
+     "Speak to King Gjuki Sorvott IV to obtain the royal decree (1 inv spot needed, otherwise you have to repeat dialogue).",
+     "Travel back to Neitiznot and speak with Mawnis. (Don't forget to take off the jester outfit)",
+     "Buy yak-hide armour (top and leggings), along with the Neitiznot shield from the Grand Exchange, or for Ironmen:",
+     "Speak with Mawnis, who will instruct you to craft a shield. For Ironmen:",
+     "Speak with Mawnis again."
+    ]
+   },
+   {
+    "title": "The troll king",
+    "steps": [
+     "Equip the Neitiznot shield and combat items to fight the Ice Troll King.",
+     "Use Protect from Melee while running to the east side cave entrance of the farthest north isle.",
+     "Enter the cave to start a cutscene.",
+     "Kill ten trolls, you will see a message saying \"You have defeated enough trolls to attack the King.\"",
+     "Turn on Protect from Missiles before crossing the bridge.",
+     "Turn on Protect from Magic for the duration of the fight. Kill the troll king. DO NOT use Protect from Melee because King will use the long distance attack as Dad does.",
+     "Decapitate the troll king's corpse.",
+     "Return to Mawnis Burowgar.",
+     "Congratulations, quest complete!"
+    ]
+   }
+  ],
+  "stages": [
+   {
+    "at": 0,
+    "do": [
+     {
+      "t": "Talk to Mord Gunnars on a pier in north Rellekka.",
+      "s": "Talk to Mord Gunnars on a pier in north Rellekka.",
+      "k": "talkToMord",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 5,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizso",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Talk to King Gjuki Sorvott IV on Jatizso.",
+      "s": "Talk to King Gjuki Sorvott IV on Jatizso.",
+      "k": "talkToGjuki",
+      "at": [
+       2407,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1897
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 10,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizso",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Talk to King Gjuki Sorvott IV on Jatizso.",
+      "s": "Talk to King Gjuki Sorvott IV on Jatizso.",
+      "k": "talkToGjuki",
+      "at": [
+       2407,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1897
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 20,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizso",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Talk to King Gjuki Sorvott IV on Jatizso.",
+      "s": "Talk to King Gjuki Sorvott IV on Jatizso.",
+      "k": "continueTalkingToGjuki",
+      "at": [
+       2407,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1897
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 30,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizso",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Talk to King Gjuki Sorvott IV on Jatizso.",
+      "s": "Talk to King Gjuki Sorvott IV on Jatizso.",
+      "k": "bringOreToGjuki",
+      "at": [
+       2407,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1897
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 40,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizso",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Talk to King Gjuki Sorvott IV on Jatizso.",
+      "s": "Talk to King Gjuki Sorvott IV on Jatizso.",
+      "k": "talkToGjukiAfterOre",
+      "at": [
+       2407,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1897
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 50,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizso",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Search the chest behind Gjuki's throne for a silly jester outfit.",
+      "s": "Search the chest behind Gjuki's throne for a silly jester outfit.",
+      "k": "getJesterOutfit",
+      "at": [
+       2407,
+       3800,
+       0
+      ],
+      "hl": {
+       "obj": [
+        21299
+       ]
+      }
+     },
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznot",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizso",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Talk to Slug Hemligssen wearing nothing but your Silly Jester outfit.",
+      "s": "Talk to Slug Hemligssen wearing nothing but your Silly Jester outfit.",
+      "k": "talkToSlug",
+      "at": [
+       2335,
+       3811,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1895
+       ]
+      }
+     },
+     {
+      "t": "Perform the actions that Mawnis requests of you.",
+      "s": "Perform the actions that Mawnis requests of you.",
+      "k": "performForMawnis"
+     }
+    ]
+   },
+   {
+    "at": 55,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizso",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Search the chest behind Gjuki's throne for a silly jester outfit.",
+      "s": "Search the chest behind Gjuki's throne for a silly jester outfit.",
+      "k": "getJesterOutfit",
+      "at": [
+       2407,
+       3800,
+       0
+      ],
+      "hl": {
+       "obj": [
+        21299
+       ]
+      }
+     },
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznot",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizso",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Talk to Mawnis in Neitiznot to start spying on him.",
+      "s": "Talk to Mawnis in Neitiznot to start spying on him.",
+      "k": "goSpyOnMawnis",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     },
+     {
+      "t": "Perform the actions that Mawnis requests of you.",
+      "s": "Perform the actions that Mawnis requests of you.",
+      "k": "performForMawnis"
+     }
+    ]
+   },
+   {
+    "at": 60,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznot",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Report back to Slug Hemligssen.",
+      "s": "Report back to Slug Hemligssen.",
+      "k": "tellSlugReport1",
+      "at": [
+       2335,
+       3811,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1895
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 70,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznot",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Report back to Slug Hemligssen.",
+      "s": "Report back to Slug Hemligssen.",
+      "k": "tellSlugReport1",
+      "at": [
+       2335,
+       3811,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1895
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 80,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznot",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Report back to Slug Hemligssen.",
+      "s": "Report back to Slug Hemligssen.",
+      "k": "tellSlugReport1",
+      "at": [
+       2335,
+       3811,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1895
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 90,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznot",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizso",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Take off the jester outfit, and talk to Mawnis.",
+      "s": "Take off the jester outfit, and talk to Mawnis.",
+      "k": "talkToMawnis",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 100,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznot",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizso",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Bring Mawnis the 8 split logs, 8 rope, and a knife.",
+      "s": "Bring Mawnis the 8 split logs, 8 rope, and a knife.",
+      "k": "talkToMawnisWithLogs",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 110,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznot",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizso",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Bring Mawnis the 8 split logs, 8 rope, and a knife.",
+      "s": "Bring Mawnis the 8 split logs, 8 rope, and a knife.",
+      "k": "talkToMawnisWithLogs",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 120,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznot",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizso",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Bring Mawnis the 8 split logs, 8 rope, and a knife.",
+      "s": "Bring Mawnis the 8 split logs, 8 rope, and a knife.",
+      "k": "talkToMawnisWithLogs",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 130,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznot",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizso",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Talk to Mawnis.",
+      "s": "Talk to Mawnis.",
+      "k": "talkToMawnisAfterItems",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 140,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznot",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizso",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Right-click repair the bridges to the north of Neitiznot. Protect from Missiles before doing this as you'll automatically cross the aggressive trolls.",
+      "s": "Right-click repair the bridges to the north of Neitiznot. Protect from Missiles before doing this as you'll automatically cross the aggressive trolls.",
+      "k": "repairBridge1",
+      "at": [
+       2314,
+       3840,
+       0
+      ],
+      "hl": {
+       "obj": [
+        21310
+       ]
+      }
+     },
+     {
+      "t": "Right-click repair the bridges to the north of Neitiznot.",
+      "s": "Right-click repair the bridges to the north of Neitiznot.",
+      "k": "repairBridge2",
+      "at": [
+       2355,
+       3840,
+       0
+      ],
+      "hl": {
+       "obj": [
+        21312
+       ]
+      }
+     },
+     {
+      "t": "Report back to Mawnis.",
+      "s": "Report back to Mawnis.",
+      "k": "talkToMawnisAfterRepair",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 150,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznot",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizso",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Report back to Mawnis.",
+      "s": "Report back to Mawnis.",
+      "k": "talkToMawnisAfterRepair",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 160,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizsoToReport",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "s": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "k": "talkToGjukiToReport",
+      "at": [
+       2407,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1897
+       ]
+      }
+     },
+     {
+      "t": "Travel back to Rellekka with Maria.",
+      "s": "Travel back to Rellekka with Maria.",
+      "k": "leaveNeitiznotToReport",
+      "at": [
+       2311,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1882
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 170,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizsoToReport",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "s": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "k": "talkToGjukiToReport",
+      "at": [
+       2407,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1897
+       ]
+      }
+     },
+     {
+      "t": "Travel back to Rellekka with Maria.",
+      "s": "Travel back to Rellekka with Maria.",
+      "k": "leaveNeitiznotToReport",
+      "at": [
+       2311,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1882
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 180,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizsoToReport",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "s": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "k": "talkToGjukiToReport",
+      "at": [
+       2407,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1897
+       ]
+      }
+     },
+     {
+      "t": "Travel back to Rellekka with Maria.",
+      "s": "Travel back to Rellekka with Maria.",
+      "k": "leaveNeitiznotToReport",
+      "at": [
+       2311,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1882
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 190,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizsoToReport",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "s": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "k": "talkToGjukiToReport",
+      "at": [
+       2407,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1897
+       ]
+      }
+     },
+     {
+      "t": "Travel back to Rellekka with Maria.",
+      "s": "Travel back to Rellekka with Maria.",
+      "k": "leaveNeitiznotToReport",
+      "at": [
+       2311,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1882
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 200,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizsoToReport",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Collect 5000 coins from Keepa in north east Jatizso.",
+      "s": "Collect 5000 coins from Keepa in north east Jatizso.",
+      "k": "collectFromKeepa",
+      "at": [
+       2417,
+       3816,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1945
+       ]
+      }
+     },
+     {
+      "t": "Collect 5000 coins from Vanligga north of Gjuki's building.",
+      "s": "Collect 5000 coins from Vanligga north of Gjuki's building.",
+      "k": "collectFromVanligga",
+      "at": [
+       2405,
+       3813,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1990
+       ]
+      }
+     },
+     {
+      "t": "Collect 6000 coins from Skuli in north west Jatizso.",
+      "s": "Collect 6000 coins from Skuli in north west Jatizso.",
+      "k": "collectFromSkuli",
+      "at": [
+       2395,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1944
+       ]
+      }
+     },
+     {
+      "t": "Collect 8000 coins from Hring Hring in south west Jatizso.",
+      "s": "Collect 8000 coins from Hring Hring in south west Jatizso.",
+      "k": "collectFromHring",
+      "at": [
+       2397,
+       3797,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1941
+       ]
+      }
+     },
+     {
+      "t": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "s": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "k": "talkToGjukiAfterCollection1",
+      "at": [
+       2407,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1897
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 210,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizsoToReport",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Collect tax from Hring Hring in south west Jatizso.",
+      "s": "Collect tax from Hring Hring in south west Jatizso.",
+      "k": "collectFromHringAgain",
+      "at": [
+       2397,
+       3797,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1941
+       ]
+      }
+     },
+     {
+      "t": "Collect tax from Raum in south west Jatizso.",
+      "s": "Collect tax from Raum in south west Jatizso.",
+      "k": "collectFromRaum",
+      "at": [
+       2395,
+       3797,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1943
+       ]
+      }
+     },
+     {
+      "t": "Collect tax from Skuli in north west Jatizso.",
+      "s": "Collect tax from Skuli in north west Jatizso.",
+      "k": "collectFromSkuliAgain",
+      "at": [
+       2395,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1944
+       ]
+      }
+     },
+     {
+      "t": "Collect tax from Keepa in north east Jatizso.",
+      "s": "Collect tax from Keepa in north east Jatizso.",
+      "k": "collectFromKeepaAgain",
+      "at": [
+       2417,
+       3816,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1945
+       ]
+      }
+     },
+     {
+      "t": "Collect tax from Flossi in north east Jatizso.",
+      "s": "Collect tax from Flossi in north east Jatizso.",
+      "k": "collectFromFlosi",
+      "at": [
+       2418,
+       3813,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1942
+       ]
+      }
+     },
+     {
+      "t": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "s": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "k": "talkToGjukiAfterCollection2",
+      "at": [
+       2407,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1897
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 230,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznotToSpyAgain",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizsoToSpyAgain",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Talk to Slug Hemligssen wearing nothing but your Silly Jester outfit.",
+      "s": "Talk to Slug Hemligssen wearing nothing but your Silly Jester outfit.",
+      "k": "talkToSlugToSpyAgain",
+      "at": [
+       2335,
+       3811,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1895
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 235,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznotToSpyAgain",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizsoToSpyAgain",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Talk to Mawnis to start spying on him.",
+      "s": "Talk to Mawnis to start spying on him.",
+      "k": "goSpyOnMawnisAgain",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     },
+     {
+      "t": "Perform the actions that Mawnis requests of you.",
+      "s": "Perform the actions that Mawnis requests of you.",
+      "k": "performForMawnisAgain"
+     }
+    ]
+   },
+   {
+    "at": 240,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznotToSpyAgain",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizsoToSpyAgain",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Report to Slug Hemligssen.",
+      "s": "Report to Slug Hemligssen.",
+      "k": "reportBackToSlugAgain",
+      "at": [
+       2335,
+       3811,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1895
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 250,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznotToSpyAgain",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizsoToSpyAgain",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Report to Slug Hemligssen.",
+      "s": "Report to Slug Hemligssen.",
+      "k": "reportBackToSlugAgain",
+      "at": [
+       2335,
+       3811,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1895
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 260,
+    "do": [
+     {
+      "t": "Travel to Jatizso with Mord.",
+      "s": "Travel to Jatizso with Mord.",
+      "k": "travelToJatizsoAfterSpy2",
+      "at": [
+       2644,
+       3709,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1900
+       ]
+      }
+     },
+     {
+      "t": "Travel back to Rellekka with Maria.",
+      "s": "Travel back to Rellekka with Maria.",
+      "k": "returnToRellekkaFromNeitiznotAfterSpy2",
+      "at": [
+       2311,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1882
+       ]
+      }
+     },
+     {
+      "t": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "s": "Report back to King Gjuki Sorvott IV on Jatizso.",
+      "k": "talkToGjukiAfterSpy2",
+      "at": [
+       2407,
+       3804,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1897
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 270,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznotWithDecree",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizsoWithDecree",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Take off your jester outfit, and talk to Mawnis.",
+      "s": "Take off your jester outfit, and talk to Mawnis.",
+      "k": "talkToMawnisWithDecree",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 275,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznotAfterDecree",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizsoAfterDecree",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Take off your jester outfit, and talk to Mawnis.",
+      "s": "Take off your jester outfit, and talk to Mawnis.",
+      "k": "talkToMawnisAfterDecree",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 280,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznotAfterDecree",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizsoAfterDecree",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Talk to Mawnis with full yak-hide armour.",
+      "s": "Talk to Mawnis with full yak-hide armour.",
+      "k": "getYakArmour",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 290,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznotAfterDecree",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Return to Rellekka with Mord.",
+      "s": "Return to Rellekka with Mord.",
+      "k": "returnToRellekkaFromJatizsoAfterDecree",
+      "at": [
+       2420,
+       3781,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1940
+       ]
+      }
+     },
+     {
+      "t": "Talk to Mawnis with a Neitiznot Shield.",
+      "s": "Talk to Mawnis with a Neitiznot Shield.",
+      "k": "makeShield",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 300,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznotAfterDecree",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Enter the cave in the north east of the islands. Be prepared in your yak armour, Neitiznot shield, and a melee weapon.",
+      "s": "Enter the cave in the north east of the islands. Be prepared in your yak armour, Neitiznot shield, and a melee weapon.",
+      "k": "enterCave",
+      "at": [
+       2402,
+       3890,
+       0
+      ],
+      "hl": {
+       "obj": [
+        21584
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "killTrolls"
+     },
+     {
+      "t": "Cross the rope bridge. Be prepared to fight the Ice Troll King. Use the Protect from Magic prayer for the fight.",
+      "s": "Cross the rope bridge. Be prepared to fight the Ice Troll King. Use the Protect from Magic prayer for the fight.",
+      "k": "enterKingRoom",
+      "at": [
+       2385,
+       10263,
+       1
+      ],
+      "hl": {
+       "obj": [
+        21316
+       ]
+      }
+     },
+     {
+      "t": "Kill the king. Use the Protect from Magic prayer for the fight.",
+      "s": "Kill the king. Use the Protect from Magic prayer for the fight.",
+      "k": "killKing",
+      "at": [
+       2386,
+       10249,
+       1
+      ],
+      "hl": {
+       "npc": [
+        5822
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 310,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznotAfterDecree",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Enter the cave in the north east of the islands. Be prepared in your yak armour, Neitiznot shield, and a melee weapon.",
+      "s": "Enter the cave in the north east of the islands. Be prepared in your yak armour, Neitiznot shield, and a melee weapon.",
+      "k": "enterCave",
+      "at": [
+       2402,
+       3890,
+       0
+      ],
+      "hl": {
+       "obj": [
+        21584
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "killTrolls"
+     },
+     {
+      "t": "Cross the rope bridge. Be prepared to fight the Ice Troll King. Use the Protect from Magic prayer for the fight.",
+      "s": "Cross the rope bridge. Be prepared to fight the Ice Troll King. Use the Protect from Magic prayer for the fight.",
+      "k": "enterKingRoom",
+      "at": [
+       2385,
+       10263,
+       1
+      ],
+      "hl": {
+       "obj": [
+        21316
+       ]
+      }
+     },
+     {
+      "t": "Kill the king. Use the Protect from Magic prayer for the fight.",
+      "s": "Kill the king. Use the Protect from Magic prayer for the fight.",
+      "k": "killKing",
+      "at": [
+       2386,
+       10249,
+       1
+      ],
+      "hl": {
+       "npc": [
+        5822
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 320,
+    "do": [
+     {
+      "t": "Travel to Neitiznot with Maria Gunnars.",
+      "s": "Travel to Neitiznot with Maria Gunnars.",
+      "k": "travelToNeitiznotAfterDecree",
+      "at": [
+       2644,
+       3710,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1883
+       ]
+      }
+     },
+     {
+      "t": "Enter the cave in the north east of the islands. Be prepared in your yak armour, Neitiznot shield, and a melee weapon.",
+      "s": "Enter the cave in the north east of the islands. Be prepared in your yak armour, Neitiznot shield, and a melee weapon.",
+      "k": "enterCave",
+      "at": [
+       2402,
+       3890,
+       0
+      ],
+      "hl": {
+       "obj": [
+        21584
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "killTrolls"
+     },
+     {
+      "t": "Cross the rope bridge. Be prepared to fight the Ice Troll King. Use the Protect from Magic prayer for the fight.",
+      "s": "Cross the rope bridge. Be prepared to fight the Ice Troll King. Use the Protect from Magic prayer for the fight.",
+      "k": "enterKingRoom",
+      "at": [
+       2385,
+       10263,
+       1
+      ],
+      "hl": {
+       "obj": [
+        21316
+       ]
+      }
+     },
+     {
+      "t": "Decapitate the king's head.",
+      "s": "Decapitate the king's head.",
+      "k": "decapitateKing",
+      "hl": {
+       "obj": [
+        21622
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 325,
+    "do": [
+     {
+      "t": "Talk to Mawnis with the Ice Troll King's head to complete the quest.",
+      "s": "Talk to Mawnis with the Ice Troll King's head to complete the quest.",
+      "k": "finishQuest",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 330,
+    "do": [
+     {
+      "t": "Talk to Mawnis to complete the quest.",
+      "s": "Talk to Mawnis to complete the quest.",
+      "k": "finishQuestGivenHead",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 331,
+    "do": [
+     {
+      "t": "Talk to Mawnis to complete the quest.",
+      "s": "Talk to Mawnis to complete the quest.",
+      "k": "finishQuestGivenHead",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 332,
+    "do": [
+     {
+      "t": "Talk to Mawnis to complete the quest.",
+      "s": "Talk to Mawnis to complete the quest.",
+      "k": "finishQuestGivenHead",
+      "at": [
+       2335,
+       3800,
+       0
+      ],
+      "hl": {
+       "npc": [
+        1878
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "facts": {
+  "id": "The Fremennik Isles",
+  "stepIds": [
+   "DRAFT"
+  ],
+  "members": false,
+  "requirements": {
+   "skills": {
+    "construction": 20
+   },
+   "questPoints": 0,
+   "quests": [
+    "The Fremennik Trials"
+   ],
+   "manual": [],
+   "capabilities": [],
+   "unparsed": "{{SCP|Construction|20|link=yes}} {{Boostable|yes}}  {{Questreqstart|no}} <ref>Only required to fix the bridges later in the quest.</ref>\nThe ability to kill a level 122 [[Ice Troll King|Troll King]] (Damage can be reduced) and, separately, 10 rock throwing [[ice troll]]s in a [[multicombat area]].",
+   "text": "*Completion of [[The Fremennik Trials]]\n*{{SCP|Construction|20|link=yes}} {{Boostable|yes}}  {{Questreqstart|no}} <ref>Only required to fix the bridges later in the quest.</ref>\n*The ability to kill a level 122 [[Ice Troll King|Troll King]] (Damage can be reduced) and, separately, 10 rock throwing [[ice troll]]s in a [[multicombat area]]."
+  },
+  "rewards": {
+   "questPoints": 1,
+   "xp": {
+    "construction": 5000,
+    "crafting": 5000,
+    "woodcutting": 10000
+   },
+   "coins": null
+  },
+  "resourceFlow": null,
+  "length": "Medium",
+  "source": {
+   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15402837",
+   "title": "The Fremennik Isles",
+   "revision": 15402837,
+   "retrievedAt": "2026-11-18T09:32:27.412Z"
+  }
+ },
+ "unknown": [
+  "item \"Yak-hide armour (top)\": no id in Quest Helper or on its Wiki card",
+  "item \"Yak-hide armour (top)\": where to get it is not written",
+  "item \"Silly jester costume\": no id in Quest Helper or on its Wiki card",
+  "item \"Silly jester costume\": where to get it is not written",
+  "fight \"Ice troll (disambiguation)\": no combat data",
+  "fight \"Ice Troll King\": no combat data",
+  "step \"performForMawnis\": Quest Helper gives no tile",
+  "step \"performForMawnisAgain\": Quest Helper gives no tile",
+  "step \"killTrolls\": Quest Helper gives no tile",
+  "step \"decapitateKing\": Quest Helper gives no tile",
+  "requirement not reviewed: <ref>Only required to fix the bridges later in the quest.</ref> The ability to kill a level 122 Troll King (Damage can be reduced) and, separately, 10 rock throwing ice trolls in a multicombat area.",
+  "what the quest uses up and hands out is not reviewed"
+ ]
+}
