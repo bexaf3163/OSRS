@@ -1,0 +1,2250 @@
+{
+  "quest": "Death on the Isle",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "Death on the Isle",
+      "revision": 15375163
+    },
+    "quickGuide": {
+      "title": "Death on the Isle/Quick guide",
+      "revision": 15319386
+    }
+  },
+  "step": {
+    "title": "Death on the Isle",
+    "type": "quest",
+    "qp": 2,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Death_on_the_Isle",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Death_on_the_Isle/Quick_guide",
+    "mapLocation": {
+      "x": 1413,
+      "y": 2937,
+      "plane": 0,
+      "label": "Talk to Patzi by the entrance to Villa Lucens."
+    },
+    "npc": {
+      "nameEn": "Patzi"
+    },
+    "itemsRequired": [],
+    "foes": []
+  },
+  "stages": {
+    "var": [
+      "varbit",
+      11210
+    ],
+    "route": [
+      {
+        "title": "Walkthrough",
+        "steps": [
+          "Talk to Patzi to start the quest (fairy ring (), then walk east).",
+          "Break into the house north of Patzi, west of the general store, via the southern House Window. Wait for the guard to move away.",
+          "Take uniform from the wardrobe on the ground floor",
+          "Speak to Patzi again",
+          "Equip both pieces of the uniform.",
+          "Head east up the stone steps, then south and speak to the Head Butler to enter the house. He will hold onto all of your items in the meantime.",
+          "Speak to Patzi",
+          "Speak to Constantinius, Cozyac, Pavo and Xocotla",
+          "Speak with Patzi again",
+          "Enter the cellar entrance. It is located just outside of the house, immediately north of the house's east exit.",
+          "Go all the way south and investigate the Antique wine against the wall.",
+          "Check on the man on the south end of the room to the east.",
+          "Speak to Constantinius, Cozyac, Pavo and Xocotla.",
+          "Head back inside the wine cellar and investigate:",
+          "Speak to the guards Stradius and Hutza to discuss your clues.",
+          "Pickpocket Adala, Patzi, Constantinius, Cozyac, Pavo and Xocotla.",
+          "Inspect the Wine labels, Threatening note, Shipping contract and Drinking flask",
+          "Speak to one of the guards, either Stradius or Hutza.",
+          "Speak to all the suspects, then accuse Adala, and she'll fight you (level 49). Once defeated, she'll claim she's too weak to have killed anyone.",
+          "Once Adala has been taken away, speak to Stradius, then head back to the ground floor, south to the cliff, round and climb up the Loose rocks shortcut, and speak to Stradius again.",
+          "Head down the stairs to the east, enter the backstage entrance, and question the Costumer.",
+          "Search the crate next to the stairs to discover it is full of poison.",
+          "Search the bookshelf on the west wall to uncover a secret passage to the wine cellar.",
+          "Search the costume rack along the north wall to discover a wine-stained costume.",
+          "Ask the Costumer about the actors, hidden passage, stained costume and the poison.",
+          "Go up the stairs and speak to Stradius again. Accuse Naiatli.",
+          "Confront Naiatli on stage and attack her when she runs away.",
+          "Speak to Stradius or Hutza to end the quest.",
+          "Speak to the Head Butler after the quest to claim a range of masks, and the Butler's tray.",
+          "Speak to the Costumer after the quest to claim your Costume needle.",
+          "Pickpocket Constantinius for a chest key. After using it to open the fancy chest in the south room of the cellar, the fountain to the south-west of Villa Lucens can be searched to find an icon.",
+          "Use the icon on the statue at the most north-eastern tip of Aldarin (Statue Holds bowl of blue fluid), and get your reward. (1 water rune, Pendant of Ates teleport location)"
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Talk to Patzi at the entrance to Villa Lucens on the island of Aldarin to start the quest.",
+            "s": "Talk to Patzi at the entrance to Villa Lucens on Aldarin.",
+            "k": "talkToPatziToStartQuest",
+            "at": [
+              1414,
+              2937,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13818
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 2,
+        "do": [
+          {
+            "t": "Talk to Patzi at the entrance to Villa Lucens on the island of Aldarin to start the quest.",
+            "s": "Talk to Patzi at the entrance to Villa Lucens on Aldarin.",
+            "k": "talkToPatziToStartQuest",
+            "at": [
+              1414,
+              2937,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13818
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 4,
+        "do": [
+          {
+            "t": "Enter the house north of Patzi through the window to steal a butler's uniform. If the Wandering Guard bothers you, wait until he steps away before entering.",
+            "s": "Climb through the window of the house north of Patzi.",
+            "k": "enterUniformHouse",
+            "at": [
+              1401,
+              2967,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54701
+              ]
+            }
+          },
+          {
+            "t": "Steal the butler's uniform from the wardrobe.",
+            "s": "Steal the butler's uniform from the wardrobe.",
+            "k": "stealUniformFromWardrobe",
+            "at": [
+              1399,
+              2969,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54723
+              ]
+            }
+          },
+          {
+            "t": "Return to Patzi after stealing the butler's uniform.",
+            "s": "Return to Patzi after stealing the butler's uniform.",
+            "k": "talkToPatziAfterStealingUniform",
+            "at": [
+              1414,
+              2937,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13818
+              ]
+            }
+          },
+          {
+            "t": "Leave the house with the butler's uniform.",
+            "s": "Leave the house with the butler's uniform.",
+            "k": "leaveUniformHouse",
+            "at": [
+              1401,
+              2967,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54701
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 6,
+        "do": [
+          {
+            "t": "Enter the house north of Patzi through the window to steal a butler's uniform. If the Wandering Guard bothers you, wait until he steps away before entering.",
+            "s": "Climb through the window of the house north of Patzi.",
+            "k": "enterUniformHouse",
+            "at": [
+              1401,
+              2967,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54701
+              ]
+            }
+          },
+          {
+            "t": "Steal the butler's uniform from the wardrobe.",
+            "s": "Steal the butler's uniform from the wardrobe.",
+            "k": "stealUniformFromWardrobe",
+            "at": [
+              1399,
+              2969,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54723
+              ]
+            }
+          },
+          {
+            "t": "Return to Patzi after stealing the butler's uniform.",
+            "s": "Return to Patzi after stealing the butler's uniform.",
+            "k": "talkToPatziAfterStealingUniform",
+            "at": [
+              1414,
+              2937,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13818
+              ]
+            }
+          },
+          {
+            "t": "Leave the house with the butler's uniform.",
+            "s": "Leave the house with the butler's uniform.",
+            "k": "leaveUniformHouse",
+            "at": [
+              1401,
+              2967,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54701
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 8,
+        "do": [
+          {
+            "t": "Continue talking to Patzi",
+            "s": "Continue talking to Patzi",
+            "k": "continueTalkingToPatzi",
+            "at": [
+              1414,
+              2937,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13818
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 10,
+        "do": [
+          {
+            "t": "Equip the Butler's uniform pieces and talk to the Head Butler up the stone stairs and to the south.",
+            "s": "Wear the butler's uniform and talk to the Head Butler.",
+            "k": "equipButlersOutfitAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 12,
+        "do": [
+          {
+            "t": "Equip the Butler's uniform pieces and talk to the Head Butler up the stone stairs and to the south.",
+            "s": "Wear the butler's uniform and talk to the Head Butler.",
+            "k": "equipButlersOutfitAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 14,
+        "do": [
+          {
+            "t": "Head inside the villa and talk to Patzi.",
+            "s": "Head inside the villa and talk to Patzi.",
+            "k": "headInsideAndTalkToPatzi",
+            "at": [
+              1447,
+              2936,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13818
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 15,
+        "do": [
+          {
+            "t": "Return to Patzi with the information you've gathered.",
+            "s": "Return to Patzi with the information you've gathered.",
+            "k": "returnToPatzi",
+            "at": [
+              1447,
+              2936,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13818
+              ]
+            }
+          },
+          {
+            "t": "Introduce yourself to Xocotla.",
+            "s": "Introduce yourself to Xocotla.",
+            "k": "introduceYourselfToXocotla",
+            "at": [
+              1441,
+              2930,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13829
+              ]
+            }
+          },
+          {
+            "t": "Introduce yourself to Pavo.",
+            "s": "Introduce yourself to Pavo.",
+            "k": "introduceYourselfToPavo",
+            "at": [
+              1447,
+              2933,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13831
+              ]
+            }
+          },
+          {
+            "t": "Introduce yourself to Cozyac.",
+            "s": "Introduce yourself to Cozyac.",
+            "k": "introduceYourselfToCozyac",
+            "at": [
+              1447,
+              2933,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13827
+              ]
+            }
+          },
+          {
+            "t": "Introduce yourself to Constantinius.",
+            "s": "Introduce yourself to Constantinius.",
+            "k": "introduceYourselfToConstantinius",
+            "at": [
+              1447,
+              2933,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13825
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 16,
+        "do": [
+          {
+            "t": "Enter the cellar.",
+            "s": "Enter the cellar.",
+            "k": "enterTheCellar",
+            "at": [
+              1449,
+              2938,
+              0
+            ],
+            "hl": {
+              "obj": [
+                55047
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 18,
+        "do": [
+          {
+            "t": "Investigate the Antique wine in the southern part of the cellar.",
+            "s": "Investigate the Antique wine in the southern part of the cellar.",
+            "k": "getWine",
+            "at": [
+              1439,
+              9314,
+              0
+            ],
+            "hl": {
+              "obj": [
+                55379
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 19,
+        "do": [
+          {
+            "t": "Check on the man in the south-eastern part of the cellar.",
+            "s": "Check on the man in the south-eastern part of the cellar.",
+            "k": "investigateMan",
+            "at": [
+              1454,
+              9322,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13872
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 20,
+        "do": [
+          {
+            "t": "Explain your innocence to the guards Stradius and Hutza.",
+            "s": "Explain your innocence to the guards Stradius and Hutza.",
+            "k": "beInterrogatedByThePolice",
+            "at": [
+              1439,
+              2938,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 21,
+        "do": [
+          {
+            "t": "Explain your innocence to the guards Stradius and Hutza.",
+            "s": "Explain your innocence to the guards Stradius and Hutza.",
+            "k": "beInterrogatedByThePolice",
+            "at": [
+              1439,
+              2938,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 22,
+        "do": [
+          {
+            "t": "Return to the guards with the information you've found so far.",
+            "s": "Return to the guards with the information you've found so far.",
+            "k": "returnToTheGuards",
+            "at": [
+              1443,
+              2935,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          },
+          {
+            "t": "Investigate Livius in the east room.",
+            "s": "Investigate Livius in the east room.",
+            "k": "investigateLiviusInEastRoom",
+            "at": [
+              1454,
+              9322,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13873
+              ]
+            }
+          },
+          {
+            "t": "Investigate the Broken pottery in the east room.",
+            "s": "Investigate the Broken pottery in the east room.",
+            "k": "investigateBrokenPotteryInEastRoom",
+            "at": [
+              1456,
+              9328,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54709
+              ]
+            }
+          },
+          {
+            "t": "Investigate the Wine storage in the east room.",
+            "s": "Investigate the Wine storage in the east room.",
+            "k": "investigateWineStorageInEastRoom",
+            "at": [
+              1451,
+              9335,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54710
+              ]
+            }
+          },
+          {
+            "t": "Investigate the Broken stool in the south room.",
+            "s": "Investigate the Broken stool in the south room.",
+            "k": "investigateBrokenStoolInSouthRoom",
+            "at": [
+              1446,
+              9315,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54712
+              ]
+            }
+          },
+          {
+            "t": "Investigate the Small box in the south room.",
+            "s": "Investigate the Small box in the south room.",
+            "k": "investigateSmallBoxInSouthRoom",
+            "at": [
+              1439,
+              9321,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54711
+              ]
+            }
+          },
+          {
+            "t": "Investigate the Jug by the entrance stairs.",
+            "s": "Investigate the Jug by the entrance stairs.",
+            "k": "investigateJug",
+            "at": [
+              1445,
+              9336,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54708
+              ]
+            }
+          },
+          {
+            "t": "Enter the cellar again to begin your investigation.",
+            "s": "Enter the cellar again to begin your investigation.",
+            "k": "enterTheCellarAgain",
+            "at": [
+              1449,
+              2938,
+              0
+            ],
+            "hl": {
+              "obj": [
+                55047
+              ]
+            }
+          },
+          {
+            "t": "Leave the cellar.",
+            "s": "Leave the cellar.",
+            "k": "leaveCellar",
+            "at": [
+              1447,
+              9338,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54716
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Patzi and Adala.",
+            "s": "Interrogate Patzi and Adala.",
+            "k": "interrogatePatziAndAdala",
+            "at": [
+              1447,
+              2936,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13818
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Xocotla.",
+            "s": "Interrogate Xocotla.",
+            "k": "investigateXocotla",
+            "at": [
+              1446,
+              2933,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13829
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Pavo.",
+            "s": "Interrogate Pavo.",
+            "k": "investigatePavo",
+            "at": [
+              1446,
+              2933,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13831
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Cozyac.",
+            "s": "Interrogate Cozyac.",
+            "k": "investigateCozyac",
+            "at": [
+              1446,
+              2933,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13827
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Constantinius.",
+            "s": "Interrogate Constantinius.",
+            "k": "investigateConstantinius",
+            "at": [
+              1446,
+              2933,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13825
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 24,
+        "do": [
+          {
+            "t": "Return to the guards with the information you've found so far.",
+            "s": "Return to the guards with the information you've found so far.",
+            "k": "returnToTheGuards",
+            "at": [
+              1443,
+              2935,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          },
+          {
+            "t": "Investigate Livius in the east room.",
+            "s": "Investigate Livius in the east room.",
+            "k": "investigateLiviusInEastRoom",
+            "at": [
+              1454,
+              9322,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13873
+              ]
+            }
+          },
+          {
+            "t": "Investigate the Broken pottery in the east room.",
+            "s": "Investigate the Broken pottery in the east room.",
+            "k": "investigateBrokenPotteryInEastRoom",
+            "at": [
+              1456,
+              9328,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54709
+              ]
+            }
+          },
+          {
+            "t": "Investigate the Wine storage in the east room.",
+            "s": "Investigate the Wine storage in the east room.",
+            "k": "investigateWineStorageInEastRoom",
+            "at": [
+              1451,
+              9335,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54710
+              ]
+            }
+          },
+          {
+            "t": "Investigate the Broken stool in the south room.",
+            "s": "Investigate the Broken stool in the south room.",
+            "k": "investigateBrokenStoolInSouthRoom",
+            "at": [
+              1446,
+              9315,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54712
+              ]
+            }
+          },
+          {
+            "t": "Investigate the Small box in the south room.",
+            "s": "Investigate the Small box in the south room.",
+            "k": "investigateSmallBoxInSouthRoom",
+            "at": [
+              1439,
+              9321,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54711
+              ]
+            }
+          },
+          {
+            "t": "Investigate the Jug by the entrance stairs.",
+            "s": "Investigate the Jug by the entrance stairs.",
+            "k": "investigateJug",
+            "at": [
+              1445,
+              9336,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54708
+              ]
+            }
+          },
+          {
+            "t": "Enter the cellar again to begin your investigation.",
+            "s": "Enter the cellar again to begin your investigation.",
+            "k": "enterTheCellarAgain",
+            "at": [
+              1449,
+              2938,
+              0
+            ],
+            "hl": {
+              "obj": [
+                55047
+              ]
+            }
+          },
+          {
+            "t": "Leave the cellar.",
+            "s": "Leave the cellar.",
+            "k": "leaveCellar",
+            "at": [
+              1447,
+              9338,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54716
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Patzi and Adala.",
+            "s": "Interrogate Patzi and Adala.",
+            "k": "interrogatePatziAndAdala",
+            "at": [
+              1447,
+              2936,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13818
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Xocotla.",
+            "s": "Interrogate Xocotla.",
+            "k": "investigateXocotla",
+            "at": [
+              1446,
+              2933,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13829
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Pavo.",
+            "s": "Interrogate Pavo.",
+            "k": "investigatePavo",
+            "at": [
+              1446,
+              2933,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13831
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Cozyac.",
+            "s": "Interrogate Cozyac.",
+            "k": "investigateCozyac",
+            "at": [
+              1446,
+              2933,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13827
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Constantinius.",
+            "s": "Interrogate Constantinius.",
+            "k": "investigateConstantinius",
+            "at": [
+              1446,
+              2933,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13825
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 26,
+        "do": [
+          {
+            "t": "Return to the guards with the stolen items.",
+            "s": "Return to the guards with the stolen items.",
+            "k": "returnStolenItemsToTheGuards",
+            "at": [
+              1443,
+              2935,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          },
+          {
+            "t": "Inspect the Shipping contract in your inventory.",
+            "s": "Inspect the Shipping contract in your inventory.",
+            "k": "inspectShippingContract"
+          },
+          {
+            "t": "Inspect the Drinking flask in your inventory.",
+            "s": "Inspect the Drinking flask in your inventory.",
+            "k": "inspectDrinkingFlask"
+          },
+          {
+            "t": "Inspect the Threatening note in your inventory.",
+            "s": "Inspect the Threatening note in your inventory.",
+            "k": "inspectThreateningNote"
+          },
+          {
+            "t": "Inspect the Wine labels in your inventory.",
+            "s": "Inspect the Wine labels in your inventory.",
+            "k": "inspectWineLabels"
+          },
+          {
+            "t": "Pickpocket Xocotla until you find a shipping contract.",
+            "s": "Pickpocket Xocotla until you find a shipping contract.",
+            "k": "pickpocketXocotla",
+            "at": [
+              1445,
+              2934,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13830
+              ]
+            }
+          },
+          {
+            "t": "Pickpocket Pavo until you find a drinking flask.",
+            "s": "Pickpocket Pavo until you find a drinking flask.",
+            "k": "pickpocketPavo",
+            "at": [
+              1445,
+              2934,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13832
+              ]
+            }
+          },
+          {
+            "t": "Pickpocket Cozyac until you find a threatening note.",
+            "s": "Pickpocket Cozyac until you find a threatening note.",
+            "k": "pickpocketCozyac",
+            "at": [
+              1445,
+              2934,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13828
+              ]
+            }
+          },
+          {
+            "t": "Pickpocket Adala until you find Wine labels.",
+            "s": "Pickpocket Adala until you find Wine labels.",
+            "k": "pickpocketAdala",
+            "at": [
+              1446,
+              2936,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13823
+              ]
+            }
+          },
+          {
+            "t": "Talk to the guards to tell them you're ready to make an accusation.",
+            "s": "Talk to the guards to tell them you're ready to make an accusation.",
+            "k": "talkToGuardsAgainToTellThemYouAreReady",
+            "at": [
+              1433,
+              2935,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 27,
+        "do": [
+          {
+            "t": "Talk to the guards to tell them you're ready to make an accusation.",
+            "s": "Talk to the guards to tell them you're ready to make an accusation.",
+            "k": "talkToGuardsAgainToTellThemYouAreReady",
+            "at": [
+              1433,
+              2935,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 28,
+        "do": [
+          {
+            "t": "Accuse Adala of the crime, ready for a fight you cannot lose.",
+            "s": "Accuse Adala of the crime, ready for a fight you cannot lose.",
+            "k": "accuseAdala",
+            "at": [
+              1446,
+              2933,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13820
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Pavo.",
+            "s": "Interrogate Pavo.",
+            "k": "interrogatePavoAgain",
+            "at": [
+              1442,
+              2931,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13831
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Cozyac.",
+            "s": "Interrogate Cozyac.",
+            "k": "interrogateCozyacAgain",
+            "at": [
+              1442,
+              2929,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13827
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Xocotla.",
+            "s": "Interrogate Xocotla.",
+            "k": "interrogateXocotlaAgain",
+            "at": [
+              1444,
+              2928,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13829
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Constantinius.",
+            "s": "Interrogate Constantinius.",
+            "k": "interrogateConstantiniusAgain",
+            "at": [
+              1446,
+              2931,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13825
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          },
+          {
+            "t": "Fight Adala. You cannot lose this fight.",
+            "s": "Fight Adala. You cannot lose this fight.",
+            "k": "fightAdala",
+            "at": [
+              1446,
+              2933,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13820
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 30,
+        "do": [
+          {
+            "t": "Accuse Adala of the crime, ready for a fight you cannot lose.",
+            "s": "Accuse Adala of the crime, ready for a fight you cannot lose.",
+            "k": "accuseAdala",
+            "at": [
+              1446,
+              2933,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13820
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Pavo.",
+            "s": "Interrogate Pavo.",
+            "k": "interrogatePavoAgain",
+            "at": [
+              1442,
+              2931,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13831
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Cozyac.",
+            "s": "Interrogate Cozyac.",
+            "k": "interrogateCozyacAgain",
+            "at": [
+              1442,
+              2929,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13827
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Xocotla.",
+            "s": "Interrogate Xocotla.",
+            "k": "interrogateXocotlaAgain",
+            "at": [
+              1444,
+              2928,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13829
+              ]
+            }
+          },
+          {
+            "t": "Interrogate Constantinius.",
+            "s": "Interrogate Constantinius.",
+            "k": "interrogateConstantiniusAgain",
+            "at": [
+              1446,
+              2931,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13825
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          },
+          {
+            "t": "Fight Adala. You cannot lose this fight.",
+            "s": "Fight Adala. You cannot lose this fight.",
+            "k": "fightAdala",
+            "at": [
+              1446,
+              2933,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13820
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 32,
+        "do": [
+          {
+            "t": "Talk to Adala to get her confession.",
+            "s": "Talk to Adala to get her confession.",
+            "k": "getAdalasConfession",
+            "at": [
+              1446,
+              2933,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13821
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 33,
+        "do": [
+          {
+            "t": "Talk to the guards about Adala.",
+            "s": "Talk to the guards about Adala.",
+            "k": "talkToGuardsAboutAdala",
+            "at": [
+              1442,
+              2933,
+              2
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 34,
+        "do": [
+          {
+            "t": "Climb the Loose rocks south-east of the villa on your way to the theatre.",
+            "s": "Climb the loose rocks south-east of the villa toward the theatre.",
+            "k": "climbFirstLooseRocksToTheatre",
+            "at": [
+              1469,
+              2918,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54720
+              ]
+            }
+          },
+          {
+            "t": "Climb down the staircase.",
+            "s": "Climb down the staircase.",
+            "k": "headDownFromMiddleFloor",
+            "at": [
+              1442,
+              2936,
+              1
+            ],
+            "hl": {
+              "obj": [
+                54714
+              ]
+            }
+          },
+          {
+            "t": "Climb down the staircase.",
+            "s": "Climb down the staircase.",
+            "k": "headDownFromTopFloor",
+            "at": [
+              1445,
+              2939,
+              2
+            ],
+            "hl": {
+              "obj": [
+                54714
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 36,
+        "do": [
+          {
+            "t": "Talk to the Costumer in the theatre cellar.",
+            "s": "Talk to the Costumer in the theatre cellar.",
+            "k": "talkToCostumer",
+            "at": [
+              1466,
+              9330,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13837
+              ]
+            }
+          },
+          {
+            "t": "Enter the theatre through the backstage entrance.",
+            "s": "Enter the theatre through the backstage entrance.",
+            "k": "enterBackstage",
+            "at": [
+              1477,
+              2927,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54715
+              ]
+            }
+          },
+          {
+            "t": "Talk to Stradius at the backstage of the theatre.",
+            "s": "Talk to Stradius at the backstage of the theatre.",
+            "k": "talkToGuardsAtTheatre",
+            "at": [
+              1472,
+              2925,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          },
+          {
+            "t": "Climb down the loose rocks in your way to the guards outside the theatre.",
+            "s": "Climb down the loose rocks toward the guards outside the theatre.",
+            "k": "climbSecondLooseRocksToTheatre",
+            "at": [
+              1474,
+              2923,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54722
+              ]
+            }
+          },
+          {
+            "t": "Climb the Loose rocks south-east of the villa on your way to the theatre.",
+            "s": "Climb the loose rocks south-east of the villa toward the theatre.",
+            "k": "climbFirstLooseRocksToTheatre",
+            "at": [
+              1469,
+              2918,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54720
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 38,
+        "do": [
+          {
+            "t": "Ask the Costumer in the theatre cellar about the hidden passage.",
+            "s": "Ask the Costumer about the hidden passage.",
+            "k": "talkToCostumerAboutHiddenPassage"
+          },
+          {
+            "t": "Ask the Costumer in the theatre cellar about the stained costume.",
+            "s": "Ask the Costumer about the stained costume.",
+            "k": "talkToCostumerAboutStainedCostume"
+          },
+          {
+            "t": "Ask the Costumer in the theatre cellar about the poison.",
+            "s": "Ask the Costumer about the poison.",
+            "k": "talkToCostumerAboutPoison"
+          },
+          {
+            "t": "Ask the Costumer in the theatre cellar about the actors.",
+            "s": "Ask the Costumer about the actors.",
+            "k": "talkToCostumerAboutActors"
+          },
+          {
+            "t": "Search the costume rack to the north.",
+            "s": "Search the costume rack to the north.",
+            "k": "searchCostumeRack",
+            "at": [
+              1464,
+              9337,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54718
+              ]
+            }
+          },
+          {
+            "t": "Search the bookshelf on the west wall.",
+            "s": "Search the bookshelf on the west wall.",
+            "k": "searchBookshelf",
+            "at": [
+              1461,
+              9331,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54726
+              ]
+            }
+          },
+          {
+            "t": "Search the crate next to the stairs.",
+            "s": "Search the crate next to the stairs.",
+            "k": "searchCrateNextToStairs",
+            "at": [
+              1469,
+              9330,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54731
+              ]
+            }
+          },
+          {
+            "t": "Enter the theatre through the backstage entrance.",
+            "s": "Enter the theatre through the backstage entrance.",
+            "k": "enterBackstage",
+            "at": [
+              1477,
+              2927,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54715
+              ]
+            }
+          },
+          {
+            "t": "Climb down the loose rocks in your way to the guards outside the theatre.",
+            "s": "Climb down the loose rocks toward the guards outside the theatre.",
+            "k": "climbSecondLooseRocksToTheatre",
+            "at": [
+              1474,
+              2923,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54722
+              ]
+            }
+          },
+          {
+            "t": "Climb the Loose rocks south-east of the villa on your way to the theatre.",
+            "s": "Climb the loose rocks south-east of the villa toward the theatre.",
+            "k": "climbFirstLooseRocksToTheatre",
+            "at": [
+              1469,
+              2918,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54720
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 40,
+        "do": [
+          {
+            "t": "Report back to Stradius near the theatre and accuse Naiatli.",
+            "s": "Report back to Stradius near the theatre and accuse Naiatli.",
+            "k": "speakToGuards",
+            "at": [
+              1472,
+              2925,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          },
+          {
+            "t": "Climb up the stairs of the theatre cellar.",
+            "s": "Climb up the stairs of the theatre cellar.",
+            "k": "climbUpFromTheatreCellar",
+            "at": [
+              1469,
+              9328,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54717
+              ]
+            }
+          },
+          {
+            "t": "Climb down the loose rocks in your way to the guards outside the theatre.",
+            "s": "Climb down the loose rocks toward the guards outside the theatre.",
+            "k": "climbSecondLooseRocksToTheatre",
+            "at": [
+              1474,
+              2923,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54722
+              ]
+            }
+          },
+          {
+            "t": "Climb the Loose rocks south-east of the villa on your way to the theatre.",
+            "s": "Climb the loose rocks south-east of the villa toward the theatre.",
+            "k": "climbFirstLooseRocksToTheatre",
+            "at": [
+              1469,
+              2918,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54720
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 42,
+        "do": [
+          {
+            "t": "Confront Naiatli, attacking her when she runs away. When Clodius appears, attack him instead.",
+            "s": "Confront Naiatli, then attack Clodius when he appears.",
+            "k": "confrontNaiatli",
+            "at": [
+              1465,
+              2932,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13838
+              ]
+            }
+          },
+          {
+            "t": "Attack Clodius.",
+            "s": "Attack Clodius.",
+            "k": "attackClodius",
+            "at": [
+              1469,
+              2937,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13839
+              ]
+            }
+          },
+          {
+            "t": "Kill Naiatli.",
+            "s": "Kill Naiatli.",
+            "k": "killNaiatli",
+            "at": [
+              1469,
+              2937,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13838
+              ]
+            }
+          },
+          {
+            "t": "Talk to Naiatli.",
+            "s": "Talk to Naiatli.",
+            "k": "talkToNaiatli",
+            "at": [
+              1472,
+              2931,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13838
+              ]
+            }
+          },
+          {
+            "t": "Talk to Stradius to enter the theatre.",
+            "s": "Talk to Stradius to enter the theatre.",
+            "k": "talkToStradiusToEnterTheTheatre",
+            "at": [
+              1472,
+              2925,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          },
+          {
+            "t": "Climb up the stairs of the theatre cellar.",
+            "s": "Climb up the stairs of the theatre cellar.",
+            "k": "climbUpFromTheatreCellar",
+            "at": [
+              1469,
+              9328,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54717
+              ]
+            }
+          },
+          {
+            "t": "Climb down the loose rocks in your way to the guards outside the theatre.",
+            "s": "Climb down the loose rocks toward the guards outside the theatre.",
+            "k": "climbSecondLooseRocksToTheatre",
+            "at": [
+              1474,
+              2923,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54722
+              ]
+            }
+          },
+          {
+            "t": "Climb the Loose rocks south-east of the villa on your way to the theatre.",
+            "s": "Climb the loose rocks south-east of the villa toward the theatre.",
+            "k": "climbFirstLooseRocksToTheatre",
+            "at": [
+              1469,
+              2918,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54720
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 45,
+        "do": [
+          {
+            "t": "Confront Naiatli, attacking her when she runs away. When Clodius appears, attack him instead.",
+            "s": "Confront Naiatli, then attack Clodius when he appears.",
+            "k": "confrontNaiatli",
+            "at": [
+              1465,
+              2932,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13838
+              ]
+            }
+          },
+          {
+            "t": "Attack Clodius.",
+            "s": "Attack Clodius.",
+            "k": "attackClodius",
+            "at": [
+              1469,
+              2937,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13839
+              ]
+            }
+          },
+          {
+            "t": "Kill Naiatli.",
+            "s": "Kill Naiatli.",
+            "k": "killNaiatli",
+            "at": [
+              1469,
+              2937,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13838
+              ]
+            }
+          },
+          {
+            "t": "Talk to Naiatli.",
+            "s": "Talk to Naiatli.",
+            "k": "talkToNaiatli",
+            "at": [
+              1472,
+              2931,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13838
+              ]
+            }
+          },
+          {
+            "t": "Talk to Stradius to enter the theatre.",
+            "s": "Talk to Stradius to enter the theatre.",
+            "k": "talkToStradiusToEnterTheTheatre",
+            "at": [
+              1472,
+              2925,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          },
+          {
+            "t": "Climb up the stairs of the theatre cellar.",
+            "s": "Climb up the stairs of the theatre cellar.",
+            "k": "climbUpFromTheatreCellar",
+            "at": [
+              1469,
+              9328,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54717
+              ]
+            }
+          },
+          {
+            "t": "Climb down the loose rocks in your way to the guards outside the theatre.",
+            "s": "Climb down the loose rocks toward the guards outside the theatre.",
+            "k": "climbSecondLooseRocksToTheatre",
+            "at": [
+              1474,
+              2923,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54722
+              ]
+            }
+          },
+          {
+            "t": "Climb the Loose rocks south-east of the villa on your way to the theatre.",
+            "s": "Climb the loose rocks south-east of the villa toward the theatre.",
+            "k": "climbFirstLooseRocksToTheatre",
+            "at": [
+              1469,
+              2918,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54720
+              ]
+            }
+          },
+          {
+            "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+            "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+            "k": "returnToButlerAndHeadInside",
+            "at": [
+              1426,
+              2919,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13833
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 49,
+        "do": [
+          {
+            "t": "Talk to Stradius and Hutza to finish the quest.",
+            "s": "Talk to Stradius and Hutza to finish the quest.",
+            "k": "talkToGuardsToFinishTheQuest",
+            "at": [
+              1443,
+              2932,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13834
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "facts": {
+    "id": "Death on the Isle",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {
+        "thieving": 34,
+        "agility": 32
+      },
+      "questPoints": 0,
+      "quests": [
+        "Children of the Sun"
+      ],
+      "manual": [],
+      "capabilities": [],
+      "unparsed": null,
+      "text": "*{{SCP|Thieving|34|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}\n*{{SCP|Agility|32|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}\n*Completion of the following quests:\n**[[Children of the Sun]]"
+    },
+    "rewards": {
+      "questPoints": 2,
+      "xp": {
+        "thieving": 10000,
+        "agility": 7500,
+        "crafting": 5000
+      },
+      "coins": 0
+    },
+    "resourceFlow": null,
+    "length": "Medium",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15375163",
+      "title": "Death on the Isle",
+      "revision": 15375163,
+      "retrievedAt": "2026-11-18T05:57:43.326Z"
+    }
+  },
+  "unknown": [
+    "step \"inspectShippingContract\": Quest Helper gives no tile",
+    "step \"inspectDrinkingFlask\": Quest Helper gives no tile",
+    "step \"inspectThreateningNote\": Quest Helper gives no tile",
+    "step \"inspectWineLabels\": Quest Helper gives no tile",
+    "step \"talkToCostumerAboutHiddenPassage\": Quest Helper gives no tile",
+    "step \"talkToCostumerAboutStainedCostume\": Quest Helper gives no tile",
+    "step \"talkToCostumerAboutPoison\": Quest Helper gives no tile",
+    "step \"talkToCostumerAboutActors\": Quest Helper gives no tile",
+    "what the quest uses up and hands out is not reviewed"
+  ]
+}

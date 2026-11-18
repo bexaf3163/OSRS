@@ -389,6 +389,21 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     consumes: [], receives: [], unknownItems: ['Bronze axe', 'Frog plushy'],
     uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
   } },
+  // The butler's uniform and the evidence are quest items; nothing is bought.
+  'Death on the Isle': { revision: 15375163, flow: {
+    consumes: [], receives: [], unknownItems: ["Butler's uniform", 'Shipping contract', 'Drinking flask', 'Threatening note', 'Wine labels'],
+    uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The box trap is kept; the needle, hammer, jerboa tails and poultice are found during the quest.
+  'At First Light': { revision: 15391671, flow: {
+    consumes: [], receives: [], unknownItems: ['Needle', 'Hammer', 'Jerboa tail', 'Smooth leaf', 'Poultice', 'Toy mouse'],
+    uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
+  } },
+  // The secateurs are kept; the tablets, notes and translations are quest items.
+  'The Garden of Death': { revision: 15396819, flow: {
+    consumes: [], receives: [], unknownItems: ['Stone tablet', 'Note', 'Journal'],
+    uncertainReceipts: [], partialDelivery: false, fromStartOnly: false,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],

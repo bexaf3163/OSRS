@@ -1,0 +1,2235 @@
+{
+ "title": "Death on the Isle",
+ "cls": "DeathOnTheIsle",
+ "var": [
+  "varbit",
+  11210
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToPatziToStartQuest"
+   },
+   "2": {
+    "s": "talkToPatziToStartQuest"
+   },
+   "4": "n1",
+   "6": "n1",
+   "8": {
+    "s": "continueTalkingToPatzi"
+   },
+   "10": {
+    "s": "equipButlersOutfitAndHeadInside"
+   },
+   "12": {
+    "s": "equipButlersOutfitAndHeadInside"
+   },
+   "14": "n2",
+   "15": "n3",
+   "16": "n4",
+   "18": "n5",
+   "19": "n6",
+   "20": "n7",
+   "21": "n7",
+   "22": "n8",
+   "24": "n8",
+   "26": "n9",
+   "27": "n10",
+   "28": "n11",
+   "30": "n11",
+   "32": "n12",
+   "33": "n13",
+   "34": "n14",
+   "36": "n15",
+   "38": "n17",
+   "40": "n18",
+   "42": "n19",
+   "45": "n19",
+   "49": {
+    "s": "talkToGuardsToFinishTheQuest"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "stealButlerUniform",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r2"
+       ]
+      },
+      {
+       "s": "leaveUniformHouse"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "talkToPatziAfterStealingUniform"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "stealUniformFromWardrobe"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterUniformHouse"
+    }
+   },
+   "n2": {
+    "n": "headInsideAndTalkToPatziStep",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ]
+    ],
+    "d": {
+     "s": "headInsideAndTalkToPatzi"
+    }
+   },
+   "n3": {
+    "n": "introduceYourself",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11214,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "introduceYourselfToConstantinius"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11212,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "introduceYourselfToCozyac"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11213,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "introduceYourselfToPavo"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11211,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "introduceYourselfToXocotla"
+      }
+     ]
+    ],
+    "d": {
+     "s": "returnToPatzi"
+    }
+   },
+   "n4": {
+    "n": "enterTheCellarStep",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterTheCellar"
+    }
+   },
+   "n5": {
+    "n": "getWineStep",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ]
+    ],
+    "d": {
+     "s": "getWine"
+    }
+   },
+   "n6": {
+    "n": "investigateManStep",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ]
+    ],
+    "d": {
+     "s": "investigateMan"
+    }
+   },
+   "n7": {
+    "n": "beInterrogatedByThePoliceStep",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ]
+    ],
+    "d": {
+     "s": "beInterrogatedByThePolice"
+    }
+   },
+   "n8": {
+    "n": "investigateMurder",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        {
+         "o": "nor",
+         "a": [
+          "r11"
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          {
+           "o": "vb",
+           "id": 11227,
+           "v": 1
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "s": "investigateConstantinius"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        {
+         "o": "nor",
+         "a": [
+          "r11"
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          {
+           "o": "vb",
+           "id": 11225,
+           "v": 1
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "s": "investigateCozyac"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        {
+         "o": "nor",
+         "a": [
+          "r11"
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          {
+           "o": "vb",
+           "id": 11226,
+           "v": 1
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "s": "investigatePavo"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        {
+         "o": "nor",
+         "a": [
+          "r11"
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          {
+           "o": "vb",
+           "id": 11224,
+           "v": 1
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "s": "investigateXocotla"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        {
+         "o": "nor",
+         "a": [
+          "r11"
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          {
+           "o": "vb",
+           "id": 11234,
+           "v": 1
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "s": "interrogatePatziAndAdala"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r11",
+        "r4"
+       ]
+      },
+      {
+       "s": "leaveCellar"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "nor",
+         "a": [
+          "r11"
+         ]
+        },
+        {
+         "o": "nor",
+         "a": [
+          "r4"
+         ]
+        }
+       ]
+      },
+      {
+       "s": "enterTheCellarAgain"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r5"
+       ]
+      },
+      {
+       "s": "investigateJug"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r6"
+       ]
+      },
+      {
+       "s": "investigateSmallBoxInSouthRoom"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r7"
+       ]
+      },
+      {
+       "s": "investigateBrokenStoolInSouthRoom"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r8"
+       ]
+      },
+      {
+       "s": "investigateWineStorageInEastRoom"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r9"
+       ]
+      },
+      {
+       "s": "investigateBrokenPotteryInEastRoom"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r10"
+       ]
+      },
+      {
+       "s": "investigateLiviusInEastRoom"
+      }
+     ]
+    ],
+    "d": {
+     "s": "returnToTheGuards"
+    }
+   },
+   "n9": {
+    "n": "investigateMurder2",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 11233,
+       "v": 1
+      },
+      {
+       "s": "talkToGuardsAgainToTellThemYouAreReady"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Wine labels",
+         "ids": [
+          29928
+         ]
+        }
+       ]
+      },
+      {
+       "s": "pickpocketAdala"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Threatening note",
+         "ids": [
+          29926
+         ]
+        }
+       ]
+      },
+      {
+       "s": "pickpocketCozyac"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Drinking flask",
+         "ids": [
+          29925
+         ]
+        }
+       ]
+      },
+      {
+       "s": "pickpocketPavo"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Shipping contract",
+         "ids": [
+          29927
+         ]
+        }
+       ]
+      },
+      {
+       "s": "pickpocketXocotla"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11236,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "inspectWineLabels"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11237,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "inspectThreateningNote"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11235,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "inspectDrinkingFlask"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11238,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "inspectShippingContract"
+      }
+     ]
+    ],
+    "d": {
+     "s": "returnStolenItemsToTheGuards"
+    }
+   },
+   "n10": {
+    "n": "talkToGuardsAgainToTellThemYouAreReadyStep",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToGuardsAgainToTellThemYouAreReady"
+    }
+   },
+   "n11": {
+    "n": "speakToSuspects",
+    "c": [
+     [
+      {
+       "o": "npc",
+       "id": 13824
+      },
+      {
+       "s": "fightAdala"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11244,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "interrogateConstantiniusAgain"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11245,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "interrogateXocotlaAgain"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11243,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "interrogateCozyacAgain"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11246,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "interrogatePavoAgain"
+      }
+     ]
+    ],
+    "d": {
+     "s": "accuseAdala"
+    }
+   },
+   "n12": {
+    "n": "getAdalasConfessionStep",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ]
+    ],
+    "d": {
+     "s": "getAdalasConfession"
+    }
+   },
+   "n13": {
+    "n": "talkToGuardsAboutAdalaStep",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToGuardsAboutAdala"
+    }
+   },
+   "n14": {
+    "n": "getToTheGuardsAtTheatreStep",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         1437,
+         2926,
+         1449,
+         2941,
+         2,
+         2
+        ]
+       ]
+      },
+      {
+       "s": "headDownFromTopFloor"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         1437,
+         2926,
+         1449,
+         2941,
+         1,
+         1
+        ]
+       ]
+      },
+      {
+       "s": "headDownFromMiddleFloor"
+      }
+     ]
+    ],
+    "d": {
+     "s": "climbFirstLooseRocksToTheatre"
+    }
+   },
+   "n15": {
+    "n": "investigateTheatreStep",
+    "c": [],
+    "d": "n16"
+   },
+   "n16": {
+    "n": "investigateTheatre",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ],
+     [
+      "r12",
+      {
+       "s": "climbFirstLooseRocksToTheatre"
+      }
+     ],
+     [
+      "r13",
+      {
+       "s": "climbSecondLooseRocksToTheatre"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11249,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "talkToGuardsAtTheatre"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r14"
+       ]
+      },
+      {
+       "s": "enterBackstage"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToCostumer"
+    }
+   },
+   "n17": {
+    "n": "investigateTheatreCellar",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ],
+     [
+      "r12",
+      {
+       "s": "climbFirstLooseRocksToTheatre"
+      }
+     ],
+     [
+      "r13",
+      {
+       "s": "climbSecondLooseRocksToTheatre"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r14"
+       ]
+      },
+      {
+       "s": "enterBackstage"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11251,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "searchCrateNextToStairs"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11250,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "searchBookshelf"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11252,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "searchCostumeRack"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11253,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "talkToCostumerAboutActors"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11255,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "talkToCostumerAboutPoison"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11256,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "talkToCostumerAboutStainedCostume"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToCostumerAboutHiddenPassage"
+    }
+   },
+   "n18": {
+    "n": "snitchToGuardsStep",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ],
+     [
+      "r12",
+      {
+       "s": "climbFirstLooseRocksToTheatre"
+      }
+     ],
+     [
+      "r13",
+      {
+       "s": "climbSecondLooseRocksToTheatre"
+      }
+     ],
+     [
+      "r14",
+      {
+       "s": "climbUpFromTheatreCellar"
+      }
+     ]
+    ],
+    "d": {
+     "s": "speakToGuards"
+    }
+   },
+   "n19": {
+    "n": "confrontNaiatliStep",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        "r3"
+       ]
+      },
+      {
+       "s": "returnToButlerAndHeadInside"
+      }
+     ],
+     [
+      "r12",
+      {
+       "s": "climbFirstLooseRocksToTheatre"
+      }
+     ],
+     [
+      "r13",
+      {
+       "s": "climbSecondLooseRocksToTheatre"
+      }
+     ],
+     [
+      "r14",
+      {
+       "s": "climbUpFromTheatreCellar"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         1472,
+         2924,
+         1481,
+         2926,
+         0,
+         0
+        ],
+        [
+         1477,
+         2927,
+         1482,
+         2944,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "talkToStradiusToEnterTheTheatre"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 11258,
+       "op": ">=",
+       "v": 6
+      },
+      {
+       "s": "talkToNaiatli"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 11258,
+       "op": ">=",
+       "v": 3
+      },
+      {
+       "s": "killNaiatli"
+      }
+     ],
+     [
+      {
+       "o": "vb",
+       "id": 11258,
+       "v": 2
+      },
+      {
+       "s": "attackClodius"
+      }
+     ]
+    ],
+    "d": {
+     "s": "confrontNaiatli"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      1399,
+      2967,
+      1402,
+      2974,
+      0,
+      0
+     ],
+     [
+      1397,
+      2970,
+      1399,
+      2977,
+      0,
+      0
+     ],
+     [
+      1392,
+      2974,
+      1396,
+      2977,
+      0,
+      0
+     ],
+     [
+      1392,
+      2973,
+      1394,
+      2973,
+      0,
+      0
+     ]
+    ]
+   },
+   "r2": {
+    "o": "and",
+    "a": [
+     {
+      "o": "item",
+      "nm": "Butler's uniform shirt",
+      "ids": [
+       29916,
+       29914
+      ]
+     },
+     {
+      "o": "item",
+      "nm": "Butler's uniform pants",
+      "ids": [
+       29918,
+       29915
+      ]
+     }
+    ]
+   },
+   "r3": {
+    "o": "vb",
+    "id": 14283,
+    "v": 5
+   },
+   "r4": {
+    "o": "and",
+    "a": [
+     "r5",
+     "r6",
+     "r7",
+     "r8",
+     "r9",
+     "r10"
+    ]
+   },
+   "r5": {
+    "o": "vb",
+    "id": 11218,
+    "v": 1
+   },
+   "r6": {
+    "o": "vb",
+    "id": 11221,
+    "v": 1
+   },
+   "r7": {
+    "o": "vb",
+    "id": 11222,
+    "v": 1
+   },
+   "r8": {
+    "o": "vb",
+    "id": 11220,
+    "v": 1
+   },
+   "r9": {
+    "o": "vb",
+    "id": 11219,
+    "v": 1
+   },
+   "r10": {
+    "o": "vb",
+    "id": 11223,
+    "v": 1
+   },
+   "r11": {
+    "o": "zone",
+    "z": [
+     [
+      1432,
+      9312,
+      1461,
+      9342,
+      0,
+      0
+     ]
+    ]
+   },
+   "r12": {
+    "o": "zone",
+    "z": [
+     [
+      1427,
+      2899,
+      1454,
+      2945,
+      0,
+      0
+     ],
+     [
+      1454,
+      2899,
+      1468,
+      2921,
+      0,
+      0
+     ]
+    ]
+   },
+   "r13": {
+    "o": "zone",
+    "z": [
+     [
+      1471,
+      2917,
+      1477,
+      2922,
+      0,
+      0
+     ]
+    ]
+   },
+   "r14": {
+    "o": "zone",
+    "z": [
+     [
+      1461,
+      9325,
+      1469,
+      9338,
+      0,
+      0
+     ]
+    ]
+   }
+  },
+  "alias": {
+   "continueTalkingToPatzi": [
+    "talkToPatziAfterStealingUniform"
+   ],
+   "returnToButlerAndHeadInside": [
+    "equipButlersOutfitAndHeadInside"
+   ],
+   "enterTheCellar": [
+    "getWine"
+   ],
+   "fightAdala": [
+    "accuseAdala"
+   ],
+   "enterBackstage": [
+    "talkToCostumer"
+   ],
+   "headDownFromTopFloor": [
+    "talkToGuardsAtTheatre"
+   ],
+   "headDownFromMiddleFloor": [
+    "talkToGuardsAtTheatre"
+   ],
+   "climbFirstLooseRocksToTheatre": [
+    "talkToGuardsAtTheatre"
+   ],
+   "climbSecondLooseRocksToTheatre": [
+    "talkToGuardsAtTheatre"
+   ],
+   "talkToCostumerAboutActors": [
+    "talkToCostumerAboutHiddenPassage",
+    "talkToCostumerAboutPoison",
+    "talkToCostumerAboutStainedCostume"
+   ],
+   "talkToCostumerAboutPoison": [
+    "talkToCostumerAboutHiddenPassage",
+    "talkToCostumerAboutStainedCostume"
+   ],
+   "talkToCostumerAboutStainedCostume": [
+    "talkToCostumerAboutHiddenPassage"
+   ],
+   "climbUpFromTheatreCellar": [
+    "speakToGuards"
+   ],
+   "attackClodius": [
+    "confrontNaiatli"
+   ],
+   "killNaiatli": [
+    "confrontNaiatli"
+   ]
+  }
+ },
+ "unknown": {},
+ "steps": {
+  "talkToPatziToStartQuest": {
+   "typ": "NpcStep",
+   "wp": [
+    1414,
+    2937,
+    0
+   ],
+   "ids": [
+    13818
+   ],
+   "text": "Talk to Patzi at the entrance to Villa Lucens on the island of Aldarin to start the quest."
+  },
+  "enterUniformHouse": {
+   "typ": "ObjectStep",
+   "wp": [
+    1401,
+    2967,
+    0
+   ],
+   "ids": [
+    54701
+   ],
+   "text": "Enter the house north of Patzi through the window to steal a butler's uniform. If the Wandering Guard bothers you, wait until he steps away before entering."
+  },
+  "leaveUniformHouse": {
+   "typ": "ObjectStep",
+   "wp": [
+    1401,
+    2967,
+    0
+   ],
+   "ids": [
+    54701
+   ],
+   "text": "Leave the house with the butler's uniform."
+  },
+  "talkToPatziAfterStealingUniform": {
+   "typ": "NpcStep",
+   "wp": [
+    1414,
+    2937,
+    0
+   ],
+   "ids": [
+    13818
+   ],
+   "text": "Return to Patzi after stealing the butler's uniform."
+  },
+  "continueTalkingToPatzi": {
+   "typ": "NpcStep",
+   "wp": [
+    1414,
+    2937,
+    0
+   ],
+   "ids": [
+    13818
+   ],
+   "text": "Continue talking to Patzi"
+  },
+  "stealUniformFromWardrobe": {
+   "typ": "ObjectStep",
+   "wp": [
+    1399,
+    2969,
+    0
+   ],
+   "ids": [
+    54723
+   ],
+   "text": "Steal the butler's uniform from the wardrobe."
+  },
+  "equipButlersOutfitAndHeadInside": {
+   "typ": "NpcStep",
+   "wp": [
+    1426,
+    2919,
+    0
+   ],
+   "ids": [
+    13833
+   ],
+   "text": "Equip the Butler's uniform pieces and talk to the Head Butler up the stone stairs and to the south."
+  },
+  "returnToButlerAndHeadInside": {
+   "typ": "NpcStep",
+   "wp": [
+    1426,
+    2919,
+    0
+   ],
+   "ids": [
+    13833
+   ],
+   "text": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin."
+  },
+  "headInsideAndTalkToPatzi": {
+   "typ": "NpcStep",
+   "wp": [
+    1447,
+    2936,
+    0
+   ],
+   "ids": [
+    13818
+   ],
+   "text": "Head inside the villa and talk to Patzi."
+  },
+  "returnToPatzi": {
+   "typ": "NpcStep",
+   "wp": [
+    1447,
+    2936,
+    0
+   ],
+   "ids": [
+    13818
+   ],
+   "text": "Return to Patzi with the information you've gathered."
+  },
+  "introduceYourselfToConstantinius": {
+   "typ": "NpcStep",
+   "wp": [
+    1447,
+    2933,
+    0
+   ],
+   "ids": [
+    13825
+   ],
+   "text": "Introduce yourself to Constantinius."
+  },
+  "introduceYourselfToCozyac": {
+   "typ": "NpcStep",
+   "wp": [
+    1447,
+    2933,
+    0
+   ],
+   "ids": [
+    13827
+   ],
+   "text": "Introduce yourself to Cozyac."
+  },
+  "introduceYourselfToPavo": {
+   "typ": "NpcStep",
+   "wp": [
+    1447,
+    2933,
+    0
+   ],
+   "ids": [
+    13831
+   ],
+   "text": "Introduce yourself to Pavo."
+  },
+  "introduceYourselfToXocotla": {
+   "typ": "NpcStep",
+   "wp": [
+    1441,
+    2930,
+    0
+   ],
+   "ids": [
+    13829
+   ],
+   "text": "Introduce yourself to Xocotla."
+  },
+  "enterTheCellar": {
+   "typ": "ObjectStep",
+   "wp": [
+    1449,
+    2938,
+    0
+   ],
+   "ids": [
+    55047
+   ],
+   "text": "Enter the cellar."
+  },
+  "getWine": {
+   "typ": "ObjectStep",
+   "wp": [
+    1439,
+    9314,
+    0
+   ],
+   "ids": [
+    55379
+   ],
+   "text": "Investigate the Antique wine in the southern part of the cellar."
+  },
+  "investigateMan": {
+   "typ": "NpcStep",
+   "wp": [
+    1454,
+    9322,
+    0
+   ],
+   "ids": [
+    13872
+   ],
+   "text": "Check on the man in the south-eastern part of the cellar."
+  },
+  "beInterrogatedByThePolice": {
+   "typ": "NpcStep",
+   "wp": [
+    1439,
+    2938,
+    0
+   ],
+   "ids": [
+    13834
+   ],
+   "text": "Explain your innocence to the guards Stradius and Hutza."
+  },
+  "returnToTheGuards": {
+   "typ": "NpcStep",
+   "wp": [
+    1443,
+    2935,
+    0
+   ],
+   "ids": [
+    13834
+   ],
+   "text": "Return to the guards with the information you've found so far."
+  },
+  "investigateConstantinius": {
+   "typ": "NpcStep",
+   "wp": [
+    1446,
+    2933,
+    0
+   ],
+   "ids": [
+    13825
+   ],
+   "text": "Interrogate Constantinius."
+  },
+  "investigateCozyac": {
+   "typ": "NpcStep",
+   "wp": [
+    1446,
+    2933,
+    0
+   ],
+   "ids": [
+    13827
+   ],
+   "text": "Interrogate Cozyac."
+  },
+  "investigatePavo": {
+   "typ": "NpcStep",
+   "wp": [
+    1446,
+    2933,
+    0
+   ],
+   "ids": [
+    13831
+   ],
+   "text": "Interrogate Pavo."
+  },
+  "investigateXocotla": {
+   "typ": "NpcStep",
+   "wp": [
+    1446,
+    2933,
+    0
+   ],
+   "ids": [
+    13829
+   ],
+   "text": "Interrogate Xocotla."
+  },
+  "interrogatePatziAndAdala": {
+   "typ": "NpcStep",
+   "wp": [
+    1447,
+    2936,
+    0
+   ],
+   "ids": [
+    13818
+   ],
+   "text": "Interrogate Patzi and Adala."
+  },
+  "leaveCellar": {
+   "typ": "ObjectStep",
+   "wp": [
+    1447,
+    9338,
+    0
+   ],
+   "ids": [
+    54716
+   ],
+   "text": "Leave the cellar."
+  },
+  "enterTheCellarAgain": {
+   "typ": "ObjectStep",
+   "wp": [
+    1449,
+    2938,
+    0
+   ],
+   "ids": [
+    55047
+   ],
+   "text": "Enter the cellar again to begin your investigation."
+  },
+  "investigateJug": {
+   "typ": "ObjectStep",
+   "wp": [
+    1445,
+    9336,
+    0
+   ],
+   "ids": [
+    54708
+   ],
+   "text": "Investigate the Jug by the entrance stairs."
+  },
+  "investigateSmallBoxInSouthRoom": {
+   "typ": "ObjectStep",
+   "wp": [
+    1439,
+    9321,
+    0
+   ],
+   "ids": [
+    54711
+   ],
+   "text": "Investigate the Small box in the south room."
+  },
+  "investigateBrokenStoolInSouthRoom": {
+   "typ": "ObjectStep",
+   "wp": [
+    1446,
+    9315,
+    0
+   ],
+   "ids": [
+    54712
+   ],
+   "text": "Investigate the Broken stool in the south room."
+  },
+  "investigateWineStorageInEastRoom": {
+   "typ": "ObjectStep",
+   "wp": [
+    1451,
+    9335,
+    0
+   ],
+   "ids": [
+    54710
+   ],
+   "text": "Investigate the Wine storage in the east room."
+  },
+  "investigateBrokenPotteryInEastRoom": {
+   "typ": "ObjectStep",
+   "wp": [
+    1456,
+    9328,
+    0
+   ],
+   "ids": [
+    54709
+   ],
+   "text": "Investigate the Broken pottery in the east room."
+  },
+  "investigateLiviusInEastRoom": {
+   "typ": "NpcStep",
+   "wp": [
+    1454,
+    9322,
+    0
+   ],
+   "ids": [
+    13873
+   ],
+   "text": "Investigate Livius in the east room."
+  },
+  "returnStolenItemsToTheGuards": {
+   "typ": "NpcStep",
+   "wp": [
+    1443,
+    2935,
+    0
+   ],
+   "ids": [
+    13834
+   ],
+   "text": "Return to the guards with the stolen items."
+  },
+  "talkToGuardsAgainToTellThemYouAreReady": {
+   "typ": "NpcStep",
+   "wp": [
+    1433,
+    2935,
+    0
+   ],
+   "ids": [
+    13834
+   ],
+   "text": "Talk to the guards to tell them you're ready to make an accusation."
+  },
+  "pickpocketAdala": {
+   "typ": "NpcStep",
+   "wp": [
+    1446,
+    2936,
+    0
+   ],
+   "ids": [
+    13823
+   ],
+   "text": "Pickpocket Adala until you find Wine labels."
+  },
+  "pickpocketCozyac": {
+   "typ": "NpcStep",
+   "wp": [
+    1445,
+    2934,
+    0
+   ],
+   "ids": [
+    13828
+   ],
+   "text": "Pickpocket Cozyac until you find a threatening note."
+  },
+  "pickpocketPavo": {
+   "typ": "NpcStep",
+   "wp": [
+    1445,
+    2934,
+    0
+   ],
+   "ids": [
+    13832
+   ],
+   "text": "Pickpocket Pavo until you find a drinking flask."
+  },
+  "pickpocketXocotla": {
+   "typ": "NpcStep",
+   "wp": [
+    1445,
+    2934,
+    0
+   ],
+   "ids": [
+    13830
+   ],
+   "text": "Pickpocket Xocotla until you find a shipping contract."
+  },
+  "inspectWineLabels": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Inspect the Wine labels in your inventory."
+  },
+  "inspectThreateningNote": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Inspect the Threatening note in your inventory."
+  },
+  "inspectDrinkingFlask": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Inspect the Drinking flask in your inventory."
+  },
+  "inspectShippingContract": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Inspect the Shipping contract in your inventory."
+  },
+  "accuseAdala": {
+   "typ": "NpcStep",
+   "wp": [
+    1446,
+    2933,
+    2
+   ],
+   "ids": [
+    13820
+   ],
+   "text": "Accuse Adala of the crime, ready for a fight you cannot lose."
+  },
+  "fightAdala": {
+   "typ": "NpcStep",
+   "wp": [
+    1446,
+    2933,
+    2
+   ],
+   "ids": [
+    13820
+   ],
+   "text": "Fight Adala. You cannot lose this fight."
+  },
+  "interrogateConstantiniusAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    1446,
+    2931,
+    2
+   ],
+   "ids": [
+    13825
+   ],
+   "text": "Interrogate Constantinius."
+  },
+  "interrogateXocotlaAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    1444,
+    2928,
+    2
+   ],
+   "ids": [
+    13829
+   ],
+   "text": "Interrogate Xocotla."
+  },
+  "interrogateCozyacAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    1442,
+    2929,
+    2
+   ],
+   "ids": [
+    13827
+   ],
+   "text": "Interrogate Cozyac."
+  },
+  "interrogatePavoAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    1442,
+    2931,
+    2
+   ],
+   "ids": [
+    13831
+   ],
+   "text": "Interrogate Pavo."
+  },
+  "getAdalasConfession": {
+   "typ": "NpcStep",
+   "wp": [
+    1446,
+    2933,
+    2
+   ],
+   "ids": [
+    13821
+   ],
+   "text": "Talk to Adala to get her confession."
+  },
+  "talkToGuardsAboutAdala": {
+   "typ": "NpcStep",
+   "wp": [
+    1442,
+    2933,
+    2
+   ],
+   "ids": [
+    13834
+   ],
+   "text": "Talk to the guards about Adala."
+  },
+  "climbFirstLooseRocksToTheatre": {
+   "typ": "ObjectStep",
+   "wp": [
+    1469,
+    2918,
+    0
+   ],
+   "ids": [
+    54720
+   ],
+   "text": "Climb the Loose rocks south-east of the villa on your way to the theatre."
+  },
+  "headDownFromTopFloor": {
+   "typ": "ObjectStep",
+   "wp": [
+    1445,
+    2939,
+    2
+   ],
+   "ids": [
+    54714
+   ],
+   "text": "Climb down the staircase."
+  },
+  "headDownFromMiddleFloor": {
+   "typ": "ObjectStep",
+   "wp": [
+    1442,
+    2936,
+    1
+   ],
+   "ids": [
+    54714
+   ],
+   "text": "Climb down the staircase."
+  },
+  "talkToCostumer": {
+   "typ": "NpcStep",
+   "wp": [
+    1466,
+    9330,
+    0
+   ],
+   "ids": [
+    13837
+   ],
+   "text": "Talk to the Costumer in the theatre cellar."
+  },
+  "enterBackstage": {
+   "typ": "ObjectStep",
+   "wp": [
+    1477,
+    2927,
+    0
+   ],
+   "ids": [
+    54715
+   ],
+   "text": "Enter the theatre through the backstage entrance."
+  },
+  "climbSecondLooseRocksToTheatre": {
+   "typ": "ObjectStep",
+   "wp": [
+    1474,
+    2923,
+    0
+   ],
+   "ids": [
+    54722
+   ],
+   "text": "Climb down the loose rocks in your way to the guards outside the theatre."
+  },
+  "talkToGuardsAtTheatre": {
+   "typ": "NpcStep",
+   "wp": [
+    1472,
+    2925,
+    0
+   ],
+   "ids": [
+    13834
+   ],
+   "text": "Talk to Stradius at the backstage of the theatre."
+  },
+  "talkToCostumerAboutHiddenPassage": {
+   "typ": null,
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "talkToCostumerAboutActors": {
+   "typ": null,
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "talkToCostumerAboutPoison": {
+   "typ": null,
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "talkToCostumerAboutStainedCostume": {
+   "typ": null,
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "searchCrateNextToStairs": {
+   "typ": "ObjectStep",
+   "wp": [
+    1469,
+    9330,
+    0
+   ],
+   "ids": [
+    54731
+   ],
+   "text": "Search the crate next to the stairs."
+  },
+  "searchBookshelf": {
+   "typ": "ObjectStep",
+   "wp": [
+    1461,
+    9331,
+    0
+   ],
+   "ids": [
+    54726
+   ],
+   "text": "Search the bookshelf on the west wall."
+  },
+  "searchCostumeRack": {
+   "typ": "ObjectStep",
+   "wp": [
+    1464,
+    9337,
+    0
+   ],
+   "ids": [
+    54718
+   ],
+   "text": "Search the costume rack to the north."
+  },
+  "speakToGuards": {
+   "typ": "NpcStep",
+   "wp": [
+    1472,
+    2925,
+    0
+   ],
+   "ids": [
+    13834
+   ],
+   "text": "Report back to Stradius near the theatre and accuse Naiatli."
+  },
+  "climbUpFromTheatreCellar": {
+   "typ": "ObjectStep",
+   "wp": [
+    1469,
+    9328,
+    0
+   ],
+   "ids": [
+    54717
+   ],
+   "text": "Climb up the stairs of the theatre cellar."
+  },
+  "confrontNaiatli": {
+   "typ": "NpcStep",
+   "wp": [
+    1465,
+    2932,
+    0
+   ],
+   "ids": [
+    13838
+   ],
+   "text": "Confront Naiatli, attacking her when she runs away. When Clodius appears, attack him instead."
+  },
+  "attackClodius": {
+   "typ": "NpcStep",
+   "wp": [
+    1469,
+    2937,
+    0
+   ],
+   "ids": [
+    13839
+   ],
+   "text": "Attack Clodius."
+  },
+  "killNaiatli": {
+   "typ": "NpcStep",
+   "wp": [
+    1469,
+    2937,
+    0
+   ],
+   "ids": [
+    13838
+   ],
+   "text": "Kill Naiatli."
+  },
+  "talkToStradiusToEnterTheTheatre": {
+   "typ": "NpcStep",
+   "wp": [
+    1472,
+    2925,
+    0
+   ],
+   "ids": [
+    13834
+   ],
+   "text": "Talk to Stradius to enter the theatre."
+  },
+  "talkToNaiatli": {
+   "typ": "NpcStep",
+   "wp": [
+    1472,
+    2931,
+    0
+   ],
+   "ids": [
+    13838
+   ],
+   "text": "Talk to Naiatli."
+  },
+  "talkToGuardsToFinishTheQuest": {
+   "typ": "NpcStep",
+   "wp": [
+    1443,
+    2932,
+    0
+   ],
+   "ids": [
+    13834
+   ],
+   "text": "Talk to Stradius and Hutza to finish the quest."
+  }
+ }
+}

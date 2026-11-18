@@ -10784,5 +10784,148 @@
         "questName": "The Ribbiting Tale of a Lily Pad Labour Dispute"
       }
     }
+  },
+  {
+    "id": "S9-50",
+    "stage": 9,
+    "type": "quest",
+    "title": "Death on the Isle",
+    "qp": 2,
+    "requires": [
+      "S9-18"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Death_on_the_Isle",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Death_on_the_Isle/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=1413,2937,0",
+    "mapLocation": {
+      "x": 1413,
+      "y": 2937,
+      "plane": 0,
+      "label": "Patzi"
+    },
+    "npc": {
+      "nameEn": "Patzi",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Patzi"
+    },
+    "itemsRequired": [],
+    "reward": "2 QP, 10,000 Thieving XP, 7,500 Agility XP, 5,000 Crafting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Patzi"
+      ],
+      "dialogChoices": [],
+      "highlightItems": [],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Death on the Isle"
+      }
+    }
+  },
+  {
+    "id": "S9-51",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Garden of Death",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Garden_of_Death",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Garden_of_Death/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=1312,3472,0",
+    "mapLocation": {
+      "x": 1312,
+      "y": 3472,
+      "plane": 0,
+      "label": "The campsite found east of the chasm at the southern end of the Kebos Lowlands"
+    },
+    "npc": {
+      "nameEn": "Tent (The Garden of Death)",
+      "location": "The campsite found east of the chasm at the southern end of the Kebos Lowlands",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Tent_(The_Garden_of_Death)"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Secateurs",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Vanessa's Farming shop in Catherby for 5 gp.",
+        "wikiItemId": 5329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Secateurs.png"
+      }
+    ],
+    "reward": "1 QP, 10,000 Farming XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Tent (The Garden of Death)"
+      ],
+      "dialogChoices": [
+        "Yes.",
+        "Molch Island"
+      ],
+      "highlightItems": [
+        "Secateurs"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Garden of Death"
+      }
+    }
+  },
+  {
+    "id": "S9-52",
+    "stage": 9,
+    "type": "quest",
+    "title": "At First Light",
+    "qp": 1,
+    "requires": [
+      "S9-18",
+      "S9-32"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/At_First_Light",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/At_First_Light/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=1555,3033,0",
+    "mapLocation": {
+      "x": 1555,
+      "y": 3033,
+      "plane": 0,
+      "label": "The Hunter Guild"
+    },
+    "npc": {
+      "nameEn": "Guildmaster Apatura",
+      "location": "The Hunter Guild",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Guildmaster_Apatura"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Box trap",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Imia north of the Hunter Guild for 41 gp.",
+        "wikiItemId": 10008,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Box_trap.png"
+      }
+    ],
+    "reward": "1 QP, 4,500 Hunter XP, 800 Construction XP, 500 Herblore XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Guildmaster Apatura"
+      ],
+      "dialogChoices": [
+        "Can I help you with anything?"
+      ],
+      "highlightItems": [
+        "Box trap"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "At First Light"
+      }
+    }
   }
 ]

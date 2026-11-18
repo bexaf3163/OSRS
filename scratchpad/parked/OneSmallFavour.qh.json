@@ -1,0 +1,2593 @@
+{
+ "title": "One Small Favour",
+ "cls": "OneSmallFavour",
+ "var": [
+  "varp",
+  416
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToYanni"
+   },
+   "5": {
+    "s": "talkToJungleForester"
+   },
+   "10": {
+    "s": "talkToBrian"
+   },
+   "15": {
+    "s": "talkToBrian"
+   },
+   "20": {
+    "s": "talkToAggie"
+   },
+   "25": "n1",
+   "30": "n1",
+   "35": "n1",
+   "40": "n1",
+   "45": {
+    "s": "talkToFred"
+   },
+   "50": {
+    "s": "talkToSeth"
+   },
+   "55": {
+    "s": "talkToHorvik"
+   },
+   "60": {
+    "s": "talkToApoth"
+   },
+   "62": {
+    "s": "talkToApoth"
+   },
+   "63": {
+    "s": "talkToApoth"
+   },
+   "65": {
+    "s": "talkToTassie"
+   },
+   "70": "n2",
+   "75": "n3",
+   "80": "n4",
+   "81": "n4",
+   "82": "n4",
+   "83": "n4",
+   "84": "n4",
+   "86": {
+    "s": "talkToBleemadgeNoTea"
+   },
+   "88": {
+    "s": "talkToArhein"
+   },
+   "90": {
+    "s": "talkToPhantuwti"
+   },
+   "95": "n5",
+   "100": {
+    "s": "talkToCromperty"
+   },
+   "105": {
+    "s": "talkToTindel"
+   },
+   "110": {
+    "s": "talkToRantz"
+   },
+   "115": {
+    "s": "talkToGnormadium"
+   },
+   "120": "n6",
+   "125": {
+    "s": "talkToGnormadiumAgain"
+   },
+   "130": {
+    "s": "returnToRantz"
+   },
+   "135": {
+    "s": "returnToTindel"
+   },
+   "140": {
+    "s": "returnToCromperty"
+   },
+   "145": "n7",
+   "150": "n7",
+   "152": "n8",
+   "155": "n8",
+   "160": {
+    "s": "returnToPhantuwti"
+   },
+   "165": {
+    "s": "returnToPhantuwti2"
+   },
+   "170": {
+    "s": "returnToPhantuwti2"
+   },
+   "175": "n9",
+   "176": "n10",
+   "177": "n11",
+   "180": "n12",
+   "185": "n13",
+   "190": {
+    "s": "returnToArhein"
+   },
+   "195": {
+    "s": "returnToBleemadge"
+   },
+   "200": "n14",
+   "205": "n15",
+   "210": "n16",
+   "215": "n16",
+   "220": "n16",
+   "225": "n17",
+   "230": {
+    "s": "returnToTassie"
+   },
+   "235": "n18",
+   "240": {
+    "s": "returnToHorvik"
+   },
+   "245": {
+    "s": "talkToHorvikFinal"
+   },
+   "250": {
+    "s": "returnToSeth"
+   },
+   "255": "n19",
+   "260": {
+    "s": "returnToAggie"
+   },
+   "265": {
+    "s": "returnToBrian"
+   },
+   "270": {
+    "s": "returnToForester"
+   },
+   "275": {
+    "s": "returnToYanni"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "goTalkToJohanhus",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToJohanhus"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownToJohanhus"
+    }
+   },
+   "n2": {
+    "n": "goTalkToHammerspike",
+    "c": [
+     [
+      "r2",
+      {
+       "s": "talkToHammerspike"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownToHammerspike"
+    }
+   },
+   "n3": {
+    "n": "goTalkToSanfew",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "talkToSanfew"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpToSanfew"
+    }
+   },
+   "n4": {
+    "n": "makeGuthixRestForGnome",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Guthix rest(3)",
+       "ids": [
+        4419
+       ]
+      },
+      {
+       "s": "talkToBleemadge"
+      }
+     ],
+     [
+      {
+       "o": "or",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Herb tea mix",
+         "ids": [
+          4464,
+          4466,
+          4468,
+          4470,
+          4472,
+          4474,
+          4476,
+          4478,
+          4480,
+          4482
+         ]
+        },
+        {
+         "o": "item",
+         "nm": "Cup of hot water",
+         "ids": [
+          4460
+         ]
+        }
+       ]
+      },
+      {
+       "s": "useHerbsOnCup"
+      }
+     ]
+    ],
+    "d": {
+     "s": "useBowlOnCup"
+    }
+   },
+   "n5": {
+    "n": "investigateWall",
+    "c": [
+     [
+      "r4",
+      {
+       "s": "searchWall"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterGoblinCave"
+    }
+   },
+   "n6": {
+    "n": "repairLights",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 6241,
+       "v": 255
+      },
+      {
+       "s": "talkToGnormadiumAgain"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r9",
+        "r10",
+        "r11",
+        "r12",
+        "r13"
+       ]
+      },
+      {
+       "s": "put8"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r9",
+        "r10",
+        "r11",
+        "r12"
+       ]
+      },
+      {
+       "s": "cutSaph"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r9",
+        "r10",
+        "r11"
+       ]
+      },
+      {
+       "s": "take8"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r9",
+        "r10",
+        "r14",
+        "r15"
+       ]
+      },
+      {
+       "s": "put7"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r9",
+        "r10",
+        "r14"
+       ]
+      },
+      {
+       "s": "cutOpal"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r9",
+        "r10"
+       ]
+      },
+      {
+       "s": "take7"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r9",
+        "r16",
+        "r17"
+       ]
+      },
+      {
+       "s": "put6"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r9",
+        "r16"
+       ]
+      },
+      {
+       "s": "cutTopaz"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r9"
+       ]
+      },
+      {
+       "s": "take6"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r18",
+        "r19"
+       ]
+      },
+      {
+       "s": "put5"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r18"
+       ]
+      },
+      {
+       "s": "cutJade"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r8"
+       ]
+      },
+      {
+       "s": "take5"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r20",
+        "r13"
+       ]
+      },
+      {
+       "s": "put4"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7",
+        "r20"
+       ]
+      },
+      {
+       "s": "cutSaph"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r7"
+       ]
+      },
+      {
+       "s": "take4"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r21",
+        "r15"
+       ]
+      },
+      {
+       "s": "put3"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6",
+        "r21"
+       ]
+      },
+      {
+       "s": "cutOpal"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r6"
+       ]
+      },
+      {
+       "s": "take3"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r22",
+        "r17"
+       ]
+      },
+      {
+       "s": "put2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r22"
+       ]
+      },
+      {
+       "s": "cutTopaz"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "take2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r23",
+        "r19"
+       ]
+      },
+      {
+       "s": "put1"
+      }
+     ],
+     [
+      "r23",
+      {
+       "s": "cutJade"
+      }
+     ]
+    ],
+    "d": {
+     "s": "take1"
+    }
+   },
+   "n7": {
+    "n": "fightSlagilith",
+    "c": [
+     [
+      {
+       "o": "npc",
+       "id": 1362
+      },
+      {
+       "s": "killSlagilith"
+      }
+     ],
+     [
+      "r24",
+      {
+       "s": "readScroll"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "standNextToSculpture"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Pigeon cages",
+       "ids": [
+        424
+       ],
+       "q": 5,
+       "bank": 1
+      },
+      {
+       "s": "enterGoblinCaveAgain"
+      }
+     ]
+    ],
+    "d": {
+     "s": "getPigeonCages"
+    }
+   },
+   "n8": {
+    "n": "freePetra",
+    "c": [
+     [
+      {
+       "o": "npc",
+       "id": 1360
+      },
+      {
+       "s": "talkToPetra"
+      }
+     ],
+     [
+      "r24",
+      {
+       "s": "readScrollAgain"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "standNextToSculpture"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Pigeon cages",
+       "ids": [
+        424
+       ],
+       "q": 5,
+       "bank": 1
+      },
+      {
+       "s": "enterGoblinCaveAgain"
+      }
+     ]
+    ],
+    "d": {
+     "s": "getPigeonCages"
+    }
+   },
+   "n9": {
+    "n": "repairVane",
+    "c": [
+     [
+      "r25",
+      {
+       "s": "searchVane"
+      }
+     ],
+     [
+      "r26",
+      {
+       "s": "goUpToRoof"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpLadder"
+    }
+   },
+   "n10": {
+    "n": "hitVane",
+    "c": [
+     [
+      "r25",
+      {
+       "s": "useHammerOnVane"
+      }
+     ],
+     [
+      "r26",
+      {
+       "s": "goUpToRoof"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpLadder"
+    }
+   },
+   "n11": {
+    "n": "getVaneBits",
+    "c": [
+     [
+      "r25",
+      {
+       "s": "searchVaneAgain"
+      }
+     ],
+     [
+      "r26",
+      {
+       "s": "goUpToRoof"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goUpLadder"
+    }
+   },
+   "n12": {
+    "n": "repairVaneParts",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r27",
+        "r28",
+        {
+         "o": "item",
+         "nm": "Weathervane pillar",
+         "ids": [
+          4434
+         ]
+        },
+        "r25"
+       ]
+      },
+      {
+       "s": "useVane3"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r27",
+        {
+         "o": "item",
+         "nm": "Directionals",
+         "ids": [
+          4430
+         ]
+        },
+        "r25"
+       ]
+      },
+      {
+       "s": "useVane2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Ornament",
+         "ids": [
+          4432
+         ]
+        },
+        "r25"
+       ]
+      },
+      {
+       "s": "useVane1"
+      }
+     ],
+     [
+      "r25",
+      {
+       "s": "goDownFromRoof"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r29",
+        "r30",
+        "r31",
+        "r26"
+       ]
+      },
+      {
+       "s": "goBackUpToRoof"
+      }
+     ],
+     [
+      "r26",
+      {
+       "s": "goDownLadderToSeers"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r29",
+        "r30",
+        "r31"
+       ]
+      },
+      {
+       "s": "goBackUpLadder"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r29",
+        "r30"
+       ]
+      },
+      {
+       "s": "useVane3OnAnvil"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r30",
+        "r31"
+       ]
+      },
+      {
+       "s": "useVane1OnAnvil"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r29",
+        "r31"
+       ]
+      },
+      {
+       "s": "useVane2OnAnvil"
+      }
+     ],
+     [
+      "r30",
+      {
+       "s": "useVane13OnAnvil"
+      }
+     ],
+     [
+      "r31",
+      {
+       "s": "useVane12OnAnvil"
+      }
+     ],
+     [
+      "r29",
+      {
+       "s": "useVane23OnAnvil"
+      }
+     ]
+    ],
+    "d": {
+     "s": "useVane123OnAnvil"
+    }
+   },
+   "n13": {
+    "n": "reportBackToPhantuwti",
+    "c": [
+     [
+      "r26",
+      {
+       "s": "goDownLadderToPhantuwti"
+      }
+     ],
+     [
+      "r25",
+      {
+       "s": "goFromRoofToPhantuwti"
+      }
+     ]
+    ],
+    "d": {
+     "s": "finishWithPhantuwti"
+    }
+   },
+   "n14": {
+    "n": "goAndReturnToSanfew",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "returnToSanfew"
+      }
+     ]
+    ],
+    "d": {
+     "s": "returnUpToSanfew"
+    }
+   },
+   "n15": {
+    "n": "dealWithHammerspike",
+    "c": [
+     [
+      "r2",
+      {
+       "s": "returnToHammerspike"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownToHammerspikeAgain"
+    }
+   },
+   "n16": {
+    "n": "sortOutGangMembers",
+    "c": [
+     [
+      "r2",
+      {
+       "s": "killGangMembers"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownToHammerspikeAgain"
+    }
+   },
+   "n17": {
+    "n": "dealWithHammerspikeAfterKillingHisGang",
+    "c": [
+     [
+      "r2",
+      {
+       "s": "talkToHammerspikeFinal"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownToHammerspikeAgain"
+    }
+   },
+   "n18": {
+    "n": "makePotAndReturnToApoth",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Airtight pot",
+       "ids": [
+        4436
+       ]
+      },
+      {
+       "s": "returnToApothecary"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r32",
+        {
+         "o": "item",
+         "nm": "Pot",
+         "ids": [
+          1931
+         ]
+        }
+       ]
+      },
+      {
+       "s": "usePotLidOnPot"
+      }
+     ],
+     [
+      "r32",
+      {
+       "s": "pickUpPot"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Unfired pot lid",
+       "ids": [
+        4438
+       ]
+      },
+      {
+       "s": "firePotLid"
+      }
+     ]
+    ],
+    "d": {
+     "s": "spinPotLid"
+    }
+   },
+   "n19": {
+    "n": "goFinishWithJohanhus",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "returnToJohnahus"
+      }
+     ]
+    ],
+    "d": {
+     "s": "returnDownToJohnahus"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      3140,
+      9600,
+      3190,
+      9655,
+      0,
+      0
+     ]
+    ]
+   },
+   "r2": {
+    "o": "zone",
+    "z": [
+     [
+      2960,
+      9696,
+      3062,
+      9854,
+      0,
+      0
+     ]
+    ]
+   },
+   "r3": {
+    "o": "zone",
+    "z": [
+     [
+      2893,
+      3423,
+      2903,
+      3433,
+      1,
+      1
+     ]
+    ]
+   },
+   "r4": {
+    "o": "zone",
+    "z": [
+     [
+      2560,
+      9792,
+      2623,
+      9855,
+      0,
+      0
+     ]
+    ]
+   },
+   "r5": {
+    "o": "vb",
+    "id": 6233,
+    "v": 1
+   },
+   "r6": {
+    "o": "vb",
+    "id": 6234,
+    "v": 1
+   },
+   "r7": {
+    "o": "vb",
+    "id": 6235,
+    "v": 1
+   },
+   "r8": {
+    "o": "vb",
+    "id": 6236,
+    "v": 1
+   },
+   "r9": {
+    "o": "vb",
+    "id": 6237,
+    "v": 1
+   },
+   "r10": {
+    "o": "vb",
+    "id": 6238,
+    "v": 1
+   },
+   "r11": {
+    "o": "vb",
+    "id": 6239,
+    "v": 1
+   },
+   "r12": {
+    "o": "vb",
+    "id": 6232,
+    "v": 1
+   },
+   "r13": {
+    "o": "item",
+    "nm": "Sapphire",
+    "ids": [
+     1607
+    ]
+   },
+   "r14": {
+    "o": "vb",
+    "id": 6231,
+    "v": 1
+   },
+   "r15": {
+    "o": "item",
+    "nm": "Opal",
+    "ids": [
+     1609
+    ],
+    "q": 1
+   },
+   "r16": {
+    "o": "vb",
+    "id": 6230,
+    "v": 1
+   },
+   "r17": {
+    "o": "item",
+    "nm": "Red topaz",
+    "ids": [
+     1613
+    ],
+    "q": 1
+   },
+   "r18": {
+    "o": "vb",
+    "id": 6229,
+    "v": 1
+   },
+   "r19": {
+    "o": "item",
+    "nm": "Jade",
+    "ids": [
+     1611
+    ],
+    "q": 1
+   },
+   "r20": {
+    "o": "vb",
+    "id": 6228,
+    "v": 1
+   },
+   "r21": {
+    "o": "vb",
+    "id": 6227,
+    "v": 1
+   },
+   "r22": {
+    "o": "vb",
+    "id": 6226,
+    "v": 1
+   },
+   "r23": {
+    "o": "vb",
+    "id": 6225,
+    "v": 1
+   },
+   "r24": {
+    "o": "zone",
+    "z": [
+     [
+      2616,
+      9835,
+      2619,
+      9835,
+      0,
+      0
+     ]
+    ]
+   },
+   "r25": {
+    "o": "zone",
+    "z": [
+     [
+      2695,
+      3469,
+      2716,
+      3476,
+      3,
+      3
+     ]
+    ]
+   },
+   "r26": {
+    "o": "zone",
+    "z": [
+     [
+      2698,
+      3468,
+      2717,
+      3476,
+      1,
+      1
+     ]
+    ]
+   },
+   "r27": {
+    "o": "vb",
+    "id": 255,
+    "v": 1
+   },
+   "r28": {
+    "o": "vb",
+    "id": 254,
+    "v": 1
+   },
+   "r29": {
+    "o": "or",
+    "a": [
+     "r28",
+     {
+      "o": "item",
+      "nm": "Directionals",
+      "ids": [
+       4430
+      ],
+      "bank": 1
+     }
+    ]
+   },
+   "r30": {
+    "o": "or",
+    "a": [
+     "r27",
+     {
+      "o": "item",
+      "nm": "Ornament",
+      "ids": [
+       4432
+      ],
+      "bank": 1
+     }
+    ]
+   },
+   "r31": {
+    "o": "or",
+    "a": [
+     {
+      "o": "vb",
+      "id": 253,
+      "v": 1
+     },
+     {
+      "o": "item",
+      "nm": "Weathervane pillar",
+      "ids": [
+       4434
+      ],
+      "bank": 1
+     }
+    ]
+   },
+   "r32": {
+    "o": "item",
+    "nm": "Pot lid",
+    "ids": [
+     4440
+    ]
+   }
+  },
+  "alias": {
+   "goDownToJohanhus": [
+    "talkToJohanhus"
+   ],
+   "goDownToHammerspike": [
+    "talkToHammerspike"
+   ],
+   "goUpToSanfew": [
+    "talkToSanfew"
+   ],
+   "talkToBleemadgeNoTea": [
+    "talkToBleemadge"
+   ],
+   "readScroll": [
+    "standNextToSculpture"
+   ],
+   "returnToPhantuwti2": [
+    "returnToPhantuwti"
+   ],
+   "goUpLadder": [
+    "searchVane"
+   ],
+   "goUpToRoof": [
+    "searchVane"
+   ],
+   "goDownFromRoof": [
+    "useVane123OnAnvil"
+   ],
+   "goDownLadderToSeers": [
+    "useVane123OnAnvil"
+   ],
+   "useVane1OnAnvil": [
+    "useVane123OnAnvil"
+   ],
+   "useVane2OnAnvil": [
+    "useVane123OnAnvil"
+   ],
+   "useVane3OnAnvil": [
+    "useVane123OnAnvil"
+   ],
+   "useVane12OnAnvil": [
+    "useVane123OnAnvil"
+   ],
+   "useVane13OnAnvil": [
+    "useVane123OnAnvil"
+   ],
+   "useVane23OnAnvil": [
+    "useVane123OnAnvil"
+   ],
+   "goBackUpToRoof": [
+    "goBackUpLadder"
+   ],
+   "useVane1": [
+    "goBackUpLadder"
+   ],
+   "useVane2": [
+    "goBackUpLadder"
+   ],
+   "useVane3": [
+    "goBackUpLadder"
+   ],
+   "goFromRoofToPhantuwti": [
+    "finishWithPhantuwti"
+   ],
+   "goDownLadderToPhantuwti": [
+    "finishWithPhantuwti"
+   ],
+   "returnUpToSanfew": [
+    "returnToSanfew"
+   ],
+   "goDownToHammerspikeAgain": [
+    "returnToHammerspike"
+   ],
+   "returnDownToJohnahus": [
+    "returnToJohnahus"
+   ]
+  }
+ },
+ "unknown": {},
+ "steps": {
+  "talkToYanni": {
+   "typ": "NpcStep",
+   "wp": [
+    2836,
+    2983,
+    0
+   ],
+   "ids": [
+    5361
+   ],
+   "text": "Talk to Yanni Salika in Shilo Village. CKR fairy ring or take cart from Brimhaven."
+  },
+  "talkToJungleForester": {
+   "typ": "NpcStep",
+   "wp": [
+    2861,
+    2942,
+    0
+   ],
+   "ids": [],
+   "text": "Talk to a Jungle Forester south of Shilo Village."
+  },
+  "talkToBrian": {
+   "typ": "NpcStep",
+   "wp": [
+    3027,
+    3249,
+    0
+   ],
+   "ids": [
+    2892
+   ],
+   "text": "Talk to Brian in the Port Sarim axe shop."
+  },
+  "talkToAggie": {
+   "typ": "NpcStep",
+   "wp": [
+    3086,
+    3258,
+    0
+   ],
+   "ids": [
+    120
+   ],
+   "text": "Talk to Aggie in Draynor Village."
+  },
+  "goDownToJohanhus": {
+   "typ": "ObjectStep",
+   "wp": [
+    3166,
+    3252,
+    0
+   ],
+   "ids": [
+    5492
+   ],
+   "text": "Enter the H.A.M hideout west of Lumbridge and talk to Johanhus Ulsbrecht in there."
+  },
+  "talkToJohanhus": {
+   "typ": "NpcStep",
+   "wp": [
+    3171,
+    9619,
+    0
+   ],
+   "ids": [
+    2535
+   ],
+   "text": "Talk to Johanhus Ulsbrecht in the south of the H.A.M hideout."
+  },
+  "talkToFred": {
+   "typ": "NpcStep",
+   "wp": [
+    3190,
+    3273,
+    0
+   ],
+   "ids": [
+    732
+   ],
+   "text": "Talk to Fred the Farmer north of Lumbridge."
+  },
+  "talkToSeth": {
+   "typ": "NpcStep",
+   "wp": [
+    3228,
+    3291,
+    0
+   ],
+   "ids": [
+    1351
+   ],
+   "text": "Talk to Seth Groats in the farm north east of Lumbridge, across the river."
+  },
+  "talkToHorvik": {
+   "typ": "NpcStep",
+   "wp": [
+    3229,
+    3437,
+    0
+   ],
+   "ids": [
+    2882
+   ],
+   "text": "Talk to Horvik in the armour shop north east of the Varrock square."
+  },
+  "talkToApoth": {
+   "typ": "NpcStep",
+   "wp": [
+    3196,
+    3404,
+    0
+   ],
+   "ids": [
+    5036
+   ],
+   "text": "Talk to the Apothecary in west Varrock."
+  },
+  "talkToTassie": {
+   "typ": "NpcStep",
+   "wp": [
+    3085,
+    3409,
+    0
+   ],
+   "ids": [
+    1352
+   ],
+   "text": "Talk to Tassie Slipcast in the Barbarian Village pottery building."
+  },
+  "goDownToHammerspike": {
+   "typ": "ObjectStep",
+   "wp": [
+    3019,
+    3450,
+    0
+   ],
+   "ids": [
+    11867
+   ],
+   "text": "Go into the Dwarven Mine and talk to Hammerspike Stoutbeard in the west side."
+  },
+  "talkToHammerspike": {
+   "typ": "NpcStep",
+   "wp": [
+    2968,
+    9811,
+    0
+   ],
+   "ids": [
+    1353
+   ],
+   "text": "Talk to Hammerspike Stoutbeard in the west cavern of the Dwarven Mine."
+  },
+  "goUpToSanfew": {
+   "typ": "ObjectStep",
+   "wp": [
+    2899,
+    3429,
+    0
+   ],
+   "ids": [
+    16671
+   ],
+   "text": "Talk to Sanfew upstairs in the Taverley herblore store."
+  },
+  "talkToSanfew": {
+   "typ": "NpcStep",
+   "wp": [
+    2899,
+    3429,
+    1
+   ],
+   "ids": [
+    5044
+   ],
+   "text": "Talk to Sanfew upstairs in the Taverley herblore store."
+  },
+  "useBowlOnCup": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use a bowl of hot water on an empty cup."
+  },
+  "talkToBleemadge": {
+   "typ": "NpcStep",
+   "wp": [
+    2847,
+    3498,
+    0
+   ],
+   "ids": [
+    10459
+   ],
+   "text": "Right-click talk to Captain Bleemadge on White Wolf Mountain."
+  },
+  "talkToBleemadgeNoTea": {
+   "typ": "NpcStep",
+   "wp": [
+    2847,
+    3498,
+    0
+   ],
+   "ids": [
+    10459
+   ],
+   "text": "Right-click talk to Captain Bleemadge on White Wolf Mountain."
+  },
+  "useHerbsOnCup": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use 2 guams, a marrentill and a harralander on the cup."
+  },
+  "talkToArhein": {
+   "typ": "NpcStep",
+   "wp": [
+    2804,
+    3432,
+    0
+   ],
+   "ids": [
+    3200
+   ],
+   "text": "Talk to Arhein in Catherby."
+  },
+  "talkToPhantuwti": {
+   "typ": "NpcStep",
+   "wp": [
+    2702,
+    3473,
+    0
+   ],
+   "ids": [
+    1357
+   ],
+   "text": "Talk to Phantuwti in the south west house of Seers' Village."
+  },
+  "enterGoblinCave": {
+   "typ": "ObjectStep",
+   "wp": [
+    2624,
+    3393,
+    0
+   ],
+   "ids": [
+    2
+   ],
+   "text": "Enter the cave south east of the Fishing Guild."
+  },
+  "searchWall": {
+   "typ": "ObjectStep",
+   "wp": [
+    2621,
+    9835,
+    0
+   ],
+   "ids": [
+    5808
+   ],
+   "text": "Right-click search the sculpture in the wall in the north east corner of the cave."
+  },
+  "talkToCromperty": {
+   "typ": "NpcStep",
+   "wp": [
+    2684,
+    3323,
+    0
+   ],
+   "ids": [
+    8480
+   ],
+   "text": "Talk to Wizard Cromperty in north east Ardougne."
+  },
+  "talkToTindel": {
+   "typ": "NpcStep",
+   "wp": [
+    2678,
+    3153,
+    0
+   ],
+   "ids": [
+    1358
+   ],
+   "text": "Talk to Tindel Marchant in Port Khazard."
+  },
+  "talkToRantz": {
+   "typ": "NpcStep",
+   "wp": [
+    2631,
+    2969,
+    0
+   ],
+   "ids": [
+    1470
+   ],
+   "text": "Talk to Rantz in the Feldip Hills. AKS fairy ring or Feldip Hills Teleport."
+  },
+  "talkToGnormadium": {
+   "typ": "NpcStep",
+   "wp": [
+    2542,
+    2968,
+    0
+   ],
+   "ids": [
+    7516
+   ],
+   "text": "Talk to Gnormadium Avlafrim west of Rantz."
+  },
+  "take1": {
+   "typ": "ObjectStep",
+   "wp": [
+    2554,
+    2974,
+    0
+   ],
+   "ids": [
+    5820
+   ],
+   "text": "Take a jade from the north east landing light."
+  },
+  "talkToGnormadiumAgain": {
+   "typ": "NpcStep",
+   "wp": [
+    2542,
+    2968,
+    0
+   ],
+   "ids": [
+    7516
+   ],
+   "text": "Talk to Gnormadium Avlafrim again."
+  },
+  "put8": {
+   "typ": "ObjectStep",
+   "wp": [
+    2545,
+    2969,
+    0
+   ],
+   "ids": [
+    5823
+   ],
+   "text": "Put a sapphire into the landing light."
+  },
+  "cutSaph": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Cut the uncut sapphire."
+  },
+  "take8": {
+   "typ": "ObjectStep",
+   "wp": [
+    2545,
+    2969,
+    0
+   ],
+   "ids": [
+    5823
+   ],
+   "text": "Take a sapphire from the landing light."
+  },
+  "put7": {
+   "typ": "ObjectStep",
+   "wp": [
+    2548,
+    2969,
+    0
+   ],
+   "ids": [
+    5821
+   ],
+   "text": "Put an opal into the landing light."
+  },
+  "cutOpal": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Cut the uncut opal."
+  },
+  "take7": {
+   "typ": "ObjectStep",
+   "wp": [
+    2548,
+    2969,
+    0
+   ],
+   "ids": [
+    5821
+   ],
+   "text": "Take an opal from the landing light."
+  },
+  "put6": {
+   "typ": "ObjectStep",
+   "wp": [
+    2551,
+    2969,
+    0
+   ],
+   "ids": [
+    5822
+   ],
+   "text": "Put a red topaz into the landing light."
+  },
+  "cutTopaz": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Cut the uncut red topaz."
+  },
+  "take6": {
+   "typ": "ObjectStep",
+   "wp": [
+    2551,
+    2969,
+    0
+   ],
+   "ids": [
+    5822
+   ],
+   "text": "Take a red topaz from the landing light."
+  },
+  "put5": {
+   "typ": "ObjectStep",
+   "wp": [
+    2554,
+    2969,
+    0
+   ],
+   "ids": [
+    5820
+   ],
+   "text": "Put a jade into the landing light."
+  },
+  "cutJade": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Cut the uncut jade."
+  },
+  "take5": {
+   "typ": "ObjectStep",
+   "wp": [
+    2554,
+    2969,
+    0
+   ],
+   "ids": [
+    5820
+   ],
+   "text": "Take a jade from the landing light."
+  },
+  "put4": {
+   "typ": "ObjectStep",
+   "wp": [
+    2545,
+    2974,
+    0
+   ],
+   "ids": [
+    5823
+   ],
+   "text": "Put a sapphire into the landing light."
+  },
+  "take4": {
+   "typ": "ObjectStep",
+   "wp": [
+    2545,
+    2974,
+    0
+   ],
+   "ids": [
+    5823
+   ],
+   "text": "Take a sapphire from the landing light."
+  },
+  "put3": {
+   "typ": "ObjectStep",
+   "wp": [
+    2548,
+    2974,
+    0
+   ],
+   "ids": [
+    5821
+   ],
+   "text": "Put an opal into the landing light."
+  },
+  "take3": {
+   "typ": "ObjectStep",
+   "wp": [
+    2548,
+    2974,
+    0
+   ],
+   "ids": [
+    5821
+   ],
+   "text": "Take an opal from the landing light."
+  },
+  "put2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2551,
+    2974,
+    0
+   ],
+   "ids": [
+    5822
+   ],
+   "text": "Put a red topaz into the landing light."
+  },
+  "take2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2551,
+    2974,
+    0
+   ],
+   "ids": [
+    5822
+   ],
+   "text": "Take a red topaz from the landing light."
+  },
+  "put1": {
+   "typ": "ObjectStep",
+   "wp": [
+    2554,
+    2974,
+    0
+   ],
+   "ids": [
+    5820
+   ],
+   "text": "Put a jade into the north east landing light."
+  },
+  "returnToRantz": {
+   "typ": "NpcStep",
+   "wp": [
+    2631,
+    2975,
+    0
+   ],
+   "ids": [
+    1470
+   ],
+   "text": "Return to Rantz in the Feldip Hills. AKS fairy ring or Feldip Hills Teleport."
+  },
+  "returnToTindel": {
+   "typ": "NpcStep",
+   "wp": [
+    2678,
+    3153,
+    0
+   ],
+   "ids": [
+    1358
+   ],
+   "text": "Return to Tindel Marchant in Port Khazard."
+  },
+  "returnToCromperty": {
+   "typ": "NpcStep",
+   "wp": [
+    2684,
+    3323,
+    0
+   ],
+   "ids": [
+    8480
+   ],
+   "text": "Return to Wizard Cromperty in north east Ardougne."
+  },
+  "getPigeonCages": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    2618,
+    3325,
+    0
+   ],
+   "ids": [],
+   "text": "Get 5 pigeon cages from behind Jerico's house in central East Ardougne."
+  },
+  "killSlagilith": {
+   "typ": "NpcStep",
+   "wp": [
+    2617,
+    9837,
+    0
+   ],
+   "ids": [
+    1362
+   ],
+   "text": "Kill the Slagilith. They take reduced damage from anything other than a pickaxe."
+  },
+  "readScroll": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the animate rock scroll."
+  },
+  "standNextToSculpture": {
+   "typ": "TileStep",
+   "wp": [
+    2616,
+    9835,
+    0
+   ],
+   "ids": [],
+   "text": "Use the animate rock scroll next to the sculpture in the north east cavern."
+  },
+  "enterGoblinCaveAgain": {
+   "typ": "ObjectStep",
+   "wp": [
+    2624,
+    3393,
+    0
+   ],
+   "ids": [
+    2
+   ],
+   "text": "Enter the cave south east of the Fishing Guild. Be prepared to fight the Slagilith(level 92, takes reduced damage from anything other than pickaxes)."
+  },
+  "talkToPetra": {
+   "typ": "NpcStep",
+   "wp": [
+    2617,
+    9837,
+    0
+   ],
+   "ids": [
+    1360
+   ],
+   "text": "Talk to Petra Fiyed."
+  },
+  "readScrollAgain": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the animate rock scroll again."
+  },
+  "returnToPhantuwti": {
+   "typ": "NpcStep",
+   "wp": [
+    2702,
+    3473,
+    0
+   ],
+   "ids": [
+    1357
+   ],
+   "text": "Return to Phantuwti in the south west house of Seers' Village."
+  },
+  "returnToPhantuwti2": {
+   "typ": "NpcStep",
+   "wp": [
+    2702,
+    3473,
+    0
+   ],
+   "ids": [
+    1357
+   ],
+   "text": "Return to Phantuwti in the south west house of Seers' Village."
+  },
+  "goUpLadder": {
+   "typ": "ObjectStep",
+   "wp": [
+    2699,
+    3476,
+    0
+   ],
+   "ids": [
+    25941
+   ],
+   "text": "Go up the ladder nearby."
+  },
+  "searchVane": {
+   "typ": "ObjectStep",
+   "wp": [
+    2702,
+    3476,
+    3
+   ],
+   "ids": [
+    5811
+   ],
+   "text": "Right-click search the weathervane on top of the Seers' building."
+  },
+  "goUpToRoof": {
+   "typ": "ObjectStep",
+   "wp": [
+    2715,
+    3472,
+    1
+   ],
+   "ids": [
+    26118
+   ],
+   "text": "Go up to the roof."
+  },
+  "useHammerOnVane": {
+   "typ": "ObjectStep",
+   "wp": [
+    2702,
+    3476,
+    3
+   ],
+   "ids": [
+    5811
+   ],
+   "text": "Use a hammer on the weathervane."
+  },
+  "searchVaneAgain": {
+   "typ": "ObjectStep",
+   "wp": [
+    2702,
+    3476,
+    3
+   ],
+   "ids": [
+    5811
+   ],
+   "text": "Right-click search the weathervane on top of the Seers' building again."
+  },
+  "useVane123OnAnvil": {
+   "typ": "ObjectStep",
+   "wp": [
+    2712,
+    3495,
+    0
+   ],
+   "ids": [
+    2097
+   ],
+   "text": "Repair the vane parts on an anvil. You can find one in the north of Seers' Village."
+  },
+  "goDownFromRoof": {
+   "typ": "ObjectStep",
+   "wp": [
+    2715,
+    3472,
+    3
+   ],
+   "ids": [
+    26119
+   ],
+   "text": "Climb down from the roof."
+  },
+  "goDownLadderToSeers": {
+   "typ": "ObjectStep",
+   "wp": [
+    2715,
+    3470,
+    1
+   ],
+   "ids": [
+    25939
+   ],
+   "text": "Repair the vane parts on the anvil in north Seers' Village."
+  },
+  "useVane1OnAnvil": {
+   "typ": "ObjectStep",
+   "wp": [
+    2712,
+    3495,
+    0
+   ],
+   "ids": [
+    2097
+   ],
+   "text": "Repair the vane parts on an anvil. You can find one in the north of Seers' Village."
+  },
+  "useVane2OnAnvil": {
+   "typ": "ObjectStep",
+   "wp": [
+    2712,
+    3495,
+    0
+   ],
+   "ids": [
+    2097
+   ],
+   "text": "Repair the vane parts on an anvil. You can find one in the north of Seers' Village."
+  },
+  "useVane3OnAnvil": {
+   "typ": "ObjectStep",
+   "wp": [
+    2712,
+    3495,
+    0
+   ],
+   "ids": [
+    2097
+   ],
+   "text": "Repair the vane parts on an anvil. You can find one in the north of Seers' Village."
+  },
+  "useVane12OnAnvil": {
+   "typ": "ObjectStep",
+   "wp": [
+    2712,
+    3495,
+    0
+   ],
+   "ids": [
+    2097
+   ],
+   "text": "Repair the vane parts on an anvil. You can find one in the north of Seers' Village."
+  },
+  "useVane13OnAnvil": {
+   "typ": "ObjectStep",
+   "wp": [
+    2712,
+    3495,
+    0
+   ],
+   "ids": [
+    2097
+   ],
+   "text": "Repair the vane parts on an anvil. You can find one in the north of Seers' Village."
+  },
+  "useVane23OnAnvil": {
+   "typ": "ObjectStep",
+   "wp": [
+    2712,
+    3495,
+    0
+   ],
+   "ids": [
+    2097
+   ],
+   "text": "Repair the vane parts on an anvil. You can find one in the north of Seers' Village."
+  },
+  "useVane3": {
+   "typ": "ObjectStep",
+   "wp": [
+    2702,
+    3476,
+    3
+   ],
+   "ids": [
+    5811
+   ],
+   "text": "Use the weathervane pillar on the weathervane."
+  },
+  "useVane2": {
+   "typ": "ObjectStep",
+   "wp": [
+    2702,
+    3476,
+    3
+   ],
+   "ids": [
+    5811
+   ],
+   "text": "Use the directionals on the weathervane."
+  },
+  "useVane1": {
+   "typ": "ObjectStep",
+   "wp": [
+    2702,
+    3476,
+    3
+   ],
+   "ids": [
+    5811
+   ],
+   "text": "Use the ornament on the weathervane."
+  },
+  "goBackUpToRoof": {
+   "typ": "ObjectStep",
+   "wp": [
+    2715,
+    3472,
+    1
+   ],
+   "ids": [
+    26118
+   ],
+   "text": "Go back up to the Seers' roof and fix the vane."
+  },
+  "goBackUpLadder": {
+   "typ": "ObjectStep",
+   "wp": [
+    2699,
+    3476,
+    0
+   ],
+   "ids": [
+    25941
+   ],
+   "text": "Go back up to the Seers' roof and fix the vane."
+  },
+  "finishWithPhantuwti": {
+   "typ": "NpcStep",
+   "wp": [
+    2702,
+    3473,
+    0
+   ],
+   "ids": [
+    1357
+   ],
+   "text": "Return to Phantuwti in the south west house of Seers' Village."
+  },
+  "goFromRoofToPhantuwti": {
+   "typ": "ObjectStep",
+   "wp": [
+    2715,
+    3472,
+    3
+   ],
+   "ids": [
+    26119
+   ],
+   "text": "Return to Phantuwti."
+  },
+  "goDownLadderToPhantuwti": {
+   "typ": "ObjectStep",
+   "wp": [
+    2699,
+    3476,
+    1
+   ],
+   "ids": [
+    25940
+   ],
+   "text": "Return to Phantuwti."
+  },
+  "returnToArhein": {
+   "typ": "NpcStep",
+   "wp": [
+    2804,
+    3432,
+    0
+   ],
+   "ids": [
+    3200
+   ],
+   "text": "Talk to Arhein in Catherby."
+  },
+  "returnToBleemadge": {
+   "typ": "NpcStep",
+   "wp": [
+    2847,
+    3498,
+    0
+   ],
+   "ids": [
+    10459
+   ],
+   "text": "Right-click talk to Captain Bleemadge on White Wolf Mountain."
+  },
+  "returnUpToSanfew": {
+   "typ": "ObjectStep",
+   "wp": [
+    2899,
+    3429,
+    0
+   ],
+   "ids": [
+    16671
+   ],
+   "text": "Return to Sanfew upstairs in the Taverley herblore store."
+  },
+  "returnToSanfew": {
+   "typ": "NpcStep",
+   "wp": [
+    2899,
+    3429,
+    1
+   ],
+   "ids": [
+    5044
+   ],
+   "text": "Return to Sanfew upstairs in the Taverley herblore store."
+  },
+  "goDownToHammerspikeAgain": {
+   "typ": "ObjectStep",
+   "wp": [
+    3019,
+    3450,
+    0
+   ],
+   "ids": [
+    11867
+   ],
+   "text": "Return to the Dwarven Mine and talk to Hammerspike Stoutbeard in the west side."
+  },
+  "returnToHammerspike": {
+   "typ": "NpcStep",
+   "wp": [
+    2968,
+    9811,
+    0
+   ],
+   "ids": [
+    1353
+   ],
+   "text": "Return to Hammerspike Stoutbeard in the west cavern of the Dwarven Mine."
+  },
+  "killGangMembers": {
+   "typ": "NpcStep",
+   "wp": [
+    2968,
+    9811,
+    0
+   ],
+   "ids": [
+    1354
+   ],
+   "text": "Kill 3 dwarf gang members until Hammerspike gives in. One dwarf gang member should appear after each kill."
+  },
+  "talkToHammerspikeFinal": {
+   "typ": "NpcStep",
+   "wp": [
+    2968,
+    9811,
+    0
+   ],
+   "ids": [
+    1353
+   ],
+   "text": "Return to Hammerspike Stoutbeard in the west cavern of the Dwarven Mine after killing his dwarf gang members."
+  },
+  "returnToTassie": {
+   "typ": "NpcStep",
+   "wp": [
+    3085,
+    3409,
+    0
+   ],
+   "ids": [
+    1352
+   ],
+   "text": "Return to Tassie Slipcast in the Barbarian Village pottery building."
+  },
+  "spinPotLid": {
+   "typ": "ObjectStep",
+   "wp": [
+    3087,
+    3409,
+    0
+   ],
+   "ids": [
+    14887
+   ],
+   "text": "Spin the clay into a pot lid."
+  },
+  "returnToApothecary": {
+   "typ": "NpcStep",
+   "wp": [
+    3196,
+    3404,
+    0
+   ],
+   "ids": [
+    5036
+   ],
+   "text": "Return to the Apothecary in west Varrock."
+  },
+  "usePotLidOnPot": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use the pot lid on a pot."
+  },
+  "pickUpPot": {
+   "typ": "ItemStep",
+   "wp": null,
+   "ids": [],
+   "text": "Get a pot to put your lid on. There's one in the Barbarian Village helmet shop."
+  },
+  "firePotLid": {
+   "typ": "ObjectStep",
+   "wp": [
+    3085,
+    3407,
+    0
+   ],
+   "ids": [
+    11601
+   ],
+   "text": "Fire the unfired pot lid."
+  },
+  "returnToHorvik": {
+   "typ": "NpcStep",
+   "wp": [
+    3229,
+    3437,
+    0
+   ],
+   "ids": [
+    2882
+   ],
+   "text": "Return to Horvik in the armour shop north east of the Varrock square."
+  },
+  "talkToHorvikFinal": {
+   "typ": "NpcStep",
+   "wp": [
+    3229,
+    3437,
+    0
+   ],
+   "ids": [
+    2882
+   ],
+   "text": "Talk to Horvik once more in the armour shop north east of the Varrock square."
+  },
+  "returnToSeth": {
+   "typ": "NpcStep",
+   "wp": [
+    3228,
+    3291,
+    0
+   ],
+   "ids": [
+    1351
+   ],
+   "text": "Return to Seth Groats in the farm north east of Lumbridge, across the river."
+  },
+  "returnDownToJohnahus": {
+   "typ": "ObjectStep",
+   "wp": [
+    3166,
+    3252,
+    0
+   ],
+   "ids": [
+    5492
+   ],
+   "text": "Enter the H.A.M hideout west of Lumbridge and talk to Johanhus Ulsbrecht in there."
+  },
+  "returnToJohnahus": {
+   "typ": "NpcStep",
+   "wp": [
+    3171,
+    9619,
+    0
+   ],
+   "ids": [
+    2535
+   ],
+   "text": "Return to Johanhus Ulsbrecht in the south of the H.A.M hideout."
+  },
+  "returnToAggie": {
+   "typ": "NpcStep",
+   "wp": [
+    3086,
+    3258,
+    0
+   ],
+   "ids": [
+    120
+   ],
+   "text": "Return to Aggie in Draynor Village."
+  },
+  "returnToBrian": {
+   "typ": "NpcStep",
+   "wp": [
+    3027,
+    3249,
+    0
+   ],
+   "ids": [
+    2892
+   ],
+   "text": "Return to Brian in the Port Sarim axe shop."
+  },
+  "returnToForester": {
+   "typ": "NpcStep",
+   "wp": [
+    2861,
+    2942,
+    0
+   ],
+   "ids": [],
+   "text": "Return to a Jungle Forester south of Shilo Village. CKR fairy ring or take cart from Brimhaven."
+  },
+  "returnToYanni": {
+   "typ": "NpcStep",
+   "wp": [
+    2836,
+    2983,
+    0
+   ],
+   "ids": [
+    5361
+   ],
+   "text": "Return to Yanni Salika in Shilo Village."
+  }
+ }
+}

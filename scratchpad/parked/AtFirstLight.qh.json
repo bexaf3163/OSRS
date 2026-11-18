@@ -1,0 +1,835 @@
+{
+ "title": "At First Light",
+ "cls": "AtFirstLight",
+ "var": [
+  "varbit",
+  9835
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "talkToApatura"
+   },
+   "1": "n1",
+   "2": "n2",
+   "3": "n3",
+   "4": "n4",
+   "5": "n5",
+   "6": {
+    "s": "talkToFoxAfterPoultice"
+   },
+   "7": "n6",
+   "8": "n7",
+   "9": "n8",
+   "10": "n9",
+   "11": "n10"
+  },
+  "nodes": {
+   "n1": {
+    "n": "goTalkToVerity",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToVerity"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownTree"
+    }
+   },
+   "n2": {
+    "n": "goTalkToWolf",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToWolf"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownTree"
+    }
+   },
+   "n3": {
+    "n": "goDistractCat",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        {
+         "o": "vb",
+         "id": 9837,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "returnToWolf"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        {
+         "o": "vb",
+         "id": 9839,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "checkBed"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        {
+         "o": "item",
+         "nm": "Toy mouse (wound)",
+         "ids": [
+          7769
+         ]
+        }
+       ]
+      },
+      {
+       "s": "useToyOnKiko"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        {
+         "o": "vb",
+         "id": 9843,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "windUpToy"
+      }
+     ],
+     [
+      "r1",
+      {
+       "s": "talkToWolf"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownTree"
+    }
+   },
+   "n4": {
+    "n": "goFindFox",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "goUpTree"
+      }
+     ],
+     [
+      {
+       "o": "or",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Jerboa tail",
+         "ids": [
+          29166
+         ],
+         "q": 2
+        },
+        {
+         "o": "item",
+         "nm": "Box trap",
+         "ids": [
+          10008
+         ]
+        }
+       ]
+      },
+      {
+       "s": "talkToFox"
+      }
+     ]
+    ],
+    "d": {
+     "s": "buyBoxTrap"
+    }
+   },
+   "n5": {
+    "n": "goMakePoultice",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Makeshift poultice",
+         "ids": [
+          28980
+         ]
+        }
+       ]
+      },
+      {
+       "s": "returnToFox"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2",
+        "r3",
+        {
+         "o": "item",
+         "nm": "Jerboa tail",
+         "ids": [
+          29166
+         ],
+         "q": 2
+        }
+       ]
+      },
+      {
+       "s": "useTailOnLeaves"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r2",
+        "r3"
+       ]
+      },
+      {
+       "s": "catchJerboa"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "takeSecondLeaf"
+      }
+     ]
+    ],
+    "d": {
+     "s": "takeLeaf"
+    }
+   },
+   "n6": {
+    "n": "bringAtzaFur",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Fur sample",
+       "ids": [
+        28981
+       ]
+      },
+      {
+       "s": "talkToAtza"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToFoxAfterPoultice"
+    }
+   },
+   "n7": {
+    "n": "goRepairEquipment",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 9840,
+       "v": 2
+      },
+      {
+       "s": "talkToAtzaForTrim"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r4",
+        {
+         "o": "item",
+         "nm": "Hammer",
+         "ids": [
+          2347,
+          25644,
+          29775
+         ]
+        }
+       ]
+      },
+      {
+       "s": "makeEquipmentPile"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "takeHammer"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToAtzaAfterHandingFur"
+    }
+   },
+   "n8": {
+    "n": "goWithTrimToFox",
+    "c": [
+     [
+      "r5",
+      {
+       "s": "returnToFoxAfterTrim"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToAtzaForTrim"
+    }
+   },
+   "n9": {
+    "n": "goToVerityWithReport",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r5",
+        "r6",
+        "r7"
+       ]
+      },
+      {
+       "s": "useJerboaTailOnBed"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r1",
+        "r5",
+        "r8",
+        "r7"
+       ]
+      },
+      {
+       "s": "talkToVerityEnd"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r8",
+        "r7"
+       ]
+      },
+      {
+       "s": "goDownTreeEnd"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r8"
+       ]
+      },
+      {
+       "s": "takeNeedle"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "getReportFromFox"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToAtzaForTrim"
+    }
+   },
+   "n10": {
+    "n": "goFinishQuest",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "goUpTreeToFinishQuest"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToApaturaToFinishQuest"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      1540,
+      9409,
+      1580,
+      9470,
+      0,
+      0
+     ]
+    ]
+   },
+   "r2": {
+    "o": "item",
+    "nm": "Smooth leaf",
+    "ids": [
+     28978
+    ]
+   },
+   "r3": {
+    "o": "item",
+    "nm": "Sticky leaf",
+    "ids": [
+     28979
+    ]
+   },
+   "r4": {
+    "o": "vb",
+    "id": 9840,
+    "v": 1
+   },
+   "r5": {
+    "o": "item",
+    "nm": "Trimmed fur",
+    "ids": [
+     28982
+    ]
+   },
+   "r6": {
+    "o": "vb",
+    "id": 9836,
+    "v": 1
+   },
+   "r7": {
+    "o": "or",
+    "a": [
+     {
+      "o": "item",
+      "nm": "Needle",
+      "ids": [
+       1733
+      ]
+     },
+     {
+      "o": "item",
+      "nm": "Costume needle",
+      "ids": [
+       29920
+      ]
+     }
+    ]
+   },
+   "r8": {
+    "o": "or",
+    "a": [
+     {
+      "o": "item",
+      "nm": "Fox's report",
+      "ids": [
+       28983
+      ]
+     },
+     "r6"
+    ]
+   }
+  },
+  "alias": {
+   "talkToAtzaAfterHandingFur": [
+    "talkToAtza"
+   ],
+   "getReportFromFox": [
+    "returnToFoxAfterTrim"
+   ],
+   "talkToApaturaToFinishQuest": [
+    "goUpTreeToFinishQuest"
+   ]
+  }
+ },
+ "unknown": {},
+ "steps": {
+  "talkToApatura": {
+   "typ": "NpcStep",
+   "wp": [
+    1554,
+    3033,
+    0
+   ],
+   "ids": [
+    13120
+   ],
+   "text": "Talk to Guildmaster Apatura in the Hunter Guild, south-west of Civitas illa Fortis."
+  },
+  "goDownTree": {
+   "typ": "ObjectStep",
+   "wp": [
+    1557,
+    3048,
+    0
+   ],
+   "ids": [
+    51641
+   ],
+   "text": "Go down the stairs in the tree in the guild."
+  },
+  "talkToVerity": {
+   "typ": "NpcStep",
+   "wp": [
+    1559,
+    9464,
+    0
+   ],
+   "ids": [
+    13127
+   ],
+   "text": "Talk to Guild Scribe Verity behind the bar."
+  },
+  "talkToWolf": {
+   "typ": "NpcStep",
+   "wp": [
+    1555,
+    9462,
+    0
+   ],
+   "ids": [
+    13126
+   ],
+   "text": "Talk to Guild Hunter Wolf (Master), next to the bar."
+  },
+  "returnToWolf": {
+   "typ": "NpcStep",
+   "wp": [
+    1555,
+    9462,
+    0
+   ],
+   "ids": [
+    13126
+   ],
+   "text": "Return to Guild Hunter Wolf (Master), next to the bar."
+  },
+  "checkBed": {
+   "typ": "ObjectStep",
+   "wp": [
+    1552,
+    9460,
+    0
+   ],
+   "ids": [
+    53011
+   ],
+   "text": "Check the cat's bed."
+  },
+  "useToyOnKiko": {
+   "typ": "NpcStep",
+   "wp": [
+    1552,
+    9460,
+    0
+   ],
+   "ids": [
+    12934
+   ],
+   "text": "Use the wound up toy mouse on Guild Hunter Kiko near the bar."
+  },
+  "windUpToy": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Wind up a toy mouse."
+  },
+  "buyBoxTrap": {
+   "typ": "NpcStep",
+   "wp": [
+    1562,
+    3060,
+    0
+   ],
+   "ids": [
+    13131
+   ],
+   "text": "Get a box trap. You can buy one from Imia in the north of the Hunter Guild's surface for 41gp."
+  },
+  "goUpTree": {
+   "typ": "ObjectStep",
+   "wp": [
+    1557,
+    9449,
+    0
+   ],
+   "ids": [
+    51642
+   ],
+   "text": "Go back up the stairs."
+  },
+  "talkToFox": {
+   "typ": "NpcStep",
+   "wp": [
+    1623,
+    2982,
+    0
+   ],
+   "ids": [
+    12932
+   ],
+   "text": "Talk to Guild Hunter Fox near the crevice south-east of the Hunter Guild."
+  },
+  "takeLeaf": {
+   "typ": "ObjectStep",
+   "wp": [
+    1618,
+    2979,
+    0
+   ],
+   "ids": [
+    50876
+   ],
+   "text": "Search the leafy bush south of the crevice for a smooth leaf."
+  },
+  "returnToFox": {
+   "typ": "NpcStep",
+   "wp": [
+    1623,
+    2982,
+    0
+   ],
+   "ids": [
+    12932
+   ],
+   "text": "Bring the poultice back to Guild Hunter Fox near the crevice."
+  },
+  "useTailOnLeaves": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Use the tails on the leaves."
+  },
+  "catchJerboa": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    1664,
+    3003,
+    0
+   ],
+   "ids": [],
+   "text": "Catch two Embertailed Jerboa for their tails."
+  },
+  "takeSecondLeaf": {
+   "typ": "ObjectStep",
+   "wp": [
+    1673,
+    2992,
+    0
+   ],
+   "ids": [
+    50877
+   ],
+   "text": "Search the rough-looking bush on the west side of the Locus Oasis."
+  },
+  "talkToFoxAfterPoultice": {
+   "typ": "NpcStep",
+   "wp": [
+    1623,
+    2982,
+    0
+   ],
+   "ids": [
+    12932
+   ],
+   "text": "Talk to Guild Hunter Fox."
+  },
+  "talkToAtza": {
+   "typ": "NpcStep",
+   "wp": [
+    1696,
+    3063,
+    0
+   ],
+   "ids": [
+    12933
+   ],
+   "text": "Talk to Atza in one of the buildings outside Civitas illa Fortis' south wall, west of the general store."
+  },
+  "talkToAtzaAfterHandingFur": {
+   "typ": "NpcStep",
+   "wp": [
+    1696,
+    3063,
+    0
+   ],
+   "ids": [
+    12933
+   ],
+   "text": "Talk to Atza in one of the buildings outside Civitas illa Fortis' south wall, west of the general store."
+  },
+  "talkToAtzaForTrim": {
+   "typ": "NpcStep",
+   "wp": [
+    1696,
+    3063,
+    0
+   ],
+   "ids": [
+    12933
+   ],
+   "text": "Talk to Atza again for some trimmed fur."
+  },
+  "makeEquipmentPile": {
+   "typ": "ObjectStep",
+   "wp": [
+    1697,
+    3063,
+    0
+   ],
+   "ids": [
+    52976
+   ],
+   "text": "Set-up the pile of equipment next to Atza."
+  },
+  "takeHammer": {
+   "typ": "ItemStep",
+   "wp": [
+    1696,
+    3070,
+    0
+   ],
+   "ids": [],
+   "text": "Take a hammer from the house north of Atza."
+  },
+  "returnToFoxAfterTrim": {
+   "typ": "NpcStep",
+   "wp": [
+    1623,
+    2982,
+    0
+   ],
+   "ids": [
+    12932
+   ],
+   "text": "Return to Guild Hunter Fox near the crevice south-east of the Hunter Guild to get his report."
+  },
+  "getReportFromFox": {
+   "typ": "NpcStep",
+   "wp": [
+    1623,
+    2982,
+    0
+   ],
+   "ids": [
+    12932
+   ],
+   "text": "Return back to Fox to get his report."
+  },
+  "useJerboaTailOnBed": {
+   "typ": "ObjectStep",
+   "wp": [
+    1552,
+    9460,
+    0
+   ],
+   "ids": [
+    53011
+   ],
+   "text": "Use a jerboa tail on the cat bed."
+  },
+  "talkToVerityEnd": {
+   "typ": "NpcStep",
+   "wp": [
+    1559,
+    9464,
+    0
+   ],
+   "ids": [
+    13127
+   ],
+   "text": "Talk to Guild Scribe Verity behind the bar again."
+  },
+  "goDownTreeEnd": {
+   "typ": "ObjectStep",
+   "wp": [
+    1557,
+    3048,
+    0
+   ],
+   "ids": [
+    51641
+   ],
+   "text": "Go down the stairs in the tree in the Hunters Guild."
+  },
+  "takeNeedle": {
+   "typ": "ItemStep",
+   "wp": [
+    1566,
+    3035,
+    0
+   ],
+   "ids": [],
+   "text": "Take the needle in the Hunter Guild's surface area, in its south-east corner."
+  },
+  "talkToApaturaToFinishQuest": {
+   "typ": "NpcStep",
+   "wp": [
+    1554,
+    3033,
+    0
+   ],
+   "ids": [
+    13120
+   ],
+   "text": "Talk to Guildmaster Apatura to finish the quest."
+  },
+  "goUpTreeToFinishQuest": {
+   "typ": "ObjectStep",
+   "wp": [
+    1557,
+    9449,
+    0
+   ],
+   "ids": [
+    51642
+   ],
+   "text": "Go back up the stairs and talk to Guildmaster Apatura to finish the quest."
+  }
+ }
+}

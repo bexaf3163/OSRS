@@ -1,0 +1,849 @@
+{
+ "title": "The Garden of Death",
+ "cls": "TheGardenOfDeath",
+ "var": [
+  "varbit",
+  14609
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "getJournal"
+   },
+   "2": {
+    "s": "readJournal"
+   },
+   "4": "n1",
+   "6": "n1",
+   "8": "n1",
+   "10": "n1",
+   "12": "n1",
+   "14": "n1",
+   "16": "n2",
+   "18": "n2",
+   "20": "n2",
+   "22": "n2",
+   "24": "n2",
+   "26": "n2",
+   "28": "n2",
+   "30": "n3",
+   "32": "n3",
+   "34": "n3",
+   "36": "n3",
+   "38": "n3",
+   "40": "n4",
+   "42": "n4",
+   "44": "n4",
+   "46": "n4",
+   "48": "n4",
+   "50": "n5",
+   "52": "n5",
+   "54": "n5"
+  },
+  "nodes": {
+   "n1": {
+    "n": "t1",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "inputWords1"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "attemptTranslation"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Word translations",
+       "ids": [
+        27513
+       ]
+      },
+      {
+       "s": "readTranslations"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Stone tablet",
+       "ids": [
+        27519
+       ]
+      },
+      {
+       "s": "readTablet1"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        "r4"
+       ]
+      },
+      {
+       "s": "searchForTablet"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "enterHole"
+      }
+     ]
+    ],
+    "d": {
+     "s": "getSecateurs"
+    }
+   },
+   "n2": {
+    "n": "t2",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r1"
+       ]
+      },
+      {
+       "s": "inputWords2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r5",
+        "r2"
+       ]
+      },
+      {
+       "s": "attemptTranslation2"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "readTranslations2"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Stone tablet",
+       "ids": [
+        27520
+       ]
+      },
+      {
+       "s": "readTablet2"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "leaveHole"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        {
+         "o": "vb",
+         "id": 14609,
+         "op": ">=",
+         "v": 24
+        }
+       ]
+      },
+      {
+       "s": "searchForTablet2"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r6",
+        {
+         "o": "vb",
+         "id": 14609,
+         "op": ">=",
+         "v": 22
+        }
+       ]
+      },
+      {
+       "s": "cutVines"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "searchVines"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "enterMolchHole"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goToMolch"
+    }
+   },
+   "n3": {
+    "n": "t3",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r1"
+       ]
+      },
+      {
+       "s": "inputWords3"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r8",
+        "r2"
+       ]
+      },
+      {
+       "s": "attemptTranslation3"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "readTranslations3"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Stone tablet",
+       "ids": [
+        27521
+       ]
+      },
+      {
+       "s": "readTablet3"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "searchForTablet3"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "leaveMolchIsland"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "leaveHole2"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterXericShrineHole"
+    }
+   },
+   "n4": {
+    "n": "t4",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r1"
+       ]
+      },
+      {
+       "s": "inputWords4"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r2"
+       ]
+      },
+      {
+       "s": "attemptTranslation4"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "readTranslations4"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Stone tablet",
+       "ids": [
+        27522
+       ]
+      },
+      {
+       "s": "readTablet4"
+      }
+     ],
+     [
+      "r11",
+      {
+       "s": "searchForTablet4"
+      }
+     ],
+     [
+      "r9",
+      {
+       "s": "leaveHole3"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterMorraHole"
+    }
+   },
+   "n5": {
+    "n": "finalStep",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Warning note",
+       "ids": [
+        27518
+       ],
+       "bank": 1
+      },
+      {
+       "s": "readWarningNote"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Stone tablet",
+       "ids": [
+        27522
+       ],
+       "bank": 1
+      },
+      {
+       "s": "readTabletFinal"
+      }
+     ],
+     [
+      "r11",
+      {
+       "s": "searchForTablet4"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterMorraHole"
+    }
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "or",
+    "a": [
+     {
+      "o": "wt",
+      "g": 162,
+      "c": 43,
+      "m": [
+       "Enter a possible translation for a word you've found:"
+      ]
+     },
+     {
+      "o": "wt",
+      "g": 229,
+      "c": 1,
+      "m": [
+       "You've discovered a new translation",
+       "You've already discovered this translation",
+       "You can't think of any suitable translations"
+      ]
+     },
+     {
+      "o": "wt",
+      "g": 219,
+      "c": 1,
+      "m": [
+       "Attempt another translation?"
+      ],
+      "cc": 0
+     }
+    ]
+   },
+   "r2": {
+    "o": "wt",
+    "g": 804,
+    "c": 4,
+    "m": [
+     "Translations"
+    ]
+   },
+   "r3": {
+    "o": "zone",
+    "z": [
+     [
+      1290,
+      9860,
+      1325,
+      9895,
+      0,
+      0
+     ]
+    ]
+   },
+   "r4": {
+    "o": "item",
+    "nm": "Secateurs (Obtainable in quest)",
+    "ids": [
+     5329,
+     7409
+    ]
+   },
+   "r5": {
+    "o": "vb",
+    "id": 14609,
+    "op": ">=",
+    "v": 28
+   },
+   "r6": {
+    "o": "zone",
+    "z": [
+     [
+      1362,
+      9990,
+      1388,
+      10036,
+      0,
+      0
+     ]
+    ]
+   },
+   "r7": {
+    "o": "zone",
+    "z": [
+     [
+      1358,
+      3623,
+      1379,
+      3643,
+      0,
+      0
+     ]
+    ]
+   },
+   "r8": {
+    "o": "vb",
+    "id": 14609,
+    "op": ">=",
+    "v": 38
+   },
+   "r9": {
+    "o": "zone",
+    "z": [
+     [
+      1292,
+      9995,
+      1319,
+      10039,
+      0,
+      0
+     ]
+    ]
+   },
+   "r10": {
+    "o": "vb",
+    "id": 14609,
+    "op": ">=",
+    "v": 48
+   },
+   "r11": {
+    "o": "zone",
+    "z": [
+     [
+      1419,
+      9812,
+      1460,
+      9836,
+      0,
+      0
+     ]
+    ]
+   }
+  },
+  "alias": {}
+ },
+ "unknown": {},
+ "steps": {
+  "getJournal": {
+   "typ": "ObjectStep",
+   "wp": [
+    1314,
+    3470,
+    0
+   ],
+   "ids": [
+    46324
+   ],
+   "text": "Search the tent in the south east of the Kebos Lowlands."
+  },
+  "readJournal": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the journal"
+  },
+  "getSecateurs": {
+   "typ": "ObjectStep",
+   "wp": [
+    1312,
+    3470,
+    0
+   ],
+   "ids": [
+    46325
+   ],
+   "text": "Search the camping equipment for some secateurs."
+  },
+  "inputWords1": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Work out various translation words and input them to the word translations."
+  },
+  "attemptTranslation": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    804,
+    5
+   ],
+   "text": "Click the 'Attempt Translation' button."
+  },
+  "readTranslations": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the word translations."
+  },
+  "readTablet1": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the stone tablet."
+  },
+  "searchForTablet": {
+   "typ": "ObjectStep",
+   "wp": [
+    1306,
+    9885,
+    0
+   ],
+   "ids": [
+    46376
+   ],
+   "text": "Search the north-west table."
+  },
+  "enterHole": {
+   "typ": "ObjectStep",
+   "wp": [
+    1308,
+    3467,
+    0
+   ],
+   "ids": [
+    46326
+   ],
+   "text": "Enter the nearby hole."
+  },
+  "goToMolch": {
+   "typ": "ObjectStep",
+   "wp": [
+    1406,
+    3612,
+    0
+   ],
+   "ids": [
+    33614
+   ],
+   "text": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch."
+  },
+  "inputWords2": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Work out various translation words and input them to the word translations."
+  },
+  "attemptTranslation2": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    804,
+    5
+   ],
+   "text": "Click the 'Attempt Translation' button."
+  },
+  "readTranslations2": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the word translations."
+  },
+  "readTablet2": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the stone tablet, and take the note after closing the tablet's interface."
+  },
+  "leaveHole": {
+   "typ": "ObjectStep",
+   "wp": [
+    1309,
+    9867,
+    0
+   ],
+   "ids": [
+    46327
+   ],
+   "text": "Leave the hole."
+  },
+  "searchForTablet2": {
+   "typ": "ObjectStep",
+   "wp": [
+    1373,
+    10014,
+    0
+   ],
+   "ids": [
+    46377
+   ],
+   "text": "Search the south west stone table."
+  },
+  "cutVines": {
+   "typ": "ObjectStep",
+   "wp": [
+    1375,
+    10024,
+    0
+   ],
+   "ids": [
+    46437
+   ],
+   "text": "Cut the vines with secateurs."
+  },
+  "searchVines": {
+   "typ": "ObjectStep",
+   "wp": [
+    1375,
+    10024,
+    0
+   ],
+   "ids": [
+    46437
+   ],
+   "text": "Inspect the vines to the south."
+  },
+  "enterMolchHole": {
+   "typ": "ObjectStep",
+   "wp": [
+    1364,
+    3637,
+    0
+   ],
+   "ids": [
+    46434
+   ],
+   "text": "Enter the hole on Molch Island."
+  },
+  "enterXericShrineHole": {
+   "typ": "ObjectStep",
+   "wp": [
+    1314,
+    3617,
+    0
+   ],
+   "ids": [
+    46435
+   ],
+   "text": "Enter the hole next to Xeric's Shrine."
+  },
+  "inputWords3": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Work out various translation words and input them to the word translations."
+  },
+  "attemptTranslation3": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    804,
+    5
+   ],
+   "text": "Click the 'Attempt Translation' button."
+  },
+  "readTranslations3": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the word translations."
+  },
+  "readTablet3": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the stone tablet."
+  },
+  "searchForTablet3": {
+   "typ": "ObjectStep",
+   "wp": [
+    1311,
+    10018,
+    0
+   ],
+   "ids": [
+    46378
+   ],
+   "text": "Search the south east stone table."
+  },
+  "leaveMolchIsland": {
+   "typ": "ObjectStep",
+   "wp": [
+    1369,
+    3641,
+    0
+   ],
+   "ids": [
+    33614
+   ],
+   "text": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine."
+  },
+  "leaveHole2": {
+   "typ": "ObjectStep",
+   "wp": [
+    1375,
+    10033,
+    0
+   ],
+   "ids": [
+    46330
+   ],
+   "text": "Leave the hole."
+  },
+  "enterMorraHole": {
+   "typ": "ObjectStep",
+   "wp": [
+    1450,
+    3511,
+    0
+   ],
+   "ids": [
+    46436
+   ],
+   "text": "Enter the hole in the Ruins of Morra, south west of Shayzien."
+  },
+  "inputWords4": {
+   "typ": "PuzzleWrapperStep",
+   "wp": null,
+   "ids": [],
+   "text": "Work out various translation words and input them to the word translations."
+  },
+  "attemptTranslation4": {
+   "typ": "WidgetStep",
+   "wp": null,
+   "ids": [
+    804,
+    5
+   ],
+   "text": "Click the 'Attempt Translation' button."
+  },
+  "readTranslations4": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the word translations."
+  },
+  "readTablet4": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the stone tablet."
+  },
+  "searchForTablet4": {
+   "typ": "ObjectStep",
+   "wp": [
+    1440,
+    9816,
+    0
+   ],
+   "ids": [
+    46379
+   ],
+   "text": "Search the south stone table."
+  },
+  "leaveHole3": {
+   "typ": "ObjectStep",
+   "wp": [
+    1294,
+    10033,
+    0
+   ],
+   "ids": [
+    46333
+   ],
+   "text": "Leave the hole."
+  },
+  "readWarningNote": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the warning note."
+  },
+  "readTabletFinal": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read the final stone tablet again."
+  }
+ }
+}

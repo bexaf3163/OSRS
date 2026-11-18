@@ -1,0 +1,2302 @@
+{
+  "quest": "The Garden of Death",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "The Garden of Death",
+      "revision": 15396819
+    },
+    "quickGuide": {
+      "title": "The Garden of Death/Quick guide",
+      "revision": 15315843
+    }
+  },
+  "step": {
+    "title": "The Garden of Death",
+    "type": "quest",
+    "qp": 1,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Garden_of_Death",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Garden_of_Death/Quick_guide",
+    "mapLocation": {
+      "x": 1312,
+      "y": 3472,
+      "plane": 0,
+      "label": "Search the tent at the campsite found east of the chasm at the southern end of the Kebos Lowlands."
+    },
+    "npc": {
+      "nameEn": "Tent (The Garden of Death)"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Secateurs",
+        "amount": 1,
+        "wikiItemId": 5329,
+        "howToGet": "Buy on the Grand Exchange, or from Vanessa's Farming shop in Catherby for 5 gp.",
+        "note": "Secateurs (obtainable during quest) (magic secateurs also work)"
+      }
+    ],
+    "foes": []
+  },
+  "stages": {
+    "var": [
+      "varbit",
+      14609
+    ],
+    "route": [
+      {
+        "title": "Walkthrough",
+        "steps": [
+          "Start the quest by searching the tent for Kasonde's journal (Fairy ring with code and head south east). Dialogue: \"Yes.\"",
+          "Read the journal.",
+          "Search the camping equipment to receive secateurs.",
+          "Climb down the nearby hole.",
+          "Search the stone table labelled \"1\" in the image below to receive the first stone tablet.",
+          "Read the stone tablet and take the note to receive the word translations scroll. Dialogue: \"Yes.\"",
+          "Read the word translations scroll and click \"Attempt Translation\". Input the following words and press enter for each: Island, Water, Time, Vessel, North.",
+          "Chat will show a prompt about having translated enough once you enter all words. The hole on Molch Island will not appear if any words are missing.",
+          "Climb-up the rope to exit the hole.",
+          "Travel to Lake Molch via Boaty and select Molch Island. (Fairy ring with code and head west.) Dialogue: \"Molch Island\"",
+          "Enter the hole on Molch Island.",
+          "Inspect the vines for a dirty note.",
+          "Cut the vines with your secateurs and squeeze through them.",
+          "Search the stone table labelled \"1\" in the image below to receive the second stone tablet.",
+          "Read the stone tablet, then input the following words on the word translations scroll: West, Poison, Body, Food, Earth.",
+          "Climb-up the rope to exit the hole.",
+          "Travel to Xeric's Shrine.",
+          "Enter the hole at Xeric's Shrine.",
+          "Search the stone table labelled \"1\" in the image below to receive the third stone tablet.",
+          "Read the stone tablet, then input the following words on the word translations scroll: Make, Yes, No, Move, Arrive, East, South.",
+          "Make your way to the Ruins of Morra. Enter the hole there.",
+          "Search the stone table labelled \"1\" in the image below to receive the final stone tablet.",
+          "Read the stone tablet, then input the following words on the word translations scroll: Few, Big, Sun, Moon, Life, Death, Mind, Home, Air, Fire.",
+          "Read the stone tablet again and then read the warning note.",
+          "Congratulations, quest complete!"
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Search the tent in the south east of the Kebos Lowlands.",
+            "s": "Search the tent in the south east of the Kebos Lowlands.",
+            "k": "getJournal",
+            "at": [
+              1314,
+              3470,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46324
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 2,
+        "do": [
+          {
+            "t": "Read the journal",
+            "s": "Read the journal",
+            "k": "readJournal"
+          }
+        ]
+      },
+      {
+        "at": 4,
+        "do": [
+          {
+            "t": "Search the camping equipment for some secateurs.",
+            "s": "Search the camping equipment for some secateurs.",
+            "k": "getSecateurs",
+            "at": [
+              1312,
+              3470,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46325
+              ]
+            }
+          },
+          {
+            "t": "Enter the nearby hole.",
+            "s": "Enter the nearby hole.",
+            "k": "enterHole",
+            "at": [
+              1308,
+              3467,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46326
+              ]
+            }
+          },
+          {
+            "t": "Search the north-west table.",
+            "s": "Search the north-west table.",
+            "k": "searchForTablet",
+            "at": [
+              1306,
+              9885,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46376
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet1"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords1"
+          }
+        ]
+      },
+      {
+        "at": 6,
+        "do": [
+          {
+            "t": "Search the camping equipment for some secateurs.",
+            "s": "Search the camping equipment for some secateurs.",
+            "k": "getSecateurs",
+            "at": [
+              1312,
+              3470,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46325
+              ]
+            }
+          },
+          {
+            "t": "Enter the nearby hole.",
+            "s": "Enter the nearby hole.",
+            "k": "enterHole",
+            "at": [
+              1308,
+              3467,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46326
+              ]
+            }
+          },
+          {
+            "t": "Search the north-west table.",
+            "s": "Search the north-west table.",
+            "k": "searchForTablet",
+            "at": [
+              1306,
+              9885,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46376
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet1"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords1"
+          }
+        ]
+      },
+      {
+        "at": 8,
+        "do": [
+          {
+            "t": "Search the camping equipment for some secateurs.",
+            "s": "Search the camping equipment for some secateurs.",
+            "k": "getSecateurs",
+            "at": [
+              1312,
+              3470,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46325
+              ]
+            }
+          },
+          {
+            "t": "Enter the nearby hole.",
+            "s": "Enter the nearby hole.",
+            "k": "enterHole",
+            "at": [
+              1308,
+              3467,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46326
+              ]
+            }
+          },
+          {
+            "t": "Search the north-west table.",
+            "s": "Search the north-west table.",
+            "k": "searchForTablet",
+            "at": [
+              1306,
+              9885,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46376
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet1"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords1"
+          }
+        ]
+      },
+      {
+        "at": 10,
+        "do": [
+          {
+            "t": "Search the camping equipment for some secateurs.",
+            "s": "Search the camping equipment for some secateurs.",
+            "k": "getSecateurs",
+            "at": [
+              1312,
+              3470,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46325
+              ]
+            }
+          },
+          {
+            "t": "Enter the nearby hole.",
+            "s": "Enter the nearby hole.",
+            "k": "enterHole",
+            "at": [
+              1308,
+              3467,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46326
+              ]
+            }
+          },
+          {
+            "t": "Search the north-west table.",
+            "s": "Search the north-west table.",
+            "k": "searchForTablet",
+            "at": [
+              1306,
+              9885,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46376
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet1"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords1"
+          }
+        ]
+      },
+      {
+        "at": 12,
+        "do": [
+          {
+            "t": "Search the camping equipment for some secateurs.",
+            "s": "Search the camping equipment for some secateurs.",
+            "k": "getSecateurs",
+            "at": [
+              1312,
+              3470,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46325
+              ]
+            }
+          },
+          {
+            "t": "Enter the nearby hole.",
+            "s": "Enter the nearby hole.",
+            "k": "enterHole",
+            "at": [
+              1308,
+              3467,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46326
+              ]
+            }
+          },
+          {
+            "t": "Search the north-west table.",
+            "s": "Search the north-west table.",
+            "k": "searchForTablet",
+            "at": [
+              1306,
+              9885,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46376
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet1"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords1"
+          }
+        ]
+      },
+      {
+        "at": 14,
+        "do": [
+          {
+            "t": "Search the camping equipment for some secateurs.",
+            "s": "Search the camping equipment for some secateurs.",
+            "k": "getSecateurs",
+            "at": [
+              1312,
+              3470,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46325
+              ]
+            }
+          },
+          {
+            "t": "Enter the nearby hole.",
+            "s": "Enter the nearby hole.",
+            "k": "enterHole",
+            "at": [
+              1308,
+              3467,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46326
+              ]
+            }
+          },
+          {
+            "t": "Search the north-west table.",
+            "s": "Search the north-west table.",
+            "k": "searchForTablet",
+            "at": [
+              1306,
+              9885,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46376
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet1"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords1"
+          }
+        ]
+      },
+      {
+        "at": 16,
+        "do": [
+          {
+            "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+            "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+            "k": "goToMolch",
+            "at": [
+              1406,
+              3612,
+              0
+            ],
+            "hl": {
+              "obj": [
+                33614
+              ]
+            }
+          },
+          {
+            "t": "Enter the hole on Molch Island.",
+            "s": "Enter the hole on Molch Island.",
+            "k": "enterMolchHole",
+            "at": [
+              1364,
+              3637,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46434
+              ]
+            }
+          },
+          {
+            "t": "Inspect the vines to the south.",
+            "s": "Inspect the vines to the south.",
+            "k": "searchVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Cut the vines with secateurs.",
+            "s": "Cut the vines with secateurs.",
+            "k": "cutVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Search the south west stone table.",
+            "s": "Search the south west stone table.",
+            "k": "searchForTablet2",
+            "at": [
+              1373,
+              10014,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46377
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole",
+            "at": [
+              1309,
+              9867,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46327
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+            "s": "Read the stone tablet, then take the note after closing it.",
+            "k": "readTablet2"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations2"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation2"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords2"
+          }
+        ]
+      },
+      {
+        "at": 18,
+        "do": [
+          {
+            "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+            "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+            "k": "goToMolch",
+            "at": [
+              1406,
+              3612,
+              0
+            ],
+            "hl": {
+              "obj": [
+                33614
+              ]
+            }
+          },
+          {
+            "t": "Enter the hole on Molch Island.",
+            "s": "Enter the hole on Molch Island.",
+            "k": "enterMolchHole",
+            "at": [
+              1364,
+              3637,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46434
+              ]
+            }
+          },
+          {
+            "t": "Inspect the vines to the south.",
+            "s": "Inspect the vines to the south.",
+            "k": "searchVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Cut the vines with secateurs.",
+            "s": "Cut the vines with secateurs.",
+            "k": "cutVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Search the south west stone table.",
+            "s": "Search the south west stone table.",
+            "k": "searchForTablet2",
+            "at": [
+              1373,
+              10014,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46377
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole",
+            "at": [
+              1309,
+              9867,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46327
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+            "s": "Read the stone tablet, then take the note after closing it.",
+            "k": "readTablet2"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations2"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation2"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords2"
+          }
+        ]
+      },
+      {
+        "at": 20,
+        "do": [
+          {
+            "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+            "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+            "k": "goToMolch",
+            "at": [
+              1406,
+              3612,
+              0
+            ],
+            "hl": {
+              "obj": [
+                33614
+              ]
+            }
+          },
+          {
+            "t": "Enter the hole on Molch Island.",
+            "s": "Enter the hole on Molch Island.",
+            "k": "enterMolchHole",
+            "at": [
+              1364,
+              3637,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46434
+              ]
+            }
+          },
+          {
+            "t": "Inspect the vines to the south.",
+            "s": "Inspect the vines to the south.",
+            "k": "searchVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Cut the vines with secateurs.",
+            "s": "Cut the vines with secateurs.",
+            "k": "cutVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Search the south west stone table.",
+            "s": "Search the south west stone table.",
+            "k": "searchForTablet2",
+            "at": [
+              1373,
+              10014,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46377
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole",
+            "at": [
+              1309,
+              9867,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46327
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+            "s": "Read the stone tablet, then take the note after closing it.",
+            "k": "readTablet2"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations2"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation2"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords2"
+          }
+        ]
+      },
+      {
+        "at": 22,
+        "do": [
+          {
+            "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+            "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+            "k": "goToMolch",
+            "at": [
+              1406,
+              3612,
+              0
+            ],
+            "hl": {
+              "obj": [
+                33614
+              ]
+            }
+          },
+          {
+            "t": "Enter the hole on Molch Island.",
+            "s": "Enter the hole on Molch Island.",
+            "k": "enterMolchHole",
+            "at": [
+              1364,
+              3637,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46434
+              ]
+            }
+          },
+          {
+            "t": "Inspect the vines to the south.",
+            "s": "Inspect the vines to the south.",
+            "k": "searchVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Cut the vines with secateurs.",
+            "s": "Cut the vines with secateurs.",
+            "k": "cutVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Search the south west stone table.",
+            "s": "Search the south west stone table.",
+            "k": "searchForTablet2",
+            "at": [
+              1373,
+              10014,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46377
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole",
+            "at": [
+              1309,
+              9867,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46327
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+            "s": "Read the stone tablet, then take the note after closing it.",
+            "k": "readTablet2"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations2"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation2"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords2"
+          }
+        ]
+      },
+      {
+        "at": 24,
+        "do": [
+          {
+            "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+            "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+            "k": "goToMolch",
+            "at": [
+              1406,
+              3612,
+              0
+            ],
+            "hl": {
+              "obj": [
+                33614
+              ]
+            }
+          },
+          {
+            "t": "Enter the hole on Molch Island.",
+            "s": "Enter the hole on Molch Island.",
+            "k": "enterMolchHole",
+            "at": [
+              1364,
+              3637,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46434
+              ]
+            }
+          },
+          {
+            "t": "Inspect the vines to the south.",
+            "s": "Inspect the vines to the south.",
+            "k": "searchVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Cut the vines with secateurs.",
+            "s": "Cut the vines with secateurs.",
+            "k": "cutVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Search the south west stone table.",
+            "s": "Search the south west stone table.",
+            "k": "searchForTablet2",
+            "at": [
+              1373,
+              10014,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46377
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole",
+            "at": [
+              1309,
+              9867,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46327
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+            "s": "Read the stone tablet, then take the note after closing it.",
+            "k": "readTablet2"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations2"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation2"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords2"
+          }
+        ]
+      },
+      {
+        "at": 26,
+        "do": [
+          {
+            "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+            "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+            "k": "goToMolch",
+            "at": [
+              1406,
+              3612,
+              0
+            ],
+            "hl": {
+              "obj": [
+                33614
+              ]
+            }
+          },
+          {
+            "t": "Enter the hole on Molch Island.",
+            "s": "Enter the hole on Molch Island.",
+            "k": "enterMolchHole",
+            "at": [
+              1364,
+              3637,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46434
+              ]
+            }
+          },
+          {
+            "t": "Inspect the vines to the south.",
+            "s": "Inspect the vines to the south.",
+            "k": "searchVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Cut the vines with secateurs.",
+            "s": "Cut the vines with secateurs.",
+            "k": "cutVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Search the south west stone table.",
+            "s": "Search the south west stone table.",
+            "k": "searchForTablet2",
+            "at": [
+              1373,
+              10014,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46377
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole",
+            "at": [
+              1309,
+              9867,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46327
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+            "s": "Read the stone tablet, then take the note after closing it.",
+            "k": "readTablet2"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations2"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation2"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords2"
+          }
+        ]
+      },
+      {
+        "at": 28,
+        "do": [
+          {
+            "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+            "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+            "k": "goToMolch",
+            "at": [
+              1406,
+              3612,
+              0
+            ],
+            "hl": {
+              "obj": [
+                33614
+              ]
+            }
+          },
+          {
+            "t": "Enter the hole on Molch Island.",
+            "s": "Enter the hole on Molch Island.",
+            "k": "enterMolchHole",
+            "at": [
+              1364,
+              3637,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46434
+              ]
+            }
+          },
+          {
+            "t": "Inspect the vines to the south.",
+            "s": "Inspect the vines to the south.",
+            "k": "searchVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Cut the vines with secateurs.",
+            "s": "Cut the vines with secateurs.",
+            "k": "cutVines",
+            "at": [
+              1375,
+              10024,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46437
+              ]
+            }
+          },
+          {
+            "t": "Search the south west stone table.",
+            "s": "Search the south west stone table.",
+            "k": "searchForTablet2",
+            "at": [
+              1373,
+              10014,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46377
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole",
+            "at": [
+              1309,
+              9867,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46327
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+            "s": "Read the stone tablet, then take the note after closing it.",
+            "k": "readTablet2"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations2"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation2"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords2"
+          }
+        ]
+      },
+      {
+        "at": 30,
+        "do": [
+          {
+            "t": "Enter the hole next to Xeric's Shrine.",
+            "s": "Enter the hole next to Xeric's Shrine.",
+            "k": "enterXericShrineHole",
+            "at": [
+              1314,
+              3617,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46435
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole2",
+            "at": [
+              1375,
+              10033,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46330
+              ]
+            }
+          },
+          {
+            "t": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+            "s": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+            "k": "leaveMolchIsland",
+            "at": [
+              1369,
+              3641,
+              0
+            ],
+            "hl": {
+              "obj": [
+                33614
+              ]
+            }
+          },
+          {
+            "t": "Search the south east stone table.",
+            "s": "Search the south east stone table.",
+            "k": "searchForTablet3",
+            "at": [
+              1311,
+              10018,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46378
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet3"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations3"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation3"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords3"
+          }
+        ]
+      },
+      {
+        "at": 32,
+        "do": [
+          {
+            "t": "Enter the hole next to Xeric's Shrine.",
+            "s": "Enter the hole next to Xeric's Shrine.",
+            "k": "enterXericShrineHole",
+            "at": [
+              1314,
+              3617,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46435
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole2",
+            "at": [
+              1375,
+              10033,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46330
+              ]
+            }
+          },
+          {
+            "t": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+            "s": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+            "k": "leaveMolchIsland",
+            "at": [
+              1369,
+              3641,
+              0
+            ],
+            "hl": {
+              "obj": [
+                33614
+              ]
+            }
+          },
+          {
+            "t": "Search the south east stone table.",
+            "s": "Search the south east stone table.",
+            "k": "searchForTablet3",
+            "at": [
+              1311,
+              10018,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46378
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet3"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations3"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation3"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords3"
+          }
+        ]
+      },
+      {
+        "at": 34,
+        "do": [
+          {
+            "t": "Enter the hole next to Xeric's Shrine.",
+            "s": "Enter the hole next to Xeric's Shrine.",
+            "k": "enterXericShrineHole",
+            "at": [
+              1314,
+              3617,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46435
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole2",
+            "at": [
+              1375,
+              10033,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46330
+              ]
+            }
+          },
+          {
+            "t": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+            "s": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+            "k": "leaveMolchIsland",
+            "at": [
+              1369,
+              3641,
+              0
+            ],
+            "hl": {
+              "obj": [
+                33614
+              ]
+            }
+          },
+          {
+            "t": "Search the south east stone table.",
+            "s": "Search the south east stone table.",
+            "k": "searchForTablet3",
+            "at": [
+              1311,
+              10018,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46378
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet3"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations3"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation3"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords3"
+          }
+        ]
+      },
+      {
+        "at": 36,
+        "do": [
+          {
+            "t": "Enter the hole next to Xeric's Shrine.",
+            "s": "Enter the hole next to Xeric's Shrine.",
+            "k": "enterXericShrineHole",
+            "at": [
+              1314,
+              3617,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46435
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole2",
+            "at": [
+              1375,
+              10033,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46330
+              ]
+            }
+          },
+          {
+            "t": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+            "s": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+            "k": "leaveMolchIsland",
+            "at": [
+              1369,
+              3641,
+              0
+            ],
+            "hl": {
+              "obj": [
+                33614
+              ]
+            }
+          },
+          {
+            "t": "Search the south east stone table.",
+            "s": "Search the south east stone table.",
+            "k": "searchForTablet3",
+            "at": [
+              1311,
+              10018,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46378
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet3"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations3"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation3"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords3"
+          }
+        ]
+      },
+      {
+        "at": 38,
+        "do": [
+          {
+            "t": "Enter the hole next to Xeric's Shrine.",
+            "s": "Enter the hole next to Xeric's Shrine.",
+            "k": "enterXericShrineHole",
+            "at": [
+              1314,
+              3617,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46435
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole2",
+            "at": [
+              1375,
+              10033,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46330
+              ]
+            }
+          },
+          {
+            "t": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+            "s": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+            "k": "leaveMolchIsland",
+            "at": [
+              1369,
+              3641,
+              0
+            ],
+            "hl": {
+              "obj": [
+                33614
+              ]
+            }
+          },
+          {
+            "t": "Search the south east stone table.",
+            "s": "Search the south east stone table.",
+            "k": "searchForTablet3",
+            "at": [
+              1311,
+              10018,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46378
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet3"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations3"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation3"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords3"
+          }
+        ]
+      },
+      {
+        "at": 40,
+        "do": [
+          {
+            "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "k": "enterMorraHole",
+            "at": [
+              1450,
+              3511,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46436
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole3",
+            "at": [
+              1294,
+              10033,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46333
+              ]
+            }
+          },
+          {
+            "t": "Search the south stone table.",
+            "s": "Search the south stone table.",
+            "k": "searchForTablet4",
+            "at": [
+              1440,
+              9816,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46379
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet4"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations4"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation4"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords4"
+          }
+        ]
+      },
+      {
+        "at": 42,
+        "do": [
+          {
+            "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "k": "enterMorraHole",
+            "at": [
+              1450,
+              3511,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46436
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole3",
+            "at": [
+              1294,
+              10033,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46333
+              ]
+            }
+          },
+          {
+            "t": "Search the south stone table.",
+            "s": "Search the south stone table.",
+            "k": "searchForTablet4",
+            "at": [
+              1440,
+              9816,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46379
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet4"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations4"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation4"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords4"
+          }
+        ]
+      },
+      {
+        "at": 44,
+        "do": [
+          {
+            "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "k": "enterMorraHole",
+            "at": [
+              1450,
+              3511,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46436
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole3",
+            "at": [
+              1294,
+              10033,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46333
+              ]
+            }
+          },
+          {
+            "t": "Search the south stone table.",
+            "s": "Search the south stone table.",
+            "k": "searchForTablet4",
+            "at": [
+              1440,
+              9816,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46379
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet4"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations4"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation4"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords4"
+          }
+        ]
+      },
+      {
+        "at": 46,
+        "do": [
+          {
+            "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "k": "enterMorraHole",
+            "at": [
+              1450,
+              3511,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46436
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole3",
+            "at": [
+              1294,
+              10033,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46333
+              ]
+            }
+          },
+          {
+            "t": "Search the south stone table.",
+            "s": "Search the south stone table.",
+            "k": "searchForTablet4",
+            "at": [
+              1440,
+              9816,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46379
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet4"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations4"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation4"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords4"
+          }
+        ]
+      },
+      {
+        "at": 48,
+        "do": [
+          {
+            "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "k": "enterMorraHole",
+            "at": [
+              1450,
+              3511,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46436
+              ]
+            }
+          },
+          {
+            "t": "Leave the hole.",
+            "s": "Leave the hole.",
+            "k": "leaveHole3",
+            "at": [
+              1294,
+              10033,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46333
+              ]
+            }
+          },
+          {
+            "t": "Search the south stone table.",
+            "s": "Search the south stone table.",
+            "k": "searchForTablet4",
+            "at": [
+              1440,
+              9816,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46379
+              ]
+            }
+          },
+          {
+            "t": "Read the stone tablet.",
+            "s": "Read the stone tablet.",
+            "k": "readTablet4"
+          },
+          {
+            "t": "Read the word translations.",
+            "s": "Read the word translations.",
+            "k": "readTranslations4"
+          },
+          {
+            "t": "Click the 'Attempt Translation' button.",
+            "s": "Click the 'Attempt Translation' button.",
+            "k": "attemptTranslation4"
+          },
+          {
+            "t": "Work out various translation words and input them to the word translations.",
+            "s": "Work out the translation words and enter them.",
+            "k": "inputWords4"
+          }
+        ]
+      },
+      {
+        "at": 50,
+        "do": [
+          {
+            "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "k": "enterMorraHole",
+            "at": [
+              1450,
+              3511,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46436
+              ]
+            }
+          },
+          {
+            "t": "Search the south stone table.",
+            "s": "Search the south stone table.",
+            "k": "searchForTablet4",
+            "at": [
+              1440,
+              9816,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46379
+              ]
+            }
+          },
+          {
+            "t": "Read the final stone tablet again.",
+            "s": "Read the final stone tablet again.",
+            "k": "readTabletFinal"
+          },
+          {
+            "t": "Read the warning note.",
+            "s": "Read the warning note.",
+            "k": "readWarningNote"
+          }
+        ]
+      },
+      {
+        "at": 52,
+        "do": [
+          {
+            "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "k": "enterMorraHole",
+            "at": [
+              1450,
+              3511,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46436
+              ]
+            }
+          },
+          {
+            "t": "Search the south stone table.",
+            "s": "Search the south stone table.",
+            "k": "searchForTablet4",
+            "at": [
+              1440,
+              9816,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46379
+              ]
+            }
+          },
+          {
+            "t": "Read the final stone tablet again.",
+            "s": "Read the final stone tablet again.",
+            "k": "readTabletFinal"
+          },
+          {
+            "t": "Read the warning note.",
+            "s": "Read the warning note.",
+            "k": "readWarningNote"
+          }
+        ]
+      },
+      {
+        "at": 54,
+        "do": [
+          {
+            "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+            "k": "enterMorraHole",
+            "at": [
+              1450,
+              3511,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46436
+              ]
+            }
+          },
+          {
+            "t": "Search the south stone table.",
+            "s": "Search the south stone table.",
+            "k": "searchForTablet4",
+            "at": [
+              1440,
+              9816,
+              0
+            ],
+            "hl": {
+              "obj": [
+                46379
+              ]
+            }
+          },
+          {
+            "t": "Read the final stone tablet again.",
+            "s": "Read the final stone tablet again.",
+            "k": "readTabletFinal"
+          },
+          {
+            "t": "Read the warning note.",
+            "s": "Read the warning note.",
+            "k": "readWarningNote"
+          }
+        ]
+      }
+    ]
+  },
+  "facts": {
+    "id": "The Garden of Death",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {
+        "farming": 20
+      },
+      "questPoints": 0,
+      "quests": [],
+      "manual": [],
+      "capabilities": [],
+      "unparsed": null,
+      "text": "*{{SCP|Farming|20|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}"
+    },
+    "rewards": {
+      "questPoints": 1,
+      "xp": {
+        "farming": 10000
+      },
+      "coins": 0
+    },
+    "resourceFlow": null,
+    "length": "Short",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15396819",
+      "title": "The Garden of Death",
+      "revision": 15396819,
+      "retrievedAt": "2026-11-18T05:57:44.890Z"
+    }
+  },
+  "unknown": [
+    "step \"readJournal\": Quest Helper gives no tile",
+    "step \"readTablet1\": Quest Helper gives no tile",
+    "step \"readTranslations\": Quest Helper gives no tile",
+    "step \"attemptTranslation\": Quest Helper gives no tile",
+    "step \"inputWords1\": Quest Helper gives no tile",
+    "step \"readTablet2\": Quest Helper gives no tile",
+    "step \"readTranslations2\": Quest Helper gives no tile",
+    "step \"attemptTranslation2\": Quest Helper gives no tile",
+    "step \"inputWords2\": Quest Helper gives no tile",
+    "step \"readTablet3\": Quest Helper gives no tile",
+    "step \"readTranslations3\": Quest Helper gives no tile",
+    "step \"attemptTranslation3\": Quest Helper gives no tile",
+    "step \"inputWords3\": Quest Helper gives no tile",
+    "step \"readTablet4\": Quest Helper gives no tile",
+    "step \"readTranslations4\": Quest Helper gives no tile",
+    "step \"attemptTranslation4\": Quest Helper gives no tile",
+    "step \"inputWords4\": Quest Helper gives no tile",
+    "step \"readTabletFinal\": Quest Helper gives no tile",
+    "step \"readWarningNote\": Quest Helper gives no tile",
+    "what the quest uses up and hands out is not reviewed"
+  ]
+}

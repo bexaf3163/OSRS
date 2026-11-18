@@ -2100,6 +2100,30 @@
       "evidence": [
         "OSRS Wiki Cuthbert, Lord of Dread: level 1, 1 hitpoint, read 2026-11-18."
       ]
+    },
+    {
+      "stepId": "S9-50",
+      "kind": "incidental",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Death on the Isle: fight Adala (level 49) after the accusation, then Naiatli and Clodius in the theatre, all with no equipment; the quest says you cannot die to them.",
+      "enemies": [],
+      "lines": [
+        "0.18",
+        "0.26"
+      ],
+      "assumptions": [
+        "The wiki says the two fights are fought with no equipment and cannot kill the player."
+      ],
+      "problems": [],
+      "alternatives": [],
+      "decision": "retain",
+      "changed": [
+        "2.142.0: new quest; scripted fights that cannot be lost."
+      ],
+      "evidence": [
+        "OSRS Wiki Death on the Isle: kills field, read 2026-11-18."
+      ]
     }
   ]
 }

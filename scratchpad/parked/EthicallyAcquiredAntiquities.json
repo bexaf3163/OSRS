@@ -1,0 +1,543 @@
+{
+  "quest": "Ethically Acquired Antiquities",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "Ethically Acquired Antiquities",
+      "revision": 15391666
+    },
+    "quickGuide": {
+      "title": "Ethically Acquired Antiquities/Quick guide",
+      "revision": 15252778
+    }
+  },
+  "step": {
+    "title": "Ethically Acquired Antiquities",
+    "type": "quest",
+    "qp": 1,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ethically_Acquired_Antiquities",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Ethically_Acquired_Antiquities/Quick_guide",
+    "mapLocation": {
+      "x": 1720,
+      "y": 3165,
+      "plane": 0,
+      "label": "Inspect the empty display on the ground floor of the Grand Museum in Civitas illa Fortis."
+    },
+    "npc": {
+      "nameEn": "Empty display (Xerna's Diadem)"
+    },
+    "itemsRequired": [],
+    "foes": []
+  },
+  "stages": {
+    "var": [
+      "varbit",
+      11193
+    ],
+    "route": [
+      {
+        "title": "Walkthrough",
+        "steps": [
+          "Inspect the empty display case in the north-east corner of the Grand Museum in Civitas illa Fortis to start the questDialogue: \"Yes.\"",
+          "Talk to Curator Herminius in the middle of the museum. Talk about the empty display caseDialogue: \"Could you tell me more about that empty display?\"",
+          "Investigate the tools behind the display case.",
+          "Inspect the display case again.",
+          "Talk to the citizens, academics, and tourists around the room about their suspicions until one mentions a mysterious individual.",
+          "Talk to Regulus Cento by the quetzals south-west of the museumDialogue: \"Have you seen anybody suspicious around?\"",
+          "Go east and talk to a Trader Crewmember (charter ship crewmember) about the suspicious man (1 inventory space required) Dialogue: \"Have you seen a man with a case?\", \"As long as it is just the one favour...\"",
+          "Go to the crafting shop south-east and get the sail repaired by ArtimaDialogue: \"I was hoping for some help.\", \"Go on then.\"",
+          "Go back to the Trader Crewmember and talk about the suspicious man againDialogue: \"So, about that man with the case\"",
+          "Head to Port Sarim, then talk to Trader Stan or any of the Trader Crewmembers who are located at the most south dockDialogue: \"Have you seen a grey-haired man with a case?\"",
+          "Talk to Betty in the runeshop in north-west Port SarimDialogue: \"Have you seen a grey-haired man with a case?\"",
+          "Read the note you receive",
+          "Talk to Curator Haig Halen in Varrock Museum about Xerna's DiademDialogue: \"I'm looking for Xerna's Diadem.\" - Option 2 if Bone Voyage is complete",
+          "Pickpocket him for the storeroom key.",
+          "Open the storeroom in the north-east part of the museum and search the crates.",
+          "Go back and talk to Haig Halen selecting option 1 to begin the sceneDialogue: \"I found Xerna's Diadem...\" - Option 2 if Bone Voyage is complete",
+          "Select options that will shame Haig Halen. A full list of which options to select can be found in the in-depth guide.",
+          "Return to the Grand Museum in Civitas illa Fortis and talk to Curator Herminius to complete the questDialogue: \"About that empty display...\""
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Inspect the empty display case at the Grand Museum in Civitas illa Fortis to start the quest.",
+            "s": "Inspect the empty display case in the Grand Museum.",
+            "k": "inspectEmptyDisplayCase",
+            "at": [
+              1721,
+              3165,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54693
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 2,
+        "do": [
+          {
+            "t": "Speak to Curator Herminius in the centre of the Grand Museum.",
+            "s": "Speak to Curator Herminius in the centre of the Grand Museum.",
+            "k": "talkToCuratorHerminius",
+            "at": [
+              1712,
+              3163,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13297
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 4,
+        "do": [
+          {
+            "t": "Investigate the tools behind the empty display case.",
+            "s": "Investigate the tools behind the empty display case.",
+            "k": "investigateToolsBehindDisplayCase",
+            "at": [
+              1722,
+              3167,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54700
+              ]
+            }
+          },
+          {
+            "t": "Inspect the empty display case again.",
+            "s": "Inspect the empty display case again.",
+            "k": "investigateCaseAgain",
+            "at": [
+              1721,
+              3165,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54693
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 6,
+        "do": [
+          {
+            "t": "Talk to any citizen in the room.",
+            "s": "Talk to any citizen in the room.",
+            "k": "talkToCitizen",
+            "at": [
+              1712,
+              3165,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13182
+              ]
+            }
+          },
+          {
+            "t": "Talk to any tourist in the room.",
+            "s": "Talk to any tourist in the room.",
+            "k": "talkToTourist",
+            "at": [
+              1712,
+              3165,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13206
+              ]
+            }
+          },
+          {
+            "t": "Talk to any academic in the room.",
+            "s": "Talk to any academic in the room.",
+            "k": "talkToAcademic",
+            "at": [
+              1712,
+              3165,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13298
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 8,
+        "do": [
+          {
+            "t": "Speak to Regulus Cento south of the Grand Museum.",
+            "s": "Speak to Regulus Cento south of the Grand Museum.",
+            "k": "talkToRegulus",
+            "at": [
+              1701,
+              3143,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12885
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 10,
+        "do": [
+          {
+            "t": "Head east to the docks and speak to any Trader Crewmember.",
+            "s": "Head east to the docks and speak to any Trader Crewmember.",
+            "k": "talkToCrewmember",
+            "at": [
+              1742,
+              3135,
+              0
+            ],
+            "hl": {
+              "npc": [
+                9312
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 12,
+        "do": [
+          {
+            "t": "Head south of the Fortis Cothon to Artima's crafting store and speak to her.",
+            "s": "Talk to Artima at the crafting store south of the Fortis Cothon.",
+            "k": "talkToArtima",
+            "at": [
+              1766,
+              3101,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13342
+              ]
+            }
+          },
+          {
+            "t": "Return up north and speak to any Trader Crewmember.",
+            "s": "Return up north and speak to any Trader Crewmember.",
+            "k": "returnToCrewmember",
+            "at": [
+              1742,
+              3135,
+              0
+            ],
+            "hl": {
+              "npc": [
+                9312
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 14,
+        "do": [
+          {
+            "t": "Return up north and speak to any Trader Crewmember.",
+            "s": "Return up north and speak to any Trader Crewmember.",
+            "k": "returnToCrewmember",
+            "at": [
+              1742,
+              3135,
+              0
+            ],
+            "hl": {
+              "npc": [
+                9312
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 16,
+        "do": [
+          {
+            "t": "Head to Port Sarim and speak to Trader Stan or any Trader Crewmember on the southern deck. To get to Port Sarim quickly, you can charter a ship.",
+            "s": "Go to Port Sarim and talk to Trader Stan on the southern deck.",
+            "k": "talkToTraderStan",
+            "at": [
+              3036,
+              3194,
+              0
+            ],
+            "hl": {
+              "npc": [
+                9299
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 18,
+        "do": [
+          {
+            "t": "Head to the Rune Shop in north western Port Sarim and speak to Betty.",
+            "s": "Head to the Rune Shop in north western Port Sarim and speak to Betty.",
+            "k": "talkToBetty",
+            "at": [
+              3011,
+              3260,
+              0
+            ],
+            "hl": {
+              "npc": [
+                1788
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 20,
+        "do": [
+          {
+            "t": "Read Betty's notes.",
+            "s": "Read Betty's notes.",
+            "k": "readBettysNotes"
+          }
+        ]
+      },
+      {
+        "at": 22,
+        "do": [
+          {
+            "t": "Head to Varrock Museum and speak to Curator Haig Halen.",
+            "s": "Head to Varrock Museum and speak to Curator Haig Halen.",
+            "k": "talkToCuratorHaigHalen",
+            "at": [
+              3257,
+              3449,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5214
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 24,
+        "do": [
+          {
+            "t": "Right-click pickpocket Curator Haig Halen.",
+            "s": "Right-click pickpocket Curator Haig Halen.",
+            "k": "pickpocketCuratorHaig",
+            "at": [
+              3257,
+              3449,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5214
+              ]
+            }
+          },
+          {
+            "t": "Open the door to the room in the north east and search the crate.",
+            "s": "Open the door to the room in the north east and search the crate.",
+            "k": "searchStoreroomCrate",
+            "at": [
+              3266,
+              3458,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54697
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 26,
+        "do": [
+          {
+            "t": "Open the door to the room in the north east and search the crate.",
+            "s": "Open the door to the room in the north east and search the crate.",
+            "k": "searchStoreroomCrate",
+            "at": [
+              3266,
+              3458,
+              0
+            ],
+            "hl": {
+              "obj": [
+                54697
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 28,
+        "do": [
+          {
+            "t": "Go speak to Curator Haig Halen again.",
+            "s": "Go speak to Curator Haig Halen again.",
+            "k": "talkToCuratorBeforeShaming",
+            "at": [
+              3257,
+              3449,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5214
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 30,
+        "do": [
+          {
+            "t": "Talk to Curator Haig Halen (option 1), then pick the answers that shame him.",
+            "s": "Shame Curator Haig Halen with the answers that expose him.",
+            "k": "shameCuratorHaigHalen"
+          }
+        ]
+      },
+      {
+        "at": 32,
+        "do": [
+          {
+            "t": "Speak to Curator before a cutscene.",
+            "s": "Speak to Curator before a cutscene.",
+            "k": "talkToCuratorBeforeCutscene",
+            "at": [
+              3257,
+              3449,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5214
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 34,
+        "do": [
+          {
+            "t": "Watch cutscene.",
+            "s": "Watch cutscene.",
+            "k": "watchCutscene",
+            "at": [
+              3257,
+              3449,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5214
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 36,
+        "do": [
+          {
+            "t": "Speak to the Curator in the centre of the Grand Museum to complete the quest.",
+            "s": "Talk to Curator Herminius in the Grand Museum to finish.",
+            "k": "returnToCuratorHerminius",
+            "at": [
+              1712,
+              3163,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13297
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "facts": {
+    "id": "Ethically Acquired Antiquities",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {
+        "thieving": 25
+      },
+      "questPoints": 0,
+      "quests": [
+        "Children of the Sun",
+        "Shield of Arrav"
+      ],
+      "manual": [],
+      "capabilities": [],
+      "unparsed": null,
+      "text": "*{{SCP|Thieving|25|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}\n*Completion of the following quests:\n**[[Children of the Sun]]\n**[[Shield of Arrav]]"
+    },
+    "rewards": {
+      "questPoints": 1,
+      "xp": {
+        "thieving": 6000
+      },
+      "coins": 5000
+    },
+    "resourceFlow": null,
+    "length": "Short",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15391666",
+      "title": "Ethically Acquired Antiquities",
+      "revision": 15391666,
+      "retrievedAt": "2026-11-18T05:57:41.761Z"
+    }
+  },
+  "unknown": [
+    "step \"readBettysNotes\": Quest Helper gives no tile",
+    "step \"shameCuratorHaigHalen\": Quest Helper gives no tile",
+    "what the quest uses up and hands out is not reviewed"
+  ]
+}

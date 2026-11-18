@@ -2053,6 +2053,63 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Bowl"
   },
   {
+    "id": 10008,
+    "nameEn": "Box trap",
+    "examine": "If a creature goes inside, the box should then slam shut.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Box_trap.png",
+    "value": 32,
+    "highAlch": 19,
+    "lowAlch": 12,
+    "buyLocations": [
+      {
+        "shopName": "Nardah Hunter Shop.",
+        "location": "Nardah",
+        "owner": "Artimeus",
+        "price": 38,
+        "stock": 25,
+        "members": true
+      },
+      {
+        "shopName": "Aleck's Hunter Emporium.",
+        "location": "Yanille",
+        "owner": "Aleck",
+        "price": 38,
+        "stock": 25,
+        "members": true
+      },
+      {
+        "shopName": "Elder Strom's Hunting Stall",
+        "location": "The Summer Shore",
+        "owner": "Elder Strom",
+        "price": 38,
+        "stock": 25,
+        "members": true
+      },
+      {
+        "shopName": "Imia's Supplies",
+        "location": "Hunter Guild",
+        "owner": "Imia",
+        "price": 41,
+        "stock": 25,
+        "members": true
+      },
+      {
+        "shopName": "Bea's Hunting Gear",
+        "location": "Bea's farm",
+        "owner": "Farmer Bea",
+        "price": 41,
+        "stock": 25,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Isle of Souls - near spinning wheel (telegrab) Note: Ironmen cannot loot it. (members only)",
+      "Civitas illa Fortis - upstairs on a table in the small building in south-west corner. Note: Ironmen cannot loot it. (members only)"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Box_trap"
+  },
+  {
     "id": 2309,
     "nameEn": "Bread",
     "examine": "Nice crispy bread.",

@@ -69345,6 +69345,4982 @@
      ]
     }
    ]
+  },
+  "S9-50": {
+   "var": [
+    "varbit",
+    11210
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Talk to Patzi to start the quest (fairy ring (), then walk east).",
+      "Break into the house north of Patzi, west of the general store, via the southern House Window. Wait for the guard to move away.",
+      "Take uniform from the wardrobe on the ground floor",
+      "Speak to Patzi again",
+      "Equip both pieces of the uniform.",
+      "Head east up the stone steps, then south and speak to the Head Butler to enter the house. He will hold onto all of your items in the meantime.",
+      "Speak to Patzi",
+      "Speak to Constantinius, Cozyac, Pavo and Xocotla",
+      "Speak with Patzi again",
+      "Enter the cellar entrance. It is located just outside of the house, immediately north of the house's east exit.",
+      "Go all the way south and investigate the Antique wine against the wall.",
+      "Check on the man on the south end of the room to the east.",
+      "Speak to Constantinius, Cozyac, Pavo and Xocotla.",
+      "Head back inside the wine cellar and investigate:",
+      "Speak to the guards Stradius and Hutza to discuss your clues.",
+      "Pickpocket Adala, Patzi, Constantinius, Cozyac, Pavo and Xocotla.",
+      "Inspect the Wine labels, Threatening note, Shipping contract and Drinking flask",
+      "Speak to one of the guards, either Stradius or Hutza.",
+      "Speak to all the suspects, then accuse Adala, and she'll fight you (level 49). Once defeated, she'll claim she's too weak to have killed anyone.",
+      "Once Adala has been taken away, speak to Stradius, then head back to the ground floor, south to the cliff, round and climb up the Loose rocks shortcut, and speak to Stradius again.",
+      "Head down the stairs to the east, enter the backstage entrance, and question the Costumer.",
+      "Search the crate next to the stairs to discover it is full of poison.",
+      "Search the bookshelf on the west wall to uncover a secret passage to the wine cellar.",
+      "Search the costume rack along the north wall to discover a wine-stained costume.",
+      "Ask the Costumer about the actors, hidden passage, stained costume and the poison.",
+      "Go up the stairs and speak to Stradius again. Accuse Naiatli.",
+      "Confront Naiatli on stage and attack her when she runs away.",
+      "Speak to Stradius or Hutza to end the quest.",
+      "Speak to the Head Butler after the quest to claim a range of masks, and the Butler's tray.",
+      "Speak to the Costumer after the quest to claim your Costume needle.",
+      "Pickpocket Constantinius for a chest key. After using it to open the fancy chest in the south room of the cellar, the fountain to the south-west of Villa Lucens can be searched to find an icon.",
+      "Use the icon on the statue at the most north-eastern tip of Aldarin (Statue Holds bowl of blue fluid), and get your reward. (1 water rune, Pendant of Ates teleport location)"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Patzi at the entrance to Villa Lucens on the island of Aldarin to start the quest.",
+       "s": "Talk to Patzi at the entrance to Villa Lucens on Aldarin.",
+       "k": "talkToPatziToStartQuest",
+       "at": [
+        1414,
+        2937,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13818
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to Patzi at the entrance to Villa Lucens on the island of Aldarin to start the quest.",
+       "s": "Talk to Patzi at the entrance to Villa Lucens on Aldarin.",
+       "k": "talkToPatziToStartQuest",
+       "at": [
+        1414,
+        2937,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13818
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Enter the house north of Patzi through the window to steal a butler's uniform. If the Wandering Guard bothers you, wait until he steps away before entering.",
+       "s": "Climb through the window of the house north of Patzi.",
+       "k": "enterUniformHouse",
+       "at": [
+        1401,
+        2967,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54701
+        ]
+       }
+      },
+      {
+       "t": "Steal the butler's uniform from the wardrobe.",
+       "s": "Steal the butler's uniform from the wardrobe.",
+       "k": "stealUniformFromWardrobe",
+       "at": [
+        1399,
+        2969,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54723
+        ]
+       }
+      },
+      {
+       "t": "Return to Patzi after stealing the butler's uniform.",
+       "s": "Return to Patzi after stealing the butler's uniform.",
+       "k": "talkToPatziAfterStealingUniform",
+       "at": [
+        1414,
+        2937,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13818
+        ]
+       }
+      },
+      {
+       "t": "Leave the house with the butler's uniform.",
+       "s": "Leave the house with the butler's uniform.",
+       "k": "leaveUniformHouse",
+       "at": [
+        1401,
+        2967,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54701
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Enter the house north of Patzi through the window to steal a butler's uniform. If the Wandering Guard bothers you, wait until he steps away before entering.",
+       "s": "Climb through the window of the house north of Patzi.",
+       "k": "enterUniformHouse",
+       "at": [
+        1401,
+        2967,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54701
+        ]
+       }
+      },
+      {
+       "t": "Steal the butler's uniform from the wardrobe.",
+       "s": "Steal the butler's uniform from the wardrobe.",
+       "k": "stealUniformFromWardrobe",
+       "at": [
+        1399,
+        2969,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54723
+        ]
+       }
+      },
+      {
+       "t": "Return to Patzi after stealing the butler's uniform.",
+       "s": "Return to Patzi after stealing the butler's uniform.",
+       "k": "talkToPatziAfterStealingUniform",
+       "at": [
+        1414,
+        2937,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13818
+        ]
+       }
+      },
+      {
+       "t": "Leave the house with the butler's uniform.",
+       "s": "Leave the house with the butler's uniform.",
+       "k": "leaveUniformHouse",
+       "at": [
+        1401,
+        2967,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54701
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Continue talking to Patzi",
+       "s": "Continue talking to Patzi",
+       "k": "continueTalkingToPatzi",
+       "at": [
+        1414,
+        2937,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13818
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Equip the Butler's uniform pieces and talk to the Head Butler up the stone stairs and to the south.",
+       "s": "Wear the butler's uniform and talk to the Head Butler.",
+       "k": "equipButlersOutfitAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Equip the Butler's uniform pieces and talk to the Head Butler up the stone stairs and to the south.",
+       "s": "Wear the butler's uniform and talk to the Head Butler.",
+       "k": "equipButlersOutfitAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "Head inside the villa and talk to Patzi.",
+       "s": "Head inside the villa and talk to Patzi.",
+       "k": "headInsideAndTalkToPatzi",
+       "at": [
+        1447,
+        2936,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13818
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Return to Patzi with the information you've gathered.",
+       "s": "Return to Patzi with the information you've gathered.",
+       "k": "returnToPatzi",
+       "at": [
+        1447,
+        2936,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13818
+        ]
+       }
+      },
+      {
+       "t": "Introduce yourself to Xocotla.",
+       "s": "Introduce yourself to Xocotla.",
+       "k": "introduceYourselfToXocotla",
+       "at": [
+        1441,
+        2930,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13829
+        ]
+       }
+      },
+      {
+       "t": "Introduce yourself to Pavo.",
+       "s": "Introduce yourself to Pavo.",
+       "k": "introduceYourselfToPavo",
+       "at": [
+        1447,
+        2933,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13831
+        ]
+       }
+      },
+      {
+       "t": "Introduce yourself to Cozyac.",
+       "s": "Introduce yourself to Cozyac.",
+       "k": "introduceYourselfToCozyac",
+       "at": [
+        1447,
+        2933,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13827
+        ]
+       }
+      },
+      {
+       "t": "Introduce yourself to Constantinius.",
+       "s": "Introduce yourself to Constantinius.",
+       "k": "introduceYourselfToConstantinius",
+       "at": [
+        1447,
+        2933,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13825
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 16,
+     "do": [
+      {
+       "t": "Enter the cellar.",
+       "s": "Enter the cellar.",
+       "k": "enterTheCellar",
+       "at": [
+        1449,
+        2938,
+        0
+       ],
+       "hl": {
+        "obj": [
+         55047
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 18,
+     "do": [
+      {
+       "t": "Investigate the Antique wine in the southern part of the cellar.",
+       "s": "Investigate the Antique wine in the southern part of the cellar.",
+       "k": "getWine",
+       "at": [
+        1439,
+        9314,
+        0
+       ],
+       "hl": {
+        "obj": [
+         55379
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 19,
+     "do": [
+      {
+       "t": "Check on the man in the south-eastern part of the cellar.",
+       "s": "Check on the man in the south-eastern part of the cellar.",
+       "k": "investigateMan",
+       "at": [
+        1454,
+        9322,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13872
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Explain your innocence to the guards Stradius and Hutza.",
+       "s": "Explain your innocence to the guards Stradius and Hutza.",
+       "k": "beInterrogatedByThePolice",
+       "at": [
+        1439,
+        2938,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 21,
+     "do": [
+      {
+       "t": "Explain your innocence to the guards Stradius and Hutza.",
+       "s": "Explain your innocence to the guards Stradius and Hutza.",
+       "k": "beInterrogatedByThePolice",
+       "at": [
+        1439,
+        2938,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 22,
+     "do": [
+      {
+       "t": "Return to the guards with the information you've found so far.",
+       "s": "Return to the guards with the information you've found so far.",
+       "k": "returnToTheGuards",
+       "at": [
+        1443,
+        2935,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      },
+      {
+       "t": "Investigate Livius in the east room.",
+       "s": "Investigate Livius in the east room.",
+       "k": "investigateLiviusInEastRoom",
+       "at": [
+        1454,
+        9322,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13873
+        ]
+       }
+      },
+      {
+       "t": "Investigate the Broken pottery in the east room.",
+       "s": "Investigate the Broken pottery in the east room.",
+       "k": "investigateBrokenPotteryInEastRoom",
+       "at": [
+        1456,
+        9328,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54709
+        ]
+       }
+      },
+      {
+       "t": "Investigate the Wine storage in the east room.",
+       "s": "Investigate the Wine storage in the east room.",
+       "k": "investigateWineStorageInEastRoom",
+       "at": [
+        1451,
+        9335,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54710
+        ]
+       }
+      },
+      {
+       "t": "Investigate the Broken stool in the south room.",
+       "s": "Investigate the Broken stool in the south room.",
+       "k": "investigateBrokenStoolInSouthRoom",
+       "at": [
+        1446,
+        9315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54712
+        ]
+       }
+      },
+      {
+       "t": "Investigate the Small box in the south room.",
+       "s": "Investigate the Small box in the south room.",
+       "k": "investigateSmallBoxInSouthRoom",
+       "at": [
+        1439,
+        9321,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54711
+        ]
+       }
+      },
+      {
+       "t": "Investigate the Jug by the entrance stairs.",
+       "s": "Investigate the Jug by the entrance stairs.",
+       "k": "investigateJug",
+       "at": [
+        1445,
+        9336,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54708
+        ]
+       }
+      },
+      {
+       "t": "Enter the cellar again to begin your investigation.",
+       "s": "Enter the cellar again to begin your investigation.",
+       "k": "enterTheCellarAgain",
+       "at": [
+        1449,
+        2938,
+        0
+       ],
+       "hl": {
+        "obj": [
+         55047
+        ]
+       }
+      },
+      {
+       "t": "Leave the cellar.",
+       "s": "Leave the cellar.",
+       "k": "leaveCellar",
+       "at": [
+        1447,
+        9338,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54716
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Patzi and Adala.",
+       "s": "Interrogate Patzi and Adala.",
+       "k": "interrogatePatziAndAdala",
+       "at": [
+        1447,
+        2936,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13818
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Xocotla.",
+       "s": "Interrogate Xocotla.",
+       "k": "investigateXocotla",
+       "at": [
+        1446,
+        2933,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13829
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Pavo.",
+       "s": "Interrogate Pavo.",
+       "k": "investigatePavo",
+       "at": [
+        1446,
+        2933,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13831
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Cozyac.",
+       "s": "Interrogate Cozyac.",
+       "k": "investigateCozyac",
+       "at": [
+        1446,
+        2933,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13827
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Constantinius.",
+       "s": "Interrogate Constantinius.",
+       "k": "investigateConstantinius",
+       "at": [
+        1446,
+        2933,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13825
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 24,
+     "do": [
+      {
+       "t": "Return to the guards with the information you've found so far.",
+       "s": "Return to the guards with the information you've found so far.",
+       "k": "returnToTheGuards",
+       "at": [
+        1443,
+        2935,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      },
+      {
+       "t": "Investigate Livius in the east room.",
+       "s": "Investigate Livius in the east room.",
+       "k": "investigateLiviusInEastRoom",
+       "at": [
+        1454,
+        9322,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13873
+        ]
+       }
+      },
+      {
+       "t": "Investigate the Broken pottery in the east room.",
+       "s": "Investigate the Broken pottery in the east room.",
+       "k": "investigateBrokenPotteryInEastRoom",
+       "at": [
+        1456,
+        9328,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54709
+        ]
+       }
+      },
+      {
+       "t": "Investigate the Wine storage in the east room.",
+       "s": "Investigate the Wine storage in the east room.",
+       "k": "investigateWineStorageInEastRoom",
+       "at": [
+        1451,
+        9335,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54710
+        ]
+       }
+      },
+      {
+       "t": "Investigate the Broken stool in the south room.",
+       "s": "Investigate the Broken stool in the south room.",
+       "k": "investigateBrokenStoolInSouthRoom",
+       "at": [
+        1446,
+        9315,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54712
+        ]
+       }
+      },
+      {
+       "t": "Investigate the Small box in the south room.",
+       "s": "Investigate the Small box in the south room.",
+       "k": "investigateSmallBoxInSouthRoom",
+       "at": [
+        1439,
+        9321,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54711
+        ]
+       }
+      },
+      {
+       "t": "Investigate the Jug by the entrance stairs.",
+       "s": "Investigate the Jug by the entrance stairs.",
+       "k": "investigateJug",
+       "at": [
+        1445,
+        9336,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54708
+        ]
+       }
+      },
+      {
+       "t": "Enter the cellar again to begin your investigation.",
+       "s": "Enter the cellar again to begin your investigation.",
+       "k": "enterTheCellarAgain",
+       "at": [
+        1449,
+        2938,
+        0
+       ],
+       "hl": {
+        "obj": [
+         55047
+        ]
+       }
+      },
+      {
+       "t": "Leave the cellar.",
+       "s": "Leave the cellar.",
+       "k": "leaveCellar",
+       "at": [
+        1447,
+        9338,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54716
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Patzi and Adala.",
+       "s": "Interrogate Patzi and Adala.",
+       "k": "interrogatePatziAndAdala",
+       "at": [
+        1447,
+        2936,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13818
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Xocotla.",
+       "s": "Interrogate Xocotla.",
+       "k": "investigateXocotla",
+       "at": [
+        1446,
+        2933,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13829
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Pavo.",
+       "s": "Interrogate Pavo.",
+       "k": "investigatePavo",
+       "at": [
+        1446,
+        2933,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13831
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Cozyac.",
+       "s": "Interrogate Cozyac.",
+       "k": "investigateCozyac",
+       "at": [
+        1446,
+        2933,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13827
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Constantinius.",
+       "s": "Interrogate Constantinius.",
+       "k": "investigateConstantinius",
+       "at": [
+        1446,
+        2933,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13825
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 26,
+     "do": [
+      {
+       "t": "Return to the guards with the stolen items.",
+       "s": "Return to the guards with the stolen items.",
+       "k": "returnStolenItemsToTheGuards",
+       "at": [
+        1443,
+        2935,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      },
+      {
+       "t": "Inspect the Shipping contract in your inventory.",
+       "s": "Inspect the Shipping contract in your inventory.",
+       "k": "inspectShippingContract"
+      },
+      {
+       "t": "Inspect the Drinking flask in your inventory.",
+       "s": "Inspect the Drinking flask in your inventory.",
+       "k": "inspectDrinkingFlask"
+      },
+      {
+       "t": "Inspect the Threatening note in your inventory.",
+       "s": "Inspect the Threatening note in your inventory.",
+       "k": "inspectThreateningNote"
+      },
+      {
+       "t": "Inspect the Wine labels in your inventory.",
+       "s": "Inspect the Wine labels in your inventory.",
+       "k": "inspectWineLabels"
+      },
+      {
+       "t": "Pickpocket Xocotla until you find a shipping contract.",
+       "s": "Pickpocket Xocotla until you find a shipping contract.",
+       "k": "pickpocketXocotla",
+       "at": [
+        1445,
+        2934,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13830
+        ]
+       }
+      },
+      {
+       "t": "Pickpocket Pavo until you find a drinking flask.",
+       "s": "Pickpocket Pavo until you find a drinking flask.",
+       "k": "pickpocketPavo",
+       "at": [
+        1445,
+        2934,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13832
+        ]
+       }
+      },
+      {
+       "t": "Pickpocket Cozyac until you find a threatening note.",
+       "s": "Pickpocket Cozyac until you find a threatening note.",
+       "k": "pickpocketCozyac",
+       "at": [
+        1445,
+        2934,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13828
+        ]
+       }
+      },
+      {
+       "t": "Pickpocket Adala until you find Wine labels.",
+       "s": "Pickpocket Adala until you find Wine labels.",
+       "k": "pickpocketAdala",
+       "at": [
+        1446,
+        2936,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13823
+        ]
+       }
+      },
+      {
+       "t": "Talk to the guards to tell them you're ready to make an accusation.",
+       "s": "Talk to the guards to tell them you're ready to make an accusation.",
+       "k": "talkToGuardsAgainToTellThemYouAreReady",
+       "at": [
+        1433,
+        2935,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 27,
+     "do": [
+      {
+       "t": "Talk to the guards to tell them you're ready to make an accusation.",
+       "s": "Talk to the guards to tell them you're ready to make an accusation.",
+       "k": "talkToGuardsAgainToTellThemYouAreReady",
+       "at": [
+        1433,
+        2935,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 28,
+     "do": [
+      {
+       "t": "Accuse Adala of the crime, ready for a fight you cannot lose.",
+       "s": "Accuse Adala of the crime, ready for a fight you cannot lose.",
+       "k": "accuseAdala",
+       "at": [
+        1446,
+        2933,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13820
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Pavo.",
+       "s": "Interrogate Pavo.",
+       "k": "interrogatePavoAgain",
+       "at": [
+        1442,
+        2931,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13831
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Cozyac.",
+       "s": "Interrogate Cozyac.",
+       "k": "interrogateCozyacAgain",
+       "at": [
+        1442,
+        2929,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13827
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Xocotla.",
+       "s": "Interrogate Xocotla.",
+       "k": "interrogateXocotlaAgain",
+       "at": [
+        1444,
+        2928,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13829
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Constantinius.",
+       "s": "Interrogate Constantinius.",
+       "k": "interrogateConstantiniusAgain",
+       "at": [
+        1446,
+        2931,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13825
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      },
+      {
+       "t": "Fight Adala. You cannot lose this fight.",
+       "s": "Fight Adala. You cannot lose this fight.",
+       "k": "fightAdala",
+       "at": [
+        1446,
+        2933,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13820
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Accuse Adala of the crime, ready for a fight you cannot lose.",
+       "s": "Accuse Adala of the crime, ready for a fight you cannot lose.",
+       "k": "accuseAdala",
+       "at": [
+        1446,
+        2933,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13820
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Pavo.",
+       "s": "Interrogate Pavo.",
+       "k": "interrogatePavoAgain",
+       "at": [
+        1442,
+        2931,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13831
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Cozyac.",
+       "s": "Interrogate Cozyac.",
+       "k": "interrogateCozyacAgain",
+       "at": [
+        1442,
+        2929,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13827
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Xocotla.",
+       "s": "Interrogate Xocotla.",
+       "k": "interrogateXocotlaAgain",
+       "at": [
+        1444,
+        2928,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13829
+        ]
+       }
+      },
+      {
+       "t": "Interrogate Constantinius.",
+       "s": "Interrogate Constantinius.",
+       "k": "interrogateConstantiniusAgain",
+       "at": [
+        1446,
+        2931,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13825
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      },
+      {
+       "t": "Fight Adala. You cannot lose this fight.",
+       "s": "Fight Adala. You cannot lose this fight.",
+       "k": "fightAdala",
+       "at": [
+        1446,
+        2933,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13820
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 32,
+     "do": [
+      {
+       "t": "Talk to Adala to get her confession.",
+       "s": "Talk to Adala to get her confession.",
+       "k": "getAdalasConfession",
+       "at": [
+        1446,
+        2933,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13821
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 33,
+     "do": [
+      {
+       "t": "Talk to the guards about Adala.",
+       "s": "Talk to the guards about Adala.",
+       "k": "talkToGuardsAboutAdala",
+       "at": [
+        1442,
+        2933,
+        2
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 34,
+     "do": [
+      {
+       "t": "Climb the Loose rocks south-east of the villa on your way to the theatre.",
+       "s": "Climb the loose rocks south-east of the villa toward the theatre.",
+       "k": "climbFirstLooseRocksToTheatre",
+       "at": [
+        1469,
+        2918,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54720
+        ]
+       }
+      },
+      {
+       "t": "Climb down the staircase.",
+       "s": "Climb down the staircase.",
+       "k": "headDownFromMiddleFloor",
+       "at": [
+        1442,
+        2936,
+        1
+       ],
+       "hl": {
+        "obj": [
+         54714
+        ]
+       }
+      },
+      {
+       "t": "Climb down the staircase.",
+       "s": "Climb down the staircase.",
+       "k": "headDownFromTopFloor",
+       "at": [
+        1445,
+        2939,
+        2
+       ],
+       "hl": {
+        "obj": [
+         54714
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 36,
+     "do": [
+      {
+       "t": "Talk to the Costumer in the theatre cellar.",
+       "s": "Talk to the Costumer in the theatre cellar.",
+       "k": "talkToCostumer",
+       "at": [
+        1466,
+        9330,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13837
+        ]
+       }
+      },
+      {
+       "t": "Enter the theatre through the backstage entrance.",
+       "s": "Enter the theatre through the backstage entrance.",
+       "k": "enterBackstage",
+       "at": [
+        1477,
+        2927,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54715
+        ]
+       }
+      },
+      {
+       "t": "Talk to Stradius at the backstage of the theatre.",
+       "s": "Talk to Stradius at the backstage of the theatre.",
+       "k": "talkToGuardsAtTheatre",
+       "at": [
+        1472,
+        2925,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      },
+      {
+       "t": "Climb down the loose rocks in your way to the guards outside the theatre.",
+       "s": "Climb down the loose rocks toward the guards outside the theatre.",
+       "k": "climbSecondLooseRocksToTheatre",
+       "at": [
+        1474,
+        2923,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54722
+        ]
+       }
+      },
+      {
+       "t": "Climb the Loose rocks south-east of the villa on your way to the theatre.",
+       "s": "Climb the loose rocks south-east of the villa toward the theatre.",
+       "k": "climbFirstLooseRocksToTheatre",
+       "at": [
+        1469,
+        2918,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54720
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 38,
+     "do": [
+      {
+       "t": "Ask the Costumer in the theatre cellar about the hidden passage.",
+       "s": "Ask the Costumer about the hidden passage.",
+       "k": "talkToCostumerAboutHiddenPassage"
+      },
+      {
+       "t": "Ask the Costumer in the theatre cellar about the stained costume.",
+       "s": "Ask the Costumer about the stained costume.",
+       "k": "talkToCostumerAboutStainedCostume"
+      },
+      {
+       "t": "Ask the Costumer in the theatre cellar about the poison.",
+       "s": "Ask the Costumer about the poison.",
+       "k": "talkToCostumerAboutPoison"
+      },
+      {
+       "t": "Ask the Costumer in the theatre cellar about the actors.",
+       "s": "Ask the Costumer about the actors.",
+       "k": "talkToCostumerAboutActors"
+      },
+      {
+       "t": "Search the costume rack to the north.",
+       "s": "Search the costume rack to the north.",
+       "k": "searchCostumeRack",
+       "at": [
+        1464,
+        9337,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54718
+        ]
+       }
+      },
+      {
+       "t": "Search the bookshelf on the west wall.",
+       "s": "Search the bookshelf on the west wall.",
+       "k": "searchBookshelf",
+       "at": [
+        1461,
+        9331,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54726
+        ]
+       }
+      },
+      {
+       "t": "Search the crate next to the stairs.",
+       "s": "Search the crate next to the stairs.",
+       "k": "searchCrateNextToStairs",
+       "at": [
+        1469,
+        9330,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54731
+        ]
+       }
+      },
+      {
+       "t": "Enter the theatre through the backstage entrance.",
+       "s": "Enter the theatre through the backstage entrance.",
+       "k": "enterBackstage",
+       "at": [
+        1477,
+        2927,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54715
+        ]
+       }
+      },
+      {
+       "t": "Climb down the loose rocks in your way to the guards outside the theatre.",
+       "s": "Climb down the loose rocks toward the guards outside the theatre.",
+       "k": "climbSecondLooseRocksToTheatre",
+       "at": [
+        1474,
+        2923,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54722
+        ]
+       }
+      },
+      {
+       "t": "Climb the Loose rocks south-east of the villa on your way to the theatre.",
+       "s": "Climb the loose rocks south-east of the villa toward the theatre.",
+       "k": "climbFirstLooseRocksToTheatre",
+       "at": [
+        1469,
+        2918,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54720
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Report back to Stradius near the theatre and accuse Naiatli.",
+       "s": "Report back to Stradius near the theatre and accuse Naiatli.",
+       "k": "speakToGuards",
+       "at": [
+        1472,
+        2925,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      },
+      {
+       "t": "Climb up the stairs of the theatre cellar.",
+       "s": "Climb up the stairs of the theatre cellar.",
+       "k": "climbUpFromTheatreCellar",
+       "at": [
+        1469,
+        9328,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54717
+        ]
+       }
+      },
+      {
+       "t": "Climb down the loose rocks in your way to the guards outside the theatre.",
+       "s": "Climb down the loose rocks toward the guards outside the theatre.",
+       "k": "climbSecondLooseRocksToTheatre",
+       "at": [
+        1474,
+        2923,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54722
+        ]
+       }
+      },
+      {
+       "t": "Climb the Loose rocks south-east of the villa on your way to the theatre.",
+       "s": "Climb the loose rocks south-east of the villa toward the theatre.",
+       "k": "climbFirstLooseRocksToTheatre",
+       "at": [
+        1469,
+        2918,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54720
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 42,
+     "do": [
+      {
+       "t": "Confront Naiatli, attacking her when she runs away. When Clodius appears, attack him instead.",
+       "s": "Confront Naiatli, then attack Clodius when he appears.",
+       "k": "confrontNaiatli",
+       "at": [
+        1465,
+        2932,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13838
+        ]
+       }
+      },
+      {
+       "t": "Attack Clodius.",
+       "s": "Attack Clodius.",
+       "k": "attackClodius",
+       "at": [
+        1469,
+        2937,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13839
+        ]
+       }
+      },
+      {
+       "t": "Kill Naiatli.",
+       "s": "Kill Naiatli.",
+       "k": "killNaiatli",
+       "at": [
+        1469,
+        2937,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13838
+        ]
+       }
+      },
+      {
+       "t": "Talk to Naiatli.",
+       "s": "Talk to Naiatli.",
+       "k": "talkToNaiatli",
+       "at": [
+        1472,
+        2931,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13838
+        ]
+       }
+      },
+      {
+       "t": "Talk to Stradius to enter the theatre.",
+       "s": "Talk to Stradius to enter the theatre.",
+       "k": "talkToStradiusToEnterTheTheatre",
+       "at": [
+        1472,
+        2925,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      },
+      {
+       "t": "Climb up the stairs of the theatre cellar.",
+       "s": "Climb up the stairs of the theatre cellar.",
+       "k": "climbUpFromTheatreCellar",
+       "at": [
+        1469,
+        9328,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54717
+        ]
+       }
+      },
+      {
+       "t": "Climb down the loose rocks in your way to the guards outside the theatre.",
+       "s": "Climb down the loose rocks toward the guards outside the theatre.",
+       "k": "climbSecondLooseRocksToTheatre",
+       "at": [
+        1474,
+        2923,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54722
+        ]
+       }
+      },
+      {
+       "t": "Climb the Loose rocks south-east of the villa on your way to the theatre.",
+       "s": "Climb the loose rocks south-east of the villa toward the theatre.",
+       "k": "climbFirstLooseRocksToTheatre",
+       "at": [
+        1469,
+        2918,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54720
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 45,
+     "do": [
+      {
+       "t": "Confront Naiatli, attacking her when she runs away. When Clodius appears, attack him instead.",
+       "s": "Confront Naiatli, then attack Clodius when he appears.",
+       "k": "confrontNaiatli",
+       "at": [
+        1465,
+        2932,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13838
+        ]
+       }
+      },
+      {
+       "t": "Attack Clodius.",
+       "s": "Attack Clodius.",
+       "k": "attackClodius",
+       "at": [
+        1469,
+        2937,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13839
+        ]
+       }
+      },
+      {
+       "t": "Kill Naiatli.",
+       "s": "Kill Naiatli.",
+       "k": "killNaiatli",
+       "at": [
+        1469,
+        2937,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13838
+        ]
+       }
+      },
+      {
+       "t": "Talk to Naiatli.",
+       "s": "Talk to Naiatli.",
+       "k": "talkToNaiatli",
+       "at": [
+        1472,
+        2931,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13838
+        ]
+       }
+      },
+      {
+       "t": "Talk to Stradius to enter the theatre.",
+       "s": "Talk to Stradius to enter the theatre.",
+       "k": "talkToStradiusToEnterTheTheatre",
+       "at": [
+        1472,
+        2925,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      },
+      {
+       "t": "Climb up the stairs of the theatre cellar.",
+       "s": "Climb up the stairs of the theatre cellar.",
+       "k": "climbUpFromTheatreCellar",
+       "at": [
+        1469,
+        9328,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54717
+        ]
+       }
+      },
+      {
+       "t": "Climb down the loose rocks in your way to the guards outside the theatre.",
+       "s": "Climb down the loose rocks toward the guards outside the theatre.",
+       "k": "climbSecondLooseRocksToTheatre",
+       "at": [
+        1474,
+        2923,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54722
+        ]
+       }
+      },
+      {
+       "t": "Climb the Loose rocks south-east of the villa on your way to the theatre.",
+       "s": "Climb the loose rocks south-east of the villa toward the theatre.",
+       "k": "climbFirstLooseRocksToTheatre",
+       "at": [
+        1469,
+        2918,
+        0
+       ],
+       "hl": {
+        "obj": [
+         54720
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Head Butler outside the at the entrance to Villa Lucens on the island of Aldarin.",
+       "s": "Talk to the Head Butler at the entrance to Villa Lucens.",
+       "k": "returnToButlerAndHeadInside",
+       "at": [
+        1426,
+        2919,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13833
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 49,
+     "do": [
+      {
+       "t": "Talk to Stradius and Hutza to finish the quest.",
+       "s": "Talk to Stradius and Hutza to finish the quest.",
+       "k": "talkToGuardsToFinishTheQuest",
+       "at": [
+        1443,
+        2932,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13834
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-51": {
+   "var": [
+    "varbit",
+    14609
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Start the quest by searching the tent for Kasonde's journal (Fairy ring with code and head south east). Dialogue: \"Yes.\"",
+      "Read the journal.",
+      "Search the camping equipment to receive secateurs.",
+      "Climb down the nearby hole.",
+      "Search the stone table labelled \"1\" in the image below to receive the first stone tablet.",
+      "Read the stone tablet and take the note to receive the word translations scroll. Dialogue: \"Yes.\"",
+      "Read the word translations scroll and click \"Attempt Translation\". Input the following words and press enter for each: Island, Water, Time, Vessel, North.",
+      "Chat will show a prompt about having translated enough once you enter all words. The hole on Molch Island will not appear if any words are missing.",
+      "Climb-up the rope to exit the hole.",
+      "Travel to Lake Molch via Boaty and select Molch Island. (Fairy ring with code and head west.) Dialogue: \"Molch Island\"",
+      "Enter the hole on Molch Island.",
+      "Inspect the vines for a dirty note.",
+      "Cut the vines with your secateurs and squeeze through them.",
+      "Search the stone table labelled \"1\" in the image below to receive the second stone tablet.",
+      "Read the stone tablet, then input the following words on the word translations scroll: West, Poison, Body, Food, Earth.",
+      "Climb-up the rope to exit the hole.",
+      "Travel to Xeric's Shrine.",
+      "Enter the hole at Xeric's Shrine.",
+      "Search the stone table labelled \"1\" in the image below to receive the third stone tablet.",
+      "Read the stone tablet, then input the following words on the word translations scroll: Make, Yes, No, Move, Arrive, East, South.",
+      "Make your way to the Ruins of Morra. Enter the hole there.",
+      "Search the stone table labelled \"1\" in the image below to receive the final stone tablet.",
+      "Read the stone tablet, then input the following words on the word translations scroll: Few, Big, Sun, Moon, Life, Death, Mind, Home, Air, Fire.",
+      "Read the stone tablet again and then read the warning note.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Search the tent in the south east of the Kebos Lowlands.",
+       "s": "Search the tent in the south east of the Kebos Lowlands.",
+       "k": "getJournal",
+       "at": [
+        1314,
+        3470,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46324
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Read the journal",
+       "s": "Read the journal",
+       "k": "readJournal"
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Search the camping equipment for some secateurs.",
+       "s": "Search the camping equipment for some secateurs.",
+       "k": "getSecateurs",
+       "at": [
+        1312,
+        3470,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46325
+        ]
+       }
+      },
+      {
+       "t": "Enter the nearby hole.",
+       "s": "Enter the nearby hole.",
+       "k": "enterHole",
+       "at": [
+        1308,
+        3467,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46326
+        ]
+       }
+      },
+      {
+       "t": "Search the north-west table.",
+       "s": "Search the north-west table.",
+       "k": "searchForTablet",
+       "at": [
+        1306,
+        9885,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46376
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet1"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords1"
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Search the camping equipment for some secateurs.",
+       "s": "Search the camping equipment for some secateurs.",
+       "k": "getSecateurs",
+       "at": [
+        1312,
+        3470,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46325
+        ]
+       }
+      },
+      {
+       "t": "Enter the nearby hole.",
+       "s": "Enter the nearby hole.",
+       "k": "enterHole",
+       "at": [
+        1308,
+        3467,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46326
+        ]
+       }
+      },
+      {
+       "t": "Search the north-west table.",
+       "s": "Search the north-west table.",
+       "k": "searchForTablet",
+       "at": [
+        1306,
+        9885,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46376
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet1"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords1"
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Search the camping equipment for some secateurs.",
+       "s": "Search the camping equipment for some secateurs.",
+       "k": "getSecateurs",
+       "at": [
+        1312,
+        3470,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46325
+        ]
+       }
+      },
+      {
+       "t": "Enter the nearby hole.",
+       "s": "Enter the nearby hole.",
+       "k": "enterHole",
+       "at": [
+        1308,
+        3467,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46326
+        ]
+       }
+      },
+      {
+       "t": "Search the north-west table.",
+       "s": "Search the north-west table.",
+       "k": "searchForTablet",
+       "at": [
+        1306,
+        9885,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46376
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet1"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords1"
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Search the camping equipment for some secateurs.",
+       "s": "Search the camping equipment for some secateurs.",
+       "k": "getSecateurs",
+       "at": [
+        1312,
+        3470,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46325
+        ]
+       }
+      },
+      {
+       "t": "Enter the nearby hole.",
+       "s": "Enter the nearby hole.",
+       "k": "enterHole",
+       "at": [
+        1308,
+        3467,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46326
+        ]
+       }
+      },
+      {
+       "t": "Search the north-west table.",
+       "s": "Search the north-west table.",
+       "k": "searchForTablet",
+       "at": [
+        1306,
+        9885,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46376
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet1"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords1"
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Search the camping equipment for some secateurs.",
+       "s": "Search the camping equipment for some secateurs.",
+       "k": "getSecateurs",
+       "at": [
+        1312,
+        3470,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46325
+        ]
+       }
+      },
+      {
+       "t": "Enter the nearby hole.",
+       "s": "Enter the nearby hole.",
+       "k": "enterHole",
+       "at": [
+        1308,
+        3467,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46326
+        ]
+       }
+      },
+      {
+       "t": "Search the north-west table.",
+       "s": "Search the north-west table.",
+       "k": "searchForTablet",
+       "at": [
+        1306,
+        9885,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46376
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet1"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords1"
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "Search the camping equipment for some secateurs.",
+       "s": "Search the camping equipment for some secateurs.",
+       "k": "getSecateurs",
+       "at": [
+        1312,
+        3470,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46325
+        ]
+       }
+      },
+      {
+       "t": "Enter the nearby hole.",
+       "s": "Enter the nearby hole.",
+       "k": "enterHole",
+       "at": [
+        1308,
+        3467,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46326
+        ]
+       }
+      },
+      {
+       "t": "Search the north-west table.",
+       "s": "Search the north-west table.",
+       "k": "searchForTablet",
+       "at": [
+        1306,
+        9885,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46376
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet1"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords1"
+      }
+     ]
+    },
+    {
+     "at": 16,
+     "do": [
+      {
+       "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+       "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+       "k": "goToMolch",
+       "at": [
+        1406,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33614
+        ]
+       }
+      },
+      {
+       "t": "Enter the hole on Molch Island.",
+       "s": "Enter the hole on Molch Island.",
+       "k": "enterMolchHole",
+       "at": [
+        1364,
+        3637,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46434
+        ]
+       }
+      },
+      {
+       "t": "Inspect the vines to the south.",
+       "s": "Inspect the vines to the south.",
+       "k": "searchVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Use your secateurs on the vines.",
+       "s": "Use your secateurs on the vines.",
+       "k": "cutVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Search the south west stone table.",
+       "s": "Search the south west stone table.",
+       "k": "searchForTablet2",
+       "at": [
+        1373,
+        10014,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46377
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole",
+       "at": [
+        1309,
+        9867,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46327
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+       "s": "Read the stone tablet, then take the note after closing it.",
+       "k": "readTablet2"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations2"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation2"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords2"
+      }
+     ]
+    },
+    {
+     "at": 18,
+     "do": [
+      {
+       "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+       "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+       "k": "goToMolch",
+       "at": [
+        1406,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33614
+        ]
+       }
+      },
+      {
+       "t": "Enter the hole on Molch Island.",
+       "s": "Enter the hole on Molch Island.",
+       "k": "enterMolchHole",
+       "at": [
+        1364,
+        3637,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46434
+        ]
+       }
+      },
+      {
+       "t": "Inspect the vines to the south.",
+       "s": "Inspect the vines to the south.",
+       "k": "searchVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Use your secateurs on the vines.",
+       "s": "Use your secateurs on the vines.",
+       "k": "cutVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Search the south west stone table.",
+       "s": "Search the south west stone table.",
+       "k": "searchForTablet2",
+       "at": [
+        1373,
+        10014,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46377
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole",
+       "at": [
+        1309,
+        9867,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46327
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+       "s": "Read the stone tablet, then take the note after closing it.",
+       "k": "readTablet2"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations2"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation2"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords2"
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+       "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+       "k": "goToMolch",
+       "at": [
+        1406,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33614
+        ]
+       }
+      },
+      {
+       "t": "Enter the hole on Molch Island.",
+       "s": "Enter the hole on Molch Island.",
+       "k": "enterMolchHole",
+       "at": [
+        1364,
+        3637,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46434
+        ]
+       }
+      },
+      {
+       "t": "Inspect the vines to the south.",
+       "s": "Inspect the vines to the south.",
+       "k": "searchVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Use your secateurs on the vines.",
+       "s": "Use your secateurs on the vines.",
+       "k": "cutVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Search the south west stone table.",
+       "s": "Search the south west stone table.",
+       "k": "searchForTablet2",
+       "at": [
+        1373,
+        10014,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46377
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole",
+       "at": [
+        1309,
+        9867,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46327
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+       "s": "Read the stone tablet, then take the note after closing it.",
+       "k": "readTablet2"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations2"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation2"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords2"
+      }
+     ]
+    },
+    {
+     "at": 22,
+     "do": [
+      {
+       "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+       "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+       "k": "goToMolch",
+       "at": [
+        1406,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33614
+        ]
+       }
+      },
+      {
+       "t": "Enter the hole on Molch Island.",
+       "s": "Enter the hole on Molch Island.",
+       "k": "enterMolchHole",
+       "at": [
+        1364,
+        3637,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46434
+        ]
+       }
+      },
+      {
+       "t": "Inspect the vines to the south.",
+       "s": "Inspect the vines to the south.",
+       "k": "searchVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Use your secateurs on the vines.",
+       "s": "Use your secateurs on the vines.",
+       "k": "cutVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Search the south west stone table.",
+       "s": "Search the south west stone table.",
+       "k": "searchForTablet2",
+       "at": [
+        1373,
+        10014,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46377
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole",
+       "at": [
+        1309,
+        9867,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46327
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+       "s": "Read the stone tablet, then take the note after closing it.",
+       "k": "readTablet2"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations2"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation2"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords2"
+      }
+     ]
+    },
+    {
+     "at": 24,
+     "do": [
+      {
+       "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+       "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+       "k": "goToMolch",
+       "at": [
+        1406,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33614
+        ]
+       }
+      },
+      {
+       "t": "Enter the hole on Molch Island.",
+       "s": "Enter the hole on Molch Island.",
+       "k": "enterMolchHole",
+       "at": [
+        1364,
+        3637,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46434
+        ]
+       }
+      },
+      {
+       "t": "Inspect the vines to the south.",
+       "s": "Inspect the vines to the south.",
+       "k": "searchVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Use your secateurs on the vines.",
+       "s": "Use your secateurs on the vines.",
+       "k": "cutVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Search the south west stone table.",
+       "s": "Search the south west stone table.",
+       "k": "searchForTablet2",
+       "at": [
+        1373,
+        10014,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46377
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole",
+       "at": [
+        1309,
+        9867,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46327
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+       "s": "Read the stone tablet, then take the note after closing it.",
+       "k": "readTablet2"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations2"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation2"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords2"
+      }
+     ]
+    },
+    {
+     "at": 26,
+     "do": [
+      {
+       "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+       "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+       "k": "goToMolch",
+       "at": [
+        1406,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33614
+        ]
+       }
+      },
+      {
+       "t": "Enter the hole on Molch Island.",
+       "s": "Enter the hole on Molch Island.",
+       "k": "enterMolchHole",
+       "at": [
+        1364,
+        3637,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46434
+        ]
+       }
+      },
+      {
+       "t": "Inspect the vines to the south.",
+       "s": "Inspect the vines to the south.",
+       "k": "searchVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Use your secateurs on the vines.",
+       "s": "Use your secateurs on the vines.",
+       "k": "cutVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Search the south west stone table.",
+       "s": "Search the south west stone table.",
+       "k": "searchForTablet2",
+       "at": [
+        1373,
+        10014,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46377
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole",
+       "at": [
+        1309,
+        9867,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46327
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+       "s": "Read the stone tablet, then take the note after closing it.",
+       "k": "readTablet2"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations2"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation2"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords2"
+      }
+     ]
+    },
+    {
+     "at": 28,
+     "do": [
+      {
+       "t": "Travel to Molch island via Boaty, located on the west/north/east sides of Lake Molch.",
+       "s": "Take Boaty to Molch island from the shore of Lake Molch.",
+       "k": "goToMolch",
+       "at": [
+        1406,
+        3612,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33614
+        ]
+       }
+      },
+      {
+       "t": "Enter the hole on Molch Island.",
+       "s": "Enter the hole on Molch Island.",
+       "k": "enterMolchHole",
+       "at": [
+        1364,
+        3637,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46434
+        ]
+       }
+      },
+      {
+       "t": "Inspect the vines to the south.",
+       "s": "Inspect the vines to the south.",
+       "k": "searchVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Use your secateurs on the vines.",
+       "s": "Use your secateurs on the vines.",
+       "k": "cutVines",
+       "at": [
+        1375,
+        10024,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46437
+        ]
+       }
+      },
+      {
+       "t": "Search the south west stone table.",
+       "s": "Search the south west stone table.",
+       "k": "searchForTablet2",
+       "at": [
+        1373,
+        10014,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46377
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole",
+       "at": [
+        1309,
+        9867,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46327
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet, and take the note after closing the tablet's interface.",
+       "s": "Read the stone tablet, then take the note after closing it.",
+       "k": "readTablet2"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations2"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation2"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords2"
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Enter the hole next to Xeric's Shrine.",
+       "s": "Enter the hole next to Xeric's Shrine.",
+       "k": "enterXericShrineHole",
+       "at": [
+        1314,
+        3617,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46435
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole2",
+       "at": [
+        1375,
+        10033,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46330
+        ]
+       }
+      },
+      {
+       "t": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+       "s": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+       "k": "leaveMolchIsland",
+       "at": [
+        1369,
+        3641,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33614
+        ]
+       }
+      },
+      {
+       "t": "Search the south east stone table.",
+       "s": "Search the south east stone table.",
+       "k": "searchForTablet3",
+       "at": [
+        1311,
+        10018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46378
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet3"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations3"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation3"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords3"
+      }
+     ]
+    },
+    {
+     "at": 32,
+     "do": [
+      {
+       "t": "Enter the hole next to Xeric's Shrine.",
+       "s": "Enter the hole next to Xeric's Shrine.",
+       "k": "enterXericShrineHole",
+       "at": [
+        1314,
+        3617,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46435
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole2",
+       "at": [
+        1375,
+        10033,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46330
+        ]
+       }
+      },
+      {
+       "t": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+       "s": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+       "k": "leaveMolchIsland",
+       "at": [
+        1369,
+        3641,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33614
+        ]
+       }
+      },
+      {
+       "t": "Search the south east stone table.",
+       "s": "Search the south east stone table.",
+       "k": "searchForTablet3",
+       "at": [
+        1311,
+        10018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46378
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet3"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations3"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation3"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords3"
+      }
+     ]
+    },
+    {
+     "at": 34,
+     "do": [
+      {
+       "t": "Enter the hole next to Xeric's Shrine.",
+       "s": "Enter the hole next to Xeric's Shrine.",
+       "k": "enterXericShrineHole",
+       "at": [
+        1314,
+        3617,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46435
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole2",
+       "at": [
+        1375,
+        10033,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46330
+        ]
+       }
+      },
+      {
+       "t": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+       "s": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+       "k": "leaveMolchIsland",
+       "at": [
+        1369,
+        3641,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33614
+        ]
+       }
+      },
+      {
+       "t": "Search the south east stone table.",
+       "s": "Search the south east stone table.",
+       "k": "searchForTablet3",
+       "at": [
+        1311,
+        10018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46378
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet3"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations3"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation3"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords3"
+      }
+     ]
+    },
+    {
+     "at": 36,
+     "do": [
+      {
+       "t": "Enter the hole next to Xeric's Shrine.",
+       "s": "Enter the hole next to Xeric's Shrine.",
+       "k": "enterXericShrineHole",
+       "at": [
+        1314,
+        3617,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46435
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole2",
+       "at": [
+        1375,
+        10033,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46330
+        ]
+       }
+      },
+      {
+       "t": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+       "s": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+       "k": "leaveMolchIsland",
+       "at": [
+        1369,
+        3641,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33614
+        ]
+       }
+      },
+      {
+       "t": "Search the south east stone table.",
+       "s": "Search the south east stone table.",
+       "k": "searchForTablet3",
+       "at": [
+        1311,
+        10018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46378
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet3"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations3"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation3"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords3"
+      }
+     ]
+    },
+    {
+     "at": 38,
+     "do": [
+      {
+       "t": "Enter the hole next to Xeric's Shrine.",
+       "s": "Enter the hole next to Xeric's Shrine.",
+       "k": "enterXericShrineHole",
+       "at": [
+        1314,
+        3617,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46435
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole2",
+       "at": [
+        1375,
+        10033,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46330
+        ]
+       }
+      },
+      {
+       "t": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+       "s": "Travel via Boaty to Molch, and enter the hole near Xeric's Shrine.",
+       "k": "leaveMolchIsland",
+       "at": [
+        1369,
+        3641,
+        0
+       ],
+       "hl": {
+        "obj": [
+         33614
+        ]
+       }
+      },
+      {
+       "t": "Search the south east stone table.",
+       "s": "Search the south east stone table.",
+       "k": "searchForTablet3",
+       "at": [
+        1311,
+        10018,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46378
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet3"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations3"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation3"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords3"
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "k": "enterMorraHole",
+       "at": [
+        1450,
+        3511,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46436
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole3",
+       "at": [
+        1294,
+        10033,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46333
+        ]
+       }
+      },
+      {
+       "t": "Search the south stone table.",
+       "s": "Search the south stone table.",
+       "k": "searchForTablet4",
+       "at": [
+        1440,
+        9816,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46379
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet4"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations4"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation4"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords4"
+      }
+     ]
+    },
+    {
+     "at": 42,
+     "do": [
+      {
+       "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "k": "enterMorraHole",
+       "at": [
+        1450,
+        3511,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46436
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole3",
+       "at": [
+        1294,
+        10033,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46333
+        ]
+       }
+      },
+      {
+       "t": "Search the south stone table.",
+       "s": "Search the south stone table.",
+       "k": "searchForTablet4",
+       "at": [
+        1440,
+        9816,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46379
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet4"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations4"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation4"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords4"
+      }
+     ]
+    },
+    {
+     "at": 44,
+     "do": [
+      {
+       "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "k": "enterMorraHole",
+       "at": [
+        1450,
+        3511,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46436
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole3",
+       "at": [
+        1294,
+        10033,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46333
+        ]
+       }
+      },
+      {
+       "t": "Search the south stone table.",
+       "s": "Search the south stone table.",
+       "k": "searchForTablet4",
+       "at": [
+        1440,
+        9816,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46379
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet4"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations4"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation4"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords4"
+      }
+     ]
+    },
+    {
+     "at": 46,
+     "do": [
+      {
+       "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "k": "enterMorraHole",
+       "at": [
+        1450,
+        3511,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46436
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole3",
+       "at": [
+        1294,
+        10033,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46333
+        ]
+       }
+      },
+      {
+       "t": "Search the south stone table.",
+       "s": "Search the south stone table.",
+       "k": "searchForTablet4",
+       "at": [
+        1440,
+        9816,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46379
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet4"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations4"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation4"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords4"
+      }
+     ]
+    },
+    {
+     "at": 48,
+     "do": [
+      {
+       "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "k": "enterMorraHole",
+       "at": [
+        1450,
+        3511,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46436
+        ]
+       }
+      },
+      {
+       "t": "Leave the hole.",
+       "s": "Leave the hole.",
+       "k": "leaveHole3",
+       "at": [
+        1294,
+        10033,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46333
+        ]
+       }
+      },
+      {
+       "t": "Search the south stone table.",
+       "s": "Search the south stone table.",
+       "k": "searchForTablet4",
+       "at": [
+        1440,
+        9816,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46379
+        ]
+       }
+      },
+      {
+       "t": "Read the stone tablet.",
+       "s": "Read the stone tablet.",
+       "k": "readTablet4"
+      },
+      {
+       "t": "Read the word translations.",
+       "s": "Read the word translations.",
+       "k": "readTranslations4"
+      },
+      {
+       "t": "Click the 'Attempt Translation' button.",
+       "s": "Click the 'Attempt Translation' button.",
+       "k": "attemptTranslation4"
+      },
+      {
+       "t": "Work out various translation words and input them to the word translations.",
+       "s": "Work out the translation words and enter them.",
+       "k": "inputWords4"
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "k": "enterMorraHole",
+       "at": [
+        1450,
+        3511,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46436
+        ]
+       }
+      },
+      {
+       "t": "Search the south stone table.",
+       "s": "Search the south stone table.",
+       "k": "searchForTablet4",
+       "at": [
+        1440,
+        9816,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46379
+        ]
+       }
+      },
+      {
+       "t": "Read the final stone tablet again.",
+       "s": "Read the final stone tablet again.",
+       "k": "readTabletFinal"
+      },
+      {
+       "t": "Read the warning note.",
+       "s": "Read the warning note.",
+       "k": "readWarningNote"
+      }
+     ]
+    },
+    {
+     "at": 52,
+     "do": [
+      {
+       "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "k": "enterMorraHole",
+       "at": [
+        1450,
+        3511,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46436
+        ]
+       }
+      },
+      {
+       "t": "Search the south stone table.",
+       "s": "Search the south stone table.",
+       "k": "searchForTablet4",
+       "at": [
+        1440,
+        9816,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46379
+        ]
+       }
+      },
+      {
+       "t": "Read the final stone tablet again.",
+       "s": "Read the final stone tablet again.",
+       "k": "readTabletFinal"
+      },
+      {
+       "t": "Read the warning note.",
+       "s": "Read the warning note.",
+       "k": "readWarningNote"
+      }
+     ]
+    },
+    {
+     "at": 54,
+     "do": [
+      {
+       "t": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "s": "Enter the hole in the Ruins of Morra, south west of Shayzien.",
+       "k": "enterMorraHole",
+       "at": [
+        1450,
+        3511,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46436
+        ]
+       }
+      },
+      {
+       "t": "Search the south stone table.",
+       "s": "Search the south stone table.",
+       "k": "searchForTablet4",
+       "at": [
+        1440,
+        9816,
+        0
+       ],
+       "hl": {
+        "obj": [
+         46379
+        ]
+       }
+      },
+      {
+       "t": "Read the final stone tablet again.",
+       "s": "Read the final stone tablet again.",
+       "k": "readTabletFinal"
+      },
+      {
+       "t": "Read the warning note.",
+       "s": "Read the warning note.",
+       "k": "readWarningNote"
+      }
+     ]
+    }
+   ]
+  },
+  "S9-52": {
+   "var": [
+    "varbit",
+    9835
+   ],
+   "route": [
+    {
+     "title": "Walkthrough",
+     "steps": [
+      "Speak to Guildmaster Apatura in the Hunters' Guild. Dialogue: \"Can I help you with anything?\"",
+      "Go down the stairs in the big tree in the middle of Hunters' Guild.",
+      "Speak to Guild Scribe Verity behind the bar.",
+      "Talk to Guild Hunter Wolf (Master) just west of the bar to get a toy mouse.",
+      "Wind up the toy mouse and then use it on Guild Hunter Kiko to distract him.",
+      "Check Kiko's cat bed.",
+      "Return to Wolf and talk to her again.",
+      "Buy a box trap from Imia's Supplies if you do not have one. Pick up the needle spawn in the fur shop for later use.",
+      "Go back up the stairs and head south-east from the guild towards the mine to find Guild Hunter Fox laying down. He can be found south-east of the mining symbol (south-west of Fairy Ring )",
+      "Talk to Fox.",
+      "Take a leaf from the leafy bush. The bush is south-west of him and browner than the other bushes.",
+      "Go east to the Locus Oasis and pick from the rough-looking bush for a second leaf. The bush is south of the hunter symbol on the map, on the west coast of the oasis.",
+      "While here, catch two Embertailed jerboa using a box trap for their tails.",
+      "Use the Jerboa tail on the leaves to create Makeshift poultice.",
+      "Return to Fox and talk to him again.",
+      "Head to Atza, who is in one of the buildings just east of the southern gate of Civitas illa Fortis (west of the pub). Talk to her.",
+      "Set-up the pile of equipment in the middle of the room. (A hammer is available in the house to the north.)",
+      "Talk to Atza to get the trimmed fur.",
+      "Return to Fox. He will give you a report for the guild.",
+      "Return to Guild Scribe Verity, down the stairs in the Hunter Guild, and give her the report.",
+      "Use the remaining jerboa tail on the cat bed to fix it.",
+      "Head back upstairs, and talk to Guildmaster Apatura.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Guildmaster Apatura in the Hunter Guild, south-west of Civitas illa Fortis.",
+       "s": "Talk to Guildmaster Apatura in the Hunter Guild.",
+       "k": "talkToApatura",
+       "at": [
+        1554,
+        3033,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13120
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Go down the stairs in the tree in the guild.",
+       "s": "Go down the stairs in the tree in the guild.",
+       "k": "goDownTree",
+       "at": [
+        1557,
+        3048,
+        0
+       ],
+       "hl": {
+        "obj": [
+         51641
+        ]
+       }
+      },
+      {
+       "t": "Talk to Guild Scribe Verity behind the bar.",
+       "s": "Talk to Guild Scribe Verity behind the bar.",
+       "k": "talkToVerity",
+       "at": [
+        1559,
+        9464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13127
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Go down the stairs in the tree in the guild.",
+       "s": "Go down the stairs in the tree in the guild.",
+       "k": "goDownTree",
+       "at": [
+        1557,
+        3048,
+        0
+       ],
+       "hl": {
+        "obj": [
+         51641
+        ]
+       }
+      },
+      {
+       "t": "Talk to Guild Hunter Wolf (Master), next to the bar.",
+       "s": "Talk to Guild Hunter Wolf (Master), next to the bar.",
+       "k": "talkToWolf",
+       "at": [
+        1555,
+        9462,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13126
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Go down the stairs in the tree in the guild.",
+       "s": "Go down the stairs in the tree in the guild.",
+       "k": "goDownTree",
+       "at": [
+        1557,
+        3048,
+        0
+       ],
+       "hl": {
+        "obj": [
+         51641
+        ]
+       }
+      },
+      {
+       "t": "Talk to Guild Hunter Wolf (Master), next to the bar.",
+       "s": "Talk to Guild Hunter Wolf (Master), next to the bar.",
+       "k": "talkToWolf",
+       "at": [
+        1555,
+        9462,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13126
+        ]
+       }
+      },
+      {
+       "t": "Wind up a toy mouse.",
+       "s": "Wind up a toy mouse.",
+       "k": "windUpToy"
+      },
+      {
+       "t": "Use the wound up toy mouse on Guild Hunter Kiko near the bar.",
+       "s": "Use the wound up toy mouse on Guild Hunter Kiko near the bar.",
+       "k": "useToyOnKiko",
+       "at": [
+        1552,
+        9460,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12934
+        ]
+       }
+      },
+      {
+       "t": "Check the cat's bed.",
+       "s": "Check the cat's bed.",
+       "k": "checkBed",
+       "at": [
+        1552,
+        9460,
+        0
+       ],
+       "hl": {
+        "obj": [
+         53011
+        ]
+       }
+      },
+      {
+       "t": "Return to Guild Hunter Wolf (Master), next to the bar.",
+       "s": "Return to Guild Hunter Wolf (Master), next to the bar.",
+       "k": "returnToWolf",
+       "at": [
+        1555,
+        9462,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13126
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Get a box trap. You can buy one from Imia in the north of the Hunter Guild's surface for 41gp.",
+       "s": "Get a box trap from Imia, north of the Hunter Guild, for 41 gp.",
+       "k": "buyBoxTrap",
+       "has": "Box trap",
+       "at": [
+        1562,
+        3060,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13131
+        ]
+       }
+      },
+      {
+       "t": "Talk to Guild Hunter Fox near the crevice south-east of the Hunter Guild.",
+       "s": "Talk to Guild Hunter Fox at the crevice south-east of the guild.",
+       "k": "talkToFox",
+       "at": [
+        1623,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12932
+        ]
+       }
+      },
+      {
+       "t": "Go back up the stairs.",
+       "s": "Go back up the stairs.",
+       "k": "goUpTree",
+       "at": [
+        1557,
+        9449,
+        0
+       ],
+       "hl": {
+        "obj": [
+         51642
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Search the leafy bush south of the crevice for a smooth leaf.",
+       "s": "Search the leafy bush south of the crevice for a smooth leaf.",
+       "k": "takeLeaf",
+       "at": [
+        1618,
+        2979,
+        0
+       ],
+       "hl": {
+        "obj": [
+         50876
+        ]
+       }
+      },
+      {
+       "t": "Search the rough-looking bush on the west side of the Locus Oasis.",
+       "s": "Search the rough-looking bush on the west side of the Locus Oasis.",
+       "k": "takeSecondLeaf",
+       "at": [
+        1673,
+        2992,
+        0
+       ],
+       "hl": {
+        "obj": [
+         50877
+        ]
+       }
+      },
+      {
+       "t": "Catch two Embertailed Jerboa for their tails.",
+       "s": "Catch two Embertailed Jerboa for their tails.",
+       "k": "catchJerboa",
+       "at": [
+        1664,
+        3003,
+        0
+       ]
+      },
+      {
+       "t": "Use the tails on the leaves.",
+       "s": "Use the tails on the leaves.",
+       "k": "useTailOnLeaves"
+      },
+      {
+       "t": "Bring the poultice back to Guild Hunter Fox near the crevice.",
+       "s": "Bring the poultice back to Guild Hunter Fox near the crevice.",
+       "k": "returnToFox",
+       "at": [
+        1623,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12932
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Talk to Guild Hunter Fox.",
+       "s": "Talk to Guild Hunter Fox.",
+       "k": "talkToFoxAfterPoultice",
+       "at": [
+        1623,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12932
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Talk to Guild Hunter Fox.",
+       "s": "Talk to Guild Hunter Fox.",
+       "k": "talkToFoxAfterPoultice",
+       "at": [
+        1623,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12932
+        ]
+       }
+      },
+      {
+       "t": "Talk to Atza in one of the buildings outside Civitas illa Fortis' south wall, west of the general store.",
+       "s": "Talk to Atza outside the south wall of Civitas illa Fortis.",
+       "k": "talkToAtza",
+       "at": [
+        1696,
+        3063,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12933
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Talk to Atza in one of the buildings outside Civitas illa Fortis' south wall, west of the general store.",
+       "s": "Talk to Atza outside the south wall of Civitas illa Fortis.",
+       "k": "talkToAtzaAfterHandingFur",
+       "at": [
+        1696,
+        3063,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12933
+        ]
+       }
+      },
+      {
+       "t": "Take a hammer from the house north of Atza.",
+       "s": "Take a hammer from the house north of Atza.",
+       "k": "takeHammer",
+       "at": [
+        1696,
+        3070,
+        0
+       ]
+      },
+      {
+       "t": "Set-up the pile of equipment next to Atza.",
+       "s": "Set-up the pile of equipment next to Atza.",
+       "k": "makeEquipmentPile",
+       "at": [
+        1697,
+        3063,
+        0
+       ],
+       "hl": {
+        "obj": [
+         52976
+        ]
+       }
+      },
+      {
+       "t": "Talk to Atza again for some trimmed fur.",
+       "s": "Talk to Atza again for some trimmed fur.",
+       "k": "talkToAtzaForTrim",
+       "at": [
+        1696,
+        3063,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12933
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Talk to Atza again for some trimmed fur.",
+       "s": "Talk to Atza again for some trimmed fur.",
+       "k": "talkToAtzaForTrim",
+       "at": [
+        1696,
+        3063,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12933
+        ]
+       }
+      },
+      {
+       "t": "Return to Guild Hunter Fox near the crevice south-east of the Hunter Guild to get his report.",
+       "s": "Return to Guild Hunter Fox at the crevice for his report.",
+       "k": "returnToFoxAfterTrim",
+       "at": [
+        1623,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12932
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Atza again for some trimmed fur.",
+       "s": "Talk to Atza again for some trimmed fur.",
+       "k": "talkToAtzaForTrim",
+       "at": [
+        1696,
+        3063,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12933
+        ]
+       }
+      },
+      {
+       "t": "Return back to Fox to get his report.",
+       "s": "Return back to Fox to get his report.",
+       "k": "getReportFromFox",
+       "at": [
+        1623,
+        2982,
+        0
+       ],
+       "hl": {
+        "npc": [
+         12932
+        ]
+       }
+      },
+      {
+       "t": "Take the needle in the Hunter Guild's surface area, in its south-east corner.",
+       "s": "Take the needle in the south-east of the Hunter Guild's surface.",
+       "k": "takeNeedle",
+       "at": [
+        1566,
+        3035,
+        0
+       ]
+      },
+      {
+       "t": "Go down the stairs in the tree in the Hunters Guild.",
+       "s": "Go down the stairs in the tree in the Hunters Guild.",
+       "k": "goDownTreeEnd",
+       "at": [
+        1557,
+        3048,
+        0
+       ],
+       "hl": {
+        "obj": [
+         51641
+        ]
+       }
+      },
+      {
+       "t": "Talk to Guild Scribe Verity behind the bar again.",
+       "s": "Talk to Guild Scribe Verity behind the bar again.",
+       "k": "talkToVerityEnd",
+       "at": [
+        1559,
+        9464,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13127
+        ]
+       }
+      },
+      {
+       "t": "Use a jerboa tail on the cat bed.",
+       "s": "Use a jerboa tail on the cat bed.",
+       "k": "useJerboaTailOnBed",
+       "at": [
+        1552,
+        9460,
+        0
+       ],
+       "hl": {
+        "obj": [
+         53011
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Talk to Guildmaster Apatura to finish the quest.",
+       "s": "Talk to Guildmaster Apatura to finish the quest.",
+       "k": "talkToApaturaToFinishQuest",
+       "at": [
+        1554,
+        3033,
+        0
+       ],
+       "hl": {
+        "npc": [
+         13120
+        ]
+       }
+      },
+      {
+       "t": "Go back up the stairs and talk to Guildmaster Apatura to finish the quest.",
+       "s": "Go up the stairs and talk to Guildmaster Apatura to finish.",
+       "k": "goUpTreeToFinishQuest",
+       "at": [
+        1557,
+        9449,
+        0
+       ],
+       "hl": {
+        "obj": [
+         51642
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }

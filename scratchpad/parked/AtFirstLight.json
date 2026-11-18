@@ -1,0 +1,690 @@
+{
+  "quest": "At First Light",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "At First Light",
+      "revision": 15391671
+    },
+    "quickGuide": {
+      "title": "At First Light/Quick guide",
+      "revision": 15213493
+    }
+  },
+  "step": {
+    "title": "At First Light",
+    "type": "quest",
+    "qp": 1,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/At_First_Light",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/At_First_Light/Quick_guide",
+    "mapLocation": {
+      "x": 1555,
+      "y": 3033,
+      "plane": 0,
+      "label": "Talk to Guildmaster Apatura at the Hunter Guild."
+    },
+    "npc": {
+      "nameEn": "Guildmaster Apatura"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Box trap",
+        "amount": 1,
+        "wikiItemId": 10008,
+        "howToGet": "Buy on the Grand Exchange, or from Imia north of the Hunter Guild for 41 gp.",
+        "note": "or a Box trap (can be bought from Imia's Supplies nearby)"
+      }
+    ],
+    "foes": []
+  },
+  "stages": {
+    "var": [
+      "varbit",
+      9835
+    ],
+    "route": [
+      {
+        "title": "Walkthrough",
+        "steps": [
+          "Speak to Guildmaster Apatura in the Hunters' Guild. Dialogue: \"Can I help you with anything?\"",
+          "Go down the stairs in the big tree in the middle of Hunters' Guild.",
+          "Speak to Guild Scribe Verity behind the bar.",
+          "Talk to Guild Hunter Wolf (Master) just west of the bar to get a toy mouse.",
+          "Wind up the toy mouse and then use it on Guild Hunter Kiko to distract him.",
+          "Check Kiko's cat bed.",
+          "Return to Wolf and talk to her again.",
+          "Buy a box trap from Imia's Supplies if you do not have one. Pick up the needle spawn in the fur shop for later use.",
+          "Go back up the stairs and head south-east from the guild towards the mine to find Guild Hunter Fox laying down. He can be found south-east of the mining symbol (south-west of Fairy Ring )",
+          "Talk to Fox.",
+          "Take a leaf from the leafy bush. The bush is south-west of him and browner than the other bushes.",
+          "Go east to the Locus Oasis and pick from the rough-looking bush for a second leaf. The bush is south of the hunter symbol on the map, on the west coast of the oasis.",
+          "While here, catch two Embertailed jerboa using a box trap for their tails.",
+          "Use the Jerboa tail on the leaves to create Makeshift poultice.",
+          "Return to Fox and talk to him again.",
+          "Head to Atza, who is in one of the buildings just east of the southern gate of Civitas illa Fortis (west of the pub). Talk to her.",
+          "Set-up the pile of equipment in the middle of the room. (A hammer is available in the house to the north.)",
+          "Talk to Atza to get the trimmed fur.",
+          "Return to Fox. He will give you a report for the guild.",
+          "Return to Guild Scribe Verity, down the stairs in the Hunter Guild, and give her the report.",
+          "Use the remaining jerboa tail on the cat bed to fix it.",
+          "Head back upstairs, and talk to Guildmaster Apatura.",
+          "Congratulations, quest complete!"
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Talk to Guildmaster Apatura in the Hunter Guild, south-west of Civitas illa Fortis.",
+            "s": "Talk to Guildmaster Apatura in the Hunter Guild.",
+            "k": "talkToApatura",
+            "at": [
+              1554,
+              3033,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13120
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 1,
+        "do": [
+          {
+            "t": "Go down the stairs in the tree in the guild.",
+            "s": "Go down the stairs in the tree in the guild.",
+            "k": "goDownTree",
+            "at": [
+              1557,
+              3048,
+              0
+            ],
+            "hl": {
+              "obj": [
+                51641
+              ]
+            }
+          },
+          {
+            "t": "Talk to Guild Scribe Verity behind the bar.",
+            "s": "Talk to Guild Scribe Verity behind the bar.",
+            "k": "talkToVerity",
+            "at": [
+              1559,
+              9464,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13127
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 2,
+        "do": [
+          {
+            "t": "Go down the stairs in the tree in the guild.",
+            "s": "Go down the stairs in the tree in the guild.",
+            "k": "goDownTree",
+            "at": [
+              1557,
+              3048,
+              0
+            ],
+            "hl": {
+              "obj": [
+                51641
+              ]
+            }
+          },
+          {
+            "t": "Talk to Guild Hunter Wolf (Master), next to the bar.",
+            "s": "Talk to Guild Hunter Wolf (Master), next to the bar.",
+            "k": "talkToWolf",
+            "at": [
+              1555,
+              9462,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13126
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 3,
+        "do": [
+          {
+            "t": "Go down the stairs in the tree in the guild.",
+            "s": "Go down the stairs in the tree in the guild.",
+            "k": "goDownTree",
+            "at": [
+              1557,
+              3048,
+              0
+            ],
+            "hl": {
+              "obj": [
+                51641
+              ]
+            }
+          },
+          {
+            "t": "Talk to Guild Hunter Wolf (Master), next to the bar.",
+            "s": "Talk to Guild Hunter Wolf (Master), next to the bar.",
+            "k": "talkToWolf",
+            "at": [
+              1555,
+              9462,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13126
+              ]
+            }
+          },
+          {
+            "t": "Wind up a toy mouse.",
+            "s": "Wind up a toy mouse.",
+            "k": "windUpToy"
+          },
+          {
+            "t": "Use the wound up toy mouse on Guild Hunter Kiko near the bar.",
+            "s": "Use the wound up toy mouse on Guild Hunter Kiko near the bar.",
+            "k": "useToyOnKiko",
+            "at": [
+              1552,
+              9460,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12934
+              ]
+            }
+          },
+          {
+            "t": "Check the cat's bed.",
+            "s": "Check the cat's bed.",
+            "k": "checkBed",
+            "at": [
+              1552,
+              9460,
+              0
+            ],
+            "hl": {
+              "obj": [
+                53011
+              ]
+            }
+          },
+          {
+            "t": "Return to Guild Hunter Wolf (Master), next to the bar.",
+            "s": "Return to Guild Hunter Wolf (Master), next to the bar.",
+            "k": "returnToWolf",
+            "at": [
+              1555,
+              9462,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13126
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 4,
+        "do": [
+          {
+            "t": "Get a box trap. You can buy one from Imia in the north of the Hunter Guild's surface for 41gp.",
+            "s": "Get a box trap from Imia, north of the Hunter Guild, for 41 gp.",
+            "k": "buyBoxTrap",
+            "at": [
+              1562,
+              3060,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13131
+              ]
+            }
+          },
+          {
+            "t": "Talk to Guild Hunter Fox near the crevice south-east of the Hunter Guild.",
+            "s": "Talk to Guild Hunter Fox at the crevice south-east of the guild.",
+            "k": "talkToFox",
+            "at": [
+              1623,
+              2982,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12932
+              ]
+            }
+          },
+          {
+            "t": "Go back up the stairs.",
+            "s": "Go back up the stairs.",
+            "k": "goUpTree",
+            "at": [
+              1557,
+              9449,
+              0
+            ],
+            "hl": {
+              "obj": [
+                51642
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 5,
+        "do": [
+          {
+            "t": "Search the leafy bush south of the crevice for a smooth leaf.",
+            "s": "Search the leafy bush south of the crevice for a smooth leaf.",
+            "k": "takeLeaf",
+            "at": [
+              1618,
+              2979,
+              0
+            ],
+            "hl": {
+              "obj": [
+                50876
+              ]
+            }
+          },
+          {
+            "t": "Search the rough-looking bush on the west side of the Locus Oasis.",
+            "s": "Search the rough-looking bush on the west side of the Locus Oasis.",
+            "k": "takeSecondLeaf",
+            "at": [
+              1673,
+              2992,
+              0
+            ],
+            "hl": {
+              "obj": [
+                50877
+              ]
+            }
+          },
+          {
+            "t": "Catch two Embertailed Jerboa for their tails.",
+            "s": "Catch two Embertailed Jerboa for their tails.",
+            "k": "catchJerboa",
+            "at": [
+              1664,
+              3003,
+              0
+            ]
+          },
+          {
+            "t": "Use the tails on the leaves.",
+            "s": "Use the tails on the leaves.",
+            "k": "useTailOnLeaves"
+          },
+          {
+            "t": "Bring the poultice back to Guild Hunter Fox near the crevice.",
+            "s": "Bring the poultice back to Guild Hunter Fox near the crevice.",
+            "k": "returnToFox",
+            "at": [
+              1623,
+              2982,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12932
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 6,
+        "do": [
+          {
+            "t": "Talk to Guild Hunter Fox.",
+            "s": "Talk to Guild Hunter Fox.",
+            "k": "talkToFoxAfterPoultice",
+            "at": [
+              1623,
+              2982,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12932
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 7,
+        "do": [
+          {
+            "t": "Talk to Guild Hunter Fox.",
+            "s": "Talk to Guild Hunter Fox.",
+            "k": "talkToFoxAfterPoultice",
+            "at": [
+              1623,
+              2982,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12932
+              ]
+            }
+          },
+          {
+            "t": "Talk to Atza in one of the buildings outside Civitas illa Fortis' south wall, west of the general store.",
+            "s": "Talk to Atza outside the south wall of Civitas illa Fortis.",
+            "k": "talkToAtza",
+            "at": [
+              1696,
+              3063,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12933
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 8,
+        "do": [
+          {
+            "t": "Talk to Atza in one of the buildings outside Civitas illa Fortis' south wall, west of the general store.",
+            "s": "Talk to Atza outside the south wall of Civitas illa Fortis.",
+            "k": "talkToAtzaAfterHandingFur",
+            "at": [
+              1696,
+              3063,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12933
+              ]
+            }
+          },
+          {
+            "t": "Take a hammer from the house north of Atza.",
+            "s": "Take a hammer from the house north of Atza.",
+            "k": "takeHammer",
+            "at": [
+              1696,
+              3070,
+              0
+            ]
+          },
+          {
+            "t": "Set-up the pile of equipment next to Atza.",
+            "s": "Set-up the pile of equipment next to Atza.",
+            "k": "makeEquipmentPile",
+            "at": [
+              1697,
+              3063,
+              0
+            ],
+            "hl": {
+              "obj": [
+                52976
+              ]
+            }
+          },
+          {
+            "t": "Talk to Atza again for some trimmed fur.",
+            "s": "Talk to Atza again for some trimmed fur.",
+            "k": "talkToAtzaForTrim",
+            "at": [
+              1696,
+              3063,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12933
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 9,
+        "do": [
+          {
+            "t": "Talk to Atza again for some trimmed fur.",
+            "s": "Talk to Atza again for some trimmed fur.",
+            "k": "talkToAtzaForTrim",
+            "at": [
+              1696,
+              3063,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12933
+              ]
+            }
+          },
+          {
+            "t": "Return to Guild Hunter Fox near the crevice south-east of the Hunter Guild to get his report.",
+            "s": "Return to Guild Hunter Fox at the crevice for his report.",
+            "k": "returnToFoxAfterTrim",
+            "at": [
+              1623,
+              2982,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12932
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 10,
+        "do": [
+          {
+            "t": "Talk to Atza again for some trimmed fur.",
+            "s": "Talk to Atza again for some trimmed fur.",
+            "k": "talkToAtzaForTrim",
+            "at": [
+              1696,
+              3063,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12933
+              ]
+            }
+          },
+          {
+            "t": "Return back to Fox to get his report.",
+            "s": "Return back to Fox to get his report.",
+            "k": "getReportFromFox",
+            "at": [
+              1623,
+              2982,
+              0
+            ],
+            "hl": {
+              "npc": [
+                12932
+              ]
+            }
+          },
+          {
+            "t": "Take the needle in the Hunter Guild's surface area, in its south-east corner.",
+            "s": "Take the needle in the south-east of the Hunter Guild's surface.",
+            "k": "takeNeedle",
+            "at": [
+              1566,
+              3035,
+              0
+            ]
+          },
+          {
+            "t": "Go down the stairs in the tree in the Hunters Guild.",
+            "s": "Go down the stairs in the tree in the Hunters Guild.",
+            "k": "goDownTreeEnd",
+            "at": [
+              1557,
+              3048,
+              0
+            ],
+            "hl": {
+              "obj": [
+                51641
+              ]
+            }
+          },
+          {
+            "t": "Talk to Guild Scribe Verity behind the bar again.",
+            "s": "Talk to Guild Scribe Verity behind the bar again.",
+            "k": "talkToVerityEnd",
+            "at": [
+              1559,
+              9464,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13127
+              ]
+            }
+          },
+          {
+            "t": "Use a jerboa tail on the cat bed.",
+            "s": "Use a jerboa tail on the cat bed.",
+            "k": "useJerboaTailOnBed",
+            "at": [
+              1552,
+              9460,
+              0
+            ],
+            "hl": {
+              "obj": [
+                53011
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 11,
+        "do": [
+          {
+            "t": "Talk to Guildmaster Apatura to finish the quest.",
+            "s": "Talk to Guildmaster Apatura to finish the quest.",
+            "k": "talkToApaturaToFinishQuest",
+            "at": [
+              1554,
+              3033,
+              0
+            ],
+            "hl": {
+              "npc": [
+                13120
+              ]
+            }
+          },
+          {
+            "t": "Go back up the stairs and talk to Guildmaster Apatura to finish the quest.",
+            "s": "Go up the stairs and talk to Guildmaster Apatura to finish.",
+            "k": "goUpTreeToFinishQuest",
+            "at": [
+              1557,
+              9449,
+              0
+            ],
+            "hl": {
+              "obj": [
+                51642
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "facts": {
+    "id": "At First Light",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {
+        "hunter": 46,
+        "herblore": 30,
+        "construction": 27
+      },
+      "questPoints": 0,
+      "quests": [
+        "Children of the Sun",
+        "Eagles' Peak"
+      ],
+      "manual": [],
+      "capabilities": [],
+      "unparsed": null,
+      "text": "* {{SCP|Hunter|46|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}\n* {{SCP|Herblore|30|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}\n* {{SCP|Construction|27|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}\n* Completion of the following quests:\n** [[Children of the Sun]]\n** [[Eagles' Peak]]"
+    },
+    "rewards": {
+      "questPoints": 1,
+      "xp": {
+        "hunter": 4500,
+        "construction": 800,
+        "herblore": 500
+      },
+      "coins": 0
+    },
+    "resourceFlow": null,
+    "length": "Short",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15391671",
+      "title": "At First Light",
+      "revision": 15391671,
+      "retrievedAt": "2026-11-18T05:57:46.852Z"
+    }
+  },
+  "unknown": [
+    "step \"windUpToy\": Quest Helper gives no tile",
+    "step \"useTailOnLeaves\": Quest Helper gives no tile",
+    "what the quest uses up and hands out is not reviewed"
+  ]
+}

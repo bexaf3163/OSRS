@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-60 stages: 32 retained, 27 revised, 0 with a branch, 1 deferred.
+61 stages: 33 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -68,6 +68,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-46 Haunted Mine | quest-fight | yes | Treus Dayth (95) | melee | Treus Dayth | Lobster 15 | Retain |
 | S9-48 Tower of Life | not-combat | no | - | none | - | - | Retain |
 | S9-49 The Ribbiting Tale of a Lily Pad Labour Dispute | incidental | yes | Cuthbert, Lord of Dread (1) | melee | Cuthbert, Lord of Dread | - | Retain |
+| S9-50 Death on the Isle | incidental | yes | - | melee | - | - | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1433,4 +1434,22 @@ Changed:
 Evidence:
 
 - OSRS Wiki Cuthbert, Lord of Dread: level 1, 1 hitpoint, read 2026-11-18.
+
+## S9-50 Death on the Isle
+
+**Retain.** Death on the Isle: fight Adala (level 49) after the accusation, then Naiatli and Clodius in the theatre, all with no equipment; the quest says you cannot die to them.
+
+Quest stage lines: 0.18, 0.26.
+
+Assumptions:
+
+- The wiki says the two fights are fought with no equipment and cannot kill the player.
+
+Changed:
+
+- 2.142.0: new quest; scripted fights that cannot be lost.
+
+Evidence:
+
+- OSRS Wiki Death on the Isle: kills field, read 2026-11-18.
 

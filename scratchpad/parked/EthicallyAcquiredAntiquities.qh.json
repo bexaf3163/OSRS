@@ -1,0 +1,422 @@
+{
+ "title": "Ethically Acquired Antiquities",
+ "cls": "EthicallyAcquiredAntiquities",
+ "var": [
+  "varbit",
+  11193
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": {
+    "s": "inspectEmptyDisplayCase"
+   },
+   "2": {
+    "s": "talkToCuratorHerminius"
+   },
+   "4": "n1",
+   "6": "n2",
+   "8": {
+    "s": "talkToRegulus"
+   },
+   "10": {
+    "s": "talkToCrewmember"
+   },
+   "12": "n3",
+   "14": {
+    "s": "returnToCrewmember"
+   },
+   "16": {
+    "s": "talkToTraderStan"
+   },
+   "18": {
+    "s": "talkToBetty"
+   },
+   "20": {
+    "s": "readBettysNotes"
+   },
+   "22": {
+    "s": "talkToCuratorHaigHalen"
+   },
+   "24": "n4",
+   "26": {
+    "s": "searchStoreroomCrate"
+   },
+   "28": {
+    "s": "talkToCuratorBeforeShaming"
+   },
+   "30": {
+    "s": "shameCuratorHaigHalen"
+   },
+   "32": {
+    "s": "talkToCuratorBeforeCutscene"
+   },
+   "34": {
+    "s": "watchCutscene"
+   },
+   "36": {
+    "s": "returnToCuratorHerminius"
+   }
+  },
+  "nodes": {
+   "n1": {
+    "n": "goInvestigateMuseum",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 11195,
+       "op": ">=",
+       "v": 1
+      },
+      {
+       "s": "investigateCaseAgain"
+      }
+     ]
+    ],
+    "d": {
+     "s": "investigateToolsBehindDisplayCase"
+    }
+   },
+   "n2": {
+    "n": "goTalkToVisitors",
+    "c": [
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11198,
+         "op": ">=",
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "talkToAcademic"
+      }
+     ],
+     [
+      {
+       "o": "nor",
+       "a": [
+        {
+         "o": "vb",
+         "id": 11197,
+         "op": ">=",
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "talkToTourist"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToCitizen"
+    }
+   },
+   "n3": {
+    "n": "goRepairSail",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Sails",
+       "ids": [
+        29904
+       ],
+       "bank": 1
+      },
+      {
+       "s": "returnToCrewmember"
+      }
+     ]
+    ],
+    "d": {
+     "s": "talkToArtima"
+    }
+   },
+   "n4": {
+    "n": "goLootRoom",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Key for Storeroom",
+       "ids": [
+        29906
+       ]
+      },
+      {
+       "s": "searchStoreroomCrate"
+      }
+     ]
+    ],
+    "d": {
+     "s": "pickpocketCuratorHaig"
+    }
+   }
+  },
+  "reqs": {},
+  "alias": {}
+ },
+ "unknown": {},
+ "steps": {
+  "inspectEmptyDisplayCase": {
+   "typ": "ObjectStep",
+   "wp": [
+    1721,
+    3165,
+    0
+   ],
+   "ids": [
+    54693
+   ],
+   "text": "Inspect the empty display case at the Grand Museum in Civitas illa Fortis to start the quest."
+  },
+  "talkToCuratorHerminius": {
+   "typ": "NpcStep",
+   "wp": [
+    1712,
+    3163,
+    0
+   ],
+   "ids": [
+    13297
+   ],
+   "text": "Speak to Curator Herminius in the centre of the Grand Museum."
+  },
+  "investigateToolsBehindDisplayCase": {
+   "typ": "ObjectStep",
+   "wp": [
+    1722,
+    3167,
+    0
+   ],
+   "ids": [
+    54700
+   ],
+   "text": "Investigate the tools behind the empty display case."
+  },
+  "investigateCaseAgain": {
+   "typ": "ObjectStep",
+   "wp": [
+    1721,
+    3165,
+    0
+   ],
+   "ids": [
+    54693
+   ],
+   "text": "Inspect the empty display case again."
+  },
+  "talkToCitizen": {
+   "typ": "NpcStep",
+   "wp": [
+    1712,
+    3165,
+    0
+   ],
+   "ids": [
+    13182
+   ],
+   "text": "Talk to any citizen in the room."
+  },
+  "talkToAcademic": {
+   "typ": "NpcStep",
+   "wp": [
+    1712,
+    3165,
+    0
+   ],
+   "ids": [
+    13298
+   ],
+   "text": "Talk to any academic in the room."
+  },
+  "talkToTourist": {
+   "typ": "NpcStep",
+   "wp": [
+    1712,
+    3165,
+    0
+   ],
+   "ids": [
+    13206
+   ],
+   "text": "Talk to any tourist in the room."
+  },
+  "talkToRegulus": {
+   "typ": "NpcStep",
+   "wp": [
+    1701,
+    3143,
+    0
+   ],
+   "ids": [
+    12885
+   ],
+   "text": "Speak to Regulus Cento south of the Grand Museum."
+  },
+  "talkToCrewmember": {
+   "typ": "NpcStep",
+   "wp": [
+    1742,
+    3135,
+    0
+   ],
+   "ids": [
+    9312
+   ],
+   "text": "Head east to the docks and speak to any Trader Crewmember."
+  },
+  "talkToArtima": {
+   "typ": "NpcStep",
+   "wp": [
+    1766,
+    3101,
+    0
+   ],
+   "ids": [
+    13342
+   ],
+   "text": "Head south of the Fortis Cothon to Artima's crafting store and speak to her."
+  },
+  "returnToCrewmember": {
+   "typ": "NpcStep",
+   "wp": [
+    1742,
+    3135,
+    0
+   ],
+   "ids": [
+    9312
+   ],
+   "text": "Return up north and speak to any Trader Crewmember."
+  },
+  "talkToTraderStan": {
+   "typ": "NpcStep",
+   "wp": [
+    3036,
+    3194,
+    0
+   ],
+   "ids": [
+    9299
+   ],
+   "text": "Head to Port Sarim and speak to Trader Stan or any Trader Crewmember on the southern deck. To get to Port Sarim quickly, you can charter a ship."
+  },
+  "talkToBetty": {
+   "typ": "NpcStep",
+   "wp": [
+    3011,
+    3260,
+    0
+   ],
+   "ids": [
+    1788
+   ],
+   "text": "Head to the Rune Shop in north western Port Sarim and speak to Betty."
+  },
+  "readBettysNotes": {
+   "typ": "DetailedQuestStep",
+   "wp": null,
+   "ids": [],
+   "text": "Read Betty's notes."
+  },
+  "talkToCuratorHaigHalen": {
+   "typ": "NpcStep",
+   "wp": [
+    3257,
+    3449,
+    0
+   ],
+   "ids": [
+    5214
+   ],
+   "text": "Head to Varrock Museum and speak to Curator Haig Halen."
+  },
+  "pickpocketCuratorHaig": {
+   "typ": "NpcStep",
+   "wp": [
+    3257,
+    3449,
+    0
+   ],
+   "ids": [
+    5214
+   ],
+   "text": "Right-click pickpocket Curator Haig Halen."
+  },
+  "searchStoreroomCrate": {
+   "typ": "ObjectStep",
+   "wp": [
+    3266,
+    3458,
+    0
+   ],
+   "ids": [
+    54697
+   ],
+   "text": "Open the door to the room in the north east and search the crate."
+  },
+  "talkToCuratorBeforeShaming": {
+   "typ": "NpcStep",
+   "wp": [
+    3257,
+    3449,
+    0
+   ],
+   "ids": [
+    5214
+   ],
+   "text": "Go speak to Curator Haig Halen again."
+  },
+  "shameCuratorHaigHalen": {
+   "typ": null,
+   "wp": null,
+   "ids": [],
+   "text": null
+  },
+  "talkToCuratorBeforeCutscene": {
+   "typ": "NpcStep",
+   "wp": [
+    3257,
+    3449,
+    0
+   ],
+   "ids": [
+    5214
+   ],
+   "text": "Speak to Curator before a cutscene."
+  },
+  "watchCutscene": {
+   "typ": "NpcStep",
+   "wp": [
+    3257,
+    3449,
+    0
+   ],
+   "ids": [
+    5214
+   ],
+   "text": "Watch cutscene."
+  },
+  "returnToCuratorHerminius": {
+   "typ": "NpcStep",
+   "wp": [
+    1712,
+    3163,
+    0
+   ],
+   "ids": [
+    13297
+   ],
+   "text": "Speak to the Curator in the centre of the Grand Museum to complete the quest."
+  }
+ }
+}
