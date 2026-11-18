@@ -5994,6 +5994,35 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Eye_of_newt"
   },
   {
+    "id": 4593,
+    "nameEn": "Fake beard",
+    "examine": "Makes me itch.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Fake_beard.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Pollnivneach general store.",
+        "location": "Pollnivneach",
+        "owner": "Market seller",
+        "price": 1,
+        "stock": 11,
+        "members": true
+      },
+      {
+        "shopName": "Ali's Discount Wares.",
+        "location": "Al Kharid",
+        "owner": "Ali Morrisane",
+        "price": 1,
+        "stock": 11,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Fake_beard"
+  },
+  {
     "id": 314,
     "nameEn": "Feather",
     "examine": "Used for fly fishing.",
@@ -8943,6 +8972,35 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Karamjan_rum"
   },
   {
+    "id": 4591,
+    "nameEn": "Kharidian headpiece",
+    "examine": "Wear it on your head.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Kharidian_headpiece.png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "buyLocations": [
+      {
+        "shopName": "Pollnivneach general store.",
+        "location": "Pollnivneach",
+        "owner": "Market seller",
+        "price": 1,
+        "stock": 12,
+        "members": true
+      },
+      {
+        "shopName": "Ali's Discount Wares.",
+        "location": "Al Kharid",
+        "owner": "Ali Morrisane",
+        "price": 1,
+        "stock": 12,
+        "members": true
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Kharidian_headpiece"
+  },
+  {
     "id": 75,
     "nameEn": "Khazard armour",
     "examine": "Armour, as worn by the minions of General Khazard.",
@@ -10708,6 +10766,59 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Mort_myre_fungus"
+  },
+  {
+    "id": 4698,
+    "nameEn": "Mud rune",
+    "examine": "A combined Earth and Water Rune.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Mud_rune.png",
+    "value": 20,
+    "highAlch": 12,
+    "lowAlch": 8,
+    "dropSources": [
+      {
+        "monster": "Spiritual mage#Zaros",
+        "combatLevel": null,
+        "rate": "7/128"
+      },
+      {
+        "monster": "Spiritual warrior#Zaros",
+        "combatLevel": null,
+        "rate": "7/128"
+      },
+      {
+        "monster": "Zombie (Tarn's Lair)#Low level",
+        "combatLevel": null,
+        "rate": "5/128"
+      },
+      {
+        "monster": "Mutated Tortoise",
+        "combatLevel": 247,
+        "rate": "5/64"
+      },
+      {
+        "monster": "Warped Tortoise",
+        "combatLevel": 121,
+        "rate": "5/64"
+      },
+      {
+        "monster": "Spiritual mage",
+        "combatLevel": 182,
+        "rate": "7/128"
+      },
+      {
+        "monster": "Blood Reaver",
+        "combatLevel": 174,
+        "rate": "7/128"
+      },
+      {
+        "monster": "Deranged archaeologist",
+        "combatLevel": 276,
+        "rate": "6/131"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Mud_rune"
   },
   {
     "id": 561,

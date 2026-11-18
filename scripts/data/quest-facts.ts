@@ -47,7 +47,7 @@ export function questFacts(article: WikiArticle, stepIds: string[], retrievedAt:
     // A partial start (Creature of Fenkenstrain's Restless Ghost) is kept as the whole quest: stricter, and its keepsakes count.
     // The quest icon ({{SCP|Quest}}) and the start marker ({{Questreqstart|..}}) around the link add nothing.
     const bare = line.replace(/\{\{(?:SCP\|Quest|Questreqstart\|[^{}]*)\}\}/gi, '').replace(/ +/g, ' ');
-    if (/^\*\s*(?:Partial c|C)omplet(?:ion of|ed) \[\[[^\]]+\]\]\.?\s*$/i.test(bare)) return consumed.add(i), firstLink(bare);
+    if (/^\*\s*(?:Partial c|C)omplet(?:ion of|ed) \[\[[^\]]+\]\](?: quest)?\.?\s*$/i.test(bare)) return consumed.add(i), firstLink(bare);
     if (/^\*\s*Completion of the following quests?:?\s*$/i.test(line)) return consumed.add(i), [];
     const head = lines.slice(0, i).reverse().find(l => /^\*(?!\*)/.test(l)) ?? '';
     if (!/^\*\*+\s*\[\[[^\]]+\]\]\s*$/.test(line) || !/Completion of the following quests?/i.test(head)) return [];
@@ -347,14 +347,21 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     uncertainReceipts: ['Trout'],
     partialDelivery: true, fromStartOnly: true,
   } },
-  // The steel weapons go to the Myreque, nails and planks into the bridge, the fungus into the druid pouch and the runes into Fire Bolt;
-  // the hammer, staff, pouch and sickle are kept.
-  'In Search of the Myreque': { revision: 15399379, flow: {
-    consumes: [{ name: 'Steel longsword', count: 1 }, { name: 'Steel shortsword', count: 2 }, { name: 'Steel mace', count: 1 }, { name: 'Steel warhammer', count: 1 },
-      { name: 'Steel dagger', count: 1 }, { name: 'Steel nails', count: 225 }, { name: 'Plank', count: 6 }, { name: 'Mort myre fungus', count: 6 }, { name: 'Coins', count: 10 }],
+  // The sap and mud rune become magic glue, the logs go into Oaknock's machine; the tools are kept, the discs and glue are quest items.
+  'The Eyes of Glouphrie': { revision: 15292355, flow: {
+    consumes: [{ name: 'Bucket of sap', count: 1 }, { name: 'Mud rune', count: 1 }, { name: 'Maple logs', count: 1 }, { name: 'Oak logs', count: 1 }],
     receives: [],
-    unknownItems: [],
-    uncertainReceipts: ['Chaos rune', 'Air rune'],
+    unknownItems: ['Ground mud runes', 'Magic glue', 'Disc'],
+    uncertainReceipts: ['Trout'],
+    partialDelivery: true, fromStartOnly: true,
+  } },
+  // The candle and rope are lost at the fissure, the wire becomes the Beads of the Dead and the bones open the tomb doors; the spade,
+  // chisel, tinderbox and staff are kept.
+  'Shilo Village': { revision: 15402098, flow: {
+    consumes: [{ name: 'Candle', count: 1 }, { name: 'Rope', count: 1 }, { name: 'Bronze wire', count: 1 }, { name: 'Bones', count: 3 }],
+    receives: [],
+    unknownItems: ['Wampum belt', 'Stone-plaque', 'Tattered scroll', 'Crumpled scroll', "Zadimus corpse", 'Bone shard', 'Bone key', 'Sword pommel', 'Bone beads', 'Beads of the dead', "Bervirius notes", 'Locating crystal'],
+    uncertainReceipts: ['Chaos rune', 'Air rune', 'Trout'],
     partialDelivery: true, fromStartOnly: true,
   } },
   'Ernest the Chicken': { revision: 15390916, flow: {
@@ -413,6 +420,8 @@ const REVIEWED_CLAUSES = new Set([
   'Must be on the [[standard spellbook]]',
   // The Feud: the Tough Guy and the Bandit champion are in the step foes and the combat ledger.
   'The ability to kill a level 70 [[Bandit champion|bandit]] and a level 75 [[Tough Guy|Menaphite]] (both can be safespotted).',
+  // Shilo Village: Nazastarool is safespotted with Magic (step foes, fight mechanics, ledger); the undead ones are walked past with food.
+  'Must be able to defend from many [[Undead one]]s (level 61-73) and able to defeat three monsters that are about level 90.',
   // Death to the Dorgeshuun: Sigmund is in the step foes and the combat ledger, fought in melee.
   'The ability to defeat a level 50 enemy with [[Melee]] or [[Magic]]',
   'The ability to defeat a level 172 [[Black demon (The Grand Tree)|Black demon]] (safespottable for Ranged and Magic or melee using a [[halberd]]).',

@@ -1858,6 +1858,127 @@
       "evidence": [
         "OSRS Wiki Elemental Workshop II: kill 2 earth elementals for the ore, read 2026-11-18."
       ]
+    },
+    {
+      "stepId": "S9-42",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "The Feud: kill the Tough Guy (level 75, 75 hitpoints, hits up to 7) and the Bandit champion (level 70, 50 hitpoints, hits up to 10) in Pollnivneach.",
+      "enemies": [
+        {
+          "name": "Tough Guy",
+          "level": 75,
+          "maxHit": 7,
+          "table": true
+        },
+        {
+          "name": "Bandit champion",
+          "level": 70,
+          "maxHit": 10,
+          "table": true
+        }
+      ],
+      "lines": [
+        "6.1",
+        "6.4"
+      ],
+      "assumptions": [
+        "Both can be safespotted (a bush for the Tough Guy, a chair for the champion); the route fights them in melee with food."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Safespot both with Ranged or Magic (wiki)."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.140.0: new quest; both are in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Tough Guy (level 75, max hit 7) and Bandit champion (level 70, max hit 10), read 2026-11-18."
+      ]
+    },
+    {
+      "stepId": "S9-43",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "The Eyes of Glouphrie: kill six evil creatures (1 hitpoint each) around the Tree Gnome Stronghold.",
+      "enemies": [
+        {
+          "name": "Evil creature",
+          "level": 1,
+          "maxHit": 1,
+          "table": true
+        }
+      ],
+      "lines": [
+        "7.1"
+      ],
+      "assumptions": [
+        "One hit each; two fish are a margin, not a need."
+      ],
+      "problems": [],
+      "alternatives": [],
+      "decision": "retain",
+      "changed": [
+        "2.140.0: new quest; the evil creature is in combatFoes.json."
+      ],
+      "evidence": [
+        "OSRS Wiki The Eyes of Glouphrie: six evil creatures with 1 hitpoint, read 2026-11-18."
+      ]
+    },
+    {
+      "stepId": "S9-44",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "safespot",
+      "runPast": true,
+      "objective": "Shilo Village: defeat Nazastarool's three forms (zombie 91, skeleton 68, ghost 93; 70 to 80 hitpoints, hits up to 9) with Fire Bolt from behind the dolmen; the undead ones (levels 61 to 73) in the tomb tunnels are walked past.",
+      "enemies": [
+        {
+          "name": "Nazastarool",
+          "level": 91,
+          "maxHit": 9,
+          "table": true
+        },
+        {
+          "name": "Nazastarool",
+          "level": 68,
+          "maxHit": 8,
+          "table": true
+        },
+        {
+          "name": "Nazastarool",
+          "level": 93,
+          "maxHit": 9,
+          "table": true
+        },
+        {
+          "name": "Undead one",
+          "level": 73,
+          "maxHit": 7,
+          "table": false
+        }
+      ],
+      "lines": [
+        "3.0", "3.8", "3.9"
+      ],
+      "assumptions": [
+        "The dolmen safespot holds for all three forms; sixty Fire Bolts cover them.",
+        "The undead ones are not fought; ten fish cover the tunnels."
+      ],
+      "problems": [],
+      "alternatives": [
+        "Crumble Undead hits harder, but the spell is not in the spell data yet."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.140.0: new quest; the three forms are in combatFoes.json and fightMechanics.json."
+      ],
+      "evidence": [
+        "OSRS Wiki Nazastarool: three forms, safespot around the dolmen, read 2026-11-18."
+      ]
     }
   ]
 }

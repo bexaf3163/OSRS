@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-53 stages: 25 retained, 27 revised, 0 with a branch, 1 deferred.
+56 stages: 28 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -61,6 +61,9 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-38 Death to the Dorgeshuun | quest-fight | yes | H.A.M. Guard (22), Sigmund (50) | melee | Sigmund, H.A.M. Guard | Trout 5 | Retain |
 | S9-39 Watchtower | quest-fight | yes | Gorad (68), Blue dragon (111) | melee | Gorad | Trout 5 | Retain |
 | S9-41 Elemental Workshop II | quest-fight | yes | Earth elemental (35) | melee | Earth elemental | Trout 3 | Retain |
+| S9-42 The Feud | quest-fight | yes | Tough Guy (75), Bandit champion (70) | melee | Bandit champion, Tough Guy | Trout 10 | Retain |
+| S9-43 The Eyes of Glouphrie | quest-fight | yes | Evil creature (1) | melee | Evil creature | Trout 2 | Retain |
+| S9-44 Shilo Village | quest-fight | yes | Nazastarool (91), Nazastarool (68), Nazastarool (93), Undead one (73) | safespot | Nazastarool | Trout 10 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1283,4 +1286,67 @@ Changed:
 Evidence:
 
 - OSRS Wiki Elemental Workshop II: kill 2 earth elementals for the ore, read 2026-11-18.
+
+## S9-42 The Feud
+
+**Retain.** The Feud: kill the Tough Guy (level 75, 75 hitpoints, hits up to 7) and the Bandit champion (level 70, 50 hitpoints, hits up to 10) in Pollnivneach.
+
+Quest stage lines: 6.1, 6.4.
+
+Assumptions:
+
+- Both can be safespotted (a bush for the Tough Guy, a chair for the champion); the route fights them in melee with food.
+
+Alternatives:
+
+- Safespot both with Ranged or Magic (wiki).
+
+Changed:
+
+- 2.140.0: new quest; both are in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki Tough Guy (level 75, max hit 7) and Bandit champion (level 70, max hit 10), read 2026-11-18.
+
+## S9-43 The Eyes of Glouphrie
+
+**Retain.** The Eyes of Glouphrie: kill six evil creatures (1 hitpoint each) around the Tree Gnome Stronghold.
+
+Quest stage lines: 7.1.
+
+Assumptions:
+
+- One hit each; two fish are a margin, not a need.
+
+Changed:
+
+- 2.140.0: new quest; the evil creature is in combatFoes.json.
+
+Evidence:
+
+- OSRS Wiki The Eyes of Glouphrie: six evil creatures with 1 hitpoint, read 2026-11-18.
+
+## S9-44 Shilo Village
+
+**Retain.** Shilo Village: defeat Nazastarool's three forms (zombie 91, skeleton 68, ghost 93; 70 to 80 hitpoints, hits up to 9) with Fire Bolt from behind the dolmen; the undead ones (levels 61 to 73) in the tomb tunnels are walked past.
+
+Quest stage lines: 3.0, 3.8, 3.9.
+
+Assumptions:
+
+- The dolmen safespot holds for all three forms; sixty Fire Bolts cover them.
+- The undead ones are not fought; ten fish cover the tunnels.
+
+Alternatives:
+
+- Crumble Undead hits harder, but the spell is not in the spell data yet.
+
+Changed:
+
+- 2.140.0: new quest; the three forms are in combatFoes.json and fightMechanics.json.
+
+Evidence:
+
+- OSRS Wiki Nazastarool: three forms, safespot around the dolmen, read 2026-11-18.
 

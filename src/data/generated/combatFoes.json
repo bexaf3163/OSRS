@@ -1681,6 +1681,154 @@
       "aggressive": false
     },
     {
+      "name": "Bandit champion",
+      "combat": 70,
+      "members": true,
+      "hitpoints": 50,
+      "attackLevel": 59,
+      "strengthLevel": 80,
+      "defenceLevel": 50,
+      "magicLevel": 0,
+      "attackBonus": 9,
+      "defence": {
+        "stab": 9,
+        "slash": 8,
+        "crush": 10,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 10,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Tough Guy",
+      "combat": 75,
+      "members": true,
+      "hitpoints": 75,
+      "attackLevel": 85,
+      "strengthLevel": 50,
+      "defenceLevel": 50,
+      "magicLevel": 80,
+      "attackBonus": 9,
+      "defence": {
+        "stab": 9,
+        "slash": 8,
+        "crush": 10,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 7,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Evil creature",
+      "version": "Standard",
+      "combat": 1,
+      "members": true,
+      "hitpoints": 1,
+      "attackLevel": 1,
+      "strengthLevel": 1,
+      "defenceLevel": 1,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 1,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Nazastarool",
+      "version": "Zombie",
+      "combat": 91,
+      "members": true,
+      "hitpoints": 70,
+      "attackLevel": 85,
+      "strengthLevel": 80,
+      "defenceLevel": 80,
+      "magicLevel": 0,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 9,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "fire",
+        "percent": 40
+      }
+    },
+    {
+      "name": "Nazastarool",
+      "version": "Skeleton",
+      "combat": 68,
+      "members": true,
+      "hitpoints": 70,
+      "attackLevel": 58,
+      "strengthLevel": 54,
+      "defenceLevel": 58,
+      "magicLevel": 0,
+      "attackBonus": 15,
+      "defence": {
+        "stab": 5,
+        "slash": 5,
+        "crush": 5,
+        "magic": 5,
+        "ranged": 5
+      },
+      "attackStyle": "slash",
+      "maxHit": 8,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "earth",
+        "percent": 40
+      }
+    },
+    {
+      "name": "Nazastarool",
+      "version": "Ghost",
+      "combat": 93,
+      "members": true,
+      "hitpoints": 80,
+      "attackLevel": 85,
+      "strengthLevel": 80,
+      "defenceLevel": 80,
+      "magicLevel": 0,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 9,
+      "speedTicks": 4,
+      "aggressive": true,
+      "weakness": {
+        "element": "air",
+        "percent": 20
+      }
+    },
+    {
       "name": "Cow",
       "version": "1",
       "combat": 2,

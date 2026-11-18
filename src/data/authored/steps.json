@@ -10052,5 +10052,402 @@
         "questName": "Elemental Workshop II"
       }
     }
+  },
+  {
+    "id": "S9-42",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Feud",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Feud",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Feud/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3302,3211,0",
+    "mapLocation": {
+      "x": 3302,
+      "y": 3211,
+      "plane": 0,
+      "label": "Northern Al Kharid"
+    },
+    "npc": {
+      "nameEn": "Ali Morrisane",
+      "location": "Northern Al Kharid",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Ali_Morrisane"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Coins",
+        "amount": 517,
+        "howToGet": "500 for the camels from Ali the Camel Man, 6 for three beers, 10 to the street urchin and 1 for the snake charmer's pot.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      },
+      {
+        "nameEn": "Kharidian headpiece",
+        "amount": 1,
+        "howToGet": "With the fake beard it makes the desert disguise. Buy on the Grand Exchange or from Ali Morrisane.",
+        "wikiItemId": 4591,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Kharidian_headpiece.png"
+      },
+      {
+        "nameEn": "Fake beard",
+        "amount": 1,
+        "howToGet": "With the Kharidian headpiece it makes the desert disguise. Buy on the Grand Exchange or from Ali Morrisane.",
+        "wikiItemId": 4593,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fake_beard.png"
+      },
+      {
+        "nameEn": "Leather gloves",
+        "amount": 1,
+        "howToGet": "Worn with the disguise for the jewels; leather gloves work, Barrows, ice and Slayer gloves do not. Buy on the Grand Exchange.",
+        "wikiItemId": 1059,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Leather_gloves.png"
+      },
+      {
+        "nameEn": "Bucket",
+        "amount": 1,
+        "howToGet": "Picks up the Ugthanki dung. Buy on the Grand Exchange or at a general store.",
+        "wikiItemId": 1925,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. The Tough Guy (level 75) and the Bandit champion (level 70) can both be safespotted.",
+        "wikiItemId": 333,
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Bandit champion",
+      "Tough Guy"
+    ],
+    "reward": "1 QP, 15,000 Thieving XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Ali Morrisane"
+      ],
+      "dialogChoices": [
+        "If you are, then why are you still selling goods from a stall?",
+        "I'd like to help you but.....",
+        "Yes.",
+        "Okay.",
+        "Are those camels around the side for sale?",
+        "What price do you want for both of them?",
+        "Would 500 gold coins for the pair of them do?",
+        "Yes, of course, those bandits should be taught a lesson.",
+        "No thanks.",
+        "Yeah, I could do with a bit of advice.",
+        "I'm looking for Traitorous Ali.",
+        "No thanks I'm ok.",
+        "Would you sell me that bottle of special kebab sauce?",
+        "No thanks, I'm good.",
+        "Wow, a snake charmer. Can I have a go? Can I have a go? Please?",
+        "Ok I'll get to it.",
+        "No, I'm really too busy."
+      ],
+      "highlightItems": [
+        "Coins",
+        "Kharidian headpiece",
+        "Fake beard",
+        "Leather gloves",
+        "Bucket",
+        "Trout"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Feud"
+      }
+    }
+  },
+  {
+    "id": "S9-43",
+    "stage": 9,
+    "type": "quest",
+    "title": "The Eyes of Glouphrie",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Eyes_of_Glouphrie",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Eyes_of_Glouphrie/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2404,3419,0",
+    "mapLocation": {
+      "x": 2404,
+      "y": 3419,
+      "plane": 0,
+      "label": "The entrance to Brimstail's cave, west of the Tree Gnome Stronghold bank"
+    },
+    "npc": {
+      "nameEn": "Brimstail",
+      "location": "His cave south-west side of the Tree Gnome Stronghold, directly west of the bank near the Stronghold Slayer Cave",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Brimstail"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Bucket of sap",
+        "amount": 1,
+        "howToGet": "With ground mud runes it makes the magic glue for Oaknock's machine. Buy on the Grand Exchange, or cut an evergreen with a knife and a bucket.",
+        "wikiItemId": 4687,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_sap.png"
+      },
+      {
+        "nameEn": "Mud rune",
+        "amount": 1,
+        "howToGet": "Ground into the magic glue. Buy on the Grand Exchange.",
+        "wikiItemId": 4698,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mud_rune.png"
+      },
+      {
+        "nameEn": "Maple logs",
+        "amount": 1,
+        "howToGet": "Used on Oaknock's machine. Buy on the Grand Exchange.",
+        "wikiItemId": 1517,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Maple_logs.png"
+      },
+      {
+        "nameEn": "Oak logs",
+        "amount": 1,
+        "howToGet": "Used on Oaknock's machine. Buy on the Grand Exchange.",
+        "wikiItemId": 1521,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Oak_logs.png"
+      },
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Saw",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Construction supplies in Sawmill for 13 gp.",
+        "wikiItemId": 8794,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Saw.png"
+      },
+      {
+        "nameEn": "Pestle and mortar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from The Lighthouse Store in Lighthouse for 4 gp.",
+        "wikiItemId": 233,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pestle_and_mortar.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange. The six evil creatures have 1 hitpoint each.",
+        "wikiItemId": 333,
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Evil creature"
+    ],
+    "reward": "2 QP, 12,000 Magic XP, 2,500 Woodcutting XP, 6,000 Runecraft XP, 250 Construction XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Brimstail"
+      ],
+      "dialogChoices": [
+        "What's that cute creature wandering around?",
+        "Yes, that sounds fascinating...",
+        "Oh, yes I love a bit of History.",
+        "Of course!",
+        "I've had a look in the other room now.",
+        "Of course, I'd love to!",
+        "I've visited Hazelmere, he told me all sorts of interesting things.",
+        "I think I've fixed the machine now!",
+        "I",
+        "I can't work out what to do with these discs!",
+        "Phew! I've got that machine working now. What do I need to do now?"
+      ],
+      "highlightItems": [
+        "Bucket of sap",
+        "Mud rune",
+        "Maple logs",
+        "Oak logs",
+        "Hammer",
+        "Saw",
+        "Pestle and mortar",
+        "Trout"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Eyes of Glouphrie"
+      }
+    }
+  },
+  {
+    "id": "S9-44",
+    "stage": 9,
+    "type": "quest",
+    "title": "Shilo Village",
+    "qp": 2,
+    "requires": [
+      "S7-14"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Shilo_Village",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Shilo_Village/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2881,2951,0",
+    "mapLocation": {
+      "x": 2881,
+      "y": 2951,
+      "plane": 0,
+      "label": "The south part of Karamja"
+    },
+    "npc": {
+      "nameEn": "Mosol Rei",
+      "location": "The south part of Karamja",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Mosol_Rei"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "howToGet": "Digs the mound of earth at Ah Za Rhoon. Buy on the Grand Exchange or at a general store.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
+      },
+      {
+        "nameEn": "Candle",
+        "amount": 1,
+        "howToGet": "Lit, it lights the fissure at Ah Za Rhoon and is lost; a bullseye lantern does not work. Buy on the Grand Exchange.",
+        "wikiItemId": 36,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Candle.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Rope",
+        "amount": 1,
+        "howToGet": "Tied to the fissure at Ah Za Rhoon and lost. Buy on the Grand Exchange.",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
+      },
+      {
+        "nameEn": "Bronze wire",
+        "amount": 1,
+        "howToGet": "Strings the bone beads into the Beads of the Dead. Buy on the Grand Exchange, or hammer a bronze bar on an anvil.",
+        "wikiItemId": 1794,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_wire.png"
+      },
+      {
+        "nameEn": "Chisel",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Dommik's Crafting Store in Al Kharid for 1 gp.",
+        "wikiItemId": 1755,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chisel.png"
+      },
+      {
+        "nameEn": "Bones",
+        "amount": 3,
+        "howToGet": "Used on the doors in Rashiliyia's Tomb; do not bury them. Buy on the Grand Exchange.",
+        "wikiItemId": 526,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bones.png"
+      },
+      {
+        "nameEn": "Staff of fire",
+        "amount": 1,
+        "howToGet": "Pays the fire runes of Fire Bolt on Nazastarool from behind the dolmen. Buy on the Grand Exchange or from Zaff in Varrock.",
+        "wikiItemId": 1387,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
+      },
+      {
+        "nameEn": "Chaos rune",
+        "amount": 60,
+        "howToGet": "Sixty Fire Bolts on Nazastarool's three forms from behind the dolmen. Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 562,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 180,
+        "howToGet": "Sixty Fire Bolts on Nazastarool's three forms from behind the dolmen. Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. The undead ones (levels 61 to 73) attack in the tomb tunnels.",
+        "wikiItemId": 333,
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
+      }
+    ],
+    "foes": [
+      "Nazastarool"
+    ],
+    "reward": "2 QP, 3,875 Crafting XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Mosol Rei"
+      ],
+      "dialogChoices": [
+        "Why do I need to run?",
+        "Rashiliyia? Who is she?",
+        "What can we do?",
+        "I'll go to see the Shaman",
+        "Yes, I'm sure and I'll take the Wampum belt to Trufitus.",
+        "Mosol Rei said something about a legend?",
+        "Do you know anything more about the temple?",
+        "Tell me more.",
+        "I am going to search for Ah Za Rhoon!",
+        "Yes, I will seriously look for Ah Za Rhoon and I'd appreciate your help.",
+        "Yes, I'll wriggle through.",
+        "Yes, I'll carefully move the rocks to see what's behind them.",
+        "Yes, I may find something else on the corpse."
+      ],
+      "highlightItems": [
+        "Spade",
+        "Candle",
+        "Tinderbox",
+        "Rope",
+        "Bronze wire",
+        "Chisel",
+        "Bones",
+        "Staff of fire",
+        "Chaos rune",
+        "Air rune",
+        "Trout"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Shilo Village"
+      }
+    }
   }
 ]

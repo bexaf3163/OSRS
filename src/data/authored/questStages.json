@@ -62201,6 +62201,3306 @@
      ]
     }
    ]
+  },
+  "S9-42": {
+   "var": [
+    "varbit",
+    334
+   ],
+   "route": [
+    {
+     "title": "Getting Started",
+     "steps": [
+      "Talk to Ali Morrisane next to the Silk Stall in Al Kharid. Dialogue: \"If you are, then why are you still selling goods from a stall?\", \"I'd like to help you but.....\", \"Yes.\", \"Okay.\"",
+      "Buy a kharidian headpiece and a fake beard and combine them."
+     ]
+    },
+    {
+     "title": "Pollnivneach",
+     "steps": [
+      "Head to Pollnivneach.",
+      "Use the 3 beers on Drunken Ali at the bar. (Make sure to use one beer on him, then talk to him in full, then use the second beer, talk in full, then finally the third beer, and talk in full.)",
+      "Talk to the bandits in Pollnivneach by the general store.",
+      "Go west of the bar and question the Menaphite Thugs."
+     ]
+    },
+    {
+     "title": "Camels",
+     "steps": [
+      "Head to the camel store just north-west of the bar.",
+      "Talk to Ali the Camel Man to buy the camels for 500 coins. You will need two free spaces in your inventory. Dialogue: \"Are those camels around the side for sale?\", \"What price do you want for both of them?\", \"Would 500 gold coins for the pair of them do?\"",
+      "Talk to a Menaphite and a bandit to give them each a receipt."
+     ]
+    },
+    {
+     "title": "=Pickpocketing=",
+     "steps": [
+      "Go to Ali the Operator and ask to join his gang (big purple tent, south-west)Dialogue: \"Yes, of course, those bandits should be taught a lesson.\", \"No thanks.\"",
+      "Attempt to pickpocket a villager once then return to Ali the Operator. Dialogue: \"Yeah, I could do with a bit of advice.\", \"No thanks.\"",
+      "Talk to the street urchin near the centre town well.",
+      "Pickpocket the villager with an arrow over their head.",
+      "Talk to Ali the Operator Dialogue: \"Yeah, I could do with a bit of advice.\"",
+      "Equip the oak blackjack and then lure a villager into a secluded area."
+     ]
+    },
+    {
+     "title": "=Jewels=",
+     "steps": [
+      "Talk to Ali the Operator.",
+      "Put on the desert disguise and gloves.",
+      "Hide behind the large cactus near the mayor's house (the large house to the East by the fountain).",
+      "Use the keys on the door.",
+      "Go up the stairs in the north-eastern corner.",
+      "Search the landscape picture near the bed.",
+      "Hit the button on the dial to reset it.",
+      "Give the jewels to Ali the Operator."
+     ]
+    },
+    {
+     "title": "=Traitor=",
+     "steps": [
+      "Talk to Ali the Operator.",
+      "Talk to a Menaphite Thug.",
+      "Talk to Ali the Operator. Dialogue: \"No thanks.\"",
+      "Talk to Ali the barman. Dialogue: \"I'm looking for Traitorous Ali.\", \"No thanks I'm ok.\"",
+      "Buy special sauce from the kebab seller. He can be found north-west of the well in the middle of the town. Dialogue: \"Would you sell me that bottle of special kebab sauce?\", \"No thanks, I'm good.\"",
+      "Use it on a trough behind the camel shop.",
+      "Use a bucket on the dung if it is brown. Obtain three more buckets of dung if you plan to complete My Arm's Big Adventure.",
+      "Use a coin on the snake charmer's money pot, sitting south of the bar Dialogue: \"Wow, a snake charmer. Can I have a go? Can I have a go? Please?\" with 2 free inventory spaces to get a snake charm and a snake basket.",
+      "Use the snake charm on a desert snake north of the Menaphite tent until it goes into the snake basket.",
+      "Go to Ali the Hag north-west of the kebab seller. Talk to her twice to give her the snake basket and Ugthanki dung to receive the hag's poison in exchange.",
+      "Use the hag's poison on the table with a beer in the bar.",
+      "Talk to Ali the Operator."
+     ]
+    },
+    {
+     "title": "Dealing with the thugs",
+     "steps": [
+      "Prepare for battle and talk to the Menaphite Leader (just outside the tent).",
+      "Kill the Tough Guy (level 75) (safespot behind bush). He drops a willow blackjack.",
+      "Talk to a villager. Dialogue: \"Ok I'll get to it.\"",
+      "Talk to the Bandit Leader wandering around the northern magic carpet station.",
+      "Kill the bandit champion (level 70) (safespot behind chair in house to the east). He drops an adamant scimitar (if you have a willow blackjack in your inventory).",
+      "Talk to a villager.",
+      "Talk to Ali the Mayor by the well in village centre.",
+      "Return to Ali Morrisane (with whom you started the quest). Dialogue: \"No, I'm really too busy.\"",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Ali Morrisane in Al Kharid to start the quest.",
+       "s": "Talk to Ali Morrisane in Al Kharid to start the quest.",
+       "k": "startQuest",
+       "at": [
+        3304,
+        3211,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3533
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Buy a shantay pass from Shantay.",
+       "s": "Buy a shantay pass from Shantay.",
+       "k": "buyShantayPass",
+       "at": [
+        3303,
+        3122,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4642
+        ]
+       }
+      },
+      {
+       "t": "Go through Shantay Pass.",
+       "s": "Go through Shantay Pass.",
+       "k": "goToShantay",
+       "at": [
+        3304,
+        3116,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4031
+        ]
+       }
+      },
+      {
+       "t": "Create a disguise by using the Kharidian Headpiece on the Fake Beard.",
+       "s": "Create a disguise by using the Kharidian Headpiece on the Fake Beard.",
+       "k": "createDisguise"
+      },
+      {
+       "t": "Buy a Kharidian Headpiece and a Fake Beard to create a disguise.",
+       "s": "Buy a Kharidian Headpiece and a Fake Beard to create a disguise.",
+       "k": "buyDisguiseGear",
+       "at": [
+        3304,
+        3211,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3533
+        ]
+       }
+      },
+      {
+       "t": "Talk to the rug merchant and travel to Pollnivneach via magic carpet.",
+       "s": "Talk to the rug merchant and travel to Pollnivneach via magic carpet.",
+       "k": "talkToRugMerchant",
+       "at": [
+        3311,
+        3109,
+        0
+       ],
+       "hl": {
+        "npc": [
+         17
+        ]
+       }
+      },
+      {
+       "t": "Give Drunken Ali 3 beers from the bartender, talking with him between each, until he says where his son is.",
+       "s": "Give Drunken Ali 3 beers from the bartender, talking between each.",
+       "k": "drunkenAli",
+       "at": [
+        3360,
+        2957,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3534
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to a Menaphite Thug to figure out how their dispute started with the bandits.",
+       "s": "Ask a Menaphite Thug how the dispute with the bandits started.",
+       "k": "talkToThug",
+       "at": [
+        3347,
+        2955,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3549
+        ]
+       }
+      },
+      {
+       "t": "Talk to a bandit to figure out their issues with the Menaphites.",
+       "s": "Talk to a bandit to figure out their issues with the Menaphites.",
+       "k": "talkToBandit",
+       "at": [
+        3362,
+        2993,
+        0
+       ],
+       "hl": {
+        "npc": [
+         734
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ali the Camel Man to try and get two camels to solve the dispute",
+       "s": "Ask Ali the Camel Man for two camels to solve the dispute.",
+       "k": "talkToCamelman",
+       "at": [
+        3350,
+        2966,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3538
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Talk to Ali the Camel Man to try and get two camels to solve the dispute",
+       "s": "Ask Ali the Camel Man for two camels to solve the dispute.",
+       "k": "talkToCamelman",
+       "at": [
+        3350,
+        2966,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3538
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Tell the bandits that the Menaphites have agreed to return the camel.",
+       "s": "Tell the bandits that the Menaphites have agreed to return the camel.",
+       "k": "talkToBanditReturnedCamel",
+       "at": [
+        3362,
+        2993,
+        0
+       ],
+       "hl": {
+        "npc": [
+         734
+        ]
+       }
+      },
+      {
+       "t": "Tell the Menaphites that the bandits have agreed to return the camel.",
+       "s": "Tell the Menaphites that the bandits have agreed to return the camel.",
+       "k": "talkToMenaphiteReturnedCamel",
+       "at": [
+        3347,
+        2955,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3549
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Talk to Ali the Operator to get a job from him.",
+       "s": "Talk to Ali the Operator to get a job from him.",
+       "k": "talkToAliTheOperator",
+       "at": [
+        3332,
+        2948,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3548
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Pickpocket a villager.",
+       "s": "Pickpocket a villager.",
+       "k": "pickpocketVillager",
+       "at": [
+        3356,
+        2962,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3552
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Lure a villager then talk to a street urchin and get them to distract a villager, once he has them distracted pickpocket them from behind.",
+       "s": "Lure a villager to the street urchin, then pickpocket them.",
+       "k": "pickPocketVillagerWithUrchin",
+       "hl": {
+        "npc": [
+         3539
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Lure a villager then talk to a street urchin and get them to distract a villager, once he has them distracted pickpocket them from behind.",
+       "s": "Lure a villager to the street urchin, then pickpocket them.",
+       "k": "pickPocketVillagerWithUrchin",
+       "hl": {
+        "npc": [
+         3539
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Talk to Ali the Operator to get a blackjack.",
+       "s": "Talk to Ali the Operator to get a blackjack.",
+       "k": "getBlackjackFromAli",
+       "at": [
+        3332,
+        2948,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3548
+        ]
+       }
+      },
+      {
+       "t": "Equip your oak blackjack in your inventory.",
+       "s": "Equip your oak blackjack in your inventory.",
+       "k": "equipBlackjack"
+      },
+      {
+       "t": "Lure a villager to secluded place or an empty building, knock them out and then pickpocket them.",
+       "s": "Lure a villager somewhere quiet, knock them out, pickpocket them.",
+       "k": "blackjackVillager",
+       "hl": {
+        "npc": [
+         3552
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Talk to Ali the Operator to get a blackjack.",
+       "s": "Talk to Ali the Operator to get a blackjack.",
+       "k": "getBlackjackFromAli",
+       "at": [
+        3332,
+        2948,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3548
+        ]
+       }
+      },
+      {
+       "t": "Equip your oak blackjack in your inventory.",
+       "s": "Equip your oak blackjack in your inventory.",
+       "k": "equipBlackjack"
+      },
+      {
+       "t": "Lure a villager to secluded place or an empty building, knock them out and then pickpocket them.",
+       "s": "Lure a villager somewhere quiet, knock them out, pickpocket them.",
+       "k": "blackjackVillager",
+       "hl": {
+        "npc": [
+         3552
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Talk to Ali the Operator to get a blackjack.",
+       "s": "Talk to Ali the Operator to get a blackjack.",
+       "k": "getBlackjackFromAli",
+       "at": [
+        3332,
+        2948,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3548
+        ]
+       }
+      },
+      {
+       "t": "Equip your oak blackjack in your inventory.",
+       "s": "Equip your oak blackjack in your inventory.",
+       "k": "equipBlackjack"
+      },
+      {
+       "t": "Lure a villager to secluded place or an empty building, knock them out and then pickpocket them.",
+       "s": "Lure a villager somewhere quiet, knock them out, pickpocket them.",
+       "k": "blackjackVillager",
+       "hl": {
+        "npc": [
+         3552
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Talk to Ali the Operator to get the second job.",
+       "s": "Talk to Ali the Operator to get the second job.",
+       "k": "talkToAliToGetSecondJob",
+       "at": [
+        3332,
+        2948,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3548
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 13,
+     "do": [
+      {
+       "t": "Hide behind the cactus",
+       "s": "Hide behind the cactus",
+       "k": "hideBehindCactus",
+       "at": [
+        3364,
+        2968,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6277
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "Open the door.",
+       "s": "Open the door.",
+       "k": "openTheDoor",
+       "hl": {
+        "obj": [
+         6238
+        ]
+       }
+      },
+      {
+       "t": "Go up the stairs.",
+       "s": "Go up the stairs.",
+       "k": "goUpStairs",
+       "hl": {
+        "obj": [
+         6244
+        ]
+       }
+      },
+      {
+       "t": "Search the painting to reveal the safe. Enter the code 1, 1, 2, 3, 5, 8.",
+       "s": "Search the painting for the safe and enter 1, 1, 2, 3, 5, 8.",
+       "k": "crackTheSafe",
+       "hl": {
+        "obj": [
+         6276
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Give Ali the Operator the jewels to get your final task from him.",
+       "s": "Give Ali the Operator the jewels to get your final task from him.",
+       "k": "giveTheJewelsToAli",
+       "at": [
+        3332,
+        2948,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3548
+        ]
+       }
+      },
+      {
+       "t": "Go down the stairs.",
+       "s": "Go down the stairs.",
+       "k": "goDownStairs",
+       "hl": {
+        "obj": [
+         6245
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 16,
+     "do": [
+      {
+       "t": "Talk to a Menaphite member to find the traitor.",
+       "s": "Talk to a Menaphite member to find the traitor.",
+       "k": "talkMenaphiteToFindTraitor",
+       "at": [
+        3347,
+        2955,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3549
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ali and tell him you have found the traitor.",
+       "s": "Talk to Ali and tell him you have found the traitor.",
+       "k": "tellAliYouFoundTraitor",
+       "at": [
+        3332,
+        2948,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3548
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 17,
+     "do": [
+      {
+       "t": "Talk to Ali the Barman to find out where Traitorous Ali is.",
+       "s": "Talk to Ali the Barman to find out where Traitorous Ali is.",
+       "k": "talkToAliTheBarman",
+       "at": [
+        3361,
+        2956,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3535
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ali the Hag to ask her to make some poison for you.",
+       "s": "Talk to Ali the Hag to ask her to make some poison for you.",
+       "k": "talkToAliTheHag",
+       "at": [
+        3345,
+        2986,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3541
+        ]
+       }
+      },
+      {
+       "t": "Use coins on the snake charmer's money pot to get a snake charm and a snake basket.",
+       "s": "Put a coin in the snake charmer's pot for a charm and a basket.",
+       "k": "giveCoinToSnakeCharmer",
+       "at": [
+        3355,
+        2953,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6230
+        ]
+       }
+      },
+      {
+       "t": "Use the Snake Charm on a snake to capture it.",
+       "s": "Use the Snake Charm on a snake to capture it.",
+       "k": "catchSnake",
+       "at": [
+        3332,
+        2958,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3544
+        ]
+       }
+      },
+      {
+       "t": "Give the snake to Ali the Hag.",
+       "s": "Give the snake to Ali the Hag.",
+       "k": "giveSnakeToHag",
+       "at": [
+        3345,
+        2986,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3541
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ali the Kebab Salesman to get a special sauce to use.",
+       "s": "Talk to Ali the Kebab Salesman to get a special sauce to use.",
+       "k": "talkToAliTheKebabSalesman",
+       "at": [
+        3352,
+        2975,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3536
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 18,
+     "do": [
+      {
+       "t": "Talk to Ali the Kebab Salesman to get a special sauce to use.",
+       "s": "Talk to Ali the Kebab Salesman to get a special sauce to use.",
+       "k": "talkToAliTheKebabSalesman",
+       "at": [
+        3352,
+        2975,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3536
+        ]
+       }
+      },
+      {
+       "t": "Pick up a bucket to grab the dung",
+       "s": "Pick up a bucket to grab the dung",
+       "has": "Bucket",
+       "k": "getBucket",
+       "at": [
+        3346,
+        2966,
+        0
+       ]
+      },
+      {
+       "t": "Use the red hot sauce on the trough and wait for a camel to drop dung. Pick up only brown Ugthanki dung; take four more for later quests that need it.",
+       "s": "Use the red hot sauce on the trough and wait for a camel to drop dung.",
+       "k": "getDung",
+       "at": [
+        3343,
+        2960,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6256
+        ]
+       }
+      },
+      {
+       "t": "Use the bucket on the dung.",
+       "s": "Use the bucket on the dung.",
+       "k": "pickupDung",
+       "hl": {
+        "obj": [
+         6257
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ali the Hag and give her the dung.",
+       "s": "Talk to Ali the Hag and give her the dung.",
+       "k": "givenDungToHag",
+       "at": [
+        3345,
+        2986,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3541
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 22,
+     "do": [
+      {
+       "t": "Use the poison on the beer glass to kill Traitorous Ali.",
+       "s": "Use the poison on the beer glass to kill Traitorous Ali.",
+       "k": "poisonTheDrink",
+       "at": [
+        3356,
+        2957,
+        0
+       ],
+       "hl": {
+        "obj": [
+         6246
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 23,
+     "do": [
+      {
+       "t": "Talk to Ali the Operator and tell him he is dead.",
+       "s": "Talk to Ali the Operator and tell him he is dead.",
+       "k": "tellAliOperatorPoisoned",
+       "at": [
+        3332,
+        2948,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3548
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 24,
+     "do": [
+      {
+       "t": "Talk to the Menaphite Leader and prepare for a fight against a tough guy. You can safespot him inside the tent by using a chair.",
+       "s": "Talk to the Menaphite Leader, ready to fight a tough guy.",
+       "k": "talkToMenaphiteLeader",
+       "hl": {
+        "npc": [
+         3547
+        ]
+       }
+      },
+      {
+       "t": "Kill the Menaphite Thug. You can safespot him inside the tent by using a chair, if he's not spawned then talk to the Menaphite Leader again.",
+       "s": "Kill the Tough Guy (safespot in the tent behind a chair).",
+       "k": "killMenaphiteThug"
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Talk to a villager and they will be angry you broke the balance of power.",
+       "s": "Talk to an angry villager about the broken balance of power.",
+       "k": "talkToAVillager",
+       "hl": {
+        "npc": [
+         3552
+        ]
+       }
+      },
+      {
+       "t": "Talk to the Bandit Leader and be prepared to fight a Bandit Champion. You can safe spot him with the stool.",
+       "s": "Talk to the Bandit Leader, ready to fight the Bandit champion.",
+       "k": "talkToBanditLeader",
+       "at": [
+        3353,
+        3002,
+        0
+       ],
+       "hl": {
+        "npc": [
+         733
+        ]
+       }
+      },
+      {
+       "t": "Kill the Bandit Champion, you can safe spot him with the stool. If he's not spawned then talk to the Bandit Leader again.",
+       "s": "Kill the Bandit champion (safespot with the stool).",
+       "k": "killBanditChampion"
+      }
+     ]
+    },
+    {
+     "at": 26,
+     "do": [
+      {
+       "t": "Talk to a villager and they will be angry still.",
+       "s": "Talk to a villager and they will be angry still.",
+       "k": "talkToAVillagerToSpawnMayor",
+       "hl": {
+        "npc": [
+         3552
+        ]
+       }
+      },
+      {
+       "t": "Talk to Ali the Mayor and get your due congratulations.",
+       "s": "Talk to Ali the Mayor and get your due congratulations.",
+       "k": "talkToMayor",
+       "at": [
+        3360,
+        2972,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3540
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 27,
+     "do": [
+      {
+       "t": "Talk to Ali Morrisane in Al Kharid to finish the quest.",
+       "s": "Talk to Ali Morrisane in Al Kharid to finish the quest.",
+       "k": "finishQuest",
+       "at": [
+        3304,
+        3211,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3533
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-43": {
+   "var": [
+    "varbit",
+    2497
+   ],
+   "route": [
+    {
+     "title": "Digression",
+     "steps": [
+      "Talk to Brimstail in the cave found in the south-west corner of the Gnome Stronghold. Dialogue: \"What's that cute creature wandering around?\", \"Yes, that sounds fascinating...\", \"Oh, yes I love a bit of History.\", \"Of course!\""
+     ]
+    },
+    {
+     "title": "Elven Mystery",
+     "steps": [
+      "Inspect the singing bowl in the western portion of the cave.",
+      "To the north, attempt to unlock Oaknock's Machine.",
+      "Talk to Brimstail. Dialogue: \"I've had a look in the other room now.\", \"Of course, I'd love to!\""
+     ]
+    },
+    {
+     "title": "Memories",
+     "steps": [
+      "Talk to Hazelmere, located upstairs in his house (on the small island east of Yanille, fairy ring code goes directly to his house, Nightmare Zone minigame teleport or Watchtower Teleport). There will be several cutscenes, the last being King Healthorg and the white Spirit Tree Argento. You'll know you're done when you get a Violet pentagon in your backpack.",
+      "Return to Brimstail. Dialogue: \"I've visited Hazelmere, he told me all sorts of interesting things.\""
+     ]
+    },
+    {
+     "title": "Incapacitated",
+     "steps": [
+      "Use your Mud Rune on the Pestle and Mortar to make Ground Mud Runes.",
+      "Add the Ground Mud Runes to the Bucket of Sap to make Magic glue.",
+      "Repair Oaknock's machine (click on the machine twice).",
+      "Talk to Brimstail. Dialogue: \"I think I've fixed the machine now!\""
+     ]
+    },
+    {
+     "title": "Anti-Illusion",
+     "steps": [
+      "Talk to Brimstail twice more to receive more discs. Dialogue: \"I\"",
+      "Optional: Drop the discs and talk to Brimstail to receive even more discs. Dialogue: \"I can't work out what to do with these discs!\""
+     ]
+    },
+    {
+     "title": "Front Panel",
+     "steps": [
+      "Head back to the Oaknock's machine and unlock the machine."
+     ]
+    },
+    {
+     "title": "Control Panel",
+     "steps": [
+      "Unlock the front panel by inserting a disc with a value equal to the green number. (When done, click the green box next to the number.)",
+      "Talk to Brimstail for more discs. Dialogue: \"I\"",
+      "Complete the three puzzles inside the unlocked machine",
+      "Talk to Brimstail. Dialogue: \"Phew! I've got that machine working now. What do I need to do now?\""
+     ]
+    },
+    {
+     "title": "Assassination",
+     "steps": [
+      "Talk to Brimstail again. Dialogue: \"Phew! I've got that machine working now. What do I need to do now?\"",
+      "Kill all Evil Creatures: (wait for the whole death animation to end before running or teleporting away!). Their colour is now black.",
+      "Talk to King Narnode.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "s": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "k": "enterCave",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Talk to Brimstail.",
+       "s": "Talk to Brimstail.",
+       "k": "talkToBrimstail",
+       "at": [
+        2410,
+        9818,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "s": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "k": "enterCave",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Inspect the singing bowl in the west room.",
+       "s": "Inspect the singing bowl in the west room.",
+       "k": "inspectBowl",
+       "at": [
+        2388,
+        9813,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17239
+        ]
+       }
+      },
+      {
+       "t": "Attempt to unlock oaknock's machine in the north of the cave.",
+       "s": "Attempt to unlock oaknock's machine in the north of the cave.",
+       "k": "inspectMachine",
+       "at": [
+        2390,
+        9826,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17282
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "s": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "k": "enterCave",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Talk to Brimstail again.",
+       "s": "Talk to Brimstail again.",
+       "k": "talkToBrimstailAgain",
+       "at": [
+        2410,
+        9818,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "s": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "k": "goUpToHazelmere",
+       "at": [
+        2677,
+        3087,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "s": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "k": "talkToHazelmere",
+       "at": [
+        2677,
+        3087,
+        1
+       ],
+       "hl": {
+        "npc": [
+         1422
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "s": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "k": "goUpToHazelmere",
+       "at": [
+        2677,
+        3087,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "s": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "k": "talkToHazelmere",
+       "at": [
+        2677,
+        3087,
+        1
+       ],
+       "hl": {
+        "npc": [
+         1422
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "s": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "k": "goUpToHazelmere",
+       "at": [
+        2677,
+        3087,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "s": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "k": "talkToHazelmere",
+       "at": [
+        2677,
+        3087,
+        1
+       ],
+       "hl": {
+        "npc": [
+         1422
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "s": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "k": "goUpToHazelmere",
+       "at": [
+        2677,
+        3087,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "s": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "k": "talkToHazelmere",
+       "at": [
+        2677,
+        3087,
+        1
+       ],
+       "hl": {
+        "npc": [
+         1422
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "s": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "k": "goUpToHazelmere",
+       "at": [
+        2677,
+        3087,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       }
+      },
+      {
+       "t": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "s": "Go talk to Hazelmere in his hut east of Yanille (Fairy Ring CLS).",
+       "k": "talkToHazelmere",
+       "at": [
+        2677,
+        3087,
+        1
+       ],
+       "hl": {
+        "npc": [
+         1422
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 15,
+     "do": [
+      {
+       "t": "Go back to Brimstail's cave in west Tree Gnome Stronghold.",
+       "s": "Go back to Brimstail's cave in west Tree Gnome Stronghold.",
+       "k": "enterCaveAgain",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Talk to Brimstail.",
+       "s": "Talk to Brimstail.",
+       "k": "talkToBrimstailAfterHazelmere",
+       "at": [
+        2410,
+        9818,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 20,
+     "do": [
+      {
+       "t": "Use the pestle and mortar on some mud runes.",
+       "s": "Use the pestle and mortar on some mud runes.",
+       "k": "grindMudRunes"
+      },
+      {
+       "t": "Use the ground mud runes on the bucket of sap.",
+       "s": "Use the ground mud runes on the bucket of sap.",
+       "k": "useMudOnSap"
+      },
+      {
+       "t": "Go back to Brimstail's cave in west Tree Gnome Stronghold.",
+       "s": "Go back to Brimstail's cave in west Tree Gnome Stronghold.",
+       "k": "enterCaveAgain",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Use the magic glue on oaknock's machine in the north of the cave.",
+       "s": "Use the magic glue on oaknock's machine in the north of the cave.",
+       "k": "repairMachine",
+       "at": [
+        2390,
+        9826,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17282
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 21,
+     "do": [
+      {
+       "t": "Use the pestle and mortar on some mud runes.",
+       "s": "Use the pestle and mortar on some mud runes.",
+       "k": "grindMudRunes"
+      },
+      {
+       "t": "Use the ground mud runes on the bucket of sap.",
+       "s": "Use the ground mud runes on the bucket of sap.",
+       "k": "useMudOnSap"
+      },
+      {
+       "t": "Go back to Brimstail's cave in west Tree Gnome Stronghold.",
+       "s": "Go back to Brimstail's cave in west Tree Gnome Stronghold.",
+       "k": "enterCaveAgain",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Use the magic glue on oaknock's machine in the north of the cave.",
+       "s": "Use the magic glue on oaknock's machine in the north of the cave.",
+       "k": "repairMachine",
+       "at": [
+        2390,
+        9826,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17282
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 22,
+     "do": [
+      {
+       "t": "Use the pestle and mortar on some mud runes.",
+       "s": "Use the pestle and mortar on some mud runes.",
+       "k": "grindMudRunes"
+      },
+      {
+       "t": "Use the ground mud runes on the bucket of sap.",
+       "s": "Use the ground mud runes on the bucket of sap.",
+       "k": "useMudOnSap"
+      },
+      {
+       "t": "Go back to Brimstail's cave in west Tree Gnome Stronghold.",
+       "s": "Go back to Brimstail's cave in west Tree Gnome Stronghold.",
+       "k": "enterCaveAgain",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Use the magic glue on oaknock's machine in the north of the cave.",
+       "s": "Use the magic glue on oaknock's machine in the north of the cave.",
+       "k": "repairMachine",
+       "at": [
+        2390,
+        9826,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17282
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 23,
+     "do": [
+      {
+       "t": "Use the pestle and mortar on some mud runes.",
+       "s": "Use the pestle and mortar on some mud runes.",
+       "k": "grindMudRunes"
+      },
+      {
+       "t": "Use the ground mud runes on the bucket of sap.",
+       "s": "Use the ground mud runes on the bucket of sap.",
+       "k": "useMudOnSap"
+      },
+      {
+       "t": "Go back to Brimstail's cave in west Tree Gnome Stronghold.",
+       "s": "Go back to Brimstail's cave in west Tree Gnome Stronghold.",
+       "k": "enterCaveAgain",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Use the magic glue on oaknock's machine in the north of the cave.",
+       "s": "Use the magic glue on oaknock's machine in the north of the cave.",
+       "k": "repairMachine",
+       "at": [
+        2390,
+        9826,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17282
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 25,
+     "do": [
+      {
+       "t": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "s": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "k": "enterCave",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Talk to Brimstail.",
+       "s": "Talk to Brimstail.",
+       "k": "talkToBrimstailAfterRepairing",
+       "at": [
+        2410,
+        9818,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 27,
+     "do": [
+      {
+       "t": "Unlock the machine.",
+       "s": "Unlock the machine.",
+       "k": "unlockMachine"
+      }
+     ]
+    },
+    {
+     "at": 30,
+     "do": [
+      {
+       "t": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "s": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "k": "enterCave",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Unlock the machine.",
+       "s": "Unlock the machine.",
+       "k": "unlockMachine"
+      }
+     ]
+    },
+    {
+     "at": 35,
+     "do": [
+      {
+       "t": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "s": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "k": "enterCave",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Operate the machine.",
+       "s": "Operate the machine.",
+       "k": "operateMachine",
+       "at": [
+        2390,
+        9826,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17282
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 36,
+     "do": [
+      {
+       "t": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "s": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "k": "enterCave",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Talk to Brimstail again.",
+       "s": "Talk to Brimstail again.",
+       "k": "talkToBrimstailAfterIllusion",
+       "at": [
+        2410,
+        9818,
+        0
+       ]
+      }
+     ]
+    },
+    {
+     "at": 40,
+     "do": [
+      {
+       "t": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "s": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "k": "enterCave",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Kill the evil creature next to Brimstail.",
+       "s": "Kill the evil creature next to Brimstail.",
+       "k": "killCreature1",
+       "at": [
+        2408,
+        9819,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1241
+        ]
+       }
+      },
+      {
+       "t": "Kill the evil creature next to the Stronghold's entrance.",
+       "s": "Kill the evil creature next to the Stronghold's entrance.",
+       "k": "killCreature5",
+       "at": [
+        2461,
+        3388,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1253
+        ]
+       }
+      },
+      {
+       "t": "Kill the evil creature next to the Stronghold's Spirit Tree.",
+       "s": "Kill the evil creature next to the Stronghold's Spirit Tree.",
+       "k": "killCreature6",
+       "at": [
+        2462,
+        3443,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1256
+        ]
+       }
+      },
+      {
+       "t": "Kill the evil creature in the north west of the Stronghold.",
+       "s": "Kill the evil creature in the north west of the Stronghold.",
+       "k": "killCreature4",
+       "at": [
+        2422,
+        3526,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1250
+        ]
+       }
+      },
+      {
+       "t": "Kill the evil creature at the top of the Grand Tree.",
+       "s": "Kill the evil creature at the top of the Grand Tree.",
+       "k": "climbUpToF1Tree",
+       "at": [
+        2466,
+        3495,
+        0
+       ]
+      },
+      {
+       "t": "Kill the evil creature at the top of the Grand Tree.",
+       "s": "Kill the evil creature at the top of the Grand Tree.",
+       "k": "climbUpToF2Tree",
+       "at": [
+        2466,
+        3495,
+        1
+       ]
+      },
+      {
+       "t": "Kill the evil creature at the top of the Grand Tree.",
+       "s": "Kill the evil creature at the top of the Grand Tree.",
+       "k": "climbUpToF3Tree",
+       "at": [
+        2466,
+        3495,
+        2
+       ]
+      },
+      {
+       "t": "Kill the evil creature at the top of the Grand Tree.",
+       "s": "Kill the evil creature at the top of the Grand Tree.",
+       "k": "killCreature3",
+       "at": [
+        2466,
+        3496,
+        3
+       ],
+       "hl": {
+        "npc": [
+         1247
+        ]
+       }
+      },
+      {
+       "t": "Kill the evil creature next to Narnode.",
+       "s": "Kill the evil creature next to Narnode.",
+       "k": "killCreature2",
+       "at": [
+        2465,
+        3494,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1244
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 45,
+     "do": [
+      {
+       "t": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "s": "Go talk to Brimstail in his cave in west Tree Gnome Stronghold.",
+       "k": "enterCave",
+       "at": [
+        2404,
+        3419,
+        0
+       ],
+       "hl": {
+        "obj": [
+         17209
+        ]
+       }
+      },
+      {
+       "t": "Kill the evil creature next to Brimstail.",
+       "s": "Kill the evil creature next to Brimstail.",
+       "k": "killCreature1",
+       "at": [
+        2408,
+        9819,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1241
+        ]
+       }
+      },
+      {
+       "t": "Kill the evil creature next to the Stronghold's entrance.",
+       "s": "Kill the evil creature next to the Stronghold's entrance.",
+       "k": "killCreature5",
+       "at": [
+        2461,
+        3388,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1253
+        ]
+       }
+      },
+      {
+       "t": "Kill the evil creature next to the Stronghold's Spirit Tree.",
+       "s": "Kill the evil creature next to the Stronghold's Spirit Tree.",
+       "k": "killCreature6",
+       "at": [
+        2462,
+        3443,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1256
+        ]
+       }
+      },
+      {
+       "t": "Kill the evil creature in the north west of the Stronghold.",
+       "s": "Kill the evil creature in the north west of the Stronghold.",
+       "k": "killCreature4",
+       "at": [
+        2422,
+        3526,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1250
+        ]
+       }
+      },
+      {
+       "t": "Kill the evil creature at the top of the Grand Tree.",
+       "s": "Kill the evil creature at the top of the Grand Tree.",
+       "k": "climbUpToF1Tree",
+       "at": [
+        2466,
+        3495,
+        0
+       ]
+      },
+      {
+       "t": "Kill the evil creature at the top of the Grand Tree.",
+       "s": "Kill the evil creature at the top of the Grand Tree.",
+       "k": "climbUpToF2Tree",
+       "at": [
+        2466,
+        3495,
+        1
+       ]
+      },
+      {
+       "t": "Kill the evil creature at the top of the Grand Tree.",
+       "s": "Kill the evil creature at the top of the Grand Tree.",
+       "k": "climbUpToF3Tree",
+       "at": [
+        2466,
+        3495,
+        2
+       ]
+      },
+      {
+       "t": "Kill the evil creature at the top of the Grand Tree.",
+       "s": "Kill the evil creature at the top of the Grand Tree.",
+       "k": "killCreature3",
+       "at": [
+        2466,
+        3496,
+        3
+       ],
+       "hl": {
+        "npc": [
+         1247
+        ]
+       }
+      },
+      {
+       "t": "Kill the evil creature next to Narnode.",
+       "s": "Kill the evil creature next to Narnode.",
+       "k": "killCreature2",
+       "at": [
+        2465,
+        3494,
+        0
+       ],
+       "hl": {
+        "npc": [
+         1244
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 50,
+     "do": [
+      {
+       "t": "Talk to King Narnode to finish the quest.",
+       "s": "Talk to King Narnode to finish the quest.",
+       "k": "talkToNarnode",
+       "at": [
+        2465,
+        3496,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8019
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "S9-44": {
+   "var": [
+    "varp",
+    116
+   ],
+   "route": [
+    {
+     "title": "Starting out",
+     "steps": [
+      "With one free inventory space, talk to Mosol Rei outside of Shilo Village. A gnome glider is nearby, as well as fairy ring . Dialogue: \"Why do I need to run?\", \"Rashiliyia? Who is she?\", \"What can we do?\", \"I'll go to see the Shaman\", \"Yes, I'm sure and I'll take the Wampum belt to Trufitus.\"",
+      "Use the wampum belt on Trufitus, found in the most north-eastern house in Tai Bwo Wannai (quest icon on minimap). Fairy ring is nearby.",
+      "Follow the chat options once you've used the belt on him. Dialogue: \"Mosol Rei said something about a legend?\", \"Do you know anything more about the temple?\", \"Tell me more.\", \"I am going to search for Ah Za Rhoon!\", \"Yes, I will seriously look for Ah Za Rhoon and I'd appreciate your help.\""
+     ]
+    },
+    {
+     "title": "Ah Za Rhoon",
+     "steps": [
+      "Head to the temple of Ah Za Rhoon south-west of the Shipyard and east of Shilo Village across the River Amja (the pile of rocks on the minimap). Use a gnome glider or Fairy ring , or walk there by crossing the wooden log to the east, then head south until you reach a mound of earth surrounded by rocks.",
+      "Use your spade on the mound of earth.",
+      "Use a lit torch or candle on the fissure, then use your rope on the fissure. You will lose the item.",
+      "Search the fissure () to climb down and follow the cave south until you reach the stream.",
+      "Search the cave-in at 2 to enter a new cave. Dialogue: \"Yes, I'll wriggle through.\"",
+      "Search the loose rocks at 6 to find a tattered scroll. Dialogue: \"Yes, I'll carefully move the rocks to see what's behind them.\" Read the scroll.",
+      "Search the sacks at 7 to find a crumpled scroll. Read the scroll.",
+      "Search the ancient gallows at 8 to get the Zadimus corpse. Dialogue: \"Yes, I may find something else on the corpse.\"",
+      "Teleport out, or head back to the first area via the Cave in at 2.",
+      "Head to the Tribal Statue near Trufitus' hut and bury the corpse."
+     ]
+    },
+    {
+     "title": "Tomb of Bervirius",
+     "steps": [
+      "With your bronze wire and chisel, head south-west to Cairn Isle, west of Shilo Village, near fairy ring . Climb the rocks () and then cross the bridge.",
+      "Search the well stacked rocks on the northern side of the island, and then enter the crevice, requiring (). If you can't get in the cave you didn't read the Tattered Scroll.",
+      "Head south and with at least 3 empty inventory spaces search the dolmen. If you had no space you'll have to return with charcoal and papyrus to get the notes. Do not drop the locating crystal or you will take 5-10 damage.",
+      "Use a chisel on the sword pommel to craft the bone beads.",
+      "Use bronze wire on the bone beads to create the Beads of the Dead necklace. You must read the Crumpled Scroll before you can create them.",
+      "Teleport out or climb up the rockslide nearby to escape the cave (may take up to 10 damage if you fail)."
+     ]
+    },
+    {
+     "title": "Tomb of Rashiliyia",
+     "steps": [
+      "Prepare for the fight against Nazastarool. Crumble Undead is useful alongside Protect from Melee.",
+      "With your three regular bones, bone shard and chisel, head south-east from fairy ring to the north-eastern dot on the Karamja map above.",
+      "Search the unique bright green palm tree from the north side to find two doors.",
+      "Search the doors to find the keyhole.",
+      "Use your chisel on the bone shard to make a bone key.",
+      "Equip the Beads of the Dead then use the key on the doors.",
+      "Open the ancient gate (while wearing the Beads of the Dead necklace), then climb down the rocks.",
+      "Run west, south, then south-west through the dungeon to reach a pair of doors.",
+      "Use (don't bury) 3 regular bones on the doors (can kill skeletons, not zombies for the bones if you forgot).",
+      "Search the dolmen, then defeat Nazastarool in his 3 forms. If you click away from the dialogue at the end of each form, click on the dolmen again to resume the other phases.",
+      "Take the Rashiliyia corpse."
+     ]
+    },
+    {
+     "title": "Finishing up",
+     "steps": [
+      "Return to Cairn Isle (fairy ring ).",
+      "Go through the well-stacked rocks.",
+      "Use the corpse on the dolmen.",
+      "Congratulations, quest complete!"
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Mosol Rei east of Shilo Village in south Karamja to receive a wampum belt.",
+       "s": "Talk to Mosol Rei east of Shilo Village for a wampum belt.",
+       "k": "talkToMosol",
+       "at": [
+        2884,
+        2951,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5340
+        ]
+       }
+      },
+      {
+       "t": "Show the wampum belt to Trufitus in Tai Bwo Wannai village.",
+       "s": "Show the wampum belt to Trufitus in Tai Bwo Wannai village.",
+       "k": "showBeltToTrufitus",
+       "at": [
+        2809,
+        3085,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4625
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Use a spade on the ground in south east Karamja.",
+       "s": "Use a spade on the ground in south east Karamja.",
+       "k": "useSpadeOnGround",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2217
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Use a spade on the ground in south east Karamja.",
+       "s": "Use a spade on the ground in south east Karamja.",
+       "k": "useSpadeOnGround",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2217
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Use a spade on the ground in south east Karamja.",
+       "s": "Use a spade on the ground in south east Karamja.",
+       "k": "useSpadeOnGround",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2217
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Use a lit torch or candle on the fissure.",
+       "s": "Use a lit torch or candle on the fissure.",
+       "k": "useTorchOnFissure",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2218
+        ]
+       }
+      },
+      {
+       "t": "Look at the mound of earth in south east Karamja.",
+       "s": "Look at the mound of earth in south east Karamja.",
+       "k": "lookAtMound",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2217
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 5,
+     "do": [
+      {
+       "t": "Use a rope on the fissure.",
+       "s": "Use a rope on the fissure.",
+       "k": "useRopeOnFissure",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2218
+        ]
+       }
+      },
+      {
+       "t": "Look at the mound of earth in south east Karamja.",
+       "s": "Look at the mound of earth in south east Karamja.",
+       "k": "lookAtMound",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2217
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 6,
+     "do": [
+      {
+       "t": "Right-click search the fissure.",
+       "s": "Right-click search the fissure.",
+       "k": "searchFissure",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2219
+        ]
+       }
+      },
+      {
+       "t": "Look at the mound of earth in south east Karamja.",
+       "s": "Look at the mound of earth in south east Karamja.",
+       "k": "lookAtMound",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2217
+        ]
+       }
+      },
+      {
+       "t": "Search the nearby cave-in to go deeper in the caverns.",
+       "s": "Search the nearby cave-in to go deeper in the caverns.",
+       "k": "enterDeeperCave",
+       "at": [
+        2888,
+        9373,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2220
+        ]
+       }
+      },
+      {
+       "t": "Search the loose rocks to the north for a tattered scroll.",
+       "s": "Search the loose rocks to the north for a tattered scroll.",
+       "k": "searchForTatteredScroll",
+       "at": [
+        2885,
+        9318,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2222
+        ]
+       }
+      },
+      {
+       "t": "Search the old sacks to the east for a crumpled scroll.",
+       "s": "Search the old sacks to the east for a crumpled scroll.",
+       "k": "searchForCrumpledScroll",
+       "at": [
+        2939,
+        9285,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2223
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the gallows in the north east corner for a corpse.",
+       "s": "Right-click search the gallows in the north east corner for a corpse.",
+       "k": "searchForCorpse",
+       "at": [
+        2935,
+        9326,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2224
+        ]
+       }
+      },
+      {
+       "t": "Bury Zadimus's corpse in the middle of Tai Bwo Wannai.",
+       "s": "Bury Zadimus's corpse in the middle of Tai Bwo Wannai.",
+       "k": "buryCorpse",
+       "at": [
+        2795,
+        3089,
+        0
+       ]
+      },
+      {
+       "t": "Read the tattered scroll.",
+       "s": "Read the tattered scroll.",
+       "k": "readTattered"
+      },
+      {
+       "t": "Read the crumpled scroll.",
+       "s": "Read the crumpled scroll.",
+       "k": "readCrumpled"
+      },
+      {
+       "t": "Right-click search the rocks on Cairn Isle.",
+       "s": "Right-click search the rocks on Cairn Isle.",
+       "k": "searchRocksOnCairn",
+       "at": [
+        2762,
+        2990,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2234
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the tomb dolmen to the south.",
+       "s": "Right-click search the tomb dolmen to the south.",
+       "k": "searchDolmen",
+       "at": [
+        2767,
+        9365,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2235
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the pommel.",
+       "s": "Use a chisel on the pommel.",
+       "k": "useChiselOnPommel"
+      },
+      {
+       "t": "Use bronze wire on the beads.",
+       "s": "Use bronze wire on the beads.",
+       "k": "useWireOnBeads"
+      },
+      {
+       "t": "Search the palm trees in the north east of Karamja. Come equipped for a boss fight.",
+       "s": "Search the palm trees in north-east Karamja, ready for a boss fight.",
+       "k": "searchPalms",
+       "at": [
+        2916,
+        3093,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2237
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the carved doors behind the palm trees.",
+       "s": "Right-click search the carved doors behind the palm trees.",
+       "k": "searchDoors",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the bone shard.",
+       "s": "Use a chisel on the bone shard.",
+       "k": "makeKey"
+      },
+      {
+       "t": "Use the bone key on the doors behind the palm trees.",
+       "s": "Use the bone key on the doors behind the palm trees.",
+       "k": "useKeyOnDoor",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 7,
+     "do": [
+      {
+       "t": "Right-click search the fissure.",
+       "s": "Right-click search the fissure.",
+       "k": "searchFissure",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2219
+        ]
+       }
+      },
+      {
+       "t": "Look at the mound of earth in south east Karamja.",
+       "s": "Look at the mound of earth in south east Karamja.",
+       "k": "lookAtMound",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2217
+        ]
+       }
+      },
+      {
+       "t": "Search the nearby cave-in to go deeper in the caverns.",
+       "s": "Search the nearby cave-in to go deeper in the caverns.",
+       "k": "enterDeeperCave",
+       "at": [
+        2888,
+        9373,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2220
+        ]
+       }
+      },
+      {
+       "t": "Search the loose rocks to the north for a tattered scroll.",
+       "s": "Search the loose rocks to the north for a tattered scroll.",
+       "k": "searchForTatteredScroll",
+       "at": [
+        2885,
+        9318,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2222
+        ]
+       }
+      },
+      {
+       "t": "Search the old sacks to the east for a crumpled scroll.",
+       "s": "Search the old sacks to the east for a crumpled scroll.",
+       "k": "searchForCrumpledScroll",
+       "at": [
+        2939,
+        9285,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2223
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the gallows in the north east corner for a corpse.",
+       "s": "Right-click search the gallows in the north east corner for a corpse.",
+       "k": "searchForCorpse",
+       "at": [
+        2935,
+        9326,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2224
+        ]
+       }
+      },
+      {
+       "t": "Bury Zadimus's corpse in the middle of Tai Bwo Wannai.",
+       "s": "Bury Zadimus's corpse in the middle of Tai Bwo Wannai.",
+       "k": "buryCorpse",
+       "at": [
+        2795,
+        3089,
+        0
+       ]
+      },
+      {
+       "t": "Read the tattered scroll.",
+       "s": "Read the tattered scroll.",
+       "k": "readTattered"
+      },
+      {
+       "t": "Read the crumpled scroll.",
+       "s": "Read the crumpled scroll.",
+       "k": "readCrumpled"
+      },
+      {
+       "t": "Right-click search the rocks on Cairn Isle.",
+       "s": "Right-click search the rocks on Cairn Isle.",
+       "k": "searchRocksOnCairn",
+       "at": [
+        2762,
+        2990,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2234
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the tomb dolmen to the south.",
+       "s": "Right-click search the tomb dolmen to the south.",
+       "k": "searchDolmen",
+       "at": [
+        2767,
+        9365,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2235
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the pommel.",
+       "s": "Use a chisel on the pommel.",
+       "k": "useChiselOnPommel"
+      },
+      {
+       "t": "Use bronze wire on the beads.",
+       "s": "Use bronze wire on the beads.",
+       "k": "useWireOnBeads"
+      },
+      {
+       "t": "Search the palm trees in the north east of Karamja. Come equipped for a boss fight.",
+       "s": "Search the palm trees in north-east Karamja, ready for a boss fight.",
+       "k": "searchPalms",
+       "at": [
+        2916,
+        3093,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2237
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the carved doors behind the palm trees.",
+       "s": "Right-click search the carved doors behind the palm trees.",
+       "k": "searchDoors",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the bone shard.",
+       "s": "Use a chisel on the bone shard.",
+       "k": "makeKey"
+      },
+      {
+       "t": "Use the bone key on the doors behind the palm trees.",
+       "s": "Use the bone key on the doors behind the palm trees.",
+       "k": "useKeyOnDoor",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Right-click search the fissure.",
+       "s": "Right-click search the fissure.",
+       "k": "searchFissure",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2219
+        ]
+       }
+      },
+      {
+       "t": "Look at the mound of earth in south east Karamja.",
+       "s": "Look at the mound of earth in south east Karamja.",
+       "k": "lookAtMound",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2217
+        ]
+       }
+      },
+      {
+       "t": "Search the nearby cave-in to go deeper in the caverns.",
+       "s": "Search the nearby cave-in to go deeper in the caverns.",
+       "k": "enterDeeperCave",
+       "at": [
+        2888,
+        9373,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2220
+        ]
+       }
+      },
+      {
+       "t": "Search the loose rocks to the north for a tattered scroll.",
+       "s": "Search the loose rocks to the north for a tattered scroll.",
+       "k": "searchForTatteredScroll",
+       "at": [
+        2885,
+        9318,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2222
+        ]
+       }
+      },
+      {
+       "t": "Search the old sacks to the east for a crumpled scroll.",
+       "s": "Search the old sacks to the east for a crumpled scroll.",
+       "k": "searchForCrumpledScroll",
+       "at": [
+        2939,
+        9285,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2223
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the gallows in the north east corner for a corpse.",
+       "s": "Right-click search the gallows in the north east corner for a corpse.",
+       "k": "searchForCorpse",
+       "at": [
+        2935,
+        9326,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2224
+        ]
+       }
+      },
+      {
+       "t": "Bury Zadimus's corpse in the middle of Tai Bwo Wannai.",
+       "s": "Bury Zadimus's corpse in the middle of Tai Bwo Wannai.",
+       "k": "buryCorpse",
+       "at": [
+        2795,
+        3089,
+        0
+       ]
+      },
+      {
+       "t": "Read the tattered scroll.",
+       "s": "Read the tattered scroll.",
+       "k": "readTattered"
+      },
+      {
+       "t": "Read the crumpled scroll.",
+       "s": "Read the crumpled scroll.",
+       "k": "readCrumpled"
+      },
+      {
+       "t": "Right-click search the rocks on Cairn Isle.",
+       "s": "Right-click search the rocks on Cairn Isle.",
+       "k": "searchRocksOnCairn",
+       "at": [
+        2762,
+        2990,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2234
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the tomb dolmen to the south.",
+       "s": "Right-click search the tomb dolmen to the south.",
+       "k": "searchDolmen",
+       "at": [
+        2767,
+        9365,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2235
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the pommel.",
+       "s": "Use a chisel on the pommel.",
+       "k": "useChiselOnPommel"
+      },
+      {
+       "t": "Use bronze wire on the beads.",
+       "s": "Use bronze wire on the beads.",
+       "k": "useWireOnBeads"
+      },
+      {
+       "t": "Search the palm trees in the north east of Karamja. Come equipped for a boss fight.",
+       "s": "Search the palm trees in north-east Karamja, ready for a boss fight.",
+       "k": "searchPalms",
+       "at": [
+        2916,
+        3093,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2237
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the carved doors behind the palm trees.",
+       "s": "Right-click search the carved doors behind the palm trees.",
+       "k": "searchDoors",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the bone shard.",
+       "s": "Use a chisel on the bone shard.",
+       "k": "makeKey"
+      },
+      {
+       "t": "Use the bone key on the doors behind the palm trees.",
+       "s": "Use the bone key on the doors behind the palm trees.",
+       "k": "useKeyOnDoor",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Right-click search the fissure.",
+       "s": "Right-click search the fissure.",
+       "k": "searchFissure",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2219
+        ]
+       }
+      },
+      {
+       "t": "Look at the mound of earth in south east Karamja.",
+       "s": "Look at the mound of earth in south east Karamja.",
+       "k": "lookAtMound",
+       "at": [
+        2922,
+        3000,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2217
+        ]
+       }
+      },
+      {
+       "t": "Search the nearby cave-in to go deeper in the caverns.",
+       "s": "Search the nearby cave-in to go deeper in the caverns.",
+       "k": "enterDeeperCave",
+       "at": [
+        2888,
+        9373,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2220
+        ]
+       }
+      },
+      {
+       "t": "Search the loose rocks to the north for a tattered scroll.",
+       "s": "Search the loose rocks to the north for a tattered scroll.",
+       "k": "searchForTatteredScroll",
+       "at": [
+        2885,
+        9318,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2222
+        ]
+       }
+      },
+      {
+       "t": "Search the old sacks to the east for a crumpled scroll.",
+       "s": "Search the old sacks to the east for a crumpled scroll.",
+       "k": "searchForCrumpledScroll",
+       "at": [
+        2939,
+        9285,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2223
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the gallows in the north east corner for a corpse.",
+       "s": "Right-click search the gallows in the north east corner for a corpse.",
+       "k": "searchForCorpse",
+       "at": [
+        2935,
+        9326,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2224
+        ]
+       }
+      },
+      {
+       "t": "Bury Zadimus's corpse in the middle of Tai Bwo Wannai.",
+       "s": "Bury Zadimus's corpse in the middle of Tai Bwo Wannai.",
+       "k": "buryCorpse",
+       "at": [
+        2795,
+        3089,
+        0
+       ]
+      },
+      {
+       "t": "Read the tattered scroll.",
+       "s": "Read the tattered scroll.",
+       "k": "readTattered"
+      },
+      {
+       "t": "Read the crumpled scroll.",
+       "s": "Read the crumpled scroll.",
+       "k": "readCrumpled"
+      },
+      {
+       "t": "Right-click search the rocks on Cairn Isle.",
+       "s": "Right-click search the rocks on Cairn Isle.",
+       "k": "searchRocksOnCairn",
+       "at": [
+        2762,
+        2990,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2234
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the tomb dolmen to the south.",
+       "s": "Right-click search the tomb dolmen to the south.",
+       "k": "searchDolmen",
+       "at": [
+        2767,
+        9365,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2235
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the pommel.",
+       "s": "Use a chisel on the pommel.",
+       "k": "useChiselOnPommel"
+      },
+      {
+       "t": "Use bronze wire on the beads.",
+       "s": "Use bronze wire on the beads.",
+       "k": "useWireOnBeads"
+      },
+      {
+       "t": "Search the palm trees in the north east of Karamja. Come equipped for a boss fight.",
+       "s": "Search the palm trees in north-east Karamja, ready for a boss fight.",
+       "k": "searchPalms",
+       "at": [
+        2916,
+        3093,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2237
+        ]
+       }
+      },
+      {
+       "t": "Right-click search the carved doors behind the palm trees.",
+       "s": "Right-click search the carved doors behind the palm trees.",
+       "k": "searchDoors",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      },
+      {
+       "t": "Use a chisel on the bone shard.",
+       "s": "Use a chisel on the bone shard.",
+       "k": "makeKey"
+      },
+      {
+       "t": "Use the bone key on the doors behind the palm trees.",
+       "s": "Use the bone key on the doors behind the palm trees.",
+       "k": "useKeyOnDoor",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 10,
+     "do": [
+      {
+       "t": "Enter the doors behind the palm trees.",
+       "s": "Enter the doors behind the palm trees.",
+       "k": "enterDoor",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      },
+      {
+       "t": "Equip the beads of the dead, then make your way through the gate, down the rocks, then to the south west corner. Use bones on the door there.",
+       "s": "Wear the beads of the dead, go south-west and use bones on the door.",
+       "k": "useBonesOnDoor",
+       "at": [
+        2892,
+        9480,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2246
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 11,
+     "do": [
+      {
+       "t": "Enter the doors behind the palm trees.",
+       "s": "Enter the doors behind the palm trees.",
+       "k": "enterDoor",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      },
+      {
+       "t": "Equip the beads of the dead, then make your way through the gate, down the rocks, then to the south west corner. Use bones on the door there.",
+       "s": "Wear the beads of the dead, go south-west and use bones on the door.",
+       "k": "useBonesOnDoor",
+       "at": [
+        2892,
+        9480,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2246
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 12,
+     "do": [
+      {
+       "t": "Enter the doors behind the palm trees.",
+       "s": "Enter the doors behind the palm trees.",
+       "k": "enterDoor",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      },
+      {
+       "t": "Search the tomb dolmen, ready to fight.",
+       "s": "Search the tomb dolmen, ready to fight.",
+       "k": "searchDolmenForFight",
+       "at": [
+        2893,
+        9488,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2258
+        ]
+       }
+      },
+      {
+       "t": "Defeat Nazastarool's 3 forms. You can safe spot them over the tomb dolmen. The Crumble Undead spell is very strong against them.",
+       "s": "Defeat Nazastarool's 3 forms; safespot them over the tomb dolmen.",
+       "k": "killNazastarool",
+       "at": [
+        2892,
+        9488,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5353
+        ]
+       }
+      },
+      {
+       "t": "Pickup Rashiliyia's corpse.",
+       "s": "Pickup Rashiliyia's corpse.",
+       "k": "pickupCorpse"
+      },
+      {
+       "t": "Right-click search the rocks on Cairn Isle to enter the caverns again.",
+       "s": "Right-click search the rocks on Cairn Isle to enter the caverns again.",
+       "k": "enterCairnAgain",
+       "at": [
+        2762,
+        2990,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2234
+        ]
+       }
+      },
+      {
+       "t": "Use Rashiliyia's corpse on the dolmen to the south.",
+       "s": "Use Rashiliyia's corpse on the dolmen to the south.",
+       "k": "useCorpseOnDolmen",
+       "at": [
+        2767,
+        9365,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2235
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 13,
+     "do": [
+      {
+       "t": "Enter the doors behind the palm trees.",
+       "s": "Enter the doors behind the palm trees.",
+       "k": "enterDoor",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      },
+      {
+       "t": "Search the tomb dolmen, ready to fight.",
+       "s": "Search the tomb dolmen, ready to fight.",
+       "k": "searchDolmenForFight",
+       "at": [
+        2893,
+        9488,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2258
+        ]
+       }
+      },
+      {
+       "t": "Defeat Nazastarool's 3 forms. You can safe spot them over the tomb dolmen. The Crumble Undead spell is very strong against them.",
+       "s": "Defeat Nazastarool's 3 forms; safespot them over the tomb dolmen.",
+       "k": "killNazastarool",
+       "at": [
+        2892,
+        9488,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5353
+        ]
+       }
+      },
+      {
+       "t": "Pickup Rashiliyia's corpse.",
+       "s": "Pickup Rashiliyia's corpse.",
+       "k": "pickupCorpse"
+      },
+      {
+       "t": "Right-click search the rocks on Cairn Isle to enter the caverns again.",
+       "s": "Right-click search the rocks on Cairn Isle to enter the caverns again.",
+       "k": "enterCairnAgain",
+       "at": [
+        2762,
+        2990,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2234
+        ]
+       }
+      },
+      {
+       "t": "Use Rashiliyia's corpse on the dolmen to the south.",
+       "s": "Use Rashiliyia's corpse on the dolmen to the south.",
+       "k": "useCorpseOnDolmen",
+       "at": [
+        2767,
+        9365,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2235
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "at": 14,
+     "do": [
+      {
+       "t": "Enter the doors behind the palm trees.",
+       "s": "Enter the doors behind the palm trees.",
+       "k": "enterDoor",
+       "at": [
+        2916,
+        3091,
+        0
+       ],
+       "hl": {
+        "obj": [
+         34673
+        ]
+       }
+      },
+      {
+       "t": "Search the tomb dolmen, ready to fight.",
+       "s": "Search the tomb dolmen, ready to fight.",
+       "k": "searchDolmenForFight",
+       "at": [
+        2893,
+        9488,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2258
+        ]
+       }
+      },
+      {
+       "t": "Defeat Nazastarool's 3 forms. You can safe spot them over the tomb dolmen. The Crumble Undead spell is very strong against them.",
+       "s": "Defeat Nazastarool's 3 forms; safespot them over the tomb dolmen.",
+       "k": "killNazastarool",
+       "at": [
+        2892,
+        9488,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5353
+        ]
+       }
+      },
+      {
+       "t": "Pickup Rashiliyia's corpse.",
+       "s": "Pickup Rashiliyia's corpse.",
+       "k": "pickupCorpse"
+      },
+      {
+       "t": "Right-click search the rocks on Cairn Isle to enter the caverns again.",
+       "s": "Right-click search the rocks on Cairn Isle to enter the caverns again.",
+       "k": "enterCairnAgain",
+       "at": [
+        2762,
+        2990,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2234
+        ]
+       }
+      },
+      {
+       "t": "Use Rashiliyia's corpse on the dolmen to the south.",
+       "s": "Use Rashiliyia's corpse on the dolmen to the south.",
+       "k": "useCorpseOnDolmen",
+       "at": [
+        2767,
+        9365,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2235
+        ]
+       }
+      }
+     ]
+    }
+   ]
   }
  }
 }
