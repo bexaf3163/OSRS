@@ -11303,5 +11303,230 @@
         "questName": "Olaf's Quest"
       }
     }
+  },
+  {
+    "id": "S9-57",
+    "stage": 9,
+    "type": "quest",
+    "title": "In Aid of the Myreque",
+    "qp": 2,
+    "requires": [
+      "S8-09"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/In_Aid_of_the_Myreque",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/In_Aid_of_the_Myreque/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3495,3464,0",
+    "mapLocation": {
+      "x": 3495,
+      "y": 3464,
+      "plane": 0,
+      "label": "Enter the trapdoor behind the Canifis pub to reach Veliaf Hurtz in the Myreque Hideout."
+    },
+    "npc": {
+      "nameEn": "Veliaf Hurtz",
+      "location": "The Myreque Hideout below the Canifis pub",
+      "floor": "Ground floor",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Veliaf_Hurtz"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Silver sickle (b)",
+        "amount": 1,
+        "howToGet": "Blessed in Nature Spirit; wield it to damage the juvinates.",
+        "wikiItemId": 2963,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Silver_sickle_(b).png"
+      },
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 3 gp.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
+      },
+      {
+        "nameEn": "Bucket",
+        "amount": 5,
+        "howToGet": "Five buckets save trips while clearing the rubble. Buy on the Grand Exchange or from a general store.",
+        "wikiItemId": 1925,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe mines the rubble. Buy on the Grand Exchange.",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp.",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Plank",
+        "amount": 11,
+        "howToGet": "Regular planks only. Buy on the Grand Exchange.",
+        "wikiItemId": 960,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
+      },
+      {
+        "nameEn": "Steel nails",
+        "amount": 44,
+        "howToGet": "Buy on the Grand Exchange; 42 can also be found during the quest.",
+        "wikiItemId": 1539,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png"
+      },
+      {
+        "nameEn": "Swamp paste",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1941,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Swamp_paste.png"
+      },
+      {
+        "nameEn": "Raw mackerel",
+        "amount": 10,
+        "howToGet": "For Aurel's crate (he may ask for snail meat instead). Buy on the Grand Exchange.",
+        "wikiItemId": 353,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Raw_mackerel.png"
+      },
+      {
+        "nameEn": "Bronze axe",
+        "amount": 10,
+        "howToGet": "For Aurel's crate. Buy on the Grand Exchange.",
+        "wikiItemId": 1351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 4,
+        "howToGet": "For Aurel's crate. Buy on the Grand Exchange or from a general store.",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
+      },
+      {
+        "nameEn": "Steel bar",
+        "amount": 2,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 2353,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_bar.png"
+      },
+      {
+        "nameEn": "Coal",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 453,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coal.png"
+      },
+      {
+        "nameEn": "Soft clay",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1761,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Soft_clay.png"
+      },
+      {
+        "nameEn": "Rope",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange, or from Ned in Draynor Village for 18 gp.",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
+      },
+      {
+        "nameEn": "Silver bar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 2355,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Silver_bar.png"
+      },
+      {
+        "nameEn": "Mithril bar",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 2359,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_bar.png"
+      },
+      {
+        "nameEn": "Sapphire",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange.",
+        "wikiItemId": 1607,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Sapphire.png"
+      },
+      {
+        "nameEn": "Cosmic rune",
+        "amount": 1,
+        "howToGet": "Lvl-1 Enchant on the silvthrill rod (standard spellbook). Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 564,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cosmic_rune.png"
+      },
+      {
+        "nameEn": "Water rune",
+        "amount": 1,
+        "howToGet": "Lvl-1 Enchant on the silvthrill rod. Buy on the Grand Exchange or at a rune shop.",
+        "wikiItemId": 555,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Water_rune.png"
+      },
+      {
+        "nameEn": "Salmon",
+        "amount": 15,
+        "howToGet": "Buy on the Grand Exchange. One goes in the chest to enter Burgh de Rott; the rest is for Gadderanks (level 35) and the juvinates.",
+        "wikiItemId": 329,
+        "heals": 9,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png"
+      }
+    ],
+    "foes": [
+      "Gadderanks",
+      "Vampyre Juvinate"
+    ],
+    "reward": "2 QP, 2,000 Attack XP, 2,000 Strength XP, 2,000 Crafting XP, 2,000 Defence XP",
+    "doneWhen": "The quest is green.",
+    "inGame": {
+      "npcNames": [
+        "Veliaf Hurtz"
+      ],
+      "dialogChoices": [
+        "I want to join your organisation.",
+        "Are there any 'out of the way' places in here?",
+        "I'd like to help fix up the town.",
+        "What should I do now?",
+        "Veliaf told me about Ivandis.",
+        "Is there somewhere that I might get more information about Ivandis?",
+        "The lives of those pitiful few left in Morytania could rest on this!",
+        "I have brought you the Rod of Ivandis!",
+        "Yes, I've come to give the Rod of Ivandis to you!"
+      ],
+      "highlightItems": [
+        "Silver sickle (b)",
+        "Spade",
+        "Bucket",
+        "Bronze pickaxe",
+        "Hammer",
+        "Plank",
+        "Steel nails",
+        "Swamp paste",
+        "Raw mackerel",
+        "Bronze axe",
+        "Tinderbox",
+        "Steel bar",
+        "Coal",
+        "Soft clay",
+        "Rope",
+        "Silver bar",
+        "Mithril bar",
+        "Sapphire",
+        "Cosmic rune",
+        "Water rune",
+        "Salmon"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "In Aid of the Myreque"
+      }
+    }
   }
 ]

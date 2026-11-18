@@ -1,0 +1,3900 @@
+{
+ "quest": "Darkness of Hallowvale",
+ "status": "draft",
+ "sources": {
+  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+  "wiki": {
+   "title": "Darkness of Hallowvale",
+   "revision": 15355656
+  },
+  "quickGuide": {
+   "title": "Darkness of Hallowvale/Quick guide",
+   "revision": 15396998
+  }
+ },
+ "step": {
+  "title": "Darkness of Hallowvale",
+  "type": "quest",
+  "qp": 2,
+  "membersOnly": true,
+  "wikiUrl": "https://oldschool.runescape.wiki/w/Darkness_of_Hallowvale",
+  "quickGuideUrl": "https://oldschool.runescape.wiki/w/Darkness_of_Hallowvale/Quick_guide",
+  "mapLocation": {
+   "x": 3494,
+   "y": 9628,
+   "plane": 0,
+   "label": "Talk to Veliaf Hurtz in the basement of the Burgh de Rott inn."
+  },
+  "npc": {
+   "nameEn": "Veliaf Hurtz"
+  },
+  "itemsRequired": [
+   {
+    "nameEn": "nails",
+    "amount": 8,
+    "wikiItemId": null,
+    "howToGet": null,
+    "note": "8 nails"
+   },
+   {
+    "nameEn": "plank",
+    "amount": 2,
+    "wikiItemId": 960,
+    "howToGet": "Buy on the Grand Exchange, or from Razmire Builders Merchants in Mort'ton for 1 gp.",
+    "note": "2 planks"
+   },
+   {
+    "nameEn": "Hammer",
+    "amount": 1,
+    "wikiItemId": 2347,
+    "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp."
+   },
+   {
+    "nameEn": "Knife",
+    "amount": 1,
+    "wikiItemId": 946,
+    "howToGet": "Buy on the Grand Exchange, or from Funch's Fine Groceries in Grand Tree for 6 gp.",
+    "note": "Knife (obtainable during the quest) or a sickle"
+   },
+   {
+    "nameEn": "Telekinetic Grab",
+    "amount": 1,
+    "wikiItemId": 8022,
+    "howToGet": null,
+    "note": "Means to cast Telekinetic Grab (air and law rune; both obtainable during the quest)"
+   }
+  ],
+  "foes": [
+   "Vanstrom_Klause"
+  ]
+ },
+ "stages": {
+  "var": [
+   "varbit",
+   2573
+  ],
+  "route": [
+   {
+    "title": "Starting out",
+    "steps": [
+     "Travel to Burgh de Rott.",
+     "Talk to Veliaf Hurtz in the pub basement. Dialogue: \"Is there something I can do to help out?\", \"Yes, please tell me more.\", \"What is the Sanguinesti region?\", \"How can I search for the Sanguinesti order of the Myreque?\", \"Can you tell me about the Sanguinesti Myreque?\", \"How should I get into the Sanguinesti region?\", \"Okay, thanks.\"",
+     "Go south-east to the docks where there's a hut with a boat in it.",
+     "Use a plank on the boat.",
+     "Use a plank on the boat chute.",
+     "Push the boat down the chute.",
+     "Board the boat."
+    ]
+   },
+   {
+    "title": "Welcome to Meiyerditch",
+    "steps": [
+     "Go north-west a short distance (still on the pier), search the floor then kick it down and climb down.",
+     "Climb over the wall rubble and talk to any Meiyerditch citizen. Dialogue: \"(whisper) Do you know about the Myreque?\", \"(whisper) I really need to meet the Myreque.\", \"How can Old Man Ral help me?\"",
+     "Talk to Old Man Ral to the north. Dialogue: \"Someone said you could help me.\", \"Old Man Ral, the sage of Sanguinesti.\"",
+     "Climb up the ladder in the building south-west of Old Man Ral."
+    ]
+   },
+   {
+    "title": "The sickle logo agility course",
+    "steps": [
+     "Jump south to the floorboards.",
+     "Jump east to the floorboards.",
+     "Go to the north-east corner of the room, push the wall and go across the gap.",
+     "Crawl under the wall to the north.",
+     "Go north to the second room, look on the west side, push the wall and walk across it.",
+     "Climb down the ladder.",
+     "Search the table next to the wall, open the trapdoor table, and climb into it.",
+     "Climb up the shelf.",
+     "Crawl under the wall to the east side.",
+     "Jump to the floorboards to the east.",
+     "Climb down the ladder.",
+     "Search the pots near the eastern door to get a door key and use it to open the door.",
+     "Climb up the ladder in the room to the east.",
+     "Jump south to the floorboards.",
+     "Go east, south, west and climb up the shelf.",
+     "Climb up the ladder.",
+     "Jump south again to the floorboards.",
+     "Climb down the ladder.",
+     "Go east through the rooms and walk across the washing line.",
+     "Climb down the ladder.",
+     "Push the wall to the north and walk across the floor.",
+     "Climb up the shelf to the north.",
+     "Climb down the shelf on the north-eastern side, below the floor.",
+     "Jump to the floorboards to the north-west.",
+     "Jump to the floorboards to the north.",
+     "Go north-west and then east (around a gap in the floor) and jump to the floorboards.",
+     "Climb up the ladder.",
+     "Search the western wall to find a ladder top.",
+     "Climb down the ladder you came up, then repair the nearby broken ladder using the ladder top. Then climb down the fixed ladder. You are now in sector three.",
+     "Open the door and go north and slightly west, then north to a house with a fireplace in it. (go up the ladder if you need a knife)",
+     "Go west through the door into the next room, then north out of the house until you see a barricade.",
+     "Go east past the sickle logo and the house directly south should have a ladder inside. Climb up the ladder.",
+     "Jump to the floorboards to the east.",
+     "Climb down the stairs.",
+     "Go south along the eastern side of the stairs. Search the wall. Use your knife on the wall, then push it.",
+     "Press the decorated wall on the northern side.",
+     "Open the lumpy rug (south-east square of the green rug).",
+     "Climb down the trapdoor to enter the hideout."
+    ]
+   },
+   {
+    "title": "Myreque meetings",
+    "steps": [
+     "Run north and talk to Vertida Sefalatis.",
+     "Travel back to Burgh de Rott.",
+     "Talk to Veliaf Hurtz in the pub basement."
+    ]
+   },
+   {
+    "title": "Urgent business",
+    "steps": [
+     "Travel to the Paterdomus Temple (fairy ring ).",
+     "Talk to Drezel in Paterdomus, underneath the temple.",
+     "Take the west exit, past the monuments.",
+     "Search the bush slightly south-west of the steps leading to the temple.",
+     "Wait for the cutscene to finish.",
+     "Return to speak with Drezel. He will give you runes to use Varrock Teleport.",
+     "Teleport or travel to Varrock and talk to King Roald in the palace. Dialogue: \"Talk to the King about Morytania.\", \"What should I do now?\" The king will teleport you back to Paterdomus if you ask the right question.",
+     "Travel back to Burgh de Rott.",
+     "Talk to Veliaf Hurtz in the pub basement."
+    ]
+   },
+   {
+    "title": "Back to Meiyerditch",
+    "steps": [
+     "Return to Meiyerditch and speak to a Vyrewatch. Dialogue: \"Send me to the mines!\"",
+     "Talk to a Meiyerditch miner to get a pickaxe if you don't have one. Dialogue: \"How do you get out of here?\"",
+     "Mine the daeyalt rocks on the walls until you get 15 daeyalt ore.",
+     "Use all 15 ores on the mine cart, then talk to a Vampyre Juvinate.",
+     "Run to the Myreque Hideout, marked on the map to the right. Follow the blue path from north to south.",
+     "Go south through 3 doors and up the ladder.",
+     "Jump to the floorboards to the east, climb down the stairs and enter the hideout.",
+     "Talk to Vertida. Dialogue: \"Okay, lead the way.\"",
+     "Climb down the ladder, out the door, run south and climb over the wall rubble where you came in to Meiyerditch.",
+     "Run south and climb up the floor.",
+     "Run north up the slope and climb down the ladder.",
+     "Search the rocky surface.",
+     "Go north through the barricade.",
+     "Climb up the ladder.",
+     "Run north along the wall and climb up the ladder.",
+     "Climb down the next ladder.",
+     "Climb the castle wall to the north.",
+     "Run west along the wall clockwise and talk to Safalaan. Make sure you have 4 free inventory spaces.",
+     "Run west along the wall clockwise until you see a sickle logo on the floor of the wall you're walking on, on the north side of the castle.",
+     "Use the papyrus on the charcoal for the first sketch.",
+     "Run west anti-clockwise and do the same for the west sickle for the second sketch.",
+     "Wait for the cutscene to finish.",
+     "Run west anti-clockwise and do the same for the south sickle.",
+     "Let Vanstrom attack you five times, which will knock you out.",
+     "Go back and finish your final sketch.",
+     "Talk to Sarius Guile if she didn't automatically talk to you when Vanstrom knocked you out.",
+     "Speak to a nearby Vyrewatch and use the mine technique to get back to the base.",
+     "Walk to the house directly south-west of the house with the ladder leading to the Myreque Hideout. It contains a fireplace and a portrait on its south wall.",
+     "Use your knife on the fireplace for a message.",
+     "Use your knife on the portrait for a large ornate key.",
+     "Return to the Myreque Hideout.",
+     "Talk to Safalaan. Dialogue: \"I have a message for you Safalaan - it may be important.\". Afterwards, give him the message."
+    ]
+   },
+   {
+    "title": "Locating the laboratory",
+    "steps": [
+     "Exit the base, climb up the stairs, jump the gap, then climb down the ladder.",
+     "Travel north towards the mine until you find a bright, red and yellow tapestry inside a building adjacent to the Eastern city wall.",
+     "Slash the tapestry with your knife.",
+     "Walk through it and use the large ornate key on the statue.",
+     "Open the door, climb-down the staircase and use Telekinetic Grab on Haemalchemy volume 1.",
+     "Return to the base and talk to Safalaan one final time and give him Haemalchemy volume 1."
+    ]
+   },
+   {
+    "title": "Finishing up",
+    "steps": [
+     "Travel back to Burgh de Rott.",
+     "Talk to Veliaf Hurtz in the pub basement. Dialogue: \"I have a message for you from Safalaan.\"",
+     "Congratulations, quest complete!"
+    ]
+   }
+  ],
+  "stages": [
+   {
+    "at": 0,
+    "do": [
+     {
+      "t": "",
+      "s": "",
+      "k": "climbOverBrokenWall",
+      "at": [
+       3491,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12737
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "enterBurghPubBasement",
+      "at": [
+       3490,
+       3232,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12743
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "talkToVeliaf",
+      "at": [
+       3494,
+       9628,
+       0
+      ],
+      "hl": {
+       "npc": [
+        9489
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 10,
+    "do": [
+     {
+      "t": "Fix the boat in south Burgh de Rott.",
+      "s": "Fix the boat in south Burgh de Rott.",
+      "k": "usePlankOnBoat",
+      "at": [
+       3524,
+       3178,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12944
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbOverBrokenWall",
+      "at": [
+       3491,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12737
+       ]
+      }
+     },
+     {
+      "t": "Leave the Myreque base.",
+      "s": "Leave the Myreque base.",
+      "k": "leavePubBasement",
+      "at": [
+       3490,
+       9632,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12779
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 20,
+    "do": [
+     {
+      "t": "Fix the boat chute.",
+      "s": "Fix the boat chute.",
+      "k": "usePlankOnChute",
+      "at": [
+       3523,
+       3175,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12947
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 30,
+    "do": [
+     {
+      "t": "Push the boat.",
+      "s": "Push the boat.",
+      "k": "pushBoat",
+      "at": [
+       3524,
+       3178,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12944
+       ]
+      }
+     },
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Talk to a Meiyerditch citizen.",
+      "s": "Talk to a Meiyerditch citizen.",
+      "k": "talkToCitizen",
+      "at": [
+       3601,
+       3189,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3780
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the north.",
+      "s": "Climb over the wall rubble to the north.",
+      "k": "climbOverRubble",
+      "at": [
+       3589,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18037
+       ]
+      }
+     },
+     {
+      "t": "Climb up the walls and search the marked floor.",
+      "s": "Climb up the walls and search the marked floor.",
+      "k": "kickBoard",
+      "at": [
+       3589,
+       3173,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18122
+       ]
+      }
+     },
+     {
+      "t": "Climb down the floorboard.",
+      "s": "Climb down the floorboard.",
+      "k": "climbDownBoard",
+      "at": [
+       3589,
+       3173,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18122
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 40,
+    "do": [
+     {
+      "t": "Push the boat.",
+      "s": "Push the boat.",
+      "k": "pushBoat",
+      "at": [
+       3524,
+       3178,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12944
+       ]
+      }
+     },
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Talk to a Meiyerditch citizen.",
+      "s": "Talk to a Meiyerditch citizen.",
+      "k": "talkToCitizen",
+      "at": [
+       3601,
+       3189,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3780
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the north.",
+      "s": "Climb over the wall rubble to the north.",
+      "k": "climbOverRubble",
+      "at": [
+       3589,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18037
+       ]
+      }
+     },
+     {
+      "t": "Climb up the walls and search the marked floor.",
+      "s": "Climb up the walls and search the marked floor.",
+      "k": "kickBoard",
+      "at": [
+       3589,
+       3173,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18122
+       ]
+      }
+     },
+     {
+      "t": "Climb down the floorboard.",
+      "s": "Climb down the floorboard.",
+      "k": "climbDownBoard",
+      "at": [
+       3589,
+       3173,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18122
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 50,
+    "do": [
+     {
+      "t": "Push the boat.",
+      "s": "Push the boat.",
+      "k": "pushBoat",
+      "at": [
+       3524,
+       3178,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12944
+       ]
+      }
+     },
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Talk to a Meiyerditch citizen.",
+      "s": "Talk to a Meiyerditch citizen.",
+      "k": "talkToCitizen",
+      "at": [
+       3601,
+       3189,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3780
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the north.",
+      "s": "Climb over the wall rubble to the north.",
+      "k": "climbOverRubble",
+      "at": [
+       3589,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18037
+       ]
+      }
+     },
+     {
+      "t": "Climb up the walls and search the marked floor.",
+      "s": "Climb up the walls and search the marked floor.",
+      "k": "kickBoard",
+      "at": [
+       3589,
+       3173,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18122
+       ]
+      }
+     },
+     {
+      "t": "Climb down the floorboard.",
+      "s": "Climb down the floorboard.",
+      "k": "climbDownBoard",
+      "at": [
+       3589,
+       3173,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18122
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 52,
+    "do": [
+     {
+      "t": "Push the boat.",
+      "s": "Push the boat.",
+      "k": "pushBoat",
+      "at": [
+       3524,
+       3178,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12944
+       ]
+      }
+     },
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Talk to a Meiyerditch citizen.",
+      "s": "Talk to a Meiyerditch citizen.",
+      "k": "talkToCitizen",
+      "at": [
+       3601,
+       3189,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3780
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the north.",
+      "s": "Climb over the wall rubble to the north.",
+      "k": "climbOverRubble",
+      "at": [
+       3589,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18037
+       ]
+      }
+     },
+     {
+      "t": "Climb up the walls and search the marked floor.",
+      "s": "Climb up the walls and search the marked floor.",
+      "k": "kickBoard",
+      "at": [
+       3589,
+       3173,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18122
+       ]
+      }
+     },
+     {
+      "t": "Climb down the floorboard.",
+      "s": "Climb down the floorboard.",
+      "k": "climbDownBoard",
+      "at": [
+       3589,
+       3173,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18122
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 54,
+    "do": [
+     {
+      "t": "Push the boat.",
+      "s": "Push the boat.",
+      "k": "pushBoat",
+      "at": [
+       3524,
+       3178,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12944
+       ]
+      }
+     },
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Talk to a Meiyerditch citizen.",
+      "s": "Talk to a Meiyerditch citizen.",
+      "k": "talkToCitizen",
+      "at": [
+       3601,
+       3189,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3780
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the north.",
+      "s": "Climb over the wall rubble to the north.",
+      "k": "climbOverRubble",
+      "at": [
+       3589,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18037
+       ]
+      }
+     },
+     {
+      "t": "Climb up the walls and search the marked floor.",
+      "s": "Climb up the walls and search the marked floor.",
+      "k": "kickBoard",
+      "at": [
+       3589,
+       3173,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18122
+       ]
+      }
+     },
+     {
+      "t": "Climb down the floorboard.",
+      "s": "Climb down the floorboard.",
+      "k": "climbDownBoard",
+      "at": [
+       3589,
+       3173,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18122
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 60,
+    "do": [
+     {
+      "t": "Push the boat.",
+      "s": "Push the boat.",
+      "k": "pushBoat",
+      "at": [
+       3524,
+       3178,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12944
+       ]
+      }
+     },
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Talk to Old Man Ral in south western Meiyerditch.",
+      "s": "Talk to Old Man Ral in south western Meiyerditch.",
+      "k": "talkToRal",
+      "at": [
+       3604,
+       3208,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3772
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the north.",
+      "s": "Climb over the wall rubble to the north.",
+      "k": "climbOverRubble",
+      "at": [
+       3589,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18037
+       ]
+      }
+     },
+     {
+      "t": "Climb down the floorboard.",
+      "s": "Climb down the floorboard.",
+      "k": "climbDownBoard",
+      "at": [
+       3589,
+       3173,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18122
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 65,
+    "do": [
+     {
+      "t": "Follow the path to the Meiyerditch Myreque base. When you reach some pots, search them for a key to open the door.",
+      "s": "Follow the path to the Meiyerditch Myreque base. When you reach some pots, search them for a key to open the door.",
+      "k": "travelToPots",
+      "at": [
+       3608,
+       3222,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18065
+       ]
+      }
+     },
+     {
+      "t": "Continue until you reach a wall with a ladder piece, and take it.",
+      "s": "Continue until you reach a wall with a ladder piece, and take it.",
+      "k": "travelToLadderPart",
+      "at": [
+       3625,
+       3240,
+       2
+      ],
+      "hl": {
+       "obj": [
+        18115
+       ]
+      }
+     },
+     {
+      "t": "Repair the ladder downstairs.",
+      "s": "Repair the ladder downstairs.",
+      "k": "travelToFixLadder",
+      "at": [
+       3629,
+       3240,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18116
+       ]
+      }
+     },
+     {
+      "t": "Use a knife on the wall you eventually reach.",
+      "s": "Use a knife on the wall you eventually reach.",
+      "k": "travelToMyrequeBase",
+      "at": [
+       3640,
+       3253,
+       0
+      ],
+      "hl": {
+       "obj": [
+        17980
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 70,
+    "do": [
+     {
+      "t": "Press the decorated wall.",
+      "s": "Press the decorated wall.",
+      "k": "pressDecoratedWall",
+      "at": [
+       3638,
+       3251,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18146
+       ]
+      }
+     },
+     {
+      "t": "Open the rug and enter the trapdoor.",
+      "s": "Open the rug and enter the trapdoor.",
+      "k": "enterRug",
+      "at": [
+       3639,
+       3249,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18120
+       ]
+      }
+     },
+     {
+      "t": "Talk to Vertida in the north room.",
+      "s": "Talk to Vertida in the north room.",
+      "k": "talkToVertida",
+      "at": [
+       3627,
+       9644,
+       0
+      ],
+      "hl": {
+       "npc": [
+        8220
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 80,
+    "do": [
+     {
+      "t": "Press the decorated wall.",
+      "s": "Press the decorated wall.",
+      "k": "pressDecoratedWall",
+      "at": [
+       3638,
+       3251,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18146
+       ]
+      }
+     },
+     {
+      "t": "Open the rug and enter the trapdoor.",
+      "s": "Open the rug and enter the trapdoor.",
+      "k": "enterRug",
+      "at": [
+       3639,
+       3249,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18120
+       ]
+      }
+     },
+     {
+      "t": "Talk to Vertida in the north room.",
+      "s": "Talk to Vertida in the north room.",
+      "k": "talkToVertida",
+      "at": [
+       3627,
+       9644,
+       0
+      ],
+      "hl": {
+       "npc": [
+        8220
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 90,
+    "do": [
+     {
+      "t": "",
+      "s": "",
+      "k": "climbOverBrokenWall",
+      "at": [
+       3491,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12737
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "enterBurghPubBasement",
+      "at": [
+       3490,
+       3232,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12743
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "talkToVeliaf",
+      "at": [
+       3494,
+       9628,
+       0
+      ],
+      "hl": {
+       "npc": [
+        9489
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 100,
+    "do": [
+     {
+      "t": "",
+      "s": "",
+      "k": "enterBurghPubBasement",
+      "at": [
+       3490,
+       3232,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12743
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "talkToVeliaf",
+      "at": [
+       3494,
+       9628,
+       0
+      ],
+      "hl": {
+       "npc": [
+        9489
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 110,
+    "do": [
+     {
+      "t": "",
+      "s": "",
+      "k": "goDownToDrezel",
+      "at": [
+       3422,
+       3485,
+       0
+      ],
+      "hl": {
+       "obj": [
+        3432
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "talkToDrezel",
+      "at": [
+       3439,
+       9896,
+       0
+      ],
+      "hl": {
+       "npc": [
+        9636
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 120,
+    "do": [
+     {
+      "t": "Search the bushes west of Paterdomus.",
+      "s": "Search the bushes west of Paterdomus.",
+      "k": "searchBushes",
+      "at": [
+       3390,
+       3480,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18121
+       ]
+      }
+     },
+     {
+      "t": "Go up the west ladder.",
+      "s": "Go up the west ladder.",
+      "k": "leaveDrezelToBushes",
+      "at": [
+       3405,
+       9907,
+       0
+      ],
+      "hl": {
+       "obj": [
+        17385
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 130,
+    "do": [
+     {
+      "t": "",
+      "s": "",
+      "k": "returnFromBushesToDrezel",
+      "at": [
+       3405,
+       3507,
+       0
+      ],
+      "hl": {
+       "obj": [
+        1579
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "talkToDrezel",
+      "at": [
+       3439,
+       9896,
+       0
+      ],
+      "hl": {
+       "npc": [
+        9636
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 135,
+    "do": [
+     {
+      "t": "Talk to King Roald in Varrock Castle.",
+      "s": "Talk to King Roald in Varrock Castle.",
+      "k": "talkToRoald",
+      "at": [
+       3222,
+       3473,
+       0
+      ]
+     }
+    ]
+   },
+   {
+    "at": 140,
+    "do": [
+     {
+      "t": "Talk to King Roald in Varrock Castle.",
+      "s": "Talk to King Roald in Varrock Castle.",
+      "k": "talkToRoald",
+      "at": [
+       3222,
+       3473,
+       0
+      ]
+     }
+    ]
+   },
+   {
+    "at": 150,
+    "do": [
+     {
+      "t": "Talk to King Roald in Varrock Castle.",
+      "s": "Talk to King Roald in Varrock Castle.",
+      "k": "talkToRoald",
+      "at": [
+       3222,
+       3473,
+       0
+      ]
+     }
+    ]
+   },
+   {
+    "at": 160,
+    "do": [
+     {
+      "t": "Talk to King Roald in Varrock Castle.",
+      "s": "Talk to King Roald in Varrock Castle.",
+      "k": "talkToRoald",
+      "at": [
+       3222,
+       3473,
+       0
+      ]
+     }
+    ]
+   },
+   {
+    "at": 170,
+    "do": [
+     {
+      "t": "",
+      "s": "",
+      "k": "climbOverBrokenWall",
+      "at": [
+       3491,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12737
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "enterBurghPubBasement",
+      "at": [
+       3490,
+       3232,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12743
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "talkToVeliaf",
+      "at": [
+       3494,
+       9628,
+       0
+      ],
+      "hl": {
+       "npc": [
+        9489
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 180,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Talk to a Vyrewatch to be sent to the mines.",
+      "s": "Talk to a Vyrewatch to be sent to the mines.",
+      "k": "goToMines",
+      "at": [
+       3615,
+       3263,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3709
+       ]
+      }
+     },
+     {
+      "t": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "s": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "k": "mineDaeyaltThenLeave",
+      "at": [
+       2389,
+       4624,
+       2
+      ],
+      "hl": {
+       "npc": [
+        3690
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbOverBrokenWall",
+      "at": [
+       3491,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12737
+       ]
+      }
+     },
+     {
+      "t": "Press the decorated wall to unlock the base's entrance.",
+      "s": "Press the decorated wall to unlock the base's entrance.",
+      "k": "returnToMeiyBase",
+      "at": [
+       3638,
+       3251,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18146
+       ]
+      }
+     },
+     {
+      "t": "Open the rug and enter the trapdoor.",
+      "s": "Open the rug and enter the trapdoor.",
+      "k": "enterRug",
+      "at": [
+       3639,
+       3249,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18120
+       ]
+      }
+     },
+     {
+      "t": "Talk to Vertida in the north room.",
+      "s": "Talk to Vertida in the north room.",
+      "k": "talkToVertida",
+      "at": [
+       3627,
+       9644,
+       0
+      ],
+      "hl": {
+       "npc": [
+        8220
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 190,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the south.",
+      "s": "Climb over the wall rubble to the south.",
+      "k": "climbBackOverRubble",
+      "at": [
+       3591,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18038
+       ]
+      }
+     },
+     {
+      "t": "Climb up to the floor in the wall to the south.",
+      "s": "Climb up to the floor in the wall to the south.",
+      "k": "climbUpFloor",
+      "at": [
+       3589,
+       3173,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18124
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownWallLadder",
+      "at": [
+       3588,
+       3210,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17999
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder.",
+      "s": "Climb down the ladder.",
+      "k": "goDownFromRandomRoom",
+      "at": [
+       3595,
+       3204,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17975
+       ]
+      }
+     },
+     {
+      "t": "Search the rocky surface nearby.",
+      "s": "Search the rocky surface nearby.",
+      "k": "searchRockySurface",
+      "at": [
+       3592,
+       3211,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18056
+       ]
+      }
+     },
+     {
+      "t": "Open the barricade to the north.",
+      "s": "Open the barricade to the north.",
+      "k": "goThroughBarricade",
+      "at": [
+       3589,
+       3215,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18054
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbUpWallLadder",
+      "at": [
+       3593,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18000
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbLadderSecondWall",
+      "at": [
+       3588,
+       3251,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18002
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownFromThirdWall",
+      "at": [
+       3588,
+       3259,
+       2
+      ],
+      "hl": {
+       "obj": [
+        18001
+       ]
+      }
+     },
+     {
+      "t": "Climb up the wall to the north.",
+      "s": "Climb up the wall to the north.",
+      "k": "climbUpDrakanWalls",
+      "at": [
+       3595,
+       3310,
+       1
+      ],
+      "hl": {
+       "obj": [
+        39173
+       ]
+      }
+     },
+     {
+      "t": "Talk to Vertida in the north room.",
+      "s": "Talk to Vertida in the north room.",
+      "k": "talkToVertida",
+      "at": [
+       3627,
+       9644,
+       0
+      ],
+      "hl": {
+       "npc": [
+        8220
+       ]
+      }
+     },
+     {
+      "t": "Talk to Safalaan on the walls.",
+      "s": "Talk to Safalaan on the walls.",
+      "k": "talkToSafalaan",
+      "at": [
+       3585,
+       3331,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3775
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 195,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the south.",
+      "s": "Climb over the wall rubble to the south.",
+      "k": "climbBackOverRubble",
+      "at": [
+       3591,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18038
+       ]
+      }
+     },
+     {
+      "t": "Climb up to the floor in the wall to the south.",
+      "s": "Climb up to the floor in the wall to the south.",
+      "k": "climbUpFloor",
+      "at": [
+       3589,
+       3173,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18124
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownWallLadder",
+      "at": [
+       3588,
+       3210,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17999
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder.",
+      "s": "Climb down the ladder.",
+      "k": "goDownFromRandomRoom",
+      "at": [
+       3595,
+       3204,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17975
+       ]
+      }
+     },
+     {
+      "t": "Search the rocky surface nearby.",
+      "s": "Search the rocky surface nearby.",
+      "k": "searchRockySurface",
+      "at": [
+       3592,
+       3211,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18056
+       ]
+      }
+     },
+     {
+      "t": "Open the barricade to the north.",
+      "s": "Open the barricade to the north.",
+      "k": "goThroughBarricade",
+      "at": [
+       3589,
+       3215,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18054
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbUpWallLadder",
+      "at": [
+       3593,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18000
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbLadderSecondWall",
+      "at": [
+       3588,
+       3251,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18002
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownFromThirdWall",
+      "at": [
+       3588,
+       3259,
+       2
+      ],
+      "hl": {
+       "obj": [
+        18001
+       ]
+      }
+     },
+     {
+      "t": "Climb up the wall to the north.",
+      "s": "Climb up the wall to the north.",
+      "k": "climbUpDrakanWalls",
+      "at": [
+       3595,
+       3310,
+       1
+      ],
+      "hl": {
+       "obj": [
+        39173
+       ]
+      }
+     },
+     {
+      "t": "Talk to Vertida in the north room.",
+      "s": "Talk to Vertida in the north room.",
+      "k": "talkToVertida",
+      "at": [
+       3627,
+       9644,
+       0
+      ],
+      "hl": {
+       "npc": [
+        8220
+       ]
+      }
+     },
+     {
+      "t": "Talk to Safalaan on the walls.",
+      "s": "Talk to Safalaan on the walls.",
+      "k": "talkToSafalaan",
+      "at": [
+       3585,
+       3331,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3775
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 200,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the south.",
+      "s": "Climb over the wall rubble to the south.",
+      "k": "climbBackOverRubble",
+      "at": [
+       3591,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18038
+       ]
+      }
+     },
+     {
+      "t": "Climb up to the floor in the wall to the south.",
+      "s": "Climb up to the floor in the wall to the south.",
+      "k": "climbUpFloor",
+      "at": [
+       3589,
+       3173,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18124
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownWallLadder",
+      "at": [
+       3588,
+       3210,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17999
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder.",
+      "s": "Climb down the ladder.",
+      "k": "goDownFromRandomRoom",
+      "at": [
+       3595,
+       3204,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17975
+       ]
+      }
+     },
+     {
+      "t": "Search the rocky surface nearby.",
+      "s": "Search the rocky surface nearby.",
+      "k": "searchRockySurface",
+      "at": [
+       3592,
+       3211,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18056
+       ]
+      }
+     },
+     {
+      "t": "Open the barricade to the north.",
+      "s": "Open the barricade to the north.",
+      "k": "goThroughBarricade",
+      "at": [
+       3589,
+       3215,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18054
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbUpWallLadder",
+      "at": [
+       3593,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18000
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbLadderSecondWall",
+      "at": [
+       3588,
+       3251,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18002
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownFromThirdWall",
+      "at": [
+       3588,
+       3259,
+       2
+      ],
+      "hl": {
+       "obj": [
+        18001
+       ]
+      }
+     },
+     {
+      "t": "Climb up the wall to the north.",
+      "s": "Climb up the wall to the north.",
+      "k": "climbUpDrakanWalls",
+      "at": [
+       3595,
+       3310,
+       1
+      ],
+      "hl": {
+       "obj": [
+        39173
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "drawNorthWall",
+      "at": [
+       3556,
+       3379,
+       0
+      ]
+     }
+    ]
+   },
+   {
+    "at": 210,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the south.",
+      "s": "Climb over the wall rubble to the south.",
+      "k": "climbBackOverRubble",
+      "at": [
+       3591,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18038
+       ]
+      }
+     },
+     {
+      "t": "Climb up to the floor in the wall to the south.",
+      "s": "Climb up to the floor in the wall to the south.",
+      "k": "climbUpFloor",
+      "at": [
+       3589,
+       3173,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18124
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownWallLadder",
+      "at": [
+       3588,
+       3210,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17999
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder.",
+      "s": "Climb down the ladder.",
+      "k": "goDownFromRandomRoom",
+      "at": [
+       3595,
+       3204,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17975
+       ]
+      }
+     },
+     {
+      "t": "Search the rocky surface nearby.",
+      "s": "Search the rocky surface nearby.",
+      "k": "searchRockySurface",
+      "at": [
+       3592,
+       3211,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18056
+       ]
+      }
+     },
+     {
+      "t": "Open the barricade to the north.",
+      "s": "Open the barricade to the north.",
+      "k": "goThroughBarricade",
+      "at": [
+       3589,
+       3215,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18054
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbUpWallLadder",
+      "at": [
+       3593,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18000
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbLadderSecondWall",
+      "at": [
+       3588,
+       3251,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18002
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownFromThirdWall",
+      "at": [
+       3588,
+       3259,
+       2
+      ],
+      "hl": {
+       "obj": [
+        18001
+       ]
+      }
+     },
+     {
+      "t": "Climb up the wall to the north.",
+      "s": "Climb up the wall to the north.",
+      "k": "climbUpDrakanWalls",
+      "at": [
+       3595,
+       3310,
+       1
+      ],
+      "hl": {
+       "obj": [
+        39173
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "drawWestWall",
+      "at": [
+       3522,
+       3357,
+       0
+      ]
+     }
+    ]
+   },
+   {
+    "at": 220,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the south.",
+      "s": "Climb over the wall rubble to the south.",
+      "k": "climbBackOverRubble",
+      "at": [
+       3591,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18038
+       ]
+      }
+     },
+     {
+      "t": "Climb up to the floor in the wall to the south.",
+      "s": "Climb up to the floor in the wall to the south.",
+      "k": "climbUpFloor",
+      "at": [
+       3589,
+       3173,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18124
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownWallLadder",
+      "at": [
+       3588,
+       3210,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17999
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder.",
+      "s": "Climb down the ladder.",
+      "k": "goDownFromRandomRoom",
+      "at": [
+       3595,
+       3204,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17975
+       ]
+      }
+     },
+     {
+      "t": "Search the rocky surface nearby.",
+      "s": "Search the rocky surface nearby.",
+      "k": "searchRockySurface",
+      "at": [
+       3592,
+       3211,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18056
+       ]
+      }
+     },
+     {
+      "t": "Open the barricade to the north.",
+      "s": "Open the barricade to the north.",
+      "k": "goThroughBarricade",
+      "at": [
+       3589,
+       3215,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18054
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbUpWallLadder",
+      "at": [
+       3593,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18000
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbLadderSecondWall",
+      "at": [
+       3588,
+       3251,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18002
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownFromThirdWall",
+      "at": [
+       3588,
+       3259,
+       2
+      ],
+      "hl": {
+       "obj": [
+        18001
+       ]
+      }
+     },
+     {
+      "t": "Climb up the wall to the north.",
+      "s": "Climb up the wall to the north.",
+      "k": "climbUpDrakanWalls",
+      "at": [
+       3595,
+       3310,
+       1
+      ],
+      "hl": {
+       "obj": [
+        39173
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "drawSouthWall",
+      "at": [
+       3572,
+       3331,
+       0
+      ]
+     },
+     {
+      "t": "Tank Vanstrom for 5 hits or use Protect from Melee.",
+      "s": "Tank Vanstrom for 5 hits or use Protect from Melee.",
+      "k": "tankVanstrom",
+      "at": [
+       3572,
+       3331,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3735
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 230,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the south.",
+      "s": "Climb over the wall rubble to the south.",
+      "k": "climbBackOverRubble",
+      "at": [
+       3591,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18038
+       ]
+      }
+     },
+     {
+      "t": "Climb up to the floor in the wall to the south.",
+      "s": "Climb up to the floor in the wall to the south.",
+      "k": "climbUpFloor",
+      "at": [
+       3589,
+       3173,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18124
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownWallLadder",
+      "at": [
+       3588,
+       3210,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17999
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder.",
+      "s": "Climb down the ladder.",
+      "k": "goDownFromRandomRoom",
+      "at": [
+       3595,
+       3204,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17975
+       ]
+      }
+     },
+     {
+      "t": "Search the rocky surface nearby.",
+      "s": "Search the rocky surface nearby.",
+      "k": "searchRockySurface",
+      "at": [
+       3592,
+       3211,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18056
+       ]
+      }
+     },
+     {
+      "t": "Open the barricade to the north.",
+      "s": "Open the barricade to the north.",
+      "k": "goThroughBarricade",
+      "at": [
+       3589,
+       3215,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18054
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbUpWallLadder",
+      "at": [
+       3593,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18000
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbLadderSecondWall",
+      "at": [
+       3588,
+       3251,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18002
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownFromThirdWall",
+      "at": [
+       3588,
+       3259,
+       2
+      ],
+      "hl": {
+       "obj": [
+        18001
+       ]
+      }
+     },
+     {
+      "t": "Climb up the wall to the north.",
+      "s": "Climb up the wall to the north.",
+      "k": "climbUpDrakanWalls",
+      "at": [
+       3595,
+       3310,
+       1
+      ],
+      "hl": {
+       "obj": [
+        39173
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "drawSouthWall",
+      "at": [
+       3572,
+       3331,
+       0
+      ]
+     },
+     {
+      "t": "Tank Vanstrom for 5 hits or use Protect from Melee.",
+      "s": "Tank Vanstrom for 5 hits or use Protect from Melee.",
+      "k": "tankVanstrom",
+      "at": [
+       3572,
+       3331,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3735
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 240,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the south.",
+      "s": "Climb over the wall rubble to the south.",
+      "k": "climbBackOverRubble",
+      "at": [
+       3591,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18038
+       ]
+      }
+     },
+     {
+      "t": "Climb up to the floor in the wall to the south.",
+      "s": "Climb up to the floor in the wall to the south.",
+      "k": "climbUpFloor",
+      "at": [
+       3589,
+       3173,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18124
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownWallLadder",
+      "at": [
+       3588,
+       3210,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17999
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder.",
+      "s": "Climb down the ladder.",
+      "k": "goDownFromRandomRoom",
+      "at": [
+       3595,
+       3204,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17975
+       ]
+      }
+     },
+     {
+      "t": "Search the rocky surface nearby.",
+      "s": "Search the rocky surface nearby.",
+      "k": "searchRockySurface",
+      "at": [
+       3592,
+       3211,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18056
+       ]
+      }
+     },
+     {
+      "t": "Open the barricade to the north.",
+      "s": "Open the barricade to the north.",
+      "k": "goThroughBarricade",
+      "at": [
+       3589,
+       3215,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18054
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbUpWallLadder",
+      "at": [
+       3593,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18000
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbLadderSecondWall",
+      "at": [
+       3588,
+       3251,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18002
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownFromThirdWall",
+      "at": [
+       3588,
+       3259,
+       2
+      ],
+      "hl": {
+       "obj": [
+        18001
+       ]
+      }
+     },
+     {
+      "t": "Climb up the wall to the north.",
+      "s": "Climb up the wall to the north.",
+      "k": "climbUpDrakanWalls",
+      "at": [
+       3595,
+       3310,
+       1
+      ],
+      "hl": {
+       "obj": [
+        39173
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "talkToSarius",
+      "at": [
+       3572,
+       3331,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3776
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 250,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Climb over the wall rubble to the south.",
+      "s": "Climb over the wall rubble to the south.",
+      "k": "climbBackOverRubble",
+      "at": [
+       3591,
+       3180,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18038
+       ]
+      }
+     },
+     {
+      "t": "Climb up to the floor in the wall to the south.",
+      "s": "Climb up to the floor in the wall to the south.",
+      "k": "climbUpFloor",
+      "at": [
+       3589,
+       3173,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18124
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownWallLadder",
+      "at": [
+       3588,
+       3210,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17999
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder.",
+      "s": "Climb down the ladder.",
+      "k": "goDownFromRandomRoom",
+      "at": [
+       3595,
+       3204,
+       1
+      ],
+      "hl": {
+       "obj": [
+        17975
+       ]
+      }
+     },
+     {
+      "t": "Search the rocky surface nearby.",
+      "s": "Search the rocky surface nearby.",
+      "k": "searchRockySurface",
+      "at": [
+       3592,
+       3211,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18056
+       ]
+      }
+     },
+     {
+      "t": "Open the barricade to the north.",
+      "s": "Open the barricade to the north.",
+      "k": "goThroughBarricade",
+      "at": [
+       3589,
+       3215,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18054
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbUpWallLadder",
+      "at": [
+       3593,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18000
+       ]
+      }
+     },
+     {
+      "t": "Climb up the ladder to the north.",
+      "s": "Climb up the ladder to the north.",
+      "k": "climbLadderSecondWall",
+      "at": [
+       3588,
+       3251,
+       1
+      ],
+      "hl": {
+       "obj": [
+        18002
+       ]
+      }
+     },
+     {
+      "t": "Climb down the ladder to the north.",
+      "s": "Climb down the ladder to the north.",
+      "k": "climbDownFromThirdWall",
+      "at": [
+       3588,
+       3259,
+       2
+      ],
+      "hl": {
+       "obj": [
+        18001
+       ]
+      }
+     },
+     {
+      "t": "Climb up the wall to the north.",
+      "s": "Climb up the wall to the north.",
+      "k": "climbUpDrakanWalls",
+      "at": [
+       3595,
+       3310,
+       1
+      ],
+      "hl": {
+       "obj": [
+        39173
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "finishSouthSketch",
+      "at": [
+       3572,
+       3331,
+       0
+      ]
+     },
+     {
+      "t": "Talk to a Vyrewatch to be sent to the mines.",
+      "s": "Talk to a Vyrewatch to be sent to the mines.",
+      "k": "goToMines",
+      "at": [
+       3615,
+       3263,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3709
+       ]
+      }
+     },
+     {
+      "t": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "s": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "k": "mineDaeyaltThenLeave",
+      "at": [
+       2389,
+       4624,
+       2
+      ],
+      "hl": {
+       "npc": [
+        3690
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbOverBrokenWall",
+      "at": [
+       3491,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12737
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "useKnifeOnFireplace",
+      "at": [
+       3627,
+       3253,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18039
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 260,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Talk to a Vyrewatch to be sent to the mines.",
+      "s": "Talk to a Vyrewatch to be sent to the mines.",
+      "k": "goToMines",
+      "at": [
+       3615,
+       3263,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3709
+       ]
+      }
+     },
+     {
+      "t": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "s": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "k": "mineDaeyaltThenLeave",
+      "at": [
+       2389,
+       4624,
+       2
+      ],
+      "hl": {
+       "npc": [
+        3690
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbOverBrokenWall",
+      "at": [
+       3491,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12737
+       ]
+      }
+     },
+     {
+      "t": "Use a knife on the portrait south of the fireplace.",
+      "s": "Use a knife on the portrait south of the fireplace.",
+      "k": "useKnifeOnPortrait",
+      "at": [
+       3627,
+       3248,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18126
+       ]
+      }
+     },
+     {
+      "t": "Inspect the portrait south of the fireplace.",
+      "s": "Inspect the portrait south of the fireplace.",
+      "k": "inspectPortrait",
+      "at": [
+       3627,
+       3248,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18126
+       ]
+      }
+     },
+     {
+      "t": "Press the decorated wall to unlock the base's entrance.",
+      "s": "Press the decorated wall to unlock the base's entrance.",
+      "k": "returnToMeiyBase",
+      "at": [
+       3638,
+       3251,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18146
+       ]
+      }
+     },
+     {
+      "t": "Open the rug and enter the trapdoor.",
+      "s": "Open the rug and enter the trapdoor.",
+      "k": "enterRug",
+      "at": [
+       3639,
+       3249,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18120
+       ]
+      }
+     },
+     {
+      "t": "Talk to Safalaan in the north room.",
+      "s": "Talk to Safalaan in the north room.",
+      "k": "talkToSafalaanInBase",
+      "at": [
+       3627,
+       9644,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3775
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 270,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Talk to a Vyrewatch to be sent to the mines.",
+      "s": "Talk to a Vyrewatch to be sent to the mines.",
+      "k": "goToMines",
+      "at": [
+       3615,
+       3263,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3709
+       ]
+      }
+     },
+     {
+      "t": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "s": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "k": "mineDaeyaltThenLeave",
+      "at": [
+       2389,
+       4624,
+       2
+      ],
+      "hl": {
+       "npc": [
+        3690
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbOverBrokenWall",
+      "at": [
+       3491,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12737
+       ]
+      }
+     },
+     {
+      "t": "Go up to the surface.",
+      "s": "Go up to the surface.",
+      "k": "leaveMeiyerBase",
+      "at": [
+       3626,
+       9617,
+       0
+      ],
+      "hl": {
+       "obj": [
+        17986
+       ]
+      }
+     },
+     {
+      "t": "Use a knife on the portrait south of the fireplace.",
+      "s": "Use a knife on the portrait south of the fireplace.",
+      "k": "useKnifeOnPortrait",
+      "at": [
+       3627,
+       3248,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18126
+       ]
+      }
+     },
+     {
+      "t": "Inspect the portrait south of the fireplace.",
+      "s": "Inspect the portrait south of the fireplace.",
+      "k": "inspectPortrait",
+      "at": [
+       3627,
+       3248,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18126
+       ]
+      }
+     },
+     {
+      "t": "Slash the tapestry in the building in north east Meiyerditch.",
+      "s": "Slash the tapestry in the building in north east Meiyerditch.",
+      "k": "useKnifeOnTapestry",
+      "at": [
+       3638,
+       3304,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18125
+       ]
+      }
+     },
+     {
+      "t": "Use the ornate key on the nearby statue.",
+      "s": "Use the ornate key on the nearby statue.",
+      "k": "useKeyOnStatue",
+      "at": [
+       3641,
+       3304,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18127
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 280,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Talk to a Vyrewatch to be sent to the mines.",
+      "s": "Talk to a Vyrewatch to be sent to the mines.",
+      "k": "goToMines",
+      "at": [
+       3615,
+       3263,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3709
+       ]
+      }
+     },
+     {
+      "t": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "s": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "k": "mineDaeyaltThenLeave",
+      "at": [
+       2389,
+       4624,
+       2
+      ],
+      "hl": {
+       "npc": [
+        3690
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbOverBrokenWall",
+      "at": [
+       3491,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12737
+       ]
+      }
+     },
+     {
+      "t": "Go up to the surface.",
+      "s": "Go up to the surface.",
+      "k": "leaveMeiyerBase",
+      "at": [
+       3626,
+       9617,
+       0
+      ],
+      "hl": {
+       "obj": [
+        17986
+       ]
+      }
+     },
+     {
+      "t": "Use a knife on the portrait south of the fireplace.",
+      "s": "Use a knife on the portrait south of the fireplace.",
+      "k": "useKnifeOnPortrait",
+      "at": [
+       3627,
+       3248,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18126
+       ]
+      }
+     },
+     {
+      "t": "Inspect the portrait south of the fireplace.",
+      "s": "Inspect the portrait south of the fireplace.",
+      "k": "inspectPortrait",
+      "at": [
+       3627,
+       3248,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18126
+       ]
+      }
+     },
+     {
+      "t": "Slash the tapestry in the building in north east Meiyerditch.",
+      "s": "Slash the tapestry in the building in north east Meiyerditch.",
+      "k": "useKnifeOnTapestry",
+      "at": [
+       3638,
+       3304,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18125
+       ]
+      }
+     },
+     {
+      "t": "Use the ornate key on the nearby statue.",
+      "s": "Use the ornate key on the nearby statue.",
+      "k": "useKeyOnStatue",
+      "at": [
+       3641,
+       3304,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18127
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 290,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Talk to a Vyrewatch to be sent to the mines.",
+      "s": "Talk to a Vyrewatch to be sent to the mines.",
+      "k": "goToMines",
+      "at": [
+       3615,
+       3263,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3709
+       ]
+      }
+     },
+     {
+      "t": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "s": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "k": "mineDaeyaltThenLeave",
+      "at": [
+       2389,
+       4624,
+       2
+      ],
+      "hl": {
+       "npc": [
+        3690
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbOverBrokenWall",
+      "at": [
+       3491,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12737
+       ]
+      }
+     },
+     {
+      "t": "Go down the staircase to the lab.",
+      "s": "Go down the staircase to the lab.",
+      "k": "goDownToLab",
+      "at": [
+       3643,
+       3305,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18049
+       ]
+      }
+     },
+     {
+      "t": "Search the broken rune case.",
+      "s": "Search the broken rune case.",
+      "k": "getRunes",
+      "at": [
+       3629,
+       9695,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18052
+       ]
+      }
+     },
+     {
+      "t": "Telegrab the Haemalchemy book.",
+      "s": "Telegrab the Haemalchemy book.",
+      "k": "telegrabBook",
+      "at": [
+       3624,
+       9690,
+       0
+      ]
+     },
+     {
+      "t": "Press the decorated wall to unlock the base's entrance.",
+      "s": "Press the decorated wall to unlock the base's entrance.",
+      "k": "returnToMeiyBase",
+      "at": [
+       3638,
+       3251,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18146
+       ]
+      }
+     },
+     {
+      "t": "Open the rug and enter the trapdoor.",
+      "s": "Open the rug and enter the trapdoor.",
+      "k": "enterRug",
+      "at": [
+       3639,
+       3249,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18120
+       ]
+      }
+     },
+     {
+      "t": "Leave the lab.",
+      "s": "Leave the lab.",
+      "k": "leaveLab",
+      "at": [
+       3637,
+       9697,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18050
+       ]
+      }
+     },
+     {
+      "t": "Talk to Safalaan in the north room.",
+      "s": "Talk to Safalaan in the north room.",
+      "k": "talkToSafalaanInBase",
+      "at": [
+       3627,
+       9644,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3775
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 300,
+    "do": [
+     {
+      "t": "Board the boat.",
+      "s": "Board the boat.",
+      "k": "boardBoat",
+      "at": [
+       3523,
+       3170,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12945
+       ]
+      }
+     },
+     {
+      "t": "Talk to a Vyrewatch to be sent to the mines.",
+      "s": "Talk to a Vyrewatch to be sent to the mines.",
+      "k": "goToMines",
+      "at": [
+       3615,
+       3263,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3709
+       ]
+      }
+     },
+     {
+      "t": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "s": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave.",
+      "k": "mineDaeyaltThenLeave",
+      "at": [
+       2389,
+       4624,
+       2
+      ],
+      "hl": {
+       "npc": [
+        3690
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "climbOverBrokenWall",
+      "at": [
+       3491,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12737
+       ]
+      }
+     },
+     {
+      "t": "Go down the staircase to the lab.",
+      "s": "Go down the staircase to the lab.",
+      "k": "goDownToLab",
+      "at": [
+       3643,
+       3305,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18049
+       ]
+      }
+     },
+     {
+      "t": "Search the broken rune case.",
+      "s": "Search the broken rune case.",
+      "k": "getRunes",
+      "at": [
+       3629,
+       9695,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18052
+       ]
+      }
+     },
+     {
+      "t": "Telegrab the Haemalchemy book.",
+      "s": "Telegrab the Haemalchemy book.",
+      "k": "telegrabBook",
+      "at": [
+       3624,
+       9690,
+       0
+      ]
+     },
+     {
+      "t": "Press the decorated wall to unlock the base's entrance.",
+      "s": "Press the decorated wall to unlock the base's entrance.",
+      "k": "returnToMeiyBase",
+      "at": [
+       3638,
+       3251,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18146
+       ]
+      }
+     },
+     {
+      "t": "Open the rug and enter the trapdoor.",
+      "s": "Open the rug and enter the trapdoor.",
+      "k": "enterRug",
+      "at": [
+       3639,
+       3249,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18120
+       ]
+      }
+     },
+     {
+      "t": "Leave the lab.",
+      "s": "Leave the lab.",
+      "k": "leaveLab",
+      "at": [
+       3637,
+       9697,
+       0
+      ],
+      "hl": {
+       "obj": [
+        18050
+       ]
+      }
+     },
+     {
+      "t": "Talk to Safalaan in the north room.",
+      "s": "Talk to Safalaan in the north room.",
+      "k": "talkToSafalaanInBase",
+      "at": [
+       3627,
+       9644,
+       0
+      ],
+      "hl": {
+       "npc": [
+        3775
+       ]
+      }
+     }
+    ]
+   },
+   {
+    "at": 310,
+    "do": [
+     {
+      "t": "",
+      "s": "",
+      "k": "climbOverBrokenWall",
+      "at": [
+       3491,
+       3230,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12737
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "enterBurghPubBasement",
+      "at": [
+       3490,
+       3232,
+       0
+      ],
+      "hl": {
+       "obj": [
+        12743
+       ]
+      }
+     },
+     {
+      "t": "",
+      "s": "",
+      "k": "talkToVeliaf",
+      "at": [
+       3494,
+       9628,
+       0
+      ],
+      "hl": {
+       "npc": [
+        9489
+       ]
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "facts": {
+  "id": "Darkness of Hallowvale",
+  "stepIds": [
+   "DRAFT"
+  ],
+  "members": false,
+  "requirements": {
+   "skills": {
+    "construction": 5,
+    "mining": 20,
+    "thieving": 22,
+    "agility": 26,
+    "crafting": 32,
+    "magic": 33,
+    "strength": 40
+   },
+   "questPoints": 0,
+   "quests": [
+    "In Aid of the Myreque"
+   ],
+   "manual": [],
+   "capabilities": [],
+   "unparsed": "{{SCP|Thieving|22|link=yes}} {{Boostable|No}} {{Questreqstart|yes}} <ref>The level 22 Thieving requirement to begin the quest is boostable, but unhooking the latch in Meiyerditch has an unboostable requirement of 22 Thieving.</ref>\n{{SCP|Agility|26|link=yes}} {{Boostable|yes}} {{Questreqstart|yes}} <ref>The level 26 Agility requirement to begin the quest is boostable, but the obstacles within Meiyerditch have an unboostable requirement of 25 Agility.</ref>\nThe ability to withstand several melee attacks from a level 169 enemy.",
+   "text": "*Completion of the following quests:\n**[[In Aid of the Myreque]]\n***[[In Search of the Myreque]]\n****[[Nature Spirit]]\n*****[[Priest in Peril]]\n*****[[The Restless Ghost]]\n*{{SCP|Construction|5|link=yes}} {{Boostable|yes}} {{Questreqstart|yes}}\n*{{SCP|Mining|20|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}\n*{{SCP|Thieving|22|link=yes}} {{Boostable|No}} {{Questreqstart|yes}} <ref>The level 22 Thieving requirement to begin the quest is boostable, but unhooking the latch in Meiyerditch has an unboostable requirement of 22 Thieving.</ref>\n*{{SCP|Agility|26|link=yes}} {{Boostable|yes}} {{Questreqstart|yes}} <ref>The level 26 Agility requirement to begin the quest is boostable, but the obstacles within Meiyerditch have an unboostable requirement of 25 Agility.</ref>\n*{{SCP|Crafting|32|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}\n*{{SCP|Magic|33|link=yes}} {{Boostable|yes}} {{Questreqstart|yes}}\n*{{SCP|Strength|40|link=yes}} {{Boostable|no}} {{Questreqstart|yes}}\n*The ability to withstand several melee attacks from a level 169 enemy."
+  },
+  "rewards": {
+   "questPoints": 2,
+   "xp": {
+    "agility": 7000,
+    "thieving": 6000,
+    "construction": 2000
+   },
+   "coins": 0
+  },
+  "resourceFlow": null,
+  "length": "Long",
+  "source": {
+   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15355656",
+   "title": "Darkness of Hallowvale",
+   "revision": 15355656,
+   "retrievedAt": "2026-11-18T17:50:57.035Z"
+  }
+ },
+ "unknown": [
+  "item \"nails\": no id in Quest Helper or on its Wiki card",
+  "item \"nails\": where to get it is not written",
+  "item \"Telekinetic Grab\": where to get it is not written",
+  "fight \"Vanstrom_Klause\": no combat data",
+  "Quest Helper condition \"call messageBox\" is not understood (1)",
+  "requirement not reviewed: <ref>The level 22 Thieving requirement to begin the quest is boostable, but unhooking the latch in Meiyerditch has an unboostable requirement of 22 Thieving.</ref> <ref>The level 26 Agility requirement to begin the quest is boostable, but the obstacles within Meiyerditch have an unboostable requirement of 25 Agility.</ref> The ability to withstand several melee attacks from a level 169 enemy.",
+  "what the quest uses up and hands out is not reviewed"
+ ]
+}

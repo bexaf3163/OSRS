@@ -12954,6 +12954,141 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_lobster"
   },
   {
+    "id": 353,
+    "nameEn": "Raw mackerel",
+    "examine": "I should try cooking this.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Raw_mackerel.png",
+    "value": 15,
+    "highAlch": 9,
+    "lowAlch": 6,
+    "buyLocations": [
+      {
+        "shopName": "Harry's Fishing Shop.",
+        "location": "Catherby",
+        "owner": "Harry",
+        "price": 15,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Two Feet Charley's Fish Shop.",
+        "location": "Mos Le'Harmless",
+        "owner": "Charley",
+        "price": 15,
+        "stock": 7,
+        "members": true
+      },
+      {
+        "shopName": "Fishing Guild Shop.",
+        "location": "Fishing Guild",
+        "owner": "Roachey",
+        "price": 15,
+        "stock": 0,
+        "members": true
+      },
+      {
+        "shopName": "Frankie's Fishing Emporium",
+        "location": "Port Piscarilius",
+        "owner": "Frankie",
+        "price": 15,
+        "stock": 250,
+        "members": true
+      },
+      {
+        "shopName": "Picaria's Fishing Shop",
+        "location": "Sunset Coast",
+        "owner": "Picaria",
+        "price": 15,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Henderson's Catch of the Day",
+        "location": "The Pandemonium",
+        "owner": "Henderson",
+        "price": 15,
+        "stock": 6,
+        "members": true
+      },
+      {
+        "shopName": "Sulisal's Superb Fishing Store",
+        "location": "Kastori",
+        "owner": "Sulisal",
+        "price": 15,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Elder Krill's Fishing Stall",
+        "location": "The Summer Shore",
+        "owner": "Elder Krill",
+        "price": 15,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Port Roberts Fish Stall",
+        "location": "Port Roberts",
+        "owner": "Gregory",
+        "price": 15,
+        "stock": 10,
+        "members": true
+      },
+      {
+        "shopName": "Aurel's Supplies",
+        "location": "Burgh de Rott",
+        "owner": "Aurel",
+        "price": 19,
+        "stock": 10,
+        "members": true
+      }
+    ],
+    "dropSources": [
+      {
+        "monster": "Ice troll runt#Variant 2",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Ice troll male#Variant 2",
+        "combatLevel": null,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Wallasalki",
+        "combatLevel": 98,
+        "rate": "3/128"
+      },
+      {
+        "monster": "Mountain troll",
+        "combatLevel": 71,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Arrg",
+        "combatLevel": 113,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Thrower Troll",
+        "combatLevel": 67,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Twig",
+        "combatLevel": 71,
+        "rate": "2/128"
+      },
+      {
+        "monster": "Berry",
+        "combatLevel": 71,
+        "rate": "2/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Raw_mackerel"
+  },
+  {
     "id": 2134,
     "nameEn": "Raw rat meat",
     "examine": "I need to cook this first.",

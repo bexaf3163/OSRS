@@ -426,6 +426,15 @@ const REVIEWED_FLOWS: Record<string, { revision: number; flow: NonNullable<Quest
     consumes: [], receives: [], unknownItems: ['Windswept logs', 'Damp planks', 'Unusual fish', 'Rotten barrel', 'Rope', 'Key'],
     uncertainReceipts: ['Lobster', 'Chaos rune', 'Air rune'], partialDelivery: false, fromStartOnly: false,
   } },
+  // The repairs, Aurel's crate and the silvthrill rod use up the materials; the tools and the sickle are kept.
+  'In Aid of the Myreque': { revision: 15381138, flow: {
+    consumes: [{ name: 'Plank', count: 11 }, { name: 'Steel nails', count: 44 }, { name: 'Swamp paste', count: 1 }, { name: 'Raw mackerel', count: 10 },
+      { name: 'Bronze axe', count: 10 }, { name: 'Tinderbox', count: 4 }, { name: 'Steel bar', count: 2 }, { name: 'Coal', count: 1 }, { name: 'Soft clay', count: 1 },
+      { name: 'Rope', count: 1 }, { name: 'Silver bar', count: 1 }, { name: 'Mithril bar', count: 1 }, { name: 'Sapphire', count: 1 }, { name: 'Cosmic rune', count: 1 },
+      { name: 'Water rune', count: 1 }, { name: 'Salmon', count: 1 }],
+    receives: [], unknownItems: ['Rod mould', 'Silvthrill rod', 'Rod of Ivandis', 'Book of the Sleeping Seven', 'Library key', 'Crate'],
+    uncertainReceipts: ['Salmon'], partialDelivery: false, fromStartOnly: false,
+  } },
   'Ernest the Chicken': { revision: 15390916, flow: {
     // All puzzle parts are obtained within the manor; a spade is reused, not handed in.
     consumes: [], receives: [], unknownItems: ['Fish food', 'Poison', 'Poisoned fish food', 'Pressure gauge', 'Rubber tube', 'Oil can', 'Key'],

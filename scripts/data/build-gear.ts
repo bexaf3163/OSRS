@@ -79,6 +79,7 @@ const EXTRA: { name: string; kind: string; set?: string }[] = [
   { name: 'Silverlight', kind: 'quest' },
   { name: 'Anti-dragon shield', kind: 'quest' },
   { name: 'Magic secateurs', kind: 'quest' },
+  { name: 'Silver sickle (b)', kind: 'quest' },
   // Hunter tools wielded in the weapon slot: with their bonuses a fight after training can still be estimated. Never advised for combat.
   { name: 'Noose wand', kind: 'tool' },
   { name: 'Insect net', kind: 'tool' },

@@ -1,0 +1,1843 @@
+{
+ "title": "Darkness of Hallowvale",
+ "cls": "DarknessOfHallowvale",
+ "var": [
+  "varbit",
+  2573
+ ],
+ "members": true,
+ "revision": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+ "machine": {
+  "stages": {
+   "0": "n1",
+   "10": "n3",
+   "20": {
+    "s": "usePlankOnChute"
+   },
+   "30": "n4",
+   "40": "n4",
+   "50": "n4",
+   "52": "n4",
+   "54": "n4",
+   "60": "n5",
+   "65": "n6",
+   "70": "n7",
+   "80": "n7",
+   "90": "n8",
+   "100": "n9",
+   "110": "n10",
+   "120": "n11",
+   "130": "n12",
+   "135": {
+    "s": "talkToRoald"
+   },
+   "140": {
+    "s": "talkToRoald"
+   },
+   "150": {
+    "s": "talkToRoald"
+   },
+   "160": {
+    "s": "talkToRoald"
+   },
+   "170": "n13",
+   "180": "n14",
+   "190": "n16",
+   "195": "n16",
+   "200": "n18",
+   "210": "n19",
+   "220": "n20",
+   "230": "n20",
+   "240": "n21",
+   "250": "n22",
+   "260": "n25",
+   "270": "n28",
+   "280": "n28",
+   "290": "n30",
+   "300": "n30",
+   "310": "n32"
+  },
+  "nodes": {
+   "n1": {
+    "n": "startQuest",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToVeliaf"
+      }
+     ]
+    ],
+    "d": "n2"
+   },
+   "n2": {
+    "n": "goToBurghPubBasement",
+    "c": [
+     [
+      "r2",
+      {
+       "s": "enterBurghPubBasement"
+      }
+     ]
+    ],
+    "d": {
+     "s": "climbOverBrokenWall"
+    }
+   },
+   "n3": {
+    "n": "goRepairBoat",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "leavePubBasement"
+      }
+     ],
+     [
+      "r2",
+      {
+       "s": "climbOverBrokenWall"
+      }
+     ]
+    ],
+    "d": {
+     "s": "usePlankOnBoat"
+    }
+   },
+   "n4": {
+    "n": "infiltrateMeiyer",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r3",
+        {
+         "o": "vb",
+         "id": 2589,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "climbDownBoard"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "kickBoard"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "climbOverRubble"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "talkToCitizen"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "boardBoat"
+      }
+     ]
+    ],
+    "d": {
+     "s": "pushBoat"
+    }
+   },
+   "n5": {
+    "n": "goTalkToRal",
+    "c": [
+     [
+      "r3",
+      {
+       "s": "climbDownBoard"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "climbOverRubble"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "talkToRal"
+      }
+     ],
+     [
+      "r6",
+      {
+       "s": "boardBoat"
+      }
+     ]
+    ],
+    "d": {
+     "s": "pushBoat"
+    }
+   },
+   "n6": {
+    "n": "goTravelToMyrequeBase",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 2598,
+       "v": 2
+      },
+      {
+       "s": "travelToMyrequeBase"
+      }
+     ],
+     [
+      {
+       "o": "item",
+       "nm": "Ladder top",
+       "ids": [
+        9655
+       ]
+      },
+      {
+       "s": "travelToFixLadder"
+      }
+     ],
+     [
+      {
+       "o": "or",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Door key",
+         "ids": [
+          9654
+         ]
+        },
+        {
+         "o": "vb",
+         "id": 2578,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "travelToLadderPart"
+      }
+     ]
+    ],
+    "d": {
+     "s": "travelToPots"
+    }
+   },
+   "n7": {
+    "n": "enterBase",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "talkToVertida"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "enterRug"
+      }
+     ]
+    ],
+    "d": {
+     "s": "pressDecoratedWall"
+    }
+   },
+   "n8": {
+    "n": "talkToVeliafAfterContact",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToVeliaf"
+      }
+     ]
+    ],
+    "d": "n2"
+   },
+   "n9": {
+    "n": "talkToVeliafAfterLetter",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToVeliaf"
+      }
+     ]
+    ],
+    "d": {
+     "s": "enterBurghPubBasement"
+    }
+   },
+   "n10": {
+    "n": "talkToDrezelAfterVeliaf",
+    "c": [
+     [
+      "r9",
+      {
+       "s": "talkToDrezel"
+      }
+     ]
+    ],
+    "d": {
+     "s": "goDownToDrezel"
+    }
+   },
+   "n11": {
+    "n": "goSearchBushes",
+    "c": [
+     [
+      "r9",
+      {
+       "s": "leaveDrezelToBushes"
+      }
+     ]
+    ],
+    "d": {
+     "s": "searchBushes"
+    }
+   },
+   "n12": {
+    "n": "talkToDrezelAfterBushes",
+    "c": [
+     [
+      "r9",
+      {
+       "s": "talkToDrezel"
+      }
+     ]
+    ],
+    "d": {
+     "s": "returnFromBushesToDrezel"
+    }
+   },
+   "n13": {
+    "n": "talkToVeliafAfterDrezel",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToVeliaf"
+      }
+     ]
+    ],
+    "d": "n2"
+   },
+   "n14": {
+    "n": "returnToMeiyerditch",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "talkToVertida"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "enterRug"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "returnToMeiyBase"
+      }
+     ]
+    ],
+    "d": "n15"
+   },
+   "n15": {
+    "n": "getToNorthMeiy",
+    "c": [
+     [
+      "r2",
+      {
+       "s": "climbOverBrokenWall"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         2376,
+         4616,
+         2399,
+         4638,
+         2,
+         2
+        ]
+       ]
+      },
+      {
+       "s": "mineDaeyaltThenLeave"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "goToMines"
+      }
+     ]
+    ],
+    "d": {
+     "s": "boardBoat"
+    }
+   },
+   "n16": {
+    "n": "goToSafalaan",
+    "c": [
+     [
+      "r11",
+      {
+       "s": "talkToSafalaan"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "talkToVertida"
+      }
+     ]
+    ],
+    "d": "n17"
+   },
+   "n17": {
+    "n": "navigateWalls",
+    "c": [
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3587,
+         3252,
+         3588,
+         3289,
+         1,
+         1
+        ],
+        [
+         3589,
+         3258,
+         3604,
+         3310,
+         1,
+         1
+        ]
+       ]
+      },
+      {
+       "s": "climbUpDrakanWalls"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3587,
+         3252,
+         3588,
+         3259,
+         2,
+         2
+        ]
+       ]
+      },
+      {
+       "s": "climbDownFromThirdWall"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3585,
+         3215,
+         3592,
+         3257,
+         1,
+         1
+        ],
+        [
+         3593,
+         3229,
+         3613,
+         3243,
+         1,
+         1
+        ]
+       ]
+      },
+      {
+       "s": "climbLadderSecondWall"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3591,
+         3230,
+         3593,
+         3234,
+         0,
+         0
+        ],
+        [
+         3588,
+         3215,
+         3590,
+         3233,
+         0,
+         0
+        ]
+       ]
+      },
+      {
+       "s": "climbUpWallLadder"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r12",
+        {
+         "o": "and",
+         "a": [
+          {
+           "o": "?",
+           "d": "call messageBox"
+          }
+         ],
+         "latch": true
+        }
+       ]
+      },
+      {
+       "s": "goThroughBarricade"
+      }
+     ],
+     [
+      "r12",
+      {
+       "s": "searchRockySurface"
+      }
+     ],
+     [
+      {
+       "o": "zone",
+       "z": [
+        [
+         3594,
+         3198,
+         3608,
+         3216,
+         1,
+         1
+        ]
+       ]
+      },
+      {
+       "s": "goDownFromRandomRoom"
+      }
+     ],
+     [
+      "r3",
+      {
+       "s": "climbDownWallLadder"
+      }
+     ],
+     [
+      "r4",
+      {
+       "s": "climbUpFloor"
+      }
+     ],
+     [
+      "r5",
+      {
+       "s": "climbBackOverRubble"
+      }
+     ]
+    ],
+    "d": {
+     "s": "boardBoat"
+    }
+   },
+   "n18": {
+    "n": "goSketchNorth",
+    "c": [
+     [
+      "r11",
+      {
+       "s": "drawNorthWall"
+      }
+     ]
+    ],
+    "d": "n17"
+   },
+   "n19": {
+    "n": "goSketchWest",
+    "c": [
+     [
+      "r11",
+      {
+       "s": "drawWestWall"
+      }
+     ]
+    ],
+    "d": "n17"
+   },
+   "n20": {
+    "n": "goSketchSouth",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r11",
+        {
+         "o": "true"
+        }
+       ]
+      },
+      {
+       "s": "tankVanstrom"
+      }
+     ],
+     [
+      "r11",
+      {
+       "s": "drawSouthWall"
+      }
+     ]
+    ],
+    "d": "n17"
+   },
+   "n21": {
+    "n": "goTalkToSarius",
+    "c": [
+     [
+      "r11",
+      {
+       "s": "talkToSarius"
+      }
+     ]
+    ],
+    "d": "n17"
+   },
+   "n22": {
+    "n": "finishSketchAndGetMessage",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        {
+         "o": "item",
+         "nm": "Castle sketch 1",
+         "ids": [
+          9646
+         ]
+        },
+        {
+         "o": "item",
+         "nm": "Castle sketch 2",
+         "ids": [
+          9647
+         ]
+        },
+        {
+         "o": "item",
+         "nm": "Castle sketch 3",
+         "ids": [
+          9648
+         ]
+        }
+       ]
+      },
+      "n23"
+     ]
+    ],
+    "d": "n24"
+   },
+   "n23": {
+    "n": "goOpenFireplace",
+    "c": [
+     [
+      "r10",
+      {
+       "s": "useKnifeOnFireplace"
+      }
+     ]
+    ],
+    "d": "n15"
+   },
+   "n24": {
+    "n": "goFinishSouthSketch",
+    "c": [
+     [
+      "r11",
+      {
+       "s": "finishSouthSketch"
+      }
+     ]
+    ],
+    "d": "n17"
+   },
+   "n25": {
+    "n": "goGiveSafalaanItems",
+    "c": [
+     [
+      {
+       "o": "vb",
+       "id": 2575,
+       "v": 1
+      },
+      "n26"
+     ]
+    ],
+    "d": "n27"
+   },
+   "n26": {
+    "n": "returnToSafalaanInBaseNoSketches",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "talkToSafalaanInBase"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "enterRug"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r13"
+       ]
+      },
+      {
+       "s": "returnToMeiyBase"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r14"
+       ]
+      },
+      {
+       "s": "inspectPortrait"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "useKnifeOnPortrait"
+      }
+     ]
+    ],
+    "d": "n15"
+   },
+   "n27": {
+    "n": "returnToSafalaanInBase",
+    "c": [],
+    "d": "n26"
+   },
+   "n28": {
+    "n": "goUnlockLab",
+    "c": [
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r13",
+        {
+         "o": "vb",
+         "id": 2594,
+         "v": 1
+        }
+       ]
+      },
+      {
+       "s": "useKeyOnStatue"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r13"
+       ]
+      },
+      {
+       "s": "useKnifeOnTapestry"
+      }
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r10",
+        "r14"
+       ]
+      },
+      {
+       "s": "inspectPortrait"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "useKnifeOnPortrait"
+      }
+     ],
+     [
+      "r7",
+      {
+       "s": "leaveMeiyerBase"
+      }
+     ]
+    ],
+    "d": "n29"
+   },
+   "n29": {
+    "n": "travelToLab",
+    "c": [],
+    "d": "n15"
+   },
+   "n30": {
+    "n": "getHaemBook",
+    "c": [
+     [
+      {
+       "o": "item",
+       "nm": "Haemalchemy volume 1",
+       "ids": [
+        9652
+       ]
+      },
+      "n31"
+     ],
+     [
+      {
+       "o": "and",
+       "a": [
+        "r15",
+        {
+         "o": "or",
+         "a": [
+          {
+           "o": "vb",
+           "id": 2584,
+           "v": 1
+          },
+          {
+           "o": "and",
+           "a": [
+            {
+             "o": "item",
+             "nm": "Law rune",
+             "ids": [
+              563
+             ]
+            },
+            {
+             "o": "item",
+             "nm": "Air rune",
+             "ids": [
+              556
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "s": "telegrabBook"
+      }
+     ],
+     [
+      "r15",
+      {
+       "s": "getRunes"
+      }
+     ],
+     [
+      "r10",
+      {
+       "s": "goDownToLab"
+      }
+     ]
+    ],
+    "d": "n29"
+   },
+   "n31": {
+    "n": "bringSafalaanBook",
+    "c": [
+     [
+      "r7",
+      {
+       "s": "talkToSafalaanInBase"
+      }
+     ],
+     [
+      "r15",
+      {
+       "s": "leaveLab"
+      }
+     ],
+     [
+      "r8",
+      {
+       "s": "enterRug"
+      }
+     ]
+    ],
+    "d": {
+     "s": "returnToMeiyBase"
+    }
+   },
+   "n32": {
+    "n": "bringMessageToVeliafToFinish",
+    "c": [
+     [
+      "r1",
+      {
+       "s": "talkToVeliaf"
+      }
+     ]
+    ],
+    "d": "n2"
+   }
+  },
+  "reqs": {
+   "r1": {
+    "o": "zone",
+    "z": [
+     [
+      3489,
+      9622,
+      3500,
+      9632,
+      0,
+      1
+     ]
+    ]
+   },
+   "r2": {
+    "o": "zone",
+    "z": [
+     [
+      3489,
+      3231,
+      3491,
+      3232,
+      0,
+      0
+     ]
+    ]
+   },
+   "r3": {
+    "o": "zone",
+    "z": [
+     [
+      3586,
+      3160,
+      3611,
+      3192,
+      1,
+      1
+     ],
+     [
+      3587,
+      3193,
+      3592,
+      3212,
+      1,
+      1
+     ]
+    ]
+   },
+   "r4": {
+    "o": "zone",
+    "z": [
+     [
+      3587,
+      3173,
+      3589,
+      3183,
+      0,
+      0
+     ]
+    ]
+   },
+   "r5": {
+    "o": "zone",
+    "z": [
+     [
+      3586,
+      3157,
+      3643,
+      3330,
+      0,
+      3
+     ],
+     [
+      3583,
+      3311,
+      3605,
+      3400,
+      0,
+      0
+     ],
+     [
+      3520,
+      3331,
+      3582,
+      3387,
+      0,
+      0
+     ]
+    ]
+   },
+   "r6": {
+    "o": "vb",
+    "id": 2587,
+    "v": 1
+   },
+   "r7": {
+    "o": "zone",
+    "z": [
+     [
+      3616,
+      9616,
+      3640,
+      9647,
+      0,
+      0
+     ]
+    ]
+   },
+   "r8": {
+    "o": "vb",
+    "id": 2590,
+    "op": ">=",
+    "v": 1
+   },
+   "r9": {
+    "o": "zone",
+    "z": [
+     [
+      3402,
+      9880,
+      3443,
+      9907,
+      0,
+      0
+     ]
+    ]
+   },
+   "r10": {
+    "o": "zone",
+    "z": [
+     [
+      3595,
+      3240,
+      3644,
+      3328,
+      0,
+      2
+     ]
+    ]
+   },
+   "r11": {
+    "o": "zone",
+    "z": [
+     [
+      3583,
+      3311,
+      3605,
+      3400,
+      0,
+      0
+     ],
+     [
+      3520,
+      3331,
+      3582,
+      3387,
+      0,
+      0
+     ]
+    ]
+   },
+   "r12": {
+    "o": "zone",
+    "z": [
+     [
+      3588,
+      3205,
+      3590,
+      3214,
+      0,
+      0
+     ],
+     [
+      3591,
+      3211,
+      3591,
+      3214,
+      0,
+      0
+     ]
+    ]
+   },
+   "r13": {
+    "o": "item",
+    "nm": "Large ornate key",
+    "ids": [
+     9651
+    ]
+   },
+   "r14": {
+    "o": "vb",
+    "id": 2595,
+    "op": ">=",
+    "v": 1
+   },
+   "r15": {
+    "o": "zone",
+    "z": [
+     [
+      3623,
+      9681,
+      3639,
+      9702,
+      0,
+      0
+     ]
+    ]
+   }
+  },
+  "alias": {
+   "talkToVeliafAfterLetter": [
+    "talkToVeliafAfterContact"
+   ],
+   "leaveDrezelToBushes": [
+    "searchBushes"
+   ],
+   "inspectPortrait": [
+    "useKnifeOnPortrait"
+   ]
+  }
+ },
+ "unknown": {
+  "call messageBox": 1
+ },
+ "steps": {
+  "climbOverBrokenWall": {
+   "typ": "ObjectStep",
+   "wp": [
+    3491,
+    3230,
+    0
+   ],
+   "ids": [
+    12737
+   ],
+   "text": ""
+  },
+  "enterBurghPubBasement": {
+   "typ": "ObjectStep",
+   "wp": [
+    3490,
+    3232,
+    0
+   ],
+   "ids": [
+    12743
+   ],
+   "text": ""
+  },
+  "talkToVeliaf": {
+   "typ": "NpcStep",
+   "wp": [
+    3494,
+    9628,
+    0
+   ],
+   "ids": [
+    9489
+   ],
+   "text": ""
+  },
+  "usePlankOnBoat": {
+   "typ": "ObjectStep",
+   "wp": [
+    3524,
+    3178,
+    0
+   ],
+   "ids": [
+    12944
+   ],
+   "text": "Fix the boat in south Burgh de Rott."
+  },
+  "leavePubBasement": {
+   "typ": "ObjectStep",
+   "wp": [
+    3490,
+    9632,
+    0
+   ],
+   "ids": [
+    12779
+   ],
+   "text": "Leave the Myreque base."
+  },
+  "usePlankOnChute": {
+   "typ": "ObjectStep",
+   "wp": [
+    3523,
+    3175,
+    0
+   ],
+   "ids": [
+    12947
+   ],
+   "text": "Fix the boat chute."
+  },
+  "pushBoat": {
+   "typ": "ObjectStep",
+   "wp": [
+    3524,
+    3178,
+    0
+   ],
+   "ids": [
+    12944
+   ],
+   "text": "Push the boat."
+  },
+  "climbDownBoard": {
+   "typ": "ObjectStep",
+   "wp": [
+    3589,
+    3173,
+    1
+   ],
+   "ids": [
+    18122
+   ],
+   "text": "Climb down the floorboard."
+  },
+  "kickBoard": {
+   "typ": "ObjectStep",
+   "wp": [
+    3589,
+    3173,
+    1
+   ],
+   "ids": [
+    18122
+   ],
+   "text": "Climb up the walls and search the marked floor."
+  },
+  "climbOverRubble": {
+   "typ": "ObjectStep",
+   "wp": [
+    3589,
+    3180,
+    0
+   ],
+   "ids": [
+    18037
+   ],
+   "text": "Climb over the wall rubble to the north."
+  },
+  "talkToCitizen": {
+   "typ": "NpcStep",
+   "wp": [
+    3601,
+    3189,
+    0
+   ],
+   "ids": [
+    3780
+   ],
+   "text": "Talk to a Meiyerditch citizen."
+  },
+  "boardBoat": {
+   "typ": "ObjectStep",
+   "wp": [
+    3523,
+    3170,
+    0
+   ],
+   "ids": [
+    12945
+   ],
+   "text": "Board the boat."
+  },
+  "talkToRal": {
+   "typ": "NpcStep",
+   "wp": [
+    3604,
+    3208,
+    0
+   ],
+   "ids": [
+    3772
+   ],
+   "text": "Talk to Old Man Ral in south western Meiyerditch."
+  },
+  "travelToPots": {
+   "typ": "ObjectStep",
+   "wp": [
+    3608,
+    3222,
+    0
+   ],
+   "ids": [
+    18065
+   ],
+   "text": "Follow the path to the Meiyerditch Myreque base. When you reach some pots, search them for a key to open the door."
+  },
+  "travelToMyrequeBase": {
+   "typ": "ObjectStep",
+   "wp": [
+    3640,
+    3253,
+    0
+   ],
+   "ids": [
+    17980
+   ],
+   "text": "Use a knife on the wall you eventually reach."
+  },
+  "travelToFixLadder": {
+   "typ": "ObjectStep",
+   "wp": [
+    3629,
+    3240,
+    1
+   ],
+   "ids": [
+    18116
+   ],
+   "text": "Repair the ladder downstairs."
+  },
+  "travelToLadderPart": {
+   "typ": "ObjectStep",
+   "wp": [
+    3625,
+    3240,
+    2
+   ],
+   "ids": [
+    18115
+   ],
+   "text": "Continue until you reach a wall with a ladder piece, and take it."
+  },
+  "pressDecoratedWall": {
+   "typ": "ObjectStep",
+   "wp": [
+    3638,
+    3251,
+    0
+   ],
+   "ids": [
+    18146
+   ],
+   "text": "Press the decorated wall."
+  },
+  "talkToVertida": {
+   "typ": "NpcStep",
+   "wp": [
+    3627,
+    9644,
+    0
+   ],
+   "ids": [
+    8220
+   ],
+   "text": "Talk to Vertida in the north room."
+  },
+  "enterRug": {
+   "typ": "ObjectStep",
+   "wp": [
+    3639,
+    3249,
+    0
+   ],
+   "ids": [
+    18120
+   ],
+   "text": "Open the rug and enter the trapdoor."
+  },
+  "goDownToDrezel": {
+   "typ": "ObjectStep",
+   "wp": [
+    3422,
+    3485,
+    0
+   ],
+   "ids": [
+    3432
+   ],
+   "text": ""
+  },
+  "talkToDrezel": {
+   "typ": "NpcStep",
+   "wp": [
+    3439,
+    9896,
+    0
+   ],
+   "ids": [
+    9636
+   ],
+   "text": ""
+  },
+  "searchBushes": {
+   "typ": "ObjectStep",
+   "wp": [
+    3390,
+    3480,
+    0
+   ],
+   "ids": [
+    18121
+   ],
+   "text": "Search the bushes west of Paterdomus."
+  },
+  "leaveDrezelToBushes": {
+   "typ": "ObjectStep",
+   "wp": [
+    3405,
+    9907,
+    0
+   ],
+   "ids": [
+    17385
+   ],
+   "text": "Go up the west ladder."
+  },
+  "returnFromBushesToDrezel": {
+   "typ": "ObjectStep",
+   "wp": [
+    3405,
+    3507,
+    0
+   ],
+   "ids": [
+    1579
+   ],
+   "text": ""
+  },
+  "talkToRoald": {
+   "typ": "NpcStep",
+   "wp": [
+    3222,
+    3473,
+    0
+   ],
+   "ids": [],
+   "text": "Talk to King Roald in Varrock Castle."
+  },
+  "mineDaeyaltThenLeave": {
+   "typ": "NpcStep",
+   "wp": [
+    2389,
+    4624,
+    2
+   ],
+   "ids": [
+    3690
+   ],
+   "text": "Mine Daeyalt ore from the walls and put them into the mine carts. If you have no pickaxe, talk to a miner to obtain a bronze one. Once you've mined 15, talk to the vampyres to leave."
+  },
+  "goToMines": {
+   "typ": "NpcStep",
+   "wp": [
+    3615,
+    3263,
+    0
+   ],
+   "ids": [
+    3709
+   ],
+   "text": "Talk to a Vyrewatch to be sent to the mines."
+  },
+  "returnToMeiyBase": {
+   "typ": "ObjectStep",
+   "wp": [
+    3638,
+    3251,
+    0
+   ],
+   "ids": [
+    18146
+   ],
+   "text": "Press the decorated wall to unlock the base's entrance."
+  },
+  "climbUpDrakanWalls": {
+   "typ": "ObjectStep",
+   "wp": [
+    3595,
+    3310,
+    1
+   ],
+   "ids": [
+    39173
+   ],
+   "text": "Climb up the wall to the north."
+  },
+  "climbDownFromThirdWall": {
+   "typ": "ObjectStep",
+   "wp": [
+    3588,
+    3259,
+    2
+   ],
+   "ids": [
+    18001
+   ],
+   "text": "Climb down the ladder to the north."
+  },
+  "climbLadderSecondWall": {
+   "typ": "ObjectStep",
+   "wp": [
+    3588,
+    3251,
+    1
+   ],
+   "ids": [
+    18002
+   ],
+   "text": "Climb up the ladder to the north."
+  },
+  "climbUpWallLadder": {
+   "typ": "ObjectStep",
+   "wp": [
+    3593,
+    3230,
+    0
+   ],
+   "ids": [
+    18000
+   ],
+   "text": "Climb up the ladder to the north."
+  },
+  "goThroughBarricade": {
+   "typ": "ObjectStep",
+   "wp": [
+    3589,
+    3215,
+    0
+   ],
+   "ids": [
+    18054
+   ],
+   "text": "Open the barricade to the north."
+  },
+  "searchRockySurface": {
+   "typ": "ObjectStep",
+   "wp": [
+    3592,
+    3211,
+    0
+   ],
+   "ids": [
+    18056
+   ],
+   "text": "Search the rocky surface nearby."
+  },
+  "goDownFromRandomRoom": {
+   "typ": "ObjectStep",
+   "wp": [
+    3595,
+    3204,
+    1
+   ],
+   "ids": [
+    17975
+   ],
+   "text": "Climb down the ladder."
+  },
+  "climbDownWallLadder": {
+   "typ": "ObjectStep",
+   "wp": [
+    3588,
+    3210,
+    1
+   ],
+   "ids": [
+    17999
+   ],
+   "text": "Climb down the ladder to the north."
+  },
+  "climbUpFloor": {
+   "typ": "ObjectStep",
+   "wp": [
+    3589,
+    3173,
+    0
+   ],
+   "ids": [
+    18124
+   ],
+   "text": "Climb up to the floor in the wall to the south."
+  },
+  "climbBackOverRubble": {
+   "typ": "ObjectStep",
+   "wp": [
+    3591,
+    3180,
+    0
+   ],
+   "ids": [
+    18038
+   ],
+   "text": "Climb over the wall rubble to the south."
+  },
+  "talkToSafalaan": {
+   "typ": "NpcStep",
+   "wp": [
+    3585,
+    3331,
+    0
+   ],
+   "ids": [
+    3775
+   ],
+   "text": "Talk to Safalaan on the walls."
+  },
+  "drawNorthWall": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    3556,
+    3379,
+    0
+   ],
+   "ids": [],
+   "text": ""
+  },
+  "drawWestWall": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    3522,
+    3357,
+    0
+   ],
+   "ids": [],
+   "text": ""
+  },
+  "tankVanstrom": {
+   "typ": "NpcStep",
+   "wp": [
+    3572,
+    3331,
+    0
+   ],
+   "ids": [
+    3735
+   ],
+   "text": "Tank Vanstrom for 5 hits or use Protect from Melee."
+  },
+  "drawSouthWall": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    3572,
+    3331,
+    0
+   ],
+   "ids": [],
+   "text": ""
+  },
+  "talkToSarius": {
+   "typ": "NpcStep",
+   "wp": [
+    3572,
+    3331,
+    0
+   ],
+   "ids": [
+    3776
+   ],
+   "text": ""
+  },
+  "finishSouthSketch": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    3572,
+    3331,
+    0
+   ],
+   "ids": [],
+   "text": ""
+  },
+  "useKnifeOnFireplace": {
+   "typ": "ObjectStep",
+   "wp": [
+    3627,
+    3253,
+    0
+   ],
+   "ids": [
+    18039
+   ],
+   "text": ""
+  },
+  "talkToSafalaanInBase": {
+   "typ": "NpcStep",
+   "wp": [
+    3627,
+    9644,
+    0
+   ],
+   "ids": [
+    3775
+   ],
+   "text": "Talk to Safalaan in the north room."
+  },
+  "inspectPortrait": {
+   "typ": "ObjectStep",
+   "wp": [
+    3627,
+    3248,
+    0
+   ],
+   "ids": [
+    18126
+   ],
+   "text": "Inspect the portrait south of the fireplace."
+  },
+  "useKnifeOnPortrait": {
+   "typ": "ObjectStep",
+   "wp": [
+    3627,
+    3248,
+    0
+   ],
+   "ids": [
+    18126
+   ],
+   "text": "Use a knife on the portrait south of the fireplace."
+  },
+  "useKeyOnStatue": {
+   "typ": "ObjectStep",
+   "wp": [
+    3641,
+    3304,
+    0
+   ],
+   "ids": [
+    18127
+   ],
+   "text": "Use the ornate key on the nearby statue."
+  },
+  "useKnifeOnTapestry": {
+   "typ": "ObjectStep",
+   "wp": [
+    3638,
+    3304,
+    0
+   ],
+   "ids": [
+    18125
+   ],
+   "text": "Slash the tapestry in the building in north east Meiyerditch."
+  },
+  "leaveMeiyerBase": {
+   "typ": "ObjectStep",
+   "wp": [
+    3626,
+    9617,
+    0
+   ],
+   "ids": [
+    17986
+   ],
+   "text": "Go up to the surface."
+  },
+  "leaveLab": {
+   "typ": "ObjectStep",
+   "wp": [
+    3637,
+    9697,
+    0
+   ],
+   "ids": [
+    18050
+   ],
+   "text": "Leave the lab."
+  },
+  "telegrabBook": {
+   "typ": "DetailedQuestStep",
+   "wp": [
+    3624,
+    9690,
+    0
+   ],
+   "ids": [],
+   "text": "Telegrab the Haemalchemy book."
+  },
+  "getRunes": {
+   "typ": "ObjectStep",
+   "wp": [
+    3629,
+    9695,
+    0
+   ],
+   "ids": [
+    18052
+   ],
+   "text": "Search the broken rune case."
+  },
+  "goDownToLab": {
+   "typ": "ObjectStep",
+   "wp": [
+    3643,
+    3305,
+    0
+   ],
+   "ids": [
+    18049
+   ],
+   "text": "Go down the staircase to the lab."
+  }
+ }
+}

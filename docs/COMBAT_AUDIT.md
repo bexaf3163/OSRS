@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/authored/combatAudit.json`
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-65 stages: 37 retained, 27 revised, 0 with a branch, 1 deferred.
+66 stages: 38 retained, 27 revised, 0 with a branch, 1 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -73,6 +73,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S9-54 Scrambled! | quest-fight | yes | Large chicken (16), Black jaguar (Scrambled!) (88), Red dragon (Scrambled!) (106) | safespot | Large chicken, Black jaguar (Scrambled!), Red dragon (Scrambled!) | Trout 3 | Retain |
 | S9-55 The Fremennik Trials | quest-fight | yes | Draugen (69), Lanzig (48) | melee | Draugen, Lanzig | Lobster 20 | Retain |
 | S9-56 Olaf's Quest | quest-fight | yes | Skeleton fremennik (40), Ulfric (100) | safespot | Skeleton fremennik, Ulfric | Trout 3 | Retain |
+| S9-57 In Aid of the Myreque | quest-fight | yes | Gadderanks (35), Vampyre Juvinate (50) | melee | Gadderanks, Vampyre Juvinate | Salmon 15 | Retain |
 
 ## S1-06 The Restless Ghost
 
@@ -1539,4 +1540,30 @@ Changed:
 Evidence:
 
 - OSRS Wiki Olaf's Quest: kills field, Ulfric safespottable, read 2026-11-18.
+
+## S9-57 In Aid of the Myreque
+
+**Retain.** In Aid of the Myreque: kill two vampyre juvinates (level 50, 60 hitpoints, hits up to 5) and Gadderanks (level 35, 20 hitpoints, hits up to 3) in the shop, then the juvinates that attack Ivan Strom on the trek; the juvinates take damage only from the blessed silver sickle.
+
+Quest stage lines: 2.5, 3.3.
+
+Assumptions:
+
+- The blessed silver sickle from Nature Spirit is wielded for the juvinates (fightMechanics.json); fourteen salmon cover both fights.
+
+Problems:
+
+- The trek juvinates are level 75 or four level 50s depending on the route Ivan takes; the estimate uses level 50.
+
+Alternatives:
+
+- Efaritay's aid with any weapon, a Wolfbane dagger or Silverlight also damage juvinates.
+
+Changed:
+
+- 2.147.0: new quest; Gadderanks and the juvinates are in combatFoes.json and the sickle rule in fightMechanics.json.
+
+Evidence:
+
+- OSRS Wiki In Aid of the Myreque: kills and items fields, read 2026-11-18.
 

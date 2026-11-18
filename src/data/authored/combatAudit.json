@@ -2288,6 +2288,47 @@
       "evidence": [
         "OSRS Wiki Olaf's Quest: kills field, Ulfric safespottable, read 2026-11-18."
       ]
+    },
+    {
+      "stepId": "S9-57",
+      "kind": "quest-fight",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "In Aid of the Myreque: kill two vampyre juvinates (level 50, 60 hitpoints, hits up to 5) and Gadderanks (level 35, 20 hitpoints, hits up to 3) in the shop, then the juvinates that attack Ivan Strom on the trek; the juvinates take damage only from the blessed silver sickle.",
+      "enemies": [
+        {
+          "name": "Gadderanks",
+          "level": 35,
+          "maxHit": 3,
+          "table": true
+        },
+        {
+          "name": "Vampyre Juvinate",
+          "level": 50,
+          "maxHit": 5,
+          "table": true
+        }
+      ],
+      "lines": [
+        "2.5",
+        "3.3"
+      ],
+      "assumptions": [
+        "The blessed silver sickle from Nature Spirit is wielded for the juvinates (fightMechanics.json); fourteen salmon cover both fights."
+      ],
+      "problems": [
+        "The trek juvinates are level 75 or four level 50s depending on the route Ivan takes; the estimate uses level 50."
+      ],
+      "alternatives": [
+        "Efaritay's aid with any weapon, a Wolfbane dagger or Silverlight also damage juvinates."
+      ],
+      "decision": "retain",
+      "changed": [
+        "2.147.0: new quest; Gadderanks and the juvinates are in combatFoes.json and the sickle rule in fightMechanics.json."
+      ],
+      "evidence": [
+        "OSRS Wiki In Aid of the Myreque: kills and items fields, read 2026-11-18."
+      ]
     }
   ]
 }

@@ -292,7 +292,7 @@ describe('gear advice', () => {
 describe('step opponents (monsters.json)', () => {
   it('every step opponent has a wiki card, the level matches the guide text', () => {
     const named = allSteps.filter((s) => s.foes?.length);
-    expect(named.map((s) => s.id)).toEqual(['S2-08', 'S2-11', 'S4-01', 'S4-02', 'S7-14', 'S7-16', 'S8-02', 'S8-07', 'S8-08', 'S9-09', 'S9-11', 'S9-17', 'S9-19', 'S9-21', 'S9-22', 'S9-24', 'S9-25', 'S9-27', 'S9-28', 'S9-33', 'S9-38', 'S9-39', 'S9-41', 'S9-42', 'S9-43', 'S9-44', 'S9-45', 'S9-46', 'S9-49', 'S9-53', 'S9-54', 'S9-55', 'S9-56']);
+    expect(named.map((s) => s.id)).toEqual(['S2-08', 'S2-11', 'S4-01', 'S4-02', 'S7-14', 'S7-16', 'S8-02', 'S8-07', 'S8-08', 'S9-09', 'S9-11', 'S9-17', 'S9-19', 'S9-21', 'S9-22', 'S9-24', 'S9-25', 'S9-27', 'S9-28', 'S9-33', 'S9-38', 'S9-39', 'S9-41', 'S9-42', 'S9-43', 'S9-44', 'S9-45', 'S9-46', 'S9-49', 'S9-53', 'S9-54', 'S9-55', 'S9-56', 'S9-57']);
     for (const s of named) {
       expect(stepFoes(s).map((f) => f.name), s.id).toEqual(s.foes);
       const text = [s.how, s.where, ...(s.fields ?? []).map((f) => f.text)].join(' ');

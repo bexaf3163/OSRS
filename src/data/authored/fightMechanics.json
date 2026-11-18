@@ -127,6 +127,11 @@
       "url": "https://oldschool.runescape.wiki/w/Ulfric",
       "safespot": { "spell": "Fire Bolt" },
       "facts": ["The wiki says Ulfric can be safespotted (Olaf's Quest kills field); Olaf's Quest fights him with Fire Bolt from there (combat audit S9-56)."]
+    },
+    "Vampyre Juvinate": {
+      "url": "https://oldschool.runescape.wiki/w/Vampyre_Juvinate",
+      "weapon": { "item": "Silver sickle (b)" },
+      "facts": ["Juvinates take damage only from silver weaponry or with Efaritay's aid; In Aid of the Myreque fights them with the blessed silver sickle from Nature Spirit (combat audit S9-57)."]
     }
   }
 }

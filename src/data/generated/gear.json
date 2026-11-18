@@ -5628,6 +5628,33 @@
       "iconUrl": "https://oldschool.runescape.wiki/images/Magic_secateurs.png"
     },
     {
+      "id": 2963,
+      "name": "Silver sickle (b)",
+      "slot": "weapon",
+      "kind": "quest",
+      "reqFrom": "Silver sickle (b)",
+      "members": true,
+      "tradeable": false,
+      "attack": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "defence": {
+        "stab": 0,
+        "slash": 1,
+        "crush": 1,
+        "magic": 1,
+        "ranged": 1
+      },
+      "strength": 1,
+      "prayer": 5,
+      "speed": 5,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Silver_sickle_(b).png"
+    },
+    {
       "id": 10150,
       "name": "Noose wand",
       "slot": "weapon",

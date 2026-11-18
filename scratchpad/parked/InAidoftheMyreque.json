@@ -1,2359 +1,2266 @@
 {
- "quest": "In Aid of the Myreque",
- "status": "draft",
- "sources": {
-  "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
-  "wiki": {
-   "title": "In Aid of the Myreque",
-   "revision": 15381138
+  "quest": "In Aid of the Myreque",
+  "status": "draft",
+  "sources": {
+    "questHelper": "b9b93706618a7b7fe7e5ea30e9a9ef35ba09673e",
+    "wiki": {
+      "title": "In Aid of the Myreque",
+      "revision": 15381138
+    },
+    "quickGuide": {
+      "title": "In Aid of the Myreque/Quick guide",
+      "revision": 15022775
+    }
   },
-  "quickGuide": {
-   "title": "In Aid of the Myreque/Quick guide",
-   "revision": 15022775
-  }
- },
- "step": {
-  "title": "In Aid of the Myreque",
-  "type": "quest",
-  "qp": 2,
-  "membersOnly": true,
-  "wikiUrl": "https://oldschool.runescape.wiki/w/In_Aid_of_the_Myreque",
-  "quickGuideUrl": "https://oldschool.runescape.wiki/w/In_Aid_of_the_Myreque/Quick_guide",
-  "mapLocation": {
-   "x": 3506,
-   "y": 9839,
-   "plane": 0,
-   "label": "Talk to Veliaf Hurtz in the Myreque Hideout below the Canifis pub."
+  "step": {
+    "title": "In Aid of the Myreque",
+    "type": "quest",
+    "qp": 2,
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/In_Aid_of_the_Myreque",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/In_Aid_of_the_Myreque/Quick_guide",
+    "mapLocation": {
+      "x": 3506,
+      "y": 9839,
+      "plane": 0,
+      "label": "Talk to Veliaf Hurtz in the Myreque Hideout below the Canifis pub."
+    },
+    "npc": {
+      "nameEn": "Veliaf Hurtz"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Silver sickle (b)",
+        "amount": 1,
+        "wikiItemId": 2963,
+        "howToGet": "Blessed in Nature Spirit; wield it to damage the juvinates.",
+        "note": "A blessed or regular silver sickle"
+      },
+      {
+        "nameEn": "Spade",
+        "amount": 1,
+        "wikiItemId": 952,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 3 gp.",
+        "note": "A spade"
+      },
+      {
+        "nameEn": "Bucket",
+        "amount": 5,
+        "wikiItemId": 1925,
+        "howToGet": "Five buckets save trips while clearing the rubble. Buy on the Grand Exchange or from a general store.",
+        "note": "1-5 buckets (5 is highly recommended to save time)"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "wikiItemId": 1265,
+        "howToGet": "Any pickaxe mines the rubble. Buy on the Grand Exchange.",
+        "note": "Any pickaxe",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Hammer",
+        "amount": 1,
+        "wikiItemId": 2347,
+        "howToGet": "Buy on the Grand Exchange, or from a general store for 1 gp.",
+        "note": "A hammer (Imcando hammer works.)"
+      },
+      {
+        "nameEn": "Plank",
+        "amount": 11,
+        "wikiItemId": 960,
+        "howToGet": "Regular planks only. Buy on the Grand Exchange.",
+        "note": "11 planks (Only regular planks will work.)"
+      },
+      {
+        "nameEn": "Steel nails",
+        "amount": 44,
+        "wikiItemId": 1539,
+        "howToGet": "Buy on the Grand Exchange; 42 can also be found during the quest.",
+        "note": "44 nails (42 are obtainable during the quest)",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png"
+      },
+      {
+        "nameEn": "Swamp paste",
+        "amount": 1,
+        "wikiItemId": 1941,
+        "howToGet": "Buy on the Grand Exchange."
+      },
+      {
+        "nameEn": "Raw mackerel",
+        "amount": 10,
+        "wikiItemId": 353,
+        "howToGet": "For Aurel's crate (he may ask for snail meat instead). Buy on the Grand Exchange.",
+        "note": "10 raw mackerel or 10 Snail meats (randomly chosen, but you can manipulate the choice)"
+      },
+      {
+        "nameEn": "Bronze axe",
+        "amount": 10,
+        "wikiItemId": 1351,
+        "howToGet": "For Aurel's crate. Buy on the Grand Exchange.",
+        "note": "10 bronze axes"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "amount": 4,
+        "wikiItemId": 590,
+        "howToGet": "For Aurel's crate. Buy on the Grand Exchange or from a general store.",
+        "note": "4 tinderboxes"
+      },
+      {
+        "nameEn": "Steel bar",
+        "amount": 2,
+        "wikiItemId": 2353,
+        "howToGet": "Buy on the Grand Exchange.",
+        "note": "2 steel bars"
+      },
+      {
+        "nameEn": "Coal",
+        "amount": 1,
+        "wikiItemId": 453,
+        "howToGet": "Buy on the Grand Exchange."
+      },
+      {
+        "nameEn": "Soft clay",
+        "amount": 1,
+        "wikiItemId": 1761,
+        "howToGet": "Buy on the Grand Exchange."
+      },
+      {
+        "nameEn": "Rope",
+        "amount": 1,
+        "wikiItemId": 954,
+        "howToGet": "Buy on the Grand Exchange, or from Ned in Draynor Village for 18 gp."
+      },
+      {
+        "nameEn": "Silver bar",
+        "amount": 1,
+        "wikiItemId": 2355,
+        "howToGet": "Buy on the Grand Exchange.",
+        "note": "A silver bar"
+      },
+      {
+        "nameEn": "Mithril bar",
+        "amount": 1,
+        "wikiItemId": 2359,
+        "howToGet": "Buy on the Grand Exchange.",
+        "note": "A mithril bar"
+      },
+      {
+        "nameEn": "Sapphire",
+        "amount": 1,
+        "wikiItemId": 1607,
+        "howToGet": "Buy on the Grand Exchange.",
+        "note": "A sapphire"
+      },
+      {
+        "nameEn": "Cosmic rune",
+        "amount": 1,
+        "wikiItemId": 564,
+        "howToGet": "Lvl-1 Enchant on the silvthrill rod (standard spellbook). Buy on the Grand Exchange or at a rune shop.",
+        "note": "A cosmic rune"
+      },
+      {
+        "nameEn": "Water rune",
+        "amount": 1,
+        "wikiItemId": 555,
+        "howToGet": "Lvl-1 Enchant on the silvthrill rod. Buy on the Grand Exchange or at a rune shop.",
+        "note": "A water rune"
+      },
+      {
+        "nameEn": "Salmon",
+        "amount": 15,
+        "wikiItemId": 329,
+        "howToGet": "Buy on the Grand Exchange. One goes in the chest to enter Burgh de Rott; the rest is for Gadderanks (level 35) and the juvinates.",
+        "note": "15 stew (highest healing), salmon, snails, or slimy eels",
+        "heals": 9,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png"
+      }
+    ],
+    "foes": [
+      "Gadderanks",
+      "Vampyre Juvinate"
+    ]
   },
-  "npc": {
-   "nameEn": "Veliaf Hurtz"
+  "stages": {
+    "var": [
+      "varbit",
+      1990
+    ],
+    "route": [
+      {
+        "title": "Starting out",
+        "steps": [
+          "Climb down the trapdoor behind the Canifis pub.",
+          "Search the wall and enter the cave entrance just south-east.",
+          "Talk to Veliaf Hurtz. Dialogue: \"I want to join your organisation.\""
+        ]
+      },
+      {
+        "title": "Patching up Burgh De Rott",
+        "steps": [
+          "Talk to Florin through the gate to Burgh de Rott.",
+          "Put a piece of food into the open chest, then open the gate.",
+          "Talk to Razvan near the pub. Dialogue: \"Are there any 'out of the way' places in here?\"",
+          "Enter the pub, climb over the broken wall, then use your pickaxe on the rubble blocking the trapdoor.",
+          "Climb down and mine the rest of the rubble. Anything you drop in the basement will be lost upon leaving.",
+          "Use your spade on the remnants to fill the buckets. There is enough here to fill five buckets.",
+          "When finished, use the buckets of rubble on the rubble pile outside the pub.",
+          "Talk to Razvan again. Dialogue: \"I'd like to help fix up the town.\"",
+          "Talk to Aurel in the general store to the north-east. Dialogue: \"I'd like to help fix up the town.\"",
+          "Climb up the ladder right outside.",
+          "Use 3 planks and 12 nails on the broken roof of the store.",
+          "Climb back down and Use 3 planks and 12 nails on the damaged wall of the general store.",
+          "Talk to Aurel again to get a crate. Dialogue: \"What should I do now?\"",
+          "Add 10 bronze axes, 10 raw mackerels or 10 snails (depending on what is asked), and 3 tinderboxes to the crate.",
+          "Talk to Aurel.",
+          "Talk to Cornelius in the bank. Dialogue: \"What should I do now?\"",
+          "Use a hammer with 2 planks, 1 swamp paste, and 8 nails on the broken bank booth",
+          "Use a hammer with 3 planks and 12 nails on the damaged wall outside.",
+          "Talk to Cornelius to recruit him. Dialogue:"
+        ]
+      },
+      {
+        "title": "Defending the village",
+        "steps": [
+          "Talk to Razvan. Dialogue: \"What should I do now?\"",
+          "Repair the furnace to the south-east. Use your steel bars, then coal, then tinderbox on the furnace.",
+          "Talk to Gadderanks in the general store.",
+          "Talk to the Vampyre Juvinate in the store.",
+          "Talk to Wiskit.",
+          "Kill the two juvinates and then Gadderanks (you'll need a silver weapon or Wolfbane dagger or Efaritay's aid to damage them).",
+          "Talk to Gadderanks.",
+          "Talk to Veliaf Hurtz."
+        ]
+      },
+      {
+        "title": "Transporting Ivan",
+        "steps": [
+          "Talk to Veliaf Hurtz in the hideout where the quest started. (The room under the Canifis pub)",
+          "Talk to Polmafi Ferdygris.",
+          "Talk to Ivan Strom to go on a simplified version of Temple Trekking and take either the short or long route. (you can't bring a pet - it must be banked!)",
+          "Kill the Vampyre Juvinates before they can kill Ivan Strom.",
+          "After you're done escorting Ivan, talk to Drezel in the underground temple for a key. Dialogue: \"Veliaf told me about Ivandis.\", \"Is there somewhere that I might get more information about Ivandis?\", \"The lives of those pitiful few left in Morytania could rest on this!\"",
+          "Use the key on the keyhole on the eastern wall and climb down the trapdoor.",
+          "Search the bookcases in the hidden room until you find The sleeping seven (The title of the book at the top when reading it is \"The Sleeping Seven\"). Read it."
+        ]
+      },
+      {
+        "title": "The rod of Ivandis",
+        "steps": [
+          "Return to the room under the Canifis pub, then go to the blockaded cave entrance just south-east of the wall.",
+          "Use a hammer on the wooden boards and enter the cave.",
+          "Use your soft clay on the coffin to make a rod mould.",
+          "Go to any furnace with your mould, a silver bar, a mithril bar and a sapphire, and craft a silvthrill rod. (Fairy ring for Edgeville Furnace.)",
+          "Cast Lvl-1 Enchant on the rod.",
+          "Use the rod on the well underneath the Paterdomus Temple (where Drezel was) with a rope in your inventory. (Nearest fairy ring )",
+          "Return to the Burgh de Rott pub basement with the Rod of Ivandis (it must be in your inventory, not equipped), then speak to Veliaf. Dialogue: \"I have brought you the Rod of Ivandis!\", \"Yes, I've come to give the Rod of Ivandis to you!\"",
+          "Congratulations, quest complete!"
+        ]
+      }
+    ],
+    "stages": [
+      {
+        "at": 0,
+        "do": [
+          {
+            "t": "Enter the trapdoor behind the Canifis Pub.",
+            "s": "Enter the trapdoor behind the Canifis Pub.",
+            "k": "climbDownCanifis",
+            "at": [
+              3495,
+              3464,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5055
+              ]
+            }
+          },
+          {
+            "t": "Enter the cave on the east side.",
+            "s": "Enter the cave on the east side.",
+            "k": "enterMyrequeCave",
+            "at": [
+              3492,
+              9823,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5046
+              ]
+            }
+          },
+          {
+            "t": "Talk to Veliaf Hurtz.",
+            "s": "Talk to Veliaf Hurtz.",
+            "k": "talkToVeliaf",
+            "at": [
+              3506,
+              9837,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5048
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 20,
+        "do": [
+          {
+            "t": "Talk to Florin in Burgh de Rott.",
+            "s": "Talk to Florin in Burgh de Rott.",
+            "k": "talkToFlorin",
+            "at": [
+              3484,
+              3242,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4454
+              ]
+            }
+          },
+          {
+            "t": "Leave through the doors to the south.",
+            "s": "Leave through the doors to the south.",
+            "k": "leaveCavesIntoSwamp",
+            "at": [
+              3501,
+              9813,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5057
+              ]
+            }
+          },
+          {
+            "t": "Leave the cave.",
+            "s": "Leave the cave.",
+            "k": "leaveMyrequeCave",
+            "at": [
+              3505,
+              9831,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5046
+              ]
+            }
+          },
+          {
+            "t": "Cross the bridge to the south.",
+            "s": "Cross the bridge to the south.",
+            "k": "goOverBridge",
+            "at": [
+              3502,
+              3431,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5003
+              ]
+            }
+          },
+          {
+            "t": "Board the boat to the south to Mort'ton.",
+            "s": "Board the boat to the south to Mort'ton.",
+            "k": "takeBoatToMortton",
+            "at": [
+              3499,
+              3378,
+              0
+            ],
+            "hl": {
+              "obj": [
+                6970
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 30,
+        "do": [
+          {
+            "t": "Place some food in the nearby chest.",
+            "s": "Place some food in the nearby chest.",
+            "k": "putFoodInChest",
+            "at": [
+              3483,
+              3246,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12736
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 40,
+        "do": [
+          {
+            "t": "Talk to Razvan in Burgh de Rott.",
+            "s": "Talk to Razvan in Burgh de Rott.",
+            "k": "talkToRazvan",
+            "at": [
+              3493,
+              3235,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4468
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 50,
+        "do": [
+          {
+            "t": "Talk to Razvan in Burgh de Rott.",
+            "s": "Talk to Razvan in Burgh de Rott.",
+            "k": "talkToRazvan",
+            "at": [
+              3493,
+              3235,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4468
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 60,
+        "do": [
+          {
+            "t": "Use a pickaxe on the rubble in the building south of Razvan.",
+            "s": "Use a pickaxe on the rubble in the building south of Razvan.",
+            "k": "clearTrapdoorRubble",
+            "at": [
+              3490,
+              3232,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12738
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 70,
+        "do": [
+          {
+            "t": "Use a pickaxe on the rubble in the building south of Razvan.",
+            "s": "Use a pickaxe on the rubble in the building south of Razvan.",
+            "k": "clearTrapdoorRubble",
+            "at": [
+              3490,
+              3232,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12738
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 80,
+        "do": [
+          {
+            "t": "Enter the trapdoor.",
+            "s": "Enter the trapdoor.",
+            "k": "enterBurghPubBasement",
+            "at": [
+              3490,
+              3232,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12743
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 90,
+        "do": [
+          {
+            "t": "Enter the trapdoor.",
+            "s": "Enter the trapdoor.",
+            "k": "enterBurghPubBasement",
+            "at": [
+              3490,
+              3232,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12743
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 100,
+        "do": [
+          {
+            "t": "Enter the trapdoor.",
+            "s": "Enter the trapdoor.",
+            "k": "enterBurghPubBasement",
+            "at": [
+              3490,
+              3232,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12743
+              ]
+            }
+          },
+          {
+            "t": "Mine all the rubble in the room, and then clean it up with a spade. You'll need an empty bucket when using the spade. You can empty the buckets outside on the rubble pile.",
+            "s": "Mine the rubble with a pickaxe, then clear it up with a spade.",
+            "k": "clearBasementRubble",
+            "hl": {
+              "obj": [
+                12812
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 110,
+        "do": [
+          {
+            "t": "Talk to Aurel in north east Burgh de Rott.",
+            "s": "Talk to Aurel in north east Burgh de Rott.",
+            "k": "talkToAurel",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4445
+              ]
+            }
+          },
+          {
+            "t": "Leave the basement.",
+            "s": "Leave the basement.",
+            "k": "leavePubBasement",
+            "at": [
+              3490,
+              9632,
+              1
+            ],
+            "hl": {
+              "obj": [
+                12779
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 120,
+        "do": [
+          {
+            "t": "Go to the roof of Aurel's shop.",
+            "s": "Go to the roof of Aurel's shop.",
+            "k": "climbShopLadder",
+            "at": [
+              3513,
+              3238,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12780
+              ]
+            }
+          },
+          {
+            "t": "Repair the broken roof.",
+            "s": "Repair the broken roof.",
+            "k": "fixRoof",
+            "at": [
+              3515,
+              3240,
+              2
+            ],
+            "hl": {
+              "obj": [
+                12751
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 130,
+        "do": [
+          {
+            "t": "Go to the roof of Aurel's shop.",
+            "s": "Go to the roof of Aurel's shop.",
+            "k": "climbShopLadder",
+            "at": [
+              3513,
+              3238,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12780
+              ]
+            }
+          },
+          {
+            "t": "Repair the broken roof.",
+            "s": "Repair the broken roof.",
+            "k": "fixRoof",
+            "at": [
+              3515,
+              3240,
+              2
+            ],
+            "hl": {
+              "obj": [
+                12751
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 140,
+        "do": [
+          {
+            "t": "Go to the roof of Aurel's shop.",
+            "s": "Go to the roof of Aurel's shop.",
+            "k": "climbShopLadder",
+            "at": [
+              3513,
+              3238,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12780
+              ]
+            }
+          },
+          {
+            "t": "Repair the broken roof.",
+            "s": "Repair the broken roof.",
+            "k": "fixRoof",
+            "at": [
+              3515,
+              3240,
+              2
+            ],
+            "hl": {
+              "obj": [
+                12751
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 150,
+        "do": [
+          {
+            "t": "Repair the shop's wall.",
+            "s": "Repair the shop's wall.",
+            "k": "fixShopWall",
+            "at": [
+              3517,
+              3238,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12859
+              ]
+            }
+          },
+          {
+            "t": "Climb back down the ladder.",
+            "s": "Climb back down the ladder.",
+            "k": "climbDownShopLadder",
+            "at": [
+              3513,
+              3238,
+              2
+            ],
+            "hl": {
+              "obj": [
+                12781
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 160,
+        "do": [
+          {
+            "t": "Talk to Aurel again.",
+            "s": "Talk to Aurel again.",
+            "k": "talkToAurelForCrate",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4445
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 165,
+        "do": [
+          {
+            "t": "Fill the crate in Aurel's shop with the 10 food he asks for, 10 bronze axes and 4 tinderboxes.",
+            "s": "Fill the crate with 10 food, 10 bronze axes and 4 tinderboxes.",
+            "k": "fillCrate"
+          },
+          {
+            "t": "Return to Aurel with the filled crate.",
+            "s": "Return to Aurel with the filled crate.",
+            "k": "talkToAurelWithCrate",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4445
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 170,
+        "do": [
+          {
+            "t": "Repair the bank booth.",
+            "s": "Repair the bank booth.",
+            "k": "repairBooth",
+            "at": [
+              3494,
+              3211,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12759
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 180,
+        "do": [
+          {
+            "t": "Repair the bank's outside wall.",
+            "s": "Repair the bank's outside wall.",
+            "k": "repairBankWall",
+            "at": [
+              3491,
+              3211,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12859
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 190,
+        "do": [
+          {
+            "t": "Talk to Cornelius and ask him to be the banker.",
+            "s": "Talk to Cornelius and ask him to be the banker.",
+            "k": "talkToCornelius",
+            "at": [
+              3496,
+              3211,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4470
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 200,
+        "do": [
+          {
+            "t": "Talk to Razvan.",
+            "s": "Talk to Razvan.",
+            "k": "talkToRazvanAfterRepairs",
+            "at": [
+              3493,
+              3235,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4468
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 205,
+        "do": [
+          {
+            "t": "Repair the furnace in the south east of Burgh de Rott. You can use the bank you just made to get items out.",
+            "s": "Repair the furnace in the south-east of Burgh de Rott.",
+            "k": "repairFurnace",
+            "at": [
+              3528,
+              3210,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12805
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 210,
+        "do": [
+          {
+            "t": "Add coal to the furnace.",
+            "s": "Add coal to the furnace.",
+            "k": "addCoalToFurnace",
+            "at": [
+              3528,
+              3210,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12805
+              ]
+            }
+          },
+          {
+            "t": "Light the furnace.",
+            "s": "Light the furnace.",
+            "k": "lightFurnace",
+            "at": [
+              3528,
+              3210,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12805
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 220,
+        "do": [
+          {
+            "t": "Light the furnace.",
+            "s": "Light the furnace.",
+            "k": "lightFurnace",
+            "at": [
+              3528,
+              3210,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12805
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 230,
+        "do": [
+          {
+            "t": "Talk to Gadderanks in the shop.",
+            "s": "Talk to Gadderanks in the shop.",
+            "k": "talkToGadderanks",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4483
+              ]
+            }
+          },
+          {
+            "t": "Talk to a juvinate in the shop.",
+            "s": "Talk to a juvinate in the shop.",
+            "k": "talkToJuvinate",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4482
+              ]
+            }
+          },
+          {
+            "t": "Talk to Wiskit in the shop. Be prepared to fight the vampyres and Gadderanks.",
+            "s": "Talk to Wiskit in the shop, ready to fight vampyres and Gadderanks.",
+            "k": "talkToWiskit",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4480
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 240,
+        "do": [
+          {
+            "t": "Talk to Gadderanks in the shop.",
+            "s": "Talk to Gadderanks in the shop.",
+            "k": "talkToGadderanks",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4483
+              ]
+            }
+          },
+          {
+            "t": "Defeat Gadderanks and the juvinates.",
+            "s": "Defeat Gadderanks and the juvinates.",
+            "k": "killGadderanksAndJuvinates",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4484
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 250,
+        "do": [
+          {
+            "t": "Talk to Gadderanks in the shop.",
+            "s": "Talk to Gadderanks in the shop.",
+            "k": "talkToGadderanks",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4483
+              ]
+            }
+          },
+          {
+            "t": "Defeat Gadderanks and the juvinates.",
+            "s": "Defeat Gadderanks and the juvinates.",
+            "k": "killGadderanksAndJuvinates",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4484
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 260,
+        "do": [
+          {
+            "t": "Talk to Gadderanks in the shop.",
+            "s": "Talk to Gadderanks in the shop.",
+            "k": "talkToGadderanks",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4483
+              ]
+            }
+          },
+          {
+            "t": "Defeat Gadderanks and the juvinates.",
+            "s": "Defeat Gadderanks and the juvinates.",
+            "k": "killGadderanksAndJuvinates",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4484
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 280,
+        "do": [
+          {
+            "t": "Talk to Veliaf in Burgh de Rott.",
+            "s": "Talk to Veliaf in Burgh de Rott.",
+            "k": "talkToVeliafAfterFight",
+            "at": [
+              3515,
+              3241,
+              0
+            ],
+            "hl": {
+              "npc": [
+                9633
+              ]
+            }
+          },
+          {
+            "t": "Enter the trapdoor behind the Canifis Pub.",
+            "s": "Enter the trapdoor behind the Canifis Pub.",
+            "k": "climbDownCanifis",
+            "at": [
+              3495,
+              3464,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5055
+              ]
+            }
+          },
+          {
+            "t": "Enter the cave on the east side.",
+            "s": "Enter the cave on the east side.",
+            "k": "enterMyrequeCave",
+            "at": [
+              3492,
+              9823,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5046
+              ]
+            }
+          },
+          {
+            "t": "Talk to Veliaf Hurtz.",
+            "s": "Talk to Veliaf Hurtz.",
+            "k": "talkToVeliafInHideoutAgain",
+            "at": [
+              3506,
+              9837,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5048
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 290,
+        "do": [
+          {
+            "t": "Enter the trapdoor behind the Canifis Pub.",
+            "s": "Enter the trapdoor behind the Canifis Pub.",
+            "k": "climbDownCanifis",
+            "at": [
+              3495,
+              3464,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5055
+              ]
+            }
+          },
+          {
+            "t": "Enter the cave on the east side.",
+            "s": "Enter the cave on the east side.",
+            "k": "enterMyrequeCave",
+            "at": [
+              3492,
+              9823,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5046
+              ]
+            }
+          },
+          {
+            "t": "Talk to Polmafi in the Myreque hideout.",
+            "s": "Talk to Polmafi in the Myreque hideout.",
+            "k": "talkToPolmafi",
+            "at": [
+              3506,
+              9837,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5052
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 300,
+        "do": [
+          {
+            "t": "Enter the trapdoor behind the Canifis Pub.",
+            "s": "Enter the trapdoor behind the Canifis Pub.",
+            "k": "climbDownCanifis",
+            "at": [
+              3495,
+              3464,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5055
+              ]
+            }
+          },
+          {
+            "t": "Enter the cave on the east side.",
+            "s": "Enter the cave on the east side.",
+            "k": "enterMyrequeCave",
+            "at": [
+              3492,
+              9823,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5046
+              ]
+            }
+          },
+          {
+            "t": "Talk to Ivan Strom in the Myreque hideout about the trek.",
+            "s": "Talk to Ivan Strom about the trek.",
+            "k": "talkToIvanForTrek",
+            "at": [
+              3506,
+              9837,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5053
+              ]
+            }
+          },
+          {
+            "t": "Kill the juvenates.",
+            "s": "Kill the juvenates.",
+            "k": "killJuvinates",
+            "at": [
+              2859,
+              4564,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4443
+              ]
+            }
+          },
+          {
+            "t": "Kill the juvenates.",
+            "s": "Kill the juvenates.",
+            "k": "killJuvinates2",
+            "at": [
+              2839,
+              4589,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4442
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 310,
+        "do": [
+          {
+            "t": "Enter the trapdoor behind the Canifis Pub.",
+            "s": "Enter the trapdoor behind the Canifis Pub.",
+            "k": "climbDownCanifis",
+            "at": [
+              3495,
+              3464,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5055
+              ]
+            }
+          },
+          {
+            "t": "Enter the cave on the east side.",
+            "s": "Enter the cave on the east side.",
+            "k": "enterMyrequeCave",
+            "at": [
+              3492,
+              9823,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5046
+              ]
+            }
+          },
+          {
+            "t": "Talk to Ivan Strom in the Myreque hideout about the trek.",
+            "s": "Talk to Ivan Strom about the trek.",
+            "k": "talkToIvanForTrek",
+            "at": [
+              3506,
+              9837,
+              0
+            ],
+            "hl": {
+              "npc": [
+                5053
+              ]
+            }
+          },
+          {
+            "t": "Kill the juvenates.",
+            "s": "Kill the juvenates.",
+            "k": "killJuvinates",
+            "at": [
+              2859,
+              4564,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4443
+              ]
+            }
+          },
+          {
+            "t": "Kill the juvenates.",
+            "s": "Kill the juvenates.",
+            "k": "killJuvinates2",
+            "at": [
+              2839,
+              4589,
+              0
+            ],
+            "hl": {
+              "npc": [
+                4442
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 315,
+        "do": [
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "goDownToDrezel",
+            "at": [
+              3422,
+              3485,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3432
+              ]
+            }
+          },
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "talkToDrezel",
+            "at": [
+              3439,
+              9896,
+              0
+            ],
+            "hl": {
+              "npc": [
+                9636
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 320,
+        "do": [
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "goDownToDrezel",
+            "at": [
+              3422,
+              3485,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3432
+              ]
+            }
+          },
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "talkToDrezel",
+            "at": [
+              3439,
+              9896,
+              0
+            ],
+            "hl": {
+              "npc": [
+                9636
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 330,
+        "do": [
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "goDownToDrezel",
+            "at": [
+              3422,
+              3485,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3432
+              ]
+            }
+          },
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "talkToDrezel",
+            "at": [
+              3439,
+              9896,
+              0
+            ],
+            "hl": {
+              "npc": [
+                9636
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 340,
+        "do": [
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "goDownToDrezel",
+            "at": [
+              3422,
+              3485,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3432
+              ]
+            }
+          },
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "talkToDrezel",
+            "at": [
+              3439,
+              9896,
+              0
+            ],
+            "hl": {
+              "npc": [
+                9636
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 350,
+        "do": [
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "goDownToDrezel",
+            "at": [
+              3422,
+              3485,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3432
+              ]
+            }
+          },
+          {
+            "t": "Use the key on the keyhole near Drezel.",
+            "s": "Use the key on the keyhole near Drezel.",
+            "k": "useKeyOnHole",
+            "at": [
+              3443,
+              9898,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12765
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 360,
+        "do": [
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "goDownToDrezel",
+            "at": [
+              3422,
+              3485,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3432
+              ]
+            }
+          },
+          {
+            "t": "Enter the library.",
+            "s": "Enter the library.",
+            "k": "enterLibrary",
+            "at": [
+              3441,
+              9899,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12762
+              ]
+            }
+          },
+          {
+            "t": "Search the bookcases for 'The Sleeping Seven' book.",
+            "s": "Search the bookcases for 'The Sleeping Seven' book.",
+            "k": "searchBookcase",
+            "at": [
+              3354,
+              9902,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12767
+              ]
+            }
+          },
+          {
+            "t": "Read 'The Sleeping Seven'.",
+            "s": "Read 'The Sleeping Seven'.",
+            "k": "readBook"
+          }
+        ]
+      },
+      {
+        "at": 370,
+        "do": [
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "goDownToDrezel",
+            "at": [
+              3422,
+              3485,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3432
+              ]
+            }
+          },
+          {
+            "t": "Enter the library.",
+            "s": "Enter the library.",
+            "k": "enterLibrary",
+            "at": [
+              3441,
+              9899,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12762
+              ]
+            }
+          },
+          {
+            "t": "Search the bookcases for 'The Sleeping Seven' book.",
+            "s": "Search the bookcases for 'The Sleeping Seven' book.",
+            "k": "searchBookcase",
+            "at": [
+              3354,
+              9902,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12767
+              ]
+            }
+          },
+          {
+            "t": "Read 'The Sleeping Seven'.",
+            "s": "Read 'The Sleeping Seven'.",
+            "k": "readBook"
+          }
+        ]
+      },
+      {
+        "at": 375,
+        "do": [
+          {
+            "t": "Enter the trapdoor behind the Canifis Pub.",
+            "s": "Enter the trapdoor behind the Canifis Pub.",
+            "k": "climbDownCanifis",
+            "at": [
+              3495,
+              3464,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5055
+              ]
+            }
+          },
+          {
+            "t": "Use a hammer on the boarded up cave.",
+            "s": "Use a hammer on the boarded up cave.",
+            "k": "useHammerOnBoards",
+            "at": [
+              3483,
+              9832,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12772
+              ]
+            }
+          },
+          {
+            "t": "Enter the cave.",
+            "s": "Enter the cave.",
+            "k": "enterCoffinRoom",
+            "at": [
+              3484,
+              9832,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12770
+              ]
+            }
+          },
+          {
+            "t": "Use a piece of soft clay on the coffin.",
+            "s": "Use a piece of soft clay on the coffin.",
+            "k": "useClayOnCoffin",
+            "at": [
+              3511,
+              9864,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12802
+              ]
+            }
+          },
+          {
+            "t": "Make a silvthrill rod at any furnace.",
+            "s": "Make a silvthrill rod at any furnace.",
+            "k": "makeRod"
+          },
+          {
+            "t": "Cast Lvl-1 enchant on the rod.",
+            "s": "Cast Lvl-1 enchant on the rod.",
+            "k": "enchantRod"
+          },
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "goDownToDrezel",
+            "at": [
+              3422,
+              3485,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3432
+              ]
+            }
+          },
+          {
+            "t": "Use the enchanted silvthrill rod on the well near Drezel under the Paterdomus Temple.",
+            "s": "Use the enchanted rod on the well near Drezel.",
+            "k": "useRodOnWell",
+            "at": [
+              3423,
+              9890,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3485
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 380,
+        "do": [
+          {
+            "t": "Enter the trapdoor behind the Canifis Pub.",
+            "s": "Enter the trapdoor behind the Canifis Pub.",
+            "k": "climbDownCanifis",
+            "at": [
+              3495,
+              3464,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5055
+              ]
+            }
+          },
+          {
+            "t": "Use a hammer on the boarded up cave.",
+            "s": "Use a hammer on the boarded up cave.",
+            "k": "useHammerOnBoards",
+            "at": [
+              3483,
+              9832,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12772
+              ]
+            }
+          },
+          {
+            "t": "Enter the cave.",
+            "s": "Enter the cave.",
+            "k": "enterCoffinRoom",
+            "at": [
+              3484,
+              9832,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12770
+              ]
+            }
+          },
+          {
+            "t": "Use a piece of soft clay on the coffin.",
+            "s": "Use a piece of soft clay on the coffin.",
+            "k": "useClayOnCoffin",
+            "at": [
+              3511,
+              9864,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12802
+              ]
+            }
+          },
+          {
+            "t": "Make a silvthrill rod at any furnace.",
+            "s": "Make a silvthrill rod at any furnace.",
+            "k": "makeRod"
+          },
+          {
+            "t": "Cast Lvl-1 enchant on the rod.",
+            "s": "Cast Lvl-1 enchant on the rod.",
+            "k": "enchantRod"
+          },
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "goDownToDrezel",
+            "at": [
+              3422,
+              3485,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3432
+              ]
+            }
+          },
+          {
+            "t": "Use the enchanted silvthrill rod on the well near Drezel under the Paterdomus Temple.",
+            "s": "Use the enchanted rod on the well near Drezel.",
+            "k": "useRodOnWell",
+            "at": [
+              3423,
+              9890,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3485
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 390,
+        "do": [
+          {
+            "t": "Enter the trapdoor behind the Canifis Pub.",
+            "s": "Enter the trapdoor behind the Canifis Pub.",
+            "k": "climbDownCanifis",
+            "at": [
+              3495,
+              3464,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5055
+              ]
+            }
+          },
+          {
+            "t": "Use a hammer on the boarded up cave.",
+            "s": "Use a hammer on the boarded up cave.",
+            "k": "useHammerOnBoards",
+            "at": [
+              3483,
+              9832,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12772
+              ]
+            }
+          },
+          {
+            "t": "Enter the cave.",
+            "s": "Enter the cave.",
+            "k": "enterCoffinRoom",
+            "at": [
+              3484,
+              9832,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12770
+              ]
+            }
+          },
+          {
+            "t": "Use a piece of soft clay on the coffin.",
+            "s": "Use a piece of soft clay on the coffin.",
+            "k": "useClayOnCoffin",
+            "at": [
+              3511,
+              9864,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12802
+              ]
+            }
+          },
+          {
+            "t": "Make a silvthrill rod at any furnace.",
+            "s": "Make a silvthrill rod at any furnace.",
+            "k": "makeRod"
+          },
+          {
+            "t": "Cast Lvl-1 enchant on the rod.",
+            "s": "Cast Lvl-1 enchant on the rod.",
+            "k": "enchantRod"
+          },
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "goDownToDrezel",
+            "at": [
+              3422,
+              3485,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3432
+              ]
+            }
+          },
+          {
+            "t": "Use the enchanted silvthrill rod on the well near Drezel under the Paterdomus Temple.",
+            "s": "Use the enchanted rod on the well near Drezel.",
+            "k": "useRodOnWell",
+            "at": [
+              3423,
+              9890,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3485
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 400,
+        "do": [
+          {
+            "t": "Enter the trapdoor behind the Canifis Pub.",
+            "s": "Enter the trapdoor behind the Canifis Pub.",
+            "k": "climbDownCanifis",
+            "at": [
+              3495,
+              3464,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5055
+              ]
+            }
+          },
+          {
+            "t": "Use a hammer on the boarded up cave.",
+            "s": "Use a hammer on the boarded up cave.",
+            "k": "useHammerOnBoards",
+            "at": [
+              3483,
+              9832,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12772
+              ]
+            }
+          },
+          {
+            "t": "Enter the cave.",
+            "s": "Enter the cave.",
+            "k": "enterCoffinRoom",
+            "at": [
+              3484,
+              9832,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12770
+              ]
+            }
+          },
+          {
+            "t": "Use a piece of soft clay on the coffin.",
+            "s": "Use a piece of soft clay on the coffin.",
+            "k": "useClayOnCoffin",
+            "at": [
+              3511,
+              9864,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12802
+              ]
+            }
+          },
+          {
+            "t": "Make a silvthrill rod at any furnace.",
+            "s": "Make a silvthrill rod at any furnace.",
+            "k": "makeRod"
+          },
+          {
+            "t": "Cast Lvl-1 enchant on the rod.",
+            "s": "Cast Lvl-1 enchant on the rod.",
+            "k": "enchantRod"
+          },
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "goDownToDrezel",
+            "at": [
+              3422,
+              3485,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3432
+              ]
+            }
+          },
+          {
+            "t": "Use the enchanted silvthrill rod on the well near Drezel under the Paterdomus Temple.",
+            "s": "Use the enchanted rod on the well near Drezel.",
+            "k": "useRodOnWell",
+            "at": [
+              3423,
+              9890,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3485
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 410,
+        "do": [
+          {
+            "t": "Enter the trapdoor behind the Canifis Pub.",
+            "s": "Enter the trapdoor behind the Canifis Pub.",
+            "k": "climbDownCanifis",
+            "at": [
+              3495,
+              3464,
+              0
+            ],
+            "hl": {
+              "obj": [
+                5055
+              ]
+            }
+          },
+          {
+            "t": "Use a hammer on the boarded up cave.",
+            "s": "Use a hammer on the boarded up cave.",
+            "k": "useHammerOnBoards",
+            "at": [
+              3483,
+              9832,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12772
+              ]
+            }
+          },
+          {
+            "t": "Enter the cave.",
+            "s": "Enter the cave.",
+            "k": "enterCoffinRoom",
+            "at": [
+              3484,
+              9832,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12770
+              ]
+            }
+          },
+          {
+            "t": "Use a piece of soft clay on the coffin.",
+            "s": "Use a piece of soft clay on the coffin.",
+            "k": "useClayOnCoffin",
+            "at": [
+              3511,
+              9864,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12802
+              ]
+            }
+          },
+          {
+            "t": "Make a silvthrill rod at any furnace.",
+            "s": "Make a silvthrill rod at any furnace.",
+            "k": "makeRod"
+          },
+          {
+            "t": "Cast Lvl-1 enchant on the rod.",
+            "s": "Cast Lvl-1 enchant on the rod.",
+            "k": "enchantRod"
+          },
+          {
+            "t": "Talk to Drezel under the Paterdomus Temple.",
+            "s": "Talk to Drezel under the Paterdomus Temple.",
+            "k": "goDownToDrezel",
+            "at": [
+              3422,
+              3485,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3432
+              ]
+            }
+          },
+          {
+            "t": "Use the enchanted silvthrill rod on the well near Drezel under the Paterdomus Temple.",
+            "s": "Use the enchanted rod on the well near Drezel.",
+            "k": "useRodOnWell",
+            "at": [
+              3423,
+              9890,
+              0
+            ],
+            "hl": {
+              "obj": [
+                3485
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "at": 420,
+        "do": [
+          {
+            "t": "Enter the trapdoor.",
+            "s": "Enter the trapdoor.",
+            "k": "enterBurghPubBasement",
+            "at": [
+              3490,
+              3232,
+              0
+            ],
+            "hl": {
+              "obj": [
+                12743
+              ]
+            }
+          },
+          {
+            "t": "Talk to Veliaf Hurtz in the Myreque hideout to finish the quest.",
+            "s": "Talk to Veliaf Hurtz to finish the quest.",
+            "k": "talkToVeliafToFinish",
+            "at": [
+              3494,
+              9628,
+              0
+            ],
+            "hl": {
+              "npc": [
+                9489
+              ]
+            }
+          }
+        ]
+      }
+    ]
   },
-  "itemsRequired": [
-   {
-    "nameEn": "Efaritay's aid",
-    "amount": 1,
-    "wikiItemId": 21140,
-    "howToGet": "Buy on the Grand Exchange.",
-    "note": "Efaritay's aid equipped in combination with any weapon OR"
-   },
-   {
-    "nameEn": "Silver weaponry",
-    "amount": 1,
-    "wikiItemId": null,
-    "howToGet": null,
-    "note": "Silver weaponry, which includes:"
-   },
-   {
-    "nameEn": "Wolfbane dagger",
-    "amount": 1,
-    "wikiItemId": null,
-    "howToGet": null
-   },
-   {
-    "nameEn": "Silver sickle (b)",
-    "amount": 1,
-    "wikiItemId": 2963,
-    "howToGet": "Buy from Ivan's Supplies in Meiyerditch for 250 gp.",
-    "note": "A blessed or regular silver sickle"
-   },
-   {
-    "nameEn": "blessed axe",
-    "amount": 1,
-    "wikiItemId": 10491,
-    "howToGet": null,
-    "note": "A blessed axe (obtained during Animal Magnetism)"
-   },
-   {
-    "nameEn": "Silverlight",
-    "amount": 1,
-    "wikiItemId": 2402,
-    "howToGet": null,
-    "note": "Silverlight (obtained during Demon Slayer), Darklight (obtained during Shadow of the Storm), Arclight, or Emberlight"
-   },
-   {
-    "nameEn": "food",
-    "amount": 1,
-    "wikiItemId": null,
-    "howToGet": null,
-    "note": "1 piece of any food to enter Burgh de Rott for the first time"
-   },
-   {
-    "nameEn": "spade",
-    "amount": 1,
-    "wikiItemId": 952,
-    "howToGet": "Buy on the Grand Exchange, or from Lumbridge General Store in Lumbridge for 3 gp.",
-    "note": "A spade"
-   },
-   {
-    "nameEn": "bucket",
-    "amount": 1,
-    "wikiItemId": 1925,
-    "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 2 gp.",
-    "note": "1-5 buckets (5 is highly recommended to save time)"
-   },
-   {
-    "nameEn": "pickaxe",
-    "amount": 1,
-    "wikiItemId": null,
-    "howToGet": null,
-    "note": "Any pickaxe"
-   },
-   {
-    "nameEn": "hammer",
-    "amount": 1,
-    "wikiItemId": 2347,
-    "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 1 gp.",
-    "note": "A hammer (Imcando hammer works.)"
-   },
-   {
-    "nameEn": "plank",
-    "amount": 11,
-    "wikiItemId": 960,
-    "howToGet": "Buy on the Grand Exchange, or from Razmire Builders Merchants in Mort'ton for 1 gp.",
-    "note": "11 planks (Only regular planks will work.)"
-   },
-   {
-    "nameEn": "nails",
-    "amount": 44,
-    "wikiItemId": null,
-    "howToGet": null,
-    "note": "44 nails (42 are obtainable during the quest)"
-   },
-   {
-    "nameEn": "Swamp paste",
-    "amount": 1,
-    "wikiItemId": 1941,
-    "howToGet": "Buy on the Grand Exchange, or from Razmire Builders Merchants in Mort'ton for 31 gp."
-   },
-   {
-    "nameEn": "raw mackerel",
-    "amount": 10,
-    "wikiItemId": 353,
-    "howToGet": "Buy on the Grand Exchange, or from Harry's Fishing Shop in Catherby for 15 gp.",
-    "note": "10 raw mackerel or 10 Snail meats (randomly chosen, but you can manipulate the choice)"
-   },
-   {
-    "nameEn": "bronze axe",
-    "amount": 10,
-    "wikiItemId": 1351,
-    "howToGet": "Buy on the Grand Exchange, or from Bandit Duty Free in Wilderness Bandit Camp for 14 gp.",
-    "note": "10 bronze axes"
-   },
-   {
-    "nameEn": "tinderbox",
-    "amount": 4,
-    "wikiItemId": 590,
-    "howToGet": "Buy on the Grand Exchange, or from Rimmington General Store in Rimmington for 1 gp.",
-    "note": "4 tinderboxes"
-   },
-   {
-    "nameEn": "steel bar",
-    "amount": 2,
-    "wikiItemId": 2353,
-    "howToGet": "Buy on the Grand Exchange.",
-    "note": "2 steel bars"
-   },
-   {
-    "nameEn": "Coal",
-    "amount": 1,
-    "wikiItemId": 453,
-    "howToGet": "Buy on the Grand Exchange, or from Drogo's Mining Emporium in Dwarven Mines for 45 gp."
-   },
-   {
-    "nameEn": "Soft clay",
-    "amount": 1,
-    "wikiItemId": 1761,
-    "howToGet": "Buy on the Grand Exchange."
-   },
-   {
-    "nameEn": "Rope",
-    "amount": 1,
-    "wikiItemId": 954,
-    "howToGet": "Buy on the Grand Exchange, or from Ned's Handmade Rope (100% Wool) in Draynor Village for 16 gp."
-   },
-   {
-    "nameEn": "silver bar",
-    "amount": 1,
-    "wikiItemId": 2355,
-    "howToGet": "Buy on the Grand Exchange, or from Ardougne Silver Stall in East Ardougne for 150 gp.",
-    "note": "A silver bar"
-   },
-   {
-    "nameEn": "mithril bar",
-    "amount": 1,
-    "wikiItemId": 2359,
-    "howToGet": "Buy on the Grand Exchange.",
-    "note": "A mithril bar"
-   },
-   {
-    "nameEn": "sapphire",
-    "amount": 1,
-    "wikiItemId": 1607,
-    "howToGet": "Buy on the Grand Exchange, or from Herquin's Gems in Falador for 250 gp.",
-    "note": "A sapphire"
-   },
-   {
-    "nameEn": "standard spellbook",
-    "amount": 1,
-    "wikiItemId": null,
-    "howToGet": null,
-    "note": "On the standard spellbook for Lvl-1 Enchant:"
-   },
-   {
-    "nameEn": "cosmic rune",
-    "amount": 1,
-    "wikiItemId": 564,
-    "howToGet": "Buy on the Grand Exchange, or from Lundail's Arena-side Rune Shop in Mage Arena for 50 gp.",
-    "note": "A cosmic rune"
-   },
-   {
-    "nameEn": "water rune",
-    "amount": 1,
-    "wikiItemId": 555,
-    "howToGet": "Buy on the Grand Exchange, or from Aubury's Rune Shop in Varrock for 4 gp.",
-    "note": "A water rune"
-   },
-   {
-    "nameEn": "Ivan Strom",
-    "amount": 1,
-    "wikiItemId": 33720,
-    "howToGet": null,
-    "note": "Optional to give to Ivan Strom (Strongly recommended if you don't have a high combat level 85+, you will not get the items back):"
-   },
-   {
-    "nameEn": "steel med helm",
-    "amount": 1,
-    "wikiItemId": 1141,
-    "howToGet": "Buy on the Grand Exchange, or from Helmet Shop in Barbarian Village for 300 gp.",
-    "note": "A steel med helm"
-   },
-   {
-    "nameEn": "steel chainbody",
-    "amount": 1,
-    "wikiItemId": 1105,
-    "howToGet": "Buy on the Grand Exchange, or from Horvik's Armour Shop in Varrock for 750 gp.",
-    "note": "A steel chainbody"
-   },
-   {
-    "nameEn": "Steel platelegs",
-    "amount": 1,
-    "wikiItemId": 1069,
-    "howToGet": "Buy on the Grand Exchange, or from Louie's Armoured Legs Bazaar in Al Kharid for 1000 gp."
-   },
-   {
-    "nameEn": "silver sickle",
-    "amount": 1,
-    "wikiItemId": 2961,
-    "howToGet": "Buy on the Grand Exchange, or from Ivan's Supplies in Meiyerditch for 175 gp.",
-    "note": "A silver sickle"
-   },
-   {
-    "nameEn": "stew",
-    "amount": 15,
-    "wikiItemId": 2003,
-    "howToGet": "Buy on the Grand Exchange, or from Barmaid for 20 gp.",
-    "note": "15 stew (highest healing), salmon, snails, or slimy eels"
-   }
-  ],
-  "foes": [
-   "Gadderanks",
-   "Vampyre Juvinate"
+  "facts": {
+    "id": "In Aid of the Myreque",
+    "stepIds": [
+      "DRAFT"
+    ],
+    "members": false,
+    "requirements": {
+      "skills": {
+        "agility": 25,
+        "crafting": 25,
+        "mining": 15,
+        "magic": 7
+      },
+      "questPoints": 0,
+      "quests": [
+        "In Search of the Myreque"
+      ],
+      "manual": [],
+      "capabilities": [],
+      "unparsed": null,
+      "text": "*Completion of the following quests:\n**[[In Search of the Myreque]]\n***[[Nature Spirit]]\n****[[Priest in Peril]]\n****[[The Restless Ghost]]\n*{{SCP|Agility|25|link=yes}} {{Boostable|Yes}} {{Questreqstart|}}\n*{{SCP|Crafting|25|link=yes}} {{Boostable|No}} {{Questreqstart|}}\n*{{SCP|Mining|15|link=yes}} {{Boostable|No}} {{Questreqstart|}}\n*{{SCP|Magic|7|link=yes}} {{Boostable|Yes}} {{Questreqstart|}}"
+    },
+    "rewards": {
+      "questPoints": 2,
+      "xp": {
+        "attack": 2000,
+        "strength": 2000,
+        "crafting": 2000,
+        "defence": 2000
+      },
+      "coins": 0
+    },
+    "resourceFlow": null,
+    "length": "Medium",
+    "source": {
+      "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15381138",
+      "title": "In Aid of the Myreque",
+      "revision": 15381138,
+      "retrievedAt": "2026-11-18T17:09:53.547Z"
+    }
+  },
+  "unknown": [
+    "fight \"Gadderanks\": no combat data",
+    "fight \"Vampyre Juvinate\": no combat data",
+    "step \"clearBasementRubble\": Quest Helper gives no tile",
+    "step \"fillCrate\": Quest Helper gives no tile",
+    "step \"readBook\": Quest Helper gives no tile",
+    "step \"makeRod\": Quest Helper gives no tile",
+    "step \"enchantRod\": Quest Helper gives no tile",
+    "what the quest uses up and hands out is not reviewed"
   ]
- },
- "stages": {
-  "var": [
-   "varbit",
-   1990
-  ],
-  "route": [
-   {
-    "title": "Starting out",
-    "steps": [
-     "Climb down the trapdoor behind the Canifis pub.",
-     "Search the wall and enter the cave entrance just south-east.",
-     "Talk to Veliaf Hurtz. Dialogue: \"I want to join your organisation.\""
-    ]
-   },
-   {
-    "title": "Patching up Burgh De Rott",
-    "steps": [
-     "Talk to Florin through the gate to Burgh de Rott.",
-     "Put a piece of food into the open chest, then open the gate.",
-     "Talk to Razvan near the pub. Dialogue: \"Are there any 'out of the way' places in here?\"",
-     "Enter the pub, climb over the broken wall, then use your pickaxe on the rubble blocking the trapdoor.",
-     "Climb down and mine the rest of the rubble. Anything you drop in the basement will be lost upon leaving.",
-     "Use your spade on the remnants to fill the buckets. There is enough here to fill five buckets.",
-     "When finished, use the buckets of rubble on the rubble pile outside the pub.",
-     "Talk to Razvan again. Dialogue: \"I'd like to help fix up the town.\"",
-     "Talk to Aurel in the general store to the north-east. Dialogue: \"I'd like to help fix up the town.\"",
-     "Climb up the ladder right outside.",
-     "Use 3 planks and 12 nails on the broken roof of the store.",
-     "Climb back down and Use 3 planks and 12 nails on the damaged wall of the general store.",
-     "Talk to Aurel again to get a crate. Dialogue: \"What should I do now?\"",
-     "Add 10 bronze axes, 10 raw mackerels or 10 snails (depending on what is asked), and 3 tinderboxes to the crate.",
-     "Talk to Aurel.",
-     "Talk to Cornelius in the bank. Dialogue: \"What should I do now?\"",
-     "Use a hammer with 2 planks, 1 swamp paste, and 8 nails on the broken bank booth",
-     "Use a hammer with 3 planks and 12 nails on the damaged wall outside.",
-     "Talk to Cornelius to recruit him. Dialogue:"
-    ]
-   },
-   {
-    "title": "Defending the village",
-    "steps": [
-     "Talk to Razvan. Dialogue: \"What should I do now?\"",
-     "Repair the furnace to the south-east. Use your steel bars, then coal, then tinderbox on the furnace.",
-     "Talk to Gadderanks in the general store.",
-     "Talk to the Vampyre Juvinate in the store.",
-     "Talk to Wiskit.",
-     "Kill the two juvinates and then Gadderanks (you'll need a silver weapon or Wolfbane dagger or Efaritay's aid to damage them).",
-     "Talk to Gadderanks.",
-     "Talk to Veliaf Hurtz."
-    ]
-   },
-   {
-    "title": "Transporting Ivan",
-    "steps": [
-     "Talk to Veliaf Hurtz in the hideout where the quest started. (The room under the Canifis pub)",
-     "Talk to Polmafi Ferdygris.",
-     "Talk to Ivan Strom to go on a simplified version of Temple Trekking and take either the short or long route. (you can't bring a pet - it must be banked!)",
-     "Kill the Vampyre Juvinates before they can kill Ivan Strom.",
-     "After you're done escorting Ivan, talk to Drezel in the underground temple for a key. Dialogue: \"Veliaf told me about Ivandis.\", \"Is there somewhere that I might get more information about Ivandis?\", \"The lives of those pitiful few left in Morytania could rest on this!\"",
-     "Use the key on the keyhole on the eastern wall and climb down the trapdoor.",
-     "Search the bookcases in the hidden room until you find The sleeping seven (The title of the book at the top when reading it is \"The Sleeping Seven\"). Read it."
-    ]
-   },
-   {
-    "title": "The rod of Ivandis",
-    "steps": [
-     "Return to the room under the Canifis pub, then go to the blockaded cave entrance just south-east of the wall.",
-     "Use a hammer on the wooden boards and enter the cave.",
-     "Use your soft clay on the coffin to make a rod mould.",
-     "Go to any furnace with your mould, a silver bar, a mithril bar and a sapphire, and craft a silvthrill rod. (Fairy ring for Edgeville Furnace.)",
-     "Cast Lvl-1 Enchant on the rod.",
-     "Use the rod on the well underneath the Paterdomus Temple (where Drezel was) with a rope in your inventory. (Nearest fairy ring )",
-     "Return to the Burgh de Rott pub basement with the Rod of Ivandis (it must be in your inventory, not equipped), then speak to Veliaf. Dialogue: \"I have brought you the Rod of Ivandis!\", \"Yes, I've come to give the Rod of Ivandis to you!\"",
-     "Congratulations, quest complete!"
-    ]
-   }
-  ],
-  "stages": [
-   {
-    "at": 0,
-    "do": [
-     {
-      "t": "Enter the trapdoor behind the Canifis Pub.",
-      "s": "Enter the trapdoor behind the Canifis Pub.",
-      "k": "climbDownCanifis",
-      "at": [
-       3495,
-       3464,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5055
-       ]
-      }
-     },
-     {
-      "t": "Enter the cave on the east side.",
-      "s": "Enter the cave on the east side.",
-      "k": "enterMyrequeCave",
-      "at": [
-       3492,
-       9823,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5046
-       ]
-      }
-     },
-     {
-      "t": "Talk to Veliaf Hurtz.",
-      "s": "Talk to Veliaf Hurtz.",
-      "k": "talkToVeliaf",
-      "at": [
-       3506,
-       9837,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5048
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 20,
-    "do": [
-     {
-      "t": "",
-      "s": "",
-      "k": "talkToFlorin",
-      "at": [
-       3484,
-       3242,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4454
-       ]
-      }
-     },
-     {
-      "t": "Leave through the doors to the south.",
-      "s": "Leave through the doors to the south.",
-      "k": "leaveCavesIntoSwamp",
-      "at": [
-       3501,
-       9813,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5057
-       ]
-      }
-     },
-     {
-      "t": "Leave the cave.",
-      "s": "Leave the cave.",
-      "k": "leaveMyrequeCave",
-      "at": [
-       3505,
-       9831,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5046
-       ]
-      }
-     },
-     {
-      "t": "Cross the bridge to the south.",
-      "s": "Cross the bridge to the south.",
-      "k": "goOverBridge",
-      "at": [
-       3502,
-       3431,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5003
-       ]
-      }
-     },
-     {
-      "t": "Board the boat to the south to Mort'ton.",
-      "s": "Board the boat to the south to Mort'ton.",
-      "k": "takeBoatToMortton",
-      "at": [
-       3499,
-       3378,
-       0
-      ],
-      "hl": {
-       "obj": [
-        6970
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 30,
-    "do": [
-     {
-      "t": "Place some food in the nearby chest.",
-      "s": "Place some food in the nearby chest.",
-      "k": "putFoodInChest",
-      "at": [
-       3483,
-       3246,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12736
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 40,
-    "do": [
-     {
-      "t": "Talk to Razvan in Burgh de Rott.",
-      "s": "Talk to Razvan in Burgh de Rott.",
-      "k": "talkToRazvan",
-      "at": [
-       3493,
-       3235,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4468
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 50,
-    "do": [
-     {
-      "t": "Talk to Razvan in Burgh de Rott.",
-      "s": "Talk to Razvan in Burgh de Rott.",
-      "k": "talkToRazvan",
-      "at": [
-       3493,
-       3235,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4468
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 60,
-    "do": [
-     {
-      "t": "Use a pickaxe on the rubble in the building south of Razvan.",
-      "s": "Use a pickaxe on the rubble in the building south of Razvan.",
-      "k": "clearTrapdoorRubble",
-      "at": [
-       3490,
-       3232,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12738
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 70,
-    "do": [
-     {
-      "t": "Use a pickaxe on the rubble in the building south of Razvan.",
-      "s": "Use a pickaxe on the rubble in the building south of Razvan.",
-      "k": "clearTrapdoorRubble",
-      "at": [
-       3490,
-       3232,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12738
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 80,
-    "do": [
-     {
-      "t": "Enter the trapdoor.",
-      "s": "Enter the trapdoor.",
-      "k": "enterBurghPubBasement",
-      "at": [
-       3490,
-       3232,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12743
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 90,
-    "do": [
-     {
-      "t": "Enter the trapdoor.",
-      "s": "Enter the trapdoor.",
-      "k": "enterBurghPubBasement",
-      "at": [
-       3490,
-       3232,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12743
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 100,
-    "do": [
-     {
-      "t": "Enter the trapdoor.",
-      "s": "Enter the trapdoor.",
-      "k": "enterBurghPubBasement",
-      "at": [
-       3490,
-       3232,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12743
-       ]
-      }
-     },
-     {
-      "t": "Mine all the rubble in the room, and then clean it up with a spade. You'll need an empty bucket when using the spade. You can empty the buckets outside on the rubble pile.",
-      "s": "Mine all the rubble in the room, and then clean it up with a spade. You'll need an empty bucket when using the spade. You can empty the buckets outside on the rubble pile.",
-      "k": "clearBasementRubble",
-      "hl": {
-       "obj": [
-        12812
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 110,
-    "do": [
-     {
-      "t": "Talk to Aurel in north east Burgh de Rott.",
-      "s": "Talk to Aurel in north east Burgh de Rott.",
-      "k": "talkToAurel",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4445
-       ]
-      }
-     },
-     {
-      "t": "Leave the basement.",
-      "s": "Leave the basement.",
-      "k": "leavePubBasement",
-      "at": [
-       3490,
-       9632,
-       1
-      ],
-      "hl": {
-       "obj": [
-        12779
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 120,
-    "do": [
-     {
-      "t": "Go to the roof of Aurel's shop.",
-      "s": "Go to the roof of Aurel's shop.",
-      "k": "climbShopLadder",
-      "at": [
-       3513,
-       3238,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12780
-       ]
-      }
-     },
-     {
-      "t": "Repair the broken roof.",
-      "s": "Repair the broken roof.",
-      "k": "fixRoof",
-      "at": [
-       3515,
-       3240,
-       2
-      ],
-      "hl": {
-       "obj": [
-        12751
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 130,
-    "do": [
-     {
-      "t": "Go to the roof of Aurel's shop.",
-      "s": "Go to the roof of Aurel's shop.",
-      "k": "climbShopLadder",
-      "at": [
-       3513,
-       3238,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12780
-       ]
-      }
-     },
-     {
-      "t": "Repair the broken roof.",
-      "s": "Repair the broken roof.",
-      "k": "fixRoof",
-      "at": [
-       3515,
-       3240,
-       2
-      ],
-      "hl": {
-       "obj": [
-        12751
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 140,
-    "do": [
-     {
-      "t": "Go to the roof of Aurel's shop.",
-      "s": "Go to the roof of Aurel's shop.",
-      "k": "climbShopLadder",
-      "at": [
-       3513,
-       3238,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12780
-       ]
-      }
-     },
-     {
-      "t": "Repair the broken roof.",
-      "s": "Repair the broken roof.",
-      "k": "fixRoof",
-      "at": [
-       3515,
-       3240,
-       2
-      ],
-      "hl": {
-       "obj": [
-        12751
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 150,
-    "do": [
-     {
-      "t": "Repair the shop's wall.",
-      "s": "Repair the shop's wall.",
-      "k": "fixShopWall",
-      "at": [
-       3517,
-       3238,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12859
-       ]
-      }
-     },
-     {
-      "t": "Climb back down the ladder.",
-      "s": "Climb back down the ladder.",
-      "k": "climbDownShopLadder",
-      "at": [
-       3513,
-       3238,
-       2
-      ],
-      "hl": {
-       "obj": [
-        12781
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 160,
-    "do": [
-     {
-      "t": "Talk to Aurel again.",
-      "s": "Talk to Aurel again.",
-      "k": "talkToAurelForCrate",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4445
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 165,
-    "do": [
-     {
-      "t": "",
-      "s": "",
-      "k": "fillCrate"
-     },
-     {
-      "t": "Return to Aurel with the filled crate.",
-      "s": "Return to Aurel with the filled crate.",
-      "k": "talkToAurelWithCrate",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4445
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 170,
-    "do": [
-     {
-      "t": "Repair the bank booth.",
-      "s": "Repair the bank booth.",
-      "k": "repairBooth",
-      "at": [
-       3494,
-       3211,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12759
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 180,
-    "do": [
-     {
-      "t": "Repair the bank's outside wall.",
-      "s": "Repair the bank's outside wall.",
-      "k": "repairBankWall",
-      "at": [
-       3491,
-       3211,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12859
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 190,
-    "do": [
-     {
-      "t": "Talk to Cornelius and ask him to be the banker.",
-      "s": "Talk to Cornelius and ask him to be the banker.",
-      "k": "talkToCornelius",
-      "at": [
-       3496,
-       3211,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4470
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 200,
-    "do": [
-     {
-      "t": "Talk to Razvan.",
-      "s": "Talk to Razvan.",
-      "k": "talkToRazvanAfterRepairs",
-      "at": [
-       3493,
-       3235,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4468
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 205,
-    "do": [
-     {
-      "t": "Repair the furnace in the south east of Burgh de Rott. You can use the bank you just made to get items out.",
-      "s": "Repair the furnace in the south east of Burgh de Rott. You can use the bank you just made to get items out.",
-      "k": "repairFurnace",
-      "at": [
-       3528,
-       3210,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12805
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 210,
-    "do": [
-     {
-      "t": "Add coal to the furnace.",
-      "s": "Add coal to the furnace.",
-      "k": "addCoalToFurnace",
-      "at": [
-       3528,
-       3210,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12805
-       ]
-      }
-     },
-     {
-      "t": "Light the furnace.",
-      "s": "Light the furnace.",
-      "k": "lightFurnace",
-      "at": [
-       3528,
-       3210,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12805
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 220,
-    "do": [
-     {
-      "t": "Light the furnace.",
-      "s": "Light the furnace.",
-      "k": "lightFurnace",
-      "at": [
-       3528,
-       3210,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12805
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 230,
-    "do": [
-     {
-      "t": "Talk to Gadderanks in the shop.",
-      "s": "Talk to Gadderanks in the shop.",
-      "k": "talkToGadderanks",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4483
-       ]
-      }
-     },
-     {
-      "t": "Talk to a juvinate in the shop.",
-      "s": "Talk to a juvinate in the shop.",
-      "k": "talkToJuvinate",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4482
-       ]
-      }
-     },
-     {
-      "t": "Talk to Wiskit in the shop. Be prepared to fight the vampyres and Gadderanks.",
-      "s": "Talk to Wiskit in the shop. Be prepared to fight the vampyres and Gadderanks.",
-      "k": "talkToWiskit",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4480
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 240,
-    "do": [
-     {
-      "t": "Talk to Gadderanks in the shop.",
-      "s": "Talk to Gadderanks in the shop.",
-      "k": "talkToGadderanks",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4483
-       ]
-      }
-     },
-     {
-      "t": "Defeat Gadderanks and the juvinates.",
-      "s": "Defeat Gadderanks and the juvinates.",
-      "k": "killGadderanksAndJuvinates",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4484
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 250,
-    "do": [
-     {
-      "t": "Talk to Gadderanks in the shop.",
-      "s": "Talk to Gadderanks in the shop.",
-      "k": "talkToGadderanks",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4483
-       ]
-      }
-     },
-     {
-      "t": "Defeat Gadderanks and the juvinates.",
-      "s": "Defeat Gadderanks and the juvinates.",
-      "k": "killGadderanksAndJuvinates",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4484
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 260,
-    "do": [
-     {
-      "t": "Talk to Gadderanks in the shop.",
-      "s": "Talk to Gadderanks in the shop.",
-      "k": "talkToGadderanks",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4483
-       ]
-      }
-     },
-     {
-      "t": "Defeat Gadderanks and the juvinates.",
-      "s": "Defeat Gadderanks and the juvinates.",
-      "k": "killGadderanksAndJuvinates",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4484
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 280,
-    "do": [
-     {
-      "t": "Talk to Veliaf in Burgh de Rott.",
-      "s": "Talk to Veliaf in Burgh de Rott.",
-      "k": "talkToVeliafAfterFight",
-      "at": [
-       3515,
-       3241,
-       0
-      ],
-      "hl": {
-       "npc": [
-        9633
-       ]
-      }
-     },
-     {
-      "t": "Enter the trapdoor behind the Canifis Pub.",
-      "s": "Enter the trapdoor behind the Canifis Pub.",
-      "k": "climbDownCanifis",
-      "at": [
-       3495,
-       3464,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5055
-       ]
-      }
-     },
-     {
-      "t": "Enter the cave on the east side.",
-      "s": "Enter the cave on the east side.",
-      "k": "enterMyrequeCave",
-      "at": [
-       3492,
-       9823,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5046
-       ]
-      }
-     },
-     {
-      "t": "Talk to Veliaf Hurtz.",
-      "s": "Talk to Veliaf Hurtz.",
-      "k": "talkToVeliafInHideoutAgain",
-      "at": [
-       3506,
-       9837,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5048
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 290,
-    "do": [
-     {
-      "t": "Enter the trapdoor behind the Canifis Pub.",
-      "s": "Enter the trapdoor behind the Canifis Pub.",
-      "k": "climbDownCanifis",
-      "at": [
-       3495,
-       3464,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5055
-       ]
-      }
-     },
-     {
-      "t": "Enter the cave on the east side.",
-      "s": "Enter the cave on the east side.",
-      "k": "enterMyrequeCave",
-      "at": [
-       3492,
-       9823,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5046
-       ]
-      }
-     },
-     {
-      "t": "",
-      "s": "",
-      "k": "talkToPolmafi",
-      "at": [
-       3506,
-       9837,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5052
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 300,
-    "do": [
-     {
-      "t": "Enter the trapdoor behind the Canifis Pub.",
-      "s": "Enter the trapdoor behind the Canifis Pub.",
-      "k": "climbDownCanifis",
-      "at": [
-       3495,
-       3464,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5055
-       ]
-      }
-     },
-     {
-      "t": "Enter the cave on the east side.",
-      "s": "Enter the cave on the east side.",
-      "k": "enterMyrequeCave",
-      "at": [
-       3492,
-       9823,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5046
-       ]
-      }
-     },
-     {
-      "t": "",
-      "s": "",
-      "k": "talkToIvanForTrek",
-      "at": [
-       3506,
-       9837,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5053
-       ]
-      }
-     },
-     {
-      "t": "Kill the juvenates.",
-      "s": "Kill the juvenates.",
-      "k": "killJuvinates",
-      "at": [
-       2859,
-       4564,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4443
-       ]
-      }
-     },
-     {
-      "t": "Kill the juvenates.",
-      "s": "Kill the juvenates.",
-      "k": "killJuvinates2",
-      "at": [
-       2839,
-       4589,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4442
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 310,
-    "do": [
-     {
-      "t": "Enter the trapdoor behind the Canifis Pub.",
-      "s": "Enter the trapdoor behind the Canifis Pub.",
-      "k": "climbDownCanifis",
-      "at": [
-       3495,
-       3464,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5055
-       ]
-      }
-     },
-     {
-      "t": "Enter the cave on the east side.",
-      "s": "Enter the cave on the east side.",
-      "k": "enterMyrequeCave",
-      "at": [
-       3492,
-       9823,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5046
-       ]
-      }
-     },
-     {
-      "t": "",
-      "s": "",
-      "k": "talkToIvanForTrek",
-      "at": [
-       3506,
-       9837,
-       0
-      ],
-      "hl": {
-       "npc": [
-        5053
-       ]
-      }
-     },
-     {
-      "t": "Kill the juvenates.",
-      "s": "Kill the juvenates.",
-      "k": "killJuvinates",
-      "at": [
-       2859,
-       4564,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4443
-       ]
-      }
-     },
-     {
-      "t": "Kill the juvenates.",
-      "s": "Kill the juvenates.",
-      "k": "killJuvinates2",
-      "at": [
-       2839,
-       4589,
-       0
-      ],
-      "hl": {
-       "npc": [
-        4442
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 315,
-    "do": [
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "goDownToDrezel",
-      "at": [
-       3422,
-       3485,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3432
-       ]
-      }
-     },
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "talkToDrezel",
-      "at": [
-       3439,
-       9896,
-       0
-      ],
-      "hl": {
-       "npc": [
-        9636
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 320,
-    "do": [
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "goDownToDrezel",
-      "at": [
-       3422,
-       3485,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3432
-       ]
-      }
-     },
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "talkToDrezel",
-      "at": [
-       3439,
-       9896,
-       0
-      ],
-      "hl": {
-       "npc": [
-        9636
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 330,
-    "do": [
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "goDownToDrezel",
-      "at": [
-       3422,
-       3485,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3432
-       ]
-      }
-     },
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "talkToDrezel",
-      "at": [
-       3439,
-       9896,
-       0
-      ],
-      "hl": {
-       "npc": [
-        9636
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 340,
-    "do": [
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "goDownToDrezel",
-      "at": [
-       3422,
-       3485,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3432
-       ]
-      }
-     },
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "talkToDrezel",
-      "at": [
-       3439,
-       9896,
-       0
-      ],
-      "hl": {
-       "npc": [
-        9636
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 350,
-    "do": [
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "goDownToDrezel",
-      "at": [
-       3422,
-       3485,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3432
-       ]
-      }
-     },
-     {
-      "t": "Use the key on the keyhole near Drezel.",
-      "s": "Use the key on the keyhole near Drezel.",
-      "k": "useKeyOnHole",
-      "at": [
-       3443,
-       9898,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12765
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 360,
-    "do": [
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "goDownToDrezel",
-      "at": [
-       3422,
-       3485,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3432
-       ]
-      }
-     },
-     {
-      "t": "Enter the library.",
-      "s": "Enter the library.",
-      "k": "enterLibrary",
-      "at": [
-       3441,
-       9899,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12762
-       ]
-      }
-     },
-     {
-      "t": "Search the bookcases for 'The Sleeping Seven' book.",
-      "s": "Search the bookcases for 'The Sleeping Seven' book.",
-      "k": "searchBookcase",
-      "at": [
-       3354,
-       9902,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12767
-       ]
-      }
-     },
-     {
-      "t": "Read 'The Sleeping Seven'.",
-      "s": "Read 'The Sleeping Seven'.",
-      "k": "readBook"
-     }
-    ]
-   },
-   {
-    "at": 370,
-    "do": [
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "goDownToDrezel",
-      "at": [
-       3422,
-       3485,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3432
-       ]
-      }
-     },
-     {
-      "t": "Enter the library.",
-      "s": "Enter the library.",
-      "k": "enterLibrary",
-      "at": [
-       3441,
-       9899,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12762
-       ]
-      }
-     },
-     {
-      "t": "Search the bookcases for 'The Sleeping Seven' book.",
-      "s": "Search the bookcases for 'The Sleeping Seven' book.",
-      "k": "searchBookcase",
-      "at": [
-       3354,
-       9902,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12767
-       ]
-      }
-     },
-     {
-      "t": "Read 'The Sleeping Seven'.",
-      "s": "Read 'The Sleeping Seven'.",
-      "k": "readBook"
-     }
-    ]
-   },
-   {
-    "at": 375,
-    "do": [
-     {
-      "t": "Enter the trapdoor behind the Canifis Pub.",
-      "s": "Enter the trapdoor behind the Canifis Pub.",
-      "k": "climbDownCanifis",
-      "at": [
-       3495,
-       3464,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5055
-       ]
-      }
-     },
-     {
-      "t": "Use a hammer on the boarded up cave.",
-      "s": "Use a hammer on the boarded up cave.",
-      "k": "useHammerOnBoards",
-      "at": [
-       3483,
-       9832,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12772
-       ]
-      }
-     },
-     {
-      "t": "Enter the cave.",
-      "s": "Enter the cave.",
-      "k": "enterCoffinRoom",
-      "at": [
-       3484,
-       9832,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12770
-       ]
-      }
-     },
-     {
-      "t": "Use a piece of soft clay on the coffin.",
-      "s": "Use a piece of soft clay on the coffin.",
-      "k": "useClayOnCoffin",
-      "at": [
-       3511,
-       9864,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12802
-       ]
-      }
-     },
-     {
-      "t": "Make a silvthrill rod at any furnace.",
-      "s": "Make a silvthrill rod at any furnace.",
-      "k": "makeRod"
-     },
-     {
-      "t": "Cast Lvl-1 enchant on the rod.",
-      "s": "Cast Lvl-1 enchant on the rod.",
-      "k": "enchantRod"
-     },
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "goDownToDrezel",
-      "at": [
-       3422,
-       3485,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3432
-       ]
-      }
-     },
-     {
-      "t": "",
-      "s": "",
-      "k": "useRodOnWell",
-      "at": [
-       3423,
-       9890,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3485
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 380,
-    "do": [
-     {
-      "t": "Enter the trapdoor behind the Canifis Pub.",
-      "s": "Enter the trapdoor behind the Canifis Pub.",
-      "k": "climbDownCanifis",
-      "at": [
-       3495,
-       3464,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5055
-       ]
-      }
-     },
-     {
-      "t": "Use a hammer on the boarded up cave.",
-      "s": "Use a hammer on the boarded up cave.",
-      "k": "useHammerOnBoards",
-      "at": [
-       3483,
-       9832,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12772
-       ]
-      }
-     },
-     {
-      "t": "Enter the cave.",
-      "s": "Enter the cave.",
-      "k": "enterCoffinRoom",
-      "at": [
-       3484,
-       9832,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12770
-       ]
-      }
-     },
-     {
-      "t": "Use a piece of soft clay on the coffin.",
-      "s": "Use a piece of soft clay on the coffin.",
-      "k": "useClayOnCoffin",
-      "at": [
-       3511,
-       9864,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12802
-       ]
-      }
-     },
-     {
-      "t": "Make a silvthrill rod at any furnace.",
-      "s": "Make a silvthrill rod at any furnace.",
-      "k": "makeRod"
-     },
-     {
-      "t": "Cast Lvl-1 enchant on the rod.",
-      "s": "Cast Lvl-1 enchant on the rod.",
-      "k": "enchantRod"
-     },
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "goDownToDrezel",
-      "at": [
-       3422,
-       3485,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3432
-       ]
-      }
-     },
-     {
-      "t": "",
-      "s": "",
-      "k": "useRodOnWell",
-      "at": [
-       3423,
-       9890,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3485
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 390,
-    "do": [
-     {
-      "t": "Enter the trapdoor behind the Canifis Pub.",
-      "s": "Enter the trapdoor behind the Canifis Pub.",
-      "k": "climbDownCanifis",
-      "at": [
-       3495,
-       3464,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5055
-       ]
-      }
-     },
-     {
-      "t": "Use a hammer on the boarded up cave.",
-      "s": "Use a hammer on the boarded up cave.",
-      "k": "useHammerOnBoards",
-      "at": [
-       3483,
-       9832,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12772
-       ]
-      }
-     },
-     {
-      "t": "Enter the cave.",
-      "s": "Enter the cave.",
-      "k": "enterCoffinRoom",
-      "at": [
-       3484,
-       9832,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12770
-       ]
-      }
-     },
-     {
-      "t": "Use a piece of soft clay on the coffin.",
-      "s": "Use a piece of soft clay on the coffin.",
-      "k": "useClayOnCoffin",
-      "at": [
-       3511,
-       9864,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12802
-       ]
-      }
-     },
-     {
-      "t": "Make a silvthrill rod at any furnace.",
-      "s": "Make a silvthrill rod at any furnace.",
-      "k": "makeRod"
-     },
-     {
-      "t": "Cast Lvl-1 enchant on the rod.",
-      "s": "Cast Lvl-1 enchant on the rod.",
-      "k": "enchantRod"
-     },
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "goDownToDrezel",
-      "at": [
-       3422,
-       3485,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3432
-       ]
-      }
-     },
-     {
-      "t": "",
-      "s": "",
-      "k": "useRodOnWell",
-      "at": [
-       3423,
-       9890,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3485
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 400,
-    "do": [
-     {
-      "t": "Enter the trapdoor behind the Canifis Pub.",
-      "s": "Enter the trapdoor behind the Canifis Pub.",
-      "k": "climbDownCanifis",
-      "at": [
-       3495,
-       3464,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5055
-       ]
-      }
-     },
-     {
-      "t": "Use a hammer on the boarded up cave.",
-      "s": "Use a hammer on the boarded up cave.",
-      "k": "useHammerOnBoards",
-      "at": [
-       3483,
-       9832,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12772
-       ]
-      }
-     },
-     {
-      "t": "Enter the cave.",
-      "s": "Enter the cave.",
-      "k": "enterCoffinRoom",
-      "at": [
-       3484,
-       9832,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12770
-       ]
-      }
-     },
-     {
-      "t": "Use a piece of soft clay on the coffin.",
-      "s": "Use a piece of soft clay on the coffin.",
-      "k": "useClayOnCoffin",
-      "at": [
-       3511,
-       9864,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12802
-       ]
-      }
-     },
-     {
-      "t": "Make a silvthrill rod at any furnace.",
-      "s": "Make a silvthrill rod at any furnace.",
-      "k": "makeRod"
-     },
-     {
-      "t": "Cast Lvl-1 enchant on the rod.",
-      "s": "Cast Lvl-1 enchant on the rod.",
-      "k": "enchantRod"
-     },
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "goDownToDrezel",
-      "at": [
-       3422,
-       3485,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3432
-       ]
-      }
-     },
-     {
-      "t": "",
-      "s": "",
-      "k": "useRodOnWell",
-      "at": [
-       3423,
-       9890,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3485
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 410,
-    "do": [
-     {
-      "t": "Enter the trapdoor behind the Canifis Pub.",
-      "s": "Enter the trapdoor behind the Canifis Pub.",
-      "k": "climbDownCanifis",
-      "at": [
-       3495,
-       3464,
-       0
-      ],
-      "hl": {
-       "obj": [
-        5055
-       ]
-      }
-     },
-     {
-      "t": "Use a hammer on the boarded up cave.",
-      "s": "Use a hammer on the boarded up cave.",
-      "k": "useHammerOnBoards",
-      "at": [
-       3483,
-       9832,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12772
-       ]
-      }
-     },
-     {
-      "t": "Enter the cave.",
-      "s": "Enter the cave.",
-      "k": "enterCoffinRoom",
-      "at": [
-       3484,
-       9832,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12770
-       ]
-      }
-     },
-     {
-      "t": "Use a piece of soft clay on the coffin.",
-      "s": "Use a piece of soft clay on the coffin.",
-      "k": "useClayOnCoffin",
-      "at": [
-       3511,
-       9864,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12802
-       ]
-      }
-     },
-     {
-      "t": "Make a silvthrill rod at any furnace.",
-      "s": "Make a silvthrill rod at any furnace.",
-      "k": "makeRod"
-     },
-     {
-      "t": "Cast Lvl-1 enchant on the rod.",
-      "s": "Cast Lvl-1 enchant on the rod.",
-      "k": "enchantRod"
-     },
-     {
-      "t": "Talk to Drezel under the Paterdomus Temple.",
-      "s": "Talk to Drezel under the Paterdomus Temple.",
-      "k": "goDownToDrezel",
-      "at": [
-       3422,
-       3485,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3432
-       ]
-      }
-     },
-     {
-      "t": "",
-      "s": "",
-      "k": "useRodOnWell",
-      "at": [
-       3423,
-       9890,
-       0
-      ],
-      "hl": {
-       "obj": [
-        3485
-       ]
-      }
-     }
-    ]
-   },
-   {
-    "at": 420,
-    "do": [
-     {
-      "t": "Enter the trapdoor.",
-      "s": "Enter the trapdoor.",
-      "k": "enterBurghPubBasement",
-      "at": [
-       3490,
-       3232,
-       0
-      ],
-      "hl": {
-       "obj": [
-        12743
-       ]
-      }
-     },
-     {
-      "t": "",
-      "s": "",
-      "k": "talkToVeliafToFinish",
-      "at": [
-       3494,
-       9628,
-       0
-      ],
-      "hl": {
-       "npc": [
-        9489
-       ]
-      }
-     }
-    ]
-   }
-  ]
- },
- "facts": {
-  "id": "In Aid of the Myreque",
-  "stepIds": [
-   "DRAFT"
-  ],
-  "members": false,
-  "requirements": {
-   "skills": {
-    "agility": 25,
-    "crafting": 25,
-    "mining": 15,
-    "magic": 7
-   },
-   "questPoints": 0,
-   "quests": [
-    "In Search of the Myreque"
-   ],
-   "manual": [],
-   "capabilities": [],
-   "unparsed": null,
-   "text": "*Completion of the following quests:\n**[[In Search of the Myreque]]\n***[[Nature Spirit]]\n****[[Priest in Peril]]\n****[[The Restless Ghost]]\n*{{SCP|Agility|25|link=yes}} {{Boostable|Yes}} {{Questreqstart|}}\n*{{SCP|Crafting|25|link=yes}} {{Boostable|No}} {{Questreqstart|}}\n*{{SCP|Mining|15|link=yes}} {{Boostable|No}} {{Questreqstart|}}\n*{{SCP|Magic|7|link=yes}} {{Boostable|Yes}} {{Questreqstart|}}"
-  },
-  "rewards": {
-   "questPoints": 2,
-   "xp": {
-    "attack": 2000,
-    "strength": 2000,
-    "crafting": 2000,
-    "defence": 2000
-   },
-   "coins": 0
-  },
-  "resourceFlow": null,
-  "length": "Medium",
-  "source": {
-   "url": "https://oldschool.runescape.wiki/w/Special:Redirect/revision/15381138",
-   "title": "In Aid of the Myreque",
-   "revision": 15381138,
-   "retrievedAt": "2026-11-18T06:48:31.848Z"
-  }
- },
- "unknown": [
-  "item \"Silver weaponry\": no id in Quest Helper or on its Wiki card",
-  "item \"Silver weaponry\": where to get it is not written",
-  "item \"Wolfbane dagger\": no id in Quest Helper or on its Wiki card",
-  "item \"Wolfbane dagger\": where to get it is not written",
-  "item \"blessed axe\": where to get it is not written",
-  "item \"Silverlight\": where to get it is not written",
-  "item \"food\": no id in Quest Helper or on its Wiki card",
-  "item \"food\": where to get it is not written",
-  "item \"pickaxe\": no id in Quest Helper or on its Wiki card",
-  "item \"pickaxe\": where to get it is not written",
-  "item \"nails\": no id in Quest Helper or on its Wiki card",
-  "item \"nails\": where to get it is not written",
-  "item \"standard spellbook\": no id in Quest Helper or on its Wiki card",
-  "item \"standard spellbook\": where to get it is not written",
-  "item \"Ivan Strom\": where to get it is not written",
-  "fight \"Gadderanks\": no combat data",
-  "fight \"Vampyre Juvinate\": no combat data",
-  "step \"clearBasementRubble\": Quest Helper gives no tile",
-  "step \"fillCrate\": Quest Helper gives no tile",
-  "step \"readBook\": Quest Helper gives no tile",
-  "step \"makeRod\": Quest Helper gives no tile",
-  "step \"enchantRod\": Quest Helper gives no tile",
-  "what the quest uses up and hands out is not reviewed"
- ]
 }
